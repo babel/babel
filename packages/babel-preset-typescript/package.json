@@ -10,7 +10,6 @@
     "typescript"
   ],
   "dependencies": {
-    "babel-plugin-syntax-object-rest-spread": "7.0.0-alpha.19",
     "babel-plugin-transform-typescript": "7.0.0-alpha.19"
   }
 }

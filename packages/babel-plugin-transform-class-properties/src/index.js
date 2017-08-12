@@ -12,6 +12,9 @@ export default function({ types: t }) {
   };
 
   const referenceVisitor = {
+    TypeAnnotation(path) {
+      path.skip();
+    },
     ReferencedIdentifier(path) {
       if (this.scope.hasOwnBinding(path.node.name)) {
         this.collision = true;
@@ -29,19 +32,19 @@ export default function({ types: t }) {
     });
   `);
 
-  const buildClassPropertySpec = (ref, { key, value, computed }) =>
+  const buildClassPropertySpec = (ref, { key, value, computed }, scope) =>
     buildObjectDefineProperty({
       REF: ref,
       KEY: t.isIdentifier(key) && !computed ? t.stringLiteral(key.name) : key,
-      VALUE: value ? value : t.identifier("undefined"),
+      VALUE: value ? value : scope.buildUndefinedNode(),
     });
 
-  const buildClassPropertyNonSpec = (ref, { key, value, computed }) =>
+  const buildClassPropertyLoose = (ref, { key, value, computed }, scope) =>
     t.expressionStatement(
       t.assignmentExpression(
         "=",
         t.memberExpression(ref, key, computed || t.isLiteral(key)),
-        value,
+        value ? value : scope.buildUndefinedNode(),
       ),
     );
 
@@ -50,9 +53,9 @@ export default function({ types: t }) {
 
     visitor: {
       Class(path, state) {
-        const buildClassProperty = state.opts.spec
-          ? buildClassPropertySpec
-          : buildClassPropertyNonSpec;
+        const buildClassProperty = state.opts.loose
+          ? buildClassPropertyLoose
+          : buildClassPropertySpec;
         const isDerived = !!path.node.superClass;
         let constructor;
         const props = [];
@@ -85,17 +88,14 @@ export default function({ types: t }) {
           const propNode = prop.node;
           if (propNode.decorators && propNode.decorators.length > 0) continue;
 
-          // In non-spec mode, all properties without values are ignored.
-          // In spec mode, *static* properties without values are still defined (see below).
-          if (!state.opts.spec && !propNode.value) continue;
-
           const isStatic = propNode.static;
 
           if (isStatic) {
-            nodes.push(buildClassProperty(ref, propNode));
+            nodes.push(buildClassProperty(ref, propNode, path.scope));
           } else {
-            if (!propNode.value) continue; // Ignore instance property with no value in spec mode
-            instanceBody.push(buildClassProperty(t.thisExpression(), propNode));
+            instanceBody.push(
+              buildClassProperty(t.thisExpression(), propNode, path.scope),
+            );
           }
         }
 

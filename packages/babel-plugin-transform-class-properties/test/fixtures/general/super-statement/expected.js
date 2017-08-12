@@ -6,7 +6,11 @@ var Foo = function (_Bar) {
 
     babelHelpers.classCallCheck(this, Foo);
     _this = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this));
-    _this.bar = "foo";
+    Object.defineProperty(_this, "bar", {
+      enumerable: true,
+      writable: true,
+      value: "foo"
+    });
     return _this;
   }
 

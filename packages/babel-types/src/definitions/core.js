@@ -154,7 +154,7 @@ defineType("CatchClause", {
       validate: assertNodeType("BlockStatement"),
     },
   },
-  aliases: ["Scopable"],
+  aliases: ["Scopable", "BlockParent"],
 });
 
 defineType("ConditionalExpression", {
@@ -518,6 +518,9 @@ defineType("Program", {
     sourceFile: {
       validate: assertValueType("string"),
     },
+    sourceType: {
+      validate: assertOneOf("script", "module"),
+    },
     directives: {
       validate: chain(
         assertValueType("array"),
@@ -739,12 +742,12 @@ defineType("TryStatement", {
   visitor: ["block", "handler", "finalizer"],
   aliases: ["Statement"],
   fields: {
-    body: {
+    block: {
       validate: assertNodeType("BlockStatement"),
     },
     handler: {
       optional: true,
-      validate: assertNodeType("BlockStatement"),
+      validate: assertNodeType("CatchClause"),
     },
     finalizer: {
       optional: true,

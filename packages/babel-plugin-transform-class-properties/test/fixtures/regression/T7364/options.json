@@ -2,6 +2,6 @@
   "plugins": [
     "external-helpers",
     "transform-async-to-generator",
-    "transform-class-properties"
+    ["transform-class-properties", {"loose": true}]
   ]
 }

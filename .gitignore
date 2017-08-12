@@ -27,3 +27,5 @@ package-lock.json
 /packages/*/lib
 .nyc_output
 /babel.sublime-workspace
+packages/babel-standalone/babel.js
+packages/babel-standalone/babel.min.js

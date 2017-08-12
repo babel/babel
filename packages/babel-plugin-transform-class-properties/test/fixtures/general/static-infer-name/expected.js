@@ -2,4 +2,8 @@ var _class, _temp;
 
 var Foo = (_temp = _class = function Foo() {
   babelHelpers.classCallCheck(this, Foo);
-}, _class.num = 0, _temp);
+}, Object.defineProperty(_class, "num", {
+  enumerable: true,
+  writable: true,
+  value: 0
+}), _temp);
