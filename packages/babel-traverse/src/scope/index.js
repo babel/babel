@@ -104,7 +104,7 @@ const collectorVisitor = {
   ForXStatement(path, state) {
     const left = path.get("left");
     if (left.isPattern() || left.isIdentifier()) {
-      state.constantViolations.push(left);
+      state.constantViolations.push(path);
     }
   },
 

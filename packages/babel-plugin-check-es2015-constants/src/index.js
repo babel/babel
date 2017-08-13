@@ -40,9 +40,9 @@ export default function({ messages, types: t }) {
               violation.replaceWith(
                 statementBeforeExpression(throwNode, violation.node),
               );
-            } else if (violation.parentPath.isForXStatement()) {
-              violation.parentPath.ensureBlock();
-              violation.parentPath.node.body.body.unshift(throwNode);
+            } else if (violation.isForXStatement()) {
+              violation.ensureBlock();
+              violation.node.body.body.unshift(throwNode);
             }
           }
         }
