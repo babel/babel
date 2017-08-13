@@ -6,6 +6,9 @@ export default function() {
 
     visitor: {
       CatchClause(path) {
+        if (path.node.param === null) {
+          return;
+        }
         const binding = path.scope.getOwnBinding(path.node.param.name);
         if (
           binding.constantViolations.filter(el => {
@@ -14,11 +17,7 @@ export default function() {
         ) {
           return;
         }
-        if (
-          path.node.param &&
-          !binding.referenced &&
-          path.scope.hasBinding(path.node.param.name)
-        ) {
+        if (path.node.param && !binding.referenced) {
           const paramPath = path.get("param");
           paramPath.remove();
         }
