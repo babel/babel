@@ -140,7 +140,7 @@ const collectorVisitor = {
   },
 
   UpdateExpression(path, state) {
-    state.constantViolations.push(path.get("argument"));
+    state.constantViolations.push(path);
   },
 
   UnaryExpression(path, state) {

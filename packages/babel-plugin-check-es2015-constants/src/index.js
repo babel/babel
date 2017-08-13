@@ -36,9 +36,9 @@ export default function({ messages, types: t }) {
                     violation.get("right").node,
                   ),
                 );
-            } else if (violation.parentPath.isUpdateExpression()) {
-              violation.parentPath.replaceWith(
-                statementBeforeExpression(throwNode, violation.parent),
+            } else if (violation.isUpdateExpression()) {
+              violation.replaceWith(
+                statementBeforeExpression(throwNode, violation.node),
               );
             } else if (violation.parentPath.isForXStatement()) {
               violation.parentPath.ensureBlock();
