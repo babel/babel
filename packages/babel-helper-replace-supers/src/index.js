@@ -53,7 +53,9 @@ const visitor = {
   },
 
   ReturnStatement(path, state) {
-    state.returns.push(path);
+    if (!path.getFunctionParent().isArrowFunctionExpression()) {
+      state.returns.push(path);
+    }
   },
 
   ThisExpression(path, state) {
