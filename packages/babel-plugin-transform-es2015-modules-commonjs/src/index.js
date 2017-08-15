@@ -1,5 +1,7 @@
 import { basename, extname } from "path";
 import template from "babel-template";
+import babelPluginTransformStrictMode from "babel-plugin-transform-strict-mode";
+
 import * as t from "babel-types";
 
 const buildRequire = template(`
@@ -73,23 +75,53 @@ export default function () {
       if (node[REASSIGN_REMAP_SKIP]) return;
 
       const left = path.get("left");
-      if (!left.isIdentifier()) return;
+      if (left.isIdentifier()) {
+        const name = left.node.name;
+        const exports = this.exports[name];
+        if (!exports) return;
 
-      const name = left.node.name;
-      const exports = this.exports[name];
-      if (!exports) return;
+        // redeclared in this scope
+        if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
 
-      // redeclared in this scope
-      if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
+        node[REASSIGN_REMAP_SKIP] = true;
 
-      node[REASSIGN_REMAP_SKIP] = true;
+        for (const reid of exports) {
+          node = buildExportsAssignment(reid, node).expression;
+        }
 
-      for (const reid of exports) {
-        node = buildExportsAssignment(reid, node).expression;
+        path.replaceWith(node);
+        this.requeueInParent(path);
       }
+      else if (left.isObjectPattern()) {
+        for (const property of left.node.properties) {
+          const name = property.value.name;
 
-      path.replaceWith(node);
-      this.requeueInParent(path);
+          const exports = this.exports[name];
+          if (!exports) continue;
+
+          // redeclared in this scope
+          if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
+
+          node[REASSIGN_REMAP_SKIP] = true;
+
+          path.insertAfter(buildExportsAssignment(t.identifier(name), t.identifier(name)));
+        }
+      }
+      else if (left.isArrayPattern()) {
+        for (const element of left.node.elements) {
+          const name = element.name;
+
+          const exports = this.exports[name];
+          if (!exports) continue;
+
+          // redeclared in this scope
+          if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
+
+          node[REASSIGN_REMAP_SKIP] = true;
+
+          path.insertAfter(buildExportsAssignment(t.identifier(name), t.identifier(name)));
+        }
+      }
     },
 
     UpdateExpression(path) {
@@ -127,7 +159,7 @@ export default function () {
   };
 
   return {
-    inherits: require("babel-plugin-transform-strict-mode"),
+    inherits: babelPluginTransformStrictMode,
 
     visitor: {
       ThisExpression(path, state) {
@@ -300,15 +332,42 @@ export default function () {
                     const id = decl.get("id");
 
                     const init = decl.get("init");
+                    const exportsToInsert = [];
                     if (!init.node) init.replaceWith(t.identifier("undefined"));
 
                     if (id.isIdentifier()) {
                       addTo(exports, id.node.name, id.node);
                       init.replaceWith(buildExportsAssignment(id.node, init.node).expression);
                       nonHoistedExportNames[id.node.name] = true;
-                    } else {
-                      // todo
+                    } else if (id.isObjectPattern()) {
+                      for (let i = 0; i < id.node.properties.length; i++) {
+                        const prop = id.node.properties[i];
+                        let propValue = prop.value;
+                        if (t.isAssignmentPattern(propValue)) {
+                          propValue = propValue.left;
+                        } else if (t.isRestProperty(prop)) {
+                          propValue = prop.argument;
+                        }
+                        addTo(exports, propValue.name, propValue);
+                        exportsToInsert.push(buildExportsAssignment(propValue, propValue));
+                        nonHoistedExportNames[propValue.name] = true;
+                      }
+                    } else if (id.isArrayPattern() && id.node.elements) {
+                      for (let i = 0; i < id.node.elements.length; i++) {
+                        let elem = id.node.elements[i];
+                        if (!elem) continue;
+                        if (t.isAssignmentPattern(elem)) {
+                          elem = elem.left;
+                        } else if (t.isRestElement(elem)) {
+                          elem = elem.argument;
+                        }
+                        const name = elem.name;
+                        addTo(exports, name, elem);
+                        exportsToInsert.push(buildExportsAssignment(elem, elem));
+                        nonHoistedExportNames[name] = true;
+                      }
                     }
+                    path.insertAfter(exportsToInsert);
                   }
                   path.replaceWith(declaration.node);
                 }
