@@ -5,7 +5,6 @@
 This preset always includes the following plugins:
 
 - [syntax-jsx](https://babeljs.io/docs/plugins/syntax-jsx/)
-- [transform-flow-strip-types](https://babeljs.io/docs/plugins/transform-flow-strip-types/)
 - [transform-react-jsx](https://babeljs.io/docs/plugins/transform-react-jsx/)
 - [transform-react-display-name](https://babeljs.io/docs/plugins/transform-react-display-name/)
 
@@ -14,15 +13,7 @@ And with the `development` option:
 - [transform-react-jsx-self](https://babeljs.io/docs/plugins/transform-react-jsx-self/)
 - [transform-react-jsx-source](https://babeljs.io/docs/plugins/transform-react-jsx-source/)
 
-Note: This preset sets the `requireDirective` option on
-`transform-flow-strip-types`. This means Flow annotations and declarations
-will _only_ be removed in files that have a `// @flow ` directive. It will also
-throw errors for any Flow annotations found in files without the directive.
-
-```js
-// @flow
-function foo(numVal: number, strVal: string) {}
-```
+> Note: Flow syntax support is no longer enabled in v7. For that, you will need to add the [Flow preset](https://babeljs.io/docs/plugins/preset-flow/).
 
 ## Install
 

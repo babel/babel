@@ -50,7 +50,7 @@ export default function({ types: t }) {
         if (skipStrip) {
           throw path.buildCodeFrameError(
             "A @flow directive is required when using Flow annotations with " +
-              "babel-preset-react or the `requireDirective` option.",
+              "the `requireDirective` option.",
           );
         }
 

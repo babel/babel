@@ -1,3 +1,0 @@
-{
-  "throws": "A @flow directive is required when using Flow annotations with babel-preset-react or the `requireDirective` option."
-}
