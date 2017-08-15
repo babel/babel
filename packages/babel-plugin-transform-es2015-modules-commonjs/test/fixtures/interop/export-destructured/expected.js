@@ -6,6 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.f1 = f1;
 exports.f2 = f2;
 exports.f3 = f3;
+exports.f4 = f4;
 let x = exports.x = 0;
 let y = exports.y = 0;
 
@@ -22,6 +23,12 @@ function f2() {
 
 function f3() {
   [x, y, z] = [3, 4, 5];
+  exports.y = y;
+  exports.x = x;
+}
+
+function f4() {
+  [x,, y] = [3, 4, 5];
   exports.y = y;
   exports.x = x;
 }

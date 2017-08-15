@@ -12,3 +12,7 @@ export function f2 () {
 export function f3 () {
   [x, y, z] = [3, 4, 5]
 }
+
+export function f4 () {
+  [x, , y] = [3, 4, 5]
+}

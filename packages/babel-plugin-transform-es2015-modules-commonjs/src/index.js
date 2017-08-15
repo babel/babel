@@ -109,6 +109,7 @@ export default function () {
       }
       else if (left.isArrayPattern()) {
         for (const element of left.node.elements) {
+          if (!element) continue;
           const name = element.name;
 
           const exports = this.exports[name];
