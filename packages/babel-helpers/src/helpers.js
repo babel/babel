@@ -601,13 +601,29 @@ helpers.objectDestructuringEmpty = template(`
 `);
 
 helpers.objectWithoutProperties = template(`
-  (function (obj, keys) {
+  (function (source, excluded) {
+    if (source == null) return {};
+
     var target = {};
-    for (var i in obj) {
-      if (keys.indexOf(i) >= 0) continue;
-      if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
-      target[i] = obj[i];
+    var sourceKeys = Object.keys(source);
+    var key, i;
+
+    for (i = 0; i < sourceKeys.length; i++) {
+      key = sourceKeys[i];
+      if (excluded.indexOf(key) >= 0) continue;
+      target[key] = source[key];
     }
+
+    if (Object.getOwnPropertySymbols) {
+      var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+      for (i = 0; i < sourceSymbolKeys.length; i++) {
+        key = sourceSymbolKeys[i];
+        if (excluded.indexOf(key) >= 0) continue;
+        if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+        target[key] = source[key];
+      }
+    }
+
     return target;
   })
 `);
@@ -760,6 +776,26 @@ helpers.toConsumableArray = template(`
       return arr2;
     } else {
       return Array.from(arr);
+    }
+  });
+`);
+
+helpers.skipFirstGeneratorNext = template(`
+  (function (fn) {
+    return function () {
+      var it = fn.apply(this, arguments);
+      it.next();
+      return it;
+    }
+  });
+`);
+
+helpers.toPropertyKey = template(`
+  (function (key) {
+    if (typeof key === "symbol") {
+      return key;
+    } else {
+      return String(key);
     }
   });
 `);

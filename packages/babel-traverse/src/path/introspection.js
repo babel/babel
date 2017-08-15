@@ -215,8 +215,10 @@ export function willIMaybeExecuteBefore(target) {
 
 export function _guessExecutionStatusRelativeTo(target) {
   // check if the two paths are in different functions, we can't track execution of these
-  const targetFuncParent = target.scope.getFunctionParent();
-  const selfFuncParent = this.scope.getFunctionParent();
+  const targetFuncParent =
+    target.scope.getFunctionParent() || target.scope.getProgramParent();
+  const selfFuncParent =
+    this.scope.getFunctionParent() || target.scope.getProgramParent();
 
   // here we check the `node` equality as sometimes we may have different paths for the
   // same node due to path thrashing
@@ -268,12 +270,9 @@ export function _guessExecutionStatusRelativeTo(target) {
   }
 
   // otherwise we're associated by a parent node, check which key comes before the other
-  const targetKeyPosition = t.VISITOR_KEYS[targetRelationship.type].indexOf(
-    targetRelationship.key,
-  );
-  const selfKeyPosition = t.VISITOR_KEYS[selfRelationship.type].indexOf(
-    selfRelationship.key,
-  );
+  const keys = t.VISITOR_KEYS[commonPath.type];
+  const targetKeyPosition = keys.indexOf(targetRelationship.key);
+  const selfKeyPosition = keys.indexOf(selfRelationship.key);
   return targetKeyPosition > selfKeyPosition ? "before" : "after";
 }
 

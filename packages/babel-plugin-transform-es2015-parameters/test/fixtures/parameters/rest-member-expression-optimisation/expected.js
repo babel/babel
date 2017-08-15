@@ -20,11 +20,7 @@ function t() {
 
 
 function t() {
-  for (var _len = arguments.length, items = Array(_len), _key = 0; _key < _len; _key++) {
-    items[_key] = arguments[_key];
-  }
-
-  for (var i = 0; i < items.length; i++) {
-    return items[i];
+  for (var i = 0; i < arguments.length; i++) {
+    return arguments.length <= i ? undefined : arguments[i];
   }
 }

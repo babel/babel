@@ -84,7 +84,7 @@ new exists?.(); // undefined
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-optional-chaining
+npm install --save-dev babel-plugin-transform-optional-chaining
 ```
 
 ## Usage
@@ -95,21 +95,21 @@ npm install --save-dev babel-plugin-syntax-optional-chaining
 
 ```json
 {
-  "plugins": ["syntax-optional-chaining"]
+  "plugins": ["transform-optional-chaining"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-optional-chaining script.js
+babel --plugins transform-optional-chaining script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("babel-core").transform("code", {
-  plugins: ["syntax-optional-chaining"]
+  plugins: ["transform-optional-chaining"]
 });
 ```
 

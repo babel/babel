@@ -1,6 +1,5 @@
 import chai from "chai";
 import path from "path";
-import decache from "decache";
 
 const DATA_ES2015 = require.resolve("./__data__/es2015");
 
@@ -40,7 +39,7 @@ describe("babel-register", function() {
 
   afterEach(() => {
     revertRegister();
-    decache(DATA_ES2015);
+    delete require.cache[DATA_ES2015];
   });
 
   it("registers correctly", () => {
@@ -53,7 +52,7 @@ describe("babel-register", function() {
     setupRegister();
 
     chai.expect(require(DATA_ES2015)).to.be.ok;
-    decache(DATA_ES2015);
+    delete require.cache[DATA_ES2015];
 
     revertRegister();
 

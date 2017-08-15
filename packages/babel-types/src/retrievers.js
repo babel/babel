@@ -70,6 +70,7 @@ getBindingIdentifiers.keys = {
   DeclareVariable: ["id"],
   InterfaceDeclaration: ["id"],
   TypeAlias: ["id"],
+  OpaqueType: ["id"],
 
   CatchClause: ["param"],
   LabeledStatement: ["label"],

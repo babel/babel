@@ -1,4 +1,5 @@
 import * as t from "babel-types";
+import { ExportAllDeclaration } from "./modules";
 
 export function AnyTypeAnnotation() {
   this.word("any");
@@ -41,7 +42,26 @@ export function DeclareFunction(node: Object, parent: Object) {
   this.space();
   this.print(node.id, node);
   this.print(node.id.typeAnnotation.typeAnnotation, node);
+
+  if (node.predicate) {
+    this.space();
+    this.print(node.predicate, node);
+  }
+
   this.semicolon();
+}
+
+export function InferredPredicate(/*node: Object*/) {
+  this.token("%");
+  this.word("checks");
+}
+
+export function DeclaredPredicate(node: Object) {
+  this.token("%");
+  this.word("checks");
+  this.token("(");
+  this.print(node.value, node);
+  this.token(")");
 }
 
 export function DeclareInterface(node: Object) {
@@ -75,6 +95,14 @@ export function DeclareTypeAlias(node: Object) {
   this.TypeAlias(node);
 }
 
+export function DeclareOpaqueType(node: Object, parent: Object) {
+  if (!t.isDeclareExportDeclaration(parent)) {
+    this.word("declare");
+    this.space();
+  }
+  this.OpaqueType(node);
+}
+
 export function DeclareVariable(node: Object, parent: Object) {
   if (!t.isDeclareExportDeclaration(parent)) {
     this.word("declare");
@@ -100,17 +128,10 @@ export function DeclareExportDeclaration(node: Object) {
   FlowExportDeclaration.apply(this, arguments);
 }
 
-export function DeclareExportAllDeclaration(node: Object) {
+export function DeclareExportAllDeclaration(/*node: Object*/) {
   this.word("declare");
   this.space();
-  this.word("export");
-  this.space();
-  this.token("*");
-  this.space();
-  this.word("from");
-  this.space();
-  this.print(node.source, node);
-  this.semicolon();
+  ExportAllDeclaration.apply(this, arguments);
 }
 
 function FlowExportDeclaration(node: Object) {
@@ -290,37 +311,26 @@ export function TypeAlias(node: Object) {
   this.semicolon();
 }
 
-export function TypeAnnotation(node: Object) {
-  this.token(":");
+export function OpaqueType(node: Object) {
+  this.word("opaque");
   this.space();
-  if (node.optional) this.token("?");
-  this.print(node.typeAnnotation, node);
-}
-
-export function TypeParameter(node: Object) {
-  this._variance(node);
-
-  this.word(node.name);
-
-  if (node.bound) {
-    this.print(node.bound, node);
+  this.word("type");
+  this.space();
+  this.print(node.id, node);
+  this.print(node.typeParameters, node);
+  if (node.supertype) {
+    this.token(":");
+    this.space();
+    this.print(node.supertype, node);
   }
-
-  if (node.default) {
+  if (node.impltype) {
     this.space();
     this.token("=");
     this.space();
-    this.print(node.default, node);
+    this.print(node.impltype, node);
   }
+  this.semicolon();
 }
-
-export function TypeParameterInstantiation(node: Object) {
-  this.token("<");
-  this.printList(node.params, node, {});
-  this.token(">");
-}
-
-export { TypeParameterInstantiation as TypeParameterDeclaration };
 
 export function ObjectTypeAnnotation(node: Object) {
   if (node.exact) {

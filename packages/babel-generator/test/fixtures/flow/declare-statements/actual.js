@@ -19,3 +19,7 @@ declare type B = {
 declare interface I { foo: string }
 declare interface I<T> { foo: T }
 declare module.exports: { foo: string }
+declare opaque type Foo<T>: Bar<T>;
+declare opaque type ID;
+declare opaque type num: number;
+declare opaque type NumArray;

@@ -54,56 +54,67 @@ for (const type in t.NODE_FIELDS) {
   const struct = ['type: "' + type + '";'];
   const args = [];
 
-  for (const fieldName in fields) {
-    const field = fields[fieldName];
+  Object.keys(t.NODE_FIELDS[type])
+    .sort((fieldA, fieldB) => {
+      const indexA = t.BUILDER_KEYS[type].indexOf(fieldA);
+      const indexB = t.BUILDER_KEYS[type].indexOf(fieldB);
+      if (indexA === indexB) return fieldA < fieldB ? -1 : 1;
+      if (indexA === -1) return 1;
+      if (indexB === -1) return -1;
+      return indexA - indexB;
+    })
+    .forEach(fieldName => {
+      const field = fields[fieldName];
 
-    let suffix = "";
-    if (field.optional || field.default != null) suffix += "?";
+      let suffix = "";
+      if (field.optional || field.default != null) suffix += "?";
 
-    let typeAnnotation = "any";
+      let typeAnnotation = "any";
 
-    const validate = field.validate;
-    if (validate) {
-      if (validate.oneOf) {
-        typeAnnotation = validate.oneOf
-          .map(function(val) {
-            return JSON.stringify(val);
-          })
-          .join(" | ");
-      }
+      const validate = field.validate;
+      if (validate) {
+        if (validate.oneOf) {
+          typeAnnotation = validate.oneOf
+            .map(function(val) {
+              return JSON.stringify(val);
+            })
+            .join(" | ");
+        }
 
-      if (validate.type) {
-        typeAnnotation = validate.type;
+        if (validate.type) {
+          typeAnnotation = validate.type;
 
-        if (typeAnnotation === "array") {
-          typeAnnotation = "Array<any>";
+          if (typeAnnotation === "array") {
+            typeAnnotation = "Array<any>";
+          }
+        }
+
+        if (validate.oneOfNodeTypes) {
+          const types = validate.oneOfNodeTypes.map(
+            type => `${NODE_PREFIX}${type}`
+          );
+          typeAnnotation = types.join(" | ");
+          if (suffix === "?") typeAnnotation = "?" + typeAnnotation;
         }
       }
 
-      if (validate.oneOfNodeTypes) {
-        const types = validate.oneOfNodeTypes.map(
-          type => `${NODE_PREFIX}${type}`
-        );
-        typeAnnotation = types.join(" | ");
-        if (suffix === "?") typeAnnotation = "?" + typeAnnotation;
+      if (typeAnnotation) {
+        suffix += ": " + typeAnnotation;
       }
-    }
 
-    if (typeAnnotation) {
-      suffix += ": " + typeAnnotation;
-    }
+      args.push(t.toBindingIdentifierName(fieldName) + suffix);
 
-    args.push(t.toBindingIdentifierName(fieldName) + suffix);
-    if (!t.isValidIdentifier(fieldName)) continue;
-    struct.push(fieldName + suffix + ";");
-  }
+      if (t.isValidIdentifier(fieldName)) {
+        struct.push(fieldName + suffix + ";");
+      }
+    });
 
   code += `declare class ${NODE_PREFIX}${type} extends ${NODE_PREFIX} {
   ${struct.join("\n  ").trim()}
 }\n\n`;
 
-  // Flow chokes on super() :/
-  if (type !== "Super") {
+  // Flow chokes on super() and import() :/
+  if (type !== "Super" && type !== "Import") {
     lines.push(
       `declare function ${type[0].toLowerCase() + type.slice(1)}(${args.join(
         ", "

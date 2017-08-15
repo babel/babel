@@ -1,7 +1,6 @@
 import { expect } from "chai";
 import fs from "fs";
 import path from "path";
-import decache from "decache";
 
 const testCacheFilename = path.join(__dirname, ".babel");
 const oldBabelDisableCacheValue = process.env.BABEL_DISABLE_CACHE;
@@ -36,7 +35,7 @@ describe("babel register", () => {
 
     beforeEach(() => {
       // Since lib/cache is a singleton we need to fully reload it
-      decache("../lib/cache");
+      delete require.cache[require.resolve("../lib/cache")];
       const cache = require("../lib/cache");
 
       load = cache.load;

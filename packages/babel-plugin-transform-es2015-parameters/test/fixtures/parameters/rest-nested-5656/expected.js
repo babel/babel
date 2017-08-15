@@ -28,7 +28,7 @@ function d(thing) {
   };
 
   {
-    var _args = thing;
+    var args = thing;
     foo(thing);
   }
 }
