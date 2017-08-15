@@ -276,24 +276,27 @@ helpers.decorate = template(`
   (function (constructor, undecorated, memberDecorators, heritage) {
     const prototype = constructor.prototype;
     let finishers = [];
-    const elementDescriptors = {}; // elementDescriptors is meant to be an array, so this will be converted later
-    //TODO: merging of elementDescriptors
+    const elementDescriptors = new Map(); // elementDescriptors is meant to be an array, so this will be converted later
 
     for (const [key, isStatic] of undecorated) {
       const target = isStatic ? constructor : prototype;
       const propertyDescriptor = Object.getOwnPropertyDescriptor(target, key);
-      elementDescriptors[key] = babelHelpers.makeElementDescriptor(
-        "property",
-        key,
-        isStatic,
-        propertyDescriptor,
+      elementDescriptors.set(
+        [key, isStatic], 
+        babelHelpers.makeElementDescriptor(
+          "property",
+          key,
+          isStatic,
+          propertyDescriptor,
+        )
       );
     }
 
+    // decorate and store in elementDescriptors
     for (const [key, decorators, isStatic] of memberDecorators) {
       const target = isStatic ? constructor : prototype;
       const propertyDescriptor =
-        elementDescriptors[key] && elementDescriptors[key].descriptor 
+        elementDescriptors.has([key, isStatic]) && elementDescriptors.get([key, isStatic]).descriptor 
         || Object.getOwnPropertyDescriptor(target, key);
 
       const elementDescriptor = babelHelpers.makeElementDescriptor(
@@ -304,11 +307,11 @@ helpers.decorate = template(`
       )
       const decorated = babelHelpers.decorateElement(elementDescriptor, decorators);
 
-      elementDescriptors[key] = decorated.descriptor;
+      elementDescriptors.set([key, isStatic], decorated.descriptor);
 
       for (const extra of decorated.extras) {
         // extras is an array of element descriptors
-        elementDescriptors[extra.key] = extra;
+        elementDescriptors.set([extra.key, extra.isStatic], extra);
       }
 
       finishers = finishers.concat(decorated.finishers);
@@ -319,8 +322,9 @@ helpers.decorate = template(`
         constructor,
         classDecorators,
         heritage,
-        Object.values(elementDescriptors)
+        Array.from(elementDescriptors.values())
       );
+
       finishers = finishers.concat(result.finishers);
       //TODO: heritage hacks so result.constructor has the correct prototype and instanceof results
       //TODO: step 38 and 39, what do they mean "initialize"?
@@ -334,6 +338,10 @@ helpers.decorate = template(`
         );
       }
 
+      for (let finisher of finishers) {
+        finisher.call(undefined, result.constructor);
+      }
+
       return result.constructor;
     };
   });
@@ -343,7 +351,7 @@ helpers.decorateElement = template(`
   (function (descriptor, decorators) {
     //spec uses the param "element" instead of "descriptor" and finds descriptor from it
     let extras = [];
-    const finishers = [];
+    let finishers = [];
 
     let previousDescriptor = descriptor;
 
@@ -351,9 +359,10 @@ helpers.decorateElement = template(`
       const decorator = decorators[i];
       const result = decorator(previousDescriptor.descriptor);
 
-      if (result.finisher) {
-        finishers.push(current.finisher);
-        result.finisher = undefined;
+      //TODO: why does .finisher exist on an elementDescriptor? the following conditional deviates from 
+      //the spec because it uses result.finishers rather than result.descriptor.finisher
+      if (result.finishers) {
+        finishers = finishers.concat(result.finishers);
       }
 
       previousDescriptor.descriptor = result.descriptor; // just change the property descriptor
@@ -563,12 +572,17 @@ helpers.makeElementDescriptor = template(`
 helpers.mergeDuplicateElements = template(`
   (function (elements) {
     let elementMap = {};
+    let staticElementMap = {};
 
     for (let elementDescriptor of elements) {
-      elementMap[elementDescriptor.key] = elementDescriptor;
+      if (elementDescriptor.isStatic) {
+        staticElementMap[elementDescriptor.key] = elementDescriptor;
+      } else {
+        elementMap[elementDescriptor.key] = elementDescriptor;
+      }
     }
 
-    return Object.values(elementMap); 
+    return Object.values(elementMap).concat(Object.values(staticElementMap)); 
   });
 `);
 
