@@ -407,6 +407,21 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
 ---
 
+### declareExportDeclaration
+```javascript
+t.declareExportDeclaration(declaration, specifiers, source)
+```
+
+See also `t.isDeclareExportDeclaration(node, opts)` and `t.assertDeclareExportDeclaration(node, opts)`.
+
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+
+ - `declaration` (required)
+ - `specifiers` (required)
+ - `source` (required)
+
+---
+
 ### declareFunction
 ```javascript
 t.declareFunction(id)
