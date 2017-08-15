@@ -56,7 +56,8 @@
     "lerna": "^2.0.0",
     "mocha": "^2.3.4",
     "promise": "^7.0.4",
-    "semver": "^5.0.3"
+    "semver": "^5.0.3",
+    "uglify-js": "^3.0.27"
   },
   "license": "BSD",
   "engines": {
