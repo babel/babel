@@ -104,4 +104,4 @@ require("babel-core").transform("code", {
 
 ## References
 
-* [Proposal: Javascript Decorators](https://github.com/wycats/javascript-decorators/blob/master/README.md)
+* [Proposal: JavaScript Decorators](https://github.com/wycats/javascript-decorators/blob/master/README.md)
