@@ -44,8 +44,7 @@
     "regenerator-preset": "^0.9.6",
     "regenerator-runtime": "^0.10.5",
     "regenerator-transform": "^0.9.12",
-    "through": "^2.3.8",
-    "uglify-js": "^3.0.27"
+    "through": "^2.3.8"
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",
@@ -57,7 +56,8 @@
     "lerna": "^2.0.0",
     "mocha": "^2.3.4",
     "promise": "^7.0.4",
-    "semver": "^5.0.3"
+    "semver": "^5.0.3",
+    "uglify-js": "^3.0.27"
   },
   "license": "BSD",
   "engines": {

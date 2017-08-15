@@ -76,7 +76,7 @@ describe("uglifyjs dead code removal", function() {
       parser: require("babylon")
     });
   }
-  
+
   it("works with function expressions", function() {
     var file1 = compile([
       'var foo = function* () {};',
@@ -98,7 +98,7 @@ describe("uglifyjs dead code removal", function() {
     assert.strictEqual(declaration.id.name, 'foo');
   });
 
-  it("works with function definitions", function() {
+  it("works with function declarations", function() {
     var file1 = compile([
       'function* foo() {};',
       'function* bar() {};'
@@ -134,7 +134,7 @@ describe("uglifyjs dead code removal", function() {
 })
 
 context("functions", function() {
-  var itMarksCorrectly = function(marked, varName) {
+  function marksCorrectly(marked, varName) {
     // marked should be a VariableDeclarator
     n.VariableDeclarator.assert(marked);
 
@@ -148,12 +148,12 @@ context("functions", function() {
 
     // with said call expression marked as a pure function
     assert.strictEqual(marked.init.leadingComments[0].value, '#__PURE__');
-  };
+  }
 
   describe("function declarations", function() {
     it("should work with a single function", function() {
       var ast = recast.parse('function* foo(){};', {
-          parser: require("babylon")
+        parser: require("babylon")
       });
 
       // get our declarations
@@ -162,7 +162,7 @@ context("functions", function() {
       const declarations = declaration.declarations;
 
       // verify our declaration is marked correctly
-      itMarksCorrectly(declarations[0], '_marked');
+      marksCorrectly(declarations[0], '_marked');
 
       // and has our function name as its first argument
       assert.strictEqual(declarations[0].init.arguments[0].name, 'foo');
@@ -173,7 +173,7 @@ context("functions", function() {
         'function* foo() {};',
         'function* bar() {};'
       ].join("\n"), {
-          parser: require("babylon")
+        parser: require("babylon")
       });
 
       // get our declarations
@@ -183,11 +183,11 @@ context("functions", function() {
 
       // verify our declarations are marked correctly and have our function name
       // as their first argument
-      itMarksCorrectly(declarations[0], '_marked');
+      marksCorrectly(declarations[0], '_marked');
       n.Identifier.assert(declarations[0].init.arguments[0]);
       assert.strictEqual(declarations[0].init.arguments[0].name, 'foo');
 
-      itMarksCorrectly(declarations[1], '_marked2');
+      marksCorrectly(declarations[1], '_marked2');
       n.Identifier.assert(declarations[1].init.arguments[0]);
       assert.strictEqual(declarations[1].init.arguments[0].name, 'bar');
     });
@@ -196,7 +196,7 @@ context("functions", function() {
   describe("function expressions", function() {
     it("should work with a named function", function() {
       var ast = recast.parse('var a = function* foo(){};', {
-          parser: require("babylon")
+        parser: require("babylon")
       });
 
       // get our declarations
@@ -205,7 +205,7 @@ context("functions", function() {
       const declarator = declaration.declarations[0];
 
       // verify our declaration is marked correctly
-      itMarksCorrectly(declarator, 'a');
+      marksCorrectly(declarator, 'a');
 
       // and that our first argument is our original function expression
       n.FunctionExpression.assert(declarator.init.arguments[0]);
@@ -214,7 +214,7 @@ context("functions", function() {
 
     it("should work with an anonymous function", function() {
       var ast = recast.parse('var a = function* (){};', {
-          parser: require("babylon")
+        parser: require("babylon")
       });
 
       // get our declarations
@@ -223,7 +223,7 @@ context("functions", function() {
       const declarator = declaration.declarations[0];
 
       // verify our declaration is marked correctly
-      itMarksCorrectly(declarator, 'a');
+      marksCorrectly(declarator, 'a');
 
       // and that our first argument is our original function expression
       n.FunctionExpression.assert(declarator.init.arguments[0]);
