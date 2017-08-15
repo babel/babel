@@ -8,14 +8,14 @@
  * the same directory.
  */
 
+"use strict";
+
 import assert from "assert";
 import * as t from "babel-types";
 import { hoist } from "./hoist";
 import { Emitter } from "./emit";
 import replaceShorthandObjectMethod from "./replaceShorthandObjectMethod";
 import * as util from "./util";
-
-let getMarkInfo = require("private").makeAccessor();
 
 exports.name = "regenerator-transform";
 
@@ -180,61 +180,58 @@ function getOuterFnExpr(funPath) {
 
   if (node.generator && // Non-generator functions don't need to be marked.
       t.isFunctionDeclaration(node)) {
-    let pp = funPath.findParent(function (path) {
-      return path.isProgram() || path.isBlockStatement();
-    });
-
-    if (!pp) {
-      return node.id;
-    }
-
-    let markDecl = getRuntimeMarkDecl(pp);
-    let declarations = markDecl.declarations;
-    let index = declarations.length;
-
-    // this can change from pass to pass if something else is altering our body
-    // so we have to look it up every time :/
-    let declarationsIndex = pp.node.body.findIndex((p) => {
-      return t.isVariableDeclaration(p) && p.declarations === declarations;
-    });
-    assert(!isNaN(declarationsIndex));
-
-    // get a new unique id for our marked variable
-    let markedId = pp.scope.generateUidIdentifier("marked");
-
-    // now push our new declaration into our list
-    declarations.push(t.variableDeclarator(
-      markedId,
-      t.callExpression(util.runtimeProperty("mark"), [node.id])
-    ));
-
-    // assemble the path to our mark declarations
-    let bodyPathName = 'body.' + String(declarationsIndex) + '.declarations.' + String(index) + '.init';
-    let bodyPath = pp.get(bodyPathName);
-
-    // mark our call to util.runtimeProperty("mark") as pure to enable tree-shaking
-    bodyPath.addComment("leading", "#__PURE__");
-
-    // and return our new id
-    return markedId;
+    // Return the identifier returned by runtime.mark(<node.id>).
+    return getMarkedFunctionId(funPath);
   }
 
   return node.id;
 }
 
-function getRuntimeMarkDecl(blockPath) {
-  let block = blockPath.node;
-  assert.ok(Array.isArray(block.body));
+const getMarkInfo = require("private").makeAccessor();
 
-  let info = getMarkInfo(block);
-  if (info.decl) {
-    return info.decl;
+function getMarkedFunctionId(funPath) {
+  const node = funPath.node;
+  t.assertIdentifier(node.id);
+
+  const blockPath = funPath.findParent(function (path) {
+    return path.isProgram() || path.isBlockStatement();
+  });
+
+  if (!blockPath) {
+    return node.id;
   }
 
-  info.decl = t.variableDeclaration("var", [])
-  blockPath.unshiftContainer("body", info.decl);
+  const block = blockPath.node;
+  assert.ok(Array.isArray(block.body));
 
-  return info.decl;
+  const info = getMarkInfo(block);
+  if (!info.decl) {
+    info.decl = t.variableDeclaration("var", []);
+    blockPath.unshiftContainer("body", info.decl);
+    info.declPath = blockPath.get("body.0");
+  }
+
+  assert.strictEqual(info.declPath.node, info.decl);
+
+  // Get a new unique identifier for our marked variable.
+  const markedId = blockPath.scope.generateUidIdentifier("marked");
+  const markCallExp = t.callExpression(
+    util.runtimeProperty("mark"),
+    [node.id]
+  );
+
+  const index = info.decl.declarations.push(
+    t.variableDeclarator(markedId, markCallExp)
+  ) - 1;
+
+  const markCallExpPath =
+    info.declPath.get("declarations." + index + ".init");
+
+  assert.strictEqual(markCallExpPath.node, markCallExp);
+
+  markCallExpPath.addComment("leading", "#__PURE__");
+
+  return markedId;
 }
 
 function renameArguments(funcPath, argsId) {
