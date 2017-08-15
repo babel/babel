@@ -12,13 +12,13 @@ Below is a class with four class properties which will be transformed.
     instanceProperty = "bork";
     boundFunction = () => {
       return this.instanceProperty;
-    }
+    };
 
     //Static class properties
     static staticProperty = "babelIsCool";
     static staticFunction = function() {
       return Bork.staticProperty;
-    }
+    };
   }
 
   let myBork = new Bork;
