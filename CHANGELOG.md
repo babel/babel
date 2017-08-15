@@ -13,6 +13,65 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 
 See [CHANGELOG - 6to5](CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 
+## 6.26.0 (2017-08-15)
+
+> Backports for some folks (also other's when we accidently merged PRs from both 6.x/master)
+> Lesson learned: just use `master` and backport on another branch.
+
+#### :eyeglasses: Spec Compliancy
+* `babel-core`, `babel-generator`, `babel-plugin-transform-flow-comments`, `babel-plugin-transform-flow-strip-types`, `babel-traverse`, `babel-types`
+  * [#6081](https://github.com/babel/babel/pull/6081) Flow opaque type 6.x backport. ([@jbrown215](https://github.com/jbrown215))
+
+#### :rocket: New Feature
+* `babel-cli`
+  * [#5796](https://github.com/babel/babel/pull/5796) Allow --inspect-brk option to be used with babel-node [6.x backport]. ([@noinkling](https://github.com/noinkling))
+
+#### :bug: Bug Fix
+* `babel-plugin-transform-es2015-modules-commonjs`
+  * [#5811](https://github.com/babel/babel/pull/5811) Fix 5768. ([@joshwnj](https://github.com/joshwnj))
+  * [#5469](https://github.com/babel/babel/pull/5469) Fix commonjs exports with destructuring.. ([@yavorsky](https://github.com/yavorsky))
+* `babel-types`
+  * [#5693](https://github.com/babel/babel/pull/5693) Hoist toSequenceExpression's convert helper. ([@jridgewell](https://github.com/jridgewell))
+
+#### :memo: Documentation
+* `babel-plugin-transform-class-properties`
+  * [#6005](https://github.com/babel/babel/pull/6005) FIX access to the prototype of an instance. ([@shuaibird](https://github.com/shuaibird))
+* `babel-plugin-transform-runtime`
+  * [#5857](https://github.com/babel/babel/pull/5857) Fix typos in README.md. ([@danny-andrews](https://github.com/danny-andrews))
+* `babel-plugin-transform-regenerator`
+  * [#5852](https://github.com/babel/babel/pull/5852) Fix babel-plugin-transform-regenerator README. ([@k15a](https://github.com/k15a))
+* Other
+  * [#5788](https://github.com/babel/babel/pull/5788) Add a section on troubleshooting [skip ci]. ([@peey](https://github.com/peey))
+  * [#5755](https://github.com/babel/babel/pull/5755) Fix broken tables in README.md. ([@u9lyfish](https://github.com/u9lyfish))
+* `babel-generator`, `babel-plugin-transform-es2015-arrow-functions`, `babel-plugin-transform-es2015-modules-commonjs`, `babel-plugin-transform-es2015-spread`, `babel-plugin-transform-runtime`, `babel-register`
+  * [#5613](https://github.com/babel/babel/pull/5613) Backport doc changes. ([@xtuc](https://github.com/xtuc))
+
+#### :house: Internal
+* `babel-traverse`
+  * [#5965](https://github.com/babel/babel/pull/5965) Remove unused functions from renamer.js.. ([@mcav](https://github.com/mcav))
+  * [#5363](https://github.com/babel/babel/pull/5363) Increase the code coverage for traverse evaluation. ([@ssuman](https://github.com/ssuman))
+* Other
+  * [#5938](https://github.com/babel/babel/pull/5938) Remove codecov node package and use bash uploader. ([@existentialism](https://github.com/existentialism))
+
+#### Committers: 17
+- Artem Yavorsky ([yavorsky](https://github.com/yavorsky))
+- Brian Ng ([existentialism](https://github.com/existentialism))
+- Danny Andrews ([danny-andrews](https://github.com/danny-andrews))
+- Henry Zhu ([hzoo](https://github.com/hzoo))
+- Jeffrey Wear ([wearhere](https://github.com/wearhere))
+- Josh Johnston ([joshwnj](https://github.com/joshwnj))
+- Justin Ridgewell ([jridgewell](https://github.com/jridgewell))
+- Konstantin Pschera ([k15a](https://github.com/k15a))
+- Malcolm ([noinkling](https://github.com/noinkling))
+- Marcus Cavanaugh ([mcav](https://github.com/mcav))
+- Peeyush Kushwaha ([peey](https://github.com/peey))
+- Philipp Friedenberger ([MrSpider](https://github.com/MrSpider))
+- Shuaibird Hwang ([shuaibird](https://github.com/shuaibird))
+- Suman ([ssuman](https://github.com/ssuman))
+- Sven SAULEAU ([xtuc](https://github.com/xtuc))
+- [jbrown215](https://github.com/jbrown215)
+- u9lyfish@gmail.com ([u9lyfish](https://github.com/u9lyfish))
+
 ## 6.25.0 (2017-06-08)
 
 Just backporting a few things.
