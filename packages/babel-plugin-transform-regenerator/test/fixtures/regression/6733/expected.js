@@ -5,7 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = _callee;
 
-var _marked = [_callee].map(regeneratorRuntime.mark);
+var _marked =
+/*#__PURE__*/
+regeneratorRuntime.mark(_callee);
 
 function _callee() {
   var x;
@@ -25,5 +27,5 @@ function _callee() {
           return _context.stop();
       }
     }
-  }, _marked[0], this);
+  }, _marked, this);
 }

@@ -1,7 +1,9 @@
 import _regeneratorRuntime from "foo/regenerator";
 import _Symbol from "foo/core-js/symbol";
 
-var _marked = [giveWord].map(_regeneratorRuntime.mark);
+var _marked =
+/*#__PURE__*/
+_regeneratorRuntime.mark(giveWord);
 
 import foo, * as bar from "someModule";
 export const myWord = _Symbol("abc");
@@ -16,7 +18,7 @@ export function giveWord() {
       case "end":
         return _context.stop();
     }
-  }, _marked[0], this);
+  }, _marked, this);
 }
 foo;
 bar;
