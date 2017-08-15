@@ -10,7 +10,7 @@ var _keys2 = _interopRequireDefault(_keys);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _marked = [fn].map(_regenerator2.default.mark);
+var _marked = /*#__PURE__*/_regenerator2.default.mark(fn);
 
 (0, _keys2.default)({});
 
@@ -23,5 +23,5 @@ function fn() {
           return _context.stop();
       }
     }
-  }, _marked[0], this);
+  }, _marked, this);
 }
