@@ -246,9 +246,9 @@ ava-init@^0.2.0:
     read-pkg-up "^2.0.0"
     write-pkg "^3.1.0"
 
-ava@^0.21.0:
-  version "0.21.0"
-  resolved "https://registry.yarnpkg.com/ava/-/ava-0.21.0.tgz#cd8d8ea3546f57150dea38548b9f72f8ca583d29"
+ava@0.22.0:
+  version "0.22.0"
+  resolved "https://registry.yarnpkg.com/ava/-/ava-0.22.0.tgz#4c28a1fdef7e749ba0c8131ac18a7ca489eef049"
   dependencies:
     "@ava/babel-preset-stage-4" "^1.1.0"
     "@ava/babel-preset-transform-test-files" "^3.0.0"
@@ -3913,9 +3913,9 @@ rollup-watch@^4.0.0:
     require-relative "0.8.7"
     rollup-pluginutils "^2.0.1"
 
-rollup@0.47.0:
-  version "0.47.0"
-  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.47.0.tgz#6a9f695bb4ceb2b27436534cdf5ecb66273472d9"
+rollup@^0.47.0:
+  version "0.47.4"
+  resolved "https://registry.yarnpkg.com/rollup/-/rollup-0.47.4.tgz#e3a55de83a78221d232ce29619a8d68189ae845e"
 
 run-async@^2.2.0:
   version "2.3.0"
