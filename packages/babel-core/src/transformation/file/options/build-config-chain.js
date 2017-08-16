@@ -7,7 +7,8 @@ import path from "path";
 import fs from "fs";
 
 const existsCache = {};
-const jsonCache   = {};
+const configCache = {};
+const ignoreCache = {};
 
 const BABELIGNORE_FILENAME = ".babelignore";
 const BABELRC_FILENAME     = ".babelrc";
@@ -84,12 +85,14 @@ class ConfigChainBuilder {
   }
 
   addIgnoreConfig(loc) {
-    const file  = fs.readFileSync(loc, "utf8");
-    let lines = file.split("\n");
-
-    lines = lines
-      .map((line) => line.replace(/#(.*?)$/, "").trim())
-      .filter((line) => !!line);
+    let lines = ignoreCache[loc];
+    if (!lines) {
+      const file  = fs.readFileSync(loc, "utf8");
+      lines = file.split("\n")
+        .map((line) => line.replace(/#(.*?)$/, "").trim())
+        .filter((line) => !!line);
+      ignoreCache[loc] = lines;
+    }
 
     if (lines.length) {
       this.mergeConfig({
@@ -107,16 +110,17 @@ class ConfigChainBuilder {
 
     this.resolvedConfigs.push(loc);
 
-    const content = fs.readFileSync(loc, "utf8");
-    let options;
-
-    try {
-      options = jsonCache[content] = jsonCache[content] || json.parse(content);
-      if (key) options = options[key];
-    } catch (err) {
-      err.message = `${loc}: Error while parsing JSON - ${err.message}`;
-      throw err;
+    let options = configCache[loc];
+    if (!options) {
+      try {
+        configCache[loc] = options = json.parse(fs.readFileSync(loc, "utf8"));
+      } catch (err) {
+        err.message = `${loc}: Error while parsing JSON - ${err.message}`;
+        throw err;
+      }
     }
+
+    if (key) options = options[key];
 
     this.mergeConfig({
       options,
