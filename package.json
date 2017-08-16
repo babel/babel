@@ -35,6 +35,7 @@
     "gulp-plumber": "^1.0.1",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
+    "inspect-process": "^0.4.2",
     "lerna": "2.0.0-beta.23",
     "lerna-changelog": "^0.2.0",
     "lodash": "^4.2.0",
