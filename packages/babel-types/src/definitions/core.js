@@ -302,7 +302,7 @@ defineType("FunctionExpression", {
 
 defineType("Identifier", {
   builder: ["name"],
-  visitor: ["typeAnnotation"],
+  visitor: ["typeAnnotation", "decorators"],
   aliases: ["Expression", "LVal"],
   fields: {
     name: {
@@ -542,7 +542,7 @@ defineType("ObjectProperty", {
 });
 
 defineType("RestElement", {
-  visitor: ["argument", "typeAnnotation"],
+  visitor: ["argument", "typeAnnotation", "decorators"],
   aliases: ["LVal"],
   fields: {
     argument: {
