@@ -3,6 +3,7 @@ var _class, _temp;
 call((_temp = _class = function _class() {
   babelHelpers.classCallCheck(this, _class);
 }, Object.defineProperty(_class, "test", {
+  configurable: true,
   enumerable: true,
   writable: true,
   value: true
@@ -13,6 +14,7 @@ var _class2 = function _class2() {
 };
 
 Object.defineProperty(_class2, "test", {
+  configurable: true,
   enumerable: true,
   writable: true,
   value: true

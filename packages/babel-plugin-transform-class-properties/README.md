@@ -104,11 +104,13 @@ Without `{ "loose": true }`, the above code will compile to the following, using
 var Bork = function Bork() {
   babelHelpers.classCallCheck(this, Bork);
   Object.defineProperty(this, "x", {
+    configurable: true,
     enumerable: true,
     writable: true,
     value: 'bar'
   });
   Object.defineProperty(this, "y", {
+    configurable: true,
     enumerable: true,
     writable: true,
     value: void 0
@@ -116,11 +118,13 @@ var Bork = function Bork() {
 };
 
 Object.defineProperty(Bork, "a", {
+  configurable: true,
   enumerable: true,
   writable: true,
   value: 'foo'
 });
 Object.defineProperty(Bork, "b", {
+  configurable: true,
   enumerable: true,
   writable: true,
   value: void 0
