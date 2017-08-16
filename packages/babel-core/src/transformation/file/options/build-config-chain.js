@@ -1,5 +1,6 @@
 
 import type Logger from "../logger";
+import codeFrame from "babel-code-frame";
 import resolve from "../../../helpers/resolve";
 import json5 from "json5";
 import isAbsolute from "path-is-absolute";
@@ -114,7 +115,16 @@ class ConfigChainBuilder {
       options = jsonCache[content] = jsonCache[content] || json.parse(content);
       if (key) options = options[key];
     } catch (err) {
-      err.message = `${loc}: Error while parsing JSON - ${err.message}`;
+      const code = codeFrame(content, err.lineNumber, err.columnNumber);
+
+      err.message = `
+${loc}:
+${code}
+Error while parsing JSON - ${err.message}
+      `;
+
+      err.stack = err.stack.replace(/^\s*at\s.*:\d+:\d+[\s\)]*\n/gm, "");
+
       throw err;
     }
 
