@@ -43,6 +43,7 @@ commander.option("-o, --out-file [out]", "Compile all input files into a single 
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
 commander.option("-q, --quiet", "Don't log anything");
+commander.option("--extends [path]", "Path a to .babelrc file to extend");
 /* eslint-enable max-len */
 
 const pkg = require("../../package.json");
