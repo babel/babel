@@ -461,6 +461,8 @@ helpers.set = template(`
 
       if (parent !== null) {
         set(parent, property, value, receiver);
+      } else {
+        Object.defineProperty(receiver, property, {value: value});
       }
     } else if ("value" in desc && desc.writable) {
       desc.value = value;
