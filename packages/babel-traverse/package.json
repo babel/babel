@@ -13,10 +13,10 @@
     "babel-runtime": "^6.22.0",
     "babel-types": "^6.25.0",
     "babylon": "^6.18.0",
-    "debug": "^2.2.0",
-    "globals": "^9.0.0",
-    "invariant": "^2.2.0",
-    "lodash": "^4.2.0"
+    "debug": "^2.6.8",
+    "globals": "^9.18.0",
+    "invariant": "^2.2.2",
+    "lodash": "^4.17.4"
   },
   "devDependencies": {
     "babel-generator": "^6.25.0"

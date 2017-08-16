@@ -6,9 +6,9 @@
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
+    "babel-helper-function-name": "^6.24.1",
     "babel-runtime": "^6.22.0",
-    "lodash": "^4.2.0",
     "babel-types": "^6.24.1",
-    "babel-helper-function-name": "^6.24.1"
+    "lodash": "^4.17.4"
   }
 }

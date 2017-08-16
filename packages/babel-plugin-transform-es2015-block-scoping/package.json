@@ -6,11 +6,11 @@
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
+    "babel-runtime": "^6.22.0",
+    "babel-template": "^6.24.1",
     "babel-traverse": "^6.24.1",
     "babel-types": "^6.24.1",
-    "babel-template": "^6.24.1",
-    "lodash": "^4.2.0",
-    "babel-runtime": "^6.22.0"
+    "lodash": "^4.17.4"
   },
   "keywords": [
     "babel-plugin"
