@@ -46,13 +46,17 @@ npm install --save-dev babel-plugin-transform-class-properties
 
 **.babelrc**
 
+Without options:
+
 ```json
-// without options
 {
   "plugins": ["transform-class-properties"]
 }
+```
 
-// with options
+With options:
+
+```json
 {
   "plugins": [
     ["transform-class-properties", { "loose": true }]
