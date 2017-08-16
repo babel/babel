@@ -16,5 +16,12 @@ describe("react preset", () => {
         }).to.throw(/must be a boolean/);
       });
     });
+    describe("noFlow", () => {
+      it("throws on non-boolean value", () => {
+        expect(function() {
+          react(null, { noFlow: 1 });
+        }).to.throw(/must be a boolean/);
+      });
+    });
   });
 });

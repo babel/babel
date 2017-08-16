@@ -1,0 +1,6 @@
+{
+  "presets": [
+    ["react", { "noFlow": true }]
+  ],
+  "throws": "Unexpected token"
+}

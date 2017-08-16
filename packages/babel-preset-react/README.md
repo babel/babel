@@ -118,3 +118,22 @@ module.exports = {
   }
 }
 ```
+
+### `noFlow`
+
+`boolean`, defaults to `false`.
+
+Toggle [transform-flow-strip-types](https://babeljs.io/docs/plugins/transform-flow-strip-types/) plugin.
+
+This is useful if you want to use the typescript preset:
+
+#### .babelrc
+
+```json
+{
+  "presets": [
+    ["react", { "noFlow": true }],
+    "typescript"
+  ]
+}
+```
