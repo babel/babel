@@ -10,7 +10,7 @@
     factory(mod.exports, global.foo, global.fooBar, global.fooBar);
     global.actual = mod.exports;
   }
-})(this, function (exports, _foo) {
+})(this, function (exports, _foo, _temp, _temp2) {
   "use strict";
 
   Object.defineProperty(exports, "__esModule", {

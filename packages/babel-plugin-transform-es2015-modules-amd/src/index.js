@@ -83,6 +83,10 @@ export default function ({ types: t }) {
           const params = this.sources.map((source) => source[0]);
           let sources = this.sources.map((source) => source[1]);
 
+          params = params.concat(this.bareSources.map(() => {
+            return path.scope.generateUidIdentifier();
+          }));
+
           sources = sources.concat(this.bareSources.filter((str) => {
             return !this.sourceNames[str.value];
           }));
