@@ -6,7 +6,6 @@ import defineType, {
   assertValueType,
   chain,
 } from "./index";
-import { classMethodOrPropertyCommon } from "./es2015";
 
 defineType("TypeAnnotation", {
   aliases: ["Flow"],
@@ -63,34 +62,5 @@ defineType("TypeParameter", {
       validate: assertNodeType("TSType", "Flow"),
       optional: true,
     },
-  },
-});
-
-defineType("ClassProperty", {
-  visitor: ["key", "value", "typeAnnotation", "decorators"],
-  builder: ["key", "value", "typeAnnotation", "decorators", "computed"],
-  aliases: ["Property"],
-  fields: {
-    ...classMethodOrPropertyCommon,
-    value: {
-      validate: assertNodeType("Expression"),
-      optional: true,
-    },
-    typeAnnotation: {
-      validate: assertNodeType("TypeAnnotation", "Noop"),
-      optional: true,
-    },
-    decorators: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Decorator")),
-      ),
-      optional: true,
-    },
-    readonly: {
-      validate: assertValueType("boolean"),
-      optional: true,
-    },
-    // todo: Has optional "variance" property for flow plugin
   },
 });

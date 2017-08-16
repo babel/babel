@@ -51,12 +51,7 @@ defineType("AssignmentExpression", {
       })(),
     },
     left: {
-      validate: assertNodeType(
-        "Identifier",
-        "MemberExpression",
-        "ArrayPattern",
-        "ObjectPattern",
-      ),
+      validate: assertNodeType("LVal", "ArrayPattern", "ObjectPattern"),
     },
     right: {
       validate: assertNodeType("Expression"),
@@ -107,11 +102,11 @@ defineType("BlockStatement", {
   visitor: ["directives", "body"],
   fields: {
     directives: {
-      default: [],
       validate: chain(
         assertValueType("array"),
         assertEach(assertNodeType("Directive")),
       ),
+      default: [],
     },
     body: {
       validate: chain(
@@ -127,17 +122,17 @@ defineType("BreakStatement", {
   visitor: ["label"],
   fields: {
     label: {
-      optional: true,
       validate: assertNodeType("Identifier"),
+      optional: true,
     },
   },
   aliases: ["Statement", "Terminatorless", "CompletionStatement"],
 });
 
 defineType("CallExpression", {
-  aliases: ["Expression"],
-  builder: ["callee", "arguments", "optional"],
   visitor: ["callee", "arguments", "typeParameters"],
+  builder: ["callee", "arguments", "optional"],
+  aliases: ["Expression"],
   fields: {
     callee: {
       validate: assertNodeType("Expression"),
@@ -192,8 +187,8 @@ defineType("ContinueStatement", {
   visitor: ["label"],
   fields: {
     label: {
-      optional: true,
       validate: assertNodeType("Identifier"),
+      optional: true,
     },
   },
   aliases: ["Statement", "Terminatorless", "CompletionStatement"],
@@ -299,12 +294,12 @@ defineType("ForStatement", {
       optional: true,
     },
     test: {
-      optional: true,
       validate: assertNodeType("Expression"),
+      optional: true,
     },
     update: {
-      optional: true,
       validate: assertNodeType("Expression"),
+      optional: true,
     },
     body: {
       validate: assertNodeType("Statement"),
@@ -351,20 +346,7 @@ defineType("FunctionDeclaration", {
   builder: ["id", "params", "body", "generator", "async"],
   visitor: ["id", "params", "body", "returnType", "typeParameters"],
   fields: {
-<<<<<<< HEAD
     ...functionDeclarationCommon,
-=======
-    id: {
-      optional: true,
-      validate: assertNodeType("Identifier"),
-    },
-    params: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Identifier", "Pattern", "RestElement")),
-      ),
-    },
->>>>>>> Lock down type system
     body: {
       validate: assertNodeType("BlockStatement"),
     },
@@ -399,7 +381,6 @@ defineType("FunctionExpression", {
     "Expression",
     "Pureish",
   ],
-<<<<<<< HEAD
   fields: {
     ...functionCommon,
     id: {
@@ -410,8 +391,6 @@ defineType("FunctionExpression", {
       validate: assertNodeType("BlockStatement"),
     },
   },
-=======
->>>>>>> Add missing fields
 });
 
 export const patternLikeCommon = {
@@ -580,7 +559,7 @@ defineType("MemberExpression", {
       default: false,
     },
     optional: {
-      default: false,
+      optional: true,
     },
   },
 });
@@ -598,11 +577,11 @@ defineType("Program", {
       validate: assertOneOf("script", "module"),
     },
     directives: {
-      default: [],
       validate: chain(
         assertValueType("array"),
         assertEach(assertNodeType("Directive")),
       ),
+      default: [],
     },
     body: {
       validate: chain(
@@ -654,12 +633,6 @@ defineType("ObjectMethod", {
         };
       })(),
     },
-    params: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Identifier", "Pattern", "RestElement")),
-      ),
-    },
     decorators: {
       validate: chain(
         assertValueType("array"),
@@ -710,7 +683,11 @@ defineType("ObjectProperty", {
         };
       })(),
     },
-    value: {},
+    value: {
+      // Value may be PatternLike if this is an AssignmentProperty
+      // https://github.com/babel/babylon/issues/434
+      validate: assertNodeType("Expression", "PatternLike"),
+    },
     shorthand: {
       validate: chain(
         assertValueType("boolean"),
@@ -732,11 +709,11 @@ defineType("ObjectProperty", {
       default: false,
     },
     decorators: {
-      optional: true,
       validate: chain(
         assertValueType("array"),
         assertEach(assertNodeType("Decorator")),
       ),
+      optional: true,
     },
   },
   visitor: ["key", "value", "decorators"],
@@ -753,19 +730,22 @@ defineType("ObjectProperty", {
 });
 
 defineType("RestElement", {
-  builder: ["argument"],
   visitor: ["argument", "typeAnnotation"],
+  builder: ["argument"],
+  aliases: ["PatternLike"],
   fields: {
     ...patternLikeCommon,
     argument: {
-      validate: assertNodeType("Identifier"),
+      validate: assertNodeType("Identifier", "MemberExpression"),
     },
   },
   validate(parent, key) {
     const [, listKey, index] = /(\w+)\[(\d+)\]/.exec(key);
     if (parent[listKey].length > index + 1) {
-      throw new TypeError(`RestElement must be last element of ${key}`);
+      throw new TypeError(`RestElement must be last element of ${listKey}`);
     }
+    // Deep validation should forbid MemberExpression under VariableDeclarator.
+    // But that'll be another day.
   },
 });
 
@@ -774,8 +754,8 @@ defineType("ReturnStatement", {
   aliases: ["Statement", "Terminatorless", "CompletionStatement"],
   fields: {
     argument: {
-      optional: true,
       validate: assertNodeType("Expression"),
+      optional: true,
     },
   },
 });
@@ -797,8 +777,8 @@ defineType("SwitchCase", {
   visitor: ["test", "consequent"],
   fields: {
     test: {
-      optional: true,
       validate: assertNodeType("Expression"),
+      optional: true,
     },
     consequent: {
       validate: chain(
@@ -885,7 +865,7 @@ defineType("UpdateExpression", {
       default: false,
     },
     argument: {
-      validate: assertNodeType("LVal"),
+      validate: assertNodeType("Identifier", "MemberExpression"),
     },
     operator: {
       validate: assertOneOf(...UPDATE_OPERATORS),
