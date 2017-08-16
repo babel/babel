@@ -21,6 +21,6 @@ function t() {
 
 function t() {
   for (var i = 0; i < arguments.length; i++) {
-    return arguments.length <= i ? undefined : arguments[i];
+    return i < 0 || arguments.length <= i ? undefined : arguments[i];
   }
 }
