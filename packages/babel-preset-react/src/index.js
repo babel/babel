@@ -7,9 +7,14 @@ import transformReactJSXSelf from "babel-plugin-transform-react-jsx-self";
 
 export default function(context, opts = {}) {
   const development = opts.development || false;
+  const noFlow = opts.noFlow || false;
 
   if (typeof development !== "boolean") {
     throw new Error("Preset react 'development' option must be a boolean.");
+  }
+
+  if (typeof noFlow !== "boolean") {
+    throw new Error("Preset react 'noFlow' option must be a boolean.");
   }
 
   return {
@@ -20,7 +25,7 @@ export default function(context, opts = {}) {
 
       development && transformReactJSXSource,
       development && transformReactJSXSelf,
-      [transformFlowStripTypes, { requireDirective: true }],
+      !noFlow && [transformFlowStripTypes, { requireDirective: true }],
     ].filter(Boolean),
   };
 }
