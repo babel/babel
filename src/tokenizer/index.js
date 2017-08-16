@@ -283,19 +283,19 @@ export default class Tokenizer extends LocationParser {
     loop: while (this.state.pos < this.input.length) {
       const ch = this.input.charCodeAt(this.state.pos);
       switch (ch) {
-        case 32:
-        case 160: // ' '
+        case 32: // space
+        case 160: // non-breaking space
           ++this.state.pos;
           break;
 
-        case 13:
+        case 13: // '\r' carriage return
           if (this.input.charCodeAt(this.state.pos + 1) === 10) {
             ++this.state.pos;
           }
 
-        case 10:
-        case 8232:
-        case 8233:
+        case 10: // '\n' line feed
+        case 8232: // line separator
+        case 8233: // paragraph separator
           ++this.state.pos;
           ++this.state.curLine;
           this.state.lineStart = this.state.pos;
