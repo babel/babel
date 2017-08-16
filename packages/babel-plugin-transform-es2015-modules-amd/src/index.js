@@ -25,6 +25,10 @@ export default function ({ types: t }) {
     return true;
   }
 
+  function hasProgramScope(path) {
+    return path.scope.getProgramParent() === path.scope;
+  }
+
   const amdVisitor = {
     ReferencedIdentifier({ node, scope }) {
       if (node.name === "exports" && !scope.getBinding("exports")) {
@@ -38,8 +42,29 @@ export default function ({ types: t }) {
 
     CallExpression(path) {
       if (!isValidRequireCall(path)) return;
+      if (!hasProgramScope(path)) {
+        this.hasRequire = true;
+        return;
+      }
       this.bareSources.push(path.node.arguments[0]);
       path.remove();
+    },
+
+    MemberExpression(path) {
+      const object = path.get("object");
+
+      if (!isValidRequireCall(object)) return;
+      if (!hasProgramScope(path)) {
+        this.hasRequire = true;
+        return;
+      }
+
+      const source = object.node.arguments[0];
+      const id = path.scope.generateUidIdentifier(source.value);
+      this.sourceNames[source.value] = true;
+      this.sources.push([id, source]);
+
+      object.replaceWith(id);
     },
 
     VariableDeclarator(path) {
@@ -48,6 +73,10 @@ export default function ({ types: t }) {
 
       const init = path.get("init");
       if (!isValidRequireCall(init)) return;
+      if (!hasProgramScope(path)) {
+        this.hasRequire = true;
+        return;
+      }
 
       const source = init.node.arguments[0];
       this.sourceNames[source.value] = true;
@@ -70,6 +99,7 @@ export default function ({ types: t }) {
 
       this.hasExports = false;
       this.hasModule = false;
+      this.hasRequire = false;
     },
 
     visitor: {
@@ -89,6 +119,11 @@ export default function ({ types: t }) {
 
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
+
+          if (this.hasRequire) {
+            sources.unshift(t.stringLiteral("require"));
+            params.unshift(t.identifier("require"));
+          }
 
           if (this.hasExports) {
             sources.unshift(t.stringLiteral("exports"));
