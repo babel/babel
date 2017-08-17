@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 export default function ({ messages, template, types: t }) {
   const buildForOfArray = template(`
     for (var KEY = 0; KEY < ARR.length; KEY++) BODY;
@@ -22,6 +20,7 @@ export default function ({ messages, template, types: t }) {
     }
   `);
 
+  /* eslint-disable max-len */
   const buildForOf = template(`
     var ITERATOR_COMPLETION = true;
     var ITERATOR_HAD_ERROR_KEY = false;
@@ -44,6 +43,7 @@ export default function ({ messages, template, types: t }) {
       }
     }
   `);
+  /* eslint-enable max-len */
 
   function _ForOfStatementArray(path) {
     const { node, scope } = path;
@@ -76,7 +76,8 @@ export default function ({ messages, template, types: t }) {
       left.declarations[0].init = iterationValue;
       loop.body.body.unshift(left);
     } else {
-      loop.body.body.unshift(t.expressionStatement(t.assignmentExpression("=", left, iterationValue)));
+      loop.body.body.unshift(t.expressionStatement(
+        t.assignmentExpression("=", left, iterationValue)));
     }
 
     if (path.parentPath.isLabeledStatement()) {
@@ -134,9 +135,8 @@ export default function ({ messages, template, types: t }) {
   };
 
   function loose(path, file) {
-    const { node, scope } = path;
-
-    const left = node.left;
+    const { node, scope, parent } = path;
+    const { left } = node;
     let declar, id;
 
     if (t.isIdentifier(left) || t.isPattern(left) || t.isMemberExpression(left)) {
@@ -170,11 +170,18 @@ export default function ({ messages, template, types: t }) {
     }
 
     //
+    const isLabeledParent = t.isLabeledStatement(parent);
+    let labeled;
+
+    if (isLabeledParent) {
+      labeled = t.labeledStatement(parent.label, loop);
+    }
 
     return {
-      declar: declar,
-      node:   loop,
-      loop:   loop
+      replaceParent: isLabeledParent,
+      declar:        declar,
+      node:          labeled || loop,
+      loop:          loop
     };
   }
 

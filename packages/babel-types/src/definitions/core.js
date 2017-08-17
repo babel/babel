@@ -1,4 +1,4 @@
-/* eslint max-len: 0 */
+/* eslint max-len: "off" */
 
 import * as t from "../index";
 
@@ -526,7 +526,7 @@ defineType("ObjectProperty", {
       }
     },
     value: {
-      validate: assertNodeType("Expression")
+      validate: assertNodeType("Expression", "Pattern", "RestElement")
     },
     shorthand: {
       validate: assertValueType("boolean"),

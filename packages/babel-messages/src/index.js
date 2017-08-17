@@ -1,4 +1,4 @@
-/* eslint max-len: 0 */
+/* eslint max-len: "off" */
 
 import * as util from "util";
 

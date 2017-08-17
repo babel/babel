@@ -1,4 +1,3 @@
-/* eslint max-len: 0 */
 // This file contains methods that modify the path/node in some ways.
 
 import { path as pathCache } from "../cache";
@@ -17,7 +16,10 @@ export function insertBefore(nodes) {
 
   if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
     return this.parentPath.insertBefore(nodes);
-  } else if (this.isNodeType("Expression") || (this.parentPath.isForStatement() && this.key === "init")) {
+  } else if (
+    this.isNodeType("Expression") ||
+    (this.parentPath.isForStatement() && this.key === "init")
+  ) {
     if (this.node) nodes.push(this.node);
     this.replaceExpressionWithStatements(nodes);
   } else {
@@ -28,7 +30,8 @@ export function insertBefore(nodes) {
       if (this.node) nodes.push(this.node);
       this._replaceWith(t.blockStatement(nodes));
     } else {
-      throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
+      throw new Error("We don't know what to do with this node type. " +
+        "We were previously a Statement but we can't fit in here?");
     }
   }
 
@@ -88,7 +91,8 @@ export function _containerInsertAfter(nodes) {
 
 export function _maybePopFromStatements(nodes) {
   const last = nodes[nodes.length - 1];
-  const isIdentifier = t.isIdentifier(last) || (t.isExpressionStatement(last) && t.isIdentifier(last.expression));
+  const isIdentifier = t.isIdentifier(last) ||
+    (t.isExpressionStatement(last) && t.isIdentifier(last.expression));
 
   if (isIdentifier && !this.isCompletionRecord()) {
     nodes.pop();
@@ -107,7 +111,10 @@ export function insertAfter(nodes) {
 
   if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
     return this.parentPath.insertAfter(nodes);
-  } else if (this.isNodeType("Expression") || (this.parentPath.isForStatement() && this.key === "init")) {
+  } else if (
+    this.isNodeType("Expression") ||
+    (this.parentPath.isForStatement() && this.key === "init")
+  ) {
     if (this.node) {
       const temp = this.scope.generateDeclaredUidIdentifier();
       nodes.unshift(t.expressionStatement(t.assignmentExpression("=", temp, this.node)));
@@ -122,7 +129,8 @@ export function insertAfter(nodes) {
       if (this.node) nodes.unshift(this.node);
       this._replaceWith(t.blockStatement(nodes));
     } else {
-      throw new Error("We don't know what to do with this node type. We were previously a Statement but we can't fit in here?");
+      throw new Error("We don't know what to do with this node type. " +
+        "We were previously a Statement but we can't fit in here?");
     }
   }
 

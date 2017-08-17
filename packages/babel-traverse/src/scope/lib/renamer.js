@@ -70,39 +70,6 @@ export default class Renamer {
     }
   }
 
-  maybeConvertFromClassFunctionDeclaration(path) {
-    return; // TODO
-
-    // retain the `name` of a class/function declaration
-
-    if (!path.isFunctionDeclaration() && !path.isClassDeclaration()) return;
-    if (this.binding.kind !== "hoisted") return;
-
-    path.node.id = t.identifier(this.oldName);
-    path.node._blockHoist = 3;
-
-    path.replaceWith(t.variableDeclaration("let", [
-      t.variableDeclarator(t.identifier(this.newName), t.toExpression(path.node))
-    ]));
-  }
-
-  maybeConvertFromClassFunctionExpression(path) {
-    return; // TODO
-
-    // retain the `name` of a class/function expression
-
-    if (!path.isFunctionExpression() && !path.isClassExpression()) return;
-    if (this.binding.kind !== "local") return;
-
-    path.node.id = t.identifier(this.oldName);
-
-    this.binding.scope.parent.push({
-      id: t.identifier(this.newName)
-    });
-
-    path.replaceWith(t.assignmentExpression("=", t.identifier(this.newName), path.node));
-  }
-
   rename(block?) {
     const { binding, oldName, newName } = this;
     const { scope, path } = binding;
@@ -123,11 +90,6 @@ export default class Renamer {
     if (binding.type === "hoisted") {
       // https://github.com/babel/babel/issues/2435
       // todo: hoist and convert function to a let
-    }
-
-    if (parentDeclar) {
-      this.maybeConvertFromClassFunctionDeclaration(parentDeclar);
-      this.maybeConvertFromClassFunctionExpression(parentDeclar);
     }
   }
 }

@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import find from "lodash/find";
 import findLast from "lodash/findLast";
 import isInteger from "lodash/isInteger";
@@ -321,6 +319,7 @@ export default class Printer {
 
     const printMethod = this[node.type];
     if (!printMethod) {
+      // eslint-disable-next-line max-len
       throw new ReferenceError(`unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`);
     }
 
@@ -331,9 +330,11 @@ export default class Printer {
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
     let needsParens = n.needsParens(node, parent, this._printStack);
-    if (this.format.retainFunctionParens &&
-        node.type === "FunctionExpression" &&
-        node.extra && node.extra.parenthesized) {
+    if (
+      this.format.retainFunctionParens &&
+      node.type === "FunctionExpression" &&
+      node.extra && node.extra.parenthesized
+    ) {
       needsParens = true;
     }
     if (needsParens) this.token("(");

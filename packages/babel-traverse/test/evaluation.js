@@ -33,7 +33,8 @@ describe("evaluation", function () {
 
   it("should bail out on recursive evaluation", function () {
     assert.strictEqual(
-      getPath("function fn(a) { var g = a ? 1 : 2, a = g * this.foo; }").get("body.0.body.body.0.declarations.1.init").evaluate().confident,
+      getPath("function fn(a) { var g = a ? 1 : 2, a = g * this.foo; }")
+        .get("body.0.body.body.0.declarations.1.init").evaluate().confident,
       false
     );
   });
@@ -54,9 +55,31 @@ describe("evaluation", function () {
 
   it("should deopt when var is redeclared in the same scope", function () {
     assert.strictEqual(
-      getPath("var x = 2; var y = x + 2; { var x = 3 }").get("body.1.declarations.0.init").evaluate().confident,
+      getPath("var x = 2; var y = x + 2; { var x = 3 }")
+        .get("body.1.declarations.0.init").evaluate().confident,
       false
     );
+  });
+
+  it("should evaluate template literals", function () {
+    assert.strictEqual(
+      getPath("var x = 8; var y = 1; var z = `value is ${x >>> y}`")
+        .get("body.2.declarations.0.init").evaluate().value,
+      "value is 4"
+    );
+  });
+
+  it("should evaluate member expressions", function () {
+    assert.strictEqual(
+      getPath("var x = 'foo'.length")
+        .get("body.0.declarations.0.init").evaluate().value,
+      3
+    );
+    const member_expr = getPath("var x = Math.min(2,Math.max(3,4));var y = Math.random();");
+    const eval_member_expr = member_expr.get("body.0.declarations.0.init").evaluate();
+    const eval_invalid_call = member_expr.get("body.1.declarations.0.init").evaluate();
+    assert.strictEqual(eval_member_expr.value, 2);
+    assert.strictEqual(eval_invalid_call.confident, false);
   });
 
   it("it should not deopt vars in different scope", function () {
@@ -73,7 +96,8 @@ describe("evaluation", function () {
 
   it("it should not deopt let/const inside blocks", function () {
     assert.strictEqual(
-      getPath("let x = 5; { let x = 1; } let y = x + 5").get("body.2.declarations.0.init").evaluate().value,
+      getPath("let x = 5; { let x = 1; } let y = x + 5")
+        .get("body.2.declarations.0.init").evaluate().value,
       10
     );
     const constExample = "const d = true; if (d && true || false) { const d = false; d && 5; }";
@@ -84,6 +108,12 @@ describe("evaluation", function () {
     assert.strictEqual(
       getPath(constExample).get("body.1.consequent.body.1").evaluate().value,
       false
+    );
+    const test_alternate = "var y = (3 < 4)? 3 + 4: 3 + 4;";
+    assert.strictEqual(
+      getPath(test_alternate)
+        .get("body.0.declarations.0.init.alternate").evaluate().value,
+      7
     );
   });
 
@@ -97,5 +127,23 @@ describe("evaluation", function () {
         .get("body.0.test").evaluate().confident,
       false
     );
+  });
+
+  it("should evaluate undefined, NaN and Infinity", () => {
+    assert.strictEqual(getPath("undefined").get("body.0.expression").evaluate().confident, true);
+    assert.strictEqual(getPath("NaN").get("body.0.expression").evaluate().confident, true);
+    assert.strictEqual(getPath("Infinity").get("body.0.expression").evaluate().confident, true);
+  });
+
+  it("should deopt redefined primitives - undefined, NaN and Infinity", () => {
+    const eval_undef = getPath("let undefined; undefined;").get("body.1.expression").evaluate();
+    const eval_nan = getPath("let NaN; NaN;").get("body.1.expression").evaluate();
+    const eval_inf = getPath("let Infinity; Infinity;").get("body.1.expression").evaluate();
+    assert.strictEqual(eval_undef.confident, false);
+    assert.strictEqual(eval_nan.confident, false);
+    assert.strictEqual(eval_inf.confident, false);
+
+    assert.strictEqual(eval_undef.deopt.type, "VariableDeclarator");
+    assert.strictEqual(eval_undef.deopt.parentPath.node.kind, "let");
   });
 });

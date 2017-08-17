@@ -1,4 +1,4 @@
-/* eslint max-len: 0 */
+import * as t from "babel-types";
 
 export function AnyTypeAnnotation() {
   this.word("any");
@@ -22,17 +22,21 @@ export function NullLiteralTypeAnnotation() {
   this.word("null");
 }
 
-export function DeclareClass(node: Object) {
-  this.word("declare");
-  this.space();
+export function DeclareClass(node: Object, parent: Object) {
+  if (!t.isDeclareExportDeclaration(parent)) {
+    this.word("declare");
+    this.space();
+  }
   this.word("class");
   this.space();
   this._interfaceish(node);
 }
 
-export function DeclareFunction(node: Object) {
-  this.word("declare");
-  this.space();
+export function DeclareFunction(node: Object, parent: Object) {
+  if (!t.isDeclareExportDeclaration(parent)) {
+    this.word("declare");
+    this.space();
+  }
   this.word("function");
   this.space();
   this.print(node.id, node);
@@ -71,14 +75,62 @@ export function DeclareTypeAlias(node: Object) {
   this.TypeAlias(node);
 }
 
-export function DeclareVariable(node: Object) {
-  this.word("declare");
-  this.space();
+export function DeclareOpaqueType(node: Object, parent: Object) {
+  if (!t.isDeclareExportDeclaration(parent)) {
+    this.word("declare");
+    this.space();
+  }
+  this.OpaqueType(node);
+}
+
+export function DeclareVariable(node: Object, parent: Object) {
+  if (!t.isDeclareExportDeclaration(parent)) {
+    this.word("declare");
+    this.space();
+  }
   this.word("var");
   this.space();
   this.print(node.id, node);
   this.print(node.id.typeAnnotation, node);
   this.semicolon();
+}
+
+export function DeclareExportDeclaration(node: Object) {
+  this.word("declare");
+  this.space();
+  this.word("export");
+  this.space();
+  if (node.default) {
+    this.word("default");
+    this.space();
+  }
+
+  FlowExportDeclaration.apply(this, arguments);
+}
+
+function FlowExportDeclaration(node: Object) {
+  if (node.declaration) {
+    const declar = node.declaration;
+    this.print(declar, node);
+    if (!t.isStatement(declar)) this.semicolon();
+  } else {
+    this.token("{");
+    if (node.specifiers.length) {
+      this.space();
+      this.printList(node.specifiers, node);
+      this.space();
+    }
+    this.token("}");
+
+    if (node.source) {
+      this.space();
+      this.word("from");
+      this.space();
+      this.print(node.source, node);
+    }
+
+    this.semicolon();
+  }
 }
 
 export function ExistentialTypeParam() {
@@ -224,6 +276,26 @@ export function TypeAlias(node: Object) {
   this.print(node.right, node);
   this.semicolon();
 }
+export function OpaqueType(node: Object) {
+  this.word("opaque");
+  this.space();
+  this.word("type");
+  this.space();
+  this.print(node.id, node);
+  this.print(node.typeParameters, node);
+  if (node.supertype) {
+    this.token(":");
+    this.space();
+    this.print(node.supertype, node);
+  }
+  if (node.impltype) {
+    this.space();
+    this.token("=");
+    this.space();
+    this.print(node.impltype, node);
+  }
+  this.semicolon();
+}
 
 export function TypeAnnotation(node: Object) {
   this.token(":");
@@ -333,6 +405,11 @@ export function ObjectTypeProperty(node: Object) {
   this.token(":");
   this.space();
   this.print(node.value, node);
+}
+
+export function ObjectTypeSpreadProperty(node: Object) {
+  this.token("...");
+  this.print(node.argument, node);
 }
 
 export function QualifiedTypeIdentifier(node: Object) {

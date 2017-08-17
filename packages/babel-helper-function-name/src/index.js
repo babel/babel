@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import getFunctionArity from "babel-helper-get-function-arity";
 import template from "babel-template";
 import * as t from "babel-types";
@@ -131,7 +129,8 @@ export default function ({ node, parent, scope, id }) {
   // has an `id` so we don't need to infer one
   if (node.id) return;
 
-  if ((t.isObjectProperty(parent) || t.isObjectMethod(parent, { kind: "method" })) && (!parent.computed || t.isLiteral(parent.key))) {
+  if ((t.isObjectProperty(parent) || t.isObjectMethod(parent, { kind: "method" })) &&
+    (!parent.computed || t.isLiteral(parent.key))) {
     // { foo() {} };
     id = parent.key;
   } else if (t.isVariableDeclarator(parent)) {

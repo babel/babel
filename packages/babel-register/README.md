@@ -5,7 +5,7 @@
 One of the ways you can use Babel is through the require hook. The require hook
 will bind itself to node's `require` and automatically compile files on the
 fly. This is equivalent to CoffeeScript's
-[coffee-script/register](http://coffeescript.org/documentation/docs/register.html).
+[coffee-script/register](http://coffeescript.org/v2/annotated-source/register.html).
 
 ## Install
 
@@ -53,7 +53,7 @@ require("babel-register")({
 
   // Ignore can also be specified as a function.
   ignore: function(filename) {
-    if (filename === '/path/to/es6-file.js') {
+    if (filename === "/path/to/es6-file.js") {
       return false;
     } else {
       return true;
@@ -66,7 +66,10 @@ require("babel-register")({
 
   // Setting this will remove the currently hooked extensions of .es6, `.es`, `.jsx`
   // and .js so you'll have to add them back if you want them to be used again.
-  extensions: [".es6", ".es", ".jsx", ".js"]
+  extensions: [".es6", ".es", ".jsx", ".js"],
+
+  // Setting this to false will disable the cache.
+  cache: true
 });
 ```
 

@@ -26,5 +26,33 @@ suite("validators", function () {
 
       assert(t.isNodesEquivalent(parse(program), parse(program2)) === false);
     });
+
+    it("rejects 'await' as an identifier", function () {
+      assert(t.isValidIdentifier("await") === false);
+    });
+  });
+
+  suite("patterns", function () {
+    it("allows nested pattern structures", function () {
+      const pattern = t.objectPattern([
+        t.objectProperty(
+          t.identifier("a"),
+          t.objectPattern([
+            t.objectProperty(
+              t.identifier("b"),
+              t.stringLiteral("foo")
+            ),
+            t.objectProperty(
+              t.identifier("c"),
+              t.arrayPattern([
+                t.identifier("value"),
+              ])
+            ),
+          ])
+        ),
+      ]);
+
+      assert(t.isNodesEquivalent(pattern, pattern) === true);
+    });
   });
 });

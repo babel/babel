@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import type { NodePath, Scope } from "babel-traverse";
 import optimiseCall from "babel-helper-optimise-call-expression";
 import * as messages from "babel-messages";
@@ -144,7 +142,8 @@ export default class ReplaceSupers {
    *
    * @example
    *
-   *   _set(CLASS.prototype.__proto__ || Object.getPrototypeOf(CLASS.prototype), "METHOD", "VALUE", this)
+   *   _set(CLASS.prototype.__proto__ || Object.getPrototypeOf(CLASS.prototype), "METHOD", "VALUE",
+   *     this)
    *
    */
 
@@ -227,9 +226,8 @@ export default class ReplaceSupers {
         t.variableDeclaration("var", [
           t.variableDeclarator(ref, node.left)
         ]),
-        t.expressionStatement(
-          t.assignmentExpression("=", node.left, t.binaryExpression(node.operator[0], ref, node.right))
-        )
+        t.expressionStatement(t.assignmentExpression("=", node.left,
+          t.binaryExpression(node.operator[0], ref, node.right)))
       ];
     }
   }
@@ -251,22 +249,30 @@ export default class ReplaceSupers {
       if (t.isSuper(callee)) {
         return;
       } else if (isMemberExpressionSuper(callee)) {
-        // super.test(); -> _get(Object.getPrototypeOf(objectRef.prototype), "test", this).call(this);
+        // super.test();
+        // to
+        // _get(Object.getPrototypeOf(objectRef.prototype), "test", this).call(this);
         property = callee.property;
         computed = callee.computed;
         args = node.arguments;
       }
     } else if (t.isMemberExpression(node) && t.isSuper(node.object)) {
-      // super.name; -> _get(Object.getPrototypeOf(objectRef.prototype), "name", this);
+      // super.name;
+      // to
+      // _get(Object.getPrototypeOf(objectRef.prototype), "name", this);
       property = node.property;
       computed = node.computed;
     } else if (t.isUpdateExpression(node) && isMemberExpressionSuper(node.argument)) {
       const binary = t.binaryExpression(node.operator[0], node.argument, t.numericLiteral(1));
       if (node.prefix) {
-        // ++super.foo; -> super.foo += 1;
+        // ++super.foo;
+        // to
+        // super.foo += 1;
         return this.specHandleAssignmentExpression(null, path, binary);
       } else {
-        // super.foo++; -> let _ref = super.foo; super.foo = _ref + 1;
+        // super.foo++;
+        // to
+        // let _ref = super.foo; super.foo = _ref + 1;
         const ref = path.scope.generateUidIdentifier("ref");
         return this.specHandleAssignmentExpression(ref, path, binary).concat(t.expressionStatement(ref));
       }

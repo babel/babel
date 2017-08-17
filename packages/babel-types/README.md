@@ -46,7 +46,7 @@ See also `t.isArrayPattern(node, opts)` and `t.assertArrayPattern(node, opts)`.
 
 Aliases: `Pattern`, `LVal`
 
- - `elements`: `Array<Expression>` (required)
+ - `elements`: `Array<Identifier | Pattern | RestElement>` (required)
  - `typeAnnotation` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
 
@@ -407,6 +407,21 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
 ---
 
+### declareExportDeclaration
+```javascript
+t.declareExportDeclaration(declaration, specifiers, source)
+```
+
+See also `t.isDeclareExportDeclaration(node, opts)` and `t.assertDeclareExportDeclaration(node, opts)`.
+
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+
+ - `declaration` (required)
+ - `specifiers` (required)
+ - `source` (required)
+
+---
+
 ### declareFunction
 ```javascript
 t.declareFunction(id)
@@ -460,6 +475,21 @@ See also `t.isDeclareModuleExports(node, opts)` and `t.assertDeclareModuleExport
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `typeAnnotation` (required)
+
+---
+
+### declareOpaqueType
+```javascript
+t.declareOpaqueType(id, typeParameters, supertype)
+```
+
+See also `t.isDeclareOpaqueType(node, opts)` and `t.assertDeclareOpaqueType(node, opts)`.
+
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+
+ - `id` (required)
+ - `typeParameters` (required)
+ - `supertype` (required)
 
 ---
 
@@ -930,6 +960,7 @@ Aliases: `ModuleSpecifier`
 
  - `local`: `Identifier` (required)
  - `imported`: `Identifier` (required)
+ - `importKind`: `null | 'type' | 'typeof'` (default: `null`)
 
 ---
 
@@ -1367,7 +1398,7 @@ See also `t.isObjectProperty(node, opts)` and `t.assertObjectProperty(node, opts
 Aliases: `UserWhitespacable`, `Property`, `ObjectMember`
 
  - `key`if computed then `Expression` else `Identifier | Literal` (required)
- - `value`: `Expression` (required)
+ - `value`: `Expression | Pattern | RestElement` (required)
  - `computed`: `boolean` (default: `false`)
  - `shorthand`: `boolean` (default: `false`)
  - `decorators`: `Array<Decorator>` (default: `null`)
@@ -1428,6 +1459,35 @@ Aliases: `Flow`, `UserWhitespacable`
 
  - `key` (required)
  - `value` (required)
+
+---
+
+### objectTypeSpreadProperty
+```javascript
+t.objectTypeSpreadProperty(argument)
+```
+
+See also `t.isObjectTypeSpreadProperty(node, opts)` and `t.assertObjectTypeSpreadProperty(node, opts)`.
+
+Aliases: `Flow`, `UserWhitespacable`
+
+ - `argument` (required)
+
+---
+
+### opaqueType
+```javascript
+t.opaqueType(id, typeParameters, impltype, supertype)
+```
+
+See also `t.isOpaqueType(node, opts)` and `t.assertOpaqueType(node, opts)`.
+
+Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
+
+ - `id` (required)
+ - `typeParameters` (required)
+ - `impltype` (required)
+ - `supertype` (required)
 
 ---
 

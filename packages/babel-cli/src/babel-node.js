@@ -1,5 +1,3 @@
-/* eslint indent: 0 */
-
 /**
  * This tiny wrapper file checks for known node flags and appends them
  * when found, before invoking the "real" _babel-node(1) executable.
@@ -48,6 +46,7 @@ getV8Flags(function (err, v8Flags) {
       case "--debug":
       case "--debug-brk":
       case "--inspect":
+      case "--inspect-brk":
         args.unshift(arg);
         break;
 

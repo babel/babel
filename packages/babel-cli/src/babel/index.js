@@ -1,7 +1,4 @@
 #!/usr/bin/env node
-/* eslint max-len: 0 */
-
-require("babel-core");
 
 const fs         = require("fs");
 const commander  = require("commander");
@@ -38,6 +35,7 @@ Object.keys(options).forEach(function (key) {
   commander.option(arg, desc.join(" "));
 });
 
+/* eslint-disable max-len */
 commander.option("-x, --extensions [extensions]", "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx]");
 commander.option("-w, --watch", "Recompile files on changes");
 commander.option("--skip-initial-build", "Do not compile files before watching");

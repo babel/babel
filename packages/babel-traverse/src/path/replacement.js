@@ -1,4 +1,3 @@
-/* eslint max-len: 0 */
 // This file contains methods responsible for replacing a node with another.
 
 import codeFrame from "babel-code-frame";
@@ -114,22 +113,31 @@ export function replaceWith(replacement) {
   }
 
   if (Array.isArray(replacement)) {
-    throw new Error("Don't use `path.replaceWith()` with an array of nodes, use `path.replaceWithMultiple()`");
+    throw new Error(
+      "Don't use `path.replaceWith()` with an array of nodes, use `path.replaceWithMultiple()`");
   }
 
   if (typeof replacement === "string") {
-    throw new Error("Don't use `path.replaceWith()` with a source string, use `path.replaceWithSourceString()`");
+    throw new Error(
+      "Don't use `path.replaceWith()` with a source string, use `path.replaceWithSourceString()`");
   }
 
   if (this.isNodeType("Statement") && t.isExpression(replacement)) {
-    if (!this.canHaveVariableDeclarationOrExpression() && !this.canSwapBetweenExpressionAndStatement(replacement)) {
+    if (
+      !this.canHaveVariableDeclarationOrExpression() &&
+      !this.canSwapBetweenExpressionAndStatement(replacement) &&
+      !this.parentPath.isExportDefaultDeclaration()
+    ) {
       // replacing a statement with an expression so wrap it in an expression statement
       replacement = t.expressionStatement(replacement);
     }
   }
 
   if (this.isNodeType("Expression") && t.isStatement(replacement)) {
-    if (!this.canHaveVariableDeclarationOrExpression() && !this.canSwapBetweenExpressionAndStatement(replacement)) {
+    if (
+      !this.canHaveVariableDeclarationOrExpression() &&
+      !this.canSwapBetweenExpressionAndStatement(replacement)
+    ) {
       // replacing an expression with a statement so let's explode it
       return this.replaceExpressionWithStatements([replacement]);
     }
@@ -212,10 +220,16 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
 
       const loop = path.findParent((path) => path.isLoop());
       if (loop) {
-        const callee = this.get("callee");
+        let uid = loop.getData("expressionReplacementReturnUid");
 
-        const uid = callee.scope.generateDeclaredUidIdentifier("ret");
-        callee.get("body").pushContainer("body", t.returnStatement(uid));
+        if (!uid) {
+          const callee = this.get("callee");
+          uid = callee.scope.generateDeclaredUidIdentifier("ret");
+          callee.get("body").pushContainer("body", t.returnStatement(uid));
+          loop.setData("expressionReplacementReturnUid", uid);
+        } else {
+          uid = t.identifier(uid.name);
+        }
 
         path.get("expression").replaceWith(
           t.assignmentExpression("=", uid, path.node.expression)

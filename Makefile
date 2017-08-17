@@ -2,6 +2,9 @@ MAKEFLAGS = -j1
 
 export NODE_ENV = test
 
+# Fix color output until TravisCI fixes travis-ci/travis-ci/issues/7967
+export FORCE_COLOR = true
+
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
 build: clean
@@ -49,13 +52,14 @@ test-only:
 test: lint test-only
 
 test-ci:
-	NODE_ENV=test make bootstrap
+	make bootstrap
 	make test-only
 
+test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
-	NODE_ENV=test BABEL_ENV=cov make bootstrap
+	BABEL_ENV=cov make bootstrap
 	./scripts/test-cov.sh
-	./node_modules/.bin/codecov -f coverage/coverage-final.json
+	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
 publish:
 	git pull --rebase

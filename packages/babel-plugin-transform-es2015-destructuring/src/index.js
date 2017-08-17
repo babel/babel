@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 export default function ({ types: t }) {
 
   /**
@@ -153,7 +151,8 @@ export default function ({ types: t }) {
 
       //
 
-      const value = t.callExpression(this.file.addHelper("objectWithoutProperties"), [objRef, keys]);
+      const value = t.callExpression(
+        this.file.addHelper("objectWithoutProperties"), [objRef, keys]);
       this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
     }
 
@@ -294,7 +293,8 @@ export default function ({ types: t }) {
 
         if (t.isRestElement(elem)) {
           elemRef = this.toArray(arrayRef);
-          elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")), [t.numericLiteral(i)]);
+          elemRef = t.callExpression(t.memberExpression(elemRef, t.identifier("slice")),
+            [t.numericLiteral(i)]);
 
           // set the element to the rest element argument since we've dealt with it
           // being a rest already
@@ -485,14 +485,18 @@ export default function ({ types: t }) {
               t.inherits(nodes[nodes.length - 1], declar);
             }
           } else {
-            nodes.push(t.inherits(destructuring.buildVariableAssignment(declar.id, declar.init), declar));
+            nodes.push(t.inherits(
+              destructuring.buildVariableAssignment(declar.id, declar.init), declar));
           }
         }
 
         const nodesOut = [];
         for (const node of nodes) {
           const tail = nodesOut[nodesOut.length - 1];
-          if (tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node) && tail.kind === node.kind) {
+          if (
+            tail && t.isVariableDeclaration(tail) && t.isVariableDeclaration(node) &&
+            tail.kind === node.kind
+          ) {
             // Create a single compound let/var rather than many.
             tail.declarations.push(...node.declarations);
           } else {

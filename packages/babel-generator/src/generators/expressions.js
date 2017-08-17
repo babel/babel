@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 import * as t from "babel-types";
 import * as n from "../node";
 

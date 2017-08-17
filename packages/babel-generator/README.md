@@ -39,6 +39,7 @@ quotes                 | `'single'` or `'double'` | autodetect based on `ast.tok
 filename               | string   |                 | Used in warning messages
 flowCommaSeparator     | boolean  | `false`         | Set to `true` to use commas instead of semicolons as Flow property separators
 jsonCompatibleStrings  | boolean  | `false`         | Set to true to run `jsesc` with "json": true to print "\u00A9" vs. "©";
+
 Options for source maps:
 
 name                   | type     | default         | description
@@ -53,12 +54,7 @@ sourceFileName         | string   |                 | The filename for the sourc
 In most cases, Babel does a 1:1 transformation of input-file to output-file.  However,
 you may be dealing with AST constructed from multiple sources - JS files, templates, etc.
 If this is the case, and you want the sourcemaps to reflect the correct sources, you'll need
-to make some changes to your code.
-
-First, each node with a `loc` property (which indicates that node's original placement in the
-source document) must also include a `loc.filename` property, set to the source filename.
-
-Second, you should pass an object to `generate` as the `code` parameter.  Keys
+to pass an object to `generate` as the `code` parameter.  Keys
 should be the source filenames, and values should be the source content.
 
 Here's an example of what that might look like:
@@ -69,14 +65,14 @@ import generate from 'babel-generator';
 
 const a = 'var a = 1;';
 const b = 'var b = 2;';
-const astA = parse(a, { filename: 'a.js' });
-const astB = parse(b, { filename: 'b.js' });
+const astA = parse(a, { sourceFilename: 'a.js' });
+const astB = parse(b, { sourceFilename: 'b.js' });
 const ast = {
   type: 'Program',
-  body: [].concat(astA.body, ast2.body)
+  body: [].concat(astA.program.body, astB.program.body)
 };
 
-const { code, map } = generate(ast, { /* options */ }, {
+const { code, map } = generate(ast, { sourceMaps: true }, {
   'a.js': a,
   'b.js': b
 });

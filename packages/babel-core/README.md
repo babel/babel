@@ -108,8 +108,8 @@ Following is a table of the options you can use:
 | `moduleRoot`             | `(sourceRoot)`       | Optional prefix for the AMD module formatter that will be prepend to the filename on module definitions. |
 | `only`                   | `null`               | A [glob](https://github.com/isaacs/minimatch), regex, or mixed array of both, matching paths to **only** compile. Can also be an array of arrays containing paths to explicitly match. When attempting to compile a non-matching file it's returned verbatim. |
 | `parserOpts`             | `{}`                 | An object containing the options to be passed down to the babel parser, babylon |
-| `plugins`                | `[]`                 | List of [plugins](/docs/plugins/) to load and use. |
-| `presets`                | `[]`                 | List of [presets](/docs/plugins/#presets) (a set of plugins) to load and use. |
+| `plugins`                | `[]`                 | List of [plugins](https://babeljs.io/docs/plugins/) to load and use. |
+| `presets`                | `[]`                 | List of [presets](https://babeljs.io/docs/plugins/#presets) (a set of plugins) to load and use. |
 | `retainLines`            | `false`              | Retain line numbers. This will lead to wacky code but is handy for scenarios where you can't use source maps. (**NOTE:** This will not retain the columns) |
 | `resolveModuleSource`    | `null`               | Resolve a module source ie. `import "SOURCE";` to a custom value. Called as `resolveModuleSource(source, filename)`. |
 | `shouldPrintComment`     | `null`               | An optional callback that controls whether a comment should be output or not. Called as `shouldPrintComment(commentContents)`. **NOTE:** This overrides the `comment` option when used. |
@@ -117,4 +117,5 @@ Following is a table of the options you can use:
 | `sourceMaps`             | `false`              | If truthy, adds a `map` property to returned output. If set to `"inline"`, a comment with a sourceMappingURL directive is added to the bottom of the returned code. If set to `"both"` then a `map` property is returned as well as a source map comment appended. **This does not emit sourcemap files by itself!** To have sourcemaps emitted using the CLI, you must pass it the `--source-maps` option. |
 | `sourceMapTarget`        | `(filenameRelative)` | Set `file` on returned source map. |
 | `sourceRoot`             | `(moduleRoot)`       | The root from which all sources are relative. |
+| `sourceType`             | `"module"`           | Indicate the mode the code should be parsed in. Can be either "script" or "module". |
 | `wrapPluginVisitorMethod`| `null`               | An optional callback that can be used to wrap visitor methods. **NOTE:** This is useful for things like introspection, and not really needed for implementing anything. Called as `wrapPluginVisitorMethod(pluginAlias, visitorType, callback)`.

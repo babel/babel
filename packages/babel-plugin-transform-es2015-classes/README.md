@@ -50,7 +50,11 @@ require("babel-core").transform("code", {
 });
 ```
 
-## Options `loose`
+## Options
+
+### `loose`
+
+`boolean`, defaults to `false`.
 
 #### Method enumerability
 

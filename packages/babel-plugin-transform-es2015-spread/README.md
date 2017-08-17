@@ -2,6 +2,22 @@
 
 > Compile ES2015 spread to ES5
 
+## Example
+
+**In**
+
+```js
+var a = ['a', 'b', 'c'];
+var b = [...a, 'foo'];
+```
+
+**Out**
+
+```js
+var a = [ 'a', 'b', 'c' ];
+var b = [].concat(a, [ 'foo' ]);
+```
+
 ## Installation
 
 ```sh
@@ -14,13 +30,17 @@ npm install --save-dev babel-plugin-transform-es2015-spread
 
 **.babelrc**
 
-```js
-// without options
+Without options:
+
+```json
 {
   "plugins": ["transform-es2015-spread"]
 }
+```
 
-// with options
+With options:
+
+```json
 {
   "plugins": [
     ["transform-es2015-spread", {
@@ -46,4 +66,8 @@ require("babel-core").transform("code", {
 
 ## Options
 
-* `loose` - All iterables are assumed to be arrays.
+### `loose`
+
+`boolean`, defaults to `false`.
+
+In loose mode, **all** iterables are assumed to be arrays.

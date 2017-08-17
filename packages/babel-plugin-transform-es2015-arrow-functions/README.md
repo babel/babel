@@ -27,12 +27,12 @@ console.log(bob.printFriends());
 **Out**
 
 ```javascript
-var a = function a() {};
-var a = function a(b) {
+var a = function () {};
+var a = function (b) {
   return b;
 };
 
-var double = [1, 2, 3].map(function (num) {
+const double = [1, 2, 3].map(function (num) {
   return num * 2;
 });
 console.log(double); // [2,4,6]
@@ -40,7 +40,7 @@ console.log(double); // [2,4,6]
 var bob = {
   _name: "Bob",
   _friends: ["Sally", "Tom"],
-  printFriends: function printFriends() {
+  printFriends() {
     var _this = this;
 
     this._friends.forEach(function (f) {
@@ -64,14 +64,16 @@ npm install --save-dev babel-plugin-transform-es2015-arrow-functions
 **.babelrc**
 
 Without options:
+
 ```json
 {
   "plugins": ["transform-es2015-arrow-functions"]
 }
 ```
 
-With options
-```json 
+With options:
+
+```json
 {
   "plugins": [
     ["transform-es2015-arrow-functions", { "spec": true }]
@@ -95,4 +97,8 @@ require("babel-core").transform("code", {
 
 ## Options
 
-* `spec` - This option wraps the generated function in `.bind(this)` and keeps uses of `this` inside the function as-is, instead of using a renamed `this`. It also adds a runtime check to ensure the functions are not instantiated.
+### `spec`
+
+`boolean`, defaults to `false`.
+
+This option wraps the generated function in `.bind(this)` and keeps uses of `this` inside the function as-is, instead of using a renamed `this`. It also adds a runtime check to ensure the functions are not instantiated.

@@ -52,6 +52,31 @@ describe("path/family", function () {
         assert.strictEqual(outerNodes[id], outerPaths[id].node, "nodes match");
       });
     });
+
+  });
+  describe("getSibling", function () {
+    const ast = parse("var a = 1, {b} = c, [d] = e; function f() {} function g() {}");
+    let sibling = {}, lastSibling = {};
+    traverse(ast, {
+      VariableDeclaration(path) {
+        sibling = path.getSibling(path.key);
+        lastSibling = sibling.getNextSibling().getNextSibling();
+      }
+    });
+
+    it("should return traverse sibling nodes", function () {
+      assert.ok(sibling.getNextSibling().node, "has property node");
+      assert.ok(lastSibling.getPrevSibling().node, "has property node");
+      assert.equal(!!sibling.getPrevSibling().node, false, "out of scope");
+      assert.equal(!!lastSibling.getNextSibling().node, false, "out of scope");
+    });
+
+    it("should return all preceding and succeeding sibling nodes", function () {
+      assert.ok(sibling.getAllNextSiblings().length, "Has next sibling");
+      assert.ok(lastSibling.getAllPrevSiblings().length, "Has prev sibling");
+      assert.equal(sibling.getAllNextSiblings().length, 2, "Has 2 succeeding sibling");
+      assert.equal(lastSibling.getAllPrevSiblings().length, 2, "Has 2 preceeding sibling");
+    });
   });
 });
 

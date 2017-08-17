@@ -10,9 +10,7 @@ import type { Format } from "./printer";
  */
 
 class Generator extends Printer {
-  constructor(ast, opts, code) {
-    opts = opts || {};
-
+  constructor(ast, opts = {}, code) {
     const tokens = ast.tokens || [];
     const format = normalizeOptions(code, opts, tokens);
     const map = opts.sourceMaps ? new SourceMap(opts, code) : null;
@@ -101,7 +99,7 @@ function findCommonStringDelimiter(code, tokens) {
     return DEFAULT_STRING_DELIMITER;
   }
 
-  const occurences = {
+  const occurrences = {
     single: 0,
     double: 0
   };
@@ -114,15 +112,15 @@ function findCommonStringDelimiter(code, tokens) {
 
     const raw = code.slice(token.start, token.end);
     if (raw[0] === "'") {
-      occurences.single++;
+      occurrences.single++;
     } else {
-      occurences.double++;
+      occurrences.double++;
     }
 
     checked++;
     if (checked >= 3) break;
   }
-  if (occurences.single > occurences.double) {
+  if (occurrences.single > occurrences.double) {
     return "single";
   } else {
     return "double";
