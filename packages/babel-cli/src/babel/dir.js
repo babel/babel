@@ -42,6 +42,9 @@ module.exports = function (commander, filenames) {
     }
   }
 
+  const filterDotFiles = (x) => x[0] === ".";
+  let copyFilesFilter = () => false;
+
   function handle(filename) {
     if (!fs.existsSync(filename)) return;
 
@@ -49,8 +52,10 @@ module.exports = function (commander, filenames) {
 
     if (stat.isDirectory(filename)) {
       const dirname = filename;
-
-      util.readdir(dirname).forEach(function (filename) {
+      if (commander.copyDotFiles) {
+        copyFilesFilter = filterDotFiles;
+      }
+      util.readdir(dirname, copyFilesFilter).forEach(function (filename) {
         const src = path.join(dirname, filename);
         handleFile(src, filename);
       });
