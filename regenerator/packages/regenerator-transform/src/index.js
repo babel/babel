@@ -20,7 +20,7 @@ export default function (context) {
 
   // The "name" property is not allowed in older versions of Babel (6.x)
   // and will cause the plugin validator to throw an exception.
-  if (version && parseInt(version) >= 7) {
+  if (version && parseInt(version, 10) >= 7) {
     plugin.name = "regenerator-transform";
   }
 
