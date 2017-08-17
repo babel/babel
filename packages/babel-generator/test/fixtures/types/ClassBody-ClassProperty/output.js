@@ -26,6 +26,10 @@ class Foo {
   bar;
   foo = 0;
   bar = 1;
+  #foo;
+  #foo = 1;
+  static #foo;
+  static #foo = Foo.#foo;
 }
 
 class A1 {
