@@ -18,9 +18,9 @@ export default function (context) {
   // exists first to avoid causing unnecessary breaking changes.
   const version = context && context.version;
 
-  // The "name" property is not allowed in older version of Babel 6.x and
-  // will cause it to throw an exception.
-  if (version && !/^6\./.test(version)) {
+  // The "name" property is not allowed in older versions of Babel (6.x)
+  // and will cause the plugin validator to throw an exception.
+  if (version && parseInt(version) >= 7) {
     plugin.name = "regenerator-transform";
   }
 
