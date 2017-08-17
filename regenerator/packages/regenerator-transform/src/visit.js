@@ -17,8 +17,6 @@ import { Emitter } from "./emit";
 import replaceShorthandObjectMethod from "./replaceShorthandObjectMethod";
 import * as util from "./util";
 
-exports.name = "regenerator-transform";
-
 exports.visitor = {
   Function: {
     exit: function(path, state) {
