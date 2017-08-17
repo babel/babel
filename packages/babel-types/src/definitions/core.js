@@ -24,7 +24,6 @@ import defineType, {
 defineType("ArrayExpression", {
   fields: {
     elements: {
-      default: [],
       validate: chain(
         assertValueType("array"),
         assertEach(
@@ -51,7 +50,12 @@ defineType("AssignmentExpression", {
       })(),
     },
     left: {
-      validate: assertNodeType("LVal", "ArrayPattern", "ObjectPattern"),
+      validate: assertNodeType(
+        "Identifier",
+        "MemberExpression",
+        "ArrayPattern",
+        "ObjectPattern",
+      ),
     },
     right: {
       validate: assertNodeType("Expression"),
@@ -404,6 +408,7 @@ export const patternLikeCommon = {
       assertValueType("array"),
       assertEach(assertNodeType("Decorator")),
     ),
+    default: [],
   },
 };
 
@@ -559,12 +564,14 @@ defineType("MemberExpression", {
       default: false,
     },
     optional: {
-      optional: true,
+      default: false,
     },
   },
 });
 
-defineType("NewExpression", { inherits: "CallExpression" });
+defineType("NewExpression", {
+  inherits: "CallExpression",
+});
 
 defineType("Program", {
   visitor: ["directives", "body"],
@@ -638,6 +645,7 @@ defineType("ObjectMethod", {
         assertValueType("array"),
         assertEach(assertNodeType("Decorator")),
       ),
+      default: [],
     },
     body: {
       validate: assertNodeType("BlockStatement"),
@@ -663,7 +671,7 @@ defineType("ObjectMethod", {
 });
 
 defineType("ObjectProperty", {
-  builder: ["key", "value", "computed", "shorthand", "decorators"],
+  builder: ["key", "value", "computed", "shorthand"],
   fields: {
     computed: {
       default: false,
@@ -713,7 +721,7 @@ defineType("ObjectProperty", {
         assertValueType("array"),
         assertEach(assertNodeType("Decorator")),
       ),
-      optional: true,
+      default: [],
     },
   },
   visitor: ["key", "value", "decorators"],

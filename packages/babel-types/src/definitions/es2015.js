@@ -29,6 +29,7 @@ defineType("AssignmentPattern", {
         assertValueType("array"),
         assertEach(assertNodeType("Decorator")),
       ),
+      default: [],
     },
   },
 });
@@ -50,6 +51,7 @@ defineType("ArrayPattern", {
         assertValueType("array"),
         assertEach(assertNodeType("Decorator")),
       ),
+      default: [],
     },
   },
 });
@@ -155,7 +157,7 @@ defineType("ClassDeclaration", {
         assertValueType("array"),
         assertEach(assertNodeType("Decorator")),
       ),
-      optional: true,
+      default: [],
     },
   },
   validate: (function() {
@@ -186,7 +188,7 @@ defineType("ClassExpression", {
         assertValueType("array"),
         assertEach(assertNodeType("Decorator")),
       ),
-      optional: true,
+      default: [],
     },
   },
 });
@@ -236,13 +238,21 @@ defineType("ExportNamedDeclaration", {
   ],
   fields: {
     declaration: {
-      validate: chain(assertNodeType("Declaration"), function(node, key, val) {
-        if (val && node.specifiers.length) {
-          throw new TypeError(
-            "Only declaration or specifiers is allowed on ExportNamedDeclaration",
-          );
-        }
-      }),
+      validate: chain(
+        assertNodeType("Declaration"),
+        function(node, key, val) {
+          if (val && node.specifiers.length) {
+            throw new TypeError(
+              "Only declaration or specifiers is allowed on ExportNamedDeclaration",
+            );
+          }
+        },
+        function(node, key, val) {
+          if (val && node.source) {
+            throw new TypeError("Cannot export a declaration from a source");
+          }
+        },
+      ),
       optional: true,
     },
     specifiers: {
@@ -250,11 +260,19 @@ defineType("ExportNamedDeclaration", {
       validate: chain(
         assertValueType("array"),
         assertEach(
-          assertNodeType(
-            "ExportSpecifier",
-            "ExportDefaultSpecifier",
-            "ExportNamespaceSpecifier",
-          ),
+          (function() {
+            const sourced = assertNodeType(
+              "ExportSpecifier",
+              "ExportDefaultSpecifier",
+              "ExportNamespaceSpecifier",
+            );
+            const sourceless = assertNodeType("ExportSpecifier");
+
+            return function(node, key, val) {
+              const validator = node.source ? sourced : sourceless;
+              validator(node, key, val);
+            };
+          })(),
         ),
       ),
     },
@@ -415,10 +433,7 @@ export const classMethodOrPropertyCommon = {
     optional: true,
   },
   accessibility: {
-    validate: chain(
-      assertValueType("string"),
-      assertOneOf("public", "private", "protected"),
-    ),
+    validate: assertOneOf("public", "private", "protected"),
     optional: true,
   },
   static: {
@@ -463,7 +478,7 @@ export const classMethodOrDeclareMethodCommon = {
       assertValueType("array"),
       assertEach(assertNodeType("Decorator")),
     ),
-    optional: true,
+    default: [],
   },
 };
 
@@ -497,8 +512,7 @@ defineType("ClassMethod", {
 
 defineType("ClassProperty", {
   visitor: ["key", "value", "typeAnnotation", "decorators"],
-  // TODO
-  builder: ["key", "value", "computed", "decorators"],
+  builder: ["key", "value", "computed", "static"],
   aliases: ["Property"],
   fields: {
     ...classMethodOrPropertyCommon,
@@ -515,7 +529,7 @@ defineType("ClassProperty", {
         assertValueType("array"),
         assertEach(assertNodeType("Decorator")),
       ),
-      optional: true,
+      default: [],
     },
     readonly: {
       validate: assertValueType("boolean"),
