@@ -75,8 +75,9 @@ export default function isReferenced(node: Object, parent: Object): boolean {
     // yes: class { [NODE] = value; }
     // yes: class { key = NODE; }
     case "ClassProperty":
+    case "ClassPrivateProperty":
       if (parent.key === node) {
-        return parent.computed;
+        return !!parent.computed;
       } else {
         return parent.value === node;
       }

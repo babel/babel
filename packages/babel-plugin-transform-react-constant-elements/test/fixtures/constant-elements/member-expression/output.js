@@ -11,10 +11,10 @@ var _ref2 =
 <els.subComponent />;
 
 class Component extends React.Component {
-  constructor(...args) {
+  constructor() {
     var _temp;
 
-    return _temp = super(...args), this.render = () => _ref2, _temp;
+    return _temp = super(...arguments), this.render = () => _ref2, _temp;
   }
 
 }

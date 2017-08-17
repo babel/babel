@@ -117,6 +117,22 @@ export function ClassProperty(node: Object) {
   this.semicolon();
 }
 
+export function ClassPrivateProperty(node: Object) {
+  if (node.static) {
+    this.word("static");
+    this.space();
+  }
+  this.token("#");
+  this.print(node.key, node);
+  if (node.value) {
+    this.space();
+    this.token("=");
+    this.space();
+    this.print(node.value, node);
+  }
+  this.semicolon();
+}
+
 export function ClassMethod(node: Object) {
   this._classMethodHead(node);
   this.space();

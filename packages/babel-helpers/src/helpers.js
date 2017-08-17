@@ -604,6 +604,33 @@ helpers.possibleConstructorReturn = () => template.program.ast`
   }
 `;
 
+helpers.privateClassPropertyKey = () => template.program.ast`
+  var id = 0;
+  export default function _privateClassPropertyKey(name) {
+    // Can we use a middle finger emoji?
+    return "__private_" + (id++) + "_" + name;
+  }
+`;
+
+helpers.privateClassPropertyGetSpec = () => template.program.ast`
+  export default function _privateClassPropertyGetSpec(receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+      throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
+  }
+`;
+
+helpers.privateClassPropertyPutSpec = () => template.program.ast`
+  export default function _privateClassPropertyPutSpec(receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+      throw new TypeError("attempted to set private field on non-instance");
+    }
+    privateMap.set(receiver, value);
+    return value;
+  }
+`;
+
 helpers.set = () => template.program.ast`
   export default function _set(object, property, value, receiver) {
     var desc = Object.getOwnPropertyDescriptor(object, property);

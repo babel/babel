@@ -26,6 +26,11 @@ class Foo {
   async;
   foo; bar;
   foo = 0; bar = 1;
+
+  #foo;
+  #foo = 1;
+  static #foo;
+  static #foo = 1;
 }
 
 class A1 {
