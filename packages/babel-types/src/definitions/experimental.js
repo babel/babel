@@ -19,6 +19,20 @@ defineType("BindExpression", {
   },
 });
 
+defineType("ClassPrivateProperty", {
+  visitor: ["key", "value"],
+  builder: ["key", "value"],
+  aliases: ["Property"],
+  fields: {
+    key: {
+      validate: assertNodeType("Identifier"),
+    },
+    value: {
+      validate: assertNodeType("Expression"),
+    },
+  },
+});
+
 defineType("Import", {
   aliases: ["Expression"],
 });
@@ -57,6 +71,16 @@ defineType("ExportNamespaceSpecifier", {
   aliases: ["ModuleSpecifier"],
   fields: {
     exported: {
+      validate: assertNodeType("Identifier"),
+    },
+  },
+});
+
+defineType("PrivateName", {
+  visitor: ["name"],
+  aliases: ["Expression", "LVal"],
+  fields: {
+    name: {
       validate: assertNodeType("Identifier"),
     },
   },
