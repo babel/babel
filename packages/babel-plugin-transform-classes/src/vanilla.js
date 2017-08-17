@@ -259,7 +259,7 @@ export default class ClassTransformer {
     for (const path of classBodyPaths) {
       const node = path.node;
 
-      if (path.isClassProperty()) {
+      if (path.isProperty()) {
         throw path.buildCodeFrameError("Missing class properties transform.");
       }
 
