@@ -3,6 +3,7 @@
 import * as t from "../index";
 
 import defineType, {
+  assertNodeOrValueType,
   assertNodeType,
   assertValueType,
   chain,
@@ -14,7 +15,7 @@ import { functionCommon, patternLikeCommon } from "./core";
 defineType("AssignmentPattern", {
   visitor: ["left", "right"],
   builder: ["left", "right"],
-  aliases: ["Pattern", "PatternLike"],
+  aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
     ...patternLikeCommon,
     left: {
@@ -35,13 +36,13 @@ defineType("AssignmentPattern", {
 defineType("ArrayPattern", {
   visitor: ["elements", "typeAnnotation"],
   builder: ["elements"],
-  aliases: ["Pattern", "PatternLike"],
+  aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
     ...patternLikeCommon,
     elements: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("PatternLike")),
+        assertEach(assertNodeOrValueType("null", "PatternLike")),
       ),
     },
     decorators: {
@@ -527,7 +528,7 @@ defineType("ClassProperty", {
 defineType("ObjectPattern", {
   visitor: ["properties", "typeAnnotation"],
   builder: ["properties"],
-  aliases: ["Pattern", "PatternLike"],
+  aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
     ...patternLikeCommon,
     properties: {

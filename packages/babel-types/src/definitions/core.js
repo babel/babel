@@ -732,7 +732,7 @@ defineType("ObjectProperty", {
 defineType("RestElement", {
   visitor: ["argument", "typeAnnotation"],
   builder: ["argument"],
-  aliases: ["PatternLike"],
+  aliases: ["LVal", "PatternLike"],
   fields: {
     ...patternLikeCommon,
     argument: {

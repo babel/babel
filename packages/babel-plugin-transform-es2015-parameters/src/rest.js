@@ -90,8 +90,9 @@ const memberExpressionOptimisationVisitor = {
           !state.deopted &&
           !// ex: `args[0] = "whatever"`
           (
-            (grandparentPath.isAssignmentExpression() &&
-              parentPath.node === grandparentPath.node.left) ||
+            grandparentPath.isAssignmentExpression({
+              left: parentPath.node,
+            }) ||
             // ex: `[args[0]] = ["whatever"]`
             grandparentPath.isLVal() ||
             // ex: `for (rest[0] in this)`
