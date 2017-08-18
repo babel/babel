@@ -1,6 +1,7 @@
 class Foo {
   constructor() {
     Object.defineProperty(this, "bar", {
+      configurable: true,
       enumerable: true,
       writable: true,
       value: "bar"
@@ -10,6 +11,7 @@ class Foo {
 }
 
 Object.defineProperty(Foo, "foo", {
+  configurable: true,
   enumerable: true,
   writable: true,
   value: "foo"

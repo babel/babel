@@ -1,8 +1,18 @@
 class Foo {
   constructor() {
-    this.bar = "bar";
+    Object.defineProperty(this, "bar", {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: "bar"
+    });
   }
 
 }
 
-Foo.foo = "foo";
+Object.defineProperty(Foo, "foo", {
+  configurable: true,
+  enumerable: true,
+  writable: true,
+  value: "foo"
+});
