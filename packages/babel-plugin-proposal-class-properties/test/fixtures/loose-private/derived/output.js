@@ -14,13 +14,13 @@ var Bar = function (_Foo) {
   babelHelpers.inherits(Bar, _Foo);
 
   function Bar() {
-    var _temp, _this, _ret;
+    var _temp, _this;
 
     babelHelpers.classCallCheck(this, Bar);
-    return _ret = (_temp = (_this = babelHelpers.possibleConstructorReturn(this, (Bar.__proto__ || Object.getPrototypeOf(Bar)).apply(this, arguments)), _this), Object.defineProperty(_this, _prop2, {
+    return babelHelpers.possibleConstructorReturn(_this, (_temp = _this = babelHelpers.possibleConstructorReturn(this, (Bar.__proto__ || Object.getPrototypeOf(Bar)).apply(this, arguments)), Object.defineProperty(_this, _prop2, {
       writable: true,
       value: "bar"
-    }), _temp), babelHelpers.possibleConstructorReturn(_this, _ret);
+    }), _temp));
   }
 
   return Bar;

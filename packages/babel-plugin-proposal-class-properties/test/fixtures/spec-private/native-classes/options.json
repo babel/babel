@@ -1,3 +1,0 @@
-{
-  "plugins": ["external-helpers", ["transform-class-properties", { "spec": true }], "transform-es2015-block-scoping", "syntax-class-properties"]
-}

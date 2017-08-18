@@ -1,7 +1,12 @@
 var Foo = function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-    this.foo = 0;
+    Object.defineProperty(this, "foo", {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: 0
+    });
   }
 
   babelHelpers.createClass(Foo, [{

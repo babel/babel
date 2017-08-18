@@ -2,10 +2,8 @@ var _bar;
 
 var Foo = function Foo() {
   babelHelpers.classCallCheck(this, Foo);
-  Object.defineProperty(this, _bar, {
-    writable: true,
-    value: void 0
-  });
+
+  _bar.set(this, void 0);
 };
 
-_bar = babelHelpers.privateClassPropertyKey("bar");
+_bar = new WeakMap();

@@ -8,16 +8,11 @@ var Foo = function Foo(foo) {
   _initialiseProps(this);
 };
 
-_bar = babelHelpers.privateClassPropertyKey("bar");
-_baz = babelHelpers.privateClassPropertyKey("baz");
+_bar = new WeakMap();
+_baz = new WeakMap();
 
 var _initialiseProps = function (_this) {
-  Object.defineProperty(_this, _bar, {
-    writable: true,
-    value: _this
-  });
-  Object.defineProperty(_this, _baz, {
-    writable: true,
-    value: foo
-  });
+  _bar.set(_this, _this);
+
+  _baz.set(_this, foo);
 };

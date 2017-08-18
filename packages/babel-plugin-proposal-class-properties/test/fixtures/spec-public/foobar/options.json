@@ -1,4 +1,4 @@
 {
-  "plugins": ["external-helpers", ["transform-class-properties", { "spec": true }]],
+  "plugins": ["external-helpers", ["proposal-class-properties", { "spec": true }]],
   "presets": ["stage-0", "es2015"]
 }
