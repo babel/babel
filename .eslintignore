@@ -12,4 +12,4 @@ packages/babel-standalone/babel.min.js
 
 # Prettier tries to insert trailing commas in function calls, which Node.js
 # doesn't natively support. This causes an error when loading the Gulp tasks.
-packages/babel-standalone/src/gulpTasks.js
+packages/babel-standalone/Gulpfile.js

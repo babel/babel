@@ -64,14 +64,14 @@ function webpackBuild(filename, libraryName, version) {
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": '"production"',
         BABEL_VERSION: JSON.stringify(
-          require("babel-core/package.json").version,
+          require("babel-core/package.json").version
         ),
         VERSION: JSON.stringify(version),
       }),
       // Use browser version of visionmedia-debug
       new webpack.NormalModuleReplacementPlugin(
         /debug\/node/,
-        "debug/src/browser",
+        "debug/src/browser"
       ),
       /*new webpack.NormalModuleReplacementPlugin(
         /..\/..\/package/,
@@ -110,13 +110,13 @@ gulp.task("build", cb => {
       webpackBuild(
         "babel.js",
         "Babel",
-        require(__dirname + "/package.json").version,
+        require(__dirname + "/package.json").version
       ),
       gulp.dest(__dirname),
       uglify(),
       rename({ extname: ".min.js" }),
       gulp.dest(__dirname),
     ],
-    cb,
+    cb
   );
 });
