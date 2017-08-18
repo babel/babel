@@ -48,6 +48,7 @@ commander.option(
   "comma-separated list of plugin names",
   collect,
 );
+commander.option("--config-file [path]", "Path a to .babelrc file to use");
 
 // Basic file input configuration.
 commander.option("--source-type [script|module]", "");
@@ -200,6 +201,10 @@ if (errors.length) {
 //
 
 const opts = commander.opts();
+//the configFile CLI option maps to the extends option in the node API
+if (opts.configFile) {
+  opts.extends = opts.configFile;
+}
 
 // Delete options that are specific to babel-cli and shouldn't be passed to babel-core.
 delete opts.version;
@@ -210,6 +215,7 @@ delete opts.outFile;
 delete opts.outDir;
 delete opts.copyFiles;
 delete opts.quiet;
+delete opts.configFile;
 
 // Commander will default the "--no-" arguments to true, but we want to leave them undefined so that
 // babel-core can handle the default-assignment logic on its own.
