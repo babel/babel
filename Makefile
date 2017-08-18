@@ -22,7 +22,7 @@ build-dist: build
 	node scripts/generate-babel-types-docs.js
 
 build-babel-standalone:
-	cd packages/babel-standalone
+	cd packages/babel-standalone; \
 	./node_modules/.bin/gulp build
 
 watch: clean
