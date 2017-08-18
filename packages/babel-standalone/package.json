@@ -90,6 +90,7 @@
     "babel-preset-stage-1": "7.0.0-alpha.19",
     "babel-preset-stage-2": "7.0.0-alpha.19",
     "babel-preset-stage-3": "7.0.0-alpha.19",
+    "gulp": "^3.9.1",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^3.0.0",
     "json-loader": "^0.5.7",
