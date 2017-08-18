@@ -2,14 +2,16 @@ var Foo = function (_Bar) {
   babelHelpers.inherits(Foo, _Bar);
 
   function Foo() {
+    var _this2;
+
     babelHelpers.classCallCheck(this, Foo);
 
     if (condition) {
-      var _this2 = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this));
+      _this2 = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this));
 
       _initialiseProps(_this2);
     } else {
-      var _this2 = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this));
+      _this2 = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this));
 
       _initialiseProps(_this2);
     }
@@ -22,6 +24,7 @@ var Foo = function (_Bar) {
 
 var _initialiseProps = function (_this) {
   Object.defineProperty(_this, "bar", {
+    configurable: true,
     enumerable: true,
     writable: true,
     value: "foo"

@@ -1,5 +1,3 @@
-var _bar;
-
 var foo = "bar";
 
 var Foo = function Foo() {
@@ -10,8 +8,6 @@ var Foo = function Foo() {
   var foo = "foo";
 };
 
-_bar = new WeakMap();
-
 var _initialiseProps = function (_this) {
-  _bar.set(_this, foo);
+  _this.bar = foo;
 };

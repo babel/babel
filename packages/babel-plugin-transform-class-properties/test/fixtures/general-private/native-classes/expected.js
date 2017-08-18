@@ -2,17 +2,13 @@ var _foo, _bar;
 
 class Foo {
   constructor() {
-    Object.defineProperty(this, _bar, {
-      writable: true,
-      value: "bar"
-    });
+    _bar.set(this, "bar");
   }
 
 }
 
-_foo = babelHelpers.privateClassPropertyKey("foo");
-Object.defineProperty(Foo, _foo, {
-  writable: true,
-  value: "foo"
-});
-_bar = babelHelpers.privateClassPropertyKey("bar");
+_foo = new WeakMap();
+
+_foo.set(Foo, "foo");
+
+_bar = new WeakMap();

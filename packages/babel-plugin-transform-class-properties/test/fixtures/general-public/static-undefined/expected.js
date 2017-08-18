@@ -6,5 +6,5 @@ Object.defineProperty(Foo, "bar", {
   configurable: true,
   enumerable: true,
   writable: true,
-  value: "foo"
+  value: void 0
 });

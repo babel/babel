@@ -3,16 +3,13 @@ function classFactory() {
 
   var Foo = function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-    Object.defineProperty(this, _foo, {
-      writable: true,
-      value: "foo"
-    });
+
+    _foo.set(this, "foo");
   };
 
-  _bar = babelHelpers.privateClassPropertyKey("bar");
-  Object.defineProperty(Foo, _bar, {
-    writable: true,
-    value: "bar"
-  });
-  _foo = babelHelpers.privateClassPropertyKey("foo");
+  _bar = new WeakMap();
+
+  _bar.set(Foo, "bar");
+
+  _foo = new WeakMap();
 }
