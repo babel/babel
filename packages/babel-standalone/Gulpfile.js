@@ -6,9 +6,11 @@
  * only target Node.js.
  */
 
+const gulp = require("gulp");
 const pump = require("pump");
 const rename = require("gulp-rename");
-const RootMostResolvePlugin = require("webpack-dependency-suite").RootMostResolvePlugin;
+const RootMostResolvePlugin = require("webpack-dependency-suite")
+  .RootMostResolvePlugin;
 const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
 const uglify = require("gulp-uglify");
@@ -17,7 +19,7 @@ function webpackBuild(filename, libraryName, version) {
   // If this build is part of a pull request, include the pull request number in
   // the version number.
   if (process.env.CIRCLE_PR_NUMBER) {
-    version += '+pr.' + process.env.CIRCLE_PR_NUMBER;
+    version += "+pr." + process.env.CIRCLE_PR_NUMBER;
   }
   const typeofPlugin = require("babel-plugin-transform-es2015-typeof-symbol")
     .default;
@@ -61,8 +63,9 @@ function webpackBuild(filename, libraryName, version) {
     plugins: [
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": '"production"',
-        BABEL_VERSION:
-          JSON.stringify(require("babel-core/package.json").version),
+        BABEL_VERSION: JSON.stringify(
+          require("babel-core/package.json").version
+        ),
         VERSION: JSON.stringify(version),
       }),
       // Use browser version of visionmedia-debug
@@ -80,7 +83,7 @@ function webpackBuild(filename, libraryName, version) {
       plugins: [
         // Dedupe packages that are used across multiple plugins.
         // This replaces DedupePlugin from Webpack 1.x
-        new RootMostResolvePlugin(__dirname + '/../../../', true),
+        new RootMostResolvePlugin(__dirname + "/../../../", true),
       ],
     },
   };
@@ -100,24 +103,20 @@ function webpackBuild(filename, libraryName, version) {
   });*/
 }
 
-function registerGulpTasks(gulp) {
-  gulp.task("build-babel-standalone", ["build"], cb => {
-    pump(
-      [
-        gulp.src(__dirname + "/index.js"),
-        webpackBuild(
-          "babel.js",
-          "Babel",
-          require(__dirname + "/../package.json").version
-        ),
-        gulp.dest(__dirname + "/../"),
-        uglify(),
-        rename({ extname: ".min.js" }),
-        gulp.dest(__dirname + "/../"),
-      ],
-      cb
-    );
-  });
-}
-
-module.exports = registerGulpTasks;
+gulp.task("build", cb => {
+  pump(
+    [
+      gulp.src(__dirname + "/src/index.js"),
+      webpackBuild(
+        "babel.js",
+        "Babel",
+        require(__dirname + "/package.json").version
+      ),
+      gulp.dest(__dirname),
+      uglify(),
+      rename({ extname: ".min.js" }),
+      gulp.dest(__dirname),
+    ],
+    cb
+  );
+});
