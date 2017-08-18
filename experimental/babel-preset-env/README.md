@@ -330,7 +330,7 @@ environment that only supports ES5.
 ES6 support, but it is not yet stable.  You can follow its progress in
 [UglifyJS2 issue #448](https://github.com/mishoo/UglifyJS2/issues/448).  If you
 require an alternative minifier which _does_ support ES6 syntax, we recommend
-using [Babili](https://github.com/babel/babili).
+using [babel-minify](https://github.com/babel/minify).
 
 ### `configPath`
 
