@@ -43,6 +43,7 @@ commander.option("-o, --out-file [out]", "Compile all input files into a single 
 commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
 commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
 commander.option("-q, --quiet", "Don't log anything");
+commander.option("--config-file [path]", "Path a to .babelrc file to use");
 /* eslint-enable max-len */
 
 const pkg = require("../../package.json");
@@ -104,6 +105,10 @@ if (errors.length) {
 //
 
 const opts = exports.opts = {};
+
+if (commander.configFile) {
+  opts.extends = commander.configFile;
+}
 
 Object.keys(options).forEach(function (key) {
   const opt = options[key];
