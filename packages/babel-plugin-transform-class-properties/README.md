@@ -12,13 +12,13 @@ Below is a class with four class properties which will be transformed.
     instanceProperty = "bork";
     boundFunction = () => {
       return this.instanceProperty;
-    }
+    };
 
     //Static class properties
     static staticProperty = "babelIsCool";
     static staticFunction = function() {
       return Bork.staticProperty;
-    }
+    };
   }
 
   let myBork = new Bork;
@@ -46,13 +46,17 @@ npm install --save-dev babel-plugin-transform-class-properties
 
 **.babelrc**
 
+Without options:
+
 ```json
-// without options
 {
   "plugins": ["transform-class-properties"]
 }
+```
 
-// with options
+With options:
+
+```json
 {
   "plugins": [
     ["transform-class-properties", { "loose": true }]
@@ -100,11 +104,13 @@ Without `{ "loose": true }`, the above code will compile to the following, using
 var Bork = function Bork() {
   babelHelpers.classCallCheck(this, Bork);
   Object.defineProperty(this, "x", {
+    configurable: true,
     enumerable: true,
     writable: true,
     value: 'bar'
   });
   Object.defineProperty(this, "y", {
+    configurable: true,
     enumerable: true,
     writable: true,
     value: void 0
@@ -112,11 +118,13 @@ var Bork = function Bork() {
 };
 
 Object.defineProperty(Bork, "a", {
+  configurable: true,
   enumerable: true,
   writable: true,
   value: 'foo'
 });
 Object.defineProperty(Bork, "b", {
+  configurable: true,
   enumerable: true,
   writable: true,
   value: void 0

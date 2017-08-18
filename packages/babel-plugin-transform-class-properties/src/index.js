@@ -25,7 +25,7 @@ export default function({ types: t }) {
 
   const buildObjectDefineProperty = template(`
     Object.defineProperty(REF, KEY, {
-      // configurable is false by default
+      configurable: true,
       enumerable: true,
       writable: true,
       value: VALUE

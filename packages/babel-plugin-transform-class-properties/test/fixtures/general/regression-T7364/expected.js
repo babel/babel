@@ -3,6 +3,7 @@ class MyClass {
     var _this = this;
 
     Object.defineProperty(this, "myAsyncMethod", {
+      configurable: true,
       enumerable: true,
       writable: true,
       value: (() => {
@@ -24,6 +25,7 @@ class MyClass {
     var _this2 = this;
 
     Object.defineProperty(this, "myAsyncMethod", {
+      configurable: true,
       enumerable: true,
       writable: true,
       value: (() => {
@@ -45,6 +47,7 @@ export default class MyClass3 {
     var _this3 = this;
 
     Object.defineProperty(this, "myAsyncMethod", {
+      configurable: true,
       enumerable: true,
       writable: true,
       value: (() => {

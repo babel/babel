@@ -270,12 +270,9 @@ export function _guessExecutionStatusRelativeTo(target) {
   }
 
   // otherwise we're associated by a parent node, check which key comes before the other
-  const targetKeyPosition = t.VISITOR_KEYS[targetRelationship.type].indexOf(
-    targetRelationship.key,
-  );
-  const selfKeyPosition = t.VISITOR_KEYS[selfRelationship.type].indexOf(
-    selfRelationship.key,
-  );
+  const keys = t.VISITOR_KEYS[commonPath.type];
+  const targetKeyPosition = keys.indexOf(targetRelationship.key);
+  const selfKeyPosition = keys.indexOf(selfRelationship.key);
   return targetKeyPosition > selfKeyPosition ? "before" : "after";
 }
 

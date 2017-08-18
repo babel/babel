@@ -11,6 +11,7 @@ function withContext(ComposedComponent) {
 
     return WithContext;
   }(Component), Object.defineProperty(_class, "propTypes", {
+    configurable: true,
     enumerable: true,
     writable: true,
     value: {

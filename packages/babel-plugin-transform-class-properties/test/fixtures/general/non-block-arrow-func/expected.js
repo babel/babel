@@ -14,6 +14,7 @@ export default (param => {
     }]);
     return App;
   }(), Object.defineProperty(_class, "props", {
+    configurable: true,
     enumerable: true,
     writable: true,
     value: {
