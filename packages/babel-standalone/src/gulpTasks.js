@@ -4,6 +4,9 @@
  * compilation of all the JavaScript files. This is because it targets web
  * browsers, so more transforms are needed than the regular Babel builds that
  * only target Node.js.
+ *
+ * The tasks in this file are designed to be reusable, so that they can be used
+ * to make standalone builds of other Babel plugins/presets (such as babel-minify)
  */
 
 const pump = require("pump");
@@ -100,24 +103,27 @@ function webpackBuild(filename, libraryName, version) {
   });*/
 }
 
-function registerGulpTasks(gulp) {
-  gulp.task("build-babel-standalone", ["build"], cb => {
+function registerBabelStandaloneTask(gulp, name, exportName, path, version) {
+  gulp.task("build-" + name + "-standalone", cb => {
     pump(
       [
-        gulp.src(__dirname + "/index.js"),
+        gulp.src(path + "/src/index.js"),
         webpackBuild(
-          "babel.js",
-          "Babel",
-          require(__dirname + "/../package.json").version
+          name + ".js",
+          exportName,
+          version
         ),
-        gulp.dest(__dirname + "/../"),
+        gulp.dest(path),
         uglify(),
         rename({ extname: ".min.js" }),
-        gulp.dest(__dirname + "/../"),
+        gulp.dest(path),
       ],
       cb
     );
   });
 }
 
-module.exports = registerGulpTasks;
+module.exports = {
+  webpackBuild: webpackBuild,
+  registerBabelStandaloneTask: registerBabelStandaloneTask,
+}
