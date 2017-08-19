@@ -8,11 +8,11 @@ var Foo = function Foo() {
   var foo = "foo";
 };
 
-var _initialiseProps = function (_this) {
+function _initialiseProps(_this) {
   Object.defineProperty(_this, "bar", {
     configurable: true,
     enumerable: true,
     writable: true,
     value: foo
   });
-};
+}
