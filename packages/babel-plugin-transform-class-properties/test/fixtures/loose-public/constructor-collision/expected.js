@@ -8,6 +8,6 @@ var Foo = function Foo() {
   var foo = "foo";
 };
 
-var _initialiseProps = function (_this) {
+function _initialiseProps(_this) {
   _this.bar = foo;
-};
+}
