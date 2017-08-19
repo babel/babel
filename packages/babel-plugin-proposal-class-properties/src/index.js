@@ -117,12 +117,12 @@ export default declare((api, options) => {
       const { parentPath, node } = path;
       if (!parentPath.isMemberExpression({ property: node, computed: false })) {
         throw path.buildCodeFrameError(
-          `Illegal syntax. Did you mean \`this.#${node.name.name}\``,
+          `illegal syntax. Did you mean \`this.#${node.name.name}\`?`,
         );
       }
 
       if (!this.privateProps[node.name.name]) {
-        throw path.buildCodeFrameError(`Unknown private property`);
+        throw path.buildCodeFrameError(`unknown private property`);
       }
     },
   };
@@ -148,24 +148,16 @@ export default declare((api, options) => {
         let assign;
         let memo;
 
-        if (grandParentPath.isAssignmentExpression()) {
-          const { operator, right } = node;
-          if (operator === "=") {
-            assign = right;
-          } else {
-            memo = path.scope.maybeGenerateMemoised(object);
-            assign = t.binaryExpression(
-              operator.slice(0, -1),
-              replaceWith,
-              right,
-            );
-          }
+        if (grandParentPath.isAssignmentExpression({ operator: "=" })) {
+          assign = node.right;
         } else {
+          const { right, operator } = node;
           memo = path.scope.maybeGenerateMemoised(object);
+
           assign = t.binaryExpression(
-            node.operator.slice(0, 1),
+            operator.slice(0, -1),
             replaceWith,
-            t.numericLiteral(1),
+            right || t.numericLiteral(1),
           );
         }
 
@@ -187,10 +179,11 @@ export default declare((api, options) => {
           replaceWith.arguments[0] = t.assignmentExpression("=", memo, object);
         }
 
-        replacePath = grandParentPath;
         const call = t.clone(grandParentPath.node);
         call.callee = t.memberExpression(replaceWith, t.identifier("call"));
         call.arguments.unshift(memo || object);
+
+        replacePath = grandParentPath;
         replaceWith = call;
       }
 
