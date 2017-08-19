@@ -5,5 +5,5 @@ export default {
   entry: "src/index.js",
   dest: "lib/index.js",
   plugins: [babel(), nodeResolve()],
-  format: "cjs"
+  format: "cjs",
 };

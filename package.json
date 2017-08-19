@@ -22,7 +22,6 @@
   },
   "devDependencies": {
     "ava": "^0.22.0",
-    "babel-cli": "7.0.0-alpha.18",
     "babel-core": "7.0.0-alpha.18",
     "babel-eslint": "8.0.0-alpha.13",
     "babel-helper-fixtures": "7.0.0-alpha.18",
