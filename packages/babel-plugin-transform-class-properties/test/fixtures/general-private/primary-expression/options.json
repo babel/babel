@@ -1,0 +1,3 @@
+{
+  "throws": "Illegal syntax. Did you mean `this.#test`"
+}
