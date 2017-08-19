@@ -5,6 +5,15 @@ const fs = require("fs");
 const chalk = require("chalk");
 const parse = require("..").parse;
 
+function map_get_default(map, key, defaultConstructor) {
+  if (map.has(key)) {
+    return map.get(key);
+  }
+  const value = new defaultConstructor();
+  map.set(key, value);
+  return value;
+}
+
 function list_files(root, dir) {
   const files = fs.readdirSync(dir ? path.join(root, dir) : root);
   let result = [];
@@ -22,7 +31,7 @@ function list_files(root, dir) {
 
 function get_tests(root_dir) {
   const files = list_files(root_dir);
-  const tests = {};
+  const tests = new Map();
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
     const test_name = path.dirname(file);
@@ -34,8 +43,8 @@ function get_tests(root_dir) {
       continue;
     }
 
-    const cases = (tests[test_name] = tests[test_name] || {});
-    const case_ = (cases[case_name] = cases[case_name] || {});
+    const cases = map_get_default(tests, test_name, Map);
+    const case_ = map_get_default(cases, case_name, Object);
 
     const content = fs.readFileSync(path.join(root_dir, file), {
       encoding: "utf8",
@@ -60,20 +69,11 @@ function get_hardcoded_tests() {
   const tests = get_tests(
     path.join(__dirname, "../build/flow/src/parser/test/flow")
   );
-  const result = {};
-  for (const section in tests) {
-    if (tests.hasOwnProperty(section)) {
-      const test = tests[section];
-      const cases = [];
-      // TODO: use Object.values if we require new enough node
-      for (const case_ in test) {
-        if (test.hasOwnProperty(case_)) {
-          cases.push(test[case_]);
-        }
-      }
-      result[section] = { tests: cases };
-    }
-  }
+  const result = new Map();
+  tests.forEach((section, sectionName) => {
+    const cases = Array.from(section.values());
+    result.set(sectionName, { tests: cases });
+  });
   return result;
 }
 
@@ -92,11 +92,11 @@ const flowOptionsMapping = {
 
 let failedTests = 0;
 let successTests = 0;
-const hardcodedTests = get_hardcoded_tests();
-Object.keys(hardcodedTests).forEach(sectionName => {
+const tests = get_hardcoded_tests();
+tests.forEach((section, sectionName) => {
   console.log("");
   console.log(`### ${sectionName} ###`);
-  hardcodedTests[sectionName].tests.forEach(test => {
+  section.tests.forEach(test => {
     const shouldSuccess =
       test.expected_ast &&
       (!Array.isArray(test.expected_ast.errors) ||
