@@ -5,6 +5,8 @@ const fs = require("fs");
 const chalk = require("chalk");
 const parse = require("..").parse;
 
+const TESTS_FOLDER = path.join(__dirname, "../build/flow/src/parser/test/flow");
+
 function map_get_default(map, key, defaultConstructor) {
   if (map.has(key)) {
     return map.get(key);
@@ -65,18 +67,6 @@ function get_tests(root_dir) {
   return tests;
 }
 
-function get_hardcoded_tests() {
-  const tests = get_tests(
-    path.join(__dirname, "../build/flow/src/parser/test/flow")
-  );
-  const result = new Map();
-  tests.forEach((section, sectionName) => {
-    const cases = Array.from(section.values());
-    result.set(sectionName, { tests: cases });
-  });
-  return result;
-}
-
 const options = {
   plugins: ["jsx", "flow", "asyncGenerators", "objectRestSpread"],
   sourceType: "module",
@@ -92,11 +82,11 @@ const flowOptionsMapping = {
 
 let failedTests = 0;
 let successTests = 0;
-const tests = get_hardcoded_tests();
+const tests = get_tests(TESTS_FOLDER);
 tests.forEach((section, sectionName) => {
   console.log("");
   console.log(`### ${sectionName} ###`);
-  section.tests.forEach(test => {
+  section.forEach(test => {
     const shouldSuccess =
       test.expected_ast &&
       (!Array.isArray(test.expected_ast.errors) ||
