@@ -9,7 +9,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "babel-plugin-transform-decorators": "7.0.0-alpha.19",
-    "babel-plugin-transform-export-extensions": "7.0.0-alpha.19",
+    "babel-plugin-transform-export-default": "7.0.0-alpha.19",
     "babel-plugin-transform-optional-chaining": "7.0.0-alpha.19",
     "babel-preset-stage-2": "7.0.0-alpha.19"
   }

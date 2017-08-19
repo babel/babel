@@ -853,6 +853,12 @@ babel-plugin-transform-export-extensions@7.0.0-alpha.18:
   dependencies:
     babel-plugin-syntax-export-extensions "7.0.0-alpha.18"
 
+babel-plugin-transform-export-extensions@7.0.0-alpha.19:
+  version "7.0.0-alpha.19"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-export-extensions/-/babel-plugin-transform-export-extensions-7.0.0-alpha.19.tgz#664ed4cd942838bee1287ff81588905614b644aa"
+  dependencies:
+    babel-plugin-syntax-export-extensions "7.0.0-alpha.19"
+
 babel-plugin-transform-flow-strip-types@7.0.0-alpha.18:
   version "7.0.0-alpha.18"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-flow-strip-types/-/babel-plugin-transform-flow-strip-types-7.0.0-alpha.18.tgz#1a15c0b0496ea4c7991b43d50b8009412a5f7364"
