@@ -8,6 +8,8 @@ const parse = require("..").parse;
 const TESTS_FOLDER = path.join(__dirname, "../build/flow/src/parser/test/flow");
 const WHITELIST_PATH = path.join(__dirname, "./flow_tests_whitelist.txt");
 
+const shouldUpdateWhitelist = process.argv.indexOf("--update-whitelist") > 0;
+
 function map_get_default(map, key, defaultConstructor) {
   if (map.has(key)) {
     return map.get(key);
@@ -72,6 +74,25 @@ function get_tests(root_dir) {
     }
   }
   return tests;
+}
+
+function update_whitelist(summary) {
+  const contains = (tests, file) =>
+    tests.some(({ test }) => test.file === file);
+
+  const result = fs
+    .readFileSync(WHITELIST_PATH, "utf8")
+    .split("\n")
+    .filter(line => {
+      const file = line.replace(/#.*$/, "").trim();
+      return (
+        !contains(summary.disallowed.success, file) &&
+        !contains(summary.disallowed.failure, file) &&
+        summary.unrecognized.indexOf(file) === -1
+      );
+    })
+    .join("\n");
+  fs.writeFileSync(WHITELIST_PATH, result);
 }
 
 const options = {
@@ -164,48 +185,50 @@ summary.passed &= summary.unrecognized.length === 0;
 // `process.stdout.write(".")` there is no final newline
 console.log();
 
-console.log("\n-- FAILED TESTS --");
-summary.disallowed.failure.forEach(
-  ({ test, shouldSuccess, exception, babylonOptions }) => {
-    console.log(chalk.red(`✘ ${test.file}`));
-    if (shouldSuccess) {
-      console.log(chalk.yellow("  Should parse successfully, but did not"));
-      console.log(chalk.yellow(`  Failed with: \`${exception.message}\``));
-    } else {
-      console.log(chalk.yellow("  Should fail parsing, but did not"));
-    }
-    console.log(
-      chalk.yellow(
-        `  Active plugins: ${JSON.stringify(babylonOptions.plugins)}`
-      )
-    );
-  }
-);
-summary.disallowed.success.forEach(
-  ({ test, shouldSuccess, babylonOptions }) => {
-    console.log(chalk.red(`✘ ${test.file}`));
-    if (shouldSuccess) {
+if (summary.disallowed.failure.length || summary.disallowed.success.length) {
+  console.log("\n-- FAILED TESTS --");
+  summary.disallowed.failure.forEach(
+    ({ test, shouldSuccess, exception, babylonOptions }) => {
+      console.log(chalk.red(`✘ ${test.file}`));
+      if (shouldSuccess) {
+        console.log(chalk.yellow("  Should parse successfully, but did not"));
+        console.log(chalk.yellow(`  Failed with: \`${exception.message}\``));
+      } else {
+        console.log(chalk.yellow("  Should fail parsing, but did not"));
+      }
       console.log(
         chalk.yellow(
-          "  Correctly parsed successfully, but" +
-            " was disallowed by the whitelist"
-        )
-      );
-    } else {
-      console.log(
-        chalk.yellow(
-          "  Correctly failed parsing, but" +
-            " was disallowed by the whitelist"
+          `  Active plugins: ${JSON.stringify(babylonOptions.plugins)}`
         )
       );
     }
-    console.log(
-      chalk.yellow(
-        `  Active plugins: ${JSON.stringify(babylonOptions.plugins)}`
-      )
-    );
-  }
-);
+  );
+  summary.disallowed.success.forEach(
+    ({ test, shouldSuccess, babylonOptions }) => {
+      console.log(chalk.red(`✘ ${test.file}`));
+      if (shouldSuccess) {
+        console.log(
+          chalk.yellow(
+            "  Correctly parsed successfully, but" +
+              " was disallowed by the whitelist"
+          )
+        );
+      } else {
+        console.log(
+          chalk.yellow(
+            "  Correctly failed parsing, but" +
+              " was disallowed by the whitelist"
+          )
+        );
+      }
+      console.log(
+        chalk.yellow(
+          `  Active plugins: ${JSON.stringify(babylonOptions.plugins)}`
+        )
+      );
+    }
+  );
+}
 
 console.log("-- SUMMARY --");
 console.log(
@@ -236,4 +259,14 @@ console.log(
   )
 );
 
-process.exit(summary.passed ? 0 : 1);
+// Some padding to separate the output from the message `make`
+// adds at the end of failing scripts
+console.log();
+
+
+if (shouldUpdateWhitelist) {
+  update_whitelist(summary);
+  console.log("\nWhitelist updated");
+} else {
+  process.exit(summary.passed ? 0 : 1);
+}
