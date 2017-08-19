@@ -676,7 +676,7 @@ export default class ExpressionParser extends LValParser {
       case tt._yield:
         if (this.state.inGenerator) this.unexpected();
 
-      case tt.name:
+      case tt.name: {
         node = this.startNode();
         const allowAwait = this.state.value === "await" && this.state.inAsync;
         const allowYield = this.shouldAllowYieldIdentifier();
@@ -705,29 +705,29 @@ export default class ExpressionParser extends LValParser {
         }
 
         return id;
+      }
 
-      case tt._do:
-        // TODO
-        if (true) {
-          this.expectPlugin("doExpressions");
-          const node = this.startNode();
-          this.next();
-          const oldInFunction = this.state.inFunction;
-          const oldLabels = this.state.labels;
-          this.state.labels = [];
-          this.state.inFunction = false;
-          node.body = this.parseBlock(false);
-          this.state.inFunction = oldInFunction;
-          this.state.labels = oldLabels;
-          return this.finishNode(node, "DoExpression");
-        }
+      case tt._do: {
+        this.expectPlugin("doExpressions");
+        const node = this.startNode();
+        this.next();
+        const oldInFunction = this.state.inFunction;
+        const oldLabels = this.state.labels;
+        this.state.labels = [];
+        this.state.inFunction = false;
+        node.body = this.parseBlock(false);
+        this.state.inFunction = oldInFunction;
+        this.state.labels = oldLabels;
+        return this.finishNode(node, "DoExpression");
+      }
 
-      case tt.regexp:
+      case tt.regexp: {
         const value = this.state.value;
         node = this.parseLiteral(value.value, "RegExpLiteral");
         node.pattern = value.pattern;
         node.flags = value.flags;
         return node;
+      }
 
       case tt.num:
         return this.parseLiteral(this.state.value, "NumericLiteral");
@@ -781,7 +781,7 @@ export default class ExpressionParser extends LValParser {
       case tt.backQuote:
         return this.parseTemplate(false);
 
-      case tt.doubleColon:
+      case tt.doubleColon: {
         node = this.startNode();
         this.next();
         node.object = null;
@@ -794,6 +794,7 @@ export default class ExpressionParser extends LValParser {
             "Binding should be performed on object property.",
           );
         }
+      }
 
       default:
         throw this.unexpected();

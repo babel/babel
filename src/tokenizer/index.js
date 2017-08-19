@@ -595,11 +595,13 @@ export default class Tokenizer extends LocationParser {
         ++this.state.pos;
         return this.finishToken(tt.backQuote);
 
-      case 48: // '0'
+      case 48: {
+        // '0'
         const next = this.input.charCodeAt(this.state.pos + 1);
         if (next === 120 || next === 88) return this.readRadixNumber(16); // '0x', '0X' - hex number
         if (next === 111 || next === 79) return this.readRadixNumber(8); // '0o', '0O' - octal number
         if (next === 98 || next === 66) return this.readRadixNumber(2); // '0b', '0B' - binary number
+      }
       // Anything else beginning with a digit is an integer, octal
       // number, or float.
       case 49:

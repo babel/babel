@@ -540,7 +540,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       switch (this.state.type) {
         case tt.name:
         case tt._void:
-        case tt._null:
+        case tt._null: {
           const type = this.match(tt._void)
             ? "TSVoidKeyword"
             : this.match(tt._null)
@@ -552,6 +552,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             return this.finishNode(node, type);
           }
           return this.tsParseTypeReference();
+        }
         case tt.string:
         case tt.num:
         case tt._true:
@@ -573,13 +574,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             return this.finishNode(node, "TSLiteralType");
           }
           break;
-        case tt._this:
+        case tt._this: {
           const thisKeyword = this.tsParseThisTypeNode();
           if (this.isContextual("is") && !this.hasPrecedingLineBreak()) {
             return this.tsParseThisTypePredicate(thisKeyword);
           } else {
             return thisKeyword;
           }
+        }
         case tt._typeof:
           return this.tsParseTypeQuery();
         case tt.braceL:
@@ -1038,13 +1040,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case tt._var:
         case tt._let:
           return this.parseVarStatement(nany, this.state.type);
-        case tt.name:
+        case tt.name: {
           const value = this.state.value;
           if (value === "global") {
             return this.tsParseAmbientExternalModuleDeclaration(nany);
           } else {
             return this.tsParseDeclaration(nany, value, /* next */ true);
           }
+        }
       }
     }
 
@@ -1064,14 +1067,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseExpressionStatement(node: any, expr: N.Identifier): ?N.Declaration {
       switch (expr.name) {
-        case "declare":
+        case "declare": {
           const declaration = this.tsTryParseDeclare(node);
           if (declaration) {
             declaration.declare = true;
             return declaration;
           }
           break;
-
+        }
         case "global":
           // `global { }` (with no `declare`) may appear inside an ambient module declaration.
           // Would like to use tsParseAmbientExternalModuleDeclaration here, but already ran past "global".
