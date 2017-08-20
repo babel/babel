@@ -10,7 +10,8 @@ machine:
 
 dependencies:
   pre:
-    - curl -o- -L https://yarnpkg.com/install.sh | bash
+    # Version number can be removed once 0.28.x or higher is released as stable
+    - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.28.4
   cache_directories:
     - ~/.yarn-cache
   override:
