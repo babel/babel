@@ -7,10 +7,6 @@ import syntaxDecorators2 from "babel-plugin-syntax-decorators-2";
 /** manual testing code
 **/
 export default function({ types: t }) {
-  // a class expression with decorators is wrapped in a `decorate(..)` call. The following is to avoid
-  // processing the same class node again
-  const processedClassNodes = [];
-
   // converts [(expression)] to [(let key = (expression))] if expression is impure
   // so as to avoid recomputation when the key is needed later
   let injectedKeyDeclaration;
@@ -38,6 +34,22 @@ export default function({ types: t }) {
         member.get("key").replaceWith(replacement);
       }
     }
+  }
+
+  //a predicate which tells if a path has any decorators at all or not.
+  function hasDecorators(path) {
+    if (path.node.decorators && path.node.decorators.length > 0) return true;
+
+    const body = path.node.body.body;
+    for (let i = 0; i < body.length; i++) {
+      const method = body[i];
+      if (!t.isClassMethod(method)) continue;
+      if (method.decorators && method.decorators.length > 0) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   // expects a method node
@@ -121,6 +133,8 @@ export default function({ types: t }) {
     visitor: {
       // export default is a special case since it expects and expression rather than a declaration
       ExportDefaultDeclaration(path) {
+        if (!hasDecorators(path)) return;
+
         const classPath = path.get("declaration");
         if (!classPath.isClassDeclaration()) return;
 
@@ -139,6 +153,8 @@ export default function({ types: t }) {
 
       // replace declaration with a let declaration
       ClassDeclaration(path) {
+        if (!hasDecorators(path)) return;
+
         const { node } = path;
         const ref = node.id || path.scope.generateUidIdentifier("class");
 
@@ -150,7 +166,7 @@ export default function({ types: t }) {
       },
 
       ClassExpression(path, file) {
-        if (processedClassNodes.indexOf(path.node) > -1) return;
+        if (!hasDecorators(path)) return;
 
         file.addHelper("makeElementDescriptor");
         file.addHelper("mergeDuplicateElements");
@@ -178,8 +194,6 @@ export default function({ types: t }) {
           path.node.superClass == null
             ? path.scope.buildUndefinedNode()
             : path.node.superClass;
-
-        processedClassNodes.push(path.node);
 
         path.replaceWith(
           t.callExpression(
