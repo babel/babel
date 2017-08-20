@@ -9,6 +9,9 @@
  * to make standalone builds of other Babel plugins/presets (such as babel-minify)
  */
 
+// Must run first
+require("./overrideModuleResolution")();
+
 const pump = require("pump");
 const rename = require("gulp-rename");
 const RootMostResolvePlugin = require("webpack-dependency-suite").RootMostResolvePlugin;
