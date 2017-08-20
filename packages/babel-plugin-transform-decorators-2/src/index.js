@@ -9,7 +9,6 @@ import syntaxDecorators2 from "babel-plugin-syntax-decorators-2";
 export default function({ types: t }) {
   // converts [(expression)] to [(let key = (expression))] if expression is impure
   // so as to avoid recomputation when the key is needed later
-  let injectedKeyDeclaration;
   function addKeysToComputedMembers(path) {
     const body = path.get("body.body");
 
@@ -19,17 +18,7 @@ export default function({ types: t }) {
           member.node.key,
         );
 
-        if (!injectedKeyDeclaration) {
-          const parent = path.getStatementParent();
-          parent.insertBefore(t.variableDeclaration("let", []));
-          injectedKeyDeclaration = parent.getSibling(parent.key - 1);
-        }
-
-        injectedKeyDeclaration.pushContainer(
-          "declarations",
-          t.variableDeclarator(ref),
-        );
-
+        path.scope.parent.push({ id: ref });
         const replacement = t.assignmentExpression("=", ref, member.node.key);
         member.get("key").replaceWith(replacement);
       }
@@ -63,7 +52,7 @@ export default function({ types: t }) {
         return node.key;
       }
     } else {
-      return t.stringLiteral(node.key.name);
+      return t.stringLiteral(node.key.name || String(node.key.value));
     }
   }
 
@@ -175,6 +164,7 @@ export default function({ types: t }) {
         const decorateIdentifier = file.addHelper("decorate", [
           "decorateClass",
           "decorateElement",
+          "makeElementDescriptor",
         ]);
 
         addKeysToComputedMembers(path);

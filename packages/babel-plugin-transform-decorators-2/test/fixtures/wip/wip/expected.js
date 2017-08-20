@@ -1,3 +1,5 @@
+var _ref, _foo;
+
 let Bizz = babelHelpers.decorate(class Bizz {
   m1() {}
 

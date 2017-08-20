@@ -1,4 +1,4 @@
-let _foo, _ref;
+var _foo, _ref;
 
 let Bizz = babelHelpers.decorate(class Bizz {
   uncomputed() {}
