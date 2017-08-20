@@ -911,7 +911,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.global = true;
         node.id = this.parseIdentifier();
       } else if (this.match(tt.string)) {
-        node.id = this.parseLiteral(this.state.value, "StringLiteral");
+        node.id = this.parseExprAtom();
       } else {
         this.unexpected();
       }
