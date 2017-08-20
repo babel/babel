@@ -14,7 +14,7 @@ ifneq ($(BABEL_ENV), "cov")
 	make build-standalone
 endif
 
-build-standalone: build
+build-standalone:
 	./node_modules/.bin/gulp build-babel-standalone --cwd=packages/babel-standalone/
 
 build-dist: build
