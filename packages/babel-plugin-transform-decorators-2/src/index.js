@@ -7,24 +7,35 @@ import syntaxDecorators2 from "babel-plugin-syntax-decorators-2";
 /** manual testing code
 **/
 export default function({ types: t }) {
+  // a class expression with decorators is wrapped in a `decorate(..)` call. The following is to avoid
+  // processing the same class node again
+  const processedClassNodes = [];
+
   // converts [(expression)] to [(let key = (expression))] if expression is impure
   // so as to avoid recomputation when the key is needed later
+  let injectedKeyDeclaration;
   function addKeysToComputedMembers(path) {
     const body = path.get("body.body");
 
     for (const member of body) {
-      if (member.node.computed && member.get("key").isPure()) {
-        const parent = path.findParent(p => p.parentPath.isBlock());
-        const ref = member.scope.generateUidIdentifier("key");
-        parent.insertBefore(
-          t.variableDeclaration("let", [t.variableDeclarator(ref)]),
+      if (member.node.computed && !member.get("key").isPure()) {
+        const ref = member.scope.generateUidIdentifierBasedOnNode(
+          member.node.key,
         );
-        const replacement = t.sequenceExpression([
-          t.assignmentExpression("=", ref, member.node.key),
-        ]);
-        // FIXME: the following should work: member.get("key").replaceWith(replacement);
-        // but doesn't accept sequenceexpression type so we have to directly manipulate node
-        member.node.key = replacement;
+
+        if (!injectedKeyDeclaration) {
+          const parent = path.getStatementParent();
+          parent.insertBefore(t.variableDeclaration("let", []));
+          injectedKeyDeclaration = parent.getSibling(parent.key - 1);
+        }
+
+        injectedKeyDeclaration.pushContainer(
+          "declarations",
+          t.variableDeclarator(ref),
+        );
+
+        const replacement = t.assignmentExpression("=", ref, member.node.key);
+        member.get("key").replaceWith(replacement);
       }
     }
   }
@@ -139,6 +150,8 @@ export default function({ types: t }) {
       },
 
       ClassExpression(path, file) {
+        if (processedClassNodes.indexOf(path.node) > -1) return;
+
         file.addHelper("makeElementDescriptor");
         file.addHelper("mergeDuplicateElements");
         file.addHelper("decorateClass", ["mergeDuplicateElements"]);
@@ -165,6 +178,8 @@ export default function({ types: t }) {
           path.node.superClass == null
             ? path.scope.buildUndefinedNode()
             : path.node.superClass;
+
+        processedClassNodes.push(path.node);
 
         path.replaceWith(
           t.callExpression(
