@@ -234,7 +234,13 @@ defineType("ExportNamedDeclaration", {
     specifiers: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("ExportSpecifier")),
+        assertEach(
+          assertNodeType(
+            "ExportSpecifier",
+            "ExportDefaultSpecifier",
+            "ExportNamespaceSpecifier",
+          ),
+        ),
       ),
     },
     source: {
