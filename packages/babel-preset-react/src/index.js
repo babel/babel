@@ -1,4 +1,3 @@
-import transformFlowStripTypes from "babel-plugin-transform-flow-strip-types";
 import transformReactJSX from "babel-plugin-transform-react-jsx";
 import transformSyntaxJSX from "babel-plugin-syntax-jsx";
 import transformReactDisplayName from "babel-plugin-transform-react-display-name";
@@ -20,7 +19,6 @@ export default function(context, opts = {}) {
 
       development && transformReactJSXSource,
       development && transformReactJSXSelf,
-      [transformFlowStripTypes, { requireDirective: true }],
     ].filter(Boolean),
   };
 }

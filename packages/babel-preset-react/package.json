@@ -9,7 +9,6 @@
   "main": "lib/index.js",
   "dependencies": {
     "babel-plugin-syntax-jsx": "7.0.0-alpha.19",
-    "babel-plugin-transform-flow-strip-types": "7.0.0-alpha.19",
     "babel-plugin-transform-react-display-name": "7.0.0-alpha.19",
     "babel-plugin-transform-react-jsx": "7.0.0-alpha.19",
     "babel-plugin-transform-react-jsx-self": "7.0.0-alpha.19",
