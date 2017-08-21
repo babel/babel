@@ -13,6 +13,8 @@ import * as Babel from "babel-core";
 
 import { runScripts } from "./transformScriptTags";
 
+console.log('Hello World');
+
 const isArray =
   Array.isArray ||
   (arg => Object.prototype.toString.call(arg) === "[object Array]");
