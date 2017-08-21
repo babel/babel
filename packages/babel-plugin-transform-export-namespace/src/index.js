@@ -1,44 +1,38 @@
 import syntaxExportExtensions from "babel-plugin-syntax-export-extensions";
 
 export default function({ types: t }) {
-  function build(node, nodes, scope) {
-    const hasNoExportNs = node.specifiers.every(
-      specifier => !t.isExportNamespaceSpecifier(specifier),
-    );
-    if (hasNoExportNs) return;
-
-    const specifier = node.specifiers.shift();
-    const uid = scope.generateUidIdentifier(specifier.exported.name);
-
-    let newSpecifier;
-    if (t.isExportNamespaceSpecifier(specifier)) {
-      newSpecifier = t.importNamespaceSpecifier(uid);
-    } else {
-      newSpecifier = t.importDefaultSpecifier(uid);
-    }
-    nodes.push(t.importDeclaration([newSpecifier], node.source));
-    nodes.push(
-      t.exportNamedDeclaration(null, [
-        t.exportSpecifier(uid, specifier.exported),
-      ]),
-    );
-
-    build(node, nodes, scope);
-  }
-
   return {
     inherits: syntaxExportExtensions,
 
     visitor: {
       ExportNamedDeclaration(path) {
         const { node, scope } = path;
+        const { specifiers } = node;
+
+        const index = t.isExportDefaultSpecifier(specifiers[0]) ? 1 : 0;
+        if (!t.isExportNamespaceSpecifier(specifiers[index])) return;
+
         const nodes = [];
-        build(node, nodes, scope);
-        if (!nodes.length) return;
+
+        if (index === 1) {
+          nodes.push(
+            t.exportNamedDeclaration(null, [specifiers.shift()], node.source),
+          );
+        }
+
+        const specifier = specifiers.shift();
+        const { exported } = specifier;
+        const uid = scope.generateUidIdentifier(exported.name);
+
+        nodes.push(
+          t.importDeclaration([t.importNamespaceSpecifier(uid)], node.source),
+          t.exportNamedDeclaration(null, [t.exportSpecifier(uid, exported)]),
+        );
 
         if (node.specifiers.length >= 1) {
           nodes.push(node);
         }
+
         path.replaceWithMultiple(nodes);
       },
     },
