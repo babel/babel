@@ -563,7 +563,7 @@ babel-helpers@7.0.0-alpha.18:
   dependencies:
     babel-template "7.0.0-alpha.18"
 
-babel-loader@7.1.1, babel-loader@^7.1.1:
+babel-loader@7.1.1:
   version "7.1.1"
   resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-7.1.1.tgz#b87134c8b12e3e4c2a94e0546085bc680a2b8488"
   dependencies:
