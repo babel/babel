@@ -12,9 +12,9 @@ var Foo = function Foo() {
 
 _bar = babelHelpers.privateClassPropertyKey("bar");
 
-function _initialiseProps(_this) {
+var _initialiseProps = function (_this) {
   Object.defineProperty(_this, _bar, {
     writable: true,
     value: foo
   });
-}
+};
