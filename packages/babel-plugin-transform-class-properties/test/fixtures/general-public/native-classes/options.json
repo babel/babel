@@ -1,3 +1,4 @@
 {
+  "minNodeVersion": "6.0.0",
   "plugins": ["external-helpers", "transform-class-properties", "transform-es2015-block-scoping", "syntax-class-properties"]
 }
