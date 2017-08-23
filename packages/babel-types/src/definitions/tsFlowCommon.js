@@ -25,7 +25,7 @@ defineType("TypeParameterInstantiation", {
     params: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("TSType", "FlowType")),
+        assertEach(assertNodeType("TSType", "Flow")),
       ),
     },
   },
