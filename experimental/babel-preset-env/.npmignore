@@ -1,6 +1,7 @@
 coverage
 src
 test
+lib/types.js
 node_modules
 scripts
 .eslintignore
