@@ -81,13 +81,13 @@ export default function({ types: t }) {
         }
         let root = nodes[0];
 
-        if (!state.opts.loose) {
-          if (nodes.length > 1) {
-            root = buildConcatCallExressions(nodes);
-          }
-        } else {
+        if (state.opts.loose) {
           for (let i = 1; i < nodes.length; i++) {
             root = t.binaryExpression("+", root, nodes[i]);
+          }
+        } else {
+          if (nodes.length > 1) {
+            root = buildConcatCallExressions(nodes);
           }
         }
 
