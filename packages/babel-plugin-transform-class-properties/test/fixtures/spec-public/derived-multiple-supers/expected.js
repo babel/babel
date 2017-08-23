@@ -22,11 +22,11 @@ var Foo = function (_Bar) {
   return Foo;
 }(Bar);
 
-function _initialiseProps(_this) {
+var _initialiseProps = function (_this) {
   Object.defineProperty(_this, "bar", {
     configurable: true,
     enumerable: true,
     writable: true,
     value: "foo"
   });
-}
+};

@@ -11,8 +11,8 @@ var Foo = function Foo(foo) {
 _bar = new WeakMap();
 _baz = new WeakMap();
 
-function _initialiseProps(_this) {
+var _initialiseProps = function (_this) {
   _bar.set(_this, _this);
 
   _baz.set(_this, foo);
-}
+};
