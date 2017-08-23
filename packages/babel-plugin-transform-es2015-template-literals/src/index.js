@@ -85,10 +85,8 @@ export default function({ types: t }) {
           for (let i = 1; i < nodes.length; i++) {
             root = t.binaryExpression("+", root, nodes[i]);
           }
-        } else {
-          if (nodes.length > 1) {
-            root = buildConcatCallExressions(nodes);
-          }
+        } else if (nodes.length > 1) {
+          root = buildConcatCallExressions(nodes);
         }
 
         path.replaceWith(root);
