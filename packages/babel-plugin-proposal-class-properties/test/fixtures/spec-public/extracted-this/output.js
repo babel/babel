@@ -6,7 +6,7 @@ var Foo = function Foo(foo) {
   _initialiseProps(this);
 };
 
-function _initialiseProps(_this) {
+var _initialiseProps = function (_this) {
   Object.defineProperty(_this, "bar", {
     configurable: true,
     enumerable: true,
@@ -19,4 +19,4 @@ function _initialiseProps(_this) {
     writable: true,
     value: foo
   });
-}
+};
