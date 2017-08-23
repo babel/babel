@@ -145,7 +145,7 @@ const collectorVisitor = {
 
   UnaryExpression(path, state) {
     if (path.node.operator === "delete") {
-      state.constantViolations.push(path.get("argument"));
+      state.constantViolations.push(path);
     }
   },
 
