@@ -1532,5 +1532,3 @@ language/statements/try/optional-catch-binding-throws.js(default)
 language/statements/try/optional-catch-binding-throws.js(strict mode)
 language/statements/try/optional-catch-binding.js(default)
 language/statements/try/optional-catch-binding.js(strict mode)
-
-

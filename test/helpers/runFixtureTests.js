@@ -74,7 +74,6 @@ function runTest(test, parseFunction) {
   }
 
   let ast;
-
   try {
     ast = parseFunction(test.actual.code, opts);
   } catch (err) {

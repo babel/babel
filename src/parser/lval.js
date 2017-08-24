@@ -84,6 +84,8 @@ export default class LValParser extends NodeUtils {
           break;
 
         case "SpreadElement":
+          this.checkToRestConversion(node);
+
           node.type = "RestElement";
           const arg = node.argument;
           this.toAssignable(arg, isBinding, contextDescription);
@@ -377,5 +379,15 @@ export default class LValParser extends NodeUtils {
         this.raise(expr.start, message);
       }
     }
+  }
+
+  checkToRestConversion(node: SpreadElement): void {
+    const validArgumentTypes = ["Identifier", "MemberExpression"];
+
+    if (validArgumentTypes.indexOf(node.argument.type) !== -1) {
+      return;
+    }
+
+    this.raise(node.argument.start, "Invalid rest operator's argument");
   }
 }
