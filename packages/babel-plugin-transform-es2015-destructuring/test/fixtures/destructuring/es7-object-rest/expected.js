@@ -15,9 +15,6 @@ var _z3 = z,
 
 var _o = o;
 x = _o.x;
-
-var _babelHelpers$objectW = babelHelpers.objectWithoutProperties(_o, ["x"]);
-
-y = _babelHelpers$objectW.y;
-z = _babelHelpers$objectW.z;
+y = _o.y;
+z = babelHelpers.objectWithoutProperties(_o, ["x", "y"]);
 _o;
