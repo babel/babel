@@ -1,6 +1,6 @@
 function overrider(fn) {
   return function(descriptor) {
-    descriptor.value = fn;
+    descriptor.descriptor.value = fn;
     return {descriptor, extras: [], finishers: []};
   }
 }

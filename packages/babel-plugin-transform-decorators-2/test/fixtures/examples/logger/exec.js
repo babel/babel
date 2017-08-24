@@ -2,8 +2,9 @@ const calls = [];
 
 function log(message) {
   return function (descriptor) {
-    let oldFunc = descriptor.value;
-    descriptor.value = function(...args) {
+    let propertyDescriptor = descriptor.descriptor;
+    let oldFunc = propertyDescriptor.value;
+    propertyDescriptor.value = function(...args) {
       calls.push(message + " entered");
       let result = oldFunc.apply(this, args);
       calls.push(message + " exited");

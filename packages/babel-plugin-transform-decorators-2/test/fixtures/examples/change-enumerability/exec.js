@@ -1,6 +1,6 @@
 function enumerable(bool) {
   return function(descriptor) {
-    descriptor.enumerable = bool;
+    descriptor.descriptor.enumerable = bool;
     return {descriptor, finishers: [], extras: []};
   }
 }

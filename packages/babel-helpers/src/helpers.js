@@ -357,7 +357,7 @@ helpers.decorateElement = template(`
 
     for (let i = decorators.length - 1; i >= 0; i--) {
       const decorator = decorators[i];
-      const result = decorator(previousDescriptor.descriptor);
+      const result = decorator(previousDescriptor);
 
       //TODO: why does .finisher exist on an elementDescriptor? the following conditional deviates from 
       //the spec because it uses result.finishers rather than result.descriptor.finisher
@@ -365,7 +365,7 @@ helpers.decorateElement = template(`
         finishers = finishers.concat(result.finishers);
       }
 
-      previousDescriptor.descriptor = result.descriptor; // just change the property descriptor
+      previousDescriptor = result.descriptor;
 
       const extrasObject = result.extras;
 
