@@ -81,7 +81,7 @@ Promise.all([utils.getTests(testDir), utils.getWhitelist(whitelistFile)])
       badnewsDetails.push(desc + ":");
       badnewsDetails.push(
         ...tests.map(function(test) {
-          return test.id;
+          return test.id || test;
         })
       );
     });
