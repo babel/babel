@@ -1,4 +1,5 @@
 import syntaxDecorators2 from "babel-plugin-syntax-decorators-2";
+import _ from "lodash";
 
 //TODO: will have to check for dot (.) access to reserved keywords in decorator members
 //TODO: check if we need the 'define' + 'Property' and 'ke' + 'ys' hacks as seen in
@@ -100,12 +101,23 @@ export default function({ types: t }) {
   function undecoratedMethods(path) {
     const body = path.get("body.body");
     const result = []; // shape: [["method1"], ["method2"], ["staticMethod1", true]]
+    const avoidDuplicates = []; // to avoid duplicates when both a getter and a setter are involved
 
     for (const method of body) {
       if (method.node.decorators && method.node.decorators.length > 0) continue;
       if (method.node.key.name == "constructor") continue;
 
       const key = getKey(method.node);
+
+      if (method.node.kind == "get" || method.node.kind == "set") {
+        const record = [key.value, method.node.static];
+
+        if (_.find(avoidDuplicates, r => _.isEqual(record, r))) {
+          continue;
+        } else {
+          avoidDuplicates.push(record);
+        }
+      }
 
       if (method.node.static) {
         result.push(t.arrayExpression([key, t.booleanLiteral(true)]));
