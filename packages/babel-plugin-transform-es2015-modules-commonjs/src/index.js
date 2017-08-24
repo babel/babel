@@ -201,7 +201,7 @@ export default function() {
           state.opts.allowTopLevelThis !== true &&
           !path.findParent(path => THIS_BREAK_KEYS.indexOf(path.type) >= 0)
         ) {
-          path.replaceWith(t.identifier("undefined"));
+          path.replaceWith(path.scope.buildUndefinedNode());
         }
       },
 
@@ -568,7 +568,7 @@ export default function() {
                   maxHoistedExportsNodeAssignmentLength,
               );
 
-              let hoistedExportsNode = t.identifier("undefined");
+              let hoistedExportsNode = scope.buildUndefinedNode();
 
               nonHoistedExportNamesChunk.forEach(function(name) {
                 hoistedExportsNode = buildExportsAssignment(

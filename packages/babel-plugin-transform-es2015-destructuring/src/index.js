@@ -112,7 +112,11 @@ export default function({ types: t }) {
       //
 
       const tempConditional = t.conditionalExpression(
-        t.binaryExpression("===", tempValueRef, t.identifier("undefined")),
+        t.binaryExpression(
+          "===",
+          tempValueRef,
+          this.scope.buildUndefinedNode(),
+        ),
         pattern.right,
         tempValueRef,
       );

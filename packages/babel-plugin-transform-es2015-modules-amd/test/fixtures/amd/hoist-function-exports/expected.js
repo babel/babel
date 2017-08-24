@@ -4,7 +4,7 @@ define(["exports", "./evens"], function (exports, _evens) {
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.isOdd = undefined;
+  exports.isOdd = void 0;
   exports.nextOdd = nextOdd;
 
   function nextOdd(n) {

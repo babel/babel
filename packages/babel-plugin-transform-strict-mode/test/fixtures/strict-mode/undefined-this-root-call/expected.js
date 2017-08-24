@@ -1,3 +1,3 @@
 "use strict";
 
-undefined.foo();
+(void 0).foo();

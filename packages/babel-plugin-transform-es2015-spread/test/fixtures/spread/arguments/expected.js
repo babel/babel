@@ -1,5 +1,5 @@
 function foo() {
-  return bar.apply(undefined, arguments);
+  return bar.apply(void 0, arguments);
 }
 
 function bar(one, two, three) {

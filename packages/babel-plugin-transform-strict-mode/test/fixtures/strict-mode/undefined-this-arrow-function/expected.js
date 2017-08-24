@@ -1,3 +1,3 @@
 "use strict";
 
-var foo = () => undefined;
+var foo = () => void 0;
