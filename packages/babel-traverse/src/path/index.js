@@ -113,6 +113,7 @@ export default class NodePath {
     }
 
     return ourScope;
+    return this.isScope() ? new Scope(this) : scope;
   }
 
   setData(key: string, val: any): any {
