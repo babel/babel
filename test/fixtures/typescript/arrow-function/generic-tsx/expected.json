@@ -192,12 +192,12 @@
           },
           "typeParameters": {
             "type": "TypeParameterDeclaration",
-            "start": 62,
+            "start": 61,
             "end": 64,
             "loc": {
               "start": {
                 "line": 2,
-                "column": 1
+                "column": 0
               },
               "end": {
                 "line": 2,
