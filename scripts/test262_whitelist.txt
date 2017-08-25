@@ -123,8 +123,6 @@ language/expressions/async-arrow-function/early-errors-arrow-formals-body-duplic
 language/expressions/async-arrow-function/early-errors-arrow-formals-body-duplicate.js(strict mode)
 language/expressions/async-arrow-function/escaped-async.js(default)
 language/expressions/async-arrow-function/escaped-async.js(strict mode)
-language/expressions/async-arrow-function/rest-params-trailing-comma-early-error.js(default)
-language/expressions/async-arrow-function/rest-params-trailing-comma-early-error.js(strict mode)
 language/expressions/async-function/early-errors-expression-formals-body-duplicate.js(default)
 language/expressions/async-function/early-errors-expression-formals-body-duplicate.js(strict mode)
 language/expressions/async-function/escaped-async.js(default)

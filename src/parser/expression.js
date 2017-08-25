@@ -494,14 +494,29 @@ export default class ExpressionParser extends LValParser {
 
       const node = this.startNodeAt(startPos, startLoc);
       node.callee = base;
+
+      // TODO: Clean up/merge this into `this.state` or a class like acorn's
+      // `DestructuringErrors` alongside refShorthandDefaultPos and
+      // refNeedsArrowPos.
+      const refTrailingCommaPos: Pos = { start: -1 };
+
       node.arguments = this.parseCallExpressionArguments(
         tt.parenR,
         possibleAsync,
+        refTrailingCommaPos,
       );
       this.finishCallExpression(node);
 
       if (possibleAsync && this.shouldParseAsyncArrow()) {
         state.stop = true;
+
+        if (refTrailingCommaPos.start > -1) {
+          this.raise(
+            refTrailingCommaPos.start,
+            "A trailing comma is not permitted after the rest element",
+          );
+        }
+
         return this.parseAsyncArrowFromCallExpression(
           this.startNodeAt(startPos, startLoc),
           node,
@@ -547,6 +562,7 @@ export default class ExpressionParser extends LValParser {
   parseCallExpressionArguments(
     close: TokenType,
     possibleAsyncArrow: boolean,
+    refTrailingCommaPos?: Pos,
   ): $ReadOnlyArray<?N.Expression> {
     const elts = [];
     let innerParenStart;
@@ -570,6 +586,7 @@ export default class ExpressionParser extends LValParser {
           false,
           possibleAsyncArrow ? { start: 0 } : undefined,
           possibleAsyncArrow ? { start: 0 } : undefined,
+          possibleAsyncArrow ? refTrailingCommaPos : undefined,
         ),
       );
     }
@@ -1547,12 +1564,17 @@ export default class ExpressionParser extends LValParser {
     allowEmpty: ?boolean,
     refShorthandDefaultPos: ?Pos,
     refNeedsArrowPos: ?Pos,
+    refTrailingCommaPos?: Pos,
   ): ?N.Expression {
     let elt;
     if (allowEmpty && this.match(tt.comma)) {
       elt = null;
     } else if (this.match(tt.ellipsis)) {
       elt = this.parseSpread(refShorthandDefaultPos);
+
+      if (refTrailingCommaPos && this.match(tt.comma)) {
+        refTrailingCommaPos.start = this.state.start;
+      }
     } else {
       elt = this.parseMaybeAssign(
         false,
