@@ -911,6 +911,14 @@ export default class ExpressionParser extends LValParser {
             spreadNodeStartLoc,
           ),
         );
+
+        if (this.match(tt.comma) && this.lookahead().type === tt.parenR) {
+          this.raise(
+            this.state.start,
+            "A trailing comma is not permitted after the rest element",
+          );
+        }
+
         break;
       } else {
         exprList.push(
