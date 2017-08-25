@@ -346,6 +346,10 @@ export default class Scope {
     // ignore parameters
     if (kind === "param") return;
 
+    // Ignore existing binding if it's the name of the current function or
+    // class expression
+    if (local.kind === "local") return;
+
     // ignore hoisted functions if there's also a local let
     if (kind === "hoisted" && local.kind === "let") return;
 
@@ -519,10 +523,6 @@ export default class Scope {
     for (const name in ids) {
       for (const id of (ids[name]: Array<Object>)) {
         let local = this.getOwnBinding(name);
-
-        // Ignore existing binding if it's the name of the current function or class
-        // expression
-        if (local && local.kind === "local") local = null;
 
         if (local) {
           // same identifier so continue safely as we're likely trying to register it
