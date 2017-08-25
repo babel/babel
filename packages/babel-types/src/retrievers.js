@@ -89,6 +89,9 @@ getBindingIdentifiers.keys = {
   FunctionDeclaration: ["id", "params"],
   FunctionExpression: ["id", "params"],
 
+  ForInStatement: ["left"],
+  ForOfStatement: ["left"],
+
   ClassDeclaration: ["id"],
   ClassExpression: ["id"],
 
