@@ -123,7 +123,7 @@ export default function({ types: t }) {
     },
   };
 
-  const privateNameRemaper = {
+  const privateNameRemapper = {
     PrivateName(path) {
       const { node, parent, parentPath, scope } = path;
       if (node.name.name !== this.name) {
@@ -155,7 +155,11 @@ export default function({ types: t }) {
           if (grandParentPath.isUpdateExpression({ prefix: false })) {
             gotMemo = scope.generateUidIdentifierBasedOnNode(parent);
             scope.push({ id: gotMemo });
-            replaceWith = t.assignmentExpression("=", gotMemo, replaceWith);
+            replaceWith = t.assignmentExpression(
+              "=",
+              gotMemo,
+              t.unaryExpression("+", replaceWith),
+            );
           }
 
           assign = t.binaryExpression(
@@ -202,7 +206,7 @@ export default function({ types: t }) {
     },
   };
 
-  const privateNameRemaperLoose = {
+  const privateNameRemapperLoose = {
     PrivateName(path) {
       const { parentPath, node } = path;
       if (node.name.name !== this.name) {
@@ -262,7 +266,7 @@ export default function({ types: t }) {
     const { file } = klass.hub;
     const privateMap = klass.scope.generateDeclaredUidIdentifier(name);
 
-    klass.traverse(privateNameRemaper, {
+    klass.traverse(privateNameRemapper, {
       name,
       privateMap,
       get: file.addHelper("privateClassPropertyGetSpec"),
@@ -293,7 +297,7 @@ export default function({ types: t }) {
     const { file } = klass.hub;
     const privateName = klass.scope.generateDeclaredUidIdentifier(name);
 
-    klass.traverse(privateNameRemaperLoose, { name, privateName });
+    klass.traverse(privateNameRemapperLoose, { name, privateName });
 
     nodes.push(
       t.expressionStatement(
