@@ -318,24 +318,25 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.toAssignable(node.value, isBinding, contextDescription);
 
         return node;
-      } else if (node.type === "ObjectExpression") {
-        node.type = "ObjectPattern";
-        for (const prop of node.properties) {
-          if (prop.kind === "get" || prop.kind === "set") {
-            this.raise(
-              prop.key.start,
-              "Object pattern can't contain getter or setter",
-            );
-          } else if (prop.method) {
-            this.raise(prop.key.start, "Object pattern can't contain methods");
-          } else {
-            this.toAssignable(prop, isBinding, "object destructuring pattern");
-          }
-        }
-
-        return node;
       }
 
       return super.toAssignable(node, isBinding, contextDescription);
+    }
+
+    toAssignableObjectExpressionProp(
+      prop: N.Node,
+      isBinding: ?boolean,
+      isLast: boolean,
+    ) {
+      if (prop.kind === "get" || prop.kind === "set") {
+        this.raise(
+          prop.key.start,
+          "Object pattern can't contain getter or setter",
+        );
+      } else if (prop.method) {
+        this.raise(prop.key.start, "Object pattern can't contain methods");
+      } else {
+        super.toAssignableObjectExpressionProp(prop, isBinding, isLast);
+      }
     }
   };
