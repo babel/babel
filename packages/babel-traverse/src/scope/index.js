@@ -36,6 +36,10 @@ function gatherNodeParts(node: Object, parts: Array) {
     for (const prop of (node.properties: Array)) {
       gatherNodeParts(prop.key || prop.argument, parts);
     }
+  } else if (t.isPrivateName(node)) {
+    gatherNodeParts(node.name, parts);
+  } else if (t.isThisExpression(node)) {
+    parts.push("this");
   }
 }
 
