@@ -56,26 +56,12 @@ export default class LValParser extends NodeUtils {
 
         case "ObjectExpression":
           node.type = "ObjectPattern";
-          for (const prop of node.properties) {
-            if (prop.type === "ObjectMethod") {
-              if (prop.kind === "get" || prop.kind === "set") {
-                this.raise(
-                  prop.key.start,
-                  "Object pattern can't contain getter or setter",
-                );
-              } else {
-                this.raise(
-                  prop.key.start,
-                  "Object pattern can't contain methods",
-                );
-              }
-            } else {
-              this.toAssignable(
-                prop,
-                isBinding,
-                "object destructuring pattern",
-              );
-            }
+          for (const [index, prop] of node.properties.entries()) {
+            this.toAssignableObjectExpressionProp(
+              prop,
+              isBinding,
+              index === node.properties.length - 1,
+            );
           }
           break;
 
@@ -122,6 +108,28 @@ export default class LValParser extends NodeUtils {
       }
     }
     return node;
+  }
+
+  toAssignableObjectExpressionProp(
+    prop: Node,
+    isBinding: ?boolean,
+    isLast: boolean,
+  ) {
+    if (prop.type === "ObjectMethod") {
+      const error =
+        prop.kind === "get" || prop.kind === "set"
+          ? "Object pattern can't contain getter or setter"
+          : "Object pattern can't contain methods";
+
+      this.raise(prop.key.start, error);
+    } else if (prop.type === "SpreadElement" && !isLast) {
+      this.raise(
+        prop.start,
+        "The rest element has to be the last element when destructuring",
+      );
+    } else {
+      this.toAssignable(prop, isBinding, "object destructuring pattern");
+    }
   }
 
   // Convert list of expression atoms to binding list.
