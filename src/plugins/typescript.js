@@ -271,13 +271,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsTryParseTypeParameters(): ?N.TypeParameterDeclaration {
-      if (this.eatRelational("<")) {
+      if (this.isRelational("<")) {
         return this.tsParseTypeParameters();
       }
     }
 
-    tsParseTypeParameters(): N.TypeParameterDeclaration {
+    tsParseTypeParameters() {
       const node: N.TypeParameterDeclaration = this.startNode();
+
+      if (this.isRelational("<") || this.match(tt.jsxTagStart)) {
+        this.next();
+      } else {
+        this.unexpected();
+      }
+
       node.params = this.tsParseBracketedList(
         "TypeParametersOrArguments",
         this.tsParseTypeParameter.bind(this),
@@ -1150,7 +1157,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           startPos,
           startLoc,
         );
-        this.expectRelational("<");
         node.typeParameters = this.tsParseTypeParameters();
         // Don't use overloaded parseFunctionParams which would look for "<" again.
         super.parseFunctionParams(node);
@@ -1733,7 +1739,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let arrowExpression;
       let typeParameters: N.TypeParameterDeclaration;
       const state = this.state.clone();
-      this.next(); // skip the jsx start
       try {
         // This is similar to TypeScript's `tryParseParenthesizedArrowFunctionExpression`.
         typeParameters = this.tsParseTypeParameters();

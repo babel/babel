@@ -94,12 +94,12 @@
               "async": false,
               "typeParameters": {
                 "type": "TypeParameterDeclaration",
-                "start": 19,
+                "start": 18,
                 "end": 21,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 19
+                    "column": 18
                   },
                   "end": {
                     "line": 1,

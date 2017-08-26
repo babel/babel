@@ -306,12 +306,12 @@
               "kind": "method",
               "typeParameters": {
                 "type": "TypeParameterDeclaration",
-                "start": 85,
+                "start": 84,
                 "end": 87,
                 "loc": {
                   "start": {
                     "line": 5,
-                    "column": 10
+                    "column": 9
                   },
                   "end": {
                     "line": 5,
