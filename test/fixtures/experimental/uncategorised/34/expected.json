@@ -76,12 +76,12 @@
             },
             "init": {
               "type": "ClassExpression",
-              "start": 15,
+              "start": 10,
               "end": 27,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 15
+                  "column": 10
                 },
                 "end": {
                   "line": 1,

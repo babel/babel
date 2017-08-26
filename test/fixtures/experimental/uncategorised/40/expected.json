@@ -30,12 +30,12 @@
     "body": [
       {
         "type": "ClassDeclaration",
-        "start": 5,
+        "start": 0,
         "end": 43,
         "loc": {
           "start": {
             "line": 1,
-            "column": 5
+            "column": 0
           },
           "end": {
             "line": 1,
@@ -95,12 +95,12 @@
         },
         "superClass": {
           "type": "ClassExpression",
-          "start": 28,
+          "start": 23,
           "end": 40,
           "loc": {
             "start": {
               "line": 1,
-              "column": 28
+              "column": 23
             },
             "end": {
               "line": 1,

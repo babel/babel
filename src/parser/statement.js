@@ -199,9 +199,7 @@ export default class StatementParser extends ExpressionParser {
     ];
     if (decorators.length) {
       node.decorators = decorators;
-      if (this.hasPlugin("decorators2")) {
-        this.resetStartLocationFromNode(node, decorators[0]);
-      }
+      this.resetStartLocationFromNode(node, decorators[0]);
       this.state.decoratorStack[this.state.decoratorStack.length - 1] = [];
     }
   }
@@ -891,9 +889,7 @@ export default class StatementParser extends ExpressionParser {
       // steal the decorators if there are any
       if (decorators.length) {
         member.decorators = decorators;
-        if (this.hasPlugin("decorators2")) {
-          this.resetStartLocationFromNode(member, decorators[0]);
-        }
+        this.resetStartLocationFromNode(member, decorators[0]);
         decorators = [];
       }
 

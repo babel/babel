@@ -44,12 +44,12 @@
         },
         "declaration": {
           "type": "ClassDeclaration",
-          "start": 32,
+          "start": 0,
           "end": 109,
           "loc": {
             "start": {
-              "line": 2,
-              "column": 15
+              "line": 1,
+              "column": 0
             },
             "end": {
               "line": 7,

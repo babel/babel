@@ -30,11 +30,11 @@
     "body": [
       {
         "type": "ClassDeclaration",
-        "start": 25,
+        "start": 0,
         "end": 37,
         "loc": {
           "start": {
-            "line": 2,
+            "line": 1,
             "column": 0
           },
           "end": {

@@ -77,11 +77,11 @@
           "body": [
             {
               "type": "ClassMethod",
-              "start": 27,
+              "start": 14,
               "end": 39,
               "loc": {
                 "start": {
-                  "line": 3,
+                  "line": 2,
                   "column": 2
                 },
                 "end": {
