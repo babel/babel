@@ -125,13 +125,13 @@ export default function({ types: t }) {
 
   const privateNameRemaper = {
     PrivateName(path) {
-      const { node, parentPath } = path;
+      const { node, parent, parentPath, scope } = path;
       if (node.name.name !== this.name) {
         return;
       }
 
       const grandParentPath = parentPath.parentPath;
-      const { object } = parentPath.node;
+      const { object } = parent;
 
       let replacePath = parentPath;
       let replaceWith = t.callExpression(this.get, [object, this.privateMap]);
@@ -140,15 +140,26 @@ export default function({ types: t }) {
         grandParentPath.isAssignmentExpression() ||
         grandParentPath.isUpdateExpression()
       ) {
+        const got = replaceWith;
         const { node } = grandParentPath;
         let assign;
         let memo;
+        let gotMemo;
 
         if (grandParentPath.isAssignmentExpression({ operator: "=" })) {
           assign = node.right;
         } else {
           const { right, operator } = node;
-          memo = path.scope.maybeGenerateMemoised(object);
+          memo = scope.maybeGenerateMemoised(object);
+
+          if (
+            grandParentPath.isUpdateExpression({ prefix: false }) &&
+            grandParentPath.parentPath.isExpression()
+          ) {
+            gotMemo = scope.generateUidIdentifierBasedOnNode(parent);
+            scope.push({ id: gotMemo });
+            replaceWith = t.assignmentExpression("=", gotMemo, replaceWith);
+          }
 
           assign = t.binaryExpression(
             operator.slice(0, -1),
@@ -158,19 +169,22 @@ export default function({ types: t }) {
         }
 
         if (memo) {
-          replaceWith.arguments[0] = t.assignmentExpression("=", memo, object);
+          got.arguments[0] = memo;
+          memo = t.assignmentExpression("=", memo, object);
         }
 
         replacePath = grandParentPath;
-        replaceWith = t.callExpression(this.set, [
+        replaceWith = t.callExpression(this.put, [
           memo || object,
           this.privateMap,
           assign,
         ]);
-      } else if (
-        grandParentPath.isCallExpression({ callee: parentPath.node })
-      ) {
-        const memo = path.scope.maybeGenerateMemoised(object);
+
+        if (gotMemo) {
+          replaceWith = t.sequenceExpression([replaceWith, gotMemo]);
+        }
+      } else if (grandParentPath.isCallExpression({ callee: parent })) {
+        const memo = scope.maybeGenerateMemoised(object);
         if (memo) {
           replaceWith.arguments[0] = t.assignmentExpression("=", memo, object);
         }
@@ -255,7 +269,7 @@ export default function({ types: t }) {
       name,
       privateMap,
       get: file.addHelper("privateClassPropertyGetSpec"),
-      set: file.addHelper("privateClassPropertyPutSpec"),
+      put: file.addHelper("privateClassPropertyPutSpec"),
     });
 
     nodes.push(
