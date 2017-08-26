@@ -156,10 +156,7 @@ export default declare((api, options) => {
           const { right, operator } = node;
           memo = scope.maybeGenerateMemoised(object);
 
-          if (
-            grandParentPath.isUpdateExpression({ prefix: false }) &&
-            grandParentPath.parentPath.isExpression()
-          ) {
+          if (grandParentPath.isUpdateExpression({ prefix: false })) {
             gotMemo = scope.generateUidIdentifierBasedOnNode(parent);
             scope.push({ id: gotMemo });
             replaceWith = t.assignmentExpression("=", gotMemo, replaceWith);
