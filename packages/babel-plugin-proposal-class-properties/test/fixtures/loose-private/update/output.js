@@ -12,10 +12,10 @@ var Foo = function () {
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
-      this[_foo] += 1;
-      this[_foo] = 2;
-      other.obj[_foo] += 1;
-      other.obj[_foo] = 2;
+      this[_foo]++;
+      ++this[_foo];
+      other.obj[_foo]++;
+      ++other.obj[_foo];
     }
   }]);
   return Foo;

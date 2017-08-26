@@ -1,9 +1,9 @@
-var _foo;
-
 var Foo = function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
-    Object.defineProperty(this, _foo, {
+    Object.defineProperty(this, "foo", {
+      configurable: true,
+      enumerable: true,
       writable: true,
       value: 0
     });
@@ -12,13 +12,11 @@ var Foo = function () {
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
-      this[_foo] += 1;
-      this[_foo] = 2;
-      other.obj[_foo] += 1;
-      other.obj[_foo] = 2;
+      this.foo++;
+      ++this.foo;
+      other.obj.foo++;
+      ++other.obj.foo;
     }
   }]);
   return Foo;
 }();
-
-_foo = babelHelpers.privateClassPropertyKey("foo");
