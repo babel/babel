@@ -6,9 +6,5 @@ class Foo {
     ++this.#foo;
     other.obj.#foo++;
     ++other.obj.#foo;
-    (0, this.#foo++);
-    (0, ++this.#foo);
-    (0, other.obj.#foo++);
-    (0, ++other.obj.#foo);
   }
 }
