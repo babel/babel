@@ -284,8 +284,8 @@ helpers.defineEnumerableProperties = template(`
     // symbol properties and define them on our target object too.
     if (Object.getOwnPropertySymbols) {
       var objectSymbols = Object.getOwnPropertySymbols(descs);
-      for (var idx in objectSymbols) {
-        var sym = objectSymbols[idx];
+      for (var i = 0; i < objectSymbols.length; i++) {
+        var sym = objectSymbols[i];
         var desc = descs[sym];
         desc.configurable = desc.enumerable = true;
         if ("value" in desc) desc.writable = true;
