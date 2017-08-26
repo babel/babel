@@ -538,9 +538,19 @@ class BlockScoping {
     let fnPath;
     if (this.loop) {
       const ref = this.scope.generateUidIdentifier("loop");
-      const p = this.loopPath.insertBefore(
+      let transformedToBlockStatement = false;
+      if (this.loopPath.isStatementOrBlock()) {
+        transformedToBlockStatement = true;
+      }
+
+      let p = this.loopPath.insertBefore(
         t.variableDeclaration("var", [t.variableDeclarator(ref, fn)]),
       );
+
+      if (transformedToBlockStatement) {
+        p = [p[0].get("body.0")];
+        this.loopPath.requeue();
+      }
 
       placeholder.replaceWith(ref);
       fnPath = p[0].get("declarations.0.init");
