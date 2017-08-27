@@ -3,11 +3,13 @@
 var Example = function () {
   function Example() {}
 
-  Example.prototype.test1 = async function test1() {
+  var _proto = Example.prototype;
+
+  _proto.test1 = async function test1() {
     await Promise.resolve(2);
   };
 
-  Example.prototype.test2 =
+  _proto.test2 =
   /*#__PURE__*/
   regeneratorRuntime.mark(function test2() {
     return regeneratorRuntime.wrap(function test2$(_context) {
