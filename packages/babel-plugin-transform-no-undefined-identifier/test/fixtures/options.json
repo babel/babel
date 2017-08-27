@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-no-undefined-identifier"],
+  "throws": "Use path.scope.buildUndefinedNode() to create an undefined identifier directly."
+}
