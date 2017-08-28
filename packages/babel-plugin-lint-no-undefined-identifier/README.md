@@ -1,4 +1,4 @@
-# babel-plugin-transform-no-undefined-identifier
+# babel-plugin-lint-no-undefined-identifier
 
 > Used internally to lint plugin code. Disallows use of `t.identifier("undefined")` in favor of `path.scope.buildUndefinedNode()`
 
@@ -13,7 +13,7 @@ t.identifier("undefined");
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-no-undefined-identifier
+npm install --save-dev babel-plugin-lint-no-undefined-identifier
 ```
 
 ## Usage
@@ -24,20 +24,20 @@ npm install --save-dev babel-plugin-transform-no-undefined-identifier
 
 ```json
 {
-  "plugins": ["transform-no-undefined-identifier"]
+  "plugins": ["lint-no-undefined-identifier"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-no-undefined-identifier script.js
+babel --plugins lint-no-undefined-identifier script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("babel-core").transform("code", {
-  plugins: ["transform-no-undefined-identifier"]
+  plugins: ["lint-no-undefined-identifier"]
 });
 ```

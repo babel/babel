@@ -1,8 +1,8 @@
 {
-  "name": "babel-plugin-transform-no-undefined-identifier",
+  "name": "babel-plugin-lint-no-undefined-identifier",
   "version": "7.0.0-alpha.19",
   "description": "Throws error if t.identifier is used create an undefined Identifier in plugins",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-no-undefined-identifier",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-lint-no-undefined-identifier",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
