@@ -30,7 +30,7 @@ watch: clean
 
 lint:
 	./node_modules/.bin/eslint scripts packages *.js --format=codeframe
-	./node_modules/.bin/babel "./packages/babel-plugin-*/src" --plugins=transform-no-undefined-identifier --out-file=/dev/null
+	./node_modules/.bin/babel ./packages/babel-plugin-*/src ./packages/babel-helper-*/src --plugins=./packages/babel-plugin-transform-no-undefined-identifier --out-file=/dev/null
 
 flow:
 	./node_modules/.bin/flow check --strip-root
