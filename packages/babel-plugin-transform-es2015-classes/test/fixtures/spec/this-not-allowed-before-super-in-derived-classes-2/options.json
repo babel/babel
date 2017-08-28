@@ -1,3 +1,4 @@
 {
-  "throws": "'this' is not allowed before super()"
+  "throws": "'this' is not allowed before super()",
+  "plugins": ["transform-es2015-classes"]
 }
