@@ -75,7 +75,7 @@ export type Identifier = PatternBase & {
 
 export type PrivateName = NodeBase & {
   type: "PrivateName",
-  name: string,
+  id: Identifier,
 };
 
 // Literals

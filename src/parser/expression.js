@@ -815,7 +815,7 @@ export default class ExpressionParser extends LValParser {
 
     if (isPrivate) {
       const node = this.startNode();
-      node.name = this.parseIdentifier(true);
+      node.id = this.parseIdentifier(true);
       return this.finishNode(node, "PrivateName");
     } else {
       return this.parseIdentifier(true);

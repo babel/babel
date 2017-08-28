@@ -174,7 +174,7 @@ An identifier. Note that an identifier may be an expression or a destructuring p
 ```js
 interface PrivateName <: Expression, Pattern {
   type: "PrivateName";
-  name: Identifier;
+  id: Identifier;
 }
 ```
 A Private Name Identifier.

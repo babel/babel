@@ -412,7 +412,7 @@
                               "column": 11
                             }
                           },
-                          "name": {
+                          "id": {
                             "type": "Identifier",
                             "start": 75,
                             "end": 76,
@@ -543,7 +543,7 @@
                               "column": 11
                             }
                           },
-                          "name": {
+                          "id": {
                             "type": "Identifier",
                             "start": 93,
                             "end": 94,
@@ -717,7 +717,7 @@
                             "column": 26
                           }
                         },
-                        "name": {
+                        "id": {
                           "type": "Identifier",
                           "start": 131,
                           "end": 132,
@@ -886,7 +886,7 @@
                               "column": 24
                             }
                           },
-                          "name": {
+                          "id": {
                             "type": "Identifier",
                             "start": 158,
                             "end": 159,
@@ -1060,7 +1060,7 @@
                             "column": 26
                           }
                         },
-                        "name": {
+                        "id": {
                           "type": "Identifier",
                           "start": 197,
                           "end": 198,
@@ -1229,7 +1229,7 @@
                               "column": 24
                             }
                           },
-                          "name": {
+                          "id": {
                             "type": "Identifier",
                             "start": 224,
                             "end": 225,
@@ -1449,7 +1449,7 @@
                                 "column": 28
                               }
                             },
-                            "name": {
+                            "id": {
                               "type": "Identifier",
                               "start": 265,
                               "end": 266,
@@ -1515,7 +1515,7 @@
                                 "column": 37
                               }
                             },
-                            "name": {
+                            "id": {
                               "type": "Identifier",
                               "start": 274,
                               "end": 275,
@@ -1594,7 +1594,7 @@
                                 "column": 48
                               }
                             },
-                            "name": {
+                            "id": {
                               "type": "Identifier",
                               "start": 285,
                               "end": 286,
@@ -1660,7 +1660,7 @@
                                 "column": 57
                               }
                             },
-                            "name": {
+                            "id": {
                               "type": "Identifier",
                               "start": 294,
                               "end": 295,
@@ -1813,7 +1813,7 @@
                                 "column": 39
                               }
                             },
-                            "name": {
+                            "id": {
                               "type": "Identifier",
                               "start": 337,
                               "end": 338,
@@ -1876,7 +1876,7 @@
                                 "column": 52
                               }
                             },
-                            "name": {
+                            "id": {
                               "type": "Identifier",
                               "start": 350,
                               "end": 351,
