@@ -195,7 +195,7 @@ export default class Scope {
   }
 
   get parentBlock() {
-    return path.parent;
+    return this.path.parent;
   }
 
   /**
