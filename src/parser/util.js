@@ -109,4 +109,26 @@ export default class UtilParser extends Tokenizer {
     }
     throw this.raise(pos != null ? pos : this.state.start, messageOrType);
   }
+
+  expectPlugin(name: string): void {
+    if (!this.hasPlugin(name)) {
+      throw this.raise(
+        this.state.start,
+        `This experimental syntax requires enabling the parser plugin: '${name}'`,
+        [name],
+      );
+    }
+  }
+
+  expectOnePlugin(names: Array<string>): void {
+    if (!names.some(n => this.hasPlugin(n))) {
+      throw this.raise(
+        this.state.start,
+        `This experimental syntax requires enabling one of the following parser plugin(s): '${names.join(
+          ", ",
+        )}'`,
+        names,
+      );
+    }
+  }
 }

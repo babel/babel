@@ -69,13 +69,14 @@ export default class LValParser extends NodeUtils {
           this.toAssignable(node.value, isBinding, contextDescription);
           break;
 
-        case "SpreadElement":
+        case "SpreadElement": {
           this.checkToRestConversion(node);
 
           node.type = "RestElement";
           const arg = node.argument;
           this.toAssignable(arg, isBinding, contextDescription);
           break;
+        }
 
         case "ArrayExpression":
           node.type = "ArrayPattern";
@@ -211,11 +212,12 @@ export default class LValParser extends NodeUtils {
       case tt.name:
         return this.parseBindingIdentifier();
 
-      case tt.bracketL:
+      case tt.bracketL: {
         const node = this.startNode();
         this.next();
         node.elements = this.parseBindingList(tt.bracketR, true);
         return this.finishNode(node, "ArrayPattern");
+      }
 
       case tt.braceL:
         return this.parseObj(true);

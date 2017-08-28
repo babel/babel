@@ -237,9 +237,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseDecorator(): N.Decorator {
-    if (!(this.hasPlugin("decorators") || this.hasPlugin("decorators2"))) {
-      this.unexpected();
-    }
+    this.expectOnePlugin(["decorators", "decorators2"]);
 
     const node = this.startNode();
     this.next();
@@ -340,11 +338,8 @@ export default class StatementParser extends ExpressionParser {
     this.state.labels.push(loopLabel);
 
     let forAwait = false;
-    if (
-      this.hasPlugin("asyncGenerators") &&
-      this.state.inAsync &&
-      this.isContextual("await")
-    ) {
+    if (this.state.inAsync && this.isContextual("await")) {
+      this.expectPlugin("asyncGenerators");
       forAwait = true;
       this.next();
     }
@@ -489,12 +484,13 @@ export default class StatementParser extends ExpressionParser {
     if (this.match(tt._catch)) {
       const clause = this.startNode();
       this.next();
-      if (this.match(tt.parenL) || !this.hasPlugin("optionalCatchBinding")) {
+      if (this.match(tt.parenL)) {
         this.expect(tt.parenL);
         clause.param = this.parseBindingAtom();
         this.checkLVal(clause.param, true, Object.create(null), "catch clause");
         this.expect(tt.parenR);
       } else {
+        this.expectPlugin("optionalCatchBinding");
         clause.param = null;
       }
       clause.body = this.parseBlock();
@@ -782,12 +778,11 @@ export default class StatementParser extends ExpressionParser {
     this.initFunction(node, isAsync);
 
     if (this.match(tt.star)) {
-      if (node.async && !this.hasPlugin("asyncGenerators")) {
-        this.unexpected();
-      } else {
-        node.generator = true;
-        this.next();
+      if (node.async) {
+        this.expectPlugin("asyncGenerators");
       }
+      node.generator = true;
+      this.next();
     }
 
     if (
@@ -960,8 +955,9 @@ export default class StatementParser extends ExpressionParser {
       isStatic = true;
     }
 
-    if (this.hasPlugin("classPrivateProperties") && this.match(tt.hash)) {
+    if (this.match(tt.hash)) {
       // Private property
+      this.expectPlugin("classPrivateProperties");
       this.next();
       const privateProp: N.ClassPrivateProperty = memberAny;
       privateProp.key = this.parseIdentifier(true);
@@ -1047,8 +1043,12 @@ export default class StatementParser extends ExpressionParser {
       this.pushClassProperty(classBody, prop);
     } else if (isSimple && key.name === "async" && !this.isLineTerminator()) {
       // an async method
-      const isGenerator =
-        this.hasPlugin("asyncGenerators") && this.eat(tt.star);
+      let isGenerator = false;
+      if (this.match(tt.star)) {
+        this.expectPlugin("asyncGenerators");
+        this.next();
+        isGenerator = true;
+      }
       method.kind = "method";
       this.parsePropertyName(method);
       if (this.isNonstaticConstructor(method)) {
@@ -1151,17 +1151,14 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseClassProperty(node: N.ClassProperty): N.ClassProperty {
-    const noPluginMsg =
-      "You can only use Class Properties when the 'classProperties' plugin is enabled.";
-    if (!node.typeAnnotation && !this.hasPlugin("classProperties")) {
-      this.raise(node.start, noPluginMsg);
+    if (!node.typeAnnotation) {
+      this.expectPlugin("classProperties");
     }
 
     this.state.inClassProperty = true;
 
     if (this.match(tt.eq)) {
-      if (!this.hasPlugin("classProperties"))
-        this.raise(this.state.start, noPluginMsg);
+      this.expectPlugin("classProperties");
       this.next();
       node.value = this.parseMaybeAssign();
     } else {
@@ -1169,6 +1166,7 @@ export default class StatementParser extends ExpressionParser {
     }
     this.semicolon();
     this.state.inClassProperty = false;
+
     return this.finishNode(node, "ClassProperty");
   }
 

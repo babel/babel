@@ -10,7 +10,11 @@ import CommentsParser from "./comments";
 // message.
 
 export default class LocationParser extends CommentsParser {
-  raise(pos: number, message: string): empty {
+  raise(
+    pos: number,
+    message: string,
+    missingPluginNames?: Array<string>,
+  ): empty {
     const loc = getLineInfo(this.input, pos);
     message += ` (${loc.line}:${loc.column})`;
     // $FlowIgnore
@@ -19,6 +23,9 @@ export default class LocationParser extends CommentsParser {
     );
     err.pos = pos;
     err.loc = loc;
+    if (missingPluginNames) {
+      err.missingPlugin = missingPluginNames;
+    }
     throw err;
   }
 }
