@@ -264,10 +264,10 @@ export function toBlock(node: Object, parent: Object): Object {
   return t.blockStatement(node);
 }
 
-export function valueToNode(value: any): Object {
+export function valueToNode(value: any, state?: any): Object {
   // undefined
   if (value === undefined) {
-    return t.identifier("undefined");
+    return state ? state.buildUndefinedNode() : t.identifier("undefined");
   }
 
   // boolean

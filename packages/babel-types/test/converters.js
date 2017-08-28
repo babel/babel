@@ -18,45 +18,65 @@ describe("converters", function() {
   });
 
   describe("valueToNode", function() {
+    let scope;
+    const undefinedNode = t.identifier("undefined");
+    beforeEach(function() {
+      scope = [];
+      scope.buildUndefinedNode = function() {
+        return undefinedNode;
+      };
+    });
     it("number", function() {
-      assert.deepEqual(t.valueToNode(Math.PI), t.numericLiteral(Math.PI));
-      assert.deepEqual(t.valueToNode(-Infinity), t.numericLiteral(-Infinity));
-      assert.deepEqual(t.valueToNode(NaN), t.numericLiteral(NaN));
+      assert.deepEqual(
+        t.valueToNode(Math.PI, scope),
+        t.numericLiteral(Math.PI),
+      );
+      assert.deepEqual(
+        t.valueToNode(-Infinity, scope),
+        t.numericLiteral(-Infinity),
+      );
+      assert.deepEqual(t.valueToNode(NaN, scope), t.numericLiteral(NaN));
     });
     it("string", function() {
       assert.deepEqual(
-        t.valueToNode('This is a "string"'),
+        t.valueToNode('This is a "string"', scope),
         t.stringLiteral('This is a "string"'),
       );
     });
     it("boolean", function() {
-      assert.deepEqual(t.valueToNode(true), t.booleanLiteral(true));
-      assert.deepEqual(t.valueToNode(false), t.booleanLiteral(false));
+      assert.deepEqual(t.valueToNode(true, scope), t.booleanLiteral(true));
+      assert.deepEqual(t.valueToNode(false, scope), t.booleanLiteral(false));
     });
     it("null", function() {
-      assert.deepEqual(t.valueToNode(null), t.nullLiteral());
+      assert.deepEqual(t.valueToNode(null, scope), t.nullLiteral());
     });
     it("undefined", function() {
-      assert.deepEqual(t.valueToNode(undefined), t.identifier("undefined"));
+      assert.deepEqual(
+        t.valueToNode(undefined, scope),
+        t.identifier("undefined"),
+      );
     });
     it("RegExp", function() {
       assert.deepEqual(
-        t.valueToNode(/abc.+/gm),
+        t.valueToNode(/abc.+/gm, scope),
         t.regExpLiteral("abc.+", "gm"),
       );
     });
     it("array", function() {
       assert.deepEqual(
-        t.valueToNode([1, "a"]),
+        t.valueToNode([1, "a"], scope),
         t.arrayExpression([t.numericLiteral(1), t.stringLiteral("a")]),
       );
     });
     it("object", function() {
       assert.deepEqual(
-        t.valueToNode({
-          a: 1,
-          "b c": 2,
-        }),
+        t.valueToNode(
+          {
+            a: 1,
+            "b c": 2,
+          },
+          scope,
+        ),
         t.objectExpression([
           t.objectProperty(t.identifier("a"), t.numericLiteral(1)),
           t.objectProperty(t.stringLiteral("b c"), t.numericLiteral(2)),
@@ -65,10 +85,10 @@ describe("converters", function() {
     });
     it("throws if cannot convert", function() {
       assert.throws(function() {
-        t.valueToNode(Object);
+        t.valueToNode(Object, scope);
       });
       assert.throws(function() {
-        t.valueToNode(Symbol());
+        t.valueToNode(Symbol(), scope);
       });
     });
   });
