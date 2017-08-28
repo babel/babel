@@ -171,8 +171,7 @@ export default class Scope {
     this.uid = uid++;
     this.hub = path.hub;
 
-    this.parentBlock = path.parent;
-    this.block = path.node;
+    this.block = node;
     this.path = path;
 
     this.labels = new Map();
@@ -193,6 +192,10 @@ export default class Scope {
   get parent() {
     const parent = this.path.findParent(p => p.isScope());
     return parent && parent.scope;
+  }
+
+  get parentBlock() {
+    return path.parent;
   }
 
   /**
