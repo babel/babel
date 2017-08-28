@@ -105,14 +105,6 @@ export default class NodePath {
   }
 
   getScope(scope: Scope) {
-    let ourScope = scope;
-
-    // we're entering a new scope so let's construct it!
-    if (this.isScope()) {
-      ourScope = new Scope(this, scope);
-    }
-
-    return ourScope;
     return this.isScope() ? new Scope(this) : scope;
   }
 
