@@ -19,7 +19,7 @@ try {
       _iteratorError2 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+        if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
           _iterator2.return();
         }
       } finally {
@@ -34,7 +34,7 @@ try {
   _iteratorError = err;
 } finally {
   try {
-    if (!_iteratorNormalCompletion && _iterator.return) {
+    if (!_iteratorNormalCompletion && _iterator.return != null) {
       _iterator.return();
     }
   } finally {

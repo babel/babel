@@ -22,7 +22,7 @@ const awaitTemplate = `
       ITERATOR_ERROR_KEY = err;
     } finally {
       try {
-        if (!ITERATOR_COMPLETION && ITERATOR_KEY.return) {
+        if (!ITERATOR_COMPLETION && ITERATOR_KEY.return != null) {
           yield AWAIT(ITERATOR_KEY.return());
         }
       } finally {

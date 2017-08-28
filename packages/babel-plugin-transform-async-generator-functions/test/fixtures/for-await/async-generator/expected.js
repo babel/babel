@@ -14,7 +14,7 @@ let g = (() => {
       _iteratorError = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion && _iterator.return) {
+        if (!_iteratorNormalCompletion && _iterator.return != null) {
           yield babelHelpers.asyncGenerator.await(_iterator.return());
         }
       } finally {
