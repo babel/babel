@@ -1132,8 +1132,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.state.inType = true;
       const type = this.flowParseUnionType();
       this.state.inType = oldInType;
-      // noAnonFunctionType is true when parsing an arrow function
-      this.state.exprAllowed = this.state.noAnonFunctionType;
+      // Ensure that a brace after a function generic type annotation is a
+      // statement, except in arrow functions (noAnonFunctionType)
+      this.state.exprAllowed =
+        this.state.exprAllowed || this.state.noAnonFunctionType;
       return type;
     }
 
