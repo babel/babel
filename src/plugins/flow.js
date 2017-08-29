@@ -180,7 +180,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.FlowDeclareVariable,
     ): N.FlowDeclareVariable {
       this.next();
-      node.id = this.flowParseTypeAnnotatableIdentifier();
+      node.id = this.flowParseTypeAnnotatableIdentifier(
+        /*allowPrimitiveOverride*/ true,
+      );
       this.semicolon();
       return this.finishNode(node, "DeclareVariable");
     }
@@ -1145,8 +1147,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TypeAnnotation");
     }
 
-    flowParseTypeAnnotatableIdentifier(): N.Identifier {
-      const ident = this.flowParseRestrictedIdentifier();
+    flowParseTypeAnnotatableIdentifier(
+      allowPrimitiveOverride?: boolean,
+    ): N.Identifier {
+      const ident = allowPrimitiveOverride
+        ? this.parseIdentifier()
+        : this.flowParseRestrictedIdentifier();
       if (this.match(tt.colon)) {
         ident.typeAnnotation = this.flowParseTypeAnnotation();
         this.finishNode(ident, ident.type);
