@@ -1,26 +1,189 @@
-import isNumber from "lodash/isNumber";
+// import isNumber from "lodash/isNumber";
 import isString from "lodash/isString";
 
 function isBigInt(x) {
   return x instanceof global.BigInt;
 }
 
-export default function(left, right, operator) {
-  // TODO: don't throw for operations that can be performed on BigInt and Number (i.e. comparisons)
+function BigIntUnaryMinus(left) {
+  return new global.BigInt(left.num.negated().toString());
+}
+
+// TODO: investigate BigNumber.js limit on pow?
+function BigIntExp(left, right) {
+  return new global.BigInt(left.num.pow(right.num).toString());
+}
+
+function BigIntMultiply(left, right) {
+  return new global.BigInt(left.num.times(right.num).toString());
+}
+
+function BigIntDivide(left, right) {
+  // setting from the BigNumber library
+  const ROUND_TOWARD_ZERO = 1;
+
+  if (left.toString() === "0") {
+    throw new RangeError();
+  }
+  return new global.BigInt(
+    left.num.div(right.num).toFixed(0, ROUND_TOWARD_ZERO).toString(),
+  );
+}
+
+function BigIntRemainder(left, right) {
+  if (left.toString() === "0") {
+    throw new RangeError();
+  }
+  return new global.BigInt(left.num.mod(right.num).toString());
+}
+
+function BigIntAdd(left, right) {
+  return new global.BigInt(left.num.plus(right.num).toString());
+}
+
+function BigIntSubtract(left, right) {
+  return new global.BigInt(left.num.minus(right.num).toString());
+}
+
+function BigIntLeftShift(left, right) {
+  // setting from the BigNumber library
+  const ROUND_FLOOR = 3;
+  const bigInt2 = new global.BigInt("2");
+
+  if (right < 0) {
+    const divResult = left.num.div(BigIntExp(bigInt2, BigIntUnaryMinus(right)));
+    const rounded = divResult.toFixed(0, ROUND_FLOOR);
+    return new global.BigInt(rounded.toString());
+  }
+  return BigIntMultiply(left, BigIntExp(bigInt2, right));
+}
+
+function BigIntSignedRightShift(left, right) {
+  return BigIntLeftShift(left, BigIntUnaryMinus(right));
+}
+
+function BigIntUnSignedRightShift() {
+  throw new TypeError();
+}
+
+function BigIntBitwiseOR() {
+  // TODO
+}
+
+function BigIntBitwiseAND() {
+  // TODO
+}
+
+function BigIntBitwiseXOR() {
+  // TODO
+}
+
+function checkTypesMatch(left, right, operator) {
   if (
-    (isBigInt(left) && isNumber(right)) ||
-    (isNumber(left) && isBigInt(right))
+    (isBigInt(left) && !isBigInt(right)) ||
+    (!isBigInt(left) && isBigInt(right))
   ) {
     throw new TypeError(`Cannot perform ${operator} on a BigInt and a Number`);
   }
+}
 
-  if (isString(left) || isString(right)) {
-    return left.toString() + right.toString();
-  }
+export default function(left, right, operator) {
+  // TODO: DRY this up a bit, if that's desirable
+  if (operator === "**") {
+    checkTypesMatch(left, right, operator);
+    if (isBigInt(left)) {
+      return BigIntExp(left, right);
+    } else {
+      return left ** right;
+    }
+  } else if (operator === "*") {
+    checkTypesMatch(left, right, operator);
+    if (isBigInt(left)) {
+      return BigIntMultiply(left, right);
+    } else {
+      return left * right;
+    }
+  } else if (operator === "/") {
+    checkTypesMatch(left, right, operator);
+    if (isBigInt(left)) {
+      return BigIntDivide(left, right);
+    } else {
+      return left / right;
+    }
+  } else if (operator === "%") {
+    checkTypesMatch(left, right, operator);
+    if (isBigInt(left)) {
+      return BigIntRemainder(left, right);
+    } else {
+      return left % right;
+    }
+  } else if (operator === "+") {
+    if (isString(left) || isString(right)) {
+      return left + right;
+    }
 
-  if (isBigInt(left) && isBigInt(right)) {
-    return left.plus(right);
-  } else {
-    return left + right;
+    checkTypesMatch(left, right, operator);
+
+    if (isBigInt(left)) {
+      return BigIntAdd(left, right);
+    } else {
+      return left + right;
+    }
+  } else if (operator === "-") {
+    checkTypesMatch(left, right, operator);
+
+    if (isBigInt(left)) {
+      return BigIntSubtract(left, right);
+    } else {
+      return left - right;
+    }
+  } else if (operator === "<<") {
+    checkTypesMatch(left, right, operator);
+
+    if (isBigInt(left)) {
+      return BigIntLeftShift(left, right);
+    } else {
+      return left << right;
+    }
+  } else if (operator === ">>") {
+    checkTypesMatch(left, right, operator);
+
+    if (isBigInt(left)) {
+      return BigIntSignedRightShift(left, right);
+    } else {
+      return left >> right;
+    }
+  } else if (operator === ">>>") {
+    checkTypesMatch(left, right, operator);
+
+    if (isBigInt(left)) {
+      return BigIntUnSignedRightShift(left, right);
+    } else {
+      return left >>> right;
+    }
+  } else if (operator === "|") {
+    checkTypesMatch(left, right, operator);
+
+    if (isBigInt(left)) {
+      return BigIntBitwiseOR(left, right);
+    } else {
+      return left | right;
+    }
+  } else if (operator === "&") {
+    checkTypesMatch(left, right, operator);
+
+    if (isBigInt(left)) {
+      return BigIntBitwiseAND(left, right);
+    } else {
+      return left & right;
+    }
+  } else if (operator === "^") {
+    checkTypesMatch(left, right, operator);
+
+    if (isBigInt(left)) {
+      return BigIntBitwiseXOR(left, right);
+    } else {
+      return left ^ right;
+    }
   }
 }
