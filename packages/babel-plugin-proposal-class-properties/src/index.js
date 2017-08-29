@@ -85,30 +85,16 @@ export default declare((api, options) => {
   };
 
   const staticErrorVisitor = {
-    Identifier(path) {
-      if (path.node.name === "arguments") {
-        const parent = path.findParent(path => {
-          return (
-            path.isProperty() ||
-            (path.isFunction() && !path.isArrowFunctionExpression())
-          );
-        });
-        if (parent.isProperty()) {
-          throw path.buildCodeFrameError("cannot reference arguments");
-        }
-      }
-    },
-
     Class(path) {
       path.skip();
     },
 
     ClassProperty(path) {
       const { computed, key, static: isStatic } = path.node;
-      if (computed) return;
+      if (computed || !isStatic) return;
 
       const name = t.isIdentifier(key) ? key.name : key.value;
-      if (isStatic && name === "prototype") {
+      if (name === "prototype") {
         throw path.buildCodeFrameError("illegal static class field");
       }
     },
@@ -117,11 +103,11 @@ export default declare((api, options) => {
       const { parentPath, node } = path;
       if (!parentPath.isMemberExpression({ property: node, computed: false })) {
         throw path.buildCodeFrameError(
-          `illegal syntax. Did you mean \`this.#${node.name.name}\`?`,
+          `illegal syntax. Did you mean \`this.#${node.id.name}\`?`,
         );
       }
 
-      if (!this.privateProps[node.name.name]) {
+      if (!this.privateProps[node.id.name]) {
         throw path.buildCodeFrameError(`unknown private property`);
       }
     },
@@ -130,7 +116,7 @@ export default declare((api, options) => {
   const privateNameRemapper = {
     PrivateName(path) {
       const { node, parent, parentPath, scope } = path;
-      if (node.name.name !== this.name) {
+      if (node.id.name !== this.name) {
         return;
       }
 
@@ -212,7 +198,7 @@ export default declare((api, options) => {
   const privateNameRemapperLoose = {
     PrivateName(path) {
       const { parentPath, node } = path;
-      if (node.name.name !== this.name) {
+      if (node.id.name !== this.name) {
         return;
       }
 
