@@ -140,11 +140,10 @@ export default function({ types: t }) {
         grandParentPath.isAssignmentExpression() ||
         grandParentPath.isUpdateExpression()
       ) {
-        const got = replaceWith;
         const { node } = grandParentPath;
         let assign;
         let memo;
-        let gotMemo;
+        let postfix;
 
         if (grandParentPath.isAssignmentExpression({ operator: "=" })) {
           assign = node.right;
@@ -152,12 +151,17 @@ export default function({ types: t }) {
           const { right, operator } = node;
           memo = scope.maybeGenerateMemoised(object);
 
+          if (memo) {
+            replaceWith.arguments[0] = memo;
+            memo = t.assignmentExpression("=", memo, object);
+          }
+
           if (grandParentPath.isUpdateExpression({ prefix: false })) {
-            gotMemo = scope.generateUidIdentifierBasedOnNode(parent);
-            scope.push({ id: gotMemo });
+            postfix = scope.generateUidIdentifierBasedOnNode(parent);
+            scope.push({ id: postfix });
             replaceWith = t.assignmentExpression(
               "=",
-              gotMemo,
+              postfix,
               t.unaryExpression("+", replaceWith),
             );
           }
@@ -169,11 +173,6 @@ export default function({ types: t }) {
           );
         }
 
-        if (memo) {
-          got.arguments[0] = memo;
-          memo = t.assignmentExpression("=", memo, object);
-        }
-
         replacePath = grandParentPath;
         replaceWith = t.callExpression(this.put, [
           memo || object,
@@ -181,8 +180,8 @@ export default function({ types: t }) {
           assign,
         ]);
 
-        if (gotMemo) {
-          replaceWith = t.sequenceExpression([replaceWith, gotMemo]);
+        if (postfix) {
+          replaceWith = t.sequenceExpression([replaceWith, postfix]);
         }
       } else if (grandParentPath.isCallExpression({ callee: parent })) {
         const memo = scope.maybeGenerateMemoised(object);
