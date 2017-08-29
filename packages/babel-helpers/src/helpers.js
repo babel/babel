@@ -357,7 +357,26 @@ helpers.decorateElement = template(`
 
     for (let i = decorators.length - 1; i >= 0; i--) {
       const decorator = decorators[i];
+      const shallowClone = {
+        configurable: previousDescriptor.descriptor.configurable,
+        enumerable: previousDescriptor.descriptor.enumerable,
+        writable: previousDescriptor.descriptor.writable,
+        value: previousDescriptor.descriptor.value
+      }
+
       const result = decorator(previousDescriptor);
+
+      if (!shallowClone.configurable) {
+        let check = 
+          result.descriptor.configurable === shallowClone.configurable &&
+          result.descriptor.enumerable === shallowClone.enumerable &&
+          result.descriptor.writable === shallowClone.writable &&
+          result.descriptor.value === shallowClone.value;
+
+        if (!check) {
+          throw new Error("Decorator tried to change unconfigurable property descriptor");
+        }
+      }
 
       //TODO: why does .finisher exist on an elementDescriptor? the following conditional deviates from 
       //the spec because it uses result.finishers rather than result.descriptor.finisher
