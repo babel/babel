@@ -13,7 +13,7 @@ export default function() {
         if (binding.constantViolations.length > 0) {
           return;
         }
-        if (path.node.param && !binding.referenced) {
+        if (!binding.referenced) {
           const paramPath = path.get("param");
           paramPath.remove();
         }
