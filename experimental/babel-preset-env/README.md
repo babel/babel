@@ -18,6 +18,18 @@ npm install babel-preset-env --save-dev
 }
 ```
 
+```json
+{
+  "presets": [
+    ["env", {
+      "targets": {
+        "node": "current"
+      }
+    }]
+  ]
+}
+```
+
 Check out the many options (especially `useBuiltIns` to polyfill less)!
 
 - [How it Works](#how-it-works)
