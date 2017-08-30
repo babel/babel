@@ -44,7 +44,7 @@ function gatherNodeParts(node: Object, parts: Array) {
       gatherNodeParts(prop.key || prop.argument, parts);
     }
   } else if (t.isPrivateName(node)) {
-    gatherNodeParts(node.name, parts);
+    gatherNodeParts(node.id, parts);
   } else if (t.isThisExpression(node)) {
     parts.push("this");
   }
