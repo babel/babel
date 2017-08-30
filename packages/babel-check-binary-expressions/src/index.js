@@ -74,6 +74,20 @@ function checkTypesMatch(left, right, operator) {
   }
 }
 
+export function checkUnaryExpressions(operator, argument) {
+  if (operator === "-") {
+    if (isBigInt(argument)) {
+      return BigIntUnaryMinus(argument);
+    } else {
+      return -argument;
+    }
+  } else if (operator === "typeof") {
+    // TODO
+  } else if (operator === "~") {
+    return BigIntSubtract(BigIntUnaryMinus(argument), 1);
+  }
+}
+
 export default function(left, right, operator) {
   // TODO: DRY this up a bit, if that's desirable
   if (operator === "**") {

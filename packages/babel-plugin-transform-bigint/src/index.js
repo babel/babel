@@ -12,6 +12,23 @@ export default function({ types: t }) {
           ]),
         );
       },
+      UnaryExpression(path, state) {
+        // TODO: figure out how to handle unary plus
+        if (["typeof", "-", "~"].indexOf(path.node.operator) !== -1) {
+          path.replaceWith(
+            t.ExpressionStatement(
+              t.CallExpression(
+                state.addImport(
+                  "babel-check-binary-expressions",
+                  "checkUnaryExpressions",
+                  "checkUnaryExpressions",
+                ),
+                [t.StringLiteral(path.node.operator), path.node.argument],
+              ),
+            ),
+          );
+        }
+      },
       BinaryExpression(path, state) {
         path.replaceWith(
           t.ExpressionStatement(
