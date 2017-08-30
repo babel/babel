@@ -233,9 +233,9 @@ babel-code-frame@7.0.0-alpha.16:
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-babel-code-frame@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-code-frame/-/babel-code-frame-7.0.0-alpha.19.tgz#18afb43ec147847cc55f79bad4dab08f938263b1"
+babel-code-frame@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-code-frame/-/babel-code-frame-7.0.0-alpha.20.tgz#b821248e62d61167c3fb6b4f9523820f5bb82c47"
   dependencies:
     chalk "^2.0.0"
     esutils "^2.0.2"
@@ -341,12 +341,12 @@ babel-helper-builder-binary-assignment-operator-visitor@7.0.0-alpha.16:
     babel-helper-explode-assignable-expression "7.0.0-alpha.16"
     babel-types "7.0.0-alpha.16"
 
-babel-helper-builder-binary-assignment-operator-visitor@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-helper-builder-binary-assignment-operator-visitor/-/babel-helper-builder-binary-assignment-operator-visitor-7.0.0-alpha.19.tgz#b1f685023ca414bf6edeb6d4c99604523fdb6d6a"
+babel-helper-builder-binary-assignment-operator-visitor@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-helper-builder-binary-assignment-operator-visitor/-/babel-helper-builder-binary-assignment-operator-visitor-7.0.0-alpha.20.tgz#0fe2ec68b5a48a1520568b95a391c680d672ee19"
   dependencies:
-    babel-helper-explode-assignable-expression "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
+    babel-helper-explode-assignable-expression "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
 
 babel-helper-builder-binary-assignment-operator-visitor@^6.24.1:
   version "6.24.1"
@@ -364,13 +364,13 @@ babel-helper-call-delegate@7.0.0-alpha.16:
     babel-traverse "7.0.0-alpha.16"
     babel-types "7.0.0-alpha.16"
 
-babel-helper-call-delegate@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-helper-call-delegate/-/babel-helper-call-delegate-7.0.0-alpha.19.tgz#d7d5a634c51b95b19a44fc1be87726ba233cbb71"
+babel-helper-call-delegate@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-helper-call-delegate/-/babel-helper-call-delegate-7.0.0-alpha.20.tgz#6573a2b4738514f0fdeaadf745b289d1968b655b"
   dependencies:
-    babel-helper-hoist-variables "7.0.0-alpha.19"
-    babel-traverse "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
+    babel-helper-hoist-variables "7.0.0-alpha.20"
+    babel-traverse "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
 
 babel-helper-call-delegate@^6.24.1:
   version "6.24.1"
@@ -389,12 +389,12 @@ babel-helper-define-map@7.0.0-alpha.16:
     babel-types "7.0.0-alpha.16"
     lodash "^4.2.0"
 
-babel-helper-define-map@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-helper-define-map/-/babel-helper-define-map-7.0.0-alpha.19.tgz#d7e112abddacc3cafca89f482dfe2eb1a19ad641"
+babel-helper-define-map@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-helper-define-map/-/babel-helper-define-map-7.0.0-alpha.20.tgz#4bd233a5c8f59577fa31a935ff9fbc603a320d6d"
   dependencies:
-    babel-helper-function-name "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
+    babel-helper-function-name "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
     lodash "^4.2.0"
 
 babel-helper-define-map@^6.24.1:
@@ -413,12 +413,12 @@ babel-helper-explode-assignable-expression@7.0.0-alpha.16:
     babel-traverse "7.0.0-alpha.16"
     babel-types "7.0.0-alpha.16"
 
-babel-helper-explode-assignable-expression@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-helper-explode-assignable-expression/-/babel-helper-explode-assignable-expression-7.0.0-alpha.19.tgz#45b639cd0b05a47a0a4c6b22c8925b7a6b7bfec5"
+babel-helper-explode-assignable-expression@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-helper-explode-assignable-expression/-/babel-helper-explode-assignable-expression-7.0.0-alpha.20.tgz#31826b2d3986f105e691ae538c49322a97754050"
   dependencies:
-    babel-traverse "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
+    babel-traverse "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
 
 babel-helper-explode-assignable-expression@^6.24.1:
   version "6.24.1"
@@ -454,14 +454,14 @@ babel-helper-function-name@7.0.0-alpha.16:
     babel-traverse "7.0.0-alpha.16"
     babel-types "7.0.0-alpha.16"
 
-babel-helper-function-name@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-helper-function-name/-/babel-helper-function-name-7.0.0-alpha.19.tgz#6da459bdbc17fc2bb6a623fbcbfc57dc4ab20e9f"
+babel-helper-function-name@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-helper-function-name/-/babel-helper-function-name-7.0.0-alpha.20.tgz#b560517ad8a6ca3029ac28bf558ef04bbfd8af85"
   dependencies:
-    babel-helper-get-function-arity "7.0.0-alpha.19"
-    babel-template "7.0.0-alpha.19"
-    babel-traverse "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
+    babel-helper-get-function-arity "7.0.0-alpha.20"
+    babel-template "7.0.0-alpha.20"
+    babel-traverse "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
 
 babel-helper-function-name@^6.24.1:
   version "6.24.1"
@@ -479,11 +479,11 @@ babel-helper-get-function-arity@7.0.0-alpha.16:
   dependencies:
     babel-types "7.0.0-alpha.16"
 
-babel-helper-get-function-arity@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-helper-get-function-arity/-/babel-helper-get-function-arity-7.0.0-alpha.19.tgz#29088a3137935e393f09a329d9d7900360514e4e"
+babel-helper-get-function-arity@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-helper-get-function-arity/-/babel-helper-get-function-arity-7.0.0-alpha.20.tgz#4e8f598b2ab20e84634038c976ef5ee71c7d79cd"
   dependencies:
-    babel-types "7.0.0-alpha.19"
+    babel-types "7.0.0-alpha.20"
 
 babel-helper-get-function-arity@^6.24.1:
   version "6.24.1"
@@ -498,11 +498,11 @@ babel-helper-hoist-variables@7.0.0-alpha.16:
   dependencies:
     babel-types "7.0.0-alpha.16"
 
-babel-helper-hoist-variables@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-helper-hoist-variables/-/babel-helper-hoist-variables-7.0.0-alpha.19.tgz#c61a057ec369746a964447a1b3ca5c2442b4d080"
+babel-helper-hoist-variables@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-helper-hoist-variables/-/babel-helper-hoist-variables-7.0.0-alpha.20.tgz#bd440478d42e45a6b9bfaa637d49ded2383ef6fe"
   dependencies:
-    babel-types "7.0.0-alpha.19"
+    babel-types "7.0.0-alpha.20"
 
 babel-helper-hoist-variables@^6.24.1:
   version "6.24.1"
@@ -517,11 +517,11 @@ babel-helper-optimise-call-expression@7.0.0-alpha.16:
   dependencies:
     babel-types "7.0.0-alpha.16"
 
-babel-helper-optimise-call-expression@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-helper-optimise-call-expression/-/babel-helper-optimise-call-expression-7.0.0-alpha.19.tgz#3cd53dd093c2e093635375507a294d6a44dfd429"
+babel-helper-optimise-call-expression@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-helper-optimise-call-expression/-/babel-helper-optimise-call-expression-7.0.0-alpha.20.tgz#ff6f39a37cd74ed3142f3d31bad75c75629aaf84"
   dependencies:
-    babel-types "7.0.0-alpha.19"
+    babel-types "7.0.0-alpha.20"
 
 babel-helper-optimise-call-expression@^6.24.1:
   version "6.24.1"
@@ -543,11 +543,11 @@ babel-helper-regex@7.0.0-alpha.16:
     babel-types "7.0.0-alpha.16"
     lodash "^4.2.0"
 
-babel-helper-regex@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-helper-regex/-/babel-helper-regex-7.0.0-alpha.19.tgz#d58ea24cbebc4d153c33a967a91322c58c4f1930"
+babel-helper-regex@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-helper-regex/-/babel-helper-regex-7.0.0-alpha.20.tgz#013ae9fa8fef00274772267b49d8dfe87212f2b3"
   dependencies:
-    babel-types "7.0.0-alpha.19"
+    babel-types "7.0.0-alpha.20"
     lodash "^4.2.0"
 
 babel-helper-regex@^6.24.1:
@@ -567,14 +567,14 @@ babel-helper-remap-async-to-generator@7.0.0-alpha.16:
     babel-traverse "7.0.0-alpha.16"
     babel-types "7.0.0-alpha.16"
 
-babel-helper-remap-async-to-generator@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-helper-remap-async-to-generator/-/babel-helper-remap-async-to-generator-7.0.0-alpha.19.tgz#ddae33dbb4fbc539d9dddc3a9c4ad0395f8f5341"
+babel-helper-remap-async-to-generator@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-helper-remap-async-to-generator/-/babel-helper-remap-async-to-generator-7.0.0-alpha.20.tgz#0bf252ee814156322014c6498a2d361cb6c402aa"
   dependencies:
-    babel-helper-wrap-function "7.0.0-alpha.19"
-    babel-template "7.0.0-alpha.19"
-    babel-traverse "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
+    babel-helper-wrap-function "7.0.0-alpha.20"
+    babel-template "7.0.0-alpha.20"
+    babel-traverse "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
 
 babel-helper-remap-async-to-generator@^6.24.1:
   version "6.24.1"
@@ -596,15 +596,15 @@ babel-helper-replace-supers@7.0.0-alpha.16:
     babel-traverse "7.0.0-alpha.16"
     babel-types "7.0.0-alpha.16"
 
-babel-helper-replace-supers@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-helper-replace-supers/-/babel-helper-replace-supers-7.0.0-alpha.19.tgz#8c9224d65fde8a872e2c5e1d18b15d5ddf3aa212"
+babel-helper-replace-supers@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-helper-replace-supers/-/babel-helper-replace-supers-7.0.0-alpha.20.tgz#42d091559304583651b0d49cedf6ca11b39f253a"
   dependencies:
-    babel-helper-optimise-call-expression "7.0.0-alpha.19"
-    babel-messages "7.0.0-alpha.19"
-    babel-template "7.0.0-alpha.19"
-    babel-traverse "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
+    babel-helper-optimise-call-expression "7.0.0-alpha.20"
+    babel-messages "7.0.0-alpha.20"
+    babel-template "7.0.0-alpha.20"
+    babel-traverse "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
 
 babel-helper-replace-supers@^6.24.1:
   version "6.24.1"
@@ -639,14 +639,14 @@ babel-helper-wrap-function@7.0.0-alpha.16:
     babel-traverse "7.0.0-alpha.16"
     babel-types "7.0.0-alpha.16"
 
-babel-helper-wrap-function@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-helper-wrap-function/-/babel-helper-wrap-function-7.0.0-alpha.19.tgz#20abff1467021a8d2b275c2ad7ae168a11ed25ec"
+babel-helper-wrap-function@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-helper-wrap-function/-/babel-helper-wrap-function-7.0.0-alpha.20.tgz#1a49b3197ee5796399cdb28b7ed25e72dbac49a5"
   dependencies:
-    babel-helper-function-name "7.0.0-alpha.19"
-    babel-template "7.0.0-alpha.19"
-    babel-traverse "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
+    babel-helper-function-name "7.0.0-alpha.20"
+    babel-template "7.0.0-alpha.20"
+    babel-traverse "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
 
 babel-helpers@7.0.0-alpha.16:
   version "7.0.0-alpha.16"
@@ -665,9 +665,9 @@ babel-messages@7.0.0-alpha.16:
   version "7.0.0-alpha.16"
   resolved "https://registry.yarnpkg.com/babel-messages/-/babel-messages-7.0.0-alpha.16.tgz#9de55213cf8e351922378765a93f3854b46748c2"
 
-babel-messages@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-messages/-/babel-messages-7.0.0-alpha.19.tgz#269b34b85070be6f6d101169ed3fdafc856dfd06"
+babel-messages@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-messages/-/babel-messages-7.0.0-alpha.20.tgz#bba0ade0a6bced2e9e4cd4f42665b44ad9223f0f"
 
 babel-messages@^6.23.0:
   version "6.23.0"
@@ -679,9 +679,9 @@ babel-plugin-check-es2015-constants@7.0.0-alpha.16:
   version "7.0.0-alpha.16"
   resolved "https://registry.yarnpkg.com/babel-plugin-check-es2015-constants/-/babel-plugin-check-es2015-constants-7.0.0-alpha.16.tgz#c61f19ecee116c8afe79e4c8b052783d88f205c8"
 
-babel-plugin-check-es2015-constants@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-check-es2015-constants/-/babel-plugin-check-es2015-constants-7.0.0-alpha.19.tgz#26035252ce8500ca0da8af797bb352d58a62e428"
+babel-plugin-check-es2015-constants@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-check-es2015-constants/-/babel-plugin-check-es2015-constants-7.0.0-alpha.20.tgz#3619751f239aa607f0cc045d8f4c49f5aa544b00"
 
 babel-plugin-check-es2015-constants@^6.22.0:
   version "6.22.0"
@@ -701,9 +701,9 @@ babel-plugin-syntax-async-functions@7.0.0-alpha.16:
   version "7.0.0-alpha.16"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-async-functions/-/babel-plugin-syntax-async-functions-7.0.0-alpha.16.tgz#570f2c3adf4d8aecc91d11180ac37250321c5d7c"
 
-babel-plugin-syntax-async-functions@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-syntax-async-functions/-/babel-plugin-syntax-async-functions-7.0.0-alpha.19.tgz#f2853e10ab14057bd31991048d2da5769f546a99"
+babel-plugin-syntax-async-functions@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-syntax-async-functions/-/babel-plugin-syntax-async-functions-7.0.0-alpha.20.tgz#aa23c4137d4d0a03afe009df72c40e5a594a6efb"
 
 babel-plugin-syntax-async-functions@^6.8.0:
   version "6.13.0"
@@ -737,9 +737,9 @@ babel-plugin-syntax-exponentiation-operator@7.0.0-alpha.16:
   version "7.0.0-alpha.16"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-exponentiation-operator/-/babel-plugin-syntax-exponentiation-operator-7.0.0-alpha.16.tgz#c5e6fd29bb8c122cd327b803390282b2d792d9b7"
 
-babel-plugin-syntax-exponentiation-operator@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-syntax-exponentiation-operator/-/babel-plugin-syntax-exponentiation-operator-7.0.0-alpha.19.tgz#9fac7fff68ee1963dfaf37417f7df594d205738e"
+babel-plugin-syntax-exponentiation-operator@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-syntax-exponentiation-operator/-/babel-plugin-syntax-exponentiation-operator-7.0.0-alpha.20.tgz#d007434885fa9507a18f374f28938597dc7c8201"
 
 babel-plugin-syntax-exponentiation-operator@^6.8.0:
   version "6.13.0"
@@ -765,9 +765,9 @@ babel-plugin-syntax-trailing-function-commas@7.0.0-alpha.16:
   version "7.0.0-alpha.16"
   resolved "https://registry.yarnpkg.com/babel-plugin-syntax-trailing-function-commas/-/babel-plugin-syntax-trailing-function-commas-7.0.0-alpha.16.tgz#daed195b88dcc26db401d51a58d346808b8e4585"
 
-babel-plugin-syntax-trailing-function-commas@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-syntax-trailing-function-commas/-/babel-plugin-syntax-trailing-function-commas-7.0.0-alpha.19.tgz#5a7d09bc12f96caa3950262a50f5f25ae3aa2173"
+babel-plugin-syntax-trailing-function-commas@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-syntax-trailing-function-commas/-/babel-plugin-syntax-trailing-function-commas-7.0.0-alpha.20.tgz#f56865239ecf2308e969b1fc0030cbb5816e52b1"
 
 babel-plugin-syntax-trailing-function-commas@^6.22.0:
   version "6.22.0"
@@ -788,12 +788,12 @@ babel-plugin-transform-async-to-generator@7.0.0-alpha.16:
     babel-helper-remap-async-to-generator "7.0.0-alpha.16"
     babel-plugin-syntax-async-functions "7.0.0-alpha.16"
 
-babel-plugin-transform-async-to-generator@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-async-to-generator/-/babel-plugin-transform-async-to-generator-7.0.0-alpha.19.tgz#00b4a0eccf20300d81d8a2eb65ba1d41fda0129c"
+babel-plugin-transform-async-to-generator@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-async-to-generator/-/babel-plugin-transform-async-to-generator-7.0.0-alpha.20.tgz#b1e55fb83392ec51a753e268055609114a6e6b9d"
   dependencies:
-    babel-helper-remap-async-to-generator "7.0.0-alpha.19"
-    babel-plugin-syntax-async-functions "7.0.0-alpha.19"
+    babel-helper-remap-async-to-generator "7.0.0-alpha.20"
+    babel-plugin-syntax-async-functions "7.0.0-alpha.20"
 
 babel-plugin-transform-async-to-generator@^6.24.1:
   version "6.24.1"
@@ -841,9 +841,9 @@ babel-plugin-transform-es2015-arrow-functions@7.0.0-alpha.16:
   version "7.0.0-alpha.16"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-arrow-functions/-/babel-plugin-transform-es2015-arrow-functions-7.0.0-alpha.16.tgz#0cfd5ed3c5c74f6d0a13cc606dd3d0039b9f1728"
 
-babel-plugin-transform-es2015-arrow-functions@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-arrow-functions/-/babel-plugin-transform-es2015-arrow-functions-7.0.0-alpha.19.tgz#1969b464f812b8514c3830130c683419909d505a"
+babel-plugin-transform-es2015-arrow-functions@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-arrow-functions/-/babel-plugin-transform-es2015-arrow-functions-7.0.0-alpha.20.tgz#e3b8f08672585a54cfe3ffdb7243784a03b52f5b"
 
 babel-plugin-transform-es2015-arrow-functions@^6.22.0:
   version "6.22.0"
@@ -855,9 +855,9 @@ babel-plugin-transform-es2015-block-scoped-functions@7.0.0-alpha.16:
   version "7.0.0-alpha.16"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-block-scoped-functions/-/babel-plugin-transform-es2015-block-scoped-functions-7.0.0-alpha.16.tgz#bb849533f9c97ab29c2aa046faa2f4e2cbf497c0"
 
-babel-plugin-transform-es2015-block-scoped-functions@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-block-scoped-functions/-/babel-plugin-transform-es2015-block-scoped-functions-7.0.0-alpha.19.tgz#89e073fe39d6ced51aa8e0fc05526fbf95d7d0fd"
+babel-plugin-transform-es2015-block-scoped-functions@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-block-scoped-functions/-/babel-plugin-transform-es2015-block-scoped-functions-7.0.0-alpha.20.tgz#aa366df2f9eb23e1b8d13016d604fb1a0a8fca33"
 
 babel-plugin-transform-es2015-block-scoped-functions@^6.22.0:
   version "6.22.0"
@@ -874,13 +874,13 @@ babel-plugin-transform-es2015-block-scoping@7.0.0-alpha.16:
     babel-types "7.0.0-alpha.16"
     lodash "^4.2.0"
 
-babel-plugin-transform-es2015-block-scoping@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-block-scoping/-/babel-plugin-transform-es2015-block-scoping-7.0.0-alpha.19.tgz#b0c962f6d80228c34f6d99885bd80b5ec5cb4126"
+babel-plugin-transform-es2015-block-scoping@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-block-scoping/-/babel-plugin-transform-es2015-block-scoping-7.0.0-alpha.20.tgz#c1fbcec7708dfe087ece56649b353fdd1909a33c"
   dependencies:
-    babel-template "7.0.0-alpha.19"
-    babel-traverse "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
+    babel-template "7.0.0-alpha.20"
+    babel-traverse "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
     lodash "^4.2.0"
 
 babel-plugin-transform-es2015-block-scoping@^6.24.1:
@@ -906,18 +906,18 @@ babel-plugin-transform-es2015-classes@7.0.0-alpha.16:
     babel-traverse "7.0.0-alpha.16"
     babel-types "7.0.0-alpha.16"
 
-babel-plugin-transform-es2015-classes@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-classes/-/babel-plugin-transform-es2015-classes-7.0.0-alpha.19.tgz#e5a716ecace52ae2e01c80fc31212e9e8083a9cf"
+babel-plugin-transform-es2015-classes@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-classes/-/babel-plugin-transform-es2015-classes-7.0.0-alpha.20.tgz#1bae0b10604367122248bafed33580e7b7b27a15"
   dependencies:
-    babel-helper-define-map "7.0.0-alpha.19"
-    babel-helper-function-name "7.0.0-alpha.19"
-    babel-helper-optimise-call-expression "7.0.0-alpha.19"
-    babel-helper-replace-supers "7.0.0-alpha.19"
-    babel-messages "7.0.0-alpha.19"
-    babel-template "7.0.0-alpha.19"
-    babel-traverse "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
+    babel-helper-define-map "7.0.0-alpha.20"
+    babel-helper-function-name "7.0.0-alpha.20"
+    babel-helper-optimise-call-expression "7.0.0-alpha.20"
+    babel-helper-replace-supers "7.0.0-alpha.20"
+    babel-messages "7.0.0-alpha.20"
+    babel-template "7.0.0-alpha.20"
+    babel-traverse "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
 
 babel-plugin-transform-es2015-classes@^6.24.1:
   version "6.24.1"
@@ -939,11 +939,11 @@ babel-plugin-transform-es2015-computed-properties@7.0.0-alpha.16:
   dependencies:
     babel-template "7.0.0-alpha.16"
 
-babel-plugin-transform-es2015-computed-properties@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-computed-properties/-/babel-plugin-transform-es2015-computed-properties-7.0.0-alpha.19.tgz#9424f3933e32734a11b28f7c34388d59ee9babc3"
+babel-plugin-transform-es2015-computed-properties@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-computed-properties/-/babel-plugin-transform-es2015-computed-properties-7.0.0-alpha.20.tgz#01f4cbda296b74c3e494aba2bad4277d5e8480c5"
   dependencies:
-    babel-template "7.0.0-alpha.19"
+    babel-template "7.0.0-alpha.20"
 
 babel-plugin-transform-es2015-computed-properties@^6.24.1:
   version "6.24.1"
@@ -956,9 +956,9 @@ babel-plugin-transform-es2015-destructuring@7.0.0-alpha.16:
   version "7.0.0-alpha.16"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-destructuring/-/babel-plugin-transform-es2015-destructuring-7.0.0-alpha.16.tgz#38c05c87dbc0072f8eb7cc58ed9d64184123d7f0"
 
-babel-plugin-transform-es2015-destructuring@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-destructuring/-/babel-plugin-transform-es2015-destructuring-7.0.0-alpha.19.tgz#cd1bac3aad6b54613305a8e1c152d0a28fa34470"
+babel-plugin-transform-es2015-destructuring@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-destructuring/-/babel-plugin-transform-es2015-destructuring-7.0.0-alpha.20.tgz#5fbaee66c325fd204e085c2dd891ab77a593e7f7"
 
 babel-plugin-transform-es2015-destructuring@^6.22.0:
   version "6.23.0"
@@ -972,11 +972,11 @@ babel-plugin-transform-es2015-duplicate-keys@7.0.0-alpha.16:
   dependencies:
     babel-types "7.0.0-alpha.16"
 
-babel-plugin-transform-es2015-duplicate-keys@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-duplicate-keys/-/babel-plugin-transform-es2015-duplicate-keys-7.0.0-alpha.19.tgz#721152c0192139bd9d1137f30a13a958008451a8"
+babel-plugin-transform-es2015-duplicate-keys@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-duplicate-keys/-/babel-plugin-transform-es2015-duplicate-keys-7.0.0-alpha.20.tgz#63eadb0b4b6b674502a6542e3992374d93ca05f7"
   dependencies:
-    babel-types "7.0.0-alpha.19"
+    babel-types "7.0.0-alpha.20"
 
 babel-plugin-transform-es2015-duplicate-keys@^6.24.1:
   version "6.24.1"
@@ -989,9 +989,9 @@ babel-plugin-transform-es2015-for-of@7.0.0-alpha.16:
   version "7.0.0-alpha.16"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-for-of/-/babel-plugin-transform-es2015-for-of-7.0.0-alpha.16.tgz#0a310f1ec1155a1bc019f4d3f172167442b30a4c"
 
-babel-plugin-transform-es2015-for-of@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-for-of/-/babel-plugin-transform-es2015-for-of-7.0.0-alpha.19.tgz#733e621be9e4717e5227882139c9f41cbd16b149"
+babel-plugin-transform-es2015-for-of@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-for-of/-/babel-plugin-transform-es2015-for-of-7.0.0-alpha.20.tgz#615686c3d3902260084bcb0f8d38777014386d4d"
 
 babel-plugin-transform-es2015-for-of@^6.22.0:
   version "6.23.0"
@@ -1006,12 +1006,12 @@ babel-plugin-transform-es2015-function-name@7.0.0-alpha.16:
     babel-helper-function-name "7.0.0-alpha.16"
     babel-types "7.0.0-alpha.16"
 
-babel-plugin-transform-es2015-function-name@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-function-name/-/babel-plugin-transform-es2015-function-name-7.0.0-alpha.19.tgz#7985ae15a7d1fbec05f6edccdbb846255e0c5bc6"
+babel-plugin-transform-es2015-function-name@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-function-name/-/babel-plugin-transform-es2015-function-name-7.0.0-alpha.20.tgz#0e7a626008dc28a67c1dae3b28670dd7fea483e4"
   dependencies:
-    babel-helper-function-name "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
+    babel-helper-function-name "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
 
 babel-plugin-transform-es2015-function-name@^6.24.1:
   version "6.24.1"
@@ -1025,9 +1025,9 @@ babel-plugin-transform-es2015-literals@7.0.0-alpha.16:
   version "7.0.0-alpha.16"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-literals/-/babel-plugin-transform-es2015-literals-7.0.0-alpha.16.tgz#abcb634c3dd41ea170bc1b4a04d787e91b7ecafe"
 
-babel-plugin-transform-es2015-literals@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-literals/-/babel-plugin-transform-es2015-literals-7.0.0-alpha.19.tgz#64a297e10ccef058544af1d82ec11d2d5b9c9908"
+babel-plugin-transform-es2015-literals@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-literals/-/babel-plugin-transform-es2015-literals-7.0.0-alpha.20.tgz#c0603ab9cad0aa6ca79c6cf7c491529557331f77"
 
 babel-plugin-transform-es2015-literals@^6.22.0:
   version "6.22.0"
@@ -1042,12 +1042,12 @@ babel-plugin-transform-es2015-modules-amd@7.0.0-alpha.16:
     babel-plugin-transform-es2015-modules-commonjs "7.0.0-alpha.16"
     babel-template "7.0.0-alpha.16"
 
-babel-plugin-transform-es2015-modules-amd@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-amd/-/babel-plugin-transform-es2015-modules-amd-7.0.0-alpha.19.tgz#db7dfecea5956e7f6766c7ef6a743c855c618af0"
+babel-plugin-transform-es2015-modules-amd@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-amd/-/babel-plugin-transform-es2015-modules-amd-7.0.0-alpha.20.tgz#b9ef5a25ad7011a7c63080cbe3438224d43b2dca"
   dependencies:
-    babel-plugin-transform-es2015-modules-commonjs "7.0.0-alpha.19"
-    babel-template "7.0.0-alpha.19"
+    babel-plugin-transform-es2015-modules-commonjs "7.0.0-alpha.20"
+    babel-template "7.0.0-alpha.20"
 
 babel-plugin-transform-es2015-modules-amd@^6.24.1:
   version "6.24.1"
@@ -1065,13 +1065,13 @@ babel-plugin-transform-es2015-modules-commonjs@7.0.0-alpha.16:
     babel-template "7.0.0-alpha.16"
     babel-types "7.0.0-alpha.16"
 
-babel-plugin-transform-es2015-modules-commonjs@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-commonjs/-/babel-plugin-transform-es2015-modules-commonjs-7.0.0-alpha.19.tgz#7c3fe8db55592995ceb17260a650640c22f8847d"
+babel-plugin-transform-es2015-modules-commonjs@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-commonjs/-/babel-plugin-transform-es2015-modules-commonjs-7.0.0-alpha.20.tgz#e2ce9108c1216eec1acfaedc1d328eab821c2158"
   dependencies:
-    babel-plugin-transform-strict-mode "7.0.0-alpha.19"
-    babel-template "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
+    babel-plugin-transform-strict-mode "7.0.0-alpha.20"
+    babel-template "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
 
 babel-plugin-transform-es2015-modules-commonjs@^6.24.1:
   version "6.24.1"
@@ -1089,12 +1089,12 @@ babel-plugin-transform-es2015-modules-systemjs@7.0.0-alpha.16:
     babel-helper-hoist-variables "7.0.0-alpha.16"
     babel-template "7.0.0-alpha.16"
 
-babel-plugin-transform-es2015-modules-systemjs@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-systemjs/-/babel-plugin-transform-es2015-modules-systemjs-7.0.0-alpha.19.tgz#251dfe6a1c42ad9a85f676c3f9e0404332860a6c"
+babel-plugin-transform-es2015-modules-systemjs@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-systemjs/-/babel-plugin-transform-es2015-modules-systemjs-7.0.0-alpha.20.tgz#3879efc0501a8df8212dae4044cd4c744c193a9f"
   dependencies:
-    babel-helper-hoist-variables "7.0.0-alpha.19"
-    babel-template "7.0.0-alpha.19"
+    babel-helper-hoist-variables "7.0.0-alpha.20"
+    babel-template "7.0.0-alpha.20"
 
 babel-plugin-transform-es2015-modules-systemjs@^6.24.1:
   version "6.24.1"
@@ -1111,12 +1111,12 @@ babel-plugin-transform-es2015-modules-umd@7.0.0-alpha.16:
     babel-plugin-transform-es2015-modules-amd "7.0.0-alpha.16"
     babel-template "7.0.0-alpha.16"
 
-babel-plugin-transform-es2015-modules-umd@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-umd/-/babel-plugin-transform-es2015-modules-umd-7.0.0-alpha.19.tgz#f0b1a497b453a4113097c8780e241f1895449ae6"
+babel-plugin-transform-es2015-modules-umd@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-modules-umd/-/babel-plugin-transform-es2015-modules-umd-7.0.0-alpha.20.tgz#297a95296d95878c2c5ecae663c1e3fcfdef6fb6"
   dependencies:
-    babel-plugin-transform-es2015-modules-amd "7.0.0-alpha.19"
-    babel-template "7.0.0-alpha.19"
+    babel-plugin-transform-es2015-modules-amd "7.0.0-alpha.20"
+    babel-template "7.0.0-alpha.20"
 
 babel-plugin-transform-es2015-modules-umd@^6.24.1:
   version "6.24.1"
@@ -1132,11 +1132,11 @@ babel-plugin-transform-es2015-object-super@7.0.0-alpha.16:
   dependencies:
     babel-helper-replace-supers "7.0.0-alpha.16"
 
-babel-plugin-transform-es2015-object-super@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-object-super/-/babel-plugin-transform-es2015-object-super-7.0.0-alpha.19.tgz#67df7402585f593d55069850d1d11bc829c5f4ed"
+babel-plugin-transform-es2015-object-super@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-object-super/-/babel-plugin-transform-es2015-object-super-7.0.0-alpha.20.tgz#bd36669cc78c4c215cb6ffa10841531e8d5ed9f3"
   dependencies:
-    babel-helper-replace-supers "7.0.0-alpha.19"
+    babel-helper-replace-supers "7.0.0-alpha.20"
 
 babel-plugin-transform-es2015-object-super@^6.24.1:
   version "6.24.1"
@@ -1155,15 +1155,15 @@ babel-plugin-transform-es2015-parameters@7.0.0-alpha.16:
     babel-traverse "7.0.0-alpha.16"
     babel-types "7.0.0-alpha.16"
 
-babel-plugin-transform-es2015-parameters@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-parameters/-/babel-plugin-transform-es2015-parameters-7.0.0-alpha.19.tgz#8a7caae4d68fbb67b76ca6094b51e1f46a1c6c3c"
+babel-plugin-transform-es2015-parameters@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-parameters/-/babel-plugin-transform-es2015-parameters-7.0.0-alpha.20.tgz#4053bf2bf764b02d2de01cde0a9a4630bfed89bb"
   dependencies:
-    babel-helper-call-delegate "7.0.0-alpha.19"
-    babel-helper-get-function-arity "7.0.0-alpha.19"
-    babel-template "7.0.0-alpha.19"
-    babel-traverse "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
+    babel-helper-call-delegate "7.0.0-alpha.20"
+    babel-helper-get-function-arity "7.0.0-alpha.20"
+    babel-template "7.0.0-alpha.20"
+    babel-traverse "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
 
 babel-plugin-transform-es2015-parameters@^6.24.1:
   version "6.24.1"
@@ -1182,11 +1182,11 @@ babel-plugin-transform-es2015-shorthand-properties@7.0.0-alpha.16:
   dependencies:
     babel-types "7.0.0-alpha.16"
 
-babel-plugin-transform-es2015-shorthand-properties@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-shorthand-properties/-/babel-plugin-transform-es2015-shorthand-properties-7.0.0-alpha.19.tgz#c1daa38eea8a6a1b50a14a31ce4a3c3e8caec5da"
+babel-plugin-transform-es2015-shorthand-properties@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-shorthand-properties/-/babel-plugin-transform-es2015-shorthand-properties-7.0.0-alpha.20.tgz#9a5278319b5bffe635759f706fa8cb6d7fc75519"
   dependencies:
-    babel-types "7.0.0-alpha.19"
+    babel-types "7.0.0-alpha.20"
 
 babel-plugin-transform-es2015-shorthand-properties@^6.24.1:
   version "6.24.1"
@@ -1199,9 +1199,9 @@ babel-plugin-transform-es2015-spread@7.0.0-alpha.16:
   version "7.0.0-alpha.16"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-spread/-/babel-plugin-transform-es2015-spread-7.0.0-alpha.16.tgz#12e801ddfa46af7bbcb746bed59fa043747aa70a"
 
-babel-plugin-transform-es2015-spread@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-spread/-/babel-plugin-transform-es2015-spread-7.0.0-alpha.19.tgz#fa59386e080df5b8ee4011353c0dcb4b7285a6c6"
+babel-plugin-transform-es2015-spread@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-spread/-/babel-plugin-transform-es2015-spread-7.0.0-alpha.20.tgz#67323c11785ef13c5ca6931c8b3b965d380d6411"
 
 babel-plugin-transform-es2015-spread@^6.22.0:
   version "6.22.0"
@@ -1216,12 +1216,12 @@ babel-plugin-transform-es2015-sticky-regex@7.0.0-alpha.16:
     babel-helper-regex "7.0.0-alpha.16"
     babel-types "7.0.0-alpha.16"
 
-babel-plugin-transform-es2015-sticky-regex@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-sticky-regex/-/babel-plugin-transform-es2015-sticky-regex-7.0.0-alpha.19.tgz#480476e5ba72012f00f6adfa508de5a036497793"
+babel-plugin-transform-es2015-sticky-regex@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-sticky-regex/-/babel-plugin-transform-es2015-sticky-regex-7.0.0-alpha.20.tgz#07ec3a946ed221b3b0fd8a763a4ad97ab1d929f5"
   dependencies:
-    babel-helper-regex "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
+    babel-helper-regex "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
 
 babel-plugin-transform-es2015-sticky-regex@^6.24.1:
   version "6.24.1"
@@ -1235,9 +1235,9 @@ babel-plugin-transform-es2015-template-literals@7.0.0-alpha.16:
   version "7.0.0-alpha.16"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-template-literals/-/babel-plugin-transform-es2015-template-literals-7.0.0-alpha.16.tgz#3028200a48038ee00353a5205fdaaa5e5b719592"
 
-babel-plugin-transform-es2015-template-literals@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-template-literals/-/babel-plugin-transform-es2015-template-literals-7.0.0-alpha.19.tgz#626da711a81cba8bf069c07f51dcc935237ed3cb"
+babel-plugin-transform-es2015-template-literals@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-template-literals/-/babel-plugin-transform-es2015-template-literals-7.0.0-alpha.20.tgz#f6e81d26d1527be09dbc08a83e763b14e9da10f1"
 
 babel-plugin-transform-es2015-template-literals@^6.22.0:
   version "6.22.0"
@@ -1249,9 +1249,9 @@ babel-plugin-transform-es2015-typeof-symbol@7.0.0-alpha.16:
   version "7.0.0-alpha.16"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-typeof-symbol/-/babel-plugin-transform-es2015-typeof-symbol-7.0.0-alpha.16.tgz#2fe3258cda1b8d7d0d50dc612850ae3ddf6c35fe"
 
-babel-plugin-transform-es2015-typeof-symbol@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-typeof-symbol/-/babel-plugin-transform-es2015-typeof-symbol-7.0.0-alpha.19.tgz#588fb8602fe1cc3417ea72ba9d61a2056eb7a05d"
+babel-plugin-transform-es2015-typeof-symbol@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-typeof-symbol/-/babel-plugin-transform-es2015-typeof-symbol-7.0.0-alpha.20.tgz#f987dbe60f9d7c3db60e61416e7f761fa5e76f71"
 
 babel-plugin-transform-es2015-typeof-symbol@^6.22.0:
   version "6.23.0"
@@ -1266,11 +1266,11 @@ babel-plugin-transform-es2015-unicode-regex@7.0.0-alpha.16:
     babel-helper-regex "7.0.0-alpha.16"
     regexpu-core "^4.0.2"
 
-babel-plugin-transform-es2015-unicode-regex@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-unicode-regex/-/babel-plugin-transform-es2015-unicode-regex-7.0.0-alpha.19.tgz#2ca7f971a671f050408102847f1bc00e09014a8d"
+babel-plugin-transform-es2015-unicode-regex@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-es2015-unicode-regex/-/babel-plugin-transform-es2015-unicode-regex-7.0.0-alpha.20.tgz#30718bd866ac21c5f8ac84e1f767e05a7d3dc5f3"
   dependencies:
-    babel-helper-regex "7.0.0-alpha.19"
+    babel-helper-regex "7.0.0-alpha.20"
     regexpu-core "^4.0.2"
 
 babel-plugin-transform-es2015-unicode-regex@^6.24.1:
@@ -1288,12 +1288,12 @@ babel-plugin-transform-exponentiation-operator@7.0.0-alpha.16:
     babel-helper-builder-binary-assignment-operator-visitor "7.0.0-alpha.16"
     babel-plugin-syntax-exponentiation-operator "7.0.0-alpha.16"
 
-babel-plugin-transform-exponentiation-operator@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-exponentiation-operator/-/babel-plugin-transform-exponentiation-operator-7.0.0-alpha.19.tgz#512950d6c2b98eda4cba109af59cb625e8b85465"
+babel-plugin-transform-exponentiation-operator@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-exponentiation-operator/-/babel-plugin-transform-exponentiation-operator-7.0.0-alpha.20.tgz#a09f8763303ea17da99a75ed73027cf170080512"
   dependencies:
-    babel-helper-builder-binary-assignment-operator-visitor "7.0.0-alpha.19"
-    babel-plugin-syntax-exponentiation-operator "7.0.0-alpha.19"
+    babel-helper-builder-binary-assignment-operator-visitor "7.0.0-alpha.20"
+    babel-plugin-syntax-exponentiation-operator "7.0.0-alpha.20"
 
 babel-plugin-transform-exponentiation-operator@^6.24.1:
   version "6.24.1"
@@ -1336,11 +1336,11 @@ babel-plugin-transform-regenerator@7.0.0-alpha.16:
   dependencies:
     regenerator-transform "0.9.11"
 
-babel-plugin-transform-regenerator@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-regenerator/-/babel-plugin-transform-regenerator-7.0.0-alpha.19.tgz#a6fb67a3efdfdb4625bc824692668a7550a8bdcc"
+babel-plugin-transform-regenerator@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-regenerator/-/babel-plugin-transform-regenerator-7.0.0-alpha.20.tgz#b29dd058489211a8e4e0eb7470984862a9a04c20"
   dependencies:
-    regenerator-transform "0.9.11"
+    regenerator-transform "0.10.0"
 
 babel-plugin-transform-regenerator@^6.24.1:
   version "6.24.1"
@@ -1354,11 +1354,11 @@ babel-plugin-transform-strict-mode@7.0.0-alpha.16:
   dependencies:
     babel-types "7.0.0-alpha.16"
 
-babel-plugin-transform-strict-mode@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-strict-mode/-/babel-plugin-transform-strict-mode-7.0.0-alpha.19.tgz#e8f5fdcb8f71b00ec32e3e2ed88c0dcd4d949bfe"
+babel-plugin-transform-strict-mode@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-strict-mode/-/babel-plugin-transform-strict-mode-7.0.0-alpha.20.tgz#4b7c54af6fe0cb8742a6a821d5cf55b103afdcbc"
   dependencies:
-    babel-types "7.0.0-alpha.19"
+    babel-types "7.0.0-alpha.20"
 
 babel-plugin-transform-strict-mode@^6.24.1:
   version "6.24.1"
@@ -1535,13 +1535,13 @@ babel-template@7.0.0-alpha.16:
     babylon "7.0.0-beta.17"
     lodash "^4.2.0"
 
-babel-template@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-template/-/babel-template-7.0.0-alpha.19.tgz#6ef867c43dbf8c204a22f9cfd62101c64c8ade9c"
+babel-template@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-template/-/babel-template-7.0.0-alpha.20.tgz#2ddab1b03a9eb8a98e7f9920cb4dc1816430db80"
   dependencies:
-    babel-traverse "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
-    babylon "7.0.0-beta.18"
+    babel-traverse "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
+    babylon "7.0.0-beta.22"
     lodash "^4.2.0"
 
 babel-template@^6.16.0, babel-template@^6.24.1:
@@ -1568,15 +1568,15 @@ babel-traverse@7.0.0-alpha.16:
     invariant "^2.2.0"
     lodash "^4.2.0"
 
-babel-traverse@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-traverse/-/babel-traverse-7.0.0-alpha.19.tgz#083f3f00a413fd9ec38383c0d5ae79511d9ed53d"
+babel-traverse@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-traverse/-/babel-traverse-7.0.0-alpha.20.tgz#f11f15ad4db4d911880ea241fed1c5643bbfa377"
   dependencies:
-    babel-code-frame "7.0.0-alpha.19"
-    babel-helper-function-name "7.0.0-alpha.19"
-    babel-messages "7.0.0-alpha.19"
-    babel-types "7.0.0-alpha.19"
-    babylon "7.0.0-beta.19"
+    babel-code-frame "7.0.0-alpha.20"
+    babel-helper-function-name "7.0.0-alpha.20"
+    babel-messages "7.0.0-alpha.20"
+    babel-types "7.0.0-alpha.20"
+    babylon "7.0.0-beta.22"
     debug "^2.2.0"
     globals "^10.0.0"
     invariant "^2.2.0"
@@ -1604,9 +1604,9 @@ babel-types@7.0.0-alpha.16:
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-babel-types@7.0.0-alpha.19:
-  version "7.0.0-alpha.19"
-  resolved "https://registry.yarnpkg.com/babel-types/-/babel-types-7.0.0-alpha.19.tgz#8222ae72f349c51758a9451486783a7b9bffc605"
+babel-types@7.0.0-alpha.20:
+  version "7.0.0-alpha.20"
+  resolved "https://registry.yarnpkg.com/babel-types/-/babel-types-7.0.0-alpha.20.tgz#1c1ae1068b61360fbacd1a52a63bccc96d80da8f"
   dependencies:
     esutils "^2.0.2"
     lodash "^4.2.0"
@@ -1625,13 +1625,9 @@ babylon@7.0.0-beta.17:
   version "7.0.0-beta.17"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.17.tgz#2aad4d6764f409dfb3ac216d855dc93d70d37911"
 
-babylon@7.0.0-beta.18:
-  version "7.0.0-beta.18"
-  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.18.tgz#5c23ee3fdb66358aabf3789779319c5b78a233c7"
-
-babylon@7.0.0-beta.19:
-  version "7.0.0-beta.19"
-  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.19.tgz#e928c7e807e970e0536b078ab3e0c48f9e052503"
+babylon@7.0.0-beta.22:
+  version "7.0.0-beta.22"
+  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.22.tgz#74f0ad82ed7c7c3cfeab74cf684f815104161b65"
 
 babylon@^6.11.0, babylon@^6.15.0, babylon@^6.17.0:
   version "6.17.0"
@@ -1969,6 +1965,7 @@ compat-table@kangax/compat-table#d88c80ea6dcbc7064112eb46bb020718107892f7:
     babel-preset-stage-0 latest
     chalk "^1.1.3"
     cheerio "^0.20.0"
+    closurecompiler latest
     core-js latest
     es5-shim latest
     es6-shim latest
@@ -1977,7 +1974,6 @@ compat-table@kangax/compat-table#d88c80ea6dcbc7064112eb46bb020718107892f7:
     esdown latest
     espree latest
     esprima latest
-    google-closure-compiler-js "^20170521.0.0"
     jshint latest
     jstransform latest
     lodash.pickby "^4.6.0"
@@ -4201,6 +4197,14 @@ regenerate@^1.2.1, regenerate@^1.3.2, regenerate@latest:
 regenerator-runtime@^0.10.0:
   version "0.10.5"
   resolved "https://registry.yarnpkg.com/regenerator-runtime/-/regenerator-runtime-0.10.5.tgz#336c3efc1220adcedda2c9fab67b5a7955a33658"
+
+regenerator-transform@0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/regenerator-transform/-/regenerator-transform-0.10.0.tgz#f9ab3eac9cc2de38431d996a6a8abf1c50f2e459"
+  dependencies:
+    babel-runtime "^6.18.0"
+    babel-types "^6.19.0"
+    private "^0.1.6"
 
 regenerator-transform@0.9.11:
   version "0.9.11"

@@ -1,6 +1,8 @@
 import "babel-polyfill/lib/regenerator-runtime/runtime";
 
-var _marked = [a].map(regeneratorRuntime.mark);
+var _marked =
+/*#__PURE__*/
+regeneratorRuntime.mark(a);
 
 function a() {
   return regeneratorRuntime.wrap(function a$(_context) {
@@ -11,5 +13,5 @@ function a() {
           return _context.stop();
       }
     }
-  }, _marked[0], this);
+  }, _marked, this);
 }

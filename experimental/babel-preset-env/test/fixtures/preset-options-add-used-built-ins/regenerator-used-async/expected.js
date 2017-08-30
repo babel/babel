@@ -2,7 +2,9 @@ import "babel-polyfill/lib/core-js/modules/es6.promise";
 import "babel-polyfill/lib/regenerator-runtime/runtime";
 
 var a = function () {
-  var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+  var _ref = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee() {
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {

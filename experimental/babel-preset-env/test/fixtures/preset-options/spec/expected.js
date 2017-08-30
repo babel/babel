@@ -1,6 +1,6 @@
 "use strict";
 
-var _this = undefined;
+var _this = void 0;
 
 function _newArrowCheck(innerThis, boundThis) { if (innerThis !== boundThis) { throw new TypeError("Cannot instantiate an arrow function"); } }
 
@@ -10,4 +10,4 @@ var x = function x() {
   _newArrowCheck(this, _this);
 
   return "foo".concat(bar);
-}.bind(undefined);
+}.bind(void 0);
