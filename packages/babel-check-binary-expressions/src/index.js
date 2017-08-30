@@ -6,10 +6,9 @@ function isBigInt(x) {
 }
 
 function BigIntUnaryMinus(left) {
-  return new global.BigInt(left.num.negated().toString());
+  return BigIntMultiply(new global.BigInt("-1"), left);
 }
 
-// TODO: investigate BigNumber.js limit on pow?
 function BigIntExp(left, right) {
   return new global.BigInt(left.num.pow(right.num).toString());
 }
@@ -19,15 +18,10 @@ function BigIntMultiply(left, right) {
 }
 
 function BigIntDivide(left, right) {
-  // setting from the BigNumber library
-  const ROUND_TOWARD_ZERO = 1;
-
   if (left.toString() === "0") {
     throw new RangeError();
   }
-  return new global.BigInt(
-    left.num.div(right.num).toFixed(0, ROUND_TOWARD_ZERO).toString(),
-  );
+  return new global.BigInt(left.num.divide(right.num).toString());
 }
 
 function BigIntRemainder(left, right) {
@@ -46,16 +40,9 @@ function BigIntSubtract(left, right) {
 }
 
 function BigIntLeftShift(left, right) {
-  // setting from the BigNumber library
-  const ROUND_FLOOR = 3;
-  const bigInt2 = new global.BigInt("2");
-
-  if (right < 0) {
-    const divResult = left.num.div(BigIntExp(bigInt2, BigIntUnaryMinus(right)));
-    const rounded = divResult.toFixed(0, ROUND_FLOOR);
-    return new global.BigInt(rounded.toString());
-  }
-  return BigIntMultiply(left, BigIntExp(bigInt2, right));
+  // TODO: ask if lib's limit of value of right to [-9007199254740992, 9007199254740992]
+  // is ok
+  return new global.BigInt(left.num.shiftLeft(right.num).toString());
 }
 
 function BigIntSignedRightShift(left, right) {
@@ -66,16 +53,16 @@ function BigIntUnSignedRightShift() {
   throw new TypeError();
 }
 
-function BigIntBitwiseOR() {
-  // TODO
+function BigIntBitwiseOR(left, right) {
+  return new global.BigInt(left.num.or(right.num).toString());
 }
 
-function BigIntBitwiseAND() {
-  // TODO
+function BigIntBitwiseAND(left, right) {
+  return new global.BigInt(left.num.and(right.num).toString());
 }
 
-function BigIntBitwiseXOR() {
-  // TODO
+function BigIntBitwiseXOR(left, right) {
+  return new global.BigInt(left.num.xor(right.num).toString());
 }
 
 function checkTypesMatch(left, right, operator) {
