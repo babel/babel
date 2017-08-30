@@ -5,4 +5,3 @@ global._babelPolyfill = true;
 
 import "core-js/shim";
 import "regenerator-runtime/runtime";
-import "./bigint/bigint";

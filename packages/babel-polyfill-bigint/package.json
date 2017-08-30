@@ -1,0 +1,12 @@
+{
+  "name": "babel-polyfill-bigint",
+  "version": "7.0.0-alpha.19",
+  "description": "Provides polyfill necessary for using BigInt",
+  "homepage": "https://babeljs.io/",
+  "license": "MIT",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-polyfill-bigint",
+  "main": "lib/index.js",
+  "dependencies": {
+    "big-integer": "^1.6.24"
+  }
+}
