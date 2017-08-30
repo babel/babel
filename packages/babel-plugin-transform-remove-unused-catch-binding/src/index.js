@@ -1,12 +1,13 @@
 import syntaxOptionalCatchBinding from "babel-plugin-syntax-optional-catch-binding";
 
-export default function() {
+export default function(babel) {
+  const { types: t } = babel;
   return {
     inherits: syntaxOptionalCatchBinding,
 
     visitor: {
       CatchClause(path) {
-        if (path.node.param === null) {
+        if (path.node.param === null || !t.isIdentifier(path.node.param)) {
           return;
         }
         const binding = path.scope.getOwnBinding(path.node.param.name);
