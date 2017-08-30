@@ -10,11 +10,7 @@ export default function() {
           return;
         }
         const binding = path.scope.getOwnBinding(path.node.param.name);
-        if (
-          binding.constantViolations.filter(el => {
-            return el.node.left.name === path.node.param.name;
-          }).length > 0
-        ) {
+        if (binding.constantViolations.length > 0) {
           return;
         }
         if (path.node.param && !binding.referenced) {
