@@ -1,6 +1,6 @@
 # babel-plugin-transform-class-properties
 
-> This plugin transforms es2015 static class properties as well as properties declared with the es2016 property initializer syntax.
+> This plugin transforms class properties
 
 ## Example
 
@@ -24,7 +24,7 @@ Below is a class with four class properties which will be transformed.
   let myBork = new Bork;
 
   //Property initializers are not on the prototype.
-  console.log(myBork.prototype.boundFunction); // > undefined
+  console.log(myBork.__proto__.boundFunction); // > undefined
 
   //Bound functions are bound to the class instance.
   console.log(myBork.boundFunction.call(undefined)); // > "bork"
