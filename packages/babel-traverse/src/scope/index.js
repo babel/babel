@@ -165,11 +165,14 @@ export default class Scope {
   constructor(path: NodePath) {
     const { node } = path;
     const cached = scopeCache.get(node);
-    if (cached) return cached;
+    // Sometimes, a scopable path is placed higher in the AST tree.
+    // In these cases, have to create a new Scope.
+    if (cached && cached.path === path) {
+      return cached;
+    }
     scopeCache.set(node, this);
 
     this.uid = uid++;
-    this.hub = path.hub;
 
     this.block = node;
     this.path = path;
@@ -196,6 +199,10 @@ export default class Scope {
 
   get parentBlock() {
     return this.path.parent;
+  }
+
+  get hub() {
+    return this.path.hub;
   }
 
   /**
