@@ -53,7 +53,7 @@ getV8Flags(function(err, v8Flags) {
       case "-gc":
         args.unshift("--expose-gc");
         break;
-        
+
       case "--expose-http2":
         args.unshift("--expose-http2");
         break;
