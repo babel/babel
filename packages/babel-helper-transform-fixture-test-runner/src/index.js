@@ -11,7 +11,6 @@ import extend from "lodash/extend";
 import merge from "lodash/merge";
 import resolve from "resolve";
 import assert from "assert";
-import chai from "chai";
 import fs from "fs";
 import path from "path";
 import vm from "vm";
@@ -132,7 +131,7 @@ function wrapPackagesArray(type, names, optionsDir) {
 
 function run(task) {
   const actual = task.actual;
-  const expect = task.expect;
+  const expected = task.expect;
   const exec = task.exec;
   const opts = task.options;
   const optionsDir = task.optionsDir;
@@ -185,28 +184,26 @@ function run(task) {
   }
 
   let actualCode = actual.code;
-  const expectCode = expect.code;
+  const expectCode = expected.code;
   if (!execCode || actualCode) {
     result = babel.transform(actualCode, getOpts(actual));
     if (
-      !expect.code &&
+      !expected.code &&
       result.code &&
       !opts.throws &&
-      fs.statSync(path.dirname(expect.loc)).isDirectory() &&
+      fs.statSync(path.dirname(expected.loc)).isDirectory() &&
       !process.env.CI
     ) {
-      console.log(`New test file created: ${expect.loc}`);
-      fs.writeFileSync(expect.loc, `${result.code}\n`);
+      console.log(`New test file created: ${expected.loc}`);
+      fs.writeFileSync(expected.loc, `${result.code}\n`);
     } else {
       actualCode = result.code.trim();
-      chai
-        .expect(actualCode)
-        .to.be.equal(expectCode, actual.loc + " !== " + expect.loc);
+      expect(actualCode).toEqual(expectCode);
     }
   }
 
   if (task.sourceMap) {
-    chai.expect(result.map).to.deep.equal(task.sourceMap);
+    expect(result.map).toEqual(task.sourceMap);
   }
 
   if (task.sourceMappings) {
@@ -215,10 +212,8 @@ function run(task) {
     task.sourceMappings.forEach(function(mapping) {
       const actual = mapping.original;
 
-      const expect = consumer.originalPositionFor(mapping.generated);
-      chai
-        .expect({ line: expect.line, column: expect.column })
-        .to.deep.equal(actual);
+      const expected = consumer.originalPositionFor(mapping.generated);
+      expect({ line: expected.line, column: expected.column }).toEqual(actual);
     });
   }
 

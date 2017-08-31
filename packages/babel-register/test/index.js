@@ -1,5 +1,5 @@
 import sourceMapSupport from "source-map-support";
-import chai from "chai";
+import path from "path";
 
 const DATA_ES2015 = require.resolve("./__data__/es2015");
 const GEN_ERROR = require.resolve("./__data__/gen_error");
@@ -36,7 +36,7 @@ describe("@babel/register", function() {
     }
   }
 
-  before(() => {
+  beforeAll(() => {
     const js = require("default-require-extensions/js");
     oldCompiler = require.extensions[".js"];
     require.extensions[".js"] = js;
@@ -45,7 +45,7 @@ describe("@babel/register", function() {
     });
   });
 
-  after(() => {
+  afterAll(() => {
     require.extensions[".js"] = oldCompiler;
   });
 
@@ -58,22 +58,20 @@ describe("@babel/register", function() {
   it("registers correctly", () => {
     setupRegister();
 
-    chai.expect(require(DATA_ES2015)).to.be.ok;
+    expect(require(DATA_ES2015)).toBeTruthy();
   });
 
   it("reverts correctly", () => {
     setupRegister();
 
-    chai.expect(require(DATA_ES2015)).to.be.ok;
+    expect(require(DATA_ES2015)).toBeTruthy();
     delete require.cache[DATA_ES2015];
 
     revertRegister();
 
-    chai
-      .expect(() => {
-        require(DATA_ES2015);
-      })
-      .to.throw(SyntaxError);
+    expect(() => {
+      require(DATA_ES2015);
+    }).toThrow(SyntaxError);
   });
 
   it("does not install source map support if asked not to", () => {

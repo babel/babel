@@ -6,9 +6,14 @@ if [ -z "$TEST_GREP" ]; then
 fi
 
 node="node"
+runSequentially=""
 
 if [ "$TEST_DEBUG" ]; then
    node="node --inspect --debug-brk"
 fi
 
-$node node_modules/mocha/bin/_mocha `scripts/_get-test-directories.sh` --opts test/mocha.opts --grep "$TEST_GREP"
+if [ -n "$CI" ]; then
+  runSequentially="--runInBand"
+fi
+
+$node node_modules/.bin/jest "$TEST_GREP"
