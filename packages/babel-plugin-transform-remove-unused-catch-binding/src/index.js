@@ -7,16 +7,27 @@ export default function(babel) {
 
     visitor: {
       CatchClause(path) {
-        if (path.node.param === null || !t.isIdentifier(path.node.param)) {
+        if (path.node.param === null) {
           return;
         }
-        const binding = path.scope.getOwnBinding(path.node.param.name);
-        if (binding.constantViolations.length > 0) {
-          return;
-        }
-        if (!binding.referenced) {
-          const paramPath = path.get("param");
-          paramPath.remove();
+        if (t.isObjectPattern(path.node.param)) {
+          const binding = path.scope.getOwnBinding(
+            path.node.param.properties[0].value.name,
+          );
+          if (binding.references <= 1) {
+            const paramPath = path.get("param");
+            paramPath.remove();
+            return;
+          }
+        } else {
+          const binding = path.scope.getOwnBinding(path.node.param.name);
+          if (binding.constantViolations.length > 0) {
+            return;
+          }
+          if (!binding.referenced) {
+            const paramPath = path.get("param");
+            paramPath.remove();
+          }
         }
       },
     },
