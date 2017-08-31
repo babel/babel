@@ -1,4 +1,10 @@
 #!/bin/bash
 set -e
 
-node_modules/.bin/jest --coverage
+jestArgs="--coverage"
+
+if [ -n "$CI" ]; then
+  jestArgs="${jestArgs} --runInBand"
+fi
+
+node_modules/.bin/jest $jestArgs
