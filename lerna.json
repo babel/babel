@@ -4,13 +4,13 @@
   "changelog": {
     "repo": "babel/babel",
     "labels": {
-      "tag: spec compliancy": ":eyeglasses: Spec Compliancy",
-      "tag: breaking change": ":boom: Breaking Change",
-      "tag: new feature": ":rocket: New Feature",
-      "tag: bug fix": ":bug: Bug Fix",
-      "tag: polish": ":nail_care: Polish",
-      "tag: documentation": ":memo: Documentation",
-      "tag: internal": ":house: Internal"
+      "Tag: Spec Compliancy": ":eyeglasses: Spec Compliancy",
+      "Tag: Breaking Change": ":boom: Breaking Change",
+      "Tag: New Feature": ":rocket: New Feature",
+      "Tag: Bug Fix": ":bug: Bug Fix",
+      "Tag: Polish": ":nail_care: Polish",
+      "Tag: Docs": ":memo: Documentation",
+      "Tag: Internal": ":house: Internal"
     }
   },
   "cacheDir": ".changelog",
