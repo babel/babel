@@ -17,7 +17,7 @@ ifneq ("$(BABEL_ENV)", "cov")
 endif
 
 build-standalone:
-	./node_modules/.bin/gulp build-babel-standalone --cwd=packages/babel-standalone/
+	./node_modules/.bin/gulp build-babel-standalone
 
 build-dist: build
 	cd packages/babel-polyfill; \
