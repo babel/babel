@@ -16,7 +16,10 @@ export default function(code: string, opts?: Object): Function {
   } catch (error) {
     if (error.stack) {
       // error.stack does not exists in IE <= 9
-      stack = error.stack.split("\n").slice(1).join("\n");
+      stack = error.stack
+        .split("\n")
+        .slice(1)
+        .join("\n");
     }
   }
 
