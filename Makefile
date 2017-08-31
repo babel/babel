@@ -32,6 +32,9 @@ bootstrap-flow: clean
 test-flow:
 	node scripts/run_flow_tests.js
 
+test-flow-update-whitelist:
+	node scripts/run_flow_tests.js --update-whitelist
+
 bootstrap-test262: clean
 	mkdir ./build
 	git clone https://github.com/tc39/test262.git ./build/test262

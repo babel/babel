@@ -5,6 +5,28 @@ const fs = require("fs");
 const chalk = require("chalk");
 const parse = require("..").parse;
 
+const TESTS_FOLDER = path.join(__dirname, "../build/flow/src/parser/test/flow");
+const WHITELIST_PATH = path.join(__dirname, "./flow_tests_whitelist.txt");
+
+const shouldUpdateWhitelist = process.argv.indexOf("--update-whitelist") > 0;
+
+function map_get_default(map, key, defaultConstructor) {
+  if (map.has(key)) {
+    return map.get(key);
+  }
+  const value = new defaultConstructor();
+  map.set(key, value);
+  return value;
+}
+
+function get_whitelist(filename) {
+  return fs
+    .readFileSync(filename, "utf8")
+    .split("\n")
+    .map(line => line.replace(/#.*$/, "").trim())
+    .filter(Boolean);
+}
+
 function list_files(root, dir) {
   const files = fs.readdirSync(dir ? path.join(root, dir) : root);
   let result = [];
@@ -22,7 +44,7 @@ function list_files(root, dir) {
 
 function get_tests(root_dir) {
   const files = list_files(root_dir);
-  const tests = {};
+  const tests = new Map();
   for (let i = 0; i < files.length; i++) {
     const file = files[i];
     const test_name = path.dirname(file);
@@ -34,18 +56,16 @@ function get_tests(root_dir) {
       continue;
     }
 
-    const cases = (tests[test_name] = tests[test_name] || {});
-    const case_ = (cases[case_name] = cases[case_name] || {});
+    const cases = map_get_default(tests, test_name, Map);
+    const case_ = map_get_default(cases, case_name, Object);
 
-    const content = fs.readFileSync(path.join(root_dir, file), {
-      encoding: "utf8",
-    });
+    const content = fs.readFileSync(path.join(root_dir, file), "utf8");
     const ext = case_parts[case_parts.length - 1];
     const kind =
       case_parts.length > 2 ? case_parts[case_parts.length - 2] : null;
 
     if (ext === "js") {
-      case_.name = case_name;
+      case_.file = file;
       case_.content = content;
     } else if (ext === "json" && kind === "tree") {
       case_.expected_ast = JSON.parse(content);
@@ -56,25 +76,23 @@ function get_tests(root_dir) {
   return tests;
 }
 
-function get_hardcoded_tests() {
-  const tests = get_tests(
-    path.join(__dirname, "../build/flow/src/parser/test/flow")
-  );
-  const result = {};
-  for (const section in tests) {
-    if (tests.hasOwnProperty(section)) {
-      const test = tests[section];
-      const cases = [];
-      // TODO: use Object.values if we require new enough node
-      for (const case_ in test) {
-        if (test.hasOwnProperty(case_)) {
-          cases.push(test[case_]);
-        }
-      }
-      result[section] = { tests: cases };
-    }
-  }
-  return result;
+function update_whitelist(summary) {
+  const contains = (tests, file) =>
+    tests.some(({ test }) => test.file === file);
+
+  const result = fs
+    .readFileSync(WHITELIST_PATH, "utf8")
+    .split("\n")
+    .filter(line => {
+      const file = line.replace(/#.*$/, "").trim();
+      return (
+        !contains(summary.disallowed.success, file) &&
+        !contains(summary.disallowed.failure, file) &&
+        summary.unrecognized.indexOf(file) === -1
+      );
+    })
+    .join("\n");
+  fs.writeFileSync(WHITELIST_PATH, result);
 }
 
 const options = {
@@ -90,17 +108,31 @@ const flowOptionsMapping = {
   esproposal_decorators: "decorators",
 };
 
-let failedTests = 0;
-let successTests = 0;
-const hardcodedTests = get_hardcoded_tests();
-Object.keys(hardcodedTests).forEach(sectionName => {
-  console.log("");
-  console.log(`### ${sectionName} ###`);
-  hardcodedTests[sectionName].tests.forEach(test => {
+const summary = {
+  passed: true,
+  allowed: {
+    success: [],
+    failure: [],
+  },
+  disallowed: {
+    success: [],
+    failure: [],
+  },
+  unrecognized: []
+};
+
+const tests = get_tests(TESTS_FOLDER);
+const whitelist = get_whitelist(WHITELIST_PATH);
+
+const unrecognized = new Set(whitelist);
+
+tests.forEach(section => {
+  section.forEach(test => {
     const shouldSuccess =
       test.expected_ast &&
       (!Array.isArray(test.expected_ast.errors) ||
         test.expected_ast.errors.length === 0);
+    const inWhitelist = whitelist.indexOf(test.file) > -1;
 
     const babylonOptions = Object.assign({}, options);
     babylonOptions.plugins = babylonOptions.plugins.slice();
@@ -132,53 +164,109 @@ Object.keys(hardcodedTests).forEach(sectionName => {
       } catch (e) {}
     }
 
-    if ((!failed && shouldSuccess) || (failed && !shouldSuccess)) {
-      successTests++;
-      console.log(chalk.green(`✔ ${test.name}`));
-    } else {
-      failedTests++;
-      printErrorMessage(
-        test.name,
-        exception,
-        shouldSuccess,
-        test.expected_ast,
-        babylonOptions
-      );
-    }
+    const isSuccess = shouldSuccess !== failed;
+    const isAllowed = isSuccess !== inWhitelist;
+
+    summary[isAllowed ? "allowed" : "disallowed"][
+      isSuccess ? "success" : "failure"
+    ].push({ test, exception, shouldSuccess, babylonOptions });
+    summary.passed &= isAllowed;
+
+    unrecognized.delete(test.file);
+
+    process.stdout.write(chalk.gray("."));
   });
 });
 
-function printErrorMessage(
-  code,
-  exception,
-  shouldSuccess,
-  expectedAst,
-  babylonOptions
-) {
-  console.log(chalk.red(`✘ ${code}`));
-  console.log(
-    chalk.yellow(
-      `  Should ${shouldSuccess
-        ? "parse successfully"
-        : `fail parsing`}, but did not`
-    )
-  );
-  if (exception)
-    console.log(chalk.yellow(`  Failed with: \`${exception.message}\``));
-  if (Array.isArray(expectedAst.errors) && expectedAst.errors.length > 0) {
-    console.log(chalk.yellow("  Expected error message similar to:"));
-    expectedAst.errors.forEach(error => {
-      console.log(`    • ${error.message}`);
-    });
-  }
+summary.unrecognized = Array.from(unrecognized);
+summary.passed &= summary.unrecognized.length === 0;
 
-  console.log(
-    chalk.yellow(`  Active plugins: ${JSON.stringify(babylonOptions.plugins)}`)
+// This is needed because, after the dots written using
+// `process.stdout.write(".")` there is no final newline
+console.log();
+
+if (summary.disallowed.failure.length || summary.disallowed.success.length) {
+  console.log("\n-- FAILED TESTS --");
+  summary.disallowed.failure.forEach(
+    ({ test, shouldSuccess, exception, babylonOptions }) => {
+      console.log(chalk.red(`✘ ${test.file}`));
+      if (shouldSuccess) {
+        console.log(chalk.yellow("  Should parse successfully, but did not"));
+        console.log(chalk.yellow(`  Failed with: \`${exception.message}\``));
+      } else {
+        console.log(chalk.yellow("  Should fail parsing, but did not"));
+      }
+      console.log(
+        chalk.yellow(
+          `  Active plugins: ${JSON.stringify(babylonOptions.plugins)}`
+        )
+      );
+    }
+  );
+  summary.disallowed.success.forEach(
+    ({ test, shouldSuccess, babylonOptions }) => {
+      console.log(chalk.red(`✘ ${test.file}`));
+      if (shouldSuccess) {
+        console.log(
+          chalk.yellow(
+            "  Correctly parsed successfully, but" +
+              " was disallowed by the whitelist"
+          )
+        );
+      } else {
+        console.log(
+          chalk.yellow(
+            "  Correctly failed parsing, but" +
+              " was disallowed by the whitelist"
+          )
+        );
+      }
+      console.log(
+        chalk.yellow(
+          `  Active plugins: ${JSON.stringify(babylonOptions.plugins)}`
+        )
+      );
+    }
   );
 }
 
-console.log();
-console.log(chalk.green(`✔ ${successTests} tests passed`));
-console.log(chalk.red(`✘ ${failedTests} tests failed`));
+console.log("-- SUMMARY --");
+console.log(
+  chalk.green("✔ " + summary.allowed.success.length + " tests passed")
+);
+console.log(
+  chalk.green(
+    "✔ " +
+      summary.allowed.failure.length +
+      " tests failed but were allowed in the whitelist"
+  )
+);
+console.log(
+  chalk.red("✘ " + summary.disallowed.failure.length + " tests failed")
+);
+console.log(
+  chalk.red(
+    "✘ " +
+      summary.disallowed.success.length +
+      " tests passed but were disallowed in the whitelist"
+  )
+);
+console.log(
+  chalk.red(
+    "✘ " +
+      summary.unrecognized.length +
+      " tests specified in the whitelist were not found"
+  )
+);
 
-process.exit(failedTests > 0 ? 1 : 0);
+// Some padding to separate the output from the message `make`
+// adds at the end of failing scripts
+console.log();
+
+
+if (shouldUpdateWhitelist) {
+  update_whitelist(summary);
+  console.log("\nWhitelist updated");
+} else {
+  process.exit(summary.passed ? 0 : 1);
+}
