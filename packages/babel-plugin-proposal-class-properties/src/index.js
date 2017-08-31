@@ -48,41 +48,33 @@ export default declare((api, options) => {
     },
   };
 
-  const collectPropertiesVisitor = {
-    enter(path) {
-      if (path.isProperty()) return;
-      if (path.isClassMethod({ kind: "constructor" })) this.constructor = path;
-      path.skip();
-    },
+  function collectPropertiesVisitor(body, propNames) {
+    for (const path of body.get("body")) {
+      if (path.isClassMethod({ kind: "constructor" })) {
+        propNames.constructor = path;
+        continue;
+      }
 
-    ClassProperty(path) {
+      if (!path.isProperty()) continue;
+
       const { key, computed, static: isStatic } = path.node;
+      propNames[isStatic ? "staticProps" : "instanceProps"].push(path);
 
-      this[isStatic ? "staticProps" : "instanceProps"].push(path);
-
-      if (computed) return;
+      if (computed) continue;
 
       const name = t.isIdentifier(key) ? key.name : key.value;
-      const seen = isStatic ? this.publicStaticProps : this.publicProps;
+      const seen =
+        propNames[
+          path.isClassPrivateProperty()
+            ? "privateProps"
+            : isStatic ? "publicStaticProps" : "publicProps"
+        ];
       if (seen[name]) {
         throw path.buildCodeFrameError("duplicate class field");
       }
       seen[name] = true;
-    },
-
-    ClassPrivateProperty(path) {
-      const { key, static: isStatic } = path.node;
-      const { name } = key;
-
-      this[isStatic ? "staticProps" : "instanceProps"].push(path);
-
-      const seen = this.privateProps;
-      if (seen[name]) {
-        throw path.buildCodeFrameError("duplicate class field");
-      }
-      seen[name] = true;
-    },
-  };
+    }
+  }
 
   const staticErrorVisitor = {
     Class(path) {
@@ -353,7 +345,7 @@ export default declare((api, options) => {
           staticProps,
           constructor: null,
         };
-        body.traverse(collectPropertiesVisitor, propNames);
+        collectPropertiesVisitor(body, propNames);
         body.traverse(staticErrorVisitor, propNames);
 
         if (!instanceProps.length && !staticProps.length) return;
