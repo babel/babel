@@ -4,14 +4,15 @@ import path from "path";
 
 describe("addon resolution", function() {
   const base = path.join(__dirname, "fixtures", "resolution");
+  let cwd;
 
   beforeEach(function() {
-    this.cwd = process.cwd();
+    cwd = process.cwd();
     process.chdir(base);
   });
 
   afterEach(function() {
-    process.chdir(this.cwd);
+    process.chdir(cwd);
   });
 
   it("should find module: presets", function() {

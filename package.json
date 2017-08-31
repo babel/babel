@@ -16,9 +16,10 @@
     "@babel/preset-flow": "7.0.0-beta.40",
     "@babel/preset-stage-0": "7.0.0-beta.40",
     "@babel/register": "7.0.0-beta.40",
+    "babel-core": "^7.0.0-0",
     "babel-eslint": "^8.0.1",
+    "babel-jest": "^22.4.1",
     "babel-loader": "8.0.0-beta.0",
-    "babel-plugin-istanbul": "^4.1.5",
     "babel-plugin-transform-charcodes": "^0.1.0",
     "babylon": "7.0.0-beta.40",
     "browserify": "^13.1.1",
@@ -44,13 +45,12 @@
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
     "husky": "^0.14.3",
+    "jest": "^22.4.2",
     "lerna": "2.0.0",
     "lerna-changelog": "^0.5.0",
     "lint-staged": "^6.0.1",
     "lodash": "^4.2.0",
     "merge-stream": "^1.0.1",
-    "mocha": "^3.0.0",
-    "nyc": "^11.0.3",
     "output-file-sync": "^2.0.0",
     "prettier": "1.10.2",
     "pump": "^1.0.2",
@@ -71,20 +71,44 @@
     "npm": ">= 2.x <= 5.x",
     "yarn": ">=0.27.5 || >=1.0.0-20170811"
   },
-  "nyc": {
-    "all": true,
-    "exclude": [
-      "scripts/*.js",
-      "packages/*/test/**",
-      "packages/babel-standalone/**",
-      "codemods/*/test/**"
-    ],
-    "sourceMap": false,
-    "instrument": false
-  },
   "lint-staged": {
     "*.js": [
       "eslint --format=codeframe --rulesdir='./scripts/eslint_rules'"
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "packages/*/src/**/*.js",
+      "codemods/*/src/**/*.js"
+    ],
+    "testRegex": "./(packages|codemods)/[^/]+/test/.+\\.js$",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/test/fixtures/",
+      "/test/debug-fixtures/",
+      "/babylon/test/expressions/",
+      "/test/tmp/",
+      "/test/__data__/",
+      "/test/helpers/",
+      "<rootDir>/test/warning.js",
+      "<rootDir>/build/",
+      "_browser.js"
+    ],
+    "testEnvironment": "node",
+    "setupTestFrameworkScriptFile": "<rootDir>/test/testSetupFile.js",
+    "transformIgnorePatterns": [
+      "/node_modules/",
+      "/test/fixtures/",
+      "/test/tmp/",
+      "/test/__data__/",
+      "/lib/"
+    ],
+    "modulePaths": [
+      "<rootDir>/packages/"
+    ],
+    "modulePathIgnorePatterns": [
+      "/test/fixtures/",
+      "<rootDir>/build/"
     ]
   }
 }

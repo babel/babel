@@ -2,7 +2,7 @@ import * as t from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
 
-suite("cloneNode", function() {
+describe("cloneNode", function() {
   it("should handle undefined", function() {
     const node = undefined;
     const cloned = t.cloneNode(node);

@@ -1,5 +1,5 @@
 import assert from "assert";
-import getTargets from "../src/targets-parser";
+import getTargets from "../lib/targets-parser";
 
 describe("getTargets", () => {
   it("parses", () => {

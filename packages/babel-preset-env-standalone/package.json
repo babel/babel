@@ -11,8 +11,7 @@
   "devDependencies": {
     "@babel/plugin-transform-new-target": "7.0.0-beta.40",
     "@babel/preset-env": "7.0.0-beta.40",
-    "@babel/standalone": "7.0.0-beta.40",
-    "mock-require": "^2.0.2"
+    "@babel/standalone": "7.0.0-beta.40"
   },
   "keywords": [
     "babel",

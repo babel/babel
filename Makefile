@@ -81,7 +81,7 @@ test-ci:
 test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
 	BABEL_ENV=cov make bootstrap
-	./scripts/test-cov.sh
+	TEST_TYPE=cov ./scripts/test-cov.sh
 	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
 bootstrap-flow:
@@ -130,8 +130,8 @@ publish:
 
 bootstrap:
 	make clean-all
-	yarn
-	./node_modules/.bin/lerna bootstrap
+	yarn --ignore-engines
+	./node_modules/.bin/lerna bootstrap -- --ignore-engines
 	make build
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
