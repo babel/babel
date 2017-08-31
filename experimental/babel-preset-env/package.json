@@ -52,7 +52,7 @@
     "babel-plugin-transform-es2015-unicode-regex": "7.0.0-alpha.20",
     "babel-plugin-transform-exponentiation-operator": "7.0.0-alpha.20",
     "babel-plugin-transform-regenerator": "7.0.0-alpha.20",
-    "browserslist": "^2.1.2",
+    "browserslist": "^2.4.0",
     "invariant": "^2.2.2",
     "semver": "^5.3.0"
   },
