@@ -19,6 +19,15 @@ export default function(babel) {
             paramPath.remove();
             return;
           }
+        } else if (t.isArrayPattern(path.node.param)) {
+          const binding = path.scope.getOwnBinding(
+            path.node.param.elements[0].name,
+          );
+          if (!binding.referenced) {
+            const paramPath = path.get("param");
+            paramPath.remove();
+            return;
+          }
         } else {
           const binding = path.scope.getOwnBinding(path.node.param.name);
           if (binding.constantViolations.length > 0) {

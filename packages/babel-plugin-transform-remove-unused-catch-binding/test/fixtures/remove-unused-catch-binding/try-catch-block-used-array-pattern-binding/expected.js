@@ -1,7 +1,5 @@
 try {
   throw 0;
-} catch ({
-  message
-}) {
+} catch ([message]) {
   console.log(message);
 }
