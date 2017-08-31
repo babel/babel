@@ -11,12 +11,12 @@ import path from "path";
 const debug = buildDebug("babel:config:loading:files:plugins");
 
 const EXACT_RE = /^module:/;
-const BABEL_PLUGIN_PREFIX_RE = /^(?!@|module:|[^/\/]+[/\/]|babel-plugin-)/;
-const BABEL_PRESET_PREFIX_RE = /^(?!@|module:|[^/\/]+[/\/]|babel-preset-)/;
-const BABEL_PLUGIN_ORG_RE = /^(@babel[/\/])(?!plugin-|[^/\/]+[/\/])/;
-const BABEL_PRESET_ORG_RE = /^(@babel[/\/])(?!preset-|[^/\/]+[/\/])/;
-const OTHER_PLUGIN_ORG_RE = /^(@(?!babel[/\/])[^/\/]+[/\/])(?!babel-plugin-|[^/\/]+[/\/])/;
-const OTHER_PRESET_ORG_RE = /^(@(?!babel[/\/])[^/\/]+[/\/])(?!babel-preset-|[^/\/]+[/\/])/;
+const BABEL_PLUGIN_PREFIX_RE = /^(?!@|module:|[^/]+\/|babel-plugin-)/;
+const BABEL_PRESET_PREFIX_RE = /^(?!@|module:|[^/]+\/|babel-preset-)/;
+const BABEL_PLUGIN_ORG_RE = /^(@babel\/)(?!plugin-|[^/]+\/)/;
+const BABEL_PRESET_ORG_RE = /^(@babel\/)(?!preset-|[^/]+\/)/;
+const OTHER_PLUGIN_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?!babel-plugin-|[^/]+\/)/;
+const OTHER_PRESET_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?!babel-preset-|[^/]+\/)/;
 
 export function resolvePlugin(name: string, dirname: string): string | null {
   return resolveStandardizedName("plugin", name, dirname);

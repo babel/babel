@@ -243,7 +243,10 @@ export default class Scope {
    */
 
   generateUid(name: string = "temp") {
-    name = t.toIdentifier(name).replace(/^_+/, "").replace(/[0-9]+$/g, "");
+    name = t
+      .toIdentifier(name)
+      .replace(/^_+/, "")
+      .replace(/[0-9]+$/g, "");
 
     let uid;
     let i = 0;
