@@ -1,0 +1,17 @@
+{
+  "name": "babel-plugin-transform-export-default",
+  "version": "7.0.0-alpha.20",
+  "description": "Compile export default to ES2015",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-export-default",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "babel-plugin-syntax-export-extensions": "7.0.0-alpha.20"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "7.0.0-alpha.20"
+  }
+}

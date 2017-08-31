@@ -7,14 +7,19 @@ export default (param => {
     }
 
     babelHelpers.createClass(App, [{
-      key: 'getParam',
+      key: "getParam",
       value: function getParam() {
         return param;
       }
     }]);
     return App;
-  }(), _class.props = {
-    prop1: 'prop1',
-    prop2: 'prop2'
-  }, _temp;
+  }(), Object.defineProperty(_class, "props", {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    value: {
+      prop1: 'prop1',
+      prop2: 'prop2'
+    }
+  }), _temp;
 });

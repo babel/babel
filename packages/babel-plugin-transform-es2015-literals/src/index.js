@@ -1,4 +1,4 @@
-export default function () {
+export default function() {
   return {
     visitor: {
       NumericLiteral({ node }) {
@@ -13,7 +13,7 @@ export default function () {
         if (node.extra && /\\[u]/gi.test(node.extra.raw)) {
           node.extra = undefined;
         }
-      }
-    }
+      },
+    },
   };
 }

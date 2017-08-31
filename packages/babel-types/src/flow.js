@@ -6,7 +6,7 @@ import * as t from "./index";
  */
 
 export function createUnionTypeAnnotation(types: Array<Object>) {
-  let flattened  = removeTypeDuplicates(types);
+  const flattened = removeTypeDuplicates(types);
 
   if (flattened.length === 1) {
     return flattened[0];
@@ -20,16 +20,16 @@ export function createUnionTypeAnnotation(types: Array<Object>) {
  */
 
 export function removeTypeDuplicates(nodes: Array<Object>): Array<Object> {
-  let generics = {};
-  let bases = {};
+  const generics = {};
+  const bases = {};
 
   // store union type groups to circular references
-  let typeGroups = [];
+  const typeGroups = [];
 
-  let types = [];
+  const types = [];
 
   for (let i = 0; i < nodes.length; i++) {
-    let node = nodes[i];
+    const node = nodes[i];
     if (!node) continue;
 
     // detect duplicates
@@ -59,14 +59,14 @@ export function removeTypeDuplicates(nodes: Array<Object>): Array<Object> {
 
     // find a matching generic type and merge and deduplicate the type parameters
     if (t.isGenericTypeAnnotation(node)) {
-      let name = node.id.name;
+      const name = node.id.name;
 
       if (generics[name]) {
         let existing = generics[name];
         if (existing.typeParameters) {
           if (node.typeParameters) {
             existing.typeParameters.params = removeTypeDuplicates(
-              existing.typeParameters.params.concat(node.typeParameters.params)
+              existing.typeParameters.params.concat(node.typeParameters.params),
             );
           }
         } else {
@@ -83,12 +83,12 @@ export function removeTypeDuplicates(nodes: Array<Object>): Array<Object> {
   }
 
   // add back in bases
-  for (let type in bases) {
+  for (const type in bases) {
     types.push(bases[type]);
   }
 
   // add back in generics
-  for (let name in generics) {
+  for (const name in generics) {
     types.push(generics[name]);
   }
 

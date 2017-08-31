@@ -6,8 +6,10 @@ let f = (() => {
 
     try {
       for (var _iterator = babelHelpers.asyncIterator(a), _step, _value; _step = yield _iterator.next(), _iteratorNormalCompletion = _step.done, _value = yield _step.value, !_iteratorNormalCompletion; _iteratorNormalCompletion = true) {
-        let { x, y: [z] } = _value;
-
+        let {
+          x,
+          y: [z]
+        } = _value;
         g(x, z);
       }
     } catch (err) {
@@ -15,7 +17,7 @@ let f = (() => {
       _iteratorError = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion && _iterator.return) {
+        if (!_iteratorNormalCompletion && _iterator.return != null) {
           yield _iterator.return();
         }
       } finally {

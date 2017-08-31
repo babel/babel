@@ -1,16 +1,21 @@
 import * as t from "babel-types";
 
-export default function () {
+export default function() {
   return {
     visitor: {
       ObjectMethod(path) {
-        let { node } = path;
+        const { node } = path;
         if (node.kind === "method") {
-          path.replaceWith(t.objectProperty(
-            node.key,
-            t.functionExpression(null, node.params, node.body, node.generator, node.async),
-            node.computed
-          ));
+          const func = t.functionExpression(
+            null,
+            node.params,
+            node.body,
+            node.generator,
+            node.async,
+          );
+          func.returnType = node.returnType;
+
+          path.replaceWith(t.objectProperty(node.key, func, node.computed));
         }
       },
 
@@ -18,7 +23,7 @@ export default function () {
         if (node.shorthand) {
           node.shorthand = false;
         }
-      }
-    }
+      },
+    },
   };
 }

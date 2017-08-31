@@ -35,17 +35,30 @@ export function JSXExpressionContainer(node: Object) {
   this.token("}");
 }
 
+export function JSXSpreadChild(node: Object) {
+  this.token("{");
+  this.token("...");
+  this.print(node.expression, node);
+  this.token("}");
+}
+
 export function JSXText(node: Object) {
-  this.token(node.value);
+  const raw = this.getPossibleRaw(node);
+
+  if (raw != null) {
+    this.token(raw);
+  } else {
+    this.token(node.value);
+  }
 }
 
 export function JSXElement(node: Object) {
-  let open = node.openingElement;
+  const open = node.openingElement;
   this.print(open, node);
   if (open.selfClosing) return;
 
   this.indent();
-  for (let child of (node.children: Array<Object>)) {
+  for (const child of (node.children: Array<Object>)) {
     this.print(child, node);
   }
   this.dedent();

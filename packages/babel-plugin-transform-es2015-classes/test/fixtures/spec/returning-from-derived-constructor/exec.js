@@ -1,3 +1,4 @@
+"use strict";
 class Foo {
   constructor() {
     return { x: 1 };
@@ -24,3 +25,34 @@ class Bar2 extends Foo {
 }
 
 assert.equal(new Bar2().x, 2);
+
+
+let singleton;
+class Sub extends Foo {
+  constructor() {
+    if (singleton) {
+      return singleton;
+    }
+    singleton = super();
+  }
+}
+
+let instance = new Sub;
+assert.equal(instance, singleton);
+
+instance = new Sub;
+assert.equal(instance, singleton);
+
+class Null extends Foo {
+  constructor() {
+    if (false) {
+      super();
+    }
+    return null;
+    super();
+  }
+}
+
+assert.throws(() => {
+  new Null();
+}, "this");

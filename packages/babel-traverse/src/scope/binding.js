@@ -13,10 +13,18 @@ import type NodePath from "../path";
 
 export default class Binding {
   constructor({ existing, identifier, scope, path, kind }) {
+    // this if condition is true only if the re-binding does not result in an error
+    // e.g. if rebinding kind is 'var' or 'hoisted', and previous was 'param'
+    if (existing) {
+      // we maintain the original binding but update constantViolations
+      existing.constantViolations = existing.constantViolations.concat(path);
+      return existing;
+    }
+
     this.identifier = identifier;
-    this.scope      = scope;
-    this.path       = path;
-    this.kind       = kind;
+    this.scope = scope;
+    this.path = path;
+    this.kind = kind;
 
     this.constantViolations = [];
     this.constant = true;
@@ -26,16 +34,7 @@ export default class Binding {
     this.references = 0;
 
     this.clearValue();
-
-    if (existing) {
-      this.constantViolations = [].concat(
-        existing.path,
-        existing.constantViolations,
-        this.constantViolations
-      );
-    }
   }
-
 
   constantViolations: Array<NodePath>;
   constant: boolean;
@@ -56,13 +55,13 @@ export default class Binding {
   setValue(value: any) {
     if (this.hasDeoptedValue) return;
     this.hasValue = true;
-    this.value    = value;
+    this.value = value;
   }
 
   clearValue() {
     this.hasDeoptedValue = false;
-    this.hasValue        = false;
-    this.value           = null;
+    this.hasValue = false;
+    this.value = null;
   }
 
   /**

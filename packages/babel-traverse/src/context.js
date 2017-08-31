@@ -1,14 +1,14 @@
 import NodePath from "./path";
 import * as t from "babel-types";
 
-let testing = process.env.NODE_ENV === "test";
+const testing = process.env.NODE_ENV === "test";
 
 export default class TraversalContext {
   constructor(scope, opts, state, parentPath) {
     this.parentPath = parentPath;
-    this.scope      = scope;
-    this.state      = state;
-    this.opts       = opts;
+    this.scope = scope;
+    this.state = state;
+    this.opts = opts;
   }
 
   parentPath: NodePath;
@@ -23,18 +23,18 @@ export default class TraversalContext {
    */
 
   shouldVisit(node): boolean {
-    let opts = this.opts;
+    const opts = this.opts;
     if (opts.enter || opts.exit) return true;
 
     // check if we have a visitor for this node
     if (opts[node.type]) return true;
 
     // check if we're going to traverse into this node
-    let keys: ?Array<string> = t.VISITOR_KEYS[node.type];
+    const keys: ?Array<string> = t.VISITOR_KEYS[node.type];
     if (!keys || !keys.length) return false;
 
     // we need to traverse into this node so ensure that it has children to traverse into!
-    for (let key of keys) {
+    for (const key of keys) {
       if (node[key]) return true;
     }
 
@@ -47,7 +47,7 @@ export default class TraversalContext {
       parent: node,
       container: obj,
       key: key,
-      listKey
+      listKey,
     });
   }
 
@@ -69,11 +69,11 @@ export default class TraversalContext {
     // nothing to traverse!
     if (container.length === 0) return false;
 
-    let queue = [];
+    const queue = [];
 
     // build up initial queue
     for (let key = 0; key < container.length; key++) {
-      let node = container[key];
+      const node = container[key];
       if (node && this.shouldVisit(node)) {
         queue.push(this.create(parent, container, key, listKey));
       }
@@ -84,9 +84,7 @@ export default class TraversalContext {
 
   visitSingle(node, key): boolean {
     if (this.shouldVisit(node[key])) {
-      return this.visitQueue([
-        this.create(node, node, key)
-      ]);
+      return this.visitQueue([this.create(node, node, key)]);
     } else {
       return false;
     }
@@ -97,14 +95,17 @@ export default class TraversalContext {
     this.queue = queue;
     this.priorityQueue = [];
 
-    let visited = [];
+    const visited = [];
     let stop = false;
 
     // visit the queue
-    for (let path of queue) {
+    for (const path of queue) {
       path.resync();
 
-      if (path.contexts.length === 0 || path.contexts[path.contexts.length - 1] !== this) {
+      if (
+        path.contexts.length === 0 ||
+        path.contexts[path.contexts.length - 1] !== this
+      ) {
         // The context might already have been pushed when this path was inserted and queued.
         // If we always re-pushed here, we could get duplicates and risk leaving contexts
         // on the stack after the traversal has completed, which could break things.
@@ -114,7 +115,7 @@ export default class TraversalContext {
       // this path no longer belongs to the tree
       if (path.key === null) continue;
 
-      if (testing && queue.length >= 10000) {
+      if (testing && queue.length >= 10_000) {
         this.trap = true;
       }
 
@@ -136,7 +137,7 @@ export default class TraversalContext {
     }
 
     // clear queue
-    for (let path of queue) {
+    for (const path of queue) {
       path.popContext();
     }
 
@@ -147,7 +148,7 @@ export default class TraversalContext {
   }
 
   visit(node, key) {
-    let nodes = node[key];
+    const nodes = node[key];
     if (!nodes) return false;
 
     if (Array.isArray(nodes)) {

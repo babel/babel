@@ -1,13 +1,13 @@
 import path from "path";
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function addDisplayName(id, call) {
-    let props = call.arguments[0].properties;
+    const props = call.arguments[0].properties;
     let safe = true;
 
     for (let i = 0; i < props.length; i++) {
-      let prop = props[i];
-      let key = t.toComputedKey(prop);
+      const prop = props[i];
+      const key = t.toComputedKey(prop);
       if (t.isLiteral(key, { value: "displayName" })) {
         safe = false;
         break;
@@ -15,24 +15,34 @@ export default function ({ types: t }) {
     }
 
     if (safe) {
-      props.unshift(t.objectProperty(t.identifier("displayName"), t.stringLiteral(id)));
+      props.unshift(
+        t.objectProperty(t.identifier("displayName"), t.stringLiteral(id)),
+      );
     }
   }
 
-  let isCreateClassCallExpression = t.buildMatchMemberExpression("React.createClass");
+  const isCreateClassCallExpression = t.buildMatchMemberExpression(
+    "React.createClass",
+  );
+  const isCreateClassAddon = callee => callee.name === "createReactClass";
 
   function isCreateClass(node) {
     if (!node || !t.isCallExpression(node)) return false;
 
-    // not React.createClass call member object
-    if (!isCreateClassCallExpression(node.callee)) return false;
+    // not createReactClass nor React.createClass call member object
+    if (
+      !isCreateClassCallExpression(node.callee) &&
+      !isCreateClassAddon(node.callee)
+    ) {
+      return false;
+    }
 
     // no call arguments
-    let args = node.arguments;
+    const args = node.arguments;
     if (args.length !== 1) return false;
 
     // first node arg is not an object
-    let first = args[0];
+    const first = args[0];
     if (!t.isObjectExpression(first)) return false;
 
     return true;
@@ -42,7 +52,10 @@ export default function ({ types: t }) {
     visitor: {
       ExportDefaultDeclaration({ node }, state) {
         if (isCreateClass(node.declaration)) {
-          let displayName = state.file.opts.basename;
+          let displayName = path.basename(
+            state.file.opts.filename,
+            path.extname(state.file.opts.filename),
+          );
 
           // ./{module name}/index.js
           if (displayName === "index") {
@@ -54,13 +67,13 @@ export default function ({ types: t }) {
       },
 
       CallExpression(path) {
-        let { node } = path;
+        const { node } = path;
         if (!isCreateClass(node)) return;
 
         let id;
 
         // crawl up the ancestry looking for possible candidates for displayName inference
-        path.find(function (path) {
+        path.find(function(path) {
           if (path.isAssignmentExpression()) {
             id = path.node.left;
           } else if (path.isObjectProperty()) {
@@ -88,7 +101,7 @@ export default function ({ types: t }) {
         if (t.isIdentifier(id)) {
           addDisplayName(id.name, node);
         }
-      }
-    }
+      },
+    },
   };
 }

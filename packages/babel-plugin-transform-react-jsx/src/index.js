@@ -1,12 +1,11 @@
-/* eslint max-len: 0 */
+import jsx from "babel-plugin-syntax-jsx";
+import helper from "babel-helper-builder-react-jsx";
 
-export default function ({ types: t }) {
-  let JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
-
-  let visitor = require("babel-helper-builder-react-jsx")({
+export default function({ types: t }) {
+  const visitor = helper({
     pre(state) {
-      let tagName = state.tagName;
-      let args    = state.args;
+      const tagName = state.tagName;
+      const args = state.args;
       if (t.react.isCompatTag(tagName)) {
         args.push(t.stringLiteral(tagName));
       } else {
@@ -16,35 +15,28 @@ export default function ({ types: t }) {
 
     post(state, pass) {
       state.callee = pass.get("jsxIdentifier")();
-    }
+    },
   });
 
-  visitor.Program = function (path, state) {
-    let { file } = state;
-    let id = state.opts.pragma || "React.createElement";
+  visitor.Program = function(path, state) {
+    const id = state.opts.pragma || "React.createElement";
 
-    for (let comment of (file.ast.comments: Array<Object>)) {
-      let matches = JSX_ANNOTATION_REGEX.exec(comment.value);
-      if (matches) {
-        id = matches[1];
-        if (id === "React.DOM") {
-          throw file.buildCodeFrameError(comment, "The @jsx React.DOM pragma has been deprecated as of React 0.12");
-        } else {
-          break;
-        }
-      }
-    }
-
-    state.set(
-      "jsxIdentifier",
-      () => id.split(".").map((name) => t.identifier(name)).reduce(
-        (object, property) => t.memberExpression(object, property)
-      )
+    state.set("jsxIdentifier", () =>
+      id
+        .split(".")
+        .map(name => t.identifier(name))
+        .reduce((object, property) => t.memberExpression(object, property)),
     );
   };
 
+  visitor.JSXAttribute = function(path) {
+    if (t.isJSXElement(path.node.value)) {
+      path.node.value = t.jSXExpressionContainer(path.node.value);
+    }
+  };
+
   return {
-    inherits: require("babel-plugin-syntax-jsx"),
-    visitor
+    inherits: jsx,
+    visitor,
   };
 }

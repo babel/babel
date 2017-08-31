@@ -8,9 +8,3 @@ for (var _a2 in [1, 2, 3]) {
   var _a3 = 3;
   console.log(_a3);
 }
-
-try {
-  throw new Error();
-} catch (_a4) {
-  var _a5 = 4;
-}

@@ -1,7 +1,6 @@
-import Plugin from "../plugin";
 import sortBy from "lodash/sortBy";
 
-export default new Plugin({
+export default {
   /**
    * [Please add a description.]
    *
@@ -20,7 +19,7 @@ export default new Plugin({
       exit({ node }) {
         let hasChange = false;
         for (let i = 0; i < node.body.length; i++) {
-          let bodyNode = node.body[i];
+          const bodyNode = node.body[i];
           if (bodyNode && bodyNode._blockHoist != null) {
             hasChange = true;
             break;
@@ -36,7 +35,7 @@ export default new Plugin({
           // Higher priorities should move toward the top.
           return -1 * priority;
         });
-      }
-    }
-  }
-});
+      },
+    },
+  },
+};

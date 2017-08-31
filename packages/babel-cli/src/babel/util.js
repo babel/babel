@@ -1,28 +1,32 @@
-let commander = require("commander");
-let readdir   = require("fs-readdir-recursive");
-let index     = require("./index");
-let babel     = require("babel-core");
-let util      = require("babel-core").util;
-let path      = require("path");
-let fs        = require("fs");
-let _         = require("lodash");
+import commander from "commander";
+import readdir from "fs-readdir-recursive";
+import * as babel from "babel-core";
+import includes from "lodash/includes";
+import path from "path";
+import fs from "fs";
 
 export function chmod(src, dest) {
   fs.chmodSync(dest, fs.statSync(src).mode);
 }
 
 export function readdirFilter(filename) {
-  return readdir(filename).filter(function (filename) {
-    return util.canCompile(filename);
+  return readdir(filename).filter(function(filename) {
+    return isCompilableExtension(filename);
   });
 }
 
 export { readdir };
 
-export let canCompile = util.canCompile;
-
-export function shouldIgnore(loc) {
-  return util.shouldIgnore(loc, index.opts.ignore, index.opts.only);
+/**
+ * Test if a filename ends with a compilable extension.
+ */
+export function isCompilableExtension(
+  filename: string,
+  altExts?: Array<string>,
+): boolean {
+  const exts = altExts || babel.DEFAULT_EXTENSIONS;
+  const ext = path.extname(filename);
+  return includes(exts, ext);
 }
 
 export function addSourceMappingUrl(code, loc) {
@@ -34,19 +38,16 @@ export function log(msg) {
 }
 
 export function transform(filename, code, opts) {
-  opts = _.defaults(opts || {}, index.opts);
-  opts.filename = filename;
+  opts = Object.assign({}, opts, {
+    filename,
+  });
 
-  let result = babel.transform(code, opts);
-  result.filename = filename;
-  result.actual = code;
-  return result;
+  return babel.transform(code, opts);
 }
 
 export function compile(filename, opts) {
   try {
-    let code = fs.readFileSync(filename, "utf8");
-    return transform(filename, code, opts);
+    return babel.transformFileSync(filename, opts);
   } catch (err) {
     if (commander.watch) {
       console.error(toErrorStack(err));
@@ -65,7 +66,7 @@ function toErrorStack(err) {
   }
 }
 
-process.on("uncaughtException", function (err) {
+process.on("uncaughtException", function(err) {
   console.error(toErrorStack(err));
   process.exit(1);
 });
@@ -76,7 +77,7 @@ export function requireChokidar() {
   } catch (err) {
     console.error(
       "The optional dependency chokidar failed to install and is required for " +
-      "--watch. Chokidar is likely not supported on your platform."
+        "--watch. Chokidar is likely not supported on your platform.",
     );
     throw err;
   }

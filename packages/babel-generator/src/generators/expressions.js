@@ -1,12 +1,12 @@
-/* eslint max-len: 0 */
-
-import isNumber from "lodash/isNumber";
 import * as t from "babel-types";
 import * as n from "../node";
 
-
 export function UnaryExpression(node: Object) {
-  if (node.operator === "void" || node.operator === "delete" || node.operator === "typeof") {
+  if (
+    node.operator === "void" ||
+    node.operator === "delete" ||
+    node.operator === "typeof"
+  ) {
     this.word(node.operator);
     this.space();
   } else {
@@ -54,11 +54,22 @@ export function NewExpression(node: Object, parent: Object) {
   this.word("new");
   this.space();
   this.print(node.callee, node);
-  if (node.arguments.length === 0 && this.format.minified &&
-      !t.isCallExpression(parent, { callee: node }) &&
-      !t.isMemberExpression(parent) &&
-      !t.isNewExpression(parent)) return;
+  if (
+    this.format.minified &&
+    node.arguments.length === 0 &&
+    !node.optional &&
+    !t.isCallExpression(parent, { callee: node }) &&
+    !t.isMemberExpression(parent) &&
+    !t.isNewExpression(parent)
+  ) {
+    return;
+  }
 
+  this.print(node.typeParameters, node); // TS
+
+  if (node.optional) {
+    this.token("?.");
+  }
   this.token("(");
   this.printList(node.arguments, node);
   this.token(")");
@@ -82,39 +93,25 @@ export function Decorator(node: Object) {
   this.newline();
 }
 
-function commaSeparatorNewline() {
-  this.token(",");
-  this.newline();
-
-  if (!this.endsWith("\n")) this.space();
-}
-
 export function CallExpression(node: Object) {
   this.print(node.callee, node);
 
+  this.print(node.typeParameters, node); // TS
+
+  if (node.optional) {
+    this.token("?.");
+  }
   this.token("(");
-
-  let isPrettyCall = node._prettyCall;
-
-  let separator;
-  if (isPrettyCall) {
-    separator = commaSeparatorNewline;
-    this.newline();
-    this.indent();
-  }
-
-  this.printList(node.arguments, node, { separator });
-
-  if (isPrettyCall) {
-    this.newline();
-    this.dedent();
-  }
-
+  this.printList(node.arguments, node);
   this.token(")");
 }
 
+export function Import() {
+  this.word("import");
+}
+
 function buildYieldAwait(keyword: string) {
-  return function (node: Object) {
+  return function(node: Object) {
     this.word(keyword);
 
     if (node.delegate) {
@@ -123,15 +120,15 @@ function buildYieldAwait(keyword: string) {
 
     if (node.argument) {
       this.space();
-      let terminatorState = this.startTerminatorless();
+      const terminatorState = this.startTerminatorless();
       this.print(node.argument, node);
       this.endTerminatorless(terminatorState);
     }
   };
 }
 
-export let YieldExpression = buildYieldAwait("yield");
-export let AwaitExpression = buildYieldAwait("await");
+export const YieldExpression = buildYieldAwait("yield");
+export const AwaitExpression = buildYieldAwait("await");
 
 export function EmptyStatement() {
   this.semicolon(true /* force */);
@@ -144,6 +141,8 @@ export function ExpressionStatement(node: Object) {
 
 export function AssignmentPattern(node: Object) {
   this.print(node.left, node);
+  if (node.left.optional) this.token("?");
+  this.print(node.left.typeAnnotation, node);
   this.space();
   this.token("=");
   this.space();
@@ -153,8 +152,10 @@ export function AssignmentPattern(node: Object) {
 export function AssignmentExpression(node: Object, parent: Object) {
   // Somewhere inside a for statement `init` node but doesn't usually
   // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
-  let parens = this.inForStatementInitCounter && node.operator === "in" &&
-               !n.needsParens(node, parent);
+  const parens =
+    this.inForStatementInitCounter &&
+    node.operator === "in" &&
+    !n.needsParens(node, parent);
 
   if (parens) {
     this.token("(");
@@ -185,7 +186,7 @@ export function BindExpression(node: Object) {
 
 export {
   AssignmentExpression as BinaryExpression,
-  AssignmentExpression as LogicalExpression
+  AssignmentExpression as LogicalExpression,
 };
 
 export function MemberExpression(node: Object) {
@@ -196,16 +197,21 @@ export function MemberExpression(node: Object) {
   }
 
   let computed = node.computed;
-  if (t.isLiteral(node.property) && isNumber(node.property.value)) {
+  if (t.isLiteral(node.property) && typeof node.property.value === "number") {
     computed = true;
   }
 
+  if (node.optional) {
+    this.token("?.");
+  }
   if (computed) {
     this.token("[");
     this.print(node.property, node);
     this.token("]");
   } else {
-    this.token(".");
+    if (!node.optional) {
+      this.token(".");
+    }
     this.print(node.property, node);
   }
 }

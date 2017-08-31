@@ -1,11 +1,27 @@
 # babel-plugin-transform-es2015-function-name
 
-Apply ES2015 function.name semantics to all functions
+> Apply ES2015 function.name semantics to all functions
+
+## Examples
+
+**In**
+
+```javascript
+let number = (x) => x
+```
+
+**Out**
+
+```javascript
+var number = function number(x) {
+  return x;
+};
+```
 
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es2015-function-name
+npm install --save-dev babel-plugin-transform-es2015-function-name
 ```
 
 ## Usage
@@ -23,7 +39,7 @@ $ npm install babel-plugin-transform-es2015-function-name
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es2015-function-name script.js
+babel --plugins transform-es2015-function-name script.js
 ```
 
 ### Via Node API

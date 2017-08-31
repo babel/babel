@@ -11,55 +11,11 @@ import * as t from "babel-types";
  * parsed nodes of `React.createClass` and `React["createClass"]`.
  */
 
-export function matchesPattern(pattern: string, allowPartial?: boolean): boolean {
-  // not a member expression
-  if (!this.isMemberExpression()) return false;
-
-  let parts = pattern.split(".");
-  let search = [this.node];
-  let i = 0;
-
-  function matches(name) {
-    let part = parts[i];
-    return part === "*" || name === part;
-  }
-
-  while (search.length) {
-    let node = search.shift();
-
-    if (allowPartial && i === parts.length) {
-      return true;
-    }
-
-    if (t.isIdentifier(node)) {
-      // this part doesn't match
-      if (!matches(node.name)) return false;
-    } else if (t.isLiteral(node)) {
-      // this part doesn't match
-      if (!matches(node.value)) return false;
-    } else if (t.isMemberExpression(node)) {
-      if (node.computed && !t.isLiteral(node.property)) {
-        // we can't deal with this
-        return false;
-      } else {
-        search.unshift(node.property);
-        search.unshift(node.object);
-        continue;
-      }
-    } else if (t.isThisExpression(node)) {
-      if (!matches("this")) return false;
-    } else {
-      // we can't deal with this
-      return false;
-    }
-
-    // too many parts
-    if (++i > parts.length) {
-      return false;
-    }
-  }
-
-  return i === parts.length;
+export function matchesPattern(
+  pattern: string,
+  allowPartial?: boolean,
+): boolean {
+  return t.matchesPattern(this.node, pattern, allowPartial);
 }
 
 /**
@@ -68,7 +24,7 @@ export function matchesPattern(pattern: string, allowPartial?: boolean): boolean
  */
 
 export function has(key): boolean {
-  let val = this.node && this.node[key];
+  const val = this.node && this.node[key];
   if (val && Array.isArray(val)) {
     return !!val.length;
   } else {
@@ -88,7 +44,7 @@ export function isStatic() {
  * Alias of `has`.
  */
 
-export let is = has;
+export const is = has;
 
 /**
  * Opposite of `has`.
@@ -126,7 +82,9 @@ export function isNodeType(type: string): boolean {
  */
 
 export function canHaveVariableDeclarationOrExpression() {
-  return (this.key === "init" || this.key === "left") && this.parentPath.isFor();
+  return (
+    (this.key === "init" || this.key === "left") && this.parentPath.isFor()
+  );
 }
 
 /**
@@ -160,7 +118,7 @@ export function isCompletionRecord(allowInsideFunction?) {
   let first = true;
 
   do {
-    let container = path.container;
+    const container = path.container;
 
     // we're in a function so can't be a completion record
     if (path.isFunction() && !first) {
@@ -185,7 +143,10 @@ export function isCompletionRecord(allowInsideFunction?) {
  */
 
 export function isStatementOrBlock() {
-  if (this.parentPath.isLabeledStatement() || t.isBlockStatement(this.container)) {
+  if (
+    this.parentPath.isLabeledStatement() ||
+    t.isBlockStatement(this.container)
+  ) {
     return false;
   } else {
     return includes(t.STATEMENT_OR_BLOCK_KEYS, this.key);
@@ -199,11 +160,11 @@ export function isStatementOrBlock() {
 export function referencesImport(moduleSource, importName) {
   if (!this.isReferencedIdentifier()) return false;
 
-  let binding = this.scope.getBinding(this.node.name);
+  const binding = this.scope.getBinding(this.node.name);
   if (!binding || binding.kind !== "module") return false;
 
-  let path = binding.path;
-  let parent = path.parentPath;
+  const path = binding.path;
+  const parent = path.parentPath;
   if (!parent.isImportDeclaration()) return false;
 
   // check moduleSource
@@ -233,7 +194,7 @@ export function referencesImport(moduleSource, importName) {
  */
 
 export function getSource() {
-  let node = this.node;
+  const node = this.node;
   if (node.end) {
     return this.hub.file.code.slice(node.start, node.end);
   } else {
@@ -254,13 +215,17 @@ export function willIMaybeExecuteBefore(target) {
 
 export function _guessExecutionStatusRelativeTo(target) {
   // check if the two paths are in different functions, we can't track execution of these
-  let targetFuncParent = target.scope.getFunctionParent();
-  let selfFuncParent = this.scope.getFunctionParent();
+  const targetFuncParent =
+    target.scope.getFunctionParent() || target.scope.getProgramParent();
+  const selfFuncParent =
+    this.scope.getFunctionParent() || target.scope.getProgramParent();
 
   // here we check the `node` equality as sometimes we may have different paths for the
   // same node due to path thrashing
   if (targetFuncParent.node !== selfFuncParent.node) {
-    let status = this._guessExecutionStatusRelativeToDifferentFunctions(targetFuncParent);
+    const status = this._guessExecutionStatusRelativeToDifferentFunctions(
+      targetFuncParent,
+    );
     if (status) {
       return status;
     } else {
@@ -268,17 +233,17 @@ export function _guessExecutionStatusRelativeTo(target) {
     }
   }
 
-  let targetPaths = target.getAncestry();
+  const targetPaths = target.getAncestry();
   if (targetPaths.indexOf(this) >= 0) return "after";
 
-  let selfPaths   = this.getAncestry();
+  const selfPaths = this.getAncestry();
 
   // get ancestor where the branches intersect
   let commonPath;
   let targetIndex;
   let selfIndex;
   for (selfIndex = 0; selfIndex < selfPaths.length; selfIndex++) {
-    let selfPath = selfPaths[selfIndex];
+    const selfPath = selfPaths[selfIndex];
     targetIndex = targetPaths.indexOf(selfPath);
     if (targetIndex >= 0) {
       commonPath = selfPath;
@@ -290,40 +255,46 @@ export function _guessExecutionStatusRelativeTo(target) {
   }
 
   // get the relationship paths that associate these nodes to their common ancestor
-  let targetRelationship = targetPaths[targetIndex - 1];
-  let selfRelationship   = selfPaths[selfIndex - 1];
+  const targetRelationship = targetPaths[targetIndex - 1];
+  const selfRelationship = selfPaths[selfIndex - 1];
   if (!targetRelationship || !selfRelationship) {
     return "before";
   }
 
   // container list so let's see which one is after the other
-  if (targetRelationship.listKey && targetRelationship.container === selfRelationship.container) {
+  if (
+    targetRelationship.listKey &&
+    targetRelationship.container === selfRelationship.container
+  ) {
     return targetRelationship.key > selfRelationship.key ? "before" : "after";
   }
 
   // otherwise we're associated by a parent node, check which key comes before the other
-  let targetKeyPosition = t.VISITOR_KEYS[targetRelationship.type].indexOf(targetRelationship.key);
-  let selfKeyPosition   = t.VISITOR_KEYS[selfRelationship.type].indexOf(selfRelationship.key);
+  const keys = t.VISITOR_KEYS[commonPath.type];
+  const targetKeyPosition = keys.indexOf(targetRelationship.key);
+  const selfKeyPosition = keys.indexOf(selfRelationship.key);
   return targetKeyPosition > selfKeyPosition ? "before" : "after";
 }
 
-export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncParent) {
-  let targetFuncPath = targetFuncParent.path;
+export function _guessExecutionStatusRelativeToDifferentFunctions(
+  targetFuncParent,
+) {
+  const targetFuncPath = targetFuncParent.path;
   if (!targetFuncPath.isFunctionDeclaration()) return;
 
   // so we're in a completely different function, if this is a function declaration
   // then we can be a bit smarter and handle cases where the function is either
   // a. not called at all (part of an export)
   // b. called directly
-  let binding = targetFuncPath.scope.getBinding(targetFuncPath.node.id.name);
+  const binding = targetFuncPath.scope.getBinding(targetFuncPath.node.id.name);
 
   // no references!
   if (!binding.references) return "before";
 
-  let referencePaths: Array<NodePath> = binding.referencePaths;
+  const referencePaths: Array<NodePath> = binding.referencePaths;
 
   // verify that all of the references are calls
-  for (let path of referencePaths) {
+  for (const path of referencePaths) {
     if (path.key !== "callee" || !path.parentPath.isCallExpression()) {
       return;
     }
@@ -332,13 +303,15 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncPare
   let allStatus;
 
   // verify that all the calls have the same execution status
-  for (let path of referencePaths) {
+  for (const path of referencePaths) {
     // if a reference is a child of the function we're checking against then we can
     // safelty ignore it
-    let childOfFunction = !!path.find((path) => path.node === targetFuncPath.node);
+    const childOfFunction = !!path.find(
+      path => path.node === targetFuncPath.node,
+    );
     if (childOfFunction) continue;
 
-    let status = this._guessExecutionStatusRelativeTo(path);
+    const status = this._guessExecutionStatusRelativeTo(path);
 
     if (allStatus) {
       if (allStatus !== status) return;
@@ -374,7 +347,7 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
       // otherwise it's a request for a pattern and that's a bit more tricky
     }
   } else if (this.isReferencedIdentifier()) {
-    let binding = this.scope.getBinding(this.node.name);
+    const binding = this.scope.getBinding(this.node.name);
     if (!binding) return;
 
     // reassigned so we can't really resolve it
@@ -384,9 +357,9 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
     if (binding.kind === "module") return;
 
     if (binding.path !== this) {
-      let ret = binding.path.resolve(dangerous, resolved);
+      const ret = binding.path.resolve(dangerous, resolved);
       // If the identifier resolves to parent node then we can't really resolve it.
-      if (this.find((parent) => parent.node === ret.node)) return;
+      if (this.find(parent => parent.node === ret.node)) return;
       return ret;
     }
   } else if (this.isTypeCastExpression()) {
@@ -395,22 +368,23 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
     // this is dangerous, as non-direct target assignments will mutate it's state
     // making this resolution inaccurate
 
-    let targetKey = this.toComputedKey();
+    const targetKey = this.toComputedKey();
     if (!t.isLiteral(targetKey)) return;
 
-    let targetName = targetKey.value;
+    const targetName = targetKey.value;
 
-    let target = this.get("object").resolve(dangerous, resolved);
+    const target = this.get("object").resolve(dangerous, resolved);
 
     if (target.isObjectExpression()) {
-      let props = target.get("properties");
-      for (let prop of (props: Array)) {
+      const props = target.get("properties");
+      for (const prop of (props: Array)) {
         if (!prop.isProperty()) continue;
 
-        let key = prop.get("key");
+        const key = prop.get("key");
 
         // { foo: obj }
-        let match = prop.isnt("computed") && key.isIdentifier({ name: targetName });
+        let match =
+          prop.isnt("computed") && key.isIdentifier({ name: targetName });
 
         // { "foo": "obj" } or { ["foo"]: "obj" }
         match = match || key.isLiteral({ value: targetName });
@@ -418,8 +392,8 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
         if (match) return prop.get("value").resolve(dangerous, resolved);
       }
     } else if (target.isArrayExpression() && !isNaN(+targetName)) {
-      let elems = target.get("elements");
-      let elem = elems[targetName];
+      const elems = target.get("elements");
+      const elem = elems[targetName];
       if (elem) return elem.resolve(dangerous, resolved);
     }
   }

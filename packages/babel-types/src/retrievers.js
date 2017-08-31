@@ -7,20 +7,20 @@ import * as t from "./index";
 export function getBindingIdentifiers(
   node: Object,
   duplicates?: boolean,
-  outerOnly?: boolean
+  outerOnly?: boolean,
 ): Object {
   let search = [].concat(node);
-  let ids    = Object.create(null);
+  const ids = Object.create(null);
 
   while (search.length) {
-    let id = search.shift();
+    const id = search.shift();
     if (!id) continue;
 
-    let keys = t.getBindingIdentifiers.keys[id.type];
+    const keys = t.getBindingIdentifiers.keys[id.type];
 
     if (t.isIdentifier(id)) {
       if (duplicates) {
-        let _ids = ids[id.name] = ids[id.name] || [];
+        const _ids = (ids[id.name] = ids[id.name] || []);
         _ids.push(id);
       } else {
         ids[id.name] = id;
@@ -29,8 +29,8 @@ export function getBindingIdentifiers(
     }
 
     if (t.isExportDeclaration(id)) {
-      if (t.isDeclaration(node.declaration)) {
-        search.push(node.declaration);
+      if (t.isDeclaration(id.declaration)) {
+        search.push(id.declaration);
       }
       continue;
     }
@@ -48,7 +48,7 @@ export function getBindingIdentifiers(
 
     if (keys) {
       for (let i = 0; i < keys.length; i++) {
-        let key = keys[i];
+        const key = keys[i];
         if (id[key]) {
           search = search.concat(id[key]);
         }
@@ -70,6 +70,7 @@ getBindingIdentifiers.keys = {
   DeclareVariable: ["id"],
   InterfaceDeclaration: ["id"],
   TypeAlias: ["id"],
+  OpaqueType: ["id"],
 
   CatchClause: ["param"],
   LabeledStatement: ["label"],
@@ -88,13 +89,15 @@ getBindingIdentifiers.keys = {
   FunctionDeclaration: ["id", "params"],
   FunctionExpression: ["id", "params"],
 
+  ForInStatement: ["left"],
+  ForOfStatement: ["left"],
+
   ClassDeclaration: ["id"],
   ClassExpression: ["id"],
 
   RestElement: ["argument"],
   UpdateExpression: ["argument"],
 
-  RestProperty: ["argument"],
   ObjectProperty: ["value"],
 
   AssignmentPattern: ["left"],
@@ -102,7 +105,7 @@ getBindingIdentifiers.keys = {
   ObjectPattern: ["properties"],
 
   VariableDeclaration: ["declarations"],
-  VariableDeclarator: ["id"]
+  VariableDeclarator: ["id"],
 };
 
 export function getOuterBindingIdentifiers(

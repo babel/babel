@@ -1,6 +1,6 @@
 import * as t from "babel-types";
 
-let visitor = {
+const visitor = {
   Scope(path, state) {
     if (state.kind === "let") path.skip();
   },
@@ -12,21 +12,23 @@ let visitor = {
   VariableDeclaration(path, state) {
     if (state.kind && path.node.kind !== state.kind) return;
 
-    let nodes = [];
+    const nodes = [];
 
-    let declarations: Array<Object> = path.get("declarations");
+    const declarations: Array<Object> = path.get("declarations");
     let firstId;
 
-    for (let declar of declarations) {
+    for (const declar of declarations) {
       firstId = declar.node.id;
 
       if (declar.node.init) {
-        nodes.push(t.expressionStatement(
-          t.assignmentExpression("=", declar.node.id, declar.node.init)
-        ));
+        nodes.push(
+          t.expressionStatement(
+            t.assignmentExpression("=", declar.node.id, declar.node.init),
+          ),
+        );
       }
 
-      for (let name in declar.getBindingIdentifiers()) {
+      for (const name in declar.getBindingIdentifiers()) {
         state.emit(t.identifier(name), name);
       }
     }
@@ -37,9 +39,9 @@ let visitor = {
     } else {
       path.replaceWithMultiple(nodes);
     }
-  }
+  },
 };
 
-export default function (path, emit: Function, kind: "var" | "let" = "var") {
+export default function(path, emit: Function, kind: "var" | "let" = "var") {
   path.traverse(visitor, { kind, emit });
 }

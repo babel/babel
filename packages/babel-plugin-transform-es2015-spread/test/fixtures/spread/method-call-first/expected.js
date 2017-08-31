@@ -1,1 +1,1 @@
-add.apply(undefined, babelHelpers.toConsumableArray(numbers).concat([foo, bar]));
+add.apply(void 0, babelHelpers.toConsumableArray(numbers).concat([foo, bar]));

@@ -1,10 +1,10 @@
 import * as t from "../index";
 
-export let VISITOR_KEYS = {};
-export let ALIAS_KEYS = {};
-export let NODE_FIELDS = {};
-export let BUILDER_KEYS = {};
-export let DEPRECATED_KEYS = {};
+export const VISITOR_KEYS = {};
+export const ALIAS_KEYS = {};
+export const NODE_FIELDS = {};
+export const BUILDER_KEYS = {};
+export const DEPRECATED_KEYS = {};
 
 function getType(val) {
   if (Array.isArray(val)) {
@@ -34,7 +34,9 @@ export function assertOneOf(...vals): Function {
   function validate(node, key, val) {
     if (vals.indexOf(val) < 0) {
       throw new TypeError(
-        `Property ${key} expected value to be one of ${JSON.stringify(vals)} but got ${JSON.stringify(val)}`
+        `Property ${key} expected value to be one of ${JSON.stringify(
+          vals,
+        )} but got ${JSON.stringify(val)}`,
       );
     }
   }
@@ -48,7 +50,7 @@ export function assertNodeType(...types: Array<string>): Function {
   function validate(node, key, val) {
     let valid = false;
 
-    for (let type of types) {
+    for (const type of types) {
       if (t.is(type, val)) {
         valid = true;
         break;
@@ -57,8 +59,9 @@ export function assertNodeType(...types: Array<string>): Function {
 
     if (!valid) {
       throw new TypeError(
-        `Property ${key} of ${node.type} expected node to be of a type ${JSON.stringify(types)} ` +
-        `but instead got ${JSON.stringify(val && val.type)}`
+        `Property ${key} of ${node.type} expected node to be of a type ${JSON.stringify(
+          types,
+        )} ` + `but instead got ${JSON.stringify(val && val.type)}`,
       );
     }
   }
@@ -72,7 +75,7 @@ export function assertNodeOrValueType(...types: Array<string>): Function {
   function validate(node, key, val) {
     let valid = false;
 
-    for (let type of types) {
+    for (const type of types) {
       if (getType(val) === type || t.is(type, val)) {
         valid = true;
         break;
@@ -81,8 +84,9 @@ export function assertNodeOrValueType(...types: Array<string>): Function {
 
     if (!valid) {
       throw new TypeError(
-        `Property ${key} of ${node.type} expected node to be of a type ${JSON.stringify(types)} ` +
-        `but instead got ${JSON.stringify(val && val.type)}`
+        `Property ${key} of ${node.type} expected node to be of a type ${JSON.stringify(
+          types,
+        )} ` + `but instead got ${JSON.stringify(val && val.type)}`,
       );
     }
   }
@@ -94,10 +98,12 @@ export function assertNodeOrValueType(...types: Array<string>): Function {
 
 export function assertValueType(type: string): Function {
   function validate(node, key, val) {
-    let valid = getType(val) === type;
+    const valid = getType(val) === type;
 
     if (!valid) {
-      throw new TypeError(`Property ${key} expected type of ${type} but got ${getType(val)}`);
+      throw new TypeError(
+        `Property ${key} expected type of ${type} but got ${getType(val)}`,
+      );
     }
   }
 
@@ -108,7 +114,7 @@ export function assertValueType(type: string): Function {
 
 export function chain(...fns: Array<Function>): Function {
   function validate(...args) {
-    for (let fn of fns) {
+    for (const fn of fns) {
       fn(...args);
     }
   }
@@ -119,17 +125,17 @@ export function chain(...fns: Array<Function>): Function {
 export default function defineType(
   type: string,
   opts: {
-    fields?: Object;
-    visitor?: Array<string>;
-    aliases?: Array<string>;
-    builder?: Array<string>;
-    inherits?: string;
-    deprecatedAlias?: string;
+    fields?: Object,
+    visitor?: Array<string>,
+    aliases?: Array<string>,
+    builder?: Array<string>,
+    inherits?: string,
+    deprecatedAlias?: string,
   } = {},
 ) {
-  let inherits = (opts.inherits && store[opts.inherits]) || {};
+  const inherits = (opts.inherits && store[opts.inherits]) || {};
 
-  opts.fields  = opts.fields || inherits.fields || {};
+  opts.fields = opts.fields || inherits.fields || {};
   opts.visitor = opts.visitor || inherits.visitor || [];
   opts.aliases = opts.aliases || inherits.aliases || [];
   opts.builder = opts.builder || inherits.builder || opts.visitor || [];
@@ -139,12 +145,12 @@ export default function defineType(
   }
 
   // ensure all field keys are represented in `fields`
-  for (let key of (opts.visitor.concat(opts.builder): Array<string>)) {
+  for (const key of (opts.visitor.concat(opts.builder): Array<string>)) {
     opts.fields[key] = opts.fields[key] || {};
   }
 
-  for (let key in opts.fields) {
-    let field = opts.fields[key];
+  for (const key in opts.fields) {
+    const field = opts.fields[key];
 
     if (opts.builder.indexOf(key) === -1) {
       field.optional = true;
@@ -158,10 +164,10 @@ export default function defineType(
 
   VISITOR_KEYS[type] = opts.visitor;
   BUILDER_KEYS[type] = opts.builder;
-  NODE_FIELDS[type]  = opts.fields;
-  ALIAS_KEYS[type]   = opts.aliases;
+  NODE_FIELDS[type] = opts.fields;
+  ALIAS_KEYS[type] = opts.aliases;
 
   store[type] = opts;
 }
 
-let store = {};
+const store = {};

@@ -1,0 +1,1 @@
+src/foo/bar.js -> lib/foo/bar.js

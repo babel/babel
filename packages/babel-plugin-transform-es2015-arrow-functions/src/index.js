@@ -1,35 +1,23 @@
-export default function ({ types: t }) {
+import type NodePath from "babel-traverse";
+
+export default function() {
   return {
     visitor: {
-      ArrowFunctionExpression(path, state) {
-        if (state.opts.spec) {
-          let { node } = path;
-          if (node.shadow) return;
+      ArrowFunctionExpression(
+        path: NodePath<BabelNodeArrowFunctionExpression>,
+        state: Object,
+      ) {
+        // In some conversion cases, it may have already been converted to a function while this callback
+        // was queued up.
+        if (!path.isArrowFunctionExpression()) return;
 
-          node.shadow = { this: false };
-          node.type = "FunctionExpression";
-
-          let boundThis = t.thisExpression();
-          boundThis._forceShadow = path;
-
-          // make sure that arrow function won't be instantiated
-          path.ensureBlock();
-          path.get("body").unshiftContainer(
-            "body",
-            t.expressionStatement(t.callExpression(state.addHelper("newArrowCheck"), [
-              t.thisExpression(),
-              boundThis
-            ]))
-          );
-
-          path.replaceWith(t.callExpression(
-            t.memberExpression(node, t.identifier("bind")),
-            [t.thisExpression()]
-          ));
-        } else {
-          path.arrowFunctionToShadowed();
-        }
-      }
-    }
+        path.arrowFunctionToExpression({
+          // While other utils may be fine inserting other arrows to make more transforms possible,
+          // the arrow transform itself absolutely cannot insert new arrow functions.
+          allowInsertArrow: false,
+          specCompliant: !!state.opts.spec,
+        });
+      },
+    },
   };
 }

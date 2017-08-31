@@ -1,52 +1,49 @@
-/* eslint max-len: 0 */
-
-import find from "lodash/find";
-import findLast from "lodash/findLast";
 import isInteger from "lodash/isInteger";
 import repeat from "lodash/repeat";
 import Buffer from "./buffer";
 import * as n from "./node";
-import Whitespace from "./whitespace";
 import * as t from "babel-types";
+
+import * as generatorFunctions from "./generators";
 
 const SCIENTIFIC_NOTATION = /e/i;
 const ZERO_DECIMAL_INTEGER = /\.0+$/;
 const NON_DECIMAL_LITERAL = /^0[box]/;
 
 export type Format = {
-  shouldPrintComment: (comment: string) => boolean;
-  retainLines: boolean;
-  comments: boolean;
-  auxiliaryCommentBefore: string;
-  auxiliaryCommentAfter: string;
-  compact: boolean | "auto";
-  minified: boolean;
-  quotes: "single" | "double";
-  concise: boolean;
+  shouldPrintComment: (comment: string) => boolean,
+  retainLines: boolean,
+  retainFunctionParens: boolean,
+  comments: boolean,
+  auxiliaryCommentBefore: string,
+  auxiliaryCommentAfter: string,
+  compact: boolean | "auto",
+  minified: boolean,
+  quotes: "single" | "double",
+  concise: boolean,
   indent: {
-    adjustMultilineComment: boolean;
-    style: string;
-    base: number;
-  }
+    adjustMultilineComment: boolean,
+    style: string,
+    base: number,
+  },
 };
 
 export default class Printer {
-  constructor(format, map, tokens) {
+  constructor(format, map) {
     this.format = format || {};
     this._buf = new Buffer(map);
-    this._whitespace = tokens.length > 0 ? new Whitespace(tokens) : null;
   }
 
   format: Format;
   inForStatementInitCounter: number = 0;
 
   _buf: Buffer;
-  _whitespace: Whitespace;
   _printStack: Array<Node> = [];
   _indent: number = 0;
   _insideAux: boolean = false;
   _printedCommentStarts: Object = {};
   _parenPushNewlineState: ?Object = null;
+  _noLineTerminator: boolean = false;
   _printAuxAfterOnNextUserNode: boolean = false;
   _printedComments: WeakSet = new WeakSet();
   _endsWithInteger = false;
@@ -106,7 +103,10 @@ export default class Printer {
   space(force: boolean = false): void {
     if (this.format.compact) return;
 
-    if ((this._buf.hasContent() && !this.endsWith(" ") && !this.endsWith("\n")) || force) {
+    if (
+      (this._buf.hasContent() && !this.endsWith(" ") && !this.endsWith("\n")) ||
+      force
+    ) {
       this._space();
     }
   }
@@ -148,14 +148,14 @@ export default class Printer {
   token(str: string): void {
     // space is mandatory to avoid outputting <!--
     // http://javascript.spec.whatwg.org/#comment-syntax
-    if ((str === "--" && this.endsWith("!")) ||
-
+    if (
+      (str === "--" && this.endsWith("!")) ||
       // Need spaces for operators of the same kind to avoid: `a+++b`
       (str[0] === "+" && this.endsWith("+")) ||
       (str[0] === "-" && this.endsWith("-")) ||
-
       // Needs spaces to avoid changing '34' to '34.', which would still be a valid number.
-      (str[0] === "." && this._endsWithInteger)) {
+      (str[0] === "." && this._endsWithInteger)
+    ) {
       this._space();
     }
 
@@ -237,7 +237,7 @@ export default class Printer {
 
   _maybeAddParen(str: string): void {
     // see startTerminatorless() instance method
-    let parenPushNewlineState = this._parenPushNewlineState;
+    const parenPushNewlineState = this._parenPushNewlineState;
     if (!parenPushNewlineState) return;
     this._parenPushNewlineState = null;
 
@@ -282,7 +282,7 @@ export default class Printer {
    *
    * This is to prevent breaking semantics for terminatorless separator nodes. eg:
    *
-   *    return foo;
+   *   return foo;
    *
    * returns `foo`. But if we do:
    *
@@ -292,10 +292,15 @@ export default class Printer {
    *  `undefined` will be returned and not `foo` due to the terminator.
    */
 
-  startTerminatorless(): Object {
-    return this._parenPushNewlineState = {
-      printed: false
-    };
+  startTerminatorless(isLabel: boolean = false): Object {
+    if (isLabel) {
+      this._noLineTerminator = true;
+      return null;
+    } else {
+      return (this._parenPushNewlineState = {
+        printed: false,
+      });
+    }
   }
 
   /**
@@ -303,7 +308,8 @@ export default class Printer {
    */
 
   endTerminatorless(state: Object) {
-    if (state.printed) {
+    this._noLineTerminator = false;
+    if (state && state.printed) {
       this.dedent();
       this.newline();
       this.token(")");
@@ -313,28 +319,40 @@ export default class Printer {
   print(node, parent) {
     if (!node) return;
 
-    let oldConcise = this.format.concise;
+    const oldConcise = this.format.concise;
     if (node._compact) {
       this.format.concise = true;
     }
 
-    let printMethod = this[node.type];
+    const printMethod = this[node.type];
     if (!printMethod) {
-      throw new ReferenceError(`unknown node of type ${JSON.stringify(node.type)} with constructor ${JSON.stringify(node && node.constructor.name)}`);
+      throw new ReferenceError(
+        `unknown node of type ${JSON.stringify(
+          node.type,
+        )} with constructor ${JSON.stringify(node && node.constructor.name)}`,
+      );
     }
 
     this._printStack.push(node);
 
-    let oldInAux = this._insideAux;
+    const oldInAux = this._insideAux;
     this._insideAux = !node.loc;
     this._maybeAddAuxComment(this._insideAux && !oldInAux);
 
     let needsParens = n.needsParens(node, parent, this._printStack);
+    if (
+      this.format.retainFunctionParens &&
+      node.type === "FunctionExpression" &&
+      node.extra &&
+      node.extra.parenthesized
+    ) {
+      needsParens = true;
+    }
     if (needsParens) this.token("(");
 
     this._printLeadingComments(node, parent);
 
-    let loc = (t.isProgram(node) || t.isFile(node)) ? null : node.loc;
+    const loc = t.isProgram(node) || t.isFile(node) ? null : node.loc;
     this.withSource("start", loc, () => {
       this[node.type](node, parent);
     });
@@ -363,7 +381,7 @@ export default class Printer {
     if (comment) {
       this._printComment({
         type: "CommentBlock",
-        value: comment
+        value: comment,
       });
     }
   }
@@ -376,16 +394,19 @@ export default class Printer {
     if (comment) {
       this._printComment({
         type: "CommentBlock",
-        value: comment
+        value: comment,
       });
     }
   }
 
   getPossibleRaw(node) {
-    if (this.format.minified) return;
-
-    let extra = node.extra;
-    if (extra && extra.raw != null && extra.rawValue != null && node.value === extra.rawValue) {
+    const extra = node.extra;
+    if (
+      extra &&
+      extra.raw != null &&
+      extra.rawValue != null &&
+      node.value === extra.rawValue
+    ) {
       return extra.raw;
     }
   }
@@ -422,14 +443,14 @@ export default class Printer {
   }
 
   printAndIndentOnComments(node, parent) {
-    let indent = !!node.leadingComments;
+    const indent = !!node.leadingComments;
     if (indent) this.indent();
     this.print(node, parent);
     if (indent) this.dedent();
   }
 
   printBlock(parent) {
-    let node = parent.body;
+    const node = parent.body;
 
     if (!t.isEmptyStatement(node)) {
       this.space();
@@ -478,33 +499,13 @@ export default class Printer {
     }
 
     let lines = 0;
-
-    if (node.start != null && !node._ignoreUserWhitespace && this._whitespace) {
-      // user node
-      if (leading) {
-        const comments = node.leadingComments;
-        const comment = comments && find(comments, (comment) =>
-          !!comment.loc && this.format.shouldPrintComment(comment.value));
-
-        lines = this._whitespace.getNewlinesBefore(comment || node);
-      } else {
-        const comments = node.trailingComments;
-        const comment = comments && findLast(comments, (comment) =>
-          !!comment.loc && this.format.shouldPrintComment(comment.value));
-
-        lines = this._whitespace.getNewlinesAfter(comment || node);
-      }
-    } else {
-      // generated node
+    // don't add newlines at the beginning of the file
+    if (this._buf.hasContent()) {
       if (!leading) lines++; // always include at least a single line after
       if (opts.addNewlines) lines += opts.addNewlines(leading, node) || 0;
 
-      let needs = n.needsWhitespaceAfter;
-      if (leading) needs = n.needsWhitespaceBefore;
+      const needs = leading ? n.needsWhitespaceBefore : n.needsWhitespaceAfter;
       if (needs(node, parent)) lines++;
-
-      // generated nodes can't add starting file whitespace
-      if (!this._buf.hasContent()) lines = 0;
     }
 
     this.newline(lines);
@@ -513,7 +514,9 @@ export default class Printer {
   _getComments(leading, node) {
     // Note, we use a boolean flag here instead of passing in the attribute name as it is faster
     // because this is called extremely frequently.
-    return (node && (leading ? node.leadingComments : node.trailingComments)) || [];
+    return (
+      (node && (leading ? node.leadingComments : node.trailingComments)) || []
+    );
   }
 
   _printComment(comment) {
@@ -531,60 +534,60 @@ export default class Printer {
       this._printedCommentStarts[comment.start] = true;
     }
 
-    // whitespace before
-    this.newline(this._whitespace ? this._whitespace.getNewlinesBefore(comment) : 0);
+    const isBlockComment = comment.type === "CommentBlock";
+
+    // Always add a newline before a block comment
+    this.newline(
+      this._buf.hasContent() && !this._noLineTerminator && isBlockComment
+        ? 1
+        : 0,
+    );
 
     if (!this.endsWith("[") && !this.endsWith("{")) this.space();
 
-    let val = comment.type === "CommentLine" ? `//${comment.value}\n` : `/*${comment.value}*/`;
+    let val =
+      !isBlockComment && !this._noLineTerminator
+        ? `//${comment.value}\n`
+        : `/*${comment.value}*/`;
 
-    //
-    if (comment.type === "CommentBlock" && this.format.indent.adjustMultilineComment) {
-      let offset = comment.loc && comment.loc.start.column;
+    if (isBlockComment && this.format.indent.adjustMultilineComment) {
+      const offset = comment.loc && comment.loc.start.column;
       if (offset) {
-        let newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
+        const newlineRegex = new RegExp("\\n\\s{1," + offset + "}", "g");
         val = val.replace(newlineRegex, "\n");
       }
 
-      let indentSize = Math.max(this._getIndent().length, this._buf.getCurrentColumn());
+      const indentSize = Math.max(
+        this._getIndent().length,
+        this._buf.getCurrentColumn(),
+      );
       val = val.replace(/\n(?!$)/g, `\n${repeat(" ", indentSize)}`);
     }
+
+    // Avoid creating //* comments
+    if (this.endsWith("/")) this._space();
 
     this.withSource("start", comment.loc, () => {
       this._append(val);
     });
 
-    // whitespace after
-    this.newline((this._whitespace ? this._whitespace.getNewlinesAfter(comment) : 0) +
-      // Subtract one to account for the line force-added above.
-      (comment.type === "CommentLine" ? -1 : 0));
+    // Always add a newline after a block comment
+    this.newline(isBlockComment && !this._noLineTerminator ? 1 : 0);
   }
 
   _printComments(comments?: Array<Object>) {
     if (!comments || !comments.length) return;
 
-    for (let comment of comments) {
+    for (const comment of comments) {
       this._printComment(comment);
     }
   }
 }
 
+// Expose the node type functions and helpers on the prototype for easy usage.
+Object.assign(Printer.prototype, generatorFunctions);
+
 function commaSeparator() {
   this.token(",");
   this.space();
-}
-
-for (let generator of [
-  require("./generators/template-literals"),
-  require("./generators/expressions"),
-  require("./generators/statements"),
-  require("./generators/classes"),
-  require("./generators/methods"),
-  require("./generators/modules"),
-  require("./generators/types"),
-  require("./generators/flow"),
-  require("./generators/base"),
-  require("./generators/jsx")
-]) {
-  Object.assign(Printer.prototype, generator);
 }

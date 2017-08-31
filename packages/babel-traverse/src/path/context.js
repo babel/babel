@@ -3,7 +3,7 @@
 import traverse from "../index";
 
 export function call(key): boolean {
-  let opts = this.opts;
+  const opts = this.opts;
 
   this.debug(() => key);
 
@@ -21,14 +21,16 @@ export function call(key): boolean {
 export function _call(fns?: Array<Function>): boolean {
   if (!fns) return false;
 
-  for (let fn of fns) {
+  for (const fn of fns) {
     if (!fn) continue;
 
-    let node = this.node;
+    const node = this.node;
     if (!node) return true;
 
-    let ret = fn.call(this.state, this, this.state);
-    if (ret) throw new Error(`Unexpected return value from visitor method ${fn}`);
+    const ret = fn.call(this.state, this, this.state);
+    if (ret) {
+      throw new Error(`Unexpected return value from visitor method ${fn}`);
+    }
 
     // node has been replaced, it will have been requeued
     if (this.node !== node) return true;
@@ -40,7 +42,7 @@ export function _call(fns?: Array<Function>): boolean {
 }
 
 export function isBlacklisted(): boolean {
-  let blacklist = this.opts.blacklist;
+  const blacklist = this.opts.blacklist;
   return blacklist && blacklist.indexOf(this.node.type) > -1;
 }
 
@@ -63,7 +65,14 @@ export function visit(): boolean {
   }
 
   this.debug(() => "Recursing into...");
-  traverse.node(this.node, this.opts, this.scope, this.state, this, this.skipKeys);
+  traverse.node(
+    this.node,
+    this.opts,
+    this.scope,
+    this.state,
+    this,
+    this.skipKeys,
+  );
 
   this.call("exit");
 
@@ -105,13 +114,13 @@ export function setScope() {
 export function setContext(context) {
   this.shouldSkip = false;
   this.shouldStop = false;
-  this.removed    = false;
-  this.skipKeys   = {};
+  this.removed = false;
+  this.skipKeys = {};
 
   if (context) {
     this.context = context;
-    this.state   = context.state;
-    this.opts    = context.opts;
+    this.state = context.state;
+    this.opts = context.opts;
   }
 
   this.setScope();
@@ -155,7 +164,7 @@ export function _resyncKey() {
       }
     }
   } else {
-    for (let key in this.container) {
+    for (const key in this.container) {
       if (this.container[key] === this.node) {
         return this.setKey(key);
       }
@@ -169,7 +178,7 @@ export function _resyncKey() {
 export function _resyncList() {
   if (!this.parent || !this.inList) return;
 
-  let newContainer = this.parent[this.listKey];
+  const newContainer = this.parent[this.listKey];
   if (this.container === newContainer) return;
 
   // container is out of sync. this is likely the result of it being reassigned
@@ -177,7 +186,11 @@ export function _resyncList() {
 }
 
 export function _resyncRemoved() {
-  if (this.key == null || !this.container || this.container[this.key] !== this.node) {
+  if (
+    this.key == null ||
+    !this.container ||
+    this.container[this.key] !== this.node
+  ) {
     this._markRemoved();
   }
 }
@@ -193,8 +206,8 @@ export function pushContext(context) {
 }
 
 export function setup(parentPath, container, listKey, key) {
-  this.inList    = !!listKey;
-  this.listKey   = listKey;
+  this.inList = !!listKey;
+  this.listKey = listKey;
   this.parentKey = listKey || key;
   this.container = container;
 
@@ -203,7 +216,7 @@ export function setup(parentPath, container, listKey, key) {
 }
 
 export function setKey(key) {
-  this.key  = key;
+  this.key = key;
   this.node = this.container[this.key];
   this.type = this.node && this.node.type;
 }
@@ -214,9 +227,9 @@ export function requeue(pathToQueue = this) {
   // TODO(loganfsmyth): This should be switched back to queue in parent contexts
   // automatically once #2892 and #4135 have been resolved. See #4140.
   // let contexts = this._getQueueContexts();
-  let contexts = this.contexts;
+  const contexts = this.contexts;
 
-  for (let context of contexts) {
+  for (const context of contexts) {
     context.maybeQueue(pathToQueue);
   }
 }
@@ -226,6 +239,7 @@ export function _getQueueContexts() {
   let contexts = this.contexts;
   while (!contexts.length) {
     path = path.parentPath;
+    if (!path) break;
     contexts = path.contexts;
   }
   return contexts;

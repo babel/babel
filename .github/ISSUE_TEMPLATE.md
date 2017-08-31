@@ -1,28 +1,32 @@
 <!---
-BEFORE YOU SUBMIT please read the following:
+Thanks for filing an issue 😄 ! Before you submit, please read the following:
+
+Search open/closed issues before submitting since someone might have asked the same thing before!
 
 If you have a support request or question please submit them to one of this resources:
 
-* Discussion Forum: https://discuss.babeljs.io/
+* Slack Community: https://slack.babeljs.io/
 * StackOverflow: http://stackoverflow.com/questions/tagged/babeljs using the tag `babeljs`
-* Slack community: https://slack.babeljs.io/
-* Also have a look at the Readme for more information on how to get support:
+* Also have a look at the readme for more information on how to get support:
   https://github.com/babel/babel/blob/master/README.md
 
-Issues on github are only related to problems of babel itself and we cannot answer 
+Issues on GitHub are only related to problems of Babel itself and we cannot answer 
 support questions here.
 -->
+
+Choose one: is this a bug report or feature request?
 
 <!--- Provide a general summary of the issue in the title above -->
 
 ### Input Code
 <!--- If you're describing a bug, please let us know which sample code reproduces your problem -->
+<!--- If you have link to our REPL or a standalone repo please link that! -->
 
 ```js
 var your => (code) => here;
 ```
 
-### Babel Configuration (.bablerc, package.json, cli command)
+### Babel Configuration (.babelrc, package.json, cli command)
 <!--- If describing a bug, tell us what your babel configuration looks like -->
 
 ```js
@@ -50,7 +54,7 @@ var your => (code) => here;
 ### Your Environment
 <!--- Include as many relevant details about the environment you experienced the bug in -->
 
-| software         | version
+| software         | version(s)
 | ---------------- | -------
 | Babel            |  
 | node             | 

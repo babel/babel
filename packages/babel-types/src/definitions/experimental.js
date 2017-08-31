@@ -7,24 +7,8 @@ defineType("AwaitExpression", {
   fields: {
     argument: {
       validate: assertNodeType("Expression"),
-    }
-  }
-});
-
-defineType("ForAwaitStatement", {
-  visitor: ["left", "right", "body"],
-  aliases: ["Scopable", "Statement", "For", "BlockParent", "Loop", "ForXStatement"],
-  fields: {
-    left: {
-      validate: assertNodeType("VariableDeclaration", "LVal")
     },
-    right: {
-      validate: assertNodeType("Expression")
-    },
-    body: {
-      validate: assertNodeType("Statement")
-    }
-  }
+  },
 });
 
 defineType("BindExpression", {
@@ -32,16 +16,20 @@ defineType("BindExpression", {
   aliases: ["Expression"],
   fields: {
     // todo
-  }
+  },
+});
+
+defineType("Import", {
+  aliases: ["Expression"],
 });
 
 defineType("Decorator", {
   visitor: ["expression"],
   fields: {
     expression: {
-      validate: assertNodeType("Expression")
-    }
-  }
+      validate: assertNodeType("Expression"),
+    },
+  },
 });
 
 defineType("DoExpression", {
@@ -49,9 +37,9 @@ defineType("DoExpression", {
   aliases: ["Expression"],
   fields: {
     body: {
-      validate: assertNodeType("BlockStatement")
-    }
-  }
+      validate: assertNodeType("BlockStatement"),
+    },
+  },
 });
 
 defineType("ExportDefaultSpecifier", {
@@ -59,9 +47,9 @@ defineType("ExportDefaultSpecifier", {
   aliases: ["ModuleSpecifier"],
   fields: {
     exported: {
-      validate: assertNodeType("Identifier")
-    }
-  }
+      validate: assertNodeType("Identifier"),
+    },
+  },
 });
 
 defineType("ExportNamespaceSpecifier", {
@@ -69,27 +57,7 @@ defineType("ExportNamespaceSpecifier", {
   aliases: ["ModuleSpecifier"],
   fields: {
     exported: {
-      validate: assertNodeType("Identifier")
-    }
-  }
-});
-
-defineType("RestProperty", {
-  visitor: ["argument"],
-  aliases: ["UnaryLike"],
-  fields: {
-    argument: {
-      validate: assertNodeType("LVal")
-    }
-  }
-});
-
-defineType("SpreadProperty", {
-  visitor: ["argument"],
-  aliases: ["UnaryLike"],
-  fields: {
-    argument: {
-      validate: assertNodeType("Expression")
-    }
-  }
+      validate: assertNodeType("Identifier"),
+    },
+  },
 });

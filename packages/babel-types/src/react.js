@@ -1,16 +1,16 @@
 import * as t from "./index";
 
-export let isReactComponent = t.buildMatchMemberExpression("React.Component");
+export const isReactComponent = t.buildMatchMemberExpression("React.Component");
 
 export function isCompatTag(tagName?: string): boolean {
-  return !!tagName && /^[a-z]|\-/.test(tagName);
+  return !!tagName && /^[a-z]|-/.test(tagName);
 }
 
 function cleanJSXElementLiteralChild(
   child: { value: string },
   args: Array<Object>,
 ) {
-  let lines = child.value.split(/\r\n|\n|\r/);
+  const lines = child.value.split(/\r\n|\n|\r/);
 
   let lastNonEmptyLine = 0;
 
@@ -23,11 +23,11 @@ function cleanJSXElementLiteralChild(
   let str = "";
 
   for (let i = 0; i < lines.length; i++) {
-    let line = lines[i];
+    const line = lines[i];
 
-    let isFirstLine = i === 0;
-    let isLastLine = i === lines.length - 1;
-    let isLastNonEmptyLine = i === lastNonEmptyLine;
+    const isFirstLine = i === 0;
+    const isLastLine = i === lines.length - 1;
+    const isLastNonEmptyLine = i === lastNonEmptyLine;
 
     // replace rendered whitespace tabs with spaces
     let trimmedLine = line.replace(/\t/g, " ");
@@ -55,7 +55,7 @@ function cleanJSXElementLiteralChild(
 }
 
 export function buildChildren(node: Object): Array<Object> {
-  let elems = [];
+  const elems = [];
 
   for (let i = 0; i < node.children.length; i++) {
     let child = node.children[i];

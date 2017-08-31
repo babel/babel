@@ -1,13 +1,10 @@
-/* eslint max-len: 0 */
-
 import * as helpers from "babel-helpers";
 import generator from "babel-generator";
 import * as messages from "babel-messages";
 import template from "babel-template";
-import each from "lodash/each";
 import * as t from "babel-types";
 
-let buildUmdWrapper = template(`
+const buildUmdWrapper = template(`
   (function (root, factory) {
     if (typeof define === "function" && define.amd) {
       define(AMD_ARGUMENTS, factory);
@@ -22,16 +19,30 @@ let buildUmdWrapper = template(`
 `);
 
 function buildGlobal(namespace, builder) {
-  let body      = [];
-  let container = t.functionExpression(null, [t.identifier("global")], t.blockStatement(body));
-  let tree      = t.program([t.expressionStatement(t.callExpression(container, [helpers.get("selfGlobal")]))]);
+  const body = [];
+  const container = t.functionExpression(
+    null,
+    [t.identifier("global")],
+    t.blockStatement(body),
+  );
+  const tree = t.program([
+    t.expressionStatement(
+      t.callExpression(container, [helpers.get("selfGlobal")]),
+    ),
+  ]);
 
-  body.push(t.variableDeclaration("var", [
-    t.variableDeclarator(
-      namespace,
-      t.assignmentExpression("=", t.memberExpression(t.identifier("global"), namespace), t.objectExpression([]))
-    )
-  ]));
+  body.push(
+    t.variableDeclaration("var", [
+      t.variableDeclarator(
+        namespace,
+        t.assignmentExpression(
+          "=",
+          t.memberExpression(t.identifier("global"), namespace),
+          t.objectExpression([]),
+        ),
+      ),
+    ]),
+  );
 
   builder(body);
 
@@ -39,65 +50,75 @@ function buildGlobal(namespace, builder) {
 }
 
 function buildUmd(namespace, builder) {
-  let body = [];
-  body.push(t.variableDeclaration("var", [
-    t.variableDeclarator(namespace, t.identifier("global"))
-  ]));
+  const body = [];
+  body.push(
+    t.variableDeclaration("var", [
+      t.variableDeclarator(namespace, t.identifier("global")),
+    ]),
+  );
 
   builder(body);
 
   return t.program([
     buildUmdWrapper({
       FACTORY_PARAMETERS: t.identifier("global"),
-      BROWSER_ARGUMENTS:  t.assignmentExpression(
+      BROWSER_ARGUMENTS: t.assignmentExpression(
         "=",
         t.memberExpression(t.identifier("root"), namespace),
-        t.objectExpression([])
+        t.objectExpression([]),
       ),
-      COMMON_ARGUMENTS:   t.identifier("exports"),
-      AMD_ARGUMENTS:      t.arrayExpression([t.stringLiteral("exports")]),
-      FACTORY_BODY:       body,
-      UMD_ROOT:           t.identifier("this")
-    })
+      COMMON_ARGUMENTS: t.identifier("exports"),
+      AMD_ARGUMENTS: t.arrayExpression([t.stringLiteral("exports")]),
+      FACTORY_BODY: body,
+      UMD_ROOT: t.identifier("this"),
+    }),
   ]);
 }
 
 function buildVar(namespace, builder) {
-  let body = [];
-  body.push(t.variableDeclaration("var", [
-    t.variableDeclarator(namespace, t.objectExpression([]))
-  ]));
+  const body = [];
+  body.push(
+    t.variableDeclaration("var", [
+      t.variableDeclarator(namespace, t.objectExpression([])),
+    ]),
+  );
   builder(body);
   body.push(t.expressionStatement(namespace));
   return t.program(body);
 }
 
 function buildHelpers(body, namespace, whitelist) {
-  each(helpers.list, function (name) {
+  helpers.list.forEach(function(name) {
     if (whitelist && whitelist.indexOf(name) < 0) return;
 
-    let key = t.identifier(name);
-    body.push(t.expressionStatement(
-      t.assignmentExpression("=", t.memberExpression(namespace, key), helpers.get(name))
-    ));
+    const key = t.identifier(name);
+    body.push(
+      t.expressionStatement(
+        t.assignmentExpression(
+          "=",
+          t.memberExpression(namespace, key),
+          helpers.get(name),
+        ),
+      ),
+    );
   });
 }
-export default function (
+export default function(
   whitelist?: Array<string>,
   outputType: "global" | "umd" | "var" = "global",
 ) {
-  let namespace = t.identifier("babelHelpers");
+  const namespace = t.identifier("babelHelpers");
 
-  let builder = function (body) {
+  const builder = function(body) {
     return buildHelpers(body, namespace, whitelist);
   };
 
   let tree;
 
-  let build = {
+  const build = {
     global: buildGlobal,
-    umd:    buildUmd,
-    var:    buildVar,
+    umd: buildUmd,
+    var: buildVar,
   }[outputType];
 
   if (build) {

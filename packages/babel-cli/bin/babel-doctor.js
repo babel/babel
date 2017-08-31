@@ -1,3 +1,3 @@
 #!/usr/bin/env node
 
-require("../lib/babel-doctor");
+throw new Error("babel-doctor has been removed.");

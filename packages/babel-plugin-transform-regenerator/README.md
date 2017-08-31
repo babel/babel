@@ -1,31 +1,72 @@
 # babel-plugin-transform-regenerator
 
-Transform async/generator functions with [regenerator](https://github.com/facebook/regenerator)
+> Transform async/generator functions with [regenerator](https://github.com/facebook/regenerator)
+
+## Example
+
+**In**
+
+```javascript
+function* a() {
+  yield 1;
+}
+```
+
+**Out**
+
+```javascript
+var _marked = [a].map(regeneratorRuntime.mark);
+
+function a() {
+  return regeneratorRuntime.wrap(function a$(_context) {
+    while (1) {
+      switch (_context.prev = _context.next) {
+        case 0:
+          _context.next = 2;
+          return 1;
+
+        case 2:
+        case "end":
+          return _context.stop();
+      }
+    }
+  }, _marked[0], this);
+}
+```
 
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-regenerator
+npm install --save-dev babel-plugin-transform-regenerator
 ```
 
 ## Usage
 
 ### Via `.babelrc` (Recommended)
 
-**.babelrc**
+Without options:
 
-```js
-// without options
+```json
 {
   "plugins": ["transform-regenerator"]
 }
-// with options
+```
+
+With options:
+
+|name|default value|
+|---|---|
+|asyncGenerators|true|
+|generators|true|
+|async|true|
+
+```json
 {
   "plugins": [
     ["transform-regenerator", {
-        asyncGenerators: false, // true by default
-        generators: false, // true by default
-        async: false // true by default
+      "asyncGenerators": false,
+      "generators": false,
+      "async": false
     }]
   ]
 }
@@ -34,7 +75,7 @@ $ npm install babel-plugin-transform-regenerator
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-regenerator script.js
+babel --plugins transform-regenerator script.js
 ```
 
 ### Via Node API

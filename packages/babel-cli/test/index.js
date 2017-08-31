@@ -1,53 +1,65 @@
-if (process.env.running_under_istanbul) return;
+const includes = require("lodash/includes");
+const readdir = require("fs-readdir-recursive");
+const helper = require("babel-helper-fixtures");
+const assert = require("assert");
+const rimraf = require("rimraf");
+const outputFileSync = require("output-file-sync");
+const child = require("child_process");
+const merge = require("lodash/merge");
+const path = require("path");
+const chai = require("chai");
+const fs = require("fs");
 
-var readdir        = require("fs-readdir-recursive");
-var helper         = require("babel-helper-fixtures");
-var assert         = require("assert");
-var rimraf         = require("rimraf");
-var outputFileSync = require("output-file-sync");
-var child          = require("child_process");
-var path           = require("path");
-var chai           = require("chai");
-var fs             = require("fs");
-var pathExists     = require("path-exists");
-var _              = require("lodash");
+const fixtureLoc = path.join(__dirname, "fixtures");
+const tmpLoc = path.join(__dirname, "tmp");
 
-var fixtureLoc = path.join(__dirname, "fixtures");
-var tmpLoc = path.join(__dirname, "tmp");
+const fileFilter = function(x) {
+  return x !== ".DS_Store";
+};
 
-var presetLocs = [
+const presetLocs = [
   path.join(__dirname, "../../babel-preset-es2015"),
-  path.join(__dirname, "../../babel-preset-react")
+  path.join(__dirname, "../../babel-preset-react"),
 ].join(",");
 
-var pluginLocs = [
+const pluginLocs = [
   path.join(__dirname, "/../../babel-plugin-transform-strict-mode"),
   path.join(__dirname, "/../../babel-plugin-transform-es2015-modules-commonjs"),
 ].join(",");
 
-var readDir = function (loc) {
-  var files = {};
-  if (pathExists.sync(loc)) {
-    _.each(readdir(loc), function (filename) {
+const readDir = function(loc, filter) {
+  const files = {};
+  if (fs.existsSync(loc)) {
+    readdir(loc, filter).forEach(function(filename) {
       files[filename] = helper.readFile(path.join(loc, filename));
     });
   }
   return files;
 };
 
-var saveInFiles = function (files) {
-  _.each(files, function (content, filename) {
+const saveInFiles = function(files) {
+  // Place an empty .babelrc in each test so tests won't unexpectedly get to repo-level config.
+  outputFileSync(".babelrc", "{}");
+
+  Object.keys(files).forEach(function(filename) {
+    const content = files[filename];
     outputFileSync(filename, content);
   });
 };
 
-var assertTest = function (stdout, stderr, opts) {
-  var expectStderr = opts.stderr.trim();
+const assertTest = function(stdout, stderr, opts) {
+  const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();
 
   if (opts.stderr) {
     if (opts.stderrContains) {
-      assert.ok(_.includes(stderr, expectStderr), "stderr " + JSON.stringify(stderr) + " didn't contain " + JSON.stringify(expectStderr));
+      assert.ok(
+        includes(stderr, expectStderr),
+        "stderr " +
+          JSON.stringify(stderr) +
+          " didn't contain " +
+          JSON.stringify(expectStderr),
+      );
     } else {
       chai.expect(stderr).to.equal(expectStderr, "stderr didn't match");
     }
@@ -55,13 +67,19 @@ var assertTest = function (stdout, stderr, opts) {
     throw new Error("stderr:\n" + stderr);
   }
 
-  var expectStdout = opts.stdout.trim();
+  const expectStdout = opts.stdout.trim();
   stdout = stdout.trim();
   stdout = stdout.replace(/\\/g, "/");
 
   if (opts.stdout) {
     if (opts.stdoutContains) {
-      assert.ok(_.includes(stdout, expectStdout), "stdout " + JSON.stringify(stdout) + " didn't contain " + JSON.stringify(expectStdout));
+      assert.ok(
+        includes(stdout, expectStdout),
+        "stdout " +
+          JSON.stringify(stdout) +
+          " didn't contain " +
+          JSON.stringify(expectStdout),
+      );
     } else {
       chai.expect(stdout).to.equal(expectStdout, "stdout didn't match");
     }
@@ -69,47 +87,67 @@ var assertTest = function (stdout, stderr, opts) {
     throw new Error("stdout:\n" + stdout);
   }
 
-  _.each(opts.outFiles, function (expect, filename) {
-    var actual = helper.readFile(filename);
-    chai.expect(actual).to.equal(expect, "out-file " + filename);
-  });
+  if (opts.outFiles) {
+    const actualFiles = readDir(path.join(tmpLoc));
+
+    Object.keys(actualFiles).forEach(function(filename) {
+      if (!opts.inFiles.hasOwnProperty(filename)) {
+        const expect = opts.outFiles[filename];
+        const actual = actualFiles[filename];
+
+        chai.expect(expect, "Output is missing: " + filename).to.not.be
+          .undefined;
+
+        if (expect) {
+          chai
+            .expect(actual)
+            .to.equal(expect, "Compiled output does not match: " + filename);
+        }
+      }
+    });
+
+    Object.keys(opts.outFiles).forEach(function(filename) {
+      chai
+        .expect(actualFiles, "Extraneous file in output: " + filename)
+        .to.contain.key(filename);
+    });
+  }
 };
 
-var buildTest = function (binName, testName, opts) {
-  var binLoc = path.join(__dirname, "../lib", binName);
+const buildTest = function(binName, testName, opts) {
+  const binLoc = path.join(__dirname, "../lib", binName);
 
-  return function (callback) {
-    this.timeout(5000);
+  return function(callback) {
     clear();
     saveInFiles(opts.inFiles);
 
-    var args = [binLoc];
+    let args = [binLoc];
 
     if (binName !== "babel-external-helpers") {
       args.push("--presets", presetLocs, "--plugins", pluginLocs);
     }
 
     if (binName === "babel-node") {
-      args.push("--only", "packages/*/test");
+      args.push("--only", "../../../../packages/*/test");
     }
 
     args = args.concat(opts.args);
 
-    var spawn = child.spawn(process.execPath, args);
+    const spawn = child.spawn(process.execPath, args);
 
-    var stderr = "";
-    var stdout = "";
+    let stderr = "";
+    let stdout = "";
 
-    spawn.stderr.on("data", function (chunk) {
+    spawn.stderr.on("data", function(chunk) {
       stderr += chunk;
     });
 
-    spawn.stdout.on("data", function (chunk) {
+    spawn.stdout.on("data", function(chunk) {
       stdout += chunk;
     });
 
-    spawn.on("close", function () {
-      var err;
+    spawn.on("close", function() {
+      let err;
 
       try {
         assertTest(stdout, stderr, opts);
@@ -118,7 +156,8 @@ var buildTest = function (binName, testName, opts) {
       }
 
       if (err) {
-        err.message = args.join(" ") + ": " + err.message;
+        err.message =
+          args.map(arg => `"${arg}"`).join(" ") + ": " + err.message;
       }
 
       callback(err);
@@ -131,49 +170,49 @@ var buildTest = function (binName, testName, opts) {
   };
 };
 
-var clear = function () {
+const clear = function() {
   process.chdir(__dirname);
-  if (pathExists.sync(tmpLoc)) rimraf.sync(tmpLoc);
+  if (fs.existsSync(tmpLoc)) rimraf.sync(tmpLoc);
   fs.mkdirSync(tmpLoc);
   process.chdir(tmpLoc);
 };
 
-_.each(fs.readdirSync(fixtureLoc), function (binName) {
+fs.readdirSync(fixtureLoc).forEach(function(binName) {
   if (binName[0] === ".") return;
 
-  var suiteLoc = path.join(fixtureLoc, binName);
-  suite("bin/" + binName, function () {
-    _.each(fs.readdirSync(suiteLoc), function (testName) {
+  const suiteLoc = path.join(fixtureLoc, binName);
+  describe("bin/" + binName, function() {
+    fs.readdirSync(suiteLoc).forEach(function(testName) {
       if (testName[0] === ".") return;
 
-      var testLoc = path.join(suiteLoc, testName);
+      const testLoc = path.join(suiteLoc, testName);
 
-      var opts = {
-        args: []
+      const opts = {
+        args: [],
       };
 
-      var optionsLoc = path.join(testLoc, "options.json");
-      if (pathExists.sync(optionsLoc)) _.merge(opts, require(optionsLoc));
+      const optionsLoc = path.join(testLoc, "options.json");
+      if (fs.existsSync(optionsLoc)) merge(opts, require(optionsLoc));
 
-      _.each(["stdout", "stdin", "stderr"], function (key) {
-        var loc = path.join(testLoc, key + ".txt");
-        if (pathExists.sync(loc)) {
+      ["stdout", "stdin", "stderr"].forEach(function(key) {
+        const loc = path.join(testLoc, key + ".txt");
+        if (fs.existsSync(loc)) {
           opts[key] = helper.readFile(loc);
         } else {
           opts[key] = opts[key] || "";
         }
       });
 
-      opts.outFiles = readDir(path.join(testLoc, "out-files"));
-      opts.inFiles  = readDir(path.join(testLoc, "in-files"));
+      opts.outFiles = readDir(path.join(testLoc, "out-files"), fileFilter);
+      opts.inFiles = readDir(path.join(testLoc, "in-files"), fileFilter);
 
-      var babelrcLoc = path.join(testLoc, ".babelrc");
-      if (pathExists.sync(babelrcLoc)) {
+      const babelrcLoc = path.join(testLoc, ".babelrc");
+      if (fs.existsSync(babelrcLoc)) {
         // copy .babelrc file to tmp directory
-        opts.inFiles['.babelrc'] = helper.readFile(babelrcLoc);
+        opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
       }
 
-      test(testName, buildTest(binName, testName, opts));
+      it(testName, buildTest(binName, testName, opts));
     });
   });
 });

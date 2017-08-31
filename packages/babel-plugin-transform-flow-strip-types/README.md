@@ -1,11 +1,25 @@
 # babel-plugin-transform-flow-strip-types
 
-Strip flow type annotations from your output code.
+> Strip all [flow](http://flowtype.org) type annotations and declarations from your output code.
+
+## Example
+
+**In**
+
+```javascript
+function foo(one: any, two: number, three?): string {}
+```
+
+**Out**
+
+```javascript
+function foo(one, two, three) {}
+```
 
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-flow-strip-types
+npm install --save-dev babel-plugin-transform-flow-strip-types
 ```
 
 ## Usage
@@ -23,7 +37,7 @@ $ npm install babel-plugin-transform-flow-strip-types
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-flow-strip-types script.js
+babel --plugins transform-flow-strip-types script.js
 ```
 
 ### Via Node API
@@ -33,3 +47,13 @@ require("babel-core").transform("code", {
   plugins: ["transform-flow-strip-types"]
 });
 ```
+
+## Options
+
+### `requireDirective`
+
+`boolean`, defaults to `false`.
+
+Setting this to true will only strip annotations and declarations from files
+that contain the `// @flow` directive. It will also throw errors for any Flow
+annotations found in files without the directive.

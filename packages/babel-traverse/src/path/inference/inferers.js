@@ -3,13 +3,25 @@ import * as t from "babel-types";
 export { default as Identifier } from "./inferer-reference";
 
 export function VariableDeclarator() {
-  let id = this.get("id");
+  const id = this.get("id");
 
-  if (id.isIdentifier()) {
-    return this.get("init").getTypeAnnotation();
-  } else {
-    return;
+  if (!id.isIdentifier()) return;
+  const init = this.get("init");
+
+  let type = init.getTypeAnnotation();
+
+  if (type && type.type === "AnyTypeAnnotation") {
+    // Detect "var foo = Array()" calls so we can optimize for arrays vs iterables.
+    if (
+      init.isCallExpression() &&
+      init.get("callee").isIdentifier({ name: "Array" }) &&
+      !init.scope.hasBinding("Array", true /* noGlobals */)
+    ) {
+      type = ArrayExpression();
+    }
   }
+
+  return type;
 }
 
 export function TypeCastExpression(node) {
@@ -30,7 +42,7 @@ export function TemplateLiteral() {
 }
 
 export function UnaryExpression(node) {
-  let operator = node.operator;
+  const operator = node.operator;
 
   if (operator === "void") {
     return t.voidTypeAnnotation();
@@ -44,15 +56,15 @@ export function UnaryExpression(node) {
 }
 
 export function BinaryExpression(node) {
-  let operator = node.operator;
+  const operator = node.operator;
 
   if (t.NUMBER_BINARY_OPERATORS.indexOf(operator) >= 0) {
     return t.numberTypeAnnotation();
   } else if (t.BOOLEAN_BINARY_OPERATORS.indexOf(operator) >= 0) {
     return t.booleanTypeAnnotation();
   } else if (operator === "+") {
-    let right = this.get("right");
-    let left  = this.get("left");
+    const right = this.get("right");
+    const left = this.get("left");
 
     if (left.isBaseType("number") && right.isBaseType("number")) {
       // both numbers so this will be a number
@@ -65,7 +77,7 @@ export function BinaryExpression(node) {
     // unsure if left and right are strings or numbers so stay on the safe side
     return t.unionTypeAnnotation([
       t.stringTypeAnnotation(),
-      t.numberTypeAnnotation()
+      t.numberTypeAnnotation(),
     ]);
   }
 }
@@ -73,19 +85,21 @@ export function BinaryExpression(node) {
 export function LogicalExpression() {
   return t.createUnionTypeAnnotation([
     this.get("left").getTypeAnnotation(),
-    this.get("right").getTypeAnnotation()
+    this.get("right").getTypeAnnotation(),
   ]);
 }
 
 export function ConditionalExpression() {
   return t.createUnionTypeAnnotation([
     this.get("consequent").getTypeAnnotation(),
-    this.get("alternate").getTypeAnnotation()
+    this.get("alternate").getTypeAnnotation(),
   ]);
 }
 
 export function SequenceExpression() {
-  return this.get("expressions").pop().getTypeAnnotation();
+  return this.get("expressions")
+    .pop()
+    .getTypeAnnotation();
 }
 
 export function AssignmentExpression() {
@@ -93,7 +107,7 @@ export function AssignmentExpression() {
 }
 
 export function UpdateExpression(node) {
-  let operator = node.operator;
+  const operator = node.operator;
   if (operator === "++" || operator === "--") {
     return t.numberTypeAnnotation();
   }
@@ -137,9 +151,30 @@ function Func() {
   return t.genericTypeAnnotation(t.identifier("Function"));
 }
 
-export { Func as Function, Func as Class };
+export {
+  Func as FunctionExpression,
+  Func as ArrowFunctionExpression,
+  Func as FunctionDeclaration,
+  Func as ClassExpression,
+  Func as ClassDeclaration,
+};
 
+const isArrayFrom = t.buildMatchMemberExpression("Array.from");
+const isObjectKeys = t.buildMatchMemberExpression("Object.keys");
+const isObjectValues = t.buildMatchMemberExpression("Object.values");
+const isObjectEntries = t.buildMatchMemberExpression("Object.entries");
 export function CallExpression() {
+  const { callee } = this.node;
+  if (isObjectKeys(callee)) {
+    return t.arrayTypeAnnotation(t.stringTypeAnnotation());
+  } else if (isArrayFrom(callee) || isObjectValues(callee)) {
+    return t.arrayTypeAnnotation(t.anyTypeAnnotation());
+  } else if (isObjectEntries(callee)) {
+    return t.arrayTypeAnnotation(
+      t.tupleTypeAnnotation([t.stringTypeAnnotation(), t.anyTypeAnnotation()]),
+    );
+  }
+
   return resolveCall(this.get("callee"));
 }
 

@@ -1,12 +1,10 @@
-/* eslint indent: 0 */
-
 /**
  * This tiny wrapper file checks for known node flags and appends them
  * when found, before invoking the "real" _babel-node(1) executable.
  */
 
-let getV8Flags = require("v8flags");
-let path = require("path");
+import getV8Flags from "v8flags";
+import path from "path";
 
 let args = [path.join(__dirname, "_babel-node")];
 
@@ -14,9 +12,9 @@ let babelArgs = process.argv.slice(2);
 let userArgs;
 
 // separate node arguments from script arguments
-let argSeparator = babelArgs.indexOf("--");
+const argSeparator = babelArgs.indexOf("--");
 if (argSeparator > -1) {
-  userArgs  = babelArgs.slice(argSeparator); // including the  --
+  userArgs = babelArgs.slice(argSeparator); // including the  --
   babelArgs = babelArgs.slice(0, argSeparator);
 }
 
@@ -35,7 +33,7 @@ function getNormalizedV8Flag(arg) {
   return arg;
 }
 
-getV8Flags(function (err, v8Flags) {
+getV8Flags(function(err, v8Flags) {
   babelArgs.forEach(function(arg) {
     const flag = arg.split("=")[0];
 
@@ -48,6 +46,7 @@ getV8Flags(function (err, v8Flags) {
       case "--debug":
       case "--debug-brk":
       case "--inspect":
+      case "--inspect-brk":
         args.unshift(arg);
         break;
 
@@ -60,7 +59,10 @@ getV8Flags(function (err, v8Flags) {
         break;
 
       default:
-        if (v8Flags.indexOf(getNormalizedV8Flag(flag)) >= 0 || arg.indexOf("--trace") === 0) {
+        if (
+          v8Flags.indexOf(getNormalizedV8Flag(flag)) >= 0 ||
+          arg.indexOf("--trace") === 0
+        ) {
           args.unshift(arg);
         } else {
           args.push(arg);
@@ -75,21 +77,28 @@ getV8Flags(function (err, v8Flags) {
   }
 
   try {
-    let kexec = require("kexec");
+    const kexec = require("kexec");
     kexec(process.argv[0], args);
   } catch (err) {
     if (err.code !== "MODULE_NOT_FOUND") throw err;
 
-    let child_process = require("child_process");
-    let proc = child_process.spawn(process.argv[0], args, { stdio: "inherit" });
-    proc.on("exit", function (code, signal) {
-      process.on("exit", function () {
+    const child_process = require("child_process");
+    const proc = child_process.spawn(process.argv[0], args, {
+      stdio: "inherit",
+    });
+    proc.on("exit", function(code, signal) {
+      process.on("exit", function() {
         if (signal) {
           process.kill(process.pid, signal);
         } else {
           process.exit(code);
         }
       });
+    });
+
+    process.on("SIGINT", () => {
+      proc.kill("SIGINT");
+      process.exit(1);
     });
   }
 });

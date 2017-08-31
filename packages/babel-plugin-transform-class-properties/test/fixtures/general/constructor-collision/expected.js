@@ -9,5 +9,10 @@ var Foo = function Foo() {
 };
 
 var _initialiseProps = function () {
-  this.bar = foo;
+  Object.defineProperty(this, "bar", {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    value: foo
+  });
 };

@@ -1,25 +1,30 @@
 {
-  "lerna": "2.0.0-beta.23",
-  "version": "6.15.0",
+  "lerna": "2.0.0-rc.4",
+  "version": "7.0.0-alpha.20",
   "changelog": {
     "repo": "babel/babel",
     "labels": {
-      "tag: bug fix": "Bug Fix",
-      "tag: breaking change": "Breaking Change",
-      "tag: documentation": "Documentation",
-      "tag: internal": "Internal",
-      "tag: new feature": "New Feature",
-      "tag: polish": "Polish",
-      "tag: spec compliancy": "Spec Compliancy"
+      "Tag: Spec Compliancy": ":eyeglasses: Spec Compliancy",
+      "Tag: Breaking Change": ":boom: Breaking Change",
+      "Tag: New Feature": ":rocket: New Feature",
+      "Tag: Bug Fix": ":bug: Bug Fix",
+      "Tag: Polish": ":nail_care: Polish",
+      "Tag: Docs": ":memo: Documentation",
+      "Tag: Internal": ":house: Internal"
     }
   },
-  "bootstrapConfig": {
-    "ignore": "babel-runtime"
+  "cacheDir": ".changelog",
+  "commands": {
+    "publish": {
+      "ignore": [
+        "*.md",
+        "test/**"
+      ]
+    }
   },
-  "publishConfig": {
-    "ignore": [
-      "*.md",
-      "test/**"
-    ]
-  }
+  "packages": [
+    "packages/*"
+  ],
+  "npmClient": "yarn",
+  "useWorkspaces": true
 }

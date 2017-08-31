@@ -1,13 +1,13 @@
-export default function ({ types: t }) {
+export default function({ types: t }) {
   function statementList(key, path) {
-    let paths: Array = path.get(key);
+    const paths: Array = path.get(key);
 
-    for (let path of paths) {
-      let func = path.node;
+    for (const path of paths) {
+      const func = path.node;
       if (!path.isFunctionDeclaration()) continue;
 
-      let declar = t.variableDeclaration("let", [
-        t.variableDeclarator(func.id, t.toExpression(func))
+      const declar = t.variableDeclaration("let", [
+        t.variableDeclarator(func.id, t.toExpression(func)),
       ]);
 
       // hoist it up above everything else
@@ -23,8 +23,11 @@ export default function ({ types: t }) {
   return {
     visitor: {
       BlockStatement(path) {
-        let { node, parent } = path;
-        if (t.isFunction(parent, { body: node })  || t.isExportDeclaration(parent)) {
+        const { node, parent } = path;
+        if (
+          t.isFunction(parent, { body: node }) ||
+          t.isExportDeclaration(parent)
+        ) {
           return;
         }
 
@@ -33,7 +36,7 @@ export default function ({ types: t }) {
 
       SwitchCase(path) {
         statementList("consequent", path);
-      }
-    }
+      },
+    },
   };
 }

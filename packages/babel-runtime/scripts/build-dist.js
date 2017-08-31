@@ -1,57 +1,39 @@
-var outputFile = require("output-file-sync");
-var each       = require("lodash/each");
-var fs         = require("fs");
-var _          = require("lodash");
+"use strict";
 
-var coreDefinitions = require("babel-plugin-transform-runtime").definitions;
+const outputFile = require("output-file-sync");
+const coreDefinitions = require("babel-plugin-transform-runtime").definitions;
+const helpers = require("babel-helpers");
+const babel = require("../../babel-core");
+const t = require("../../babel-types");
 
-var paths = ["is-iterable", "get-iterator"];
+const paths = ["is-iterable", "get-iterator"];
 
-each(coreDefinitions.builtins, function (path) {
+Object.keys(coreDefinitions.builtins).forEach((key) => {
+  const path = coreDefinitions.builtins[key];
   paths.push(path);
 });
 
-each(coreDefinitions.methods, function (props) {
-  each(props, function (path) {
+Object.keys(coreDefinitions.methods).forEach((key) => {
+  const props = coreDefinitions.methods[key];
+  Object.keys(props).forEach((key2) => {
+    const path = props[key2];
     paths.push(path);
   });
 });
 
-each(paths, function (path) {
-  writeFile("core-js/" + path + ".js", defaultify('require("core-js/library/fn/' + path + '")'));
+paths.forEach(function(path) {
+  writeFile(
+    "core-js/" + path + ".js",
+    defaultify(`require("core-js/library/fn/${path}")`)
+  );
 });
-
-// Should be removed in the next major release:
-var legacy = {
-  "string/pad-left": "string/pad-start",
-  "string/pad-right": "string/pad-end"
-};
-
-each(legacy, function (value, key) {
-  writeFile("core-js/" + key + ".js", defaultify('require("core-js/library/fn/' + value + '")'));
-});
-
-var helpers    = require("babel-helpers");
-var babel      = require("../../babel-core");
-var util       = require("../../babel-core/lib/util");
-var t          = require("../../babel-types");
 
 function relative(filename) {
-  return __dirname + "/../" + filename;
-}
-
-function readFile(filename, shouldDefaultify) {
-  var file = fs.readFileSync(require.resolve(filename), "utf8");
-
-  if (shouldDefaultify) {
-    file += "\n" + defaultify("module.exports") + "\n";
-  }
-
-  return file;
+  return `${__dirname}/../${filename}`;
 }
 
 function defaultify(name) {
-  return 'module.exports = { "default": ' + name + ', __esModule: true };';
+  return `module.exports = { "default": ${name}, __esModule: true };`;
 }
 
 function writeRootFile(filename, content) {
@@ -64,66 +46,95 @@ function writeFile(filename, content) {
   return writeRootFile(filename, content);
 }
 
-var transformOpts = {
-  presets: [
-    require("../../babel-preset-es2015")
-  ],
+function makeTransformOpts(modules, useBuiltIns) {
+  const opts = {
+    presets: [[require("../../babel-preset-es2015"), { modules: false }]],
 
-  plugins: [
-    require("../../babel-plugin-transform-runtime"),
-    [require("../../babel-plugin-transform-es2015-modules-commonjs"), {loose: true, strict: false}]
-  ]
-};
+    plugins: [
+      [
+        require("../../babel-plugin-transform-runtime"),
+        { useBuiltIns, useESModules: modules === false },
+      ],
+    ],
+  };
+  if (modules === "commonjs") {
+    opts.plugins.push([
+      require("../../babel-plugin-transform-es2015-modules-commonjs"),
+      { loose: true, strict: false },
+    ]);
+  } else if (modules !== false) {
+    throw new Error("Unsupported module type");
+  }
+  return opts;
+}
 
 function buildRuntimeRewritePlugin(relativePath, helperName) {
   return {
-    pre: function (file){
-      var original = file.get("helperGenerator");
-      file.set("helperGenerator", function(name){
+    pre(file) {
+      const original = file.get("helperGenerator");
+      file.set("helperGenerator", (name) => {
         // make sure that helpers won't insert circular references to themselves
-        if (name === helperName) return;
+        if (name === helperName) return false;
 
         return original(name);
       });
     },
     visitor: {
-      CallExpression: function(path){
-        if (!path.get("callee").isIdentifier({name: "require"}) ||
+      ImportDeclaration(path) {
+        path.get("source").node.value = path
+          .get("source")
+          .node.value.replace(/^babel-runtime/, relativePath);
+      },
+      CallExpression(path) {
+        if (
+          !path.get("callee").isIdentifier({ name: "require" }) ||
           path.get("arguments").length !== 1 ||
-          !path.get("arguments")[0].isStringLiteral()) return;
+          !path.get("arguments")[0].isStringLiteral()
+        ) {
+          return;
+        }
 
         // replace any reference to babel-runtime with a relative path
-        path.get("arguments")[0].node.value = path.get("arguments")[0].node.value
-          .replace(/^babel-runtime/, relativePath);
-      }
-    }
+        path.get("arguments")[0].node.value = path
+          .get("arguments")[0]
+          .node.value.replace(/^babel-runtime/, relativePath);
+      },
+    },
   };
 }
 
-function selfContainify(path, code) {
-  return babel.transform(code, {
-    presets: transformOpts.presets,
-    plugins: transformOpts.plugins.concat([buildRuntimeRewritePlugin(path, null)])
-  }).code;
-}
+function buildHelper(helperName, modules, useBuiltIns) {
+  const helper = helpers.get(helperName);
+  // avoid an unneccessary TDZ in the easy case
+  if (helper.type === "FunctionExpression") {
+    helper.type = "FunctionDeclaration";
+  }
+  const tree = t.program([t.exportDefaultDeclaration(helper)]);
 
-function buildHelper(helperName) {
-  var tree = t.program([
-    t.exportDefaultDeclaration(helpers.get(helperName))
-  ]);
+  const transformOpts = makeTransformOpts(modules, useBuiltIns);
+
+  const relative = useBuiltIns ? "../.." : "..";
 
   return babel.transformFromAst(tree, null, {
     presets: transformOpts.presets,
-    plugins: transformOpts.plugins.concat([buildRuntimeRewritePlugin("..", helperName)])
+    plugins: transformOpts.plugins.concat([
+      buildRuntimeRewritePlugin(
+        modules === false ? `../${relative}` : relative,
+        helperName
+      ),
+    ]),
   }).code;
 }
 
-each(helpers.list, function (helperName) {
-  writeFile("helpers/" + helperName + ".js", buildHelper(helperName));
+for (const modules of ["commonjs", false]) {
+  for (const builtin of [false, true]) {
+    const dirname = `helpers/${builtin ? "builtin/" : ""}${!modules ? "es6/" : ""}`;
 
-  // compat
-  var helperAlias = _.kebabCase(helperName);
-  var content = "module.exports = require(\"./" + helperName + ".js\");";
-  writeFile("helpers/_" + helperAlias + ".js", content);
-  if (helperAlias !== helperName) writeFile("helpers/" + helperAlias + ".js", content);
-});
+    for (const helperName of helpers.list) {
+      writeFile(
+        `${dirname}${helperName}.js`,
+        buildHelper(helperName, modules, builtin)
+      );
+    }
+  }
+}

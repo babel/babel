@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var _exportNames = ['z', 'a', 'b', 'c', 'd', 'e', 'f'];
 
-var _mod = require('mod');
+var _mod = require("mod");
 
 Object.keys(_mod).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;

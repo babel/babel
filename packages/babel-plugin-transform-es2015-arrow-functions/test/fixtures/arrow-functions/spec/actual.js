@@ -4,4 +4,7 @@ function foo() {
   (function () {
     return () => this;
   })();
+  return {
+    g: () => this
+  }
 }

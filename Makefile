@@ -2,10 +2,20 @@ MAKEFLAGS = -j1
 
 export NODE_ENV = test
 
-.PHONY: clean test test-only test-cov test-clean test-travis publish build bootstrap publish-core publish-runtime build-website build-core watch-core build-core-test clean-core prepublish
+# Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
+export FORCE_COLOR = true
+
+.PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
 build: clean
+	rm -rf packages/*/lib
 	./node_modules/.bin/gulp build
+ifneq ($(BABEL_ENV), "cov")
+	make build-standalone
+endif
+
+build-standalone:
+	./node_modules/.bin/gulp build-babel-standalone --cwd=packages/babel-standalone/
 
 build-dist: build
 	cd packages/babel-polyfill; \
@@ -15,15 +25,23 @@ build-dist: build
 	node scripts/generate-babel-types-docs.js
 
 watch: clean
-	./node_modules/.bin/gulp watch
+	rm -rf packages/*/lib
+	BABEL_ENV=development ./node_modules/.bin/gulp watch
 
 lint:
-	./node_modules/.bin/eslint packages/*/src
+	./node_modules/.bin/eslint scripts packages *.js --format=codeframe --rulesdir="./eslint_rules"
+
+flow:
+	./node_modules/.bin/flow check --strip-root
+
+fix:
+	./node_modules/.bin/eslint scripts packages *.js --format=codeframe --fix --rulesdir="./eslint_rules"
 
 clean: test-clean
-	rm -rf packages/*/lib
 	rm -rf packages/babel-polyfill/browser*
 	rm -rf packages/babel-polyfill/dist
+	# rm -rf packages/babel-runtime/helpers
+	# rm -rf packages/babel-runtime/core-js
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
 
@@ -31,38 +49,44 @@ test-clean:
 	rm -rf packages/*/test/tmp
 	rm -rf packages/*/test-fixtures.json
 
+clean-all:
+	rm -rf packages/*/lib
+	rm -rf node_modules
+	rm -rf packages/*/node_modules
+	rm -rf package-lock.json
+	rm -rf packages/*/package-lock.json
+	make clean
+
 test-only:
 	./scripts/test.sh
 	make test-clean
 
 test: lint test-only
 
-test-cov: clean
-	# rebuild with test
-	rm -rf packages/*/lib
-	BABEL_ENV=test; ./node_modules/.bin/gulp build
-	./scripts/test-cov.sh
-
 test-ci:
-	make lint
-	NODE_ENV=test make bootstrap
-	# if ./node_modules/.bin/semver `npm --version` -r ">=3.3.0"; then ./node_modules/.bin/flow check; fi
+	make bootstrap
+	make test-only
+
+test-ci-coverage: SHELL:=/bin/bash
+test-ci-coverage:
+	BABEL_ENV=cov make bootstrap
 	./scripts/test-cov.sh
-	cat ./coverage/coverage.json | ./node_modules/codecov.io/bin/codecov.io.js
+	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
 publish:
 	git pull --rebase
 	rm -rf packages/*/lib
 	BABEL_ENV=production make build-dist
 	make test
-	./node_modules/.bin/lerna publish --only-explicit-updates
+	# not using lerna independent mode atm, so only update packages that have changed since we use ^
+	# --only-explicit-updates
+	./node_modules/.bin/lerna publish --force-publish=* --npm-tag=next --exact --skip-temp-tag
 	make clean
-	#./scripts/build-website.sh
 
 bootstrap:
-	npm install
+	make clean-all
+	yarn
 	./node_modules/.bin/lerna bootstrap
 	make build
 	cd packages/babel-runtime; \
-	npm install; \
 	node scripts/build-dist.js

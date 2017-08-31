@@ -1,12 +1,12 @@
 import * as defineMap from "babel-helper-define-map";
 
-export default function ({ types: t }) {
+export default function({ types: t }) {
   return {
     visitor: {
       ObjectExpression(path, file) {
-        let { node } = path;
+        const { node } = path;
         let hasAny = false;
-        for (let prop of (node.properties: Array)) {
+        for (const prop of (node.properties: Array)) {
           if (prop.kind === "get" || prop.kind === "set") {
             hasAny = true;
             break;
@@ -14,9 +14,9 @@ export default function ({ types: t }) {
         }
         if (!hasAny) return;
 
-        let mutatorMap = {};
+        const mutatorMap = {};
 
-        node.properties = node.properties.filter(function (prop) {
+        node.properties = node.properties.filter(function(prop) {
           if (!prop.computed && (prop.kind === "get" || prop.kind === "set")) {
             defineMap.push(mutatorMap, prop, null, file);
             return false;
@@ -25,11 +25,16 @@ export default function ({ types: t }) {
           }
         });
 
-        path.replaceWith(t.callExpression(
-          t.memberExpression(t.identifier("Object"), t.identifier("defineProperties")),
-          [node, defineMap.toDefineObject(mutatorMap)]
-        ));
-      }
-    }
+        path.replaceWith(
+          t.callExpression(
+            t.memberExpression(
+              t.identifier("Object"),
+              t.identifier("defineProperties"),
+            ),
+            [node, defineMap.toDefineObject(mutatorMap)],
+          ),
+        );
+      },
+    },
   };
 }

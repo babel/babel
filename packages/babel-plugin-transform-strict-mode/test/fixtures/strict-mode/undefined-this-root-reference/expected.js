@@ -1,3 +1,3 @@
 "use strict";
 
-undefined;
+void 0;

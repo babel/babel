@@ -1,16 +1,16 @@
 import presetStage3 from "babel-preset-stage-3";
 
-import transformClassProperties from "babel-plugin-transform-class-properties";
-import transformObjectRestSpread from "babel-plugin-transform-object-rest-spread";
-import transformDecorators from "babel-plugin-transform-decorators";
+import transformFunctionSent from "babel-plugin-transform-function-sent";
+import transformExportNamespace from "babel-plugin-transform-export-namespace";
+import transformNumericSeparator from "babel-plugin-transform-numeric-separator";
 
-export default {
-  presets: [
-    presetStage3
-  ],
-  plugins: [
-    transformClassProperties,
-    transformObjectRestSpread,
-    transformDecorators
-  ]
-};
+export default function() {
+  return {
+    presets: [presetStage3],
+    plugins: [
+      transformFunctionSent,
+      transformExportNamespace,
+      transformNumericSeparator,
+    ],
+  };
+}

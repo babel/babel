@@ -44,6 +44,7 @@ var a: { subObj: {strVal: string} }
 var a: { subObj: ?{strVal: string} }
 var a: { param1: number; param2: string }
 var a: { param1: number; param2?: string }
+var a: { ...any; ...{}|{p: void} };
 var a: { [a: number]: string; [b: number]: string; };
 var a: { add(x: number, ...y: Array<string>): void };
 var a: { id<T>(x: T): T; };
@@ -97,5 +98,11 @@ import type2, { foo3 } from "bar";
 import type * as namespace from "bar";
 export type { foo };
 export type { foo2 } from "bar";
+import {type T} from "foo";
+import {type T2, V1} from "foo";
+import {typeof V2} from "foo";
+import {typeof V3, V4} from "foo";
 export interface foo5 { p: number }
 export interface foo6<T> { p: T }
+import 'foo';
+export type * from "foo";

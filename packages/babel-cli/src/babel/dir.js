@@ -1,27 +1,38 @@
-let outputFileSync = require("output-file-sync");
-let pathExists     = require("path-exists");
-let slash          = require("slash");
-let path           = require("path");
-let util           = require("./util");
-let fs             = require("fs");
-let _              = require("lodash");
+import defaults from "lodash/defaults";
+import outputFileSync from "output-file-sync";
+import slash from "slash";
+import path from "path";
+import fs from "fs";
 
-module.exports = function (commander, filenames) {
+import * as util from "./util";
+
+export default function(commander, filenames, opts) {
   function write(src, relative) {
+    if (!util.isCompilableExtension(relative, commander.extensions)) {
+      return false;
+    }
+
     // remove extension and then append back on .js
     relative = relative.replace(/\.(\w*?)$/, "") + ".js";
 
-    let dest = path.join(commander.outDir, relative);
+    const dest = path.join(commander.outDir, relative);
 
-    let data = util.compile(src, {
-      sourceFileName: slash(path.relative(dest + "/..", src)),
-      sourceMapTarget: path.basename(relative)
-    });
-    if (!commander.copyFiles && data.ignored) return;
+    const data = util.compile(
+      src,
+      defaults(
+        {
+          sourceFileName: slash(path.relative(dest + "/..", src)),
+          sourceMapTarget: path.basename(relative),
+        },
+        opts,
+      ),
+    );
+
+    if (!data) return false;
 
     // we've requested explicit sourcemaps to be written to disk
     if (data.map && commander.sourceMaps && commander.sourceMaps !== "inline") {
-      let mapLoc = dest + ".map";
+      const mapLoc = dest + ".map";
       data.code = util.addSourceMappingUrl(data.code, mapLoc);
       outputFileSync(mapLoc, JSON.stringify(data.map));
     }
@@ -30,30 +41,30 @@ module.exports = function (commander, filenames) {
     util.chmod(src, dest);
 
     util.log(src + " -> " + dest);
+
+    return true;
   }
 
   function handleFile(src, filename) {
-    if (util.shouldIgnore(src)) return;
+    const didWrite = write(src, filename);
 
-    if (util.canCompile(filename, commander.extensions)) {
-      write(src, filename);
-    } else if (commander.copyFiles) {
-      let dest = path.join(commander.outDir, filename);
+    if (!didWrite && commander.copyFiles) {
+      const dest = path.join(commander.outDir, filename);
       outputFileSync(dest, fs.readFileSync(src));
       util.chmod(src, dest);
     }
   }
 
   function handle(filename) {
-    if (!pathExists.sync(filename)) return;
+    if (!fs.existsSync(filename)) return;
 
-    let stat = fs.statSync(filename);
+    const stat = fs.statSync(filename);
 
     if (stat.isDirectory(filename)) {
-      let dirname = filename;
+      const dirname = filename;
 
-      _.each(util.readdir(dirname), function (filename) {
-        let src = path.join(dirname, filename);
+      util.readdir(dirname).forEach(function(filename) {
+        const src = path.join(dirname, filename);
         handleFile(src, filename);
       });
     } else {
@@ -62,21 +73,25 @@ module.exports = function (commander, filenames) {
   }
 
   if (!commander.skipInitialBuild) {
-    _.each(filenames, handle);
+    filenames.forEach(handle);
   }
 
   if (commander.watch) {
-    let chokidar = util.requireChokidar();
+    const chokidar = util.requireChokidar();
 
-    _.each(filenames, function (dirname) {
-      let watcher = chokidar.watch(dirname, {
+    filenames.forEach(function(dirname) {
+      const watcher = chokidar.watch(dirname, {
         persistent: true,
-        ignoreInitial: true
+        ignoreInitial: true,
+        awaitWriteFinish: {
+          stabilityThreshold: 50,
+          pollInterval: 10,
+        },
       });
 
-      _.each(["add", "change"], function (type) {
-        watcher.on(type, function (filename) {
-          let relative = path.relative(dirname, filename) || filename;
+      ["add", "change"].forEach(function(type) {
+        watcher.on(type, function(filename) {
+          const relative = path.relative(dirname, filename) || filename;
           try {
             handleFile(filename, relative);
           } catch (err) {
@@ -86,4 +101,4 @@ module.exports = function (commander, filenames) {
       });
     });
   }
-};
+}

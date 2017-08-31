@@ -1,0 +1,26 @@
+{
+  plugins: [
+      "./thirteen",
+      "./fourteen",
+  ],
+  presets: [{
+    plugins: [
+        "./fifteen",
+        "./sixteen",
+    ],
+  }],
+  env: {
+    development: {
+      plugins: [
+          "./seventeen",
+          "./eighteen",
+      ],
+      presets: [{
+        plugins: [
+          "./nineteen",
+          "./twenty",
+        ],
+      }],
+    },
+  },
+}

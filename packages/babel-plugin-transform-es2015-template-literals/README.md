@@ -1,11 +1,25 @@
 # babel-plugin-transform-es2015-template-literals
 
-Compile ES2015 template literals to ES5
+> Compile ES2015 template literals to ES5
+
+## Example
+
+**In**
+
+```javascript
+`foo${bar}`;
+```
+
+**Out**
+
+```javascript
+"foo".concat(bar);
+```
 
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es2015-template-literals
+npm install --save-dev babel-plugin-transform-es2015-template-literals
 ```
 
 ## Usage
@@ -14,18 +28,21 @@ $ npm install babel-plugin-transform-es2015-template-literals
 
 **.babelrc**
 
-```js
-// without options
+Without options:
+
+```json
 {
   "plugins": ["transform-es2015-template-literals"]
 }
+```
 
-// with options
+With options:
+
+```json
 {
   "plugins": [
     ["transform-es2015-template-literals", {
-      "loose": true,
-      "spec": true
+      "loose": true
     }]
   ]
 }
@@ -34,7 +51,7 @@ $ npm install babel-plugin-transform-es2015-template-literals
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es2015-template-literals script.js
+babel --plugins transform-es2015-template-literals script.js
 ```
 
 ### Via Node API
@@ -43,4 +60,26 @@ $ babel --plugins transform-es2015-template-literals script.js
 require("babel-core").transform("code", {
   plugins: ["transform-es2015-template-literals"]
 });
+```
+
+## Options
+
+### `loose`
+
+`boolean`, defaults to `false`.
+
+When `true`, tagged template literal objects aren't frozen. All template literal expressions and quasis are combined with the `+` operator instead of with `String.prototype.concat`.
+
+When `false` or not set, all template literal expressions and quasis are combined with `String.prototype.concat`. It will handle cases with `Symbol.toPrimitive` correctly and throw correctly if template literal expression is a `Symbol()`. See [babel/babel#5791](https://github.com/babel/babel/pull/5791).
+
+**In**
+
+```javascript
+`foo${bar}`;
+```
+
+**Out**
+
+```javascript
+"foo" + bar;
 ```

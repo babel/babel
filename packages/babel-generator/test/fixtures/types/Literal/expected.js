@@ -10,3 +10,5 @@ false;
 0b10;
 0o70;
 0X1F;
+-0b1111011;
+"use strict";

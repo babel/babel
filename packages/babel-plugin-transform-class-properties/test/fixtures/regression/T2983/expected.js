@@ -9,5 +9,5 @@ var _class2 = function _class2() {
 };
 
 _class2.test = true;
-export default _class2;
+export { _class2 as default };
 ;

@@ -9,4 +9,4 @@ var _class = function (_A) {
   return _class;
 }(A);
 
-export default _class;
+export { _class as default };

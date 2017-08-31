@@ -1,69 +1,77 @@
 {
+  "name": "babel",
   "private": true,
   "license": "MIT",
   "scripts": {
-    "test": "make test",
-    "build": "make build"
+    "build": "make build",
+    "fix": "make fix",
+    "lint": "make lint",
+    "precommit": "lint-staged",
+    "test": "make test"
   },
   "devDependencies": {
     "async": "^1.5.0",
-    "babel-core": "^6.13.2",
-    "babel-eslint": "^6.1.2",
-    "babel-plugin-transform-class-properties": "^6.6.0",
-    "babel-plugin-transform-flow-strip-types": "^6.3.13",
-    "babel-plugin-transform-runtime": "^6.3.13",
-    "babel-preset-es2015": "^6.13.2",
-    "babel-preset-stage-0": "^6.0.0",
-    "babel-runtime": "^6.0.0",
-    "browserify": "^11.2.0",
+    "babel-cli": "7.0.0-alpha.18",
+    "babel-core": "7.0.0-alpha.18",
+    "babel-eslint": "8.0.0-alpha.15",
+    "babel-plugin-istanbul": "^4.1.4",
+    "babel-preset-env": "2.0.0-alpha.18",
+    "babel-preset-flow": "7.0.0-alpha.18",
+    "babel-preset-stage-0": "7.0.0-alpha.18",
+    "babel-register": "7.0.0-alpha.18",
+    "babylon": "7.0.0-beta.18",
+    "browserify": "^13.1.1",
     "bundle-collapser": "^1.2.1",
-    "chai": "^2.2.0",
-    "chalk": "1.1.1",
-    "codecov.io": "^0.1.6",
+    "chai": "^4.1.0",
+    "chalk": "^2.0.0",
     "derequire": "^2.0.2",
-    "eslint": "^2.13.1",
-    "eslint-config-babel": "^1.0.1",
-    "eslint-plugin-babel": "^3.3.0",
-    "eslint-plugin-flow-vars": "^0.5.0",
-    "flow-bin": "^0.32.0",
+    "eslint": "^4.5.0",
+    "eslint-config-babel": "^7.0.2",
+    "eslint-plugin-flowtype": "^2.20.0",
+    "eslint-plugin-prettier": "^2.2.0",
+    "flow-bin": "^0.53.1",
     "gulp": "^3.9.0",
-    "gulp-babel": "^6.0.0",
+    "gulp-babel": "^7.0.0",
     "gulp-newer": "^1.0.0",
     "gulp-plumber": "^1.0.1",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
-    "istanbul": "^0.4.5",
-    "lerna": "2.0.0-beta.23",
-    "lerna-changelog": "^0.2.0",
+    "husky": "^0.14.3",
+    "lerna": "2.0.0",
+    "lerna-changelog": "^0.5.0",
+    "lint-staged": "^4.0.4",
     "lodash": "^4.2.0",
     "mocha": "^3.0.0",
-    "output-file-sync": "^1.1.1",
+    "nyc": "^11.0.3",
+    "output-file-sync": "^2.0.0",
+    "prettier": "^1.6.1",
     "rimraf": "^2.4.3",
     "semver": "^5.0.0",
     "through2": "^2.0.0",
     "uglify-js": "^2.4.16"
   },
-  "babel": {
-    "comments": false,
-    "presets": [
-      [
-        "es2015",
-        {
-          "loose": true
-        }
-      ],
-      "stage-0"
+  "engines": {
+    "node": ">= 4.x <= 8.x",
+    "npm": ">= 2.x <= 5.x",
+    "yarn": ">=0.27.5 || >=1.0.0-20170811"
+  },
+  "nyc": {
+    "all": true,
+    "exclude": [
+      "scripts/*.js",
+      "packages/*/test/**",
+      "packages/babel-standalone/**"
     ],
-    "plugins": [
-      "./scripts/add-module-exports",
-      "transform-runtime",
-      "transform-class-properties",
-      "transform-flow-strip-types"
-    ],
-    "env": {
-      "test": {
-        "auxiliaryCommentBefore": "istanbul ignore next"
-      }
-    }
-  }
+    "sourceMap": false,
+    "instrument": false
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --format=codeframe --fix --rulesdir='./eslint_rules'",
+      "git add"
+    ]
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }

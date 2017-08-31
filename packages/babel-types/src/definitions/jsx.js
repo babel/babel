@@ -1,17 +1,26 @@
-import defineType, { assertNodeType, assertValueType, chain, assertEach } from "./index";
+import defineType, {
+  assertNodeType,
+  assertValueType,
+  chain,
+  assertEach,
+} from "./index";
 
 defineType("JSXAttribute", {
   visitor: ["name", "value"],
   aliases: ["JSX", "Immutable"],
   fields: {
     name: {
-      validate: assertNodeType("JSXIdentifier", "JSXNamespacedName")
+      validate: assertNodeType("JSXIdentifier", "JSXNamespacedName"),
     },
     value: {
       optional: true,
-      validate: assertNodeType("JSXElement", "StringLiteral", "JSXExpressionContainer")
-    }
-  }
+      validate: assertNodeType(
+        "JSXElement",
+        "StringLiteral",
+        "JSXExpressionContainer",
+      ),
+    },
+  },
 });
 
 defineType("JSXClosingElement", {
@@ -19,9 +28,9 @@ defineType("JSXClosingElement", {
   aliases: ["JSX", "Immutable"],
   fields: {
     name: {
-      validate: assertNodeType("JSXIdentifier", "JSXMemberExpression")
-    }
-  }
+      validate: assertNodeType("JSXIdentifier", "JSXMemberExpression"),
+    },
+  },
 });
 
 defineType("JSXElement", {
@@ -30,23 +39,30 @@ defineType("JSXElement", {
   aliases: ["JSX", "Immutable", "Expression"],
   fields: {
     openingElement: {
-      validate: assertNodeType("JSXOpeningElement")
+      validate: assertNodeType("JSXOpeningElement"),
     },
     closingElement: {
       optional: true,
-      validate: assertNodeType("JSXClosingElement")
+      validate: assertNodeType("JSXClosingElement"),
     },
     children: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("JSXText", "JSXExpressionContainer", "JSXElement"))
-      )
-    }
-  }
+        assertEach(
+          assertNodeType(
+            "JSXText",
+            "JSXExpressionContainer",
+            "JSXSpreadChild",
+            "JSXElement",
+          ),
+        ),
+      ),
+    },
+  },
 });
 
 defineType("JSXEmptyExpression", {
-  aliases: ["JSX", "Expression"]
+  aliases: ["JSX", "Expression"],
 });
 
 defineType("JSXExpressionContainer", {
@@ -54,9 +70,19 @@ defineType("JSXExpressionContainer", {
   aliases: ["JSX", "Immutable"],
   fields: {
     expression: {
-      validate: assertNodeType("Expression")
-    }
-  }
+      validate: assertNodeType("Expression"),
+    },
+  },
+});
+
+defineType("JSXSpreadChild", {
+  visitor: ["expression"],
+  aliases: ["JSX", "Immutable"],
+  fields: {
+    expression: {
+      validate: assertNodeType("Expression"),
+    },
+  },
 });
 
 defineType("JSXIdentifier", {
@@ -64,9 +90,9 @@ defineType("JSXIdentifier", {
   aliases: ["JSX", "Expression"],
   fields: {
     name: {
-      validate: assertValueType("string")
-    }
-  }
+      validate: assertValueType("string"),
+    },
+  },
 });
 
 defineType("JSXMemberExpression", {
@@ -74,12 +100,12 @@ defineType("JSXMemberExpression", {
   aliases: ["JSX", "Expression"],
   fields: {
     object: {
-      validate: assertNodeType("JSXMemberExpression", "JSXIdentifier")
+      validate: assertNodeType("JSXMemberExpression", "JSXIdentifier"),
     },
     property: {
-      validate: assertNodeType("JSXIdentifier")
-    }
-  }
+      validate: assertNodeType("JSXIdentifier"),
+    },
+  },
 });
 
 defineType("JSXNamespacedName", {
@@ -87,12 +113,12 @@ defineType("JSXNamespacedName", {
   aliases: ["JSX"],
   fields: {
     namespace: {
-      validate: assertNodeType("JSXIdentifier")
+      validate: assertNodeType("JSXIdentifier"),
     },
     name: {
-      validate: assertNodeType("JSXIdentifier")
-    }
-  }
+      validate: assertNodeType("JSXIdentifier"),
+    },
+  },
 });
 
 defineType("JSXOpeningElement", {
@@ -101,19 +127,19 @@ defineType("JSXOpeningElement", {
   aliases: ["JSX", "Immutable"],
   fields: {
     name: {
-      validate: assertNodeType("JSXIdentifier", "JSXMemberExpression")
+      validate: assertNodeType("JSXIdentifier", "JSXMemberExpression"),
     },
     selfClosing: {
       default: false,
-      validate: assertValueType("boolean")
+      validate: assertValueType("boolean"),
     },
     attributes: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("JSXAttribute", "JSXSpreadAttribute"))
-      )
-    }
-  }
+        assertEach(assertNodeType("JSXAttribute", "JSXSpreadAttribute")),
+      ),
+    },
+  },
 });
 
 defineType("JSXSpreadAttribute", {
@@ -121,9 +147,9 @@ defineType("JSXSpreadAttribute", {
   aliases: ["JSX"],
   fields: {
     argument: {
-      validate: assertNodeType("Expression")
-    }
-  }
+      validate: assertNodeType("Expression"),
+    },
+  },
 });
 
 defineType("JSXText", {
@@ -131,7 +157,7 @@ defineType("JSXText", {
   builder: ["value"],
   fields: {
     value: {
-      validate: assertValueType("string")
-    }
-  }
+      validate: assertValueType("string"),
+    },
+  },
 });

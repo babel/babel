@@ -1,20 +1,29 @@
 # babel-plugin-transform-object-rest-spread
 
-Compile object rest and spread to ES5
+> This plugin allows Babel to transform rest properties for object destructuring assignment and spread properties for object literals.
+
+## Example
+
+### Rest Properties
 
 ```js
-// source
-z = { x, ...y };
+let { x, y, ...z } = { x: 1, y: 2, a: 3, b: 4 };
+console.log(x); // 1
+console.log(y); // 2
+console.log(z); // { a: 3, b: 4 }
+```
 
-// compiled
-_extends = Object.assign || function(target) { ... }
-z = _extends({ x }, y);
+### Spread Properties
+
+```js
+let n = { x, y, ...z };
+console.log(n); // { x: 1, y: 2, a: 3, b: 4 }
 ```
 
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-object-rest-spread
+npm install --save-dev babel-plugin-transform-object-rest-spread
 ```
 
 ## Usage
@@ -29,29 +38,10 @@ $ npm install babel-plugin-transform-object-rest-spread
 }
 ```
 
-## Options
-
-This plugin will use babel's `extends` helper, which will polyfill `Object.assign` by default.
-
-* `useBuiltIns` - Do not use Babel's helper's and just transform to use the built-in method (Disabled by default).
-
-```js
-{
-  "plugins": [
-    ["transform-object-rest-spread", { "useBuiltIns": true }]
-  ]
-}
-
-// source
-z = { x, ...y };
-// compiled
-z = Object.assign({ x }, y);
-```
-
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-object-rest-spread script.js
+babel --plugins transform-object-rest-spread script.js
 ```
 
 ### Via Node API
@@ -61,3 +51,38 @@ require("babel-core").transform("code", {
   plugins: ["transform-object-rest-spread"]
 });
 ```
+
+## Options
+
+### `useBuiltIns`
+
+`boolean`, defaults to `false`.
+
+By default, this plugin uses Babel's `extends` helper which polyfills `Object.assign`. Enabling this option will use `Object.assign` directly.
+
+**.babelrc**
+
+```json
+{
+  "plugins": [
+    ["transform-object-rest-spread", { "useBuiltIns": true }]
+  ]
+}
+```
+
+**In**
+
+```js
+z = { x, ...y };
+```
+
+**Out**
+
+```js
+z = Object.assign({ x }, y);
+```
+
+## References
+
+* [Proposal: Object Rest/Spread Properties for ECMAScript](https://github.com/sebmarkbage/ecmascript-rest-spread)
+* [Spec](http://sebmarkbage.github.io/ecmascript-rest-spread)

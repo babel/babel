@@ -1,5 +1,1 @@
-var div = React.createElement(
-  "div",
-  null,
-  "test"
-);
+var div = React.createElement("div", null, "test");

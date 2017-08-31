@@ -7,30 +7,30 @@ In computer science, this is known as an implementation of quasiquotes.
 ## Install
 
 ```sh
-$ npm install babel-template
+npm install --save-dev babel-template
 ```
 
 ## Usage
 
 ```js
-import template from 'babel-template';
-import generate from 'babel-generator';
-import * as t from 'babel-types';
+import template from "babel-template";
+import generate from "babel-generator";
+import * as t from "babel-types";
 
 const buildRequire = template(`
   var IMPORT_NAME = require(SOURCE);
 `);
 
 const ast = buildRequire({
-  IMPORT_NAME: t.identifier('myModule'),
-  SOURCE: t.stringLiteral('my-module')
+  IMPORT_NAME: t.identifier("myModule"),
+  SOURCE: t.stringLiteral("my-module")
 });
 
 console.log(generate(ast).code);
 ```
 
 ```js
-var myModule = require('my-module');
+const myModule = require("my-module");
 ```
 
 ## API

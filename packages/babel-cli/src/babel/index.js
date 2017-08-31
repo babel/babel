@@ -1,67 +1,163 @@
 #!/usr/bin/env node
-/* eslint max-len: 0 */
 
-require("babel-core");
+import fs from "fs";
+import commander from "commander";
+import { version } from "babel-core";
+import uniq from "lodash/uniq";
+import glob from "glob";
 
-let pathExists = require("path-exists");
-let commander  = require("commander");
-let kebabCase  = require("lodash/kebabCase");
-let options    = require("babel-core").options;
-let util       = require("babel-core").util;
-let uniq       = require("lodash/uniq");
-let each       = require("lodash/each");
-let glob       = require("glob");
+import dirCommand from "./dir";
+import fileCommand from "./file";
 
-each(options, function (option, key) {
-  if (option.hidden) return;
+import pkg from "../../package.json";
 
-  let arg = kebabCase(key);
-
-  if (option.type !== "boolean") {
-    arg += " [" + (option.type || "string") + "]";
+function booleanify(val: any): boolean | any {
+  if (val === "true" || val == 1) {
+    return true;
   }
 
-  if (option.type === "boolean" && option.default === true) {
-    arg = "no-" + arg;
+  if (val === "false" || val == 0 || !val) {
+    return false;
   }
 
-  arg = "--" + arg;
+  return val;
+}
 
-  if (option.shorthand) {
-    arg = "-" + option.shorthand + ", " + arg;
-  }
+function collect(value, previousValue): Array<string> {
+  // If the user passed the option with no value, like "babel file.js --presets", do nothing.
+  if (typeof value !== "string") return previousValue;
 
-  let desc = [];
-  if (option.deprecated) desc.push("[DEPRECATED] " + option.deprecated);
-  if (option.description) desc.push(option.description);
+  const values = value.split(",");
 
-  commander.option(arg, desc.join(" "));
-});
+  return previousValue ? previousValue.concat(values) : values;
+}
 
-commander.option("-x, --extensions [extensions]", "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx]");
+/* eslint-disable max-len */
+// Standard Babel input configs.
+commander.option(
+  "-f, --filename [filename]",
+  "filename to use when reading from stdin - this will be used in source-maps, errors etc",
+);
+commander.option(
+  "--presets [list]",
+  "comma-separated list of preset names",
+  collect,
+);
+commander.option(
+  "--plugins [list]",
+  "comma-separated list of plugin names",
+  collect,
+);
+commander.option("--config-file [path]", "Path a to .babelrc file to use");
+
+// Basic file input configuration.
+commander.option("--source-type [script|module]", "");
+commander.option(
+  "--no-babelrc",
+  "Whether or not to look up .babelrc and .babelignore files",
+);
+commander.option(
+  "--ignore [list]",
+  "list of glob paths to **not** compile",
+  collect,
+);
+commander.option(
+  "--only [list]",
+  "list of glob paths to **only** compile",
+  collect,
+);
+
+// Misc babel config.
+commander.option(
+  "--no-highlight-code",
+  "enable/disable ANSI syntax highlighting of code frames (on by default)",
+);
+
+// General output formatting.
+commander.option(
+  "--no-comments",
+  "write comments to generated output (true by default)",
+);
+commander.option(
+  "--retain-lines",
+  "retain line numbers - will result in really ugly code",
+);
+commander.option(
+  "--compact [true|false|auto]",
+  "do not include superfluous whitespace characters and line terminators",
+  booleanify,
+);
+commander.option("--minified", "save as much bytes when printing [true|false]");
+commander.option(
+  "--auxiliary-comment-before [string]",
+  "print a comment before any injected non-user code",
+);
+commander.option(
+  "--auxiliary-comment-after [string]",
+  "print a comment after any injected non-user code",
+);
+
+// General soucemap formatting.
+commander.option("-s, --source-maps [true|false|inline|both]", "", booleanify);
+commander.option(
+  "--source-map-target [string]",
+  "set `file` on returned source map",
+);
+commander.option(
+  "--source-file-name [string]",
+  "set `sources[0]` on returned source map",
+);
+commander.option(
+  "--source-root [filename]",
+  "the root from which all sources are relative",
+);
+
+// Config params for certain module output formats.
+commander.option(
+  "--module-root [filename]",
+  "optional prefix for the AMD module formatter that will be prepend to the filename on module definitions",
+);
+commander.option("-M, --module-ids", "insert an explicit id for modules");
+commander.option(
+  "--module-id [string]",
+  "specify a custom name for module ids",
+);
+
+// "babel" command specific arguments that are not passed to babel-core.
+commander.option(
+  "-x, --extensions [extensions]",
+  "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx,.mjs]",
+  collect,
+);
 commander.option("-w, --watch", "Recompile files on changes");
-commander.option("--skip-initial-build", "Do not compile files before watching");
-commander.option("-o, --out-file [out]", "Compile all input files into a single file");
-commander.option("-d, --out-dir [out]", "Compile an input directory of modules into an output directory");
-commander.option("-D, --copy-files", "When compiling a directory copy over non-compilable files");
+commander.option(
+  "--skip-initial-build",
+  "Do not compile files before watching",
+);
+commander.option(
+  "-o, --out-file [out]",
+  "Compile all input files into a single file",
+);
+commander.option(
+  "-d, --out-dir [out]",
+  "Compile an input directory of modules into an output directory",
+);
+commander.option(
+  "-D, --copy-files",
+  "When compiling a directory copy over non-compilable files",
+);
 commander.option("-q, --quiet", "Don't log anything");
+/* eslint-enable max-len */
 
-let pkg = require("../../package.json");
-commander.version(pkg.version + " (babel-core " + require("babel-core").version + ")");
+commander.version(pkg.version + " (babel-core " + version + ")");
 commander.usage("[options] <files ...>");
 commander.parse(process.argv);
 
 //
 
-if (commander.extensions) {
-  commander.extensions = util.arrayify(commander.extensions);
-}
+const errors = [];
 
-//
-
-let errors = [];
-
-let filenames = commander.args.reduce(function (globbed, input) {
+let filenames = commander.args.reduce(function(globbed, input) {
   let files = glob.sync(input);
   if (!files.length) files = [input];
   return globbed.concat(files);
@@ -69,8 +165,8 @@ let filenames = commander.args.reduce(function (globbed, input) {
 
 filenames = uniq(filenames);
 
-each(filenames, function (filename) {
-  if (!pathExists.sync(filename)) {
+filenames.forEach(function(filename) {
+  if (!fs.existsSync(filename)) {
     errors.push(filename + " doesn't exist");
   }
 });
@@ -104,26 +200,28 @@ if (errors.length) {
 
 //
 
-let opts = exports.opts = {};
-
-each(options, function (opt, key) {
-  if (commander[key] !== undefined && commander[key] !== opt.default) {
-    opts[key] = commander[key];
-  }
-});
-
-opts.ignore = util.arrayify(opts.ignore, util.regexify);
-
-if (opts.only) {
-  opts.only = util.arrayify(opts.only, util.regexify);
+const opts = commander.opts();
+//the configFile CLI option maps to the extends option in the node API
+if (opts.configFile) {
+  opts.extends = opts.configFile;
 }
 
-let fn;
+// Delete options that are specific to babel-cli and shouldn't be passed to babel-core.
+delete opts.version;
+delete opts.extensions;
+delete opts.watch;
+delete opts.skipInitialBuild;
+delete opts.outFile;
+delete opts.outDir;
+delete opts.copyFiles;
+delete opts.quiet;
+delete opts.configFile;
 
-if (commander.outDir) {
-  fn = require("./dir");
-} else {
-  fn = require("./file");
-}
+// Commander will default the "--no-" arguments to true, but we want to leave them undefined so that
+// babel-core can handle the default-assignment logic on its own.
+if (opts.babelrc === true) opts.babelrc = undefined;
+if (opts.comments === true) opts.comments = undefined;
+if (opts.highlightCode === true) opts.highlightCode = undefined;
 
-fn(commander, filenames, exports.opts);
+const fn = commander.outDir ? dirCommand : fileCommand;
+fn(commander, filenames, opts);

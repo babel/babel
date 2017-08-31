@@ -1,59 +1,89 @@
-var assert = require("assert");
-var OptionManager = require("../lib/transformation/file/options/option-manager");
-var Logger = require("../lib/transformation/file/logger");
-var path = require("path");
+import assert from "assert";
+import manageOptions from "../lib/config/option-manager";
+import path from "path";
 
-suite("option-manager", function () {
-  suite("memoisePluginContainer", function () {
-    test("throws for babel 5 plugin", function() {
-      return assert.throws(
-        function () {
-          OptionManager.memoisePluginContainer(
-            function (ref) {
-              var Plugin = ref.Plugin;
-              return new Plugin("object-assign", {});
-            }
-          );
-        },
-        /Babel 5 plugin is being run with Babel 6/
-      );
-    })
+describe("option-manager", () => {
+  it("throws for babel 5 plugin", () => {
+    return assert.throws(() => {
+      manageOptions({
+        plugins: [({ Plugin }) => new Plugin("object-assign", {})],
+      });
+    }, /Babel 5 plugin is being run with Babel 6/);
   });
 
-  suite("mergeOptions", function () {
-    test("throws for removed babel 5 options", function() {
+  describe("mergeOptions", () => {
+    it("throws for removed babel 5 options", () => {
+      return assert.throws(() => {
+        manageOptions({
+          randomOption: true,
+        });
+      }, /Unknown option: base.randomOption/);
+    });
+
+    it("throws for removed babel 5 options", () => {
       return assert.throws(
-        function () {
-          var opt = new OptionManager(new Logger(null, "unknown"));
-          opt.init({
-            'randomOption': true
+        () => {
+          manageOptions({
+            auxiliaryComment: true,
+            blacklist: true,
           });
         },
-        /Unknown option: base.randomOption/
+        // eslint-disable-next-line max-len
+        /Using removed Babel 5 option: base.auxiliaryComment - Use `auxiliaryCommentBefore` or `auxiliaryCommentAfter`/,
       );
-    })
-    test("throws for removed babel 5 options", function() {
-      return assert.throws(
-        function () {
-          var opt = new OptionManager(new Logger(null, "unknown"));
-          opt.init({
-            'auxiliaryComment': true,
-            'blacklist': true
-          });
-        },
-        /Using removed Babel 5 option: base.auxiliaryComment - Use `auxiliaryCommentBefore` or `auxiliaryCommentAfter`/
-      );
-    })
-    test("throws for resolved but erroring preset", function() {
-      return assert.throws(
-        function () {
-          var opt = new OptionManager(new Logger(null, "unknown"));
-          opt.init({
-            'presets': [path.resolve(__dirname, "fixtures", "option-manager", "not-a-preset")]
-          });
-        },
-        /While processing preset: .*option-manager(?:\/|\\\\)not-a-preset\.js/
-      );
-    })
+    });
+
+    it("throws for resolved but erroring preset", () => {
+      return assert.throws(() => {
+        manageOptions({
+          presets: [
+            path.join(__dirname, "fixtures/option-manager/not-a-preset"),
+          ],
+        });
+      }, /While processing: .*option-manager(?:\/|\\\\)not-a-preset\.js/);
+    });
+  });
+
+  describe("presets", function() {
+    function presetTest(name) {
+      it(name, function() {
+        const { options, passes } = manageOptions({
+          presets: [
+            path.join(__dirname, "fixtures/option-manager/presets", name),
+          ],
+        });
+
+        assert.equal(true, Array.isArray(options.plugins));
+        assert.equal(1, options.plugins.length);
+        assert.equal(1, passes.length);
+        assert.equal(1, passes[0].length);
+      });
+    }
+
+    function presetThrowsTest(name, msg) {
+      it(name, function() {
+        assert.throws(
+          () =>
+            manageOptions({
+              presets: [
+                path.join(__dirname, "fixtures/option-manager/presets", name),
+              ],
+            }),
+          msg,
+        );
+      });
+    }
+
+    presetTest("es5_function");
+    presetTest("es5_object");
+    presetTest("es2015_default_function");
+    presetTest("es2015_default_object");
+
+    presetThrowsTest(
+      "es2015_named",
+      /Must export a default export when using ES6 modules/,
+    );
+    presetThrowsTest("es2015_invalid", /Unsupported format: string/);
+    presetThrowsTest("es5_invalid", /Unsupported format: string/);
   });
 });

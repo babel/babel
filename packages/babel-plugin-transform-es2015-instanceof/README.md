@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-es2015-instanceof
+npm install --save-dev babel-plugin-transform-es2015-instanceof
 ```
 
 ## Usage
@@ -21,7 +21,7 @@ $ npm install babel-plugin-transform-es2015-instanceof
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-es2015-instanceof script.js
+babel --plugins transform-es2015-instanceof script.js
 ```
 
 ### Via Node API

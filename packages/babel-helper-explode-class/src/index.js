@@ -2,15 +2,15 @@ import bindifyDecorators from "babel-helper-bindify-decorators";
 import type { NodePath } from "babel-traverse";
 import * as t from "babel-types";
 
-export default function (classPath) {
+export default function(classPath) {
   classPath.assertClass();
 
-  let memoisedExpressions = [];
+  const memoisedExpressions = [];
 
   function maybeMemoise(path) {
     if (!path.node || path.isPure()) return;
 
-    let uid = classPath.scope.generateDeclaredUidIdentifier();
+    const uid = classPath.scope.generateDeclaredUidIdentifier();
     memoisedExpressions.push(t.assignmentExpression("=", uid, path.node));
     path.replaceWith(uid);
   }
@@ -24,7 +24,7 @@ export default function (classPath) {
     // bind decorators if they're member expressions
     bindifyDecorators(paths);
 
-    for (let path of paths) {
+    for (const path of paths) {
       maybeMemoise(path);
     }
   }
@@ -32,8 +32,8 @@ export default function (classPath) {
   maybeMemoise(classPath.get("superClass"));
   memoiseDecorators(classPath.get("decorators"), true);
 
-  let methods: Array<NodePath> = classPath.get("body.body");
-  for (let methodPath of methods) {
+  const methods: Array<NodePath> = classPath.get("body.body");
+  for (const methodPath of methods) {
     if (methodPath.is("computed")) {
       maybeMemoise(methodPath.get("key"));
     }
@@ -44,6 +44,8 @@ export default function (classPath) {
   }
 
   if (memoisedExpressions) {
-    classPath.insertBefore(memoisedExpressions.map((expr) => t.expressionStatement(expr)));
+    classPath.insertBefore(
+      memoisedExpressions.map(expr => t.expressionStatement(expr)),
+    );
   }
 }

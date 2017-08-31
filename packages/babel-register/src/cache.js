@@ -2,17 +2,24 @@ import path from "path";
 import fs from "fs";
 import { sync as mkdirpSync } from "mkdirp";
 import homeOrTmp from "home-or-tmp";
-import pathExists from "path-exists";
+import * as babel from "babel-core";
+import findCacheDir from "find-cache-dir";
 
-const FILENAME = process.env.BABEL_CACHE_PATH || path.join(homeOrTmp, ".babel.json");
-let data = {};
+const DEFAULT_CACHE_DIR = findCacheDir({ name: "babel-register" }) || homeOrTmp;
+const DEFAULT_FILENAME = path.join(
+  DEFAULT_CACHE_DIR,
+  `.babel.${babel.version}.${babel.getEnv()}.json`,
+);
+const FILENAME: string = process.env.BABEL_CACHE_PATH || DEFAULT_FILENAME;
+let data: Object = {};
 
 /**
  * Write stringified cache to disk.
  */
 
 export function save() {
-  let serialised = {};
+  let serialised: string = "{}";
+
   try {
     serialised = JSON.stringify(data, null, "  ");
   } catch (err) {
@@ -23,6 +30,7 @@ export function save() {
       throw err;
     }
   }
+
   mkdirpSync(path.dirname(FILENAME));
   fs.writeFileSync(FILENAME, serialised);
 }
@@ -37,7 +45,7 @@ export function load() {
   process.on("exit", save);
   process.nextTick(save);
 
-  if (!pathExists.sync(FILENAME)) return;
+  if (!fs.existsSync(FILENAME)) return;
 
   try {
     data = JSON.parse(fs.readFileSync(FILENAME));
@@ -50,6 +58,6 @@ export function load() {
  * Retrieve data from cache.
  */
 
-export function get() {
+export function get(): Object {
   return data;
 }

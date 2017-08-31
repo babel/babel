@@ -1,11 +1,30 @@
 # babel-plugin-check-es2015-constants
 
-Validate ES2015 constants
+> Validate ES2015 constants (prevents reassignment of const variables).
+
+## Example
+
+**In**
+
+```js
+const a = 1;
+a = 2;
+```
+
+**Out**
+
+```bash
+repl: "a" is read-only
+  1 | const a = 1;
+> 2 | a = 2;
+    | ^
+```
+
 
 ## Installation
 
 ```sh
-$ npm install babel-plugin-check-es2015-constants
+npm install --save-dev babel-plugin-check-es2015-constants
 ```
 
 ## Usage
@@ -23,7 +42,7 @@ $ npm install babel-plugin-check-es2015-constants
 ### Via CLI
 
 ```sh
-$ babel --plugins check-es2015-constants script.js
+babel --plugins check-es2015-constants script.js
 ```
 
 ### Via Node API
@@ -36,4 +55,4 @@ require("babel-core").transform("code", {
 
 ## Note
 
-This check will only validate consts. If you need it to compile down to `var` then you must also install and enable [`transform-es2015-block-scoping`](../babel-plugin-transform-es2015-block-scoping).
+This check will only validate consts. If you need it to compile down to `var` then you must also install and enable [`transform-es2015-block-scoping`](http://babeljs.io/docs/plugins/transform-es2015-block-scoping/).

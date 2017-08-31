@@ -1,80 +1,76 @@
 import deepClone from "lodash/cloneDeep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
-import extend from "lodash/extend";
+import escapeRegExp from "lodash/escapeRegExp";
 import * as babel from "babel-core";
-import each from "lodash/each";
-import { util, OptionManager } from "babel-core";
+import { OptionManager, DEFAULT_EXTENSIONS } from "babel-core";
+import { addHook } from "pirates";
 import fs from "fs";
 import path from "path";
 
+const maps = {};
+const transformOpts = {};
+let piratesRevert = null;
+
 sourceMapSupport.install({
   handleUncaughtExceptions: false,
+  environment: "node",
   retrieveSourceMap(source) {
-    let map = maps && maps[source];
+    const map = maps && maps[source];
     if (map) {
       return {
         url: null,
-        map: map
+        map: map,
       };
     } else {
       return null;
     }
-  }
+  },
 });
 
 registerCache.load();
 let cache = registerCache.get();
 
-let transformOpts = {};
-
-let ignore;
-let only;
-
-let oldHandlers   = {};
-let maps          = {};
-
-let cwd = process.cwd();
-
-function getRelativePath(filename) {
-  return path.relative(cwd, filename);
-}
-
 function mtime(filename) {
   return +fs.statSync(filename).mtime;
 }
 
-function compile(filename) {
-  let result;
-
+function compile(code, filename) {
   // merge in base options and resolve all the plugins and presets relative to this file
-  let opts = new OptionManager().init(extend(
-    { sourceRoot: path.dirname(filename) }, // sourceRoot can be overwritten
-    deepClone(transformOpts),
-    { filename }
-  ));
+  const opts = new OptionManager().init(
+    Object.assign(
+      { sourceRoot: path.dirname(filename) }, // sourceRoot can be overwritten
+      deepClone(transformOpts),
+      { filename },
+    ),
+  );
+
+  // Bail out ASAP if the file has been ignored.
+  if (opts === null) return code;
 
   let cacheKey = `${JSON.stringify(opts)}:${babel.version}`;
 
-  let env = process.env.BABEL_ENV || process.env.NODE_ENV;
+  const env = babel.getEnv(false);
+
   if (env) cacheKey += `:${env}`;
 
   if (cache) {
-    let cached = cache[cacheKey];
+    const cached = cache[cacheKey];
     if (cached && cached.mtime === mtime(filename)) {
-      result = cached;
+      return cached.code;
     }
   }
 
-  if (!result) {
-    result = babel.transformFileSync(filename, extend(opts, {
+  const result = babel.transform(
+    code,
+    Object.assign(opts, {
       // Do not process config files since has already been done with the OptionManager
       // calls above and would introduce duplicates.
       babelrc: false,
       sourceMaps: "both",
-      ast: false
-    }));
-  }
+      ast: false,
+    }),
+  );
 
   if (cache) {
     cache[cacheKey] = result;
@@ -86,61 +82,51 @@ function compile(filename) {
   return result.code;
 }
 
-function shouldIgnore(filename) {
-  if (!ignore && !only) {
-    return getRelativePath(filename).split(path.sep).indexOf("node_modules") >= 0;
-  } else {
-    return util.shouldIgnore(filename, ignore || [], only);
-  }
+function hookExtensions(exts) {
+  if (piratesRevert) piratesRevert();
+  piratesRevert = addHook(compile, { exts, ignoreNodeModules: false });
 }
 
-function loader(m, filename) {
-  m._compile(compile(filename), filename);
+export function revert() {
+  if (piratesRevert) piratesRevert();
+  delete require.cache[require.resolve(__filename)];
 }
 
-function registerExtension(ext) {
-  let old = oldHandlers[ext] || oldHandlers[".js"] || require.extensions[".js"];
+register({
+  extensions: DEFAULT_EXTENSIONS,
+});
 
-  require.extensions[ext] = function (m, filename) {
-    if (shouldIgnore(filename)) {
-      old(m, filename);
-    } else {
-      loader(m, filename, old);
-    }
-  };
-}
-
-function hookExtensions(_exts) {
-  each(oldHandlers, function (old, ext) {
-    if (old === undefined) {
-      delete require.extensions[ext];
-    } else {
-      require.extensions[ext] = old;
-    }
-  });
-
-  oldHandlers = {};
-
-  each(_exts, function (ext) {
-    oldHandlers[ext] = require.extensions[ext];
-    registerExtension(ext);
-  });
-}
-
-hookExtensions(util.canCompile.EXTENSIONS);
-
-export default function (opts?: Object = {}) {
-  if (opts.only != null) only = util.arrayify(opts.only, util.regexify);
-  if (opts.ignore != null) ignore = util.arrayify(opts.ignore, util.regexify);
-
-  if (opts.extensions) hookExtensions(util.arrayify(opts.extensions));
+export default function register(opts?: Object = {}) {
+  if (opts.extensions) hookExtensions(opts.extensions);
 
   if (opts.cache === false) cache = null;
 
   delete opts.extensions;
-  delete opts.ignore;
   delete opts.cache;
-  delete opts.only;
 
-  extend(transformOpts, opts);
+  Object.assign(transformOpts, opts);
+
+  if (!transformOpts.ignore && !transformOpts.only) {
+    transformOpts.ignore = [
+      // Ignore any node_modules content outside the current working directory.
+      new RegExp(
+        "^(?!" +
+          escapeRegExp(process.cwd()) +
+          ").*" +
+          escapeRegExp(path.sep + "node_modules" + path.sep),
+        "i",
+      ),
+
+      // Ignore any node_modules inside the current working directory.
+      new RegExp(
+        "^" +
+          escapeRegExp(process.cwd()) +
+          "(?:" +
+          path.sep +
+          ".*)?" +
+          escapeRegExp(path.sep + "node_modules" + path.sep),
+        "i",
+      ),
+    ];
+  }
 }

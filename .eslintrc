@@ -1,9 +1,14 @@
 {
   "extends": "babel",
+  "plugins": [
+    "prettier"
+  ],
   "rules": {
-    "max-len": 0
+    "curly": ["error", "multi-line"],
+    "prettier/prettier": ["error", { "trailingComma": "es5" }]
   },
   "env": {
-    "node": true
+    "node": true,
+    "mocha": true
   }
 }
