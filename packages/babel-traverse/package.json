@@ -13,7 +13,7 @@
     "babel-messages": "7.0.0-alpha.20",
     "babel-types": "7.0.0-alpha.20",
     "babylon": "7.0.0-beta.22",
-    "debug": "^2.2.0",
+    "debug": "^3.0.1",
     "globals": "^10.0.0",
     "invariant": "^2.2.0",
     "lodash": "^4.2.0"
