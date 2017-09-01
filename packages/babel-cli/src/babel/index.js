@@ -223,6 +223,7 @@ delete opts.outDir;
 delete opts.copyFiles;
 delete opts.quiet;
 delete opts.configFile;
+delete opts.deleteDirOnStart;
 
 // Commander will default the "--no-" arguments to true, but we want to leave them undefined so that
 // babel-core can handle the default-assignment logic on its own.
