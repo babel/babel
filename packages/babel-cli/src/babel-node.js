@@ -54,6 +54,10 @@ getV8Flags(function(err, v8Flags) {
         args.unshift("--expose-gc");
         break;
 
+      case "--expose-http2":
+        args.unshift("--expose-http2");
+        break;
+
       case "--nolazy":
         args.unshift(flag);
         break;
