@@ -85,8 +85,7 @@ publish:
 
 bootstrap:
 	make clean-all
-	yarn
-	./node_modules/.bin/lerna bootstrap
+	yarn install
 	make build
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
