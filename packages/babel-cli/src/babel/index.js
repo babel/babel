@@ -147,7 +147,10 @@ commander.option(
   "When compiling a directory copy over non-compilable files",
 );
 commander.option("-q, --quiet", "Don't log anything");
-commander.option("-l, --delete-dir-on-start", "Delete's the out directory before compilation");
+commander.option(
+  "--delete-dir-on-start",
+  "Delete's the out directory before compilation",
+);
 /* eslint-enable max-len */
 
 commander.version(pkg.version + " (babel-core " + version + ")");
