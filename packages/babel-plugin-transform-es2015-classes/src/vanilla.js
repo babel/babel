@@ -97,7 +97,6 @@ export default class ClassTransformer {
 
     this.pushedConstructor = false;
     this.pushedInherits = false;
-    this.pushedThis = false;
     this.isLoose = false;
 
     this.superThises = [];
@@ -267,12 +266,6 @@ export default class ClassTransformer {
 
         if (isConstructor) {
           path.traverse(verifyConstructorVisitor, this);
-
-          if (!this.hasBareSuper && this.isDerived) {
-            throw path.buildCodeFrameError(
-              "missing super() call in constructor",
-            );
-          }
         }
 
         const replaceSupers = new ReplaceSupers(
@@ -440,17 +433,12 @@ export default class ClassTransformer {
       // turn it into a return
 
       if (this.superThises.length) {
-        bareSuper.scope.push({ id: thisRef });
-        call = t.assignmentExpression("=", thisRef, call);
+        call = t.assignmentExpression("=", thisRef(), call);
       }
 
       bareSuper.parentPath.replaceWith(t.returnStatement(call));
     } else {
-      if (!this.pushedThis) {
-        body.scope.push({ id: thisRef });
-        this.pushedThis = true;
-      }
-      bareSuper.replaceWith(t.assignmentExpression("=", thisRef, call));
+      bareSuper.replaceWith(t.assignmentExpression("=", thisRef(), call));
     }
   }
 
@@ -460,12 +448,20 @@ export default class ClassTransformer {
     const path = this.userConstructorPath;
     const body = path.get("body");
 
+    if (!this.hasBareSuper && !this.superReturns.length) {
+      throw path.buildCodeFrameError("missing super() call in constructor");
+    }
+
     path.traverse(findThisesVisitor, this);
 
     let guaranteedSuperBeforeFinish = !!this.bareSupers.length;
 
     const superRef = this.superName || t.identifier("Function");
-    const thisRef = path.scope.generateUidIdentifier("this");
+    let thisRef = function() {
+      const ref = path.scope.generateDeclaredUidIdentifier("this");
+      thisRef = () => ref;
+      return ref;
+    };
 
     for (const bareSuper of this.bareSupers) {
       this.wrapSuperCall(bareSuper, superRef, thisRef, body);
@@ -486,7 +482,7 @@ export default class ClassTransformer {
     }
 
     for (const thisPath of this.superThises) {
-      thisPath.replaceWith(thisRef);
+      thisPath.replaceWith(thisRef());
     }
 
     let wrapReturn;
@@ -494,14 +490,14 @@ export default class ClassTransformer {
     if (this.isLoose) {
       wrapReturn = returnArg => {
         return returnArg
-          ? t.logicalExpression("||", returnArg, thisRef)
-          : thisRef;
+          ? t.logicalExpression("||", returnArg, thisRef())
+          : thisRef();
       };
     } else {
       wrapReturn = returnArg =>
         t.callExpression(
           this.file.addHelper("possibleConstructorReturn"),
-          [thisRef].concat(returnArg || []),
+          [thisRef()].concat(returnArg || []),
         );
     }
 
@@ -511,7 +507,9 @@ export default class ClassTransformer {
     if (bodyPaths.length && !bodyPaths.pop().isReturnStatement()) {
       body.pushContainer(
         "body",
-        t.returnStatement(guaranteedSuperBeforeFinish ? thisRef : wrapReturn()),
+        t.returnStatement(
+          guaranteedSuperBeforeFinish ? thisRef() : wrapReturn(),
+        ),
       );
     }
 
