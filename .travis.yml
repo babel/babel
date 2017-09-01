@@ -42,8 +42,6 @@ matrix:
       env: JOB=flow-test
     - node_js: node
       env: JOB=test262-test
-    - node_js: "lts/*"
-      env: JOB=flow-test
 
 after_script:
   - greenkeeper-lockfile-upload
