@@ -29,7 +29,7 @@ export function insertBefore(nodes) {
     return this._containerInsertBefore(nodes);
   } else if (this.isStatementOrBlock()) {
     if (this.node) nodes.push(this.node);
-    this._replaceWith(t.blockStatement(nodes));
+    this.replaceWith(t.blockStatement(nodes));
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +
@@ -104,10 +104,6 @@ export function _containerInsertAfter(nodes) {
  */
 
 export function insertAfter(nodes) {
-  return this._insertAfter(nodes);
-}
-
-export function _insertAfter(nodes, shouldRequeue = false) {
   this._assertUnremoved();
 
   nodes = this._verifyNodeList(nodes);
@@ -116,10 +112,7 @@ export function _insertAfter(nodes, shouldRequeue = false) {
     this.parentPath.isExpressionStatement() ||
     this.parentPath.isLabeledStatement()
   ) {
-    // `replaceWithMultiple` requeues if there's a replacement for this.node,
-    // but not for an ancestor's. Set `shouldRequeue` to true so that any replacement
-    // for an ancestor node can be enqueued. Fix #5628 and #5023.
-    return this.parentPath._insertAfter(nodes, true);
+    return this.parentPath.insertAfter(nodes);
   } else if (
     this.isNodeType("Expression") ||
     (this.parentPath.isForStatement() && this.key === "init")
@@ -142,10 +135,7 @@ export function _insertAfter(nodes, shouldRequeue = false) {
     ) {
       nodes.unshift(this.node);
     }
-    this._replaceWith(t.blockStatement(nodes));
-    if (shouldRequeue) {
-      this.requeue();
-    }
+    this.replaceWith(t.blockStatement(nodes));
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +
