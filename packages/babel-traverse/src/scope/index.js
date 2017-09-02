@@ -16,25 +16,6 @@ import { scope as scopeCache } from "../cache";
 // See `warnOnFlowBinding`.
 let _crawlCallsCount = 0;
 
-/**
- * To avoid creating a new Scope instance for each traversal, we maintain a cache on the
- * node itself containing all scopes it has been associated with.
- */
-
-function getCache(path, parentScope, self) {
-  const scopes: Array<Scope> = scopeCache.get(path.node) || [];
-
-  for (const scope of scopes) {
-    if (scope.parent === parentScope && scope.path === path) return scope;
-  }
-
-  scopes.push(self);
-
-  if (!scopeCache.has(path.node)) {
-    scopeCache.set(path.node, scopes);
-  }
-}
-
 // Recursively gathers the identifying names of a node.
 function gatherNodeParts(node: Object, parts: Array) {
   if (t.isModuleDeclaration(node)) {
@@ -181,20 +162,19 @@ export default class Scope {
    * within.
    */
 
-  constructor(path: NodePath, parentScope?: Scope) {
-    if (parentScope && parentScope.block === path.node) {
-      return parentScope;
+  constructor(path: NodePath) {
+    const { node } = path;
+    const cached = scopeCache.get(node);
+    // Sometimes, a scopable path is placed higher in the AST tree.
+    // In these cases, have to create a new Scope.
+    if (cached && cached.path === path) {
+      return cached;
     }
-
-    const cached = getCache(path, parentScope, this);
-    if (cached) return cached;
+    scopeCache.set(node, this);
 
     this.uid = uid++;
-    this.parent = parentScope;
-    this.hub = path.hub;
 
-    this.parentBlock = path.parent;
-    this.block = path.node;
+    this.block = node;
     this.path = path;
 
     this.labels = new Map();
@@ -211,6 +191,19 @@ export default class Scope {
    */
 
   static contextVariables = ["arguments", "undefined", "Infinity", "NaN"];
+
+  get parent() {
+    const parent = this.path.findParent(p => p.isScope());
+    return parent && parent.scope;
+  }
+
+  get parentBlock() {
+    return this.path.parent;
+  }
+
+  get hub() {
+    return this.path.hub;
+  }
 
   /**
    * Traverse node with current scope and path.
