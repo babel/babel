@@ -4,16 +4,19 @@
  * This file handles all logic for converting string-based configuration references into loaded objects.
  */
 
+import buildDebug from "debug";
 import resolve from "resolve";
 import path from "path";
 
+const debug = buildDebug("babel:config:loading:files:plugins");
+
 const EXACT_RE = /^module:/;
-const BABEL_PLUGIN_PREFIX_RE = /^(?!@|module:|[^/\/]+[/\/]|babel-plugin-)/;
-const BABEL_PRESET_PREFIX_RE = /^(?!@|module:|[^/\/]+[/\/]|babel-preset-)/;
-const BABEL_PLUGIN_ORG_RE = /^(@babel[/\/])(?!plugin-|[^/\/]+[/\/])/;
-const BABEL_PRESET_ORG_RE = /^(@babel[/\/])(?!preset-|[^/\/]+[/\/])/;
-const OTHER_PLUGIN_ORG_RE = /^(@(?!babel[/\/])[^/\/]+[/\/])(?!babel-plugin-|[^/\/]+[/\/])/;
-const OTHER_PRESET_ORG_RE = /^(@(?!babel[/\/])[^/\/]+[/\/])(?!babel-preset-|[^/\/]+[/\/])/;
+const BABEL_PLUGIN_PREFIX_RE = /^(?!@|module:|[^/]+\/|babel-plugin-)/;
+const BABEL_PRESET_PREFIX_RE = /^(?!@|module:|[^/]+\/|babel-preset-)/;
+const BABEL_PLUGIN_ORG_RE = /^(@babel\/)(?!plugin-|[^/]+\/)/;
+const BABEL_PRESET_ORG_RE = /^(@babel\/)(?!preset-|[^/]+\/)/;
+const OTHER_PLUGIN_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?!babel-plugin-|[^/]+\/)/;
+const OTHER_PRESET_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?!babel-preset-|[^/]+\/)/;
 
 export function resolvePlugin(name: string, dirname: string): string | null {
   return resolveStandardizedName("plugin", name, dirname);
@@ -32,10 +35,10 @@ export function loadPlugin(
     throw new Error(`Plugin ${name} not found relative to ${dirname}`);
   }
 
-  return {
-    filepath,
-    value: requireModule(filepath),
-  };
+  const value = requireModule("plugin", filepath);
+  debug("Loaded plugin %o from %o.", name, dirname);
+
+  return { filepath, value };
 }
 
 export function loadPreset(
@@ -47,10 +50,11 @@ export function loadPreset(
     throw new Error(`Preset ${name} not found relative to ${dirname}`);
   }
 
-  return {
-    filepath,
-    value: requireModule(filepath),
-  };
+  const value = requireModule("preset", filepath);
+
+  debug("Loaded preset %o from %o.", name, dirname);
+
+  return { filepath, value };
 }
 
 export function loadParser(
@@ -59,7 +63,7 @@ export function loadParser(
 ): { filepath: string, value: Function } {
   const filepath = resolve.sync(name, { basedir: dirname });
 
-  const mod = requireModule(filepath);
+  const mod = requireModule("parser", filepath);
 
   if (!mod) {
     throw new Error(
@@ -71,10 +75,13 @@ export function loadParser(
       `Parser ${name} relative to ${dirname} does not export a .parse function`,
     );
   }
+  const value = mod.parse;
+
+  debug("Loaded parser %o from %o.", name, dirname);
 
   return {
     filepath,
-    value: mod.parse,
+    value,
   };
 }
 
@@ -84,7 +91,7 @@ export function loadGenerator(
 ): { filepath: string, value: Function } {
   const filepath = resolve.sync(name, { basedir: dirname });
 
-  const mod = requireModule(filepath);
+  const mod = requireModule("generator", filepath);
 
   if (!mod) {
     throw new Error(
@@ -96,10 +103,13 @@ export function loadGenerator(
       `Generator ${name} relative to ${dirname} does not export a .print function`,
     );
   }
+  const value = mod.print;
+
+  debug("Loaded generator %o from %o.", name, dirname);
 
   return {
     filepath,
-    value: mod.print,
+    value,
   };
 }
 
@@ -185,7 +195,20 @@ function resolveStandardizedName(
   }
 }
 
-function requireModule(name: string): mixed {
-  // $FlowIssue
-  return require(name);
+const LOADING_MODULES = new Set();
+function requireModule(type: string, name: string): mixed {
+  if (LOADING_MODULES.has(name)) {
+    throw new Error(
+      // eslint-disable-next-line max-len
+      `Reentrant ${type} detected trying to load "${name}". This module is not ignored and is trying to load itself while compiling itself, leading to a dependency cycle. We recommend adding it to your "ignore" list in your babelrc, or to a .babelignore.`,
+    );
+  }
+
+  try {
+    LOADING_MODULES.add(name);
+    // $FlowIssue
+    return require(name);
+  } finally {
+    LOADING_MODULES.delete(name);
+  }
 }

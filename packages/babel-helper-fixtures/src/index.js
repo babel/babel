@@ -2,7 +2,7 @@ import cloneDeep from "lodash/cloneDeep";
 import trimEnd from "lodash/trimEnd";
 import resolve from "try-resolve";
 import clone from "lodash/clone";
-import merge from "lodash/merge";
+import extend from "lodash/extend";
 import semver from "semver";
 import path from "path";
 import fs from "fs";
@@ -106,7 +106,7 @@ export default function get(entryLoc): Array<Suite> {
       const taskOpts = cloneDeep(suite.options);
 
       const taskOptsLoc = resolve(taskDir + "/options");
-      if (taskOptsLoc) merge(taskOpts, require(taskOptsLoc));
+      if (taskOptsLoc) extend(taskOpts, require(taskOptsLoc));
 
       const test = {
         optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,

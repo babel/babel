@@ -443,7 +443,7 @@ export default class Printer {
   }
 
   printAndIndentOnComments(node, parent) {
-    const indent = !!node.leadingComments;
+    const indent = node.leadingComments && node.leadingComments.length > 0;
     if (indent) this.indent();
     this.print(node, parent);
     if (indent) this.dedent();
@@ -468,7 +468,7 @@ export default class Printer {
   }
 
   printInnerComments(node, indent = true) {
-    if (!node.innerComments) return;
+    if (!node.innerComments || !node.innerComments.length) return;
     if (indent) this.indent();
     this._printComments(node.innerComments);
     if (indent) this.dedent();

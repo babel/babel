@@ -5,7 +5,9 @@ let A = function A() {
 let B = function () {
   function B() {}
 
-  B.prototype.b = function b() {
+  var _proto = B.prototype;
+
+  _proto.b = function b() {
     console.log('b');
   };
 

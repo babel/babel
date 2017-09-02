@@ -3,6 +3,9 @@
 import { getEnv } from "./helpers/environment";
 import path from "path";
 import micromatch from "micromatch";
+import buildDebug from "debug";
+
+const debug = buildDebug("babel:config:config-chain");
 
 import { findConfigs, loadConfig } from "./loading/files";
 
@@ -67,7 +70,15 @@ class ConfigChainBuilder {
         );
       }
 
-      if (this.matchesPatterns(ignore, dirname)) return true;
+      if (this.matchesPatterns(ignore, dirname)) {
+        debug(
+          "Ignored %o because it matched one of %O from %o",
+          this.filename,
+          ignore,
+          dirname,
+        );
+        return true;
+      }
     }
 
     if (only) {
@@ -77,7 +88,15 @@ class ConfigChainBuilder {
         );
       }
 
-      if (!this.matchesPatterns(only, dirname)) return true;
+      if (!this.matchesPatterns(only, dirname)) {
+        debug(
+          "Ignored %o because it failed to match one of %O from %o",
+          this.filename,
+          only,
+          dirname,
+        );
+        return true;
+      }
     }
 
     return false;

@@ -16,25 +16,6 @@ import { scope as scopeCache } from "../cache";
 // See `warnOnFlowBinding`.
 let _crawlCallsCount = 0;
 
-/**
- * To avoid creating a new Scope instance for each traversal, we maintain a cache on the
- * node itself containing all scopes it has been associated with.
- */
-
-function getCache(path, parentScope, self) {
-  const scopes: Array<Scope> = scopeCache.get(path.node) || [];
-
-  for (const scope of scopes) {
-    if (scope.parent === parentScope && scope.path === path) return scope;
-  }
-
-  scopes.push(self);
-
-  if (!scopeCache.has(path.node)) {
-    scopeCache.set(path.node, scopes);
-  }
-}
-
 // Recursively gathers the identifying names of a node.
 function gatherNodeParts(node: Object, parts: Array) {
   if (t.isModuleDeclaration(node)) {
@@ -181,20 +162,19 @@ export default class Scope {
    * within.
    */
 
-  constructor(path: NodePath, parentScope?: Scope) {
-    if (parentScope && parentScope.block === path.node) {
-      return parentScope;
+  constructor(path: NodePath) {
+    const { node } = path;
+    const cached = scopeCache.get(node);
+    // Sometimes, a scopable path is placed higher in the AST tree.
+    // In these cases, have to create a new Scope.
+    if (cached && cached.path === path) {
+      return cached;
     }
-
-    const cached = getCache(path, parentScope, this);
-    if (cached) return cached;
+    scopeCache.set(node, this);
 
     this.uid = uid++;
-    this.parent = parentScope;
-    this.hub = path.hub;
 
-    this.parentBlock = path.parent;
-    this.block = path.node;
+    this.block = node;
     this.path = path;
 
     this.labels = new Map();
@@ -211,6 +191,19 @@ export default class Scope {
    */
 
   static contextVariables = ["arguments", "undefined", "Infinity", "NaN"];
+
+  get parent() {
+    const parent = this.path.findParent(p => p.isScope());
+    return parent && parent.scope;
+  }
+
+  get parentBlock() {
+    return this.path.parent;
+  }
+
+  get hub() {
+    return this.path.hub;
+  }
 
   /**
    * Traverse node with current scope and path.
@@ -243,7 +236,10 @@ export default class Scope {
    */
 
   generateUid(name: string = "temp") {
-    name = t.toIdentifier(name).replace(/^_+/, "").replace(/[0-9]+$/g, "");
+    name = t
+      .toIdentifier(name)
+      .replace(/^_+/, "")
+      .replace(/[0-9]+$/g, "");
 
     let uid;
     let i = 0;
@@ -345,6 +341,10 @@ export default class Scope {
   checkBlockScopedCollisions(local, kind: string, name: string, id: Object) {
     // ignore parameters
     if (kind === "param") return;
+
+    // Ignore existing binding if it's the name of the current function or
+    // class expression
+    if (local.kind === "local") return;
 
     // ignore hoisted functions if there's also a local let
     if (kind === "hoisted" && local.kind === "let") return;
@@ -519,6 +519,7 @@ export default class Scope {
     for (const name in ids) {
       for (const id of (ids[name]: Array<Object>)) {
         let local = this.getOwnBinding(name);
+
         if (local) {
           // same identifier so continue safely as we're likely trying to register it
           // multiple times
@@ -908,7 +909,7 @@ export default class Scope {
     if (_crawlCallsCount === 0 && binding && binding.path.isFlow()) {
       console.warn(`
         You or one of the Babel plugins you are using are using Flow declarations as bindings.
-        Support for this will be removed in version 6.8. To find out the caller, grep for this
+        Support for this will be removed in version 7. To find out the caller, grep for this
         message and change it to a \`console.trace()\`.
       `);
     }

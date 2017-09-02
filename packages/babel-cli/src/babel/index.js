@@ -147,6 +147,10 @@ commander.option(
   "When compiling a directory copy over non-compilable files",
 );
 commander.option("-q, --quiet", "Don't log anything");
+commander.option(
+  "--delete-dir-on-start",
+  "Delete's the out directory before compilation",
+);
 /* eslint-enable max-len */
 
 commander.version(pkg.version + " (babel-core " + version + ")");
@@ -192,6 +196,9 @@ if (commander.watch) {
 if (commander.skipInitialBuild && !commander.watch) {
   errors.push("--skip-initial-build requires --watch");
 }
+if (commander.deleteDirOnStart && !commander.outDir) {
+  errors.push("--delete-dir-on-start requires --out-dir");
+}
 
 if (errors.length) {
   console.error(errors.join(". "));
@@ -216,6 +223,7 @@ delete opts.outDir;
 delete opts.copyFiles;
 delete opts.quiet;
 delete opts.configFile;
+delete opts.deleteDirOnStart;
 
 // Commander will default the "--no-" arguments to true, but we want to leave them undefined so that
 // babel-core can handle the default-assignment logic on its own.

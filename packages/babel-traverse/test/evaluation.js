@@ -18,14 +18,18 @@ describe("evaluation", function() {
   describe("evaluateTruthy", function() {
     it("it should work with null", function() {
       assert.strictEqual(
-        getPath("false || a.length === 0;").get("body")[0].evaluateTruthy(),
+        getPath("false || a.length === 0;")
+          .get("body")[0]
+          .evaluateTruthy(),
         undefined,
       );
     });
 
     it("it should not mistake lack of confidence for falsy", function() {
       assert.strictEqual(
-        getPath("foo || 'bar'").get("body")[0].evaluate().value,
+        getPath("foo || 'bar'")
+          .get("body")[0]
+          .evaluate().value,
         undefined,
       );
     });
@@ -67,16 +71,48 @@ describe("evaluation", function() {
     );
   });
 
+  it("should evaluate template literals", function() {
+    assert.strictEqual(
+      getPath("var x = 8; var y = 1; var z = `value is ${x >>> y}`")
+        .get("body.2.declarations.0.init")
+        .evaluate().value,
+      "value is 4",
+    );
+  });
+
+  it("should evaluate member expressions", function() {
+    assert.strictEqual(
+      getPath("var x = 'foo'.length")
+        .get("body.0.declarations.0.init")
+        .evaluate().value,
+      3,
+    );
+    const member_expr = getPath(
+      "var x = Math.min(2,Math.max(3,4));var y = Math.random();",
+    );
+    const eval_member_expr = member_expr
+      .get("body.0.declarations.0.init")
+      .evaluate();
+    const eval_invalid_call = member_expr
+      .get("body.1.declarations.0.init")
+      .evaluate();
+    assert.strictEqual(eval_member_expr.value, 2);
+    assert.strictEqual(eval_invalid_call.confident, false);
+  });
+
   it("it should not deopt vars in different scope", function() {
     const input =
       "var a = 5; function x() { var a = 5; var b = a + 1; } var b = a + 2";
     assert.strictEqual(
-      getPath(input).get("body.1.body.body.1.declarations.0.init").evaluate()
-        .value,
+      getPath(input)
+        .get("body.1.body.body.1.declarations.0.init")
+        .evaluate().value,
       6,
     );
     assert.strictEqual(
-      getPath(input).get("body.2.declarations.0.init").evaluate().value,
+      getPath(input)
+        .get("body.2.declarations.0.init")
+        .evaluate().value,
       7,
     );
   });
@@ -91,12 +127,23 @@ describe("evaluation", function() {
     const constExample =
       "const d = true; if (d && true || false) { const d = false; d && 5; }";
     assert.strictEqual(
-      getPath(constExample).get("body.1.test").evaluate().value,
+      getPath(constExample)
+        .get("body.1.test")
+        .evaluate().value,
       true,
     );
     assert.strictEqual(
-      getPath(constExample).get("body.1.consequent.body.1").evaluate().value,
+      getPath(constExample)
+        .get("body.1.consequent.body.1")
+        .evaluate().value,
       false,
+    );
+    const test_alternate = "var y = (3 < 4)? 3 + 4: 3 + 4;";
+    assert.strictEqual(
+      getPath(test_alternate)
+        .get("body.0.declarations.0.init.alternate")
+        .evaluate().value,
+      7,
     );
   });
 
@@ -117,15 +164,21 @@ describe("evaluation", function() {
 
   it("should evaluate undefined, NaN and Infinity", () => {
     assert.strictEqual(
-      getPath("undefined").get("body.0.expression").evaluate().confident,
+      getPath("undefined")
+        .get("body.0.expression")
+        .evaluate().confident,
       true,
     );
     assert.strictEqual(
-      getPath("NaN").get("body.0.expression").evaluate().confident,
+      getPath("NaN")
+        .get("body.0.expression")
+        .evaluate().confident,
       true,
     );
     assert.strictEqual(
-      getPath("Infinity").get("body.0.expression").evaluate().confident,
+      getPath("Infinity")
+        .get("body.0.expression")
+        .evaluate().confident,
       true,
     );
   });
@@ -150,12 +203,16 @@ describe("evaluation", function() {
 
   it("should work with String.raw", function() {
     assert.strictEqual(
-      getPath("String.raw`\\d`").get("body")[0].evaluate().value,
+      getPath("String.raw`\\d`")
+        .get("body")[0]
+        .evaluate().value,
       "\\d",
     );
 
     assert.strictEqual(
-      getPath("`${String.raw`\\d`}`").get("body")[0].evaluate().value,
+      getPath("`${String.raw`\\d`}`")
+        .get("body")[0]
+        .evaluate().value,
       "\\d",
     );
   });

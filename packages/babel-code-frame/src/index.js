@@ -51,7 +51,7 @@ const JSX_TAG = /^[a-z][\w-]*$/i;
  * RegExp to test for the three types of brackets.
  */
 
-const BRACKET = /^[()\[\]{}]$/;
+const BRACKET = /^[()[\]{}]$/;
 
 /**
  * Get the type of token, specifying punctuator type.
@@ -94,7 +94,10 @@ function highlight(defs: Object, text: string) {
     const type = getTokenType(args);
     const colorize = defs[type];
     if (colorize) {
-      return args[0].split(NEWLINE).map(str => colorize(str)).join("\n");
+      return args[0]
+        .split(NEWLINE)
+        .map(str => colorize(str))
+        .join("\n");
     } else {
       return args[0];
     }

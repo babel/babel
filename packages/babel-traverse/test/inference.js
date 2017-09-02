@@ -64,28 +64,36 @@ describe("inference", function() {
   });
   describe("getTypeAnnotation", function() {
     it("should infer from type cast", function() {
-      const path = getPath("(x: number)").get("body")[0].get("expression");
+      const path = getPath("(x: number)")
+        .get("body")[0]
+        .get("expression");
       assert.ok(
         t.isNumberTypeAnnotation(path.getTypeAnnotation()),
         "should be number",
       );
     });
     it("should infer string from template literal", function() {
-      const path = getPath("`hey`").get("body")[0].get("expression");
+      const path = getPath("`hey`")
+        .get("body")[0]
+        .get("expression");
       assert.ok(
         t.isStringTypeAnnotation(path.getTypeAnnotation()),
         "should be string",
       );
     });
     it("should infer number from +x", function() {
-      const path = getPath("+x").get("body")[0].get("expression");
+      const path = getPath("+x")
+        .get("body")[0]
+        .get("expression");
       assert.ok(
         t.isNumberTypeAnnotation(path.getTypeAnnotation()),
         "should be number",
       );
     });
     it("should infer T from new T", function() {
-      const path = getPath("new T").get("body")[0].get("expression");
+      const path = getPath("new T")
+        .get("body")[0]
+        .get("expression");
       const type = path.getTypeAnnotation();
       assert.ok(
         t.isGenericTypeAnnotation(type) && type.id.name === "T",
@@ -93,49 +101,63 @@ describe("inference", function() {
       );
     });
     it("should infer number from ++x", function() {
-      const path = getPath("++x").get("body")[0].get("expression");
+      const path = getPath("++x")
+        .get("body")[0]
+        .get("expression");
       assert.ok(
         t.isNumberTypeAnnotation(path.getTypeAnnotation()),
         "should be number",
       );
     });
     it("should infer number from --x", function() {
-      const path = getPath("--x").get("body")[0].get("expression");
+      const path = getPath("--x")
+        .get("body")[0]
+        .get("expression");
       assert.ok(
         t.isNumberTypeAnnotation(path.getTypeAnnotation()),
         "should be number",
       );
     });
     it("should infer void from void x", function() {
-      const path = getPath("void x").get("body")[0].get("expression");
+      const path = getPath("void x")
+        .get("body")[0]
+        .get("expression");
       assert.ok(
         t.isVoidTypeAnnotation(path.getTypeAnnotation()),
         "should be void",
       );
     });
     it("should infer string from typeof x", function() {
-      const path = getPath("typeof x").get("body")[0].get("expression");
+      const path = getPath("typeof x")
+        .get("body")[0]
+        .get("expression");
       assert.ok(
         t.isStringTypeAnnotation(path.getTypeAnnotation()),
         "should be string",
       );
     });
     it("should infer boolean from !x", function() {
-      const path = getPath("!x").get("body")[0].get("expression");
+      const path = getPath("!x")
+        .get("body")[0]
+        .get("expression");
       assert.ok(
         t.isBooleanTypeAnnotation(path.getTypeAnnotation()),
         "should be boolean",
       );
     });
     it("should infer type of sequence expression", function() {
-      const path = getPath("a,1").get("body")[0].get("expression");
+      const path = getPath("a,1")
+        .get("body")[0]
+        .get("expression");
       assert.ok(
         t.isNumberTypeAnnotation(path.getTypeAnnotation()),
         "should be number",
       );
     });
     it("should infer type of logical expression", function() {
-      const path = getPath("'a' && 1").get("body")[0].get("expression");
+      const path = getPath("'a' && 1")
+        .get("body")[0]
+        .get("expression");
       const type = path.getTypeAnnotation();
       assert.ok(t.isUnionTypeAnnotation(type), "should be a union");
       assert.ok(
@@ -148,7 +170,9 @@ describe("inference", function() {
       );
     });
     it("should infer type of conditional expression", function() {
-      const path = getPath("q ? true : 0").get("body")[0].get("expression");
+      const path = getPath("q ? true : 0")
+        .get("body")[0]
+        .get("expression");
       const type = path.getTypeAnnotation();
       assert.ok(t.isUnionTypeAnnotation(type), "should be a union");
       assert.ok(
@@ -161,7 +185,9 @@ describe("inference", function() {
       );
     });
     it("should infer RegExp from RegExp literal", function() {
-      const path = getPath("/.+/").get("body")[0].get("expression");
+      const path = getPath("/.+/")
+        .get("body")[0]
+        .get("expression");
       const type = path.getTypeAnnotation();
       assert.ok(
         t.isGenericTypeAnnotation(type) && type.id.name === "RegExp",
@@ -169,7 +195,9 @@ describe("inference", function() {
       );
     });
     it("should infer Object from object expression", function() {
-      const path = getPath("({ a: 5 })").get("body")[0].get("expression");
+      const path = getPath("({ a: 5 })")
+        .get("body")[0]
+        .get("expression");
       const type = path.getTypeAnnotation();
       assert.ok(
         t.isGenericTypeAnnotation(type) && type.id.name === "Object",
@@ -177,7 +205,9 @@ describe("inference", function() {
       );
     });
     it("should infer Array from array expression", function() {
-      const path = getPath("[ 5 ]").get("body")[0].get("expression");
+      const path = getPath("[ 5 ]")
+        .get("body")[0]
+        .get("expression");
       const type = path.getTypeAnnotation();
       assert.ok(
         t.isGenericTypeAnnotation(type) && type.id.name === "Array",
@@ -222,22 +252,30 @@ describe("inference", function() {
       );
     });
     it("should infer number from x/y", function() {
-      const path = getPath("x/y").get("body")[0].get("expression");
+      const path = getPath("x/y")
+        .get("body")[0]
+        .get("expression");
       const type = path.getTypeAnnotation();
       assert.ok(t.isNumberTypeAnnotation(type), "should be number");
     });
     it("should infer boolean from x instanceof y", function() {
-      const path = getPath("x instanceof y").get("body")[0].get("expression");
+      const path = getPath("x instanceof y")
+        .get("body")[0]
+        .get("expression");
       const type = path.getTypeAnnotation();
       assert.ok(t.isBooleanTypeAnnotation(type), "should be boolean");
     });
     it("should infer number from 1 + 2", function() {
-      const path = getPath("1 + 2").get("body")[0].get("expression");
+      const path = getPath("1 + 2")
+        .get("body")[0]
+        .get("expression");
       const type = path.getTypeAnnotation();
       assert.ok(t.isNumberTypeAnnotation(type), "should be number");
     });
     it("should infer string|number from x + y", function() {
-      const path = getPath("x + y").get("body")[0].get("expression");
+      const path = getPath("x + y")
+        .get("body")[0]
+        .get("expression");
       const type = path.getTypeAnnotation();
       assert.ok(t.isUnionTypeAnnotation(type), "should be a union");
       assert.ok(

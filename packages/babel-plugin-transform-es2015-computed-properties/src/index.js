@@ -38,7 +38,7 @@ export default function({ types: t, template }) {
     }
   }
 
-  function pushMutatorDefine({ objId, body, getMutatorId, scope }, prop) {
+  function pushMutatorDefine({ body, getMutatorId, scope }, prop) {
     let key =
       !prop.computed && t.isIdentifier(prop.key)
         ? t.stringLiteral(prop.key.name)

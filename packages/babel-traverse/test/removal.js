@@ -24,7 +24,10 @@ describe("removal", function() {
   describe("ArrowFunction", function() {
     it("remove body", function() {
       const rootPath = getPath("x = () => b;");
-      const path = rootPath.get("body")[0].get("expression").get("right");
+      const path = rootPath
+        .get("body")[0]
+        .get("expression")
+        .get("right");
       const body = path.get("body");
       body.remove();
 

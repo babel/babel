@@ -3,7 +3,7 @@ import * as t from "./index";
 export const isReactComponent = t.buildMatchMemberExpression("React.Component");
 
 export function isCompatTag(tagName?: string): boolean {
-  return !!tagName && /^[a-z]|\-/.test(tagName);
+  return !!tagName && /^[a-z]|-/.test(tagName);
 }
 
 function cleanJSXElementLiteralChild(

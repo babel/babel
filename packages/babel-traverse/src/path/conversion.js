@@ -123,7 +123,7 @@ function hoistFunctionEnvironment(
     p =>
       (p.isFunction() && !p.isArrowFunctionExpression()) ||
       p.isProgram() ||
-      p.isClassProperty(),
+      p.isClassProperty({ static: false }),
   );
   const inConstructor = thisEnvFn && thisEnvFn.node.kind === "constructor";
 
@@ -148,28 +148,22 @@ function hoistFunctionEnvironment(
         "Unable to handle nested super() usage in arrow",
       );
     }
-
     const allSuperCalls = [];
     thisEnvFn.traverse({
-      Function: child => {
-        if (
-          child.isArrowFunctionExpression() ||
-          child.isClassProperty() ||
-          child === fnPath
-        ) {
-          return;
-        }
+      Function(child) {
+        if (child.isArrowFunctionExpression()) return;
+        child.skip();
+      },
+      ClassProperty(child) {
+        if (child.node.static) return;
         child.skip();
       },
       CallExpression(child) {
         if (!child.get("callee").isSuper()) return;
-
         allSuperCalls.push(child);
       },
     });
-
     const superBinding = getSuperBinding(thisEnvFn);
-
     allSuperCalls.forEach(superCall =>
       superCall.get("callee").replaceWith(t.identifier(superBinding)),
     );
@@ -399,15 +393,12 @@ function getThisBinding(thisEnvFn, inConstructor) {
 
     const supers = new WeakSet();
     thisEnvFn.traverse({
-      Function: child => {
-        if (
-          child.isArrowFunctionExpression() ||
-          child.isClassProperty() ||
-          child === this
-        ) {
-          return;
-        }
-
+      Function(child) {
+        if (child.isArrowFunctionExpression()) return;
+        child.skip();
+      },
+      ClassProperty(child) {
+        if (child.node.static) return;
         child.skip();
       },
       CallExpression(child) {
@@ -529,8 +520,12 @@ function getScopeInformation(fnPath) {
   const superCalls = [];
 
   fnPath.traverse({
+    ClassProperty(child) {
+      if (child.node.static) return;
+      child.skip();
+    },
     Function(child) {
-      if (child.isArrowFunctionExpression() || child.isClassProperty()) return;
+      if (child.isArrowFunctionExpression()) return;
       child.skip();
     },
     ThisExpression(child) {

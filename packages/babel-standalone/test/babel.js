@@ -14,7 +14,24 @@ describe("babel-standalone", () => {
         "};",
     );
   });
-
+  it("handles the es2015-loose preset", () => {
+    const output = Babel.transform("class A {}", {
+      presets: ["es2015-loose"],
+    }).code;
+    assert.equal(output, '"use strict";\n\nvar A = function A() {};');
+  });
+  it("handles the typescript preset", () => {
+    const output = Babel.transform("var a: string;", {
+      presets: ["typescript"],
+    }).code;
+    assert.equal(output, "var a;");
+  });
+  it("handles the flow preset", () => {
+    const output = Babel.transform("var a: string;", {
+      presets: ["flow"],
+    }).code;
+    assert.equal(output, "var a;");
+  });
   it("can translate simple ast", () => {
     const ast = {
       type: "Program",

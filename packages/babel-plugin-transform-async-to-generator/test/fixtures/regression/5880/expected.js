@@ -14,7 +14,7 @@ babelHelpers.asyncToGenerator(function* () {
     _iteratorError = err;
   } finally {
     try {
-      if (!_iteratorNormalCompletion && _iterator.return) {
+      if (!_iteratorNormalCompletion && _iterator.return != null) {
         yield _iterator.return();
       }
     } finally {

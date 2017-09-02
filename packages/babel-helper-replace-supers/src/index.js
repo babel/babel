@@ -52,6 +52,10 @@ const visitor = {
     if (!path.isArrowFunctionExpression()) path.skip();
   },
 
+  ClassProperty(path) {
+    if (!path.node.static) path.skip();
+  },
+
   ReturnStatement(path, state) {
     if (!path.getFunctionParent().isArrowFunctionExpression()) {
       state.returns.push(path);

@@ -218,75 +218,15 @@ registerPresets({
   "stage-1": require("babel-preset-stage-1"),
   "stage-2": require("babel-preset-stage-2"),
   "stage-3": require("babel-preset-stage-3"),
-
-  // ES2015 preset with es2015-modules-commonjs removed
-  // Plugin list copied from babel-preset-es2015/index.js
-  "es2015-no-commonjs": {
-    plugins: [
-      require("babel-plugin-transform-es2015-template-literals"),
-      require("babel-plugin-transform-es2015-literals"),
-      require("babel-plugin-transform-es2015-function-name"),
-      require("babel-plugin-transform-es2015-arrow-functions"),
-      require("babel-plugin-transform-es2015-block-scoped-functions"),
-      require("babel-plugin-transform-es2015-classes"),
-      require("babel-plugin-transform-es2015-object-super"),
-      require("babel-plugin-transform-es2015-shorthand-properties"),
-      require("babel-plugin-transform-es2015-computed-properties"),
-      require("babel-plugin-transform-es2015-for-of"),
-      require("babel-plugin-transform-es2015-sticky-regex"),
-      require("babel-plugin-transform-es2015-unicode-regex"),
-      require("babel-plugin-check-es2015-constants"),
-      require("babel-plugin-transform-es2015-spread"),
-      require("babel-plugin-transform-es2015-parameters"),
-      require("babel-plugin-transform-es2015-destructuring"),
-      require("babel-plugin-transform-es2015-block-scoping"),
-      require("babel-plugin-transform-es2015-typeof-symbol"),
-      [
-        require("babel-plugin-transform-regenerator"),
-        { async: false, asyncGenerators: false },
-      ],
-    ],
-  },
-
-  // ES2015 preset with plugins set to loose mode.
-  // Based off https://github.com/bkonkle/babel-preset-es2015-loose/blob/master/index.js
   "es2015-loose": {
-    plugins: [
-      [
-        require("babel-plugin-transform-es2015-template-literals"),
-        { loose: true },
-      ],
-      require("babel-plugin-transform-es2015-literals"),
-      require("babel-plugin-transform-es2015-function-name"),
-      require("babel-plugin-transform-es2015-arrow-functions"),
-      require("babel-plugin-transform-es2015-block-scoped-functions"),
-      [require("babel-plugin-transform-es2015-classes"), { loose: true }],
-      require("babel-plugin-transform-es2015-object-super"),
-      require("babel-plugin-transform-es2015-shorthand-properties"),
-      require("babel-plugin-transform-es2015-duplicate-keys"),
-      [
-        require("babel-plugin-transform-es2015-computed-properties"),
-        { loose: true },
-      ],
-      [require("babel-plugin-transform-es2015-for-of"), { loose: true }],
-      require("babel-plugin-transform-es2015-sticky-regex"),
-      require("babel-plugin-transform-es2015-unicode-regex"),
-      require("babel-plugin-check-es2015-constants"),
-      [require("babel-plugin-transform-es2015-spread"), { loose: true }],
-      require("babel-plugin-transform-es2015-parameters"),
-      [require("babel-plugin-transform-es2015-destructuring"), { loose: true }],
-      require("babel-plugin-transform-es2015-block-scoping"),
-      require("babel-plugin-transform-es2015-typeof-symbol"),
-      [
-        require("babel-plugin-transform-es2015-modules-commonjs"),
-        { loose: true },
-      ],
-      [
-        require("babel-plugin-transform-regenerator"),
-        { async: false, asyncGenerators: false },
-      ],
-    ],
+    presets: [[require("babel-preset-es2015"), { loose: true }]],
   },
+  // ES2015 preset with es2015-modules-commonjs removed
+  "es2015-no-commonjs": {
+    presets: [[require("babel-preset-es2015"), { modules: false }]],
+  },
+  typescript: require("babel-preset-typescript"),
+  flow: require("babel-preset-flow"),
 });
 
 export const version = VERSION;

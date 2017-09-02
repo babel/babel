@@ -75,20 +75,18 @@ export default function({ types: t }) {
         // since `+` is left-to-right associative
         // ensure the first node is a string if first/second isn't
         const considerSecondNode =
-          state.opts.spec || !t.isStringLiteral(nodes[1]);
+          !state.opts.loose || !t.isStringLiteral(nodes[1]);
         if (!t.isStringLiteral(nodes[0]) && considerSecondNode) {
           nodes.unshift(t.stringLiteral(""));
         }
         let root = nodes[0];
 
-        if (state.opts.spec) {
-          if (nodes.length > 1) {
-            root = buildConcatCallExressions(nodes);
-          }
-        } else {
+        if (state.opts.loose) {
           for (let i = 1; i < nodes.length; i++) {
             root = t.binaryExpression("+", root, nodes[i]);
           }
+        } else if (nodes.length > 1) {
+          root = buildConcatCallExressions(nodes);
         }
 
         path.replaceWith(root);

@@ -1,11 +1,14 @@
 // @flow
 
+import buildDebug from "debug";
 import path from "path";
 import fs from "fs";
 import json5 from "json5";
 import resolve from "resolve";
 import { getEnv } from "../../helpers/environment";
 import { makeStrongCache } from "../../caching";
+
+const debug = buildDebug("babel:config:loading:files:configuration");
 
 type ConfigFile = {
   filepath: string,
@@ -31,6 +34,7 @@ export function findConfigs(dirname: string): Array<ConfigFile> {
       const ignore = readIgnoreConfig(ignoreLoc);
 
       if (ignore) {
+        debug("Found ignore %o from %o.", ignore.filepath, dirname);
         confs.push(ignore);
         foundIgnore = true;
       }
@@ -57,6 +61,7 @@ export function findConfigs(dirname: string): Array<ConfigFile> {
       }, null);
 
       if (conf) {
+        debug("Found configuration %o from %o.", conf.filepath, dirname);
         confs.push(conf);
         foundConfig = true;
       }
@@ -80,6 +85,7 @@ export function loadConfig(name: string, dirname: string): ConfigFile {
     throw new Error(`Config file ${filepath} contains no configuration data`);
   }
 
+  debug("Loaded config %o from $o.", name, dirname);
   return conf;
 }
 
@@ -93,14 +99,31 @@ function readConfig(filepath) {
     : readConfigFile(filepath);
 }
 
+const LOADING_CONFIGS = new Set();
 const readConfigJS = makeStrongCache((filepath, cache) => {
   if (!fs.existsSync(filepath)) {
     cache.forever();
     return null;
   }
 
+  // The `require()` call below can make this code reentrant if a require hook like babel-register has been
+  // loaded into the system. That would cause Babel to attempt to compile the `.babelrc.js` file as it loads
+  // below. To cover this case, we auto-ignore re-entrant config processing.
+  if (LOADING_CONFIGS.has(filepath)) {
+    cache.never();
+
+    debug("Auto-ignoring usage of config %o.", filepath);
+    return {
+      filepath,
+      dirname: path.dirname(filepath),
+      options: {},
+    };
+  }
+
   let options;
   try {
+    LOADING_CONFIGS.add(filepath);
+
     // $FlowIssue
     const configModule = (require(filepath): mixed);
     options =
@@ -110,6 +133,8 @@ const readConfigJS = makeStrongCache((filepath, cache) => {
   } catch (err) {
     err.message = `${filepath}: Error while loading config - ${err.message}`;
     throw err;
+  } finally {
+    LOADING_CONFIGS.delete(filepath);
   }
 
   if (typeof options === "function") {

@@ -29,7 +29,7 @@ export function insertBefore(nodes) {
     return this._containerInsertBefore(nodes);
   } else if (this.isStatementOrBlock()) {
     if (this.node) nodes.push(this.node);
-    return this._replaceWith(t.blockStatement(nodes));
+    return this.replaceWith(t.blockStatement(nodes));
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +
@@ -133,7 +133,7 @@ export function insertAfter(nodes) {
     ) {
       nodes.unshift(this.node);
     }
-    return this._replaceWith(t.blockStatement(nodes));
+    return this.replaceWith(t.blockStatement(nodes));
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +
