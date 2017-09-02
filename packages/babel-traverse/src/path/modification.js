@@ -28,8 +28,26 @@ export function insertBefore(nodes) {
   } else if (Array.isArray(this.container)) {
     return this._containerInsertBefore(nodes);
   } else if (this.isStatementOrBlock()) {
-    if (this.node) nodes.push(this.node);
-    return this.replaceWith(t.blockStatement(nodes));
+    const shouldInsertCurrentNode =
+      this.node &&
+      (!this.isExpressionStatement() || this.node.expression != null);
+
+    this.replaceWith(
+      t.blockStatement(shouldInsertCurrentNode ? [this.node] : []),
+    );
+
+    // Create a fake Path so we can use _containerInsertBefore
+    // We do this so that we get the same result as if the BlockStatement
+    // would have been there already
+    const path = NodePath.get({
+      parentPath: this,
+      parent: this.node,
+      container: this.node.body,
+      litsKey: "body",
+      key: 0,
+    });
+
+    return path._containerInsertBefore(nodes);
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +
@@ -126,14 +144,28 @@ export function insertAfter(nodes) {
   } else if (Array.isArray(this.container)) {
     return this._containerInsertAfter(nodes);
   } else if (this.isStatementOrBlock()) {
-    // Unshift current node if it's not an empty expression
-    if (
+    const shouldInsertCurrentNode =
       this.node &&
-      (!this.isExpressionStatement() || this.node.expression != null)
-    ) {
-      nodes.unshift(this.node);
+      (!this.isExpressionStatement() || this.node.expression != null);
+
+    if (!this.parentPath.isBlockStatement()) {
+      this.replaceWith(
+        t.blockStatement(shouldInsertCurrentNode ? [this.node] : []),
+      );
     }
-    return this.replaceWith(t.blockStatement(nodes));
+
+    // Create a fake Path so we can use _containerInsertAfter
+    // We do this so that we get the same result as if the BlockStatement
+    // would have been there already
+    const path = NodePath.get({
+      parentPath: this,
+      parent: this.node,
+      container: this.node.body,
+      litsKey: "body",
+      key: 0,
+    });
+
+    return path._containerInsertAfter(nodes);
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +
