@@ -107,16 +107,11 @@ export default function register(opts?: Object = {}) {
   Object.assign(transformOpts, opts);
 
   if (!transformOpts.ignore && !transformOpts.only) {
+    transformOpts.only = [
+      // Only compile things inside the current working directory.
+      new RegExp("^" + escapeRegExp(process.cwd()), "i"),
+    ];
     transformOpts.ignore = [
-      // Ignore any node_modules content outside the current working directory.
-      new RegExp(
-        "^(?!" +
-          escapeRegExp(process.cwd()) +
-          ").*" +
-          escapeRegExp(path.sep + "node_modules" + path.sep),
-        "i",
-      ),
-
       // Ignore any node_modules inside the current working directory.
       new RegExp(
         "^" +
