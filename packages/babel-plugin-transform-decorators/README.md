@@ -64,7 +64,7 @@ Add the following line to your .babelrc file:
 
 #### NOTE: Order of Plugins Matters!
 
-If you are including your plugins manually and using `transform-class-properties`, make sure that `transform-decorators` comes *before* `transform-class-properties`.
+If you are including your plugins manually and using `transform-class-properties`, make sure that `transform-decorators` comes *before* `transform-class-properties`. `transform-class-properties` also must be used in loose mode to support `transform-decorators`.
 
 Wrong:
 
@@ -83,7 +83,7 @@ Right:
 {
   "plugins": [
     "transform-decorators",
-    "transform-class-properties"
+    ["transform-class-properties", { "loose" : true }]
   ]
 }
 ```
