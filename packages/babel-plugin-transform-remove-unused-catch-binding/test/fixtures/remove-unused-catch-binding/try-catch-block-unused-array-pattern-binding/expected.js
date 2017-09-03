@@ -1,5 +1,5 @@
 try {
   throw 0;
-} catch {
+} catch ([message]) {
   console.log("it failed, but this code executes");
 }
