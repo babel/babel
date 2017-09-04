@@ -203,14 +203,6 @@ export default function({ types: t }) {
           path.ensureBlock();
         }
       },
-      CallExpression(path) {
-        const { node } = path;
-        if (node.callee.name === "_initializerWarningHelper") {
-          throw path.buildCodeFrameError(
-            "Class Properties Transform requires loose mode for decorators support",
-          );
-        }
-      },
     },
   };
 }

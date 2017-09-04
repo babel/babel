@@ -30,7 +30,9 @@ const buildInitializerWarningHelper = template(`
     function NAME(descriptor, context){
         throw new Error(
           'Decorating class property failed. Please ensure that ' +
-          'transform-class-properties is enabled.'
+          'transform-class-properties is enabled and set to use loose mode. ' +
+          'To use transform-class-properties in spec mode with decorators, wait for ' +
+          'the next major version of decorators in stage 2.'
         );
     }
 `);

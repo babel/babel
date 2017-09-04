@@ -1,8 +1,0 @@
-{
-  "plugins": [
-    "external-helpers",
-    "transform-decorators",
-    "transform-class-properties"
-  ],
-  "throws": "Class Properties Transform requires loose mode for decorators support"
-}
