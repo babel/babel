@@ -6,6 +6,16 @@
 npm install babel-preset-env --save-dev
 ```
 
+Acts as a replacement for preset-es2015,16,17,latest
+
+```json
+{
+  "presets": ["env"]
+}
+```
+
+You can target specific versions with browserslist
+
 ```json
 {
   "presets": [
@@ -17,6 +27,8 @@ npm install babel-preset-env --save-dev
   ]
 }
 ```
+
+Or even the current (running) version of Node
 
 ```json
 {
