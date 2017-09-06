@@ -183,7 +183,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       delete node.directives;
     }
 
-    parseClassMethod(
+    pushClassMethod(
       classBody: N.ClassBody,
       method: N.ClassMethod,
       isGenerator: boolean,

@@ -137,6 +137,7 @@ require("babylon").parse("code", {
 | `decorators` (Stage 1) and `decorators2` (Stage 2 [proposal](https://github.com/tc39/proposal-decorators)) | `@a class A {}` |
 | `classProperties` ([proposal](https://github.com/tc39/proposal-class-public-fields)) | `class A { b = 1; }` |
 | `classPrivateProperties` ([proposal](https://github.com/tc39/proposal-private-fields)) | `class A { #b = 1; }` |
+| `classPrivateMethods` ([proposal](https://github.com/tc39/proposal-private-methods)) | `class A { #c() {} }` |
 | `exportExtensions` ([proposal 1](https://github.com/leebyron/ecmascript-export-default-from)), ([proposal 2](https://github.com/leebyron/ecmascript-export-ns-from)) | Proposal 1: `export v from "mod"` Proposal 2: `export * as ns from "mod"` |
 | `asyncGenerators` ([proposal](https://github.com/tc39/proposal-async-iteration)) | `async function*() {}`, `for await (let a of b) {}` |
 | `functionBind` ([proposal](https://github.com/zenparsing/es-function-bind)) | `a::b`, `::console.log` |

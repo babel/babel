@@ -89,8 +89,9 @@
                   "column": 4
                 }
               },
+              "static": false,
               "key": {
-                "type": "Identifier",
+                "type": "PrivateName",
                 "start": 15,
                 "end": 16,
                 "loc": {
@@ -101,12 +102,26 @@
                   "end": {
                     "line": 2,
                     "column": 4
-                  },
-                  "identifierName": "x"
+                  }
                 },
-                "name": "x"
+                "id": {
+                  "type": "Identifier",
+                  "start": 15,
+                  "end": 16,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 3
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 4
+                    },
+                    "identifierName": "x"
+                  },
+                  "name": "x"
+                }
               },
-              "static": false,
               "value": null
             },
             {
@@ -123,8 +138,9 @@
                   "column": 4
                 }
               },
+              "static": false,
               "key": {
-                "type": "Identifier",
+                "type": "PrivateName",
                 "start": 20,
                 "end": 21,
                 "loc": {
@@ -135,12 +151,26 @@
                   "end": {
                     "line": 3,
                     "column": 4
-                  },
-                  "identifierName": "y"
+                  }
                 },
-                "name": "y"
+                "id": {
+                  "type": "Identifier",
+                  "start": 20,
+                  "end": 21,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 3
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 4
+                    },
+                    "identifierName": "y"
+                  },
+                  "name": "y"
+                }
               },
-              "static": false,
               "value": null
             }
           ]

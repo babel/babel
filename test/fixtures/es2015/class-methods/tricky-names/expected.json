@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 257,
+  "end": 311,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 45,
+      "line": 55,
       "column": 1
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 257,
+    "end": 311,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 45,
+        "line": 55,
         "column": 1
       }
     },
@@ -31,14 +31,14 @@
       {
         "type": "ClassDeclaration",
         "start": 0,
-        "end": 257,
+        "end": 311,
         "loc": {
           "start": {
             "line": 1,
             "column": 0
           },
           "end": {
-            "line": 45,
+            "line": 55,
             "column": 1
           }
         },
@@ -63,14 +63,14 @@
         "body": {
           "type": "ClassBody",
           "start": 8,
-          "end": 257,
+          "end": 311,
           "loc": {
             "start": {
               "line": 1,
               "column": 8
             },
             "end": {
-              "line": 45,
+              "line": 55,
               "column": 1
             }
           },
@@ -90,7 +90,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 12,
@@ -108,6 +107,7 @@
                 },
                 "name": "get"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
@@ -147,7 +147,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 27,
@@ -165,6 +164,7 @@
                 },
                 "name": "set"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
@@ -203,7 +203,6 @@
                   "column": 7
                 }
               },
-              "static": false,
               "kind": "method",
               "computed": false,
               "key": {
@@ -223,6 +222,7 @@
                 },
                 "name": "static"
               },
+              "static": false,
               "id": null,
               "generator": false,
               "expression": false,
@@ -261,7 +261,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 60,
@@ -279,6 +278,7 @@
                 },
                 "name": "async"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
@@ -306,36 +306,216 @@
             {
               "type": "ClassMethod",
               "start": 78,
-              "end": 98,
+              "end": 91,
               "loc": {
                 "start": {
                   "line": 15,
                   "column": 2
                 },
                 "end": {
-                  "line": 17,
+                  "line": 16,
+                  "column": 7
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "StringLiteral",
+                "start": 78,
+                "end": 83,
+                "loc": {
+                  "start": {
+                    "line": 15,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 15,
+                    "column": 7
+                  }
+                },
+                "extra": {
+                  "rawValue": "get",
+                  "raw": "'get'"
+                },
+                "value": "get"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 89,
+                "end": 91,
+                "loc": {
+                  "start": {
+                    "line": 16,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 16,
+                    "column": 7
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start": 95,
+              "end": 108,
+              "loc": {
+                "start": {
+                  "line": 18,
+                  "column": 2
+                },
+                "end": {
+                  "line": 19,
+                  "column": 7
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "StringLiteral",
+                "start": 95,
+                "end": 100,
+                "loc": {
+                  "start": {
+                    "line": 18,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 18,
+                    "column": 7
+                  }
+                },
+                "extra": {
+                  "rawValue": "set",
+                  "raw": "'set'"
+                },
+                "value": "set"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 106,
+                "end": 108,
+                "loc": {
+                  "start": {
+                    "line": 19,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 19,
+                    "column": 7
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start": 112,
+              "end": 127,
+              "loc": {
+                "start": {
+                  "line": 21,
+                  "column": 2
+                },
+                "end": {
+                  "line": 22,
+                  "column": 7
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "StringLiteral",
+                "start": 112,
+                "end": 119,
+                "loc": {
+                  "start": {
+                    "line": 21,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 21,
+                    "column": 9
+                  }
+                },
+                "extra": {
+                  "rawValue": "async",
+                  "raw": "'async'"
+                },
+                "value": "async"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 125,
+                "end": 127,
+                "loc": {
+                  "start": {
+                    "line": 22,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 22,
+                    "column": 7
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start": 132,
+              "end": 152,
+              "loc": {
+                "start": {
+                  "line": 25,
+                  "column": 2
+                },
+                "end": {
+                  "line": 27,
                   "column": 7
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 87,
-                "end": 90,
+                "start": 141,
+                "end": 144,
                 "loc": {
                   "start": {
-                    "line": 16,
+                    "line": 26,
                     "column": 2
                   },
                   "end": {
-                    "line": 16,
+                    "line": 26,
                     "column": 5
                   },
                   "identifierName": "get"
                 },
                 "name": "get"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
@@ -344,15 +524,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 96,
-                "end": 98,
+                "start": 150,
+                "end": 152,
                 "loc": {
                   "start": {
-                    "line": 17,
+                    "line": 27,
                     "column": 5
                   },
                   "end": {
-                    "line": 17,
+                    "line": 27,
                     "column": 7
                   }
                 },
@@ -362,37 +542,37 @@
             },
             {
               "type": "ClassMethod",
-              "start": 102,
-              "end": 122,
+              "start": 156,
+              "end": 176,
               "loc": {
                 "start": {
-                  "line": 19,
+                  "line": 29,
                   "column": 2
                 },
                 "end": {
-                  "line": 21,
+                  "line": 31,
                   "column": 7
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 111,
-                "end": 114,
+                "start": 165,
+                "end": 168,
                 "loc": {
                   "start": {
-                    "line": 20,
+                    "line": 30,
                     "column": 2
                   },
                   "end": {
-                    "line": 20,
+                    "line": 30,
                     "column": 5
                   },
                   "identifierName": "set"
                 },
                 "name": "set"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
@@ -401,15 +581,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 120,
-                "end": 122,
+                "start": 174,
+                "end": 176,
                 "loc": {
                   "start": {
-                    "line": 21,
+                    "line": 31,
                     "column": 5
                   },
                   "end": {
-                    "line": 21,
+                    "line": 31,
                     "column": 7
                   }
                 },
@@ -419,37 +599,37 @@
             },
             {
               "type": "ClassMethod",
-              "start": 126,
-              "end": 149,
+              "start": 180,
+              "end": 203,
               "loc": {
                 "start": {
-                  "line": 23,
+                  "line": 33,
                   "column": 2
                 },
                 "end": {
-                  "line": 25,
+                  "line": 35,
                   "column": 7
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 135,
-                "end": 141,
+                "start": 189,
+                "end": 195,
                 "loc": {
                   "start": {
-                    "line": 24,
+                    "line": 34,
                     "column": 2
                   },
                   "end": {
-                    "line": 24,
+                    "line": 34,
                     "column": 8
                   },
                   "identifierName": "static"
                 },
                 "name": "static"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
@@ -458,15 +638,15 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 147,
-                "end": 149,
+                "start": 201,
+                "end": 203,
                 "loc": {
                   "start": {
-                    "line": 25,
+                    "line": 35,
                     "column": 5
                   },
                   "end": {
-                    "line": 25,
+                    "line": 35,
                     "column": 7
                   }
                 },
@@ -476,168 +656,54 @@
             },
             {
               "type": "ClassMethod",
-              "start": 153,
-              "end": 175,
+              "start": 207,
+              "end": 229,
               "loc": {
                 "start": {
-                  "line": 27,
+                  "line": 37,
                   "column": 2
                 },
                 "end": {
-                  "line": 29,
+                  "line": 39,
                   "column": 7
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 162,
-                "end": 167,
-                "loc": {
-                  "start": {
-                    "line": 28,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 28,
-                    "column": 7
-                  },
-                  "identifierName": "async"
-                },
-                "name": "async"
-              },
-              "kind": "method",
-              "id": null,
-              "generator": false,
-              "expression": false,
-              "async": false,
-              "params": [],
-              "body": {
-                "type": "BlockStatement",
-                "start": 173,
-                "end": 175,
-                "loc": {
-                  "start": {
-                    "line": 29,
-                    "column": 5
-                  },
-                  "end": {
-                    "line": 29,
-                    "column": 7
-                  }
-                },
-                "body": [],
-                "directives": []
-              }
-            },
-            {
-              "type": "ClassMethod",
-              "start": 179,
-              "end": 197,
-              "loc": {
-                "start": {
-                  "line": 31,
-                  "column": 2
-                },
-                "end": {
-                  "line": 33,
-                  "column": 7
-                }
-              },
-              "static": true,
-              "computed": false,
-              "key": {
-                "type": "Identifier",
-                "start": 188,
-                "end": 189,
-                "loc": {
-                  "start": {
-                    "line": 32,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 32,
-                    "column": 3
-                  },
-                  "identifierName": "a"
-                },
-                "name": "a"
-              },
-              "kind": "method",
-              "id": null,
-              "generator": false,
-              "expression": false,
-              "async": false,
-              "params": [],
-              "body": {
-                "type": "BlockStatement",
-                "start": 195,
-                "end": 197,
-                "loc": {
-                  "start": {
-                    "line": 33,
-                    "column": 5
-                  },
-                  "end": {
-                    "line": 33,
-                    "column": 7
-                  }
-                },
-                "body": [],
-                "directives": []
-              }
-            },
-            {
-              "type": "ClassMethod",
-              "start": 202,
-              "end": 221,
-              "loc": {
-                "start": {
-                  "line": 36,
-                  "column": 2
-                },
-                "end": {
-                  "line": 38,
-                  "column": 7
-                }
-              },
-              "static": false,
-              "computed": false,
-              "key": {
-                "type": "Identifier",
-                "start": 208,
-                "end": 213,
-                "loc": {
-                  "start": {
-                    "line": 37,
-                    "column": 2
-                  },
-                  "end": {
-                    "line": 37,
-                    "column": 7
-                  },
-                  "identifierName": "async"
-                },
-                "name": "async"
-              },
-              "kind": "get",
-              "id": null,
-              "generator": false,
-              "expression": false,
-              "async": false,
-              "params": [],
-              "body": {
-                "type": "BlockStatement",
-                "start": 219,
+                "start": 216,
                 "end": 221,
                 "loc": {
                   "start": {
                     "line": 38,
-                    "column": 5
+                    "column": 2
                   },
                   "end": {
                     "line": 38,
+                    "column": 7
+                  },
+                  "identifierName": "async"
+                },
+                "name": "async"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 227,
+                "end": 229,
+                "loc": {
+                  "start": {
+                    "line": 39,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 39,
                     "column": 7
                   }
                 },
@@ -647,37 +713,94 @@
             },
             {
               "type": "ClassMethod",
-              "start": 226,
-              "end": 255,
+              "start": 233,
+              "end": 251,
               "loc": {
                 "start": {
                   "line": 41,
                   "column": 2
                 },
                 "end": {
-                  "line": 44,
+                  "line": 43,
                   "column": 7
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
-                "start": 241,
-                "end": 247,
+                "start": 242,
+                "end": 243,
                 "loc": {
                   "start": {
-                    "line": 43,
+                    "line": 42,
                     "column": 2
                   },
                   "end": {
-                    "line": 43,
-                    "column": 8
+                    "line": 42,
+                    "column": 3
                   },
-                  "identifierName": "static"
+                  "identifierName": "a"
                 },
-                "name": "static"
+                "name": "a"
               },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 249,
+                "end": 251,
+                "loc": {
+                  "start": {
+                    "line": 43,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 43,
+                    "column": 7
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start": 256,
+              "end": 275,
+              "loc": {
+                "start": {
+                  "line": 46,
+                  "column": 2
+                },
+                "end": {
+                  "line": 48,
+                  "column": 7
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 262,
+                "end": 267,
+                "loc": {
+                  "start": {
+                    "line": 47,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 47,
+                    "column": 7
+                  },
+                  "identifierName": "async"
+                },
+                "name": "async"
+              },
+              "computed": false,
               "kind": "get",
               "id": null,
               "generator": false,
@@ -686,15 +809,72 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 253,
-                "end": 255,
+                "start": 273,
+                "end": 275,
                 "loc": {
                   "start": {
-                    "line": 44,
+                    "line": 48,
                     "column": 5
                   },
                   "end": {
-                    "line": 44,
+                    "line": 48,
+                    "column": 7
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start": 280,
+              "end": 309,
+              "loc": {
+                "start": {
+                  "line": 51,
+                  "column": 2
+                },
+                "end": {
+                  "line": 54,
+                  "column": 7
+                }
+              },
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start": 295,
+                "end": 301,
+                "loc": {
+                  "start": {
+                    "line": 53,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 53,
+                    "column": 8
+                  },
+                  "identifierName": "static"
+                },
+                "name": "static"
+              },
+              "computed": false,
+              "kind": "get",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 307,
+                "end": 309,
+                "loc": {
+                  "start": {
+                    "line": 54,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 54,
                     "column": 7
                   }
                 },

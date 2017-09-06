@@ -90,6 +90,7 @@ These are the core Babylon AST node types.
 - [Classes](#classes)
   - [ClassBody](#classbody)
   - [ClassMethod](#classmethod)
+  - [ClassPrivateMethod](#classprivatemethod)
   - [ClassProperty](#classproperty)
   - [ClassPrivateProperty](#classprivateproperty)
   - [ClassDeclaration](#classdeclaration)
@@ -1032,7 +1033,7 @@ interface Class <: Node {
 ```js
 interface ClassBody <: Node {
   type: "ClassBody";
-  body: [ ClassMethod | ClassProperty | ClassPrivateProperty ];
+  body: [ ClassMethod | ClassPrivateMethod | ClassProperty | ClassPrivateProperty ];
 }
 ```
 
@@ -1044,6 +1045,18 @@ interface ClassMethod <: Function {
   key: Expression;
   kind: "constructor" | "method" | "get" | "set";
   computed: boolean;
+  static: boolean;
+  decorators: [ Decorator ];
+}
+```
+
+## ClassPrivateMethod
+
+```js
+interface ClassPrivateMethod <: Function {
+  type: "ClassPrivateMethod";
+  key: PrivateName;
+  kind: "method" | "get" | "set";
   static: boolean;
   decorators: [ Decorator ];
 }
@@ -1066,7 +1079,7 @@ interface ClassProperty <: Node {
 ```js
 interface ClassPrivateProperty <: Node {
   type: "ClassPrivateProperty";
-  key: Identifier;
+  key: PrivateName;
   value: Expression;
   static: boolean;
 }

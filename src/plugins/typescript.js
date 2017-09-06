@@ -1639,7 +1639,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseClassProperty(node);
     }
 
-    parseClassMethod(
+    pushClassMethod(
       classBody: N.ClassBody,
       method: N.ClassMethod,
       isGenerator: boolean,
@@ -1648,13 +1648,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): void {
       const typeParameters = this.tsTryParseTypeParameters();
       if (typeParameters) method.typeParameters = typeParameters;
-      super.parseClassMethod(
+      super.pushClassMethod(
         classBody,
         method,
         isGenerator,
         isAsync,
         isConstructor,
       );
+    }
+
+    pushClassPrivateMethod(
+      classBody: N.ClassBody,
+      method: N.ClassPrivateMethod,
+      isGenerator: boolean,
+      isAsync: boolean,
+    ): void {
+      const typeParameters = this.tsTryParseTypeParameters();
+      if (typeParameters) method.typeParameters = typeParameters;
+      super.pushClassPrivateMethod(classBody, method, isGenerator, isAsync);
     }
 
     parseClassSuper(node: N.Class): void {

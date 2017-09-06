@@ -12,6 +12,16 @@ class A {
   () {}
 
 
+  'get'
+  () {}
+
+  'set'
+  () {}
+
+  'async'
+  () {}
+
+
   static
   get
   () {}

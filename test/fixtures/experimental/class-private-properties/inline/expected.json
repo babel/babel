@@ -89,8 +89,9 @@
                   "column": 13
                 }
               },
+              "static": false,
               "key": {
-                "type": "Identifier",
+                "type": "PrivateName",
                 "start": 11,
                 "end": 12,
                 "loc": {
@@ -101,12 +102,26 @@
                   "end": {
                     "line": 1,
                     "column": 12
-                  },
-                  "identifierName": "x"
+                  }
                 },
-                "name": "x"
+                "id": {
+                  "type": "Identifier",
+                  "start": 11,
+                  "end": 12,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 12
+                    },
+                    "identifierName": "x"
+                  },
+                  "name": "x"
+                }
               },
-              "static": false,
               "value": null
             },
             {
@@ -123,8 +138,9 @@
                   "column": 17
                 }
               },
+              "static": false,
               "key": {
-                "type": "Identifier",
+                "type": "PrivateName",
                 "start": 15,
                 "end": 16,
                 "loc": {
@@ -135,12 +151,26 @@
                   "end": {
                     "line": 1,
                     "column": 16
-                  },
-                  "identifierName": "y"
+                  }
                 },
-                "name": "y"
+                "id": {
+                  "type": "Identifier",
+                  "start": 15,
+                  "end": 16,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 16
+                    },
+                    "identifierName": "y"
+                  },
+                  "name": "y"
+                }
               },
-              "static": false,
               "value": null
             }
           ]
@@ -207,8 +237,9 @@
                   "column": 17
                 }
               },
+              "static": false,
               "key": {
-                "type": "Identifier",
+                "type": "PrivateName",
                 "start": 32,
                 "end": 33,
                 "loc": {
@@ -219,12 +250,26 @@
                   "end": {
                     "line": 3,
                     "column": 12
-                  },
-                  "identifierName": "x"
+                  }
                 },
-                "name": "x"
+                "id": {
+                  "type": "Identifier",
+                  "start": 32,
+                  "end": 33,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 12
+                    },
+                    "identifierName": "x"
+                  },
+                  "name": "x"
+                }
               },
-              "static": false,
               "value": {
                 "type": "NumericLiteral",
                 "start": 36,
@@ -260,8 +305,9 @@
                   "column": 25
                 }
               },
+              "static": false,
               "key": {
-                "type": "Identifier",
+                "type": "PrivateName",
                 "start": 40,
                 "end": 41,
                 "loc": {
@@ -272,12 +318,26 @@
                   "end": {
                     "line": 3,
                     "column": 20
-                  },
-                  "identifierName": "y"
+                  }
                 },
-                "name": "y"
+                "id": {
+                  "type": "Identifier",
+                  "start": 40,
+                  "end": 41,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 19
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 20
+                    },
+                    "identifierName": "y"
+                  },
+                  "name": "y"
+                }
               },
-              "static": false,
               "value": {
                 "type": "NumericLiteral",
                 "start": 44,

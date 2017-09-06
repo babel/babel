@@ -1398,20 +1398,30 @@ export default class ExpressionParser extends LValParser {
   }
 
   parsePropertyName(
-    prop: N.ObjectOrClassMember | N.TsNamedTypeElementBase,
-  ): N.Expression {
+    prop:
+      | N.ObjectOrClassMember
+      | N.ClassPrivateProperty
+      | N.ClassPrivateMethod
+      | N.TsNamedTypeElementBase,
+  ): N.Expression | N.Identifier {
     if (this.eat(tt.bracketL)) {
       prop.computed = true;
       prop.key = this.parseMaybeAssign();
       this.expect(tt.bracketR);
     } else {
-      prop.computed = false;
       const oldInPropertyName = this.state.inPropertyName;
       this.state.inPropertyName = true;
+      // We check if it's valid for it to be a private name when we push it.
       prop.key =
         this.match(tt.num) || this.match(tt.string)
           ? this.parseExprAtom()
-          : this.parseIdentifier(true);
+          : this.parseMaybePrivateName();
+
+      if (prop.key.type !== "PrivateName") {
+        // ClassPrivateProperty is never computed, so we don't assign in that case.
+        prop.computed = false;
+      }
+
       this.state.inPropertyName = oldInPropertyName;
     }
 

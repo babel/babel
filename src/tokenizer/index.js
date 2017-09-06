@@ -521,7 +521,8 @@ export default class Tokenizer extends LocationParser {
     switch (code) {
       case 35: // '#'
         if (
-          this.hasPlugin("classPrivateProperties") &&
+          (this.hasPlugin("classPrivateProperties") ||
+            this.hasPlugin("classPrivateMethods")) &&
           this.state.classLevel > 0
         ) {
           ++this.state.pos;
