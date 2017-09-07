@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 testDirs=`TEST_TYPE=cov scripts/_get-test-directories.sh`
