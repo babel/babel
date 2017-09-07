@@ -5,17 +5,20 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 function _default() {
-  return function () {
-    function Select() {
-      babelHelpers.classCallCheck(this, Select);
-    }
+  return (
+    /*#__PURE__*/
+    function () {
+      function Select() {
+        babelHelpers.classCallCheck(this, Select);
+      }
 
-    babelHelpers.createClass(Select, [{
-      key: "query",
-      value: function query(_query) {}
-    }]);
-    return Select;
-  }();
+      babelHelpers.createClass(Select, [{
+        key: "query",
+        value: function query(_query) {}
+      }]);
+      return Select;
+    }()
+  );
 }
 
 exports.default = _default;

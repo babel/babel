@@ -8,7 +8,9 @@ var BaseView = function BaseView() {
   this.autoRender = true;
 };
 
-var BaseView = function () {
+var BaseView =
+/*#__PURE__*/
+function () {
   function BaseView() {
     babelHelpers.classCallCheck(this, BaseView);
   }

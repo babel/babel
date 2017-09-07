@@ -9,7 +9,9 @@ var _BaseFoo2 = require("./BaseFoo");
 
 var _BaseFoo3 = babelHelpers.interopRequireDefault(_BaseFoo2);
 
-var SubFoo = function (_BaseFoo) {
+var SubFoo =
+/*#__PURE__*/
+function (_BaseFoo) {
   babelHelpers.inherits(SubFoo, _BaseFoo);
 
   function SubFoo() {

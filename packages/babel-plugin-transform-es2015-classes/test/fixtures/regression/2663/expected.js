@@ -16,7 +16,9 @@ var _binarySerializer = require("./helpers/binary-serializer");
 var _binarySerializer2 = babelHelpers.interopRequireDefault(_binarySerializer);
 
 // import ...
-var Connection = function (_EventEmitter) {
+var Connection =
+/*#__PURE__*/
+function (_EventEmitter) {
   babelHelpers.inherits(Connection, _EventEmitter);
 
   function Connection(endpoint, joinKey, joinData, roomId) {

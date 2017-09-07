@@ -7,7 +7,9 @@ exports.default = void 0;
 
 var _store = require("./store");
 
-let Login = function (_React$Component) {
+let Login =
+/*#__PURE__*/
+function (_React$Component) {
   babelHelpers.inherits(Login, _React$Component);
 
   function Login() {

@@ -2,6 +2,8 @@ import LooseTransformer from "./loose";
 import VanillaTransformer from "./vanilla";
 import nameFunction from "babel-helper-function-name";
 
+const PURE_ANNOTATION = "#__PURE__";
+
 export default function({ types: t }) {
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
@@ -51,11 +53,11 @@ export default function({ types: t }) {
 
         path.replaceWith(new Constructor(path, state.file).run());
 
-        if (
-          path.isCallExpression() &&
-          path.get("callee").isArrowFunctionExpression()
-        ) {
-          path.get("callee").arrowFunctionToExpression();
+        if (path.isCallExpression()) {
+          path.addComment("leading", PURE_ANNOTATION);
+          if (path.get("callee").isArrowFunctionExpression()) {
+            path.get("callee").arrowFunctionToExpression();
+          }
         }
       },
     },

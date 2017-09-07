@@ -1,4 +1,6 @@
-var Foo = function () {
+var Foo =
+/*#__PURE__*/
+function () {
   function Foo() {}
 
   var _proto = Foo.prototype;

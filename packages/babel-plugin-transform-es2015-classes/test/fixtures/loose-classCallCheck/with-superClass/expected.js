@@ -2,7 +2,9 @@ function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.crea
 
 let B = function B() {};
 
-let A = function (_B) {
+let A =
+/*#__PURE__*/
+function (_B) {
   _inheritsLoose(A, _B);
 
   function A(track) {
