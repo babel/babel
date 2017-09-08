@@ -65,9 +65,13 @@ export default function({ types: t }) {
 
   //expects path to an object pattern
   function createObjectSpread(path, file, objRef) {
-    const last = path.get("properties").pop(); // note: popping does not mean removal from path
-    const restElement = t.clone(last.node);
-    last.remove(); // remove restElement
+    const props = path.get("properties");
+    const last = props[props.length - 1];
+    const restElement = last.node.type === "RestElement" && t.clone(last.node);
+
+    if (restElement) {
+      last.remove();
+    }
 
     const impureComputedPropertyDeclarators = replaceImpureComputedKeys(path);
     const { keys, allLiteral } = extractNormalizedKeys(path);
@@ -85,7 +89,7 @@ export default function({ types: t }) {
 
     return [
       impureComputedPropertyDeclarators,
-      restElement.argument,
+      restElement && restElement.argument,
       t.callExpression(file.addHelper("objectWithoutProperties"), [
         objRef,
         keyExpression,
@@ -199,14 +203,16 @@ export default function({ types: t }) {
 
               insertionPath.insertBefore(impureComputedPropertyDeclarators);
 
-              insertionPath.insertAfter(
-                t.variableDeclarator(argument, callExpression),
-              );
+              if (argument) {
+                insertionPath.insertAfter(
+                  t.variableDeclarator(argument, callExpression),
+                );
 
-              insertionPath = insertionPath.getSibling(insertionPath.key + 1);
+                insertionPath = insertionPath.getSibling(insertionPath.key + 1);
+              }
 
-              if (path.parentPath.node.properties.length === 0) {
-                path
+              if (objectPatternPath.node.properties.length === 0) {
+                objectPatternPath
                   .findParent(
                     path =>
                       path.isObjectProperty() || path.isVariableDeclarator(),
