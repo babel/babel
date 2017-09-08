@@ -1,6 +1,6 @@
-define(["foo"], function (_foo) {
+define(["foo"], function (foo) {
   "use strict";
 
-  var foo = babelHelpers.interopRequireWildcard(_foo);
+  foo = babelHelpers.interopRequireWildcard(foo);
   foo;
 });

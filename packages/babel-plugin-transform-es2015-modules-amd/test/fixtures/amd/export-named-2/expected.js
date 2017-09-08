@@ -1,9 +1,11 @@
-define(["exports"], function (exports) {
+define(["exports"], function (_exports) {
   "use strict";
 
-  Object.defineProperty(exports, "__esModule", {
+  Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  exports.foo = foo;
-  exports.bar = bar;
+  _exports.bar = _exports.foo = void 0;
+  var foo, bar;
+  _exports.bar = bar;
+  _exports.foo = foo;
 });

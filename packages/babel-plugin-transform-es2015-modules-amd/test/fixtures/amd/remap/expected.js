@@ -1,12 +1,14 @@
-define(["exports"], function (exports) {
+define(["exports"], function (_exports) {
   "use strict";
 
-  Object.defineProperty(exports, "__esModule", {
+  Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  var test = exports.test = 2;
-  exports.test = test = 5;
-  exports.test = test += 1;
+  _exports.f = _exports.e = _exports.c = _exports.a = _exports.test = void 0;
+  var test = 2;
+  _exports.test = test;
+  _exports.test = test = 5;
+  _exports.test = test += 1;
 
   (function () {
     var test = 2;
@@ -15,13 +17,12 @@ define(["exports"], function (exports) {
   })();
 
   var a = 2;
-  exports.a = a;
-  exports.a = a = 3;
+  _exports.a = a;
+  _exports.a = a = 3;
   var b = 2;
-  exports.c = b;
-  exports.c = b = 3;
+  _exports.c = b;
+  _exports.c = b = 3;
   var d = 3;
-  exports.e = d;
-  exports.f = d;
-  exports.f = exports.e = d = 4;
+  _exports.f = _exports.e = d;
+  _exports.f = _exports.e = d = 4;
 });
