@@ -2,15 +2,6 @@
 
 // @flow
 
-// This is a trick taken from Esprima. It turns out that, on
-// non-Chrome browsers, to check whether a string is in a set, a
-// predicate containing a big ugly `switch` statement is faster than
-// a regular expression, and on Chrome the two are about on par.
-// This function uses `eval` (non-lexical) to produce such a
-// predicate from a space-separated string of words.
-//
-// It starts by sorting the words by length.
-
 function makePredicate(words: string): (str: string) => boolean {
   const wordsArr = words.split(" ");
   return function(str) {

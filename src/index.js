@@ -2,16 +2,8 @@
 
 import type { Options } from "./options";
 import Parser, { plugins } from "./parser";
-import "./parser/util";
-import "./parser/statement";
-import "./parser/lval";
-import "./parser/expression";
-import "./parser/node";
-import "./parser/location";
-import "./parser/comments";
 
 import { types as tokTypes } from "./tokenizer/types";
-import "./tokenizer";
 import "./tokenizer/context";
 
 import type { Expression, File } from "./types";
