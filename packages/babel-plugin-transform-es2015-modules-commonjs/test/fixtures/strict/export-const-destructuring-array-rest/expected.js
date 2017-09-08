@@ -1,6 +1,7 @@
 "use strict";
 
+exports.baz = exports.bar = exports.foo = void 0;
 const [foo, bar, ...baz] = [];
-exports.foo = foo;
-exports.bar = bar;
 exports.baz = baz;
+exports.bar = bar;
+exports.foo = foo;

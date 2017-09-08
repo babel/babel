@@ -3,11 +3,14 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports["default"] = void 0;
 
-exports["default"] = function (_a) {
+var _default = function _default(_a) {
   return {
     a: function a() {
       return _a;
     }
   };
 };
+
+exports["default"] = _default;

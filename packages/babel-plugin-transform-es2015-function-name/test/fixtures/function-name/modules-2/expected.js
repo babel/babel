@@ -5,9 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _last2 = require("lodash/last");
-
-var _last3 = babelHelpers.interopRequireDefault(_last2);
+var _last2 = babelHelpers.interopRequireDefault(require("lodash/last"));
 
 let Container =
 /*#__PURE__*/
@@ -23,7 +21,7 @@ function () {
         return;
       }
 
-      return (0, _last3.default)(this.tokens.get(key));
+      return (0, _last2.default)(this.tokens.get(key));
     }
   }]);
   return Container;

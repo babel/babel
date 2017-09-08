@@ -1,8 +1,7 @@
 "use strict";
 
-var _foo = require("foo");
-
-_foo.default;
-_foo.default;
-_foo.foo3;
-(0, _foo.foo3)();
+var foo4 = babelHelpers.interopRequireDefault(require("foo"));
+foo4.default;
+foo4.default;
+foo4.foo3;
+(0, foo4.foo3)();

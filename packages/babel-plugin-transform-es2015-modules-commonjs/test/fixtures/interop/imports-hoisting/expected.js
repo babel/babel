@@ -1,10 +1,8 @@
 "use strict";
 
-var _taggedTemplateLiteral2 = require("babel-runtime/helpers/taggedTemplateLiteral");
+var _taggedTemplateLiteral2 = _interopRequireDefault(require("babel-runtime/helpers/taggedTemplateLiteral"));
 
-var _taggedTemplateLiteral3 = _interopRequireDefault(_taggedTemplateLiteral2);
-
-var _templateObject = (0, _taggedTemplateLiteral3.default)(["foo"], ["foo"]);
+var _templateObject = (0, _taggedTemplateLiteral2.default)(["foo"], ["foo"]);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 

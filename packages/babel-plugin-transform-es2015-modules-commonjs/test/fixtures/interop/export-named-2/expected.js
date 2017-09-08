@@ -3,5 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.foo = foo;
+exports.bar = exports.foo = void 0;
+var foo, bar;
 exports.bar = bar;
+exports.foo = foo;
