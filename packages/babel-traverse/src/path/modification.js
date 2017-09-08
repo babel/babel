@@ -35,19 +35,7 @@ export function insertBefore(nodes) {
     this.replaceWith(
       t.blockStatement(shouldInsertCurrentNode ? [this.node] : []),
     );
-
-    // Create a fake Path so we can use _containerInsertBefore
-    // We do this so that we get the same result as if the BlockStatement
-    // would have been there already
-    const path = NodePath.get({
-      parentPath: this,
-      parent: this.node,
-      container: this.node.body,
-      litsKey: "body",
-      key: 0,
-    });
-
-    return path._containerInsertBefore(nodes);
+    return this.unshiftContainer("body", nodes);
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +
@@ -61,34 +49,14 @@ export function _containerInsert(from, nodes) {
 
   const paths = [];
 
+  this.container.splice(from, 0, ...nodes);
   for (let i = 0; i < nodes.length; i++) {
     const to = from + i;
-    const node = nodes[i];
-    this.container.splice(to, 0, node);
+    const path = this.getSibling(`${to}`);
+    paths.push(path);
 
-    if (this.context) {
-      const path = this.context.create(
-        this.parent,
-        this.container,
-        to,
-        this.listKey,
-      );
-
-      // While this path may have a context, there is currently no guarantee that the context
-      // will be the active context, because `popContext` may leave a final context in place.
-      // We should remove this `if` and always push once #4145 has been resolved.
-      if (this.context.queue) path.pushContext(this.context);
-      paths.push(path);
-    } else {
-      paths.push(
-        NodePath.get({
-          parentPath: this.parentPath,
-          parent: this.parent,
-          container: this.container,
-          listKey: this.listKey,
-          key: to,
-        }),
-      );
+    if (this.context && this.context.queue) {
+      path.pushContext(this.context);
     }
   }
 
@@ -148,24 +116,10 @@ export function insertAfter(nodes) {
       this.node &&
       (!this.isExpressionStatement() || this.node.expression != null);
 
-    if (!this.parentPath.isBlockStatement()) {
-      this.replaceWith(
-        t.blockStatement(shouldInsertCurrentNode ? [this.node] : []),
-      );
-    }
-
-    // Create a fake Path so we can use _containerInsertAfter
-    // We do this so that we get the same result as if the BlockStatement
-    // would have been there already
-    const path = NodePath.get({
-      parentPath: this,
-      parent: this.node,
-      container: this.node.body,
-      litsKey: "body",
-      key: 0,
-    });
-
-    return path._containerInsertAfter(nodes);
+    this.replaceWith(
+      t.blockStatement(shouldInsertCurrentNode ? [this.node] : []),
+    );
+    return this.pushContainer("body", nodes);
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +

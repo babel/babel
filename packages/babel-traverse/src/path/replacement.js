@@ -116,7 +116,7 @@ export function replaceWith(replacement) {
   }
 
   if (this.node === replacement) {
-    return;
+    return [this];
   }
 
   if (this.isProgram() && !t.isProgram(replacement)) {
@@ -137,6 +137,8 @@ export function replaceWith(replacement) {
     );
   }
 
+  let nodePath = "";
+
   if (this.isNodeType("Statement") && t.isExpression(replacement)) {
     if (
       !this.canHaveVariableDeclarationOrExpression() &&
@@ -145,6 +147,7 @@ export function replaceWith(replacement) {
     ) {
       // replacing a statement with an expression so wrap it in an expression statement
       replacement = t.expressionStatement(replacement);
+      nodePath = "expression";
     }
   }
 
@@ -174,7 +177,7 @@ export function replaceWith(replacement) {
   // requeue for visiting
   this.requeue();
 
-  return [this];
+  return [nodePath ? this.get(nodePath) : this];
 }
 
 /**
@@ -209,45 +212,45 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
   const toSequenceExpression = t.toSequenceExpression(nodes, this.scope);
 
   if (toSequenceExpression) {
-    return this.replaceWith(toSequenceExpression);
-  } else {
-    const container = t.arrowFunctionExpression([], t.blockStatement(nodes));
-
-    this.replaceWith(t.callExpression(container, []));
-    this.traverse(hoistVariablesVisitor);
-
-    // add implicit returns to all ending expression statements
-    const completionRecords: Array<NodePath> = this.get(
-      "callee",
-    ).getCompletionRecords();
-    for (const path of completionRecords) {
-      if (!path.isExpressionStatement()) continue;
-
-      const loop = path.findParent(path => path.isLoop());
-      if (loop) {
-        let uid = loop.getData("expressionReplacementReturnUid");
-
-        if (!uid) {
-          const callee = this.get("callee");
-          uid = callee.scope.generateDeclaredUidIdentifier("ret");
-          callee.get("body").pushContainer("body", t.returnStatement(uid));
-          loop.setData("expressionReplacementReturnUid", uid);
-        } else {
-          uid = t.identifier(uid.name);
-        }
-
-        path
-          .get("expression")
-          .replaceWith(t.assignmentExpression("=", uid, path.node.expression));
-      } else {
-        path.replaceWith(t.returnStatement(path.node.expression));
-      }
-    }
-
-    this.get("callee").arrowFunctionToExpression();
-
-    return [this];
+    return this.replaceWith(toSequenceExpression)[0].get("expressions");
   }
+  const container = t.arrowFunctionExpression([], t.blockStatement(nodes));
+
+  this.replaceWith(t.callExpression(container, []));
+  this.traverse(hoistVariablesVisitor);
+
+  // add implicit returns to all ending expression statements
+  const completionRecords: Array<NodePath> = this.get(
+    "callee",
+  ).getCompletionRecords();
+  for (const path of completionRecords) {
+    if (!path.isExpressionStatement()) continue;
+
+    const loop = path.findParent(path => path.isLoop());
+    if (loop) {
+      let uid = loop.getData("expressionReplacementReturnUid");
+
+      if (!uid) {
+        const callee = this.get("callee");
+        uid = callee.scope.generateDeclaredUidIdentifier("ret");
+        callee.get("body").pushContainer("body", t.returnStatement(uid));
+        loop.setData("expressionReplacementReturnUid", uid);
+      } else {
+        uid = t.identifier(uid.name);
+      }
+
+      path
+        .get("expression")
+        .replaceWith(t.assignmentExpression("=", uid, path.node.expression));
+    } else {
+      path.replaceWith(t.returnStatement(path.node.expression));
+    }
+  }
+
+  const callee = this.get("callee");
+  callee.arrowFunctionToExpression();
+
+  return callee.get("body.body");
 }
 
 export function replaceInline(nodes: Object | Array<Object>) {
