@@ -141,9 +141,11 @@ function arrayDestructure() {
     rest[_key15] = arguments[_key15];
   }
 
-  var _x = babelHelpers.slicedToArray(x, 1);
+  var _x = x;
 
-  rest[0] = _x[0];
+  var _x2 = babelHelpers.slicedToArray(_x, 1);
+
+  rest[0] = _x2[0];
 }
 
 function forOf() {
