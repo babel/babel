@@ -1,0 +1,4 @@
+{
+  "plugins": ["../../../../index"],
+  "throws": "Use path.scope.buildUndefinedNode() to create an undefined identifier directly."
+}

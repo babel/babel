@@ -80,7 +80,7 @@ const replPlugin = ({ types: t }) => ({
       // prevent implicit strict mode from printing 'use strict'.
       path.pushContainer(
         "body",
-        t.expressionStatement(t.identifier("undefined")),
+        t.expressionStatement(path.scope.buildUndefinedNode()),
       );
     },
   },

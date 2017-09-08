@@ -1,4 +1,5 @@
 /lib
+internal/*/test/fixtures
 packages/babel-runtime
 !packages/babel-runtime/scripts
 !packages/babel-runtime/core-js.js

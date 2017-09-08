@@ -29,13 +29,14 @@ watch: clean
 	BABEL_ENV=development ./node_modules/.bin/gulp watch
 
 lint:
-	./node_modules/.bin/eslint scripts packages *.js --format=codeframe --rulesdir="./eslint_rules"
+	./node_modules/.bin/eslint scripts packages *.js --format=codeframe
+	./node_modules/.bin/babel ./packages/babel-plugin-*/src ./packages/babel-helper-*/src --plugins=./internal/babel-plugin-lint-no-undefined-identifier --out-file=/dev/null
 
 flow:
 	./node_modules/.bin/flow check --strip-root
 
 fix:
-	./node_modules/.bin/eslint scripts packages *.js --format=codeframe --fix --rulesdir="./eslint_rules"
+	./node_modules/.bin/eslint scripts packages *.js --format=codeframe --fix
 
 clean: test-clean
 	rm -rf packages/babel-polyfill/browser*
