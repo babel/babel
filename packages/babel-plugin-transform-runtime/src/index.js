@@ -39,24 +39,23 @@ export default function({ types: t }) {
         );
       }
 
-      this.setDynamic("regeneratorIdentifier", function() {
-        return file.addImport(
-          `${moduleName}/regenerator`,
-          "default",
-          "regeneratorRuntime",
-        );
-      });
+      this.moduleName = moduleName;
     },
 
     visitor: {
       ReferencedIdentifier(path, state) {
         const { node, parent, scope } = path;
-
         if (
           node.name === "regeneratorRuntime" &&
           state.opts.regenerator !== false
         ) {
-          path.replaceWith(state.get("regeneratorIdentifier"));
+          path.replaceWith(
+            this.file.addImport(
+              `${this.moduleName}/regenerator`,
+              "default",
+              "regeneratorRuntime",
+            ),
+          );
           return;
         }
 

@@ -220,7 +220,7 @@ export default class File extends Store {
       prependDeclaration(specifiers);
     }
 
-    return id;
+    return t.identifier(id.name);
   }
 
   addHelper(name: string): Object {
