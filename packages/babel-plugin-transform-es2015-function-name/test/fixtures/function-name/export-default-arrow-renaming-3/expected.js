@@ -3,8 +3,9 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = void 0;
 
-exports.default = function (_ref) {
+var _default = function _default(_ref) {
   var _onClick = _ref.onClick;
   return React.createElement("div", {
     onClick: function onClick() {
@@ -12,3 +13,5 @@ exports.default = function (_ref) {
     }
   });
 };
+
+exports.default = _default;

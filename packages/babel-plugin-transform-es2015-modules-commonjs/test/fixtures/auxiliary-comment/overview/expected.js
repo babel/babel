@@ -25,24 +25,15 @@ require("./directory/foo-bar")
 
 var
 /*before*/
-_foo = require("foo2")
+_foo2 = babelHelpers.interopRequireDefault(require("foo2"))
 /*after*/
 ;
 
-/*before*/
-var _foo2 = babelHelpers.interopRequireDefault(_foo);
-
-/*after*/
 var
 /*before*/
-_foo3 = require("foo3")
+foo2 = babelHelpers.interopRequireWildcard(require("foo3"))
 /*after*/
 ;
-
-/*before*/
-var
-/*after*/
-foo2 = babelHelpers.interopRequireWildcard(_foo3);
 
 var
 /*before*/
@@ -56,15 +47,18 @@ _foo5 = require("foo5")
 /*after*/
 ;
 
+var test;
+
 /*before*/
-exports.
+exports.test = test;
+
 /*after*/
-test = test;
-var test2 =
+var test2 = 5;
+
 /*before*/
-exports.
+exports.test2 = test2;
+
 /*after*/
-test2 = 5;
 
 /*before*/
 (0, _foo4.bar)

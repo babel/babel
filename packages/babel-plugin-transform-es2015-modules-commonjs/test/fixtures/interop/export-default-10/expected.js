@@ -3,7 +3,10 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = void 0;
 
-exports.default = function () {
+var _default = function () {
   return "foo";
 }();
+
+exports.default = _default;
