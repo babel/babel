@@ -67,11 +67,9 @@ export default function({ types: t }) {
   function createObjectSpread(path, file, objRef) {
     const props = path.get("properties");
     const last = props[props.length - 1];
-    const restElement = last.node.type === "RestElement" && t.clone(last.node);
-
-    if (restElement) {
-      last.remove();
-    }
+    t.assertRestElement(last.node);
+    const restElement = t.clone(last.node);
+    last.remove();
 
     const impureComputedPropertyDeclarators = replaceImpureComputedKeys(path);
     const { keys, allLiteral } = extractNormalizedKeys(path);
@@ -89,7 +87,7 @@ export default function({ types: t }) {
 
     return [
       impureComputedPropertyDeclarators,
-      restElement && restElement.argument,
+      restElement.argument,
       t.callExpression(file.addHelper("objectWithoutProperties"), [
         objRef,
         keyExpression,
@@ -178,6 +176,13 @@ export default function({ types: t }) {
               let ref = this.originalPath.node.init;
               const refPropertyPath = [];
 
+              if (path.parentPath.isArrayPattern()) {
+                // Return early if we encounter an ArrayPattern parent,
+                // because that means this RestElement is an array element
+                // rather than an object property.
+                return;
+              }
+
               path.findParent(path => {
                 if (path.isObjectProperty()) {
                   refPropertyPath.unshift(path.node.key.name);
@@ -201,15 +206,15 @@ export default function({ types: t }) {
                 callExpression,
               ] = createObjectSpread(objectPatternPath, file, ref);
 
+              t.assertIdentifier(argument);
+
               insertionPath.insertBefore(impureComputedPropertyDeclarators);
 
-              if (argument) {
-                insertionPath.insertAfter(
-                  t.variableDeclarator(argument, callExpression),
-                );
+              insertionPath.insertAfter(
+                t.variableDeclarator(argument, callExpression),
+              );
 
-                insertionPath = insertionPath.getSibling(insertionPath.key + 1);
-              }
+              insertionPath = insertionPath.getSibling(insertionPath.key + 1);
 
               if (objectPatternPath.node.properties.length === 0) {
                 objectPatternPath
