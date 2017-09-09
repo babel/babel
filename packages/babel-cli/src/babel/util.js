@@ -98,3 +98,10 @@ export function requireChokidar() {
     throw err;
   }
 }
+
+export function adjustRelative(relative, keepModuleExtension) {
+  if (keepModuleExtension && relative.split(".").pop() === "mjs") {
+    return relative;
+  }
+  return relative.replace(/\.(\w*?)$/, "") + ".js";
+}

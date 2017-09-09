@@ -129,6 +129,10 @@ commander.option(
   "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx,.mjs]",
   collect,
 );
+commander.option(
+  "--keep-module-extension",
+  "Preserve the .mjs extension of the input files",
+);
 commander.option("-w, --watch", "Recompile files on changes");
 commander.option(
   "--skip-initial-build",
@@ -224,6 +228,7 @@ delete opts.copyFiles;
 delete opts.quiet;
 delete opts.configFile;
 delete opts.deleteDirOnStart;
+delete opts.keepModuleExtension;
 
 // Commander will default the "--no-" arguments to true, but we want to leave them undefined so that
 // babel-core can handle the default-assignment logic on its own.
