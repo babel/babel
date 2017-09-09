@@ -73,6 +73,20 @@ describe("scope", function() {
       );
     });
 
+    it("variable constantness", function() {
+      assert.ok(getPath("var a = 1;").scope.getBinding("a").constant === true);
+      assert.ok(
+        getPath("var a = 1; a = 2;").scope.getBinding("a").constant === false,
+      );
+      assert.ok(
+        getPath("var a = 1, a = 2;").scope.getBinding("a").constant === false,
+      );
+      assert.ok(
+        getPath("var a = 1; var a = 2;").scope.getBinding("a").constant ===
+          false,
+      );
+    });
+
     it("purity", function() {
       assert.ok(
         getPath("({ x: 1 })")

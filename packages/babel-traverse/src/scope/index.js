@@ -535,13 +535,17 @@ export default class Scope {
 
         parent.references[name] = true;
 
-        this.bindings[name] = new Binding({
-          identifier: id,
-          existing: local,
-          scope: this,
-          path: bindingPath,
-          kind: kind,
-        });
+        // A redeclaration of an existing variable is a modification
+        if (local) {
+          this.registerConstantViolation(bindingPath);
+        } else {
+          this.bindings[name] = new Binding({
+            identifier: id,
+            scope: this,
+            path: bindingPath,
+            kind: kind,
+          });
+        }
       }
     }
   }

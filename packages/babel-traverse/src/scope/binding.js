@@ -12,15 +12,7 @@ import type NodePath from "../path";
  */
 
 export default class Binding {
-  constructor({ existing, identifier, scope, path, kind }) {
-    // this if condition is true only if the re-binding does not result in an error
-    // e.g. if rebinding kind is 'var' or 'hoisted', and previous was 'param'
-    if (existing) {
-      // we maintain the original binding but update constantViolations
-      existing.constantViolations = existing.constantViolations.concat(path);
-      return existing;
-    }
-
+  constructor({ identifier, scope, path, kind }) {
     this.identifier = identifier;
     this.scope = scope;
     this.path = path;
