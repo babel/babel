@@ -541,7 +541,6 @@ export default class Scope {
         } else {
           this.bindings[name] = new Binding({
             identifier: id,
-            existing: local,
             scope: this,
             path: bindingPath,
             kind: kind,
