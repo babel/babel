@@ -1,8 +1,9 @@
-let _a$c = {
+let _a$d = {
   a: [1, 2, 3, 4],
-  c: "zxcv"
+  d: "oyez"
 },
     {
-  a: [b, ...arrayRest]
-} = _a$c,
-    objectRest = babelHelpers.objectWithoutProperties(_a$c, ["a"]);
+  a: [b, ...arrayRest],
+  c = function (...functionRest) {}
+} = _a$d,
+    objectRest = babelHelpers.objectWithoutProperties(_a$d, ["a", "c"]);

@@ -176,10 +176,10 @@ export default function({ types: t }) {
               let ref = this.originalPath.node.init;
               const refPropertyPath = [];
 
-              if (path.parentPath.isArrayPattern()) {
-                // Return early if we encounter an ArrayPattern parent,
-                // because that means this RestElement is an array element
-                // rather than an object property.
+              if (!path.parentPath.isObjectPattern()) {
+                // Return early if the parent is not an ObjectPattern, but
+                // (for example) an ArrayPattern or Function, because that
+                // means this RestElement is an not an object property.
                 return;
               }
 
