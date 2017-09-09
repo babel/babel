@@ -128,16 +128,15 @@ export default function({ types: t }) {
           factory.expression.body.directives = node.directives;
           node.directives = [];
 
-          node.body = [
+          node.body = [];
+
+          path.pushContainer("body", [
             buildDefine({
               MODULE_NAME: moduleName,
               SOURCES: sources,
               FACTORY: factory,
             }),
-          ];
-
-          // requeue the CallExpression
-          path.requeue(path.get("body.0.expression"));
+          ]);
         },
       },
     },
