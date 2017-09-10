@@ -10,9 +10,9 @@ class Foo {
 
 }
 
-_foo = babelHelpers.privateClassPropertyKey("foo");
+_foo = babelHelpers.classPrivateFieldKey("foo");
 Object.defineProperty(Foo, _foo, {
   writable: true,
   value: "foo"
 });
-_bar = babelHelpers.privateClassPropertyKey("bar");
+_bar = babelHelpers.classPrivateFieldKey("bar");

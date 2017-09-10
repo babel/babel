@@ -8,35 +8,35 @@ var Point = function () {
 
     _y.set(this, void 0);
 
-    babelHelpers.privateClassPropertyPutSpec(this, _x, +x);
-    babelHelpers.privateClassPropertyPutSpec(this, _y, +y);
+    babelHelpers.classPrivateFieldPut(this, _x, +x);
+    babelHelpers.classPrivateFieldPut(this, _y, +y);
   }
 
   babelHelpers.createClass(Point, [{
     key: "equals",
     value: function equals(p) {
-      return babelHelpers.privateClassPropertyGetSpec(this, _x) === babelHelpers.privateClassPropertyGetSpec(p, _x) && babelHelpers.privateClassPropertyGetSpec(this, _y) === babelHelpers.privateClassPropertyGetSpec(p, _y);
+      return babelHelpers.classPrivateFieldGet(this, _x) === babelHelpers.classPrivateFieldGet(p, _x) && babelHelpers.classPrivateFieldGet(this, _y) === babelHelpers.classPrivateFieldGet(p, _y);
     }
   }, {
     key: "toString",
     value: function toString() {
-      return `Point<${babelHelpers.privateClassPropertyGetSpec(this, _x)},${babelHelpers.privateClassPropertyGetSpec(this, _y)}>`;
+      return `Point<${babelHelpers.classPrivateFieldGet(this, _x)},${babelHelpers.classPrivateFieldGet(this, _y)}>`;
     }
   }, {
     key: "x",
     get: function () {
-      return babelHelpers.privateClassPropertyGetSpec(this, _x);
+      return babelHelpers.classPrivateFieldGet(this, _x);
     },
     set: function (value) {
-      babelHelpers.privateClassPropertyPutSpec(this, _x, +value);
+      babelHelpers.classPrivateFieldPut(this, _x, +value);
     }
   }, {
     key: "y",
     get: function () {
-      return babelHelpers.privateClassPropertyGetSpec(this, _y);
+      return babelHelpers.classPrivateFieldGet(this, _y);
     },
     set: function (value) {
-      babelHelpers.privateClassPropertyPutSpec(this, _y, +value);
+      babelHelpers.classPrivateFieldPut(this, _y, +value);
     }
   }]);
   return Point;

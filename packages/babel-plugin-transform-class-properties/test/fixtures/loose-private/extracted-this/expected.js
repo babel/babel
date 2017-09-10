@@ -8,8 +8,8 @@ var Foo = function Foo(foo) {
   _initialiseProps(this);
 };
 
-_bar = babelHelpers.privateClassPropertyKey("bar");
-_baz = babelHelpers.privateClassPropertyKey("baz");
+_bar = babelHelpers.classPrivateFieldKey("bar");
+_baz = babelHelpers.classPrivateFieldKey("baz");
 
 var _initialiseProps = function (_this) {
   Object.defineProperty(_this, _bar, {

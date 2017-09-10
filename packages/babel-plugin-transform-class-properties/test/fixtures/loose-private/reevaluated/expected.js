@@ -9,10 +9,10 @@ function classFactory() {
     });
   };
 
-  _bar = babelHelpers.privateClassPropertyKey("bar");
+  _bar = babelHelpers.classPrivateFieldKey("bar");
   Object.defineProperty(Foo, _bar, {
     writable: true,
     value: "bar"
   });
-  _foo = babelHelpers.privateClassPropertyKey("foo");
+  _foo = babelHelpers.classPrivateFieldKey("foo");
 }
