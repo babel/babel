@@ -130,8 +130,8 @@ commander.option(
   collect,
 );
 commander.option(
-  "--keep-module-extension",
-  "Preserve the .mjs extension of the input files",
+  "--keep-file-extension",
+  "Preserve the file extensions of the input files",
 );
 commander.option("-w, --watch", "Recompile files on changes");
 commander.option(
@@ -228,7 +228,7 @@ delete opts.copyFiles;
 delete opts.quiet;
 delete opts.configFile;
 delete opts.deleteDirOnStart;
-delete opts.keepModuleExtension;
+delete opts.keepFileExtension;
 
 // Commander will default the "--no-" arguments to true, but we want to leave them undefined so that
 // babel-core can handle the default-assignment logic on its own.

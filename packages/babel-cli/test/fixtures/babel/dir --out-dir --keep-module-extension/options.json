@@ -1,3 +1,0 @@
-{
-  "args": ["src", "--out-dir", "lib", "--keep-module-extension"]
-}
