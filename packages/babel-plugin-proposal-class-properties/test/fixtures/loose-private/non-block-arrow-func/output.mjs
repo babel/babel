@@ -13,7 +13,7 @@ export default (param => {
       }
     }]);
     return App;
-  }(), _props = babelHelpers.privateClassPropertyKey("props"), Object.defineProperty(_class, _props, {
+  }(), _props = babelHelpers.classPrivateFieldKey("props"), Object.defineProperty(_class, _props, {
     writable: true,
     value: {
       prop1: 'prop1',

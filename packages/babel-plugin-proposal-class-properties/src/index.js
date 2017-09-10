@@ -62,10 +62,13 @@ export default declare((api, options) => {
 
       if (computed) continue;
 
-      const name = t.isIdentifier(key) ? key.name : key.value;
+      const isPrivate = path.isClassPrivateProperty();
+      const name = isPrivate
+        ? key.id.name
+        : t.isIdentifier(key) ? key.name : key.value;
       const seen =
         propNames[
-          path.isClassPrivateProperty()
+          isPrivate
             ? "privateProps"
             : isStatic ? "publicStaticProps" : "publicProps"
         ];
@@ -93,15 +96,19 @@ export default declare((api, options) => {
 
     PrivateName(path) {
       const { parentPath, node } = path;
-      if (!parentPath.isMemberExpression({ property: node, computed: false })) {
-        throw path.buildCodeFrameError(
-          `illegal syntax. Did you mean \`this.#${node.id.name}\`?`,
-        );
+      if (parentPath.isMemberExpression({ property: node, computed: false })) {
+        if (!this.privateProps[node.id.name]) {
+          throw path.buildCodeFrameError("unknown private property");
+        }
+
+        return;
       }
 
-      if (!this.privateProps[node.id.name]) {
-        throw path.buildCodeFrameError(`unknown private property`);
-      }
+      if (parentPath.isClassPrivateProperty({ key: node })) return;
+
+      throw path.buildCodeFrameError(
+        `illegal syntax. Did you mean \`this.#${node.id.name}\`?`,
+      );
     },
   };
 
@@ -111,6 +118,7 @@ export default declare((api, options) => {
       if (node.id.name !== this.name) {
         return;
       }
+      if (!parentPath.isMemberExpression()) return;
 
       const grandParentPath = parentPath.parentPath;
       const { object } = parent;
@@ -193,6 +201,7 @@ export default declare((api, options) => {
       if (node.id.name !== this.name) {
         return;
       }
+      if (!parentPath.isMemberExpression()) return;
 
       parentPath.node.computed = true;
       path.replaceWith(this.privateName);
@@ -251,17 +260,17 @@ export default declare((api, options) => {
     });
   };
 
-  const buildPrivateClassPropertySpec = (ref, prop, klass, nodes) => {
+  const buildPrivateClassPropertySpec = (ref, prop, klass, nodes, isStatic) => {
     const { node } = prop;
-    const { name } = node.key;
+    const { name } = node.key.id;
     const { file } = klass.hub;
     const privateMap = klass.scope.generateDeclaredUidIdentifier(name);
 
     klass.traverse(privateNameRemapper, {
       name,
       privateMap,
-      get: file.addHelper("privateClassPropertyGetSpec"),
-      put: file.addHelper("privateClassPropertyPutSpec"),
+      get: file.addHelper(`classPrivateFieldGet${isStatic ? "Static" : ""}`),
+      put: file.addHelper(`classPrivateFieldPut${isStatic ? "Static" : ""}`),
     });
 
     nodes.push(
@@ -284,7 +293,7 @@ export default declare((api, options) => {
 
   const buildPrivateClassPropertyLoose = (ref, prop, klass, nodes) => {
     const { key, value } = prop.node;
-    const { name } = key;
+    const { name } = key.id;
     const { file } = klass.hub;
     const privateName = klass.scope.generateDeclaredUidIdentifier(name);
 
@@ -295,7 +304,7 @@ export default declare((api, options) => {
         t.assignmentExpression(
           "=",
           privateName,
-          t.callExpression(file.addHelper("privateClassPropertyKey"), [
+          t.callExpression(file.addHelper("classPrivateFieldKey"), [
             t.stringLiteral(name),
           ]),
         ),
@@ -388,7 +397,7 @@ export default declare((api, options) => {
         for (const prop of staticProps) {
           if (prop.isClassPrivateProperty()) {
             staticNodes.push(
-              buildPrivateClassProperty(ref, prop, path, staticNodes),
+              buildPrivateClassProperty(ref, prop, path, staticNodes, true),
             );
           } else {
             staticNodes.push(buildPublicClassProperty(ref, prop));

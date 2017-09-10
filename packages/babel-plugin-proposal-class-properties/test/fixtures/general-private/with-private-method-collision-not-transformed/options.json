@@ -1,0 +1,4 @@
+{
+  "plugins": ["external-helpers", "transform-class-properties", "transform-es2015-classes", "transform-es2015-block-scoping", "syntax-class-private-methods"],
+  "throws": "duplicate private class field"
+}

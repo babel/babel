@@ -22,4 +22,4 @@ var Foo = function () {
   return Foo;
 }();
 
-_foo = babelHelpers.privateClassPropertyKey("foo");
+_foo = babelHelpers.classPrivateFieldKey("foo");

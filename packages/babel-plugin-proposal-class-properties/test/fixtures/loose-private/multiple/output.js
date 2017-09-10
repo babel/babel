@@ -12,5 +12,5 @@ var Foo = function Foo() {
   });
 };
 
-_x = babelHelpers.privateClassPropertyKey("x");
-_y = babelHelpers.privateClassPropertyKey("y");
+_x = babelHelpers.classPrivateFieldKey("x");
+_y = babelHelpers.classPrivateFieldKey("y");

@@ -8,7 +8,7 @@ var Foo = function Foo() {
   });
 };
 
-_prop = babelHelpers.privateClassPropertyKey("prop");
+_prop = babelHelpers.classPrivateFieldKey("prop");
 
 var Bar = function (_Foo) {
   babelHelpers.inherits(Bar, _Foo);
@@ -26,4 +26,4 @@ var Bar = function (_Foo) {
   return Bar;
 }(Foo);
 
-_prop2 = babelHelpers.privateClassPropertyKey("prop");
+_prop2 = babelHelpers.classPrivateFieldKey("prop");

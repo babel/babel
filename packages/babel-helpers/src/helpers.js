@@ -603,16 +603,16 @@ helpers.possibleConstructorReturn = () => template.program.ast`
   }
 `;
 
-helpers.privateClassPropertyKey = () => template.program.ast`
+helpers.classPrivateFieldKey = () => template.program.ast`
   var id = 0;
-  export default function _privateClassPropertyKey(name) {
+  export default function _classPrivateFieldKey(name) {
     // Can we use a middle finger emoji?
     return "__private_" + (id++) + "_" + name;
   }
 `;
 
-helpers.privateClassPropertyGetSpec = () => template.program.ast`
-  export default function _privateClassPropertyGetSpec(receiver, privateMap) {
+helpers.classPrivateFieldGet = () => template.program.ast`
+  export default function _classPrivateFieldGet(receiver, privateMap) {
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to get private field on non-instance");
     }
@@ -620,8 +620,21 @@ helpers.privateClassPropertyGetSpec = () => template.program.ast`
   }
 `;
 
-helpers.privateClassPropertyPutSpec = () => template.program.ast`
-  export default function _privateClassPropertyPutSpec(receiver, privateMap, value) {
+helpers.classPrivateFieldGetStatic = () => template.program.ast`
+  export default function _classPrivateFieldGet(receiver, privateMap) {
+    while (receiver && !privateMap.has(receiver)) {
+      receiver = Object.getPrototypeOf(receiver);
+    }
+    if (receiver) {
+      return privateMap.get(receiver);
+    } else {
+      throw new TypeError("attempted to get private field on non-instance");
+    }
+  }
+`;
+
+helpers.classPrivateFieldPut = () => template.program.ast`
+  export default function _classPrivateFieldPut(receiver, privateMap, value) {
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to set private field on non-instance");
     }
@@ -629,6 +642,21 @@ helpers.privateClassPropertyPutSpec = () => template.program.ast`
     return value;
   }
 `;
+
+helpers.classPrivateFieldPutStatic = () => template.program.ast`
+  export default function _classPrivateFieldPutStatic(receiver, privateMap, value) {
+    while (receiver && !privateMap.has(receiver)) {
+      receiver = Object.getPrototypeOf(receiver);
+    }
+    if (receiver) {
+      privateMap.set(receiver, value);
+      return value;
+    } else {
+      throw new TypeError("attempted to set private field on non-instance");
+    }
+  }
+`;
+
 
 helpers.set = () => template.program.ast`
   export default function _set(object, property, value, receiver) {

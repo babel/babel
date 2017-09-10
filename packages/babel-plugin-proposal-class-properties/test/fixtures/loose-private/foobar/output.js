@@ -20,4 +20,4 @@ var Child = function (_Parent) {
   return Child;
 }(Parent);
 
-_scopedFunctionWithThis = babelHelpers.privateClassPropertyKey("scopedFunctionWithThis");
+_scopedFunctionWithThis = babelHelpers.classPrivateFieldKey("scopedFunctionWithThis");

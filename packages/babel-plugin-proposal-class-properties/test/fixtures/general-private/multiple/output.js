@@ -5,7 +5,7 @@ var Foo = function Foo() {
 
   _x.set(this, 0);
 
-  _y.set(this, babelHelpers.privateClassPropertyGetSpec(this, _x));
+  _y.set(this, babelHelpers.classPrivateFieldGet(this, _x));
 };
 
 _x = new WeakMap();

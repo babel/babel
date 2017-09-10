@@ -17,4 +17,4 @@ var Foo = function (_Bar) {
   return Foo;
 }(Bar);
 
-_bar = babelHelpers.privateClassPropertyKey("bar");
+_bar = babelHelpers.classPrivateFieldKey("bar");
