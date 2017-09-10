@@ -15,7 +15,7 @@ export default declare((api, options) => {
       }
     },
 
-    Class(path) {
+    ClassBody(path) {
       path.skip();
     },
 
@@ -80,7 +80,7 @@ export default declare((api, options) => {
   }
 
   const staticErrorVisitor = {
-    Class(path) {
+    ClassBody(path) {
       path.skip();
     },
 
@@ -190,7 +190,7 @@ export default declare((api, options) => {
       replacePath.replaceWith(replaceWith);
     },
 
-    Class(path) {
+    ClassBody(path) {
       path.skip();
     },
   };
@@ -207,7 +207,7 @@ export default declare((api, options) => {
       path.replaceWith(this.privateName);
     },
 
-    Class(path) {
+    ClassBody(path) {
       path.skip();
     },
   };
@@ -260,13 +260,19 @@ export default declare((api, options) => {
     });
   };
 
-  const buildPrivateClassPropertySpec = (ref, prop, klass, nodes, isStatic) => {
+  const buildPrivateClassPropertySpec = (
+    ref,
+    prop,
+    classBody,
+    nodes,
+    isStatic = false,
+  ) => {
     const { node } = prop;
     const { name } = node.key.id;
-    const { file } = klass.hub;
-    const privateMap = klass.scope.generateDeclaredUidIdentifier(name);
+    const { file } = classBody.hub;
+    const privateMap = classBody.scope.generateDeclaredUidIdentifier(name);
 
-    klass.traverse(privateNameRemapper, {
+    classBody.traverse(privateNameRemapper, {
       name,
       privateMap,
       get: file.addHelper(`classPrivateFieldGet${isStatic ? "Static" : ""}`),
@@ -286,18 +292,18 @@ export default declare((api, options) => {
     return t.expressionStatement(
       t.callExpression(t.memberExpression(privateMap, t.identifier("set")), [
         ref,
-        node.value || klass.scope.buildUndefinedNode(),
+        node.value || classBody.scope.buildUndefinedNode(),
       ]),
     );
   };
 
-  const buildPrivateClassPropertyLoose = (ref, prop, klass, nodes) => {
+  const buildPrivateClassPropertyLoose = (ref, prop, classBody, nodes) => {
     const { key, value } = prop.node;
     const { name } = key.id;
-    const { file } = klass.hub;
-    const privateName = klass.scope.generateDeclaredUidIdentifier(name);
+    const { file } = classBody.hub;
+    const privateName = classBody.scope.generateDeclaredUidIdentifier(name);
 
-    klass.traverse(privateNameRemapperLoose, { name, privateName });
+    classBody.traverse(privateNameRemapperLoose, { name, privateName });
 
     nodes.push(
       t.expressionStatement(
@@ -397,7 +403,7 @@ export default declare((api, options) => {
         for (const prop of staticProps) {
           if (prop.isClassPrivateProperty()) {
             staticNodes.push(
-              buildPrivateClassProperty(ref, prop, path, staticNodes, true),
+              buildPrivateClassProperty(ref, prop, body, staticNodes, true),
             );
           } else {
             staticNodes.push(buildPublicClassProperty(ref, prop));
