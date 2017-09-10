@@ -200,8 +200,13 @@ export default function({ types: t }) {
       }
       if (!parentPath.isMemberExpression()) return;
 
+      const object = parentPath.get("object");
+
+      object.replaceWith(
+        t.callExpression(this.base, [object.node, this.privateKey]),
+      );
       parentPath.node.computed = true;
-      path.replaceWith(this.privateName);
+      path.replaceWith(this.privateKey);
     },
 
     ClassBody(path) {
@@ -247,13 +252,7 @@ export default function({ types: t }) {
     );
   }
 
-  function buildPrivateClassPropertySpec(
-    ref,
-    prop,
-    classBody,
-    nodes,
-    isStatic = false,
-  ) {
+  function buildPrivateClassPropertySpec(ref, prop, classBody, nodes) {
     const { node } = prop;
     const { name } = node.key.id;
     const { file } = classBody.hub;
@@ -262,8 +261,8 @@ export default function({ types: t }) {
     classBody.traverse(privateNameRemapper, {
       name,
       privateMap,
-      get: file.addHelper(`classPrivateFieldGet${isStatic ? "Static" : ""}`),
-      put: file.addHelper(`classPrivateFieldPut${isStatic ? "Static" : ""}`),
+      get: file.addHelper("classPrivateFieldGet"),
+      put: file.addHelper("classPrivateFieldPut"),
     });
 
     nodes.push(
@@ -288,15 +287,19 @@ export default function({ types: t }) {
     const { key, value } = prop.node;
     const { name } = key.id;
     const { file } = classBody.hub;
-    const privateName = classBody.scope.generateDeclaredUidIdentifier(name);
+    const privateKey = classBody.scope.generateDeclaredUidIdentifier(name);
 
-    classBody.traverse(privateNameRemapperLoose, { name, privateName });
+    classBody.traverse(privateNameRemapperLoose, {
+      name,
+      privateKey,
+      base: file.addHelper("classPrivateFieldBase"),
+    });
 
     nodes.push(
       t.expressionStatement(
         t.assignmentExpression(
           "=",
-          privateName,
+          privateKey,
           t.callExpression(file.addHelper("classPrivateFieldKey"), [
             t.stringLiteral(name),
           ]),
@@ -306,7 +309,7 @@ export default function({ types: t }) {
 
     return buildPrivateProperty({
       REF: ref,
-      KEY: privateName,
+      KEY: privateKey,
       VALUE: value || prop.scope.buildUndefinedNode(),
     });
   }
@@ -356,7 +359,7 @@ export default function({ types: t }) {
 
         for (const prop of staticProps) {
           if (prop.isClassPrivateProperty()) {
-            nodes.push(buildPrivateClassProperty(ref, prop, body, nodes, true));
+            nodes.push(buildPrivateClassProperty(ref, prop, body, nodes));
           } else {
             nodes.push(buildPublicClassProperty(ref, prop));
           }

@@ -8,7 +8,7 @@ var Foo = function Foo() {
   });
   Object.defineProperty(this, _y, {
     writable: true,
-    value: this[_x]
+    value: babelHelpers.classPrivateFieldBase(this, _x)[_x]
   });
 };
 

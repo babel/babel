@@ -8,12 +8,12 @@ var Foo = function () {
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test() {
-      return Foo[_bar];
+      return babelHelpers.classPrivateFieldBase(Foo, _bar)[_bar];
     }
   }], [{
     key: "test",
     value: function test() {
-      return Foo[_bar];
+      return babelHelpers.classPrivateFieldBase(Foo, _bar)[_bar];
     }
   }]);
   return Foo;

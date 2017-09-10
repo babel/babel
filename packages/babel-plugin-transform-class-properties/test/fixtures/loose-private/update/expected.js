@@ -12,10 +12,10 @@ var Foo = function () {
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
-      this[_foo]++;
-      ++this[_foo];
-      other.obj[_foo]++;
-      ++other.obj[_foo];
+      babelHelpers.classPrivateFieldBase(this, _foo)[_foo]++;
+      ++babelHelpers.classPrivateFieldBase(this, _foo)[_foo];
+      babelHelpers.classPrivateFieldBase(other.obj, _foo)[_foo]++;
+      ++babelHelpers.classPrivateFieldBase(other.obj, _foo)[_foo];
     }
   }]);
   return Foo;
