@@ -7,8 +7,8 @@ var Outer = function Outer() {
     value: void 0
   });
 
-  var Test = function (_this$_outer) {
-    babelHelpers.inherits(Test, _this$_outer);
+  var Test = function (_babelHelpers$classPr) {
+    babelHelpers.inherits(Test, _babelHelpers$classPr);
 
     function Test() {
       babelHelpers.classCallCheck(this, Test);
@@ -16,7 +16,7 @@ var Outer = function Outer() {
     }
 
     return Test;
-  }(this[_outer]);
+  }(babelHelpers.classPrivateFieldBase(this, _outer)[_outer]);
 };
 
 _outer = babelHelpers.classPrivateFieldKey("outer");
