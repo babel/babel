@@ -12,10 +12,10 @@ var Foo = function () {
     value: function test(other) {
       var _other$obj;
 
-      babelHelpers.privateClassPropertyPutSpec(this, _foo, babelHelpers.privateClassPropertyGetSpec(this, _foo) + 1);
-      babelHelpers.privateClassPropertyPutSpec(this, _foo, 2);
-      babelHelpers.privateClassPropertyPutSpec(_other$obj = other.obj, _foo, babelHelpers.privateClassPropertyGetSpec(_other$obj, _foo) + 1);
-      babelHelpers.privateClassPropertyPutSpec(other.obj, _foo, 2);
+      babelHelpers.classPrivateFieldPut(this, _foo, babelHelpers.classPrivateFieldGet(this, _foo) + 1);
+      babelHelpers.classPrivateFieldPut(this, _foo, 2);
+      babelHelpers.classPrivateFieldPut(_other$obj = other.obj, _foo, babelHelpers.classPrivateFieldGet(_other$obj, _foo) + 1);
+      babelHelpers.classPrivateFieldPut(other.obj, _foo, 2);
     }
   }]);
   return Foo;
