@@ -11,35 +11,35 @@ var Point = function () {
       writable: true,
       value: void 0
     });
-    this[_x] = +x;
-    this[_y] = +y;
+    babelHelpers.classPrivateFieldBase(this, _x)[_x] = +x;
+    babelHelpers.classPrivateFieldBase(this, _y)[_y] = +y;
   }
 
   babelHelpers.createClass(Point, [{
     key: "equals",
     value: function equals(p) {
-      return this[_x] === p[_x] && this[_y] === p[_y];
+      return babelHelpers.classPrivateFieldBase(this, _x)[_x] === babelHelpers.classPrivateFieldBase(p, _x)[_x] && babelHelpers.classPrivateFieldBase(this, _y)[_y] === babelHelpers.classPrivateFieldBase(p, _y)[_y];
     }
   }, {
     key: "toString",
     value: function toString() {
-      return `Point<${this[_x]},${this[_y]}>`;
+      return `Point<${babelHelpers.classPrivateFieldBase(this, _x)[_x]},${babelHelpers.classPrivateFieldBase(this, _y)[_y]}>`;
     }
   }, {
     key: "x",
     get: function () {
-      return this[_x];
+      return babelHelpers.classPrivateFieldBase(this, _x)[_x];
     },
     set: function (value) {
-      this[_x] = +value;
+      babelHelpers.classPrivateFieldBase(this, _x)[_x] = +value;
     }
   }, {
     key: "y",
     get: function () {
-      return this[_y];
+      return babelHelpers.classPrivateFieldBase(this, _y)[_y];
     },
     set: function (value) {
-      this[_y] = +value;
+      babelHelpers.classPrivateFieldBase(this, _y)[_y] = +value;
     }
   }]);
   return Point;

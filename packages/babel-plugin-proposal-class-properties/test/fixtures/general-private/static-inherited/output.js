@@ -8,7 +8,7 @@ var Base = function () {
   babelHelpers.createClass(Base, null, [{
     key: "m",
     value: function m() {
-      return babelHelpers.classPrivateFieldGetStatic(this, _foo);
+      return babelHelpers.classPrivateFieldGet(this, _foo);
     }
   }]);
   return Base;

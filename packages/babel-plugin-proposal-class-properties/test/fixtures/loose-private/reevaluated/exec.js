@@ -37,7 +37,7 @@ assert.equal(Foo1.static(), "bar");
 assert.equal(Foo2.instance(f2), "foo");
 assert.equal(Foo2.static(), "bar");
 
-assert.equal(f1.instance.call(f2), undefined);
-assert.equal(f2.instance.call(f1), undefined);
-assert.equal(Foo1.instance(f2), undefined);
-assert.equal(Foo2.instance(f1), undefined);
+assert.throws(() => f1.instance.call(f2));
+assert.throws(() => f2.instance.call(f1));
+assert.throws(() => Foo1.instance(f2));
+assert.throws(() => Foo2.instance(f1));

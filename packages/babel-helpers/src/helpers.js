@@ -611,25 +611,21 @@ helpers.classPrivateFieldKey = () => template.program.ast`
   }
 `;
 
+helpers.classPrivateFieldBase = () => template.program.ast`
+  export default function _classPrivateFieldBase(receiver, privateKey) {
+    if (!Object.prototype.hasOwnProperty.call(receiver, privateKey)) {
+      throw new TypeError("attempted to use private field on non-instance");
+    }
+    return receiver;
+  }
+`;
+
 helpers.classPrivateFieldGet = () => template.program.ast`
   export default function _classPrivateFieldGet(receiver, privateMap) {
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to get private field on non-instance");
     }
     return privateMap.get(receiver);
-  }
-`;
-
-helpers.classPrivateFieldGetStatic = () => template.program.ast`
-  export default function _classPrivateFieldGet(receiver, privateMap) {
-    while (receiver && !privateMap.has(receiver)) {
-      receiver = Object.getPrototypeOf(receiver);
-    }
-    if (receiver) {
-      return privateMap.get(receiver);
-    } else {
-      throw new TypeError("attempted to get private field on non-instance");
-    }
   }
 `;
 
@@ -642,21 +638,6 @@ helpers.classPrivateFieldPut = () => template.program.ast`
     return value;
   }
 `;
-
-helpers.classPrivateFieldPutStatic = () => template.program.ast`
-  export default function _classPrivateFieldPutStatic(receiver, privateMap, value) {
-    while (receiver && !privateMap.has(receiver)) {
-      receiver = Object.getPrototypeOf(receiver);
-    }
-    if (receiver) {
-      privateMap.set(receiver, value);
-      return value;
-    } else {
-      throw new TypeError("attempted to set private field on non-instance");
-    }
-  }
-`;
-
 
 helpers.set = () => template.program.ast`
   export default function _set(object, property, value, receiver) {
