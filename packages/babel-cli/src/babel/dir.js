@@ -7,7 +7,7 @@ import fs from "fs";
 import * as util from "./util";
 
 export default function(commander, filenames, opts) {
-  function write(src, relative) {
+  function write(src, relative, base) {
     if (!util.isCompilableExtension(relative, commander.extensions)) {
       return false;
     }
@@ -15,7 +15,7 @@ export default function(commander, filenames, opts) {
     // remove extension and then append back on .js
     relative = relative.replace(/\.(\w*?)$/, "") + ".js";
 
-    const dest = path.join(commander.outDir, relative);
+    const dest = getDest(commander, relative, base);
 
     const data = util.compile(
       src,
@@ -45,11 +45,16 @@ export default function(commander, filenames, opts) {
     return true;
   }
 
-  function handleFile(src, filename) {
-    const didWrite = write(src, filename);
+  function getDest(commander, filename, base) {
+    if (commander.relative) return path.join(base, commander.outDir, filename);
+    return path.join(commander.outDir, filename);
+  }
+
+  function handleFile(src, filename, base) {
+    const didWrite = write(src, filename, base);
 
     if (!didWrite && commander.copyFiles) {
-      const dest = path.join(commander.outDir, filename);
+      const dest = getDest(commander, filename, base);
       outputFileSync(dest, fs.readFileSync(src));
       util.chmod(src, dest);
     }
@@ -68,10 +73,10 @@ export default function(commander, filenames, opts) {
       }
       util.readdir(dirname).forEach(function(filename) {
         const src = path.join(dirname, filename);
-        handleFile(src, filename);
+        handleFile(src, filename, dirname);
       });
     } else {
-      write(filename, filename);
+      write(filename, path.basename(filename), path.dirname(filename));
     }
   }
 
