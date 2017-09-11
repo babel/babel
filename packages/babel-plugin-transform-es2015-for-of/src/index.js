@@ -109,7 +109,8 @@ export default function({ messages, template, types: t }) {
           right.isGenericType("Array") ||
           t.isArrayTypeAnnotation(right.getTypeAnnotation())
         ) {
-          return replaceWithArray(path);
+          replaceWithArray(path);
+          return;
         }
 
         let callback = spec;

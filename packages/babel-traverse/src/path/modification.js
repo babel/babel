@@ -24,20 +24,24 @@ export function insertBefore(nodes) {
     (this.parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) nodes.push(this.node);
-    this.replaceExpressionWithStatements(nodes);
+    return this.replaceExpressionWithStatements(nodes);
   } else if (Array.isArray(this.container)) {
     return this._containerInsertBefore(nodes);
   } else if (this.isStatementOrBlock()) {
-    if (this.node) nodes.push(this.node);
-    this.replaceWith(t.blockStatement(nodes));
+    const shouldInsertCurrentNode =
+      this.node &&
+      (!this.isExpressionStatement() || this.node.expression != null);
+
+    this.replaceWith(
+      t.blockStatement(shouldInsertCurrentNode ? [this.node] : []),
+    );
+    return this.unshiftContainer("body", nodes);
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +
         "We were previously a Statement but we can't fit in here?",
     );
   }
-
-  return [this];
 }
 
 export function _containerInsert(from, nodes) {
@@ -45,34 +49,14 @@ export function _containerInsert(from, nodes) {
 
   const paths = [];
 
+  this.container.splice(from, 0, ...nodes);
   for (let i = 0; i < nodes.length; i++) {
     const to = from + i;
-    const node = nodes[i];
-    this.container.splice(to, 0, node);
+    const path = this.getSibling(`${to}`);
+    paths.push(path);
 
-    if (this.context) {
-      const path = this.context.create(
-        this.parent,
-        this.container,
-        to,
-        this.listKey,
-      );
-
-      // While this path may have a context, there is currently no guarantee that the context
-      // will be the active context, because `popContext` may leave a final context in place.
-      // We should remove this `if` and always push once #4145 has been resolved.
-      if (this.context.queue) path.pushContext(this.context);
-      paths.push(path);
-    } else {
-      paths.push(
-        NodePath.get({
-          parentPath: this.parentPath,
-          parent: this.parent,
-          container: this.container,
-          listKey: this.listKey,
-          key: to,
-        }),
-      );
+    if (this.context && this.context.queue) {
+      path.pushContext(this.context);
     }
   }
 
@@ -124,26 +108,24 @@ export function insertAfter(nodes) {
       );
       nodes.push(t.expressionStatement(temp));
     }
-    this.replaceExpressionWithStatements(nodes);
+    return this.replaceExpressionWithStatements(nodes);
   } else if (Array.isArray(this.container)) {
     return this._containerInsertAfter(nodes);
   } else if (this.isStatementOrBlock()) {
-    // Unshift current node if it's not an empty expression
-    if (
+    const shouldInsertCurrentNode =
       this.node &&
-      (!this.isExpressionStatement() || this.node.expression != null)
-    ) {
-      nodes.unshift(this.node);
-    }
-    this.replaceWith(t.blockStatement(nodes));
+      (!this.isExpressionStatement() || this.node.expression != null);
+
+    this.replaceWith(
+      t.blockStatement(shouldInsertCurrentNode ? [this.node] : []),
+    );
+    return this.pushContainer("body", nodes);
   } else {
     throw new Error(
       "We don't know what to do with this node type. " +
         "We were previously a Statement but we can't fit in here?",
     );
   }
-
-  return [this];
 }
 
 /**
