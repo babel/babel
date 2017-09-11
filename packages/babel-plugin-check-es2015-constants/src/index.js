@@ -18,7 +18,7 @@ export default function({ messages, types: t }) {
       Scope({ scope }) {
         for (const name in scope.bindings) {
           const binding = scope.bindings[name];
-          if (binding.kind !== "const" && binding.kind !== "module") continue;
+          if (binding.kind !== "const") continue;
 
           for (const violation of (binding.constantViolations: Array)) {
             const throwNode = t.throwStatement(

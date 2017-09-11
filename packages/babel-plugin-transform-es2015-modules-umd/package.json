@@ -6,7 +6,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-plugin-transform-es2015-modules-amd": "7.0.0-beta.0",
+    "babel-helper-modules": "7.0.0-beta.0",
     "babel-template": "7.0.0-beta.0"
   },
   "keywords": [

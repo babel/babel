@@ -10,12 +10,10 @@
     factory(global.fooBAR, global.fooBAR, global.fizzBuzz);
     global.actual = mod.exports;
   }
-})(this, function (_fooBar, _fooBar3, _fizzbuzz) {
+})(this, function (_fooBar, _fooBar2, _fizzbuzz) {
   "use strict";
 
-  var _fooBar2 = babelHelpers.interopRequireDefault(_fooBar);
-
-  var _fooBar4 = babelHelpers.interopRequireDefault(_fooBar3);
-
-  var _fizzbuzz2 = babelHelpers.interopRequireDefault(_fizzbuzz);
+  _fooBar = babelHelpers.interopRequireDefault(_fooBar);
+  _fooBar2 = babelHelpers.interopRequireDefault(_fooBar2);
+  _fizzbuzz = babelHelpers.interopRequireDefault(_fizzbuzz);
 });

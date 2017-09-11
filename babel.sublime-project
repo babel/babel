@@ -1,7 +1,7 @@
 {
     "settings": {
         "rulers": [
-            110
+            80
         ],
 
         // Set to false to disable detection of tabs vs. spaces on load
