@@ -1,6 +1,8 @@
 "use strict";
 
-var Foo = function () {
+var Foo =
+/*#__PURE__*/
+function () {
   function Foo(val) {
     babelHelpers.classCallCheck(this, Foo);
     this._val = val;

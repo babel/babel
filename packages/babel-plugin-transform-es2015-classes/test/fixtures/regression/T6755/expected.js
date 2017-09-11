@@ -1,6 +1,8 @@
 "use strict";
 
-var Example = function () {
+var Example =
+/*#__PURE__*/
+function () {
   function Example() {}
 
   var _proto = Example.prototype;

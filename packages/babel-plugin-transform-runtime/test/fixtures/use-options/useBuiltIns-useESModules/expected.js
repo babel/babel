@@ -2,7 +2,9 @@ import _classCallCheck from "babel-runtime/helpers/builtin/es6/classCallCheck";
 import _possibleConstructorReturn from "babel-runtime/helpers/builtin/es6/possibleConstructorReturn";
 import _inherits from "babel-runtime/helpers/builtin/es6/inherits";
 
-let Foo = function (_Bar) {
+let Foo =
+/*#__PURE__*/
+function (_Bar) {
   _inherits(Foo, _Bar);
 
   function Foo() {

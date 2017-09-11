@@ -9,7 +9,9 @@ var _react = require("react");
 
 var _react2 = babelHelpers.interopRequireDefault(_react);
 
-var RandomComponent = function (_Component) {
+var RandomComponent =
+/*#__PURE__*/
+function (_Component) {
   babelHelpers.inherits(RandomComponent, _Component);
 
   function RandomComponent() {

@@ -6,7 +6,9 @@ function _one() {}
 
 function _two() {}
 
-let Test1 = function () {
+let Test1 =
+/*#__PURE__*/
+function () {
   function Test1() {
     _classCallCheck(this, Test1);
   }

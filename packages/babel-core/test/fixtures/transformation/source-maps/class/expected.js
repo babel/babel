@@ -1,4 +1,6 @@
-var Test = function () {
+var Test =
+/*#__PURE__*/
+function () {
   function Test() {
     babelHelpers.classCallCheck(this, Test);
   }

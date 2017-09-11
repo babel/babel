@@ -12,7 +12,9 @@ var B = function B() {
   _classCallCheck(this, B);
 };
 
-var A = function (_B) {
+var A =
+/*#__PURE__*/
+function (_B) {
   _inherits(A, _B);
 
   function A(track) {

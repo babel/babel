@@ -1,4 +1,6 @@
-let Foo = function () {
+let Foo =
+/*#__PURE__*/
+function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
   }

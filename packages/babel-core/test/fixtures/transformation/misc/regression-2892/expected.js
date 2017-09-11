@@ -54,7 +54,9 @@ function _asyncToGenerator(fn) { return function () { var _this = this, _argumen
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Foo = function () {
+var Foo =
+/*#__PURE__*/
+function () {
   function Foo() {
     _classCallCheck(this, Foo);
   }

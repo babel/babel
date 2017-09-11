@@ -1,6 +1,8 @@
 "use strict";
 
-var C = function () {
+var C =
+/*#__PURE__*/
+function () {
   function C() {}
 
   var _proto = C.prototype;

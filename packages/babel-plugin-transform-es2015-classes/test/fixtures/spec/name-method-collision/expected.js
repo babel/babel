@@ -2,7 +2,9 @@
 
 var _a2 = require("./a");
 
-var Foo = function () {
+var Foo =
+/*#__PURE__*/
+function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
   }

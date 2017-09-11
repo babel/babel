@@ -2,7 +2,9 @@ let A = function A() {
   console.log('a');
 };
 
-let B = function () {
+let B =
+/*#__PURE__*/
+function () {
   function B() {}
 
   var _proto = B.prototype;

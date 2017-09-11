@@ -1,4 +1,6 @@
-var A = function () {
+var A =
+/*#__PURE__*/
+function () {
   function A() {
     babelHelpers.classCallCheck(this, A);
   }
@@ -12,7 +14,9 @@ var A = function () {
   return A;
 }();
 
-var B = function (_A) {
+var B =
+/*#__PURE__*/
+function (_A) {
   babelHelpers.inherits(B, _A);
 
   function B(...args) {

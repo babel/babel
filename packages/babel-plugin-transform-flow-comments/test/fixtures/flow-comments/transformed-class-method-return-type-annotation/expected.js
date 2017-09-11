@@ -1,7 +1,9 @@
 "use strict";
 
 // @flow
-var C = function () {
+var C =
+/*#__PURE__*/
+function () {
   function C() {
     babelHelpers.classCallCheck(this, C);
   }

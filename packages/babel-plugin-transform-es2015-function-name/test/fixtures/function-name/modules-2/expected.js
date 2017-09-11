@@ -9,7 +9,9 @@ var _last2 = require("lodash/last");
 
 var _last3 = babelHelpers.interopRequireDefault(_last2);
 
-let Container = function () {
+let Container =
+/*#__PURE__*/
+function () {
   function Container() {
     babelHelpers.classCallCheck(this, Container);
   }

@@ -1,6 +1,8 @@
 "use strict";
 
-var A = function (_B) {
+var A =
+/*#__PURE__*/
+function (_B) {
   babelHelpers.inherits(A, _B);
 
   function A() {
