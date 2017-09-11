@@ -13,7 +13,7 @@ export default function(commander, filenames, opts) {
     }
 
     // remove extension and then append back on .js
-    relative = relative.replace(/\.(\w*?)$/, "") + ".js";
+    relative = util.adjustRelative(relative, commander.keepFileExtension);
 
     const dest = getDest(commander, relative, base);
 
