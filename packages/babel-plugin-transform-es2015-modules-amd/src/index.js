@@ -79,6 +79,7 @@ export default function({ types: t }) {
 
       const source = init.node.arguments[0];
       this.sourceNames[source.value] = true;
+
       this.sources.push([id.node, source]);
 
       path.remove();

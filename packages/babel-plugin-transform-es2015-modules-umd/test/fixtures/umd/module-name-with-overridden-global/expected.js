@@ -10,11 +10,13 @@
     factory(mod.exports);
     global.baz = mod.exports;
   }
-})(this, function (exports) {
+})(this, function (_exports) {
   "use strict";
 
-  Object.defineProperty(exports, "__esModule", {
+  Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  exports.default = 42;
+  _exports.default = void 0;
+  var _default = 42;
+  _exports.default = _default;
 });

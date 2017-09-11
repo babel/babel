@@ -10,9 +10,9 @@
     factory(global.foo);
     global.actual = mod.exports;
   }
-})(this, function (_foo) {
+})(this, function (foo) {
   "use strict";
 
-  var foo = babelHelpers.interopRequireWildcard(_foo);
+  foo = babelHelpers.interopRequireWildcard(foo);
   foo;
 });
