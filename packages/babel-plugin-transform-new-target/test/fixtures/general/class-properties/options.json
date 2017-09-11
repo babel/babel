@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-new-target", "transform-es2015-arrow-functions", ["transform-class-properties", {"loose": true}]]
+}

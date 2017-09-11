@@ -66,6 +66,8 @@ Add the following line to your .babelrc file:
 
 If you are including your plugins manually and using `transform-class-properties`, make sure that `transform-decorators` comes *before* `transform-class-properties`.
 
+Currently, `transform-class-properties` must be used in `loose` mode to support the `transform-decorators`. To use `transform-class-properties` in spec mode with decorators, wait for the next major version of decorators (Stage 2).
+
 Wrong:
 
 ```json
@@ -83,7 +85,7 @@ Right:
 {
   "plugins": [
     "transform-decorators",
-    "transform-class-properties"
+    ["transform-class-properties", { "loose" : true }]
   ]
 }
 ```
@@ -104,4 +106,4 @@ require("babel-core").transform("code", {
 
 ## References
 
-* [Proposal: Javascript Decorators](https://github.com/wycats/javascript-decorators/blob/master/README.md)
+* [Proposal: JavaScript Decorators](https://github.com/wycats/javascript-decorators/blob/master/README.md)

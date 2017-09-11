@@ -1,13 +1,11 @@
 {
   "name": "babel-plugin-syntax-function-bind",
-  "version": "7.0.0-alpha.9",
+  "version": "7.0.0-alpha.20",
   "description": "Allow parsing of function bind",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-function-bind",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ],
-  "dependencies": {},
-  "devDependencies": {}
+  ]
 }

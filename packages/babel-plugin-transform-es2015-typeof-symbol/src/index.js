@@ -1,6 +1,4 @@
-export default function ({ types: t }) {
-  const IGNORE = Symbol();
-
+export default function({ types: t }) {
   return {
     visitor: {
       Scope({ scope }) {
@@ -13,8 +11,7 @@ export default function ({ types: t }) {
 
       UnaryExpression(path) {
         const { node, parent } = path;
-        if (node[IGNORE]) return;
-        if (path.find((path) => path.node && !!path.node._generated)) return;
+        if (node.operator !== "typeof") return;
 
         if (
           path.parentPath.isBinaryExpression() &&
@@ -24,27 +21,37 @@ export default function ({ types: t }) {
           // need to handle symbols
           const opposite = path.getOpposite();
           if (
-            opposite.isLiteral() && opposite.node.value !== "symbol" &&
+            opposite.isLiteral() &&
+            opposite.node.value !== "symbol" &&
             opposite.node.value !== "object"
           ) {
             return;
           }
         }
 
-        if (node.operator === "typeof") {
-          const call = t.callExpression(this.addHelper("typeof"), [node.argument]);
-          if (path.get("argument").isIdentifier()) {
-            const undefLiteral = t.stringLiteral("undefined");
-            const unary = t.unaryExpression("typeof", node.argument);
-            unary[IGNORE] = true;
-            path.replaceWith(t.conditionalExpression(
+        const helper = this.addHelper("typeof");
+        const isUnderHelper = path.findParent(path => {
+          return path.isVariableDeclarator() && path.node.id === helper;
+        });
+
+        if (isUnderHelper) {
+          return;
+        }
+
+        const call = t.callExpression(helper, [node.argument]);
+        const arg = path.get("argument");
+        if (arg.isIdentifier() && !path.scope.hasBinding(arg.node.name)) {
+          const undefLiteral = t.stringLiteral("undefined");
+          const unary = t.unaryExpression("typeof", node.argument);
+          path.replaceWith(
+            t.conditionalExpression(
               t.binaryExpression("===", unary, undefLiteral),
               undefLiteral,
-              call
-            ));
-          } else {
-            path.replaceWith(call);
-          }
+              call,
+            ),
+          );
+        } else {
+          path.replaceWith(call);
         }
       },
     },

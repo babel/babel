@@ -1,23 +1,28 @@
-import type { NodePath } from "babel-traverse";
-import { visitors } from "babel-traverse";
+import convertFunctionParams from "./params";
+import convertFunctionRest from "./rest";
 
-import * as destructuring from "./destructuring";
-import * as def from "./default";
-import * as rest from "./rest";
-
-export default function () {
+export default function() {
   return {
-    visitor: visitors.merge([{
-      ArrowFunctionExpression(path) {
-        // default/rest visitors require access to `arguments`
-        const params: Array<NodePath> = path.get("params");
-        for (const param of params) {
-          if (param.isRestElement() || param.isAssignmentPattern()) {
-            path.arrowFunctionToShadowed();
-            break;
-          }
+    visitor: {
+      Function(path) {
+        if (
+          path.isArrowFunctionExpression() &&
+          path
+            .get("params")
+            .some(param => param.isRestElement() || param.isAssignmentPattern())
+        ) {
+          // default/rest visitors require access to `arguments`, so it cannot be an arrow
+          path.arrowFunctionToExpression();
+        }
+
+        const convertedRest = convertFunctionRest(path);
+        const convertedParams = convertFunctionParams(path, this.opts.loose);
+
+        if (convertedRest || convertedParams) {
+          // Manually reprocess this scope to ensure that the moved params are updated.
+          path.scope.crawl();
         }
       },
-    }, destructuring.visitor, rest.visitor, def.visitor]),
+    },
   };
 }

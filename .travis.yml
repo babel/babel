@@ -7,14 +7,22 @@ cache:
   directories:
   - node_modules
 node_js:
-  - '7'
+  - '8'
   - '6'
   - '4'
 
 env:
-  - JOB=test
+  global:
+    - PATH=$HOME/.yarn/bin:$PATH
+    - JOB=test
+
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.28.1
 
 script:
+  # Babel doesn't build correctly with npm v2 (which comes bundled with Node v4)
+  # so we manually upgrade to a known working npm version.
+  - npm install --global npm@4
   - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
   - 'if [ "$JOB" = "lint" ]; then make lint && make flow; fi'
 

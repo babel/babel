@@ -1,14 +1,14 @@
 {
   "name": "babel-helper-function-name",
-  "version": "7.0.0-alpha.9",
+  "version": "7.0.0-alpha.20",
   "description": "Helper function to change the property 'name' of every function",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-function-name",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-types": "7.0.0-alpha.9",
-    "babel-traverse": "7.0.0-alpha.9",
-    "babel-helper-get-function-arity": "7.0.0-alpha.9",
-    "babel-template": "7.0.0-alpha.9"
+    "babel-helper-get-function-arity": "7.0.0-alpha.20",
+    "babel-template": "7.0.0-alpha.20",
+    "babel-traverse": "7.0.0-alpha.20",
+    "babel-types": "7.0.0-alpha.20"
   }
 }

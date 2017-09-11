@@ -11,11 +11,12 @@ let s = (() => {
       var _ref2 = babelHelpers.asyncToGenerator(function* (y, a) {
         let r = (() => {
           var _ref3 = babelHelpers.asyncToGenerator(function* (z, b) {
+            yield z;
+
             for (var _len2 = arguments.length, innerArgs = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
               innerArgs[_key2 - 2] = arguments[_key2];
             }
 
-            yield z;
             console.log(_this, innerArgs, _arguments);
             return _this.x;
           });
@@ -24,8 +25,8 @@ let s = (() => {
             return _ref3.apply(this, arguments);
           };
         })();
-        yield r();
 
+        yield r();
         console.log(_this, args, _arguments);
         return _this.g(r);
       });

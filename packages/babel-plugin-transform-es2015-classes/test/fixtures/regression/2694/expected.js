@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = undefined;
+exports.default = void 0;
 
-var _BaseFoo2 = require('./BaseFoo');
+var _BaseFoo2 = require("./BaseFoo");
 
 var _BaseFoo3 = babelHelpers.interopRequireDefault(_BaseFoo2);
 
@@ -18,9 +18,9 @@ var SubFoo = function (_BaseFoo) {
   }
 
   babelHelpers.createClass(SubFoo, null, [{
-    key: 'talk',
+    key: "talk",
     value: function talk() {
-      babelHelpers.get(SubFoo.__proto__ || Object.getPrototypeOf(SubFoo), 'talk', this).call(this);
+      babelHelpers.get(SubFoo.__proto__ || Object.getPrototypeOf(SubFoo), "talk", this).call(this);
       console.log('SubFoo.talk');
     }
   }]);

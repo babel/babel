@@ -11,55 +11,11 @@ import * as t from "babel-types";
  * parsed nodes of `React.createClass` and `React["createClass"]`.
  */
 
-export function matchesPattern(pattern: string, allowPartial?: boolean): boolean {
-  // not a member expression
-  if (!this.isMemberExpression()) return false;
-
-  const parts = pattern.split(".");
-  const search = [this.node];
-  let i = 0;
-
-  function matches(name) {
-    const part = parts[i];
-    return part === "*" || name === part;
-  }
-
-  while (search.length) {
-    const node = search.shift();
-
-    if (allowPartial && i === parts.length) {
-      return true;
-    }
-
-    if (t.isIdentifier(node)) {
-      // this part doesn't match
-      if (!matches(node.name)) return false;
-    } else if (t.isLiteral(node)) {
-      // this part doesn't match
-      if (!matches(node.value)) return false;
-    } else if (t.isMemberExpression(node)) {
-      if (node.computed && !t.isLiteral(node.property)) {
-        // we can't deal with this
-        return false;
-      } else {
-        search.unshift(node.property);
-        search.unshift(node.object);
-        continue;
-      }
-    } else if (t.isThisExpression(node)) {
-      if (!matches("this")) return false;
-    } else {
-      // we can't deal with this
-      return false;
-    }
-
-    // too many parts
-    if (++i > parts.length) {
-      return false;
-    }
-  }
-
-  return i === parts.length;
+export function matchesPattern(
+  pattern: string,
+  allowPartial?: boolean,
+): boolean {
+  return t.matchesPattern(this.node, pattern, allowPartial);
 }
 
 /**
@@ -126,7 +82,9 @@ export function isNodeType(type: string): boolean {
  */
 
 export function canHaveVariableDeclarationOrExpression() {
-  return (this.key === "init" || this.key === "left") && this.parentPath.isFor();
+  return (
+    (this.key === "init" || this.key === "left") && this.parentPath.isFor()
+  );
 }
 
 /**
@@ -185,7 +143,10 @@ export function isCompletionRecord(allowInsideFunction?) {
  */
 
 export function isStatementOrBlock() {
-  if (this.parentPath.isLabeledStatement() || t.isBlockStatement(this.container)) {
+  if (
+    this.parentPath.isLabeledStatement() ||
+    t.isBlockStatement(this.container)
+  ) {
     return false;
   } else {
     return includes(t.STATEMENT_OR_BLOCK_KEYS, this.key);
@@ -254,13 +215,17 @@ export function willIMaybeExecuteBefore(target) {
 
 export function _guessExecutionStatusRelativeTo(target) {
   // check if the two paths are in different functions, we can't track execution of these
-  const targetFuncParent = target.scope.getFunctionParent();
-  const selfFuncParent = this.scope.getFunctionParent();
+  const targetFuncParent =
+    target.scope.getFunctionParent() || target.scope.getProgramParent();
+  const selfFuncParent =
+    this.scope.getFunctionParent() || target.scope.getProgramParent();
 
   // here we check the `node` equality as sometimes we may have different paths for the
   // same node due to path thrashing
   if (targetFuncParent.node !== selfFuncParent.node) {
-    const status = this._guessExecutionStatusRelativeToDifferentFunctions(targetFuncParent);
+    const status = this._guessExecutionStatusRelativeToDifferentFunctions(
+      targetFuncParent,
+    );
     if (status) {
       return status;
     } else {
@@ -297,17 +262,23 @@ export function _guessExecutionStatusRelativeTo(target) {
   }
 
   // container list so let's see which one is after the other
-  if (targetRelationship.listKey && targetRelationship.container === selfRelationship.container) {
+  if (
+    targetRelationship.listKey &&
+    targetRelationship.container === selfRelationship.container
+  ) {
     return targetRelationship.key > selfRelationship.key ? "before" : "after";
   }
 
   // otherwise we're associated by a parent node, check which key comes before the other
-  const targetKeyPosition = t.VISITOR_KEYS[targetRelationship.type].indexOf(targetRelationship.key);
-  const selfKeyPosition = t.VISITOR_KEYS[selfRelationship.type].indexOf(selfRelationship.key);
+  const keys = t.VISITOR_KEYS[commonPath.type];
+  const targetKeyPosition = keys.indexOf(targetRelationship.key);
+  const selfKeyPosition = keys.indexOf(selfRelationship.key);
   return targetKeyPosition > selfKeyPosition ? "before" : "after";
 }
 
-export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncParent) {
+export function _guessExecutionStatusRelativeToDifferentFunctions(
+  targetFuncParent,
+) {
   const targetFuncPath = targetFuncParent.path;
   if (!targetFuncPath.isFunctionDeclaration()) return;
 
@@ -335,7 +306,9 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(targetFuncPare
   for (const path of referencePaths) {
     // if a reference is a child of the function we're checking against then we can
     // safelty ignore it
-    const childOfFunction = !!path.find((path) => path.node === targetFuncPath.node);
+    const childOfFunction = !!path.find(
+      path => path.node === targetFuncPath.node,
+    );
     if (childOfFunction) continue;
 
     const status = this._guessExecutionStatusRelativeTo(path);
@@ -386,7 +359,7 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
     if (binding.path !== this) {
       const ret = binding.path.resolve(dangerous, resolved);
       // If the identifier resolves to parent node then we can't really resolve it.
-      if (this.find((parent) => parent.node === ret.node)) return;
+      if (this.find(parent => parent.node === ret.node)) return;
       return ret;
     }
   } else if (this.isTypeCastExpression()) {
@@ -410,7 +383,8 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
         const key = prop.get("key");
 
         // { foo: obj }
-        let match = prop.isnt("computed") && key.isIdentifier({ name: targetName });
+        let match =
+          prop.isnt("computed") && key.isIdentifier({ name: targetName });
 
         // { "foo": "obj" } or { ["foo"]: "obj" }
         match = match || key.isLiteral({ value: targetName });

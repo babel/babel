@@ -1,13 +1,11 @@
 {
   "name": "babel-plugin-syntax-jsx",
-  "version": "7.0.0-alpha.9",
+  "version": "7.0.0-alpha.20",
   "description": "Allow parsing of jsx",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-jsx",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ],
-  "dependencies": {},
-  "devDependencies": {}
+  ]
 }

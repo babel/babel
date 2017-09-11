@@ -10,4 +10,46 @@ class Foo {
   static ["foo"]() {}
   static get foo() {}
   static set foo(bar) {}
+  static static() {}
+
+  get
+  () {}
+
+  set
+  () {}
+
+  static
+  () {}
+
+  async
+  () {}
+
+  static
+  get
+  () {}
+
+  static
+  set
+  () {}
+
+  static
+  static
+  () {}
+
+  static
+  async
+  () {}
+
+  static
+  a
+  () {}
+
+  get
+  async
+  () {}
+
+  static
+  get
+  static
+  () {}
 }

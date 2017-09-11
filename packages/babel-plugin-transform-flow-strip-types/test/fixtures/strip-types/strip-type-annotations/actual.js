@@ -104,3 +104,5 @@ import {typeof V2} from "foo";
 import {typeof V3, V4} from "foo";
 export interface foo5 { p: number }
 export interface foo6<T> { p: T }
+import 'foo';
+export type * from "foo";

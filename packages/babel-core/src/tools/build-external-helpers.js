@@ -4,6 +4,8 @@ import * as messages from "babel-messages";
 import template from "babel-template";
 import * as t from "babel-types";
 
+const keywordHelpers = ["typeof", "extends", "instanceof"];
+
 const buildUmdWrapper = template(`
   (function (root, factory) {
     if (typeof define === "function" && define.amd) {
@@ -20,28 +22,80 @@ const buildUmdWrapper = template(`
 
 function buildGlobal(namespace, builder) {
   const body = [];
-  const container = t.functionExpression(null, [t.identifier("global")], t.blockStatement(body));
+  const container = t.functionExpression(
+    null,
+    [t.identifier("global")],
+    t.blockStatement(body),
+  );
   const tree = t.program([
-    t.expressionStatement(t.callExpression(container, [helpers.get("selfGlobal")]))]);
-
-  body.push(t.variableDeclaration("var", [
-    t.variableDeclarator(
-      namespace,
-      t.assignmentExpression("=", t.memberExpression(t.identifier("global"), namespace),
-        t.objectExpression([]))
+    t.expressionStatement(
+      t.callExpression(container, [helpers.get("selfGlobal")]),
     ),
-  ]));
+  ]);
+
+  body.push(
+    t.variableDeclaration("var", [
+      t.variableDeclarator(
+        namespace,
+        t.assignmentExpression(
+          "=",
+          t.memberExpression(t.identifier("global"), namespace),
+          t.objectExpression([]),
+        ),
+      ),
+    ]),
+  );
 
   builder(body);
 
   return tree;
 }
 
+function buildModule(namespace, builder) {
+  const body = [];
+  builder(body);
+
+  const module = body
+    .map(helper => {
+      const originalIdentifier = helper.expression.left.property.name;
+      const isKeywordHelper = keywordHelpers.indexOf(originalIdentifier) !== -1;
+      const helperIndentifier = isKeywordHelper
+        ? `_${originalIdentifier}`
+        : originalIdentifier;
+
+      const variableDeclaration = t.variableDeclaration("var", [
+        t.variableDeclarator(
+          t.identifier(helperIndentifier),
+          helper.expression.right,
+        ),
+      ]);
+
+      return isKeywordHelper
+        ? variableDeclaration
+        : t.exportNamedDeclaration(variableDeclaration, []);
+    })
+    .concat(
+      t.exportNamedDeclaration(
+        null,
+        keywordHelpers.map(keywordHelper =>
+          t.exportSpecifier(
+            t.identifier(`_${keywordHelper}`),
+            t.identifier(keywordHelper),
+          ),
+        ),
+      ),
+    );
+
+  return t.program(module);
+}
+
 function buildUmd(namespace, builder) {
   const body = [];
-  body.push(t.variableDeclaration("var", [
-    t.variableDeclarator(namespace, t.identifier("global")),
-  ]));
+  body.push(
+    t.variableDeclaration("var", [
+      t.variableDeclarator(namespace, t.identifier("global")),
+    ]),
+  );
 
   builder(body);
 
@@ -51,7 +105,7 @@ function buildUmd(namespace, builder) {
       BROWSER_ARGUMENTS: t.assignmentExpression(
         "=",
         t.memberExpression(t.identifier("root"), namespace),
-        t.objectExpression([])
+        t.objectExpression([]),
       ),
       COMMON_ARGUMENTS: t.identifier("exports"),
       AMD_ARGUMENTS: t.arrayExpression([t.stringLiteral("exports")]),
@@ -63,31 +117,39 @@ function buildUmd(namespace, builder) {
 
 function buildVar(namespace, builder) {
   const body = [];
-  body.push(t.variableDeclaration("var", [
-    t.variableDeclarator(namespace, t.objectExpression([])),
-  ]));
+  body.push(
+    t.variableDeclaration("var", [
+      t.variableDeclarator(namespace, t.objectExpression([])),
+    ]),
+  );
   builder(body);
   body.push(t.expressionStatement(namespace));
   return t.program(body);
 }
 
 function buildHelpers(body, namespace, whitelist) {
-  helpers.list.forEach(function (name) {
+  helpers.list.forEach(function(name) {
     if (whitelist && whitelist.indexOf(name) < 0) return;
 
     const key = t.identifier(name);
-    body.push(t.expressionStatement(
-      t.assignmentExpression("=", t.memberExpression(namespace, key), helpers.get(name))
-    ));
+    body.push(
+      t.expressionStatement(
+        t.assignmentExpression(
+          "=",
+          t.memberExpression(namespace, key),
+          helpers.get(name),
+        ),
+      ),
+    );
   });
 }
-export default function (
+export default function(
   whitelist?: Array<string>,
-  outputType: "global" | "umd" | "var" = "global",
+  outputType: "global" | "module" | "umd" | "var" = "global",
 ) {
   const namespace = t.identifier("babelHelpers");
 
-  const builder = function (body) {
+  const builder = function(body) {
     return buildHelpers(body, namespace, whitelist);
   };
 
@@ -95,6 +157,7 @@ export default function (
 
   const build = {
     global: buildGlobal,
+    module: buildModule,
     umd: buildUmd,
     var: buildVar,
   }[outputType];

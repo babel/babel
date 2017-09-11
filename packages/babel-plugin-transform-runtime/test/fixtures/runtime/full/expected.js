@@ -1,10 +1,11 @@
 import _regeneratorRuntime from "babel-runtime/regenerator";
 import _Symbol from "babel-runtime/core-js/symbol";
 
-var _marked = [giveWord].map(_regeneratorRuntime.mark);
+var _marked =
+/*#__PURE__*/
+_regeneratorRuntime.mark(giveWord);
 
 import foo, * as bar from "someModule";
-
 export const myWord = _Symbol("abc");
 export function giveWord() {
   return _regeneratorRuntime.wrap(function giveWord$(_context) {
@@ -17,8 +18,7 @@ export function giveWord() {
       case "end":
         return _context.stop();
     }
-  }, _marked[0], this);
+  }, _marked, this);
 }
-
 foo;
 bar;

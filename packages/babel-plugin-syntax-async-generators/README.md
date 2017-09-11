@@ -1,6 +1,6 @@
 # babel-plugin-syntax-async-generators
 
-Allow parsing of async generator functions.
+> Allow parsing of async generator functions.
 
 ## Example
 

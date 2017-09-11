@@ -3,11 +3,82 @@ import isRegExp from "lodash/isRegExp";
 import type { Scope } from "babel-traverse";
 import * as t from "./index";
 
-export function toComputedKey(node: Object, key: Object = node.key || node.property): Object {
+export function toComputedKey(
+  node: Object,
+  key: Object = node.key || node.property,
+): Object {
   if (!node.computed) {
     if (t.isIdentifier(key)) key = t.stringLiteral(key.name);
   }
   return key;
+}
+
+function gatherSequenceExpressions(
+  nodes: Array<Object>,
+  scope: Scope,
+  declars: Array<Object>,
+): ?Object {
+  const exprs = [];
+  let ensureLastUndefined = true;
+
+  for (const node of nodes) {
+    ensureLastUndefined = false;
+
+    if (t.isExpression(node)) {
+      exprs.push(node);
+    } else if (t.isExpressionStatement(node)) {
+      exprs.push(node.expression);
+    } else if (t.isVariableDeclaration(node)) {
+      if (node.kind !== "var") return; // bailed
+
+      for (const declar of (node.declarations: Array)) {
+        const bindings = t.getBindingIdentifiers(declar);
+        for (const key in bindings) {
+          declars.push({
+            kind: node.kind,
+            id: bindings[key],
+          });
+        }
+
+        if (declar.init) {
+          exprs.push(t.assignmentExpression("=", declar.id, declar.init));
+        }
+      }
+
+      ensureLastUndefined = true;
+    } else if (t.isIfStatement(node)) {
+      const consequent = node.consequent
+        ? gatherSequenceExpressions([node.consequent], scope, declars)
+        : scope.buildUndefinedNode();
+      const alternate = node.alternate
+        ? gatherSequenceExpressions([node.alternate], scope, declars)
+        : scope.buildUndefinedNode();
+      if (!consequent || !alternate) return; // bailed
+
+      exprs.push(t.conditionalExpression(node.test, consequent, alternate));
+    } else if (t.isBlockStatement(node)) {
+      const body = gatherSequenceExpressions(node.body, scope, declars);
+      if (!body) return; // bailed
+
+      exprs.push(body);
+    } else if (t.isEmptyStatement(node)) {
+      // empty statement so ensure the last item is undefined if we're last
+      ensureLastUndefined = true;
+    } else {
+      // bailed, we can't turn this statement into an expression
+      return;
+    }
+  }
+
+  if (ensureLastUndefined) {
+    exprs.push(scope.buildUndefinedNode());
+  }
+
+  if (exprs.length === 1) {
+    return exprs[0];
+  } else {
+    return t.sequenceExpression(exprs);
+  }
 }
 
 /**
@@ -19,84 +90,21 @@ export function toComputedKey(node: Object, key: Object = node.key || node.prope
  * Expression statements are just resolved to their expression.
  */
 
-export function toSequenceExpression(nodes: Array<Object>, scope: Scope): ?Object {
+export function toSequenceExpression(
+  nodes: Array<Object>,
+  scope: Scope,
+): ?Object {
   if (!nodes || !nodes.length) return;
 
   const declars = [];
-  let bailed = false;
+  const result = gatherSequenceExpressions(nodes, scope, declars);
+  if (!result) return;
 
-  const result = convert(nodes);
-  if (bailed) return;
-
-  for (let i = 0; i < declars.length; i++) {
-    scope.push(declars[i]);
+  for (const declar of declars) {
+    scope.push(declar);
   }
 
   return result;
-
-  function convert(nodes) {
-    let ensureLastUndefined = false;
-    const exprs = [];
-
-    for (const node of (nodes: Array)) {
-      if (t.isExpression(node)) {
-        exprs.push(node);
-      } else if (t.isExpressionStatement(node)) {
-        exprs.push(node.expression);
-      } else if (t.isVariableDeclaration(node)) {
-        if (node.kind !== "var") return bailed = true; // bailed
-
-        for (const declar of (node.declarations: Array)) {
-          const bindings = t.getBindingIdentifiers(declar);
-          for (const key in bindings) {
-            declars.push({
-              kind: node.kind,
-              id: bindings[key],
-            });
-          }
-
-          if (declar.init) {
-            exprs.push(t.assignmentExpression("=", declar.id, declar.init));
-          }
-        }
-
-        ensureLastUndefined = true;
-        continue;
-      } else if (t.isIfStatement(node)) {
-        const consequent = node.consequent ? convert([node.consequent]) : scope.buildUndefinedNode();
-        const alternate = node.alternate ? convert([node.alternate]) : scope.buildUndefinedNode();
-
-        if (consequent === true || alternate === true) {
-          return bailed = true;
-        }
-
-        exprs.push(t.conditionalExpression(node.test, consequent, alternate));
-      } else if (t.isBlockStatement(node)) {
-        exprs.push(convert(node.body));
-      } else if (t.isEmptyStatement(node)) {
-        // empty statement so ensure the last item is undefined if we're last
-        ensureLastUndefined = true;
-        continue;
-      } else {
-        // bailed, we can't turn this statement into an expression
-        return bailed = true;
-      }
-
-      ensureLastUndefined = false;
-    }
-
-    if (ensureLastUndefined || exprs.length === 0) {
-      exprs.push(scope.buildUndefinedNode());
-    }
-
-    //
-
-    if (exprs.length === 1) {
-      return exprs[0];
-    } else {
-      return t.sequenceExpression(exprs);
-    }
-  }
 }
 
 export function toKeyAlias(node: Object, key: Object = node.key): string {
@@ -125,9 +133,9 @@ export function toKeyAlias(node: Object, key: Object = node.key): string {
 
 toKeyAlias.uid = 0;
 
-toKeyAlias.increment = function () {
+toKeyAlias.increment = function() {
   if (toKeyAlias.uid >= Number.MAX_SAFE_INTEGER) {
-    return toKeyAlias.uid = 0;
+    return (toKeyAlias.uid = 0);
   } else {
     return toKeyAlias.uid++;
   }
@@ -143,7 +151,7 @@ export function toIdentifier(name: string): string {
   name = name.replace(/^[-0-9]+/, "");
 
   // camel case
-  name = name.replace(/[-\s]+(.)?/g, function (match, c) {
+  name = name.replace(/[-\s]+(.)?/g, function(match, c) {
     return c ? c.toUpperCase() : "";
   });
 

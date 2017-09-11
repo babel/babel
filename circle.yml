@@ -1,11 +1,17 @@
+general:
+  artifacts:
+    - "packages/babel-standalone/babel.js"
+    - "packages/babel-standalone/babel.min.js"
+
 machine:
   node:
     version:
-      6
+      8
 
 dependencies:
   pre:
-    - curl -o- -L https://yarnpkg.com/install.sh | bash
+    # Version number can be removed once 0.28.x or higher is released as stable
+    - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 0.28.4
   cache_directories:
     - ~/.yarn-cache
   override:
@@ -14,3 +20,9 @@ dependencies:
 test:
   override:
     - make test-ci-coverage
+    # Builds babel-standalone with the regular Babel config
+    - make build
+    # test-ci-coverage doesn't test babel-standalone, as trying to gather coverage
+    # data for a JS file that's several megabytes large is bound to fail. Here,
+    # we just run the babel-standalone test separately.
+    - ./node_modules/mocha/bin/_mocha packages/babel-standalone/test/ --opts test/mocha.opts

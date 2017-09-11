@@ -16,8 +16,9 @@
   Object.defineProperty(exports, "__esModule", {
     value: true
   });
-  exports.isOdd = undefined;
+  exports.isOdd = void 0;
   exports.nextOdd = nextOdd;
+
   function nextOdd(n) {
     return (0, _evens.isEven)(n) ? n + 1 : n + 2;
   }

@@ -1,0 +1,12 @@
+{
+  "name": "babel-plugin-syntax-typescript",
+  "version": "7.0.0-alpha.20",
+  "description": "Allow parsing of TypeScript syntax",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-typescript",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin",
+    "typescript"
+  ]
+}

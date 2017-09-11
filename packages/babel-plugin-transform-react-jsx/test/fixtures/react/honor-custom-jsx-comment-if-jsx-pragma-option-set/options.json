@@ -1,5 +1,5 @@
 {
-  "plugins": [
-    ["transform-react-jsx", {"pragma": "foo.bar"}]
-  ]
+   "plugins": [
+		["transform-react-jsx", {"pragma": "foo.bar"}]
+   ]
 }

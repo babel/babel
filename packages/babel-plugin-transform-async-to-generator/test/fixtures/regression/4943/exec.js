@@ -8,12 +8,6 @@ async function foo({ a, b = mandatory("b") } = {}) {
   return Promise.resolve(b);
 }
 
-return (async () => {
-  assert.doesNotThrow(() => {
-    foo()
-      .then(() => {
-        throw new Error('should not occcur');
-      })
-      .catch(() => true);
-  });
-})();
+return foo().then(() => {
+  throw new Error('should not occcur');
+}, () => true);

@@ -1,6 +1,6 @@
 # babel-plugin-transform-class-properties
 
-> This plugin transforms es2015 static class properties as well as properties declared with the es2016 property initializer syntax.
+> This plugin transforms class properties
 
 ## Example
 
@@ -12,19 +12,19 @@ Below is a class with four class properties which will be transformed.
     instanceProperty = "bork";
     boundFunction = () => {
       return this.instanceProperty;
-    }
+    };
 
     //Static class properties
     static staticProperty = "babelIsCool";
     static staticFunction = function() {
       return Bork.staticProperty;
-    }
+    };
   }
 
   let myBork = new Bork;
 
   //Property initializers are not on the prototype.
-  console.log(myBork.prototype.boundFunction); // > undefined
+  console.log(myBork.__proto__.boundFunction); // > undefined
 
   //Bound functions are bound to the class instance.
   console.log(myBork.boundFunction.call(undefined)); // > "bork"
@@ -46,16 +46,20 @@ npm install --save-dev babel-plugin-transform-class-properties
 
 **.babelrc**
 
+Without options:
+
 ```json
-// without options
 {
   "plugins": ["transform-class-properties"]
 }
+```
 
-// with options
+With options:
+
+```json
 {
   "plugins": [
-    ["transform-class-properties", { "spec": true }]
+    ["transform-class-properties", { "loose": true }]
   ]
 }
 ```
@@ -76,11 +80,69 @@ require("babel-core").transform("code", {
 
 ## Options
 
-### `spec`
+### `loose`
 
 `boolean`, defaults to `false`.
 
-Class properties are compiled to use `Object.defineProperty`. Static fields are now defined even if they are not initialized.
+When `true`, class properties are compiled to use an assignment expression instead of `Object.defineProperty`.
+
+#### Example
+
+```js
+  class Bork {
+    static a = 'foo';
+    static b;
+
+    x = 'bar';
+    y;
+  }
+```
+
+Without `{ "loose": true }`, the above code will compile to the following, using `Object.definePropery`:
+
+```js
+var Bork = function Bork() {
+  babelHelpers.classCallCheck(this, Bork);
+  Object.defineProperty(this, "x", {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    value: 'bar'
+  });
+  Object.defineProperty(this, "y", {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    value: void 0
+  });
+};
+
+Object.defineProperty(Bork, "a", {
+  configurable: true,
+  enumerable: true,
+  writable: true,
+  value: 'foo'
+});
+Object.defineProperty(Bork, "b", {
+  configurable: true,
+  enumerable: true,
+  writable: true,
+  value: void 0
+});
+```
+
+However, with `{ "loose": true }`, it will compile using assignment expressions:
+
+```js
+var Bork = function Bork() {
+  babelHelpers.classCallCheck(this, Bork);
+  this.x = 'bar';
+  this.y = void 0;
+};
+
+Bork.a = 'foo';
+Bork.b = void 0;
+```
 
 ## References
 

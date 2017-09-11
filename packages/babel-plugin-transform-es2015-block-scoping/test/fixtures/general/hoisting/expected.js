@@ -1,7 +1,10 @@
 var _loop = function (i) {
   x = 5;
-  ({ f } = { f: 2 });
-
+  ({
+    f
+  } = {
+    f: 2
+  });
   fns.push(function () {
     return i * x;
   });
@@ -24,7 +27,7 @@ try {
   _iteratorError = err;
 } finally {
   try {
-    if (!_iteratorNormalCompletion && _iterator.return) {
+    if (!_iteratorNormalCompletion && _iterator.return != null) {
       _iterator.return();
     }
   } finally {

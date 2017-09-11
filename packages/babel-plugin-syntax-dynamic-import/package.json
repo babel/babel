@@ -1,13 +1,11 @@
 {
   "name": "babel-plugin-syntax-dynamic-import",
-  "version": "7.0.0-alpha.9",
+  "version": "7.0.0-alpha.20",
   "description": "Allow parsing of import()",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-dynamic-import",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
-  ],
-  "dependencies": {},
-  "devDependencies": {}
+  ]
 }

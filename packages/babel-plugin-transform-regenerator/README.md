@@ -60,13 +60,13 @@ With options:
 |generators|true|
 |async|true|
 
-````json
+```json
 {
   "plugins": [
     ["transform-regenerator", {
-      asyncGenerators: false,
-      generators: false,
-      async: false
+      "asyncGenerators": false,
+      "generators": false,
+      "async": false
     }]
   ]
 }

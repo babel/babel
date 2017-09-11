@@ -2,12 +2,18 @@
 
 > Babel preset for all React plugins.
 
-This preset includes the following plugins/presets:
+This preset always includes the following plugins:
 
-- [preset-flow](https://babeljs.io/docs/plugins/preset-flow/)
 - [syntax-jsx](https://babeljs.io/docs/plugins/syntax-jsx/)
 - [transform-react-jsx](https://babeljs.io/docs/plugins/transform-react-jsx/)
 - [transform-react-display-name](https://babeljs.io/docs/plugins/transform-react-display-name/)
+
+And with the `development` option:
+
+- [transform-react-jsx-self](https://babeljs.io/docs/plugins/transform-react-jsx-self/)
+- [transform-react-jsx-source](https://babeljs.io/docs/plugins/transform-react-jsx-source/)
+
+> Note: Flow syntax support is no longer enabled in v7. For that, you will need to add the [Flow preset](https://babeljs.io/docs/plugins/preset-flow/).
 
 ## Install
 
@@ -54,7 +60,7 @@ View the output
 ### Via CLI
 
 ```sh
-babel script.js --presets react 
+babel script.js --presets react
 ```
 
 ### Via Node API
@@ -63,4 +69,43 @@ babel script.js --presets react
 require("babel-core").transform("code", {
   presets: ["react"]
 });
+```
+
+## Options
+
+### `development`
+
+`boolean`, defaults to `false`.
+
+Toggles plugins that aid in development, such as [`babel-plugin-transform-react-jsx-self`](https://babeljs.io/docs/plugins/transform-react-jsx-self/) and [`babel-plugin-transform-react-jsx-source`](https://babeljs.io/docs/plugins/transform-react-jsx-source/).
+
+This is useful when combined with either a `babelrc.js` or [env option in a .babelrc](https://babeljs.io/docs/usage/babelrc/#env-option) configuration:
+
+#### babelrc.js
+
+```js
+module.exports = {
+  presets: [
+    ["react", {
+      development: process.env.BABEL_ENV === "development"
+    }],
+  ],
+}
+```
+
+#### .babelrc
+
+> Note: the `env` option will likely get deprecated soon
+
+```json
+{
+  "presets": ["react"],
+  "env": {
+    "development": {
+      "presets": [
+        ["react", { "development": true }]
+      ]
+    }
+  }
+}
 ```

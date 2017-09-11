@@ -44,6 +44,10 @@ export function ExportNamespaceSpecifier(node: Object) {
 export function ExportAllDeclaration(node: Object) {
   this.word("export");
   this.space();
+  if (node.exportKind === "type") {
+    this.word("type");
+    this.space();
+  }
   this.token("*");
   this.space();
   this.word("from");
@@ -52,13 +56,21 @@ export function ExportAllDeclaration(node: Object) {
   this.semicolon();
 }
 
-export function ExportNamedDeclaration() {
+export function ExportNamedDeclaration(node: Object) {
+  if (t.isClassDeclaration(node.declaration)) {
+    this.printJoin(node.declaration.decorators, node);
+  }
+
   this.word("export");
   this.space();
   ExportDeclaration.apply(this, arguments);
 }
 
-export function ExportDefaultDeclaration() {
+export function ExportDefaultDeclaration(node: Object) {
+  if (t.isClassDeclaration(node.declaration)) {
+    this.printJoin(node.declaration.decorators, node);
+  }
+
   this.word("export");
   this.space();
   this.word("default");
@@ -83,7 +95,10 @@ function ExportDeclaration(node: Object) {
     let hasSpecial = false;
     while (true) {
       const first = specifiers[0];
-      if (t.isExportDefaultSpecifier(first) || t.isExportNamespaceSpecifier(first)) {
+      if (
+        t.isExportDefaultSpecifier(first) ||
+        t.isExportNamespaceSpecifier(first)
+      ) {
         hasSpecial = true;
         this.print(specifiers.shift(), node);
         if (specifiers.length) {
@@ -130,7 +145,10 @@ export function ImportDeclaration(node: Object) {
     // print "special" specifiers first
     while (true) {
       const first = specifiers[0];
-      if (t.isImportDefaultSpecifier(first) || t.isImportNamespaceSpecifier(first)) {
+      if (
+        t.isImportDefaultSpecifier(first) ||
+        t.isImportNamespaceSpecifier(first)
+      ) {
         this.print(specifiers.shift(), node);
         if (specifiers.length) {
           this.token(",");

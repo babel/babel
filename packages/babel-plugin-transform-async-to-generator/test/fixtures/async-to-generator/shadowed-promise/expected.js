@@ -1,6 +1,6 @@
 let foo = (() => {
   var _ref = _asyncToGenerator(function* () {
-    yield new _Promise(function (resolve) {
+    yield new _Promise(resolve => {
       resolve();
     });
   });

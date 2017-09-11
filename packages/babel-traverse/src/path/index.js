@@ -105,18 +105,11 @@ export default class NodePath {
   }
 
   getScope(scope: Scope) {
-    let ourScope = scope;
-
-    // we're entering a new scope so let's construct it!
-    if (this.isScope()) {
-      ourScope = new Scope(this, scope);
-    }
-
-    return ourScope;
+    return this.isScope() ? new Scope(this) : scope;
   }
 
   setData(key: string, val: any): any {
-    return this.data[key] = val;
+    return (this.data[key] = val);
   }
 
   getData(key: string, def?: any): any {
@@ -153,7 +146,7 @@ export default class NodePath {
       let key = path.key;
       if (path.inList) key = `${path.listKey}[${key}]`;
       parts.unshift(key);
-    } while (path = path.parentPath);
+    } while ((path = path.parentPath));
     return parts.join(".");
   }
 
@@ -163,7 +156,8 @@ export default class NodePath {
   }
 }
 
-Object.assign(NodePath.prototype,
+Object.assign(
+  NodePath.prototype,
   NodePath_ancestry,
   NodePath_inference,
   NodePath_replacement,
@@ -174,15 +168,16 @@ Object.assign(NodePath.prototype,
   NodePath_removal,
   NodePath_modification,
   NodePath_family,
-  NodePath_comments);
+  NodePath_comments,
+);
 
 for (const type of (t.TYPES: Array<string>)) {
   const typeKey = `is${type}`;
-  NodePath.prototype[typeKey] = function (opts) {
+  NodePath.prototype[typeKey] = function(opts) {
     return t[typeKey](this.node, opts);
   };
 
-  NodePath.prototype[`assert${type}`] = function (opts) {
+  NodePath.prototype[`assert${type}`] = function(opts) {
     if (!this[typeKey](opts)) {
       throw new TypeError(`Expected node path of type ${type}`);
     }
@@ -195,7 +190,7 @@ for (const type in virtualTypes) {
 
   const virtualType = virtualTypes[type];
 
-  NodePath.prototype[`is${type}`] = function (opts) {
+  NodePath.prototype[`is${type}`] = function(opts) {
     return virtualType.checkPath(this, opts);
   };
 }

@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-object-assign",
-  "version": "7.0.0-alpha.9",
+  "version": "7.0.0-alpha.20",
   "description": "Replace Object.assign with an inline helper",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-assign",
   "author": "Jed Watson",
@@ -10,6 +10,6 @@
     "babel-plugin"
   ],
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-alpha.9"
+    "babel-helper-plugin-test-runner": "7.0.0-alpha.20"
   }
 }

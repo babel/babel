@@ -7,9 +7,13 @@ Object.defineProperty(exports, "__esModule", {
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var foo = function () {
-  var _ref2 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3() {
+  var _ref2 = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee3() {
     var bar = function () {
-      var _ref3 = _asyncToGenerator(regeneratorRuntime.mark(function _callee2() {
+      var _ref3 = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee2() {
         var baz;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
@@ -58,7 +62,9 @@ var Foo = function () {
   _createClass(Foo, [{
     key: "bar",
     value: function () {
-      var _ref = _asyncToGenerator(regeneratorRuntime.mark(function _callee() {
+      var _ref = _asyncToGenerator(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee() {
         var baz;
         return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {

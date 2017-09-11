@@ -4,25 +4,7 @@ import type TraversalContext from "../index";
 import NodePath from "./index";
 import * as t from "babel-types";
 
-export function getStatementParent(): ?NodePath {
-  let path = this;
-
-  do {
-    if (!path.parentPath || (Array.isArray(path.container) && path.isStatement())) {
-      break;
-    } else {
-      path = path.parentPath;
-    }
-  } while (path);
-
-  if (path && (path.isProgram() || path.isFile())) {
-    throw new Error("File/Program node, we can't possibly find a statement parent to this");
-  }
-
-  return path;
-}
-
-export function getOpposite() {
+export function getOpposite(): ?NodePath {
   if (this.key === "left") {
     return this.getSibling("right");
   } else if (this.key === "right") {
@@ -30,26 +12,27 @@ export function getOpposite() {
   }
 }
 
+function addCompletionRecords(path, paths) {
+  if (path) return paths.concat(path.getCompletionRecords());
+  return paths;
+}
+
 export function getCompletionRecords(): Array {
   let paths = [];
 
-  const add = function (path) {
-    if (path) paths = paths.concat(path.getCompletionRecords());
-  };
-
   if (this.isIfStatement()) {
-    add(this.get("consequent"));
-    add(this.get("alternate"));
+    paths = addCompletionRecords(this.get("consequent"), paths);
+    paths = addCompletionRecords(this.get("alternate"), paths);
   } else if (this.isDoExpression() || this.isFor() || this.isWhile()) {
-    add(this.get("body"));
+    paths = addCompletionRecords(this.get("body"), paths);
   } else if (this.isProgram() || this.isBlockStatement()) {
-    add(this.get("body").pop());
+    paths = addCompletionRecords(this.get("body").pop(), paths);
   } else if (this.isFunction()) {
     return this.get("body").getCompletionRecords();
   } else if (this.isTryStatement()) {
-    add(this.get("block"));
-    add(this.get("handler"));
-    add(this.get("finalizer"));
+    paths = addCompletionRecords(this.get("block"), paths);
+    paths = addCompletionRecords(this.get("handler"), paths);
+    paths = addCompletionRecords(this.get("finalizer"), paths);
   } else {
     paths.push(this);
   }
@@ -77,8 +60,8 @@ export function getNextSibling(): NodePath {
 
 export function getAllNextSiblings(): Array<NodePath> {
   let _key = this.key;
-  let sibling:NodePath = this.getSibling(++_key);
-  const siblings:Array<NodePath> = [];
+  let sibling: NodePath = this.getSibling(++_key);
+  const siblings: Array<NodePath> = [];
   while (sibling.node) {
     siblings.push(sibling);
     sibling = this.getSibling(++_key);
@@ -88,8 +71,8 @@ export function getAllNextSiblings(): Array<NodePath> {
 
 export function getAllPrevSiblings(): Array<NodePath> {
   let _key = this.key;
-  let sibling:NodePath = this.getSibling(--_key);
-  const siblings:Array<NodePath> = [];
+  let sibling: NodePath = this.getSibling(--_key);
+  const siblings: Array<NodePath> = [];
   while (sibling.node) {
     siblings.push(sibling);
     sibling = this.getSibling(--_key);
@@ -97,12 +80,17 @@ export function getAllPrevSiblings(): Array<NodePath> {
   return siblings;
 }
 
-export function get(key: string, context?: boolean | TraversalContext): NodePath {
+export function get(
+  key: string,
+  context?: boolean | TraversalContext,
+): NodePath {
   if (context === true) context = this.context;
   const parts = key.split(".");
-  if (parts.length === 1) { // "foo"
+  if (parts.length === 1) {
+    // "foo"
     return this._getKey(key, context);
-  } else { // "foo.bar"
+  } else {
+    // "foo.bar"
     return this._getPattern(parts, context);
   }
 }
@@ -148,18 +136,21 @@ export function _getPattern(parts, context) {
   return path;
 }
 
-export function getBindingIdentifiers(duplicates?) {
+export function getBindingIdentifiers(duplicates?): Object {
   return t.getBindingIdentifiers(this.node, duplicates);
 }
 
-export function getOuterBindingIdentifiers(duplicates?) {
+export function getOuterBindingIdentifiers(duplicates?): Object {
   return t.getOuterBindingIdentifiers(this.node, duplicates);
 }
 
 // original source - https://github.com/babel/babel/blob/master/packages/babel-types/src/retrievers.js
 // path.getBindingIdentifiers returns nodes where the following re-implementation
 // returns paths
-export function getBindingIdentifierPaths(duplicates = false, outerOnly = false) {
+export function getBindingIdentifierPaths(
+  duplicates = false,
+  outerOnly = false,
+) {
   const path = this;
   let search = [].concat(path);
   const ids = Object.create(null);
@@ -173,7 +164,7 @@ export function getBindingIdentifierPaths(duplicates = false, outerOnly = false)
 
     if (id.isIdentifier()) {
       if (duplicates) {
-        const _ids = ids[id.node.name] = ids[id.node.name] || [];
+        const _ids = (ids[id.node.name] = ids[id.node.name] || []);
         _ids.push(id);
       } else {
         ids[id.node.name] = id;

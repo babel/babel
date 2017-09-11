@@ -16,25 +16,6 @@ import { scope as scopeCache } from "../cache";
 // See `warnOnFlowBinding`.
 let _crawlCallsCount = 0;
 
-/**
- * To avoid creating a new Scope instance for each traversal, we maintain a cache on the
- * node itself containing all scopes it has been associated with.
- */
-
-function getCache(path, parentScope, self) {
-  const scopes: Array<Scope> = scopeCache.get(path.node) || [];
-
-  for (const scope of scopes) {
-    if (scope.parent === parentScope && scope.path === path) return scope;
-  }
-
-  scopes.push(self);
-
-  if (!scopeCache.has(path.node)) {
-    scopeCache.set(path.node, scopes);
-  }
-}
-
 // Recursively gathers the identifying names of a node.
 function gatherNodeParts(node: Object, parts: Array) {
   if (t.isModuleDeclaration(node)) {
@@ -71,7 +52,11 @@ const collectorVisitor = {
   For(path) {
     for (const key of (t.FOR_INIT_KEYS: Array)) {
       const declar = path.get(key);
-      if (declar.isVar()) path.scope.getFunctionParent().registerBinding("var", declar);
+      if (declar.isVar()) {
+        const parentScope =
+          path.scope.getFunctionParent() || path.scope.getProgramParent();
+        parentScope.registerBinding("var", declar);
+      }
     }
   },
 
@@ -80,13 +65,17 @@ const collectorVisitor = {
     if (path.isBlockScoped()) return;
 
     // this will be hit again once we traverse into it after this iteration
-    if (path.isExportDeclaration() && path.get("declaration").isDeclaration()) return;
+    if (path.isExportDeclaration() && path.get("declaration").isDeclaration()) {
+      return;
+    }
 
     // TODO(amasad): remove support for flow as bindings (See warning below).
     //if (path.isFlow()) return;
 
     // we've ran into a declaration!
-    path.scope.getFunctionParent().registerDeclaration(path);
+    const parent =
+      path.scope.getFunctionParent() || path.scope.getProgramParent();
+    parent.registerDeclaration(path);
   },
 
   ReferencedIdentifier(path, state) {
@@ -96,7 +85,7 @@ const collectorVisitor = {
   ForXStatement(path, state) {
     const left = path.get("left");
     if (left.isPattern() || left.isIdentifier()) {
-      state.constantViolations.push(left);
+      state.constantViolations.push(path);
     }
   },
 
@@ -132,12 +121,12 @@ const collectorVisitor = {
   },
 
   UpdateExpression(path, state) {
-    state.constantViolations.push(path.get("argument"));
+    state.constantViolations.push(path);
   },
 
   UnaryExpression(path, state) {
     if (path.node.operator === "delete") {
-      state.constantViolations.push(path.get("argument"));
+      state.constantViolations.push(path);
     }
   },
 
@@ -168,26 +157,24 @@ const collectorVisitor = {
 let uid = 0;
 
 export default class Scope {
-
   /**
    * This searches the current "scope" and collects all references/bindings
    * within.
    */
 
-  constructor(path: NodePath, parentScope?: Scope) {
-    if (parentScope && parentScope.block === path.node) {
-      return parentScope;
+  constructor(path: NodePath) {
+    const { node } = path;
+    const cached = scopeCache.get(node);
+    // Sometimes, a scopable path is placed higher in the AST tree.
+    // In these cases, have to create a new Scope.
+    if (cached && cached.path === path) {
+      return cached;
     }
-
-    const cached = getCache(path, parentScope, this);
-    if (cached) return cached;
+    scopeCache.set(node, this);
 
     this.uid = uid++;
-    this.parent = parentScope;
-    this.hub = path.hub;
 
-    this.parentBlock = path.parent;
-    this.block = path.node;
+    this.block = node;
     this.path = path;
 
     this.labels = new Map();
@@ -203,12 +190,20 @@ export default class Scope {
    * Variables available in current context.
    */
 
-  static contextVariables = [
-    "arguments",
-    "undefined",
-    "Infinity",
-    "NaN",
-  ];
+  static contextVariables = ["arguments", "undefined", "Infinity", "NaN"];
+
+  get parent() {
+    const parent = this.path.findParent(p => p.isScope());
+    return parent && parent.scope;
+  }
+
+  get parentBlock() {
+    return this.path.parent;
+  }
+
+  get hub() {
+    return this.path.hub;
+  }
 
   /**
    * Traverse node with current scope and path.
@@ -241,14 +236,22 @@ export default class Scope {
    */
 
   generateUid(name: string = "temp") {
-    name = t.toIdentifier(name).replace(/^_+/, "").replace(/[0-9]+$/g, "");
+    name = t
+      .toIdentifier(name)
+      .replace(/^_+/, "")
+      .replace(/[0-9]+$/g, "");
 
     let uid;
     let i = 0;
     do {
       uid = this._generateUid(name, i);
       i++;
-    } while (this.hasLabel(uid) || this.hasBinding(uid) || this.hasGlobal(uid) || this.hasReference(uid));
+    } while (
+      this.hasLabel(uid) ||
+      this.hasBinding(uid) ||
+      this.hasGlobal(uid) ||
+      this.hasReference(uid)
+    );
 
     const program = this.getProgramParent();
     program.references[uid] = true;
@@ -271,7 +274,10 @@ export default class Scope {
    * Generate a unique identifier based on a node.
    */
 
-  generateUidIdentifierBasedOnNode(parent: Object, defaultName?: String): Object {
+  generateUidIdentifierBasedOnNode(
+    parent: Object,
+    defaultName?: String,
+  ): Object {
     let node = parent;
 
     if (t.isAssignmentExpression(parent)) {
@@ -336,17 +342,28 @@ export default class Scope {
     // ignore parameters
     if (kind === "param") return;
 
+    // Ignore existing binding if it's the name of the current function or
+    // class expression
+    if (local.kind === "local") return;
+
     // ignore hoisted functions if there's also a local let
     if (kind === "hoisted" && local.kind === "let") return;
 
     const duplicate =
       // don't allow duplicate bindings to exist alongside
-      kind === "let" || local.kind === "let" || local.kind === "const" || local.kind === "module" ||
+      kind === "let" ||
+      local.kind === "let" ||
+      local.kind === "const" ||
+      local.kind === "module" ||
       // don't allow a local of param with a kind of let
-      local.kind === "param" && (kind === "let" || kind === "const");
+      (local.kind === "param" && (kind === "let" || kind === "const"));
 
     if (duplicate) {
-      throw this.hub.file.buildCodeFrameError(id, messages.get("scopeDuplicateDeclaration", name), TypeError);
+      throw this.hub.file.buildCodeFrameError(
+        id,
+        messages.get("scopeDuplicateDeclaration", name),
+        TypeError,
+      );
     }
   }
 
@@ -380,7 +397,7 @@ export default class Scope {
           kind: binding.kind,
         });
       }
-    } while (scope = scope.parent);
+    } while ((scope = scope.parent));
     console.log(sep);
   }
 
@@ -389,7 +406,9 @@ export default class Scope {
 
     if (t.isIdentifier(node)) {
       const binding = this.getBinding(node.name);
-      if (binding && binding.constant && binding.path.isGenericType("Array")) return node;
+      if (binding && binding.constant && binding.path.isGenericType("Array")) {
+        return node;
+      }
     }
 
     if (t.isArrayExpression(node)) {
@@ -402,13 +421,13 @@ export default class Scope {
           t.memberExpression(
             t.memberExpression(
               t.identifier("Array"),
-              t.identifier("prototype")
+              t.identifier("prototype"),
             ),
-            t.identifier("slice")
+            t.identifier("slice"),
           ),
-          t.identifier("call")
+          t.identifier("call"),
         ),
-        [node]
+        [node],
       );
     }
 
@@ -455,7 +474,11 @@ export default class Scope {
       }
     } else if (path.isExportDeclaration()) {
       const declar = path.get("declaration");
-      if (declar.isClassDeclaration() || declar.isFunctionDeclaration() || declar.isVariableDeclaration()) {
+      if (
+        declar.isClassDeclaration() ||
+        declar.isFunctionDeclaration() ||
+        declar.isVariableDeclaration()
+      ) {
         this.registerDeclaration(declar);
       }
     } else {
@@ -496,6 +519,7 @@ export default class Scope {
     for (const name in ids) {
       for (const id of (ids[name]: Array<Object>)) {
         let local = this.getOwnBinding(name);
+
         if (local) {
           // same identifier so continue safely as we're likely trying to register it
           // multiple times
@@ -511,13 +535,17 @@ export default class Scope {
 
         parent.references[name] = true;
 
-        this.bindings[name] = new Binding({
-          identifier: id,
-          existing: local,
-          scope: this,
-          path: bindingPath,
-          kind: kind,
-        });
+        // A redeclaration of an existing variable is a modification
+        if (local) {
+          this.registerConstantViolation(bindingPath);
+        } else {
+          this.bindings[name] = new Binding({
+            identifier: id,
+            scope: this,
+            path: bindingPath,
+            kind: kind,
+          });
+        }
       }
     }
   }
@@ -531,7 +559,7 @@ export default class Scope {
 
     do {
       if (scope.uids[name]) return true;
-    } while (scope = scope.parent);
+    } while ((scope = scope.parent));
 
     return false;
   }
@@ -541,7 +569,7 @@ export default class Scope {
 
     do {
       if (scope.globals[name]) return true;
-    } while (scope = scope.parent);
+    } while ((scope = scope.parent));
 
     return false;
   }
@@ -551,7 +579,7 @@ export default class Scope {
 
     do {
       if (scope.references[name]) return true;
-    } while (scope = scope.parent);
+    } while ((scope = scope.parent));
 
     return false;
   }
@@ -563,7 +591,9 @@ export default class Scope {
       if (constantsOnly) return binding.constant;
       return true;
     } else if (t.isClass(node)) {
-      if (node.superClass && !this.isPure(node.superClass, constantsOnly)) return false;
+      if (node.superClass && !this.isPure(node.superClass, constantsOnly)) {
+        return false;
+      }
       return this.isPure(node.body, constantsOnly);
     } else if (t.isClassBody(node)) {
       for (const method of node.body) {
@@ -571,7 +601,10 @@ export default class Scope {
       }
       return true;
     } else if (t.isBinary(node)) {
-      return this.isPure(node.left, constantsOnly) && this.isPure(node.right, constantsOnly);
+      return (
+        this.isPure(node.left, constantsOnly) &&
+        this.isPure(node.right, constantsOnly)
+      );
     } else if (t.isArrayExpression(node)) {
       for (const elem of (node.elements: Array<Object>)) {
         if (!this.isPure(elem, constantsOnly)) return false;
@@ -591,6 +624,17 @@ export default class Scope {
       return this.isPure(node.value, constantsOnly);
     } else if (t.isUnaryExpression(node)) {
       return this.isPure(node.argument, constantsOnly);
+    } else if (t.isTaggedTemplateExpression(node)) {
+      return (
+        t.matchesPattern(node.tag, "String.raw") &&
+        !this.hasBinding("String", true) &&
+        this.isPure(node.quasi, constantsOnly)
+      );
+    } else if (t.isTemplateLiteral(node)) {
+      for (const expression of (node.expressions: Array<Object>)) {
+        if (!this.isPure(expression, constantsOnly)) return false;
+      }
+      return true;
     } else {
       return t.isPureish(node);
     }
@@ -601,7 +645,7 @@ export default class Scope {
    */
 
   setData(key, val) {
-    return this.data[key] = val;
+    return (this.data[key] = val);
   }
 
   /**
@@ -613,7 +657,7 @@ export default class Scope {
     do {
       const data = scope.data[key];
       if (data != null) return data;
-    } while (scope = scope.parent);
+    } while ((scope = scope.parent));
   }
 
   /**
@@ -626,7 +670,7 @@ export default class Scope {
     do {
       const data = scope.data[key];
       if (data != null) scope.data[key] = null;
-    } while (scope = scope.parent);
+    } while ((scope = scope.parent));
   }
 
   init() {
@@ -738,11 +782,11 @@ export default class Scope {
   }
 
   push(opts: {
-    id: Object;
-    init: ?Object;
-    unique: ?boolean;
-    _blockHoist: ?number;
-    kind: "var" | "let";
+    id: Object,
+    init: ?Object,
+    unique: ?boolean,
+    _blockHoist: ?number,
+    kind: "var" | "let",
   }) {
     let path = this.path;
 
@@ -751,7 +795,7 @@ export default class Scope {
     }
 
     if (path.isSwitchStatement()) {
-      path = this.getFunctionParent().path;
+      path = (this.getFunctionParent() || this.getProgramParent()).path;
     }
 
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
@@ -768,7 +812,6 @@ export default class Scope {
 
     if (!declarPath) {
       const declar = t.variableDeclaration(kind, []);
-      declar._generated = true;
       declar._blockHoist = blockHoist;
 
       [declarPath] = path.unshiftContainer("body", [declar]);
@@ -790,13 +833,12 @@ export default class Scope {
       if (scope.path.isProgram()) {
         return scope;
       }
-    } while (scope = scope.parent);
-    throw new Error("We couldn't find a Function or Program...");
+    } while ((scope = scope.parent));
+    throw new Error("Couldn't find a Program");
   }
 
   /**
-   * Walk up the scope tree until we hit either a Function or reach the
-   * very top and hit Program.
+   * Walk up the scope tree until we hit either a Function or return null.
    */
 
   getFunctionParent() {
@@ -805,8 +847,8 @@ export default class Scope {
       if (scope.path.isFunctionParent()) {
         return scope;
       }
-    } while (scope = scope.parent);
-    throw new Error("We couldn't find a Function or Program...");
+    } while ((scope = scope.parent));
+    return null;
   }
 
   /**
@@ -820,8 +862,10 @@ export default class Scope {
       if (scope.path.isBlockParent()) {
         return scope;
       }
-    } while (scope = scope.parent);
-    throw new Error("We couldn't find a BlockStatement, For, Switch, Function, Loop or Program...");
+    } while ((scope = scope.parent));
+    throw new Error(
+      "We couldn't find a BlockStatement, For, Switch, Function, Loop or Program...",
+    );
   }
 
   /**
@@ -869,7 +913,7 @@ export default class Scope {
     if (_crawlCallsCount === 0 && binding && binding.path.isFlow()) {
       console.warn(`
         You or one of the Babel plugins you are using are using Flow declarations as bindings.
-        Support for this will be removed in version 6.8. To find out the caller, grep for this
+        Support for this will be removed in version 7. To find out the caller, grep for this
         message and change it to a \`console.trace()\`.
       `);
     }
@@ -882,7 +926,7 @@ export default class Scope {
     do {
       const binding = scope.getOwnBinding(name);
       if (binding) return this.warnOnFlowBinding(binding);
-    } while (scope = scope.parent);
+    } while ((scope = scope.parent));
   }
 
   getOwnBinding(name: string) {
@@ -947,6 +991,6 @@ export default class Scope {
       if (scope.uids[name]) {
         scope.uids[name] = false;
       }
-    } while (scope = scope.parent);
+    } while ((scope = scope.parent));
   }
 }

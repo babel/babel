@@ -27,24 +27,24 @@ Contributions are always welcome, no matter how large or small.
 
 - If you aren't just making a documentation change, you'll probably want to learn a bit about a few topics.
  - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babylon/blob/master/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://github.com/babel/babylon#output).
- - This repository's [`/doc`](https://github.com/babel/babel/tree/master/doc) directory for notes on Babel's internals
+ - Check out [`/doc`](https://github.com/babel/babel/tree/master/doc) for information about Babel's internals
  - Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
  - Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
-- When you feel ready to finally jump into the babel source code a good start is to look out for issues which are labeled with [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and/or [beginner-friendly](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22beginner-friendly%22).
+- When you feel ready to jump into the Babel source code, a good place to start is to look for issues tagged with [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) and/or [beginner-friendly](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22beginner-friendly%22).
+- Follow along with what we are working on by joining our Slack, following our annoucements on [Twitter](https://twitter.com/babeljs), and reading (or participating!) in our [meeting notes](https://github.com/babel/notes).
+- Check out our [website](http://babeljs.io/) and the [repo](https://github.com/babel/website)
 
 ## Chat
 
-Feel free to check out the `#discussion`/`#development` channels on our [slack](https://slack.babeljs.io). Some of us are always online to chat!
+Feel free to check out the `#discussion`/`#development` channels on our [Slack](https://slack.babeljs.io). Some of us are always online to chat!
 
 ## Developing
 
 **Note:** Versions `< 5.1.10` can't be built.
 
-Babel is built for node 4 and up but we develop using node 6. Make sure you are on npm 3.
+Babel is built for Node 4 and up but we develop using Node 8 and yarn. You can check this with `node -v`.
 
-You can check this with `node -v` and `npm -v`.
-
-In addition, make sure that Yarn is installed.
+Make sure that Yarn is installed with version >= `0.28.0`.
 Installation instructions can be found here: https://yarnpkg.com/en/docs/install.
 
 ### Setup
@@ -114,17 +114,32 @@ To run tests for a specific package in [packages](https://github.com/babel/babel
 $ TEST_ONLY=babel-cli make test
 ```
 
+`TEST_ONLY` will also match substrings of the package name:
+
+```sh
+# Run tests for the babel-plugin-transform-es2015-classes package.
+$ TEST_ONLY=es2015-class make test
+```
+
 Use the `TEST_GREP` variable to run a subset of tests by name:
 
 ```sh
 $ TEST_GREP=transformation make test
 ```
 
-To enable the node debugger added in v6.3.0, set the `TEST_DEBUG` environment variable:
+Substitute spaces for hyphens and forward slashes when targeting specific test names:
+
+```sh
+$ TEST_GREP="arrow functions destructuring parameters" make test
+```
+
+To enable the Node.js debugger added in v6.3.0, set the `TEST_DEBUG` environment variable:
 
 ```sh
 $ TEST_DEBUG=true make test
 ```
+
+You can combine `TEST_DEBUG` with `TEST_GREP` or `TEST_ONLY` to debug a subset of tests. If you plan to stay long in the debugger (which you'll likely do!), you may increase the test timeout by editing [test/mocha.opts](https://github.com/babel/babel/blob/master/test/mocha.opts).
 
 To test the code coverage, use:
 
@@ -132,6 +147,18 @@ To test the code coverage, use:
 $ BABEL_ENV=cov make build
 $ ./scripts/test-cov.sh
 ```
+
+
+#### Troubleshooting Tests
+
+In case you're not able to reproduce an error on CI locally, it may be due to
+
+ - Node Version: Travis CI runs the tests against all major node versions. If your tests use JavaScript features unsupported by lower versions of node, then use [minNodeVersion option](#writing-tests) in options.json.
+ - Timeout: Check the CI log and if the only errors are timeout errors and you are sure that it's not related to the changes you made, ask someone in the slack channel to trigger rebuild on the CI build and it might be resolved
+
+In case you're locally getting errors which are not on the CI, it may be due to
+
+ - Updates in Dependencies: Make sure you run `make bootstrap` before you run `make build` or `make watch` before you run the tests.
 
 ### Writing tests
 
@@ -183,6 +210,15 @@ If you need to check for an error that is thrown you can add to the `options.jso
 {
   "plugins": [["transform-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
   "throws": "transform-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
+}
+```
+
+If the test requires a minimum Node version, you can add `minNodeVersion` (must be in semver format).
+
+```js
+// options.json example
+{
+  "minNodeVersion": "5.0.0"
 }
 ```
 

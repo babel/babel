@@ -1,11 +1,14 @@
 // @flow
 
+import buildDebug from "debug";
 import path from "path";
 import fs from "fs";
 import json5 from "json5";
 import resolve from "resolve";
 import { getEnv } from "../../helpers/environment";
 import { makeStrongCache } from "../../caching";
+
+const debug = buildDebug("babel:config:loading:files:configuration");
 
 type ConfigFile = {
   filepath: string,
@@ -31,6 +34,7 @@ export function findConfigs(dirname: string): Array<ConfigFile> {
       const ignore = readIgnoreConfig(ignoreLoc);
 
       if (ignore) {
+        debug("Found ignore %o from %o.", ignore.filepath, dirname);
         confs.push(ignore);
         foundIgnore = true;
       }
@@ -41,19 +45,23 @@ export function findConfigs(dirname: string): Array<ConfigFile> {
         BABELRC_FILENAME,
         BABELRC_JS_FILENAME,
         PACKAGE_FILENAME,
-      ].reduce((previousConfig: ConfigFile|null, name) => {
+      ].reduce((previousConfig: ConfigFile | null, name) => {
         const filepath = path.join(loc, name);
         const config = readConfig(filepath);
 
         if (config && previousConfig) {
-          throw new Error(`Multiple configuration files found. Please remove one:\n- ${
-            path.basename(previousConfig.filepath)}\n- ${name}\nfrom ${loc}`);
+          throw new Error(
+            `Multiple configuration files found. Please remove one:\n- ${path.basename(
+              previousConfig.filepath,
+            )}\n- ${name}\nfrom ${loc}`,
+          );
         }
 
         return config || previousConfig;
       }, null);
 
       if (conf) {
+        debug("Found configuration %o from %o.", conf.filepath, dirname);
         confs.push(conf);
         foundConfig = true;
       }
@@ -73,8 +81,11 @@ export function loadConfig(name: string, dirname: string): ConfigFile {
   const filepath = resolve.sync(name, { basedir: dirname });
 
   const conf = readConfig(filepath);
-  if (!conf) throw new Error(`Config file ${filepath} contains no configuration data`);
+  if (!conf) {
+    throw new Error(`Config file ${filepath} contains no configuration data`);
+  }
 
+  debug("Loaded config %o from $o.", name, dirname);
   return conf;
 }
 
@@ -83,23 +94,47 @@ export function loadConfig(name: string, dirname: string): ConfigFile {
  * throw if there are parsing errors while loading a config.
  */
 function readConfig(filepath) {
-  return (path.extname(filepath) === ".js") ? readConfigJS(filepath) : readConfigFile(filepath);
+  return path.extname(filepath) === ".js"
+    ? readConfigJS(filepath)
+    : readConfigFile(filepath);
 }
 
+const LOADING_CONFIGS = new Set();
 const readConfigJS = makeStrongCache((filepath, cache) => {
   if (!fs.existsSync(filepath)) {
     cache.forever();
     return null;
   }
 
+  // The `require()` call below can make this code reentrant if a require hook like babel-register has been
+  // loaded into the system. That would cause Babel to attempt to compile the `.babelrc.js` file as it loads
+  // below. To cover this case, we auto-ignore re-entrant config processing.
+  if (LOADING_CONFIGS.has(filepath)) {
+    cache.never();
+
+    debug("Auto-ignoring usage of config %o.", filepath);
+    return {
+      filepath,
+      dirname: path.dirname(filepath),
+      options: {},
+    };
+  }
+
   let options;
   try {
+    LOADING_CONFIGS.add(filepath);
+
     // $FlowIssue
     const configModule = (require(filepath): mixed);
-    options = configModule && configModule.__esModule ? (configModule.default || undefined) : configModule;
+    options =
+      configModule && configModule.__esModule
+        ? configModule.default || undefined
+        : configModule;
   } catch (err) {
     err.message = `${filepath}: Error while loading config - ${err.message}`;
     throw err;
+  } finally {
+    LOADING_CONFIGS.delete(filepath);
   }
 
   if (typeof options === "function") {
@@ -113,7 +148,9 @@ const readConfigJS = makeStrongCache((filepath, cache) => {
   }
 
   if (!options || typeof options !== "object" || Array.isArray(options)) {
-    throw new Error(`${filepath}: Configuration should be an exported JavaScript object.`);
+    throw new Error(
+      `${filepath}: Configuration should be an exported JavaScript object.`,
+    );
   }
 
   return {
@@ -144,8 +181,12 @@ const readConfigFile = makeStaticFileCache((filepath, content) => {
     if (!options) throw new Error(`${filepath}: No config detected`);
   }
 
-  if (typeof options !== "object") throw new Error(`${filepath}: Config returned typeof ${typeof options}`);
-  if (Array.isArray(options)) throw new Error(`${filepath}: Expected config object but found array`);
+  if (typeof options !== "object") {
+    throw new Error(`${filepath}: Config returned typeof ${typeof options}`);
+  }
+  if (Array.isArray(options)) {
+    throw new Error(`${filepath}: Expected config object but found array`);
+  }
 
   return {
     filepath,
@@ -157,8 +198,8 @@ const readConfigFile = makeStaticFileCache((filepath, content) => {
 const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
   const ignore = content
     .split("\n")
-    .map((line) => line.replace(/#(.*?)$/, "").trim())
-    .filter((line) => !!line);
+    .map(line => line.replace(/#(.*?)$/, "").trim())
+    .filter(line => !!line);
 
   return {
     filepath,
@@ -167,7 +208,7 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
   };
 });
 
-function makeStaticFileCache<T>(fn: (string, string) => T): (string) => T|null {
+function makeStaticFileCache<T>(fn: (string, string) => T): string => T | null {
   return makeStrongCache((filepath, cache) => {
     if (cache.invalidate(() => fileMtime(filepath)) === null) {
       cache.forever();
@@ -178,7 +219,7 @@ function makeStaticFileCache<T>(fn: (string, string) => T): (string) => T|null {
   });
 }
 
-function fileMtime(filepath: string): number|null {
+function fileMtime(filepath: string): number | null {
   try {
     return +fs.statSync(filepath).mtime;
   } catch (e) {

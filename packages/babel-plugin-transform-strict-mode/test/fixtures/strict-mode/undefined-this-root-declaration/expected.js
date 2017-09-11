@@ -1,3 +1,3 @@
 "use strict";
 
-var self = undefined;
+var self = void 0;

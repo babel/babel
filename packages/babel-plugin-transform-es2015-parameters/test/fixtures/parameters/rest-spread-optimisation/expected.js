@@ -1,17 +1,15 @@
 // optimisation
-
 function foo() {
-  foo.apply(undefined, arguments);
-}
+  foo.apply(void 0, arguments);
+} // deoptimisation
 
-// deoptimisation
 
 function foo(a) {
   for (var _len = arguments.length, b = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
     b[_key - 1] = arguments[_key];
   }
 
-  foo.apply(undefined, b);
+  foo.apply(void 0, b);
 }
 
 function foo() {
@@ -19,7 +17,7 @@ function foo() {
     b[_key2] = arguments[_key2];
   }
 
-  foo.apply(undefined, [1].concat(b));
+  foo.apply(void 0, [1].concat(b));
 }
 
 function foo() {
@@ -28,5 +26,5 @@ function foo() {
   }
 
   args.pop();
-  foo.apply(undefined, args);
+  foo.apply(void 0, args);
 }

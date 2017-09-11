@@ -42,10 +42,15 @@ const buildExportAll = template(`
   });
 `);
 
-const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty",
-  "ClassMethod", "ObjectMethod"];
+const THIS_BREAK_KEYS = [
+  "FunctionExpression",
+  "FunctionDeclaration",
+  "ClassProperty",
+  "ClassMethod",
+  "ObjectMethod",
+];
 
-export default function () {
+export default function() {
   const REASSIGN_REMAP_SKIP = Symbol();
 
   const reassignmentVisitor = {
@@ -61,10 +66,18 @@ export default function () {
         path.replaceWith(t.sequenceExpression([t.numericLiteral(0), remap]));
       } else if (path.isJSXIdentifier() && t.isMemberExpression(remap)) {
         const { object, property } = remap;
-        path.replaceWith(t.JSXMemberExpression(t.JSXIdentifier(object.name),
-          t.JSXIdentifier(property.name)));
+        path.replaceWith(
+          t.JSXMemberExpression(
+            t.JSXIdentifier(object.name),
+            t.JSXIdentifier(property.name),
+          ),
+        );
       } else {
-        path.replaceWith(remap);
+        path.replaceWith(
+          // Clone the node before inserting it to ensure that different nodes in the AST are represented
+          // by different objects.
+          t.cloneWithoutLoc(remap),
+        );
       }
       this.requeueInParent(path);
     },
@@ -74,23 +87,61 @@ export default function () {
       if (node[REASSIGN_REMAP_SKIP]) return;
 
       const left = path.get("left");
-      if (!left.isIdentifier()) return;
+      if (left.isIdentifier()) {
+        const name = left.node.name;
+        const exports = this.exports[name];
+        if (!exports) return;
 
-      const name = left.node.name;
-      const exports = this.exports[name];
-      if (!exports) return;
+        // redeclared in this scope
+        if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
 
-      // redeclared in this scope
-      if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
+        node[REASSIGN_REMAP_SKIP] = true;
 
-      node[REASSIGN_REMAP_SKIP] = true;
+        for (const reid of exports) {
+          node = buildExportsAssignment(reid, node).expression;
+        }
 
-      for (const reid of exports) {
-        node = buildExportsAssignment(reid, node).expression;
+        path.replaceWith(node);
+        this.requeueInParent(path);
+      } else if (left.isObjectPattern()) {
+        for (const property of left.node.properties) {
+          const name = property.value.name;
+
+          const exports = this.exports[name];
+          if (!exports) continue;
+
+          // redeclared in this scope
+          if (this.scope.getBinding(name) !== path.scope.getBinding(name)) {
+            return;
+          }
+
+          node[REASSIGN_REMAP_SKIP] = true;
+
+          path.insertAfter(
+            buildExportsAssignment(t.identifier(name), t.identifier(name)),
+          );
+        }
+      } else if (left.isArrayPattern()) {
+        for (const element of left.node.elements) {
+          if (!element) continue;
+
+          const name = element.name;
+
+          const exports = this.exports[name];
+          if (!exports) continue;
+
+          // redeclared in this scope
+          if (this.scope.getBinding(name) !== path.scope.getBinding(name)) {
+            return;
+          }
+
+          node[REASSIGN_REMAP_SKIP] = true;
+
+          path.insertAfter(
+            buildExportsAssignment(t.identifier(name), t.identifier(name)),
+          );
+        }
       }
-
-      path.replaceWith(node);
-      this.requeueInParent(path);
     },
 
     UpdateExpression(path) {
@@ -104,9 +155,17 @@ export default function () {
       // redeclared in this scope
       if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
 
-      const node = t.assignmentExpression(path.node.operator[0] + "=", arg.node, t.numericLiteral(1));
+      const node = t.assignmentExpression(
+        path.node.operator[0] + "=",
+        arg.node,
+        t.numericLiteral(1),
+      );
 
-      if ((path.parentPath.isExpressionStatement() && !path.isCompletionRecord()) || path.node.prefix) {
+      if (
+        (path.parentPath.isExpressionStatement() &&
+          !path.isCompletionRecord()) ||
+        path.node.prefix
+      ) {
         path.replaceWith(node);
         this.requeueInParent(path);
         return;
@@ -118,7 +177,8 @@ export default function () {
       let operator;
       if (path.node.operator === "--") {
         operator = "+";
-      } else { // "++"
+      } else {
+        // "++"
         operator = "-";
       }
       nodes.push(t.binaryExpression(operator, arg.node, t.numericLiteral(1)));
@@ -139,10 +199,9 @@ export default function () {
 
         if (
           state.opts.allowTopLevelThis !== true &&
-          !path.findParent((path) => !path.is("shadow") &&
-          THIS_BREAK_KEYS.indexOf(path.type) >= 0)
+          !path.findParent(path => THIS_BREAK_KEYS.indexOf(path.type) >= 0)
         ) {
-          path.replaceWith(t.identifier("undefined"));
+          path.replaceWith(path.scope.buildUndefinedNode());
         }
       },
 
@@ -178,12 +237,15 @@ export default function () {
             const cached = requires[source];
             if (cached) return cached;
 
-            const ref = path.scope.generateUidIdentifier(basename(source, extname(source)));
+            const ref = path.scope.generateUidIdentifier(
+              basename(source, extname(source)),
+            );
 
             const varDecl = t.variableDeclaration("var", [
-              t.variableDeclarator(ref, buildRequire(
-                t.stringLiteral(source)
-              ).expression),
+              t.variableDeclarator(
+                ref,
+                buildRequire(t.stringLiteral(source)).expression,
+              ),
             ]);
 
             // Copy location from the original import statement for sourcemap
@@ -198,7 +260,7 @@ export default function () {
 
             topNodes.push(varDecl);
 
-            return requires[source] = ref;
+            return (requires[source] = ref);
           }
 
           function addTo(obj, key, arr) {
@@ -210,11 +272,16 @@ export default function () {
             if (path.isExportDeclaration()) {
               hasExports = true;
 
-              const specifiers = [].concat(path.get("declaration"), path.get("specifiers"));
+              const specifiers = [].concat(
+                path.get("declaration"),
+                path.get("specifiers"),
+              );
               for (const specifier of specifiers) {
                 const ids = specifier.getBindingIdentifiers();
                 if (ids.__esModule) {
-                  throw specifier.buildCodeFrameError("Illegal export \"__esModule\"");
+                  throw specifier.buildCodeFrameError(
+                    'Illegal export "__esModule"',
+                  );
                 }
               }
             }
@@ -234,7 +301,7 @@ export default function () {
               if (typeof path.node._blockHoist === "number") {
                 importsEntry.maxBlockHoist = Math.max(
                   path.node._blockHoist,
-                  importsEntry.maxBlockHoist
+                  importsEntry.maxBlockHoist,
                 );
               }
 
@@ -251,7 +318,12 @@ export default function () {
                   topNodes.push(buildExportsAssignment(defNode, id));
                   path.replaceWith(declaration.node);
                 } else {
-                  topNodes.push(buildExportsAssignment(defNode, t.toExpression(declaration.node)));
+                  topNodes.push(
+                    buildExportsAssignment(
+                      defNode,
+                      t.toExpression(declaration.node),
+                    ),
+                  );
                   path.remove();
                 }
               } else if (declaration.isClassDeclaration()) {
@@ -264,7 +336,12 @@ export default function () {
                     buildExportsAssignment(defNode, id),
                   ]);
                 } else {
-                  path.replaceWith(buildExportsAssignment(defNode, t.toExpression(declaration.node)));
+                  path.replaceWith(
+                    buildExportsAssignment(
+                      defNode,
+                      t.toExpression(declaration.node),
+                    ),
+                  );
 
                   // Manualy re-queue `export default class {}` expressions so that the ES3 transform
                   // has an opportunity to convert them. Ideally this would happen automatically from the
@@ -272,7 +349,12 @@ export default function () {
                   path.parentPath.requeue(path.get("expression.left"));
                 }
               } else {
-                path.replaceWith(buildExportsAssignment(t.identifier("default"), declaration.node));
+                path.replaceWith(
+                  buildExportsAssignment(
+                    t.identifier("default"),
+                    declaration.node,
+                  ),
+                );
 
                 // Manualy re-queue `export default foo;` expressions so that the ES3 transform
                 // has an opportunity to convert them. Ideally this would happen automatically from the
@@ -296,21 +378,27 @@ export default function () {
                   ]);
                   nonHoistedExportNames[id.name] = true;
                 } else if (declaration.isVariableDeclaration()) {
-                  const declarators = declaration.get("declarations");
-                  for (const decl of declarators) {
-                    const id = decl.get("id");
+                  const ids = declaration.getBindingIdentifierPaths();
+                  const exportsToInsert = [];
+                  for (const name in ids) {
+                    const id = ids[name];
+                    const { parentPath, node } = id;
 
-                    const init = decl.get("init");
-                    if (!init.node) init.replaceWith(t.identifier("undefined"));
+                    addTo(exports, name, node);
+                    nonHoistedExportNames[name] = true;
 
-                    if (id.isIdentifier()) {
-                      addTo(exports, id.node.name, id.node);
-                      init.replaceWith(buildExportsAssignment(id.node, init.node).expression);
-                      nonHoistedExportNames[id.node.name] = true;
+                    if (parentPath.isVariableDeclarator()) {
+                      const init = parentPath.get("init");
+                      const assignment = buildExportsAssignment(
+                        node,
+                        init.node || path.scope.buildUndefinedNode(),
+                      );
+                      init.replaceWith(assignment.expression);
                     } else {
-                      // todo
+                      exportsToInsert.push(buildExportsAssignment(node, node));
                     }
                   }
+                  path.insertAfter(exportsToInsert);
                   path.replaceWith(declaration.node);
                 }
                 continue;
@@ -329,15 +417,25 @@ export default function () {
                     // todo
                   } else if (specifier.isExportSpecifier()) {
                     if (!noInterop && specifier.node.local.name === "default") {
-                      topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name),
-                        t.memberExpression(
-                          t.callExpression(this.addHelper("interopRequireDefault"), [ref]),
-                          specifier.node.local
-                        )
-                      ));
+                      topNodes.push(
+                        buildExportsFrom(
+                          t.stringLiteral(specifier.node.exported.name),
+                          t.memberExpression(
+                            t.callExpression(
+                              this.addHelper("interopRequireDefault"),
+                              [ref],
+                            ),
+                            specifier.node.local,
+                          ),
+                        ),
+                      );
                     } else {
-                      topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name),
-                        t.memberExpression(ref, specifier.node.local)));
+                      topNodes.push(
+                        buildExportsFrom(
+                          t.stringLiteral(specifier.node.exported.name),
+                          t.memberExpression(ref, specifier.node.local),
+                        ),
+                      );
                     }
                     nonHoistedExportNames[specifier.node.exported.name] = true;
                   }
@@ -345,16 +443,28 @@ export default function () {
               } else {
                 for (const specifier of specifiers) {
                   if (specifier.isExportSpecifier()) {
-                    addTo(exports, specifier.node.local.name, specifier.node.exported);
+                    addTo(
+                      exports,
+                      specifier.node.local.name,
+                      specifier.node.exported,
+                    );
                     nonHoistedExportNames[specifier.node.exported.name] = true;
-                    nodes.push(buildExportsAssignment(specifier.node.exported, specifier.node.local));
+                    nodes.push(
+                      buildExportsAssignment(
+                        specifier.node.exported,
+                        specifier.node.local,
+                      ),
+                    );
                   }
                 }
               }
               path.replaceWithMultiple(nodes);
             } else if (path.isExportAllDeclaration()) {
               const exportNode = buildExportAll({
-                OBJECT: addRequire(path.node.source.value, path.node._blockHoist),
+                OBJECT: addRequire(
+                  path.node.source.value,
+                  path.node._blockHoist,
+                ),
               });
               exportNode.loc = path.node.loc;
               topNodes.push(exportNode);
@@ -380,8 +490,8 @@ export default function () {
                         specifier.local,
                         t.callExpression(
                           this.addHelper("interopRequireWildcard"),
-                          [uid]
-                        )
+                          [uid],
+                        ),
                       ),
                     ]);
 
@@ -393,7 +503,10 @@ export default function () {
                   }
                   wildcard = specifier.local;
                 } else if (t.isImportDefaultSpecifier(specifier)) {
-                  specifiers[i] = t.importSpecifier(specifier.local, t.identifier("default"));
+                  specifiers[i] = t.importSpecifier(
+                    specifier.local,
+                    t.identifier("default"),
+                  );
                 }
               }
 
@@ -404,14 +517,16 @@ export default function () {
                     if (wildcard) {
                       target = wildcard;
                     } else if (!noInterop) {
-                      target = wildcard = path.scope.generateUidIdentifier(uid.name);
+                      target = wildcard = path.scope.generateUidIdentifier(
+                        uid.name,
+                      );
                       const varDecl = t.variableDeclaration("var", [
                         t.variableDeclarator(
                           target,
                           t.callExpression(
                             this.addHelper("interopRequireDefault"),
-                            [uid]
-                          )
+                            [uid],
+                          ),
                         ),
                       ]);
 
@@ -422,8 +537,10 @@ export default function () {
                       topNodes.push(varDecl);
                     }
                   }
-                  remaps[specifier.local.name] = t.memberExpression(target,
-                    t.cloneWithoutLoc(specifier.imported));
+                  remaps[specifier.local.name] = t.memberExpression(
+                    target,
+                    t.cloneWithoutLoc(specifier.imported),
+                  );
                 }
               }
             } else {
@@ -435,25 +552,29 @@ export default function () {
           }
 
           if (hasImports && Object.keys(nonHoistedExportNames).length) {
-
             // avoid creating too long of export assignment to prevent stack overflow
             const maxHoistedExportsNodeAssignmentLength = 100;
             const nonHoistedExportNamesArr = Object.keys(nonHoistedExportNames);
 
             for (
               let currentExportsNodeAssignmentLength = 0;
-              currentExportsNodeAssignmentLength < nonHoistedExportNamesArr.length;
+              currentExportsNodeAssignmentLength <
+              nonHoistedExportNamesArr.length;
               currentExportsNodeAssignmentLength += maxHoistedExportsNodeAssignmentLength
             ) {
               const nonHoistedExportNamesChunk = nonHoistedExportNamesArr.slice(
                 currentExportsNodeAssignmentLength,
-                currentExportsNodeAssignmentLength + maxHoistedExportsNodeAssignmentLength);
+                currentExportsNodeAssignmentLength +
+                  maxHoistedExportsNodeAssignmentLength,
+              );
 
-              let hoistedExportsNode = t.identifier("undefined");
+              let hoistedExportsNode = scope.buildUndefinedNode();
 
-              nonHoistedExportNamesChunk.forEach(function (name) {
-                hoistedExportsNode = buildExportsAssignment(t.identifier(name), hoistedExportsNode)
-                  .expression;
+              nonHoistedExportNamesChunk.forEach(function(name) {
+                hoistedExportsNode = buildExportsAssignment(
+                  t.identifier(name),
+                  hoistedExportsNode,
+                ).expression;
               });
 
               const node = t.expressionStatement(hoistedExportsNode);
@@ -466,7 +587,9 @@ export default function () {
           // add __esModule declaration if this file has any exports
           if (hasExports && !strict) {
             let buildTemplate = buildExportsModuleDeclaration;
-            if (this.opts.loose) buildTemplate = buildLooseExportsModuleDeclaration;
+            if (this.opts.loose) {
+              buildTemplate = buildLooseExportsModuleDeclaration;
+            }
 
             const declar = buildTemplate();
             declar._blockHoist = 3;
@@ -479,7 +602,7 @@ export default function () {
             remaps,
             scope,
             exports,
-            requeueInParent: (newPath) => path.requeue(newPath),
+            requeueInParent: newPath => path.requeue(newPath),
           });
         },
       },

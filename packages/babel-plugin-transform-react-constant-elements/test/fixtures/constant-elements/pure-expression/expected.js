@@ -5,4 +5,3 @@ var Foo = React.createClass({
     return _ref;
   }
 });
-

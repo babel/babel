@@ -1,1 +1,1 @@
-add.apply(undefined, babelHelpers.toConsumableArray(numbers));
+add.apply(void 0, babelHelpers.toConsumableArray(numbers));

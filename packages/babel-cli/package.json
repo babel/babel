@@ -1,6 +1,6 @@
 {
   "name": "babel-cli",
-  "version": "7.0.0-alpha.9",
+  "version": "7.0.0-alpha.20",
   "description": "Babel command line.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -16,24 +16,24 @@
     "compiler"
   ],
   "dependencies": {
-    "babel-core": "7.0.0-alpha.9",
-    "babel-register": "7.0.0-alpha.9",
-    "babel-polyfill": "7.0.0-alpha.9",
+    "babel-core": "7.0.0-alpha.20",
+    "babel-polyfill": "7.0.0-alpha.20",
+    "babel-register": "7.0.0-alpha.20",
     "commander": "^2.8.1",
     "convert-source-map": "^1.1.0",
     "fs-readdir-recursive": "^1.0.0",
     "glob": "^7.0.0",
     "lodash": "^4.2.0",
-    "output-file-sync": "^1.1.0",
+    "output-file-sync": "^2.0.0",
     "slash": "^1.0.0",
     "source-map": "^0.5.0",
-    "v8flags": "^2.0.10"
+    "v8flags": "^3.0.0"
   },
   "optionalDependencies": {
     "chokidar": "^1.6.1"
   },
   "devDependencies": {
-    "babel-helper-fixtures": "7.0.0-alpha.9"
+    "babel-helper-fixtures": "7.0.0-alpha.20"
   },
   "bin": {
     "babel-doctor": "./bin/babel-doctor.js",

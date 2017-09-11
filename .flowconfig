@@ -1,6 +1,7 @@
 [ignore]
 .*/packages/.*/lib
 .*/packages/.*/test
+.*/node_modules/conventional-changelog-core/
 
 [include]
 packages/*/src
@@ -12,6 +13,5 @@ lib/types.js
 lib/third-party-libs.js.flow
 
 [options]
-strip_root=true
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 suppress_comment= \\(.\\|\n\\)*\\$FlowIssue

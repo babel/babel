@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-class-properties",
-  "version": "7.0.0-alpha.9",
+  "version": "7.0.0-alpha.20",
   "description": "This plugin transforms static class properties as well as properties declared with the property initializer syntax",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-class-properties",
   "license": "MIT",
@@ -9,11 +9,11 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-helper-function-name": "7.0.0-alpha.9",
-    "babel-plugin-syntax-class-properties": "7.0.0-alpha.9",
-    "babel-template": "7.0.0-alpha.9"
+    "babel-helper-function-name": "7.0.0-alpha.20",
+    "babel-plugin-syntax-class-properties": "7.0.0-alpha.20",
+    "babel-template": "7.0.0-alpha.20"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-alpha.9"
+    "babel-helper-plugin-test-runner": "7.0.0-alpha.20"
   }
 }

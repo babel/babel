@@ -10,8 +10,8 @@ export function chmod(src, dest) {
 }
 
 export function readdirFilter(filename) {
-  return readdir(filename).filter(function (filename) {
-    return babel.util.isCompilableExtension(filename);
+  return readdir(filename).filter(function(filename) {
+    return isCompilableExtension(filename);
   });
 }
 
@@ -20,7 +20,10 @@ export { readdir };
 /**
  * Test if a filename ends with a compilable extension.
  */
-export function isCompilableExtension(filename: string, altExts?: Array<string>): boolean {
+export function isCompilableExtension(
+  filename: string,
+  altExts?: Array<string>,
+): boolean {
   const exts = altExts || babel.DEFAULT_EXTENSIONS;
   const ext = path.extname(filename);
   return includes(exts, ext);
@@ -55,6 +58,22 @@ export function compile(filename, opts) {
   }
 }
 
+export function deleteDir(path) {
+  if (fs.existsSync(path)) {
+    fs.readdirSync(path).forEach(function(file) {
+      const curPath = path + "/" + file;
+      if (fs.lstatSync(curPath).isDirectory()) {
+        // recurse
+        deleteDir(curPath);
+      } else {
+        // delete file
+        fs.unlinkSync(curPath);
+      }
+    });
+    fs.rmdirSync(path);
+  }
+}
+
 function toErrorStack(err) {
   if (err._babel && err instanceof SyntaxError) {
     return `${err.name}: ${err.message}\n${err.codeFrame}`;
@@ -63,7 +82,7 @@ function toErrorStack(err) {
   }
 }
 
-process.on("uncaughtException", function (err) {
+process.on("uncaughtException", function(err) {
   console.error(toErrorStack(err));
   process.exit(1);
 });
@@ -74,7 +93,7 @@ export function requireChokidar() {
   } catch (err) {
     console.error(
       "The optional dependency chokidar failed to install and is required for " +
-      "--watch. Chokidar is likely not supported on your platform."
+        "--watch. Chokidar is likely not supported on your platform.",
     );
     throw err;
   }

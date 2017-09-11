@@ -12,7 +12,6 @@ try {
     try {
       for (var _iterator2 = f()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
         let e = _step2.value;
-
         continue b;
       }
     } catch (err) {
@@ -20,7 +19,7 @@ try {
       _iteratorError2 = err;
     } finally {
       try {
-        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+        if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
           _iterator2.return();
         }
       } finally {
@@ -35,7 +34,7 @@ try {
   _iteratorError = err;
 } finally {
   try {
-    if (!_iteratorNormalCompletion && _iterator.return) {
+    if (!_iteratorNormalCompletion && _iterator.return != null) {
       _iterator.return();
     }
   } finally {

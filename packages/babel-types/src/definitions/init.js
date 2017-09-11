@@ -5,3 +5,5 @@ import "./flow";
 import "./jsx";
 import "./misc";
 import "./experimental";
+import "./tsFlowCommon";
+import "./typescript";

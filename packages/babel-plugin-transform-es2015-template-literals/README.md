@@ -13,7 +13,7 @@
 **Out**
 
 ```javascript
-"foo" + bar;
+"foo".concat(bar);
 ```
 
 ## Installation
@@ -42,8 +42,7 @@ With options:
 {
   "plugins": [
     ["transform-es2015-template-literals", {
-      "loose": true,
-      "spec": true
+      "loose": true
     }]
   ]
 }
@@ -69,13 +68,9 @@ require("babel-core").transform("code", {
 
 `boolean`, defaults to `false`.
 
-In loose mode, tagged template literal objects aren't frozen.
+When `true`, tagged template literal objects aren't frozen. All template literal expressions and quasis are combined with the `+` operator instead of with `String.prototype.concat`.
 
-### `spec`
-
-`boolean`, defaults to `false`.
-
-This option wraps all template literal expressions with `String`. See [babel/babel#1065](https://github.com/babel/babel/issues/1065) for more info.
+When `false` or not set, all template literal expressions and quasis are combined with `String.prototype.concat`. It will handle cases with `Symbol.toPrimitive` correctly and throw correctly if template literal expression is a `Symbol()`. See [babel/babel#5791](https://github.com/babel/babel/pull/5791).
 
 **In**
 
@@ -86,5 +81,5 @@ This option wraps all template literal expressions with `String`. See [babel/bab
 **Out**
 
 ```javascript
-"foo" + String(bar);
+"foo" + bar;
 ```

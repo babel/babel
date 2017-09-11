@@ -1,12 +1,12 @@
 {
   "name": "babel-helper-regex",
-  "version": "7.0.0-alpha.9",
+  "version": "7.0.0-alpha.20",
   "description": "Helper function to check for literal RegEx",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-regex",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "lodash": "^4.2.0",
-    "babel-types": "7.0.0-alpha.9"
+    "babel-types": "7.0.0-alpha.20",
+    "lodash": "^4.2.0"
   }
 }

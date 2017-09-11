@@ -10,6 +10,7 @@
 /coverage
 dist
 /.package.json
+package-lock.json
 /packages/babel-runtime/core-js/**/*.js
 !/packages/babel-runtime/core-js/map.js
 /packages/babel-runtime/helpers/*.js
@@ -21,6 +22,10 @@ dist
 /packages/babel-runtime/helpers/es6/*.js
 !/packages/babel-runtime/helpers/es6/toArray.js
 /packages/babel-register/test/.babel
+/packages/babel-cli/test/tmp
+/packages/babel-node/test/tmp
 /packages/*/lib
 .nyc_output
 /babel.sublime-workspace
+packages/babel-standalone/babel.js
+packages/babel-standalone/babel.min.js

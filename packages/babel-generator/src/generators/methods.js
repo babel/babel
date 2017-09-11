@@ -3,20 +3,31 @@ import * as t from "babel-types";
 export function _params(node: Object) {
   this.print(node.typeParameters, node);
   this.token("(");
-  this.printList(node.params, node, {
-    iterator: (node) => {
-      if (node.optional) this.token("?");
-      this.print(node.typeAnnotation, node);
-    },
-  });
+  this._parameters(node.params, node);
   this.token(")");
 
-  if (node.returnType) {
-    this.print(node.returnType, node);
+  this.print(node.returnType, node);
+}
+
+export function _parameters(parameters, parent) {
+  for (let i = 0; i < parameters.length; i++) {
+    this._param(parameters[i], parent);
+
+    if (i < parameters.length - 1) {
+      this.token(",");
+      this.space();
+    }
   }
 }
 
-export function _method(node: Object) {
+export function _param(parameter, parent) {
+  this.printJoin(parameter.decorators, parameter);
+  this.print(parameter, parent);
+  if (parameter.optional) this.token("?"); // TS / flow
+  this.print(parameter.typeAnnotation, parameter); // TS / flow
+}
+
+export function _methodHead(node: Object) {
   const kind = node.kind;
   const key = node.key;
 
@@ -44,12 +55,25 @@ export function _method(node: Object) {
     this.print(key, node);
   }
 
+  if (node.optional) {
+    // TS
+    this.token("?");
+  }
+
   this._params(node);
-  this.space();
-  this.print(node.body, node);
 }
 
-export function FunctionExpression(node: Object) {
+export function _predicate(node: Object) {
+  if (node.predicate) {
+    if (!node.returnType) {
+      this.token(":");
+    }
+    this.space();
+    this.print(node.predicate, node);
+  }
+}
+
+export function _functionHead(node: Object) {
   if (node.async) {
     this.word("async");
     this.space();
@@ -57,14 +81,17 @@ export function FunctionExpression(node: Object) {
   this.word("function");
   if (node.generator) this.token("*");
 
+  this.space();
   if (node.id) {
-    this.space();
     this.print(node.id, node);
-  } else {
-    this.space();
   }
 
   this._params(node);
+  this._predicate(node);
+}
+
+export function FunctionExpression(node: Object) {
+  this._functionHead(node);
   this.space();
   this.print(node.body, node);
 }
@@ -79,11 +106,17 @@ export function ArrowFunctionExpression(node: Object) {
 
   const firstParam = node.params[0];
 
-  if (node.params.length === 1 && t.isIdentifier(firstParam) && !hasTypes(node, firstParam)) {
+  if (
+    node.params.length === 1 &&
+    t.isIdentifier(firstParam) &&
+    !hasTypes(node, firstParam)
+  ) {
     this.print(firstParam, node);
   } else {
     this._params(node);
   }
+
+  this._predicate(node);
 
   this.space();
   this.token("=>");
@@ -93,6 +126,11 @@ export function ArrowFunctionExpression(node: Object) {
 }
 
 function hasTypes(node, param) {
-  return node.typeParameters || node.returnType || param.typeAnnotation || param.optional ||
-    param.trailingComments;
+  return (
+    node.typeParameters ||
+    node.returnType ||
+    param.typeAnnotation ||
+    param.optional ||
+    param.trailingComments
+  );
 }

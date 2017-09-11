@@ -1,7 +1,7 @@
 class AnchorLink extends Component {
   render() {
-    var _props = this.props;
-    const isExternal = _props.isExternal,
+    const _props = this.props,
+          isExternal = _props.isExternal,
           children = _props.children;
 
     if (isExternal) {
@@ -10,4 +10,5 @@ class AnchorLink extends Component {
 
     return <Link>{children}</Link>;
   }
+
 }

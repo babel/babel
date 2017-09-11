@@ -7,7 +7,7 @@ System.register([], function (_export, _context) {
     });
   }
 
-  _export('lazyLoadOperation', lazyLoadOperation);
+  _export("lazyLoadOperation", lazyLoadOperation);
 
   return {
     setters: [],

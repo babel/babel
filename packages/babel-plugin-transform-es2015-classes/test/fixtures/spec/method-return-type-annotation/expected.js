@@ -5,7 +5,7 @@ var C = function () {
   }
 
   babelHelpers.createClass(C, [{
-    key: 'm',
+    key: "m",
     value: function m(x: number): string {
       return 'a';
     }
