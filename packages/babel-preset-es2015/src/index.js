@@ -68,7 +68,7 @@ export default function(context, opts = {}) {
       transformES2015UnicodeRegex,
       checkES2015Constants,
       [transformES2015Spread, optsLoose],
-      transformES2015Parameters,
+      [transformES2015Parameters, optsLoose],
       [transformES2015Destructuring, optsLoose],
       transformES2015BlockScoping,
       transformES2015TypeofSymbol,
