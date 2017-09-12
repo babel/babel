@@ -708,7 +708,7 @@ See also `t.isExportNamedDeclaration(node, opts)` and `t.assertExportNamedDeclar
 Aliases: `Statement`, `Declaration`, `ModuleDeclaration`, `ExportDeclaration`
 
  - `declaration`: `Declaration` (default: `null`)
- - `specifiers`: `Array<ExportSpecifier>` (required)
+ - `specifiers`: `Array<ExportSpecifier | ExportDefaultSpecifier | ExportNamespaceSpecifier>` (required)
  - `source`: `StringLiteral` (default: `null`)
 
 ---
@@ -2605,7 +2605,7 @@ See also `t.isTypeParameterInstantiation(node, opts)` and `t.assertTypeParameter
 
 Aliases: `Flow`
 
- - `params`: `Array<TSType | FlowType>` (required)
+ - `params`: `Array<TSType | Flow>` (required)
 
 ---
 
