@@ -81,7 +81,6 @@ function hasBlacklistedType(path, state) {
 
 traverse.hasType = function(
   tree: Object,
-  scope: Object,
   type: Object,
   blacklistTypes: Array<string>,
 ): boolean {
@@ -99,10 +98,11 @@ traverse.hasType = function(
   traverse(
     tree,
     {
+      noScope: true,
       blacklist: blacklistTypes,
       enter: hasBlacklistedType,
     },
-    scope,
+    null,
     state,
   );
 
