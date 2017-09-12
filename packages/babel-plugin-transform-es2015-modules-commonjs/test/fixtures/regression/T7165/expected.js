@@ -3,11 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var _exportNames = [];
 
 var _bar = require("bar");
 
 Object.keys(_bar).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
+  if (_exportNames.indexOf(key) !== -1) return;
   Object.defineProperty(exports, key, {
     enumerable: true,
     get: function () {

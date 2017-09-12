@@ -33,6 +33,7 @@ const buildExportsAssignment = template(`
 const buildExportAll = template(`
   Object.keys(OBJECT).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
+    if (EXPORT_NAMES.indexOf(key) !== -1) return;
     Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {
@@ -40,6 +41,10 @@ const buildExportAll = template(`
       }
     });
   });
+`);
+
+const buildExportNames = template(`
+  var $0 = $1;
 `);
 
 const THIS_BREAK_KEYS = [
@@ -206,6 +211,9 @@ export default function() {
       },
 
       Program: {
+        enter(path) {
+          this.exportNamesIdentifier = path.scope.generateUidIdentifier("exportNames");
+        },
         exit(path) {
           this.ranCommonJS = true;
 
@@ -222,10 +230,13 @@ export default function() {
           let hasExports = false;
           let hasImports = false;
 
+          let needsExportNames = false;
+
           const body: Array<Object> = path.get("body");
           const imports = Object.create(null);
           const exports = Object.create(null);
 
+          const allExportNames = Object.create(null);
           const nonHoistedExportNames = Object.create(null);
 
           const topNodes = [];
@@ -369,6 +380,7 @@ export default function() {
                   addTo(exports, id.name, id);
                   topNodes.push(buildExportsAssignment(id, id));
                   path.replaceWith(declaration.node);
+                  allExportNames[id.name] = true;
                 } else if (declaration.isClassDeclaration()) {
                   const id = declaration.node.id;
                   addTo(exports, id.name, id);
@@ -377,6 +389,7 @@ export default function() {
                     buildExportsAssignment(id, id),
                   ]);
                   nonHoistedExportNames[id.name] = true;
+                  allExportNames[id.name] = true;
                 } else if (declaration.isVariableDeclaration()) {
                   const ids = declaration.getBindingIdentifierPaths();
                   const exportsToInsert = [];
@@ -386,6 +399,7 @@ export default function() {
 
                     addTo(exports, name, node);
                     nonHoistedExportNames[name] = true;
+                    allExportNames[id.node.name] = true;
 
                     if (parentPath.isVariableDeclarator()) {
                       const init = parentPath.get("init");
@@ -437,6 +451,9 @@ export default function() {
                         ),
                       );
                     }
+                    if (specifier.node.exported.name !== "default") {
+                      allExportNames[specifier.node.exported.name] = true;
+                    }
                     nonHoistedExportNames[specifier.node.exported.name] = true;
                   }
                 }
@@ -455,17 +472,22 @@ export default function() {
                         specifier.node.local,
                       ),
                     );
+                    if (specifier.node.exported.name !== "default") {
+                      allExportNames[specifier.node.exported.name] = true;
+                    }
                   }
                 }
               }
               path.replaceWithMultiple(nodes);
             } else if (path.isExportAllDeclaration()) {
               const exportNode = buildExportAll({
+                EXPORT_NAMES: this.exportNamesIdentifier,
                 OBJECT: addRequire(
                   path.node.source.value,
                   path.node._blockHoist,
                 ),
               });
+              needsExportNames = true;
               exportNode.loc = path.node.loc;
               topNodes.push(exportNode);
               path.remove();
@@ -582,6 +604,10 @@ export default function() {
 
               topNodes.unshift(node);
             }
+          }
+
+          if (needsExportNames) {
+            topNodes.unshift(buildExportNames(this.exportNamesIdentifier, t.valueToNode(Object.keys(allExportNames))));
           }
 
           // add __esModule declaration if this file has any exports
