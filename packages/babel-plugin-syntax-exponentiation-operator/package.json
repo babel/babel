@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-syntax-exponentiation-operator",
-  "version": "7.0.0-alpha.20",
+  "version": "7.0.0-beta.0",
   "description": "Allow parsing of the exponentiation operator",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-exponentation-operator",
   "license": "MIT",
