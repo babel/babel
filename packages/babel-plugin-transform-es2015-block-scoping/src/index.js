@@ -480,7 +480,6 @@ class BlockScoping {
     // handle generators
     const hasYield = traverse.hasType(
       fn.body,
-      this.scope,
       "YieldExpression",
       t.FUNCTION_TYPES,
     );
@@ -493,7 +492,6 @@ class BlockScoping {
     // handlers async functions
     const hasAsync = traverse.hasType(
       fn.body,
-      this.scope,
       "AwaitExpression",
       t.FUNCTION_TYPES,
     );
