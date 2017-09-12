@@ -42,6 +42,13 @@ const buildExportAll = template(`
   });
 `);
 
+const buildExportAllLoose = template(`
+  Object.keys(OBJECT).forEach(function(key) {
+    if(key==='default' || key === '__esModule') return;
+    exports[key] = obj[key];
+  });
+`);
+
 const THIS_BREAK_KEYS = [
   "FunctionExpression",
   "FunctionDeclaration",
@@ -460,12 +467,17 @@ export default function() {
               }
               path.replaceWithMultiple(nodes);
             } else if (path.isExportAllDeclaration()) {
-              const exportNode = buildExportAll({
+              const obj = {
                 OBJECT: addRequire(
                   path.node.source.value,
                   path.node._blockHoist,
                 ),
-              });
+              };
+
+              let exportNode = buildExportAll(obj);
+              if (this.opts.loose) {
+                exportNode = buildExportAllLoose(obj);
+              }
               exportNode.loc = path.node.loc;
               topNodes.push(exportNode);
               path.remove();
