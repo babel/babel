@@ -12,10 +12,10 @@
     "url": "https://github.com/babel/babel-eslint.git"
   },
   "dependencies": {
-    "babel-code-frame": "7.0.0-alpha.17",
-    "babel-traverse": "7.0.0-alpha.17",
-    "babel-types": "7.0.0-alpha.17",
-    "babylon": "7.0.0-beta.18"
+    "babel-code-frame": "7.0.0-beta.0",
+    "babel-traverse": "7.0.0-beta.0",
+    "babel-types": "7.0.0-beta.0",
+    "babylon": "7.0.0-beta.22"
   },
   "scripts": {
     "test": "npm run lint && npm run test-only",

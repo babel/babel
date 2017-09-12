@@ -81,19 +81,19 @@ babel-code-frame@7.0.0-alpha.12:
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-babel-code-frame@7.0.0-alpha.17:
-  version "7.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/babel-code-frame/-/babel-code-frame-7.0.0-alpha.17.tgz#06a5daddb0946d8e95392477065a86480474f19c"
-  dependencies:
-    chalk "^2.0.0"
-    esutils "^2.0.2"
-    js-tokens "^3.0.0"
-
 babel-code-frame@7.0.0-alpha.3:
   version "7.0.0-alpha.3"
   resolved "https://registry.yarnpkg.com/babel-code-frame/-/babel-code-frame-7.0.0-alpha.3.tgz#9ff265eaaac94b58dfc7ca4a4eecf389d5f4d344"
   dependencies:
     chalk "^1.1.0"
+    esutils "^2.0.2"
+    js-tokens "^3.0.0"
+
+babel-code-frame@7.0.0-beta.0:
+  version "7.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/babel-code-frame/-/babel-code-frame-7.0.0-beta.0.tgz#418a7b5f3f7dc9a4670e61b1158b4c5661bec98d"
+  dependencies:
+    chalk "^2.0.0"
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
@@ -114,15 +114,6 @@ babel-eslint@^8.0.0-alpha.13:
     babel-types "7.0.0-alpha.12"
     babylon "7.0.0-beta.14"
 
-babel-helper-function-name@7.0.0-alpha.17:
-  version "7.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/babel-helper-function-name/-/babel-helper-function-name-7.0.0-alpha.17.tgz#b976290af579712345ecd6a146e6dff86b47b8ed"
-  dependencies:
-    babel-helper-get-function-arity "7.0.0-alpha.17"
-    babel-template "7.0.0-alpha.17"
-    babel-traverse "7.0.0-alpha.17"
-    babel-types "7.0.0-alpha.17"
-
 babel-helper-function-name@7.0.0-alpha.7:
   version "7.0.0-alpha.7"
   resolved "https://registry.yarnpkg.com/babel-helper-function-name/-/babel-helper-function-name-7.0.0-alpha.7.tgz#19aecddc5402f941c5726802993077b41ea9832d"
@@ -132,11 +123,14 @@ babel-helper-function-name@7.0.0-alpha.7:
     babel-traverse "7.0.0-alpha.7"
     babel-types "7.0.0-alpha.7"
 
-babel-helper-get-function-arity@7.0.0-alpha.17:
-  version "7.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/babel-helper-get-function-arity/-/babel-helper-get-function-arity-7.0.0-alpha.17.tgz#f9ee3be4b6e892235ee790a8849ada1f88eedcf1"
+babel-helper-function-name@7.0.0-beta.0:
+  version "7.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/babel-helper-function-name/-/babel-helper-function-name-7.0.0-beta.0.tgz#d1b6779b647e5c5c31ebeb05e13b998e4d352d56"
   dependencies:
-    babel-types "7.0.0-alpha.17"
+    babel-helper-get-function-arity "7.0.0-beta.0"
+    babel-template "7.0.0-beta.0"
+    babel-traverse "7.0.0-beta.0"
+    babel-types "7.0.0-beta.0"
 
 babel-helper-get-function-arity@7.0.0-alpha.7:
   version "7.0.0-alpha.7"
@@ -144,26 +138,23 @@ babel-helper-get-function-arity@7.0.0-alpha.7:
   dependencies:
     babel-types "7.0.0-alpha.7"
 
+babel-helper-get-function-arity@7.0.0-beta.0:
+  version "7.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/babel-helper-get-function-arity/-/babel-helper-get-function-arity-7.0.0-beta.0.tgz#9d1ab7213bb5efe1ef1638a8ea1489969b5a8b6e"
+  dependencies:
+    babel-types "7.0.0-beta.0"
+
 babel-messages@7.0.0-alpha.12:
   version "7.0.0-alpha.12"
   resolved "https://registry.yarnpkg.com/babel-messages/-/babel-messages-7.0.0-alpha.12.tgz#5fda840cb8dfeda06a7894a1e8ab1af695f249c0"
-
-babel-messages@7.0.0-alpha.17:
-  version "7.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/babel-messages/-/babel-messages-7.0.0-alpha.17.tgz#777d7f82656d5e3526c1f4c74aaaba99b260d7db"
 
 babel-messages@7.0.0-alpha.3:
   version "7.0.0-alpha.3"
   resolved "https://registry.yarnpkg.com/babel-messages/-/babel-messages-7.0.0-alpha.3.tgz#c8390a468478b8384da134612e12a6bc31a684e9"
 
-babel-template@7.0.0-alpha.17:
-  version "7.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/babel-template/-/babel-template-7.0.0-alpha.17.tgz#085597c0021644c72fa74460a8f76a85e76da943"
-  dependencies:
-    babel-traverse "7.0.0-alpha.17"
-    babel-types "7.0.0-alpha.17"
-    babylon "7.0.0-beta.18"
-    lodash "^4.2.0"
+babel-messages@7.0.0-beta.0:
+  version "7.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/babel-messages/-/babel-messages-7.0.0-beta.0.tgz#6df01296e49fc8fbd0637394326a167f36da817b"
 
 babel-template@7.0.0-alpha.7:
   version "7.0.0-alpha.7"
@@ -172,6 +163,15 @@ babel-template@7.0.0-alpha.7:
     babel-traverse "7.0.0-alpha.7"
     babel-types "7.0.0-alpha.7"
     babylon "7.0.0-beta.8"
+    lodash "^4.2.0"
+
+babel-template@7.0.0-beta.0:
+  version "7.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/babel-template/-/babel-template-7.0.0-beta.0.tgz#85083cf9e4395d5e48bf5154d7a8d6991cafecfb"
+  dependencies:
+    babel-traverse "7.0.0-beta.0"
+    babel-types "7.0.0-beta.0"
+    babylon "7.0.0-beta.22"
     lodash "^4.2.0"
 
 babel-traverse@7.0.0-alpha.12:
@@ -188,20 +188,6 @@ babel-traverse@7.0.0-alpha.12:
     invariant "^2.2.0"
     lodash "^4.2.0"
 
-babel-traverse@7.0.0-alpha.17:
-  version "7.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/babel-traverse/-/babel-traverse-7.0.0-alpha.17.tgz#c8a33788274bc4138c529ec9c29f0bacb573f42c"
-  dependencies:
-    babel-code-frame "7.0.0-alpha.17"
-    babel-helper-function-name "7.0.0-alpha.17"
-    babel-messages "7.0.0-alpha.17"
-    babel-types "7.0.0-alpha.17"
-    babylon "7.0.0-beta.18"
-    debug "^2.2.0"
-    globals "^10.0.0"
-    invariant "^2.2.0"
-    lodash "^4.2.0"
-
 babel-traverse@7.0.0-alpha.7:
   version "7.0.0-alpha.7"
   resolved "https://registry.yarnpkg.com/babel-traverse/-/babel-traverse-7.0.0-alpha.7.tgz#61cc89061b0ad0a5f9fc6df81117fac428bc4148"
@@ -215,6 +201,20 @@ babel-traverse@7.0.0-alpha.7:
     invariant "^2.2.0"
     lodash "^4.2.0"
 
+babel-traverse@7.0.0-beta.0:
+  version "7.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/babel-traverse/-/babel-traverse-7.0.0-beta.0.tgz#da14be9b762f62a2f060db464eaafdd8cd072a41"
+  dependencies:
+    babel-code-frame "7.0.0-beta.0"
+    babel-helper-function-name "7.0.0-beta.0"
+    babel-messages "7.0.0-beta.0"
+    babel-types "7.0.0-beta.0"
+    babylon "7.0.0-beta.22"
+    debug "^3.0.1"
+    globals "^10.0.0"
+    invariant "^2.2.0"
+    lodash "^4.2.0"
+
 babel-types@7.0.0-alpha.12:
   version "7.0.0-alpha.12"
   resolved "https://registry.yarnpkg.com/babel-types/-/babel-types-7.0.0-alpha.12.tgz#d7b2c6d0c49c518fd36de5ac14f4f50bed6de7e5"
@@ -222,14 +222,6 @@ babel-types@7.0.0-alpha.12:
     esutils "^2.0.2"
     lodash "^4.2.0"
     to-fast-properties "^1.0.1"
-
-babel-types@7.0.0-alpha.17:
-  version "7.0.0-alpha.17"
-  resolved "https://registry.yarnpkg.com/babel-types/-/babel-types-7.0.0-alpha.17.tgz#bc74e19423b015a5ce88727440fc6ae863463dc0"
-  dependencies:
-    esutils "^2.0.2"
-    lodash "^4.2.0"
-    to-fast-properties "^2.0.0"
 
 babel-types@7.0.0-alpha.7:
   version "7.0.0-alpha.7"
@@ -239,6 +231,14 @@ babel-types@7.0.0-alpha.7:
     lodash "^4.2.0"
     to-fast-properties "^1.0.1"
 
+babel-types@7.0.0-beta.0:
+  version "7.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/babel-types/-/babel-types-7.0.0-beta.0.tgz#eb8b6e556470e6dcc4aef982d79ad229469b5169"
+  dependencies:
+    esutils "^2.0.2"
+    lodash "^4.2.0"
+    to-fast-properties "^2.0.0"
+
 babylon@7.0.0-beta.12:
   version "7.0.0-beta.12"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.12.tgz#f7b9c8a89ff7d6afb57b906d947a4237f9bf53f9"
@@ -247,9 +247,9 @@ babylon@7.0.0-beta.14:
   version "7.0.0-beta.14"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.14.tgz#72aa3c493c984c2edc54d4bc077b74066ed4511d"
 
-babylon@7.0.0-beta.18:
-  version "7.0.0-beta.18"
-  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.18.tgz#5c23ee3fdb66358aabf3789779319c5b78a233c7"
+babylon@7.0.0-beta.22:
+  version "7.0.0-beta.22"
+  resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.22.tgz#74f0ad82ed7c7c3cfeab74cf684f815104161b65"
 
 babylon@7.0.0-beta.8:
   version "7.0.0-beta.8"
@@ -407,6 +407,12 @@ debug@2.6.0:
 debug@^2.2.0, debug@^2.6.8:
   version "2.6.8"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.8.tgz#e731531ca2ede27d188222427da17821d68ff4fc"
+  dependencies:
+    ms "2.0.0"
+
+debug@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/debug/-/debug-3.0.1.tgz#0564c612b521dc92d9f2988f0549e34f9c98db64"
   dependencies:
     ms "2.0.0"
 
