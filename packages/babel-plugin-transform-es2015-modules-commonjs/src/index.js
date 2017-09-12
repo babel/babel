@@ -43,8 +43,8 @@ const buildExportAll = template(`
 `);
 
 const buildExportAllLoose = template(`
-  Object.keys(OBJECT).forEach(function(key) {
-    if(key==="default" || key === "__esModule") return;
+  Object.keys(OBJECT).forEach(function (key) {
+    if (key === "default" || key === "__esModule") return;
     exports[key] = obj[key];
   });
 `);
