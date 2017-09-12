@@ -44,7 +44,7 @@ const buildExportAll = template(`
 
 const buildExportAllLoose = template(`
   Object.keys(OBJECT).forEach(function(key) {
-    if(key==='default' || key === '__esModule') return;
+    if(key==="default" || key === "__esModule") return;
     exports[key] = obj[key];
   });
 `);
@@ -218,6 +218,7 @@ export default function() {
 
           const strict = !!this.opts.strict;
           const noInterop = !!this.opts.noInterop;
+          const loose = !!this.opts.loose;
 
           const { scope } = path;
 
@@ -474,10 +475,9 @@ export default function() {
                 ),
               };
 
-              let exportNode = buildExportAll(obj);
-              if (this.opts.loose) {
-                exportNode = buildExportAllLoose(obj);
-              }
+              const exportNode = loose
+                ? buildExportAllLoose(obj)
+                : buildExportAll(obj);
               exportNode.loc = path.node.loc;
               topNodes.push(exportNode);
               path.remove();
