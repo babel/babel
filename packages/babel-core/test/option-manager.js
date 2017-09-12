@@ -44,8 +44,7 @@ describe("option-manager", () => {
     });
   });
 
-  describe("source type", () => {
-
+  describe("source type", function() {
     it("should set module for .mjs extension", () => {
       const config = manageOptions({
         sourceType: "program",
@@ -56,8 +55,7 @@ describe("option-manager", () => {
     });
   });
 
-  describe("presets", function () {
-
+  describe("presets", function() {
     function presetTest(name) {
       it(name, function() {
         const { options, passes } = manageOptions({
