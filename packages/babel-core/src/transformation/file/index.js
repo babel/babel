@@ -223,13 +223,12 @@ export default class File extends Store {
     return t.identifier(id.name);
   }
 
-  addHelper(name: string): Object {
+  addHelper(name: string, deps: Array<string>): Object {
     const declar = this.declarations[name];
     if (declar) return declar;
 
     if (!this.usedHelpers[name]) {
       this.metadata.usedHelpers.push(name);
-      this.usedHelpers[name] = true;
     }
 
     const generator = this.get("helperGenerator");
@@ -241,7 +240,18 @@ export default class File extends Store {
       return t.memberExpression(runtime, t.identifier(name));
     }
 
-    const ref = getHelper(name);
+    const opts = {};
+    if (deps) {
+      for (const dep in deps) {
+        if (!this.usedHelpers[name]) {
+          throw "Helper dependencies must be added to the file first";
+        } else {
+          opts["babelHelpers." + dep] = this.usedHelpers[name];
+        }
+      }
+    }
+
+    const ref = getHelper(name, opts);
     const uid = (this.declarations[name] = this.scope.generateUidIdentifier(
       name,
     ));
@@ -259,6 +269,8 @@ export default class File extends Store {
         unique: true,
       });
     }
+
+    this.usedHelpers[name] = uid.name;
 
     return uid;
   }
