@@ -1,6 +1,6 @@
 import {
   rewriteModuleStatementsAndPrepareHeader,
-  getSourceMetadataArray,
+  isSideEffectImport,
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
@@ -42,15 +42,13 @@ export default function({ types: t }) {
             noInterop,
           });
 
-          getSourceMetadataArray(
-            meta,
-          ).forEach(([source, metadata, isSideEffect]) => {
+          for (const [source, metadata] of meta.source) {
             const loadExpr = t.callExpression(t.identifier("require"), [
               t.stringLiteral(source),
             ]);
 
             let header;
-            if (isSideEffect) {
+            if (isSideEffectImport(metadata)) {
               header = t.expressionStatement(loadExpr);
             } else {
               header = t.variableDeclaration("var", [
@@ -64,7 +62,7 @@ export default function({ types: t }) {
 
             headers.push(header);
             headers.push(...buildNamespaceInitStatements(meta, metadata));
-          });
+          }
 
           ensureStatementsHoisted(headers);
           path.unshiftContainer("body", headers);
