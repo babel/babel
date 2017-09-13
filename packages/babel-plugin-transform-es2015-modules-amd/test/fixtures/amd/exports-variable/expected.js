@@ -1,24 +1,33 @@
-define(["exports"], function (exports) {
+define(["exports"], function (_exports) {
   "use strict";
 
-  Object.defineProperty(exports, "__esModule", {
+  Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  exports.foo8 = foo8;
-  var foo = exports.foo = 1;
-  var foo2 = exports.foo2 = 1,
-      bar = exports.bar = 2;
+  _exports.foo8 = foo8;
+  _exports.foo9 = _exports.foo7 = _exports.foo6 = _exports.foo5 = _exports.foo4 = _exports.foo3 = _exports.bar = _exports.foo2 = _exports.foo = void 0;
+  var foo = 1;
+  _exports.foo = foo;
+  var foo2 = 1,
+      bar = 2;
+  _exports.bar = bar;
+  _exports.foo2 = foo2;
 
-  var foo3 = exports.foo3 = function () {};
+  var foo3 = function () {};
 
-  var foo4 = exports.foo4 = void 0;
-  let foo5 = exports.foo5 = 2;
-  let foo6 = exports.foo6 = void 0;
-  const foo7 = exports.foo7 = 3;
+  _exports.foo3 = foo3;
+  var foo4;
+  _exports.foo4 = foo4;
+  let foo5 = 2;
+  _exports.foo5 = foo5;
+  let foo6;
+  _exports.foo6 = foo6;
+  const foo7 = 3;
+  _exports.foo7 = foo7;
 
   function foo8() {}
 
   class foo9 {}
 
-  exports.foo9 = foo9;
+  _exports.foo9 = foo9;
 });

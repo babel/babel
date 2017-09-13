@@ -5,15 +5,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _net = require("net");
-
-var _net2 = babelHelpers.interopRequireDefault(_net);
+var _net = babelHelpers.interopRequireDefault(require("net"));
 
 var _events = require("events");
 
-var _binarySerializer = require("./helpers/binary-serializer");
-
-var _binarySerializer2 = babelHelpers.interopRequireDefault(_binarySerializer);
+var _binarySerializer = babelHelpers.interopRequireDefault(require("./helpers/binary-serializer"));
 
 // import ...
 var Connection =
@@ -35,7 +31,7 @@ function (_EventEmitter) {
   babelHelpers.createClass(Connection, [{
     key: "send",
     value: function send(message) {
-      this.sock.write(_binarySerializer2.default.serializeMessage(message));
+      this.sock.write(_binarySerializer.default.serializeMessage(message));
     }
   }, {
     key: "disconnect",

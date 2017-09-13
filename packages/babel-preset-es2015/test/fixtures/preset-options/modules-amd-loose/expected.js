@@ -1,8 +1,8 @@
-define(["exports"], function (exports) {
+define(["exports"], function (_exports) {
   "use strict";
 
-  exports.__esModule = true;
-  exports.a = a;
+  _exports.__esModule = true;
+  _exports.a = a;
 
   function a() {}
 });

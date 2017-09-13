@@ -10,15 +10,15 @@
     factory(mod.exports, global.foo);
     global.actual = mod.exports;
   }
-})(this, function (exports, _foo) {
+})(this, function (_exports, _foo) {
   "use strict";
 
-  Object.defineProperty(exports, "__esModule", {
+  Object.defineProperty(_exports, "__esModule", {
     value: true
   });
   Object.keys(_foo).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
-    Object.defineProperty(exports, key, {
+    Object.defineProperty(_exports, key, {
       enumerable: true,
       get: function () {
         return _foo[key];

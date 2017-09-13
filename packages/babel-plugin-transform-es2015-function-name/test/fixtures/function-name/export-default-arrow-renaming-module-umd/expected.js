@@ -10,18 +10,21 @@
     factory(mod.exports);
     global.actual = mod.exports;
   }
-})(this, function (exports) {
+})(this, function (_exports) {
   "use strict";
 
-  Object.defineProperty(exports, "__esModule", {
+  Object.defineProperty(_exports, "__esModule", {
     value: true
   });
+  _exports.default = void 0;
 
-  exports.default = function (_a) {
+  var _default = function _default(_a) {
     return {
       a: function a() {
         return _a;
       }
     };
   };
+
+  _exports.default = _default;
 });

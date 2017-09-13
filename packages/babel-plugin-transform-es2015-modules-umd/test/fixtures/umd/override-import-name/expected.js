@@ -10,6 +10,6 @@
     factory(global.baz);
     global.actual = mod.exports;
   }
-})(this, function () {
+})(this, function (_babelTemplate) {
   "use strict";
 });

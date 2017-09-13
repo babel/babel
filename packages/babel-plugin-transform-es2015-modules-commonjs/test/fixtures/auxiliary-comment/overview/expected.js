@@ -56,6 +56,8 @@ _foo5 = require("foo5")
 /*after*/
 ;
 
+var test;
+
 /*before*/
 exports.
 /*after*/

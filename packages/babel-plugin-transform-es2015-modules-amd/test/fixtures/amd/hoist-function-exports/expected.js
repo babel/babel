@@ -1,19 +1,21 @@
-define(["exports", "./evens"], function (exports, _evens) {
+define(["exports", "./evens"], function (_exports, _evens) {
   "use strict";
 
-  Object.defineProperty(exports, "__esModule", {
+  Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  exports.isOdd = void 0;
-  exports.nextOdd = nextOdd;
+  _exports.nextOdd = nextOdd;
+  _exports.isOdd = void 0;
 
   function nextOdd(n) {
     return (0, _evens.isEven)(n) ? n + 1 : n + 2;
   }
 
-  var isOdd = exports.isOdd = function (isEven) {
+  var isOdd = function (isEven) {
     return function (n) {
       return !isEven(n);
     };
   }(_evens.isEven);
+
+  _exports.isOdd = isOdd;
 });

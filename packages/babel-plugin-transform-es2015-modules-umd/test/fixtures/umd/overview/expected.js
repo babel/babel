@@ -10,17 +10,20 @@
     factory(mod.exports, global.foo, global.fooBar, global.fooBar);
     global.actual = mod.exports;
   }
-})(this, function (exports, _foo) {
+})(this, function (_exports, foo2, _fooBar, _fooBar2) {
   "use strict";
 
-  Object.defineProperty(exports, "__esModule", {
+  Object.defineProperty(_exports, "__esModule", {
     value: true
   });
-  exports.test2 = exports.test = void 0;
-  var foo2 = babelHelpers.interopRequireWildcard(_foo);
-  exports.test = test;
-  var test2 = exports.test2 = 5;
-  exports.default = test;
-  _foo.bar;
-  _foo.foo;
+  _exports.default = _exports.test2 = _exports.test = void 0;
+  foo2 = babelHelpers.interopRequireWildcard(foo2);
+  var test;
+  _exports.test = test;
+  var test2 = 5;
+  _exports.test2 = test2;
+  var _default = test;
+  _exports.default = _default;
+  foo2.bar;
+  foo2.foo;
 });

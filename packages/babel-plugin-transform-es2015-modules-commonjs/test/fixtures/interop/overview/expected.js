@@ -23,6 +23,7 @@ var _foo4 = require("foo4");
 
 var _foo5 = require("foo5");
 
+var test;
 exports.test = test;
 var test2 = exports.test2 = 5;
 _foo4.bar;
