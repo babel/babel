@@ -50,7 +50,8 @@ export default function({ types: t }) {
       }
 
       if (!state.fileNameIdentifier) {
-        const fileName = state.file.opts.filename;
+        // Default to an empty string in case no filename was supplied in the transform
+        const fileName = state.file.opts.filename || "";
 
         const fileNameIdentifier = path.scope.generateUidIdentifier(
           FILE_NAME_VAR,
