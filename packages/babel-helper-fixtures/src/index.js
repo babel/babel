@@ -84,11 +84,11 @@ export default function get(entryLoc): Array<Suite> {
 
     function push(taskName, taskDir) {
       const actualLocAlias = suiteName + "/" + taskName + "/actual.js";
-      let expectLocAlias = suiteName + "/" + taskName + "/expected.js";
+      const expectLocAlias = suiteName + "/" + taskName + "/expected.js";
       const execLocAlias = suiteName + "/" + taskName + "/exec.js";
 
       const actualLoc = taskDir + "/actual.js";
-      let expectLoc = taskDir + "/expected.js";
+      const expectLoc = taskDir + "/expected.js";
       let execLoc = taskDir + "/exec.js";
 
       if (fs.statSync(taskDir).isFile()) {
@@ -96,11 +96,6 @@ export default function get(entryLoc): Array<Suite> {
         if (ext !== ".js" && ext !== ".module.js") return;
 
         execLoc = taskDir;
-      }
-
-      if (resolve.relative(expectLoc + "on")) {
-        expectLoc += "on";
-        expectLocAlias += "on";
       }
 
       const taskOpts = cloneDeep(suite.options);
