@@ -9,10 +9,10 @@ test("Doesn't use the same object for two different nodes in the AST", function(
   }).ast;
 
   assert.equal(ast.program.body[0].declarations[0].id.type, "Identifier");
-  assert.equal(ast.program.body[2].expression.type, "MemberExpression");
-  assert.equal(ast.program.body[2].expression.object.type, "Identifier");
   assert.equal(ast.program.body[3].expression.type, "MemberExpression");
   assert.equal(ast.program.body[3].expression.object.type, "Identifier");
+  assert.equal(ast.program.body[4].expression.type, "MemberExpression");
+  assert.equal(ast.program.body[4].expression.object.type, "Identifier");
 
   assert.notStrictEqual(
     ast.program.body[2].expression.object,
