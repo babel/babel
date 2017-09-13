@@ -1,5 +1,6 @@
 exports.__esModule = true;
+exports.default = _default;
 
-exports.default = function (arr) {
+function _default(arr) {
   return Array.isArray(arr) ? arr : Array.from(arr);
-};
+}
