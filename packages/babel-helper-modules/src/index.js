@@ -49,6 +49,12 @@ export function rewriteModuleStatementsAndPrepareHeader(
     headers.push(buildESModuleHeader(meta, loose /* enumerable */));
   }
 
+  const nameList = buildExportNameListDeclaration(path, meta);
+  if (nameList) {
+    meta.exportNameListName = nameList.name;
+    headers.push(nameList.statement);
+  }
+
   // Create all of the statically known named exports.
   headers.push(...buildExportInitializationStatements(path, meta));
 
@@ -173,6 +179,8 @@ function buildESModuleHeader(
 const namespaceReexport = template(`
   Object.keys(NAMESPACE).forEach(function(key) {
     if (key === "default" || key === "__esModule") return;
+    VERIFY_NAME_LIST;
+
     Object.defineProperty(EXPORTS, key, {
       enumerable: true,
       get: function() {
@@ -181,15 +189,22 @@ const namespaceReexport = template(`
     });
   });
 `);
+const buildNameListCheck = template(`
+  if (Object.prototype.hasOwnProperty.call(EXPORTS_LIST, key)) return;
+`);
 
 /**
  * Create a re-export initialization loop for a specific imported namespace.
  */
 function buildNamespaceReexport(metadata, namespace) {
-  // TODO: This should skip exporting a prop that is already exported.
   return namespaceReexport({
     NAMESPACE: t.identifier(namespace),
     EXPORTS: t.identifier(metadata.exportName),
+    VERIFY_NAME_LIST: metadata.exportNameListName
+      ? buildNameListCheck({
+          EXPORTS_LIST: t.identifier(metadata.exportNameListName),
+        })
+      : null,
   });
 }
 
@@ -201,6 +216,48 @@ const reexportGetter = template(`
     },
   });
 `);
+
+/**
+ * Build a statement declaring a variable that contains all of the exported
+ * variable names in an object so they can easily be referenced from an
+ * export * from statement to check for conflicts.
+ */
+function buildExportNameListDeclaration(
+  programPath: NodePath,
+  metadata: ModuleMetadata,
+) {
+  const exportedVars = Object.create(null);
+  for (const data of metadata.local.values()) {
+    for (const name of data.names) {
+      exportedVars[name] = true;
+    }
+  }
+
+  let hasReexport = false;
+  for (const data of metadata.source.values()) {
+    for (const exportName of data.reexports.keys()) {
+      exportedVars[exportName] = true;
+    }
+    for (const exportName of data.reexportNamespace) {
+      exportedVars[exportName] = true;
+    }
+
+    hasReexport = hasReexport || data.reexportAll;
+  }
+
+  if (!hasReexport || Object.keys(exportedVars).length === 0) return null;
+
+  const name = programPath.scope.generateUidIdentifier("exportNames");
+
+  delete exportedVars.default;
+
+  return {
+    name: name.name,
+    statement: t.variableDeclaration("var", [
+      t.variableDeclarator(name, t.valueToNode(exportedVars)),
+    ]),
+  };
+}
 
 /**
  * Create a set of statements that will initialize all of the statically-known
@@ -224,7 +281,7 @@ function buildExportInitializationStatements(
       exportNames.push(...data.names);
     }
   }
-  for (const [, data] of metadata.source) {
+  for (const data of metadata.source.values()) {
     for (const [exportName, importName] of data.reexports) {
       initStatements.push(
         reexportGetter({
