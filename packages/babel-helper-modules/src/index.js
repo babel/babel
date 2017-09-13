@@ -9,7 +9,7 @@ import normalizeAndLoadModuleMetadata, {
   isSideEffectImport,
 } from "./normalize-and-load-metadata";
 
-export { hasExports };
+export { hasExports, isSideEffectImport };
 
 /**
  * Perform all of the generic ES6 module rewriting needed to handle initial
@@ -53,34 +53,6 @@ export function rewriteModuleStatementsAndPrepareHeader(
   headers.push(...buildExportInitializationStatements(path, meta));
 
   return { meta, headers };
-}
-
-/**
- * Break down the module metadata into a simple array that contains the
- * fields generally needed for compiling ES6 module support.
- */
-export function getSourceMetadataArray(meta: ModuleMetadata) {
-  const lastNonSideEffectBlock = Array.from(
-    meta.source,
-  ).reduceRight((acc, [source, metadata]) => {
-    if (acc !== null) return acc;
-
-    if (isSideEffectImport(metadata)) return null;
-    return source;
-  }, null);
-
-  let inSideEffectBlock = lastNonSideEffectBlock === null;
-
-  const items = [];
-  for (const [source, metadata] of meta.source) {
-    const isSideEffect = isSideEffectImport(metadata);
-
-    items.push([source, metadata, isSideEffect, inSideEffectBlock]);
-
-    if (source === lastNonSideEffectBlock) inSideEffectBlock = true;
-  }
-
-  return items;
 }
 
 /**

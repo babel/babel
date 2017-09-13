@@ -2,7 +2,7 @@ import template from "babel-template";
 import {
   rewriteModuleStatementsAndPrepareHeader,
   hasExports,
-  getSourceMetadataArray,
+  isSideEffectImport,
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
@@ -51,19 +51,16 @@ export default function({ types: t }) {
             importNames.push(t.identifier(meta.exportName));
           }
 
-          getSourceMetadataArray(
-            meta,
-          ).forEach(([source, metadata, , inSideEffectBlock]) => {
+          for (const [source, metadata] of meta.source) {
             amdArgs.push(t.stringLiteral(source));
             commonjsArgs.push(
               t.callExpression(t.identifier("require"), [
                 t.stringLiteral(source),
               ]),
             );
+            importNames.push(t.identifier(metadata.name));
 
-            if (!inSideEffectBlock) {
-              importNames.push(t.identifier(metadata.name));
-
+            if (!isSideEffectImport(metadata)) {
               const interop = wrapInterop(
                 path,
                 t.identifier(metadata.name),
@@ -83,7 +80,7 @@ export default function({ types: t }) {
             }
 
             headers.push(...buildNamespaceInitStatements(meta, metadata));
-          });
+          }
 
           ensureStatementsHoisted(headers);
           path.unshiftContainer("body", headers);

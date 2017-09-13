@@ -10,6 +10,6 @@
     factory(global.foo, global.fooBar, global.fooBar);
     global.actual = mod.exports;
   }
-})(this, function () {
+})(this, function (_foo, _fooBar, _fooBar2) {
   "use strict";
 });
