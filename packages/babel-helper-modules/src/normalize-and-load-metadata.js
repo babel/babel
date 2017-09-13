@@ -4,6 +4,10 @@ import * as t from "babel-types";
 
 export type ModuleMetadata = {
   exportName: string,
+
+  // The name of the variable that will reference an object containing export names.
+  exportNameListName: null | string,
+
   // Lookup from local binding to export information.
   local: Map<string, LocalExportMetadata>,
 
@@ -107,6 +111,7 @@ export default function normalizeModuleAndLoadMetadata(
 
   return {
     exportName,
+    exportNameListName: null,
     local,
     source,
   };
