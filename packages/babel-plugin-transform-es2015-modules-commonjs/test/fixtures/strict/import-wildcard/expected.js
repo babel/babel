@@ -1,6 +1,7 @@
 "use strict";
 
-var foo = require("foo");
+var _foo = require("foo");
 
-foo.bar();
-foo.baz();
+_foo.bar();
+
+_foo.baz();

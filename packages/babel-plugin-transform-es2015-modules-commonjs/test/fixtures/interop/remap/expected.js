@@ -3,9 +3,7 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.f = exports.e = exports.c = exports.a = exports.test = void 0;
-var test = 2;
-exports.test = test;
+var test = exports.test = 2;
 exports.test = test = 5;
 exports.test = test += 1;
 
@@ -22,5 +20,6 @@ var b = 2;
 exports.c = b;
 exports.c = b = 3;
 var d = 3;
-exports.f = exports.e = d;
+exports.e = d;
+exports.f = d;
 exports.f = exports.e = d = 4;

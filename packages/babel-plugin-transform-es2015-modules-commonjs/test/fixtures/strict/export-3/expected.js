@@ -1,3 +1,3 @@
 "use strict";
 
-require("foo");
+var _foo = require("foo");

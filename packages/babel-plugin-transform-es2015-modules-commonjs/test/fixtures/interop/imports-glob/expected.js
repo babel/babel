@@ -1,3 +1,5 @@
 "use strict";
 
-var foo = babelHelpers.interopRequireWildcard(require("foo"));
+var _foo = require("foo");
+
+var foo = babelHelpers.interopRequireWildcard(_foo);

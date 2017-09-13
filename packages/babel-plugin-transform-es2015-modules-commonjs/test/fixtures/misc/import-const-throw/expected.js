@@ -1,8 +1,12 @@
 "use strict";
 
-var _foo = _interopRequireDefault(require("foo"));
+var _foo = require("foo");
 
-var Bar = _interopRequireWildcard(require("bar"));
+var _foo2 = _interopRequireDefault(_foo);
+
+var _bar = require("bar");
+
+var Bar = _interopRequireWildcard(_bar);
 
 var _baz = require("baz");
 
@@ -10,34 +14,24 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-_foo.default = (42, function () {
-  throw new Error('"' + "Foo" + '" is read-only.');
-}());
-Bar = (43, function () {
-  throw new Error('"' + "Bar" + '" is read-only.');
-}());
-_baz.Baz = (44, function () {
-  throw new Error('"' + "Baz" + '" is read-only.');
-}());
+Foo = 42;
+Bar = 43;
+Baz = 44;
 ({
-  Foo: _foo.default
+  Foo: _foo2.default
 } = {});
 ({
   Bar
-} = ({}, function () {
-  throw new Error('"' + "Bar" + '" is read-only.');
-}()));
+} = {});
 ({
   Baz: _baz.Baz
 } = {});
 ({
-  prop: _foo.default
+  prop: _foo2.default
 } = {});
 ({
   prop: Bar
-} = ({}, function () {
-  throw new Error('"' + "Bar" + '" is read-only.');
-}()));
+} = {});
 ({
   prop: _baz.Baz
 } = {});

@@ -2,7 +2,9 @@
 
 require("./foo");
 
-var _bar = babelHelpers.interopRequireDefault(require("./bar"));
+var _bar = require("./bar");
+
+var _bar2 = babelHelpers.interopRequireDefault(_bar);
 
 require("./derp");
 
