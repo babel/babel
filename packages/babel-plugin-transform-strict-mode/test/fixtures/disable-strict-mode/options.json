@@ -1,5 +1,0 @@
-{
-  "plugins": [
-    ["transform-strict-mode", { "strictMode": false }]
-  ]
-}

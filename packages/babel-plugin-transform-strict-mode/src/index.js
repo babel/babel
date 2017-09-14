@@ -3,11 +3,7 @@ import * as t from "babel-types";
 export default function() {
   return {
     visitor: {
-      Program(path, state) {
-        if (state.opts.strict === false || state.opts.strictMode === false) {
-          return;
-        }
-
+      Program(path) {
         const { node } = path;
 
         for (const directive of (node.directives: Array<Object>)) {
