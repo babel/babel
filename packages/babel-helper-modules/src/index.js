@@ -31,7 +31,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
 
   rewriteLiveReferences(path, meta);
 
-  if (strictMode !== false || strict !== false) {
+  if (strictMode !== false) {
     const hasStrict = path.node.directives.some(directive => {
       return directive.value.value === "use strict";
     });
