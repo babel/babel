@@ -25,5 +25,6 @@ export default {
   "transform-es2015-typeof-symbol": require("babel-plugin-transform-es2015-typeof-symbol"),
   "transform-es2015-unicode-regex": require("babel-plugin-transform-es2015-unicode-regex"),
   "transform-exponentiation-operator": require("babel-plugin-transform-exponentiation-operator"),
+  "transform-new-target": require("babel-plugin-transform-new-target"),
   "transform-regenerator": require("babel-plugin-transform-regenerator"),
 };

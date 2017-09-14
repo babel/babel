@@ -27,6 +27,7 @@ Using plugins:
   transform-es2015-template-literals { "android":"4" }
   transform-es2015-typeof-symbol { "android":"4" }
   transform-es2015-unicode-regex { "android":"4" }
+  transform-new-target { "android":"4" }
   transform-regenerator { "android":"4" }
   transform-exponentiation-operator { "android":"4" }
   transform-async-to-generator { "android":"4" }

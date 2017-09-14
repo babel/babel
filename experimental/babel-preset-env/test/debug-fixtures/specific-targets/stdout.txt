@@ -32,6 +32,7 @@ Using plugins:
   transform-es2015-template-literals { "ie":"10", "safari":"7" }
   transform-es2015-typeof-symbol { "ie":"10", "safari":"7" }
   transform-es2015-unicode-regex { "ie":"10", "ios":"9", "safari":"7" }
+  transform-new-target { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   transform-regenerator { "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-exponentiation-operator { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-async-to-generator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }

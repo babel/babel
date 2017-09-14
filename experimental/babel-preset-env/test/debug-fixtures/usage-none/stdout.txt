@@ -28,6 +28,7 @@ Using plugins:
   transform-es2015-template-literals { "ie":"11" }
   transform-es2015-typeof-symbol { "ie":"11" }
   transform-es2015-unicode-regex { "ie":"11" }
+  transform-new-target { "ie":"11" }
   transform-regenerator { "firefox":"50", "ie":"11" }
   transform-exponentiation-operator { "firefox":"50", "ie":"11" }
   transform-async-to-generator { "chrome":"52", "firefox":"50", "ie":"11" }

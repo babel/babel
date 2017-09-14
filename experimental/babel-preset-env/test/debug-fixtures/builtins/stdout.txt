@@ -29,6 +29,7 @@ Using plugins:
   transform-es2015-template-literals { "ie":"10" }
   transform-es2015-typeof-symbol { "ie":"10" }
   transform-es2015-unicode-regex { "ie":"10" }
+  transform-new-target { "ie":"10" }
   transform-regenerator { "ie":"10" }
   transform-exponentiation-operator { "ie":"10", "node":"6" }
   transform-async-to-generator { "chrome":"54", "ie":"10", "node":"6" }

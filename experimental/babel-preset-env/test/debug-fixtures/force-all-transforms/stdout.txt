@@ -27,6 +27,7 @@ Using plugins:
   transform-es2015-template-literals {}
   transform-es2015-typeof-symbol {}
   transform-es2015-unicode-regex {}
+  transform-new-target {}
   transform-regenerator {}
   transform-exponentiation-operator {}
   transform-async-to-generator {}

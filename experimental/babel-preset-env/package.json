@@ -51,6 +51,7 @@
     "babel-plugin-transform-es2015-typeof-symbol": "7.0.0-beta.0",
     "babel-plugin-transform-es2015-unicode-regex": "7.0.0-beta.0",
     "babel-plugin-transform-exponentiation-operator": "7.0.0-beta.0",
+    "babel-plugin-transform-new-target": "7.0.0-beta.0",
     "babel-plugin-transform-regenerator": "7.0.0-beta.0",
     "browserslist": "^2.4.0",
     "invariant": "^2.2.2",

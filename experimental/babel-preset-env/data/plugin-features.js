@@ -102,6 +102,11 @@ const es2015 = {
       "RegExp \"y\" and \"u\" flags / \"u\" flag",
     ],
   },
+  "transform-new-target": {
+    features: [
+      "new.target",
+    ],
+  },
   "transform-regenerator": {
     features: [
       "generators",

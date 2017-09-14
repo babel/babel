@@ -189,6 +189,16 @@
     "opera": "37",
     "electron": "1.1"
   },
+  "transform-new-target": {
+    "chrome": "46",
+    "edge": "14",
+    "firefox": "41",
+    "safari": "10",
+    "node": "5",
+    "ios": "10",
+    "opera": "33",
+    "electron": "0.36"
+  },
   "transform-regenerator": {
     "chrome": "50",
     "edge": "13",
