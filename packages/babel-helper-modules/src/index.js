@@ -22,7 +22,6 @@ export function rewriteModuleStatementsAndPrepareHeader(
   { exportName, strict, allowTopLevelThis, strictMode, loose, noInterop },
 ) {
   const meta = normalizeAndLoadModuleMetadata(path, exportName, {
-    strict,
     noInterop,
   });
 
@@ -32,7 +31,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
 
   rewriteLiveReferences(path, meta);
 
-  if (strictMode !== false && strict !== false) {
+  if (strictMode !== false || strict !== false) {
     const hasStrict = path.node.directives.some(directive => {
       return directive.value.value === "use strict";
     });

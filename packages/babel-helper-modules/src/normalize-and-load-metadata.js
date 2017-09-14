@@ -86,7 +86,7 @@ export function isSideEffectImport(source: SourceModuleMetadata) {
 export default function normalizeModuleAndLoadMetadata(
   programPath: NodePath,
   exportName?: string,
-  { strict = false, noInterop = false } = {},
+  { noInterop = false } = {},
 ): ModuleMetadata {
   if (!exportName) {
     exportName = programPath.scope.generateUidIdentifier("exports").name;
@@ -94,7 +94,7 @@ export default function normalizeModuleAndLoadMetadata(
 
   nameAnonymousExports(programPath);
 
-  const { local, source } = getModuleMetadata(programPath, strict);
+  const { local, source } = getModuleMetadata(programPath);
 
   removeModuleDeclarations(programPath);
 
@@ -120,7 +120,7 @@ export default function normalizeModuleAndLoadMetadata(
 /**
  * Get metadata about the imports and exports present in this module.
  */
-function getModuleMetadata(programPath: NodePath, strict: boolean = false) {
+function getModuleMetadata(programPath: NodePath) {
   const localData = getLocalExportMetadata(programPath);
 
   const sourceData = new Map();
@@ -175,7 +175,7 @@ function getModuleMetadata(programPath: NodePath, strict: boolean = false) {
         } else if (spec.isImportNamespaceSpecifier()) {
           const localName = spec.get("local").node.name;
 
-          if (!strict) data.interop = "namespace";
+          data.interop = "namespace";
 
           data.importsNamespace.add(localName);
           const reexport = localData.get(localName);
