@@ -26,8 +26,7 @@
     "lodash": "^4.2.0",
     "output-file-sync": "^2.0.0",
     "slash": "^1.0.0",
-    "source-map": "^0.5.0",
-    "v8flags": "^3.0.0"
+    "source-map": "^0.5.0"
   },
   "optionalDependencies": {
     "chokidar": "^1.6.1"
