@@ -2,7 +2,9 @@
 
 var _scopedFunctionWithThis;
 
-var Child = function (_Parent) {
+var Child =
+/*#__PURE__*/
+function (_Parent) {
   babelHelpers.inherits(Child, _Parent);
 
   function Child() {

@@ -1,6 +1,8 @@
 var _x, _y;
 
-var Point = function () {
+var Point =
+/*#__PURE__*/
+function () {
   function Point(x = 0, y = 0) {
     babelHelpers.classCallCheck(this, Point);
     Object.defineProperty(this, _x, {

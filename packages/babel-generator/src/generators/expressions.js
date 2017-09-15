@@ -226,5 +226,5 @@ export function MetaProperty(node: Object) {
 
 export function PrivateName(node: Object) {
   this.token("#");
-  this.print(node.name, node);
+  this.print(node.id, node);
 }
