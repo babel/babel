@@ -6,7 +6,7 @@ var t = function (f) {
 };
 
 function t(f) {
-  for (var _len = arguments.length, items = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+  for (var _len = arguments.length, items = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
     items[_key - 1] = arguments[_key];
   }
 

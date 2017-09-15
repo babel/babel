@@ -3,7 +3,7 @@ import * as t from "babel-types";
 
 const buildRest = template(`
   for (var LEN = ARGUMENTS.length,
-           ARRAY = Array(ARRAY_LEN),
+           ARRAY = new Array(ARRAY_LEN),
            KEY = START;
        KEY < LEN;
        KEY++) {

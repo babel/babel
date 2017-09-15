@@ -3,7 +3,7 @@ let s = (() => {
     var _this = this,
         _arguments = arguments;
 
-    for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
       args[_key - 1] = arguments[_key];
     }
 
@@ -13,7 +13,7 @@ let s = (() => {
           var _ref3 = babelHelpers.asyncToGenerator(function* (z, b) {
             yield z;
 
-            for (var _len2 = arguments.length, innerArgs = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+            for (var _len2 = arguments.length, innerArgs = new Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
               innerArgs[_key2 - 2] = arguments[_key2];
             }
 
