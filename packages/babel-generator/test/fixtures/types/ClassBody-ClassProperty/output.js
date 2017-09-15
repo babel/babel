@@ -29,7 +29,7 @@ class Foo {
   #foo;
   #foo = 1;
   static #foo;
-  static #foo = 1;
+  static #foo = Foo.#foo;
 }
 
 class A1 {

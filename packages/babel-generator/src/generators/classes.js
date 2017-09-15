@@ -122,7 +122,6 @@ export function ClassPrivateProperty(node: Object) {
     this.word("static");
     this.space();
   }
-  this.token("#");
   this.print(node.key, node);
   if (node.value) {
     this.space();

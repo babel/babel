@@ -1,4 +1,6 @@
-var Foo = function () {
+var Foo =
+/*#__PURE__*/
+function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
     Object.defineProperty(this, "foo", {

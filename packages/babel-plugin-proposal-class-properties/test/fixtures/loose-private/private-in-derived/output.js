@@ -7,7 +7,9 @@ var Outer = function Outer() {
     value: void 0
   });
 
-  var Test = function (_babelHelpers$classPr) {
+  var Test =
+  /*#__PURE__*/
+  function (_babelHelpers$classPr) {
     babelHelpers.inherits(Test, _babelHelpers$classPr);
 
     function Test() {

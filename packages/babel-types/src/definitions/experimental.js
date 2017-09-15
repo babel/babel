@@ -1,11 +1,5 @@
 // @flow
-import defineType, {
-  assertEach,
-  assertOneOf,
-  assertNodeType,
-  assertValueType,
-  chain,
-} from "./utils";
+import defineType, { assertNodeType } from "./utils";
 import { classMethodOrPropertyCommon } from "./es2015";
 
 defineType("AwaitExpression", {
