@@ -60,7 +60,7 @@ function makeTransformOpts(modules, useBuiltIns) {
   if (modules === "commonjs") {
     opts.plugins.push([
       require("../../babel-plugin-transform-es2015-modules-commonjs"),
-      { loose: true, strict: false },
+      { loose: true, strictMode: false },
     ]);
   } else if (modules !== false) {
     throw new Error("Unsupported module type");
