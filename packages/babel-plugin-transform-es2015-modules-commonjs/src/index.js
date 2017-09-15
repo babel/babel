@@ -1,4 +1,5 @@
 import {
+  isModule,
   rewriteModuleStatementsAndPrepareHeader,
   isSideEffectImport,
   buildNamespaceInitStatements,
@@ -11,6 +12,10 @@ export default function({ types: t }) {
     visitor: {
       Program: {
         exit(path, state) {
+          // For now this requires unambiguous rather that just sourceType
+          // because Babel currently parses all files as sourceType:module.
+          if (!isModule(path, true /* requireUnambiguous */)) return;
+
           const {
             loose,
             allowTopLevelThis,

@@ -1,5 +1,6 @@
 import template from "babel-template";
 import {
+  isModule,
   rewriteModuleStatementsAndPrepareHeader,
   hasExports,
   isSideEffectImport,
@@ -18,6 +19,8 @@ export default function({ types: t }) {
     visitor: {
       Program: {
         exit(path, state) {
+          if (!isModule(path)) return;
+
           const {
             loose,
             allowTopLevelThis,

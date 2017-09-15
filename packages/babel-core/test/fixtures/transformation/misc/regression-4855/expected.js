@@ -1,5 +1,3 @@
-"use strict";
-
 var _values = values;
 var _fieldName = fieldName;
 value = _values[_fieldName];

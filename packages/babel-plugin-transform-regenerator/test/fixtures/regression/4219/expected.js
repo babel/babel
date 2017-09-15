@@ -1,5 +1,3 @@
-"use strict";
-
 function test(fn) {
   return function _callee() {
     var _args = arguments;

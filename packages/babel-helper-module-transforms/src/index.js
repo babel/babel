@@ -1,3 +1,4 @@
+import assert from "assert";
 import * as t from "babel-types";
 import template from "babel-template";
 import chunk from "lodash/chunk";
@@ -11,6 +12,31 @@ import normalizeAndLoadModuleMetadata, {
 
 export { hasExports, isSideEffectImport };
 
+export function isModule(path: NodePath, requireUnambiguous: boolean = false) {
+  const { sourceType } = path.node;
+  if (sourceType !== "module" && sourceType !== "script") {
+    throw path.buildCodeFrameError(
+      `Unknown sourceType "${sourceType}", cannot transform.`,
+    );
+  }
+
+  const filename = path.hub.file.opts.filename;
+  if (/\.mjs$/.test(filename)) {
+    requireUnambiguous = false;
+  }
+
+  return (
+    path.node.sourceType === "module" &&
+    (!requireUnambiguous || isUnambiguousModule(path))
+  );
+}
+
+// This approach is not ideal. It is here to preserve compatibility for now,
+// but really this should just return true or be deleted.
+function isUnambiguousModule(path) {
+  return path.get("body").some(p => p.isModuleDeclaration());
+}
+
 /**
  * Perform all of the generic ES6 module rewriting needed to handle initial
  * module processing. This function will rewrite the majority of the given
@@ -21,6 +47,9 @@ export function rewriteModuleStatementsAndPrepareHeader(
   path: NodePath,
   { exportName, strict, allowTopLevelThis, strictMode, loose, noInterop },
 ) {
+  assert(isModule(path), "Cannot process module statements in a script");
+  path.node.sourceType = "script";
+
   const meta = normalizeAndLoadModuleMetadata(path, exportName, {
     noInterop,
   });
