@@ -144,12 +144,16 @@ function buildVar(namespace, builder) {
 }
 
 function buildHelpers(body, namespace, whitelist) {
+  const getHelperReference = name =>
+    t.memberExpression(namespace, t.identifier(name));
+
   helpers.list.forEach(function(name) {
     if (whitelist && whitelist.indexOf(name) < 0) return;
 
     const { nodes } = helpers.get(
       name,
-      t.memberExpression(namespace, t.identifier(name)),
+      getHelperReference,
+      getHelperReference(name),
     );
 
     body.push(...nodes);
