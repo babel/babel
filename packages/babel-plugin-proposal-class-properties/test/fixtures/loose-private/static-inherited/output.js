@@ -1,6 +1,8 @@
 var _foo, _foo2;
 
-var Base = function () {
+var Base =
+/*#__PURE__*/
+function () {
   function Base() {
     babelHelpers.classCallCheck(this, Base);
   }
@@ -20,7 +22,9 @@ Object.defineProperty(Base, _foo, {
   value: 1
 });
 
-var Sub1 = function (_Base) {
+var Sub1 =
+/*#__PURE__*/
+function (_Base) {
   babelHelpers.inherits(Sub1, _Base);
 
   function Sub1() {
@@ -37,7 +41,9 @@ Object.defineProperty(Sub1, _foo2, {
   value: 2
 });
 
-var Sub2 = function (_Base2) {
+var Sub2 =
+/*#__PURE__*/
+function (_Base2) {
   babelHelpers.inherits(Sub2, _Base2);
 
   function Sub2() {

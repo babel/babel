@@ -8,7 +8,9 @@ var Foo = function Foo() {
 
 _prop = new WeakMap();
 
-var Bar = function (_Foo) {
+var Bar =
+/*#__PURE__*/
+function (_Foo) {
   babelHelpers.inherits(Bar, _Foo);
 
   function Bar() {

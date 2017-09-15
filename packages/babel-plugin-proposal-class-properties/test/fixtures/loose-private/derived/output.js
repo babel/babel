@@ -10,7 +10,9 @@ var Foo = function Foo() {
 
 _prop = babelHelpers.classPrivateFieldKey("prop");
 
-var Bar = function (_Foo) {
+var Bar =
+/*#__PURE__*/
+function (_Foo) {
   babelHelpers.inherits(Bar, _Foo);
 
   function Bar() {
