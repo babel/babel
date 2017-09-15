@@ -9,3 +9,11 @@ function bar() {
 function foo() {
   return 1, "foo";
 }
+
+() => {
+  return /a/;
+};
+
+function foo() {
+  return /a/;
+}

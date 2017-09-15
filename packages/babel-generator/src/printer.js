@@ -246,8 +246,10 @@ export default class Printer {
     if (i === str.length) return;
 
     const cha = str[i];
-    if (cha === "\n" || cha === "/") {
-      // we're going to break this terminator expression so we need to add a parentheses
+    const chaPost = str[i + 1];
+
+    // Check for newline or comment
+    if (cha === "\n" || (cha === "/" && (chaPost === "/" || chaPost === "*"))) {
       this.token("(");
       this.indent();
       parenPushNewlineState.printed = true;

@@ -199,7 +199,7 @@ export function AssignmentExpression(node: Object): boolean {
   }
 }
 
-// Walk up the print stack to deterimine if our node can come first
+// Walk up the print stack to determine if our node can come first
 // in statement.
 function isFirstInStatement(
   printStack: Array<Object>,
