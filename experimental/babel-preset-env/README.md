@@ -100,7 +100,7 @@ If you are targeting IE 8 and Chrome 55 it will include all plugins required by 
 
 ### Support a target option `"node": "current"` to compile for the currently running node version.
 
-For example, if you are building on Node 4, arrow functions won't be converted, but they will if you build on Node 0.12.
+For example, if you are building on Node 6, arrow functions won't be converted, but they will if you build on Node 0.12.
 
 ### Support a `browsers` option like autoprefixer
 
