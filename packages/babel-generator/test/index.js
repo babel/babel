@@ -183,7 +183,7 @@ describe("generation", function() {
       ast,
       {
         filename: "inline",
-        sourceFileName: "inline",
+        sourceFilename: "inline",
         sourceMaps: true,
       },
       code,
@@ -255,7 +255,7 @@ describe("generation", function() {
 
     const ast = parse(code, { filename: "a.js" }).program;
     const generated = generate(ast, {
-      sourceFileName: "a.js",
+      sourceFilename: "a.js",
       sourceMaps: true,
     });
 

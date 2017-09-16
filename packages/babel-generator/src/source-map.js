@@ -25,10 +25,10 @@ export default class SourceMap {
 
       const code = this._code;
       if (typeof code === "string") {
-        map.setSourceContent(this._opts.sourceFileName, code);
+        map.setSourceContent(this._opts.sourceFilename, code);
       } else if (typeof code === "object") {
-        Object.keys(code).forEach(sourceFileName => {
-          map.setSourceContent(sourceFileName, code[sourceFileName]);
+        Object.keys(code).forEach(sourceFilename => {
+          map.setSourceContent(sourceFilename, code[sourceFilename]);
         });
       }
 
@@ -82,7 +82,7 @@ export default class SourceMap {
         line: generatedLine,
         column: generatedColumn,
       },
-      source: line == null ? undefined : filename || this._opts.sourceFileName,
+      source: line == null ? undefined : filename || this._opts.sourceFilename,
       original:
         line == null
           ? undefined

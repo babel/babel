@@ -113,7 +113,7 @@ Following is a table of the options you can use:
 | `retainLines`            | `false`              | Retain line numbers. This will lead to wacky code but is handy for scenarios where you can't use source maps. (**NOTE:** This will not retain the columns) |
 | `resolveModuleSource`    | `null`               | Resolve a module source ie. `import "SOURCE";` to a custom value. Called as `resolveModuleSource(source, filename)` |
 | `shouldPrintComment`     | `null`               | An optional callback that controls whether a comment should be output or not. Called as `shouldPrintComment(commentContents)`. **NOTE:** This overrides the `comment` option when used |
-| `sourceFileName`         | `(filenameRelative)` | Set `sources[0]` on returned source map |
+| `sourceFilename`         | `(filenameRelative)` | Set `sources[0]` on returned source map |
 | `sourceMaps`             | `false`              | If truthy, adds a `map` property to returned output. If set to `"inline"`, a comment with a sourceMappingURL directive is added to the bottom of the returned code. If set to `"both"` then a `map` property is returned as well as a source map comment appended. **This does not emit sourcemap files by itself!** To have sourcemaps emitted using the CLI, you must pass it the `--source-maps` option |
 | `sourceMapTarget`        | `(filenameRelative)` | Set `file` on returned source map |
 | `sourceRoot`             | `(moduleRoot)`       | The root from which all sources are relative |

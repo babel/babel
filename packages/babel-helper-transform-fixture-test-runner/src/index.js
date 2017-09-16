@@ -256,7 +256,7 @@ export default function(
 
               defaults(task.options, {
                 filenameRelative: task.expect.filename,
-                sourceFileName: task.actual.filename,
+                sourceFilename: task.actual.filename,
                 sourceMapTarget: task.expect.filename,
                 suppressDeprecationMessages: true,
                 babelrc: false,
