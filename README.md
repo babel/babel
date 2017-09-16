@@ -44,35 +44,30 @@ When your supported environments don't support certain features natively, Babel 
 Try it out at our [REPL](https://babeljs.io/repl/#?babili=false&evaluate=true&lineWrap=false&presets=latest&code=%5B1%2C2%2C3%5D.map(n%20%3D%3E%20n%20%2B%201)%3B&experimental=true&loose=true&spec=false&playground=false&stage=0) and follow us at [@babeljs](https://twitter.com/babeljs).
 
 - [FAQ](#faq)
-- [Packages](#packages)
 - [Team](#team)
+- [Backers](#backers)
+- [Sponsors](#sponsors)
 - [License](#license)
 
-# FAQ
+## FAQ
 
-## Docs?
+### Docs?
 
 Check out our website: [babeljs.io](http://babeljs.io/)
 
-## Looking for support?
+### Looking for support?
 
 For questions and support please visit our [discussion forum](https://discuss.babeljs.io/), sign up for our [Slack community](https://slack.babeljs.io/), or [StackOverflow](http://stackoverflow.com/questions/tagged/babeljs).
 
-## Want to report a bug or request a feature?
+### Want to report a bug or request a feature?
 
-Bugs and feature requests can be posted at https://github.com/babel/babel/issues.
+Read through our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md) and fill out the issue template at [babel/issues](https://github.com/babel/babel/issues).
 
-> We've moved our issues from phabricator back to github issues!
-
-Former phabricator issue URLs now automatically redirect to their corresponding Github issue:
-
-https://phabricator.babeljs.io/T2168 mostly corresponds to https://github.com/babel/babel/issues/2168.
-
-## Want to report an issue with [babeljs.io](https://babeljs.io) (the website)?
+### Want to report an issue with [babeljs.io](https://babeljs.io) (the website)?
 
 For documentation and website issues please visit the [babel/website](https://github.com/babel/website) repo.
 
-## Want to contribute to Babel?
+### Want to contribute to Babel?
 
 Check out our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md). If you have already joined Slack, join our [#development](https://babeljs.slack.com/messages/development) channel!
 
@@ -81,7 +76,7 @@ You can also start by checking out the issues with the [help-wanted](https://git
 Our discussions/notes/roadmap: [babel/notes](https://github.com/babel/notes)
 Our progress on TC39 proposals: [babel/proposals](https://github.com/babel/proposals)
 
-## Packages
+### How is the repo structured?
 
 The Babel repo is managed as a [monorepo](https://github.com/babel/babel/blob/master/doc/design/monorepo.md) that is composed of many [npm packages](/packages#readme).
 
@@ -125,8 +120,7 @@ Amjad Masad | James Kyle | Jesse McCarthy | Sebastian McKenzie |
 [@amasad](https://github.com/amasad) | [@thejameskyle](https://github.com/thejameskyle) | [@jmm](https://github.com/jmm) | [@sebmck](https://twitter.com/sebmck) |
 | [@amasad](https://twitter.com/amasad) | [@thejameskyle](https://twitter.com/thejameskyle) | [@mccjm](https://twitter.com/mccjm) | [@kittens](https://github.com/kittens) 
 
-
-# Backers
+## Backers
 
 Support us with a monthly donation and help us continue our activities. [[Become a backer](https://opencollective.com/babel#backer)]
 
@@ -161,7 +155,7 @@ Support us with a monthly donation and help us continue our activities. [[Become
   <a href="https://opencollective.com/babel/backer/28/website" target="_blank"><img src="https://opencollective.com/babel/backer/28/avatar.svg"></a>		
   <a href="https://opencollective.com/babel/backer/29/website" target="_blank"><img src="https://opencollective.com/babel/backer/29/avatar.svg"></a>
 
-# Sponsors
+## Sponsors
 
 Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/babel#sponsor)]
 
