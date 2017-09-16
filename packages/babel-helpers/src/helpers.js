@@ -276,42 +276,44 @@ helpers.decorate = template(`
   (function (constructor, undecorated, memberDecorators, heritage) {
     const prototype = constructor.prototype;
     let finishers = [];
-    const elementDescriptors = new Map(); // elementDescriptors is meant to be an array, so this will be converted later
+    const elementDescriptors = {}; // elementDescriptors is meant to be an array, so this will be converted later
+    const staticElementDescriptors = {};
 
     for (const [key, isStatic] of undecorated) {
+      const map = isStatic? staticElementDescriptors : elementDescriptors;
       const target = isStatic ? constructor : prototype;
       const propertyDescriptor = Object.getOwnPropertyDescriptor(target, key);
-      elementDescriptors.set(
-        [key, isStatic], 
-        babelHelpers.makeElementDescriptor(
-          "property",
-          key,
-          isStatic,
-          propertyDescriptor,
-        )
+      map[key] = babelHelpers.makeElementDescriptor(
+        "property",
+        key,
+        isStatic,
+        propertyDescriptor,
       );
     }
 
-    // decorate and store in elementDescriptors
+    // decorate and store in elementDescriptors or staticElementDescriptors
     for (const [key, decorators, isStatic] of memberDecorators) {
+      const map = isStatic ? staticElementDescriptors : elementDescriptors;
       const target = isStatic ? constructor : prototype;
-      const propertyDescriptor =
-        elementDescriptors.has([key, isStatic]) && elementDescriptors.get([key, isStatic]).descriptor 
-        || Object.getOwnPropertyDescriptor(target, key);
+      const propertyDescriptor = 
+        map[key] && map[key].descriptor || Object.getOwnPropertyDescriptor(target, key);
 
       const elementDescriptor = babelHelpers.makeElementDescriptor(
         "property",
         key,
         isStatic,
         propertyDescriptor,
-      )
+      );
+
       const decorated = babelHelpers.decorateElement(elementDescriptor, decorators);
 
-      elementDescriptors.set([key, isStatic], decorated.descriptor);
+      map[key] = decorated.descriptor;
 
       for (const extra of decorated.extras) {
         // extras is an array of element descriptors
-        elementDescriptors.set([extra.key, extra.isStatic], extra);
+        const map = extra.isStatic? staticElementDescriptors : elementDescriptors;
+        // TODO: refactor to use proper merging logic here. currently it's just overriding
+        map[extra.key] = extra;
       }
 
       finishers = finishers.concat(decorated.finishers);
@@ -322,12 +324,13 @@ helpers.decorate = template(`
         constructor,
         classDecorators,
         heritage,
-        Array.from(elementDescriptors.values())
+        Object.values(elementDescriptors).concat(Object.values(staticElementDescriptors))
       );
 
       finishers = finishers.concat(result.finishers);
       //TODO: heritage hacks so result.constructor has the correct prototype and instanceof results
-      //TODO: step 38 and 39, what do they mean "initialize"?
+      //NOTE: step 38 and 39 in spec, refer to some "initialize" state which hasn't been implemented,
+      //because it's unlikely to stay in future versions of the spec
 
       for (const elementDescriptor of result.elements) {
         const target = elementDescriptor.isStatic ? constructor : prototype;
@@ -347,6 +350,7 @@ helpers.decorate = template(`
   });
 `);
 
+//TODO guarding against malformed descriptors returned by decorators
 helpers.decorateElement = template(`
   (function (descriptor, decorators) {
     //spec uses the param "element" instead of "descriptor" and finds descriptor from it
@@ -583,21 +587,45 @@ helpers.interopRequireWildcard = template(`
 
 helpers.makeElementDescriptor = template(`
   (function (kind, key, isStatic, descriptor, finisher) {
-    return { kind, key, isStatic, descriptor, finisher };
+    var elementDescriptor = { kind, key, isStatic, descriptor};
+    if (finisher) {
+      elementDescriptor.finisher = finisher;
+    }
+    return elementDescriptor;
   });
 `);
 
-//TODO
+/** 
+ * NOTE: Details for merging haven't been decided on by TC39.
+ * The following function implements a reasonable merging strategy - which 
+ * is to merge getters and setters, and to override everything else 
+ **/
 helpers.mergeDuplicateElements = template(`
   (function (elements) {
     let elementMap = {};
     let staticElementMap = {};
 
     for (let elementDescriptor of elements) {
-      if (elementDescriptor.isStatic) {
-        staticElementMap[elementDescriptor.key] = elementDescriptor;
+      let map = elementDescriptor.isStatic? staticElementMap : elementMap;
+
+      if (!map[elementDescriptor.key]) {
+        map[elementDescriptor.key] = elementDescriptor;
       } else {
-        elementMap[elementDescriptor.key] = elementDescriptor;
+        let prev = map[elementDescriptor.key];
+        let isDataDescriptor = !!prev.descriptor.value;
+        let newIsDataDescriptor = !!elementDescriptor.descriptor.value;
+
+        if (!newIsDataDescriptor && !isDataDescriptor) {
+          // if both are accessor descriptors, merge getters and setters
+          let get = elementDescriptor.descriptor.get || prev.descriptor.get;
+          let set = elementDescriptor.descriptor.set || prev.descriptor.set;
+
+          let descriptor = Object.assign({}, elementDescriptor.descriptor, {get, set});
+
+          map[elementDescriptor.key] = Object.assign({}, elementDescriptor, {descriptor});
+        } else {
+          map[elementDescriptor.key] = elementDescriptor; // overrideprevious descriptor
+        }
       }
     }
 

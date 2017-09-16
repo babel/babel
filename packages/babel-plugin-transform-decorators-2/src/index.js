@@ -185,13 +185,6 @@ export default function({ types: t }) {
         const methodDecorators = takeMethodDecorators(path);
         const classDecorators = takeClassDecorators(path);
 
-        if (
-          methodDecorators.elements.length == 0 &&
-          classDecorators.elements.length == 0
-        ) {
-          return;
-        }
-
         const superClass =
           path.node.superClass == null
             ? path.scope.buildUndefinedNode()
