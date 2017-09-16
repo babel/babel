@@ -50,7 +50,7 @@ export default function({ types: t }) {
       }
 
       if (!state.fileNameIdentifier) {
-        const fileName = state.file.opts.filename;
+        const fileName = state.file.opts.filename || "";
 
         const fileNameIdentifier = path.scope.generateUidIdentifier(
           FILE_NAME_VAR,
