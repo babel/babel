@@ -1,6 +1,8 @@
 "use strict";
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _instanceof(left, right) { if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+
+function _classCallCheck(instance, Constructor) { if (!_instanceof(instance, Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Test = function Test() {
   _classCallCheck(this, Test);
@@ -11,4 +13,4 @@ arr.map(function (x) {
   return x * MULTIPLIER;
 });
 
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNjcmlwdC5qcyIsInNjcmlwdDIuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7OztJQUFNLEk7Ozs7O0FDQU4sSUFBSSxHQUFKLENBQVE7QUFBQSxTQUFLLElBQUksVUFBVDtBQUFBLENBQVIiLCJmaWxlIjoic2NyaXB0My5qcyIsInNvdXJjZXNDb250ZW50IjpbImNsYXNzIFRlc3Qge1xuXG59IiwiYXJyLm1hcCh4ID0+IHggKiBNVUxUSVBMSUVSKTsiXX0=
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNjcmlwdC5qcyIsInNjcmlwdDIuanMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7O0lBQU0sSTs7Ozs7QUNBTixJQUFJLEdBQUosQ0FBUTtBQUFBLFNBQUssSUFBSSxVQUFUO0FBQUEsQ0FBUiIsImZpbGUiOiJzY3JpcHQzLmpzIiwic291cmNlc0NvbnRlbnQiOlsiY2xhc3MgVGVzdCB7XG5cbn0iLCJhcnIubWFwKHggPT4geCAqIE1VTFRJUExJRVIpOyJdfQ==

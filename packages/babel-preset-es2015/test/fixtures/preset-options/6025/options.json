@@ -10,6 +10,7 @@
     "transform-es2015-duplicate-keys",
     "transform-es2015-for-of",
     "transform-es2015-function-name",
+    "transform-es2015-instanceof",
     "transform-es2015-literals",
     "transform-es2015-object-super",
     "transform-es2015-parameters",
