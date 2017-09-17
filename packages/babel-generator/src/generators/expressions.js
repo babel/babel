@@ -33,7 +33,9 @@ export function UpdateExpression(node: Object) {
     this.token(node.operator);
     this.print(node.argument, node);
   } else {
+    this.startTerminatorless(true);
     this.print(node.argument, node);
+    this.endTerminatorless();
     this.token(node.operator);
   }
 }
