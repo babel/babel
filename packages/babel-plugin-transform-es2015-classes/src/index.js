@@ -1,8 +1,7 @@
 import LooseTransformer from "./loose";
 import VanillaTransformer from "./vanilla";
+import annotateAsPure from "babel-helper-annotate-as-pure";
 import nameFunction from "babel-helper-function-name";
-
-const PURE_ANNOTATION = "#__PURE__";
 
 export default function({ types: t }) {
   // todo: investigate traversal requeueing
@@ -57,7 +56,7 @@ export default function({ types: t }) {
         path.replaceWith(new Constructor(path, state.file).run());
 
         if (path.isCallExpression()) {
-          path.addComment("leading", PURE_ANNOTATION);
+          annotateAsPure(path);
           if (path.get("callee").isArrowFunctionExpression()) {
             path.get("callee").arrowFunctionToExpression();
           }

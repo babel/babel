@@ -1,4 +1,5 @@
 // This file contains methods responsible for dealing with comments.
+import * as t from "babel-types";
 
 /**
  * Share comments amongst siblings.
@@ -27,13 +28,8 @@ export function shareCommentsWithSiblings() {
   }
 }
 
-export function addComment(type, content, line?) {
-  this.addComments(type, [
-    {
-      type: line ? "CommentLine" : "CommentBlock",
-      value: content,
-    },
-  ]);
+export function addComment(type: string, content: string, line?: boolean) {
+  t.addComment(this.node, type, content, line);
 }
 
 /**
@@ -41,20 +37,5 @@ export function addComment(type, content, line?) {
  */
 
 export function addComments(type: string, comments: Array) {
-  if (!comments) return;
-
-  const node = this.node;
-  if (!node) return;
-
-  const key = `${type}Comments`;
-
-  if (node[key]) {
-    if (type === "leading") {
-      node[key] = comments.concat(node[key]);
-    } else {
-      node[key] = node[key].concat(comments);
-    }
-  } else {
-    node[key] = comments;
-  }
+  t.addComments(this.node, type, comments);
 }
