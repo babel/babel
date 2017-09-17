@@ -12,9 +12,9 @@ function defineHelper(str) {
 helpers.typeof = defineHelper(`
   export default function _typeof(obj) {
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-      _typeof = function (obj) { return typeof obj; };
+      _typeof = obj => typeof obj;
     } else {
-      _typeof = function (obj) {
+      _typeof = obj => {
         return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype
           ? "symbol"
           : typeof obj;
@@ -26,24 +26,20 @@ helpers.typeof = defineHelper(`
 `);
 
 helpers.jsx = defineHelper(`
-  var REACT_ELEMENT_TYPE;
+  const REACT_ELEMENT_TYPE = (typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7;
 
-  export default function _createRawReactElement(type, props, key, children) {
-    if (!REACT_ELEMENT_TYPE) {
-      REACT_ELEMENT_TYPE = (typeof Symbol === "function" && Symbol.for && Symbol.for("react.element")) || 0xeac7;
-    }
+  export default function _createRawReactElement(type, props, key, ...children) {
+    const defaultProps = type && type.defaultProps;
 
-    var defaultProps = type && type.defaultProps;
-    var childrenLength = arguments.length - 3;
-
-    if (!props && childrenLength !== 0) {
+    if (!props && children.length !== 0) {
       // If we're going to assign props.children, we create a new object now
       // to avoid mutating defaultProps.
       props = {};
     }
+
     if (props && defaultProps) {
-      for (var propName in defaultProps) {
-        if (props[propName] === void 0) {
+      for (const propName in defaultProps) {
+        if (props[propName] === undefined) {
           props[propName] = defaultProps[propName];
         }
       }
@@ -51,22 +47,18 @@ helpers.jsx = defineHelper(`
       props = defaultProps || {};
     }
 
-    if (childrenLength === 1) {
+    if (children.length === 1) {
+      props.children = children[0];
+    } else if (children.length > 1) {
       props.children = children;
-    } else if (childrenLength > 1) {
-      var childArray = new Array(childrenLength);
-      for (var i = 0; i < childrenLength; i++) {
-        childArray[i] = arguments[i + 3];
-      }
-      props.children = childArray;
     }
 
     return {
       $$typeof: REACT_ELEMENT_TYPE,
-      type: type,
+      type,
       key: key === undefined ? null : '' + key,
       ref: null,
-      props: props,
+      props,
       _owner: null,
     };
   }
@@ -76,7 +68,7 @@ helpers.asyncIterator = defineHelper(`
   export default function _asyncIterator(iterable) {
     if (typeof Symbol === "function") {
       if (Symbol.asyncIterator) {
-        var method = iterable[Symbol.asyncIterator];
+        const method = iterable[Symbol.asyncIterator];
         if (method != null) return method.call(iterable);
       }
       if (Symbol.iterator) {
@@ -92,108 +84,114 @@ helpers.asyncGenerator = defineHelper(`
     this.value = value;
   }
 
-  function AsyncGenerator(gen) {
-    var front, back;
+  const send = (state, key, arg) => new Promise((resolve, reject) => {
+    const request = {
+      key,
+      arg,
+      resolve,
+      reject,
+      next: null,
+    };
 
-    function send(key, arg) {
-      return new Promise(function (resolve, reject) {
-        var request = {
-          key: key,
-          arg: arg,
-          resolve: resolve,
-          reject: reject,
-          next: null
-        };
-
-        if (back) {
-          back = back.next = request;
-        } else {
-          front = back = request;
-          resume(key, arg);
-        }
-      });
+    if (state.back) {
+      state.back = state.back.next = request;
+    } else {
+      state.front = state.back = request;
+      resume(state, key, arg);
     }
+  });
 
-    function resume(key, arg) {
-      try {
-        var result = gen[key](arg)
-        var value = result.value;
-        if (value instanceof AwaitValue) {
-          Promise.resolve(value.value).then(
-            function (arg) { resume("next", arg); },
-            function (arg) { resume("throw", arg); });
-        } else {
-          settle(result.done ? "return" : "normal", result.value);
-        }
-      } catch (err) {
-        settle("throw", err);
-      }
-    }
-
-    function settle(type, value) {
-      switch (type) {
-        case "return":
-          front.resolve({ value: value, done: true });
-          break;
-        case "throw":
-          front.reject(value);
-          break;
-        default:
-          front.resolve({ value: value, done: false });
-          break;
-      }
-
-      front = front.next;
-      if (front) {
-        resume(front.key, front.arg);
+  const resume = (state, key, arg) => {
+    try {
+      const result = state.gen[key](arg);
+      const {value} = result;
+      if (value instanceof AwaitValue) {
+        Promise.resolve(value.value).then(
+          arg => resume(state, "next", arg),
+          arg => resume(state, "throw", arg),
+        );
       } else {
-        back = null;
+        settle(state, result.done ? "return" : "normal", result.value);
+      }
+    } catch (err) {
+      settle(state, "throw", err);
+    }
+  };
+
+  const settle = (state, type, value) => {
+    switch (type) {
+      case "return":
+        state.front.resolve({ value, done: true });
+        break;
+      case "throw":
+        state.front.reject(value);
+        break;
+      default:
+        state.front.resolve({ value, done: false });
+        break;
+    }
+
+    state.front = state.front.next;
+    if (state.front) {
+      resume(state, state.front.key, state.front.arg);
+    } else {
+      state.back = null;
+    }
+  };
+
+  class AsyncGenerator {
+    constructor(gen) {
+      this._state = {
+        gen,
+        front: null,
+        back: null,
+      }
+
+      this._invoke = send;
+
+      // Hide "return" method if generator return is not supported
+      if (typeof gen.return !== "function") {
+        this.return = undefined;
       }
     }
 
-    this._invoke = send;
+    [(typeof Symbol === "function" && Symbol.asyncIterator) || "@@asyncIterator"]() {
+      return this;
+    }
 
-    // Hide "return" method if generator return is not supported
-    if (typeof gen.return !== "function") {
-      this.return = undefined;
+    next(arg) {
+      return this._invoke(this._state, "next", arg);
+    }
+
+    throw(arg) {
+      return this._invoke(this._state, "throw", arg);
+    }
+
+    return(arg) {
+      return this._invoke(this._state, "return", arg);
     }
   }
-
-  if (typeof Symbol === "function" && Symbol.asyncIterator) {
-    AsyncGenerator.prototype[Symbol.asyncIterator] = function () { return this; };
-  }
-
-  AsyncGenerator.prototype.next = function (arg) { return this._invoke("next", arg); };
-  AsyncGenerator.prototype.throw = function (arg) { return this._invoke("throw", arg); };
-  AsyncGenerator.prototype.return = function (arg) { return this._invoke("return", arg); };
 
   export default {
-    wrap: function (fn) {
-      return function () {
-        return new AsyncGenerator(fn.apply(this, arguments));
-      };
-    },
-    await: function (value) {
-      return new AwaitValue(value);
-    }
+    wrap: fn => (...args) => new AsyncGenerator(fn.apply(this, args)),
+    await: value => new AwaitValue(value),
   };
 `);
 
 helpers.asyncGeneratorDelegate = defineHelper(`
   export default function _asyncGeneratorDelegate(inner, awaitWrap) {
-    var iter = {}, waiting = false;
+    const iter = {};
+    let waiting = false;
 
     function pump(key, value) {
       waiting = true;
-      value = new Promise(function (resolve) { resolve(inner[key](value)); });
+      value = new Promise(resolve => resolve(inner[key](value)));
       return { done: false, value: awaitWrap(value) };
-    };
-
-    if (typeof Symbol === "function" && Symbol.iterator) {
-      iter[Symbol.iterator] = function () { return this; };
     }
 
-    iter.next = function (value) {
+    iter[(typeof Symbol === "function" && Symbol.iterator) || "@@iterator"] = () => iter;
+
+    iter.next = value => {
       if (waiting) {
         waiting = false;
         return value;
@@ -202,7 +200,7 @@ helpers.asyncGeneratorDelegate = defineHelper(`
     };
 
     if (typeof inner.throw === "function") {
-      iter.throw = function (value) {
+      iter.throw = value => {
         if (waiting) {
           waiting = false;
           throw value;
@@ -212,9 +210,7 @@ helpers.asyncGeneratorDelegate = defineHelper(`
     }
 
     if (typeof inner.return === "function") {
-      iter.return = function (value) {
-        return pump("return", value);
-      };
+      iter.return = value => pump("return", value);
     }
 
     return iter;
@@ -223,22 +219,22 @@ helpers.asyncGeneratorDelegate = defineHelper(`
 
 helpers.asyncToGenerator = defineHelper(`
   export default function _asyncToGenerator(fn) {
-    return function () {
+    return function (...args) {
       return new Promise((resolve, reject) => {
-        var gen = fn.apply(this, arguments);
+        const gen = fn.apply(this, args);
         function step(key, arg) {
+          let info;
           try {
-            var info = gen[key](arg);
-            var value = info.value;
+            info = gen[key](arg);
           } catch (error) {
             reject(error);
             return;
           }
 
           if (info.done) {
-            resolve(value);
+            resolve(info.value);
           } else {
-            Promise.resolve(value).then(_next, _throw);
+            Promise.resolve(info.value).then(_next, _throw);
           }
         }
         function _next(value) { step("next", value); }
@@ -260,8 +256,8 @@ helpers.classCallCheck = defineHelper(`
 
 helpers.createClass = defineHelper(`
   function _defineProperties(target, props) {
-    for (var i = 0; i < props.length; i ++) {
-      var descriptor = props[i];
+    for (let i = 0; i < props.length; i++) {
+      const descriptor = props[i];
       descriptor.enumerable = descriptor.enumerable || false;
       descriptor.configurable = true;
       if ("value" in descriptor) descriptor.writable = true;
@@ -278,8 +274,8 @@ helpers.createClass = defineHelper(`
 
 helpers.defineEnumerableProperties = defineHelper(`
   export default function _defineEnumerableProperties(obj, descs) {
-    for (var key in descs) {
-      var desc = descs[key];
+    for (const key in descs) {
+      const desc = descs[key];
       desc.configurable = desc.enumerable = true;
       if ("value" in desc) desc.writable = true;
       Object.defineProperty(obj, key, desc);
@@ -289,10 +285,10 @@ helpers.defineEnumerableProperties = defineHelper(`
     // Symbols are available, fetch all of the descs object's own
     // symbol properties and define them on our target object too.
     if (Object.getOwnPropertySymbols) {
-      var objectSymbols = Object.getOwnPropertySymbols(descs);
-      for (var i = 0; i < objectSymbols.length; i++) {
-        var sym = objectSymbols[i];
-        var desc = descs[sym];
+      const objectSymbols = Object.getOwnPropertySymbols(descs);
+      for (let i = 0; i < objectSymbols.length; i++) {
+        const sym = objectSymbols[i];
+        const desc = descs[sym];
         desc.configurable = desc.enumerable = true;
         if ("value" in desc) desc.writable = true;
         Object.defineProperty(obj, sym, desc);
@@ -304,10 +300,10 @@ helpers.defineEnumerableProperties = defineHelper(`
 
 helpers.defaults = defineHelper(`
   export default function _defaults(obj, defaults) {
-    var keys = Object.getOwnPropertyNames(defaults);
-    for (var i = 0; i < keys.length; i++) {
-      var key = keys[i];
-      var value = Object.getOwnPropertyDescriptor(defaults, key);
+    const keys = Object.getOwnPropertyNames(defaults);
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const value = Object.getOwnPropertyDescriptor(defaults, key);
       if (value && value.configurable && obj[key] === undefined) {
         Object.defineProperty(obj, key, value);
       }
@@ -338,31 +334,27 @@ helpers.defineProperty = defineHelper(`
 `);
 
 helpers.extends = defineHelper(`
-  export default function _extends() {
-    _extends = Object.assign || function (target) {
-      for (var i = 1; i < arguments.length; i++) {
-        var source = arguments[i];
-        for (var key in source) {
-          if (Object.prototype.hasOwnProperty.call(source, key)) {
-            target[key] = source[key];
-          }
+  export default Object.assign || function (target, ...sources) {
+    for (let i = 0; i < sources.length; i++) {
+      const source = sources[i];
+      for (const key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
         }
       }
-      return target;
-    };
-
-    return _extends.apply(this, arguments);
-  }
+    }
+    return target;
+  };
 `);
 
 helpers.get = defineHelper(`
   export default function _get(object, property, receiver) {
     if (object === null) object = Function.prototype;
 
-    var desc = Object.getOwnPropertyDescriptor(object, property);
+    const desc = Object.getOwnPropertyDescriptor(object, property);
 
     if (desc === undefined) {
-      var parent = Object.getPrototypeOf(object);
+      const parent = Object.getPrototypeOf(object);
 
       if (parent === null) {
         return undefined;
@@ -372,7 +364,7 @@ helpers.get = defineHelper(`
     } else if ("value" in desc) {
       return desc.value;
     } else {
-      var getter = desc.get;
+      const getter = desc.get;
 
       if (getter === undefined) {
         return undefined;
@@ -429,9 +421,9 @@ helpers.interopRequireWildcard = defineHelper(`
     if (obj && obj.__esModule) {
       return obj;
     } else {
-      var newObj = {};
+      const newObj = {};
       if (obj != null) {
-        for (var key in obj) {
+        for (const key in obj) {
           if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
         }
       }
@@ -459,20 +451,19 @@ helpers.objectWithoutProperties = defineHelper(`
   export default function _objectWithoutProperties(source, excluded) {
     if (source == null) return {};
 
-    var target = {};
-    var sourceKeys = Object.keys(source);
-    var key, i;
+    const target = {};
+    const sourceKeys = Object.keys(source);
 
-    for (i = 0; i < sourceKeys.length; i++) {
-      key = sourceKeys[i];
+    for (let i = 0; i < sourceKeys.length; i++) {
+      const key = sourceKeys[i];
       if (excluded.indexOf(key) >= 0) continue;
       target[key] = source[key];
     }
 
     if (Object.getOwnPropertySymbols) {
-      var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-      for (i = 0; i < sourceSymbolKeys.length; i++) {
-        key = sourceSymbolKeys[i];
+      const sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+      for (let i = 0; i < sourceSymbolKeys.length; i++) {
+        const key = sourceSymbolKeys[i];
         if (excluded.indexOf(key) >= 0) continue;
         if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
         target[key] = source[key];
@@ -497,10 +488,10 @@ helpers.possibleConstructorReturn = defineHelper(`
 
 helpers.set = defineHelper(`
   export default function _set(object, property, value, receiver) {
-    var desc = Object.getOwnPropertyDescriptor(object, property);
+    const desc = Object.getOwnPropertyDescriptor(object, property);
 
     if (desc === undefined) {
-      var parent = Object.getPrototypeOf(object);
+      const parent = Object.getPrototypeOf(object);
 
       if (parent !== null) {
         _set(parent, property, value, receiver);
@@ -508,7 +499,7 @@ helpers.set = defineHelper(`
     } else if ("value" in desc && desc.writable) {
       desc.value = value;
     } else {
-      var setter = desc.set;
+      const setter = desc.set;
 
       if (setter !== undefined) {
         setter.call(receiver, value);
@@ -533,12 +524,13 @@ helpers.slicedToArray = defineHelper(`
     // _i = _iterator
     // _s = _step
 
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-    var _e = undefined;
+    const _arr = [];
+    let _n = true;
+    let _d = false;
+    let _e, _i;
     try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      let _s;
+      for (_i = arr[Symbol.iterator](); !(_n = (_s = _i.next()).done); _n = true) {
         _arr.push(_s.value);
         if (i && _arr.length === i) break;
       }
@@ -571,8 +563,8 @@ helpers.slicedToArrayLoose = defineHelper(`
     if (Array.isArray(arr)) {
       return arr;
     } else if (Symbol.iterator in Object(arr)) {
-      var _arr = [];
-      for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+      const _arr = [];
+      for (let _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
         _arr.push(_step.value);
         if (i && _arr.length === i) break;
       }
@@ -621,7 +613,8 @@ helpers.toArray = defineHelper(`
 helpers.toConsumableArray = defineHelper(`
   export default function _toConsumableArray(arr) {
     if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+      let i, arr2;
+      for (i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
       return arr2;
     } else {
       return Array.from(arr);
@@ -631,8 +624,8 @@ helpers.toConsumableArray = defineHelper(`
 
 helpers.skipFirstGeneratorNext = defineHelper(`
   export default function _skipFirstGeneratorNext(fn) {
-    return function () {
-      var it = fn.apply(this, arguments);
+    return function (...args) {
+      const it = fn.apply(this, args);
       it.next();
       return it;
     }
