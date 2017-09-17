@@ -21,6 +21,7 @@ import transformES2015ModulesCommonJS from "babel-plugin-transform-es2015-module
 import transformES2015ModulesSystemJS from "babel-plugin-transform-es2015-modules-systemjs";
 import transformES2015ModulesAMD from "babel-plugin-transform-es2015-modules-amd";
 import transformES2015ModulesUMD from "babel-plugin-transform-es2015-modules-umd";
+import transformES2015Instanceof from "babel-plugin-transform-es2015-instanceof";
 import transformRegenerator from "babel-plugin-transform-regenerator";
 
 export default function(context, opts = {}) {
@@ -72,6 +73,7 @@ export default function(context, opts = {}) {
       [transformES2015Destructuring, optsLoose],
       transformES2015BlockScoping,
       transformES2015TypeofSymbol,
+      transformES2015Instanceof,
       modules === "commonjs" && [transformES2015ModulesCommonJS, optsLoose],
       modules === "systemjs" && [transformES2015ModulesSystemJS, optsLoose],
       modules === "amd" && [transformES2015ModulesAMD, optsLoose],
