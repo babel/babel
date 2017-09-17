@@ -1,5 +1,4 @@
 import * as babel from "../lib/index";
-import buildExternalHelpers from "../lib/tools/build-external-helpers";
 import sourceMap from "source-map";
 import assert from "assert";
 import path from "path";
@@ -817,26 +816,44 @@ describe("api", function() {
   });
 
   describe("buildExternalHelpers", function() {
+    describe("smoke tests", function() {
+      it("builds external helpers in global output type", function() {
+        babel.buildExternalHelpers(null, "global");
+      });
+
+      it("builds external helpers in module output type", function() {
+        babel.buildExternalHelpers(null, "module");
+      });
+
+      it("builds external helpers in umd output type", function() {
+        babel.buildExternalHelpers(null, "umd");
+      });
+
+      it("builds external helpers in var output type", function() {
+        babel.buildExternalHelpers(null, "var");
+      });
+    });
+
     it("all", function() {
-      const script = buildExternalHelpers();
+      const script = babel.buildExternalHelpers();
       assert.ok(script.indexOf("classCallCheck") >= -1);
       assert.ok(script.indexOf("inherits") >= 0);
     });
 
     it("whitelist", function() {
-      const script = buildExternalHelpers(["inherits"]);
+      const script = babel.buildExternalHelpers(["inherits"]);
       assert.ok(script.indexOf("classCallCheck") === -1);
       assert.ok(script.indexOf("inherits") >= 0);
     });
 
     it("empty whitelist", function() {
-      const script = buildExternalHelpers([]);
+      const script = babel.buildExternalHelpers([]);
       assert.ok(script.indexOf("classCallCheck") === -1);
       assert.ok(script.indexOf("inherits") === -1);
     });
 
     it("underscored", function() {
-      const script = buildExternalHelpers(["typeof"]);
+      const script = babel.buildExternalHelpers(["typeof"]);
       assert.ok(script.indexOf("typeof") >= 0);
     });
   });
