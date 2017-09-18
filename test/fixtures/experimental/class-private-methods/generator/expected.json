@@ -93,12 +93,12 @@
               "kind": "method",
               "key": {
                 "type": "PrivateName",
-                "start": 18,
+                "start": 17,
                 "end": 22,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 4
+                    "column": 3
                   },
                   "end": {
                     "line": 2,
