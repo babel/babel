@@ -26,13 +26,9 @@
           "loose": true
         }
       ]
-    ],
-    "plugins": [
-      "transform-runtime"
     ]
   },
   "dependencies": {
-    "babel-runtime": "^6.18.0",
     "babel-types": "^6.19.0",
     "private": "^0.1.6"
   },
