@@ -88,6 +88,7 @@ const rewriteBindingInitVisitor = {
           t.identifier(localName),
         ),
       );
+      statement._blockHoist = path.node._blockHoist;
 
       requeueInParent(path.insertAfter(statement)[0]);
     }
@@ -105,6 +106,7 @@ const rewriteBindingInitVisitor = {
             t.identifier(localName),
           ),
         );
+        statement._blockHoist = path.node._blockHoist;
 
         requeueInParent(path.insertAfter(statement)[0]);
       }
@@ -338,6 +340,7 @@ const rewriteReferencesVisitor = {
           let node = t.sequenceExpression(items);
           if (path.parentPath.isExpressionStatement()) {
             node = t.expressionStatement(node);
+            node._blockHoist = path.parentPath.node._blockHoist;
           }
 
           const statement = path.insertAfter(node)[0];
