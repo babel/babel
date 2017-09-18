@@ -1,5 +1,5 @@
 let oneOf = function () {
-  for (var _len = arguments.length, nodes = Array(_len), _key = 0; _key < _len; _key++) {
+  for (var _len = arguments.length, nodes = new Array(_len), _key = 0; _key < _len; _key++) {
     nodes[_key] = arguments[_key];
   }
 

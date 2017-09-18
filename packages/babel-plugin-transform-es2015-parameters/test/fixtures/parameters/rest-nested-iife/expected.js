@@ -13,7 +13,7 @@ function broken(x) {
       return Foo;
     }(Bar);
 
-    for (var _len = arguments.length, foo = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    for (var _len = arguments.length, foo = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
       foo[_key - 1] = arguments[_key];
     }
 

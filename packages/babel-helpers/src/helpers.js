@@ -54,7 +54,7 @@ helpers.jsx = defineHelper(`
     if (childrenLength === 1) {
       props.children = children;
     } else if (childrenLength > 1) {
-      var childArray = Array(childrenLength);
+      var childArray = new Array(childrenLength);
       for (var i = 0; i < childrenLength; i++) {
         childArray[i] = arguments[i + 3];
       }
@@ -621,7 +621,7 @@ helpers.toArray = defineHelper(`
 helpers.toConsumableArray = defineHelper(`
   export default function _toConsumableArray(arr) {
     if (Array.isArray(arr)) {
-      for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+      for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
       return arr2;
     } else {
       return Array.from(arr);
