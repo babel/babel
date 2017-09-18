@@ -92,12 +92,12 @@
               "static": false,
               "key": {
                 "type": "PrivateName",
-                "start": 17,
+                "start": 16,
                 "end": 18,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 3
+                    "column": 2
                   },
                   "end": {
                     "line": 2,
@@ -160,12 +160,12 @@
               "static": false,
               "key": {
                 "type": "PrivateName",
-                "start": 27,
+                "start": 26,
                 "end": 28,
                 "loc": {
                   "start": {
                     "line": 3,
-                    "column": 3
+                    "column": 2
                   },
                   "end": {
                     "line": 3,
@@ -430,12 +430,12 @@
                         },
                         "property": {
                           "type": "PrivateName",
-                          "start": 75,
+                          "start": 74,
                           "end": 76,
                           "loc": {
                             "start": {
                               "line": 6,
-                              "column": 10
+                              "column": 9
                             },
                             "end": {
                               "line": 6,
@@ -561,12 +561,12 @@
                         },
                         "property": {
                           "type": "PrivateName",
-                          "start": 93,
+                          "start": 92,
                           "end": 94,
                           "loc": {
                             "start": {
                               "line": 7,
-                              "column": 10
+                              "column": 9
                             },
                             "end": {
                               "line": 7,
@@ -757,12 +757,12 @@
                               "static": false,
                               "key": {
                                 "type": "PrivateName",
-                                "start": 132,
+                                "start": 131,
                                 "end": 133,
                                 "loc": {
                                   "start": {
                                     "line": 10,
-                                    "column": 7
+                                    "column": 6
                                   },
                                   "end": {
                                     "line": 10,
@@ -825,12 +825,12 @@
                               "static": false,
                               "key": {
                                 "type": "PrivateName",
-                                "start": 146,
+                                "start": 145,
                                 "end": 147,
                                 "loc": {
                                   "start": {
                                     "line": 11,
-                                    "column": 7
+                                    "column": 6
                                   },
                                   "end": {
                                     "line": 11,
@@ -1095,12 +1095,12 @@
                                         },
                                         "property": {
                                           "type": "PrivateName",
-                                          "start": 202,
+                                          "start": 201,
                                           "end": 203,
                                           "loc": {
                                             "start": {
                                               "line": 14,
-                                              "column": 14
+                                              "column": 13
                                             },
                                             "end": {
                                               "line": 14,
@@ -1226,12 +1226,12 @@
                                         },
                                         "property": {
                                           "type": "PrivateName",
-                                          "start": 224,
+                                          "start": 223,
                                           "end": 225,
                                           "loc": {
                                             "start": {
                                               "line": 15,
-                                              "column": 14
+                                              "column": 13
                                             },
                                             "end": {
                                               "line": 15,
@@ -1400,12 +1400,12 @@
                                       },
                                       "property": {
                                         "type": "PrivateName",
-                                        "start": 270,
+                                        "start": 269,
                                         "end": 271,
                                         "loc": {
                                           "start": {
                                             "line": 18,
-                                            "column": 29
+                                            "column": 28
                                           },
                                           "end": {
                                             "line": 18,
@@ -1569,12 +1569,12 @@
                                         },
                                         "property": {
                                           "type": "PrivateName",
-                                          "start": 301,
+                                          "start": 300,
                                           "end": 302,
                                           "loc": {
                                             "start": {
                                               "line": 19,
-                                              "column": 27
+                                              "column": 26
                                             },
                                             "end": {
                                               "line": 19,
@@ -1743,12 +1743,12 @@
                                       },
                                       "property": {
                                         "type": "PrivateName",
-                                        "start": 344,
+                                        "start": 343,
                                         "end": 345,
                                         "loc": {
                                           "start": {
                                             "line": 21,
-                                            "column": 29
+                                            "column": 28
                                           },
                                           "end": {
                                             "line": 21,
@@ -1912,12 +1912,12 @@
                                         },
                                         "property": {
                                           "type": "PrivateName",
-                                          "start": 375,
+                                          "start": 374,
                                           "end": 376,
                                           "loc": {
                                             "start": {
                                               "line": 22,
-                                              "column": 27
+                                              "column": 26
                                             },
                                             "end": {
                                               "line": 22,
@@ -2132,12 +2132,12 @@
                                           },
                                           "property": {
                                             "type": "PrivateName",
-                                            "start": 420,
+                                            "start": 419,
                                             "end": 421,
                                             "loc": {
                                               "start": {
                                                 "line": 24,
-                                                "column": 31
+                                                "column": 30
                                               },
                                               "end": {
                                                 "line": 24,
@@ -2198,12 +2198,12 @@
                                           },
                                           "property": {
                                             "type": "PrivateName",
-                                            "start": 429,
+                                            "start": 428,
                                             "end": 430,
                                             "loc": {
                                               "start": {
                                                 "line": 24,
-                                                "column": 40
+                                                "column": 39
                                               },
                                               "end": {
                                                 "line": 24,
@@ -2277,12 +2277,12 @@
                                           },
                                           "property": {
                                             "type": "PrivateName",
-                                            "start": 440,
+                                            "start": 439,
                                             "end": 441,
                                             "loc": {
                                               "start": {
                                                 "line": 24,
-                                                "column": 51
+                                                "column": 50
                                               },
                                               "end": {
                                                 "line": 24,
@@ -2343,12 +2343,12 @@
                                           },
                                           "property": {
                                             "type": "PrivateName",
-                                            "start": 449,
+                                            "start": 448,
                                             "end": 450,
                                             "loc": {
                                               "start": {
                                                 "line": 24,
-                                                "column": 60
+                                                "column": 59
                                               },
                                               "end": {
                                                 "line": 24,
@@ -2496,12 +2496,12 @@
                                           },
                                           "property": {
                                             "type": "PrivateName",
-                                            "start": 496,
+                                            "start": 495,
                                             "end": 497,
                                             "loc": {
                                               "start": {
                                                 "line": 26,
-                                                "column": 42
+                                                "column": 41
                                               },
                                               "end": {
                                                 "line": 26,
@@ -2559,12 +2559,12 @@
                                           },
                                           "property": {
                                             "type": "PrivateName",
-                                            "start": 509,
+                                            "start": 508,
                                             "end": 510,
                                             "loc": {
                                               "start": {
                                                 "line": 26,
-                                                "column": 55
+                                                "column": 54
                                               },
                                               "end": {
                                                 "line": 26,
@@ -2768,12 +2768,12 @@
                       },
                       "property": {
                         "type": "PrivateName",
-                        "start": 554,
+                        "start": 553,
                         "end": 555,
                         "loc": {
                           "start": {
                             "line": 30,
-                            "column": 25
+                            "column": 24
                           },
                           "end": {
                             "line": 30,
@@ -2937,12 +2937,12 @@
                         },
                         "property": {
                           "type": "PrivateName",
-                          "start": 581,
+                          "start": 580,
                           "end": 582,
                           "loc": {
                             "start": {
                               "line": 31,
-                              "column": 23
+                              "column": 22
                             },
                             "end": {
                               "line": 31,
@@ -3111,12 +3111,12 @@
                       },
                       "property": {
                         "type": "PrivateName",
-                        "start": 620,
+                        "start": 619,
                         "end": 621,
                         "loc": {
                           "start": {
                             "line": 33,
-                            "column": 25
+                            "column": 24
                           },
                           "end": {
                             "line": 33,
@@ -3280,12 +3280,12 @@
                         },
                         "property": {
                           "type": "PrivateName",
-                          "start": 647,
+                          "start": 646,
                           "end": 648,
                           "loc": {
                             "start": {
                               "line": 34,
-                              "column": 23
+                              "column": 22
                             },
                             "end": {
                               "line": 34,
@@ -3500,12 +3500,12 @@
                           },
                           "property": {
                             "type": "PrivateName",
-                            "start": 688,
+                            "start": 687,
                             "end": 689,
                             "loc": {
                               "start": {
                                 "line": 36,
-                                "column": 27
+                                "column": 26
                               },
                               "end": {
                                 "line": 36,
@@ -3566,12 +3566,12 @@
                           },
                           "property": {
                             "type": "PrivateName",
-                            "start": 697,
+                            "start": 696,
                             "end": 698,
                             "loc": {
                               "start": {
                                 "line": 36,
-                                "column": 36
+                                "column": 35
                               },
                               "end": {
                                 "line": 36,
@@ -3645,12 +3645,12 @@
                           },
                           "property": {
                             "type": "PrivateName",
-                            "start": 708,
+                            "start": 707,
                             "end": 709,
                             "loc": {
                               "start": {
                                 "line": 36,
-                                "column": 47
+                                "column": 46
                               },
                               "end": {
                                 "line": 36,
@@ -3711,12 +3711,12 @@
                           },
                           "property": {
                             "type": "PrivateName",
-                            "start": 717,
+                            "start": 716,
                             "end": 718,
                             "loc": {
                               "start": {
                                 "line": 36,
-                                "column": 56
+                                "column": 55
                               },
                               "end": {
                                 "line": 36,
@@ -3864,12 +3864,12 @@
                           },
                           "property": {
                             "type": "PrivateName",
-                            "start": 760,
+                            "start": 759,
                             "end": 761,
                             "loc": {
                               "start": {
                                 "line": 38,
-                                "column": 38
+                                "column": 37
                               },
                               "end": {
                                 "line": 38,
@@ -3927,12 +3927,12 @@
                           },
                           "property": {
                             "type": "PrivateName",
-                            "start": 773,
+                            "start": 772,
                             "end": 774,
                             "loc": {
                               "start": {
                                 "line": 38,
-                                "column": 51
+                                "column": 50
                               },
                               "end": {
                                 "line": 38,

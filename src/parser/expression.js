@@ -348,7 +348,6 @@ export default class ExpressionParser extends LValParser {
         if (arg.type === "Identifier") {
           this.raise(node.start, "Deleting local variable in strict mode");
         } else if (
-          this.hasPlugin("classPrivateProperties") &&
           arg.type === "MemberExpression" &&
           arg.property.type === "PrivateName"
         ) {
@@ -471,9 +470,7 @@ export default class ExpressionParser extends LValParser {
     } else if (this.eat(tt.dot)) {
       const node = this.startNodeAt(startPos, startLoc);
       node.object = base;
-      node.property = this.hasPlugin("classPrivateProperties")
-        ? this.parseMaybePrivateName()
-        : this.parseIdentifier(true);
+      node.property = this.parseMaybePrivateName();
       node.computed = false;
       return this.finishNode(node, "MemberExpression");
     } else if (this.eat(tt.bracketL)) {
@@ -809,10 +806,12 @@ export default class ExpressionParser extends LValParser {
   }
 
   parseMaybePrivateName(): N.PrivateName | N.Identifier {
-    const isPrivate = this.eat(tt.hash);
+    const isPrivate = this.match(tt.hash);
 
     if (isPrivate) {
+      this.expectOnePlugin(["classPrivateProperties", "classPrivateMethods"]);
       const node = this.startNode();
+      this.next();
       node.id = this.parseIdentifier(true);
       return this.finishNode(node, "PrivateName");
     } else {

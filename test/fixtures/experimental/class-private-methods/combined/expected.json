@@ -147,12 +147,12 @@
               "kind": "method",
               "key": {
                 "type": "PrivateName",
-                "start": 26,
+                "start": 25,
                 "end": 27,
                 "loc": {
                   "start": {
                     "line": 4,
-                    "column": 4
+                    "column": 3
                   },
                   "end": {
                     "line": 4,
@@ -282,12 +282,12 @@
               "static": false,
               "key": {
                 "type": "PrivateName",
-                "start": 57,
+                "start": 56,
                 "end": 58,
                 "loc": {
                   "start": {
                     "line": 8,
-                    "column": 3
+                    "column": 2
                   },
                   "end": {
                     "line": 8,
@@ -443,12 +443,12 @@
               "static": false,
               "key": {
                 "type": "PrivateName",
-                "start": 99,
+                "start": 98,
                 "end": 100,
                 "loc": {
                   "start": {
                     "line": 11,
-                    "column": 7
+                    "column": 6
                   },
                   "end": {
                     "line": 11,
@@ -566,12 +566,12 @@
               "static": false,
               "key": {
                 "type": "PrivateName",
-                "start": 122,
+                "start": 121,
                 "end": 123,
                 "loc": {
                   "start": {
                     "line": 13,
-                    "column": 3
+                    "column": 2
                   },
                   "end": {
                     "line": 13,

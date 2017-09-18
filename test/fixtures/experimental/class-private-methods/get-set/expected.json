@@ -92,12 +92,12 @@
               "static": false,
               "key": {
                 "type": "PrivateName",
-                "start": 21,
+                "start": 20,
                 "end": 25,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 7
+                    "column": 6
                   },
                   "end": {
                     "line": 2,
@@ -213,12 +213,12 @@
               "static": false,
               "key": {
                 "type": "PrivateName",
-                "start": 60,
+                "start": 59,
                 "end": 64,
                 "loc": {
                   "start": {
                     "line": 5,
-                    "column": 7
+                    "column": 6
                   },
                   "end": {
                     "line": 5,
