@@ -16,7 +16,7 @@
     "desugaring",
     "ES6"
   ],
-  "version": "0.10.1",
+  "version": "0.11.0",
   "homepage": "http://github.com/facebook/regenerator",
   "repository": {
     "type": "git",
@@ -41,9 +41,9 @@
     "commoner": "^0.10.8",
     "private": "^0.1.6",
     "recast": "^0.11.17",
-    "regenerator-preset": "^0.10.1",
+    "regenerator-preset": "^0.11.0",
     "regenerator-runtime": "^0.11.0",
-    "regenerator-transform": "^0.10.1",
+    "regenerator-transform": "^0.11.0",
     "through": "^2.3.8"
   },
   "devDependencies": {
