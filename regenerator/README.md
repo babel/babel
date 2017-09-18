@@ -12,7 +12,7 @@ or as a standalone .js file, whichever you prefer.
 Installation
 ---
 
-From NPM:
+From npm:
 ```sh
 npm install -g regenerator
 ```
