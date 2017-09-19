@@ -1,8 +1,11 @@
+// These mappings represent the builtin/feature proposals that have been
+// shipped by browsers, and are enabled by the `shippedProposals` option.
+
 const builtIns = {
   "es7.promise.finally": "Promise.prototype.finally"
 };
 
-const plugins = {
+const features = {
   "transform-async-generator-functions": "Asynchronous Iterators",
   "transform-object-rest-spread": "object rest/spread properties",
   "transform-optional-catch-binding": "optional catch binding",
@@ -16,4 +19,4 @@ const pluginSyntaxMap = new Map([
   ["transform-unicode-property-regex", null],
 ]);
 
-module.exports = { builtIns, plugins, pluginSyntaxMap };
+module.exports = { builtIns, features, pluginSyntaxMap };

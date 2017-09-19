@@ -384,6 +384,25 @@ The starting point where the config search for browserslist will start, and asce
 
 Toggles whether or not [browserslist config sources](https://github.com/ai/browserslist#queries) are used, which includes searching for any browserslist files or referencing the browserslist key inside package.json. This is useful for projects that use a browserslist config for files that won't be compiled with Babel.
 
+### `shippedProposals`
+
+`boolean`, defaults to `false`
+
+Toggles enabling support for builtin/feature proposals that have shipped in browsers. If your target environments have native support for a feature proposal, its matching parser syntax plugin is enabled instead of performing any transform. Note that this _does not_ enable the same transformations as [`babel-preset-stage3`](https://babeljs.io/docs/plugins/preset-stage-3/), since proposals can continue to change before landing in browsers.
+
+The following are currently supported:
+
+**Builtins**
+
+- [Promise.prototype.finally](https://github.com/tc39/proposal-promise-finally)
+
+**Features**
+
+- [Asynchronous Iterators](https://github.com/tc39/proposal-async-iteration)
+- [Object rest/spread properties](https://github.com/tc39/proposal-object-rest-spread)
+- [Optional catch binding](https://github.com/tc39/proposal-optional-catch-binding)
+- [Unicode property escapes in regular expressions](https://github.com/tc39/proposal-regexp-unicode-property-escapes)
+
 ---
 
 ## Examples

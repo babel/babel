@@ -187,6 +187,6 @@ const es2017 = {
   "es7.string.pad-end": "String padding / String.prototype.padEnd",
 };
 
-const stage3 = require("./stage3").builtIns;
+const proposals = require("./shipped-proposals").builtIns;
 
-module.exports = Object.assign({}, es2015, es2016, es2017, stage3);
+module.exports = Object.assign({}, es2015, es2016, es2017, proposals);

@@ -2,10 +2,7 @@
   "presets": [
     ["../../lib", {
       "debug": true,
-      "targets": {
-        "browsers": "chrome 60"
-      },
-      "stage3": true,
+      "shippedProposals": true,
       "useBuiltIns": "entry"
     }]
   ]

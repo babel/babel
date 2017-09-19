@@ -20,8 +20,8 @@ export type Options = {
   include: Array<string>,
   loose: boolean,
   modules: ModuleOption,
+  shippedProposals: boolean,
   spec: boolean,
-  stage3: boolean,
   targets: Targets,
   useBuiltIns: BuiltInsOption,
 };

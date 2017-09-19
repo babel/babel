@@ -135,6 +135,6 @@ const es2017 = {
   }
 };
 
-const stage3 = require("./stage3").plugins;
+const proposals = require("./shipped-proposals").features;
 
-module.exports = Object.assign({}, es2015, es2016, es2017, stage3);
+module.exports = Object.assign({}, es2015, es2016, es2017, proposals);

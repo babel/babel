@@ -8,10 +8,10 @@ import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
 import {
-  builtIns as stage3BuiltIns,
-  plugins as stage3Plugins,
+  builtIns as proposalBuiltIns,
+  features as proposalPlugins,
   pluginSyntaxMap,
-} from "../data/stage3.js";
+} from "../data/shipped-proposals.js";
 import useBuiltInsEntryPlugin from "./use-built-ins-entry-plugin";
 import addUsedBuiltInsPlugin from "./use-built-ins-plugin";
 import getTargets from "./targets-parser";
@@ -31,11 +31,15 @@ const getPlugin = (pluginName: string) => {
   return plugin;
 };
 
-const builtInsListWithoutStage3 = filterStageFromList(
+const builtInsListWithoutProposals = filterStageFromList(
   builtInsList,
-  stage3BuiltIns,
+  proposalBuiltIns,
 );
-const pluginListWithoutStage3 = filterStageFromList(pluginList, stage3Plugins);
+
+const pluginListWithoutProposals = filterStageFromList(
+  pluginList,
+  proposalPlugins,
+);
 
 export const isPluginRequired = (
   supportedEnvironments: Targets,
@@ -123,10 +127,10 @@ const filterItems = (
       if (isPluginRequired(targets, list[item])) {
         result.add(item);
       } else {
-        const stage3Syntax = pluginSyntaxMap.get(item);
+        const shippedProposalsSyntax = pluginSyntaxMap.get(item);
 
-        if (stage3Syntax) {
-          result.add(stage3Syntax);
+        if (shippedProposalsSyntax) {
+          result.add(shippedProposalsSyntax);
         }
       }
     }
@@ -154,8 +158,8 @@ export default function buildPreset(
     include: optionsInclude,
     loose,
     modules,
+    shippedProposals,
     spec,
-    stage3,
     targets: optionsTargets,
     useBuiltIns,
   } = normalizeOptions(opts);
@@ -182,7 +186,7 @@ export default function buildPreset(
   const transformTargets = forceAllTransforms || hasUglifyTarget ? {} : targets;
 
   const transformations = filterItems(
-    stage3 ? pluginList : pluginListWithoutStage3,
+    shippedProposals ? pluginList : pluginListWithoutProposals,
     include.plugins,
     exclude.plugins,
     transformTargets,
@@ -195,7 +199,7 @@ export default function buildPreset(
     polyfillTargets = getBuiltInTargets(targets);
 
     polyfills = filterItems(
-      stage3 ? builtInsList : builtInsListWithoutStage3,
+      shippedProposals ? builtInsList : builtInsListWithoutProposals,
       include.builtIns,
       exclude.builtIns,
       polyfillTargets,

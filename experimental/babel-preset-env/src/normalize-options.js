@@ -163,8 +163,12 @@ export default function normalizeOptions(opts: Options) {
     include: validateIncludesAndExcludes(opts.include, "include"),
     loose: validateBoolOption("loose", opts.loose, false),
     modules: validateModulesOption(opts.modules),
+    shippedProposals: validateBoolOption(
+      "shippedProposals",
+      opts.shippedProposals,
+      false,
+    ),
     spec: validateBoolOption("loose", opts.spec, false),
-    stage3: validateBoolOption("stage3", opts.stage3, false),
     targets: opts.targets,
     useBuiltIns: validateUseBuiltInsOption(opts.useBuiltIns),
   };

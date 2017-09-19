@@ -1,7 +1,7 @@
 {
   "presets": [
     ["../../../../lib", {
-      "stage3": true,
+      "shippedProposals": true,
       "useBuiltIns": "usage"
     }]
   ]
