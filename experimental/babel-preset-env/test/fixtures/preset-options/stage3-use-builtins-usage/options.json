@@ -1,0 +1,8 @@
+{
+  "presets": [
+    ["../../../../lib", {
+      "stage3": true,
+      "useBuiltIns": "usage"
+    }]
+  ]
+}

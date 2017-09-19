@@ -3,14 +3,11 @@
 const fs = require("fs");
 const path = require("path");
 
-const flatten = require("lodash/flatten");
 const flattenDeep = require("lodash/flattenDeep");
 const isEqual = require("lodash/isEqual");
 const mapValues = require("lodash/mapValues");
 const pickBy = require("lodash/pickBy");
 const electronToChromiumVersions = require("electron-to-chromium").versions;
-const pluginFeatures = require("../data/plugin-features");
-const builtInFeatures = require("../data/built-in-features");
 
 const electronToChromiumKeys = Object.keys(
   electronToChromiumVersions
@@ -36,8 +33,10 @@ const findClosestElectronVersion = targetVersion => {
 const chromiumToElectron = chromium =>
   chromiumToElectronMap[chromium] || findClosestElectronVersion(chromium);
 
-const renameTests = (tests, getName) =>
-  tests.map(test => Object.assign({}, test, { name: getName(test.name) }));
+const renameTests = (tests, getName, category) =>
+  tests.map(test =>
+    Object.assign({}, test, { name: getName(test.name), category })
+  );
 
 // The following is adapted from compat-table:
 // https://github.com/kangax/compat-table/blob/gh-pages/build.js
@@ -54,11 +53,16 @@ const byTestSuite = suite => browser => {
     : true;
 };
 
-const es6 = require("compat-table/data-es6");
-es6.browsers = pickBy(envs, byTestSuite("es6"));
-
-const es2016plus = require("compat-table/data-es2016plus");
-es2016plus.browsers = pickBy(envs, byTestSuite("es2016plus"));
+const compatSources = [
+  "es6",
+  "es2016plus",
+  "esnext",
+].reduce((result, source) => {
+  const data = require(`compat-table/data-${source}`);
+  data.browsers = pickBy(envs, byTestSuite(source));
+  result.push(data);
+  return result;
+}, []);
 
 const interpolateAllResults = (rawBrowsers, tests) => {
   const interpolateResults = res => {
@@ -111,8 +115,9 @@ const interpolateAllResults = (rawBrowsers, tests) => {
   });
 };
 
-interpolateAllResults(es6.browsers, es6.tests);
-interpolateAllResults(es2016plus.browsers, es2016plus.tests);
+compatSources.forEach(({ browsers, tests }) =>
+  interpolateAllResults(browsers, tests)
+);
 
 // End of compat-table code adaptation
 
@@ -130,44 +135,55 @@ const environments = [
 ];
 
 const compatibilityTests = flattenDeep(
-  [es6, es2016plus].map(data =>
+  compatSources.map(data =>
     data.tests.map(test => {
       return test.subtests
-        ? [test, renameTests(test.subtests, name => test.name + " / " + name)]
+        ? [
+            test,
+            renameTests(
+              test.subtests,
+              name => test.name + " / " + name,
+              test.category
+            ),
+          ]
         : test;
     })
   )
 );
 
 const getLowestImplementedVersion = ({ features }, env) => {
-  const tests = flatten(
-    compatibilityTests
-      .filter(test => {
-        return (
-          features.indexOf(test.name) >= 0 ||
-          // for features === ["DataView"]
-          // it covers "DataView (Int8)" and "DataView (UInt8)"
-          (features.length === 1 && test.name.indexOf(features[0]) === 0)
-        );
-      })
-      .map(test => {
-        const isBuiltIn =
-          test.category === "built-ins" ||
-          test.category === "built-in extensions";
+  const tests = compatibilityTests
+    .filter(test => {
+      return (
+        features.indexOf(test.name) >= 0 ||
+        // for features === ["DataView"]
+        // it covers "DataView (Int8)" and "DataView (UInt8)"
+        (features.length === 1 && test.name.indexOf(features[0]) === 0)
+      );
+    })
+    .reduce((result, test) => {
+      const isBuiltIn =
+        test.category === "built-ins" ||
+        test.category === "built-in extensions";
 
-        return test.subtests
-          ? test.subtests.map(subtest => ({
-              name: `${test.name}/${subtest.name}`,
-              res: subtest.res,
-              isBuiltIn,
-            }))
-          : {
-              name: test.name,
-              res: test.res,
-              isBuiltIn,
-            };
-      })
-  );
+      if (!test.subtests) {
+        result.push({
+          name: test.name,
+          res: test.res,
+          isBuiltIn,
+        });
+      } else {
+        test.subtests.forEach(subtest =>
+          result.push({
+            name: `${test.name}/${subtest.name}`,
+            res: subtest.res,
+            isBuiltIn,
+          })
+        );
+      }
+
+      return result;
+    }, []);
 
   const envTests = tests.map(({ res: test, name, isBuiltIn }, i) => {
     // Babel itself doesn't implement the feature correctly,
@@ -221,6 +237,7 @@ const generateData = (environments, features) => {
 
     environments.forEach(env => {
       const version = getLowestImplementedVersion(options, env);
+
       if (version !== null) {
         plugin[env] = version.toString();
       }
@@ -245,36 +262,26 @@ const generateData = (environments, features) => {
   });
 };
 
-const pluginsDataPath = path.join(__dirname, "../data/plugins.json");
-const builtInsDataPath = path.join(__dirname, "../data/built-ins.json");
+["plugin", "built-in"].forEach(target => {
+  const newData = generateData(
+    environments,
+    require(`../data/${target}-features`)
+  );
+  const dataPath = path.join(__dirname, `../data/${target}s.json`);
 
-const newPluginData = generateData(environments, pluginFeatures);
-const newBuiltInsData = generateData(environments, builtInFeatures);
+  if (process.argv[2] === "--check") {
+    const currentData = require(dataPath);
 
-if (process.argv[2] === "--check") {
-  const currentPluginData = require(pluginsDataPath);
-  const currentBuiltInsData = require(builtInsDataPath);
+    if (!isEqual(currentData, newData)) {
+      console.error(
+        "The newly generated plugin/built-in data does not match the current " +
+          "files. Re-run `npm run build-data`."
+      );
+      process.exit(1);
+    }
 
-  if (
-    !isEqual(currentPluginData, newPluginData) ||
-    !isEqual(currentBuiltInsData, newBuiltInsData)
-  ) {
-    console.error(
-      "The newly generated plugin/built-in data does not match the current " +
-        "files. Re-run `npm run build-data`."
-    );
-    process.exit(1);
+    process.exit(0);
   }
 
-  process.exit(0);
-}
-
-fs.writeFileSync(
-  pluginsDataPath,
-  JSON.stringify(newPluginData, null, 2) + "\n"
-);
-
-fs.writeFileSync(
-  builtInsDataPath,
-  JSON.stringify(newBuiltInsData, null, 2) + "\n"
-);
+  fs.writeFileSync(dataPath, `${JSON.stringify(newData, null, 2)}\n`);
+});

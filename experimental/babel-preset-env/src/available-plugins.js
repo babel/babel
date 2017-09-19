@@ -1,7 +1,11 @@
 export default {
   "check-es2015-constants": require("babel-plugin-check-es2015-constants"),
+  "syntax-async-generators": require("babel-plugin-syntax-async-generators"),
+  "syntax-object-rest-spread": require("babel-plugin-syntax-object-rest-spread"),
+  "syntax-optional-catch-binding": require("babel-plugin-syntax-optional-catch-binding"),
   "syntax-trailing-function-commas": require("babel-plugin-syntax-trailing-function-commas"),
   "transform-async-to-generator": require("babel-plugin-transform-async-to-generator"),
+  "transform-async-generator-functions": require("babel-plugin-transform-async-generator-functions"),
   "transform-es2015-arrow-functions": require("babel-plugin-transform-es2015-arrow-functions"),
   "transform-es2015-block-scoped-functions": require("babel-plugin-transform-es2015-block-scoped-functions"),
   "transform-es2015-block-scoping": require("babel-plugin-transform-es2015-block-scoping"),
@@ -26,5 +30,8 @@ export default {
   "transform-es2015-unicode-regex": require("babel-plugin-transform-es2015-unicode-regex"),
   "transform-exponentiation-operator": require("babel-plugin-transform-exponentiation-operator"),
   "transform-new-target": require("babel-plugin-transform-new-target"),
+  "transform-object-rest-spread": require("babel-plugin-transform-object-rest-spread"),
+  "transform-optional-catch-binding": require("babel-plugin-transform-optional-catch-binding"),
   "transform-regenerator": require("babel-plugin-transform-regenerator"),
+  "transform-unicode-property-regex": require("babel-plugin-transform-unicode-property-regex"),
 };

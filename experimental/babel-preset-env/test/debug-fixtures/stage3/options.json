@@ -1,0 +1,9 @@
+{
+  "presets": [
+    ["../../lib", {
+      "debug": true,
+      "stage3": true,
+      "useBuiltIns": "entry"
+    }]
+  ]
+}

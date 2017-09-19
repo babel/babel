@@ -1,5 +1,3 @@
-// https://github.com/zloirock/core-js
-
 const typedArrayMethods = [
   "typed arrays / %TypedArray%.from",
   "typed arrays / %TypedArray%.of",
@@ -80,7 +78,18 @@ const es2015 = {
   "es6.reflect.set": "Reflect / Reflect.set",
   "es6.reflect.set-prototype-of": "Reflect / Reflect.setPrototypeOf",
 
-  "es6.promise": "Promise",
+  "es6.promise": {
+    features: [
+      "Promise / basic functionality",
+      "Promise / constructor requires new",
+      "Promise / Promise.prototype isn\'t an instance",
+      "Promise / Promise.all",
+      "Promise / Promise.all, generic iterables",
+      "Promise / Promise.race",
+      "Promise / Promise.race, generic iterables",
+      "Promise / Promise[Symbol.species]"
+    ]
+  },
 
   "es6.symbol": {
     features: [
@@ -178,4 +187,6 @@ const es2017 = {
   "es7.string.pad-end": "String padding / String.prototype.padEnd",
 };
 
-module.exports = Object.assign({}, es2015, es2016, es2017);
+const stage3 = require("./stage3").builtIns;
+
+module.exports = Object.assign({}, es2015, es2016, es2017, stage3);

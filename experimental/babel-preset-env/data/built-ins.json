@@ -164,7 +164,7 @@
   "es6.reflect.construct": {
     "chrome": "49",
     "edge": "13",
-    "firefox": "45",
+    "firefox": "44",
     "safari": "10",
     "node": "6",
     "ios": "10",
@@ -691,6 +691,7 @@
     "firefox": "23",
     "safari": "7",
     "node": "0.12",
+    "android": "4.4",
     "ios": "7",
     "opera": "17",
     "electron": "0.2"
@@ -824,5 +825,6 @@
     "ios": "10",
     "opera": "44",
     "electron": "1.7"
-  }
+  },
+  "es7.promise.finally": {}
 }

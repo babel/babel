@@ -91,15 +91,6 @@ export const validateBoolOption = (
   return value;
 };
 
-export const validateLooseOption = (looseOpt: boolean) =>
-  validateBoolOption("loose", looseOpt, false);
-
-export const validateSpecOption = (specOpt: boolean) =>
-  validateBoolOption("spec", specOpt, false);
-
-export const validateForceAllTransformsOption = (forceAllTransforms: boolean) =>
-  validateBoolOption("forceAllTransforms", forceAllTransforms, false);
-
 export const validateIgnoreBrowserslistConfig = (
   ignoreBrowserslistConfig: boolean,
 ) =>
@@ -161,16 +152,19 @@ export default function normalizeOptions(opts: Options) {
     configPath: validateConfigPathOption(opts.configPath),
     debug: opts.debug,
     exclude: validateIncludesAndExcludes(opts.exclude, "exclude"),
-    forceAllTransforms: validateForceAllTransformsOption(
+    forceAllTransforms: validateBoolOption(
+      "forceAllTransforms",
       opts.forceAllTransforms,
+      false,
     ),
     ignoreBrowserslistConfig: validateIgnoreBrowserslistConfig(
       opts.ignoreBrowserslistConfig,
     ),
     include: validateIncludesAndExcludes(opts.include, "include"),
-    loose: validateLooseOption(opts.loose),
+    loose: validateBoolOption("loose", opts.loose, false),
     modules: validateModulesOption(opts.modules),
-    spec: validateSpecOption(opts.spec),
+    spec: validateBoolOption("loose", opts.spec, false),
+    stage3: validateBoolOption("stage3", opts.stage3, false),
     targets: opts.targets,
     useBuiltIns: validateUseBuiltInsOption(opts.useBuiltIns),
   };

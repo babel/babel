@@ -1,0 +1,12 @@
+{
+  "presets": [
+    ["../../lib", {
+      "debug": true,
+      "targets": {
+        "browsers": "chrome 60"
+      },
+      "stage3": true,
+      "useBuiltIns": "entry"
+    }]
+  ]
+}

@@ -21,6 +21,7 @@ export type Options = {
   loose: boolean,
   modules: ModuleOption,
   spec: boolean,
+  stage3: boolean,
   targets: Targets,
   useBuiltIns: BuiltInsOption,
 };

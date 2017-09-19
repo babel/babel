@@ -135,4 +135,6 @@ const es2017 = {
   }
 };
 
-module.exports = Object.assign({}, es2015, es2016, es2017);
+const stage3 = require("./stage3").plugins;
+
+module.exports = Object.assign({}, es2015, es2016, es2017, stage3);
