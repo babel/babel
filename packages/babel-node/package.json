@@ -1,6 +1,6 @@
 {
   "name": "babel-node",
-  "version": "7.0.0-beta.0",
+  "version": "7.0.0-beta.1",
   "description": "Babel command line",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -16,9 +16,9 @@
     "compiler"
   ],
   "dependencies": {
-    "babel-core": "7.0.0-beta.0",
-    "babel-polyfill": "7.0.0-beta.0",
-    "babel-register": "7.0.0-beta.0",
+    "babel-core": "7.0.0-beta.1",
+    "babel-polyfill": "7.0.0-beta.1",
+    "babel-register": "7.0.0-beta.1",
     "commander": "^2.8.1",
     "fs-readdir-recursive": "^1.0.0",
     "lodash": "^4.2.0",
@@ -26,7 +26,7 @@
     "v8flags": "^3.0.0"
   },
   "devDependencies": {
-    "babel-helper-fixtures": "7.0.0-beta.0"
+    "babel-helper-fixtures": "7.0.0-beta.1"
   },
   "bin": {
     "babel-node": "./bin/babel-node.js"

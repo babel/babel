@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-typescript",
-  "version": "7.0.0-beta.0",
+  "version": "7.0.0-beta.1",
   "description": "Babel preset for TypeScript.",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-typescript",
   "license": "MIT",
@@ -10,6 +10,6 @@
     "typescript"
   ],
   "dependencies": {
-    "babel-plugin-transform-typescript": "7.0.0-beta.0"
+    "babel-plugin-transform-typescript": "7.0.0-beta.1"
   }
 }
