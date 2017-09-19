@@ -74,7 +74,7 @@ function buildModule(namespace, builder) {
         ? `_${originalIdentifier}`
         : originalIdentifier;
 
-      const variableDeclaration = t.variableDeclaration("var", [
+      const variableDeclaration = t.variableDeclaration("const", [
         t.variableDeclarator(
           t.identifier(helperIndentifier),
           helper.expression.right,

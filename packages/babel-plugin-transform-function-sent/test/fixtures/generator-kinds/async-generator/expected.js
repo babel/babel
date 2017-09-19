@@ -10,18 +10,16 @@ let foo = (() => {
   };
 })();
 
-function _skipFirstGeneratorNext(fn) { return function () { var it = fn.apply(this, arguments); it.next(); return it; }; }
+function _skipFirstGeneratorNext(fn) { return function (...args) { const it = fn.apply(this, args); it.next(); return it; }; }
 
 function AwaitValue(value) { this.value = value; }
 
-function AsyncGenerator(gen) { var front, back; function send(key, arg) { return new Promise(function (resolve, reject) { var request = { key: key, arg: arg, resolve: resolve, reject: reject, next: null }; if (back) { back = back.next = request; } else { front = back = request; resume(key, arg); } }); } function resume(key, arg) { try { var result = gen[key](arg); var value = result.value; if (value instanceof AwaitValue) { Promise.resolve(value.value).then(function (arg) { resume("next", arg); }, function (arg) { resume("throw", arg); }); } else { settle(result.done ? "return" : "normal", result.value); } } catch (err) { settle("throw", err); } } function settle(type, value) { switch (type) { case "return": front.resolve({ value: value, done: true }); break; case "throw": front.reject(value); break; default: front.resolve({ value: value, done: false }); break; } front = front.next; if (front) { resume(front.key, front.arg); } else { back = null; } } this._invoke = send; if (typeof gen.return !== "function") { this.return = undefined; } }
+const send = (state, key, arg) => new Promise((resolve, reject) => { const request = { key, arg, resolve, reject, next: null }; if (state.back) { state.back = state.back.next = request; } else { state.front = state.back = request; resume(state, key, arg); } });
 
-if (typeof Symbol === "function" && Symbol.asyncIterator) { AsyncGenerator.prototype[Symbol.asyncIterator] = function () { return this; }; }
+const resume = (state, key, arg) => { try { const result = state.gen[key](arg); const { value } = result; if (value instanceof AwaitValue) { Promise.resolve(value.value).then(arg => resume(state, "next", arg), arg => resume(state, "throw", arg)); } else { settle(state, result.done ? "return" : "normal", result.value); } } catch (err) { settle(state, "throw", err); } };
 
-AsyncGenerator.prototype.next = function (arg) { return this._invoke("next", arg); };
+const settle = (state, type, value) => { switch (type) { case "return": state.front.resolve({ value, done: true }); break; case "throw": state.front.reject(value); break; default: state.front.resolve({ value, done: false }); break; } state.front = state.front.next; if (state.front) { resume(state, state.front.key, state.front.arg); } else { state.back = null; } };
 
-AsyncGenerator.prototype.throw = function (arg) { return this._invoke("throw", arg); };
+class AsyncGenerator { constructor(gen) { this._state = { gen, front: null, back: null }; this._invoke = send; if (typeof gen.return !== "function") { this.return = undefined; } } [typeof Symbol === "function" && Symbol.asyncIterator || "@@asyncIterator"]() { return this; } next(arg) { return this._invoke(this._state, "next", arg); } throw(arg) { return this._invoke(this._state, "throw", arg); } return(arg) { return this._invoke(this._state, "return", arg); } }
 
-AsyncGenerator.prototype.return = function (arg) { return this._invoke("return", arg); };
-
-var _asyncGenerator = { wrap: function (fn) { return function () { return new AsyncGenerator(fn.apply(this, arguments)); }; }, await: function (value) { return new AwaitValue(value); } };
+var _asyncGenerator = { wrap: fn => (...args) => new AsyncGenerator(fn.apply(this, args)), await: value => new AwaitValue(value) };
