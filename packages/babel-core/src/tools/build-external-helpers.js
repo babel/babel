@@ -66,36 +66,41 @@ function buildModule(namespace, builder) {
   const body = [];
   builder(body);
 
-  const module = body
-    .map(helper => {
-      const originalIdentifier = helper.expression.left.property.name;
-      const isKeywordHelper = keywordHelpers.indexOf(originalIdentifier) !== -1;
-      const helperIndentifier = isKeywordHelper
-        ? `_${originalIdentifier}`
-        : originalIdentifier;
+  const module = body.map(helperNode => {
+    const possibleAssignment = t.isExpressionStatement(helperNode)
+      ? helperNode.expression
+      : helperNode;
 
-      const variableDeclaration = t.variableDeclaration("var", [
-        t.variableDeclarator(
-          t.identifier(helperIndentifier),
-          helper.expression.right,
+    const isExportedHelper =
+      t.isAssignmentExpression(possibleAssignment) &&
+      t.isMemberExpression(possibleAssignment.left) &&
+      possibleAssignment.left.object.name === namespace.name;
+
+    if (!isExportedHelper) {
+      return helperNode;
+    }
+
+    const exportedHelper = possibleAssignment;
+
+    const identifier = exportedHelper.left.property.name;
+    const isKeywordHelper = keywordHelpers.indexOf(identifier) !== -1;
+
+    if (isKeywordHelper) {
+      return t.exportNamedDeclaration(null, [
+        t.exportSpecifier(
+          t.identifier(`_${identifier}`),
+          t.identifier(identifier),
         ),
       ]);
+    }
 
-      return isKeywordHelper
-        ? variableDeclaration
-        : t.exportNamedDeclaration(variableDeclaration, []);
-    })
-    .concat(
-      t.exportNamedDeclaration(
-        null,
-        keywordHelpers.map(keywordHelper =>
-          t.exportSpecifier(
-            t.identifier(`_${keywordHelper}`),
-            t.identifier(keywordHelper),
-          ),
-        ),
-      ),
+    return t.exportNamedDeclaration(
+      t.variableDeclaration("var", [
+        t.variableDeclarator(t.identifier(identifier), exportedHelper.right),
+      ]),
+      [],
     );
+  });
 
   return t.program(module);
 }
@@ -133,9 +138,10 @@ function buildVar(namespace, builder) {
       t.variableDeclarator(namespace, t.objectExpression([])),
     ]),
   );
+  const tree = t.program(body);
   builder(body);
   body.push(t.expressionStatement(namespace));
-  return t.program(body);
+  return tree;
 }
 
 function buildHelpers(body, namespace, whitelist) {
