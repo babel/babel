@@ -1,4 +1,5 @@
-import _regeneratorRuntime from "babel-runtime/regenerator";
+var _regeneratorRuntime = require("babel-runtime/regenerator").default;
+
 void
 /*#__PURE__*/
 _regeneratorRuntime.mark(function _callee() {

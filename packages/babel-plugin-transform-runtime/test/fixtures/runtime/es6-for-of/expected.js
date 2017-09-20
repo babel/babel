@@ -1,4 +1,5 @@
-import _getIterator from "babel-runtime/core-js/get-iterator";
+var _getIterator = require("babel-runtime/core-js/get-iterator").default;
+
 var _iteratorNormalCompletion = true;
 var _didIteratorError = false;
 var _iteratorError = undefined;
