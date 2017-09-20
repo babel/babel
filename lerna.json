@@ -18,8 +18,13 @@
     "publish": {
       "ignore": [
         "*.md",
-        "test/**"
+        "test/**",
+        "codemods/**"
       ]
     }
-  }
+  },
+  "packages": [
+    "packages/*",
+    "codemods/*"
+  ]
 }
