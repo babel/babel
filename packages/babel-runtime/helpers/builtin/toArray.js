@@ -1,5 +1,3 @@
-"use strict";
-
 var arrayWithHoles = require("./arrayWithHoles");
 
 var iterableToArray = require("./iterableToArray");
