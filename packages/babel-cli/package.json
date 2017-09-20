@@ -19,6 +19,7 @@
     "babel-core": "7.0.0-beta.0",
     "babel-polyfill": "7.0.0-beta.0",
     "babel-register": "7.0.0-beta.0",
+    "babel-node": "7.0.0-beta.0",
     "commander": "^2.8.1",
     "convert-source-map": "^1.1.0",
     "fs-readdir-recursive": "^1.0.0",
