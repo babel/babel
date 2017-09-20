@@ -13,6 +13,6 @@
 })(this, function (_foo) {
   "use strict";
 
-  _foo = babelHelpers.interopRequireDefault(_foo);
+  _foo = babelHelpers.interopRequireWildcard(_foo);
   _foo.baz;
 });
