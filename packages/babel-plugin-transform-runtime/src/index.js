@@ -22,11 +22,10 @@ export default function({ types: t }) {
         const helpersDir = this.opts.useESModules
           ? `${baseHelpersDir}/es6`
           : baseHelpersDir;
-        file.set("helperGenerator", function(name) {
+        file.set("helperGenerator", name => {
           if (HELPER_BLACKLIST.indexOf(name) < 0) {
-            return file.addImport(
+            return this.addDefaultImport(
               `${moduleName}/${helpersDir}/${name}`,
-              "default",
               name,
             );
           }
@@ -40,6 +39,10 @@ export default function({ types: t }) {
       }
 
       this.moduleName = moduleName;
+
+      this.addDefaultImport = (source, nameHint) => {
+        return file.addImport(source, "default", nameHint);
+      };
     },
 
     visitor: {
@@ -50,9 +53,8 @@ export default function({ types: t }) {
           state.opts.regenerator !== false
         ) {
           path.replaceWith(
-            this.file.addImport(
+            this.addDefaultImport(
               `${this.moduleName}/regenerator`,
-              "default",
               "regeneratorRuntime",
             ),
           );
@@ -68,9 +70,8 @@ export default function({ types: t }) {
         // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
         const moduleName = getRuntimeModuleName(state.opts);
         path.replaceWith(
-          state.addImport(
+          this.addDefaultImport(
             `${moduleName}/core-js/${definitions.builtins[node.name]}`,
-            "default",
             node.name,
           ),
         );
@@ -93,9 +94,8 @@ export default function({ types: t }) {
         const moduleName = getRuntimeModuleName(state.opts);
         path.replaceWith(
           t.callExpression(
-            state.addImport(
+            this.addDefaultImport(
               `${moduleName}/core-js/get-iterator`,
-              "default",
               "getIterator",
             ),
             [callee.object],
@@ -113,9 +113,8 @@ export default function({ types: t }) {
         const moduleName = getRuntimeModuleName(state.opts);
         path.replaceWith(
           t.callExpression(
-            state.addImport(
+            this.addDefaultImport(
               `${moduleName}/core-js/is-iterable`,
-              "default",
               "isIterable",
             ),
             [path.node.right],
@@ -157,9 +156,8 @@ export default function({ types: t }) {
 
           const moduleName = getRuntimeModuleName(state.opts);
           path.replaceWith(
-            state.addImport(
+            this.addDefaultImport(
               `${moduleName}/core-js/${methods[prop.name]}`,
-              "default",
               `${obj.name}$${prop.name}`,
             ),
           );
@@ -178,9 +176,8 @@ export default function({ types: t }) {
           const moduleName = getRuntimeModuleName(state.opts);
           path.replaceWith(
             t.memberExpression(
-              state.addImport(
+              this.addDefaultImport(
                 `${moduleName}/core-js/${definitions.builtins[obj.name]}`,
-                "default",
                 obj.name,
               ),
               node.property,
