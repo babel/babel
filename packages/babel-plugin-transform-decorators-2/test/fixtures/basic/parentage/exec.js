@@ -10,11 +10,15 @@ function noopMethodDec(descriptor) {
   @noopMethodDec foo() {}
 }
 
-@noopClassDec class Foo {
+@noopClassDec class Foo extends Bar {
   @noopMethodDec bar() {}
 }
 
 let x = new Foo();
+let y = new Bar();
 
 assert.ok(x instanceof Foo);
 assert.ok(x instanceof Bar);
+
+assert.ok(y instanceof Bar);
+assert.equal(y instanceof Foo, false);
