@@ -1,3 +1,0 @@
-{
-  "plugins": ["transform-remove-unused-catch-binding"]
-}
