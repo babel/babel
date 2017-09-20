@@ -157,10 +157,14 @@ function permuteHelperAST(file, metadata, id, localBindings) {
           exp.replaceWith(decl);
           path.pushContainer(
             "body",
-            t.assignmentExpression("=", id, t.identifier(exportName)),
+            t.expressionStatement(
+              t.assignmentExpression("=", id, t.identifier(exportName)),
+            ),
           );
         } else {
-          exp.replaceWith(t.assignmentExpression("=", id, decl.node));
+          exp.replaceWith(
+            t.expressionStatement(t.assignmentExpression("=", id, decl.node)),
+          );
         }
       } else {
         throw new Error("Unexpected helper format.");
