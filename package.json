@@ -35,7 +35,7 @@
     "eslint-config-babel": "^7.0.1",
     "eslint-plugin-flowtype": "^2.34.0",
     "eslint-plugin-prettier": "^2.1.2",
-    "flow-bin": "^0.54.1",
+    "flow-bin": "^0.55.0",
     "graceful-fs": "^4.1.11",
     "husky": "^0.14.1",
     "lint-staged": "^4.0.0",
