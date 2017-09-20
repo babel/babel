@@ -1,6 +1,6 @@
 {
   "name": "babel-helper-transform-fixture-test-runner",
-  "version": "7.0.0-beta.0",
+  "version": "7.0.0-beta.1",
   "description": "Transform test runner for babel-helper-fixtures module",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -8,10 +8,10 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-transform-fixture-test-runner",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-code-frame": "7.0.0-beta.0",
-    "babel-core": "7.0.0-beta.0",
-    "babel-helper-fixtures": "7.0.0-beta.0",
-    "babel-polyfill": "7.0.0-beta.0",
+    "babel-code-frame": "7.0.0-beta.1",
+    "babel-core": "7.0.0-beta.1",
+    "babel-helper-fixtures": "7.0.0-beta.1",
+    "babel-polyfill": "7.0.0-beta.1",
     "chai": "^4.1.0",
     "lodash": "^4.2.0",
     "resolve": "^1.3.2",

@@ -7,6 +7,11 @@ packages/*/lib
 packages/*/dist
 packages/*/test/fixtures
 packages/*/test/tmp
+codemods/*/node_modules
+codemods/*/lib
+codemods/*/dist
+codemods/*/test/fixtures
+codemods/*/test/tmp
 packages/babel-standalone/babel.js
 packages/babel-standalone/babel.min.js
 

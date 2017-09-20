@@ -1,7 +1,6 @@
 {
   "plugins": [
     "transform-exponentiation-operator",
-    "syntax-async-functions",
     "transform-regenerator",
     "transform-es2015-template-literals",
     "transform-es2015-literals",

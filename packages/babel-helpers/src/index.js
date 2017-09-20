@@ -27,7 +27,7 @@ function getHelperMetadata(file) {
 
   traverse(file, {
     ImportDeclaration(child) {
-      throw child.buildCodeFrameError("Helpers may import anything.");
+      throw child.buildCodeFrameError("Helpers may not import anything.");
     },
     ExportDefaultDeclaration(child) {
       const decl = child.get("declaration");

@@ -4,7 +4,7 @@ import {
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
-} from "babel-helper-modules";
+} from "babel-helper-module-transforms";
 
 export default function({ types: t }) {
   return {
