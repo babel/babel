@@ -58,6 +58,10 @@ getV8Flags(function(err, v8Flags) {
         args.unshift("--expose-http2");
         break;
 
+      case "--experimental-modules":
+        args.unshift("--experimental-modules");
+        break;
+
       case "--nolazy":
         args.unshift(flag);
         break;
