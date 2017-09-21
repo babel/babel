@@ -224,8 +224,9 @@ helpers.asyncGeneratorDelegate = defineHelper(`
 helpers.asyncToGenerator = defineHelper(`
   export default function _asyncToGenerator(fn) {
     return function () {
-      return new Promise((resolve, reject) => {
-        var gen = fn.apply(this, arguments);
+      var self = this, args = arguments;
+      return new Promise(function (resolve, reject) {
+        var gen = fn.apply(self, args);
         function step(key, arg) {
           try {
             var info = gen[key](arg);
