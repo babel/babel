@@ -1,7 +1,7 @@
 function A() {
-  var a = void 0;
+  var a;
 }
 
 function B() {
-  var a = void 0;
+  var a;
 }

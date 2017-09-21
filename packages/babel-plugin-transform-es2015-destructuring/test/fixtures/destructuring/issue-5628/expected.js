@@ -1,7 +1,7 @@
 (function () {
-  var q = void 0;
-  var w = void 0;
-  var e = void 0;
+  var q;
+  var w;
+  var e;
 
   if (true) {
     var _map = [1, 2, 3].map(function () {

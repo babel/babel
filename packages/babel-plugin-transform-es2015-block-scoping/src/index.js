@@ -100,6 +100,18 @@ function isBlockScoped(node) {
   return true;
 }
 
+/**
+ * If there is a loop ancestor closer than the closest function, we
+ * consider ourselves to be in a loop.
+ */
+function isInLoop(path) {
+  const loopOrFunctionParent = path.find(
+    path => path.isLoop() || path.isFunction(),
+  );
+
+  return loopOrFunctionParent && loopOrFunctionParent.isLoop();
+}
+
 function convertBlockScopedToVar(
   path,
   node,
@@ -110,8 +122,9 @@ function convertBlockScopedToVar(
   if (!node) {
     node = path.node;
   }
+
   // https://github.com/babel/babel/issues/255
-  if (!t.isFor(parent)) {
+  if (isInLoop(path) && !t.isFor(parent)) {
     for (let i = 0; i < node.declarations.length; i++) {
       const declar = node.declarations[i];
       declar.init = declar.init || scope.buildUndefinedNode();
@@ -655,12 +668,7 @@ class BlockScoping {
       loopDepth: 0,
     };
 
-    const loopOrFunctionParent = this.blockPath.find(
-      path => path.isLoop() || path.isFunction(),
-    );
-    if (loopOrFunctionParent && loopOrFunctionParent.isLoop()) {
-      // There is a loop ancestor closer than the closest function, so we
-      // consider ourselves to be in a loop.
+    if (isInLoop(this.blockPath)) {
       state.loopDepth++;
     }
 
