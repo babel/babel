@@ -21,10 +21,10 @@ export default function(opts) {
 
   visitor.JSXElement = {
     exit(path, file) {
-      const callExpr = buildElementCall(path.get("openingElement"), file);
-
-      callExpr.arguments = callExpr.arguments.concat(path.node.children);
-      path.replaceWith(t.inherits(callExpr, path.node));
+      const callExpr = buildElementCall(path, file);
+      if (callExpr) {
+        path.replaceWith(t.inherits(callExpr, path.node));
+      }
     },
   };
 
@@ -79,9 +79,15 @@ export default function(opts) {
   }
 
   function buildElementCall(path, file) {
-    path.parent.children = t.react.buildChildren(path.parent);
+    if (opts.filter && !opts.filter(path.node, file)) return;
 
-    const tagExpr = convertJSXIdentifier(path.node.name, path.node);
+    const openingPath = path.get("openingElement");
+    openingPath.parent.children = t.react.buildChildren(openingPath.parent);
+
+    const tagExpr = convertJSXIdentifier(
+      openingPath.node.name,
+      openingPath.node,
+    );
     const args = [];
 
     let tagName;
@@ -101,14 +107,14 @@ export default function(opts) {
       opts.pre(state, file);
     }
 
-    let attribs = path.node.attributes;
+    let attribs = openingPath.node.attributes;
     if (attribs.length) {
       attribs = buildOpeningElementAttributes(attribs, file);
     } else {
       attribs = t.nullLiteral();
     }
 
-    args.push(attribs);
+    args.push(attribs, ...path.node.children);
 
     if (opts.post) {
       opts.post(state, file);
