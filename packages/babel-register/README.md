@@ -20,7 +20,7 @@ require("babel-register");
 ```
 
 All subsequent files required by node with the extensions `.es6`, `.es`, `.jsx`,
-`.mjs`, and `.js` will be transformed by Babel.
+`.mjs`, `.ts`, `.tsx`, and `.js` will be transformed by Babel.
 
 <blockquote class="babel-callout babel-callout-info">
   <h4>Polyfill not included</h4>
@@ -66,7 +66,7 @@ require("babel-register")({
 
   // Setting this will remove the currently hooked extensions of `.es6`, `.es`, `.jsx`, `.mjs`
   // and .js so you'll have to add them back if you want them to be used again.
-  extensions: [".es6", ".es", ".jsx", ".js", ".mjs"],
+  extensions: [".es6", ".es", ".jsx", ".js", ".mjs", ".ts", ".tsx"],
 
   // Setting this to false will disable the cache.
   cache: true

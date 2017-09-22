@@ -1,0 +1,2 @@
+src/a.ts -> lib/a.js
+src/b.tsx -> lib/b.js

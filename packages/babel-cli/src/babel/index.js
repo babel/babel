@@ -126,7 +126,7 @@ commander.option(
 // "babel" command specific arguments that are not passed to babel-core.
 commander.option(
   "-x, --extensions [extensions]",
-  "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx,.mjs]",
+  "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx,.mjs,.ts,.tsx]",
   collect,
 );
 commander.option(

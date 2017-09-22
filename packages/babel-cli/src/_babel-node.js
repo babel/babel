@@ -36,7 +36,7 @@ program.option(
 );
 program.option(
   "-x, --extensions [extensions]",
-  "List of extensions to hook into [.es6,.js,.es,.jsx,.mjs]",
+  "List of extensions to hook into [.es6,.js,.es,.jsx,.mjs,.ts,.tsx]",
   collect,
 );
 program.option("-w, --plugins [string]", "", collect);
