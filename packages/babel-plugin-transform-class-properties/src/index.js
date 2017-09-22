@@ -9,21 +9,212 @@ export default function({ types: t }) {
         this.push(path.parentPath);
       }
     },
+
+    ClassBody(path) {
+      path.skip();
+    },
+
+    Function(path) {
+      if (path.isArrowFunctionExpression()) return;
+      path.skip();
+    },
   };
 
-  const referenceVisitor = {
+  const collisionVisitor = {
     TypeAnnotation(path) {
       path.skip();
     },
+
     ReferencedIdentifier(path) {
       if (this.scope.hasOwnBinding(path.node.name)) {
         this.collision = true;
-        path.skip();
+        path.stop();
       }
     },
   };
 
-  const buildObjectDefineProperty = template(`
+  const remapThisVisitor = {
+    ThisExpression(path) {
+      path.replaceWith(this.thisRef);
+    },
+
+    Function(path) {
+      if (path.isArrowFunctionExpression()) return;
+      path.skip();
+    },
+  };
+
+  function collectPropertiesVisitor(body, propNames) {
+    for (const path of body.get("body")) {
+      if (path.isClassMethod({ kind: "constructor" })) {
+        propNames.constructor = path;
+        continue;
+      }
+
+      if (!path.isProperty()) continue;
+
+      const { key, computed, static: isStatic } = path.node;
+      propNames[isStatic ? "staticProps" : "instanceProps"].push(path);
+
+      if (computed) continue;
+
+      const isPrivate = path.isClassPrivateProperty();
+      const name = isPrivate
+        ? key.id.name
+        : t.isIdentifier(key) ? key.name : key.value;
+      const seen =
+        propNames[
+          isPrivate
+            ? "privateProps"
+            : isStatic ? "publicStaticProps" : "publicProps"
+        ];
+
+      if (seen[name]) {
+        throw path.buildCodeFrameError("duplicate class field");
+      }
+      seen[name] = true;
+    }
+  }
+
+  const staticErrorVisitor = {
+    ClassBody(path) {
+      path.skip();
+    },
+
+    ClassProperty(path) {
+      const { computed, key, static: isStatic } = path.node;
+      if (computed || !isStatic) return;
+
+      const name = t.isIdentifier(key) ? key.name : key.value;
+      if (name === "prototype") {
+        throw path.buildCodeFrameError("illegal static class field");
+      }
+    },
+
+    PrivateName(path) {
+      const { parentPath, node } = path;
+      if (parentPath.isMemberExpression({ property: node, computed: false })) {
+        if (!this.privateProps[node.id.name]) {
+          throw path.buildCodeFrameError("unknown private property");
+        }
+
+        return;
+      }
+
+      if (parentPath.isClassPrivateProperty({ key: node })) return;
+
+      throw path.buildCodeFrameError(
+        `illegal syntax. Did you mean \`this.#${node.id.name}\`?`,
+      );
+    },
+  };
+
+  const privateNameRemapper = {
+    PrivateName(path) {
+      const { node, parent, parentPath, scope } = path;
+      if (node.id.name !== this.name) {
+        return;
+      }
+      if (!parentPath.isMemberExpression()) return;
+
+      const grandParentPath = parentPath.parentPath;
+      const { object } = parent;
+
+      let replacePath = parentPath;
+      let replaceWith = t.callExpression(this.get, [object, this.privateMap]);
+
+      if (
+        grandParentPath.isAssignmentExpression() ||
+        grandParentPath.isUpdateExpression()
+      ) {
+        const { node } = grandParentPath;
+        let assign;
+        let memo;
+        let postfix;
+
+        if (grandParentPath.isAssignmentExpression({ operator: "=" })) {
+          assign = node.right;
+        } else {
+          const { right, operator } = node;
+          memo = scope.maybeGenerateMemoised(object);
+
+          if (memo) {
+            replaceWith.arguments[0] = memo;
+            memo = t.assignmentExpression("=", memo, object);
+          }
+
+          if (grandParentPath.isUpdateExpression({ prefix: false })) {
+            postfix = scope.generateUidIdentifierBasedOnNode(parent);
+            scope.push({ id: postfix });
+            replaceWith = t.assignmentExpression(
+              "=",
+              postfix,
+              t.unaryExpression("+", replaceWith),
+            );
+          }
+
+          assign = t.binaryExpression(
+            operator.slice(0, -1),
+            replaceWith,
+            right || t.numericLiteral(1),
+          );
+        }
+
+        replacePath = grandParentPath;
+        replaceWith = t.callExpression(this.put, [
+          memo || object,
+          this.privateMap,
+          assign,
+        ]);
+
+        if (postfix) {
+          replaceWith = t.sequenceExpression([replaceWith, postfix]);
+        }
+      } else if (grandParentPath.isCallExpression({ callee: parent })) {
+        const memo = scope.maybeGenerateMemoised(object);
+        if (memo) {
+          replaceWith.arguments[0] = t.assignmentExpression("=", memo, object);
+        }
+
+        const call = t.clone(grandParentPath.node);
+        call.callee = t.memberExpression(replaceWith, t.identifier("call"));
+        call.arguments.unshift(memo || object);
+
+        replacePath = grandParentPath;
+        replaceWith = call;
+      }
+
+      replacePath.replaceWith(replaceWith);
+    },
+
+    ClassBody(path) {
+      path.skip();
+    },
+  };
+
+  const privateNameRemapperLoose = {
+    PrivateName(path) {
+      const { parentPath, node } = path;
+      if (node.id.name !== this.name) {
+        return;
+      }
+      if (!parentPath.isMemberExpression()) return;
+
+      const object = parentPath.get("object");
+
+      object.replaceWith(
+        t.callExpression(this.base, [object.node, this.privateKey]),
+      );
+      parentPath.node.computed = true;
+      path.replaceWith(this.privateKey);
+    },
+
+    ClassBody(path) {
+      path.skip();
+    },
+  };
+
+  const buildPublicProperty = template(`
     Object.defineProperty(REF, KEY, {
       configurable: true,
       enumerable: true,
@@ -32,74 +223,150 @@ export default function({ types: t }) {
     });
   `);
 
-  const buildClassPropertySpec = (ref, { key, value, computed }, scope) =>
-    buildObjectDefineProperty({
+  const buildPrivateProperty = template(`
+    Object.defineProperty(REF, KEY, {
+      // configurable is false by default
+      // enumerable is false by default
+      writable: true,
+      value: VALUE
+    });
+  `);
+
+  function buildPublicClassPropertySpec(ref, prop) {
+    const { key, value, computed } = prop.node;
+    return buildPublicProperty({
       REF: ref,
       KEY: t.isIdentifier(key) && !computed ? t.stringLiteral(key.name) : key,
-      VALUE: value ? value : scope.buildUndefinedNode(),
+      VALUE: value || prop.scope.buildUndefinedNode(),
     });
+  }
 
-  const buildClassPropertyLoose = (ref, { key, value, computed }, scope) =>
-    t.expressionStatement(
+  function buildPublicClassPropertyLoose(ref, prop) {
+    const { key, value, computed } = prop.node;
+    return t.expressionStatement(
       t.assignmentExpression(
         "=",
         t.memberExpression(ref, key, computed || t.isLiteral(key)),
-        value ? value : scope.buildUndefinedNode(),
+        value || prop.scope.buildUndefinedNode(),
       ),
     );
+  }
+
+  function buildPrivateClassPropertySpec(ref, prop, classBody, nodes) {
+    const { node } = prop;
+    const { name } = node.key.id;
+    const { file } = classBody.hub;
+    const privateMap = classBody.scope.generateDeclaredUidIdentifier(name);
+
+    classBody.traverse(privateNameRemapper, {
+      name,
+      privateMap,
+      get: file.addHelper("classPrivateFieldGet"),
+      put: file.addHelper("classPrivateFieldPut"),
+    });
+
+    nodes.push(
+      t.expressionStatement(
+        t.assignmentExpression(
+          "=",
+          privateMap,
+          t.newExpression(t.identifier("WeakMap"), []),
+        ),
+      ),
+    );
+
+    return t.expressionStatement(
+      t.callExpression(t.memberExpression(privateMap, t.identifier("set")), [
+        ref,
+        node.value || classBody.scope.buildUndefinedNode(),
+      ]),
+    );
+  }
+
+  function buildPrivateClassPropertyLoose(ref, prop, classBody, nodes) {
+    const { key, value } = prop.node;
+    const { name } = key.id;
+    const { file } = classBody.hub;
+    const privateKey = classBody.scope.generateDeclaredUidIdentifier(name);
+
+    classBody.traverse(privateNameRemapperLoose, {
+      name,
+      privateKey,
+      base: file.addHelper("classPrivateFieldBase"),
+    });
+
+    nodes.push(
+      t.expressionStatement(
+        t.assignmentExpression(
+          "=",
+          privateKey,
+          t.callExpression(file.addHelper("classPrivateFieldKey"), [
+            t.stringLiteral(name),
+          ]),
+        ),
+      ),
+    );
+
+    return buildPrivateProperty({
+      REF: ref,
+      KEY: privateKey,
+      VALUE: value || prop.scope.buildUndefinedNode(),
+    });
+  }
 
   return {
     inherits: syntaxClassProperties,
 
     visitor: {
       Class(path, state) {
-        const buildClassProperty = state.opts.loose
-          ? buildClassPropertyLoose
-          : buildClassPropertySpec;
+        const buildPublicClassProperty = state.opts.loose
+          ? buildPublicClassPropertyLoose
+          : buildPublicClassPropertySpec;
+        const buildPrivateClassProperty = state.opts.loose
+          ? buildPrivateClassPropertyLoose
+          : buildPrivateClassPropertySpec;
         const isDerived = !!path.node.superClass;
-        let constructor;
-        const props = [];
+
+        const instanceProps = [];
+        const staticProps = [];
         const body = path.get("body");
+        const { scope } = path;
 
-        for (const path of body.get("body")) {
-          if (path.isClassProperty()) {
-            props.push(path);
-          } else if (path.isClassMethod({ kind: "constructor" })) {
-            constructor = path;
-          }
-        }
+        const propNames = {
+          publicProps: Object.create(null),
+          publicStaticProps: Object.create(null),
+          privateProps: Object.create(null),
+          instanceProps,
+          staticProps,
+          constructor: null,
+        };
+        collectPropertiesVisitor(body, propNames);
+        body.traverse(staticErrorVisitor, propNames);
 
-        if (!props.length) return;
+        if (!instanceProps.length && !staticProps.length) return;
 
-        const nodes = [];
         let ref;
-
         if (path.isClassExpression() || !path.node.id) {
           nameFunction(path);
-          ref = path.scope.generateUidIdentifier("class");
+          ref = scope.generateUidIdentifier("class");
         } else {
           // path.isClassDeclaration() && path.node.id
           ref = path.node.id;
         }
 
+        const nodes = [];
         let instanceBody = [];
 
-        for (const prop of props) {
-          const propNode = prop.node;
-          if (propNode.decorators && propNode.decorators.length > 0) continue;
-
-          const isStatic = propNode.static;
-
-          if (isStatic) {
-            nodes.push(buildClassProperty(ref, propNode, path.scope));
+        for (const prop of staticProps) {
+          if (prop.isClassPrivateProperty()) {
+            nodes.push(buildPrivateClassProperty(ref, prop, body, nodes));
           } else {
-            instanceBody.push(
-              buildClassProperty(t.thisExpression(), propNode, path.scope),
-            );
+            nodes.push(buildPublicClassProperty(ref, prop));
           }
         }
 
-        if (instanceBody.length) {
+        if (instanceProps.length) {
+          let constructor = propNames.constructor;
           if (!constructor) {
             const newConstructor = t.classMethod(
               "constructor",
@@ -107,16 +374,17 @@ export default function({ types: t }) {
               [],
               t.blockStatement([]),
             );
+
             if (isDerived) {
-              newConstructor.params = [t.restElement(t.identifier("args"))];
               newConstructor.body.body.push(
                 t.returnStatement(
                   t.callExpression(t.super(), [
-                    t.spreadElement(t.identifier("args")),
+                    t.spreadElement(t.identifier("arguments")),
                   ]),
                 ),
               );
             }
+
             [constructor] = body.unshiftContainer("body", newConstructor);
           }
 
@@ -124,14 +392,40 @@ export default function({ types: t }) {
             collision: false,
             scope: constructor.scope,
           };
+          const bareSupers = [];
 
-          for (const prop of props) {
-            prop.traverse(referenceVisitor, collisionState);
-            if (collisionState.collision) break;
+          if (isDerived) {
+            constructor.traverse(findBareSupers, bareSupers);
           }
 
-          if (collisionState.collision) {
-            const initialisePropsRef = path.scope.generateUidIdentifier(
+          if (bareSupers.length <= 1) {
+            for (const prop of instanceProps) {
+              prop.traverse(collisionVisitor, collisionState);
+              if (collisionState.collision) break;
+            }
+          }
+
+          const extract = bareSupers.length > 1 || collisionState.collision;
+          const thisRef = extract
+            ? scope.generateUidIdentifier("this")
+            : t.thisExpression();
+
+          for (const prop of instanceProps) {
+            if (extract) {
+              prop.traverse(remapThisVisitor, { thisRef });
+            }
+
+            if (prop.isClassPrivateProperty()) {
+              instanceBody.push(
+                buildPrivateClassProperty(thisRef, prop, body, nodes),
+              );
+            } else {
+              instanceBody.push(buildPublicClassProperty(thisRef, prop));
+            }
+          }
+
+          if (extract) {
+            const initialisePropsRef = scope.generateUidIdentifier(
               "initialiseProps",
             );
 
@@ -141,7 +435,7 @@ export default function({ types: t }) {
                   initialisePropsRef,
                   t.functionExpression(
                     null,
-                    [],
+                    [thisRef],
                     t.blockStatement(instanceBody),
                   ),
                 ),
@@ -150,19 +444,12 @@ export default function({ types: t }) {
 
             instanceBody = [
               t.expressionStatement(
-                t.callExpression(
-                  t.memberExpression(initialisePropsRef, t.identifier("call")),
-                  [t.thisExpression()],
-                ),
+                t.callExpression(initialisePropsRef, [t.thisExpression()]),
               ),
             ];
           }
 
-          //
-
-          if (isDerived) {
-            const bareSupers = [];
-            constructor.traverse(findBareSupers, bareSupers);
+          if (bareSupers.length) {
             for (const bareSuper of bareSupers) {
               bareSuper.insertAfter(instanceBody);
             }
@@ -171,14 +458,14 @@ export default function({ types: t }) {
           }
         }
 
-        for (const prop of props) {
+        for (const prop of [...staticProps, ...instanceProps]) {
           prop.remove();
         }
 
         if (!nodes.length) return;
 
         if (path.isClassExpression()) {
-          path.scope.push({ id: ref });
+          scope.push({ id: ref });
           path.replaceWith(t.assignmentExpression("=", ref, path.node));
         } else {
           // path.isClassDeclaration()
@@ -193,13 +480,20 @@ export default function({ types: t }) {
 
         path.insertAfter(nodes);
       },
+
+      PrivateName(path) {
+        throw path.buildCodeFrameError(
+          "PrivateName is illegal outside ClassBody",
+        );
+      },
+
       ArrowFunctionExpression(path) {
         const classExp = path.get("body");
         if (!classExp.isClassExpression()) return;
 
         const body = classExp.get("body");
         const members = body.get("body");
-        if (members.some(member => member.isClassProperty())) {
+        if (members.some(member => member.isProperty())) {
           path.ensureBlock();
         }
       },

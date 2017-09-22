@@ -496,6 +496,42 @@ helpers.possibleConstructorReturn = defineHelper(`
   }
 `);
 
+helpers.classPrivateFieldKey = defineHelper(`
+  var id = 0;
+  export default function _classPrivateFieldKey(name) {
+    // Can we use a middle finger emoji?
+    return "__private_" + (id++) + "_" + name;
+  }
+`);
+
+helpers.classPrivateFieldBase = defineHelper(`
+  export default function _classPrivateFieldBase(receiver, privateKey) {
+    if (!Object.prototype.hasOwnProperty.call(receiver, privateKey)) {
+      throw new TypeError("attempted to use private field on non-instance");
+    }
+    return receiver;
+  }
+`);
+
+helpers.classPrivateFieldGet = defineHelper(`
+  export default function _classPrivateFieldGet(receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+      throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
+  }
+`);
+
+helpers.classPrivateFieldPut = defineHelper(`
+  export default function _classPrivateFieldPut(receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+      throw new TypeError("attempted to set private field on non-instance");
+    }
+    privateMap.set(receiver, value);
+    return value;
+  }
+`);
+
 helpers.set = defineHelper(`
   export default function _set(object, property, value, receiver) {
     var desc = Object.getOwnPropertyDescriptor(object, property);

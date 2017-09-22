@@ -1,1 +1,1 @@
-{ "plugins": ["classProperties"] }
+{ "plugins": ["classProperties", "classPrivateProperties"] }

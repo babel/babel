@@ -12,7 +12,7 @@
     "babel-helper-function-name": "7.0.0-beta.1",
     "babel-messages": "7.0.0-beta.1",
     "babel-types": "7.0.0-beta.1",
-    "babylon": "7.0.0-beta.22",
+    "babylon": "7.0.0-beta.24",
     "debug": "^3.0.1",
     "globals": "^10.0.0",
     "invariant": "^2.2.0",

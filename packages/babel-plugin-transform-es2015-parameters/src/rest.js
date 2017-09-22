@@ -47,7 +47,7 @@ const memberExpressionOptimisationVisitor = {
     path.skip();
   },
 
-  "Function|ClassProperty": function(path, state) {
+  Function(path, state) {
     // Detect whether any reference to rest is contained in nested functions to
     // determine if deopt is necessary.
     const oldNoOptimise = state.noOptimise;
