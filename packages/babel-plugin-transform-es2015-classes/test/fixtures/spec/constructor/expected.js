@@ -22,8 +22,8 @@ function (_Bar) {
 
 var ConstructorScoping = function ConstructorScoping() {
   babelHelpers.classCallCheck(this, ConstructorScoping);
-  var bar = void 0;
+  var bar;
   {
-    var _bar = void 0;
+    var _bar;
   }
 };
