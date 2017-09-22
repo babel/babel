@@ -63,8 +63,7 @@ For convenience, you can use `"node": "current"` to only include the necessary p
 - [Usage](#usage)
 - [Options](#options)
 - [Examples](#examples)
-- [Caveats](#caveats)
-- [Other Cool Projects](#other-cool-projects)
+- [Issues](#issues)
 
 ## How it Works
 
