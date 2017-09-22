@@ -158,8 +158,6 @@ function getModuleMetadata(programPath: NodePath) {
 
       child.get("specifiers").forEach(spec => {
         if (spec.isImportDefaultSpecifier()) {
-          if (data.interop === "none") data.interop = "default";
-
           const localName = spec.get("local").node.name;
 
           data.imports.set(localName, "default");
@@ -175,8 +173,6 @@ function getModuleMetadata(programPath: NodePath) {
         } else if (spec.isImportNamespaceSpecifier()) {
           const localName = spec.get("local").node.name;
 
-          data.interop = "namespace";
-
           data.importsNamespace.add(localName);
           const reexport = localData.get(localName);
           if (reexport) {
@@ -191,10 +187,6 @@ function getModuleMetadata(programPath: NodePath) {
           const localName = spec.get("local").node.name;
 
           data.imports.set(localName, importName);
-
-          if (importName === "default" && data.interop === "none") {
-            data.interop = "default";
-          }
 
           const reexport = localData.get(localName);
           if (reexport) {
@@ -224,10 +216,6 @@ function getModuleMetadata(programPath: NodePath) {
         const importName = spec.get("local").node.name;
         const exportName = spec.get("exported").node.name;
 
-        if (importName === "default" && data.interop === "none") {
-          data.interop = "default";
-        }
-
         data.reexports.set(exportName, importName);
 
         if (exportName === "__esModule") {
@@ -236,6 +224,30 @@ function getModuleMetadata(programPath: NodePath) {
       });
     }
   });
+
+  for (const metadata of sourceData.values()) {
+    if (metadata.importsNamespace.size > 0) {
+      metadata.interop = "namespace";
+      continue;
+    }
+    let needsDefault = false;
+    let needsNamed = false;
+    for (const importName of metadata.imports.values()) {
+      if (importName === "default") needsDefault = true;
+      else needsNamed = true;
+    }
+    for (const importName of metadata.reexports.values()) {
+      if (importName === "default") needsDefault = true;
+      else needsNamed = true;
+    }
+
+    if (needsDefault && needsNamed) {
+      // TODO(logan): Using the namespace interop here is unfortunate. Revisit.
+      metadata.interop = "namespace";
+    } else if (needsDefault) {
+      metadata.interop = "default";
+    }
+  }
 
   return {
     local: localData,
