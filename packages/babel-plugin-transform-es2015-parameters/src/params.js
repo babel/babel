@@ -54,53 +54,41 @@ export default function convertFunctionParams(path, loose) {
   };
 
   const body = [];
-
-  let firstOptionalIndex = null;
-
-  //
   const params = path.get("params");
 
-  if (loose) {
-    const body = [];
-    for (let i = 0; i < params.length; ++i) {
-      const param = params[i];
-      if (param.isAssignmentPattern()) {
-        const left = param.get("left");
-        const right = param.get("right");
-
-        const undefinedNode = scope.buildUndefinedNode();
-
-        if (left.isIdentifier()) {
-          body.push(
-            buildLooseDefaultParam({
-              ASSIGNMENT_IDENTIFIER: left.node,
-              DEFAULT_VALUE: right.node,
-              UNDEFINED: undefinedNode,
-            }),
-          );
-          param.replaceWith(left.node);
-        } else if (left.isObjectPattern() || left.isArrayPattern()) {
-          const paramName = scope.generateUidIdentifier();
-          body.push(
-            buildLooseDestructuredDefaultParam({
-              ASSIGNMENT_IDENTIFIER: left.node,
-              DEFAULT_VALUE: right.node,
-              PARAMETER_NAME: paramName,
-              UNDEFINED: undefinedNode,
-            }),
-          );
-          param.replaceWith(paramName);
-        }
-      }
-    }
-    path.get("body").unshiftContainer("body", body);
-    return;
-  }
+  let firstOptionalIndex = null;
 
   for (let i = 0; i < params.length; i++) {
     const param = params[i];
 
-    if (param.isAssignmentPattern()) {
+    if (param.isAssignmentPattern() && loose) {
+      const left = param.get("left");
+      const right = param.get("right");
+
+      const undefinedNode = scope.buildUndefinedNode();
+
+      if (left.isIdentifier()) {
+        body.push(
+          buildLooseDefaultParam({
+            ASSIGNMENT_IDENTIFIER: left.node,
+            DEFAULT_VALUE: right.node,
+            UNDEFINED: undefinedNode,
+          }),
+        );
+        param.replaceWith(left.node);
+      } else if (left.isObjectPattern() || left.isArrayPattern()) {
+        const paramName = scope.generateUidIdentifier();
+        body.push(
+          buildLooseDestructuredDefaultParam({
+            ASSIGNMENT_IDENTIFIER: left.node,
+            DEFAULT_VALUE: right.node,
+            PARAMETER_NAME: paramName,
+            UNDEFINED: undefinedNode,
+          }),
+        );
+        param.replaceWith(paramName);
+      }
+    } else if (param.isAssignmentPattern()) {
       if (firstOptionalIndex === null) firstOptionalIndex = i;
 
       const left = param.get("left");
