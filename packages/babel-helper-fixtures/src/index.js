@@ -83,11 +83,20 @@ export default function get(entryLoc): Array<Suite> {
     }
 
     function push(taskName, taskDir) {
-      const actualLocAlias = suiteName + "/" + taskName + "/actual.js";
+      // Actual Name can be something like actual.css
+      let actualName = "actual.js";
+
+      for (const fileName of fs.readdirSync(taskDir)) {
+        if (/^actual/.test(fileName)) {
+          actualName = fileName;
+        }
+      }
+
+      const actualLocAlias = suiteName + "/" + taskName + "/" + actualName;
       let expectLocAlias = suiteName + "/" + taskName + "/expected.js";
       const execLocAlias = suiteName + "/" + taskName + "/exec.js";
 
-      const actualLoc = taskDir + "/actual.js";
+      const actualLoc = taskDir + "/" + actualName;
       let expectLoc = taskDir + "/expected.js";
       let execLoc = taskDir + "/exec.js";
 
