@@ -285,16 +285,7 @@ describe("api", function() {
 
     assert.equal(aliasBaseType, "NumberTypeAnnotation");
 
-    assert.deepEqual(
-      [
-        '"use strict";',
-        "",
-        "var x = function x(y) {",
-        "  return y;",
-        "};",
-      ].join("\n"),
-      result.code,
-    );
+    assert.deepEqual(result.code, "var x = function x(y) {\n  return y;\n};");
 
     // 2. passPerPreset: false
 
@@ -304,16 +295,7 @@ describe("api", function() {
 
     assert.equal(aliasBaseType, null);
 
-    assert.deepEqual(
-      [
-        '"use strict";',
-        "",
-        "var x = function x(y) {",
-        "  return y;",
-        "};",
-      ].join("\n"),
-      result.code,
-    );
+    assert.deepEqual(result.code, "var x = function x(y) {\n  return y;\n};");
   });
 
   it("complex plugin and preset ordering", function() {

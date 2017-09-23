@@ -1,11 +1,9 @@
-"use strict";
-
-var _this = void 0;
+var _this = this;
 
 "1".concat(a);
 (function () {
   babelHelpers.newArrowCheck(this, _this);
-}).bind(void 0);
+}).bind(this);
 
 function a() {
   var _this2 = this;

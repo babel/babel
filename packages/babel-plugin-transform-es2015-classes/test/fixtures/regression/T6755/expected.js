@@ -1,5 +1,3 @@
-"use strict";
-
 var Example =
 /*#__PURE__*/
 function () {

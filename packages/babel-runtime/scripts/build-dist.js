@@ -104,7 +104,7 @@ function buildRuntimeRewritePlugin(relativePath, helperName) {
 }
 
 function buildHelper(helperName, modules, useBuiltIns) {
-  const tree = t.program(helpers.get(helperName).nodes);
+  const tree = t.program(helpers.get(helperName).nodes, [], "module");
 
   const transformOpts = makeTransformOpts(modules, useBuiltIns);
 

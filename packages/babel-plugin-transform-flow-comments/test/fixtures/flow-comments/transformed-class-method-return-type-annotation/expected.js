@@ -1,5 +1,3 @@
-"use strict";
-
 // @flow
 var C =
 /*#__PURE__*/

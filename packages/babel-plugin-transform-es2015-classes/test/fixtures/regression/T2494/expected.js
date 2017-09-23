@@ -1,5 +1,3 @@
-"use strict";
-
 var x = {
   Foo:
   /*#__PURE__*/

@@ -513,13 +513,14 @@ defineType("NewExpression", { inherits: "CallExpression" });
 
 defineType("Program", {
   visitor: ["directives", "body"],
-  builder: ["body", "directives"],
+  builder: ["body", "directives", "sourceType"],
   fields: {
     sourceFile: {
       validate: assertValueType("string"),
     },
     sourceType: {
       validate: assertOneOf("script", "module"),
+      default: "script",
     },
     directives: {
       validate: chain(

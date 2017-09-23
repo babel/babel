@@ -1,5 +1,3 @@
-"use strict";
-
 var C =
 /*#__PURE__*/
 function () {
