@@ -127,10 +127,6 @@ const buildTest = function(binName, testName, opts) {
       args.push("--presets", presetLocs, "--plugins", pluginLocs);
     }
 
-    if (binName === "babel-node") {
-      args.push("--only", "../../../../packages/*/test");
-    }
-
     args = args.concat(opts.args);
 
     const spawn = child.spawn(process.execPath, args);
