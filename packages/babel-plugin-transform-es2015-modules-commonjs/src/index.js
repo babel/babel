@@ -6,8 +6,82 @@ import {
   ensureStatementsHoisted,
   wrapInterop,
 } from "babel-helper-module-transforms";
+import simplifyAccess from "babel-helper-simple-access";
 
-export default function({ types: t }) {
+export default function({ types: t, template }) {
+  const moduleAssertion = template(`
+    (function(){
+      throw new Error("The CommonJS 'module' variable is not available in ES6 modules.");
+    })();
+  `);
+  const exportsAssertion = template(`
+    (function(){
+      throw new Error("The CommonJS 'exports' variable is not available in ES6 modules.");
+    })();
+  `);
+  const getAssertion = localName =>
+    (localName === "module" ? moduleAssertion() : exportsAssertion())
+      .expression;
+
+  const moduleExportsVisitor = {
+    ReferencedIdentifier(path) {
+      const localName = path.node.name;
+      if (localName !== "module" && localName !== "exports") return;
+
+      const localBinding = path.scope.getBinding(localName);
+      const rootBinding = this.scope.getBinding(localName);
+
+      if (
+        // redeclared in this scope
+        rootBinding !== localBinding ||
+        (path.parentPath.isObjectProperty({ value: path.node }) &&
+          path.parentPath.parentPath.isObjectPattern()) ||
+        path.parentPath.isAssignmentExpression({ left: path.node }) ||
+        path.isAssignmentExpression({ left: path.node })
+      ) {
+        return;
+      }
+
+      path.replaceWith(getAssertion(localName));
+    },
+
+    AssignmentExpression(path) {
+      const left = path.get("left");
+      if (left.isIdentifier()) {
+        const localName = path.node.name;
+        if (localName !== "module" && localName !== "exports") return;
+
+        const localBinding = path.scope.getBinding(localName);
+        const rootBinding = this.scope.getBinding(localName);
+
+        // redeclared in this scope
+        if (rootBinding !== localBinding) return;
+
+        const right = path.get("right");
+        right.replaceWith(
+          t.sequenceExpression([right.node, getAssertion(localName)]),
+        );
+      } else if (left.isPattern()) {
+        const ids = left.getOuterBindingIdentifiers();
+        const localName = Object.keys(ids).filter(localName => {
+          if (localName !== "module" && localName !== "exports") return false;
+
+          return (
+            this.scope.getBinding(localName) ===
+            path.scope.getBinding(localName)
+          );
+        })[0];
+
+        if (localName) {
+          const right = path.get("right");
+          right.replaceWith(
+            t.sequenceExpression([right.node, getAssertion(localName)]),
+          );
+        }
+      }
+    },
+  };
+
   return {
     visitor: {
       Program: {
@@ -22,6 +96,9 @@ export default function({ types: t }) {
             strict,
             strictMode,
             noInterop,
+
+            // Defaulting to 'true' for now. May change before 7.x major.
+            allowCommonJSExports = true,
           } = state.opts;
 
           // Rename the bindings auto-injected into the scope so there is no
@@ -31,6 +108,16 @@ export default function({ types: t }) {
           path.scope.rename("require");
           path.scope.rename("__filename");
           path.scope.rename("__dirname");
+
+          // Rewrite references to 'module' and 'exports' to throw exceptions.
+          // These objects are specific to CommonJS and are not available in
+          // real ES6 implementations.
+          if (!allowCommonJSExports) {
+            simplifyAccess(path, new Set(["module", "exports"]));
+            path.traverse(moduleExportsVisitor, {
+              scope: path.scope,
+            });
+          }
 
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
