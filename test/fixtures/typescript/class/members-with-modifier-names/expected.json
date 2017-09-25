@@ -115,7 +115,7 @@
               "async": false,
               "params": [],
               "returnType": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 22,
                 "end": 28,
                 "loc": {
@@ -186,7 +186,7 @@
               "async": false,
               "params": [],
               "returnType": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 49,
                 "end": 55,
                 "loc": {
@@ -305,7 +305,7 @@
               },
               "kind": "method",
               "typeParameters": {
-                "type": "TypeParameterDeclaration",
+                "type": "TSTypeParameterDeclaration",
                 "start": 84,
                 "end": 87,
                 "loc": {
@@ -320,7 +320,7 @@
                 },
                 "params": [
                   {
-                    "type": "TypeParameter",
+                    "type": "TSTypeParameter",
                     "start": 85,
                     "end": 86,
                     "loc": {
@@ -343,7 +343,7 @@
               "async": false,
               "params": [],
               "returnType": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 89,
                 "end": 95,
                 "loc": {

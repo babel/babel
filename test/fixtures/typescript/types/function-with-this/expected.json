@@ -74,7 +74,7 @@
               },
               "name": "f",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 5,
                 "end": 29,
                 "loc": {
@@ -119,7 +119,7 @@
                       },
                       "name": "this",
                       "typeAnnotation": {
-                        "type": "TypeAnnotation",
+                        "type": "TSTypeAnnotation",
                         "start": 12,
                         "end": 20,
                         "loc": {
@@ -151,7 +151,7 @@
                     }
                   ],
                   "typeAnnotation": {
-                    "type": "TypeAnnotation",
+                    "type": "TSTypeAnnotation",
                     "start": 22,
                     "end": 29,
                     "loc": {

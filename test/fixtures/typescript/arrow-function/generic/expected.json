@@ -57,7 +57,7 @@
             }
           },
           "returnType": {
-            "type": "TypeAnnotation",
+            "type": "TSTypeAnnotation",
             "start": 9,
             "end": 12,
             "loc": {
@@ -125,7 +125,7 @@
               },
               "name": "a",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 5,
                 "end": 8,
                 "loc": {
@@ -191,7 +191,7 @@
             "name": "a"
           },
           "typeParameters": {
-            "type": "TypeParameterDeclaration",
+            "type": "TSTypeParameterDeclaration",
             "start": 0,
             "end": 3,
             "loc": {
@@ -206,7 +206,7 @@
             },
             "params": [
               {
-                "type": "TypeParameter",
+                "type": "TSTypeParameter",
                 "start": 1,
                 "end": 2,
                 "loc": {

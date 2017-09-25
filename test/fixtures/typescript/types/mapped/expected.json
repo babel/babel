@@ -74,7 +74,7 @@
               },
               "name": "map",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 7,
                 "end": 35,
                 "loc": {
@@ -102,7 +102,7 @@
                     }
                   },
                   "typeParameter": {
-                    "type": "TypeParameter",
+                    "type": "TSTypeParameter",
                     "start": 12,
                     "end": 23,
                     "loc": {
@@ -201,7 +201,7 @@
               },
               "name": "map",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 44,
                 "end": 82,
                 "loc": {
@@ -230,7 +230,7 @@
                   },
                   "readonly": true,
                   "typeParameter": {
-                    "type": "TypeParameter",
+                    "type": "TSTypeParameter",
                     "start": 58,
                     "end": 69,
                     "loc": {

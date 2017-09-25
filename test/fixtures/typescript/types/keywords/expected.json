@@ -74,7 +74,7 @@
               },
               "name": "a",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 5,
                 "end": 10,
                 "loc": {
@@ -155,7 +155,7 @@
               },
               "name": "b",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 17,
                 "end": 26,
                 "loc": {
@@ -236,7 +236,7 @@
               },
               "name": "ne",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 34,
                 "end": 41,
                 "loc": {
@@ -317,7 +317,7 @@
               },
               "name": "nul",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 50,
                 "end": 56,
                 "loc": {
@@ -398,7 +398,7 @@
               },
               "name": "num",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 65,
                 "end": 73,
                 "loc": {
@@ -479,7 +479,7 @@
               },
               "name": "o",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 80,
                 "end": 88,
                 "loc": {
@@ -560,7 +560,7 @@
               },
               "name": "st",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 96,
                 "end": 104,
                 "loc": {
@@ -641,7 +641,7 @@
               },
               "name": "sy",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 112,
                 "end": 120,
                 "loc": {
@@ -722,7 +722,7 @@
               },
               "name": "u",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 127,
                 "end": 138,
                 "loc": {
@@ -803,7 +803,7 @@
               },
               "name": "v",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 145,
                 "end": 151,
                 "loc": {

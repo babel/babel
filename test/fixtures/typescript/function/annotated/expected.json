@@ -63,7 +63,7 @@
         "expression": false,
         "async": false,
         "typeParameters": {
-          "type": "TypeParameterDeclaration",
+          "type": "TSTypeParameterDeclaration",
           "start": 10,
           "end": 13,
           "loc": {
@@ -78,7 +78,7 @@
           },
           "params": [
             {
-              "type": "TypeParameter",
+              "type": "TSTypeParameter",
               "start": 11,
               "end": 12,
               "loc": {
@@ -114,7 +114,7 @@
             "name": "x",
             "optional": true,
             "typeAnnotation": {
-              "type": "TypeAnnotation",
+              "type": "TSTypeAnnotation",
               "start": 16,
               "end": 19,
               "loc": {
@@ -163,7 +163,7 @@
           }
         ],
         "returnType": {
-          "type": "TypeAnnotation",
+          "type": "TSTypeAnnotation",
           "start": 20,
           "end": 23,
           "loc": {

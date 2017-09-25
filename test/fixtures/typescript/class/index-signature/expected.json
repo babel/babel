@@ -107,7 +107,7 @@
                   },
                   "name": "x",
                   "typeAnnotation": {
-                    "type": "TypeAnnotation",
+                    "type": "TSTypeAnnotation",
                     "start": 18,
                     "end": 24,
                     "loc": {
@@ -139,7 +139,7 @@
                 }
               ],
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 25,
                 "end": 30,
                 "loc": {
@@ -202,7 +202,7 @@
                   },
                   "name": "x",
                   "typeAnnotation": {
-                    "type": "TypeAnnotation",
+                    "type": "TSTypeAnnotation",
                     "start": 49,
                     "end": 55,
                     "loc": {
@@ -234,7 +234,7 @@
                 }
               ],
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 56,
                 "end": 61,
                 "loc": {

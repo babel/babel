@@ -131,7 +131,7 @@
                   },
                   "name": "x",
                   "typeAnnotation": {
-                    "type": "TypeAnnotation",
+                    "type": "TSTypeAnnotation",
                     "start": 27,
                     "end": 35,
                     "loc": {
@@ -178,7 +178,7 @@
                   },
                   "name": "y",
                   "typeAnnotation": {
-                    "type": "TypeAnnotation",
+                    "type": "TSTypeAnnotation",
                     "start": 38,
                     "end": 46,
                     "loc": {
@@ -266,7 +266,7 @@
                   },
                   "name": "x",
                   "typeAnnotation": {
-                    "type": "TypeAnnotation",
+                    "type": "TSTypeAnnotation",
                     "start": 66,
                     "end": 74,
                     "loc": {
@@ -313,7 +313,7 @@
                   },
                   "name": "y",
                   "typeAnnotation": {
-                    "type": "TypeAnnotation",
+                    "type": "TSTypeAnnotation",
                     "start": 77,
                     "end": 85,
                     "loc": {
@@ -401,7 +401,7 @@
                   },
                   "name": "x",
                   "typeAnnotation": {
-                    "type": "TypeAnnotation",
+                    "type": "TSTypeAnnotation",
                     "start": 105,
                     "end": 110,
                     "loc": {
@@ -448,7 +448,7 @@
                   },
                   "name": "y",
                   "typeAnnotation": {
-                    "type": "TypeAnnotation",
+                    "type": "TSTypeAnnotation",
                     "start": 113,
                     "end": 118,
                     "loc": {

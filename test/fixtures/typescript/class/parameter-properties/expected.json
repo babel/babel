@@ -179,7 +179,7 @@
                     },
                     "name": "pu",
                     "typeAnnotation": {
-                      "type": "TypeAnnotation",
+                      "type": "TSTypeAnnotation",
                       "start": 64,
                       "end": 72,
                       "loc": {
@@ -277,7 +277,7 @@
                     "name": "pi",
                     "optional": true,
                     "typeAnnotation": {
-                      "type": "TypeAnnotation",
+                      "type": "TSTypeAnnotation",
                       "start": 116,
                       "end": 124,
                       "loc": {
@@ -477,7 +477,7 @@
                       "name": "y",
                       "optional": true,
                       "typeAnnotation": {
-                        "type": "TypeAnnotation",
+                        "type": "TSTypeAnnotation",
                         "start": 239,
                         "end": 247,
                         "loc": {

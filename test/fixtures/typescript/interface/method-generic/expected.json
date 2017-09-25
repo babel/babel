@@ -107,7 +107,7 @@
                 "name": "m"
               },
               "typeParameters": {
-                "type": "TypeParameterDeclaration",
+                "type": "TSTypeParameterDeclaration",
                 "start": 19,
                 "end": 53,
                 "loc": {
@@ -122,7 +122,7 @@
                 },
                 "params": [
                   {
-                    "type": "TypeParameter",
+                    "type": "TSTypeParameter",
                     "start": 20,
                     "end": 52,
                     "loc": {
@@ -199,7 +199,7 @@
                             "name": "x"
                           },
                           "typeAnnotation": {
-                            "type": "TypeAnnotation",
+                            "type": "TSTypeAnnotation",
                             "start": 42,
                             "end": 50,
                             "loc": {
@@ -236,7 +236,7 @@
               },
               "parameters": [],
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 55,
                 "end": 58,
                 "loc": {

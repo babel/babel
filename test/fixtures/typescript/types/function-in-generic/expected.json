@@ -74,7 +74,7 @@
               },
               "name": "x",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 5,
                 "end": 24,
                 "loc": {
@@ -119,7 +119,7 @@
                     "name": "Array"
                   },
                   "typeParameters": {
-                    "type": "TypeParameterInstantiation",
+                    "type": "TSTypeParameterInstantiation",
                     "start": 12,
                     "end": 24,
                     "loc": {
@@ -149,7 +149,7 @@
                         },
                         "parameters": [],
                         "typeAnnotation": {
-                          "type": "TypeAnnotation",
+                          "type": "TSTypeAnnotation",
                           "start": 16,
                           "end": 23,
                           "loc": {

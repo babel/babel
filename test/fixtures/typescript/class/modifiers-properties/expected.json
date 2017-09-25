@@ -148,7 +148,7 @@
               },
               "optional": true,
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 51,
                 "end": 59,
                 "loc": {

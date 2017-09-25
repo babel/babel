@@ -60,7 +60,7 @@
           "name": "T"
         },
         "typeParameters": {
-          "type": "TypeParameterDeclaration",
+          "type": "TSTypeParameterDeclaration",
           "start": 6,
           "end": 9,
           "loc": {
@@ -75,7 +75,7 @@
           },
           "params": [
             {
-              "type": "TypeParameter",
+              "type": "TSTypeParameter",
               "start": 7,
               "end": 8,
               "loc": {

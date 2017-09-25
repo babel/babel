@@ -125,7 +125,7 @@
               }
             },
             "typeParameters": {
-              "type": "TypeParameterInstantiation",
+              "type": "TSTypeParameterInstantiation",
               "start": 22,
               "end": 25,
               "loc": {

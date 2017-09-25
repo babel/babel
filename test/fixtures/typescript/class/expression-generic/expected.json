@@ -58,7 +58,7 @@
           },
           "id": null,
           "typeParameters": {
-            "type": "TypeParameterDeclaration",
+            "type": "TSTypeParameterDeclaration",
             "start": 6,
             "end": 9,
             "loc": {
@@ -73,7 +73,7 @@
             },
             "params": [
               {
-                "type": "TypeParameter",
+                "type": "TSTypeParameter",
                 "start": 7,
                 "end": 8,
                 "loc": {
@@ -159,7 +159,7 @@
             "name": "C"
           },
           "typeParameters": {
-            "type": "TypeParameterDeclaration",
+            "type": "TSTypeParameterDeclaration",
             "start": 23,
             "end": 26,
             "loc": {
@@ -174,7 +174,7 @@
             },
             "params": [
               {
-                "type": "TypeParameter",
+                "type": "TSTypeParameter",
                 "start": 24,
                 "end": 25,
                 "loc": {

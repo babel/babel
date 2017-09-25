@@ -107,7 +107,7 @@
                 "name": "public"
               },
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 21,
                 "end": 29,
                 "loc": {

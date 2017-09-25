@@ -110,7 +110,7 @@
               },
               "kind": "method",
               "typeParameters": {
-                "type": "TypeParameterDeclaration",
+                "type": "TSTypeParameterDeclaration",
                 "start": 25,
                 "end": 28,
                 "loc": {
@@ -125,7 +125,7 @@
                 },
                 "params": [
                   {
-                    "type": "TypeParameter",
+                    "type": "TSTypeParameter",
                     "start": 26,
                     "end": 27,
                     "loc": {
@@ -148,7 +148,7 @@
               "async": false,
               "params": [],
               "returnType": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 30,
                 "end": 36,
                 "loc": {

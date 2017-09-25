@@ -109,7 +109,7 @@
               "optional": true,
               "parameters": [],
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 22,
                 "end": 28,
                 "loc": {

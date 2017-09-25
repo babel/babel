@@ -78,7 +78,7 @@
           "name": "D"
         },
         "superTypeParameters": {
-          "type": "TypeParameterInstantiation",
+          "type": "TSTypeParameterInstantiation",
           "start": 116,
           "end": 119,
           "loc": {

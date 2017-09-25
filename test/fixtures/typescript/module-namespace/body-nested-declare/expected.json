@@ -166,7 +166,7 @@
                           },
                           "name": "x",
                           "typeAnnotation": {
-                            "type": "TypeAnnotation",
+                            "type": "TSTypeAnnotation",
                             "start": 55,
                             "end": 63,
                             "loc": {

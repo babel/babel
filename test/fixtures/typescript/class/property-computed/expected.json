@@ -142,7 +142,7 @@
                 "computed": false
               },
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 31,
                 "end": 39,
                 "loc": {
@@ -241,7 +241,7 @@
               },
               "optional": true,
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 63,
                 "end": 71,
                 "loc": {

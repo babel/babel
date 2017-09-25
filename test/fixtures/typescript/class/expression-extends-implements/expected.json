@@ -91,7 +91,7 @@
             "arguments": []
           },
           "superTypeParameters": {
-            "type": "TypeParameterInstantiation",
+            "type": "TSTypeParameterInstantiation",
             "start": 18,
             "end": 21,
             "loc": {
@@ -204,7 +204,7 @@
                 }
               },
               "typeParameters": {
-                "type": "TypeParameterInstantiation",
+                "type": "TSTypeParameterInstantiation",
                 "start": 36,
                 "end": 39,
                 "loc": {
@@ -355,7 +355,7 @@
             "arguments": []
           },
           "superTypeParameters": {
-            "type": "TypeParameterInstantiation",
+            "type": "TSTypeParameterInstantiation",
             "start": 65,
             "end": 68,
             "loc": {
@@ -468,7 +468,7 @@
                 }
               },
               "typeParameters": {
-                "type": "TypeParameterInstantiation",
+                "type": "TSTypeParameterInstantiation",
                 "start": 83,
                 "end": 86,
                 "loc": {

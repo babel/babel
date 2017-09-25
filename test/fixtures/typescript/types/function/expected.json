@@ -74,7 +74,7 @@
               },
               "name": "f",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 5,
                 "end": 54,
                 "loc": {
@@ -119,7 +119,7 @@
                       },
                       "name": "a",
                       "typeAnnotation": {
-                        "type": "TypeAnnotation",
+                        "type": "TSTypeAnnotation",
                         "start": 9,
                         "end": 17,
                         "loc": {
@@ -167,7 +167,7 @@
                       "name": "b",
                       "optional": true,
                       "typeAnnotation": {
-                        "type": "TypeAnnotation",
+                        "type": "TSTypeAnnotation",
                         "start": 21,
                         "end": 29,
                         "loc": {
@@ -229,7 +229,7 @@
                         "name": "c"
                       },
                       "typeAnnotation": {
-                        "type": "TypeAnnotation",
+                        "type": "TSTypeAnnotation",
                         "start": 35,
                         "end": 45,
                         "loc": {
@@ -276,7 +276,7 @@
                     }
                   ],
                   "typeAnnotation": {
-                    "type": "TypeAnnotation",
+                    "type": "TSTypeAnnotation",
                     "start": 47,
                     "end": 54,
                     "loc": {

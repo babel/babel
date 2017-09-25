@@ -63,7 +63,7 @@
         "expression": false,
         "async": false,
         "typeParameters": {
-          "type": "TypeParameterDeclaration",
+          "type": "TSTypeParameterDeclaration",
           "start": 10,
           "end": 19,
           "loc": {
@@ -78,7 +78,7 @@
           },
           "params": [
             {
-              "type": "TypeParameter",
+              "type": "TSTypeParameter",
               "start": 13,
               "end": 14,
               "loc": {

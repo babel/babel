@@ -74,7 +74,7 @@
               },
               "name": "union",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 9,
                 "end": 36,
                 "loc": {
@@ -202,7 +202,7 @@
               },
               "name": "intersection",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 54,
                 "end": 71,
                 "loc": {
@@ -315,7 +315,7 @@
               },
               "name": "precedence1",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 88,
                 "end": 115,
                 "loc": {
@@ -460,7 +460,7 @@
               },
               "name": "precedence2",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 132,
                 "end": 159,
                 "loc": {

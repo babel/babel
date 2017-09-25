@@ -148,7 +148,7 @@
               "async": false,
               "params": [],
               "returnType": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 33,
                 "end": 39,
                 "loc": {
@@ -252,7 +252,7 @@
               "async": false,
               "params": [],
               "returnType": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 65,
                 "end": 71,
                 "loc": {

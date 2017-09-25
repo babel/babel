@@ -93,7 +93,7 @@
           "arguments": []
         },
         "superTypeParameters": {
-          "type": "TypeParameterInstantiation",
+          "type": "TSTypeParameterInstantiation",
           "start": 19,
           "end": 22,
           "loc": {

@@ -75,7 +75,7 @@
           },
           "arguments": [],
           "typeParameters": {
-            "type": "TypeParameterInstantiation",
+            "type": "TSTypeParameterInstantiation",
             "start": 1,
             "end": 4,
             "loc": {
@@ -172,7 +172,7 @@
           },
           "arguments": [],
           "typeParameters": {
-            "type": "TypeParameterInstantiation",
+            "type": "TSTypeParameterInstantiation",
             "start": 9,
             "end": 15,
             "loc": {

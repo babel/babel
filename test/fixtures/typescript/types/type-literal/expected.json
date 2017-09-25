@@ -74,7 +74,7 @@
               },
               "name": "obj",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 7,
                 "end": 22,
                 "loc": {
@@ -135,7 +135,7 @@
                         "name": "x"
                       },
                       "typeAnnotation": {
-                        "type": "TypeAnnotation",
+                        "type": "TSTypeAnnotation",
                         "start": 12,
                         "end": 20,
                         "loc": {

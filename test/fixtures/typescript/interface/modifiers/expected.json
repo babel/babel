@@ -108,7 +108,7 @@
               },
               "readonly": true,
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 28,
                 "end": 36,
                 "loc": {

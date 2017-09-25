@@ -57,7 +57,7 @@
             }
           },
           "returnType": {
-            "type": "TypeAnnotation",
+            "type": "TSTypeAnnotation",
             "start": 11,
             "end": 19,
             "loc": {
@@ -108,7 +108,7 @@
               },
               "name": "x",
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 2,
                 "end": 10,
                 "loc": {

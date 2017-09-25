@@ -184,7 +184,7 @@
                 }
               ],
               "typeAnnotation": {
-                "type": "TypeAnnotation",
+                "type": "TSTypeAnnotation",
                 "start": 22,
                 "end": 48,
                 "loc": {
@@ -245,7 +245,7 @@
                         "name": "x"
                       },
                       "typeAnnotation": {
-                        "type": "TypeAnnotation",
+                        "type": "TSTypeAnnotation",
                         "start": 27,
                         "end": 35,
                         "loc": {
@@ -308,7 +308,7 @@
                         "name": "y"
                       },
                       "typeAnnotation": {
-                        "type": "TypeAnnotation",
+                        "type": "TSTypeAnnotation",
                         "start": 38,
                         "end": 46,
                         "loc": {

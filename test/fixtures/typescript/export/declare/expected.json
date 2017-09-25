@@ -90,7 +90,7 @@
                 },
                 "name": "x",
                 "typeAnnotation": {
-                  "type": "TypeAnnotation",
+                  "type": "TSTypeAnnotation",
                   "start": 22,
                   "end": 30,
                   "loc": {
@@ -179,7 +179,7 @@
           "async": false,
           "params": [],
           "returnType": {
-            "type": "TypeAnnotation",
+            "type": "TSTypeAnnotation",
             "start": 59,
             "end": 65,
             "loc": {

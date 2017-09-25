@@ -60,7 +60,7 @@
           "name": "C"
         },
         "typeParameters": {
-          "type": "TypeParameterDeclaration",
+          "type": "TSTypeParameterDeclaration",
           "start": 7,
           "end": 41,
           "loc": {
@@ -75,7 +75,7 @@
           },
           "params": [
             {
-              "type": "TypeParameter",
+              "type": "TSTypeParameter",
               "start": 8,
               "end": 40,
               "loc": {
@@ -152,7 +152,7 @@
                       "name": "x"
                     },
                     "typeAnnotation": {
-                      "type": "TypeAnnotation",
+                      "type": "TSTypeAnnotation",
                       "start": 30,
                       "end": 38,
                       "loc": {

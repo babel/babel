@@ -60,7 +60,7 @@
           "name": "T"
         },
         "typeParameters": {
-          "type": "TypeParameterDeclaration",
+          "type": "TSTypeParameterDeclaration",
           "start": 6,
           "end": 40,
           "loc": {
@@ -75,7 +75,7 @@
           },
           "params": [
             {
-              "type": "TypeParameter",
+              "type": "TSTypeParameter",
               "start": 7,
               "end": 39,
               "loc": {
@@ -152,7 +152,7 @@
                       "name": "x"
                     },
                     "typeAnnotation": {
-                      "type": "TypeAnnotation",
+                      "type": "TSTypeAnnotation",
                       "start": 29,
                       "end": 37,
                       "loc": {
@@ -219,7 +219,7 @@
             "name": "Array"
           },
           "typeParameters": {
-            "type": "TypeParameterInstantiation",
+            "type": "TSTypeParameterInstantiation",
             "start": 48,
             "end": 51,
             "loc": {
