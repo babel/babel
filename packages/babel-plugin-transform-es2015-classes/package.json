@@ -6,6 +6,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
+    "babel-helper-annotate-as-pure": "7.0.0-beta.1",
     "babel-helper-define-map": "7.0.0-beta.1",
     "babel-helper-function-name": "7.0.0-beta.1",
     "babel-helper-optimise-call-expression": "7.0.0-beta.1",
