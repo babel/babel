@@ -23,14 +23,18 @@ traverse(file, {
 
 ## Caveat with UglifyJS pre v3.1.0
 
-`babel-helper-annotate-as-pure` concatenates existing leading comments to the `#__PURE__` annotation, but versions of UglifyJS before v3.1.0 checks only the last leading comment for the annotation.
+`babel-helper-annotate-as-pure` will append any existing leading comments to the `#__PURE__` annotation. Versions of UglifyJS prior to v3.1.0 will **ignore** these annotations, as they only check the _last_ leading comment for the annotation.
 
-So for the example input when annotating all CallExpressions:
+For example, using the `Usage` snippet above:
+
+**In**
+
 ```js
 const four = /* foo */ add(2, 2);
 ```
-it produces:
+
+**Out**
+
 ```js
 const four = /* #__PURE__ */ /* foo */ add(2, 2);
 ```
-and such generated annotation will be ignored in those previous versions of the UglifyJS.
