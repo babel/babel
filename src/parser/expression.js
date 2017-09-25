@@ -1469,13 +1469,20 @@ export default class ExpressionParser extends LValParser {
     isAsync?: boolean,
   ): N.ArrowFunctionExpression {
     this.initFunction(node, isAsync);
+    this.setArrowFunctionParameters(node, params);
+    this.parseFunctionBody(node, true);
+    return this.finishNode(node, "ArrowFunctionExpression");
+  }
+
+  setArrowFunctionParameters(
+    node: N.ArrowFunctionExpression,
+    params: N.Expression[],
+  ): void {
     node.params = this.toAssignableList(
       params,
       true,
       "arrow function parameters",
     );
-    this.parseFunctionBody(node, true);
-    return this.finishNode(node, "ArrowFunctionExpression");
   }
 
   isStrictBody(
@@ -1529,12 +1536,19 @@ export default class ExpressionParser extends LValParser {
     }
     this.state.inAsync = oldInAsync;
 
+    this.checkFunctionNameAndParams(node, allowExpression);
+  }
+
+  checkFunctionNameAndParams(
+    node: N.Function,
+    isArrowFunction: ?boolean,
+  ): void {
     // If this is a strict mode function, verify that argument names
     // are not repeated, and it does not try to bind the words `eval`
     // or `arguments`.
-    const isStrict = this.isStrictBody(node, isExpression);
-    // Also check when allowExpression === true for arrow functions
-    const checkLVal = this.state.strict || allowExpression || isStrict;
+    const isStrict = this.isStrictBody(node, node.expression);
+    // Also check for arrow functions
+    const checkLVal = this.state.strict || isStrict || isArrowFunction;
 
     if (
       isStrict &&
