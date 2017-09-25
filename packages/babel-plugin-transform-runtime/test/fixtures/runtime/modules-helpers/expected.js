@@ -1,6 +1,6 @@
 "use strict";
 
-var _interopRequireDefault = require("babel-runtime/helpers/interopRequireDefault").default;
+var _interopRequireDefault = require("babel-runtime/helpers/interopRequireDefault");
 
 var _classCallCheck2 = _interopRequireDefault(require("babel-runtime/helpers/classCallCheck"));
 

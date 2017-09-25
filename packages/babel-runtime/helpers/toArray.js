@@ -1,10 +1,7 @@
-exports.__esModule = true;
-exports.default = _toArray;
-
-var _from = _interopRequireDefault(require("../core-js/array/from"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+var _Array$from = require("../core-js/array/from");
 
 function _toArray(arr) {
-  return Array.isArray(arr) ? arr : (0, _from.default)(arr);
+  return Array.isArray(arr) ? arr : _Array$from(arr);
 }
+
+module.exports = _toArray;

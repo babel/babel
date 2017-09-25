@@ -1,8 +1,8 @@
-var _classCallCheck = require("babel-runtime/helpers/builtin/es6/classCallCheck").default;
+var _classCallCheck = require("babel-runtime/helpers/builtin/es6/classCallCheck");
 
-var _possibleConstructorReturn = require("babel-runtime/helpers/builtin/es6/possibleConstructorReturn").default;
+var _possibleConstructorReturn = require("babel-runtime/helpers/builtin/es6/possibleConstructorReturn");
 
-var _inherits = require("babel-runtime/helpers/builtin/es6/inherits").default;
+var _inherits = require("babel-runtime/helpers/builtin/es6/inherits");
 
 let Foo =
 /*#__PURE__*/

@@ -63,7 +63,7 @@ export default function({ types: t }) {
           cached = t.cloneDeep(cached);
         } else {
           cached = addDefault(file.path, source, {
-            importedInterop: "compiled",
+            importedInterop: "uncompiled",
             nameHint,
             blockHoist,
           });
