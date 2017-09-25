@@ -424,3 +424,53 @@ defineType("TSNamespaceExportDeclaration", {
     id: validateType("Identifier"),
   },
 });
+
+defineType("TSTypeAnnotation", {
+  visitor: ["typeAnnotation"],
+  fields: {
+    typeAnnotation: {
+      validate: assertNodeType("TSType"),
+    },
+  },
+});
+
+defineType("TSTypeParameterInstantiation", {
+  visitor: ["params"],
+  fields: {
+    params: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("TSType")),
+      ),
+    },
+  },
+});
+
+defineType("TSTypeParameterDeclaration", {
+  visitor: ["params"],
+  fields: {
+    params: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("TSTypeParameter")),
+      ),
+    },
+  },
+});
+
+defineType("TSTypeParameter", {
+  visitor: ["constraint", "default"],
+  fields: {
+    name: {
+      validate: assertValueType("string"),
+    },
+    constraint: {
+      validate: assertNodeType("TSType"),
+      optional: true,
+    },
+    default: {
+      validate: assertNodeType("TSType"),
+      optional: true,
+    },
+  },
+});

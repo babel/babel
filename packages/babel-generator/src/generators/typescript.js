@@ -14,13 +14,7 @@ export function TSTypeParameterInstantiation(node): void {
 export { TSTypeParameterInstantiation as TSTypeParameterDeclaration };
 
 export function TSTypeParameter(node) {
-  this._variance(node);
-
   this.word(node.name);
-
-  if (node.bound) {
-    this.print(node.bound, node);
-  }
 
   if (node.constraint) {
     this.space();

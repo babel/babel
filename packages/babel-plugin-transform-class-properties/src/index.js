@@ -12,7 +12,7 @@ export default function({ types: t }) {
   };
 
   const referenceVisitor = {
-    TypeAnnotation(path) {
+    "TSTypeAnnotation|TypeAnnotation"(path) {
       path.skip();
     },
     ReferencedIdentifier(path) {

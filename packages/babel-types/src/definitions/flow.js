@@ -1,4 +1,9 @@
-import defineType from "./index";
+import defineType, {
+  assertEach,
+  assertNodeType,
+  assertValueType,
+  chain,
+} from "./index";
 
 defineType("AnyTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"],
@@ -217,6 +222,62 @@ defineType("NumberTypeAnnotation", {
   },
 });
 
+defineType("ObjectTypeAnnotation", {
+  visitor: ["properties", "indexers", "callProperties"],
+  aliases: ["Flow"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("ObjectTypeCallProperty", {
+  visitor: ["value"],
+  aliases: ["Flow", "UserWhitespacable"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("ObjectTypeIndexer", {
+  visitor: ["id", "key", "value"],
+  aliases: ["Flow", "UserWhitespacable"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("ObjectTypeProperty", {
+  visitor: ["key", "value"],
+  aliases: ["Flow", "UserWhitespacable"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("ObjectTypeSpreadProperty", {
+  visitor: ["argument"],
+  aliases: ["Flow", "UserWhitespacable"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("OpaqueType", {
+  visitor: ["id", "typeParameters", "supertype", "impltype"],
+  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("QualifiedTypeIdentifier", {
+  visitor: ["id", "qualification"],
+  aliases: ["Flow"],
+  fields: {
+    // todo
+  },
+});
+
 defineType("StringLiteralTypeAnnotation", {
   aliases: ["Flow"],
   fields: {
@@ -260,11 +321,13 @@ defineType("TypeAlias", {
   },
 });
 
-defineType("OpaqueType", {
-  visitor: ["id", "typeParameters", "supertype", "impltype"],
-  aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
+defineType("TypeAnnotation", {
+  aliases: ["Flow"],
+  visitor: ["typeAnnotation"],
   fields: {
-    // todo
+    typeAnnotation: {
+      validate: assertNodeType("Flow"),
+    },
   },
 });
 
@@ -276,51 +339,47 @@ defineType("TypeCastExpression", {
   },
 });
 
-defineType("ObjectTypeAnnotation", {
-  visitor: ["properties", "indexers", "callProperties"],
+defineType("TypeParameter", {
   aliases: ["Flow"],
+  visitor: ["bound", "default"],
   fields: {
-    // todo
+    name: {
+      validate: assertValueType("string"),
+    },
+    bound: {
+      validate: assertNodeType("TypeAnnotation"),
+      optional: true,
+    },
+    default: {
+      validate: assertNodeType("Flow"),
+      optional: true,
+    },
   },
 });
 
-defineType("ObjectTypeCallProperty", {
-  visitor: ["value"],
-  aliases: ["Flow", "UserWhitespacable"],
-  fields: {
-    // todo
-  },
-});
-
-defineType("ObjectTypeIndexer", {
-  visitor: ["id", "key", "value"],
-  aliases: ["Flow", "UserWhitespacable"],
-  fields: {
-    // todo
-  },
-});
-
-defineType("ObjectTypeProperty", {
-  visitor: ["key", "value"],
-  aliases: ["Flow", "UserWhitespacable"],
-  fields: {
-    // todo
-  },
-});
-
-defineType("ObjectTypeSpreadProperty", {
-  visitor: ["argument"],
-  aliases: ["Flow", "UserWhitespacable"],
-  fields: {
-    // todo
-  },
-});
-
-defineType("QualifiedTypeIdentifier", {
-  visitor: ["id", "qualification"],
+defineType("TypeParameterDeclaration", {
   aliases: ["Flow"],
+  visitor: ["params"],
   fields: {
-    // todo
+    params: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("TypeParameter")),
+      ),
+    },
+  },
+});
+
+defineType("TypeParameterInstantiation", {
+  aliases: ["Flow"],
+  visitor: ["params"],
+  fields: {
+    params: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Flow")),
+      ),
+    },
   },
 });
 

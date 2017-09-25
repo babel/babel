@@ -356,7 +356,7 @@ Aliases: `Property`
 
  - `key` (required)
  - `value`: `Expression` (default: `null`)
- - `typeAnnotation`: `TypeAnnotation | Noop` (default: `null`)
+ - `typeAnnotation`: `TypeAnnotation | TSTypeAnnotation | Noop` (default: `null`)
  - `decorators`: `Array<Decorator>` (default: `null`)
  - `computed`: `boolean` (default: `false`)
  - `abstract`: `boolean` (default: `null`)
@@ -1551,7 +1551,7 @@ Aliases: `Expression`, `ExpressionWrapper`
 
 ### program
 ```javascript
-t.program(body, directives)
+t.program(body, directives, sourceType)
 ```
 
 See also `t.isProgram(node, opts)` and `t.assertProgram(node, opts)`.
@@ -1560,8 +1560,8 @@ Aliases: `Scopable`, `BlockParent`, `Block`
 
  - `body`: `Array<Statement>` (required)
  - `directives`: `Array<Directive>` (default: `[]`)
+ - `sourceType`: `'script' | 'module'` (default: `'script'`)
  - `sourceFile`: `string` (default: `null`)
- - `sourceType`: `'script' | 'module'` (default: `null`)
 
 ---
 
@@ -2301,6 +2301,17 @@ Aliases: `Statement`, `Declaration`
 
 ---
 
+### tSTypeAnnotation
+```javascript
+t.tSTypeAnnotation(typeAnnotation)
+```
+
+See also `t.isTSTypeAnnotation(node, opts)` and `t.assertTSTypeAnnotation(node, opts)`.
+
+ - `typeAnnotation`: `TSType` (required)
+
+---
+
 ### tSTypeAssertion
 ```javascript
 t.tSTypeAssertion(typeAnnotation, expression)
@@ -2339,6 +2350,41 @@ Aliases: `TSType`
 
  - `typeAnnotation`: `TSType` (required)
  - `operator`: `string` (default: `null`)
+
+---
+
+### tSTypeParameter
+```javascript
+t.tSTypeParameter(constraint, default)
+```
+
+See also `t.isTSTypeParameter(node, opts)` and `t.assertTSTypeParameter(node, opts)`.
+
+ - `constraint`: `TSType` (default: `null`)
+ - `default`: `TSType` (default: `null`)
+ - `name`: `string` (default: `null`)
+
+---
+
+### tSTypeParameterDeclaration
+```javascript
+t.tSTypeParameterDeclaration(params)
+```
+
+See also `t.isTSTypeParameterDeclaration(node, opts)` and `t.assertTSTypeParameterDeclaration(node, opts)`.
+
+ - `params`: `Array<TSTypeParameter>` (required)
+
+---
+
+### tSTypeParameterInstantiation
+```javascript
+t.tSTypeParameterInstantiation(params)
+```
+
+See also `t.isTSTypeParameterInstantiation(node, opts)` and `t.assertTSTypeParameterInstantiation(node, opts)`.
+
+ - `params`: `Array<TSType>` (required)
 
 ---
 
@@ -2549,7 +2595,7 @@ See also `t.isTypeAnnotation(node, opts)` and `t.assertTypeAnnotation(node, opts
 
 Aliases: `Flow`
 
- - `typeAnnotation`: `TSType | Flow` (required)
+ - `typeAnnotation`: `Flow` (required)
 
 ---
 
@@ -2569,7 +2615,7 @@ Aliases: `Flow`, `ExpressionWrapper`, `Expression`
 
 ### typeParameter
 ```javascript
-t.typeParameter(bound, constraint, default)
+t.typeParameter(bound, default)
 ```
 
 See also `t.isTypeParameter(node, opts)` and `t.assertTypeParameter(node, opts)`.
@@ -2577,8 +2623,7 @@ See also `t.isTypeParameter(node, opts)` and `t.assertTypeParameter(node, opts)`
 Aliases: `Flow`
 
  - `bound`: `TypeAnnotation` (default: `null`)
- - `constraint`: `TSType` (default: `null`)
- - `default`: `TSType | Flow` (default: `null`)
+ - `default`: `Flow` (default: `null`)
  - `name`: `string` (default: `null`)
 
 ---
@@ -2605,7 +2650,7 @@ See also `t.isTypeParameterInstantiation(node, opts)` and `t.assertTypeParameter
 
 Aliases: `Flow`
 
- - `params`: `Array<TSType | Flow>` (required)
+ - `params`: `Array<Flow>` (required)
 
 ---
 

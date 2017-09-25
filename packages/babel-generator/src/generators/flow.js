@@ -335,13 +335,6 @@ export function TypeParameter(node) {
     this.print(node.bound, node);
   }
 
-  if (node.constraint) {
-    this.space();
-    this.word("extends");
-    this.space();
-    this.print(node.constraint, node);
-  }
-
   if (node.default) {
     this.space();
     this.token("=");
