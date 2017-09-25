@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-bigint", "transform-es2015-modules-commonjs"]
+}

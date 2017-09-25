@@ -1,0 +1,12 @@
+{
+  "name": "babel-check-binary-expressions",
+  "version": "7.0.0-alpha.16",
+  "description": "Check binary expressions",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-check-binary-expressions",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [],
+  "dependencies": {
+    "lodash": "^4.2.0"
+  }
+}

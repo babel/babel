@@ -1,4 +1,4 @@
-import defineType, { assertNodeType } from "./index";
+import defineType, { assertNodeType, assertValueType } from "./index";
 
 defineType("AwaitExpression", {
   builder: ["argument"],
@@ -60,4 +60,14 @@ defineType("ExportNamespaceSpecifier", {
       validate: assertNodeType("Identifier"),
     },
   },
+});
+
+defineType("BigIntLiteral", {
+  builder: ["value"],
+  fields: {
+    value: {
+      validate: assertValueType("string"),
+    },
+  },
+  aliases: ["Expression", "Pureish", "Literal", "Immutable"],
 });
