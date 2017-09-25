@@ -21,13 +21,13 @@
 <p align="center">
   <a href="#backers"><img alt="Backers on Open Collective" src="https://opencollective.com/babel/backers/badge.svg" /></a>
   <a href="#sponsors"><img alt="Sponsors on Open Collective" src="https://opencollective.com/babel/sponsors/badge.svg" /></a>
-    <a href="https://medium.com/friendship-dot-js/i-peeked-into-my-node-modules-directory-and-you-wont-believe-what-happened-next-b89f63d21558"><img alt="Business Strategy Status" src="https://img.shields.io/badge/business%20model-flavortown-green.svg"></a>
+  <a href="https://medium.com/friendship-dot-js/i-peeked-into-my-node-modules-directory-and-you-wont-believe-what-happened-next-b89f63d21558"><img alt="Business Strategy Status" src="https://img.shields.io/badge/business%20model-flavortown-green.svg"></a>
 </p>
 
 Babel is community-driven and thus mostly maintained by a group of volunteers. It has a lot of [companies and projects](http://babeljs.io/users) using it but almost no sponsors/people funded to work on it. If you'd like to help maintain the future of the project, please consider:
 
 - [Giving funds by becoming a backer/sponsor on OpenCollective](https://opencollective.com/babel)
-- Giving time by giving developer time on the project. (Can message us Twitter or [slack](slack.babeljs.io))
+- Giving developer time on the project. (Can message us [Twitter](https://twitter.com/babeljs) or [slack](slack.babeljs.io))
 
 ## Intro
 
