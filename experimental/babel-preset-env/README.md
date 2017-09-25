@@ -141,11 +141,11 @@ Browserslist config will be ignored if: 1) `targets.browsers` was specified 2) o
 
 #### Targets merging.
 
-1. If [targets.browsers](#browsers) is defined - the browserslist config will be ignored. The browsers specified in `targets` will be merged with [any other explicitly defined targets](#targets). If merged, targets defined explicitly will override the same targets received from `targets.browsers`.
+1. If [targets.browsers](#targetsbrowsers) is defined - the browserslist config will be ignored. The browsers specified in `targets` will be merged with [any other explicitly defined targets](#targets). If merged, targets defined explicitly will override the same targets received from `targets.browsers`.
 
-2. If [targets.browsers](#browsers) is _not_ defined - the program will search browserslist file or `package.json` with `browserslist` field. The search will start from the working directory of the process or from the path specified by the `configPath` option, and go up to the system root. If both a browserslist file and configuration inside a `package.json` are found, an exception will be thrown.
+2. If [targets.browsers](#targetsbrowsers) is _not_ defined - the program will search browserslist file or `package.json` with `browserslist` field. The search will start from the working directory of the process or from the path specified by the `configPath` option, and go up to the system root. If both a browserslist file and configuration inside a `package.json` are found, an exception will be thrown.
 
-3. If a browserslist config was found and other targets are defined (but not [targets.browsers](#browsers)), the targets will be merged in the same way as `targets` defined explicitly with `targets.browsers`.
+3. If a browserslist config was found and other targets are defined (but not [targets.browsers](#targetsbrowsers)), the targets will be merged in the same way as `targets` defined explicitly with `targets.browsers`.
 
 ## Install
 
