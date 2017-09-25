@@ -27,7 +27,7 @@
 Babel is community-driven and thus mostly maintained by a group of volunteers. It has a lot of [companies and projects](http://babeljs.io/users) using it but almost no sponsors/people funded to work on it. If you'd like to help maintain the future of the project, please consider:
 
 - [Giving funds by becoming a backer/sponsor on OpenCollective](https://opencollective.com/babel)
-- Giving developer time on the project. (Can message us [Twitter](https://twitter.com/babeljs) or [slack](slack.babeljs.io))
+- Giving developer time on the project. (Message us on [Twitter](https://twitter.com/babeljs) or [Slack](slack.babeljs.io))
 
 ## Intro
 
