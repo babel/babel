@@ -2,7 +2,7 @@
 
 ## Usage
 
-### Adding a named impport
+### Adding a named import
 
 ```
 import { addNamed } from "babel-helper-module-imports";
