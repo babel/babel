@@ -6,6 +6,9 @@ import fs from "fs";
 
 import * as util from "./util";
 
+const startMsg = ">>Started transpiling";
+const endMsg = ">>Finished transpiling";
+
 export default function(commander, filenames, opts) {
   function write(src, relative, base) {
     if (!util.isCompilableExtension(relative, commander.extensions)) {
@@ -81,7 +84,9 @@ export default function(commander, filenames, opts) {
   }
 
   if (!commander.skipInitialBuild) {
+    console.log(startMsg);
     filenames.forEach(handle);
+    console.log(endMsg);
   }
 
   if (commander.watch) {
@@ -96,14 +101,28 @@ export default function(commander, filenames, opts) {
           pollInterval: 10,
         },
       });
-
+      let processing = true; //Track whether or not we're currently processing files
+      let timer;
       ["add", "change"].forEach(function(type) {
         watcher.on(type, function(filename) {
           const relative = path.relative(dirname, filename) || filename;
           try {
+            if (timer == null || processing == false) {
+              console.log(startMsg);
+            }
+            processing = true;
             handleFile(filename, relative);
           } catch (err) {
             console.error(err.stack);
+          } finally {
+            if (processing == true) {
+              clearTimeout(timer);
+              timer = setTimeout(function() {
+                console.log(endMsg);
+                processing = false;
+                timer = null;
+              }, 250);
+            }
           }
         });
       });
