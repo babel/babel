@@ -9,6 +9,7 @@ export default function({ types: t }) {
             return (
               (path.isVariableDeclarator() && path.node.id === helper) ||
               (path.isFunctionDeclaration() &&
+                path.node.id &&
                 path.node.id.name === helper.name)
             );
           });
