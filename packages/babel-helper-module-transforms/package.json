@@ -1,6 +1,6 @@
 {
   "name": "babel-helper-module-transforms",
-  "version": "7.0.0-beta.1",
+  "version": "7.0.0-beta.2",
   "description": "Babel helper functions for implementing ES6 module transformations",
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -8,8 +8,8 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-module-transforms",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-template": "7.0.0-beta.1",
-    "babel-types": "7.0.0-beta.1",
+    "babel-template": "7.0.0-beta.2",
+    "babel-types": "7.0.0-beta.2",
     "lodash": "^4.2.0"
   }
 }
