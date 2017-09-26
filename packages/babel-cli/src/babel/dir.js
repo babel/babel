@@ -84,9 +84,9 @@ export default function(commander, filenames, opts) {
   }
 
   if (!commander.skipInitialBuild) {
-    console.log(startMsg);
+    if (commander.noisey) console.log(startMsg);
     filenames.forEach(handle);
-    console.log(endMsg);
+    if (commander.noisey) console.log(endMsg);
   }
 
   if (commander.watch) {
@@ -108,7 +108,7 @@ export default function(commander, filenames, opts) {
           const relative = path.relative(dirname, filename) || filename;
           try {
             if (timer == null || processing == false) {
-              console.log(startMsg);
+              if (commander.noisey) console.log(startMsg);
             }
             processing = true;
             handleFile(filename, relative);
@@ -118,7 +118,7 @@ export default function(commander, filenames, opts) {
             if (processing == true) {
               clearTimeout(timer);
               timer = setTimeout(function() {
-                console.log(endMsg);
+                if (commander.noisey) console.log(endMsg);
                 processing = false;
                 timer = null;
               }, 250);

@@ -159,6 +159,10 @@ commander.option(
   "--delete-dir-on-start",
   "Delete's the out directory before compilation",
 );
+commander.option(
+  "-n --noisy",
+  "Output indication of when files are being processed",
+);
 /* eslint-enable max-len */
 
 commander.version(pkg.version + " (babel-core " + version + ")");
@@ -166,7 +170,6 @@ commander.usage("[options] <files ...>");
 commander.parse(process.argv);
 
 //
-
 const errors = [];
 
 let filenames = commander.args.reduce(function(globbed, input) {
@@ -237,6 +240,7 @@ delete opts.quiet;
 delete opts.configFile;
 delete opts.deleteDirOnStart;
 delete opts.keepFileExtension;
+delete opts.noisy;
 
 // Commander will default the "--no-" arguments to true, but we want to leave them undefined so that
 // babel-core can handle the default-assignment logic on its own.
