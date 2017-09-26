@@ -35,6 +35,9 @@ export default function({ types: t }) {
   }
 
   return {
+    pre() {
+      this.templates = new Map();
+    },
     visitor: {
       TaggedTemplateExpression(path, state) {
         const { node } = path;
@@ -54,18 +57,41 @@ export default function({ types: t }) {
           raws.push(t.stringLiteral(raw));
         }
 
-        let templateName = "taggedTemplateLiteral";
-        if (state.opts.loose) templateName += "Loose";
+        let helperName = "taggedTemplateLiteral";
+        if (state.opts.loose) helperName += "Loose";
 
-        const templateObject = state.file.addTemplateObject(
-          templateName,
-          t.arrayExpression(strings),
-          t.arrayExpression(raws),
+        // Generate a unique name based on the string literals so we dedupe
+        // identical strings used in the program.
+        const rawParts = raws.map(s => s.value).join(",");
+        const name = `${helperName}_${raws.length}_${rawParts}`;
+
+        let templateObject = this.templates.get(name);
+        if (templateObject) {
+          templateObject = t.clone(templateObject);
+        } else {
+          const programPath = path.find(p => p.isProgram());
+          templateObject = programPath.scope.generateUidIdentifier(
+            "templateObject",
+          );
+          this.templates.set(name, templateObject);
+
+          const helperId = this.addHelper(helperName);
+          const init = t.callExpression(helperId, [
+            t.arrayExpression(strings),
+            t.arrayExpression(raws),
+          ]);
+          init._compact = true;
+          programPath.scope.push({
+            id: templateObject,
+            init,
+            // This ensures that we don't fail if not using function expression helpers
+            _blockHoist: 1.9,
+          });
+        }
+
+        path.replaceWith(
+          t.callExpression(node.tag, [templateObject, ...quasi.expressions]),
         );
-
-        const args = [templateObject].concat(quasi.expressions);
-
-        path.replaceWith(t.callExpression(node.tag, args));
       },
 
       TemplateLiteral(path, state) {
