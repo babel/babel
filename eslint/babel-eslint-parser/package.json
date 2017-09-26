@@ -1,6 +1,6 @@
 {
   "name": "babel-eslint",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "Custom parser for ESLint",
   "main": "index.js",
   "files": [
