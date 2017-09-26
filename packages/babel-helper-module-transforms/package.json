@@ -9,6 +9,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "babel-helper-module-imports": "7.0.0-beta.2",
+    "babel-helper-simple-access": "7.0.0-beta.2",
     "babel-template": "7.0.0-beta.2",
     "babel-types": "7.0.0-beta.2",
     "lodash": "^4.2.0"

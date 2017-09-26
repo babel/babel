@@ -20,7 +20,7 @@
   var test = 2;
   _exports.test = test;
   _exports.test = test = 5;
-  _exports.test = test += 1;
+  _exports.test = test = test + 1;
 
   (function () {
     var test = 2;
