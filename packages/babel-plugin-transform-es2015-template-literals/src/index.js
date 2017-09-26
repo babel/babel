@@ -83,7 +83,7 @@ export default function({ types: t }) {
           init._compact = true;
           programPath.scope.push({
             id: templateObject,
-            init: init,
+            init,
             // This ensures that we don't fail if not using function expression helpers
             _blockHoist: 1.9,
           });
