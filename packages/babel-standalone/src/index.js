@@ -192,6 +192,7 @@ registerPlugins({
   "transform-flow-strip-types": require("babel-plugin-transform-flow-strip-types"),
   "transform-function-bind": require("babel-plugin-transform-function-bind"),
   "transform-jscript": require("babel-plugin-transform-jscript"),
+  "transform-new-target": require("babel-plugin-transform-new-target"),
   "transform-object-assign": require("babel-plugin-transform-object-assign"),
   "transform-object-rest-spread": require("babel-plugin-transform-object-rest-spread"),
   "transform-object-set-prototype-of-to-assign": require("babel-plugin-transform-object-set-prototype-of-to-assign"),
