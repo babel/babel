@@ -33,7 +33,9 @@ export default function({ types: t }) {
         const isUnderHelper = path.findParent(path => {
           return (
             (path.isVariableDeclarator() && path.node.id === helper) ||
-            (path.isFunctionDeclaration() && path.node.id.name === helper.name)
+            (path.isFunctionDeclaration() &&
+              path.node.id &&
+              path.node.id.name === helper.name)
           );
         });
 
