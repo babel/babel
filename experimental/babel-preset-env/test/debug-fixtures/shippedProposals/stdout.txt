@@ -98,6 +98,8 @@ Using polyfills with `entry` option:
   es6.number.epsilon {}
   es6.number.min-safe-integer {}
   es6.number.max-safe-integer {}
+  es6.number.parse-float {}
+  es6.number.parse-int {}
   es6.math.acosh {}
   es6.math.asinh {}
   es6.math.atanh {}

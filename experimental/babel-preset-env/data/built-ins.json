@@ -595,6 +595,26 @@
     "opera": "21",
     "electron": "0.2"
   },
+  "es6.number.parse-float": {
+    "chrome": "34",
+    "edge": "12",
+    "firefox": "25",
+    "safari": "9",
+    "node": "0.12",
+    "ios": "9",
+    "opera": "21",
+    "electron": "0.2"
+  },
+  "es6.number.parse-int": {
+    "chrome": "34",
+    "edge": "12",
+    "firefox": "25",
+    "safari": "9",
+    "node": "0.12",
+    "ios": "9",
+    "opera": "21",
+    "electron": "0.2"
+  },
   "es6.math.acosh": {
     "chrome": "38",
     "edge": "12",

@@ -97,6 +97,8 @@ Using polyfills with `entry` option:
   es6.number.epsilon { "ie":"10" }
   es6.number.min-safe-integer { "ie":"10" }
   es6.number.max-safe-integer { "ie":"10" }
+  es6.number.parse-float { "ie":"10" }
+  es6.number.parse-int { "ie":"10" }
   es6.math.acosh { "ie":"10" }
   es6.math.asinh { "ie":"10" }
   es6.math.atanh { "ie":"10" }

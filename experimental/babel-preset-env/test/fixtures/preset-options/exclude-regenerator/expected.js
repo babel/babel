@@ -58,6 +58,8 @@ import "babel-polyfill/lib/core-js/modules/es6.number.is-nan";
 import "babel-polyfill/lib/core-js/modules/es6.number.epsilon";
 import "babel-polyfill/lib/core-js/modules/es6.number.min-safe-integer";
 import "babel-polyfill/lib/core-js/modules/es6.number.max-safe-integer";
+import "babel-polyfill/lib/core-js/modules/es6.number.parse-float";
+import "babel-polyfill/lib/core-js/modules/es6.number.parse-int";
 import "babel-polyfill/lib/core-js/modules/es6.math.acosh";
 import "babel-polyfill/lib/core-js/modules/es6.math.asinh";
 import "babel-polyfill/lib/core-js/modules/es6.math.atanh";

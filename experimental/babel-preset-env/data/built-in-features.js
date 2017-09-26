@@ -155,6 +155,8 @@ const es2015 = {
   "es6.number.epsilon": "Number properties / Number.EPSILON",
   "es6.number.min-safe-integer": "Number properties / Number.MIN_SAFE_INTEGER",
   "es6.number.max-safe-integer": "Number properties / Number.MAX_SAFE_INTEGER",
+  "es6.number.parse-float": "Number properties / Number.parseFloat",
+  "es6.number.parse-int": "Number properties / Number.parseInt",
 
   "es6.math.acosh": "Math methods / Math.acosh",
   "es6.math.asinh": "Math methods / Math.asinh",

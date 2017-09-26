@@ -95,6 +95,8 @@ Using polyfills with `entry` option:
   es6.number.epsilon { "android":"4" }
   es6.number.min-safe-integer { "android":"4" }
   es6.number.max-safe-integer { "android":"4" }
+  es6.number.parse-float { "android":"4" }
+  es6.number.parse-int { "android":"4" }
   es6.math.acosh { "android":"4" }
   es6.math.asinh { "android":"4" }
   es6.math.atanh { "android":"4" }
