@@ -5,10 +5,12 @@ export NODE_ENV = test
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
 
+SOURCES = packages codemods
+
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
 build: clean
-	rm -rf packages/*/lib
+	make clean-lib
 	./node_modules/.bin/gulp build
 ifneq ($(BABEL_ENV), "cov")
 	make build-standalone
@@ -25,17 +27,17 @@ build-dist: build
 	node scripts/generate-babel-types-docs.js
 
 watch: clean
-	rm -rf packages/*/lib
+	make clean-lib
 	BABEL_ENV=development ./node_modules/.bin/gulp watch
 
 lint:
-	./node_modules/.bin/eslint scripts packages *.js --format=codeframe --rulesdir="./eslint_rules"
+	./node_modules/.bin/eslint scripts $(SOURCES) *.js --format=codeframe --rulesdir="./eslint_rules"
 
 flow:
 	./node_modules/.bin/flow check --strip-root
 
 fix:
-	./node_modules/.bin/eslint scripts packages *.js --format=codeframe --fix --rulesdir="./eslint_rules"
+	./node_modules/.bin/eslint scripts $(SOURCES) *.js --format=codeframe --fix --rulesdir="./eslint_rules"
 
 clean: test-clean
 	rm -rf packages/babel-polyfill/browser*
@@ -46,16 +48,8 @@ clean: test-clean
 	rm -rf packages/*/npm-debug*
 
 test-clean:
-	rm -rf packages/*/test/tmp
-	rm -rf packages/*/test-fixtures.json
-
-clean-all:
-	rm -rf packages/*/lib
-	rm -rf node_modules
-	rm -rf packages/*/node_modules
-	rm -rf package-lock.json
-	rm -rf packages/*/package-lock.json
-	make clean
+	$(foreach source, $(SOURCES), \
+		$(call clean-source-test, $(source)))
 
 test-only:
 	./scripts/test.sh
@@ -75,7 +69,7 @@ test-ci-coverage:
 
 publish:
 	git pull --rebase
-	rm -rf packages/*/lib
+	make clean-lib
 	BABEL_ENV=production make build-dist
 	make test
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
@@ -90,3 +84,34 @@ bootstrap:
 	make build
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
+
+clean-lib:
+	$(foreach source, $(SOURCES), \
+		$(call clean-source-lib, $(source)))
+
+clean-all:
+	rm -rf node_modules
+	rm -rf package-lock.json
+
+	$(foreach source, $(SOURCES), \
+		$(call clean-source-all, $(source)))
+
+	make clean
+
+define clean-source-lib
+	rm -rf $(1)/*/lib
+
+endef
+
+define clean-source-test
+	rm -rf $(1)/*/test/tmp
+	rm -rf $(1)/*/test-fixtures.json
+
+endef
+
+define clean-source-all
+	rm -rf $(1)/*/lib
+	rm -rf $(1)/*/node_modules
+	rm -rf $(1)/*/package-lock.json
+
+endef

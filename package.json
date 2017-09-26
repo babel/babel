@@ -41,6 +41,7 @@
     "lerna-changelog": "^0.5.0",
     "lint-staged": "^4.0.4",
     "lodash": "^4.2.0",
+    "merge-stream": "^1.0.1",
     "mocha": "^3.0.0",
     "nyc": "^11.0.3",
     "output-file-sync": "^2.0.0",

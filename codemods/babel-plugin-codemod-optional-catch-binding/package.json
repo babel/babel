@@ -9,9 +9,9 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-plugin-syntax-optional-catch-binding": "7.0.0-beta.0"
+    "babel-plugin-syntax-optional-catch-binding": "7.0.0-beta.1"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-beta.0"
+    "babel-helper-plugin-test-runner": "7.0.0-beta.1"
   }
 }
