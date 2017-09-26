@@ -414,6 +414,7 @@ exports.parseNoPatch = function(code, options) {
       "importMeta",
       "classPrivateProperties",
       "bigInt",
+      "optionalCatchBinding",
     ],
   };
 

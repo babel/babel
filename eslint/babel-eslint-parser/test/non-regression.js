@@ -1845,4 +1845,15 @@ describe("verify", () => {
       []
     );
   });
+
+  it("works with optionalCatchBinding", () => {
+    verifyAndAssertMessages(
+      unpad(`
+        try {} catch {}
+        try {} catch {} finally {}
+      `),
+      {},
+      []
+    );
+  });
 });
