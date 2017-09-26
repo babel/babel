@@ -286,7 +286,7 @@ export const functionCommon = {
     default: false,
   },
   returnType: {
-    validate: assertNodeType("TypeAnnotation", "Noop"),
+    validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
     optional: true,
   },
   typeParameters: {
@@ -352,7 +352,7 @@ defineType("FunctionExpression", {
 export const patternLikeCommon = {
   typeAnnotation: {
     // TODO: babel-plugin-transform-flow-comments puts a Noop here, is there a better way?
-    validate: assertNodeType("TypeAnnotation", "Noop"),
+    validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
     optional: true,
   },
   decorators: {
