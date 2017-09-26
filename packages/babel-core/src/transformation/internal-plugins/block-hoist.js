@@ -10,6 +10,7 @@ export default {
    *  - 1 Default node position
    *  - 2 Priority over normal nodes
    *  - 3 We want this to be at the **very** top
+   *  - 4 Reserved for the helpers used to implement module imports.
    */
 
   name: "internal.blockHoist",

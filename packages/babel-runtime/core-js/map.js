@@ -1,1 +1,1 @@
-module.exports = { "default": require("core-js/library/fn/map"), __esModule: true };
+module.exports = require("core-js/library/fn/map");

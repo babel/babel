@@ -178,49 +178,13 @@ export default class File extends Store {
     return source;
   }
 
-  addImport(
-    source: string,
-    imported?: string = "",
-    name?: string = imported,
-  ): Object | null {
-    const prependDeclaration = (
-      specifiers: Array<BabelNodeImportSpecifier>,
-    ): void => {
-      const declar = t.importDeclaration(specifiers, t.stringLiteral(source));
-      declar._blockHoist = 3;
-
-      this.path.unshiftContainer("body", declar);
-    };
-
-    // import "module-name";
-    if (!imported) {
-      prependDeclaration([]);
-      return null;
-    }
-
-    const alias = `${source}:${imported}`;
-    let id = this.dynamicImportIds[alias];
-
-    if (!id) {
-      source = this.resolveModuleSource(source);
-      id = this.dynamicImportIds[alias] = this.scope.generateUidIdentifier(
-        name,
-      );
-
-      const specifiers = [];
-
-      if (imported === "*") {
-        specifiers.push(t.importNamespaceSpecifier(id));
-      } else if (imported === "default") {
-        specifiers.push(t.importDefaultSpecifier(id));
-      } else {
-        specifiers.push(t.importSpecifier(id, t.identifier(imported)));
-      }
-
-      prependDeclaration(specifiers);
-    }
-
-    return t.identifier(id.name);
+  addImport() {
+    throw new Error(
+      "This API has been removed. If you're looking for this " +
+        "functionality in Babel 7, you should import the " +
+        "'babel-helper-module-imports' module and use the functions exposed " +
+        " from that module, such as 'addNamed' or 'addDefault'.",
+    );
   }
 
   addHelper(name: string): Object {

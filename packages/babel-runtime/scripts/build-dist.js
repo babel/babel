@@ -33,7 +33,7 @@ function relative(filename) {
 }
 
 function defaultify(name) {
-  return `module.exports = { "default": ${name}, __esModule: true };`;
+  return `module.exports = ${name};`;
 }
 
 function writeRootFile(filename, content) {
@@ -57,14 +57,6 @@ function makeTransformOpts(modules, useBuiltIns) {
       ],
     ],
   };
-  if (modules === "commonjs") {
-    opts.plugins.push([
-      require("../../babel-plugin-transform-es2015-modules-commonjs"),
-      { loose: true, strictMode: false },
-    ]);
-  } else if (modules !== false) {
-    throw new Error("Unsupported module type");
-  }
   return opts;
 }
 
@@ -104,8 +96,13 @@ function buildRuntimeRewritePlugin(relativePath, helperName) {
 }
 
 function buildHelper(helperName, modules, useBuiltIns) {
-  const tree = t.program(helpers.get(helperName).nodes, [], "module");
+  const id =
+    modules === "commonjs"
+      ? t.memberExpression(t.identifier("module"), t.identifier("exports"))
+      : null;
+  const sourceType = modules === "commonjs" ? "script" : "module";
 
+  const tree = t.program(helpers.get(helperName, id).nodes, [], sourceType);
   const transformOpts = makeTransformOpts(modules, useBuiltIns);
 
   const relative = useBuiltIns ? "../.." : "..";

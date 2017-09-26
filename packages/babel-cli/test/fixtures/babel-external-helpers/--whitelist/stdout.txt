@@ -17,5 +17,5 @@
     return Constructor;
   }
 
-  babelHelpers.createClass = _createClass
+  babelHelpers.createClass = _createClass;
 })(typeof global === "undefined" ? self : global);
