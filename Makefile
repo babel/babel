@@ -12,7 +12,7 @@ SOURCES = packages codemods
 build: clean
 	make clean-lib
 	./node_modules/.bin/gulp build
-ifneq ($(BABEL_ENV), "cov")
+ifneq ("$(BABEL_ENV)", "cov")
 	make build-standalone
 endif
 
