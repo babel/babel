@@ -6,8 +6,8 @@ import fs from "fs";
 
 import * as util from "./util";
 
-const startMsg = ">>Started transpiling";
-const endMsg = ">>Finished transpiling";
+const startMsg = "Detected change to watched files. Rebuilding..";
+const endMsg = "Rebuild complete. Waiting for changes.";
 
 export default function(commander, filenames, opts) {
   function write(src, relative, base) {
