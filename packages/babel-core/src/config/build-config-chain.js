@@ -27,13 +27,14 @@ export default function buildConfigChain(opts: {}): Array<ConfigItem> | null {
     filename ? new LoadedFile(filename) : null,
   );
 
+  const envKey = getEnv();
   try {
-    builder.mergeConfigArguments(opts, process.cwd());
+    builder.mergeConfigArguments(opts, process.cwd(), envKey);
 
     // resolve all .babelrc files
     if (opts.babelrc !== false && filename) {
       findConfigs(path.dirname(filename)).forEach(configFile =>
-        builder.mergeConfigFile(configFile),
+        builder.mergeConfigFile(configFile, envKey),
       );
     }
   } catch (e) {
@@ -53,27 +54,33 @@ class ConfigChainBuilder {
     this.file = file;
   }
 
-  mergeConfigArguments(opts, dirname) {
-    this.mergeConfig({
-      type: "arguments",
-      options: opts,
-      alias: "base",
-      dirname,
-    });
+  mergeConfigArguments(opts, dirname, envKey: string) {
+    this.mergeConfig(
+      {
+        type: "arguments",
+        options: opts,
+        alias: "base",
+        dirname,
+      },
+      envKey,
+    );
   }
 
-  mergeConfigFile(file: ConfigFile) {
+  mergeConfigFile(file: ConfigFile, envKey: string) {
     const { filepath, dirname, options } = file;
 
-    this.mergeConfig({
-      type: "options",
-      options,
-      alias: filepath,
-      dirname,
-    });
+    this.mergeConfig(
+      {
+        type: "options",
+        options,
+        alias: filepath,
+        dirname,
+      },
+      envKey,
+    );
   }
 
-  mergeConfig({ type, options: rawOpts, alias, dirname }) {
+  mergeConfig({ type, options: rawOpts, alias, dirname }, envKey: string) {
     if (rawOpts.ignore != null && !Array.isArray(rawOpts.ignore)) {
       throw new Error(
         `.ignore should be an array, ${JSON.stringify(rawOpts.ignore)} given`,
@@ -100,8 +107,6 @@ class ConfigChainBuilder {
     delete options.env;
     delete options.extends;
 
-    const envKey = getEnv();
-
     if (
       rawOpts.env != null &&
       (typeof rawOpts.env !== "object" || Array.isArray(rawOpts.env))
@@ -119,12 +124,15 @@ class ConfigChainBuilder {
     }
 
     if (envOpts) {
-      this.mergeConfig({
-        type,
-        options: envOpts,
-        alias: `${alias}.env.${envKey}`,
-        dirname: dirname,
-      });
+      this.mergeConfig(
+        {
+          type,
+          options: envOpts,
+          alias: `${alias}.env.${envKey}`,
+          dirname: dirname,
+        },
+        envKey,
+      );
     }
 
     this.configs.push({
@@ -146,7 +154,7 @@ class ConfigChainBuilder {
         return config.alias === extendsConfig.filepath;
       });
       if (!existingConfig) {
-        this.mergeConfigFile(extendsConfig);
+        this.mergeConfigFile(extendsConfig, envKey);
       }
     }
   }
