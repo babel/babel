@@ -7,7 +7,7 @@ export default function({ types: t }) {
     visitor: {
       UnaryExpression(path) {
         const { operator, argument } = path.node;
-        if (!operator === "throw") return;
+        if (operator !== "throw") return;
 
         const arg = t.identifier("e");
         const arrow = t.functionExpression(
