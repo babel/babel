@@ -7,7 +7,7 @@ import buildDebug from "debug";
 
 const debug = buildDebug("babel:config:config-chain");
 
-import { findConfigs, loadConfig } from "./loading/files";
+import { findConfigs, loadConfig, type ConfigFile } from "./loading/files";
 
 type ConfigItem = {
   type: "options" | "arguments",
@@ -28,25 +28,13 @@ export default function buildConfigChain(opts: {}): Array<ConfigItem> | null {
   );
 
   try {
-    builder.mergeConfig({
-      type: "arguments",
-      options: opts,
-      alias: "base",
-      dirname: process.cwd(),
-    });
+    builder.mergeConfigArguments(opts, process.cwd());
 
     // resolve all .babelrc files
     if (opts.babelrc !== false && filename) {
-      findConfigs(
-        path.dirname(filename),
-      ).forEach(({ filepath, dirname, options }) => {
-        builder.mergeConfig({
-          type: "options",
-          options,
-          alias: filepath,
-          dirname,
-        });
-      });
+      findConfigs(path.dirname(filename)).forEach(configFile =>
+        builder.mergeConfigFile(configFile),
+      );
     }
   } catch (e) {
     if (e.code !== "BABEL_IGNORED_FILE") throw e;
@@ -63,6 +51,26 @@ class ConfigChainBuilder {
 
   constructor(file: LoadedFile | null) {
     this.file = file;
+  }
+
+  mergeConfigArguments(opts, dirname) {
+    this.mergeConfig({
+      type: "arguments",
+      options: opts,
+      alias: "base",
+      dirname,
+    });
+  }
+
+  mergeConfigFile(file: ConfigFile) {
+    const { filepath, dirname, options } = file;
+
+    this.mergeConfig({
+      type: "options",
+      options,
+      alias: filepath,
+      dirname,
+    });
   }
 
   mergeConfig({ type, options: rawOpts, alias, dirname }) {
