@@ -9,12 +9,21 @@ const debug = buildDebug("babel:config:config-chain");
 
 import { findConfigs, loadConfig, type ConfigFile } from "./loading/files";
 
+import { makeWeakCache, makeStrongCache } from "./caching";
+
 type ConfigItem = {
   type: "options" | "arguments",
   options: {},
   dirname: string,
   alias: string,
   loc: string,
+};
+
+type ConfigRaw = {
+  type: "options" | "arguments",
+  options: {},
+  alias: string,
+  dirname: string,
 };
 
 export default function buildConfigChain(opts: {}): Array<ConfigItem> | null {
@@ -54,101 +63,36 @@ class ConfigChainBuilder {
     this.file = file;
   }
 
-  mergeConfigArguments(opts, dirname, envKey: string) {
-    this.mergeConfig(
-      {
-        type: "arguments",
-        options: opts,
-        alias: "base",
-        dirname,
-      },
-      envKey,
+  mergeConfigArguments(opts: {}, dirname: string, envKey: string) {
+    flattenArgumentsOptionsParts(opts, dirname, envKey).forEach(part =>
+      this._processConfigPart(part, envKey),
     );
   }
 
   mergeConfigFile(file: ConfigFile, envKey: string) {
-    const { filepath, dirname, options } = file;
-
-    this.mergeConfig(
-      {
-        type: "options",
-        options,
-        alias: filepath,
-        dirname,
-      },
-      envKey,
+    flattenFileOptionsParts(file)(envKey).forEach(part =>
+      this._processConfigPart(part, envKey),
     );
   }
 
-  mergeConfig({ type, options: rawOpts, alias, dirname }, envKey: string) {
-    if (rawOpts.ignore != null && !Array.isArray(rawOpts.ignore)) {
-      throw new Error(
-        `.ignore should be an array, ${JSON.stringify(rawOpts.ignore)} given`,
-      );
-    }
-    if (rawOpts.only != null && !Array.isArray(rawOpts.only)) {
-      throw new Error(
-        `.only should be an array, ${JSON.stringify(rawOpts.only)} given`,
-      );
-    }
+  _processConfigPart(part: ConfigPart, envKey: string) {
+    if (part.part === "config") {
+      const { ignore, only } = part;
 
-    // Bail out ASAP if this file is ignored so that we run as little logic as possible on ignored files.
-    if (
-      this.file &&
-      this.file.shouldIgnore(rawOpts.ignore, rawOpts.only, dirname)
-    ) {
-      // TODO(logan): This is a really cross way to bail out. Avoid this in rewrite.
-      throw Object.assign((new Error("This file has been ignored."): any), {
-        code: "BABEL_IGNORED_FILE",
-      });
-    }
-
-    const options = Object.assign({}, rawOpts);
-    delete options.env;
-    delete options.extends;
-
-    if (
-      rawOpts.env != null &&
-      (typeof rawOpts.env !== "object" || Array.isArray(rawOpts.env))
-    ) {
-      throw new Error(".env block must be an object, null, or undefined");
-    }
-
-    const envOpts = rawOpts.env && rawOpts.env[envKey];
-
-    if (
-      envOpts != null &&
-      (typeof envOpts !== "object" || Array.isArray(envOpts))
-    ) {
-      throw new Error(".env[...] block must be an object, null, or undefined");
-    }
-
-    if (envOpts) {
-      this.mergeConfig(
-        {
-          type,
-          options: envOpts,
-          alias: `${alias}.env.${envKey}`,
-          dirname: dirname,
-        },
-        envKey,
-      );
-    }
-
-    this.configs.push({
-      type,
-      options,
-      alias,
-      loc: alias,
-      dirname,
-    });
-
-    if (rawOpts.extends) {
-      if (typeof rawOpts.extends !== "string") {
-        throw new Error(".extends must be a string");
+      // Bail out ASAP if this file is ignored so that we run as little logic as possible on ignored files.
+      if (
+        this.file &&
+        this.file.shouldIgnore(ignore, only, part.config.dirname)
+      ) {
+        // TODO(logan): This is a really gross way to bail out. Avoid this in rewrite.
+        throw Object.assign((new Error("This file has been ignored."): any), {
+          code: "BABEL_IGNORED_FILE",
+        });
       }
 
-      const extendsConfig = loadConfig(rawOpts.extends, dirname);
+      this.configs.push(part.config);
+    } else {
+      const extendsConfig = loadConfig(part.path, part.dirname);
 
       const existingConfig = this.configs.some(config => {
         return config.alias === extendsConfig.filepath;
@@ -158,6 +102,277 @@ class ConfigChainBuilder {
       }
     }
   }
+}
+
+/**
+ * Given the root config object passed to Babel, split it into the separate
+ * config parts. The resulting config objects in the 'ConfigPart' have their
+ * object identity preserved between calls so that they can be used for caching.
+ */
+function flattenArgumentsOptionsParts(
+  opts: {},
+  dirname: string,
+  envKey: string,
+): Array<ConfigPart> {
+  const raw = [];
+
+  const env = typeof opts.env === "object" ? opts.env : null;
+  const plugins = Array.isArray(opts.plugins) ? opts.plugins : null;
+  const presets = Array.isArray(opts.presets) ? opts.presets : null;
+  const passPerPreset =
+    typeof opts.passPerPreset === "boolean" ? opts.passPerPreset : false;
+
+  if (env) {
+    raw.push(...flattenArgumentsEnvOptionsParts(env)(dirname)(envKey));
+  }
+
+  const innerOpts = Object.assign({}, opts);
+  // If the env, plugins, and presets values on the object aren't arrays or
+  // objects, leave them in the base opts so that normal options validation
+  // will throw errors on them later.
+  if (env) delete innerOpts.env;
+  if (plugins) delete innerOpts.plugins;
+  if (presets) {
+    delete innerOpts.presets;
+    delete innerOpts.passPerPreset;
+  }
+  delete innerOpts.extends;
+
+  if (Object.keys(innerOpts).length > 0) {
+    raw.push(
+      ...flattenOptionsParts({
+        type: "arguments",
+        options: innerOpts,
+        alias: "base",
+        dirname,
+      }),
+    );
+  }
+
+  if (plugins) {
+    raw.push(...flattenArgumentsPluginsOptionsParts(plugins)(dirname));
+  }
+  if (presets) {
+    raw.push(
+      ...flattenArgumentsPresetsOptionsParts(presets)(passPerPreset)(dirname),
+    );
+  }
+
+  if (opts.extends != null) {
+    raw.push(
+      ...flattenOptionsParts(
+        buildArgumentsRawConfig({ extends: opts.extends }, dirname),
+      ),
+    );
+  }
+
+  return raw;
+}
+
+/**
+ * For the top-level 'options' object, we cache the env list based on
+ * the object identity of the 'env' object.
+ */
+const flattenArgumentsEnvOptionsParts = makeWeakCache((env: {}) => {
+  const options = { env };
+
+  return makeStrongCache((dirname: string) =>
+    flattenOptionsPartsLookup(buildArgumentsRawConfig(options, dirname)),
+  );
+});
+
+/**
+ * For the top-level 'options' object, we cache the plugin list based on
+ * the object identity of the 'plugins' object.
+ */
+const flattenArgumentsPluginsOptionsParts = makeWeakCache(
+  (plugins: Array<mixed>) => {
+    const options = { plugins };
+
+    return makeStrongCache((dirname: string) =>
+      flattenOptionsParts(buildArgumentsRawConfig(options, dirname)),
+    );
+  },
+);
+
+/**
+ * For the top-level 'options' object, we cache the preset list based on
+ * the object identity of the 'presets' object.
+ */
+const flattenArgumentsPresetsOptionsParts = makeWeakCache(
+  (presets: Array<mixed>) =>
+    makeStrongCache((passPerPreset: ?boolean) => {
+      // The concept of passPerPreset is integrally tied to the preset list
+      // so unfortunately we need to copy both values here, adding an extra
+      // layer of caching functions.
+      const options = { presets, passPerPreset };
+
+      return makeStrongCache((dirname: string) =>
+        flattenOptionsParts(buildArgumentsRawConfig(options, dirname)),
+      );
+    }),
+);
+
+function buildArgumentsRawConfig(options: {}, dirname: string): ConfigRaw {
+  return {
+    type: "arguments",
+    options,
+    alias: "base",
+    dirname,
+  };
+}
+
+/**
+ * Given a config from a specific file, return a list of ConfigPart objects
+ * with object identity preserved for all 'config' part objects for use
+ * with caching later in config processing.
+ */
+const flattenFileOptionsParts = makeWeakCache((file: ConfigFile) => {
+  return flattenOptionsPartsLookup({
+    type: "options",
+    options: file.options,
+    alias: file.filepath,
+    dirname: file.dirname,
+  });
+});
+
+/**
+ * Given a config, create a function that will return the config parts for
+ * the environment passed as the first argument.
+ */
+function flattenOptionsPartsLookup(
+  config: ConfigRaw,
+): (string | null) => Array<ConfigPart> {
+  const parts = flattenOptionsParts(config);
+
+  const def = parts.filter(part => part.activeEnv === null);
+  const lookup = new Map();
+
+  parts.forEach(part => {
+    if (part.activeEnv !== null) lookup.set(part.activeEnv, []);
+  });
+
+  for (const [activeEnv, values] of lookup) {
+    parts.forEach(part => {
+      if (part.activeEnv === null || part.activeEnv === activeEnv) {
+        values.push(part);
+      }
+    });
+  }
+
+  return envKey => lookup.get(envKey) || def;
+}
+
+type ConfigPart =
+  | {
+      part: "config",
+      config: ConfigItem,
+      ignore: ?Array<mixed>,
+      only: ?Array<mixed>,
+      activeEnv: string | null,
+    }
+  | {
+      part: "extends",
+      path: string,
+      dirname: string,
+      activeEnv: string | null,
+    };
+
+/**
+ * Given a generic config object, flatten it into its various parts so that
+ * then can be cached and processed later.
+ */
+function flattenOptionsParts(
+  rawConfig: ConfigRaw,
+  activeEnv: string | null = null,
+): Array<ConfigPart> {
+  const { type, options: rawOpts, alias, dirname } = rawConfig;
+
+  if (rawOpts.ignore != null && !Array.isArray(rawOpts.ignore)) {
+    throw new Error(
+      `.ignore should be an array, ${JSON.stringify(rawOpts.ignore)} given`,
+    );
+  }
+  if (rawOpts.only != null && !Array.isArray(rawOpts.only)) {
+    throw new Error(
+      `.only should be an array, ${JSON.stringify(rawOpts.only)} given`,
+    );
+  }
+  const ignore = rawOpts.ignore || null;
+  const only = rawOpts.only || null;
+
+  const parts = [];
+
+  if (
+    rawOpts.env != null &&
+    (typeof rawOpts.env !== "object" || Array.isArray(rawOpts.env))
+  ) {
+    throw new Error(".env block must be an object, null, or undefined");
+  }
+
+  const rawEnv = rawOpts.env || {};
+
+  Object.keys(rawEnv).forEach(envKey => {
+    const envOpts = rawEnv[envKey];
+
+    if (envOpts !== undefined && activeEnv !== null && activeEnv !== envKey) {
+      throw new Error(`Unreachable .env[${envKey}] block detected`);
+    }
+
+    if (
+      envOpts != null &&
+      (typeof envOpts !== "object" || Array.isArray(envOpts))
+    ) {
+      throw new Error(".env[...] block must be an object, null, or undefined");
+    }
+
+    if (envOpts) {
+      parts.push(
+        ...flattenOptionsParts(
+          {
+            type,
+            options: envOpts,
+            alias: alias + `.env.${envKey}`,
+            dirname,
+          },
+          envKey,
+        ),
+      );
+    }
+  });
+
+  const options = Object.assign({}, rawOpts);
+  delete options.env;
+  delete options.extends;
+
+  parts.push({
+    part: "config",
+    config: {
+      type,
+      options,
+      alias,
+      loc: alias,
+      dirname,
+    },
+    ignore,
+    only,
+    activeEnv,
+  });
+
+  if (rawOpts.extends != null) {
+    if (typeof rawOpts.extends !== "string") {
+      throw new Error(".extends must be a string");
+    }
+
+    parts.push({
+      part: "extends",
+      path: rawOpts.extends,
+      dirname,
+      activeEnv,
+    });
+  }
+
+  return parts;
 }
 
 /**
