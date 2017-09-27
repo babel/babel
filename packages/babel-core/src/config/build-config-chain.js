@@ -37,7 +37,16 @@ export default function buildConfigChain(opts: {}): Array<ConfigItem> | null {
 
     // resolve all .babelrc files
     if (opts.babelrc !== false && filename) {
-      builder.findConfigs(filename);
+      findConfigs(
+        path.dirname(filename),
+      ).forEach(({ filepath, dirname, options }) => {
+        builder.mergeConfig({
+          type: "options",
+          options,
+          alias: filepath,
+          dirname,
+        });
+      });
     }
   } catch (e) {
     if (e.code !== "BABEL_IGNORED_FILE") throw e;
@@ -54,17 +63,6 @@ class ConfigChainBuilder {
 
   constructor(file: LoadedFile | null) {
     this.file = file;
-  }
-
-  findConfigs(loc: string) {
-    findConfigs(path.dirname(loc)).forEach(({ filepath, dirname, options }) => {
-      this.mergeConfig({
-        type: "options",
-        options,
-        alias: filepath,
-        dirname,
-      });
-    });
   }
 
   mergeConfig({ type, options: rawOpts, alias, dirname }) {
