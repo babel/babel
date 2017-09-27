@@ -47,6 +47,7 @@ export const NUMBER_UNARY_OPERATORS = ["+", "-", "~"];
 export const STRING_UNARY_OPERATORS = ["typeof"];
 export const UNARY_OPERATORS = [
   "void",
+  "throw",
   ...BOOLEAN_UNARY_OPERATORS,
   ...NUMBER_UNARY_OPERATORS,
   ...STRING_UNARY_OPERATORS,

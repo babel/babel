@@ -32,7 +32,7 @@
     "babel-template": "7.0.0-beta.2",
     "babel-traverse": "7.0.0-beta.2",
     "babel-types": "7.0.0-beta.2",
-    "babylon": "7.0.0-beta.25",
+    "babylon": "7.0.0-beta.26",
     "convert-source-map": "^1.1.0",
     "debug": "^3.0.1",
     "json5": "^0.5.0",

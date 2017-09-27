@@ -11,6 +11,7 @@
     "babel-plugin-transform-export-namespace": "7.0.0-beta.2",
     "babel-plugin-transform-function-sent": "7.0.0-beta.2",
     "babel-plugin-transform-numeric-separator": "7.0.0-beta.2",
+    "babel-plugin-transform-throw-expressions": "7.0.0-beta.2",
     "babel-preset-stage-3": "7.0.0-beta.2"
   }
 }

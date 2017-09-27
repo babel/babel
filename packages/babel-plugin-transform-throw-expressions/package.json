@@ -1,0 +1,17 @@
+{
+  "name": "babel-plugin-transform-throw-expressions",
+  "version": "7.0.0-beta.2",
+  "description": "Wraps Throw Expressions in an IIFE",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-throw-expressions",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "babel-plugin-syntax-throw-expressions": "7.0.0-beta.2"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "7.0.0-beta.2"
+  }
+}
