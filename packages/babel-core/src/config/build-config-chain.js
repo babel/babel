@@ -23,7 +23,9 @@ export default function buildConfigChain(opts: {}): Array<ConfigItem> | null {
   }
 
   const filename = opts.filename ? path.resolve(opts.filename) : null;
-  const builder = new ConfigChainBuilder(filename);
+  const builder = new ConfigChainBuilder(
+    filename ? new LoadedFile(filename) : null,
+  );
 
   try {
     builder.mergeConfig({
@@ -47,123 +49,11 @@ export default function buildConfigChain(opts: {}): Array<ConfigItem> | null {
 }
 
 class ConfigChainBuilder {
-  filename: string | null;
-  configs: Array<ConfigItem>;
-  possibleDirs: null | Array<string>;
+  file: LoadedFile | null;
+  configs: Array<ConfigItem> = [];
 
-  constructor(filename) {
-    this.configs = [];
-    this.filename = filename;
-    this.possibleDirs = null;
-  }
-
-  /**
-   * Tests if a filename should be ignored based on "ignore" and "only" options.
-   */
-  shouldIgnore(ignore: mixed, only: mixed, dirname: string): boolean {
-    if (!this.filename) return false;
-
-    if (ignore) {
-      if (!Array.isArray(ignore)) {
-        throw new Error(
-          `.ignore should be an array, ${JSON.stringify(ignore)} given`,
-        );
-      }
-
-      if (this.matchesPatterns(ignore, dirname)) {
-        debug(
-          "Ignored %o because it matched one of %O from %o",
-          this.filename,
-          ignore,
-          dirname,
-        );
-        return true;
-      }
-    }
-
-    if (only) {
-      if (!Array.isArray(only)) {
-        throw new Error(
-          `.only should be an array, ${JSON.stringify(only)} given`,
-        );
-      }
-
-      if (!this.matchesPatterns(only, dirname)) {
-        debug(
-          "Ignored %o because it failed to match one of %O from %o",
-          this.filename,
-          only,
-          dirname,
-        );
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  /**
-   * Returns result of calling function with filename if pattern is a function.
-   * Otherwise returns result of matching pattern Regex with filename.
-   */
-  matchesPatterns(patterns: Array<mixed>, dirname: string) {
-    const filename = this.filename;
-    if (!filename) {
-      throw new Error("Assertion failure: .filename should always exist here");
-    }
-
-    const res = [];
-    const strings = [];
-    const fns = [];
-
-    patterns.forEach(pattern => {
-      if (typeof pattern === "string") strings.push(pattern);
-      else if (typeof pattern === "function") fns.push(pattern);
-      else if (pattern instanceof RegExp) res.push(pattern);
-      else {
-        throw new Error(
-          "Patterns must be a string, function, or regular expression",
-        );
-      }
-    });
-
-    if (res.some(re => re.test(filename))) return true;
-    if (fns.some(fn => fn(filename))) return true;
-
-    if (strings.length > 0) {
-      let possibleDirs = this.possibleDirs;
-      // Lazy-init so we don't initialize this for files that have no glob patterns.
-      if (!possibleDirs) {
-        possibleDirs = this.possibleDirs = [];
-
-        possibleDirs.push(filename);
-
-        let current = filename;
-        while (true) {
-          const previous = current;
-          current = path.dirname(current);
-          if (previous === current) break;
-
-          possibleDirs.push(current);
-        }
-      }
-
-      const absolutePatterns = strings.map(pattern => {
-        // Preserve the "!" prefix so that micromatch can use it for negation.
-        const negate = pattern[0] === "!";
-        if (negate) pattern = pattern.slice(1);
-
-        return (negate ? "!" : "") + path.resolve(dirname, pattern);
-      });
-
-      if (
-        micromatch(possibleDirs, absolutePatterns, { nocase: true }).length > 0
-      ) {
-        return true;
-      }
-    }
-
-    return false;
+  constructor(file: LoadedFile | null) {
+    this.file = file;
   }
 
   findConfigs(loc: string) {
@@ -178,10 +68,21 @@ class ConfigChainBuilder {
   }
 
   mergeConfig({ type, options: rawOpts, alias, dirname }) {
+    if (rawOpts.ignore != null && !Array.isArray(rawOpts.ignore)) {
+      throw new Error(
+        `.ignore should be an array, ${JSON.stringify(rawOpts.ignore)} given`,
+      );
+    }
+    if (rawOpts.only != null && !Array.isArray(rawOpts.only)) {
+      throw new Error(
+        `.only should be an array, ${JSON.stringify(rawOpts.only)} given`,
+      );
+    }
+
     // Bail out ASAP if this file is ignored so that we run as little logic as possible on ignored files.
     if (
-      this.filename &&
-      this.shouldIgnore(rawOpts.ignore || null, rawOpts.only || null, dirname)
+      this.file &&
+      this.file.shouldIgnore(rawOpts.ignore, rawOpts.only, dirname)
     ) {
       // TODO(logan): This is a really cross way to bail out. Avoid this in rewrite.
       throw Object.assign((new Error("This file has been ignored."): any), {
@@ -247,5 +148,112 @@ class ConfigChainBuilder {
         });
       }
     }
+  }
+}
+
+/**
+ * Track a given file and expose function to check if it should be ignored.
+ */
+class LoadedFile {
+  filename: string;
+  possibleDirs: null | Array<string> = null;
+
+  constructor(filename) {
+    this.filename = filename;
+  }
+
+  /**
+   * Tests if a filename should be ignored based on "ignore" and "only" options.
+   */
+  shouldIgnore(
+    ignore: ?Array<mixed>,
+    only: ?Array<mixed>,
+    dirname: string,
+  ): boolean {
+    if (ignore) {
+      if (this._matchesPatterns(ignore, dirname)) {
+        debug(
+          "Ignored %o because it matched one of %O from %o",
+          this.filename,
+          ignore,
+          dirname,
+        );
+        return true;
+      }
+    }
+
+    if (only) {
+      if (!this._matchesPatterns(only, dirname)) {
+        debug(
+          "Ignored %o because it failed to match one of %O from %o",
+          this.filename,
+          only,
+          dirname,
+        );
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  /**
+   * Returns result of calling function with filename if pattern is a function.
+   * Otherwise returns result of matching pattern Regex with filename.
+   */
+  _matchesPatterns(patterns: Array<mixed>, dirname: string): boolean {
+    const res = [];
+    const strings = [];
+    const fns = [];
+
+    patterns.forEach(pattern => {
+      if (typeof pattern === "string") strings.push(pattern);
+      else if (typeof pattern === "function") fns.push(pattern);
+      else if (pattern instanceof RegExp) res.push(pattern);
+      else {
+        throw new Error(
+          "Patterns must be a string, function, or regular expression",
+        );
+      }
+    });
+
+    const filename = this.filename;
+    if (res.some(re => re.test(filename))) return true;
+    if (fns.some(fn => fn(filename))) return true;
+
+    if (strings.length > 0) {
+      let possibleDirs = this.possibleDirs;
+      // Lazy-init so we don't initialize this for files that have no glob patterns.
+      if (!possibleDirs) {
+        possibleDirs = this.possibleDirs = [];
+
+        possibleDirs.push(filename);
+
+        let current = filename;
+        while (true) {
+          const previous = current;
+          current = path.dirname(current);
+          if (previous === current) break;
+
+          possibleDirs.push(current);
+        }
+      }
+
+      const absolutePatterns = strings.map(pattern => {
+        // Preserve the "!" prefix so that micromatch can use it for negation.
+        const negate = pattern[0] === "!";
+        if (negate) pattern = pattern.slice(1);
+
+        return (negate ? "!" : "") + path.resolve(dirname, pattern);
+      });
+
+      if (
+        micromatch(possibleDirs, absolutePatterns, { nocase: true }).length > 0
+      ) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
