@@ -165,7 +165,7 @@ export const keywords = {
   if: new KeywordTokenType("if"),
   return: new KeywordTokenType("return", { beforeExpr }),
   switch: new KeywordTokenType("switch"),
-  throw: new KeywordTokenType("throw", { beforeExpr }),
+  throw: new KeywordTokenType("throw", { beforeExpr, prefix, startsExpr }),
   try: new KeywordTokenType("try"),
   var: new KeywordTokenType("var"),
   let: new KeywordTokenType("let"),

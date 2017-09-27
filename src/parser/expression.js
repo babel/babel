@@ -324,6 +324,10 @@ export default class ExpressionParser extends LValParser {
       const update = this.match(tt.incDec);
       node.operator = this.state.value;
       node.prefix = true;
+
+      if (node.operator === "throw") {
+        this.expectPlugin("throwExpressions");
+      }
       this.next();
 
       const argType = this.state.type;

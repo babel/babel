@@ -148,6 +148,7 @@ require("babylon").parse("code", {
 | `importMeta` ([proposal](https://github.com/tc39/proposal-import-meta)) | `import.meta.url` |
 | `bigInt` ([proposal](https://github.com/tc39/proposal-bigint)) | `100n` |
 | `optionalCatchBinding` ([proposal](https://github.com/babel/proposals/issues/7)) | `try {throw 0;} catch{do();}` |
+| `throwExpressions` ([proposal](https://github.com/babel/proposals/issues/23)) | `() => throw new Error("")` |
 
 ### FAQ
 

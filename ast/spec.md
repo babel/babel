@@ -736,7 +736,7 @@ A unary operator expression.
 
 ```js
 enum UnaryOperator {
-  "-" | "+" | "!" | "~" | "typeof" | "void" | "delete"
+  "-" | "+" | "!" | "~" | "typeof" | "void" | "delete" | "throw"
 }
 ```
 
