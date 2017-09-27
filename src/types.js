@@ -621,7 +621,7 @@ export type ClassBase = HasDecorators & {
 
 export type ClassBody = NodeBase & {
   type: "ClassBody",
-  body: Array<ClassMember>, // TODO: $ReadOnlyArray
+  body: Array<ClassMember | TsIndexSignature>, // TODO: $ReadOnlyArray
 };
 
 export type ClassMemberBase = NodeBase &
@@ -638,8 +638,7 @@ export type ClassMember =
   | ClassMethod
   | ClassPrivateMethod
   | ClassProperty
-  | ClassPrivateProperty
-  | TsIndexSignature;
+  | ClassPrivateProperty;
 
 export type MethodLike =
   | ObjectMethod
@@ -655,7 +654,6 @@ export type MethodBase = FunctionBase & {
 export type MethodKind = "constructor" | "method" | "get" | "set";
 
 export type ClassMethodOrDeclareMethodCommon = ClassMemberBase & {
-  type: "ClassMethod",
   key: Expression,
   kind: MethodKind,
   static: boolean,
@@ -664,13 +662,16 @@ export type ClassMethodOrDeclareMethodCommon = ClassMemberBase & {
 
 export type ClassMethod = MethodBase &
   ClassMethodOrDeclareMethodCommon & {
+    type: "ClassMethod",
     variance?: ?FlowVariance, // TODO: Not in spec
   };
 
 export type ClassPrivateMethod = NodeBase &
-  ClassMethodOrDeclareMethodCommon & {
+  ClassMethodOrDeclareMethodCommon &
+  MethodBase & {
     type: "ClassPrivateMethod",
     key: PrivateName,
+    computed: false,
   };
 
 export type ClassProperty = ClassMemberBase & {
@@ -690,6 +691,7 @@ export type ClassPrivateProperty = NodeBase & {
   key: PrivateName,
   value: ?Expression, // TODO: Not in spec that this is nullable.
   static: boolean,
+  computed: false,
 };
 
 export type OptClassDeclaration = ClassBase &

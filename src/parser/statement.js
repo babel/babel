@@ -921,15 +921,12 @@ export default class StatementParser extends ExpressionParser {
     member: N.ClassMember,
     state: { hadConstructor: boolean },
   ): void {
-    // Use the appropriate variable to represent `member` once a more specific type is known.
-    const memberAny: any = member;
-    const method: N.ClassMethod = memberAny;
-    const prop: N.ClassProperty = memberAny;
-
     let isStatic = false;
     if (this.match(tt.name) && this.state.value === "static") {
       const key = this.parseIdentifier(true); // eats 'static'
       if (this.isClassMethod()) {
+        const method: N.ClassMethod = (member: any);
+
         // a method named 'static'
         method.kind = "method";
         method.computed = false;
@@ -944,6 +941,8 @@ export default class StatementParser extends ExpressionParser {
         );
         return;
       } else if (this.isClassProperty()) {
+        const prop: N.ClassProperty = (member: any);
+
         // a property named 'static'
         prop.computed = false;
         prop.key = key;
@@ -964,16 +963,15 @@ export default class StatementParser extends ExpressionParser {
     state: { hadConstructor: boolean },
     isStatic: boolean,
   ) {
-    const memberAny: any = member;
-    const methodOrProp:
-      | N.ClassMethod
-      | N.ClassPrivateMethod
-      | N.ClassProperty
-      | N.ClassPrivateProperty = memberAny;
-    const method: N.ClassMethod | N.ClassPrivateMethod = memberAny;
-    const prop: N.ClassProperty | N.ClassPrivateProperty = memberAny;
+    const publicMethod: $FlowSubtype<N.ClassMethod> = member;
+    const privateMethod: $FlowSubtype<N.ClassPrivateMethod> = member;
+    const publicProp: $FlowSubtype<N.ClassMethod> = member;
+    const privateProp: $FlowSubtype<N.ClassPrivateMethod> = member;
 
-    methodOrProp.static = isStatic;
+    const method: typeof publicMethod | typeof privateMethod = publicMethod;
+    const publicMember: typeof publicMethod | typeof publicProp = publicMethod;
+
+    member.static = isStatic;
 
     if (this.eat(tt.star)) {
       // a generator
@@ -982,17 +980,17 @@ export default class StatementParser extends ExpressionParser {
 
       if (method.key.type === "PrivateName") {
         // Private generator method
-        this.pushClassPrivateMethod(classBody, method, true, false);
+        this.pushClassPrivateMethod(classBody, privateMethod, true, false);
         return;
       }
 
-      if (this.isNonstaticConstructor(method)) {
-        this.raise(method.key.start, "Constructor can't be a generator");
+      if (this.isNonstaticConstructor(publicMethod)) {
+        this.raise(publicMethod.key.start, "Constructor can't be a generator");
       }
 
       this.pushClassMethod(
         classBody,
-        method,
+        publicMethod,
         true,
         false,
         /* isConstructor */ false,
@@ -1001,30 +999,30 @@ export default class StatementParser extends ExpressionParser {
       return;
     }
 
-    const key = this.parseClassPropertyName(methodOrProp);
+    const key = this.parseClassPropertyName(member);
     const isPrivate = key.type === "PrivateName";
     // Check the key is not a computed expression or string literal.
     const isSimple = key.type === "Identifier";
 
-    this.parsePostMemberNameModifiers(methodOrProp);
+    this.parsePostMemberNameModifiers(publicMember);
 
     if (this.isClassMethod()) {
       method.kind = "method";
 
       if (isPrivate) {
-        this.pushClassPrivateMethod(classBody, method, false, false);
+        this.pushClassPrivateMethod(classBody, privateMethod, false, false);
         return;
       }
 
       // a normal method
-      const isConstructor = this.isNonstaticConstructor(method);
+      const isConstructor = this.isNonstaticConstructor(publicMethod);
 
       if (isConstructor) {
-        method.kind = "constructor";
+        publicMethod.kind = "constructor";
 
-        if (method.decorators) {
+        if (publicMethod.decorators) {
           this.raise(
-            method.start,
+            publicMethod.start,
             "You can't attach decorators to a class constructor",
           );
         }
@@ -1036,12 +1034,18 @@ export default class StatementParser extends ExpressionParser {
         state.hadConstructor = true;
       }
 
-      this.pushClassMethod(classBody, method, false, false, isConstructor);
+      this.pushClassMethod(
+        classBody,
+        publicMethod,
+        false,
+        false,
+        isConstructor,
+      );
     } else if (this.isClassProperty()) {
       if (isPrivate) {
-        this.pushClassPrivateProperty(classBody, prop);
+        this.pushClassPrivateProperty(classBody, privateProp);
       } else {
-        this.pushClassProperty(classBody, prop);
+        this.pushClassProperty(classBody, publicProp);
       }
     } else if (isSimple && key.name === "async" && !this.isLineTerminator()) {
       // an async method
@@ -1057,18 +1061,23 @@ export default class StatementParser extends ExpressionParser {
 
       if (method.key.type === "PrivateName") {
         // private async method
-        this.pushClassPrivateMethod(classBody, method, isGenerator, true);
+        this.pushClassPrivateMethod(
+          classBody,
+          privateMethod,
+          isGenerator,
+          true,
+        );
       } else {
-        if (this.isNonstaticConstructor(method)) {
+        if (this.isNonstaticConstructor(publicMethod)) {
           this.raise(
-            method.key.start,
+            publicMethod.key.start,
             "Constructor can't be an async function",
           );
         }
 
         this.pushClassMethod(
           classBody,
-          method,
+          publicMethod,
           isGenerator,
           true,
           /* isConstructor */ false,
@@ -1083,53 +1092,48 @@ export default class StatementParser extends ExpressionParser {
       // a getter or setter
       method.kind = key.name;
       // The so-called parsed name would have been "get/set": get the real name.
-      this.parseClassPropertyName(method);
+      this.parseClassPropertyName(publicMethod);
 
       if (method.key.type === "PrivateName") {
         // private getter/setter
-        this.pushClassPrivateMethod(classBody, method, false, false);
+        this.pushClassPrivateMethod(classBody, privateMethod, false, false);
       } else {
-        if (this.isNonstaticConstructor(method)) {
+        if (this.isNonstaticConstructor(publicMethod)) {
           this.raise(
-            method.key.start,
+            publicMethod.key.start,
             "Constructor can't have get/set modifier",
           );
         }
         this.pushClassMethod(
           classBody,
-          method,
+          publicMethod,
           false,
           false,
           /* isConstructor */ false,
         );
       }
 
-      this.checkGetterSetterParamCount(method);
+      this.checkGetterSetterParamCount(publicMethod);
     } else if (this.isLineTerminator()) {
       // an uninitialized class property (due to ASI, since we don't otherwise recognize the next token)
       if (isPrivate) {
-        this.pushClassPrivateProperty(classBody, prop);
+        this.pushClassPrivateProperty(classBody, privateProp);
       } else {
-        this.pushClassProperty(classBody, prop);
+        this.pushClassProperty(classBody, publicProp);
       }
     } else {
       this.unexpected();
     }
   }
 
-  parseClassPropertyName(
-    methodOrProp:
-      | N.ClassMethod
-      | N.ClassProperty
-      | N.ClassPrivateProperty
-      | N.ClassPrivateMethod,
-  ): N.Expression | N.Identifier {
-    const key = this.parsePropertyName(methodOrProp);
+  parseClassPropertyName(member: N.ClassMember): N.Expression | N.Identifier {
+    const key = this.parsePropertyName(member);
 
     if (
-      !methodOrProp.computed &&
-      methodOrProp.static &&
-      (key.name === "prototype" || key.value === "prototype")
+      !member.computed &&
+      member.static &&
+      ((key: $FlowSubtype<N.Identifier>).name === "prototype" ||
+        (key: $FlowSubtype<N.StringLiteral>).value === "prototype")
     ) {
       this.raise(
         key.start,
@@ -1158,7 +1162,10 @@ export default class StatementParser extends ExpressionParser {
     classBody.body.push(this.parseClassProperty(prop));
   }
 
-  pushClassPrivateProperty(classBody: N.ClassBody, prop: N.ClassProperty) {
+  pushClassPrivateProperty(
+    classBody: N.ClassBody,
+    prop: N.ClassPrivateProperty,
+  ) {
     this.expectPlugin("classPrivateProperties", prop.key.start);
     classBody.body.push(this.parseClassPrivateProperty(prop));
   }
@@ -1183,7 +1190,7 @@ export default class StatementParser extends ExpressionParser {
 
   pushClassPrivateMethod(
     classBody: N.ClassBody,
-    method: N.ClassMethod,
+    method: N.ClassPrivateMethod,
     isGenerator: boolean,
     isAsync: boolean,
   ): void {

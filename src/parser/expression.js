@@ -1401,21 +1401,17 @@ export default class ExpressionParser extends LValParser {
   }
 
   parsePropertyName(
-    prop:
-      | N.ObjectOrClassMember
-      | N.ClassPrivateProperty
-      | N.ClassPrivateMethod
-      | N.TsNamedTypeElementBase,
+    prop: N.ObjectOrClassMember | N.ClassMember | N.TsNamedTypeElementBase,
   ): N.Expression | N.Identifier {
     if (this.eat(tt.bracketL)) {
-      prop.computed = true;
+      (prop: $FlowSubtype<N.ObjectOrClassMember>).computed = true;
       prop.key = this.parseMaybeAssign();
       this.expect(tt.bracketR);
     } else {
       const oldInPropertyName = this.state.inPropertyName;
       this.state.inPropertyName = true;
       // We check if it's valid for it to be a private name when we push it.
-      prop.key =
+      (prop: $FlowFixMe).key =
         this.match(tt.num) || this.match(tt.string)
           ? this.parseExprAtom()
           : this.parseMaybePrivateName();

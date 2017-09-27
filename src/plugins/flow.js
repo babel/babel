@@ -1699,10 +1699,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isAsync: boolean,
       isConstructor: boolean,
     ): void {
-      if (method.variance) {
-        this.unexpected(method.variance.start);
+      if ((method: $FlowFixMe).variance) {
+        this.unexpected((method: $FlowFixMe).variance.start);
       }
-      delete method.variance;
+      delete (method: $FlowFixMe).variance;
       if (this.isRelational("<")) {
         method.typeParameters = this.flowParseTypeParameterDeclaration();
       }
@@ -1722,10 +1722,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isGenerator: boolean,
       isAsync: boolean,
     ): void {
-      if (method.variance) {
-        this.unexpected(method.variance.start);
+      if ((method: $FlowFixMe).variance) {
+        this.unexpected((method: $FlowFixMe).variance.start);
       }
-      delete method.variance;
+      delete (method: $FlowFixMe).variance;
       if (this.isRelational("<")) {
         method.typeParameters = this.flowParseTypeParameterDeclaration();
       }
@@ -1756,7 +1756,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parsePropertyName(
-      node: N.ObjectOrClassMember | N.TsNamedTypeElementBase,
+      node: N.ObjectOrClassMember | N.ClassMember | N.TsNamedTypeElementBase,
     ): N.Identifier {
       const variance = this.flowParseVariance();
       const key = super.parsePropertyName(node);
@@ -1775,10 +1775,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isPattern: boolean,
       refShorthandDefaultPos: ?Pos,
     ): void {
-      if (prop.variance) {
-        this.unexpected(prop.variance.start);
+      if ((prop: $FlowFixMe).variance) {
+        this.unexpected((prop: $FlowFixMe).variance.start);
       }
-      delete prop.variance;
+      delete (prop: $FlowFixMe).variance;
 
       let typeParameters;
 
