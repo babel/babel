@@ -146,12 +146,7 @@ class ConfigChainBuilder {
         return config.alias === extendsConfig.filepath;
       });
       if (!existingConfig) {
-        this.mergeConfig({
-          type: "options",
-          alias: extendsConfig.filepath,
-          options: extendsConfig.options,
-          dirname: extendsConfig.dirname,
-        });
+        this.mergeConfigFile(extendsConfig);
       }
     }
   }
