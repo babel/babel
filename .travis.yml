@@ -52,3 +52,7 @@ after_success:
 
 notifications:
   slack: babeljs:5Wy4QX13KVkGy9CnU0rmvgeK
+
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
