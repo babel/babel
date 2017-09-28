@@ -471,6 +471,7 @@ export default class File extends Store {
     const result = {
       metadata: null,
       options: this.opts,
+      parserOptions: this.parserOpts,
       ignored: !!ignored,
       code: null,
       ast: null,
