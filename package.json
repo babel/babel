@@ -23,7 +23,7 @@
   "devDependencies": {
     "ava": "^0.22.0",
     "babel-core": "7.0.0-alpha.18",
-    "babel-eslint": "8.0.0",
+    "babel-eslint": "8.0.1",
     "babel-helper-fixtures": "7.0.0-alpha.18",
     "babel-plugin-external-helpers": "7.0.0-alpha.18",
     "babel-plugin-istanbul": "^4.1.4",
