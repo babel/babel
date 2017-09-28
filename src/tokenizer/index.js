@@ -733,7 +733,7 @@ export default class Tokenizer extends LocationParser {
             forbiddenSiblings.indexOf(next) > -1 ||
             Number.isNaN(next)
           ) {
-            this.raise(this.state.pos, "Invalid NumericLiteralSeparator");
+            this.raise(this.state.pos, "Invalid or unexpected token");
           }
 
           // Ignore this _ character

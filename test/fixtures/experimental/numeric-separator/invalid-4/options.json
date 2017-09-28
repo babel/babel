@@ -1,1 +1,1 @@
-{ "throws": "Invalid NumericLiteralSeparator (1:3)" }
+{ "throws": "Invalid or unexpected token (1:3)" }
