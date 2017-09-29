@@ -77,8 +77,6 @@ export default class File {
     this.hub = new Hub(this);
   }
 
-  static helpers: Array<string>;
-
   pluginPasses: Array<Array<[Plugin, Object]>>;
   parserOpts: BabelParserOptions;
   opts: Object;
