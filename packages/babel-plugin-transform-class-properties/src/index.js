@@ -193,16 +193,6 @@ export default function({ types: t }) {
 
         path.insertAfter(nodes);
       },
-      ArrowFunctionExpression(path) {
-        const classExp = path.get("body");
-        if (!classExp.isClassExpression()) return;
-
-        const body = classExp.get("body");
-        const members = body.get("body");
-        if (members.some(member => member.isClassProperty())) {
-          path.ensureBlock();
-        }
-      },
     },
   };
 }

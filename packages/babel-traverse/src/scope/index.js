@@ -799,7 +799,7 @@ export default class Scope {
     }
 
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
-      t.ensureBlock(path.node);
+      path.ensureBlock();
       path = path.get("body");
     }
 
