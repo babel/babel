@@ -78,9 +78,6 @@ export default class File {
       },
     };
 
-    this.dynamicImportTypes = {};
-    this.dynamicImportIds = {};
-    this.dynamicImports = [];
     this.declarations = {};
     this.usedHelpers = {};
 
@@ -98,9 +95,6 @@ export default class File {
   pluginPasses: Array<Array<[Plugin, Object]>>;
   parserOpts: BabelParserOptions;
   opts: Object;
-  dynamicImportTypes: Object;
-  dynamicImportIds: Object;
-  dynamicImports: Array<Object>;
   declarations: Object;
   usedHelpers: Object;
   path: NodePath;
