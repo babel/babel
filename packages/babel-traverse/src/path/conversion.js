@@ -24,12 +24,17 @@ export function toComputedKey(): Object {
 
 export function ensureBlock() {
   const body = this.get("body");
-  if (body.isBlockStatement()) {
-    return this.node;
+  const bodyNode = body.node;
+
+  if (Array.isArray(body)) {
+    throw new Error("Can't convert array path to a block statement");
+  }
+  if (!bodyNode) {
+    throw new Error("Can't convert node without a body");
   }
 
-  if (Array.isArray(body.node)) {
-    throw new Error("Can't convert array path to a block statement");
+  if (body.isBlockStatement()) {
+    return bodyNode;
   }
 
   const statements = [];
