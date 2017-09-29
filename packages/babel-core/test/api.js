@@ -103,38 +103,6 @@ describe("parser and generator options", function() {
 });
 
 describe("api", function() {
-  it("analyze", function() {
-    assert.equal(babel.analyse("foobar;").marked.length, 0);
-
-    assert.equal(
-      babel.analyse("foobar;", {
-        plugins: [
-          new Plugin({
-            visitor: {
-              Program: function(path) {
-                path.mark("category", "foobar");
-              },
-            },
-          }),
-        ],
-      }).marked[0].message,
-      "foobar",
-    );
-
-    assert.equal(
-      babel.analyse(
-        "foobar;",
-        {},
-        {
-          Program: function(path) {
-            path.mark("category", "foobar");
-          },
-        },
-      ).marked[0].message,
-      "foobar",
-    );
-  });
-
   it("exposes the resolvePlugin method", function() {
     assert.throws(
       () => babel.resolvePlugin("nonexistent-plugin"),

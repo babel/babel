@@ -67,7 +67,6 @@ export default class File {
     }
 
     this.metadata = {
-      marked: [],
       modules: {
         imports: [],
         exports: {

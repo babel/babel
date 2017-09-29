@@ -31,7 +31,6 @@ export function Plugin(alias) {
 
 export {
   transform,
-  analyse,
   transformFromAst,
   transformFile,
   transformFileSync,
