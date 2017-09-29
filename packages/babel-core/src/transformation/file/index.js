@@ -67,7 +67,6 @@ export default class File {
     }
 
     this.metadata = {
-      usedHelpers: [],
       marked: [],
       modules: {
         imports: [],
@@ -79,7 +78,6 @@ export default class File {
     };
 
     this.declarations = {};
-    this.usedHelpers = {};
 
     this.path = null;
     this.ast = {};
@@ -96,7 +94,6 @@ export default class File {
   parserOpts: BabelParserOptions;
   opts: Object;
   declarations: Object;
-  usedHelpers: Object;
   path: NodePath;
   ast: Object;
   scope: Scope;
@@ -190,11 +187,6 @@ export default class File {
   addHelper(name: string): Object {
     const declar = this.declarations[name];
     if (declar) return declar;
-
-    if (!this.usedHelpers[name]) {
-      this.metadata.usedHelpers.push(name);
-      this.usedHelpers[name] = true;
-    }
 
     const generator = this.get("helperGenerator");
     const runtime = this.get("helpersNamespace");
