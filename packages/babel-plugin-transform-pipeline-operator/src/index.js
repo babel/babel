@@ -7,7 +7,9 @@ export default function({ types: t }) {
     visitor: {
       BinaryExpression(path) {
         const { scope } = path;
-        const { operator, left, right } = path.node;
+        const { node } = path;
+        const { operator, left } = node;
+        let { right } = node;
         if (operator !== "|>") return;
 
         let optimizeArrow =
@@ -21,6 +23,8 @@ export default function({ types: t }) {
           } else if (params.length > 1) {
             optimizeArrow = false;
           }
+        } else if (t.isIdentifier(right, { name: "eval" })) {
+          right = t.sequenceExpression([t.numericLiteral(0), right]);
         }
 
         if (optimizeArrow && !param) {
