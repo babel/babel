@@ -57,7 +57,6 @@ const optionNames = new Set([
   "sourceType",
   "auxiliaryCommentBefore",
   "auxiliaryCommentAfter",
-  "resolveModuleSource",
   "getModuleId",
   "moduleRoot",
   "moduleIds",
@@ -450,9 +449,10 @@ function normalizeOptions(config) {
     // check for an unknown option
     if (!optionNames.has(key)) {
       if (removed[key]) {
+        const { message, version = 5 } = removed[key];
+
         throw new ReferenceError(
-          `Using removed Babel 5 option: ${alias}.${key} - ${removed[key]
-            .message}`,
+          `Using removed Babel ${version} option: ${alias}.${key} - ${message}`,
         );
       } else {
         // eslint-disable-next-line max-len

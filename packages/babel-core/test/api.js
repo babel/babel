@@ -484,26 +484,6 @@ describe("api", function() {
         });
       }),
 
-      transformAsync('import localName from "./array";', {
-        resolveModuleSource: function() {
-          return "override-source";
-        },
-      }).then(function(result) {
-        assert.deepEqual(result.metadata.modules.imports, [
-          {
-            source: "override-source",
-            imported: ["default"],
-            specifiers: [
-              {
-                kind: "named",
-                imported: "default",
-                local: "localName",
-              },
-            ],
-          },
-        ]);
-      }),
-
       transformAsync('export * as externalName1 from "external";', {
         plugins: [require("../../babel-plugin-syntax-export-extensions")],
       }).then(function(result) {
@@ -745,23 +725,6 @@ describe("api", function() {
         },
       });
       assert.equal(result.code, undefined);
-    });
-  });
-
-  it("resolveModuleSource option", function() {
-    /* eslint-disable max-len */
-    const actual =
-      'import foo from "foo-import-default";\nimport "foo-import-bare";\nexport { foo } from "foo-export-named";';
-    const expected =
-      'import foo from "resolved/foo-import-default";\nimport "resolved/foo-import-bare";\nexport { foo } from "resolved/foo-export-named";';
-    /* eslint-enable max-len */
-
-    return transformAsync(actual, {
-      resolveModuleSource: function(originalSource) {
-        return "resolved/" + originalSource;
-      },
-    }).then(function(result) {
-      assert.equal(result.code.trim(), expected);
     });
   });
 

@@ -166,11 +166,9 @@ export default class File {
     }
   }
 
+  // TODO: Remove this before 7.x's official release. Leaving it in for now to
+  // prevent unnecessary breakage between beta versions.
   resolveModuleSource(source: string): string {
-    const resolveModuleSource = this.opts.resolveModuleSource;
-    if (resolveModuleSource) {
-      source = resolveModuleSource(source, this.opts.filename);
-    }
     return source;
   }
 

@@ -26,21 +26,17 @@ export default class ImportBuilder {
   }
 
   import() {
-    const importedSource = this._file.resolveModuleSource(this._importedSource);
-
     this._statements.push(
-      t.importDeclaration([], t.stringLiteral(importedSource)),
+      t.importDeclaration([], t.stringLiteral(this._importedSource)),
     );
     return this;
   }
 
   require() {
-    const importedSource = this._file.resolveModuleSource(this._importedSource);
-
     this._statements.push(
       t.expressionStatement(
         t.callExpression(t.identifier("require"), [
-          t.stringLiteral(importedSource),
+          t.stringLiteral(this._importedSource),
         ]),
       ),
     );
