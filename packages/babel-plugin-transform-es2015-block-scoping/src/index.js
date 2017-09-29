@@ -44,8 +44,8 @@ export default function() {
       },
 
       Loop(path, file) {
-        const { node, parent, scope } = path;
-        t.ensureBlock(node);
+        const { parent, scope } = path;
+        path.ensureBlock();
         const blockScoping = new BlockScoping(
           path,
           path.get("body"),

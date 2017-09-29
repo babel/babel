@@ -160,6 +160,7 @@ function forOf() {
   try {
     for (var _iterator = this[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
       rest[0] = _step.value;
+      ;
     }
   } catch (err) {
     _didIteratorError = true;
