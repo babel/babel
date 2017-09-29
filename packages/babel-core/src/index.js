@@ -35,7 +35,7 @@ export {
   transformFromAst,
   transformFile,
   transformFileSync,
-} from "./transformation/pipeline";
+} from "./transformation";
 
 /**
  * Recommended set of compilable extensions. Not used in babel-core directly, but meant as
