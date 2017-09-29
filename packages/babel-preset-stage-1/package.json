@@ -11,6 +11,7 @@
     "babel-plugin-transform-decorators": "7.0.0-beta.2",
     "babel-plugin-transform-export-default": "7.0.0-beta.2",
     "babel-plugin-transform-optional-chaining": "7.0.0-beta.2",
+    "babel-plugin-transform-pipeline-operator": "7.0.0-beta.2",
     "babel-preset-stage-2": "7.0.0-beta.2"
   }
 }
