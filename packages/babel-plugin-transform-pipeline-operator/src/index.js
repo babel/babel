@@ -6,28 +6,34 @@ export default function({ types: t }) {
 
     visitor: {
       BinaryExpression(path) {
-        const { scope, parentPath } = path;
-        const { node } = path;
-        const { operator, left, right } = node;
+        const { scope } = path;
+        const { operator, left, right } = path.node;
         if (operator !== "|>") return;
 
-        // Why do I have to fix this here?!
-        if (parentPath.isArrowFunctionExpression({ body: node })) {
-          path.replaceWith(t.blockStatement([t.returnStatement(node)]));
+        let optimizeArrow =
+          t.isArrowFunctionExpression(right) && t.isExpression(right.body);
+        let param;
+
+        if (optimizeArrow) {
+          const { params } = right;
+          if (params.length === 1) {
+            param = params[0];
+          } else if (params.length > 1) {
+            optimizeArrow = false;
+          }
+        }
+
+        if (optimizeArrow && !param) {
+          // Arrow function with 0 arguments
+          path.replaceWith(t.sequenceExpression([left, right.body]));
           return;
         }
 
-        const optimizeArrow =
-          t.isArrowFunctionExpression(right) &&
-          right.params.length === 1 &&
-          t.isIdentifier(right.params[0]) &&
-          t.isExpression(right.body);
-
-        const param = optimizeArrow ? right.params[0] : left;
-        const placeholder = scope.generateUidIdentifierBasedOnNode(param);
+        const placeholder = scope.generateUidIdentifierBasedOnNode(
+          param || left,
+        );
         scope.push({ id: placeholder });
-
-        if (optimizeArrow) {
+        if (param) {
           path.get("right").scope.rename(param.name, placeholder.name);
         }
 
