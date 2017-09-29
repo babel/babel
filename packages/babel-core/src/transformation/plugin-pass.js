@@ -1,9 +1,8 @@
-import Store from "./store";
 import File from "./file";
 
-export default class PluginPass extends Store {
+export default class PluginPass {
   constructor(file: File, key: string, options: Object = {}) {
-    super();
+    this._map = new Map();
 
     this.key = key;
     this.file = file;
@@ -13,6 +12,14 @@ export default class PluginPass extends Store {
   key: string;
   file: File;
   opts: Object;
+
+  set(key: string, val) {
+    this._map.set(key, val);
+  }
+
+  get(key: string): any {
+    return this._map.get(key);
+  }
 
   addHelper(...args) {
     return this.file.addHelper(...args);

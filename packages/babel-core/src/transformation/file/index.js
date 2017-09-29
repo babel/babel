@@ -9,7 +9,6 @@ import sourceMap from "source-map";
 import generate from "babel-generator";
 import { codeFrameColumns } from "babel-code-frame";
 import traverse from "babel-traverse";
-import Store from "../store";
 import { parse } from "babylon";
 import * as t from "babel-types";
 import buildDebug from "debug";
@@ -38,7 +37,7 @@ const errorVisitor = {
   },
 };
 
-export default class File extends Store {
+export default class File {
   constructor({ options, passes }: ResolvedConfig) {
     if (!INTERNAL_PLUGINS) {
       // Lazy-init the internal plugin to remove the init-time circular dependency between plugins being
@@ -49,8 +48,7 @@ export default class File extends Store {
       }).passes[0];
     }
 
-    super();
-
+    this._map = new Map();
     this.pluginPasses = passes;
     this.opts = options;
 
@@ -112,6 +110,14 @@ export default class File extends Store {
   hub: Hub;
   code: string;
   shebang: string;
+
+  set(key: string, val) {
+    this._map.set(key, val);
+  }
+
+  get(key: string): any {
+    return this._map.get(key);
+  }
 
   getMetadata() {
     let has = false;
