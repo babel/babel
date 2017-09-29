@@ -22,9 +22,9 @@ export const logPlugin = (plugin, targets, list, context) => {
   }, {});
 
   const formattedTargets = JSON.stringify(filteredList)
-    .replace(/\,/g, ", ")
-    .replace(/^\{\"/, '{ "')
-    .replace(/\"\}$/, '" }');
+    .replace(/,/g, ", ")
+    .replace(/^\{"/, '{ "')
+    .replace(/"\}$/, '" }');
 
   logMessage(`${plugin} ${formattedTargets}`, context);
 };

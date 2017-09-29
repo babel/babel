@@ -185,7 +185,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
       return result;
     }, []);
 
-  const envTests = tests.map(({ res: test, name, isBuiltIn }, i) => {
+  const envTests = tests.map(({ res: test, isBuiltIn }, i) => {
     // Babel itself doesn't implement the feature correctly,
     // don't count against it
     // only doing this for built-ins atm
