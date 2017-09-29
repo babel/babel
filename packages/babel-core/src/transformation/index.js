@@ -1,22 +1,9 @@
-/* global BabelFileResult, BabelFileMetadata */
+/* global BabelFileResult */
 import fs from "fs";
 
 import * as t from "babel-types";
 import File from "./file";
 import loadConfig from "../config";
-
-export function analyse(
-  code: string,
-  opts: Object = {},
-  visitor?: Object,
-): ?BabelFileMetadata {
-  opts.code = false;
-  if (visitor) {
-    opts.plugins = opts.plugins || [];
-    opts.plugins.push({ visitor });
-  }
-  return transform(code, opts).metadata;
-}
 
 export function transform(code: string, opts?: Object): BabelFileResult {
   const config = loadConfig(opts);

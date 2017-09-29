@@ -31,11 +31,10 @@ export function Plugin(alias) {
 
 export {
   transform,
-  analyse,
   transformFromAst,
   transformFile,
   transformFileSync,
-} from "./transformation/pipeline";
+} from "./transformation";
 
 /**
  * Recommended set of compilable extensions. Not used in babel-core directly, but meant as

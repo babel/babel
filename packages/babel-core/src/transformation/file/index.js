@@ -1,7 +1,6 @@
 /* global BabelFileResult, BabelParserOptions, BabelFileMetadata */
 
 import getHelper from "babel-helpers";
-import * as metadataVisitor from "./metadata";
 import convertSourceMap from "convert-source-map";
 import PluginPass from "../plugin-pass";
 import { NodePath, Hub, Scope } from "babel-traverse";
@@ -9,7 +8,6 @@ import sourceMap from "source-map";
 import generate from "babel-generator";
 import { codeFrameColumns } from "babel-code-frame";
 import traverse from "babel-traverse";
-import Store from "../store";
 import { parse } from "babylon";
 import * as t from "babel-types";
 import buildDebug from "debug";
@@ -38,7 +36,7 @@ const errorVisitor = {
   },
 };
 
-export default class File extends Store {
+export default class File {
   constructor({ options, passes }: ResolvedConfig) {
     if (!INTERNAL_PLUGINS) {
       // Lazy-init the internal plugin to remove the init-time circular dependency between plugins being
@@ -49,8 +47,7 @@ export default class File extends Store {
       }).passes[0];
     }
 
-    super();
-
+    this._map = new Map();
     this.pluginPasses = passes;
     this.opts = options;
 
@@ -68,23 +65,8 @@ export default class File extends Store {
       }
     }
 
-    this.metadata = {
-      usedHelpers: [],
-      marked: [],
-      modules: {
-        imports: [],
-        exports: {
-          exported: [],
-          specifiers: [],
-        },
-      },
-    };
-
-    this.dynamicImportTypes = {};
-    this.dynamicImportIds = {};
-    this.dynamicImports = [];
+    this.metadata = {};
     this.declarations = {};
-    this.usedHelpers = {};
 
     this.path = null;
     this.ast = {};
@@ -95,16 +77,10 @@ export default class File extends Store {
     this.hub = new Hub(this);
   }
 
-  static helpers: Array<string>;
-
   pluginPasses: Array<Array<[Plugin, Object]>>;
   parserOpts: BabelParserOptions;
   opts: Object;
-  dynamicImportTypes: Object;
-  dynamicImportIds: Object;
-  dynamicImports: Array<Object>;
   declarations: Object;
-  usedHelpers: Object;
   path: NodePath;
   ast: Object;
   scope: Scope;
@@ -113,17 +89,12 @@ export default class File extends Store {
   code: string;
   shebang: string;
 
-  getMetadata() {
-    let has = false;
-    for (const node of (this.ast.program.body: Array<Object>)) {
-      if (t.isModuleDeclaration(node)) {
-        has = true;
-        break;
-      }
-    }
-    if (has) {
-      this.path.traverse(metadataVisitor, this);
-    }
+  set(key: string, val) {
+    this._map.set(key, val);
+  }
+
+  get(key: string): any {
+    return this._map.get(key);
   }
 
   getModuleName(): ?string {
@@ -170,11 +141,9 @@ export default class File extends Store {
     }
   }
 
+  // TODO: Remove this before 7.x's official release. Leaving it in for now to
+  // prevent unnecessary breakage between beta versions.
   resolveModuleSource(source: string): string {
-    const resolveModuleSource = this.opts.resolveModuleSource;
-    if (resolveModuleSource) {
-      source = resolveModuleSource(source, this.opts.filename);
-    }
     return source;
   }
 
@@ -190,11 +159,6 @@ export default class File extends Store {
   addHelper(name: string): Object {
     const declar = this.declarations[name];
     if (declar) return declar;
-
-    if (!this.usedHelpers[name]) {
-      this.metadata.usedHelpers.push(name);
-      this.usedHelpers[name] = true;
-    }
 
     const generator = this.get("helperGenerator");
     const runtime = this.get("helpersNamespace");
@@ -343,7 +307,6 @@ export default class File extends Store {
     }).setContext();
     this.scope = this.path.scope;
     this.ast = ast;
-    this.getMetadata();
   }
 
   addAst(ast) {
@@ -469,7 +432,7 @@ export default class File extends Store {
 
   makeResult({ code, map, ast, ignored }: BabelFileResult): BabelFileResult {
     const result = {
-      metadata: null,
+      metadata: this.metadata,
       options: this.opts,
       ignored: !!ignored,
       code: null,
@@ -483,10 +446,6 @@ export default class File extends Store {
 
     if (this.opts.ast) {
       result.ast = ast;
-    }
-
-    if (this.opts.metadata) {
-      result.metadata = this.metadata;
     }
 
     return result;
