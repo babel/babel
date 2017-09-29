@@ -1,4 +1,6 @@
+var _ref;
+
 var map = fn => array => array.map(fn);
 
-var result = map(x => x * 20)([10, 20]);
+var result = (_ref = [10, 20], map(x => x * 20)(_ref));
 assert.deepEqual(result, [200, 400]);
