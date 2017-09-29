@@ -92,12 +92,9 @@ describe("babel-standalone", () => {
 
   it("handles plugins with options", () => {
     const output = Babel.transform("`${x}`", {
-      plugins: [["transform-es2015-template-literals", { spec: true }]],
+      plugins: [["transform-es2015-template-literals", { loose: true }]],
     }).code;
-    assert.equal(
-      output,
-      '"".concat(x);', // https://github.com/babel/babel/pull/5791
-    );
+    assert.equal(output, '"" + x;');
   });
 
   it("throws on invalid preset name", () => {
