@@ -145,6 +145,7 @@ registerPlugins({
   "syntax-class-properties": require("babel-plugin-syntax-class-properties"),
   "syntax-decorators": require("babel-plugin-syntax-decorators"),
   "syntax-do-expressions": require("babel-plugin-syntax-do-expressions"),
+  "syntax-dynamic-import": require("babel-plugin-syntax-dynamic-import"),
   "syntax-exponentiation-operator": require("babel-plugin-syntax-exponentiation-operator"),
   "syntax-export-extensions": require("babel-plugin-syntax-export-extensions"),
   "syntax-flow": require("babel-plugin-syntax-flow"),
@@ -152,6 +153,7 @@ registerPlugins({
   "syntax-function-sent": require("babel-plugin-syntax-function-sent"),
   "syntax-jsx": require("babel-plugin-syntax-jsx"),
   "syntax-object-rest-spread": require("babel-plugin-syntax-object-rest-spread"),
+  "syntax-optional-catch-binding": require("babel-plugin-syntax-optional-catch-binding"),
   "syntax-trailing-function-commas": require("babel-plugin-syntax-trailing-function-commas"),
   "transform-async-functions": require("babel-plugin-transform-async-functions"),
   "transform-async-to-generator": require("babel-plugin-transform-async-to-generator"),
@@ -192,9 +194,11 @@ registerPlugins({
   "transform-flow-strip-types": require("babel-plugin-transform-flow-strip-types"),
   "transform-function-bind": require("babel-plugin-transform-function-bind"),
   "transform-jscript": require("babel-plugin-transform-jscript"),
+  "transform-new-target": require("babel-plugin-transform-new-target"),
   "transform-object-assign": require("babel-plugin-transform-object-assign"),
   "transform-object-rest-spread": require("babel-plugin-transform-object-rest-spread"),
   "transform-object-set-prototype-of-to-assign": require("babel-plugin-transform-object-set-prototype-of-to-assign"),
+  "transform-optional-catch-binding": require("babel-plugin-transform-optional-catch-binding"),
   "transform-proto-to-assign": require("babel-plugin-transform-proto-to-assign"),
   "transform-react-constant-elements": require("babel-plugin-transform-react-constant-elements"),
   "transform-react-display-name": require("babel-plugin-transform-react-display-name"),
@@ -206,6 +210,7 @@ registerPlugins({
   "transform-regenerator": require("babel-plugin-transform-regenerator"),
   "transform-runtime": require("babel-plugin-transform-runtime"),
   "transform-strict-mode": require("babel-plugin-transform-strict-mode"),
+  "transform-unicode-property-regex": require("babel-plugin-transform-unicode-property-regex"),
 });
 
 // All the presets we should bundle
