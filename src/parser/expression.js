@@ -290,6 +290,13 @@ export default class ExpressionParser extends LValParser {
 
         const startPos = this.state.start;
         const startLoc = this.state.startLoc;
+
+        if (node.operator === "|>") {
+          this.expectPlugin("pipelineOperator");
+          // Support syntax such as 10 |> x => x + 1
+          this.state.potentialArrowAt = startPos;
+        }
+
         node.right = this.parseExprOp(
           this.parseMaybeUnary(),
           startPos,

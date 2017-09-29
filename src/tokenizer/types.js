@@ -61,7 +61,7 @@ export class TokenType {
     this.isAssign = !!conf.isAssign;
     this.prefix = !!conf.prefix;
     this.postfix = !!conf.postfix;
-    this.binop = conf.binop || null;
+    this.binop = conf.binop === 0 ? 0 : conf.binop || null;
     this.updateContext = null;
   }
 }
@@ -131,6 +131,7 @@ export const types: { [name: string]: TokenType } = {
   incDec: new TokenType("++/--", { prefix, postfix, startsExpr }),
   bang: new TokenType("!", { beforeExpr, prefix, startsExpr }),
   tilde: new TokenType("~", { beforeExpr, prefix, startsExpr }),
+  pipeline: new BinopTokenType("|>", 0),
   logicalOR: new BinopTokenType("||", 1),
   logicalAND: new BinopTokenType("&&", 2),
   bitwiseOR: new BinopTokenType("|", 3),

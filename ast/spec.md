@@ -790,6 +790,7 @@ enum BinaryOperator {
      | "+" | "-" | "*" | "/" | "%"
      | "|" | "^" | "&" | "in"
      | "instanceof"
+     | "|>"
 }
 ```
 
