@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 6,
+  "end": 17,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 6
+      "column": 17
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 6,
+    "end": 17,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 6
+        "column": 17
       }
     },
     "sourceType": "script",
@@ -31,7 +31,7 @@
       {
         "type": "ExpressionStatement",
         "start": 0,
-        "end": 6,
+        "end": 17,
         "loc": {
           "start": {
             "line": 1,
@@ -39,13 +39,13 @@
           },
           "end": {
             "line": 1,
-            "column": 6
+            "column": 17
           }
         },
         "expression": {
           "type": "NumericLiteral",
           "start": 0,
-          "end": 6,
+          "end": 17,
           "loc": {
             "start": {
               "line": 1,
@@ -53,14 +53,14 @@
             },
             "end": {
               "line": 1,
-              "column": 6
+              "column": 17
             }
           },
           "extra": {
-            "rawValue": 9,
-            "raw": "0o0_11"
+            "rawValue": 448585456,
+            "raw": "0x1_a_b_c_d_e_f_0"
           },
-          "value": 9
+          "value": 448585456
         }
       }
     ],
