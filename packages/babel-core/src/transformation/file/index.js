@@ -1,7 +1,6 @@
 /* global BabelFileResult, BabelParserOptions, BabelFileMetadata */
 
 import getHelper from "babel-helpers";
-import * as metadataVisitor from "./metadata";
 import convertSourceMap from "convert-source-map";
 import PluginPass from "../plugin-pass";
 import { NodePath, Hub, Scope } from "babel-traverse";
@@ -66,16 +65,7 @@ export default class File {
       }
     }
 
-    this.metadata = {
-      modules: {
-        imports: [],
-        exports: {
-          exported: [],
-          specifiers: [],
-        },
-      },
-    };
-
+    this.metadata = {};
     this.declarations = {};
 
     this.path = null;
@@ -107,19 +97,6 @@ export default class File {
 
   get(key: string): any {
     return this._map.get(key);
-  }
-
-  getMetadata() {
-    let has = false;
-    for (const node of (this.ast.program.body: Array<Object>)) {
-      if (t.isModuleDeclaration(node)) {
-        has = true;
-        break;
-      }
-    }
-    if (has) {
-      this.path.traverse(metadataVisitor, this);
-    }
   }
 
   getModuleName(): ?string {
@@ -332,7 +309,6 @@ export default class File {
     }).setContext();
     this.scope = this.path.scope;
     this.ast = ast;
-    this.getMetadata();
   }
 
   addAst(ast) {
@@ -458,7 +434,7 @@ export default class File {
 
   makeResult({ code, map, ast, ignored }: BabelFileResult): BabelFileResult {
     const result = {
-      metadata: null,
+      metadata: this.metadata,
       options: this.opts,
       ignored: !!ignored,
       code: null,
@@ -472,10 +448,6 @@ export default class File {
 
     if (this.opts.ast) {
       result.ast = ast;
-    }
-
-    if (this.opts.metadata) {
-      result.metadata = this.metadata;
     }
 
     return result;
