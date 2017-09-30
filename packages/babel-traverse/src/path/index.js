@@ -142,9 +142,9 @@ export default class NodePath {
     return parts.join(".");
   }
 
-  debug(buildMessage: Function) {
+  debug(message) {
     if (!debug.enabled) return;
-    debug(`${this.getPathLocation()} ${this.type}: ${buildMessage()}`);
+    debug(`${this.getPathLocation()} ${this.type}: ${message}`);
   }
 }
 

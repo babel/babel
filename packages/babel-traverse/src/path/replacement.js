@@ -195,7 +195,7 @@ export function _replaceWith(node) {
     t.validate(this.parent, this.key, node);
   }
 
-  this.debug(() => `Replace with ${node && node.type}`);
+  this.debug(`Replace with ${node && node.type}`);
 
   this.node = this.container[this.key] = node;
 }

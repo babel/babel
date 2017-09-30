@@ -64,7 +64,7 @@ export function _containerInsert(from, nodes) {
 
   for (const path of paths) {
     path.setScope();
-    path.debug(() => "Inserted.");
+    path.debug("Inserted.");
 
     for (const context of contexts) {
       context.maybeQueue(path, true);
