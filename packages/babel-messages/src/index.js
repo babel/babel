@@ -8,7 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  modulesIllegalExportName: "Illegal export $1",
   undeclaredVariable: "Reference to undeclared variable $1",
   undeclaredVariableSuggestion:
     "Reference to undeclared variable $1 - did you mean $2?",
