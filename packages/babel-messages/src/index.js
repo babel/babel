@@ -13,8 +13,6 @@ export const MESSAGES = {
   didYouMean: "Did you mean $1?",
   codeGeneratorDeopt:
     "Note: The code generator has deoptimised the styling of $1 as it exceeds the max of $2.",
-  missingTemplatesDirectory:
-    "no templates directory - this is most likely the result of a broken `npm publish`. Please report to https://github.com/babel/babel/issues",
   unsupportedOutputType: "Unsupported output type $1",
   illegalMethodName: "Illegal method name $1",
   lostTrackNodePath:
