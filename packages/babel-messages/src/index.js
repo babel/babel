@@ -8,8 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  traverseNeedsParent:
-    "You must pass a scope and parentPath unless traversing a Program/File. Instead of that you tried to traverse a $1 node without passing scope and parentPath.",
   traverseVerifyVisitorProperty:
     "You passed `traverse()` a visitor object with the property $1 that has the invalid property $2",
   traverseVerifyNodeType:
