@@ -8,7 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  noAssignmentsInForHead: "No assignments allowed in for-in/of head",
   expectedMemberExpressionOrIdentifier:
     "Expected type MemberExpression or Identifier",
   invalidParentForThisNode:
