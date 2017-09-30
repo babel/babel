@@ -8,7 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  scopeDuplicateDeclaration: "Duplicate declaration $1",
   settersNoRest: "Setters aren't allowed to have a rest",
   noAssignmentsInForHead: "No assignments allowed in for-in/of head",
   expectedMemberExpressionOrIdentifier:
