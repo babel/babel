@@ -8,7 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  didYouMean: "Did you mean $1?",
   codeGeneratorDeopt:
     "Note: The code generator has deoptimised the styling of $1 as it exceeds the max of $2.",
   unsupportedOutputType: "Unsupported output type $1",
