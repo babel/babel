@@ -8,7 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  readOnly: "$1 is read-only",
   unknownForHead: "Unknown node type $1 in ForStatement",
   didYouMean: "Did you mean $1?",
   codeGeneratorDeopt:
