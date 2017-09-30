@@ -20,7 +20,9 @@ export function insertBefore(nodes) {
   ) {
     return this.parentPath.insertBefore(nodes);
   } else if (
-    (this.isNodeType("Expression") && this.listKey !== "params") ||
+    (this.isNodeType("Expression") &&
+      this.listKey !== "params" &&
+      this.listKey !== "arguments") ||
     (this.parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) nodes.push(this.node);
