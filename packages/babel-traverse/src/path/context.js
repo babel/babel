@@ -95,16 +95,13 @@ export function stop() {
 export function setScope() {
   if (this.opts && this.opts.noScope) return;
 
-  let target = this.context && this.context.scope;
+  let path = this.parentPath;
+  let target;
+  while (path && !target) {
+    if (path.opts && path.opts.noScope) return;
 
-  if (!target) {
-    let path = this.parentPath;
-    while (path && !target) {
-      if (path.opts && path.opts.noScope) return;
-
-      target = path.scope;
-      path = path.parentPath;
-    }
+    target = path.scope;
+    path = path.parentPath;
   }
 
   this.scope = this.getScope(target);
