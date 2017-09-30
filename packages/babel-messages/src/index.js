@@ -8,9 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  undeclaredVariableSuggestion:
-    "Reference to undeclared variable $1 - did you mean $2?",
-
   traverseNeedsParent:
     "You must pass a scope and parentPath unless traversing a Program/File. Instead of that you tried to traverse a $1 node without passing scope and parentPath.",
   traverseVerifyVisitorProperty:
