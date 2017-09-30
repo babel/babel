@@ -1,5 +1,4 @@
 import * as virtualTypes from "./path/lib/virtual-types";
-import * as messages from "babel-messages";
 import * as t from "babel-types";
 import clone from "lodash/clone";
 
@@ -125,7 +124,10 @@ export function verify(visitor) {
   if (visitor._verified) return;
 
   if (typeof visitor === "function") {
-    throw new Error(messages.get("traverseVerifyRootFunction"));
+    throw new Error(
+      "You passed `traverse()` a function when it expected a" +
+        "visitor object, are you sure you didn't mean `{ enter: Function }`?",
+    );
   }
 
   for (const nodeType in visitor) {
@@ -136,7 +138,9 @@ export function verify(visitor) {
     if (shouldIgnoreKey(nodeType)) continue;
 
     if (t.TYPES.indexOf(nodeType) < 0) {
-      throw new Error(messages.get("traverseVerifyNodeType", nodeType));
+      throw new Error(
+        `You gave us a visitor for the node type ${nodeType} but it's not a valid type`,
+      );
     }
 
     const visitors = visitor[nodeType];
@@ -150,7 +154,8 @@ export function verify(visitor) {
           );
         } else {
           throw new Error(
-            messages.get("traverseVerifyVisitorProperty", nodeType, visitorKey),
+            "You passed `traverse()` a visitor object with the property" +
+              ` "${visitorKey}" that has the invalid property $2`,
           );
         }
       }
