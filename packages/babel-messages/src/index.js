@@ -8,7 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  undeclaredVariable: "Reference to undeclared variable $1",
   undeclaredVariableSuggestion:
     "Reference to undeclared variable $1 - did you mean $2?",
 
