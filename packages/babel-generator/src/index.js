@@ -73,8 +73,8 @@ function normalizeOptions(code, opts): Format {
 
     if (format.compact) {
       console.error(
-        `[BABEL] Note: The code generator has deoptimised the styling of ${opts.filename},
-        it exceeds the max of 500KB.`,
+        "[BABEL] Note: The code generator has deoptimised the styling of " +
+          `${opts.filename} as it exceeds the max of ${"500KB"}.`,
       );
     }
   }

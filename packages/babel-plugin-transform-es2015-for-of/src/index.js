@@ -1,4 +1,4 @@
-export default function({ messages, template, types: t }) {
+export default function({ template, types: t }) {
   const buildForOfArray = template(`
     for (var KEY = 0; KEY < ARR.length; KEY++) BODY;
   `);
@@ -169,7 +169,7 @@ export default function({ messages, template, types: t }) {
     } else {
       throw file.buildCodeFrameError(
         left,
-        messages.get("unknownForHead", left.type),
+        `Unknown node type ${left.type} in ForStatement`,
       );
     }
 
@@ -226,7 +226,7 @@ export default function({ messages, template, types: t }) {
     } else {
       throw file.buildCodeFrameError(
         left,
-        messages.get("unknownForHead", left.type),
+        `Unknown node type ${left.type} in ForStatement`,
       );
     }
 

@@ -1,6 +1,5 @@
 import TraversalContext from "./context";
 import * as visitors from "./visitors";
-import * as messages from "babel-messages";
 import includes from "lodash/includes";
 import * as t from "babel-types";
 import * as cache from "./cache";
@@ -22,7 +21,11 @@ export default function traverse(
 
   if (!opts.noScope && !scope) {
     if (parent.type !== "Program" && parent.type !== "File") {
-      throw new Error(messages.get("traverseNeedsParent", parent.type));
+      throw new Error(
+        "You must pass a scope and parentPath unless traversing a Program/File. " +
+          `Instead of that you tried to traverse a ${parent.type} node without ` +
+          "passing scope and parentPath.",
+      );
     }
   }
 
