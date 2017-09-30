@@ -8,10 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  expectedMemberExpressionOrIdentifier:
-    "Expected type MemberExpression or Identifier",
-  invalidParentForThisNode:
-    "We don't know how to handle this node within the current parent - please open an issue",
   readOnly: "$1 is read-only",
   unknownForHead: "Unknown node type $1 in ForStatement",
   didYouMean: "Did you mean $1?",
