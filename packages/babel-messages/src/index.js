@@ -8,7 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  unknownForHead: "Unknown node type $1 in ForStatement",
   didYouMean: "Did you mean $1?",
   codeGeneratorDeopt:
     "Note: The code generator has deoptimised the styling of $1 as it exceeds the max of $2.",
