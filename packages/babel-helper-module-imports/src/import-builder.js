@@ -82,11 +82,10 @@ export default class ImportBuilder {
       statement = t.expressionStatement(this._resultName);
       this._statements.push(statement);
     }
-    this._statements[
-      this._statements.length - 1
-    ] = t.variableDeclaration("var", [
-      t.variableDeclarator(name, statement.expression),
-    ]);
+    this._statements[this._statements.length - 1] = t.variableDeclaration(
+      "var",
+      [t.variableDeclarator(name, statement.expression)],
+    );
     this._resultName = t.clone(name);
     return this;
   }

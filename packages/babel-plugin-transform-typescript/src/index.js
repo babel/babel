@@ -15,7 +15,7 @@ function isInType(path) {
 }
 
 interface State {
-  programPath: any,
+  programPath: any;
 }
 
 export default function({ types: t }) {
