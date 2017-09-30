@@ -8,8 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  codeGeneratorDeopt:
-    "Note: The code generator has deoptimised the styling of $1 as it exceeds the max of $2.",
   unsupportedOutputType: "Unsupported output type $1",
   illegalMethodName: "Illegal method name $1",
   modulesIllegalExportName: "Illegal export $1",
