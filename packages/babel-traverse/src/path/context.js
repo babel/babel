@@ -5,7 +5,7 @@ import traverse from "../index";
 export function call(key): boolean {
   const opts = this.opts;
 
-  this.debug(() => key);
+  this.debug(key);
 
   if (this.node) {
     if (this._call(opts[key])) return true;
@@ -60,11 +60,11 @@ export function visit(): boolean {
   }
 
   if (this.call("enter") || this.shouldSkip) {
-    this.debug(() => "Skip...");
+    this.debug("Skip...");
     return this.shouldStop;
   }
 
-  this.debug(() => "Recursing into...");
+  this.debug("Recursing into...");
   traverse.node(
     this.node,
     this.opts,
