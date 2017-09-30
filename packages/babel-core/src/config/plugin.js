@@ -1,6 +1,12 @@
 // @flow
 
 export default class Plugin {
+  key: ?string;
+  manipulateOptions: ?Function;
+  post: ?Function;
+  pre: ?Function;
+  visitor: ?{};
+
   constructor(plugin: {}, key?: string) {
     if (plugin.name != null && typeof plugin.name !== "string") {
       throw new Error("Plugin .name must be a string, null, or undefined");
@@ -30,10 +36,4 @@ export default class Plugin {
     this.pre = plugin.pre;
     this.visitor = plugin.visitor;
   }
-
-  key: ?string;
-  manipulateOptions: ?Function;
-  post: ?Function;
-  pre: ?Function;
-  visitor: ?{};
 }

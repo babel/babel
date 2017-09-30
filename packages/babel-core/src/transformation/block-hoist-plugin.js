@@ -1,6 +1,28 @@
+// @flow
+
 import sortBy from "lodash/sortBy";
 
-export default {
+import loadConfig, { type Plugin } from "../config";
+
+let LOADED_PLUGIN: Plugin | void;
+
+export default function loadBlockHoistPlugin(): [Plugin, void] {
+  if (!LOADED_PLUGIN) {
+    // Lazy-init the internal plugin to remove the init-time circular
+    // dependency between plugins being passed babel-core's export object,
+    // which loads this file, and this 'loadConfig' loading plugins.
+    const config = loadConfig({
+      babelrc: false,
+      plugins: [blockHoistPlugin],
+    });
+    LOADED_PLUGIN = config ? config.passes[0][0][0] : undefined;
+    if (!LOADED_PLUGIN) throw new Error("Assertion failure");
+  }
+
+  return [LOADED_PLUGIN, undefined];
+}
+
+const blockHoistPlugin = {
   /**
    * [Please add a description.]
    *
