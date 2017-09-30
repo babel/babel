@@ -2,7 +2,6 @@
 
 import * as context from "../index";
 import Plugin from "./plugin";
-import * as messages from "babel-messages";
 import defaults from "lodash/defaults";
 import merge from "lodash/merge";
 import removed from "./removed";
@@ -334,7 +333,7 @@ function instantiatePlugin({ value: pluginObj, descriptor }) {
   Object.keys(pluginObj).forEach(key => {
     if (!ALLOWED_PLUGIN_KEYS.has(key)) {
       throw new Error(
-        messages.get("pluginInvalidProperty", descriptor.alias, key),
+        `Plugin ${descriptor.alias} provided an invalid property of ${key}`,
       );
     }
   });
