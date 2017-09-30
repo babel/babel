@@ -8,8 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  pluginNotObject:
-    "Plugin $2 specified in $1 was expected to return an object when invoked but returned $3",
   pluginNotFunction:
     "Plugin $2 specified in $1 was expected to return a function but returned $3",
   pluginUnknown:
