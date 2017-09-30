@@ -1,6 +1,5 @@
 import type { NodePath, Scope } from "babel-traverse";
 import optimiseCall from "babel-helper-optimise-call-expression";
-import * as messages from "babel-messages";
 import * as t from "babel-types";
 
 // ✌️
@@ -251,7 +250,7 @@ export default class ReplaceSupers {
     const node = path.node;
 
     if (isIllegalBareSuper(node, parent)) {
-      throw path.buildCodeFrameError(messages.get("classesIllegalBareSuper"));
+      throw path.buildCodeFrameError("Illegal use of bare super");
     }
 
     if (t.isCallExpression(node)) {

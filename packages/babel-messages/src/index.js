@@ -8,9 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  tailCallReassignmentDeopt:
-    "Function reference has been reassigned, so it will probably be dereferenced, therefore we can't optimise this with confidence",
-  classesIllegalBareSuper: "Illegal use of bare super",
   classesIllegalSuperCall:
     "Direct super call is illegal in non-constructor, use super.$1() instead",
   scopeDuplicateDeclaration: "Duplicate declaration $1",
