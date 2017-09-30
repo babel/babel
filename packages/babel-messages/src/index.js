@@ -16,9 +16,6 @@ export const MESSAGES = {
   unsupportedOutputType: "Unsupported output type $1",
   illegalMethodName: "Illegal method name $1",
   modulesIllegalExportName: "Illegal export $1",
-  modulesDuplicateDeclarations:
-    "Duplicate module declarations with the same source but in different scopes",
-
   undeclaredVariable: "Reference to undeclared variable $1",
   undeclaredVariableType:
     "Referencing a type alias outside of a type annotation",
