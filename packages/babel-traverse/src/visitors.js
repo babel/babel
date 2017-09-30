@@ -153,7 +153,8 @@ export function verify(visitor) {
           );
         } else {
           throw new Error(
-            messages.get("traverseVerifyVisitorProperty", nodeType, visitorKey),
+            "You passed `traverse()` a visitor object with the property" +
+              ` "${visitorKey}" that has the invalid property $2`,
           );
         }
       }
