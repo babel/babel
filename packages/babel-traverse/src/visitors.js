@@ -1,5 +1,4 @@
 import * as virtualTypes from "./path/lib/virtual-types";
-import * as messages from "babel-messages";
 import * as t from "babel-types";
 import clone from "lodash/clone";
 
@@ -139,7 +138,9 @@ export function verify(visitor) {
     if (shouldIgnoreKey(nodeType)) continue;
 
     if (t.TYPES.indexOf(nodeType) < 0) {
-      throw new Error(messages.get("traverseVerifyNodeType", nodeType));
+      throw new Error(
+        `You gave us a visitor for the node type ${nodeType} but it's not a valid type`,
+      );
     }
 
     const visitors = visitor[nodeType];

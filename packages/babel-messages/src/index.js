@@ -8,9 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  traverseVerifyNodeType:
-    "You gave us a visitor for the node type $1 but it's not a valid type",
-
   pluginNotObject:
     "Plugin $2 specified in $1 was expected to return an object when invoked but returned $3",
   pluginNotFunction:
