@@ -1,6 +1,6 @@
-var _templateObject = _taggedTemplateLiteralLoose(["wow\na", "b ", ""], ["wow\\na", "b ", ""]),
-    _templateObject2 = _taggedTemplateLiteralLoose(["wow\nab", " ", ""], ["wow\\nab", " ", ""]),
-    _templateObject3 = _taggedTemplateLiteralLoose(["wow\naB", " ", ""], ["wow\\naB", " ", ""]);
+var _templateObject = /*#__PURE__*/ _taggedTemplateLiteralLoose(["wow\na", "b ", ""], ["wow\\na", "b ", ""]),
+    _templateObject2 = /*#__PURE__*/ _taggedTemplateLiteralLoose(["wow\nab", " ", ""], ["wow\\nab", " ", ""]),
+    _templateObject3 = /*#__PURE__*/ _taggedTemplateLiteralLoose(["wow\naB", " ", ""], ["wow\\naB", " ", ""]);
 
 function _taggedTemplateLiteralLoose(strings, raw) { strings.raw = raw; return strings; }
 

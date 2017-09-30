@@ -1,6 +1,6 @@
-var _templateObject = _taggedTemplateLiteral(["wow\na", "b ", ""], ["wow\\na", "b ", ""]),
-    _templateObject2 = _taggedTemplateLiteral(["wow\nab", " ", ""], ["wow\\nab", " ", ""]),
-    _templateObject3 = _taggedTemplateLiteral(["wow\naB", " ", ""], ["wow\\naB", " ", ""]);
+var _templateObject = /*#__PURE__*/ _taggedTemplateLiteral(["wow\na", "b ", ""], ["wow\\na", "b ", ""]),
+    _templateObject2 = /*#__PURE__*/ _taggedTemplateLiteral(["wow\nab", " ", ""], ["wow\\nab", " ", ""]),
+    _templateObject3 = /*#__PURE__*/ _taggedTemplateLiteral(["wow\naB", " ", ""], ["wow\\naB", " ", ""]);
 
 function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 

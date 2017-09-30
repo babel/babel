@@ -1,3 +1,5 @@
+import annotateAsPure from "babel-helper-annotate-as-pure";
+
 export default function({ types: t }) {
   /**
    * This function groups the objects into multiple calls to `.concat()` in
@@ -80,6 +82,7 @@ export default function({ types: t }) {
             t.arrayExpression(strings),
             t.arrayExpression(raws),
           ]);
+          annotateAsPure(init);
           init._compact = true;
           programPath.scope.push({
             id: templateObject,

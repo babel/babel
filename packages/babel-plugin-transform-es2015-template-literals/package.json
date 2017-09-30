@@ -9,6 +9,7 @@
     "babel-plugin"
   ],
   "devDependencies": {
+    "babel-helper-annotate-as-pure": "7.0.0-beta.2",
     "babel-helper-plugin-test-runner": "7.0.0-beta.2"
   }
 }
