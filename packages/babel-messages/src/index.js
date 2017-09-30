@@ -15,9 +15,6 @@ export const MESSAGES = {
     "Note: The code generator has deoptimised the styling of $1 as it exceeds the max of $2.",
   unsupportedOutputType: "Unsupported output type $1",
   illegalMethodName: "Illegal method name $1",
-  lostTrackNodePath:
-    "We lost track of this node's position, likely because the AST was directly manipulated",
-
   modulesIllegalExportName: "Illegal export $1",
   modulesDuplicateDeclarations:
     "Duplicate module declarations with the same source but in different scopes",
