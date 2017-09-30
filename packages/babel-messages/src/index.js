@@ -7,9 +7,7 @@ import * as util from "util";
  * Messages can include $0-style placeholders.
  */
 
-export const MESSAGES = {
-  pluginInvalidProperty: "Plugin $1 provided an invalid property of $2",
-};
+export const MESSAGES = {};
 
 /**
  * Get a message with $0 placeholders replaced by arguments.
