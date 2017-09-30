@@ -8,8 +8,6 @@ import * as util from "util";
  */
 
 export const MESSAGES = {
-  classesIllegalSuperCall:
-    "Direct super call is illegal in non-constructor, use super.$1() instead",
   scopeDuplicateDeclaration: "Duplicate declaration $1",
   settersNoRest: "Setters aren't allowed to have a rest",
   noAssignmentsInForHead: "No assignments allowed in for-in/of head",
