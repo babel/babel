@@ -17,8 +17,6 @@ export const MESSAGES = {
   illegalMethodName: "Illegal method name $1",
   modulesIllegalExportName: "Illegal export $1",
   undeclaredVariable: "Reference to undeclared variable $1",
-  undeclaredVariableType:
-    "Referencing a type alias outside of a type annotation",
   undeclaredVariableSuggestion:
     "Reference to undeclared variable $1 - did you mean $2?",
 
