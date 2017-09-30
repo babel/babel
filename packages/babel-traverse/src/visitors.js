@@ -125,7 +125,10 @@ export function verify(visitor) {
   if (visitor._verified) return;
 
   if (typeof visitor === "function") {
-    throw new Error(messages.get("traverseVerifyRootFunction"));
+    throw new Error(
+      "You passed `traverse()` a function when it expected a" +
+        "visitor object, are you sure you didn't mean `{ enter: Function }`?",
+    );
   }
 
   for (const nodeType in visitor) {
