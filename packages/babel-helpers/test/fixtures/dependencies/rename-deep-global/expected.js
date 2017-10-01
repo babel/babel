@@ -1,6 +1,6 @@
-function _$_$_$_main_() { return _$_$_$_dependency_() || Promise; }
+function _$_renameDeepGlobal_main() { return _$_renameDeepGlobal_dependency() || Promise; }
 
-function _$_$_$_dependency_() { return Promise; }
+function _$_renameDeepGlobal_dependency() { return Promise; }
 
-_$_$_$_main_;
+_$_renameDeepGlobal_main;
 let _Promise = "I will be a good guy!";

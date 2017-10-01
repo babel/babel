@@ -1,6 +1,6 @@
-function _$_$_$_main_() { return _$_$_$_dependency_(); }
+function _$_reuseDependency_main() { return _$_reuseDependency_dependency(); }
 
-function _$_$_$_dependency_() { 0; }
+function _$_reuseDependency_dependency() { 0; }
 
-_$_$_$_main_;
-_$_$_$_dependency_;
+_$_reuseDependency_main;
+_$_reuseDependency_dependency;

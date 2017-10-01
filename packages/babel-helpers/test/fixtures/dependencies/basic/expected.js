@@ -1,5 +1,5 @@
-function _$_$_$_main_() { return _$_$_$_dependency_(); }
+function _$_basic_main() { return _$_basic_dependency(); }
 
-function _$_$_$_dependency_() {}
+function _$_basic_dependency() {}
 
-_$_$_$_main_;
+_$_basic_main;

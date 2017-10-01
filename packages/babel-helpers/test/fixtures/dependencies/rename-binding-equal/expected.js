@@ -1,9 +1,9 @@
 let _foo = "main";
 
-function _$_$_$_main_() { return _$_$_$_dependency_() + _foo; }
+function _$_renameBindingEqual_main() { return _$_renameBindingEqual_dependency() + _foo; }
 
 let foo = "dependency";
 
-function _$_$_$_dependency_() { return foo; }
+function _$_renameBindingEqual_dependency() { return foo; }
 
-_$_$_$_main_;
+_$_renameBindingEqual_main;

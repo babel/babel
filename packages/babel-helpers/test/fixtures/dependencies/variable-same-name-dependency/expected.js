@@ -1,5 +1,5 @@
-function _$_$_$_main_() { let x = _$_$_$_dependency_; return function (dep) { return x() + dep; }; }
+function _$_variableSameNameDependency_main() { let x = _$_variableSameNameDependency_dependency; return function (dep) { return x() + dep; }; }
 
-function _$_$_$_dependency_() {}
+function _$_variableSameNameDependency_dependency() {}
 
-_$_$_$_main_;
+_$_variableSameNameDependency_main;

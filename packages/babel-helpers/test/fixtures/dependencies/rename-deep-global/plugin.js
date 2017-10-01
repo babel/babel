@@ -1,12 +1,12 @@
 const defineHelper = require("../../../helpers/define-helper").default;
 
-const dependency = defineHelper("dependency", `
+const dependency = defineHelper(__dirname, "dependency", `
   export default function fn() {
     return Promise;
   }
 `);
 
-const main = defineHelper("main", `
+const main = defineHelper(__dirname, "main", `
   import dep from "${dependency}";
 
   export default function helper() {

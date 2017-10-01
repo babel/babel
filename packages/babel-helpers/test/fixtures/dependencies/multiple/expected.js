@@ -1,7 +1,7 @@
-function _$_$_$_main_() { return _$_$_$_dependency1_() + _$_$_$_dependency2_(); }
+function _$_multiple_main() { return _$_multiple_dependency() + _$_multiple_dependency2(); }
 
-function _$_$_$_dependency2_() { 1; }
+function _$_multiple_dependency2() { 1; }
 
-function _$_$_$_dependency1_() { 0; }
+function _$_multiple_dependency() { 0; }
 
-_$_$_$_main_;
+_$_multiple_main;

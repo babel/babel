@@ -1,15 +1,23 @@
+import path from "path";
 import template from "babel-template";
 import helpers from "../../lib/helpers";
 
-// This is not garanteed to be 100% unique, but I hope
-// no one will ever name a babel helper like "_$_$_$_foo_12"!
-let i = 0;
-function getHelperUid(name) {
-  return `_$_$_$_${name}_${i++}`;
+function getHelperId(dir, name) {
+  const testName = path.basename(dir);
+  return `_$_${testName}_${name}`;
 }
 
-export default function defineHelper(name: string, code: string): string {
-  const id = getHelperUid(name);
-  helpers[id] = template(code, { sourceType: "module" });
+export default function defineHelper(
+  dir: string,
+  name: string,
+  code: string,
+): string {
+  const id = getHelperId(dir, name);
+  if (id in helpers) {
+    throw new Error(`The ${id} helper is already defined.`);
+  }
+  Object.defineProperty(helpers, id, {
+    value: template(code, { sourceType: "module" }),
+  });
   return id;
 }

@@ -1,7 +1,7 @@
-function _$_$_$_main_() { return _$_$_$_dependency_(); }
+function _$_deep_main() { return _$_deep_dependency(); }
 
-function _$_$_$_dependency_() { return _$_$_$_dependencyDeep_; }
+function _$_deep_dependency() { return _$_deep_dependencyDeep; }
 
-function _$_$_$_dependencyDeep_() {}
+function _$_deep_dependencyDeep() {}
 
-_$_$_$_main_;
+_$_deep_main;

@@ -1,6 +1,6 @@
 const defineHelper = require("../../../helpers/define-helper").default;
 
-const main = defineHelper("main", `
+const main = defineHelper(__dirname, "main", `
   import dep from "(!!!)%-..a,4892 missing";
 
   export default function helper() {
