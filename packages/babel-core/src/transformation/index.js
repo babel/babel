@@ -10,11 +10,9 @@ export function transform(code: string, opts?: Object): BabelFileResult {
   if (config === null) return null;
 
   const file = new File(config);
-  return file.wrap(code, function() {
-    file.addCode(code);
-    file.parseCode(code);
-    return file.transform();
-  });
+  file.addCode(code);
+  file.parseCode(code);
+  return file.transform();
 }
 
 export function transformFromAst(
@@ -32,11 +30,9 @@ export function transformFromAst(
   }
 
   const file = new File(config);
-  return file.wrap(code, function() {
-    file.addCode(code);
-    file.addAst(ast);
-    return file.transform();
-  });
+  file.addCode(code);
+  file.addAst(ast);
+  return file.transform();
 }
 
 export function transformFile(
@@ -59,11 +55,9 @@ export function transformFile(
     if (!err) {
       try {
         const file = new File(config);
-        result = file.wrap(code, function() {
-          file.addCode(code);
-          file.parseCode(code);
-          return file.transform();
-        });
+        file.addCode(code);
+        file.parseCode(code);
+        result = file.transform();
       } catch (_err) {
         err = _err;
       }
@@ -88,9 +82,7 @@ export function transformFileSync(
   const code = fs.readFileSync(filename, "utf8");
   const file = new File(config);
 
-  return file.wrap(code, function() {
-    file.addCode(code);
-    file.parseCode(code);
-    return file.transform();
-  });
+  file.addCode(code);
+  file.parseCode(code);
+  return file.transform();
 }

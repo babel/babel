@@ -2,6 +2,7 @@ import cloneDeep from "lodash/cloneDeep";
 import has from "lodash/has";
 import traverse from "babel-traverse";
 import * as babylon from "babylon";
+import { codeFrameColumns } from "babel-code-frame";
 
 const FROM_TEMPLATE = new Set();
 
@@ -42,7 +43,12 @@ export default function(code: string, opts?: Object): Function {
         preserveComments: opts.preserveComments,
       });
     } catch (err) {
-      err.stack = `${err.stack}from\n${stack}`;
+      const loc = err.loc;
+      if (loc) {
+        err.loc = null;
+        err.message += "\n" + codeFrameColumns(code, { start: loc });
+      }
+      err.stack = `${err.stack}\n    ==========================\n${stack}`;
       throw err;
     }
 

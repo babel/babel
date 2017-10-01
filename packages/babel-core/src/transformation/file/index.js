@@ -212,26 +212,38 @@ export default class File {
     msg: string,
     Error: typeof Error = SyntaxError,
   ): Error {
-    const loc = node && (node.loc || node._loc);
+    let loc = node && (node.loc || node._loc);
 
-    const err = new Error(msg);
+    msg = `${this.opts.filename}: ${msg}`;
 
-    if (loc) {
-      err.loc = loc.start;
-    } else {
-      traverse(node, errorVisitor, this.scope, err);
+    if (!loc && node) {
+      const state = {
+        loc: null,
+      };
+      traverse(node, errorVisitor, this.scope, state);
+      loc = state.loc;
 
-      err.message +=
-        " (This is an error on an internal node. Probably an internal error";
+      let txt =
+        "This is an error on an internal node. Probably an internal error.";
+      if (loc) txt += " Location has been estimated.";
 
-      if (err.loc) {
-        err.message += ". Location has been estimated.";
-      }
-
-      err.message += ")";
+      msg += ` (${txt})`;
     }
 
-    return err;
+    msg +=
+      "\n" +
+      codeFrameColumns(
+        this.code,
+        {
+          start: {
+            line: loc.line,
+            column: loc.column + 1,
+          },
+        },
+        this.opts,
+      );
+
+    return new Error(msg);
   }
 
   mergeSourceMap(map: Object) {
@@ -302,7 +314,28 @@ export default class File {
     }
 
     debug(this.opts, "Parse start");
-    const ast = parseCode(code, parserOpts || this.parserOpts);
+    let ast;
+    try {
+      ast = parseCode(code, parserOpts || this.parserOpts);
+    } catch (err) {
+      const loc = err.loc;
+      if (loc) {
+        err.loc = null;
+        err.message =
+          `${this.opts.filename}: ${err.message}\n` +
+          codeFrameColumns(
+            this.code,
+            {
+              start: {
+                line: loc.line,
+                column: loc.column + 1,
+              },
+            },
+            this.opts,
+          );
+      }
+      throw err;
+    }
     debug(this.opts, "Parse stop");
     return ast;
   }
@@ -363,47 +396,6 @@ export default class File {
     }
 
     return this.generate();
-  }
-
-  wrap(code: string, callback: Function): BabelFileResult {
-    code = code + "";
-
-    try {
-      return callback();
-    } catch (err) {
-      if (err._babel) {
-        throw err;
-      } else {
-        err._babel = true;
-      }
-
-      let message = (err.message = `${this.opts.filename}: ${err.message}`);
-
-      const loc = err.loc;
-      if (loc) {
-        const location = {
-          start: {
-            line: loc.line,
-            column: loc.column + 1,
-          },
-        };
-        err.codeFrame = codeFrameColumns(code, location, this.opts);
-        message += "\n" + err.codeFrame;
-      }
-
-      if (process.browser) {
-        // chrome has it's own pretty stringifier which doesn't use the stack property
-        // https://github.com/babel/babel/issues/2175
-        err.message = message;
-      }
-
-      if (err.stack) {
-        const newStack = err.stack.replace(err.message, message);
-        err.stack = newStack;
-      }
-
-      throw err;
-    }
   }
 
   addCode(code: string) {
