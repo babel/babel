@@ -1,4 +1,4 @@
-export default function({ messages, types: t }) {
+export default function({ types: t }) {
   /**
    * Helper function to run a statement before an expression by replacing it with a comma expression
    * and wrapping the statement in an IIFE as the first operand.
@@ -23,7 +23,7 @@ export default function({ messages, types: t }) {
           for (const violation of (binding.constantViolations: Array)) {
             const throwNode = t.throwStatement(
               t.newExpression(t.identifier("Error"), [
-                t.stringLiteral(messages.get("readOnly", name)),
+                t.stringLiteral(`"${name}" is read-only`),
               ]),
             );
 

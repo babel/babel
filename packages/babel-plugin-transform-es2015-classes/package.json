@@ -11,7 +11,6 @@
     "babel-helper-function-name": "7.0.0-beta.2",
     "babel-helper-optimise-call-expression": "7.0.0-beta.2",
     "babel-helper-replace-supers": "7.0.0-beta.2",
-    "babel-messages": "7.0.0-beta.2",
     "babel-template": "7.0.0-beta.2",
     "babel-traverse": "7.0.0-beta.2",
     "babel-types": "7.0.0-beta.2"

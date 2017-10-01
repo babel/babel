@@ -1,6 +1,5 @@
 import * as helpers from "babel-helpers";
 import generator from "babel-generator";
-import * as messages from "babel-messages";
 import template from "babel-template";
 import * as t from "babel-types";
 
@@ -178,7 +177,7 @@ export default function(
   if (build) {
     tree = build(namespace, builder);
   } else {
-    throw new Error(messages.get("unsupportedOutputType", outputType));
+    throw new Error(`Unsupported output type ${outputType}`);
   }
 
   return generator(tree).code;

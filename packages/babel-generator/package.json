@@ -11,7 +11,6 @@
     "lib"
   ],
   "dependencies": {
-    "babel-messages": "7.0.0-beta.2",
     "babel-types": "7.0.0-beta.2",
     "jsesc": "^2.5.1",
     "lodash": "^4.2.0",

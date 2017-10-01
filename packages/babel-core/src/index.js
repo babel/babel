@@ -5,7 +5,6 @@ export { resolvePlugin, resolvePreset } from "./config/loading/files";
 export { version } from "../package";
 export { getEnv } from "./config/helpers/environment";
 
-export * as messages from "babel-messages";
 export * as types from "babel-types";
 export traverse from "babel-traverse";
 export template from "babel-template";
