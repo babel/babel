@@ -41,3 +41,7 @@ notifications:
       #     travis encrypt "babeljs:<token>#activity" --add notifications.slack.rooms
       # where <token> is from the Slack integration settings.
       secure: SrwPKRe2AiNAKRo/+2yW/x4zxbWf2FBXuBuuPkdTJVTpWe++Jin1lXYJWTKP1a1i/IbmhffBO9YZcUFbeuXJpRM083vO8VYpyuBMQRqWD+Z3o+ttPlHGOJgnj0nkIcGRk6k7PpyHNnIkixfEJDvbbg9lN1Jswb3xkL8iYIHpuFE=
+
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/
