@@ -17,7 +17,7 @@ function makePath(path) {
  * Given a file AST for a given helper, get a bunch of metadata about it so that Babel can quickly render
  * the helper is whatever context it is needed in.
  */
-function getHelperMetadata(file) {
+function getHelperMetadata(name, file) {
   const globals = new Set();
   const localBindingNames = new Set();
   // Maps imported identifier -> helper name
@@ -58,7 +58,10 @@ function getHelperMetadata(file) {
         }
 
         exportName = decl.node.id.name;
+      } else if (decl.isIdentifier()) {
+        exportName = decl.node.name;
       }
+
       exportPath = makePath(child);
     },
     ExportAllDeclaration(child) {
@@ -120,6 +123,7 @@ function getHelperMetadata(file) {
   exportBindingAssignments.reverse();
 
   return {
+    helperName: name,
     globals: Array.from(globals),
     localBindingNames: Array.from(localBindingNames),
     dependencies,
@@ -142,6 +146,7 @@ function permuteHelperAST(file, metadata, id, getLocalBindings, getDependency) {
   if (!id) return;
 
   const {
+    helperName,
     localBindingNames,
     dependencies,
     exportBindingAssignments,
@@ -165,7 +170,9 @@ function permuteHelperAST(file, metadata, id, getLocalBindings, getDependency) {
     if (newName !== name) toRename[name] = newName;
   });
 
-  if (id.type === "Identifier" && exportName !== id.name) {
+  const isKeywordHelper = keywordHelpers.indexOf(helperName) !== -1;
+
+  if (id.type === "Identifier" && exportName !== id.name && !isKeywordHelper) {
     toRename[exportName] = id.name;
   }
 
@@ -178,10 +185,11 @@ function permuteHelperAST(file, metadata, id, getLocalBindings, getDependency) {
       const impsBindingRefs = importBindingsReferences.map(p => path.get(p));
 
       const decl = exp.get("declaration");
+
       if (id.type === "Identifier") {
         if (decl.isFunctionDeclaration()) {
           exp.replaceWith(decl);
-        } else {
+        } else if (!isKeywordHelper) {
           exp.replaceWith(
             t.variableDeclaration("var", [t.variableDeclarator(id, decl.node)]),
           );
@@ -235,7 +243,7 @@ function loadHelper(name) {
       return t.file(t.program(Array.isArray(ast) ? ast : [ast]));
     };
 
-    const metadata = getHelperMetadata(fn());
+    const metadata = getHelperMetadata(name, fn());
 
     // Preload dependencies
     metadata.dependencies.forEach(loadHelper);
@@ -267,5 +275,7 @@ export function get(
 export const list = Object.keys(helpers)
   .map(name => name.replace(/^_/, ""))
   .filter(name => name !== "__esModule");
+
+export const keywordHelpers = ["typeof", "extends", "instanceof"];
 
 export default get;
