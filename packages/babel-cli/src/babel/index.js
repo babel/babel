@@ -154,10 +154,14 @@ commander.option(
   "-D, --copy-files",
   "When compiling a directory copy over non-compilable files",
 );
+commander.option(
+  "--include-dotfiles",
+  "Include dotfiles when compiling and copying non-compilable files",
+);
 commander.option("-q, --quiet", "Don't log anything");
 commander.option(
   "--delete-dir-on-start",
-  "Delete's the out directory before compilation",
+  "Delete the out directory before compilation",
 );
 /* eslint-enable max-len */
 
@@ -233,6 +237,7 @@ delete opts.skipInitialBuild;
 delete opts.outFile;
 delete opts.outDir;
 delete opts.copyFiles;
+delete opts.includeDotfiles;
 delete opts.quiet;
 delete opts.configFile;
 delete opts.deleteDirOnStart;

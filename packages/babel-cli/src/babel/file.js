@@ -130,9 +130,11 @@ export default function(commander, filenames, opts) {
       if (stat.isDirectory()) {
         const dirname = filename;
 
-        util.readdirFilter(filename).forEach(function(filename) {
-          _filenames.push(path.join(dirname, filename));
-        });
+        util
+          .readdirForCompilable(filename, commander.includeDotfiles)
+          .forEach(function(filename) {
+            _filenames.push(path.join(dirname, filename));
+          });
       } else {
         _filenames.push(filename);
       }

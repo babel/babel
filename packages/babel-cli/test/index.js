@@ -88,10 +88,14 @@ const assertTest = function(stdout, stderr, opts) {
   }
 
   if (opts.outFiles) {
-    const actualFiles = readDir(path.join(tmpLoc));
+    const actualFiles = readDir(path.join(tmpLoc), fileFilter);
 
     Object.keys(actualFiles).forEach(function(filename) {
-      if (!opts.inFiles.hasOwnProperty(filename)) {
+      if (
+        // saveInFiles always creates an empty .babelrc, so lets exclude for now
+        filename !== ".babelrc" &&
+        !opts.inFiles.hasOwnProperty(filename)
+      ) {
         const expect = opts.outFiles[filename];
         const actual = actualFiles[filename];
 
