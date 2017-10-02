@@ -49,10 +49,8 @@ function transformFile(file: File, pluginPasses: PluginPasses): void {
     const passes = [];
     const visitors = [];
 
-    for (const [plugin, pluginOpts] of pluginPairs.concat([
-      loadBlockHoistPlugin(),
-    ])) {
-      const pass = new PluginPass(file, plugin.key, pluginOpts);
+    for (const plugin of pluginPairs.concat([loadBlockHoistPlugin()])) {
+      const pass = new PluginPass(file, plugin.key, plugin.options);
 
       passPairs.push([plugin, pass]);
       passes.push(pass);

@@ -15,7 +15,7 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
   });
 
   for (const pluginPairs of config.passes) {
-    for (const [plugin] of pluginPairs) {
+    for (const plugin of pluginPairs) {
       if (plugin.manipulateOptions) {
         plugin.manipulateOptions(options, options.parserOpts);
       }

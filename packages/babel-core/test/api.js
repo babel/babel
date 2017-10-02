@@ -154,9 +154,8 @@ describe("api", function() {
       plugins: [__dirname + "/../../babel-plugin-syntax-jsx"],
     }).then(function(result) {
       assert.ok(
-        result.options.plugins[0][0].manipulateOptions
-          .toString()
-          .indexOf("jsx") >= 0,
+        result.options.plugins[0].manipulateOptions.toString().indexOf("jsx") >=
+          0,
       );
     });
   });

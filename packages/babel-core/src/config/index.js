@@ -9,7 +9,7 @@ export type ResolvedConfig = {
 };
 
 export type { Plugin };
-export type PluginPassList = Array<[Plugin, ?{}]>;
+export type PluginPassList = Array<Plugin>;
 export type PluginPasses = Array<PluginPassList>;
 
 /**

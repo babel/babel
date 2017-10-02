@@ -6,7 +6,7 @@ import loadConfig, { type Plugin } from "../config";
 
 let LOADED_PLUGIN: Plugin | void;
 
-export default function loadBlockHoistPlugin(): [Plugin, void] {
+export default function loadBlockHoistPlugin(): Plugin {
   if (!LOADED_PLUGIN) {
     // Lazy-init the internal plugin to remove the init-time circular
     // dependency between plugins being passed babel-core's export object,
@@ -15,11 +15,11 @@ export default function loadBlockHoistPlugin(): [Plugin, void] {
       babelrc: false,
       plugins: [blockHoistPlugin],
     });
-    LOADED_PLUGIN = config ? config.passes[0][0][0] : undefined;
+    LOADED_PLUGIN = config ? config.passes[0][0] : undefined;
     if (!LOADED_PLUGIN) throw new Error("Assertion failure");
   }
 
-  return [LOADED_PLUGIN, undefined];
+  return LOADED_PLUGIN;
 }
 
 const blockHoistPlugin = {
