@@ -21,6 +21,7 @@ This is quite taboo but let's look at the pros and cons:
 
  * Codebase looks more intimidating.
  * Repo is bigger in size.
+ * [Can't `npm install` modules directly from GitHub](https://github.com/npm/npm/issues/2974)
  * ???
 
 ## This is dumb! Nobody in open source does this!
