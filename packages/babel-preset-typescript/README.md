@@ -1,6 +1,6 @@
 # babel-preset-typescript
 
-> Babel preset for TypeScript.  
+> Babel preset for TypeScript.
 
 This preset includes the following plugins:
 
