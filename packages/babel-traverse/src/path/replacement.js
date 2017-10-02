@@ -77,14 +77,18 @@ export function replaceWithSourceString(replacement) {
   } catch (err) {
     const loc = err.loc;
     if (loc) {
-      const location = {
-        start: {
-          line: loc.line,
-          column: loc.column + 1,
-        },
-      };
-      err.message += " - make sure this is an expression.";
-      err.message += "\n" + codeFrameColumns(replacement, location);
+      // Set the location to null or else the re-thrown exception could
+      // incorrectly interpret the location as referencing the file being
+      // transformed.
+      err.loc = null;
+      err.message +=
+        " - make sure this is an expression.\n" +
+        codeFrameColumns(replacement, {
+          start: {
+            line: loc.line,
+            column: loc.column + 1,
+          },
+        });
     }
     throw err;
   }

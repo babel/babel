@@ -1,39 +1,47 @@
-import File from "./file";
+// @flow
+
+import type File from "./file/file";
 
 export default class PluginPass {
-  constructor(file: File, key: string, options: Object = {}) {
-    this._map = new Map();
-
-    this.key = key;
-    this.file = file;
-    this.opts = options;
-  }
-
-  key: string;
+  _map: Map<mixed, mixed> = new Map();
+  key: ?string;
   file: File;
   opts: Object;
 
-  set(key: string, val) {
+  constructor(file: File, key: ?string, options: ?Object) {
+    this.key = key;
+    this.file = file;
+    this.opts = options || {};
+  }
+
+  set(key: mixed, val: mixed) {
     this._map.set(key, val);
   }
 
-  get(key: string): any {
+  get(key: mixed): any {
     return this._map.get(key);
   }
 
-  addHelper(...args) {
-    return this.file.addHelper(...args);
+  addHelper(name: string) {
+    return this.file.addHelper(name);
   }
 
-  addImport(...args) {
-    return this.file.addImport(...args);
+  addImport() {
+    return this.file.addImport();
   }
 
-  getModuleName(...args) {
-    return this.file.getModuleName(...args);
+  getModuleName(): ?string {
+    return this.file.getModuleName();
   }
 
-  buildCodeFrameError(...args) {
-    return this.file.buildCodeFrameError(...args);
+  buildCodeFrameError(
+    node: ?{
+      loc?: { line: number, column: number },
+      _loc?: { line: number, column: number },
+    },
+    msg: string,
+    Error?: typeof Error,
+  ) {
+    return this.file.buildCodeFrameError(node, msg, Error);
   }
 }

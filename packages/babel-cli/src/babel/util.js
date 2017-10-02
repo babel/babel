@@ -63,7 +63,7 @@ export function compile(filename, opts) {
     return babel.transformFileSync(filename, opts);
   } catch (err) {
     if (commander.watch) {
-      console.error(toErrorStack(err));
+      console.error(err);
       return { ignored: true };
     } else {
       throw err;
@@ -87,16 +87,8 @@ export function deleteDir(path) {
   }
 }
 
-function toErrorStack(err) {
-  if (err._babel && err instanceof SyntaxError) {
-    return `${err.name}: ${err.message}\n${err.codeFrame}`;
-  } else {
-    return err.stack;
-  }
-}
-
 process.on("uncaughtException", function(err) {
-  console.error(toErrorStack(err));
+  console.error(err);
   process.exit(1);
 });
 
