@@ -6,6 +6,8 @@ This preset includes the following plugins:
 
 - [transform-typescript](https://babeljs.io/docs/plugins/transform-typescript/)
 
+> You will need to specify `--extensions ".ts"` for `babel-cli`, `babel-node` to handle `.ts` files.
+
 ## Example
 
 **In**
