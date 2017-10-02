@@ -36,7 +36,7 @@ export default {
 };
 ```
 
-## How to define an helper?
+## Defining Helpers
 
 > **NOTE**: This package is only meant to be used by the packages inluded in this repository. There is no way for third-party plugins to define an helper.
 
