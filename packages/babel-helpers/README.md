@@ -40,7 +40,11 @@ export default {
 
 > **NOTE**: This package is only meant to be used by the packages inluded in this repository. There is no way for third-party plugins to define an helper.
 
-Helpers are defined in the `src/helpers.js` file.
+Helpers are defined in the `src/helpers.js` file, and they must be valid modules which follow these guidelines:
+ - they must have a default export, which is their entry-point;
+ - they can't have named exports;
+ - they can import other helpers, exclusively by using default imports.
+
 ```js
 helpers.customHelper = defineHelper(`
   import dep from "dependency";
@@ -50,8 +54,3 @@ helpers.customHelper = defineHelper(`
   }
 `);
 ```
-
-Helpers...
- - ... must have a default export, which is the entry-point of the helper;
- - ... can't have named exports;
- - ... can import other helpers, exclusively by using default imports.
