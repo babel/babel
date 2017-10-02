@@ -21,7 +21,7 @@ export default function(commander, filenames, opts) {
       src,
       defaults(
         {
-          sourceFileName: slash(path.relative(dest + "/..", src)),
+          sourceFilename: slash(path.relative(dest + "/..", src)),
           sourceMapTarget: path.basename(relative),
         },
         opts,

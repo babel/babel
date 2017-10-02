@@ -53,7 +53,7 @@ export default class File {
 
     this.parserOpts = {
       sourceType: this.opts.sourceType,
-      sourceFileName: this.opts.filename,
+      sourceFilename: this.opts.filename,
       plugins: [],
     };
 

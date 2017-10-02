@@ -49,7 +49,7 @@ const optionNames = new Set([
   "minified",
   "sourceMaps",
   "sourceMapTarget",
-  "sourceFileName",
+  "sourceFilename",
   "sourceRoot",
   "babelrc",
   "sourceType",
@@ -199,7 +199,7 @@ class OptionManager {
     }
 
     defaults(opts, {
-      sourceFileName: basenameRelative,
+      sourceFilename: basenameRelative,
       sourceMapTarget: basenameRelative,
     });
 

@@ -109,7 +109,7 @@ export default function(commander, filenames, opts) {
           code,
           defaults(
             {
-              sourceFileName: "stdin",
+              sourceFilename: "stdin",
             },
             opts,
           ),
@@ -154,7 +154,7 @@ export default function(commander, filenames, opts) {
         filename,
         defaults(
           {
-            sourceFileName: sourceFilename,
+            sourceFilename: sourceFilename,
           },
           opts,
         ),
