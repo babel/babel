@@ -19,7 +19,6 @@ function addCompletionRecords(path, paths) {
 
 export function getCompletionRecords(): Array {
   let paths = [];
-
   if (this.isIfStatement()) {
     paths = addCompletionRecords(this.get("consequent"), paths);
     paths = addCompletionRecords(this.get("alternate"), paths);
@@ -33,6 +32,8 @@ export function getCompletionRecords(): Array {
     paths = addCompletionRecords(this.get("block"), paths);
     paths = addCompletionRecords(this.get("handler"), paths);
     paths = addCompletionRecords(this.get("finalizer"), paths);
+  } else if (this.isCatchClause()) {
+    paths = addCompletionRecords(this.get("body"), paths);
   } else {
     paths.push(this);
   }
