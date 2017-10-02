@@ -444,6 +444,7 @@ export default class File {
     const result = {
       metadata: this.metadata,
       options: this.opts,
+      parserOptions: this.parserOpts,
       ignored: !!ignored,
       code: null,
       ast: null,
