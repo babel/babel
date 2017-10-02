@@ -20,14 +20,32 @@ function makePath(path) {
 function getHelperMetadata(file) {
   const globals = new Set();
   const localBindingNames = new Set();
+  // Maps imported identifier -> helper name
+  const dependencies = new Map();
 
   let exportName;
   let exportPath;
   const exportBindingAssignments = [];
+  const importPaths = [];
+  const importBindingsReferences = [];
 
   traverse(file, {
     ImportDeclaration(child) {
-      throw child.buildCodeFrameError("Helpers may not import anything.");
+      const name = child.node.source.value;
+      if (!helpers[name]) {
+        throw child.buildCodeFrameError(`Unknown helper ${name}`);
+      }
+      if (
+        child.get("specifiers").length !== 1 ||
+        !child.get("specifiers.0").isImportDefaultSpecifier()
+      ) {
+        throw child.buildCodeFrameError(
+          "Helpers can only import a default value",
+        );
+      }
+      const bindingIdentifier = child.node.specifiers[0].local;
+      dependencies.set(bindingIdentifier, name);
+      importPaths.push(makePath(child));
     },
     ExportDefaultDeclaration(child) {
       const decl = child.get("declaration");
@@ -62,15 +80,19 @@ function getHelperMetadata(file) {
 
       Object.keys(bindings).forEach(name => {
         if (name === exportName) return;
+        if (dependencies.has(bindings[name].identifier)) return;
 
         localBindingNames.add(name);
       });
     },
     ReferencedIdentifier(child) {
       const name = child.node.name;
-      const binding = child.scope.getBinding(name);
-
-      if (!binding) globals.add(name);
+      const binding = child.scope.getBinding(name, /* noGlobal */ true);
+      if (!binding) {
+        globals.add(name);
+      } else if (dependencies.has(binding.identifier)) {
+        importBindingsReferences.push(makePath(child));
+      }
     },
     AssignmentExpression(child) {
       const left = child.get("left");
@@ -100,17 +122,20 @@ function getHelperMetadata(file) {
   return {
     globals: Array.from(globals),
     localBindingNames: Array.from(localBindingNames),
+    dependencies,
     exportBindingAssignments,
     exportPath,
     exportName,
+    importBindingsReferences,
+    importPaths,
   };
 }
 
 /**
  * Given a helper AST and information about how it will be used, update the AST to match the usage.
  */
-function permuteHelperAST(file, metadata, id, localBindings) {
-  if (localBindings && !id) {
+function permuteHelperAST(file, metadata, id, getLocalBindings, getDependency) {
+  if (getLocalBindings && !id) {
     throw new Error("Unexpected local bindings for module-based helpers.");
   }
 
@@ -118,13 +143,21 @@ function permuteHelperAST(file, metadata, id, localBindings) {
 
   const {
     localBindingNames,
+    dependencies,
     exportBindingAssignments,
     exportPath,
     exportName,
+    importBindingsReferences,
+    importPaths,
   } = metadata;
 
+  const dependenciesRefs = {};
+  dependencies.forEach((name, id) => {
+    dependenciesRefs[id.name] = getDependency(name);
+  });
+
   const toRename = {};
-  const bindings = new Set(localBindings || []);
+  const bindings = new Set((getLocalBindings && getLocalBindings()) || []);
   localBindingNames.forEach(name => {
     let newName = name;
     while (bindings.has(newName)) newName = "_" + newName;
@@ -138,7 +171,12 @@ function permuteHelperAST(file, metadata, id, localBindings) {
 
   traverse(file, {
     Program(path) {
+      // We need to compute these in advance because removing nodes would
+      // invalidate the paths.
       const exp = path.get(exportPath);
+      const imps = importPaths.map(p => path.get(p));
+      const impsBindingRefs = importBindingsReferences.map(p => path.get(p));
+
       const decl = exp.get("declaration");
       if (id.type === "Identifier") {
         if (decl.isFunctionDeclaration()) {
@@ -174,6 +212,12 @@ function permuteHelperAST(file, metadata, id, localBindings) {
         path.scope.rename(name, toRename[name]);
       });
 
+      for (const path of imps) path.remove();
+      for (const path of impsBindingRefs) {
+        const node = t.cloneDeep(dependenciesRefs[path.node.name]);
+        path.replaceWith(node);
+      }
+
       // We only use "traverse" for all the handy scoping helpers, so we can stop immediately without
       // actually doing the traversal.
       path.stop();
@@ -193,9 +237,12 @@ function loadHelper(name) {
 
     const metadata = getHelperMetadata(fn());
 
-    helperData[name] = function(id, localBindings) {
+    // Preload dependencies
+    metadata.dependencies.forEach(loadHelper);
+
+    helperData[name] = function(getDependency, id, getLocalBindings) {
       const file = fn();
-      permuteHelperAST(file, metadata, id, localBindings);
+      permuteHelperAST(file, metadata, id, getLocalBindings, getDependency);
 
       return {
         nodes: file.program.body,
@@ -207,9 +254,14 @@ function loadHelper(name) {
   return helperData[name];
 }
 
-export function get(name, id?, localBindings?: Array) {
+export function get(
+  name,
+  getDependency: string => t.Expression,
+  id?,
+  getLocalBindings?: () => string[],
+) {
   const helper = loadHelper(name);
-  return helper(id, localBindings);
+  return helper(getDependency, id, getLocalBindings);
 }
 
 export const list = Object.keys(helpers)

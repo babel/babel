@@ -169,12 +169,16 @@ export default class File {
       return t.memberExpression(runtime, t.identifier(name));
     }
 
-    const ownBindingNames = Object.keys(this.scope.getAllBindings());
     const uid = (this.declarations[name] = this.scope.generateUidIdentifier(
       name,
     ));
 
-    const { nodes, globals } = getHelper(name, uid, ownBindingNames);
+    const { nodes, globals } = getHelper(
+      name,
+      name => this.addHelper(name),
+      uid,
+      () => Object.keys(this.scope.getAllBindings()),
+    );
 
     globals.forEach(name => {
       if (this.path.scope.hasBinding(name, true /* noGlobals */)) {
@@ -187,6 +191,12 @@ export default class File {
     });
 
     this.path.unshiftContainer("body", nodes);
+    // TODO: NodePath#unshiftContainer should automatically register new
+    // bindings.
+    this.path.get("body").forEach(path => {
+      if (nodes.indexOf(path.node) === -1) return;
+      if (path.isVariableDeclaration()) this.scope.registerDeclaration(path);
+    });
 
     return uid;
   }

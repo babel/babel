@@ -60,7 +60,15 @@ function makeTransformOpts(modules, useBuiltIns) {
   return opts;
 }
 
-function buildRuntimeRewritePlugin(relativePath, helperName) {
+function adjustImportPath(node, relativePath) {
+  if (helpers.list.indexOf(node.value) >= 0) {
+    node.value = `./${node.value}`;
+  } else {
+    node.value = node.value.replace(/^babel-runtime/, relativePath)
+  }
+}
+
+function buildRuntimeRewritePlugin(relativePath, helperName, dependencies) {
   return {
     pre(file) {
       const original = file.get("helperGenerator");
@@ -73,9 +81,7 @@ function buildRuntimeRewritePlugin(relativePath, helperName) {
     },
     visitor: {
       ImportDeclaration(path) {
-        path.get("source").node.value = path
-          .get("source")
-          .node.value.replace(/^babel-runtime/, relativePath);
+        adjustImportPath(path.get("source").node, relativePath);
       },
       CallExpression(path) {
         if (
@@ -86,10 +92,9 @@ function buildRuntimeRewritePlugin(relativePath, helperName) {
           return;
         }
 
-        // replace any reference to babel-runtime with a relative path
-        path.get("arguments")[0].node.value = path
-          .get("arguments")[0]
-          .node.value.replace(/^babel-runtime/, relativePath);
+        // replace any reference to babel-runtime and other helpers
+        // with a relative path
+        adjustImportPath(path.get("arguments")[0].node, relativePath);
       },
     },
   };
