@@ -107,7 +107,8 @@ function buildHelper(helperName, modules, useBuiltIns) {
       : null;
   const sourceType = modules === "commonjs" ? "script" : "module";
 
-  const tree = t.program(helpers.get(helperName, id).nodes, [], sourceType);
+  const helper = helpers.get(helperName, null, id);
+  const tree = t.program(helper.nodes, [], sourceType);
   const transformOpts = makeTransformOpts(modules, useBuiltIns);
 
   const relative = useBuiltIns ? "../.." : "..";
