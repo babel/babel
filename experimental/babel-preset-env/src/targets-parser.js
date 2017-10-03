@@ -106,33 +106,35 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
     targets = mergeBrowsers(queryBrowsers, targets);
   }
   // Parse remaining targets
-  const parsed = Object.keys(targets).sort().reduce((
-    results: ParsedResult,
-    target: string,
-  ): ParsedResult => {
-    if (target !== "browsers") {
-      const value = targets[target];
+  const parsed = Object.keys(targets)
+    .sort()
+    .reduce(
+      (results: ParsedResult, target: string): ParsedResult => {
+        if (target !== "browsers") {
+          const value = targets[target];
 
-      // Warn when specifying minor/patch as a decimal
-      if (typeof value === "number" && value % 1 !== 0) {
-        results.decimalWarnings.push({ target, value });
-      }
+          // Warn when specifying minor/patch as a decimal
+          if (typeof value === "number" && value % 1 !== 0) {
+            results.decimalWarnings.push({ target, value });
+          }
 
-      // Check if we have a target parser?
-      const parser = targetParserMap[target] || targetParserMap.__default;
-      const [parsedTarget, parsedValue] = parser(target, value);
+          // Check if we have a target parser?
+          const parser = targetParserMap[target] || targetParserMap.__default;
+          const [parsedTarget, parsedValue] = parser(target, value);
 
-      if (parsedValue) {
-        // Merge (lowest wins)
-        results.targets[parsedTarget] = parsedValue;
-      }
-    }
+          if (parsedValue) {
+            // Merge (lowest wins)
+            results.targets[parsedTarget] = parsedValue;
+          }
+        }
 
-    return results;
-  }, {
-    targets: targetOpts,
-    decimalWarnings: [],
-  });
+        return results;
+      },
+      {
+        targets: targetOpts,
+        decimalWarnings: [],
+      },
+    );
 
   outputDecimalWarning(parsed.decimalWarnings);
 

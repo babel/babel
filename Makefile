@@ -5,7 +5,7 @@ export NODE_ENV = test
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
 
-SOURCES = packages codemods
+SOURCES = packages codemods experimental
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 

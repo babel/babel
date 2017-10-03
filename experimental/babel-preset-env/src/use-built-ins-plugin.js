@@ -13,25 +13,25 @@ function isPolyfillSource(value: string): boolean {
   return value === "babel-polyfill";
 }
 
-function warnOnInstanceMethod() {
-  // state.opts.debug &&
-  //   console.warn(
-  //     `Adding a polyfill: An instance method may have been used: ${details}`,
-  //   );
-}
+// function warnOnInstanceMethod() {
+// state.opts.debug &&
+//   console.warn(
+//     `Adding a polyfill: An instance method may have been used: ${details}`,
+//   );
+// }
 
 function has(obj: Object, key: string): boolean {
   return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
-function getObjectString(node: Object): string {
-  if (node.type === "Identifier") {
-    return node.name;
-  } else if (node.type === "MemberExpression") {
-    return `${getObjectString(node.object)}.${getObjectString(node.property)}`;
-  }
-  return node.name;
-}
+// function getObjectString(node: Object): string {
+//   if (node.type === "Identifier") {
+//     return node.name;
+//   } else if (node.type === "MemberExpression") {
+//     return `${getObjectString(node.object)}.${getObjectString(node.property)}`;
+//   }
+//   return node.name;
+// }
 
 const modulePathMap = {
   "regenerator-runtime": "babel-polyfill/lib/regenerator-runtime/runtime",
@@ -200,7 +200,7 @@ export default function({ types: t }: { types: Object }): Plugin {
           t.isIdentifier(prop) &&
           has(definitions.instanceMethods, prop.name)
         ) {
-          warnOnInstanceMethod(state, getObjectString(node));
+          //warnOnInstanceMethod(state, getObjectString(node));
           const builtIn = definitions.instanceMethods[prop.name];
           addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
         } else if (node.computed) {
@@ -209,13 +209,13 @@ export default function({ types: t }: { types: Object }): Plugin {
             has(definitions.instanceMethods, prop.value)
           ) {
             const builtIn = definitions.instanceMethods[prop.value];
-            warnOnInstanceMethod(state, `${obj.name}['${prop.value}']`);
+            //warnOnInstanceMethod(state, `${obj.name}['${prop.value}']`);
             addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
           } else {
             const res = path.get("property").evaluate();
             if (res.confident) {
               const builtIn = definitions.instanceMethods[res.value];
-              warnOnInstanceMethod(state, `${obj.name}['${res.value}']`);
+              //warnOnInstanceMethod(state, `${obj.name}['${res.value}']`);
               addUnsupported(
                 path.get("property"),
                 state.opts.polyfills,
@@ -264,10 +264,10 @@ export default function({ types: t }: { types: Object }): Plugin {
           t.isIdentifier(prop) &&
           has(definitions.instanceMethods, prop.name)
         ) {
-          warnOnInstanceMethod(
-            state,
-            `${path.parentPath.node.kind} { ${prop.name} } = ${obj.name}`,
-          );
+          // warnOnInstanceMethod(
+          //   state,
+          //   `${path.parentPath.node.kind} { ${prop.name} } = ${obj.name}`,
+          // );
 
           const builtIn = definitions.instanceMethods[prop.name];
           addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);

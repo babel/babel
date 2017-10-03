@@ -68,7 +68,9 @@
     "exclude": [
       "scripts/*.js",
       "packages/*/test/**",
-      "packages/babel-standalone/**"
+      "packages/babel-standalone/**",
+      "codemods/*/test/**",
+      "experimental/*/test/**"
     ],
     "sourceMap": false,
     "instrument": false

@@ -5,30 +5,16 @@
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
-  "repository": "https://github.com/babel/babel-preset-env",
+  "repository": "https://github.com/babel/experimental/babel-preset-env",
   "main": "lib/index.js",
   "scripts": {
-    "build": "rimraf lib && babel src -d lib",
-    "build-data": "node ./scripts/build-data.js",
-    "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'",
-    "coverage": "BABEL_ENV=test nyc npm run test",
-    "coverage-ci": "nyc report --reporter=json && codecov -f coverage/coverage-final.json",
-    "dev": "babel -w src -d lib",
-    "fix": "eslint . --fix",
-    "flow": "flow",
-    "format": "prettier --trailing-comma all --write \"src/*.js\" \"test/*.js\" && prettier --trailing-comma es5 --write \"scripts/*.js\"",
-    "lint": "eslint .",
-    "precommit": "lint-staged",
-    "prepublish": "npm run build",
-    "test": "npm run build && npm run flow && npm run test-only",
-    "test-ci": "nyc npm run test",
-    "test-only": "mocha ./test --compilers js:babel-register -t 10000"
+    "build-data": "node ./scripts/build-data.js"
   },
   "dependencies": {
     "babel-plugin-check-es2015-constants": "7.0.0-beta.2",
-    "babel-plugin-syntax-async-generators": "7.0.0-beta.0",
-    "babel-plugin-syntax-object-rest-spread": "7.0.0-beta.0",
-    "babel-plugin-syntax-optional-catch-binding": "7.0.0-beta.0",
+    "babel-plugin-syntax-async-generators": "7.0.0-beta.2",
+    "babel-plugin-syntax-object-rest-spread": "7.0.0-beta.2",
+    "babel-plugin-syntax-optional-catch-binding": "7.0.0-beta.2",
     "babel-plugin-syntax-trailing-function-commas": "7.0.0-beta.0",
     "babel-plugin-transform-async-to-generator": "7.0.0-beta.2",
     "babel-plugin-transform-async-generator-functions": "7.0.0-beta.2",
@@ -65,90 +51,8 @@
     "semver": "^5.3.0"
   },
   "devDependencies": {
-    "babel-cli": "7.0.0-beta.2",
-    "babel-eslint": "^8.0.1",
     "babel-helper-fixtures": "7.0.0-beta.2",
     "babel-helper-plugin-test-runner": "7.0.0-beta.2",
-    "babel-plugin-istanbul": "^4.1.5",
-    "babel-plugin-transform-flow-strip-types": "7.0.0-beta.2",
-    "babel-preset-env": "2.0.0-beta.2",
-    "babel-register": "7.0.0-beta.2",
-    "chai": "^4.0.2",
-    "codecov": "^2.2.0",
-    "compat-table": "kangax/compat-table#b8477cc0f6d65c000c46213e654d19f350de9fa8",
-    "eslint": "^4.8.0",
-    "eslint-config-babel": "^7.0.2",
-    "eslint-plugin-flowtype": "^2.37.0",
-    "flow-bin": "^0.46.0",
-    "fs-extra": "^3.0.1",
-    "husky": "^0.13.2",
-    "lint-staged": "^4.0.0",
-    "lodash": "^4.17.4",
-    "mocha": "^3.4.2",
-    "nyc": "^11.0.3",
-    "prettier": "1.5.2",
-    "rimraf": "^2.6.1"
-  },
-  "babel": {
-    "presets": [
-      [
-        "env",
-        {
-          "targets": {
-            "node": 4
-          },
-          "loose": true
-        }
-      ]
-    ],
-    "plugins": [
-      "transform-flow-strip-types"
-    ],
-    "env": {
-      "test": {
-        "plugins": [
-          "istanbul"
-        ]
-      }
-    }
-  },
-  "changelog": {
-    "repo": "babel/babel-preset-env",
-    "labels": {
-      "Tag: Breaking Change": ":boom: Breaking Change",
-      "Tag: New Feature": ":rocket: New Feature",
-      "Tag: Bug Fix": ":bug: Bug Fix",
-      "Tag: Polish": ":nail_care: Polish",
-      "Tag: Docs": ":memo: Documentation",
-      "Tag: Internal": ":house: Internal",
-      "Tag: Chore": "Chore",
-      "Tag: Deprecation": "Deprecation"
-    }
-  },
-  "nyc": {
-    "all": true,
-    "include": [
-      "src/*.js"
-    ],
-    "instrument": false,
-    "sourceMap": false
-  },
-  "lint-staged": {
-    "src/**/*.js": [
-      "prettier --trailing-comma all --write",
-      "git add"
-    ],
-    "scripts/*.js": [
-      "prettier --trailing-comma es5 --write",
-      "git add"
-    ],
-    "test/*.js": [
-      "prettier --trailing-comma all --write",
-      "git add"
-    ],
-    "package.json": [
-      "node ./scripts/yarn-install.js",
-      "git add yarn.lock"
-    ]
+    "compat-table": "kangax/compat-table#b8477cc0f6d65c000c46213e654d19f350de9fa8"
   }
 }

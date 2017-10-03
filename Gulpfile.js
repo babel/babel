@@ -18,7 +18,7 @@ const RootMostResolvePlugin = require("webpack-dependency-suite")
 const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
 
-const sources = ["codemods", "packages"];
+const sources = ["codemods", "packages", "experimental"];
 
 function swapSrcWithLib(srcPath) {
   const parts = srcPath.split(path.sep);
