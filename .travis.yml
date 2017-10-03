@@ -23,7 +23,7 @@ script:
   # Babel doesn't build correctly with npm v2 (which comes bundled with Node v4)
   # so we manually upgrade to a known working npm version.
   - npm install --global npm@4
-  - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
+  - 'if [ "$JOB" = "test" ]; then make bootstrap && make test-only; fi'
   - 'if [ "$JOB" = "lint" ]; then make lint && make flow; fi'
 
 matrix:
