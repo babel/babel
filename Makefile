@@ -17,7 +17,7 @@ build-standalone:
 	./node_modules/.bin/gulp build-babel-standalone --cwd=packages/babel-standalone/
 
 build-dist: build
-  make build-standalone
+	make build-standalone
 	cd packages/babel-polyfill; \
 	scripts/build-dist.sh
 	cd packages/babel-runtime; \
