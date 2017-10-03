@@ -19,7 +19,7 @@ const buildUmdWrapper = template(`
   });
 `);
 
-function buildGlobal(builder) {
+function buildGlobal(whitelist) {
   const namespace = t.identifier("babelHelpers");
 
   const body = [];
@@ -58,15 +58,15 @@ function buildGlobal(builder) {
     ]),
   );
 
-  builder(body, namespace);
+  buildHelpers(body, namespace, whitelist);
 
   return tree;
 }
 
-function buildModule(builder) {
+function buildModule(whitelist) {
   const namespace = t.identifier("babelHelpers");
   const body = [];
-  builder(body, namespace);
+  buildHelpers(body, namespace, whitelist);
 
   const module = body.map(helperNode => {
     const possibleAssignment = t.isExpressionStatement(helperNode)
@@ -107,7 +107,7 @@ function buildModule(builder) {
   return t.program(module);
 }
 
-function buildUmd(builder) {
+function buildUmd(whitelist) {
   const namespace = t.identifier("babelHelpers");
 
   const body = [];
@@ -117,7 +117,7 @@ function buildUmd(builder) {
     ]),
   );
 
-  builder(body, namespace);
+  buildHelpers(body, namespace, whitelist);
 
   return t.program([
     buildUmdWrapper({
@@ -135,7 +135,7 @@ function buildUmd(builder) {
   ]);
 }
 
-function buildVar(builder) {
+function buildVar(whitelist) {
   const namespace = t.identifier("babelHelpers");
 
   const body = [];
@@ -145,7 +145,7 @@ function buildVar(builder) {
     ]),
   );
   const tree = t.program(body);
-  builder(body, namespace);
+  buildHelpers(body, namespace, whitelist);
   body.push(t.expressionStatement(namespace));
   return tree;
 }
@@ -170,10 +170,6 @@ export default function(
   whitelist?: Array<string>,
   outputType: "global" | "module" | "umd" | "var" = "global",
 ) {
-  const builder = function(body, namespace) {
-    return buildHelpers(body, namespace, whitelist);
-  };
-
   let tree;
 
   const build = {
@@ -184,7 +180,7 @@ export default function(
   }[outputType];
 
   if (build) {
-    tree = build(builder);
+    tree = build(whitelist);
   } else {
     throw new Error(`Unsupported output type ${outputType}`);
   }
