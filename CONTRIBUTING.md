@@ -139,6 +139,12 @@ To enable the Node.js debugger added in v6.3.0, set the `TEST_DEBUG` environment
 $ TEST_DEBUG=true make test
 ```
 
+Use the `INCLUDE_STANDALONE` variable to run also `babel-standalone` tests:
+
+```sh
+$ INCLUDE_STANDALONE=true make test
+```
+
 You can combine `TEST_DEBUG` with `TEST_GREP` or `TEST_ONLY` to debug a subset of tests. If you plan to stay long in the debugger (which you'll likely do!), you may increase the test timeout by editing [test/mocha.opts](https://github.com/babel/babel/blob/master/test/mocha.opts).
 
 To test the code coverage, use:

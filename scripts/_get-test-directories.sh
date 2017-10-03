@@ -10,8 +10,9 @@ for source in "${sources[@]}"; do
     if [ -n "$TEST_ONLY" ] && [[ `basename $f` != *"$TEST_ONLY"* ]]; then
       continue
     fi
-    # Exclude babel-standalone from coverage runs
-    if [ "$TEST_TYPE" = "cov" ] && [ `basename $f` = 'babel-standalone' ]; then
+
+    # Only include babel-standalone if required
+    if [[ "$INCLUDE_STANDALONE" != 'true' ]] && [ `basename $f` = 'babel-standalone' ]; then
       continue
     fi
 

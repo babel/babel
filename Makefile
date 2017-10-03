@@ -12,6 +12,9 @@ SOURCES = packages codemods
 build: clean
 	make clean-lib
 	./node_modules/.bin/gulp build
+ifeq ("$(INCLUDE_STANDALONE)", "true")
+	make build-standalone
+endif
 
 build-runtime:
 	cd packages/babel-runtime; \
@@ -59,12 +62,12 @@ test-only:
 test: lint test-only
 
 test-ci:
-	make bootstrap-ci
-	make test-only
+	INCLUDE_STANDALONE=true make bootstrap
+	INCLUDE_STANDALONE=true make test-only
 
 test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
-	BABEL_ENV=cov make bootstrap-ci
+	INCLUDE_STANDALONE=true make bootstrap
 	./scripts/test-cov.sh
 	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
@@ -81,16 +84,12 @@ publish:
 bootstrap:
 	make clean-all
 	yarn
-	./node_modules/.bin/lerna bootstrap --ignore babel-standalone
-	make build
-	make build-runtime
-
-bootstrap-ci:
-	make clean-all
-	yarn
+ifeq ("$(INCLUDE_STANDALONE)", "true")
 	./node_modules/.bin/lerna bootstrap
+else
+	./node_modules/.bin/lerna bootstrap --ignore babel-standalone
+endif
 	make build
-	make build-standalone
 	make build-runtime
 
 clean-lib:
