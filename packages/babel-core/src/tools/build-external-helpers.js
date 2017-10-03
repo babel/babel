@@ -3,8 +3,6 @@ import generator from "babel-generator";
 import template from "babel-template";
 import * as t from "babel-types";
 
-const keywordHelpers = ["typeof", "extends", "instanceof"];
-
 const buildUmdWrapper = template(`
   (function (root, factory) {
     if (typeof define === "function" && define.amd) {
@@ -61,44 +59,44 @@ function buildGlobal(namespace, builder) {
   return tree;
 }
 
+const normalizeHelperId = helperId => helperId.replace(/^_+/, "");
+
 function buildModule(namespace, builder) {
   const body = [];
+  const module = [];
   builder(body);
 
-  const module = body.map(helperNode => {
-    const possibleAssignment = t.isExpressionStatement(helperNode)
-      ? helperNode.expression
-      : helperNode;
+  body.forEach(helperNode => {
+    let exportedHelperId;
 
-    const isExportedHelper =
-      t.isAssignmentExpression(possibleAssignment) &&
-      t.isMemberExpression(possibleAssignment.left) &&
-      possibleAssignment.left.object.name === namespace.name;
-
-    if (!isExportedHelper) {
-      return helperNode;
+    if (t.isFunctionDeclaration(helperNode)) {
+      exportedHelperId = normalizeHelperId(helperNode.id.name);
+    } else if (t.isVariableDeclaration(helperNode)) {
+      exportedHelperId = normalizeHelperId(helperNode.declarations[0].id.name);
     }
 
-    const exportedHelper = possibleAssignment;
+    if (!exportedHelperId || helpers.list.indexOf(exportedHelperId) === -1) {
+      module.push(helperNode);
+      return;
+    }
 
-    const identifier = exportedHelper.left.property.name;
-    const isKeywordHelper = keywordHelpers.indexOf(identifier) !== -1;
+    const isKeywordHelper =
+      helpers.keywordHelpers.indexOf(exportedHelperId) !== -1;
 
     if (isKeywordHelper) {
-      return t.exportNamedDeclaration(null, [
-        t.exportSpecifier(
-          t.identifier(`_${identifier}`),
-          t.identifier(identifier),
-        ),
-      ]);
+      module.push(helperNode);
+      module.push(
+        t.exportNamedDeclaration(null, [
+          t.exportSpecifier(
+            t.identifier(`_${exportedHelperId}`),
+            t.identifier(exportedHelperId),
+          ),
+        ]),
+      );
+      return;
     }
 
-    return t.exportNamedDeclaration(
-      t.variableDeclaration("var", [
-        t.variableDeclarator(t.identifier(identifier), exportedHelper.right),
-      ]),
-      [],
-    );
+    module.push(t.exportNamedDeclaration(helperNode, []));
   });
 
   return t.program(module);
@@ -144,8 +142,10 @@ function buildVar(namespace, builder) {
 }
 
 function buildHelpers(body, namespace, whitelist) {
-  const getHelperReference = name =>
-    t.memberExpression(namespace, t.identifier(name));
+  const getHelperReference = name => {
+    const id = t.identifier(name);
+    return namespace ? t.memberExpression(namespace, id) : id;
+  };
 
   helpers.list.forEach(function(name) {
     if (whitelist && whitelist.indexOf(name) < 0) return;
@@ -163,7 +163,8 @@ export default function(
   whitelist?: Array<string>,
   outputType: "global" | "module" | "umd" | "var" = "global",
 ) {
-  const namespace = t.identifier("babelHelpers");
+  const namespace =
+    outputType !== "module" ? t.identifier("babelHelpers") : null;
 
   const builder = function(body) {
     return buildHelpers(body, namespace, whitelist);
