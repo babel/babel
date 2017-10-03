@@ -222,13 +222,13 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
 
   this.replaceWith(t.callExpression(container, []));
   this.traverse(hoistVariablesVisitor);
+
   // add implicit returns to all ending expression statements
   const completionRecords: Array<NodePath> = this.get(
     "callee",
   ).getCompletionRecords();
   for (const path of completionRecords) {
     if (!path.isExpressionStatement()) continue;
-    // console.log(path.node.expression);
 
     const loop = path.findParent(path => path.isLoop());
     if (loop) {
