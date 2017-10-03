@@ -19,7 +19,9 @@ const buildUmdWrapper = template(`
   });
 `);
 
-function buildGlobal(namespace, builder) {
+function buildGlobal(builder) {
+  const namespace = t.identifier("babelHelpers");
+
   const body = [];
   const container = t.functionExpression(
     null,
@@ -56,14 +58,15 @@ function buildGlobal(namespace, builder) {
     ]),
   );
 
-  builder(body);
+  builder(body, namespace);
 
   return tree;
 }
 
-function buildModule(namespace, builder) {
+function buildModule(builder) {
+  const namespace = t.identifier("babelHelpers");
   const body = [];
-  builder(body);
+  builder(body, namespace);
 
   const module = body.map(helperNode => {
     const possibleAssignment = t.isExpressionStatement(helperNode)
@@ -104,7 +107,9 @@ function buildModule(namespace, builder) {
   return t.program(module);
 }
 
-function buildUmd(namespace, builder) {
+function buildUmd(builder) {
+  const namespace = t.identifier("babelHelpers");
+
   const body = [];
   body.push(
     t.variableDeclaration("var", [
@@ -112,7 +117,7 @@ function buildUmd(namespace, builder) {
     ]),
   );
 
-  builder(body);
+  builder(body, namespace);
 
   return t.program([
     buildUmdWrapper({
@@ -130,7 +135,9 @@ function buildUmd(namespace, builder) {
   ]);
 }
 
-function buildVar(namespace, builder) {
+function buildVar(builder) {
+  const namespace = t.identifier("babelHelpers");
+
   const body = [];
   body.push(
     t.variableDeclaration("var", [
@@ -138,7 +145,7 @@ function buildVar(namespace, builder) {
     ]),
   );
   const tree = t.program(body);
-  builder(body);
+  builder(body, namespace);
   body.push(t.expressionStatement(namespace));
   return tree;
 }
@@ -163,9 +170,7 @@ export default function(
   whitelist?: Array<string>,
   outputType: "global" | "module" | "umd" | "var" = "global",
 ) {
-  const namespace = t.identifier("babelHelpers");
-
-  const builder = function(body) {
+  const builder = function(body, namespace) {
     return buildHelpers(body, namespace, whitelist);
   };
 
@@ -179,7 +184,7 @@ export default function(
   }[outputType];
 
   if (build) {
-    tree = build(namespace, builder);
+    tree = build(builder);
   } else {
     throw new Error(`Unsupported output type ${outputType}`);
   }
