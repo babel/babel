@@ -1,6 +1,8 @@
 import syntaxOptionalChaining from "babel-plugin-syntax-optional-chaining";
 
-export default function({ types: t }) {
+export default function({ types: t }, options) {
+  const { loose } = options;
+
   function optional(path, replacementPath, loose = false) {
     const { scope } = path;
     const optionals = [];
@@ -123,7 +125,7 @@ export default function({ types: t }) {
           return;
         }
 
-        optional(path, findReplacementPath(path), this.opts.loose);
+        optional(path, findReplacementPath(path), loose);
       },
     },
   };

@@ -3,7 +3,9 @@ import VanillaTransformer from "./vanilla";
 import annotateAsPure from "babel-helper-annotate-as-pure";
 import nameFunction from "babel-helper-function-name";
 
-export default function({ types: t }) {
+export default function({ types: t }, options) {
+  const { loose } = options;
+
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
 
@@ -51,7 +53,7 @@ export default function({ types: t }) {
         node[VISITED] = true;
 
         let Constructor = VanillaTransformer;
-        if (state.opts.loose) Constructor = LooseTransformer;
+        if (loose) Constructor = LooseTransformer;
 
         path.replaceWith(new Constructor(path, state.file).run());
 

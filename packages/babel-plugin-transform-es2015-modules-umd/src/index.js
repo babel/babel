@@ -30,7 +30,17 @@ const buildWrapper = template(`
   })
 `);
 
-export default function({ types: t }) {
+export default function({ types: t }, options) {
+  const {
+    globals,
+    exactGlobals,
+    loose,
+    allowTopLevelThis,
+    strict,
+    strictMode,
+    noInterop,
+  } = options;
+
   /**
    * Build the assignment statements that initialize the UMD global.
    */
@@ -107,18 +117,9 @@ export default function({ types: t }) {
   return {
     visitor: {
       Program: {
-        exit(path, state) {
+        exit(path) {
           if (!isModule(path)) return;
 
-          const {
-            globals,
-            exactGlobals,
-            loose,
-            allowTopLevelThis,
-            strict,
-            strictMode,
-            noInterop,
-          } = state.opts;
           const browserGlobals = globals || {};
 
           let moduleName = this.getModuleName();

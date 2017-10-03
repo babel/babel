@@ -2,7 +2,9 @@ import { addDefault, isModule } from "babel-helper-module-imports";
 
 import definitions from "./definitions";
 
-export default function({ types: t }) {
+export default function({ types: t }, options) {
+  const { helpers, polyfill, useBuiltIns, useESModules } = options;
+
   function getRuntimeModuleName(opts) {
     return opts.moduleName || "babel-runtime";
   }
@@ -15,13 +17,11 @@ export default function({ types: t }) {
 
   return {
     pre(file) {
-      const moduleName = getRuntimeModuleName(this.opts);
+      const moduleName = getRuntimeModuleName(options);
 
-      if (this.opts.helpers !== false) {
-        const baseHelpersDir = this.opts.useBuiltIns
-          ? "helpers/builtin"
-          : "helpers";
-        const helpersDir = this.opts.useESModules
+      if (helpers !== false) {
+        const baseHelpersDir = useBuiltIns ? "helpers/builtin" : "helpers";
+        const helpersDir = useESModules
           ? `${baseHelpersDir}/es6`
           : baseHelpersDir;
         file.set("helperGenerator", name => {
@@ -41,7 +41,7 @@ export default function({ types: t }) {
         });
       }
 
-      if (this.opts.polyfill && this.opts.useBuiltIns) {
+      if (polyfill && useBuiltIns) {
         throw new Error(
           "The polyfill option conflicts with useBuiltIns; use one or the other",
         );
