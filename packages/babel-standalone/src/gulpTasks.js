@@ -110,7 +110,7 @@ function registerBabelStandaloneTask(gulp, name, exportName, path, version) {
   gulp.task("build-" + name + "-standalone", cb => {
     pump(
       [
-        gulp.src(path + "/src/index.js"),
+        gulp.src(path + "/src/" + name + ".js"),
         webpackBuild(
           name + ".js",
           exportName,
