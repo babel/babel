@@ -12,14 +12,12 @@ SOURCES = packages codemods
 build: clean
 	make clean-lib
 	./node_modules/.bin/gulp build
-ifneq ("$(BABEL_ENV)", "cov")
-	make build-standalone
-endif
 
 build-standalone:
 	./node_modules/.bin/gulp build-babel-standalone --cwd=packages/babel-standalone/
 
 build-dist: build
+  make build-standalone
 	cd packages/babel-polyfill; \
 	scripts/build-dist.sh
 	cd packages/babel-runtime; \
