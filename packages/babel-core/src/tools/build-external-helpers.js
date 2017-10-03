@@ -3,8 +3,6 @@ import generator from "babel-generator";
 import template from "babel-template";
 import * as t from "babel-types";
 
-const keywordHelpers = ["typeof", "extends", "instanceof"];
-
 const buildUmdWrapper = template(`
   (function (root, factory) {
     if (typeof define === "function" && define.amd) {
@@ -64,47 +62,19 @@ function buildGlobal(whitelist) {
 }
 
 function buildModule(whitelist) {
-  const namespace = t.identifier("babelHelpers");
   const body = [];
-  buildHelpers(body, namespace, whitelist);
+  const refs = buildHelpers(body, null, whitelist);
 
-  const module = body.map(helperNode => {
-    const possibleAssignment = t.isExpressionStatement(helperNode)
-      ? helperNode.expression
-      : helperNode;
+  body.unshift(
+    t.exportNamedDeclaration(
+      null,
+      Object.keys(refs).map(name => {
+        return t.exportSpecifier(t.clone(refs[name]), t.identifier(name));
+      }),
+    ),
+  );
 
-    const isExportedHelper =
-      t.isAssignmentExpression(possibleAssignment) &&
-      t.isMemberExpression(possibleAssignment.left) &&
-      possibleAssignment.left.object.name === namespace.name;
-
-    if (!isExportedHelper) {
-      return helperNode;
-    }
-
-    const exportedHelper = possibleAssignment;
-
-    const identifier = exportedHelper.left.property.name;
-    const isKeywordHelper = keywordHelpers.indexOf(identifier) !== -1;
-
-    if (isKeywordHelper) {
-      return t.exportNamedDeclaration(null, [
-        t.exportSpecifier(
-          t.identifier(`_${identifier}`),
-          t.identifier(identifier),
-        ),
-      ]);
-    }
-
-    return t.exportNamedDeclaration(
-      t.variableDeclaration("var", [
-        t.variableDeclarator(t.identifier(identifier), exportedHelper.right),
-      ]),
-      [],
-    );
-  });
-
-  return t.program(module);
+  return t.program(body, [], "module");
 }
 
 function buildUmd(whitelist) {
@@ -151,20 +121,23 @@ function buildVar(whitelist) {
 }
 
 function buildHelpers(body, namespace, whitelist) {
-  const getHelperReference = name =>
-    t.memberExpression(namespace, t.identifier(name));
+  const getHelperReference = name => {
+    return namespace
+      ? t.memberExpression(namespace, t.identifier(name))
+      : t.identifier(name);
+  };
 
+  const refs = {};
   helpers.list.forEach(function(name) {
     if (whitelist && whitelist.indexOf(name) < 0) return;
 
-    const { nodes } = helpers.get(
-      name,
-      getHelperReference,
-      getHelperReference(name),
-    );
+    const ref = (refs[name] = getHelperReference(name));
+
+    const { nodes } = helpers.get(name, getHelperReference, ref);
 
     body.push(...nodes);
   });
+  return refs;
 }
 export default function(
   whitelist?: Array<string>,
