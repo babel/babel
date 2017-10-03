@@ -13,6 +13,10 @@ build: clean
 	make clean-lib
 	./node_modules/.bin/gulp build
 
+build-runtime:
+	cd packages/babel-runtime; \
+	node scripts/build-dist.js
+
 build-standalone:
 	./node_modules/.bin/gulp build-babel-standalone --cwd=packages/babel-standalone/
 
@@ -20,8 +24,7 @@ build-dist: build
 	make build-standalone
 	cd packages/babel-polyfill; \
 	scripts/build-dist.sh
-	cd packages/babel-runtime; \
-	node scripts/build-dist.js
+	make build-runtime
 	node scripts/generate-babel-types-docs.js
 
 watch: clean
@@ -55,8 +58,13 @@ test-only:
 
 test: lint test-only
 
-test-coverage: SHELL:=/bin/bash
-test-coverage:
+test-ci:
+	make bootstrap-ci
+	make test-only
+
+test-ci-coverage: SHELL:=/bin/bash
+test-ci-coverage:
+	BABEL_ENV=cov make bootstrap-ci
 	./scripts/test-cov.sh
 	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
@@ -73,17 +81,17 @@ publish:
 bootstrap:
 	make clean-all
 	yarn
-ifeq ("$(BABEL_ENV)", "with-standalone")
+	./node_modules/.bin/lerna bootstrap --ignore babel-standalone
+	make build
+	make build-runtime
+
+bootstrap-ci:
+	make clean-all
+	yarn
 	./node_modules/.bin/lerna bootstrap
 	make build
 	make build-standalone
-else
-	./node_modules/.bin/lerna bootstrap --ignore babel-standalone
-	make build
-endif
-	make build
-	cd packages/babel-runtime; \
-	node scripts/build-dist.js
+	make build-runtime
 
 clean-lib:
 	$(foreach source, $(SOURCES), \
