@@ -124,7 +124,7 @@ function buildHelpers(body, namespace, whitelist) {
   const getHelperReference = name => {
     return namespace
       ? t.memberExpression(namespace, t.identifier(name))
-      : t.identifier(name);
+      : t.identifier(`_${name}`);
   };
 
   const refs = {};
