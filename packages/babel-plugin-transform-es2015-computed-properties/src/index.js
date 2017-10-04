@@ -1,8 +1,8 @@
 export default function({ types: t, template }, options) {
-  const { loose: isLoose } = options;
-
-  let callback = spec;
-  if (isLoose) callback = loose;
+  const { loose } = options;
+  const pushComputedProps = loose
+    ? pushComputedPropsLoose
+    : pushComputedPropsSpec;
 
   const buildMutatorMapAssign = template(`
     MUTATOR_MAP_REF[KEY] = MUTATOR_MAP_REF[KEY] || {};
@@ -67,7 +67,7 @@ export default function({ types: t, template }, options) {
     );
   }
 
-  function loose(info) {
+  function pushComputedPropsLoose(info) {
     for (const prop of info.computedProps) {
       if (prop.kind === "get" || prop.kind === "set") {
         pushMutatorDefine(info, prop);
@@ -77,7 +77,7 @@ export default function({ types: t, template }, options) {
     }
   }
 
-  function spec(info) {
+  function pushComputedPropsSpec(info) {
     const { objId, body, computedProps, state } = info;
 
     for (const prop of computedProps) {
@@ -166,7 +166,7 @@ export default function({ types: t, template }, options) {
             return mutatorRef;
           };
 
-          const single = callback({
+          const single = pushComputedProps({
             scope,
             objId,
             body,
