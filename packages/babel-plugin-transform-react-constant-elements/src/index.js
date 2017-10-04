@@ -3,7 +3,6 @@ export default function transformReactConstantElement({ types: t }, options) {
   const isAllowMutablePropsOnTagsAnArray = Array.isArray(
     allowMutablePropsOnTags,
   );
-  const isAllowMutablePropsOnTagsNotNull = allowMutablePropsOnTags != null;
   const HOISTED = new WeakSet();
 
   const immutabilityVisitor = {
@@ -76,7 +75,7 @@ export default function transformReactConstantElement({ types: t }, options) {
         // This transform takes the option `allowMutablePropsOnTags`, which is an array
         // of JSX tags to allow mutable props (such as objects, functions) on. Use sparingly
         // and only on tags you know will never modify their own props.
-        if (isAllowMutablePropsOnTagsNotNull) {
+        if (allowMutablePropsOnTags != null) {
           if (isAllowMutablePropsOnTagsAnArray) {
             throw new Error(
               ".allowMutablePropsOnTags must be an array, null, or undefined.",
