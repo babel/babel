@@ -1,4 +1,9 @@
-export default function({ template, types: t }) {
+export default function({ template, types: t }, options) {
+  const { loose: isLoose } = options;
+
+  let callback = spec;
+  if (isLoose) callback = loose;
+
   const buildForOfArray = template(`
     for (var KEY = 0; KEY < ARR.length; KEY++) BODY;
   `);
@@ -112,9 +117,6 @@ export default function({ template, types: t }) {
           replaceWithArray(path);
           return;
         }
-
-        let callback = spec;
-        if (state.opts.loose) callback = loose;
 
         const { node } = path;
         const build = callback(path, state);

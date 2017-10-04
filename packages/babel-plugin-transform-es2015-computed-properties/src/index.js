@@ -1,4 +1,9 @@
-export default function({ types: t, template }) {
+export default function({ types: t, template }, options) {
+  const { loose: isLoose } = options;
+
+  let callback = spec;
+  if (loose) callback = loose;
+
   const buildMutatorMapAssign = template(`
     MUTATOR_MAP_REF[KEY] = MUTATOR_MAP_REF[KEY] || {};
     MUTATOR_MAP_REF[KEY].KIND = VALUE;
@@ -144,9 +149,6 @@ export default function({ types: t, template }) {
               t.variableDeclarator(objId, initPropExpression),
             ]),
           );
-
-          let callback = spec;
-          if (state.opts.loose) callback = loose;
 
           let mutatorRef;
 

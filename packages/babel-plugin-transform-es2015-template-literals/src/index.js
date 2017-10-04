@@ -3,6 +3,9 @@ import annotateAsPure from "babel-helper-annotate-as-pure";
 export default function({ types: t }, options) {
   const { loose } = options;
 
+  let helperName = "taggedTemplateLiteral";
+  if (loose) helperName += "Loose";
+
   /**
    * This function groups the objects into multiple calls to `.concat()` in
    * order to preserve execution order of the primitive conversion, e.g.
@@ -60,9 +63,6 @@ export default function({ types: t }, options) {
           strings.push(value);
           raws.push(t.stringLiteral(raw));
         }
-
-        let helperName = "taggedTemplateLiteral";
-        if (loose) helperName += "Loose";
 
         // Generate a unique name based on the string literals so we dedupe
         // identical strings used in the program.

@@ -3,11 +3,12 @@ import { addDefault, isModule } from "babel-helper-module-imports";
 import definitions from "./definitions";
 
 export default function({ types: t }, options) {
-  const { helpers, polyfill, useBuiltIns, useESModules } = options;
-
-  function getRuntimeModuleName(opts) {
-    return opts.moduleName || "babel-runtime";
-  }
+  const { helpers, moduleName = "babel-runtime", polyfill, regenerator, useBuiltIns, useESModules } = options;
+  const notRegenerator = regenerator !== false;
+  const notPolyfillOrDoesUseBuiltIns = polyfill === false || useBuiltIns;
+  const isPolyfillAndUseBuiltIns = polyfill && useBuiltIns;
+  const baseHelpersDir = useBuiltIns ? "helpers/builtin" : "helpers";
+  const helpersDir = useESModules ? `${baseHelpersDir}/es6` : baseHelpersDir;
 
   function has(obj, key) {
     return Object.prototype.hasOwnProperty.call(obj, key);
@@ -17,13 +18,7 @@ export default function({ types: t }, options) {
 
   return {
     pre(file) {
-      const moduleName = getRuntimeModuleName(options);
-
       if (helpers !== false) {
-        const baseHelpersDir = useBuiltIns ? "helpers/builtin" : "helpers";
-        const helpersDir = useESModules
-          ? `${baseHelpersDir}/es6`
-          : baseHelpersDir;
         file.set("helperGenerator", name => {
           const isInteropHelper = HEADER_HELPERS.indexOf(name) !== -1;
 
@@ -41,7 +36,7 @@ export default function({ types: t }, options) {
         });
       }
 
-      if (polyfill && useBuiltIns) {
+      if (isPolyfillAndUseBuiltIns) {
         throw new Error(
           "The polyfill option conflicts with useBuiltIns; use one or the other",
         );
@@ -79,7 +74,7 @@ export default function({ types: t }, options) {
         const { node, parent, scope } = path;
         if (
           node.name === "regeneratorRuntime" &&
-          state.opts.regenerator !== false
+          notRegenerator
         ) {
           path.replaceWith(
             this.addDefaultImport(
@@ -90,14 +85,13 @@ export default function({ types: t }, options) {
           return;
         }
 
-        if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
+        if (notPolyfillOrDoesUseBuiltIns) return;
 
         if (t.isMemberExpression(parent)) return;
         if (!has(definitions.builtins, node.name)) return;
         if (scope.getBindingIdentifier(node.name)) return;
 
         // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
-        const moduleName = getRuntimeModuleName(state.opts);
         path.replaceWith(
           this.addDefaultImport(
             `${moduleName}/core-js/${definitions.builtins[node.name]}`,
@@ -108,7 +102,7 @@ export default function({ types: t }, options) {
 
       // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
       CallExpression(path, state) {
-        if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
+        if (notPolyfillOrDoesUseBuiltIns) return;
 
         // we can't compile this
         if (path.node.arguments.length) return;
@@ -120,7 +114,6 @@ export default function({ types: t }, options) {
           return;
         }
 
-        const moduleName = getRuntimeModuleName(state.opts);
         path.replaceWith(
           t.callExpression(
             this.addDefaultImport(
@@ -134,12 +127,11 @@ export default function({ types: t }, options) {
 
       // Symbol.iterator in arr -> core.$for.isIterable(arr)
       BinaryExpression(path, state) {
-        if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
+        if (notPolyfillOrDoesUseBuiltIns) return;
 
         if (path.node.operator !== "in") return;
         if (!path.get("left").matchesPattern("Symbol.iterator")) return;
 
-        const moduleName = getRuntimeModuleName(state.opts);
         path.replaceWith(
           t.callExpression(
             this.addDefaultImport(
@@ -154,7 +146,7 @@ export default function({ types: t }, options) {
       // Array.from -> _core.Array.from
       MemberExpression: {
         enter(path, state) {
-          if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
+          if (notPolyfillOrDoesUseBuiltIns) return;
           if (!path.isReferenced()) return;
 
           const { node } = path;
@@ -183,7 +175,6 @@ export default function({ types: t }, options) {
             }
           }
 
-          const moduleName = getRuntimeModuleName(state.opts);
           path.replaceWith(
             this.addDefaultImport(
               `${moduleName}/core-js/${methods[prop.name]}`,
@@ -193,7 +184,7 @@ export default function({ types: t }, options) {
         },
 
         exit(path, state) {
-          if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
+          if (notPolyfillOrDoesUseBuiltIns) return;
           if (!path.isReferenced()) return;
 
           const { node } = path;
@@ -202,7 +193,6 @@ export default function({ types: t }, options) {
           if (!has(definitions.builtins, obj.name)) return;
           if (path.scope.getBindingIdentifier(obj.name)) return;
 
-          const moduleName = getRuntimeModuleName(state.opts);
           path.replaceWith(
             t.memberExpression(
               this.addDefaultImport(

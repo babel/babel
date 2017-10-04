@@ -4,6 +4,7 @@ import syntaxClassProperties from "babel-plugin-syntax-class-properties";
 
 export default function({ types: t }, options) {
   const { loose } = options;
+
   const findBareSupers = {
     Super(path) {
       if (path.parentPath.isCallExpression({ callee: path.node })) {
@@ -49,14 +50,13 @@ export default function({ types: t }, options) {
       ),
     );
 
+  const buildClassProperty = loose ? buildClassPropertyLoose : buildClassPropertySpec;
+
   return {
     inherits: syntaxClassProperties,
 
     visitor: {
       Class(path) {
-        const buildClassProperty = loose
-          ? buildClassPropertyLoose
-          : buildClassPropertySpec;
         const isDerived = !!path.node.superClass;
         let constructor;
         const props = [];

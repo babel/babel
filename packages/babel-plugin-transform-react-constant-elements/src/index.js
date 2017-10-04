@@ -1,5 +1,7 @@
 export default function({ types: t }, options) {
   const { allowMutablePropsOnTags } = options;
+  const isAllowMutablePropsOnTagsAnArray = Array.isArray(allowMutablePropsOnTags);
+  const isAllowMutablePropsOnTagsNotNull = allowMutablePropsOnTags != null;
   const HOISTED = new WeakSet();
 
   const immutabilityVisitor = {
@@ -72,8 +74,8 @@ export default function({ types: t }, options) {
         // This transform takes the option `allowMutablePropsOnTags`, which is an array
         // of JSX tags to allow mutable props (such as objects, functions) on. Use sparingly
         // and only on tags you know will never modify their own props.
-        if (allowMutablePropsOnTags != null) {
-          if (!Array.isArray(allowMutablePropsOnTags)) {
+        if (isAllowMutablePropsOnTagsNotNull) {
+          if (isAllowMutablePropsOnTagsAnArray) {
             throw new Error(
               ".allowMutablePropsOnTags must be an array, null, or undefined.",
             );

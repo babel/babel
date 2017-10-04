@@ -9,6 +9,9 @@ export default function({ types: t }, options) {
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
 
+  let Constructor = VanillaTransformer;
+  if (loose) Constructor = LooseTransformer;
+
   return {
     visitor: {
       ExportDefaultDeclaration(path) {
@@ -51,9 +54,6 @@ export default function({ types: t }, options) {
         }
 
         node[VISITED] = true;
-
-        let Constructor = VanillaTransformer;
-        if (loose) Constructor = LooseTransformer;
 
         path.replaceWith(new Constructor(path, state.file).run());
 

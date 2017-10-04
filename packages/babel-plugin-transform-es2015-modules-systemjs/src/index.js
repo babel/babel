@@ -25,6 +25,7 @@ const TYPE_IMPORT = "Import";
 export default function({ types: t }, options) {
   const { systemGlobal } = options;
   const IGNORE_REASSIGNMENT_SYMBOL = Symbol();
+  const system = systemGlobal || "System";
 
   const reassignmentVisitor = {
     "AssignmentExpression|UpdateExpression"(path) {
@@ -360,7 +361,7 @@ export default function({ types: t }, options) {
           path.node.body = [
             buildTemplate({
               SYSTEM_REGISTER: t.memberExpression(
-                t.identifier(systemGlobal || "System"),
+                t.identifier(system),
                 t.identifier("register"),
               ),
               BEFORE_BODY: beforeBody,
