@@ -15,8 +15,7 @@ const buildWrapper = template(`
 `);
 
 export default function({ types: t }, options) {
-  const { allowTopLevelThis, loose, noInterop, strict, strictMode } = options;
-  const ref = { allowTopLevelThis, loose, noInterop, strict, strictMode };
+  const { loose, allowTopLevelThis, strict, strictMode, noInterop } = options;
   return {
     visitor: {
       Program: {
@@ -26,10 +25,16 @@ export default function({ types: t }, options) {
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
-            path,
-            ref,
-          );
+          const {
+            meta,
+            headers,
+          } = rewriteModuleStatementsAndPrepareHeader(path, {
+            loose,
+            strict,
+            strictMode,
+            allowTopLevelThis,
+            noInterop,
+          });
 
           const amdArgs = [];
           const commonjsArgs = [];
