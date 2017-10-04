@@ -134,8 +134,8 @@ function getHelperMetadata(file) {
 /**
  * Given a helper AST and information about how it will be used, update the AST to match the usage.
  */
-function permuteHelperAST(file, metadata, id, getLocalBindings, getDependency) {
-  if (getLocalBindings && !id) {
+function permuteHelperAST(file, metadata, id, localBindings, getDependency) {
+  if (localBindings && !id) {
     throw new Error("Unexpected local bindings for module-based helpers.");
   }
 
@@ -154,11 +154,11 @@ function permuteHelperAST(file, metadata, id, getLocalBindings, getDependency) {
   const dependenciesRefs = {};
   dependencies.forEach((name, id) => {
     dependenciesRefs[id.name] =
-      typeof getDependency === "function" ? getDependency(name) : id;
+      (typeof getDependency === "function" && getDependency(name)) || id;
   });
 
   const toRename = {};
-  const bindings = new Set((getLocalBindings && getLocalBindings()) || []);
+  const bindings = new Set(localBindings || []);
   localBindingNames.forEach(name => {
     let newName = name;
     while (bindings.has(newName)) newName = "_" + newName;
@@ -237,17 +237,17 @@ function loadHelper(name) {
 
     const metadata = getHelperMetadata(fn());
 
-    // Preload dependencies
-    metadata.dependencies.forEach(loadHelper);
+    helperData[name] = {
+      build(getDependency, id, localBindings) {
+        const file = fn();
+        permuteHelperAST(file, metadata, id, localBindings, getDependency);
 
-    helperData[name] = function(getDependency, id, getLocalBindings) {
-      const file = fn();
-      permuteHelperAST(file, metadata, id, getLocalBindings, getDependency);
-
-      return {
-        nodes: file.program.body,
-        globals: metadata.globals,
-      };
+        return {
+          nodes: file.program.body,
+          globals: metadata.globals,
+        };
+      },
+      dependencies: metadata.dependencies,
     };
   }
 
@@ -256,12 +256,15 @@ function loadHelper(name) {
 
 export function get(
   name,
-  getDependency?: string => t.Expression,
+  getDependency?: string => ?t.Expression,
   id?,
-  getLocalBindings?: () => string[],
+  localBindings?: string[],
 ) {
-  const helper = loadHelper(name);
-  return helper(getDependency, id, getLocalBindings);
+  return loadHelper(name).build(getDependency, id, localBindings);
+}
+
+export function getDependencies(name: string): $ReadOnlyArray<string> {
+  return Array.from(loadHelper(name).dependencies.values());
 }
 
 export const list = Object.keys(helpers)
