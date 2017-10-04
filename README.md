@@ -149,7 +149,7 @@ require("babylon").parse("code", {
 | `bigInt` ([proposal](https://github.com/tc39/proposal-bigint)) | `100n` |
 | `optionalCatchBinding` ([proposal](https://github.com/babel/proposals/issues/7)) | `try {throw 0;} catch{do();}` |
 | `throwExpressions` ([proposal](https://github.com/babel/proposals/issues/23)) | `() => throw new Error("")` |
-| `pipelineOperator` ([proposal](https://github.com/babel/proposals/issues/29)) | `a |> b` |
+| `pipelineOperator` ([proposal](https://github.com/babel/proposals/issues/29)) | `a \|> b` |
 
 ### FAQ
 
