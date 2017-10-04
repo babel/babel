@@ -1,4 +1,4 @@
-export default function({ types: t }, options) {
+export default function transformReactConstantElement({ types: t }, options) {
   const { allowMutablePropsOnTags } = options;
   const isAllowMutablePropsOnTagsAnArray = Array.isArray(allowMutablePropsOnTags);
   const isAllowMutablePropsOnTagsNotNull = allowMutablePropsOnTags != null;
