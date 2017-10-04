@@ -1,4 +1,4 @@
-export default function({ types: t }) {
+export default function transformReactConstantElement({ types: t }) {
   const HOISTED = new WeakSet();
 
   const immutabilityVisitor = {
