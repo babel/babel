@@ -2,7 +2,6 @@ import type NodePath from "babel-traverse";
 
 export default function(babel, options) {
   const { spec } = options;
-  const isSpec = !!spec;
   return {
     visitor: {
       ArrowFunctionExpression(
@@ -16,7 +15,7 @@ export default function(babel, options) {
           // While other utils may be fine inserting other arrows to make more transforms possible,
           // the arrow transform itself absolutely cannot insert new arrow functions.
           allowInsertArrow: false,
-          specCompliant: isSpec,
+          specCompliant: !!spec,
         });
       },
     },

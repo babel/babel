@@ -11,12 +11,11 @@ export default function({ types: t }, options) {
     useBuiltIns,
     useESModules,
   } = options;
+  const notRegenerator = regenerator !== false;
+  const notPolyfillOrDoesUseBuiltIns = polyfill === false || useBuiltIns;
+  const isPolyfillAndUseBuiltIns = polyfill && useBuiltIns;
   const baseHelpersDir = useBuiltIns ? "helpers/builtin" : "helpers";
   const helpersDir = useESModules ? `${baseHelpersDir}/es6` : baseHelpersDir;
-  const isHelpers = helpers !== false;
-  const isPolyfillAndUseBuiltIns = polyfill && useBuiltIns;
-  const notPolyfillOrDoesUseBuiltIns = polyfill === false || useBuiltIns;
-  const notRegenerator = regenerator !== false;
 
   function has(obj, key) {
     return Object.prototype.hasOwnProperty.call(obj, key);
@@ -26,7 +25,7 @@ export default function({ types: t }, options) {
 
   return {
     pre(file) {
-      if (isHelpers) {
+      if (helpers !== false) {
         file.set("helperGenerator", name => {
           const isInteropHelper = HEADER_HELPERS.indexOf(name) !== -1;
 
