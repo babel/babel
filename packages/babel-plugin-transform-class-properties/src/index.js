@@ -50,7 +50,9 @@ export default function({ types: t }, options) {
       ),
     );
 
-  const buildClassProperty = loose ? buildClassPropertyLoose : buildClassPropertySpec;
+  const buildClassProperty = loose
+    ? buildClassPropertyLoose
+    : buildClassPropertySpec;
 
   return {
     inherits: syntaxClassProperties,

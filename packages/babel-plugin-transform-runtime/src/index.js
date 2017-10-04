@@ -3,7 +3,14 @@ import { addDefault, isModule } from "babel-helper-module-imports";
 import definitions from "./definitions";
 
 export default function({ types: t }, options) {
-  const { helpers, moduleName = "babel-runtime", polyfill, regenerator, useBuiltIns, useESModules } = options;
+  const {
+    helpers,
+    moduleName = "babel-runtime",
+    polyfill,
+    regenerator,
+    useBuiltIns,
+    useESModules,
+  } = options;
   const baseHelpersDir = useBuiltIns ? "helpers/builtin" : "helpers";
   const helpersDir = useESModules ? `${baseHelpersDir}/es6` : baseHelpersDir;
   const isHelpers = helpers !== false;
@@ -71,12 +78,9 @@ export default function({ types: t }, options) {
     },
 
     visitor: {
-      ReferencedIdentifier(path, state) {
+      ReferencedIdentifier(path) {
         const { node, parent, scope } = path;
-        if (
-          node.name === "regeneratorRuntime" &&
-          notRegenerator
-        ) {
+        if (node.name === "regeneratorRuntime" && notRegenerator) {
           path.replaceWith(
             this.addDefaultImport(
               `${this.moduleName}/regenerator`,
@@ -102,7 +106,7 @@ export default function({ types: t }, options) {
       },
 
       // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
-      CallExpression(path, state) {
+      CallExpression(path) {
         if (notPolyfillOrDoesUseBuiltIns) return;
 
         // we can't compile this
@@ -127,7 +131,7 @@ export default function({ types: t }, options) {
       },
 
       // Symbol.iterator in arr -> core.$for.isIterable(arr)
-      BinaryExpression(path, state) {
+      BinaryExpression(path) {
         if (notPolyfillOrDoesUseBuiltIns) return;
 
         if (path.node.operator !== "in") return;
@@ -146,7 +150,7 @@ export default function({ types: t }, options) {
 
       // Array.from -> _core.Array.from
       MemberExpression: {
-        enter(path, state) {
+        enter(path) {
           if (notPolyfillOrDoesUseBuiltIns) return;
           if (!path.isReferenced()) return;
 
@@ -184,7 +188,7 @@ export default function({ types: t }, options) {
           );
         },
 
-        exit(path, state) {
+        exit(path) {
           if (notPolyfillOrDoesUseBuiltIns) return;
           if (!path.isReferenced()) return;
 

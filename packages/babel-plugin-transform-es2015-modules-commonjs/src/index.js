@@ -131,10 +131,10 @@ export default function({ types: t, template }, options) {
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          const {
-            meta,
-            headers,
-          } = rewriteModuleStatementsAndPrepareHeader(path, ref);
+          const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
+            path,
+            ref,
+          );
 
           for (const [source, metadata] of meta.source) {
             const loadExpr = t.callExpression(t.identifier("require"), [

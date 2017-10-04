@@ -1,6 +1,8 @@
 export default function transformReactConstantElement({ types: t }, options) {
   const { allowMutablePropsOnTags } = options;
-  const isAllowMutablePropsOnTagsAnArray = Array.isArray(allowMutablePropsOnTags);
+  const isAllowMutablePropsOnTagsAnArray = Array.isArray(
+    allowMutablePropsOnTags,
+  );
   const isAllowMutablePropsOnTagsNotNull = allowMutablePropsOnTags != null;
   const HOISTED = new WeakSet();
 
