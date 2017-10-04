@@ -2,7 +2,7 @@ export default function({ types: t, template }, options) {
   const { loose: isLoose } = options;
 
   let callback = spec;
-  if (loose) callback = loose;
+  if (isLoose) callback = loose;
 
   const buildMutatorMapAssign = template(`
     MUTATOR_MAP_REF[KEY] = MUTATOR_MAP_REF[KEY] || {};
