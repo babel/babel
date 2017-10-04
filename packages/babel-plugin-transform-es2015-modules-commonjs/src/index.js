@@ -10,15 +10,25 @@ import simplifyAccess from "babel-helper-simple-access";
 
 export default function({ types: t, template }, options) {
   const {
-    loose,
     allowTopLevelThis,
+    loose,
+    noInterop,
     strict,
     strictMode,
-    noInterop,
 
     // Defaulting to 'true' for now. May change before 7.x major.
     allowCommonJSExports = true,
   } = options;
+
+  const ref = {
+    exportName: "exports",
+    allowTopLevelThis,
+    loose,
+    noInterop,
+    strict,
+    strictMode,
+  };
+
   const moduleAssertion = template(`
     (function(){
       throw new Error("The CommonJS 'module' variable is not available in ES6 modules.");
@@ -124,14 +134,7 @@ export default function({ types: t, template }, options) {
           const {
             meta,
             headers,
-          } = rewriteModuleStatementsAndPrepareHeader(path, {
-            exportName: "exports",
-            loose,
-            strict,
-            strictMode,
-            allowTopLevelThis,
-            noInterop,
-          });
+          } = rewriteModuleStatementsAndPrepareHeader(path, ref);
 
           for (const [source, metadata] of meta.source) {
             const loadExpr = t.callExpression(t.identifier("require"), [
