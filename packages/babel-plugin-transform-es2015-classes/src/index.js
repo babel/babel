@@ -5,12 +5,10 @@ import nameFunction from "babel-helper-function-name";
 
 export default function({ types: t }, options) {
   const { loose } = options;
+  const Constructor = loose ? LooseTransformer : VanillaTransformer;
 
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
-
-  let Constructor = VanillaTransformer;
-  if (loose) Constructor = LooseTransformer;
 
   return {
     visitor: {
