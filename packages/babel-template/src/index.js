@@ -7,7 +7,7 @@ import * as t from "babel-types";
 
 const FROM_TEMPLATE = new Set();
 
-export default function (firstArg, ...rest) {
+export default function(firstArg, ...rest) {
   if (typeof firstArg === "string") {
     return factory(firstArg, ...rest);
   } else {
@@ -15,7 +15,7 @@ export default function (firstArg, ...rest) {
   }
 }
 
-function template (partials: Object | string[], ...args: Array<Object>) {
+function template(partials: Object | string[], ...args: Array<Object>) {
   if (!Array.isArray(partials)) {
     // support template({ options })`string`
     return templateApply.bind(undefined, partials);
@@ -23,8 +23,12 @@ function template (partials: Object | string[], ...args: Array<Object>) {
   return templateApply(null, partials, ...args);
 }
 
-function templateApply(opts: Object | null, partials: string[], ...args: Array<Object>) {
-  if (partials.some((str) => str.includes("$BABEL_TEMPLATE$"))) {
+function templateApply(
+  opts: Object | null,
+  partials: string[],
+  ...args: Array<Object>
+) {
+  if (partials.some(str => str.includes("$BABEL_TEMPLATE$"))) {
     throw new Error("Template contains illegal substring $BABEL_TEMPLATE$");
   }
 
@@ -65,7 +69,9 @@ function templateApply(opts: Object | null, partials: string[], ...args: Array<O
   }
 
   if (hasNonNumericReplacement && replacementMap.has(0)) {
-    throw new Error("Template cannot have a '0' replacement and a named replacement at the same time");
+    throw new Error(
+      "Template cannot have a '0' replacement and a named replacement at the same time",
+    );
   }
 
   const code = partials.reduce((acc, partial, i) => {
@@ -100,7 +106,7 @@ function templateApply(opts: Object | null, partials: string[], ...args: Array<O
   };
 }
 
-function factory (code: string, opts?: Object): Function {
+function factory(code: string, opts?: Object): Function {
   // since we lazy parse the template, we get the current stack so we have the
   // original stack to append if it errors when parsing
   let stack;
