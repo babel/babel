@@ -57,14 +57,16 @@ describe("tagged templating", () => {
   describe("string interpolation", () => {
     it("has expected internal representation", () => {
       const tpl = template`${"foo"}(${"b a r"})`;
-      expect(generator(tpl()).code).to.equal("$BABEL_TEMPLATE$$foo($BABEL_TEMPLATE$$bAR);");
+      expect(generator(tpl()).code).to.equal(
+        "$BABEL_TEMPLATE$$foo($BABEL_TEMPLATE$$bAR);",
+      );
     });
 
     it("simple replacement", () => {
       const tpl = template`${"foo"}(${"b a r"})`;
       const arg = {
         foo: t.identifier("baz"),
-        "b a r": t.numericLiteral(123)
+        "b a r": t.numericLiteral(123),
       };
 
       const result = tpl(arg);
@@ -75,13 +77,13 @@ describe("tagged templating", () => {
       const { callee, arguments: args } = result.expression;
 
       expect(callee).to.equal(arg.foo);
-      expect(args).to.deep.equal([ arg["b a r"] ]);
+      expect(args).to.deep.equal([arg["b a r"]]);
     });
 
     it("does not conflict with similar identifiers", () => {
       const tpl = template`foo + ${"foo"}`;
       const arg = {
-        foo: t.identifier("foo")
+        foo: t.identifier("foo"),
       };
 
       const result = tpl(arg);
@@ -100,7 +102,7 @@ describe("tagged templating", () => {
       const tpl = template`${"fOO"} + ${"f o o"}`;
       const arg = {
         fOO: t.numericLiteral(123),
-        "f o o": t.numericLiteral(321)
+        "f o o": t.numericLiteral(321),
       };
 
       const result = tpl(arg);
@@ -118,13 +120,15 @@ describe("tagged templating", () => {
 
   describe("mixed interpolation", () => {
     it("throws when 0 is used", () => {
-      expect(() => template`${0} - ${"foo"}`).to.throw("Template cannot have a '0' replacement and a named replacement at the same time");
+      expect(() => template`${0} - ${"foo"}`).to.throw(
+        "Template cannot have a '0' replacement and a named replacement at the same time",
+      );
     });
 
     it("works", () => {
       const tpl = template`${1}.${"prop"}`;
       const arg = {
-        prop: t.identifier("prop")
+        prop: t.identifier("prop"),
       };
 
       const result = tpl(arg, t.thisExpression());
@@ -166,8 +170,14 @@ describe("tagged templating", () => {
       expect(removeResult.leadingComments).to.be.undefined;
 
       expect(Array.isArray(preserveResult.leadingComments)).to.be.true;
-      expect(preserveResult.leadingComments[0]).to.have.property("type", "CommentLine");
-      expect(preserveResult.leadingComments[0]).to.have.property("value", " comment");
+      expect(preserveResult.leadingComments[0]).to.have.property(
+        "type",
+        "CommentLine",
+      );
+      expect(preserveResult.leadingComments[0]).to.have.property(
+        "value",
+        " comment",
+      );
     });
   });
 });
