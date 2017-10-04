@@ -24,14 +24,14 @@ export default function({ types: t }, options) {
     return [];
   }
 
-  function build(props: Array, scope, state) {
+  function build(props: Array, scope) {
     const nodes = [];
     let _props = [];
 
     for (const prop of props) {
       if (t.isSpreadElement(prop)) {
         _props = push(_props, nodes);
-        nodes.push(getSpreadLiteral(prop, scope, state));
+        nodes.push(getSpreadLiteral(prop, scope));
       } else {
         _props.push(prop);
       }
