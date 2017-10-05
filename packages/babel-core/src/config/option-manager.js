@@ -506,7 +506,7 @@ function normalizePair(
   value: {} | Function,
   options: ?{},
 } {
-  let options = {};
+  let options;
   let value = pair;
   if (Array.isArray(pair)) {
     if (pair.length > 2) {
