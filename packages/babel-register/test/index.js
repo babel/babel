@@ -3,7 +3,7 @@ import path from "path";
 
 const DATA_ES2015 = require.resolve("./__data__/es2015");
 
-describe("babel-register", function() {
+xdescribe("babel-register", function() {
   let babelRegister;
   let oldCompiler;
 

@@ -66,4 +66,6 @@ if (!module.parent) {
       copySync(join(testFromDir, "actual.js"), join(testToDir, "actual.js"));
     }
   }
+} else {
+  it("Skipped because of `module.parent`");
 }

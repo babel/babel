@@ -40,6 +40,8 @@
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
     "husky": "^0.14.3",
+    "jest": "^21.2.1",
+    "jest-runner-mocha": "0.4.0",
     "lerna": "2.0.0",
     "lerna-changelog": "^0.5.0",
     "lint-staged": "^4.2.3",
@@ -79,5 +81,18 @@
     "*.js": [
       "eslint --format=codeframe --rulesdir='./scripts/eslint_rules'"
     ]
+  },
+  "jest": {
+    "runner": "jest-runner-mocha",
+    "testMatch": [
+      "<rootDir>/packages/**/test/*.js"
+    ]
+  },
+  "jest-runner-mocha": {
+    "cliOptions": {
+      "compiler": "./node_modules/babel-register",
+      "timeout": 10000,
+      "ui": "tdd"
+    }
   }
 }
