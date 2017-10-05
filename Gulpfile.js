@@ -18,6 +18,16 @@ const RootMostResolvePlugin = require("webpack-dependency-suite")
 const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
 
+const fs = require("fs");
+const dirs = p =>
+  fs.readdirSync(p).filter(f => fs.statSync(path.join(p, f)).isDirectory());
+const pkgs = dirs("packages");
+const alias = {};
+
+for (const pkg of pkgs) {
+  alias[pkg] = path.resolve(__dirname, `packages/${pkg}/src`);
+}
+
 const sources = ["codemods", "packages"];
 
 function swapSrcWithLib(srcPath) {
@@ -125,7 +135,16 @@ function webpackBuild() {
             // their project.json (or a ".babelrc" file). We need to ignore
             // those as we're using our own Babel options.
             babelrc: false,
-            presets: ["env", "stage-0"],
+            presets: [
+              [
+                "env",
+                {
+                  loose: true,
+                },
+              ],
+              "stage-0",
+              "flow",
+            ],
           },
         },
       ],
@@ -160,6 +179,7 @@ function webpackBuild() {
         // This replaces DedupePlugin from Webpack 1.x
         new RootMostResolvePlugin(__dirname, true),
       ],
+      alias,
     },
   };
 
