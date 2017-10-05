@@ -1,8 +1,15 @@
 export default function transformReactConstantElement({ types: t }, options) {
   const { allowMutablePropsOnTags } = options;
-  const isAllowMutablePropsOnTagsAnArray = Array.isArray(
-    allowMutablePropsOnTags,
-  );
+
+  if (
+    allowMutablePropsOnTags != null &&
+    Array.isArray(allowMutablePropsOnTags)
+  ) {
+    throw new Error(
+      ".allowMutablePropsOnTags must be an array, null, or undefined.",
+    );
+  }
+
   const HOISTED = new WeakSet();
 
   const immutabilityVisitor = {
@@ -76,11 +83,6 @@ export default function transformReactConstantElement({ types: t }, options) {
         // of JSX tags to allow mutable props (such as objects, functions) on. Use sparingly
         // and only on tags you know will never modify their own props.
         if (allowMutablePropsOnTags != null) {
-          if (isAllowMutablePropsOnTagsAnArray) {
-            throw new Error(
-              ".allowMutablePropsOnTags must be an array, null, or undefined.",
-            );
-          }
           // Get the element's name. If it's a member expression, we use the last part of the path.
           // So the option ["FormattedMessage"] would match "Intl.FormattedMessage".
           let namePath = path.get("openingElement.name");
