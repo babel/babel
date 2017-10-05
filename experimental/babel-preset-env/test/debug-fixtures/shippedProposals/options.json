@@ -1,0 +1,9 @@
+{
+  "presets": [
+    ["../../lib", {
+      "debug": true,
+      "shippedProposals": true,
+      "useBuiltIns": "entry"
+    }]
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "presets": [
+    ["../../../../lib", {
+      "targets": {
+        "chrome": 55
+      },
+      "modules": false,
+      "useBuiltIns": "entry",
+      "exclude": [
+        "es7.string.pad-start",
+        "es7.string.pad-end",
+        "web.timers",
+        "web.immediate",
+        "web.dom.iterable"
+      ]
+    }]
+  ]
+}

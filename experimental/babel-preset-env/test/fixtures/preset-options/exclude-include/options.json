@@ -1,0 +1,20 @@
+{
+  "presets": [
+    ["../../../../lib", {
+      "targets": {
+        "chrome": 55
+      },
+      "modules": false,
+      "useBuiltIns": "entry",
+      "exclude": [
+        "transform-async-to-generator",
+        "transform-regenerator",
+        "es7.string.pad-start"
+      ],
+      "include": [
+        "transform-es2015-arrow-functions",
+        "es6.map"
+      ]
+    }]
+  ]
+}

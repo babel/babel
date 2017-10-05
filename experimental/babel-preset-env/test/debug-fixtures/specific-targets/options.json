@@ -1,0 +1,11 @@
+{
+  "presets": [
+    ["../../lib", {
+      "debug": true,
+      "targets": {
+        "browsers": "ie 10, ios 9, safari 7, edge 13, chrome 54, firefox 49"
+      },
+      "useBuiltIns": "entry"
+    }]
+  ]
+}

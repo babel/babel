@@ -1,0 +1,11 @@
+{
+  "presets": [
+    ["../../../../lib", {
+      "targets": {
+        "electron": "1.4"
+      },
+      "modules": false,
+      "useBuiltIns": "entry"
+    }]
+  ]
+}

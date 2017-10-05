@@ -1,0 +1,26 @@
+Warning, the following targets are using a decimal version:
+
+  node: 7.4
+
+We recommend using a string for minor/patch versions to avoid numbers like 6.10
+getting parsed as 6.1, which can lead to unexpected behavior.
+
+babel-preset-env: `DEBUG` option
+
+Using targets:
+{
+  "firefox": "52",
+  "node": "7.4"
+}
+
+Using modules transform: commonjs
+
+Using plugins:
+  transform-es2015-destructuring { "firefox":"52" }
+  transform-es2015-for-of { "firefox":"52" }
+  transform-es2015-function-name { "firefox":"52" }
+  transform-es2015-literals { "firefox":"52" }
+  syntax-trailing-function-commas { "node":"7.4" }
+
+Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
+src/in.js -> lib/in.js
