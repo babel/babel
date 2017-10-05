@@ -1,5 +1,4 @@
 import chai from "chai";
-import path from "path";
 
 const DATA_ES2015 = require.resolve("./__data__/es2015");
 
@@ -12,7 +11,15 @@ describe("babel-register", function() {
     babelRegister.default(
       Object.assign(
         {
-          presets: [path.join(__dirname, "../../babel-preset-es2015")],
+          plugins: [
+            {
+              visitor: {
+                ImportDeclaration(path) {
+                  path.remove();
+                },
+              },
+            },
+          ],
           babelrc: false,
         },
         config,
