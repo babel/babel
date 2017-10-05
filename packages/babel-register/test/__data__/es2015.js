@@ -1,1 +1,1 @@
-import a from "assert";
+import "assert";
