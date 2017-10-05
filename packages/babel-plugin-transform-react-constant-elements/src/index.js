@@ -3,7 +3,7 @@ export default function transformReactConstantElement({ types: t }, options) {
 
   if (
     allowMutablePropsOnTags != null &&
-    Array.isArray(allowMutablePropsOnTags)
+    !Array.isArray(allowMutablePropsOnTags)
   ) {
     throw new Error(
       ".allowMutablePropsOnTags must be an array, null, or undefined.",
