@@ -1,3 +1,5 @@
+import { addDefault, isModule } from "babel-helper-module-imports";
+
 import definitions from "./definitions";
 
 export default function({ types: t }) {
@@ -9,7 +11,7 @@ export default function({ types: t }) {
     return Object.prototype.hasOwnProperty.call(obj, key);
   }
 
-  const HELPER_BLACKLIST = ["interopRequireWildcard", "interopRequireDefault"];
+  const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
   return {
     pre(file) {
@@ -22,14 +24,20 @@ export default function({ types: t }) {
         const helpersDir = this.opts.useESModules
           ? `${baseHelpersDir}/es6`
           : baseHelpersDir;
-        file.set("helperGenerator", function(name) {
-          if (HELPER_BLACKLIST.indexOf(name) < 0) {
-            return file.addImport(
-              `${moduleName}/${helpersDir}/${name}`,
-              "default",
-              name,
-            );
-          }
+        file.set("helperGenerator", name => {
+          const isInteropHelper = HEADER_HELPERS.indexOf(name) !== -1;
+
+          // Explicitly set the CommonJS interop helpers to their reserve
+          // blockHoist of 4 so they are guaranteed to exist
+          // when other things used them to import.
+          const blockHoist =
+            isInteropHelper && !isModule(file.path) ? 4 : undefined;
+
+          return this.addDefaultImport(
+            `${moduleName}/${helpersDir}/${name}`,
+            name,
+            blockHoist,
+          );
         });
       }
 
@@ -40,6 +48,30 @@ export default function({ types: t }) {
       }
 
       this.moduleName = moduleName;
+
+      const cache = new Map();
+
+      this.addDefaultImport = (source, nameHint, blockHoist) => {
+        // If something on the page adds a helper when the file is an ES6
+        // file, we can't reused the cached helper name after things have been
+        // transformed because it has almost certainly been renamed.
+        const cacheKey = isModule(file.path);
+        const key = `${source}:${nameHint}:${cacheKey || ""}`;
+
+        let cached = cache.get(key);
+        if (cached) {
+          cached = t.cloneDeep(cached);
+        } else {
+          cached = addDefault(file.path, source, {
+            importedInterop: "uncompiled",
+            nameHint,
+            blockHoist,
+          });
+
+          cache.set(key, cached);
+        }
+        return cached;
+      };
     },
 
     visitor: {
@@ -50,9 +82,8 @@ export default function({ types: t }) {
           state.opts.regenerator !== false
         ) {
           path.replaceWith(
-            this.file.addImport(
+            this.addDefaultImport(
               `${this.moduleName}/regenerator`,
-              "default",
               "regeneratorRuntime",
             ),
           );
@@ -68,9 +99,8 @@ export default function({ types: t }) {
         // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
         const moduleName = getRuntimeModuleName(state.opts);
         path.replaceWith(
-          state.addImport(
+          this.addDefaultImport(
             `${moduleName}/core-js/${definitions.builtins[node.name]}`,
-            "default",
             node.name,
           ),
         );
@@ -93,9 +123,8 @@ export default function({ types: t }) {
         const moduleName = getRuntimeModuleName(state.opts);
         path.replaceWith(
           t.callExpression(
-            state.addImport(
+            this.addDefaultImport(
               `${moduleName}/core-js/get-iterator`,
-              "default",
               "getIterator",
             ),
             [callee.object],
@@ -113,9 +142,8 @@ export default function({ types: t }) {
         const moduleName = getRuntimeModuleName(state.opts);
         path.replaceWith(
           t.callExpression(
-            state.addImport(
+            this.addDefaultImport(
               `${moduleName}/core-js/is-iterable`,
-              "default",
               "isIterable",
             ),
             [path.node.right],
@@ -157,9 +185,8 @@ export default function({ types: t }) {
 
           const moduleName = getRuntimeModuleName(state.opts);
           path.replaceWith(
-            state.addImport(
+            this.addDefaultImport(
               `${moduleName}/core-js/${methods[prop.name]}`,
-              "default",
               `${obj.name}$${prop.name}`,
             ),
           );
@@ -178,9 +205,8 @@ export default function({ types: t }) {
           const moduleName = getRuntimeModuleName(state.opts);
           path.replaceWith(
             t.memberExpression(
-              state.addImport(
+              this.addDefaultImport(
                 `${moduleName}/core-js/${definitions.builtins[obj.name]}`,
-                "default",
                 obj.name,
               ),
               node.property,

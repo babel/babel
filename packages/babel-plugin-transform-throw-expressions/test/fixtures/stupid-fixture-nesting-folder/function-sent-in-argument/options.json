@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-throw-expressions", "syntax-function-sent"]
+}

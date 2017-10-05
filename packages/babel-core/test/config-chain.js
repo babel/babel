@@ -1,4 +1,5 @@
 import assert from "assert";
+import fs from "fs";
 import path from "path";
 import buildConfigChain from "../lib/config/build-config-chain";
 
@@ -49,6 +50,234 @@ describe("buildConfigChain", function() {
       });
 
       assert.equal(chain, null);
+    });
+  });
+
+  describe("caching", function() {
+    describe("programmatic options", function() {
+      it("should not cache the input options by identity", () => {
+        const comments = false;
+
+        const chain1 = buildConfigChain({ comments });
+        const chain2 = buildConfigChain({ comments });
+
+        assert.equal(chain1.length, 1);
+        assert.equal(chain2.length, 1);
+        assert.notStrictEqual(chain1[0], chain2[0]);
+      });
+
+      it("should cache the env options by identity", () => {
+        process.env.NODE_ENV = "foo";
+        const env = {
+          foo: {
+            comments: false,
+          },
+        };
+
+        const chain1 = buildConfigChain({ env });
+        const chain2 = buildConfigChain({ env });
+
+        assert.equal(chain1.length, 2);
+        assert.equal(chain2.length, 2);
+        assert.strictEqual(chain1[0], chain2[0]);
+        assert.strictEqual(chain1[1], chain2[1]);
+      });
+
+      it("should cache the plugin options by identity", () => {
+        const plugins = [];
+
+        const chain1 = buildConfigChain({ plugins });
+        const chain2 = buildConfigChain({ plugins });
+
+        assert.equal(chain1.length, 1);
+        assert.equal(chain2.length, 1);
+        assert.strictEqual(chain1[0], chain2[0]);
+      });
+
+      it("should cache the presets options by identity", () => {
+        const presets = [];
+
+        const chain1 = buildConfigChain({ presets });
+        const chain2 = buildConfigChain({ presets });
+
+        assert.equal(chain1.length, 1);
+        assert.equal(chain2.length, 1);
+        assert.strictEqual(chain1[0], chain2[0]);
+      });
+
+      it("should not cache the presets options with passPerPreset", () => {
+        const presets = [];
+
+        const chain1 = buildConfigChain({ presets });
+        const chain2 = buildConfigChain({ presets, passPerPreset: true });
+        const chain3 = buildConfigChain({ presets, passPerPreset: false });
+
+        assert.equal(chain1.length, 1);
+        assert.equal(chain2.length, 1);
+        assert.equal(chain3.length, 1);
+        assert.notStrictEqual(chain1[0], chain2[0]);
+        assert.strictEqual(chain1[0], chain3[0]);
+        assert.notStrictEqual(chain2[0], chain3[0]);
+      });
+    });
+
+    describe("config file options", function() {
+      function touch(filepath) {
+        const s = fs.statSync(filepath);
+        fs.utimesSync(
+          filepath,
+          s.atime,
+          s.mtime + Math.random() > 0.5 ? 1 : -1,
+        );
+      }
+
+      it("should cache package.json files by mtime", () => {
+        const filename = fixture(
+          "complex-plugin-config",
+          "config-identity",
+          "pkg",
+          "src.js",
+        );
+        const pkgJSON = fixture(
+          "complex-plugin-config",
+          "config-identity",
+          "pkg",
+          "package.json",
+        );
+
+        const chain1 = buildConfigChain({ filename });
+        const chain2 = buildConfigChain({ filename });
+
+        touch(pkgJSON);
+
+        const chain3 = buildConfigChain({ filename });
+        const chain4 = buildConfigChain({ filename });
+
+        assert.equal(chain1.length, 3);
+        assert.equal(chain2.length, 3);
+        assert.equal(chain3.length, 3);
+        assert.equal(chain4.length, 3);
+        assert.equal(chain1[1].alias, pkgJSON);
+        assert.equal(chain2[1].alias, pkgJSON);
+        assert.equal(chain3[1].alias, pkgJSON);
+        assert.equal(chain4[1].alias, pkgJSON);
+        assert.strictEqual(chain1[1], chain2[1]);
+
+        // Identity changed after touch().
+        assert.notStrictEqual(chain3[1], chain1[1]);
+        assert.strictEqual(chain3[1], chain4[1]);
+      });
+
+      it("should cache .babelrc files by mtime", () => {
+        const filename = fixture(
+          "complex-plugin-config",
+          "config-identity",
+          "babelrc",
+          "src.js",
+        );
+        const babelrcFile = fixture(
+          "complex-plugin-config",
+          "config-identity",
+          "babelrc",
+          ".babelrc",
+        );
+
+        const chain1 = buildConfigChain({ filename });
+        const chain2 = buildConfigChain({ filename });
+
+        touch(babelrcFile);
+
+        const chain3 = buildConfigChain({ filename });
+        const chain4 = buildConfigChain({ filename });
+
+        assert.equal(chain1.length, 3);
+        assert.equal(chain2.length, 3);
+        assert.equal(chain3.length, 3);
+        assert.equal(chain4.length, 3);
+        assert.equal(chain1[1].alias, babelrcFile);
+        assert.equal(chain2[1].alias, babelrcFile);
+        assert.equal(chain3[1].alias, babelrcFile);
+        assert.equal(chain4[1].alias, babelrcFile);
+        assert.strictEqual(chain1[1], chain2[1]);
+
+        // Identity changed after touch().
+        assert.notStrictEqual(chain3[1], chain1[1]);
+        assert.strictEqual(chain3[1], chain4[1]);
+      });
+
+      it("should cache .babelignore files by mtime", () => {
+        const filename = fixture(
+          "complex-plugin-config",
+          "config-identity",
+          "babelignore",
+          "src.js",
+        );
+        const babelignoreFile = fixture(
+          "complex-plugin-config",
+          "config-identity",
+          "babelignore",
+          ".babelignore",
+        );
+
+        const chain1 = buildConfigChain({ filename });
+        const chain2 = buildConfigChain({ filename });
+
+        touch(babelignoreFile);
+
+        const chain3 = buildConfigChain({ filename });
+        const chain4 = buildConfigChain({ filename });
+
+        assert.equal(chain1.length, 6);
+        assert.equal(chain2.length, 6);
+        assert.equal(chain3.length, 6);
+        assert.equal(chain4.length, 6);
+        assert.equal(chain1[4].alias, babelignoreFile);
+        assert.equal(chain2[4].alias, babelignoreFile);
+        assert.equal(chain3[4].alias, babelignoreFile);
+        assert.equal(chain4[4].alias, babelignoreFile);
+        assert.strictEqual(chain1[4], chain2[4]);
+
+        // Identity changed after touch().
+        assert.notStrictEqual(chain3[4], chain1[4]);
+        assert.strictEqual(chain3[4], chain4[4]);
+      });
+
+      it("should cache .babelrc.js files programmable behavior", () => {
+        const filename = fixture(
+          "complex-plugin-config",
+          "config-identity",
+          "babelrc-js",
+          "src.js",
+        );
+        const babelrcFile = fixture(
+          "complex-plugin-config",
+          "config-identity",
+          "babelrc-js",
+          ".babelrc.js",
+        );
+
+        const chain1 = buildConfigChain({ filename });
+        const chain2 = buildConfigChain({ filename });
+
+        process.env.NODE_ENV = "new-env";
+
+        const chain3 = buildConfigChain({ filename });
+        const chain4 = buildConfigChain({ filename });
+
+        assert.equal(chain1.length, 3);
+        assert.equal(chain2.length, 3);
+        assert.equal(chain3.length, 3);
+        assert.equal(chain4.length, 3);
+        assert.equal(chain1[1].alias, babelrcFile);
+        assert.equal(chain2[1].alias, babelrcFile);
+        assert.equal(chain3[1].alias, babelrcFile);
+        assert.equal(chain4[1].alias, babelrcFile);
+        assert.strictEqual(chain1[1], chain2[1]);
+
+        // Identity changed after changing the NODE_ENV.
+        assert.notStrictEqual(chain3[1], chain1[1]);
+        assert.strictEqual(chain3[1], chain4[1]);
+      });
     });
   });
 

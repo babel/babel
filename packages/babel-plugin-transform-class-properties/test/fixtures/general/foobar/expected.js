@@ -1,5 +1,3 @@
-"use strict";
-
 var Child =
 /*#__PURE__*/
 function (_Parent) {

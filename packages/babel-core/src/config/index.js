@@ -5,8 +5,12 @@ import manageOptions from "./option-manager";
 
 export type ResolvedConfig = {
   options: Object,
-  passes: Array<Array<[Plugin, ?{}]>>,
+  passes: PluginPasses,
 };
+
+export type { Plugin };
+export type PluginPassList = Array<Plugin>;
+export type PluginPasses = Array<PluginPassList>;
 
 /**
  * Standard API for loading Babel configuration data. Not for public consumption.

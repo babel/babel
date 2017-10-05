@@ -13,6 +13,10 @@ type ElementState = {
 };
 
 require("babel-helper-builder-react-jsx")({
+  filter: function (element: JSXElement) {
+    // if returns false, the element isn't transformed
+  },
+
   pre: function (state: ElementState) {
     // called before building the element
   },

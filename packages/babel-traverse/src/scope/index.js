@@ -4,7 +4,6 @@ import Renamer from "./lib/renamer";
 import type NodePath from "../path";
 import traverse from "../index";
 import defaults from "lodash/defaults";
-import * as messages from "babel-messages";
 import Binding from "./binding";
 import globals from "globals";
 import * as t from "babel-types";
@@ -361,7 +360,7 @@ export default class Scope {
     if (duplicate) {
       throw this.hub.file.buildCodeFrameError(
         id,
-        messages.get("scopeDuplicateDeclaration", name),
+        `Duplicate declaration "${name}"`,
         TypeError,
       );
     }
@@ -799,7 +798,7 @@ export default class Scope {
     }
 
     if (path.isLoop() || path.isCatchClause() || path.isFunction()) {
-      t.ensureBlock(path.node);
+      path.ensureBlock();
       path = path.get("body");
     }
 

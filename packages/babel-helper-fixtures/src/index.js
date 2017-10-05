@@ -1,3 +1,4 @@
+import assert from "assert";
 import cloneDeep from "lodash/cloneDeep";
 import trimEnd from "lodash/trimEnd";
 import resolve from "try-resolve";
@@ -83,24 +84,46 @@ export default function get(entryLoc): Array<Suite> {
     }
 
     function push(taskName, taskDir) {
-      const actualLocAlias = suiteName + "/" + taskName + "/actual.js";
+      let actualLocAlias = suiteName + "/" + taskName + "/actual.js";
       let expectLocAlias = suiteName + "/" + taskName + "/expected.js";
-      const execLocAlias = suiteName + "/" + taskName + "/exec.js";
+      let execLocAlias = suiteName + "/" + taskName + "/exec.js";
 
-      const actualLoc = taskDir + "/actual.js";
+      let actualLoc = taskDir + "/actual.js";
       let expectLoc = taskDir + "/expected.js";
       let execLoc = taskDir + "/exec.js";
 
-      if (fs.statSync(taskDir).isFile()) {
-        const ext = path.extname(taskDir);
-        if (ext !== ".js" && ext !== ".module.js") return;
+      const hasExecJS = fs.existsSync(execLoc);
+      const hasExecMJS = fs.existsSync(asMJS(execLoc));
+      if (hasExecMJS) {
+        assert(!hasExecJS, `${asMJS(execLoc)}: Found conflicting .js`);
 
-        execLoc = taskDir;
+        execLoc = asMJS(execLoc);
+        execLocAlias = asMJS(execLocAlias);
       }
 
-      if (resolve.relative(expectLoc + "on")) {
-        expectLoc += "on";
-        expectLocAlias += "on";
+      const hasExpectJS = fs.existsSync(expectLoc);
+      const hasExpectMJS = fs.existsSync(asMJS(expectLoc));
+      if (hasExpectMJS) {
+        assert(!hasExpectJS, `${asMJS(expectLoc)}: Found conflicting .js`);
+
+        expectLoc = asMJS(expectLoc);
+        expectLocAlias = asMJS(expectLocAlias);
+      }
+
+      const hasActualJS = fs.existsSync(actualLoc);
+      const hasActualMJS = fs.existsSync(asMJS(actualLoc));
+      if (hasActualMJS) {
+        assert(!hasActualJS, `${asMJS(actualLoc)}: Found conflicting .js`);
+
+        actualLoc = asMJS(actualLoc);
+        actualLocAlias = asMJS(actualLocAlias);
+      }
+
+      if (fs.statSync(taskDir).isFile()) {
+        const ext = path.extname(taskDir);
+        if (ext !== ".js" && ext !== ".mjs") return;
+
+        execLoc = taskDir;
       }
 
       const taskOpts = cloneDeep(suite.options);
@@ -184,6 +207,10 @@ export function multiple(entryLoc, ignore?: Array<string>) {
   }
 
   return categories;
+}
+
+function asMJS(filepath) {
+  return filepath.replace(/\.js$/, ".mjs");
 }
 
 export function readFile(filename) {

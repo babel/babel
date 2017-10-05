@@ -1,29 +1,41 @@
 "use strict";
 
+// Blame Logan for this.
+// This works around https://github.com/istanbuljs/istanbuljs/issues/92 until
+// we have a version of Istanbul that actually works with 7.x.
+function istanbulHacks() {
+  return {
+    inherits: require("babel-plugin-istanbul").default,
+    visitor: {
+      Program: {
+        exit: function(path) {
+          if (!this.__dv__) return
+
+          const node = path.node.body[0];
+          if (
+            node.type !== "VariableDeclaration" ||
+            node.declarations[0].id.type !== "Identifier" ||
+            !node.declarations[0].id.name.match(/cov_/) ||
+            node._blockHoist !== 3
+          ) {
+            throw new Error("Something has gone wrong in Logan's hacks.");
+          }
+
+          // Gross hacks to put the code coverage block above all compiled
+          // import statement output.
+          node._blockHoist = 5;
+        },
+      },
+    },
+  };
+}
+
 let envOpts = {
   loose: true
 };
 
 module.exports = {
   comments: false,
-  plugins: [
-    // temp until next release
-    function() {
-      return {
-        visitor: {
-          "Function": function(path) {
-            const node = path.node;
-            for (let i = 0; i < node.params.length; i++) {
-              const param = node.params[i];
-              if (param.type === "AssignmentPattern") {
-                param.left.optional = false;
-              }
-            }
-          }
-        }
-      };
-    }
-  ],
   presets: [
     ["env", envOpts],
     "stage-0",
@@ -32,7 +44,7 @@ module.exports = {
   env: {
     cov: {
       auxiliaryCommentBefore: "istanbul ignore next",
-      plugins: ["istanbul"]
+      plugins: [istanbulHacks]
     }
   }
 };

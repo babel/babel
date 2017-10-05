@@ -1,10 +1,7 @@
 import * as helpers from "babel-helpers";
 import generator from "babel-generator";
-import * as messages from "babel-messages";
 import template from "babel-template";
 import * as t from "babel-types";
-
-const keywordHelpers = ["typeof", "extends", "instanceof"];
 
 const buildUmdWrapper = template(`
   (function (root, factory) {
@@ -20,7 +17,9 @@ const buildUmdWrapper = template(`
   });
 `);
 
-function buildGlobal(namespace, builder) {
+function buildGlobal(whitelist) {
+  const namespace = t.identifier("babelHelpers");
+
   const body = [];
   const container = t.functionExpression(
     null,
@@ -57,55 +56,30 @@ function buildGlobal(namespace, builder) {
     ]),
   );
 
-  builder(body);
+  buildHelpers(body, namespace, whitelist);
 
   return tree;
 }
 
-function buildModule(namespace, builder) {
+function buildModule(whitelist) {
   const body = [];
-  builder(body);
+  const refs = buildHelpers(body, null, whitelist);
 
-  const module = body.map(helperNode => {
-    const possibleAssignment = t.isExpressionStatement(helperNode)
-      ? helperNode.expression
-      : helperNode;
+  body.unshift(
+    t.exportNamedDeclaration(
+      null,
+      Object.keys(refs).map(name => {
+        return t.exportSpecifier(t.clone(refs[name]), t.identifier(name));
+      }),
+    ),
+  );
 
-    const isExportedHelper =
-      t.isAssignmentExpression(possibleAssignment) &&
-      t.isMemberExpression(possibleAssignment.left) &&
-      possibleAssignment.left.object.name === namespace.name;
-
-    if (!isExportedHelper) {
-      return helperNode;
-    }
-
-    const exportedHelper = possibleAssignment;
-
-    const identifier = exportedHelper.left.property.name;
-    const isKeywordHelper = keywordHelpers.indexOf(identifier) !== -1;
-
-    if (isKeywordHelper) {
-      return t.exportNamedDeclaration(null, [
-        t.exportSpecifier(
-          t.identifier(`_${identifier}`),
-          t.identifier(identifier),
-        ),
-      ]);
-    }
-
-    return t.exportNamedDeclaration(
-      t.variableDeclaration("var", [
-        t.variableDeclarator(t.identifier(identifier), exportedHelper.right),
-      ]),
-      [],
-    );
-  });
-
-  return t.program(module);
+  return t.program(body, [], "module");
 }
 
-function buildUmd(namespace, builder) {
+function buildUmd(whitelist) {
+  const namespace = t.identifier("babelHelpers");
+
   const body = [];
   body.push(
     t.variableDeclaration("var", [
@@ -113,7 +87,7 @@ function buildUmd(namespace, builder) {
     ]),
   );
 
-  builder(body);
+  buildHelpers(body, namespace, whitelist);
 
   return t.program([
     buildUmdWrapper({
@@ -131,7 +105,9 @@ function buildUmd(namespace, builder) {
   ]);
 }
 
-function buildVar(namespace, builder) {
+function buildVar(whitelist) {
+  const namespace = t.identifier("babelHelpers");
+
   const body = [];
   body.push(
     t.variableDeclaration("var", [
@@ -139,33 +115,34 @@ function buildVar(namespace, builder) {
     ]),
   );
   const tree = t.program(body);
-  builder(body);
+  buildHelpers(body, namespace, whitelist);
   body.push(t.expressionStatement(namespace));
   return tree;
 }
 
 function buildHelpers(body, namespace, whitelist) {
+  const getHelperReference = name => {
+    return namespace
+      ? t.memberExpression(namespace, t.identifier(name))
+      : t.identifier(`_${name}`);
+  };
+
+  const refs = {};
   helpers.list.forEach(function(name) {
     if (whitelist && whitelist.indexOf(name) < 0) return;
 
-    const { nodes } = helpers.get(
-      name,
-      t.memberExpression(namespace, t.identifier(name)),
-    );
+    const ref = (refs[name] = getHelperReference(name));
+
+    const { nodes } = helpers.get(name, getHelperReference, ref);
 
     body.push(...nodes);
   });
+  return refs;
 }
 export default function(
   whitelist?: Array<string>,
   outputType: "global" | "module" | "umd" | "var" = "global",
 ) {
-  const namespace = t.identifier("babelHelpers");
-
-  const builder = function(body) {
-    return buildHelpers(body, namespace, whitelist);
-  };
-
   let tree;
 
   const build = {
@@ -176,9 +153,9 @@ export default function(
   }[outputType];
 
   if (build) {
-    tree = build(namespace, builder);
+    tree = build(whitelist);
   } else {
-    throw new Error(messages.get("unsupportedOutputType", outputType));
+    throw new Error(`Unsupported output type ${outputType}`);
   }
 
   return generator(tree).code;

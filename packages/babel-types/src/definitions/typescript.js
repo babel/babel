@@ -87,7 +87,7 @@ defineType("TSQualifiedName", {
 const signatureDeclarationCommon = {
   typeParameters: validateOptionalType("TypeParameterDeclaration"),
   parameters: validateArrayOfType(["Identifier", "RestElement"]),
-  typeAnnotation: validateOptionalType("TypeAnnotation"),
+  typeAnnotation: validateOptionalType("TSTypeAnnotation"),
 };
 
 const callConstructSignatureDeclaration = {
@@ -114,7 +114,7 @@ defineType("TSPropertySignature", {
   fields: {
     ...namedTypeElementCommon,
     readonly: validateOptional(bool),
-    typeAnnotation: validateOptionalType("TypeAnnotation"),
+    typeAnnotation: validateOptionalType("TSTypeAnnotation"),
     initializer: validateOptionalType("Expression"),
   },
 });
@@ -134,7 +134,7 @@ defineType("TSIndexSignature", {
   fields: {
     readonly: validateOptional(bool),
     parameters: validateArrayOfType("Identifier"), // Length must be 1
-    typeAnnotation: validateOptionalType("TypeAnnotation"),
+    typeAnnotation: validateOptionalType("TSTypeAnnotation"),
   },
 });
 
@@ -188,7 +188,7 @@ defineType("TSTypePredicate", {
   visitor: ["parameterName", "typeAnnotation"],
   fields: {
     parameterName: validateType(["Identifier", "TSThisType"]),
-    typeAnnotation: validateType("TypeAnnotation"),
+    typeAnnotation: validateType("TSTypeAnnotation"),
   },
 });
 
@@ -422,5 +422,55 @@ defineType("TSNamespaceExportDeclaration", {
   visitor: ["id"],
   fields: {
     id: validateType("Identifier"),
+  },
+});
+
+defineType("TSTypeAnnotation", {
+  visitor: ["typeAnnotation"],
+  fields: {
+    typeAnnotation: {
+      validate: assertNodeType("TSType"),
+    },
+  },
+});
+
+defineType("TSTypeParameterInstantiation", {
+  visitor: ["params"],
+  fields: {
+    params: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("TSType")),
+      ),
+    },
+  },
+});
+
+defineType("TSTypeParameterDeclaration", {
+  visitor: ["params"],
+  fields: {
+    params: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("TSTypeParameter")),
+      ),
+    },
+  },
+});
+
+defineType("TSTypeParameter", {
+  visitor: ["constraint", "default"],
+  fields: {
+    name: {
+      validate: assertValueType("string"),
+    },
+    constraint: {
+      validate: assertNodeType("TSType"),
+      optional: true,
+    },
+    default: {
+      validate: assertNodeType("TSType"),
+      optional: true,
+    },
   },
 });

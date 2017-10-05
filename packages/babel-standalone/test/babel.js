@@ -18,7 +18,7 @@ describe("babel-standalone", () => {
     const output = Babel.transform("class A {}", {
       presets: ["es2015-loose"],
     }).code;
-    assert.equal(output, '"use strict";\n\nvar A = function A() {};');
+    assert.equal(output, "var A = function A() {};");
   });
   it("handles the typescript preset", () => {
     const output = Babel.transform("var a: string;", {
@@ -56,7 +56,7 @@ describe("babel-standalone", () => {
     };
     const output = Babel.transformFromAst(ast, "42", { presets: ["es2015"] })
       .code;
-    assert.equal(output, '"use strict";\n' + "\n" + "42;");
+    assert.equal(output, "42;");
   });
 
   it("handles the react preset", () => {
@@ -92,12 +92,9 @@ describe("babel-standalone", () => {
 
   it("handles plugins with options", () => {
     const output = Babel.transform("`${x}`", {
-      plugins: [["transform-es2015-template-literals", { spec: true }]],
+      plugins: [["transform-es2015-template-literals", { loose: true }]],
     }).code;
-    assert.equal(
-      output,
-      '"".concat(x);', // https://github.com/babel/babel/pull/5791
-    );
+    assert.equal(output, '"" + x;');
   });
 
   it("throws on invalid preset name", () => {

@@ -16,15 +16,22 @@
   <a href="https://www.npmjs.com/package/babel-core"><img alt="npm Downloads" src="https://img.shields.io/npm/dm/babel-core.svg?maxAge=43200"></a>
 </p>
 
+<h2 align="center">Supporting Babel</h2>
+
 <p align="center">
   <a href="#backers"><img alt="Backers on Open Collective" src="https://opencollective.com/babel/backers/badge.svg" /></a>
   <a href="#sponsors"><img alt="Sponsors on Open Collective" src="https://opencollective.com/babel/sponsors/badge.svg" /></a>
-    <a href="https://medium.com/friendship-dot-js/i-peeked-into-my-node-modules-directory-and-you-wont-believe-what-happened-next-b89f63d21558"><img alt="Business Strategy Status" src="https://img.shields.io/badge/business%20model-flavortown-green.svg"></a>
+  <a href="https://medium.com/friendship-dot-js/i-peeked-into-my-node-modules-directory-and-you-wont-believe-what-happened-next-b89f63d21558"><img alt="Business Strategy Status" src="https://img.shields.io/badge/business%20model-flavortown-green.svg"></a>
 </p>
 
-Babel is a community-driven tool that helps you write code in the latest version of JavaScript.
+Babel is community-driven and thus mostly maintained by a group of volunteers. It has a lot of [companies and projects](http://babeljs.io/users) using it but almost no sponsors/people funded to work on it. If you'd like to help maintain the future of the project, please consider:
 
-When your supported environments don't support certain features natively, Babel will help you compile those features down to a supported version.
+- Giving developer time on the project. (Message us on [Twitter](https://twitter.com/babeljs) or [Slack](slack.babeljs.io))
+- [Giving funds by becoming a backer/sponsor on OpenCollective](https://opencollective.com/babel)
+
+## Intro
+
+Babel is a tool that helps you write code in the latest version of JavaScript. When your supported environments don't support certain features natively, Babel will help you compile those features down to a supported version.
 
 **In**
 
@@ -41,7 +48,7 @@ When your supported environments don't support certain features natively, Babel 
 });
 ```
 
-Try it out at our [REPL](https://babeljs.io/repl/#?babili=false&evaluate=true&lineWrap=false&presets=latest&code=%5B1%2C2%2C3%5D.map(n%20%3D%3E%20n%20%2B%201)%3B&experimental=true&loose=true&spec=false&playground=false&stage=0) and follow us at [@babeljs](https://twitter.com/babeljs).
+Try it out at our [REPL](https://babeljs.io/repl/build/master#?code_lz=NoRgNATGDMC6B0BbAhgBwBQDsAEBeAfNjgNTYgCUA3EA&lineWrap=true&presets=es2015%2Ces2016%2Ces2017&version=7.0.0-beta.2).
 
 - [FAQ](#faq)
 - [Team](#team)
@@ -57,24 +64,24 @@ Check out our website: [babeljs.io](http://babeljs.io/)
 
 ### Looking for support?
 
-For questions and support please visit our [discussion forum](https://discuss.babeljs.io/), sign up for our [Slack community](https://slack.babeljs.io/), or [StackOverflow](http://stackoverflow.com/questions/tagged/babeljs).
+For questions and support please visit join our [Slack Community](https://slack.babeljs.io/), ask a question on [Stack Overflow](http://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs/).
 
 ### Want to report a bug or request a feature?
 
-Read through our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md) and fill out the issue template at [babel/issues](https://github.com/babel/babel/issues).
+Please read through our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md) and fill out the issue template at [babel/issues](https://github.com/babel/babel/issues)!
 
-### Want to report an issue with [babeljs.io](https://babeljs.io) (the website)?
+### Want to report an issue with our website ([babeljs.io](https://babeljs.io))?
 
-For documentation and website issues please visit the [babel/website](https://github.com/babel/website) repo.
+For docs/website issues please visit the [babel/website](https://github.com/babel/website/issues).
 
 ### Want to contribute to Babel?
 
-Check out our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md). If you have already joined Slack, join our [#development](https://babeljs.slack.com/messages/development) channel!
+Check out our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md) to get started with setting up the repo.
 
-You can also start by checking out the issues with the [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label.
-
-Our discussions/notes/roadmap: [babel/notes](https://github.com/babel/notes)
-Our progress on TC39 proposals: [babel/proposals](https://github.com/babel/proposals)
+- If you have already joined Slack, join our [#development](https://babeljs.slack.com/messages/development) channel and say hi!
+- Checki out the issues with the [beginner-friendly](https://github.com/babel/babel/labels/beginner-friendly) and [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label.
+- Our discussions/notes/roadmap: [babel/notes](https://github.com/babel/notes)
+- Our progress on TC39 proposals: [babel/proposals](https://github.com/babel/proposals)
 
 ### How is the repo structured?
 

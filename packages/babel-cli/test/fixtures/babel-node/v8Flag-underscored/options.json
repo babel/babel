@@ -1,4 +1,0 @@
-{
-  "args": ["--expose_gc", "--eval", "console.log(typeof global.gc)"],
-  "stdout": "function"
-}

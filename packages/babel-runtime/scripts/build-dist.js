@@ -33,7 +33,7 @@ function relative(filename) {
 }
 
 function defaultify(name) {
-  return `module.exports = { "default": ${name}, __esModule: true };`;
+  return `module.exports = ${name};`;
 }
 
 function writeRootFile(filename, content) {
@@ -57,18 +57,18 @@ function makeTransformOpts(modules, useBuiltIns) {
       ],
     ],
   };
-  if (modules === "commonjs") {
-    opts.plugins.push([
-      require("../../babel-plugin-transform-es2015-modules-commonjs"),
-      { loose: true, strictMode: false },
-    ]);
-  } else if (modules !== false) {
-    throw new Error("Unsupported module type");
-  }
   return opts;
 }
 
-function buildRuntimeRewritePlugin(relativePath, helperName) {
+function adjustImportPath(node, relativePath) {
+  if (helpers.list.indexOf(node.value) >= 0) {
+    node.value = `./${node.value}`;
+  } else {
+    node.value = node.value.replace(/^babel-runtime/, relativePath)
+  }
+}
+
+function buildRuntimeRewritePlugin(relativePath, helperName, dependencies) {
   return {
     pre(file) {
       const original = file.get("helperGenerator");
@@ -81,9 +81,7 @@ function buildRuntimeRewritePlugin(relativePath, helperName) {
     },
     visitor: {
       ImportDeclaration(path) {
-        path.get("source").node.value = path
-          .get("source")
-          .node.value.replace(/^babel-runtime/, relativePath);
+        adjustImportPath(path.get("source").node, relativePath);
       },
       CallExpression(path) {
         if (
@@ -94,18 +92,23 @@ function buildRuntimeRewritePlugin(relativePath, helperName) {
           return;
         }
 
-        // replace any reference to babel-runtime with a relative path
-        path.get("arguments")[0].node.value = path
-          .get("arguments")[0]
-          .node.value.replace(/^babel-runtime/, relativePath);
+        // replace any reference to babel-runtime and other helpers
+        // with a relative path
+        adjustImportPath(path.get("arguments")[0].node, relativePath);
       },
     },
   };
 }
 
 function buildHelper(helperName, modules, useBuiltIns) {
-  const tree = t.program(helpers.get(helperName).nodes);
+  const id =
+    modules === "commonjs"
+      ? t.memberExpression(t.identifier("module"), t.identifier("exports"))
+      : null;
+  const sourceType = modules === "commonjs" ? "script" : "module";
 
+  const helper = helpers.get(helperName, null, id);
+  const tree = t.program(helper.nodes, [], sourceType);
   const transformOpts = makeTransformOpts(modules, useBuiltIns);
 
   const relative = useBuiltIns ? "../.." : "..";

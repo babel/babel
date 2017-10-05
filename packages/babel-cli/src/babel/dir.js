@@ -71,10 +71,13 @@ export default function(commander, filenames, opts) {
       if (commander.deleteDirOnStart) {
         util.deleteDir(commander.outDir);
       }
-      util.readdir(dirname).forEach(function(filename) {
-        const src = path.join(dirname, filename);
-        handleFile(src, filename, dirname);
-      });
+
+      util
+        .readdir(dirname, commander.includeDotfiles)
+        .forEach(function(filename) {
+          const src = path.join(dirname, filename);
+          handleFile(src, filename, dirname);
+        });
     } else {
       write(filename, path.basename(filename), path.dirname(filename));
     }

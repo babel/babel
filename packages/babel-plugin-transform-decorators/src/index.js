@@ -144,10 +144,8 @@ export default function({ types: t }) {
     // TODO: This should probably also hoist computed properties.
     const decorators = (path.isClass()
       ? [path].concat(path.get("body.body"))
-      : path.get("properties")).reduce(
-      (acc, prop) => acc.concat(prop.node.decorators || []),
-      [],
-    );
+      : path.get("properties")
+    ).reduce((acc, prop) => acc.concat(prop.node.decorators || []), []);
 
     const identDecorators = decorators.filter(
       decorator => !t.isIdentifier(decorator.expression),

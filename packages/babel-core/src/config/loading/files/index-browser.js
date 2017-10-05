@@ -1,6 +1,6 @@
 // @flow
 
-type ConfigFile = {
+export type ConfigFile = {
   filepath: string,
   dirname: string,
   options: {},

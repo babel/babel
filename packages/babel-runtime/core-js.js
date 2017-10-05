@@ -1,4 +1,1 @@
-module.exports = {
-  "default": require("core-js/library"),
-  __esModule: true
-};
+module.exports = require("core-js/library");

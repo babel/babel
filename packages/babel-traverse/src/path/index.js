@@ -126,14 +126,6 @@ export default class NodePath {
     traverse(this.node, visitor, this.scope, state, this);
   }
 
-  mark(type: string, message: string) {
-    this.hub.file.metadata.marked.push({
-      type,
-      message,
-      loc: this.node.loc,
-    });
-  }
-
   set(key: string, node: Object) {
     t.validate(this.node, key, node);
     this.node[key] = node;
@@ -150,9 +142,9 @@ export default class NodePath {
     return parts.join(".");
   }
 
-  debug(buildMessage: Function) {
+  debug(message) {
     if (!debug.enabled) return;
-    debug(`${this.getPathLocation()} ${this.type}: ${buildMessage()}`);
+    debug(`${this.getPathLocation()} ${this.type}: ${message}`);
   }
 }
 

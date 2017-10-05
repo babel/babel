@@ -20,7 +20,9 @@ export function insertBefore(nodes) {
   ) {
     return this.parentPath.insertBefore(nodes);
   } else if (
-    (this.isNodeType("Expression") && this.listKey !== "params") ||
+    (this.isNodeType("Expression") &&
+      this.listKey !== "params" &&
+      this.listKey !== "arguments") ||
     (this.parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) nodes.push(this.node);
@@ -64,7 +66,7 @@ export function _containerInsert(from, nodes) {
 
   for (const path of paths) {
     path.setScope();
-    path.debug(() => "Inserted.");
+    path.debug("Inserted.");
 
     for (const context of contexts) {
       context.maybeQueue(path, true);

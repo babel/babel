@@ -10,7 +10,7 @@ import { makeStrongCache } from "../../caching";
 
 const debug = buildDebug("babel:config:loading:files:configuration");
 
-type ConfigFile = {
+export type ConfigFile = {
   filepath: string,
   dirname: string,
   options: {},

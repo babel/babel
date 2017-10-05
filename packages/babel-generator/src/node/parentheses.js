@@ -93,6 +93,17 @@ export function Binary(node: Object, parent: Object): boolean {
   return false;
 }
 
+export function UnionTypeAnnotation(node: Object, parent: Object): boolean {
+  return (
+    t.isArrayTypeAnnotation(parent) ||
+    t.isNullableTypeAnnotation(parent) ||
+    t.isIntersectionTypeAnnotation(parent) ||
+    t.isUnionTypeAnnotation(parent)
+  );
+}
+
+export { UnionTypeAnnotation as IntersectionTypeAnnotation };
+
 export function TSAsExpression() {
   return true;
 }

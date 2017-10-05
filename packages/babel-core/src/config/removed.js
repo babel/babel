@@ -56,4 +56,15 @@ export default {
   whitelist: {
     message: "Put the specific transforms you want in the `plugins` option",
   },
+
+  resolveModuleSource: {
+    version: 6,
+    message: "Use `babel-plugin-module-resolver@3`'s 'resolvePath' options",
+  },
+
+  metadata: {
+    version: 6,
+    message:
+      "Generated plugin metadata is always included in the output result",
+  },
 };

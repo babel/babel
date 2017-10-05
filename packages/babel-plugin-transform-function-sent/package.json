@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-function-sent",
-  "version": "7.0.0-beta.1",
+  "version": "7.0.0-beta.2",
   "description": "Compile the function.sent meta propety to valid ES2015 code",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-function-sent",
   "license": "MIT",
@@ -9,10 +9,10 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-helper-wrap-function": "7.0.0-beta.1",
-    "babel-plugin-syntax-function-sent": "7.0.0-beta.1"
+    "babel-helper-wrap-function": "7.0.0-beta.2",
+    "babel-plugin-syntax-function-sent": "7.0.0-beta.2"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-beta.1"
+    "babel-helper-plugin-test-runner": "7.0.0-beta.2"
   }
 }

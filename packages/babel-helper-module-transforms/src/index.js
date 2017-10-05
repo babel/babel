@@ -1,6 +1,9 @@
+import assert from "assert";
 import * as t from "babel-types";
 import template from "babel-template";
 import chunk from "lodash/chunk";
+
+import { isModule } from "babel-helper-module-imports";
 
 import rewriteThis from "./rewrite-this";
 import rewriteLiveReferences from "./rewrite-live-references";
@@ -9,7 +12,7 @@ import normalizeAndLoadModuleMetadata, {
   isSideEffectImport,
 } from "./normalize-and-load-metadata";
 
-export { hasExports, isSideEffectImport };
+export { hasExports, isSideEffectImport, isModule };
 
 /**
  * Perform all of the generic ES6 module rewriting needed to handle initial
@@ -21,6 +24,9 @@ export function rewriteModuleStatementsAndPrepareHeader(
   path: NodePath,
   { exportName, strict, allowTopLevelThis, strictMode, loose, noInterop },
 ) {
+  assert(isModule(path), "Cannot process module statements in a script");
+  path.node.sourceType = "script";
+
   const meta = normalizeAndLoadModuleMetadata(path, exportName, {
     noInterop,
   });

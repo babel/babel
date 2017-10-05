@@ -400,6 +400,49 @@ export function buildMatchMemberExpression(
 }
 
 /**
+ * Add comment of certain type to a node.
+ */
+
+export function addComment(
+  node: Object,
+  type: string,
+  content: string,
+  line?: boolean,
+): Object {
+  addComments(node, type, [
+    {
+      type: line ? "CommentLine" : "CommentBlock",
+      value: content,
+    },
+  ]);
+}
+
+/**
+ * Add comments of certain type to a node.
+ */
+
+export function addComments(
+  node: Object,
+  type: string,
+  comments: Array,
+): Object {
+  if (!comments || !node) return;
+
+  const key = `${type}Comments`;
+
+  if (node[key]) {
+    if (type === "leading") {
+      node[key] = comments.concat(node[key]);
+    } else {
+      node[key] = node[key].concat(comments);
+    }
+  } else {
+    node[key] = comments;
+  }
+  return node;
+}
+
+/**
  * Remove comment properties from a node.
  */
 

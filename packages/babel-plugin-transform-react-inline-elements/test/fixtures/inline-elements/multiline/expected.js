@@ -1,1 +1,1 @@
-babelHelpers.jsx(Baz, {}, void 0);
+babelHelpers.jsx(Baz, {});

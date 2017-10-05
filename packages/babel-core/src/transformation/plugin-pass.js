@@ -1,32 +1,47 @@
-import Store from "./store";
-import File from "./file";
+// @flow
 
-export default class PluginPass extends Store {
-  constructor(file: File, key: string, options: Object = {}) {
-    super();
+import type File from "./file/file";
 
-    this.key = key;
-    this.file = file;
-    this.opts = options;
-  }
-
-  key: string;
+export default class PluginPass {
+  _map: Map<mixed, mixed> = new Map();
+  key: ?string;
   file: File;
   opts: Object;
 
-  addHelper(...args) {
-    return this.file.addHelper(...args);
+  constructor(file: File, key: ?string, options: ?Object) {
+    this.key = key;
+    this.file = file;
+    this.opts = options || {};
   }
 
-  addImport(...args) {
-    return this.file.addImport(...args);
+  set(key: mixed, val: mixed) {
+    this._map.set(key, val);
   }
 
-  getModuleName(...args) {
-    return this.file.getModuleName(...args);
+  get(key: mixed): any {
+    return this._map.get(key);
   }
 
-  buildCodeFrameError(...args) {
-    return this.file.buildCodeFrameError(...args);
+  addHelper(name: string) {
+    return this.file.addHelper(name);
+  }
+
+  addImport() {
+    return this.file.addImport();
+  }
+
+  getModuleName(): ?string {
+    return this.file.getModuleName();
+  }
+
+  buildCodeFrameError(
+    node: ?{
+      loc?: { line: number, column: number },
+      _loc?: { line: number, column: number },
+    },
+    msg: string,
+    Error?: typeof Error,
+  ) {
+    return this.file.buildCodeFrameError(node, msg, Error);
   }
 }

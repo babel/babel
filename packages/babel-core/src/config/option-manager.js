@@ -1,6 +1,7 @@
+// @flow
+
 import * as context from "../index";
 import Plugin from "./plugin";
-import * as messages from "babel-messages";
 import defaults from "lodash/defaults";
 import merge from "lodash/merge";
 import removed from "./removed";
@@ -8,6 +9,8 @@ import buildConfigChain from "./build-config-chain";
 import path from "path";
 import traverse from "babel-traverse";
 import clone from "lodash/clone";
+import { makeWeakCache } from "./caching";
+import { getEnv } from "./helpers/environment";
 
 import {
   loadPlugin,
@@ -39,7 +42,6 @@ const optionNames = new Set([
   "ignore",
   "only",
   "code",
-  "metadata",
   "ast",
   "extends",
   "comments",
@@ -55,7 +57,6 @@ const optionNames = new Set([
   "sourceType",
   "auxiliaryCommentBefore",
   "auxiliaryCommentAfter",
-  "resolveModuleSource",
   "getModuleId",
   "moduleRoot",
   "moduleIds",
@@ -78,7 +79,7 @@ const ALLOWED_PLUGIN_KEYS = new Set([
 
 export default function manageOptions(opts: {}): {
   options: Object,
-  passes: Array<Array<[Plugin, ?{}]>>,
+  passes: Array<Array<Plugin>>,
 } | null {
   return new OptionManager().init(opts);
 }
@@ -90,7 +91,7 @@ class OptionManager {
   }
 
   options: Object;
-  passes: Array<Array<[Plugin, ?{}]>>;
+  passes: Array<Array<Plugin>>;
 
   /**
    * This is called when we want to merge the input `opts` into the
@@ -101,7 +102,7 @@ class OptionManager {
    *  - `dirname` is used to resolve plugins relative to it.
    */
 
-  mergeOptions(config: MergeOptions, pass?: Array<[Plugin, ?{}]>) {
+  mergeOptions(config: MergeOptions, pass?: Array<Plugin>) {
     const result = loadConfig(config);
 
     const plugins = result.plugins.map(descriptor =>
@@ -222,13 +223,11 @@ type BasicDescriptor = {
 /**
  * Load and validate the given config into a set of options, plugins, and presets.
  */
-function loadConfig(
-  config,
-): {
+const loadConfig = makeWeakCache((config): {
   options: {},
   plugins: Array<BasicDescriptor>,
   presets: Array<BasicDescriptor>,
-} {
+} => {
   const options = normalizeOptions(config);
 
   if (
@@ -278,24 +277,25 @@ function loadConfig(
   });
 
   return { options, plugins, presets };
-}
+});
 
 /**
  * Load a generic plugin/preset from the given descriptor loaded from the config object.
  */
-function loadDescriptor(descriptor, skipOptions) {
+const loadDescriptor = makeWeakCache((descriptor, cache) => {
   if (typeof descriptor.value !== "function") {
     return { value: descriptor.value, descriptor };
   }
-
   const { value, options } = descriptor;
+
+  const api = Object.assign(Object.create(context), {
+    cache,
+    env: () => cache.using(() => getEnv()),
+  });
+
   let item;
   try {
-    if (skipOptions) {
-      item = value(context);
-    } else {
-      item = value(context, options, { dirname: descriptor.dirname });
-    }
+    item = value(api, options, { dirname: descriptor.dirname });
   } catch (e) {
     if (descriptor.alias) {
       e.message += ` (While processing: ${JSON.stringify(descriptor.alias)})`;
@@ -308,92 +308,98 @@ function loadDescriptor(descriptor, skipOptions) {
   }
 
   return { value: item, descriptor };
-}
+});
 
 /**
  * Instantiate a plugin for the given descriptor, returning the plugin/options pair.
  */
-const PLUGIN_CACHE = new WeakMap();
-function loadPluginDescriptor(descriptor) {
+function loadPluginDescriptor(descriptor: BasicDescriptor) {
   if (descriptor.value instanceof Plugin) {
-    return [descriptor.value, descriptor.options];
-  }
-
-  let result = PLUGIN_CACHE.get(descriptor.value);
-  if (!result) {
-    result = instantiatePlugin(
-      loadDescriptor(descriptor, true /* skipOptions */),
-    );
-    PLUGIN_CACHE.set(descriptor.value, result);
-  }
-
-  return [result, descriptor.options];
-}
-
-function instantiatePlugin({ value: pluginObj, descriptor }) {
-  Object.keys(pluginObj).forEach(key => {
-    if (!ALLOWED_PLUGIN_KEYS.has(key)) {
+    if (descriptor.options) {
       throw new Error(
-        messages.get("pluginInvalidProperty", descriptor.alias, key),
+        "Passed options to an existing Plugin instance will not work.",
       );
     }
-  });
-  if (
-    pluginObj.visitor &&
-    (pluginObj.visitor.enter || pluginObj.visitor.exit)
-  ) {
-    throw new Error(
-      "Plugins aren't allowed to specify catch-all enter/exit handlers. " +
-        "Please target individual nodes.",
-    );
+
+    return descriptor.value;
   }
 
-  const plugin = Object.assign({}, pluginObj, {
-    visitor: clone(pluginObj.visitor || {}),
-  });
-
-  traverse.explode(plugin.visitor);
-
-  let inheritsDescriptor;
-  let inherits;
-  if (plugin.inherits) {
-    inheritsDescriptor = {
-      alias: `${descriptor.loc}$inherits`,
-      loc: descriptor.loc,
-      value: plugin.inherits,
-      options: descriptor.options,
-      dirname: descriptor.dirname,
-    };
-
-    inherits = loadPluginDescriptor(inheritsDescriptor)[0];
-
-    plugin.pre = chain(inherits.pre, plugin.pre);
-    plugin.post = chain(inherits.post, plugin.post);
-    plugin.manipulateOptions = chain(
-      inherits.manipulateOptions,
-      plugin.manipulateOptions,
-    );
-    plugin.visitor = traverse.visitors.merge([
-      inherits.visitor,
-      plugin.visitor,
-    ]);
-  }
-
-  return new Plugin(plugin, descriptor.alias);
+  return instantiatePlugin(loadDescriptor(descriptor));
 }
+
+const instantiatePlugin = makeWeakCache(
+  ({ value: pluginObj, descriptor }, cache) => {
+    Object.keys(pluginObj).forEach(key => {
+      if (!ALLOWED_PLUGIN_KEYS.has(key)) {
+        throw new Error(
+          `Plugin ${descriptor.alias} provided an invalid property of ${key}`,
+        );
+      }
+    });
+    if (
+      pluginObj.visitor &&
+      (pluginObj.visitor.enter || pluginObj.visitor.exit)
+    ) {
+      throw new Error(
+        "Plugins aren't allowed to specify catch-all enter/exit handlers. " +
+          "Please target individual nodes.",
+      );
+    }
+
+    const plugin = Object.assign({}, pluginObj, {
+      visitor: clone(pluginObj.visitor || {}),
+    });
+
+    traverse.explode(plugin.visitor);
+
+    let inheritsDescriptor;
+    let inherits;
+    if (plugin.inherits) {
+      inheritsDescriptor = {
+        alias: `${descriptor.loc}$inherits`,
+        loc: descriptor.loc,
+        value: plugin.inherits,
+        options: descriptor.options,
+        dirname: descriptor.dirname,
+      };
+
+      // If the inherited plugin changes, reinstantiate this plugin.
+      inherits = cache.invalidate(() =>
+        loadPluginDescriptor(inheritsDescriptor),
+      );
+
+      plugin.pre = chain(inherits.pre, plugin.pre);
+      plugin.post = chain(inherits.post, plugin.post);
+      plugin.manipulateOptions = chain(
+        inherits.manipulateOptions,
+        plugin.manipulateOptions,
+      );
+      plugin.visitor = traverse.visitors.merge([
+        inherits.visitor,
+        plugin.visitor,
+      ]);
+    }
+
+    return new Plugin(plugin, descriptor.options, descriptor.alias);
+  },
+);
 
 /**
  * Generate a config object that will act as the root of a new nested config.
  */
-function loadPresetDescriptor(descriptor): MergeOptions {
+const loadPresetDescriptor = (descriptor: BasicDescriptor): MergeOptions => {
+  return instantiatePreset(loadDescriptor(descriptor));
+};
+
+const instantiatePreset = makeWeakCache(({ value, descriptor }) => {
   return {
     type: "preset",
-    options: loadDescriptor(descriptor).value,
+    options: value,
     alias: descriptor.alias,
     loc: descriptor.loc,
     dirname: descriptor.dirname,
   };
-}
+});
 
 /**
  * Validate and return the options object for the config.
@@ -448,9 +454,10 @@ function normalizeOptions(config) {
     // check for an unknown option
     if (!optionNames.has(key)) {
       if (removed[key]) {
+        const { message, version = 5 } = removed[key];
+
         throw new ReferenceError(
-          `Using removed Babel 5 option: ${alias}.${key} - ${removed[key]
-            .message}`,
+          `Using removed Babel ${version} option: ${alias}.${key} - ${message}`,
         );
       } else {
         // eslint-disable-next-line max-len
@@ -560,7 +567,6 @@ function createInitialOptions() {
     babelrc: true,
     filename: "unknown",
     code: true,
-    metadata: true,
     ast: true,
     comments: true,
     compact: "auto",

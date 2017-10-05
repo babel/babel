@@ -1,5 +1,5 @@
 import commander from "commander";
-import readdir from "fs-readdir-recursive";
+import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "babel-core";
 import includes from "lodash/includes";
 import path from "path";
@@ -9,13 +9,26 @@ export function chmod(src, dest) {
   fs.chmodSync(dest, fs.statSync(src).mode);
 }
 
-export function readdirFilter(filename) {
-  return readdir(filename).filter(function(filename) {
-    return isCompilableExtension(filename);
-  });
+type ReaddirFilter = (filename: string) => boolean;
+
+export function readdir(
+  dirname: string,
+  includeDotfiles: boolean,
+  filter: ReaddirFilter,
+) {
+  return readdirRecursive(
+    dirname,
+    filename =>
+      (includeDotfiles || filename[0] !== ".") && (!filter || filter(filename)),
+  );
 }
 
-export { readdir };
+export function readdirForCompilable(
+  dirname: string,
+  includeDotfiles: boolean,
+) {
+  return readdir(dirname, includeDotfiles, isCompilableExtension);
+}
 
 /**
  * Test if a filename ends with a compilable extension.
@@ -50,7 +63,7 @@ export function compile(filename, opts) {
     return babel.transformFileSync(filename, opts);
   } catch (err) {
     if (commander.watch) {
-      console.error(toErrorStack(err));
+      console.error(err);
       return { ignored: true };
     } else {
       throw err;
@@ -74,16 +87,8 @@ export function deleteDir(path) {
   }
 }
 
-function toErrorStack(err) {
-  if (err._babel && err instanceof SyntaxError) {
-    return `${err.name}: ${err.message}\n${err.codeFrame}`;
-  } else {
-    return err.stack;
-  }
-}
-
 process.on("uncaughtException", function(err) {
-  console.error(toErrorStack(err));
+  console.error(err);
   process.exit(1);
 });
 

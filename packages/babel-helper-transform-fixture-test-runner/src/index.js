@@ -176,8 +176,9 @@ function run(task) {
     try {
       resultExec = runCodeInTestContext(execCode, execOpts);
     } catch (err) {
-      err.message = exec.loc + ": " + err.message;
-      err.message += codeFrameColumns(execCode, exec.loc);
+      // Pass empty location to include the whole file in the output.
+      err.message =
+        `${exec.loc}: ${err.message}\n` + codeFrameColumns(execCode, {});
       throw err;
     }
   }

@@ -1,3 +1,36 @@
+export function TSTypeAnnotation(node) {
+  this.token(":");
+  this.space();
+  if (node.optional) this.token("?");
+  this.print(node.typeAnnotation, node);
+}
+
+export function TSTypeParameterInstantiation(node): void {
+  this.token("<");
+  this.printList(node.params, node, {});
+  this.token(">");
+}
+
+export { TSTypeParameterInstantiation as TSTypeParameterDeclaration };
+
+export function TSTypeParameter(node) {
+  this.word(node.name);
+
+  if (node.constraint) {
+    this.space();
+    this.word("extends");
+    this.space();
+    this.print(node.constraint, node);
+  }
+
+  if (node.default) {
+    this.space();
+    this.token("=");
+    this.space();
+    this.print(node.default, node);
+  }
+}
+
 export function TSParameterProperty(node) {
   if (node.accessibility) {
     this.word(node.accessibility);

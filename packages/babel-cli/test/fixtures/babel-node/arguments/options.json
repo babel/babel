@@ -1,4 +1,0 @@
-{
-  "args": ["bar", "foo"],
-  "stdout": "foo"
-}

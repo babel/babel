@@ -1,6 +1,6 @@
 {
   "lerna": "2.0.0-rc.4",
-  "version": "7.0.0-beta.1",
+  "version": "7.0.0-beta.2",
   "changelog": {
     "repo": "babel/babel",
     "labels": {
@@ -18,8 +18,13 @@
     "publish": {
       "ignore": [
         "*.md",
-        "test/**"
+        "test/**",
+        "codemods/**"
       ]
     }
-  }
+  },
+  "packages": [
+    "packages/*",
+    "codemods/*"
+  ]
 }
