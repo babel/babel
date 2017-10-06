@@ -136,7 +136,8 @@ gulp.task("build-babel-preset-env-standalone", cb => {
   );
 });
 
-function webpackBuild({ filename, library, plugins = [], externals }) {
+function webpackBuild(opts) {
+  const plugins = opts.plugins || [];
   let version = require("./packages/babel-core/package.json").version;
 
   // If this build is part of a pull request, include the pull request number in
@@ -182,8 +183,8 @@ function webpackBuild({ filename, library, plugins = [], externals }) {
       net: "empty",
     },
     output: {
-      filename: filename,
-      library: library,
+      filename: opts.filename,
+      library: opts.library,
       libraryTarget: "umd",
     },
     plugins: [
@@ -208,8 +209,8 @@ function webpackBuild({ filename, library, plugins = [], externals }) {
     },
   };
 
-  if (externals) {
-    config.externals = externals;
+  if (opts.externals) {
+    config.externals = opts.externals;
   }
 
   return webpackStream(config, webpack);
