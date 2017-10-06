@@ -19,11 +19,11 @@ const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
 const uglify = require("gulp-uglify");
 
-function webpackBuild(filename, libraryName, version) {
+function webpackBuild(filename, libraryName, version, plugins) {
   // If this build is part of a pull request, include the pull request number in
   // the version number.
   if (process.env.CIRCLE_PR_NUMBER) {
-    version += '+pr.' + process.env.CIRCLE_PR_NUMBER;
+    version += "+pr." + process.env.CIRCLE_PR_NUMBER;
   }
   const typeofPlugin = require("babel-plugin-transform-es2015-typeof-symbol")
     .default;
@@ -64,7 +64,7 @@ function webpackBuild(filename, libraryName, version) {
       library: libraryName,
       libraryTarget: "umd",
     },
-    plugins: [
+    plugins: plugins || [
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": '"production"',
         BABEL_VERSION:
@@ -106,7 +106,7 @@ function webpackBuild(filename, libraryName, version) {
   });*/
 }
 
-function registerBabelStandaloneTask(gulp, name, exportName, path, version) {
+function registerBabelStandaloneTask(gulp, name, exportName, path, version, plugins) {
   gulp.task("build-" + name + "-standalone", cb => {
     pump(
       [
@@ -114,7 +114,8 @@ function registerBabelStandaloneTask(gulp, name, exportName, path, version) {
         webpackBuild(
           name + ".js",
           exportName,
-          version
+          version,
+          plugins
         ),
         gulp.dest(path),
         uglify(),
