@@ -1,0 +1,13 @@
+{
+  "presets": [
+    ["../../lib", {
+      "debug": true,
+      "targets": {
+        "chrome": 55,
+        "uglify": true
+      },
+      "useBuiltIns": "entry",
+      "modules": false
+    }]
+  ]
+}

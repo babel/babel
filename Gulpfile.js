@@ -3,6 +3,9 @@
 const plumber = require("gulp-plumber");
 const through = require("through2");
 const chalk = require("chalk");
+const pump = require("pump");
+const uglify = require("gulp-uglify");
+const rename = require("gulp-rename");
 const newer = require("gulp-newer");
 const babel = require("gulp-babel");
 const watch = require("gulp-watch");
@@ -10,8 +13,12 @@ const gutil = require("gulp-util");
 const gulp = require("gulp");
 const path = require("path");
 const merge = require("merge-stream");
+const RootMostResolvePlugin = require("webpack-dependency-suite")
+  .RootMostResolvePlugin;
+const webpack = require("webpack");
+const webpackStream = require("webpack-stream");
 
-const sources = ["codemods", "packages"];
+const sources = ["codemods", "packages", "experimental"];
 
 function swapSrcWithLib(srcPath) {
   const parts = srcPath.split(path.sep);
@@ -70,3 +77,96 @@ gulp.task("watch", ["build"], function() {
     gulp.start("build");
   });
 });
+
+gulp.task("build-babel-standalone", cb => {
+  pump(
+    [
+      gulp.src(__dirname + "/packages/babel-standalone/src/index.js"),
+      webpackBuild(),
+      gulp.dest(__dirname + "/packages/babel-standalone"),
+      uglify(),
+      rename({ extname: ".min.js" }),
+      gulp.dest(__dirname + "/packages/babel-standalone"),
+    ],
+    cb
+  );
+});
+
+function webpackBuild() {
+  let version = require("./packages/babel-core/package.json").version;
+
+  // If this build is part of a pull request, include the pull request number in
+  // the version number.
+  if (process.env.CIRCLE_PR_NUMBER) {
+    version += "+pr." + process.env.CIRCLE_PR_NUMBER;
+  }
+
+  const config = {
+    module: {
+      rules: [
+        {
+          test: /\.js$/,
+          include: /node_modules/,
+          loader: "babel-loader",
+          options: {
+            // Some of the node_modules may have their own "babel" section in
+            // their project.json (or a ".babelrc" file). We need to ignore
+            // those as we're using our own Babel options.
+            babelrc: false,
+            presets: ["env"],
+          },
+        },
+        {
+          test: /\.js$/,
+          exclude: /node_modules/,
+          loader: "babel-loader",
+          options: {
+            // Some of the node_modules may have their own "babel" section in
+            // their project.json (or a ".babelrc" file). We need to ignore
+            // those as we're using our own Babel options.
+            babelrc: false,
+            presets: ["env", "stage-0"],
+          },
+        },
+      ],
+    },
+    node: {
+      // Mock Node.js modules that Babel require()s but that we don't
+      // particularly care about.
+      fs: "empty",
+      module: "empty",
+      net: "empty",
+    },
+    output: {
+      filename: "babel.js",
+      library: "Babel",
+      libraryTarget: "umd",
+    },
+    plugins: [
+      new webpack.DefinePlugin({
+        "process.env.NODE_ENV": '"production"',
+        BABEL_VERSION: JSON.stringify(version),
+        VERSION: JSON.stringify(version),
+      }),
+      /*new webpack.NormalModuleReplacementPlugin(
+        /..\/..\/package/,
+        "../../../../src/babel-package-shim"
+      ),*/
+      new webpack.optimize.ModuleConcatenationPlugin(),
+    ],
+    resolve: {
+      plugins: [
+        // Dedupe packages that are used across multiple plugins.
+        // This replaces DedupePlugin from Webpack 1.x
+        new RootMostResolvePlugin(__dirname, true),
+      ],
+    },
+  };
+
+  return webpackStream(config, webpack);
+  // To write JSON for debugging:
+  /*return webpackStream(config, webpack, (err, stats) => {
+    require('gulp-util').log(stats.toString({colors: true}));
+    require('fs').writeFileSync('webpack-debug.json', JSON.stringify(stats.toJson()));
+  });*/
+}

@@ -1,0 +1,11 @@
+{
+  "presets": [
+    ["../../lib", {
+      "debug": true,
+      "targets": {
+        "chrome": 55
+      },
+      "useBuiltIns": "usage"
+    }]
+  ]
+}
