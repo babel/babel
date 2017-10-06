@@ -214,7 +214,7 @@ class OptionManager {
 
 type BasicDescriptor = {
   value: {} | Function,
-  options: ?{},
+  options: {} | void,
   dirname: string,
   alias: string,
   loc: string,
@@ -222,7 +222,7 @@ type BasicDescriptor = {
 
 type LoadedDescriptor = {
   value: {},
-  options: ?{},
+  options: {} | void,
   dirname: string,
   alias: string,
   loc: string,
@@ -520,7 +520,7 @@ function normalizePair(
 ): {
   filepath: string | null,
   value: {} | Function,
-  options: ?{},
+  options: {} | void,
 } {
   let options;
   let value = pair;
@@ -562,6 +562,7 @@ function normalizePair(
       "Plugin/Preset options must be an object, null, or undefined",
     );
   }
+  options = options || undefined;
 
   return { filepath, value, options };
 }
