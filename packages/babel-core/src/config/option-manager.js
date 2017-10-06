@@ -289,24 +289,25 @@ const loadConfig = makeWeakCache((config): {
  */
 const loadDescriptor = makeWeakCache(
   (descriptor: BasicDescriptor, cache): LoadedDescriptor => {
-    if (typeof descriptor.value !== "function") {
-      return { value: descriptor.value, descriptor };
-    }
     const { value, options } = descriptor;
 
-    const api = Object.assign(Object.create(context), {
-      cache,
-      env: () => cache.using(() => getEnv()),
-    });
+    let item = value;
+    if (typeof value === "function") {
+      const api = Object.assign(Object.create(context), {
+        cache,
+        env: () => cache.using(() => getEnv()),
+      });
 
-    let item;
-    try {
-      item = value(api, options, { dirname: descriptor.dirname });
-    } catch (e) {
-      if (descriptor.alias) {
-        e.message += ` (While processing: ${JSON.stringify(descriptor.alias)})`;
+      try {
+        item = value(api, options, { dirname: descriptor.dirname });
+      } catch (e) {
+        if (descriptor.alias) {
+          e.message += ` (While processing: ${JSON.stringify(
+            descriptor.alias,
+          )})`;
+        }
+        throw e;
       }
-      throw e;
     }
 
     if (!item || typeof item !== "object") {
