@@ -1,0 +1,40 @@
+{
+  "name": "babel-env-standalone",
+  "version": "7.0.0-beta.2",
+  "description": "Standalone build of babel-prest-env for use in non-Node.js environments.",
+  "main": "babel-preset-env.js",
+  "files": [
+    "babel-preset-env.js",
+    "babel-preset-env.min.js",
+    "src"
+  ],
+  "devDependencies": {
+    "babel-core": "7.0.0-beta.2",
+    "babel-plugin-transform-new-target": "7.0.0-beta.2",
+    "babel-preset-env": "2.0.0-beta.2",
+    "babel-standalone": "7.0.0-beta.2",
+    "mock-require": "^2.0.2",
+    "webpack": "^3.4.1"
+  },
+  "keywords": [
+    "babel",
+    "babel-preset-env",
+    "babeljs",
+    "6to5",
+    "transpile",
+    "preset",
+    "standalone",
+    "transpiler"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/babel/babel/issues"
+  },
+  "homepage": "https://github.com/babel/babel/packages/babel-preset-env-standalone#readme",
+  "jest": {
+    "transformIgnorePatterns": [
+      "/node_modules/",
+      "babel-preset-env.js"
+    ]
+  }
+}
