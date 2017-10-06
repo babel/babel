@@ -1,0 +1,14 @@
+{
+  "presets": [
+    ["../../lib", {
+      "useBuiltIns": "entry",
+      "debug": true,
+      "targets": {
+        "chrome": 54,
+        "electron": 0.36,
+        "node": 6.10,
+        "ie": 10
+      }
+    }]
+  ]
+}

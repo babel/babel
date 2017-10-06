@@ -19,12 +19,14 @@
       "ignore": [
         "*.md",
         "test/**",
-        "codemods/**"
+        "codemods/**",
+        "experimental/**"
       ]
     }
   },
   "packages": [
     "packages/*",
-    "codemods/*"
+    "codemods/*",
+    "experimental/*"
   ]
 }

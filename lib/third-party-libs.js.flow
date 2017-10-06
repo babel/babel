@@ -31,3 +31,36 @@ declare module "lodash/clone" {
 declare module "lodash/merge" {
   declare export default <T: Object>(T, Object) => T;
 }
+
+declare module "convert-source-map" {
+  declare export type SourceMap = {
+    version: 3,
+    file: ?string,
+    sources: [?string],
+    sourcesContent: [?string],
+    names: [?string],
+    mappings: string,
+  };
+
+  declare class Converter {
+    toJSON(): string;
+    toBase64(): string;
+    toComment(): string;
+    toObject(): SourceMap
+  }
+
+  declare module.exports: {
+    SourceMap: SourceMap,
+    Converter: Converter,
+    fromObject(obj: SourceMap): Converter,
+    fromJSON(str: string): Converter,
+    fromBase64(str: string): Converter,
+    fromComment(str: string): Converter,
+    fromMapFileComment(str: string): Converter,
+    fromSource(str: string): Converter,
+    fromMapFileSource(str: string): Converter,
+    removeComments(str: string): string,
+    removeMapFileComments(str: string): string,
+    generateMapFileComment(path: string, options?: ?{ multiline: boolean }): string,
+  };
+}

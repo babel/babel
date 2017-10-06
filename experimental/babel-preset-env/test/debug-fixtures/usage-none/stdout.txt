@@ -1,0 +1,43 @@
+babel-preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "52",
+  "firefox": "50",
+  "ie": "11"
+}
+
+Using modules transform: commonjs
+
+Using plugins:
+  check-es2015-constants { "firefox":"50", "ie":"11" }
+  transform-es2015-arrow-functions { "ie":"11" }
+  transform-es2015-block-scoping { "firefox":"50", "ie":"11" }
+  transform-es2015-classes { "ie":"11" }
+  transform-es2015-computed-properties { "ie":"11" }
+  transform-es2015-destructuring { "firefox":"50", "ie":"11" }
+  transform-es2015-duplicate-keys { "ie":"11" }
+  transform-es2015-for-of { "firefox":"50", "ie":"11" }
+  transform-es2015-function-name { "firefox":"50", "ie":"11" }
+  transform-es2015-literals { "firefox":"50", "ie":"11" }
+  transform-es2015-object-super { "ie":"11" }
+  transform-es2015-parameters { "firefox":"50", "ie":"11" }
+  transform-es2015-shorthand-properties { "ie":"11" }
+  transform-es2015-spread { "ie":"11" }
+  transform-es2015-sticky-regex { "ie":"11" }
+  transform-es2015-template-literals { "ie":"11" }
+  transform-es2015-typeof-symbol { "ie":"11" }
+  transform-es2015-unicode-regex { "ie":"11" }
+  transform-new-target { "ie":"11" }
+  transform-regenerator { "firefox":"50", "ie":"11" }
+  transform-exponentiation-operator { "firefox":"50", "ie":"11" }
+  transform-async-to-generator { "chrome":"52", "firefox":"50", "ie":"11" }
+  syntax-trailing-function-commas { "chrome":"52", "firefox":"50", "ie":"11" }
+
+Using polyfills with `usage` option:
+
+[src/in.js] Based on your code and targets, none were added.
+src/in.js -> lib/in.js
+
+[src/in2.js] Based on your code and targets, none were added.
+src/in2.js -> lib/in2.js

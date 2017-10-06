@@ -5,7 +5,7 @@ export NODE_ENV = test
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
 
-SOURCES = packages codemods
+SOURCES = packages codemods experimental
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
@@ -18,7 +18,7 @@ ifneq ("$(BABEL_ENV)", "cov")
 endif
 
 build-standalone:
-	./node_modules/.bin/gulp build-babel-standalone --cwd=packages/babel-standalone/
+	./node_modules/.bin/gulp build-babel-standalone
 
 build-preset-env-standalone:
 	./node_modules/.bin/gulp build-babel-preset-env-standalone --cwd=packages/babel-preset-env-standalone/

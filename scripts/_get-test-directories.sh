@@ -3,7 +3,7 @@ set -e
 
 TEST_DIRS=""
 
-sources=("packages" "codemods")
+sources=("codemods" "experimental" "packages")
 
 for source in "${sources[@]}"; do
   for f in $source/*; do

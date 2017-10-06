@@ -9,12 +9,10 @@
     "src"
   ],
   "devDependencies": {
-    "babel-core": "7.0.0-beta.2",
     "babel-plugin-transform-new-target": "7.0.0-beta.2",
     "babel-preset-env": "2.0.0-beta.2",
     "babel-standalone": "7.0.0-beta.2",
     "mock-require": "^2.0.2",
-    "webpack": "^3.4.1"
   },
   "keywords": [
     "babel",

@@ -33,6 +33,8 @@ export function getCompletionRecords(): Array {
     paths = addCompletionRecords(this.get("block"), paths);
     paths = addCompletionRecords(this.get("handler"), paths);
     paths = addCompletionRecords(this.get("finalizer"), paths);
+  } else if (this.isCatchClause()) {
+    paths = addCompletionRecords(this.get("body"), paths);
   } else {
     paths.push(this);
   }

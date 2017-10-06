@@ -8,7 +8,7 @@ describe("option-manager", () => {
       manageOptions({
         plugins: [({ Plugin }) => new Plugin("object-assign", {})],
       });
-    }, /Babel 5 plugin is being run with Babel 6/);
+    }, /Babel 5 plugin is being run with an unsupported Babel/);
   });
 
   describe("mergeOptions", () => {

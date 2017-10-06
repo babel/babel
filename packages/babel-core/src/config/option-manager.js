@@ -9,6 +9,8 @@ import buildConfigChain from "./build-config-chain";
 import path from "path";
 import traverse from "babel-traverse";
 import clone from "lodash/clone";
+import { makeWeakCache } from "./caching";
+import { getEnv } from "./helpers/environment";
 
 import {
   loadPlugin,
@@ -77,7 +79,7 @@ const ALLOWED_PLUGIN_KEYS = new Set([
 
 export default function manageOptions(opts: {}): {
   options: Object,
-  passes: Array<Array<[Plugin, ?{}]>>,
+  passes: Array<Array<Plugin>>,
 } | null {
   return new OptionManager().init(opts);
 }
@@ -89,7 +91,7 @@ class OptionManager {
   }
 
   options: Object;
-  passes: Array<Array<[Plugin, ?{}]>>;
+  passes: Array<Array<Plugin>>;
 
   /**
    * This is called when we want to merge the input `opts` into the
@@ -100,7 +102,7 @@ class OptionManager {
    *  - `dirname` is used to resolve plugins relative to it.
    */
 
-  mergeOptions(config: MergeOptions, pass?: Array<[Plugin, ?{}]>) {
+  mergeOptions(config: MergeOptions, pass?: Array<Plugin>) {
     const result = loadConfig(config);
 
     const plugins = result.plugins.map(descriptor =>
@@ -212,7 +214,15 @@ class OptionManager {
 
 type BasicDescriptor = {
   value: {} | Function,
-  options: ?{},
+  options: {} | void,
+  dirname: string,
+  alias: string,
+  loc: string,
+};
+
+type LoadedDescriptor = {
+  value: {},
+  options: {},
   dirname: string,
   alias: string,
   loc: string,
@@ -221,13 +231,11 @@ type BasicDescriptor = {
 /**
  * Load and validate the given config into a set of options, plugins, and presets.
  */
-function loadConfig(
-  config,
-): {
+const loadConfig = makeWeakCache((config): {
   options: {},
   plugins: Array<BasicDescriptor>,
   presets: Array<BasicDescriptor>,
-} {
+} => {
   const options = normalizeOptions(config);
 
   if (
@@ -277,122 +285,136 @@ function loadConfig(
   });
 
   return { options, plugins, presets };
-}
+});
 
 /**
  * Load a generic plugin/preset from the given descriptor loaded from the config object.
  */
-function loadDescriptor(descriptor, skipOptions) {
-  if (typeof descriptor.value !== "function") {
-    return { value: descriptor.value, descriptor };
-  }
+const loadDescriptor = makeWeakCache(
+  (
+    { value, options = {}, dirname, alias, loc }: BasicDescriptor,
+    cache,
+  ): LoadedDescriptor => {
+    let item = value;
+    if (typeof value === "function") {
+      const api = Object.assign(Object.create(context), {
+        cache,
+        env: () => cache.using(() => getEnv()),
+      });
 
-  const { value, options } = descriptor;
-  let item;
-  try {
-    if (skipOptions) {
-      item = value(context);
-    } else {
-      item = value(context, options, { dirname: descriptor.dirname });
+      try {
+        item = value(api, options, { dirname });
+      } catch (e) {
+        if (alias) {
+          e.message += ` (While processing: ${JSON.stringify(alias)})`;
+        }
+        throw e;
+      }
     }
-  } catch (e) {
-    if (descriptor.alias) {
-      e.message += ` (While processing: ${JSON.stringify(descriptor.alias)})`;
+
+    if (!item || typeof item !== "object") {
+      throw new Error("Plugin/Preset did not return an object.");
     }
-    throw e;
-  }
 
-  if (!item || typeof item !== "object") {
-    throw new Error("Plugin/Preset did not return an object.");
-  }
-
-  return { value: item, descriptor };
-}
+    return { value: item, options, dirname, alias, loc };
+  },
+);
 
 /**
  * Instantiate a plugin for the given descriptor, returning the plugin/options pair.
  */
-const PLUGIN_CACHE = new WeakMap();
-function loadPluginDescriptor(descriptor) {
+function loadPluginDescriptor(descriptor: BasicDescriptor): Plugin {
   if (descriptor.value instanceof Plugin) {
-    return [descriptor.value, descriptor.options];
-  }
-
-  let result = PLUGIN_CACHE.get(descriptor.value);
-  if (!result) {
-    result = instantiatePlugin(
-      loadDescriptor(descriptor, true /* skipOptions */),
-    );
-    PLUGIN_CACHE.set(descriptor.value, result);
-  }
-
-  return [result, descriptor.options];
-}
-
-function instantiatePlugin({ value: pluginObj, descriptor }) {
-  Object.keys(pluginObj).forEach(key => {
-    if (!ALLOWED_PLUGIN_KEYS.has(key)) {
+    if (descriptor.options) {
       throw new Error(
-        `Plugin ${descriptor.alias} provided an invalid property of ${key}`,
+        "Passed options to an existing Plugin instance will not work.",
       );
     }
-  });
-  if (
-    pluginObj.visitor &&
-    (pluginObj.visitor.enter || pluginObj.visitor.exit)
-  ) {
-    throw new Error(
-      "Plugins aren't allowed to specify catch-all enter/exit handlers. " +
-        "Please target individual nodes.",
-    );
+
+    return descriptor.value;
   }
 
-  const plugin = Object.assign({}, pluginObj, {
-    visitor: clone(pluginObj.visitor || {}),
-  });
-
-  traverse.explode(plugin.visitor);
-
-  let inheritsDescriptor;
-  let inherits;
-  if (plugin.inherits) {
-    inheritsDescriptor = {
-      alias: `${descriptor.loc}$inherits`,
-      loc: descriptor.loc,
-      value: plugin.inherits,
-      options: descriptor.options,
-      dirname: descriptor.dirname,
-    };
-
-    inherits = loadPluginDescriptor(inheritsDescriptor)[0];
-
-    plugin.pre = chain(inherits.pre, plugin.pre);
-    plugin.post = chain(inherits.post, plugin.post);
-    plugin.manipulateOptions = chain(
-      inherits.manipulateOptions,
-      plugin.manipulateOptions,
-    );
-    plugin.visitor = traverse.visitors.merge([
-      inherits.visitor,
-      plugin.visitor,
-    ]);
-  }
-
-  return new Plugin(plugin, descriptor.alias);
+  return instantiatePlugin(loadDescriptor(descriptor));
 }
+
+const instantiatePlugin = makeWeakCache(
+  (
+    { value: pluginObj, options, dirname, alias, loc }: LoadedDescriptor,
+    cache,
+  ): Plugin => {
+    Object.keys(pluginObj).forEach(key => {
+      if (!ALLOWED_PLUGIN_KEYS.has(key)) {
+        throw new Error(
+          `Plugin ${alias} provided an invalid property of ${key}`,
+        );
+      }
+    });
+    if (
+      pluginObj.visitor &&
+      (pluginObj.visitor.enter || pluginObj.visitor.exit)
+    ) {
+      throw new Error(
+        "Plugins aren't allowed to specify catch-all enter/exit handlers. " +
+          "Please target individual nodes.",
+      );
+    }
+
+    const plugin = Object.assign({}, pluginObj, {
+      visitor: clone(pluginObj.visitor || {}),
+    });
+
+    traverse.explode(plugin.visitor);
+
+    let inheritsDescriptor;
+    let inherits;
+    if (plugin.inherits) {
+      inheritsDescriptor = {
+        alias: `${loc}$inherits`,
+        loc,
+        value: plugin.inherits,
+        options,
+        dirname,
+      };
+
+      // If the inherited plugin changes, reinstantiate this plugin.
+      inherits = cache.invalidate(() =>
+        loadPluginDescriptor(inheritsDescriptor),
+      );
+
+      plugin.pre = chain(inherits.pre, plugin.pre);
+      plugin.post = chain(inherits.post, plugin.post);
+      plugin.manipulateOptions = chain(
+        inherits.manipulateOptions,
+        plugin.manipulateOptions,
+      );
+      plugin.visitor = traverse.visitors.merge([
+        inherits.visitor,
+        plugin.visitor,
+      ]);
+    }
+
+    return new Plugin(plugin, options, alias);
+  },
+);
 
 /**
  * Generate a config object that will act as the root of a new nested config.
  */
-function loadPresetDescriptor(descriptor): MergeOptions {
-  return {
-    type: "preset",
-    options: loadDescriptor(descriptor).value,
-    alias: descriptor.alias,
-    loc: descriptor.loc,
-    dirname: descriptor.dirname,
-  };
-}
+const loadPresetDescriptor = (descriptor: BasicDescriptor): MergeOptions => {
+  return instantiatePreset(loadDescriptor(descriptor));
+};
+
+const instantiatePreset = makeWeakCache(
+  ({ value, dirname, alias, loc }: LoadedDescriptor): MergeOptions => {
+    return {
+      type: "preset",
+      options: value,
+      alias,
+      loc,
+      dirname,
+    };
+  },
+);
 
 /**
  * Validate and return the options object for the config.
@@ -497,7 +519,7 @@ function normalizePair(
 ): {
   filepath: string | null,
   value: {} | Function,
-  options: ?{},
+  options: {} | void,
 } {
   let options;
   let value = pair;
@@ -539,6 +561,7 @@ function normalizePair(
       "Plugin/Preset options must be an object, null, or undefined",
     );
   }
+  options = options || undefined;
 
   return { filepath, value, options };
 }

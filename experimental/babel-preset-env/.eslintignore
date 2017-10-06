@@ -1,0 +1,6 @@
+/lib
+debug-fixtures
+fixtures
+/data
+/flow-typed
+test/tmp

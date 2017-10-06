@@ -153,7 +153,8 @@ function permuteHelperAST(file, metadata, id, getLocalBindings, getDependency) {
 
   const dependenciesRefs = {};
   dependencies.forEach((name, id) => {
-    dependenciesRefs[id.name] = getDependency(name);
+    dependenciesRefs[id.name] =
+      typeof getDependency === "function" ? getDependency(name) : id;
   });
 
   const toRename = {};
@@ -256,7 +257,7 @@ function loadHelper(name) {
 
 export function get(
   name,
-  getDependency: string => t.Expression,
+  getDependency?: string => t.Expression,
   id?,
   getLocalBindings?: () => string[],
 ) {
