@@ -222,7 +222,7 @@ type BasicDescriptor = {
 
 type LoadedDescriptor = {
   value: {},
-  options: {} | void,
+  options: {},
   dirname: string,
   alias: string,
   loc: string,
@@ -292,7 +292,7 @@ const loadConfig = makeWeakCache((config): {
  */
 const loadDescriptor = makeWeakCache(
   (descriptor: BasicDescriptor, cache): LoadedDescriptor => {
-    const { value, options, dirname, alias, loc } = descriptor;
+    const { value, options = {}, dirname, alias, loc } = descriptor;
 
     let item = value;
     if (typeof value === "function") {
