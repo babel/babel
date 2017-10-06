@@ -14,6 +14,8 @@ codemods/*/test/fixtures
 codemods/*/test/tmp
 packages/babel-standalone/babel.js
 packages/babel-standalone/babel.min.js
+packages/babel-preset-env-standalone/babel-preset-env.js
+packages/babel-preset-env-standalone/babel-preset-env.min.js
 
 # Prettier tries to insert trailing commas in function calls, which Node.js
 # doesn't natively support. This causes an error when loading the Gulp tasks.
