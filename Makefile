@@ -21,7 +21,7 @@ build-standalone:
 	./node_modules/.bin/gulp build-babel-standalone
 
 build-preset-env-standalone:
-	./node_modules/.bin/gulp build-babel-preset-env-standalone --cwd=packages/babel-preset-env-standalone/
+	./node_modules/.bin/gulp build-babel-preset-env-standalone
 
 build-dist: build
 	cd packages/babel-polyfill; \
