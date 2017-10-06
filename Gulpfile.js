@@ -92,6 +92,27 @@ gulp.task("build-babel-standalone", cb => {
   );
 });
 
+const envWebpackPlugins = [
+  new webpack.NormalModuleReplacementPlugin(
+    /\.\/available-plugins/,
+    require.resolve(
+      path.join(
+        __dirname,
+        "./packages/babel-preset-env-standalone/src/available-plugins"
+      )
+    )
+  ),
+  new webpack.NormalModuleReplacementPlugin(
+    /caniuse-lite\/data\/regions\/.+/,
+    require.resolve(
+      path.join(
+        __dirname,
+        "./packages/babel-preset-env-standalone/src/caniuse-lite-regions"
+      )
+    )
+  ),
+];
+
 gulp.task("build-babel-preset-env-standalone", cb => {
   pump(
     [
@@ -102,6 +123,9 @@ gulp.task("build-babel-preset-env-standalone", cb => {
         filename: "babel-preset-env.js",
         library: "babelPresetEnv",
         plugins: envWebpackPlugins,
+        externals: {
+          "babel-standalone": "Babel",
+        },
       }),
       gulp.dest(__dirname + "/packages/babel-preset-env-standalone"),
       uglify(),
@@ -112,7 +136,7 @@ gulp.task("build-babel-preset-env-standalone", cb => {
   );
 });
 
-function webpackBuild({ filename, library, plugins = [] }) {
+function webpackBuild({ filename, library, plugins = [], externals }) {
   let version = require("./packages/babel-core/package.json").version;
 
   // If this build is part of a pull request, include the pull request number in
@@ -184,6 +208,10 @@ function webpackBuild({ filename, library, plugins = [] }) {
     },
   };
 
+  if (externals) {
+    config.externals = externals;
+  }
+
   return webpackStream(config, webpack);
   // To write JSON for debugging:
   /*return webpackStream(config, webpack, (err, stats) => {
@@ -191,14 +219,3 @@ function webpackBuild({ filename, library, plugins = [] }) {
     require('fs').writeFileSync('webpack-debug.json', JSON.stringify(stats.toJson()));
   });*/
 }
-
-const envWebpackPlugins = [
-  new webpack.NormalModuleReplacementPlugin(
-    /\.\/available-plugins/,
-    require.resolve(path.join(__dirname, "./src/available-plugins"))
-  ),
-  new webpack.NormalModuleReplacementPlugin(
-    /caniuse-lite\/data\/regions\/.+/,
-    require.resolve(path.join(__dirname, "./src/caniuse-lite-regions"))
-  ),
-];
