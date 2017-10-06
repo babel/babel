@@ -108,7 +108,7 @@ gulp.task("build-babel-preset-env-standalone", cb => {
       rename({ extname: ".min.js" }),
       gulp.dest(__dirname + "/packages/babel-preset-env-standalone"),
     ],
-    cb,
+    cb
   );
 });
 
@@ -195,10 +195,10 @@ function webpackBuild({ filename, library, plugins = [] }) {
 const envWebpackPlugins = [
   new webpack.NormalModuleReplacementPlugin(
     /\.\/available-plugins/,
-    require.resolve(path.join(__dirname, "./src/available-plugins")),
+    require.resolve(path.join(__dirname, "./src/available-plugins"))
   ),
   new webpack.NormalModuleReplacementPlugin(
     /caniuse-lite\/data\/regions\/.+/,
-    require.resolve(path.join(__dirname, "./src/caniuse-lite-regions")),
+    require.resolve(path.join(__dirname, "./src/caniuse-lite-regions"))
   ),
 ];
