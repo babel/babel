@@ -98,7 +98,7 @@ const envWebpackPlugins = [
     require.resolve(
       path.join(
         __dirname,
-        "./packages/babel-preset-env-standalone/src/available-plugins"
+        "./experimental/babel-preset-env-standalone/src/available-plugins"
       )
     )
   ),
@@ -107,7 +107,7 @@ const envWebpackPlugins = [
     require.resolve(
       path.join(
         __dirname,
-        "./packages/babel-preset-env-standalone/src/caniuse-lite-regions"
+        "./experimental/babel-preset-env-standalone/src/caniuse-lite-regions"
       )
     )
   ),
@@ -117,7 +117,7 @@ gulp.task("build-babel-preset-env-standalone", cb => {
   pump(
     [
       gulp.src(
-        __dirname + "/packages/babel-preset-env-standalone/src/index.js"
+        __dirname + "/experimental/babel-preset-env-standalone/src/index.js"
       ),
       webpackBuild({
         filename: "babel-preset-env.js",
@@ -126,11 +126,13 @@ gulp.task("build-babel-preset-env-standalone", cb => {
         externals: {
           "babel-standalone": "Babel",
         },
+        version: require("./experimental/babel-preset-env/package.json")
+          .version,
       }),
-      gulp.dest(__dirname + "/packages/babel-preset-env-standalone"),
+      gulp.dest(__dirname + "/experimental/babel-preset-env-standalone"),
       uglify(),
       rename({ extname: ".min.js" }),
-      gulp.dest(__dirname + "/packages/babel-preset-env-standalone"),
+      gulp.dest(__dirname + "/experimental/babel-preset-env-standalone"),
     ],
     cb
   );
@@ -138,12 +140,14 @@ gulp.task("build-babel-preset-env-standalone", cb => {
 
 function webpackBuild(opts) {
   const plugins = opts.plugins || [];
-  let version = require("./packages/babel-core/package.json").version;
-
+  let babelVersion = require("./packages/babel-core/package.json").version;
+  let version = opts.version || babelVersion;
   // If this build is part of a pull request, include the pull request number in
   // the version number.
   if (process.env.CIRCLE_PR_NUMBER) {
-    version += "+pr." + process.env.CIRCLE_PR_NUMBER;
+    const prVersion = "+pr." + process.env.CIRCLE_PR_NUMBER;
+    babelVersion += prVersion;
+    version += prVersion;
   }
 
   const config = {
@@ -191,7 +195,7 @@ function webpackBuild(opts) {
       new webpack.DefinePlugin({
         "process.env.NODE_ENV": '"production"',
         "process.env": JSON.stringify({ NODE_ENV: "production" }),
-        BABEL_VERSION: JSON.stringify(version),
+        BABEL_VERSION: JSON.stringify(babelVersion),
         VERSION: JSON.stringify(version),
       }),
       /*new webpack.NormalModuleReplacementPlugin(
