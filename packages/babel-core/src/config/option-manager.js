@@ -220,6 +220,11 @@ type BasicDescriptor = {
   loc: string,
 };
 
+type LoadedDescriptor = {
+  value: {},
+  descriptor: BasicDescriptor,
+};
+
 /**
  * Load and validate the given config into a set of options, plugins, and presets.
  */
@@ -282,38 +287,40 @@ const loadConfig = makeWeakCache((config): {
 /**
  * Load a generic plugin/preset from the given descriptor loaded from the config object.
  */
-const loadDescriptor = makeWeakCache((descriptor, cache) => {
-  if (typeof descriptor.value !== "function") {
-    return { value: descriptor.value, descriptor };
-  }
-  const { value, options } = descriptor;
-
-  const api = Object.assign(Object.create(context), {
-    cache,
-    env: () => cache.using(() => getEnv()),
-  });
-
-  let item;
-  try {
-    item = value(api, options, { dirname: descriptor.dirname });
-  } catch (e) {
-    if (descriptor.alias) {
-      e.message += ` (While processing: ${JSON.stringify(descriptor.alias)})`;
+const loadDescriptor = makeWeakCache(
+  (descriptor: BasicDescriptor, cache): LoadedDescriptor => {
+    if (typeof descriptor.value !== "function") {
+      return { value: descriptor.value, descriptor };
     }
-    throw e;
-  }
+    const { value, options } = descriptor;
 
-  if (!item || typeof item !== "object") {
-    throw new Error("Plugin/Preset did not return an object.");
-  }
+    const api = Object.assign(Object.create(context), {
+      cache,
+      env: () => cache.using(() => getEnv()),
+    });
 
-  return { value: item, descriptor };
-});
+    let item;
+    try {
+      item = value(api, options, { dirname: descriptor.dirname });
+    } catch (e) {
+      if (descriptor.alias) {
+        e.message += ` (While processing: ${JSON.stringify(descriptor.alias)})`;
+      }
+      throw e;
+    }
+
+    if (!item || typeof item !== "object") {
+      throw new Error("Plugin/Preset did not return an object.");
+    }
+
+    return { value: item, descriptor };
+  },
+);
 
 /**
  * Instantiate a plugin for the given descriptor, returning the plugin/options pair.
  */
-function loadPluginDescriptor(descriptor: BasicDescriptor) {
+function loadPluginDescriptor(descriptor: BasicDescriptor): Plugin {
   if (descriptor.value instanceof Plugin) {
     if (descriptor.options) {
       throw new Error(
@@ -328,7 +335,7 @@ function loadPluginDescriptor(descriptor: BasicDescriptor) {
 }
 
 const instantiatePlugin = makeWeakCache(
-  ({ value: pluginObj, descriptor }, cache) => {
+  ({ value: pluginObj, descriptor }: LoadedDescriptor, cache): Plugin => {
     Object.keys(pluginObj).forEach(key => {
       if (!ALLOWED_PLUGIN_KEYS.has(key)) {
         throw new Error(
@@ -391,15 +398,17 @@ const loadPresetDescriptor = (descriptor: BasicDescriptor): MergeOptions => {
   return instantiatePreset(loadDescriptor(descriptor));
 };
 
-const instantiatePreset = makeWeakCache(({ value, descriptor }) => {
-  return {
-    type: "preset",
-    options: value,
-    alias: descriptor.alias,
-    loc: descriptor.loc,
-    dirname: descriptor.dirname,
-  };
-});
+const instantiatePreset = makeWeakCache(
+  ({ value, descriptor }: LoadedDescriptor): MergeOptions => {
+    return {
+      type: "preset",
+      options: value,
+      alias: descriptor.alias,
+      loc: descriptor.loc,
+      dirname: descriptor.dirname,
+    };
+  },
+);
 
 /**
  * Validate and return the options object for the config.
