@@ -291,9 +291,10 @@ const loadConfig = makeWeakCache((config): {
  * Load a generic plugin/preset from the given descriptor loaded from the config object.
  */
 const loadDescriptor = makeWeakCache(
-  (descriptor: BasicDescriptor, cache): LoadedDescriptor => {
-    const { value, options = {}, dirname, alias, loc } = descriptor;
-
+  (
+    { value, options = {}, dirname, alias, loc }: BasicDescriptor,
+    cache,
+  ): LoadedDescriptor => {
     let item = value;
     if (typeof value === "function") {
       const api = Object.assign(Object.create(context), {
@@ -302,12 +303,10 @@ const loadDescriptor = makeWeakCache(
       });
 
       try {
-        item = value(api, options, { dirname: descriptor.dirname });
+        item = value(api, options, { dirname });
       } catch (e) {
-        if (descriptor.alias) {
-          e.message += ` (While processing: ${JSON.stringify(
-            descriptor.alias,
-          )})`;
+        if (alias) {
+          e.message += ` (While processing: ${JSON.stringify(alias)})`;
         }
         throw e;
       }
@@ -317,7 +316,7 @@ const loadDescriptor = makeWeakCache(
       throw new Error("Plugin/Preset did not return an object.");
     }
 
-    return { value: item, options, descriptor, dirname, alias, loc };
+    return { value: item, options, dirname, alias, loc };
   },
 );
 
