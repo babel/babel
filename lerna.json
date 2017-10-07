@@ -28,5 +28,7 @@
     "packages/*",
     "codemods/*",
     "experimental/*"
-  ]
+  ],
+  "npmClient": "yarn",
+  "npmClientArgs": ["--no-lockfile"]
 }
