@@ -2,6 +2,8 @@ general:
   artifacts:
     - "packages/babel-standalone/babel.js"
     - "packages/babel-standalone/babel.min.js"
+    - "experimental/babel-preset-env-standalone/babel-preset-env.js"
+    - "experimental/babel-preset-env-standalone/babel-preset-env.min.js"
 
 machine:
   node:
