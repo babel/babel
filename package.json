@@ -85,7 +85,9 @@
   "jest": {
     "runner": "jest-runner-mocha",
     "testMatch": [
-      "<rootDir>/packages/**/test/*.js"
+      "<rootDir>/packages/**/test/*.js",
+      "<rootDir>/codemods/**/test/*.js",
+      "<rootDir>/**/*.spec.js"
     ]
   },
   "jest-runner-mocha": {
