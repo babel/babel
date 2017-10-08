@@ -129,6 +129,13 @@ for (let i = 0; i < t.TYPES.length; i++) {
   );
 }
 
+lines.push(
+  `declare function clone<T>(n: T): T;`,
+  `declare function cloneDeep<T>(n: T): T;`,
+  `declare function removeProperties<T>(n: T, opts: ?{}): void;`,
+  `declare function removePropertiesDeep<T>(n: T, opts: ?{}): T;`
+);
+
 for (const type in t.FLIPPED_ALIAS_KEYS) {
   const types = t.FLIPPED_ALIAS_KEYS[type];
   code += `type ${NODE_PREFIX}${type} = ${types
