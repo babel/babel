@@ -245,7 +245,6 @@ export default function({ template, types: t }, options) {
       ITERATOR_KEY: iteratorKey,
       STEP_KEY: stepKey,
       OBJECT: node.right,
-      BODY: null,
     });
 
     const isLabeledParent = t.isLabeledStatement(parent);
