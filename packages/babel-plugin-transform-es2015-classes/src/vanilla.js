@@ -23,8 +23,8 @@ const noMethodVisitor = {
 };
 
 const transformToObjectDefineProperty = template(`
-  Object.defineProperty(constructor, prop, {
-    propFunction,
+  Object.defineProperty(CONSTRUCTOR, PROPERTY, {
+    FUNCTION_IDENTIFIER,
     enumerable: true,
     configurable: true
   })
@@ -550,8 +550,9 @@ export default class ClassTransformer {
       if (isSingleGetOrSet) {
         path.replaceWith(
           transformToObjectDefineProperty({
-            constructor: t.identifier(this.classRef.name),
-            prop: t.identifier(node.kind),
+            CONSTRUCTOR: t.identifier(this.classRef.name),
+            PROPERTY: t.identifier(node.kind),
+            FUNCTION_IDENTIFIER: t.identifier(node.key.name),
           }),
         );
       }
