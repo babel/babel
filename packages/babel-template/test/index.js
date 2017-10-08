@@ -5,18 +5,18 @@ import chai from "chai";
 const comments = "// Sum two numbers\nconst add = (a, b) => a + b;";
 
 describe("templating", function() {
-  it("import statement will cause parser to throw by default", function() {
+  it("import statements are allowed by default", function() {
     chai
       .expect(function() {
         template("import foo from 'foo'")({});
       })
-      .to.throw();
+      .not.to.throw();
   });
 
-  it("import statements are allowed with sourceType: module", function() {
+  it("with statements are allowed with sourceType: script", function() {
     chai
       .expect(function() {
-        template("import foo from 'foo'", { sourceType: "module" })({});
+        template("with({}){}", { sourceType: "script" })({});
       })
       .not.to.throw();
   });

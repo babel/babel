@@ -6,7 +6,7 @@ const helpers = {};
 export default helpers;
 
 function defineHelper(str) {
-  return template(str, { sourceType: "module" });
+  return template(str);
 }
 
 helpers.typeof = defineHelper(`

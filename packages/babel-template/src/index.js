@@ -129,6 +129,7 @@ function factory(code: string, opts?: Object): Function {
       allowReturnOutsideFunction: true,
       allowSuperOutsideMethod: true,
       preserveComments: false,
+      sourceType: "module",
     },
     opts,
   );
