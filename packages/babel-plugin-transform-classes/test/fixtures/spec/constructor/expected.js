@@ -13,7 +13,7 @@ function (_Bar) {
 
     babelHelpers.classCallCheck(this, Foo);
     _this = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this));
-    babelHelpers.assertThisInitialized(_this).state = "test";
+    _this.state = "test";
     return _this;
   }
 

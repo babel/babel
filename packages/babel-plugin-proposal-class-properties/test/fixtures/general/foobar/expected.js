@@ -13,7 +13,7 @@ function (_Parent) {
       enumerable: true,
       writable: true,
       value: function value() {
-        babelHelpers.assertThisInitialized(_this).name = {};
+        _this.name = {};
       }
     });
     return _this;

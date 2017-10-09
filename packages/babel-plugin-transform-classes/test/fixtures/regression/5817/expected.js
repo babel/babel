@@ -9,11 +9,11 @@ function (_B) {
     babelHelpers.classCallCheck(this, A);
     _this = babelHelpers.possibleConstructorReturn(this, (A.__proto__ || Object.getPrototypeOf(A)).call(this));
 
-    babelHelpers.assertThisInitialized(_this).arrow1 = function (x) {
+    _this.arrow1 = function (x) {
       return x;
     };
 
-    babelHelpers.assertThisInitialized(_this).arrow2 = function (x) {
+    _this.arrow2 = function (x) {
       return x;
     };
 

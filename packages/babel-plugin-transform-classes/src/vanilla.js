@@ -35,6 +35,13 @@ const verifyConstructorVisitor = visitors.merge([
 
     ThisExpression(path) {
       if (this.isDerived) {
+        if (path.parentPath.isMemberExpression({ object: path.node })) {
+          // In cases like this.foo or this[foo], there is no need to ass
+          // assertThisInitialized, since they already throw if this is
+          // undefined.
+          return;
+        }
+
         const assertion = t.callExpression(
           this.file.addHelper("assertThisInitialized"),
           [path.node],
