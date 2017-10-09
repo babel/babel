@@ -33,7 +33,7 @@ var Test = function Test() {
         args[_key] = arguments[_key];
       }
 
-      return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_ref = Other.__proto__ || Object.getPrototypeOf(Other)).call.apply(_ref, [this].concat(args))), Object.defineProperty(_this, "a", {
+      return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_ref = Other.__proto__ || Object.getPrototypeOf(Other)).call.apply(_ref, [this].concat(args))), Object.defineProperty(_assertThisInitialized(_this), "a", {
         configurable: true,
         enumerable: true,
         writable: true,

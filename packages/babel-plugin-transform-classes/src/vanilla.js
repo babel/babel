@@ -34,14 +34,13 @@ const verifyConstructorVisitor = visitors.merge([
     },
 
     ThisExpression(path) {
-      if (this.isDerived && !this.hasBareSuper) {
-        const fn = path.find(p => p.isFunction());
-
-        if (!fn || !fn.isArrowFunctionExpression()) {
-          throw path.buildCodeFrameError(
-            "'this' is not allowed before super()",
-          );
-        }
+      if (this.isDerived) {
+        const assertion = t.callExpression(
+          this.file.addHelper("assertThisInitialized"),
+          [path.node],
+        );
+        path.replaceWith(assertion);
+        path.skip();
       }
     },
   },

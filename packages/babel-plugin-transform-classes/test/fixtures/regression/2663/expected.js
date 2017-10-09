@@ -22,8 +22,8 @@ function (_EventEmitter) {
 
     babelHelpers.classCallCheck(this, Connection);
     _this = babelHelpers.possibleConstructorReturn(this, (Connection.__proto__ || Object.getPrototypeOf(Connection)).call(this));
-    _this.isConnected = false;
-    _this.roomId = roomId; // ...
+    babelHelpers.assertThisInitialized(_this).isConnected = false;
+    babelHelpers.assertThisInitialized(_this).roomId = roomId; // ...
 
     return _this;
   }

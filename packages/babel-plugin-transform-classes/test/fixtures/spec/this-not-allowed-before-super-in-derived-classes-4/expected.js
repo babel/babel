@@ -1,8 +1,3 @@
-var Test = function Test() {
-  babelHelpers.classCallCheck(this, Test);
-  this.state = "test";
-};
-
 var Foo =
 /*#__PURE__*/
 function (_Bar) {
@@ -12,18 +7,13 @@ function (_Bar) {
     var _this;
 
     babelHelpers.classCallCheck(this, Foo);
+
+    var fn = () => babelHelpers.assertThisInitialized(_this);
+
     _this = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this));
-    babelHelpers.assertThisInitialized(_this).state = "test";
+    fn();
     return _this;
   }
 
   return Foo;
 }(Bar);
-
-var ConstructorScoping = function ConstructorScoping() {
-  babelHelpers.classCallCheck(this, ConstructorScoping);
-  var bar;
-  {
-    var _bar;
-  }
-};
