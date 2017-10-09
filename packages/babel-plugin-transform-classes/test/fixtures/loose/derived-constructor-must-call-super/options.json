@@ -1,4 +1,0 @@
-{
-  "throws": "missing super() call in constructor",
-  "plugins": ["transform-classes"]
-}

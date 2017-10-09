@@ -431,10 +431,6 @@ export default class ClassTransformer {
     const path = this.userConstructorPath;
     const body = path.get("body");
 
-    if (!this.hasBareSuper && !this.superReturns.length) {
-      throw path.buildCodeFrameError("missing super() call in constructor");
-    }
-
     path.traverse(findThisesVisitor, this);
 
     let guaranteedSuperBeforeFinish = !!this.bareSupers.length;
@@ -456,7 +452,11 @@ export default class ClassTransformer {
             return true;
           }
 
-          if (parentPath.isLoop() || parentPath.isConditional()) {
+          if (
+            parentPath.isLoop() ||
+            parentPath.isConditional() ||
+            parentPath.isArrowFunctionExpression()
+          ) {
             guaranteedSuperBeforeFinish = false;
             return true;
           }
@@ -472,9 +472,13 @@ export default class ClassTransformer {
 
     if (this.isLoose) {
       wrapReturn = returnArg => {
+        const thisExpr = t.callExpression(
+          this.file.addHelper("assertThisInitialized"),
+          [thisRef()],
+        );
         return returnArg
-          ? t.logicalExpression("||", returnArg, thisRef())
-          : thisRef();
+          ? t.logicalExpression("||", returnArg, thisExpr)
+          : thisExpr;
       };
     } else {
       wrapReturn = returnArg =>
@@ -487,7 +491,7 @@ export default class ClassTransformer {
     // if we have a return as the last node in the body then we've already caught that
     // return
     const bodyPaths = body.get("body");
-    if (bodyPaths.length && !bodyPaths.pop().isReturnStatement()) {
+    if (!bodyPaths.length || !bodyPaths.pop().isReturnStatement()) {
       body.pushContainer(
         "body",
         t.returnStatement(
