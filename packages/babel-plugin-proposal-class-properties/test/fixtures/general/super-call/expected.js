@@ -27,7 +27,7 @@ function (_A) {
       configurable: true,
       enumerable: true,
       writable: true,
-      value: babelHelpers.get(B.prototype.__proto__ || Object.getPrototypeOf(B.prototype), "foo", _this).call(_this)
+      value: babelHelpers.get(B.prototype.__proto__ || Object.getPrototypeOf(B.prototype), "foo", babelHelpers.assertThisInitialized(_this)).call(_this)
     }), _temp));
   }
 

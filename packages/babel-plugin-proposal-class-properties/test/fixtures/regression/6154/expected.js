@@ -10,6 +10,8 @@ function _classCallCheck(instance, Constructor) { if (!_instanceof(instance, Con
 
 function _get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return _get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } }
 
+function _assertThisInitialized(self) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
 var Test = function Test() {
   var _this2 = this;
 
@@ -36,7 +38,7 @@ var Test = function Test() {
         enumerable: true,
         writable: true,
         value: function value() {
-          return _get(Other.prototype.__proto__ || Object.getPrototypeOf(Other.prototype), "test", _this);
+          return _get(Other.prototype.__proto__ || Object.getPrototypeOf(Other.prototype), "test", _assertThisInitialized(_this));
         }
       }), _temp));
     }
@@ -49,7 +51,7 @@ var Test = function Test() {
     enumerable: true,
     writable: true,
     value: function value() {
-      return _get(Test.prototype.__proto__ || Object.getPrototypeOf(Test.prototype), "test", _this2);
+      return _get(Test.prototype.__proto__ || Object.getPrototypeOf(Test.prototype), "test", _assertThisInitialized(_this2));
     }
   });
 };

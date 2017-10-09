@@ -19,22 +19,6 @@ const noMethodVisitor = {
 const verifyConstructorVisitor = visitors.merge([
   noMethodVisitor,
   {
-    MemberExpression: {
-      exit(path) {
-        const objectPath = path.get("object");
-        if (this.isDerived && !this.hasBareSuper && objectPath.isSuper()) {
-          const hasArrowFunctionParent = path.findParent(p =>
-            p.isArrowFunctionExpression(),
-          );
-          if (!hasArrowFunctionParent) {
-            throw objectPath.buildCodeFrameError(
-              "'super.*' is not allowed before super()",
-            );
-          }
-        }
-      },
-    },
-
     CallExpression: {
       exit(path) {
         if (path.get("callee").isSuper()) {
@@ -273,6 +257,7 @@ export default class ClassTransformer {
             methodNode: node,
             objectRef: this.classRef,
             superRef: this.superName,
+            inConstructor: isConstructor,
             isStatic: node.static,
             isLoose: this.isLoose,
             scope: this.scope,
