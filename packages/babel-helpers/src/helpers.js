@@ -89,7 +89,7 @@ helpers.asyncIterator = defineHelper(`
 
 helpers.AwaitValue = defineHelper(`
   export default function _AwaitValue(value) {
-    this.value = value;
+    this.wrapped = value;
   }
 `);
 
@@ -106,7 +106,7 @@ helpers.AsyncGenerator = defineHelper(`
           arg: arg,
           resolve: resolve,
           reject: reject,
-          next: null
+          next: null,
         };
 
         if (back) {
@@ -122,13 +122,18 @@ helpers.AsyncGenerator = defineHelper(`
       try {
         var result = gen[key](arg)
         var value = result.value;
-        if (value instanceof AwaitValue) {
-          Promise.resolve(value.value).then(
-            function (arg) { resume("next", arg); },
-            function (arg) { resume("throw", arg); });
-        } else {
-          settle(result.done ? "return" : "normal", result.value);
-        }
+        var wrappedAwait = value instanceof AwaitValue;
+
+        Promise.resolve(wrappedAwait ? value.wrapped : value).then(
+          function (arg) {
+            if (wrappedAwait) {
+              resume("next", arg);
+              return
+            }
+
+            settle(result.done ? "return" : "normal", arg);
+          },
+          function (err) { resume("throw", err); });
       } catch (err) {
         settle("throw", err);
       }

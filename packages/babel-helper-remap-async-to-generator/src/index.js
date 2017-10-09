@@ -10,11 +10,21 @@ const awaitVisitor = {
     path.skip();
   },
 
-  AwaitExpression({ node }, { wrapAwait }) {
-    node.type = "YieldExpression";
-    if (wrapAwait) {
-      node.argument = t.callExpression(wrapAwait, [node.argument]);
+  AwaitExpression(path, { wrapAwait }) {
+    const argument = path.get("argument");
+
+    if (path.parentPath.isYieldExpression()) {
+      path.replaceWith(argument.node);
+      return;
     }
+
+    path.replaceWith(
+      t.yieldExpression(
+        wrapAwait
+          ? t.callExpression(wrapAwait, [argument.node])
+          : argument.node,
+      ),
+    );
   },
 
   ForOfStatement(path, { file, wrapAwait }) {
