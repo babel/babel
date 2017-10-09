@@ -52,11 +52,6 @@ const awaitVisitor = {
 };
 
 export default function(path: NodePath, file: Object, helpers: Object) {
-  if (!helpers) {
-    // bc for 6.15 and earlier
-    helpers = { wrapAsync: file };
-    file = null;
-  }
   path.traverse(awaitVisitor, {
     file,
     wrapAwait: helpers.wrapAwait,
