@@ -14,20 +14,13 @@ const buildWrapper = template(`
   })
 `);
 
-export default function({ types: t }) {
+export default function({ types: t }, options) {
+  const { loose, allowTopLevelThis, strict, strictMode, noInterop } = options;
   return {
     visitor: {
       Program: {
-        exit(path, state) {
+        exit(path) {
           if (!isModule(path)) return;
-
-          const {
-            loose,
-            allowTopLevelThis,
-            strict,
-            strictMode,
-            noInterop,
-          } = state.opts;
 
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);

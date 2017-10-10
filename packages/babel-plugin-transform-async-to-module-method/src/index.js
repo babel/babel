@@ -3,15 +3,14 @@ import syntaxAsyncFunctions from "babel-plugin-syntax-async-functions";
 
 import { addNamed } from "babel-helper-module-imports";
 
-export default function({ types: t }) {
+export default function({ types: t }, options) {
+  const { method, module } = options;
   return {
     inherits: syntaxAsyncFunctions,
 
     visitor: {
       Function(path, state) {
         if (!path.node.async || path.node.generator) return;
-
-        const { module, method } = state.opts;
 
         let wrapAsync = state.methodWrapper;
         if (wrapAsync) {

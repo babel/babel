@@ -2,7 +2,9 @@ import nameFunction from "babel-helper-function-name";
 import template from "babel-template";
 import syntaxClassProperties from "babel-plugin-syntax-class-properties";
 
-export default function({ types: t }) {
+export default function({ types: t }, options) {
+  const { loose } = options;
+
   const findBareSupers = {
     Super(path) {
       if (path.parentPath.isCallExpression({ callee: path.node })) {
@@ -48,14 +50,15 @@ export default function({ types: t }) {
       ),
     );
 
+  const buildClassProperty = loose
+    ? buildClassPropertyLoose
+    : buildClassPropertySpec;
+
   return {
     inherits: syntaxClassProperties,
 
     visitor: {
-      Class(path, state) {
-        const buildClassProperty = state.opts.loose
-          ? buildClassPropertyLoose
-          : buildClassPropertySpec;
+      Class(path) {
         const isDerived = !!path.node.superClass;
         let constructor;
         const props = [];

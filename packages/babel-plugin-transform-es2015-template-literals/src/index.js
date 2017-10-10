@@ -1,6 +1,11 @@
 import annotateAsPure from "babel-helper-annotate-as-pure";
 
-export default function({ types: t }) {
+export default function({ types: t }, options) {
+  const { loose } = options;
+
+  let helperName = "taggedTemplateLiteral";
+  if (loose) helperName += "Loose";
+
   /**
    * This function groups the objects into multiple calls to `.concat()` in
    * order to preserve execution order of the primitive conversion, e.g.
@@ -41,7 +46,7 @@ export default function({ types: t }) {
       this.templates = new Map();
     },
     visitor: {
-      TaggedTemplateExpression(path, state) {
+      TaggedTemplateExpression(path) {
         const { node } = path;
         const { quasi } = node;
 
@@ -58,9 +63,6 @@ export default function({ types: t }) {
           strings.push(value);
           raws.push(t.stringLiteral(raw));
         }
-
-        let helperName = "taggedTemplateLiteral";
-        if (state.opts.loose) helperName += "Loose";
 
         // Generate a unique name based on the string literals so we dedupe
         // identical strings used in the program.
@@ -97,7 +99,7 @@ export default function({ types: t }) {
         );
       },
 
-      TemplateLiteral(path, state) {
+      TemplateLiteral(path) {
         const nodes = [];
         const expressions = path.get("expressions");
 
@@ -118,14 +120,13 @@ export default function({ types: t }) {
 
         // since `+` is left-to-right associative
         // ensure the first node is a string if first/second isn't
-        const considerSecondNode =
-          !state.opts.loose || !t.isStringLiteral(nodes[1]);
+        const considerSecondNode = !loose || !t.isStringLiteral(nodes[1]);
         if (!t.isStringLiteral(nodes[0]) && considerSecondNode) {
           nodes.unshift(t.stringLiteral(""));
         }
         let root = nodes[0];
 
-        if (state.opts.loose) {
+        if (loose) {
           for (let i = 1; i < nodes.length; i++) {
             root = t.binaryExpression("+", root, nodes[i]);
           }

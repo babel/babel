@@ -1,7 +1,8 @@
 import convertFunctionParams from "./params";
 import convertFunctionRest from "./rest";
 
-export default function() {
+export default function(babel, options) {
+  const { loose } = options;
   return {
     visitor: {
       Function(path) {
@@ -16,7 +17,7 @@ export default function() {
         }
 
         const convertedRest = convertFunctionRest(path);
-        const convertedParams = convertFunctionParams(path, this.opts.loose);
+        const convertedParams = convertFunctionParams(path, loose);
 
         if (convertedRest || convertedParams) {
           // Manually reprocess this scope to ensure that the moved params are updated.
