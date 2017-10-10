@@ -51,6 +51,7 @@
     "semver": "^5.3.0"
   },
   "devDependencies": {
+    "babel-cli": "7.0.0-beta.2",
     "babel-helper-fixtures": "7.0.0-beta.2",
     "babel-helper-plugin-test-runner": "7.0.0-beta.2",
     "compat-table": "kangax/compat-table#b8477cc0f6d65c000c46213e654d19f350de9fa8"
