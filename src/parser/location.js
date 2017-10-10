@@ -1,6 +1,6 @@
 // @flow
 
-import { getLineInfo } from "../util/location";
+import { getLineInfo, type Position } from "../util/location";
 import CommentsParser from "./comments";
 
 // This function is used to raise exceptions on parse errors. It

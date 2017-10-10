@@ -487,7 +487,8 @@ export default class StatementParser extends ExpressionParser {
       if (this.match(tt.parenL)) {
         this.expect(tt.parenL);
         clause.param = this.parseBindingAtom();
-        this.checkLVal(clause.param, true, Object.create(null), "catch clause");
+        const clashes: any = Object.create(null);
+        this.checkLVal(clause.param, true, clashes, "catch clause");
         this.expect(tt.parenR);
       } else {
         this.expectPlugin("optionalCatchBinding");

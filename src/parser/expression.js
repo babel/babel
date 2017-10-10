@@ -1125,7 +1125,7 @@ export default class ExpressionParser extends LValParser {
     refShorthandDefaultPos?: ?Pos,
   ): T {
     let decorators = [];
-    const propHash = Object.create(null);
+    const propHash: any = Object.create(null);
     let first = true;
     const node = this.startNode();
 
@@ -1567,7 +1567,7 @@ export default class ExpressionParser extends LValParser {
     }
 
     if (checkLVal) {
-      const nameHash = Object.create(null);
+      const nameHash: any = Object.create(null);
       const oldStrict = this.state.strict;
       if (isStrict) this.state.strict = true;
       if (node.id) {
