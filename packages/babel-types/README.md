@@ -2676,7 +2676,7 @@ See also `t.isUnaryExpression(node, opts)` and `t.assertUnaryExpression(node, op
 
 Aliases: `UnaryLike`, `Expression`
 
- - `operator`: `'void' | 'delete' | '!' | '+' | '-' | '~' | 'typeof'` (required)
+ - `operator`: `'void' | 'throw' | 'delete' | '!' | '+' | '-' | '~' | 'typeof'` (required)
  - `argument`: `Expression` (required)
  - `prefix`: `boolean` (default: `true`)
 

@@ -79,7 +79,7 @@ For docs/website issues please visit the [babel/website](https://github.com/babe
 Check out our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md) to get started with setting up the repo.
 
 - If you have already joined Slack, join our [#development](https://babeljs.slack.com/messages/development) channel and say hi!
-- Checki out the issues with the [beginner-friendly](https://github.com/babel/babel/labels/beginner-friendly) and [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label.
+- Check out the issues with the [beginner-friendly](https://github.com/babel/babel/labels/beginner-friendly) and [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label.
 - Our discussions/notes/roadmap: [babel/notes](https://github.com/babel/notes)
 - Our progress on TC39 proposals: [babel/proposals](https://github.com/babel/proposals)
 

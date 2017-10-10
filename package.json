@@ -77,7 +77,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "eslint --format=codeframe --rulesdir='./eslint_rules'"
+      "eslint --format=codeframe --rulesdir='./scripts/eslint_rules'"
     ]
   }
 }

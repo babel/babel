@@ -17,8 +17,6 @@
   ],
   "dependencies": {
     "babel-core": "7.0.0-beta.2",
-    "babel-polyfill": "7.0.0-beta.2",
-    "babel-register": "7.0.0-beta.2",
     "commander": "^2.8.1",
     "convert-source-map": "^1.1.0",
     "fs-readdir-recursive": "^1.0.0",
