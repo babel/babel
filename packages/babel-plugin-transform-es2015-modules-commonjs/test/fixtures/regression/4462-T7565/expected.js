@@ -1,4 +1,5 @@
 "use strict";
+"use exports { yy, zz }";
 
 Object.defineProperty(exports, "__esModule", {
   value: true

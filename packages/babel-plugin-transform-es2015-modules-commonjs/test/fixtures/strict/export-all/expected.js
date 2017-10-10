@@ -1,4 +1,5 @@
 "use strict";
+"use exports { z, a, b, d, e, f, default, c, g }";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
@@ -10,7 +11,8 @@ var _exportNames = {
   d: true,
   e: true,
   f: true,
-  c: true
+  c: true,
+  g: true
 };
 exports.b = b;
 exports.default = _default;
@@ -18,6 +20,12 @@ Object.defineProperty(exports, "c", {
   enumerable: true,
   get: function () {
     return _mod.c;
+  }
+});
+Object.defineProperty(exports, "g", {
+  enumerable: true,
+  get: function () {
+    return _bod.c;
   }
 });
 exports.f = exports.e = exports.d = exports.a = exports.z = void 0;
@@ -34,6 +42,9 @@ Object.keys(_mod).forEach(function (key) {
     }
   });
 });
+
+var _bod = require("bod");
+
 var z = 100;
 exports.z = z;
 

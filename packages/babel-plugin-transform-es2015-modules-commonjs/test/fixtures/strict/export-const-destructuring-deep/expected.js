@@ -1,4 +1,5 @@
 "use strict";
+"use exports { baz, qux }";
 
 exports.qux = exports.baz = void 0;
 const {
