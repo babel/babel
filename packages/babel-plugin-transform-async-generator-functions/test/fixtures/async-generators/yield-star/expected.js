@@ -1,7 +1,7 @@
 let g = (() => {
-  var _ref = babelHelpers.asyncGenerator.wrap(function* () {
-    yield* babelHelpers.asyncGeneratorDelegate(babelHelpers.asyncIterator([1, 2, 3]), babelHelpers.asyncGenerator.await);
-    yield* babelHelpers.asyncGeneratorDelegate(babelHelpers.asyncIterator(iterable), babelHelpers.asyncGenerator.await);
+  var _ref = babelHelpers.wrapAsyncGenerator(function* () {
+    yield* babelHelpers.asyncGeneratorDelegate(babelHelpers.asyncIterator([1, 2, 3]), babelHelpers.awaitAsyncGenerator);
+    yield* babelHelpers.asyncGeneratorDelegate(babelHelpers.asyncIterator(iterable), babelHelpers.awaitAsyncGenerator);
   });
 
   return function g() {

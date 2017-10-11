@@ -2,9 +2,9 @@
   g() {
     var _this = this;
 
-    return babelHelpers.asyncGenerator.wrap(function* () {
+    return babelHelpers.wrapAsyncGenerator(function* () {
       _this;
-      yield babelHelpers.asyncGenerator.await(1);
+      yield babelHelpers.awaitAsyncGenerator(1);
       yield 2;
       return 3;
     })();

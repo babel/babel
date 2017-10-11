@@ -87,12 +87,16 @@ helpers.asyncIterator = defineHelper(`
   }
 `);
 
-helpers.asyncGenerator = defineHelper(`
-  function AwaitValue(value) {
+helpers.AwaitValue = defineHelper(`
+  export default function _AwaitValue(value) {
     this.value = value;
   }
+`);
 
-  function AsyncGenerator(gen) {
+helpers.AsyncGenerator = defineHelper(`
+  import AwaitValue from "AwaitValue";
+
+  export default function AsyncGenerator(gen) {
     var front, back;
 
     function send(key, arg) {
@@ -166,17 +170,24 @@ helpers.asyncGenerator = defineHelper(`
   AsyncGenerator.prototype.next = function (arg) { return this._invoke("next", arg); };
   AsyncGenerator.prototype.throw = function (arg) { return this._invoke("throw", arg); };
   AsyncGenerator.prototype.return = function (arg) { return this._invoke("return", arg); };
+`);
 
-  export default {
-    wrap: function (fn) {
-      return function () {
-        return new AsyncGenerator(fn.apply(this, arguments));
-      };
-    },
-    await: function (value) {
-      return new AwaitValue(value);
-    }
-  };
+helpers.wrapAsyncGenerator = defineHelper(`
+  import AsyncGenerator from "AsyncGenerator";
+
+  export default function _wrapAsyncGenerator(fn) {
+    return function () {
+      return new AsyncGenerator(fn.apply(this, arguments));
+    };
+  }
+`);
+
+helpers.awaitAsyncGenerator = defineHelper(`
+  import AwaitValue from "AwaitValue";
+
+  export default function _awaitAsyncGenerator(value) {
+    return new AwaitValue(value);
+  }
 `);
 
 helpers.asyncGeneratorDelegate = defineHelper(`
