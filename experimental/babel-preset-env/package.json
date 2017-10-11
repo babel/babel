@@ -54,6 +54,6 @@
     "babel-cli": "7.0.0-beta.2",
     "babel-helper-fixtures": "7.0.0-beta.2",
     "babel-helper-plugin-test-runner": "7.0.0-beta.2",
-    "compat-table": "kangax/compat-table#b8477cc0f6d65c000c46213e654d19f350de9fa8"
+    "compat-table": "kangax/compat-table#07dce174cc63f2b15b5f86b99cdfc89358dd072a"
   }
 }

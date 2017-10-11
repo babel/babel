@@ -238,7 +238,10 @@
     "opera": "45",
     "electron": "1.7"
   },
-  "transform-async-generator-functions": {},
+  "transform-async-generator-functions": {
+    "chrome": "63",
+    "opera": "50"
+  },
   "transform-object-rest-spread": {
     "chrome": "60",
     "firefox": "55",
