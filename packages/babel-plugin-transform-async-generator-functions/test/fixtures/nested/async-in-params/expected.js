@@ -1,8 +1,8 @@
 let g = (() => {
-  var _ref = babelHelpers.asyncGenerator.wrap(function* (x = babelHelpers.asyncToGenerator(function* () {
+  var _ref = babelHelpers.wrapAsyncGenerator(function* (x = babelHelpers.asyncToGenerator(function* () {
     yield 1;
   })) {
-    yield babelHelpers.asyncGenerator.await(2);
+    yield babelHelpers.awaitAsyncGenerator(2);
     yield 3;
   });
 

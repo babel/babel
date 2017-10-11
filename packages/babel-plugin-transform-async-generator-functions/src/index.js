@@ -12,10 +12,7 @@ export default function({ types: t }) {
       const callee = state.addHelper("asyncGeneratorDelegate");
       node.argument = t.callExpression(callee, [
         t.callExpression(state.addHelper("asyncIterator"), [node.argument]),
-        t.memberExpression(
-          state.addHelper("asyncGenerator"),
-          t.identifier("await"),
-        ),
+        state.addHelper("awaitAsyncGenerator"),
       ]);
     },
   };
@@ -29,14 +26,8 @@ export default function({ types: t }) {
         path.traverse(yieldStarVisitor, state);
 
         remapAsyncToGenerator(path, state.file, {
-          wrapAsync: t.memberExpression(
-            state.addHelper("asyncGenerator"),
-            t.identifier("wrap"),
-          ),
-          wrapAwait: t.memberExpression(
-            state.addHelper("asyncGenerator"),
-            t.identifier("await"),
-          ),
+          wrapAsync: state.addHelper("wrapAsyncGenerator"),
+          wrapAwait: state.addHelper("awaitAsyncGenerator"),
         });
       },
     },
