@@ -1,6 +1,6 @@
 class Foo extends Bar {
   constructor() {
-    const t = () => super.test()
+    var t = () => super.test()
     super.foo();
     super();
   }

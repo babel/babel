@@ -8,7 +8,7 @@ function _get(object, property, receiver) { if (object === null) object = Functi
 
 function _assertThisInitialized(self) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-let Foo =
+var Foo =
 /*#__PURE__*/
 function (_Bar) {
   _inherits(Foo, _Bar);
