@@ -79,7 +79,7 @@ For docs/website issues please visit the [babel/website](https://github.com/babe
 Check out our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md) to get started with setting up the repo.
 
 - If you have already joined Slack, join our [#development](https://babeljs.slack.com/messages/development) channel and say hi!
-- Check out the issues with the [beginner-friendly](https://github.com/babel/babel/labels/beginner-friendly) and [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label.
+- Check out the issues with the [good first issue](https://github.com/babel/babel/labels/good first issue) and [help-wanted](https://github.com/babel/babel/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22) label.
 - Our discussions/notes/roadmap: [babel/notes](https://github.com/babel/notes)
 - Our progress on TC39 proposals: [babel/proposals](https://github.com/babel/proposals)
 
@@ -91,7 +91,7 @@ The Babel repo is managed as a [monorepo](https://github.com/babel/babel/blob/ma
 
 ### Core members
 
-[![Babel](https://avatars.githubusercontent.com/u/9637642?s=64)](https://github.com/babel) | [![Daniel Tschinder](https://avatars.githubusercontent.com/u/231804?s=64)](https://github.com/danez) | [![Logan Smyth](https://avatars.githubusercontent.com/u/132260?s=64)](https://github.com/loganfsmyth) | [![Henry Zhu](https://avatars.githubusercontent.com/u/588473?s=64)](https://github.com/hzoo) | 
+[![Babel](https://avatars.githubusercontent.com/u/9637642?s=64)](https://github.com/babel) | [![Daniel Tschinder](https://avatars.githubusercontent.com/u/231804?s=64)](https://github.com/danez) | [![Logan Smyth](https://avatars.githubusercontent.com/u/132260?s=64)](https://github.com/loganfsmyth) | [![Henry Zhu](https://avatars.githubusercontent.com/u/588473?s=64)](https://github.com/hzoo) |
 |---|---|---|---|
 Babel | Daniel Tschinder | Logan Smyth | Henry Zhu |
 :octocat: [@babel](https://github.com/babel) | [@danez](https://github.com/danez) | [@loganfsmyth](https://github.com/loganfsmyth) | [@hzoo](https://github.com/hzoo) |
@@ -113,7 +113,7 @@ Babel | Daniel Tschinder | Logan Smyth | Henry Zhu |
 
 ### Non-Human Members
 
-[<img src="https://github.com/babel/babel-bot/raw/master/babel-bot.png" height="64">](https://github.com/babel-bot) | 
+[<img src="https://github.com/babel/babel-bot/raw/master/babel-bot.png" height="64">](https://github.com/babel-bot) |
 |---|
 | Babel Bot |
 | [@babel-bot](https://github.com/babel-bot) |
@@ -121,11 +121,11 @@ Babel | Daniel Tschinder | Logan Smyth | Henry Zhu |
 
 ### Inactive members
 
-[![Amjad Masad](https://avatars.githubusercontent.com/u/587518?s=64)](https://github.com/amasad) | [![James Kyle](https://avatars.githubusercontent.com/u/952783?s=64)](https://github.com/thejameskyle) | [![Jesse McCarthy](https://avatars.githubusercontent.com/u/129203?s=64)](https://github.com/jmm) | [![Sebastian McKenzie](https://avatars.githubusercontent.com/u/853712?s=64)](https://github.com/kittens) (Creator) | 
+[![Amjad Masad](https://avatars.githubusercontent.com/u/587518?s=64)](https://github.com/amasad) | [![James Kyle](https://avatars.githubusercontent.com/u/952783?s=64)](https://github.com/thejameskyle) | [![Jesse McCarthy](https://avatars.githubusercontent.com/u/129203?s=64)](https://github.com/jmm) | [![Sebastian McKenzie](https://avatars.githubusercontent.com/u/853712?s=64)](https://github.com/kittens) (Creator) |
 |---|---|---|---|
-Amjad Masad | James Kyle | Jesse McCarthy | Sebastian McKenzie | 
+Amjad Masad | James Kyle | Jesse McCarthy | Sebastian McKenzie |
 [@amasad](https://github.com/amasad) | [@thejameskyle](https://github.com/thejameskyle) | [@jmm](https://github.com/jmm) | [@sebmck](https://twitter.com/sebmck) |
-| [@amasad](https://twitter.com/amasad) | [@thejameskyle](https://twitter.com/thejameskyle) | [@mccjm](https://twitter.com/mccjm) | [@kittens](https://github.com/kittens) 
+| [@amasad](https://twitter.com/amasad) | [@thejameskyle](https://twitter.com/thejameskyle) | [@mccjm](https://twitter.com/mccjm) | [@kittens](https://github.com/kittens)
 
 ## Backers
 
