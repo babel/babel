@@ -136,6 +136,7 @@ for (let i = 0; i < t.TYPES.length; i++) {
 }
 
 lines.push(
+  `declare function validate(n: BabelNode, key: string, value: mixed): void;`,
   `declare function clone<T>(n: T): T;`,
   `declare function cloneDeep<T>(n: T): T;`,
   `declare function removeProperties<T>(n: T, opts: ?{}): void;`,
