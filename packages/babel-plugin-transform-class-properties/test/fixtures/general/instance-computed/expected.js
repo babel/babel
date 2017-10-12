@@ -1,7 +1,12 @@
 function test(x) {
   var F = function F() {
     babelHelpers.classCallCheck(this, F);
-    this[_x] = 1;
+    Object.defineProperty(this, _x, {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: 1
+    });
   };
 
   var _x = x;

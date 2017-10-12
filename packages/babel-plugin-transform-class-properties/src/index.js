@@ -96,6 +96,20 @@ export default function({ types: t }, options) {
           if (isStatic) {
             nodes.push(buildClassProperty(ref, propNode, path.scope));
           } else {
+            // Make sure computed property names are only evaluated once (upon
+            // class definition).
+            if (propNode.computed) {
+              const ident = path.scope.generateUidIdentifierBasedOnNode(
+                propNode.key,
+              );
+              nodes.push(
+                t.variableDeclaration("var", [
+                  t.variableDeclarator(ident, propNode.key),
+                ]),
+              );
+              propNode.key = ident;
+            }
+
             instanceBody.push(
               buildClassProperty(t.thisExpression(), propNode, path.scope),
             );
