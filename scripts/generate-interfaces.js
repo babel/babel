@@ -140,7 +140,19 @@ lines.push(
   `declare function clone<T>(n: T): T;`,
   `declare function cloneDeep<T>(n: T): T;`,
   `declare function removeProperties<T>(n: T, opts: ?{}): void;`,
-  `declare function removePropertiesDeep<T>(n: T, opts: ?{}): T;`
+  `declare function removePropertiesDeep<T>(n: T, opts: ?{}): T;`,
+  `declare type TraversalAncestors = Array<{
+    node: BabelNode,
+    key: string,
+    index?: number,
+  }>;
+  declare type TraversalHandler<T> = (BabelNode, TraversalAncestors, T) => void;
+  declare type TraversalHandlers<T> = {
+    enter?: TraversalHandler<T>,
+    exit?: TraversalHandler<T>,
+  };`.replace(/(^|\n) {2}/g, "$1"),
+  // eslint-disable-next-line
+  `declare function traverse<T>(n: BabelNode, TraversalHandler<T> | TraversalHandlers<T>, state?: T): void;`
 );
 
 for (const type in t.FLIPPED_ALIAS_KEYS) {
