@@ -124,9 +124,15 @@ for (const type in t.NODE_FIELDS) {
 }
 
 for (let i = 0; i < t.TYPES.length; i++) {
-  lines.push(
-    `declare function is${t.TYPES[i]}(node: Object, opts?: Object): boolean;`
-  );
+  let decl = `declare function is${t.TYPES[
+    i
+  ]}(node: Object, opts?: ?Object): boolean`;
+
+  if (t.NODE_FIELDS[t.TYPES[i]]) {
+    decl += ` %checks (node instanceof ${NODE_PREFIX}${t.TYPES[i]})`;
+  }
+
+  lines.push(decl);
 }
 
 lines.push(
