@@ -1,0 +1,15 @@
+import { es3, es2017 } from "./reserved-words";
+
+export default function() {
+  const reservedKeywords = es3.filter(w => !es2017.includes(w));
+
+  return {
+    visitor: {
+      Identifier(path) {
+        if (reservedKeywords.includes(path.node.name)) {
+          path.scope.rename(path.node.name);
+        }
+      },
+    },
+  };
+}
