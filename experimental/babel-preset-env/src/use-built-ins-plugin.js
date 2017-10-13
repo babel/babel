@@ -182,9 +182,8 @@ export default function({ types: t }: { types: Object }): Plugin {
 
         if (!t.isReferenced(obj, node)) return;
         let instanceType;
-        let objName = obj.name;
+        let evaluatedPropType = obj.name;
         let propName = prop.name;
-
         if (node.computed) {
           if (t.isStringLiteral(prop)) {
             propName = prop.value;
@@ -195,18 +194,16 @@ export default function({ types: t }: { types: Object }): Plugin {
             }
           }
         }
-
         if (path.scope.getBindingIdentifier(obj.name)) {
           const result = path.get("object").evaluate();
           if (result.value) {
             instanceType = getType(result.value);
           } else if (result.deopt && result.deopt.isIdentifier()) {
-            objName = result.deopt.node.name;
+            evaluatedPropType = result.deopt.node.name;
           }
         }
-
-        if (has(definitions.staticMethods, objName)) {
-          const staticMethods = definitions.staticMethods[objName];
+        if (has(definitions.staticMethods, evaluatedPropType)) {
+          const staticMethods = definitions.staticMethods[evaluatedPropType];
           if (has(staticMethods, propName)) {
             const builtIn = staticMethods[propName];
             addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
@@ -215,7 +212,7 @@ export default function({ types: t }: { types: Object }): Plugin {
 
         if (has(definitions.instanceMethods, propName)) {
           //warnOnInstanceMethod(state, getObjectString(node));
-          let builtIn = definitions.instanceMethods[prop.name];
+          let builtIn = definitions.instanceMethods[propName];
           if (instanceType) {
             builtIn = builtIn.filter(item => item.includes(instanceType));
           }
