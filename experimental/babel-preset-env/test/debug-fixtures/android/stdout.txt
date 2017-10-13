@@ -65,6 +65,16 @@ Using polyfills with `entry` option:
   es6.reflect.set-prototype-of { "android":"4" }
   es6.promise { "android":"4" }
   es6.symbol { "android":"4" }
+  es6.object.freeze { "android":"4" }
+  es6.object.seal { "android":"4" }
+  es6.object.prevent-extensions { "android":"4" }
+  es6.object.is-frozen { "android":"4" }
+  es6.object.is-sealed { "android":"4" }
+  es6.object.is-extensible { "android":"4" }
+  es6.object.get-own-property-descriptor { "android":"4" }
+  es6.object.get-prototype-of { "android":"4" }
+  es6.object.keys { "android":"4" }
+  es6.object.get-own-property-names { "android":"4" }
   es6.object.assign { "android":"4" }
   es6.object.is { "android":"4" }
   es6.object.set-prototype-of { "android":"4" }
