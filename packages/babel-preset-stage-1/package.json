@@ -12,6 +12,7 @@
     "@babel/plugin-transform-export-default": "7.0.0-beta.3",
     "@babel/plugin-transform-optional-chaining": "7.0.0-beta.3",
     "@babel/plugin-transform-pipeline-operator": "7.0.0-beta.3",
+    "@babel/plugin-transform-nullish-coalescing-operator": "7.0.0-beta.3",
     "@babel/preset-stage-2": "7.0.0-beta.3"
   }
 }

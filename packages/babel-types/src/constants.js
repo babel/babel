@@ -38,6 +38,7 @@ export const NUMBER_BINARY_OPERATORS = [
 ];
 export const BINARY_OPERATORS = [
   "+",
+  "??",
   ...NUMBER_BINARY_OPERATORS,
   ...BOOLEAN_BINARY_OPERATORS,
 ];
