@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-function-bind", "transform-es2015-modules-commonjs"]
+}
