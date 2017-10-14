@@ -150,6 +150,7 @@ require("babylon").parse("code", {
 | `optionalCatchBinding` ([proposal](https://github.com/babel/proposals/issues/7)) | `try {throw 0;} catch{do();}` |
 | `throwExpressions` ([proposal](https://github.com/babel/proposals/issues/23)) | `() => throw new Error("")` |
 | `pipelineOperator` ([proposal](https://github.com/babel/proposals/issues/29)) | `a \|> b` |
+| `nullishCoalescingOperator` ([proposal](https://github.com/babel/proposals/issues/14)) | `a ?? b` |
 
 ### FAQ
 

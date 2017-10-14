@@ -791,6 +791,7 @@ enum BinaryOperator {
      | "|" | "^" | "&" | "in"
      | "instanceof"
      | "|>"
+     | "??"
 }
 ```
 

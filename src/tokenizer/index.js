@@ -581,7 +581,10 @@ export default class Tokenizer extends LocationParser {
     // '?'
     const next = this.input.charCodeAt(this.state.pos + 1);
     const next2 = this.input.charCodeAt(this.state.pos + 2);
-    if (next === 46 && !(next2 >= 48 && next2 <= 57)) {
+    if (next === 63) {
+      // '??'
+      this.finishOp(tt.nullishCoalescing, 2);
+    } else if (next === 46 && !(next2 >= 48 && next2 <= 57)) {
       // '.' not followed by a number
       this.state.pos += 2;
       this.finishToken(tt.questionDot);

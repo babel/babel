@@ -1,0 +1,3 @@
+{
+  "throws": "This experimental syntax requires enabling the parser plugin: 'nullishCoalescingOperator' (1:7)"
+}
