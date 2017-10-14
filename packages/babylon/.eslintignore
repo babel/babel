@@ -1,7 +1,0 @@
-.nyc_output
-build
-coverage
-lib
-node_modules
-test/expressions
-test/fixtures

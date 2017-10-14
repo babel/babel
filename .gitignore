@@ -3,11 +3,12 @@
 /packages/*/node_modules
 *.log
 *.cache
+/build
 /.eslintcache
 /browser.js
 /browser-polyfill.js
 /runtime.js
-/coverage
+coverage
 dist
 /.package.json
 package-lock.json
@@ -35,3 +36,4 @@ packages/babel-standalone/babel.js
 packages/babel-standalone/babel.min.js
 /codemods/*/lib
 /codemods/*/node_modules
+/packages/babylon/build

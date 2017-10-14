@@ -9,9 +9,11 @@
     "babel",
     "javascript",
     "parser",
+    "tc39",
+    "ecmascript",
     "babylon"
   ],
-  "repository": "https://github.com/babel/babylon",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babylon",
   "main": "lib/index.js",
   "files": [
     "bin",
@@ -21,82 +23,14 @@
     "node": ">=4.2.0"
   },
   "devDependencies": {
-    "ava": "^0.22.0",
-    "babel-core": "7.0.0-alpha.18",
-    "babel-eslint": "8.0.1",
-    "babel-helper-fixtures": "7.0.0-alpha.18",
-    "babel-plugin-external-helpers": "7.0.0-alpha.18",
-    "babel-plugin-istanbul": "^4.1.4",
-    "babel-preset-env": "2.0.0-alpha.18",
-    "babel-preset-flow": "7.0.0-alpha.18",
-    "chalk": "^2.0.0",
-    "cross-env": "^5.0.0",
-    "eslint": "^4.0.0",
-    "eslint-config-babel": "^7.0.1",
-    "eslint-plugin-flowtype": "^2.34.0",
-    "eslint-plugin-prettier": "^2.1.2",
-    "flow-bin": "^0.56.0",
-    "graceful-fs": "^4.1.11",
-    "husky": "^0.14.1",
-    "lint-staged": "^4.0.0",
-    "nyc": "^11.0.3",
-    "prettier": "^1.5.2",
-    "rimraf": "^2.5.4",
+    "@babel/helper-fixtures": "7.0.0-beta.5",
     "rollup": "^0.50.0",
-    "rollup-plugin-babel": "^3.0.1",
+    "rollup-plugin-babel": "^4.0.0-beta.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-watch": "^4.0.0",
-    "unicode-9.0.0": "~0.7.0",
-    "util.promisify": "^1.0.0"
+    "unicode-9.0.0": "~0.7.0"
   },
   "bin": {
     "babylon": "./bin/babylon.js"
-  },
-  "scripts": {
-    "build": "yarn run clean && rollup -c",
-    "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'",
-    "clean": "rimraf lib",
-    "flow": "flow",
-    "lint": "eslint src bin test",
-    "prepublish": "cross-env BABEL_ENV=production yarn run build",
-    "preversion": "yarn run test && npm run changelog",
-    "test": "yarn run lint && yarn run flow && yarn run build -- -m && yarn run test-only",
-    "test-only": "ava",
-    "test-coverage": "cross-env BABEL_ENV=test yarn run build && nyc --reporter=json --reporter=text yarn run test-only",
-    "watch": "yarn run clean && rollup -c --watch"
-  },
-  "nyc": {
-    "include": [
-      "src/**/*.js",
-      "bin/**/*.js"
-    ],
-    "sourceMap": false,
-    "instrument": false
-  },
-  "ava": {
-    "files": [
-      "test/*.js"
-    ],
-    "source": [
-      "src/**/*.js",
-      "bin/**/*.js"
-    ]
-  },
-  "changelog": {
-    "repo": "babel/babylon",
-    "labels": {
-      "Tag: Breaking Change": ":boom: Breaking Change",
-      "Tag: Bug Fix": ":bug: Bug Fix",
-      "Tag: Docs": ":memo: Documentation",
-      "Tag: Internal": ":house: Internal",
-      "Tag: New Feature": ":rocket: New Feature",
-      "Tag: Polish": ":nail_care: Polish"
-    }
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint --format=codeframe --fix",
-      "git add"
-    ]
   }
 }

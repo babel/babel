@@ -3,9 +3,12 @@
 const path = require("path");
 const fs = require("fs");
 const chalk = require("chalk");
-const parse = require("..").parse;
+const parse = require("../../../packages/babylon").parse;
 
-const TESTS_FOLDER = path.join(__dirname, "../build/flow/src/parser/test/flow");
+const TESTS_FOLDER = path.join(
+  __dirname,
+  "../../../build/flow/src/parser/test/flow"
+);
 const WHITELIST_PATH = path.join(__dirname, "./flow_tests_whitelist.txt");
 
 const shouldUpdateWhitelist = process.argv.indexOf("--update-whitelist") > 0;
@@ -118,7 +121,7 @@ const summary = {
     success: [],
     failure: [],
   },
-  unrecognized: []
+  unrecognized: [],
 };
 
 const tests = get_tests(TESTS_FOLDER);
@@ -140,8 +143,9 @@ tests.forEach(section => {
     if (test.options) {
       Object.keys(test.options).forEach(option => {
         if (!test.options[option]) return;
-        if (!flowOptionsMapping[option])
+        if (!flowOptionsMapping[option]) {
           throw new Error("Parser options not mapped " + option);
+        }
         babylonOptions.plugins.push(flowOptionsMapping[option]);
       });
     }
@@ -262,7 +266,6 @@ console.log(
 // Some padding to separate the output from the message `make`
 // adds at the end of failing scripts
 console.log();
-
 
 if (shouldUpdateWhitelist) {
   update_whitelist(summary);

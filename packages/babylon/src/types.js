@@ -22,15 +22,15 @@ export type Comment = {
 };
 
 export interface NodeBase {
-  start: number,
-  end: number,
-  loc: SourceLocation,
-  range: [number, number],
-  leadingComments?: ?Array<Comment>,
-  trailingComments?: ?Array<Comment>,
-  innerComments?: ?Array<Comment>,
+  start: number;
+  end: number;
+  loc: SourceLocation;
+  range: [number, number];
+  leadingComments?: ?Array<Comment>;
+  trailingComments?: ?Array<Comment>;
+  innerComments?: ?Array<Comment>;
 
-  extra: { [key: string]: any },
+  extra: { [key: string]: any };
 }
 
 // Using a union type for `Node` makes type-checking too slow.

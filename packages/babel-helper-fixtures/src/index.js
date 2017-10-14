@@ -126,6 +126,11 @@ export default function get(entryLoc): Array<Suite> {
         execLoc = taskDir;
       }
 
+      if (resolve.relative(expectLoc + "on")) {
+        expectLoc += "on";
+        expectLocAlias += "on";
+      }
+
       const taskOpts = cloneDeep(suite.options);
 
       const taskOptsLoc = resolve(taskDir + "/options");

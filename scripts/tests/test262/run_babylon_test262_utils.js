@@ -7,10 +7,10 @@ const pfs = {
   readFile: promisify(fs.readFile),
   writeFile: promisify(fs.writeFile),
   readdir: promisify(fs.readdir),
-  stat: promisify(fs.stat)
+  stat: promisify(fs.stat),
 };
 
-const parse = require("..").parse;
+const parse = require("../../../packages/babylon").parse;
 
 const modulePattern = /^\s*-\s*module\s*$|^\s*flags\s*:.*\bmodule\b/m;
 const noStrictPattern = /^\s*-\s*noStrict\s*$|^\s*flags\s*:.*\bnoStrict\b/m;
@@ -42,7 +42,7 @@ function readDirDeep(dirName) {
       contents.map(function(name) {
         return findTests(path.join(dirName, name));
       })
-    ).then(flatten)
+    ).then(flatten);
   });
 }
 

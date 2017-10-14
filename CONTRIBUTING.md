@@ -17,14 +17,14 @@
 
 # Contributing
 
-> Before contributing, please read our [code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
-
-Contributions are always welcome, no matter how large or small.
+Contributions are always welcome, no matter how large or small. Before
+contributing, please read the
+[code of conduct](https://github.com/babel/babel/blob/master/CODE_OF_CONDUCT.md).
 
 ## Not sure where to start?
 
 - If you aren't just making a documentation change, you'll probably want to learn a bit about a few topics.
- - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babylon/blob/master/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://github.com/babel/babylon#output).
+ - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babel/tree/master/packages/babylon/blob/master/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://github.com/babel/babel/tree/master/packages/babylon#output).
  - Check out [`/doc`](https://github.com/babel/babel/tree/master/doc) for information about Babel's internals
  - Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
  - Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
@@ -146,7 +146,6 @@ $ BABEL_ENV=cov make build
 $ ./scripts/test-cov.sh
 ```
 
-
 #### Troubleshooting Tests
 
 In case you're not able to reproduce an error on CI locally, it may be due to
@@ -220,20 +219,33 @@ If the test requires a minimum Node version, you can add `minNodeVersion` (must 
 }
 ```
 
+#### `babylon`
+
+Writing tests for Babylon is very
+similar to the other packages.
+Inside the `packages/babylon/tests/fixtures` folder are categories/groupings of test fixtures (es2015, flow,
+etc.). To add a test, create a folder under one of these groupings (or create a new one) with a
+descriptive name, and add the following:
+
+* Create an `actual.js` file that contains the code you want Babylon to parse.
+
+* Add an `expected.json` file with the expected parser output. For added convenience, if there is no `expected.json` present, the test runner will generate one for you.
+
 #### Bootstrapping expected output
 
 For both `babel-plugin-x` and `babylon`, you can easily generate an `expected.js`/`expected.json` automatically by just providing `actual.js` and running the tests as you usually would.
 
 ```
 // Example
-- babylon
-  - test
-    - fixtures
-      - comments
-        - basic
-          - block-trailing-comment
-            - actual.js
-            - expected.json (will be generated if not created)
+- packages
+  - babylon
+    - test
+      - fixtures
+        - comments
+          - basic
+            - block-trailing-comment
+              - actual.js
+              - expected.json (will be generated if not created)
 ```
 
 ### Debugging code
@@ -273,8 +285,20 @@ The debugger starts at the first executed line of code, which is Mocha's first l
 Click _Resume script execution_ <img src="https://i.imgur.com/TmYBn9d.png" alt="Resume script execution button." width="16"> to jump to the set breakpoint.
 Note that the code shown in Chrome DevTools is compiled code and therefore differs.
 
+## Creating a new plugin (`spec-new`)
+
+> Example: https://github.com/babel/babylon/pull/541
+
+- Create a new issue that describes the proposal (ex: [#538](https://github.com/babel/babylon/issues/538)). Include any relevant information like proposal repo/author, examples, parsing approaches, meeting notes, presentation slides, and more.
+- The pull request should include:
+  - [ ] An update to the [plugins](https://github.com/babel/babel/tree/master/packages/babylon#plugins) part of the readme. Add a new entry to that list for the new plugin flag (and link to the proposal)
+  - [ ] If any new nodes or modifications need to be added to the AST, update [ast/spec.md](https://github.com/babel/babel/bloc/master/packages/babylon/ast/spec.md)
+  - [ ] Make sure you use the `this.hasPlugin("plugin-name-here")` check in Babylon so that your new plugin code only runs when that flag is turned on (not default behavior)
+  - [ ] Add failing/passing tests according to spec behavior
+- Start working about the Babel transform itself!
+
 ## Internals
-- AST spec ([babylon/ast/spec.md](https://github.com/babel/babylon/blob/master/ast/spec.md))
+- AST spec ([babylon/ast/spec.md](https://github.com/babel/babel/tree/master/packages/babylon/blob/master/ast/spec.md))
 - Versioning ([doc/design/versioning.md](https://github.com/babel/babel/blob/master/doc/design/versioning.md)
 - Monorepo ([doc/design/monorepo.md](https://github.com/babel/babel/blob/master/doc/design/monorepo.md))
 - Compiler environment support ([doc/design/compiler-environment-support.md](https://github.com/babel/babel/blob/master/doc/design/compiler-environment-support.md))

@@ -7,5 +7,23 @@ export default {
     file: "lib/index.js",
     format: "cjs",
   },
-  plugins: [babel(), nodeResolve()],
+  plugins: [
+    babel({
+      babelrc: false,
+      presets: [
+        [
+          "@babel/env",
+          {
+            loose: true,
+            modules: false,
+            targets: {
+              node: "4.2",
+            },
+          },
+        ],
+        "@babel/flow",
+      ],
+    }),
+    nodeResolve(),
+  ],
 };

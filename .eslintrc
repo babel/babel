@@ -5,7 +5,8 @@
   ],
   "rules": {
     "curly": ["error", "multi-line"],
-    "prettier/prettier": ["error", { "trailingComma": "es5" }]
+    "prettier/prettier": ["error", { "trailingComma": "es5" }],
+    "no-case-declarations": "error"
   },
   "env": {
     "node": true,

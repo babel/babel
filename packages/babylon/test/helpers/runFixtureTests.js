@@ -1,5 +1,4 @@
-import test from "ava";
-import { multiple as getFixtures } from "babel-helper-fixtures";
+import { multiple as getFixtures } from "@babel/helper-fixtures";
 
 export function runFixtureTests(fixturesPath, parseFunction) {
   const fixtures = getFixtures(fixturesPath);
@@ -7,18 +6,15 @@ export function runFixtureTests(fixturesPath, parseFunction) {
   Object.keys(fixtures).forEach(function(name) {
     fixtures[name].forEach(function(testSuite) {
       testSuite.tests.forEach(function(task) {
-        const testFn = task.disabled
-          ? test.skip
-          : task.options.only ? test.only : test;
+        const testFn = task.disabled ? it.skip : it;
 
-        testFn(name + "/" + testSuite.title + "/" + task.title, function(t) {
+        testFn(name + "/" + testSuite.title + "/" + task.title, function() {
           try {
             runTest(task, parseFunction);
-            t.pass();
           } catch (err) {
             const message =
               name + "/" + task.actual.filename + ": " + err.message;
-            t.fail(message);
+            throw new Error(message);
           }
         });
       });
@@ -37,18 +33,15 @@ export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
         task.options.plugins = task.options.plugins || [];
         task.options.plugins.push("estree");
 
-        const testFn = task.disabled
-          ? test.skip
-          : task.options.only ? test.only : test;
+        const testFn = task.disabled ? it.skip : it;
 
-        testFn(name + "/" + testSuite.title + "/" + task.title, function(t) {
+        testFn(name + "/" + testSuite.title + "/" + task.title, function() {
           try {
             runTest(task, parseFunction);
-            t.pass();
           } catch (err) {
             const message =
               name + "/" + task.actual.filename + ": " + err.message;
-            t.fail(message);
+            throw new Error(message);
           }
         });
       });

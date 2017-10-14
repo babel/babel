@@ -40,7 +40,7 @@ tt.jsxTagEnd.updateContext = function(prevType) {
 function isFragment(object: ?N.JSXElement): boolean {
   return object
     ? object.type === "JSXOpeningFragment" ||
-      object.type === "JSXClosingFragment"
+        object.type === "JSXClosingFragment"
     : false;
 }
 

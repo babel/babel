@@ -1,14 +1,6 @@
 {
-  "root": true,
-  "extends": "babel",
-  "plugins": [
-    "prettier"
-  ],
+  "extends": "../.eslintrc",
   "rules": {
-    "prettier/prettier": ["error", { "trailingComma": "all" }],
-    "no-case-declarations": "error"
-  },
-  "env": {
-    "node": true
+    "curly": "off"
   }
 }

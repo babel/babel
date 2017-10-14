@@ -2,9 +2,9 @@
 
 const path = require("path");
 const chalk = require("chalk");
-const utils = require("./run_test262_utils");
+const utils = require("./run_babylon_test262_utils");
 
-const testDir = path.join(__dirname, "..", "build", "test262", "test");
+const testDir = path.join(__dirname, "../../../build/test262/test");
 const whitelistFile = path.join(__dirname, "test262_whitelist.txt");
 const plugins = ["asyncGenerators", "objectRestSpread", "optionalCatchBinding"];
 const shouldUpdate = process.argv.indexOf("--update-whitelist") > -1;
