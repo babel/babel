@@ -1,8 +1,9 @@
 import { es3, es2017 } from "./reserved-words";
 
-export default function() {
-  const reservedKeywords = es3.filter(w => !(es2017.indexOf(w) !== -1));
+const difference = (arr, arr2) => arr.filter(el => !(arr2.indexOf(el) !== -1));
+const reservedKeywords = difference(es3, es2017);
 
+export default function() {
   return {
     visitor: {
       "BindingIdentifier|ReferencedIdentifier"(path) {
