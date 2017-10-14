@@ -28,7 +28,7 @@ function resetCache() {
   process.env.BABEL_DISABLE_CACHE = oldBabelDisableCacheValue;
 }
 
-describe("@babel/register - caching", () => {
+describe.skip("@babel/register - caching", () => {
   describe("cache", () => {
     let load, get, save;
 
