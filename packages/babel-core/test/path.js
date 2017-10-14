@@ -1,5 +1,5 @@
-import { transform } from "../lib/index";
-import Plugin from "../lib/config/plugin";
+import { transform } from "../src/index";
+import Plugin from "../src/config/plugin";
 import chai from "chai";
 
 describe("traversal path", function() {
