@@ -1191,20 +1191,29 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSTypeParameterInstantiation");
     }
 
+    tsIsDeclarationStart(): boolean {
+      if (this.match(tt.name)) {
+        switch (this.state.value) {
+          case "abstract":
+          case "declare":
+          case "enum":
+          case "interface":
+          case "module":
+          case "namespace":
+          case "type":
+            return true;
+        }
+      }
+
+      return false;
+    }
+
     // ======================================================
     // OVERRIDES
     // ======================================================
 
     isExportDefaultSpecifier(): boolean {
-      if (
-        this.match(tt.name) &&
-        (this.state.value === "type" ||
-          this.state.value === "interface" ||
-          this.state.value === "enum")
-      ) {
-        return false;
-      }
-
+      if (this.tsIsDeclarationStart()) return false;
       return super.isExportDefaultSpecifier();
     }
 
@@ -1524,18 +1533,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // export type
     // Should be true for anything parsed by `tsTryParseExportDeclaration`.
     shouldParseExportDeclaration(): boolean {
-      if (this.match(tt.name)) {
-        switch (this.state.value) {
-          case "abstract":
-          case "declare":
-          case "enum":
-          case "interface":
-          case "module":
-          case "namespace":
-          case "type":
-            return true;
-        }
-      }
+      if (this.tsIsDeclarationStart()) return true;
       return super.shouldParseExportDeclaration();
     }
 
