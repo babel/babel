@@ -7,7 +7,7 @@ export default helpers;
 
 // Helpers never include placeholders, so we disable placeholder pattern
 // matching to allow us to use pattern-like variable names.
-const defineHelper = template({ placeholderPattern: false });
+const defineHelper = template.program({ placeholderPattern: false });
 
 helpers.typeof = defineHelper(`
   export default function _typeof(obj) {

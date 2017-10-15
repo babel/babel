@@ -232,8 +232,7 @@ function loadHelper(name) {
     if (!helpers[name]) throw new ReferenceError(`Unknown helper ${name}`);
 
     const fn = () => {
-      const ast = helpers[name]();
-      return t.file(t.program(Array.isArray(ast) ? ast : [ast]));
+      return t.file(helpers[name]());
     };
 
     const metadata = getHelperMetadata(fn());

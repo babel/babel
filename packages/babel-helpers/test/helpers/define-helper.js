@@ -17,7 +17,7 @@ export default function defineHelper(
     throw new Error(`The ${id} helper is already defined.`);
   }
   Object.defineProperty(helpers, id, {
-    value: template(code),
+    value: template.program(code),
   });
   return id;
 }
