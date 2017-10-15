@@ -75,7 +75,7 @@
           },
           "operator": "|>",
           "right": {
-            "type": "BinaryExpression",
+            "type": "LogicalExpression",
             "start": 5,
             "end": 11,
             "loc": {

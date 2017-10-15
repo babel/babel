@@ -43,7 +43,7 @@
           }
         },
         "expression": {
-          "type": "BinaryExpression",
+          "type": "LogicalExpression",
           "start": 0,
           "end": 11,
           "loc": {
@@ -57,7 +57,7 @@
             }
           },
           "left": {
-            "type": "BinaryExpression",
+            "type": "LogicalExpression",
             "start": 0,
             "end": 6,
             "loc": {
