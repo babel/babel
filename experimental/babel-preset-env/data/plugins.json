@@ -240,6 +240,7 @@
   },
   "transform-async-generator-functions": {
     "chrome": "63",
+    "firefox": "57",
     "opera": "50"
   },
   "transform-object-rest-spread": {
