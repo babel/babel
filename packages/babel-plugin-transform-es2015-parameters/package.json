@@ -1,21 +1,21 @@
 {
   "name": "babel-plugin-transform-es2015-parameters",
-  "version": "7.0.0-beta.2",
+  "version": "7.0.0-beta.3",
   "description": "Compile ES2015 default and rest parameters to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-parameters",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-helper-call-delegate": "7.0.0-beta.2",
-    "babel-helper-get-function-arity": "7.0.0-beta.2",
-    "babel-template": "7.0.0-beta.2",
-    "babel-traverse": "7.0.0-beta.2",
-    "babel-types": "7.0.0-beta.2"
+    "babel-helper-call-delegate": "7.0.0-beta.3",
+    "babel-helper-get-function-arity": "7.0.0-beta.3",
+    "babel-template": "7.0.0-beta.3",
+    "babel-traverse": "7.0.0-beta.3",
+    "babel-types": "7.0.0-beta.3"
   },
   "keywords": [
     "babel-plugin"
   ],
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-beta.2"
+    "babel-helper-plugin-test-runner": "7.0.0-beta.3"
   }
 }

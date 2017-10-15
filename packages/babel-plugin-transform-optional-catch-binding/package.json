@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-optional-catch-binding",
-  "version": "7.0.0-beta.2",
+  "version": "7.0.0-beta.3",
   "description": "Compile optional catch bindings",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-optional-catch-binding",
   "license": "MIT",
@@ -9,9 +9,9 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-plugin-syntax-optional-catch-binding": "7.0.0-beta.2"
+    "babel-plugin-syntax-optional-catch-binding": "7.0.0-beta.3"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-beta.2"
+    "babel-helper-plugin-test-runner": "7.0.0-beta.3"
   }
 }

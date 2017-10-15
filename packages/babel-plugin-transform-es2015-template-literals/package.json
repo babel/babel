@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-es2015-template-literals",
-  "version": "7.0.0-beta.2",
+  "version": "7.0.0-beta.3",
   "description": "Compile ES2015 template literals to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-template-literals",
   "license": "MIT",
@@ -9,7 +9,7 @@
     "babel-plugin"
   ],
   "devDependencies": {
-    "babel-helper-annotate-as-pure": "7.0.0-beta.2",
-    "babel-helper-plugin-test-runner": "7.0.0-beta.2"
+    "babel-helper-annotate-as-pure": "7.0.0-beta.3",
+    "babel-helper-plugin-test-runner": "7.0.0-beta.3"
   }
 }
