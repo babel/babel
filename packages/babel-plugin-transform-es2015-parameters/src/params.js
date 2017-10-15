@@ -111,7 +111,7 @@ export default function convertFunctionParams(path, loose) {
       });
       body.push(defNode);
     } else if (firstOptionalIndex !== null) {
-      const defNode = buildArgumentsAccess(param.node, t.numericLiteral(i));
+      const defNode = buildArgumentsAccess([param.node, t.numericLiteral(i)]);
       body.push(defNode);
     } else if (param.isObjectPattern() || param.isArrayPattern()) {
       const uid = path.scope.generateUidIdentifier("ref");
