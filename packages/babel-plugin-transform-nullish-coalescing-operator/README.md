@@ -13,7 +13,8 @@ var foo = object.foo ?? "default";
 **Out**
 
 ```javascript
-var foo = object.foo != null ? object.foo : "default";
+var _ref;
+var foo = (_ref = object.foo, _ref != null ? _ref : "default");
 ```
 
 ## Installation
