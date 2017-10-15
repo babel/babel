@@ -142,16 +142,12 @@ const buildBindingExportAssignmentExpression = (
   }, localExpr);
 };
 
-const importThrow = template(`
-  (function() {
-    throw new Error('"' + NAME + '" is read-only.');
-  })();
-`);
-
 const buildImportThrow = localName => {
-  return importThrow({
-    NAME: t.stringLiteral(localName),
-  }).expression;
+  return template.expression.ast`
+    (function() {
+      throw new Error('"' + '${localName}' + '" is read-only.');
+    })()
+  `;
 };
 
 const rewriteReferencesVisitor = {
