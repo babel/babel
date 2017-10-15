@@ -7,7 +7,7 @@ export default function({ types: t }) {
     inherits: syntaxNullishCoalescingOperator,
 
     visitor: {
-      BinaryExpression(path) {
+      LogicalExpression(path) {
         const { node } = path;
         if (node.operator !== OPERATOR) {
           return;
