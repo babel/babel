@@ -6,7 +6,7 @@
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
-    "babel-plugin"
+    "@babel/plugin"
   ],
   "dependencies": {
     "@babel/helper-builder-react-jsx": "7.0.0-beta.3"

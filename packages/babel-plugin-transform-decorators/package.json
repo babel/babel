@@ -8,7 +8,7 @@
   "main": "lib/index.js",
   "keywords": [
     "babel",
-    "babel-plugin",
+    "@babel/plugin",
     "decorators"
   ],
   "dependencies": {
