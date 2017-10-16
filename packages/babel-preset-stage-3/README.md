@@ -17,7 +17,7 @@ The gist of Stage 3 is:
 ## Install
 
 ```sh
-npm install --save-dev babel-preset-stage-3
+npm install --save-dev @babel/preset-stage-3
 ```
 
 ## Usage

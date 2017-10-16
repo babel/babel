@@ -25,7 +25,7 @@ const x = 0;
 ## Installation
 
 ```sh
-npm install --save-dev babel-preset-typescript
+npm install --save-dev @babel/preset-typescript
 ```
 
 ## Usage

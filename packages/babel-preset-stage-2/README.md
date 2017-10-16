@@ -17,7 +17,7 @@ The gist of Stage 2 is:
 ## Install
 
 ```sh
-npm install --save-dev babel-preset-stage-2
+npm install --save-dev @babel/preset-stage-2
 ```
 
 ## Usage

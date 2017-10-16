@@ -23,7 +23,7 @@ function foo(one, two, three) {}
 ## Installation
 
 ```sh
-npm install --save-dev babel-preset-flow
+npm install --save-dev @babel/preset-flow
 ```
 
 ## Usage

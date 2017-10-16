@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-npm install --save-dev babel-types
+npm install --save-dev @babel/types
 ```
 
 ## API

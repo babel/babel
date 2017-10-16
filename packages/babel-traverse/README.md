@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-$ npm install --save babel-traverse
+$ npm install --save @babel/traverse
 ```
 
 ## Usage

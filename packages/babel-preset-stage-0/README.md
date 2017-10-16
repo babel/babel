@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-npm install --save-dev babel-preset-stage-0
+npm install --save-dev @babel/preset-stage-0
 ```
 
 ## Usage

@@ -24,7 +24,7 @@ And with the `development` option:
 Install the CLI and this preset
 
 ```sh
-npm install --save-dev babel-cli babel-preset-react
+npm install --save-dev @babel/cli @babel/preset-react
 ```
 
 Make a .babelrc config file with the preset

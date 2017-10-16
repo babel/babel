@@ -5,7 +5,7 @@
 ## Install
 
 ```sh
-npm install --save-dev babel-preset-es2016
+npm install --save-dev @babel/preset-es2016
 ```
 
 ## Usage
