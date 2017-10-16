@@ -791,7 +791,6 @@ enum BinaryOperator {
      | "|" | "^" | "&" | "in"
      | "instanceof"
      | "|>"
-     | "??"
 }
 ```
 
@@ -839,7 +838,7 @@ A logical operator expression.
 
 ```js
 enum LogicalOperator {
-  "||" | "&&"
+  "||" | "&&" | "??"
 }
 ```
 
