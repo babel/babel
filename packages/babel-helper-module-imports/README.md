@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-npm install babel-helper-module-imports --save
+npm install @babel/helper-module-imports --save
 ```
 
 ## Usage

@@ -33,7 +33,6 @@
     "@babel/helper-fixtures": "7.0.0-beta.3"
   },
   "bin": {
-    "babel-doctor": "./bin/babel-doctor.js",
     "babel": "./bin/babel.js",
     "babel-external-helpers": "./bin/babel-external-helpers.js"
   }

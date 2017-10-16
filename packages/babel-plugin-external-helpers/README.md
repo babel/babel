@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-external-helpers
+npm install --save-dev @babel/plugin-external-helpers
 ```
 
 ## Usage

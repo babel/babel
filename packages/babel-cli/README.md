@@ -2,7 +2,7 @@
 
 > Babel command line.
 
-In addition, various entry point scripts live in the top-level package at `babel-cli/bin`.
+In addition, various entry point scripts live in the top-level package at `@babel/cli/bin`.
 
 There are some shell-executable utility scripts, `babel-external-helpers.js` and `babel-node.js`, and the main Babel cli script, `babel.js`.
 

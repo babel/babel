@@ -44,7 +44,7 @@ runModuleInTestContext("@babel/polyfill", __filename);
 runCodeInTestContext(buildExternalHelpers());
 
 /**
- * A basic implementation of CommonJS so we can execute `babel-polyfill` inside our test context.
+ * A basic implementation of CommonJS so we can execute `@babel/polyfill` inside our test context.
  * This allows us to run our unittests
  */
 function runModuleInTestContext(id: string, relativeFilename: string) {

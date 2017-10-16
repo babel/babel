@@ -24,7 +24,7 @@ repl: "a" is read-only
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-check-es2015-constants
+npm install --save-dev @babel/plugin-check-es2015-constants
 ```
 
 ## Usage

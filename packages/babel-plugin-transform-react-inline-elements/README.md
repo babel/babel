@@ -8,7 +8,7 @@ When used alongside `transform-runtime`, polyfills (by default including `Symbol
 
 Even if `['transform-runtime', { helpers: true, polyfill: false }]` is specified, it might still break, since `helpers` come precompiled.
 
-In this case, we recommend importing/requiring `babel-polyfill` in the entry point of your application and using `babel-preset-env` with the `useBuiltIns` option to only include the polyfills your targets need. Alternatively, you can also import/require `core-js/modules/es6.symbol` by itself.
+In this case, we recommend importing/requiring `@babel/polyfill` in the entry point of your application and using `@babel/preset-env` with the `useBuiltIns` option to only include the polyfills your targets need. Alternatively, you can also import/require `core-js/modules/es6.symbol` by itself.
 
 This transform **should be enabled only in production** (e.g., just before minifying your code) because, although it improves runtime performance, it makes warning messages more cryptic and skips important checks that happen in development mode, including propTypes.
 

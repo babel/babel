@@ -2,15 +2,15 @@
 
 > Externalise references to helpers and built-ins, automatically polyfilling your code without polluting globals. (This plugin is recommended in a library/tool)
 
-NOTE: Instance methods such as `"foobar".includes("foo")` will not work since that would require modification of existing built-ins (Use [`babel-polyfill`](http://babeljs.io/docs/usage/polyfill) for that).
+NOTE: Instance methods such as `"foobar".includes("foo")` will not work since that would require modification of existing built-ins (Use [`@babel/polyfill`](http://babeljs.io/docs/usage/polyfill) for that).
 
 ## Why?
 
 Babel uses very small helpers for common functions such as `_extend`. By default this will be added to every file that requires it. This duplication is sometimes unnecessary, especially when your application is spread out over multiple files.
 
-This is where the `transform-runtime` plugin comes in: all of the helpers will reference the module `babel-runtime` to avoid duplication across your compiled output. The runtime will be compiled into your build.
+This is where the `transform-runtime` plugin comes in: all of the helpers will reference the module `@babel/runtime` to avoid duplication across your compiled output. The runtime will be compiled into your build.
 
-Another purpose of this transformer is to create a sandboxed environment for your code. If you use [babel-polyfill](http://babeljs.io/docs/usage/polyfill/) and the built-ins it provides such as `Promise`, `Set` and `Map`, those will pollute the global scope. While this might be ok for an app or a command line tool, it becomes a problem if your code is a library which you intend to publish for others to use or if you can't exactly control the environment in which your code will run.
+Another purpose of this transformer is to create a sandboxed environment for your code. If you use [@babel/polyfill](http://babeljs.io/docs/usage/polyfill/) and the built-ins it provides such as `Promise`, `Set` and `Map`, those will pollute the global scope. While this might be ok for an app or a command line tool, it becomes a problem if your code is a library which you intend to publish for others to use or if you can't exactly control the environment in which your code will run.
 
 The transformer will alias these built-ins to `core-js` so you can use them seamlessly without having to require the polyfill.
 
@@ -20,16 +20,16 @@ See the [technical details](#technical-details) section for more information on 
 
 **NOTE - Production vs. development dependencies**
 
-In most cases, you should install `babel-plugin-transform-runtime` as a development dependency (with `--save-dev`).
+In most cases, you should install `@babel/plugin-transform-runtime` as a development dependency (with `--save-dev`).
 
 ```sh
 npm install --save-dev @babel/plugin-transform-runtime
 ```
 
-and `babel-runtime` as a production dependency (with `--save`).
+and `@babel/runtime` as a production dependency (with `--save`).
 
 ```sh
-npm install --save babel-runtime
+npm install --save @babel/runtime
 ```
 
 The transformation plugin is typically used only in development, but the runtime itself will be depended on by your deployed/published code. See the examples below for more details.
@@ -105,7 +105,7 @@ For more information, see [Regenerator aliasing](#regenerator-aliasing).
 
 ### `moduleName`
 
-`string`, defaults to `"babel-runtime"`.
+`string`, defaults to `"@babel/runtime"`.
 
 Sets the name/path of the module used when importing helpers.
 
@@ -200,13 +200,13 @@ export default function (instance, Constructor) {
 
 The `runtime` transformer plugin does three things:
 
-* Automatically requires `babel-runtime/regenerator` when you use generators/async functions.
-* Automatically requires `babel-runtime/core-js` and maps ES6 static methods and built-ins.
-* Removes the inline Babel helpers and uses the module `babel-runtime/helpers` instead.
+* Automatically requires `@babel/runtime/regenerator` when you use generators/async functions.
+* Automatically requires `@babel/runtime/core-js` and maps ES6 static methods and built-ins.
+* Removes the inline Babel helpers and uses the module `@babel/runtime/helpers` instead.
 
 What does this actually mean though? Basically, you can use built-ins such as `Promise`, `Set`, `Symbol`, etc., as well use all the Babel features that require a polyfill seamlessly, without global pollution, making it extremely suitable for libraries.
 
-Make sure you include `babel-runtime` as a dependency.
+Make sure you include `@babel/runtime` as a dependency.
 
 ### Regenerator aliasing
 

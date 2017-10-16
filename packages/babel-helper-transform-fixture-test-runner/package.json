@@ -1,7 +1,7 @@
 {
   "name": "@babel/helper-transform-fixture-test-runner",
   "version": "7.0.0-beta.3",
-  "description": "Transform test runner for babel-helper-fixtures module",
+  "description": "Transform test runner for @babel/helper-fixtures module",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",

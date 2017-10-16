@@ -2,7 +2,7 @@
 
 > This plugin places a `"use strict";` directive at the top of all files to enable [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode).
 
-This plugin may be enabled via `babel-plugin-transform-es2015-modules-commonjs`.
+This plugin may be enabled via `@babel/plugin-transform-es2015-modules-commonjs`.
 If you wish to disable it you can either turn `strict` off or pass
 `strictMode: false` as an option to the commonjs transform.
 
