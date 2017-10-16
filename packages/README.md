@@ -13,7 +13,7 @@ A monorepo, muhahahahahaha. See the [monorepo design doc](/doc/design/monorepo.m
 
 | Package | Version | Dependencies |
 |--------|-------|------------|
-| [`babel-core`](/packages/babel-core) | [![npm](https://img.shields.io/npm/v/babel-core.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-core) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-core)](https://david-dm.org/babel/babel?path=packages/babel-core) |
+| [`@babel/core`](/packages/babel-core) | [![npm](https://img.shields.io/npm/v/babel-core.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-core) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-core)](https://david-dm.org/babel/babel?path=packages/babel-core) |
 | [`babylon`](https://github.com/babel/babylon) | [![npm](https://img.shields.io/npm/v/babylon.svg?maxAge=2592000)](https://www.npmjs.com/package/babylon) | [![Dependency Status](https://david-dm.org/babel/babylon.svg)](https://david-dm.org/babel/babylon) |
 | [`@babel/traverse`](/packages/babel-traverse) | [![npm](https://img.shields.io/npm/v/babel-traverse.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-traverse) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-traverse)](https://david-dm.org/babel/babel?path=packages/babel-traverse) |
 | [`@babel/generator`](/packages/babel-generator) | [![npm](https://img.shields.io/npm/v/babel-generator.svg?maxAge=2592000)](https://www.npmjs.com/package/babel-generator) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-generator)](https://david-dm.org/babel/babel?path=packages/babel-generator) |
@@ -23,12 +23,12 @@ A monorepo, muhahahahahaha. See the [monorepo design doc](/doc/design/monorepo.m
 The compiler can be broken down into 3 parts:
 - The parser: [`babylon`](https://github.com/babel/babylon) (moved to a separate repo and versioned independently)
 - The transformer[s]: All the plugins/presets
-  - These all use [`babel-traverse`](/packages/babel-traverse) to traverse through the AST
-- The generator: [`babel-generator`](/packages/babel-generator)
+  - These all use [`@babel/traverse`](/packages/babel-traverse) to traverse through the AST
+- The generator: [`@babel/generator`](/packages/babel-generator)
 
 The flow goes like this:
 
-input string -> `babylon` parser -> `AST` -> transformer[s] -> `AST` -> `babel-generator` -> output string
+input string -> `babylon` parser -> `AST` -> transformer[s] -> `AST` -> `@babel/generator` -> output string
 
 Check out the [`babel-handbook`](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#introduction) for more information on this.
 
