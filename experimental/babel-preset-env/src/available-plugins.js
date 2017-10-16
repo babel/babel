@@ -3,7 +3,7 @@ export default {
   "syntax-async-generators": require("@babel/plugin-syntax-async-generators"),
   "syntax-object-rest-spread": require("@babel/plugin-syntax-object-rest-spread"),
   "syntax-optional-catch-binding": require("@babel/plugin-syntax-optional-catch-binding"),
-  "syntax-trailing-function-commas": require("@babel/plugin-syntax-trailing-function-commas"),
+  "syntax-trailing-function-commas": require("babel-plugin-syntax-trailing-function-commas"),
   "transform-async-to-generator": require("@babel/plugin-transform-async-to-generator"),
   "transform-async-generator-functions": require("@babel/plugin-transform-async-generator-functions"),
   "transform-es2015-arrow-functions": require("@babel/plugin-transform-es2015-arrow-functions"),
@@ -33,5 +33,5 @@ export default {
   "transform-object-rest-spread": require("@babel/plugin-transform-object-rest-spread"),
   "transform-optional-catch-binding": require("@babel/plugin-transform-optional-catch-binding"),
   "transform-regenerator": require("@babel/plugin-transform-regenerator"),
-  "transform-unicode-property-regex": require("@babel/plugin-transform-unicode-property-regex"),
+  "transform-unicode-property-regex": require("babel-plugin-transform-unicode-property-regex"),
 };
