@@ -5,7 +5,8 @@ import homeOrTmp from "home-or-tmp";
 import * as babel from "@babel/core";
 import findCacheDir from "find-cache-dir";
 
-const DEFAULT_CACHE_DIR = findCacheDir({ name: "babel-register" }) || homeOrTmp;
+const DEFAULT_CACHE_DIR =
+  findCacheDir({ name: "@babel/register" }) || homeOrTmp;
 const DEFAULT_FILENAME = path.join(
   DEFAULT_CACHE_DIR,
   `.babel.${babel.version}.${babel.getEnv()}.json`,

@@ -1,8 +1,8 @@
 "use strict";
 
 const outputFile = require("output-file-sync");
-const coreDefinitions = require("babel-plugin-transform-runtime").definitions;
-const helpers = require("babel-helpers");
+const coreDefinitions = require("@babel/plugin-transform-runtime").definitions;
+const helpers = require("@babel/helpers");
 const babel = require("../../babel-core");
 const t = require("../../babel-types");
 
@@ -38,7 +38,6 @@ function defaultify(name) {
 
 function writeRootFile(filename, content) {
   filename = relative(filename);
-  //console.log(filename);
   outputFile(filename, content);
 }
 

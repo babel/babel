@@ -1,6 +1,6 @@
 const includes = require("lodash/includes");
 const readdir = require("fs-readdir-recursive");
-const helper = require("babel-helper-fixtures");
+const helper = require("@babel/helper-fixtures");
 const assert = require("assert");
 const rimraf = require("rimraf");
 const outputFileSync = require("output-file-sync");

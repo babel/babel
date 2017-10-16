@@ -40,7 +40,7 @@ function test(sourceType, opts, initializer, expectedCode) {
 const testScript = test.bind(undefined, "script");
 const testModule = test.bind(undefined, "module");
 
-describe("babel-helper-module-imports", () => {
+describe("@babel/helper-module-imports", () => {
   describe("namespace import", () => {
     const addNamespace = opts => m => m.addNamespace("source", opts);
 

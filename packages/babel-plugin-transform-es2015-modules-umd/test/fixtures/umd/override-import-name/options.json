@@ -3,7 +3,7 @@
     "external-helpers",
     ["transform-es2015-modules-umd", {
       "globals": {
-          "babel-template": "baz"
+          "@babel/template": "baz"
         }
     }]
   ]

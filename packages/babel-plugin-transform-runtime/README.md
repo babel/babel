@@ -57,7 +57,7 @@ With options:
       "helpers": false,
       "polyfill": false,
       "regenerator": true,
-      "moduleName": "babel-runtime"
+      "moduleName": "@babel/runtime"
     }]
   ]
 }

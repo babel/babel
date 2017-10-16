@@ -2,7 +2,7 @@ import chai from "chai";
 
 const DATA_ES2015 = require.resolve("./__data__/es2015");
 
-describe("babel-register", function() {
+describe("@babel/register", function() {
   let babelRegister;
   let oldCompiler;
 

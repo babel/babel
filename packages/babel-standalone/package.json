@@ -85,7 +85,7 @@
     "@babel/plugin-transform-runtime": "7.0.0-beta.3",
     "@babel/plugin-transform-strict-mode": "7.0.0-beta.3",
     "babel-plugin-transform-unicode-property-regex": "^2.0.5",
-    "babel-preset-env": "2.0.0-alpha.19",
+    "@babel/preset-env": "2.0.0-alpha.19",
     "@babel/preset-es2015": "7.0.0-beta.3",
     "@babel/preset-es2016": "7.0.0-beta.3",
     "@babel/preset-es2017": "7.0.0-beta.3",
