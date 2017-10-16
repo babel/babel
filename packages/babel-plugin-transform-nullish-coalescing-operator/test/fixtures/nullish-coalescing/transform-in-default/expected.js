@@ -1,3 +1,3 @@
-var _ref;
+var _foo;
 
-function foo(foo, bar = (_ref = foo, _ref != null ? _ref : "bar")) {}
+function foo(foo, bar = (_foo = foo, _foo != null ? _foo : "bar")) {}

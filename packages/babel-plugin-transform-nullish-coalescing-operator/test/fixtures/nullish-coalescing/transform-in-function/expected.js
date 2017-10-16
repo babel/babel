@@ -1,5 +1,5 @@
-var _ref;
+var _opts$foo;
 
 function foo(opts) {
-  var foo = (_ref = opts.foo, _ref != null ? _ref : "default");
+  var foo = (_opts$foo = opts.foo, _opts$foo != null ? _opts$foo : "default");
 }

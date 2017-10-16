@@ -9,7 +9,7 @@ export const COMMENT_KEYS = [
   "innerComments",
 ];
 
-export const LOGICAL_OPERATORS = ["||", "&&"];
+export const LOGICAL_OPERATORS = ["||", "&&", "??"];
 export const UPDATE_OPERATORS = ["++", "--"];
 
 export const BOOLEAN_NUMBER_BINARY_OPERATORS = [">", "<", ">=", "<="];
@@ -38,7 +38,6 @@ export const NUMBER_BINARY_OPERATORS = [
 ];
 export const BINARY_OPERATORS = [
   "+",
-  "??",
   ...NUMBER_BINARY_OPERATORS,
   ...BOOLEAN_BINARY_OPERATORS,
 ];
