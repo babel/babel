@@ -7,7 +7,7 @@ export default function() {
   return {
     visitor: {
       "BindingIdentifier|ReferencedIdentifier"(path) {
-        if (reservedKeywords.includes(path.node.name)) {
+        if (reservedKeywords.indexOf(path.node.name) !== -1) {
           path.scope.rename(path.node.name);
         }
       },
