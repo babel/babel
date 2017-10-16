@@ -1,4 +1,4 @@
-import * as defineMap from "babel-helper-define-map";
+import * as defineMap from "@babel/helper-define-map";
 
 export default function({ types: t }) {
   return {

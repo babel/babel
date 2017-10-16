@@ -1,5 +1,5 @@
 import assert from "assert";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 /**
  * A class to track and accumulate mutations to the AST that will eventually

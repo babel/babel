@@ -1,9 +1,9 @@
 import assert from "assert";
-import * as t from "babel-types";
-import template from "babel-template";
+import * as t from "@babel/types";
+import template from "@babel/template";
 import chunk from "lodash/chunk";
 
-import { isModule } from "babel-helper-module-imports";
+import { isModule } from "@babel/helper-module-imports";
 
 import rewriteThis from "./rewrite-this";
 import rewriteLiveReferences from "./rewrite-live-references";

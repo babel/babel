@@ -1,4 +1,4 @@
-import nameFunction from "babel-helper-function-name";
+import nameFunction from "@babel/helper-function-name";
 
 export default function() {
   return {

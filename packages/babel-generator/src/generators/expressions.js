@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import * as n from "../node";
 
 export function UnaryExpression(node: Object) {

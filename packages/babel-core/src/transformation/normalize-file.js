@@ -2,7 +2,7 @@
 
 import convertSourceMap, { typeof Converter } from "convert-source-map";
 import { parse } from "babylon";
-import { codeFrameColumns } from "babel-code-frame";
+import { codeFrameColumns } from "@babel/code-frame";
 
 const shebangRegex = /^#!.*/;
 

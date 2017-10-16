@@ -9,7 +9,7 @@
 /* global VERSION */
 /* eslint-disable max-len */
 
-import * as Babel from "babel-core";
+import * as Babel from "@babel/core";
 
 import { runScripts } from "./transformScriptTags";
 

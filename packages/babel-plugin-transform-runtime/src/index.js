@@ -1,4 +1,4 @@
-import { addDefault, isModule } from "babel-helper-module-imports";
+import { addDefault, isModule } from "@babel/helper-module-imports";
 
 import definitions from "./definitions";
 

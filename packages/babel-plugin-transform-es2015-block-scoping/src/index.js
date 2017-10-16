@@ -1,12 +1,12 @@
-import type NodePath from "babel-traverse";
-import type Scope from "babel-traverse";
+import type NodePath from "@babel/traverse";
+import type Scope from "@babel/traverse";
 import type File from "../../../file";
-import traverse from "babel-traverse";
+import traverse from "@babel/traverse";
 import { visitor as tdzVisitor } from "./tdz";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import values from "lodash/values";
 import extend from "lodash/extend";
-import template from "babel-template";
+import template from "@babel/template";
 
 const DONE = new WeakSet();
 

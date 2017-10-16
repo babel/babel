@@ -1,4 +1,4 @@
-import syntaxExportExtensions from "babel-plugin-syntax-export-extensions";
+import syntaxExportExtensions from "@babel/plugin-syntax-export-extensions";
 
 export default function({ types: t }) {
   return {

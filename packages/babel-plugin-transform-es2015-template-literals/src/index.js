@@ -1,4 +1,4 @@
-import annotateAsPure from "babel-helper-annotate-as-pure";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 export default function({ types: t }, options) {
   const { loose } = options;

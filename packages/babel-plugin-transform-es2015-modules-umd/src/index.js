@@ -1,5 +1,5 @@
 import { basename, extname } from "path";
-import template from "babel-template";
+import template from "@babel/template";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
@@ -8,7 +8,7 @@ import {
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
-} from "babel-helper-module-transforms";
+} from "@babel/helper-module-transforms";
 
 const buildPrerequisiteAssignment = template(`
   GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}

@@ -2,7 +2,7 @@ import path from "path";
 import fs from "fs";
 import { sync as mkdirpSync } from "mkdirp";
 import homeOrTmp from "home-or-tmp";
-import * as babel from "babel-core";
+import * as babel from "@babel/core";
 import findCacheDir from "find-cache-dir";
 
 const DEFAULT_CACHE_DIR = findCacheDir({ name: "babel-register" }) || homeOrTmp;

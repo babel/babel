@@ -1,10 +1,10 @@
 // @flow
 
-import getHelper from "babel-helpers";
-import { NodePath, Hub, Scope } from "babel-traverse";
-import { codeFrameColumns } from "babel-code-frame";
-import traverse from "babel-traverse";
-import * as t from "babel-types";
+import getHelper from "@babel/helpers";
+import { NodePath, Hub, Scope } from "@babel/traverse";
+import { codeFrameColumns } from "@babel/code-frame";
+import traverse from "@babel/traverse";
+import * as t from "@babel/types";
 
 import type { NormalizedFile } from "../normalize-file";
 

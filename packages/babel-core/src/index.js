@@ -8,9 +8,9 @@ export { resolvePlugin, resolvePreset } from "./config/loading/files";
 export { version } from "../package";
 export { getEnv } from "./config/helpers/environment";
 
-export * as types from "babel-types";
-export { default as traverse } from "babel-traverse";
-export { default as template } from "babel-template";
+export * as types from "@babel/types";
+export { default as traverse } from "@babel/traverse";
+export { default as template } from "@babel/template";
 
 import loadConfig from "./config";
 

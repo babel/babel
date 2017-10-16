@@ -1,4 +1,4 @@
-import syntaxTypeScript from "babel-plugin-syntax-typescript";
+import syntaxTypeScript from "@babel/plugin-syntax-typescript";
 
 import transpileEnum from "./enum";
 

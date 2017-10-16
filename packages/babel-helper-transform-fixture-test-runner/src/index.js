@@ -1,8 +1,8 @@
-import * as babel from "babel-core";
-import { buildExternalHelpers } from "babel-core";
-import getFixtures from "babel-helper-fixtures";
+import * as babel from "@babel/core";
+import { buildExternalHelpers } from "@babel/core";
+import getFixtures from "@babel/helper-fixtures";
 import sourceMap from "source-map";
-import { codeFrameColumns } from "babel-code-frame";
+import { codeFrameColumns } from "@babel/code-frame";
 import defaults from "lodash/defaults";
 import includes from "lodash/includes";
 import * as helpers from "./helpers";

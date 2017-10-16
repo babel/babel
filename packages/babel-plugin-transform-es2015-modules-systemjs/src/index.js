@@ -1,5 +1,5 @@
-import hoistVariables from "babel-helper-hoist-variables";
-import template from "babel-template";
+import hoistVariables from "@babel/helper-hoist-variables";
+import template from "@babel/template";
 
 const buildTemplate = template(`
   SYSTEM_REGISTER(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {

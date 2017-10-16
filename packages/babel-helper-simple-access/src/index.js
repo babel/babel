@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 export default function simplifyAccess(path: NodePath, bindingNames) {
   path.traverse(simpleAssignmentVisitor, {

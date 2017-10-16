@@ -1,5 +1,5 @@
-import * as regex from "babel-helper-regex";
-import * as t from "babel-types";
+import * as regex from "@babel/helper-regex";
+import * as t from "@babel/types";
 
 export default function() {
   return {

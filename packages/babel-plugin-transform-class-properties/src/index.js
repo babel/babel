@@ -1,6 +1,6 @@
-import nameFunction from "babel-helper-function-name";
-import template from "babel-template";
-import syntaxClassProperties from "babel-plugin-syntax-class-properties";
+import nameFunction from "@babel/helper-function-name";
+import template from "@babel/template";
+import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
 
 export default function({ types: t }, options) {
   const { loose } = options;

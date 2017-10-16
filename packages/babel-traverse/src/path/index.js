@@ -5,7 +5,7 @@ import buildDebug from "debug";
 import invariant from "invariant";
 import traverse from "../index";
 import Scope from "../scope";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import { path as pathCache } from "../cache";
 
 // NodePath is split across many files.

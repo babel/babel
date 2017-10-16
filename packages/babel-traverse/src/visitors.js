@@ -1,5 +1,5 @@
 import * as virtualTypes from "./path/lib/virtual-types";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import clone from "lodash/clone";
 
 /**

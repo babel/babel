@@ -1,5 +1,5 @@
-import { react } from "babel-types";
-import * as t from "babel-types";
+import { react } from "@babel/types";
+import * as t from "@babel/types";
 
 const referenceVisitor = {
   // This visitor looks for bindings to establish a topmost scope for hoisting.

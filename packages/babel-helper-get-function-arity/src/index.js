@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 export default function(node): number {
   const params: Array<Object> = node.params;
