@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-react-jsx-self",
+  "name": "@babel/plugin-transform-react-jsx-self",
   "version": "7.0.0-beta.3",
   "description": "Add a __self prop to all JSX Elements",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-jsx-self",

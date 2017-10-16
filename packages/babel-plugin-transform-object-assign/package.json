@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-object-assign",
+  "name": "@babel/plugin-transform-object-assign",
   "version": "7.0.0-beta.3",
   "description": "Replace Object.assign with an inline helper",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-assign",

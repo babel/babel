@@ -1,5 +1,5 @@
 {
-  "name": "babel-preset-flow",
+  "name": "@babel/preset-flow",
   "version": "7.0.0-beta.3",
   "description": "Babel preset for all Flow plugins.",
   "author": "James Kyle <me@thejameskyle.com>",

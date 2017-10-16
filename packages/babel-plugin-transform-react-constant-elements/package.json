@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-react-constant-elements",
+  "name": "@babel/plugin-transform-react-constant-elements",
   "version": "7.0.0-beta.3",
   "description": "Treat React JSX elements as value types and hoist them to the highest scope",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-constant-elements",

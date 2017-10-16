@@ -1,5 +1,5 @@
 {
-  "name": "babel-register",
+  "name": "@babel/register",
   "version": "7.0.0-beta.3",
   "description": "babel require hook",
   "license": "MIT",

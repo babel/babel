@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-function-bind",
+  "name": "@babel/plugin-transform-function-bind",
   "version": "7.0.0-beta.3",
   "description": "Compile function bind operator to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-function-bind",

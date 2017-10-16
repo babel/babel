@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-es2015-instanceof",
+  "name": "@babel/plugin-transform-es2015-instanceof",
   "version": "7.0.0-beta.3",
   "description": "This plugin transforms all the ES2015 'instanceof' methods",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-instanceof",

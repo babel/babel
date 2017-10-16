@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-do-expressions",
+  "name": "@babel/plugin-transform-do-expressions",
   "version": "7.0.0-beta.3",
   "description": "Compile do expressions to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-do-expressions",

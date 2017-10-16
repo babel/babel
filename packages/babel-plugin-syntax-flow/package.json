@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-syntax-flow",
+  "name": "@babel/plugin-syntax-flow",
   "version": "7.0.0-beta.3",
   "description": "Allow parsing of the flow syntax",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-flow",

@@ -1,5 +1,5 @@
 {
-  "name": "babel-helper-explode-class",
+  "name": "@babel/helper-explode-class",
   "version": "7.0.0-beta.3",
   "description": "Helper function to explode class",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-explode-class",

@@ -1,5 +1,5 @@
 {
-  "name": "babel-helper-call-delegate",
+  "name": "@babel/helper-call-delegate",
   "version": "7.0.0-beta.3",
   "description": "Helper function to call delegate",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-call-delegate",

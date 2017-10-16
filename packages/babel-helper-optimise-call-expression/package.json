@@ -1,5 +1,5 @@
 {
-  "name": "babel-helper-optimise-call-expression",
+  "name": "@babel/helper-optimise-call-expression",
   "version": "7.0.0-beta.3",
   "description": "Helper function to optimise call expression",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-optimise-call-expression",

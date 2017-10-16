@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-new-target",
+  "name": "@babel/plugin-transform-new-target",
   "version": "7.0.0-beta.3",
   "description": "Transforms new.target meta property",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-new-target",

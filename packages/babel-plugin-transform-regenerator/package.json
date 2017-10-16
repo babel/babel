@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-regenerator",
+  "name": "@babel/plugin-transform-regenerator",
   "author": "Ben Newman <bn@cs.stanford.edu>",
   "description": "Explode async and generator functions into a state machine.",
   "version": "7.0.0-beta.3",

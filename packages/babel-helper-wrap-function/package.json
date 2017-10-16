@@ -1,5 +1,5 @@
 {
-  "name": "babel-helper-wrap-function",
+  "name": "@babel/helper-wrap-function",
   "version": "7.0.0-beta.3",
   "description": "Helper to wrap functions inside a function call.",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-wrap-function",

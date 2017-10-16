@@ -1,5 +1,5 @@
 {
-  "name": "babel-helper-hoist-variables",
+  "name": "@babel/helper-hoist-variables",
   "version": "7.0.0-beta.3",
   "description": "Helper function to hoist variables",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-hoist-variables",

@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-es2015-block-scoping",
+  "name": "@babel/plugin-transform-es2015-block-scoping",
   "version": "7.0.0-beta.3",
   "description": "Compile ES2015 block scoping (const and let) to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-block-scoping",

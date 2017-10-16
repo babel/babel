@@ -1,5 +1,5 @@
 {
-  "name": "babel-preset-es2015",
+  "name": "@babel/preset-es2015",
   "version": "7.0.0-beta.3",
   "description": "Babel preset for all es2015 plugins.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",

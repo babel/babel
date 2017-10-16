@@ -1,5 +1,5 @@
 {
-  "name": "babel-helper-function-name",
+  "name": "@babel/helper-function-name",
   "version": "7.0.0-beta.3",
   "description": "Helper function to change the property 'name' of every function",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-function-name",

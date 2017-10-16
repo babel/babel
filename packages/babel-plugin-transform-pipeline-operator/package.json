@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-pipeline-operator",
+  "name": "@babel/plugin-transform-pipeline-operator",
   "version": "7.0.0-beta.3",
   "description": "Transform pipeline operator into call expressions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-pipeline-operator",

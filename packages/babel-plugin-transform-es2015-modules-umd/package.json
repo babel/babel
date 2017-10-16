@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-es2015-modules-umd",
+  "name": "@babel/plugin-transform-es2015-modules-umd",
   "version": "7.0.0-beta.3",
   "description": "This plugin transforms ES2015 modules to UMD",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-modules-umd",

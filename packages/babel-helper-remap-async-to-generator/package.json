@@ -1,5 +1,5 @@
 {
-  "name": "babel-helper-remap-async-to-generator",
+  "name": "@babel/helper-remap-async-to-generator",
   "version": "7.0.0-beta.3",
   "description": "Helper function to remap async functions to generators",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-remap-async-to-generator",

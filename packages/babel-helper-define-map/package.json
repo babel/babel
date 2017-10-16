@@ -1,5 +1,5 @@
 {
-  "name": "babel-helper-define-map",
+  "name": "@babel/helper-define-map",
   "version": "7.0.0-beta.3",
   "description": "Helper function to define a map",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-define-map",

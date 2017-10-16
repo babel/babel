@@ -1,5 +1,5 @@
 {
-  "name": "babel-helper-plugin-test-runner",
+  "name": "@babel/helper-plugin-test-runner",
   "version": "7.0.0-beta.3",
   "description": "Helper function to support test runner",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-plugin-test-runner",

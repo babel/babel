@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-decorators",
+  "name": "@babel/plugin-transform-decorators",
   "version": "7.0.0-beta.3",
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "license": "MIT",

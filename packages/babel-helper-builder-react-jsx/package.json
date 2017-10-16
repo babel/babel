@@ -1,5 +1,5 @@
 {
-  "name": "babel-helper-builder-react-jsx",
+  "name": "@babel/helper-builder-react-jsx",
   "version": "7.0.0-beta.3",
   "description": "Helper function to build react jsx",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-builder-react-jsx",

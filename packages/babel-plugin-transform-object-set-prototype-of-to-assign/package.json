@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-object-set-prototype-of-to-assign",
+  "name": "@babel/plugin-transform-object-set-prototype-of-to-assign",
   "version": "7.0.0-beta.3",
   "description": "Turn Object.setPrototypeOf to assignments",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-set-prototype-of-to-assign",
