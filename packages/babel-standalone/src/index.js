@@ -1,5 +1,5 @@
 /**
- * Entry point for babel-standalone. This wraps Babel's API in a version that's
+ * Entry point for @babel/standalone. This wraps Babel's API in a version that's
  * friendlier for use in web browers. It removes the automagical detection of
  * plugins, instead explicitly registering all the available plugins and
  * presets, and requiring custom ones to be registered through `registerPlugin`
@@ -210,7 +210,7 @@ registerPlugins({
   "transform-regenerator": require("@babel/plugin-transform-regenerator"),
   "transform-runtime": require("@babel/plugin-transform-runtime"),
   "transform-strict-mode": require("@babel/plugin-transform-strict-mode"),
-  "transform-unicode-property-regex": require("@babel/plugin-transform-unicode-property-regex"),
+  "transform-unicode-property-regex": require("babel-plugin-transform-unicode-property-regex"),
 });
 
 // All the presets we should bundle
