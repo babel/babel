@@ -10,7 +10,7 @@
     "@babel/template": "7.0.0-beta.3"
   },
   "keywords": [
-    "@babel/plugin"
+    "babel-plugin"
   ],
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "7.0.0-beta.3"

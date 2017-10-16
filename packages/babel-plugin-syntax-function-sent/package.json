@@ -6,6 +6,6 @@
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
-    "@babel/plugin"
+    "babel-plugin"
   ]
 }
