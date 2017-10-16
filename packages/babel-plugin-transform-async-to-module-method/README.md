@@ -64,7 +64,7 @@ babel --plugins transform-async-to-module-method script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-async-to-module-method"]
 });
 ```

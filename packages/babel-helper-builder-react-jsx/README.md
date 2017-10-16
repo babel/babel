@@ -12,7 +12,7 @@ type ElementState = {
   post?: Function; // function called with (state: ElementState) after building attribs
 };
 
-require("babel-helper-builder-react-jsx")({
+require("@babel/helper-builder-react-jsx")({
   filter: function (element: JSXElement) {
     // if returns false, the element isn't transformed
   },

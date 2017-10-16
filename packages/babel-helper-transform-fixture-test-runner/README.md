@@ -5,7 +5,7 @@
 ## Usage
 
 ```javascript
-import runFixtures from "babel-helper-transform-fixture-test-runner";
+import runFixtures from "@babel/helper-transform-fixture-test-runner";
 
 runFixtures("/User/sebmck/Projects/babel-something/test/fixtures");
 ```

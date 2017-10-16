@@ -9,8 +9,8 @@ declare export default annotateAsPure(nodeOrPath: Node | NodePath);
 ## Usage
 
 ```js
-import traverse from "babel-traverse";
-import annotateAsPure from "babel-helper-annotate-as-pure";
+import traverse from "@babel/traverse";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 // ...
 

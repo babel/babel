@@ -72,7 +72,7 @@ babel --plugins transform-runtime script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-runtime"]
 });
 ```
@@ -246,7 +246,7 @@ With the `runtime` transformer, however, it is compiled to:
 ```javascript
 "use strict";
 
-var _regenerator = require("babel-runtime/regenerator");
+var _regenerator = require("@babel/runtime/regenerator");
 
 var _regenerator2 = _interopRequireDefault(_regenerator);
 
@@ -289,15 +289,15 @@ into the following:
 ```javascript
 "use strict";
 
-var _getIterator2 = require("babel-runtime/core-js/get-iterator");
+var _getIterator2 = require("@babel/runtime/core-js/get-iterator");
 
 var _getIterator3 = _interopRequireDefault(_getIterator2);
 
-var _promise = require("babel-runtime/core-js/promise");
+var _promise = require("@babel/runtime/core-js/promise");
 
 var _promise2 = _interopRequireDefault(_promise);
 
-var _symbol = require("babel-runtime/core-js/symbol");
+var _symbol = require("@babel/runtime/core-js/symbol");
 
 var _symbol2 = _interopRequireDefault(_symbol);
 
@@ -346,7 +346,7 @@ the `runtime` transformer however turns this into:
 ```javascript
 "use strict";
 
-var _classCallCheck2 = require("babel-runtime/helpers/classCallCheck");
+var _classCallCheck2 = require("@babel/runtime/helpers/classCallCheck");
 
 var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 

@@ -29,7 +29,7 @@ babel script.js --presets stage-0
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   presets: ["stage-0"]
 });
 ```

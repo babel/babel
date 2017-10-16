@@ -49,7 +49,7 @@ babel --plugins transform-react-display-name script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-react-display-name"]
 });
 ```

@@ -43,7 +43,7 @@ babel --plugins transform-react-jsx-self script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-react-jsx-self"]
 });
 ```

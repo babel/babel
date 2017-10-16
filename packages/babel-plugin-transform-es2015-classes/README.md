@@ -17,7 +17,7 @@ class Test {
   constructor(name) {
     this.name = name;
   }
-  
+
   logger () {
     console.log("Hello", this.name);
   }
@@ -81,7 +81,7 @@ babel --plugins transform-es2015-classes script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-classes"]
 });
 ```

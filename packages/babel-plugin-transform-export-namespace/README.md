@@ -35,7 +35,7 @@ babel --plugins transform-export-namespace script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-export-namespace"]
 });
 ```

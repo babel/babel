@@ -13,9 +13,9 @@ npm install --save-dev babel-template
 ## Usage
 
 ```js
-import template from "babel-template";
-import generate from "babel-generator";
-import * as t from "babel-types";
+import template from "@babel/template";
+import generate from "@babel/generator";
+import * as t from "@babel/types";
 
 const buildRequire = template(`
   var IMPORT_NAME = require(SOURCE);

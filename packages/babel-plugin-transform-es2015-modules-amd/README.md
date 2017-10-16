@@ -51,7 +51,7 @@ babel --plugins transform-es2015-modules-amd script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-modules-amd"]
 });
 ```

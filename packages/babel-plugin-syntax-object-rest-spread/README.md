@@ -29,7 +29,7 @@ babel --plugins syntax-object-rest-spread script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["syntax-object-rest-spread"]
 });
 ```

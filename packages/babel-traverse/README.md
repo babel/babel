@@ -14,7 +14,7 @@ We can use it alongside Babylon to traverse and update nodes:
 
 ```js
 import * as babylon from "babylon";
-import traverse from "babel-traverse";
+import traverse from "@babel/traverse";
 
 const code = `function square(n) {
   return n * n;

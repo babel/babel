@@ -93,7 +93,7 @@ babel --plugins transform-react-jsx script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-react-jsx"]
 });
 ```

@@ -47,7 +47,7 @@ babel --plugins transform-es3-property-literals script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es3-property-literals"]
 });
 ```

@@ -99,7 +99,7 @@ babel --plugins transform-decorators script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-decorators"]
 });
 ```

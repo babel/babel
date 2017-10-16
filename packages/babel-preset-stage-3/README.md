@@ -41,7 +41,7 @@ babel script.js --presets stage-3
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   presets: ["stage-3"]
 });
 ```

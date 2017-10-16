@@ -39,7 +39,7 @@ babel script.js --presets stage-1
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   presets: ["stage-1"]
 });
 ```

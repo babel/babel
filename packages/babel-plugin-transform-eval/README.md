@@ -43,7 +43,7 @@ babel --plugins transform-eval script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-eval"]
 });
 ```

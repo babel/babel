@@ -29,7 +29,7 @@ babel --plugins syntax-optional-chaining script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["syntax-optional-chaining"]
 });
 ```

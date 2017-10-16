@@ -5,7 +5,7 @@
 ## Usage
 
 ```javascript
-import getFixtures from "babel-helper-fixtures";
+import getFixtures from "@babel/helper-fixtures";
 
 type TestFile = {
   loc: string;

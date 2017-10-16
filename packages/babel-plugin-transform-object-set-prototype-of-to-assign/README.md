@@ -47,7 +47,7 @@ babel --plugins transform-object-set-prototype-of-to-assign script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-object-set-prototype-of-to-assign"]
 });
 ```

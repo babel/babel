@@ -21,7 +21,7 @@ _wrapper(function () {
 ## Usage
 
 ```js
-import wrapFunction from "babel-helper-wrap-function";
+import wrapFunction from "@babel/helper-wrap-function";
 
 wrapFunction(nodePathOfTheFunction, nodeWhichReferencesToTheWrapper);
 ```

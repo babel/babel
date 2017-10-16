@@ -66,7 +66,7 @@ babel script.js --presets react
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   presets: ["react"]
 });
 ```

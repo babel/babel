@@ -36,7 +36,7 @@ babel --plugins syntax-throw-expressions script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["syntax-throw-expressions"]
 });
 ```

@@ -5,9 +5,9 @@
 The gist of Stage 2 is:
 
 > **Stage 2:** draft
-> 
+>
 > **What is it?** A first version of what will be in the specification. At this point, an eventual inclusion of the feature in the standard is likely.
-> 
+>
 > **What’s required?** The proposal must now additionally have a formal description of the syntax and semantics of the feature (using the formal language of the ECMAScript specification). The description should be as complete as possible, but can contain todos and placeholders. Two experimental implementations of the feature are needed, but one of them can be in a transpiler such as Babel.
 >
 > **What’s next?** Only incremental changes are expected from now on.
@@ -41,7 +41,7 @@ babel script.js --presets stage-2
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   presets: ["stage-2"]
 });
 ```
