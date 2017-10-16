@@ -5,13 +5,13 @@
 ## Install
 
 ```sh
-npm install --save-dev babel-code-frame
+npm install --save-dev @babel/code-frame
 ```
 
 ## Usage
 
 ```js
-import { codeFrameColumns } from 'babel-code-frame';
+import { codeFrameColumns } from '@babel/code-frame';
 
 const rawLines = `class Foo {
   constructor()
@@ -35,7 +35,7 @@ If the column number is not known, you may omit it.
 You can also pass an `end` hash in `location`.
 
 ```js
-import { codeFrameColumns } from 'babel-code-frame';
+import { codeFrameColumns } from '@babel/code-frame';
 
 const rawLines = `class Foo {
   constructor() {
@@ -95,7 +95,7 @@ The new API takes a `location` object, similar to what is available in an AST.
 This is an example of the deprecated (but still available) API:
 
 ```js
-import codeFrame from 'babel-code-frame';
+import codeFrame from '@babel/code-frame';
 
 const rawLines = `class Foo {
   constructor()
@@ -111,7 +111,7 @@ console.log(result);
 To get the same highlighting using the new API:
 
 ```js
-import { codeFrameColumns } from 'babel-code-frame';
+import { codeFrameColumns } from '@babel/code-frame';
 
 const rawLines = `class Foo {
   constructor() {

@@ -27,7 +27,7 @@ var foo = (function () {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-jscript
+npm install --save-dev @babel/plugin-transform-jscript
 ```
 
 ## Usage

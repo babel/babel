@@ -54,7 +54,7 @@ console.log(bob.printFriends());
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-arrow-functions
+npm install --save-dev @babel/plugin-transform-es2015-arrow-functions
 ```
 
 ## Usage

@@ -25,7 +25,7 @@ var profile = React.DOM.div(null,
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-react-jsx-compat
+npm install --save-dev @babel/plugin-transform-react-jsx-compat
 ```
 
 ## Usage

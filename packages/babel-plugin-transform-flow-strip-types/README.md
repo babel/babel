@@ -19,7 +19,7 @@ function foo(one, two, three) {}
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-flow-strip-types
+npm install --save-dev @babel/plugin-transform-flow-strip-types
 ```
 
 ## Usage

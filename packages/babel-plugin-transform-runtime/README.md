@@ -23,7 +23,7 @@ See the [technical details](#technical-details) section for more information on 
 In most cases, you should install `babel-plugin-transform-runtime` as a development dependency (with `--save-dev`).
 
 ```sh
-npm install --save-dev babel-plugin-transform-runtime
+npm install --save-dev @babel/plugin-transform-runtime
 ```
 
 and `babel-runtime` as a production dependency (with `--save`).

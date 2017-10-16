@@ -48,7 +48,7 @@ var obj = (
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-computed-properties
+npm install --save-dev @babel/plugin-transform-es2015-computed-properties
 ```
 
 ## Usage

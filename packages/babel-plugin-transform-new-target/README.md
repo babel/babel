@@ -74,7 +74,7 @@ Reflect.construct(Foo, [], Baz); // => undefined (incorrect)
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-new-target
+npm install --save-dev @babel/plugin-transform-new-target
 ```
 
 ## Usage

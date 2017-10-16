@@ -37,7 +37,7 @@ function a() {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-regenerator
+npm install --save-dev @babel/plugin-transform-regenerator
 ```
 
 ## Usage

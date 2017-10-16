@@ -27,7 +27,7 @@ var a = 3;
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-block-scoping
+npm install --save-dev @babel/plugin-transform-es2015-block-scoping
 ```
 
 ## Usage

@@ -48,7 +48,7 @@ babelHelpers.jsx(Baz, {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-react-inline-elements
+npm install --save-dev @babel/plugin-transform-react-inline-elements
 ```
 
 ## Usage

@@ -25,7 +25,7 @@ foo();
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-strict-mode
+npm install --save-dev @babel/plugin-transform-strict-mode
 ```
 
 ## Usage

@@ -55,7 +55,7 @@ var profile = dom( "div", null,
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-react-jsx
+npm install --save-dev @babel/plugin-transform-react-jsx
 ```
 
 ## Usage

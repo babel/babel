@@ -13,7 +13,7 @@ function test(param = throw new Error('required!')) {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-throw-expressions
+npm install --save-dev @babel/plugin-transform-throw-expressions
 ```
 
 ## Usage

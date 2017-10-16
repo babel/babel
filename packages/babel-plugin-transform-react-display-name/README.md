@@ -25,7 +25,7 @@ var bar = createReactClass({
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-react-display-name
+npm install --save-dev @babel/plugin-transform-react-display-name
 ```
 
 ## Usage

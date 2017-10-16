@@ -23,7 +23,7 @@ exports.default = 42;
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-modules-commonjs
+npm install --save-dev @babel/plugin-transform-es2015-modules-commonjs
 ```
 
 ## Usage

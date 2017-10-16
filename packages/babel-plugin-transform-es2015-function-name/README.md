@@ -21,7 +21,7 @@ var number = function number(x) {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-function-name
+npm install --save-dev @babel/plugin-transform-es2015-function-name
 ```
 
 ## Usage

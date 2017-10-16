@@ -11,7 +11,7 @@ export * as ns from 'mod';
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-export-namespace
+npm install --save-dev @babel/plugin-transform-export-namespace
 ```
 
 ## Usage

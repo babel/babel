@@ -5,7 +5,7 @@ Transform pipeline operator `|>` into call expressions. See [the proposal](https
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-pipeline-operator
+$ npm install @babel/plugin-transform-pipeline-operator
 ```
 
 ## Usage

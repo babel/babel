@@ -84,7 +84,7 @@ new exists?.(); // undefined
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-optional-chaining
+npm install --save-dev @babel/plugin-transform-optional-chaining
 ```
 
 ## Usage

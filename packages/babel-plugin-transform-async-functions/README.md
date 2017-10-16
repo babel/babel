@@ -5,7 +5,7 @@
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-async-functions
+npm install --save-dev @babel/plugin-transform-async-functions
 ```
 
 ## Usage

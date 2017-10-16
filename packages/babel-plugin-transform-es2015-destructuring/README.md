@@ -23,7 +23,7 @@ var x = arr.x,
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-destructuring
+npm install --save-dev @babel/plugin-transform-es2015-destructuring
 ```
 
 ## Usage

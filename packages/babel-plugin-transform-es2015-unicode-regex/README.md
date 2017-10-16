@@ -21,7 +21,7 @@ var match = string.match(/foo((?:[\0-\t\x0B\f\x0E-\u2027\u202A-\uD7FF\uE000-\uFF
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-unicode-regex
+npm install --save-dev @babel/plugin-transform-es2015-unicode-regex
 ```
 
 ## Usage

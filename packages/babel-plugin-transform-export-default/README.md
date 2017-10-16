@@ -11,7 +11,7 @@ export v from 'mod';
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-export-default
+npm install --save-dev @babel/plugin-transform-export-default
 ```
 
 ## Usage

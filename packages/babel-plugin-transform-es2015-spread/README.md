@@ -21,7 +21,7 @@ var b = [].concat(a, [ 'foo' ]);
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-spread
+npm install --save-dev @babel/plugin-transform-es2015-spread
 ```
 
 ## Usage

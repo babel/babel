@@ -31,7 +31,7 @@ var foo = Object.defineProperties({}, {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es5-property-mutators
+npm install --save-dev @babel/plugin-transform-es5-property-mutators
 ```
 
 ## Usage

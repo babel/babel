@@ -32,7 +32,7 @@ iterator.next(2); // Logs "Yield 1"
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-function-sent
+npm install --save-dev @babel/plugin-transform-function-sent
 ```
 
 ## Usage

@@ -60,7 +60,7 @@ Octals are great for permissions, but also look better when represented in `0o00
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-numeric-separator
+npm install --save-dev @babel/plugin-transform-numeric-separator
 ```
 
 ## Usage

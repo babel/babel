@@ -23,7 +23,7 @@ const u = 'Hello\n\t!'; // unicode string literals, newline and tab
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-literals
+npm install --save-dev @babel/plugin-transform-es2015-literals
 ```
 
 ## Usage

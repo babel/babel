@@ -19,7 +19,7 @@ var a = new RegExp("o+", "y");
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-sticky-regex
+npm install --save-dev @babel/plugin-transform-es2015-sticky-regex
 ```
 
 ## Usage

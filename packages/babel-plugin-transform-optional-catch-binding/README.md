@@ -27,7 +27,7 @@ try {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-optional-catch-binding
+npm install --save-dev @babel/plugin-transform-optional-catch-binding
 ```
 
 ## Usage

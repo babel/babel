@@ -28,7 +28,7 @@ b **= 3;
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-exponentiation-operator
+npm install --save-dev @babel/plugin-transform-exponentiation-operator
 ```
 
 ## Usage

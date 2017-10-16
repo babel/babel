@@ -19,7 +19,7 @@
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-react-jsx-self
+npm install --save-dev @babel/plugin-transform-react-jsx-self
 ```
 
 ## Usage

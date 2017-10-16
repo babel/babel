@@ -19,7 +19,7 @@
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-template-literals
+npm install --save-dev @babel/plugin-transform-es2015-template-literals
 ```
 
 ## Usage

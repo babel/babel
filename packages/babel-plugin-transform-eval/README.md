@@ -19,7 +19,7 @@ eval("(function () { return 'foo'; })");
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-eval
+npm install --save-dev @babel/plugin-transform-eval
 ```
 
 ## Usage

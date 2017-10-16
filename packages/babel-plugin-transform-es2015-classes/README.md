@@ -47,7 +47,7 @@ var Test = function () {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-classes
+npm install --save-dev @babel/plugin-transform-es2015-classes
 ```
 
 ## Usage

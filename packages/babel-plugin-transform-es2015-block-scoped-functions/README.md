@@ -31,7 +31,7 @@ name("Steve");
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-block-scoped-functions
+npm install --save-dev @babel/plugin-transform-es2015-block-scoped-functions
 ```
 
 ## Usage

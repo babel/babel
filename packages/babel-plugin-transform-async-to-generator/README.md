@@ -26,7 +26,7 @@ var foo = _asyncToGenerator(function* () {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-async-to-generator
+npm install --save-dev @babel/plugin-transform-async-to-generator
 ```
 
 ## Usage

@@ -24,7 +24,7 @@ const x = 0;
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-typescript
+npm install --save-dev @babel/plugin-transform-typescript
 ```
 
 ## Usage

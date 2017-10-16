@@ -43,7 +43,7 @@ var obj2 = _obj = {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-object-super
+npm install --save-dev @babel/plugin-transform-es2015-object-super
 ```
 
 ## Usage

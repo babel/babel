@@ -28,7 +28,7 @@ For dynamic import support (`import('./lazy.js').then(m => ...)`), enable the [s
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-modules-systemjs
+npm install --save-dev @babel/plugin-transform-es2015-modules-systemjs
 ```
 
 ## Usage
