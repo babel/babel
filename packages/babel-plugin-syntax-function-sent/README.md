@@ -5,7 +5,7 @@
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-function-sent
+npm install --save-dev @babel/plugin-syntax-function-sent
 ```
 
 ## Usage

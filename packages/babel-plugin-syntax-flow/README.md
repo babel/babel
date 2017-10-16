@@ -5,7 +5,7 @@
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-flow
+npm install --save-dev @babel/plugin-syntax-flow
 ```
 
 ## Usage

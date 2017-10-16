@@ -18,7 +18,7 @@ try {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-optional-catch-binding
+npm install --save-dev @babel/plugin-syntax-optional-catch-binding
 ```
 
 ## Usage

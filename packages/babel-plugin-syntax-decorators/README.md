@@ -5,7 +5,7 @@
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-decorators
+npm install --save-dev @babel/plugin-syntax-decorators
 ```
 
 ## Usage

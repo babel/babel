@@ -23,7 +23,7 @@ async function f() {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-async-generators
+npm install --save-dev @babel/plugin-syntax-async-generators
 ```
 
 ## Usage

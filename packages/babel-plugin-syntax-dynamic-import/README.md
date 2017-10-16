@@ -5,7 +5,7 @@
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-dynamic-import
+npm install --save-dev @babel/plugin-syntax-dynamic-import
 ```
 
 ## Usage

@@ -5,7 +5,7 @@
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-export-extensions
+npm install --save-dev @babel/plugin-syntax-export-extensions
 ```
 
 ## Usage

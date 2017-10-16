@@ -3,7 +3,7 @@
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-typescript
+npm install --save-dev @babel/plugin-syntax-typescript
 ```
 
 ## Usage

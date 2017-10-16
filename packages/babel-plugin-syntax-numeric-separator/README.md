@@ -6,7 +6,7 @@
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-numeric-separator
+npm install --save-dev @babel/plugin-syntax-numeric-separator
 ```
 
 ## Usage

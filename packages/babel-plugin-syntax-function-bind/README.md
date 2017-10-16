@@ -5,7 +5,7 @@
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-function-bind
+npm install --save-dev @babel/plugin-syntax-function-bind
 ```
 
 ## Usage

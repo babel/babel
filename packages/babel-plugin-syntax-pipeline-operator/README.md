@@ -5,7 +5,7 @@ Allow parsing of the pipeline operator `|>`. See [the proposal](https://github.c
 ## Installation
 
 ```sh
-$ npm install babel-plugin-syntax-pipeline-operator
+$ npm install @babel/plugin-syntax-pipeline-operator
 ```
 
 ## Usage

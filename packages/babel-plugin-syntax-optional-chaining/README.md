@@ -5,7 +5,7 @@ Allow parsing of optional properties.
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-optional-chaining
+npm install --save-dev @babel/plugin-syntax-optional-chaining
 ```
 
 ## Usage
