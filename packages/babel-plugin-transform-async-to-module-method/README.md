@@ -1,4 +1,4 @@
-# babel-plugin-transform-async-to-module-method
+# @babel/plugin-transform-async-to-module-method
 
 > Turn async functions into a Bluebird coroutine
 

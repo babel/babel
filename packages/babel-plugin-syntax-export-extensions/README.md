@@ -1,4 +1,4 @@
-# babel-plugin-syntax-export-extensions
+# @babel/plugin-syntax-export-extensions
 
 > Allow parsing of export extensions.
 

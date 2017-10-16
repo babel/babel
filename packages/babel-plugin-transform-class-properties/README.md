@@ -1,4 +1,4 @@
-# babel-plugin-transform-class-properties
+# @babel/plugin-transform-class-properties
 
 > This plugin transforms class properties
 

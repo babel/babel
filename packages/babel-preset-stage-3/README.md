@@ -1,4 +1,4 @@
-# babel-preset-stage-3
+# @babel/preset-stage-3
 
 > Babel preset for stage 3 plugins.
 

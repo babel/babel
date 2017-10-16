@@ -1,4 +1,4 @@
-# babel-plugin-transform-throw-expressions
+# @babel/plugin-transform-throw-expressions
 
 This plugin transforms Throw Expressions into an IIFE.
 

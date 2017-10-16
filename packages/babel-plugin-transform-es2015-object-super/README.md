@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-object-super
+# @babel/plugin-transform-es2015-object-super
 
 > Compile ES2015 object super to ES5
 

@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-shorthand-properties
+# @babel/plugin-transform-es2015-shorthand-properties
 
 > Compile ES2015 shorthand properties to ES5
 

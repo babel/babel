@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-computed-properties
+# @babel/plugin-transform-es2015-computed-properties
 
 > Compile ES2015 computed properties to ES5
 

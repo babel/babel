@@ -1,4 +1,4 @@
-# babel-preset-typescript
+# @babel/preset-typescript
 
 > Babel preset for TypeScript.
 

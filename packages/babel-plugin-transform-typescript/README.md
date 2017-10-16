@@ -1,4 +1,4 @@
-# babel-plugin-transform-typescript
+# @babel/plugin-transform-typescript
 
 > Transform [TypeScript](https://github.com/Microsoft/TypeScript) into ES.next.
 

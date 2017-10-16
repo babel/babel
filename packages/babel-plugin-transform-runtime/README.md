@@ -1,4 +1,4 @@
-# babel-plugin-transform-runtime
+# @babel/plugin-transform-runtime
 
 > Externalise references to helpers and built-ins, automatically polyfilling your code without polluting globals. (This plugin is recommended in a library/tool)
 

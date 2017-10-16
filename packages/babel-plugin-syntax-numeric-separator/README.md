@@ -1,4 +1,4 @@
-# babel-plugin-syntax-numeric-separator
+# @babel/plugin-syntax-numeric-separator
 
 > Allow parsing of Numeric Literals (Decimal, Binary, Hex and Octal) that contain a _NumericLiteralSeparator_.
 

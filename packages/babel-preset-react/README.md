@@ -1,4 +1,4 @@
-# babel-preset-react
+# @babel/preset-react
 
 > Babel preset for all React plugins.
 

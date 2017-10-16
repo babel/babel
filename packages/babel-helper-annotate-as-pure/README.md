@@ -1,4 +1,4 @@
-# babel-helper-annotate-as-pure
+# @babel/helper-annotate-as-pure
 
 ## API
 

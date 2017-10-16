@@ -1,4 +1,4 @@
-# babel-preset-es2015
+# @babel/preset-es2015
 
 > Babel preset for all es2015 plugins.
 

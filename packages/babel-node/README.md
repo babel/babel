@@ -1,4 +1,4 @@
-# babel-node
+# @babel/node
 
 > A Babel-powered Node.js CLI
 

@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-unicode-regex
+# @babel/plugin-transform-es2015-unicode-regex
 
 > Compile ES2015 unicode regex to ES5
 

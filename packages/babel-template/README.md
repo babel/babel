@@ -1,4 +1,4 @@
-# babel-template
+# @babel/template
 
 > Generate an AST from a string template.
 

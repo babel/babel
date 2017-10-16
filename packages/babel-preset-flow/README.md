@@ -1,4 +1,4 @@
-# babel-preset-flow
+# @babel/preset-flow
 
 > Babel preset for all Flow plugins.
 

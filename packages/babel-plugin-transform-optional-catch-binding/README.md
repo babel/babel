@@ -1,4 +1,4 @@
-# babel-plugin-transform-optional-catch-binding
+# @babel/plugin-transform-optional-catch-binding
 
 > Optional catch binding enables the catch block to execute whether or not an argument is passed to the catch statement (CatchClause).
 

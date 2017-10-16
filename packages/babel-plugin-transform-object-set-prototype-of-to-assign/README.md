@@ -1,4 +1,4 @@
-# babel-plugin-transform-object-set-prototype-of-to-assign
+# @babel/plugin-transform-object-set-prototype-of-to-assign
 
 > This plugin will transform all `Object.setPrototypeOf` calls to a method that will do a shallow defaults of all properties.
 

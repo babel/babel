@@ -1,4 +1,4 @@
-# babel-plugin-syntax-typescript
+# @babel/plugin-syntax-typescript
 
 ## Installation
 

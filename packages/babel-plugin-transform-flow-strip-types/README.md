@@ -1,4 +1,4 @@
-# babel-plugin-transform-flow-strip-types
+# @babel/plugin-transform-flow-strip-types
 
 > Strip all [flow](http://flowtype.org) type annotations and declarations from your output code.
 

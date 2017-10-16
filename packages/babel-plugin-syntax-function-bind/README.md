@@ -1,4 +1,4 @@
-# babel-plugin-syntax-function-bind
+# @babel/plugin-syntax-function-bind
 
 > Allow parsing of function bind.
 

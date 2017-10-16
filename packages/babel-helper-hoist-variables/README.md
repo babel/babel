@@ -1,4 +1,4 @@
-# babel-helper-hoist-variables
+# @babel/helper-hoist-variables
 
 ## Usage
 

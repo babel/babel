@@ -1,4 +1,4 @@
-# babel-plugin-transform-react-display-name
+# @babel/plugin-transform-react-display-name
 
 > Add displayName to `createReactClass` (and `React.createClass`) calls
 

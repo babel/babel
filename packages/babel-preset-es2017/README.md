@@ -1,4 +1,4 @@
-# babel-preset-es2017
+# @babel/preset-es2017
 
 > Babel preset for all es2017 plugins.
 

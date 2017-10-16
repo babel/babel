@@ -1,4 +1,4 @@
-# babel-plugin-syntax-optional-chaining
+# @babel/plugin-syntax-optional-chaining
 
 Allow parsing of optional properties.
 

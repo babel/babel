@@ -1,4 +1,4 @@
-# babel-plugin-transform-async-functions
+# @babel/plugin-transform-async-functions
 
 > Compile async functions to ES5
 

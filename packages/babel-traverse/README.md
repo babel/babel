@@ -1,4 +1,4 @@
-# babel-traverse
+# @babel/traverse
 
 > babel-traverse maintains the overall tree state, and is responsible for replacing, removing, and adding nodes.
 

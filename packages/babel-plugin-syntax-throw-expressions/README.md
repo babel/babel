@@ -1,4 +1,4 @@
-# babel-plugin-syntax-throw-expressions
+# @babel/plugin-syntax-throw-expressions
 
 Allow parsing of Throw Expressions:
 

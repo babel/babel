@@ -1,4 +1,4 @@
-# babel-plugin-codemod-optional-catch-binding
+# @babel/plugin-codemod-optional-catch-binding
 
 > If the argument bound to the catch block is not referenced in the catch block, that argument and the catch binding is removed.
 

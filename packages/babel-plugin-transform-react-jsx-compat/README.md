@@ -1,4 +1,4 @@
-# babel-plugin-transform-react-jsx-compat
+# @babel/plugin-transform-react-jsx-compat
 
 > Turn JSX into React Pre-0.12 function calls
 

@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-spread
+# @babel/plugin-transform-es2015-spread
 
 > Compile ES2015 spread to ES5
 

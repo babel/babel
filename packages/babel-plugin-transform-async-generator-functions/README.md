@@ -1,4 +1,4 @@
-# babel-plugin-transform-async-generator-functions
+# @babel/plugin-transform-async-generator-functions
 
 > Turn async generator functions and for-await statements to ES2015 generators
 

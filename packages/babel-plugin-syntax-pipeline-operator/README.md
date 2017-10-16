@@ -1,4 +1,4 @@
-# babel-plugin-syntax-pipeline-operator
+# @babel/plugin-syntax-pipeline-operator
 
 Allow parsing of the pipeline operator `|>`. See [the proposal](https://github.com/tc39/proposal-pipeline-operator) for details.
 

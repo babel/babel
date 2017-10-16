@@ -1,4 +1,4 @@
-# babel-cli
+# @babel/cli
 
 > Babel command line.
 

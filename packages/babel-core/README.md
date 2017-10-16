@@ -1,4 +1,4 @@
-# babel-core
+# @babel/core
 
 > Babel compiler core.
 

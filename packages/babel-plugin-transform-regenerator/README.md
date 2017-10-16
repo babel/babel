@@ -1,4 +1,4 @@
-# babel-plugin-transform-regenerator
+# @babel/plugin-transform-regenerator
 
 > Transform async/generator functions with [regenerator](https://github.com/facebook/regenerator)
 

@@ -1,4 +1,4 @@
-# babel-helper-builder-react-jsx
+# @babel/helper-builder-react-jsx
 
 ## Usage
 

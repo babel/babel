@@ -1,4 +1,4 @@
-# babel-types
+# @babel/types
 
 > This module contains methods for building ASTs manually and for checking the types of AST nodes.
 

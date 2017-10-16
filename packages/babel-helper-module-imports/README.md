@@ -1,4 +1,4 @@
-# babel-helper-module-imports
+# @babel/helper-module-imports
 
 ## Installation
 

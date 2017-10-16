@@ -1,4 +1,4 @@
-# babel-plugin-syntax-do-expressions
+# @babel/plugin-syntax-do-expressions
 
 > Allow parsing of do expressions.
 

@@ -1,4 +1,4 @@
-# babel-plugin-transform-async-to-generator
+# @babel/plugin-transform-async-to-generator
 
 > Turn async functions into ES2015 generators
 

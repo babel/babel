@@ -1,4 +1,4 @@
-# babel-plugin-transform-react-inline-elements
+# @babel/plugin-transform-react-inline-elements
 
 > Replaces the `React.createElement` function with one that is more optimized for production: `babelHelpers.jsx`.
 

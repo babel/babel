@@ -1,4 +1,4 @@
-# babel-plugin-transform-function-bind
+# @babel/plugin-transform-function-bind
 
 > Compile the new function bind operator `::` to ES5.
 

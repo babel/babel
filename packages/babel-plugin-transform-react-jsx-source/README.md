@@ -1,4 +1,4 @@
-# babel-plugin-transform-react-jsx-source
+# @babel/plugin-transform-react-jsx-source
 
 > Adds source file and line number to JSX elements.
 

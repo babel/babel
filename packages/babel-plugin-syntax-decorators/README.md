@@ -1,4 +1,4 @@
-# babel-plugin-syntax-decorators
+# @babel/plugin-syntax-decorators
 
 > Allow parsing of decorators.
 

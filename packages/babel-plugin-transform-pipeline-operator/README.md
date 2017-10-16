@@ -1,4 +1,4 @@
-# babel-plugin-transform-pipeline-operator
+# @babel/plugin-transform-pipeline-operator
 
 Transform pipeline operator `|>` into call expressions. See [the proposal](https://github.com/tc39/proposal-pipeline-operator) for details.
 

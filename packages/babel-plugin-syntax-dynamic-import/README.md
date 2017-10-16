@@ -1,4 +1,4 @@
-# babel-plugin-syntax-dynamic-import
+# @babel/plugin-syntax-dynamic-import
 
 > Allow parsing of `import()`.
 

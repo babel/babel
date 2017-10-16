@@ -1,4 +1,4 @@
-# babel-plugin-syntax-optional-catch-binding
+# @babel/plugin-syntax-optional-catch-binding
 
 > This plugin allows Babel to parse optional catch bindings.
 

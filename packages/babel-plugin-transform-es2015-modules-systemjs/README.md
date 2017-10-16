@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-modules-systemjs
+# @babel/plugin-transform-es2015-modules-systemjs
 
 > This plugin transforms ES2015 modules to [SystemJS](https://github.com/systemjs/systemjs).
 

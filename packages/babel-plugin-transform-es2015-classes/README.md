@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-classes
+# @babel/plugin-transform-es2015-classes
 
 > Compile ES2015 classes to ES5
 

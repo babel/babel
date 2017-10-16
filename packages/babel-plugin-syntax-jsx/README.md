@@ -1,4 +1,4 @@
-# babel-plugin-syntax-jsx
+# @babel/plugin-syntax-jsx
 
 > Allow parsing of JSX
 

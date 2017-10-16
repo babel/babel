@@ -1,4 +1,4 @@
-# babel-plugin-transform-flow-comments
+# @babel/plugin-transform-flow-comments
 
 > Turn flow type annotations into comments.
 

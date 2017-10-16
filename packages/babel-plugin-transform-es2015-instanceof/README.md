@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-instanceof
+# @babel/plugin-transform-es2015-instanceof
 
 ## Installation
 

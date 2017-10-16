@@ -1,4 +1,4 @@
-# babel-plugin-transform-optional-chaining
+# @babel/plugin-transform-optional-chaining
 
 The Optional Chaining Operator allows you to handle properties of deeply nested
 objects without worrying about undefined intermediate objects.

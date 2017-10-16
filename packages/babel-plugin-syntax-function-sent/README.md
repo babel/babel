@@ -1,4 +1,4 @@
-# babel-plugin-syntax-function-sent
+# @babel/plugin-syntax-function-sent
 
 > Allow parsing of the `function.sent` meta property.
 

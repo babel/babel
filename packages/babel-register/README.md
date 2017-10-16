@@ -1,4 +1,4 @@
-# babel-register
+# @babel/register
 
 > The require hook will bind itself to node's require and automatically compile files on the fly.
 

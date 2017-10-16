@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-for-of
+# @babel/plugin-transform-es2015-for-of
 
 > Compile ES2015 for...of to ES5
 

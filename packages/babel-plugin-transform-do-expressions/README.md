@@ -1,4 +1,4 @@
-# babel-plugin-transform-do-expressions
+# @babel/plugin-transform-do-expressions
 
 > Compile `do` expressions to ES5
 

@@ -1,4 +1,4 @@
-# babel-plugin-transform-es3-property-literals
+# @babel/plugin-transform-es3-property-literals
 
 > Ensure that reserved words are quoted in object property keys
 

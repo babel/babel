@@ -1,4 +1,4 @@
-# babel-helper-optimise-call-expression
+# @babel/helper-optimise-call-expression
 
 ## Usage
 

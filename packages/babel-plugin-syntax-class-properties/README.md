@@ -1,4 +1,4 @@
-# babel-plugin-syntax-class-properties
+# @babel/plugin-syntax-class-properties
 
 > Allow parsing of class properties.
 

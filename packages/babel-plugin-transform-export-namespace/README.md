@@ -1,4 +1,4 @@
-# babel-plugin-transform-export-namespace
+# @babel/plugin-transform-export-namespace
 
 > Compile export-ns-from statements to ES2015
 

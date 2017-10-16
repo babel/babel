@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-sticky-regex
+# @babel/plugin-transform-es2015-sticky-regex
 
 > Compile ES2015 sticky regex to an ES5 RegExp constructor
 

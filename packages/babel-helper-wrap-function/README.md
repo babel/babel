@@ -1,4 +1,4 @@
-# babel-helper-wrap-function
+# @babel/helper-wrap-function
 
 This helper wraps a function within a call expression. It works with any function: statements, expressions and methods; both named and anonymous.
 

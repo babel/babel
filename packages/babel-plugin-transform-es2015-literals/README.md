@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-literals
+# @babel/plugin-transform-es2015-literals
 
 > Compile ES2015 unicode string and number literals to ES5
 

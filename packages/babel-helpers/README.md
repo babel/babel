@@ -1,4 +1,4 @@
-# babel-helpers
+# @babel/helpers
 
 > Collection of helper functions used by Babel transforms.
 

@@ -1,4 +1,4 @@
-# babel-generator
+# @babel/generator
 
 > Turns an AST into code.
 

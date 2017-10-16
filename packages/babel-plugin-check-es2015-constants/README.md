@@ -1,4 +1,4 @@
-# babel-plugin-check-es2015-constants
+# @babel/plugin-check-es2015-constants
 
 > Validate ES2015 constants (prevents reassignment of const variables).
 

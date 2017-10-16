@@ -1,4 +1,4 @@
-# babel-plugin-transform-object-rest-spread
+# @babel/plugin-transform-object-rest-spread
 
 > This plugin allows Babel to transform rest properties for object destructuring assignment and spread properties for object literals.
 

@@ -1,4 +1,4 @@
-# babel-code-frame
+# @babel/code-frame
 
 > Generate errors that contain a code frame that point to source locations.
 

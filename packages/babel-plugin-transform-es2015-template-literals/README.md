@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-template-literals
+# @babel/plugin-transform-es2015-template-literals
 
 > Compile ES2015 template literals to ES5
 

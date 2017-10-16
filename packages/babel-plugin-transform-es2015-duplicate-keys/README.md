@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-duplicate-keys
+# @babel/plugin-transform-es2015-duplicate-keys
 
 > Compile objects with duplicate keys to valid strict ES5.
 

@@ -1,4 +1,4 @@
-# babel-plugin-transform-export-default
+# @babel/plugin-transform-export-default
 
 > Compile export-default-from statements to ES2015
 

@@ -1,4 +1,4 @@
-# babel-plugin-transform-react-constant-elements
+# @babel/plugin-transform-react-constant-elements
 
 > Treat React JSX elements as value types and hoist them to the highest scope.
 

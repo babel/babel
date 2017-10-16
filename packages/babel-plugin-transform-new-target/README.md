@@ -1,4 +1,4 @@
-# babel-plugin-transform-new-target
+# @babel/plugin-transform-new-target
 
 This plugins allows babel to transform `new.target` meta property into a
 (correct in most cases) `this.constructor` expression.

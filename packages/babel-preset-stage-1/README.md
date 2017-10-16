@@ -1,4 +1,4 @@
-# babel-preset-stage-1
+# @babel/preset-stage-1
 
 > Babel preset for stage 1 plugins.
 

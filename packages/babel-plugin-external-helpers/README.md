@@ -1,4 +1,4 @@
-# babel-plugin-external-helpers
+# @babel/plugin-external-helpers
 
 ## Installation
 

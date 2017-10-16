@@ -1,4 +1,4 @@
-# babel-plugin-transform-decorators
+# @babel/plugin-transform-decorators
 
 > Compile class and object decorators to ES5
 

@@ -1,4 +1,4 @@
-# babel-plugin-transform-function-sent
+# @babel/plugin-transform-function-sent
 
 > Compile the `function.sent` meta property, used inside generator functions, to valid ES2015 code.
 

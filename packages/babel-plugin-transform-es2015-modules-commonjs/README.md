@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-modules-commonjs
+# @babel/plugin-transform-es2015-modules-commonjs
 
 > This plugin transforms ES2015 modules to [CommonJS](http://wiki.commonjs.org/wiki/Modules/1.1).
 

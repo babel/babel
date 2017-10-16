@@ -1,4 +1,4 @@
-# babel-plugin-transform-es3-member-expression-literals
+# @babel/plugin-transform-es3-member-expression-literals
 
 > Ensure that reserved words are quoted in property accesses
 

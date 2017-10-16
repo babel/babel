@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-arrow-functions
+# @babel/plugin-transform-es2015-arrow-functions
 
 > Compile ES2015 arrow functions to ES5
 

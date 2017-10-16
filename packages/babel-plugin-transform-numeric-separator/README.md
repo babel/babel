@@ -1,4 +1,4 @@
-# babel-plugin-transform-numeric-separator
+# @babel/plugin-transform-numeric-separator
 
 > This plugin allows Babel to transform Decimal, Binary, Hex and Octal literals containing Numeric Literal Separator to their non-separated form.
 
