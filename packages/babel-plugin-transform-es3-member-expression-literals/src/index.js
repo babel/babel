@@ -7,7 +7,7 @@ export default function({ types: t }) {
           if (
             !node.computed &&
             t.isIdentifier(prop) &&
-            !t.isValidIdentifier(prop.name)
+            !t.isValidES3Identifier(prop.name)
           ) {
             // foo.default -> foo["default"]
             node.property = t.stringLiteral(prop.name);

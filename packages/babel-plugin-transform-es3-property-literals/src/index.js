@@ -7,7 +7,7 @@ export default function({ types: t }) {
           if (
             !node.computed &&
             t.isIdentifier(key) &&
-            !t.isValidIdentifier(key.name)
+            !t.isValidES3Identifier(key.name)
           ) {
             // default: "bar" -> "default": "bar"
             node.key = t.stringLiteral(key.name);

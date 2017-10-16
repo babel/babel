@@ -607,6 +607,7 @@ export {
   isBinding,
   isReferenced,
   isValidIdentifier,
+  isValidES3Identifier,
   isLet,
   isBlockScoped,
   isVar,
