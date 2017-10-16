@@ -38,7 +38,7 @@ export const logEntryPolyfills = (
   if (!importPolyfillIncluded) {
     console.log(
       `
-[${filename}] \`import 'babel-polyfill'\` was not found.`,
+[${filename}] \`import '@babel/polyfill'\` was not found.`,
     );
     return;
   }

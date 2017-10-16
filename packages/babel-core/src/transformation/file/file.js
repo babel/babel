@@ -110,7 +110,7 @@ export default class File {
     throw new Error(
       "This API has been removed. If you're looking for this " +
         "functionality in Babel 7, you should import the " +
-        "'babel-helper-module-imports' module and use the functions exposed " +
+        "'@babel/helper-module-imports' module and use the functions exposed " +
         " from that module, such as 'addNamed' or 'addDefault'.",
     );
   }
