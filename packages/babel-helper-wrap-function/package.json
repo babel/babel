@@ -6,9 +6,9 @@
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-helper-function-name": "7.0.0-beta.3",
-    "babel-template": "7.0.0-beta.3",
-    "babel-traverse": "7.0.0-beta.3",
-    "babel-types": "7.0.0-beta.3"
+    "@babel/helper-function-name": "7.0.0-beta.3",
+    "@babel/template": "7.0.0-beta.3",
+    "@babel/traverse": "7.0.0-beta.3",
+    "@babel/types": "7.0.0-beta.3"
   }
 }

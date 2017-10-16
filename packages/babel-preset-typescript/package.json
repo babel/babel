@@ -10,6 +10,6 @@
     "typescript"
   ],
   "dependencies": {
-    "babel-plugin-transform-typescript": "7.0.0-beta.3"
+    "@babel/plugin-transform-typescript": "7.0.0-beta.3"
   }
 }

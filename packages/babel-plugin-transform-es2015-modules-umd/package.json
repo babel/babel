@@ -6,13 +6,13 @@
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-helper-module-transforms": "7.0.0-beta.3",
-    "babel-template": "7.0.0-beta.3"
+    "@babel/helper-module-transforms": "7.0.0-beta.3",
+    "@babel/template": "7.0.0-beta.3"
   },
   "keywords": [
     "babel-plugin"
   ],
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-beta.3"
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.3"
   }
 }

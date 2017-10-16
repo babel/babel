@@ -6,14 +6,14 @@
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-helper-hoist-variables": "7.0.0-beta.3",
-    "babel-template": "7.0.0-beta.3"
+    "@babel/helper-hoist-variables": "7.0.0-beta.3",
+    "@babel/template": "7.0.0-beta.3"
   },
   "keywords": [
     "babel-plugin"
   ],
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-beta.3",
-    "babel-plugin-syntax-dynamic-import": "7.0.0-beta.3"
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.3",
+    "@babel/plugin-syntax-dynamic-import": "7.0.0-beta.3"
   }
 }

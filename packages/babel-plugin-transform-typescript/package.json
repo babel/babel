@@ -10,9 +10,9 @@
     "typescript"
   ],
   "dependencies": {
-    "babel-plugin-syntax-typescript": "7.0.0-beta.3"
+    "@babel/plugin-syntax-typescript": "7.0.0-beta.3"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-beta.3"
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.3"
   }
 }

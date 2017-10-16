@@ -8,6 +8,6 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-es2016",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-plugin-transform-exponentiation-operator": "7.0.0-beta.3"
+    "@babel/plugin-transform-exponentiation-operator": "7.0.0-beta.3"
   }
 }
