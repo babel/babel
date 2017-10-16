@@ -1,5 +1,5 @@
 import path from "path";
-import template from "babel-template";
+import template from "@babel/template";
 import helpers from "../../lib/helpers";
 
 function getHelperId(dir, name) {

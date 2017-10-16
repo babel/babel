@@ -1,5 +1,5 @@
 import chai from "chai";
-import * as babel from "babel-core";
+import * as babel from "@babel/core";
 
 import { ImportInjector } from "../";
 
