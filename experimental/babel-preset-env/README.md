@@ -286,12 +286,12 @@ var b = new Map();
 **Out (if environment doesn't support it)**
 
 ```js
-import "babel-polyfill/core-js/modules/es6.promise";
+import "@babel/polyfill/core-js/modules/es6.promise";
 var a = new Promise();
 ```
 
 ```js
-import "babel-polyfill/core-js/modules/es6.map";
+import "@babel/polyfill/core-js/modules/es6.map";
 var b = new Map();
 ```
 
@@ -307,28 +307,28 @@ var b = new Map();
 
 #### `useBuiltIns: 'entry'`
 
-> NOTE: Only use `require("babel-polyfill");` once in your whole app.
+> NOTE: Only use `require("@babel/polyfill");` once in your whole app.
 > Multiple imports or requires of `babel-polyfill` will throw an error since it can cause global collisions and other issues that are hard to trace.
 > We recommend creating a single entry file that only contains the `require` statement.
 
-This option enables a new plugin that replaces the statement `import "babel-polyfill"` or `require("babel-polyfill")` with individual requires for `babel-polyfill` based on environment.
+This option enables a new plugin that replaces the statement `import "@babel/polyfill"` or `require("@babel/polyfill")` with individual requires for `babel-polyfill` based on environment.
 
 **In**
 
 ```js
-import "babel-polyfill";
+import "@babel/polyfill";
 ```
 
 **Out (different based on environment)**
 
 ```js
-import "babel-polyfill/core-js/modules/es7.string.pad-start";
-import "babel-polyfill/core-js/modules/es7.string.pad-end";
+import "@babel/polyfill/core-js/modules/es7.string.pad-start";
+import "@babel/polyfill/core-js/modules/es7.string.pad-end";
 ```
 
 #### `useBuiltIns: false`
 
-Don't add polyfills automatically per file, or transform `import "babel-polyfill"` to individual polyfills.
+Don't add polyfills automatically per file, or transform `import "@babel/polyfill"` to individual polyfills.
 
 ### `forceAllTransforms`
 

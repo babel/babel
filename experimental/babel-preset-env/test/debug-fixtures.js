@@ -1,7 +1,7 @@
 const chai = require("chai");
 const child = require("child_process");
 const fs = require("fs-extra");
-const helper = require("babel-helper-fixtures");
+const helper = require("@babel/helper-fixtures");
 const path = require("path");
 
 const fixtureLoc = path.join(__dirname, "debug-fixtures");
