@@ -145,7 +145,7 @@ describe("api", function() {
       babel.transform("", {
         plugins: [__dirname + "/../../babel-plugin-syntax-jsx", false],
       });
-    }, /Error: \[BABEL\] unknown: Unexpected falsy value: false/);
+    }, /.plugins\[1\] must be a string, object, function/);
   });
 
   it("options merge backwards", function() {

@@ -372,7 +372,7 @@ describe("buildConfigChain", function() {
 
     const expected = [
       {
-        type: "options",
+        type: "file",
         options: {
           plugins: ["extended"],
         },
@@ -380,7 +380,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           extends: "./extended.babelrc.json",
           plugins: ["root"],
@@ -389,7 +389,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["root-ignore"],
         },
@@ -416,7 +416,7 @@ describe("buildConfigChain", function() {
 
     const expected = [
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["root-ignore"],
         },
@@ -424,7 +424,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           plugins: ["dir2"],
         },
@@ -451,7 +451,7 @@ describe("buildConfigChain", function() {
 
     const expected = [
       {
-        type: "options",
+        type: "file",
         options: {
           plugins: ["extended"],
         },
@@ -459,7 +459,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           extends: "./extended.babelrc.json",
           plugins: ["root"],
@@ -468,7 +468,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["root-ignore"],
         },
@@ -495,7 +495,7 @@ describe("buildConfigChain", function() {
 
     const expected = [
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["root-ignore"],
         },
@@ -503,7 +503,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           env: {
             bar: {
@@ -540,7 +540,7 @@ describe("buildConfigChain", function() {
 
     const expected = [
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["root-ignore"],
         },
@@ -548,7 +548,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           env: {
             bar: {
@@ -564,7 +564,7 @@ describe("buildConfigChain", function() {
         dirname: fixture("env"),
       },
       {
-        type: "options",
+        type: "env",
         options: {
           plugins: ["env-foo"],
         },
@@ -594,7 +594,7 @@ describe("buildConfigChain", function() {
 
     const expected = [
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["root-ignore"],
         },
@@ -602,7 +602,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           env: {
             bar: {
@@ -618,7 +618,7 @@ describe("buildConfigChain", function() {
         dirname: fixture("env"),
       },
       {
-        type: "options",
+        type: "env",
         options: {
           plugins: ["env-bar"],
         },
@@ -647,7 +647,7 @@ describe("buildConfigChain", function() {
 
     const expected = [
       {
-        type: "options",
+        type: "file",
         options: {
           plugins: ["pkg-plugin"],
         },
@@ -655,7 +655,7 @@ describe("buildConfigChain", function() {
         dirname: fixture("pkg"),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["pkg-ignore"],
         },
@@ -682,7 +682,7 @@ describe("buildConfigChain", function() {
 
     const expected = [
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["root-ignore"],
         },
@@ -690,7 +690,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           plugins: ["foo", "bar"],
         },
@@ -717,7 +717,7 @@ describe("buildConfigChain", function() {
 
     const expected = [
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["root-ignore"],
         },
@@ -725,7 +725,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           compact: true,
         },
@@ -752,7 +752,7 @@ describe("buildConfigChain", function() {
 
     const expected = [
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["root-ignore"],
         },
@@ -760,7 +760,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           plugins: ["foo", "bar"],
         },
@@ -786,7 +786,7 @@ describe("buildConfigChain", function() {
 
     const expected = [
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["root-ignore"],
         },
@@ -794,7 +794,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           plugins: ["extended"],
         },
@@ -802,7 +802,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           extends: "../extended.babelrc.json",
           plugins: ["foo", "bar"],
@@ -833,7 +833,7 @@ describe("buildConfigChain", function() {
 
       const expected = [
         {
-          type: "options",
+          type: "file",
           options: {
             ignore: ["root-ignore"],
           },
@@ -841,7 +841,7 @@ describe("buildConfigChain", function() {
           dirname: fixture(),
         },
         {
-          type: "options",
+          type: "file",
           options: {
             plugins: ["json"],
           },
@@ -869,7 +869,7 @@ describe("buildConfigChain", function() {
 
     const expected = [
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["root-ignore"],
         },
@@ -877,7 +877,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["*", "!src.js"],
         },
@@ -910,7 +910,7 @@ describe("buildConfigChain", function() {
 
     const expected = [
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["root-ignore"],
         },
@@ -918,7 +918,7 @@ describe("buildConfigChain", function() {
         dirname: fixture(),
       },
       {
-        type: "options",
+        type: "file",
         options: {
           ignore: ["*", "!folder"],
         },
