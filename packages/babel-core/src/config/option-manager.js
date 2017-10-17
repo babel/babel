@@ -34,7 +34,6 @@ const optionNames = new Set([
   "env",
   "retainLines",
   "highlightCode",
-  "suppressDeprecationMessages",
   "presets",
   "plugins",
   "ignore",
