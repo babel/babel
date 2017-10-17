@@ -32,7 +32,6 @@ const optionNames = new Set([
   "filenameRelative",
   "inputSourceMap",
   "env",
-  "mode",
   "retainLines",
   "highlightCode",
   "suppressDeprecationMessages",
