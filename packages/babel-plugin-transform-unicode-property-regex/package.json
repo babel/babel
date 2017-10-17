@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "description": "Compile Unicode property escapes in Unicode regular expressions to ES5.",
   "homepage": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-unicode-property-regex",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "engines": {
     "node": ">=4"
   },
@@ -23,23 +23,11 @@
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "babel src -d dist",
-    "clean": "rm -rf dist",
-    "prepublish": "npm run clean && npm run build",
-    "test": "mocha --compilers js:babel-register",
-    "test:watch": "npm run test -- --watch"
-  },
   "dependencies": {
-    "babel-helper-regex": "^6.26.0",
+    "babel-helper-regex": "^7.0.0-beta.3",
     "regexpu-core": "^4.1.3"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-register": "^6.26.0",
-    "istanbul": "^0.4.5",
-    "mocha": "^4.0.1"
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.3"
   }
 }
