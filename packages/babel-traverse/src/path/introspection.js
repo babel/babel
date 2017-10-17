@@ -2,7 +2,7 @@
 
 import type NodePath from "./index";
 import includes from "lodash/includes";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 /**
  * Match the current node if it matches the provided `pattern`.

@@ -1,4 +1,4 @@
-# babel-preset-typescript
+# @babel/preset-typescript
 
 > Babel preset for TypeScript.
 
@@ -25,7 +25,7 @@ const x = 0;
 ## Installation
 
 ```sh
-npm install --save-dev babel-preset-typescript
+npm install --save-dev @babel/preset-typescript
 ```
 
 ## Usage
@@ -49,7 +49,7 @@ babel --presets typescript script.ts
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   presets: ["typescript"]
 });
 ```

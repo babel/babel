@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-computed-properties
+# @babel/plugin-transform-es2015-computed-properties
 
 > Compile ES2015 computed properties to ES5
 
@@ -48,7 +48,7 @@ var obj = (
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-computed-properties
+npm install --save-dev @babel/plugin-transform-es2015-computed-properties
 ```
 
 ## Usage
@@ -86,7 +86,7 @@ babel --plugins transform-es2015-computed-properties script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-computed-properties"]
 });
 ```

@@ -1,4 +1,4 @@
-# babel-helper-bindify-decorators
+# @babel/helper-bindify-decorators
 
 ## Usage
 

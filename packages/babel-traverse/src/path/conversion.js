@@ -1,7 +1,7 @@
 // This file contains methods that convert the path node into another node or some other type of data.
 
-import * as t from "babel-types";
-import nameFunction from "babel-helper-function-name";
+import * as t from "@babel/types";
+import nameFunction from "@babel/helper-function-name";
 
 export function toComputedKey(): Object {
   const node = this.node;

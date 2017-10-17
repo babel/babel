@@ -1,4 +1,4 @@
-# babel-plugin-transform-async-to-module-method
+# @babel/plugin-transform-async-to-module-method
 
 > Turn async functions into a Bluebird coroutine
 
@@ -25,7 +25,7 @@ var foo = Bluebird.coroutine(function* () {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-async-to-module-method
+npm install --save-dev @babel/plugin-transform-async-to-module-method
 ```
 
 ## Usage
@@ -64,7 +64,7 @@ babel --plugins transform-async-to-module-method script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-async-to-module-method"]
 });
 ```

@@ -1,4 +1,4 @@
-import type NodePath from "babel-traverse";
+import type NodePath from "@babel/traverse";
 
 export default function(babel, options) {
   const { spec } = options;

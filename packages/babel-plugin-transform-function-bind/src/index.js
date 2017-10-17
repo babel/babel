@@ -1,4 +1,4 @@
-import syntaxFunctionBind from "babel-plugin-syntax-function-bind";
+import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
 
 export default function({ types: t }) {
   function getTempId(scope) {

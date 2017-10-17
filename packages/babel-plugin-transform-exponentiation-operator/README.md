@@ -1,4 +1,4 @@
-# babel-plugin-transform-exponentiation-operator
+# @babel/plugin-transform-exponentiation-operator
 
 > Compile exponentiation operator to ES5
 
@@ -28,7 +28,7 @@ b **= 3;
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-exponentiation-operator
+npm install --save-dev @babel/plugin-transform-exponentiation-operator
 ```
 
 ## Usage
@@ -52,7 +52,7 @@ babel --plugins transform-exponentiation-operator script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-exponentiation-operator"]
 });
 ```

@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-destructuring
+# @babel/plugin-transform-es2015-destructuring
 
 > Compile ES2015 destructuring to ES5
 
@@ -23,7 +23,7 @@ var x = arr.x,
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-destructuring
+npm install --save-dev @babel/plugin-transform-es2015-destructuring
 ```
 
 ## Usage
@@ -47,7 +47,7 @@ babel --plugins transform-es2015-destructuring script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-destructuring"]
 });
 ```

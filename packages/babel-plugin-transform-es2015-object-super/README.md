@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-object-super
+# @babel/plugin-transform-es2015-object-super
 
 > Compile ES2015 object super to ES5
 
@@ -43,7 +43,7 @@ var obj2 = _obj = {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-object-super
+npm install --save-dev @babel/plugin-transform-es2015-object-super
 ```
 
 ## Usage
@@ -67,7 +67,7 @@ babel --plugins transform-es2015-object-super script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-object-super"]
 });
 ```

@@ -1,5 +1,5 @@
-import jsx from "babel-plugin-syntax-jsx";
-import helper from "babel-helper-builder-react-jsx";
+import jsx from "@babel/plugin-syntax-jsx";
+import helper from "@babel/helper-builder-react-jsx";
 
 export default function({ types: t }, options) {
   const { pragma } = options;

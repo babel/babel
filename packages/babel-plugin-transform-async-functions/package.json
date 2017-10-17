@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-async-functions",
+  "name": "@babel/plugin-transform-async-functions",
   "version": "7.0.0-beta.3",
   "description": "Compile async functions to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-async-functions",
@@ -12,6 +12,6 @@
     "babel-plugin-syntax-async-functions": "7.0.0-beta.0"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-beta.3"
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.3"
   }
 }

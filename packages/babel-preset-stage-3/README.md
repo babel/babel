@@ -1,4 +1,4 @@
-# babel-preset-stage-3
+# @babel/preset-stage-3
 
 > Babel preset for stage 3 plugins.
 
@@ -17,7 +17,7 @@ The gist of Stage 3 is:
 ## Install
 
 ```sh
-npm install --save-dev babel-preset-stage-3
+npm install --save-dev @babel/preset-stage-3
 ```
 
 ## Usage
@@ -41,7 +41,7 @@ babel script.js --presets stage-3
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   presets: ["stage-3"]
 });
 ```

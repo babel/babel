@@ -1,5 +1,5 @@
 import assert from "assert";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 import ImportBuilder from "./import-builder";
 import isModule from "./is-module";

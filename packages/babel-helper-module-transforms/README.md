@@ -1,4 +1,4 @@
-# babel-helper-module-transforms
+# @babel/helper-module-transforms
 
 ## Usage
 

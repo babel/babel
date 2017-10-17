@@ -1,5 +1,5 @@
 import Binding from "../binding";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 const renameVisitor = {
   ReferencedIdentifier({ node }, state) {

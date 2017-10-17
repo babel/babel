@@ -7,7 +7,7 @@ import merge from "lodash/merge";
 import removed from "./removed";
 import buildConfigChain from "./build-config-chain";
 import path from "path";
-import traverse from "babel-traverse";
+import traverse from "@babel/traverse";
 import clone from "lodash/clone";
 import { makeWeakCache } from "./caching";
 import { getEnv } from "./helpers/environment";

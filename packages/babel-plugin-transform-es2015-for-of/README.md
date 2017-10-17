@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-for-of
+# @babel/plugin-transform-es2015-for-of
 
 > Compile ES2015 for...of to ES5
 
@@ -40,7 +40,7 @@ try {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-for-of
+npm install --save-dev @babel/plugin-transform-es2015-for-of
 ```
 
 ## Usage
@@ -78,7 +78,7 @@ babel --plugins transform-es2015-for-of script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-for-of"]
 });
 ```

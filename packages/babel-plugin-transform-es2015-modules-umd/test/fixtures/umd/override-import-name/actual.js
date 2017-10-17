@@ -1,1 +1,1 @@
-import "babel-template";
+import "es6-promise";

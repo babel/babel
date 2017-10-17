@@ -1,4 +1,4 @@
-# babel-plugin-transform-react-jsx-source
+# @babel/plugin-transform-react-jsx-source
 
 > Adds source file and line number to JSX elements.
 
@@ -19,7 +19,7 @@
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-react-jsx-source
+npm install --save-dev @babel/plugin-transform-react-jsx-source
 ```
 
 ## Usage
@@ -43,7 +43,7 @@ babel --plugins transform-react-jsx-source script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-react-jsx-source"]
 });
 ```

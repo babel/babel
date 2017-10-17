@@ -1,4 +1,4 @@
-import syntaxPipelineOperator from "babel-plugin-syntax-pipeline-operator";
+import syntaxPipelineOperator from "@babel/plugin-syntax-pipeline-operator";
 
 export default function({ types: t }) {
   return {

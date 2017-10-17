@@ -1,4 +1,4 @@
-# babel-plugin-transform-decorators
+# @babel/plugin-transform-decorators
 
 > Compile class and object decorators to ES5
 
@@ -49,7 +49,7 @@ function enumerable(value) {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-decorators
+npm install --save-dev @babel/plugin-transform-decorators
 ```
 
 ## Usage
@@ -99,7 +99,7 @@ babel --plugins transform-decorators script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-decorators"]
 });
 ```

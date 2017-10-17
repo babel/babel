@@ -1,8 +1,8 @@
 "use strict";
 
 const outputFile = require("output-file-sync");
-const coreDefinitions = require("babel-plugin-transform-runtime").definitions;
-const helpers = require("babel-helpers");
+const coreDefinitions = require("@babel/plugin-transform-runtime").definitions;
+const helpers = require("@babel/helpers");
 const babel = require("../../babel-core");
 const t = require("../../babel-types");
 
@@ -38,7 +38,6 @@ function defaultify(name) {
 
 function writeRootFile(filename, content) {
   filename = relative(filename);
-  //console.log(filename);
   outputFile(filename, content);
 }
 
@@ -64,7 +63,7 @@ function adjustImportPath(node, relativePath) {
   if (helpers.list.indexOf(node.value) >= 0) {
     node.value = `./${node.value}`;
   } else {
-    node.value = node.value.replace(/^babel-runtime/, relativePath)
+    node.value = node.value.replace(/^@babel\/runtime/, relativePath);
   }
 }
 
@@ -92,7 +91,7 @@ function buildRuntimeRewritePlugin(relativePath, helperName, dependencies) {
           return;
         }
 
-        // replace any reference to babel-runtime and other helpers
+        // replace any reference to @babel/runtime and other helpers
         // with a relative path
         adjustImportPath(path.get("arguments")[0].node, relativePath);
       },

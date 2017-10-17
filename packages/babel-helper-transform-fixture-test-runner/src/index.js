@@ -1,8 +1,8 @@
-import * as babel from "babel-core";
-import { buildExternalHelpers } from "babel-core";
-import getFixtures from "babel-helper-fixtures";
+import * as babel from "@babel/core";
+import { buildExternalHelpers } from "@babel/core";
+import getFixtures from "@babel/helper-fixtures";
 import sourceMap from "source-map";
-import { codeFrameColumns } from "babel-code-frame";
+import { codeFrameColumns } from "@babel/code-frame";
 import defaults from "lodash/defaults";
 import includes from "lodash/includes";
 import * as helpers from "./helpers";
@@ -38,13 +38,13 @@ vm.runInContext(
 
 // Initialize the test context with the polyfill, and then freeze the global to prevent implicit
 // global creation in tests, which could cause things to bleed between tests.
-runModuleInTestContext("babel-polyfill", __filename);
+runModuleInTestContext("@babel/polyfill", __filename);
 
 // Populate the "babelHelpers" global with Babel's helper utilities.
 runCodeInTestContext(buildExternalHelpers());
 
 /**
- * A basic implementation of CommonJS so we can execute `babel-polyfill` inside our test context.
+ * A basic implementation of CommonJS so we can execute `@babel/polyfill` inside our test context.
  * This allows us to run our unittests
  */
 function runModuleInTestContext(id: string, relativeFilename: string) {

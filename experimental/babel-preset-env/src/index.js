@@ -211,7 +211,7 @@ export default function buildPreset(
   const pluginUseBuiltIns = useBuiltIns !== false;
 
   // NOTE: not giving spec here yet to avoid compatibility issues when
-  // babel-plugin-transform-es2015-modules-commonjs gets its spec mode
+  // transform-es2015-modules-commonjs gets its spec mode
   if (modules !== false && moduleTransformations[modules]) {
     plugins.push([getPlugin(moduleTransformations[modules]), { loose }]);
   }
@@ -227,7 +227,7 @@ export default function buildPreset(
 
   if (debug && !hasBeenLogged) {
     hasBeenLogged = true;
-    console.log("babel-preset-env: `DEBUG` option");
+    console.log("@babel/preset-env: `DEBUG` option");
     console.log("\nUsing targets:");
     console.log(JSON.stringify(prettifyTargets(targets), null, 2));
     console.log(`\nUsing modules transform: ${modules.toString()}`);

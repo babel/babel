@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-check-es2015-constants",
+  "name": "@babel/plugin-check-es2015-constants",
   "version": "7.0.0-beta.3",
   "description": "Compile ES2015 constants to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-check-es2015-constants",
@@ -9,6 +9,6 @@
     "babel-plugin"
   ],
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-beta.3"
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.3"
   }
 }

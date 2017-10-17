@@ -1,2 +1,2 @@
-# babel-runtime
+# @babel/runtime
 

@@ -1,11 +1,11 @@
-import { addDefault, isModule } from "babel-helper-module-imports";
+import { addDefault, isModule } from "@babel/helper-module-imports";
 
 import definitions from "./definitions";
 
 export default function({ types: t }, options) {
   const {
     helpers,
-    moduleName = "babel-runtime",
+    moduleName = "@babel/runtime",
     polyfill,
     regenerator,
     useBuiltIns,

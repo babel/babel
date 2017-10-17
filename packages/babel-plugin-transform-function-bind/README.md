@@ -1,4 +1,4 @@
-# babel-plugin-transform-function-bind
+# @babel/plugin-transform-function-bind
 
 > Compile the new function bind operator `::` to ES5.
 
@@ -86,7 +86,7 @@ $('.some-link').on('click', view.reset.bind(view));
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-function-bind
+npm install --save-dev @babel/plugin-transform-function-bind
 ```
 
 ## Usage
@@ -110,7 +110,7 @@ babel --plugins transform-function-bind script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-function-bind"]
 });
 ```

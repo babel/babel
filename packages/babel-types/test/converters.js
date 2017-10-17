@@ -1,7 +1,7 @@
 import * as t from "../lib";
 import { assert } from "chai";
 import { parse } from "babylon";
-import generate from "babel-generator";
+import generate from "@babel/generator";
 
 function parseCode(string) {
   return parse(string, {

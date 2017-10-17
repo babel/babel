@@ -3,7 +3,7 @@
 import { path as pathCache } from "../cache";
 import PathHoister from "./lib/hoister";
 import NodePath from "./index";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 /**
  * Insert the provided nodes before the current one.

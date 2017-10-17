@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-parameters
+# @babel/plugin-transform-es2015-parameters
 
 > Compile ES2015 default and rest parameters to ES5
 
@@ -38,7 +38,7 @@ function test() {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-parameters
+npm install --save-dev @babel/plugin-transform-es2015-parameters
 ```
 
 ## Caveats
@@ -68,7 +68,7 @@ babel --plugins transform-es2015-parameters script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-parameters"]
 });
 ```

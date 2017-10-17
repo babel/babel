@@ -1,9 +1,9 @@
-# babel-plugin-syntax-typescript
+# @babel/plugin-syntax-typescript
 
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-typescript
+npm install --save-dev @babel/plugin-syntax-typescript
 ```
 
 ## Usage
@@ -27,7 +27,7 @@ babel --plugins syntax-typescript script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["syntax-typescript"]
 });
 ```

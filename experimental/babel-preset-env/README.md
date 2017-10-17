@@ -1,4 +1,4 @@
-# babel-preset-env [![npm](https://img.shields.io/npm/v/babel-preset-env.svg)](https://www.npmjs.com/package/babel-preset-env) [![travis](https://img.shields.io/travis/babel/babel-preset-env/master.svg)](https://travis-ci.org/babel/babel-preset-env) [![npm-downloads](https://img.shields.io/npm/dm/babel-preset-env.svg)](https://www.npmjs.com/package/babel-preset-env) [![codecov](https://img.shields.io/codecov/c/github/babel/babel-preset-env/master.svg?maxAge=43200)](https://codecov.io/github/babel/babel-preset-env)
+# @babel/preset-env [![npm](https://img.shields.io/npm/v/babel-preset-env.svg)](https://www.npmjs.com/package/babel-preset-env) [![travis](https://img.shields.io/travis/babel/babel-preset-env/master.svg)](https://travis-ci.org/babel/babel-preset-env) [![npm-downloads](https://img.shields.io/npm/dm/babel-preset-env.svg)](https://www.npmjs.com/package/babel-preset-env) [![codecov](https://img.shields.io/codecov/c/github/babel/babel-preset-env/master.svg?maxAge=43200)](https://codecov.io/github/babel/babel-preset-env)
 
 > A Babel preset that compiles [ES2015+](https://github.com/tc39/proposals/blob/master/finished-proposals.md) down to ES5 by automatically determining the Babel plugins and polyfills you need based on your targeted browser or runtime environments.
 
@@ -286,12 +286,12 @@ var b = new Map();
 **Out (if environment doesn't support it)**
 
 ```js
-import "babel-polyfill/core-js/modules/es6.promise";
+import "@babel/polyfill/core-js/modules/es6.promise";
 var a = new Promise();
 ```
 
 ```js
-import "babel-polyfill/core-js/modules/es6.map";
+import "@babel/polyfill/core-js/modules/es6.map";
 var b = new Map();
 ```
 
@@ -307,28 +307,28 @@ var b = new Map();
 
 #### `useBuiltIns: 'entry'`
 
-> NOTE: Only use `require("babel-polyfill");` once in your whole app.
+> NOTE: Only use `require("@babel/polyfill");` once in your whole app.
 > Multiple imports or requires of `babel-polyfill` will throw an error since it can cause global collisions and other issues that are hard to trace.
 > We recommend creating a single entry file that only contains the `require` statement.
 
-This option enables a new plugin that replaces the statement `import "babel-polyfill"` or `require("babel-polyfill")` with individual requires for `babel-polyfill` based on environment.
+This option enables a new plugin that replaces the statement `import "@babel/polyfill"` or `require("@babel/polyfill")` with individual requires for `babel-polyfill` based on environment.
 
 **In**
 
 ```js
-import "babel-polyfill";
+import "@babel/polyfill";
 ```
 
 **Out (different based on environment)**
 
 ```js
-import "babel-polyfill/core-js/modules/es7.string.pad-start";
-import "babel-polyfill/core-js/modules/es7.string.pad-end";
+import "@babel/polyfill/core-js/modules/es7.string.pad-start";
+import "@babel/polyfill/core-js/modules/es7.string.pad-end";
 ```
 
 #### `useBuiltIns: false`
 
-Don't add polyfills automatically per file, or transform `import "babel-polyfill"` to individual polyfills.
+Don't add polyfills automatically per file, or transform `import "@babel/polyfill"` to individual polyfills.
 
 ### `forceAllTransforms`
 

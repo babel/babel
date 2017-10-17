@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-arrow-functions
+# @babel/plugin-transform-es2015-arrow-functions
 
 > Compile ES2015 arrow functions to ES5
 
@@ -54,7 +54,7 @@ console.log(bob.printFriends());
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-arrow-functions
+npm install --save-dev @babel/plugin-transform-es2015-arrow-functions
 ```
 
 ## Usage
@@ -90,7 +90,7 @@ babel --plugins transform-es2015-arrow-functions script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-arrow-functions"]
 });
 ```

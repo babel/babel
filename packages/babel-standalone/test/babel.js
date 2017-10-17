@@ -1,8 +1,8 @@
 const assert = require("assert");
 const Babel = require("../babel");
 
-// Basic smoke tests for babel-standalone
-describe("babel-standalone", () => {
+// Basic smoke tests for @babel/standalone
+describe("@babel/standalone", () => {
   it("handles the es2015-no-commonjs preset", () => {
     const output = Babel.transform('const getMessage = () => "Hello World"', {
       presets: ["es2015-no-commonjs"],

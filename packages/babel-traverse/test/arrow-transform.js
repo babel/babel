@@ -1,8 +1,8 @@
 import { NodePath } from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
-import generate from "babel-generator";
-import * as t from "babel-types";
+import generate from "@babel/generator";
+import * as t from "@babel/types";
 
 function assertConversion(
   input,

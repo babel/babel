@@ -1,4 +1,4 @@
-# babel-plugin-transform-object-rest-spread
+# @babel/plugin-transform-object-rest-spread
 
 > This plugin allows Babel to transform rest properties for object destructuring assignment and spread properties for object literals.
 
@@ -23,7 +23,7 @@ console.log(n); // { x: 1, y: 2, a: 3, b: 4 }
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-object-rest-spread
+npm install --save-dev @babel/plugin-transform-object-rest-spread
 ```
 
 ## Usage
@@ -47,7 +47,7 @@ babel --plugins transform-object-rest-spread script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-object-rest-spread"]
 });
 ```

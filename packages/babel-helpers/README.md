@@ -1,11 +1,11 @@
-# babel-helpers
+# @babel/helpers
 
 > Collection of helper functions used by Babel transforms.
 
 ## Install
 
 ```sh
-npm install --save-dev babel-helpers
+npm install --save-dev @babel/helpers
 ```
 
 ## Usage
@@ -13,8 +13,8 @@ npm install --save-dev babel-helpers
 Direct:
 
 ```js
-import * as helpers from 'babel-helpers';
-import * as t from 'babel-types';
+import * as helpers from '@babel/helpers';
+import * as t from '@babel/types';
 
 const typeofHelper = helpers.get('typeof');
 
@@ -44,7 +44,7 @@ Helpers are defined in the `src/helpers.js` file, and they must be valid modules
  - They must have a default export, which is their entry-point.
  - They can import other helpers, exclusively by using default imports.
  - They can't have named exports.
- 
+
 ```js
 helpers.customHelper = defineHelper(`
   import dep from "dependency";

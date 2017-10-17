@@ -1,4 +1,4 @@
-# babel-plugin-transform-react-constant-elements
+# @babel/plugin-transform-react-constant-elements
 
 > Treat React JSX elements as value types and hoist them to the highest scope.
 
@@ -51,7 +51,7 @@ const Hr = () => {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-react-constant-elements
+npm install --save-dev @babel/plugin-transform-react-constant-elements
 ```
 
 ## Usage
@@ -95,7 +95,7 @@ babel --plugins transform-react-constant-elements script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-react-constant-elements"]
 });
 ```

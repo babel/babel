@@ -1,5 +1,5 @@
 {
-  "name": "babel-plugin-transform-object-rest-spread",
+  "name": "@babel/plugin-transform-object-rest-spread",
   "version": "7.0.0-beta.3",
   "description": "Compile object rest and spread to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-rest-spread",
@@ -9,9 +9,9 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-plugin-syntax-object-rest-spread": "7.0.0-beta.3"
+    "@babel/plugin-syntax-object-rest-spread": "7.0.0-beta.3"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-beta.3"
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.3"
   }
 }

@@ -1,4 +1,4 @@
-# babel-plugin-transform-es5-property-mutators
+# @babel/plugin-transform-es5-property-mutators
 
 > This plugin allows Babel to transform [object initializer mutators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Object_initializer#Method_definitions) into `Object.defineProperties`.
 
@@ -31,7 +31,7 @@ var foo = Object.defineProperties({}, {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es5-property-mutators
+npm install --save-dev @babel/plugin-transform-es5-property-mutators
 ```
 
 ## Usage
@@ -55,7 +55,7 @@ babel --plugins transform-es5-property-mutators script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es5-property-mutators"]
 });
 ```

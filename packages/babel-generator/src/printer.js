@@ -2,7 +2,7 @@ import isInteger from "lodash/isInteger";
 import repeat from "lodash/repeat";
 import Buffer from "./buffer";
 import * as n from "./node";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 import * as generatorFunctions from "./generators";
 

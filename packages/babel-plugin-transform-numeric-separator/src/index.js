@@ -1,4 +1,4 @@
-import syntaxNumericSeparator from "babel-plugin-syntax-numeric-separator";
+import syntaxNumericSeparator from "@babel/plugin-syntax-numeric-separator";
 
 export default function({ types: t }) {
   function replaceNumberArg({ node }) {

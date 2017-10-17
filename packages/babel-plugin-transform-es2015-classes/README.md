@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-classes
+# @babel/plugin-transform-es2015-classes
 
 > Compile ES2015 classes to ES5
 
@@ -17,7 +17,7 @@ class Test {
   constructor(name) {
     this.name = name;
   }
-  
+
   logger () {
     console.log("Hello", this.name);
   }
@@ -47,7 +47,7 @@ var Test = function () {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-classes
+npm install --save-dev @babel/plugin-transform-es2015-classes
 ```
 
 ## Usage
@@ -81,7 +81,7 @@ babel --plugins transform-es2015-classes script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-classes"]
 });
 ```

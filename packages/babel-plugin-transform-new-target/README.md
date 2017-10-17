@@ -1,4 +1,4 @@
-# babel-plugin-transform-new-target
+# @babel/plugin-transform-new-target
 
 This plugins allows babel to transform `new.target` meta property into a
 (correct in most cases) `this.constructor` expression.
@@ -74,7 +74,7 @@ Reflect.construct(Foo, [], Baz); // => undefined (incorrect)
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-new-target
+npm install --save-dev @babel/plugin-transform-new-target
 ```
 
 ## Usage
@@ -98,7 +98,7 @@ babel --plugins transform-new-target script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-new-target"]
 });
 ```

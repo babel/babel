@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-modules-commonjs
+# @babel/plugin-transform-es2015-modules-commonjs
 
 > This plugin transforms ES2015 modules to [CommonJS](http://wiki.commonjs.org/wiki/Modules/1.1).
 
@@ -23,7 +23,7 @@ exports.default = 42;
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-modules-commonjs
+npm install --save-dev @babel/plugin-transform-es2015-modules-commonjs
 ```
 
 ## Usage
@@ -57,7 +57,7 @@ babel --plugins transform-es2015-modules-commonjs script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-modules-commonjs"]
 });
 ```

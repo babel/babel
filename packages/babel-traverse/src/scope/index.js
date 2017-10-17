@@ -6,7 +6,7 @@ import traverse from "../index";
 import defaults from "lodash/defaults";
 import Binding from "./binding";
 import globals from "globals";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import { scope as scopeCache } from "../cache";
 
 // Number of calls to the crawl method to figure out whether we're

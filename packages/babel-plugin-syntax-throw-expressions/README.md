@@ -1,4 +1,4 @@
-# babel-plugin-syntax-throw-expressions
+# @babel/plugin-syntax-throw-expressions
 
 Allow parsing of Throw Expressions:
 
@@ -12,7 +12,7 @@ function test(param = throw new Error('required!')) {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-throw-expressions
+npm install --save-dev @babel/plugin-syntax-throw-expressions
 ```
 
 ## Usage
@@ -36,7 +36,7 @@ babel --plugins syntax-throw-expressions script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["syntax-throw-expressions"]
 });
 ```

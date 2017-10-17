@@ -1,11 +1,11 @@
-# babel-plugin-syntax-jsx
+# @babel/plugin-syntax-jsx
 
 > Allow parsing of JSX
 
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-jsx
+npm install --save-dev @babel/plugin-syntax-jsx
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ babel --plugins syntax-jsx script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["syntax-jsx"]
 });
 ```

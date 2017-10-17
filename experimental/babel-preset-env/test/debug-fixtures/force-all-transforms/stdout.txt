@@ -1,4 +1,4 @@
-babel-preset-env: `DEBUG` option
+@babel/preset-env: `DEBUG` option
 
 Using targets:
 {
@@ -35,7 +35,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[src/in.js] Replaced `babel-polyfill` with the following polyfills:
+[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es7.string.pad-start { "chrome":"55" }
   es7.string.pad-end { "chrome":"55" }
   web.timers { "chrome":"55" }

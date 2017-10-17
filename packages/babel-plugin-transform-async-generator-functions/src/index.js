@@ -1,5 +1,5 @@
-import remapAsyncToGenerator from "babel-helper-remap-async-to-generator";
-import syntaxAsyncGenerators from "babel-plugin-syntax-async-generators";
+import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
+import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 
 export default function({ types: t }) {
   const yieldStarVisitor = {

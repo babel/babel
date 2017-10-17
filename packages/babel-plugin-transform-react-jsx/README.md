@@ -1,4 +1,4 @@
-# babel-plugin-transform-react-jsx
+# @babel/plugin-transform-react-jsx
 
 > Turn JSX into React function calls
 
@@ -55,7 +55,7 @@ var profile = dom( "div", null,
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-react-jsx
+npm install --save-dev @babel/plugin-transform-react-jsx
 ```
 
 ## Usage
@@ -93,7 +93,7 @@ babel --plugins transform-react-jsx script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-react-jsx"]
 });
 ```

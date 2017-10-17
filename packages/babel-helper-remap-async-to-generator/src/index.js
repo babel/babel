@@ -1,8 +1,8 @@
 /* @noflow */
 
-import type { NodePath } from "babel-traverse";
-import wrapFunction from "babel-helper-wrap-function";
-import * as t from "babel-types";
+import type { NodePath } from "@babel/traverse";
+import wrapFunction from "@babel/helper-wrap-function";
+import * as t from "@babel/types";
 import rewriteForAwait from "./for-await";
 
 const awaitVisitor = {

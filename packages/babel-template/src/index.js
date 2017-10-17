@@ -1,9 +1,9 @@
 import cloneDeep from "lodash/cloneDeep";
 import has from "lodash/has";
-import traverse from "babel-traverse";
+import traverse from "@babel/traverse";
 import * as babylon from "babylon";
-import { codeFrameColumns } from "babel-code-frame";
-import * as t from "babel-types";
+import { codeFrameColumns } from "@babel/code-frame";
+import * as t from "@babel/types";
 
 const FROM_TEMPLATE = new Set();
 

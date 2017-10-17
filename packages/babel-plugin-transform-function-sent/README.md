@@ -1,4 +1,4 @@
-# babel-plugin-transform-function-sent
+# @babel/plugin-transform-function-sent
 
 > Compile the `function.sent` meta property, used inside generator functions, to valid ES2015 code.
 
@@ -32,7 +32,7 @@ iterator.next(2); // Logs "Yield 1"
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-function-sent
+npm install --save-dev @babel/plugin-transform-function-sent
 ```
 
 ## Usage
@@ -56,7 +56,7 @@ babel --plugins transform-function-sent script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-function-sent"]
 });
 ```

@@ -1,5 +1,5 @@
-import traverse from "babel-traverse";
-import * as t from "babel-types";
+import traverse from "@babel/traverse";
+import * as t from "@babel/types";
 import helpers from "./helpers";
 
 function makePath(path) {

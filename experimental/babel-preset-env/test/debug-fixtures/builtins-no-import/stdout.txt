@@ -1,4 +1,4 @@
-babel-preset-env: `DEBUG` option
+@babel/preset-env: `DEBUG` option
 
 Using targets:
 {
@@ -17,5 +17,5 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[src/in.js] `import 'babel-polyfill'` was not found.
+[src/in.js] `import '@babel/polyfill'` was not found.
 src/in.js -> lib/in.js

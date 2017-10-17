@@ -1,5 +1,5 @@
 import generator from "../../babel-generator";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import template from "../lib";
 import chai from "chai";
 const expect = chai.expect;

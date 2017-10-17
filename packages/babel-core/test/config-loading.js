@@ -2,7 +2,7 @@ import loadConfig from "../lib/config";
 import path from "path";
 import { expect } from "chai";
 
-describe("babel-core config loading", () => {
+describe("@babel/core config loading", () => {
   const FILEPATH = path.join(
     __dirname,
     "fixtures",

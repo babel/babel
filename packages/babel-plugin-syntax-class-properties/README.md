@@ -1,11 +1,11 @@
-# babel-plugin-syntax-class-properties
+# @babel/plugin-syntax-class-properties
 
 > Allow parsing of class properties.
 
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-class-properties
+npm install --save-dev @babel/plugin-syntax-class-properties
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ babel --plugins syntax-class-properties script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["syntax-class-properties"]
 });
 ```

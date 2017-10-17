@@ -1,4 +1,4 @@
-# babel-helper-get-function-arity
+# @babel/helper-get-function-arity
 
 ## Usage
 

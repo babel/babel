@@ -1,10 +1,10 @@
 "use strict";
 
-var _interopRequireDefault = require("babel-runtime/helpers/interopRequireDefault");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("babel-runtime/core-js/object/define-property");
+var _Object$defineProperty = require("@babel/runtime/core-js/object/define-property");
 
-var _Object$keys = require("babel-runtime/core-js/object/keys");
+var _Object$keys = require("@babel/runtime/core-js/object/keys");
 
 Object.defineProperty(exports, "__esModule", {
   value: true

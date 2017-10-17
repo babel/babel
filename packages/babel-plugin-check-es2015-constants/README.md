@@ -1,4 +1,4 @@
-# babel-plugin-check-es2015-constants
+# @babel/plugin-check-es2015-constants
 
 > Validate ES2015 constants (prevents reassignment of const variables).
 
@@ -24,7 +24,7 @@ repl: "a" is read-only
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-check-es2015-constants
+npm install --save-dev @babel/plugin-check-es2015-constants
 ```
 
 ## Usage
@@ -48,7 +48,7 @@ babel --plugins check-es2015-constants script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["check-es2015-constants"]
 });
 ```

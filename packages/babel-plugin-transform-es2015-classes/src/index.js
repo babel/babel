@@ -1,7 +1,7 @@
 import LooseTransformer from "./loose";
 import VanillaTransformer from "./vanilla";
-import annotateAsPure from "babel-helper-annotate-as-pure";
-import nameFunction from "babel-helper-function-name";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
+import nameFunction from "@babel/helper-function-name";
 
 export default function({ types: t }, options) {
   const { loose } = options;

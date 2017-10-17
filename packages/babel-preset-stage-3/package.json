@@ -1,5 +1,5 @@
 {
-  "name": "babel-preset-stage-3",
+  "name": "@babel/preset-stage-3",
   "version": "7.0.0-beta.3",
   "description": "Babel preset for stage 3 plugins",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
@@ -8,11 +8,11 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-stage-3",
   "main": "lib/index.js",
   "dependencies": {
-    "babel-plugin-syntax-dynamic-import": "7.0.0-beta.3",
-    "babel-plugin-transform-async-generator-functions": "7.0.0-beta.3",
-    "babel-plugin-transform-class-properties": "7.0.0-beta.3",
-    "babel-plugin-transform-object-rest-spread": "7.0.0-beta.3",
-    "babel-plugin-transform-optional-catch-binding": "7.0.0-beta.3",
+    "@babel/plugin-syntax-dynamic-import": "7.0.0-beta.3",
+    "@babel/plugin-transform-async-generator-functions": "7.0.0-beta.3",
+    "@babel/plugin-transform-class-properties": "7.0.0-beta.3",
+    "@babel/plugin-transform-object-rest-spread": "7.0.0-beta.3",
+    "@babel/plugin-transform-optional-catch-binding": "7.0.0-beta.3",
     "babel-plugin-transform-unicode-property-regex": "^2.0.5"
   }
 }

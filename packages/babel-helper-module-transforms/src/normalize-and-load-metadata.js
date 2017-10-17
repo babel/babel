@@ -1,6 +1,6 @@
 import { basename, extname } from "path";
 
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 export type ModuleMetadata = {
   exportName: string,

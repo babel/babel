@@ -1,10 +1,10 @@
 // This file contains methods responsible for replacing a node with another.
 
-import { codeFrameColumns } from "babel-code-frame";
+import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "../index";
 import NodePath from "./index";
 import { parse } from "babylon";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 const hoistVariablesVisitor = {
   Function(path) {

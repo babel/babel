@@ -1,4 +1,4 @@
-# babel-plugin-transform-optional-chaining
+# @babel/plugin-transform-optional-chaining
 
 The Optional Chaining Operator allows you to handle properties of deeply nested
 objects without worrying about undefined intermediate objects.
@@ -84,7 +84,7 @@ new exists?.(); // undefined
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-optional-chaining
+npm install --save-dev @babel/plugin-transform-optional-chaining
 ```
 
 ## Usage
@@ -108,7 +108,7 @@ babel --plugins transform-optional-chaining script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-optional-chaining"]
 });
 ```

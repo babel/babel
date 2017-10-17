@@ -1,4 +1,4 @@
-import syntaxDoExpressions from "babel-plugin-syntax-do-expressions";
+import syntaxDoExpressions from "@babel/plugin-syntax-do-expressions";
 
 export default function() {
   return {

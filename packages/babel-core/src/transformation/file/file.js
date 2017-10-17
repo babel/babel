@@ -1,10 +1,10 @@
 // @flow
 
-import getHelper from "babel-helpers";
-import { NodePath, Hub, Scope } from "babel-traverse";
-import { codeFrameColumns } from "babel-code-frame";
-import traverse from "babel-traverse";
-import * as t from "babel-types";
+import getHelper from "@babel/helpers";
+import { NodePath, Hub, Scope } from "@babel/traverse";
+import { codeFrameColumns } from "@babel/code-frame";
+import traverse from "@babel/traverse";
+import * as t from "@babel/types";
 
 import type { NormalizedFile } from "../normalize-file";
 
@@ -110,7 +110,7 @@ export default class File {
     throw new Error(
       "This API has been removed. If you're looking for this " +
         "functionality in Babel 7, you should import the " +
-        "'babel-helper-module-imports' module and use the functions exposed " +
+        "'@babel/helper-module-imports' module and use the functions exposed " +
         " from that module, such as 'addNamed' or 'addDefault'.",
     );
   }

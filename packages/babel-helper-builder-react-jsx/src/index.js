@@ -1,5 +1,5 @@
 import esutils from "esutils";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 type ElementState = {
   tagExpr: Object, // tag node

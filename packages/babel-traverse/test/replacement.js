@@ -1,7 +1,7 @@
 import traverse from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import { expect } from "chai";
 
 describe("path/replacement", function() {

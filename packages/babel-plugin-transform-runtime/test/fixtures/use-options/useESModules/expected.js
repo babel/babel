@@ -1,10 +1,10 @@
-var _Object$getPrototypeOf = require("babel-runtime/core-js/object/get-prototype-of");
+var _Object$getPrototypeOf = require("@babel/runtime/core-js/object/get-prototype-of");
 
-var _classCallCheck = require("babel-runtime/helpers/es6/classCallCheck");
+var _classCallCheck = require("@babel/runtime/helpers/es6/classCallCheck");
 
-var _possibleConstructorReturn = require("babel-runtime/helpers/es6/possibleConstructorReturn");
+var _possibleConstructorReturn = require("@babel/runtime/helpers/es6/possibleConstructorReturn");
 
-var _inherits = require("babel-runtime/helpers/es6/inherits");
+var _inherits = require("@babel/runtime/helpers/es6/inherits");
 
 let Foo =
 /*#__PURE__*/

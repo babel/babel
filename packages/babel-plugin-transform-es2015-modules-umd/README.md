@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-modules-umd
+# @babel/plugin-transform-es2015-modules-umd
 
 > This plugin transforms ES2015 modules to [Universal Module Definition (UMD)](https://github.com/umdjs/umd).
 
@@ -39,7 +39,7 @@ export default 42;
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-modules-umd
+npm install --save-dev @babel/plugin-transform-es2015-modules-umd
 ```
 
 ## Usage
@@ -208,7 +208,7 @@ babel --plugins transform-es2015-modules-umd script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-modules-umd"]
 });
 ```

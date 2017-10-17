@@ -1,4 +1,4 @@
-# babel-preset-react
+# @babel/preset-react
 
 > Babel preset for all React plugins.
 
@@ -24,7 +24,7 @@ And with the `development` option:
 Install the CLI and this preset
 
 ```sh
-npm install --save-dev babel-cli babel-preset-react
+npm install --save-dev @babel/cli @babel/preset-react
 ```
 
 Make a .babelrc config file with the preset
@@ -66,7 +66,7 @@ babel script.js --presets react
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   presets: ["react"]
 });
 ```
@@ -77,7 +77,7 @@ require("babel-core").transform("code", {
 
 `boolean`, defaults to `false`.
 
-Toggles plugins that aid in development, such as [`babel-plugin-transform-react-jsx-self`](https://babeljs.io/docs/plugins/transform-react-jsx-self/) and [`babel-plugin-transform-react-jsx-source`](https://babeljs.io/docs/plugins/transform-react-jsx-source/).
+Toggles plugins that aid in development, such as [`@babel/plugin-transform-react-jsx-self`](https://babeljs.io/docs/plugins/transform-react-jsx-self/) and [`@babel/plugin-transform-react-jsx-source`](https://babeljs.io/docs/plugins/transform-react-jsx-source/).
 
 This is useful when combined with either a `babelrc.js` or [env option in a .babelrc](https://babeljs.io/docs/usage/babelrc/#env-option) configuration:
 

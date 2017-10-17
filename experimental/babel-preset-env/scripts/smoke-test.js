@@ -91,7 +91,7 @@ const foo = new Promise((resolve) => {
   fs.writeFileSync(
     path.join(tempFolderPath, "index.js"),
     `
-import "babel-polyfill";
+import "@babel/polyfill";
 1 ** 2;
 `
   );

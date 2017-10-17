@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-unicode-regex
+# @babel/plugin-transform-es2015-unicode-regex
 
 > Compile ES2015 unicode regex to ES5
 
@@ -21,7 +21,7 @@ var match = string.match(/foo((?:[\0-\t\x0B\f\x0E-\u2027\u202A-\uD7FF\uE000-\uFF
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-unicode-regex
+npm install --save-dev @babel/plugin-transform-es2015-unicode-regex
 ```
 
 ## Usage
@@ -45,7 +45,7 @@ babel --plugins transform-es2015-unicode-regex script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-unicode-regex"]
 });
 ```

@@ -1,4 +1,4 @@
-import syntaxOptionalChaining from "babel-plugin-syntax-optional-chaining";
+import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 
 export default function({ types: t }, options) {
   const { loose = false } = options;

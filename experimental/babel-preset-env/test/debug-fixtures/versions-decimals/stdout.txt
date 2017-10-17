@@ -6,7 +6,7 @@ Warning, the following targets are using a decimal version:
 We recommend using a string for minor/patch versions to avoid numbers like 6.10
 getting parsed as 6.1, which can lead to unexpected behavior.
 
-babel-preset-env: `DEBUG` option
+@babel/preset-env: `DEBUG` option
 
 Using targets:
 {
@@ -46,7 +46,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[src/in.js] Replaced `babel-polyfill` with the following polyfills:
+[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es6.typed.array-buffer { "electron":"0.36", "ie":"10", "node":"6.1" }
   es6.typed.data-view { "electron":"0.36" }
   es6.typed.int8-array { "electron":"0.36", "ie":"10", "node":"6.1" }

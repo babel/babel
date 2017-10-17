@@ -5,8 +5,8 @@ import {
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
-} from "babel-helper-module-transforms";
-import simplifyAccess from "babel-helper-simple-access";
+} from "@babel/helper-module-transforms";
+import simplifyAccess from "@babel/helper-simple-access";
 
 export default function({ types: t, template }, options) {
   const {
