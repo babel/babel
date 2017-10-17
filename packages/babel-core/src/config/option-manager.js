@@ -23,7 +23,6 @@ type MergeOptions = {
   +type: "arguments" | "options" | "preset",
   options: {},
   alias: string,
-  loc: string,
   dirname: string,
 };
 
@@ -214,7 +213,6 @@ type BasicDescriptor = {
   options: {} | void,
   dirname: string,
   alias: string,
-  loc: string,
 };
 
 type LoadedDescriptor = {
@@ -222,7 +220,6 @@ type LoadedDescriptor = {
   options: {},
   dirname: string,
   alias: string,
-  loc: string,
 };
 
 /**
@@ -250,8 +247,7 @@ const loadConfig = makeWeakCache((config): {
     );
 
     return {
-      alias: filepath || `${config.loc}$${index}`,
-      loc: filepath || config.loc,
+      alias: filepath || `${config.alias}$${index}`,
       value,
       options,
       dirname: config.dirname,
@@ -273,8 +269,7 @@ const loadConfig = makeWeakCache((config): {
     );
 
     return {
-      alias: filepath || `${config.loc}$${index}`,
-      loc: filepath || config.loc,
+      alias: filepath || `${config.alias}$${index}`,
       value,
       options,
       dirname: config.dirname,
@@ -289,7 +284,7 @@ const loadConfig = makeWeakCache((config): {
  */
 const loadDescriptor = makeWeakCache(
   (
-    { value, options = {}, dirname, alias, loc }: BasicDescriptor,
+    { value, options = {}, dirname, alias }: BasicDescriptor,
     cache,
   ): LoadedDescriptor => {
     let item = value;
@@ -313,7 +308,7 @@ const loadDescriptor = makeWeakCache(
       throw new Error("Plugin/Preset did not return an object.");
     }
 
-    return { value: item, options, dirname, alias, loc };
+    return { value: item, options, dirname, alias };
   },
 );
 
@@ -336,7 +331,7 @@ function loadPluginDescriptor(descriptor: BasicDescriptor): Plugin {
 
 const instantiatePlugin = makeWeakCache(
   (
-    { value: pluginObj, options, dirname, alias, loc }: LoadedDescriptor,
+    { value: pluginObj, options, dirname, alias }: LoadedDescriptor,
     cache,
   ): Plugin => {
     Object.keys(pluginObj).forEach(key => {
@@ -366,8 +361,7 @@ const instantiatePlugin = makeWeakCache(
     let inherits;
     if (plugin.inherits) {
       inheritsDescriptor = {
-        alias: `${loc}$inherits`,
-        loc,
+        alias: `${alias}$inherits`,
         value: plugin.inherits,
         options,
         dirname,
@@ -402,12 +396,11 @@ const loadPresetDescriptor = (descriptor: BasicDescriptor): MergeOptions => {
 };
 
 const instantiatePreset = makeWeakCache(
-  ({ value, dirname, alias, loc }: LoadedDescriptor): MergeOptions => {
+  ({ value, dirname, alias }: LoadedDescriptor): MergeOptions => {
     return {
       type: "preset",
       options: value,
       alias,
-      loc,
       dirname,
     };
   },

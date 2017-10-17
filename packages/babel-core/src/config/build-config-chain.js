@@ -16,7 +16,6 @@ type ConfigItem = {
   options: {},
   dirname: string,
   alias: string,
-  loc: string,
 };
 
 type ConfigRaw = {
@@ -351,7 +350,6 @@ function flattenOptionsParts(
       type,
       options,
       alias,
-      loc: alias,
       dirname,
     },
     ignore,
