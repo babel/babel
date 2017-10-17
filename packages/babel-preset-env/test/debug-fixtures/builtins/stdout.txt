@@ -38,6 +38,7 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+  es6.array.sort { "chrome":"54", "node":"6" }
   es6.typed.array-buffer { "ie":"10", "node":"6" }
   es6.typed.int8-array { "ie":"10", "node":"6" }
   es6.typed.uint8-array { "ie":"10", "node":"6" }

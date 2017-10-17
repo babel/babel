@@ -8,6 +8,7 @@ import "core-js/modules/es6.string.starts-with";
 import "core-js/modules/es7.string.pad-end";
 import "core-js/modules/es7.string.pad-start";
 import "core-js/modules/es6.array.fill";
+import "core-js/modules/es6.function.bind";
 import "core-js/modules/es6.array.find-index";
 import "core-js/modules/es6.array.find";
 import "core-js/modules/es7.array.includes";

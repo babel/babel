@@ -54,7 +54,7 @@ const byTestSuite = suite => browser => {
     : true;
 };
 
-const compatSources = ["es6", "es2016plus", "esnext"].reduce(
+const compatSources = ["es5", "es6", "es2016plus", "esnext"].reduce(
   (result, source) => {
     const data = require(`compat-table/data-${source}`);
     data.browsers = pickBy(envs, byTestSuite(source));

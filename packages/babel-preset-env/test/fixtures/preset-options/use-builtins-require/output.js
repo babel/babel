@@ -1,3 +1,5 @@
+require("core-js/modules/es6.array.sort");
+
 require("core-js/modules/es7.string.pad-start");
 
 require("core-js/modules/es7.string.pad-end");
