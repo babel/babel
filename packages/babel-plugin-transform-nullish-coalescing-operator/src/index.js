@@ -1,4 +1,4 @@
-import syntaxNullishCoalescingOperator from "babel-plugin-syntax-nullish-coalescing-operator";
+import syntaxNullishCoalescingOperator from "@babel/plugin-syntax-nullish-coalescing-operator";
 
 export default function({ types: t }) {
   return {
