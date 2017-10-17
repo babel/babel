@@ -26,7 +26,7 @@ try {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-codemod-optional-catch-binding
+npm install --save-dev @babel/plugin-codemod-optional-catch-binding
 ```
 
 ## Usage
