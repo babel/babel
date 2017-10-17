@@ -44,7 +44,7 @@ const assertTest = (stdout, stderr, opts) => {
 };
 
 const buildTest = opts => {
-  const binLoc = require.resolve("babel-cli/bin/babel");
+  const binLoc = require.resolve("@babel/cli/bin/babel");
 
   return callback => {
     clear();

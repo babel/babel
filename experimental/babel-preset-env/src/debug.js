@@ -52,7 +52,7 @@ export const logEntryPolyfills = (
 
   console.log(
     `
-[${filename}] Replaced \`babel-polyfill\` with the following polyfill${wordEnds(
+[${filename}] Replaced \`@babel/polyfill\` with the following polyfill${wordEnds(
       polyfills.size,
     )}:`,
   );

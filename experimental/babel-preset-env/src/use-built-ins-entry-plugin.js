@@ -11,7 +11,7 @@ type Plugin = {
 type RequireType = "require" | "import";
 
 function isPolyfillSource(value: string): boolean {
-  return value === "babel-polyfill";
+  return value === "@babel/polyfill";
 }
 
 export default function({ types: t }: { types: Object }): Plugin {
@@ -45,7 +45,7 @@ export default function({ types: t }: { types: Object }): Plugin {
     core: ?boolean,
   ): Object {
     if (core) {
-      polyfill = `babel-polyfill/lib/core-js/modules/${polyfill}`;
+      polyfill = `@babel/polyfill/lib/core-js/modules/${polyfill}`;
     }
 
     if (requireType === "import") {
@@ -67,7 +67,7 @@ export default function({ types: t }: { types: Object }): Plugin {
     if (regenerator) {
       imports.push(
         createImport(
-          "babel-polyfill/lib/regenerator-runtime/runtime",
+          "@babel/polyfill/lib/regenerator-runtime/runtime",
           requireType,
         ),
       );
