@@ -1,4 +1,4 @@
-# babel-plugin-transform-class-properties
+# babel-plugin-transform-unified-class-features
 
 > This plugin transforms class properties
 
@@ -146,4 +146,4 @@ Bork.b = void 0;
 
 ## References
 
-* [Proposal: ES Class Fields & Static Properties](https://github.com/jeffmo/es-class-static-properties-and-fields)
+* [Proposal: Integrated public and private fields](https://github.com/tc39/proposal-class-fields)
