@@ -137,7 +137,13 @@ class OptionManager {
       pass.unshift(...plugins);
     }
 
-    merge(this.options, result.options);
+    const options = Object.assign({}, result.options);
+    delete options.extends;
+    delete options.env;
+    delete options.plugins;
+    delete options.presets;
+
+    merge(this.options, options);
   }
 
   init(opts: {}) {

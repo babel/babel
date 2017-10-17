@@ -18,12 +18,20 @@ type ConfigItem = {
   alias: string,
 };
 
-type ConfigRaw = {
-  type: "options" | "arguments",
-  options: {},
-  alias: string,
-  dirname: string,
-};
+type ConfigPart =
+  | {
+      part: "config",
+      config: ConfigItem,
+      ignore: ?Array<mixed>,
+      only: ?Array<mixed>,
+      activeEnv: string | null,
+    }
+  | {
+      part: "extends",
+      path: string,
+      dirname: string,
+      activeEnv: string | null,
+    };
 
 export default function buildConfigChain(opts: {}): Array<ConfigItem> | null {
   if (typeof opts.filename !== "string" && opts.filename != null) {
@@ -160,7 +168,7 @@ function flattenArgumentsOptionsParts(
   if (opts.extends != null) {
     raw.push(
       ...flattenOptionsParts(
-        buildArgumentsRawConfig({ extends: opts.extends }, dirname),
+        buildArgumentsItem({ extends: opts.extends }, dirname),
       ),
     );
   }
@@ -176,7 +184,7 @@ const flattenArgumentsEnvOptionsParts = makeWeakCache((env: {}) => {
   const options = { env };
 
   return makeStrongCache((dirname: string) =>
-    flattenOptionsPartsLookup(buildArgumentsRawConfig(options, dirname)),
+    flattenOptionsPartsLookup(buildArgumentsItem(options, dirname)),
   );
 });
 
@@ -189,7 +197,7 @@ const flattenArgumentsPluginsOptionsParts = makeWeakCache(
     const options = { plugins };
 
     return makeStrongCache((dirname: string) =>
-      flattenOptionsParts(buildArgumentsRawConfig(options, dirname)),
+      flattenOptionsParts(buildArgumentsItem(options, dirname)),
     );
   },
 );
@@ -207,12 +215,12 @@ const flattenArgumentsPresetsOptionsParts = makeWeakCache(
       const options = { presets, passPerPreset };
 
       return makeStrongCache((dirname: string) =>
-        flattenOptionsParts(buildArgumentsRawConfig(options, dirname)),
+        flattenOptionsParts(buildArgumentsItem(options, dirname)),
       );
     }),
 );
 
-function buildArgumentsRawConfig(options: {}, dirname: string): ConfigRaw {
+function buildArgumentsItem(options: {}, dirname: string): ConfigItem {
   return {
     type: "arguments",
     options,
@@ -240,7 +248,7 @@ const flattenFileOptionsParts = makeWeakCache((file: ConfigFile) => {
  * the environment passed as the first argument.
  */
 function flattenOptionsPartsLookup(
-  config: ConfigRaw,
+  config: ConfigItem,
 ): (string | null) => Array<ConfigPart> {
   const parts = flattenOptionsParts(config);
 
@@ -262,30 +270,15 @@ function flattenOptionsPartsLookup(
   return envKey => lookup.get(envKey) || def;
 }
 
-type ConfigPart =
-  | {
-      part: "config",
-      config: ConfigItem,
-      ignore: ?Array<mixed>,
-      only: ?Array<mixed>,
-      activeEnv: string | null,
-    }
-  | {
-      part: "extends",
-      path: string,
-      dirname: string,
-      activeEnv: string | null,
-    };
-
 /**
  * Given a generic config object, flatten it into its various parts so that
  * then can be cached and processed later.
  */
 function flattenOptionsParts(
-  rawConfig: ConfigRaw,
+  config: ConfigItem,
   activeEnv: string | null = null,
 ): Array<ConfigPart> {
-  const { type, options: rawOpts, alias, dirname } = rawConfig;
+  const { type, options: rawOpts, alias, dirname } = config;
 
   if (rawOpts.ignore != null && !Array.isArray(rawOpts.ignore)) {
     throw new Error(
@@ -340,18 +333,9 @@ function flattenOptionsParts(
     }
   });
 
-  const options = Object.assign({}, rawOpts);
-  delete options.env;
-  delete options.extends;
-
   parts.push({
     part: "config",
-    config: {
-      type,
-      options,
-      alias,
-      dirname,
-    },
+    config,
     ignore,
     only,
     activeEnv,
