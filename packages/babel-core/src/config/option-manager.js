@@ -28,7 +28,6 @@ type MergeOptions = {
 };
 
 const optionNames = new Set([
-  "relative",
   "filename",
   "filenameRelative",
   "inputSourceMap",
