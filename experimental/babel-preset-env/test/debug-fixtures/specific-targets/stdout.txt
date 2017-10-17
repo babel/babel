@@ -1,4 +1,4 @@
-babel-preset-env: `DEBUG` option
+@babel/preset-env: `DEBUG` option
 
 Using targets:
 {
@@ -40,7 +40,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[src/in.js] Replaced `babel-polyfill` with the following polyfills:
+[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es6.typed.array-buffer { "ie":"10", "ios":"9", "safari":"7" }
   es6.typed.int8-array { "ie":"10", "ios":"9", "safari":"7" }
   es6.typed.uint8-array { "ie":"10", "ios":"9", "safari":"7" }

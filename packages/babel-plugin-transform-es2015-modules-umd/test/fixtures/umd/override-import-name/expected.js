@@ -10,6 +10,6 @@
     factory(global.Promise);
     global.actual = mod.exports;
   }
-})(this, function (_babelTemplate) {
+})(this, function (_es6Promise) {
   "use strict";
 });

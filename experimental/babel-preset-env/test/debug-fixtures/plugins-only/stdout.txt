@@ -5,7 +5,7 @@ Warning, the following targets are using a decimal version:
 We recommend using a string for minor/patch versions to avoid numbers like 6.10
 getting parsed as 6.1, which can lead to unexpected behavior.
 
-babel-preset-env: `DEBUG` option
+@babel/preset-env: `DEBUG` option
 
 Using targets:
 {

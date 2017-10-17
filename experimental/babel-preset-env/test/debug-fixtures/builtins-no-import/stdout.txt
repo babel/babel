@@ -1,4 +1,4 @@
-babel-preset-env: `DEBUG` option
+@babel/preset-env: `DEBUG` option
 
 Using targets:
 {
