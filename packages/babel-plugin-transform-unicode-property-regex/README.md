@@ -1,4 +1,4 @@
-# babel-plugin-transform-unicode-property-regex
+# @babel/plugin-transform-unicode-property-regex
 
 Compile [Unicode property escapes](https://github.com/mathiasbynens/regexpu-core/blob/master/property-escapes.md) (`\p{…}` and `\P{…}`) in Unicode regular expressions to ES5 or ES6 that works in today’s environments.
 
@@ -9,7 +9,7 @@ Compile [Unicode property escapes](https://github.com/mathiasbynens/regexpu-core
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-unicode-property-regex
+$ npm install @babel/plugin-transform-unicode-property-regex
 ```
 
 ## Usage
