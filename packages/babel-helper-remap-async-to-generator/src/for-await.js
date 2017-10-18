@@ -72,7 +72,7 @@ export default function(path, helpers) {
     OBJECT: node.right,
     STEP_VALUE: stepValue,
     STEP_KEY: stepKey,
-    AWAIT: helpers.wrapAwait,
+    ...(helpers.wrapAwait ? { AWAIT: helpers.wrapAwait } : {}),
   });
 
   // remove generator function wrapper

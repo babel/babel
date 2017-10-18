@@ -5,9 +5,9 @@ import template from "@babel/template";
 const helpers = {};
 export default helpers;
 
-function defineHelper(str) {
-  return template(str, { sourceType: "module" });
-}
+// Helpers never include placeholders, so we disable placeholder pattern
+// matching to allow us to use pattern-like variable names.
+const defineHelper = template.program({ placeholderPattern: false });
 
 helpers.typeof = defineHelper(`
   export default function _typeof(obj) {

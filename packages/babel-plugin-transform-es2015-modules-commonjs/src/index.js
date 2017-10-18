@@ -19,19 +19,11 @@ export default function({ types: t, template }, options) {
     // Defaulting to 'true' for now. May change before 7.x major.
     allowCommonJSExports = true,
   } = options;
-  const moduleAssertion = template(`
+  const getAssertion = localName => template.expression.ast`
     (function(){
-      throw new Error("The CommonJS 'module' variable is not available in ES6 modules.");
-    })();
-  `);
-  const exportsAssertion = template(`
-    (function(){
-      throw new Error("The CommonJS 'exports' variable is not available in ES6 modules.");
-    })();
-  `);
-  const getAssertion = localName =>
-    (localName === "module" ? moduleAssertion() : exportsAssertion())
-      .expression;
+      throw new Error("The CommonJS '" + "${localName}" + "' variable is not available in ES6 modules.");
+    })()
+  `;
 
   const moduleExportsVisitor = {
     ReferencedIdentifier(path) {

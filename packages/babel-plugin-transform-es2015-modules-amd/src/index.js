@@ -37,23 +37,16 @@ export default function({ types: t }, options) {
           });
 
           const amdArgs = [];
-          const commonjsArgs = [];
           const importNames = [];
 
           if (hasExports(meta)) {
             amdArgs.push(t.stringLiteral("exports"));
-            commonjsArgs.push(t.identifier("exports"));
 
             importNames.push(t.identifier(meta.exportName));
           }
 
           for (const [source, metadata] of meta.source) {
             amdArgs.push(t.stringLiteral(source));
-            commonjsArgs.push(
-              t.callExpression(t.identifier("require"), [
-                t.stringLiteral(source),
-              ]),
-            );
             importNames.push(t.identifier(metadata.name));
 
             if (!isSideEffectImport(metadata)) {
@@ -89,7 +82,6 @@ export default function({ types: t }, options) {
               MODULE_NAME: moduleName,
 
               AMD_ARGUMENTS: t.arrayExpression(amdArgs),
-              COMMONJS_ARGUMENTS: commonjsArgs,
               IMPORT_NAMES: importNames,
             }),
           ])[0];

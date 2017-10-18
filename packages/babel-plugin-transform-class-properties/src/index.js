@@ -25,30 +25,27 @@ export default function({ types: t }, options) {
     },
   };
 
-  const buildObjectDefineProperty = template(`
-    Object.defineProperty(REF, KEY, {
-      configurable: true,
-      enumerable: true,
-      writable: true,
-      value: VALUE
-    });
-  `);
-
-  const buildClassPropertySpec = (ref, { key, value, computed }, scope) =>
-    buildObjectDefineProperty({
+  const buildClassPropertySpec = (ref, { key, value, computed }, scope) => {
+    return template.statement`
+      Object.defineProperty(REF, KEY, {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        value: VALUE
+      });
+    `({
       REF: ref,
       KEY: t.isIdentifier(key) && !computed ? t.stringLiteral(key.name) : key,
-      VALUE: value ? value : scope.buildUndefinedNode(),
+      VALUE: value || scope.buildUndefinedNode(),
     });
+  };
 
-  const buildClassPropertyLoose = (ref, { key, value, computed }, scope) =>
-    t.expressionStatement(
-      t.assignmentExpression(
-        "=",
-        t.memberExpression(ref, key, computed || t.isLiteral(key)),
-        value ? value : scope.buildUndefinedNode(),
-      ),
-    );
+  const buildClassPropertyLoose = (ref, { key, value, computed }, scope) => {
+    return template.statement`MEMBER = VALUE`({
+      MEMBER: t.memberExpression(ref, key, computed || t.isLiteral(key)),
+      VALUE: value || scope.buildUndefinedNode(),
+    });
+  };
 
   const buildClassProperty = loose
     ? buildClassPropertyLoose

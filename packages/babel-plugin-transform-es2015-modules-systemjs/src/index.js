@@ -2,11 +2,11 @@ import hoistVariables from "@babel/helper-hoist-variables";
 import template from "@babel/template";
 
 const buildTemplate = template(`
-  SYSTEM_REGISTER(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
+  SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
     "use strict";
     BEFORE_BODY;
     return {
-      setters: [SETTERS],
+      setters: SETTERS,
       execute: function () {
         BODY;
       }
@@ -365,8 +365,8 @@ export default function({ types: t }, options) {
               ),
               BEFORE_BODY: beforeBody,
               MODULE_NAME: moduleName,
-              SETTERS: setters,
-              SOURCES: sources,
+              SETTERS: t.arrayExpression(setters),
+              SOURCES: t.arrayExpression(sources),
               BODY: path.node.body,
               EXPORT_IDENTIFIER: exportIdent,
               CONTEXT_IDENTIFIER: contextIdent,
