@@ -33,5 +33,5 @@ export default {
   "transform-object-rest-spread": require("@babel/plugin-transform-object-rest-spread"),
   "transform-optional-catch-binding": require("@babel/plugin-transform-optional-catch-binding"),
   "transform-regenerator": require("@babel/plugin-transform-regenerator"),
-  "transform-unicode-property-regex": require("babel-plugin-transform-unicode-property-regex"),
+  "transform-unicode-property-regex": require("@babel/plugin-transform-unicode-property-regex"),
 };
