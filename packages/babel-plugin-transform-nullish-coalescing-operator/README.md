@@ -13,9 +13,13 @@ var foo = object.foo ?? "default";
 **Out**
 
 ```javascript
-var _ref;
-var foo = (_ref = object.foo, _ref != null ? _ref : "default");
+var _object$foo;
+
+var foo = (_object$foo = object.foo, _object$foo !== null && _object$foo !== void 0 ? _object$foo : "default");
 ```
+
+> **NOTE:** We cannot use `!= null` here because `document.all` is `!= null` and
+> `document.all` has been deemed not "nullish".
 
 ## Installation
 

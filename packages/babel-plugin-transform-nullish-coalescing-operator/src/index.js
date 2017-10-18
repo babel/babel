@@ -18,7 +18,15 @@ export default function({ types: t }) {
           t.sequenceExpression([
             t.assignmentExpression("=", ref, node.left),
             t.conditionalExpression(
-              t.binaryExpression("!=", t.clone(ref), t.nullLiteral()),
+              t.logicalExpression(
+                "&&",
+                t.binaryExpression("!==", t.clone(ref), t.nullLiteral()),
+                t.binaryExpression(
+                  "!==",
+                  t.clone(ref),
+                  scope.buildUndefinedNode(),
+                ),
+              ),
               t.clone(ref),
               node.right,
             ),
