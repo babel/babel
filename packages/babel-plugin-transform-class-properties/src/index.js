@@ -25,6 +25,25 @@ export default function({ types: t }, options) {
     },
   };
 
+  const argumentsHoistVisitor = {
+    TypeAnnotation(path) {
+      path.skip();
+    },
+    ReferencedIdentifier(path) {
+      if (
+        path.node.name === "arguments" &&
+        !this.scope.hasOwnBinding(path.node.name)
+      ) {
+        const uid = this.functionScope.generateUid("arguments");
+        this.functionScope.push({
+          id: t.identifier(uid),
+          init: t.identifier("arguments"),
+        });
+        path.replaceWith(t.identifier(uid));
+      }
+    },
+  };
+
   const buildObjectDefineProperty = template(`
     Object.defineProperty(REF, KEY, {
       configurable: true,
@@ -92,6 +111,20 @@ export default function({ types: t }, options) {
           if (propNode.decorators && propNode.decorators.length > 0) continue;
 
           const isStatic = propNode.static;
+
+          // If the value of the property is an arrow function, then hoist arguments to
+          // the parent function scope of the class if it exists
+          const value = prop.get("value");
+          if (value.isArrowFunctionExpression()) {
+            const parentClassFunctionScope = path.scope.getFunctionParent();
+
+            if (parentClassFunctionScope) {
+              value.traverse(argumentsHoistVisitor, {
+                scope: value.scope,
+                functionScope: parentClassFunctionScope,
+              });
+            }
+          }
 
           if (isStatic) {
             nodes.push(buildClassProperty(ref, propNode, path.scope));
