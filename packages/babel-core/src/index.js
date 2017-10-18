@@ -1,5 +1,6 @@
 // @flow
 
+export { default as File } from "./transformation/file/file";
 export {
   default as buildExternalHelpers,
 } from "./tools/build-external-helpers";
