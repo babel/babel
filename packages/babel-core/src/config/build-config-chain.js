@@ -69,6 +69,7 @@ export default function buildConfigChain(
 class ConfigChainBuilder {
   file: LoadedFile | null;
   configs: Array<ConfigItem> = [];
+  seenFiles: Set<ConfigFile> = new Set();
 
   constructor(file: LoadedFile | null) {
     this.file = file;
@@ -85,9 +86,17 @@ class ConfigChainBuilder {
   }
 
   mergeConfigFile(file: ConfigFile, envKey: string) {
-    flattenFileOptionsParts(file)(envKey).forEach(part =>
-      this._processConfigPart(part, envKey),
-    );
+    if (this.seenFiles.has(file)) {
+      throw new Error(
+        `Cycle detected in Babel configuration file through "${file.filepath}".`,
+      );
+    }
+
+    const parts = flattenFileOptionsParts(file)(envKey);
+
+    this.seenFiles.add(file);
+    parts.forEach(part => this._processConfigPart(part, envKey));
+    this.seenFiles.delete(file);
   }
 
   _processConfigPart(part: ConfigPart, envKey: string) {
@@ -107,14 +116,7 @@ class ConfigChainBuilder {
 
       this.configs.push(part.config);
     } else {
-      const extendsConfig = loadConfig(part.path, part.dirname);
-
-      const existingConfig = this.configs.some(config => {
-        return config.alias === extendsConfig.filepath;
-      });
-      if (!existingConfig) {
-        this.mergeConfigFile(extendsConfig, envKey);
-      }
+      this.mergeConfigFile(loadConfig(part.path, part.dirname), envKey);
     }
   }
 }
