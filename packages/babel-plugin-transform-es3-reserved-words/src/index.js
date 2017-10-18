@@ -1,10 +1,8 @@
-import { isValidES3Identifier } from "../../babel-types";
-
-export default function() {
+export default function({ types: t }) {
   return {
     visitor: {
       "BindingIdentifier|ReferencedIdentifier"(path) {
-        if (!isValidES3Identifier(path.node.name)) {
+        if (!t.isValidES3Identifier(path.node.name)) {
           path.scope.rename(path.node.name);
         }
       },
