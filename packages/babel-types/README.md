@@ -1235,7 +1235,7 @@ See also `t.isLogicalExpression(node, opts)` and `t.assertLogicalExpression(node
 
 Aliases: `Binary`, `Expression`
 
- - `operator`: `'||' | '&&'` (required)
+ - `operator`: `'||' | '&&' | '??'` (required)
  - `left`: `Expression` (required)
  - `right`: `Expression` (required)
 
