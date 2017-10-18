@@ -1,7 +1,7 @@
 import { getBindingIdentifiers } from "./retrievers";
 import esutils from "esutils";
 import * as t from "./index";
-import { BLOCK_SCOPED_SYMBOL } from "./constants";
+import { BLOCK_SCOPED_SYMBOL, RESERVED_WORDS_ES3_ONLY } from "./constants";
 
 /**
  * Check if the input `node` is a binding identifier.
@@ -176,6 +176,14 @@ export function isValidIdentifier(name: string): boolean {
   } else {
     return esutils.keyword.isIdentifierNameES6(name);
   }
+}
+/**
+ * Check if the input `name` is a valid identifier name according to the ES3 specification.
+ *
+ * Additional ES3 reserved words are
+ */
+export function isValidES3Identifier(name: string): boolean {
+  return isValidIdentifier(name, true) && !RESERVED_WORDS_ES3_ONLY.has(name);
 }
 
 /**
