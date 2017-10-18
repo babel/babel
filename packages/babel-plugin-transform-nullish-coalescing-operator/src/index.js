@@ -6,12 +6,11 @@ export default function({ types: t }) {
 
     visitor: {
       LogicalExpression(path) {
-        const { node } = path;
+        const { node, scope } = path;
         if (node.operator !== "??") {
           return;
         }
 
-        const scope = path.scope.parent || path.scope;
         const ref = scope.generateUidIdentifierBasedOnNode(node.left);
         scope.push({ id: ref });
 
@@ -19,7 +18,7 @@ export default function({ types: t }) {
           t.sequenceExpression([
             t.assignmentExpression("=", ref, node.left),
             t.conditionalExpression(
-              t.binaryExpression("!=", ref, t.nullLiteral()),
+              t.binaryExpression("!=", t.clone(ref), t.nullLiteral()),
               t.clone(ref),
               node.right,
             ),
