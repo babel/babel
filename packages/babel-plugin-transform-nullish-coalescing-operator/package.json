@@ -4,7 +4,7 @@
   "description": "Remove nullish coalescing operator",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-nullish-coalescing-opearator",
   "license": "MIT",
-  "main": "lib/index.js",
+  "main": "lib",
   "keywords": [
     "babel-plugin"
   ],
