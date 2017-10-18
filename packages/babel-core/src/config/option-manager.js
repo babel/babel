@@ -303,7 +303,7 @@ const loadDescriptor = makeWeakCache(
       });
 
       try {
-        item = value(api, options, { dirname });
+        item = value(api, options, dirname);
       } catch (e) {
         if (alias) {
           e.message += ` (While processing: ${JSON.stringify(alias)})`;
