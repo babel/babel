@@ -126,54 +126,54 @@ const COMMON_VALIDATORS: ValidatorSet = {
   >),
 };
 export type ValidatedOptions = {
-  filename?: ?string,
-  filenameRelative?: ?string,
-  babelrc?: ?boolean,
-  code?: ?boolean,
-  ast?: ?boolean,
-  inputSourceMap?: ?RootInputSourceMapOption,
+  filename?: string,
+  filenameRelative?: string,
+  babelrc?: boolean,
+  code?: boolean,
+  ast?: boolean,
+  inputSourceMap?: RootInputSourceMapOption,
 
-  extends?: ?string,
-  env?: ?EnvSet<ValidatedOptions>,
-  ignore?: ?IgnoreList,
-  only?: ?IgnoreList,
+  extends?: string,
+  env?: EnvSet<ValidatedOptions>,
+  ignore?: IgnoreList,
+  only?: IgnoreList,
 
-  presets?: ?PluginList,
-  plugins?: ?PluginList,
-  passPerPreset?: ?boolean,
+  presets?: PluginList,
+  plugins?: PluginList,
+  passPerPreset?: boolean,
 
   // Options for @babel/generator
-  retainLines?: ?boolean,
-  comments?: ?boolean,
-  shouldPrintComment?: ?Function,
-  compact?: ?CompactOption,
-  minified?: ?boolean,
-  auxiliaryCommentBefore?: ?string,
-  auxiliaryCommentAfter?: ?string,
+  retainLines?: boolean,
+  comments?: boolean,
+  shouldPrintComment?: Function,
+  compact?: CompactOption,
+  minified?: boolean,
+  auxiliaryCommentBefore?: string,
+  auxiliaryCommentAfter?: string,
 
   // Parser
-  sourceType?: ?SourceTypeOption,
+  sourceType?: SourceTypeOption,
 
-  wrapPluginVisitorMethod?: ?Function,
-  highlightCode?: ?boolean,
+  wrapPluginVisitorMethod?: Function,
+  highlightCode?: boolean,
 
   // Sourcemap generation options.
-  sourceMaps?: ?SourceMapsOption,
-  sourceMap?: ?SourceMapsOption,
-  sourceMapTarget?: ?string,
-  sourceFileName?: ?string,
-  sourceRoot?: ?string,
+  sourceMaps?: SourceMapsOption,
+  sourceMap?: SourceMapsOption,
+  sourceMapTarget?: string,
+  sourceFileName?: string,
+  sourceRoot?: string,
 
   // AMD/UMD/SystemJS module naming options.
-  getModuleId?: ?Function,
-  moduleRoot?: ?string,
-  moduleIds?: ?boolean,
-  moduleId?: ?string,
+  getModuleId?: Function,
+  moduleRoot?: string,
+  moduleIds?: boolean,
+  moduleId?: string,
 
   // Deprecate top level parserOpts
-  parserOpts?: ?{},
+  parserOpts?: {},
   // Deprecate top level generatorOpts
-  generatorOpts?: ?{},
+  generatorOpts?: {},
 };
 
 export type EnvSet<T> = {
@@ -241,7 +241,7 @@ function assertNoDuplicateSourcemap(opts: {}): void {
   }
 }
 
-function assertEnvSet(key: string, value: mixed): ?EnvSet<ValidatedOptions> {
+function assertEnvSet(key: string, value: mixed): EnvSet<ValidatedOptions> {
   const obj = assertObject(key, value);
   if (obj) {
     // Validate but don't copy the .env object in order to preserve

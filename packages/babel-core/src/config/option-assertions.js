@@ -12,30 +12,36 @@ import type {
   RootInputSourceMapOption,
 } from "./options";
 
-export function assertSourceMaps(key: string, value: mixed): ?SourceMapsOption {
+export function assertSourceMaps(
+  key: string,
+  value: mixed,
+): SourceMapsOption | void {
   if (
-    value != null &&
+    value !== undefined &&
     typeof value !== "boolean" &&
     value !== "inline" &&
     value !== "both"
   ) {
     throw new Error(
-      `.${key} must be a boolean, "inline", "both", null, or undefined`,
+      `.${key} must be a boolean, "inline", "both", or undefined`,
     );
   }
   return value;
 }
 
-export function assertCompact(key: string, value: mixed): ?CompactOption {
-  if (value != null && typeof value !== "boolean" && value !== "auto") {
-    throw new Error(`.${key} must be a boolean, "auto", null, or undefined`);
+export function assertCompact(key: string, value: mixed): CompactOption | void {
+  if (value !== undefined && typeof value !== "boolean" && value !== "auto") {
+    throw new Error(`.${key} must be a boolean, "auto", or undefined`);
   }
   return value;
 }
 
-export function assertSourceType(key: string, value: mixed): ?SourceTypeOption {
-  if (value != null && value !== "module" && value !== "script") {
-    throw new Error(`.${key} must be "module", "script", null, or undefined`);
+export function assertSourceType(
+  key: string,
+  value: mixed,
+): SourceTypeOption | void {
+  if (value !== undefined && value !== "module" && value !== "script") {
+    throw new Error(`.${key} must be "module", "script", or undefined`);
   }
   return value;
 }
@@ -43,48 +49,49 @@ export function assertSourceType(key: string, value: mixed): ?SourceTypeOption {
 export function assertInputSourceMap(
   key: string,
   value: mixed,
-): ?RootInputSourceMapOption {
+): RootInputSourceMapOption | void {
   if (
-    value != null &&
+    value !== undefined &&
     typeof value !== "boolean" &&
-    typeof value !== "object"
+    (typeof value !== "object" || !value)
   ) {
-    throw new Error(
-      ".inputSourceMap must be a boolean, object, null, or undefined",
-    );
+    throw new Error(".inputSourceMap must be a boolean, object, or undefined");
   }
   return value;
 }
 
-export function assertString(key: string, value: mixed): ?string {
-  if (value != null && typeof value !== "string") {
-    throw new Error(`.${key} must be a string, null, or undefined`);
+export function assertString(key: string, value: mixed): string | void {
+  if (value !== undefined && typeof value !== "string") {
+    throw new Error(`.${key} must be a string, or undefined`);
   }
   return value;
 }
 
-export function assertFunction(key: string, value: mixed): ?Function {
-  if (value != null && typeof value !== "function") {
-    throw new Error(`.${key} must be a function, null, or undefined`);
+export function assertFunction(key: string, value: mixed): Function | void {
+  if (value !== undefined && typeof value !== "function") {
+    throw new Error(`.${key} must be a function, or undefined`);
   }
   return value;
 }
 
-export function assertBoolean(key: string, value: mixed): ?boolean {
-  if (value != null && typeof value !== "boolean") {
-    throw new Error(`.${key} must be a boolean, null, or undefined`);
+export function assertBoolean(key: string, value: mixed): boolean | void {
+  if (value !== undefined && typeof value !== "boolean") {
+    throw new Error(`.${key} must be a boolean, or undefined`);
   }
   return value;
 }
 
-export function assertObject(key: string, value: mixed): ?{} {
-  if (value != null && (typeof value !== "object" || Array.isArray(value))) {
-    throw new Error(`.${key} must be an object, null, or undefined`);
+export function assertObject(key: string, value: mixed): {} | void {
+  if (
+    value !== undefined &&
+    (typeof value !== "object" || Array.isArray(value) || !value)
+  ) {
+    throw new Error(`.${key} must be an object, or undefined`);
   }
   return value;
 }
 
-export function assertIgnoreList(key: string, value: mixed): ?IgnoreList {
+export function assertIgnoreList(key: string, value: mixed): IgnoreList | void {
   const arr = assertArray(key, value);
   if (arr) {
     arr.forEach((item, i) => assertIgnoreItem(key, i, item));
@@ -102,13 +109,13 @@ function assertIgnoreItem(
     !(value instanceof RegExp)
   ) {
     throw new Error(
-      `.${key}[${index}] must be an array of string/Funtion/RegExp values, or null, or undefined`,
+      `.${key}[${index}] must be an array of string/Funtion/RegExp values, or or undefined`,
     );
   }
   return value;
 }
 
-export function assertPluginList(key: string, value: mixed): ?PluginList {
+export function assertPluginList(key: string, value: mixed): PluginList | void {
   const arr = assertArray(key, value);
   if (arr) {
     // Loop instead of using `.map` in order to preserve object identity
@@ -135,9 +142,7 @@ function assertPluginItem(
     if (value.length === 2) {
       const opts = value[1];
       if (opts != null && (typeof opts !== "object" || Array.isArray(opts))) {
-        throw new Error(
-          `.${key}[${index}][1] must be an object, null, or undefined`,
-        );
+        throw new Error(`.${key}[${index}][1] must be an object, or undefined`);
       }
     }
   } else {
@@ -168,7 +173,7 @@ function assertPluginTarget(
 
 function assertArray(key: string, value: mixed): ?$ReadOnlyArray<mixed> {
   if (value != null && !Array.isArray(value)) {
-    throw new Error(`.${key} must be an array, null, or undefined`);
+    throw new Error(`.${key} must be an array, or undefined`);
   }
   return value;
 }
