@@ -556,6 +556,15 @@ function normalizePair(
     );
   }
 
+  if (filepath !== null && typeof value === "object" && value) {
+    // We allow object values for plugins/presets nested directly within a
+    // config object, because it can be useful to define them in nested
+    // configuration contexts.
+    throw new Error(
+      "Plugin/Preset files are not allowed to export objects, only functions.",
+    );
+  }
+
   if (options != null && typeof options !== "object") {
     throw new Error(
       "Plugin/Preset options must be an object, null, or undefined",
