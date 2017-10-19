@@ -33,7 +33,6 @@ Using plugins:
   transform-regenerator { "ie":"10" }
   transform-exponentiation-operator { "ie":"10", "node":"6" }
   transform-async-to-generator { "chrome":"54", "ie":"10", "node":"6" }
-  syntax-trailing-function-commas { "chrome":"54", "ie":"10", "node":"6" }
 
 Using polyfills with `entry` option:
 

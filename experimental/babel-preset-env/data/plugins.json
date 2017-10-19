@@ -228,16 +228,6 @@
     "opera": "42",
     "electron": "1.6"
   },
-  "syntax-trailing-function-commas": {
-    "chrome": "58",
-    "edge": "14",
-    "firefox": "52",
-    "safari": "10",
-    "node": "8",
-    "ios": "10",
-    "opera": "45",
-    "electron": "1.7"
-  },
   "transform-async-generator-functions": {
     "chrome": "63",
     "firefox": "57",

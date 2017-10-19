@@ -31,7 +31,6 @@ Using plugins:
   transform-regenerator {}
   transform-exponentiation-operator {}
   transform-async-to-generator {}
-  syntax-trailing-function-commas { "chrome":"55" }
 
 Using polyfills with `entry` option:
 
