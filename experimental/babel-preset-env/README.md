@@ -259,10 +259,10 @@ This option is useful for "blacklisting" a transform like `transform-regenerator
 
 `"usage"` | `"entry"` | `false`, defaults to `false`.
 
-A way to apply `@babel/preset-env` for polyfills (via `babel-polyfill`).
+A way to apply `@babel/preset-env` for polyfills (via `@babel/polyfill`).
 
 ```sh
-npm install babel-polyfill --save
+npm install @babel/polyfill --save
 ```
 
 #### `useBuiltIns: 'usage'`
