@@ -13,7 +13,6 @@ Using plugins:
   transform-es2015-function-name { "node":"6" }
   transform-exponentiation-operator { "node":"6" }
   transform-async-to-generator { "node":"6" }
-  syntax-trailing-function-commas { "node":"6" }
 
 Using polyfills with `entry` option:
 

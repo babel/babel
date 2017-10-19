@@ -8,7 +8,6 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  syntax-trailing-function-commas { "chrome":"55" }
 
 Using polyfills with `usage` option:
 
