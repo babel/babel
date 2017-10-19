@@ -3,8 +3,8 @@
 const outputFile = require("output-file-sync");
 const coreDefinitions = require("@babel/plugin-transform-runtime").definitions;
 const helpers = require("@babel/helpers");
-const babel = require("../../babel-core");
-const t = require("../../babel-types");
+const babel = require("@babel/core");
+const t = require("@babel/types");
 
 const paths = ["is-iterable", "get-iterator"];
 
@@ -47,11 +47,11 @@ function writeFile(filename, content) {
 
 function makeTransformOpts(modules, useBuiltIns) {
   const opts = {
-    presets: [[require("../../babel-preset-es2015"), { modules: false }]],
+    presets: [[require("@babel/preset-env"), { modules: false }]],
 
     plugins: [
       [
-        require("../../babel-plugin-transform-runtime"),
+        require("@babel/plugin-transform-runtime"),
         { useBuiltIns, useESModules: modules === false },
       ],
     ],
