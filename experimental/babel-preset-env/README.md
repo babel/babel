@@ -262,7 +262,7 @@ This option is useful for "blacklisting" a transform like `transform-regenerator
 A way to apply `@babel/preset-env` for polyfills (via `babel-polyfill`).
 
 ```sh
-npm install babel-polyfill --save
+npm install @babel/polyfill --save
 ```
 
 #### `useBuiltIns: 'usage'`
