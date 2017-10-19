@@ -2,8 +2,7 @@ import jsx from "@babel/plugin-syntax-jsx";
 import helper from "@babel/helper-builder-react-jsx";
 
 export default function({ types: t }, options) {
-  const { pragma } = options;
-  let id = pragma || "React.createElement";
+  const pragma = options.pragma || "React.createElement";
 
   const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
 
@@ -26,6 +25,7 @@ export default function({ types: t }, options) {
   visitor.Program = function(path, state) {
     const { file } = state;
 
+    let id = pragma;
     for (const comment of (file.ast.comments: Array<Object>)) {
       const matches = JSX_ANNOTATION_REGEX.exec(comment.value);
       if (matches) {
