@@ -104,7 +104,7 @@ export default function({ types: t }, options) {
                   t.variableDeclarator(ident, propNode.key),
                 ]),
               );
-              propNode.key = ident;
+              propNode.key = t.clone(ident);
             }
 
             instanceBody.push(
