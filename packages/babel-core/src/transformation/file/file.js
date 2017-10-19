@@ -1,6 +1,6 @@
 // @flow
 
-import getHelper from "@babel/helpers";
+import * as helpers from "@babel/helpers";
 import { NodePath, Hub, Scope } from "@babel/traverse";
 import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "@babel/traverse";
@@ -132,11 +132,16 @@ export default class File {
       name,
     ));
 
-    const { nodes, globals } = getHelper(
+    const dependencies = {};
+    for (const dep of helpers.getDependencies(name)) {
+      dependencies[dep] = this.addHelper(dep);
+    }
+
+    const { nodes, globals } = helpers.get(
       name,
-      name => this.addHelper(name),
+      dep => dependencies[dep],
       uid,
-      () => Object.keys(this.scope.getAllBindings()),
+      Object.keys(this.scope.getAllBindings()),
     );
 
     globals.forEach(name => {

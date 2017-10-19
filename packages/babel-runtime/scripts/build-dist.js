@@ -99,6 +99,15 @@ function buildRuntimeRewritePlugin(relativePath, helperName, dependencies) {
   };
 }
 
+function buildRequireCall(id, dep) {
+  return t.variableDeclaration("var", [
+    t.variableDeclarator(
+      id,
+      t.callExpression(t.identifier("require"), [t.stringLiteral(dep)])
+    )
+  ]);
+}
+
 function buildHelper(helperName, modules, useBuiltIns) {
   const id =
     modules === "commonjs"
@@ -106,12 +115,31 @@ function buildHelper(helperName, modules, useBuiltIns) {
       : null;
   const sourceType = modules === "commonjs" ? "script" : "module";
 
-  const helper = helpers.get(helperName, null, id);
-  const tree = t.program(helper.nodes, [], sourceType);
+  const tree = t.program([], [], sourceType);
+  const dependencies = {};
+  let bindings = null;
+
+  if (modules === "commonjs") {
+    bindings = [];
+    for (const dep of helpers.getDependencies(helperName)) {
+      const id = dependencies[dep] = t.identifier(t.toIdentifier(dep));
+      tree.body.push(buildRequireCall(id, dep));
+      bindings.push(id.name);
+    }
+  }
+
+  const helper = helpers.get(
+    helperName,
+    dep => dependencies[dep],
+    id,
+    bindings
+  );
+  tree.body.push.apply(tree.body, helper.nodes);
+
   const transformOpts = makeTransformOpts(modules, useBuiltIns);
 
   const relative = useBuiltIns ? "../.." : "..";
-
+  
   return babel.transformFromAst(tree, null, {
     presets: transformOpts.presets,
     plugins: transformOpts.plugins.concat([
