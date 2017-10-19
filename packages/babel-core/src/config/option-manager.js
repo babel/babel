@@ -205,35 +205,19 @@ const loadConfig = makeWeakCache((config: MergeOptions): {
 } => {
   const options = normalizeOptions(config);
 
-  const plugins = (config.options.plugins || []).map((plugin, index) => {
-    const { filepath, value, options } = normalizePair(
-      plugin,
-      loadPlugin,
-      config.dirname,
-    );
+  const plugins = (config.options.plugins || []).map((plugin, index) =>
+    createDescriptor(plugin, loadPlugin, config.dirname, {
+      index,
+      alias: config.alias,
+    }),
+  );
 
-    return {
-      alias: filepath || `${config.alias}$${index}`,
-      value,
-      options,
-      dirname: config.dirname,
-    };
-  });
-
-  const presets = (config.options.presets || []).map((preset, index) => {
-    const { filepath, value, options } = normalizePair(
-      preset,
-      loadPreset,
-      config.dirname,
-    );
-
-    return {
-      alias: filepath || `${config.alias}$${index}`,
-      value,
-      options,
-      dirname: config.dirname,
-    };
-  });
+  const presets = (config.options.presets || []).map((preset, index) =>
+    createDescriptor(preset, loadPreset, config.dirname, {
+      index,
+      alias: config.alias,
+    }),
+  );
 
   return { options, plugins, presets };
 });
@@ -397,15 +381,18 @@ function normalizeOptions(config) {
 /**
  * Given a plugin/preset item, resolve it into a standard format.
  */
-function normalizePair(
+function createDescriptor(
   pair: PluginItem,
   resolver,
   dirname,
-): {
-  filepath: string | null,
-  value: {} | Function,
-  options: {} | void,
-} {
+  {
+    index,
+    alias,
+  }: {
+    index: number,
+    alias: string,
+  },
+): BasicDescriptor {
   let options;
   let value = pair;
   if (Array.isArray(value)) {
@@ -451,7 +438,12 @@ function normalizePair(
   }
   options = options || undefined;
 
-  return { filepath, value, options };
+  return {
+    alias: filepath || `${alias}$${index}`,
+    value,
+    options,
+    dirname,
+  };
 }
 
 function chain(a, b) {
