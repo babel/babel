@@ -76,7 +76,17 @@ export default function({ types: t }, options) {
 
       replacementPath.replaceWith(
         t.conditionalExpression(
-          t.binaryExpression("==", check, t.nullLiteral()),
+          loose
+            ? t.binaryExpression("==", t.clone(check), t.nullLiteral())
+            : t.logicalExpression(
+                "||",
+                t.binaryExpression("===", t.clone(check), t.nullLiteral()),
+                t.binaryExpression(
+                  "===",
+                  t.clone(ref),
+                  scope.buildUndefinedNode(),
+                ),
+              ),
           nil,
           replacementPath.node,
         ),
