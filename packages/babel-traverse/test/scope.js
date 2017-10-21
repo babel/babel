@@ -2,8 +2,8 @@ import traverse from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
 
-function getPath(code) {
-  const ast = parse(code);
+function getPath(code, options) {
+  const ast = parse(code, options);
   let path;
   traverse(ast, {
     Program: function(_path) {
@@ -70,6 +70,24 @@ describe("scope", function() {
       assert.ok(
         getPath("var { bar: [ foo ] } = null;").scope.getBinding("foo").path
           .type === "VariableDeclarator",
+      );
+    });
+
+    it("declare var", function() {
+      assert.equal(
+        getPath("declare var foo;", { plugins: ["flow"] }).scope.getBinding(
+          "foo",
+        ),
+        null,
+      );
+    });
+
+    it("declare function", function() {
+      assert.equal(
+        getPath("declare function foo(): void;", {
+          plugins: ["flow"],
+        }).scope.getBinding("foo"),
+        null,
       );
     });
 
