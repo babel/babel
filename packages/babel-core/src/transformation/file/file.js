@@ -56,6 +56,10 @@ export default class File {
     return this._map.get(key);
   }
 
+  has(key: mixed): boolean {
+    return this._map.has(key);
+  }
+
   getModuleName(): ?string {
     const opts = this.opts;
     if (!opts.moduleIds) {
