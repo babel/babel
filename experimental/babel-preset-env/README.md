@@ -118,7 +118,7 @@ For example, to enable only the polyfills and plugins needed for a project targe
 {
   "presets": [
     ["env", {
-      "useBuiltIns": true
+      "useBuiltIns": "entry"
     }]
   ]
 }
@@ -519,7 +519,7 @@ exports.A = A;
         "safari": 10
       },
       "modules": false,
-      "useBuiltIns": true,
+      "useBuiltIns": "entry",
       "debug": true
     }]
   ]
