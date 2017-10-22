@@ -59,9 +59,14 @@ export default function({ types: t }, options) {
         const isDerived = !!path.node.superClass;
         let constructor;
         const props = [];
+        const computedPaths = [];
         const body = path.get("body");
 
         for (const path of body.get("body")) {
+          if (path.node.computed) {
+            computedPaths.push(path);
+          }
+
           if (path.isClassProperty()) {
             props.push(path);
           } else if (path.isClassMethod({ kind: "constructor" })) {
@@ -71,7 +76,6 @@ export default function({ types: t }, options) {
 
         if (!props.length) return;
 
-        const nodes = [];
         let ref;
 
         if (path.isClassExpression() || !path.node.id) {
@@ -82,36 +86,41 @@ export default function({ types: t }, options) {
           ref = path.node.id;
         }
 
+        const computedNodes = [];
+        const staticNodes = [];
         let instanceBody = [];
+
+        for (const computedPath of computedPaths) {
+          const computedNode = computedPath.node;
+          // Make sure computed property names are only evaluated once (upon class definition)
+          // and in the right order in combination with static properties
+          if (!computedPath.get("key").isConstantExpression()) {
+            const ident = path.scope.generateUidIdentifierBasedOnNode(
+              computedNode.key,
+            );
+            computedNodes.push(
+              t.variableDeclaration("var", [
+                t.variableDeclarator(ident, computedNode.key),
+              ]),
+            );
+            computedNode.key = t.clone(ident);
+          }
+        }
 
         for (const prop of props) {
           const propNode = prop.node;
           if (propNode.decorators && propNode.decorators.length > 0) continue;
 
-          const isStatic = propNode.static;
-
-          if (isStatic) {
-            nodes.push(buildClassProperty(ref, propNode, path.scope));
+          if (propNode.static) {
+            staticNodes.push(buildClassProperty(ref, propNode, path.scope));
           } else {
-            // Make sure computed property names are only evaluated once (upon
-            // class definition).
-            if (propNode.computed) {
-              const ident = path.scope.generateUidIdentifierBasedOnNode(
-                propNode.key,
-              );
-              nodes.push(
-                t.variableDeclaration("var", [
-                  t.variableDeclarator(ident, propNode.key),
-                ]),
-              );
-              propNode.key = t.clone(ident);
-            }
-
             instanceBody.push(
               buildClassProperty(t.thisExpression(), propNode, path.scope),
             );
           }
         }
+
+        const nodes = computedNodes.concat(staticNodes);
 
         if (instanceBody.length) {
           if (!constructor) {
