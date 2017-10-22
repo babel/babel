@@ -113,6 +113,36 @@ require("@babel/core").transform("code", {
 });
 ```
 
+## Options
+
+### `loose`
+
+`boolean`, defaults to `false`.
+
+When `true`, this transform will pretend `document.all` does not exist,
+and perform loose equality checks with `null` instead of string equality checks
+against both `null` and `undefined`.
+
+#### Example
+
+In
+
+```javascript
+foo?.bar;
+```
+
+Out (`loose === true`)
+
+```javascript
+foo == null ? void 0 : foo.bar;
+```
+
+Out (`loose === false`)
+
+```javascript
+foo === null || foo === void 0 ? void 0 : foo.bar;
+```
+
 ## References
 
 * [Proposal: Optional Chaining](https://github.com/tc39/proposal-optional-chaining)
