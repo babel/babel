@@ -81,8 +81,6 @@ new Test?.(); // test instance
 new exists?.(); // undefined
 ```
 
-
-
 ## Installation
 
 ```sh
