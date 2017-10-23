@@ -97,6 +97,8 @@ register({
 });
 
 export default function register(opts?: Object = {}) {
+  // Clone to avoid mutating the arguments object with the 'delete's below.
+  opts = Object.assign({}, opts);
   if (opts.extensions) hookExtensions(opts.extensions);
 
   if (opts.cache === false) cache = null;
