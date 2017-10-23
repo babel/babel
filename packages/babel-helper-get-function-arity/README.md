@@ -9,12 +9,13 @@ Function that returns the number of arguments that a function takes.
 import getFunctionArity from "@babel/helper-get-function-arity";
 
 function wrap(state, method, id, scope) {
-  ...
+  // ...
   if (!t.isFunction(method)) {
     return false;
   }
 
   const argumentsLength = getFunctionArity(method);
-  ...
+
+  // ...
 }
 ```
