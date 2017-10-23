@@ -1,6 +1,7 @@
 # @babel/helper-get-function-arity
 
-Function that returns the number of arguments or operands that a function takes.
+Function that returns the number of arguments that a function takes.
+* Examples of what is considered an argument can be found at [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/length)
 
 ## Usage
 
@@ -13,7 +14,7 @@ function wrap(state, method, id, scope) {
     return false;
   }
 
-  const argumentLength = getFunctionArity(method);
+  const argumentsLength = getFunctionArity(method);
   ...
 }
 ```
