@@ -23,6 +23,7 @@ export default function({ types: t }) {
           );
         }
       },
+      compat: true,
     }),
   };
 }
