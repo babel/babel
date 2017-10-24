@@ -1,0 +1,4 @@
+/** @jsx dom */
+/** @jsxFrag DomFrag */
+
+<></>
