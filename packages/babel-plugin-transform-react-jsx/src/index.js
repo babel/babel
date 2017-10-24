@@ -35,7 +35,7 @@ export default function({ types: t }, options) {
       state.callee = pass.get("jsxIdentifier")();
     },
 
-    THROW_IF_NAMESPACE,
+    throwIfNamespace: THROW_IF_NAMESPACE,
   });
 
   visitor.Program = {

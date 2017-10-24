@@ -92,3 +92,26 @@ export function JSXClosingElement(node: Object) {
 }
 
 export function JSXEmptyExpression() {}
+
+export function JSXFragment(node: Object) {
+  const open = node.openingFragment;
+  this.print(open, node);
+
+  this.indent();
+  for (const child of (node.children: Array<Object>)) {
+    this.print(child, node);
+  }
+  this.dedent();
+
+  this.print(node.closingFragment, node);
+}
+
+export function JSXOpeningFragment() {
+  this.token("<");
+  this.token(">");
+}
+
+export function JSXClosingFragment() {
+  this.token("</");
+  this.token(">");
+}
