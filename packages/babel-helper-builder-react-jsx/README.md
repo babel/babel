@@ -10,6 +10,7 @@ type ElementState = {
   call?: Object; // optional call property that can be set to override the call expression returned
   pre?: Function; // function called with (state: ElementState) before building attribs
   post?: Function; // function called with (state: ElementState) after building attribs
+  compat?: boolean // true if React is in compat mode
 };
 
 require("@babel/helper-builder-react-jsx")({
