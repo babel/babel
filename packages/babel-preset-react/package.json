@@ -14,6 +14,9 @@
     "@babel/plugin-transform-react-jsx-self": "7.0.0-beta.3",
     "@babel/plugin-transform-react-jsx-source": "7.0.0-beta.3"
   },
+  "peerDependencies": {
+    "@babel/core": "7.0.0-beta.3"
+  },
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "7.0.0-beta.3",
     "@babel/helper-transform-fixture-test-runner": "7.0.0-beta.3"

@@ -49,6 +49,9 @@
     "invariant": "^2.2.2",
     "semver": "^5.3.0"
   },
+  "peerDependencies": {
+    "@babel/core": "7.0.0-beta.3"
+  },
   "devDependencies": {
     "@babel/cli": "7.0.0-beta.3",
     "@babel/helper-fixtures": "7.0.0-beta.3",

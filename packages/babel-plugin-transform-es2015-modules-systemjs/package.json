@@ -12,6 +12,9 @@
   "keywords": [
     "babel-plugin"
   ],
+  "peerDependencies": {
+    "@babel/core": "7.0.0-beta.3"
+  },
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "7.0.0-beta.3",
     "@babel/plugin-syntax-dynamic-import": "7.0.0-beta.3"
