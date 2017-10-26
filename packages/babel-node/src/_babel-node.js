@@ -3,6 +3,7 @@ import Module from "module";
 import { inspect } from "util";
 import path from "path";
 import repl from "repl";
+import { readFileSync } from "fs";
 import * as babel from "@babel/core";
 import vm from "vm";
 import "@babel/polyfill";
@@ -41,19 +42,25 @@ program.option(
 );
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
+program.option("-c, --config [string]", "", collect);
 /* eslint-enable max-len */
 
 program.version(pkg.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
 
-register({
+const cliConfigs = {
   extensions: program.extensions,
   ignore: program.ignore,
   only: program.only,
   plugins: program.plugins,
   presets: program.presets,
-});
+}
+const config = program.config
+  .map(file => require(file))
+  .reduce((prev, curr) => Object.assign({}, prev, curr), cliConfigs)
+      
+register(config);
 
 const replPlugin = ({ types: t }) => ({
   visitor: {
