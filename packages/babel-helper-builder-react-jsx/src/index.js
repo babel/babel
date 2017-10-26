@@ -51,7 +51,7 @@ export default function(opts) {
        * If there is flag "throwIfNamespace"
        * print XMLNamespace like string literal
        */
-      return t.stringLiteral(node.namespace.name + ":" + node.name.name);
+      return t.stringLiteral(`${node.namespace.name}:${node.name.name}`);
     }
 
     return node;
