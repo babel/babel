@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    [
+      "transform-react-jsx",
+      {
+        "pragma": "h",
+        "throwIfNamespace": true
+      }
+    ]
+  ],
+  "throws": "Namespace tags are not supported. ReactJSX is not XML."
+}
