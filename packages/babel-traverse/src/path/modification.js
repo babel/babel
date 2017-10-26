@@ -138,6 +138,9 @@ export function updateSiblingKeys(fromIndex, incrementBy) {
   if (!this.parent) return;
 
   const paths = pathCache.get(this.parent);
+
+  if (!paths) return;
+
   for (let i = 0; i < paths.length; i++) {
     const path = paths[i];
     if (path.key >= fromIndex) {
