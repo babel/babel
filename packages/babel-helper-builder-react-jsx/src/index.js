@@ -14,9 +14,11 @@ export default function(opts) {
   const visitor = {};
 
   visitor.JSXNamespacedName = function(path) {
-    throw path.buildCodeFrameError(
-      "Namespace tags are not supported. ReactJSX is not XML.",
-    );
+    if (opts.throwIfNamespace) {
+      throw path.buildCodeFrameError(
+        "Namespace tags are not supported. ReactJSX is not XML.",
+      );
+    }
   };
 
   visitor.JSXElement = {
@@ -44,6 +46,12 @@ export default function(opts) {
         convertJSXIdentifier(node.object, node),
         convertJSXIdentifier(node.property, node),
       );
+    } else if (t.isJSXNamespacedName(node)) {
+      /**
+       * If there is flag "throwIfNamespace"
+       * print XMLNamespace like string literal
+       */
+      return t.stringLiteral(node.namespace.name + ":" + node.name.name);
     }
 
     return node;
