@@ -5,8 +5,7 @@
       "targets": {
         "chrome": 55
       },
-      "modules": false,
-      "debug": true
+      "modules": false
     }]
   ]
 }
