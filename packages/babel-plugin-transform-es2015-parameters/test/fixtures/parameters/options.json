@@ -1,6 +1,6 @@
 {
   "plugins": [
-    "transform-class-properties",
+    "proposal-class-properties",
     "external-helpers",
     "syntax-flow",
     "transform-es2015-parameters",

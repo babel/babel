@@ -1,3 +1,0 @@
-{
-  "plugins": ["transform-numeric-separator", "transform-es2015-literals"]
-}

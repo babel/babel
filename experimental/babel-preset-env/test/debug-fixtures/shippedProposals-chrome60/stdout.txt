@@ -8,10 +8,10 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  transform-async-generator-functions { "chrome":"60" }
+  proposal-async-generator-functions { "chrome":"60" }
   syntax-object-rest-spread { "chrome":"60" }
-  transform-optional-catch-binding { "chrome":"60" }
-  transform-unicode-property-regex { "chrome":"60" }
+  proposal-optional-catch-binding { "chrome":"60" }
+  proposal-unicode-property-regex { "chrome":"60" }
 
 Using polyfills with `entry` option:
 

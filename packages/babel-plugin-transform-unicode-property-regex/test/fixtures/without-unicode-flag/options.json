@@ -1,5 +1,0 @@
-{
-  "plugins": [
-    ["transform-unicode-property-regex"]
-  ]
-}

@@ -1,4 +1,4 @@
 {
-  "plugins": ["external-helpers", "transform-class-properties"],
+  "plugins": ["external-helpers", "proposal-class-properties"],
   "presets": ["es2015", "react"]
 }

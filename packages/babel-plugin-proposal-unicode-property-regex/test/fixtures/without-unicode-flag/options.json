@@ -1,0 +1,5 @@
+{
+  "plugins": [
+    ["proposal-unicode-property-regex"]
+  ]
+}
