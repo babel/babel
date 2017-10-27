@@ -129,7 +129,7 @@ export default class StatementParser extends ExpressionParser {
       case tt.semi:
         return this.parseEmptyStatement(node);
       case tt._export:
-      case tt._import:
+      case tt._import: {
         if (
           (this.hasPlugin("dynamicImport") &&
             this.lookahead().type === tt.parenL) ||
@@ -137,29 +137,26 @@ export default class StatementParser extends ExpressionParser {
         )
           break;
 
-        if (!this.options.allowImportExportEverywhere) {
-          if (!topLevel) {
-            this.raise(
-              this.state.start,
-              "'import' and 'export' may only appear at the top level",
-            );
-          }
-
-          if (!this.inModule) {
-            this.raise(
-              this.state.start,
-              `'import' and 'export' may appear only with 'sourceType: "module"'`,
-            );
-          }
+        if (!this.options.allowImportExportEverywhere && !topLevel) {
+          this.raise(
+            this.state.start,
+            "'import' and 'export' may only appear at the top level",
+          );
         }
 
         this.next();
+
+        let result;
         if (starttype == tt._import) {
-          return this.parseImport(node);
+          result = this.parseImport(node);
         } else {
-          return this.parseExport(node);
+          result = this.parseExport(node);
         }
 
+        this.assertModuleNodeAllowed(node);
+
+        return result;
+      }
       case tt.name:
         if (this.state.value === "async") {
           // peek ahead and see if next token is a function
@@ -190,6 +187,15 @@ export default class StatementParser extends ExpressionParser {
       return this.parseLabeledStatement(node, maybeName, expr);
     } else {
       return this.parseExpressionStatement(node, expr);
+    }
+  }
+
+  assertModuleNodeAllowed(node: N.Node): void {
+    if (!this.options.allowImportExportEverywhere && !this.inModule) {
+      this.raise(
+        node.start,
+        `'import' and 'export' may appear only with 'sourceType: "module"'`,
+      );
     }
   }
 
