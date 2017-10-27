@@ -94,21 +94,21 @@ npm install --save-dev @babel/plugin-transform-do-expressions
 
 ```json
 {
-  "plugins": ["transform-do-expressions"]
+  "plugins": ["@babel/transform-do-expressions"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-do-expressions script.js
+babel --plugins @babel/transform-do-expressions script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-do-expressions"]
+  plugins: ["@babel/transform-do-expressions"]
 });
 ```
 

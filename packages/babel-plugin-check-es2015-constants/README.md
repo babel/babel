@@ -35,21 +35,21 @@ npm install --save-dev @babel/plugin-check-es2015-constants
 
 ```json
 {
-  "plugins": ["check-es2015-constants"]
+  "plugins": ["@babel/check-es2015-constants"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins check-es2015-constants script.js
+babel --plugins @babel/check-es2015-constants script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["check-es2015-constants"]
+  plugins: ["@babel/check-es2015-constants"]
 });
 ```
 

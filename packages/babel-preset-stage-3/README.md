@@ -28,21 +28,21 @@ npm install --save-dev @babel/preset-stage-3
 
 ```json
 {
-  "presets": ["stage-3"]
+  "presets": ["@babel/stage-3"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel script.js --presets stage-3
+babel script.js --presets @babel/stage-3
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  presets: ["stage-3"]
+  presets: ["@babel/stage-3"]
 });
 ```
 

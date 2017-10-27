@@ -16,20 +16,20 @@ npm install --save-dev @babel/plugin-syntax-optional-chaining
 
 ```json
 {
-  "plugins": ["syntax-optional-chaining"]
+  "plugins": ["@babel/syntax-optional-chaining"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-optional-chaining script.js
+babel --plugins @babel/syntax-optional-chaining script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["syntax-optional-chaining"]
+  plugins: ["@babel/syntax-optional-chaining"]
 });
 ```

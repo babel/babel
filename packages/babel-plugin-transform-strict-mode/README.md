@@ -37,7 +37,7 @@ npm install --save-dev @babel/plugin-transform-strict-mode
 
 ```json
 {
-  "plugins": ["transform-strict-mode"]
+  "plugins": ["@babel/transform-strict-mode"]
 }
 ```
 
@@ -45,13 +45,13 @@ npm install --save-dev @babel/plugin-transform-strict-mode
 ### Via CLI
 
 ```sh
-babel --plugins transform-strict-mode script.js
+babel --plugins @babel/transform-strict-mode script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-strict-mode"]
+  plugins: ["@babel/transform-strict-mode"]
 });
 ```

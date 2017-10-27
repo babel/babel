@@ -43,21 +43,21 @@ npm install --save-dev @babel/plugin-transform-function-sent
 
 ```json
 {
-  "plugins": ["transform-function-sent"]
+  "plugins": ["@babel/transform-function-sent"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-function-sent script.js
+babel --plugins @babel/transform-function-sent script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-function-sent"]
+  plugins: ["@babel/transform-function-sent"]
 });
 ```
 

@@ -30,20 +30,20 @@ npm install --save-dev @babel/plugin-transform-eval
 
 ```json
 {
-  "plugins": ["transform-eval"]
+  "plugins": ["@babel/transform-eval"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-eval script.js
+babel --plugins @babel/transform-eval script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-eval"]
+  plugins: ["@babel/transform-eval"]
 });
 ```

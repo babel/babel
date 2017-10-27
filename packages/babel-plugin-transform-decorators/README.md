@@ -58,7 +58,7 @@ Add the following line to your .babelrc file:
 
 ```json
 {
-  "plugins": ["transform-decorators"]
+  "plugins": ["@babel/transform-decorators"]
 }
 ```
 
@@ -73,8 +73,8 @@ Wrong:
 ```json
 {
   "plugins": [
-    "transform-class-properties",
-    "transform-decorators"
+    "@babel/transform-class-properties",
+    "@babel/transform-decorators"
   ]
 }
 ```
@@ -84,8 +84,8 @@ Right:
 ```json
 {
   "plugins": [
-    "transform-decorators",
-    ["transform-class-properties", { "loose" : true }]
+    "@babel/transform-decorators",
+    ["@babel/transform-class-properties", { "loose" : true }]
   ]
 }
 ```
@@ -93,14 +93,14 @@ Right:
 ### Via CLI
 
 ```sh
-babel --plugins transform-decorators script.js
+babel --plugins @babel/transform-decorators script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-decorators"]
+  plugins: ["@babel/transform-decorators"]
 });
 ```
 

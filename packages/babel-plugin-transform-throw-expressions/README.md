@@ -24,21 +24,21 @@ npm install --save-dev @babel/plugin-transform-throw-expressions
 
 ```json
 {
-  "plugins": ["transform-throw-expressions"]
+  "plugins": ["@babel/transform-throw-expressions"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-throw-expressions script.js
+babel --plugins @babel/transform-throw-expressions script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-throw-expressions"]
+  plugins: ["@babel/transform-throw-expressions"]
 });
 ```
 

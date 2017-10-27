@@ -97,21 +97,21 @@ npm install --save-dev @babel/plugin-transform-function-bind
 
 ```json
 {
-  "plugins": ["transform-function-bind"]
+  "plugins": ["@babel/transform-function-bind"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-function-bind script.js
+babel --plugins @babel/transform-function-bind script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-function-bind"]
+  plugins: ["@babel/transform-function-bind"]
 });
 ```
 

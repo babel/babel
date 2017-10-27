@@ -16,20 +16,20 @@ npm install --save-dev @babel/plugin-syntax-nullish-coalescing-operator
 
 ```json
 {
-  "plugins": ["syntax-nullish-coalescing-operator"]
+  "plugins": ["@babel/syntax-nullish-coalescing-operator"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-nullish-coalescing-operator script.js
+babel --plugins @babel/syntax-nullish-coalescing-operator script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["syntax-nullish-coalescing-operator"]
+  plugins: ["@babel/syntax-nullish-coalescing-operator"]
 });
 ```

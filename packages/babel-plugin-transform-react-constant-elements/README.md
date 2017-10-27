@@ -62,7 +62,7 @@ npm install --save-dev @babel/plugin-transform-react-constant-elements
 
 ```json
 {
-  "plugins": ["transform-react-constant-elements"]
+  "plugins": ["@babel/transform-react-constant-elements"]
 }
 ```
 
@@ -80,7 +80,7 @@ This will skip the `Mutable Properties` deopt.
 ```json
 {
   "plugins": [
-    ["transform-react-constant-elements", {"allowMutablePropsOnTags": ["FormattedMessage"]}],
+    ["@babel/transform-react-constant-elements", {"allowMutablePropsOnTags": ["FormattedMessage"]}],
   ]
 }
 
@@ -89,14 +89,14 @@ This will skip the `Mutable Properties` deopt.
 ### Via CLI
 
 ```sh
-babel --plugins transform-react-constant-elements script.js
+babel --plugins @babel/transform-react-constant-elements script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-react-constant-elements"]
+  plugins: ["@babel/transform-react-constant-elements"]
 });
 ```
 

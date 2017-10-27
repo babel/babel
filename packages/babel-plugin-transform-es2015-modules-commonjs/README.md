@@ -35,13 +35,13 @@ npm install --save-dev @babel/plugin-transform-es2015-modules-commonjs
 ```js
 // without options
 {
-  "plugins": ["transform-es2015-modules-commonjs"]
+  "plugins": ["@babel/transform-es2015-modules-commonjs"]
 }
 
 // with options
 {
   "plugins": [
-    ["transform-es2015-modules-commonjs", {
+    ["@babel/transform-es2015-modules-commonjs", {
       "allowTopLevelThis": true
     }]
   ]
@@ -51,14 +51,14 @@ npm install --save-dev @babel/plugin-transform-es2015-modules-commonjs
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-modules-commonjs script.js
+babel --plugins @babel/transform-es2015-modules-commonjs script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-modules-commonjs"]
+  plugins: ["@babel/transform-es2015-modules-commonjs"]
 });
 ```
 

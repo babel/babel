@@ -35,21 +35,21 @@ npm install --save-dev @babel/plugin-transform-nullish-coalescing-operator
 
 ```json
 {
-  "plugins": ["transform-nullish-coalescing-operator"]
+  "plugins": ["@babel/transform-nullish-coalescing-operator"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-nullish-coalescing-operator script.js
+babel --plugins @babel/transform-nullish-coalescing-operator script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-nullish-coalescing-operator"]
+  plugins: ["@babel/transform-nullish-coalescing-operator"]
 });
 ```
 

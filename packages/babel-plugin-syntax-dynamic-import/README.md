@@ -16,20 +16,20 @@ npm install --save-dev @babel/plugin-syntax-dynamic-import
 
 ```json
 {
-  "plugins": ["syntax-dynamic-import"]
+  "plugins": ["@babel/syntax-dynamic-import"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-dynamic-import script.js
+babel --plugins @babel/syntax-dynamic-import script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["syntax-dynamic-import"]
+  plugins: ["@babel/syntax-dynamic-import"]
 });
 ```

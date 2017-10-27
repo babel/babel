@@ -29,21 +29,21 @@ npm install --save-dev @babel/plugin-syntax-optional-catch-binding
 
 ```json
 {
-  "plugins": ["syntax-optional-catch-binding"]
+  "plugins": ["@babel/syntax-optional-catch-binding"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-optional-catch-binding script.js
+babel --plugins @babel/syntax-optional-catch-binding script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["syntax-optional-catch-binding"]
+  plugins: ["@babel/syntax-optional-catch-binding"]
 });
 ```
 

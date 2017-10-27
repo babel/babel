@@ -50,7 +50,7 @@ npm install --save-dev @babel/plugin-transform-es2015-modules-umd
 
 ```json
 {
-  "plugins": ["transform-es2015-modules-umd"]
+  "plugins": ["@babel/transform-es2015-modules-umd"]
 }
 ```
 
@@ -61,7 +61,7 @@ as `global.Promise` rather than `global.es6Promise`. This can be accommodated by
 ```json
 {
   "plugins": [
-    ["transform-es2015-modules-umd", {
+    ["@babel/transform-es2015-modules-umd", {
       "globals": {
         "es6-promise": "Promise"
       }
@@ -178,7 +178,7 @@ Finally, with the plugin options set to:
 {
   "plugins": [
     "external-helpers",
-    ["transform-es2015-modules-umd", {
+    ["@babel/transform-es2015-modules-umd", {
       "globals": {
         "my/custom/module/name": "My.Custom.Module.Name"
       },
@@ -202,13 +202,13 @@ global.My.Custom.Module.Name = mod.exports;
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-modules-umd script.js
+babel --plugins @babel/transform-es2015-modules-umd script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-modules-umd"]
+  plugins: ["@babel/transform-es2015-modules-umd"]
 });
 ```

@@ -42,20 +42,20 @@ npm install --save-dev @babel/plugin-transform-es2015-duplicate-keys
 
 ```json
 {
-  "plugins": ["transform-es2015-duplicate-keys"]
+  "plugins": ["@babel/transform-es2015-duplicate-keys"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-duplicate-keys script.js
+babel --plugins @babel/transform-es2015-duplicate-keys script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-duplicate-keys"]
+  plugins: ["@babel/transform-es2015-duplicate-keys"]
 });
 ```

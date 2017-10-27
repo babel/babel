@@ -22,21 +22,21 @@ npm install --save-dev @babel/plugin-transform-export-default
 
 ```json
 {
-  "plugins": ["transform-export-default"]
+  "plugins": ["@babel/transform-export-default"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-export-default script.js
+babel --plugins @babel/transform-export-default script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-export-default"]
+  plugins: ["@babel/transform-export-default"]
 });
 ```
 ## References

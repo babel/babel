@@ -38,7 +38,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["transform-async-to-module-method"]
+  "plugins": ["@babel/transform-async-to-module-method"]
 }
 ```
 
@@ -47,7 +47,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["transform-async-to-module-method", {
+    ["@babel/transform-async-to-module-method", {
       "module": "bluebird",
       "method": "coroutine"
     }]
@@ -58,13 +58,13 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins transform-async-to-module-method script.js
+babel --plugins @babel/transform-async-to-module-method script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-async-to-module-method"]
+  plugins: ["@babel/transform-async-to-module-method"]
 });
 ```

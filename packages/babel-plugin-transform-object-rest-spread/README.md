@@ -34,21 +34,21 @@ npm install --save-dev @babel/plugin-transform-object-rest-spread
 
 ```json
 {
-  "plugins": ["transform-object-rest-spread"]
+  "plugins": ["@babel/transform-object-rest-spread"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-object-rest-spread script.js
+babel --plugins @babel/transform-object-rest-spread script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-object-rest-spread"]
+  plugins: ["@babel/transform-object-rest-spread"]
 });
 ```
 
@@ -65,7 +65,7 @@ By default, this plugin uses Babel's `extends` helper which polyfills `Object.as
 ```json
 {
   "plugins": [
-    ["transform-object-rest-spread", { "useBuiltIns": true }]
+    ["@babel/transform-object-rest-spread", { "useBuiltIns": true }]
   ]
 }
 ```

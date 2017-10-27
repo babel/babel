@@ -54,20 +54,20 @@ npm install --save-dev @babel/plugin-transform-es2015-object-super
 
 ```json
 {
-  "plugins": ["transform-es2015-object-super"]
+  "plugins": ["@babel/transform-es2015-object-super"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-object-super script.js
+babel --plugins @babel/transform-es2015-object-super script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-object-super"]
+  plugins: ["@babel/transform-es2015-object-super"]
 });
 ```

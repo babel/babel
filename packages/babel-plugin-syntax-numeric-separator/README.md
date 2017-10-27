@@ -17,20 +17,20 @@ npm install --save-dev @babel/plugin-syntax-numeric-separator
 
 ```json
 {
-  "plugins": ["syntax-numeric-separator"]
+  "plugins": ["@babel/syntax-numeric-separator"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-numeric-separator script.js
+babel --plugins @babel/syntax-numeric-separator script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["syntax-numeric-separator"]
+  plugins: ["@babel/syntax-numeric-separator"]
 });
 ```

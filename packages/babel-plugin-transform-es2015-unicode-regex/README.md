@@ -32,20 +32,20 @@ npm install --save-dev @babel/plugin-transform-es2015-unicode-regex
 
 ```json
 {
-  "plugins": ["transform-es2015-unicode-regex"]
+  "plugins": ["@babel/transform-es2015-unicode-regex"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-unicode-regex script.js
+babel --plugins @babel/transform-es2015-unicode-regex script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-unicode-regex"]
+  plugins: ["@babel/transform-es2015-unicode-regex"]
 });
 ```

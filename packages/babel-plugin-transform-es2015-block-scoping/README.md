@@ -40,7 +40,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["transform-es2015-block-scoping"]
+  "plugins": ["@babel/transform-es2015-block-scoping"]
 }
 ```
 
@@ -49,7 +49,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["transform-es2015-block-scoping", {
+    ["@babel/transform-es2015-block-scoping", {
       "throwIfClosureRequired": true
     }]
   ]
@@ -59,14 +59,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-block-scoping script.js
+babel --plugins @babel/transform-es2015-block-scoping script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-block-scoping"]
+  plugins: ["@babel/transform-es2015-block-scoping"]
 });
 ```
 

@@ -59,21 +59,21 @@ npm install --save-dev @babel/plugin-transform-react-inline-elements
 
 ```json
 {
-  "plugins": ["transform-react-inline-elements"]
+  "plugins": ["@babel/transform-react-inline-elements"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-react-inline-elements script.js
+babel --plugins @babel/transform-react-inline-elements script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-react-inline-elements"]
+  plugins: ["@babel/transform-react-inline-elements"]
 });
 ```
 

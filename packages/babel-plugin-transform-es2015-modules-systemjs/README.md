@@ -41,7 +41,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["transform-es2015-modules-systemjs"]
+  "plugins": ["@babel/transform-es2015-modules-systemjs"]
 }
 ```
 
@@ -50,7 +50,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["transform-es2015-modules-systemjs", {
+    ["@babel/transform-es2015-modules-systemjs", {
       // outputs SystemJS.register(...)
       "systemGlobal": "SystemJS"
     }]
@@ -61,13 +61,13 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-modules-systemjs script.js
+babel --plugins @babel/transform-es2015-modules-systemjs script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-modules-systemjs"]
+  plugins: ["@babel/transform-es2015-modules-systemjs"]
 });
 ```
