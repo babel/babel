@@ -119,4 +119,8 @@ When spreading props, use `Object.assign` directly instead of Babel's extend hel
 
 `boolean`, defaults to `true`.
 
-This option controls how to handle XML Namespaces. React's don't support it thus default behavior is to throw an error when XML namespace occurs, this behavior could be suppressed by setting it to false.
+Toggles whether or not to throw an error if a XML namespaced tag name is used. For example:
+
+    <f:image />
+
+Though the JSX spec allows this, it is disabled by default since React's JSX does not currently have support for it.
