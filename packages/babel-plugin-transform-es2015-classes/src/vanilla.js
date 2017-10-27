@@ -1,16 +1,10 @@
-import type { NodePath } from "babel-traverse";
-import { visitors } from "babel-traverse";
-import ReplaceSupers from "babel-helper-replace-supers";
-import optimiseCall from "babel-helper-optimise-call-expression";
-import * as defineMap from "babel-helper-define-map";
-import template from "babel-template";
-import * as t from "babel-types";
-
-const buildDerivedConstructor = template(`
-  (function () {
-    super(...arguments);
-  })
-`);
+import type { NodePath } from "@babel/traverse";
+import { visitors } from "@babel/traverse";
+import ReplaceSupers from "@babel/helper-replace-supers";
+import optimiseCall from "@babel/helper-optimise-call-expression";
+import * as defineMap from "@babel/helper-define-map";
+import template from "@babel/template";
+import * as t from "@babel/types";
 
 const noMethodVisitor = {
   "FunctionExpression|FunctionDeclaration"(path) {
@@ -212,7 +206,11 @@ export default class ClassTransformer {
     let params, body;
 
     if (this.isDerived) {
-      const constructor = buildDerivedConstructor().expression;
+      const constructor = template.expression.ast`
+        (function () {
+          super(...arguments);
+        })
+      `;
       params = constructor.params;
       body = constructor.body;
     } else {

@@ -1,5 +1,5 @@
-import "babel-polyfill/lib/core-js/modules/es6.promise";
-import "babel-polyfill/lib/regenerator-runtime/runtime";
+import "@babel/polyfill/lib/core-js/modules/es6.promise";
+import "@babel/polyfill/lib/regenerator-runtime/runtime";
 
 var a = function () {
   var _ref = _asyncToGenerator(

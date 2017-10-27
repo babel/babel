@@ -1,17 +1,20 @@
 {
-  "name": "babel-plugin-codemod-optional-catch-binding",
-  "version": "7.0.0-beta.2",
+  "name": "@babel/plugin-codemod-optional-catch-binding",
+  "version": "7.0.0-beta.3",
   "description": "Remove unused catch bindings",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-remove-unused-catch-binding",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
-    "babel-plugin"
+    "@babel/plugin"
   ],
   "dependencies": {
-    "babel-plugin-syntax-optional-catch-binding": "7.0.0-beta.2"
+    "@babel/plugin-syntax-optional-catch-binding": "7.0.0-beta.3"
+  },
+  "peerDependencies": {
+    "@babel/core": "7.0.0-beta.3"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-beta.2"
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.3"
   }
 }

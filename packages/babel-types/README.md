@@ -1,11 +1,11 @@
-# babel-types
+# @babel/types
 
 > This module contains methods for building ASTs manually and for checking the types of AST nodes.
 
 ## Install
 
 ```sh
-npm install --save-dev babel-types
+npm install --save-dev @babel/types
 ```
 
 ## API
@@ -1235,7 +1235,7 @@ See also `t.isLogicalExpression(node, opts)` and `t.assertLogicalExpression(node
 
 Aliases: `Binary`, `Expression`
 
- - `operator`: `'||' | '&&'` (required)
+ - `operator`: `'||' | '&&' | '??'` (required)
  - `left`: `Expression` (required)
  - `right`: `Expression` (required)
 
@@ -2676,7 +2676,7 @@ See also `t.isUnaryExpression(node, opts)` and `t.assertUnaryExpression(node, op
 
 Aliases: `UnaryLike`, `Expression`
 
- - `operator`: `'void' | 'delete' | '!' | '+' | '-' | '~' | 'typeof'` (required)
+ - `operator`: `'void' | 'throw' | 'delete' | '!' | '+' | '-' | '~' | 'typeof'` (required)
  - `argument`: `Expression` (required)
  - `prefix`: `boolean` (default: `true`)
 

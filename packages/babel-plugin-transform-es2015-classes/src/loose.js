@@ -1,6 +1,6 @@
-import nameFunction from "babel-helper-function-name";
+import nameFunction from "@babel/helper-function-name";
 import VanillaTransformer from "./vanilla";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 export default class LooseClassTransformer extends VanillaTransformer {
   constructor() {

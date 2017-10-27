@@ -7,7 +7,7 @@ import merge from "lodash/merge";
 import removed from "./removed";
 import buildConfigChain from "./build-config-chain";
 import path from "path";
-import traverse from "babel-traverse";
+import traverse from "@babel/traverse";
 import clone from "lodash/clone";
 import { makeWeakCache } from "./caching";
 import { getEnv } from "./helpers/environment";
@@ -303,7 +303,7 @@ const loadDescriptor = makeWeakCache(
       });
 
       try {
-        item = value(api, options, { dirname });
+        item = value(api, options, dirname);
       } catch (e) {
         if (alias) {
           e.message += ` (While processing: ${JSON.stringify(alias)})`;
@@ -553,6 +553,15 @@ function normalizePair(
   if (typeof value !== "object" && typeof value !== "function") {
     throw new Error(
       `Unsupported format: ${typeof value}. Expected an object or a function.`,
+    );
+  }
+
+  if (filepath !== null && typeof value === "object" && value) {
+    // We allow object values for plugins/presets nested directly within a
+    // config object, because it can be useful to define them in nested
+    // configuration contexts.
+    throw new Error(
+      "Plugin/Preset files are not allowed to export objects, only functions.",
     );
   }
 

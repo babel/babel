@@ -1,4 +1,4 @@
-# babel-helper-function-name
+# @babel/helper-function-name
 
 ## Usage
 

@@ -1,5 +1,5 @@
-import type { Scope } from "babel-traverse";
-import * as t from "babel-types";
+import type { Scope } from "@babel/traverse";
+import * as t from "@babel/types";
 
 function getObjRef(node, nodes, file, scope) {
   let ref;

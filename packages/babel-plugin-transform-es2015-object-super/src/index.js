@@ -1,4 +1,4 @@
-import ReplaceSupers from "babel-helper-replace-supers";
+import ReplaceSupers from "@babel/helper-replace-supers";
 
 function replacePropertySuper(path, node, scope, getObjectRef, file) {
   const replaceSupers = new ReplaceSupers({

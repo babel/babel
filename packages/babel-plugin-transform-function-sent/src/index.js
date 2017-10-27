@@ -1,5 +1,5 @@
-import syntaxFunctionSent from "babel-plugin-syntax-function-sent";
-import wrapFunction from "babel-helper-wrap-function";
+import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
+import wrapFunction from "@babel/helper-wrap-function";
 
 export default function({ types: t }) {
   const isFunctionSent = node =>

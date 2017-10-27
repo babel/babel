@@ -1,4 +1,4 @@
-# babel-helper-regex
+# @babel/helper-regex
 
 ## Usage
 

@@ -1,5 +1,5 @@
 // This file contains methods responsible for dealing with comments.
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 /**
  * Share comments amongst siblings.

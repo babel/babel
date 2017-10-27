@@ -1,4 +1,4 @@
-# babel-plugin-transform-throw-expressions
+# @babel/plugin-transform-throw-expressions
 
 This plugin transforms Throw Expressions into an IIFE.
 
@@ -13,7 +13,7 @@ function test(param = throw new Error('required!')) {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-throw-expressions
+npm install --save-dev @babel/plugin-transform-throw-expressions
 ```
 
 ## Usage
@@ -37,7 +37,7 @@ babel --plugins transform-throw-expressions script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-throw-expressions"]
 });
 ```

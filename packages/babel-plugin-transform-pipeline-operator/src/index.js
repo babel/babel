@@ -1,4 +1,4 @@
-import syntaxPipelineOperator from "babel-plugin-syntax-pipeline-operator";
+import syntaxPipelineOperator from "@babel/plugin-syntax-pipeline-operator";
 
 export default function({ types: t }) {
   return {
@@ -18,9 +18,9 @@ export default function({ types: t }) {
 
         if (optimizeArrow) {
           const { params } = right;
-          if (params.length === 1) {
+          if (params.length === 1 && t.isIdentifier(params[0])) {
             param = params[0];
-          } else if (params.length > 1) {
+          } else if (params.length > 0) {
             optimizeArrow = false;
           }
         } else if (t.isIdentifier(right, { name: "eval" })) {

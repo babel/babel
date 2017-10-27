@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 function getTDZStatus(refPath, bindingPath) {
   const executionStatus = bindingPath._guessExecutionStatusRelativeTo(refPath);
@@ -16,7 +16,6 @@ function buildTDZAssert(node, file) {
   return t.callExpression(file.addHelper("temporalRef"), [
     node,
     t.stringLiteral(node.name),
-    file.addHelper("temporalUndefined"),
   ]);
 }
 

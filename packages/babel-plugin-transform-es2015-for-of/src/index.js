@@ -1,4 +1,9 @@
-export default function({ template, types: t }) {
+export default function({ template, types: t }, options) {
+  const { loose } = options;
+  const pushComputedProps = loose
+    ? pushComputedPropsLoose
+    : pushComputedPropsSpec;
+
   const buildForOfArray = template(`
     for (var KEY = 0; KEY < ARR.length; KEY++) BODY;
   `);
@@ -113,11 +118,8 @@ export default function({ template, types: t }) {
           return;
         }
 
-        let callback = spec;
-        if (state.opts.loose) callback = loose;
-
         const { node } = path;
-        const build = callback(path, state);
+        const build = pushComputedProps(path, state);
         const declar = build.declar;
         const loop = build.loop;
         const block = loop.body;
@@ -146,7 +148,7 @@ export default function({ template, types: t }) {
     },
   };
 
-  function loose(path, file) {
+  function pushComputedPropsLoose(path, file) {
     const { node, scope, parent } = path;
     const { left } = node;
     let declar, id, intermediate;
@@ -201,7 +203,7 @@ export default function({ template, types: t }) {
     };
   }
 
-  function spec(path, file) {
+  function pushComputedPropsSpec(path, file) {
     const { node, scope, parent } = path;
     const left = node.left;
     let declar;
@@ -243,7 +245,6 @@ export default function({ template, types: t }) {
       ITERATOR_KEY: iteratorKey,
       STEP_KEY: stepKey,
       OBJECT: node.right,
-      BODY: null,
     });
 
     const isLabeledParent = t.isLabeledStatement(parent);

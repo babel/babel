@@ -1,8 +1,8 @@
-# babel-plugin-transform-flow-comments
+# @babel/plugin-transform-flow-comments
 
 > Turn flow type annotations into comments.
 
-You should be able to use this plugin instead of `babel-plugin-flow-strip-types` to preserve the `/* @flow */` directive and still use flow.
+You should be able to use this plugin instead of `@babel/plugin-flow-strip-types` to preserve the `/* @flow */` directive and still use flow.
 
 [Flow Comments Blog Post](http://flowtype.org/blog/2015/02/20/Flow-Comments.html)
 
@@ -41,7 +41,7 @@ function foo(x /*: number*/) /*: string*/ {}
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-flow-comments
+npm install --save-dev @babel/plugin-transform-flow-comments
 ```
 
 ## Usage
@@ -65,7 +65,7 @@ babel --plugins transform-flow-comments script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-flow-comments"]
 });
 ```

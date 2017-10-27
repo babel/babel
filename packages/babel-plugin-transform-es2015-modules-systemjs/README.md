@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-modules-systemjs
+# @babel/plugin-transform-es2015-modules-systemjs
 
 > This plugin transforms ES2015 modules to [SystemJS](https://github.com/systemjs/systemjs).
 
@@ -28,7 +28,7 @@ For dynamic import support (`import('./lazy.js').then(m => ...)`), enable the [s
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-modules-systemjs
+npm install --save-dev @babel/plugin-transform-es2015-modules-systemjs
 ```
 
 ## Usage
@@ -67,7 +67,7 @@ babel --plugins transform-es2015-modules-systemjs script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-modules-systemjs"]
 });
 ```

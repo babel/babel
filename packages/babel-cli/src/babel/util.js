@@ -1,6 +1,6 @@
 import commander from "commander";
 import readdirRecursive from "fs-readdir-recursive";
-import * as babel from "babel-core";
+import * as babel from "@babel/core";
 import includes from "lodash/includes";
 import path from "path";
 import fs from "fs";

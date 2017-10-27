@@ -1,4 +1,4 @@
-babel-preset-env: `DEBUG` option
+@babel/preset-env: `DEBUG` option
 
 Using targets:
 {
@@ -31,11 +31,10 @@ Using plugins:
   transform-regenerator { "android":"4" }
   transform-exponentiation-operator { "android":"4" }
   transform-async-to-generator { "android":"4" }
-  syntax-trailing-function-commas { "android":"4" }
 
 Using polyfills with `entry` option:
 
-[src/in.js] Replaced `babel-polyfill` with the following polyfills:
+[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es6.typed.array-buffer { "android":"4" }
   es6.typed.int8-array { "android":"4" }
   es6.typed.uint8-array { "android":"4" }
@@ -65,6 +64,16 @@ Using polyfills with `entry` option:
   es6.reflect.set-prototype-of { "android":"4" }
   es6.promise { "android":"4" }
   es6.symbol { "android":"4" }
+  es6.object.freeze { "android":"4" }
+  es6.object.seal { "android":"4" }
+  es6.object.prevent-extensions { "android":"4" }
+  es6.object.is-frozen { "android":"4" }
+  es6.object.is-sealed { "android":"4" }
+  es6.object.is-extensible { "android":"4" }
+  es6.object.get-own-property-descriptor { "android":"4" }
+  es6.object.get-prototype-of { "android":"4" }
+  es6.object.keys { "android":"4" }
+  es6.object.get-own-property-names { "android":"4" }
   es6.object.assign { "android":"4" }
   es6.object.is { "android":"4" }
   es6.object.set-prototype-of { "android":"4" }

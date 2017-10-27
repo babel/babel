@@ -1,4 +1,4 @@
-# babel-plugin-transform-optional-catch-binding
+# @babel/plugin-transform-optional-catch-binding
 
 > Optional catch binding enables the catch block to execute whether or not an argument is passed to the catch statement (CatchClause).
 
@@ -27,7 +27,7 @@ try {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-optional-catch-binding
+npm install --save-dev @babel/plugin-transform-optional-catch-binding
 ```
 
 ## Usage
@@ -51,7 +51,7 @@ babel --plugins transform-optional-catch-binding script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-optional-catch-binding"]
 });
 ```

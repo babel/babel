@@ -1,4 +1,4 @@
-# babel-plugin-transform-es3-property-literals
+# @babel/plugin-transform-es3-property-literals
 
 > Ensure that reserved words are quoted in object property keys
 
@@ -23,7 +23,7 @@ var foo = {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es3-property-literals
+npm install --save-dev @babel/plugin-transform-es3-property-literals
 ```
 
 ## Usage
@@ -47,7 +47,7 @@ babel --plugins transform-es3-property-literals script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es3-property-literals"]
 });
 ```

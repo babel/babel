@@ -1,11 +1,11 @@
-# babel-plugin-syntax-export-extensions
+# @babel/plugin-syntax-export-extensions
 
 > Allow parsing of export extensions.
 
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-export-extensions
+npm install --save-dev @babel/plugin-syntax-export-extensions
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ babel --plugins syntax-export-extensions script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["syntax-export-extensions"]
 });
 ```

@@ -1,4 +1,15 @@
-export default function transformReactConstantElement({ types: t }) {
+export default function transformReactConstantElement({ types: t }, options) {
+  const { allowMutablePropsOnTags } = options;
+
+  if (
+    allowMutablePropsOnTags != null &&
+    !Array.isArray(allowMutablePropsOnTags)
+  ) {
+    throw new Error(
+      ".allowMutablePropsOnTags must be an array, null, or undefined.",
+    );
+  }
+
   const HOISTED = new WeakSet();
 
   const immutabilityVisitor = {
@@ -71,12 +82,7 @@ export default function transformReactConstantElement({ types: t }) {
         // This transform takes the option `allowMutablePropsOnTags`, which is an array
         // of JSX tags to allow mutable props (such as objects, functions) on. Use sparingly
         // and only on tags you know will never modify their own props.
-        if (this.opts.allowMutablePropsOnTags != null) {
-          if (!Array.isArray(this.opts.allowMutablePropsOnTags)) {
-            throw new Error(
-              ".allowMutablePropsOnTags must be an array, null, or undefined.",
-            );
-          }
+        if (allowMutablePropsOnTags != null) {
           // Get the element's name. If it's a member expression, we use the last part of the path.
           // So the option ["FormattedMessage"] would match "Intl.FormattedMessage".
           let namePath = path.get("openingElement.name");
@@ -86,7 +92,7 @@ export default function transformReactConstantElement({ types: t }) {
 
           const elementName = namePath.node.name;
           state.mutablePropsAllowed =
-            this.opts.allowMutablePropsOnTags.indexOf(elementName) > -1;
+            allowMutablePropsOnTags.indexOf(elementName) > -1;
         }
 
         // Traverse all props passed to this element for immutability.

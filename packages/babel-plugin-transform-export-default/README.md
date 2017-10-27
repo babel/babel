@@ -1,4 +1,4 @@
-# babel-plugin-transform-export-default
+# @babel/plugin-transform-export-default
 
 > Compile export-default-from statements to ES2015
 
@@ -11,7 +11,7 @@ export v from 'mod';
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-export-default
+npm install --save-dev @babel/plugin-transform-export-default
 ```
 
 ## Usage
@@ -35,7 +35,7 @@ babel --plugins transform-export-default script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-export-default"]
 });
 ```

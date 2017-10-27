@@ -17,12 +17,14 @@ const main = defineHelper(__dirname, "main", `
   }
 `);
 
-module.exports = {
-  visitor: {
-    Identifier(path) {
-      if (path.node.name !== "REPLACE_ME") return;
-      const helper = this.addHelper(main);
-      path.replaceWith(helper);
+module.exports = function() {
+  return {
+    visitor: {
+      Identifier(path) {
+        if (path.node.name !== "REPLACE_ME") return;
+        const helper = this.addHelper(main);
+        path.replaceWith(helper);
+      },
     },
-  },
+  };
 };

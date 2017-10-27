@@ -1,4 +1,4 @@
-# babel-plugin-transform-regenerator
+# @babel/plugin-transform-regenerator
 
 > Transform async/generator functions with [regenerator](https://github.com/facebook/regenerator)
 
@@ -37,7 +37,7 @@ function a() {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-regenerator
+npm install --save-dev @babel/plugin-transform-regenerator
 ```
 
 ## Usage
@@ -81,7 +81,7 @@ babel --plugins transform-regenerator script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-regenerator"]
 });
 ```

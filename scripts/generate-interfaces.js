@@ -124,10 +124,36 @@ for (const type in t.NODE_FIELDS) {
 }
 
 for (let i = 0; i < t.TYPES.length; i++) {
-  lines.push(
-    `declare function is${t.TYPES[i]}(node: Object, opts?: Object): boolean;`
-  );
+  let decl = `declare function is${t.TYPES[
+    i
+  ]}(node: Object, opts?: ?Object): boolean`;
+
+  if (t.NODE_FIELDS[t.TYPES[i]]) {
+    decl += ` %checks (node instanceof ${NODE_PREFIX}${t.TYPES[i]})`;
+  }
+
+  lines.push(decl);
 }
+
+lines.push(
+  `declare function validate(n: BabelNode, key: string, value: mixed): void;`,
+  `declare function clone<T>(n: T): T;`,
+  `declare function cloneDeep<T>(n: T): T;`,
+  `declare function removeProperties<T>(n: T, opts: ?{}): void;`,
+  `declare function removePropertiesDeep<T>(n: T, opts: ?{}): T;`,
+  `declare type TraversalAncestors = Array<{
+    node: BabelNode,
+    key: string,
+    index?: number,
+  }>;
+  declare type TraversalHandler<T> = (BabelNode, TraversalAncestors, T) => void;
+  declare type TraversalHandlers<T> = {
+    enter?: TraversalHandler<T>,
+    exit?: TraversalHandler<T>,
+  };`.replace(/(^|\n) {2}/g, "$1"),
+  // eslint-disable-next-line
+  `declare function traverse<T>(n: BabelNode, TraversalHandler<T> | TraversalHandlers<T>, state?: T): void;`
+);
 
 for (const type in t.FLIPPED_ALIAS_KEYS) {
   const types = t.FLIPPED_ALIAS_KEYS[type];

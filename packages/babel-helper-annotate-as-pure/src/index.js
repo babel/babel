@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 const PURE_ANNOTATION = "#__PURE__";
 

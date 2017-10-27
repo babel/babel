@@ -1,4 +1,4 @@
-# babel-preset-flow
+# @babel/preset-flow
 
 > Babel preset for all Flow plugins.
 
@@ -23,7 +23,7 @@ function foo(one, two, three) {}
 ## Installation
 
 ```sh
-npm install --save-dev babel-preset-flow
+npm install --save-dev @babel/preset-flow
 ```
 
 ## Usage
@@ -47,7 +47,7 @@ babel --presets flow script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   presets: ["flow"]
 });
 ```

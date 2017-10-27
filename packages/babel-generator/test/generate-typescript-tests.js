@@ -1,5 +1,5 @@
 /*
-Copies tests from babylon's TypeScript test suite to babel-generator.
+Copies tests from babylon's TypeScript test suite to @babel/generator.
 This script assumes that the "babylon" repository is adjacent to "babel".
 */
 

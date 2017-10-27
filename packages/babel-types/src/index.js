@@ -66,6 +66,9 @@ export { VISITOR_KEYS, ALIAS_KEYS, NODE_FIELDS, BUILDER_KEYS, DEPRECATED_KEYS };
 import * as _react from "./react";
 export { _react as react };
 
+import { traverse, traverseFast } from "./traverse";
+export { traverse, traverseFast };
+
 /**
  * Registers `is[Type]` and `assert[Type]` for all types.
  */
@@ -534,36 +537,6 @@ export function isNode(node?): boolean {
 toFastProperties(t);
 toFastProperties(t.VISITOR_KEYS);
 
-/**
- * A prefix AST traversal implementation implementation.
- */
-
-export function traverseFast(
-  node: Node,
-  enter: (node: Node) => void,
-  opts?: Object,
-) {
-  if (!node) return;
-
-  const keys = t.VISITOR_KEYS[node.type];
-  if (!keys) return;
-
-  opts = opts || {};
-  enter(node, opts);
-
-  for (const key of keys) {
-    const subNode = node[key];
-
-    if (Array.isArray(subNode)) {
-      for (const node of subNode) {
-        traverseFast(node, enter, opts);
-      }
-    } else {
-      traverseFast(subNode, enter, opts);
-    }
-  }
-}
-
 const CLEAR_KEYS: Array = ["tokens", "start", "end", "loc", "raw", "rawValue"];
 
 const CLEAR_KEYS_PLUS_COMMENTS: Array = t.COMMENT_KEYS
@@ -607,6 +580,7 @@ export {
   isBinding,
   isReferenced,
   isValidIdentifier,
+  isValidES3Identifier,
   isLet,
   isBlockScoped,
   isVar,

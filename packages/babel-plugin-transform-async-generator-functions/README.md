@@ -1,4 +1,4 @@
-# babel-plugin-transform-async-generator-functions
+# @babel/plugin-transform-async-generator-functions
 
 > Turn async generator functions and for-await statements to ES2015 generators
 
@@ -73,7 +73,7 @@ forEach(genAnswers(), function(val) { output += val.value })
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-async-generator-functions
+npm install --save-dev @babel/plugin-transform-async-generator-functions
 ```
 
 ## Usage
@@ -97,7 +97,7 @@ babel --plugins transform-async-generator-functions script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-async-generator-functions"]
 });
 ```

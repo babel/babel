@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 export function _params(node: Object) {
   this.print(node.typeParameters, node);

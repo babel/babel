@@ -1,4 +1,4 @@
-# babel-helper-explode-assignable-expression
+# @babel/helper-explode-assignable-expression
 
 ## Usage
 

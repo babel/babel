@@ -1,11 +1,11 @@
-# babel-preset-stage-0
+# @babel/preset-stage-0
 
 > Babel preset for stage 0 plugins.
 
 ## Install
 
 ```sh
-npm install --save-dev babel-preset-stage-0
+npm install --save-dev @babel/preset-stage-0
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ babel script.js --presets stage-0
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   presets: ["stage-0"]
 });
 ```

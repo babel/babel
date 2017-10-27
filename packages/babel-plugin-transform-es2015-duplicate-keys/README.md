@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-duplicate-keys
+# @babel/plugin-transform-es2015-duplicate-keys
 
 > Compile objects with duplicate keys to valid strict ES5.
 
@@ -31,7 +31,7 @@ var y = {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-duplicate-keys
+npm install --save-dev @babel/plugin-transform-es2015-duplicate-keys
 ```
 
 ## Usage
@@ -55,7 +55,7 @@ babel --plugins transform-es2015-duplicate-keys script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-duplicate-keys"]
 });
 ```

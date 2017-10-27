@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-spread
+# @babel/plugin-transform-es2015-spread
 
 > Compile ES2015 spread to ES5
 
@@ -21,7 +21,7 @@ var b = [].concat(a, [ 'foo' ]);
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-spread
+npm install --save-dev @babel/plugin-transform-es2015-spread
 ```
 
 ## Usage
@@ -59,7 +59,7 @@ babel --plugins transform-es2015-spread script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-spread"]
 });
 ```

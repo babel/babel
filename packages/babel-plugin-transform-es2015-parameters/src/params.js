@@ -1,6 +1,6 @@
-import callDelegate from "babel-helper-call-delegate";
-import template from "babel-template";
-import * as t from "babel-types";
+import callDelegate from "@babel/helper-call-delegate";
+import template from "@babel/template";
+import * as t from "@babel/types";
 
 const buildDefaultParam = template(`
   let VARIABLE_NAME =
@@ -111,7 +111,7 @@ export default function convertFunctionParams(path, loose) {
       });
       body.push(defNode);
     } else if (firstOptionalIndex !== null) {
-      const defNode = buildArgumentsAccess(param.node, t.numericLiteral(i));
+      const defNode = buildArgumentsAccess([param.node, t.numericLiteral(i)]);
       body.push(defNode);
     } else if (param.isObjectPattern() || param.isArrayPattern()) {
       const uid = path.scope.generateUidIdentifier("ref");

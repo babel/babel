@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-typeof-symbol
+# @babel/plugin-transform-es2015-typeof-symbol
 
 > ES6 introduces a new native type called [symbols](https://babeljs.io/learn-es2015/#ecmascript-2015-features-symbols). This transformer wraps all `typeof` expressions with a method that replicates native behaviour. (ie. returning "symbol" for symbols)
 
@@ -23,7 +23,7 @@ _typeof(Symbol()) === "symbol";
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-typeof-symbol
+npm install --save-dev @babel/plugin-transform-es2015-typeof-symbol
 ```
 
 ## Usage
@@ -47,7 +47,7 @@ babel --plugins transform-es2015-typeof-symbol script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-typeof-symbol"]
 });
 ```

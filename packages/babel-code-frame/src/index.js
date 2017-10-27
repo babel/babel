@@ -82,6 +82,13 @@ function getTokenType(match) {
     return "bracket";
   }
 
+  if (
+    token.type === "invalid" &&
+    (token.value === "@" || token.value === "#")
+  ) {
+    return "punctuator";
+  }
+
   return token.type;
 }
 
@@ -251,7 +258,7 @@ export default function(
     deprecationWarningShown = true;
 
     const deprecationError = new Error(
-      "Passing lineNumber and colNumber is deprecated to babel-code-frame. Please use `codeFrameColumns`.",
+      "Passing lineNumber and colNumber is deprecated to @babel/code-frame. Please use `codeFrameColumns`.",
     );
     deprecationError.name = "DeprecationWarning";
 

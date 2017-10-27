@@ -1,4 +1,4 @@
-babel-preset-env: `DEBUG` option
+@babel/preset-env: `DEBUG` option
 
 Using targets:
 {
@@ -13,9 +13,8 @@ Using plugins:
   transform-es2015-function-name { "node":"6" }
   transform-exponentiation-operator { "node":"6" }
   transform-async-to-generator { "node":"6" }
-  syntax-trailing-function-commas { "node":"6" }
 
 Using polyfills with `entry` option:
 
-[src/in.js] `import 'babel-polyfill'` was not found.
+[src/in.js] `import '@babel/polyfill'` was not found.
 src/in.js -> lib/in.js

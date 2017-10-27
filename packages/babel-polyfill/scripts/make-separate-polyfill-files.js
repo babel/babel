@@ -7,7 +7,7 @@ function relative(loc) {
   return path.join(__dirname, "..", loc);
 }
 
-const builtIns = require("babel-preset-env/data/built-ins.json");
+const builtIns = require("@babel/preset-env/data/built-ins.json");
 const polyfills = Object.keys(builtIns);
 
 polyfills

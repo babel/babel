@@ -1,13 +1,13 @@
 /* eslint max-len: "off" */
 
-import template from "babel-template";
+import template from "@babel/template";
 
 const helpers = {};
 export default helpers;
 
-function defineHelper(str) {
-  return template(str, { sourceType: "module" });
-}
+// Helpers never include placeholders, so we disable placeholder pattern
+// matching to allow us to use pattern-like variable names.
+const defineHelper = template.program({ placeholderPattern: false });
 
 helpers.typeof = defineHelper(`
   export default function _typeof(obj) {
@@ -87,12 +87,16 @@ helpers.asyncIterator = defineHelper(`
   }
 `);
 
-helpers.asyncGenerator = defineHelper(`
-  function AwaitValue(value) {
-    this.value = value;
+helpers.AwaitValue = defineHelper(`
+  export default function _AwaitValue(value) {
+    this.wrapped = value;
   }
+`);
 
-  function AsyncGenerator(gen) {
+helpers.AsyncGenerator = defineHelper(`
+  import AwaitValue from "AwaitValue";
+
+  export default function AsyncGenerator(gen) {
     var front, back;
 
     function send(key, arg) {
@@ -102,7 +106,7 @@ helpers.asyncGenerator = defineHelper(`
           arg: arg,
           resolve: resolve,
           reject: reject,
-          next: null
+          next: null,
         };
 
         if (back) {
@@ -118,13 +122,18 @@ helpers.asyncGenerator = defineHelper(`
       try {
         var result = gen[key](arg)
         var value = result.value;
-        if (value instanceof AwaitValue) {
-          Promise.resolve(value.value).then(
-            function (arg) { resume("next", arg); },
-            function (arg) { resume("throw", arg); });
-        } else {
-          settle(result.done ? "return" : "normal", result.value);
-        }
+        var wrappedAwait = value instanceof AwaitValue;
+
+        Promise.resolve(wrappedAwait ? value.wrapped : value).then(
+          function (arg) {
+            if (wrappedAwait) {
+              resume("next", arg);
+              return
+            }
+
+            settle(result.done ? "return" : "normal", arg);
+          },
+          function (err) { resume("throw", err); });
       } catch (err) {
         settle("throw", err);
       }
@@ -166,17 +175,24 @@ helpers.asyncGenerator = defineHelper(`
   AsyncGenerator.prototype.next = function (arg) { return this._invoke("next", arg); };
   AsyncGenerator.prototype.throw = function (arg) { return this._invoke("throw", arg); };
   AsyncGenerator.prototype.return = function (arg) { return this._invoke("return", arg); };
+`);
 
-  export default {
-    wrap: function (fn) {
-      return function () {
-        return new AsyncGenerator(fn.apply(this, arguments));
-      };
-    },
-    await: function (value) {
-      return new AwaitValue(value);
-    }
-  };
+helpers.wrapAsyncGenerator = defineHelper(`
+  import AsyncGenerator from "AsyncGenerator";
+
+  export default function _wrapAsyncGenerator(fn) {
+    return function () {
+      return new AsyncGenerator(fn.apply(this, arguments));
+    };
+  }
+`);
+
+helpers.awaitAsyncGenerator = defineHelper(`
+  import AwaitValue from "AwaitValue";
+
+  export default function _awaitAsyncGenerator(value) {
+    return new AwaitValue(value);
+  }
 `);
 
 helpers.asyncGeneratorDelegate = defineHelper(`
@@ -600,7 +616,9 @@ helpers.taggedTemplateLiteralLoose = defineHelper(`
 `);
 
 helpers.temporalRef = defineHelper(`
-  export default function _temporalRef(val, name, undef) {
+  import undef from "temporalUndefined";
+
+  export default function _temporalRef(val, name) {
     if (val === undef) {
       throw new ReferenceError(name + " is not defined - temporal dead zone");
     } else {

@@ -1,4 +1,4 @@
-import syntaxThrowExpressions from "babel-plugin-syntax-throw-expressions";
+import syntaxThrowExpressions from "@babel/plugin-syntax-throw-expressions";
 
 export default function({ types: t }) {
   return {

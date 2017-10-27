@@ -1,4 +1,4 @@
-import syntaxFlow from "babel-plugin-syntax-flow";
+import syntaxFlow from "@babel/plugin-syntax-flow";
 
 export default function({ types: t }) {
   const FLOW_DIRECTIVE = "@flow";

@@ -1,4 +1,4 @@
-# babel-plugin-syntax-optional-catch-binding
+# @babel/plugin-syntax-optional-catch-binding
 
 > This plugin allows Babel to parse optional catch bindings.
 
@@ -18,7 +18,7 @@ try {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-optional-catch-binding
+npm install --save-dev @babel/plugin-syntax-optional-catch-binding
 ```
 
 ## Usage
@@ -42,7 +42,7 @@ babel --plugins syntax-optional-catch-binding script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["syntax-optional-catch-binding"]
 });
 ```

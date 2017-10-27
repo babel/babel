@@ -1,4 +1,4 @@
-# babel-helper-replace-supers
+# @babel/helper-replace-supers
 
 ## Usage
 

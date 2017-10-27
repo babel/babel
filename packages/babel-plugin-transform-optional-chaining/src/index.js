@@ -1,7 +1,9 @@
-import syntaxOptionalChaining from "babel-plugin-syntax-optional-chaining";
+import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 
-export default function({ types: t }) {
-  function optional(path, replacementPath, loose = false) {
+export default function({ types: t }, options) {
+  const { loose = false } = options;
+
+  function optional(path, replacementPath) {
     const { scope } = path;
     const optionals = [];
     const nil = scope.buildUndefinedNode();
@@ -74,7 +76,17 @@ export default function({ types: t }) {
 
       replacementPath.replaceWith(
         t.conditionalExpression(
-          t.binaryExpression("==", check, t.nullLiteral()),
+          loose
+            ? t.binaryExpression("==", t.clone(check), t.nullLiteral())
+            : t.logicalExpression(
+                "||",
+                t.binaryExpression("===", t.clone(check), t.nullLiteral()),
+                t.binaryExpression(
+                  "===",
+                  t.clone(ref),
+                  scope.buildUndefinedNode(),
+                ),
+              ),
           nil,
           replacementPath.node,
         ),
@@ -123,7 +135,7 @@ export default function({ types: t }) {
           return;
         }
 
-        optional(path, findReplacementPath(path), this.opts.loose);
+        optional(path, findReplacementPath(path));
       },
     },
   };

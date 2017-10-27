@@ -1,11 +1,11 @@
-# babel-preset-es2015
+# @babel/preset-es2015
 
 > Babel preset for all es2015 plugins.
 
 ## Install
 
 ```sh
-npm install --save-dev babel-preset-es2015
+npm install --save-dev @babel/preset-es2015
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ babel script.js --presets es2015
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   presets: ["es2015"]
 });
 ```

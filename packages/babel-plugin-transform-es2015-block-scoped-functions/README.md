@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-block-scoped-functions
+# @babel/plugin-transform-es2015-block-scoped-functions
 
 > Babel plugin to ensure function declarations at the block level are block scoped.
 
@@ -31,7 +31,7 @@ name("Steve");
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-block-scoped-functions
+npm install --save-dev @babel/plugin-transform-es2015-block-scoped-functions
 ```
 
 ## Usage
@@ -55,7 +55,7 @@ babel --plugins transform-es2015-block-scoped-functions script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-block-scoped-functions"]
 });
 ```

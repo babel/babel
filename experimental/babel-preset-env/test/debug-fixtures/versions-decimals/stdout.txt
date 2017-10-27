@@ -6,7 +6,7 @@ Warning, the following targets are using a decimal version:
 We recommend using a string for minor/patch versions to avoid numbers like 6.10
 getting parsed as 6.1, which can lead to unexpected behavior.
 
-babel-preset-env: `DEBUG` option
+@babel/preset-env: `DEBUG` option
 
 Using targets:
 {
@@ -42,11 +42,10 @@ Using plugins:
   transform-regenerator { "electron":"0.36", "ie":"10" }
   transform-exponentiation-operator { "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-async-to-generator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  syntax-trailing-function-commas { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
 
 Using polyfills with `entry` option:
 
-[src/in.js] Replaced `babel-polyfill` with the following polyfills:
+[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es6.typed.array-buffer { "electron":"0.36", "ie":"10", "node":"6.1" }
   es6.typed.data-view { "electron":"0.36" }
   es6.typed.int8-array { "electron":"0.36", "ie":"10", "node":"6.1" }
@@ -77,6 +76,16 @@ Using polyfills with `entry` option:
   es6.reflect.set-prototype-of { "electron":"0.36", "ie":"10" }
   es6.promise { "electron":"0.36", "ie":"10", "node":"6.1" }
   es6.symbol { "electron":"0.36", "ie":"10", "node":"6.1" }
+  es6.object.freeze { "ie":"10" }
+  es6.object.seal { "ie":"10" }
+  es6.object.prevent-extensions { "ie":"10" }
+  es6.object.is-frozen { "ie":"10" }
+  es6.object.is-sealed { "ie":"10" }
+  es6.object.is-extensible { "ie":"10" }
+  es6.object.get-own-property-descriptor { "ie":"10" }
+  es6.object.get-prototype-of { "ie":"10" }
+  es6.object.keys { "ie":"10" }
+  es6.object.get-own-property-names { "ie":"10" }
   es6.object.assign { "ie":"10" }
   es6.object.is { "ie":"10" }
   es6.object.set-prototype-of { "ie":"10" }

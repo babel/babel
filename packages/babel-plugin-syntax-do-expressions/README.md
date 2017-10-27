@@ -1,11 +1,11 @@
-# babel-plugin-syntax-do-expressions
+# @babel/plugin-syntax-do-expressions
 
 > Allow parsing of do expressions.
 
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-do-expressions
+npm install --save-dev @babel/plugin-syntax-do-expressions
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ babel --plugins syntax-do-expressions script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["syntax-do-expressions"]
 });
 ```

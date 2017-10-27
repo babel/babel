@@ -300,6 +300,106 @@
     "opera": "38",
     "electron": "1.2"
   },
+  "es6.object.freeze": {
+    "chrome": "44",
+    "edge": "12",
+    "firefox": "35",
+    "safari": "9",
+    "node": "4",
+    "ios": "9",
+    "opera": "31",
+    "electron": "0.31"
+  },
+  "es6.object.seal": {
+    "chrome": "44",
+    "edge": "12",
+    "firefox": "35",
+    "safari": "9",
+    "node": "4",
+    "ios": "9",
+    "opera": "31",
+    "electron": "0.31"
+  },
+  "es6.object.prevent-extensions": {
+    "chrome": "44",
+    "edge": "12",
+    "firefox": "35",
+    "safari": "9",
+    "node": "4",
+    "ios": "9",
+    "opera": "31",
+    "electron": "0.31"
+  },
+  "es6.object.is-frozen": {
+    "chrome": "44",
+    "edge": "12",
+    "firefox": "35",
+    "safari": "9",
+    "node": "4",
+    "ios": "9",
+    "opera": "31",
+    "electron": "0.31"
+  },
+  "es6.object.is-sealed": {
+    "chrome": "44",
+    "edge": "12",
+    "firefox": "35",
+    "safari": "9",
+    "node": "4",
+    "ios": "9",
+    "opera": "31",
+    "electron": "0.31"
+  },
+  "es6.object.is-extensible": {
+    "chrome": "44",
+    "edge": "12",
+    "firefox": "35",
+    "safari": "9",
+    "node": "4",
+    "ios": "9",
+    "opera": "31",
+    "electron": "0.31"
+  },
+  "es6.object.get-own-property-descriptor": {
+    "chrome": "44",
+    "edge": "12",
+    "firefox": "35",
+    "safari": "9",
+    "node": "4",
+    "ios": "9",
+    "opera": "31",
+    "electron": "0.31"
+  },
+  "es6.object.get-prototype-of": {
+    "chrome": "44",
+    "edge": "12",
+    "firefox": "3.5",
+    "safari": "9",
+    "node": "4",
+    "ios": "9",
+    "opera": "31",
+    "electron": "0.31"
+  },
+  "es6.object.keys": {
+    "chrome": "40",
+    "edge": "12",
+    "firefox": "35",
+    "safari": "9",
+    "node": "4",
+    "ios": "9",
+    "opera": "27",
+    "electron": "0.21"
+  },
+  "es6.object.get-own-property-names": {
+    "chrome": "40",
+    "edge": "12",
+    "firefox": "33",
+    "safari": "9",
+    "node": "4",
+    "ios": "9",
+    "opera": "27",
+    "electron": "0.21"
+  },
   "es6.object.assign": {
     "chrome": "45",
     "edge": "12",
@@ -846,5 +946,8 @@
     "opera": "44",
     "electron": "1.7"
   },
-  "es7.promise.finally": {}
+  "es7.promise.finally": {
+    "chrome": "63",
+    "opera": "50"
+  }
 }

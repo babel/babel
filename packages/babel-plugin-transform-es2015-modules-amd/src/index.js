@@ -1,4 +1,4 @@
-import template from "babel-template";
+import template from "@babel/template";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
@@ -7,27 +7,20 @@ import {
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
-} from "babel-helper-module-transforms";
+} from "@babel/helper-module-transforms";
 
 const buildWrapper = template(`
   define(MODULE_NAME, AMD_ARGUMENTS, function(IMPORT_NAMES) {
   })
 `);
 
-export default function({ types: t }) {
+export default function({ types: t }, options) {
+  const { loose, allowTopLevelThis, strict, strictMode, noInterop } = options;
   return {
     visitor: {
       Program: {
-        exit(path, state) {
+        exit(path) {
           if (!isModule(path)) return;
-
-          const {
-            loose,
-            allowTopLevelThis,
-            strict,
-            strictMode,
-            noInterop,
-          } = state.opts;
 
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
@@ -44,23 +37,16 @@ export default function({ types: t }) {
           });
 
           const amdArgs = [];
-          const commonjsArgs = [];
           const importNames = [];
 
           if (hasExports(meta)) {
             amdArgs.push(t.stringLiteral("exports"));
-            commonjsArgs.push(t.identifier("exports"));
 
             importNames.push(t.identifier(meta.exportName));
           }
 
           for (const [source, metadata] of meta.source) {
             amdArgs.push(t.stringLiteral(source));
-            commonjsArgs.push(
-              t.callExpression(t.identifier("require"), [
-                t.stringLiteral(source),
-              ]),
-            );
             importNames.push(t.identifier(metadata.name));
 
             if (!isSideEffectImport(metadata)) {
@@ -96,7 +82,6 @@ export default function({ types: t }) {
               MODULE_NAME: moduleName,
 
               AMD_ARGUMENTS: t.arrayExpression(amdArgs),
-              COMMONJS_ARGUMENTS: commonjsArgs,
               IMPORT_NAMES: importNames,
             }),
           ])[0];

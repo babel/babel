@@ -1,16 +1,17 @@
 // @flow
 
+export { default as File } from "./transformation/file/file";
 export {
   default as buildExternalHelpers,
 } from "./tools/build-external-helpers";
 export { resolvePlugin, resolvePreset } from "./config/loading/files";
 
-export { version } from "../package";
+export { version } from "../package.json";
 export { getEnv } from "./config/helpers/environment";
 
-export * as types from "babel-types";
-export { default as traverse } from "babel-traverse";
-export { default as template } from "babel-template";
+export * as types from "@babel/types";
+export { default as traverse } from "@babel/traverse";
+export { default as template } from "@babel/template";
 
 import loadConfig from "./config";
 
@@ -39,8 +40,8 @@ export { default as transformFile } from "./transform-file";
 export { default as transformFileSync } from "./transform-file-sync";
 
 /**
- * Recommended set of compilable extensions. Not used in babel-core directly, but meant as
- * as an easy source for tooling making use of babel-core.
+ * Recommended set of compilable extensions. Not used in @babel/core directly, but meant as
+ * as an easy source for tooling making use of @babel/core.
  */
 export const DEFAULT_EXTENSIONS = Object.freeze([
   ".js",

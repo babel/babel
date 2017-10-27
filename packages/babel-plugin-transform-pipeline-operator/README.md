@@ -1,11 +1,11 @@
-# babel-plugin-transform-pipeline-operator
+# @babel/plugin-transform-pipeline-operator
 
 Transform pipeline operator `|>` into call expressions. See [the proposal](https://github.com/tc39/proposal-pipeline-operator) for details.
 
 ## Installation
 
 ```sh
-$ npm install babel-plugin-transform-pipeline-operator
+$ npm install @babel/plugin-transform-pipeline-operator
 ```
 
 ## Usage
@@ -29,7 +29,7 @@ $ babel --plugins transform-pipeline-operator script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-pipeline-operator"]
 });
 ```

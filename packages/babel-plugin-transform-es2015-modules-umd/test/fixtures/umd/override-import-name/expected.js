@@ -1,15 +1,15 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define(["babel-template"], factory);
+    define(["es6-promise"], factory);
   } else if (typeof exports !== "undefined") {
-    factory(require("babel-template"));
+    factory(require("es6-promise"));
   } else {
     var mod = {
       exports: {}
     };
-    factory(global.baz);
+    factory(global.Promise);
     global.actual = mod.exports;
   }
-})(this, function (_babelTemplate) {
+})(this, function (_es6Promise) {
   "use strict";
 });

@@ -1,5 +1,5 @@
 const assert = require("assert");
-const babel = require("babel-core");
+const babel = require("@babel/core");
 
 test("Doesn't use the same object for two different nodes in the AST", function() {
   const code = 'import Foo from "bar"; Foo; Foo;';

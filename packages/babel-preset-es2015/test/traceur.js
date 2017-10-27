@@ -1,5 +1,5 @@
 import includes from "lodash/includes";
-import runner from "babel-helper-transform-fixture-test-runner";
+import runner from "@babel/helper-transform-fixture-test-runner";
 
 runner(
   `${__dirname}/fixtures/traceur`,

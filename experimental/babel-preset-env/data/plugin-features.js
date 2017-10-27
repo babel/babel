@@ -128,11 +128,6 @@ const es2017 = {
       "async functions",
     ],
   },
-  "syntax-trailing-function-commas": {
-    features: [
-      "trailing commas in function syntax",
-    ],
-  }
 };
 
 const proposals = require("./shipped-proposals").features;

@@ -1,4 +1,4 @@
-babel-preset-env: `DEBUG` option
+@babel/preset-env: `DEBUG` option
 
 Using targets:
 {}
@@ -29,7 +29,6 @@ Using plugins:
   transform-regenerator {}
   transform-exponentiation-operator {}
   transform-async-to-generator {}
-  syntax-trailing-function-commas {}
   transform-async-generator-functions {}
   transform-object-rest-spread {}
   transform-optional-catch-binding {}
@@ -37,7 +36,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[src/in.js] Replaced `babel-polyfill` with the following polyfills:
+[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es6.typed.array-buffer {}
   es6.typed.data-view {}
   es6.typed.int8-array {}
@@ -68,6 +67,16 @@ Using polyfills with `entry` option:
   es6.reflect.set-prototype-of {}
   es6.promise {}
   es6.symbol {}
+  es6.object.freeze {}
+  es6.object.seal {}
+  es6.object.prevent-extensions {}
+  es6.object.is-frozen {}
+  es6.object.is-sealed {}
+  es6.object.is-extensible {}
+  es6.object.get-own-property-descriptor {}
+  es6.object.get-prototype-of {}
+  es6.object.keys {}
+  es6.object.get-own-property-names {}
   es6.object.assign {}
   es6.object.is {}
   es6.object.set-prototype-of {}

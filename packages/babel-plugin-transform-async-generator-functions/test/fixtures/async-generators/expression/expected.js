@@ -1,7 +1,7 @@
 (() => {
-  var _ref = babelHelpers.asyncGenerator.wrap(function* () {
+  var _ref = babelHelpers.wrapAsyncGenerator(function* () {
     this;
-    yield babelHelpers.asyncGenerator.await(1);
+    yield babelHelpers.awaitAsyncGenerator(1);
     yield 2;
     return 3;
   });

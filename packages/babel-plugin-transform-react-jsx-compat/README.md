@@ -1,4 +1,4 @@
-# babel-plugin-transform-react-jsx-compat
+# @babel/plugin-transform-react-jsx-compat
 
 > Turn JSX into React Pre-0.12 function calls
 
@@ -25,7 +25,7 @@ var profile = React.DOM.div(null,
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-react-jsx-compat
+npm install --save-dev @babel/plugin-transform-react-jsx-compat
 ```
 
 ## Usage
@@ -49,7 +49,7 @@ babel --plugins transform-react-jsx-compat script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-react-jsx-compat"]
 });
 ```

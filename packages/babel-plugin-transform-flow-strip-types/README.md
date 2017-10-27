@@ -1,4 +1,4 @@
-# babel-plugin-transform-flow-strip-types
+# @babel/plugin-transform-flow-strip-types
 
 > Strip all [flow](http://flowtype.org) type annotations and declarations from your output code.
 
@@ -19,7 +19,7 @@ function foo(one, two, three) {}
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-flow-strip-types
+npm install --save-dev @babel/plugin-transform-flow-strip-types
 ```
 
 ## Usage
@@ -43,7 +43,7 @@ babel --plugins transform-flow-strip-types script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-flow-strip-types"]
 });
 ```

@@ -9,7 +9,7 @@ export const COMMENT_KEYS = [
   "innerComments",
 ];
 
-export const LOGICAL_OPERATORS = ["||", "&&"];
+export const LOGICAL_OPERATORS = ["||", "&&", "??"];
 export const UPDATE_OPERATORS = ["++", "--"];
 
 export const BOOLEAN_NUMBER_BINARY_OPERATORS = [">", "<", ">=", "<="];
@@ -62,3 +62,30 @@ export const BLOCK_SCOPED_SYMBOL = Symbol.for("var used to be block scoped");
 export const NOT_LOCAL_BINDING = Symbol.for(
   "should not be considered a local binding",
 );
+
+export const RESERVED_WORDS_ES3_ONLY = new Set([
+  "abstract",
+  "boolean",
+  "byte",
+  "char",
+  "double",
+  "enum",
+  "final",
+  "float",
+  "goto",
+  "implements",
+  "int",
+  "interface",
+  "long",
+  "native",
+  "package",
+  "private",
+  "protected",
+  "public",
+  "short",
+  "static",
+  "synchronized",
+  "throws",
+  "transient",
+  "volatile",
+]);

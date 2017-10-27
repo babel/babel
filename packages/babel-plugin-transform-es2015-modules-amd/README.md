@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-modules-amd
+# @babel/plugin-transform-es2015-modules-amd
 
 > This plugin transforms ES2015 modules to [Asynchronous Module Definition (AMD)](https://github.com/amdjs/amdjs-api).
 
@@ -27,7 +27,7 @@ define(["exports"], function (exports) {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-modules-amd
+npm install --save-dev @babel/plugin-transform-es2015-modules-amd
 ```
 
 ## Usage
@@ -51,7 +51,7 @@ babel --plugins transform-es2015-modules-amd script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-modules-amd"]
 });
 ```

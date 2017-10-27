@@ -1,4 +1,4 @@
-# babel-plugin-transform-class-properties
+# @babel/plugin-transform-class-properties
 
 > This plugin transforms class properties
 
@@ -37,7 +37,7 @@ Below is a class with four class properties which will be transformed.
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-class-properties
+npm install --save-dev @babel/plugin-transform-class-properties
 ```
 
 ## Usage
@@ -73,7 +73,7 @@ babel --plugins transform-class-properties script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-class-properties"]
 });
 ```

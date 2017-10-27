@@ -3,7 +3,7 @@ import chalk from "chalk";
 import stripAnsi from "strip-ansi";
 import codeFrame, { codeFrameColumns } from "..";
 
-describe("babel-code-frame", function() {
+describe("@babel/code-frame", function() {
   it("basic usage", function() {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
     assert.equal(

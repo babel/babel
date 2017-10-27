@@ -1,6 +1,6 @@
 {
-  "name": "babel-plugin-transform-pipeline-operator",
-  "version": "7.0.0-beta.2",
+  "name": "@babel/plugin-transform-pipeline-operator",
+  "version": "7.0.0-beta.3",
   "description": "Transform pipeline operator into call expressions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-pipeline-operator",
   "license": "MIT",
@@ -9,9 +9,12 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-plugin-syntax-pipeline-operator": "7.0.0-beta.2"
+    "@babel/plugin-syntax-pipeline-operator": "7.0.0-beta.3"
+  },
+  "peerDependencies": {
+    "@babel/core": "7.0.0-beta.3"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-beta.2"
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.3"
   }
 }

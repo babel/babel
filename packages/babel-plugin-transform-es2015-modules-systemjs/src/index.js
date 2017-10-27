@@ -1,12 +1,12 @@
-import hoistVariables from "babel-helper-hoist-variables";
-import template from "babel-template";
+import hoistVariables from "@babel/helper-hoist-variables";
+import template from "@babel/template";
 
 const buildTemplate = template(`
-  SYSTEM_REGISTER(MODULE_NAME, [SOURCES], function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
+  SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
     "use strict";
     BEFORE_BODY;
     return {
-      setters: [SETTERS],
+      setters: SETTERS,
       execute: function () {
         BODY;
       }
@@ -22,7 +22,8 @@ const buildExportAll = template(`
 
 const TYPE_IMPORT = "Import";
 
-export default function({ types: t }) {
+export default function({ types: t }, options) {
+  const { systemGlobal = "System" } = options;
   const IGNORE_REASSIGNMENT_SYMBOL = Symbol();
 
   const reassignmentVisitor = {
@@ -359,13 +360,13 @@ export default function({ types: t }) {
           path.node.body = [
             buildTemplate({
               SYSTEM_REGISTER: t.memberExpression(
-                t.identifier(state.opts.systemGlobal || "System"),
+                t.identifier(systemGlobal),
                 t.identifier("register"),
               ),
               BEFORE_BODY: beforeBody,
               MODULE_NAME: moduleName,
-              SETTERS: setters,
-              SOURCES: sources,
+              SETTERS: t.arrayExpression(setters),
+              SOURCES: t.arrayExpression(sources),
               BODY: path.node.body,
               EXPORT_IDENTIFIER: exportIdent,
               CONTEXT_IDENTIFIER: contextIdent,

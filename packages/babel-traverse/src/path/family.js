@@ -2,7 +2,7 @@
 
 import type TraversalContext from "../index";
 import NodePath from "./index";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 export function getOpposite(): ?NodePath {
   if (this.key === "left") {

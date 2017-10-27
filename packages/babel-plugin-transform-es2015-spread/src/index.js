@@ -1,9 +1,8 @@
-export default function({ types: t }) {
-  function getSpreadLiteral(spread, scope, state) {
-    if (
-      state.opts.loose &&
-      !t.isIdentifier(spread.argument, { name: "arguments" })
-    ) {
+export default function({ types: t }, options) {
+  const { loose } = options;
+
+  function getSpreadLiteral(spread, scope) {
+    if (loose && !t.isIdentifier(spread.argument, { name: "arguments" })) {
       return spread.argument;
     } else {
       return scope.toArray(spread.argument, true);
@@ -25,14 +24,14 @@ export default function({ types: t }) {
     return [];
   }
 
-  function build(props: Array, scope, state) {
+  function build(props: Array, scope) {
     const nodes = [];
     let _props = [];
 
     for (const prop of props) {
       if (t.isSpreadElement(prop)) {
         _props = push(_props, nodes);
-        nodes.push(getSpreadLiteral(prop, scope, state));
+        nodes.push(getSpreadLiteral(prop, scope));
       } else {
         _props.push(prop);
       }

@@ -1,4 +1,4 @@
-# babel-helper-annotate-as-pure
+# @babel/helper-annotate-as-pure
 
 ## API
 
@@ -9,8 +9,8 @@ declare export default annotateAsPure(nodeOrPath: Node | NodePath);
 ## Usage
 
 ```js
-import traverse from "babel-traverse";
-import annotateAsPure from "babel-helper-annotate-as-pure";
+import traverse from "@babel/traverse";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 // ...
 
@@ -23,7 +23,7 @@ traverse(file, {
 
 ## Caveat with UglifyJS pre v3.1.0
 
-`babel-helper-annotate-as-pure` will append any existing leading comments to the `#__PURE__` annotation. Versions of UglifyJS prior to v3.1.0 will **ignore** these annotations, as they only check the _last_ leading comment for the annotation.
+`@babel/helper-annotate-as-pure` will append any existing leading comments to the `#__PURE__` annotation. Versions of UglifyJS prior to v3.1.0 will **ignore** these annotations, as they only check the _last_ leading comment for the annotation.
 
 For example, using the `Usage` snippet above:
 

@@ -1,7 +1,7 @@
-import * as helpers from "babel-helpers";
-import generator from "babel-generator";
-import template from "babel-template";
-import * as t from "babel-types";
+import * as helpers from "@babel/helpers";
+import generator from "@babel/generator";
+import template from "@babel/template";
+import * as t from "@babel/types";
 
 const buildUmdWrapper = template(`
   (function (root, factory) {

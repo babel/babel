@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-literals
+# @babel/plugin-transform-es2015-literals
 
 > Compile ES2015 unicode string and number literals to ES5
 
@@ -23,7 +23,7 @@ const u = 'Hello\n\t!'; // unicode string literals, newline and tab
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-literals
+npm install --save-dev @babel/plugin-transform-es2015-literals
 ```
 
 ## Usage
@@ -47,7 +47,7 @@ babel --plugins transform-es2015-literals script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-literals"]
 });
 ```

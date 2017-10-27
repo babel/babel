@@ -1,4 +1,4 @@
-import syntaxFunctionBind from "babel-plugin-syntax-function-bind";
+import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
 
 export default function({ types: t }) {
   function getTempId(scope) {
@@ -16,7 +16,7 @@ export default function({ types: t }) {
 
   function inferBindContext(bind, scope) {
     const staticContext = getStaticContext(bind, scope);
-    if (staticContext) return staticContext;
+    if (staticContext) return t.cloneDeep(staticContext);
 
     const tempId = getTempId(scope);
     if (bind.object) {

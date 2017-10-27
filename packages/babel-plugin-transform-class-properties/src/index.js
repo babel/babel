@@ -1,8 +1,10 @@
-import nameFunction from "babel-helper-function-name";
-import template from "babel-template";
-import syntaxClassProperties from "babel-plugin-syntax-class-properties";
+import nameFunction from "@babel/helper-function-name";
+import template from "@babel/template";
+import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
 
-export default function({ types: t }) {
+export default function({ types: t }, options) {
+  const { loose } = options;
+
   const findBareSupers = {
     Super(path) {
       if (path.parentPath.isCallExpression({ callee: path.node })) {
@@ -23,39 +25,37 @@ export default function({ types: t }) {
     },
   };
 
-  const buildObjectDefineProperty = template(`
-    Object.defineProperty(REF, KEY, {
-      configurable: true,
-      enumerable: true,
-      writable: true,
-      value: VALUE
-    });
-  `);
-
-  const buildClassPropertySpec = (ref, { key, value, computed }, scope) =>
-    buildObjectDefineProperty({
+  const buildClassPropertySpec = (ref, { key, value, computed }, scope) => {
+    return template.statement`
+      Object.defineProperty(REF, KEY, {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        value: VALUE
+      });
+    `({
       REF: ref,
       KEY: t.isIdentifier(key) && !computed ? t.stringLiteral(key.name) : key,
-      VALUE: value ? value : scope.buildUndefinedNode(),
+      VALUE: value || scope.buildUndefinedNode(),
     });
+  };
 
-  const buildClassPropertyLoose = (ref, { key, value, computed }, scope) =>
-    t.expressionStatement(
-      t.assignmentExpression(
-        "=",
-        t.memberExpression(ref, key, computed || t.isLiteral(key)),
-        value ? value : scope.buildUndefinedNode(),
-      ),
-    );
+  const buildClassPropertyLoose = (ref, { key, value, computed }, scope) => {
+    return template.statement`MEMBER = VALUE`({
+      MEMBER: t.memberExpression(ref, key, computed || t.isLiteral(key)),
+      VALUE: value || scope.buildUndefinedNode(),
+    });
+  };
+
+  const buildClassProperty = loose
+    ? buildClassPropertyLoose
+    : buildClassPropertySpec;
 
   return {
     inherits: syntaxClassProperties,
 
     visitor: {
-      Class(path, state) {
-        const buildClassProperty = state.opts.loose
-          ? buildClassPropertyLoose
-          : buildClassPropertySpec;
+      Class(path) {
         const isDerived = !!path.node.superClass;
         let constructor;
         const props = [];
@@ -93,6 +93,20 @@ export default function({ types: t }) {
           if (isStatic) {
             nodes.push(buildClassProperty(ref, propNode, path.scope));
           } else {
+            // Make sure computed property names are only evaluated once (upon
+            // class definition).
+            if (propNode.computed) {
+              const ident = path.scope.generateUidIdentifierBasedOnNode(
+                propNode.key,
+              );
+              nodes.push(
+                t.variableDeclaration("var", [
+                  t.variableDeclarator(ident, propNode.key),
+                ]),
+              );
+              propNode.key = t.clone(ident);
+            }
+
             instanceBody.push(
               buildClassProperty(t.thisExpression(), propNode, path.scope),
             );

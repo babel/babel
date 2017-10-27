@@ -1,12 +1,12 @@
-# babel-core
+# @babel/core
 
 > Babel compiler core.
 
 
 ```javascript
-var babel = require("babel-core");
-import { transform } from "babel-core";
-import * as babel from "babel-core";
+var babel = require("@babel/core");
+import { transform } from "@babel/core";
+import * as babel from "@babel/core";
 ```
 
 All transformations will use your local configuration files (`.babelrc` or in `package.json`). See [options](#options) to disable it.
@@ -97,7 +97,7 @@ Following is a table of the options you can use:
 | `extends`                | `null`               | A path to a `.babelrc` file to extend |
 | `filename`               | `"unknown"`          | Filename for use in errors etc |
 | `filenameRelative`       | `(filename)`         | Filename relative to `sourceRoot` |
-| `generatorOpts`          | `{}`                 | An object containing the options to be passed down to the babel code generator, babel-generator |
+| `generatorOpts`          | `{}`                 | An object containing the options to be passed down to the babel code generator, @babel/generator |
 | `getModuleId`            | `null`               | Specify a custom callback to generate a module id with. Called as `getModuleId(moduleName)`. If falsy value is returned then the generated module id is used |
 | `highlightCode`          | `true`               | ANSI highlight syntax error code frames |
 | `ignore`                 | `null`               | Opposite to the `only` option. `ignore` is disregarded if `only` is specified |

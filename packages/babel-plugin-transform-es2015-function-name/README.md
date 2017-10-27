@@ -1,4 +1,4 @@
-# babel-plugin-transform-es2015-function-name
+# @babel/plugin-transform-es2015-function-name
 
 > Apply ES2015 function.name semantics to all functions
 
@@ -21,7 +21,7 @@ var number = function number(x) {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-es2015-function-name
+npm install --save-dev @babel/plugin-transform-es2015-function-name
 ```
 
 ## Usage
@@ -45,7 +45,7 @@ babel --plugins transform-es2015-function-name script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-es2015-function-name"]
 });
 ```

@@ -1,11 +1,11 @@
-import type NodePath from "babel-traverse";
+import type NodePath from "@babel/traverse";
 
-export default function() {
+export default function(babel, options) {
+  const { spec } = options;
   return {
     visitor: {
       ArrowFunctionExpression(
         path: NodePath<BabelNodeArrowFunctionExpression>,
-        state: Object,
       ) {
         // In some conversion cases, it may have already been converted to a function while this callback
         // was queued up.
@@ -15,7 +15,7 @@ export default function() {
           // While other utils may be fine inserting other arrows to make more transforms possible,
           // the arrow transform itself absolutely cannot insert new arrow functions.
           allowInsertArrow: false,
-          specCompliant: !!state.opts.spec,
+          specCompliant: !!spec,
         });
       },
     },

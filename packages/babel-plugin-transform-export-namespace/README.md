@@ -1,4 +1,4 @@
-# babel-plugin-transform-export-namespace
+# @babel/plugin-transform-export-namespace
 
 > Compile export-ns-from statements to ES2015
 
@@ -11,7 +11,7 @@ export * as ns from 'mod';
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-export-namespace
+npm install --save-dev @babel/plugin-transform-export-namespace
 ```
 
 ## Usage
@@ -35,7 +35,7 @@ babel --plugins transform-export-namespace script.js
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
+require("@babel/core").transform("code", {
   plugins: ["transform-export-namespace"]
 });
 ```

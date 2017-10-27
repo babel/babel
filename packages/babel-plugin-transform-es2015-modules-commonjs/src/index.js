@@ -5,23 +5,25 @@ import {
   buildNamespaceInitStatements,
   ensureStatementsHoisted,
   wrapInterop,
-} from "babel-helper-module-transforms";
-import simplifyAccess from "babel-helper-simple-access";
+} from "@babel/helper-module-transforms";
+import simplifyAccess from "@babel/helper-simple-access";
 
-export default function({ types: t, template }) {
-  const moduleAssertion = template(`
+export default function({ types: t, template }, options) {
+  const {
+    loose,
+    allowTopLevelThis,
+    strict,
+    strictMode,
+    noInterop,
+
+    // Defaulting to 'true' for now. May change before 7.x major.
+    allowCommonJSExports = true,
+  } = options;
+  const getAssertion = localName => template.expression.ast`
     (function(){
-      throw new Error("The CommonJS 'module' variable is not available in ES6 modules.");
-    })();
-  `);
-  const exportsAssertion = template(`
-    (function(){
-      throw new Error("The CommonJS 'exports' variable is not available in ES6 modules.");
-    })();
-  `);
-  const getAssertion = localName =>
-    (localName === "module" ? moduleAssertion() : exportsAssertion())
-      .expression;
+      throw new Error("The CommonJS '" + "${localName}" + "' variable is not available in ES6 modules.");
+    })()
+  `;
 
   const moduleExportsVisitor = {
     ReferencedIdentifier(path) {
@@ -85,21 +87,10 @@ export default function({ types: t, template }) {
   return {
     visitor: {
       Program: {
-        exit(path, state) {
+        exit(path) {
           // For now this requires unambiguous rather that just sourceType
           // because Babel currently parses all files as sourceType:module.
           if (!isModule(path, true /* requireUnambiguous */)) return;
-
-          const {
-            loose,
-            allowTopLevelThis,
-            strict,
-            strictMode,
-            noInterop,
-
-            // Defaulting to 'true' for now. May change before 7.x major.
-            allowCommonJSExports = true,
-          } = state.opts;
 
           // Rename the bindings auto-injected into the scope so there is no
           // risk of conflict between the bindings.
