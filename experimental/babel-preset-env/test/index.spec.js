@@ -119,11 +119,11 @@ describe("babel-preset-env", () => {
     it("should return in transforms array", () => {
       assert.deepEqual(
         babelPresetEnv.transformIncludesAndExcludes([
-          "transform-es2015-arrow-functions",
+          "transform-arrow-functions",
         ]),
         {
-          all: ["transform-es2015-arrow-functions"],
-          plugins: new Set(["transform-es2015-arrow-functions"]),
+          all: ["transform-arrow-functions"],
+          plugins: new Set(["transform-arrow-functions"]),
           builtIns: new Set(),
         },
       );

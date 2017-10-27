@@ -10,25 +10,25 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-es2015-constants { "ie":"10" }
-  transform-es2015-arrow-functions { "ie":"10" }
-  transform-es2015-block-scoped-functions { "ie":"10" }
-  transform-es2015-block-scoping { "ie":"10" }
-  transform-es2015-classes { "ie":"10" }
-  transform-es2015-computed-properties { "ie":"10" }
-  transform-es2015-destructuring { "ie":"10" }
-  transform-es2015-duplicate-keys { "ie":"10" }
-  transform-es2015-for-of { "ie":"10" }
-  transform-es2015-function-name { "ie":"10" }
-  transform-es2015-literals { "ie":"10" }
-  transform-es2015-object-super { "ie":"10" }
-  transform-es2015-parameters { "ie":"10" }
-  transform-es2015-shorthand-properties { "ie":"10" }
-  transform-es2015-spread { "ie":"10" }
-  transform-es2015-sticky-regex { "ie":"10" }
-  transform-es2015-template-literals { "ie":"10" }
-  transform-es2015-typeof-symbol { "ie":"10" }
-  transform-es2015-unicode-regex { "ie":"10" }
+  check-constants { "ie":"10" }
+  transform-arrow-functions { "ie":"10" }
+  transform-block-scoped-functions { "ie":"10" }
+  transform-block-scoping { "ie":"10" }
+  transform-classes { "ie":"10" }
+  transform-computed-properties { "ie":"10" }
+  transform-destructuring { "ie":"10" }
+  transform-duplicate-keys { "ie":"10" }
+  transform-for-of { "ie":"10" }
+  transform-function-name { "ie":"10" }
+  transform-literals { "ie":"10" }
+  transform-object-super { "ie":"10" }
+  transform-parameters { "ie":"10" }
+  transform-shorthand-properties { "ie":"10" }
+  transform-spread { "ie":"10" }
+  transform-sticky-regex { "ie":"10" }
+  transform-template-literals { "ie":"10" }
+  transform-typeof-symbol { "ie":"10" }
+  transform-unicode-regex { "ie":"10" }
   transform-new-target { "ie":"10" }
   transform-regenerator { "ie":"10" }
   transform-exponentiation-operator { "ie":"10", "node":"6.10" }

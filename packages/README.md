@@ -58,7 +58,7 @@ Check out the [`babel-handbook`](https://github.com/thejameskyle/babel-handbook/
 
 After Babel 6, the default transforms were removed; if you don't specify any plugins/presets, Babel will just return the original source code.
 
-The transformer[s] used in Babel are the independent pieces of code that transform specific things. For example: the [`es2015-arrow-functions`](/packages/babel-plugin-transform-es2015-arrow-functions) transform specifically changes arrow functions into regular functions. A preset is simply an array of plugins that make it easier to run a whole a set of transforms without specifying each one manually.
+The transformer[s] used in Babel are the independent pieces of code that transform specific things. For example: the [`es2015-arrow-functions`](/packages/babel-plugin-transform-arrow-functions) transform specifically changes arrow functions into regular functions. A preset is simply an array of plugins that make it easier to run a whole a set of transforms without specifying each one manually.
 
 | Package | Version | Dependencies | Description |
 |--------|-------|------------|---|

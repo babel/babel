@@ -1,0 +1,4 @@
+{
+  "throws": "'super.*' is not allowed before super()",
+  "plugins": ["transform-classes"]
+}

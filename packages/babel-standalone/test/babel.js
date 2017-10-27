@@ -81,7 +81,7 @@ describe("@babel/standalone", () => {
 
   it("handles specifying a plugin by name", () => {
     const output = Babel.transform('const getMessage = () => "Hello World"', {
-      plugins: ["transform-es2015-arrow-functions"],
+      plugins: ["transform-arrow-functions"],
     }).code;
     // Transforms arrow syntax but NOT "const".
     assert.equal(

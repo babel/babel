@@ -13,25 +13,25 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-es2015-constants { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-es2015-arrow-functions { "ie":"10", "ios":"9", "safari":"7" }
-  transform-es2015-block-scoped-functions { "ie":"10", "ios":"9", "safari":"7" }
-  transform-es2015-block-scoping { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-es2015-classes { "ie":"10", "ios":"9", "safari":"7" }
-  transform-es2015-computed-properties { "ie":"10", "safari":"7" }
-  transform-es2015-destructuring { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-es2015-duplicate-keys { "ie":"10", "safari":"7" }
-  transform-es2015-for-of { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-es2015-function-name { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-es2015-literals { "firefox":"49", "ie":"10", "safari":"7" }
-  transform-es2015-object-super { "ie":"10", "ios":"9", "safari":"7" }
-  transform-es2015-parameters { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-es2015-shorthand-properties { "ie":"10", "safari":"7" }
-  transform-es2015-spread { "ie":"10", "ios":"9", "safari":"7" }
-  transform-es2015-sticky-regex { "ie":"10", "ios":"9", "safari":"7" }
-  transform-es2015-template-literals { "ie":"10", "safari":"7" }
-  transform-es2015-typeof-symbol { "ie":"10", "safari":"7" }
-  transform-es2015-unicode-regex { "ie":"10", "ios":"9", "safari":"7" }
+  check-constants { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  transform-arrow-functions { "ie":"10", "ios":"9", "safari":"7" }
+  transform-block-scoped-functions { "ie":"10", "ios":"9", "safari":"7" }
+  transform-block-scoping { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  transform-classes { "ie":"10", "ios":"9", "safari":"7" }
+  transform-computed-properties { "ie":"10", "safari":"7" }
+  transform-destructuring { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  transform-duplicate-keys { "ie":"10", "safari":"7" }
+  transform-for-of { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  transform-function-name { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  transform-literals { "firefox":"49", "ie":"10", "safari":"7" }
+  transform-object-super { "ie":"10", "ios":"9", "safari":"7" }
+  transform-parameters { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  transform-shorthand-properties { "ie":"10", "safari":"7" }
+  transform-spread { "ie":"10", "ios":"9", "safari":"7" }
+  transform-sticky-regex { "ie":"10", "ios":"9", "safari":"7" }
+  transform-template-literals { "ie":"10", "safari":"7" }
+  transform-typeof-symbol { "ie":"10", "safari":"7" }
+  transform-unicode-regex { "ie":"10", "ios":"9", "safari":"7" }
   transform-new-target { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   transform-regenerator { "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-exponentiation-operator { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }

@@ -19,25 +19,25 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-es2015-constants { "electron":"0.36", "ie":"10" }
-  transform-es2015-arrow-functions { "ie":"10" }
-  transform-es2015-block-scoped-functions { "ie":"10" }
-  transform-es2015-block-scoping { "electron":"0.36", "ie":"10" }
-  transform-es2015-classes { "ie":"10" }
-  transform-es2015-computed-properties { "ie":"10" }
-  transform-es2015-destructuring { "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-es2015-duplicate-keys { "ie":"10" }
-  transform-es2015-for-of { "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-es2015-function-name { "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-es2015-literals { "ie":"10" }
-  transform-es2015-object-super { "ie":"10" }
-  transform-es2015-parameters { "electron":"0.36", "ie":"10" }
-  transform-es2015-shorthand-properties { "ie":"10" }
-  transform-es2015-spread { "ie":"10" }
-  transform-es2015-sticky-regex { "electron":"0.36", "ie":"10" }
-  transform-es2015-template-literals { "ie":"10" }
-  transform-es2015-typeof-symbol { "ie":"10" }
-  transform-es2015-unicode-regex { "electron":"0.36", "ie":"10" }
+  check-constants { "electron":"0.36", "ie":"10" }
+  transform-arrow-functions { "ie":"10" }
+  transform-block-scoped-functions { "ie":"10" }
+  transform-block-scoping { "electron":"0.36", "ie":"10" }
+  transform-classes { "ie":"10" }
+  transform-computed-properties { "ie":"10" }
+  transform-destructuring { "electron":"0.36", "ie":"10", "node":"6.1" }
+  transform-duplicate-keys { "ie":"10" }
+  transform-for-of { "electron":"0.36", "ie":"10", "node":"6.1" }
+  transform-function-name { "electron":"0.36", "ie":"10", "node":"6.1" }
+  transform-literals { "ie":"10" }
+  transform-object-super { "ie":"10" }
+  transform-parameters { "electron":"0.36", "ie":"10" }
+  transform-shorthand-properties { "ie":"10" }
+  transform-spread { "ie":"10" }
+  transform-sticky-regex { "electron":"0.36", "ie":"10" }
+  transform-template-literals { "ie":"10" }
+  transform-typeof-symbol { "ie":"10" }
+  transform-unicode-regex { "electron":"0.36", "ie":"10" }
   transform-new-target { "ie":"10" }
   transform-regenerator { "electron":"0.36", "ie":"10" }
   transform-exponentiation-operator { "electron":"0.36", "ie":"10", "node":"6.1" }

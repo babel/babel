@@ -1,101 +1,101 @@
 const es2015 = {
-  "check-es2015-constants": {
+  "check-constants": {
     features: [
       "const",
     ],
   },
-  "transform-es2015-arrow-functions": {
+  "transform-arrow-functions": {
     features: [
       "arrow functions",
     ],
   },
-  "transform-es2015-block-scoped-functions": {
+  "transform-block-scoped-functions": {
     features: [
       "block-level function declaration"
     ],
   },
-  "transform-es2015-block-scoping": {
+  "transform-block-scoping": {
     features: [
       "const",
       "let",
     ],
   },
-  "transform-es2015-classes": {
+  "transform-classes": {
     features: [
       "class",
       "super",
     ],
   },
-  "transform-es2015-computed-properties": {
+  "transform-computed-properties": {
     features: [
       "object literal extensions / computed properties",
     ],
   },
-  "transform-es2015-destructuring": {
+  "transform-destructuring": {
     features: [
       "destructuring, assignment",
       "destructuring, declarations",
       "destructuring, parameters",
     ],
   },
-  "transform-es2015-duplicate-keys": {
+  "transform-duplicate-keys": {
     features: [
       "miscellaneous / duplicate property names in strict mode",
     ],
   },
-  "transform-es2015-for-of": {
+  "transform-for-of": {
     features: [
       "for..of loops",
     ],
   },
-  "transform-es2015-function-name": {
+  "transform-function-name": {
     features: [
       "function \"name\" property",
     ]
   },
-  "transform-es2015-literals": {
+  "transform-literals": {
     features: [
       "Unicode code point escapes",
     ],
   },
-  "transform-es2015-object-super": {
+  "transform-object-super": {
     features: [
       "super",
     ],
   },
-  "transform-es2015-parameters": {
+  "transform-parameters": {
     features: [
       "default function parameters",
       "rest parameters",
     ],
   },
-  "transform-es2015-shorthand-properties": {
+  "transform-shorthand-properties": {
     features: [
       "object literal extensions / shorthand properties",
     ],
   },
-  "transform-es2015-spread": {
+  "transform-spread": {
     features: [
       "spread (...) operator",
     ],
   },
-  "transform-es2015-sticky-regex": {
+  "transform-sticky-regex": {
     features: [
       "RegExp \"y\" and \"u\" flags / \"y\" flag, lastIndex",
       "RegExp \"y\" and \"u\" flags / \"y\" flag",
     ],
   },
-  "transform-es2015-template-literals": {
+  "transform-template-literals": {
     features: [
       "template literals",
     ],
   },
-  "transform-es2015-typeof-symbol": {
+  "transform-typeof-symbol": {
     features: [
       "Symbol / typeof support"
     ],
   },
-  "transform-es2015-unicode-regex": {
+  "transform-unicode-regex": {
     features: [
       "RegExp \"y\" and \"u\" flags / \"u\" flag, case folding",
       "RegExp \"y\" and \"u\" flags / \"u\" flag, Unicode code point escapes",

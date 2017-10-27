@@ -1,3 +1,0 @@
-{
-  "plugins": ["transform-es2015-block-scoping", "syntax-jsx", "transform-react-jsx", "transform-es2015-block-scoped-functions", "transform-es2015-arrow-functions"]
-}

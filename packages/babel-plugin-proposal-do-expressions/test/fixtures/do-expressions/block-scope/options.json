@@ -1,3 +1,3 @@
 {
-  "plugins": ["transform-es2015-block-scoping", "proposal-do-expressions"]
+  "plugins": ["transform-block-scoping", "proposal-do-expressions"]
 }
