@@ -38,21 +38,21 @@ npm install --save-dev @babel/plugin-transform-optional-catch-binding
 
 ```json
 {
-  "plugins": ["transform-optional-catch-binding"]
+  "plugins": ["@babel/transform-optional-catch-binding"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-optional-catch-binding script.js
+babel --plugins @babel/transform-optional-catch-binding script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-optional-catch-binding"]
+  plugins: ["@babel/transform-optional-catch-binding"]
 });
 ```
 

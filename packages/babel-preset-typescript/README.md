@@ -36,20 +36,20 @@ npm install --save-dev @babel/preset-typescript
 
 ```json
 {
-  "presets": ["typescript"]
+  "presets": ["@babel/typescript"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --presets typescript script.ts
+babel --presets @babel/typescript script.ts
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  presets: ["typescript"]
+  presets: ["@babel/typescript"]
 });
 ```

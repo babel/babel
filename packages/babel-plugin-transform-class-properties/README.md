@@ -50,7 +50,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["transform-class-properties"]
+  "plugins": ["@babel/transform-class-properties"]
 }
 ```
 
@@ -59,7 +59,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["transform-class-properties", { "loose": true }]
+    ["@babel/transform-class-properties", { "loose": true }]
   ]
 }
 ```
@@ -67,14 +67,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins transform-class-properties script.js
+babel --plugins @babel/transform-class-properties script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-class-properties"]
+  plugins: ["@babel/transform-class-properties"]
 });
 ```
 

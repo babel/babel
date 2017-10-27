@@ -173,7 +173,7 @@ For example, in [`babel-plugin-transform-exponentiation-operator/test`](https://
 - There is an `index.js` file. It imports our [test helper](https://github.com/babel/babel/tree/master/packages/babel-helper-plugin-test-runner). (You don't have to worry about this).
 - There can be multiple folders under [`/fixtures`](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures)
    - There is an [`options.json`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/options.json) file whose function is similar to a `.babelrc` file, allowing you to pass in the plugins and settings you need for your tests.
-   - For this test, we only need the relevant plugin, so it's just `{ "plugins": ["transform-exponentiation-operator"] }`.
+   - For this test, we only need the relevant plugin, so it's just `{ "plugins": ["@babel/transform-exponentiation-operator"] }`.
    - If necessary, you can have an `options.json` with different options in each subfolder.
 
 - In each subfolder, you can organize your directory structure by categories of tests. (Example: these folders can be named after the feature you are testing or can reference the issue number they fix)
@@ -208,8 +208,8 @@ If you need to check for an error that is thrown you can add to the `options.jso
 ```js
 // options.json example
 {
-  "plugins": [["transform-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
-  "throws": "transform-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
+  "plugins": [["@babel/transform-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
+  "throws": "@babel/transform-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
 }
 ```
 

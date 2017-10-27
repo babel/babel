@@ -44,7 +44,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["transform-runtime"]
+  "plugins": ["@babel/transform-runtime"]
 }
 ```
 
@@ -53,7 +53,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["transform-runtime", {
+    ["@babel/transform-runtime", {
       "helpers": false,
       "polyfill": false,
       "regenerator": true,
@@ -66,14 +66,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins transform-runtime script.js
+babel --plugins @babel/transform-runtime script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-runtime"]
+  plugins: ["@babel/transform-runtime"]
 });
 ```
 

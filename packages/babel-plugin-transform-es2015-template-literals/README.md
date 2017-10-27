@@ -32,7 +32,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["transform-es2015-template-literals"]
+  "plugins": ["@babel/transform-es2015-template-literals"]
 }
 ```
 
@@ -41,7 +41,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["transform-es2015-template-literals", {
+    ["@babel/transform-es2015-template-literals", {
       "loose": true
     }]
   ]
@@ -51,14 +51,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-template-literals script.js
+babel --plugins @babel/transform-es2015-template-literals script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-template-literals"]
+  plugins: ["@babel/transform-es2015-template-literals"]
 });
 ```
 

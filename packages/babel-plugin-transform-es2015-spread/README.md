@@ -34,7 +34,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["transform-es2015-spread"]
+  "plugins": ["@babel/transform-es2015-spread"]
 }
 ```
 
@@ -43,7 +43,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["transform-es2015-spread", {
+    ["@babel/transform-es2015-spread", {
       "loose": true
     }]
   ]
@@ -53,14 +53,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-spread script.js
+babel --plugins @babel/transform-es2015-spread script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-spread"]
+  plugins: ["@babel/transform-es2015-spread"]
 });
 ```
 

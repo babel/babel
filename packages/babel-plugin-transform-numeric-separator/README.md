@@ -71,27 +71,27 @@ npm install --save-dev @babel/plugin-transform-numeric-separator
 
 ```json
 {
-  "plugins": ["transform-numeric-separator"]
+  "plugins": ["@babel/transform-numeric-separator"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-numeric-separator script.js
+babel --plugins @babel/transform-numeric-separator script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-numeric-separator"]
+  plugins: ["@babel/transform-numeric-separator"]
 });
 ```
 
 ## Additional Information
 
-If you need to further compile ES2015 Decimal, Binary, Hex and Octal number representations to their pre-ES2015 numeric literal form, add the [`"transform-es2015-literals"`](http://babeljs.io/docs/plugins/transform-es2015-literals/) plugin:
+If you need to further compile ES2015 Decimal, Binary, Hex and Octal number representations to their pre-ES2015 numeric literal form, add the [`"@babel/transform-es2015-literals"`](http://babeljs.io/docs/plugins/transform-es2015-literals/) plugin:
 
 > `transform-es2015-literals` is already included in [@babel/preset-env](https://github.com/babel/babel/tree/master/experimental/babel-preset-env) and @babel/preset-es2015.
 
@@ -101,11 +101,11 @@ If you need to further compile ES2015 Decimal, Binary, Hex and Octal number repr
 
 ```json
 {
-  "presets": ["env"],
-  "plugins": ["transform-numeric-separator"]
+  "presets": ["@babel/env"],
+  "plugins": ["@babel/transform-numeric-separator"]
 }
 {
-  "plugins": ["transform-numeric-separator", "transform-es2015-literals"]
+  "plugins": ["@babel/transform-numeric-separator", "@babel/transform-es2015-literals"]
 }
 ```
 

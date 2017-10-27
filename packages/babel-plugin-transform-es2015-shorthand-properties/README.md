@@ -50,20 +50,20 @@ npm install --save-dev @babel/plugin-transform-es2015-shorthand-properties
 
 ```json
 {
-  "plugins": ["transform-es2015-shorthand-properties"]
+  "plugins": ["@babel/transform-es2015-shorthand-properties"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-shorthand-properties script.js
+babel --plugins @babel/transform-es2015-shorthand-properties script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-shorthand-properties"]
+  plugins: ["@babel/transform-es2015-shorthand-properties"]
 });
 ```

@@ -22,21 +22,21 @@ npm install --save-dev @babel/plugin-transform-export-namespace
 
 ```json
 {
-  "plugins": ["transform-export-namespace"]
+  "plugins": ["@babel/transform-export-namespace"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-export-namespace script.js
+babel --plugins @babel/transform-export-namespace script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-export-namespace"]
+  plugins: ["@babel/transform-export-namespace"]
 });
 ```
 ## References

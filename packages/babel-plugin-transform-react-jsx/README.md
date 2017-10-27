@@ -68,7 +68,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["transform-react-jsx"]
+  "plugins": ["@babel/transform-react-jsx"]
 }
 ```
 
@@ -77,7 +77,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["transform-react-jsx", {
+    ["@babel/transform-react-jsx", {
       "pragma": "dom" // default pragma is React.createElement
     }]
   ]
@@ -87,14 +87,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins transform-react-jsx script.js
+babel --plugins @babel/transform-react-jsx script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-react-jsx"]
+  plugins: ["@babel/transform-react-jsx"]
 });
 ```
 

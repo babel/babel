@@ -95,21 +95,21 @@ npm install --save-dev @babel/plugin-transform-optional-chaining
 
 ```json
 {
-  "plugins": ["transform-optional-chaining"]
+  "plugins": ["@babel/transform-optional-chaining"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-optional-chaining script.js
+babel --plugins @babel/transform-optional-chaining script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-optional-chaining"]
+  plugins: ["@babel/transform-optional-chaining"]
 });
 ```
 

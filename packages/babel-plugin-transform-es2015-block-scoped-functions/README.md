@@ -42,20 +42,20 @@ npm install --save-dev @babel/plugin-transform-es2015-block-scoped-functions
 
 ```json
 {
-  "plugins": ["transform-es2015-block-scoped-functions"]
+  "plugins": ["@babel/transform-es2015-block-scoped-functions"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-block-scoped-functions script.js
+babel --plugins @babel/transform-es2015-block-scoped-functions script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-block-scoped-functions"]
+  plugins: ["@babel/transform-es2015-block-scoped-functions"]
 });
 ```

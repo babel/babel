@@ -15,34 +15,12 @@ And with the `development` option:
 
 > Note: Flow syntax support is no longer enabled in v7. For that, you will need to add the [Flow preset](https://babeljs.io/docs/plugins/preset-flow/).
 
-## Install
+## Installation
 
 > You can also check out the React [Getting Started page](https://facebook.github.io/react/docs/hello-world.html)
 
-> For more info, check out the setup page on the [cli](/docs/setup/) and the [usage](/docs/usage/cli/) docs.
-
-Install the CLI and this preset
-
 ```sh
-npm install --save-dev @babel/cli @babel/preset-react
-```
-
-Make a .babelrc config file with the preset
-
-```sh
-echo '{ "presets": ["react"] }' > .babelrc
-```
-
-Create a file to run on
-
-```sh
-echo '<h1>Hello, world!</h1>' > index.js
-```
-
-View the output
-
-```sh
-./node_modules/.bin/babel index.js
+npm install --save-dev @babel/preset-react
 ```
 
 ## Usage
@@ -53,21 +31,21 @@ View the output
 
 ```json
 {
-  "presets": ["react"]
+  "presets": ["@babel/react"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel script.js --presets react
+babel --presets @babel/react script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  presets: ["react"]
+  presets: ["@babel/react"]
 });
 ```
 
@@ -86,7 +64,7 @@ This is useful when combined with either a `babelrc.js` or [env option in a .bab
 ```js
 module.exports = {
   presets: [
-    ["react", {
+    ["@babel/react", {
       development: process.env.BABEL_ENV === "development"
     }],
   ],
@@ -99,11 +77,11 @@ module.exports = {
 
 ```json
 {
-  "presets": ["react"],
+  "presets": ["@babel/react"],
   "env": {
     "development": {
       "presets": [
-        ["react", { "development": true }]
+        ["@babel/react", { "development": true }]
       ]
     }
   }

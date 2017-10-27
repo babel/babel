@@ -38,21 +38,21 @@ npm install --save-dev @babel/plugin-transform-es2015-modules-amd
 
 ```json
 {
-  "plugins": ["transform-es2015-modules-amd"]
+  "plugins": ["@babel/transform-es2015-modules-amd"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-modules-amd script.js
+babel --plugins @babel/transform-es2015-modules-amd script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-modules-amd"]
+  plugins: ["@babel/transform-es2015-modules-amd"]
 });
 ```
 

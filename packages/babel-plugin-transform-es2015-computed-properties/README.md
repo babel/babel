@@ -61,7 +61,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["transform-es2015-computed-properties"]
+  "plugins": ["@babel/transform-es2015-computed-properties"]
 }
 ```
 
@@ -70,7 +70,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["transform-es2015-computed-properties", {
+    ["@babel/transform-es2015-computed-properties", {
       "loose": true
     }]
   ]
@@ -80,14 +80,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-computed-properties script.js
+babel --plugins @babel/transform-es2015-computed-properties script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-computed-properties"]
+  plugins: ["@babel/transform-es2015-computed-properties"]
 });
 ```
 

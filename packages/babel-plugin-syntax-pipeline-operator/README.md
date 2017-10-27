@@ -16,20 +16,20 @@ $ npm install @babel/plugin-syntax-pipeline-operator
 
 ```json
 {
-  "plugins": ["syntax-pipeline-operator"]
+  "plugins": ["@babel/syntax-pipeline-operator"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-$ babel --plugins syntax-pipeline-operator script.js
+$ babel --plugins @babel/syntax-pipeline-operator script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["syntax-pipeline-operator"]
+  plugins: ["@babel/syntax-pipeline-operator"]
 });
 ```

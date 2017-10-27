@@ -9,7 +9,7 @@ Compile [Unicode property escapes](https://github.com/mathiasbynens/regexpu-core
 ## Installation
 
 ```sh
-$ npm install @babel/plugin-transform-unicode-property-regex
+npm install @babel/plugin-transform-unicode-property-regex
 ```
 
 ## Usage
@@ -20,30 +20,30 @@ $ npm install @babel/plugin-transform-unicode-property-regex
 
 ```json
 {
-  "plugins": ["transform-unicode-property-regex"]
+  "plugins": ["@babel/transform-unicode-property-regex"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-unicode-property-regex script.js
+babel --plugins @babel/@babel/transform-unicode-property-regex script.js
 ```
 
 ### Via Node.js API
 
 ```js
-require('@babel/core').transform(code, {
-  'plugins': ['transform-unicode-property-regex']
+require("@babel/core").transform(code, {
+  "plugins": ["@babel/transform-unicode-property-regex"]
 });
 ```
 
 To transpile to ES6/ES2015:
 
 ```js
-require('@babel/core').transform(code, {
-  'plugins': [
-    ['transform-unicode-property-regex', { 'useUnicodeFlag': true }]
+require("@babel/core").transform(code, {
+  "plugins": [
+    ["@babel/transform-unicode-property-regex", { "useUnicodeFlag": true }]
   ]
 });
 ```

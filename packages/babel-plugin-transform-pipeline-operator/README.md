@@ -16,20 +16,20 @@ $ npm install @babel/plugin-transform-pipeline-operator
 
 ```json
 {
-  "plugins": ["transform-pipeline-operator"]
+  "plugins": ["@babel/transform-pipeline-operator"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-$ babel --plugins transform-pipeline-operator script.js
+$ babel --plugins @babel/transform-pipeline-operator script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-pipeline-operator"]
+  plugins: ["@babel/transform-pipeline-operator"]
 });
 ```

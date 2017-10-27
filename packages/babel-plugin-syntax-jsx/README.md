@@ -16,20 +16,20 @@ npm install --save-dev @babel/plugin-syntax-jsx
 
 ```json
 {
-  "plugins": ["syntax-jsx"]
+  "plugins": ["@babel/syntax-jsx"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-jsx script.js
+babel --plugins @babel/syntax-jsx script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["syntax-jsx"]
+  plugins: ["@babel/syntax-jsx"]
 });
 ```

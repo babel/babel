@@ -84,21 +84,21 @@ npm install --save-dev @babel/plugin-transform-async-generator-functions
 
 ```json
 {
-  "plugins": ["transform-async-generator-functions"]
+  "plugins": ["@babel/transform-async-generator-functions"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-async-generator-functions script.js
+babel --plugins @babel/transform-async-generator-functions script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-async-generator-functions"]
+  plugins: ["@babel/transform-async-generator-functions"]
 });
 ```
 

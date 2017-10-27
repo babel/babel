@@ -10,7 +10,7 @@ Without any configuration options, @babel/preset-env behaves exactly the same as
 
 ```json
 {
-  "presets": ["env"]
+  "presets": ["@babel/env"]
 }
 ```
 
@@ -21,7 +21,7 @@ This example only includes the polyfills and code transforms needed for the last
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "browsers": ["last 2 versions", "safari >= 7"]
       }
@@ -35,7 +35,7 @@ Similarly, if you're targeting Node.js instead of the browser, you can configure
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "node": "6.10"
       }
@@ -49,7 +49,7 @@ For convenience, you can use `"node": "current"` to only include the necessary p
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "node": "current"
       }
@@ -117,7 +117,7 @@ For example, to enable only the polyfills and plugins needed for a project targe
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "useBuiltIns": "entry"
     }]
   ]
@@ -167,7 +167,7 @@ The default behavior without options runs all transforms (behaves the same as [@
 
 ```json
 {
-  "presets": ["env"]
+  "presets": ["@babel/env"]
 }
 ```
 
@@ -342,7 +342,7 @@ Don't add polyfills automatically per file, or transform `import "@babel/polyfil
   ```js
   module.exports = {
     presets: [
-      ["env", {
+      ["@babel/env", {
         targets: {
           chrome: 59,
           edge: 13,
@@ -419,7 +419,7 @@ export class A {}
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "chrome": 52
       }
@@ -442,7 +442,7 @@ exports.A = A;
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "chrome": 52
       },
@@ -466,7 +466,7 @@ export class A {}
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "chrome": 52,
         "browsers": ["last 2 versions", "safari 7"]
@@ -491,7 +491,7 @@ export var A = function A() {
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "node": "current"
       }
@@ -514,7 +514,7 @@ exports.A = A;
 ```json
 {
   "presets": [
-    [ "env", {
+    ["@babel/env", {
       "targets": {
         "safari": 10
       },
@@ -556,12 +556,12 @@ Using polyfills:
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "browsers": ["last 2 versions", "safari >= 7"]
       },
-      "include": ["transform-es2015-arrow-functions", "es6.map"],
-      "exclude": ["transform-regenerator", "es6.set"]
+      "include": ["@babel/transform-es2015-arrow-functions", "es6.map"],
+      "exclude": ["@babel/transform-regenerator", "es6.set"]
     }]
   ]
 }

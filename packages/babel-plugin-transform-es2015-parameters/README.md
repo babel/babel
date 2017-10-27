@@ -55,21 +55,21 @@ not supported in your environment then you'll need the
 
 ```json
 {
-  "plugins": ["transform-es2015-parameters"]
+  "plugins": ["@babel/transform-es2015-parameters"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-parameters script.js
+babel --plugins @babel/transform-es2015-parameters script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-parameters"]
+  plugins: ["@babel/transform-es2015-parameters"]
 });
 ```
 

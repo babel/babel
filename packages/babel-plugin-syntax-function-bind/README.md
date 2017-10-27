@@ -16,20 +16,20 @@ npm install --save-dev @babel/plugin-syntax-function-bind
 
 ```json
 {
-  "plugins": ["syntax-function-bind"]
+  "plugins": ["@babel/syntax-function-bind"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-function-bind script.js
+babel --plugins @babel/syntax-function-bind script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["syntax-function-bind"]
+  plugins: ["@babel/syntax-function-bind"]
 });
 ```

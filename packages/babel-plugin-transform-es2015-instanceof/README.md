@@ -14,20 +14,20 @@ npm install --save-dev @babel/plugin-transform-es2015-instanceof
 
 ```json
 {
-  "plugins": ["transform-es2015-instanceof"]
+  "plugins": ["@babel/transform-es2015-instanceof"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-instanceof script.js
+babel --plugins @babel/transform-es2015-instanceof script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-instanceof"]
+  plugins: ["@babel/transform-es2015-instanceof"]
 });
 ```

@@ -67,7 +67,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["transform-es2015-arrow-functions"]
+  "plugins": ["@babel/transform-es2015-arrow-functions"]
 }
 ```
 
@@ -76,7 +76,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["transform-es2015-arrow-functions", { "spec": true }]
+    ["@babel/transform-es2015-arrow-functions", { "spec": true }]
   ]
 }
 ```
@@ -84,14 +84,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-arrow-functions script.js
+babel --plugins @babel/transform-es2015-arrow-functions script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-arrow-functions"]
+  plugins: ["@babel/transform-es2015-arrow-functions"]
 });
 ```
 

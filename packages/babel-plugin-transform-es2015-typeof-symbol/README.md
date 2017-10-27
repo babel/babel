@@ -34,20 +34,20 @@ npm install --save-dev @babel/plugin-transform-es2015-typeof-symbol
 
 ```json
 {
-  "plugins": ["transform-es2015-typeof-symbol"]
+  "plugins": ["@babel/transform-es2015-typeof-symbol"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-es2015-typeof-symbol script.js
+babel --plugins @babel/transform-es2015-typeof-symbol script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-es2015-typeof-symbol"]
+  plugins: ["@babel/transform-es2015-typeof-symbol"]
 });
 ```
