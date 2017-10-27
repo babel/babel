@@ -16,6 +16,14 @@ const noMethodVisitor = {
   },
 };
 
+const transformToObjectDefineProperty = template(`
+  Object.defineProperty(CONSTRUCTOR, PROPERTY, {
+    FUNCTION_IDENTIFIER,
+    enumerable: true,
+    configurable: true
+  })
+`);
+
 const verifyConstructorVisitor = visitors.merge([
   noMethodVisitor,
   {
@@ -529,7 +537,26 @@ export default class ClassTransformer {
       if (this._processMethod(node, scope)) return;
     }
 
-    this.pushToMap(node, false, null, scope);
+    if (["get", "set"].indexOf(node.kind) !== -1) {
+      const nodeAndSiblings = this.path.get("body.body");
+      const isSingleGetOrSet = !nodeAndSiblings.filter(
+        nodePath =>
+          nodePath.node.kind !== "constructor" &&
+          nodePath.node.kind !== "get" &&
+          nodePath.node.kind !== "set",
+      ).length;
+      if (isSingleGetOrSet) {
+        path.replaceWith(
+          transformToObjectDefineProperty({
+            CONSTRUCTOR: t.identifier(this.classRef.name),
+            PROPERTY: t.identifier(node.kind),
+            FUNCTION_IDENTIFIER: t.identifier(node.key.name),
+          }),
+        );
+      }
+    } else {
+      this.pushToMap(node, false, null, scope);
+    }
   }
 
   _processMethod() {
