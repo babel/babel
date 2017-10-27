@@ -125,6 +125,21 @@ export default function({ types: t, template }, options) {
             noInterop,
           });
 
+          let exportsList = [];
+          for (const [, { names }] of meta.local) {
+            exportsList = exportsList.concat(names);
+          }
+          for (const [, source] of meta.source) {
+            // ex: `export { name } from "mod"` or `export { name as foo } from "mod"`
+            exportsList = exportsList.concat(
+              Array.from(source.reexports.keys()),
+            );
+          }
+
+          const useExportsDirective = t.directive(
+            t.directiveLiteral(`use exports { ${exportsList.join(", ")} }`),
+          );
+
           for (const [source, metadata] of meta.source) {
             const loadExpr = t.callExpression(t.identifier("require"), [
               t.stringLiteral(source),
@@ -149,6 +164,9 @@ export default function({ types: t, template }, options) {
 
           ensureStatementsHoisted(headers);
           path.unshiftContainer("body", headers);
+          if (exportsList.length) {
+            path.pushContainer("directives", useExportsDirective);
+          }
         },
       },
     },

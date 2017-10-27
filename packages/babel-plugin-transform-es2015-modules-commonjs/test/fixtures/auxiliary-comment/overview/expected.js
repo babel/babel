@@ -1,5 +1,6 @@
 /*before*/
 "use strict";
+"use exports { test, test2 }";
 
 Object.defineProperty(exports, "__esModule", {
   value: true

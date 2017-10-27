@@ -1,4 +1,5 @@
 "use strict";
+"use exports { foo }";
 
 exports.foo = foo;
 
