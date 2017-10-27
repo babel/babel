@@ -1,0 +1,3 @@
+{
+  "plugins": [["proposal-object-rest-spread", { "useBuiltIns": true }]]
+}

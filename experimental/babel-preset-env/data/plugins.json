@@ -228,17 +228,17 @@
     "opera": "42",
     "electron": "1.6"
   },
-  "transform-async-generator-functions": {
+  "proposal-async-generator-functions": {
     "chrome": "63",
     "firefox": "57",
     "opera": "50"
   },
-  "transform-object-rest-spread": {
+  "proposal-object-rest-spread": {
     "chrome": "60",
     "firefox": "55",
     "node": "8.3",
     "opera": "47"
   },
-  "transform-optional-catch-binding": {},
-  "transform-unicode-property-regex": {}
+  "proposal-optional-catch-binding": {},
+  "proposal-unicode-property-regex": {}
 }

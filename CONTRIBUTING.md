@@ -208,8 +208,8 @@ If you need to check for an error that is thrown you can add to the `options.jso
 ```js
 // options.json example
 {
-  "plugins": [["@babel/transform-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
-  "throws": "@babel/transform-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
+  "plugins": [["@babel/proposal-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
+  "throws": "@babel/proposal-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
 }
 ```
 

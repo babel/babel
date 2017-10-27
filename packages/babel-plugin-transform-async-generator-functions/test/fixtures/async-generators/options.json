@@ -1,3 +1,0 @@
-{
-  "plugins": ["external-helpers", "transform-async-generator-functions"]
-}

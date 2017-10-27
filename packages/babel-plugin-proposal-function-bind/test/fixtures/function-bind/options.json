@@ -1,0 +1,3 @@
+{
+  "plugins": ["proposal-function-bind", "transform-es2015-arrow-functions"]
+}

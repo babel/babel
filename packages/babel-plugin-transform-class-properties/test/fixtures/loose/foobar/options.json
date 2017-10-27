@@ -1,4 +1,0 @@
-{
-  "plugins": ["external-helpers", ["transform-class-properties", {"loose": true}]],
-  "presets": ["es2015"]
-}

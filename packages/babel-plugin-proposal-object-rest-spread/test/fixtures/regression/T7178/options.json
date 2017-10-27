@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "transform-es2015-modules-commonjs",
+    "transform-es2015-destructuring",
+    "proposal-object-rest-spread",
+    "external-helpers"
+  ]
+}

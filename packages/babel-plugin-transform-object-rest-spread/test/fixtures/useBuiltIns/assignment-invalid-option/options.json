@@ -1,4 +1,0 @@
-{
-  "plugins": [["transform-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
-  "throws": "transform-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
-}
