@@ -153,7 +153,6 @@ registerPlugins({
   "syntax-object-rest-spread": require("@babel/plugin-syntax-object-rest-spread"),
   "syntax-optional-catch-binding": require("@babel/plugin-syntax-optional-catch-binding"),
   "transform-async-to-generator": require("@babel/plugin-transform-async-to-generator"),
-  "transform-async-to-module-method": require("@babel/plugin-transform-async-to-module-method"),
   "proposal-class-properties": require("@babel/plugin-proposal-class-properties"),
   "proposal-decorators": require("@babel/plugin-proposal-decorators"),
   "proposal-do-expressions": require("@babel/plugin-proposal-do-expressions"),
