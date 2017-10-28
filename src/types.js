@@ -799,6 +799,9 @@ export type JSXAttribute = Node;
 export type JSXOpeningElement = Node;
 export type JSXClosingElement = Node;
 export type JSXElement = Node;
+export type JSXOpeningFragment = Node;
+export type JSXClosingFragment = Node;
+export type JSXFragment = Node;
 
 // Flow/TypeScript common (TODO: Not in spec)
 
