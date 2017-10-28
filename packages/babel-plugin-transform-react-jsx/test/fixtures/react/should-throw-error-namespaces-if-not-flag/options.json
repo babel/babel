@@ -8,5 +8,5 @@
       }
     ]
   ],
-  "throws": "Namespace tags are not supported by default. React's JSX doesn't support namespace tags.You can turn on the 'throwIfNamespace' flag to bypass this warning."
+  "throws": "Namespace tags are not supported by default. React's JSX doesn't support namespace tags. You can turn on the 'throwIfNamespace' flag to bypass this warning."
 }
