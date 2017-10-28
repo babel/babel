@@ -138,7 +138,7 @@ export default class File extends Store {
   initOptions(opts) {
     opts = new OptionManager(this.log, this.pipeline).init(opts);
 
-    if (opts.inputSourceMap) {
+    if (opts.inputSourceMap && !opts.sourceMaps) {
       opts.sourceMaps = true;
     }
 
