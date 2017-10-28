@@ -194,7 +194,11 @@ export function _resyncRemoved() {
 
 export function popContext() {
   this.contexts.pop();
-  this.setContext(this.contexts[this.contexts.length - 1]);
+  if (this.contexts.length) {
+    this.setContext(this.contexts[this.contexts.length - 1]);
+  } else {
+    this.setContext(undefined);
+  }
 }
 
 export function pushContext(context) {
