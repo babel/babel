@@ -79,7 +79,7 @@ With options:
   "plugins": [
     ["@babel/transform-react-jsx", {
       "pragma": "dom", // default pragma is React.createElement
-      "throwIfNamespace": false // default throwIfNamespace is true
+      "throwIfNamespace": false // defaults to true
     }]
   ]
 }
