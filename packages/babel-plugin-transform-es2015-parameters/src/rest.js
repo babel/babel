@@ -155,7 +155,8 @@ const memberExpressionOptimisationVisitor = {
   },
 };
 function hasRest(node) {
-  return t.isRestElement(node.params[node.params.length - 1]);
+  const length = node.params.length;
+  return length > 0 && t.isRestElement(node.params[length - 1]);
 }
 
 function optimiseIndexGetter(path, argsId, offset) {
