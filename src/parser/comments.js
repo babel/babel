@@ -65,14 +65,15 @@ export default class CommentsParser extends BaseParser {
         this.state.trailingComments.length = 0;
       }
     } else {
-      const lastInStack = last(stack);
-      if (
-        stack.length > 0 &&
-        lastInStack.trailingComments &&
-        lastInStack.trailingComments[0].start >= node.end
-      ) {
-        trailingComments = lastInStack.trailingComments;
-        lastInStack.trailingComments = null;
+      if (stack.length > 0) {
+        const lastInStack = last(stack);
+        if (
+          lastInStack.trailingComments &&
+          lastInStack.trailingComments[0].start >= node.end
+        ) {
+          trailingComments = lastInStack.trailingComments;
+          lastInStack.trailingComments = null;
+        }
       }
     }
 
@@ -138,6 +139,7 @@ export default class CommentsParser extends BaseParser {
       if (lastChild.leadingComments) {
         if (
           lastChild !== node &&
+          lastChild.leadingComments.length > 0 &&
           last(lastChild.leadingComments).end <= node.start
         ) {
           node.leadingComments = lastChild.leadingComments;
