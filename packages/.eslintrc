@@ -1,6 +1,7 @@
 {
   "rules": {
     "prettier/prettier": ["error", { "trailingComma": "all" }],
-    "no-undefined-identifier": 2
+    "no-undefined-identifier": 2,
+    "no-tail-check-without-length-check": 2
   }
 }
