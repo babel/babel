@@ -194,7 +194,7 @@ export function _resyncRemoved() {
 
 export function popContext() {
   this.contexts.pop();
-  if (this.contexts.length) {
+  if (this.contexts.length > 0) {
     this.setContext(this.contexts[this.contexts.length - 1]);
   } else {
     this.setContext(undefined);
