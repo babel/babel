@@ -423,21 +423,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
         }
 
-        if (
-          // $FlowIgnore
-          isFragment(openingElement) &&
-          !isFragment(closingElement)
-        ) {
+        if (isFragment(openingElement) && !isFragment(closingElement)) {
           this.raise(
             // $FlowIgnore
             closingElement.start,
             "Expected corresponding JSX closing tag for <>",
           );
-        } else if (
-          // $FlowIgnore
-          !isFragment(openingElement) &&
-          isFragment(closingElement)
-        ) {
+        } else if (!isFragment(openingElement) && isFragment(closingElement)) {
           this.raise(
             // $FlowIgnore
             closingElement.start,
@@ -445,11 +437,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               getQualifiedJSXName(openingElement.name) +
               ">",
           );
-        } else if (
-          // $FlowIgnore
-          !isFragment(openingElement) &&
-          !isFragment(closingElement)
-        ) {
+        } else if (!isFragment(openingElement) && !isFragment(closingElement)) {
           if (
             // $FlowIgnore
             getQualifiedJSXName(closingElement.name) !==
@@ -466,7 +454,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      // $FlowIgnore
       if (isFragment(openingElement)) {
         node.openingFragment = openingElement;
         node.closingFragment = closingElement;
@@ -482,7 +469,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         );
       }
 
-      // $FlowIgnore
       return isFragment(openingElement)
         ? this.finishNode(node, "JSXFragment")
         : this.finishNode(node, "JSXElement");
