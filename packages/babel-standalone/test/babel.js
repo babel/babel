@@ -92,7 +92,7 @@ describe("@babel/standalone", () => {
 
   it("handles plugins with options", () => {
     const output = Babel.transform("`${x}`", {
-      plugins: [["transform-es2015-template-literals", { loose: true }]],
+      plugins: [["transform-template-literals", { loose: true }]],
     }).code;
     assert.equal(output, '"" + x;');
   });
