@@ -519,20 +519,17 @@ export default function({ types: t }) {
           }
         }
 
+        let tail = null;
         const nodesOut = [];
         for (const node of nodes) {
-          const tail = nodesOut[nodesOut.length - 1];
-          if (
-            tail &&
-            t.isVariableDeclaration(tail) &&
-            t.isVariableDeclaration(node)
-          ) {
+          if (tail !== null && t.isVariableDeclaration(node)) {
             // Create a single compound declarations
             tail.declarations.push(...node.declarations);
           } else {
             // Make sure the original node kind is used for each compound declaration
             node.kind = nodeKind;
             nodesOut.push(node);
+            tail = t.isVariableDeclaration(node) ? node : null;
           }
         }
 
