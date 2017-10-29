@@ -19,7 +19,6 @@ Installation
 There are several ways to get a copy of @babel/standalone. Pick whichever one you like:
 
 - Use it via UNPKG: https://unpkg.com/@babel/standalone@6/babel.min.js. This is a simple way to embed it on a webpage without having to do any other setup.
-- Install via Bower: `bower install @babel/standalone`
 - Install via NPM: `npm install --save @babel/standalone`
 - Manually grab `babel.js` and/or `babel.min.js` from the [GitHub releases page](https://github.com/Daniel15/babel-standalone/releases). Every release includes these files.
 - Install it via Git: You can use the repo at https://github.com/Daniel15/babel-standalone-bower to pull a prebuilt version from Git. Note that this is generally only advised for systems that *must* pull artifacts from Git, such as Bower.
