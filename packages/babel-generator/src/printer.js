@@ -245,8 +245,8 @@ export default class Printer {
     for (i = 0; i < str.length && str[i] === " "; i++) continue;
     if (i === str.length) return;
 
-    const cha = str[i];
-    const chaPost = str[i + 1];
+    const cha = str[i++];
+    const chaPost = i === str.length ? "" : str[i];
 
     // Check for newline or comment
     if (cha === "\n" || (cha === "/" && (chaPost === "/" || chaPost === "*"))) {
