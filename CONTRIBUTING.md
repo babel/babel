@@ -1,5 +1,3 @@
-# NOTE: DO NOT OPEN ISSUES FOR QUESTIONS AND SUPPORT. SEE THE README FOR MORE INFO.
-
 ----
 
 <p align="center" class="toc">
