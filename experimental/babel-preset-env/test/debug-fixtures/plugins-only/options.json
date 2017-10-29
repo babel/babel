@@ -5,7 +5,7 @@
       "exclude": [
         "transform-async-to-generator",
         "transform-regenerator",
-        "transform-es2015-parameters"
+        "transform-parameters"
       ],
       "targets": {
         "firefox": 52,

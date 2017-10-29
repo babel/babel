@@ -171,7 +171,7 @@ exports.default = function (left, right) {
 `boolean`, defaults to `false`.
 
 When enabled, the transform will use helpers that do not get run through
-`transform-es2015-modules-commonjs`. This allows for smaller builds in module
+`transform-modules-commonjs`. This allows for smaller builds in module
 systems like webpack, since it doesn't need to preserve commonjs semantics.
 
 For example, here is the `classCallCheck` helper with `useESModules` disabled:

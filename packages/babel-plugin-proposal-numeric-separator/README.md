@@ -91,9 +91,9 @@ require("@babel/core").transform("code", {
 
 ## Additional Information
 
-If you need to further compile ES2015 Decimal, Binary, Hex and Octal number representations to their pre-ES2015 numeric literal form, add the [`"@babel/transform-es2015-literals"`](http://babeljs.io/docs/plugins/transform-es2015-literals/) plugin:
+If you need to further compile ES2015 Decimal, Binary, Hex and Octal number representations to their pre-ES2015 numeric literal form, add the [`"@babel/transform-literals"`](http://babeljs.io/docs/plugins/transform-literals/) plugin:
 
-> `transform-es2015-literals` is already included in [@babel/preset-env](https://github.com/babel/babel/tree/master/experimental/babel-preset-env) and @babel/preset-es2015.
+> `transform-literals` is already included in [@babel/preset-env](https://github.com/babel/babel/tree/master/experimental/babel-preset-env) and @babel/preset-es2015.
 
 ### Via `.babelrc` (Recommended)
 
@@ -105,7 +105,7 @@ If you need to further compile ES2015 Decimal, Binary, Hex and Octal number repr
   "plugins": ["@babel/proposal-numeric-separator"]
 }
 {
-  "plugins": ["@babel/proposal-numeric-separator", "@babel/transform-es2015-literals"]
+  "plugins": ["@babel/proposal-numeric-separator", "@babel/transform-literals"]
 }
 ```
 

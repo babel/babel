@@ -126,7 +126,7 @@ export default function({ types: t }) {
     inherits: syntaxObjectRestSpread,
 
     visitor: {
-      // taken from transform-es2015-parameters/src/destructuring.js
+      // taken from transform-parameters/src/destructuring.js
       // function a({ b, ...c }) {}
       Function(path) {
         const params = path.get("params");
@@ -134,7 +134,7 @@ export default function({ types: t }) {
           replaceRestElement(params[i].parentPath, params[i], i, params.length);
         }
       },
-      // adapted from transform-es2015-destructuring/src/index.js#pushObjectRest
+      // adapted from transform-destructuring/src/index.js#pushObjectRest
       // const { a, ...b } = c;
       VariableDeclarator(path, file) {
         if (!path.get("id").isObjectPattern()) {
@@ -231,7 +231,7 @@ export default function({ types: t }) {
           },
         );
       },
-      // taken from transform-es2015-destructuring/src/index.js#visitor
+      // taken from transform-destructuring/src/index.js#visitor
       // export var { a, ...b } = c;
       ExportNamedDeclaration(path) {
         const declaration = path.get("declaration");
@@ -301,7 +301,7 @@ export default function({ types: t }) {
           path.replaceWithMultiple(nodes);
         }
       },
-      // taken from transform-es2015-destructuring/src/index.js#visitor
+      // taken from transform-destructuring/src/index.js#visitor
       ForXStatement(path) {
         const { node, scope } = path;
         const leftPath = path.get("left");

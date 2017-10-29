@@ -1,3 +1,3 @@
 {
-  "plugins": ["external-helpers", "transform-es2015-block-scoping", "transform-es2015-classes", "transform-jscript", "transform-es2015-arrow-functions"]
+  "plugins": ["external-helpers", "transform-block-scoping", "transform-classes", "transform-jscript", "transform-arrow-functions"]
 }

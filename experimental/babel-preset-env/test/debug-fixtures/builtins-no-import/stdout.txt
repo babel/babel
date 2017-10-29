@@ -8,9 +8,9 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  transform-es2015-destructuring { "node":"6" }
-  transform-es2015-for-of { "node":"6" }
-  transform-es2015-function-name { "node":"6" }
+  transform-destructuring { "node":"6" }
+  transform-for-of { "node":"6" }
+  transform-function-name { "node":"6" }
   transform-exponentiation-operator { "node":"6" }
   transform-async-to-generator { "node":"6" }
 

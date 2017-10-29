@@ -8,25 +8,25 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-es2015-constants { "android":"4" }
-  transform-es2015-arrow-functions { "android":"4" }
-  transform-es2015-block-scoped-functions { "android":"4" }
-  transform-es2015-block-scoping { "android":"4" }
-  transform-es2015-classes { "android":"4" }
-  transform-es2015-computed-properties { "android":"4" }
-  transform-es2015-destructuring { "android":"4" }
-  transform-es2015-duplicate-keys { "android":"4" }
-  transform-es2015-for-of { "android":"4" }
-  transform-es2015-function-name { "android":"4" }
-  transform-es2015-literals { "android":"4" }
-  transform-es2015-object-super { "android":"4" }
-  transform-es2015-parameters { "android":"4" }
-  transform-es2015-shorthand-properties { "android":"4" }
-  transform-es2015-spread { "android":"4" }
-  transform-es2015-sticky-regex { "android":"4" }
-  transform-es2015-template-literals { "android":"4" }
-  transform-es2015-typeof-symbol { "android":"4" }
-  transform-es2015-unicode-regex { "android":"4" }
+  check-constants { "android":"4" }
+  transform-arrow-functions { "android":"4" }
+  transform-block-scoped-functions { "android":"4" }
+  transform-block-scoping { "android":"4" }
+  transform-classes { "android":"4" }
+  transform-computed-properties { "android":"4" }
+  transform-destructuring { "android":"4" }
+  transform-duplicate-keys { "android":"4" }
+  transform-for-of { "android":"4" }
+  transform-function-name { "android":"4" }
+  transform-literals { "android":"4" }
+  transform-object-super { "android":"4" }
+  transform-parameters { "android":"4" }
+  transform-shorthand-properties { "android":"4" }
+  transform-spread { "android":"4" }
+  transform-sticky-regex { "android":"4" }
+  transform-template-literals { "android":"4" }
+  transform-typeof-symbol { "android":"4" }
+  transform-unicode-regex { "android":"4" }
   transform-new-target { "android":"4" }
   transform-regenerator { "android":"4" }
   transform-exponentiation-operator { "android":"4" }

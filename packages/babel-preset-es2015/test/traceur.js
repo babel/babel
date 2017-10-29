@@ -84,7 +84,7 @@ runner(
   {},
   function(opts, task) {
     if (includes(task.exec.loc, "module.js")) {
-      opts.plugins.push("transform-es2015-modules-commonjs");
+      opts.plugins.push("transform-modules-commonjs");
     } else {
       opts.sourceType = "script";
     }

@@ -16,10 +16,10 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  transform-es2015-destructuring { "firefox":"52" }
-  transform-es2015-for-of { "firefox":"52" }
-  transform-es2015-function-name { "firefox":"52" }
-  transform-es2015-literals { "firefox":"52" }
+  transform-destructuring { "firefox":"52" }
+  transform-for-of { "firefox":"52" }
+  transform-function-name { "firefox":"52" }
+  transform-literals { "firefox":"52" }
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
 src/in.js -> lib/in.js

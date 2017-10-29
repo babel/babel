@@ -115,7 +115,7 @@ $ TEST_ONLY=babel-cli make test
 `TEST_ONLY` will also match substrings of the package name:
 
 ```sh
-# Run tests for the babel-plugin-transform-es2015-classes package.
+# Run tests for the babel-plugin-transform-classes package.
 $ TEST_ONLY=es2015-class make test
 ```
 

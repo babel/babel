@@ -15,22 +15,19 @@ describe("normalize-options", () => {
   describe("normalizeOptions", () => {
     it("should return normalized `include` and `exclude`", () => {
       const normalized = normalizeOptions.default({
-        include: [
-          "babel-plugin-transform-es2015-spread",
-          "transform-es2015-classes",
-        ],
+        include: ["babel-plugin-transform-spread", "transform-classes"],
       });
       assert.deepEqual(normalized.include, [
-        "transform-es2015-spread",
-        "transform-es2015-classes",
+        "transform-spread",
+        "transform-classes",
       ]);
     });
 
     it("should throw if duplicate names in `include` and `exclude`", () => {
       const normalizeWithSameIncludes = () => {
         normalizeOptions.default({
-          include: ["babel-plugin-transform-es2015-spread"],
-          exclude: ["transform-es2015-spread"],
+          include: ["babel-plugin-transform-spread"],
+          exclude: ["transform-spread"],
         });
       };
       assert.throws(normalizeWithSameIncludes, Error);
@@ -78,10 +75,10 @@ describe("normalize-options", () => {
     it("should drop `babel-plugin-` prefix if needed", function() {
       assert.deepEqual(
         normalizePluginNames([
-          "babel-plugin-transform-es2015-object-super",
-          "transform-es2015-parameters",
+          "babel-plugin-transform-object-super",
+          "transform-parameters",
         ]),
-        ["transform-es2015-object-super", "transform-es2015-parameters"],
+        ["transform-object-super", "transform-parameters"],
       );
     });
 
