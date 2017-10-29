@@ -110,7 +110,7 @@ export default class UtilParser extends Tokenizer {
     throw this.raise(pos != null ? pos : this.state.start, messageOrType);
   }
 
-  expectPlugin(name: string, pos?: ?number): void {
+  expectPlugin(name: string, pos?: ?number): true {
     if (!this.hasPlugin(name)) {
       throw this.raise(
         pos != null ? pos : this.state.start,
@@ -118,6 +118,8 @@ export default class UtilParser extends Tokenizer {
         [name],
       );
     }
+
+    return true;
   }
 
   expectOnePlugin(names: Array<string>, pos?: ?number): void {

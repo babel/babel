@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 22,
+  "end": 28,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 2,
-      "column": 17
+      "column": 23
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 22,
+    "end": 28,
     "loc": {
       "start": {
         "line": 1,
@@ -23,15 +23,15 @@
       },
       "end": {
         "line": 2,
-        "column": 17
+        "column": 23
       }
     },
     "sourceType": "module",
     "body": [
       {
-        "type": "ExportNamedDeclaration",
+        "type": "ExportDefaultDeclaration",
         "start": 5,
-        "end": 22,
+        "end": 28,
         "loc": {
           "start": {
             "line": 2,
@@ -39,15 +39,13 @@
           },
           "end": {
             "line": 2,
-            "column": 17
+            "column": 23
           }
         },
-        "specifiers": [],
-        "source": null,
         "declaration": {
           "type": "ClassDeclaration",
           "start": 0,
-          "end": 22,
+          "end": 28,
           "loc": {
             "start": {
               "line": 1,
@@ -55,7 +53,7 @@
             },
             "end": {
               "line": 2,
-              "column": 17
+              "column": 23
             }
           },
           "decorators": [
@@ -92,36 +90,20 @@
               }
             }
           ],
-          "id": {
-            "type": "Identifier",
-            "start": 18,
-            "end": 19,
-            "loc": {
-              "start": {
-                "line": 2,
-                "column": 13
-              },
-              "end": {
-                "line": 2,
-                "column": 14
-              },
-              "identifierName": "A"
-            },
-            "name": "A"
-          },
+          "id": null,
           "superClass": null,
           "body": {
             "type": "ClassBody",
-            "start": 20,
-            "end": 22,
+            "start": 26,
+            "end": 28,
             "loc": {
               "start": {
                 "line": 2,
-                "column": 15
+                "column": 21
               },
               "end": {
                 "line": 2,
-                "column": 17
+                "column": 23
               }
             },
             "body": []

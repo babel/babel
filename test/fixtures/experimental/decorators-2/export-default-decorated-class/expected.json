@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 22,
+  "end": 34,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 2,
-      "column": 17
+      "column": 18
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 22,
+    "end": 34,
     "loc": {
       "start": {
         "line": 1,
@@ -23,97 +23,95 @@
       },
       "end": {
         "line": 2,
-        "column": 17
+        "column": 18
       }
     },
     "sourceType": "module",
     "body": [
       {
-        "type": "ExportNamedDeclaration",
-        "start": 5,
-        "end": 22,
+        "type": "ExportDefaultDeclaration",
+        "start": 0,
+        "end": 34,
         "loc": {
           "start": {
-            "line": 2,
+            "line": 1,
             "column": 0
           },
           "end": {
             "line": 2,
-            "column": 17
+            "column": 18
           }
         },
-        "specifiers": [],
-        "source": null,
         "declaration": {
-          "type": "ClassDeclaration",
-          "start": 0,
-          "end": 22,
+          "type": "ClassExpression",
+          "start": 16,
+          "end": 34,
           "loc": {
             "start": {
-              "line": 1,
+              "line": 2,
               "column": 0
             },
             "end": {
               "line": 2,
-              "column": 17
+              "column": 18
             }
           },
           "decorators": [
             {
               "type": "Decorator",
-              "start": 0,
-              "end": 4,
+              "start": 16,
+              "end": 20,
               "loc": {
                 "start": {
-                  "line": 1,
+                  "line": 2,
                   "column": 0
                 },
                 "end": {
-                  "line": 1,
+                  "line": 2,
                   "column": 4
                 }
               },
               "expression": {
                 "type": "Identifier",
-                "start": 1,
-                "end": 4,
+                "start": 17,
+                "end": 20,
                 "loc": {
                   "start": {
-                    "line": 1,
+                    "line": 2,
                     "column": 1
                   },
                   "end": {
-                    "line": 1,
+                    "line": 2,
                     "column": 4
                   },
-                  "identifierName": "foo"
+                  "identifierName": "bar"
                 },
-                "name": "foo"
+                "name": "bar"
               }
             }
           ],
           "id": {
             "type": "Identifier",
-            "start": 18,
-            "end": 19,
+            "start": 27,
+            "end": 30,
             "loc": {
               "start": {
                 "line": 2,
-                "column": 13
+                "column": 11
               },
               "end": {
                 "line": 2,
                 "column": 14
               },
-              "identifierName": "A"
+              "identifierName": "Foo"
             },
-            "name": "A"
+            "name": "Foo"
           },
           "superClass": null,
           "body": {
             "type": "ClassBody",
-            "start": 20,
-            "end": 22,
+            "start": 31,
+            "end": 34,
             "loc": {
               "start": {
                 "line": 2,
@@ -121,7 +119,7 @@
               },
               "end": {
                 "line": 2,
-                "column": 17
+                "column": 18
               }
             },
             "body": []

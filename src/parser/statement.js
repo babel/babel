@@ -1424,7 +1424,8 @@ export default class StatementParser extends ExpressionParser {
       this.state.type.keyword === "let" ||
       this.state.type.keyword === "function" ||
       this.state.type.keyword === "class" ||
-      this.isContextual("async")
+      this.isContextual("async") ||
+      (this.match(tt.at) && this.expectPlugin("decorators2"))
     );
   }
 

@@ -54,7 +54,7 @@ export const defaultOptions: Options = {
 export function getOptions(opts: ?Options): Options {
   const options: any = {};
   for (const key in defaultOptions) {
-    options[key] = opts && key in opts ? opts[key] : defaultOptions[key];
+    options[key] = opts && opts[key] != null ? opts[key] : defaultOptions[key];
   }
   return options;
 }

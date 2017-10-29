@@ -1,2 +1,2 @@
 @foo
-export default class {}
+export class A {}
