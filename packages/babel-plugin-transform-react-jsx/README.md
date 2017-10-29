@@ -78,7 +78,8 @@ With options:
 {
   "plugins": [
     ["@babel/transform-react-jsx", {
-      "pragma": "dom" // default pragma is React.createElement
+      "pragma": "dom", // default pragma is React.createElement
+      "throwIfNamespace": false // defaults to true
     }]
   ]
 }
@@ -113,3 +114,13 @@ Note that the `@jsx React.DOM` pragma has been deprecated as of React v0.12
 `boolean`, defaults to `false`.
 
 When spreading props, use `Object.assign` directly instead of Babel's extend helper.
+
+### `throwIfNamespace`
+
+`boolean`, defaults to `true`.
+
+Toggles whether or not to throw an error if a XML namespaced tag name is used. For example:
+
+    <f:image />
+
+Though the JSX spec allows this, it is disabled by default since React's JSX does not currently have support for it.

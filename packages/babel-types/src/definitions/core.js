@@ -129,7 +129,9 @@ defineType("CallExpression", {
     arguments: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("Expression", "SpreadElement")),
+        assertEach(
+          assertNodeType("Expression", "SpreadElement", "JSXNamespacedName"),
+        ),
       ),
     },
     optional: {
