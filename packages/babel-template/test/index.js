@@ -1,7 +1,7 @@
 import generator from "../../babel-generator";
 import template from "../lib";
 import { expect } from "chai";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 const comments = "// Sum two numbers\nconst add = (a, b) => a + b;";
 
