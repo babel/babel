@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-unicode-property-regex",
-  "version": "7.0.0-beta.3",
+  "version": "7.0.0-beta.4",
   "description": "Compile Unicode property escapes in Unicode regular expressions to ES5.",
   "homepage": "https://babeljs.io/",
   "main": "lib/index.js",
@@ -18,13 +18,13 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-unicode-property-regex",
   "bugs": "https://github.com/babel/babel/issues",
   "dependencies": {
-    "@babel/helper-regex": "7.0.0-beta.3",
+    "@babel/helper-regex": "7.0.0-beta.4",
     "regexpu-core": "^4.1.3"
   },
   "peerDependencies": {
     "@babel/core": "7.0.0-beta.3"
   },
   "devDependencies": {
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.3"
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.4"
   }
 }
