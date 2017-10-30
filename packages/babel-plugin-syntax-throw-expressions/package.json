@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-throw-expressions",
-  "version": "7.0.0-beta.4",
+  "version": "7.0.0-beta.5",
   "description": "Allow parsing of Throw Expressions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-throw-expressions",
   "license": "MIT",

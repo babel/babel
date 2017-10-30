@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-typeof-symbol",
-  "version": "7.0.0-beta.4",
+  "version": "7.0.0-beta.5",
   "description": "This transformer wraps all typeof expressions with a method that replicates native behaviour. (ie. returning “symbol” for symbols)",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-typeof-symbol",
   "license": "MIT",
@@ -12,6 +12,6 @@
     "@babel/core": ">=7.0.0-beta.4 <7.0.0-rc.0"
   },
   "devDependencies": {
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.4"
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.5"
   }
 }

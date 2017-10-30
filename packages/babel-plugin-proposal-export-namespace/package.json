@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-export-namespace",
-  "version": "7.0.0-beta.4",
+  "version": "7.0.0-beta.5",
   "description": "Compile export namespace to ES2015",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-export-namespace",
   "license": "MIT",
@@ -9,12 +9,12 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/plugin-syntax-export-extensions": "7.0.0-beta.4"
+    "@babel/plugin-syntax-export-extensions": "7.0.0-beta.5"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0-beta.4 <7.0.0-rc.0"
   },
   "devDependencies": {
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.4"
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.5"
   }
 }
