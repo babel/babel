@@ -10,7 +10,8 @@ const gutil = require("gulp-util");
 const gulp = require("gulp");
 const path = require("path");
 const merge = require("merge-stream");
-const { registerStandalonePackageTask } = require("./scripts/gulp-tasks");
+const registerStandalonePackageTask = require("./scripts/gulp-tasks")
+  .registerStandalonePackageTask;
 
 const sources = ["codemods", "packages", "experimental"];
 

@@ -14,7 +14,8 @@
 const path = require("path");
 const pump = require("pump");
 const rename = require("gulp-rename");
-const { RootMostResolvePlugin } = require("webpack-dependency-suite");
+const RootMostResolvePlugin = require("webpack-dependency-suite")
+  .RootMostResolvePlugin;
 const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
 const uglify = require("gulp-uglify");
