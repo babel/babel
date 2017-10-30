@@ -12,7 +12,7 @@
     "@babel/plugin-syntax-numeric-separator": "7.0.0-beta.4"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.3"
+    "@babel/core": ">=7.0.0-beta.4 <7.0.0-rc.0"
   },
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "7.0.0-beta.4"
