@@ -12,7 +12,7 @@ const maps = {};
 const transformOpts = {};
 let piratesRevert = null;
 
-sourceMapSupport.install({
+const sourceMapSupportOptions = {
   handleUncaughtExceptions: false,
   environment: "node",
   retrieveSourceMap(source) {
@@ -26,7 +26,11 @@ sourceMapSupport.install({
       return null;
     }
   },
-});
+};
+
+if (!process.env.BABEL_DISABLE_SOURCEMAPS) {
+  sourceMapSupport.install(sourceMapSupportOptions);
+}
 
 registerCache.load();
 let cache = registerCache.get();
