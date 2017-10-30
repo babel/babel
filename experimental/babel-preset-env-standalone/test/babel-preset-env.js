@@ -1,6 +1,6 @@
 const assert = require("assert");
 const mock = require("mock-require");
-const Babel = require("babel-standalone/babel");
+const Babel = require("@babel/standalone/babel");
 mock("Babel", Babel);
 require("../babel-preset-env");
 
