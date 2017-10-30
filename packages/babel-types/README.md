@@ -231,7 +231,7 @@ See also `t.isCallExpression(node, opts)` and `t.assertCallExpression(node, opts
 Aliases: `Expression`
 
  - `callee`: `Expression` (required)
- - `arguments`: `Array<Expression | SpreadElement>` (required)
+ - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
  - `optional`: `true | false` (default: `null`)
  - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
 
@@ -1293,7 +1293,7 @@ See also `t.isNewExpression(node, opts)` and `t.assertNewExpression(node, opts)`
 Aliases: `Expression`
 
  - `callee`: `Expression` (required)
- - `arguments`: `Array<Expression | SpreadElement>` (required)
+ - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
  - `optional`: `true | false` (default: `null`)
  - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
 
