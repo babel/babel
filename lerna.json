@@ -29,9 +29,6 @@
     "codemods/*",
     "experimental/*"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "npmClient": "yarn",
   "npmClientArgs": [
     "--no-lockfile"
