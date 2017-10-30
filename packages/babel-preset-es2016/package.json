@@ -11,6 +11,6 @@
     "@babel/plugin-transform-exponentiation-operator": "7.0.0-beta.4"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.3"
+    "@babel/core": "^7.0.0-beta.4"
   }
 }

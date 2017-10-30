@@ -22,7 +22,7 @@
     "regexpu-core": "^4.1.3"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.3"
+    "@babel/core": "^7.0.0-beta.4"
   },
   "devDependencies": {
     "@babel/helper-plugin-test-runner": "7.0.0-beta.4"
