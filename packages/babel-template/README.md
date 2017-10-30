@@ -49,9 +49,9 @@ which will parse and return the AST directly.
 ## Template Literal Usage
 
 ```js
-import template from "babel-template";
-import generate from "babel-generator";
-import * as t from "babel-types";
+import template from "@babel/template";
+import generate from "@babel/generator";
+import * as t from "@babel/types";
 
 const fn = template`
   var IMPORT_NAME = require('${"my-module"}');

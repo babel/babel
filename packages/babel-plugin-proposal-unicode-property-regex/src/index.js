@@ -1,5 +1,5 @@
 import rewritePattern from "regexpu-core";
-import * as regex from "babel-helper-regex";
+import * as regex from "@babel/helper-regex";
 
 export default function() {
   return {
