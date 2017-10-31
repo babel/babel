@@ -1,4 +1,4 @@
-import { availablePlugins } from "@babel/standalone";
+import { availablePlugins, registerPlugin } from "@babel/standalone";
 
 const notIncludedPlugins = {
   "transform-new-target": require("@babel/plugin-transform-new-target"),
@@ -6,7 +6,7 @@ const notIncludedPlugins = {
 
 Object.keys(notIncludedPlugins).forEach(pluginName => {
   if (!availablePlugins[pluginName]) {
-    availablePlugins[pluginName] = notIncludedPlugins[pluginName];
+    registerPlugin(pluginName, notIncludedPlugins[pluginName]);
   }
 });
 
