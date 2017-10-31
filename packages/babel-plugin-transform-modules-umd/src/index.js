@@ -1,5 +1,4 @@
 import { basename, extname } from "path";
-import template from "@babel/template";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
@@ -9,6 +8,7 @@ import {
   ensureStatementsHoisted,
   wrapInterop,
 } from "@babel/helper-module-transforms";
+import { types as t, template } from "@babel/core";
 
 const buildPrerequisiteAssignment = template(`
   GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
@@ -30,7 +30,7 @@ const buildWrapper = template(`
   })
 `);
 
-export default function({ types: t }, options) {
+export default function(api, options) {
   const {
     globals,
     exactGlobals,

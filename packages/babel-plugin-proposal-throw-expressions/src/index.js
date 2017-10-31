@@ -1,6 +1,7 @@
 import syntaxThrowExpressions from "@babel/plugin-syntax-throw-expressions";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default function() {
   return {
     inherits: syntaxThrowExpressions,
 

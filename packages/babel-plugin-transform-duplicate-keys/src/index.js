@@ -1,4 +1,4 @@
-import * as t from "@babel/types";
+import { types as t } from "@babel/core";
 
 function getName(key) {
   if (t.isIdentifier(key)) {

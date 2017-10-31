@@ -1,7 +1,8 @@
 import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default function() {
   const yieldStarVisitor = {
     Function(path) {
       path.skip();

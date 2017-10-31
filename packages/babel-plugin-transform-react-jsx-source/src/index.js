@@ -12,11 +12,12 @@
  * var __jsxFileName = 'this/file.js';
  * <sometag __source={{fileName: __jsxFileName, lineNumber: 10}}/>
  */
+import { types as t } from "@babel/core";
 
 const TRACE_ID = "__source";
 const FILE_NAME_VAR = "_jsxFileName";
 
-export default function({ types: t }) {
+export default function() {
   function makeTrace(fileNameIdentifier, lineNumber) {
     const fileLineLiteral =
       lineNumber != null ? t.numericLiteral(lineNumber) : t.nullLiteral();

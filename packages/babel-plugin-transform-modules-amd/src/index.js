@@ -1,4 +1,3 @@
-import template from "@babel/template";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
@@ -8,13 +7,14 @@ import {
   ensureStatementsHoisted,
   wrapInterop,
 } from "@babel/helper-module-transforms";
+import { template, types as t } from "@babel/core";
 
 const buildWrapper = template(`
   define(MODULE_NAME, AMD_ARGUMENTS, function(IMPORT_NAMES) {
   })
 `);
 
-export default function({ types: t }, options) {
+export default function(api, options) {
   const { loose, allowTopLevelThis, strict, strictMode, noInterop } = options;
   return {
     visitor: {

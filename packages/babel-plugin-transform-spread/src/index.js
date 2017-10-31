@@ -1,4 +1,6 @@
-export default function({ types: t }, options) {
+import { types as t } from "@babel/core";
+
+export default function(api, options) {
   const { loose } = options;
 
   function getSpreadLiteral(spread, scope) {

@@ -1,4 +1,6 @@
-export default function({ template, types: t }, options) {
+import { template, types as t } from "@babel/core";
+
+export default function(api, options) {
   const { loose } = options;
   const pushComputedProps = loose
     ? pushComputedPropsLoose

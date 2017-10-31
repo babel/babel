@@ -1,6 +1,7 @@
 import annotateAsPure from "@babel/helper-annotate-as-pure";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }, options) {
+export default function(api, options) {
   const { loose } = options;
 
   let helperName = "taggedTemplateLiteral";

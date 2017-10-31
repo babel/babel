@@ -4,7 +4,7 @@ import transformReactDisplayName from "@babel/plugin-transform-react-display-nam
 import transformReactJSXSource from "@babel/plugin-transform-react-jsx-source";
 import transformReactJSXSelf from "@babel/plugin-transform-react-jsx-self";
 
-export default function(context, opts = {}) {
+export default function(api, opts = {}) {
   const pragma = opts.pragma || "React.createElement";
   const pragmaFrag = opts.pragmaFrag || "React.Fragment";
   const throwIfNamespace =
