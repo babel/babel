@@ -7,7 +7,7 @@ babel-node is a CLI that works exactly the same as the Node.js CLI, with the add
 ## Install
 
 ```sh
-npm install --save-dev @babel/node
+npm install --save-dev @babel/core @babel/node
 ```
 
 ## Usage

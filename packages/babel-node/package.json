@@ -16,7 +16,6 @@
     "compiler"
   ],
   "dependencies": {
-    "@babel/core": "7.0.0-beta.5",
     "@babel/polyfill": "7.0.0-beta.5",
     "@babel/register": "7.0.0-beta.5",
     "commander": "^2.8.1",
@@ -24,6 +23,9 @@
     "lodash": "^4.2.0",
     "output-file-sync": "^2.0.0",
     "v8flags": "^3.0.0"
+  },
+  "peerDependencies": {
+    "@babel/core": ">=7.0.0-beta.4 <7.0.0-rc.0"
   },
   "devDependencies": {
     "@babel/helper-fixtures": "7.0.0-beta.5"
