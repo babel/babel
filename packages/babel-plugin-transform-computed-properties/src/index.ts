@@ -157,36 +157,52 @@ export default declare((api, options: Options) => {
   function pushComputedPropsSpec(info: PropertyInfo) {
     const { objId, body, computedProps, state } = info;
 
-    for (const prop of computedProps) {
-      // PrivateName must not be in ObjectExpression
-      const key = t.toComputedKey(prop) as t.Expression;
+    // To prevent too deep AST structures in case of large objects
+    const CHUNK_LENGTH_CAP = 10;
 
+    let currentChunk: t.ObjectMember[] = null;
+    const computedPropsChunks: Array<
+      | { accessor: true; chunk: t.ObjectMethod }
+      | { accessor: false; chunk: t.ObjectMember[] }
+    > = [];
+    for (const prop of computedProps) {
       if (
         t.isObjectMethod(prop) &&
         (prop.kind === "get" || prop.kind === "set")
       ) {
-        const single = pushAccessorDefine(info, prop);
+        currentChunk = null;
+        computedPropsChunks.push({ accessor: true, chunk: prop });
+      } else {
+        if (!currentChunk || currentChunk.length === CHUNK_LENGTH_CAP) {
+          currentChunk = [];
+          computedPropsChunks.push({ accessor: false, chunk: currentChunk });
+        }
+        currentChunk.push(prop);
+      }
+    }
+
+    for (const { accessor, chunk } of computedPropsChunks) {
+      if (accessor) {
+        const single = pushAccessorDefine(info, chunk);
         if (single) return single;
       } else {
-        // the value of ObjectProperty in ObjectExpression must be an expression
-        const value = getValue(prop);
-        if (computedProps.length === 1) {
-          return t.callExpression(state.addHelper("defineProperty"), [
-            info.initPropExpression,
+        const single = computedPropsChunks.length === 1;
+        let node: t.Expression = single
+          ? info.initPropExpression
+          : t.cloneNode(objId);
+        for (const prop of chunk) {
+          // PrivateName must not be in ObjectExpression
+          const key = t.toComputedKey(prop) as t.Expression;
+          // the value of ObjectProperty in ObjectExpression must be an expression
+          const value = getValue(prop);
+          node = t.callExpression(state.addHelper("defineProperty"), [
+            t.cloneNode(node),
             key,
             value,
           ]);
-        } else {
-          body.push(
-            t.expressionStatement(
-              t.callExpression(state.addHelper("defineProperty"), [
-                t.cloneNode(objId),
-                key,
-                value,
-              ]),
-            ),
-          );
         }
+        if (single) return node;
+        body.push(t.expressionStatement(node));
       }
     }
   }

@@ -9,3 +9,10 @@ var obj = {
   foo: "foo2",
   bar: "bar",
 };
+
+expect(obj).toEqual({
+  xheh: "heh",
+  ynoo: "noo",
+  foo: "foo2",
+  bar: "bar",
+});
