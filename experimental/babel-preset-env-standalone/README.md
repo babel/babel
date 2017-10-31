@@ -1,14 +1,15 @@
-babel-env-standalone
+@babel/preset-env-standalone
 =================
 
-babel-env-standalone is a standalone build of [babel-preset-env](https://github.com/babel/babel-preset-env) for use in non-Node.js environments, including browsers.
+@babel/preset-env-standalone is a standalone build of [babel-preset-env](https://babeljs.io/docs/plugins/preset-env) for use in non-Node.js environments, including browsers.
 
 Installation
 ============
 
 There are several ways to get a copy of babel-preset-env. Pick whichever one you like:
 
-- Install via NPM: `npm install --save babel-env-standalone`
+- Use it via UNPKG: https://unpkg.com/@babel/preset-env-standalone@7/babel-preset-env.min.js. This is a simple way to embed it on a webpage without having to do any other setup.
+- Install via NPM: `npm install --save @babel/preset-env-standalone`
 - Manually grab `babel-preset-env.js` and/or `babel-preset-env.min.js` from the [GitHub releases page](https://github.com/babel/babel/releases). Every release includes these files.
 
 Usage
