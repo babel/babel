@@ -1,7 +1,0 @@
-{
-  "plugins": [
-    ["transform-unicode-property-regex", {
-      "useUnicodeFlag": true
-    }]
-  ]
-}

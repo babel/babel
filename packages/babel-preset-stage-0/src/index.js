@@ -1,7 +1,7 @@
 import presetStage1 from "@babel/preset-stage-1";
 
-import transformDoExpressions from "@babel/plugin-transform-do-expressions";
-import transformFunctionBind from "@babel/plugin-transform-function-bind";
+import transformDoExpressions from "@babel/plugin-proposal-do-expressions";
+import transformFunctionBind from "@babel/plugin-proposal-function-bind";
 
 export default function() {
   return {

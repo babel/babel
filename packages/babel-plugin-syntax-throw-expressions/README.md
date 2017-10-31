@@ -23,20 +23,20 @@ npm install --save-dev @babel/plugin-syntax-throw-expressions
 
 ```json
 {
-  "plugins": ["syntax-throw-expressions"]
+  "plugins": ["@babel/syntax-throw-expressions"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-throw-expressions script.js
+babel --plugins @babel/syntax-throw-expressions script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["syntax-throw-expressions"]
+  plugins: ["@babel/syntax-throw-expressions"]
 });
 ```

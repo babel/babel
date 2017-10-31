@@ -1,3 +1,0 @@
-{
-  "plugins": ["external-helpers", "syntax-dynamic-import", "transform-es2015-modules-systemjs"]
-}

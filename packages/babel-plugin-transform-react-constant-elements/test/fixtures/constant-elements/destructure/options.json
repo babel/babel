@@ -1,7 +1,7 @@
 {
   "plugins": [
     "syntax-jsx",
-    "transform-es2015-destructuring",
+    "transform-destructuring",
     "transform-react-constant-elements"
   ]
 }

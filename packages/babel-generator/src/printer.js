@@ -245,15 +245,17 @@ export default class Printer {
     for (i = 0; i < str.length && str[i] === " "; i++) continue;
     if (i === str.length) return;
 
+    // Check for newline or comment.
     const cha = str[i];
-    const chaPost = str[i + 1];
-
-    // Check for newline or comment
-    if (cha === "\n" || (cha === "/" && (chaPost === "/" || chaPost === "*"))) {
-      this.token("(");
-      this.indent();
-      parenPushNewlineState.printed = true;
+    if (cha !== "\n") {
+      if (cha !== "/") return;
+      if (i + 1 === str.length) return;
+      const chaPost = str[i + 1];
+      if (chaPost !== "/" && chaPost !== "*") return;
     }
+    this.token("(");
+    this.indent();
+    parenPushNewlineState.printed = true;
   }
 
   _catchUp(prop: string, loc: Object) {

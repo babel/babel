@@ -1,8 +1,0 @@
-{
-  "plugins": [
-    [
-      "transform-es2015-modules-commonjs",
-      { "allowCommonJSExports": false }
-    ]
-  ]
-}

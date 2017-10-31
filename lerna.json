@@ -1,6 +1,6 @@
 {
   "lerna": "2.0.0-rc.4",
-  "version": "7.0.0-beta.3",
+  "version": "7.0.0-beta.5",
   "changelog": {
     "repo": "babel/babel",
     "labels": {
@@ -29,9 +29,6 @@
     "codemods/*",
     "experimental/*"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "npmClient": "yarn",
   "npmClientArgs": [
     "--no-lockfile"

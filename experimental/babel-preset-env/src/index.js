@@ -211,7 +211,7 @@ export default function buildPreset(
   const pluginUseBuiltIns = useBuiltIns !== false;
 
   // NOTE: not giving spec here yet to avoid compatibility issues when
-  // transform-es2015-modules-commonjs gets its spec mode
+  // transform-modules-commonjs gets its spec mode
   if (modules !== false && moduleTransformations[modules]) {
     plugins.push([getPlugin(moduleTransformations[modules]), { loose }]);
   }

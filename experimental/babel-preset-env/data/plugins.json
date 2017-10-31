@@ -1,5 +1,5 @@
 {
-  "check-es2015-constants": {
+  "check-constants": {
     "chrome": "49",
     "edge": "14",
     "firefox": "51",
@@ -9,7 +9,7 @@
     "opera": "36",
     "electron": "1"
   },
-  "transform-es2015-arrow-functions": {
+  "transform-arrow-functions": {
     "chrome": "47",
     "edge": "13",
     "firefox": "45",
@@ -19,7 +19,7 @@
     "opera": "34",
     "electron": "0.36"
   },
-  "transform-es2015-block-scoped-functions": {
+  "transform-block-scoped-functions": {
     "chrome": "41",
     "edge": "12",
     "firefox": "46",
@@ -30,7 +30,7 @@
     "opera": "28",
     "electron": "0.24"
   },
-  "transform-es2015-block-scoping": {
+  "transform-block-scoping": {
     "chrome": "49",
     "edge": "14",
     "firefox": "51",
@@ -40,7 +40,7 @@
     "opera": "36",
     "electron": "1"
   },
-  "transform-es2015-classes": {
+  "transform-classes": {
     "chrome": "46",
     "edge": "13",
     "firefox": "45",
@@ -50,7 +50,7 @@
     "opera": "33",
     "electron": "0.36"
   },
-  "transform-es2015-computed-properties": {
+  "transform-computed-properties": {
     "chrome": "44",
     "edge": "12",
     "firefox": "34",
@@ -60,7 +60,7 @@
     "opera": "31",
     "electron": "0.31"
   },
-  "transform-es2015-destructuring": {
+  "transform-destructuring": {
     "chrome": "51",
     "firefox": "53",
     "safari": "10",
@@ -69,7 +69,7 @@
     "opera": "38",
     "electron": "1.2"
   },
-  "transform-es2015-duplicate-keys": {
+  "transform-duplicate-keys": {
     "chrome": "42",
     "edge": "12",
     "firefox": "34",
@@ -79,7 +79,7 @@
     "opera": "29",
     "electron": "0.27"
   },
-  "transform-es2015-for-of": {
+  "transform-for-of": {
     "chrome": "51",
     "edge": "15",
     "firefox": "53",
@@ -89,7 +89,7 @@
     "opera": "38",
     "electron": "1.2"
   },
-  "transform-es2015-function-name": {
+  "transform-function-name": {
     "chrome": "51",
     "firefox": "53",
     "safari": "10",
@@ -98,7 +98,7 @@
     "opera": "38",
     "electron": "1.2"
   },
-  "transform-es2015-literals": {
+  "transform-literals": {
     "chrome": "44",
     "edge": "12",
     "firefox": "53",
@@ -108,7 +108,7 @@
     "opera": "31",
     "electron": "0.31"
   },
-  "transform-es2015-object-super": {
+  "transform-object-super": {
     "chrome": "46",
     "edge": "13",
     "firefox": "45",
@@ -118,7 +118,7 @@
     "opera": "33",
     "electron": "0.36"
   },
-  "transform-es2015-parameters": {
+  "transform-parameters": {
     "chrome": "49",
     "edge": "14",
     "firefox": "53",
@@ -128,7 +128,7 @@
     "opera": "36",
     "electron": "1"
   },
-  "transform-es2015-shorthand-properties": {
+  "transform-shorthand-properties": {
     "chrome": "43",
     "edge": "12",
     "firefox": "33",
@@ -138,7 +138,7 @@
     "opera": "30",
     "electron": "0.29"
   },
-  "transform-es2015-spread": {
+  "transform-spread": {
     "chrome": "46",
     "edge": "13",
     "firefox": "36",
@@ -148,7 +148,7 @@
     "opera": "33",
     "electron": "0.36"
   },
-  "transform-es2015-sticky-regex": {
+  "transform-sticky-regex": {
     "chrome": "49",
     "edge": "13",
     "firefox": "3",
@@ -158,7 +158,7 @@
     "opera": "36",
     "electron": "1"
   },
-  "transform-es2015-template-literals": {
+  "transform-template-literals": {
     "chrome": "41",
     "edge": "13",
     "firefox": "34",
@@ -168,7 +168,7 @@
     "opera": "28",
     "electron": "0.24"
   },
-  "transform-es2015-typeof-symbol": {
+  "transform-typeof-symbol": {
     "chrome": "38",
     "edge": "12",
     "firefox": "36",
@@ -178,7 +178,7 @@
     "opera": "25",
     "electron": "0.2"
   },
-  "transform-es2015-unicode-regex": {
+  "transform-unicode-regex": {
     "chrome": "50",
     "edge": "13",
     "firefox": "46",
@@ -228,17 +228,17 @@
     "opera": "42",
     "electron": "1.6"
   },
-  "transform-async-generator-functions": {
+  "proposal-async-generator-functions": {
     "chrome": "63",
     "firefox": "57",
     "opera": "50"
   },
-  "transform-object-rest-spread": {
+  "proposal-object-rest-spread": {
     "chrome": "60",
     "firefox": "55",
     "node": "8.3",
     "opera": "47"
   },
-  "transform-optional-catch-binding": {},
-  "transform-unicode-property-regex": {}
+  "proposal-optional-catch-binding": {},
+  "proposal-unicode-property-regex": {}
 }

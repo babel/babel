@@ -6,17 +6,17 @@ const builtIns = {
 };
 
 const features = {
-  "transform-async-generator-functions": "Asynchronous Iterators",
-  "transform-object-rest-spread": "object rest/spread properties",
-  "transform-optional-catch-binding": "optional catch binding",
-  "transform-unicode-property-regex": "RegExp Unicode Property Escapes",
+  "proposal-async-generator-functions": "Asynchronous Iterators",
+  "proposal-object-rest-spread": "object rest/spread properties",
+  "proposal-optional-catch-binding": "optional catch binding",
+  "proposal-unicode-property-regex": "RegExp Unicode Property Escapes",
 };
 
 const pluginSyntaxMap = new Map([
-  ["transform-async-generator-functions", "syntax-async-generators"],
-  ["transform-object-rest-spread", "syntax-object-rest-spread"],
-  ["transform-optional-catch-binding", "syntax-optional-catch-binding"],
-  ["transform-unicode-property-regex", null],
+  ["proposal-async-generator-functions", "syntax-async-generators"],
+  ["proposal-object-rest-spread", "syntax-object-rest-spread"],
+  ["proposal-optional-catch-binding", "syntax-optional-catch-binding"],
+  ["proposal-unicode-property-regex", null],
 ]);
 
 module.exports = { builtIns, features, pluginSyntaxMap };

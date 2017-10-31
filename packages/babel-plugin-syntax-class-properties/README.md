@@ -16,20 +16,20 @@ npm install --save-dev @babel/plugin-syntax-class-properties
 
 ```json
 {
-  "plugins": ["syntax-class-properties"]
+  "plugins": ["@babel/syntax-class-properties"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-class-properties script.js
+babel --plugins @babel/syntax-class-properties script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["syntax-class-properties"]
+  plugins: ["@babel/syntax-class-properties"]
 });
 ```

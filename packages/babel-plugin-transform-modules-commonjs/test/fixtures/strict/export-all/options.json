@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "transform-block-scoping",
+    "transform-modules-commonjs"
+  ]
+}

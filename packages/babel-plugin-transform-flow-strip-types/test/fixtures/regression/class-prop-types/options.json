@@ -1,7 +1,7 @@
 {
   "plugins": [
     "transform-flow-strip-types",
-    "transform-es2015-classes",
+    "transform-classes",
     "external-helpers"
   ]
 }

@@ -10,7 +10,7 @@ Without any configuration options, @babel/preset-env behaves exactly the same as
 
 ```json
 {
-  "presets": ["env"]
+  "presets": ["@babel/env"]
 }
 ```
 
@@ -21,7 +21,7 @@ This example only includes the polyfills and code transforms needed for the last
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "browsers": ["last 2 versions", "safari >= 7"]
       }
@@ -35,7 +35,7 @@ Similarly, if you're targeting Node.js instead of the browser, you can configure
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "node": "6.10"
       }
@@ -49,7 +49,7 @@ For convenience, you can use `"node": "current"` to only include the necessary p
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "node": "current"
       }
@@ -117,7 +117,7 @@ For example, to enable only the polyfills and plugins needed for a project targe
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "useBuiltIns": "entry"
     }]
   ]
@@ -167,7 +167,7 @@ The default behavior without options runs all transforms (behaves the same as [@
 
 ```json
 {
-  "presets": ["env"]
+  "presets": ["@babel/env"]
 }
 ```
 
@@ -235,15 +235,15 @@ An array of plugins to always include.
 
 Valid options include any:
 
-- [Babel plugins](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js) - both with (`@babel/plugin-transform-es2015-spread`) and without prefix (`transform-es2015-spread`) are supported.
+- [Babel plugins](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js) - both with (`@babel/plugin-transform-spread`) and without prefix (`transform-spread`) are supported.
 
 - [Built-ins](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js), such as `map`, `set`, or `object.assign`.
 
 This option is useful if there is a bug in a native implementation, or a combination of a non-supported feature + a supported one doesn't work.
 
-For example, Node 4 supports native classes but not spread. If `super` is used with a spread argument, then the `transform-es2015-classes` transform needs to be `include`d, as it is not possible to transpile a spread with `super` otherwise.
+For example, Node 4 supports native classes but not spread. If `super` is used with a spread argument, then the `transform-classes` transform needs to be `include`d, as it is not possible to transpile a spread with `super` otherwise.
 
-> NOTE: The `include` and `exclude` options _only_ work with the [plugins included with this preset](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js); so, for example, including `transform-do-expressions` or excluding `transform-function-bind` will throw errors. To use a plugin _not_ included with this preset, add them to your [config](https://babeljs.io/docs/usage/babelrc/) directly.
+> NOTE: The `include` and `exclude` options _only_ work with the [plugins included with this preset](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js); so, for example, including `proposal-do-expressions` or excluding `proposal-function-bind` will throw errors. To use a plugin _not_ included with this preset, add them to your [config](https://babeljs.io/docs/usage/babelrc/) directly.
 
 ### `exclude`
 
@@ -253,7 +253,7 @@ An array of plugins to always exclude/remove.
 
 The possible options are the same as the `include` option.
 
-This option is useful for "blacklisting" a transform like `transform-regenerator` if you don't use generators and don't want to include `regeneratorRuntime` (when using `useBuiltIns`) or for using another plugin like [fast-async](https://github.com/MatAtBread/fast-async) instead of [Babel's async-to-gen](http://babeljs.io/docs/plugins/transform-async-generator-functions/).
+This option is useful for "blacklisting" a transform like `transform-regenerator` if you don't use generators and don't want to include `regeneratorRuntime` (when using `useBuiltIns`) or for using another plugin like [fast-async](https://github.com/MatAtBread/fast-async) instead of [Babel's async-to-gen](http://babeljs.io/docs/plugins/proposal-async-generator-functions/).
 
 ### `useBuiltIns`
 
@@ -342,7 +342,7 @@ Don't add polyfills automatically per file, or transform `import "@babel/polyfil
   ```js
   module.exports = {
     presets: [
-      ["env", {
+      ["@babel/env", {
         targets: {
           chrome: 59,
           edge: 13,
@@ -419,7 +419,7 @@ export class A {}
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "chrome": 52
       }
@@ -442,7 +442,7 @@ exports.A = A;
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "chrome": 52
       },
@@ -466,7 +466,7 @@ export class A {}
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "chrome": 52,
         "browsers": ["last 2 versions", "safari 7"]
@@ -491,7 +491,7 @@ export var A = function A() {
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "node": "current"
       }
@@ -514,7 +514,7 @@ exports.A = A;
 ```json
 {
   "presets": [
-    [ "env", {
+    ["@babel/env", {
       "targets": {
         "safari": 10
       },
@@ -556,12 +556,12 @@ Using polyfills:
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "browsers": ["last 2 versions", "safari >= 7"]
       },
-      "include": ["transform-es2015-arrow-functions", "es6.map"],
-      "exclude": ["transform-regenerator", "es6.set"]
+      "include": ["@babel/transform-arrow-functions", "es6.map"],
+      "exclude": ["@babel/transform-regenerator", "es6.set"]
     }]
   ]
 }
@@ -569,4 +569,4 @@ Using polyfills:
 
 ## Issues
 
-If you get a `SyntaxError: Unexpected token ...` error when using the [object-rest-spread](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-rest-spread) transform then make sure the plugin has been updated to, at least, `v6.19.0`.
+If you get a `SyntaxError: Unexpected token ...` error when using the [object-rest-spread](https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-object-rest-spread) transform then make sure the plugin has been updated to, at least, `v6.19.0`.

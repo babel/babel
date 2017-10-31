@@ -1,0 +1,3 @@
+{
+  "plugins": ["external-helpers", "transform-function-name", "transform-classes", "proposal-decorators"]
+}

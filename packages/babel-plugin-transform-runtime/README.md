@@ -44,7 +44,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["transform-runtime"]
+  "plugins": ["@babel/transform-runtime"]
 }
 ```
 
@@ -53,7 +53,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["transform-runtime", {
+    ["@babel/transform-runtime", {
       "helpers": false,
       "polyfill": false,
       "regenerator": true,
@@ -66,14 +66,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins transform-runtime script.js
+babel --plugins @babel/transform-runtime script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-runtime"]
+  plugins: ["@babel/transform-runtime"]
 });
 ```
 
@@ -171,7 +171,7 @@ exports.default = function (left, right) {
 `boolean`, defaults to `false`.
 
 When enabled, the transform will use helpers that do not get run through
-`transform-es2015-modules-commonjs`. This allows for smaller builds in module
+`transform-modules-commonjs`. This allows for smaller builds in module
 systems like webpack, since it doesn't need to preserve commonjs semantics.
 
 For example, here is the `classCallCheck` helper with `useESModules` disabled:

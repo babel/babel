@@ -1,0 +1,53 @@
+# @babel/plugin-transform-property-literals
+
+> Ensure that reserved words are quoted in object property keys
+
+## Example
+
+**In**
+
+```javascript
+var foo = {
+  catch: function () {}
+};
+```
+
+**Out**
+
+```javascript
+var foo = {
+  "catch": function () {}
+};
+```
+
+## Installation
+
+```sh
+npm install --save-dev @babel/plugin-transform-property-literals
+```
+
+## Usage
+
+### Via `.babelrc` (Recommended)
+
+**.babelrc**
+
+```json
+{
+  "plugins": ["@babel/transform-property-literals"]
+}
+```
+
+### Via CLI
+
+```sh
+babel --plugins @babel/transform-property-literals script.js
+```
+
+### Via Node API
+
+```javascript
+require("@babel/core").transform("code", {
+  plugins: ["@babel/transform-property-literals"]
+});
+```

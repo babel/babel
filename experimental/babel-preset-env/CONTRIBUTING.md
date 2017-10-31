@@ -20,7 +20,7 @@ And add them in this structure:
 
 ```js
 // es2016
-"transform-exponentiation-operator": {
+"@babel/transform-exponentiation-operator": {
   features: [
     "exponentiation (**) operator",
   ],

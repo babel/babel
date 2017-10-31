@@ -34,20 +34,20 @@ npm install --save-dev @babel/plugin-transform-object-set-prototype-of-to-assign
 
 ```json
 {
-  "plugins": ["transform-object-set-prototype-of-to-assign"]
+  "plugins": ["@babel/transform-object-set-prototype-of-to-assign"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-object-set-prototype-of-to-assign script.js
+babel --plugins @babel/transform-object-set-prototype-of-to-assign script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["transform-object-set-prototype-of-to-assign"]
+  plugins: ["@babel/transform-object-set-prototype-of-to-assign"]
 });
 ```

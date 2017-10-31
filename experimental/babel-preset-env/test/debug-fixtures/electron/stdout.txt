@@ -15,14 +15,14 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-es2015-constants { "electron":"0.36" }
-  transform-es2015-block-scoping { "electron":"0.36" }
-  transform-es2015-destructuring { "electron":"0.36" }
-  transform-es2015-for-of { "electron":"0.36" }
-  transform-es2015-function-name { "electron":"0.36" }
-  transform-es2015-parameters { "electron":"0.36" }
-  transform-es2015-sticky-regex { "electron":"0.36" }
-  transform-es2015-unicode-regex { "electron":"0.36" }
+  check-constants { "electron":"0.36" }
+  transform-block-scoping { "electron":"0.36" }
+  transform-destructuring { "electron":"0.36" }
+  transform-for-of { "electron":"0.36" }
+  transform-function-name { "electron":"0.36" }
+  transform-parameters { "electron":"0.36" }
+  transform-sticky-regex { "electron":"0.36" }
+  transform-unicode-regex { "electron":"0.36" }
   transform-regenerator { "electron":"0.36" }
   transform-exponentiation-operator { "electron":"0.36" }
   transform-async-to-generator { "electron":"0.36" }

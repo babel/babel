@@ -51,35 +51,34 @@ Babel is a tool that helps you write code in the latest version of JavaScript. W
 Try it out at our [REPL](https://babeljs.io/repl/build/master#?code_lz=NoRgNATGDMC6B0BbAhgBwBQDsAEBeAfNjgNTYgCUA3EA&lineWrap=true&presets=es2015%2Ces2016%2Ces2017&version=7.0.0-beta.2).
 
 - [FAQ](#faq)
-- [Team](https://babeljs.io/team)
 - [Backers](#backers)
 - [Sponsors](#sponsors)
 - [License](#license)
 
 ## FAQ
 
-### Docs?
+### Who maintains Babel?
 
-Check out our website: [babeljs.io](http://babeljs.io/)
+Mostly a handful of volunteers! Please check out our [team page](https://babeljs.io/team)!
 
 ### Looking for support?
 
 For questions and support please visit join our [Slack Community](https://slack.babeljs.io/), ask a question on [Stack Overflow](http://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs/).
 
+### Where are the docs?
+
+Check out our website: [babeljs.io](http://babeljs.io/), and report issues/features at [babel/website](https://github.com/babel/website/issues).
+
 ### Want to report a bug or request a feature?
 
 Please read through our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md) and fill out the issue template at [babel/issues](https://github.com/babel/babel/issues)!
-
-### Want to report an issue with our website ([babeljs.io](https://babeljs.io))?
-
-For docs/website issues please visit the [babel/website](https://github.com/babel/website/issues).
 
 ### Want to contribute to Babel?
 
 Check out our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md) to get started with setting up the repo.
 
 - If you have already joined Slack, join our [#development](https://babeljs.slack.com/messages/development) channel and say hi!
-- Check out the issues with the [good first issue](https://github.com/babel/babel/labels/good%20first%20issue) and [help wanted](https://github.com/babel/babel/labels/help%20wanted) label.
+- Check out the issues with the [good first issue](https://github.com/babel/babel/labels/good%20first%20issue) and [help wanted](https://github.com/babel/babel/labels/help%20wanted) label. We suggest also looking at the closed ones to get a sense of the kinds of issues you can tackle.
 - Our discussions/notes/roadmap: [babel/notes](https://github.com/babel/notes)
 - Our progress on TC39 proposals: [babel/proposals](https://github.com/babel/proposals)
 

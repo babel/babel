@@ -34,21 +34,21 @@ npm install --save-dev @babel/plugin-syntax-async-generators
 
 ```json
 {
-  "plugins": ["syntax-async-generators"]
+  "plugins": ["@babel/syntax-async-generators"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-async-generators script.js
+babel --plugins @babel/syntax-async-generators script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["syntax-async-generators"]
+  plugins: ["@babel/syntax-async-generators"]
 });
 ```
 

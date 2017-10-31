@@ -1,3 +1,3 @@
 {
-  "plugins": ["external-helpers", "syntax-jsx", "transform-react-jsx", "transform-react-display-name", "transform-es2015-arrow-functions"]
+  "plugins": ["external-helpers", "syntax-jsx", "transform-react-jsx", "transform-react-display-name", "transform-arrow-functions"]
 }

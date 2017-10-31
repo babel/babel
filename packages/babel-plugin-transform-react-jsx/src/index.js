@@ -3,6 +3,8 @@ import helper from "@babel/helper-builder-react-jsx";
 
 export default function({ types: t }, options) {
   const pragma = options.pragma || "React.createElement";
+  const throwIfNamespace =
+    options.throwIfNamespace === undefined ? true : !!options.throwIfNamespace;
 
   const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
 
@@ -20,6 +22,8 @@ export default function({ types: t }, options) {
     post(state, pass) {
       state.callee = pass.get("jsxIdentifier")();
     },
+
+    throwIfNamespace,
   });
 
   visitor.Program = function(path, state) {
