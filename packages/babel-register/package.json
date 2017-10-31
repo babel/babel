@@ -22,6 +22,7 @@
     "@babel/core": ">=7.0.0-beta.4 <7.0.0-rc.0"
   },
   "devDependencies": {
+    "@babel/core": "7.0.0-beta.5",
     "default-require-extensions": "^2.0.0"
   }
 }

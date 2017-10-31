@@ -13,6 +13,7 @@
     "@babel/core": ">=7.0.0-beta.4 <7.0.0-rc.0"
   },
   "devDependencies": {
+    "@babel/core": "7.0.0-beta.5",
     "@babel/helper-plugin-test-runner": "7.0.0-beta.5"
   }
 }
