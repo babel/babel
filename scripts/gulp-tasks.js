@@ -20,31 +20,8 @@ const webpack = require("webpack");
 const webpackStream = require("webpack-stream");
 const uglify = require("gulp-uglify");
 
-const standalonePackagePlugins = {
-  babelPresetEnv: [
-    new webpack.NormalModuleReplacementPlugin(
-      /\.\/available-plugins/,
-      require.resolve(
-        path.join(
-          __dirname,
-          "../experimental/babel-preset-env-standalone/src/available-plugins"
-        )
-      )
-    ),
-    new webpack.NormalModuleReplacementPlugin(
-      /caniuse-lite\/data\/regions\/.+/,
-      require.resolve(
-        path.join(
-          __dirname,
-          "../experimental/babel-preset-env-standalone/src/caniuse-lite-regions"
-        )
-      )
-    ),
-  ],
-};
-
 function webpackBuild(opts) {
-  const plugins = standalonePackagePlugins[opts.library] || [];
+  const plugins = opts.plugins || [];
   let babelVersion = require("../packages/babel-core/package.json").version;
   let version = opts.version || babelVersion;
   // If this build is part of a pull request, include the pull request number in
@@ -137,7 +114,8 @@ function registerStandalonePackageTask(
   name,
   exportName,
   pathname,
-  version
+  version,
+  plugins
 ) {
   const standaloneName = name + "-standalone";
   const standalonePath = path.join(pathname, standaloneName);
@@ -149,6 +127,7 @@ function registerStandalonePackageTask(
           filename: name + ".js",
           library: exportName,
           version,
+          plugins,
         }),
         gulp.dest(standalonePath),
         uglify(),

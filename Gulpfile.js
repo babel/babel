@@ -9,6 +9,7 @@ const watch = require("gulp-watch");
 const gutil = require("gulp-util");
 const gulp = require("gulp");
 const path = require("path");
+const webpack = require("webpack");
 const merge = require("merge-stream");
 const registerStandalonePackageTask = require("./scripts/gulp-tasks")
   .registerStandalonePackageTask;
@@ -81,10 +82,32 @@ registerStandalonePackageTask(
   require("./packages/babel-core/package.json").version
 );
 
+const presetEnvWebpackPlugins = [
+  new webpack.NormalModuleReplacementPlugin(
+    /\.\/available-plugins/,
+    require.resolve(
+      path.join(
+        __dirname,
+        "./experimental/babel-preset-env-standalone/src/available-plugins"
+      )
+    )
+  ),
+  new webpack.NormalModuleReplacementPlugin(
+    /caniuse-lite\/data\/regions\/.+/,
+    require.resolve(
+      path.join(
+        __dirname,
+        "./experimental/babel-preset-env-standalone/src/caniuse-lite-regions"
+      )
+    )
+  ),
+];
+
 registerStandalonePackageTask(
   gulp,
   "babel-preset-env",
   "babelPresetEnv",
   path.join(__dirname, "experimental"),
-  require("./experimental/babel-preset-env/package.json").version
+  require("./experimental/babel-preset-env/package.json").version,
+  presetEnvWebpackPlugins
 );
