@@ -37,9 +37,9 @@ let envOpts = {
 module.exports = {
   comments: false,
   presets: [
-    ["env", envOpts],
-    "stage-0",
-    "flow"
+    ["@babel/env", envOpts],
+    "@babel/stage-0",
+    "@babel/flow"
   ],
   env: {
     cov: {
