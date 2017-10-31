@@ -58,15 +58,4 @@ types/parameter_defaults/migrated_0031.js
 types/parameter_defaults/migrated_0032.js
 types/string_literal_invalid/migrated_0000.js
 types/typecasts_invalid/migrated_0001.js
-types/import_type_shorthand/reserved_type.js
-types/import_type_shorthand/type_as_as.js
-types/import_type_shorthand/typeof_reserved_type.js
-types/import_type_shorthand/typeof_reserved_value.js
-types/import_types/default_reserved_type.js
-types/import_types/default_reserved_value.js
-types/import_types/named_reserved_type.js
-types/import_types/named_reserved_value.js
-types/import_types/namespace_reserved_type.js
-types/import_types/namespace_reserved_value.js
-types/import_types/typeof_default_reserved_type.js
-types/import_types/typeof_namespace_reserved_type.js
+types/import_types/typeof_named_reserved_type.js

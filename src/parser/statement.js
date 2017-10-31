@@ -5,7 +5,6 @@
 import * as N from "../types";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import ExpressionParser from "./expression";
-import type { Position } from "../util/location";
 import { lineBreak } from "../util/whitespace";
 
 // Reused empty array added for node fields that are always empty.
@@ -1579,21 +1578,34 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(node, "ImportDeclaration");
   }
 
-  // Parses a comma-separated list of module imports.
+  // eslint-disable-next-line no-unused-vars
+  shouldParseDefaultImport(node: N.ImportDeclaration): boolean {
+    return this.match(tt.name);
+  }
 
+  parseImportSpecifierLocal(
+    node: N.ImportDeclaration,
+    specifier: N.Node,
+    type: string,
+    contextDescription: string,
+  ): void {
+    specifier.local = this.parseIdentifier();
+    this.checkLVal(specifier.local, true, undefined, contextDescription);
+    node.specifiers.push(this.finishNode(specifier, type));
+  }
+
+  // Parses a comma-separated list of module imports.
   parseImportSpecifiers(node: N.ImportDeclaration): void {
     let first = true;
-    if (this.match(tt.name)) {
+    if (this.shouldParseDefaultImport(node)) {
       // import defaultObj, { x, y as z } from '...'
-      const startPos = this.state.start;
-      const startLoc = this.state.startLoc;
-      node.specifiers.push(
-        this.parseImportSpecifierDefault(
-          this.parseIdentifier(),
-          startPos,
-          startLoc,
-        ),
+      this.parseImportSpecifierLocal(
+        node,
+        this.startNode(),
+        "ImportDefaultSpecifier",
+        "default import specifier",
       );
+
       if (!this.eat(tt.comma)) return;
     }
 
@@ -1601,16 +1613,14 @@ export default class StatementParser extends ExpressionParser {
       const specifier = this.startNode();
       this.next();
       this.expectContextual("as");
-      specifier.local = this.parseIdentifier();
-      this.checkLVal(
-        specifier.local,
-        true,
-        undefined,
+
+      this.parseImportSpecifierLocal(
+        node,
+        specifier,
+        "ImportNamespaceSpecifier",
         "import namespace specifier",
       );
-      node.specifiers.push(
-        this.finishNode(specifier, "ImportNamespaceSpecifier"),
-      );
+
       return;
     }
 
@@ -1651,16 +1661,5 @@ export default class StatementParser extends ExpressionParser {
     }
     this.checkLVal(specifier.local, true, undefined, "import specifier");
     node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));
-  }
-
-  parseImportSpecifierDefault(
-    id: N.Identifier,
-    startPos: number,
-    startLoc: Position,
-  ): N.ImportDefaultSpecifier {
-    const node = this.startNodeAt(startPos, startLoc);
-    node.local = id;
-    this.checkLVal(node.local, true, undefined, "default import specifier");
-    return this.finishNode(node, "ImportDefaultSpecifier");
   }
 }

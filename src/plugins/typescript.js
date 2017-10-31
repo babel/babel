@@ -1030,7 +1030,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             /* optionalId */ false,
           );
         case tt._const:
-          if (this.match(tt._const) && this.lookaheadIsContextual("enum")) {
+          if (this.match(tt._const) && this.isLookaheadContextual("enum")) {
             // `const enum = 0;` not allowed because "enum" is a strict mode reserved word.
             this.expect(tt._const);
             this.expectContextual("enum");
@@ -1049,11 +1049,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
         }
       }
-    }
-
-    lookaheadIsContextual(name: string): boolean {
-      const l = this.lookahead();
-      return l.type === tt.name && l.value === name;
     }
 
     // Note: this won't be called unless the keyword is allowed in `shouldParseExportDeclaration`.

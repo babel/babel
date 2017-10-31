@@ -6,17 +6,22 @@ import type Parser from "../parser";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import * as N from "../types";
 import type { Pos, Position } from "../util/location";
+import type State from "../tokenizer/state";
 
 const primitiveTypes = [
   "any",
-  "mixed",
-  "empty",
   "bool",
   "boolean",
-  "number",
-  "string",
-  "void",
+  "empty",
+  "false",
+  "mixed",
   "null",
+  "number",
+  "static",
+  "string",
+  "true",
+  "typeof",
+  "void",
 ];
 
 function isEsModuleType(bodyElement: N.Node): boolean {
@@ -26,6 +31,16 @@ function isEsModuleType(bodyElement: N.Node): boolean {
       (!bodyElement.declaration ||
         (bodyElement.declaration.type !== "TypeAlias" &&
           bodyElement.declaration.type !== "InterfaceDeclaration")))
+  );
+}
+
+function hasTypeImportKind(node: N.Node): boolean {
+  return node.importKind === "type" || node.importKind === "typeof";
+}
+
+function isMaybeDefaultImport(state: State): boolean {
+  return (
+    (state.type === tt.name || !!state.type.keyword) && state.value !== "from"
   );
 }
 
@@ -420,14 +435,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "InterfaceDeclaration");
     }
 
-    flowParseRestrictedIdentifier(liberal?: boolean): N.Identifier {
-      if (primitiveTypes.indexOf(this.state.value) > -1) {
-        this.raise(
-          this.state.start,
-          `Cannot overwrite primitive type ${this.state.value}`,
-        );
+    checkReservedType(word: string, startLoc: number) {
+      if (primitiveTypes.indexOf(word) > -1) {
+        this.raise(startLoc, `Cannot overwrite primitive type ${word}`);
       }
+    }
 
+    flowParseRestrictedIdentifier(liberal?: boolean): N.Identifier {
+      this.checkReservedType(this.state.value, this.state.start);
       return this.parseIdentifier(liberal);
     }
 
@@ -1860,6 +1875,28 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return node;
     }
 
+    shouldParseDefaultImport(node: N.ImportDeclaration): boolean {
+      if (!hasTypeImportKind(node)) {
+        return super.shouldParseDefaultImport(node);
+      }
+
+      return isMaybeDefaultImport(this.state);
+    }
+
+    parseImportSpecifierLocal(
+      node: N.ImportDeclaration,
+      specifier: N.Node,
+      type: string,
+      contextDescription: string,
+    ): void {
+      specifier.local = hasTypeImportKind(node)
+        ? this.flowParseRestrictedIdentifier(true)
+        : this.parseIdentifier();
+
+      this.checkLVal(specifier.local, true, undefined, contextDescription);
+      node.specifiers.push(this.finishNode(specifier, type));
+    }
+
     // parse typeof and type imports
     parseImportSpecifiers(node: N.ImportDeclaration): void {
       node.importKind = "value";
@@ -1873,7 +1910,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (kind) {
         const lh = this.lookahead();
         if (
-          (lh.type === tt.name && lh.value !== "from") ||
+          isMaybeDefaultImport(lh) ||
           lh.type === tt.braceL ||
           lh.type === tt.star
         ) {
@@ -1899,7 +1936,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       let isBinding = false;
-      if (this.isContextual("as")) {
+      if (this.isContextual("as") && !this.isLookaheadContextual("as")) {
         const as_ident = this.parseIdentifier(true);
         if (
           specifierTypeKind !== null &&
@@ -1936,23 +1973,28 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         specifier.local = specifier.imported.__clone();
       }
 
-      if (
-        (node.importKind === "type" || node.importKind === "typeof") &&
-        (specifier.importKind === "type" || specifier.importKind === "typeof")
-      ) {
+      const nodeIsTypeImport = hasTypeImportKind(node);
+      const specifierIsTypeImport = hasTypeImportKind(specifier);
+
+      if (nodeIsTypeImport && specifierIsTypeImport) {
         this.raise(
           firstIdentLoc,
-          "`The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements`",
+          "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements",
         );
       }
 
-      if (isBinding)
+      if (nodeIsTypeImport || specifierIsTypeImport) {
+        this.checkReservedType(specifier.local.name, specifier.local.start);
+      }
+
+      if (isBinding && !nodeIsTypeImport && !specifierIsTypeImport) {
         this.checkReservedWord(
           specifier.local.name,
           specifier.start,
           true,
           true,
         );
+      }
 
       this.checkLVal(specifier.local, true, undefined, "import specifier");
       node.specifiers.push(this.finishNode(specifier, "ImportSpecifier"));

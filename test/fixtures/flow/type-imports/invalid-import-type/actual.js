@@ -1,1 +1,1 @@
-import { type debugger } from "foo";
+import type string from "foo";

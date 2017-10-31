@@ -49,6 +49,11 @@ export default class UtilParser extends Tokenizer {
     return this.match(tt.name) && this.state.value === name;
   }
 
+  isLookaheadContextual(name: string): boolean {
+    const l = this.lookahead();
+    return l.type === tt.name && l.value === name;
+  }
+
   // Consumes contextual keyword if possible.
 
   eatContextual(name: string): boolean {
