@@ -11,7 +11,7 @@ You only need to use babel-eslint if you are using types (Flow) or experimental 
 
 > If there is an issue, first check if it can be reproduced with the regular parser or with the latest versions of `eslint` and `babel-eslint`!
 
-For questions and support please visit the [`#linting`](https://babeljs.slack.com/messages/linting/) babel slack channel (sign up [here](https://babel-slack.herokuapp.com))!
+For questions and support please visit the [`#discussion`](https://babeljs.slack.com/messages/discussion/) babel slack channel (sign up [here](https://github.com/babel/notes/issues/38)) or eslint [gitter](https://gitter.im/eslint/eslint)!
 
 > Note that the `ecmaFeatures` config property may still be required for ESLint to work properly with features not in ECMAScript 5 by default. Examples are `globalReturn` and `modules`).
 
