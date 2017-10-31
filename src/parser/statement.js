@@ -899,7 +899,7 @@ export default class StatementParser extends ExpressionParser {
 
       if (
         this.hasPlugin("decorators2") &&
-        member.kind != "method" &&
+        ["method", "get", "set"].indexOf(member.kind) === -1 &&
         member.decorators &&
         member.decorators.length > 0
       ) {
