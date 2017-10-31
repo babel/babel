@@ -779,7 +779,9 @@ export default class StatementParser extends ExpressionParser {
     isAsync?: boolean,
     optionalId?: boolean,
   ): T {
+    const oldInFunc = this.state.inFunction;
     const oldInMethod = this.state.inMethod;
+    this.state.inFunction = true;
     this.state.inMethod = false;
 
     this.initFunction(node, isAsync);
@@ -811,6 +813,7 @@ export default class StatementParser extends ExpressionParser {
       isStatement ? "FunctionDeclaration" : "FunctionExpression",
       allowExpressionBody,
     );
+    this.state.inFunction = oldInFunc;
     this.state.inMethod = oldInMethod;
     return node;
   }

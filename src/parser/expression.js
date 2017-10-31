@@ -1461,7 +1461,9 @@ export default class ExpressionParser extends LValParser {
     isConstructor: boolean,
     type: string,
   ): T {
+    const oldInFunc = this.state.inFunction;
     const oldInMethod = this.state.inMethod;
+    this.state.inFunction = true;
     this.state.inMethod = node.kind || true;
     this.initFunction(node, isAsync);
     this.expect(tt.parenL);
@@ -1473,6 +1475,7 @@ export default class ExpressionParser extends LValParser {
     );
     node.generator = !!isGenerator;
     this.parseFunctionBodyAndFinish(node, type);
+    this.state.inFunction = oldInFunc;
     this.state.inMethod = oldInMethod;
     return node;
   }
@@ -1484,9 +1487,12 @@ export default class ExpressionParser extends LValParser {
     params: N.Expression[],
     isAsync?: boolean,
   ): N.ArrowFunctionExpression {
+    const oldInFunc = this.state.inFunction;
+    this.state.inFunction = true;
     this.initFunction(node, isAsync);
     this.setArrowFunctionParameters(node, params);
     this.parseFunctionBody(node, true);
+    this.state.inFunction = oldInFunc;
     return this.finishNode(node, "ArrowFunctionExpression");
   }
 
@@ -1536,17 +1542,14 @@ export default class ExpressionParser extends LValParser {
       node.body = this.parseMaybeAssign();
       node.expression = true;
     } else {
-      // Start a new scope with regard to labels and the `inFunction`
+      // Start a new scope with regard to labels and the `inGenerator`
       // flag (restore them to their old value afterwards).
-      const oldInFunc = this.state.inFunction;
       const oldInGen = this.state.inGenerator;
       const oldLabels = this.state.labels;
-      this.state.inFunction = true;
       this.state.inGenerator = node.generator;
       this.state.labels = [];
       node.body = this.parseBlock(true);
       node.expression = false;
-      this.state.inFunction = oldInFunc;
       this.state.inGenerator = oldInGen;
       this.state.labels = oldLabels;
     }
