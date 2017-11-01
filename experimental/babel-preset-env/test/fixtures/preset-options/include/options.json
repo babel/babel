@@ -1,8 +1,10 @@
 {
   "presets": [
     ["../../../../lib", {
-      "targets": {},
-      "include": ["transform-modules-commonjs"],
+      "targets": {
+        "chrome": 61
+      },
+      "include": ["transform-classes"],
       "modules": false
     }]
   ]
