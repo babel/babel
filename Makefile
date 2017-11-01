@@ -12,18 +12,22 @@ SOURCES = packages codemods experimental
 build: clean
 	make clean-lib
 	./node_modules/.bin/gulp build
-ifneq ("$(BABEL_ENV)", "cov")
+ifeq ("$(INCLUDE_STANDALONE)", "true")
 	make build-standalone
 endif
+
+build-runtime:
+	cd packages/babel-runtime; \
+	node scripts/build-dist.js
 
 build-standalone:
 	./node_modules/.bin/gulp build-babel-standalone
 
-build-dist: build
+build-dist:
+	INCLUDE_STANDALONE=true make build-standalone
 	cd packages/babel-polyfill; \
 	scripts/build-dist.sh
-	cd packages/babel-runtime; \
-	node scripts/build-dist.js
+	make build-runtime
 	node scripts/generate-babel-types-docs.js
 
 watch: clean
@@ -58,12 +62,12 @@ test-only:
 test: lint test-only
 
 test-ci:
-	make bootstrap
-	make test-only
+	INCLUDE_STANDALONE=true make bootstrap
+	INCLUDE_STANDALONE=true make test-only
 
 test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
-	BABEL_ENV=cov make bootstrap
+	INCLUDE_STANDALONE=true make bootstrap
 	./scripts/test-cov.sh
 	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
@@ -80,10 +84,13 @@ publish:
 bootstrap:
 	make clean-all
 	yarn
+ifeq ("$(INCLUDE_STANDALONE)", "true")
 	./node_modules/.bin/lerna bootstrap
+else
+	./node_modules/.bin/lerna bootstrap --ignore babel-standalone
+endif
 	make build
-	cd packages/babel-runtime; \
-	node scripts/build-dist.js
+	make build-runtime
 
 clean-lib:
 	$(foreach source, $(SOURCES), \
