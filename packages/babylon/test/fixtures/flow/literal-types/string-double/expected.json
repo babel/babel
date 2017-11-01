@@ -1,0 +1,189 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 57,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 57
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 57,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 57
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 57,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 57
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 22,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 22
+            },
+            "identifierName": "createElement"
+          },
+          "name": "createElement"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start": 23,
+            "end": 37,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 23
+              },
+              "end": {
+                "line": 1,
+                "column": 37
+              },
+              "identifierName": "tagName"
+            },
+            "name": "tagName",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start": 30,
+              "end": 37,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 30
+                },
+                "end": {
+                  "line": 1,
+                  "column": 37
+                }
+              },
+              "typeAnnotation": {
+                "type": "StringLiteralTypeAnnotation",
+                "start": 32,
+                "end": 37,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 32
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 37
+                  }
+                },
+                "extra": {
+                  "rawValue": "div",
+                  "raw": "\"div\""
+                },
+                "value": "div"
+              }
+            }
+          }
+        ],
+        "predicate": null,
+        "returnType": {
+          "type": "TypeAnnotation",
+          "start": 38,
+          "end": 54,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 38
+            },
+            "end": {
+              "line": 1,
+              "column": 54
+            }
+          },
+          "typeAnnotation": {
+            "type": "GenericTypeAnnotation",
+            "start": 40,
+            "end": 54,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 40
+              },
+              "end": {
+                "line": 1,
+                "column": 54
+              }
+            },
+            "typeParameters": null,
+            "id": {
+              "type": "Identifier",
+              "start": 40,
+              "end": 54,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 40
+                },
+                "end": {
+                  "line": 1,
+                  "column": 54
+                },
+                "identifierName": "HTMLDivElement"
+              },
+              "name": "HTMLDivElement"
+            }
+          }
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start": 55,
+          "end": 57,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 55
+            },
+            "end": {
+              "line": 1,
+              "column": 57
+            }
+          },
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "presets": [
+    ["env", {
+      "loose": true,
+      "modules": false,
+      "targets": {
+        "node": "4.2"
+      }
+    }],
+    "flow"
+  ],
+  "plugins": [
+    "external-helpers"
+  ],
+  "env": {
+    "watch": {
+      "presets": [
+        ["env", {
+          "loose": true,
+          "targets": {
+            "node": "current"
+          }
+        }],
+        "flow"
+      ]
+    },
+    "test": {
+      "plugins": ["istanbul"]
+    }
+  }
+}

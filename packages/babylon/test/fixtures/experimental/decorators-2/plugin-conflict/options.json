@@ -1,0 +1,4 @@
+{
+  "plugins": ["decorators", "decorators2"],
+  "throws": "Cannot use decorators and decorators2 plugin together"
+}

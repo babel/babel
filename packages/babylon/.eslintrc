@@ -1,0 +1,14 @@
+{
+  "root": true,
+  "extends": "babel",
+  "plugins": [
+    "prettier"
+  ],
+  "rules": {
+    "prettier/prettier": ["error", { "trailingComma": "all" }],
+    "no-case-declarations": "error"
+  },
+  "env": {
+    "node": true
+  }
+}

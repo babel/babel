@@ -1,0 +1,150 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 66,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 37
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 66,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 37
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "OpaqueType",
+        "start": 0,
+        "end": 28,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 28
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 12,
+          "end": 18,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 12
+            },
+            "end": {
+              "line": 1,
+              "column": 18
+            },
+            "identifierName": "opaque"
+          },
+          "name": "opaque"
+        },
+        "typeParameters": null,
+        "supertype": null,
+        "impltype": {
+          "type": "NumberTypeAnnotation",
+          "start": 21,
+          "end": 27,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 21
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            }
+          }
+        }
+      },
+      {
+        "type": "OpaqueType",
+        "start": 29,
+        "end": 66,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 37
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 41,
+          "end": 56,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 12
+            },
+            "end": {
+              "line": 2,
+              "column": 27
+            },
+            "identifierName": "not_transparent"
+          },
+          "name": "not_transparent"
+        },
+        "typeParameters": null,
+        "supertype": null,
+        "impltype": {
+          "type": "GenericTypeAnnotation",
+          "start": 59,
+          "end": 65,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 30
+            },
+            "end": {
+              "line": 2,
+              "column": 36
+            }
+          },
+          "typeParameters": null,
+          "id": {
+            "type": "Identifier",
+            "start": 59,
+            "end": 65,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 30
+              },
+              "end": {
+                "line": 2,
+                "column": 36
+              },
+              "identifierName": "opaque"
+            },
+            "name": "opaque"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

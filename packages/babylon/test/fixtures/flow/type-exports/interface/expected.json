@@ -1,0 +1,363 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 69,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 33
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 69,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 33
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 0,
+        "end": 34,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 34
+          }
+        },
+        "specifiers": [],
+        "source": null,
+        "exportKind": "type",
+        "declaration": {
+          "type": "InterfaceDeclaration",
+          "start": 7,
+          "end": 34,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 7
+            },
+            "end": {
+              "line": 1,
+              "column": 34
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 17,
+            "end": 20,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 17
+              },
+              "end": {
+                "line": 1,
+                "column": 20
+              },
+              "identifierName": "foo"
+            },
+            "name": "foo"
+          },
+          "typeParameters": null,
+          "extends": [],
+          "mixins": [],
+          "body": {
+            "type": "ObjectTypeAnnotation",
+            "start": 21,
+            "end": 34,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 21
+              },
+              "end": {
+                "line": 1,
+                "column": 34
+              }
+            },
+            "callProperties": [],
+            "properties": [
+              {
+                "type": "ObjectTypeProperty",
+                "start": 23,
+                "end": 32,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 23
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 32
+                  }
+                },
+                "key": {
+                  "type": "Identifier",
+                  "start": 23,
+                  "end": 24,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 24
+                    },
+                    "identifierName": "p"
+                  },
+                  "name": "p"
+                },
+                "static": false,
+                "kind": "init",
+                "value": {
+                  "type": "NumberTypeAnnotation",
+                  "start": 26,
+                  "end": 32,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 26
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 32
+                    }
+                  }
+                },
+                "variance": null,
+                "optional": false
+              }
+            ],
+            "indexers": [],
+            "exact": false
+          }
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 34,
+        "end": 35,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 34
+          },
+          "end": {
+            "line": 1,
+            "column": 35
+          }
+        }
+      },
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 36,
+        "end": 68,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 32
+          }
+        },
+        "specifiers": [],
+        "source": null,
+        "exportKind": "type",
+        "declaration": {
+          "type": "InterfaceDeclaration",
+          "start": 43,
+          "end": 68,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 7
+            },
+            "end": {
+              "line": 2,
+              "column": 32
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 53,
+            "end": 56,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 17
+              },
+              "end": {
+                "line": 2,
+                "column": 20
+              },
+              "identifierName": "bar"
+            },
+            "name": "bar"
+          },
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start": 56,
+            "end": 59,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 20
+              },
+              "end": {
+                "line": 2,
+                "column": 23
+              }
+            },
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start": 57,
+                "end": 58,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 22
+                  }
+                },
+                "name": "T",
+                "variance": null
+              }
+            ]
+          },
+          "extends": [],
+          "mixins": [],
+          "body": {
+            "type": "ObjectTypeAnnotation",
+            "start": 60,
+            "end": 68,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 24
+              },
+              "end": {
+                "line": 2,
+                "column": 32
+              }
+            },
+            "callProperties": [],
+            "properties": [
+              {
+                "type": "ObjectTypeProperty",
+                "start": 62,
+                "end": 66,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 26
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 30
+                  }
+                },
+                "key": {
+                  "type": "Identifier",
+                  "start": 62,
+                  "end": 63,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 26
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 27
+                    },
+                    "identifierName": "p"
+                  },
+                  "name": "p"
+                },
+                "static": false,
+                "kind": "init",
+                "value": {
+                  "type": "GenericTypeAnnotation",
+                  "start": 65,
+                  "end": 66,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 29
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 30
+                    }
+                  },
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 65,
+                    "end": 66,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 29
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 30
+                      },
+                      "identifierName": "T"
+                    },
+                    "name": "T"
+                  }
+                },
+                "variance": null,
+                "optional": false
+              }
+            ],
+            "indexers": [],
+            "exact": false
+          }
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 68,
+        "end": 69,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 32
+          },
+          "end": {
+            "line": 2,
+            "column": 33
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}
