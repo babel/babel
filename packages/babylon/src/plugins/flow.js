@@ -383,14 +383,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.FlowDeclareInterface,
     ): N.FlowDeclareInterface {
       this.next();
-      this.flowParseInterfaceish(node);
+      this.flowParseInterfaceish(node, true);
       return this.finishNode(node, "DeclareInterface");
     }
 
     // Interfaces
 
-    flowParseInterfaceish(node: N.FlowDeclare): void {
-      node.id = this.parseIdentifier();
+    flowParseInterfaceish(node: N.FlowDeclare, allowLiberalId: boolean): void {
+      node.id = this.flowParseRestrictedIdentifier(/*liberal*/ allowLiberalId);
 
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -431,7 +431,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     flowParseInterface(node: N.FlowInterface): N.FlowInterface {
-      this.flowParseInterfaceish(node);
+      this.flowParseInterfaceish(node, true);
       return this.finishNode(node, "InterfaceDeclaration");
     }
 
@@ -468,7 +468,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       declare: boolean,
     ): N.FlowOpaqueType {
       this.expectContextual("type");
-      node.id = this.flowParseRestrictedIdentifier();
+      node.id = this.flowParseRestrictedIdentifier(/*liberal*/ true);
 
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -1775,7 +1775,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const implemented: N.FlowClassImplements[] = (node.implements = []);
         do {
           const node = this.startNode();
-          node.id = this.parseIdentifier();
+          node.id = this.flowParseRestrictedIdentifier(/*liberal*/ true);
           if (this.isRelational("<")) {
             node.typeParameters = this.flowParseTypeParameterInstantiation();
           } else {
