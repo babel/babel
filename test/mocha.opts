@@ -1,1 +1,1 @@
---reporter dot --ui tdd --timeout 10000 --compilers js:babel-register
+--reporter dot --ui tdd --timeout 10000 --compilers js:@babel/register

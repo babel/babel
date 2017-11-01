@@ -44,7 +44,7 @@ function webpackBuild(opts) {
             // their project.json (or a ".babelrc" file). We need to ignore
             // those as we're using our own Babel options.
             babelrc: false,
-            presets: ["env"],
+            presets: ["@babel/env"],
           },
         },
         {
@@ -56,7 +56,7 @@ function webpackBuild(opts) {
             // their project.json (or a ".babelrc" file). We need to ignore
             // those as we're using our own Babel options.
             babelrc: false,
-            presets: ["env", "stage-0"],
+            presets: ["@babel/env", "@babel/stage-0"],
           },
         },
       ],
