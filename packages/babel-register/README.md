@@ -10,7 +10,7 @@ fly. This is equivalent to CoffeeScript's
 ## Install
 
 ```sh
-npm install @babel/register --save-dev
+npm install @babel/core @babel/register --save-dev
 ```
 
 ## Usage
