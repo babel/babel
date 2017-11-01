@@ -1056,9 +1056,9 @@ babel-helper-get-function-arity@7.0.0-beta.0:
   dependencies:
     babel-types "7.0.0-beta.0"
 
-babel-loader@babel/babel-loader#peerDep-@babel/core:
-  version "7.1.2"
-  resolved "https://codeload.github.com/babel/babel-loader/tar.gz/738b957c93e8c14a55a31a1b1a81376a0757bd85"
+babel-loader@8.0.0-beta.0:
+  version "8.0.0-beta.0"
+  resolved "https://registry.yarnpkg.com/babel-loader/-/babel-loader-8.0.0-beta.0.tgz#b85c3b52d1095949125c72c7ec1fa0fbb47a11ff"
   dependencies:
     find-cache-dir "^1.0.0"
     loader-utils "^1.0.2"
