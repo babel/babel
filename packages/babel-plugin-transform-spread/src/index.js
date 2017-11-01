@@ -105,7 +105,7 @@ export default function({ types: t }, options) {
             callee.object = t.assignmentExpression("=", temp, callee.object);
             contextLiteral = temp;
           } else {
-            contextLiteral = callee.object;
+            contextLiteral = t.cloneDeep(callee.object);
           }
           t.appendToMemberExpression(callee, t.identifier("apply"));
         } else {
