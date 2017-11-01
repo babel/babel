@@ -10,7 +10,10 @@ There are several ways to get a copy of babel-preset-env. Pick whichever one you
 
 - Use it via UNPKG: https://unpkg.com/@babel/preset-env-standalone@7/babel-preset-env.min.js. This is a simple way to embed it on a webpage without having to do any other setup.
 - Install via NPM: `npm install --save @babel/preset-env-standalone`
-- Manually grab `babel-preset-env.js` and/or `babel-preset-env.min.js` from the [GitHub releases page](https://github.com/babel/babel/releases). Every release includes these files.
+- Manually grab `babel-preset-env.js` and/or `babel-preset-env.min.js`:
+  * Download archived source code from the [GitHub releases page](https://github.com/babel/babel/releases).
+  * Unpack it.
+  * Grab `babel-preset-env.js` and/or `babel-preset-env.min.js` from the `experimental/babel-preset-env-standalone`.
 
 Usage
 =====
