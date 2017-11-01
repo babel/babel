@@ -123,7 +123,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     flowParseDeclareClass(node: N.FlowDeclareClass): N.FlowDeclareClass {
       this.next();
-      this.flowParseInterfaceish(node);
+      this.flowParseInterfaceish(node, /*isClass*/ true);
       return this.finishNode(node, "DeclareClass");
     }
 
@@ -383,14 +383,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node: N.FlowDeclareInterface,
     ): N.FlowDeclareInterface {
       this.next();
-      this.flowParseInterfaceish(node, true);
+      this.flowParseInterfaceish(node);
       return this.finishNode(node, "DeclareInterface");
     }
 
     // Interfaces
 
-    flowParseInterfaceish(node: N.FlowDeclare, allowLiberalId: boolean): void {
-      node.id = this.flowParseRestrictedIdentifier(/*liberal*/ allowLiberalId);
+    flowParseInterfaceish(node: N.FlowDeclare, isClass?: boolean): void {
+      node.id = this.flowParseRestrictedIdentifier(/*liberal*/ !isClass);
 
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -404,7 +404,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.eat(tt._extends)) {
         do {
           node.extends.push(this.flowParseInterfaceExtends());
-        } while (this.eat(tt.comma));
+        } while (!isClass && this.eat(tt.comma));
       }
 
       if (this.isContextual("mixins")) {
@@ -431,7 +431,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     flowParseInterface(node: N.FlowInterface): N.FlowInterface {
-      this.flowParseInterfaceish(node, true);
+      this.flowParseInterfaceish(node);
       return this.finishNode(node, "InterfaceDeclaration");
     }
 
