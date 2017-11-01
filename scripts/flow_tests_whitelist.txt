@@ -10,7 +10,6 @@
 
 ES6/binding-pattern/object-pattern/await-prop-in-async-function.js
 JSX_invalid/migrated_0000.js
-arrow_function/param-dflt-yield-expr.js
 arrow_function_invalid/migrated_0002.js
 async_await/async_generic_method.js
 async_await/migrated_0020.js

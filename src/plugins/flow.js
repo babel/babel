@@ -2002,7 +2002,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // parse function type parameters - function foo<T>() {}
     parseFunctionParams(node: N.Function): void {
-      if (this.isRelational("<")) {
+      // $FlowFixMe
+      const kind = node.kind;
+      if (kind !== "get" && kind !== "set" && this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
       }
       super.parseFunctionParams(node);

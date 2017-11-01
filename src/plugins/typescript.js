@@ -1679,10 +1679,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.parseObjPropValue(prop, ...args);
     }
 
-    parseFunctionParams(node: N.Function): void {
+    parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
       const typeParameters = this.tsTryParseTypeParameters();
       if (typeParameters) node.typeParameters = typeParameters;
-      super.parseFunctionParams(node);
+      super.parseFunctionParams(node, allowModifiers);
     }
 
     // `let x: number;`

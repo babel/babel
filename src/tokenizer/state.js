@@ -21,13 +21,15 @@ export default class State {
     this.noArrowParamsConversionAt = [];
 
     // eslint-disable-next-line max-len
-    this.inMethod = this.inFunction = this.inGenerator = this.inAsync = this.inPropertyName = this.inType = this.inClassProperty = this.noAnonFunctionType = false;
+    this.inMethod = this.inFunction = this.inParameters = this.maybeInArrowParameters = this.inGenerator = this.inAsync = this.inPropertyName = this.inType = this.inClassProperty = this.noAnonFunctionType = false;
 
     this.classLevel = 0;
 
     this.labels = [];
 
     this.decoratorStack = [[]];
+
+    this.yieldInPossibleArrowParameters = null;
 
     this.tokens = [];
 
@@ -87,6 +89,8 @@ export default class State {
 
   // Flags to track whether we are in a function, a generator.
   inFunction: boolean;
+  inParameters: boolean;
+  maybeInArrowParameters: boolean;
   inGenerator: boolean;
   inMethod: boolean | N.MethodKind;
   inAsync: boolean;
@@ -105,6 +109,11 @@ export default class State {
   // Supports nesting of decorators, e.g. @foo(@bar class inner {}) class outer {}
   // where @foo belongs to the outer class and @bar to the inner
   decoratorStack: Array<Array<N.Decorator>>;
+
+  // The first yield expression inside parenthesized expressions and arrow
+  // function parameters. It is used to disallow yield in arrow function
+  // parameters.
+  yieldInPossibleArrowParameters: ?N.YieldExpression;
 
   // Token store.
   tokens: Array<Token | N.Comment>;

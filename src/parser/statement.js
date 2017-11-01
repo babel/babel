@@ -780,6 +780,7 @@ export default class StatementParser extends ExpressionParser {
   ): T {
     const oldInFunc = this.state.inFunction;
     const oldInMethod = this.state.inMethod;
+    const oldInGenerator = this.state.inGenerator;
     this.state.inFunction = true;
     this.state.inMethod = false;
 
@@ -802,9 +803,19 @@ export default class StatementParser extends ExpressionParser {
       this.unexpected();
     }
 
+    // When parsing function expression, the binding identifier is parsed
+    // according to the rules inside the function.
+    // e.g. (function* yield() {}) is invalid because "yield" is disallowed in
+    // generators.
+    // This isn't the case with function declarations: function* yield() {} is
+    // valid because yield is parsed as if it was outside the generator.
+    // Therefore, this.state.inGenerator is set before or after parsing the
+    // function id according to the "isStatement" parameter.
+    if (!isStatement) this.state.inGenerator = node.generator;
     if (this.match(tt.name) || this.match(tt._yield)) {
       node.id = this.parseBindingIdentifier();
     }
+    if (isStatement) this.state.inGenerator = node.generator;
 
     this.parseFunctionParams(node);
     this.parseFunctionBodyAndFinish(
@@ -812,14 +823,26 @@ export default class StatementParser extends ExpressionParser {
       isStatement ? "FunctionDeclaration" : "FunctionExpression",
       allowExpressionBody,
     );
+
     this.state.inFunction = oldInFunc;
     this.state.inMethod = oldInMethod;
+    this.state.inGenerator = oldInGenerator;
+
     return node;
   }
 
-  parseFunctionParams(node: N.Function): void {
+  parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {
+    const oldInParameters = this.state.inParameters;
+    this.state.inParameters = true;
+
     this.expect(tt.parenL);
-    node.params = this.parseBindingList(tt.parenR);
+    node.params = this.parseBindingList(
+      tt.parenR,
+      /* allowEmpty */ false,
+      allowModifiers,
+    );
+
+    this.state.inParameters = oldInParameters;
   }
 
   // Parse a class declaration or literal (depending on the
