@@ -51,19 +51,26 @@ export default declare((api, options) => {
     environmentVisitor,
   ]);
 
-  const buildClassPropertySpec = (ref, { key, value, computed }, scope) => {
-    return template.statement`
-      Object.defineProperty(REF, KEY, {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: VALUE
-      });
-    `({
-      REF: t.cloneNode(ref),
-      KEY: t.isIdentifier(key) && !computed ? t.stringLiteral(key.name) : key,
-      VALUE: value || scope.buildUndefinedNode(),
-    });
+  const foldDefinePropertyCalls = nodes =>
+    t.expressionStatement(
+      nodes.reduce((folded, node) => {
+        // update defineProperty's obj argument
+        node.arguments[0] = folded;
+        return node;
+      }),
+    );
+
+  const buildClassPropertySpec = (
+    ref,
+    { key, value, computed },
+    scope,
+    state,
+  ) => {
+    return t.callExpression(state.addHelper("defineProperty"), [
+      ref,
+      t.isIdentifier(key) && !computed ? t.stringLiteral(key.name) : key,
+      value || scope.buildUndefinedNode(),
+    ]);
   };
 
   const buildClassPropertyLoose = (ref, { key, value, computed }, scope) => {
@@ -85,7 +92,7 @@ export default declare((api, options) => {
     inherits: syntaxClassProperties,
 
     visitor: {
-      Class(path) {
+      Class(path, state) {
         const isDerived = !!path.node.superClass;
         let constructor;
         const props = [];
@@ -146,17 +153,31 @@ export default declare((api, options) => {
           if (propNode.decorators && propNode.decorators.length > 0) continue;
 
           if (propNode.static) {
-            staticNodes.push(buildClassProperty(ref, propNode, path.scope));
+            staticNodes.push(
+              buildClassProperty(ref, propNode, path.scope, state),
+            );
           } else {
             instanceBody.push(
-              buildClassProperty(t.thisExpression(), propNode, path.scope),
+              buildClassProperty(
+                t.thisExpression(),
+                propNode,
+                path.scope,
+                state,
+              ),
             );
           }
         }
 
-        const afterNodes = [...staticNodes];
+        const afterNodes =
+          !loose && staticNodes.length
+            ? foldDefinePropertyCalls(staticNodes)
+            : staticNodes;
 
         if (instanceBody.length) {
+          const assignments = loose
+            ? instanceBody
+            : foldDefinePropertyCalls(instanceBody);
+
           if (!constructor) {
             const newConstructor = t.classMethod(
               "constructor",
@@ -186,10 +207,10 @@ export default declare((api, options) => {
             const bareSupers = [];
             constructor.traverse(findBareSupers, bareSupers);
             for (const bareSuper of bareSupers) {
-              bareSuper.insertAfter(instanceBody);
+              bareSuper.insertAfter(assignments);
             }
           } else {
-            constructor.get("body").unshiftContainer("body", instanceBody);
+            constructor.get("body").unshiftContainer("body", assignments);
           }
         }
 

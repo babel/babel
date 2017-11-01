@@ -24,12 +24,7 @@ function (_Hello) {
 
     let Inner = function Inner() {
       babelHelpers.classCallCheck(this, Inner);
-      Object.defineProperty(this, _this2, {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: "hello"
-      });
+      babelHelpers.defineProperty(this, _this2, "hello");
     };
 
     return babelHelpers.possibleConstructorReturn(_this, new Inner());

@@ -5,12 +5,7 @@ class C {}
 class A extends C {
   constructor() {
     super();
-    Object.defineProperty(this, "field", {
-      configurable: true,
-      enumerable: true,
-      writable: true,
-      value: 1
-    });
+    babelHelpers.defineProperty(this, "field", 1);
 
     class B extends C {
       constructor() {
@@ -40,12 +35,7 @@ class SuperClass extends Obj {
   constructor() {
     var _temp;
 
-    class B extends ((_temp = super(), Object.defineProperty(this, "field", {
-      configurable: true,
-      enumerable: true,
-      writable: true,
-      value: 1
-    }), _temp), Obj) {
+    class B extends ((_temp = super(), babelHelpers.defineProperty(this, "field", 1), _temp), Obj) {
       constructor() {
         super();
         expect(this.field).toBeUndefined();
@@ -71,12 +61,7 @@ class ComputedMethod extends Obj {
         expect(this.field).toBeUndefined();
       }
 
-      [(_temp2 = super(), Object.defineProperty(this, "field", {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: 1
-      }), _temp2)]() {}
+      [(_temp2 = super(), babelHelpers.defineProperty(this, "field", 1), _temp2)]() {}
 
     }
 
@@ -92,22 +77,12 @@ class ComputedField extends Obj {
   constructor() {
     var _temp3;
 
-    var _ref = (_temp3 = super(), Object.defineProperty(this, "field", {
-      configurable: true,
-      enumerable: true,
-      writable: true,
-      value: 1
-    }), _temp3);
+    var _ref = (_temp3 = super(), babelHelpers.defineProperty(this, "field", 1), _temp3);
 
     class B extends Obj {
       constructor() {
         super();
-        Object.defineProperty(this, _ref, {
-          configurable: true,
-          enumerable: true,
-          writable: true,
-          value: 1
-        });
+        babelHelpers.defineProperty(this, _ref, 1);
         expect(this.field).toBeUndefined();
       }
 

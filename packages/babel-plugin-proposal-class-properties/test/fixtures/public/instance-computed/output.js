@@ -5,12 +5,7 @@ function test(x) {
     "use strict";
 
     babelHelpers.classCallCheck(this, F);
-    Object.defineProperty(this, _x, {
-      configurable: true,
-      enumerable: true,
-      writable: true,
-      value: 1
-    });
+    babelHelpers.defineProperty(this, _x, 1);
   };
 
   x = 'deadbeef';
