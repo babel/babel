@@ -1,16 +1,16 @@
-# babel-preset-env [![npm](https://img.shields.io/npm/v/babel-preset-env.svg)](https://www.npmjs.com/package/babel-preset-env) [![travis](https://img.shields.io/travis/babel/babel-preset-env/master.svg)](https://travis-ci.org/babel/babel-preset-env) [![npm-downloads](https://img.shields.io/npm/dm/babel-preset-env.svg)](https://www.npmjs.com/package/babel-preset-env) [![codecov](https://img.shields.io/codecov/c/github/babel/babel-preset-env/master.svg?maxAge=43200)](https://codecov.io/github/babel/babel-preset-env)
+# @babel/preset-env [![npm](https://img.shields.io/npm/v/babel-preset-env.svg)](https://www.npmjs.com/package/babel-preset-env) [![travis](https://img.shields.io/travis/babel/babel-preset-env/master.svg)](https://travis-ci.org/babel/babel-preset-env) [![npm-downloads](https://img.shields.io/npm/dm/babel-preset-env.svg)](https://www.npmjs.com/package/babel-preset-env) [![codecov](https://img.shields.io/codecov/c/github/babel/babel-preset-env/master.svg?maxAge=43200)](https://codecov.io/github/babel/babel-preset-env)
 
 > A Babel preset that compiles [ES2015+](https://github.com/tc39/proposals/blob/master/finished-proposals.md) down to ES5 by automatically determining the Babel plugins and polyfills you need based on your targeted browser or runtime environments.
 
 ```sh
-npm install babel-preset-env --save-dev
+npm install @babel/preset-env --save-dev
 ```
 
-Without any configuration options, babel-preset-env behaves exactly the same as babel-preset-latest (or babel-preset-es2015, babel-preset-es2016, and babel-preset-es2017 together).
+Without any configuration options, @babel/preset-env behaves exactly the same as @babel/preset-latest (or @babel/preset-es2015, @babel/preset-es2016, and @babel/preset-es2017 together).
 
 ```json
 {
-  "presets": ["env"]
+  "presets": ["@babel/env"]
 }
 ```
 
@@ -21,7 +21,7 @@ This example only includes the polyfills and code transforms needed for the last
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "browsers": ["last 2 versions", "safari >= 7"]
       }
@@ -35,7 +35,7 @@ Similarly, if you're targeting Node.js instead of the browser, you can configure
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "node": "6.10"
       }
@@ -49,7 +49,7 @@ For convenience, you can use `"node": "current"` to only include the necessary p
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "node": "current"
       }
@@ -85,9 +85,9 @@ This should be straightforward to do in most cases. There might be cases where p
 
 ### Support all plugins in Babel that are considered `latest`
 
-> Default behavior without options is the same as `babel-preset-latest`.
+> Default behavior without options is the same as `@babel/preset-latest`.
 
-It won't include `stage-x` plugins. env will support all plugins in what we consider the latest version of JavaScript (by matching what we do in [`babel-preset-latest`](http://babeljs.io/docs/plugins/preset-latest/)).
+It won't include `stage-x` plugins. env will support all plugins in what we consider the latest version of JavaScript (by matching what we do in [`@babel/preset-latest`](http://babeljs.io/docs/plugins/preset-latest/)).
 
 Ref: [#14](https://github.com/babel/babel-preset-env/issues/14)
 
@@ -109,7 +109,7 @@ Ref: [#19](https://github.com/babel/babel-preset-env/pull/19)
 
 [Browserslist](https://github.com/ai/browserslist) is a library used to share a supported list of browsers between different front-end tools like [autoprefixer](https://github.com/postcss/autoprefixer), [stylelint](https://stylelint.io/), [eslint-plugin-compat](https://github.com/amilajack/eslint-plugin-compat) and many others.
 
-By default, babel-preset-env will use [browserslist config sources](https://github.com/ai/browserslist#queries).
+By default, @babel/preset-env will use [browserslist config sources](https://github.com/ai/browserslist#queries).
 
 For example, to enable only the polyfills and plugins needed for a project targeting *last 2 versions* and *IE10*:
 
@@ -117,8 +117,8 @@ For example, to enable only the polyfills and plugins needed for a project targe
 ```json
 {
   "presets": [
-    ["env", {
-      "useBuiltIns": true
+    ["@babel/env", {
+      "useBuiltIns": "entry"
     }]
   ]
 }
@@ -152,22 +152,22 @@ Browserslist config will be ignored if: 1) `targets.browsers` was specified 2) o
 With [npm](https://www.npmjs.com):
 
 ```sh
-npm install --save-dev babel-preset-env
+npm install --save-dev @babel/preset-env
 ```
 
 Or [yarn](https://yarnpkg.com):
 
 ```sh
-yarn add babel-preset-env --dev
+yarn add @babel/preset-env --dev
 ```
 
 ## Usage
 
-The default behavior without options runs all transforms (behaves the same as [babel-preset-latest](https://babeljs.io/docs/plugins/preset-latest/)).
+The default behavior without options runs all transforms (behaves the same as [@babel/preset-latest](https://babeljs.io/docs/plugins/preset-latest/)).
 
 ```json
 {
-  "presets": ["env"]
+  "presets": ["@babel/env"]
 }
 ```
 
@@ -235,15 +235,15 @@ An array of plugins to always include.
 
 Valid options include any:
 
-- [Babel plugins](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js) - both with (`babel-plugin-transform-es2015-spread`) and without prefix (`transform-es2015-spread`) are supported.
+- [Babel plugins](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js) - both with (`@babel/plugin-transform-spread`) and without prefix (`transform-spread`) are supported.
 
 - [Built-ins](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js), such as `map`, `set`, or `object.assign`.
 
 This option is useful if there is a bug in a native implementation, or a combination of a non-supported feature + a supported one doesn't work.
 
-For example, Node 4 supports native classes but not spread. If `super` is used with a spread argument, then the `transform-es2015-classes` transform needs to be `include`d, as it is not possible to transpile a spread with `super` otherwise.
+For example, Node 4 supports native classes but not spread. If `super` is used with a spread argument, then the `transform-classes` transform needs to be `include`d, as it is not possible to transpile a spread with `super` otherwise.
 
-> NOTE: The `include` and `exclude` options _only_ work with the [plugins included with this preset](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js); so, for example, including `transform-do-expressions` or excluding `transform-function-bind` will throw errors. To use a plugin _not_ included with this preset, add them to your [config](https://babeljs.io/docs/usage/babelrc/) directly.
+> NOTE: The `include` and `exclude` options _only_ work with the [plugins included with this preset](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js); so, for example, including `proposal-do-expressions` or excluding `proposal-function-bind` will throw errors. To use a plugin _not_ included with this preset, add them to your [config](https://babeljs.io/docs/usage/babelrc/) directly.
 
 ### `exclude`
 
@@ -253,16 +253,16 @@ An array of plugins to always exclude/remove.
 
 The possible options are the same as the `include` option.
 
-This option is useful for "blacklisting" a transform like `transform-regenerator` if you don't use generators and don't want to include `regeneratorRuntime` (when using `useBuiltIns`) or for using another plugin like [fast-async](https://github.com/MatAtBread/fast-async) instead of [Babel's async-to-gen](http://babeljs.io/docs/plugins/transform-async-generator-functions/).
+This option is useful for "blacklisting" a transform like `transform-regenerator` if you don't use generators and don't want to include `regeneratorRuntime` (when using `useBuiltIns`) or for using another plugin like [fast-async](https://github.com/MatAtBread/fast-async) instead of [Babel's async-to-gen](http://babeljs.io/docs/plugins/proposal-async-generator-functions/).
 
 ### `useBuiltIns`
 
 `"usage"` | `"entry"` | `false`, defaults to `false`.
 
-A way to apply `babel-preset-env` for polyfills (via `babel-polyfill`).
+A way to apply `@babel/preset-env` for polyfills (via `@babel/polyfill`).
 
 ```sh
-npm install babel-polyfill --save
+npm install @babel/polyfill --save
 ```
 
 #### `useBuiltIns: 'usage'`
@@ -286,12 +286,12 @@ var b = new Map();
 **Out (if environment doesn't support it)**
 
 ```js
-import "babel-polyfill/core-js/modules/es6.promise";
+import "@babel/polyfill/core-js/modules/es6.promise";
 var a = new Promise();
 ```
 
 ```js
-import "babel-polyfill/core-js/modules/es6.map";
+import "@babel/polyfill/core-js/modules/es6.map";
 var b = new Map();
 ```
 
@@ -307,28 +307,28 @@ var b = new Map();
 
 #### `useBuiltIns: 'entry'`
 
-> NOTE: Only use `require("babel-polyfill");` once in your whole app.
-> Multiple imports or requires of `babel-polyfill` will throw an error since it can cause global collisions and other issues that are hard to trace.
+> NOTE: Only use `require("@babel/polyfill");` once in your whole app.
+> Multiple imports or requires of `@babel/polyfill` will throw an error since it can cause global collisions and other issues that are hard to trace.
 > We recommend creating a single entry file that only contains the `require` statement.
 
-This option enables a new plugin that replaces the statement `import "babel-polyfill"` or `require("babel-polyfill")` with individual requires for `babel-polyfill` based on environment.
+This option enables a new plugin that replaces the statement `import "@babel/polyfill"` or `require("@babel/polyfill")` with individual requires for `@babel/polyfill` based on environment.
 
 **In**
 
 ```js
-import "babel-polyfill";
+import "@babel/polyfill";
 ```
 
 **Out (different based on environment)**
 
 ```js
-import "babel-polyfill/core-js/modules/es7.string.pad-start";
-import "babel-polyfill/core-js/modules/es7.string.pad-end";
+import "@babel/polyfill/core-js/modules/es7.string.pad-start";
+import "@babel/polyfill/core-js/modules/es7.string.pad-end";
 ```
 
 #### `useBuiltIns: false`
 
-Don't add polyfills automatically per file, or transform `import "babel-polyfill"` to individual polyfills.
+Don't add polyfills automatically per file, or transform `import "@babel/polyfill"` to individual polyfills.
 
 ### `forceAllTransforms`
 
@@ -342,7 +342,7 @@ Don't add polyfills automatically per file, or transform `import "babel-polyfill
   ```js
   module.exports = {
     presets: [
-      ["env", {
+      ["@babel/env", {
         targets: {
           chrome: 59,
           edge: 13,
@@ -387,7 +387,7 @@ Toggles whether or not [browserslist config sources](https://github.com/ai/brows
 
 `boolean`, defaults to `false`
 
-Toggles enabling support for builtin/feature proposals that have shipped in browsers. If your target environments have native support for a feature proposal, its matching parser syntax plugin is enabled instead of performing any transform. Note that this _does not_ enable the same transformations as [`babel-preset-stage3`](https://babeljs.io/docs/plugins/preset-stage-3/), since proposals can continue to change before landing in browsers.
+Toggles enabling support for builtin/feature proposals that have shipped in browsers. If your target environments have native support for a feature proposal, its matching parser syntax plugin is enabled instead of performing any transform. Note that this _does not_ enable the same transformations as [`@babel/preset-stage3`](https://babeljs.io/docs/plugins/preset-stage-3/), since proposals can continue to change before landing in browsers.
 
 The following are currently supported:
 
@@ -419,7 +419,7 @@ export class A {}
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "chrome": 52
       }
@@ -442,7 +442,7 @@ exports.A = A;
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "chrome": 52
       },
@@ -466,7 +466,7 @@ export class A {}
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "chrome": 52,
         "browsers": ["last 2 versions", "safari 7"]
@@ -491,7 +491,7 @@ export var A = function A() {
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "node": "current"
       }
@@ -514,12 +514,12 @@ exports.A = A;
 ```json
 {
   "presets": [
-    [ "env", {
+    ["@babel/env", {
       "targets": {
         "safari": 10
       },
       "modules": false,
-      "useBuiltIns": true,
+      "useBuiltIns": "entry",
       "debug": true
     }]
   ]
@@ -556,12 +556,12 @@ Using polyfills:
 ```json
 {
   "presets": [
-    ["env", {
+    ["@babel/env", {
       "targets": {
         "browsers": ["last 2 versions", "safari >= 7"]
       },
-      "include": ["transform-es2015-arrow-functions", "es6.map"],
-      "exclude": ["transform-regenerator", "es6.set"]
+      "include": ["@babel/transform-arrow-functions", "es6.map"],
+      "exclude": ["@babel/transform-regenerator", "es6.set"]
     }]
   ]
 }
@@ -569,4 +569,4 @@ Using polyfills:
 
 ## Issues
 
-If you get a `SyntaxError: Unexpected token ...` error when using the [object-rest-spread](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-rest-spread) transform then make sure the plugin has been updated to, at least, `v6.19.0`.
+If you get a `SyntaxError: Unexpected token ...` error when using the [object-rest-spread](https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-object-rest-spread) transform then make sure the plugin has been updated to, at least, `v6.19.0`.

@@ -1,9 +1,9 @@
-# babel-plugin-external-helpers
+# @babel/plugin-external-helpers
 
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-external-helpers
+npm install --save-dev @babel/plugin-external-helpers
 ```
 
 ## Usage
@@ -14,20 +14,20 @@ npm install --save-dev babel-plugin-external-helpers
 
 ```json
 {
-  "plugins": ["external-helpers"]
+  "plugins": ["@babel/external-helpers"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins external-helpers script.js
+babel --plugins @babel/external-helpers script.js
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  plugins: ["external-helpers"]
+require("@babel/core").transform("code", {
+  plugins: ["@babel/external-helpers"]
 });
 ```

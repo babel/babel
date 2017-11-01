@@ -1,8 +1,0 @@
-{
-  "plugins": [
-    "transform-es2015-destructuring",
-    "transform-es2015-modules-commonjs",
-    "transform-es3-member-expression-literals",
-    "transform-es3-property-literals"
-  ]
-}

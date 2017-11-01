@@ -12,7 +12,7 @@
         "es7.string.pad-start"
       ],
       "include": [
-        "transform-es2015-arrow-functions",
+        "transform-arrow-functions",
         "es6.map"
       ]
     }]

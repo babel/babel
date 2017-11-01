@@ -1,11 +1,11 @@
-# babel-types
+# @babel/types
 
 > This module contains methods for building ASTs manually and for checking the types of AST nodes.
 
 ## Install
 
 ```sh
-npm install --save-dev babel-types
+npm install --save-dev @babel/types
 ```
 
 ## API
@@ -231,7 +231,7 @@ See also `t.isCallExpression(node, opts)` and `t.assertCallExpression(node, opts
 Aliases: `Expression`
 
  - `callee`: `Expression` (required)
- - `arguments`: `Array<Expression | SpreadElement>` (required)
+ - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
  - `optional`: `true | false` (default: `null`)
  - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
 
@@ -1235,7 +1235,7 @@ See also `t.isLogicalExpression(node, opts)` and `t.assertLogicalExpression(node
 
 Aliases: `Binary`, `Expression`
 
- - `operator`: `'||' | '&&'` (required)
+ - `operator`: `'||' | '&&' | '??'` (required)
  - `left`: `Expression` (required)
  - `right`: `Expression` (required)
 
@@ -1293,7 +1293,7 @@ See also `t.isNewExpression(node, opts)` and `t.assertNewExpression(node, opts)`
 Aliases: `Expression`
 
  - `callee`: `Expression` (required)
- - `arguments`: `Array<Expression | SpreadElement>` (required)
+ - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
  - `optional`: `true | false` (default: `null`)
  - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
 

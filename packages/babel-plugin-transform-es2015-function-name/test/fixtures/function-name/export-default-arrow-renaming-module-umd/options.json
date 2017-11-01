@@ -1,3 +1,0 @@
-{
-  "plugins": ["transform-es2015-function-name", "transform-es2015-shorthand-properties", "transform-es2015-arrow-functions", "transform-es2015-modules-umd"]
-}

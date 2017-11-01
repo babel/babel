@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    "external-helpers",
+    ["transform-modules-umd", {
+      "globals": {
+        "my custom module name": "baz"
+      },
+      "exactGlobals": true
+    }]
+  ],
+  "moduleId": "my custom module name"
+}

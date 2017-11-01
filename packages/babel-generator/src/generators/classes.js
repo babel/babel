@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 export function ClassDeclaration(node: Object, parent: Object) {
   if (

@@ -1,4 +1,4 @@
-babel-preset-env: `DEBUG` option
+@babel/preset-env: `DEBUG` option
 
 Using targets:
 {
@@ -10,29 +10,28 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-es2015-constants { "firefox":"50", "ie":"11" }
-  transform-es2015-arrow-functions { "ie":"11" }
-  transform-es2015-block-scoping { "firefox":"50", "ie":"11" }
-  transform-es2015-classes { "ie":"11" }
-  transform-es2015-computed-properties { "ie":"11" }
-  transform-es2015-destructuring { "firefox":"50", "ie":"11" }
-  transform-es2015-duplicate-keys { "ie":"11" }
-  transform-es2015-for-of { "firefox":"50", "ie":"11" }
-  transform-es2015-function-name { "firefox":"50", "ie":"11" }
-  transform-es2015-literals { "firefox":"50", "ie":"11" }
-  transform-es2015-object-super { "ie":"11" }
-  transform-es2015-parameters { "firefox":"50", "ie":"11" }
-  transform-es2015-shorthand-properties { "ie":"11" }
-  transform-es2015-spread { "ie":"11" }
-  transform-es2015-sticky-regex { "ie":"11" }
-  transform-es2015-template-literals { "ie":"11" }
-  transform-es2015-typeof-symbol { "ie":"11" }
-  transform-es2015-unicode-regex { "ie":"11" }
+  check-constants { "firefox":"50", "ie":"11" }
+  transform-arrow-functions { "ie":"11" }
+  transform-block-scoping { "firefox":"50", "ie":"11" }
+  transform-classes { "ie":"11" }
+  transform-computed-properties { "ie":"11" }
+  transform-destructuring { "firefox":"50", "ie":"11" }
+  transform-duplicate-keys { "ie":"11" }
+  transform-for-of { "firefox":"50", "ie":"11" }
+  transform-function-name { "firefox":"50", "ie":"11" }
+  transform-literals { "firefox":"50", "ie":"11" }
+  transform-object-super { "ie":"11" }
+  transform-parameters { "firefox":"50", "ie":"11" }
+  transform-shorthand-properties { "ie":"11" }
+  transform-spread { "ie":"11" }
+  transform-sticky-regex { "ie":"11" }
+  transform-template-literals { "ie":"11" }
+  transform-typeof-symbol { "ie":"11" }
+  transform-unicode-regex { "ie":"11" }
   transform-new-target { "ie":"11" }
   transform-regenerator { "firefox":"50", "ie":"11" }
   transform-exponentiation-operator { "firefox":"50", "ie":"11" }
   transform-async-to-generator { "chrome":"52", "firefox":"50", "ie":"11" }
-  syntax-trailing-function-commas { "chrome":"52", "firefox":"50", "ie":"11" }
 
 Using polyfills with `usage` option:
 

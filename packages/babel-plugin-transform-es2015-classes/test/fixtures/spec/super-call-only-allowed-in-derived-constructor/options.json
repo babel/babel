@@ -1,4 +1,0 @@
-{
-  "throws": "super() is only allowed in a derived constructor",
-  "plugins": ["transform-es2015-classes"]
-}

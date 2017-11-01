@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.6.1 (2017-10-17)
+
+### :bug: Bug Fix
+
+- Update compat table to fix two small issues ([#445](https://github.com/babel/babel-preset-env/pull/445)) (@danez)
+
+ES2015 destructuring is not fully supported in Edge 15 and the polyfill required again. `es6.math.imul` is supported on Android as of version 4.4
+
+- Add polyfills for ES6 static Object methods ([#441](https://github.com/babel/babel-preset-env/pull/441)) (@danez)
+
+Functions such as `Object.keys`, `Object.freeze`, ... do already exist in ES5, but their behaviour changed in ES2015. `babel-preset-env` with `builtIns: true` now adds the core-js polyfills for this methods if the browser only supports the ES5 variant of the method (like IE11 for example)
+
+- Normalize module format of plugins/built-ins data ([#376](https://github.com/babel/babel-preset-env/pull/376)) (@rtsao)
+
 ## v1.6.0 (2017-07-04)
 
 ### :rocket: New Feature
@@ -101,10 +115,10 @@ correctly report issues before they get transpiled away).
 
 - Allow use `babel-plugin-` prefix for include and exclude ([#242](https://github.com/babel/babel-preset-env/pull/242)) (@yavorsky)
 
-The `include` and `exclude` options now allow both prefixed (`babel-plugin-transform-es2015-spread`) 
+The `include` and `exclude` options now allow both prefixed (`babel-plugin-transform-es2015-spread`)
 and prefix-less (`transform-es2015-spread`) plugin names.
 
-### :memo: Documentation 
+### :memo: Documentation
 
 - Note babel plugin prefix handling in include/exclude ([#245](https://github.com/babel/babel-preset-env/pull/245)) (@existentialism)
 - Fix README: debug option shows info in stdout. ([#236](https://github.com/babel/babel-preset-env/pull/236)) (@Gerhut)
@@ -129,14 +143,14 @@ and prefix-less (`transform-es2015-spread`) plugin names.
 - Add check for ArrayBuffer[Symbol.species] ([#233](https://github.com/babel/babel-preset-env/pull/233)) (@existentialism)
 
 We now properly check for `Symbol.species` support in ArrayBuffer and include the
-polyfill if necessary. This should, as a side effect, fix ArrayBuffer-related 
+polyfill if necessary. This should, as a side effect, fix ArrayBuffer-related
 errors on IE9.
 
 ### :nail_care: Polish
 
 - Fill data with electron as a target. ([#229](https://github.com/babel/babel-preset-env/pull/229)) (@yavorsky)
 
-We've simplified things by adding `electron` as a target instead of doing a bunch of 
+We've simplified things by adding `electron` as a target instead of doing a bunch of
 things at runtime. Electron targets should now also be displayed in the debug output.
 
 - separate default builtins for platforms ([#226](https://github.com/babel/babel-preset-env/pull/226)) (@restrry)
@@ -144,7 +158,7 @@ things at runtime. Electron targets should now also be displayed in the debug ou
 If you are targeting the `node` environment exclusively, the always-included web polyfills
 (like `dom.iterable`, and a few others) will now no longer be included.
 
-### :memo: Documentation 
+### :memo: Documentation
 
  * remove deprecated projects ([#223](https://github.com/babel/babel-preset-env/pull/223)) [skip ci] (@stevemao)
 
@@ -158,8 +172,8 @@ If you are targeting the `node` environment exclusively, the always-included web
 
 - Refactor browser data parsing to handle families ([#208](https://github.com/babel/babel-preset-env/pull/208)) (@existentialism)
 
-When parsing plugin data, we weren't properly handling browser families. This caused 
-`transform-es2015-block-scoping` and other plugins to be incorrectly added for Edge >= 12. 
+When parsing plugin data, we weren't properly handling browser families. This caused
+`transform-es2015-block-scoping` and other plugins to be incorrectly added for Edge >= 12.
 (s/o to @mgol for the the report and review!)
 
 - Add typed array methods to built-ins features. ([#198](https://github.com/babel/babel-preset-env/pull/198)) (@yavorsky)
@@ -259,7 +273,7 @@ Given targets:
 ```txt
 {
   "firefox": 52,
-  "node": 7.4 
+  "node": 7.4
 }
 ```
 
@@ -305,7 +319,7 @@ Using plugins:
 - Update yarnfile ([#145](https://github.com/babel/babel-preset-env/pull/145)) (@baer)
 - devDeps: eslint-config-babel v5.0.0 ([#139](https://github.com/babel/babel-preset-env/pull/139)) (@kaicataldo)
 - Update compat-table, build data ([#135](https://github.com/babel/babel-preset-env/pull/135)) (@hzoo)
- 
+
 ## v1.1.8 (2017-01-10)
 
 ### :bug: Bug Fix
@@ -320,7 +334,7 @@ Makes sure that all transformations on `targets` (such as `exclude`/`include`) a
 - Include yarn.lock and update CI. ([#124](https://github.com/babel/babel-preset-env/pull/124)) (@existentialism)
 
 ## v1.1.7 (2017-01-09)
- 
+
 Had a publishing issue in the previous release.
 
 ## v1.1.6 (2017-01-06)
@@ -494,7 +508,7 @@ In
 
 ```js
 import "babel-polyfill"; // create an entry js file that contains this
-// or 
+// or
 import "core-js";
 ```
 

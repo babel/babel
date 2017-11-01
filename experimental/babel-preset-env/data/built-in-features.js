@@ -109,6 +109,18 @@ const es2015 = {
     ]
   },
 
+  "es6.object.freeze": "Object static methods accept primitives / Object.freeze",
+  "es6.object.seal": "Object static methods accept primitives / Object.seal",
+  "es6.object.prevent-extensions": "Object static methods accept primitives / Object.preventExtensions",
+  "es6.object.is-frozen": "Object static methods accept primitives / Object.isFrozen",
+  "es6.object.is-sealed": "Object static methods accept primitives / Object.isSealed",
+  "es6.object.is-extensible": "Object static methods accept primitives / Object.isExtensible",
+  "es6.object.get-own-property-descriptor":
+    "Object static methods accept primitives / Object.getOwnPropertyDescriptor",
+  "es6.object.get-prototype-of": "Object static methods accept primitives / Object.getPrototypeOf",
+  "es6.object.keys": "Object static methods accept primitives / Object.keys",
+  "es6.object.get-own-property-names": "Object static methods accept primitives / Object.getOwnPropertyNames",
+
   "es6.object.assign": "Object static methods / Object.assign",
   "es6.object.is": "Object static methods / Object.is",
   "es6.object.set-prototype-of": "Object static methods / Object.setPrototypeOf",

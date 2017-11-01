@@ -1,3 +1,3 @@
 {
-  "plugins": ["external-helpers", "transform-react-constant-elements", "transform-es2015-classes", "syntax-jsx"]
+  "plugins": ["external-helpers", "transform-react-constant-elements", "transform-classes", "syntax-jsx"]
 }

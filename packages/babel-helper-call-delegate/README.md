@@ -1,4 +1,4 @@
-# babel-helper-call-delegate
+# @babel/helper-call-delegate
 
 ## Usage
 

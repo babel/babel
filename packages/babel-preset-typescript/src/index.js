@@ -1,4 +1,4 @@
-import transformTypeScript from "babel-plugin-transform-typescript";
+import transformTypeScript from "@babel/plugin-transform-typescript";
 
 export default function() {
   return {

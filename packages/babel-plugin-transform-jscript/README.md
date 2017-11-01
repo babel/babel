@@ -1,4 +1,4 @@
-# babel-plugin-transform-jscript
+# @babel/plugin-transform-jscript
 
 > This plugin allows Babel to transform named function expressions into function declarations to get around some [particularly nasty JScript bugs](https://kangax.github.io/nfe/#jscript-bugs) related to name function expressions.
 
@@ -27,7 +27,7 @@ var foo = (function () {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-jscript
+npm install --save-dev @babel/plugin-transform-jscript
 ```
 
 ## Usage
@@ -38,20 +38,20 @@ npm install --save-dev babel-plugin-transform-jscript
 
 ```json
 {
-  "plugins": ["transform-jscript"]
+  "plugins": ["@babel/transform-jscript"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-jscript script.js
+babel --plugins @babel/transform-jscript script.js
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  plugins: ["transform-jscript"]
+require("@babel/core").transform("code", {
+  plugins: ["@babel/transform-jscript"]
 });
 ```

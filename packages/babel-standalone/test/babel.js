@@ -1,8 +1,8 @@
 const assert = require("assert");
 const Babel = require("../babel");
 
-// Basic smoke tests for babel-standalone
-describe("babel-standalone", () => {
+// Basic smoke tests for @babel/standalone
+describe("@babel/standalone", () => {
   it("handles the es2015-no-commonjs preset", () => {
     const output = Babel.transform('const getMessage = () => "Hello World"', {
       presets: ["es2015-no-commonjs"],
@@ -81,7 +81,7 @@ describe("babel-standalone", () => {
 
   it("handles specifying a plugin by name", () => {
     const output = Babel.transform('const getMessage = () => "Hello World"', {
-      plugins: ["transform-es2015-arrow-functions"],
+      plugins: ["transform-arrow-functions"],
     }).code;
     // Transforms arrow syntax but NOT "const".
     assert.equal(
@@ -92,7 +92,7 @@ describe("babel-standalone", () => {
 
   it("handles plugins with options", () => {
     const output = Babel.transform("`${x}`", {
-      plugins: [["transform-es2015-template-literals", { loose: true }]],
+      plugins: [["transform-template-literals", { loose: true }]],
     }).code;
     assert.equal(output, '"" + x;');
   });

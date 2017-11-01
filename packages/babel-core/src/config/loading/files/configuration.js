@@ -106,7 +106,7 @@ const readConfigJS = makeStrongCache((filepath, cache) => {
     return null;
   }
 
-  // The `require()` call below can make this code reentrant if a require hook like babel-register has been
+  // The `require()` call below can make this code reentrant if a require hook like @babel/register has been
   // loaded into the system. That would cause Babel to attempt to compile the `.babelrc.js` file as it loads
   // below. To cover this case, we auto-ignore re-entrant config processing.
   if (LOADING_CONFIGS.has(filepath)) {

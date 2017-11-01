@@ -1,11 +1,11 @@
-# babel-plugin-syntax-flow
+# @babel/plugin-syntax-flow
 
 
 
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-flow
+npm install --save-dev @babel/plugin-syntax-flow
 ```
 
 ## Usage
@@ -16,20 +16,20 @@ npm install --save-dev babel-plugin-syntax-flow
 
 ```json
 {
-  "plugins": ["syntax-flow"]
+  "plugins": ["@babel/syntax-flow"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-flow script.js
+babel --plugins @babel/syntax-flow script.js
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  plugins: ["syntax-flow"]
+require("@babel/core").transform("code", {
+  plugins: ["@babel/syntax-flow"]
 });
 ```

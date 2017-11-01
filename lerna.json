@@ -1,6 +1,6 @@
 {
   "lerna": "2.0.0-rc.4",
-  "version": "7.0.0-beta.2",
+  "version": "7.0.0-beta.5",
   "changelog": {
     "repo": "babel/babel",
     "labels": {
@@ -30,5 +30,7 @@
     "experimental/*"
   ],
   "npmClient": "yarn",
-  "npmClientArgs": ["--no-lockfile"]
+  "npmClientArgs": [
+    "--no-lockfile"
+  ]
 }

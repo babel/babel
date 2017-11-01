@@ -1,10 +1,10 @@
 "use strict";
 
 const outputFile = require("output-file-sync");
-const coreDefinitions = require("babel-plugin-transform-runtime").definitions;
-const helpers = require("babel-helpers");
-const babel = require("../../babel-core");
-const t = require("../../babel-types");
+const coreDefinitions = require("@babel/plugin-transform-runtime").definitions;
+const helpers = require("@babel/helpers");
+const babel = require("@babel/core");
+const t = require("@babel/types");
 
 const paths = ["is-iterable", "get-iterator"];
 
@@ -38,7 +38,6 @@ function defaultify(name) {
 
 function writeRootFile(filename, content) {
   filename = relative(filename);
-  //console.log(filename);
   outputFile(filename, content);
 }
 
@@ -48,11 +47,11 @@ function writeFile(filename, content) {
 
 function makeTransformOpts(modules, useBuiltIns) {
   const opts = {
-    presets: [[require("../../babel-preset-es2015"), { modules: false }]],
+    presets: [[require("@babel/preset-env"), { modules: false }]],
 
     plugins: [
       [
-        require("../../babel-plugin-transform-runtime"),
+        require("@babel/plugin-transform-runtime"),
         { useBuiltIns, useESModules: modules === false },
       ],
     ],
@@ -64,7 +63,7 @@ function adjustImportPath(node, relativePath) {
   if (helpers.list.indexOf(node.value) >= 0) {
     node.value = `./${node.value}`;
   } else {
-    node.value = node.value.replace(/^babel-runtime/, relativePath)
+    node.value = node.value.replace(/^@babel\/runtime/, relativePath);
   }
 }
 
@@ -92,12 +91,21 @@ function buildRuntimeRewritePlugin(relativePath, helperName, dependencies) {
           return;
         }
 
-        // replace any reference to babel-runtime and other helpers
+        // replace any reference to @babel/runtime and other helpers
         // with a relative path
         adjustImportPath(path.get("arguments")[0].node, relativePath);
       },
     },
   };
+}
+
+function buildRequireCall(id, dep) {
+  return t.variableDeclaration("var", [
+    t.variableDeclarator(
+      id,
+      t.callExpression(t.identifier("require"), [t.stringLiteral(dep)])
+    )
+  ]);
 }
 
 function buildHelper(helperName, modules, useBuiltIns) {
@@ -107,12 +115,31 @@ function buildHelper(helperName, modules, useBuiltIns) {
       : null;
   const sourceType = modules === "commonjs" ? "script" : "module";
 
-  const helper = helpers.get(helperName, null, id);
-  const tree = t.program(helper.nodes, [], sourceType);
+  const tree = t.program([], [], sourceType);
+  const dependencies = {};
+  let bindings = null;
+
+  if (modules === "commonjs") {
+    bindings = [];
+    for (const dep of helpers.getDependencies(helperName)) {
+      const id = dependencies[dep] = t.identifier(t.toIdentifier(dep));
+      tree.body.push(buildRequireCall(id, dep));
+      bindings.push(id.name);
+    }
+  }
+
+  const helper = helpers.get(
+    helperName,
+    dep => dependencies[dep],
+    id,
+    bindings
+  );
+  tree.body.push.apply(tree.body, helper.nodes);
+
   const transformOpts = makeTransformOpts(modules, useBuiltIns);
 
   const relative = useBuiltIns ? "../.." : "..";
-
+  
   return babel.transformFromAst(tree, null, {
     presets: transformOpts.presets,
     plugins: transformOpts.plugins.concat([

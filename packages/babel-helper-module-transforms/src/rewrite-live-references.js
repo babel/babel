@@ -1,7 +1,7 @@
 import assert from "assert";
-import * as t from "babel-types";
-import template from "babel-template";
-import simplifyAccess from "babel-helper-simple-access";
+import * as t from "@babel/types";
+import template from "@babel/template";
+import simplifyAccess from "@babel/helper-simple-access";
 
 import type { ModuleMetadata } from "./";
 
@@ -142,16 +142,12 @@ const buildBindingExportAssignmentExpression = (
   }, localExpr);
 };
 
-const importThrow = template(`
-  (function() {
-    throw new Error('"' + NAME + '" is read-only.');
-  })();
-`);
-
 const buildImportThrow = localName => {
-  return importThrow({
-    NAME: t.stringLiteral(localName),
-  }).expression;
+  return template.expression.ast`
+    (function() {
+      throw new Error('"' + '${localName}' + '" is read-only.');
+    })()
+  `;
 };
 
 const rewriteReferencesVisitor = {

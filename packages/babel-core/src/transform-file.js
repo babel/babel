@@ -25,7 +25,7 @@ export default function transformFile(
     try {
       result = runTransform(config, code);
     } catch (_err) {
-      return callback(err, null);
+      return callback(_err, null);
     }
     callback(null, result);
   });

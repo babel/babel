@@ -1,3 +1,0 @@
-{
-  "plugins": [ "transform-function-sent", "transform-async-generator-functions" ]
-}

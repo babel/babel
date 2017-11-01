@@ -1,4 +1,4 @@
-# babel-preset-stage-1
+# @babel/preset-stage-1
 
 > Babel preset for stage 1 plugins.
 
@@ -15,7 +15,7 @@ The gist of Stage 1 is:
 ## Install
 
 ```sh
-npm install --save-dev babel-preset-stage-1
+npm install --save-dev @babel/preset-stage-1
 ```
 
 ## Usage
@@ -26,21 +26,21 @@ npm install --save-dev babel-preset-stage-1
 
 ```json
 {
-  "presets": ["stage-1"]
+  "presets": ["@babel/stage-1"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel script.js --presets stage-1
+babel script.js --presets @babel/stage-1
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  presets: ["stage-1"]
+require("@babel/core").transform("code", {
+  presets: ["@babel/stage-1"]
 });
 ```
 

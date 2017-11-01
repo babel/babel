@@ -10,7 +10,7 @@ type Plugin = {
 };
 
 function isPolyfillSource(value: string): boolean {
-  return value === "babel-polyfill";
+  return value === "@babel/polyfill";
 }
 
 // function warnOnInstanceMethod() {
@@ -39,12 +39,12 @@ function getType(target: any): string {
 // }
 
 const modulePathMap = {
-  "regenerator-runtime": "babel-polyfill/lib/regenerator-runtime/runtime",
+  "regenerator-runtime": "@babel/polyfill/lib/regenerator-runtime/runtime",
 };
 
 const getModulePath = module => {
   return (
-    modulePathMap[module] || `babel-polyfill/lib/core-js/modules/${module}`
+    modulePathMap[module] || `@babel/polyfill/lib/core-js/modules/${module}`
   );
 };
 
@@ -108,7 +108,7 @@ export default function({ types: t }: { types: Object }): Plugin {
         console.warn(
           `
   When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
-  Please remove the \`import 'babel-polyfill'\` call or use \`useBuiltIns: 'entry'\` instead.`,
+  Please remove the \`import '@babel/polyfill'\` call or use \`useBuiltIns: 'entry'\` instead.`,
         );
         path.remove();
       }
@@ -120,7 +120,7 @@ export default function({ types: t }: { types: Object }): Plugin {
             console.warn(
               `
   When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
-  Please remove the \`require('babel-polyfill')\` call or use \`useBuiltIns: 'entry'\` instead.`,
+  Please remove the \`require('@babel/polyfill')\` call or use \`useBuiltIns: 'entry'\` instead.`,
             );
             bodyPath.remove();
           }
@@ -207,6 +207,13 @@ export default function({ types: t }: { types: Object }): Plugin {
           if (has(staticMethods, propName)) {
             const builtIn = staticMethods[propName];
             addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
+            // if (obj.name === "Array" && prop.name === "from") {
+            //   addImport(
+            //     path,
+            //     "@babel/polyfill/lib/core-js/modules/web.dom.iterable",
+            //     this.builtIns,
+            //   );
+            // }
           }
         }
 

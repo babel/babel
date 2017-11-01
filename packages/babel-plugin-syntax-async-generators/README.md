@@ -1,4 +1,4 @@
-# babel-plugin-syntax-async-generators
+# @babel/plugin-syntax-async-generators
 
 > Allow parsing of async generator functions.
 
@@ -23,7 +23,7 @@ async function f() {
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-async-generators
+npm install --save-dev @babel/plugin-syntax-async-generators
 ```
 
 ## Usage
@@ -34,21 +34,21 @@ npm install --save-dev babel-plugin-syntax-async-generators
 
 ```json
 {
-  "plugins": ["syntax-async-generators"]
+  "plugins": ["@babel/syntax-async-generators"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-async-generators script.js
+babel --plugins @babel/syntax-async-generators script.js
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  plugins: ["syntax-async-generators"]
+require("@babel/core").transform("code", {
+  plugins: ["@babel/syntax-async-generators"]
 });
 ```
 

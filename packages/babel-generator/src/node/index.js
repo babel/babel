@@ -1,6 +1,6 @@
 import * as whitespace from "./whitespace";
 import * as parens from "./parentheses";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 function expandAliases(obj) {
   const newObj = {};
@@ -75,7 +75,11 @@ export function needsWhitespace(node, parent, type) {
     }
   }
 
-  return (linesInfo && linesInfo[type]) || 0;
+  if (typeof linesInfo === "object" && linesInfo !== null) {
+    return linesInfo[type] || 0;
+  }
+
+  return 0;
 }
 
 export function needsWhitespaceBefore(node, parent) {

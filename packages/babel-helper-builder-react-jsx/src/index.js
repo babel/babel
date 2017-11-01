@@ -1,5 +1,5 @@
 import esutils from "esutils";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 type ElementState = {
   tagExpr: Object, // tag node
@@ -14,11 +14,13 @@ export default function(opts) {
   const visitor = {};
 
   visitor.JSXNamespacedName = function(path) {
-    throw path.buildCodeFrameError(
-      "Namespace tags are not supported. ReactJSX is not XML.",
-    );
+    if (opts.throwIfNamespace) {
+      throw path.buildCodeFrameError(
+        `Namespace tags are not supported by default. React's JSX doesn't support namespace tags. \
+You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
+      );
+    }
   };
-
   visitor.JSXElement = {
     exit(path, file) {
       const callExpr = buildElementCall(path, file);
@@ -44,6 +46,12 @@ export default function(opts) {
         convertJSXIdentifier(node.object, node),
         convertJSXIdentifier(node.property, node),
       );
+    } else if (t.isJSXNamespacedName(node)) {
+      /**
+       * If there is flag "throwIfNamespace"
+       * print XMLNamespace like string literal
+       */
+      return t.stringLiteral(`${node.namespace.name}:${node.name.name}`);
     }
 
     return node;

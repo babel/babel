@@ -1,4 +1,4 @@
-# babel-plugin-transform-react-jsx
+# @babel/plugin-transform-react-jsx
 
 > Turn JSX into React function calls
 
@@ -55,7 +55,7 @@ var profile = dom( "div", null,
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-react-jsx
+npm install --save-dev @babel/plugin-transform-react-jsx
 ```
 
 ## Usage
@@ -68,7 +68,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["transform-react-jsx"]
+  "plugins": ["@babel/transform-react-jsx"]
 }
 ```
 
@@ -77,8 +77,9 @@ With options:
 ```json
 {
   "plugins": [
-    ["transform-react-jsx", {
-      "pragma": "dom" // default pragma is React.createElement
+    ["@babel/transform-react-jsx", {
+      "pragma": "dom", // default pragma is React.createElement
+      "throwIfNamespace": false // defaults to true
     }]
   ]
 }
@@ -87,14 +88,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins transform-react-jsx script.js
+babel --plugins @babel/transform-react-jsx script.js
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  plugins: ["transform-react-jsx"]
+require("@babel/core").transform("code", {
+  plugins: ["@babel/transform-react-jsx"]
 });
 ```
 
@@ -113,3 +114,13 @@ Note that the `@jsx React.DOM` pragma has been deprecated as of React v0.12
 `boolean`, defaults to `false`.
 
 When spreading props, use `Object.assign` directly instead of Babel's extend helper.
+
+### `throwIfNamespace`
+
+`boolean`, defaults to `true`.
+
+Toggles whether or not to throw an error if a XML namespaced tag name is used. For example:
+
+    <f:image />
+
+Though the JSX spec allows this, it is disabled by default since React's JSX does not currently have support for it.

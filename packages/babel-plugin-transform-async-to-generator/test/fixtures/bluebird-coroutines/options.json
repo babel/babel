@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    "external-helpers",
+    ["transform-async-to-generator", {
+      "module": "bluebird",
+      "method": "coroutine"
+    }]
+  ]
+}

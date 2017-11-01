@@ -25,9 +25,6 @@ export default {
     message:
       "use the `pragma` option in the `react-jsx` plugin . Check out http://babeljs.io/docs/plugins/transform-react-jsx/",
   },
-  // "keepModuleIdExtensions": {
-  //   "message": ""
-  // },
   loose: {
     message:
       "Specify the `loose` option for the relevant plugin you are using or use a preset that sets the option.",

@@ -3,10 +3,10 @@ import Module from "module";
 import { inspect } from "util";
 import path from "path";
 import repl from "repl";
-import * as babel from "babel-core";
+import * as babel from "@babel/core";
 import vm from "vm";
-import "babel-polyfill";
-import register from "babel-register";
+import "@babel/polyfill";
+import register from "@babel/register";
 
 import pkg from "../package.json";
 

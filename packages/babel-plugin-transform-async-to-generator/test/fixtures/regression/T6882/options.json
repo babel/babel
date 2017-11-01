@@ -2,8 +2,8 @@
   "plugins": [
     "external-helpers",
     "transform-async-to-generator",
-    "transform-es2015-block-scoping",
-    "transform-es2015-arrow-functions",
+    "transform-block-scoping",
+    "transform-arrow-functions",
     "transform-regenerator"
   ]
 }

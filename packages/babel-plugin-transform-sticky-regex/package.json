@@ -1,0 +1,22 @@
+{
+  "name": "@babel/plugin-transform-sticky-regex",
+  "version": "7.0.0-beta.5",
+  "description": "Compile ES2015 sticky regex to an ES5 RegExp constructor",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-sticky-regex",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/helper-regex": "7.0.0-beta.5",
+    "@babel/types": "7.0.0-beta.5"
+  },
+  "peerDependencies": {
+    "@babel/core": ">=7.0.0-beta.4 <7.0.0-rc.0"
+  },
+  "devDependencies": {
+    "@babel/core": "7.0.0-beta.5",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.5"
+  }
+}

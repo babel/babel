@@ -1,11 +1,11 @@
-import * as t from "babel-types";
-import template from "babel-template";
+import * as t from "@babel/types";
+import template from "@babel/template";
 
 const awaitTemplate = `
   function* wrapper() {
     var ITERATOR_COMPLETION = true;
     var ITERATOR_HAD_ERROR_KEY = false;
-    var ITERATOR_ERROR_KEY = undefined;
+    var ITERATOR_ERROR_KEY;
     try {
       for (
         var ITERATOR_KEY = GET_ITERATOR(OBJECT), STEP_KEY, STEP_VALUE;
@@ -38,7 +38,7 @@ const buildForAwaitWithoutWrapping = template(
   awaitTemplate.replace(/\bAWAIT\b/g, ""),
 );
 
-export default function(path, helpers) {
+export default function(path, { getAsyncIterator, wrapAwait }) {
   const { node, scope, parent } = path;
 
   const stepKey = scope.generateUidIdentifier("step");
@@ -58,9 +58,7 @@ export default function(path, helpers) {
     ]);
   }
 
-  const build = helpers.wrapAwait
-    ? buildForAwait
-    : buildForAwaitWithoutWrapping;
+  const build = wrapAwait ? buildForAwait : buildForAwaitWithoutWrapping;
   let template = build({
     ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
     ITERATOR_COMPLETION: scope.generateUidIdentifier(
@@ -68,11 +66,11 @@ export default function(path, helpers) {
     ),
     ITERATOR_ERROR_KEY: scope.generateUidIdentifier("iteratorError"),
     ITERATOR_KEY: scope.generateUidIdentifier("iterator"),
-    GET_ITERATOR: helpers.getAsyncIterator,
+    GET_ITERATOR: getAsyncIterator,
     OBJECT: node.right,
     STEP_VALUE: stepValue,
     STEP_KEY: stepKey,
-    AWAIT: helpers.wrapAwait,
+    ...(wrapAwait ? { AWAIT: wrapAwait } : {}),
   });
 
   // remove generator function wrapper

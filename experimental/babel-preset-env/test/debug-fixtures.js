@@ -1,7 +1,7 @@
 const chai = require("chai");
 const child = require("child_process");
 const fs = require("fs-extra");
-const helper = require("babel-helper-fixtures");
+const helper = require("@babel/helper-fixtures");
 const path = require("path");
 
 const fixtureLoc = path.join(__dirname, "debug-fixtures");
@@ -44,7 +44,7 @@ const assertTest = (stdout, stderr, opts) => {
 };
 
 const buildTest = opts => {
-  const binLoc = require.resolve("babel-cli/bin/babel");
+  const binLoc = require.resolve("@babel/cli/bin/babel");
 
   return callback => {
     clear();

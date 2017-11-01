@@ -1,4 +1,4 @@
-# babel-helper-explode-class
+# @babel/helper-explode-class
 
 ## Usage
 

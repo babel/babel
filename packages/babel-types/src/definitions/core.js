@@ -129,7 +129,9 @@ defineType("CallExpression", {
     arguments: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("Expression", "SpreadElement")),
+        assertEach(
+          assertNodeType("Expression", "SpreadElement", "JSXNamespacedName"),
+        ),
       ),
     },
     optional: {
@@ -351,7 +353,7 @@ defineType("FunctionExpression", {
 
 export const patternLikeCommon = {
   typeAnnotation: {
-    // TODO: babel-plugin-transform-flow-comments puts a Noop here, is there a better way?
+    // TODO: @babel/plugin-transform-flow-comments puts a Noop here, is there a better way?
     validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
     optional: true,
   },

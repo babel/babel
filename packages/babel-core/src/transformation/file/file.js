@@ -1,10 +1,10 @@
 // @flow
 
-import getHelper from "babel-helpers";
-import { NodePath, Hub, Scope } from "babel-traverse";
-import { codeFrameColumns } from "babel-code-frame";
-import traverse from "babel-traverse";
-import * as t from "babel-types";
+import * as helpers from "@babel/helpers";
+import { NodePath, Hub, Scope } from "@babel/traverse";
+import { codeFrameColumns } from "@babel/code-frame";
+import traverse from "@babel/traverse";
+import * as t from "@babel/types";
 
 import type { NormalizedFile } from "../normalize-file";
 
@@ -54,6 +54,10 @@ export default class File {
 
   get(key: mixed): any {
     return this._map.get(key);
+  }
+
+  has(key: mixed): boolean {
+    return this._map.has(key);
   }
 
   getModuleName(): ?string {
@@ -110,7 +114,7 @@ export default class File {
     throw new Error(
       "This API has been removed. If you're looking for this " +
         "functionality in Babel 7, you should import the " +
-        "'babel-helper-module-imports' module and use the functions exposed " +
+        "'@babel/helper-module-imports' module and use the functions exposed " +
         " from that module, such as 'addNamed' or 'addDefault'.",
     );
   }
@@ -132,11 +136,16 @@ export default class File {
       name,
     ));
 
-    const { nodes, globals } = getHelper(
+    const dependencies = {};
+    for (const dep of helpers.getDependencies(name)) {
+      dependencies[dep] = this.addHelper(dep);
+    }
+
+    const { nodes, globals } = helpers.get(
       name,
-      name => this.addHelper(name),
+      dep => dependencies[dep],
       uid,
-      () => Object.keys(this.scope.getAllBindings()),
+      Object.keys(this.scope.getAllBindings()),
     );
 
     globals.forEach(name => {

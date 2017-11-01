@@ -3,7 +3,7 @@ import sourceMap from "source-map";
 import assert from "assert";
 import path from "path";
 import Plugin from "../lib/config/plugin";
-import generator from "babel-generator";
+import generator from "@babel/generator";
 
 function assertIgnored(result) {
   assert.ok(!result);

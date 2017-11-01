@@ -1,5 +1,5 @@
-import _regeneratorRuntime from "babel-runtime/regenerator";
-import _Symbol from "babel-runtime/core-js/symbol";
+import _regeneratorRuntime from "@babel/runtime/regenerator";
+import _Symbol from "@babel/runtime/core-js/symbol";
 
 var _marked =
 /*#__PURE__*/

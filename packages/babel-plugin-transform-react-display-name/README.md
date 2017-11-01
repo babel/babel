@@ -1,4 +1,4 @@
-# babel-plugin-transform-react-display-name
+# @babel/plugin-transform-react-display-name
 
 > Add displayName to `createReactClass` (and `React.createClass`) calls
 
@@ -25,7 +25,7 @@ var bar = createReactClass({
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-react-display-name
+npm install --save-dev @babel/plugin-transform-react-display-name
 ```
 
 ## Usage
@@ -36,20 +36,20 @@ npm install --save-dev babel-plugin-transform-react-display-name
 
 ```json
 {
-  "plugins": ["transform-react-display-name"]
+  "plugins": ["@babel/transform-react-display-name"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-react-display-name script.js
+babel --plugins @babel/transform-react-display-name script.js
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  plugins: ["transform-react-display-name"]
+require("@babel/core").transform("code", {
+  plugins: ["@babel/transform-react-display-name"]
 });
 ```
