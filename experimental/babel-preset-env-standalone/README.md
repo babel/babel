@@ -15,4 +15,19 @@ There are several ways to get a copy of babel-preset-env. Pick whichever one you
 Usage
 =====
 
-Load `babel-preset-env.js` or `babel-preset-env.min.js` in your environment, **along with Babel-standalone**. This is important: You need to load Babel too!
+Load `babel-preset-env.js` or `babel-preset-env.min.js` in your environment, **along with Babel-standalone**. This is important: You need to load Babel too! It will be registered as an available preset of the @babel/standalone.
+
+Then, just use it like any other preset:
+
+```js
+Babel.transform(code, {
+  presets: [
+    ["env", {
+      "targets": {
+        "browsers": "last 1 safari version"
+      },
+      useBuiltIns: "usage"
+    }]
+  ]
+});
+```
