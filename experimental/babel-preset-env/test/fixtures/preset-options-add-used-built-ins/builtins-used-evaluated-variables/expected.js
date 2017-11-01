@@ -1,6 +1,6 @@
-import "babel-polyfill/lib/core-js/modules/es6.object.assign";
-import "babel-polyfill/lib/core-js/modules/es6.array.find";
-import "babel-polyfill/lib/core-js/modules/es7.array.includes";
+import "@babel/polyfill/lib/core-js/modules/es6.object.assign";
+import "@babel/polyfill/lib/core-js/modules/es6.array.find";
+import "@babel/polyfill/lib/core-js/modules/es7.array.includes";
 var arrayInstance = [];
 var objectClass = Object;
 var assignStr = "assign";
