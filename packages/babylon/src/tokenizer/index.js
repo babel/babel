@@ -4,7 +4,7 @@
 
 import type { Options } from "../options";
 import type { Position } from "../util/location";
-import charCodes from "../util/charCodes";
+import * as charCodes from "../util/charCodes";
 import {
   isIdentifierStart,
   isIdentifierChar,

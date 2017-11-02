@@ -2,37 +2,33 @@
 
 type Char = number;
 
-const charCodes = {
-  space: 32,
-  backSpace: 8,
-  shiftOut: 14,
-  nonBreakingSpace: 160,
-  carriageReturn: 13, // '\r'
-  lineFeed: 10, // '\n'
-  lineSeparator: 8232,
-  paragraphSeparator: 8233,
+export const space = 32;
+export const backSpace = 8;
+export const shiftOut = 14;
+export const nonBreakingSpace = 160;
+export const carriageReturn = 13; // '\r'
+export const lineFeed = 10; // '\n'
+export const lineSeparator = 8232;
+export const paragraphSeparator = 8233;
 
-  asterisk: 42, // '*'
-  dot: 46, // '.'
-  slash: 47, // '/'
+export const asterisk = 42; // '*'
+export const dot = 46; // '.'
+export const slash = 47; // '/'
 
-  letterN: 110, // 'n'
+export const letterN = 110; // 'n'
 
-  digit0: 48, // '0'
-  digit9: 57, // '9'
+export const digit0 = 48; // '0'
+export const digit9 = 57; // '9'
 
-  lessThan: 60, // '<'
-  equalsTo: 61, // '='
-  greaterThan: 62, // '>'
-  questionMark: 63, // '?'
-  at: 64, // '@'
+export const lessThan = 60; // '<'
+export const equalsTo = 61; // '='
+export const greaterThan = 62; // '>'
+export const questionMark = 63; // '?'
+export const at = 64; // '@'
 
-  exclamationMark: 33, // '!'
-  dash: 45, // '-'
-};
+export const exclamationMark = 33; // '!'
+export const dash = 45; // '-'
 
 export function isDigit(code: Char): boolean {
-  return code >= charCodes.digit0 && code <= charCodes.digit9;
+  return code >= digit0 && code <= digit9;
 }
-
-export default charCodes;
