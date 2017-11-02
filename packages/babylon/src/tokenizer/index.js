@@ -4,6 +4,7 @@
 
 import type { Options } from "../options";
 import type { Position } from "../util/location";
+import charCodes from "../util/charCodes";
 import {
   isIdentifierStart,
   isIdentifierChar,
@@ -328,31 +329,31 @@ export default class Tokenizer extends LocationParser {
     loop: while (this.state.pos < this.input.length) {
       const ch = this.input.charCodeAt(this.state.pos);
       switch (ch) {
-        case 32: // space
-        case 160: // non-breaking space
+        case charCodes.space:
+        case charCodes.nonBreakingSpace:
           ++this.state.pos;
           break;
 
-        case 13: // '\r' carriage return
+        case charCodes.carriageReturn:
           if (this.input.charCodeAt(this.state.pos + 1) === 10) {
             ++this.state.pos;
           }
 
-        case 10: // '\n' line feed
-        case 8232: // line separator
-        case 8233: // paragraph separator
+        case charCodes.lineFeed:
+        case charCodes.lineSeparator:
+        case charCodes.paragraphSeparator:
           ++this.state.pos;
           ++this.state.curLine;
           this.state.lineStart = this.state.pos;
           break;
 
-        case 47: // '/'
+        case charCodes.slash: // '/'
           switch (this.input.charCodeAt(this.state.pos + 1)) {
-            case 42: // '*'
+            case charCodes.asterisk: // '*'
               this.skipBlockComment();
               break;
 
-            case 47:
+            case charCodes.slash:
               this.skipLineComment(2);
               break;
 
@@ -873,7 +874,7 @@ export default class Tokenizer extends LocationParser {
         val = code - 97 + 10; // a
       } else if (code >= 65) {
         val = code - 65 + 10; // A
-      } else if (code >= 48 && code <= 57) {
+      } else if (charCodes.isIn09(code)) {
         val = code - 48; // 0-9
       } else {
         val = Infinity;
@@ -901,7 +902,7 @@ export default class Tokenizer extends LocationParser {
       this.raise(this.state.start + 2, "Expected number in radix " + radix);
 
     if (this.hasPlugin("bigInt")) {
-      if (this.input.charCodeAt(this.state.pos) === 0x6e) {
+      if (this.input.charCodeAt(this.state.pos) === charCodes.letterN) {
         // 'n'
         ++this.state.pos;
         isBigInt = true;
@@ -924,7 +925,7 @@ export default class Tokenizer extends LocationParser {
 
   readNumber(startsWithDot: boolean): void {
     const start = this.state.pos;
-    let octal = this.input.charCodeAt(start) === 0x30; // '0'
+    let octal = this.input.charCodeAt(start) === charCodes.digit0; // '0'
     let isFloat = false;
     let isBigInt = false;
 
