@@ -38,6 +38,8 @@ export const visitor = {
 
     const bindingPath = scope.getBinding(node.name).path;
 
+    if (bindingPath.isFunctionDeclaration()) return;
+
     const status = getTDZStatus(path, bindingPath);
     if (status === "inside") return;
 
