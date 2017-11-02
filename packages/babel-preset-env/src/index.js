@@ -49,6 +49,8 @@ const pluginListWithoutProposals = filterStageFromList(
   proposalPlugins,
 );
 
+const validEcmascriptTargets = new Set(["5", "2015", "2016", "2017", "2018"]);
+
 export const isPluginRequired = (
   supportedEnvironments: Targets,
   plugin: Targets,
@@ -74,6 +76,20 @@ export const isPluginRequired = (
         // Include plugin if it is supported in the unreleased environment, which wasn't specified in targets
       } else if (isUnreleasedVersion(lowestImplementedVersion, environment)) {
         return true;
+      }
+
+      if (environment === "ecmascript") {
+        if (!validEcmascriptTargets.has(lowestTargetedVersion)) {
+          throw new Error(
+            `Invalid ECMAScript version passed for target "ecmascript". Must be ${Array.from(
+              validEcmascriptTargets,
+            ).join(", ")}`,
+          );
+        }
+        return (
+          parseInt(lowestImplementedVersion, 10) >
+          parseInt(lowestTargetedVersion, 10)
+        );
       }
 
       if (!semver.valid(lowestTargetedVersion)) {
@@ -187,6 +203,7 @@ export default function buildPreset(
     ignoreBrowserslistConfig,
     configPath,
   });
+
   const include = transformIncludesAndExcludes(optionsInclude);
   const exclude = transformIncludesAndExcludes(optionsExclude);
 
