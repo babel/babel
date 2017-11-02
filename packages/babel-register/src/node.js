@@ -12,21 +12,23 @@ const maps = {};
 const transformOpts = {};
 let piratesRevert = null;
 
-sourceMapSupport.install({
-  handleUncaughtExceptions: false,
-  environment: "node",
-  retrieveSourceMap(source) {
-    const map = maps && maps[source];
-    if (map) {
-      return {
-        url: null,
-        map: map,
-      };
-    } else {
-      return null;
-    }
-  },
-});
+function installSourceMapSupport() {
+  sourceMapSupport.install({
+    handleUncaughtExceptions: false,
+    environment: "node",
+    retrieveSourceMap(source) {
+      const map = maps && maps[source];
+      if (map) {
+        return {
+          url: null,
+          map: map,
+        };
+      } else {
+        return null;
+      }
+    },
+  });
+}
 
 registerCache.load();
 let cache = registerCache.get();
@@ -61,16 +63,19 @@ function compile(code, filename) {
     }
   }
 
-  const result = babel.transform(
-    code,
-    Object.assign(opts, {
-      // Do not process config files since has already been done with the OptionManager
-      // calls above and would introduce duplicates.
-      babelrc: false,
-      sourceMaps: "both",
-      ast: false,
-    }),
-  );
+  const extendedOpts = Object.assign(opts, {
+    // Do not process config files since has already been done with the OptionManager
+    // calls above and would introduce duplicates.
+    babelrc: false,
+    sourceMaps: "sourceMaps" in opts ? opts.sourceMaps : "both",
+    ast: false,
+  });
+
+  if (extendedOpts.sourceMaps) {
+    installSourceMapSupport();
+  }
+
+  const result = babel.transform(code, extendedOpts);
 
   if (cache) {
     cache[cacheKey] = result;
