@@ -192,6 +192,19 @@ describe("getTargets", () => {
     });
   });
 
+  describe("ecmascript", () => {
+    it("should be a target", () => {
+      assert.deepEqual(
+        getTargets({
+          ecmascript: 2015,
+        }),
+        {
+          ecmascript: "2015",
+        },
+      );
+    });
+  });
+
   describe("electron", () => {
     it("should be its own target", () => {
       expect(

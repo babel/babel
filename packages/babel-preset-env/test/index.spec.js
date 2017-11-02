@@ -41,6 +41,20 @@ describe("babel-preset-env", () => {
       expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(false);
     });
 
+    it("returns false if plugin feature is implemented by lower than target (ecmascript)", () => {
+      const plugin = {
+        ecmascript: 2015,
+      };
+      const targets = {
+        ecmascript: "2018",
+      };
+
+      assert.strictEqual(
+        babelPresetEnv.isPluginRequired(targets, plugin),
+        false,
+      );
+    });
+
     it("returns false if plugin feature is implemented is equal to target", () => {
       const plugin = {
         chrome: 49,
@@ -51,6 +65,19 @@ describe("babel-preset-env", () => {
       expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(false);
     });
 
+    it("returns false if plugin feature is implemented is equal to target (ecmascript)", () => {
+      const plugin = {
+        ecmascript: 2015,
+      };
+      const targets = {
+        ecmascript: "2015",
+      };
+      assert.strictEqual(
+        babelPresetEnv.isPluginRequired(targets, plugin),
+        false,
+      );
+    });
+
     it("returns true if plugin feature is implemented is greater than target", () => {
       const plugin = {
         chrome: 50,
@@ -59,6 +86,33 @@ describe("babel-preset-env", () => {
         chrome: "49.0.0",
       };
       expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(true);
+    });
+
+    it("returns true if plugin feature is implemented is greater than target (ecmascript)", () => {
+      const plugin = {
+        ecmascript: 2018,
+      };
+      const targets = {
+        ecmascript: "5",
+      };
+      assert.strictEqual(
+        babelPresetEnv.isPluginRequired(targets, plugin),
+        true,
+      );
+    });
+
+    it("returns true if uglify is specified as a target", () => {
+      const plugin = {
+        chrome: 50,
+      };
+      const targets = {
+        chrome: "55.0.0",
+        uglify: true,
+      };
+      assert.strictEqual(
+        babelPresetEnv.isPluginRequired(targets, plugin),
+        true,
+      );
     });
 
     it("returns when target is a decimal", () => {

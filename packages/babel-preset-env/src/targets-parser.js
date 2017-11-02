@@ -149,6 +149,8 @@ const targetParserMap = {
         : semverifyTarget(target, value);
     return [target, parsed];
   },
+
+  ecmascript: (target, value) => [target, String(value)],
 };
 
 type ParsedResult = {
