@@ -28,26 +28,26 @@ import State from "./state";
 const forbiddenNumericSeparatorSiblings = {
   decBinOct: [
     charCodes.dot,
-    charCodes.letterUpperB,
-    charCodes.letterUpperE,
-    charCodes.letterUpperO,
+    charCodes.uppercaseB,
+    charCodes.uppercaseE,
+    charCodes.uppercaseO,
     charCodes.underscore, // multiple separators are not allowed
-    charCodes.letterLowerB,
-    charCodes.letterLowerE,
-    charCodes.letterLowerO,
+    charCodes.lowercaseB,
+    charCodes.lowercaseE,
+    charCodes.lowercaseO,
   ],
   hex: [
     charCodes.dot,
-    charCodes.letterUpperX,
+    charCodes.uppercaseX,
     charCodes.underscore, // multiple separators are not allowed
-    charCodes.letterLowerX,
+    charCodes.lowercaseX,
   ],
 };
 
 const allowedNumericSeparatorSiblings = {};
 allowedNumericSeparatorSiblings.bin = [
   // 0 - 1
-  48,
+  charCodes.digit0,
   49,
 ];
 allowedNumericSeparatorSiblings.oct = [
@@ -64,7 +64,7 @@ allowedNumericSeparatorSiblings.dec = [
   // 0 - 9
   ...allowedNumericSeparatorSiblings.oct,
   56,
-  57,
+  charCodes.digit9,
 ];
 
 allowedNumericSeparatorSiblings.hex = [
@@ -72,17 +72,17 @@ allowedNumericSeparatorSiblings.hex = [
   ...allowedNumericSeparatorSiblings.dec,
   // A - F
   65,
-  charCodes.letterUpperB,
+  charCodes.uppercaseB,
   67,
   68,
-  charCodes.letterUpperE,
+  charCodes.uppercaseE,
   70,
   // a - f
   97,
-  charCodes.letterLowerB,
+  charCodes.lowercaseB,
   99,
   100,
-  charCodes.letterLowerE,
+  charCodes.lowercaseE,
   102,
 ];
 
@@ -401,7 +401,7 @@ export default class Tokenizer extends LocationParser {
   //
   readToken_dot(): void {
     const next = this.input.charCodeAt(this.state.pos + 1);
-    if (next >= 48 && next <= 57) {
+    if (next >= charCodes.digit0 && next <= charCodes.digit9) {
       this.readNumber(true);
       return;
     }
@@ -589,7 +589,10 @@ export default class Tokenizer extends LocationParser {
     if (next === charCodes.questionMark) {
       // '??'
       this.finishOp(tt.nullishCoalescing, 2);
-    } else if (next === charCodes.dot && !(next2 >= 48 && next2 <= 57)) {
+    } else if (
+      next === charCodes.dot &&
+      !(next2 >= charCodes.digit0 && next2 <= charCodes.digit9)
+    ) {
       // '.' not followed by a number
       this.state.pos += 2;
       this.finishToken(tt.questionDot);
@@ -692,30 +695,21 @@ export default class Tokenizer extends LocationParser {
         this.finishToken(tt.backQuote);
         return;
 
-      case 48: {
+      case charCodes.digit0: {
         // '0'
         const next = this.input.charCodeAt(this.state.pos + 1);
         // '0x', '0X' - hex number
-        if (
-          next === charCodes.letterLowerX ||
-          next === charCodes.letterUpperX
-        ) {
+        if (next === charCodes.lowercaseX || next === charCodes.uppercaseX) {
           this.readRadixNumber(16);
           return;
         }
         // '0o', '0O' - octal number
-        if (
-          next === charCodes.letterLowerO ||
-          next === charCodes.letterUpperO
-        ) {
+        if (next === charCodes.lowercaseO || next === charCodes.uppercaseO) {
           this.readRadixNumber(8);
           return;
         }
         // '0b', '0B' - binary number
-        if (
-          next === charCodes.letterLowerB ||
-          next === charCodes.letterUpperB
-        ) {
+        if (next === charCodes.lowercaseB || next === charCodes.uppercaseB) {
           this.readRadixNumber(2);
           return;
         }
@@ -730,7 +724,7 @@ export default class Tokenizer extends LocationParser {
       case 54:
       case 55:
       case 56:
-      case 57: // 1-9
+      case charCodes.digit9: // 1-9
         this.readNumber(false);
         return;
 
@@ -888,7 +882,7 @@ export default class Tokenizer extends LocationParser {
       } else if (code >= 65) {
         val = code - 65 + 10; // A
       } else if (charCodes.isDigit(code)) {
-        val = code - 48; // 0-9
+        val = code - charCodes.digit0; // 0-9
       } else {
         val = Infinity;
       }
@@ -1128,7 +1122,7 @@ export default class Tokenizer extends LocationParser {
         return "\n"; // 'n' -> '\n'
       case 114:
         return "\r"; // 'r' -> '\r'
-      case charCodes.letterLowerX: {
+      case charCodes.lowercaseX: {
         const code = this.readHexChar(2, throwOnInvalid);
         return code === null ? null : String.fromCharCode(code);
       }
@@ -1139,7 +1133,7 @@ export default class Tokenizer extends LocationParser {
       }
       case 116:
         return "\t"; // 't' -> '\t'
-      case charCodes.letterLowerB:
+      case charCodes.lowercaseB:
         return "\b"; // 'b' -> '\b'
       case 118:
         return "\u000b"; // 'v' -> '\u000b'
@@ -1152,7 +1146,7 @@ export default class Tokenizer extends LocationParser {
         ++this.state.curLine;
         return "";
       default:
-        if (ch >= 48 && ch <= 55) {
+        if (ch >= charCodes.digit0 && ch <= 55) {
           const codePos = this.state.pos - 1;
           // $FlowFixMe
           let octalStr = this.input
