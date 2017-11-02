@@ -1,0 +1,141 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 39,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 3,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 39,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 3,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 39,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 11,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 11
+            },
+            "identifierName": "fn"
+          },
+          "name": "fn"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start": 14,
+          "end": 39,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 14
+            },
+            "end": {
+              "line": 3,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "FunctionDeclaration",
+              "start": 18,
+              "end": 37,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 21
+                }
+              },
+              "id": {
+                "type": "Identifier",
+                "start": 27,
+                "end": 32,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 16
+                  },
+                  "identifierName": "yield"
+                },
+                "name": "yield"
+              },
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 35,
+                "end": 37,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 19
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 21
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

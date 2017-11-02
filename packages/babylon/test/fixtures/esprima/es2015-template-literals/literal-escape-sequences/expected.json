@@ -1,0 +1,104 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 51,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 51
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 51,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 51
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 51,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 51
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 50,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 50
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 10,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 10
+                },
+                "identifierName": "source"
+              },
+              "name": "source"
+            },
+            "init": {
+              "type": "StringLiteral",
+              "start": 13,
+              "end": 50,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 13
+                },
+                "end": {
+                  "line": 1,
+                  "column": 50
+                }
+              },
+              "extra": {
+                "rawValue": "`\\u{000042}\\u0042\\x42\\u0\\A\\0`",
+                "raw": "'`\\\\u{000042}\\\\u0042\\\\x42\\\\u0\\\\A\\\\0`'"
+              },
+              "value": "`\\u{000042}\\u0042\\x42\\u0\\A\\0`"
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

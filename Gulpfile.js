@@ -7,6 +7,7 @@ const newer = require("gulp-newer");
 const babel = require("gulp-babel");
 const watch = require("gulp-watch");
 const gutil = require("gulp-util");
+const filter = require("gulp-filter");
 const gulp = require("gulp");
 const path = require("path");
 const webpack = require("webpack");
@@ -32,9 +33,11 @@ gulp.task("build", function() {
   return merge(
     sources.map(source => {
       const base = path.join(__dirname, source);
+      const f = filter(["**", "!**/packages/babylon/**"]);
 
       return gulp
         .src(getGlobFromSource(source), { base: base })
+        .pipe(f)
         .pipe(
           plumber({
             errorHandler: function(err) {

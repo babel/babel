@@ -1,0 +1,159 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 29,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 29
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 29,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 29
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 29,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 29
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 8,
+          "end": 29,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 8
+            },
+            "end": {
+              "line": 1,
+              "column": 29
+            }
+          },
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start": 10,
+              "end": 28,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 1,
+                  "column": 28
+                }
+              },
+              "static": true,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 21,
+                "end": 22,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 22
+                  },
+                  "identifierName": "a"
+                },
+                "name": "a"
+              },
+              "kind": "set",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 23,
+                  "end": 24,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 24
+                    },
+                    "identifierName": "v"
+                  },
+                  "name": "v"
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 26,
+                "end": 28,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 26
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 28
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

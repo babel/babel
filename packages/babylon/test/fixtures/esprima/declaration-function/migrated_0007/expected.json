@@ -1,0 +1,171 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 33,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 33
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 33,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 33
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 33,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 33
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 14,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 14
+            },
+            "identifierName": "hello"
+          },
+          "name": "hello"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start": 15,
+            "end": 16,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 15
+              },
+              "end": {
+                "line": 1,
+                "column": 16
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          {
+            "type": "Identifier",
+            "start": 18,
+            "end": 19,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 18
+              },
+              "end": {
+                "line": 1,
+                "column": 19
+              },
+              "identifierName": "b"
+            },
+            "name": "b"
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 21,
+          "end": 33,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 21
+            },
+            "end": {
+              "line": 1,
+              "column": 33
+            }
+          },
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 23,
+              "end": 31,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 23
+                },
+                "end": {
+                  "line": 1,
+                  "column": 31
+                }
+              },
+              "expression": {
+                "type": "CallExpression",
+                "start": 23,
+                "end": 30,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 23
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 30
+                  }
+                },
+                "callee": {
+                  "type": "Identifier",
+                  "start": 23,
+                  "end": 28,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 28
+                    },
+                    "identifierName": "sayHi"
+                  },
+                  "name": "sayHi"
+                },
+                "arguments": []
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

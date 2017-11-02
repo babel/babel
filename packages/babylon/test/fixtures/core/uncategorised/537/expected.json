@@ -1,0 +1,136 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 19,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 19
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 19,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 19
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ForStatement",
+        "start": 0,
+        "end": 19,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 19
+          }
+        },
+        "init": {
+          "type": "VariableDeclaration",
+          "start": 4,
+          "end": 15,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 15
+            }
+          },
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start": 10,
+              "end": 15,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 1,
+                  "column": 15
+                }
+              },
+              "id": {
+                "type": "Identifier",
+                "start": 10,
+                "end": 11,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 11
+                  },
+                  "identifierName": "x"
+                },
+                "name": "x"
+              },
+              "init": {
+                "type": "NumericLiteral",
+                "start": 14,
+                "end": 15,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 14
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 15
+                  }
+                },
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
+              }
+            }
+          ],
+          "kind": "const"
+        },
+        "test": null,
+        "update": null,
+        "body": {
+          "type": "EmptyStatement",
+          "start": 18,
+          "end": 19,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 18
+            },
+            "end": {
+              "line": 1,
+              "column": 19
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

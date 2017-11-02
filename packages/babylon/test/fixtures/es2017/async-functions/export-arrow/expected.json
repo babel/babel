@@ -1,0 +1,117 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 38,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 38
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 38,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 38
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 0,
+        "end": 38,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 38
+          }
+        },
+        "declaration": {
+          "type": "ArrowFunctionExpression",
+          "start": 15,
+          "end": 38,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 38
+            }
+          },
+          "id": null,
+          "generator": false,
+          "expression": true,
+          "async": true,
+          "params": [],
+          "body": {
+            "type": "AwaitExpression",
+            "start": 27,
+            "end": 38,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 27
+              },
+              "end": {
+                "line": 1,
+                "column": 38
+              }
+            },
+            "argument": {
+              "type": "CallExpression",
+              "start": 33,
+              "end": 38,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 33
+                },
+                "end": {
+                  "line": 1,
+                  "column": 38
+                }
+              },
+              "callee": {
+                "type": "Identifier",
+                "start": 33,
+                "end": 36,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 33
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 36
+                  },
+                  "identifierName": "foo"
+                },
+                "name": "foo"
+              },
+              "arguments": []
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

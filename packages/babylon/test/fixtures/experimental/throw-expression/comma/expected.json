@@ -1,0 +1,184 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 35,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 3,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 35,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 3,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 35,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 13,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 13
+            },
+            "identifierName": "test"
+          },
+          "name": "test"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start": 16,
+          "end": 35,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 16
+            },
+            "end": {
+              "line": 3,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ExpressionStatement",
+              "start": 20,
+              "end": 33,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 15
+                }
+              },
+              "expression": {
+                "type": "SequenceExpression",
+                "start": 21,
+                "end": 31,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 3
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 13
+                  }
+                },
+                "expressions": [
+                  {
+                    "type": "UnaryExpression",
+                    "start": 21,
+                    "end": 28,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 3
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 10
+                      }
+                    },
+                    "operator": "throw",
+                    "prefix": true,
+                    "argument": {
+                      "type": "NumericLiteral",
+                      "start": 27,
+                      "end": 28,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 9
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 10
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 1,
+                        "raw": "1"
+                      },
+                      "value": 1
+                    },
+                    "extra": {
+                      "parenthesizedArgument": false
+                    }
+                  },
+                  {
+                    "type": "NumericLiteral",
+                    "start": 30,
+                    "end": 31,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 13
+                      }
+                    },
+                    "extra": {
+                      "rawValue": 2,
+                      "raw": "2"
+                    },
+                    "value": 2
+                  }
+                ],
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 20
+                }
+              }
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

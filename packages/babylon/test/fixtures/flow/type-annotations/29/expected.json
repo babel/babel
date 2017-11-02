@@ -1,0 +1,172 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 34,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 34
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 34,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 34
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 34,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 34
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            },
+            "identifierName": "Foo"
+          },
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 10,
+          "end": 34,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 34
+            }
+          },
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start": 11,
+              "end": 33,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 11
+                },
+                "end": {
+                  "line": 1,
+                  "column": 33
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 15,
+                "end": 22,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 15
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 22
+                  },
+                  "identifierName": "fooProp"
+                },
+                "name": "fooProp"
+              },
+              "kind": "get",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "predicate": null,
+              "returnType": {
+                "type": "TypeAnnotation",
+                "start": 24,
+                "end": 31,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 24
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 31
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation",
+                  "start": 25,
+                  "end": 31,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 31
+                    }
+                  }
+                }
+              },
+              "body": {
+                "type": "BlockStatement",
+                "start": 31,
+                "end": 33,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 31
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 33
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

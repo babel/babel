@@ -1,0 +1,238 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 31,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 31
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 31,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 31
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start": 0,
+        "end": 31,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 31
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 5,
+          "end": 6,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 5
+            },
+            "end": {
+              "line": 1,
+              "column": 6
+            },
+            "identifierName": "o"
+          },
+          "name": "o"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "ObjectTypeAnnotation",
+          "start": 9,
+          "end": 31,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 31
+            }
+          },
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start": 11,
+              "end": 29,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 11
+                },
+                "end": {
+                  "line": 1,
+                  "column": 29
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 11,
+                "end": 12,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 12
+                  },
+                  "identifierName": "m"
+                },
+                "name": "m"
+              },
+              "static": false,
+              "kind": "init",
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start": 11,
+                "end": 29,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 29
+                  }
+                },
+                "params": [
+                  {
+                    "type": "FunctionTypeParam",
+                    "start": 13,
+                    "end": 22,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 22
+                      }
+                    },
+                    "name": null,
+                    "optional": false,
+                    "typeAnnotation": {
+                      "type": "UnionTypeAnnotation",
+                      "start": 13,
+                      "end": 22,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 13
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 22
+                        }
+                      },
+                      "types": [
+                        {
+                          "type": "GenericTypeAnnotation",
+                          "start": 14,
+                          "end": 17,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 14
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 17
+                            }
+                          },
+                          "typeParameters": null,
+                          "id": {
+                            "type": "Identifier",
+                            "start": 14,
+                            "end": 17,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 14
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 17
+                              },
+                              "identifierName": "int"
+                            },
+                            "name": "int"
+                          }
+                        },
+                        {
+                          "type": "BooleanTypeAnnotation",
+                          "start": 18,
+                          "end": 22,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 18
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 22
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "rest": null,
+                "typeParameters": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start": 25,
+                  "end": 29,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 29
+                    }
+                  }
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "plugins": ["exportExtensions", "typescript"],
+  "sourceType": "module"
+}

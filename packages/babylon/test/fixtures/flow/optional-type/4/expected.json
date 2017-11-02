@@ -1,0 +1,155 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 23,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 23
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 23,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 23
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 23,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 23
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 6,
+            "end": 23,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 6
+              },
+              "end": {
+                "line": 1,
+                "column": 23
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 6,
+              "end": 7,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 6
+                },
+                "end": {
+                  "line": 1,
+                  "column": 7
+                },
+                "identifierName": "f"
+              },
+              "name": "f"
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "start": 10,
+              "end": 23,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 1,
+                  "column": 23
+                }
+              },
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "RestElement",
+                  "start": 11,
+                  "end": 15,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 15
+                    }
+                  },
+                  "argument": {
+                    "type": "Identifier",
+                    "start": 14,
+                    "end": 15,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 15
+                      },
+                      "identifierName": "x"
+                    },
+                    "name": "x"
+                  },
+                  "optional": true
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 21,
+                "end": 23,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 23
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

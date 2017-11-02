@@ -1,0 +1,202 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 34,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 34
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 34,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 34
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 34,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 34
+          }
+        },
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start": 1,
+          "end": 33,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 1
+            },
+            "end": {
+              "line": 1,
+              "column": 33
+            }
+          },
+          "id": null,
+          "generator": false,
+          "expression": true,
+          "async": false,
+          "params": [
+            {
+              "type": "RestElement",
+              "start": 2,
+              "end": 24,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 2
+                },
+                "end": {
+                  "line": 1,
+                  "column": 24
+                }
+              },
+              "argument": {
+                "type": "Identifier",
+                "start": 5,
+                "end": 9,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 9
+                  },
+                  "identifierName": "rest"
+                },
+                "name": "rest"
+              },
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start": 9,
+                "end": 24,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 24
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "GenericTypeAnnotation",
+                  "start": 11,
+                  "end": 24,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 24
+                    }
+                  },
+                  "typeParameters": {
+                    "type": "TypeParameterInstantiation",
+                    "start": 16,
+                    "end": 24,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 24
+                      }
+                    },
+                    "params": [
+                      {
+                        "type": "NumberTypeAnnotation",
+                        "start": 17,
+                        "end": 23,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 17
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 23
+                          }
+                        }
+                      }
+                    ]
+                  },
+                  "id": {
+                    "type": "Identifier",
+                    "start": 11,
+                    "end": 16,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 16
+                      },
+                      "identifierName": "Array"
+                    },
+                    "name": "Array"
+                  }
+                }
+              }
+            }
+          ],
+          "body": {
+            "type": "Identifier",
+            "start": 29,
+            "end": 33,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 29
+              },
+              "end": {
+                "line": 1,
+                "column": 33
+              },
+              "identifierName": "rest"
+            },
+            "name": "rest"
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

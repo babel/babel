@@ -1,0 +1,218 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 28,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 28
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 28,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 28
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 28,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 28
+          }
+        },
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start": 0,
+          "end": 28,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 28
+            }
+          },
+          "id": null,
+          "generator": false,
+          "expression": true,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start": 1,
+              "end": 2,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 1
+                },
+                "end": {
+                  "line": 1,
+                  "column": 2
+                },
+                "identifierName": "x"
+              },
+              "name": "x"
+            }
+          ],
+          "body": {
+            "type": "ArrowFunctionExpression",
+            "start": 8,
+            "end": 27,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 8
+              },
+              "end": {
+                "line": 1,
+                "column": 27
+              }
+            },
+            "id": null,
+            "generator": false,
+            "expression": true,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 9,
+                "end": 10,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 10
+                  },
+                  "identifierName": "y"
+                },
+                "name": "y"
+              },
+              {
+                "type": "Identifier",
+                "start": 12,
+                "end": 13,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 13
+                  },
+                  "identifierName": "z"
+                },
+                "name": "z"
+              }
+            ],
+            "body": {
+              "type": "SequenceExpression",
+              "start": 19,
+              "end": 26,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 19
+                },
+                "end": {
+                  "line": 1,
+                  "column": 26
+                }
+              },
+              "expressions": [
+                {
+                  "type": "Identifier",
+                  "start": 19,
+                  "end": 20,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 19
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 20
+                    },
+                    "identifierName": "x"
+                  },
+                  "name": "x"
+                },
+                {
+                  "type": "Identifier",
+                  "start": 22,
+                  "end": 23,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 22
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 23
+                    },
+                    "identifierName": "y"
+                  },
+                  "name": "y"
+                },
+                {
+                  "type": "Identifier",
+                  "start": 25,
+                  "end": 26,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 26
+                    },
+                    "identifierName": "z"
+                  },
+                  "name": "z"
+                }
+              ],
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 18
+              }
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 7
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

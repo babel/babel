@@ -1,0 +1,6 @@
+{
+  "extends": "../.eslintrc",
+  "rules": {
+    "curly": "off"
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 30,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 30
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 30,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 30
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 0,
+        "end": 30,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 30
+          }
+        },
+        "declaration": {
+          "type": "FunctionDeclaration",
+          "start": 15,
+          "end": 30,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 30
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 24,
+            "end": 25,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 24
+              },
+              "end": {
+                "line": 1,
+                "column": 25
+              },
+              "identifierName": "f"
+            },
+            "name": "f"
+          },
+          "generator": false,
+          "expression": false,
+          "async": false,
+          "params": [],
+          "body": {
+            "type": "BlockStatement",
+            "start": 28,
+            "end": 30,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 28
+              },
+              "end": {
+                "line": 1,
+                "column": 30
+              }
+            },
+            "body": [],
+            "directives": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

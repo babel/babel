@@ -1,0 +1,157 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 20,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 20
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 20,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 20
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 20,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 20
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 10,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 10
+            },
+            "identifierName": "a"
+          },
+          "name": "a"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [
+          {
+            "type": "ArrayPattern",
+            "start": 11,
+            "end": 16,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 11
+              },
+              "end": {
+                "line": 1,
+                "column": 16
+              }
+            },
+            "elements": [
+              {
+                "type": "AssignmentPattern",
+                "start": 12,
+                "end": 15,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 15
+                  }
+                },
+                "left": {
+                  "type": "Identifier",
+                  "start": 12,
+                  "end": 13,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 12
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 13
+                    },
+                    "identifierName": "a"
+                  },
+                  "name": "a"
+                },
+                "right": {
+                  "type": "NumericLiteral",
+                  "start": 14,
+                  "end": 15,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 15
+                    }
+                  },
+                  "extra": {
+                    "rawValue": 0,
+                    "raw": "0"
+                  },
+                  "value": 0
+                }
+              }
+            ]
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 18,
+          "end": 20,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 18
+            },
+            "end": {
+              "line": 1,
+              "column": 20
+            }
+          },
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

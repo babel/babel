@@ -1,0 +1,193 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 44,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 44
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 44,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 44
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 44,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 44
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 10,
+          "end": 11,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 11
+            },
+            "identifierName": "g"
+          },
+          "name": "g"
+        },
+        "generator": true,
+        "expression": false,
+        "async": false,
+        "params": [],
+        "body": {
+          "type": "BlockStatement",
+          "start": 14,
+          "end": 44,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 14
+            },
+            "end": {
+              "line": 1,
+              "column": 44
+            }
+          },
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start": 16,
+              "end": 42,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 16
+                },
+                "end": {
+                  "line": 1,
+                  "column": 42
+                }
+              },
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 20,
+                  "end": 42,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 20
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 42
+                    }
+                  },
+                  "id": {
+                    "type": "Identifier",
+                    "start": 20,
+                    "end": 21,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 20
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 21
+                      },
+                      "identifierName": "z"
+                    },
+                    "name": "z"
+                  },
+                  "init": {
+                    "type": "FunctionExpression",
+                    "start": 24,
+                    "end": 42,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 24
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 42
+                      }
+                    },
+                    "id": null,
+                    "generator": false,
+                    "expression": false,
+                    "async": false,
+                    "params": [
+                      {
+                        "type": "Identifier",
+                        "start": 33,
+                        "end": 38,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 33
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 38
+                          },
+                          "identifierName": "yield"
+                        },
+                        "name": "yield"
+                      }
+                    ],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start": 40,
+                      "end": 42,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 40
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 42
+                        }
+                      },
+                      "body": [],
+                      "directives": []
+                    }
+                  }
+                }
+              ],
+              "kind": "var"
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

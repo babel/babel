@@ -1,0 +1,207 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 55,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 55
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 55,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 55
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 55,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 55
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 37,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 37
+            },
+            "identifierName": "singleElementWithInitializer"
+          },
+          "name": "singleElementWithInitializer"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [
+          {
+            "type": "RestElement",
+            "start": 38,
+            "end": 51,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 38
+              },
+              "end": {
+                "line": 1,
+                "column": 51
+              }
+            },
+            "argument": {
+              "type": "ObjectPattern",
+              "start": 41,
+              "end": 51,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 41
+                },
+                "end": {
+                  "line": 1,
+                  "column": 51
+                }
+              },
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start": 42,
+                  "end": 50,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 42
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 50
+                    }
+                  },
+                  "method": false,
+                  "computed": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start": 42,
+                    "end": 43,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 42
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 43
+                      },
+                      "identifierName": "a"
+                    },
+                    "name": "a"
+                  },
+                  "shorthand": false,
+                  "value": {
+                    "type": "AssignmentPattern",
+                    "start": 45,
+                    "end": 50,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 45
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 50
+                      }
+                    },
+                    "left": {
+                      "type": "Identifier",
+                      "start": 45,
+                      "end": 46,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 45
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 46
+                        },
+                        "identifierName": "b"
+                      },
+                      "name": "b"
+                    },
+                    "right": {
+                      "type": "NumericLiteral",
+                      "start": 49,
+                      "end": 50,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 49
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 50
+                        }
+                      },
+                      "extra": {
+                        "rawValue": 0,
+                        "raw": "0"
+                      },
+                      "value": 0
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 53,
+          "end": 55,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 53
+            },
+            "end": {
+              "line": 1,
+              "column": 55
+            }
+          },
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,164 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 18,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 18
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 18,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 18
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 18,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 18
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 17,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 17
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 17,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 17
+                },
+                "identifierName": "x"
+              },
+              "name": "x",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 5,
+                "end": 17,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 17
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSTypeQuery",
+                  "start": 7,
+                  "end": 17,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 17
+                    }
+                  },
+                  "exprName": {
+                    "type": "TSQualifiedName",
+                    "start": 14,
+                    "end": 17,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 17
+                      }
+                    },
+                    "left": {
+                      "type": "Identifier",
+                      "start": 14,
+                      "end": 15,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 14
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 15
+                        },
+                        "identifierName": "y"
+                      },
+                      "name": "y"
+                    },
+                    "right": {
+                      "type": "Identifier",
+                      "start": 16,
+                      "end": 17,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 17
+                        },
+                        "identifierName": "z"
+                      },
+                      "name": "z"
+                    }
+                  }
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

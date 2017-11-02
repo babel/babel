@@ -54,6 +54,7 @@
   },
   "devDependencies": {
     "@babel/cli": "7.0.0-beta.5",
+    "@babel/core": "7.0.0-beta.5",
     "@babel/helper-fixtures": "7.0.0-beta.5",
     "@babel/helper-plugin-test-runner": "7.0.0-beta.5",
     "compat-table": "kangax/compat-table#957f1ff15972e8fb2892a172f985e9af27bf1c75",

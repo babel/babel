@@ -1,5 +1,6 @@
 // @flow
 
+// $FlowIssue recursion?
 export default class Plugin {
   key: ?string;
   manipulateOptions: ?Function;

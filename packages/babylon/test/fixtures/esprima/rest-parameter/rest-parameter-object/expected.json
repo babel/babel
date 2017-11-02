@@ -1,0 +1,175 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 21,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 21
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 21,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 21
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 21,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 21
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 10,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 10
+            },
+            "identifierName": "f"
+          },
+          "name": "f"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [
+          {
+            "type": "RestElement",
+            "start": 11,
+            "end": 17,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 11
+              },
+              "end": {
+                "line": 1,
+                "column": 17
+              }
+            },
+            "argument": {
+              "type": "ObjectPattern",
+              "start": 14,
+              "end": 17,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 14
+                },
+                "end": {
+                  "line": 1,
+                  "column": 17
+                }
+              },
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start": 15,
+                  "end": 16,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 16
+                    }
+                  },
+                  "method": false,
+                  "computed": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start": 15,
+                    "end": 16,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 16
+                      },
+                      "identifierName": "a"
+                    },
+                    "name": "a"
+                  },
+                  "shorthand": true,
+                  "value": {
+                    "type": "Identifier",
+                    "start": 15,
+                    "end": 16,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 16
+                      },
+                      "identifierName": "a"
+                    },
+                    "name": "a"
+                  },
+                  "extra": {
+                    "shorthand": true
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 19,
+          "end": 21,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 19
+            },
+            "end": {
+              "line": 1,
+              "column": 21
+            }
+          },
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

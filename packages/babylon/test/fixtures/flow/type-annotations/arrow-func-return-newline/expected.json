@@ -1,0 +1,200 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 38,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 14
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 38,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 14
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 38,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 14
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 6,
+            "end": 38,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 6
+              },
+              "end": {
+                "line": 2,
+                "column": 14
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 6,
+              "end": 7,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 6
+                },
+                "end": {
+                  "line": 1,
+                  "column": 7
+                },
+                "identifierName": "x"
+              },
+              "name": "x"
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "start": 10,
+              "end": 38,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 2,
+                  "column": 14
+                }
+              },
+              "predicate": null,
+              "returnType": {
+                "type": "TypeAnnotation",
+                "start": 24,
+                "end": 32,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 8
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation",
+                  "start": 26,
+                  "end": 32,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 8
+                    }
+                  }
+                }
+              },
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 11,
+                  "end": 22,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 22
+                    },
+                    "identifierName": "foo"
+                  },
+                  "name": "foo",
+                  "typeAnnotation": {
+                    "type": "TypeAnnotation",
+                    "start": 14,
+                    "end": 22,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 22
+                      }
+                    },
+                    "typeAnnotation": {
+                      "type": "StringTypeAnnotation",
+                      "start": 16,
+                      "end": 22,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 22
+                        }
+                      }
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 36,
+                "end": 38,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 14
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

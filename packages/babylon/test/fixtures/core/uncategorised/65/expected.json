@@ -1,0 +1,191 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 50,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 50
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 50,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 50
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "SwitchStatement",
+        "start": 0,
+        "end": 50,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 50
+          }
+        },
+        "discriminant": {
+          "type": "Identifier",
+          "start": 8,
+          "end": 14,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 8
+            },
+            "end": {
+              "line": 1,
+              "column": 14
+            },
+            "identifierName": "answer"
+          },
+          "name": "answer"
+        },
+        "cases": [
+          {
+            "type": "SwitchCase",
+            "start": 18,
+            "end": 48,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 18
+              },
+              "end": {
+                "line": 1,
+                "column": 48
+              }
+            },
+            "consequent": [
+              {
+                "type": "ExpressionStatement",
+                "start": 41,
+                "end": 48,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 41
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 48
+                  }
+                },
+                "expression": {
+                  "type": "CallExpression",
+                  "start": 41,
+                  "end": 48,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 41
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 48
+                    }
+                  },
+                  "callee": {
+                    "type": "Identifier",
+                    "start": 41,
+                    "end": 46,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 41
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 46
+                      },
+                      "identifierName": "bingo"
+                    },
+                    "name": "bingo",
+                    "leadingComments": null
+                  },
+                  "arguments": [],
+                  "leadingComments": null
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": " perfect ",
+                    "start": 27,
+                    "end": 40,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 27
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 40
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "test": {
+              "type": "NumericLiteral",
+              "start": 23,
+              "end": 25,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 23
+                },
+                "end": {
+                  "line": 1,
+                  "column": 25
+                }
+              },
+              "extra": {
+                "rawValue": 42,
+                "raw": "42"
+              },
+              "value": 42
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": " perfect ",
+      "start": 27,
+      "end": 40,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 27
+        },
+        "end": {
+          "line": 1,
+          "column": 40
+        }
+      }
+    }
+  ]
+}

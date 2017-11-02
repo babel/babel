@@ -1,0 +1,204 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 47,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 47
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 47,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 47
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 47,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 47
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 8,
+          "end": 47,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 8
+            },
+            "end": {
+              "line": 1,
+              "column": 47
+            }
+          },
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start": 9,
+              "end": 26,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 26
+                }
+              },
+              "static": false,
+              "computed": false,
+              "key": {
+                "type": "StringLiteral",
+                "start": 9,
+                "end": 22,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 22
+                  }
+                },
+                "extra": {
+                  "rawValue": "constructor",
+                  "raw": "\"constructor\""
+                },
+                "value": "constructor"
+              },
+              "kind": "constructor",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 24,
+                "end": 26,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 24
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 26
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            },
+            {
+              "type": "ClassMethod",
+              "start": 27,
+              "end": 46,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 27
+                },
+                "end": {
+                  "line": 1,
+                  "column": 46
+                }
+              },
+              "static": false,
+              "computed": true,
+              "key": {
+                "type": "StringLiteral",
+                "start": 28,
+                "end": 41,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 28
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 41
+                  }
+                },
+                "extra": {
+                  "rawValue": "constructor",
+                  "raw": "\"constructor\""
+                },
+                "value": "constructor"
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 44,
+                "end": 46,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 44
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 46
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

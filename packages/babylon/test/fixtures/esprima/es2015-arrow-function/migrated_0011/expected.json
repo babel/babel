@@ -1,0 +1,107 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 9,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 9
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 9,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 9
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 9,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 9
+          }
+        },
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start": 0,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            }
+          },
+          "id": null,
+          "generator": false,
+          "expression": true,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start": 1,
+              "end": 2,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 1
+                },
+                "end": {
+                  "line": 1,
+                  "column": 2
+                },
+                "identifierName": "a"
+              },
+              "name": "a"
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start": 7,
+            "end": 9,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 7
+              },
+              "end": {
+                "line": 1,
+                "column": 9
+              }
+            },
+            "extra": {
+              "rawValue": 0,
+              "raw": "00"
+            },
+            "value": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "type": "Identifier",
+  "start": 0,
+  "end": 3,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 3
+    },
+    "identifierName": "abc"
+  },
+  "name": "abc",
+  "leadingComments": null,
+  "trailingComments": [
+    {
+      "type": "CommentLine",
+      "value": " my comment",
+      "start": 4,
+      "end": 17,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 4
+        },
+        "end": {
+          "line": 1,
+          "column": 17
+        }
+      }
+    }
+  ],
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " my comment",
+      "start": 4,
+      "end": 17,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 4
+        },
+        "end": {
+          "line": 1,
+          "column": 17
+        }
+      }
+    }
+  ]
+}

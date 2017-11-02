@@ -1,0 +1,170 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 32,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 32
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 32,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 32
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 32,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 32
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 31,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 31
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 6,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 6
+                },
+                "identifierName": "hi"
+              },
+              "name": "hi"
+            },
+            "init": {
+              "type": "FunctionExpression",
+              "start": 9,
+              "end": 31,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 31
+                }
+              },
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 20,
+                "end": 31,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 20
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 31
+                  }
+                },
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 22,
+                    "end": 29,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 22
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 29
+                      }
+                    },
+                    "expression": {
+                      "type": "CallExpression",
+                      "start": 22,
+                      "end": 29,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 22
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 29
+                        }
+                      },
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 22,
+                        "end": 27,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 22
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 27
+                          },
+                          "identifierName": "sayHi"
+                        },
+                        "name": "sayHi"
+                      },
+                      "arguments": []
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 121,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 10,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 121,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 10,
+        "column": 1
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 36,
+        "end": 121,
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 0
+          },
+          "end": {
+            "line": 10,
+            "column": 1
+          }
+        },
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start": 51,
+          "end": 121,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 15
+            },
+            "end": {
+              "line": 10,
+              "column": 1
+            }
+          },
+          "id": null,
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 57,
+            "end": 121,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 21
+              },
+              "end": {
+                "line": 10,
+                "column": 1
+              }
+            },
+            "body": [
+              {
+                "type": "ClassMethod",
+                "start": 103,
+                "end": 119,
+                "loc": {
+                  "start": {
+                    "line": 8,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 9,
+                    "column": 5
+                  }
+                },
+                "static": false,
+                "computed": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 103,
+                  "end": 110,
+                  "loc": {
+                    "start": {
+                      "line": 8,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 8,
+                      "column": 11
+                    },
+                    "identifierName": "method1"
+                  },
+                  "name": "method1",
+                  "leadingComments": null
+                },
+                "kind": "method",
+                "id": null,
+                "generator": false,
+                "expression": false,
+                "async": false,
+                "params": [],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 112,
+                  "end": 119,
+                  "loc": {
+                    "start": {
+                      "line": 8,
+                      "column": 13
+                    },
+                    "end": {
+                      "line": 9,
+                      "column": 5
+                    }
+                  },
+                  "body": [],
+                  "directives": []
+                },
+                "leadingComments": [
+                  {
+                    "type": "CommentBlock",
+                    "value": "*\n     * this is method1.\n     ",
+                    "start": 63,
+                    "end": 98,
+                    "loc": {
+                      "start": {
+                        "line": 5,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 7,
+                        "column": 7
+                      }
+                    }
+                  }
+                ]
+              }
+            ],
+            "leadingComments": null
+          },
+          "leadingComments": null
+        },
+        "leadingComments": [
+          {
+            "type": "CommentBlock",
+            "value": "*\n * this is anonymous class.\n ",
+            "start": 0,
+            "end": 35,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 3,
+                "column": 3
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": "*\n * this is anonymous class.\n ",
+      "start": 0,
+      "end": 35,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 3
+        }
+      }
+    },
+    {
+      "type": "CommentBlock",
+      "value": "*\n     * this is method1.\n     ",
+      "start": 63,
+      "end": 98,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 4
+        },
+        "end": {
+          "line": 7,
+          "column": 7
+        }
+      }
+    }
+  ]
+}

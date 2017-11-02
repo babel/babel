@@ -1,0 +1,313 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 57,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 57
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 57,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 57
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 57,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 57
+          }
+        },
+        "expression": {
+          "type": "JSXElement",
+          "start": 0,
+          "end": 57,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 57
+            }
+          },
+          "openingElement": {
+            "type": "JSXOpeningElement",
+            "start": 0,
+            "end": 57,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 57
+              }
+            },
+            "attributes": [
+              {
+                "type": "JSXAttribute",
+                "start": 11,
+                "end": 21,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 21
+                  }
+                },
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start": 11,
+                  "end": 15,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 15
+                    }
+                  },
+                  "name": "left"
+                },
+                "value": {
+                  "type": "JSXElement",
+                  "start": 16,
+                  "end": 21,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 21
+                    }
+                  },
+                  "openingElement": {
+                    "type": "JSXOpeningElement",
+                    "start": 16,
+                    "end": 21,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 21
+                      }
+                    },
+                    "attributes": [],
+                    "name": {
+                      "type": "JSXIdentifier",
+                      "start": 17,
+                      "end": 18,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 17
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 18
+                        }
+                      },
+                      "name": "a"
+                    },
+                    "selfClosing": true
+                  },
+                  "closingElement": null,
+                  "children": []
+                }
+              },
+              {
+                "type": "JSXAttribute",
+                "start": 22,
+                "end": 54,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 22
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 54
+                  }
+                },
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start": 22,
+                  "end": 27,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 22
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 27
+                    }
+                  },
+                  "name": "right"
+                },
+                "value": {
+                  "type": "JSXElement",
+                  "start": 28,
+                  "end": 54,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 28
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 54
+                    }
+                  },
+                  "openingElement": {
+                    "type": "JSXOpeningElement",
+                    "start": 28,
+                    "end": 31,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 28
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 31
+                      }
+                    },
+                    "attributes": [],
+                    "name": {
+                      "type": "JSXIdentifier",
+                      "start": 29,
+                      "end": 30,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 29
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 30
+                        }
+                      },
+                      "name": "b"
+                    },
+                    "selfClosing": false
+                  },
+                  "closingElement": {
+                    "type": "JSXClosingElement",
+                    "start": 50,
+                    "end": 54,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 50
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 54
+                      }
+                    },
+                    "name": {
+                      "type": "JSXIdentifier",
+                      "start": 52,
+                      "end": 53,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 52
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 53
+                        }
+                      },
+                      "name": "b"
+                    }
+                  },
+                  "children": [
+                    {
+                      "type": "JSXText",
+                      "start": 31,
+                      "end": 50,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 31
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 50
+                        }
+                      },
+                      "extra": {
+                        "rawValue": "monkeys /> gorillas",
+                        "raw": "monkeys /> gorillas"
+                      },
+                      "value": "monkeys /> gorillas"
+                    }
+                  ]
+                }
+              }
+            ],
+            "name": {
+              "type": "JSXIdentifier",
+              "start": 1,
+              "end": 10,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 1
+                },
+                "end": {
+                  "line": 1,
+                  "column": 10
+                }
+              },
+              "name": "LeftRight"
+            },
+            "selfClosing": true
+          },
+          "closingElement": null,
+          "children": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

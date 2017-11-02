@@ -1,0 +1,239 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 55,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 3,
+      "column": 2
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 55,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 3,
+        "column": 2
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 55,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 2
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 6,
+            "end": 54,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 6
+              },
+              "end": {
+                "line": 3,
+                "column": 1
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 6,
+              "end": 9,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 6
+                },
+                "end": {
+                  "line": 1,
+                  "column": 9
+                },
+                "identifierName": "foo"
+              },
+              "name": "foo"
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "start": 12,
+              "end": 54,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 12
+                },
+                "end": {
+                  "line": 3,
+                  "column": 1
+                }
+              },
+              "id": null,
+              "generator": false,
+              "expression": false,
+              "async": true,
+              "params": [
+                {
+                  "type": "ObjectPattern",
+                  "start": 19,
+                  "end": 33,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 19
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 33
+                    }
+                  },
+                  "properties": [
+                    {
+                      "type": "ObjectProperty",
+                      "start": 21,
+                      "end": 31,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 21
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 31
+                        }
+                      },
+                      "method": false,
+                      "key": {
+                        "type": "Identifier",
+                        "start": 21,
+                        "end": 26,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 21
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 26
+                          },
+                          "identifierName": "async"
+                        },
+                        "name": "async"
+                      },
+                      "computed": false,
+                      "shorthand": false,
+                      "value": {
+                        "type": "Identifier",
+                        "start": 28,
+                        "end": 31,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 28
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 31
+                          },
+                          "identifierName": "bar"
+                        },
+                        "name": "bar"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 38,
+                "end": 54,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 38
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 1
+                  }
+                },
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 42,
+                    "end": 52,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 12
+                      }
+                    },
+                    "expression": {
+                      "type": "AwaitExpression",
+                      "start": 42,
+                      "end": 51,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 2
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 11
+                        }
+                      },
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 48,
+                        "end": 51,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 11
+                          },
+                          "identifierName": "baz"
+                        },
+                        "name": "baz"
+                      }
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

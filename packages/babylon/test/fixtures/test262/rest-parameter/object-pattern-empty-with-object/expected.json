@@ -1,0 +1,171 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 39,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 39
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 39,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 39
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 39,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 39
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 24,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 24
+            },
+            "identifierName": "emptyWithObject"
+          },
+          "name": "emptyWithObject"
+        },
+        "generator": false,
+        "expression": false,
+        "async": false,
+        "params": [
+          {
+            "type": "RestElement",
+            "start": 25,
+            "end": 35,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 25
+              },
+              "end": {
+                "line": 1,
+                "column": 35
+              }
+            },
+            "argument": {
+              "type": "ObjectPattern",
+              "start": 28,
+              "end": 35,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 28
+                },
+                "end": {
+                  "line": 1,
+                  "column": 35
+                }
+              },
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start": 29,
+                  "end": 34,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 29
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 34
+                    }
+                  },
+                  "method": false,
+                  "computed": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start": 29,
+                    "end": 30,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 29
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 30
+                      },
+                      "identifierName": "p"
+                    },
+                    "name": "p"
+                  },
+                  "shorthand": false,
+                  "value": {
+                    "type": "ObjectPattern",
+                    "start": 32,
+                    "end": 34,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 32
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 34
+                      }
+                    },
+                    "properties": []
+                  }
+                }
+              ]
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 37,
+          "end": 39,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 37
+            },
+            "end": {
+              "line": 1,
+              "column": 39
+            }
+          },
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

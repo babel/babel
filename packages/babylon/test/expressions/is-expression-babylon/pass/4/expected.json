@@ -1,0 +1,17 @@
+{
+  "type": "Identifier",
+  "start": 1,
+  "end": 7,
+  "loc": {
+    "start": {
+      "line": 2,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 6
+    },
+    "identifierName": "public"
+  },
+  "name": "public"
+}
