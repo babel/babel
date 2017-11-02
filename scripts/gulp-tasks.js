@@ -60,6 +60,8 @@ function webpackBuild(opts) {
           },
         },
       ],
+      // babylon is already bundled and does not require parsing
+      noParse: [/babylon\/lib/],
     },
     node: {
       // Mock Node.js modules that Babel require()s but that we don't
