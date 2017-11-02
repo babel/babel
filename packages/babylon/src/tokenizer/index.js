@@ -364,7 +364,7 @@ export default class Tokenizer extends LocationParser {
 
         default:
           if (
-            (ch > 8 && ch < 14) ||
+            (ch > charCodes.backSpace && ch < charCodes.shiftOut) ||
             (ch >= 5760 && nonASCIIwhitespace.test(String.fromCharCode(ch)))
           ) {
             ++this.state.pos;
@@ -528,8 +528,11 @@ export default class Tokenizer extends LocationParser {
 
     if (next === code) {
       size =
-        code === 62 && this.input.charCodeAt(this.state.pos + 2) === 62 ? 3 : 2;
-      if (this.input.charCodeAt(this.state.pos + size) === 61) {
+        code === charCodes.greaterThan &&
+        this.input.charCodeAt(this.state.pos + 2) === charCodes.greaterThan
+          ? 3
+          : 2;
+      if (this.input.charCodeAt(this.state.pos + size) === charCodes.equalsTo) {
         this.finishOp(tt.assign, size + 1);
         return;
       }
@@ -538,11 +541,11 @@ export default class Tokenizer extends LocationParser {
     }
 
     if (
-      next === 33 &&
-      code === 60 &&
+      next === charCodes.exclamationMark &&
+      code === charCodes.lessThan &&
       !this.inModule &&
-      this.input.charCodeAt(this.state.pos + 2) === 45 &&
-      this.input.charCodeAt(this.state.pos + 3) === 45
+      this.input.charCodeAt(this.state.pos + 2) === charCodes.dash &&
+      this.input.charCodeAt(this.state.pos + 3) === charCodes.dash
     ) {
       // `<!--`, an XML-style comment that should be interpreted as a line comment
       this.skipLineComment(4);
@@ -551,7 +554,7 @@ export default class Tokenizer extends LocationParser {
       return;
     }
 
-    if (next === 61) {
+    if (next === charCodes.equalsTo) {
       // <= | >=
       size = 2;
     }
@@ -565,27 +568,29 @@ export default class Tokenizer extends LocationParser {
     if (next === 61) {
       this.finishOp(
         tt.equality,
-        this.input.charCodeAt(this.state.pos + 2) === 61 ? 3 : 2,
+        this.input.charCodeAt(this.state.pos + 2) === charCodes.equalsTo
+          ? 3
+          : 2,
       );
       return;
     }
-    if (code === 61 && next === 62) {
+    if (code === charCodes.equalsTo && next === charCodes.greaterThan) {
       // '=>'
       this.state.pos += 2;
       this.finishToken(tt.arrow);
       return;
     }
-    this.finishOp(code === 61 ? tt.eq : tt.bang, 1);
+    this.finishOp(code === charCodes.equalsTo ? tt.eq : tt.bang, 1);
   }
 
   readToken_question(): void {
     // '?'
     const next = this.input.charCodeAt(this.state.pos + 1);
     const next2 = this.input.charCodeAt(this.state.pos + 2);
-    if (next === 63) {
+    if (next === charCodes.questionMark) {
       // '??'
       this.finishOp(tt.nullishCoalescing, 2);
-    } else if (next === 46 && !(next2 >= 48 && next2 <= 57)) {
+    } else if (next === charCodes.dot && !(next2 >= 48 && next2 <= 57)) {
       // '.' not followed by a number
       this.state.pos += 2;
       this.finishToken(tt.questionDot);
@@ -874,7 +879,7 @@ export default class Tokenizer extends LocationParser {
         val = code - 97 + 10; // a
       } else if (code >= 65) {
         val = code - 65 + 10; // A
-      } else if (charCodes.isIn09(code)) {
+      } else if (charCodes.isDigit(code)) {
         val = code - 48; // 0-9
       } else {
         val = Infinity;
