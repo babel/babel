@@ -83,7 +83,7 @@ describe("@babel/register", function() {
 
     let gen_error;
     chai.expect((gen_error = require(GEN_ERROR))).to.be.ok;
-    chai.expect(gen_error()).to.match(/gen_error\.js:5:34/);
+    chai.expect(gen_error()).to.match(/gen_error\.js:6:34/);
   });
 
   it("Installs source map support by default", () => {
@@ -91,7 +91,7 @@ describe("@babel/register", function() {
 
     let gen_error;
     chai.expect((gen_error = require(GEN_ERROR))).to.be.ok;
-    chai.expect(gen_error()).to.match(/gen_error\.js:1:72/);
+    chai.expect(gen_error()).to.match(/gen_error\.js:2:72/);
   });
 
   it("Installs source map support when requested", () => {
@@ -101,6 +101,6 @@ describe("@babel/register", function() {
 
     let gen_error;
     chai.expect((gen_error = require(GEN_ERROR))).to.be.ok;
-    chai.expect(gen_error()).to.match(/gen_error\.js:1:72/);
+    chai.expect(gen_error()).to.match(/gen_error\.js:2:72/);
   });
 });
