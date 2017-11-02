@@ -14,8 +14,18 @@ export const paragraphSeparator = 8233;
 export const asterisk = 42; // '*'
 export const dot = 46; // '.'
 export const slash = 47; // '/'
+export const underscore = 95; // '_'
 
-export const letterN = 110; // 'n'
+export const letterUpperB = 66; // 'B'
+export const letterUpperE = 69; // 'E'
+export const letterUpperO = 79; // 'O'
+export const letterUpperX = 88; // 'X'
+
+export const letterLowerN = 110; // 'n'
+export const letterLowerB = 98; // 'b'
+export const letterLowerE = 101; // 'e'
+export const letterLowerO = 111; // 'o'
+export const letterLowerX = 120; // 'x'
 
 export const digit0 = 48; // '0'
 export const digit9 = 57; // '9'

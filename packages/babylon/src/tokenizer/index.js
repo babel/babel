@@ -27,20 +27,20 @@ import State from "./state";
 
 const forbiddenNumericSeparatorSiblings = {
   decBinOct: [
-    46, // .
-    66, // B
-    69, // E
-    79, // O
-    95, // _ (multiple separators are not allowed)
-    98, // b
-    101, // e
-    111, // o
+    charCodes.dot,
+    charCodes.letterUpperB,
+    charCodes.letterUpperE,
+    charCodes.letterUpperO,
+    charCodes.underscore, // multiple separators are not allowed
+    charCodes.letterLowerB,
+    charCodes.letterLowerE,
+    charCodes.letterLowerO,
   ],
   hex: [
-    46, // .
-    88, // X
-    95, // _ (multiple separators are not allowed)
-    120, // x
+    charCodes.dot,
+    charCodes.letterUpperX,
+    charCodes.underscore, // multiple separators are not allowed
+    charCodes.letterLowerX,
   ],
 };
 
@@ -72,17 +72,17 @@ allowedNumericSeparatorSiblings.hex = [
   ...allowedNumericSeparatorSiblings.dec,
   // A - F
   65,
-  66,
+  charCodes.letterUpperB,
   67,
   68,
-  69,
+  charCodes.letterUpperE,
   70,
   // a - f
   97,
-  98,
+  charCodes.letterLowerB,
   99,
   100,
-  101,
+  charCodes.letterLowerE,
   102,
 ];
 
@@ -407,8 +407,7 @@ export default class Tokenizer extends LocationParser {
     }
 
     const next2 = this.input.charCodeAt(this.state.pos + 2);
-    if (next === 46 && next2 === 46) {
-      // 46 = dot '.'
+    if (next === charCodes.dot && next2 === charCodes.dot) {
       this.state.pos += 3;
       this.finishToken(tt.ellipsis);
     } else {
@@ -621,7 +620,7 @@ export default class Tokenizer extends LocationParser {
       // The interpretation of a dot depends on whether it is followed
       // by a digit or another two dots.
 
-      case 46: // '.'
+      case charCodes.dot:
         this.readToken_dot();
         return;
 
@@ -697,17 +696,26 @@ export default class Tokenizer extends LocationParser {
         // '0'
         const next = this.input.charCodeAt(this.state.pos + 1);
         // '0x', '0X' - hex number
-        if (next === 120 || next === 88) {
+        if (
+          next === charCodes.letterLowerX ||
+          next === charCodes.letterUpperX
+        ) {
           this.readRadixNumber(16);
           return;
         }
         // '0o', '0O' - octal number
-        if (next === 111 || next === 79) {
+        if (
+          next === charCodes.letterLowerO ||
+          next === charCodes.letterUpperO
+        ) {
           this.readRadixNumber(8);
           return;
         }
         // '0b', '0B' - binary number
-        if (next === 98 || next === 66) {
+        if (
+          next === charCodes.letterLowerB ||
+          next === charCodes.letterUpperB
+        ) {
           this.readRadixNumber(2);
           return;
         }
@@ -856,7 +864,7 @@ export default class Tokenizer extends LocationParser {
       if (this.hasPlugin("numericSeparator")) {
         const prev = this.input.charCodeAt(this.state.pos - 1);
         const next = this.input.charCodeAt(this.state.pos + 1);
-        if (code === 95) {
+        if (code === charCodes.underscore) {
           if (allowedSiblings.indexOf(next) === -1) {
             this.raise(this.state.pos, "Invalid or unexpected token");
           }
@@ -907,7 +915,7 @@ export default class Tokenizer extends LocationParser {
       this.raise(this.state.start + 2, "Expected number in radix " + radix);
 
     if (this.hasPlugin("bigInt")) {
-      if (this.input.charCodeAt(this.state.pos) === charCodes.letterN) {
+      if (this.input.charCodeAt(this.state.pos) === charCodes.letterLowerN) {
         // 'n'
         ++this.state.pos;
         isBigInt = true;
@@ -1120,8 +1128,7 @@ export default class Tokenizer extends LocationParser {
         return "\n"; // 'n' -> '\n'
       case 114:
         return "\r"; // 'r' -> '\r'
-      case 120: {
-        // 'x'
+      case charCodes.letterLowerX: {
         const code = this.readHexChar(2, throwOnInvalid);
         return code === null ? null : String.fromCharCode(code);
       }
@@ -1132,7 +1139,7 @@ export default class Tokenizer extends LocationParser {
       }
       case 116:
         return "\t"; // 't' -> '\t'
-      case 98:
+      case charCodes.letterLowerB:
         return "\b"; // 'b' -> '\b'
       case 118:
         return "\u000b"; // 'v' -> '\u000b'
