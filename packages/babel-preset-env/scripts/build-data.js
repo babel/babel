@@ -58,19 +58,45 @@ const compatSources = ["es6", "es2016plus", "esnext"].reduce(
   (result, source) => {
     const data = require(`compat-table/data-${source}`);
     data.browsers = pickBy(envs, byTestSuite(source));
+    data.source = source;
     result.push(data);
     return result;
   },
   []
 );
 
-const interpolateAllResults = (rawBrowsers, tests) => {
-  const interpolateResults = res => {
+const interpolateAllResults = (rawBrowsers, tests, source) => {
+  const interpolateResults = (res, category) => {
     let browser;
     let prevBrowser;
     let result;
     let prevResult;
     let prevBid;
+    let ecmascript;
+
+    if (source === "es6") {
+      ecmascript = 2015;
+    } else if (source === "es2016plus") {
+      if (category.match(/2016/)) {
+        ecmascript = 2016;
+      } else if (category.match(/2017/)) {
+        ecmascript = 2017;
+      } else if (category.match(/2018/)) {
+        ecmascript = 2018;
+      } else {
+        throw new Error(
+          `Could not find ecmascript version for: "${category}" in "${source}"`
+        );
+      }
+    } else if (source === "esnext") {
+      ecmascript = null;
+    } else {
+      throw new Error(
+        `Missing logic to categorize ecmascript version in source: "${source}"`
+      );
+    }
+
+    res.ecmascript = ecmascript;
 
     for (const bid in rawBrowsers) {
       // For browsers that are essentially equal to other browsers,
@@ -107,16 +133,16 @@ const interpolateAllResults = (rawBrowsers, tests) => {
     // Calculate the result totals for tests which consist solely of subtests.
     if ("subtests" in t) {
       t.subtests.forEach(function(e) {
-        interpolateResults(e.res);
+        interpolateResults(e.res, t.category);
       });
     } else {
-      interpolateResults(t.res);
+      interpolateResults(t.res, t.category);
     }
   });
 };
 
-compatSources.forEach(({ browsers, tests }) =>
-  interpolateAllResults(browsers, tests)
+compatSources.forEach(({ browsers, tests, source }) =>
+  interpolateAllResults(browsers, tests, source)
 );
 
 // End of compat-table code adaptation
@@ -132,6 +158,7 @@ const environments = [
   "android",
   "ios",
   "phantom",
+  "ecmascript",
 ];
 
 const compatibilityTests = flattenDeep(
@@ -192,6 +219,10 @@ const getLowestImplementedVersion = ({ features }, env) => {
     // only doing this for built-ins atm
     if (!test.babel && isBuiltIn) {
       return "-1";
+    }
+
+    if (env === "ecmascript") {
+      return test.ecmascript ? `ecmascript${test.ecmascript}` : null;
     }
 
     return (
