@@ -4,7 +4,7 @@
 
 import type { Options } from "../options";
 import type { Position } from "../util/location";
-import * as charCodes from "../util/charCodes";
+import * as charCodes from "charcodes";
 import {
   isIdentifierStart,
   isIdentifierChar,
@@ -916,8 +916,7 @@ export default class Tokenizer extends LocationParser {
       this.raise(this.state.start + 2, "Expected number in radix " + radix);
 
     if (this.hasPlugin("bigInt")) {
-      if (this.input.charCodeAt(this.state.pos) === charCodes.letterLowerN) {
-        // 'n'
+      if (this.input.charCodeAt(this.state.pos) === charCodes.lowercaseN) {
         ++this.state.pos;
         isBigInt = true;
       }
