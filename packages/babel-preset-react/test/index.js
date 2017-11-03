@@ -7,14 +7,4 @@ describe("react preset", () => {
       react(null);
     }).not.to.throw();
   });
-
-  describe("options", () => {
-    describe("development", () => {
-      it("throws on non-boolean value", () => {
-        expect(function() {
-          react(null, { development: 1 });
-        }).to.throw(/must be a boolean/);
-      });
-    });
-  });
 });
