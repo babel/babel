@@ -437,6 +437,7 @@ export default class Tokenizer extends LocationParser {
     let type = code === charCodes.asterisk ? tt.star : tt.modulo;
     let width = 1;
     let next = this.input.charCodeAt(this.state.pos + 1);
+    const exprAllowed = this.state.exprAllowed;
 
     // Exponentiation operator **
     if (code === charCodes.asterisk && next === charCodes.asterisk) {
@@ -445,7 +446,7 @@ export default class Tokenizer extends LocationParser {
       type = tt.exponent;
     }
 
-    if (next === charCodes.equalsTo) {
+    if (next === charCodes.equalsTo && !exprAllowed) {
       width++;
       type = tt.assign;
     }

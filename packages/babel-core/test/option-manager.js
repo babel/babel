@@ -17,7 +17,7 @@ describe("option-manager", () => {
         manageOptions({
           randomOption: true,
         });
-      }, /Unknown option: base.randomOption/);
+      }, /Unknown option: .randomOption/);
     });
 
     it("throws for removed babel 5 options", () => {
@@ -29,7 +29,7 @@ describe("option-manager", () => {
           });
         },
         // eslint-disable-next-line max-len
-        /Using removed Babel 5 option: base.auxiliaryComment - Use `auxiliaryCommentBefore` or `auxiliaryCommentAfter`/,
+        /Using removed Babel 5 option: .auxiliaryComment - Use `auxiliaryCommentBefore` or `auxiliaryCommentAfter`/,
       );
     });
 
@@ -47,7 +47,7 @@ describe("option-manager", () => {
   describe("source type", function() {
     it("should set module for .mjs extension", () => {
       const config = manageOptions({
-        sourceType: "program",
+        sourceType: "script",
         filename: "foo.mjs",
       });
 
