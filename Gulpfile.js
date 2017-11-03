@@ -116,7 +116,15 @@ function webpackBuild() {
             // their project.json (or a ".babelrc" file). We need to ignore
             // those as we're using our own Babel options.
             babelrc: false,
-            presets: ["@babel/env"],
+            presets: [
+              [
+                "@babel/env",
+                {
+                  loose: true,
+                  exclude: ["transform-typeof-symbol"],
+                },
+              ],
+            ],
           },
         },
         {
@@ -128,7 +136,16 @@ function webpackBuild() {
             // their project.json (or a ".babelrc" file). We need to ignore
             // those as we're using our own Babel options.
             babelrc: false,
-            presets: ["@babel/env", "@babel/stage-0"],
+            presets: [
+              [
+                "@babel/env",
+                {
+                  loose: true,
+                  exclude: ["transform-typeof-symbol"],
+                },
+              ],
+              ["@babel/stage-0", { loose: true }],
+            ],
           },
         },
       ],
