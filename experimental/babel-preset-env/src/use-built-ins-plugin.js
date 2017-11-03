@@ -24,6 +24,11 @@ function has(obj: Object, key: string): boolean {
   return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
+function getType(target: any): string {
+  if (Array.isArray(target)) return "array";
+  return typeof target;
+}
+
 // function getObjectString(node: Object): string {
 //   if (node.type === "Identifier") {
 //     return node.name;
@@ -176,14 +181,31 @@ export default function({ types: t }: { types: Object }): Plugin {
         const prop = node.property;
 
         if (!t.isReferenced(obj, node)) return;
-
-        // doesn't reference the global
-        if (path.scope.getBindingIdentifier(obj.name)) return;
-
-        if (has(definitions.staticMethods, obj.name)) {
-          const staticMethods = definitions.staticMethods[obj.name];
-          if (has(staticMethods, prop.name)) {
-            const builtIn = staticMethods[prop.name];
+        let instanceType;
+        let evaluatedPropType = obj.name;
+        let propName = prop.name;
+        if (node.computed) {
+          if (t.isStringLiteral(prop)) {
+            propName = prop.value;
+          } else {
+            const res = path.get("property").evaluate();
+            if (res.confident && res.value) {
+              propName = res.value;
+            }
+          }
+        }
+        if (path.scope.getBindingIdentifier(obj.name)) {
+          const result = path.get("object").evaluate();
+          if (result.value) {
+            instanceType = getType(result.value);
+          } else if (result.deopt && result.deopt.isIdentifier()) {
+            evaluatedPropType = result.deopt.node.name;
+          }
+        }
+        if (has(definitions.staticMethods, evaluatedPropType)) {
+          const staticMethods = definitions.staticMethods[evaluatedPropType];
+          if (has(staticMethods, propName)) {
+            const builtIn = staticMethods[propName];
             addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
             // if (obj.name === "Array" && prop.name === "from") {
             //   addImport(
@@ -195,35 +217,13 @@ export default function({ types: t }: { types: Object }): Plugin {
           }
         }
 
-        if (
-          !node.computed &&
-          t.isIdentifier(prop) &&
-          has(definitions.instanceMethods, prop.name)
-        ) {
+        if (has(definitions.instanceMethods, propName)) {
           //warnOnInstanceMethod(state, getObjectString(node));
-          const builtIn = definitions.instanceMethods[prop.name];
-          addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
-        } else if (node.computed) {
-          if (
-            t.isStringLiteral(prop) &&
-            has(definitions.instanceMethods, prop.value)
-          ) {
-            const builtIn = definitions.instanceMethods[prop.value];
-            //warnOnInstanceMethod(state, `${obj.name}['${prop.value}']`);
-            addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
-          } else {
-            const res = path.get("property").evaluate();
-            if (res.confident) {
-              const builtIn = definitions.instanceMethods[res.value];
-              //warnOnInstanceMethod(state, `${obj.name}['${res.value}']`);
-              addUnsupported(
-                path.get("property"),
-                state.opts.polyfills,
-                builtIn,
-                this.builtIns,
-              );
-            }
+          let builtIn = definitions.instanceMethods[propName];
+          if (instanceType) {
+            builtIn = builtIn.filter(item => item.includes(instanceType));
           }
+          addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
         }
       },
 
