@@ -76,7 +76,7 @@ describe("@babel/register", function() {
       .to.throw(SyntaxError);
   });
 
-  it("Does not install source map support if asked not to", () => {
+  it("does not install source map support if asked not to", () => {
     setupRegister({
       sourceMaps: false,
     });
@@ -86,7 +86,7 @@ describe("@babel/register", function() {
     chai.expect(gen_error()).to.match(/gen_error\.js:8:34/);
   });
 
-  it("Installs source map support by default", () => {
+  it("installs source map support by default", () => {
     setupRegister();
 
     let gen_error;
@@ -94,7 +94,7 @@ describe("@babel/register", function() {
     chai.expect(gen_error()).to.match(/gen_error\.js:2:86/);
   });
 
-  it("Installs source map support when requested", () => {
+  it("installs source map support when requested", () => {
     setupRegister({
       sourceMaps: "both",
     });
