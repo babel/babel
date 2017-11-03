@@ -114,7 +114,7 @@ publish:
 	make test
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
 	# --only-explicit-updates
-	./node_modules/.bin/lerna publish --force-publish=* --npm-tag=next --exact --skip-temp-tag
+	./node_modules/.bin/lerna publish --force-publish=* --exact --skip-temp-tag
 	make clean
 
 bootstrap:
