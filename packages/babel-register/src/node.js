@@ -13,7 +13,6 @@ const transformOpts = {};
 let piratesRevert = null;
 
 function installSourceMapSupport() {
-  if (Object.keys(maps).length === 0) return;
   sourceMapSupport.install({
     handleUncaughtExceptions: false,
     environment: "node",
@@ -81,9 +80,11 @@ function compile(code, filename) {
   }
 
   if (result.map) {
+    if (Object.keys(maps).length === 0) {
+      installSourceMapSupport();
+    }
     maps[filename] = result.map;
   }
-  installSourceMapSupport();
 
   return result.code;
 }
