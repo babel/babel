@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-function-bind",
-  "version": "7.0.0-beta.5",
+  "version": "7.0.0-beta.31",
   "description": "Allow parsing of function bind",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-function-bind",
   "license": "MIT",
@@ -9,9 +9,9 @@
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": ">=7.0.0-beta.4 <7.0.0-rc.0"
+    "@babel/core": "7.0.0-beta.31"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.5"
+    "@babel/core": "7.0.0-beta.31"
   }
 }
