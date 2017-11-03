@@ -94,8 +94,7 @@ export function JSXClosingElement(node: Object) {
 export function JSXEmptyExpression() {}
 
 export function JSXFragment(node: Object) {
-  const open = node.openingFragment;
-  this.print(open, node);
+  this.print(node.openingFragment, node);
 
   this.indent();
   for (const child of (node.children: Array<Object>)) {
