@@ -9,6 +9,7 @@ export default {
   },
   plugins: [
     babel({
+      externalHelpersWhitelist: ["inheritsLoose"],
       babelrc: false,
       presets: [
         [
