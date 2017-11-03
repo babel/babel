@@ -24,6 +24,7 @@ export default {
         ],
         "@babel/flow",
       ],
+      plugins: ["transform-for-of-as-array"],
     }),
     nodeResolve(),
   ],
