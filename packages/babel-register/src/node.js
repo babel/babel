@@ -13,6 +13,7 @@ const transformOpts = {};
 let piratesRevert = null;
 
 function installSourceMapSupport() {
+  if (Object.keys(maps).length === 0) return;
   sourceMapSupport.install({
     handleUncaughtExceptions: false,
     environment: "node",
@@ -63,26 +64,26 @@ function compile(code, filename) {
     }
   }
 
-  const extendedOpts = Object.assign(opts, {
-    // Do not process config files since has already been done with the OptionManager
-    // calls above and would introduce duplicates.
-    babelrc: false,
-    sourceMaps: "sourceMaps" in opts ? opts.sourceMaps : "both",
-    ast: false,
-  });
-
-  if (extendedOpts.sourceMaps) {
-    installSourceMapSupport();
-  }
-
-  const result = babel.transform(code, extendedOpts);
+  const result = babel.transform(
+    code,
+    Object.assign(opts, {
+      // Do not process config files since has already been done with the OptionManager
+      // calls above and would introduce duplicates.
+      babelrc: false,
+      sourceMaps: "sourceMaps" in opts ? opts.sourceMaps : "both",
+      ast: false,
+    }),
+  );
 
   if (cache) {
     cache[cacheKey] = result;
     result.mtime = mtime(filename);
   }
 
-  maps[filename] = result.map;
+  if (result.map) {
+    maps[filename] = result.map;
+  }
+  installSourceMapSupport();
 
   return result.code;
 }
