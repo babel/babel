@@ -16,6 +16,7 @@ defineType("JSXAttribute", {
       optional: true,
       validate: assertNodeType(
         "JSXElement",
+        "JSXFragment",
         "StringLiteral",
         "JSXExpressionContainer",
       ),
@@ -54,6 +55,7 @@ defineType("JSXElement", {
             "JSXExpressionContainer",
             "JSXSpreadChild",
             "JSXElement",
+            "JSXFragment",
           ),
         ),
       ),
@@ -160,4 +162,40 @@ defineType("JSXText", {
       validate: assertValueType("string"),
     },
   },
+});
+
+defineType("JSXFragment", {
+  builder: ["openingFragment", "closingFragment", "children"],
+  visitor: ["openingFragment", "children", "closingFragment"],
+  aliases: ["JSX", "Immutable", "Expression"],
+  fields: {
+    openingFragment: {
+      validate: assertNodeType("JSXOpeningFragment"),
+    },
+    closingFragment: {
+      validate: assertNodeType("JSXClosingFragment"),
+    },
+    children: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(
+          assertNodeType(
+            "JSXText",
+            "JSXExpressionContainer",
+            "JSXSpreadChild",
+            "JSXElement",
+            "JSXFragment",
+          ),
+        ),
+      ),
+    },
+  },
+});
+
+defineType("JSXOpeningFragment", {
+  aliases: ["JSX", "Immutable"],
+});
+
+defineType("JSXClosingFragment", {
+  aliases: ["JSX", "Immutable"],
 });
