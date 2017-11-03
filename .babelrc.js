@@ -31,23 +31,28 @@ function istanbulHacks() {
 }
 
 let envOpts = {
-  loose: true
+  loose: true,
+  exclude: ["transform-typeof-symbol"],
 };
 
-module.exports = {
+const config = {
   comments: false,
   presets: [
     ["@babel/env", envOpts],
-    "@babel/stage-0",
     "@babel/flow"
   ],
-  env: {
-    cov: {
-      auxiliaryCommentBefore: "istanbul ignore next",
-      plugins: [istanbulHacks]
-    }
-  }
+  plugins: [
+    ["@babel/proposal-class-properties", { loose: true }],
+    "@babel/proposal-export-namespace",
+    "@babel/proposal-numeric-separator",
+    ["@babel/proposal-object-rest-spread", { useBuiltIns: true}],
+  ]
 };
+
+if (process.env.BABEL_ENV === "cov") {
+  config.auxiliaryCommentBefore = "istanbul ignore next";
+  config.plugins.push(istanbulHacks);
+}
 
 if (process.env.BABEL_ENV === "development") {
   envOpts.targets = {
@@ -55,3 +60,5 @@ if (process.env.BABEL_ENV === "development") {
   };
   envOpts.debug = true;
 }
+
+module.exports = config;
