@@ -69,7 +69,7 @@ function compile(code, filename) {
       // Do not process config files since has already been done with the OptionManager
       // calls above and would introduce duplicates.
       babelrc: false,
-      sourceMaps: "sourceMaps" in opts ? opts.sourceMaps : "both",
+      sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
       ast: false,
     }),
   );
