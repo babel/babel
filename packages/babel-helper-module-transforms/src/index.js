@@ -61,7 +61,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
   }
 
   // Create all of the statically known named exports.
-  headers.push(...buildExportInitializationStatements(path, meta));
+  headers.push(...buildExportInitializationStatements(path, meta, loose));
 
   return { meta, headers };
 }
@@ -111,6 +111,7 @@ export function wrapInterop(
 export function buildNamespaceInitStatements(
   metadata: ModuleMetadata,
   sourceMetadata: SourceModuleMetadata,
+  loose: boolean = false,
 ) {
   const statements = [];
 
@@ -136,7 +137,11 @@ export function buildNamespaceInitStatements(
     );
   }
   if (sourceMetadata.reexportAll) {
-    const statement = buildNamespaceReexport(metadata, sourceMetadata.name);
+    const statement = buildNamespaceReexport(
+      metadata,
+      sourceMetadata.name,
+      loose,
+    );
     statement.loc = sourceMetadata.reexportAll.loc;
 
     // Iterate props creating getter for each prop.
@@ -166,26 +171,35 @@ function buildESModuleHeader(
 /**
  * Create a re-export initialization loop for a specific imported namespace.
  */
-function buildNamespaceReexport(metadata, namespace) {
-  return template.statement`
-    Object.keys(NAMESPACE).forEach(function(key) {
-      if (key === "default" || key === "__esModule") return;
-      VERIFY_NAME_LIST;
+function buildNamespaceReexport(metadata, namespace, loose) {
+  return (loose
+    ? template.statement`
+        Object.keys(NAMESPACE).forEach(function(key) {
+          if (key === "default" || key === "__esModule") return;
+          VERIFY_NAME_LIST;
 
-      Object.defineProperty(EXPORTS, key, {
-        enumerable: true,
-        get: function() {
-          return NAMESPACE[key];
-        },
-      });
-    });
-  `({
+          EXPORTS[key] = NAMESPACE[key];
+        });
+      `
+    : template.statement`
+        Object.keys(NAMESPACE).forEach(function(key) {
+          if (key === "default" || key === "__esModule") return;
+          VERIFY_NAME_LIST;
+
+          Object.defineProperty(EXPORTS, key, {
+            enumerable: true,
+            get: function() {
+              return NAMESPACE[key];
+            },
+          });
+        });
+    `)({
     NAMESPACE: namespace,
     EXPORTS: metadata.exportName,
     VERIFY_NAME_LIST: metadata.exportNameListName
       ? template`
-          if (Object.prototype.hasOwnProperty.call(EXPORTS_LIST, key)) return;
-        `({ EXPORTS_LIST: metadata.exportNameListName })
+            if (Object.prototype.hasOwnProperty.call(EXPORTS_LIST, key)) return;
+          `({ EXPORTS_LIST: metadata.exportNameListName })
       : null,
   });
 }
@@ -239,6 +253,7 @@ function buildExportNameListDeclaration(
 function buildExportInitializationStatements(
   programPath: NodePath,
   metadata: ModuleMetadata,
+  loose: boolean = false,
 ) {
   const initStatements = [];
 
@@ -257,14 +272,16 @@ function buildExportInitializationStatements(
   for (const data of metadata.source.values()) {
     for (const [exportName, importName] of data.reexports) {
       initStatements.push(
-        template`
-          Object.defineProperty(EXPORTS, "EXPORT_NAME", {
-            enumerable: true,
-            get: function() {
-              return NAMESPACE.IMPORT_NAME;
-            },
-          });
-        `({
+        (loose
+          ? template.statement`EXPORTS.EXPORT_NAME = NAMESPACE.IMPORT_NAME;`
+          : template`
+            Object.defineProperty(EXPORTS, "EXPORT_NAME", {
+              enumerable: true,
+              get: function() {
+                return NAMESPACE.IMPORT_NAME;
+              },
+            });
+          `)({
           EXPORTS: metadata.exportName,
           EXPORT_NAME: exportName,
           NAMESPACE: data.name,

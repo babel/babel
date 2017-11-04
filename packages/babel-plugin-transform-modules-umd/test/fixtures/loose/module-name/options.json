@@ -1,0 +1,7 @@
+{
+  "moduleIds": true,
+  "plugins": [
+    "external-helpers",
+    ["transform-modules-umd", { "loose": true }]
+  ]
+}
