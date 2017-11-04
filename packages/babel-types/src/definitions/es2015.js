@@ -5,7 +5,7 @@ import defineType, {
   chain,
   assertEach,
   assertOneOf,
-} from "./index";
+} from "./utils";
 import { functionCommon, patternLikeCommon } from "./core";
 
 defineType("AssignmentPattern", {

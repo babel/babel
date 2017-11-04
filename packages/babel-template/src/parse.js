@@ -44,7 +44,7 @@ export default function parseAndBuildMetadata<T>(
   const placeholders = [];
   const placeholderNames = new Set();
 
-  t.traverse(ast, (placeholderVisitorHandler: TraversalHandler<*>), {
+  t.traverse(ast, (placeholderVisitorHandler: TraversalHandler<*, *>), {
     placeholders,
     placeholderNames,
     placeholderWhitelist,
@@ -58,10 +58,10 @@ export default function parseAndBuildMetadata<T>(
   };
 }
 
-function placeholderVisitorHandler(
-  node: BabelNode,
-  ancestors: TraversalAncestors,
-  state: MetadataState,
+function placeholderVisitorHandler<T: BabelNode, S: MetadataState>(
+  node: T,
+  ancestors: TraversalAncestors<T>,
+  state: S,
 ) {
   let name;
   if (t.isIdentifier(node)) {
@@ -103,13 +103,17 @@ function placeholderVisitorHandler(
   state.placeholders.push({
     name,
     type,
-    resolve: ast => resolveAncestors(ast, ancestors),
+    // $FlowFixMe
+    resolve: (ast: BabelNode) => resolveAncestors(ast, ancestors),
     isDuplicate: state.placeholderNames.has(name),
   });
   state.placeholderNames.add(name);
 }
 
-function resolveAncestors(ast: BabelNodeFile, ancestors: TraversalAncestors) {
+function resolveAncestors<T: BabelNode>(
+  ast: T,
+  ancestors: TraversalAncestors<T>,
+) {
   let parent: BabelNode = ast;
   for (let i = 0; i < ancestors.length - 1; i++) {
     const { key, index } = ancestors[i];

@@ -1,12 +1,11 @@
 // @flow
-
 import defineType, {
   assertEach,
   assertNodeType,
   assertOneOf,
   assertValueType,
   chain,
-} from "./index";
+} from "./utils";
 import { functionDeclarationCommon } from "./core";
 import { classMethodOrDeclareMethodCommon } from "./es2015";
 

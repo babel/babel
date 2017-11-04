@@ -4,7 +4,7 @@ import defineType, {
   assertNodeType,
   assertValueType,
   chain,
-} from "./index";
+} from "./utils";
 import { classMethodOrPropertyCommon } from "./es2015";
 
 defineType("AwaitExpression", {

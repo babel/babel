@@ -4,7 +4,7 @@ import defineType, {
   assertNodeType,
   assertValueType,
   chain,
-} from "./index";
+} from "./utils";
 
 defineType("AnyTypeAnnotation", {
   aliases: ["Flow", "FlowBaseAnnotation"],

@@ -4,7 +4,7 @@ import defineType, {
   assertValueType,
   chain,
   assertEach,
-} from "./index";
+} from "./utils";
 
 defineType("JSXAttribute", {
   visitor: ["name", "value"],
