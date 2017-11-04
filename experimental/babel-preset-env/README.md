@@ -567,6 +567,44 @@ Using polyfills:
 }
 ```
 
+### Configure different targets
+
+See [.babelrc documentation](https://babeljs.io/docs/usage/babelrc/#env-option).
+
+**.babelrc**
+
+```json
+{
+  "env": {
+    "server": {
+      "presets": [
+        ["@babel/env", {
+          "targets": {
+            "node": true
+          }
+        }]
+      ]
+    },
+    "client": {
+      "presets": [
+        ["@babel/env", {
+          "targets": {
+            "browsers": ["> 2%"]
+          }
+        }]
+      ]
+    }
+  }
+}
+```
+
+**commands**
+
+```sh
+$ BABEL_ENV=server babel
+$ BABEL_ENV=client babel
+```
+
 ## Issues
 
 If you get a `SyntaxError: Unexpected token ...` error when using the [object-rest-spread](https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-object-rest-spread) transform then make sure the plugin has been updated to, at least, `v6.19.0`.
