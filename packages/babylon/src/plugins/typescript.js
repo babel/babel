@@ -1009,10 +1009,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.end = original.end;
       node.loc.end = original.loc.end;
 
-      if (original.leadingComments)
+      if (original.leadingComments) {
         node.leadingComments = original.leadingComments;
-      if (original.trailingComments)
+      }
+      if (original.trailingComments) {
         node.trailingComments = original.trailingComments;
+      }
       if (original.innerComments) node.innerComments = original.innerComments;
 
       return node;

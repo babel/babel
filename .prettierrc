@@ -1,0 +1,12 @@
+{
+  "trailingComma": "es5",
+  "overrides": [{
+    "files": [
+      "**/packages/*/src/**/*.js",
+      "**/packages/*/test/**/*.js"
+    ],
+    "options": {
+      "trailingComma": "all"
+    }
+  }]
+}
