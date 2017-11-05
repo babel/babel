@@ -33,10 +33,12 @@ class Node implements NodeBase {
     // $FlowIgnore
     const node2: any = new Node();
     for (const key in this) {
-      // Do not clone comments that are already attached to the node
-      if (commentKeys.indexOf(key) < 0) {
-        // $FlowIgnore
-        node2[key] = this[key];
+      if (Object.prototype.hasOwnProperty.call(this, key)) {
+        // Do not clone comments that are already attached to the node
+        if (commentKeys.indexOf(key) < 0) {
+          // $FlowIgnore
+          node2[key] = this[key];
+        }
       }
     }
 

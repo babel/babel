@@ -186,15 +186,17 @@ export default class State {
   clone(skipArrays?: boolean): State {
     const state = new State();
     for (const key in this) {
-      // $FlowIgnore
-      let val = this[key];
+      if (Object.prototype.hasOwnProperty.call(this, key)) {
+        // $FlowIgnore
+        let val = this[key];
 
-      if ((!skipArrays || key === "context") && Array.isArray(val)) {
-        val = val.slice();
+        if ((!skipArrays || key === "context") && Array.isArray(val)) {
+          val = val.slice();
+        }
+
+        // $FlowIgnore
+        state[key] = val;
       }
-
-      // $FlowIgnore
-      state[key] = val;
     }
     return state;
   }
