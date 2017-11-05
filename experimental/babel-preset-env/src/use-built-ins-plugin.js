@@ -198,7 +198,7 @@ export default function({ types: t }: { types: Object }): Plugin {
           const result = path.get("object").evaluate();
           if (result.value) {
             instanceType = getType(result.value);
-          } else if (result.deopt && result.deopt.isIdentifier()) {
+          } else if (result.deopt && t.isIdentifier(result.deopt)) {
             evaluatedPropType = result.deopt.node.name;
           }
         }
