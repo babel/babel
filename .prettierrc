@@ -2,6 +2,10 @@
   "trailingComma": "es5",
   "overrides": [{
     "files": [
+      "**/experimental/*/src/**/*.js",
+      "**/experimental/*/test/**/*.js",
+      "**/codemods/*/src/**/*.js",
+      "**/codemods/*/test/**/*.js",
       "**/packages/*/src/**/*.js",
       "**/packages/*/test/**/*.js"
     ],

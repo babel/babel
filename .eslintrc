@@ -13,7 +13,11 @@
   },
   "overrides": [
     {
-      "files": "packages/*/src/**/*.js",
+      "files": [
+        "packages/*/src/**/*.js",
+        "experimental/*/src/**/*.js",
+        "codemods/*/src/**/*.js"
+      ],
       "rules": {
         "no-undefined-identifier": "error"
       }
