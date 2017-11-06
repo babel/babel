@@ -231,6 +231,18 @@ descriptive name, and add the following:
 
 * Add an `expected.json` file with the expected parser output. For added convenience, if there is no `expected.json` present, the test runner will generate one for you.
 
+After writing tests for babylon, just build it by running:
+
+```sh
+$ make build-babylon
+```
+
+Then, to run the tests, use:
+
+```sh
+$ TEST_ONLY=babylon make test-only
+```
+
 #### Bootstrapping expected output
 
 For both `babel-plugin-x` and `babylon`, you can easily generate an `expected.js`/`expected.json` automatically by just providing `actual.js` and running the tests as you usually would.
