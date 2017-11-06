@@ -32,13 +32,13 @@ class Node implements NodeBase {
   __clone(): this {
     // $FlowIgnore
     const node2: any = new Node();
-    for (const key in this) {
+    Object.keys(this).forEach(key => {
       // Do not clone comments that are already attached to the node
       if (commentKeys.indexOf(key) < 0) {
         // $FlowIgnore
         node2[key] = this[key];
       }
-    }
+    });
 
     return node2;
   }

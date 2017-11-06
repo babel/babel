@@ -185,7 +185,7 @@ export default class State {
 
   clone(skipArrays?: boolean): State {
     const state = new State();
-    for (const key in this) {
+    Object.keys(this).forEach(key => {
       // $FlowIgnore
       let val = this[key];
 
@@ -195,7 +195,7 @@ export default class State {
 
       // $FlowIgnore
       state[key] = val;
-    }
+    });
     return state;
   }
 }
