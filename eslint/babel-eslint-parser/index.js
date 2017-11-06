@@ -2,10 +2,10 @@ var babylonToEspree = require("./babylon-to-espree");
 var Module = require("module");
 var path = require("path");
 var parse = require("babylon").parse;
-var t = require("babel-types");
+var t = require("@babel/types");
 var tt = require("babylon").tokTypes;
-var traverse = require("babel-traverse").default;
-var codeFrameColumns = require("babel-code-frame").codeFrameColumns;
+var traverse = require("@babel/traverse").default;
+var codeFrameColumns = require("@babel/code-frame").codeFrameColumns;
 
 var hasPatched = false;
 var eslintOptions = {};
