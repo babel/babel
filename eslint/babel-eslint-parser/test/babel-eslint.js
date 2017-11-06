@@ -61,6 +61,7 @@ function lookup(obj, keypath, backwardsDepth) {
 }
 
 function parseAndAssertSame(code) {
+  code = unpad(code);
   var esAST = espree.parse(code, {
     ecmaFeatures: {
       // enable JSX parsing
@@ -177,30 +178,26 @@ describe("babylon-to-esprima", () => {
     });
 
     it("template also with braces #96", () => {
-      parseAndAssertSame(
-        unpad(`
-          export default function f1() {
-            function f2(foo) {
-              const bar = 3;
-              return \`\${foo} \${bar}\`;
-            }
-            return f2;
+      parseAndAssertSame(`
+        export default function f1() {
+          function f2(foo) {
+            const bar = 3;
+            return \`\${foo} \${bar}\`;
           }
-        `)
-      );
+          return f2;
+        }
+      `);
     });
 
     it("template with destructuring #31", () => {
-      parseAndAssertSame(
-        unpad(`
-          module.exports = {
-            render() {
-              var {name} = this.props;
-              return Math.max(null, \`Name: \${name}, Name: \${name}\`);
-            }
-          };
-        `)
-      );
+      parseAndAssertSame(`
+        module.exports = {
+          render() {
+            var {name} = this.props;
+            return Math.max(null, \`Name: \${name}, Name: \${name}\`);
+          }
+        };
+      `);
     });
   });
 
@@ -301,40 +298,34 @@ describe("babylon-to-esprima", () => {
   });
 
   it("line comments", () => {
-    parseAndAssertSame(
-      unpad(`
-        // single comment
-        var foo = 15; // comment next to statement
-        // second comment after statement
-      `)
-    );
+    parseAndAssertSame(`
+      // single comment
+      var foo = 15; // comment next to statement
+      // second comment after statement
+    `);
   });
 
   it("block comments", () => {
-    parseAndAssertSame(
-      unpad(`
-        /* single comment */
-        var foo = 15; /* comment next to statement */
-        /*
-         * multiline
-         * comment
-         */
-       `)
-    );
+    parseAndAssertSame(`
+      /* single comment */
+      var foo = 15; /* comment next to statement */
+      /*
+       * multiline
+       * comment
+       */
+    `);
   });
 
   it("block comments #124", () => {
-    parseAndAssertSame(
-      unpad(`
-        React.createClass({
-          render() {
-            // return (
-            //   <div />
-            // ); // <-- this is the line that is reported
-          }
-        });
-      `)
-    );
+    parseAndAssertSame(`
+      React.createClass({
+        render() {
+          // return (
+          //   <div />
+          // ); // <-- this is the line that is reported
+        }
+      });
+    `);
   });
 
   it("null", () => {
@@ -374,43 +365,37 @@ describe("babylon-to-esprima", () => {
   });
 
   it("jsdoc", () => {
-    parseAndAssertSame(
-      unpad(`
-        /**
-        * @param {object} options
-        * @return {number}
-        */
-        const test = function({ a, b, c }) {
-          return a + b + c;
-        };
-        module.exports = test;
-      `)
-    );
+    parseAndAssertSame(`
+      /**
+      * @param {object} options
+      * @return {number}
+      */
+      const test = function({ a, b, c }) {
+        return a + b + c;
+      };
+      module.exports = test;
+    `);
   });
 
   it("empty block with comment", () => {
-    parseAndAssertSame(
-      unpad(`
-        function a () {
-          try {
-            b();
-          } catch (e) {
-            // asdf
-          }
+    parseAndAssertSame(`
+      function a () {
+        try {
+          b();
+        } catch (e) {
+          // asdf
         }
-      `)
-    );
+      }
+    `);
   });
 
   describe("babel tests", () => {
     it("MethodDefinition", () => {
-      parseAndAssertSame(
-        unpad(`
-          export default class A {
-            a() {}
-          }
-        `)
-      );
+      parseAndAssertSame(`
+        export default class A {
+          a() {}
+        }
+      `);
     });
 
     it("MethodDefinition 2", () => {
@@ -420,43 +405,37 @@ describe("babylon-to-esprima", () => {
     });
 
     it("ClassMethod", () => {
-      parseAndAssertSame(
-        unpad(`
-          class A {
-            constructor() {
-            }
+      parseAndAssertSame(`
+        class A {
+          constructor() {
           }
-        `)
-      );
+        }
+      `);
     });
 
     it("ClassMethod multiple params", () => {
-      parseAndAssertSame(
-        unpad(`
-          class A {
-            constructor(a, b, c) {
-            }
+      parseAndAssertSame(`
+        class A {
+          constructor(a, b, c) {
           }
-        `)
-      );
+        }
+      `);
     });
 
     it("ClassMethod multiline", () => {
-      parseAndAssertSame(
-        unpad(`
-          class A {
-            constructor (
-              a,
-              b,
-              c
-            )
+      parseAndAssertSame(`
+        class A {
+          constructor (
+            a,
+            b,
+            c
+          )
 
-            {
+          {
 
-            }
           }
-        `)
-      );
+        }
+      `);
     });
 
     it("ClassMethod oneline", () => {
@@ -464,14 +443,12 @@ describe("babylon-to-esprima", () => {
     });
 
     it("ObjectMethod", () => {
-      parseAndAssertSame(
-        unpad(`
-          var a = {
-            b(c) {
-            }
+      parseAndAssertSame(`
+        var a = {
+          b(c) {
           }
-        `)
-      );
+        }
+      `);
     });
 
     it("do not allow import export everywhere", () => {
@@ -496,41 +473,35 @@ describe("babylon-to-esprima", () => {
 
     it("getters and setters", () => {
       parseAndAssertSame("class A { get x ( ) { ; } }");
-      parseAndAssertSame(
-        unpad(`
-          class A {
-            get x(
-            )
-            {
-              ;
-            }
+      parseAndAssertSame(`
+        class A {
+          get x(
+          )
+          {
+            ;
           }
-        `)
-      );
+        }
+      `);
       parseAndAssertSame("class A { set x (a) { ; } }");
-      parseAndAssertSame(
-        unpad(`
-          class A {
-            set x(a
-            )
-            {
-              ;
-            }
+      parseAndAssertSame(`
+        class A {
+          set x(a
+          )
+          {
+            ;
           }
-        `)
-      );
-      parseAndAssertSame(
-        unpad(`
-          var B = {
-            get x () {
-              return this.ecks;
-            },
-            set x (ecks) {
-              this.ecks = ecks;
-            }
-          };
-        `)
-      );
+        }
+      `);
+      parseAndAssertSame(`
+        var B = {
+          get x () {
+            return this.ecks;
+          },
+          set x (ecks) {
+            this.ecks = ecks;
+          }
+        };
+      `);
     });
 
     it("RestOperator", () => {
@@ -546,13 +517,11 @@ describe("babylon-to-esprima", () => {
     });
 
     it("Async/Await", () => {
-      parseAndAssertSame(
-        unpad(`
-          async function a() {
-            await 1;
-          }
-        `)
-      );
+      parseAndAssertSame(`
+        async function a() {
+          await 1;
+        }
+      `);
     });
   });
 });
