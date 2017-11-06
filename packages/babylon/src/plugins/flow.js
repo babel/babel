@@ -184,11 +184,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         if (this.lookahead().type === tt.dot) {
           return this.flowParseDeclareModuleExports(node);
         } else {
-          if (insideModule)
+          if (insideModule) {
             this.unexpected(
               null,
               "`declare module` cannot be used inside another `declare module`",
             );
+          }
           return this.flowParseDeclareModule(node);
         }
       } else if (this.isContextual("type")) {
@@ -261,15 +262,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module";
       body.forEach(bodyElement => {
         if (isEsModuleType(bodyElement)) {
-          if (kind === "CommonJS")
+          if (kind === "CommonJS") {
             this.unexpected(bodyElement.start, errorMessage);
+          }
           kind = "ES";
         } else if (bodyElement.type === "DeclareModuleExports") {
-          if (hasModuleExport)
+          if (hasModuleExport) {
             this.unexpected(
               bodyElement.start,
               "Duplicate `declare module.exports` statement",
             );
+          }
           if (kind === "ES") this.unexpected(bodyElement.start, errorMessage);
           kind = "CommonJS";
           hasModuleExport = true;
@@ -755,8 +758,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           node.value = this.flowParseObjectTypeMethodish(
             this.startNodeAt(node.start, node.loc.start),
           );
-          if (kind === "get" || kind === "set")
+          if (kind === "get" || kind === "set") {
             this.flowCheckGetterSetterParamCount(node);
+          }
         } else {
           if (kind !== "init") this.unexpected();
           if (this.eat(tt.question)) {
@@ -1054,8 +1058,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case tt.plusMin:
           if (this.state.value === "-") {
             this.next();
-            if (!this.match(tt.num))
+            if (!this.match(tt.num)) {
               this.unexpected(null, "Unexpected token, expected number");
+            }
 
             return this.parseLiteral(
               -this.state.value,
