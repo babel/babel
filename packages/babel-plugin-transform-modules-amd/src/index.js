@@ -68,7 +68,9 @@ export default function({ types: t }, options) {
               }
             }
 
-            headers.push(...buildNamespaceInitStatements(meta, metadata));
+            headers.push(
+              ...buildNamespaceInitStatements(meta, metadata, loose),
+            );
           }
 
           ensureStatementsHoisted(headers);
