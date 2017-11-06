@@ -1,12 +1,12 @@
 "use strict";
 
-require("@babel/polyfill/lib/core-js/modules/es6.symbol");
+require("core-js/modules/es6.symbol");
 
-require("@babel/polyfill/lib/core-js/modules/es6.promise");
+require("core-js/modules/es6.promise");
 
-require("@babel/polyfill/lib/regenerator-runtime/runtime");
+require("regenerator-runtime/runtime");
 
-require("@babel/polyfill/lib/core-js/modules/es6.object.assign");
+require("core-js/modules/es6.object.assign");
 
 var agf = function () {
   var _ref = _wrapAsyncGenerator(
