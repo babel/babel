@@ -1,6 +1,6 @@
 var fooCalls = [];
 
-var jumpTable = function (name, ...args) {
+var jumpTable = function jumpTable(name, ...args) {
   if (jumpTable[name]) {
     jumpTable[name](...args);
   }
