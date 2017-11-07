@@ -44,10 +44,15 @@ export default function({ types: t }, options) {
   /**
    * Build the assignment statements that initialize the UMD global.
    */
-  function buildBrowserInit(browserGlobals, exactGlobals, file, moduleName) {
+  function buildBrowserInit(
+    browserGlobals,
+    exactGlobals,
+    filename,
+    moduleName,
+  ) {
     const moduleNameOrBasename = moduleName
       ? moduleName.value
-      : basename(file.opts.filename, extname(file.opts.filename));
+      : basename(filename, extname(filename));
     let globalToAssign = t.memberExpression(
       t.identifier("global"),
       t.identifier(t.toIdentifier(moduleNameOrBasename)),
@@ -204,7 +209,7 @@ export default function({ types: t }, options) {
               GLOBAL_TO_ASSIGN: buildBrowserInit(
                 browserGlobals,
                 exactGlobals,
-                this.file,
+                this.filename || "unknown",
                 moduleName,
               ),
             }),

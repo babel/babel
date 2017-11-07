@@ -24,7 +24,7 @@ export default function generateCode(
     Object.assign(
       {
         // General generator flags.
-        filename: opts.filename,
+        filename: opts.filename || "unknown",
         auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
         auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
         retainLines: opts.retainLines,
@@ -35,9 +35,9 @@ export default function generateCode(
 
         // Source-map generation flags.
         sourceMaps: opts.sourceMaps,
-        sourceMapTarget: opts.sourceMapTarget,
+        sourceMapTarget: opts.sourceMapTarget || "unknown",
         sourceRoot: opts.sourceRoot,
-        sourceFileName: opts.sourceFileName,
+        sourceFileName: opts.sourceFileName || "unknown",
       },
       opts.generatorOpts,
     ),

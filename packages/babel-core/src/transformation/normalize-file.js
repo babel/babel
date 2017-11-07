@@ -70,7 +70,7 @@ function parser(options, code) {
     if (loc) {
       err.loc = null;
       err.message =
-        `${options.filename}: ${err.message}\n` +
+        `${options.filename || "unknown"}: ${err.message}\n` +
         codeFrameColumns(
           code,
           {

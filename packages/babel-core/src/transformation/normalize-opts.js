@@ -7,7 +7,7 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
     parserOpts: Object.assign(
       {
         sourceType: config.options.sourceType,
-        sourceFileName: config.options.filename,
+        sourceFileName: config.options.filename || "unknown",
         plugins: [],
       },
       config.options.parserOpts,
