@@ -1,13 +1,12 @@
 // @flow
 
-import { types as tt, TokenType, keywords as keywordTypes } from "../tokenizer/types";
+import { types as tt } from "../tokenizer/types";
 import type Parser from "../parser";
 import * as N from "../types";
-import type { Pos, Position, } from "../util/location";
+import type { Pos } from "../util/location";
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
-
     // ==================================
     // Overrides
     // ==================================
@@ -32,21 +31,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return expr;
       }
 
-      let tmp = this.parseSubscripts(expr, startPos, startLoc);
+      const tmp = this.parseSubscripts(expr, startPos, startLoc);
       if (
         tmp.type === "CallExpression" &&
         tmp.callee.type === "Identifier" &&
         tmp.callee.name === "match" &&
         tmp.arguments.length === 1 &&
         this.match(tt.braceL)
-      ) { // properbly a match expression
+      ) {
+        // properbly a match expression
         this.next();
-        let node = this.startNodeAt(startPos, startLoc);
+        const node = this.startNodeAt(startPos, startLoc);
 
-        let firstClause = this.parseMatchClause();
+        const firstClause = this.parseMatchClause();
 
         node.expression = tmp.arguments[0];
-        node.clauses = [ firstClause ];
+        node.clauses = [firstClause];
 
         while (this.match(tt.comma)) {
           this.next();
@@ -67,12 +67,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // pattern ':' expression
     parseMatchClause(): N.MatchExpressionClause {
-      let node = this.startNode();
+      const node = this.startNode();
 
-      let pattern = this.parseMatchPattern();
+      const pattern = this.parseMatchPattern();
 
       if (!this.eat(tt.colon)) {
-        this.unexpected(this.state.pos, tt.colon)
+        this.unexpected(this.state.pos, tt.colon);
       }
 
       node.pattern = pattern;
@@ -81,7 +81,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "MatchExpressionClause");
     }
 
-    parseClauseBody(node: N.MatchExpressionClause, allowExpression: ?boolean): void {
+    parseClauseBody(
+      node: N.MatchExpressionClause,
+      allowExpression: ?boolean,
+    ): void {
       const isExpression = allowExpression && !this.match(tt.braceL);
 
       const oldInParameters = this.state.inParameters;
@@ -112,8 +115,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.state.inParameters = oldInParameters;
     }
 
-    parseMatchPattern() : N.MatchExpressionPattern | null {
-      let basic = this.parseBasicMatchPattern();
+    parseMatchPattern(): N.MatchExpressionPattern | null {
+      const basic = this.parseBasicMatchPattern();
       if (basic === null) {
         if (this.match(tt._else)) {
           this.next();
@@ -127,7 +130,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    parseBasicMatchPattern() : N.MatchExpressionPattern | null {
+    parseBasicMatchPattern(): N.MatchExpressionPattern | null {
       let node;
 
       if (this.match(tt.braceL)) {
@@ -156,10 +159,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // '{' ( propertyPattern (',')* )+ '}'
-    parseObjectPattern() : N.ObjectMatchPattern {
-      let node = this.startNode();
+    parseObjectPattern(): N.ObjectMatchPattern {
+      const node = this.startNode();
       if (!this.eat(tt.braceL)) {
-        this.unexpected(this.state.pos, tt.braceL)
+        this.unexpected(this.state.pos, tt.braceL);
       }
 
       node.children = [];
@@ -172,10 +175,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           node.restIdentifier = id;
 
           if (!this.eat(tt.braceR)) {
-            this.unexpected(this.state.pos, tt.braceR)
+            this.unexpected(this.state.pos, tt.braceR);
           }
         } else {
-          let pattern = this.parseObjectPropertyPattern();
+          const pattern = this.parseObjectPropertyPattern();
           node.children.push(pattern);
         }
 
@@ -185,18 +188,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } else if (!this.match(tt.braceR)) {
           this.unexpected(this.state.pos, "comma or braceR");
         }
-
       }
 
-      this.eat(tt.braceR)
+      this.eat(tt.braceR);
       return this.finishNode(node, "ObjectMatchPattern");
     }
 
-    parseObjectPropertyPattern() : N.ObjectPropertyMatchPattern {
-      let node = this.startNode();
+    parseObjectPropertyPattern(): N.ObjectPropertyMatchPattern {
+      const node = this.startNode();
 
       node.key = this.parseIdentifier();
-      node.value = null
+      node.value = null;
 
       if (this.match(tt.colon)) {
         this.next();
@@ -210,10 +212,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // '{' ( propertyPattern (',')* )+ '}'
-    parseArrayPattern() : N.ArrayMatchPattern {
-      let node = this.startNode();
+    parseArrayPattern(): N.ArrayMatchPattern {
+      const node = this.startNode();
       if (!this.eat(tt.bracketL)) {
-        this.unexpected(this.state.pos, tt.braceL)
+        this.unexpected(this.state.pos, tt.braceL);
       }
 
       node.children = [];
@@ -228,7 +230,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
           return this.finishNode(node, "ArrayMatchPattern");
         } else {
-          let pattern = this.parseBasicMatchPattern();
+          const pattern = this.parseBasicMatchPattern();
           node.children.push(pattern);
         }
 
@@ -240,8 +242,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      this.eat(tt.bracketR)
+      this.eat(tt.bracketR);
       return this.finishNode(node, "ArrayMatchPattern");
     }
-
   };
