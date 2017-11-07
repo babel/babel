@@ -127,12 +127,10 @@ function visit(node, name, scope) {
 }
 
 /**
- * @param {NodePath} path
+ * @param {NodePath} param0
  * @param {Boolean} localBinding whether a name could shadow a self-reference (e.g. converting arrow function)
  */
-export default function(path, localBinding = false) {
-  const { node, parent, scope } = path;
-  let { id } = path;
+export default function({ node, parent, scope, id }) {
   // has an `id` so we don't need to infer one
   if (node.id) return;
 
@@ -155,32 +153,9 @@ export default function(path, localBinding = false) {
         scope.getBinding(id.name) === binding
       ) {
         // always going to reference this method
-        if (!localBinding) {
-          node.id = id;
-          node.id[t.NOT_LOCAL_BINDING] = true;
-          return;
-        } else {
-          let wouldShadow = false;
-          if (scope.hasReference(id.name)) {
-            // check if the reference happens inside the function itself
-            path.traverse({
-              ReferencedIdentifier(path) {
-                if (path.node.name !== id.name) {
-                  return;
-                }
-                wouldShadow = path.scope.getBinding(id.name) === binding;
-                if (wouldShadow) {
-                  path.stop();
-                }
-              },
-            });
-          }
-          // ideally, we would rename the binding instead, and name the function with the original name.
-          // however, scope is not clever enough to avoid breaking object shorthand names or export names
-          node.id = wouldShadow ? scope.generateUidIdentifier(id.name) : id;
-          node.id[t.NOT_LOCAL_BINDING] = true;
-          return;
-        }
+        node.id = id;
+        node.id[t.NOT_LOCAL_BINDING] = true;
+        return;
       }
     }
   } else if (t.isAssignmentExpression(parent)) {
