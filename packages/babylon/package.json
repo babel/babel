@@ -24,12 +24,13 @@
   },
   "devDependencies": {
     "@babel/helper-fixtures": "7.0.0-beta.5",
+    "babel-plugin-transform-charcodes": "0.0.3-0",
+    "charcodes": "0.0.3-0",
     "rollup": "^0.50.0",
     "rollup-plugin-babel": "^4.0.0-beta.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-watch": "^4.0.0",
-    "unicode-9.0.0": "~0.7.0",
-    "charcodes": "^0.0.2"
+    "unicode-9.0.0": "~0.7.0"
   },
   "bin": {
     "babylon": "./bin/babylon.js"
