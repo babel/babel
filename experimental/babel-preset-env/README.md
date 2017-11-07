@@ -286,12 +286,12 @@ var b = new Map();
 **Out (if environment doesn't support it)**
 
 ```js
-import "@babel/polyfill/core-js/modules/es6.promise";
+import "core-js/modules/es6.promise";
 var a = new Promise();
 ```
 
 ```js
-import "@babel/polyfill/core-js/modules/es6.map";
+import "core-js/modules/es6.map";
 var b = new Map();
 ```
 
@@ -322,8 +322,8 @@ import "@babel/polyfill";
 **Out (different based on environment)**
 
 ```js
-import "@babel/polyfill/core-js/modules/es7.string.pad-start";
-import "@babel/polyfill/core-js/modules/es7.string.pad-end";
+import "core-js/modules/es7.string.pad-start";
+import "core-js/modules/es7.string.pad-end";
 ```
 
 #### `useBuiltIns: false`
