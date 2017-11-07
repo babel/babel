@@ -1,7 +1,12 @@
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default function(api, opts) {
+  const { useBuiltIns = false } = opts;
+  if (typeof useBuiltIns !== "boolean") {
+    throw new Error(".useBuiltIns must be a boolean, or undefined");
+  }
+
   function hasRestElement(path) {
     let foundRestElement = false;
     path.traverse({
@@ -346,14 +351,6 @@ export default function() {
       // var a = { ...b, ...c }
       ObjectExpression(path, file) {
         if (!hasSpread(path.node)) return;
-
-        const useBuiltIns = file.opts.useBuiltIns || false;
-        if (typeof useBuiltIns !== "boolean") {
-          throw new Error(
-            "proposal-object-rest-spread currently only accepts a boolean " +
-              "option for useBuiltIns (defaults to false)",
-          );
-        }
 
         const args = [];
         let props = [];
