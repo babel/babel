@@ -18,28 +18,6 @@ export default function({ types: t }, options) {
     return false;
   }
 
-  function isConsumableArrayHelper(node) {
-    return (
-      t.isCallExpression(node) &&
-      t.isIdentifier(node.callee.object, { name: "babelHelpers" }) &&
-      t.isIdentifier(node.callee.property, { name: "toConsumableArray" })
-    );
-  }
-
-  function isArrayPrototypeSliceCall(node) {
-    return (
-      t.isCallExpression(node) &&
-      t.isIdentifier(node.callee.property, { name: "call" }) &&
-      t.isMemberExpression(node.callee.object) &&
-      node.arguments.length === 1 &&
-      t.isIdentifier(node.arguments[0], { name: "arguments" })
-    );
-  }
-
-  function isNewArray(node) {
-    return isConsumableArrayHelper(node) || isArrayPrototypeSliceCall(node);
-  }
-
   function push(_props, nodes) {
     if (!_props.length) return _props;
     nodes.push(t.arrayExpression(_props));
@@ -74,7 +52,7 @@ export default function({ types: t }, options) {
         const nodes = build(elements, scope, state);
         const first = nodes.shift();
 
-        if (nodes.length === 0 && isNewArray(first)) {
+        if (nodes.length === 0 && first !== elements[0].argument) {
           path.replaceWith(first);
           return;
         }
