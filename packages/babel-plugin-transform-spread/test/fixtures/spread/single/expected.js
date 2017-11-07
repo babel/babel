@@ -1,1 +1,1 @@
-[].concat(babelHelpers.toConsumableArray(foo));
+babelHelpers.toConsumableArray(foo);

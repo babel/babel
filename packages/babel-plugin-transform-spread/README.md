@@ -15,7 +15,7 @@ var b = [...a, 'foo'];
 
 ```js
 var a = [ 'a', 'b', 'c' ];
-var b = [].concat(a, [ 'foo' ]);
+var b = a.concat([ 'foo' ]);
 ```
 
 ## Installation

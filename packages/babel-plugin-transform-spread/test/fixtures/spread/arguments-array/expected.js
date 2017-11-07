@@ -1,5 +1,5 @@
 function foo() {
-  return bar([].concat(Array.prototype.slice.call(arguments)));
+  return bar(Array.prototype.slice.call(arguments));
 }
 
 function bar(one, two, three) {
