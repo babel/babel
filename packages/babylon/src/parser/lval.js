@@ -159,11 +159,12 @@ export default class LValParser extends NodeUtils {
     }
     for (let i = 0; i < end; i++) {
       const elt = exprList[i];
-      if (elt && elt.type === "SpreadElement")
+      if (elt && elt.type === "SpreadElement") {
         this.raise(
           elt.start,
           "The rest element has to be the last element when destructuring",
         );
+      }
       if (elt) this.toAssignable(elt, isBinding, contextDescription);
     }
     return exprList;
@@ -352,13 +353,14 @@ export default class LValParser extends NodeUtils {
 
       case "ArrayPattern":
         for (const elem of expr.elements) {
-          if (elem)
+          if (elem) {
             this.checkLVal(
               elem,
               isBinding,
               checkClashes,
               "array destructuring pattern",
             );
+          }
         }
         break;
 

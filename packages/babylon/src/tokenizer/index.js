@@ -786,8 +786,9 @@ export default class Tokenizer extends LocationParser {
     const start = this.state.pos;
     let escaped, inClass;
     for (;;) {
-      if (this.state.pos >= this.input.length)
+      if (this.state.pos >= this.input.length) {
         this.raise(start, "Unterminated regular expression");
+      }
       const ch = this.input.charAt(this.state.pos);
       if (lineBreak.test(ch)) {
         this.raise(start, "Unterminated regular expression");
@@ -813,8 +814,9 @@ export default class Tokenizer extends LocationParser {
     const mods = this.readWord1();
     if (mods) {
       const validFlags = /^[gmsiyu]*$/;
-      if (!validFlags.test(mods))
+      if (!validFlags.test(mods)) {
         this.raise(start, "Invalid regular expression flag");
+      }
     }
 
     this.finishToken(tt.regexp, {
@@ -886,8 +888,9 @@ export default class Tokenizer extends LocationParser {
     if (
       this.state.pos === start ||
       (len != null && this.state.pos - start !== len)
-    )
+    ) {
       return null;
+    }
 
     return total;
   }
@@ -898,8 +901,9 @@ export default class Tokenizer extends LocationParser {
 
     this.state.pos += 2; // 0x
     const val = this.readInt(radix);
-    if (val == null)
+    if (val == null) {
       this.raise(this.state.start + 2, "Expected number in radix " + radix);
+    }
 
     if (this.hasPlugin("bigInt")) {
       if (this.input.charCodeAt(this.state.pos) === 0x6e) {
@@ -909,8 +913,9 @@ export default class Tokenizer extends LocationParser {
       }
     }
 
-    if (isIdentifierStart(this.fullCharCodeAtPos()))
+    if (isIdentifierStart(this.fullCharCodeAtPos())) {
       this.raise(this.state.pos, "Identifier directly after number");
+    }
 
     if (isBigInt) {
       const str = this.input.slice(start, this.state.pos).replace(/[_n]/g, "");
@@ -929,8 +934,9 @@ export default class Tokenizer extends LocationParser {
     let isFloat = false;
     let isBigInt = false;
 
-    if (!startsWithDot && this.readInt(10) === null)
+    if (!startsWithDot && this.readInt(10) === null) {
       this.raise(start, "Invalid number");
+    }
     if (octal && this.state.pos == start + 1) octal = false; // number === 0
 
     let next = this.input.charCodeAt(this.state.pos);
@@ -961,8 +967,9 @@ export default class Tokenizer extends LocationParser {
       }
     }
 
-    if (isIdentifierStart(this.fullCharCodeAtPos()))
+    if (isIdentifierStart(this.fullCharCodeAtPos())) {
       this.raise(this.state.pos, "Identifier directly after number");
+    }
 
     // remove "_" for numeric literal separator, and "n" for BigInts
     const str = this.input.slice(start, this.state.pos).replace(/[_n]/g, "");
@@ -1022,8 +1029,9 @@ export default class Tokenizer extends LocationParser {
     let out = "",
       chunkStart = ++this.state.pos;
     for (;;) {
-      if (this.state.pos >= this.input.length)
+      if (this.state.pos >= this.input.length) {
         this.raise(this.state.start, "Unterminated string constant");
+      }
       const ch = this.input.charCodeAt(this.state.pos);
       if (ch === quote) break;
       if (ch === 92) {
@@ -1033,8 +1041,9 @@ export default class Tokenizer extends LocationParser {
         out += this.readEscapedChar(false);
         chunkStart = this.state.pos;
       } else {
-        if (isNewLine(ch))
+        if (isNewLine(ch)) {
           this.raise(this.state.start, "Unterminated string constant");
+        }
         ++this.state.pos;
       }
     }
@@ -1049,8 +1058,9 @@ export default class Tokenizer extends LocationParser {
       chunkStart = this.state.pos,
       containsInvalid = false;
     for (;;) {
-      if (this.state.pos >= this.input.length)
+      if (this.state.pos >= this.input.length) {
         this.raise(this.state.start, "Unterminated template");
+      }
       const ch = this.input.charCodeAt(this.state.pos);
       if (
         ch === 96 ||
