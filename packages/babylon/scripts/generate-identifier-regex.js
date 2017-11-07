@@ -14,12 +14,13 @@ const cont = [0x200c, 0x200d].concat(
     version +
     "/Binary_Property/ID_Continue/code-points.js").filter(function(ch) {
     return ch > 0x7f && search(start, ch, last + 1) == -1;
-  }),
+  })
 );
 
 function search(arr, ch, starting) {
-  for (let i = starting; arr[i] <= ch && i < arr.length; last = i++)
+  for (let i = starting; arr[i] <= ch && i < arr.length; last = i++) {
     if (arr[i] === ch) return i;
+  }
   return -1;
 }
 
@@ -62,10 +63,8 @@ const contData = generate(cont);
 console.log('let nonASCIIidentifierStartChars = "' + startData.nonASCII + '";');
 console.log('let nonASCIIidentifierChars = "' + contData.nonASCII + '";');
 console.log(
-  "const astralIdentifierStartCodes = " +
-    JSON.stringify(startData.astral) +
-    ";",
+  "const astralIdentifierStartCodes = " + JSON.stringify(startData.astral) + ";"
 );
 console.log(
-  "const astralIdentifierCodes = " + JSON.stringify(contData.astral) + ";",
+  "const astralIdentifierCodes = " + JSON.stringify(contData.astral) + ";"
 );

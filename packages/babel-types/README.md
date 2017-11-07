@@ -1059,7 +1059,7 @@ See also `t.isJSXAttribute(node, opts)` and `t.assertJSXAttribute(node, opts)`.
 Aliases: `JSX`, `Immutable`
 
  - `name`: `JSXIdentifier | JSXNamespacedName` (required)
- - `value`: `JSXElement | StringLiteral | JSXExpressionContainer` (default: `null`)
+ - `value`: `JSXElement | JSXFragment | StringLiteral | JSXExpressionContainer` (default: `null`)
 
 ---
 
@@ -1076,6 +1076,18 @@ Aliases: `JSX`, `Immutable`
 
 ---
 
+### jSXClosingFragment
+```javascript
+t.jSXClosingFragment()
+```
+
+See also `t.isJSXClosingFragment(node, opts)` and `t.assertJSXClosingFragment(node, opts)`.
+
+Aliases: `JSX`, `Immutable`
+
+
+---
+
 ### jSXElement
 ```javascript
 t.jSXElement(openingElement, closingElement, children, selfClosing)
@@ -1087,7 +1099,7 @@ Aliases: `JSX`, `Immutable`, `Expression`
 
  - `openingElement`: `JSXOpeningElement` (required)
  - `closingElement`: `JSXClosingElement` (default: `null`)
- - `children`: `Array<JSXText | JSXExpressionContainer | JSXSpreadChild | JSXElement>` (required)
+ - `children`: `Array<JSXText | JSXExpressionContainer | JSXSpreadChild | JSXElement | JSXFragment>` (required)
  - `selfClosing` (required)
 
 ---
@@ -1114,6 +1126,21 @@ See also `t.isJSXExpressionContainer(node, opts)` and `t.assertJSXExpressionCont
 Aliases: `JSX`, `Immutable`
 
  - `expression`: `Expression` (required)
+
+---
+
+### jSXFragment
+```javascript
+t.jSXFragment(openingFragment, closingFragment, children)
+```
+
+See also `t.isJSXFragment(node, opts)` and `t.assertJSXFragment(node, opts)`.
+
+Aliases: `JSX`, `Immutable`, `Expression`
+
+ - `openingFragment`: `JSXOpeningFragment` (required)
+ - `closingFragment`: `JSXClosingFragment` (required)
+ - `children`: `Array<JSXText | JSXExpressionContainer | JSXSpreadChild | JSXElement | JSXFragment>` (required)
 
 ---
 
@@ -1170,6 +1197,18 @@ Aliases: `JSX`, `Immutable`
  - `name`: `JSXIdentifier | JSXMemberExpression` (required)
  - `attributes`: `Array<JSXAttribute | JSXSpreadAttribute>` (required)
  - `selfClosing`: `boolean` (default: `false`)
+
+---
+
+### jSXOpeningFragment
+```javascript
+t.jSXOpeningFragment()
+```
+
+See also `t.isJSXOpeningFragment(node, opts)` and `t.assertJSXOpeningFragment(node, opts)`.
+
+Aliases: `JSX`, `Immutable`
+
 
 ---
 

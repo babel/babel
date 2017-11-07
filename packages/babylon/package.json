@@ -1,6 +1,6 @@
 {
   "name": "babylon",
-  "version": "7.0.0-beta.30",
+  "version": "7.0.0-beta.31",
   "description": "A JavaScript parser",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -23,7 +23,8 @@
     "node": ">=4.2.0"
   },
   "devDependencies": {
-    "@babel/helper-fixtures": "7.0.0-beta.5",
+    "@babel/helper-fixtures": "7.0.0-beta.31",
+    "babel-plugin-transform-for-of-as-array": "1.0.4",
     "babel-plugin-transform-charcodes": "0.0.3-0",
     "charcodes": "0.0.3-0",
     "rollup": "^0.50.0",

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-react-display-name",
-  "version": "7.0.0-beta.5",
+  "version": "7.0.0-beta.31",
   "description": "Add displayName to React.createClass calls",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-display-name",
   "license": "MIT",
@@ -9,10 +9,10 @@
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": ">=7.0.0-beta.4 <7.0.0-rc.0"
+    "@babel/core": "7.0.0-beta.31"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.5",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.5"
+    "@babel/core": "7.0.0-beta.31",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.31"
   }
 }

@@ -46,11 +46,75 @@ var profile = <div>
 
 var dom = require("deku").dom;
 
-var profile = dom( "div", null,
+var profile = dom("div", null,
   dom("img", { src: "avatar.png", className: "profile" }),
   dom("h3", null, [user.firstName, user.lastName].join(" "))
 );
 ```
+
+### Fragments
+
+Fragments are a feature available in React 16.2.0+.
+
+#### React
+
+**In**
+
+```javascript
+var descriptions = items.map(item => (
+  <>
+    <dt>{item.name}</dt>
+    <dd>{item.value}</dd>
+  </>
+));
+```
+
+**Out**
+
+```javascript
+var descriptions = items.map(item => React.createElement(
+  React.Fragment,
+  null,
+  React.createElement("dt", null, item.name),
+  React.createElement("dd", null, item.value)
+));
+```
+
+#### Custom
+
+**In**
+
+```javascript
+/** @jsx dom */
+/** @jsxFrag DomFrag */
+
+var { dom, DomFrag } = require("deku"); // DomFrag is fictional!
+
+var descriptions = items.map(item => (
+  <>
+    <dt>{item.name}</dt>
+    <dd>{item.value}</dd>
+  </>
+));
+```
+
+**Out**
+
+```javascript
+/** @jsx dom */
+/** @jsxFrag DomFrag */
+
+var { dom, DomFrag } = require("deku"); // DomFrag is fictional!
+
+var descriptions = items.map(item => dom(
+  DomFrag,
+  null,
+  dom("dt", null, item.name),
+  dom("dd", null, item.value)
+));
+```
+
+Note that if a custom pragma is specified, then a custom fragment pragma must also be specified if the `<></>` is used. Otherwise, an error will be thrown.
 
 ## Installation
 
@@ -79,6 +143,7 @@ With options:
   "plugins": [
     ["@babel/transform-react-jsx", {
       "pragma": "dom", // default pragma is React.createElement
+      "pragmaFrag": "DomFrag", // default is React.Fragment
       "throwIfNamespace": false // defaults to true
     }]
   ]
@@ -108,6 +173,12 @@ require("@babel/core").transform("code", {
 Replace the function used when compiling JSX expressions.
 
 Note that the `@jsx React.DOM` pragma has been deprecated as of React v0.12
+
+### `pragmaFrag`
+
+`string`, defaults to `React.Fragment`.
+
+Replace the component used when compiling JSX fragments.
 
 ### `useBuiltIns`
 

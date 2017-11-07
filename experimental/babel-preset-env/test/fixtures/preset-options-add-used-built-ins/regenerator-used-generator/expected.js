@@ -1,4 +1,4 @@
-import "@babel/polyfill/lib/regenerator-runtime/runtime";
+import "regenerator-runtime/runtime";
 
 var _marked =
 /*#__PURE__*/

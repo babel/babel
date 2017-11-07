@@ -12,8 +12,6 @@ The gist of Stage 2 is:
 >
 > **What’s next?** Only incremental changes are expected from now on.
 
-
-
 ## Install
 
 ```sh
@@ -45,6 +43,21 @@ require("@babel/core").transform("code", {
   presets: ["@babel/stage-2"]
 });
 ```
+
+## Options
+
+### `loose`
+
+`boolean`, defaults to `false`.
+
+Enable "loose" transformations for any plugins in this preset that allow them.
+
+### `useBuiltIns`
+
+`boolean`, defaults to `false`.
+
+Will use the native built-in instead of trying to polyfill behavior for any plugins that require one.
+
 ## References
 
 - Chapter "[The TC39 process for ECMAScript features](http://exploringjs.com/es2016-es2017/ch_tc39-process.html)" in "Exploring ES2016 and ES2017" by Axel Rauschmayer

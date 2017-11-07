@@ -61,8 +61,9 @@ export default class ExpressionParser extends LValParser {
     const name = key.type === "Identifier" ? key.name : String(key.value);
 
     if (name === "__proto__") {
-      if (propHash.proto)
+      if (propHash.proto) {
         this.raise(key.start, "Redefinition of __proto__ property");
+      }
       propHash.proto = true;
     }
   }
@@ -124,8 +125,9 @@ export default class ExpressionParser extends LValParser {
     const startLoc = this.state.startLoc;
     if (this.match(tt._yield) && this.state.inGenerator) {
       let left = this.parseYield();
-      if (afterLeftParse)
+      if (afterLeftParse) {
         left = afterLeftParse.call(this, left, startPos, startLoc);
+      }
       return left;
     }
 
@@ -146,8 +148,9 @@ export default class ExpressionParser extends LValParser {
       refShorthandDefaultPos,
       refNeedsArrowPos,
     );
-    if (afterLeftParse)
+    if (afterLeftParse) {
       left = afterLeftParse.call(this, left, startPos, startLoc);
+    }
     if (this.state.type.isAssign) {
       const node = this.startNodeAt(startPos, startLoc);
       node.operator = this.state.value;
@@ -1000,8 +1003,9 @@ export default class ExpressionParser extends LValParser {
       (arrowNode = this.parseArrow(arrowNode))
     ) {
       for (const param of exprList) {
-        if (param.extra && param.extra.parenthesized)
+        if (param.extra && param.extra.parenthesized) {
           this.unexpected(param.extra.parenStart);
+        }
       }
 
       this.parseArrowExpression(arrowNode, exprList);
@@ -1016,8 +1020,9 @@ export default class ExpressionParser extends LValParser {
     }
     if (optionalCommaStart) this.unexpected(optionalCommaStart);
     if (spreadStart) this.unexpected(spreadStart);
-    if (refShorthandDefaultPos.start)
+    if (refShorthandDefaultPos.start) {
       this.unexpected(refShorthandDefaultPos.start);
+    }
     if (refNeedsArrowPos.start) this.unexpected(refNeedsArrowPos.start);
 
     if (exprList.length > 1) {

@@ -5,9 +5,26 @@ import transformExportNamespace from "@babel/plugin-proposal-export-namespace";
 import transformNumericSeparator from "@babel/plugin-proposal-numeric-separator";
 import transformThrowExpressions from "@babel/plugin-proposal-throw-expressions";
 
-export default function() {
+export default function(context, opts = {}) {
+  let loose = false;
+  let useBuiltIns = false;
+
+  if (opts !== undefined) {
+    if (opts.loose !== undefined) loose = opts.loose;
+    if (opts.useBuiltIns !== undefined) useBuiltIns = opts.useBuiltIns;
+  }
+
+  if (typeof loose !== "boolean") {
+    throw new Error("@babel/preset-stage-2 'loose' option must be a boolean.");
+  }
+  if (typeof useBuiltIns !== "boolean") {
+    throw new Error(
+      "@babel/preset-stage-2 'useBuiltIns' option must be a boolean.",
+    );
+  }
+
   return {
-    presets: [presetStage3],
+    presets: [[presetStage3, { loose, useBuiltIns }]],
     plugins: [
       transformFunctionSent,
       transformExportNamespace,
