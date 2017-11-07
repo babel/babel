@@ -144,7 +144,7 @@ export function arrowFunctionToExpression(
     this.replaceWith(
       t.callExpression(
         t.memberExpression(
-          nameFunction(this) || this.node,
+          nameFunction(this, true) || this.node,
           t.identifier("bind"),
         ),
         [checkBinding ? t.identifier(checkBinding.name) : t.thisExpression()],
