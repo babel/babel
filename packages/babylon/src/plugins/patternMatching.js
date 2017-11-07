@@ -43,6 +43,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.next();
         const node = this.startNodeAt(startPos, startLoc);
 
+        if (this.match(tt.braceR)) {
+          this.raise(
+            this.state.pos,
+            "there are no clauses in match expression",
+          );
+        }
+
         const firstClause = this.parseMatchClause();
 
         node.expression = tmp.arguments[0];
@@ -158,7 +165,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    // '{' ( propertyPattern (',')* )+ '}'
+    // '{' ( propertyPattern ',')+ propertyPattern? '}'
     parseObjectPattern(): N.ObjectMatchPattern {
       const node = this.startNode();
       if (!this.eat(tt.braceL)) {
@@ -211,7 +218,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "ObjectPropertyMatchPattern");
     }
 
-    // '{' ( propertyPattern (',')* )+ '}'
+    // '[' ( pattern ',' )+ pattern? ']'
     parseArrayPattern(): N.ArrayMatchPattern {
       const node = this.startNode();
       if (!this.eat(tt.bracketL)) {
