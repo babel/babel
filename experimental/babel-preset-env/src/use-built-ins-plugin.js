@@ -1,17 +1,13 @@
-//@flow
-
+// @flow
 import { definitions } from "./built-in-definitions";
 import { logUsagePolyfills } from "./debug";
+import { createImport, isPolyfillSource, isRequire } from "./utils";
 
 type Plugin = {
   visitor: Object,
   pre: Function,
   name: string,
 };
-
-function isPolyfillSource(value: string): boolean {
-  return value === "@babel/polyfill";
-}
 
 // function warnOnInstanceMethod() {
 // state.opts.debug &&
@@ -38,16 +34,6 @@ function getType(target: any): string {
 //   return node.name;
 // }
 
-const modulePathMap = {
-  "regenerator-runtime": "@babel/polyfill/lib/regenerator-runtime/runtime",
-};
-
-const getModulePath = module => {
-  return (
-    modulePathMap[module] || `@babel/polyfill/lib/core-js/modules/${module}`
-  );
-};
-
 export default function({ types: t }: { types: Object }): Plugin {
   function addImport(
     path: Object,
@@ -56,15 +42,8 @@ export default function({ types: t }: { types: Object }): Plugin {
   ): void {
     if (builtIn && !builtIns.has(builtIn)) {
       builtIns.add(builtIn);
-
-      const importDec = t.importDeclaration(
-        [],
-        t.stringLiteral(getModulePath(builtIn)),
-      );
-
-      importDec._blockHoist = 3;
       const programPath = path.find(path => path.isProgram());
-      programPath.unshiftContainer("body", importDec);
+      programPath.unshiftContainer("body", createImport(t, builtIn));
     }
   }
 
@@ -87,18 +66,6 @@ export default function({ types: t }: { types: Object }): Plugin {
     }
   }
 
-  function isRequire(path: Object): boolean {
-    return (
-      t.isExpressionStatement(path.node) &&
-      t.isCallExpression(path.node.expression) &&
-      t.isIdentifier(path.node.expression.callee) &&
-      path.node.expression.callee.name === "require" &&
-      path.node.expression.arguments.length === 1 &&
-      t.isStringLiteral(path.node.expression.arguments[0]) &&
-      isPolyfillSource(path.node.expression.arguments[0].value)
-    );
-  }
-
   const addAndRemovePolyfillImports = {
     ImportDeclaration(path) {
       if (
@@ -116,7 +83,7 @@ export default function({ types: t }: { types: Object }): Plugin {
     Program: {
       enter(path) {
         path.get("body").forEach(bodyPath => {
-          if (isRequire(bodyPath)) {
+          if (isRequire(t, bodyPath)) {
             console.warn(
               `
   When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
