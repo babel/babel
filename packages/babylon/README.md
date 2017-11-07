@@ -141,6 +141,7 @@ require("babylon").parse("code", {
 | `throwExpressions` ([proposal](https://github.com/babel/proposals/issues/23)) | `() => throw new Error("")` |
 | `pipelineOperator` ([proposal](https://github.com/babel/proposals/issues/29)) | `a \|> b` |
 | `nullishCoalescingOperator` ([proposal](https://github.com/babel/proposals/issues/14)) | `a ?? b` |
+| `patternMatching` ([proposal](https://github.com/tc39/proposal-pattern-matching)) | n/a
 
 ### FAQ
 
