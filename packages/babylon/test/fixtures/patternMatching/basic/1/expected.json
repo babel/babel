@@ -104,7 +104,7 @@
                 },
                 "children": [
                   {
-                    "type": "Identifier",
+                    "type": "ObjectPropertyMatchPattern",
                     "start": 14,
                     "end": 15,
                     "loc": {
@@ -115,10 +115,26 @@
                       "end": {
                         "line": 2,
                         "column": 4
-                      },
-                      "identifierName": "b"
+                      }
                     },
-                    "name": "b"
+                    "key": {
+                      "type": "Identifier",
+                      "start": 14,
+                      "end": 15,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 3
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 4
+                        },
+                        "identifierName": "b"
+                      },
+                      "name": "b"
+                    },
+                    "value": null
                   }
                 ],
                 "restIdentifier": null

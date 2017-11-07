@@ -173,7 +173,7 @@
                       },
                       "children": [
                         {
-                          "type": "Identifier",
+                          "type": "ObjectPropertyMatchPattern",
                           "start": 44,
                           "end": 45,
                           "loc": {
@@ -184,13 +184,29 @@
                             "end": {
                               "line": 2,
                               "column": 5
-                            },
-                            "identifierName": "x"
+                            }
                           },
-                          "name": "x"
+                          "key": {
+                            "type": "Identifier",
+                            "start": 44,
+                            "end": 45,
+                            "loc": {
+                              "start": {
+                                "line": 2,
+                                "column": 4
+                              },
+                              "end": {
+                                "line": 2,
+                                "column": 5
+                              },
+                              "identifierName": "x"
+                            },
+                            "name": "x"
+                          },
+                          "value": null
                         },
                         {
-                          "type": "Identifier",
+                          "type": "ObjectPropertyMatchPattern",
                           "start": 47,
                           "end": 48,
                           "loc": {
@@ -201,13 +217,29 @@
                             "end": {
                               "line": 2,
                               "column": 8
-                            },
-                            "identifierName": "y"
+                            }
                           },
-                          "name": "y"
+                          "key": {
+                            "type": "Identifier",
+                            "start": 47,
+                            "end": 48,
+                            "loc": {
+                              "start": {
+                                "line": 2,
+                                "column": 7
+                              },
+                              "end": {
+                                "line": 2,
+                                "column": 8
+                              },
+                              "identifierName": "y"
+                            },
+                            "name": "y"
+                          },
+                          "value": null
                         },
                         {
-                          "type": "Identifier",
+                          "type": "ObjectPropertyMatchPattern",
                           "start": 50,
                           "end": 51,
                           "loc": {
@@ -218,10 +250,26 @@
                             "end": {
                               "line": 2,
                               "column": 11
-                            },
-                            "identifierName": "z"
+                            }
                           },
-                          "name": "z"
+                          "key": {
+                            "type": "Identifier",
+                            "start": 50,
+                            "end": 51,
+                            "loc": {
+                              "start": {
+                                "line": 2,
+                                "column": 10
+                              },
+                              "end": {
+                                "line": 2,
+                                "column": 11
+                              },
+                              "identifierName": "z"
+                            },
+                            "name": "z"
+                          },
+                          "value": null
                         }
                       ],
                       "restIdentifier": null
@@ -516,7 +564,7 @@
                       },
                       "children": [
                         {
-                          "type": "Identifier",
+                          "type": "ObjectPropertyMatchPattern",
                           "start": 96,
                           "end": 97,
                           "loc": {
@@ -527,13 +575,29 @@
                             "end": {
                               "line": 3,
                               "column": 5
-                            },
-                            "identifierName": "x"
+                            }
                           },
-                          "name": "x"
+                          "key": {
+                            "type": "Identifier",
+                            "start": 96,
+                            "end": 97,
+                            "loc": {
+                              "start": {
+                                "line": 3,
+                                "column": 4
+                              },
+                              "end": {
+                                "line": 3,
+                                "column": 5
+                              },
+                              "identifierName": "x"
+                            },
+                            "name": "x"
+                          },
+                          "value": null
                         },
                         {
-                          "type": "Identifier",
+                          "type": "ObjectPropertyMatchPattern",
                           "start": 99,
                           "end": 100,
                           "loc": {
@@ -544,10 +608,26 @@
                             "end": {
                               "line": 3,
                               "column": 8
-                            },
-                            "identifierName": "y"
+                            }
                           },
-                          "name": "y"
+                          "key": {
+                            "type": "Identifier",
+                            "start": 99,
+                            "end": 100,
+                            "loc": {
+                              "start": {
+                                "line": 3,
+                                "column": 7
+                              },
+                              "end": {
+                                "line": 3,
+                                "column": 8
+                              },
+                              "identifierName": "y"
+                            },
+                            "name": "y"
+                          },
+                          "value": null
                         }
                       ],
                       "restIdentifier": null

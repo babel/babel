@@ -138,6 +138,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.parseLiteral(this.state.value, "NumericLiteral");
       } else if (this.match(tt.bigint)) {
         return this.parseLiteral(this.state.value, "BigIntLiteral");
+      } else if (this.match(tt.string)) {
+        return this.parseLiteral(this.state.value, "StringLiteral");
       } else if (this.match(tt._null)) {
         node = this.startNode();
         this.next();
@@ -173,15 +175,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             this.unexpected(this.state.pos, tt.braceR)
           }
         } else {
-          let pattern = this.parseBasicMatchPattern();
+          let pattern = this.parseObjectPropertyPattern();
           node.children.push(pattern);
         }
 
         // the next token must be close bracket or comma
-        if (!this.match(tt.braceR)) {
-          if (!this.eat(tt.comma)) {
-            this.unexpected(this.state.pos, tt.comma);
-          }
+        if (this.match(tt.comma)) {
+          this.next();
+        } else if (!this.match(tt.braceR)) {
+          this.unexpected(this.state.pos, "comma or braceR");
         }
 
       }
@@ -198,7 +200,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (this.match(tt.colon)) {
         this.next();
-        node.value = this.parseMatchPattern();
+        node.value = this.parseBasicMatchPattern();
+        if (node.value === null) {
+          this.raise(this.state.pos, "not a correct pattern");
+        }
       }
 
       return this.finishNode(node, "ObjectPropertyMatchPattern");
