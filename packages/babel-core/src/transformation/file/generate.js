@@ -21,7 +21,26 @@ export default function generateCode(
 
   let { code: outputCode, map: outputMap } = gen(
     ast,
-    opts.generatorOpts ? Object.assign(opts, opts.generatorOpts) : opts,
+    Object.assign(
+      {
+        // General generator flags.
+        filename: opts.filename,
+        auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
+        auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
+        retainLines: opts.retainLines,
+        comments: opts.comments,
+        compact: opts.compact,
+        minified: opts.minified,
+        concise: opts.concise,
+
+        // Source-map generation flags.
+        sourceMaps: opts.sourceMaps,
+        sourceMapTarget: opts.sourceMapTarget,
+        sourceRoot: opts.sourceRoot,
+        sourceFileName: opts.sourceFileName,
+      },
+      opts.generatorOpts,
+    ),
     code,
   );
 
