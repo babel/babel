@@ -75,18 +75,48 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.unexpected(this.state.pos, tt.colon)
       }
 
-      let value = this.parseExpression();
-
       node.pattern = pattern;
-      node.value = value;
+      this.parseClauseBody(node, true);
 
       return this.finishNode(node, "MatchExpressionClause");
+    }
+
+    parseClauseBody(node: N.MatchExpressionClause, allowExpression: ?boolean): void {
+      const isExpression = allowExpression && !this.match(tt.braceL);
+
+      const oldInParameters = this.state.inParameters;
+      const oldInAsync = this.state.inAsync;
+      this.state.inParameters = false;
+      this.state.inAsync = false;
+
+      if (isExpression) {
+        node.body = this.parseMaybeAssign();
+        node.expression = true;
+      } else {
+        // Start a new scope with regard to labels and the `inGenerator`
+        // flag (restore them to their old value afterwards).
+        const oldInGen = this.state.inGenerator;
+        const oldInFunc = this.state.inFunction;
+        const oldLabels = this.state.labels;
+        this.state.inGenerator = false;
+        this.state.inFunction = true;
+        this.state.labels = [];
+        node.body = this.parseBlock(true);
+        node.expression = false;
+        this.state.inFunction = oldInFunc;
+        this.state.inGenerator = oldInGen;
+        this.state.labels = oldLabels;
+      }
+      this.state.inAsync = oldInAsync;
+
+      this.state.inParameters = oldInParameters;
     }
 
     parseMatchPattern() : N.MatchExpressionPattern | null {
       let basic = this.parseBasicMatchPattern();
       if (basic === null) {
         if (this.match(tt._else)) {
+          this.next();
           return "else";
         } else {
           this.unexpected();
