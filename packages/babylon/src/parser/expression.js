@@ -647,7 +647,7 @@ export default class ExpressionParser extends LValParser {
         ) {
           this.raise(
             this.state.start,
-            "'method or class constructor' has access to super, as only those has [[HomeObject]] assigned at the time of creation",
+            "super is only allowed in object methods and classes",
           );
         }
 
