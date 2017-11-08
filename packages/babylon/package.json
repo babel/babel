@@ -25,7 +25,7 @@
   "devDependencies": {
     "@babel/helper-fixtures": "7.0.0-beta.31",
     "babel-plugin-transform-for-of-as-array": "1.0.4",
-    "babel-plugin-transform-charcodes": "0.0.3",
+    "babel-plugin-transform-charcodes": "0.0.5",
     "charcodes": "0.0.3",
     "rollup": "^0.50.0",
     "rollup-plugin-babel": "^4.0.0-beta.0",
