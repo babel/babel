@@ -1172,7 +1172,7 @@ export default class Tokenizer extends LocationParser {
             .substr(this.state.pos - 1, 3)
             .match(/^[0-7]+/)[0];
           let octal = parseInt(octalStr, 8);
-          if (octal > 2557) {
+          if (octal > 255) {
             octalStr = octalStr.slice(0, -1);
             octal = parseInt(octalStr, 8);
           }
