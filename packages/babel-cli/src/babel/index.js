@@ -160,7 +160,7 @@ commander.option(
   "Delete's the out directory before compilation",
 );
 commander.option(
-  "-n --noisy",
+  "-n --noisey",
   "Output indication of when files are being processed",
 );
 /* eslint-enable max-len */
@@ -240,7 +240,7 @@ delete opts.quiet;
 delete opts.configFile;
 delete opts.deleteDirOnStart;
 delete opts.keepFileExtension;
-delete opts.noisy;
+delete opts.noisey;
 
 // Commander will default the "--no-" arguments to true, but we want to leave them undefined so that
 // babel-core can handle the default-assignment logic on its own.
