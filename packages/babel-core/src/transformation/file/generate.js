@@ -19,30 +19,7 @@ export default function generateCode(
     gen = opts.generatorOpts.generator;
   }
 
-  let { code: outputCode, map: outputMap } = gen(
-    ast,
-    Object.assign(
-      {
-        // General generator flags.
-        filename: opts.filename || "unknown",
-        auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
-        auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
-        retainLines: opts.retainLines,
-        comments: opts.comments,
-        compact: opts.compact,
-        minified: opts.minified,
-        concise: opts.concise,
-
-        // Source-map generation flags.
-        sourceMaps: opts.sourceMaps,
-        sourceMapTarget: opts.sourceMapTarget || "unknown",
-        sourceRoot: opts.sourceRoot,
-        sourceFileName: opts.sourceFileName || "unknown",
-      },
-      opts.generatorOpts,
-    ),
-    code,
-  );
+  let { code: outputCode, map: outputMap } = gen(ast, opts.generatorOpts, code);
 
   if (shebang) {
     // add back shebang
