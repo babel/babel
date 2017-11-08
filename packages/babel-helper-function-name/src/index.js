@@ -126,7 +126,11 @@ function visit(node, name, scope) {
   return state;
 }
 
-export default function({ node, parent, scope, id }) {
+/**
+ * @param {NodePath} param0
+ * @param {Boolean} localBinding whether a name could shadow a self-reference (e.g. converting arrow function)
+ */
+export default function({ node, parent, scope, id }, localBinding = false) {
   // has an `id` so we don't need to infer one
   if (node.id) return;
 
@@ -141,7 +145,8 @@ export default function({ node, parent, scope, id }) {
     // let foo = function () {};
     id = parent.id;
 
-    if (t.isIdentifier(id)) {
+    // but not "let foo = () => {};" being converted to function expression
+    if (t.isIdentifier(id) && !localBinding) {
       const binding = scope.parent.getBinding(id.name);
       if (
         binding &&
