@@ -1,7 +1,7 @@
 // @flow
 
 import * as context from "../index";
-import Plugin from "./plugin";
+import Plugin, { validatePluginObject } from "./plugin";
 import defaults from "lodash/defaults";
 import merge from "lodash/merge";
 import buildConfigChain, { type ConfigItem } from "./build-config-chain";
@@ -27,15 +27,6 @@ type MergeOptions =
       alias: string,
       dirname: string,
     };
-
-const ALLOWED_PLUGIN_KEYS = new Set([
-  "name",
-  "manipulateOptions",
-  "pre",
-  "post",
-  "visitor",
-  "inherits",
-]);
 
 export default function manageOptions(opts: {}): {
   options: Object,
@@ -275,37 +266,16 @@ function loadPluginDescriptor(descriptor: BasicDescriptor): Plugin {
 }
 
 const instantiatePlugin = makeWeakCache(
-  (
-    { value: pluginObj, options, dirname, alias }: LoadedDescriptor,
-    cache,
-  ): Plugin => {
-    Object.keys(pluginObj).forEach(key => {
-      if (!ALLOWED_PLUGIN_KEYS.has(key)) {
-        throw new Error(
-          `Plugin ${alias} provided an invalid property of ${key}`,
-        );
-      }
-    });
-    if (
-      pluginObj.visitor &&
-      (pluginObj.visitor.enter || pluginObj.visitor.exit)
-    ) {
-      throw new Error(
-        "Plugins aren't allowed to specify catch-all enter/exit handlers. " +
-          "Please target individual nodes.",
-      );
+  ({ value, options, dirname, alias }: LoadedDescriptor, cache): Plugin => {
+    const pluginObj = validatePluginObject(value);
+
+    const plugin = Object.assign({}, pluginObj);
+    if (plugin.visitor) {
+      plugin.visitor = traverse.explode(clone(plugin.visitor));
     }
 
-    const plugin = Object.assign({}, pluginObj, {
-      visitor: clone(pluginObj.visitor || {}),
-    });
-
-    traverse.explode(plugin.visitor);
-
-    let inheritsDescriptor;
-    let inherits;
     if (plugin.inherits) {
-      inheritsDescriptor = {
+      const inheritsDescriptor = {
         alias: `${alias}$inherits`,
         value: plugin.inherits,
         options,
@@ -313,7 +283,7 @@ const instantiatePlugin = makeWeakCache(
       };
 
       // If the inherited plugin changes, reinstantiate this plugin.
-      inherits = cache.invalidate(() =>
+      const inherits = cache.invalidate(() =>
         loadPluginDescriptor(inheritsDescriptor),
       );
 
@@ -324,8 +294,8 @@ const instantiatePlugin = makeWeakCache(
         plugin.manipulateOptions,
       );
       plugin.visitor = traverse.visitors.merge([
-        inherits.visitor,
-        plugin.visitor,
+        inherits.visitor || {},
+        plugin.visitor || {},
       ]);
     }
 
