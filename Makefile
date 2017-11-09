@@ -40,6 +40,8 @@ build-dist: build
 
 watch: clean
 	make clean-lib
+	# Rebuild Babylon since the clear above deleted it. Alternatives welcome :P
+	make build-babylon
 	BABEL_ENV=development ./node_modules/.bin/gulp watch
 
 flow:

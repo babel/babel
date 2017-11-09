@@ -1,5 +1,6 @@
 import babel from "rollup-plugin-babel";
 import nodeResolve from "rollup-plugin-node-resolve";
+import json from "rollup-plugin-json";
 
 export default {
   input: "src/index.js",
@@ -8,6 +9,7 @@ export default {
     format: "cjs",
   },
   plugins: [
+    json(),
     babel({
       externalHelpersWhitelist: ["inheritsLoose"],
       babelrc: false,

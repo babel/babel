@@ -22,6 +22,9 @@
   "engines": {
     "node": ">=4.2.0"
   },
+  "scripts": {
+    "version": "node scripts/update-version.js"
+  },
   "devDependencies": {
     "@babel/helper-fixtures": "7.0.0-beta.32",
     "babel-plugin-transform-for-of-as-array": "1.0.4",
@@ -29,6 +32,7 @@
     "charcodes": "0.0.10",
     "rollup": "^0.50.0",
     "rollup-plugin-babel": "^4.0.0-beta.0",
+    "rollup-plugin-json": "^2.3.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-watch": "^4.0.0",
     "unicode-9.0.0": "~0.7.0"
