@@ -10,7 +10,7 @@ import normalizeOptions from "./normalize-opts";
 import normalizeFile from "./normalize-file";
 
 import generateCode from "./file/generate";
-import File from "./file/file";
+import type File from "./file/file";
 
 export type FileResultCallback = {
   (Error, null): any,
@@ -48,19 +48,24 @@ export function runSync(
   code: string,
   ast: ?(BabelNodeFile | BabelNodeProgram),
 ): FileResult {
-  const options = normalizeOptions(config);
-  const input = normalizeFile(options, code, ast);
-
-  const file = new File(options, input);
+  const file = normalizeFile(
+    config.passes,
+    normalizeOptions(config),
+    code,
+    ast,
+  );
 
   transformFile(file, config.passes);
 
-  const { outputCode, outputMap } = options.code ? generateCode(file) : {};
+  const opts = file.opts;
+  const { outputCode, outputMap } = opts.code
+    ? generateCode(config.passes, file)
+    : {};
 
   return {
     metadata: file.metadata,
-    options: options,
-    ast: options.ast ? file.ast : null,
+    options: opts,
+    ast: opts.ast ? file.ast : null,
     code: outputCode === undefined ? null : outputCode,
     map: outputMap === undefined ? null : outputMap,
   };

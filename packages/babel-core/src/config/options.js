@@ -12,13 +12,9 @@ import {
   assertSourceMaps,
   assertCompact,
   assertSourceType,
+  type ValidatorSet,
+  type Validator,
 } from "./option-assertions";
-
-type ValidatorSet = {
-  [string]: Validator<any>,
-};
-
-type Validator<T> = (string, mixed) => T;
 
 const ROOT_VALIDATORS: ValidatorSet = {
   filename: (assertString: Validator<

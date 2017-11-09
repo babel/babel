@@ -12,6 +12,12 @@ import type {
   RootInputSourceMapOption,
 } from "./options";
 
+export type ValidatorSet = {
+  [string]: Validator<any>,
+};
+
+export type Validator<T> = (string, mixed) => T;
+
 export function assertSourceMaps(
   key: string,
   value: mixed,
