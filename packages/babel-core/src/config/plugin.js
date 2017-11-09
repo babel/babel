@@ -8,6 +8,9 @@ import {
   type Validator,
 } from "./option-assertions";
 
+// Note: The casts here are just meant to be static assertions to make sure
+// that the assertion functions actually assert that the value's type matches
+// the declared types.
 const VALIDATORS: ValidatorSet = {
   name: (assertString: Validator<$PropertyType<PluginObject, "name">>),
   manipulateOptions: (assertFunction: Validator<
@@ -20,6 +23,13 @@ const VALIDATORS: ValidatorSet = {
   >),
   visitor: (assertVisitorMap: Validator<
     $PropertyType<PluginObject, "visitor">,
+  >),
+
+  parserOverride: (assertFunction: Validator<
+    $PropertyType<PluginObject, "parserOverride">,
+  >),
+  generatorOverride: (assertFunction: Validator<
+    $PropertyType<PluginObject, "generatorOverride">,
   >),
 };
 
@@ -70,6 +80,9 @@ export type PluginObject = {
 
   inherits?: Function,
   visitor?: VisitorMap,
+
+  parserOverride?: Function,
+  generatorOverride?: Function,
 };
 
 export function validatePluginObject(obj: {}): PluginObject {
@@ -90,6 +103,9 @@ export default class Plugin {
   pre: Function | void;
   visitor: {};
 
+  parserOverride: Function | void;
+  generatorOverride: Function | void;
+
   options: {};
 
   constructor(plugin: PluginObject, options: {}, key?: string) {
@@ -99,6 +115,9 @@ export default class Plugin {
     this.post = plugin.post;
     this.pre = plugin.pre;
     this.visitor = plugin.visitor || {};
+    this.parserOverride = plugin.parserOverride;
+    this.generatorOverride = plugin.generatorOverride;
+
     this.options = options;
   }
 }

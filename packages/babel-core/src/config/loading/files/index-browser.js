@@ -42,21 +42,3 @@ export function loadPreset(
     `Cannot load preset ${name} relative to ${dirname} in a browser`,
   );
 }
-
-export function loadParser(
-  name: string,
-  dirname: string,
-): { filepath: string, value: Function } {
-  throw new Error(
-    `Cannot load parser ${name} relative to ${dirname} in a browser`,
-  );
-}
-
-export function loadGenerator(
-  name: string,
-  dirname: string,
-): { filepath: string, value: Function } {
-  throw new Error(
-    `Cannot load generator ${name} relative to ${dirname} in a browser`,
-  );
-}

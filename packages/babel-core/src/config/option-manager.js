@@ -12,12 +12,7 @@ import { makeWeakCache } from "./caching";
 import { getEnv } from "./helpers/environment";
 import { validate, type ValidatedOptions, type PluginItem } from "./options";
 
-import {
-  loadPlugin,
-  loadPreset,
-  loadParser,
-  loadGenerator,
-} from "./loading/files";
+import { loadPlugin, loadPreset } from "./loading/files";
 
 type MergeOptions =
   | ConfigItem
@@ -196,7 +191,7 @@ const loadConfig = makeWeakCache((config: MergeOptions): {
   plugins: Array<BasicDescriptor>,
   presets: Array<BasicDescriptor>,
 } => {
-  const options = normalizeOptions(config);
+  const options = config.options;
 
   const plugins = (config.options.plugins || []).map((plugin, index) =>
     createDescriptor(plugin, loadPlugin, config.dirname, {
@@ -320,35 +315,6 @@ const instantiatePreset = makeWeakCache(
     };
   },
 );
-
-/**
- * Validate and return the options object for the config.
- */
-function normalizeOptions(config) {
-  //
-  const options = Object.assign({}, config.options);
-
-  if (options.parserOpts && typeof options.parserOpts.parser === "string") {
-    options.parserOpts = Object.assign({}, options.parserOpts);
-    (options.parserOpts: any).parser = loadParser(
-      options.parserOpts.parser,
-      config.dirname,
-    ).value;
-  }
-
-  if (
-    options.generatorOpts &&
-    typeof options.generatorOpts.generator === "string"
-  ) {
-    options.generatorOpts = Object.assign({}, options.generatorOpts);
-    (options.generatorOpts: any).generator = loadGenerator(
-      options.generatorOpts.generator,
-      config.dirname,
-    ).value;
-  }
-
-  return options;
-}
 
 /**
  * Given a plugin/preset item, resolve it into a standard format.
