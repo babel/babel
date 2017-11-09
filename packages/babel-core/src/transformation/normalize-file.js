@@ -1,5 +1,6 @@
 // @flow
 
+import * as t from "@babel/types";
 import convertSourceMap, { typeof Converter } from "convert-source-map";
 import { parse } from "babylon";
 import { codeFrameColumns } from "@babel/code-frame";
@@ -16,7 +17,7 @@ export type NormalizedFile = {
 export default function normalizeFile(
   options: Object,
   code: string,
-  ast?: {},
+  ast: ?(BabelNodeFile | BabelNodeProgram),
 ): NormalizedFile {
   code = `${code || ""}`;
 
@@ -37,7 +38,15 @@ export default function normalizeFile(
     code = code.replace(shebangRegex, "");
   }
 
-  if (!ast) ast = parser(options, code);
+  if (ast) {
+    if (ast.type === "Program") {
+      ast = t.file(ast, [], []);
+    } else if (ast.type !== "File") {
+      throw new Error("AST root must be a Program or File node");
+    }
+  } else {
+    ast = parser(options, code);
+  }
 
   return {
     code,
