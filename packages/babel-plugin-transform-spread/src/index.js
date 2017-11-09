@@ -52,11 +52,11 @@ export default function(api, options) {
         if (!hasSpread(elements)) return;
 
         const nodes = build(elements, scope, state);
-        let first = nodes.shift();
+        const first = nodes.shift();
 
-        if (!t.isArrayExpression(first)) {
-          nodes.unshift(first);
-          first = t.arrayExpression([]);
+        if (nodes.length === 0 && first !== elements[0].argument) {
+          path.replaceWith(first);
+          return;
         }
 
         path.replaceWith(
