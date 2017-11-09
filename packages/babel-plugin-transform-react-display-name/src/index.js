@@ -1,5 +1,9 @@
 import path from "path";
+
 import { types as t } from "@babel/core";
+
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
 
 export default function() {
   function addDisplayName(id, call) {
@@ -50,6 +54,7 @@ export default function() {
   }
 
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       ExportDefaultDeclaration({ node }, state) {
         if (isCreateClass(node.declaration)) {

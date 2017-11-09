@@ -1,5 +1,8 @@
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function transformReactConstantElement(api, options) {
   const { allowMutablePropsOnTags } = options;
 
@@ -74,6 +77,7 @@ export default function transformReactConstantElement(api, options) {
   };
 
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       JSXElement(path) {
         if (HOISTED.has(path.node)) return;

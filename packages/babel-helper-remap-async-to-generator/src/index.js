@@ -5,6 +5,7 @@ import wrapFunction from "@babel/helper-wrap-function";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import * as t from "@babel/types";
 import rewriteForAwait from "./for-await";
+export { default as CACHE_KEY } from "./_cache-key";
 
 const awaitVisitor = {
   Function(path) {

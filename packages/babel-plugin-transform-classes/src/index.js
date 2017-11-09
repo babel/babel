@@ -4,6 +4,9 @@ import annotateAsPure from "@babel/helper-annotate-as-pure";
 import nameFunction from "@babel/helper-function-name";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function(api, options) {
   const { loose } = options;
   const Constructor = loose ? LooseTransformer : VanillaTransformer;
@@ -12,6 +15,7 @@ export default function(api, options) {
   const VISITED = Symbol();
 
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       ExportDefaultDeclaration(path) {
         if (!path.get("declaration").isClassDeclaration()) return;

@@ -10,6 +10,9 @@ import {
 } from "@babel/helper-module-transforms";
 import { types as t, template } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 const buildPrerequisiteAssignment = template(`
   GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
 `);
@@ -120,6 +123,7 @@ export default function(api, options) {
   }
 
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       Program: {
         exit(path) {

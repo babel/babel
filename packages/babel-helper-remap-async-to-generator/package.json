@@ -5,8 +5,11 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-remap-async-to-generator",
   "license": "MIT",
   "main": "lib/index.js",
+  "scripts": {
+    "version": "node ../../scripts/lerna-version.js"
+  },
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "7.0.0-beta.32",
+    "@babel/helper-caching": "7.0.0-beta.32",
     "@babel/helper-wrap-function": "7.0.0-beta.32",
     "@babel/template": "7.0.0-beta.32",
     "@babel/traverse": "7.0.0-beta.32",

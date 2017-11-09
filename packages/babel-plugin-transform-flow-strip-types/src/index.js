@@ -1,12 +1,16 @@
 import syntaxFlow from "@babel/plugin-syntax-flow";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function() {
   const FLOW_DIRECTIVE = "@flow";
 
   let skipStrip = false;
 
   return {
+    cacheKey: CACHE_KEY,
     inherits: syntaxFlow,
 
     visitor: {

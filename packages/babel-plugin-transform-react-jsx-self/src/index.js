@@ -13,6 +13,9 @@
  */
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 const TRACE_ID = "__self";
 
 export default function() {
@@ -26,6 +29,7 @@ export default function() {
   };
 
   return {
+    cacheKey: CACHE_KEY,
     visitor,
   };
 }

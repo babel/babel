@@ -1,5 +1,6 @@
 import explode from "@babel/helper-explode-assignable-expression";
 import * as t from "@babel/types";
+export { default as CACHE_KEY } from "./_cache-key";
 
 export default function(opts: { build: Function, operator: string }): Object {
   const { build, operator } = opts;

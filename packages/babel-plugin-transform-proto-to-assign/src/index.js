@@ -1,6 +1,9 @@
 import pull from "lodash/pull";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function() {
   function isProtoKey(node) {
     return t.isLiteral(t.toComputedKey(node, node.key), { value: "__proto__" });
@@ -21,6 +24,7 @@ export default function() {
   }
 
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       AssignmentExpression(path, file) {
         if (!isProtoAssignmentExpression(path.node)) return;

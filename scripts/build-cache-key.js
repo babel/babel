@@ -29,8 +29,6 @@ function buildCacheKey(pkgPath, pkgContent) {
     return acc;
   }, []);
 
-  const id = `${name}@${version}`;
-
   let content;
 
   if (name === HELPER_MODULE) {
@@ -40,7 +38,17 @@ function buildCacheKey(pkgPath, pkgContent) {
     // really have any Babel-specific deps at the moment, so the name and version is fine.
     content = `
       "use strict";
-      module.exports = ${JSON.stringify(id)};
+      module.exports = {
+        inspect: function() {
+          return {
+            name: ${JSON.stringify(name)},
+            version: ${JSON.stringify(version)}
+          };
+        },
+        toString: function() {
+          return ${JSON.stringify(`${name}@${version}`)};
+        }
+      };
     `;
   } else if (
     scripts &&
@@ -61,9 +69,10 @@ function buildCacheKey(pkgPath, pkgContent) {
       "use strict";
       var k = ${cachingModule};
 
-      module.exports = k({
-        id: ${JSON.stringify(id)},
-        dependencies: k([
+      module.exports = k.obj({
+        name: ${JSON.stringify(name)},
+        version: ${JSON.stringify(version)},
+        dependencies: k.obj([
           ${`${deps.join(",\n          ")}`}
         ])
       });

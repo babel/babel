@@ -1,8 +1,11 @@
 import type NodePath from "@babel/traverse";
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
 
 export default function(api, options) {
   const { spec } = options;
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       ArrowFunctionExpression(
         path: NodePath<BabelNodeArrowFunctionExpression>,

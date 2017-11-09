@@ -5,7 +5,11 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-builder-react-jsx",
   "license": "MIT",
   "main": "lib/index.js",
+  "scripts": {
+    "version": "node ../../scripts/lerna-version.js"
+  },
   "dependencies": {
+    "@babel/helper-caching": "7.0.0-beta.32",
     "@babel/types": "7.0.0-beta.32",
     "esutils": "^2.0.0"
   }

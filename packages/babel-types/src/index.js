@@ -2,6 +2,8 @@ import toFastProperties from "to-fast-properties";
 import loClone from "lodash/clone";
 import uniq from "lodash/uniq";
 
+export { default as CACHE_KEY } from "./_cache-key";
+
 const t = exports;
 
 /**

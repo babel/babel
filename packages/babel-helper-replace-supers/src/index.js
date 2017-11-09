@@ -2,6 +2,8 @@ import type { NodePath, Scope } from "@babel/traverse";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as t from "@babel/types";
 
+export { default as CACHE_KEY } from "./_cache-key";
+
 // ✌️
 const HARDCORE_THIS_REF = new WeakSet();
 

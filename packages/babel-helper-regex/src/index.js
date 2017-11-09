@@ -1,4 +1,5 @@
 import pull from "lodash/pull";
+export { default as CACHE_KEY } from "./_cache-key";
 
 export function is(node: Object, flag: string): boolean {
   return node.type === "RegExpLiteral" && node.flags.indexOf(flag) >= 0;

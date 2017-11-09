@@ -1,8 +1,12 @@
 import syntaxNullishCoalescingOperator from "@babel/plugin-syntax-nullish-coalescing-operator";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function(api, { loose = false }) {
   return {
+    cacheKey: CACHE_KEY,
     inherits: syntaxNullishCoalescingOperator,
 
     visitor: {

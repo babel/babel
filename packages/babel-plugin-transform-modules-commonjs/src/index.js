@@ -9,6 +9,9 @@ import {
 import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function(api, options) {
   const {
     loose,
@@ -86,6 +89,7 @@ export default function(api, options) {
   };
 
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       Program: {
         exit(path) {

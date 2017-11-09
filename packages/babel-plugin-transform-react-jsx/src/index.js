@@ -2,6 +2,9 @@ import jsx from "@babel/plugin-syntax-jsx";
 import helper from "@babel/helper-builder-react-jsx";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function(api, options) {
   const THROW_IF_NAMESPACE =
     options.throwIfNamespace === undefined ? true : !!options.throwIfNamespace;
@@ -88,6 +91,7 @@ export default function(api, options) {
   };
 
   return {
+    cacheKey: CACHE_KEY,
     inherits: jsx,
     visitor,
   };

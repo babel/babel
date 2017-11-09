@@ -1,5 +1,8 @@
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function() {
   /**
    * Helper function to run a statement before an expression by replacing it with a comma expression
@@ -16,6 +19,7 @@ export default function() {
   }
 
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       Scope({ scope }) {
         for (const name in scope.bindings) {

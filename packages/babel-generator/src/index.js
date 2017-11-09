@@ -1,6 +1,8 @@
 import SourceMap from "./source-map";
 import Printer, { type Format } from "./printer";
 
+export { default as CACHE_KEY } from "./_cache-key";
+
 /**
  * Babel's code generator, turns an ast into code, maintaining sourcemaps,
  * user preferences, and valid output.

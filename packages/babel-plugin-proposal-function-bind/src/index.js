@@ -1,6 +1,9 @@
 import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function() {
   function getTempId(scope) {
     let id = scope.path.getData("functionBind");
@@ -36,6 +39,7 @@ export default function() {
   }
 
   return {
+    cacheKey: CACHE_KEY,
     inherits: syntaxFunctionBind,
 
     visitor: {

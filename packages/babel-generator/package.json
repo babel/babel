@@ -10,7 +10,11 @@
   "files": [
     "lib"
   ],
+  "scripts": {
+    "version": "node ../../scripts/lerna-version.js"
+  },
   "dependencies": {
+    "@babel/helper-caching": "7.0.0-beta.32",
     "@babel/types": "7.0.0-beta.32",
     "jsesc": "^2.5.1",
     "lodash": "^4.2.0",

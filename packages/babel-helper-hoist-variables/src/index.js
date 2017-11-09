@@ -1,4 +1,5 @@
 import * as t from "@babel/types";
+export { default as CACHE_KEY } from "./_cache-key";
 
 const visitor = {
   Scope(path, state) {

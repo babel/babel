@@ -1,6 +1,8 @@
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
 import definitions from "./definitions";
 
 export default function(api, options) {
@@ -25,6 +27,7 @@ export default function(api, options) {
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
   return {
+    cacheKey: CACHE_KEY,
     pre(file) {
       if (helpers !== false) {
         file.set("helperGenerator", name => {

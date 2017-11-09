@@ -2,6 +2,8 @@ import traverse from "@babel/traverse";
 import * as t from "@babel/types";
 import helpers from "./helpers";
 
+export { default as CACHE_KEY } from "./_cache-key";
+
 function makePath(path) {
   const parts = [];
 

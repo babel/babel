@@ -1,6 +1,9 @@
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function(api, opts) {
   const { useBuiltIns = false } = opts;
   if (typeof useBuiltIns !== "boolean") {
@@ -129,6 +132,7 @@ export default function(api, opts) {
   }
 
   return {
+    cacheKey: CACHE_KEY,
     inherits: syntaxObjectRestSpread,
 
     visitor: {

@@ -2,6 +2,8 @@ import bindifyDecorators from "@babel/helper-bindify-decorators";
 import type { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
 
+export { default as CACHE_KEY } from "./_cache-key";
+
 export default function(classPath) {
   classPath.assertClass();
 

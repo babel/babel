@@ -7,7 +7,11 @@
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-module-transforms",
   "main": "lib/index.js",
+  "scripts": {
+    "version": "node ../../scripts/lerna-version.js"
+  },
   "dependencies": {
+    "@babel/helper-caching": "7.0.0-beta.32",
     "@babel/helper-module-imports": "7.0.0-beta.32",
     "@babel/helper-simple-access": "7.0.0-beta.32",
     "@babel/template": "7.0.0-beta.32",

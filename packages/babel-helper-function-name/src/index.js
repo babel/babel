@@ -1,6 +1,7 @@
 import getFunctionArity from "@babel/helper-get-function-arity";
 import template from "@babel/template";
 import * as t from "@babel/types";
+export { default as CACHE_KEY } from "./_cache-key";
 
 const buildPropertyMethodAssignmentWrapper = template(`
   (function (FUNCTION_KEY) {

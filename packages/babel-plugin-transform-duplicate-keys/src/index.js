@@ -1,5 +1,8 @@
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 function getName(key) {
   if (t.isIdentifier(key)) {
     return key.name;
@@ -9,6 +12,7 @@ function getName(key) {
 
 export default function() {
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       ObjectExpression(path) {
         const { node } = path;

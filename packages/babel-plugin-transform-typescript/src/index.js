@@ -1,6 +1,9 @@
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 import transpileEnum from "./enum";
 
 function isInType(path) {
@@ -21,6 +24,7 @@ interface State {
 
 export default function() {
   return {
+    cacheKey: CACHE_KEY,
     inherits: syntaxTypeScript,
     visitor: {
       //"Pattern" alias doesn't include Identifier or RestElement.

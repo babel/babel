@@ -1,5 +1,6 @@
 import esutils from "esutils";
 import * as t from "@babel/types";
+export { default as CACHE_KEY } from "./_cache-key";
 
 type ElementState = {
   tagExpr: Object, // tag node

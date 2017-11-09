@@ -3,6 +3,9 @@
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import { template, types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 const buildClassDecorator = template(`
   DECORATOR(CLASS_REF = INNER) || CLASS_REF;
 `);
@@ -319,6 +322,7 @@ export default function() {
   }
 
   return {
+    cacheKey: CACHE_KEY,
     inherits: syntaxDecorators,
 
     visitor: {
