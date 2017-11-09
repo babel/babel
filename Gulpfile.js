@@ -5,7 +5,6 @@ const through = require("through2");
 const chalk = require("chalk");
 const newer = require("gulp-newer");
 const babel = require("gulp-babel");
-const watch = require("gulp-watch");
 const gutil = require("gulp-util");
 const filter = require("gulp-filter");
 const gulp = require("gulp");
@@ -72,9 +71,7 @@ gulp.task("build", function() {
 });
 
 gulp.task("watch", ["build"], function() {
-  watch(sources.map(getGlobFromSource), { debounceDelay: 200 }, function() {
-    gulp.start("build");
-  });
+  gulp.watch(sources.map(getGlobFromSource), { debounceDelay: 200 }, ["build"]);
 });
 
 registerStandalonePackageTask(
