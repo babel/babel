@@ -52,14 +52,13 @@ export default function({ types: t }) {
     visitor: {
       ExportDefaultDeclaration({ node }, state) {
         if (isCreateClass(node.declaration)) {
-          let displayName = path.basename(
-            state.file.opts.filename,
-            path.extname(state.file.opts.filename),
-          );
+          const filename = state.filename || "unknown";
+
+          let displayName = path.basename(filename, path.extname(filename));
 
           // ./{module name}/index.js
           if (displayName === "index") {
-            displayName = path.basename(path.dirname(state.file.opts.filename));
+            displayName = path.basename(path.dirname(filename));
           }
 
           addDisplayName(displayName, node.declaration);

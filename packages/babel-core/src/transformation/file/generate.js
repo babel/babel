@@ -19,11 +19,7 @@ export default function generateCode(
     gen = opts.generatorOpts.generator;
   }
 
-  let { code: outputCode, map: outputMap } = gen(
-    ast,
-    opts.generatorOpts ? Object.assign(opts, opts.generatorOpts) : opts,
-    code,
-  );
+  let { code: outputCode, map: outputMap } = gen(ast, opts.generatorOpts, code);
 
   if (shebang) {
     // add back shebang

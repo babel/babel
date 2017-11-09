@@ -7,11 +7,14 @@ export default class PluginPass {
   key: ?string;
   file: File;
   opts: Object;
+  filename: string | void;
 
   constructor(file: File, key: ?string, options: ?Object) {
     this.key = key;
     this.file = file;
     this.opts = options || {};
+    this.filename =
+      typeof file.opts.filename === "string" ? file.opts.filename : undefined;
   }
 
   set(key: mixed, val: mixed) {

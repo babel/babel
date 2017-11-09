@@ -163,16 +163,18 @@ class OptionManager {
       filenameRelative: opts.filename,
     });
 
-    const basenameRelative = path.basename(opts.filenameRelative);
+    if (typeof opts.filenameRelative === "string") {
+      const basenameRelative = path.basename(opts.filenameRelative);
 
-    if (path.extname(opts.filenameRelative) === ".mjs") {
-      opts.sourceType = "module";
+      if (path.extname(opts.filenameRelative) === ".mjs") {
+        opts.sourceType = "module";
+      }
+
+      defaults(opts, {
+        sourceFileName: basenameRelative,
+        sourceMapTarget: basenameRelative,
+      });
     }
-
-    defaults(opts, {
-      sourceFileName: basenameRelative,
-      sourceMapTarget: basenameRelative,
-    });
 
     return {
       options: opts,
@@ -461,7 +463,6 @@ function createInitialOptions() {
   return {
     sourceType: "module",
     babelrc: true,
-    filename: "unknown",
     code: true,
     ast: true,
     comments: true,
