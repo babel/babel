@@ -120,6 +120,7 @@ class OptionManager {
 
     // Tack the passes onto the object itself so that, if this object is passed back to Babel a second time,
     // it will be in the right structure to not change behavior.
+    opts.babelrc = false;
     opts.plugins = this.passes[0];
     opts.presets = this.passes
       .slice(1)
