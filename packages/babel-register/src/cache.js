@@ -62,3 +62,11 @@ export function load() {
 export function get(): Object {
   return data;
 }
+
+/**
+ * Clear the cache object.
+ */
+
+export function clear() {
+  data = {};
+}
