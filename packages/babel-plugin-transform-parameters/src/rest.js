@@ -1,5 +1,4 @@
-import template from "@babel/template";
-import * as t from "@babel/types";
+import { template, types as t } from "@babel/core";
 
 const buildRest = template(`
   for (var LEN = ARGUMENTS.length,

@@ -1,8 +1,9 @@
 import { addDefault, isModule } from "@babel/helper-module-imports";
+import { types as t } from "@babel/core";
 
 import definitions from "./definitions";
 
-export default function({ types: t }, options) {
+export default function(api, options) {
   const {
     helpers,
     moduleName = "@babel/runtime",

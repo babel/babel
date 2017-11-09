@@ -1,6 +1,7 @@
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default function() {
   function hasRestElement(path) {
     let foundRestElement = false;
     path.traverse({

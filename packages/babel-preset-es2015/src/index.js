@@ -24,7 +24,7 @@ import transformES2015ModulesUMD from "@babel/plugin-transform-modules-umd";
 import transformES2015Instanceof from "@babel/plugin-transform-instanceof";
 import transformRegenerator from "@babel/plugin-transform-regenerator";
 
-export default function(context, opts = {}) {
+export default function(api, opts = {}) {
   const moduleTypes = ["commonjs", "amd", "umd", "systemjs"];
   let loose = false;
   let modules = "commonjs";

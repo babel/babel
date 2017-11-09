@@ -146,7 +146,7 @@ const filterItems = (
 };
 
 export default function buildPreset(
-  context: Object,
+  api: Object,
   opts: Object = {},
 ): { plugins: Array<Plugin> } {
   const {

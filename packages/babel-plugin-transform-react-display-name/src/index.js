@@ -1,6 +1,7 @@
 import path from "path";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default function() {
   function addDisplayName(id, call) {
     const props = call.arguments[0].properties;
     let safe = true;

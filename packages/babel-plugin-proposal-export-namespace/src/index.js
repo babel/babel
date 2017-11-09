@@ -1,6 +1,7 @@
 import syntaxExportExtensions from "@babel/plugin-syntax-export-extensions";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default function() {
   return {
     inherits: syntaxExportExtensions,
 

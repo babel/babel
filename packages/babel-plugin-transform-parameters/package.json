@@ -7,10 +7,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-call-delegate": "7.0.0-beta.31",
-    "@babel/helper-get-function-arity": "7.0.0-beta.31",
-    "@babel/template": "7.0.0-beta.31",
-    "@babel/traverse": "7.0.0-beta.31",
-    "@babel/types": "7.0.0-beta.31"
+    "@babel/helper-get-function-arity": "7.0.0-beta.31"
   },
   "keywords": [
     "babel-plugin"

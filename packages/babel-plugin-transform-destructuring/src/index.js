@@ -1,4 +1,6 @@
-export default function({ types: t }) {
+import { types as t } from "@babel/core";
+
+export default function() {
   /**
    * Test if a VariableDeclaration's declarations contains any Patterns.
    */

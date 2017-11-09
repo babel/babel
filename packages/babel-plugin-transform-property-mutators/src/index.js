@@ -1,6 +1,7 @@
 import * as defineMap from "@babel/helper-define-map";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default function() {
   return {
     visitor: {
       ObjectExpression(path, file) {
