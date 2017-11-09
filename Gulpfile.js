@@ -37,34 +37,11 @@ gulp.task("build", function() {
       return gulp
         .src(getGlobFromSource(source), { base: base })
         .pipe(f)
-        .pipe(
-          plumber({
-            errorHandler: function(err) {
-              gutil.log(err.stack);
-            },
-          })
-        )
-        .pipe(
-          newer({
-            dest: base,
-            map: swapSrcWithLib,
-          })
-        )
-        .pipe(
-          through.obj(function(file, enc, callback) {
-            gutil.log("Compiling", "'" + chalk.cyan(file.relative) + "'...");
-            callback(null, file);
-          })
-        )
+        .pipe(withPlumber())
+        .pipe(newer({ dest: base, map: swapSrcWithLib }))
+        .pipe(logCompilingMessage())
         .pipe(babel())
-        .pipe(
-          through.obj(function(file, enc, callback) {
-            // Passing 'file.relative' because newer() above uses a relative
-            // path and this keeps it consistent.
-            file.path = path.resolve(file.base, swapSrcWithLib(file.relative));
-            callback(null, file);
-          })
-        )
+        .pipe(rewriteFilePath(swapSrcWithLib))
         .pipe(gulp.dest(base));
     })
   );
@@ -73,6 +50,30 @@ gulp.task("build", function() {
 gulp.task("watch", ["build"], function() {
   gulp.watch(sources.map(getGlobFromSource), { debounceDelay: 200 }, ["build"]);
 });
+
+function rewriteFilePath(nameMapper) {
+  return through.obj(function(file, enc, callback) {
+    // Passing 'file.relative' because newer() above uses a relative
+    // path and this keeps it consistent.
+    file.path = path.resolve(file.base, nameMapper(file.relative));
+    callback(null, file);
+  });
+}
+
+function withPlumber() {
+  return plumber({
+    errorHandler: function(err) {
+      gutil.log(err.stack);
+    },
+  });
+}
+
+function logCompilingMessage() {
+  return through.obj(function(file, enc, callback) {
+    gutil.log("Compiling", "'" + chalk.cyan(file.relative) + "'...");
+    callback(null, file);
+  });
+}
 
 registerStandalonePackageTask(
   gulp,
