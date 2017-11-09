@@ -58,14 +58,13 @@ export function runSync(
   transformFile(file, config.passes);
 
   const opts = file.opts;
-  const { outputCode, outputMap } = opts.code
-    ? generateCode(config.passes, file)
-    : {};
+  const { outputCode, outputMap } =
+    opts.code !== false ? generateCode(config.passes, file) : {};
 
   return {
     metadata: file.metadata,
     options: opts,
-    ast: opts.ast ? file.ast : null,
+    ast: opts.ast !== false ? file.ast : null,
     code: outputCode === undefined ? null : outputCode,
     map: outputMap === undefined ? null : outputMap,
   };
