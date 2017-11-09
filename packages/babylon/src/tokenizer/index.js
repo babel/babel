@@ -53,6 +53,7 @@ allowedNumericSeparatorSiblings.bin = [
 allowedNumericSeparatorSiblings.oct = [
   // 0 - 7
   ...allowedNumericSeparatorSiblings.bin,
+
   charCodes.digit2,
   charCodes.digit3,
   charCodes.digit4,
@@ -63,6 +64,7 @@ allowedNumericSeparatorSiblings.oct = [
 allowedNumericSeparatorSiblings.dec = [
   // 0 - 9
   ...allowedNumericSeparatorSiblings.oct,
+
   charCodes.digit8,
   charCodes.digit9,
 ];
@@ -70,20 +72,20 @@ allowedNumericSeparatorSiblings.dec = [
 allowedNumericSeparatorSiblings.hex = [
   // 0 - 9, A - F, a - f,
   ...allowedNumericSeparatorSiblings.dec,
-  // A - F
+
   charCodes.uppercaseA,
   charCodes.uppercaseB,
-  67,
-  68,
+  charCodes.uppercaseC,
+  charCodes.uppercaseD,
   charCodes.uppercaseE,
-  70,
-  // a - f
+  charCodes.uppercaseF,
+
   charCodes.lowercaseA,
   charCodes.lowercaseB,
-  99,
-  100,
+  charCodes.lowercaseC,
+  charCodes.lowercaseD,
   charCodes.lowercaseE,
-  102,
+  charCodes.lowercaseF,
 ];
 
 // Object type used to represent tokens. Note that normally, tokens
@@ -115,7 +117,7 @@ function codePointToString(code: number): string {
   } else {
     return String.fromCharCode(
       ((code - 0x10000) >> 10) + 0xd800,
-      ((code - 0x10000) & 1023) + 0xdc00,
+      ((code - 0x10000) & charCodes.lowercaseF) + 0xdc00,
     );
   }
 }
@@ -302,10 +304,10 @@ export default class Tokenizer extends LocationParser {
     let ch = this.input.charCodeAt((this.state.pos += startSkip));
     if (this.state.pos < this.input.length) {
       while (
-        ch !== 10 &&
-        ch !== 13 &&
-        ch !== 8232 &&
-        ch !== 8233 &&
+        ch !== charCodes.lineFeed &&
+        ch !== charCodes.carriageReturn &&
+        ch !== charCodes.lineSeparator &&
+        ch !== charCodes.paragraphSeparator &&
         ++this.state.pos < this.input.length
       ) {
         ch = this.input.charCodeAt(this.state.pos);
@@ -335,7 +337,9 @@ export default class Tokenizer extends LocationParser {
           break;
 
         case charCodes.carriageReturn:
-          if (this.input.charCodeAt(this.state.pos + 1) === 10) {
+          if (
+            this.input.charCodeAt(this.state.pos + 1) === charCodes.lineFeed
+          ) {
             ++this.state.pos;
           }
 
@@ -347,9 +351,9 @@ export default class Tokenizer extends LocationParser {
           this.state.lineStart = this.state.pos;
           break;
 
-        case charCodes.slash: // '/'
+        case charCodes.slash:
           switch (this.input.charCodeAt(this.state.pos + 1)) {
-            case charCodes.asterisk: // '*'
+            case charCodes.asterisk:
               this.skipBlockComment();
               break;
 
@@ -471,7 +475,7 @@ export default class Tokenizer extends LocationParser {
       if (next === charCodes.greaterThan) {
         this.finishOp(tt.pipeline, 2);
         return;
-      } else if (next === 125 && this.hasPlugin("flow")) {
+      } else if (next === charCodes.rightCurlyBrace && this.hasPlugin("flow")) {
         // '|}'
         this.finishOp(tt.braceBarR, 2);
         return;
@@ -611,7 +615,7 @@ export default class Tokenizer extends LocationParser {
 
   getTokenFromCode(code: number): void {
     switch (code) {
-      case 35: // '#'
+      case charCodes.numberSign:
         if (
           (this.hasPlugin("classPrivateProperties") ||
             this.hasPlugin("classPrivateMethods")) &&
@@ -635,27 +639,27 @@ export default class Tokenizer extends LocationParser {
         return;
 
       // Punctuation tokens.
-      case 40:
+      case charCodes.leftParenthesis:
         ++this.state.pos;
         this.finishToken(tt.parenL);
         return;
-      case 41:
+      case charCodes.rightParenthesis:
         ++this.state.pos;
         this.finishToken(tt.parenR);
         return;
-      case 59:
+      case charCodes.semicolon:
         ++this.state.pos;
         this.finishToken(tt.semi);
         return;
-      case 44:
+      case charCodes.comma:
         ++this.state.pos;
         this.finishToken(tt.comma);
         return;
-      case 91:
+      case charCodes.leftSquareBracket:
         ++this.state.pos;
         this.finishToken(tt.bracketL);
         return;
-      case 93:
+      case charCodes.rightSquareBracket:
         ++this.state.pos;
         this.finishToken(tt.bracketR);
         return;
@@ -672,15 +676,15 @@ export default class Tokenizer extends LocationParser {
         }
         return;
 
-      case 125:
+      case charCodes.rightCurlyBrace:
         ++this.state.pos;
         this.finishToken(tt.braceR);
         return;
 
-      case 58:
+      case charCodes.colon:
         if (
           this.hasPlugin("functionBind") &&
-          this.input.charCodeAt(this.state.pos + 1) === 58
+          this.input.charCodeAt(this.state.pos + 1) === charCodes.colon
         ) {
           this.finishOp(tt.doubleColon, 2);
         } else {
@@ -689,10 +693,10 @@ export default class Tokenizer extends LocationParser {
         }
         return;
 
-      case 63:
+      case charCodes.questionMark:
         this.readToken_question();
         return;
-      case 64:
+      case charCodes.atSign:
         ++this.state.pos;
         this.finishToken(tt.at);
         return;
@@ -703,7 +707,6 @@ export default class Tokenizer extends LocationParser {
         return;
 
       case charCodes.digit0: {
-        // '0'
         const next = this.input.charCodeAt(this.state.pos + 1);
         // '0x', '0X' - hex number
         if (next === charCodes.lowercaseX || next === charCodes.uppercaseX) {
@@ -736,7 +739,7 @@ export default class Tokenizer extends LocationParser {
         return;
 
       // Quotes produce strings.
-      case charCodes.questionMark:
+      case charCodes.quotationMark:
       case charCodes.apostrophe:
         this.readString(code);
         return;
@@ -765,7 +768,7 @@ export default class Tokenizer extends LocationParser {
         return;
 
       case charCodes.plusSign:
-      case charCodes.dash: // '+-'
+      case charCodes.dash:
         this.readToken_plus_min(code);
         return;
 
@@ -887,9 +890,9 @@ export default class Tokenizer extends LocationParser {
       }
 
       if (code >= charCodes.lowercaseA) {
-        val = code - charCodes.lowercaseA + 10; // a
+        val = code - charCodes.lowercaseA + charCodes.lineFeed;
       } else if (code >= charCodes.uppercaseA) {
-        val = code - charCodes.uppercaseA + 10; // A
+        val = code - charCodes.uppercaseA + charCodes.lineFeed;
       } else if (charCodes.isDigit(code)) {
         val = code - charCodes.digit0; // 0-9
       } else {
@@ -943,7 +946,7 @@ export default class Tokenizer extends LocationParser {
 
   readNumber(startsWithDot: boolean): void {
     const start = this.state.pos;
-    let octal = this.input.charCodeAt(start) === charCodes.digit0; // '0'
+    let octal = this.input.charCodeAt(start) === charCodes.digit0;
     let isFloat = false;
     let isBigInt = false;
 
@@ -1016,7 +1019,6 @@ export default class Tokenizer extends LocationParser {
     let code;
 
     if (ch === charCodes.leftCurlyBrace) {
-      // '{'
       const codePos = ++this.state.pos;
       code = this.readHexChar(
         this.input.indexOf("}", this.state.pos) - this.state.pos,
@@ -1050,7 +1052,6 @@ export default class Tokenizer extends LocationParser {
       const ch = this.input.charCodeAt(this.state.pos);
       if (ch === quote) break;
       if (ch === charCodes.backslash) {
-        // '\'
         out += this.input.slice(chunkStart, this.state.pos);
         // $FlowFixMe
         out += this.readEscapedChar(false);
@@ -1099,7 +1100,6 @@ export default class Tokenizer extends LocationParser {
         return;
       }
       if (ch === charCodes.backslash) {
-        // '\'
         out += this.input.slice(chunkStart, this.state.pos);
         const escaped = this.readEscapedChar(true);
         if (escaped === null) {
@@ -1112,9 +1112,11 @@ export default class Tokenizer extends LocationParser {
         out += this.input.slice(chunkStart, this.state.pos);
         ++this.state.pos;
         switch (ch) {
-          case 13:
-            if (this.input.charCodeAt(this.state.pos) === 10) ++this.state.pos;
-          case 10:
+          case charCodes.carriageReturn:
+            if (this.input.charCodeAt(this.state.pos) === charCodes.lineFeed) {
+              ++this.state.pos;
+            }
+          case charCodes.lineFeed:
             out += "\n";
             break;
           default:
@@ -1137,30 +1139,31 @@ export default class Tokenizer extends LocationParser {
     const ch = this.input.charCodeAt(++this.state.pos);
     ++this.state.pos;
     switch (ch) {
-      case 110:
-        return "\n"; // 'n' -> '\n'
-      case 114:
-        return "\r"; // 'r' -> '\r'
+      case charCodes.lowercaseN:
+        return "\n";
+      case charCodes.lowercaseR:
+        return "\r";
       case charCodes.lowercaseX: {
         const code = this.readHexChar(2, throwOnInvalid);
         return code === null ? null : String.fromCharCode(code);
       }
-      case 117: {
-        // 'u'
+      case charCodes.lowercaseU: {
         const code = this.readCodePoint(throwOnInvalid);
         return code === null ? null : codePointToString(code);
       }
-      case 116:
-        return "\t"; // 't' -> '\t'
+      case charCodes.lowercaseT:
+        return "\t";
       case charCodes.lowercaseB:
-        return "\b"; // 'b' -> '\b'
-      case 118:
-        return "\u000b"; // 'v' -> '\u000b'
-      case 102:
-        return "\f"; // 'f' -> '\f'
-      case 13:
-        if (this.input.charCodeAt(this.state.pos) === 10) ++this.state.pos; // '\r\n'
-      case 10: // ' \n'
+        return "\b";
+      case charCodes.lowercaseV:
+        return "\u000b";
+      case charCodes.lowercaseF:
+        return "\f";
+      case charCodes.carriageReturn:
+        if (this.input.charCodeAt(this.state.pos) === charCodes.lineFeed) {
+          ++this.state.pos;
+        }
+      case charCodes.lineFeed:
         this.state.lineStart = this.state.pos;
         ++this.state.curLine;
         return "";
@@ -1233,8 +1236,7 @@ export default class Tokenizer extends LocationParser {
         word += this.input.slice(chunkStart, this.state.pos);
         const escStart = this.state.pos;
 
-        if (this.input.charCodeAt(++this.state.pos) !== 117) {
-          // "u"
+        if (this.input.charCodeAt(++this.state.pos) !== charCodes.lowercaseU) {
           this.raise(
             this.state.pos,
             "Expecting Unicode escape sequence \\uXXXX",
