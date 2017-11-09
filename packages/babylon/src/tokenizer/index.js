@@ -117,7 +117,7 @@ function codePointToString(code: number): string {
   } else {
     return String.fromCharCode(
       ((code - 0x10000) >> 10) + 0xd800,
-      ((code - 0x10000) & charCodes.lowercaseF) + 0xdc00,
+      ((code - 0x10000) & 1023) + 0xdc00,
     );
   }
 }
@@ -233,7 +233,7 @@ export default class Tokenizer extends LocationParser {
   readToken(code: number): void {
     // Identifier or keyword. '\uXXXX' sequences are allowed in
     // identifiers, so '\' also dispatches to that.
-    if (isIdentifierStart(code) || code === charCodes.backslash /* '\' */) {
+    if (isIdentifierStart(code) || code === charCodes.backslash) {
       this.readWord();
     } else {
       this.getTokenFromCode(code);
