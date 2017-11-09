@@ -30,8 +30,7 @@ function installSourceMapSupport() {
   });
 }
 
-registerCache.load();
-let cache = registerCache.get();
+let cache;
 
 function mtime(filename) {
   return +fs.statSync(filename).mtime;
@@ -103,7 +102,13 @@ export default function register(opts?: Object = {}) {
   opts = Object.assign({}, opts);
   if (opts.extensions) hookExtensions(opts.extensions);
 
-  if (opts.cache === false) cache = null;
+  if (opts.cache === false && cache) {
+    registerCache.clear();
+    cache = null;
+  } else if (opts.cache !== false && !cache) {
+    registerCache.load();
+    cache = registerCache.get();
+  }
 
   delete opts.extensions;
   delete opts.cache;
