@@ -1,5 +1,7 @@
 {
   "plugins": [
-    ["proposal-unicode-property-regex"]
+    ["proposal-unicode-property-regex", {
+      "useUnicodeFlag": false
+    }]
   ]
 }
