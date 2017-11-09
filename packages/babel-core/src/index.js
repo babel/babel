@@ -35,9 +35,13 @@ export function Plugin(alias: string) {
 }
 
 export { default as transform } from "./transform";
-export { default as transformFromAst } from "./transform-ast";
+export { default as transformSync } from "./transform-sync";
+
 export { default as transformFile } from "./transform-file";
 export { default as transformFileSync } from "./transform-file-sync";
+
+export { default as transformFromAst } from "./transform-ast";
+export { default as transformFromAstSync } from "./transform-ast-sync";
 
 /**
  * Recommended set of compilable extensions. Not used in @babel/core directly, but meant as

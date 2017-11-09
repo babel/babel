@@ -125,6 +125,8 @@ const COMMON_VALIDATORS: ValidatorSet = {
     $PropertyType<ValidatedOptions, "generatorOpts">,
   >),
 };
+export type InputOptions = ValidatedOptions;
+
 export type ValidatedOptions = {
   filename?: string,
   filenameRelative?: string,
