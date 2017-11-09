@@ -1,11 +1,11 @@
 {
   "name": "@babel/helper-regex",
   "version": "7.0.0-beta.31",
-  "description": "Helper function to check for literal RegEx",
+  "description": "Helper visitor to transform regular expressions using regexpu",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-regex",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "lodash": "^4.2.0"
+    "regexpu-core": "^4.1.3"
   }
 }
