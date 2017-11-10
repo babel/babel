@@ -1,11 +1,13 @@
 function fn(a1) {
   var a2 = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 4;
-  var _arguments$ = arguments[2],
-      a3 = _arguments$.a3,
-      a4 = _arguments$.a4;
-  var a5 = arguments[3];
 
-  var _ref = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {},
-      a6 = _ref.a6,
-      a7 = _ref.a7;
+  var _ref = arguments.length > 2 ? arguments[2] : undefined,
+      a3 = _ref.a3,
+      a4 = _ref.a4;
+
+  var a5 = arguments.length > 3 ? arguments[3] : undefined;
+
+  var _ref2 = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {},
+      a6 = _ref2.a6,
+      a7 = _ref2.a7;
 }
