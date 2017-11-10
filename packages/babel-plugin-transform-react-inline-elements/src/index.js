@@ -1,6 +1,7 @@
 import helper from "@babel/helper-builder-react-jsx";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default function() {
   function hasRefOrSpread(attrs) {
     for (let i = 0; i < attrs.length; i++) {
       const attr = attrs[i];

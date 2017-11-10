@@ -1,7 +1,7 @@
 // Fork of https://github.com/loganfsmyth/babel-plugin-proposal-decorators-legacy
 
-import template from "@babel/template";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
+import { template, types as t } from "@babel/core";
 
 const buildClassDecorator = template(`
   DECORATOR(CLASS_REF = INNER) || CLASS_REF;
@@ -82,7 +82,7 @@ const buildApplyDecoratedDescriptor = template(`
     }
 `);
 
-export default function({ types: t }) {
+export default function() {
   /**
    * Add a helper to take an initial descriptor, apply some decorators to it, and optionally
    * define the property.

@@ -1,6 +1,7 @@
 import syntaxNullishCoalescingOperator from "@babel/plugin-syntax-nullish-coalescing-operator";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }, { loose = false }) {
+export default function(api, { loose = false }) {
   return {
     inherits: syntaxNullishCoalescingOperator,
 

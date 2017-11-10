@@ -1,7 +1,8 @@
 import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
 import wrapFunction from "@babel/helper-wrap-function";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default function() {
   const isFunctionSent = node =>
     t.isIdentifier(node.meta, { name: "function" }) &&
     t.isIdentifier(node.property, { name: "sent" });

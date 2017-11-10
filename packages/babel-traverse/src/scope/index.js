@@ -9,12 +9,6 @@ import globals from "globals";
 import * as t from "@babel/types";
 import { scope as scopeCache } from "../cache";
 
-// Number of calls to the crawl method to figure out whether we're
-// somewhere inside a call that was trigerred by call. This is meant
-// to be used to figure out whether a warning should be trigerred.
-// See `warnOnFlowBinding`.
-let _crawlCallsCount = 0;
-
 // Recursively gathers the identifying names of a node.
 function gatherNodeParts(node: Object, parts: Array) {
   if (t.isModuleDeclaration(node)) {
@@ -455,6 +449,8 @@ export default class Scope {
   }
 
   registerDeclaration(path: NodePath) {
+    if (path.isFlow()) return;
+
     if (path.isLabeledStatement()) {
       this.registerLabel(path);
     } else if (path.isFunctionDeclaration()) {
@@ -517,7 +513,7 @@ export default class Scope {
 
     for (const name in ids) {
       for (const id of (ids[name]: Array<Object>)) {
-        let local = this.getOwnBinding(name);
+        const local = this.getOwnBinding(name);
 
         if (local) {
           // same identifier so continue safely as we're likely trying to register it
@@ -526,11 +522,6 @@ export default class Scope {
 
           this.checkBlockScopedCollisions(local, kind, name, id);
         }
-
-        // It's erroneous that we currently consider flow a binding, however, we can't
-        // remove it because people might be depending on it. See warning section
-        // in `warnOnFlowBinding`.
-        if (local && local.path.isFlow()) local = null;
 
         parent.references[name] = true;
 
@@ -677,15 +668,7 @@ export default class Scope {
   }
 
   crawl() {
-    _crawlCallsCount++;
-    this._crawl();
-    _crawlCallsCount--;
-  }
-
-  _crawl() {
     const path = this.path;
-
-    //
 
     this.references = Object.create(null);
     this.bindings = Object.create(null);
@@ -908,28 +891,17 @@ export default class Scope {
     return this.getBindingIdentifier(name) === node;
   }
 
-  warnOnFlowBinding(binding) {
-    if (_crawlCallsCount === 0 && binding && binding.path.isFlow()) {
-      console.warn(`
-        You or one of the Babel plugins you are using are using Flow declarations as bindings.
-        Support for this will be removed in version 7. To find out the caller, grep for this
-        message and change it to a \`console.trace()\`.
-      `);
-    }
-    return binding;
-  }
-
   getBinding(name: string) {
     let scope = this;
 
     do {
       const binding = scope.getOwnBinding(name);
-      if (binding) return this.warnOnFlowBinding(binding);
+      if (binding) return binding;
     } while ((scope = scope.parent));
   }
 
   getOwnBinding(name: string) {
-    return this.warnOnFlowBinding(this.bindings[name]);
+    return this.bindings[name];
   }
 
   getBindingIdentifier(name: string) {

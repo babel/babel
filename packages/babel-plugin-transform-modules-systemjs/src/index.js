@@ -1,5 +1,5 @@
 import hoistVariables from "@babel/helper-hoist-variables";
-import template from "@babel/template";
+import { template, types as t } from "@babel/core";
 
 const buildTemplate = template(`
   SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
@@ -22,7 +22,7 @@ const buildExportAll = template(`
 
 const TYPE_IMPORT = "Import";
 
-export default function({ types: t }, options) {
+export default function(api, options) {
   const { systemGlobal = "System" } = options;
   const IGNORE_REASSIGNMENT_SYMBOL = Symbol();
 

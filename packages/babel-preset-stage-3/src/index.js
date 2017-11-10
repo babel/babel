@@ -5,13 +5,30 @@ import transformObjectRestSpread from "@babel/plugin-proposal-object-rest-spread
 import transformOptionalCatchBinding from "@babel/plugin-proposal-optional-catch-binding";
 import transformUnicodePropertyRegex from "@babel/plugin-proposal-unicode-property-regex";
 
-export default function() {
+export default function(context, opts = {}) {
+  let loose = false;
+  let useBuiltIns = false;
+
+  if (opts !== undefined) {
+    if (opts.loose !== undefined) loose = opts.loose;
+    if (opts.useBuiltIns !== undefined) useBuiltIns = opts.useBuiltIns;
+  }
+
+  if (typeof loose !== "boolean") {
+    throw new Error("@babel/preset-stage-3 'loose' option must be a boolean.");
+  }
+  if (typeof useBuiltIns !== "boolean") {
+    throw new Error(
+      "@babel/preset-stage-3 'useBuiltIns' option must be a boolean.",
+    );
+  }
+
   return {
     plugins: [
       syntaxDynamicImport,
       transformAsyncGeneratorFunctions,
-      transformClassProperties,
-      transformObjectRestSpread,
+      [transformClassProperties, { loose }],
+      [transformObjectRestSpread, { useBuiltIns }],
       transformOptionalCatchBinding,
       transformUnicodePropertyRegex,
     ],

@@ -31,7 +31,7 @@ export function makeStrongCache<ArgT, ResultT>(
  * configures its caching behavior. Cached values are stored weakly and the function argument must be
  * an object type.
  */
-export function makeWeakCache<ArgT: {} | Array<*>, ResultT>(
+export function makeWeakCache<ArgT: {} | Array<*> | $ReadOnlyArray<*>, ResultT>(
   handler: (ArgT, CacheConfigurator) => ResultT,
   autoPermacache?: boolean,
 ): ArgT => ResultT {

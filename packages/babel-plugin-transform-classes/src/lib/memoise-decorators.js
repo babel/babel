@@ -1,5 +1,5 @@
 import type { Scope } from "@babel/traverse";
-import * as t from "@babel/types";
+import { types as t } from "@babel/core";
 
 export default function(
   decorators: Array<Object>,

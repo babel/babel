@@ -1,6 +1,7 @@
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }, options) {
+export default function(api, options) {
   const { loose = false } = options;
 
   function optional(path, replacementPath) {

@@ -1,8 +1,8 @@
 import nameFunction from "@babel/helper-function-name";
-import template from "@babel/template";
 import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
+import { template, types as t } from "@babel/core";
 
-export default function({ types: t }, options) {
+export default function(api, options) {
   const { loose } = options;
 
   const findBareSupers = {

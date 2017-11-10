@@ -212,7 +212,9 @@ export default class File {
               column: loc.column + 1,
             },
           },
-          this.opts,
+          {
+            highlightCode: this.opts.highlightCode,
+          },
         );
     }
 

@@ -4,6 +4,12 @@ import { getEnv } from "./helpers/environment";
 import path from "path";
 import micromatch from "micromatch";
 import buildDebug from "debug";
+import {
+  validate,
+  type ValidatedOptions,
+  type PluginList,
+  type IgnoreList,
+} from "./options";
 
 const debug = buildDebug("babel:config:config-chain");
 
@@ -11,26 +17,31 @@ import { findConfigs, loadConfig, type ConfigFile } from "./loading/files";
 
 import { makeWeakCache, makeStrongCache } from "./caching";
 
-type ConfigItem = {
-  type: "options" | "arguments",
-  options: {},
-  dirname: string,
-  alias: string,
-  loc: string,
-};
-
-type ConfigRaw = {
-  type: "options" | "arguments",
-  options: {},
+export type ConfigItem = {
+  type: "arguments" | "env" | "file",
+  options: ValidatedOptions,
   alias: string,
   dirname: string,
 };
 
-export default function buildConfigChain(opts: {}): Array<ConfigItem> | null {
-  if (typeof opts.filename !== "string" && opts.filename != null) {
-    throw new Error(".filename must be a string, null, or undefined");
-  }
+type ConfigPart =
+  | {
+      part: "config",
+      config: ConfigItem,
+      ignore: ?IgnoreList,
+      only: ?IgnoreList,
+      activeEnv: string | null,
+    }
+  | {
+      part: "extends",
+      path: string,
+      dirname: string,
+      activeEnv: string | null,
+    };
 
+export default function buildConfigChain(
+  opts: ValidatedOptions,
+): Array<ConfigItem> | null {
   const filename = opts.filename ? path.resolve(opts.filename) : null;
   const builder = new ConfigChainBuilder(
     filename ? new LoadedFile(filename) : null,
@@ -58,21 +69,34 @@ export default function buildConfigChain(opts: {}): Array<ConfigItem> | null {
 class ConfigChainBuilder {
   file: LoadedFile | null;
   configs: Array<ConfigItem> = [];
+  seenFiles: Set<ConfigFile> = new Set();
 
   constructor(file: LoadedFile | null) {
     this.file = file;
   }
 
-  mergeConfigArguments(opts: {}, dirname: string, envKey: string) {
+  mergeConfigArguments(
+    opts: ValidatedOptions,
+    dirname: string,
+    envKey: string,
+  ) {
     flattenArgumentsOptionsParts(opts, dirname, envKey).forEach(part =>
       this._processConfigPart(part, envKey),
     );
   }
 
   mergeConfigFile(file: ConfigFile, envKey: string) {
-    flattenFileOptionsParts(file)(envKey).forEach(part =>
-      this._processConfigPart(part, envKey),
-    );
+    if (this.seenFiles.has(file)) {
+      throw new Error(
+        `Cycle detected in Babel configuration file through "${file.filepath}".`,
+      );
+    }
+
+    const parts = flattenFileOptionsParts(file)(envKey);
+
+    this.seenFiles.add(file);
+    parts.forEach(part => this._processConfigPart(part, envKey));
+    this.seenFiles.delete(file);
   }
 
   _processConfigPart(part: ConfigPart, envKey: string) {
@@ -92,14 +116,7 @@ class ConfigChainBuilder {
 
       this.configs.push(part.config);
     } else {
-      const extendsConfig = loadConfig(part.path, part.dirname);
-
-      const existingConfig = this.configs.some(config => {
-        return config.alias === extendsConfig.filepath;
-      });
-      if (!existingConfig) {
-        this.mergeConfigFile(extendsConfig, envKey);
-      }
+      this.mergeConfigFile(loadConfig(part.path, part.dirname), envKey);
     }
   }
 }
@@ -110,43 +127,26 @@ class ConfigChainBuilder {
  * object identity preserved between calls so that they can be used for caching.
  */
 function flattenArgumentsOptionsParts(
-  opts: {},
+  opts: ValidatedOptions,
   dirname: string,
   envKey: string,
 ): Array<ConfigPart> {
+  const {
+    env,
+    plugins,
+    presets,
+    passPerPreset,
+    extends: extendsPath,
+    ...options
+  } = opts;
+
   const raw = [];
-
-  const env = typeof opts.env === "object" ? opts.env : null;
-  const plugins = Array.isArray(opts.plugins) ? opts.plugins : null;
-  const presets = Array.isArray(opts.presets) ? opts.presets : null;
-  const passPerPreset =
-    typeof opts.passPerPreset === "boolean" ? opts.passPerPreset : false;
-
   if (env) {
     raw.push(...flattenArgumentsEnvOptionsParts(env)(dirname)(envKey));
   }
 
-  const innerOpts = Object.assign({}, opts);
-  // If the env, plugins, and presets values on the object aren't arrays or
-  // objects, leave them in the base opts so that normal options validation
-  // will throw errors on them later.
-  if (env) delete innerOpts.env;
-  if (plugins) delete innerOpts.plugins;
-  if (presets) {
-    delete innerOpts.presets;
-    delete innerOpts.passPerPreset;
-  }
-  delete innerOpts.extends;
-
-  if (Object.keys(innerOpts).length > 0) {
-    raw.push(
-      ...flattenOptionsParts({
-        type: "arguments",
-        options: innerOpts,
-        alias: "base",
-        dirname,
-      }),
-    );
+  if (Object.keys(options).length > 0) {
+    raw.push(...flattenOptionsParts(buildArgumentsItem(options, dirname)));
   }
 
   if (plugins) {
@@ -154,14 +154,14 @@ function flattenArgumentsOptionsParts(
   }
   if (presets) {
     raw.push(
-      ...flattenArgumentsPresetsOptionsParts(presets)(passPerPreset)(dirname),
+      ...flattenArgumentsPresetsOptionsParts(presets)(!!passPerPreset)(dirname),
     );
   }
 
-  if (opts.extends != null) {
+  if (extendsPath != null) {
     raw.push(
       ...flattenOptionsParts(
-        buildArgumentsRawConfig({ extends: opts.extends }, dirname),
+        buildArgumentsItem({ extends: extendsPath }, dirname),
       ),
     );
   }
@@ -174,10 +174,10 @@ function flattenArgumentsOptionsParts(
  * the object identity of the 'env' object.
  */
 const flattenArgumentsEnvOptionsParts = makeWeakCache((env: {}) => {
-  const options = { env };
+  const options: ValidatedOptions = { env };
 
   return makeStrongCache((dirname: string) =>
-    flattenOptionsPartsLookup(buildArgumentsRawConfig(options, dirname)),
+    flattenOptionsPartsLookup(buildArgumentsItem(options, dirname)),
   );
 });
 
@@ -186,11 +186,11 @@ const flattenArgumentsEnvOptionsParts = makeWeakCache((env: {}) => {
  * the object identity of the 'plugins' object.
  */
 const flattenArgumentsPluginsOptionsParts = makeWeakCache(
-  (plugins: Array<mixed>) => {
-    const options = { plugins };
+  (plugins: PluginList) => {
+    const options: ValidatedOptions = { plugins };
 
     return makeStrongCache((dirname: string) =>
-      flattenOptionsParts(buildArgumentsRawConfig(options, dirname)),
+      flattenOptionsParts(buildArgumentsItem(options, dirname)),
     );
   },
 );
@@ -200,20 +200,23 @@ const flattenArgumentsPluginsOptionsParts = makeWeakCache(
  * the object identity of the 'presets' object.
  */
 const flattenArgumentsPresetsOptionsParts = makeWeakCache(
-  (presets: Array<mixed>) =>
-    makeStrongCache((passPerPreset: ?boolean) => {
+  (presets: PluginList) =>
+    makeStrongCache((passPerPreset: boolean) => {
       // The concept of passPerPreset is integrally tied to the preset list
       // so unfortunately we need to copy both values here, adding an extra
       // layer of caching functions.
       const options = { presets, passPerPreset };
 
       return makeStrongCache((dirname: string) =>
-        flattenOptionsParts(buildArgumentsRawConfig(options, dirname)),
+        flattenOptionsParts(buildArgumentsItem(options, dirname)),
       );
     }),
 );
 
-function buildArgumentsRawConfig(options: {}, dirname: string): ConfigRaw {
+function buildArgumentsItem(
+  options: ValidatedOptions,
+  dirname: string,
+): ConfigItem {
   return {
     type: "arguments",
     options,
@@ -229,8 +232,8 @@ function buildArgumentsRawConfig(options: {}, dirname: string): ConfigRaw {
  */
 const flattenFileOptionsParts = makeWeakCache((file: ConfigFile) => {
   return flattenOptionsPartsLookup({
-    type: "options",
-    options: file.options,
+    type: "file",
+    options: validate("file", file.options),
     alias: file.filepath,
     dirname: file.dirname,
   });
@@ -241,7 +244,7 @@ const flattenFileOptionsParts = makeWeakCache((file: ConfigFile) => {
  * the environment passed as the first argument.
  */
 function flattenOptionsPartsLookup(
-  config: ConfigRaw,
+  config: ConfigItem,
 ): (string | null) => Array<ConfigPart> {
   const parts = flattenOptionsParts(config);
 
@@ -263,107 +266,45 @@ function flattenOptionsPartsLookup(
   return envKey => lookup.get(envKey) || def;
 }
 
-type ConfigPart =
-  | {
-      part: "config",
-      config: ConfigItem,
-      ignore: ?Array<mixed>,
-      only: ?Array<mixed>,
-      activeEnv: string | null,
-    }
-  | {
-      part: "extends",
-      path: string,
-      dirname: string,
-      activeEnv: string | null,
-    };
-
 /**
  * Given a generic config object, flatten it into its various parts so that
  * then can be cached and processed later.
  */
 function flattenOptionsParts(
-  rawConfig: ConfigRaw,
+  config: ConfigItem,
   activeEnv: string | null = null,
 ): Array<ConfigPart> {
-  const { type, options: rawOpts, alias, dirname } = rawConfig;
-
-  if (rawOpts.ignore != null && !Array.isArray(rawOpts.ignore)) {
-    throw new Error(
-      `.ignore should be an array, ${JSON.stringify(rawOpts.ignore)} given`,
-    );
-  }
-  if (rawOpts.only != null && !Array.isArray(rawOpts.only)) {
-    throw new Error(
-      `.only should be an array, ${JSON.stringify(rawOpts.only)} given`,
-    );
-  }
-  const ignore = rawOpts.ignore || null;
-  const only = rawOpts.only || null;
+  const { options: rawOpts, alias, dirname } = config;
 
   const parts = [];
 
-  if (
-    rawOpts.env != null &&
-    (typeof rawOpts.env !== "object" || Array.isArray(rawOpts.env))
-  ) {
-    throw new Error(".env block must be an object, null, or undefined");
+  if (rawOpts.env) {
+    for (const envKey of Object.keys(rawOpts.env)) {
+      if (rawOpts.env[envKey]) {
+        parts.push(
+          ...flattenOptionsParts(
+            {
+              type: "env",
+              options: rawOpts.env[envKey],
+              alias: alias + `.env.${envKey}`,
+              dirname,
+            },
+            envKey,
+          ),
+        );
+      }
+    }
   }
-
-  const rawEnv = rawOpts.env || {};
-
-  Object.keys(rawEnv).forEach(envKey => {
-    const envOpts = rawEnv[envKey];
-
-    if (envOpts !== undefined && activeEnv !== null && activeEnv !== envKey) {
-      throw new Error(`Unreachable .env[${envKey}] block detected`);
-    }
-
-    if (
-      envOpts != null &&
-      (typeof envOpts !== "object" || Array.isArray(envOpts))
-    ) {
-      throw new Error(".env[...] block must be an object, null, or undefined");
-    }
-
-    if (envOpts) {
-      parts.push(
-        ...flattenOptionsParts(
-          {
-            type,
-            options: envOpts,
-            alias: alias + `.env.${envKey}`,
-            dirname,
-          },
-          envKey,
-        ),
-      );
-    }
-  });
-
-  const options = Object.assign({}, rawOpts);
-  delete options.env;
-  delete options.extends;
 
   parts.push({
     part: "config",
-    config: {
-      type,
-      options,
-      alias,
-      loc: alias,
-      dirname,
-    },
-    ignore,
-    only,
+    config,
+    ignore: rawOpts.ignore,
+    only: rawOpts.only,
     activeEnv,
   });
 
   if (rawOpts.extends != null) {
-    if (typeof rawOpts.extends !== "string") {
-      throw new Error(".extends must be a string");
-    }
-
     parts.push({
       part: "extends",
       path: rawOpts.extends,
@@ -390,8 +331,8 @@ class LoadedFile {
    * Tests if a filename should be ignored based on "ignore" and "only" options.
    */
   shouldIgnore(
-    ignore: ?Array<mixed>,
-    only: ?Array<mixed>,
+    ignore: ?IgnoreList,
+    only: ?IgnoreList,
     dirname: string,
   ): boolean {
     if (ignore) {
@@ -425,7 +366,7 @@ class LoadedFile {
    * Returns result of calling function with filename if pattern is a function.
    * Otherwise returns result of matching pattern Regex with filename.
    */
-  _matchesPatterns(patterns: Array<mixed>, dirname: string): boolean {
+  _matchesPatterns(patterns: IgnoreList, dirname: string): boolean {
     const res = [];
     const strings = [];
     const fns = [];
@@ -433,12 +374,7 @@ class LoadedFile {
     patterns.forEach(pattern => {
       if (typeof pattern === "string") strings.push(pattern);
       else if (typeof pattern === "function") fns.push(pattern);
-      else if (pattern instanceof RegExp) res.push(pattern);
-      else {
-        throw new Error(
-          "Patterns must be a string, function, or regular expression",
-        );
-      }
+      else res.push(pattern);
     });
 
     const filename = this.filename;

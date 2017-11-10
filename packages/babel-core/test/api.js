@@ -145,7 +145,7 @@ describe("api", function() {
       babel.transform("", {
         plugins: [__dirname + "/../../babel-plugin-syntax-jsx", false],
       });
-    }, /Error: \[BABEL\] unknown: Unexpected falsy value: false/);
+    }, /.plugins\[1\] must be a string, object, function/);
   });
 
   it("options merge backwards", function() {
@@ -530,31 +530,31 @@ describe("api", function() {
     it("default", function() {
       const result = babel.transform("foo;", {
         env: {
-          development: { code: false },
+          development: { comments: false },
         },
       });
 
-      assert.equal(result.code, undefined);
+      assert.equal(result.options.comments, false);
     });
 
     it("BABEL_ENV", function() {
       process.env.BABEL_ENV = "foo";
       const result = babel.transform("foo;", {
         env: {
-          foo: { code: false },
+          foo: { comments: false },
         },
       });
-      assert.equal(result.code, undefined);
+      assert.equal(result.options.comments, false);
     });
 
     it("NODE_ENV", function() {
       process.env.NODE_ENV = "foo";
       const result = babel.transform("foo;", {
         env: {
-          foo: { code: false },
+          foo: { comments: false },
         },
       });
-      assert.equal(result.code, undefined);
+      assert.equal(result.options.comments, false);
     });
   });
 

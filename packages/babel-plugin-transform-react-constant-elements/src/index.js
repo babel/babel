@@ -1,4 +1,6 @@
-export default function transformReactConstantElement({ types: t }, options) {
+import { types as t } from "@babel/core";
+
+export default function transformReactConstantElement(api, options) {
   const { allowMutablePropsOnTags } = options;
 
   if (

@@ -1,5 +1,4 @@
 import { basename, extname } from "path";
-import template from "@babel/template";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
@@ -9,6 +8,7 @@ import {
   ensureStatementsHoisted,
   wrapInterop,
 } from "@babel/helper-module-transforms";
+import { types as t, template } from "@babel/core";
 
 const buildPrerequisiteAssignment = template(`
   GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
@@ -30,7 +30,7 @@ const buildWrapper = template(`
   })
 `);
 
-export default function({ types: t }, options) {
+export default function(api, options) {
   const {
     globals,
     exactGlobals,
@@ -44,10 +44,15 @@ export default function({ types: t }, options) {
   /**
    * Build the assignment statements that initialize the UMD global.
    */
-  function buildBrowserInit(browserGlobals, exactGlobals, file, moduleName) {
+  function buildBrowserInit(
+    browserGlobals,
+    exactGlobals,
+    filename,
+    moduleName,
+  ) {
     const moduleNameOrBasename = moduleName
       ? moduleName.value
-      : basename(file.opts.filename, extname(file.opts.filename));
+      : basename(filename, extname(filename));
     let globalToAssign = t.memberExpression(
       t.identifier("global"),
       t.identifier(t.toIdentifier(moduleNameOrBasename)),
@@ -181,7 +186,9 @@ export default function({ types: t }, options) {
               }
             }
 
-            headers.push(...buildNamespaceInitStatements(meta, metadata));
+            headers.push(
+              ...buildNamespaceInitStatements(meta, metadata, loose),
+            );
           }
 
           ensureStatementsHoisted(headers);
@@ -202,7 +209,7 @@ export default function({ types: t }, options) {
               GLOBAL_TO_ASSIGN: buildBrowserInit(
                 browserGlobals,
                 exactGlobals,
-                this.file,
+                this.filename || "unknown",
                 moduleName,
               ),
             }),

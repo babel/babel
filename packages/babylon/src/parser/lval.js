@@ -56,12 +56,10 @@ export default class LValParser extends NodeUtils {
 
         case "ObjectExpression":
           node.type = "ObjectPattern";
-          for (const [index, prop] of node.properties.entries()) {
-            this.toAssignableObjectExpressionProp(
-              prop,
-              isBinding,
-              index === node.properties.length - 1,
-            );
+          for (let index = 0; index < node.properties.length; index++) {
+            const prop = node.properties[index];
+            const isLast = index === node.properties.length - 1;
+            this.toAssignableObjectExpressionProp(prop, isBinding, isLast);
           }
           break;
 
@@ -161,11 +159,12 @@ export default class LValParser extends NodeUtils {
     }
     for (let i = 0; i < end; i++) {
       const elt = exprList[i];
-      if (elt && elt.type === "SpreadElement")
+      if (elt && elt.type === "SpreadElement") {
         this.raise(
           elt.start,
           "The rest element has to be the last element when destructuring",
         );
+      }
       if (elt) this.toAssignable(elt, isBinding, contextDescription);
     }
     return exprList;
@@ -354,13 +353,14 @@ export default class LValParser extends NodeUtils {
 
       case "ArrayPattern":
         for (const elem of expr.elements) {
-          if (elem)
+          if (elem) {
             this.checkLVal(
               elem,
               isBinding,
               checkClashes,
               "array destructuring pattern",
             );
+          }
         }
         break;
 

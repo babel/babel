@@ -9,6 +9,7 @@ export default {
   },
   plugins: [
     babel({
+      externalHelpersWhitelist: ["inheritsLoose"],
       babelrc: false,
       presets: [
         [
@@ -23,6 +24,7 @@ export default {
         ],
         "@babel/flow",
       ],
+      plugins: ["transform-for-of-as-array"],
     }),
     nodeResolve(),
   ],

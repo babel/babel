@@ -3,5 +3,5 @@ function foo() {
     bar[_key] = arguments[_key];
   }
 
-  return [].concat(bar);
+  return bar.concat();
 }

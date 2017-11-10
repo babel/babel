@@ -1,4 +1,6 @@
-export default function({ types: t }) {
+import { types as t } from "@babel/core";
+
+export default function() {
   /**
    * Helper function to run a statement before an expression by replacing it with a comma expression
    * and wrapping the statement in an IIFE as the first operand.

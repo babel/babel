@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import * as babel from "@babel/core";
 import { buildExternalHelpers } from "@babel/core";
 import getFixtures from "@babel/helper-fixtures";
@@ -259,7 +260,6 @@ export default function(
                 filenameRelative: task.expect.filename,
                 sourceFileName: task.actual.filename,
                 sourceMapTarget: task.expect.filename,
-                suppressDeprecationMessages: true,
                 babelrc: false,
                 sourceMap: !!(task.sourceMappings || task.sourceMap),
               });

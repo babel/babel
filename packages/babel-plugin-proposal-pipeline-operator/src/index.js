@@ -1,6 +1,7 @@
 import syntaxPipelineOperator from "@babel/plugin-syntax-pipeline-operator";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default function() {
   return {
     inherits: syntaxPipelineOperator,
 

@@ -1,8 +1,11 @@
 // @flow
 
+import * as t from "@babel/types";
+import type { PluginPasses } from "../config";
 import convertSourceMap, { typeof Converter } from "convert-source-map";
 import { parse } from "babylon";
 import { codeFrameColumns } from "@babel/code-frame";
+import File from "./file/file";
 
 const shebangRegex = /^#!.*/;
 
@@ -14,10 +17,11 @@ export type NormalizedFile = {
 };
 
 export default function normalizeFile(
+  pluginPasses: PluginPasses,
   options: Object,
   code: string,
-  ast?: {},
-): NormalizedFile {
+  ast: ?(BabelNodeFile | BabelNodeProgram),
+): File {
   code = `${code || ""}`;
 
   let shebang = null;
@@ -37,40 +41,50 @@ export default function normalizeFile(
     code = code.replace(shebangRegex, "");
   }
 
-  if (!ast) ast = parser(options, code);
+  if (ast) {
+    if (ast.type === "Program") {
+      ast = t.file(ast, [], []);
+    } else if (ast.type !== "File") {
+      throw new Error("AST root must be a Program or File node");
+    }
+  } else {
+    ast = parser(pluginPasses, options, code);
+  }
 
-  return {
+  return new File(options, {
     code,
     ast,
     shebang,
     inputMap,
-  };
+  });
 }
 
-function parser(options, code) {
-  let parseCode = parse;
-
-  let { parserOpts } = options;
-  if (parserOpts.parser) {
-    parseCode = parserOpts.parser;
-
-    parserOpts = Object.assign({}, parserOpts, {
-      parser: {
-        parse(source) {
-          return parse(source, parserOpts);
-        },
-      },
-    });
-  }
-
+function parser(pluginPasses, options, code) {
   try {
-    return parseCode(code, parserOpts);
+    const results = [];
+    for (const plugins of pluginPasses) {
+      for (const plugin of plugins) {
+        const { parserOverride } = plugin;
+        if (parserOverride) {
+          const ast = parserOverride(code, options.parserOpts, parse);
+
+          if (ast !== undefined) results.push(ast);
+        }
+      }
+    }
+
+    if (results.length === 0) {
+      return parse(code, options.parserOpts);
+    } else if (results.length === 1) {
+      return results[0];
+    }
+    throw new Error("More than one plugin attempted to override parsing.");
   } catch (err) {
     const loc = err.loc;
     if (loc) {
       err.loc = null;
       err.message =
-        `${options.filename}: ${err.message}\n` +
+        `${options.filename || "unknown"}: ${err.message}\n` +
         codeFrameColumns(
           code,
           {

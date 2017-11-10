@@ -2,8 +2,9 @@ import LooseTransformer from "./loose";
 import VanillaTransformer from "./vanilla";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import nameFunction from "@babel/helper-function-name";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }, options) {
+export default function(api, options) {
   const { loose } = options;
   const Constructor = loose ? LooseTransformer : VanillaTransformer;
 

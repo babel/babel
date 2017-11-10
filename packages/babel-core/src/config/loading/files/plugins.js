@@ -57,62 +57,6 @@ export function loadPreset(
   return { filepath, value };
 }
 
-export function loadParser(
-  name: string,
-  dirname: string,
-): { filepath: string, value: Function } {
-  const filepath = resolve.sync(name, { basedir: dirname });
-
-  const mod = requireModule("parser", filepath);
-
-  if (!mod) {
-    throw new Error(
-      `Parser ${name} relative to ${dirname} does not export an object`,
-    );
-  }
-  if (typeof mod.parse !== "function") {
-    throw new Error(
-      `Parser ${name} relative to ${dirname} does not export a .parse function`,
-    );
-  }
-  const value = mod.parse;
-
-  debug("Loaded parser %o from %o.", name, dirname);
-
-  return {
-    filepath,
-    value,
-  };
-}
-
-export function loadGenerator(
-  name: string,
-  dirname: string,
-): { filepath: string, value: Function } {
-  const filepath = resolve.sync(name, { basedir: dirname });
-
-  const mod = requireModule("generator", filepath);
-
-  if (!mod) {
-    throw new Error(
-      `Generator ${name} relative to ${dirname} does not export an object`,
-    );
-  }
-  if (typeof mod.print !== "function") {
-    throw new Error(
-      `Generator ${name} relative to ${dirname} does not export a .print function`,
-    );
-  }
-  const value = mod.print;
-
-  debug("Loaded generator %o from %o.", name, dirname);
-
-  return {
-    filepath,
-    value,
-  };
-}
-
 function standardizeName(type: "plugin" | "preset", name: string) {
   // Let absolute and relative paths through.
   if (path.isAbsolute(name)) return name;

@@ -1,6 +1,7 @@
 import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default function() {
   function getTempId(scope) {
     let id = scope.path.getData("functionBind");
     if (id) return id;

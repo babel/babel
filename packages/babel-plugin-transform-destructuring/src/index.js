@@ -1,4 +1,13 @@
-export default function({ types: t }) {
+import { types as t } from "@babel/core";
+
+export default function(api, options) {
+  const { loose = false } = options;
+  if (typeof loose !== "boolean") {
+    throw new Error(`.loose must be a boolean or undefined`);
+  }
+
+  const arrayOnlySpread = loose;
+
   /**
    * Test if a VariableDeclaration's declarations contains any Patterns.
    */
@@ -41,8 +50,9 @@ export default function({ types: t }) {
       this.arrays = {};
       this.nodes = opts.nodes || [];
       this.scope = opts.scope;
-      this.file = opts.file;
       this.kind = opts.kind;
+      this.arrayOnlySpread = opts.arrayOnlySpread;
+      this.addHelper = opts.addHelper;
     }
 
     buildVariableAssignment(id, init) {
@@ -86,7 +96,7 @@ export default function({ types: t }) {
 
     toArray(node, count) {
       if (
-        this.file.opts.loose ||
+        this.arrayOnlySpread ||
         (t.isIdentifier(node) && this.arrays[node.name])
       ) {
         return node;
@@ -162,7 +172,7 @@ export default function({ types: t }) {
       //
 
       const value = t.callExpression(
-        this.file.addHelper("objectWithoutProperties"),
+        this.addHelper("objectWithoutProperties"),
         [objRef, keys],
       );
       this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
@@ -187,7 +197,7 @@ export default function({ types: t }) {
       if (!pattern.properties.length) {
         this.nodes.push(
           t.expressionStatement(
-            t.callExpression(this.file.addHelper("objectDestructuringEmpty"), [
+            t.callExpression(this.addHelper("objectDestructuringEmpty"), [
               objRef,
             ]),
           ),
@@ -368,7 +378,7 @@ export default function({ types: t }) {
         path.insertAfter(t.exportNamedDeclaration(null, specifiers));
       },
 
-      ForXStatement(path, file) {
+      ForXStatement(path) {
         const { node, scope } = path;
         const left = node.left;
 
@@ -404,9 +414,10 @@ export default function({ types: t }) {
 
         const destructuring = new DestructuringTransformer({
           kind: left.kind,
-          file: file,
           scope: scope,
           nodes: nodes,
+          arrayOnlySpread,
+          addHelper: name => this.addHelper(name),
         });
 
         destructuring.init(pattern, key);
@@ -417,7 +428,7 @@ export default function({ types: t }) {
         block.body = nodes.concat(block.body);
       },
 
-      CatchClause({ node, scope }, file) {
+      CatchClause({ node, scope }) {
         const pattern = node.param;
         if (!t.isPattern(pattern)) return;
 
@@ -428,16 +439,17 @@ export default function({ types: t }) {
 
         const destructuring = new DestructuringTransformer({
           kind: "let",
-          file: file,
           scope: scope,
           nodes: nodes,
+          arrayOnlySpread,
+          addHelper: name => this.addHelper(name),
         });
         destructuring.init(pattern, ref);
 
         node.body.body = nodes.concat(node.body.body);
       },
 
-      AssignmentExpression(path, file) {
+      AssignmentExpression(path) {
         const { node, scope } = path;
         if (!t.isPattern(node.left)) return;
 
@@ -445,9 +457,10 @@ export default function({ types: t }) {
 
         const destructuring = new DestructuringTransformer({
           operator: node.operator,
-          file: file,
           scope: scope,
           nodes: nodes,
+          arrayOnlySpread,
+          addHelper: name => this.addHelper(name),
         });
 
         let ref;
@@ -477,7 +490,7 @@ export default function({ types: t }) {
         path.replaceWithMultiple(nodes);
       },
 
-      VariableDeclaration(path, file) {
+      VariableDeclaration(path) {
         const { node, scope, parent } = path;
         if (t.isForXStatement(parent)) return;
         if (!parent || !path.container) return; // i don't know why this is necessary - TODO
@@ -498,7 +511,8 @@ export default function({ types: t }) {
             nodes: nodes,
             scope: scope,
             kind: node.kind,
-            file: file,
+            arrayOnlySpread,
+            addHelper: name => this.addHelper(name),
           });
 
           if (t.isPattern(pattern)) {

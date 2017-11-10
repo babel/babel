@@ -12,21 +12,23 @@ const maps = {};
 const transformOpts = {};
 let piratesRevert = null;
 
-sourceMapSupport.install({
-  handleUncaughtExceptions: false,
-  environment: "node",
-  retrieveSourceMap(source) {
-    const map = maps && maps[source];
-    if (map) {
-      return {
-        url: null,
-        map: map,
-      };
-    } else {
-      return null;
-    }
-  },
-});
+function installSourceMapSupport() {
+  sourceMapSupport.install({
+    handleUncaughtExceptions: false,
+    environment: "node",
+    retrieveSourceMap(source) {
+      const map = maps && maps[source];
+      if (map) {
+        return {
+          url: null,
+          map: map,
+        };
+      } else {
+        return null;
+      }
+    },
+  });
+}
 
 registerCache.load();
 let cache = registerCache.get();
@@ -67,7 +69,7 @@ function compile(code, filename) {
       // Do not process config files since has already been done with the OptionManager
       // calls above and would introduce duplicates.
       babelrc: false,
-      sourceMaps: "both",
+      sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
       ast: false,
     }),
   );
@@ -77,7 +79,12 @@ function compile(code, filename) {
     result.mtime = mtime(filename);
   }
 
-  maps[filename] = result.map;
+  if (result.map) {
+    if (Object.keys(maps).length === 0) {
+      installSourceMapSupport();
+    }
+    maps[filename] = result.map;
+  }
 
   return result.code;
 }

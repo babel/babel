@@ -133,8 +133,9 @@ export default class StatementParser extends ExpressionParser {
           (this.hasPlugin("dynamicImport") &&
             this.lookahead().type === tt.parenL) ||
           (this.hasPlugin("importMeta") && this.lookahead().type === tt.dot)
-        )
+        ) {
           break;
+        }
 
         if (!this.options.allowImportExportEverywhere && !topLevel) {
           this.raise(
@@ -305,8 +306,9 @@ export default class StatementParser extends ExpressionParser {
         if (node.label && isBreak) break;
       }
     }
-    if (i === this.state.labels.length)
+    if (i === this.state.labels.length) {
       this.raise(node.start, "Unsyntactic " + keyword);
+    }
     return this.finishNode(
       node,
       isBreak ? "BreakStatement" : "ContinueStatement",
@@ -449,8 +451,9 @@ export default class StatementParser extends ExpressionParser {
         if (isCase) {
           cur.test = this.parseExpression();
         } else {
-          if (sawDefault)
+          if (sawDefault) {
             this.raise(this.state.lastTokStart, "Multiple default clauses");
+          }
           sawDefault = true;
           cur.test = null;
         }
@@ -473,8 +476,9 @@ export default class StatementParser extends ExpressionParser {
     this.next();
     if (
       lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start))
-    )
+    ) {
       this.raise(this.state.lastTokEnd, "Illegal newline after throw");
+    }
     node.argument = this.parseExpression();
     this.semicolon();
     return this.finishNode(node, "ThrowStatement");
@@ -533,8 +537,9 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseWithStatement(node: N.WithStatement): N.WithStatement {
-    if (this.state.strict)
+    if (this.state.strict) {
       this.raise(this.state.start, "'with' in strict mode");
+    }
     this.next();
     node.object = this.parseParenExpression();
     node.body = this.parseStatement(false);

@@ -1,5 +1,11 @@
-//@flow
+// @flow
 import { logEntryPolyfills } from "./debug";
+import {
+  createImport,
+  isPolyfillSource,
+  isRequire,
+  type RequireType,
+} from "./utils";
 
 type Plugin = {
   visitor: Object,
@@ -8,52 +14,7 @@ type Plugin = {
   name: string,
 };
 
-type RequireType = "require" | "import";
-
-function isPolyfillSource(value: string): boolean {
-  return value === "@babel/polyfill";
-}
-
 export default function({ types: t }: { types: Object }): Plugin {
-  function createImportDeclaration(polyfill: string): Object {
-    const declar = t.importDeclaration([], t.stringLiteral(polyfill));
-    declar._blockHoist = 3;
-    return declar;
-  }
-
-  function createRequireStatement(polyfill: string): Object {
-    return t.expressionStatement(
-      t.callExpression(t.identifier("require"), [t.stringLiteral(polyfill)]),
-    );
-  }
-
-  function isRequire(path: Object): boolean {
-    return (
-      t.isExpressionStatement(path.node) &&
-      t.isCallExpression(path.node.expression) &&
-      t.isIdentifier(path.node.expression.callee) &&
-      path.node.expression.callee.name === "require" &&
-      path.node.expression.arguments.length === 1 &&
-      t.isStringLiteral(path.node.expression.arguments[0]) &&
-      isPolyfillSource(path.node.expression.arguments[0].value)
-    );
-  }
-
-  function createImport(
-    polyfill: string,
-    requireType: RequireType,
-    core: ?boolean,
-  ): Object {
-    if (core) {
-      polyfill = `@babel/polyfill/lib/core-js/modules/${polyfill}`;
-    }
-
-    if (requireType === "import") {
-      return createImportDeclaration(polyfill);
-    }
-    return createRequireStatement(polyfill);
-  }
-
   function createImports(
     polyfills: Array<string>,
     requireType: RequireType,
@@ -62,15 +23,10 @@ export default function({ types: t }: { types: Object }): Plugin {
     const items = Array.isArray(polyfills) ? new Set(polyfills) : polyfills;
     const imports = [];
 
-    items.forEach(p => imports.push(createImport(p, requireType, true)));
+    items.forEach(p => imports.push(createImport(t, p, requireType)));
 
     if (regenerator) {
-      imports.push(
-        createImport(
-          "@babel/polyfill/lib/regenerator-runtime/runtime",
-          requireType,
-        ),
-      );
+      imports.push(createImport(t, "regenerator-runtime", requireType));
     }
 
     return imports;
@@ -90,7 +46,7 @@ export default function({ types: t }: { types: Object }): Plugin {
     },
     Program(path, state) {
       path.get("body").forEach(bodyPath => {
-        if (isRequire(bodyPath)) {
+        if (isRequire(t, bodyPath)) {
           bodyPath.replaceWithMultiple(
             createImports(
               state.opts.polyfills,
