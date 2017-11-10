@@ -63,16 +63,11 @@ function compile(code, filename) {
     }
   }
 
-  const result = babel.transform(
-    code,
-    Object.assign(opts, {
-      // Do not process config files since has already been done with the OptionManager
-      // calls above and would introduce duplicates.
-      babelrc: false,
-      sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
-      ast: false,
-    }),
-  );
+  const result = babel.transform(code, {
+    ...opts,
+    sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
+    ast: false,
+  });
 
   if (cache) {
     cache[cacheKey] = result;

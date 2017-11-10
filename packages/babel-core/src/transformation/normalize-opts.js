@@ -1,15 +1,34 @@
 // @flow
 
+import path from "path";
 import type { ResolvedConfig } from "../config";
 
 export default function normalizeOptions(config: ResolvedConfig): {} {
+  const {
+    filename,
+    filenameRelative = filename || "unknown",
+    sourceType = "module",
+    inputSourceMap,
+    sourceMaps = !!inputSourceMap,
+
+    moduleRoot,
+    sourceRoot = moduleRoot,
+
+    sourceFileName = filenameRelative,
+    sourceMapTarget = filenameRelative,
+
+    comments = true,
+    compact = "auto",
+  } = config.options;
+
   const opts = config.options;
 
   const options = Object.assign({}, opts, {
     parserOpts: Object.assign(
       {
-        sourceType: opts.sourceType,
-        sourceFileName: opts.filename || "unknown",
+        sourceType:
+          path.extname(filenameRelative) === ".mjs" ? "module" : sourceType,
+        sourceFileName: filename,
         plugins: [],
       },
       opts.parserOpts,
@@ -17,20 +36,20 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
     generatorOpts: Object.assign(
       {
         // General generator flags.
-        filename: opts.filename || "unknown",
+        filename,
         auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
         auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
         retainLines: opts.retainLines,
-        comments: opts.comments,
-        compact: opts.compact,
+        comments,
+        compact,
         minified: opts.minified,
         concise: opts.concise,
 
         // Source-map generation flags.
-        sourceMaps: opts.sourceMaps,
-        sourceMapTarget: opts.sourceMapTarget || "unknown",
-        sourceRoot: opts.sourceRoot,
-        sourceFileName: opts.sourceFileName || "unknown",
+        sourceMaps,
+        sourceMapTarget,
+        sourceRoot,
+        sourceFileName,
       },
       opts.generatorOpts,
     ),

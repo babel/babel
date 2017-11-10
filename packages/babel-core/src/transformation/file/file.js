@@ -61,44 +61,46 @@ export default class File {
   }
 
   getModuleName(): ?string {
-    const opts = this.opts;
-    if (!opts.moduleIds) {
-      return null;
-    }
+    const {
+      filename,
+      filenameRelative = filename,
+
+      moduleId,
+      moduleIds = !!moduleId,
+
+      getModuleId,
+
+      sourceRoot: sourceRootTmp,
+      moduleRoot = sourceRootTmp,
+      sourceRoot = moduleRoot,
+    } = this.opts;
+
+    if (!moduleIds) return null;
 
     // moduleId is n/a if a `getModuleId()` is provided
-    if (opts.moduleId != null && !opts.getModuleId) {
-      return opts.moduleId;
+    if (moduleId != null && !getModuleId) {
+      return moduleId;
     }
 
-    let filenameRelative = opts.filenameRelative;
-    let moduleName = "";
+    let moduleName = moduleRoot != null ? moduleRoot + "/" : "";
 
-    if (opts.moduleRoot != null) {
-      moduleName = opts.moduleRoot + "/";
+    if (filenameRelative) {
+      const sourceRootReplacer =
+        sourceRoot != null ? new RegExp("^" + sourceRoot + "/?") : "";
+
+      moduleName += filenameRelative
+        // remove sourceRoot from filename
+        .replace(sourceRootReplacer, "")
+        // remove extension
+        .replace(/\.(\w*?)$/, "");
     }
-
-    if (!opts.filenameRelative) {
-      return moduleName + opts.filename.replace(/^\//, "");
-    }
-
-    if (opts.sourceRoot != null) {
-      // remove sourceRoot from filename
-      const sourceRootRegEx = new RegExp("^" + opts.sourceRoot + "/?");
-      filenameRelative = filenameRelative.replace(sourceRootRegEx, "");
-    }
-
-    // remove extension
-    filenameRelative = filenameRelative.replace(/\.(\w*?)$/, "");
-
-    moduleName += filenameRelative;
 
     // normalize path separators
     moduleName = moduleName.replace(/\\/g, "/");
 
-    if (opts.getModuleId) {
+    if (getModuleId) {
       // If return is falsy, assume they want us to use our generated default name
-      return opts.getModuleId(moduleName) || moduleName;
+      return getModuleId(moduleName) || moduleName;
     } else {
       return moduleName;
     }
@@ -202,6 +204,8 @@ export default class File {
     }
 
     if (loc) {
+      const { highlightCode = true } = this.opts;
+
       msg +=
         "\n" +
         codeFrameColumns(
@@ -212,9 +216,7 @@ export default class File {
               column: loc.column + 1,
             },
           },
-          {
-            highlightCode: this.opts.highlightCode,
-          },
+          { highlightCode },
         );
     }
 

@@ -2,10 +2,8 @@
 
 import * as context from "../index";
 import Plugin, { validatePluginObject } from "./plugin";
-import defaults from "lodash/defaults";
 import merge from "lodash/merge";
 import buildConfigChain, { type ConfigItem } from "./build-config-chain";
-import path from "path";
 import traverse from "@babel/traverse";
 import clone from "lodash/clone";
 import { makeWeakCache } from "./caching";
@@ -118,49 +116,17 @@ class OptionManager {
       throw e;
     }
 
-    const opts: Object = merge(createInitialOptions(), this.options);
+    const opts: Object = this.options;
 
     // Tack the passes onto the object itself so that, if this object is passed back to Babel a second time,
     // it will be in the right structure to not change behavior.
+    opts.babelrc = false;
     opts.plugins = this.passes[0];
     opts.presets = this.passes
       .slice(1)
       .filter(plugins => plugins.length > 0)
       .map(plugins => ({ plugins }));
     opts.passPerPreset = opts.presets.length > 0;
-
-    if (opts.inputSourceMap) {
-      opts.sourceMaps = true;
-    }
-
-    if (opts.moduleId) {
-      opts.moduleIds = true;
-    }
-
-    defaults(opts, {
-      moduleRoot: opts.sourceRoot,
-    });
-
-    defaults(opts, {
-      sourceRoot: opts.moduleRoot,
-    });
-
-    defaults(opts, {
-      filenameRelative: opts.filename,
-    });
-
-    if (typeof opts.filenameRelative === "string") {
-      const basenameRelative = path.basename(opts.filenameRelative);
-
-      if (path.extname(opts.filenameRelative) === ".mjs") {
-        opts.sourceType = "module";
-      }
-
-      defaults(opts, {
-        sourceFileName: basenameRelative,
-        sourceMapTarget: basenameRelative,
-      });
-    }
 
     return {
       options: opts,
@@ -392,17 +358,5 @@ function chain(a, b) {
     for (const fn of fns) {
       fn.apply(this, args);
     }
-  };
-}
-
-function createInitialOptions() {
-  return {
-    sourceType: "module",
-    babelrc: true,
-    code: true,
-    ast: true,
-    comments: true,
-    compact: "auto",
-    highlightCode: true,
   };
 }
