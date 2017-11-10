@@ -11,23 +11,54 @@ import * as babel from "@babel/core";
 
 All transformations will use your local configuration files (`.babelrc` or in `package.json`). See [options](#options) to disable it.
 
-## babel.transform(code: string, [options?](#options): Object)
 
-Transforms the passed in `code`. Returning an object with the generated code,
+## babel.transform(code: string, [options?](#options): Object, callback: Function)
+
+Transforms the passed in `code`. Calling a callback with an object with the generated code,
 source map, and AST.
 
 ```js
-babel.transform(code, options) // => { code, map, ast }
+babel.transform(code, options, function(err, result) {
+  result; // => { code, map, ast }
+});
 ```
 
 **Example**
 
 ```js
-var result = babel.transform("code();", options);
+babel.transform("code();", options, function(err, result) {
+  result.code;
+  result.map;
+  result.ast;
+});
+```
+
+### Compat Note:
+
+In Babel 6, this method was synchronous and `transformSync` did not exist. For backward-compatibility,
+this function will behave synchronously if no callback is given. If you're starting with Babel 7
+and need synchronous behavior, please use `transformSync` since this backward-compat may be dropped in
+future major versions of Babel.
+
+
+## babel.transformSync(code: string, [options?](#options): Object)
+
+Transforms the passed in `code`. Returning an object with the generated code,
+source map, and AST.
+
+```js
+babel.transformSync(code, options) // => { code, map, ast }
+```
+
+**Example**
+
+```js
+var result = babel.transformSync("code();", options);
 result.code;
 result.map;
 result.ast;
 ```
+
 
 ## babel.transformFile(filename: string, [options?](#options): Object, callback: Function)
 
@@ -45,6 +76,7 @@ babel.transformFile("filename.js", options, function (err, result) {
 });
 ```
 
+
 ## babel.transformFileSync(filename: string, [options?](#options): Object)
 
 Synchronous version of `babel.transformFile`. Returns the transformed contents of
@@ -60,15 +92,37 @@ babel.transformFileSync(filename, options) // => { code, map, ast }
 babel.transformFileSync("filename.js", options).code;
 ```
 
-## babel.transformFromAst(ast: Object, code?: string, [options?](#options): Object)
+
+## babel.transformFromAst(ast: Object, code?: string, [options?](#options): Object, callback: Function)
 
 Given an [AST](https://astexplorer.net/), transform it.
 
 ```js
 const sourceCode = "if (true) return;";
 const parsedAst = babylon.parse(sourceCode, { allowReturnOutsideFunction: true });
-const { code, map, ast } = babel.transformFromAst(parsedAst, sourceCode, options);
+babel.transformFromAst(parsedAst, sourceCode, options, function(err, result) {
+  const { code, map, ast } = result;
+});
 ```
+
+### Compat Note:
+
+In Babel 6, this method was synchronous and `transformFromAstSync` did not exist. For backward-compatibility,
+this function will behave synchronously if no callback is given. If you're starting with Babel 7
+and need synchronous behavior, please use `transformFromAstSync` since this backward-compat may be dropped in
+future major versions of Babel.
+
+
+## babel.transformFromAstSync(ast: Object, code?: string, [options?](#options): Object)
+
+Given an [AST](https://astexplorer.net/), transform it.
+
+```js
+const sourceCode = "if (true) return;";
+const parsedAst = babylon.parse(sourceCode, { allowReturnOutsideFunction: true });
+const { code, map, ast } = babel.transformFromAstSync(parsedAst, sourceCode, options);
+```
+
 
 ## Options
 
