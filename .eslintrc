@@ -23,7 +23,7 @@
       }
     },
     {
-      "files": [ "packages/*/test/**/*.js", "test/**/*.js" ],
+      "files": [ "packages/*/test/**/*.js", "experimental/*/test/**/*.js", "test/**/*.js" ],
       "env": {
         "mocha": true
       }
