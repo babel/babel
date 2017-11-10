@@ -46,8 +46,15 @@ export function assertSourceType(
   key: string,
   value: mixed,
 ): SourceTypeOption | void {
-  if (value !== undefined && value !== "module" && value !== "script") {
-    throw new Error(`.${key} must be "module", "script", or undefined`);
+  if (
+    value !== undefined &&
+    value !== "module" &&
+    value !== "script" &&
+    value !== "unambiguous"
+  ) {
+    throw new Error(
+      `.${key} must be "module", "script", "unambiguous", or undefined`,
+    );
   }
   return value;
 }
