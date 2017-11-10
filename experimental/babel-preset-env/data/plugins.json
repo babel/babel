@@ -231,14 +231,18 @@
   "proposal-async-generator-functions": {
     "chrome": "63",
     "firefox": "57",
+    "safari": "tp",
     "opera": "50"
   },
   "proposal-object-rest-spread": {
     "chrome": "60",
     "firefox": "55",
+    "safari": "tp",
     "node": "8.3",
     "opera": "47"
   },
-  "proposal-optional-catch-binding": {},
+  "proposal-optional-catch-binding": {
+    "safari": "tp"
+  },
   "proposal-unicode-property-regex": {}
 }
