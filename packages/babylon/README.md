@@ -39,7 +39,7 @@ mind. When in doubt, use `.parse()`.
 - **allowSuperOutsideMethod**: TODO
 
 - **sourceType**: Indicate the mode the code should be parsed in. Can be
-  either `"script"` or `"module"`.
+  one of `"script"`, `"module"`, or `"unambiguous"`. Defaults to `"script"`. `"unambiguous"` will make Babylon attempt to _guess_, based on the presence of ES6 `import` or `export` statements. Files with ES6 `import`s and `export`s are considered `"module"` and are otherwise `"script"`.
 
 - **sourceFilename**: Correlate output AST nodes with their source filename.  Useful when generating code and source maps from the ASTs of multiple input files.
 
