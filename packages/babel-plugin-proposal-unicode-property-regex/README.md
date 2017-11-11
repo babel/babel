@@ -52,8 +52,8 @@ require("@babel/core").transform(code, {
 
 * `useUnicodeFlag` (defaults to `true`)
 
-When disabled with `false`, the transform will convert unicode regexes to
-non-unicode regexes, removing the `u` flag. See https://www.npmjs.com/package/regexpu-core#useunicodeflag-default-false- for more information.
+When disabled with `false`, the transform converts Unicode regexes to
+non-Unicode regexes for wider support, removing the `u` flag. See https://github.com/mathiasbynens/regexpu-core#useunicodeflag-default-false for more information.
 
 ## Author
 
