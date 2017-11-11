@@ -369,7 +369,8 @@ export default class Tokenizer extends LocationParser {
         default:
           if (
             (ch > charCodes.backSpace && ch < charCodes.shiftOut) ||
-            (ch >= 5760 && nonASCIIwhitespace.test(String.fromCharCode(ch)))
+            (ch >= charCodes.oghamSpaceMark &&
+              nonASCIIwhitespace.test(String.fromCharCode(ch)))
           ) {
             ++this.state.pos;
           } else {
