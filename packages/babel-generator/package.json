@@ -14,7 +14,7 @@
     "@babel/types": "7.0.0-beta.31",
     "jsesc": "^2.5.1",
     "lodash": "^4.2.0",
-    "source-map": "^0.5.0",
+    "source-map": "^0.6.1",
     "trim-right": "^1.0.1"
   },
   "devDependencies": {
