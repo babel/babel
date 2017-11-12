@@ -2219,8 +2219,56 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.callee = base;
         node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
         base = this.finishNode(node, "CallExpression");
+      } else if (
+        base.type === "Identifier" &&
+        base.name === "async" &&
+        this.isRelational("<")
+      ) {
+        const state = this.state.clone();
+        let error;
+        try {
+          const node = this.parseAsyncArrowWithTypeParameters(
+            startPos,
+            startLoc,
+          );
+          if (node) return node;
+        } catch (e) {
+          error = e;
+        }
+
+        this.state = state;
+        try {
+          return super.parseSubscripts(base, startPos, startLoc, noCalls);
+        } catch (e) {
+          throw error || e;
+        }
       }
 
       return super.parseSubscripts(base, startPos, startLoc, noCalls);
+    }
+
+    parseAsyncArrowWithTypeParameters(
+      startPos: number,
+      startLoc: Position,
+    ): ?N.ArrowFunctionExpression {
+      const node = this.startNodeAt(startPos, startLoc);
+
+      const oldInFunc = this.state.inFunction;
+      const oldInGenerator = this.state.inGenerator;
+      const oldInAsync = this.state.inAsync;
+      this.state.inFunction = true;
+      this.state.inGenerator = false;
+      this.state.inAsync = true;
+
+      this.initFunction(node, true);
+      this.parseFunctionParams(node);
+      if (!this.parseArrow(node)) return;
+      this.parseFunctionBodyAndFinish(node, "ArrowFunctionExpression", true);
+
+      this.state.inFunction = oldInFunc;
+      this.state.inGenerator = oldInGenerator;
+      this.state.inAsync = oldInAsync;
+
+      return node;
     }
   };
