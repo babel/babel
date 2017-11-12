@@ -7,7 +7,9 @@ exports.foo = void 0;
 
 var _bar = babelHelpers.interopRequireDefault(require("bar"));
 
-let foo = (() => {
+let foo =
+/*#__PURE__*/
+(() => {
   var _ref = babelHelpers.asyncToGenerator(function* () {});
 
   return function foo() {

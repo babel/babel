@@ -1,5 +1,7 @@
 function f() {
-  g(babelHelpers.asyncToGenerator(function* () {
+  g(
+  /*#__PURE__*/
+  babelHelpers.asyncToGenerator(function* () {
     var _this = this;
 
     c(function () {
@@ -8,6 +10,7 @@ function f() {
   }));
 }
 
+/*#__PURE__*/
 babelHelpers.asyncToGenerator(function* () {
   var _this2 = this;
 

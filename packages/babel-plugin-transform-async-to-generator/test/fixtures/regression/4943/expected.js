@@ -1,6 +1,8 @@
 "use strict";
 
-let foo = (() => {
+let foo =
+/*#__PURE__*/
+(() => {
   var _ref = _asyncToGenerator(function* (_ref2) {
     let a = _ref2.a,
         _ref2$b = _ref2.b,
