@@ -1498,11 +1498,12 @@ export default class ExpressionParser extends LValParser {
     return node;
   }
 
-  // Parse arrow function expression with given parameters.
-
+  // Parse arrow function expression.
+  // If the parameters are provided, they will be converted to an
+  // assignable list.
   parseArrowExpression(
     node: N.ArrowFunctionExpression,
-    params: N.Expression[],
+    params?: ?(N.Expression[]),
     isAsync?: boolean,
   ): N.ArrowFunctionExpression {
     // if we got there, it's no more "yield in possible arrow parameters";
@@ -1518,7 +1519,7 @@ export default class ExpressionParser extends LValParser {
     const oldInFunc = this.state.inFunction;
     this.state.inFunction = true;
     this.initFunction(node, isAsync);
-    this.setArrowFunctionParameters(node, params);
+    if (params) this.setArrowFunctionParameters(node, params);
 
     const oldInGenerator = this.state.inGenerator;
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
