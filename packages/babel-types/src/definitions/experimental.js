@@ -76,6 +76,42 @@ defineType("DoExpression", {
   },
 });
 
+defineType("MatchExpression", {
+  visitor: ["clauses"],
+  aliases: ["Expression"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("MatchExpressionClause", {
+  visitor: ["pattern", "body"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("ObjectMatchPattern", {
+  visitor: ["children"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("ObjectPropertyMatchPattern", {
+  visitor: ["key", "value"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("ArrayMatchPattern", {
+  visitor: ["children"],
+  fields: {
+    // todo
+  },
+});
+
 defineType("ExportDefaultSpecifier", {
   visitor: ["exported"],
   aliases: ["ModuleSpecifier"],
