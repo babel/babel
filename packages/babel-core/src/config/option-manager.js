@@ -189,6 +189,7 @@ const loadDescriptor = makeWeakCache(
       const api = Object.assign(Object.create(context), {
         cache,
         env: () => cache.using(() => getEnv()),
+        async: () => false,
       });
 
       try {
@@ -203,6 +204,15 @@ const loadDescriptor = makeWeakCache(
 
     if (!item || typeof item !== "object") {
       throw new Error("Plugin/Preset did not return an object.");
+    }
+
+    if (typeof item.then === "function") {
+      throw new Error(
+        `You appear to be using an async plugin, ` +
+          `which your current version of Babel does not support.` +
+          `If you're using a published plugin, ` +
+          `you may need to upgrade your @babel/core version.`,
+      );
     }
 
     return { value: item, options, dirname, alias };
