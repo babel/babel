@@ -76,6 +76,14 @@ function parser(pluginPasses, options, code) {
     if (results.length === 0) {
       return parse(code, options.parserOpts);
     } else if (results.length === 1) {
+      if (typeof results[0].then === "function") {
+        throw new Error(
+          `You appear to be using an async codegen plugin, ` +
+            `which your current version of Babel does not support. ` +
+            `If you're using a published plugin, you may need to upgrade ` +
+            `your @babel/core version.`,
+        );
+      }
       return results[0];
     }
     throw new Error("More than one plugin attempted to override parsing.");

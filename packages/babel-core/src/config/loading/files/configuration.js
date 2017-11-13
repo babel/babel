@@ -153,6 +153,16 @@ const readConfigJS = makeStrongCache((filepath, cache) => {
     );
   }
 
+  if (typeof options.then === "function") {
+    throw new Error(
+      `You appear to be using an async configuration, ` +
+        `which your current version of Babel does not support. ` +
+        `We may add support for this in the future, ` +
+        `but if you're on the most recent version of @babel/core and still ` +
+        `seeing this error, then you'll need to synchronously return your config.`,
+    );
+  }
+
   return {
     filepath,
     dirname: path.dirname(filepath),
