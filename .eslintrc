@@ -23,7 +23,12 @@
       }
     },
     {
-      "files": [ "packages/*/test/**/*.js", "test/**/*.js" ],
+      "files": [
+        "packages/*/test/**/*.js",
+        "experimental/*/test/**/*.js",
+        "codemods/*/test/**/*.js",
+        "test/**/*.js"
+      ],
       "env": {
         "mocha": true
       }
