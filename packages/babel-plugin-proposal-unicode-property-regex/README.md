@@ -43,10 +43,17 @@ To transpile to ES6/ES2015:
 ```js
 require("@babel/core").transform(code, {
   "plugins": [
-    ["@babel/proposal-unicode-property-regex", { "useUnicodeFlag": true }]
+    ["@babel/proposal-unicode-property-regex", { "useUnicodeFlag": false }]
   ]
 });
 ```
+
+## Options
+
+* `useUnicodeFlag` (defaults to `true`)
+
+When disabled with `false`, the transform converts Unicode regexes to
+non-Unicode regexes for wider support, removing the `u` flag. See https://github.com/mathiasbynens/regexpu-core#useunicodeflag-default-false for more information.
 
 ## Author
 

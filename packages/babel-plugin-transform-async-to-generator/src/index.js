@@ -1,7 +1,8 @@
 import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
 import { addNamed } from "@babel/helper-module-imports";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }, options) {
+export default function(api, options) {
   const { method, module } = options;
 
   if (method && module) {

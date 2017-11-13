@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-optional-catch-binding",
-  "version": "7.0.0-beta.31",
+  "version": "7.0.0-beta.32",
   "description": "Allow parsing of optional catch bindings",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-optional-catch-binding",
   "license": "MIT",
@@ -9,9 +9,9 @@
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.31"
+    "@babel/core": "7.0.0-beta.32"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.31"
+    "@babel/core": "7.0.0-beta.32"
   }
 }

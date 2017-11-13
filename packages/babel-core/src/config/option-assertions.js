@@ -12,6 +12,12 @@ import type {
   RootInputSourceMapOption,
 } from "./options";
 
+export type ValidatorSet = {
+  [string]: Validator<any>,
+};
+
+export type Validator<T> = (string, mixed) => T;
+
 export function assertSourceMaps(
   key: string,
   value: mixed,
@@ -40,8 +46,15 @@ export function assertSourceType(
   key: string,
   value: mixed,
 ): SourceTypeOption | void {
-  if (value !== undefined && value !== "module" && value !== "script") {
-    throw new Error(`.${key} must be "module", "script", or undefined`);
+  if (
+    value !== undefined &&
+    value !== "module" &&
+    value !== "script" &&
+    value !== "unambiguous"
+  ) {
+    throw new Error(
+      `.${key} must be "module", "script", "unambiguous", or undefined`,
+    );
   }
   return value;
 }

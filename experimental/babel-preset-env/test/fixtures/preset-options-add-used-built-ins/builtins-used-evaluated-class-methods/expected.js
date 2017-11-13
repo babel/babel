@@ -1,4 +1,4 @@
-import "@babel/polyfill/lib/core-js/modules/es6.object.assign";
+import "core-js/modules/es6.object.assign";
 var objectClass = Object;
 var arrayInstance = [];
 var assignStr = "assign";

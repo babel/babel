@@ -7,8 +7,9 @@ import {
   wrapInterop,
 } from "@babel/helper-module-transforms";
 import simplifyAccess from "@babel/helper-simple-access";
+import { template, types as t } from "@babel/core";
 
-export default function({ types: t, template }, options) {
+export default function(api, options) {
   const {
     loose,
     allowTopLevelThis,

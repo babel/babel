@@ -1,6 +1,7 @@
 import syntaxNumericSeparator from "@babel/plugin-syntax-numeric-separator";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default function() {
   function replaceNumberArg({ node }) {
     if (node.callee.name !== "Number") {
       return;

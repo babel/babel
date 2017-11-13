@@ -1,4 +1,5 @@
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
+import { types as t } from "@babel/core";
 
 import transpileEnum from "./enum";
 
@@ -18,7 +19,7 @@ interface State {
   programPath: any;
 }
 
-export default function({ types: t }) {
+export default function() {
   return {
     inherits: syntaxTypeScript,
     visitor: {

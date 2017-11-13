@@ -1,4 +1,5 @@
 import ReplaceSupers from "@babel/helper-replace-supers";
+import { types as t } from "@babel/core";
 
 function replacePropertySuper(path, node, scope, getObjectRef, file) {
   const replaceSupers = new ReplaceSupers({
@@ -13,7 +14,7 @@ function replacePropertySuper(path, node, scope, getObjectRef, file) {
   replaceSupers.replace();
 }
 
-export default function({ types: t }) {
+export default function() {
   return {
     visitor: {
       ObjectExpression(path, state) {

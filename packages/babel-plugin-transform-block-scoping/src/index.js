@@ -1,19 +1,24 @@
 import type NodePath from "@babel/traverse";
 import type Scope from "@babel/traverse";
-import type File from "../../../file";
-import traverse from "@babel/traverse";
 import { visitor as tdzVisitor } from "./tdz";
-import * as t from "@babel/types";
 import values from "lodash/values";
 import extend from "lodash/extend";
-import template from "@babel/template";
+import { traverse, template, types as t } from "@babel/core";
 
 const DONE = new WeakSet();
 
-export default function() {
+export default function(api, opts) {
+  const { throwIfClosureRequired = false, tdz: tdzEnabled = false } = opts;
+  if (typeof throwIfClosureRequired !== "boolean") {
+    throw new Error(`.throwIfClosureRequired must be a boolean, or undefined`);
+  }
+  if (typeof tdzEnabled !== "boolean") {
+    throw new Error(`.throwIfClosureRequired must be a boolean, or undefined`);
+  }
+
   return {
     visitor: {
-      VariableDeclaration(path, file) {
+      VariableDeclaration(path) {
         const { node, parent, scope } = path;
         if (!isBlockScoped(node)) return;
         convertBlockScopedToVar(path, null, parent, scope, true);
@@ -28,7 +33,7 @@ export default function() {
               assign._ignoreBlockScopingTDZ = true;
               nodes.push(t.expressionStatement(assign));
             }
-            decl.init = file.addHelper("temporalUndefined");
+            decl.init = this.addHelper("temporalUndefined");
           }
 
           node._blockHoist = 2;
@@ -43,7 +48,7 @@ export default function() {
         }
       },
 
-      Loop(path, file) {
+      Loop(path) {
         const { parent, scope } = path;
         path.ensureBlock();
         const blockScoping = new BlockScoping(
@@ -51,32 +56,35 @@ export default function() {
           path.get("body"),
           parent,
           scope,
-          file,
+          throwIfClosureRequired,
+          tdzEnabled,
         );
         const replace = blockScoping.run();
         if (replace) path.replaceWith(replace);
       },
 
-      CatchClause(path, file) {
+      CatchClause(path) {
         const { parent, scope } = path;
         const blockScoping = new BlockScoping(
           null,
           path.get("body"),
           parent,
           scope,
-          file,
+          throwIfClosureRequired,
+          tdzEnabled,
         );
         blockScoping.run();
       },
 
-      "BlockStatement|SwitchStatement|Program"(path, file) {
+      "BlockStatement|SwitchStatement|Program"(path) {
         if (!ignoreBlock(path)) {
           const blockScoping = new BlockScoping(
             null,
             path,
             path.parent,
             path.scope,
-            file,
+            throwIfClosureRequired,
+            tdzEnabled,
           );
           blockScoping.run();
         }
@@ -326,11 +334,13 @@ class BlockScoping {
     blockPath: NodePath,
     parent: Object,
     scope: Scope,
-    file: File,
+    throwIfClosureRequired: boolean,
+    tdzEnabled: boolean,
   ) {
     this.parent = parent;
     this.scope = scope;
-    this.file = file;
+    this.throwIfClosureRequired = throwIfClosureRequired;
+    this.tdzEnabled = tdzEnabled;
 
     this.blockPath = blockPath;
     this.block = blockPath.node;
@@ -434,7 +444,7 @@ class BlockScoping {
   }
 
   wrapClosure() {
-    if (this.file.opts.throwIfClosureRequired) {
+    if (this.throwIfClosureRequired) {
       throw this.blockPath.buildCodeFrameError(
         "Compiling let/const in this block would add a closure " +
           "(throwIfClosureRequired).",
@@ -664,8 +674,9 @@ class BlockScoping {
     const state = {
       letReferences: this.letReferences,
       closurify: false,
-      file: this.file,
       loopDepth: 0,
+      tdzEnabled: this.tdzEnabled,
+      addHelper: name => this.addHelper(name),
     };
 
     if (isInLoop(this.blockPath)) {

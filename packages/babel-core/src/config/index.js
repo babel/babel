@@ -3,6 +3,8 @@
 import type Plugin from "./plugin";
 import manageOptions from "./option-manager";
 
+export type { InputOptions } from "./options";
+
 export type ResolvedConfig = {
   options: Object,
   passes: PluginPasses,

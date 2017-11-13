@@ -12,13 +12,9 @@ import {
   assertSourceMaps,
   assertCompact,
   assertSourceType,
+  type ValidatorSet,
+  type Validator,
 } from "./option-assertions";
-
-type ValidatorSet = {
-  [string]: Validator<any>,
-};
-
-type Validator<T> = (string, mixed) => T;
 
 const ROOT_VALIDATORS: ValidatorSet = {
   filename: (assertString: Validator<
@@ -125,6 +121,8 @@ const COMMON_VALIDATORS: ValidatorSet = {
     $PropertyType<ValidatedOptions, "generatorOpts">,
   >),
 };
+export type InputOptions = ValidatedOptions;
+
 export type ValidatedOptions = {
   filename?: string,
   filenameRelative?: string,
@@ -187,7 +185,7 @@ export type PluginItem = PluginTarget | [PluginTarget, {} | void];
 export type PluginList = $ReadOnlyArray<PluginItem>;
 
 export type SourceMapsOption = boolean | "inline" | "both";
-export type SourceTypeOption = "module" | "script";
+export type SourceTypeOption = "module" | "script" | "unambiguous";
 export type CompactOption = boolean | "auto";
 export type RootInputSourceMapOption = {} | boolean;
 

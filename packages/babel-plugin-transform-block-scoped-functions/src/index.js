@@ -1,4 +1,6 @@
-export default function({ types: t }) {
+import { types as t } from "@babel/core";
+
+export default function() {
   function statementList(key, path) {
     const paths: Array = path.get(key);
 

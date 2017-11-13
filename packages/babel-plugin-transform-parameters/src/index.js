@@ -1,7 +1,7 @@
 import convertFunctionParams from "./params";
 import convertFunctionRest from "./rest";
 
-export default function(babel, options) {
+export default function(api, options) {
   const { loose } = options;
   return {
     visitor: {

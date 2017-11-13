@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-es2017",
-  "version": "7.0.0-beta.31",
+  "version": "7.0.0-beta.32",
   "description": "Babel preset for all es2017 plugins.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -8,12 +8,12 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-es2017",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/plugin-transform-async-to-generator": "7.0.0-beta.31"
+    "@babel/plugin-transform-async-to-generator": "7.0.0-beta.32"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.31"
+    "@babel/core": "7.0.0-beta.32"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.31"
+    "@babel/core": "7.0.0-beta.32"
   }
 }

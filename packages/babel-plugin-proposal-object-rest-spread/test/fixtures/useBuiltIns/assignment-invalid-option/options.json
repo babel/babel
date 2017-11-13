@@ -1,4 +1,4 @@
 {
   "plugins": [["proposal-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
-  "throws": "proposal-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
+  "throws": ".useBuiltIns must be a boolean, or undefined"
 }

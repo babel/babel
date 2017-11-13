@@ -1,7 +1,8 @@
 import jsx from "@babel/plugin-syntax-jsx";
 import helper from "@babel/helper-builder-react-jsx";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }, options) {
+export default function(api, options) {
   const THROW_IF_NAMESPACE =
     options.throwIfNamespace === undefined ? true : !!options.throwIfNamespace;
 

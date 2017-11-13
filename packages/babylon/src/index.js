@@ -21,7 +21,27 @@ plugins.typescript = typescriptPlugin;
 plugins.patternMatching = patternMatchingPlugin;
 
 export function parse(input: string, options?: Options): File {
-  return getParser(options, input).parse();
+  if (options && options.sourceType === "unambiguous") {
+    options = Object.assign({}, options);
+    try {
+      options.sourceType = "module";
+      const ast = getParser(options, input).parse();
+
+      // Rather than try to parse as a script first, we opt to parse as a module and convert back
+      // to a script where possible to avoid having to do a full re-parse of the input content.
+      if (!hasModuleSyntax(ast)) ast.program.sourceType = "script";
+      return ast;
+    } catch (moduleError) {
+      try {
+        options.sourceType = "script";
+        return getParser(options, input).parse();
+      } catch (scriptError) {}
+
+      throw moduleError;
+    }
+  } else {
+    return getParser(options, input).parse();
+  }
 }
 
 export function parseExpression(input: string, options?: Options): Expression {
@@ -98,4 +118,17 @@ function getParserClass(
     parserClassCache[key] = cls;
   }
   return cls;
+}
+
+function hasModuleSyntax(ast) {
+  return ast.program.body.some(
+    child =>
+      (child.type === "ImportDeclaration" &&
+        (!child.importKind || child.importKind === "value")) ||
+      (child.type === "ExportNamedDeclaration" &&
+        (!child.exportKind || child.exportKind === "value")) ||
+      (child.type === "ExportAllDeclaration" &&
+        (!child.exportKind || child.exportKind === "value")) ||
+      child.type === "ExportDefaultDeclaration",
+  );
 }

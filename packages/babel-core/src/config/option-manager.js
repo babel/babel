@@ -1,23 +1,16 @@
 // @flow
 
 import * as context from "../index";
-import Plugin from "./plugin";
-import defaults from "lodash/defaults";
+import Plugin, { validatePluginObject } from "./plugin";
 import merge from "lodash/merge";
 import buildConfigChain, { type ConfigItem } from "./build-config-chain";
-import path from "path";
 import traverse from "@babel/traverse";
 import clone from "lodash/clone";
 import { makeWeakCache } from "./caching";
 import { getEnv } from "./helpers/environment";
 import { validate, type ValidatedOptions, type PluginItem } from "./options";
 
-import {
-  loadPlugin,
-  loadPreset,
-  loadParser,
-  loadGenerator,
-} from "./loading/files";
+import { loadPlugin, loadPreset } from "./loading/files";
 
 type MergeOptions =
   | ConfigItem
@@ -27,15 +20,6 @@ type MergeOptions =
       alias: string,
       dirname: string,
     };
-
-const ALLOWED_PLUGIN_KEYS = new Set([
-  "name",
-  "manipulateOptions",
-  "pre",
-  "post",
-  "visitor",
-  "inherits",
-]);
 
 export default function manageOptions(opts: {}): {
   options: Object,
@@ -132,47 +116,17 @@ class OptionManager {
       throw e;
     }
 
-    const opts: Object = merge(createInitialOptions(), this.options);
+    const opts: Object = this.options;
 
     // Tack the passes onto the object itself so that, if this object is passed back to Babel a second time,
     // it will be in the right structure to not change behavior.
+    opts.babelrc = false;
     opts.plugins = this.passes[0];
     opts.presets = this.passes
       .slice(1)
       .filter(plugins => plugins.length > 0)
       .map(plugins => ({ plugins }));
     opts.passPerPreset = opts.presets.length > 0;
-
-    if (opts.inputSourceMap) {
-      opts.sourceMaps = true;
-    }
-
-    if (opts.moduleId) {
-      opts.moduleIds = true;
-    }
-
-    defaults(opts, {
-      moduleRoot: opts.sourceRoot,
-    });
-
-    defaults(opts, {
-      sourceRoot: opts.moduleRoot,
-    });
-
-    defaults(opts, {
-      filenameRelative: opts.filename,
-    });
-
-    const basenameRelative = path.basename(opts.filenameRelative);
-
-    if (path.extname(opts.filenameRelative) === ".mjs") {
-      opts.sourceType = "module";
-    }
-
-    defaults(opts, {
-      sourceFileName: basenameRelative,
-      sourceMapTarget: basenameRelative,
-    });
 
     return {
       options: opts,
@@ -203,7 +157,7 @@ const loadConfig = makeWeakCache((config: MergeOptions): {
   plugins: Array<BasicDescriptor>,
   presets: Array<BasicDescriptor>,
 } => {
-  const options = normalizeOptions(config);
+  const options = config.options;
 
   const plugins = (config.options.plugins || []).map((plugin, index) =>
     createDescriptor(plugin, loadPlugin, config.dirname, {
@@ -273,37 +227,16 @@ function loadPluginDescriptor(descriptor: BasicDescriptor): Plugin {
 }
 
 const instantiatePlugin = makeWeakCache(
-  (
-    { value: pluginObj, options, dirname, alias }: LoadedDescriptor,
-    cache,
-  ): Plugin => {
-    Object.keys(pluginObj).forEach(key => {
-      if (!ALLOWED_PLUGIN_KEYS.has(key)) {
-        throw new Error(
-          `Plugin ${alias} provided an invalid property of ${key}`,
-        );
-      }
-    });
-    if (
-      pluginObj.visitor &&
-      (pluginObj.visitor.enter || pluginObj.visitor.exit)
-    ) {
-      throw new Error(
-        "Plugins aren't allowed to specify catch-all enter/exit handlers. " +
-          "Please target individual nodes.",
-      );
+  ({ value, options, dirname, alias }: LoadedDescriptor, cache): Plugin => {
+    const pluginObj = validatePluginObject(value);
+
+    const plugin = Object.assign({}, pluginObj);
+    if (plugin.visitor) {
+      plugin.visitor = traverse.explode(clone(plugin.visitor));
     }
 
-    const plugin = Object.assign({}, pluginObj, {
-      visitor: clone(pluginObj.visitor || {}),
-    });
-
-    traverse.explode(plugin.visitor);
-
-    let inheritsDescriptor;
-    let inherits;
     if (plugin.inherits) {
-      inheritsDescriptor = {
+      const inheritsDescriptor = {
         alias: `${alias}$inherits`,
         value: plugin.inherits,
         options,
@@ -311,7 +244,7 @@ const instantiatePlugin = makeWeakCache(
       };
 
       // If the inherited plugin changes, reinstantiate this plugin.
-      inherits = cache.invalidate(() =>
+      const inherits = cache.invalidate(() =>
         loadPluginDescriptor(inheritsDescriptor),
       );
 
@@ -322,8 +255,8 @@ const instantiatePlugin = makeWeakCache(
         plugin.manipulateOptions,
       );
       plugin.visitor = traverse.visitors.merge([
-        inherits.visitor,
-        plugin.visitor,
+        inherits.visitor || {},
+        plugin.visitor || {},
       ]);
     }
 
@@ -348,35 +281,6 @@ const instantiatePreset = makeWeakCache(
     };
   },
 );
-
-/**
- * Validate and return the options object for the config.
- */
-function normalizeOptions(config) {
-  //
-  const options = Object.assign({}, config.options);
-
-  if (options.parserOpts && typeof options.parserOpts.parser === "string") {
-    options.parserOpts = Object.assign({}, options.parserOpts);
-    (options.parserOpts: any).parser = loadParser(
-      options.parserOpts.parser,
-      config.dirname,
-    ).value;
-  }
-
-  if (
-    options.generatorOpts &&
-    typeof options.generatorOpts.generator === "string"
-  ) {
-    options.generatorOpts = Object.assign({}, options.generatorOpts);
-    (options.generatorOpts: any).generator = loadGenerator(
-      options.generatorOpts.generator,
-      config.dirname,
-    ).value;
-  }
-
-  return options;
-}
 
 /**
  * Given a plugin/preset item, resolve it into a standard format.
@@ -454,18 +358,5 @@ function chain(a, b) {
     for (const fn of fns) {
       fn.apply(this, args);
     }
-  };
-}
-
-function createInitialOptions() {
-  return {
-    sourceType: "module",
-    babelrc: true,
-    filename: "unknown",
-    code: true,
-    ast: true,
-    comments: true,
-    compact: "auto",
-    highlightCode: true,
   };
 }

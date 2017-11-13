@@ -1,10 +1,8 @@
 import type { NodePath } from "@babel/traverse";
-import { visitors } from "@babel/traverse";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as defineMap from "@babel/helper-define-map";
-import template from "@babel/template";
-import * as t from "@babel/types";
+import { traverse, template, types as t } from "@babel/core";
 
 const noMethodVisitor = {
   "FunctionExpression|FunctionDeclaration"(path) {
@@ -16,7 +14,7 @@ const noMethodVisitor = {
   },
 };
 
-const verifyConstructorVisitor = visitors.merge([
+const verifyConstructorVisitor = traverse.visitors.merge([
   noMethodVisitor,
   {
     MemberExpression: {
@@ -63,7 +61,7 @@ const verifyConstructorVisitor = visitors.merge([
   },
 ]);
 
-const findThisesVisitor = visitors.merge([
+const findThisesVisitor = traverse.visitors.merge([
   noMethodVisitor,
   {
     ThisExpression(path) {
