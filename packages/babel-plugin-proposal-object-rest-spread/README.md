@@ -34,21 +34,21 @@ npm install --save-dev @babel/plugin-proposal-object-rest-spread
 
 ```json
 {
-  "plugins": ["@babel/proposal-object-rest-spread"]
+  "plugins": ["@babel/plugin-proposal-object-rest-spread"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/proposal-object-rest-spread script.js
+babel --plugins @babel/plugin-proposal-object-rest-spread script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/proposal-object-rest-spread"]
+  plugins: ["@babel/plugin-proposal-object-rest-spread"]
 });
 ```
 
@@ -65,7 +65,7 @@ By default, this plugin uses Babel's `extends` helper which polyfills `Object.as
 ```json
 {
   "plugins": [
-    ["@babel/proposal-object-rest-spread", { "useBuiltIns": true }]
+    ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }]
   ]
 }
 ```

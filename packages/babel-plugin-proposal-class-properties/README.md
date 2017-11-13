@@ -50,7 +50,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["@babel/proposal-class-properties"]
+  "plugins": ["@babel/plugin-proposal-class-properties"]
 }
 ```
 
@@ -59,7 +59,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["@babel/proposal-class-properties", { "loose": true }]
+    ["@babel/plugin-proposal-class-properties", { "loose": true }]
   ]
 }
 ```
@@ -67,14 +67,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins @babel/proposal-class-properties script.js
+babel --plugins @babel/plugin-proposal-class-properties script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/proposal-class-properties"]
+  plugins: ["@babel/plugin-proposal-class-properties"]
 });
 ```
 

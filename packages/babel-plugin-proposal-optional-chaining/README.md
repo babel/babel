@@ -95,21 +95,21 @@ npm install --save-dev @babel/plugin-proposal-optional-chaining
 
 ```json
 {
-  "plugins": ["@babel/proposal-optional-chaining"]
+  "plugins": ["@babel/plugin-proposal-optional-chaining"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/proposal-optional-chaining script.js
+babel --plugins @babel/plugin-proposal-optional-chaining script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/proposal-optional-chaining"]
+  plugins: ["@babel/plugin-proposal-optional-chaining"]
 });
 ```
 

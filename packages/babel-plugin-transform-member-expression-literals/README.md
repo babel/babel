@@ -30,20 +30,20 @@ npm install --save-dev @babel/plugin-transform-member-expression-literals
 
 ```json
 {
-  "plugins": ["@babel/transform-member-expression-literals"]
+  "plugins": ["@babel/plugin-transform-member-expression-literals"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-member-expression-literals script.js
+babel --plugins @babel/plugin-transform-member-expression-literals script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-member-expression-literals"]
+  plugins: ["@babel/plugin-transform-member-expression-literals"]
 });
 ```

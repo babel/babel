@@ -22,21 +22,21 @@ npm install --save-dev @babel/plugin-proposal-export-namespace
 
 ```json
 {
-  "plugins": ["@babel/proposal-export-namespace"]
+  "plugins": ["@babel/plugin-proposal-export-namespace"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/proposal-export-namespace script.js
+babel --plugins @babel/plugin-proposal-export-namespace script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/proposal-export-namespace"]
+  plugins: ["@babel/plugin-proposal-export-namespace"]
 });
 ```
 ## References

@@ -4,7 +4,7 @@
 
 This preset includes the following plugins:
 
-- [transform-flow-strip-types](https://babeljs.io/docs/plugins/transform-flow-strip-types/)
+- [@babel/plugin-transform-flow-strip-types](https://babeljs.io/docs/plugins/transform-flow-strip-types/)
 
 ## Example
 
@@ -34,20 +34,20 @@ npm install --save-dev @babel/preset-flow
 
 ```json
 {
-  "presets": ["@babel/flow"]
+  "presets": ["@babel/preset-flow"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --presets @babel/flow script.js
+babel --presets @babel/preset-flow script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  presets: ["@babel/flow"]
+  presets: ["@babel/preset-flow"]
 });
 ```

@@ -23,7 +23,7 @@ System.register([], function (_export, _context) {
 });
 ```
 
-For dynamic import support (`import('./lazy.js').then(m => ...)`), enable the [syntax-dynamic-import](https://babeljs.io/docs/plugins/syntax-dynamic-import/) plugin before this one.
+For dynamic import support (`import('./lazy.js').then(m => ...)`), enable the [@babel/plugin-syntax-dynamic-import](https://babeljs.io/docs/plugins/syntax-dynamic-import/) plugin before this one.
 
 ## Installation
 
@@ -41,7 +41,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["@babel/transform-modules-systemjs"]
+  "plugins": ["@babel/plugin-transform-modules-systemjs"]
 }
 ```
 
@@ -50,7 +50,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["@babel/transform-modules-systemjs", {
+    ["@babel/plugin-transform-modules-systemjs", {
       // outputs SystemJS.register(...)
       "systemGlobal": "SystemJS"
     }]
@@ -61,13 +61,13 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-modules-systemjs script.js
+babel --plugins @babel/plugin-transform-modules-systemjs script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-modules-systemjs"]
+  plugins: ["@babel/plugin-transform-modules-systemjs"]
 });
 ```

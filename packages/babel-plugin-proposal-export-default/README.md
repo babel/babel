@@ -22,21 +22,21 @@ npm install --save-dev @babel/plugin-proposal-export-default
 
 ```json
 {
-  "plugins": ["@babel/proposal-export-default"]
+  "plugins": ["@babel/plugin-proposal-export-default"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/proposal-export-default script.js
+babel --plugins @babel/plugin-proposal-export-default script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/proposal-export-default"]
+  plugins: ["@babel/plugin-proposal-export-default"]
 });
 ```
 ## References

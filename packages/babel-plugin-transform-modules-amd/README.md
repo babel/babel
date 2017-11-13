@@ -38,24 +38,24 @@ npm install --save-dev @babel/plugin-transform-modules-amd
 
 ```json
 {
-  "plugins": ["@babel/transform-modules-amd"]
+  "plugins": ["@babel/plugin-transform-modules-amd"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-modules-amd script.js
+babel --plugins @babel/plugin-transform-modules-amd script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-modules-amd"]
+  plugins: ["@babel/plugin-transform-modules-amd"]
 });
 ```
 
 ### Options
 
-See options for `babel-plugin-transform-commonjs`.
+See options for `@babel/plugin-transform-modules-commonjs`.

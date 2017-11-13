@@ -61,7 +61,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["@babel/transform-computed-properties"]
+  "plugins": ["@babel/plugin-transform-computed-properties"]
 }
 ```
 
@@ -70,7 +70,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["@babel/transform-computed-properties", {
+    ["@babel/plugin-transform-computed-properties", {
       "loose": true
     }]
   ]
@@ -80,14 +80,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-computed-properties script.js
+babel --plugins @babel/plugin-transform-computed-properties script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-computed-properties"]
+  plugins: ["@babel/plugin-transform-computed-properties"]
 });
 ```
 

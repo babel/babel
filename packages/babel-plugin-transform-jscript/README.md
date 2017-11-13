@@ -38,20 +38,20 @@ npm install --save-dev @babel/plugin-transform-jscript
 
 ```json
 {
-  "plugins": ["@babel/transform-jscript"]
+  "plugins": ["@babel/plugin-transform-jscript"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-jscript script.js
+babel --plugins @babel/plugin-transform-jscript script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-jscript"]
+  plugins: ["@babel/plugin-transform-jscript"]
 });
 ```

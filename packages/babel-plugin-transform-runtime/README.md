@@ -8,7 +8,7 @@ NOTE: Instance methods such as `"foobar".includes("foo")` will not work since th
 
 Babel uses very small helpers for common functions such as `_extend`. By default this will be added to every file that requires it. This duplication is sometimes unnecessary, especially when your application is spread out over multiple files.
 
-This is where the `transform-runtime` plugin comes in: all of the helpers will reference the module `@babel/runtime` to avoid duplication across your compiled output. The runtime will be compiled into your build.
+This is where the `@babel/plugin-transform-runtime` plugin comes in: all of the helpers will reference the module `@babel/runtime` to avoid duplication across your compiled output. The runtime will be compiled into your build.
 
 Another purpose of this transformer is to create a sandboxed environment for your code. If you use [@babel/polyfill](http://babeljs.io/docs/usage/polyfill/) and the built-ins it provides such as `Promise`, `Set` and `Map`, those will pollute the global scope. While this might be ok for an app or a command line tool, it becomes a problem if your code is a library which you intend to publish for others to use or if you can't exactly control the environment in which your code will run.
 
@@ -44,7 +44,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["@babel/transform-runtime"]
+  "plugins": ["@babel/plugin-transform-runtime"]
 }
 ```
 
@@ -53,7 +53,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["@babel/transform-runtime", {
+    ["@babel/plugin-transform-runtime", {
       "helpers": false,
       "polyfill": false,
       "regenerator": true,
@@ -66,14 +66,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-runtime script.js
+babel --plugins @babel/plugin-transform-runtime script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-runtime"]
+  plugins: ["@babel/plugin-transform-runtime"]
 });
 ```
 
@@ -171,7 +171,7 @@ exports.default = function (left, right) {
 `boolean`, defaults to `false`.
 
 When enabled, the transform will use helpers that do not get run through
-`transform-modules-commonjs`. This allows for smaller builds in module
+`@babel/plugin-transform-modules-commonjs`. This allows for smaller builds in module
 systems like webpack, since it doesn't need to preserve commonjs semantics.
 
 For example, here is the `classCallCheck` helper with `useESModules` disabled:

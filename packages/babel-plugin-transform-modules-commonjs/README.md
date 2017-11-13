@@ -35,13 +35,13 @@ npm install --save-dev @babel/plugin-transform-modules-commonjs
 ```js
 // without options
 {
-  "plugins": ["@babel/transform-modules-commonjs"]
+  "plugins": ["@babel/plugin-transform-modules-commonjs"]
 }
 
 // with options
 {
   "plugins": [
-    ["@babel/transform-modules-commonjs", {
+    ["@babel/plugin-transform-modules-commonjs", {
       "allowTopLevelThis": true
     }]
   ]
@@ -51,14 +51,14 @@ npm install --save-dev @babel/plugin-transform-modules-commonjs
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-modules-commonjs script.js
+babel --plugins @babel/plugin-transform-modules-commonjs script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-modules-commonjs"]
+  plugins: ["@babel/plugin-transform-modules-commonjs"]
 });
 ```
 
@@ -82,7 +82,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 ```
 
-In environments that don't support this you can enable loose mode on `babel-plugin-transform-modules-commonjs`
+In environments that don't support this you can enable loose mode on `@babel/plugin-transform-modules-commonjs`
 and instead of using `Object.defineProperty` an assignment will be used instead.
 
 ```javascript

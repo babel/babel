@@ -6,7 +6,7 @@
 
 Built-in classes such as `Date`, `Array`, `DOM` etc cannot be properly subclassed
 due to limitations in ES5 (for the [classes](http://babeljs.io/docs/plugins/transform-classes) plugin).
-You can try to use [babel-plugin-transform-builtin-extend](https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend) based on `Object.setPrototypeOf` and `Reflect.construct`, but it also has some limitations.
+You can try to use [@babel/plugin-transform-builtin-extend](https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend) based on `Object.setPrototypeOf` and `Reflect.construct`, but it also has some limitations.
 
 ## Examples
 
@@ -59,13 +59,13 @@ npm install --save-dev @babel/plugin-transform-classes
 ```js
 // without options
 {
-  "plugins": ["@babel/transform-classes"]
+  "plugins": ["@babel/plugin-transform-classes"]
 }
 
 // with options
 {
   "plugins": [
-    ["@babel/transform-classes", {
+    ["@babel/plugin-transform-classes", {
       "loose": true
     }]
   ]
@@ -75,14 +75,14 @@ npm install --save-dev @babel/plugin-transform-classes
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-classes script.js
+babel --plugins @babel/plugin-transform-classes script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-classes"]
+  plugins: ["@babel/plugin-transform-classes"]
 });
 ```
 

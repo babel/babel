@@ -16,20 +16,20 @@ npm install --save-dev @babel/preset-es2016
 
 ```json
 {
-  "presets": ["@babel/es2016"]
+  "presets": ["@babel/preset-es2016"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel script.js --presets @babel/es2016
+babel script.js --presets @babel/preset-es2016
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  presets: ["@babel/es2016"]
+  presets: ["@babel/preset-es2016"]
 });
 ```

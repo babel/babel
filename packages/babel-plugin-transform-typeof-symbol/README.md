@@ -34,20 +34,20 @@ npm install --save-dev @babel/plugin-transform-typeof-symbol
 
 ```json
 {
-  "plugins": ["@babel/transform-typeof-symbol"]
+  "plugins": ["@babel/plugin-transform-typeof-symbol"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-typeof-symbol script.js
+babel --plugins @babel/plugin-transform-typeof-symbol script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-typeof-symbol"]
+  plugins: ["@babel/plugin-transform-typeof-symbol"]
 });
 ```
