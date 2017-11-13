@@ -10,7 +10,7 @@ Without any configuration options, @babel/preset-env behaves exactly the same as
 
 ```json
 {
-  "presets": ["@babel/env"]
+  "presets": ["@babel/preset-env"]
 }
 ```
 
@@ -21,7 +21,7 @@ This example only includes the polyfills and code transforms needed for the last
 ```json
 {
   "presets": [
-    ["@babel/env", {
+    ["@babel/preset-env", {
       "targets": {
         "browsers": ["last 2 versions", "safari >= 7"]
       }
@@ -35,7 +35,7 @@ Similarly, if you're targeting Node.js instead of the browser, you can configure
 ```json
 {
   "presets": [
-    ["@babel/env", {
+    ["@babel/preset-env", {
       "targets": {
         "node": "6.10"
       }
@@ -49,7 +49,7 @@ For convenience, you can use `"node": "current"` to only include the necessary p
 ```json
 {
   "presets": [
-    ["@babel/env", {
+    ["@babel/preset-env", {
       "targets": {
         "node": "current"
       }
