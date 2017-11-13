@@ -247,6 +247,8 @@ const continuationVisitor = {
         }
         state.reassignments[name] = true;
       }
+    } else if (path.isReturnStatement()) {
+      state.returnStatements.push(path);
     }
   },
 };
@@ -585,6 +587,7 @@ class BlockScoping {
   addContinuations(fn) {
     const state = {
       reassignments: {},
+      returnStatements: [],
       outsideReferences: this.outsideLetReferences,
     };
 
@@ -598,6 +601,12 @@ class BlockScoping {
       fn.params[i] = newParam;
 
       this.scope.rename(param.name, newParam.name, fn);
+
+      state.returnStatements.forEach(returnStatement => {
+        returnStatement.insertBefore(
+          t.expressionStatement(t.assignmentExpression("=", param, newParam)),
+        );
+      });
 
       // assign outer reference as it's been modified internally and needs to be retained
       fn.body.body.push(
