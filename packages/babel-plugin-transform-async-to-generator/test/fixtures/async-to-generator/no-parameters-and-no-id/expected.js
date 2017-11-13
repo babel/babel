@@ -1,1 +1,3 @@
-foo(babelHelpers.asyncToGenerator(function* () {}));
+foo(
+/*#__PURE__*/
+babelHelpers.asyncToGenerator(function* () {}));

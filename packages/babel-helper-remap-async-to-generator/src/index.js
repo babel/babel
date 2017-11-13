@@ -2,6 +2,7 @@
 
 import type { NodePath } from "@babel/traverse";
 import wrapFunction from "@babel/helper-wrap-function";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 import * as t from "@babel/types";
 import rewriteForAwait from "./for-await";
 
@@ -71,4 +72,16 @@ export default function(path: NodePath, file: Object, helpers: Object) {
   path.node.generator = true;
 
   wrapFunction(path, helpers.wrapAsync);
+
+  const isProperty =
+    path.isObjectMethod() ||
+    path.isClassMethod() ||
+    path.parentPath.isObjectProperty() ||
+    path.parentPath.isClassProperty();
+
+  if (!isProperty) {
+    annotateAsPure(
+      path.isDeclaration() ? path.get("declarations.0.init") : path,
+    );
+  }
 }

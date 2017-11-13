@@ -6,7 +6,9 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 let myFunc = (() => {
-  var _ref = babelHelpers.asyncToGenerator(function* () {});
+  var _ref = babelHelpers.asyncToGenerator(
+  /*#__PURE__*/
+  function* () {});
 
   return function myFunc() {
     return _ref.apply(this, arguments);

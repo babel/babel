@@ -1,4 +1,6 @@
-let f = (() => {
+let f =
+/*#__PURE__*/
+(() => {
   var _ref = babelHelpers.asyncToGenerator(function* () {
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;

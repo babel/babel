@@ -8,7 +8,9 @@ require("regenerator-runtime/runtime");
 
 require("core-js/modules/es6.object.assign");
 
-var agf = function () {
+var agf =
+/*#__PURE__*/
+function () {
   var _ref = _wrapAsyncGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee() {
