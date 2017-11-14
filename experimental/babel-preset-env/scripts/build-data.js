@@ -194,10 +194,9 @@ const getLowestImplementedVersion = ({ features }, env) => {
     if (!test.babel && isBuiltIn) {
       return "-1";
     }
-    const sortedKeys = Object.keys(test);
 
     return (
-      sortedKeys
+      Object.keys(test)
         .filter(t => t.startsWith(env))
         // Babel assumes strict mode
         .filter(
