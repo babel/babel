@@ -1,0 +1,657 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 167,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 5,
+      "column": 32
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 167,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 5,
+        "column": 32
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 23,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 23
+          }
+        },
+        "expression": {
+          "type": "BinaryExpression",
+          "start": 0,
+          "end": 22,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 22
+            }
+          },
+          "left": {
+            "type": "BinaryExpression",
+            "start": 0,
+            "end": 8,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 8
+              }
+            },
+            "left": {
+              "type": "Identifier",
+              "start": 0,
+              "end": 5,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 1,
+                  "column": 5
+                },
+                "identifierName": "async"
+              },
+              "name": "async"
+            },
+            "operator": "<",
+            "right": {
+              "type": "Identifier",
+              "start": 7,
+              "end": 8,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 7
+                },
+                "end": {
+                  "line": 1,
+                  "column": 8
+                },
+                "identifierName": "T"
+              },
+              "name": "T"
+            }
+          },
+          "operator": ">",
+          "right": {
+            "type": "TypeCastExpression",
+            "start": 10,
+            "end": 21,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 10
+              },
+              "end": {
+                "line": 1,
+                "column": 21
+              }
+            },
+            "expression": {
+              "type": "Identifier",
+              "start": 10,
+              "end": 12,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 1,
+                  "column": 12
+                },
+                "identifierName": "fn"
+              },
+              "name": "fn"
+            },
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start": 12,
+              "end": 21,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 12
+                },
+                "end": {
+                  "line": 1,
+                  "column": 21
+                }
+              },
+              "typeAnnotation": {
+                "type": "FunctionTypeAnnotation",
+                "start": 14,
+                "end": 21,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 14
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 21
+                  }
+                },
+                "params": [],
+                "rest": null,
+                "returnType": {
+                  "type": "GenericTypeAnnotation",
+                  "start": 20,
+                  "end": 21,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 20
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 21
+                    }
+                  },
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 20,
+                    "end": 21,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 20
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 21
+                      },
+                      "identifierName": "T"
+                    },
+                    "name": "T"
+                  }
+                },
+                "typeParameters": null
+              }
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 9
+            }
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " This looks A LOT like an async arrow function, but it isn't because",
+            "start": 25,
+            "end": 95,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 0
+              },
+              "end": {
+                "line": 3,
+                "column": 70
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " T + U isn't a valid type parameter.",
+            "start": 96,
+            "end": 134,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 0
+              },
+              "end": {
+                "line": 4,
+                "column": 38
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 135,
+        "end": 167,
+        "loc": {
+          "start": {
+            "line": 5,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 32
+          }
+        },
+        "expression": {
+          "type": "TypeCastExpression",
+          "start": 136,
+          "end": 165,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 1
+            },
+            "end": {
+              "line": 5,
+              "column": 30
+            }
+          },
+          "expression": {
+            "type": "BinaryExpression",
+            "start": 136,
+            "end": 156,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 1
+              },
+              "end": {
+                "line": 5,
+                "column": 21
+              }
+            },
+            "left": {
+              "type": "BinaryExpression",
+              "start": 136,
+              "end": 148,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 1
+                },
+                "end": {
+                  "line": 5,
+                  "column": 13
+                }
+              },
+              "left": {
+                "type": "Identifier",
+                "start": 136,
+                "end": 141,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 6
+                  },
+                  "identifierName": "async"
+                },
+                "name": "async",
+                "leadingComments": null
+              },
+              "operator": "<",
+              "right": {
+                "type": "BinaryExpression",
+                "start": 143,
+                "end": 148,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 13
+                  }
+                },
+                "left": {
+                  "type": "Identifier",
+                  "start": 143,
+                  "end": 144,
+                  "loc": {
+                    "start": {
+                      "line": 5,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 5,
+                      "column": 9
+                    },
+                    "identifierName": "T"
+                  },
+                  "name": "T"
+                },
+                "operator": "+",
+                "right": {
+                  "type": "Identifier",
+                  "start": 147,
+                  "end": 148,
+                  "loc": {
+                    "start": {
+                      "line": 5,
+                      "column": 12
+                    },
+                    "end": {
+                      "line": 5,
+                      "column": 13
+                    },
+                    "identifierName": "U"
+                  },
+                  "name": "U"
+                }
+              },
+              "leadingComments": null
+            },
+            "operator": ">",
+            "right": {
+              "type": "TypeCastExpression",
+              "start": 150,
+              "end": 155,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 15
+                },
+                "end": {
+                  "line": 5,
+                  "column": 20
+                }
+              },
+              "expression": {
+                "type": "Identifier",
+                "start": 150,
+                "end": 152,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 15
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 17
+                  },
+                  "identifierName": "fn"
+                },
+                "name": "fn"
+              },
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start": 152,
+                "end": 155,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 17
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 20
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "GenericTypeAnnotation",
+                  "start": 154,
+                  "end": 155,
+                  "loc": {
+                    "start": {
+                      "line": 5,
+                      "column": 19
+                    },
+                    "end": {
+                      "line": 5,
+                      "column": 20
+                    }
+                  },
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 154,
+                    "end": 155,
+                    "loc": {
+                      "start": {
+                        "line": 5,
+                        "column": 19
+                      },
+                      "end": {
+                        "line": 5,
+                        "column": 20
+                      },
+                      "identifierName": "T"
+                    },
+                    "name": "T"
+                  }
+                }
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 149
+              }
+            },
+            "leadingComments": null
+          },
+          "typeAnnotation": {
+            "type": "TypeAnnotation",
+            "start": 156,
+            "end": 165,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 21
+              },
+              "end": {
+                "line": 5,
+                "column": 30
+              }
+            },
+            "typeAnnotation": {
+              "type": "FunctionTypeAnnotation",
+              "start": 158,
+              "end": 165,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 23
+                },
+                "end": {
+                  "line": 5,
+                  "column": 30
+                }
+              },
+              "params": [
+                {
+                  "type": "FunctionTypeParam",
+                  "start": 158,
+                  "end": 162,
+                  "loc": {
+                    "start": {
+                      "line": 5,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 5,
+                      "column": 27
+                    }
+                  },
+                  "name": null,
+                  "optional": false,
+                  "typeAnnotation": {
+                    "type": "GenericTypeAnnotation",
+                    "start": 158,
+                    "end": 159,
+                    "loc": {
+                      "start": {
+                        "line": 5,
+                        "column": 23
+                      },
+                      "end": {
+                        "line": 5,
+                        "column": 24
+                      }
+                    },
+                    "typeParameters": null,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 158,
+                      "end": 159,
+                      "loc": {
+                        "start": {
+                          "line": 5,
+                          "column": 23
+                        },
+                        "end": {
+                          "line": 5,
+                          "column": 24
+                        },
+                        "identifierName": "T"
+                      },
+                      "name": "T"
+                    }
+                  }
+                }
+              ],
+              "rest": null,
+              "returnType": {
+                "type": "GenericTypeAnnotation",
+                "start": 163,
+                "end": 165,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 28
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 30
+                  }
+                },
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 163,
+                  "end": 165,
+                  "loc": {
+                    "start": {
+                      "line": 5,
+                      "column": 28
+                    },
+                    "end": {
+                      "line": 5,
+                      "column": 30
+                    },
+                    "identifierName": "fn"
+                  },
+                  "name": "fn"
+                }
+              },
+              "typeParameters": null
+            }
+          },
+          "leadingComments": null,
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 135
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " This looks A LOT like an async arrow function, but it isn't because",
+            "start": 25,
+            "end": 95,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 0
+              },
+              "end": {
+                "line": 3,
+                "column": 70
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " T + U isn't a valid type parameter.",
+            "start": 96,
+            "end": 134,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 0
+              },
+              "end": {
+                "line": 4,
+                "column": 38
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " This looks A LOT like an async arrow function, but it isn't because",
+      "start": 25,
+      "end": 95,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 70
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " T + U isn't a valid type parameter.",
+      "start": 96,
+      "end": 134,
+      "loc": {
+        "start": {
+          "line": 4,
+          "column": 0
+        },
+        "end": {
+          "line": 4,
+          "column": 38
+        }
+      }
+    }
+  ]
+}
