@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-for-of-as-array", "transform-modules-commonjs"]
+}
