@@ -50,12 +50,12 @@ export function log(msg) {
   if (!commander.quiet) console.log(msg);
 }
 
-export function transform(filename, code, opts) {
+export function transform(filename, code, opts, cb) {
   opts = Object.assign({}, opts, {
     filename,
   });
 
-  return babel.transform(code, opts);
+  babel.transform(code, opts, cb);
 }
 
 export function compile(filename, opts) {

@@ -103,19 +103,21 @@ export default function(commander, filenames, opts) {
     });
 
     process.stdin.on("end", function() {
-      results.push(
-        util.transform(
-          commander.filename,
-          code,
-          defaults(
-            {
-              sourceFileName: "stdin",
-            },
-            opts,
-          ),
+      util.transform(
+        commander.filename,
+        code,
+        defaults(
+          {
+            sourceFileName: "stdin",
+          },
+          opts,
         ),
+        function(err, result) {
+          if (err) console.error(err.stack);
+          results.push(result);
+          output();
+        },
       );
-      output();
     });
   };
 
