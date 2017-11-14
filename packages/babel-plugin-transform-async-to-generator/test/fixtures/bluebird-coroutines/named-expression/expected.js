@@ -1,6 +1,8 @@
 var _coroutine = require("bluebird").coroutine;
 
-var foo = (() => {
+var foo =
+/*#__PURE__*/
+(() => {
   var _ref = _coroutine(function* () {
     console.log(bar);
   });

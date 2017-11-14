@@ -142,6 +142,7 @@ const readConfigJS = makeStrongCache((filepath, cache) => {
       cache,
       // Expose ".env()" so people can easily get the same env that we expose using the "env" key.
       env: () => cache.using(() => getEnv()),
+      async: () => false,
     });
   } else {
     cache.forever();
@@ -150,6 +151,16 @@ const readConfigJS = makeStrongCache((filepath, cache) => {
   if (!options || typeof options !== "object" || Array.isArray(options)) {
     throw new Error(
       `${filepath}: Configuration should be an exported JavaScript object.`,
+    );
+  }
+
+  if (typeof options.then === "function") {
+    throw new Error(
+      `You appear to be using an async configuration, ` +
+        `which your current version of Babel does not support. ` +
+        `We may add support for this in the future, ` +
+        `but if you're on the most recent version of @babel/core and still ` +
+        `seeing this error, then you'll need to synchronously return your config.`,
     );
   }
 

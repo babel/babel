@@ -1,4 +1,6 @@
-let one = (() => {
+let one =
+/*#__PURE__*/
+(() => {
   var _ref = babelHelpers.asyncToGenerator(function* (a, b = 1) {});
 
   return function one(_x) {
@@ -6,7 +8,9 @@ let one = (() => {
   };
 })();
 
-let two = (() => {
+let two =
+/*#__PURE__*/
+(() => {
   var _ref2 = babelHelpers.asyncToGenerator(function* (a, b, ...c) {});
 
   return function two(_x2, _x3) {
@@ -14,7 +18,9 @@ let two = (() => {
   };
 })();
 
-let three = (() => {
+let three =
+/*#__PURE__*/
+(() => {
   var _ref3 = babelHelpers.asyncToGenerator(function* (a, b = 1, c, d = 3) {});
 
   return function three(_x4) {
@@ -22,7 +28,9 @@ let three = (() => {
   };
 })();
 
-let four = (() => {
+let four =
+/*#__PURE__*/
+(() => {
   var _ref4 = babelHelpers.asyncToGenerator(function* (a, b = 1, c, ...d) {});
 
   return function four(_x5) {
@@ -30,7 +38,9 @@ let four = (() => {
   };
 })();
 
-let five = (() => {
+let five =
+/*#__PURE__*/
+(() => {
   var _ref5 = babelHelpers.asyncToGenerator(function* (a, {
     b
   }) {});
@@ -40,7 +50,9 @@ let five = (() => {
   };
 })();
 
-let six = (() => {
+let six =
+/*#__PURE__*/
+(() => {
   var _ref6 = babelHelpers.asyncToGenerator(function* (a, {
     b
   } = {}) {});

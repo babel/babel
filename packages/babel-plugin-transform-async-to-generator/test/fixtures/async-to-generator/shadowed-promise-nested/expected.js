@@ -1,6 +1,10 @@
-let foo = (() => {
+let foo =
+/*#__PURE__*/
+(() => {
   var _ref = _asyncToGenerator(function* () {
-    let bar = (() => {
+    let bar =
+    /*#__PURE__*/
+    (() => {
       var _ref2 = _asyncToGenerator(function* () {
         return Promise.resolve();
       });

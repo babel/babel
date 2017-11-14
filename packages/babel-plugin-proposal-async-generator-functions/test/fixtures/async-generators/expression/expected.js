@@ -1,3 +1,4 @@
+/*#__PURE__*/
 (() => {
   var _ref = babelHelpers.wrapAsyncGenerator(function* () {
     this;

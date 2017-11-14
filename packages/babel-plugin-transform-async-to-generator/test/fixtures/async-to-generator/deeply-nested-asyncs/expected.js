@@ -1,4 +1,6 @@
-let s = (() => {
+let s =
+/*#__PURE__*/
+(() => {
   var _ref = babelHelpers.asyncToGenerator(function* (x) {
     var _this = this,
         _arguments = arguments;
@@ -7,9 +9,13 @@ let s = (() => {
       args[_key - 1] = arguments[_key];
     }
 
-    let t = (() => {
+    let t =
+    /*#__PURE__*/
+    (() => {
       var _ref2 = babelHelpers.asyncToGenerator(function* (y, a) {
-        let r = (() => {
+        let r =
+        /*#__PURE__*/
+        (() => {
           var _ref3 = babelHelpers.asyncToGenerator(function* (z, b) {
             yield z;
 
