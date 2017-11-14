@@ -186,7 +186,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
       return result;
     }, []);
 
-  const unreleasedLabel = unreleasedLabels[env];
+  const unreleasedLabelForEnv = unreleasedLabels[env];
   const envTests = tests.map(({ res: test, isBuiltIn }, i) => {
     // Babel itself doesn't implement the feature correctly,
     // don't count against it
@@ -195,35 +195,6 @@ const getLowestImplementedVersion = ({ features }, env) => {
       return "-1";
     }
     const sortedKeys = Object.keys(test);
-    // Replace unreleased version after latest released version.
-    const unreleasedFullLabel = unreleasedLabel ? env + unreleasedLabel : null;
-    if (unreleasedFullLabel && sortedKeys.indexOf(unreleasedFullLabel) >= 0) {
-      // Find latest released version
-      const latestVersion = sortedKeys.reduce((current, next) => {
-        let nextVer = next.replace(env, "");
-        if (!next.startsWith(env) || nextVer === unreleasedLabel) {
-          return current;
-        }
-        nextVer = parseFloat(nextVer);
-        const currentVer = current
-          ? parseFloat(current.replace(env, ""))
-          : null;
-        const isLarger = !currentVer || nextVer > currentVer;
-        if (isLarger) {
-          return next;
-        }
-        return current;
-      }, null);
-      // Put unreleased version after released.
-      if (latestVersion) {
-        sortedKeys.splice(sortedKeys.indexOf(unreleasedFullLabel), 1);
-        sortedKeys.splice(
-          sortedKeys.indexOf(latestVersion) + 1,
-          0,
-          unreleasedFullLabel
-        );
-      }
-    }
 
     return (
       sortedKeys
@@ -238,7 +209,8 @@ const getLowestImplementedVersion = ({ features }, env) => {
         })
         // version must be label from the unreleasedLabels (like tp) or number.
         .filter(
-          version => unreleasedLabel === version || !isNaN(parseFloat(version))
+          version =>
+            unreleasedLabelForEnv === version || !isNaN(parseFloat(version))
         )
         .shift()
     );
@@ -260,10 +232,10 @@ const getLowestImplementedVersion = ({ features }, env) => {
   return envTests
     .map(str => {
       const version = str.replace(env, "");
-      return version === unreleasedLabel ? version : parseFloat(version);
+      return version === unreleasedLabelForEnv ? version : parseFloat(version);
     })
     .reduce((a, b) => {
-      return b === unreleasedLabel || a < b ? b : a;
+      return b === unreleasedLabelForEnv || a < b ? b : a;
     });
 };
 
