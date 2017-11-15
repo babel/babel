@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-decorators",
-  "version": "7.0.0-beta.31",
+  "version": "7.0.0-beta.32",
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "license": "MIT",
   "description": "Compile class and object decorators to ES5",
@@ -12,13 +12,13 @@
     "decorators"
   ],
   "dependencies": {
-    "@babel/plugin-syntax-decorators": "7.0.0-beta.31"
+    "@babel/plugin-syntax-decorators": "7.0.0-beta.32"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.31"
+    "@babel/core": "7.0.0-beta.32"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.31",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.31"
+    "@babel/core": "7.0.0-beta.32",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.32"
   }
 }

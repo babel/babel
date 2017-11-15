@@ -58,14 +58,13 @@ export function runSync(
   transformFile(file, config.passes);
 
   const opts = file.opts;
-  const { outputCode, outputMap } = opts.code
-    ? generateCode(config.passes, file)
-    : {};
+  const { outputCode, outputMap } =
+    opts.code !== false ? generateCode(config.passes, file) : {};
 
   return {
     metadata: file.metadata,
     options: opts,
-    ast: opts.ast ? file.ast : null,
+    ast: opts.ast !== false ? file.ast : null,
     code: outputCode === undefined ? null : outputCode,
     map: outputMap === undefined ? null : outputMap,
   };
@@ -87,7 +86,18 @@ function transformFile(file: File, pluginPasses: PluginPasses): void {
 
     for (const [plugin, pass] of passPairs) {
       const fn = plugin.pre;
-      if (fn) fn.call(pass, file);
+      if (fn) {
+        const result = fn.call(pass, file);
+
+        if (isThenable(result)) {
+          throw new Error(
+            `You appear to be using an plugin with an async .pre, ` +
+              `which your current version of Babel does not support.` +
+              `If you're using a published plugin, you may need to upgrade ` +
+              `your @babel/core version.`,
+          );
+        }
+      }
     }
 
     // merge all plugin visitors into a single visitor
@@ -100,7 +110,26 @@ function transformFile(file: File, pluginPasses: PluginPasses): void {
 
     for (const [plugin, pass] of passPairs) {
       const fn = plugin.post;
-      if (fn) fn.call(pass, file);
+      if (fn) {
+        const result = fn.call(pass, file);
+
+        if (isThenable(result)) {
+          throw new Error(
+            `You appear to be using an plugin with an async .post, ` +
+              `which your current version of Babel does not support.` +
+              `If you're using a published plugin, you may need to upgrade ` +
+              `your @babel/core version.`,
+          );
+        }
+      }
     }
   }
+}
+
+function isThenable(val: mixed): boolean {
+  return (
+    !!val &&
+    (typeof val === "object" || typeof val === "function") &&
+    typeof val.then === "function"
+  );
 }

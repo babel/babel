@@ -1,4 +1,6 @@
-var foo = (() => {
+var foo =
+/*#__PURE__*/
+(() => {
   var _ref = babelHelpers.asyncToGenerator(function* () {
     console.log(bar);
   });

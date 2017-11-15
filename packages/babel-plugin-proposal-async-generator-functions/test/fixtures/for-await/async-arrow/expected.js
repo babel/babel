@@ -1,3 +1,4 @@
+/*#__PURE__*/
 babelHelpers.asyncToGenerator(function* () {
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;

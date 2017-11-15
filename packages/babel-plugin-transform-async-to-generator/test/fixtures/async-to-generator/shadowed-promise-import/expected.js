@@ -1,4 +1,6 @@
-let foo = (() => {
+let foo =
+/*#__PURE__*/
+(() => {
   var _ref = _asyncToGenerator(function* () {
     yield _Promise.resolve();
   });

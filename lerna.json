@@ -1,16 +1,16 @@
 {
   "lerna": "2.0.0-rc.4",
-  "version": "7.0.0-beta.31",
+  "version": "7.0.0-beta.32",
   "changelog": {
     "repo": "babel/babel",
     "labels": {
-      "Tag: Spec Compliancy": ":eyeglasses: Spec Compliancy",
-      "Tag: Breaking Change": ":boom: Breaking Change",
-      "Tag: New Feature": ":rocket: New Feature",
-      "Tag: Bug Fix": ":bug: Bug Fix",
-      "Tag: Polish": ":nail_care: Polish",
-      "Tag: Docs": ":memo: Documentation",
-      "Tag: Internal": ":house: Internal"
+      "PR: Spec Compliancy": ":eyeglasses: Spec Compliancy",
+      "PR: Breaking Change": ":boom: Breaking Change",
+      "PR: New Feature": ":rocket: New Feature",
+      "PR: Bug Fix": ":bug: Bug Fix",
+      "PR: Polish": ":nail_care: Polish",
+      "PR: Docs": ":memo: Documentation",
+      "PR: Internal": ":house: Internal"
     }
   },
   "cacheDir": ".changelog",

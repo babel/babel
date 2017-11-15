@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-stage-1",
-  "version": "7.0.0-beta.31",
+  "version": "7.0.0-beta.32",
   "description": "Babel preset for stage 1 plugins",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -8,17 +8,17 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-stage-1",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/plugin-proposal-decorators": "7.0.0-beta.31",
-    "@babel/plugin-proposal-export-default": "7.0.0-beta.31",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "7.0.0-beta.31",
-    "@babel/plugin-proposal-optional-chaining": "7.0.0-beta.31",
-    "@babel/plugin-proposal-pipeline-operator": "7.0.0-beta.31",
-    "@babel/preset-stage-2": "7.0.0-beta.31"
+    "@babel/plugin-proposal-decorators": "7.0.0-beta.32",
+    "@babel/plugin-proposal-export-default": "7.0.0-beta.32",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "7.0.0-beta.32",
+    "@babel/plugin-proposal-optional-chaining": "7.0.0-beta.32",
+    "@babel/plugin-proposal-pipeline-operator": "7.0.0-beta.32",
+    "@babel/preset-stage-2": "7.0.0-beta.32"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.31"
+    "@babel/core": "7.0.0-beta.32"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.31"
+    "@babel/core": "7.0.0-beta.32"
   }
 }

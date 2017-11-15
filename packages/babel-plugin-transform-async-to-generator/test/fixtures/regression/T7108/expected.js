@@ -4,7 +4,9 @@ class Test {
 
     return babelHelpers.asyncToGenerator(function* () {
       console.log(_this);
-      setTimeout(babelHelpers.asyncToGenerator(function* () {
+      setTimeout(
+      /*#__PURE__*/
+      babelHelpers.asyncToGenerator(function* () {
         console.log(_this);
       }));
     })();
@@ -15,7 +17,9 @@ class Test {
 
     return babelHelpers.asyncToGenerator(function* () {
       console.log(_this2);
-      setTimeout((() => {
+      setTimeout(
+      /*#__PURE__*/
+      (() => {
         var _ref2 = babelHelpers.asyncToGenerator(function* (arg) {
           console.log(_this2);
         });
@@ -32,7 +36,9 @@ class Test {
 
     return babelHelpers.asyncToGenerator(function* () {
       console.log(_this3);
-      setTimeout(babelHelpers.asyncToGenerator(function* () {
+      setTimeout(
+      /*#__PURE__*/
+      babelHelpers.asyncToGenerator(function* () {
         console.log(_this3);
       }));
     })();
@@ -43,7 +49,9 @@ class Test {
 
     return babelHelpers.asyncToGenerator(function* () {
       console.log(_this4);
-      setTimeout((() => {
+      setTimeout(
+      /*#__PURE__*/
+      (() => {
         var _ref4 = babelHelpers.asyncToGenerator(function* (arg) {
           console.log(_this4);
         });

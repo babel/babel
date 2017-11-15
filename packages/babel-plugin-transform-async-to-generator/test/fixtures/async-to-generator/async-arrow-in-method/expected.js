@@ -4,7 +4,9 @@ let TestClass = {
   testMethodFailure() {
     var _this = this;
 
-    return new Promise((() => {
+    return new Promise(
+    /*#__PURE__*/
+    (() => {
       var _ref = babelHelpers.asyncToGenerator(function* (resolve) {
         console.log(_this);
         setTimeout(resolve, 1000);

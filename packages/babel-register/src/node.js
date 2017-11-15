@@ -30,8 +30,7 @@ function installSourceMapSupport() {
   });
 }
 
-registerCache.load();
-let cache = registerCache.get();
+let cache;
 
 function mtime(filename) {
   return +fs.statSync(filename).mtime;
@@ -63,16 +62,11 @@ function compile(code, filename) {
     }
   }
 
-  const result = babel.transform(
-    code,
-    Object.assign(opts, {
-      // Do not process config files since has already been done with the OptionManager
-      // calls above and would introduce duplicates.
-      babelrc: false,
-      sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
-      ast: false,
-    }),
-  );
+  const result = babel.transform(code, {
+    ...opts,
+    sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
+    ast: false,
+  });
 
   if (cache) {
     cache[cacheKey] = result;
@@ -108,7 +102,13 @@ export default function register(opts?: Object = {}) {
   opts = Object.assign({}, opts);
   if (opts.extensions) hookExtensions(opts.extensions);
 
-  if (opts.cache === false) cache = null;
+  if (opts.cache === false && cache) {
+    registerCache.clear();
+    cache = null;
+  } else if (opts.cache !== false && !cache) {
+    registerCache.load();
+    cache = registerCache.get();
+  }
 
   delete opts.extensions;
   delete opts.cache;

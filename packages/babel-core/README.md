@@ -11,23 +11,54 @@ import * as babel from "@babel/core";
 
 All transformations will use your local configuration files (`.babelrc` or in `package.json`). See [options](#options) to disable it.
 
-## babel.transform(code: string, [options?](#options): Object)
 
-Transforms the passed in `code`. Returning an object with the generated code,
+## babel.transform(code: string, [options?](#options): Object, callback: Function)
+
+Transforms the passed in `code`. Calling a callback with an object with the generated code,
 source map, and AST.
 
 ```js
-babel.transform(code, options) // => { code, map, ast }
+babel.transform(code, options, function(err, result) {
+  result; // => { code, map, ast }
+});
 ```
 
 **Example**
 
 ```js
-var result = babel.transform("code();", options);
+babel.transform("code();", options, function(err, result) {
+  result.code;
+  result.map;
+  result.ast;
+});
+```
+
+### Compat Note:
+
+In Babel 6, this method was synchronous and `transformSync` did not exist. For backward-compatibility,
+this function will behave synchronously if no callback is given. If you're starting with Babel 7
+and need synchronous behavior, please use `transformSync` since this backward-compat may be dropped in
+future major versions of Babel.
+
+
+## babel.transformSync(code: string, [options?](#options): Object)
+
+Transforms the passed in `code`. Returning an object with the generated code,
+source map, and AST.
+
+```js
+babel.transformSync(code, options) // => { code, map, ast }
+```
+
+**Example**
+
+```js
+var result = babel.transformSync("code();", options);
 result.code;
 result.map;
 result.ast;
 ```
+
 
 ## babel.transformFile(filename: string, [options?](#options): Object, callback: Function)
 
@@ -45,6 +76,7 @@ babel.transformFile("filename.js", options, function (err, result) {
 });
 ```
 
+
 ## babel.transformFileSync(filename: string, [options?](#options): Object)
 
 Synchronous version of `babel.transformFile`. Returns the transformed contents of
@@ -60,15 +92,37 @@ babel.transformFileSync(filename, options) // => { code, map, ast }
 babel.transformFileSync("filename.js", options).code;
 ```
 
-## babel.transformFromAst(ast: Object, code?: string, [options?](#options): Object)
+
+## babel.transformFromAst(ast: Object, code?: string, [options?](#options): Object, callback: Function)
 
 Given an [AST](https://astexplorer.net/), transform it.
 
 ```js
 const sourceCode = "if (true) return;";
 const parsedAst = babylon.parse(sourceCode, { allowReturnOutsideFunction: true });
-const { code, map, ast } = babel.transformFromAst(parsedAst, sourceCode, options);
+babel.transformFromAst(parsedAst, sourceCode, options, function(err, result) {
+  const { code, map, ast } = result;
+});
 ```
+
+### Compat Note:
+
+In Babel 6, this method was synchronous and `transformFromAstSync` did not exist. For backward-compatibility,
+this function will behave synchronously if no callback is given. If you're starting with Babel 7
+and need synchronous behavior, please use `transformFromAstSync` since this backward-compat may be dropped in
+future major versions of Babel.
+
+
+## babel.transformFromAstSync(ast: Object, code?: string, [options?](#options): Object)
+
+Given an [AST](https://astexplorer.net/), transform it.
+
+```js
+const sourceCode = "if (true) return;";
+const parsedAst = babylon.parse(sourceCode, { allowReturnOutsideFunction: true });
+const { code, map, ast } = babel.transformFromAstSync(parsedAst, sourceCode, options);
+```
+
 
 ## Options
 
@@ -116,5 +170,5 @@ Following is a table of the options you can use:
 | `sourceMaps`             | `false`              | If truthy, adds a `map` property to returned output. If set to `"inline"`, a comment with a sourceMappingURL directive is added to the bottom of the returned code. If set to `"both"` then a `map` property is returned as well as a source map comment appended. **This does not emit sourcemap files by itself!** To have sourcemaps emitted using the CLI, you must pass it the `--source-maps` option |
 | `sourceMapTarget`        | `(filenameRelative)` | Set `file` on returned source map |
 | `sourceRoot`             | `(moduleRoot)`       | The root from which all sources are relative |
-| `sourceType`             | `"module"`           | Indicate the mode the code should be parsed in. Can be either "script" or "module" |
+| `sourceType`             | `"module"`           | Indicate the mode the code should be parsed in. Can be one of "script", "module", or "unambiguous". `"unambiguous"` will make Babel attempt to _guess_, based on the presence of ES6 `import` or `export` statements. Files with ES6 `import`s and `export`s are considered `"module"` and are otherwise `"script"`. |
 | `wrapPluginVisitorMethod`| `null`               | An optional callback that can be used to wrap visitor methods. **NOTE:** This is useful for things like introspection, and not really needed for implementing anything. Called as `wrapPluginVisitorMethod(pluginAlias, visitorType, callback)`.

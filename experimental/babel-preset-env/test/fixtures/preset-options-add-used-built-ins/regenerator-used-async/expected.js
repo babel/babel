@@ -1,7 +1,9 @@
 import "core-js/modules/es6.promise";
 import "regenerator-runtime/runtime";
 
-var a = function () {
+var a =
+/*#__PURE__*/
+function () {
   var _ref = _asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee() {

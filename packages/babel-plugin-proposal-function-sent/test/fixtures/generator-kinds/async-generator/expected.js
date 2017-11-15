@@ -1,4 +1,6 @@
-let foo = (() => {
+let foo =
+/*#__PURE__*/
+(() => {
   var _ref = _wrapAsyncGenerator(_skipFirstGeneratorNext(function* () {
     let _functionSent = yield;
 
