@@ -139,7 +139,7 @@ const readConfigJS = makeStrongCache((filepath, cache) => {
 
   if (typeof options === "function") {
     options = options({
-      cache,
+      cache: cache.simple(),
       // Expose ".env()" so people can easily get the same env that we expose using the "env" key.
       env: () => cache.using(() => getEnv()),
       async: () => false,

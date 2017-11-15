@@ -187,7 +187,7 @@ const loadDescriptor = makeWeakCache(
     let item = value;
     if (typeof value === "function") {
       const api = Object.assign(Object.create(context), {
-        cache,
+        cache: cache.simple(),
         env: () => cache.using(() => getEnv()),
         async: () => false,
       });
