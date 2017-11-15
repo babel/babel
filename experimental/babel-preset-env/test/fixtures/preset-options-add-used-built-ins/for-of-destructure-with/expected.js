@@ -1,5 +1,5 @@
-import "@babel/polyfill/lib/core-js/modules/es7.string.pad-end";
-import "@babel/polyfill/lib/core-js/modules/es7.string.pad-start";
+import "core-js/modules/es7.string.pad-end";
+import "core-js/modules/es7.string.pad-start";
 
 for (const {
   padStart
