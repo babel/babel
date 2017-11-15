@@ -217,14 +217,12 @@ export default function({ types: t }: { types: Object }): Plugin {
       const obj = node.init;
 
       if (!t.isObjectPattern(node.id)) return;
-      const props = node.id.properties;
-
       if (!t.isReferenced(obj, node)) return;
 
       // doesn't reference the global
-      if (path.scope.getBindingIdentifier(obj.name)) return;
+      if (obj && path.scope.getBindingIdentifier(obj.name)) return;
 
-      for (let prop of props) {
+      for (let prop of node.id.properties) {
         prop = prop.key;
         if (
           !node.computed &&
