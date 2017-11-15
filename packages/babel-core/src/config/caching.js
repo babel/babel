@@ -14,15 +14,19 @@ type SimpleCacheConfiguratorObj = {
   invalidate: <T>(handler: () => T) => T,
 };
 
-type CacheEntry<ResultT> = Array<[ResultT, () => boolean]>;
+type CacheEntry<ResultT, SideChannel> = Array<
+  [ResultT, (SideChannel) => boolean],
+>;
+
+export type { CacheConfigurator };
 
 /**
  * Given a function with a single argument, cache its results based on its argument and how it
  * configures its caching behavior. Cached values are stored strongly.
  */
-export function makeStrongCache<ArgT, ResultT>(
-  handler: (ArgT, CacheConfigurator) => ResultT,
-): ArgT => ResultT {
+export function makeStrongCache<ArgT, ResultT, SideChannel>(
+  handler: (ArgT, CacheConfigurator<SideChannel>) => ResultT,
+): (ArgT, SideChannel) => ResultT {
   return makeCachedFunction(new Map(), handler);
 }
 
@@ -31,30 +35,41 @@ export function makeStrongCache<ArgT, ResultT>(
  * configures its caching behavior. Cached values are stored weakly and the function argument must be
  * an object type.
  */
-export function makeWeakCache<ArgT: {} | Array<*> | $ReadOnlyArray<*>, ResultT>(
-  handler: (ArgT, CacheConfigurator) => ResultT,
-): ArgT => ResultT {
+export function makeWeakCache<
+  ArgT: {} | Array<*> | $ReadOnlyArray<*>,
+  ResultT,
+  SideChannel,
+>(
+  handler: (ArgT, CacheConfigurator<SideChannel>) => ResultT,
+): (ArgT, SideChannel) => ResultT {
   return makeCachedFunction(new WeakMap(), handler);
 }
 
-type CacheMap<ArgT, ResultT> =
-  | Map<ArgT, CacheEntry<ResultT>>
-  | WeakMap<ArgT, CacheEntry<ResultT>>;
+type CacheMap<ArgT, ResultT, SideChannel> =
+  | Map<ArgT, CacheEntry<ResultT, SideChannel>>
+  | WeakMap<ArgT, CacheEntry<ResultT, SideChannel>>;
 
-function makeCachedFunction<ArgT, ResultT, Cache: CacheMap<ArgT, ResultT>>(
+function makeCachedFunction<
+  ArgT,
+  ResultT,
+  SideChannel,
+  Cache: CacheMap<ArgT, ResultT, SideChannel>,
+>(
   callCache: Cache,
-  handler: (ArgT, CacheConfigurator) => ResultT,
-): ArgT => ResultT {
-  return function cachedFunction(arg) {
-    let cachedValue: CacheEntry<ResultT> | void = callCache.get(arg);
+  handler: (ArgT, CacheConfigurator<SideChannel>) => ResultT,
+): (ArgT, SideChannel) => ResultT {
+  return function cachedFunction(arg, data) {
+    let cachedValue: CacheEntry<ResultT, SideChannel> | void = callCache.get(
+      arg,
+    );
 
     if (cachedValue) {
       for (const [value, valid] of cachedValue) {
-        if (valid()) return value;
+        if (valid(data)) return value;
       }
     }
 
-    const cache = new CacheConfigurator();
+    const cache = new CacheConfigurator(data);
 
     const value = handler(arg, cache);
 
@@ -84,7 +99,7 @@ function makeCachedFunction<ArgT, ResultT, Cache: CacheMap<ArgT, ResultT>>(
   };
 }
 
-class CacheConfigurator {
+class CacheConfigurator<SideChannel = void> {
   _active: boolean = true;
   _never: boolean = false;
   _forever: boolean = false;
@@ -92,7 +107,13 @@ class CacheConfigurator {
 
   _configured: boolean = false;
 
-  _pairs: Array<[mixed, () => mixed]> = [];
+  _pairs: Array<[mixed, (SideChannel) => mixed]> = [];
+
+  _data: SideChannel;
+
+  constructor(data: SideChannel) {
+    this._data = data;
+  }
 
   simple() {
     return makeSimpleConfigurator(this);
@@ -127,7 +148,7 @@ class CacheConfigurator {
     this._configured = true;
   }
 
-  using<T>(handler: () => T): T {
+  using<T>(handler: SideChannel => T): T {
     if (!this._active) {
       throw new Error("Cannot change caching after evaluation has completed.");
     }
@@ -138,12 +159,12 @@ class CacheConfigurator {
     }
     this._configured = true;
 
-    const key = handler();
+    const key = handler(this._data);
     this._pairs.push([key, handler]);
     return key;
   }
 
-  invalidate<T>(handler: () => T): T {
+  invalidate<T>(handler: SideChannel => T): T {
     if (!this._active) {
       throw new Error("Cannot change caching after evaluation has completed.");
     }
@@ -155,14 +176,14 @@ class CacheConfigurator {
     this._invalidate = true;
     this._configured = true;
 
-    const key = handler();
+    const key = handler(this._data);
     this._pairs.push([key, handler]);
     return key;
   }
 
-  validator(): () => boolean {
+  validator(): SideChannel => boolean {
     const pairs = this._pairs;
-    return () => pairs.every(([key, fn]) => key === fn());
+    return (data: SideChannel) => pairs.every(([key, fn]) => key === fn(data));
   }
 
   deactivate() {
@@ -175,7 +196,7 @@ class CacheConfigurator {
 }
 
 function makeSimpleConfigurator(
-  cache: CacheConfigurator,
+  cache: CacheConfigurator<any>,
 ): SimpleCacheConfigurator {
   function cacheFn(val) {
     if (typeof val === "boolean") {
@@ -188,8 +209,8 @@ function makeSimpleConfigurator(
   }
   cacheFn.forever = () => cache.forever();
   cacheFn.never = () => cache.never();
-  cacheFn.using = cb => cache.using(cb);
-  cacheFn.invalidate = cb => cache.invalidate(cb);
+  cacheFn.using = cb => cache.using(() => cb());
+  cacheFn.invalidate = cb => cache.invalidate(() => cb());
 
   return (cacheFn: any);
 }
