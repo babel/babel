@@ -16,6 +16,7 @@ import { makeWeakCache, type CacheConfigurator } from "./caching";
 import { getEnv } from "./helpers/environment";
 import { validate, type ValidatedOptions } from "./validation/options";
 import { validatePluginObject } from "./validation/plugins";
+import makeAPI from "./helpers/config-api";
 
 type LoadedDescriptor = {
   value: {},
@@ -202,11 +203,7 @@ const loadDescriptor = makeWeakCache(
 
     let item = value;
     if (typeof value === "function") {
-      const api = Object.assign(Object.create(context), {
-        cache: cache.simple(),
-        env: () => cache.using(data => data.envName),
-        async: () => false,
-      });
+      const api = Object.assign(Object.create(context), makeAPI(cache));
 
       try {
         item = value(api, options, dirname);

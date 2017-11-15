@@ -1,6 +1,6 @@
 // @flow
 
-type SimpleCacheConfigurator = SimpleCacheConfiguratorFn &
+export type SimpleCacheConfigurator = SimpleCacheConfiguratorFn &
   SimpleCacheConfiguratorObj;
 
 type SimpleCacheConfiguratorFn = {
