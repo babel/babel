@@ -948,6 +948,7 @@
   },
   "es7.promise.finally": {
     "chrome": "63",
+    "safari": "tp",
     "opera": "50"
   }
 }

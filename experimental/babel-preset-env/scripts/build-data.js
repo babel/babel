@@ -7,6 +7,7 @@ const flattenDeep = require("lodash/flattenDeep");
 const isEqual = require("lodash/isEqual");
 const mapValues = require("lodash/mapValues");
 const pickBy = require("lodash/pickBy");
+const unreleasedLabels = require("../data/unreleased-labels");
 const electronToChromiumVersions = require("electron-to-chromium").versions;
 
 const electronToChromiumKeys = Object.keys(
@@ -185,6 +186,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
       return result;
     }, []);
 
+  const unreleasedLabelForEnv = unreleasedLabels[env];
   const envTests = tests.map(({ res: test, isBuiltIn }, i) => {
     // Babel itself doesn't implement the feature correctly,
     // don't count against it
@@ -200,9 +202,15 @@ const getLowestImplementedVersion = ({ features }, env) => {
         .filter(
           test => tests[i].res[test] === true || tests[i].res[test] === "strict"
         )
-        // normalize some keys
-        .map(test => test.replace("_", "."))
-        .filter(test => !isNaN(parseFloat(test.replace(env, ""))))
+        // normalize some keys and get version from full string.
+        .map(test => {
+          return test.replace("_", ".").replace(env, "");
+        })
+        // version must be label from the unreleasedLabels (like tp) or number.
+        .filter(
+          version =>
+            unreleasedLabelForEnv === version || !isNaN(parseFloat(version))
+        )
         .shift()
     );
   });
@@ -220,9 +228,14 @@ const getLowestImplementedVersion = ({ features }, env) => {
     return null;
   }
 
-  return envTests.map(str => Number(str.replace(env, ""))).reduce((a, b) => {
-    return a < b ? b : a;
-  });
+  return envTests
+    .map(str => {
+      const version = str.replace(env, "");
+      return version === unreleasedLabelForEnv ? version : parseFloat(version);
+    })
+    .reduce((a, b) => {
+      return b === unreleasedLabelForEnv || a < b ? b : a;
+    });
 };
 
 const generateData = (environments, features) => {

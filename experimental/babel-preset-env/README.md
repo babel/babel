@@ -181,7 +181,7 @@ For more information on setting options for a preset, refer to the [plugin/prese
 
 Takes an object of environment versions to support.
 
-Each target environment takes a number or a string (we recommend using a string when specifying minor versions like `node: "6.10"`).
+Each target environment takes a number or a string (we recommend using a string when specifying minor versions like `node: "6.10"`). You can also specify `tp` (technology preview) version for Safari.
 
 Example environments: `chrome`, `opera`, `edge`, `firefox`, `safari`, `ie`, `ios`, `android`, `node`, `electron`.
 
@@ -197,7 +197,7 @@ If you want to compile against the current node version, you can specify `"node"
 
 `Array<string> | string`
 
-A query to select browsers (ex: last 2 versions, > 5%) using [browserslist](https://github.com/ai/browserslist).
+A query to select browsers (ex: last 2 versions, > 5%, safari tp) using [browserslist](https://github.com/ai/browserslist).
 
 Note, browsers' results are overridden by explicit items from `targets`.
 
