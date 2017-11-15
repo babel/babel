@@ -121,17 +121,16 @@ const filterItems = (
   const result = new Set();
 
   for (const item in list) {
-    const excluded = excludes.has(item);
+    if (
+      !excludes.has(item) &&
+      (isPluginRequired(targets, list[item]) || includes.has(item))
+    ) {
+      result.add(item);
+    } else {
+      const shippedProposalsSyntax = pluginSyntaxMap.get(item);
 
-    if (!excluded) {
-      if (isPluginRequired(targets, list[item])) {
-        result.add(item);
-      } else {
-        const shippedProposalsSyntax = pluginSyntaxMap.get(item);
-
-        if (shippedProposalsSyntax) {
-          result.add(shippedProposalsSyntax);
-        }
+      if (shippedProposalsSyntax) {
+        result.add(shippedProposalsSyntax);
       }
     }
   }
@@ -139,8 +138,6 @@ const filterItems = (
   if (defaultItems) {
     defaultItems.forEach(item => !excludes.has(item) && result.add(item));
   }
-
-  includes.forEach(item => result.add(item));
 
   return result;
 };
