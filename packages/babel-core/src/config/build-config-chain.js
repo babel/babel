@@ -1,6 +1,5 @@
 // @flow
 
-import { getEnv } from "./helpers/environment";
 import path from "path";
 import micromatch from "micromatch";
 import buildDebug from "debug";
@@ -41,20 +40,20 @@ type ConfigPart =
 
 export default function buildConfigChain(
   opts: ValidatedOptions,
+  envName: string,
 ): Array<ConfigItem> | null {
   const filename = opts.filename ? path.resolve(opts.filename) : null;
   const builder = new ConfigChainBuilder(
     filename ? new LoadedFile(filename) : null,
   );
 
-  const envKey = getEnv();
   try {
-    builder.mergeConfigArguments(opts, process.cwd(), envKey);
+    builder.mergeConfigArguments(opts, process.cwd(), envName);
 
     // resolve all .babelrc files
     if (opts.babelrc !== false && filename) {
-      findConfigs(path.dirname(filename)).forEach(configFile =>
-        builder.mergeConfigFile(configFile, envKey),
+      findConfigs(path.dirname(filename), envName).forEach(configFile =>
+        builder.mergeConfigFile(configFile, envName),
       );
     }
   } catch (e) {
@@ -85,21 +84,21 @@ class ConfigChainBuilder {
     );
   }
 
-  mergeConfigFile(file: ConfigFile, envKey: string) {
+  mergeConfigFile(file: ConfigFile, envName: string) {
     if (this.seenFiles.has(file)) {
       throw new Error(
         `Cycle detected in Babel configuration file through "${file.filepath}".`,
       );
     }
 
-    const parts = flattenFileOptionsParts(file)(envKey);
+    const parts = flattenFileOptionsParts(file)(envName);
 
     this.seenFiles.add(file);
-    parts.forEach(part => this._processConfigPart(part, envKey));
+    parts.forEach(part => this._processConfigPart(part, envName));
     this.seenFiles.delete(file);
   }
 
-  _processConfigPart(part: ConfigPart, envKey: string) {
+  _processConfigPart(part: ConfigPart, envName: string) {
     if (part.part === "config") {
       const { ignore, only } = part;
 
@@ -116,7 +115,10 @@ class ConfigChainBuilder {
 
       this.configs.push(part.config);
     } else {
-      this.mergeConfigFile(loadConfig(part.path, part.dirname), envKey);
+      this.mergeConfigFile(
+        loadConfig(part.path, part.dirname, envName),
+        envName,
+      );
     }
   }
 }
@@ -129,7 +131,7 @@ class ConfigChainBuilder {
 function flattenArgumentsOptionsParts(
   opts: ValidatedOptions,
   dirname: string,
-  envKey: string,
+  envName: string,
 ): Array<ConfigPart> {
   const {
     env,
@@ -142,7 +144,7 @@ function flattenArgumentsOptionsParts(
 
   const raw = [];
   if (env) {
-    raw.push(...flattenArgumentsEnvOptionsParts(env)(dirname)(envKey));
+    raw.push(...flattenArgumentsEnvOptionsParts(env)(dirname)(envName));
   }
 
   if (Object.keys(options).length > 0) {
@@ -263,7 +265,7 @@ function flattenOptionsPartsLookup(
     });
   }
 
-  return envKey => lookup.get(envKey) || def;
+  return envName => lookup.get(envName) || def;
 }
 
 /**
