@@ -16,8 +16,24 @@ export default function({ types: t }) {
     );
   }
 
-  function makeTest(path, id, pattern, isRoot) {
+  function makeIsObjectTest(body) {
+    return t.binaryExpression(
+      "===",
+      t.unaryExpression("typeof", body, true),
+      t.stringLiteral("object"),
+    );
+  }
+
+  function makeTest(path, id, pattern, defines, isRoot) {
     let arrayTest;
+    let objectTest;
+    let objectPropTest;
+    let objPropSubTest;
+    let newId;
+
+    if (pattern === "else" && isRoot) {
+      return t.booleanLiteral(true);
+    }
 
     switch (pattern.type) {
       case "NumericLiteral":
@@ -45,50 +61,65 @@ export default function({ types: t }) {
             t.numericLiteral(index) /* property */,
             true /* computed */,
           );
-          const subTest = makeTest(path, newId, patternNode, false);
+          const subTest = makeTest(path, newId, patternNode, defines, false);
 
           arrayTest = t.logicalExpression("&&", arrayTest, subTest);
         });
 
         return arrayTest;
+      case "ObjectMatchPattern":
+        objectTest = makeIsObjectTest(id);
+
+        pattern.children.forEach(propPattern => {
+          const subPropTest = makeTest(path, id, propPattern, defines, false);
+
+          objectTest = t.logicalExpression("&&", objectTest, subPropTest);
+        });
+
+        return objectTest;
+      case "ObjectPropertyMatchPattern":
+        objectPropTest = t.callExpression(
+          t.memberExpression(id, t.identifier("hasOwnProperty"), false),
+          [t.stringLiteral(pattern.key.name)],
+        );
+
+        newId = t.memberExpression(id, pattern.key, false);
+        if (pattern.value === null) {
+          pattern.value = pattern.key;
+        }
+        objPropSubTest = makeTest(path, newId, pattern.value, defines, false);
+
+        objectPropTest = t.logicalExpression(
+          "&&",
+          objectPropTest,
+          objPropSubTest,
+        );
+
+        return objectPropTest;
       case "Identifier":
         if (isRoot) {
           return t.binaryExpression("===", id, pattern);
         } else {
+          defines.push(
+            t.variableDeclaration("const", [t.variableDeclarator(pattern, id)]),
+          );
           return t.binaryExpression(
             "!==",
             id,
             path.scope.buildUndefinedNode(), // undefined node
           );
         }
-      // TODO:
-      // case "ObjectMatchPattern":
-      // case "ObjectPropertyMatchPattern":
-      default:
-        return t.booleanLiteral(true);
     }
+    throw new Error("Not a correct pattern");
   }
 
-  function extractAllIdentifier(pattern, set) {
-    switch (pattern.type) {
-      case "ArrayMatchPattern":
-        pattern.children.forEach(val => extractAllIdentifier(val, set));
-        break;
-      case "ObjectMatchPattern":
-        pattern.children.forEach(val => extractAllIdentifier(val.value, set));
-        break;
-      case "Identifier":
-        set.add(pattern.name);
-        break;
-    }
-  }
-
-  function makeClosure(clause) {
+  function makeClosure(clause, defines) {
     let body;
     if (clause.expression) {
-      body = t.blockStatement([t.returnStatement(clause.body)], []);
+      body = t.blockStatement([...defines, t.returnStatement(clause.body)], []);
     } else {
-      body = clause.body;
+      // a block statement
+      body = t.blockStatement([...defines, ...clause.body.body], []);
     }
     return t.returnStatement(
       t.callExpression(
@@ -102,18 +133,6 @@ export default function({ types: t }) {
         [],
       ),
     );
-  }
-
-  function generateIDDefines(set) {
-    const result = [];
-
-    for (const item of set) {
-      const expr = t.variableDeclaration("let", [
-        t.variableDeclarator(t.identifier(item), null),
-      ]);
-      result.push(expr);
-    }
-    return result;
   }
 
   return {
@@ -139,39 +158,37 @@ export default function({ types: t }) {
 
         let mainIfTree, lastTree;
 
-        // extract all identifier begin
-        let id_set = new Set();
-
-        path.node.clauses.forEach(clause => {
-          const pattern = clause.pattern;
-          extractAllIdentifier(pattern, id_set);
-        });
-
-        const exprs = generateIDDefines(id_set);
-
-        id_set = null; // release set;
-        // end
-
         path.node.clauses.forEach((clause, index) => {
+          const defines = [];
+          let _test;
+          let _closure;
           if (index === 0) {
-            lastTree = mainIfTree = t.ifStatement(
-              makeTest(path, match_expression_id, clause.pattern, true),
-              makeClosure(clause),
-              null,
+            _test = makeTest(
+              path,
+              match_expression_id,
+              clause.pattern,
+              defines,
+              true,
             );
+            _closure = makeClosure(clause, defines);
+            lastTree = mainIfTree = t.ifStatement(_test, _closure, null);
           } else {
-            const newIfTree = t.ifStatement(
-              makeTest(path, match_expression_id, clause.pattern, true),
-              makeClosure(clause),
-              null,
+            _test = makeTest(
+              path,
+              match_expression_id,
+              clause.pattern,
+              defines,
+              true,
             );
+            _closure = makeClosure(clause, defines);
+            const newIfTree = t.ifStatement(_test, _closure, null);
             lastTree.alternate = newIfTree;
             lastTree = newIfTree;
           }
         });
 
         const bodyExpr = t.blockStatement(
-          first_statements_group.concat([...exprs, mainIfTree]),
+          first_statements_group.concat([mainIfTree]),
         );
 
         path.replaceWith(
