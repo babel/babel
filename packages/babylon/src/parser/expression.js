@@ -1465,7 +1465,6 @@ export default class ExpressionParser extends LValParser {
   initFunction(node: N.BodilessFunctionOrMethodBase, isAsync: ?boolean): void {
     node.id = null;
     node.generator = false;
-    node.expression = false;
     node.async = !!isAsync;
   }
 
@@ -1580,7 +1579,6 @@ export default class ExpressionParser extends LValParser {
 
     if (isExpression) {
       node.body = this.parseMaybeAssign();
-      node.expression = true;
     } else {
       // Start a new scope with regard to labels and the `inGenerator`
       // flag (restore them to their old value afterwards).
@@ -1591,7 +1589,6 @@ export default class ExpressionParser extends LValParser {
       this.state.inFunction = true;
       this.state.labels = [];
       node.body = this.parseBlock(true);
-      node.expression = false;
       this.state.inFunction = oldInFunc;
       this.state.inGenerator = oldInGen;
       this.state.labels = oldLabels;
