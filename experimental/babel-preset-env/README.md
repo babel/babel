@@ -235,7 +235,7 @@ An array of plugins to always include.
 
 Valid options include any:
 
-- [Babel plugins](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js) - both with (`@babel/plugin-transform-spread`) and without prefix (`transform-spread`) are supported.
+- [Babel plugins](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js) - names without a prefix like `transform-spread` instead of `plugin-transform-spread` are supported.
 
 - [Built-ins](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js), such as `map`, `set`, or `object.assign`.
 
@@ -560,8 +560,8 @@ Using polyfills:
       "targets": {
         "browsers": ["last 2 versions", "safari >= 7"]
       },
-      "include": ["@babel/transform-arrow-functions", "es6.map"],
-      "exclude": ["@babel/transform-regenerator", "es6.set"]
+      "include": ["transform-arrow-functions", "es6.map"],
+      "exclude": ["transform-regenerator", "es6.set"]
     }]
   ]
 }
