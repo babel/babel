@@ -111,12 +111,25 @@ const getPlatformSpecificDefaultFor = (targets: Targets): ?Array<string> => {
   return isAnyTarget || isWebTarget ? defaultWebIncludes : null;
 };
 
+const getOptionSpecificExcludesFor = ({
+  loose,
+}: {
+  loose: boolean,
+}): Array<string> => {
+  const defaultExcludes = [];
+  if (loose) {
+    defaultExcludes.push("transform-typeof-symbol");
+  }
+  return defaultExcludes;
+};
+
 const filterItems = (
   list,
   includes,
   excludes,
   targets,
-  defaultItems,
+  defaultIncludes,
+  defaultExcludes,
 ): Set<string> => {
   const result = new Set();
 
@@ -136,8 +149,12 @@ const filterItems = (
     }
   }
 
-  if (defaultItems) {
-    defaultItems.forEach(item => !excludes.has(item) && result.add(item));
+  if (defaultIncludes) {
+    defaultIncludes.forEach(item => !excludes.has(item) && result.add(item));
+  }
+
+  if (defaultExcludes) {
+    defaultExcludes.forEach(item => !includes.has(item) && result.delete(item));
   }
 
   includes.forEach(item => result.add(item));
@@ -190,6 +207,8 @@ export default function buildPreset(
     include.plugins,
     exclude.plugins,
     transformTargets,
+    null,
+    getOptionSpecificExcludesFor({ loose }),
   );
 
   let polyfills;
