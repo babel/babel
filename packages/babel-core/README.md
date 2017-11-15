@@ -144,10 +144,11 @@ Following is a table of the options you can use:
 | `auxiliaryCommentAfter`  | `null`               | Attach a comment after all non-user injected code |
 | `auxiliaryCommentBefore` | `null`               | Attach a comment before all non-user injected code |
 | `babelrc`                | `true`               | Specify whether or not to use .babelrc and .babelignore files. Not available when using the CLI, [use `--no-babelrc` instead](https://babeljs.io/docs/usage/cli/#babel-ignoring-babelrc) |
+| `envName`                | env vars             | Defaults to environment variable `BABEL_ENV` if set, or else `NODE_ENV` if set, or else it defaults to `"development"` |
 | `code`                   | `true`               | Enable code generation |
 | `comments`               | `true`               | Output comments in generated output |
 | `compact`                | `"auto"`             | Do not include superfluous whitespace characters and line terminators. When set to `"auto"` compact is set to `true` on input sizes of >500KB |
-| `env`                    | `{}`                 | This is an object of keys that represent different environments. For example, you may have: `{ env: { production: { /* specific options */ } } }` which will use those options when the environment variable `BABEL_ENV` is set to `"production"`. If `BABEL_ENV` isn't set then `NODE_ENV` will be used, if it's not set then it defaults to `"development"` |
+| `env`                    | `{}`                 | This is an object of keys that represent different environments. For example, you may have: `{ env: { production: { /* specific options */ } } }` which will use those options when the `envName` is `production` |
 | `extends`                | `null`               | A path to a `.babelrc` file to extend |
 | `filename`               | `"unknown"`          | Filename for use in errors etc |
 | `filenameRelative`       | `(filename)`         | Filename relative to `sourceRoot` |

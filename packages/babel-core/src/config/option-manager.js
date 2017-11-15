@@ -103,7 +103,7 @@ class OptionManager {
   init(inputOpts: {}) {
     const args = validate("arguments", inputOpts);
 
-    const envName = getEnv();
+    const { envName = getEnv() } = args;
 
     const configChain = buildConfigChain(args, envName);
     if (!configChain) return null;
@@ -133,6 +133,7 @@ class OptionManager {
       .filter(plugins => plugins.length > 0)
       .map(plugins => ({ plugins }));
     opts.passPerPreset = opts.presets.length > 0;
+    opts.envName = envName;
 
     return {
       options: opts,
