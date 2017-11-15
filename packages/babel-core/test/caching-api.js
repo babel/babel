@@ -221,12 +221,6 @@ describe("caching API", () => {
     assert.equal(fn("two"), fn("two"));
   });
 
-  it("should throw if caching is never configured and not defaulting", () => {
-    const fn = makeStrongCache(() => {}, false /* autoPermacache */);
-
-    assert.throws(() => fn(), /Error: Caching was left unconfigured./);
-  });
-
   it("should auto-permacache by default", () => {
     let count = 0;
 
