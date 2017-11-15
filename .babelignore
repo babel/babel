@@ -2,3 +2,6 @@
 packages/*/test/fixtures
 packages/*/lib
 packages/babel-standalone/babel.js
+experimental/*/test/fixtures
+experimental/*/lib
+experimental/babel-preset-env-standalone/babel-preset-env.js

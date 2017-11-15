@@ -18,6 +18,8 @@ experimental/*/test/fixtures
 experimental/*/test/tmp
 experimental/babel-preset-env/data
 experimental/babel-preset-env/test/debug-fixtures
+experimental/babel-preset-env-standalone/babel-preset-env.js
+experimental/babel-preset-env-standalone/babel-preset-env.min.js
 packages/babel-standalone/babel.js
 packages/babel-standalone/babel.min.js
 packages/babylon/build

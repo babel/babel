@@ -18,6 +18,7 @@ build: clean
 	./node_modules/.bin/gulp build
 ifneq ("$(BABEL_ENV)", "cov")
 	make build-standalone
+	make build-preset-env-standalone
 endif
 
 build-babylon:
@@ -26,6 +27,9 @@ build-babylon:
 
 build-standalone:
 	./node_modules/.bin/gulp build-babel-standalone
+
+build-preset-env-standalone:
+	./node_modules/.bin/gulp build-babel-preset-env-standalone
 
 build-dist: build
 	cd packages/babel-polyfill; \
