@@ -181,9 +181,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           const id = this.parseIdentifier();
           node.restIdentifier = id;
 
-          if (!this.eat(tt.braceR)) {
+          if (!this.match(tt.braceR)) {
             this.unexpected(this.state.pos, tt.braceR);
           }
+          break;
         } else {
           const pattern = this.parseObjectPropertyPattern();
           node.children.push(pattern);

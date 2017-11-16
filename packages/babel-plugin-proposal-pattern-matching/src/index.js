@@ -24,12 +24,27 @@ export default function({ types: t }) {
     );
   }
 
+  // assert(keys.length > 0)
+  function makeRestTest(id, keys) {
+    let tree;
+    keys.forEach((existKey, index) => {
+      const expr = t.binaryExpression("!==", id, t.stringLiteral(existKey));
+      if (index === 0) {
+        tree = expr;
+      } else {
+        tree = t.logicalExpression("&&", tree, expr);
+      }
+    });
+    return tree;
+  }
+
   function makeTest(path, id, pattern, defines, isRoot) {
     let arrayTest;
     let objectTest;
     let objectPropTest;
     let objPropSubTest;
     let newId;
+    let key_id;
 
     if (pattern === "else" && isRoot) {
       return null;
@@ -75,6 +90,72 @@ export default function({ types: t }) {
 
           objectTest = t.logicalExpression("&&", objectTest, subPropTest);
         });
+
+        if (pattern.restIdentifier !== null) {
+          const exists_key = pattern.children.map(
+            propPattern => propPattern.key.name,
+          );
+
+          // make a new object
+          // iterate the matched key
+          // check if the matched key in the old objects
+          // if it's not, add it to the new object
+          //
+          // let $restID = {};
+          //
+          // for (let $key in id) {
+          //  if ($key !== $key1 && $key !== $key2 && ...) {
+          //    newobj[key] = id[key];
+          //  }
+          // }
+          if (exists_key.length > 0) {
+            defines.push(
+              t.variableDeclaration("var", [
+                t.variableDeclarator(
+                  pattern.restIdentifier,
+                  t.objectExpression([]),
+                ),
+              ]),
+            );
+            key_id = path.scope.generateUidIdentifier("key");
+
+            defines.push(
+              t.forInStatement(
+                t.variableDeclaration("var", [
+                  t.variableDeclarator(key_id, null),
+                ]), // left
+                id, // right
+                t.ifStatement(
+                  makeRestTest(key_id, exists_key),
+                  t.expressionStatement(
+                    t.assignmentExpression(
+                      "=",
+                      t.memberExpression(pattern.restIdentifier, key_id, true),
+                      t.memberExpression(id, key_id, true),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          } else {
+            // exists_key.length === 0
+            defines.push(
+              t.variableDeclaration("var", [
+                t.variableDeclarator(
+                  pattern.restIdentifier,
+                  t.callExpression(
+                    t.memberExpression(
+                      t.identifier("Object"),
+                      t.identifier("assign"),
+                      false,
+                    ),
+                    [t.objectExpression([]), id],
+                  ),
+                ),
+              ]),
+            );
+          }
+        }
 
         return objectTest;
       case "ObjectPropertyMatchPattern":
