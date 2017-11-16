@@ -24,8 +24,13 @@ export default function({ types: t }) {
     );
   }
 
-  // assert(keys.length > 0)
   function makeRestTest(id, keys) {
+    if (!Array.isArray(keys) || keys.length === 0) {
+      throw new Error(
+        "The second param must be array, and its length must bigger than zero",
+      );
+    }
+
     let tree;
     keys.forEach((existKey, index) => {
       const expr = t.binaryExpression("!==", id, t.stringLiteral(existKey));
