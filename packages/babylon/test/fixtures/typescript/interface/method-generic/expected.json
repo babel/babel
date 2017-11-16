@@ -88,7 +88,6 @@
                   "column": 45
                 }
               },
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 18,
@@ -106,6 +105,7 @@
                 },
                 "name": "m"
               },
+              "computed": false,
               "typeParameters": {
                 "type": "TSTypeParameterDeclaration",
                 "start": 19,
@@ -180,7 +180,6 @@
                               "column": 36
                             }
                           },
-                          "computed": false,
                           "key": {
                             "type": "Identifier",
                             "start": 41,
@@ -198,6 +197,7 @@
                             },
                             "name": "x"
                           },
+                          "computed": false,
                           "typeAnnotation": {
                             "type": "TSTypeAnnotation",
                             "start": 42,

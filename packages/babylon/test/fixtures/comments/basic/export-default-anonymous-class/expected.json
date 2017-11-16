@@ -88,7 +88,6 @@
                   }
                 },
                 "static": false,
-                "computed": false,
                 "key": {
                   "type": "Identifier",
                   "start": 103,
@@ -107,10 +106,10 @@
                   "name": "method1",
                   "leadingComments": null
                 },
+                "computed": false,
                 "kind": "method",
                 "id": null,
                 "generator": false,
-                "expression": false,
                 "async": false,
                 "params": [],
                 "body": {

@@ -90,7 +90,6 @@
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 22,
@@ -108,6 +107,7 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -124,7 +124,6 @@
                   "column": 8
                 }
               },
-              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -143,6 +142,7 @@
                 },
                 "name": "static"
               },
+              "static": false,
               "value": null
             }
           ]
@@ -210,7 +210,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 47,
@@ -228,6 +227,7 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "value": null
             }
           ]
@@ -295,7 +295,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 62,
@@ -313,6 +312,7 @@
                 },
                 "name": "get"
               },
+              "computed": false,
               "value": null
             }
           ]
@@ -380,7 +380,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 79,
@@ -398,6 +397,7 @@
                 },
                 "name": "set"
               },
+              "computed": false,
               "value": null
             }
           ]
@@ -464,7 +464,6 @@
                   "column": 17
                 }
               },
-              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -483,6 +482,7 @@
                 },
                 "name": "static"
               },
+              "static": false,
               "value": null
             }
           ]
@@ -550,7 +550,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 116,
@@ -568,6 +567,7 @@
                 },
                 "name": "async"
               },
+              "computed": false,
               "value": null
             }
           ]
@@ -635,7 +635,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 138,
@@ -653,6 +652,7 @@
                 },
                 "name": "get"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -671,7 +671,6 @@
               },
               "static": false,
               "kind": "method",
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 145,
@@ -689,9 +688,9 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "id": null,
               "generator": true,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {
@@ -778,7 +777,6 @@
               },
               "static": true,
               "kind": "method",
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 177,
@@ -796,9 +794,9 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "id": null,
               "generator": true,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {
@@ -884,7 +882,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 199,
@@ -902,6 +899,7 @@
                 },
                 "name": "async"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -919,7 +917,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 207,
@@ -937,10 +934,10 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {
@@ -1026,7 +1023,6 @@
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 239,
@@ -1044,6 +1040,7 @@
                 },
                 "name": "async"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -1061,7 +1058,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 247,
@@ -1079,6 +1075,7 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "value": null
             }
           ]
@@ -1145,7 +1142,6 @@
                   "column": 19
                 }
               },
-              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -1164,6 +1160,7 @@
                 },
                 "name": "static"
               },
+              "static": false,
               "value": null
             }
           ]
@@ -1230,7 +1227,6 @@
                   "column": 13
                 }
               },
-              "static": false,
               "computed": false,
               "key": {
                 "type": "Identifier",
@@ -1249,6 +1245,7 @@
                 },
                 "name": "static"
               },
+              "static": false,
               "value": {
                 "type": "NumericLiteral",
                 "start": 298,
@@ -1335,7 +1332,6 @@
                 }
               },
               "static": false,
-              "computed": true,
               "key": {
                 "type": "StringLiteral",
                 "start": 325,
@@ -1356,10 +1352,10 @@
                 },
                 "value": "a"
               },
+              "computed": true,
               "kind": "get",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {
@@ -1445,7 +1441,6 @@
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 366,
@@ -1463,10 +1458,10 @@
                 },
                 "name": "static"
               },
+              "computed": false,
               "kind": "get",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {

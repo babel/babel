@@ -88,7 +88,6 @@
                   "column": 16
                 }
               },
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 15,
@@ -106,6 +105,7 @@
                 },
                 "name": "public"
               },
+              "computed": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start": 21,

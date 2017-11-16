@@ -90,7 +90,6 @@
               },
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [
                 {
@@ -123,7 +122,6 @@
                         }
                       },
                       "method": false,
-                      "computed": false,
                       "key": {
                         "type": "Identifier",
                         "start": 23,
@@ -141,6 +139,7 @@
                         },
                         "name": "async"
                       },
+                      "computed": false,
                       "shorthand": true,
                       "value": {
                         "type": "AssignmentPattern",

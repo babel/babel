@@ -90,7 +90,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 14,
@@ -108,11 +107,11 @@
                 },
                 "name": "m"
               },
+              "computed": false,
               "optional": true,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "returnType": {

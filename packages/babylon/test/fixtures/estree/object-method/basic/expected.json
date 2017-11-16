@@ -104,7 +104,6 @@
                     }
                   },
                   "method": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 14,
@@ -122,6 +121,7 @@
                     },
                     "name": "foo"
                   },
+                  "computed": false,
                   "kind": "init",
                   "value": {
                     "type": "FunctionExpression",
@@ -139,7 +139,6 @@
                     },
                     "id": null,
                     "generator": false,
-                    "expression": false,
                     "async": false,
                     "params": [],
                     "body": {

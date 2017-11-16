@@ -58,7 +58,6 @@
           },
           "id": null,
           "generator": false,
-          "expression": true,
           "async": false,
           "params": [
             {
@@ -122,7 +121,6 @@
                       }
                     },
                     "method": false,
-                    "computed": false,
                     "key": {
                       "type": "Identifier",
                       "start": 8,
@@ -140,6 +138,7 @@
                       },
                       "name": "b"
                     },
+                    "computed": false,
                     "shorthand": true,
                     "value": {
                       "type": "Identifier",

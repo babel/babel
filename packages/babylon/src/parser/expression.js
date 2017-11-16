@@ -1543,11 +1543,14 @@ export default class ExpressionParser extends LValParser {
     );
   }
 
-  isStrictBody(
-    node: { body: N.BlockStatement },
-    isExpression: ?boolean,
-  ): boolean {
-    if (!isExpression && node.body.directives.length) {
+  isStrictBody(node: { body: N.BlockStatement }): boolean {
+    const isBlockStatement = node.body.type === "BlockStatement";
+
+    if (
+      isBlockStatement &&
+      node.body.directives &&
+      node.body.directives.length
+    ) {
       for (const directive of node.body.directives) {
         if (directive.value.value === "use strict") {
           return true;
@@ -1606,7 +1609,7 @@ export default class ExpressionParser extends LValParser {
     // If this is a strict mode function, verify that argument names
     // are not repeated, and it does not try to bind the words `eval`
     // or `arguments`.
-    const isStrict = this.isStrictBody(node, node.expression);
+    const isStrict = this.isStrictBody(node);
     // Also check for arrow functions
     const checkLVal = this.state.strict || isStrict || isArrowFunction;
 

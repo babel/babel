@@ -76,7 +76,6 @@
             "name": "f"
           },
           "generator": false,
-          "expression": false,
           "async": false,
           "params": [
             {
@@ -207,7 +206,6 @@
             "name": "f"
           },
           "generator": false,
-          "expression": false,
           "async": false,
           "params": [
             {

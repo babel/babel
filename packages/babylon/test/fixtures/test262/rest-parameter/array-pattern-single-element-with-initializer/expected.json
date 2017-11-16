@@ -60,7 +60,6 @@
           "name": "singleElementWithInitializer"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "params": [
           {

@@ -60,7 +60,6 @@
           "name": "multiElementWithArray"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "params": [
           {
@@ -107,7 +106,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 35,
@@ -125,6 +123,7 @@
                     },
                     "name": "p"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "ArrayPattern",
@@ -176,7 +175,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 43,
@@ -194,6 +192,7 @@
                     },
                     "name": "b"
                   },
+                  "computed": false,
                   "shorthand": true,
                   "value": {
                     "type": "Identifier",
@@ -231,7 +230,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 46,
@@ -249,6 +247,7 @@
                     },
                     "name": "q"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "ArrayPattern",

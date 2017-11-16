@@ -90,7 +90,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 10,
@@ -108,6 +107,7 @@
                 },
                 "name": "x"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -125,7 +125,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 13,
@@ -143,6 +142,7 @@
                 },
                 "name": "y"
               },
+              "computed": false,
               "value": null
             }
           ]
@@ -210,7 +210,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 29,
@@ -228,6 +227,7 @@
                 },
                 "name": "x"
               },
+              "computed": false,
               "value": {
                 "type": "NumericLiteral",
                 "start": 33,
@@ -264,7 +264,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 36,
@@ -282,6 +281,7 @@
                 },
                 "name": "y"
               },
+              "computed": false,
               "value": {
                 "type": "NumericLiteral",
                 "start": 40,

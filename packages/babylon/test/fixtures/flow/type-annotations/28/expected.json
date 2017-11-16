@@ -90,7 +90,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 15,
@@ -108,10 +107,10 @@
                 },
                 "name": "fooProp"
               },
+              "computed": false,
               "kind": "set",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [
                 {

@@ -250,7 +250,6 @@
                                 }
                               ],
                               "static": false,
-                              "computed": false,
                               "key": {
                                 "type": "Identifier",
                                 "start": 64,
@@ -268,10 +267,10 @@
                                 },
                                 "name": "innerMethod"
                               },
+                              "computed": false,
                               "kind": "method",
                               "id": null,
                               "generator": false,
-                              "expression": false,
                               "async": false,
                               "params": [],
                               "body": {
@@ -300,7 +299,6 @@
                 }
               ],
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 94,
@@ -318,10 +316,10 @@
                 },
                 "name": "outerMethod"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {

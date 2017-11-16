@@ -127,7 +127,6 @@
                 }
               },
               "method": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 11,
@@ -145,6 +144,7 @@
                 },
                 "name": "y"
               },
+              "computed": false,
               "shorthand": false,
               "value": {
                 "type": "NumericLiteral",

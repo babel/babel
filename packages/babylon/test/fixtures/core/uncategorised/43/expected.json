@@ -104,7 +104,6 @@
                   }
                 },
                 "method": false,
-                "computed": false,
                 "key": {
                   "type": "NumericLiteral",
                   "start": 10,
@@ -125,10 +124,10 @@
                   },
                   "value": 10
                 },
+                "computed": false,
                 "kind": "set",
                 "id": null,
                 "generator": false,
-                "expression": false,
                 "async": false,
                 "params": [
                   {

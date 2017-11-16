@@ -88,7 +88,6 @@
                   }
                 },
                 "static": false,
-                "computed": false,
                 "key": {
                   "type": "Identifier",
                   "start": 8,
@@ -106,10 +105,10 @@
                   },
                   "name": "f"
                 },
+                "computed": false,
                 "kind": "method",
                 "id": null,
                 "generator": false,
-                "expression": false,
                 "async": false,
                 "params": [
                   {
@@ -156,7 +155,6 @@
                             }
                           },
                           "method": false,
-                          "computed": false,
                           "key": {
                             "type": "Identifier",
                             "start": 11,
@@ -174,6 +172,7 @@
                             },
                             "name": "x"
                           },
+                          "computed": false,
                           "shorthand": true,
                           "value": {
                             "type": "Identifier",
@@ -228,7 +227,6 @@
                             }
                           },
                           "method": false,
-                          "computed": false,
                           "key": {
                             "type": "Identifier",
                             "start": 17,
@@ -246,6 +244,7 @@
                             },
                             "name": "x"
                           },
+                          "computed": false,
                           "shorthand": false,
                           "value": {
                             "type": "NumericLiteral",

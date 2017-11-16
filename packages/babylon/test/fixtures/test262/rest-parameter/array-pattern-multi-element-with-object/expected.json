@@ -60,7 +60,6 @@
           "name": "multiElementWithObject"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "params": [
           {
@@ -122,7 +121,6 @@
                         }
                       },
                       "method": false,
-                      "computed": false,
                       "key": {
                         "type": "Identifier",
                         "start": 37,
@@ -140,6 +138,7 @@
                         },
                         "name": "p"
                       },
+                      "computed": false,
                       "shorthand": false,
                       "value": {
                         "type": "Identifier",
@@ -191,7 +190,6 @@
                         }
                       },
                       "method": false,
-                      "computed": false,
                       "key": {
                         "type": "Identifier",
                         "start": 45,
@@ -209,6 +207,7 @@
                         },
                         "name": "r"
                       },
+                      "computed": false,
                       "shorthand": true,
                       "value": {
                         "type": "Identifier",
@@ -263,7 +262,6 @@
                         }
                       },
                       "method": false,
-                      "computed": false,
                       "key": {
                         "type": "Identifier",
                         "start": 50,
@@ -281,6 +279,7 @@
                         },
                         "name": "s"
                       },
+                      "computed": false,
                       "shorthand": true,
                       "value": {
                         "type": "AssignmentPattern",

@@ -104,7 +104,6 @@
                   }
                 },
                 "method": false,
-                "computed": false,
                 "key": {
                   "type": "Identifier",
                   "start": 10,
@@ -122,10 +121,10 @@
                   },
                   "name": "width"
                 },
+                "computed": false,
                 "kind": "get",
                 "id": null,
                 "generator": false,
-                "expression": false,
                 "async": false,
                 "params": [],
                 "body": {

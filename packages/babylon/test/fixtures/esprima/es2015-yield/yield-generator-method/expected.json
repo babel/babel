@@ -72,7 +72,6 @@
                 }
               },
               "method": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 4,
@@ -90,10 +89,10 @@
                 },
                 "name": "yield"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": true,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {

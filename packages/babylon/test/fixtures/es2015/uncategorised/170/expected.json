@@ -74,7 +74,6 @@
             "name": "x"
           },
           "generator": false,
-          "expression": false,
           "async": false,
           "params": [
             {
@@ -107,7 +106,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 14,
@@ -125,6 +123,7 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
                   "shorthand": true,
                   "value": {
                     "type": "Identifier",
@@ -162,7 +161,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 17,
@@ -180,6 +178,7 @@
                     },
                     "name": "b"
                   },
+                  "computed": false,
                   "shorthand": true,
                   "value": {
                     "type": "Identifier",

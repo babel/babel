@@ -60,7 +60,6 @@
           "name": "multiElementWithInitializer"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "params": [
           {

@@ -104,7 +104,6 @@
                     }
                   },
                   "method": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 27,
@@ -122,10 +121,10 @@
                     },
                     "name": "queryAll"
                   },
+                  "computed": false,
                   "kind": "method",
                   "id": null,
                   "generator": true,
-                  "expression": false,
                   "async": true,
                   "params": [
                     {
