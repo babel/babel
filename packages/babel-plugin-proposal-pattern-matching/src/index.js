@@ -32,7 +32,7 @@ export default function({ types: t }) {
     let newId;
 
     if (pattern === "else" && isRoot) {
-      return t.booleanLiteral(true);
+      return null;
     }
 
     switch (pattern.type) {
@@ -158,7 +158,10 @@ export default function({ types: t }) {
 
         let mainIfTree, lastTree;
 
-        path.node.clauses.forEach((clause, index) => {
+        for (let i = 0; i < path.node.clauses.length; i++) {
+          const clause = path.node.clauses[i];
+          const index = i;
+
           const defines = [];
           let _test;
           let _closure;
@@ -171,7 +174,12 @@ export default function({ types: t }) {
               true,
             );
             _closure = makeClosure(clause, defines);
-            lastTree = mainIfTree = t.ifStatement(_test, _closure, null);
+            if (_test === null) {
+              lastTree = mainIfTree = _closure;
+              break;
+            } else {
+              lastTree = mainIfTree = t.ifStatement(_test, _closure, null);
+            }
           } else {
             _test = makeTest(
               path,
@@ -181,11 +189,16 @@ export default function({ types: t }) {
               true,
             );
             _closure = makeClosure(clause, defines);
-            const newIfTree = t.ifStatement(_test, _closure, null);
-            lastTree.alternate = newIfTree;
-            lastTree = newIfTree;
+            if (_test === null) {
+              lastTree.alternate = _closure;
+              break;
+            } else {
+              const newIfTree = t.ifStatement(_test, _closure, null);
+              lastTree.alternate = newIfTree;
+              lastTree = newIfTree;
+            }
           }
-        });
+        }
 
         const bodyExpr = t.blockStatement(
           first_statements_group.concat([mainIfTree]),
