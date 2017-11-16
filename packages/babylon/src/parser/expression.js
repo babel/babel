@@ -648,7 +648,10 @@ export default class ExpressionParser extends LValParser {
           !this.state.inClassProperty &&
           !this.options.allowSuperOutsideMethod
         ) {
-          this.raise(this.state.start, "'super' outside of function or class");
+          this.raise(
+            this.state.start,
+            "super is only allowed in object methods and classes",
+          );
         }
 
         node = this.startNode();
