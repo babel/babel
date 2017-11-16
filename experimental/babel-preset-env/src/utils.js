@@ -1,6 +1,8 @@
 // @flow
 
 import semver from "semver";
+import unreleasedLabels from "../data/unreleased-labels";
+import { semverMin } from "./targets-parser";
 import type { Targets } from "./types";
 
 // Convert version to a semver value.
@@ -43,13 +45,34 @@ export const prettifyTargets = (targets: Targets): Object => {
   return Object.keys(targets).reduce((results, target) => {
     let value = targets[target];
 
-    if (typeof value === "string") {
+    const unreleasedLabel = unreleasedLabels[target];
+    if (typeof value === "string" && unreleasedLabel !== value) {
       value = prettifyVersion(value);
     }
 
     results[target] = value;
     return results;
   }, {});
+};
+
+export const isUnreleasedVersion = (version: string, env: string): boolean => {
+  const unreleasedLabel = unreleasedLabels[env];
+  return (
+    unreleasedLabel && unreleasedLabel === version.toString().toLowerCase()
+  );
+};
+
+export const getLowestUnreleased = (
+  a: string,
+  b: string,
+  env: string,
+): string => {
+  const unreleasedLabel = unreleasedLabels[env];
+  const hasUnreleased = [a, b].some(item => item === unreleasedLabel);
+  if (hasUnreleased) {
+    return a === hasUnreleased ? b : a || b;
+  }
+  return semverMin(a, b);
 };
 
 export const filterStageFromList = (list: any, stageList: any) => {
