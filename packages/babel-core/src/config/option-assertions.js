@@ -1,4 +1,5 @@
 // @flow
+import { validKey, type CacheKey } from "@babel/helper-caching";
 
 import type {
   IgnoreList,
@@ -17,6 +18,16 @@ export type ValidatorSet = {
 };
 
 export type Validator<T> = (string, mixed) => T;
+
+export function assertCacheKey(key: string, value: mixed): CacheKey | void {
+  if (!validKey(value)) {
+    throw new Error(
+      `.${key} must be a valid primitive, or have a meaningful toString implementation`,
+    );
+  }
+
+  return (value: any);
+}
 
 export function assertSourceMaps(
   key: string,
