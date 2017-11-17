@@ -7,9 +7,13 @@ import fs from "fs";
 import * as util from "./util";
 
 export default function(commander, filenames, opts) {
-  function write(src, relative, base) {
+  function write(src, relative, base, callback) {
+    if (typeof base === "function") {
+      callback = base;
+      base = undefined;
+    }
     if (!util.isCompilableExtension(relative, commander.extensions)) {
-      return false;
+      return callback();
     }
 
     // remove extension and then append back on .js
@@ -17,7 +21,7 @@ export default function(commander, filenames, opts) {
 
     const dest = getDest(commander, relative, base);
 
-    const data = util.compile(
+    util.compile(
       src,
       defaults(
         {
@@ -26,23 +30,27 @@ export default function(commander, filenames, opts) {
         },
         opts,
       ),
+      function(err, res) {
+        if (err) return callback(err);
+        if (!res) return callback();
+
+        // we've requested explicit sourcemaps to be written to disk
+        if (
+          res.map &&
+          commander.sourceMaps &&
+          commander.sourceMaps !== "inline"
+        ) {
+          const mapLoc = dest + ".map";
+          res.code = util.addSourceMappingUrl(res.code, mapLoc);
+          outputFileSync(mapLoc, JSON.stringify(res.map));
+        }
+
+        outputFileSync(dest, res.code);
+        util.chmod(src, dest);
+
+        return callback(null, src + " -> " + dest);
+      },
     );
-
-    if (!data) return false;
-
-    // we've requested explicit sourcemaps to be written to disk
-    if (data.map && commander.sourceMaps && commander.sourceMaps !== "inline") {
-      const mapLoc = dest + ".map";
-      data.code = util.addSourceMappingUrl(data.code, mapLoc);
-      outputFileSync(mapLoc, JSON.stringify(data.map));
-    }
-
-    outputFileSync(dest, data.code);
-    util.chmod(src, dest);
-
-    util.log(src + " -> " + dest);
-
-    return true;
   }
 
   function getDest(commander, filename, base) {
@@ -50,17 +58,25 @@ export default function(commander, filenames, opts) {
     return path.join(commander.outDir, filename);
   }
 
-  function handleFile(src, filename, base) {
-    const didWrite = write(src, filename, base);
-
-    if (!didWrite && commander.copyFiles) {
-      const dest = getDest(commander, filename, base);
-      outputFileSync(dest, fs.readFileSync(src));
-      util.chmod(src, dest);
+  function handleFile(src, filename, base, callback) {
+    if (typeof base === "function") {
+      callback = base;
+      base = undefined;
     }
+
+    write(src, filename, base, function(err, res) {
+      if (err) return callback(err);
+      if (!res && commander.copyFiles) {
+        const dest = getDest(commander, filename, base);
+        outputFileSync(dest, fs.readFileSync(src));
+        util.chmod(src, dest);
+      }
+
+      return callback(null, res);
+    });
   }
 
-  function handle(filename) {
+  function handle(filename, callback) {
     if (!fs.existsSync(filename)) return;
 
     const stat = fs.statSync(filename);
@@ -72,19 +88,57 @@ export default function(commander, filenames, opts) {
         util.deleteDir(commander.outDir);
       }
 
-      util
-        .readdir(dirname, commander.includeDotfiles)
-        .forEach(function(filename) {
-          const src = path.join(dirname, filename);
-          handleFile(src, filename, dirname);
+      const results = [];
+      let filesProcessed = 0;
+
+      const files = util.readdir(dirname, commander.includeDotfiles);
+      files.forEach(function(filename, index) {
+        const src = path.join(dirname, filename);
+        handleFile(src, filename, dirname, function(err, res) {
+          if (err) return callback(err);
+          results[index] = res;
+          filesProcessed++;
+          if (filesProcessed === files.length) {
+            return callback(null, results);
+          }
         });
+      });
     } else {
-      write(filename, path.basename(filename), path.dirname(filename));
+      write(
+        filename,
+        path.basename(filename),
+        path.dirname(filename),
+        callback,
+      );
     }
   }
 
+  function output(resultsArray) {
+    resultsArray.forEach(function(result) {
+      if (result) {
+        if (Array.isArray(result)) {
+          result.forEach(singleResult => {
+            if (singleResult) util.log(singleResult);
+          });
+        } else util.log(result);
+      }
+    });
+  }
+
+  const results = [];
+  let filesProcessed = 0;
+
   if (!commander.skipInitialBuild) {
-    filenames.forEach(handle);
+    filenames.forEach((filename, index) => {
+      handle(filename, function(err, res) {
+        if (err) throw err;
+        results[index] = res;
+        filesProcessed++;
+        if (filesProcessed === filenames.length) {
+          output(results);
+        }
+      });
+    });
   }
 
   if (commander.watch) {
@@ -104,7 +158,10 @@ export default function(commander, filenames, opts) {
         watcher.on(type, function(filename) {
           const relative = path.relative(dirname, filename) || filename;
           try {
-            handleFile(filename, relative);
+            handleFile(filename, relative, function(err, res) {
+              if (err) throw err;
+              util.log(res);
+            });
           } catch (err) {
             console.error(err.stack);
           }
