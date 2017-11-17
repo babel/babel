@@ -24,9 +24,9 @@
   <a href="https://medium.com/friendship-dot-js/i-peeked-into-my-node-modules-directory-and-you-wont-believe-what-happened-next-b89f63d21558"><img alt="Business Strategy Status" src="https://img.shields.io/badge/business%20model-flavortown-green.svg"></a>
 </p>
 
-Babel is community-driven and thus mostly maintained by a group of [volunteers](https://babeljs.io/team). It has a lot of [companies and projects](http://babeljs.io/users) using it but almost no sponsors/people funded to work on it. If you'd like to help maintain the future of the project, please consider:
+Babel is community-driven and thus mostly maintained by a group of [volunteers](https://babeljs.io/team). It has a lot of [companies and projects](https://babeljs.io/users) using it but almost no sponsors/people funded to work on it. If you'd like to help maintain the future of the project, please consider:
 
-- Giving developer time on the project. (Message us on [Twitter](https://twitter.com/babeljs) or [Slack](slack.babeljs.io))
+- Giving developer time on the project. (Message us on [Twitter](https://twitter.com/babeljs) or [Slack](https://slack.babeljs.io/))
 - [Giving funds by becoming a backer/sponsor on OpenCollective](https://opencollective.com/babel)
 
 ## Intro
@@ -63,19 +63,19 @@ Mostly a handful of volunteers! Please check out our [team page](https://babeljs
 
 ### Looking for support?
 
-For questions and support please visit join our [Slack Community](https://slack.babeljs.io/), ask a question on [Stack Overflow](http://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs/).
+For questions and support please visit join our [Slack Community](https://slack.babeljs.io/), ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs).
 
 ### Where are the docs?
 
-Check out our website: [babeljs.io](http://babeljs.io/), and report issues/features at [babel/website](https://github.com/babel/website/issues).
+Check out our website: [babeljs.io](https://babeljs.io/), and report issues/features at [babel/website](https://github.com/babel/website/issues).
 
 ### Want to report a bug or request a feature?
 
-Please read through our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md) and fill out the issue template at [babel/issues](https://github.com/babel/babel/issues)!
+Please read through our [CONTRIBUTING.md](CONTRIBUTING.md) and fill out the issue template at [babel/issues](https://github.com/babel/babel/issues)!
 
 ### Want to contribute to Babel?
 
-Check out our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTRIBUTING.md) to get started with setting up the repo.
+Check out our [CONTRIBUTING.md](CONTRIBUTING.md) to get started with setting up the repo.
 
 - If you have already joined Slack, join our [#development](https://babeljs.slack.com/messages/development) channel and say hi!
 - Check out the issues with the [good first issue](https://github.com/babel/babel/labels/good%20first%20issue) and [help wanted](https://github.com/babel/babel/labels/help%20wanted) label. We suggest also looking at the closed ones to get a sense of the kinds of issues you can tackle.
@@ -84,7 +84,7 @@ Check out our [CONTRIBUTING.md](https://github.com/babel/babel/blob/master/CONTR
 
 ### How is the repo structured?
 
-The Babel repo is managed as a [monorepo](https://github.com/babel/babel/blob/master/doc/design/monorepo.md) that is composed of many [npm packages](/packages#readme).
+The Babel repo is managed as a [monorepo](doc/design/monorepo.md) that is composed of many [npm packages](packages/README.md).
 
 ## Backers
 
@@ -158,4 +158,4 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 
 ## License
 
-[MIT](https://github.com/babel/babel/blob/master/LICENSE)
+[MIT](LICENSE)
