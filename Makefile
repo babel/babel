@@ -42,6 +42,10 @@ watch: clean
 	make clean-lib
 	BABEL_ENV=development ./node_modules/.bin/gulp watch
 
+watch-babylon:
+	cd packages/babylon; \
+	./node_modules/.bin/rollup -c -w
+
 flow:
 	./node_modules/.bin/flow check --strip-root
 
