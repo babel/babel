@@ -16,20 +16,20 @@ npm install --save-dev @babel/plugin-syntax-export-extensions
 
 ```json
 {
-  "plugins": ["@babel/syntax-export-extensions"]
+  "plugins": ["@babel/plugin-syntax-export-extensions"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/syntax-export-extensions script.js
+babel --plugins @babel/plugin-syntax-export-extensions script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/syntax-export-extensions"]
+  plugins: ["@babel/plugin-syntax-export-extensions"]
 });
 ```

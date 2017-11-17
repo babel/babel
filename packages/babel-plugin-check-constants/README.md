@@ -55,4 +55,4 @@ require("@babel/core").transform("code", {
 
 ## Note
 
-This check will only validate consts. If you need it to compile down to `var` then you must also install and enable [`transform-block-scoping`](http://babeljs.io/docs/plugins/transform-block-scoping/).
+This check will only validate consts. If you need it to compile down to `var` then you must also install and enable [`@babel/plugin-transform-block-scoping`](http://babeljs.io/docs/plugins/transform-block-scoping/).

@@ -115,7 +115,7 @@ $ TEST_ONLY=babel-cli make test
 `TEST_ONLY` will also match substrings of the package name:
 
 ```sh
-# Run tests for the babel-plugin-transform-classes package.
+# Run tests for the @babel/plugin-transform-classes package.
 $ TEST_ONLY=es2015-class make test
 ```
 
@@ -161,16 +161,16 @@ In case you're locally getting errors which are not on the CI, it may be due to
 
 Most packages in [`/packages`](https://github.com/babel/babel/tree/master/packages) have a `test` folder, however some tests might be in other packages or in [`/packages/babel-core`](https://github.com/babel/babel/tree/master/packages/babel-core/test/fixtures).
 
-#### `babel-plugin-x`
+#### `@babel/plugin-x`
 
 All the Babel plugins (and other packages) that have a `/test/fixtures` are written in a similar way.
 
-For example, in [`babel-plugin-transform-exponentiation-operator/test`](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator/test):
+For example, in [`@babel/plugin-transform-exponentiation-operator/test`](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator/test):
 
 - There is an `index.js` file. It imports our [test helper](https://github.com/babel/babel/tree/master/packages/babel-helper-plugin-test-runner). (You don't have to worry about this).
 - There can be multiple folders under [`/fixtures`](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures)
    - There is an [`options.json`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/options.json) file whose function is similar to a `.babelrc` file, allowing you to pass in the plugins and settings you need for your tests.
-   - For this test, we only need the relevant plugin, so it's just `{ "plugins": ["@babel/transform-exponentiation-operator"] }`.
+   - For this test, we only need the relevant plugin, so it's just `{ "plugins": ["@babel/plugin-transform-exponentiation-operator"] }`.
    - If necessary, you can have an `options.json` with different options in each subfolder.
 
 - In each subfolder, you can organize your directory structure by categories of tests. (Example: these folders can be named after the feature you are testing or can reference the issue number they fix)
@@ -205,8 +205,8 @@ If you need to check for an error that is thrown you can add to the `options.jso
 ```js
 // options.json example
 {
-  "plugins": [["@babel/proposal-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
-  "throws": "@babel/proposal-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
+  "plugins": [["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
+  "throws": "@babel/plugin-proposal-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
 }
 ```
 
@@ -233,7 +233,7 @@ descriptive name, and add the following:
 
 #### Bootstrapping expected output
 
-For both `babel-plugin-x` and `babylon`, you can easily generate an `expected.js`/`expected.json` automatically by just providing `actual.js` and running the tests as you usually would.
+For both `@babel/plugin-x` and `babylon`, you can easily generate an `expected.js`/`expected.json` automatically by just providing `actual.js` and running the tests as you usually would.
 
 ```
 // Example
@@ -267,7 +267,7 @@ To include the changes, we have to make sure to build Babel:
 $ make build
 ```
 
-Next, we need to execute `Generator.generate()`, which can be achieved by running a test case in the `babel-generator` package.
+Next, we need to execute `Generator.generate()`, which can be achieved by running a test case in the `@babel/generator` package.
 For example, we can run the test case that tests the generation of class declarations:
 
 ```bash

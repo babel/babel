@@ -53,7 +53,7 @@ Without options:
 
 ```js
 {
-  "plugins": ["@babel/transform-for-of"]
+  "plugins": ["@babel/plugin-transform-for-of"]
 }
 ```
 
@@ -62,7 +62,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["@babel/transform-for-of", {
+    ["@babel/plugin-transform-for-of", {
       "loose": true
     }]
   ]
@@ -72,14 +72,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-for-of script.js
+babel --plugins @babel/plugin-transform-for-of script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-for-of"]
+  plugins: ["@babel/plugin-transform-for-of"]
 });
 ```
 

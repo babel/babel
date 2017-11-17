@@ -34,20 +34,20 @@ npm install --save-dev @babel/plugin-transform-property-literals
 
 ```json
 {
-  "plugins": ["@babel/transform-property-literals"]
+  "plugins": ["@babel/plugin-transform-property-literals"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-property-literals script.js
+babel --plugins @babel/plugin-transform-property-literals script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-property-literals"]
+  plugins: ["@babel/plugin-transform-property-literals"]
 });
 ```

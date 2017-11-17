@@ -16,20 +16,20 @@ $ npm install @babel/plugin-proposal-pipeline-operator
 
 ```json
 {
-  "plugins": ["@babel/proposal-pipeline-operator"]
+  "plugins": ["@babel/plugin-proposal-pipeline-operator"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-$ babel --plugins @babel/proposal-pipeline-operator script.js
+$ babel --plugins @babel/plugin-proposal-pipeline-operator script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/proposal-pipeline-operator"]
+  plugins: ["@babel/plugin-proposal-pipeline-operator"]
 });
 ```

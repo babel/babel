@@ -262,7 +262,7 @@ This release primarily upgrades `compat-table`, which adds support for async on 
 
 - Add tests for debug output ([#156](https://github.com/babel/babel-preset-env/pull/156)) (@existentialism)
 
-Since we've (mostly @yavorsky) have fixed a number of bugs recently with the `debug` option output, we added the ability to assert stdout matches what we expect. Read the updated [CONTRIBUTING.md](https://github.com/babel/babel-preset-env/blob/master/CONTRIBUTING.md#testing-the-debug-option) for more info.
+Since we've (mostly @yavorsky) have fixed a number of bugs recently with the `debug` option output, we added the ability to assert stdout matches what we expect. Read the updated [CONTRIBUTING.md](https://github.com/babel/experimental/babel-preset-env/blob/master/CONTRIBUTING.md#testing-the-debug-option) for more info.
 
 - Fixes #143. Log correct targets. ([#155](https://github.com/babel/babel-preset-env/pull/155)) (@yavorsky)
 
@@ -442,7 +442,7 @@ Example:
 
 `"exclude": ["map"]` doesn't include the `Map` polyfill if you know you aren't using it in your code (w/ `useBuiltIns`). (We will figure out a way to automatically do this [#84](https://github.com/babel/babel-preset-env/issues/84)).
 
-If you pass a wrong plugin it will error: valid options for `include/exclude` are in [/data/plugin-features.js](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js) and [/data/built-in-features.js](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js) (without the `es6.`)
+If you pass a wrong plugin it will error: valid options for `include/exclude` are in [/data/plugin-features.js](https://github.com/babel/experimental/babel-preset-env/blob/master/data/plugin-features.js) and [/data/built-in-features.js](https://github.com/babel/experimental/babel-preset-env/blob/master/data/built-in-features.js) (without the `es6.`)
 
 ### :house: Internal
 
@@ -555,7 +555,7 @@ Electron is also an environment, so [Paul went ahead](https://twitter.com/paulcb
 }
 ```
 
-> Currently we are manually updating the data in [/data/electron-to-chromium.js](https://github.com/babel/babel-preset-env/blob/master/data/electron-to-chromium.js), but [@kevinsawicki](https://github.com/kevinsawicki) says we could generate the data from [atom-shell/dist/index.json](https://gh-contractor-zcbenz.s3.amazonaws.com/atom-shell/dist/index.json) as well! (Someone should make a PR :smile:)
+> Currently we are manually updating the data in [/data/electron-to-chromium.js](https://github.com/babel/experimental/babel-preset-env/blob/master/data/electron-to-chromium.js), but [@kevinsawicki](https://github.com/kevinsawicki) says we could generate the data from [atom-shell/dist/index.json](https://gh-contractor-zcbenz.s3.amazonaws.com/atom-shell/dist/index.json) as well! (Someone should make a PR :smile:)
 
 
 

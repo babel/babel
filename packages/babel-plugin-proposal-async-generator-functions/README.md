@@ -84,21 +84,21 @@ npm install --save-dev @babel/plugin-proposal-async-generator-functions
 
 ```json
 {
-  "plugins": ["@babel/proposal-async-generator-functions"]
+  "plugins": ["@babel/plugin-proposal-async-generator-functions"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/proposal-async-generator-functions script.js
+babel --plugins @babel/plugin-proposal-async-generator-functions script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/proposal-async-generator-functions"]
+  plugins: ["@babel/plugin-proposal-async-generator-functions"]
 });
 ```
 

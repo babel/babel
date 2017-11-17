@@ -52,20 +52,20 @@ npm install --save-dev @babel/plugin-transform-flow-comments
 
 ```json
 {
-  "plugins": ["@babel/transform-flow-comments"]
+  "plugins": ["@babel/plugin-transform-flow-comments"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-flow-comments script.js
+babel --plugins @babel/plugin-transform-flow-comments script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-flow-comments"]
+  plugins: ["@babel/plugin-transform-flow-comments"]
 });
 ```

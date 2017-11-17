@@ -2,7 +2,7 @@
 
 ## Adding a new plugin to support (when approved in the next ECMAScript version)
 
-### Update [`plugin-features.js`](https://github.com/babel/babel-preset-env/blob/master/data/plugin-features.js)
+### Update [`plugin-features.js`](https://github.com/babel/babel/blob/master/experimental/babel-preset-env/data/plugin-features.js)
 
 *Example:*
 
@@ -14,20 +14,20 @@ Find the relevant entries on [compat-table](https://kangax.github.io/compat-tabl
 
 Find the corresponding babel plugin:
 
-`transform-exponentiation-operator`
+`@babel/plugin-transform-exponentiation-operator`
 
 And add them in this structure:
 
 ```js
 // es2016
-"@babel/transform-exponentiation-operator": {
+"@babel/plugin-transform-exponentiation-operator": {
   features: [
     "exponentiation (**) operator",
   ],
 },
 ```
 
-### Update [`built-in-features.js`](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js)
+### Update [`built-in-features.js`](https://github.com/babel/babel/blob/master/experimental/babel-preset-env/data/built-in-features.js)
 
 *Example:*
 
@@ -42,7 +42,7 @@ Find the corresponding module on [core-js](https://github.com/zloirock/core-js/t
 
 `es7.object.values.js`
 
-Find required ES version in [`built-in-features.js`](https://github.com/babel/babel-preset-env/blob/master/data/built-in-features.js) and add the new feature:
+Find required ES version in [`built-in-features.js`](https://github.com/babel/babel/blob/master/experimental/babel-preset-env/data/built-in-features.js) and add the new feature:
 
 ```js
 const es2017 = {
@@ -51,7 +51,7 @@ const es2017 = {
 }
 ```
 
-### Update [`plugins.json`](https://github.com/babel/babel-preset-env/blob/master/data/plugins.json)
+### Update [`plugins.json`](https://github.com/babel/babel/blob/master/experimental/babel-preset-env/data/plugins.json)
 
 Until `compat-table` is a standalone npm module for data we are using the git url
 
@@ -77,7 +77,7 @@ npm run coverage
 
 #### General
 
-All the tests for `babel-preset-env` exist in the `test/fixtures` folder. The
+All the tests for `@babel/preset-env` exist in the `test/fixtures` folder. The
 test setup and conventions are exactly the same as testing a Babel plugin, so
 please read our [documentation on writing tests](https://github.com/babel/babel/blob/master/CONTRIBUTING.md#babel-plugin-x).
 

@@ -16,20 +16,20 @@ npm install --save-dev @babel/plugin-syntax-function-sent
 
 ```json
 {
-  "plugins": ["@babel/syntax-function-sent"]
+  "plugins": ["@babel/plugin-syntax-function-sent"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/syntax-function-sent script.js
+babel --plugins @babel/plugin-syntax-function-sent script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/syntax-function-sent"]
+  plugins: ["@babel/plugin-syntax-function-sent"]
 });
 ```

@@ -16,20 +16,20 @@ npm install --save-dev @babel/plugin-syntax-do-expressions
 
 ```json
 {
-  "plugins": ["@babel/syntax-do-expressions"]
+  "plugins": ["@babel/plugin-syntax-do-expressions"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/syntax-do-expressions script.js
+babel --plugins @babel/plugin-syntax-do-expressions script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/syntax-do-expressions"]
+  plugins: ["@babel/plugin-syntax-do-expressions"]
 });
 ```

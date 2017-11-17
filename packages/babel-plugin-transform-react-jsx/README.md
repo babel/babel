@@ -132,7 +132,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["@babel/transform-react-jsx"]
+  "plugins": ["@babel/plugin-transform-react-jsx"]
 }
 ```
 
@@ -141,7 +141,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["@babel/transform-react-jsx", {
+    ["@babel/plugin-transform-react-jsx", {
       "pragma": "dom", // default pragma is React.createElement
       "pragmaFrag": "DomFrag", // default is React.Fragment
       "throwIfNamespace": false // defaults to true
@@ -153,14 +153,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-react-jsx script.js
+babel --plugins @babel/plugin-transform-react-jsx script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-react-jsx"]
+  plugins: ["@babel/plugin-transform-react-jsx"]
 });
 ```
 

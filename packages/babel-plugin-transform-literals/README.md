@@ -34,20 +34,20 @@ npm install --save-dev @babel/plugin-transform-literals
 
 ```json
 {
-  "plugins": ["@babel/transform-literals"]
+  "plugins": ["@babel/plugin-transform-literals"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-literals script.js
+babel --plugins @babel/plugin-transform-literals script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-literals"]
+  plugins: ["@babel/plugin-transform-literals"]
 });
 ```
