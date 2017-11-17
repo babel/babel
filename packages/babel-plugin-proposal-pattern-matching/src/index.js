@@ -200,9 +200,15 @@ export default function({ types: t }) {
   }
 
   function makeClosure(clause, defines) {
+    if (!Array.isArray(defines)) {
+      throw new Error("The second param of makeClosure must be an array");
+    }
     let body;
     if (clause.expression) {
       body = t.blockStatement([...defines, t.returnStatement(clause.body)], []);
+      if (defines.length === 0) {
+        return t.returnStatement(clause.body);
+      }
     } else {
       // a block statement
       body = t.blockStatement([...defines, ...clause.body.body], []);
