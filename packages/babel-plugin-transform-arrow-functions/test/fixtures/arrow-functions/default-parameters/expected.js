@@ -5,6 +5,6 @@ var some = function () {
 
 var collect = function () {
   let since = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-  let userid = arguments[1];
+  let userid = arguments.length > 1 ? arguments[1] : undefined;
   console.log(userid);
 };
