@@ -41,9 +41,9 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
         auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
         retainLines: opts.retainLines,
         comments,
+        shouldPrintComment: opts.shouldPrintComment,
         compact,
         minified: opts.minified,
-        concise: opts.concise,
 
         // Source-map generation flags.
         sourceMaps,
