@@ -40,6 +40,17 @@ npm install --save-dev @babel/preset-typescript
 }
 ```
 
+### Via `package.json`
+```json
+{
+  "version": "0.0.1",
+  "name": "my-package",
+  "babel": {
+    "presets": ["@babel/preset-typescript"]  
+  }
+}
+```
+
 ### Via CLI
 
 ```sh
