@@ -1,27 +1,24 @@
 import syntaxPatternMatching from "@babel/plugin-syntax-pattern-matching";
+import { template } from "@babel/core";
 
 export default function({ types: t }) {
   function makeIsArrayTest(body) {
-    return t.callExpression(
-      t.memberExpression(t.identifier("Array"), t.identifier("isArray"), false),
-      [body],
-    );
+    return template.expression(`Array.isArray(BODY)`)({
+      BODY: body,
+    });
   }
 
   function makeArrayLengthTest(id, length) {
-    return t.binaryExpression(
-      "===",
-      t.memberExpression(id, t.identifier("length")),
-      t.numericLiteral(length),
-    );
+    return template.expression(`ID.length === LENGTH`)({
+      ID: id,
+      LENGTH: t.numericLiteral(length),
+    });
   }
 
   function makeIsObjectTest(body) {
-    return t.binaryExpression(
-      "===",
-      t.unaryExpression("typeof", body, true),
-      t.stringLiteral("object"),
-    );
+    return template.expression(`typeof BODY === "object"`)({
+      BODY: body,
+    });
   }
 
   function makeRestTest(id, keys) {
@@ -125,39 +122,28 @@ export default function({ types: t }) {
             key_id = path.scope.generateUidIdentifier("key");
 
             defines.push(
-              t.forInStatement(
-                t.variableDeclaration("var", [
-                  t.variableDeclarator(key_id, null),
-                ]), // left
-                id, // right
-                t.ifStatement(
-                  makeRestTest(key_id, exists_key),
-                  t.expressionStatement(
-                    t.assignmentExpression(
-                      "=",
-                      t.memberExpression(pattern.restIdentifier, key_id, true),
-                      t.memberExpression(id, key_id, true),
-                    ),
-                  ),
-                ),
-              ),
+              template(`
+              for (var KEY_ID in ID) {
+                if (REST_TEST) {
+                  REST_ID[KEY_ID] = ID[KEY_ID];
+                }
+              }
+              `)({
+                KEY_ID: key_id,
+                REST_TEST: makeRestTest(key_id, exists_key),
+                REST_ID: pattern.restIdentifier,
+                ID: id,
+              }),
             );
           } else {
             // exists_key.length === 0
             defines.push(
-              t.variableDeclaration("var", [
-                t.variableDeclarator(
-                  pattern.restIdentifier,
-                  t.callExpression(
-                    t.memberExpression(
-                      t.identifier("Object"),
-                      t.identifier("assign"),
-                      false,
-                    ),
-                    [t.objectExpression([]), id],
-                  ),
-                ),
-              ]),
+              template(`
+              var REST_ID = Object.assign({}, ID);
+              `)({
+                REST_ID: pattern.restIdentifier,
+                ID: id,
+              }),
             );
           }
         }
@@ -213,18 +199,13 @@ export default function({ types: t }) {
       // a block statement
       body = t.blockStatement([...defines, ...clause.body.body], []);
     }
-    return t.returnStatement(
-      t.callExpression(
-        t.functionExpression(
-          null /* id */,
-          [] /* params */,
-          body /* body */,
-          false /* generator */,
-          false /* async */,
-        ),
-        [],
-      ),
-    );
+    return template(`
+      return function(){
+        BODY
+      }();
+      `)({
+      BODY: body,
+    });
   }
 
   return {
