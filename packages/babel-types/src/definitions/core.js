@@ -1,5 +1,4 @@
-/* eslint max-len: "off" */
-
+// @flow
 import * as t from "../index";
 
 import {
@@ -848,7 +847,7 @@ defineType("WithStatement", {
   aliases: ["Statement"],
   fields: {
     object: {
-      object: assertNodeType("Expression"),
+      validate: assertNodeType("Expression"),
     },
     body: {
       validate: assertNodeType("BlockStatement", "Statement"),

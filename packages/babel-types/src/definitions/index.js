@@ -1,3 +1,4 @@
+// @flow
 import * as t from "../index";
 
 export const VISITOR_KEYS = {};
@@ -30,8 +31,8 @@ export function assertEach(callback: Function): Function {
   return validator;
 }
 
-export function assertOneOf(...vals): Function {
-  function validate(node, key, val) {
+export function assertOneOf(...vals: Array<any>): Function {
+  function validate(node: Object, key: string, val: any): void {
     if (vals.indexOf(val) < 0) {
       throw new TypeError(
         `Property ${key} expected value to be one of ${JSON.stringify(
@@ -125,7 +126,9 @@ export function chain(...fns: Array<Function>): Function {
 export default function defineType(
   type: string,
   opts: {
-    fields?: Object,
+    fields?: {
+      [string]: {| validate?: Function, default?: any, optional?: boolean |},
+    },
     visitor?: Array<string>,
     aliases?: Array<string>,
     builder?: Array<string>,
@@ -135,24 +138,25 @@ export default function defineType(
 ) {
   const inherits = (opts.inherits && store[opts.inherits]) || {};
 
-  opts.fields = opts.fields || inherits.fields || {};
-  opts.visitor = opts.visitor || inherits.visitor || [];
-  opts.aliases = opts.aliases || inherits.aliases || [];
-  opts.builder = opts.builder || inherits.builder || opts.visitor || [];
+  const fields = opts.fields || inherits.fields || {};
+  const visitor = opts.visitor || inherits.visitor || [];
+  const aliases = opts.aliases || inherits.aliases || [];
+  const builder = opts.builder || inherits.builder || opts.visitor || [];
 
   if (opts.deprecatedAlias) {
     DEPRECATED_KEYS[opts.deprecatedAlias] = type;
   }
 
   // ensure all field keys are represented in `fields`
-  for (const key of (opts.visitor.concat(opts.builder): Array<string>)) {
-    opts.fields[key] = opts.fields[key] || {};
+  for (const key of (visitor.concat(builder): Array<string>)) {
+    // $FlowIssue
+    fields[key] = fields[key] || {};
   }
 
-  for (const key in opts.fields) {
-    const field = opts.fields[key];
+  for (const key in fields) {
+    const field = fields[key];
 
-    if (opts.builder.indexOf(key) === -1) {
+    if (builder.indexOf(key) === -1) {
       field.optional = true;
     }
     if (field.default === undefined) {
@@ -162,10 +166,10 @@ export default function defineType(
     }
   }
 
-  VISITOR_KEYS[type] = opts.visitor;
-  BUILDER_KEYS[type] = opts.builder;
-  NODE_FIELDS[type] = opts.fields;
-  ALIAS_KEYS[type] = opts.aliases;
+  VISITOR_KEYS[type] = opts.visitor = visitor;
+  BUILDER_KEYS[type] = opts.builder = builder;
+  NODE_FIELDS[type] = opts.fields = fields;
+  ALIAS_KEYS[type] = opts.aliases = aliases;
 
   store[type] = opts;
 }
