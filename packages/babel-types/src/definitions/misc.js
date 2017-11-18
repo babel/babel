@@ -1,3 +1,4 @@
+// @flow
 import defineType, { assertNodeType } from "./index";
 
 defineType("Noop", {

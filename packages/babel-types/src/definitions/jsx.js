@@ -1,3 +1,4 @@
+// @flow
 import defineType, {
   assertNodeType,
   assertValueType,
