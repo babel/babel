@@ -1549,11 +1549,7 @@ export default class ExpressionParser extends LValParser {
   isStrictBody(node: { body: N.BlockStatement }): boolean {
     const isBlockStatement = node.body.type === "BlockStatement";
 
-    if (
-      isBlockStatement &&
-      node.body.directives &&
-      node.body.directives.length
-    ) {
+    if (isBlockStatement && node.body.directives.length) {
       for (const directive of node.body.directives) {
         if (directive.value.value === "use strict") {
           return true;
