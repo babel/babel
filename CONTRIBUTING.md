@@ -299,7 +299,7 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 
 ## Internals
 - AST spec ([babylon/ast/spec.md](https://github.com/babel/babel/tree/master/packages/babylon/blob/master/ast/spec.md))
-- Versioning ([doc/design/versioning.md](https://github.com/babel/babel/blob/master/doc/design/versioning.md)
+- Versioning ([doc/design/versioning.md](https://github.com/babel/babel/blob/master/doc/design/versioning.md))
 - Monorepo ([doc/design/monorepo.md](https://github.com/babel/babel/blob/master/doc/design/monorepo.md))
 - Compiler environment support ([doc/design/compiler-environment-support.md](https://github.com/babel/babel/blob/master/doc/design/compiler-environment-support.md))
 - Compiler assumptions ([doc/design/compiler-assumptions.md](https://github.com/babel/babel/blob/master/doc/design/compiler-assumptions.md))
