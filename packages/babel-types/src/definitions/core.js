@@ -661,6 +661,7 @@ defineType("RestElement", {
   visitor: ["argument", "typeAnnotation"],
   builder: ["argument"],
   aliases: ["LVal", "PatternLike"],
+  deprecatedAlias: "RestProperty",
   fields: {
     ...patternLikeCommon,
     argument: {

@@ -466,6 +466,7 @@ defineType("ObjectPattern", {
 defineType("SpreadElement", {
   visitor: ["argument"],
   aliases: ["UnaryLike"],
+  deprecatedAlias: "SpreadProperty",
   fields: {
     argument: {
       validate: assertNodeType("Expression"),
