@@ -20,7 +20,6 @@
     "babel-eslint": "^8.0.1",
     "babel-jest": "^21.3.0-0",
     "babel-loader": "8.0.0-beta.0",
-    "babel-plugin-istanbul": "^4.1.4",
     "babylon": "7.0.0-beta.31",
     "browserify": "^13.1.1",
     "bundle-collapser": "^1.2.1",
