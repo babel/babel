@@ -128,10 +128,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    isStrictBody(node: { body: N.BlockStatement }): boolean {
+    isStrictBody(
+      node: { body: N.BlockStatement },
+      isExpression: ?boolean,
+    ): boolean {
       const isBlockStatement = node.body.type === "BlockStatement";
 
-      if (isBlockStatement && node.body.body.length > 0) {
+      if (!isExpression && isBlockStatement && node.body.body.length > 0) {
         for (const directive of node.body.body) {
           if (
             directive.type === "ExpressionStatement" &&
