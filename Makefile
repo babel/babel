@@ -56,6 +56,7 @@ lint:
 	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' '**/.*.js' --format=codeframe --rulesdir="./scripts/eslint_rules"
 
 fix:
+	./node_modules/.bin/prettier --write --ignore-path .eslintignore '**/*.json'
 	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' '**/.*.js' --format=codeframe --fix --rulesdir="./scripts/eslint_rules"
 
 clean: test-clean
