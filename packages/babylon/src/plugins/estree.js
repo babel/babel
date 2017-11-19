@@ -239,11 +239,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       delete node.extra;
 
       const isExpression = !this.match(tt.braceL);
-      if (isExpression) {
-        node.expression = true;
-      } else {
-        node.expression = false;
-      }
+      node.expression = isExpression;
 
       return node;
     }
