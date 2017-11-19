@@ -122,7 +122,8 @@
                 }
               },
               "value": 1,
-              "raw": "1"
+              "raw": "1",
+              "expression": true
             }
           }
         ],
@@ -157,7 +158,8 @@
             }
           },
           "value": "use strict",
-          "raw": "\"use strict\""
+          "raw": "\"use strict\"",
+          "expression": true
         }
       }
     ]

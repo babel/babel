@@ -89,7 +89,8 @@
                 }
               },
               "value": null,
-              "raw": "null"
+              "raw": "null",
+              "expression": true
             }
           }
         ],

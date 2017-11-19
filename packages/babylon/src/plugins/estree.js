@@ -128,13 +128,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    isStrictBody(
-      node: { body: N.BlockStatement },
-      isExpression: ?boolean,
-    ): boolean {
+    isStrictBody(node: { body: N.BlockStatement }): boolean {
       const isBlockStatement = node.body.type === "BlockStatement";
 
-      if (!isExpression && isBlockStatement && node.body.body.length > 0) {
+      if (isBlockStatement && node.body.body.length > 0) {
         for (const directive of node.body.body) {
           if (
             directive.type === "ExpressionStatement" &&
@@ -240,6 +237,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node = super.parseLiteral(value, type, startPos, startLoc);
       node.raw = node.extra.raw;
       delete node.extra;
+
+      const isExpression = !this.match(tt.braceL);
+      if (isExpression) {
+        node.expression = true;
+      } else {
+        node.expression = false;
+      }
 
       return node;
     }

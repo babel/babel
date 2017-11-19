@@ -89,7 +89,8 @@
                 }
               },
               "value": true,
-              "raw": "true"
+              "raw": "true",
+              "expression": true
             }
           }
         ],
@@ -156,7 +157,8 @@
                 }
               },
               "value": false,
-              "raw": "false"
+              "raw": "false",
+              "expression": true
             }
           }
         ],

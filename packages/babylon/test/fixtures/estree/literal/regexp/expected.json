@@ -90,6 +90,7 @@
               },
               "value": "/.*/i",
               "raw": "/.*/i",
+              "expression": true,
               "regex": {
                 "pattern": ".*",
                 "flags": "i"
