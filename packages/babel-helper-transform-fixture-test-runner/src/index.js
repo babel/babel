@@ -1,4 +1,4 @@
-/* eslint-env mocha */
+/* eslint-env jest */
 import * as babel from "@babel/core";
 import { buildExternalHelpers } from "@babel/core";
 import getFixtures from "@babel/helper-fixtures";
