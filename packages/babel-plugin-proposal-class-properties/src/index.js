@@ -90,11 +90,53 @@ export default function(api, options) {
         const staticNodes = [];
         let instanceBody = [];
 
+        /**
+         * Helper function to run a statement before an expression by replacing it with a comma expression
+         * and wrapping the statement in an IIFE as the first operand.
+         */
+        function statementBeforeExpression(statement, expression) {
+          return t.sequenceExpression([
+            t.callExpression(
+              t.functionExpression(null, [], t.blockStatement([statement])),
+              [],
+            ),
+            expression,
+          ]);
+        }
+
+        const ClassFieldDefinitionEvaluationTDZ = classRef => ({
+          Expression(path) {
+            if (path.parentKey === "value") {
+              path.skip();
+            }
+          },
+
+          ReferencedIdentifier(path) {
+            if (classRef === path.scope.getBinding(path.node.name)) {
+              const throwNode = t.throwStatement(
+                t.newExpression(t.identifier("Error"), [
+                  t.stringLiteral(
+                    `Class cannot be referenced in computed property keys.`,
+                  ),
+                ]),
+              );
+
+              path.replaceWith(statementBeforeExpression(throwNode, path.node));
+              path.skip();
+            }
+          },
+        });
+
         for (const computedPath of computedPaths) {
           const computedNode = computedPath.node;
           // Make sure computed property names are only evaluated once (upon class definition)
           // and in the right order in combination with static properties
           if (!computedPath.get("key").isConstantExpression()) {
+            computedPath.traverse(
+              ClassFieldDefinitionEvaluationTDZ(
+                path.scope.getBinding(ref.name),
+              ),
+            );
             const ident = path.scope.generateUidIdentifierBasedOnNode(
               computedNode.key,
             );
