@@ -50,10 +50,10 @@ flow:
 	./node_modules/.bin/flow check --strip-root
 
 lint:
-	./node_modules/.bin/eslint scripts $(SOURCES) *.js --format=codeframe --rulesdir="./scripts/eslint_rules"
+	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' '**/.*.js' --format=codeframe --rulesdir="./scripts/eslint_rules"
 
 fix:
-	./node_modules/.bin/eslint scripts $(SOURCES) *.js --format=codeframe --fix --rulesdir="./scripts/eslint_rules"
+	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' '**/.*.js' --format=codeframe --fix --rulesdir="./scripts/eslint_rules"
 
 clean: test-clean
 	rm -rf packages/babel-polyfill/browser*
