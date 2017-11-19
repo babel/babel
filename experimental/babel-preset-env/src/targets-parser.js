@@ -71,17 +71,19 @@ const outputDecimalWarning = (decimalTargets: Array<Object>): void => {
     return;
   }
 
-  console.log("Warning, the following targets are using a decimal version:");
-  console.log("");
+  console.error("Warning, the following targets are using a decimal version:");
+  console.error("");
   decimalTargets.forEach(({ target, value }) =>
-    console.log(`  ${target}: ${value}`),
+    console.error(`  ${target}: ${value}`),
   );
-  console.log("");
-  console.log(
+  console.error("");
+  console.error(
     "We recommend using a string for minor/patch versions to avoid numbers like 6.10",
   );
-  console.log("getting parsed as 6.1, which can lead to unexpected behavior.");
-  console.log("");
+  console.error(
+    "getting parsed as 6.1, which can lead to unexpected behavior.",
+  );
+  console.error("");
 };
 
 const targetParserMap = {
