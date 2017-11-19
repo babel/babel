@@ -102,8 +102,7 @@
                     }
                   },
                   "value": "string",
-                  "raw": "\"string\"",
-                  "expression": true
+                  "raw": "\"string\""
                 }
               }
             },

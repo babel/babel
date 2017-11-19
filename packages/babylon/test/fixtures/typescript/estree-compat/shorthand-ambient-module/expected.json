@@ -57,8 +57,7 @@
             }
           },
           "value": "hot-new-module",
-          "raw": "\"hot-new-module\"",
-          "expression": true
+          "raw": "\"hot-new-module\""
         },
         "declare": true
       }

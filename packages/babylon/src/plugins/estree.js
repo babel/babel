@@ -238,10 +238,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.raw = node.extra.raw;
       delete node.extra;
 
-      const isExpression = !this.match(tt.braceL);
-      node.expression = isExpression;
-
       return node;
+    }
+
+    parseFunctionBody(node: N.Function, allowExpression: ?boolean): void {
+      super.parseFunctionBody(node, allowExpression);
+      node.expression = node.body.type !== "BlockStatement";
     }
 
     parseMethod<T: N.MethodLike>(

@@ -153,8 +153,7 @@
                     }
                   },
                   "value": 1,
-                  "raw": "1",
-                  "expression": true
+                  "raw": "1"
                 },
                 "operator": "+",
                 "right": {
@@ -172,13 +171,13 @@
                     }
                   },
                   "value": 1,
-                  "raw": "1",
-                  "expression": true
+                  "raw": "1"
                 }
               }
             }
           ]
-        }
+        },
+        "expression": false
       }
     ]
   }

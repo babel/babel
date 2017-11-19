@@ -156,7 +156,8 @@
                         }
                       },
                       "body": []
-                    }
+                    },
+                    "expression": false
                   },
                   "shorthand": false
                 }

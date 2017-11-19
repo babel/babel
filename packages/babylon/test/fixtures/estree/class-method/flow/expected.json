@@ -307,6 +307,7 @@
                     }
                   ]
                 },
+                "expression": false,
                 "typeParameters": {
                   "type": "TypeParameterDeclaration",
                   "start": 51,
