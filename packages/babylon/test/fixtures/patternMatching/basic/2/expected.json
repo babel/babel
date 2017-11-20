@@ -144,7 +144,8 @@
                     "value": 2
                   }
                 ],
-                "hasRest": false
+                "hasRest": false,
+                "restIdentifier": null
               },
               "body": {
                 "type": "NumericLiteral",

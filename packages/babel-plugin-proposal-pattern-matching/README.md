@@ -197,6 +197,15 @@ _match_expr[1] === 2 &&
 _match_expr[2] === 3
 ```
 
+And rest identifier is supported.
+
+Example:
+
+```js
+// rest elements will be added to `rest`
+[1,2,3, ...rest]
+```
+
 ### Object
 
 Matching object is more complicated, it will check

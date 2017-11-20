@@ -92,7 +92,7 @@ defineType("MatchExpressionClause", {
 });
 
 defineType("ObjectMatchPattern", {
-  visitor: ["children"],
+  visitor: ["children", "restIdentifier"],
   fields: {
     // todo
   },
@@ -106,7 +106,7 @@ defineType("ObjectPropertyMatchPattern", {
 });
 
 defineType("ArrayMatchPattern", {
-  visitor: ["children"],
+  visitor: ["children", "restIdentifier"],
   fields: {
     // todo
   },

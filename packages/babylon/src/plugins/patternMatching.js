@@ -228,11 +228,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       node.children = [];
       node.hasRest = false;
+      node.restIdentifier = null;
 
       while (!this.match(tt.bracketR)) {
         if (this.match(tt.ellipsis)) {
           this.next();
           node.hasRest = true;
+          if (this.match(tt.name)) {
+            node.restIdentifier = this.parseIdentifier();
+          }
           if (!this.eat(tt.bracketR)) {
             this.unexpected(this.state.pos, tt.braceR);
           }

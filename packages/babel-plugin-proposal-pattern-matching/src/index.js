@@ -70,6 +70,15 @@ export default function({ types: t }) {
             arrayTest,
             makeArrayLengthTest(id, pattern.children.length),
           );
+        } else if (pattern.restIdentifier !== null) {
+          const count = pattern.children.length;
+          defines.push(
+            template(`var REST_ID = ID.slice(COUNT);`)({
+              REST_ID: pattern.restIdentifier,
+              ID: id,
+              COUNT: t.numericLiteral(count),
+            }),
+          );
         }
 
         pattern.children.forEach((patternNode, index) => {

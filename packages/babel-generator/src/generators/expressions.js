@@ -25,6 +25,12 @@ export function DoExpression(node: Object) {
 export function ArrayMatchPattern(node: Object) {
   this.token("[");
   this.printList(node.children, node);
+  if (node.hasRest) {
+    this.token("...");
+  }
+  if (node.restIdentifier !== null) {
+    this.print(node.restIdentifier, node);
+  }
   this.token("]");
 }
 
@@ -51,7 +57,13 @@ export function MatchExpressionClause(node: Object) {
 }
 
 export function ObjectMatchPattern(node: Object) {
+  this.token("{");
   this.printList(node.children, node);
+  if (node.restIdentifier !== null) {
+    this.token("...");
+    this.print(node.restIdentifier, node);
+  }
+  this.token("}");
 }
 
 export function ObjectPropertyMatchPattern(node: Object) {

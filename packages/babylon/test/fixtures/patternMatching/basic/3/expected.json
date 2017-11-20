@@ -852,7 +852,8 @@
                         }
                       },
                       "children": [],
-                      "hasRest": true
+                      "hasRest": true,
+                      "restIdentifier": null
                     },
                     "body": {
                       "type": "MemberExpression",
