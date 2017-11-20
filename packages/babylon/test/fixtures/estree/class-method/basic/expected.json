@@ -126,6 +126,7 @@
                 "id": null,
                 "generator": false,
                 "async": false,
+                "expression": false,
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
@@ -142,8 +143,7 @@
                     }
                   },
                   "body": []
-                },
-                "expression": false
+                }
               }
             }
           ]

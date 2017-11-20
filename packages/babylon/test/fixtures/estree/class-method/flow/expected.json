@@ -142,6 +142,7 @@
                 "id": null,
                 "generator": false,
                 "async": false,
+                "expression": false,
                 "params": [
                   {
                     "type": "Identifier",
@@ -307,7 +308,6 @@
                     }
                   ]
                 },
-                "expression": false,
                 "typeParameters": {
                   "type": "TypeParameterDeclaration",
                   "start": 51,

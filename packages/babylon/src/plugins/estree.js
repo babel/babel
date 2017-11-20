@@ -66,6 +66,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // Overrides
     // ==================================
 
+    initFunction(
+      node: N.BodilessFunctionOrMethodBase,
+      isAsync: ?boolean,
+    ): void {
+      super.initFunction(node, isAsync);
+      node.expression = false;
+    }
+
     checkDeclaration(node: N.Pattern): void {
       if (isSimpleProperty(node)) {
         // $FlowFixMe
