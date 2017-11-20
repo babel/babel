@@ -273,19 +273,22 @@ export default function({ types: t }) {
           }
         }
 
+        if (lastTree.alternate === null) {
+          lastTree.alternate = template(
+            `throw new Error("No patterns are matched")`,
+          )();
+        }
+
         const bodyExpr = t.blockStatement(
           first_statements_group.concat([mainIfTree]),
         );
 
         path.replaceWith(
-          t.callExpression(
-            t.arrowFunctionExpression(
-              [], // params
-              bodyExpr, // body
-              false, // async
-            ),
-            [],
-          ),
+          template.expression(`function() {
+            BODY
+          }()`)({
+            BODY: bodyExpr,
+          }),
         );
       },
     },
