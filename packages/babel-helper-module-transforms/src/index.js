@@ -55,6 +55,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
   }
 
   const nameList = buildExportNameListDeclaration(path, meta);
+
   if (nameList) {
     meta.exportNameListName = nameList.name;
     headers.push(nameList.statement);
@@ -253,7 +254,6 @@ function buildExportNameListDeclaration(
 function buildExportInitializationStatements(
   programPath: NodePath,
   metadata: ModuleMetadata,
-  loose: boolean = false,
 ) {
   const initStatements = [];
 
@@ -269,26 +269,8 @@ function buildExportInitializationStatements(
       exportNames.push(...data.names);
     }
   }
+
   for (const data of metadata.source.values()) {
-    for (const [exportName, importName] of data.reexports) {
-      initStatements.push(
-        (loose
-          ? template.statement`EXPORTS.EXPORT_NAME = NAMESPACE.IMPORT_NAME;`
-          : template`
-            Object.defineProperty(EXPORTS, "EXPORT_NAME", {
-              enumerable: true,
-              get: function() {
-                return NAMESPACE.IMPORT_NAME;
-              },
-            });
-          `)({
-          EXPORTS: metadata.exportName,
-          EXPORT_NAME: exportName,
-          NAMESPACE: data.name,
-          IMPORT_NAME: importName,
-        }),
-      );
-    }
     for (const exportName of data.reexportNamespace) {
       exportNames.push(exportName);
     }

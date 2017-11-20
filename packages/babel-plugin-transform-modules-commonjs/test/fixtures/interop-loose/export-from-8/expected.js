@@ -1,6 +1,9 @@
 "use strict";
 
 exports.__esModule = true;
+
+var _foo = require("foo");
+
 exports.foo = _foo.foo;
 exports.foo1 = _foo.foo1;
 exports.foo2 = _foo.foo2;
@@ -102,5 +105,3 @@ exports.foo97 = _foo.foo97;
 exports.foo98 = _foo.foo98;
 exports.foo99 = _foo.foo99;
 exports.foo100 = _foo.foo100;
-
-var _foo = require("foo");
