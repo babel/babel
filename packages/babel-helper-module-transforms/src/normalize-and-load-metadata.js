@@ -86,7 +86,7 @@ export function isSideEffectImport(source: SourceModuleMetadata) {
 export default function normalizeModuleAndLoadMetadata(
   programPath: NodePath,
   exportName?: string,
-  { noInterop = false } = {},
+  { noInterop = false, loose = false } = {},
 ): ModuleMetadata {
   if (!exportName) {
     exportName = programPath.scope.generateUidIdentifier("exports").name;
@@ -94,7 +94,7 @@ export default function normalizeModuleAndLoadMetadata(
 
   nameAnonymousExports(programPath);
 
-  const { local, source } = getModuleMetadata(programPath);
+  const { local, source } = getModuleMetadata(programPath, loose);
 
   removeModuleDeclarations(programPath);
 
@@ -120,8 +120,8 @@ export default function normalizeModuleAndLoadMetadata(
 /**
  * Get metadata about the imports and exports present in this module.
  */
-function getModuleMetadata(programPath: NodePath) {
-  const localData = getLocalExportMetadata(programPath);
+function getModuleMetadata(programPath: NodePath, loose: boolean) {
+  const localData = getLocalExportMetadata(programPath, loose);
 
   const sourceData = new Map();
   const getData = sourceNode => {
@@ -260,6 +260,7 @@ function getModuleMetadata(programPath: NodePath) {
  */
 function getLocalExportMetadata(
   programPath: NodePath,
+  loose: boolean,
 ): Map<string, LocalExportMetadata> {
   const bindingKindLookup = new Map();
 
@@ -272,7 +273,11 @@ function getLocalExportMetadata(
       if (child.isExportNamedDeclaration()) {
         if (child.node.declaration) {
           child = child.get("declaration");
-        } else if (child.node.source && child.get("source").isStringLiteral()) {
+        } else if (
+          loose &&
+          child.node.source &&
+          child.get("source").isStringLiteral()
+        ) {
           child.node.specifiers.forEach(specifier => {
             bindingKindLookup.set(specifier.local.name, "block");
           });
@@ -322,7 +327,7 @@ function getLocalExportMetadata(
   };
 
   programPath.get("body").forEach(child => {
-    if (child.isExportNamedDeclaration()) {
+    if (child.isExportNamedDeclaration() && (loose || !child.node.source)) {
       if (child.node.declaration) {
         const declaration = child.get("declaration");
         const ids = declaration.getOuterBindingIdentifierPaths();

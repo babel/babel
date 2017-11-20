@@ -29,6 +29,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
 
   const meta = normalizeAndLoadModuleMetadata(path, exportName, {
     noInterop,
+    loose,
   });
 
   if (!allowTopLevelThis) {
