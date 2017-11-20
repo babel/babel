@@ -170,7 +170,18 @@ export default function({ types: t }) {
         return objectPropTest;
       case "Identifier":
         if (isRoot) {
-          return t.binaryExpression("===", id, pattern);
+          if (pattern.name === "Array") {
+            return template.expression(`Array.isArray(ID)`)({
+              ID: id,
+            });
+          } else {
+            return template.expression(`(PATTERN[Symbol.match] &&
+              PATTERN[Symbol.match](ID) !== null) ||
+              (typeof PATTERN === "function" && ID instanceof PATTERN)`)({
+              PATTERN: pattern,
+              ID: id,
+            });
+          }
         } else {
           defines.push(
             t.variableDeclaration("const", [t.variableDeclarator(pattern, id)]),
