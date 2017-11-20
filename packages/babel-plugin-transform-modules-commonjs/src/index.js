@@ -3,6 +3,7 @@ import {
   rewriteModuleStatementsAndPrepareHeader,
   isSideEffectImport,
   buildNamespaceInitStatements,
+  buildReexportsFromMeta,
   ensureStatementsHoisted,
   wrapInterop,
 } from "@babel/helper-module-transforms";
@@ -24,30 +25,6 @@ export default function(api, options) {
       throw new Error("The CommonJS '" + "${localName}" + "' variable is not available in ES6 modules.");
     })()
   `;
-
-  const getReexports = (meta, metadata, loose) => {
-    const reexports = [];
-    for (const [exportName, importName] of metadata.reexports) {
-      reexports.push(
-        (loose
-          ? template.statement`EXPORTS.EXPORT_NAME = NAMESPACE.IMPORT_NAME;`
-          : template`
-            Object.defineProperty(EXPORTS, "EXPORT_NAME", {
-              enumerable: true,
-              get: function() {
-                return NAMESPACE.IMPORT_NAME;
-              },
-            });
-          `)({
-          EXPORTS: meta.exportName,
-          EXPORT_NAME: exportName,
-          NAMESPACE: metadata.name,
-          IMPORT_NAME: importName,
-        }),
-      );
-    }
-    return reexports;
-  };
 
   const moduleExportsVisitor = {
     ReferencedIdentifier(path) {
@@ -148,7 +125,6 @@ export default function(api, options) {
             allowTopLevelThis,
             noInterop,
           });
-          // console.log(headers[1].expression.lef);
 
           for (const [source, metadata] of meta.source) {
             const loadExpr = t.callExpression(t.identifier("require"), [
@@ -168,7 +144,7 @@ export default function(api, options) {
             }
             header.loc = metadata.loc;
             if (!loose) {
-              headers.push(...getReexports(meta, metadata, loose));
+              headers.push(...buildReexportsFromMeta(meta, metadata, loose));
             }
 
             headers.push(header);
@@ -177,7 +153,7 @@ export default function(api, options) {
             );
 
             if (loose) {
-              headers.push(...getReexports(meta, metadata, loose));
+              headers.push(...buildReexportsFromMeta(meta, metadata, loose));
             }
           }
 

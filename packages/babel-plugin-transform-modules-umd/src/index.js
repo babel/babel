@@ -5,6 +5,7 @@ import {
   hasExports,
   isSideEffectImport,
   buildNamespaceInitStatements,
+  buildReexportsFromMeta,
   ensureStatementsHoisted,
   wrapInterop,
 } from "@babel/helper-module-transforms";
@@ -186,9 +187,17 @@ export default function(api, options) {
               }
             }
 
+            if (!loose) {
+              headers.push(...buildReexportsFromMeta(meta, metadata, loose));
+            }
+
             headers.push(
               ...buildNamespaceInitStatements(meta, metadata, loose),
             );
+
+            if (loose) {
+              headers.push(...buildReexportsFromMeta(meta, metadata, loose));
+            }
           }
 
           ensureStatementsHoisted(headers);
