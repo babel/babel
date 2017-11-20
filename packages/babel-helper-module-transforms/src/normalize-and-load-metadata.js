@@ -269,8 +269,15 @@ function getLocalExportMetadata(
       kind = "import";
     } else {
       if (child.isExportDefaultDeclaration()) child = child.get("declaration");
-      if (child.isExportNamedDeclaration() && child.node.declaration) {
-        child = child.get("declaration");
+      if (child.isExportNamedDeclaration()) {
+        if (child.node.declaration) {
+          child = child.get("declaration");
+        } else if (child.node.source && child.get("source").isStringLiteral()) {
+          child.node.specifiers.forEach(specifier => {
+            bindingKindLookup.set(specifier.local.name, "block");
+          });
+          return;
+        }
       }
 
       if (child.isFunctionDeclaration()) {
@@ -295,6 +302,7 @@ function getLocalExportMetadata(
   const getLocalMetadata = idPath => {
     const localName = idPath.node.name;
     let metadata = localMetadata.get(localName);
+
     if (!metadata) {
       const kind = bindingKindLookup.get(localName);
 
@@ -314,7 +322,7 @@ function getLocalExportMetadata(
   };
 
   programPath.get("body").forEach(child => {
-    if (child.isExportNamedDeclaration() && !child.node.source) {
+    if (child.isExportNamedDeclaration()) {
       if (child.node.declaration) {
         const declaration = child.get("declaration");
         const ids = declaration.getOuterBindingIdentifierPaths();
@@ -324,7 +332,6 @@ function getLocalExportMetadata(
               'Illegal export "__esModule".',
             );
           }
-
           getLocalMetadata(ids[name]).names.push(name);
         });
       } else {
@@ -335,7 +342,6 @@ function getLocalExportMetadata(
           if (exported.node.name === "__esModule") {
             throw exported.buildCodeFrameError('Illegal export "__esModule".');
           }
-
           getLocalMetadata(local).names.push(exported.node.name);
         });
       }
@@ -354,7 +360,6 @@ function getLocalExportMetadata(
       }
     }
   });
-
   return localMetadata;
 }
 
