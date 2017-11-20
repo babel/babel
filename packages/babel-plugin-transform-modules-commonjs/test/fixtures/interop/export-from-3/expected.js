@@ -15,5 +15,6 @@ Object.defineProperty(exports, "bar", {
     return _foo.bar;
   }
 });
+exports.bar = exports.foo = void 0;
 
 var _foo = require("foo");

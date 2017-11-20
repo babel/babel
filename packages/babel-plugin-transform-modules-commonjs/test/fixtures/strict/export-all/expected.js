@@ -7,10 +7,10 @@ var _exportNames = {
   z: true,
   a: true,
   b: true,
+  c: true,
   d: true,
   e: true,
-  f: true,
-  c: true
+  f: true
 };
 exports.b = b;
 exports.default = _default;
@@ -20,7 +20,7 @@ Object.defineProperty(exports, "c", {
     return _mod.c;
   }
 });
-exports.f = exports.e = exports.d = exports.a = exports.z = void 0;
+exports.f = exports.e = exports.d = exports.c = exports.a = exports.z = void 0;
 
 var _mod = require("mod");
 

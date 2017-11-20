@@ -9,5 +9,6 @@ Object.defineProperty(exports, "default", {
     return _foo.foo;
   }
 });
+exports.default = void 0;
 
 var _foo = require("foo");
