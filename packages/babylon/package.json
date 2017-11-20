@@ -15,10 +15,7 @@
   ],
   "repository": "https://github.com/babel/babel/tree/master/packages/babylon",
   "main": "lib/index.js",
-  "files": [
-    "bin",
-    "lib"
-  ],
+  "files": ["bin", "lib"],
   "engines": {
     "node": ">=4.2.0"
   },

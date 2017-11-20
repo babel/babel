@@ -4,7 +4,8 @@
   "description": "Helper function to support fixtures",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "license": "MIT",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-fixtures",
+  "repository":
+    "https://github.com/babel/babel/tree/master/packages/babel-helper-fixtures",
   "main": "lib/index.js",
   "dependencies": {
     "lodash": "^4.2.0",

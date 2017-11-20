@@ -1,13 +1,13 @@
 {
   "name": "@babel/plugin-proposal-class-properties",
   "version": "7.0.0-beta.32",
-  "description": "This plugin transforms static class properties as well as properties declared with the property initializer syntax",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-class-properties",
+  "description":
+    "This plugin transforms static class properties as well as properties declared with the property initializer syntax",
+  "repository":
+    "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-class-properties",
   "license": "MIT",
   "main": "lib/index.js",
-  "keywords": [
-    "babel-plugin"
-  ],
+  "keywords": ["babel-plugin"],
   "dependencies": {
     "@babel/helper-function-name": "7.0.0-beta.32",
     "@babel/plugin-syntax-class-properties": "7.0.0-beta.32"

@@ -2,12 +2,11 @@
   "name": "@babel/plugin-syntax-function-sent",
   "version": "7.0.0-beta.32",
   "description": "Allow parsing of the function.sent meta property",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-function-sent",
+  "repository":
+    "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-function-sent",
   "license": "MIT",
   "main": "lib/index.js",
-  "keywords": [
-    "babel-plugin"
-  ],
+  "keywords": ["babel-plugin"],
   "peerDependencies": {
     "@babel/core": "7.0.0-beta.32"
   },

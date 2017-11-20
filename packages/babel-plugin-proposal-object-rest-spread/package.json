@@ -2,12 +2,11 @@
   "name": "@babel/plugin-proposal-object-rest-spread",
   "version": "7.0.0-beta.32",
   "description": "Compile object rest and spread to ES5",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-object-rest-spread",
+  "repository":
+    "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-object-rest-spread",
   "license": "MIT",
   "main": "lib/index.js",
-  "keywords": [
-    "babel-plugin"
-  ],
+  "keywords": ["babel-plugin"],
   "dependencies": {
     "@babel/plugin-syntax-object-rest-spread": "7.0.0-beta.32"
   },

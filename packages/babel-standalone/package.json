@@ -1,13 +1,10 @@
 {
   "name": "@babel/standalone",
   "version": "7.0.0-beta.32",
-  "description": "Standalone build of Babel for use in non-Node.js environments.",
+  "description":
+    "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
-  "files": [
-    "babel.js",
-    "babel.min.js",
-    "src"
-  ],
+  "files": ["babel.js", "babel.min.js", "src"],
   "devDependencies": {
     "@babel/core": "7.0.0-beta.32",
     "@babel/plugin-check-constants": "7.0.0-beta.32",
@@ -56,7 +53,8 @@
     "@babel/plugin-transform-modules-umd": "7.0.0-beta.32",
     "@babel/plugin-transform-new-target": "7.0.0-beta.32",
     "@babel/plugin-transform-object-assign": "7.0.0-beta.32",
-    "@babel/plugin-transform-object-set-prototype-of-to-assign": "7.0.0-beta.32",
+    "@babel/plugin-transform-object-set-prototype-of-to-assign":
+      "7.0.0-beta.32",
     "@babel/plugin-transform-object-super": "7.0.0-beta.32",
     "@babel/plugin-transform-parameters": "7.0.0-beta.32",
     "@babel/plugin-transform-property-literals": "7.0.0-beta.32",
@@ -89,13 +87,7 @@
     "@babel/preset-stage-3": "7.0.0-beta.32",
     "@babel/preset-typescript": "7.0.0-beta.32"
   },
-  "keywords": [
-    "babel",
-    "babeljs",
-    "6to5",
-    "transpile",
-    "transpiler"
-  ],
+  "keywords": ["babel", "babeljs", "6to5", "transpile", "transpiler"],
   "author": "Daniel Lo Nigro <daniel@dan.cx> (http://dan.cx/)",
   "license": "MIT",
   "bugs": {

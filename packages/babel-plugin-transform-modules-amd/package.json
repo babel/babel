@@ -2,15 +2,14 @@
   "name": "@babel/plugin-transform-modules-amd",
   "version": "7.0.0-beta.32",
   "description": "This plugin transforms ES2015 modules to AMD",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-modules-amd",
+  "repository":
+    "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-modules-amd",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-module-transforms": "7.0.0-beta.32"
   },
-  "keywords": [
-    "babel-plugin"
-  ],
+  "keywords": ["babel-plugin"],
   "peerDependencies": {
     "@babel/core": "7.0.0-beta.32"
   },

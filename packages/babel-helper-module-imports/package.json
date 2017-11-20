@@ -5,7 +5,8 @@
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-module-imports",
+  "repository":
+    "https://github.com/babel/babel/tree/master/packages/babel-helper-module-imports",
   "main": "lib/index.js",
   "dependencies": {
     "@babel/types": "7.0.0-beta.32",

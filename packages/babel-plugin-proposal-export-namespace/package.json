@@ -2,12 +2,11 @@
   "name": "@babel/plugin-proposal-export-namespace",
   "version": "7.0.0-beta.32",
   "description": "Compile export namespace to ES2015",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-export-namespace",
+  "repository":
+    "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-export-namespace",
   "license": "MIT",
   "main": "lib/index.js",
-  "keywords": [
-    "babel-plugin"
-  ],
+  "keywords": ["babel-plugin"],
   "dependencies": {
     "@babel/plugin-syntax-export-extensions": "7.0.0-beta.32"
   },

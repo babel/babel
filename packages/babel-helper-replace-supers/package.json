@@ -2,7 +2,8 @@
   "name": "@babel/helper-replace-supers",
   "version": "7.0.0-beta.32",
   "description": "Helper function to replace supers",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-replace-supers",
+  "repository":
+    "https://github.com/babel/babel/tree/master/packages/babel-helper-replace-supers",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {

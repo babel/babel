@@ -2,12 +2,11 @@
   "name": "@babel/plugin-transform-exponentiation-operator",
   "version": "7.0.0-beta.32",
   "description": "Compile exponentiation operator to ES5",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator",
+  "repository":
+    "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator",
   "license": "MIT",
   "main": "lib/index.js",
-  "keywords": [
-    "babel-plugin"
-  ],
+  "keywords": ["babel-plugin"],
   "dependencies": {
     "@babel/helper-builder-binary-assignment-operator-visitor": "7.0.0-beta.32"
   },
