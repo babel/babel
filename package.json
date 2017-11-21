@@ -72,8 +72,7 @@
       "scripts/*.js",
       "packages/*/test/**",
       "packages/babel-standalone/**",
-      "codemods/*/test/**",
-      "experimental/*/test/**"
+      "codemods/*/test/**"
     ],
     "sourceMap": false,
     "instrument": false

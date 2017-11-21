@@ -13,7 +13,7 @@ There are several ways to use @babel/preset-env-standalone. Pick whichever one y
 - Manually grab `babel-preset-env.js` and/or `babel-preset-env.min.js`:
   * Download archived source code from the [GitHub releases page](https://github.com/babel/babel/releases).
   * Unpack it.
-  * Grab `babel-preset-env.js` and/or `babel-preset-env.min.js` from the `experimental/babel-preset-env-standalone`.
+  * Grab `babel-preset-env.js` and/or `babel-preset-env.min.js` from `packages/babel-preset-env-standalone`.
 
 Usage
 =====
