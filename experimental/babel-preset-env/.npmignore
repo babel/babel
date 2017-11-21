@@ -13,3 +13,5 @@ yarn.lock
 .eslintrc
 babel-preset-env-*.tgz
 flow-typed
+.github
+.idea
