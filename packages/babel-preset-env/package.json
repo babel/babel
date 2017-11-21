@@ -5,7 +5,7 @@
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
-  "repository": "https://github.com/babel/babel/tree/master/experimental/babel-preset-env",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-env",
   "main": "lib/index.js",
   "scripts": {
     "build-data": "node ./scripts/build-data.js"

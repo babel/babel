@@ -19,15 +19,13 @@
       "ignore": [
         "*.md",
         "test/**",
-        "codemods/**",
-        "experimental/**"
+        "codemods/**"
       ]
     }
   },
   "packages": [
     "packages/*",
-    "codemods/*",
-    "experimental/*"
+    "codemods/*"
   ],
   "npmClient": "yarn",
   "npmClientArgs": [
