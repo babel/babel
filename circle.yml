@@ -2,8 +2,8 @@ general:
   artifacts:
     - "packages/babel-standalone/babel.js"
     - "packages/babel-standalone/babel.min.js"
-    - "experimental/babel-preset-env-standalone/babel-preset-env.js"
-    - "experimental/babel-preset-env-standalone/babel-preset-env.min.js"
+    - "packages/babel-preset-env-standalone/babel-preset-env.js"
+    - "packages/babel-preset-env-standalone/babel-preset-env.min.js"
 
 machine:
   node:
@@ -27,4 +27,4 @@ test:
     # data for a JS file that's several megabytes large is bound to fail. Here,
     # we just run the babel-standalone test separately.
     - ./node_modules/mocha/bin/_mocha packages/babel-standalone/test/ --opts test/mocha.opts
-    - ./node_modules/mocha/bin/_mocha experimental/babel-preset-env-standalone/test/ --opts test/mocha.opts
+    - ./node_modules/mocha/bin/_mocha packages/babel-preset-env-standalone/test/ --opts test/mocha.opts

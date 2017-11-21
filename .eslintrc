@@ -15,7 +15,6 @@
     {
       "files": [
         "packages/*/src/**/*.js",
-        "experimental/*/src/**/*.js",
         "codemods/*/src/**/*.js"
       ],
       "rules": {
@@ -25,7 +24,6 @@
     {
       "files": [
         "packages/*/test/**/*.js",
-        "experimental/*/test/**/*.js",
         "codemods/*/test/**/*.js",
         "test/**/*.js"
       ],

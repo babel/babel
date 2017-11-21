@@ -15,7 +15,7 @@ const merge = require("merge-stream");
 const registerStandalonePackageTask = require("./scripts/gulp-tasks")
   .registerStandalonePackageTask;
 
-const sources = ["codemods", "packages", "experimental"];
+const sources = ["codemods", "packages"];
 
 function swapSrcWithLib(srcPath) {
   const parts = srcPath.split(path.sep);
@@ -91,7 +91,7 @@ const presetEnvWebpackPlugins = [
     require.resolve(
       path.join(
         __dirname,
-        "./experimental/babel-preset-env-standalone/src/available-plugins"
+        "./packages/babel-preset-env-standalone/src/available-plugins"
       )
     )
   ),
@@ -100,7 +100,7 @@ const presetEnvWebpackPlugins = [
     require.resolve(
       path.join(
         __dirname,
-        "./experimental/babel-preset-env-standalone/src/caniuse-lite-regions"
+        "./packages/babel-preset-env-standalone/src/caniuse-lite-regions"
       )
     )
   ),
@@ -110,7 +110,7 @@ registerStandalonePackageTask(
   gulp,
   "babel-preset-env",
   "babelPresetEnv",
-  path.join(__dirname, "experimental"),
-  require("./experimental/babel-preset-env/package.json").version,
+  path.join(__dirname, "packages"),
+  require("./packages/babel-preset-env/package.json").version,
   presetEnvWebpackPlugins
 );

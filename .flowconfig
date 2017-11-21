@@ -4,14 +4,11 @@
 .*/packages/.*/test
 .*/codemods/.*/lib
 .*/codemods/.*/test
-.*/experimental/.*/lib
-.*/experimental/.*/test
 .*/node_modules/conventional-changelog-core/
 
 [include]
 packages/*/src
 codemods/*/src
-experimental/*/src
 
 [libs]
 lib/file.js
