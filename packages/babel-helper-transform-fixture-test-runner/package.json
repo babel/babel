@@ -13,6 +13,7 @@
     "@babel/helper-fixtures": "7.0.0-beta.32",
     "@babel/polyfill": "7.0.0-beta.32",
     "chai": "^4.1.0",
+    "jest": "^21.0.2",
     "lodash": "^4.2.0",
     "resolve": "^1.3.2",
     "source-map": "^0.5.0"

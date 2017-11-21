@@ -6,9 +6,14 @@ if [ -z "$TEST_GREP" ]; then
 fi
 
 node="node"
+jestArgs=""
 
 if [ "$TEST_DEBUG" ]; then
-   node="node --inspect --debug-brk"
+   node="node --inspect-brk"
 fi
 
-$node node_modules/mocha/bin/_mocha `scripts/_get-test-directories.sh` --opts test/mocha.opts --grep "$TEST_GREP"
+if [ -n "$CI" ]; then
+  jestArgs="${jestArgs} --runInBand --ci"
+fi
+
+$node node_modules/.bin/jest $jestArgs "$TEST_GREP"

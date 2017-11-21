@@ -283,6 +283,9 @@ describe("api", function() {
       return { plugins: [pushPlugin(str)] };
     }
 
+    const oldEnv = process.env.BABEL_ENV;
+    process.env.BABEL_ENV = "development";
+
     const result = babel.transform("", {
       filename: path.join(
         __dirname,
@@ -305,6 +308,12 @@ describe("api", function() {
         },
       },
     });
+
+    if (oldEnv === undefined) {
+      delete process.env.BABEL_ENV;
+    } else {
+      process.env.BABEL_ENV = oldEnv;
+    }
 
     assert.equal(
       result.code,
@@ -515,14 +524,14 @@ describe("api", function() {
     const oldBabelEnv = process.env.BABEL_ENV;
     const oldNodeEnv = process.env.NODE_ENV;
 
-    setup(function() {
+    beforeEach(function() {
       // Tests need to run with the default and specific values for these. They
       // need to be cleared for each test.
       delete process.env.BABEL_ENV;
       delete process.env.NODE_ENV;
     });
 
-    suiteTeardown(function() {
+    afterAll(function() {
       process.env.BABEL_ENV = oldBabelEnv;
       process.env.NODE_ENV = oldNodeEnv;
     });

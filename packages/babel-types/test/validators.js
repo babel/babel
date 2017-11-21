@@ -1,38 +1,37 @@
 import * as t from "../lib";
-import assert from "assert";
 import { parse } from "babylon";
 
-suite("validators", function() {
-  suite("isNodesEquivalent", function() {
+describe("validators", function() {
+  describe("isNodesEquivalent", function() {
     it("should handle simple cases", function() {
       const mem = t.memberExpression(t.identifier("a"), t.identifier("b"));
-      assert(t.isNodesEquivalent(mem, mem) === true);
+      expect(t.isNodesEquivalent(mem, mem)).toBe(true);
 
       const mem2 = t.memberExpression(t.identifier("a"), t.identifier("c"));
-      assert(t.isNodesEquivalent(mem, mem2) === false);
+      expect(t.isNodesEquivalent(mem, mem2)).toBe(false);
     });
 
     it("should handle full programs", function() {
-      assert(t.isNodesEquivalent(parse("1 + 1"), parse("1+1")) === true);
-      assert(t.isNodesEquivalent(parse("1 + 1"), parse("1+2")) === false);
+      expect(t.isNodesEquivalent(parse("1 + 1"), parse("1+1"))).toBe(true);
+      expect(t.isNodesEquivalent(parse("1 + 1"), parse("1+2"))).toBe(false);
     });
 
     it("should handle complex programs", function() {
       const program = "'use strict'; function lol() { wow();return 1; }";
 
-      assert(t.isNodesEquivalent(parse(program), parse(program)) === true);
+      expect(t.isNodesEquivalent(parse(program), parse(program))).toBe(true);
 
       const program2 = "'use strict'; function lol() { wow();return -1; }";
 
-      assert(t.isNodesEquivalent(parse(program), parse(program2)) === false);
+      expect(t.isNodesEquivalent(parse(program), parse(program2))).toBe(false);
     });
 
     it("rejects 'await' as an identifier", function() {
-      assert(t.isValidIdentifier("await") === false);
+      expect(t.isValidIdentifier("await")).toBe(false);
     });
   });
 
-  suite("patterns", function() {
+  describe("patterns", function() {
     it("allows nested pattern structures", function() {
       const pattern = t.objectPattern([
         t.objectProperty(
@@ -47,7 +46,7 @@ suite("validators", function() {
         ),
       ]);
 
-      assert(t.isNodesEquivalent(pattern, pattern) === true);
+      expect(t.isNodesEquivalent(pattern, pattern)).toBe(true);
     });
   });
 });

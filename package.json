@@ -17,9 +17,10 @@
     "@babel/preset-stage-0": "7.0.0-beta.31",
     "@babel/register": "7.0.0-beta.31",
     "async": "^1.5.0",
+    "babel-core": "^7.0.0-0",
     "babel-eslint": "^8.0.1",
+    "babel-jest": "^21.3.0-0",
     "babel-loader": "8.0.0-beta.0",
-    "babel-plugin-istanbul": "^4.1.4",
     "babylon": "7.0.0-beta.31",
     "browserify": "^13.1.1",
     "bundle-collapser": "^1.2.1",
@@ -42,13 +43,12 @@
     "gulp-util": "^3.0.7",
     "gulp-watch": "^4.3.5",
     "husky": "^0.14.3",
+    "jest": "^21.3.0-0",
     "lerna": "2.0.0",
     "lerna-changelog": "^0.5.0",
     "lint-staged": "^4.2.3",
     "lodash": "^4.2.0",
     "merge-stream": "^1.0.1",
-    "mocha": "^3.0.0",
-    "nyc": "^11.0.3",
     "output-file-sync": "^2.0.0",
     "prettier": "1.7.3",
     "pump": "^1.0.2",
@@ -66,21 +66,44 @@
     "npm": ">= 2.x <= 5.x",
     "yarn": ">=0.27.5 || >=1.0.0-20170811"
   },
-  "nyc": {
-    "all": true,
-    "exclude": [
-      "scripts/*.js",
-      "packages/*/test/**",
-      "packages/babel-standalone/**",
-      "codemods/*/test/**",
-      "experimental/*/test/**"
-    ],
-    "sourceMap": false,
-    "instrument": false
-  },
   "lint-staged": {
     "*.js": [
       "eslint --format=codeframe --rulesdir='./scripts/eslint_rules'"
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "packages/*/src/**/*.js",
+      "codemods/*/src/**/*.js",
+      "experimental/*/src/**/*.js"
+    ],
+    "testRegex": "./(packages|codemods|experimental)/[^/]+/test/.+\\.js$",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/test/fixtures/",
+      "/test/debug-fixtures/",
+      "/babylon/test/expressions/",
+      "/test/tmp/",
+      "/test/__data__/",
+      "/test/helpers/",
+      "<rootDir>/test/warning.js",
+      "<rootDir>/build/",
+      "_browser.js"
+    ],
+    "testEnvironment": "node",
+    "setupTestFrameworkScriptFile": "<rootDir>/test/testSetupFile.js",
+    "transformIgnorePatterns": [
+      "/node_modules/",
+      "/test/fixtures/",
+      "/test/tmp/",
+      "/test/__data__/"
+    ],
+    "modulePaths": [
+      "<rootDir>/packages/"
+    ],
+    "modulePathIgnorePatterns": [
+      "/test/fixtures/",
+      "<rootDir>/build/"
     ]
   }
 }

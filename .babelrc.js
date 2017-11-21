@@ -1,5 +1,7 @@
 "use strict";
 
+const env = process.env.BABEL_ENV || process.env.NODE_ENV;
+
 // Blame Logan for this.
 // This works around https://github.com/istanbuljs/istanbuljs/issues/92 until
 // we have a version of Istanbul that actually works with 7.x.
@@ -30,10 +32,20 @@ function istanbulHacks() {
   };
 }
 
-let envOpts = {
+const envOpts = {
   loose: true,
   exclude: ["transform-typeof-symbol"],
 };
+
+switch(env) {
+  case "development":
+    envOpts.debug = true;
+    // fall-through
+  case "test":
+    envOpts.targets = {
+      node: "current"
+  };
+}
 
 const config = {
   comments: false,
@@ -52,13 +64,6 @@ const config = {
 if (process.env.BABEL_ENV === "cov") {
   config.auxiliaryCommentBefore = "istanbul ignore next";
   config.plugins.push(istanbulHacks);
-}
-
-if (process.env.BABEL_ENV === "development") {
-  envOpts.targets = {
-    node: "current"
-  };
-  envOpts.debug = true;
 }
 
 module.exports = config;

@@ -2,8 +2,8 @@ import * as t from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
 
-suite("cloning", function() {
-  suite("clone", function() {
+describe("cloning", function() {
+  describe("clone", function() {
     it("should handle undefined", function() {
       const node = undefined;
       const cloned = t.clone(node);
@@ -24,7 +24,7 @@ suite("cloning", function() {
     });
   });
 
-  suite("cloneDeep", function() {
+  describe("cloneDeep", function() {
     it("should handle undefined", function() {
       const node = undefined;
       const cloned = t.cloneDeep(node);

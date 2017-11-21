@@ -257,15 +257,17 @@ export default function(
   if (!deprecationWarningShown) {
     deprecationWarningShown = true;
 
-    const deprecationError = new Error(
-      "Passing lineNumber and colNumber is deprecated to @babel/code-frame. Please use `codeFrameColumns`.",
-    );
-    deprecationError.name = "DeprecationWarning";
+    const message =
+      "Passing lineNumber and colNumber is deprecated to @babel/code-frame. Please use `codeFrameColumns`.";
 
     if (process.emitWarning) {
-      process.emitWarning(deprecationError);
+      // A string is directly supplied to emitWarning, because when supplying an
+      // Error object node throws in the tests because of different contexts
+      process.emitWarning(message, "DeprecationWarning");
     } else {
-      console.warn(deprecationError);
+      const deprecationError = new Error(message);
+      deprecationError.name = "DeprecationWarning";
+      console.warn(new Error(message));
     }
   }
 
