@@ -9,7 +9,7 @@ const wordEnds = size => {
 export const logMessage = (message, context) => {
   const pre = context ? `[${context}] ` : "";
   const logStr = `  ${pre}${message}`;
-  console.log(logStr);
+  console.error(logStr);
 };
 
 export const logPlugin = (plugin, targets, list, context) => {
@@ -36,21 +36,21 @@ export const logEntryPolyfills = (
   onDebug,
 ) => {
   if (!importPolyfillIncluded) {
-    console.log(
+    console.error(
       `
 [${filename}] \`import '@babel/polyfill'\` was not found.`,
     );
     return;
   }
   if (!polyfills.size) {
-    console.log(
+    console.error(
       `
 [${filename}] Based on your targets, none were added.`,
     );
     return;
   }
 
-  console.log(
+  console.error(
     `
 [${filename}] Replaced \`@babel/polyfill\` with the following polyfill${wordEnds(
       polyfills.size,
@@ -61,13 +61,13 @@ export const logEntryPolyfills = (
 
 export const logUsagePolyfills = (polyfills, filename, onDebug) => {
   if (!polyfills.size) {
-    console.log(
+    console.error(
       `
 [${filename}] Based on your code and targets, none were added.`,
     );
     return;
   }
-  console.log(
+  console.error(
     `
 [${filename}] Added following polyfill${wordEnds(polyfills.size)}:`,
   );

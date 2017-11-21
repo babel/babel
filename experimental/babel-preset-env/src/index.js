@@ -196,10 +196,10 @@ export default function buildPreset(
     hasUglifyTarget = true;
     delete optionsTargets.uglify;
 
-    console.log("");
-    console.log("The uglify target has been deprecated. Set the top level");
-    console.log("option `forceAllTransforms: true` instead.");
-    console.log("");
+    console.error("");
+    console.error("The uglify target has been deprecated. Set the top level");
+    console.error("option `forceAllTransforms: true` instead.");
+    console.error("");
   }
 
   const targets = getTargets(optionsTargets, {
@@ -255,21 +255,21 @@ export default function buildPreset(
 
   if (debug && !hasBeenLogged) {
     hasBeenLogged = true;
-    console.log("@babel/preset-env: `DEBUG` option");
-    console.log("\nUsing targets:");
-    console.log(JSON.stringify(prettifyTargets(targets), null, 2));
-    console.log(`\nUsing modules transform: ${modules.toString()}`);
-    console.log("\nUsing plugins:");
+    console.error("@babel/preset-env: `DEBUG` option");
+    console.error("\nUsing targets:");
+    console.error(JSON.stringify(prettifyTargets(targets), null, 2));
+    console.error(`\nUsing modules transform: ${modules.toString()}`);
+    console.error("\nUsing plugins:");
     transformations.forEach(transform => {
       logPlugin(transform, targets, pluginList);
     });
 
     if (!useBuiltIns) {
-      console.log(
+      console.error(
         "\nUsing polyfills: No polyfills were added, since the `useBuiltIns` option was not set.",
       );
     } else {
-      console.log(
+      console.error(
         `
 Using polyfills with \`${useBuiltIns}\` option:`,
       );

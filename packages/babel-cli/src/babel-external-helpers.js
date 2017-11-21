@@ -24,4 +24,4 @@ commander.option(
 commander.usage("[options]");
 commander.parse(process.argv);
 
-console.log(buildExternalHelpers(commander.whitelist, commander.outputType));
+console.error(buildExternalHelpers(commander.whitelist, commander.outputType));
