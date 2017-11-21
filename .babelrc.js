@@ -9,7 +9,7 @@ function istanbulHacks() {
     visitor: {
       Program: {
         exit: function(path) {
-          if (!this.__dv__) return
+          if (!this.__dv__) return;
 
           const node = path.node.body[0];
           if (
@@ -30,23 +30,20 @@ function istanbulHacks() {
   };
 }
 
-let envOpts = {
+const envOpts = {
   loose: true,
   exclude: ["transform-typeof-symbol"],
 };
 
 const config = {
   comments: false,
-  presets: [
-    ["@babel/env", envOpts],
-    "@babel/flow"
-  ],
+  presets: [["@babel/env", envOpts], "@babel/flow"],
   plugins: [
     ["@babel/proposal-class-properties", { loose: true }],
     "@babel/proposal-export-namespace",
     "@babel/proposal-numeric-separator",
-    ["@babel/proposal-object-rest-spread", { useBuiltIns: true}],
-  ]
+    ["@babel/proposal-object-rest-spread", { useBuiltIns: true }],
+  ],
 };
 
 if (process.env.BABEL_ENV === "cov") {
@@ -56,7 +53,7 @@ if (process.env.BABEL_ENV === "cov") {
 
 if (process.env.BABEL_ENV === "development") {
   envOpts.targets = {
-    node: "current"
+    node: "current",
   };
   envOpts.debug = true;
 }

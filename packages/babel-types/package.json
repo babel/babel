@@ -5,7 +5,8 @@
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-types",
+  "repository":
+    "https://github.com/babel/babel/tree/master/packages/babel-types",
   "main": "lib/index.js",
   "dependencies": {
     "esutils": "^2.0.2",

@@ -1,5 +1,11 @@
 {
   "trailingComma": "es5",
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": false,
+  "bracketSpacing": true,
+  "tabWidth": 2,
+  "printWidth": 80,
   "overrides": [{
     "files": [
       "**/experimental/*/src/**/*.js",

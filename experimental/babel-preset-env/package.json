@@ -5,7 +5,8 @@
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
-  "repository": "https://github.com/babel/babel/tree/master/experimental/babel-preset-env",
+  "repository":
+    "https://github.com/babel/babel/tree/master/experimental/babel-preset-env",
   "main": "lib/index.js",
   "scripts": {
     "build-data": "node ./scripts/build-data.js"
@@ -57,7 +58,8 @@
     "@babel/core": "7.0.0-beta.32",
     "@babel/helper-fixtures": "7.0.0-beta.32",
     "@babel/helper-plugin-test-runner": "7.0.0-beta.32",
-    "compat-table": "kangax/compat-table#957f1ff15972e8fb2892a172f985e9af27bf1c75",
+    "compat-table":
+      "kangax/compat-table#957f1ff15972e8fb2892a172f985e9af27bf1c75",
     "electron-to-chromium": "^1.3.27"
   }
 }

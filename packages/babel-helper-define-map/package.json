@@ -2,7 +2,8 @@
   "name": "@babel/helper-define-map",
   "version": "7.0.0-beta.32",
   "description": "Helper function to define a map",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-define-map",
+  "repository":
+    "https://github.com/babel/babel/tree/master/packages/babel-helper-define-map",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {

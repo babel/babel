@@ -1,11 +1,13 @@
 {
   "name": "@babel/traverse",
   "version": "7.0.0-beta.32",
-  "description": "The Babel Traverse module maintains the overall tree state, and is responsible for replacing, removing, and adding nodes",
+  "description":
+    "The Babel Traverse module maintains the overall tree state, and is responsible for replacing, removing, and adding nodes",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-traverse",
+  "repository":
+    "https://github.com/babel/babel/tree/master/packages/babel-traverse",
   "main": "lib/index.js",
   "dependencies": {
     "@babel/code-frame": "7.0.0-beta.32",

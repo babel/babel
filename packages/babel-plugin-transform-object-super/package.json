@@ -2,12 +2,11 @@
   "name": "@babel/plugin-transform-object-super",
   "version": "7.0.0-beta.32",
   "description": "Compile ES2015 object super to ES5",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-super",
+  "repository":
+    "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-super",
   "license": "MIT",
   "main": "lib/index.js",
-  "keywords": [
-    "babel-plugin"
-  ],
+  "keywords": ["babel-plugin"],
   "dependencies": {
     "@babel/helper-replace-supers": "7.0.0-beta.32"
   },

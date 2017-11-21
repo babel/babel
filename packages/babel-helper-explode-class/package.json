@@ -2,7 +2,8 @@
   "name": "@babel/helper-explode-class",
   "version": "7.0.0-beta.32",
   "description": "Helper function to explode class",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-explode-class",
+  "repository":
+    "https://github.com/babel/babel/tree/master/packages/babel-helper-explode-class",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
