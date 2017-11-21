@@ -296,5 +296,6 @@ Using polyfills with \`${useBuiltIns}\` option:`,
 
   return {
     plugins,
+    transformations,
   };
 }
