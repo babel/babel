@@ -1,6 +1,6 @@
 import type NodePath from "@babel/traverse";
 
-export default function(api, options) {
+export default function(api, options={}) {
   const { spec } = options;
   return {
     visitor: {
