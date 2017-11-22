@@ -633,6 +633,12 @@ helpers.readOnlyError = defineHelper(`
   }
 `);
 
+helpers.classNameTDZError = defineHelper(`
+  export default function _classNameTDZError(name) {
+    throw new Error("Class \\"" + name + "\\" cannot be referenced in computed property keys.");
+  }
+`);
+
 helpers.temporalUndefined = defineHelper(`
   export default {};
 `);

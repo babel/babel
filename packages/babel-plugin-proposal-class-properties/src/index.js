@@ -55,7 +55,7 @@ export default function(api, options) {
     inherits: syntaxClassProperties,
 
     visitor: {
-      Class(path) {
+      Class(path, state) {
         const isDerived = !!path.node.superClass;
         let constructor;
         const props = [];
@@ -90,21 +90,7 @@ export default function(api, options) {
         const staticNodes = [];
         let instanceBody = [];
 
-        /**
-         * Helper function to run a statement before an expression by replacing it with a comma expression
-         * and wrapping the statement in an IIFE as the first operand.
-         */
-        function statementBeforeExpression(statement, expression) {
-          return t.sequenceExpression([
-            t.callExpression(
-              t.functionExpression(null, [], t.blockStatement([statement])),
-              [],
-            ),
-            expression,
-          ]);
-        }
-
-        const ClassFieldDefinitionEvaluationTDZ = classRef => ({
+        const ClassFieldDefinitionEvaluationTDZ = (classRef, state) => ({
           Expression(path) {
             if (path.parentKey === "value") {
               path.skip();
@@ -113,15 +99,12 @@ export default function(api, options) {
 
           ReferencedIdentifier(path) {
             if (classRef === path.scope.getBinding(path.node.name)) {
-              const throwNode = t.throwStatement(
-                t.newExpression(t.identifier("Error"), [
-                  t.stringLiteral(
-                    `Class cannot be referenced in computed property keys.`,
-                  ),
-                ]),
-              );
+              const classNameTDZError = state.addHelper("classNameTDZError");
+              const throwNode = t.callExpression(classNameTDZError, [
+                t.stringLiteral(path.node.name),
+              ]);
 
-              path.replaceWith(statementBeforeExpression(throwNode, path.node));
+              path.replaceWith(t.sequenceExpression([throwNode, path.node]));
               path.skip();
             }
           },
@@ -135,6 +118,7 @@ export default function(api, options) {
             computedPath.traverse(
               ClassFieldDefinitionEvaluationTDZ(
                 path.scope.getBinding(ref.name),
+                state,
               ),
             );
             const ident = path.scope.generateUidIdentifierBasedOnNode(
