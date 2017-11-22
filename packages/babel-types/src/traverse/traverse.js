@@ -1,10 +1,20 @@
 // @flow
 import { VISITOR_KEYS } from "../definitions";
-import type {
-  TraversalAncestors,
-  TraversalHandler,
-  TraversalHandlers,
-} from "../flow-types/traverse";
+
+export type TraversalAncestors<T: BabelNode> = Array<{
+  node: T,
+  key: string,
+  index?: number,
+}>;
+export type TraversalHandler<T: BabelNode, S: Object> = (
+  T,
+  TraversalAncestors<T>,
+  S,
+) => void;
+export type TraversalHandlers<T: BabelNode, S: Object> = {
+  enter?: TraversalHandler<T, S>,
+  exit?: TraversalHandler<T, S>,
+};
 
 /**
  * A general AST traversal with both prefix and postfix handlers, and a

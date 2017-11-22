@@ -85,6 +85,7 @@ export {
 
 // traverse
 export { default as traverse } from "./traverse/traverse";
+export type * from "./traverse/traverse";
 export { default as traverseFast } from "./traverse/traverseFast";
 
 // utils
@@ -120,7 +121,3 @@ export const react = {
   isCompatTag,
   buildChildren,
 };
-
-// flow-types
-
-export type * from "./flow-types/traverse";
