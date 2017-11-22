@@ -44,7 +44,14 @@ export default function() {
 
         for (const specifier of path.node.specifiers) {
           const binding = path.scope.getBinding(specifier.local.name);
-          if (isImportTypeOnly(binding, state.programPath)) {
+
+          // The binding may not exist if the import node was explicitly
+          // injected by another plugin. Currently core does not do a good job
+          // of keeping scope bindings synchronized with the AST. For now we
+          // just bail if there is no binding, since chances are good that if
+          // the import statement was injected then it wasn't a typescript type
+          // import anyway.
+          if (binding && isImportTypeOnly(binding, state.programPath)) {
             importsToRemove.push(binding.path);
           } else {
             allElided = false;
