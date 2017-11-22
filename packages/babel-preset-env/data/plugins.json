@@ -242,7 +242,10 @@
     "opera": "47"
   },
   "proposal-optional-catch-binding": {
+    "firefox": "58",
     "safari": "tp"
   },
-  "proposal-unicode-property-regex": {}
+  "proposal-unicode-property-regex": {
+    "safari": "tp"
+  }
 }
