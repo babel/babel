@@ -1361,7 +1361,7 @@ export default class StatementParser extends ExpressionParser {
 
         // export async;
         if (next.type !== tt._function) {
-          this.unexpected(next.start, "Unexpected token, expected function");
+          this.unexpected(next.start, `Unexpected token, expected "function"`);
         }
       }
 

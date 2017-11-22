@@ -1059,7 +1059,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (this.state.value === "-") {
             this.next();
             if (!this.match(tt.num)) {
-              this.unexpected(null, "Unexpected token, expected number");
+              this.unexpected(null, `Unexpected token, expected "number"`);
             }
 
             return this.parseLiteral(
