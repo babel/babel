@@ -2811,7 +2811,7 @@ See also `t.isWithStatement(node, opts)` and `t.assertWithStatement(node, opts)`
 
 Aliases: `Statement`
 
- - `object` (required)
+ - `object`: `Expression` (required)
  - `body`: `BlockStatement | Statement` (required)
 
 ---
