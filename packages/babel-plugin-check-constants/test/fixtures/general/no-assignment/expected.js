@@ -1,4 +1,4 @@
+function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
+
 var MULTIPLIER = 5;
-MULTIPLIER = (function () {
-  throw new Error("\"MULTIPLIER\" is read-only");
-}(), "overwrite");
+MULTIPLIER = (_readOnlyError("MULTIPLIER"), "overwrite");
