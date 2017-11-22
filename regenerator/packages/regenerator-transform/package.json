@@ -34,7 +34,6 @@
   },
   "devDependencies": {
     "babel-cli": "^6.9.0",
-    "babel-plugin-transform-runtime": "^6.9.0",
     "babel-preset-env": "^1.2.2"
   }
 }
