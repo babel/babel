@@ -620,8 +620,12 @@ export default class ExpressionParser extends LValParser {
     node: N.ArrowFunctionExpression,
     call: N.CallExpression,
   ): N.ArrowFunctionExpression {
+    const oldYield = this.state.yieldInPossibleArrowParameters;
+    this.state.yieldInPossibleArrowParameters = null;
     this.expect(tt.arrow);
-    return this.parseArrowExpression(node, call.arguments, true);
+    this.parseArrowExpression(node, call.arguments, true);
+    this.state.yieldInPossibleArrowParameters = oldYield;
+    return node;
   }
 
   // Parse a no-call expression (like argument of `new` or `::` operators).

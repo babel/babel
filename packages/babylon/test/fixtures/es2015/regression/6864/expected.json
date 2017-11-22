@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 59,
+  "end": 85,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 4,
+      "line": 5,
       "column": 1
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 59,
+    "end": 85,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 4,
+        "line": 5,
         "column": 1
       }
     },
@@ -31,14 +31,14 @@
       {
         "type": "FunctionDeclaration",
         "start": 0,
-        "end": 59,
+        "end": 85,
         "loc": {
           "start": {
             "line": 1,
             "column": 0
           },
           "end": {
-            "line": 4,
+            "line": 5,
             "column": 1
           }
         },
@@ -66,14 +66,14 @@
         "body": {
           "type": "BlockStatement",
           "start": 14,
-          "end": 59,
+          "end": 85,
           "loc": {
             "start": {
               "line": 1,
               "column": 14
             },
             "end": {
-              "line": 4,
+              "line": 5,
               "column": 1
             }
           },
@@ -255,6 +255,96 @@
                 "extra": {
                   "parenthesized": true,
                   "parenStart": 36
+                }
+              }
+            },
+            {
+              "type": "ExpressionStatement",
+              "start": 60,
+              "end": 83,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 2
+                },
+                "end": {
+                  "line": 4,
+                  "column": 25
+                }
+              },
+              "expression": {
+                "type": "YieldExpression",
+                "start": 61,
+                "end": 81,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 3
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 23
+                  }
+                },
+                "delegate": false,
+                "argument": {
+                  "type": "ArrowFunctionExpression",
+                  "start": 67,
+                  "end": 81,
+                  "loc": {
+                    "start": {
+                      "line": 4,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 4,
+                      "column": 23
+                    }
+                  },
+                  "id": null,
+                  "generator": false,
+                  "expression": true,
+                  "async": true,
+                  "params": [
+                    {
+                      "type": "Identifier",
+                      "start": 74,
+                      "end": 75,
+                      "loc": {
+                        "start": {
+                          "line": 4,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 4,
+                          "column": 17
+                        },
+                        "identifierName": "a"
+                      },
+                      "name": "a"
+                    }
+                  ],
+                  "body": {
+                    "type": "Identifier",
+                    "start": 80,
+                    "end": 81,
+                    "loc": {
+                      "start": {
+                        "line": 4,
+                        "column": 22
+                      },
+                      "end": {
+                        "line": 4,
+                        "column": 23
+                      },
+                      "identifierName": "a"
+                    },
+                    "name": "a"
+                  }
+                },
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 60
                 }
               }
             }
