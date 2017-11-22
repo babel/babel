@@ -620,8 +620,12 @@ export default class ExpressionParser extends LValParser {
     node: N.ArrowFunctionExpression,
     call: N.CallExpression,
   ): N.ArrowFunctionExpression {
+    const oldYield = this.state.yieldInPossibleArrowParameters;
+    this.state.yieldInPossibleArrowParameters = null;
     this.expect(tt.arrow);
-    return this.parseArrowExpression(node, call.arguments, true);
+    this.parseArrowExpression(node, call.arguments, true);
+    this.state.yieldInPossibleArrowParameters = oldYield;
+    return node;
   }
 
   // Parse a no-call expression (like argument of `new` or `::` operators).
@@ -715,14 +719,22 @@ export default class ExpressionParser extends LValParser {
           this.next();
           return this.parseFunction(node, false, false, true);
         } else if (canBeArrow && id.name === "async" && this.match(tt.name)) {
+          const oldYield = this.state.yieldInPossibleArrowParameters;
+          this.state.yieldInPossibleArrowParameters = null;
           const params = [this.parseIdentifier()];
           this.expect(tt.arrow);
           // let foo = bar => {};
-          return this.parseArrowExpression(node, params, true);
+          this.parseArrowExpression(node, params, true);
+          this.state.yieldInPossibleArrowParameters = oldYield;
+          return node;
         }
 
         if (canBeArrow && !this.canInsertSemicolon() && this.eat(tt.arrow)) {
-          return this.parseArrowExpression(node, [id]);
+          const oldYield = this.state.yieldInPossibleArrowParameters;
+          this.state.yieldInPossibleArrowParameters = null;
+          this.parseArrowExpression(node, [id]);
+          this.state.yieldInPossibleArrowParameters = oldYield;
+          return node;
         }
 
         return id;
