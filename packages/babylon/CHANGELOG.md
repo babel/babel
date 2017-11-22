@@ -620,7 +620,7 @@ function *foo() {
 Annotate more errors with expected token ([#172](https://github.com/babel/babylon/pull/172))) (Moti Zilberman)
 
 ```js
-// Unexpected token, expected ";" (1:6)
+// Unexpected token, expected ; (1:6)
 { set 1 }
 ```
 
@@ -676,7 +676,7 @@ Babylon will now print out the token it's expecting if there's a `SyntaxError` (
 
 ```bash
 # So in the case of a missing ending curly (`}`)
-Module build failed: SyntaxError: Unexpected token, expected "}" (30:0)
+Module build failed: SyntaxError: Unexpected token, expected } (30:0)
   28 |   }
   29 |
 > 30 |
