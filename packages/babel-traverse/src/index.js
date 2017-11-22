@@ -7,6 +7,7 @@ import * as cache from "./cache";
 export { default as NodePath } from "./path";
 export { default as Scope } from "./scope";
 export { default as Hub } from "./hub";
+
 export { visitors };
 
 export default function traverse(
@@ -37,10 +38,6 @@ export default function traverse(
 traverse.visitors = visitors;
 traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
-
-traverse.NodePath = require("./path");
-traverse.Scope = require("./scope");
-traverse.Hub = require("./hub");
 
 traverse.cheap = function(node, enter) {
   return t.traverseFast(node, enter);
