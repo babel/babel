@@ -141,6 +141,7 @@ class OptionManager {
 }
 
 type BasicDescriptor = {
+  name: string | void,
   value: {} | Function,
   options: {} | void,
   dirname: string,
@@ -262,6 +263,7 @@ const instantiatePlugin = makeWeakCache(
 
     if (plugin.inherits) {
       const inheritsDescriptor = {
+        name: undefined,
         alias: `${alias}$inherits`,
         value: plugin.inherits,
         options,
@@ -327,10 +329,16 @@ function createDescriptor(
     ownPass?: boolean,
   },
 ): BasicDescriptor {
+  let name;
   let options;
   let value = pair;
   if (Array.isArray(value)) {
-    [value, options] = value;
+    if (value.length === 3) {
+      // $FlowIgnore - Flow doesn't like the multiple tuple types.
+      [value, options, name] = value;
+    } else {
+      [value, options] = value;
+    }
   }
 
   let filepath = null;
@@ -366,6 +374,7 @@ function createDescriptor(
   }
 
   return {
+    name,
     alias: filepath || `${alias}$${index}`,
     value,
     options,
