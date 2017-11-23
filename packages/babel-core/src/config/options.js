@@ -206,6 +206,9 @@ export function validate(type: OptionsType, opts: {}): ValidatedOptions {
     if (type !== "arguments" && ROOT_VALIDATORS[key]) {
       throw new Error(`.${key} is only allowed in root programmatic options`);
     }
+    if (type === "env" && key === "env") {
+      throw new Error(`.${key} is not allowed inside another env block`);
+    }
 
     const validator =
       COMMON_VALIDATORS[key] ||
