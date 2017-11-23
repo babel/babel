@@ -366,13 +366,6 @@ function createDescriptor(
     );
   }
 
-  if (options != null && typeof options !== "object") {
-    throw new Error(
-      "Plugin/Preset options must be an object, null, or undefined",
-    );
-  }
-  options = options || undefined;
-
   return {
     alias: filepath || `${alias}$${index}`,
     value,
