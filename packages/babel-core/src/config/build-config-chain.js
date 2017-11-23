@@ -39,16 +39,17 @@ type ConfigPart =
     };
 
 export default function buildConfigChain(
+  cwd: string,
   opts: ValidatedOptions,
   envName: string,
 ): Array<ConfigItem> | null {
-  const filename = opts.filename ? path.resolve(opts.filename) : null;
+  const filename = opts.filename ? path.resolve(cwd, opts.filename) : null;
   const builder = new ConfigChainBuilder(
     filename ? new LoadedFile(filename) : null,
   );
 
   try {
-    builder.mergeConfigArguments(opts, process.cwd(), envName);
+    builder.mergeConfigArguments(opts, cwd, envName);
 
     // resolve all .babelrc files
     if (opts.babelrc !== false && filename) {

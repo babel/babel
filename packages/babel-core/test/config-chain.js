@@ -1,9 +1,13 @@
 import assert from "assert";
 import fs from "fs";
 import path from "path";
-import buildConfigChain from "../lib/config/build-config-chain";
+import buildConfigChainFn from "../lib/config/build-config-chain";
 
 const DEFAULT_ENV = "development";
+
+function buildConfigChain(opts, envName) {
+  return buildConfigChainFn(process.cwd(), opts, envName);
+}
 
 function fixture() {
   const args = [__dirname, "fixtures", "config"];

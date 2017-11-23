@@ -17,6 +17,7 @@ import {
 } from "./option-assertions";
 
 const ROOT_VALIDATORS: ValidatorSet = {
+  cwd: (assertString: Validator<$PropertyType<ValidatedOptions, "cwd">>),
   filename: (assertString: Validator<
     $PropertyType<ValidatedOptions, "filename">,
   >),
@@ -128,6 +129,7 @@ const COMMON_VALIDATORS: ValidatorSet = {
 export type InputOptions = ValidatedOptions;
 
 export type ValidatedOptions = {
+  cwd?: string,
   filename?: string,
   filenameRelative?: string,
   babelrc?: boolean,

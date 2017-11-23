@@ -1,5 +1,6 @@
 // @flow
 
+import path from "path";
 import * as context from "../index";
 import Plugin, { validatePluginObject } from "./plugin";
 import merge from "lodash/merge";
@@ -103,9 +104,10 @@ class OptionManager {
   init(inputOpts: {}) {
     const args = validate("arguments", inputOpts);
 
-    const { envName = getEnv() } = args;
+    const { envName = getEnv(), cwd = "." } = args;
+    const absoluteCwd = path.resolve(cwd);
 
-    const configChain = buildConfigChain(args, envName);
+    const configChain = buildConfigChain(absoluteCwd, args, envName);
     if (!configChain) return null;
 
     try {
@@ -134,6 +136,7 @@ class OptionManager {
       .map(plugins => ({ plugins }));
     opts.passPerPreset = opts.presets.length > 0;
     opts.envName = envName;
+    opts.cwd = absoluteCwd;
 
     return {
       options: opts,
