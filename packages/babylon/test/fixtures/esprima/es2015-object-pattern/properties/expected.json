@@ -87,7 +87,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 5,
@@ -105,6 +104,7 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
                   "shorthand": true,
                   "value": {
                     "type": "Identifier",
@@ -142,7 +142,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 7,
@@ -160,6 +159,7 @@
                     },
                     "name": "b"
                   },
+                  "computed": false,
                   "shorthand": true,
                   "value": {
                     "type": "AssignmentPattern",
@@ -232,7 +232,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 11,
@@ -250,6 +249,7 @@
                     },
                     "name": "c"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "Identifier",
@@ -284,7 +284,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 15,
@@ -302,6 +301,7 @@
                     },
                     "name": "e"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "AssignmentPattern",

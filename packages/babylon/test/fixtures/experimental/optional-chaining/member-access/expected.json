@@ -90,8 +90,8 @@
             },
             "name": "bar"
           },
-          "optional": true,
-          "computed": false
+          "computed": false,
+          "optional": true
         }
       },
       {
@@ -170,8 +170,8 @@
               },
               "name": "bar"
             },
-            "optional": true,
-            "computed": false
+            "computed": false,
+            "optional": true
           },
           "property": {
             "type": "Identifier",
@@ -190,8 +190,8 @@
             },
             "name": "baz"
           },
-          "optional": true,
-          "computed": false
+          "computed": false,
+          "optional": true
         }
       }
     ],

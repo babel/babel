@@ -56,10 +56,6 @@
               "column": 28
             }
           },
-          "id": null,
-          "generator": false,
-          "expression": true,
-          "async": true,
           "typeParameters": {
             "type": "TypeParameterDeclaration",
             "start": 6,
@@ -179,6 +175,9 @@
               }
             }
           ],
+          "id": null,
+          "generator": false,
+          "async": true,
           "body": {
             "type": "Identifier",
             "start": 26,

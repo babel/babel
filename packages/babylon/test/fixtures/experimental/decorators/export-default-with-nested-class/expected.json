@@ -138,7 +138,6 @@
                   }
                 },
                 "static": false,
-                "computed": false,
                 "key": {
                   "type": "Identifier",
                   "start": 54,
@@ -156,10 +155,10 @@
                   },
                   "name": "makeNestedClass"
                 },
+                "computed": false,
                 "kind": "method",
                 "id": null,
                 "generator": false,
-                "expression": false,
                 "async": false,
                 "params": [],
                 "body": {

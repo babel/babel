@@ -106,7 +106,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 39,
@@ -124,6 +123,7 @@
                 },
                 "name": "finishNodeAt"
               },
+              "computed": false,
               "kind": "method",
               "value": {
                 "type": "FunctionExpression",
@@ -141,8 +141,8 @@
                 },
                 "id": null,
                 "generator": false,
-                "expression": false,
                 "async": false,
+                "expression": false,
                 "params": [
                   {
                     "type": "Identifier",

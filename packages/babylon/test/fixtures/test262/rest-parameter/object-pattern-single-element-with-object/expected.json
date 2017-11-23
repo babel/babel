@@ -60,7 +60,6 @@
           "name": "singleElementWithObject"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "params": [
           {
@@ -107,7 +106,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 37,
@@ -125,6 +123,7 @@
                     },
                     "name": "p"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "ObjectPattern",
@@ -156,7 +155,6 @@
                           }
                         },
                         "method": false,
-                        "computed": false,
                         "key": {
                           "type": "Identifier",
                           "start": 41,
@@ -174,6 +172,7 @@
                           },
                           "name": "a"
                         },
+                        "computed": false,
                         "shorthand": false,
                         "value": {
                           "type": "Identifier",

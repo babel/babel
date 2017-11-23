@@ -123,7 +123,6 @@
             },
             "id": null,
             "generator": false,
-            "expression": false,
             "async": false,
             "params": [
               {
@@ -191,7 +190,6 @@
                     "name": "isConstant"
                   },
                   "generator": false,
-                  "expression": false,
                   "async": false,
                   "params": [
                     {

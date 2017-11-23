@@ -241,7 +241,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 39,
@@ -259,6 +258,7 @@
                     },
                     "name": "x"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "NumericLiteral",
@@ -296,7 +296,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 45,
@@ -314,6 +313,7 @@
                     },
                     "name": "y"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "StringLiteral",
@@ -555,7 +555,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 97,
@@ -573,6 +572,7 @@
                     },
                     "name": "x"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "NumericLiteral",
@@ -610,7 +610,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 103,
@@ -628,6 +627,7 @@
                     },
                     "name": "y"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "StringLiteral",
@@ -1076,7 +1076,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 193,
@@ -1094,6 +1093,7 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "ObjectExpression",
@@ -1125,7 +1125,6 @@
                           }
                         },
                         "method": false,
-                        "computed": false,
                         "key": {
                           "type": "Identifier",
                           "start": 198,
@@ -1143,6 +1142,7 @@
                           },
                           "name": "x"
                         },
+                        "computed": false,
                         "shorthand": false,
                         "value": {
                           "type": "NumericLiteral",
@@ -1180,7 +1180,6 @@
                           }
                         },
                         "method": false,
-                        "computed": false,
                         "key": {
                           "type": "Identifier",
                           "start": 204,
@@ -1198,6 +1197,7 @@
                           },
                           "name": "y"
                         },
+                        "computed": false,
                         "shorthand": false,
                         "value": {
                           "type": "StringLiteral",
@@ -1238,7 +1238,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 216,
@@ -1256,6 +1255,7 @@
                     },
                     "name": "b"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "BooleanLiteral",
@@ -1600,7 +1600,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 286,
@@ -1618,6 +1617,7 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "ObjectExpression",
@@ -1649,7 +1649,6 @@
                           }
                         },
                         "method": false,
-                        "computed": false,
                         "key": {
                           "type": "Identifier",
                           "start": 291,
@@ -1667,6 +1666,7 @@
                           },
                           "name": "x"
                         },
+                        "computed": false,
                         "shorthand": false,
                         "value": {
                           "type": "NumericLiteral",
@@ -1704,7 +1704,6 @@
                           }
                         },
                         "method": false,
-                        "computed": false,
                         "key": {
                           "type": "Identifier",
                           "start": 297,
@@ -1722,6 +1721,7 @@
                           },
                           "name": "y"
                         },
+                        "computed": false,
                         "shorthand": false,
                         "value": {
                           "type": "StringLiteral",
@@ -1762,7 +1762,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 309,
@@ -1780,6 +1779,7 @@
                     },
                     "name": "b"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "BooleanLiteral",

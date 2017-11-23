@@ -60,7 +60,6 @@
           "name": "g"
         },
         "generator": true,
-        "expression": false,
         "async": false,
         "params": [
           {
@@ -93,7 +92,6 @@
                   }
                 },
                 "method": false,
-                "computed": false,
                 "key": {
                   "type": "Identifier",
                   "start": 13,
@@ -111,6 +109,7 @@
                   },
                   "name": "yield"
                 },
+                "computed": false,
                 "shorthand": false,
                 "value": {
                   "type": "Identifier",

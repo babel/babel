@@ -58,7 +58,6 @@
           },
           "id": null,
           "generator": false,
-          "expression": true,
           "async": false,
           "params": [
             {
@@ -109,7 +108,6 @@
                   }
                 },
                 "method": false,
-                "computed": false,
                 "key": {
                   "type": "Identifier",
                   "start": 8,
@@ -127,6 +125,7 @@
                   },
                   "name": "property"
                 },
+                "computed": false,
                 "shorthand": false,
                 "value": {
                   "type": "NumericLiteral",

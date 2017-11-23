@@ -254,7 +254,6 @@
               },
               "id": null,
               "generator": false,
-              "expression": true,
               "async": false,
               "params": [
                 {
@@ -540,7 +539,6 @@
               },
               "id": null,
               "generator": false,
-              "expression": true,
               "async": false,
               "params": [
                 {

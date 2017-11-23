@@ -91,7 +91,6 @@
               },
               "accessibility": "public",
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 21,
@@ -109,10 +108,10 @@
                 },
                 "name": "delete"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "returnType": {

@@ -90,7 +90,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 14,
@@ -108,6 +107,7 @@
                 },
                 "name": "x"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -125,7 +125,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 21,
@@ -143,6 +142,7 @@
                 },
                 "name": "x"
               },
+              "computed": false,
               "optional": true,
               "value": null
             },
@@ -161,7 +161,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 29,
@@ -179,6 +178,7 @@
                 },
                 "name": "x"
               },
+              "computed": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start": 30,
@@ -226,7 +226,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 44,
@@ -244,6 +243,7 @@
                 },
                 "name": "x"
               },
+              "computed": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start": 45,

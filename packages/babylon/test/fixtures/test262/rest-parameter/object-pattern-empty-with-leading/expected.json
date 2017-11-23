@@ -60,7 +60,6 @@
           "name": "emptyWithLeading"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "params": [
           {

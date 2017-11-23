@@ -104,7 +104,6 @@
                   }
                 },
                 "method": false,
-                "computed": false,
                 "key": {
                   "type": "Identifier",
                   "start": 6,
@@ -122,6 +121,7 @@
                   },
                   "name": "true"
                 },
+                "computed": false,
                 "shorthand": false,
                 "value": {
                   "type": "NumericLiteral",

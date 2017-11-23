@@ -105,7 +105,6 @@
                   }
                 },
                 "static": false,
-                "computed": false,
                 "key": {
                   "type": "Identifier",
                   "start": 28,
@@ -123,10 +122,10 @@
                   },
                   "name": "c"
                 },
+                "computed": false,
                 "kind": "method",
                 "id": null,
                 "generator": false,
-                "expression": false,
                 "async": false,
                 "params": [],
                 "body": {
@@ -180,7 +179,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 40,
@@ -198,6 +196,7 @@
                 },
                 "name": "c"
               },
+              "computed": false,
               "value": {
                 "type": "CallExpression",
                 "start": 44,

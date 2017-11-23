@@ -90,7 +90,6 @@
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 21,
@@ -108,10 +107,10 @@
                 },
                 "name": "f"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": []
             },
@@ -131,7 +130,6 @@
               },
               "accessibility": "public",
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 44,
@@ -149,10 +147,10 @@
                 },
                 "name": "f"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": []
             },
@@ -172,7 +170,6 @@
               },
               "accessibility": "protected",
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 70,
@@ -190,10 +187,10 @@
                 },
                 "name": "f"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": []
             },
@@ -213,7 +210,6 @@
               },
               "accessibility": "private",
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 94,
@@ -231,10 +227,10 @@
                 },
                 "name": "f"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": []
             }

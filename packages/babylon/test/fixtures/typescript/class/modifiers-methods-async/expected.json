@@ -92,7 +92,6 @@
               },
               "abstract": true,
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 80,
@@ -110,10 +109,10 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": true,
               "params": []
             },
@@ -132,7 +131,6 @@
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 102,
@@ -150,10 +148,10 @@
                 },
                 "name": "s"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": true,
               "params": [],
               "body": {
@@ -191,7 +189,6 @@
               "accessibility": "public",
               "abstract": true,
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 135,
@@ -209,10 +206,10 @@
                 },
                 "name": "pua"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": true,
               "params": []
             },
@@ -232,7 +229,6 @@
               },
               "accessibility": "public",
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 166,
@@ -250,10 +246,10 @@
                 },
                 "name": "pus"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": true,
               "params": [],
               "body": {
@@ -290,7 +286,6 @@
               },
               "accessibility": "public",
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 193,
@@ -308,10 +303,10 @@
                 },
                 "name": "pu"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": true,
               "params": [],
               "body": {
@@ -348,7 +343,6 @@
               },
               "accessibility": "protected",
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 221,
@@ -366,10 +360,10 @@
                 },
                 "name": "po"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": true,
               "params": [],
               "body": {
@@ -406,7 +400,6 @@
               },
               "accessibility": "private",
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 247,
@@ -424,10 +417,10 @@
                 },
                 "name": "pi"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": true,
               "params": [],
               "body": {

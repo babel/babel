@@ -72,7 +72,6 @@
                 }
               },
               "method": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 17,
@@ -90,6 +89,7 @@
                 },
                 "name": "foo"
               },
+              "computed": false,
               "shorthand": false,
               "value": {
                 "type": "NumericLiteral",

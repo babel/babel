@@ -60,7 +60,6 @@
           "name": "multiElementWithInitializer"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "params": [
           {
@@ -107,7 +106,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 41,
@@ -125,6 +123,7 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "AssignmentPattern",
@@ -194,7 +193,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 51,
@@ -212,6 +210,7 @@
                     },
                     "name": "b"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "Identifier",
@@ -246,7 +245,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 57,
@@ -264,6 +262,7 @@
                     },
                     "name": "c"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "AssignmentPattern",

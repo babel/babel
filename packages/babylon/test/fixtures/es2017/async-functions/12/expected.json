@@ -60,7 +60,6 @@
           "name": "foo"
         },
         "generator": false,
-        "expression": false,
         "async": true,
         "params": [
           {

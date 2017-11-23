@@ -72,7 +72,6 @@
                 }
               },
               "method": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 6,
@@ -90,6 +89,7 @@
                 },
                 "name": "x"
               },
+              "computed": false,
               "shorthand": true,
               "value": {
                 "type": "AssignmentPattern",

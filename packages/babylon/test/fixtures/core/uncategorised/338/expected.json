@@ -72,7 +72,6 @@
                 }
               },
               "method": false,
-              "computed": false,
               "key": {
                 "type": "NumericLiteral",
                 "start": 2,
@@ -93,6 +92,7 @@
                 },
                 "value": 1
               },
+              "computed": false,
               "shorthand": false,
               "value": {
                 "type": "BinaryExpression",

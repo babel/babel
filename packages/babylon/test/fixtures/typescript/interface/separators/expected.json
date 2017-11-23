@@ -88,7 +88,6 @@
                   "column": 28
                 }
               },
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 18,
@@ -106,6 +105,7 @@
                 },
                 "name": "x"
               },
+              "computed": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start": 19,
@@ -151,7 +151,6 @@
                   "column": 38
                 }
               },
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 29,
@@ -169,6 +168,7 @@
                 },
                 "name": "y"
               },
+              "computed": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start": 30,
@@ -263,7 +263,6 @@
                   "column": 27
                 }
               },
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 58,
@@ -281,6 +280,7 @@
                 },
                 "name": "x"
               },
+              "computed": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start": 59,
@@ -326,7 +326,6 @@
                   "column": 37
                 }
               },
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 69,
@@ -344,6 +343,7 @@
                 },
                 "name": "y"
               },
+              "computed": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start": 70,
@@ -438,7 +438,6 @@
                   "column": 13
                 }
               },
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 105,
@@ -456,6 +455,7 @@
                 },
                 "name": "x"
               },
+              "computed": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start": 106,
@@ -501,7 +501,6 @@
                   "column": 13
                 }
               },
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 119,
@@ -519,6 +518,7 @@
                 },
                 "name": "y"
               },
+              "computed": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start": 120,

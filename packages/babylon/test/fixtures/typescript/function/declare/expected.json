@@ -60,7 +60,6 @@
           "name": "f"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "params": [],
         "returnType": {
@@ -127,7 +126,6 @@
           "name": "f"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "typeParameters": {
           "type": "TSTypeParameterDeclaration",

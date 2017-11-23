@@ -106,7 +106,6 @@
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 31,
@@ -124,10 +123,10 @@
                 },
                 "name": "foo"
               },
+              "computed": false,
               "kind": "get",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {

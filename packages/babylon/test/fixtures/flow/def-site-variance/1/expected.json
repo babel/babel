@@ -190,7 +190,6 @@
           "name": "f"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "typeParameters": {
           "type": "TypeParameterDeclaration",

@@ -90,7 +90,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 10,
@@ -108,10 +107,10 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {
@@ -147,7 +146,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 16,
@@ -165,10 +163,10 @@
                 },
                 "name": "b"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {

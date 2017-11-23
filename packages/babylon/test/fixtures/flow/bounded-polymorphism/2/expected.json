@@ -60,7 +60,6 @@
           "name": "bar"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "typeParameters": {
           "type": "TypeParameterDeclaration",

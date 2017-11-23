@@ -124,7 +124,6 @@
                 }
               ],
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 24,
@@ -142,6 +141,7 @@
                 },
                 "name": "foo"
               },
+              "computed": false,
               "value": {
                 "type": "StringLiteral",
                 "start": 30,

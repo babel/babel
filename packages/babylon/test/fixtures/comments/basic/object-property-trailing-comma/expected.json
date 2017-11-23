@@ -104,8 +104,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 14,
@@ -123,6 +121,8 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
+                  "shorthand": false,
                   "value": {
                     "type": "StringLiteral",
                     "start": 17,
@@ -159,8 +159,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 37,
@@ -179,6 +177,8 @@
                     "name": "b",
                     "leadingComments": null
                   },
+                  "computed": false,
+                  "shorthand": false,
                   "value": {
                     "type": "StringLiteral",
                     "start": 40,
@@ -233,8 +233,6 @@
                     }
                   },
                   "method": false,
-                  "shorthand": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 60,
@@ -253,6 +251,8 @@
                     "name": "c",
                     "leadingComments": null
                   },
+                  "computed": false,
+                  "shorthand": false,
                   "value": {
                     "type": "StringLiteral",
                     "start": 63,

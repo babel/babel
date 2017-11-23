@@ -72,7 +72,6 @@
                 }
               },
               "method": false,
-              "computed": true,
               "key": {
                 "type": "Identifier",
                 "start": 7,
@@ -90,10 +89,10 @@
                 },
                 "name": "x"
               },
+              "computed": true,
               "kind": "get",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {
@@ -129,7 +128,6 @@
                 }
               },
               "method": false,
-              "computed": true,
               "key": {
                 "type": "Identifier",
                 "start": 21,
@@ -147,10 +145,10 @@
                 },
                 "name": "x"
               },
+              "computed": true,
               "kind": "set",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [
                 {

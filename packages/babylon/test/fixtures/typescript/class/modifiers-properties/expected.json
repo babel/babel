@@ -92,7 +92,6 @@
               },
               "readonly": true,
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 32,
@@ -110,6 +109,7 @@
                 },
                 "name": "r"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -128,7 +128,6 @@
               },
               "readonly": true,
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 48,
@@ -146,6 +145,7 @@
                 },
                 "name": "r2"
               },
+              "computed": false,
               "optional": true,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
@@ -195,7 +195,6 @@
               },
               "abstract": true,
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 74,
@@ -213,6 +212,7 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -230,7 +230,6 @@
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 88,
@@ -248,6 +247,7 @@
                 },
                 "name": "s"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -266,7 +266,6 @@
               },
               "accessibility": "public",
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 103,
@@ -284,6 +283,7 @@
                 },
                 "name": "pu"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -302,7 +302,6 @@
               },
               "accessibility": "protected",
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 121,
@@ -320,6 +319,7 @@
                 },
                 "name": "po"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -338,7 +338,6 @@
               },
               "accessibility": "private",
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 137,
@@ -356,6 +355,7 @@
                 },
                 "name": "pi"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -375,7 +375,6 @@
               "abstract": true,
               "readonly": true,
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 164,
@@ -393,6 +392,7 @@
                 },
                 "name": "ra"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -412,7 +412,6 @@
               "abstract": true,
               "readonly": true,
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 190,
@@ -430,6 +429,7 @@
                 },
                 "name": "ar"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -448,7 +448,6 @@
               },
               "readonly": true,
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 214,
@@ -466,6 +465,7 @@
                 },
                 "name": "sr"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -485,7 +485,6 @@
               "accessibility": "public",
               "readonly": true,
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 239,
@@ -503,6 +502,7 @@
                 },
                 "name": "pur"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -522,7 +522,6 @@
               "accessibility": "public",
               "abstract": true,
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 264,
@@ -540,6 +539,7 @@
                 },
                 "name": "pua"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -558,7 +558,6 @@
               },
               "accessibility": "public",
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 287,
@@ -576,6 +575,7 @@
                 },
                 "name": "pus"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -596,7 +596,6 @@
               "abstract": true,
               "readonly": true,
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 321,
@@ -614,6 +613,7 @@
                 },
                 "name": "pura"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -634,7 +634,6 @@
               "abstract": true,
               "readonly": true,
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 356,
@@ -652,6 +651,7 @@
                 },
                 "name": "puar"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -671,7 +671,6 @@
               "accessibility": "public",
               "readonly": true,
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 389,
@@ -689,6 +688,7 @@
                 },
                 "name": "pusr"
               },
+              "computed": false,
               "value": null
             }
           ]

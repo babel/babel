@@ -184,7 +184,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 44,
@@ -202,6 +201,7 @@
                 },
                 "name": "x"
               },
+              "computed": false,
               "value": null
             },
             {
@@ -219,7 +219,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 51,
@@ -237,6 +236,7 @@
                 },
                 "name": "x"
               },
+              "computed": false,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start": 52,
@@ -284,7 +284,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 66,
@@ -302,10 +301,10 @@
                 },
                 "name": "f"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": []
             },
@@ -324,7 +323,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 75,
@@ -342,10 +340,10 @@
                 },
                 "name": "f"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "returnType": {

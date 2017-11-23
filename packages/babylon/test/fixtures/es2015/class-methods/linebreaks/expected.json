@@ -90,7 +90,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 18,
@@ -108,10 +107,10 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "kind": "get",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {
@@ -147,7 +146,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 37,
@@ -165,10 +163,10 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "kind": "set",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [
                 {
@@ -222,7 +220,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 51,
@@ -240,10 +237,10 @@
                 },
                 "name": "constructor"
               },
+              "computed": false,
               "kind": "constructor",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {
@@ -279,7 +276,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 74,
@@ -297,10 +293,10 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {
@@ -337,7 +333,6 @@
               },
               "static": false,
               "kind": "method",
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 91,
@@ -355,9 +350,9 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "id": null,
               "generator": true,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {
@@ -393,7 +388,6 @@
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 119,
@@ -411,10 +405,10 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "kind": "get",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {
@@ -450,7 +444,6 @@
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 147,
@@ -468,10 +461,10 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "kind": "set",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [
                 {
@@ -525,7 +518,6 @@
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 170,
@@ -543,10 +535,10 @@
                 },
                 "name": "constructor"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {
@@ -582,7 +574,6 @@
                 }
               },
               "static": true,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 202,
@@ -600,10 +591,10 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {
@@ -640,7 +631,6 @@
               },
               "static": true,
               "kind": "method",
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 228,
@@ -658,9 +648,9 @@
                 },
                 "name": "a"
               },
+              "computed": false,
               "id": null,
               "generator": true,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {

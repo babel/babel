@@ -90,7 +90,6 @@
               },
               "id": null,
               "generator": false,
-              "expression": true,
               "async": false,
               "params": [],
               "body": {
@@ -123,7 +122,6 @@
                       }
                     },
                     "method": false,
-                    "computed": false,
                     "key": {
                       "type": "Identifier",
                       "start": 51,
@@ -141,6 +139,7 @@
                       },
                       "name": "id"
                     },
+                    "computed": false,
                     "shorthand": false,
                     "value": {
                       "type": "ArrowFunctionExpression",
@@ -207,7 +206,6 @@
                       },
                       "id": null,
                       "generator": false,
-                      "expression": true,
                       "async": false,
                       "params": [
                         {

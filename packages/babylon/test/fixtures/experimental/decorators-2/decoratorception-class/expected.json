@@ -119,7 +119,6 @@
                         }
                       },
                       "method": false,
-                      "computed": false,
                       "key": {
                         "type": "Identifier",
                         "start": 11,
@@ -137,6 +136,7 @@
                         },
                         "name": "store"
                       },
+                      "computed": false,
                       "shorthand": false,
                       "value": {
                         "type": "ClassExpression",

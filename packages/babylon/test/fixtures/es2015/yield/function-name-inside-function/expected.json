@@ -60,7 +60,6 @@
           "name": "fn"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "params": [],
         "body": {
@@ -110,7 +109,6 @@
                 "name": "yield"
               },
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {

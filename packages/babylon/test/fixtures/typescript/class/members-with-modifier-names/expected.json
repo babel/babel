@@ -90,7 +90,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 14,
@@ -108,10 +107,10 @@
                 },
                 "name": "public"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "returnType": {
@@ -182,7 +181,6 @@
               "static": false,
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "returnType": {
@@ -231,7 +229,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 61,
@@ -249,6 +246,7 @@
                 },
                 "name": "readonly"
               },
+              "computed": false,
               "value": {
                 "type": "NumericLiteral",
                 "start": 72,
@@ -285,7 +283,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 79,
@@ -303,6 +300,7 @@
                 },
                 "name": "async"
               },
+              "computed": false,
               "kind": "method",
               "typeParameters": {
                 "type": "TSTypeParameterDeclaration",
@@ -339,7 +337,6 @@
               },
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "returnType": {

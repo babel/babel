@@ -90,7 +90,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 14,
@@ -108,10 +107,10 @@
                 },
                 "name": "constructor"
               },
+              "computed": false,
               "kind": "constructor",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [
                 {
@@ -225,7 +224,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 53,
@@ -243,10 +241,10 @@
                 },
                 "name": "constructor"
               },
+              "computed": false,
               "kind": "constructor",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [
                 {
@@ -360,7 +358,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 92,
@@ -378,10 +375,10 @@
                 },
                 "name": "constructor"
               },
+              "computed": false,
               "kind": "constructor",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [
                 {

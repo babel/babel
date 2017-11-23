@@ -159,7 +159,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 18,
@@ -177,6 +176,7 @@
                     },
                     "name": "bar"
                   },
+                  "computed": false,
                   "shorthand": true,
                   "value": {
                     "type": "Identifier",

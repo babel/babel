@@ -76,7 +76,6 @@
             "name": "foo"
           },
           "generator": false,
-          "expression": false,
           "async": true,
           "params": [],
           "body": {
@@ -144,7 +143,6 @@
             "name": "bar"
           },
           "generator": false,
-          "expression": false,
           "async": true,
           "params": [],
           "body": {

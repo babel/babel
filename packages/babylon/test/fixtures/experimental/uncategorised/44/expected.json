@@ -90,7 +90,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 12,
@@ -108,6 +107,7 @@
                 },
                 "name": "foo"
               },
+              "computed": false,
               "value": null
             }
           ]
