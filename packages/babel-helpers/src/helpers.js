@@ -633,12 +633,6 @@ helpers.readOnlyError = defineHelper(`
   }
 `);
 
-helpers.readOnlyError = defineHelper(`
-  export default function _readOnlyError(name) {
-    throw new Error("\\"" + name + "\\" is read-only");
-  }
-`);
-
 helpers.classNameTDZError = defineHelper(`
   export default function _classNameTDZError(name) {
     throw new Error("Class \\"" + name + "\\" cannot be referenced in computed property keys.");
