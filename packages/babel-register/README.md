@@ -39,7 +39,7 @@ override this by passing an ignore regex via:
 require("@babel/register")({
   // This will override `node_modules` ignoring - you can alternatively pass
   // an array of strings to be explicitly matched or a regex / glob
-  ignore: false
+  ignore: []
 });
 ```
 
@@ -49,7 +49,7 @@ require("@babel/register")({
 require("@babel/register")({
   // Optional ignore regex - if any filenames **do** match this regex then they
   // aren't compiled.
-  ignore: /regex/,
+  ignore: [/regex/],
 
   // Ignore can also be specified as a function.
   ignore: function(filename) {
