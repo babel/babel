@@ -71,7 +71,7 @@ For convenience, you can use `"node": "current"` to only include the necessary p
 
 Use external data such as [`compat-table`](https://github.com/kangax/compat-table) to determine browser support. (We should create PRs there when necessary)
 
-![](https://cloud.githubusercontent.com/assets/588473/19214029/58deebce-8d48-11e6-9004-ee3fbcb75d8b.png)
+![](https://user-images.githubusercontent.com/29643052/33222483-56587b2e-d160-11e7-9013-b4be3d6224dd.png)
 
 We can periodically run [build-data.js](https://github.com/babel/packages/babel-preset-env/blob/master/scripts/build-data.js) which generates [plugins.json](https://github.com/babel/packages/babel-preset-env/blob/master/data/plugins.json).
 
