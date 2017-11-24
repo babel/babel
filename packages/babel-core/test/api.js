@@ -121,6 +121,7 @@ describe("api", function() {
     const options = {
       babelrc: false,
     };
+    Object.freeze(options);
     babel.transformFile(__dirname + "/fixtures/api/file.js", options, function(
       err,
       res,
@@ -128,7 +129,7 @@ describe("api", function() {
       if (err) return done(err);
       assert.equal(res.code, "foo();");
       // keep user options untouched
-      assert.equal(Object.keys(options).length, 1);
+      assert.deepEqual(options, { babelrc: false });
       done();
     });
   });
@@ -137,12 +138,13 @@ describe("api", function() {
     const options = {
       babelrc: false,
     };
+    Object.freeze(options);
     assert.equal(
       babel.transformFileSync(__dirname + "/fixtures/api/file.js", options)
         .code,
       "foo();",
     );
-    assert.equal(Object.keys(options).length, 1);
+    assert.deepEqual(options, { babelrc: false });
   });
 
   it("options throw on falsy true", function() {
