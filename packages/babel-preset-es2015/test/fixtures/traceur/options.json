@@ -1,7 +1,6 @@
 {
   "plugins": [
     "transform-exponentiation-operator",
-    "transform-regenerator",
     "transform-template-literals",
     "transform-literals",
     "transform-arrow-functions",
