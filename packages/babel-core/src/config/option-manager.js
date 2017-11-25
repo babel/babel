@@ -53,7 +53,7 @@ class OptionManager {
       loadPluginDescriptor(descriptor, envName),
     );
     const presets = result.presets.map(descriptor => ({
-      pass: config.options.passPerPreset ? [] : pass,
+      pass: descriptor.ownPass ? [] : pass,
       preset: loadPresetDescriptor(descriptor, envName),
     }));
 
@@ -143,6 +143,7 @@ type BasicDescriptor = {
   options: {} | void,
   dirname: string,
   alias: string,
+  ownPass?: boolean,
 };
 
 type LoadedDescriptor = {
@@ -173,6 +174,7 @@ const loadConfig = makeWeakCache((config: MergeOptions): {
     createDescriptor(preset, loadPreset, config.dirname, {
       index,
       alias: config.alias,
+      ownPass: config.options.passPerPreset,
     }),
   );
 
@@ -316,9 +318,11 @@ function createDescriptor(
   {
     index,
     alias,
+    ownPass,
   }: {
     index: number,
     alias: string,
+    ownPass?: boolean,
   },
 ): BasicDescriptor {
   let options;
@@ -364,6 +368,7 @@ function createDescriptor(
     value,
     options,
     dirname,
+    ownPass,
   };
 }
 
