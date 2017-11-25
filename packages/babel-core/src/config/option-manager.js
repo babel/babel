@@ -46,36 +46,29 @@ class OptionManager {
    *  - `loc` is used to point to the original config.
    *  - `dirname` is used to resolve plugins relative to it.
    */
-
-  mergeOptions(config: MergeOptions, pass?: Array<Plugin>, envName: string) {
+  mergeOptions(config: MergeOptions, pass: Array<Plugin>, envName: string) {
     const result = loadConfig(config);
 
     const plugins = result.plugins.map(descriptor =>
       loadPluginDescriptor(descriptor, envName),
     );
-    const presets = result.presets.map(descriptor =>
-      loadPresetDescriptor(descriptor, envName),
-    );
-
-    const passPerPreset = config.options.passPerPreset;
-    pass = pass || this.passes[0];
+    const presets = result.presets.map(descriptor => ({
+      pass: config.options.passPerPreset ? [] : pass,
+      preset: loadPresetDescriptor(descriptor, envName),
+    }));
 
     // resolve presets
     if (presets.length > 0) {
-      let presetPasses = null;
-      if (passPerPreset) {
-        presetPasses = presets.map(() => []);
-        // The passes are created in the same order as the preset list, but are inserted before any
-        // existing additional passes.
-        this.passes.splice(1, 0, ...presetPasses);
-      }
+      // The passes are created in the same order as the preset list, but are inserted before any
+      // existing additional passes.
+      this.passes.splice(
+        1,
+        0,
+        ...presets.map(o => o.pass).filter(p => p !== pass),
+      );
 
-      presets.forEach((presetConfig, i) => {
-        this.mergeOptions(
-          presetConfig,
-          presetPasses ? presetPasses[i] : pass,
-          envName,
-        );
+      presets.forEach(({ preset, pass }) => {
+        this.mergeOptions(preset, pass, envName);
       });
     }
 
@@ -112,7 +105,7 @@ class OptionManager {
 
     try {
       for (const config of configChain) {
-        this.mergeOptions(config, undefined, envName);
+        this.mergeOptions(config, this.passes[0], envName);
       }
     } catch (e) {
       // There are a few case where thrown errors will try to annotate themselves multiple times, so
