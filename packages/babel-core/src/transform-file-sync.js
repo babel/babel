@@ -8,13 +8,14 @@ export default function transformFileSync(
   filename: string,
   opts: ?InputOptions,
 ): FileResult | null {
+  let options;
   if (opts == null) {
-    opts = { filename };
+    options = { filename };
   } else if (opts && typeof opts === "object") {
-    opts = Object.assign(opts, { filename });
+    options = Object.assign({}, opts, { filename });
   }
 
-  const config = loadConfig(opts);
+  const config = loadConfig(options);
   if (config === null) return null;
 
   return runSync(config, fs.readFileSync(filename, "utf8"));

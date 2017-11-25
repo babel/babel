@@ -118,26 +118,33 @@ describe("api", function() {
   });
 
   it("transformFile", function(done) {
-    babel.transformFile(
-      __dirname + "/fixtures/api/file.js",
-      {
-        babelrc: false,
-      },
-      function(err, res) {
-        if (err) return done(err);
-        assert.equal(res.code, "foo();");
-        done();
-      },
-    );
+    const options = {
+      babelrc: false,
+    };
+    Object.freeze(options);
+    babel.transformFile(__dirname + "/fixtures/api/file.js", options, function(
+      err,
+      res,
+    ) {
+      if (err) return done(err);
+      assert.equal(res.code, "foo();");
+      // keep user options untouched
+      assert.deepEqual(options, { babelrc: false });
+      done();
+    });
   });
 
   it("transformFileSync", function() {
+    const options = {
+      babelrc: false,
+    };
+    Object.freeze(options);
     assert.equal(
-      babel.transformFileSync(__dirname + "/fixtures/api/file.js", {
-        babelrc: false,
-      }).code,
+      babel.transformFileSync(__dirname + "/fixtures/api/file.js", options)
+        .code,
       "foo();",
     );
+    assert.deepEqual(options, { babelrc: false });
   });
 
   it("options throw on falsy true", function() {
