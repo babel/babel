@@ -187,7 +187,7 @@ export type EnvSet<T> = {
 export type IgnoreItem = string | Function | RegExp;
 export type IgnoreList = $ReadOnlyArray<IgnoreItem>;
 
-export type PluginOptions = {} | void;
+export type PluginOptions = {} | void | false;
 export type PluginTarget = string | {} | Function;
 export type PluginItem =
   | Plugin
