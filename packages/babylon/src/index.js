@@ -17,6 +17,22 @@ plugins.flow = flowPlugin;
 plugins.jsx = jsxPlugin;
 plugins.typescript = typescriptPlugin;
 
+// Rollup is smart enough to inline the values from the JSON without getting
+// whole blob, and Babylon doesn't have any babel-related dependencies,
+// so we're doing this here instead of using the _cache-key logic.
+// This will inline the version at the time of bundling. For the final
+// published, scripts/update-version.js will run to copy the updated value.
+import { name, version } from "../package.json";
+
+// This is meant for use as an invalidation key for caching. If it changes,
+// then you know you're building with a different version of Babylon and
+// you can invalidate. It should _not_ be parsed to get the version number
+// since there is no guaranteed that the format is stable across versions.
+export const CACHE_KEY = {
+  inspect: () => ({ name, version }),
+  toString: () => `${name}@${version}`,
+};
+
 export function parse(input: string, options?: Options): File {
   if (options && options.sourceType === "unambiguous") {
     options = Object.assign({}, options);

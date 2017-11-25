@@ -2,6 +2,9 @@ import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
 import wrapFunction from "@babel/helper-wrap-function";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function() {
   const isFunctionSent = node =>
     t.isIdentifier(node.meta, { name: "function" }) &&
@@ -29,6 +32,7 @@ export default function() {
   };
 
   return {
+    cacheKey: CACHE_KEY,
     inherits: syntaxFunctionSent,
 
     visitor: {

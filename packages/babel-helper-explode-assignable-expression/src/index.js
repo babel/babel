@@ -1,5 +1,6 @@
 import type { Scope } from "@babel/traverse";
 import * as t from "@babel/types";
+export { default as CACHE_KEY } from "./_cache-key";
 
 function getObjRef(node, nodes, file, scope) {
   let ref;

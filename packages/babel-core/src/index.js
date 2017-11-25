@@ -6,12 +6,15 @@ export {
 } from "./tools/build-external-helpers";
 export { resolvePlugin, resolvePreset } from "./config/loading/files";
 
+export { default as CACHE_KEY } from "./_cache-key";
+
 export { version } from "../package.json";
 export { getEnv } from "./config/helpers/environment";
 
 export * as types from "@babel/types";
 export { default as traverse } from "@babel/traverse";
 export { default as template } from "@babel/template";
+export { default as caching } from "@babel/helper-caching";
 
 import loadConfig from "./config";
 

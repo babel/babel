@@ -1,5 +1,10 @@
-export default function({ parse, traverse }) {
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
+export default function(api) {
+  const { parse, traverse } = api;
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       CallExpression(path) {
         if (

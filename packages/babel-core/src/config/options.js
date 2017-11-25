@@ -1,5 +1,7 @@
 // @flow
 
+import type { CacheKey } from "@babel/helper-caching";
+
 import removed from "./removed";
 import {
   assertString,
@@ -12,6 +14,7 @@ import {
   assertSourceMaps,
   assertCompact,
   assertSourceType,
+  assertCacheKey,
   type ValidatorSet,
   type Validator,
 } from "./option-assertions";
@@ -43,6 +46,12 @@ const NONPRESET_VALIDATORS: ValidatorSet = {
     $PropertyType<ValidatedOptions, "ignore">,
   >),
   only: (assertIgnoreList: Validator<$PropertyType<ValidatedOptions, "only">>),
+};
+
+const CACHE_VALIDATORS: ValidatorSet = {
+  cacheKey: (assertCacheKey: Validator<
+    $PropertyType<ValidatedOptions, "cacheKey">,
+  >),
 };
 
 const COMMON_VALIDATORS: ValidatorSet = {
@@ -177,6 +186,8 @@ export type ValidatedOptions = {
   parserOpts?: {},
   // Deprecate top level generatorOpts
   generatorOpts?: {},
+
+  cacheKey?: CacheKey,
 };
 
 export type EnvSet<T> = {
@@ -206,11 +217,15 @@ export function validate(type: OptionsType, opts: {}): ValidatedOptions {
     if (type !== "arguments" && ROOT_VALIDATORS[key]) {
       throw new Error(`.${key} is only allowed in root programmatic options`);
     }
+    if (type === "env" && CACHE_VALIDATORS[key]) {
+      throw new Error(`.${key} is not allowed in 'env' options`);
+    }
 
     const validator =
       COMMON_VALIDATORS[key] ||
       NONPRESET_VALIDATORS[key] ||
-      ROOT_VALIDATORS[key];
+      ROOT_VALIDATORS[key] ||
+      CACHE_VALIDATORS[key];
 
     if (validator) validator(key, opts[key]);
     else throw buildUnknownError(key);

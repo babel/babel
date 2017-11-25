@@ -7,7 +7,11 @@
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-module-imports",
   "main": "lib/index.js",
+  "scripts": {
+    "version": "node ../../scripts/lerna-version.js"
+  },
   "dependencies": {
+    "@babel/helper-caching": "7.0.0-beta.32",
     "@babel/types": "7.0.0-beta.32",
     "lodash": "^4.2.0"
   },

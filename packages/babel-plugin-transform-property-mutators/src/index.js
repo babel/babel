@@ -1,8 +1,12 @@
 import * as defineMap from "@babel/helper-define-map";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function() {
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       ObjectExpression(path, file) {
         const { node } = path;

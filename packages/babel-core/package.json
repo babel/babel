@@ -27,7 +27,11 @@
     "./lib/transform-file.js": "./lib/transform-file-browser.js",
     "./lib/transform-file-sync.js": "./lib/transform-file-sync-browser.js"
   },
+  "scripts": {
+    "version": "node ../../scripts/lerna-version.js"
+  },
   "dependencies": {
+    "@babel/helper-caching": "7.0.0-beta.32",
     "@babel/code-frame": "7.0.0-beta.32",
     "@babel/generator": "7.0.0-beta.32",
     "@babel/helpers": "7.0.0-beta.32",

@@ -1,4 +1,5 @@
 import ImportInjector from "./import-injector";
+export { default as CACHE_KEY } from "./_cache-key";
 
 export { ImportInjector };
 

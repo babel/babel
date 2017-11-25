@@ -1,5 +1,8 @@
 import { template, types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function(api, options) {
   const { loose } = options;
   const pushComputedProps = loose
@@ -112,6 +115,7 @@ export default function(api, options) {
   }
 
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       ObjectExpression: {
         exit(path, state) {

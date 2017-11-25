@@ -5,6 +5,9 @@ import values from "lodash/values";
 import extend from "lodash/extend";
 import { traverse, template, types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 const DONE = new WeakSet();
 
 export default function(api, opts) {
@@ -17,6 +20,7 @@ export default function(api, opts) {
   }
 
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       VariableDeclaration(path) {
         const { node, parent, scope } = path;

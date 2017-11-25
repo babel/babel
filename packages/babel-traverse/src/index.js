@@ -4,6 +4,8 @@ import includes from "lodash/includes";
 import * as t from "@babel/types";
 import * as cache from "./cache";
 
+export { default as CACHE_KEY } from "./_cache-key";
+
 export { default as NodePath } from "./path";
 export { default as Scope } from "./scope";
 export { default as Hub } from "./hub";

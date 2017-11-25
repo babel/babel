@@ -1,6 +1,7 @@
 import hoistVariables from "@babel/helper-hoist-variables";
 import type { NodePath } from "@babel/traverse";
 import * as t from "@babel/types";
+export { default as CACHE_KEY } from "./_cache-key";
 
 const visitor = {
   enter(path, state) {

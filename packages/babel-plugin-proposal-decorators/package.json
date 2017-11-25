@@ -11,6 +11,9 @@
     "babel-plugin",
     "decorators"
   ],
+  "scripts": {
+    "version": "node ../../scripts/lerna-version.js"
+  },
   "dependencies": {
     "@babel/plugin-syntax-decorators": "7.0.0-beta.32"
   },

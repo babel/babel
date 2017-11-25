@@ -2,6 +2,8 @@ import jsTokens, { matchToToken } from "js-tokens";
 import esutils from "esutils";
 import Chalk from "chalk";
 
+export { default as CACHE_KEY } from "./_cache-key";
+
 let deprecationWarningShown = false;
 
 type Location = {

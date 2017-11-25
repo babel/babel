@@ -1,5 +1,7 @@
 import rewritePattern from "regexpu-core";
 import * as regex from "@babel/helper-regex";
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
 
 export default function(api, options) {
   const { useUnicodeFlag = true } = options;
@@ -8,6 +10,7 @@ export default function(api, options) {
   }
 
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       RegExpLiteral(path) {
         const node = path.node;

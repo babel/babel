@@ -1,6 +1,9 @@
 import syntaxNumericSeparator from "@babel/plugin-syntax-numeric-separator";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function() {
   function replaceNumberArg({ node }) {
     if (node.callee.name !== "Number") {
@@ -16,6 +19,7 @@ export default function() {
   }
 
   return {
+    cacheKey: CACHE_KEY,
     inherits: syntaxNumericSeparator,
 
     visitor: {

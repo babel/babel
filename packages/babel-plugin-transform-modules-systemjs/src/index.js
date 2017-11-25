@@ -1,6 +1,9 @@
 import hoistVariables from "@babel/helper-hoist-variables";
 import { template, types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 const buildTemplate = template(`
   SYSTEM_REGISTER(MODULE_NAME, SOURCES, function (EXPORT_IDENTIFIER, CONTEXT_IDENTIFIER) {
     "use strict";
@@ -71,6 +74,7 @@ export default function(api, options) {
   };
 
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       CallExpression(path, state) {
         if (path.node.callee.type === TYPE_IMPORT) {

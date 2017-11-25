@@ -1,0 +1,15 @@
+{
+  "name": "@babel/helper-caching",
+  "version": "7.0.0-beta.32",
+  "description": "Helper function to generate caching data for packages",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-caching",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "scripts": {
+    "version": "node ../../scripts/lerna-version.js"
+  },
+  "dependencies": {
+    "hash.js": "^1.1.3",
+    "lodash": "^4.2.0"
+  }
+}

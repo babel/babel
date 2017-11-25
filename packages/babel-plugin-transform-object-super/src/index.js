@@ -1,6 +1,9 @@
 import ReplaceSupers from "@babel/helper-replace-supers";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 function replacePropertySuper(path, node, scope, getObjectRef, file) {
   const replaceSupers = new ReplaceSupers({
     getObjectRef: getObjectRef,
@@ -16,6 +19,7 @@ function replacePropertySuper(path, node, scope, getObjectRef, file) {
 
 export default function() {
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       ObjectExpression(path, state) {
         let objectRef;

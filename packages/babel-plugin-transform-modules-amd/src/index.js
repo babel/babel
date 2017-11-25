@@ -9,6 +9,9 @@ import {
 } from "@babel/helper-module-transforms";
 import { template, types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 const buildWrapper = template(`
   define(MODULE_NAME, AMD_ARGUMENTS, function(IMPORT_NAMES) {
   })
@@ -17,6 +20,7 @@ const buildWrapper = template(`
 export default function(api, options) {
   const { loose, allowTopLevelThis, strict, strictMode, noInterop } = options;
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       Program: {
         exit(path) {

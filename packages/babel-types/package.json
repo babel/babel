@@ -7,7 +7,11 @@
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-types",
   "main": "lib/index.js",
+  "scripts": {
+    "version": "node ../../scripts/lerna-version.js"
+  },
   "dependencies": {
+    "@babel/helper-caching": "7.0.0-beta.32",
     "esutils": "^2.0.2",
     "lodash": "^4.2.0",
     "to-fast-properties": "^2.0.0"

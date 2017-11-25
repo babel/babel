@@ -1,6 +1,9 @@
 import helper from "@babel/helper-builder-react-jsx";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function() {
   function hasRefOrSpread(attrs) {
     for (let i = 0; i < attrs.length; i++) {
@@ -57,5 +60,8 @@ export default function() {
       }
     },
   });
-  return { visitor };
+  return {
+    cacheKey: CACHE_KEY,
+    visitor,
+  };
 }

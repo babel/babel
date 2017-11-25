@@ -7,7 +7,11 @@
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-code-frame",
   "main": "lib/index.js",
+  "scripts": {
+    "version": "node ../../scripts/lerna-version.js"
+  },
   "dependencies": {
+    "@babel/helper-caching": "7.0.0-beta.32",
     "chalk": "^2.0.0",
     "esutils": "^2.0.2",
     "js-tokens": "^3.0.0"

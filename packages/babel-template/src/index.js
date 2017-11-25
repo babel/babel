@@ -3,6 +3,8 @@
 import * as formatters from "./formatters";
 import createTemplateBuilder from "./builder";
 
+export { default as CACHE_KEY } from "./_cache-key";
+
 export const smart = createTemplateBuilder(formatters.smart);
 export const statement = createTemplateBuilder(formatters.statement);
 export const statements = createTemplateBuilder(formatters.statements);

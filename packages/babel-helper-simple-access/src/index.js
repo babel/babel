@@ -1,4 +1,5 @@
 import * as t from "@babel/types";
+export { default as CACHE_KEY } from "./_cache-key";
 
 export default function simplifyAccess(path: NodePath, bindingNames) {
   path.traverse(simpleAssignmentVisitor, {

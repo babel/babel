@@ -1,5 +1,6 @@
 import * as t from "@babel/types";
 
+export { default as CACHE_KEY } from "./_cache-key";
 export default function(callee, thisNode, args) {
   if (
     args.length === 1 &&

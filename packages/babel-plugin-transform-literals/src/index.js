@@ -1,5 +1,9 @@
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function() {
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       NumericLiteral({ node }) {
         // number octal like 0b10 or 0o70

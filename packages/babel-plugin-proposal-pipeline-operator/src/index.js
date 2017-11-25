@@ -1,8 +1,12 @@
 import syntaxPipelineOperator from "@babel/plugin-syntax-pipeline-operator";
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function() {
   return {
+    cacheKey: CACHE_KEY,
     inherits: syntaxPipelineOperator,
 
     visitor: {

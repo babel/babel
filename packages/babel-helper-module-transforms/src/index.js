@@ -2,6 +2,7 @@ import assert from "assert";
 import * as t from "@babel/types";
 import template from "@babel/template";
 import chunk from "lodash/chunk";
+export { default as CACHE_KEY } from "./_cache-key";
 
 import { isModule } from "@babel/helper-module-imports";
 

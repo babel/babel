@@ -8,6 +8,9 @@
   "keywords": [
     "@babel/plugin"
   ],
+  "scripts": {
+    "version": "node ../../scripts/lerna-version.js"
+  },
   "dependencies": {
     "@babel/plugin-syntax-optional-catch-binding": "7.0.0-beta.32"
   },

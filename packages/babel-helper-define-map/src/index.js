@@ -1,6 +1,7 @@
 import nameFunction from "@babel/helper-function-name";
 import has from "lodash/has";
 import * as t from "@babel/types";
+export { default as CACHE_KEY } from "./_cache-key";
 
 function toKind(node: Object) {
   if (t.isClassMethod(node) || t.isObjectMethod(node)) {

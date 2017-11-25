@@ -5,6 +5,9 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-modules-systemjs",
   "license": "MIT",
   "main": "lib/index.js",
+  "scripts": {
+    "version": "node ../../scripts/lerna-version.js"
+  },
   "dependencies": {
     "@babel/helper-hoist-variables": "7.0.0-beta.32"
   },

@@ -1,5 +1,8 @@
 import { types as t } from "@babel/core";
 
+import CACHE_KEY from "./_cache-key";
+export { CACHE_KEY };
+
 export default function() {
   function statementList(key, path) {
     const paths: Array = path.get(key);
@@ -23,6 +26,7 @@ export default function() {
   }
 
   return {
+    cacheKey: CACHE_KEY,
     visitor: {
       BlockStatement(path) {
         const { node, parent } = path;

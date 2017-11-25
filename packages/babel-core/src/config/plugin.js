@@ -1,6 +1,9 @@
 // @flow
 
+import type { CacheKey } from "@babel/helper-caching";
+
 import {
+  assertCacheKey,
   assertString,
   assertFunction,
   assertObject,
@@ -30,6 +33,10 @@ const VALIDATORS: ValidatorSet = {
   >),
   generatorOverride: (assertFunction: Validator<
     $PropertyType<PluginObject, "generatorOverride">,
+  >),
+
+  cacheKey: (assertCacheKey: Validator<
+    $PropertyType<PluginObject, "cacheKey">,
   >),
 };
 
@@ -72,6 +79,8 @@ export type VisitorMap = {
 };
 
 export type PluginObject = {
+  cacheKey?: CacheKey,
+
   name?: string,
   manipulateOptions?: Function,
 
@@ -107,8 +116,10 @@ export default class Plugin {
   generatorOverride: Function | void;
 
   options: {};
+  cacheKey: CacheKey;
 
   constructor(plugin: PluginObject, options: {}, key?: string) {
+    this.cacheKey = plugin.cacheKey;
     this.key = plugin.name || key;
 
     this.manipulateOptions = plugin.manipulateOptions;
