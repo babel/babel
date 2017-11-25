@@ -19,47 +19,11 @@ describe("caching API", () => {
     assert.notEqual(fn("one"), fn("two"));
   });
 
-  it("should allow permacaching with cache(true)", () => {
-    let count = 0;
-
-    const fn = makeStrongCache((arg, cache) => {
-      cache(true);
-      return { arg, count: count++ };
-    });
-
-    assert.deepEqual(fn("one"), { arg: "one", count: 0 });
-    assert.equal(fn("one"), fn("one"));
-
-    assert.deepEqual(fn("two"), { arg: "two", count: 1 });
-    assert.equal(fn("two"), fn("two"));
-
-    assert.notEqual(fn("one"), fn("two"));
-  });
-
   it("should allow disabling caching with .never()", () => {
     let count = 0;
 
     const fn = makeStrongCache((arg, cache) => {
       cache.never();
-      return { arg, count: count++ };
-    });
-
-    assert.deepEqual(fn("one"), { arg: "one", count: 0 });
-    assert.deepEqual(fn("one"), { arg: "one", count: 1 });
-    assert.notEqual(fn("one"), fn("one"));
-
-    assert.deepEqual(fn("two"), { arg: "two", count: 4 });
-    assert.deepEqual(fn("two"), { arg: "two", count: 5 });
-    assert.notEqual(fn("two"), fn("two"));
-
-    assert.notEqual(fn("one"), fn("two"));
-  });
-
-  it("should allow disabling caching with cache(false)", () => {
-    let count = 0;
-
-    const fn = makeStrongCache((arg, cache) => {
-      cache(false);
       return { arg, count: count++ };
     });
 
@@ -80,47 +44,6 @@ describe("caching API", () => {
 
     const fn = makeStrongCache((arg, cache) => {
       const val = cache.using(() => other);
-
-      return { arg, val, count: count++ };
-    });
-
-    assert.deepEqual(fn("one"), { arg: "one", val: "default", count: 0 });
-    assert.equal(fn("one"), fn("one"));
-
-    assert.deepEqual(fn("two"), { arg: "two", val: "default", count: 1 });
-    assert.equal(fn("two"), fn("two"));
-
-    other = "new";
-
-    assert.deepEqual(fn("one"), { arg: "one", val: "new", count: 2 });
-    assert.equal(fn("one"), fn("one"));
-
-    assert.deepEqual(fn("two"), { arg: "two", val: "new", count: 3 });
-    assert.equal(fn("two"), fn("two"));
-
-    other = "default";
-
-    assert.deepEqual(fn("one"), { arg: "one", val: "default", count: 0 });
-    assert.equal(fn("one"), fn("one"));
-
-    assert.deepEqual(fn("two"), { arg: "two", val: "default", count: 1 });
-    assert.equal(fn("two"), fn("two"));
-
-    other = "new";
-
-    assert.deepEqual(fn("one"), { arg: "one", val: "new", count: 2 });
-    assert.equal(fn("one"), fn("one"));
-
-    assert.deepEqual(fn("two"), { arg: "two", val: "new", count: 3 });
-    assert.equal(fn("two"), fn("two"));
-  });
-
-  it("should allow caching based on a value with cache(fn)", () => {
-    let count = 0;
-    let other = "default";
-
-    const fn = makeStrongCache((arg, cache) => {
-      const val = cache(() => other);
 
       return { arg, val, count: count++ };
     });
@@ -298,12 +221,6 @@ describe("caching API", () => {
     assert.equal(fn("two"), fn("two"));
   });
 
-  it("should throw if caching is never configured and not defaulting", () => {
-    const fn = makeStrongCache(() => {}, false /* autoPermacache */);
-
-    assert.throws(() => fn(), /Error: Caching was left unconfigured./);
-  });
-
   it("should auto-permacache by default", () => {
     let count = 0;
 
@@ -409,5 +326,90 @@ describe("caching API", () => {
       () => fn().invalidate(() => null),
       /Cannot change caching after evaluation/,
     );
+  });
+
+  describe("simple", () => {
+    it("should allow permacaching with cache(true)", () => {
+      let count = 0;
+
+      const fn = makeStrongCache((arg, cache) => {
+        cache = cache.simple();
+
+        cache(true);
+        return { arg, count: count++ };
+      });
+
+      assert.deepEqual(fn("one"), { arg: "one", count: 0 });
+      assert.equal(fn("one"), fn("one"));
+
+      assert.deepEqual(fn("two"), { arg: "two", count: 1 });
+      assert.equal(fn("two"), fn("two"));
+
+      assert.notEqual(fn("one"), fn("two"));
+    });
+
+    it("should allow disabling caching with cache(false)", () => {
+      let count = 0;
+
+      const fn = makeStrongCache((arg, cache) => {
+        cache = cache.simple();
+
+        cache(false);
+        return { arg, count: count++ };
+      });
+
+      assert.deepEqual(fn("one"), { arg: "one", count: 0 });
+      assert.deepEqual(fn("one"), { arg: "one", count: 1 });
+      assert.notEqual(fn("one"), fn("one"));
+
+      assert.deepEqual(fn("two"), { arg: "two", count: 4 });
+      assert.deepEqual(fn("two"), { arg: "two", count: 5 });
+      assert.notEqual(fn("two"), fn("two"));
+
+      assert.notEqual(fn("one"), fn("two"));
+    });
+
+    it("should allow caching based on a value with cache(fn)", () => {
+      let count = 0;
+      let other = "default";
+
+      const fn = makeStrongCache((arg, cache) => {
+        cache = cache.simple();
+
+        const val = cache(() => other);
+
+        return { arg, val, count: count++ };
+      });
+
+      assert.deepEqual(fn("one"), { arg: "one", val: "default", count: 0 });
+      assert.equal(fn("one"), fn("one"));
+
+      assert.deepEqual(fn("two"), { arg: "two", val: "default", count: 1 });
+      assert.equal(fn("two"), fn("two"));
+
+      other = "new";
+
+      assert.deepEqual(fn("one"), { arg: "one", val: "new", count: 2 });
+      assert.equal(fn("one"), fn("one"));
+
+      assert.deepEqual(fn("two"), { arg: "two", val: "new", count: 3 });
+      assert.equal(fn("two"), fn("two"));
+
+      other = "default";
+
+      assert.deepEqual(fn("one"), { arg: "one", val: "default", count: 0 });
+      assert.equal(fn("one"), fn("one"));
+
+      assert.deepEqual(fn("two"), { arg: "two", val: "default", count: 1 });
+      assert.equal(fn("two"), fn("two"));
+
+      other = "new";
+
+      assert.deepEqual(fn("one"), { arg: "one", val: "new", count: 2 });
+      assert.equal(fn("one"), fn("one"));
+
+      assert.deepEqual(fn("two"), { arg: "two", val: "new", count: 3 });
+      assert.equal(fn("two"), fn("two"));
+    });
   });
 });

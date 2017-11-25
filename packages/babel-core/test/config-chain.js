@@ -3,6 +3,8 @@ import fs from "fs";
 import path from "path";
 import buildConfigChain from "../lib/config/build-config-chain";
 
+const DEFAULT_ENV = "development";
+
 function fixture() {
   const args = [__dirname, "fixtures", "config"];
   for (let i = 0; i < arguments.length; i++) {
@@ -16,49 +18,39 @@ function base() {
 }
 
 describe("buildConfigChain", function() {
-  let oldBabelEnv;
-  let oldNodeEnv;
-
-  beforeEach(function() {
-    oldBabelEnv = process.env.BABEL_ENV;
-    oldNodeEnv = process.env.NODE_ENV;
-
-    delete process.env.BABEL_ENV;
-    delete process.env.NODE_ENV;
-  });
-
-  afterEach(function() {
-    process.env.BABEL_ENV = oldBabelEnv;
-    process.env.NODE_ENV = oldNodeEnv;
-  });
-
   describe("ignore", () => {
     it("should ignore files that match", () => {
-      const chain = buildConfigChain({
-        filename: fixture("nonexistant-fake", "src.js"),
-        babelrc: false,
-        ignore: [
-          fixture("nonexistant-fake", "src.js"),
+      const chain = buildConfigChain(
+        {
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          ignore: [
+            fixture("nonexistant-fake", "src.js"),
 
-          // We had a regression where multiple ignore patterns broke things, so
-          // we keep some extra random items in here.
-          fixture("nonexistant-fake", "other.js"),
-          fixture("nonexistant-fake", "misc.js"),
-        ],
-      });
+            // We had a regression where multiple ignore patterns broke things, so
+            // we keep some extra random items in here.
+            fixture("nonexistant-fake", "other.js"),
+            fixture("nonexistant-fake", "misc.js"),
+          ],
+        },
+        DEFAULT_ENV,
+      );
 
       assert.equal(chain, null);
     });
 
     it("should not ignore files that don't match", () => {
-      const chain = buildConfigChain({
-        filename: fixture("nonexistant-fake", "src.js"),
-        babelrc: false,
-        ignore: [
-          fixture("nonexistant-fake", "other.js"),
-          fixture("nonexistant-fake", "misc.js"),
-        ],
-      });
+      const chain = buildConfigChain(
+        {
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          ignore: [
+            fixture("nonexistant-fake", "other.js"),
+            fixture("nonexistant-fake", "misc.js"),
+          ],
+        },
+        DEFAULT_ENV,
+      );
 
       const expected = [
         {
@@ -82,27 +74,33 @@ describe("buildConfigChain", function() {
 
   describe("only", () => {
     it("should ignore files that don't match", () => {
-      const chain = buildConfigChain({
-        filename: fixture("nonexistant-fake", "src.js"),
-        babelrc: false,
-        only: [
-          fixture("nonexistant-fake", "other.js"),
-          fixture("nonexistant-fake", "misc.js"),
-        ],
-      });
+      const chain = buildConfigChain(
+        {
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          only: [
+            fixture("nonexistant-fake", "other.js"),
+            fixture("nonexistant-fake", "misc.js"),
+          ],
+        },
+        DEFAULT_ENV,
+      );
 
       assert.equal(chain, null);
     });
 
     it("should not ignore files that match", () => {
-      const chain = buildConfigChain({
-        filename: fixture("nonexistant-fake", "src.js"),
-        babelrc: false,
-        only: [
-          fixture("nonexistant-fake", "src.js"),
-          fixture("nonexistant-fake", "misc.js"),
-        ],
-      });
+      const chain = buildConfigChain(
+        {
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          only: [
+            fixture("nonexistant-fake", "src.js"),
+            fixture("nonexistant-fake", "misc.js"),
+          ],
+        },
+        DEFAULT_ENV,
+      );
 
       const expected = [
         {
@@ -126,12 +124,15 @@ describe("buildConfigChain", function() {
 
   describe("ignore/only", () => {
     it("should ignore files that match ignore and don't match only", () => {
-      const chain = buildConfigChain({
-        filename: fixture("nonexistant-fake", "src.js"),
-        babelrc: false,
-        ignore: [fixture("nonexistant-fake", "src.js")],
-        only: [fixture("nonexistant-fake", "src.js")],
-      });
+      const chain = buildConfigChain(
+        {
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          ignore: [fixture("nonexistant-fake", "src.js")],
+          only: [fixture("nonexistant-fake", "src.js")],
+        },
+        DEFAULT_ENV,
+      );
 
       assert.equal(chain, null);
     });
@@ -142,8 +143,8 @@ describe("buildConfigChain", function() {
       it("should not cache the input options by identity", () => {
         const comments = false;
 
-        const chain1 = buildConfigChain({ comments });
-        const chain2 = buildConfigChain({ comments });
+        const chain1 = buildConfigChain({ comments }, DEFAULT_ENV);
+        const chain2 = buildConfigChain({ comments }, DEFAULT_ENV);
 
         assert.equal(chain1.length, 1);
         assert.equal(chain2.length, 1);
@@ -151,15 +152,14 @@ describe("buildConfigChain", function() {
       });
 
       it("should cache the env options by identity", () => {
-        process.env.NODE_ENV = "foo";
         const env = {
           foo: {
             comments: false,
           },
         };
 
-        const chain1 = buildConfigChain({ env });
-        const chain2 = buildConfigChain({ env });
+        const chain1 = buildConfigChain({ env }, "foo");
+        const chain2 = buildConfigChain({ env }, "foo");
 
         assert.equal(chain1.length, 2);
         assert.equal(chain2.length, 2);
@@ -170,8 +170,8 @@ describe("buildConfigChain", function() {
       it("should cache the plugin options by identity", () => {
         const plugins = [];
 
-        const chain1 = buildConfigChain({ plugins });
-        const chain2 = buildConfigChain({ plugins });
+        const chain1 = buildConfigChain({ plugins }, DEFAULT_ENV);
+        const chain2 = buildConfigChain({ plugins }, DEFAULT_ENV);
 
         assert.equal(chain1.length, 1);
         assert.equal(chain2.length, 1);
@@ -181,8 +181,8 @@ describe("buildConfigChain", function() {
       it("should cache the presets options by identity", () => {
         const presets = [];
 
-        const chain1 = buildConfigChain({ presets });
-        const chain2 = buildConfigChain({ presets });
+        const chain1 = buildConfigChain({ presets }, DEFAULT_ENV);
+        const chain2 = buildConfigChain({ presets }, DEFAULT_ENV);
 
         assert.equal(chain1.length, 1);
         assert.equal(chain2.length, 1);
@@ -192,9 +192,15 @@ describe("buildConfigChain", function() {
       it("should not cache the presets options with passPerPreset", () => {
         const presets = [];
 
-        const chain1 = buildConfigChain({ presets });
-        const chain2 = buildConfigChain({ presets, passPerPreset: true });
-        const chain3 = buildConfigChain({ presets, passPerPreset: false });
+        const chain1 = buildConfigChain({ presets }, DEFAULT_ENV);
+        const chain2 = buildConfigChain(
+          { presets, passPerPreset: true },
+          DEFAULT_ENV,
+        );
+        const chain3 = buildConfigChain(
+          { presets, passPerPreset: false },
+          DEFAULT_ENV,
+        );
 
         assert.equal(chain1.length, 1);
         assert.equal(chain2.length, 1);
@@ -229,13 +235,13 @@ describe("buildConfigChain", function() {
           "package.json",
         );
 
-        const chain1 = buildConfigChain({ filename });
-        const chain2 = buildConfigChain({ filename });
+        const chain1 = buildConfigChain({ filename }, DEFAULT_ENV);
+        const chain2 = buildConfigChain({ filename }, DEFAULT_ENV);
 
         touch(pkgJSON);
 
-        const chain3 = buildConfigChain({ filename });
-        const chain4 = buildConfigChain({ filename });
+        const chain3 = buildConfigChain({ filename }, DEFAULT_ENV);
+        const chain4 = buildConfigChain({ filename }, DEFAULT_ENV);
 
         assert.equal(chain1.length, 3);
         assert.equal(chain2.length, 3);
@@ -266,13 +272,13 @@ describe("buildConfigChain", function() {
           ".babelrc",
         );
 
-        const chain1 = buildConfigChain({ filename });
-        const chain2 = buildConfigChain({ filename });
+        const chain1 = buildConfigChain({ filename }, DEFAULT_ENV);
+        const chain2 = buildConfigChain({ filename }, DEFAULT_ENV);
 
         touch(babelrcFile);
 
-        const chain3 = buildConfigChain({ filename });
-        const chain4 = buildConfigChain({ filename });
+        const chain3 = buildConfigChain({ filename }, DEFAULT_ENV);
+        const chain4 = buildConfigChain({ filename }, DEFAULT_ENV);
 
         assert.equal(chain1.length, 3);
         assert.equal(chain2.length, 3);
@@ -303,13 +309,13 @@ describe("buildConfigChain", function() {
           ".babelignore",
         );
 
-        const chain1 = buildConfigChain({ filename });
-        const chain2 = buildConfigChain({ filename });
+        const chain1 = buildConfigChain({ filename }, DEFAULT_ENV);
+        const chain2 = buildConfigChain({ filename }, DEFAULT_ENV);
 
         touch(babelignoreFile);
 
-        const chain3 = buildConfigChain({ filename });
-        const chain4 = buildConfigChain({ filename });
+        const chain3 = buildConfigChain({ filename }, DEFAULT_ENV);
+        const chain4 = buildConfigChain({ filename }, DEFAULT_ENV);
 
         assert.equal(chain1.length, 6);
         assert.equal(chain2.length, 6);
@@ -340,13 +346,11 @@ describe("buildConfigChain", function() {
           ".babelrc.js",
         );
 
-        const chain1 = buildConfigChain({ filename });
-        const chain2 = buildConfigChain({ filename });
+        const chain1 = buildConfigChain({ filename }, DEFAULT_ENV);
+        const chain2 = buildConfigChain({ filename }, DEFAULT_ENV);
 
-        process.env.NODE_ENV = "new-env";
-
-        const chain3 = buildConfigChain({ filename });
-        const chain4 = buildConfigChain({ filename });
+        const chain3 = buildConfigChain({ filename }, "new-env");
+        const chain4 = buildConfigChain({ filename }, "new-env");
 
         assert.equal(chain1.length, 3);
         assert.equal(chain2.length, 3);
@@ -358,7 +362,7 @@ describe("buildConfigChain", function() {
         assert.equal(chain4[1].alias, babelrcFile);
         assert.strictEqual(chain1[1], chain2[1]);
 
-        // Identity changed after changing the NODE_ENV.
+        // Identity changed after changing the envName.
         assert.notStrictEqual(chain3[1], chain1[1]);
         assert.strictEqual(chain3[1], chain4[1]);
       });
@@ -366,9 +370,12 @@ describe("buildConfigChain", function() {
   });
 
   it("dir1", function() {
-    const chain = buildConfigChain({
-      filename: fixture("dir1", "src.js"),
-    });
+    const chain = buildConfigChain(
+      {
+        filename: fixture("dir1", "src.js"),
+      },
+      DEFAULT_ENV,
+    );
 
     const expected = [
       {
@@ -410,9 +417,12 @@ describe("buildConfigChain", function() {
   });
 
   it("dir2", function() {
-    const chain = buildConfigChain({
-      filename: fixture("dir2", "src.js"),
-    });
+    const chain = buildConfigChain(
+      {
+        filename: fixture("dir2", "src.js"),
+      },
+      DEFAULT_ENV,
+    );
 
     const expected = [
       {
@@ -445,9 +455,12 @@ describe("buildConfigChain", function() {
   });
 
   it("dir3", function() {
-    const chain = buildConfigChain({
-      filename: fixture("dir3", "src.js"),
-    });
+    const chain = buildConfigChain(
+      {
+        filename: fixture("dir3", "src.js"),
+      },
+      DEFAULT_ENV,
+    );
 
     const expected = [
       {
@@ -489,9 +502,12 @@ describe("buildConfigChain", function() {
   });
 
   it("env - base", function() {
-    const chain = buildConfigChain({
-      filename: fixture("env", "src.js"),
-    });
+    const chain = buildConfigChain(
+      {
+        filename: fixture("env", "src.js"),
+      },
+      DEFAULT_ENV,
+    );
 
     const expected = [
       {
@@ -532,11 +548,12 @@ describe("buildConfigChain", function() {
   });
 
   it("env - foo", function() {
-    process.env.NODE_ENV = "foo";
-
-    const chain = buildConfigChain({
-      filename: fixture("env", "src.js"),
-    });
+    const chain = buildConfigChain(
+      {
+        filename: fixture("env", "src.js"),
+      },
+      "foo",
+    );
 
     const expected = [
       {
@@ -585,12 +602,12 @@ describe("buildConfigChain", function() {
   });
 
   it("env - bar", function() {
-    process.env.NODE_ENV = "foo"; // overridden
-    process.env.NODE_ENV = "bar";
-
-    const chain = buildConfigChain({
-      filename: fixture("env", "src.js"),
-    });
+    const chain = buildConfigChain(
+      {
+        filename: fixture("env", "src.js"),
+      },
+      "bar",
+    );
 
     const expected = [
       {
@@ -639,11 +656,12 @@ describe("buildConfigChain", function() {
   });
 
   it("env - foo", function() {
-    process.env.NODE_ENV = "foo";
-
-    const chain = buildConfigChain({
-      filename: fixture("pkg", "src.js"),
-    });
+    const chain = buildConfigChain(
+      {
+        filename: fixture("pkg", "src.js"),
+      },
+      "foo",
+    );
 
     const expected = [
       {
@@ -676,9 +694,12 @@ describe("buildConfigChain", function() {
   });
 
   it("js-config", function() {
-    const chain = buildConfigChain({
-      filename: fixture("js-config", "src.js"),
-    });
+    const chain = buildConfigChain(
+      {
+        filename: fixture("js-config", "src.js"),
+      },
+      DEFAULT_ENV,
+    );
 
     const expected = [
       {
@@ -711,9 +732,12 @@ describe("buildConfigChain", function() {
   });
 
   it("js-config-function", function() {
-    const chain = buildConfigChain({
-      filename: fixture("js-config-function", "src.js"),
-    });
+    const chain = buildConfigChain(
+      {
+        filename: fixture("js-config-function", "src.js"),
+      },
+      DEFAULT_ENV,
+    );
 
     const expected = [
       {
@@ -746,9 +770,12 @@ describe("buildConfigChain", function() {
   });
 
   it("js-config-default - should read transpiled export default", function() {
-    const chain = buildConfigChain({
-      filename: fixture("js-config-default", "src.js"),
-    });
+    const chain = buildConfigChain(
+      {
+        filename: fixture("js-config-default", "src.js"),
+      },
+      DEFAULT_ENV,
+    );
 
     const expected = [
       {
@@ -780,9 +807,12 @@ describe("buildConfigChain", function() {
     assert.deepEqual(chain, expected);
   });
   it("js-config-extended", function() {
-    const chain = buildConfigChain({
-      filename: fixture("js-config-extended", "src.js"),
-    });
+    const chain = buildConfigChain(
+      {
+        filename: fixture("js-config-extended", "src.js"),
+      },
+      DEFAULT_ENV,
+    );
 
     const expected = [
       {
@@ -827,9 +857,12 @@ describe("buildConfigChain", function() {
     "json-pkg-config-no-babel - should not throw if" +
       " package.json doesn't contain a `babel` field",
     function() {
-      const chain = buildConfigChain({
-        filename: fixture("json-pkg-config-no-babel", "src.js"),
-      });
+      const chain = buildConfigChain(
+        {
+          filename: fixture("json-pkg-config-no-babel", "src.js"),
+        },
+        DEFAULT_ENV,
+      );
 
       const expected = [
         {
@@ -863,9 +896,12 @@ describe("buildConfigChain", function() {
   );
 
   it("should not ignore file matching negated file pattern", function() {
-    const chain = buildConfigChain({
-      filename: fixture("ignore-negate", "src.js"),
-    });
+    const chain = buildConfigChain(
+      {
+        filename: fixture("ignore-negate", "src.js"),
+      },
+      DEFAULT_ENV,
+    );
 
     const expected = [
       {
@@ -896,17 +932,23 @@ describe("buildConfigChain", function() {
 
     assert.deepEqual(chain, expected);
 
-    const chain2 = buildConfigChain({
-      filename: fixture("ignore-negate", "src2.js"),
-    });
+    const chain2 = buildConfigChain(
+      {
+        filename: fixture("ignore-negate", "src2.js"),
+      },
+      DEFAULT_ENV,
+    );
 
     assert.equal(chain2, null);
   });
 
   it("should not ignore file matching negated folder pattern", function() {
-    const chain = buildConfigChain({
-      filename: fixture("ignore-negate-folder", "folder", "src.js"),
-    });
+    const chain = buildConfigChain(
+      {
+        filename: fixture("ignore-negate-folder", "folder", "src.js"),
+      },
+      DEFAULT_ENV,
+    );
 
     const expected = [
       {
@@ -937,9 +979,12 @@ describe("buildConfigChain", function() {
 
     assert.deepEqual(chain, expected);
 
-    const chain2 = buildConfigChain({
-      filename: fixture("ignore-negate-folder", "src2.js"),
-    });
+    const chain2 = buildConfigChain(
+      {
+        filename: fixture("ignore-negate-folder", "src2.js"),
+      },
+      DEFAULT_ENV,
+    );
 
     assert.equal(chain2, null);
   });
@@ -949,9 +994,12 @@ describe("buildConfigChain", function() {
       " and a .babelrc.js are present",
     function() {
       assert.throws(function() {
-        buildConfigChain({
-          filename: fixture("js-json-config", "src.js"),
-        });
+        buildConfigChain(
+          {
+            filename: fixture("js-json-config", "src.js"),
+          },
+          DEFAULT_ENV,
+        );
       }, /Multiple configuration files found\.(.|\n)*\.babelrc(.|\n)*\.babelrc\.js/);
     },
   );
@@ -961,9 +1009,12 @@ describe("buildConfigChain", function() {
       " and a package.json with a babel field are present",
     function() {
       assert.throws(function() {
-        buildConfigChain({
-          filename: fixture("js-pkg-config", "src.js"),
-        });
+        buildConfigChain(
+          {
+            filename: fixture("js-pkg-config", "src.js"),
+          },
+          DEFAULT_ENV,
+        );
       }, /Multiple configuration files found\.(.|\n)*\.babelrc\.js(.|\n)*package\.json/);
     },
   );
@@ -973,42 +1024,57 @@ describe("buildConfigChain", function() {
       " and a package.json with a babel field are present",
     function() {
       assert.throws(function() {
-        buildConfigChain({
-          filename: fixture("json-pkg-config", "src.js"),
-        });
+        buildConfigChain(
+          {
+            filename: fixture("json-pkg-config", "src.js"),
+          },
+          DEFAULT_ENV,
+        );
       }, /Multiple configuration files found\.(.|\n)*\.babelrc(.|\n)*package\.json/);
     },
   );
 
   it("js-config-error", function() {
     assert.throws(function() {
-      buildConfigChain({
-        filename: fixture("js-config-error", "src.js"),
-      });
+      buildConfigChain(
+        {
+          filename: fixture("js-config-error", "src.js"),
+        },
+        DEFAULT_ENV,
+      );
     }, /Error while loading config/);
   });
 
   it("js-config-error2", function() {
     assert.throws(function() {
-      buildConfigChain({
-        filename: fixture("js-config-error2", "src.js"),
-      });
+      buildConfigChain(
+        {
+          filename: fixture("js-config-error2", "src.js"),
+        },
+        DEFAULT_ENV,
+      );
     }, /Configuration should be an exported JavaScript object/);
   });
 
   it("js-config-error3", function() {
     assert.throws(function() {
-      buildConfigChain({
-        filename: fixture("js-config-error3", "src.js"),
-      });
+      buildConfigChain(
+        {
+          filename: fixture("js-config-error3", "src.js"),
+        },
+        DEFAULT_ENV,
+      );
     }, /Configuration should be an exported JavaScript object/);
   });
 
   it("json-config-error", function() {
     assert.throws(function() {
-      buildConfigChain({
-        filename: fixture("json-config-error", "src.js"),
-      });
+      buildConfigChain(
+        {
+          filename: fixture("json-config-error", "src.js"),
+        },
+        DEFAULT_ENV,
+      );
     }, /Error while parsing config/);
   });
 });
