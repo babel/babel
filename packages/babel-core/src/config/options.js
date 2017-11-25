@@ -17,6 +17,7 @@ import {
 } from "./option-assertions";
 
 const ROOT_VALIDATORS: ValidatorSet = {
+  cwd: (assertString: Validator<$PropertyType<ValidatedOptions, "cwd">>),
   filename: (assertString: Validator<
     $PropertyType<ValidatedOptions, "filename">,
   >),
@@ -128,6 +129,7 @@ const COMMON_VALIDATORS: ValidatorSet = {
 export type InputOptions = ValidatedOptions;
 
 export type ValidatedOptions = {
+  cwd?: string,
   filename?: string,
   filenameRelative?: string,
   babelrc?: boolean,
@@ -205,6 +207,9 @@ export function validate(type: OptionsType, opts: {}): ValidatedOptions {
     }
     if (type !== "arguments" && ROOT_VALIDATORS[key]) {
       throw new Error(`.${key} is only allowed in root programmatic options`);
+    }
+    if (type === "env" && key === "env") {
+      throw new Error(`.${key} is not allowed inside another env block`);
     }
 
     const validator =

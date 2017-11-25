@@ -296,12 +296,6 @@ describe("api", function() {
         development: {
           passPerPreset: true,
           presets: [pushPreset("argthree"), pushPreset("argfour")],
-          env: {
-            development: {
-              passPerPreset: true,
-              presets: [pushPreset("argfive"), pushPreset("argsix")],
-            },
-          },
         },
       },
     });
@@ -327,8 +321,6 @@ describe("api", function() {
         "fourteen;",
         "fifteen;",
         "sixteen;",
-        "argfive;",
-        "argsix;",
         "argthree;",
         "argfour;",
         "seven;",

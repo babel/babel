@@ -1,5 +1,6 @@
 // @flow
 
+import path from "path";
 import * as context from "../index";
 import Plugin, { validatePluginObject } from "./plugin";
 import merge from "lodash/merge";
@@ -45,36 +46,29 @@ class OptionManager {
    *  - `loc` is used to point to the original config.
    *  - `dirname` is used to resolve plugins relative to it.
    */
-
-  mergeOptions(config: MergeOptions, pass?: Array<Plugin>, envName: string) {
+  mergeOptions(config: MergeOptions, pass: Array<Plugin>, envName: string) {
     const result = loadConfig(config);
 
     const plugins = result.plugins.map(descriptor =>
       loadPluginDescriptor(descriptor, envName),
     );
-    const presets = result.presets.map(descriptor =>
-      loadPresetDescriptor(descriptor, envName),
-    );
-
-    const passPerPreset = config.options.passPerPreset;
-    pass = pass || this.passes[0];
+    const presets = result.presets.map(descriptor => ({
+      pass: descriptor.ownPass ? [] : pass,
+      preset: loadPresetDescriptor(descriptor, envName),
+    }));
 
     // resolve presets
     if (presets.length > 0) {
-      let presetPasses = null;
-      if (passPerPreset) {
-        presetPasses = presets.map(() => []);
-        // The passes are created in the same order as the preset list, but are inserted before any
-        // existing additional passes.
-        this.passes.splice(1, 0, ...presetPasses);
-      }
+      // The passes are created in the same order as the preset list, but are inserted before any
+      // existing additional passes.
+      this.passes.splice(
+        1,
+        0,
+        ...presets.map(o => o.pass).filter(p => p !== pass),
+      );
 
-      presets.forEach((presetConfig, i) => {
-        this.mergeOptions(
-          presetConfig,
-          presetPasses ? presetPasses[i] : pass,
-          envName,
-        );
+      presets.forEach(({ preset, pass }) => {
+        this.mergeOptions(preset, pass, envName);
       });
     }
 
@@ -103,14 +97,15 @@ class OptionManager {
   init(inputOpts: {}) {
     const args = validate("arguments", inputOpts);
 
-    const { envName = getEnv() } = args;
+    const { envName = getEnv(), cwd = "." } = args;
+    const absoluteCwd = path.resolve(cwd);
 
-    const configChain = buildConfigChain(args, envName);
+    const configChain = buildConfigChain(absoluteCwd, args, envName);
     if (!configChain) return null;
 
     try {
       for (const config of configChain) {
-        this.mergeOptions(config, undefined, envName);
+        this.mergeOptions(config, this.passes[0], envName);
       }
     } catch (e) {
       // There are a few case where thrown errors will try to annotate themselves multiple times, so
@@ -134,6 +129,7 @@ class OptionManager {
       .map(plugins => ({ plugins }));
     opts.passPerPreset = opts.presets.length > 0;
     opts.envName = envName;
+    opts.cwd = absoluteCwd;
 
     return {
       options: opts,
@@ -147,6 +143,7 @@ type BasicDescriptor = {
   options: {} | void,
   dirname: string,
   alias: string,
+  ownPass?: boolean,
 };
 
 type LoadedDescriptor = {
@@ -177,6 +174,7 @@ const loadConfig = makeWeakCache((config: MergeOptions): {
     createDescriptor(preset, loadPreset, config.dirname, {
       index,
       alias: config.alias,
+      ownPass: config.options.passPerPreset,
     }),
   );
 
@@ -320,9 +318,11 @@ function createDescriptor(
   {
     index,
     alias,
+    ownPass,
   }: {
     index: number,
     alias: string,
+    ownPass?: boolean,
   },
 ): BasicDescriptor {
   let options;
@@ -363,18 +363,12 @@ function createDescriptor(
     );
   }
 
-  if (options != null && typeof options !== "object") {
-    throw new Error(
-      "Plugin/Preset options must be an object, null, or undefined",
-    );
-  }
-  options = options || undefined;
-
   return {
     alias: filepath || `${alias}$${index}`,
     value,
     options,
     dirname,
+    ownPass,
   };
 }
 
