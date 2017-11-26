@@ -83,6 +83,8 @@ class OptionManager {
     delete options.plugins;
     delete options.presets;
     delete options.passPerPreset;
+    delete options.ignore;
+    delete options.only;
 
     // "sourceMap" is just aliased to sourceMap, so copy it over as
     // we merge the options together.
