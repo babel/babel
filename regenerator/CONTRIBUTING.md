@@ -5,6 +5,9 @@ here. Facebook employees who contribute to Regenerator are expected to do
 so in the same way as everyone else. In other words, this document applies
 equally to all contributors.
 
+### Code of Conduct
+The code of conduct is described in [`CODE_OF_CONDUCT.md`](CODE_OF_CONDUCT.md)
+
 ### `master` is unsafe
 
 We will do our best to keep `master` in good shape, with tests passing at
