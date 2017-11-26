@@ -6,6 +6,7 @@ import convertSourceMap, { typeof Converter } from "convert-source-map";
 import { parse } from "babylon";
 import { codeFrameColumns } from "@babel/code-frame";
 import File from "./file/file";
+import generateHelpMessage from "./util/missing-plugin-helper";
 
 const shebangRegex = /^#!.*/;
 
@@ -102,7 +103,8 @@ function parser(pluginPasses, options, code) {
             },
           },
           options,
-        );
+        ) +
+        `\n${generateHelpMessage(err.missingPlugin)}`;
     }
     throw err;
   }
