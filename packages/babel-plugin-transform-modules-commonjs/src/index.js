@@ -3,7 +3,6 @@ import {
   rewriteModuleStatementsAndPrepareHeader,
   isSideEffectImport,
   buildNamespaceInitStatements,
-  buildReexportsFromMeta,
   ensureStatementsHoisted,
   wrapInterop,
 } from "@babel/helper-module-transforms";
@@ -143,18 +142,11 @@ export default function(api, options) {
               ]);
             }
             header.loc = metadata.loc;
-            if (!loose) {
-              headers.push(...buildReexportsFromMeta(meta, metadata, loose));
-            }
 
             headers.push(header);
             headers.push(
               ...buildNamespaceInitStatements(meta, metadata, loose),
             );
-
-            if (loose) {
-              headers.push(...buildReexportsFromMeta(meta, metadata, loose));
-            }
           }
 
           ensureStatementsHoisted(headers);

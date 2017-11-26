@@ -128,6 +128,9 @@ export function buildNamespaceInitStatements(
       }),
     );
   }
+  if (loose) {
+    statements.push(...buildReexportsFromMeta(metadata, sourceMetadata, loose));
+  }
   for (const exportName of sourceMetadata.reexportNamespace) {
     // Assign export to namespace object.
     statements.push(
@@ -279,6 +282,7 @@ function buildExportNameListDeclaration(
 function buildExportInitializationStatements(
   programPath: NodePath,
   metadata: ModuleMetadata,
+  loose: boolean = false,
 ) {
   const initStatements = [];
 
@@ -296,6 +300,9 @@ function buildExportInitializationStatements(
   }
 
   for (const data of metadata.source.values()) {
+    if (!loose) {
+      initStatements.push(...buildReexportsFromMeta(metadata, data, loose));
+    }
     for (const exportName of data.reexportNamespace) {
       exportNames.push(exportName);
     }
