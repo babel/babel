@@ -38,9 +38,13 @@ export function NullableTypeAnnotation(node: Object, parent: Object): boolean {
 export { NullableTypeAnnotation as FunctionTypeAnnotation };
 
 export function UpdateExpression(node: Object, parent: Object): boolean {
-  // (foo++).test()
   return (
-    (t.isMemberExpression(parent) && parent.object === node) ||
+    // (foo++).test(), (foo++)[0]
+    t.isMemberExpression(parent, { object: node }) ||
+    // (foo++)()
+    t.isCallExpression(parent, { callee: node }) ||
+    // new (foo++)()
+    t.isNewExpression(parent, { callee: node }) ||
     isClassExtendsClause(node, parent)
   );
 }
