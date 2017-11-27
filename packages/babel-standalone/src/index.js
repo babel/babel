@@ -137,6 +137,8 @@ export function registerPresets(newPresets) {
 }
 
 // All the plugins we should bundle
+// Want to get rid of this long whitelist of plugins?
+// Wait! Please read https://github.com/babel/babel/pull/6177 first.
 registerPlugins({
   "check-constants": require("@babel/plugin-check-constants"),
   "external-helpers": require("@babel/plugin-external-helpers"),
@@ -208,6 +210,8 @@ registerPlugins({
 });
 
 // All the presets we should bundle
+// Want to get rid of this whitelist of presets?
+// Wait! Please read https://github.com/babel/babel/pull/6177 first.
 registerPresets({
   es2015: require("@babel/preset-es2015"),
   es2016: require("@babel/preset-es2016"),
