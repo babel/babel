@@ -121,6 +121,11 @@ exports.hoist = function(funPath) {
     FunctionExpression: function(path) {
       // Don't descend into nested function expressions.
       path.skip();
+    },
+
+    ArrowFunctionExpression: function(path) {
+      // Don't descend into nested function expressions.
+      path.skip();
     }
   });
 
