@@ -155,28 +155,29 @@ export function buildNamespaceInitStatements(
   return statements;
 }
 
+const getTemplateForReexport = loose => {
+  return loose
+    ? template.statement`EXPORTS.EXPORT_NAME = NAMESPACE.IMPORT_NAME;`
+    : template`
+      Object.defineProperty(EXPORTS, "EXPORT_NAME", {
+        enumerable: true,
+        get: function() {
+          return NAMESPACE.IMPORT_NAME;
+        },
+      });
+    `;
+};
+
 export function buildReexportsFromMeta(meta, metadata, loose) {
-  const reexports = [];
-  for (const [exportName, importName] of metadata.reexports) {
-    reexports.push(
-      (loose
-        ? template.statement`EXPORTS.EXPORT_NAME = NAMESPACE.IMPORT_NAME;`
-        : template`
-          Object.defineProperty(EXPORTS, "EXPORT_NAME", {
-            enumerable: true,
-            get: function() {
-              return NAMESPACE.IMPORT_NAME;
-            },
-          });
-        `)({
-        EXPORTS: meta.exportName,
-        EXPORT_NAME: exportName,
-        NAMESPACE: metadata.name,
-        IMPORT_NAME: importName,
-      }),
-    );
-  }
-  return reexports;
+  const templateForCurrentMode = getTemplateForReexport(loose);
+  return Array.from(metadata.reexports).map(([exportName, importName]) =>
+    templateForCurrentMode({
+      EXPORTS: meta.exportName,
+      EXPORT_NAME: exportName,
+      NAMESPACE: metadata.name,
+      IMPORT_NAME: importName,
+    }),
+  );
 }
 
 /**
