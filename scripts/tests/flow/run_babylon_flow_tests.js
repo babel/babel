@@ -107,7 +107,7 @@ const options = {
 const flowOptionsMapping = {
   esproposal_class_instance_fields: "classProperties",
   esproposal_class_static_fields: "classProperties",
-  esproposal_export_star_as: "exportExtensions",
+  esproposal_export_star_as: "exportNamespace",
   esproposal_decorators: "decorators",
 };
 
