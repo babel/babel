@@ -8,9 +8,26 @@
  * the same directory.
  */
 
-import * as t from "babel-types";
+let currentTypes = null;
+
+export function wrapWithTypes(types, fn) {
+  return function (...args) {
+    const oldTypes = currentTypes;
+    currentTypes = types;
+    try {
+      return fn.apply(this, args);
+    } finally {
+      currentTypes = oldTypes;
+    }
+  };
+}
+
+export function getTypes() {
+  return currentTypes;
+}
 
 export function runtimeProperty(name) {
+  const t = getTypes();
   return t.memberExpression(
     t.identifier("regeneratorRuntime"),
     t.identifier(name),

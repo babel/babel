@@ -8,7 +8,6 @@
  * the same directory.
  */
 
-import * as t from "babel-types";
 import * as util from "./util";
 let hasOwn = Object.prototype.hasOwnProperty;
 
@@ -17,6 +16,7 @@ let hasOwn = Object.prototype.hasOwnProperty;
 // returns a VariableDeclaration containing just the names of the removed
 // declarations.
 exports.hoist = function(funPath) {
+  const t = util.getTypes();
   t.assertFunction(funPath.node);
 
   let vars = {};

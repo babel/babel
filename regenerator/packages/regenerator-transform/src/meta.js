@@ -9,12 +9,13 @@
  */
 
 import assert from "assert";
+import { getTypes } from "./util.js";
 let m = require("private").makeAccessor();
-import * as t from "babel-types";
 let hasOwn = Object.prototype.hasOwnProperty;
 
 function makePredicate(propertyName, knownTypes) {
   function onlyChildren(node) {
+    const t = getTypes();
     t.assertNode(node);
 
     // Assume no side effects until we find out otherwise.
@@ -45,7 +46,7 @@ function makePredicate(propertyName, knownTypes) {
   }
 
   function predicate(node) {
-    t.assertNode(node);
+    getTypes().assertNode(node);
 
     let meta = m(node);
     if (hasOwn.call(meta, propertyName))

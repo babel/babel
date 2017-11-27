@@ -10,7 +10,7 @@
 
 export default function (context) {
   const plugin = {
-    visitor: require("./visit").visitor,
+    visitor: require("./visit").getVisitor(context),
   };
 
   // Some presets manually call child presets, but fail to pass along the

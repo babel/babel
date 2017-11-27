@@ -9,7 +9,6 @@
  */
 
 import assert from "assert";
-import * as t from "babel-types";
 import * as leap from "./leap";
 import * as meta from "./meta";
 import * as util from "./util";
@@ -18,7 +17,8 @@ let hasOwn = Object.prototype.hasOwnProperty;
 
 function Emitter(contextId) {
   assert.ok(this instanceof Emitter);
-  t.assertIdentifier(contextId);
+
+  util.getTypes().assertIdentifier(contextId);
 
   // Used to generate unique temporary names.
   this.nextTempId = 0;
@@ -59,13 +59,13 @@ exports.Emitter = Emitter;
 // location to be determined at any time, even after generating code that
 // refers to the location.
 function loc() {
-  return t.numericLiteral(-1);
+  return util.getTypes().numericLiteral(-1);
 }
 
 // Sets the exact value of the given location to the offset of the next
 // Statement emitted.
 Ep.mark = function(loc) {
-  t.assertLiteral(loc);
+  util.getTypes().assertLiteral(loc);
   let index = this.listing.length;
   if (loc.value === -1) {
     loc.value = index;
@@ -79,6 +79,8 @@ Ep.mark = function(loc) {
 };
 
 Ep.emit = function(node) {
+  const t = util.getTypes();
+
   if (t.isExpression(node)) {
     node = t.expressionStatement(node);
   }
@@ -96,6 +98,7 @@ Ep.emitAssign = function(lhs, rhs) {
 
 // Shorthand for an assignment statement.
 Ep.assign = function(lhs, rhs) {
+  const t = util.getTypes();
   return t.expressionStatement(
     t.assignmentExpression("=", lhs, rhs));
 };
@@ -103,6 +106,7 @@ Ep.assign = function(lhs, rhs) {
 // Convenience function for generating expressions like context.next,
 // context.sent, and context.rval.
 Ep.contextProperty = function(name, computed) {
+  const t = util.getTypes();
   return t.memberExpression(
     this.contextId,
     computed ? t.stringLiteral(name) : t.identifier(name),
@@ -120,7 +124,7 @@ Ep.stop = function(rval) {
 };
 
 Ep.setReturnValue = function(valuePath) {
-  t.assertExpression(valuePath.value);
+  util.getTypes().assertExpression(valuePath.value);
 
   this.emitAssign(
     this.contextProperty("rval"),
@@ -129,6 +133,8 @@ Ep.setReturnValue = function(valuePath) {
 };
 
 Ep.clearPendingException = function(tryLoc, assignee) {
+  const t = util.getTypes();
+
   t.assertLiteral(tryLoc);
 
   let catchCall = t.callExpression(
@@ -147,11 +153,13 @@ Ep.clearPendingException = function(tryLoc, assignee) {
 // exact value of the location is not yet known.
 Ep.jump = function(toLoc) {
   this.emitAssign(this.contextProperty("next"), toLoc);
-  this.emit(t.breakStatement());
+  this.emit(util.getTypes().breakStatement());
 };
 
 // Conditional jump.
 Ep.jumpIf = function(test, toLoc) {
+  const t = util.getTypes();
+
   t.assertExpression(test);
   t.assertLiteral(toLoc);
 
@@ -166,6 +174,8 @@ Ep.jumpIf = function(test, toLoc) {
 
 // Conditional jump, with the condition negated.
 Ep.jumpIfNot = function(test, toLoc) {
+  const t = util.getTypes();
+
   t.assertExpression(test);
   t.assertLiteral(toLoc);
 
@@ -197,6 +207,8 @@ Ep.makeTempVar = function() {
 };
 
 Ep.getContextFunction = function(id) {
+  const t = util.getTypes();
+
   return t.functionExpression(
     id || null/*Anonymous*/,
     [this.contextId],
@@ -218,7 +230,8 @@ Ep.getContextFunction = function(id) {
 // Each marked location in this.listing will correspond to one generated
 // case statement.
 Ep.getDispatchLoop = function() {
-  let self = this;
+  const self = this;
+  const t = util.getTypes();
   let cases = [];
   let current;
 
@@ -280,6 +293,7 @@ Ep.getTryLocsList = function() {
     return null;
   }
 
+  const t = util.getTypes();
   let lastLocValue = 0;
 
   return t.arrayExpression(
@@ -315,6 +329,7 @@ Ep.getTryLocsList = function() {
 // No destructive modification of AST nodes.
 
 Ep.explode = function(path, ignoreResult) {
+  const t = util.getTypes();
   let node = path.node;
   let self = this;
 
@@ -362,6 +377,7 @@ function getDeclError(node) {
 }
 
 Ep.explodeStatement = function(path, labelId) {
+  const t = util.getTypes();
   let stmt = path.node;
   let self = this;
   let before, after, head;
@@ -776,6 +792,7 @@ Ep.emitAbruptCompletion = function(record) {
     "normal completions are not abrupt"
   );
 
+  const t = util.getTypes();
   let abruptArgs = [t.stringLiteral(record.type)];
 
   if (record.type === "break" ||
@@ -810,7 +827,7 @@ function isValidCompletion(record) {
   if (type === "break" ||
       type === "continue") {
     return !hasOwn.call(record, "value")
-        && t.isLiteral(record.target);
+        && util.getTypes().isLiteral(record.target);
   }
 
   if (type === "return" ||
@@ -833,7 +850,7 @@ function isValidCompletion(record) {
 // targets, but minimizing the number of switch cases keeps the generated
 // code shorter.
 Ep.getUnmarkedCurrentLoc = function() {
-  return t.numericLiteral(this.listing.length);
+  return util.getTypes().numericLiteral(this.listing.length);
 };
 
 // The context.prev property takes the value of context.next whenever we
@@ -848,7 +865,7 @@ Ep.getUnmarkedCurrentLoc = function() {
 // be costly and verbose to set context.prev before every statement.
 Ep.updateContextPrevLoc = function(loc) {
   if (loc) {
-    t.assertLiteral(loc);
+    util.getTypes().assertLiteral(loc);
 
     if (loc.value === -1) {
       // If an uninitialized location literal was passed in, set its value
@@ -870,6 +887,7 @@ Ep.updateContextPrevLoc = function(loc) {
 };
 
 Ep.explodeExpression = function(path, ignoreResult) {
+  const t = util.getTypes();
   let expr = path.node;
   if (expr) {
     t.assertExpression(expr);
