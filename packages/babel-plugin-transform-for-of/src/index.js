@@ -1,7 +1,7 @@
 import { template, types as t } from "@babel/core";
 
 export default function(api, options) {
-  const { loose, forOfAsArray: isForOfAsArray } = options;
+  const { loose, assumeArray } = options;
   const pushComputedProps = loose
     ? pushComputedPropsLoose
     : pushComputedPropsSpec;
@@ -307,7 +307,7 @@ export default function(api, options) {
     },
   };
 
-  const visitor = isForOfAsArray ? forOfAsArray : defaultForOf;
+  const visitor = assumeArray ? forOfAsArray : defaultForOf;
 
   return {
     visitor,
