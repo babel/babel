@@ -170,7 +170,7 @@ const getTemplateForReexport = loose => {
 
 export function buildReexportsFromMeta(meta, metadata, loose) {
   const templateForCurrentMode = getTemplateForReexport(loose);
-  return Array.from(metadata.reexports).map(([exportName, importName]) =>
+  return Array.from(metadata.reexports, ([exportName, importName]) =>
     templateForCurrentMode({
       EXPORTS: meta.exportName,
       EXPORT_NAME: exportName,
