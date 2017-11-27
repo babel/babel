@@ -168,7 +168,7 @@ const getTemplateForReexport = loose => {
     `;
 };
 
-export function buildReexportsFromMeta(meta, metadata, loose) {
+const buildReexportsFromMeta = (meta, metadata, loose) => {
   const templateForCurrentMode = getTemplateForReexport(loose);
   return Array.from(metadata.reexports, ([exportName, importName]) =>
     templateForCurrentMode({
@@ -178,7 +178,7 @@ export function buildReexportsFromMeta(meta, metadata, loose) {
       IMPORT_NAME: importName,
     }),
   );
-}
+};
 
 /**
  * Build an "__esModule" header statement setting the property on a given object.
