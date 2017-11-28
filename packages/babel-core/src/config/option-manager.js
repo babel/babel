@@ -30,13 +30,9 @@ export default function manageOptions(opts: {}): {
 }
 
 class OptionManager {
-  constructor() {
-    this.options = {};
-    this.passes = [[]];
-  }
-
-  options: ValidatedOptions;
-  passes: Array<Array<Plugin>>;
+  optionDefaults: ValidatedOptions = {};
+  options: ValidatedOptions = {};
+  passes: Array<Array<Plugin>> = [[]];
 
   /**
    * This is called when we want to merge the input `opts` into the
@@ -46,16 +42,23 @@ class OptionManager {
    *  - `loc` is used to point to the original config.
    *  - `dirname` is used to resolve plugins relative to it.
    */
-  mergeOptions(config: MergeOptions, pass: Array<Plugin>, envName: string) {
-    const result = loadConfig(config);
-
-    const plugins = result.plugins.map(descriptor =>
+  mergeOptions(
+    config: {
+      plugins: Array<BasicDescriptor>,
+      presets: Array<BasicDescriptor>,
+    },
+    pass: Array<Plugin>,
+    envName: string,
+  ) {
+    const plugins = config.plugins.map(descriptor =>
       loadPluginDescriptor(descriptor, envName),
     );
-    const presets = result.presets.map(descriptor => ({
-      pass: descriptor.ownPass ? [] : pass,
-      preset: loadPresetDescriptor(descriptor, envName),
-    }));
+    const presets = config.presets.map(descriptor => {
+      return {
+        preset: loadPresetDescriptor(descriptor, envName),
+        pass: descriptor.ownPass ? [] : pass,
+      };
+    });
 
     // resolve presets
     if (presets.length > 0) {
@@ -68,7 +71,18 @@ class OptionManager {
       );
 
       presets.forEach(({ preset, pass }) => {
-        this.mergeOptions(preset, pass, envName);
+        const loadedConfig = loadConfig(preset);
+        this.mergeOptions(
+          {
+            // Call dedupDescriptors() to remove 'false' descriptors.
+            plugins: dedupDescriptors(loadedConfig.plugins),
+            presets: dedupDescriptors(loadedConfig.presets),
+          },
+          pass,
+          envName,
+        );
+
+        merge(this.optionDefaults, normalizeOptions(loadedConfig.options));
       });
     }
 
@@ -76,24 +90,23 @@ class OptionManager {
     if (plugins.length > 0) {
       pass.unshift(...plugins);
     }
+  }
 
-    const options = Object.assign({}, result.options);
-    delete options.extends;
-    delete options.env;
-    delete options.plugins;
-    delete options.presets;
-    delete options.passPerPreset;
-    delete options.ignore;
-    delete options.only;
+  mergeConfigChain(chain: $ReadOnlyArray<MergeOptions>, envName: string) {
+    const config = dedupLoadedConfigs(chain.map(config => loadConfig(config)));
 
-    // "sourceMap" is just aliased to sourceMap, so copy it over as
-    // we merge the options together.
-    if (options.sourceMap) {
-      options.sourceMaps = options.sourceMap;
-      delete options.sourceMap;
-    }
+    this.mergeOptions(
+      {
+        plugins: config.plugins,
+        presets: config.presets,
+      },
+      this.passes[0],
+      envName,
+    );
 
-    merge(this.options, options);
+    config.options.forEach(opts => {
+      merge(this.options, normalizeOptions(opts));
+    });
   }
 
   init(inputOpts: {}) {
@@ -106,9 +119,7 @@ class OptionManager {
     if (!configChain) return null;
 
     try {
-      for (const config of configChain) {
-        this.mergeOptions(config, this.passes[0], envName);
-      }
+      this.mergeConfigChain(configChain, envName);
     } catch (e) {
       // There are a few case where thrown errors will try to annotate themselves multiple times, so
       // to keep things simple we just bail out if re-wrapping the message.
@@ -119,7 +130,7 @@ class OptionManager {
       throw e;
     }
 
-    const opts: Object = this.options;
+    const opts: Object = merge(this.optionDefaults, this.options);
 
     // Tack the passes onto the object itself so that, if this object is passed back to Babel a second time,
     // it will be in the right structure to not change behavior.
@@ -140,9 +151,29 @@ class OptionManager {
   }
 }
 
+function normalizeOptions(opts: ValidatedOptions): ValidatedOptions {
+  const options = Object.assign({}, opts);
+  delete options.extends;
+  delete options.env;
+  delete options.plugins;
+  delete options.presets;
+  delete options.passPerPreset;
+  delete options.ignore;
+  delete options.only;
+
+  // "sourceMap" is just aliased to sourceMap, so copy it over as
+  // we merge the options together.
+  if (options.sourceMap) {
+    options.sourceMaps = options.sourceMap;
+    delete options.sourceMap;
+  }
+  return options;
+}
+
 type BasicDescriptor = {
+  name: string | void,
   value: {} | Function,
-  options: {} | void,
+  options: {} | void | false,
   dirname: string,
   alias: string,
   ownPass?: boolean,
@@ -155,14 +186,16 @@ type LoadedDescriptor = {
   alias: string,
 };
 
+type LoadedConfig = {
+  options: ValidatedOptions,
+  plugins: Array<BasicDescriptor>,
+  presets: Array<BasicDescriptor>,
+};
+
 /**
  * Load and validate the given config into a set of options, plugins, and presets.
  */
-const loadConfig = makeWeakCache((config: MergeOptions): {
-  options: {},
-  plugins: Array<BasicDescriptor>,
-  presets: Array<BasicDescriptor>,
-} => {
+const loadConfig = makeWeakCache((config: MergeOptions): LoadedConfig => {
   const options = config.options;
 
   const plugins = (config.options.plugins || []).map((plugin, index) =>
@@ -172,25 +205,133 @@ const loadConfig = makeWeakCache((config: MergeOptions): {
     }),
   );
 
+  assertNoDuplicates(plugins);
+
   const presets = (config.options.presets || []).map((preset, index) =>
     createDescriptor(preset, loadPreset, config.dirname, {
       index,
       alias: config.alias,
-      ownPass: config.options.passPerPreset,
+      ownPass: options.passPerPreset,
     }),
   );
 
+  assertNoDuplicates(presets);
+
   return { options, plugins, presets };
 });
+
+function assertNoDuplicates(items: Array<BasicDescriptor>): void {
+  const map = new Map();
+
+  for (const item of items) {
+    if (typeof item.value !== "function") continue;
+
+    let nameMap = map.get(item.value);
+    if (!nameMap) {
+      nameMap = new Set();
+      map.set(item.value, nameMap);
+    }
+
+    if (nameMap.has(item.name)) {
+      throw new Error(
+        [
+          `Duplicate plugin/preset detected.`,
+          `If you'd like to use two separate instances of a plugin,`,
+          `they neen separate names, e.g.`,
+          ``,
+          `  plugins: [`,
+          `    ['some-plugin', {}],`,
+          `    ['some-plugin', {}, 'some unique name'],`,
+          `  ]`,
+        ].join("\n"),
+      );
+    }
+
+    nameMap.add(item.name);
+  }
+}
+
+function dedupLoadedConfigs(
+  items: Array<LoadedConfig>,
+): {
+  plugins: Array<BasicDescriptor>,
+  presets: Array<BasicDescriptor>,
+  options: Array<ValidatedOptions>,
+} {
+  const options = [];
+  const plugins = [];
+  const presets = [];
+
+  for (const item of items) {
+    plugins.push(...item.plugins);
+    presets.push(...item.presets);
+    options.push(item.options);
+  }
+
+  return {
+    options,
+    plugins: dedupDescriptors(plugins),
+    presets: dedupDescriptors(presets),
+  };
+}
+
+function dedupDescriptors(
+  items: Array<BasicDescriptor>,
+): Array<BasicDescriptor> {
+  const map: Map<
+    Function,
+    Map<string | void, { value: BasicDescriptor | null }>,
+  > = new Map();
+
+  const descriptors = [];
+
+  for (const item of items) {
+    if (typeof item.value === "function") {
+      const fnKey = item.value;
+      let nameMap = map.get(fnKey);
+      if (!nameMap) {
+        nameMap = new Map();
+        map.set(fnKey, nameMap);
+      }
+      let desc = nameMap.get(item.name);
+      if (!desc) {
+        desc = { value: null };
+        descriptors.push(desc);
+
+        // Treat passPerPreset presets as unique, skipping them
+        // in the merge processing steps.
+        if (!item.ownPass) nameMap.set(item.name, desc);
+      }
+
+      if (item.options === false) {
+        desc.value = null;
+      } else {
+        desc.value = item;
+      }
+    } else {
+      descriptors.push({ value: item });
+    }
+  }
+
+  return descriptors.reduce((acc, desc) => {
+    if (desc.value) acc.push(desc.value);
+    return acc;
+  }, []);
+}
 
 /**
  * Load a generic plugin/preset from the given descriptor loaded from the config object.
  */
 const loadDescriptor = makeWeakCache(
   (
-    { value, options = {}, dirname, alias }: BasicDescriptor,
+    { value, options, dirname, alias }: BasicDescriptor,
     cache: CacheConfigurator<{ envName: string }>,
   ): LoadedDescriptor => {
+    // Disabled presets should already have been filtered out
+    if (options === false) throw new Error("Assertion failure");
+
+    options = options || {};
+
     let item = value;
     if (typeof value === "function") {
       const api = Object.assign(Object.create(context), {
@@ -262,6 +403,7 @@ const instantiatePlugin = makeWeakCache(
 
     if (plugin.inherits) {
       const inheritsDescriptor = {
+        name: undefined,
         alias: `${alias}$inherits`,
         value: plugin.inherits,
         options,
@@ -327,10 +469,16 @@ function createDescriptor(
     ownPass?: boolean,
   },
 ): BasicDescriptor {
+  let name;
   let options;
   let value = pair;
   if (Array.isArray(value)) {
-    [value, options] = value;
+    if (value.length === 3) {
+      // $FlowIgnore - Flow doesn't like the multiple tuple types.
+      [value, options, name] = value;
+    } else {
+      [value, options] = value;
+    }
   }
 
   let filepath = null;
@@ -366,6 +514,7 @@ function createDescriptor(
   }
 
   return {
+    name,
     alias: filepath || `${alias}$${index}`,
     value,
     options,

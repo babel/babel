@@ -146,16 +146,31 @@ function assertPluginItem(
     if (value.length === 0) {
       throw new Error(`.${key}[${index}] must include an object`);
     }
-    if (value.length > 2) {
-      throw new Error(`.${key}[${index}] may only be a two-tuple`);
+
+    if (value.length > 3) {
+      throw new Error(
+        `.${key}[${index}] may only be a two-tuple or three-tuple`,
+      );
     }
 
     assertPluginTarget(key, index, true, value[0]);
 
-    if (value.length === 2) {
+    if (value.length > 1) {
       const opts = value[1];
-      if (opts != null && (typeof opts !== "object" || Array.isArray(opts))) {
-        throw new Error(`.${key}[${index}][1] must be an object, or undefined`);
+      if (
+        opts !== undefined &&
+        opts !== false &&
+        (typeof opts !== "object" || Array.isArray(opts))
+      ) {
+        throw new Error(
+          `.${key}[${index}][1] must be an object, false, or undefined`,
+        );
+      }
+    }
+    if (value.length === 3) {
+      const name = value[2];
+      if (name !== undefined && typeof name !== "string") {
+        throw new Error(`.${key}[${index}][2] must be a string, or undefined`);
       }
     }
   } else {
