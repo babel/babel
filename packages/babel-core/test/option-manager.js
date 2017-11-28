@@ -1,11 +1,11 @@
 import assert from "assert";
-import manageOptions from "../lib/config/option-manager";
+import { loadOptions } from "../lib";
 import path from "path";
 
 describe("option-manager", () => {
   it("throws for babel 5 plugin", () => {
     return assert.throws(() => {
-      manageOptions({
+      loadOptions({
         plugins: [({ Plugin }) => new Plugin("object-assign", {})],
       });
     }, /Babel 5 plugin is being run with an unsupported Babel/);
@@ -25,7 +25,7 @@ describe("option-manager", () => {
       const { calls, plugin } = makePlugin();
 
       assert.throws(() => {
-        manageOptions({
+        loadOptions({
           plugins: [plugin, plugin],
         });
       }, /Duplicate plugin\/preset detected/);
@@ -36,7 +36,7 @@ describe("option-manager", () => {
       const { calls: calls1, plugin: plugin1 } = makePlugin();
       const { calls: calls2, plugin: plugin2 } = makePlugin();
 
-      manageOptions({
+      loadOptions({
         plugins: [[plugin1, { arg: 1 }], [plugin2, { arg: 2 }, "some-name"]],
       });
       assert.deepEqual(calls1, [{ arg: 1 }]);
@@ -47,7 +47,7 @@ describe("option-manager", () => {
       const { calls: calls1, plugin: plugin1 } = makePlugin();
       const { calls: calls2, plugin: plugin2 } = makePlugin();
 
-      manageOptions({
+      loadOptions({
         envName: "test",
         plugins: [[plugin1, { arg: 1 }]],
         env: {
@@ -64,7 +64,7 @@ describe("option-manager", () => {
       const { calls, plugin: preset } = makePlugin();
 
       assert.throws(() => {
-        manageOptions({
+        loadOptions({
           presets: [preset, preset],
         });
       }, /Duplicate plugin\/preset detected/);
@@ -75,7 +75,7 @@ describe("option-manager", () => {
       const { calls: calls1, plugin: preset1 } = makePlugin();
       const { calls: calls2, plugin: preset2 } = makePlugin();
 
-      manageOptions({
+      loadOptions({
         presets: [[preset1, { arg: 1 }], [preset2, { arg: 2 }, "some-name"]],
       });
       assert.deepEqual(calls1, [{ arg: 1 }]);
@@ -86,7 +86,7 @@ describe("option-manager", () => {
       const { calls: calls1, plugin: preset1 } = makePlugin();
       const { calls: calls2, plugin: preset2 } = makePlugin();
 
-      manageOptions({
+      loadOptions({
         envName: "test",
         presets: [[preset1, { arg: 1 }]],
         env: {
@@ -103,7 +103,7 @@ describe("option-manager", () => {
       const { calls: calls1, plugin: preset1 } = makePlugin();
       const { calls: calls2, plugin: preset2 } = makePlugin();
 
-      manageOptions({
+      loadOptions({
         envName: "test",
         passPerPreset: true,
         presets: [[preset1, { arg: 1 }]],
@@ -121,7 +121,7 @@ describe("option-manager", () => {
   describe("mergeOptions", () => {
     it("throws for removed babel 5 options", () => {
       return assert.throws(() => {
-        manageOptions({
+        loadOptions({
           randomOption: true,
         });
       }, /Unknown option: .randomOption/);
@@ -130,7 +130,7 @@ describe("option-manager", () => {
     it("throws for removed babel 5 options", () => {
       return assert.throws(
         () => {
-          manageOptions({
+          loadOptions({
             auxiliaryComment: true,
             blacklist: true,
           });
@@ -142,7 +142,7 @@ describe("option-manager", () => {
 
     it("throws for resolved but erroring preset", () => {
       return assert.throws(() => {
-        manageOptions({
+        loadOptions({
           presets: [
             path.join(__dirname, "fixtures/option-manager/not-a-preset"),
           ],
@@ -154,7 +154,7 @@ describe("option-manager", () => {
   describe("presets", function() {
     function presetTest(name) {
       it(name, function() {
-        const { options, passes } = manageOptions({
+        const options = loadOptions({
           presets: [
             path.join(__dirname, "fixtures/option-manager/presets", name),
           ],
@@ -162,8 +162,7 @@ describe("option-manager", () => {
 
         assert.equal(true, Array.isArray(options.plugins));
         assert.equal(1, options.plugins.length);
-        assert.equal(1, passes.length);
-        assert.equal(1, passes[0].length);
+        assert.equal(0, options.presets.length);
       });
     }
 
@@ -171,7 +170,7 @@ describe("option-manager", () => {
       it(name, function() {
         assert.throws(
           () =>
-            manageOptions({
+            loadOptions({
               presets: [
                 path.join(__dirname, "fixtures/option-manager/presets", name),
               ],
