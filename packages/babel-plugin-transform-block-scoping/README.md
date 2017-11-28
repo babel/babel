@@ -73,6 +73,7 @@ require("@babel/core").transform("code", {
 ## Options
 
 ### `throwIfClosureRequired`
+`boolean`, defaults to `false`.
 
 In cases such as the following it's impossible to rewrite let/const without adding an additional function and closure while transforming:
 
@@ -85,6 +86,7 @@ for (let i = 0; i < 5; i++) {
 In extremely performance-sensitive code, this can be undesirable. If `"throwIfClosureRequired": true` is set, Babel throws when transforming these patterns instead of automatically adding an additional function.
 
 ### `tdz`
+`boolean`, defaults to `false`.
 
 By default this plugin will ignore the *temporal dead zone (TDZ)* for block-scoped variables. The following code will **not throw an error when transpiled with Babel, which is not spec compliant**:
 
