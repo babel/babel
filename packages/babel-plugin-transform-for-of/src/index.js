@@ -2,6 +2,60 @@ import { template, types as t } from "@babel/core";
 
 export default function(api, options) {
   const { loose, assumeArray } = options;
+
+  if (loose === true && assumeArray === true) {
+    throw new Error(
+      `Cannot use loose and assumeArray options together in babel-plugin-transform-for-of`,
+    );
+  }
+
+  if (assumeArray) {
+    return {
+      visitor: {
+        ForOfStatement(path) {
+          const { scope } = path;
+          const { left, right, body } = path.node;
+          const i = scope.generateUidIdentifier("i");
+          let array = scope.maybeGenerateMemoised(right, true);
+
+          const inits = [t.variableDeclarator(i, t.numericLiteral(0))];
+          if (array) {
+            inits.push(t.variableDeclarator(array, right));
+          } else {
+            array = right;
+          }
+
+          const item = t.memberExpression(array, t.clone(i), true);
+          let assignment;
+          if (t.isVariableDeclaration(left)) {
+            assignment = left;
+            assignment.declarations[0].init = item;
+          } else {
+            assignment = t.expressionStatement(
+              t.assignmentExpression("=", left, item),
+            );
+          }
+
+          const block = t.toBlock(body);
+          block.body.unshift(assignment);
+
+          path.replaceWith(
+            t.forStatement(
+              t.variableDeclaration("let", inits),
+              t.binaryExpression(
+                "<",
+                t.clone(i),
+                t.memberExpression(t.clone(array), t.identifier("length")),
+              ),
+              t.updateExpression("++", t.clone(i)),
+              block,
+            ),
+          );
+        },
+      },
+    };
+  }
+
   const pushComputedProps = loose
     ? pushComputedPropsLoose
     : pushComputedPropsSpec;
@@ -223,93 +277,46 @@ export default function(api, options) {
     };
   }
 
-  const defaultForOf = {
-    ForOfStatement(path, state) {
-      const right = path.get("right");
-      if (
-        right.isArrayExpression() ||
-        right.isGenericType("Array") ||
-        t.isArrayTypeAnnotation(right.getTypeAnnotation())
-      ) {
-        replaceWithArray(path);
-        return;
-      }
-
-      const { node } = path;
-      const build = pushComputedProps(path, state);
-      const declar = build.declar;
-      const loop = build.loop;
-      const block = loop.body;
-
-      // ensure that it's a block so we can take all its statements
-      path.ensureBlock();
-
-      // add the value declaration to the new loop body
-      if (declar) {
-        block.body.push(declar);
-      }
-
-      // push the rest of the original loop body onto our new body
-      block.body = block.body.concat(node.body.body);
-
-      t.inherits(loop, node);
-      t.inherits(loop.body, node.body);
-
-      if (build.replaceParent) {
-        path.parentPath.replaceWithMultiple(build.node);
-        path.remove();
-      } else {
-        path.replaceWithMultiple(build.node);
-      }
-    },
-  };
-
-  const forOfAsArray = {
-    ForOfStatement(path) {
-      const { scope } = path;
-      const { left, right, body } = path.node;
-      const i = scope.generateUidIdentifier("i");
-      let array = scope.maybeGenerateMemoised(right, true);
-
-      const inits = [t.variableDeclarator(i, t.numericLiteral(0))];
-      if (array) {
-        inits.push(t.variableDeclarator(array, right));
-      } else {
-        array = right;
-      }
-
-      const item = t.memberExpression(array, t.clone(i), true);
-      let assignment;
-      if (t.isVariableDeclaration(left)) {
-        assignment = left;
-        assignment.declarations[0].init = item;
-      } else {
-        assignment = t.expressionStatement(
-          t.assignmentExpression("=", left, item),
-        );
-      }
-
-      const block = t.toBlock(body);
-      block.body.unshift(assignment);
-
-      path.replaceWith(
-        t.forStatement(
-          t.variableDeclaration("let", inits),
-          t.binaryExpression(
-            "<",
-            t.clone(i),
-            t.memberExpression(t.clone(array), t.identifier("length")),
-          ),
-          t.updateExpression("++", t.clone(i)),
-          block,
-        ),
-      );
-    },
-  };
-
-  const visitor = assumeArray ? forOfAsArray : defaultForOf;
-
   return {
-    visitor,
+    visitor: {
+      ForOfStatement(path, state) {
+        const right = path.get("right");
+        if (
+          right.isArrayExpression() ||
+          right.isGenericType("Array") ||
+          t.isArrayTypeAnnotation(right.getTypeAnnotation())
+        ) {
+          replaceWithArray(path);
+          return;
+        }
+
+        const { node } = path;
+        const build = pushComputedProps(path, state);
+        const declar = build.declar;
+        const loop = build.loop;
+        const block = loop.body;
+
+        // ensure that it's a block so we can take all its statements
+        path.ensureBlock();
+
+        // add the value declaration to the new loop body
+        if (declar) {
+          block.body.push(declar);
+        }
+
+        // push the rest of the original loop body onto our new body
+        block.body = block.body.concat(node.body.body);
+
+        t.inherits(loop, node);
+        t.inherits(loop.body, node.body);
+
+        if (build.replaceParent) {
+          path.parentPath.replaceWithMultiple(build.node);
+          path.remove();
+        } else {
+          path.replaceWithMultiple(build.node);
+        }
+      },
+    },
   };
 }
