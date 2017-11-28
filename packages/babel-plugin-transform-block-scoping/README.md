@@ -70,7 +70,9 @@ require("@babel/core").transform("code", {
 });
 ```
 
-## Options `throwIfClosureRequired`
+## Options 
+
+`throwIfClosureRequired`
 
 In cases such as the following it's impossible to rewrite let/const without adding an additional function and closure while transforming:
 
@@ -81,3 +83,13 @@ for (let i = 0; i < 5; i++) {
 ```
 
 In extremely performance-sensitive code, this can be undesirable. If `"throwIfClosureRequired": true` is set, Babel throws when transforming these patterns instead of automatically adding an additional function.
+
+`tdz`
+
+If `"tdz": true` is set, variable will not be hoisted and accessing the variable before declaration will throw ReferenceError due to **temporal dead zone (TDZ)**.
+
+```javascript
+console.log(x); // ReferenceError: x is not defined - temporal dead zone
+let x;
+```
+
