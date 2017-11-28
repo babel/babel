@@ -5,7 +5,7 @@ export default function(api, options) {
 
   if (loose === true && assumeArray === true) {
     throw new Error(
-      `Cannot use loose and assumeArray options together in babel-plugin-transform-for-of`,
+      `The loose and assumeArray options cannot be used together in @babel/plugin-transform-for-of`,
     );
   }
 
