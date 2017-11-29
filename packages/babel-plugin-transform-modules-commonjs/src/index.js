@@ -16,7 +16,6 @@ export default function(api, options) {
     strict,
     strictMode,
     noInterop,
-
     // Defaulting to 'true' for now. May change before 7.x major.
     allowCommonJSExports = true,
   } = options;

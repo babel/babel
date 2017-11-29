@@ -29,6 +29,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
 
   const meta = normalizeAndLoadModuleMetadata(path, exportName, {
     noInterop,
+    loose,
   });
 
   if (!allowTopLevelThis) {
@@ -55,6 +56,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
   }
 
   const nameList = buildExportNameListDeclaration(path, meta);
+
   if (nameList) {
     meta.exportNameListName = nameList.name;
     headers.push(nameList.statement);
@@ -126,6 +128,9 @@ export function buildNamespaceInitStatements(
       }),
     );
   }
+  if (loose) {
+    statements.push(...buildReexportsFromMeta(metadata, sourceMetadata, loose));
+  }
   for (const exportName of sourceMetadata.reexportNamespace) {
     // Assign export to namespace object.
     statements.push(
@@ -149,6 +154,31 @@ export function buildNamespaceInitStatements(
   }
   return statements;
 }
+
+const getTemplateForReexport = loose => {
+  return loose
+    ? template.statement`EXPORTS.EXPORT_NAME = NAMESPACE.IMPORT_NAME;`
+    : template`
+      Object.defineProperty(EXPORTS, "EXPORT_NAME", {
+        enumerable: true,
+        get: function() {
+          return NAMESPACE.IMPORT_NAME;
+        },
+      });
+    `;
+};
+
+const buildReexportsFromMeta = (meta, metadata, loose) => {
+  const templateForCurrentMode = getTemplateForReexport(loose);
+  return Array.from(metadata.reexports, ([exportName, importName]) =>
+    templateForCurrentMode({
+      EXPORTS: meta.exportName,
+      EXPORT_NAME: exportName,
+      NAMESPACE: metadata.name,
+      IMPORT_NAME: importName,
+    }),
+  );
+};
 
 /**
  * Build an "__esModule" header statement setting the property on a given object.
@@ -269,25 +299,10 @@ function buildExportInitializationStatements(
       exportNames.push(...data.names);
     }
   }
+
   for (const data of metadata.source.values()) {
-    for (const [exportName, importName] of data.reexports) {
-      initStatements.push(
-        (loose
-          ? template.statement`EXPORTS.EXPORT_NAME = NAMESPACE.IMPORT_NAME;`
-          : template`
-            Object.defineProperty(EXPORTS, "EXPORT_NAME", {
-              enumerable: true,
-              get: function() {
-                return NAMESPACE.IMPORT_NAME;
-              },
-            });
-          `)({
-          EXPORTS: metadata.exportName,
-          EXPORT_NAME: exportName,
-          NAMESPACE: data.name,
-          IMPORT_NAME: importName,
-        }),
-      );
+    if (!loose) {
+      initStatements.push(...buildReexportsFromMeta(metadata, data, loose));
     }
     for (const exportName of data.reexportNamespace) {
       exportNames.push(exportName);

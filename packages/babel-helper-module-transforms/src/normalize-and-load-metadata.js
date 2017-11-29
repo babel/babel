@@ -86,7 +86,7 @@ export function isSideEffectImport(source: SourceModuleMetadata) {
 export default function normalizeModuleAndLoadMetadata(
   programPath: NodePath,
   exportName?: string,
-  { noInterop = false } = {},
+  { noInterop = false, loose = false } = {},
 ): ModuleMetadata {
   if (!exportName) {
     exportName = programPath.scope.generateUidIdentifier("exports").name;
@@ -94,7 +94,7 @@ export default function normalizeModuleAndLoadMetadata(
 
   nameAnonymousExports(programPath);
 
-  const { local, source } = getModuleMetadata(programPath);
+  const { local, source } = getModuleMetadata(programPath, loose);
 
   removeModuleDeclarations(programPath);
 
@@ -120,8 +120,8 @@ export default function normalizeModuleAndLoadMetadata(
 /**
  * Get metadata about the imports and exports present in this module.
  */
-function getModuleMetadata(programPath: NodePath) {
-  const localData = getLocalExportMetadata(programPath);
+function getModuleMetadata(programPath: NodePath, loose: boolean) {
+  const localData = getLocalExportMetadata(programPath, loose);
 
   const sourceData = new Map();
   const getData = sourceNode => {
@@ -260,6 +260,7 @@ function getModuleMetadata(programPath: NodePath) {
  */
 function getLocalExportMetadata(
   programPath: NodePath,
+  loose: boolean,
 ): Map<string, LocalExportMetadata> {
   const bindingKindLookup = new Map();
 
@@ -269,8 +270,19 @@ function getLocalExportMetadata(
       kind = "import";
     } else {
       if (child.isExportDefaultDeclaration()) child = child.get("declaration");
-      if (child.isExportNamedDeclaration() && child.node.declaration) {
-        child = child.get("declaration");
+      if (child.isExportNamedDeclaration()) {
+        if (child.node.declaration) {
+          child = child.get("declaration");
+        } else if (
+          loose &&
+          child.node.source &&
+          child.get("source").isStringLiteral()
+        ) {
+          child.node.specifiers.forEach(specifier => {
+            bindingKindLookup.set(specifier.local.name, "block");
+          });
+          return;
+        }
       }
 
       if (child.isFunctionDeclaration()) {
@@ -295,6 +307,7 @@ function getLocalExportMetadata(
   const getLocalMetadata = idPath => {
     const localName = idPath.node.name;
     let metadata = localMetadata.get(localName);
+
     if (!metadata) {
       const kind = bindingKindLookup.get(localName);
 
@@ -314,7 +327,7 @@ function getLocalExportMetadata(
   };
 
   programPath.get("body").forEach(child => {
-    if (child.isExportNamedDeclaration() && !child.node.source) {
+    if (child.isExportNamedDeclaration() && (loose || !child.node.source)) {
       if (child.node.declaration) {
         const declaration = child.get("declaration");
         const ids = declaration.getOuterBindingIdentifierPaths();
@@ -324,7 +337,6 @@ function getLocalExportMetadata(
               'Illegal export "__esModule".',
             );
           }
-
           getLocalMetadata(ids[name]).names.push(name);
         });
       } else {
@@ -335,7 +347,6 @@ function getLocalExportMetadata(
           if (exported.node.name === "__esModule") {
             throw exported.buildCodeFrameError('Illegal export "__esModule".');
           }
-
           getLocalMetadata(local).names.push(exported.node.name);
         });
       }
@@ -354,7 +365,6 @@ function getLocalExportMetadata(
       }
     }
   });
-
   return localMetadata;
 }
 
