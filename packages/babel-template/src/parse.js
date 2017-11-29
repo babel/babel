@@ -60,7 +60,7 @@ export default function parseAndBuildMetadata<T>(
 
 function placeholderVisitorHandler<T: BabelNode, S: MetadataState>(
   node: T,
-  ancestors: TraversalAncestors<T>,
+  ancestors: TraversalAncestors,
   state: S,
 ) {
   let name;
@@ -110,10 +110,7 @@ function placeholderVisitorHandler<T: BabelNode, S: MetadataState>(
   state.placeholderNames.add(name);
 }
 
-function resolveAncestors<T: BabelNode>(
-  ast: T,
-  ancestors: TraversalAncestors<T>,
-) {
+function resolveAncestors<T: BabelNode>(ast: T, ancestors: TraversalAncestors) {
   let parent: BabelNode = ast;
   for (let i = 0; i < ancestors.length - 1; i++) {
     const { key, index } = ancestors[i];

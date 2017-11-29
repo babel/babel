@@ -1,14 +1,14 @@
 // @flow
 import { VISITOR_KEYS } from "../definitions";
 
-export type TraversalAncestors<T: BabelNode> = Array<{
-  node: T,
+export type TraversalAncestors = Array<{
+  node: BabelNode,
   key: string,
   index?: number,
 }>;
 export type TraversalHandler<T: BabelNode, S: Object> = (
   T,
-  TraversalAncestors<T>,
+  TraversalAncestors,
   S,
 ) => void;
 export type TraversalHandlers<T: BabelNode, S: Object> = {
@@ -40,7 +40,7 @@ function traverseSimpleImpl<T: Object>(
   enter: ?Function,
   exit: ?Function,
   state: ?Object,
-  ancestors: TraversalAncestors<T>,
+  ancestors: TraversalAncestors,
 ) {
   const keys = VISITOR_KEYS[node.type];
   if (!keys) return;

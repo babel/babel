@@ -146,13 +146,13 @@ lines.push(
     key: string,
     index?: number,
   }>;
-  declare type TraversalHandler<T> = (BabelNode, TraversalAncestors, T) => void;
-  declare type TraversalHandlers<T> = {
-    enter?: TraversalHandler<T>,
-    exit?: TraversalHandler<T>,
+  declare type TraversalHandler<T: BabelNode, S: Object> = (T, TraversalAncestors, S) => void;
+  declare type TraversalHandlers<T: BabelNode, S: Object> = {
+    enter?: TraversalHandler<T, S>,
+    exit?: TraversalHandler<T, S>,
   };`.replace(/(^|\n) {2}/g, "$1"),
   // eslint-disable-next-line
-  `declare function traverse<T>(n: BabelNode, TraversalHandler<T> | TraversalHandlers<T>, state?: T): void;`
+  `declare function traverse<T: BabelNode, S: Object>(n: T, TraversalHandler<T, S> | TraversalHandlers<T, S>, state?: S): void;`
 );
 
 for (const type in t.FLIPPED_ALIAS_KEYS) {
