@@ -59,11 +59,12 @@ Without options:
 
 With options:
 
-```json
+```js
 {
   "plugins": [
     ["@babel/plugin-transform-for-of", {
-      "loose": true
+      "loose": true, // defaults to false
+      "assumeArray": true // defaults to false
     }]
   ]
 }
@@ -125,6 +126,13 @@ In loose mode an iterator's `return` method will not be called on abrupt complet
 
 Please see [google/traceur-compiler#1773](https://github.com/google/traceur-compiler/issues/1773) and
 [babel/babel#838](https://github.com/babel/babel/issues/838) for more information.
+
+### `assumeArray`
+`boolean`, defaults to `false`
+
+This will apply the optimization shown below to all for-of loops by assuming that _all_ loops are arrays.
+
+Can be useful when you just want a for-of loop to represent a basic for loop over an array.
 
 ### Optimization
 
