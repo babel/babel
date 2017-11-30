@@ -138,7 +138,10 @@ defineType("CallExpression", {
       optional: true,
     },
     typeParameters: {
-      validate: assertNodeType("TypeParameterInstantiation"),
+      validate: assertNodeType(
+        "TypeParameterInstantiation",
+        "TSTypeParameterInstantiation",
+      ),
       optional: true,
     },
   },
@@ -286,12 +289,19 @@ export const functionCommon = {
     validate: assertValueType("boolean"),
     default: false,
   },
+};
+
+export const functionTypeAnnotationCommon = {
   returnType: {
     validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
     optional: true,
   },
   typeParameters: {
-    validate: assertNodeType("TypeParameterDeclaration", "Noop"),
+    validate: assertNodeType(
+      "TypeParameterDeclaration",
+      "TSTypeParameterDeclaration",
+      "Noop",
+    ),
     optional: true,
   },
 };
@@ -313,6 +323,7 @@ defineType("FunctionDeclaration", {
   visitor: ["id", "params", "body", "returnType", "typeParameters"],
   fields: {
     ...functionDeclarationCommon,
+    ...functionTypeAnnotationCommon,
     body: {
       validate: assertNodeType("BlockStatement"),
     },
@@ -340,6 +351,7 @@ defineType("FunctionExpression", {
   ],
   fields: {
     ...functionCommon,
+    ...functionTypeAnnotationCommon,
     id: {
       validate: assertNodeType("Identifier"),
       optional: true,
@@ -559,6 +571,7 @@ defineType("ObjectMethod", {
   builder: ["kind", "key", "params", "body", "computed"],
   fields: {
     ...functionCommon,
+    ...functionTypeAnnotationCommon,
     kind: {
       validate: chain(
         assertValueType("string"),

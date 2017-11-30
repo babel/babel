@@ -6,7 +6,11 @@ import defineType, {
   assertEach,
   assertOneOf,
 } from "./utils";
-import { functionCommon, patternLikeCommon } from "./core";
+import {
+  functionCommon,
+  functionTypeAnnotationCommon,
+  patternLikeCommon,
+} from "./core";
 
 defineType("AssignmentPattern", {
   visitor: ["left", "right"],
@@ -63,6 +67,7 @@ defineType("ArrowFunctionExpression", {
   ],
   fields: {
     ...functionCommon,
+    ...functionTypeAnnotationCommon,
     expression: {
       // https://github.com/babel/babylon/issues/505
       validate: assertValueType("boolean"),
@@ -94,7 +99,11 @@ defineType("ClassBody", {
 
 const classCommon = {
   typeParameters: {
-    validate: assertNodeType("TypeParameterDeclaration", "Noop"),
+    validate: assertNodeType(
+      "TypeParameterDeclaration",
+      "TSTypeParameterDeclaration",
+      "Noop",
+    ),
     optional: true,
   },
   body: {
@@ -105,7 +114,10 @@ const classCommon = {
     validate: assertNodeType("Expression"),
   },
   superTypeParameters: {
-    validate: assertNodeType("TypeParameterInstantiation"),
+    validate: assertNodeType(
+      "TypeParameterInstantiation",
+      "TSTypeParameterInstantiation",
+    ),
     optional: true,
   },
   implements: {
@@ -442,6 +454,7 @@ defineType("ClassMethod", {
   ],
   fields: {
     ...classMethodOrDeclareMethodCommon,
+    ...functionTypeAnnotationCommon,
     body: {
       validate: assertNodeType("BlockStatement"),
     },
