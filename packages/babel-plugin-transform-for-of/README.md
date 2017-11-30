@@ -59,11 +59,12 @@ Without options:
 
 With options:
 
-```json
+```js
 {
   "plugins": [
     ["@babel/plugin-transform-for-of", {
-      "loose": true
+      "loose": true, // defaults to false
+      "assumeArray": true // defaults to false
     }]
   ]
 }
@@ -118,6 +119,12 @@ for (var _iterator = foo, _isArray = Array.isArray(_iterator), _i = 0, _iterator
   var i = _ref;
 }
 ```
+
+### `assumeArray`
+
+This will apply the optimization shown below to all for-of loops by assuming that all loops are arrays.
+
+Can be useful when you just want a for-of loop to represent a basic for loop over an array.
 
 #### Abrupt completions
 
