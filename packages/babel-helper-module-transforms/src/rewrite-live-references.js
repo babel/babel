@@ -24,7 +24,7 @@ export default function rewriteLiveReferences(
       imported.set(localName, [source, importName, null]);
     }
     for (const localName of data.importsNamespace) {
-      imported.set(localName, [null, null, localName]);
+      imported.set(localName, [source, null, localName]);
     }
   }
 
@@ -60,8 +60,8 @@ export default function rewriteLiveReferences(
     scope: programPath.scope,
     imported, // local / import
     exported, // local name => exported name list
-    buildImportReference: ([source, importName, localName]) => {
-      if (localName) return null;
+    buildImportReference: ([source, importName, localName], identNode) => {
+      if (localName) return identNode;
 
       const name = metadata.source.get(source).name;
 
@@ -172,7 +172,7 @@ const rewriteReferencesVisitor = {
 
     const importData = imported.get(localName);
     if (importData) {
-      const ref = buildImportReference(importData) || path.node;
+      const ref = buildImportReference(importData, path.node);
 
       if (path.parentPath.isCallExpression({ callee: path.node })) {
         path.replaceWith(t.sequenceExpression([t.numericLiteral(0), ref]));
@@ -225,8 +225,7 @@ const rewriteReferencesVisitor = {
           const assignment = path.node;
 
           if (importData) {
-            assignment.left =
-              buildImportReference(importData) || assignment.left;
+            assignment.left = buildImportReference(importData, assignment.left);
 
             assignment.right = t.sequenceExpression([
               assignment.right,
