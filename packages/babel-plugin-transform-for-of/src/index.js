@@ -161,6 +161,49 @@ export default function(api, options) {
     }
   }
 
+  return {
+    visitor: {
+      ForOfStatement(path, state) {
+        const right = path.get("right");
+        if (
+          right.isArrayExpression() ||
+          right.isGenericType("Array") ||
+          t.isArrayTypeAnnotation(right.getTypeAnnotation())
+        ) {
+          replaceWithArray(path);
+          return;
+        }
+
+        const { node } = path;
+        const build = pushComputedProps(path, state);
+        const declar = build.declar;
+        const loop = build.loop;
+        const block = loop.body;
+
+        // ensure that it's a block so we can take all its statements
+        path.ensureBlock();
+
+        // add the value declaration to the new loop body
+        if (declar) {
+          block.body.push(declar);
+        }
+
+        // push the rest of the original loop body onto our new body
+        block.body = block.body.concat(node.body.body);
+
+        t.inherits(loop, node);
+        t.inherits(loop.body, node.body);
+
+        if (build.replaceParent) {
+          path.parentPath.replaceWithMultiple(build.node);
+          path.remove();
+        } else {
+          path.replaceWithMultiple(build.node);
+        }
+      },
+    },
+  };
+
   function pushComputedPropsLoose(path, file) {
     const { node, scope, parent } = path;
     const { left } = node;
@@ -269,6 +312,8 @@ export default function(api, options) {
       tryBody[0] = t.labeledStatement(parent.label, loop);
     }
 
+    //
+
     return {
       replaceParent: isLabeledParent,
       declar: declar,
@@ -276,47 +321,4 @@ export default function(api, options) {
       node: template,
     };
   }
-
-  return {
-    visitor: {
-      ForOfStatement(path, state) {
-        const right = path.get("right");
-        if (
-          right.isArrayExpression() ||
-          right.isGenericType("Array") ||
-          t.isArrayTypeAnnotation(right.getTypeAnnotation())
-        ) {
-          replaceWithArray(path);
-          return;
-        }
-
-        const { node } = path;
-        const build = pushComputedProps(path, state);
-        const declar = build.declar;
-        const loop = build.loop;
-        const block = loop.body;
-
-        // ensure that it's a block so we can take all its statements
-        path.ensureBlock();
-
-        // add the value declaration to the new loop body
-        if (declar) {
-          block.body.push(declar);
-        }
-
-        // push the rest of the original loop body onto our new body
-        block.body = block.body.concat(node.body.body);
-
-        t.inherits(loop, node);
-        t.inherits(loop.body, node.body);
-
-        if (build.replaceParent) {
-          path.parentPath.replaceWithMultiple(build.node);
-          path.remove();
-        } else {
-          path.replaceWithMultiple(build.node);
-        }
-      },
-    },
-  };
 }
