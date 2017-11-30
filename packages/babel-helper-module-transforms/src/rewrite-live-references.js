@@ -61,11 +61,17 @@ export default function rewriteLiveReferences(
     imported, // local / import
     exported, // local name => exported name list
     buildImportReference: ([source, importName, localName], identNode) => {
-      if (localName) return identNode;
+      const meta = metadata.source.get(source);
 
-      const name = metadata.source.get(source).name;
+      if (localName) {
+        if (meta.lazy) identNode = t.callExpression(identNode, []);
+        return identNode;
+      }
 
-      return t.memberExpression(t.identifier(name), t.identifier(importName));
+      let namespace = t.identifier(meta.name);
+      if (meta.lazy) namespace = t.callExpression(namespace, []);
+
+      return t.memberExpression(namespace, t.identifier(importName));
     },
   });
 }
