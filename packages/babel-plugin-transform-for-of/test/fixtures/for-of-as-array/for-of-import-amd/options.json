@@ -1,0 +1,7 @@
+{
+  "plugins": [["transform-for-of", {
+    "assumeArray": true
+    }],
+    ["transform-modules-amd"]
+  ]
+}
