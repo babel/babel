@@ -98,7 +98,7 @@ When `true`, class properties are compiled to use an assignment expression inste
   }
 ```
 
-Without `{ "loose": true }`, the above code will compile to the following, using `Object.definePropery`:
+Without `{ "loose": true }`, the above code will compile to the following, using `Object.defineProperty`:
 
 ```js
 var Bork = function Bork() {
