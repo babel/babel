@@ -1,5 +1,5 @@
 {
   "sourceType": "module",
-  "plugins": ["flow","exportExtensions"],
+  "plugins": ["flow", "exportNamespaceFrom"],
   "throws": "Unexpected token (1:14)"
 }

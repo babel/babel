@@ -1585,13 +1585,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
     }
 
-    parseExportStar(node: N.ExportNamedDeclaration, allowNamed: boolean): void {
+    parseExportStar(node: N.ExportNamedDeclaration): void {
       if (this.eatContextual("type")) {
         node.exportKind = "type";
-        allowNamed = false;
       }
 
-      return super.parseExportStar(node, allowNamed);
+      return super.parseExportStar(node);
+    }
+
+    parseExportNamespace(node: N.ExportNamedDeclaration) {
+      if (node.exportKind === "type") {
+        this.unexpected();
+      }
+
+      return super.parseExportNamespace(node);
     }
 
     parseClassId(node: N.Class, isStatement: boolean, optionalId: ?boolean) {
