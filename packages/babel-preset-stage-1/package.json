@@ -9,6 +9,7 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/plugin-proposal-decorators": "7.0.0-beta.32",
+    "@babel/plugin-proposal-do-expressions": "^7.0.0-beta.32",
     "@babel/plugin-proposal-export-default": "7.0.0-beta.32",
     "@babel/plugin-proposal-nullish-coalescing-operator": "7.0.0-beta.32",
     "@babel/plugin-proposal-optional-chaining": "7.0.0-beta.32",
