@@ -58,8 +58,8 @@ fix:
 clean: test-clean
 	rm -rf packages/babel-polyfill/browser*
 	rm -rf packages/babel-polyfill/dist
-	# rm -rf packages/babel-runtime/helpers
-	# rm -rf packages/babel-runtime/core-js
+	rm -rf packages/babel-runtime/helpers
+	rm -rf packages/babel-runtime/core-js
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
 
@@ -134,6 +134,8 @@ bootstrap:
 	node scripts/build-dist.js
 
 clean-lib:
+	rm -rf packages/babel-runtime/helpers
+	rm -rf packages/babel-runtime/core-js
 	$(foreach source, $(SOURCES), \
 		$(call clean-source-lib, $(source)))
 
