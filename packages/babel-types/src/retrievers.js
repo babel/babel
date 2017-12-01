@@ -88,6 +88,9 @@ getBindingIdentifiers.keys = {
 
   FunctionDeclaration: ["id", "params"],
   FunctionExpression: ["id", "params"],
+  ArrowFunctionExpression: ["params"],
+  ObjectMethod: ["params"],
+  ClassMethod: ["params"],
 
   ForInStatement: ["left"],
   ForOfStatement: ["left"],
