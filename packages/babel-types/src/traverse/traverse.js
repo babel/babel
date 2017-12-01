@@ -6,14 +6,10 @@ export type TraversalAncestors = Array<{
   key: string,
   index?: number,
 }>;
-export type TraversalHandler<S: Object> = (
-  BabelNode,
-  TraversalAncestors,
-  S,
-) => void;
-export type TraversalHandlers<S: Object> = {
-  enter?: TraversalHandler<S>,
-  exit?: TraversalHandler<S>,
+export type TraversalHandler<T> = (BabelNode, TraversalAncestors, T) => void;
+export type TraversalHandlers<T> = {
+  enter?: TraversalHandler<T>,
+  exit?: TraversalHandler<T>,
 };
 
 /**
@@ -21,25 +17,25 @@ export type TraversalHandlers<S: Object> = {
  * state object. Exposes ancestry data to each handler so that more complex
  * AST data can be taken into account.
  */
-export default function traverse<S: Object>(
+export default function traverse<T>(
   node: BabelNode,
-  handlers: TraversalHandler<S> | TraversalHandlers<S>,
-  state?: S,
+  handlers: TraversalHandler<T> | TraversalHandlers<T>,
+  state?: T,
 ): void {
   if (typeof handlers === "function") {
     handlers = { enter: handlers };
   }
 
-  const { enter, exit } = (handlers: TraversalHandlers<S>);
+  const { enter, exit } = (handlers: TraversalHandlers<T>);
 
   traverseSimpleImpl(node, enter, exit, state, []);
 }
 
-function traverseSimpleImpl<T: Object>(
-  node: T,
+function traverseSimpleImpl<T>(
+  node: Object,
   enter: ?Function,
   exit: ?Function,
-  state: ?Object,
+  state: ?T,
   ancestors: TraversalAncestors,
 ) {
   const keys = VISITOR_KEYS[node.type];
