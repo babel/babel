@@ -50,6 +50,7 @@
     "mocha": "^3.0.0",
     "nyc": "^11.0.3",
     "output-file-sync": "^2.0.0",
+    "pre-commit": "^1.2.2",
     "prettier": "1.7.3",
     "pump": "^1.0.2",
     "rimraf": "^2.4.3",
@@ -64,7 +65,7 @@
   "engines": {
     "node": ">= 4.x <= 9.x",
     "npm": ">= 2.x <= 5.x",
-    "yarn": ">=0.27.5 || >=1.0.0-20170811"
+    "yarn": ">=0.27.5 || >=1.3.2"
   },
   "nyc": {
     "all": true,
@@ -81,5 +82,8 @@
     "*.js": [
       "eslint --format=codeframe --rulesdir='./scripts/eslint_rules'"
     ]
+  },
+  "dependencies": {
+    "@babel/helper-fixtures": "^7.0.0-beta.32"
   }
 }
