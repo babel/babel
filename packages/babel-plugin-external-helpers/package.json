@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-external-helpers",
-  "version": "7.0.0-beta.32",
+  "version": "7.0.0-beta.33",
   "description": "This plugin contains helper functions that’ll be placed at the top of the generated code",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-external-helpers",
   "license": "MIT",
@@ -9,10 +9,10 @@
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.32"
+    "@babel/core": "7.0.0-beta.33"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.32",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.32"
+    "@babel/core": "7.0.0-beta.33",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.33"
   }
 }
