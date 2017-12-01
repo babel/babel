@@ -43,7 +43,7 @@ const config = {
   ],
   plugins: [
     ["@babel/proposal-class-properties", { loose: true }],
-    "@babel/proposal-export-namespace",
+    "@babel/proposal-export-namespace-from",
     "@babel/proposal-numeric-separator",
     ["@babel/proposal-object-rest-spread", { useBuiltIns: true}],
   ]
