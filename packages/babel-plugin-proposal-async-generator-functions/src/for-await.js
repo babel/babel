@@ -1,8 +1,8 @@
 import * as t from "@babel/types";
 import template from "@babel/template";
 
-const awaitTemplate = `
-  function* wrapper() {
+const buildForAwait = template(`
+  async function wrapper() {
     var ITERATOR_COMPLETION = true;
     var ITERATOR_HAD_ERROR_KEY = false;
     var ITERATOR_ERROR_KEY;
@@ -10,9 +10,9 @@ const awaitTemplate = `
       for (
         var ITERATOR_KEY = GET_ITERATOR(OBJECT), STEP_KEY, STEP_VALUE;
         (
-          STEP_KEY = yield AWAIT(ITERATOR_KEY.next()),
+          STEP_KEY = await ITERATOR_KEY.next(),
           ITERATOR_COMPLETION = STEP_KEY.done,
-          STEP_VALUE = yield AWAIT(STEP_KEY.value),
+          STEP_VALUE = await STEP_KEY.value,
           !ITERATOR_COMPLETION
         );
         ITERATOR_COMPLETION = true) {
@@ -23,7 +23,7 @@ const awaitTemplate = `
     } finally {
       try {
         if (!ITERATOR_COMPLETION && ITERATOR_KEY.return != null) {
-          yield AWAIT(ITERATOR_KEY.return());
+          await ITERATOR_KEY.return();
         }
       } finally {
         if (ITERATOR_HAD_ERROR_KEY) {
@@ -32,13 +32,9 @@ const awaitTemplate = `
       }
     }
   }
-`;
-const buildForAwait = template(awaitTemplate);
-const buildForAwaitWithoutWrapping = template(
-  awaitTemplate.replace(/\bAWAIT\b/g, ""),
-);
+`);
 
-export default function(path, { getAsyncIterator, wrapAwait }) {
+export default function(path, { getAsyncIterator }) {
   const { node, scope, parent } = path;
 
   const stepKey = scope.generateUidIdentifier("step");
@@ -57,9 +53,7 @@ export default function(path, { getAsyncIterator, wrapAwait }) {
       t.variableDeclarator(left.declarations[0].id, stepValue),
     ]);
   }
-
-  const build = wrapAwait ? buildForAwait : buildForAwaitWithoutWrapping;
-  let template = build({
+  let template = buildForAwait({
     ITERATOR_HAD_ERROR_KEY: scope.generateUidIdentifier("didIteratorError"),
     ITERATOR_COMPLETION: scope.generateUidIdentifier(
       "iteratorNormalCompletion",
@@ -70,10 +64,9 @@ export default function(path, { getAsyncIterator, wrapAwait }) {
     OBJECT: node.right,
     STEP_VALUE: stepValue,
     STEP_KEY: stepKey,
-    ...(wrapAwait ? { AWAIT: wrapAwait } : {}),
   });
 
-  // remove generator function wrapper
+  // remove async function wrapper
   template = template.body.body;
 
   const isLabeledParent = t.isLabeledStatement(parent);
