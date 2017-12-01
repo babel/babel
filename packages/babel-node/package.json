@@ -16,7 +16,6 @@
     "compiler"
   ],
   "dependencies": {
-    "@babel/polyfill": "7.0.0-beta.32",
     "@babel/register": "7.0.0-beta.32",
     "commander": "^2.8.1",
     "fs-readdir-recursive": "^1.0.0",

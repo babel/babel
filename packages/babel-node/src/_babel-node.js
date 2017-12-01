@@ -5,9 +5,7 @@ import path from "path";
 import repl from "repl";
 import * as babel from "@babel/core";
 import vm from "vm";
-import "@babel/polyfill";
 import register from "@babel/register";
-
 import pkg from "../package.json";
 
 const program = new commander.Command("babel-node");
