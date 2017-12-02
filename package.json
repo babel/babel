@@ -31,7 +31,7 @@
     "eslint-config-babel": "^7.0.2",
     "eslint-plugin-flowtype": "^2.20.0",
     "eslint-plugin-prettier": "^2.2.0",
-    "flow-bin": "^0.57.3",
+    "flow-bin": "^0.59.0",
     "graceful-fs": "^4.1.11",
     "gulp": "^3.9.0",
     "gulp-babel": "^8.0.0-beta.0",
