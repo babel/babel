@@ -1,14 +1,20 @@
-import * as t from "./index";
+// @flow
+import {
+  isExportDeclaration,
+  isIdentifier,
+  isDeclaration,
+  isFunctionDeclaration,
+  isFunctionExpression,
+} from "../validators/generated";
 
 /**
  * Return a list of binding identifiers associated with the input `node`.
  */
-
-export function getBindingIdentifiers(
+export default function getBindingIdentifiers(
   node: Object,
   duplicates?: boolean,
   outerOnly?: boolean,
-): Object {
+): { [string]: Object | Array<Object> } {
   let search = [].concat(node);
   const ids = Object.create(null);
 
@@ -16,9 +22,9 @@ export function getBindingIdentifiers(
     const id = search.shift();
     if (!id) continue;
 
-    const keys = t.getBindingIdentifiers.keys[id.type];
+    const keys = getBindingIdentifiers.keys[id.type];
 
-    if (t.isIdentifier(id)) {
+    if (isIdentifier(id)) {
       if (duplicates) {
         const _ids = (ids[id.name] = ids[id.name] || []);
         _ids.push(id);
@@ -28,20 +34,20 @@ export function getBindingIdentifiers(
       continue;
     }
 
-    if (t.isExportDeclaration(id)) {
-      if (t.isDeclaration(id.declaration)) {
+    if (isExportDeclaration(id)) {
+      if (isDeclaration(id.declaration)) {
         search.push(id.declaration);
       }
       continue;
     }
 
     if (outerOnly) {
-      if (t.isFunctionDeclaration(id)) {
+      if (isFunctionDeclaration(id)) {
         search.push(id.id);
         continue;
       }
 
-      if (t.isFunctionExpression(id)) {
+      if (isFunctionExpression(id)) {
         continue;
       }
     }
@@ -56,13 +62,13 @@ export function getBindingIdentifiers(
     }
   }
 
+  // $FlowIssue Object.create() seems broken
   return ids;
 }
 
 /**
  * Mapping of types to their identifier keys.
  */
-
 getBindingIdentifiers.keys = {
   DeclareClass: ["id"],
   DeclareFunction: ["id"],
@@ -107,10 +113,3 @@ getBindingIdentifiers.keys = {
   VariableDeclaration: ["declarations"],
   VariableDeclarator: ["id"],
 };
-
-export function getOuterBindingIdentifiers(
-  node: Object,
-  duplicates?: boolean,
-): Object {
-  return getBindingIdentifiers(node, duplicates, true);
-}

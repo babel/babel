@@ -1,25 +1,17 @@
-import * as t from "./index";
-
-/**
- * Takes an array of `types` and flattens them, removing duplicates and
- * returns a `UnionTypeAnnotation` node containg them.
- */
-
-export function createUnionTypeAnnotation(types: Array<Object>) {
-  const flattened = removeTypeDuplicates(types);
-
-  if (flattened.length === 1) {
-    return flattened[0];
-  } else {
-    return t.unionTypeAnnotation(flattened);
-  }
-}
+// @flow
+import {
+  isAnyTypeAnnotation,
+  isGenericTypeAnnotation,
+  isUnionTypeAnnotation,
+  isFlowBaseAnnotation,
+} from "../../validators/generated";
 
 /**
  * Dedupe type annotations.
  */
-
-export function removeTypeDuplicates(nodes: Array<Object>): Array<Object> {
+export default function removeTypeDuplicates(
+  nodes: Array<Object>,
+): Array<Object> {
   const generics = {};
   const bases = {};
 
@@ -38,18 +30,16 @@ export function removeTypeDuplicates(nodes: Array<Object>): Array<Object> {
     }
 
     // this type matches anything
-    if (t.isAnyTypeAnnotation(node)) {
+    if (isAnyTypeAnnotation(node)) {
       return [node];
     }
 
-    //
-    if (t.isFlowBaseAnnotation(node)) {
+    if (isFlowBaseAnnotation(node)) {
       bases[node.type] = node;
       continue;
     }
 
-    //
-    if (t.isUnionTypeAnnotation(node)) {
+    if (isUnionTypeAnnotation(node)) {
       if (typeGroups.indexOf(node.types) < 0) {
         nodes = nodes.concat(node.types);
         typeGroups.push(node.types);
@@ -58,7 +48,7 @@ export function removeTypeDuplicates(nodes: Array<Object>): Array<Object> {
     }
 
     // find a matching generic type and merge and deduplicate the type parameters
-    if (t.isGenericTypeAnnotation(node)) {
+    if (isGenericTypeAnnotation(node)) {
       const name = node.id.name;
 
       if (generics[name]) {
@@ -93,28 +83,4 @@ export function removeTypeDuplicates(nodes: Array<Object>): Array<Object> {
   }
 
   return types;
-}
-
-/**
- * Create a type anotation based on typeof expression.
- */
-
-export function createTypeAnnotationBasedOnTypeof(type: string) {
-  if (type === "string") {
-    return t.stringTypeAnnotation();
-  } else if (type === "number") {
-    return t.numberTypeAnnotation();
-  } else if (type === "undefined") {
-    return t.voidTypeAnnotation();
-  } else if (type === "boolean") {
-    return t.booleanTypeAnnotation();
-  } else if (type === "function") {
-    return t.genericTypeAnnotation(t.identifier("Function"));
-  } else if (type === "object") {
-    return t.genericTypeAnnotation(t.identifier("Object"));
-  } else if (type === "symbol") {
-    return t.genericTypeAnnotation(t.identifier("Symbol"));
-  } else {
-    throw new Error("Invalid typeof value");
-  }
 }

@@ -1,5 +1,5 @@
 // @flow
-import * as t from "../index";
+import isValidIdentifier from "../validators/isValidIdentifier";
 
 import {
   BINARY_OPERATORS,
@@ -15,7 +15,7 @@ import defineType, {
   assertEach,
   chain,
   assertOneOf,
-} from "./index";
+} from "./utils";
 
 defineType("ArrayExpression", {
   fields: {
@@ -372,7 +372,7 @@ defineType("Identifier", {
     ...patternLikeCommon,
     name: {
       validate(node, key, val) {
-        if (!t.isValidIdentifier(val)) {
+        if (!isValidIdentifier(val)) {
           // throw new TypeError(`"${val}" is not a valid identifer name`);
         }
       },

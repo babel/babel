@@ -1,34 +1,5 @@
-import { VISITOR_KEYS } from "./index";
-
-/**
- * A prefix AST traversal implementation meant for simple searching
- * and processing.
- */
-export function traverseFast(
-  node: Node,
-  enter: (node: Node) => void,
-  opts?: Object,
-) {
-  if (!node) return;
-
-  const keys = VISITOR_KEYS[node.type];
-  if (!keys) return;
-
-  opts = opts || {};
-  enter(node, opts);
-
-  for (const key of keys) {
-    const subNode = node[key];
-
-    if (Array.isArray(subNode)) {
-      for (const node of subNode) {
-        traverseFast(node, enter, opts);
-      }
-    } else {
-      traverseFast(subNode, enter, opts);
-    }
-  }
-}
+// @flow
+import { VISITOR_KEYS } from "../definitions";
 
 export type TraversalAncestors = Array<{
   node: BabelNode,
@@ -46,20 +17,27 @@ export type TraversalHandlers<T> = {
  * state object. Exposes ancestry data to each handler so that more complex
  * AST data can be taken into account.
  */
-export function traverse<T>(
+export default function traverse<T>(
   node: BabelNode,
   handlers: TraversalHandler<T> | TraversalHandlers<T>,
   state?: T,
-) {
+): void {
   if (typeof handlers === "function") {
     handlers = { enter: handlers };
   }
 
-  const { enter, exit } = handlers;
+  const { enter, exit } = (handlers: TraversalHandlers<T>);
 
   traverseSimpleImpl(node, enter, exit, state, []);
 }
-function traverseSimpleImpl(node, enter, exit, state, ancestors) {
+
+function traverseSimpleImpl<T>(
+  node: Object,
+  enter: ?Function,
+  exit: ?Function,
+  state: ?T,
+  ancestors: TraversalAncestors,
+) {
   const keys = VISITOR_KEYS[node.type];
   if (!keys) return;
 

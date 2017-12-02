@@ -16,6 +16,9 @@ build: clean
   # Build babylon before building all other projects
 	make build-babylon
 	./node_modules/.bin/gulp build
+	node ./packages/babel-types/scripts/generateTypeHelpers.js
+	# call build again as the generated files might need to be compiled again.
+	./node_modules/.bin/gulp build
 ifneq ("$(BABEL_ENV)", "cov")
 	make build-standalone
 	make build-preset-env-standalone

@@ -1,12 +1,7 @@
-import * as t from "./index";
+// @flow
+import { stringLiteral } from "../../builders/generated";
 
-export const isReactComponent = t.buildMatchMemberExpression("React.Component");
-
-export function isCompatTag(tagName?: string): boolean {
-  return !!tagName && /^[a-z]|-/.test(tagName);
-}
-
-function cleanJSXElementLiteralChild(
+export default function cleanJSXElementLiteralChild(
   child: { value: string },
   args: Array<Object>,
 ) {
@@ -51,25 +46,5 @@ function cleanJSXElementLiteralChild(
     }
   }
 
-  if (str) args.push(t.stringLiteral(str));
-}
-
-export function buildChildren(node: Object): Array<Object> {
-  const elems = [];
-
-  for (let i = 0; i < node.children.length; i++) {
-    let child = node.children[i];
-
-    if (t.isJSXText(child)) {
-      cleanJSXElementLiteralChild(child, elems);
-      continue;
-    }
-
-    if (t.isJSXExpressionContainer(child)) child = child.expression;
-    if (t.isJSXEmptyExpression(child)) continue;
-
-    elems.push(child);
-  }
-
-  return elems;
+  if (str) args.push(stringLiteral(str));
 }
