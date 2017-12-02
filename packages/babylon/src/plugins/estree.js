@@ -74,10 +74,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.expression = false;
     }
 
-    checkDeclaration(node: N.Pattern): void {
+    checkDeclaration(node: N.Pattern | N.ObjectProperty): void {
       if (isSimpleProperty(node)) {
-        // $FlowFixMe
-        this.checkDeclaration(node.value);
+        this.checkDeclaration(((node: any): N.EstreeProperty).value);
       } else {
         super.checkDeclaration(node);
       }

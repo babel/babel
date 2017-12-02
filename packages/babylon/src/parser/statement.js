@@ -1513,10 +1513,9 @@ export default class StatementParser extends ExpressionParser {
     }
   }
 
-  checkDeclaration(node: N.Pattern): void {
+  checkDeclaration(node: N.Pattern | N.ObjectProperty): void {
     if (node.type === "ObjectPattern") {
       for (const prop of node.properties) {
-        // $FlowFixMe (prop may be an AssignmentProperty, in which case this does nothing?)
         this.checkDeclaration(prop);
       }
     } else if (node.type === "ArrayPattern") {

@@ -17,6 +17,7 @@ lib/types.js
 lib/third-party-libs.js.flow
 
 [options]
+include_warnings=true
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 suppress_comment= \\(.\\|\n\\)*\\$FlowIssue
 suppress_comment= \\(.\\|\n\\)*\\$FlowIgnore
