@@ -119,6 +119,8 @@ test-test262-update-whitelist:
 publish:
 	git pull --rebase
 	make clean-lib
+	rm -rf packages/babel-runtime/helpers
+	rm -rf packages/babel-runtime/core-js
 	BABEL_ENV=production make build-dist
 	make test
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
@@ -135,8 +137,6 @@ bootstrap:
 	node scripts/build-dist.js
 
 clean-lib:
-	rm -rf packages/babel-runtime/helpers
-	rm -rf packages/babel-runtime/core-js
 	$(foreach source, $(SOURCES), \
 		$(call clean-source-lib, $(source)))
 

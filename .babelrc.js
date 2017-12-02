@@ -32,7 +32,6 @@ function istanbulHacks() {
 
 let envOpts = {
   loose: true,
-  exclude: ["transform-typeof-symbol"],
 };
 
 const config = {
@@ -43,9 +42,9 @@ const config = {
   ],
   plugins: [
     ["@babel/proposal-class-properties", { loose: true }],
-    "@babel/proposal-export-namespace",
+    "@babel/proposal-export-namespace-from",
     "@babel/proposal-numeric-separator",
-    ["@babel/proposal-object-rest-spread", { useBuiltIns: true}],
+    ["@babel/proposal-object-rest-spread", { useBuiltIns: true }],
   ]
 };
 
