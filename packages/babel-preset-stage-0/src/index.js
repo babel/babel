@@ -1,6 +1,5 @@
 import presetStage1 from "@babel/preset-stage-1";
 
-import transformDoExpressions from "@babel/plugin-proposal-do-expressions";
 import transformFunctionBind from "@babel/plugin-proposal-function-bind";
 
 export default function(context, opts = {}) {
@@ -23,6 +22,6 @@ export default function(context, opts = {}) {
 
   return {
     presets: [[presetStage1, { loose, useBuiltIns }]],
-    plugins: [transformDoExpressions, transformFunctionBind],
+    plugins: [transformFunctionBind],
   };
 }
