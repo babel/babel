@@ -5,6 +5,7 @@ import transformExportDefault from "@babel/plugin-proposal-export-default";
 import transformOptionalChaining from "@babel/plugin-proposal-optional-chaining";
 import transformPipelineOperator from "@babel/plugin-proposal-pipeline-operator";
 import transformNullishCoalescingOperator from "@babel/plugin-proposal-nullish-coalescing-operator";
+import transformDoExpressions from "@babel/plugin-proposal-do-expressions";
 
 export default function(context, opts = {}) {
   let loose = false;
@@ -32,6 +33,7 @@ export default function(context, opts = {}) {
       [transformOptionalChaining, { loose }],
       transformPipelineOperator,
       [transformNullishCoalescingOperator, { loose }],
+      transformDoExpressions,
     ],
   };
 }
