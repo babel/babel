@@ -1,12 +1,12 @@
 {
   "name": "@babel/helper-bindify-decorators",
-  "version": "7.0.0-beta.33",
+  "version": "7.0.0-beta.34",
   "description": "Helper function to bindify decorators",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-bindify-decorators",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/traverse": "7.0.0-beta.33",
-    "@babel/types": "7.0.0-beta.33"
+    "@babel/traverse": "7.0.0-beta.34",
+    "@babel/types": "7.0.0-beta.34"
   }
 }

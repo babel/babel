@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-pipeline-operator",
-  "version": "7.0.0-beta.33",
+  "version": "7.0.0-beta.34",
   "description": "Allow parsing of the pipeline operator",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-pipeline-operator",
   "license": "MIT",
@@ -9,9 +9,9 @@
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.33"
+    "@babel/core": "7.0.0-beta.34"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.33"
+    "@babel/core": "7.0.0-beta.34"
   }
 }
