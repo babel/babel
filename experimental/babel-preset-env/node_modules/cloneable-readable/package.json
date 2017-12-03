@@ -1,0 +1,39 @@
+{
+  "name": "cloneable-readable",
+  "version": "1.0.0",
+  "description": "Clone a Readable stream, safely",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && tape test.js | tap-spec"
+  },
+  "precommit": "test",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcollina/cloneable-readable.git"
+  },
+  "keywords": [
+    "readable",
+    "stream",
+    "clone"
+  ],
+  "author": "Matteo Collina <hello@matteocollina.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mcollina/cloneable-readable/issues"
+  },
+  "homepage": "https://github.com/mcollina/cloneable-readable#readme",
+  "devDependencies": {
+    "flush-write-stream": "^1.0.0",
+    "from2": "^2.1.1",
+    "pre-commit": "^1.1.2",
+    "readable-stream": "^2.1.0",
+    "standard": "^8.0.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.6.0"
+  },
+  "dependencies": {
+    "inherits": "^2.0.1",
+    "process-nextick-args": "^1.0.6",
+    "through2": "^2.0.1"
+  }
+}

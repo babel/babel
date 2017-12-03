@@ -1,0 +1,61 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<title>Jasmine Spec Runner</title>
+
+	<link rel="shortcut icon" type="image/png" href="lib/jasmine_favicon.png">
+
+	<link rel="stylesheet" type="text/css" href="lib/jasmine.css">
+	<script type="text/javascript" src="lib/jasmine.js"></script>
+	<script type="text/javascript" src="lib/jasmine-html.js"></script>
+	<script type="text/javascript" src="lib/json2.js"></script>
+
+	<!-- include helper files here... -->
+	<script src="helpers/h-matchers.js"></script>
+
+	<!-- include source files here... -->
+	<script src="../es5-shim.min.js"></script>
+
+	<!-- include spec files here... -->
+	<script src="spec/s-array.js"></script>
+	<script src="spec/s-function.js"></script>
+	<script src="spec/s-string.js"></script>
+	<script src="spec/s-object.js"></script>
+	<script src="spec/s-number.js"></script>
+	<script src="spec/s-date.js"></script>
+
+
+	<script type="text/javascript">
+		(function() {
+			var jasmineEnv = jasmine.getEnv();
+			jasmineEnv.updateInterval = 1000;
+
+			var trivialReporter = new jasmine.TrivialReporter();
+
+			jasmineEnv.addReporter(trivialReporter);
+
+			jasmineEnv.specFilter = function(spec) {
+				return trivialReporter.specFilter(spec);
+			};
+
+			var currentWindowOnload = window.onload;
+
+			window.onload = function() {
+				if (currentWindowOnload) {
+					currentWindowOnload();
+				}
+				execJasmine();
+			};
+
+			function execJasmine() {
+				jasmineEnv.execute();
+			}
+
+		})();
+	</script>
+
+</head>
+
+<body>
+</body>
+</html>

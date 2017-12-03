@@ -1,0 +1,53 @@
+{
+  "name": "entities",
+  "version": "1.1.1",
+  "description": "Encode & decode XML/HTML entities with ease",
+  "author": "Felix Boehm <me@feedic.com>",
+  "keywords": [
+    "html",
+    "xml",
+    "entity",
+    "encoding"
+  ],
+  "main": "./index.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "mocha": "1",
+    "mocha-lcov-reporter": "*",
+    "coveralls": "*",
+    "istanbul": "*",
+    "jshint": "2"
+  },
+  "scripts": {
+    "test": "mocha && npm run lint",
+    "lint": "jshint index.js lib/*.js test/*.js",
+    "lcov": "istanbul cover _mocha --report lcovonly -- -R spec",
+    "coveralls": "npm run lint && npm run lcov && (cat coverage/lcov.info | coveralls || exit 0)"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fb55/node-entities.git"
+  },
+  "license": "BSD-like",
+  "jshintConfig": {
+    "eqeqeq": true,
+    "freeze": true,
+    "latedef": "nofunc",
+    "noarg": true,
+    "nonbsp": true,
+    "quotmark": "double",
+    "undef": true,
+    "unused": true,
+    "trailing": true,
+    "eqnull": true,
+    "proto": true,
+    "smarttabs": true,
+    "node": true,
+    "globals": {
+      "describe": true,
+      "it": true
+    }
+  }
+}

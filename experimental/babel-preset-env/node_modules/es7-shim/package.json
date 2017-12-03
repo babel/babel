@@ -1,0 +1,91 @@
+{
+	"name": "es7-shim",
+	"version": "6.0.0",
+	"description": "ECMAScript 7 compatibility shims for legacy JavaScript engines",
+	"homepage": "http://github.com/es-shims/es7-shim/",
+	"author": "Jordan Harband <ljharb@gmail.com> (https://github.com/ljharb/)",
+	"contributors": [
+		"Jordan Harband <ljharb@gmail.com> (https://github.com/ljharb/)"
+	],
+	"bugs": {
+		"mail": "ljharb@gmail.com",
+		"url": "http://github.com/es-shims/es7-shim/issues"
+	},
+	"license": "MIT",
+	"main": "index.js",
+	"browser": "browser.js",
+	"repository": {
+		"type": "git",
+		"url": "http://github.com/es-shims/es7-shim.git"
+	},
+	"keywords": [
+		"ecmascript",
+		"harmony",
+		"es7",
+		"ES2016",
+		"shim",
+		"polyfill"
+	],
+	"scripts": {
+		"pretest": "npm run --silent lint",
+		"test": "npm run --silent tests-only",
+		"posttest": "npm run --silent security",
+		"tests-only": "node test/index.js",
+		"prepublish": "npm run --silent minify",
+		"build": "mkdir -p dist && browserify ./ > dist/es7-shim.js",
+		"minify": "npm run --silent build && uglifyjs dist/es7-shim.js --comments --source-map=dist/es7-shim.map -m -b ascii_only=true,beautify=false > dist/es7-shim.min.js",
+		"coverage": "covert test/index.js",
+		"coverage-quiet": "covert test/index.js --quiet",
+		"lint": "parallelshell 'npm run --silent jscs' 'npm run --silent eslint'",
+		"jscs": "jscs test/index.js *.js",
+		"eslint": "eslint test/index.js *.js",
+		"security": "nsp check"
+	},
+	"dependencies": {
+		"array-includes": "^3.0.2",
+		"object.getownpropertydescriptors": "^2.0.2",
+		"object.entries": "^1.0.3",
+		"object.values": "^1.0.3",
+		"string-at": "^1.0.1",
+		"string.prototype.padstart": "^3.0.0",
+		"string.prototype.padend": "^3.0.0",
+		"string.prototype.trimleft": "^2.0.0",
+		"string.prototype.trimright": "^2.0.0"
+	},
+	"devDependencies": {
+		"tape": "^4.6.0",
+		"browserify": "^13.0.1",
+		"uglify-js": "^2.7.0",
+		"covert": "^1.1.0",
+		"jscs": "^3.0.6",
+		"nsp": "^2.5.0",
+		"eslint": "^3.0.1",
+		"@ljharb/eslint-config": "^6.0.0",
+		"es6-promise": "^3.2.1",
+		"semver": "^5.2.0",
+		"replace": "^0.3.0",
+		"parallelshell": "^2.0.0"
+	},
+	"engines": {
+		"node": ">=0.4.0"
+	},
+	"testling": {
+		"files": "test/index.js",
+		"browsers": [
+			"iexplore/6.0..latest",
+			"firefox/3.0..6.0",
+			"firefox/15.0..latest",
+			"firefox/nightly",
+			"chrome/4.0..10.0",
+			"chrome/20.0..latest",
+			"chrome/canary",
+			"opera/10.0..latest",
+			"opera/next",
+			"safari/4.0..latest",
+			"ipad/6.0..latest",
+			"iphone/6.0..latest",
+			"android-browser/4.2"
+		]
+	}
+}
+

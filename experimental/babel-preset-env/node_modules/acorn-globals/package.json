@@ -1,0 +1,34 @@
+{
+  "name": "acorn-globals",
+  "version": "1.0.9",
+  "description": "Detect global variables in JavaScript using acorn",
+  "keywords": [
+    "ast",
+    "variable",
+    "name",
+    "lexical",
+    "scope",
+    "local",
+    "global",
+    "implicit"
+  ],
+  "files": [
+    "index.js",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "acorn": "^2.1.0"
+  },
+  "devDependencies": {
+    "testit": "^2.0.2"
+  },
+  "scripts": {
+    "test": "node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ForbesLindesay/acorn-globals.git"
+  },
+  "author": "ForbesLindesay",
+  "license": "MIT"
+}

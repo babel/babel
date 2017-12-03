@@ -1,0 +1,22 @@
+{
+  "name": "babel-register",
+  "version": "6.26.0",
+  "description": "babel require hook",
+  "license": "MIT",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-register",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "main": "lib/node.js",
+  "browser": "lib/browser.js",
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-runtime": "^6.26.0",
+    "core-js": "^2.5.0",
+    "home-or-tmp": "^2.0.0",
+    "lodash": "^4.17.4",
+    "mkdirp": "^0.5.1",
+    "source-map-support": "^0.4.15"
+  },
+  "devDependencies": {
+    "decache": "^4.1.0"
+  }
+}

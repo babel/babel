@@ -1,0 +1,19 @@
+{
+  "rules": {
+    "array-callback-return": 0,
+    "func-name-matching": 0,
+    "max-statements-per-line": [2, { "max": 2 }],
+    "no-restricted-properties": 1,
+    "symbol-description": 0,
+    "prefer-promise-reject-errors": 0,
+  },
+  "env": {
+    "mocha": true
+  },
+  "globals": {
+    "Symbol": false,
+    "Promise": false,
+    "expect": false,
+    "assert": false
+  }
+}

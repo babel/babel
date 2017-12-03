@@ -859,7 +859,8 @@ export default class StatementParser extends ExpressionParser {
       isStatement &&
       !optionalId &&
       !this.match(tt.name) &&
-      !this.match(tt._yield)
+      !this.match(tt._yield) &&
+      !this.match(tt._let)
     ) {
       this.unexpected();
     }
@@ -876,6 +877,11 @@ export default class StatementParser extends ExpressionParser {
     if (this.match(tt.name) || this.match(tt._yield)) {
       node.id = this.parseBindingIdentifier();
     }
+
+    if (this.match(tt._let)) {
+      node.id = this.parseIdentifier(this.shouldAllowLetIdentifier());
+    }
+
     if (isStatement) this.state.inGenerator = node.generator;
 
     this.parseFunctionParams(node);

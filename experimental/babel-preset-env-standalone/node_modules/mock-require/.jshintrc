@@ -1,0 +1,18 @@
+{
+  "eqeqeq": true,
+  "indent": 2,
+  "undef": true,
+  "unused": "vars",
+  "loopfunc": true,
+  "noarg": true,
+  "regexdash": true,
+  "browser": true,
+  "wsh": true,
+  "jquery": true,
+  "trailing": true,
+  "sub": true,
+  "laxcomma": true,
+  "node": true,
+  "newcap": false,
+  "eqnull": true
+}

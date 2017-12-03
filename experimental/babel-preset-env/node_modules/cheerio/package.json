@@ -1,0 +1,49 @@
+{
+  "name": "cheerio",
+  "version": "0.20.0",
+  "description": "Tiny, fast, and elegant implementation of core jQuery designed specifically for the server",
+  "author": "Matt Mueller <mattmuelle@gmail.com> (mat.io)",
+  "license": "MIT",
+  "keywords": [
+    "htmlparser",
+    "jquery",
+    "selector",
+    "scraper",
+    "parser",
+    "html"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/cheeriojs/cheerio.git"
+  },
+  "main": "./index.js",
+  "files": [
+    "index.js",
+    "lib"
+  ],
+  "engines": {
+    "node": ">= 0.6"
+  },
+  "dependencies": {
+    "css-select": "~1.2.0",
+    "entities": "~1.1.1",
+    "htmlparser2": "~3.8.1",
+    "dom-serializer": "~0.1.0",
+    "lodash": "^4.1.0"
+  },
+  "devDependencies": {
+    "benchmark": "~1.0.0",
+    "coveralls": "~2.10",
+    "expect.js": "~0.3.1",
+    "istanbul": "~0.2",
+    "jshint": "~2.5.1",
+    "mocha": "*",
+    "xyz": "~0.5.0"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "optionalDependencies": {
+    "jsdom": "^7.0.2"
+  }
+}

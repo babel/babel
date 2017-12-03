@@ -1,0 +1,43 @@
+{
+	"name": "extend",
+	"author": "Stefan Thomas <justmoon@members.fsf.org> (http://www.justmoon.net)",
+	"version": "3.0.1",
+	"description": "Port of jQuery.extend for node.js and the browser",
+	"main": "index",
+	"scripts": {
+		"pretest": "npm run lint",
+		"test": "npm run tests-only",
+		"posttest": "npm run coverage-quiet",
+		"tests-only": "node test",
+		"coverage": "covert test/index.js",
+		"coverage-quiet": "covert test/index.js --quiet",
+		"lint": "npm run jscs && npm run eslint",
+		"jscs": "jscs *.js */*.js",
+		"eslint": "eslint *.js */*.js"
+	},
+	"contributors": [
+		{
+			"name": "Jordan Harband",
+			"url": "https://github.com/ljharb"
+		}
+	],
+	"keywords": [
+		"extend",
+		"clone",
+		"merge"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/justmoon/node-extend.git"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"tape": "^4.6.3",
+		"covert": "^1.1.0",
+		"jscs": "^3.0.7",
+		"eslint": "^3.19.0",
+		"@ljharb/eslint-config": "^11.0.0"
+	},
+	"license": "MIT"
+}
+

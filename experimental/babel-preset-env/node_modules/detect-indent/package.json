@@ -1,0 +1,46 @@
+{
+  "name": "detect-indent",
+  "version": "4.0.0",
+  "description": "Detect the indentation of code",
+  "license": "MIT",
+  "repository": "sindresorhus/detect-indent",
+  "author": {
+    "name": "Sindre Sorhus",
+    "email": "sindresorhus@gmail.com",
+    "url": "sindresorhus.com"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "xo && ava"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "indent",
+    "indentation",
+    "detect",
+    "infer",
+    "identify",
+    "code",
+    "string",
+    "text",
+    "source",
+    "space",
+    "tab"
+  ],
+  "dependencies": {
+    "repeating": "^2.0.0"
+  },
+  "devDependencies": {
+    "ava": "*",
+    "xo": "*"
+  },
+  "xo": {
+    "ignores": [
+      "fixture/**"
+    ]
+  }
+}

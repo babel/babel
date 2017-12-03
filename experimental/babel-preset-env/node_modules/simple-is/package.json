@@ -1,0 +1,25 @@
+{
+  "name": "simple-is",
+  "version": "0.2.0",
+  "description": "maximally minimal type-testing library",
+  "main": "simple-is.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/olov/simple-is.git"
+  },
+  "keywords": [
+    "is",
+    "type",
+    "test",
+    "check",
+    "assert"
+  ],
+  "scripts": {
+    "test": "tap test/*.js"
+  },
+  "devDependencies": {
+    "tap": "~0.4.0"
+  },
+  "author": "Olov Lassus <olov.lassus@gmail.com>",
+  "license": "MIT"
+}

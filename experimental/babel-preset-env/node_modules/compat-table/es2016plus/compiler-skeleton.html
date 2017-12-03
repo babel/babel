@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ECMAScript 2016+ compatibility table - <!-- NAME --> test page</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,600">
+    <link rel="stylesheet" href="../../master.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="../../master.js"></script>
+    <!-- POLYFILLS -->
+    <script>
+      if (typeof global === "undefined") {
+        this.lacksGlobal = true;
+        window.global = this;
+      }
+      function __createIterableObject(a, b, c) {
+        try {
+          return eval("(function*() { yield a; yield b; yield c; }())");
+        }
+        catch (e) {
+          var arr = [a, b, c, ,];
+          var iterable = {
+            next: function() {
+              return { value: arr.shift(), done: arr.length <= 0 };
+            },
+          };
+          iterable[Symbol.iterator] = function(){ return iterable; }
+          return iterable;
+        }
+      }
+    </script>
+</head>
+<body class="es2016plus">
+  <div id="header">
+    <h1>
+      <span title="ECMA-262">ECMAScript</span> 2016+ compatibility table - <!-- URL --> test page
+
+      <p style="margin:left; font-size:0.9em;">
+          <a href="../index.html">← Back to the main table</a>
+        </p>
+    </h1>
+  </div>
+  <div id="body">
+    <p class="warning">Please note that <em>some</em> compiled output <strong>may be buggy</strong> or not representative of the compiler's true support.</p>
+
+    <table id="table-wrapper" style="width:50%;">
+      <colgroup>
+        <col>
+        <col class="this-browser-col">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="test-name">Feature name</th>
+          <th class="current"><!-- URL --> + current browser's native support</th>
+          <th></th>
+          <!-- TABLE HEADERS -->
+        </tr>
+      </thead>
+      <tbody>
+        <!-- TABLE BODY -->
+      </tbody>
+    </table>
+    <div id="footnotes">
+      <!-- FOOTNOTES -->
+    </div>
+  </div>
+  <pre class="info-tooltip" style="display:none"></pre>
+</body>
+</html>

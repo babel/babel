@@ -1,0 +1,7 @@
+importScripts(
+  '../node_modules/es5-shim/es5-shim.js',
+  '../node_modules/es5-shim/es5-sham.js',
+  '../es6-shim.js'
+);
+
+postMessage('ready');

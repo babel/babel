@@ -1,0 +1,44 @@
+{
+  "author": "Ben Newman <bn@cs.stanford.edu>",
+  "name": "recast",
+  "description": "JavaScript syntax tree transformer, nondestructive pretty-printer, and automatic source map generator",
+  "keywords": [
+    "ast",
+    "rewriting",
+    "refactoring",
+    "codegen",
+    "syntax",
+    "transformation",
+    "parsing",
+    "pretty-printing"
+  ],
+  "version": "0.11.23",
+  "homepage": "http://github.com/benjamn/recast",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/benjamn/recast.git"
+  },
+  "license": "MIT",
+  "main": "main.js",
+  "scripts": {
+    "test": "node ./node_modules/mocha/bin/mocha --reporter spec --full-trace",
+    "debug": "node ./node_modules/mocha/bin/mocha --debug-brk --reporter spec"
+  },
+  "browser": {
+    "fs": false
+  },
+  "dependencies": {
+    "ast-types": "0.9.6",
+    "esprima": "~3.1.0",
+    "private": "~0.1.5",
+    "source-map": "~0.5.0"
+  },
+  "devDependencies": {
+    "babylon": "~6.15.0",
+    "esprima-fb": "^15001.1001.0-dev-harmony-fb",
+    "mocha": "~3.1.2"
+  },
+  "engines": {
+    "node": ">= 0.8"
+  }
+}

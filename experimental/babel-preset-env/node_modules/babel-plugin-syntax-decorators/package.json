@@ -1,0 +1,13 @@
+{
+  "name": "babel-plugin-syntax-decorators",
+  "version": "6.13.0",
+  "description": "Allow parsing of decorators",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-decorators",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {},
+  "devDependencies": {}
+}

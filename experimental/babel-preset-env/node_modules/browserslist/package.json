@@ -1,0 +1,84 @@
+{
+  "name": "browserslist",
+  "version": "2.9.0",
+  "description": "Share target browsers between different front-end tools, like Autoprefixer, Stylelint and babel-env-preset",
+  "keywords": [
+    "caniuse",
+    "browsers",
+    "target"
+  ],
+  "author": "Andrey Sitnik <andrey@sitnik.ru>",
+  "license": "MIT",
+  "repository": "ai/browserslist",
+  "dependencies": {
+    "caniuse-lite": "^1.0.30000760",
+    "electron-to-chromium": "^1.3.27"
+  },
+  "bin": "./cli.js",
+  "devDependencies": {
+    "cross-spawn": "^5.1.0",
+    "eslint": "^4.11.0",
+    "eslint-config-logux": "^16.2.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-es5": "^1.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jest": "^21.3.2",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "jest": "^21.2.1",
+    "lint-staged": "^5.0.0",
+    "pre-commit": "^1.1.3",
+    "size-limit": "^0.13.1",
+    "yaspeller-ci": "^0.7.0"
+  },
+  "eslintConfig": {
+    "extends": "eslint-config-logux/browser",
+    "rules": {
+      "security/detect-unsafe-regex": "off",
+      "global-require": "off"
+    },
+    "overrides": {
+      "files": [
+        "*.test.js"
+      ],
+      "rules": {
+        "es5/no-arrow-functions": "off"
+      }
+    }
+  },
+  "jest": {
+    "coverageThreshold": {
+      "global": {
+        "statements": 100
+      }
+    },
+    "modulePathIgnorePatterns": [
+      "test/fixtures"
+    ]
+  },
+  "size-limit": [
+    {
+      "path": "index.js",
+      "limit": "155 KB"
+    }
+  ],
+  "scripts": {
+    "lint-staged": "lint-staged",
+    "spellcheck": "yaspeller-ci README.md CHANGELOG.md",
+    "lint": "eslint *.js test/*.js __mocks__/*.js",
+    "test": "jest --coverage && yarn lint && yarn spellcheck && size-limit"
+  },
+  "lint-staged": {
+    "*.md": "yaspeller-ci",
+    "*.js": "eslint"
+  },
+  "browser": {
+    "path": false,
+    "fs": false
+  },
+  "pre-commit": [
+    "lint-staged"
+  ]
+}

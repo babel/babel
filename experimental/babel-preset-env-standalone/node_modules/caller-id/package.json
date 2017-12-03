@@ -1,0 +1,35 @@
+{
+    "name": "caller-id",
+    "version": "0.1.0",
+    "author": "Pixels & Bytes <pxandbytes@gmail.com>",
+    "description": "A utility for getting information on the caller of a function in node.js",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/pixelsandbytes/caller-id.git"
+    },
+    "main": "./lib/caller-id.js",
+    "keywords": [
+        "function",
+        "method",
+        "call",
+        "caller",
+        "stack",
+        "trace",
+        "stacktrace",
+        "caller-id"
+    ],
+    "devDependencies": {
+        "grunt": "~0.4.1",
+        "grunt-cli": "~0.1.9",
+        "grunt-contrib-jshint": "~0.7.1",
+        "grunt-simple-mocha": "~0.4.0",
+        "should": "~2.0.2"
+    },
+    "dependencies": {
+        "stack-trace": "~0.0.7"
+    },
+    "engines": {
+        "node": ">=0.8"
+    },
+    "license": "MIT"
+}

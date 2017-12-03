@@ -1,0 +1,21 @@
+{
+  "name": "semver",
+  "version": "4.3.6",
+  "description": "The semantic version parser used by npm.",
+  "main": "semver.js",
+  "browser": "semver.browser.js",
+  "min": "semver.min.js",
+  "scripts": {
+    "test": "tap test/*.js",
+    "prepublish": "make"
+  },
+  "devDependencies": {
+    "tap": "^1.2.0",
+    "uglify-js": "~2.3.6"
+  },
+  "license": "ISC",
+  "repository": "git://github.com/npm/node-semver.git",
+  "bin": {
+    "semver": "./bin/semver"
+  }
+}

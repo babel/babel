@@ -1,0 +1,10 @@
+.gitattributes
+.jshint*
+.jscsrc
+.travis.yml
+
+scripts/
+test/
+
+jsconfig.js
+.settings/

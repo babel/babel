@@ -1,0 +1,11 @@
+{
+  "name": "bcrypt-pbkdf",
+  "version": "1.0.1",
+  "description": "Port of the OpenBSD bcrypt_pbkdf function to pure JS",
+  "main": "index.js",
+  "dependencies": {
+    "tweetnacl": "^0.14.3"
+  },
+  "devDependencies": {},
+  "license": "BSD-3-Clause"
+}

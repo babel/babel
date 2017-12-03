@@ -1,0 +1,28 @@
+{
+  "boss": true,
+  "curly": true,
+  "devel": false,
+  "eqnull": false,
+  "esnext": true,
+  "expr": true,
+  "funcscope": true,
+  "globals": {
+    "afterEach": true,
+    "beforeEach": true,
+    "describe": true,
+    "expect": true,
+    "it": true,
+    "jest": true
+  },
+  "globalstrict": false,
+  "laxbreak": true,
+  "loopfunc": false,
+  "newcap": true,
+  "node": true,
+  "noempty": true,
+  "nonstandard": false,
+  "onecase": false,
+  "trailing": true,
+  "undef": true,
+  "unused": "vars"
+}

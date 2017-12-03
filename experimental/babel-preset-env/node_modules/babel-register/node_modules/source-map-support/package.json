@@ -1,0 +1,30 @@
+{
+  "name": "source-map-support",
+  "description": "Fixes stack traces for files with source maps",
+  "version": "0.4.18",
+  "main": "./source-map-support.js",
+  "scripts": {
+    "build": "node build.js",
+    "serve-tests": "http-server -p 1336",
+    "prepublish": "npm run build",
+    "test": "mocha"
+  },
+  "dependencies": {
+    "source-map": "^0.5.6"
+  },
+  "devDependencies": {
+    "browserify": "3.44.2",
+    "coffee-script": "1.7.1",
+    "http-server": "^0.8.5",
+    "mocha": "1.18.2",
+    "webpack": "^1.13.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evanw/node-source-map-support"
+  },
+  "bugs": {
+    "url": "https://github.com/evanw/node-source-map-support/issues"
+  },
+  "license": "MIT"
+}

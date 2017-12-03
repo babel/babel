@@ -1,0 +1,43 @@
+{
+  "name": "diff",
+  "version": "1.0.8",
+  "description": "A javascript text diff implementation.",
+  "keywords": [
+    "diff",
+    "javascript"
+  ],
+  "maintainers": [
+    "Kevin Decker <kpdecker@gmail.com> (http://incaseofstairs.com)"
+  ],
+  "bugs": {
+    "email": "kpdecker@gmail.com",
+    "url": "http://github.com/kpdecker/jsdiff/issues"
+  },
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "http://github.com/kpdecker/jsdiff/blob/master/LICENSE"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/kpdecker/jsdiff.git"
+  },
+  "engines": {
+    "node": ">=0.3.1"
+  },
+  "main": "./diff",
+  "scripts": {
+    "test": "node_modules/.bin/mocha test/*.js"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "~1.6",
+    "should": "~1.2",
+    "colors": "~0.6.2"
+  },
+  "optionalDependencies": {},
+  "files": [
+    "diff.js"
+  ]
+}

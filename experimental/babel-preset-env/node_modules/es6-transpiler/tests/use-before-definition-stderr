@@ -1,0 +1,3 @@
+line 3: reference to unknown global variable x
+line 5: x is referenced before its declaration
+line 7: x is referenced before its declaration

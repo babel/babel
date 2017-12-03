@@ -211,6 +211,10 @@ export default class LValParser extends NodeUtils {
     );
   }
 
+  shouldAllowLetIdentifier(): boolean {
+    return this.match(tt._let) && !this.state.strict;
+  }
+
   parseBindingIdentifier(): Identifier {
     return this.parseIdentifier(this.shouldAllowYieldIdentifier());
   }
@@ -231,6 +235,9 @@ export default class LValParser extends NodeUtils {
 
       case tt.braceL:
         return this.parseObj(true);
+
+      case tt._let:
+        return this.parseIdentifier(this.shouldAllowLetIdentifier());
 
       default:
         throw this.unexpected();

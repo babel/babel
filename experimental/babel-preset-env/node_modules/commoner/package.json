@@ -1,0 +1,53 @@
+{
+  "author": {
+    "name": "Ben Newman",
+    "email": "ben@benjamn.com"
+  },
+  "name": "commoner",
+  "description": "Flexible tool for translating any dialect of JavaScript into Node-readable CommonJS modules",
+  "keywords": [
+    "modules",
+    "require",
+    "commonjs",
+    "exports",
+    "commoner",
+    "browserify",
+    "stitch"
+  ],
+  "version": "0.10.8",
+  "license": "MIT",
+  "homepage": "http://github.com/benjamn/commoner",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/benjamn/commoner.git"
+  },
+  "main": "main.js",
+  "files": [
+    "bin",
+    "lib",
+    "main.js"
+  ],
+  "bin": {
+    "commonize": "./bin/commonize"
+  },
+  "scripts": {
+    "test": "rm -rf test/output ; node ./node_modules/mocha/bin/mocha --reporter spec test/run.js"
+  },
+  "dependencies": {
+    "commander": "^2.5.0",
+    "detective": "^4.3.1",
+    "glob": "^5.0.15",
+    "graceful-fs": "^4.1.2",
+    "iconv-lite": "^0.4.5",
+    "mkdirp": "^0.5.0",
+    "private": "^0.1.6",
+    "q": "^1.1.2",
+    "recast": "^0.11.17"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.3"
+  },
+  "engines": {
+    "node": ">= 0.8"
+  }
+}

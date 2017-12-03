@@ -1,0 +1,17 @@
+{
+  "name": "babel-plugin-transform-es2015-arrow-functions",
+  "version": "6.22.0",
+  "description": "Compile ES2015 arrow functions to ES5",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-es2015-arrow-functions",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "babel-runtime": "^6.22.0"
+  },
+  "devDependencies": {
+    "babel-helper-plugin-test-runner": "^6.22.0"
+  }
+}

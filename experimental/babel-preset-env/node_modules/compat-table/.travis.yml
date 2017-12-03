@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "node"
+env:
+  - LINT=true
+  - TEST=true
+script: 'if [ -n "${TEST-}" ]; then npm run test:no_change; elif [ -n "${LINT-}" ]; then npm run lint; else false; fi'
+branches:
+  only:
+    - gh-pages
+sudo: false

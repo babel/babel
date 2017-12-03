@@ -1,0 +1,58 @@
+{
+	"name": "is-symbol",
+	"version": "1.0.1",
+	"description": "Determine if a value is an ES6 Symbol or not.",
+	"main": "index.js",
+	"scripts": {
+		"test": "npm run lint && node --es-staging --harmony test/index.js && npm run security",
+		"coverage": "covert test/index.js",
+		"coverage:quiet": "covert test/index.js --quiet",
+		"lint": "jscs *.js */*.js",
+		"security": "nsp package"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/ljharb/is-symbol.git"
+	},
+	"keywords": [
+		"symbol",
+		"es6",
+		"is",
+		"Symbol"
+	],
+	"author": "Jordan Harband",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/ljharb/is-symbol/issues"
+	},
+	"dependencies": {},
+	"devDependencies": {
+		"tape": "~3.4.0",
+		"covert": "1.0.0",
+		"jscs": "~1.10.0",
+		"nsp": "~1.0.0",
+		"semver": "~4.2.0"
+	},
+	"testling": {
+		"files": "test/index.js",
+		"browsers": [
+			"iexplore/6.0..latest",
+			"firefox/3.0..6.0",
+			"firefox/15.0..latest",
+			"firefox/nightly",
+			"chrome/4.0..10.0",
+			"chrome/20.0..latest",
+			"chrome/canary",
+			"opera/10.0..latest",
+			"opera/next",
+			"safari/4.0..latest",
+			"ipad/6.0..latest",
+			"iphone/6.0..latest",
+			"android-browser/4.2"
+		]
+	},
+	"engines": {
+		"node": ">= 0.4"
+	}
+}
+

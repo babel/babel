@@ -1,0 +1,3 @@
+{
+    id: 'node-path-set'
+}

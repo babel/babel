@@ -1,0 +1,27 @@
+{
+  "name": "nth-check",
+  "version": "1.0.1",
+  "description": "performant nth-check parser & compiler",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fb55/nth-check"
+  },
+  "keywords": [
+    "nth-child",
+    "nth",
+    "css"
+  ],
+  "author": "Felix Boehm <me@feedic.com>",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/fb55/nth-check/issues"
+  },
+  "homepage": "https://github.com/fb55/nth-check",
+  "dependencies": {
+    "boolbase": "~1.0.0"
+  }
+}

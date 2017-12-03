@@ -1,0 +1,31 @@
+{
+  "name": "sntp",
+  "description": "SNTP Client",
+  "version": "2.1.0",
+  "author": "Eran Hammer <eran@hammer.io> (http://hueniverse.com)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hueniverse/sntp"
+  },
+  "main": "lib/index.js",
+  "keywords": [
+    "sntp",
+    "ntp",
+    "time"
+  ],
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "dependencies": {
+    "hoek": "4.x.x"
+  },
+  "devDependencies": {
+    "code": "4.x.x",
+    "lab": "14.x.x"
+  },
+  "scripts": {
+    "test": "lab -a code -t 100 -L -m 20000",
+    "test-cov-html": "lab -a code -r html -o coverage.html -m 20000"
+  },
+  "license": "BSD-3-Clause"
+}
