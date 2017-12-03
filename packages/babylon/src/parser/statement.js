@@ -129,11 +129,8 @@ export default class StatementParser extends ExpressionParser {
         return this.parseEmptyStatement(node);
       case tt._export:
       case tt._import: {
-        if (
-          (this.hasPlugin("dynamicImport") &&
-            this.lookahead().type === tt.parenL) ||
-          (this.hasPlugin("importMeta") && this.lookahead().type === tt.dot)
-        ) {
+        const nextToken = this.lookahead();
+        if (nextToken.type === tt.parenL || nextToken.type === tt.dot) {
           break;
         }
 
