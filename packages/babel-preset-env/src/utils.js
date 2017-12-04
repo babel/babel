@@ -115,7 +115,7 @@ export const createImport = (
 
   if (requireType === "import") {
     const declar = t.importDeclaration([], t.stringLiteral(modulePath));
-    declar._blockHoist = 3;
+    declar._blockHoist = 4;
     return declar;
   }
 
