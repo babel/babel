@@ -309,7 +309,7 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 - Start working about the Babel transform itself!
 
 ## Internals
-- AST spec ([babylon/ast/spec.md](https://github.com/babel/babel/tree/master/packages/babylon/blob/master/ast/spec.md))
+- AST spec ([babylon/ast/spec.md](https://github.com/babel/babel/blob/master/packages/babylon/ast/spec.md))
 - Versioning ([doc/design/versioning.md](https://github.com/babel/babel/blob/master/doc/design/versioning.md))
 - Monorepo ([doc/design/monorepo.md](https://github.com/babel/babel/blob/master/doc/design/monorepo.md))
 - Compiler environment support ([doc/design/compiler-environment-support.md](https://github.com/babel/babel/blob/master/doc/design/compiler-environment-support.md))
