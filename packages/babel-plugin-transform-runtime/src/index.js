@@ -31,10 +31,10 @@ export default function(api, options) {
           const isInteropHelper = HEADER_HELPERS.indexOf(name) !== -1;
 
           // Explicitly set the CommonJS interop helpers to their reserve
-          // blockHoist of 4 so they are guaranteed to exist
+          // blockHoist of 5 so they are guaranteed to exist
           // when other things used them to import.
           const blockHoist =
-            isInteropHelper && !isModule(file.path) ? 4 : undefined;
+            isInteropHelper && !isModule(file.path) ? 5 : undefined;
 
           return this.addDefaultImport(
             `${moduleName}/${helpersDir}/${name}`,
