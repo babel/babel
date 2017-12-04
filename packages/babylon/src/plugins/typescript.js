@@ -1280,7 +1280,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       noCalls: ?boolean,
       state: { stop: boolean },
     ): N.Expression {
-      if (this.eat(tt.bang)) {
+      if (!this.hasPrecedingLineBreak() && this.eat(tt.bang)) {
         const nonNullExpression: N.TsNonNullExpression = this.startNodeAt(
           startPos,
           startLoc,
