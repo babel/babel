@@ -1,14 +1,13 @@
-let agf =
-/*#__PURE__*/
-(() => {
-  var _ref = babelHelpers.wrapAsyncGenerator(function* () {
+function agf() {
+  return _agf.apply(this, arguments);
+}
+
+function _agf() {
+  _agf = babelHelpers.wrapAsyncGenerator(function* () {
     this;
     yield babelHelpers.awaitAsyncGenerator(1);
     yield 2;
     return 3;
   });
-
-  return function agf() {
-    return _ref.apply(this, arguments);
-  };
-})();
+  return _agf.apply(this, arguments);
+}
