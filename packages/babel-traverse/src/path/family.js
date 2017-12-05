@@ -35,6 +35,14 @@ export function getCompletionRecords(): Array {
     paths = addCompletionRecords(this.get("finalizer"), paths);
   } else if (this.isCatchClause()) {
     paths = addCompletionRecords(this.get("body"), paths);
+  } else if (this.isSwitchStatement()) {
+    const cases = this.get("cases");
+    for (let i = 0, caseLen = cases.length; i < caseLen; i++) {
+      if (cases[i].get("consequent")[1]) {
+        cases[i].get("consequent")[1].remove();
+      }
+      paths = addCompletionRecords(cases[i].get("consequent")[0], paths);
+    }
   } else {
     paths.push(this);
   }
