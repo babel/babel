@@ -17,6 +17,38 @@ function addCompletionRecords(path, paths) {
   return paths;
 }
 
+function completionRecordForSwitch(cases, paths) {
+  for (let i = 0, caseLen = cases.length; i < caseLen; i++) {
+    const consequentLength = cases[i].get("consequent").length;
+    const isDefaultStatement = !cases[i].get("test").type;
+    if (isDefaultStatement) {
+      paths = addCompletionRecords(
+        cases[i].get("consequent")[consequentLength - 1],
+        paths,
+      );
+    } else {
+      const finalStatement = cases[i].get("consequent")[consequentLength - 1];
+      const isBreakStatement =
+        finalStatement && finalStatement.isBreakStatement();
+      // TODO:- Make it as ternary
+      if (consequentLength === 1) {
+        // TODO:- return null if the case statement has only break
+      } else {
+        paths = addCompletionRecords(
+          cases[i].get("consequent")[
+            consequentLength - (isBreakStatement ? 2 : 1)
+          ],
+          paths,
+        );
+      }
+      if (isBreakStatement) {
+        finalStatement.remove();
+      }
+    }
+  }
+  return paths;
+}
+
 export function getCompletionRecords(): Array {
   let paths = [];
 
@@ -37,12 +69,7 @@ export function getCompletionRecords(): Array {
     paths = addCompletionRecords(this.get("body"), paths);
   } else if (this.isSwitchStatement()) {
     const cases = this.get("cases");
-    for (let i = 0, caseLen = cases.length; i < caseLen; i++) {
-      if (cases[i].get("consequent")[1]) {
-        cases[i].get("consequent")[1].remove();
-      }
-      paths = addCompletionRecords(cases[i].get("consequent")[0], paths);
-    }
+    paths = completionRecordForSwitch(cases, paths);
   } else {
     paths.push(this);
   }
