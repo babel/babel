@@ -20,29 +20,33 @@ function addCompletionRecords(path, paths) {
 function completionRecordForSwitch(cases, paths) {
   for (let i = 0, caseLen = cases.length; i < caseLen; i++) {
     const consequentLength = cases[i].get("consequent").length;
-    const isDefaultStatement = !cases[i].get("test").type;
-    if (isDefaultStatement) {
+    const isDefaultCase = cases[i].get("test").type === null;
+    if (isDefaultCase) {
       paths = addCompletionRecords(
         cases[i].get("consequent")[consequentLength - 1],
         paths,
       );
     } else {
-      const finalStatement = cases[i].get("consequent")[consequentLength - 1];
-      const isBreakStatement =
-        finalStatement && finalStatement.isBreakStatement();
-      // TODO:- Make it as ternary
-      if (consequentLength === 1) {
-        // TODO:- return null if the case statement has only break
-      } else {
+      const lastCaseStatement = cases[i].get("consequent")[
+        consequentLength - 1
+      ];
+      const hasBreakStatement =
+        lastCaseStatement && lastCaseStatement.isBreakStatement();
+
+      if (consequentLength === 1 && hasBreakStatement) {
+        // Todo
+        // const emptyNode = cases[i].scope.buildUndefinedNode();
+        // cases[i].get("consequent").unshift(emptyNode);
+        // this.resync();
+        // paths = addCompletionRecords(emptyNode, paths);
+        // lastCaseStatement.remove();
+      }
+      if (consequentLength > 1 && hasBreakStatement) {
         paths = addCompletionRecords(
-          cases[i].get("consequent")[
-            consequentLength - (isBreakStatement ? 2 : 1)
-          ],
+          cases[i].get("consequent")[consequentLength - 2],
           paths,
         );
-      }
-      if (isBreakStatement) {
-        finalStatement.remove();
+        lastCaseStatement.remove();
       }
     }
   }
@@ -51,7 +55,6 @@ function completionRecordForSwitch(cases, paths) {
 
 export function getCompletionRecords(): Array {
   let paths = [];
-
   if (this.isIfStatement()) {
     paths = addCompletionRecords(this.get("consequent"), paths);
     paths = addCompletionRecords(this.get("alternate"), paths);
@@ -68,8 +71,7 @@ export function getCompletionRecords(): Array {
   } else if (this.isCatchClause()) {
     paths = addCompletionRecords(this.get("body"), paths);
   } else if (this.isSwitchStatement()) {
-    const cases = this.get("cases");
-    paths = completionRecordForSwitch(cases, paths);
+    paths = completionRecordForSwitch(this.get("cases"), paths);
   } else {
     paths.push(this);
   }
