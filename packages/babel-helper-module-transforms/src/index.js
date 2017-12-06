@@ -75,7 +75,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
 export function ensureStatementsHoisted(statements) {
   // Force all of the header fields to be at the top of the file.
   statements.forEach(header => {
-    header._blockHoist = 3;
+    header._blockHoist = 4;
   });
 }
 

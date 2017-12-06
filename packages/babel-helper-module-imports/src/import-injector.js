@@ -410,14 +410,14 @@ export default class ImportInjector {
     return resultName;
   }
 
-  _insertStatements(statements, blockHoist = 3) {
+  _insertStatements(statements, blockHoist = 4) {
     statements.forEach(node => {
       node._blockHoist = blockHoist;
     });
 
     const targetPath = this._programPath.get("body").filter(p => {
       const val = p.node._blockHoist;
-      return Number.isFinite(val) && val < 4;
+      return Number.isFinite(val) && val < 5;
     })[0];
 
     if (targetPath) {
