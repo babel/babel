@@ -36,6 +36,6 @@
     "babylon": "./bin/babylon.js"
   },
   "publishConfig": {
-    "tag": "latest" 
+    "tag": "next" 
   }
 }
