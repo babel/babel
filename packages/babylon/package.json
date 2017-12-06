@@ -34,5 +34,8 @@
   },
   "bin": {
     "babylon": "./bin/babylon.js"
+  },
+  "publishConfig": {
+    "tag": "latest" 
   }
 }
