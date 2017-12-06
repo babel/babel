@@ -6,7 +6,7 @@ function (_Base) {
   function Child() {
     var _this;
 
-    return {} || _this;
+    return {} || babelHelpers.assertThisInitialized(_this);
   }
 
   return Child;

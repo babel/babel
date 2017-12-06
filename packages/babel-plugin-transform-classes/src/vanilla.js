@@ -17,22 +17,6 @@ const noMethodVisitor = {
 const verifyConstructorVisitor = traverse.visitors.merge([
   noMethodVisitor,
   {
-    MemberExpression: {
-      exit(path) {
-        const objectPath = path.get("object");
-        if (this.isDerived && !this.hasBareSuper && objectPath.isSuper()) {
-          const hasArrowFunctionParent = path.findParent(p =>
-            p.isArrowFunctionExpression(),
-          );
-          if (!hasArrowFunctionParent) {
-            throw objectPath.buildCodeFrameError(
-              "'super.*' is not allowed before super()",
-            );
-          }
-        }
-      },
-    },
-
     CallExpression: {
       exit(path) {
         if (path.get("callee").isSuper()) {
@@ -48,14 +32,20 @@ const verifyConstructorVisitor = traverse.visitors.merge([
     },
 
     ThisExpression(path) {
-      if (this.isDerived && !this.hasBareSuper) {
-        const fn = path.find(p => p.isFunction());
-
-        if (!fn || !fn.isArrowFunctionExpression()) {
-          throw path.buildCodeFrameError(
-            "'this' is not allowed before super()",
-          );
+      if (this.isDerived) {
+        if (path.parentPath.isMemberExpression({ object: path.node })) {
+          // In cases like this.foo or this[foo], there is no need to add
+          // assertThisInitialized, since they already throw if this is
+          // undefined.
+          return;
         }
+
+        const assertion = t.callExpression(
+          this.file.addHelper("assertThisInitialized"),
+          [path.node],
+        );
+        path.replaceWith(assertion);
+        path.skip();
       }
     },
   },
@@ -271,6 +261,7 @@ export default class ClassTransformer {
             methodNode: node,
             objectRef: this.classRef,
             superRef: this.superName,
+            inConstructor: isConstructor,
             isStatic: node.static,
             isLoose: this.isLoose,
             scope: this.scope,
@@ -444,10 +435,6 @@ export default class ClassTransformer {
     const path = this.userConstructorPath;
     const body = path.get("body");
 
-    if (!this.hasBareSuper && !this.superReturns.length) {
-      throw path.buildCodeFrameError("missing super() call in constructor");
-    }
-
     path.traverse(findThisesVisitor, this);
 
     let guaranteedSuperBeforeFinish = !!this.bareSupers.length;
@@ -469,7 +456,11 @@ export default class ClassTransformer {
             return true;
           }
 
-          if (parentPath.isLoop() || parentPath.isConditional()) {
+          if (
+            parentPath.isLoop() ||
+            parentPath.isConditional() ||
+            parentPath.isArrowFunctionExpression()
+          ) {
             guaranteedSuperBeforeFinish = false;
             return true;
           }
@@ -485,9 +476,13 @@ export default class ClassTransformer {
 
     if (this.isLoose) {
       wrapReturn = returnArg => {
+        const thisExpr = t.callExpression(
+          this.file.addHelper("assertThisInitialized"),
+          [thisRef()],
+        );
         return returnArg
-          ? t.logicalExpression("||", returnArg, thisRef())
-          : thisRef();
+          ? t.logicalExpression("||", returnArg, thisExpr)
+          : thisExpr;
       };
     } else {
       wrapReturn = returnArg =>
@@ -500,7 +495,7 @@ export default class ClassTransformer {
     // if we have a return as the last node in the body then we've already caught that
     // return
     const bodyPaths = body.get("body");
-    if (bodyPaths.length && !bodyPaths.pop().isReturnStatement()) {
+    if (!bodyPaths.length || !bodyPaths.pop().isReturnStatement()) {
       body.pushContainer(
         "body",
         t.returnStatement(

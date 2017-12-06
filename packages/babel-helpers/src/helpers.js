@@ -509,12 +509,24 @@ helpers.objectWithoutProperties = defineHelper(`
   }
 `);
 
+helpers.assertThisInitialized = defineHelper(`
+  export default function _assertThisInitialized(self) {
+    if (self === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self;
+  }
+`);
+
 helpers.possibleConstructorReturn = defineHelper(`
   export default function _possibleConstructorReturn(self, call) {
     if (call && (typeof call === "object" || typeof call === "function")) {
       return call;
     }
-    if (!self) {
+    // TODO: Should just be
+    //   import assertThisInitialized from "assertThisInitialized";
+    //   return assertThisInitialized(self);
+    if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
     }
     return self;
