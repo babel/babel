@@ -150,7 +150,8 @@ export default class LValParser extends NodeUtils {
         if (
           arg.type !== "Identifier" &&
           arg.type !== "MemberExpression" &&
-          arg.type !== "ArrayPattern"
+          arg.type !== "ArrayPattern" &&
+          arg.type !== "ObjectPattern"
         ) {
           this.unexpected(arg.start);
         }
