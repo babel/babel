@@ -2,7 +2,7 @@
   "name": "regenerator-preset",
   "author": "Ben Newman <bn@cs.stanford.edu>",
   "description": "Babel preset for easy use of regenerator-transform.",
-  "version": "0.11.3",
+  "version": "0.11.4",
   "main": "index.js",
   "keywords": [
     "regenerator",
@@ -22,6 +22,6 @@
     "babel-plugin-transform-es2015-block-scoping": "^6.18.0",
     "babel-plugin-transform-es2015-classes": "^6.18.0",
     "babel-plugin-transform-es2015-for-of": "^6.18.0",
-    "regenerator-transform": "^0.12.1"
+    "regenerator-transform": "^0.12.2"
   }
 }
