@@ -18,32 +18,29 @@ function addCompletionRecords(path, paths) {
 }
 
 function completionRecordForSwitch(cases, paths) {
-  for (let i = 0, caseLen = cases.length; i < caseLen; i++) {
-    const consequentLength = cases[i].get("consequent").length;
-    const isDefaultCase = cases[i].get("test").type === null;
+  for (const switchcase of cases) {
+    const consequentLength = switchcase.get("consequent").length;
+    const isDefaultCase = switchcase.get("test").type === null;
     if (isDefaultCase) {
       paths = addCompletionRecords(
-        cases[i].get("consequent")[consequentLength - 1],
+        switchcase.get("consequent")[consequentLength - 1],
         paths,
       );
     } else {
-      const lastCaseStatement = cases[i].get("consequent")[
+      const lastCaseStatement = switchcase.get("consequent")[
         consequentLength - 1
       ];
       const hasBreakStatement =
         lastCaseStatement && lastCaseStatement.isBreakStatement();
 
       if (consequentLength === 1 && hasBreakStatement) {
-        // Todo
-        // const emptyNode = cases[i].scope.buildUndefinedNode();
-        // cases[i].get("consequent").unshift(emptyNode);
-        // this.resync();
-        // paths = addCompletionRecords(emptyNode, paths);
-        // lastCaseStatement.remove();
+        const emptyNode = switchcase.scope.buildUndefinedNode();
+        lastCaseStatement.replaceWith(emptyNode);
+        paths = addCompletionRecords(switchcase.get("consequent")[0], paths);
       }
       if (consequentLength > 1 && hasBreakStatement) {
         paths = addCompletionRecords(
-          cases[i].get("consequent")[consequentLength - 2],
+          switchcase.get("consequent")[consequentLength - 2],
           paths,
         );
         lastCaseStatement.remove();
