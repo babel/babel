@@ -151,9 +151,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     /**
-   * If !expectSuccess, returns undefined instead of failing to parse.
-   * If expectSuccess, parseElement should always return a defined value.
-   */
+     * If !expectSuccess, returns undefined instead of failing to parse.
+     * If expectSuccess, parseElement should always return a defined value.
+     */
     tsParseDelimitedListWorker<T: N.Node>(
       kind: ParsingContext,
       parseElement: () => ?T,

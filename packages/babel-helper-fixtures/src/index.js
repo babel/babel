@@ -164,7 +164,9 @@ export default function get(entryLoc): Array<Suite> {
 
         if (minimumVersion == null) {
           throw new Error(
-            `'minNodeVersion' has invalid semver format: ${taskOpts.minNodeVersion}`,
+            `'minNodeVersion' has invalid semver format: ${
+              taskOpts.minNodeVersion
+            }`,
           );
         }
 

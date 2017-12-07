@@ -37,20 +37,20 @@ export const statements: Formatter<
   Array<BabelNodeStatement>,
 > = makeStatementFormatter(body => body);
 
-export const statement: Formatter<
-  BabelNodeStatement,
-> = makeStatementFormatter(body => {
-  // We do this validation when unwrapping since the replacement process
-  // could have added or removed statements.
-  if (body.length === 0) {
-    throw new Error("Found nothing to return.");
-  }
-  if (body.length > 1) {
-    throw new Error("Found multiple statements but wanted one");
-  }
+export const statement: Formatter<BabelNodeStatement> = makeStatementFormatter(
+  body => {
+    // We do this validation when unwrapping since the replacement process
+    // could have added or removed statements.
+    if (body.length === 0) {
+      throw new Error("Found nothing to return.");
+    }
+    if (body.length > 1) {
+      throw new Error("Found multiple statements but wanted one");
+    }
 
-  return body[0];
-});
+    return body[0];
+  },
+);
 
 export const expression: Formatter<BabelNodeExpression> = {
   code: str => `(\n${str}\n)`,

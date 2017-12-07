@@ -113,17 +113,17 @@ export default function(api, options) {
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          const {
-            meta,
-            headers,
-          } = rewriteModuleStatementsAndPrepareHeader(path, {
-            exportName: "exports",
-            loose,
-            strict,
-            strictMode,
-            allowTopLevelThis,
-            noInterop,
-          });
+          const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
+            path,
+            {
+              exportName: "exports",
+              loose,
+              strict,
+              strictMode,
+              allowTopLevelThis,
+              noInterop,
+            },
+          );
 
           for (const [source, metadata] of meta.source) {
             const loadExpr = t.callExpression(t.identifier("require"), [
