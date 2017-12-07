@@ -35,13 +35,13 @@ function completionRecordForSwitch(cases, paths) {
       ];
       const hasBreakStatement =
         lastCaseStatement && lastCaseStatement.isBreakStatement();
-
-      if (consequentLength === 1 && hasBreakStatement) {
-        const emptyNode = switchcase.scope.buildUndefinedNode();
-        lastCaseStatement.replaceWith(emptyNode);
-        paths = addCompletionRecords(switchcase.get("consequent")[0], paths);
+      if (!hasBreakStatement) {
+        continue;
       }
-      if (consequentLength > 1 && hasBreakStatement) {
+      if (consequentLength === 1) {
+        lastCaseStatement.replaceWith(switchcase.scope.buildUndefinedNode());
+        paths = addCompletionRecords(switchcase.get("consequent")[0], paths);
+      } else {
         paths = addCompletionRecords(
           switchcase.get("consequent")[consequentLength - 2],
           paths,
