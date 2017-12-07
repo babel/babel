@@ -80,4 +80,4 @@ file public issues and go through the process outlined on that page.
 ## License
 
 By contributing to Regenerator, you agree that your contributions will be
-licensed under the [BSD License](LICENSE).
+licensed under the [MIT License](LICENSE).

@@ -14,7 +14,7 @@
     "type": "git",
     "url": "https://github.com/facebook/regenerator/tree/master/packages/regenerator-transform"
   },
-  "license": "BSD",
+  "license": "MIT",
   "scripts": {
     "prepublish": "babel src/ --out-dir lib/"
   },

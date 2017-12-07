@@ -59,7 +59,7 @@
     "semver": "^5.0.3",
     "uglify-js": "^3.0.27"
   },
-  "license": "BSD",
+  "license": "MIT",
   "engines": {
     "node": ">= 0.6"
   }
