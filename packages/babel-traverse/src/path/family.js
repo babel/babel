@@ -20,6 +20,9 @@ function addCompletionRecords(path, paths) {
 function completionRecordForSwitch(cases, paths) {
   for (const switchcase of cases) {
     const consequentLength = switchcase.get("consequent").length;
+    if (consequentLength === 0) {
+      continue;
+    }
     const isDefaultCase = switchcase.get("test").type === null;
     if (isDefaultCase) {
       paths = addCompletionRecords(
