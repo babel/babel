@@ -501,77 +501,62 @@ export function JSXAttribute(...args: Array<any>): Object {
   return builder("JSXAttribute", ...args);
 }
 export { JSXAttribute as jsxAttribute };
-export { JSXAttribute as jSXAttribute };
 export function JSXClosingElement(...args: Array<any>): Object {
   return builder("JSXClosingElement", ...args);
 }
 export { JSXClosingElement as jsxClosingElement };
-export { JSXClosingElement as jSXClosingElement };
 export function JSXElement(...args: Array<any>): Object {
   return builder("JSXElement", ...args);
 }
 export { JSXElement as jsxElement };
-export { JSXElement as jSXElement };
 export function JSXEmptyExpression(...args: Array<any>): Object {
   return builder("JSXEmptyExpression", ...args);
 }
 export { JSXEmptyExpression as jsxEmptyExpression };
-export { JSXEmptyExpression as jSXEmptyExpression };
 export function JSXExpressionContainer(...args: Array<any>): Object {
   return builder("JSXExpressionContainer", ...args);
 }
 export { JSXExpressionContainer as jsxExpressionContainer };
-export { JSXExpressionContainer as jSXExpressionContainer };
 export function JSXSpreadChild(...args: Array<any>): Object {
   return builder("JSXSpreadChild", ...args);
 }
 export { JSXSpreadChild as jsxSpreadChild };
-export { JSXSpreadChild as jSXSpreadChild };
 export function JSXIdentifier(...args: Array<any>): Object {
   return builder("JSXIdentifier", ...args);
 }
 export { JSXIdentifier as jsxIdentifier };
-export { JSXIdentifier as jSXIdentifier };
 export function JSXMemberExpression(...args: Array<any>): Object {
   return builder("JSXMemberExpression", ...args);
 }
 export { JSXMemberExpression as jsxMemberExpression };
-export { JSXMemberExpression as jSXMemberExpression };
 export function JSXNamespacedName(...args: Array<any>): Object {
   return builder("JSXNamespacedName", ...args);
 }
 export { JSXNamespacedName as jsxNamespacedName };
-export { JSXNamespacedName as jSXNamespacedName };
 export function JSXOpeningElement(...args: Array<any>): Object {
   return builder("JSXOpeningElement", ...args);
 }
 export { JSXOpeningElement as jsxOpeningElement };
-export { JSXOpeningElement as jSXOpeningElement };
 export function JSXSpreadAttribute(...args: Array<any>): Object {
   return builder("JSXSpreadAttribute", ...args);
 }
 export { JSXSpreadAttribute as jsxSpreadAttribute };
-export { JSXSpreadAttribute as jSXSpreadAttribute };
 export function JSXText(...args: Array<any>): Object {
   return builder("JSXText", ...args);
 }
 export { JSXText as jsxText };
-export { JSXText as jSXText };
 export function JSXFragment(...args: Array<any>): Object {
   return builder("JSXFragment", ...args);
 }
 export { JSXFragment as jsxFragment };
-export { JSXFragment as jSXFragment };
 export function JSXOpeningFragment(...args: Array<any>): Object {
   return builder("JSXOpeningFragment", ...args);
 }
 export { JSXOpeningFragment as jsxOpeningFragment };
-export { JSXOpeningFragment as jSXOpeningFragment };
 export function JSXClosingFragment(...args: Array<any>): Object {
   return builder("JSXClosingFragment", ...args);
 }
 export { JSXClosingFragment as jsxClosingFragment };
-export { JSXClosingFragment as jSXClosingFragment };
 export function Noop(...args: Array<any>): Object {
   return builder("Noop", ...args);
 }
@@ -616,272 +601,218 @@ export function TSParameterProperty(...args: Array<any>): Object {
   return builder("TSParameterProperty", ...args);
 }
 export { TSParameterProperty as tsParameterProperty };
-export { TSParameterProperty as tSParameterProperty };
 export function TSDeclareFunction(...args: Array<any>): Object {
   return builder("TSDeclareFunction", ...args);
 }
 export { TSDeclareFunction as tsDeclareFunction };
-export { TSDeclareFunction as tSDeclareFunction };
 export function TSDeclareMethod(...args: Array<any>): Object {
   return builder("TSDeclareMethod", ...args);
 }
 export { TSDeclareMethod as tsDeclareMethod };
-export { TSDeclareMethod as tSDeclareMethod };
 export function TSQualifiedName(...args: Array<any>): Object {
   return builder("TSQualifiedName", ...args);
 }
 export { TSQualifiedName as tsQualifiedName };
-export { TSQualifiedName as tSQualifiedName };
 export function TSCallSignatureDeclaration(...args: Array<any>): Object {
   return builder("TSCallSignatureDeclaration", ...args);
 }
 export { TSCallSignatureDeclaration as tsCallSignatureDeclaration };
-export { TSCallSignatureDeclaration as tSCallSignatureDeclaration };
 export function TSConstructSignatureDeclaration(...args: Array<any>): Object {
   return builder("TSConstructSignatureDeclaration", ...args);
 }
 export { TSConstructSignatureDeclaration as tsConstructSignatureDeclaration };
-export { TSConstructSignatureDeclaration as tSConstructSignatureDeclaration };
 export function TSPropertySignature(...args: Array<any>): Object {
   return builder("TSPropertySignature", ...args);
 }
 export { TSPropertySignature as tsPropertySignature };
-export { TSPropertySignature as tSPropertySignature };
 export function TSMethodSignature(...args: Array<any>): Object {
   return builder("TSMethodSignature", ...args);
 }
 export { TSMethodSignature as tsMethodSignature };
-export { TSMethodSignature as tSMethodSignature };
 export function TSIndexSignature(...args: Array<any>): Object {
   return builder("TSIndexSignature", ...args);
 }
 export { TSIndexSignature as tsIndexSignature };
-export { TSIndexSignature as tSIndexSignature };
 export function TSAnyKeyword(...args: Array<any>): Object {
   return builder("TSAnyKeyword", ...args);
 }
 export { TSAnyKeyword as tsAnyKeyword };
-export { TSAnyKeyword as tSAnyKeyword };
 export function TSNumberKeyword(...args: Array<any>): Object {
   return builder("TSNumberKeyword", ...args);
 }
 export { TSNumberKeyword as tsNumberKeyword };
-export { TSNumberKeyword as tSNumberKeyword };
 export function TSObjectKeyword(...args: Array<any>): Object {
   return builder("TSObjectKeyword", ...args);
 }
 export { TSObjectKeyword as tsObjectKeyword };
-export { TSObjectKeyword as tSObjectKeyword };
 export function TSBooleanKeyword(...args: Array<any>): Object {
   return builder("TSBooleanKeyword", ...args);
 }
 export { TSBooleanKeyword as tsBooleanKeyword };
-export { TSBooleanKeyword as tSBooleanKeyword };
 export function TSStringKeyword(...args: Array<any>): Object {
   return builder("TSStringKeyword", ...args);
 }
 export { TSStringKeyword as tsStringKeyword };
-export { TSStringKeyword as tSStringKeyword };
 export function TSSymbolKeyword(...args: Array<any>): Object {
   return builder("TSSymbolKeyword", ...args);
 }
 export { TSSymbolKeyword as tsSymbolKeyword };
-export { TSSymbolKeyword as tSSymbolKeyword };
 export function TSVoidKeyword(...args: Array<any>): Object {
   return builder("TSVoidKeyword", ...args);
 }
 export { TSVoidKeyword as tsVoidKeyword };
-export { TSVoidKeyword as tSVoidKeyword };
 export function TSUndefinedKeyword(...args: Array<any>): Object {
   return builder("TSUndefinedKeyword", ...args);
 }
 export { TSUndefinedKeyword as tsUndefinedKeyword };
-export { TSUndefinedKeyword as tSUndefinedKeyword };
 export function TSNullKeyword(...args: Array<any>): Object {
   return builder("TSNullKeyword", ...args);
 }
 export { TSNullKeyword as tsNullKeyword };
-export { TSNullKeyword as tSNullKeyword };
 export function TSNeverKeyword(...args: Array<any>): Object {
   return builder("TSNeverKeyword", ...args);
 }
 export { TSNeverKeyword as tsNeverKeyword };
-export { TSNeverKeyword as tSNeverKeyword };
 export function TSThisType(...args: Array<any>): Object {
   return builder("TSThisType", ...args);
 }
 export { TSThisType as tsThisType };
-export { TSThisType as tSThisType };
 export function TSFunctionType(...args: Array<any>): Object {
   return builder("TSFunctionType", ...args);
 }
 export { TSFunctionType as tsFunctionType };
-export { TSFunctionType as tSFunctionType };
 export function TSConstructorType(...args: Array<any>): Object {
   return builder("TSConstructorType", ...args);
 }
 export { TSConstructorType as tsConstructorType };
-export { TSConstructorType as tSConstructorType };
 export function TSTypeReference(...args: Array<any>): Object {
   return builder("TSTypeReference", ...args);
 }
 export { TSTypeReference as tsTypeReference };
-export { TSTypeReference as tSTypeReference };
 export function TSTypePredicate(...args: Array<any>): Object {
   return builder("TSTypePredicate", ...args);
 }
 export { TSTypePredicate as tsTypePredicate };
-export { TSTypePredicate as tSTypePredicate };
 export function TSTypeQuery(...args: Array<any>): Object {
   return builder("TSTypeQuery", ...args);
 }
 export { TSTypeQuery as tsTypeQuery };
-export { TSTypeQuery as tSTypeQuery };
 export function TSTypeLiteral(...args: Array<any>): Object {
   return builder("TSTypeLiteral", ...args);
 }
 export { TSTypeLiteral as tsTypeLiteral };
-export { TSTypeLiteral as tSTypeLiteral };
 export function TSArrayType(...args: Array<any>): Object {
   return builder("TSArrayType", ...args);
 }
 export { TSArrayType as tsArrayType };
-export { TSArrayType as tSArrayType };
 export function TSTupleType(...args: Array<any>): Object {
   return builder("TSTupleType", ...args);
 }
 export { TSTupleType as tsTupleType };
-export { TSTupleType as tSTupleType };
 export function TSUnionType(...args: Array<any>): Object {
   return builder("TSUnionType", ...args);
 }
 export { TSUnionType as tsUnionType };
-export { TSUnionType as tSUnionType };
 export function TSIntersectionType(...args: Array<any>): Object {
   return builder("TSIntersectionType", ...args);
 }
 export { TSIntersectionType as tsIntersectionType };
-export { TSIntersectionType as tSIntersectionType };
 export function TSParenthesizedType(...args: Array<any>): Object {
   return builder("TSParenthesizedType", ...args);
 }
 export { TSParenthesizedType as tsParenthesizedType };
-export { TSParenthesizedType as tSParenthesizedType };
 export function TSTypeOperator(...args: Array<any>): Object {
   return builder("TSTypeOperator", ...args);
 }
 export { TSTypeOperator as tsTypeOperator };
-export { TSTypeOperator as tSTypeOperator };
 export function TSIndexedAccessType(...args: Array<any>): Object {
   return builder("TSIndexedAccessType", ...args);
 }
 export { TSIndexedAccessType as tsIndexedAccessType };
-export { TSIndexedAccessType as tSIndexedAccessType };
 export function TSMappedType(...args: Array<any>): Object {
   return builder("TSMappedType", ...args);
 }
 export { TSMappedType as tsMappedType };
-export { TSMappedType as tSMappedType };
 export function TSLiteralType(...args: Array<any>): Object {
   return builder("TSLiteralType", ...args);
 }
 export { TSLiteralType as tsLiteralType };
-export { TSLiteralType as tSLiteralType };
 export function TSExpressionWithTypeArguments(...args: Array<any>): Object {
   return builder("TSExpressionWithTypeArguments", ...args);
 }
 export { TSExpressionWithTypeArguments as tsExpressionWithTypeArguments };
-export { TSExpressionWithTypeArguments as tSExpressionWithTypeArguments };
 export function TSInterfaceDeclaration(...args: Array<any>): Object {
   return builder("TSInterfaceDeclaration", ...args);
 }
 export { TSInterfaceDeclaration as tsInterfaceDeclaration };
-export { TSInterfaceDeclaration as tSInterfaceDeclaration };
 export function TSInterfaceBody(...args: Array<any>): Object {
   return builder("TSInterfaceBody", ...args);
 }
 export { TSInterfaceBody as tsInterfaceBody };
-export { TSInterfaceBody as tSInterfaceBody };
 export function TSTypeAliasDeclaration(...args: Array<any>): Object {
   return builder("TSTypeAliasDeclaration", ...args);
 }
 export { TSTypeAliasDeclaration as tsTypeAliasDeclaration };
-export { TSTypeAliasDeclaration as tSTypeAliasDeclaration };
 export function TSAsExpression(...args: Array<any>): Object {
   return builder("TSAsExpression", ...args);
 }
 export { TSAsExpression as tsAsExpression };
-export { TSAsExpression as tSAsExpression };
 export function TSTypeAssertion(...args: Array<any>): Object {
   return builder("TSTypeAssertion", ...args);
 }
 export { TSTypeAssertion as tsTypeAssertion };
-export { TSTypeAssertion as tSTypeAssertion };
 export function TSEnumDeclaration(...args: Array<any>): Object {
   return builder("TSEnumDeclaration", ...args);
 }
 export { TSEnumDeclaration as tsEnumDeclaration };
-export { TSEnumDeclaration as tSEnumDeclaration };
 export function TSEnumMember(...args: Array<any>): Object {
   return builder("TSEnumMember", ...args);
 }
 export { TSEnumMember as tsEnumMember };
-export { TSEnumMember as tSEnumMember };
 export function TSModuleDeclaration(...args: Array<any>): Object {
   return builder("TSModuleDeclaration", ...args);
 }
 export { TSModuleDeclaration as tsModuleDeclaration };
-export { TSModuleDeclaration as tSModuleDeclaration };
 export function TSModuleBlock(...args: Array<any>): Object {
   return builder("TSModuleBlock", ...args);
 }
 export { TSModuleBlock as tsModuleBlock };
-export { TSModuleBlock as tSModuleBlock };
 export function TSImportEqualsDeclaration(...args: Array<any>): Object {
   return builder("TSImportEqualsDeclaration", ...args);
 }
 export { TSImportEqualsDeclaration as tsImportEqualsDeclaration };
-export { TSImportEqualsDeclaration as tSImportEqualsDeclaration };
 export function TSExternalModuleReference(...args: Array<any>): Object {
   return builder("TSExternalModuleReference", ...args);
 }
 export { TSExternalModuleReference as tsExternalModuleReference };
-export { TSExternalModuleReference as tSExternalModuleReference };
 export function TSNonNullExpression(...args: Array<any>): Object {
   return builder("TSNonNullExpression", ...args);
 }
 export { TSNonNullExpression as tsNonNullExpression };
-export { TSNonNullExpression as tSNonNullExpression };
 export function TSExportAssignment(...args: Array<any>): Object {
   return builder("TSExportAssignment", ...args);
 }
 export { TSExportAssignment as tsExportAssignment };
-export { TSExportAssignment as tSExportAssignment };
 export function TSNamespaceExportDeclaration(...args: Array<any>): Object {
   return builder("TSNamespaceExportDeclaration", ...args);
 }
 export { TSNamespaceExportDeclaration as tsNamespaceExportDeclaration };
-export { TSNamespaceExportDeclaration as tSNamespaceExportDeclaration };
 export function TSTypeAnnotation(...args: Array<any>): Object {
   return builder("TSTypeAnnotation", ...args);
 }
 export { TSTypeAnnotation as tsTypeAnnotation };
-export { TSTypeAnnotation as tSTypeAnnotation };
 export function TSTypeParameterInstantiation(...args: Array<any>): Object {
   return builder("TSTypeParameterInstantiation", ...args);
 }
 export { TSTypeParameterInstantiation as tsTypeParameterInstantiation };
-export { TSTypeParameterInstantiation as tSTypeParameterInstantiation };
 export function TSTypeParameterDeclaration(...args: Array<any>): Object {
   return builder("TSTypeParameterDeclaration", ...args);
 }
 export { TSTypeParameterDeclaration as tsTypeParameterDeclaration };
-export { TSTypeParameterDeclaration as tSTypeParameterDeclaration };
 export function TSTypeParameter(...args: Array<any>): Object {
   return builder("TSTypeParameter", ...args);
 }
 export { TSTypeParameter as tsTypeParameter };
-export { TSTypeParameter as tSTypeParameter };
 export function NumberLiteral(...args: Array<any>): Object {
   console.trace(
     "The node type NumberLiteral has been renamed to NumericLiteral",

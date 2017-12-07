@@ -1761,9 +1761,9 @@ Aliases: `Statement`, `BlockParent`, `Scopable`
 
 ---
 
-### tSAnyKeyword
+### tsAnyKeyword
 ```javascript
-t.tSAnyKeyword()
+t.tsAnyKeyword()
 ```
 
 See also `t.isTSAnyKeyword(node, opts)` and `t.assertTSAnyKeyword(node, opts)`.
@@ -1773,9 +1773,9 @@ Aliases: `TSType`
 
 ---
 
-### tSArrayType
+### tsArrayType
 ```javascript
-t.tSArrayType(elementType)
+t.tsArrayType(elementType)
 ```
 
 See also `t.isTSArrayType(node, opts)` and `t.assertTSArrayType(node, opts)`.
@@ -1786,9 +1786,9 @@ Aliases: `TSType`
 
 ---
 
-### tSAsExpression
+### tsAsExpression
 ```javascript
-t.tSAsExpression(expression, typeAnnotation)
+t.tsAsExpression(expression, typeAnnotation)
 ```
 
 See also `t.isTSAsExpression(node, opts)` and `t.assertTSAsExpression(node, opts)`.
@@ -1800,9 +1800,9 @@ Aliases: `Expression`
 
 ---
 
-### tSBooleanKeyword
+### tsBooleanKeyword
 ```javascript
-t.tSBooleanKeyword()
+t.tsBooleanKeyword()
 ```
 
 See also `t.isTSBooleanKeyword(node, opts)` and `t.assertTSBooleanKeyword(node, opts)`.
@@ -1812,9 +1812,9 @@ Aliases: `TSType`
 
 ---
 
-### tSCallSignatureDeclaration
+### tsCallSignatureDeclaration
 ```javascript
-t.tSCallSignatureDeclaration(typeParameters, parameters, typeAnnotation)
+t.tsCallSignatureDeclaration(typeParameters, parameters, typeAnnotation)
 ```
 
 See also `t.isTSCallSignatureDeclaration(node, opts)` and `t.assertTSCallSignatureDeclaration(node, opts)`.
@@ -1827,9 +1827,9 @@ Aliases: `TSTypeElement`
 
 ---
 
-### tSConstructSignatureDeclaration
+### tsConstructSignatureDeclaration
 ```javascript
-t.tSConstructSignatureDeclaration(typeParameters, parameters, typeAnnotation)
+t.tsConstructSignatureDeclaration(typeParameters, parameters, typeAnnotation)
 ```
 
 See also `t.isTSConstructSignatureDeclaration(node, opts)` and `t.assertTSConstructSignatureDeclaration(node, opts)`.
@@ -1842,9 +1842,9 @@ Aliases: `TSTypeElement`
 
 ---
 
-### tSConstructorType
+### tsConstructorType
 ```javascript
-t.tSConstructorType(typeParameters, typeAnnotation)
+t.tsConstructorType(typeParameters, typeAnnotation)
 ```
 
 See also `t.isTSConstructorType(node, opts)` and `t.assertTSConstructorType(node, opts)`.
@@ -1857,9 +1857,9 @@ Aliases: `TSType`
 
 ---
 
-### tSDeclareFunction
+### tsDeclareFunction
 ```javascript
-t.tSDeclareFunction(id, typeParameters, params, returnType)
+t.tsDeclareFunction(id, typeParameters, params, returnType)
 ```
 
 See also `t.isTSDeclareFunction(node, opts)` and `t.assertTSDeclareFunction(node, opts)`.
@@ -1876,9 +1876,9 @@ Aliases: `Statement`, `Declaration`
 
 ---
 
-### tSDeclareMethod
+### tsDeclareMethod
 ```javascript
-t.tSDeclareMethod(decorators, key, typeParameters, params, returnType)
+t.tsDeclareMethod(decorators, key, typeParameters, params, returnType)
 ```
 
 See also `t.isTSDeclareMethod(node, opts)` and `t.assertTSDeclareMethod(node, opts)`.
@@ -1900,9 +1900,9 @@ See also `t.isTSDeclareMethod(node, opts)` and `t.assertTSDeclareMethod(node, op
 
 ---
 
-### tSEnumDeclaration
+### tsEnumDeclaration
 ```javascript
-t.tSEnumDeclaration(id, members)
+t.tsEnumDeclaration(id, members)
 ```
 
 See also `t.isTSEnumDeclaration(node, opts)` and `t.assertTSEnumDeclaration(node, opts)`.
@@ -1917,9 +1917,9 @@ Aliases: `Statement`, `Declaration`
 
 ---
 
-### tSEnumMember
+### tsEnumMember
 ```javascript
-t.tSEnumMember(id, initializer)
+t.tsEnumMember(id, initializer)
 ```
 
 See also `t.isTSEnumMember(node, opts)` and `t.assertTSEnumMember(node, opts)`.
@@ -1929,9 +1929,9 @@ See also `t.isTSEnumMember(node, opts)` and `t.assertTSEnumMember(node, opts)`.
 
 ---
 
-### tSExportAssignment
+### tsExportAssignment
 ```javascript
-t.tSExportAssignment(expression)
+t.tsExportAssignment(expression)
 ```
 
 See also `t.isTSExportAssignment(node, opts)` and `t.assertTSExportAssignment(node, opts)`.
@@ -1942,9 +1942,9 @@ Aliases: `Statement`
 
 ---
 
-### tSExpressionWithTypeArguments
+### tsExpressionWithTypeArguments
 ```javascript
-t.tSExpressionWithTypeArguments(expression, typeParameters)
+t.tsExpressionWithTypeArguments(expression, typeParameters)
 ```
 
 See also `t.isTSExpressionWithTypeArguments(node, opts)` and `t.assertTSExpressionWithTypeArguments(node, opts)`.
@@ -1956,9 +1956,9 @@ Aliases: `TSType`
 
 ---
 
-### tSExternalModuleReference
+### tsExternalModuleReference
 ```javascript
-t.tSExternalModuleReference(expression)
+t.tsExternalModuleReference(expression)
 ```
 
 See also `t.isTSExternalModuleReference(node, opts)` and `t.assertTSExternalModuleReference(node, opts)`.
@@ -1967,9 +1967,9 @@ See also `t.isTSExternalModuleReference(node, opts)` and `t.assertTSExternalModu
 
 ---
 
-### tSFunctionType
+### tsFunctionType
 ```javascript
-t.tSFunctionType(typeParameters, typeAnnotation)
+t.tsFunctionType(typeParameters, typeAnnotation)
 ```
 
 See also `t.isTSFunctionType(node, opts)` and `t.assertTSFunctionType(node, opts)`.
@@ -1982,9 +1982,9 @@ Aliases: `TSType`
 
 ---
 
-### tSImportEqualsDeclaration
+### tsImportEqualsDeclaration
 ```javascript
-t.tSImportEqualsDeclaration(id, moduleReference)
+t.tsImportEqualsDeclaration(id, moduleReference)
 ```
 
 See also `t.isTSImportEqualsDeclaration(node, opts)` and `t.assertTSImportEqualsDeclaration(node, opts)`.
@@ -1997,9 +1997,9 @@ Aliases: `Statement`
 
 ---
 
-### tSIndexSignature
+### tsIndexSignature
 ```javascript
-t.tSIndexSignature(parameters, typeAnnotation)
+t.tsIndexSignature(parameters, typeAnnotation)
 ```
 
 See also `t.isTSIndexSignature(node, opts)` and `t.assertTSIndexSignature(node, opts)`.
@@ -2012,9 +2012,9 @@ Aliases: `TSTypeElement`
 
 ---
 
-### tSIndexedAccessType
+### tsIndexedAccessType
 ```javascript
-t.tSIndexedAccessType(objectType, indexType)
+t.tsIndexedAccessType(objectType, indexType)
 ```
 
 See also `t.isTSIndexedAccessType(node, opts)` and `t.assertTSIndexedAccessType(node, opts)`.
@@ -2026,9 +2026,9 @@ Aliases: `TSType`
 
 ---
 
-### tSInterfaceBody
+### tsInterfaceBody
 ```javascript
-t.tSInterfaceBody(body)
+t.tsInterfaceBody(body)
 ```
 
 See also `t.isTSInterfaceBody(node, opts)` and `t.assertTSInterfaceBody(node, opts)`.
@@ -2037,9 +2037,9 @@ See also `t.isTSInterfaceBody(node, opts)` and `t.assertTSInterfaceBody(node, op
 
 ---
 
-### tSInterfaceDeclaration
+### tsInterfaceDeclaration
 ```javascript
-t.tSInterfaceDeclaration(id, typeParameters, extends, body)
+t.tsInterfaceDeclaration(id, typeParameters, extends, body)
 ```
 
 See also `t.isTSInterfaceDeclaration(node, opts)` and `t.assertTSInterfaceDeclaration(node, opts)`.
@@ -2054,9 +2054,9 @@ Aliases: `Statement`, `Declaration`
 
 ---
 
-### tSIntersectionType
+### tsIntersectionType
 ```javascript
-t.tSIntersectionType(types)
+t.tsIntersectionType(types)
 ```
 
 See also `t.isTSIntersectionType(node, opts)` and `t.assertTSIntersectionType(node, opts)`.
@@ -2067,9 +2067,9 @@ Aliases: `TSType`
 
 ---
 
-### tSLiteralType
+### tsLiteralType
 ```javascript
-t.tSLiteralType(literal)
+t.tsLiteralType(literal)
 ```
 
 See also `t.isTSLiteralType(node, opts)` and `t.assertTSLiteralType(node, opts)`.
@@ -2080,9 +2080,9 @@ Aliases: `TSType`
 
 ---
 
-### tSMappedType
+### tsMappedType
 ```javascript
-t.tSMappedType(typeParameter, typeAnnotation)
+t.tsMappedType(typeParameter, typeAnnotation)
 ```
 
 See also `t.isTSMappedType(node, opts)` and `t.assertTSMappedType(node, opts)`.
@@ -2096,9 +2096,9 @@ Aliases: `TSType`
 
 ---
 
-### tSMethodSignature
+### tsMethodSignature
 ```javascript
-t.tSMethodSignature(key, typeParameters, parameters, typeAnnotation)
+t.tsMethodSignature(key, typeParameters, parameters, typeAnnotation)
 ```
 
 See also `t.isTSMethodSignature(node, opts)` and `t.assertTSMethodSignature(node, opts)`.
@@ -2114,9 +2114,9 @@ Aliases: `TSTypeElement`
 
 ---
 
-### tSModuleBlock
+### tsModuleBlock
 ```javascript
-t.tSModuleBlock(body)
+t.tsModuleBlock(body)
 ```
 
 See also `t.isTSModuleBlock(node, opts)` and `t.assertTSModuleBlock(node, opts)`.
@@ -2125,9 +2125,9 @@ See also `t.isTSModuleBlock(node, opts)` and `t.assertTSModuleBlock(node, opts)`
 
 ---
 
-### tSModuleDeclaration
+### tsModuleDeclaration
 ```javascript
-t.tSModuleDeclaration(id, body)
+t.tsModuleDeclaration(id, body)
 ```
 
 See also `t.isTSModuleDeclaration(node, opts)` and `t.assertTSModuleDeclaration(node, opts)`.
@@ -2141,9 +2141,9 @@ Aliases: `Statement`, `Declaration`
 
 ---
 
-### tSNamespaceExportDeclaration
+### tsNamespaceExportDeclaration
 ```javascript
-t.tSNamespaceExportDeclaration(id)
+t.tsNamespaceExportDeclaration(id)
 ```
 
 See also `t.isTSNamespaceExportDeclaration(node, opts)` and `t.assertTSNamespaceExportDeclaration(node, opts)`.
@@ -2154,9 +2154,9 @@ Aliases: `Statement`
 
 ---
 
-### tSNeverKeyword
+### tsNeverKeyword
 ```javascript
-t.tSNeverKeyword()
+t.tsNeverKeyword()
 ```
 
 See also `t.isTSNeverKeyword(node, opts)` and `t.assertTSNeverKeyword(node, opts)`.
@@ -2166,9 +2166,9 @@ Aliases: `TSType`
 
 ---
 
-### tSNonNullExpression
+### tsNonNullExpression
 ```javascript
-t.tSNonNullExpression(expression)
+t.tsNonNullExpression(expression)
 ```
 
 See also `t.isTSNonNullExpression(node, opts)` and `t.assertTSNonNullExpression(node, opts)`.
@@ -2179,9 +2179,9 @@ Aliases: `Expression`
 
 ---
 
-### tSNullKeyword
+### tsNullKeyword
 ```javascript
-t.tSNullKeyword()
+t.tsNullKeyword()
 ```
 
 See also `t.isTSNullKeyword(node, opts)` and `t.assertTSNullKeyword(node, opts)`.
@@ -2191,9 +2191,9 @@ Aliases: `TSType`
 
 ---
 
-### tSNumberKeyword
+### tsNumberKeyword
 ```javascript
-t.tSNumberKeyword()
+t.tsNumberKeyword()
 ```
 
 See also `t.isTSNumberKeyword(node, opts)` and `t.assertTSNumberKeyword(node, opts)`.
@@ -2203,9 +2203,9 @@ Aliases: `TSType`
 
 ---
 
-### tSObjectKeyword
+### tsObjectKeyword
 ```javascript
-t.tSObjectKeyword()
+t.tsObjectKeyword()
 ```
 
 See also `t.isTSObjectKeyword(node, opts)` and `t.assertTSObjectKeyword(node, opts)`.
@@ -2215,9 +2215,9 @@ Aliases: `TSType`
 
 ---
 
-### tSParameterProperty
+### tsParameterProperty
 ```javascript
-t.tSParameterProperty(parameter)
+t.tsParameterProperty(parameter)
 ```
 
 See also `t.isTSParameterProperty(node, opts)` and `t.assertTSParameterProperty(node, opts)`.
@@ -2230,9 +2230,9 @@ Aliases: `LVal`
 
 ---
 
-### tSParenthesizedType
+### tsParenthesizedType
 ```javascript
-t.tSParenthesizedType(typeAnnotation)
+t.tsParenthesizedType(typeAnnotation)
 ```
 
 See also `t.isTSParenthesizedType(node, opts)` and `t.assertTSParenthesizedType(node, opts)`.
@@ -2243,9 +2243,9 @@ Aliases: `TSType`
 
 ---
 
-### tSPropertySignature
+### tsPropertySignature
 ```javascript
-t.tSPropertySignature(key, typeAnnotation, initializer)
+t.tsPropertySignature(key, typeAnnotation, initializer)
 ```
 
 See also `t.isTSPropertySignature(node, opts)` and `t.assertTSPropertySignature(node, opts)`.
@@ -2261,9 +2261,9 @@ Aliases: `TSTypeElement`
 
 ---
 
-### tSQualifiedName
+### tsQualifiedName
 ```javascript
-t.tSQualifiedName(left, right)
+t.tsQualifiedName(left, right)
 ```
 
 See also `t.isTSQualifiedName(node, opts)` and `t.assertTSQualifiedName(node, opts)`.
@@ -2275,9 +2275,9 @@ Aliases: `TSEntityName`
 
 ---
 
-### tSStringKeyword
+### tsStringKeyword
 ```javascript
-t.tSStringKeyword()
+t.tsStringKeyword()
 ```
 
 See also `t.isTSStringKeyword(node, opts)` and `t.assertTSStringKeyword(node, opts)`.
@@ -2287,9 +2287,9 @@ Aliases: `TSType`
 
 ---
 
-### tSSymbolKeyword
+### tsSymbolKeyword
 ```javascript
-t.tSSymbolKeyword()
+t.tsSymbolKeyword()
 ```
 
 See also `t.isTSSymbolKeyword(node, opts)` and `t.assertTSSymbolKeyword(node, opts)`.
@@ -2299,9 +2299,9 @@ Aliases: `TSType`
 
 ---
 
-### tSThisType
+### tsThisType
 ```javascript
-t.tSThisType()
+t.tsThisType()
 ```
 
 See also `t.isTSThisType(node, opts)` and `t.assertTSThisType(node, opts)`.
@@ -2311,9 +2311,9 @@ Aliases: `TSType`
 
 ---
 
-### tSTupleType
+### tsTupleType
 ```javascript
-t.tSTupleType(elementTypes)
+t.tsTupleType(elementTypes)
 ```
 
 See also `t.isTSTupleType(node, opts)` and `t.assertTSTupleType(node, opts)`.
@@ -2324,9 +2324,9 @@ Aliases: `TSType`
 
 ---
 
-### tSTypeAliasDeclaration
+### tsTypeAliasDeclaration
 ```javascript
-t.tSTypeAliasDeclaration(id, typeParameters, typeAnnotation)
+t.tsTypeAliasDeclaration(id, typeParameters, typeAnnotation)
 ```
 
 See also `t.isTSTypeAliasDeclaration(node, opts)` and `t.assertTSTypeAliasDeclaration(node, opts)`.
@@ -2340,9 +2340,9 @@ Aliases: `Statement`, `Declaration`
 
 ---
 
-### tSTypeAnnotation
+### tsTypeAnnotation
 ```javascript
-t.tSTypeAnnotation(typeAnnotation)
+t.tsTypeAnnotation(typeAnnotation)
 ```
 
 See also `t.isTSTypeAnnotation(node, opts)` and `t.assertTSTypeAnnotation(node, opts)`.
@@ -2351,9 +2351,9 @@ See also `t.isTSTypeAnnotation(node, opts)` and `t.assertTSTypeAnnotation(node, 
 
 ---
 
-### tSTypeAssertion
+### tsTypeAssertion
 ```javascript
-t.tSTypeAssertion(typeAnnotation, expression)
+t.tsTypeAssertion(typeAnnotation, expression)
 ```
 
 See also `t.isTSTypeAssertion(node, opts)` and `t.assertTSTypeAssertion(node, opts)`.
@@ -2365,9 +2365,9 @@ Aliases: `Expression`
 
 ---
 
-### tSTypeLiteral
+### tsTypeLiteral
 ```javascript
-t.tSTypeLiteral(members)
+t.tsTypeLiteral(members)
 ```
 
 See also `t.isTSTypeLiteral(node, opts)` and `t.assertTSTypeLiteral(node, opts)`.
@@ -2378,9 +2378,9 @@ Aliases: `TSType`
 
 ---
 
-### tSTypeOperator
+### tsTypeOperator
 ```javascript
-t.tSTypeOperator(typeAnnotation)
+t.tsTypeOperator(typeAnnotation)
 ```
 
 See also `t.isTSTypeOperator(node, opts)` and `t.assertTSTypeOperator(node, opts)`.
@@ -2392,9 +2392,9 @@ Aliases: `TSType`
 
 ---
 
-### tSTypeParameter
+### tsTypeParameter
 ```javascript
-t.tSTypeParameter(constraint, default)
+t.tsTypeParameter(constraint, default)
 ```
 
 See also `t.isTSTypeParameter(node, opts)` and `t.assertTSTypeParameter(node, opts)`.
@@ -2405,9 +2405,9 @@ See also `t.isTSTypeParameter(node, opts)` and `t.assertTSTypeParameter(node, op
 
 ---
 
-### tSTypeParameterDeclaration
+### tsTypeParameterDeclaration
 ```javascript
-t.tSTypeParameterDeclaration(params)
+t.tsTypeParameterDeclaration(params)
 ```
 
 See also `t.isTSTypeParameterDeclaration(node, opts)` and `t.assertTSTypeParameterDeclaration(node, opts)`.
@@ -2416,9 +2416,9 @@ See also `t.isTSTypeParameterDeclaration(node, opts)` and `t.assertTSTypeParamet
 
 ---
 
-### tSTypeParameterInstantiation
+### tsTypeParameterInstantiation
 ```javascript
-t.tSTypeParameterInstantiation(params)
+t.tsTypeParameterInstantiation(params)
 ```
 
 See also `t.isTSTypeParameterInstantiation(node, opts)` and `t.assertTSTypeParameterInstantiation(node, opts)`.
@@ -2427,9 +2427,9 @@ See also `t.isTSTypeParameterInstantiation(node, opts)` and `t.assertTSTypeParam
 
 ---
 
-### tSTypePredicate
+### tsTypePredicate
 ```javascript
-t.tSTypePredicate(parameterName, typeAnnotation)
+t.tsTypePredicate(parameterName, typeAnnotation)
 ```
 
 See also `t.isTSTypePredicate(node, opts)` and `t.assertTSTypePredicate(node, opts)`.
@@ -2441,9 +2441,9 @@ Aliases: `TSType`
 
 ---
 
-### tSTypeQuery
+### tsTypeQuery
 ```javascript
-t.tSTypeQuery(exprName)
+t.tsTypeQuery(exprName)
 ```
 
 See also `t.isTSTypeQuery(node, opts)` and `t.assertTSTypeQuery(node, opts)`.
@@ -2454,9 +2454,9 @@ Aliases: `TSType`
 
 ---
 
-### tSTypeReference
+### tsTypeReference
 ```javascript
-t.tSTypeReference(typeName, typeParameters)
+t.tsTypeReference(typeName, typeParameters)
 ```
 
 See also `t.isTSTypeReference(node, opts)` and `t.assertTSTypeReference(node, opts)`.
@@ -2468,9 +2468,9 @@ Aliases: `TSType`
 
 ---
 
-### tSUndefinedKeyword
+### tsUndefinedKeyword
 ```javascript
-t.tSUndefinedKeyword()
+t.tsUndefinedKeyword()
 ```
 
 See also `t.isTSUndefinedKeyword(node, opts)` and `t.assertTSUndefinedKeyword(node, opts)`.
@@ -2480,9 +2480,9 @@ Aliases: `TSType`
 
 ---
 
-### tSUnionType
+### tsUnionType
 ```javascript
-t.tSUnionType(types)
+t.tsUnionType(types)
 ```
 
 See also `t.isTSUnionType(node, opts)` and `t.assertTSUnionType(node, opts)`.
@@ -2493,9 +2493,9 @@ Aliases: `TSType`
 
 ---
 
-### tSVoidKeyword
+### tsVoidKeyword
 ```javascript
-t.tSVoidKeyword()
+t.tsVoidKeyword()
 ```
 
 See also `t.isTSVoidKeyword(node, opts)` and `t.assertTSVoidKeyword(node, opts)`.
