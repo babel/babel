@@ -56,36 +56,36 @@ export const isPluginRequired = (
     return true;
   }
 
-  const isRequiredForEnvironments: Array<
-    string,
-  > = targetEnvironments.filter(environment => {
-    // Feature is not implemented in that environment
-    if (!plugin[environment]) {
-      return true;
-    }
+  const isRequiredForEnvironments: Array<string> = targetEnvironments.filter(
+    environment => {
+      // Feature is not implemented in that environment
+      if (!plugin[environment]) {
+        return true;
+      }
 
-    const lowestImplementedVersion: string = plugin[environment];
-    const lowestTargetedVersion: string = supportedEnvironments[environment];
-    // If targets has unreleased value as a lowest version, then don't require a plugin.
-    if (isUnreleasedVersion(lowestTargetedVersion, environment)) {
-      return false;
-      // Include plugin if it is supported in the unreleased environment, which wasn't specified in targets
-    } else if (isUnreleasedVersion(lowestImplementedVersion, environment)) {
-      return true;
-    }
+      const lowestImplementedVersion: string = plugin[environment];
+      const lowestTargetedVersion: string = supportedEnvironments[environment];
+      // If targets has unreleased value as a lowest version, then don't require a plugin.
+      if (isUnreleasedVersion(lowestTargetedVersion, environment)) {
+        return false;
+        // Include plugin if it is supported in the unreleased environment, which wasn't specified in targets
+      } else if (isUnreleasedVersion(lowestImplementedVersion, environment)) {
+        return true;
+      }
 
-    if (!semver.valid(lowestTargetedVersion)) {
-      throw new Error(
-        // eslint-disable-next-line max-len
-        `Invalid version passed for target "${environment}": "${lowestTargetedVersion}". Versions must be in semver format (major.minor.patch)`,
+      if (!semver.valid(lowestTargetedVersion)) {
+        throw new Error(
+          // eslint-disable-next-line max-len
+          `Invalid version passed for target "${environment}": "${lowestTargetedVersion}". Versions must be in semver format (major.minor.patch)`,
+        );
+      }
+
+      return semver.gt(
+        semverify(lowestImplementedVersion),
+        lowestTargetedVersion,
       );
-    }
-
-    return semver.gt(
-      semverify(lowestImplementedVersion),
-      lowestTargetedVersion,
-    );
-  });
+    },
+  );
 
   return isRequiredForEnvironments.length > 0;
 };

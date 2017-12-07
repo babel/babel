@@ -191,9 +191,9 @@ function assertPluginTarget(
     typeof value !== "function"
   ) {
     throw new Error(
-      `.${key}[${index}]${inArray
-        ? `[0]`
-        : ""} must be a string, object, function`,
+      `.${key}[${index}]${
+        inArray ? `[0]` : ""
+      } must be a string, object, function`,
     );
   }
   return value;

@@ -51,7 +51,7 @@
     "mocha": "^3.0.0",
     "nyc": "^11.0.3",
     "output-file-sync": "^2.0.0",
-    "prettier": "1.7.3",
+    "prettier": "1.9.1",
     "pump": "^1.0.2",
     "rimraf": "^2.4.3",
     "semver": "^5.0.0",
