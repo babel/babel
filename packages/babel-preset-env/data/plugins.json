@@ -201,7 +201,7 @@
   "transform-regenerator": {
     "chrome": "50",
     "edge": "13",
-    "firefox": "53",
+    "firefox": "38",
     "safari": "10",
     "node": "6",
     "ios": "10",
