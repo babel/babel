@@ -53,6 +53,7 @@ function completionRecordForSwitch(cases, paths) {
 
 export function getCompletionRecords(): NodePath[] {
   let paths = [];
+
   if (this.isIfStatement()) {
     paths = addCompletionRecords(this.get("consequent"), paths);
     paths = addCompletionRecords(this.get("alternate"), paths);
