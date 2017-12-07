@@ -65,6 +65,10 @@ Mostly a handful of volunteers! Please check out our [team page](https://babeljs
 
 For questions and support please visit join our [Slack Community](https://slack.babeljs.io/), ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs).
 
+### Is there a Babel song?
+
+I'm so glad you asked: [Hallelujah —— In Praise of Babel](SONG.md) by [@angus-c](https://github.com/angus-c). Tweet us your recordings!
+
 ### Where are the docs?
 
 Check out our website: [babeljs.io](https://babeljs.io/), and report issues/features at [babel/website](https://github.com/babel/website/issues).
@@ -95,30 +99,30 @@ Support us with a monthly donation and help us continue our activities. [[Become
 <a href="https://opencollective.com/babel/backer/2/website" target="_blank"><img src="https://opencollective.com/babel/backer/2/avatar.svg"></a>
 <a href="https://opencollective.com/babel/backer/3/website" target="_blank"><img src="https://opencollective.com/babel/backer/3/avatar.svg"></a>
 <a href="https://opencollective.com/babel/backer/4/website" target="_blank"><img src="https://opencollective.com/babel/backer/4/avatar.svg"></a>
-<a href="https://opencollective.com/babel/backer/5/website" target="_blank"><img src="https://opencollective.com/babel/backer/5/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/6/website" target="_blank"><img src="https://opencollective.com/babel/backer/6/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/7/website" target="_blank"><img src="https://opencollective.com/babel/backer/7/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/8/website" target="_blank"><img src="https://opencollective.com/babel/backer/8/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/9/website" target="_blank"><img src="https://opencollective.com/babel/backer/9/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/10/website" target="_blank"><img src="https://opencollective.com/babel/backer/10/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/11/website" target="_blank"><img src="https://opencollective.com/babel/backer/11/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/12/website" target="_blank"><img src="https://opencollective.com/babel/backer/12/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/13/website" target="_blank"><img src="https://opencollective.com/babel/backer/13/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/14/website" target="_blank"><img src="https://opencollective.com/babel/backer/14/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/15/website" target="_blank"><img src="https://opencollective.com/babel/backer/15/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/16/website" target="_blank"><img src="https://opencollective.com/babel/backer/16/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/17/website" target="_blank"><img src="https://opencollective.com/babel/backer/17/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/18/website" target="_blank"><img src="https://opencollective.com/babel/backer/18/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/19/website" target="_blank"><img src="https://opencollective.com/babel/backer/19/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/20/website" target="_blank"><img src="https://opencollective.com/babel/backer/20/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/21/website" target="_blank"><img src="https://opencollective.com/babel/backer/21/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/22/website" target="_blank"><img src="https://opencollective.com/babel/backer/22/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/23/website" target="_blank"><img src="https://opencollective.com/babel/backer/23/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/24/website" target="_blank"><img src="https://opencollective.com/babel/backer/24/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/25/website" target="_blank"><img src="https://opencollective.com/babel/backer/25/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/26/website" target="_blank"><img src="https://opencollective.com/babel/backer/26/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/27/website" target="_blank"><img src="https://opencollective.com/babel/backer/27/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/backer/28/website" target="_blank"><img src="https://opencollective.com/babel/backer/28/avatar.svg"></a>		
+<a href="https://opencollective.com/babel/backer/5/website" target="_blank"><img src="https://opencollective.com/babel/backer/5/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/6/website" target="_blank"><img src="https://opencollective.com/babel/backer/6/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/7/website" target="_blank"><img src="https://opencollective.com/babel/backer/7/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/8/website" target="_blank"><img src="https://opencollective.com/babel/backer/8/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/9/website" target="_blank"><img src="https://opencollective.com/babel/backer/9/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/10/website" target="_blank"><img src="https://opencollective.com/babel/backer/10/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/11/website" target="_blank"><img src="https://opencollective.com/babel/backer/11/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/12/website" target="_blank"><img src="https://opencollective.com/babel/backer/12/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/13/website" target="_blank"><img src="https://opencollective.com/babel/backer/13/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/14/website" target="_blank"><img src="https://opencollective.com/babel/backer/14/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/15/website" target="_blank"><img src="https://opencollective.com/babel/backer/15/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/16/website" target="_blank"><img src="https://opencollective.com/babel/backer/16/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/17/website" target="_blank"><img src="https://opencollective.com/babel/backer/17/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/18/website" target="_blank"><img src="https://opencollective.com/babel/backer/18/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/19/website" target="_blank"><img src="https://opencollective.com/babel/backer/19/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/20/website" target="_blank"><img src="https://opencollective.com/babel/backer/20/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/21/website" target="_blank"><img src="https://opencollective.com/babel/backer/21/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/22/website" target="_blank"><img src="https://opencollective.com/babel/backer/22/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/23/website" target="_blank"><img src="https://opencollective.com/babel/backer/23/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/24/website" target="_blank"><img src="https://opencollective.com/babel/backer/24/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/25/website" target="_blank"><img src="https://opencollective.com/babel/backer/25/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/26/website" target="_blank"><img src="https://opencollective.com/babel/backer/26/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/27/website" target="_blank"><img src="https://opencollective.com/babel/backer/27/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/backer/28/website" target="_blank"><img src="https://opencollective.com/babel/backer/28/avatar.svg"></a>
   <a href="https://opencollective.com/babel/backer/29/website" target="_blank"><img src="https://opencollective.com/babel/backer/29/avatar.svg"></a>
 
 ## Sponsors
@@ -130,30 +134,30 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 <a href="https://opencollective.com/babel/sponsor/2/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/2/avatar.svg"></a>
 <a href="https://opencollective.com/babel/sponsor/3/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/3/avatar.svg"></a>
 <a href="https://opencollective.com/babel/sponsor/4/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/4/avatar.svg"></a>
- <a href="https://opencollective.com/babel/sponsor/5/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/5/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/6/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/6/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/7/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/7/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/8/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/8/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/9/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/9/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/10/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/10/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/11/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/11/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/12/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/12/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/13/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/13/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/14/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/14/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/15/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/15/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/16/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/16/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/17/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/17/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/18/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/18/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/19/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/19/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/20/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/20/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/21/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/21/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/22/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/22/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/23/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/23/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/24/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/24/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/25/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/25/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/26/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/26/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/27/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/27/avatar.svg"></a>		
-  <a href="https://opencollective.com/babel/sponsor/28/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/28/avatar.svg"></a>		
+ <a href="https://opencollective.com/babel/sponsor/5/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/5/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/6/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/6/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/7/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/7/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/8/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/8/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/9/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/9/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/10/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/10/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/11/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/11/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/12/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/12/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/13/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/13/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/14/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/14/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/15/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/15/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/16/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/16/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/17/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/17/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/18/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/18/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/19/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/19/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/20/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/20/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/21/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/21/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/22/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/22/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/23/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/23/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/24/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/24/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/25/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/25/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/26/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/26/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/27/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/27/avatar.svg"></a>
+  <a href="https://opencollective.com/babel/sponsor/28/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/28/avatar.svg"></a>
   <a href="https://opencollective.com/babel/sponsor/29/website" target="_blank"><img src="https://opencollective.com/babel/sponsor/29/avatar.svg"></a>
 
 ## License
