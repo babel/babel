@@ -8,7 +8,6 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-constants { "android":"4" }
   transform-arrow-functions { "android":"4" }
   transform-block-scoped-functions { "android":"4" }
   transform-block-scoping { "android":"4" }

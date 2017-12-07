@@ -19,7 +19,6 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-constants { "electron":"0.36", "ie":"10" }
   transform-arrow-functions { "ie":"10" }
   transform-block-scoped-functions { "ie":"10" }
   transform-block-scoping { "electron":"0.36", "ie":"10" }

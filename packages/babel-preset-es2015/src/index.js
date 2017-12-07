@@ -11,7 +11,6 @@ import transformES2015ComputedProperties from "@babel/plugin-transform-computed-
 import transformES2015ForOf from "@babel/plugin-transform-for-of";
 import transformES2015StickyRegex from "@babel/plugin-transform-sticky-regex";
 import transformES2015UnicodeRegex from "@babel/plugin-transform-unicode-regex";
-import checkES2015Constants from "@babel/plugin-check-constants";
 import transformES2015Spread from "@babel/plugin-transform-spread";
 import transformES2015Parameters from "@babel/plugin-transform-parameters";
 import transformES2015Destructuring from "@babel/plugin-transform-destructuring";
@@ -67,7 +66,6 @@ export default function(api, opts = {}) {
       [transformES2015ForOf, optsLoose],
       transformES2015StickyRegex,
       transformES2015UnicodeRegex,
-      checkES2015Constants,
       [transformES2015Spread, optsLoose],
       [transformES2015Parameters, optsLoose],
       [transformES2015Destructuring, optsLoose],

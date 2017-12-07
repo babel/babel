@@ -11,7 +11,6 @@
     "build-data": "node ./scripts/build-data.js; node ./scripts/build-modules-support.js"
   },
   "dependencies": {
-    "@babel/plugin-check-constants": "7.0.0-beta.38",
     "@babel/plugin-proposal-async-generator-functions": "7.0.0-beta.38",
     "@babel/plugin-proposal-object-rest-spread": "7.0.0-beta.38",
     "@babel/plugin-proposal-optional-catch-binding": "7.0.0-beta.38",

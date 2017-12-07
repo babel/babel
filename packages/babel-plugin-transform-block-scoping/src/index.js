@@ -48,7 +48,7 @@ export default function(api, opts) {
         }
       },
 
-      Loop(path) {
+      Loop(path, state) {
         const { parent, scope } = path;
         path.ensureBlock();
         const blockScoping = new BlockScoping(
@@ -58,12 +58,13 @@ export default function(api, opts) {
           scope,
           throwIfClosureRequired,
           tdzEnabled,
+          state,
         );
         const replace = blockScoping.run();
         if (replace) path.replaceWith(replace);
       },
 
-      CatchClause(path) {
+      CatchClause(path, state) {
         const { parent, scope } = path;
         const blockScoping = new BlockScoping(
           null,
@@ -72,11 +73,12 @@ export default function(api, opts) {
           scope,
           throwIfClosureRequired,
           tdzEnabled,
+          state,
         );
         blockScoping.run();
       },
 
-      "BlockStatement|SwitchStatement|Program"(path) {
+      "BlockStatement|SwitchStatement|Program"(path, state) {
         if (!ignoreBlock(path)) {
           const blockScoping = new BlockScoping(
             null,
@@ -85,6 +87,7 @@ export default function(api, opts) {
             path.scope,
             throwIfClosureRequired,
             tdzEnabled,
+            state,
           );
           blockScoping.run();
         }
@@ -338,9 +341,11 @@ class BlockScoping {
     scope: Scope,
     throwIfClosureRequired: boolean,
     tdzEnabled: boolean,
+    state: Object,
   ) {
     this.parent = parent;
     this.scope = scope;
+    this.state = state;
     this.throwIfClosureRequired = throwIfClosureRequired;
     this.tdzEnabled = tdzEnabled;
 
@@ -396,6 +401,35 @@ class BlockScoping {
 
   updateScopeInfo(wrappedInClosure) {
     const scope = this.scope;
+    const state = this.state;
+
+    for (const name in scope.bindings) {
+      const binding = scope.bindings[name];
+      if (binding.kind !== "const") continue;
+
+      for (const violation of (binding.constantViolations: Array)) {
+        const readOnlyError = state.addHelper("readOnlyError");
+        const throwNode = t.callExpression(readOnlyError, [
+          t.stringLiteral(name),
+        ]);
+
+        if (violation.isAssignmentExpression()) {
+          violation
+            .get("right")
+            .replaceWith(
+              t.sequenceExpression([throwNode, violation.get("right").node]),
+            );
+        } else if (violation.isUpdateExpression()) {
+          violation.replaceWith(
+            t.sequenceExpression([throwNode, violation.node]),
+          );
+        } else if (violation.isForXStatement()) {
+          violation.ensureBlock();
+          violation.node.body.body.unshift(t.expressionStatement(throwNode));
+        }
+      }
+    }
+
     const parentScope = scope.getFunctionParent() || scope.getProgramParent();
     const letRefs = this.letReferences;
 

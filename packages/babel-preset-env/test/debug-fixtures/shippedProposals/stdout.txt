@@ -6,7 +6,6 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-constants {}
   transform-arrow-functions {}
   transform-block-scoped-functions {}
   transform-block-scoping {}

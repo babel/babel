@@ -140,7 +140,6 @@ export function registerPresets(newPresets) {
 // Want to get rid of this long whitelist of plugins?
 // Wait! Please read https://github.com/babel/babel/pull/6177 first.
 registerPlugins({
-  "check-constants": require("@babel/plugin-check-constants"),
   "external-helpers": require("@babel/plugin-external-helpers"),
   "syntax-async-generators": require("@babel/plugin-syntax-async-generators"),
   "syntax-class-properties": require("@babel/plugin-syntax-class-properties"),

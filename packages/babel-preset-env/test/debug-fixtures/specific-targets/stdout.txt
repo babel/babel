@@ -13,7 +13,6 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-constants { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-arrow-functions { "ie":"10", "ios":"9", "safari":"7" }
   transform-block-scoped-functions { "ie":"10", "ios":"9", "safari":"7" }
   transform-block-scoping { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
