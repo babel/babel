@@ -157,6 +157,7 @@
                     },
                     "static": false,
                     "kind": "init",
+                    "method": true,
                     "value": {
                       "type": "FunctionTypeAnnotation",
                       "start": 37,

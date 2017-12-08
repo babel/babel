@@ -9,7 +9,7 @@ declare export class A<T> extends B<T> {
   x: number
 }
 declare export class A {
-  static foo: () => number,
+  static foo(): number,
   static x: string,
 }
 declare export class A {

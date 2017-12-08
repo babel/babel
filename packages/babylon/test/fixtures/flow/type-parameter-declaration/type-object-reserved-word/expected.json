@@ -109,6 +109,7 @@
               },
               "static": false,
               "kind": "init",
+              "method": true,
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 13,
@@ -210,6 +211,7 @@
               },
               "static": false,
               "kind": "init",
+              "method": true,
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 34,
@@ -311,6 +313,7 @@
               },
               "static": false,
               "kind": "init",
+              "method": true,
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 55,
@@ -412,6 +415,7 @@
               },
               "static": false,
               "kind": "init",
+              "method": true,
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 75,

@@ -751,6 +751,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         let optional = false;
         if (this.isRelational("<") || this.match(tt.parenL)) {
           // This is a method property
+          node.method = true;
+
           if (variance) {
             this.unexpected(variance.start);
           }
@@ -763,6 +765,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
         } else {
           if (kind !== "init") this.unexpected();
+
+          node.method = false;
+
           if (this.eat(tt.question)) {
             optional = true;
           }
