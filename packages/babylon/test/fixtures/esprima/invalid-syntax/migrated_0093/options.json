@@ -1,3 +1,3 @@
 {
-  "throws": "Argument name clash in strict mode (1:18)"
+  "throws": "Argument name clash in arrow function (1:18)"
 }

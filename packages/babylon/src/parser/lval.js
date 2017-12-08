@@ -331,7 +331,7 @@ export default class LValParser extends NodeUtils {
           const key = `_${expr.name}`;
 
           if (checkClashes[key]) {
-            this.raise(expr.start, "Argument name clash in strict mode");
+            this.raise(expr.start, "Argument name clash in arrow function");
           } else {
             checkClashes[key] = true;
           }
