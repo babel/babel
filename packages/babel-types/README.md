@@ -80,7 +80,7 @@ Aliases: `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Expression`, 
  - `expression`: `boolean` (default: `null`)
  - `generator`: `boolean` (default: `false`)
  - `returnType`: `TypeAnnotation | TSTypeAnnotation | Noop` (default: `null`)
- - `typeParameters`: `TypeParameterDeclaration | Noop` (default: `null`)
+ - `typeParameters`: `TypeParameterDeclaration | TSTypeParameterDeclaration | Noop` (default: `null`)
 
 ---
 
@@ -233,7 +233,7 @@ Aliases: `Expression`
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
  - `optional`: `true | false` (default: `null`)
- - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
+ - `typeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
 
 ---
 
@@ -279,8 +279,8 @@ Aliases: `Scopable`, `Class`, `Statement`, `Declaration`, `Pureish`
  - `declare`: `boolean` (default: `null`)
  - `implements`: `Array<TSExpressionWithTypeArguments | FlowClassImplements>` (default: `null`)
  - `mixins` (default: `null`)
- - `superTypeParameters`: `TypeParameterInstantiation` (default: `null`)
- - `typeParameters`: `TypeParameterDeclaration | Noop` (default: `null`)
+ - `superTypeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
+ - `typeParameters`: `TypeParameterDeclaration | TSTypeParameterDeclaration | Noop` (default: `null`)
 
 ---
 
@@ -299,8 +299,8 @@ Aliases: `Scopable`, `Class`, `Expression`, `Pureish`
  - `decorators`: `Array<Decorator>` (default: `null`)
  - `implements`: `Array<TSExpressionWithTypeArguments | FlowClassImplements>` (default: `null`)
  - `mixins` (default: `null`)
- - `superTypeParameters`: `TypeParameterInstantiation` (default: `null`)
- - `typeParameters`: `TypeParameterDeclaration | Noop` (default: `null`)
+ - `superTypeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
+ - `typeParameters`: `TypeParameterDeclaration | TSTypeParameterDeclaration | Noop` (default: `null`)
 
 ---
 
@@ -341,7 +341,7 @@ Aliases: `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
  - `generator`: `boolean` (default: `false`)
  - `optional`: `boolean` (default: `null`)
  - `returnType`: `TypeAnnotation | TSTypeAnnotation | Noop` (default: `null`)
- - `typeParameters`: `TypeParameterDeclaration | Noop` (default: `null`)
+ - `typeParameters`: `TypeParameterDeclaration | TSTypeParameterDeclaration | Noop` (default: `null`)
 
 ---
 
@@ -829,7 +829,7 @@ Aliases: `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Statement`, `
  - `async`: `boolean` (default: `false`)
  - `declare`: `boolean` (default: `null`)
  - `returnType`: `TypeAnnotation | TSTypeAnnotation | Noop` (default: `null`)
- - `typeParameters`: `TypeParameterDeclaration | Noop` (default: `null`)
+ - `typeParameters`: `TypeParameterDeclaration | TSTypeParameterDeclaration | Noop` (default: `null`)
 
 ---
 
@@ -848,7 +848,7 @@ Aliases: `Scopable`, `Function`, `BlockParent`, `FunctionParent`, `Expression`, 
  - `generator`: `boolean` (default: `false`)
  - `async`: `boolean` (default: `false`)
  - `returnType`: `TypeAnnotation | TSTypeAnnotation | Noop` (default: `null`)
- - `typeParameters`: `TypeParameterDeclaration | Noop` (default: `null`)
+ - `typeParameters`: `TypeParameterDeclaration | TSTypeParameterDeclaration | Noop` (default: `null`)
 
 ---
 
@@ -1334,7 +1334,7 @@ Aliases: `Expression`
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
  - `optional`: `true | false` (default: `null`)
- - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
+ - `typeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
 
 ---
 
@@ -1453,7 +1453,7 @@ Aliases: `UserWhitespacable`, `Function`, `Scopable`, `BlockParent`, `FunctionPa
  - `decorators`: `Array<Decorator>` (default: `null`)
  - `generator`: `boolean` (default: `false`)
  - `returnType`: `TypeAnnotation | TSTypeAnnotation | Noop` (default: `null`)
- - `typeParameters`: `TypeParameterDeclaration | Noop` (default: `null`)
+ - `typeParameters`: `TypeParameterDeclaration | TSTypeParameterDeclaration | Noop` (default: `null`)
 
 ---
 
@@ -1821,7 +1821,7 @@ See also `t.isTSCallSignatureDeclaration(node, opts)` and `t.assertTSCallSignatu
 
 Aliases: `TSTypeElement`
 
- - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
+ - `typeParameters`: `TSTypeParameterDeclaration` (default: `null`)
  - `parameters`: `Array<Identifier | RestElement>` (default: `null`)
  - `typeAnnotation`: `TSTypeAnnotation` (default: `null`)
 
@@ -1836,7 +1836,7 @@ See also `t.isTSConstructSignatureDeclaration(node, opts)` and `t.assertTSConstr
 
 Aliases: `TSTypeElement`
 
- - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
+ - `typeParameters`: `TSTypeParameterDeclaration` (default: `null`)
  - `parameters`: `Array<Identifier | RestElement>` (default: `null`)
  - `typeAnnotation`: `TSTypeAnnotation` (default: `null`)
 
@@ -1851,7 +1851,7 @@ See also `t.isTSConstructorType(node, opts)` and `t.assertTSConstructorType(node
 
 Aliases: `TSType`
 
- - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
+ - `typeParameters`: `TSTypeParameterDeclaration` (default: `null`)
  - `typeAnnotation`: `TSTypeAnnotation` (default: `null`)
  - `parameters`: `Array<Identifier | RestElement>` (default: `null`)
 
@@ -1867,9 +1867,9 @@ See also `t.isTSDeclareFunction(node, opts)` and `t.assertTSDeclareFunction(node
 Aliases: `Statement`, `Declaration`
 
  - `id`: `Identifier` (default: `null`)
- - `typeParameters`: `TypeParameterDeclaration | Noop` (default: `null`)
+ - `typeParameters`: `TSTypeParameterDeclaration | Noop` (default: `null`)
  - `params`: `Array<LVal>` (required)
- - `returnType`: `TypeAnnotation | TSTypeAnnotation | Noop` (default: `null`)
+ - `returnType`: `TSTypeAnnotation | Noop` (default: `null`)
  - `async`: `boolean` (default: `false`)
  - `declare`: `boolean` (default: `null`)
  - `generator`: `boolean` (default: `false`)
@@ -1885,9 +1885,9 @@ See also `t.isTSDeclareMethod(node, opts)` and `t.assertTSDeclareMethod(node, op
 
  - `decorators`: `Array<Decorator>` (default: `null`)
  - `key` (required)
- - `typeParameters`: `TypeParameterDeclaration | Noop` (default: `null`)
+ - `typeParameters`: `TSTypeParameterDeclaration | Noop` (default: `null`)
  - `params`: `Array<LVal>` (required)
- - `returnType`: `TypeAnnotation | TSTypeAnnotation | Noop` (default: `null`)
+ - `returnType`: `TSTypeAnnotation | Noop` (default: `null`)
  - `abstract`: `boolean` (default: `null`)
  - `access`: `"public" | "private" | "protected"` (default: `null`)
  - `accessibility`: `"public" | "private" | "protected"` (default: `null`)
@@ -1952,7 +1952,7 @@ See also `t.isTSExpressionWithTypeArguments(node, opts)` and `t.assertTSExpressi
 Aliases: `TSType`
 
  - `expression`: `TSEntityName` (required)
- - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
+ - `typeParameters`: `TSTypeParameterInstantiation` (default: `null`)
 
 ---
 
@@ -1976,7 +1976,7 @@ See also `t.isTSFunctionType(node, opts)` and `t.assertTSFunctionType(node, opts
 
 Aliases: `TSType`
 
- - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
+ - `typeParameters`: `TSTypeParameterDeclaration` (default: `null`)
  - `typeAnnotation`: `TSTypeAnnotation` (default: `null`)
  - `parameters`: `Array<Identifier | RestElement>` (default: `null`)
 
@@ -2047,7 +2047,7 @@ See also `t.isTSInterfaceDeclaration(node, opts)` and `t.assertTSInterfaceDeclar
 Aliases: `Statement`, `Declaration`
 
  - `id`: `Identifier` (required)
- - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
+ - `typeParameters`: `TSTypeParameterDeclaration` (default: `null`)
  - `extends`: `Array<TSExpressionWithTypeArguments>` (default: `null`)
  - `body`: `TSInterfaceBody` (required)
  - `declare`: `boolean` (default: `null`)
@@ -2089,7 +2089,7 @@ See also `t.isTSMappedType(node, opts)` and `t.assertTSMappedType(node, opts)`.
 
 Aliases: `TSType`
 
- - `typeParameter`: `TypeParameter` (required)
+ - `typeParameter`: `TSTypeParameter` (required)
  - `typeAnnotation`: `TSType` (default: `null`)
  - `optional`: `boolean` (default: `null`)
  - `readonly`: `boolean` (default: `null`)
@@ -2106,7 +2106,7 @@ See also `t.isTSMethodSignature(node, opts)` and `t.assertTSMethodSignature(node
 Aliases: `TSTypeElement`
 
  - `key`: `Expression` (required)
- - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
+ - `typeParameters`: `TSTypeParameterDeclaration` (default: `null`)
  - `parameters`: `Array<Identifier | RestElement>` (default: `null`)
  - `typeAnnotation`: `TSTypeAnnotation` (default: `null`)
  - `computed`: `boolean` (default: `null`)
@@ -2334,7 +2334,7 @@ See also `t.isTSTypeAliasDeclaration(node, opts)` and `t.assertTSTypeAliasDeclar
 Aliases: `Statement`, `Declaration`
 
  - `id`: `Identifier` (required)
- - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
+ - `typeParameters`: `TSTypeParameterDeclaration` (default: `null`)
  - `typeAnnotation`: `TSType` (required)
  - `declare`: `boolean` (default: `null`)
 
@@ -2464,7 +2464,7 @@ See also `t.isTSTypeReference(node, opts)` and `t.assertTSTypeReference(node, op
 Aliases: `TSType`
 
  - `typeName`: `TSEntityName` (required)
- - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
+ - `typeParameters`: `TSTypeParameterInstantiation` (default: `null`)
 
 ---
 
