@@ -2274,7 +2274,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
     }
 
-    hasFlowComment(): ?number {
+    skipFlowComment(): ?number {
       const includeComment =
         this.input.charCodeAt(this.state.pos + 2) === charCodes.colon &&
         this.input.charCodeAt(this.state.pos + 3) === charCodes.colon &&

@@ -354,8 +354,8 @@ export default class Tokenizer extends LocationParser {
         case charCodes.slash:
           switch (this.input.charCodeAt(this.state.pos + 1)) {
             case charCodes.asterisk:
-              if (this.plugins.flow && this.hasFlowComment()) {
-                this.state.pos += this.hasFlowComment();
+              if (this.plugins.flow && this.skipFlowComment()) {
+                this.state.pos += this.skipFlowComment();
                 this.state.hasFlowComment = true;
                 break;
               }
