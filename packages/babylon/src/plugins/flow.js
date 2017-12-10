@@ -7,6 +7,7 @@ import { types as tt, type TokenType } from "../tokenizer/types";
 import * as N from "../types";
 import type { Pos, Position } from "../util/location";
 import type State from "../tokenizer/state";
+import * as charCodes from "charcodes";
 
 const primitiveTypes = [
   "any",
@@ -2271,5 +2272,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         /* params */ undefined,
         /* isAsync */ true,
       );
+    }
+
+    hasFlowComment(): boolean | number {
+      const includeComment =
+        this.input.charCodeAt(this.state.pos + 2) === charCodes.colon &&
+        this.input.charCodeAt(this.state.pos + 3) === charCodes.colon &&
+        4; // check for /*::
+      const flowincludeComment =
+        this.input.slice(this.state.pos + 2, 14) === "flow-include" && 14; // check for /*flow-include
+      const annotationComment =
+        this.input.charCodeAt(this.state.pos + 2) === charCodes.colon &&
+        this.input.charCodeAt(this.state.pos + 3) !== charCodes.colon &&
+        2; // check for /*:
+      return includeComment || annotationComment || flowincludeComment;
     }
   };
