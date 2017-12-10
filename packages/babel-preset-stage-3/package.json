@@ -13,7 +13,8 @@
     "@babel/plugin-proposal-object-rest-spread": "7.0.0-beta.34",
     "@babel/plugin-proposal-optional-catch-binding": "7.0.0-beta.34",
     "@babel/plugin-proposal-unicode-property-regex": "7.0.0-beta.34",
-    "@babel/plugin-syntax-dynamic-import": "7.0.0-beta.34"
+    "@babel/plugin-syntax-dynamic-import": "7.0.0-beta.34",
+    "@babel/plugin-syntax-import-meta": "7.0.0-beta.34"
   },
   "peerDependencies": {
     "@babel/core": "7.0.0-beta.34"
