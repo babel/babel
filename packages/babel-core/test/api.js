@@ -599,4 +599,42 @@ describe("api", function() {
       assert.ok(script.indexOf("typeof") >= 0);
     });
   });
+
+  describe("handle parsing errors", function() {
+    const options = {
+      babelrc: false,
+    };
+
+    it("only syntax plugin available", function() {
+      assert.throws(
+        () =>
+          babel.transformFileSync(
+            __dirname + "/fixtures/api/parsing-errors/only-syntax/file.js",
+            options,
+          ),
+        RegExp(
+          "Support for this experimental syntax isn't currently enabled. " +
+            "Add @babel/plugin-syntax-dynamic-import \\(https://git.io/vb4Sv\\) to the 'plugins' " +
+            "section of your Babel config.",
+        ),
+      );
+    });
+
+    it("both syntax and transform plugin available", function() {
+      assert.throws(
+        () =>
+          babel.transformFileSync(
+            __dirname +
+              "/fixtures/api/parsing-errors/syntax-and-transform/file.js",
+            options,
+          ),
+        RegExp(
+          "Support for this experimental syntax isn't currently enabled. Add either " +
+            "@babel/plugin-syntax-async-generators \\(https://git.io/vb4SY\\) or " +
+            "@babel/plugin-syntax-async-generators \\(https://git.io/vb4SY\\) " +
+            "\\(if you only need parsing support\\) to the 'plugins' section of your Babel config.",
+        ),
+      );
+    });
+  });
 });

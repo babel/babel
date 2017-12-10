@@ -2,99 +2,196 @@
 
 const pluginNameMap = {
   asyncGenerators: {
-    syntax: "@babel/plugin-syntax-async-generators",
-    transform: "@babel/plugin-proposal-async-generator-functions",
-  },
-  bigInt: {
-    issueLink: "https://github.com/babel/proposals/issues/2",
-  },
-  classPrivateMethods: {
-    issueLink: "https://github.com/babel/proposals/issues/22",
-  },
-  classPrivateProperties: {
-    issueLink: "https://github.com/babel/proposals/issues/22",
+    syntax: {
+      name: "@babel/plugin-syntax-async-generators",
+      url: "https://git.io/vb4SY",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-async-generator-functions",
+      url: "https://git.io/vb4yp",
+    },
   },
   classProperties: {
-    syntax: "@babel/plugin-syntax-class-properties",
-    transform: "@babel/plugin-proposal-class-properties",
+    syntax: {
+      name: "@babel/plugin-syntax-class-properties",
+      url: "https://git.io/vb4yQ",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-class-properties",
+      url: "https://git.io/vb4SL",
+    },
   },
   decorators: {
-    syntax: "@babel/plugin-syntax-decorators",
-    transform: "@babel/plugin-proposal-decorators",
+    syntax: {
+      name: "@babel/plugin-syntax-decorators",
+      url: "https://git.io/vb4y9",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-decorators",
+      url: "https://git.io/vb4ST",
+    },
   },
   doExpressions: {
-    syntax: "@babel/plugin-syntax-do-expressions",
-    transform: "@babel/plugin-proposal-do-expressions",
+    syntax: {
+      name: "@babel/plugin-syntax-do-expressions",
+      url: "https://git.io/vb4yh",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-do-expressions",
+      url: "https://git.io/vb4S3",
+    },
   },
   dynamicImport: {
-    syntax: "@babel/plugin-syntax-dynamic-import",
+    syntax: {
+      name: "@babel/plugin-syntax-dynamic-import",
+      url: "https://git.io/vb4Sv",
+    },
   },
-  // Not required to be handled.
-  // (See https://github.com/babel/babel/issues/6205#issuecomment-346997662).
-  // Here just to complete the plugin map
-  estree: {},
   exportDefaultFrom: {
-    syntax: "@babel/plugin-syntax-export-default-from",
-    transform: "@babel/plugin-proposal-export-default-from",
+    syntax: {
+      name: "@babel/plugin-syntax-export-default-from",
+      url: "https://git.io/vb4SO",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-export-default-from",
+      url: "https://git.io/vb4yH",
+    },
   },
   exportNamespaceFrom: {
-    syntax: "@babel/plugin-syntax-export-namespace-from",
-    transform: "@babel/plugin-proposal-export-namespace-from",
+    syntax: {
+      name: "@babel/plugin-syntax-export-namespace-from",
+      url: "https://git.io/vb4Sf",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-export-namespace-from",
+      url: "https://git.io/vb4SG",
+    },
   },
   flow: {
-    syntax: "@babel/plugin-syntax-flow",
-    transform: "@babel/plugin-transform-flow-strip-type",
+    syntax: {
+      name: "@babel/plugin-syntax-flow",
+      url: "https://git.io/vb4yb",
+    },
+    transform: {
+      name: "@babel/plugin-transform-flow-strip-types",
+      url: "https://git.io/vb49g",
+    },
   },
   functionBind: {
-    syntax: "@babel/plugin-syntax-function-bind",
-    transform: "@babel/plugin-proposal-function-bind",
+    syntax: {
+      name: "@babel/plugin-syntax-function-bind",
+      url: "https://git.io/vb4y7",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-function-bind",
+      url: "https://git.io/vb4St",
+    },
   },
   functionSent: {
-    syntax: "@babel/plugin-syntax-function-sent",
-    transform: "@babel/plugin-proposal-function-sent",
-  },
-  importMeta: {
-    issueLink: "https://github.com/babel/proposals/issues/10",
+    syntax: {
+      name: "@babel/plugin-syntax-function-sent",
+      url: "https://git.io/vb4yN",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-function-sent",
+      url: "https://git.io/vb4SZ",
+    },
   },
   jsx: {
-    syntax: "@babel/plugin-syntax-jsx",
-    transform: "@babel/plugin-transform-react-jsx",
+    syntax: {
+      name: "@babel/plugin-syntax-jsx",
+      url: "https://git.io/vb4yA",
+    },
+    transform: {
+      name: "@babel/plugin-transform-react-jsx",
+      url: "https://git.io/vb4yd",
+    },
   },
   nullishCoalescingOperator: {
-    syntax: "@babel/plugin-syntax-nullish-coalescing-operator",
-    transform: "@babel/plugin-proposal-nullish-coalescing-operator",
+    syntax: {
+      name: "@babel/plugin-syntax-nullish-coalescing-operator",
+      url: "https://git.io/vb4yx",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-nullish-coalescing-operator",
+      url: "https://git.io/vb4Se",
+    },
   },
   numericSeparator: {
-    syntax: "@babel/plugin-syntax-numeric-separator",
-    transform: "@babel/plugin-proposal-numeric-separator",
+    syntax: {
+      name: "@babel/plugin-syntax-numeric-separator",
+      url: "https://git.io/vb4Sq",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-numeric-separator",
+      url: "https://git.io/vb4yS",
+    },
   },
   objectRestSpread: {
-    syntax: "@babel/plugin-syntax-object-rest-spread",
-    transform: "@babel/plugin-proposal-object-rest-spread",
+    syntax: {
+      name: "@babel/plugin-syntax-object-rest-spread",
+      url: "https://git.io/vb4y5",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-object-rest-spread",
+      url: "https://git.io/vb4Ss",
+    },
   },
   optionalCatchBinding: {
-    syntax: "@babel/plugin-syntax-optional-catch-binding",
-    transform: "@babel/plugin-proposal-optional-catch-binding",
+    syntax: {
+      name: "@babel/plugin-syntax-optional-catch-binding",
+      url: "https://git.io/vb4Sn",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-optional-catch-binding",
+      url: "https://git.io/vb4SI",
+    },
   },
   optionalChaining: {
-    syntax: "@babel/plugin-syntax-optional-chaining",
-    transform: "@babel/plugin-proposal-optional-chaining",
+    syntax: {
+      name: "@babel/plugin-syntax-optional-chaining",
+      url: "https://git.io/vb4Sc",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-optional-chaining",
+      url: "https://git.io/vb4Sk",
+    },
   },
   pipelineOperator: {
-    syntax: "@babel/plugin-syntax-pipeline-operator",
-    transform: "@babel/plugin-proposal-pipeline-operator",
+    syntax: {
+      name: "@babel/plugin-syntax-pipeline-operator",
+      url: "https://git.io/vb4yj",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-pipeline-operator",
+      url: "https://git.io/vb4SU",
+    },
   },
   throwExpressions: {
-    syntax: "@babel/plugin-syntax-throw-expressions",
-    transform: "@babel/plugin-proposal-throw-expressions",
+    syntax: {
+      name: "@babel/plugin-syntax-throw-expressions",
+      url: "https://git.io/vb4SJ",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-throw-expressions",
+      url: "https://git.io/vb4yF",
+    },
   },
   typescript: {
-    syntax: "@babel/plugin-syntax-typescript",
-    transform: "@babel/plugin-transform-typescript",
+    syntax: {
+      name: "@babel/plugin-syntax-typescript",
+      url: "https://git.io/vb4SC",
+    },
+    transform: {
+      name: "@babel/plugin-transform-typescript",
+      url: "https://git.io/vb4Sm",
+    },
   },
 };
 
-export default function generateHelpMessage(
+const getNameURLCombination = ({ name, url }) => `${name} (${url})`;
+
+export default function generateMissingPluginMessage(
   missingPlugins: string[] = [],
 ): string {
   let helpMessage = "";
@@ -102,26 +199,20 @@ export default function generateHelpMessage(
   if (pluginName) {
     const pluginInfo = pluginNameMap[pluginName];
     if (pluginInfo) {
-      const {
-        syntax: syntaxPlugin,
-        transform: transformPlugin,
-        issueLink,
-      } = pluginInfo;
+      const { syntax: syntaxPlugin, transform: transformPlugin } = pluginInfo;
       if (syntaxPlugin) {
+        const syntaxPluginInfo = getNameURLCombination(syntaxPlugin);
         if (transformPlugin) {
+          const transformPluginInfo = getNameURLCombination(syntaxPlugin);
           helpMessage =
-            `Use the ${syntaxPlugin} plugin to enable parsing. ` +
-            `Use the ${transformPlugin} plugin to enable transformation.` +
-            `\nNote: The transform plugins already include the syntax plugins, so you don't need both.`;
+            `Support for this experimental syntax isn't currently enabled. ` +
+            `Add either ${transformPluginInfo} or ${syntaxPluginInfo} (if you only need parsing support) ` +
+            `to the 'plugins' section of your Babel config.`;
         } else {
           helpMessage =
-            `Use the ${syntaxPlugin} plugin to enable parsing. ` +
-            `Babel doesn't support transforming this syntax.`;
+            `Support for this experimental syntax isn't currently enabled. ` +
+            `Add ${syntaxPluginInfo} to the 'plugins' section of your Babel config.`;
         }
-      } else if (issueLink) {
-        helpMessage =
-          `This syntax is not supported yet. ` +
-          `Follow it's development at ${issueLink}.`;
       }
     }
   }
