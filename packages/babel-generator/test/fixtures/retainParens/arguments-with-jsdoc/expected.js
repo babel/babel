@@ -1,0 +1,3 @@
+fun(
+/** @type {number} */
+(arg));
