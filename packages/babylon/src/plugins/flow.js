@@ -2309,7 +2309,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     skipBlockComment(): void {
-      if (this.plugins.flow && this.plugins.flowComments && this.skipFlowComment()) {
+      if (
+        this.plugins.flow &&
+        this.plugins.flowComments &&
+        this.skipFlowComment()
+      ) {
         this.hasFlowCommentCompletion();
         this.state.pos += this.skipFlowComment();
         this.state.hasFlowComment = true;
