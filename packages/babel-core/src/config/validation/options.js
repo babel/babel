@@ -83,6 +83,9 @@ const COMMON_VALIDATORS: ValidatorSet = {
   auxiliaryCommentAfter: (assertString: Validator<
     $PropertyType<ValidatedOptions, "auxiliaryCommentAfter">,
   >),
+  retainParens: (assertBoolean: Validator<
+    $PropertyType<ValidatedOptions, "retainParens">,
+  >),
   sourceType: (assertSourceType: Validator<
     $PropertyType<ValidatedOptions, "sourceType">,
   >),
@@ -155,6 +158,7 @@ export type ValidatedOptions = {
   minified?: boolean,
   auxiliaryCommentBefore?: string,
   auxiliaryCommentAfter?: string,
+  retainParens?: boolean,
 
   // Parser
   sourceType?: SourceTypeOption,
