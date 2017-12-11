@@ -99,7 +99,13 @@ function update_whitelist(summary) {
 }
 
 const options = {
-  plugins: ["jsx", "flow", "asyncGenerators", "objectRestSpread"],
+  plugins: [
+    "jsx",
+    "flow",
+    "flowComments",
+    "asyncGenerators",
+    "objectRestSpread",
+  ],
   sourceType: "module",
   ranges: true,
 };
