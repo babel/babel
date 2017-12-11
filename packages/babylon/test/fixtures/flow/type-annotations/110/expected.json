@@ -109,6 +109,7 @@
               },
               "static": false,
               "kind": "init",
+              "method": false,
               "value": {
                 "type": "GenericTypeAnnotation",
                 "start": 13,

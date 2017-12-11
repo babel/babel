@@ -124,6 +124,7 @@
                   },
                   "static": false,
                   "kind": "init",
+                  "method": false,
                   "value": {
                     "type": "StringLiteralTypeAnnotation",
                     "start": 23,
@@ -200,6 +201,7 @@
                   },
                   "static": false,
                   "kind": "init",
+                  "method": false,
                   "value": {
                     "type": "StringLiteralTypeAnnotation",
                     "start": 38,
@@ -525,6 +527,7 @@
               },
               "static": false,
               "kind": "init",
+              "method": false,
               "value": {
                 "type": "UnionTypeAnnotation",
                 "start": 147,
@@ -589,6 +592,7 @@
                         },
                         "static": false,
                         "kind": "init",
+                        "method": false,
                         "value": {
                           "type": "StringLiteralTypeAnnotation",
                           "start": 156,
@@ -665,6 +669,7 @@
                         },
                         "static": false,
                         "kind": "init",
+                        "method": false,
                         "value": {
                           "type": "StringLiteralTypeAnnotation",
                           "start": 174,
@@ -783,6 +788,7 @@
               },
               "static": false,
               "kind": "init",
+              "method": false,
               "value": {
                 "type": "IntersectionTypeAnnotation",
                 "start": 212,
@@ -847,6 +853,7 @@
                         },
                         "static": false,
                         "kind": "init",
+                        "method": false,
                         "value": {
                           "type": "StringLiteralTypeAnnotation",
                           "start": 221,
@@ -923,6 +930,7 @@
                         },
                         "static": false,
                         "kind": "init",
+                        "method": false,
                         "value": {
                           "type": "StringLiteralTypeAnnotation",
                           "start": 239,

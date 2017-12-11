@@ -136,6 +136,7 @@
                       },
                       "static": false,
                       "kind": "init",
+                      "method": false,
                       "value": {
                         "type": "NumberTypeAnnotation",
                         "start": 14,
@@ -187,6 +188,7 @@
                       },
                       "static": false,
                       "kind": "init",
+                      "method": false,
                       "value": {
                         "type": "StringTypeAnnotation",
                         "start": 25,
@@ -450,6 +452,7 @@
                       },
                       "static": false,
                       "kind": "init",
+                      "method": false,
                       "value": {
                         "type": "NumberTypeAnnotation",
                         "start": 71,
@@ -501,6 +504,7 @@
                       },
                       "static": false,
                       "kind": "init",
+                      "method": false,
                       "value": {
                         "type": "StringTypeAnnotation",
                         "start": 82,
@@ -864,6 +868,7 @@
                       },
                       "static": false,
                       "kind": "init",
+                      "method": false,
                       "value": {
                         "type": "ObjectTypeAnnotation",
                         "start": 148,
@@ -913,6 +918,7 @@
                             },
                             "static": false,
                             "kind": "init",
+                            "method": false,
                             "value": {
                               "type": "NumberTypeAnnotation",
                               "start": 154,
@@ -964,6 +970,7 @@
                             },
                             "static": false,
                             "kind": "init",
+                            "method": false,
                             "value": {
                               "type": "StringTypeAnnotation",
                               "start": 165,
@@ -1022,6 +1029,7 @@
                       },
                       "static": false,
                       "kind": "init",
+                      "method": false,
                       "value": {
                         "type": "BooleanTypeAnnotation",
                         "start": 179,
@@ -1388,6 +1396,7 @@
                       },
                       "static": false,
                       "kind": "init",
+                      "method": false,
                       "value": {
                         "type": "ObjectTypeAnnotation",
                         "start": 242,
@@ -1437,6 +1446,7 @@
                             },
                             "static": false,
                             "kind": "init",
+                            "method": false,
                             "value": {
                               "type": "NumberTypeAnnotation",
                               "start": 247,
@@ -1488,6 +1498,7 @@
                             },
                             "static": false,
                             "kind": "init",
+                            "method": false,
                             "value": {
                               "type": "StringTypeAnnotation",
                               "start": 258,
@@ -1546,6 +1557,7 @@
                       },
                       "static": false,
                       "kind": "init",
+                      "method": false,
                       "value": {
                         "type": "BooleanTypeAnnotation",
                         "start": 271,

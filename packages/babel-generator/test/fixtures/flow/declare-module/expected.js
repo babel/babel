@@ -8,11 +8,11 @@ declare module A {
 }
 declare module A {
   declare class B {
-    foo: () => number
+    foo(): number
   }
 }
 declare module A {
   declare module.exports: {
-    foo: () => number
+    foo(): number
   }
 }

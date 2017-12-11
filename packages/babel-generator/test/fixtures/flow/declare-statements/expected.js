@@ -9,7 +9,7 @@ declare class A<T> extends B<T> {
   x: number
 }
 declare class A {
-  static foo: () => number,
+  static foo(): number,
   static x: string,
 }
 declare class A {

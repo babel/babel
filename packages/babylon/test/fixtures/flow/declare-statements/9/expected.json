@@ -227,6 +227,7 @@
               },
               "static": false,
               "kind": "init",
+              "method": false,
               "value": {
                 "type": "NumberTypeAnnotation",
                 "start": 37,
