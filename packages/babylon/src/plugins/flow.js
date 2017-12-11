@@ -8,6 +8,7 @@ import * as N from "../types";
 import type { Pos, Position } from "../util/location";
 import type State from "../tokenizer/state";
 import * as charCodes from "charcodes";
+import { lineBreakG } from "../util/whitespace";
 
 const primitiveTypes = [
   "any",
@@ -2274,17 +2275,96 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
     }
 
+    readToken_mult_modulo(code: number): void {
+      // '%*'
+      let type = code === charCodes.asterisk ? tt.star : tt.modulo;
+      let width = 1;
+      let next = this.input.charCodeAt(this.state.pos + 1);
+      const exprAllowed = this.state.exprAllowed;
+
+      // Exponentiation operator **
+      if (code === charCodes.asterisk && next === charCodes.asterisk) {
+        width++;
+        next = this.input.charCodeAt(this.state.pos + 2);
+        type = tt.exponent;
+      }
+
+      if (next === charCodes.equalsTo && !exprAllowed) {
+        width++;
+        type = tt.assign;
+      }
+
+      if (
+        code === charCodes.asterisk &&
+        next === charCodes.slash &&
+        this.state.hasFlowComment
+      ) {
+        this.state.hasFlowComment = false;
+        this.state.pos += 2;
+        this.nextToken();
+        return;
+      }
+
+      this.finishOp(type, width);
+    }
+
+    skipBlockComment(): void {
+      if (this.plugins.flow && this.skipFlowComment()) {
+        this.hasFlowCommentCompletion();
+        this.state.pos += this.skipFlowComment();
+        this.state.hasFlowComment = true;
+        return;
+      }
+      const startLoc = this.state.curPosition();
+      const start = this.state.pos;
+
+      let end;
+      if (this.plugins.flow && this.state.hasFlowComment) {
+        end = this.input.indexOf("*-/", (this.state.pos += 2));
+        if (end === -1) this.raise(this.state.pos - 2, "Unterminated comment");
+        this.state.pos = end + 3;
+      } else {
+        end = this.input.indexOf("*/", (this.state.pos += 2));
+        if (end === -1) this.raise(this.state.pos - 2, "Unterminated comment");
+        this.state.pos = end + 2;
+      }
+
+      lineBreakG.lastIndex = start;
+      let match;
+      while (
+        (match = lineBreakG.exec(this.input)) &&
+        match.index < this.state.pos
+      ) {
+        ++this.state.curLine;
+        this.state.lineStart = match.index + match[0].length;
+      }
+
+      this.pushComment(
+        true,
+        this.input.slice(start + 2, end),
+        start,
+        this.state.pos,
+        startLoc,
+        this.state.curPosition(),
+      );
+    }
+
     skipFlowComment(): ?number {
+      const ch2 = this.input.charCodeAt(this.state.pos + 2);
+      const ch3 = this.input.charCodeAt(this.state.pos + 3);
       const includeComment =
-        this.input.charCodeAt(this.state.pos + 2) === charCodes.colon &&
-        this.input.charCodeAt(this.state.pos + 3) === charCodes.colon &&
-        4; // check for /*::
+        ch2 === charCodes.colon && ch3 === charCodes.colon && 4; // check for /*::
       const flowincludeComment =
         this.input.slice(this.state.pos + 2, 14) === "flow-include" && 14; // check for /*flow-include
       const annotationComment =
-        this.input.charCodeAt(this.state.pos + 2) === charCodes.colon &&
-        this.input.charCodeAt(this.state.pos + 3) !== charCodes.colon &&
-        2; // check for /*:
+        ch2 === charCodes.colon && ch3 !== charCodes.colon && 2; // check for /*:
       return includeComment || annotationComment || flowincludeComment;
+    }
+
+    hasFlowCommentCompletion() {
+      const end = this.input.indexOf("*/", this.state.pos);
+      if (end === -1) {
+        this.raise(this.state.pos - 2, "Unterminated comment");
+      }
     }
   };
