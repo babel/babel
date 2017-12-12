@@ -425,6 +425,46 @@ helpers.inheritsLoose = defineHelper(`
   }
 `);
 
+// Based on https://github.com/WebReflection/babel-plugin-transform-builtin-classes
+helpers.wrapNativeSuper = defineHelper(`
+  var _gPO = Object.getPrototypeOf || function _gPO(o) { return o.__proto__ };
+  var _sPO = Object.setPrototypeOf || function _sPO(o, p) { o.__proto__ = p };
+  var _construct = Reflect.construct || function _construct(Parent, args, Class) {
+    var Constructor, a = [null];
+    a.push.apply(a, args);
+    Constructor = Parent.bind.apply(Parent, a);
+    return _sPO(new Constructor, Class.prototype);
+  };
+
+  var _cache = typeof WeakMap === "function" && new WeakMap();
+
+  export default function _wrapNativeSuper(Class) {
+    if (_cache) {
+      if (_cache.has(Class)) return _cache.get(Class);
+      _cache.set(Class, Wrapper);
+    }
+
+    function Wrapper() {}
+    Wrapper.prototype = Object.create(Class.prototype, {
+      constructor: {
+        value: Wrapper,
+        enumerable: false,
+        writeable: true,
+        configurable: true,
+      }
+    });
+    return _sPO(
+      Wrapper,
+      _sPO(
+        function Super() {
+          return _construct(Class, arguments, _gPO(this).constructor);
+        },
+        Class
+      )
+    );
+  }
+`);
+
 helpers.instanceof = defineHelper(`
   export default function _instanceof(left, right) {
     if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {

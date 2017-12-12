@@ -5,8 +5,21 @@ import nameFunction from "@babel/helper-function-name";
 import { types as t } from "@babel/core";
 
 export default function(api, options) {
-  const { loose } = options;
+  const { loose, builtins } = options;
   const Constructor = loose ? LooseTransformer : VanillaTransformer;
+
+  let customBuiltins;
+  if (builtins) {
+    if (!Array.isArray(builtins)) {
+      throw new Error(".builtins must be an array.");
+    }
+    if (builtins.some(s => typeof s !== "string")) {
+      throw new Error(".builtins must be an array of strings.");
+    }
+    customBuiltins = new Set(builtins);
+  } else {
+    customBuiltins = new Set();
+  }
 
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
@@ -54,7 +67,9 @@ export default function(api, options) {
 
         node[VISITED] = true;
 
-        path.replaceWith(new Constructor(path, state.file).run());
+        path.replaceWith(
+          new Constructor(path, state.file, customBuiltins).run(),
+        );
 
         if (path.isCallExpression()) {
           annotateAsPure(path);

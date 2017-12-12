@@ -119,3 +119,37 @@ class Bar extends Foo {
 When `Bar.prototype.foo` is defined it triggers the setter on `Foo`. This is a
 case that is very unlikely to appear in production code however it's something
 to keep in mind.
+
+### `builtins`
+
+`Array<string>`, defaults to `[]`.
+
+When extending a native constructor (e.g., `class extends Array {}`), it needs
+to be wrapped.
+Babel only recognizes built-in JavaScript functions defined in the ECMAScript
+specification. If you need to extend other classes, you can define them using
+this option.
+
+#### Compatibility
+
+This transformer works on IE11 and every other browser with `Object.setPrototypeOf` or `__proto__` as fallback.
+
+There is **NO IE <= 10 support**. If you need IE <= 10 don't it's recommended to not don't extend natives.
+
+#### Example
+
+```json
+{
+  "plugins": [
+    ["@babel/transform-classes", {
+      "builtins": [ "HTMLElement" ]
+    }]
+  ]
+}
+```
+
+```js
+class MyCustomElement extends HTMLElement {
+  // ...
+}
+```
