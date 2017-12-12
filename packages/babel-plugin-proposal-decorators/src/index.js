@@ -26,75 +26,18 @@ const buildGetObjectInitializer = template(`
     })
 `);
 
-const buildInitializerWarningHelper = template(`
-    function NAME(descriptor, context){
-        throw new Error(
-          'Decorating class property failed. Please ensure that ' +
-          'proposal-class-properties is enabled and set to use loose mode. ' +
-          'To use proposal-class-properties in spec mode with decorators, wait for ' +
-          'the next major version of decorators in stage 2.'
-        );
-    }
-`);
-
-const buildInitializerDefineProperty = template(`
-    function NAME(target, property, descriptor, context){
-        if (!descriptor) return;
-
-        Object.defineProperty(target, property, {
-            enumerable: descriptor.enumerable,
-            configurable: descriptor.configurable,
-            writable: descriptor.writable,
-            value: descriptor.initializer ? descriptor.initializer.call(context) : void 0,
-        });
-    }
-`);
-
-const buildApplyDecoratedDescriptor = template(`
-    function NAME(target, property, decorators, descriptor, context){
-        var desc = {};
-        Object['ke' + 'ys'](descriptor).forEach(function(key){
-            desc[key] = descriptor[key];
-        });
-        desc.enumerable = !!desc.enumerable;
-        desc.configurable = !!desc.configurable;
-        if ('value' in desc || desc.initializer){
-            desc.writable = true;
-        }
-
-        desc = decorators.slice().reverse().reduce(function(desc, decorator){
-            return decorator(target, property, desc) || desc;
-        }, desc);
-
-        if (context && desc.initializer !== void 0){
-            desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
-            desc.initializer = undefined;
-        }
-
-        if (desc.initializer === void 0){
-            // This is a hack to avoid this being processed by 'transform-runtime'.
-            // See issue #9.
-            Object['define' + 'Property'](target, property, desc);
-            desc = null;
-        }
-
-        return desc;
-    }
-`);
-
 export default function() {
   /**
    * Add a helper to take an initial descriptor, apply some decorators to it, and optionally
    * define the property.
    */
+
   function ensureApplyDecoratedDescriptorHelper(path, state) {
     if (!state.applyDecoratedDescriptor) {
       state.applyDecoratedDescriptor = path.scope.generateUidIdentifier(
         "applyDecoratedDescriptor",
       );
-      const helper = buildApplyDecoratedDescriptor({
-        NAME: state.applyDecoratedDescriptor,
-      });
+      const helper = state.addHelper("buildApplyDecoratedDescriptor");
       path.scope.getProgramParent().path.unshiftContainer("body", helper);
     }
 
@@ -109,9 +52,7 @@ export default function() {
       state.initializerDefineProp = path.scope.generateUidIdentifier(
         "initDefineProp",
       );
-      const helper = buildInitializerDefineProperty({
-        NAME: state.initializerDefineProp,
-      });
+      const helper = state.addHelper("buildInitializerDefineProperty");
       path.scope.getProgramParent().path.unshiftContainer("body", helper);
     }
 
@@ -127,9 +68,7 @@ export default function() {
       state.initializerWarningHelper = path.scope.generateUidIdentifier(
         "initializerWarningHelper",
       );
-      const helper = buildInitializerWarningHelper({
-        NAME: state.initializerWarningHelper,
-      });
+      const helper = state.addHelper("buildInitializerWarningHelper");
       path.scope.getProgramParent().path.unshiftContainer("body", helper);
     }
 
