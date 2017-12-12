@@ -35,18 +35,47 @@ function completionRecordForSwitch(cases, paths) {
       ];
       const hasBreakStatement =
         lastCaseStatement && lastCaseStatement.isBreakStatement();
-      if (!hasBreakStatement) {
-        continue;
+
+      if (hasBreakStatement) {
+        if (consequentLength === 1) {
+          lastCaseStatement.replaceWith(switchcase.scope.buildUndefinedNode());
+          paths = addCompletionRecords(switchcase.get("consequent")[0], paths);
+        }
+        if (consequentLength > 1) {
+          paths = addCompletionRecords(
+            switchcase.get("consequent")[consequentLength - 2],
+            paths,
+          );
+          lastCaseStatement.remove();
+        }
       }
-      if (consequentLength === 1) {
+
+      if (!hasBreakStatement) {
+        if (consequentLength >= 1) {
+          paths = addCompletionRecords(
+            switchcase.get("consequent")[consequentLength - 1],
+            paths,
+          );
+        }
+      }
+
+      if (hasBreakStatement && consequentLength === 1) {
         lastCaseStatement.replaceWith(switchcase.scope.buildUndefinedNode());
         paths = addCompletionRecords(switchcase.get("consequent")[0], paths);
-      } else {
+      }
+
+      if (hasBreakStatement && consequentLength > 1) {
         paths = addCompletionRecords(
-          switchcase.get("consequent")[consequentLength - 2],
+          switchcase.get("consequent")[consequentLength - 1],
           paths,
         );
-        lastCaseStatement.remove();
+      }
+
+      if (!hasBreakStatement && consequentLength) {
+        paths = addCompletionRecords(
+          switchcase.get("consequent")[consequentLength - 1],
+          paths,
+        );
       }
     }
   }
