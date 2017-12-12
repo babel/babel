@@ -134,7 +134,7 @@ this option.
 
 This transformer works on IE11 and every other browser with `Object.setPrototypeOf` or `__proto__` as fallback.
 
-There is **NO IE <= 10 support**. If you need IE <= 10 don't it's recommended to not don't extend natives.
+There is **NO IE <= 10 support**. If you need IE <= 10 it's recommended that you don't extend natives.
 
 #### Example
 
