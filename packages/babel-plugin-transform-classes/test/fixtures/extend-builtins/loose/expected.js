@@ -10,7 +10,7 @@ var _cache = typeof WeakMap === "function" && new WeakMap();
 
 function _wrapNativeSuper(Class) { if (_cache) { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() {} Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writeable: true, configurable: true } }); return _sPO(Wrapper, _sPO(function Super() { return _construct(Class, arguments, _gPO(this).constructor); }, Class)); }
 
-let List =
+var List =
 /*#__PURE__*/
 function (_Array) {
   _inheritsLoose(List, _Array);
