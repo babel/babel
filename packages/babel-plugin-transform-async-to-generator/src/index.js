@@ -18,9 +18,7 @@ export default function(api, options) {
             wrapAsync = state.methodWrapper = addNamed(path, method, module);
           }
 
-          remapAsyncToGenerator(path, state.file, {
-            wrapAsync,
-          });
+          remapAsyncToGenerator(path, { wrapAsync });
         },
       },
     };
@@ -31,7 +29,7 @@ export default function(api, options) {
       Function(path, state) {
         if (!path.node.async || path.node.generator) return;
 
-        remapAsyncToGenerator(path, state.file, {
+        remapAsyncToGenerator(path, {
           wrapAsync: state.addHelper("asyncToGenerator"),
         });
       },

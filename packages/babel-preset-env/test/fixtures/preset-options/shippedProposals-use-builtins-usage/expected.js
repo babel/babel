@@ -1,12 +1,12 @@
 "use strict";
 
-require("core-js/modules/es6.symbol");
-
-require("core-js/modules/es6.promise");
-
 require("regenerator-runtime/runtime");
 
 require("core-js/modules/es6.object.assign");
+
+require("core-js/modules/es6.symbol");
+
+require("core-js/modules/es6.promise");
 
 var agf =
 /*#__PURE__*/
@@ -38,6 +38,8 @@ function () {
   };
 }();
 
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
 function _awaitAsyncGenerator(value) { return new _AwaitValue(value); }
 
 function _wrapAsyncGenerator(fn) { return function () { return new _AsyncGenerator(fn.apply(this, arguments)); }; }
@@ -53,8 +55,6 @@ _AsyncGenerator.prototype.throw = function (arg) { return this._invoke("throw", 
 _AsyncGenerator.prototype.return = function (arg) { return this._invoke("return", arg); };
 
 function _AwaitValue(value) { this.wrapped = value; }
-
-function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
 
 var _x$y$a$b = {
   x: 1,
