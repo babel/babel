@@ -74,6 +74,7 @@ export {
 export {
   default as removeTypeDuplicates,
 } from "./modifications/flow/removeTypeDuplicates";
+export { default as inheritParens } from "./modifications/inheritParens";
 
 // retrievers
 export {
