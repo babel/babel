@@ -701,8 +701,12 @@ helpers.toPropertyKey = defineHelper(`
   }
 `);
 
-helpers.buildInitializerWarningHelper = defineHelper(`
-    export default function _buildInitializerWarningHelper(descriptor, context){
+/**
+ * Add a helper that will throw a useful error if the transform fails to detect the class
+ * property assignment, so users know something failed.
+ */
+helpers.initializerWarningHelper = defineHelper(`
+    export default function _initializerWarningHelper(descriptor, context){
         throw new Error(
           'Decorating class property failed. Please ensure that ' +
           'proposal-class-properties is enabled and set to use loose mode. ' +
@@ -712,8 +716,11 @@ helpers.buildInitializerWarningHelper = defineHelper(`
     }
 `);
 
-helpers.buildInitializerDefineProperty = defineHelper(`
-    export default function _buildInitializerDefineProperty(target, property, descriptor, context){
+/**
+ * Add a helper to call as a replacement for class property definition.
+ */
+helpers.initializerDefineProperty = defineHelper(`
+    export default function _initializerDefineProperty(target, property, descriptor, context){
         if (!descriptor) return;
 
         Object.defineProperty(target, property, {
@@ -725,8 +732,12 @@ helpers.buildInitializerDefineProperty = defineHelper(`
     }
 `);
 
-helpers.buildApplyDecoratedDescriptor = defineHelper(`
-    export default function _buildApplyDecoratedDescriptor(target, property, decorators, descriptor, context){
+/**
+ * Add a helper to take an initial descriptor, apply some decorators to it, and optionally
+ * define the property.
+ */
+helpers.applyDecoratedDescriptor = defineHelper(`
+    export default function _applyDecoratedDescriptor(target, property, decorators, descriptor, context){
         var desc = {};
         Object['ke' + 'ys'](descriptor).forEach(function(key){
             desc[key] = descriptor[key];

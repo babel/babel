@@ -28,54 +28,6 @@ const buildGetObjectInitializer = template(`
 
 export default function() {
   /**
-   * Add a helper to take an initial descriptor, apply some decorators to it, and optionally
-   * define the property.
-   */
-
-  function ensureApplyDecoratedDescriptorHelper(path, state) {
-    if (!state.applyDecoratedDescriptor) {
-      state.applyDecoratedDescriptor = path.scope.generateUidIdentifier(
-        "applyDecoratedDescriptor",
-      );
-      const helper = state.addHelper("buildApplyDecoratedDescriptor");
-      path.scope.getProgramParent().path.unshiftContainer("body", helper);
-    }
-
-    return state.applyDecoratedDescriptor;
-  }
-
-  /**
-   * Add a helper to call as a replacement for class property definition.
-   */
-  function ensureInitializerDefineProp(path, state) {
-    if (!state.initializerDefineProp) {
-      state.initializerDefineProp = path.scope.generateUidIdentifier(
-        "initDefineProp",
-      );
-      const helper = state.addHelper("buildInitializerDefineProperty");
-      path.scope.getProgramParent().path.unshiftContainer("body", helper);
-    }
-
-    return state.initializerDefineProp;
-  }
-
-  /**
-   * Add a helper that will throw a useful error if the transform fails to detect the class
-   * property assignment, so users know something failed.
-   */
-  function ensureInitializerWarning(path, state) {
-    if (!state.initializerWarningHelper) {
-      state.initializerWarningHelper = path.scope.generateUidIdentifier(
-        "initializerWarningHelper",
-      );
-      const helper = state.addHelper("buildInitializerWarningHelper");
-      path.scope.getProgramParent().path.unshiftContainer("body", helper);
-    }
-
-    return state.initializerWarningHelper;
-  }
-
-  /**
    * If the decorator expressions are non-identifiers, hoist them to before the class so we can be sure
    * that they are evaluated in order.
    */
@@ -199,35 +151,32 @@ export default function() {
               t.blockStatement([t.returnStatement(node.value)]),
             )
           : t.nullLiteral();
-        node.value = t.callExpression(ensureInitializerWarning(path, state), [
-          descriptor,
-          t.thisExpression(),
-        ]);
+        node.value = t.callExpression(
+          state.addHelper("initializerWarningHelper"),
+          [descriptor, t.thisExpression()],
+        );
 
         acc = acc.concat([
           t.assignmentExpression(
             "=",
             descriptor,
-            t.callExpression(
-              ensureApplyDecoratedDescriptorHelper(path, state),
-              [
-                target,
-                property,
-                t.arrayExpression(decorators.map(dec => dec.expression)),
-                t.objectExpression([
-                  t.objectProperty(
-                    t.identifier("enumerable"),
-                    t.booleanLiteral(true),
-                  ),
-                  t.objectProperty(t.identifier("initializer"), initializer),
-                ]),
-              ],
-            ),
+            t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
+              target,
+              property,
+              t.arrayExpression(decorators.map(dec => dec.expression)),
+              t.objectExpression([
+                t.objectProperty(
+                  t.identifier("enumerable"),
+                  t.booleanLiteral(true),
+                ),
+                t.objectProperty(t.identifier("initializer"), initializer),
+              ]),
+            ]),
           ),
         ]);
       } else {
         acc = acc.concat(
-          t.callExpression(ensureApplyDecoratedDescriptorHelper(path, state), [
+          t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
             target,
             property,
             t.arrayExpression(decorators.map(dec => dec.expression)),
@@ -306,21 +255,13 @@ export default function() {
       },
 
       AssignmentExpression(path, state) {
-        if (!state.initializerWarningHelper) return;
-
         if (!path.get("left").isMemberExpression()) return;
         if (!path.get("left.property").isIdentifier()) return;
         if (!path.get("right").isCallExpression()) return;
-        if (
-          !path
-            .get("right.callee")
-            .isIdentifier({ name: state.initializerWarningHelper.name })
-        ) {
-          return;
-        }
+        if (!path.get("right.callee").isIdentifier()) return;
 
         path.replaceWith(
-          t.callExpression(ensureInitializerDefineProp(path, state), [
+          t.callExpression(state.addHelper("initializerDefineProperty"), [
             path.get("left.object").node,
             t.stringLiteral(path.get("left.property").node.name),
             path.get("right.arguments")[0].node,
