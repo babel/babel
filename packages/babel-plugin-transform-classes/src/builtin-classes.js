@@ -9,7 +9,7 @@ export default new Set([
   "Float32Array",
   "Float64Array",
   "Function",
-  "In16Array",
+  "Int16Array",
   "Int32Array",
   "Int8Array",
   "Map",

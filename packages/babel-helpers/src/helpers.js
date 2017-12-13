@@ -429,17 +429,18 @@ helpers.inheritsLoose = defineHelper(`
 helpers.wrapNativeSuper = defineHelper(`
   var _gPO = Object.getPrototypeOf || function _gPO(o) { return o.__proto__ };
   var _sPO = Object.setPrototypeOf || function _sPO(o, p) { o.__proto__ = p };
-  var _construct = Reflect.construct || function _construct(Parent, args, Class) {
-    var Constructor, a = [null];
-    a.push.apply(a, args);
-    Constructor = Parent.bind.apply(Parent, a);
-    return _sPO(new Constructor, Class.prototype);
-  };
+  var _construct = (typeof Reflect === "object" && Reflect.construct) ||
+    function _construct(Parent, args, Class) {
+      var Constructor, a = [null];
+      a.push.apply(a, args);
+      Constructor = Parent.bind.apply(Parent, a);
+      return _sPO(new Constructor, Class.prototype);
+    };
 
-  var _cache = typeof WeakMap === "function" && new WeakMap();
+  var _cache = typeof Map === "function" && new Map();
 
   export default function _wrapNativeSuper(Class) {
-    if (_cache) {
+    if (typeof _cache !== "undefined") {
       if (_cache.has(Class)) return _cache.get(Class);
       _cache.set(Class, Wrapper);
     }
