@@ -3,18 +3,15 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.foo = void 0;
+exports.foo = foo;
 
 var _bar = babelHelpers.interopRequireDefault(require("bar"));
 
-let foo =
-/*#__PURE__*/
-(() => {
-  var _ref = babelHelpers.asyncToGenerator(function* () {});
+function foo() {
+  return _foo.apply(this, arguments);
+}
 
-  return function foo() {
-    return _ref.apply(this, arguments);
-  };
-})();
-
-exports.foo = foo;
+function _foo() {
+  _foo = babelHelpers.asyncToGenerator(function* () {});
+  return _foo.apply(this, arguments);
+}

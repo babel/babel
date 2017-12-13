@@ -1,33 +1,3 @@
-var agf =
-/*#__PURE__*/
-function () {
-  var _ref = _wrapAsyncGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee() {
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            _context.next = 2;
-            return _awaitAsyncGenerator(1);
-
-          case 2:
-            _context.next = 4;
-            return 2;
-
-          case 4:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, this);
-  }));
-
-  return function agf() {
-    return _ref.apply(this, arguments);
-  };
-}();
-
 function _awaitAsyncGenerator(value) { return new _AwaitValue(value); }
 
 function _wrapAsyncGenerator(fn) { return function () { return new _AsyncGenerator(fn.apply(this, arguments)); }; }
@@ -60,3 +30,32 @@ var n = Object.assign({
   x: x,
   y: y
 }, z);
+
+function agf() {
+  return _agf.apply(this, arguments);
+}
+
+function _agf() {
+  _agf = _wrapAsyncGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee() {
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return _awaitAsyncGenerator(1);
+
+          case 2:
+            _context.next = 4;
+            return 2;
+
+          case 4:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+  return _agf.apply(this, arguments);
+}
