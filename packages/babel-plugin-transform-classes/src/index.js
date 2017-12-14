@@ -9,7 +9,7 @@ export default function(api, options) {
   const Constructor = loose ? LooseTransformer : VanillaTransformer;
 
   let customBuiltins;
-  if (builtins) {
+  if (builtins !== void 0) {
     if (!Array.isArray(builtins)) {
       throw new Error(".builtins must be an array.");
     }
