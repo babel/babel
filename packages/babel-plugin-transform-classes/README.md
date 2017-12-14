@@ -124,9 +124,14 @@ to keep in mind.
 
 `Array<string>`, defaults to `[]`.
 
-When extending a native constructor (e.g., `class extends Array {}`), it needs
-to be wrapped.
-Babel only recognizes built-in JavaScript functions defined in the ECMAScript
+When extending a native class (e.g., `class extends Array {}`), the super class
+needs to be wrapped. This is needed to workaround two problems:
+- Babel transpiles classes using `SuperClass.apply(/* ... */)`, but native
+  classes aren't callable and thus throw in this case.
+- Some built-in functions (like `Array`) always return a new object. Instead of
+  returning it, Babel should treat it as the new `this`.
+
+Babel only recognizes global built-in functions defined in the ECMAScript
 specification. If you need to extend other classes, you can define them using
 this option.
 
