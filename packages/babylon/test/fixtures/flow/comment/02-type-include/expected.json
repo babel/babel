@@ -109,6 +109,7 @@
               },
               "static": false,
               "kind": "init",
+              "method": false,
               "value": {
                 "type": "NumberTypeAnnotation",
                 "start": 25,
@@ -160,6 +161,7 @@
               },
               "static": false,
               "kind": "init",
+              "method": false,
               "value": {
                 "type": "BooleanTypeAnnotation",
                 "start": 40,
@@ -211,6 +213,7 @@
               },
               "static": false,
               "kind": "init",
+              "method": false,
               "value": {
                 "type": "StringTypeAnnotation",
                 "start": 56,
