@@ -440,6 +440,10 @@ helpers.wrapNativeSuper = defineHelper(`
   var _cache = typeof Map === "function" && new Map();
 
   export default function _wrapNativeSuper(Class) {
+    if (typeof Class !== "function") {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+
     if (typeof _cache !== "undefined") {
       if (_cache.has(Class)) return _cache.get(Class);
       _cache.set(Class, Wrapper);

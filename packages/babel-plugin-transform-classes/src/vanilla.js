@@ -4,7 +4,7 @@ import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as defineMap from "@babel/helper-define-map";
 import { traverse, template, types as t } from "@babel/core";
 
-import builtinClasses from "./builtin-classes";
+type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
 
 const noMethodVisitor = {
   "FunctionExpression|FunctionDeclaration"(path) {
@@ -63,7 +63,7 @@ const findThisesVisitor = traverse.visitors.merge([
 ]);
 
 export default class ClassTransformer {
-  constructor(path: NodePath, file, customBuiltins: Set<string>) {
+  constructor(path: NodePath, file, builtinClasses: ReadonlySet<string>) {
     this.parent = path.parent;
     this.scope = path.scope;
     this.node = path.node;
@@ -99,7 +99,7 @@ export default class ClassTransformer {
     const { name } = this.superName;
     this.extendsNative =
       this.isDerived &&
-      (builtinClasses.has(name) || customBuiltins.has(name)) &&
+      builtinClasses.has(name) &&
       !this.scope.hasBinding(name, /* noGlobals */ true);
   }
 

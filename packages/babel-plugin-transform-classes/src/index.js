@@ -3,23 +3,19 @@ import VanillaTransformer from "./vanilla";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import nameFunction from "@babel/helper-function-name";
 import { types as t } from "@babel/core";
+import globals from "globals";
+
+const getBuiltinClasses = category =>
+  Object.keys(globals[category]).filter(name => /^[A-Z]/.test(name));
+
+const builtinClasses = new Set([
+  ...getBuiltinClasses("builtin"),
+  ...getBuiltinClasses("browser"),
+]);
 
 export default function(api, options) {
-  const { loose, builtins } = options;
+  const { loose } = options;
   const Constructor = loose ? LooseTransformer : VanillaTransformer;
-
-  let customBuiltins;
-  if (builtins !== void 0) {
-    if (!Array.isArray(builtins)) {
-      throw new Error(".builtins must be an array.");
-    }
-    if (builtins.some(s => typeof s !== "string")) {
-      throw new Error(".builtins must be an array of strings.");
-    }
-    customBuiltins = new Set(builtins);
-  } else {
-    customBuiltins = new Set();
-  }
 
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
@@ -68,7 +64,7 @@ export default function(api, options) {
         node[VISITED] = true;
 
         path.replaceWith(
-          new Constructor(path, state.file, customBuiltins).run(),
+          new Constructor(path, state.file, builtinClasses).run(),
         );
 
         if (path.isCallExpression()) {

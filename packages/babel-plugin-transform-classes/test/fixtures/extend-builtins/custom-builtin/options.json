@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    ["transform-classes", { "builtins": [ "Bar" ] }],
-    "external-helpers"
-  ]
-}

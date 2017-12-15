@@ -4,9 +4,15 @@
 
 ## Caveats
 
-Built-in classes such as `Date`, `Array`, `DOM` etc cannot be properly subclassed
-due to limitations in ES5 (for the [classes](http://babeljs.io/docs/plugins/transform-classes) plugin).
-You can try to use [@babel/plugin-transform-builtin-extend](https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend) based on `Object.setPrototypeOf` and `Reflect.construct`, but it also has some limitations.
+When extending a native class (e.g., `class extends Array {}`), the super class
+needs to be wrapped. This is needed to workaround two problems:
+- Babel transpiles classes using `SuperClass.apply(/* ... */)`, but native
+  classes aren't callable and thus throw in this case.
+- Some built-in functions (like `Array`) always return a new object. Instead of
+  returning it, Babel should treat it as the new `this`.
+
+The wrapper works on IE11 and every other browser with `Object.setPrototypeOf` or `__proto__` as fallback.
+There is **NO IE <= 10 support**. If you need IE <= 10 it's recommended that you don't extend natives.
 
 ## Examples
 
@@ -119,42 +125,3 @@ class Bar extends Foo {
 When `Bar.prototype.foo` is defined it triggers the setter on `Foo`. This is a
 case that is very unlikely to appear in production code however it's something
 to keep in mind.
-
-### `builtins`
-
-`Array<string>`, defaults to `[]`.
-
-When extending a native class (e.g., `class extends Array {}`), the super class
-needs to be wrapped. This is needed to workaround two problems:
-- Babel transpiles classes using `SuperClass.apply(/* ... */)`, but native
-  classes aren't callable and thus throw in this case.
-- Some built-in functions (like `Array`) always return a new object. Instead of
-  returning it, Babel should treat it as the new `this`.
-
-Babel only recognizes global built-in functions defined in the ECMAScript
-specification. If you need to extend other classes, you can define them using
-this option.
-
-#### Compatibility
-
-This transformer works on IE11 and every other browser with `Object.setPrototypeOf` or `__proto__` as fallback.
-
-There is **NO IE <= 10 support**. If you need IE <= 10 it's recommended that you don't extend natives.
-
-#### Example
-
-```json
-{
-  "plugins": [
-    ["@babel/transform-classes", {
-      "builtins": [ "HTMLElement" ]
-    }]
-  ]
-}
-```
-
-```js
-class MyCustomElement extends HTMLElement {
-  // ...
-}
-```
