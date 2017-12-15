@@ -27,6 +27,8 @@ const buildGetObjectInitializer = template(`
 `);
 
 export default function() {
+  const WARNING_CALLS = new WeakSet();
+
   /**
    * If the decorator expressions are non-identifiers, hoist them to before the class so we can be sure
    * that they are evaluated in order.
@@ -151,10 +153,13 @@ export default function() {
               t.blockStatement([t.returnStatement(node.value)]),
             )
           : t.nullLiteral();
+
         node.value = t.callExpression(
           state.addHelper("initializerWarningHelper"),
           [descriptor, t.thisExpression()],
         );
+
+        WARNING_CALLS.add(node.value);
 
         acc = acc.concat([
           t.assignmentExpression(
@@ -255,10 +260,7 @@ export default function() {
       },
 
       AssignmentExpression(path, state) {
-        if (!path.get("left").isMemberExpression()) return;
-        if (!path.get("left.property").isIdentifier()) return;
-        if (!path.get("right").isCallExpression()) return;
-        if (!path.get("right.callee").isIdentifier()) return;
+        if (!WARNING_CALLS.has(path.node.right)) return;
 
         path.replaceWith(
           t.callExpression(state.addHelper("initializerDefineProperty"), [
