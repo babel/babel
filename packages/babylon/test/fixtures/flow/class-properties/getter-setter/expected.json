@@ -111,6 +111,7 @@
               },
               "static": false,
               "kind": "get",
+              "method": true,
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 20,
@@ -179,6 +180,7 @@
               },
               "static": false,
               "kind": "set",
+              "method": true,
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 39,
@@ -299,6 +301,7 @@
               },
               "static": false,
               "kind": "get",
+              "method": true,
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 65,
@@ -370,6 +373,7 @@
               },
               "static": false,
               "kind": "set",
+              "method": true,
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 86,
@@ -490,6 +494,7 @@
               },
               "static": false,
               "kind": "get",
+              "method": true,
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 114,
@@ -561,6 +566,7 @@
               },
               "static": false,
               "kind": "set",
+              "method": true,
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 133,

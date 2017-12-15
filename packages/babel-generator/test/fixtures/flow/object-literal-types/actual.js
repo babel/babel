@@ -5,3 +5,5 @@ type T = { ...U, ...V };
 type T = { p: V, ...U };
 type T = { ...U, p: V, };
 type T = { ...{}|{ p: V, }};
+type T = { foo(): number }
+type T = { foo: () => number }

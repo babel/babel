@@ -16,3 +16,9 @@ type T = { ...{} | {
     p: V
   }
 };
+type T = {
+  foo(): number
+};
+type T = {
+  foo: () => number
+};

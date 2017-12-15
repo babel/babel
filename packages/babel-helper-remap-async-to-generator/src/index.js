@@ -81,9 +81,7 @@ export default function(path: NodePath, file: Object, helpers: Object) {
     path.parentPath.isObjectProperty() ||
     path.parentPath.isClassProperty();
 
-  if (!isProperty && !isIIFE) {
-    annotateAsPure(
-      path.isDeclaration() ? path.get("declarations.0.init") : path,
-    );
+  if (!isProperty && !isIIFE && path.isExpression()) {
+    annotateAsPure(path);
   }
 }

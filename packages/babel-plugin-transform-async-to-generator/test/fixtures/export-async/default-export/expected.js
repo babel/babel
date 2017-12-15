@@ -3,16 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
-
-let myFunc = (() => {
-  var _ref = babelHelpers.asyncToGenerator(
-  /*#__PURE__*/
-  function* () {});
-
-  return function myFunc() {
-    return _ref.apply(this, arguments);
-  };
-})();
-
 exports.default = myFunc;
+
+function myFunc() {
+  return _myFunc.apply(this, arguments);
+}
+
+function _myFunc() {
+  _myFunc = babelHelpers.asyncToGenerator(function* () {});
+  return _myFunc.apply(this, arguments);
+}

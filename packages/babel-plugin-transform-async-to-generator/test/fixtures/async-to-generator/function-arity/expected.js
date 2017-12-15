@@ -1,63 +1,57 @@
-let one =
-/*#__PURE__*/
-(() => {
-  var _ref = babelHelpers.asyncToGenerator(function* (a, b = 1) {});
+function one(_x) {
+  return _one.apply(this, arguments);
+}
 
-  return function one(_x) {
-    return _ref.apply(this, arguments);
-  };
-})();
+function _one() {
+  _one = babelHelpers.asyncToGenerator(function* (a, b = 1) {});
+  return _one.apply(this, arguments);
+}
 
-let two =
-/*#__PURE__*/
-(() => {
-  var _ref2 = babelHelpers.asyncToGenerator(function* (a, b, ...c) {});
+function two(_x2, _x3) {
+  return _two.apply(this, arguments);
+}
 
-  return function two(_x2, _x3) {
-    return _ref2.apply(this, arguments);
-  };
-})();
+function _two() {
+  _two = babelHelpers.asyncToGenerator(function* (a, b, ...c) {});
+  return _two.apply(this, arguments);
+}
 
-let three =
-/*#__PURE__*/
-(() => {
-  var _ref3 = babelHelpers.asyncToGenerator(function* (a, b = 1, c, d = 3) {});
+function three(_x4) {
+  return _three.apply(this, arguments);
+}
 
-  return function three(_x4) {
-    return _ref3.apply(this, arguments);
-  };
-})();
+function _three() {
+  _three = babelHelpers.asyncToGenerator(function* (a, b = 1, c, d = 3) {});
+  return _three.apply(this, arguments);
+}
 
-let four =
-/*#__PURE__*/
-(() => {
-  var _ref4 = babelHelpers.asyncToGenerator(function* (a, b = 1, c, ...d) {});
+function four(_x5) {
+  return _four.apply(this, arguments);
+}
 
-  return function four(_x5) {
-    return _ref4.apply(this, arguments);
-  };
-})();
+function _four() {
+  _four = babelHelpers.asyncToGenerator(function* (a, b = 1, c, ...d) {});
+  return _four.apply(this, arguments);
+}
 
-let five =
-/*#__PURE__*/
-(() => {
-  var _ref5 = babelHelpers.asyncToGenerator(function* (a, {
+function five(_x6, _x7) {
+  return _five.apply(this, arguments);
+}
+
+function _five() {
+  _five = babelHelpers.asyncToGenerator(function* (a, {
     b
   }) {});
+  return _five.apply(this, arguments);
+}
 
-  return function five(_x6, _x7) {
-    return _ref5.apply(this, arguments);
-  };
-})();
+function six(_x8) {
+  return _six.apply(this, arguments);
+}
 
-let six =
-/*#__PURE__*/
-(() => {
-  var _ref6 = babelHelpers.asyncToGenerator(function* (a, {
+function _six() {
+  _six = babelHelpers.asyncToGenerator(function* (a, {
     b
   } = {}) {});
-
-  return function six(_x8) {
-    return _ref6.apply(this, arguments);
-  };
-})();
+  return _six.apply(this, arguments);
+}

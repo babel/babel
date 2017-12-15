@@ -1,9 +1,8 @@
-let foo =
-/*#__PURE__*/
-(() => {
-  var _ref = babelHelpers.asyncToGenerator(function* (bar) {});
+function foo(_x) {
+  return _foo.apply(this, arguments);
+}
 
-  return function foo(_x) {
-    return _ref.apply(this, arguments);
-  };
-})();
+function _foo() {
+  _foo = babelHelpers.asyncToGenerator(function* (bar) {});
+  return _foo.apply(this, arguments);
+}

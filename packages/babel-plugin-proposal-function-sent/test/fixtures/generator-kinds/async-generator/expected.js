@@ -1,17 +1,3 @@
-let foo =
-/*#__PURE__*/
-(() => {
-  var _ref = _wrapAsyncGenerator(_skipFirstGeneratorNext(function* () {
-    let _functionSent = yield;
-
-    _functionSent = yield _awaitAsyncGenerator(_functionSent);
-  }));
-
-  return function foo() {
-    return _ref.apply(this, arguments);
-  };
-})();
-
 function _skipFirstGeneratorNext(fn) { return function () { var it = fn.apply(this, arguments); it.next(); return it; }; }
 
 function _awaitAsyncGenerator(value) { return new _AwaitValue(value); }
@@ -29,3 +15,16 @@ _AsyncGenerator.prototype.throw = function (arg) { return this._invoke("throw", 
 _AsyncGenerator.prototype.return = function (arg) { return this._invoke("return", arg); };
 
 function _AwaitValue(value) { this.wrapped = value; }
+
+function foo() {
+  return _foo.apply(this, arguments);
+}
+
+function _foo() {
+  _foo = _wrapAsyncGenerator(_skipFirstGeneratorNext(function* () {
+    let _functionSent = yield;
+
+    _functionSent = yield _awaitAsyncGenerator(_functionSent);
+  }));
+  return _foo.apply(this, arguments);
+}
