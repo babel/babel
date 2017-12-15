@@ -647,20 +647,20 @@ class BlockScoping {
 
     //
     if (block.body) {
+      const declarPaths = this.blockPath.get("body");
       for (let i = 0; i < block.body.length; i++) {
-        const declarPath = this.blockPath.get("body")[i];
-        addDeclarationsFromChild(declarPath);
+        addDeclarationsFromChild(declarPaths[i]);
       }
     }
 
     if (block.cases) {
+      const declarPaths = this.blockPath.get("cases");
       for (let i = 0; i < block.cases.length; i++) {
         const consequents = block.cases[i].consequent;
 
         for (let j = 0; j < consequents.length; j++) {
-          const declarPath = this.blockPath.get("cases")[i];
           const declar = consequents[j];
-          addDeclarationsFromChild(declarPath, declar);
+          addDeclarationsFromChild(declarPaths[i], declar);
         }
       }
     }
