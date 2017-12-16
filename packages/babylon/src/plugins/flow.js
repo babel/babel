@@ -8,7 +8,6 @@ import * as N from "../types";
 import type { Pos, Position } from "../util/location";
 import type State from "../tokenizer/state";
 import * as charCodes from "charcodes";
-import { lineBreakG } from "../util/whitespace";
 
 const primitiveTypes = [
   "any",
@@ -2276,24 +2275,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     readToken_mult_modulo(code: number): void {
-      // '%*'
-      let type = code === charCodes.asterisk ? tt.star : tt.modulo;
-      let width = 1;
-      let next = this.input.charCodeAt(this.state.pos + 1);
-      const exprAllowed = this.state.exprAllowed;
-
-      // Exponentiation operator **
-      if (code === charCodes.asterisk && next === charCodes.asterisk) {
-        width++;
-        next = this.input.charCodeAt(this.state.pos + 2);
-        type = tt.exponent;
-      }
-
-      if (next === charCodes.equalsTo && !exprAllowed) {
-        width++;
-        type = tt.assign;
-      }
-
+      const next = this.input.charCodeAt(this.state.pos + 1);
       if (
         code === charCodes.asterisk &&
         next === charCodes.slash &&
@@ -2305,13 +2287,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return;
       }
 
-      this.finishOp(type, width);
+      super.readToken_mult_modulo(code);
     }
 
     skipBlockComment(): void {
       if (
-        this.plugins.flow &&
-        this.plugins.flowComments &&
+        this.hasPlugin("flow") &&
+        this.hasPlugin("flowComments") &&
         this.skipFlowComment()
       ) {
         this.hasFlowCommentCompletion();
@@ -2319,38 +2301,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.state.hasFlowComment = true;
         return;
       }
-      const startLoc = this.state.curPosition();
-      const start = this.state.pos;
 
       let end;
-      if (this.plugins.flow && this.state.hasFlowComment) {
+      if (this.hasPlugin("flow") && this.state.hasFlowComment) {
         end = this.input.indexOf("*-/", (this.state.pos += 2));
         if (end === -1) this.raise(this.state.pos - 2, "Unterminated comment");
         this.state.pos = end + 3;
-      } else {
-        end = this.input.indexOf("*/", (this.state.pos += 2));
-        if (end === -1) this.raise(this.state.pos - 2, "Unterminated comment");
-        this.state.pos = end + 2;
       }
 
-      lineBreakG.lastIndex = start;
-      let match;
-      while (
-        (match = lineBreakG.exec(this.input)) &&
-        match.index < this.state.pos
-      ) {
-        ++this.state.curLine;
-        this.state.lineStart = match.index + match[0].length;
-      }
-
-      this.pushComment(
-        true,
-        this.input.slice(start + 2, end),
-        start,
-        this.state.pos,
-        startLoc,
-        this.state.curPosition(),
-      );
+      super.skipBlockComment();
     }
 
     skipFlowComment(): ?number {
