@@ -2307,6 +2307,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         end = this.input.indexOf("*-/", (this.state.pos += 2));
         if (end === -1) this.raise(this.state.pos - 2, "Unterminated comment");
         this.state.pos = end + 3;
+        return;
       }
 
       super.skipBlockComment();
