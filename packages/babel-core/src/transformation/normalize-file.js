@@ -92,21 +92,23 @@ function parser(pluginPasses, options, code) {
     const { loc, missingPlugin } = err;
     if (loc) {
       err.loc = null;
-      err.message =
-        `${options.filename || "unknown"}: ${err.message}\n` +
-        codeFrameColumns(
-          code,
-          {
-            start: {
-              line: loc.line,
-              column: loc.column + 1,
-            },
+      const codeFrame = codeFrameColumns(
+        code,
+        {
+          start: {
+            line: loc.line,
+            column: loc.column + 1,
           },
-          options,
-        );
-      const missingPluginMessage = generateMissingPluginMessage(missingPlugin);
-      if (missingPluginMessage) {
-        err.message += `\n${missingPluginMessage}`;
+        },
+        options,
+      );
+      if (missingPlugin) {
+        err.message =
+          `${options.filename || "unknown"}: ` +
+          generateMissingPluginMessage(missingPlugin[0], loc, codeFrame);
+      } else {
+        err.message =
+          `${options.filename || "unknown"}: ${err.message}\n\n` + codeFrame;
       }
     }
     throw err;

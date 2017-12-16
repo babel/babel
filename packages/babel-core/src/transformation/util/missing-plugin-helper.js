@@ -191,28 +191,38 @@ const pluginNameMap = {
 
 const getNameURLCombination = ({ name, url }) => `${name} (${url})`;
 
+/*
+Returns a string of the format:
+Support for the experimental syntax [babylon plugin name] isn't currently enabled ([loc]):
+
+[code frame]
+
+Add [npm package name] ([url]) to the 'plugins' section of your Babel config
+to enable [parsing|transformation].
+*/
 export default function generateMissingPluginMessage(
-  missingPlugins: string[] = [],
+  missingPluginName: string,
+  loc,
+  codeFrame,
 ): string {
-  let helpMessage = "";
-  const pluginName = missingPlugins.length && missingPlugins[0];
-  if (pluginName) {
-    const pluginInfo = pluginNameMap[pluginName];
-    if (pluginInfo) {
-      const { syntax: syntaxPlugin, transform: transformPlugin } = pluginInfo;
-      if (syntaxPlugin) {
+  let helpMessage =
+    `Support for the experimental syntax '${missingPluginName}' isn't currently enabled ` +
+    `(${loc.line}:${loc.column + 1}):\n\n` +
+    codeFrame;
+  const pluginInfo = pluginNameMap[missingPluginName];
+  if (pluginInfo) {
+    const { syntax: syntaxPlugin, transform: transformPlugin } = pluginInfo;
+    if (syntaxPlugin) {
+      if (transformPlugin) {
+        const transformPluginInfo = getNameURLCombination(transformPlugin);
+        helpMessage +=
+          `\n\nAdd ${transformPluginInfo} to the 'plugins' section of your Babel config ` +
+          `to enable transformation.`;
+      } else {
         const syntaxPluginInfo = getNameURLCombination(syntaxPlugin);
-        if (transformPlugin) {
-          const transformPluginInfo = getNameURLCombination(syntaxPlugin);
-          helpMessage =
-            `Support for this experimental syntax isn't currently enabled. ` +
-            `Add either ${transformPluginInfo} or ${syntaxPluginInfo} (if you only need parsing support) ` +
-            `to the 'plugins' section of your Babel config.`;
-        } else {
-          helpMessage =
-            `Support for this experimental syntax isn't currently enabled. ` +
-            `Add ${syntaxPluginInfo} to the 'plugins' section of your Babel config.`;
-        }
+        helpMessage +=
+          `\n\nAdd ${syntaxPluginInfo} to the 'plugins' section of your Babel config ` +
+          `to enable parsing.`;
       }
     }
   }
