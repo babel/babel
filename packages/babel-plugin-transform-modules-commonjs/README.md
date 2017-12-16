@@ -68,10 +68,7 @@ require("@babel/core").transform("code", {
 
 `boolean`, defaults to `false`.
 
-As per the spec, `import` and `export` are only allowed to be used at the top
-level. When in loose mode these are allowed to be used anywhere.
-
-And by default, when using exports with babel a non-enumerable `__esModule` property
+By default, when using exports with babel a non-enumerable `__esModule` property
 is exported.
 
 ```javascript
