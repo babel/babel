@@ -152,6 +152,7 @@ registerPlugins({
   "syntax-flow": require("@babel/plugin-syntax-flow"),
   "syntax-function-bind": require("@babel/plugin-syntax-function-bind"),
   "syntax-function-sent": require("@babel/plugin-syntax-function-sent"),
+  "syntax-import-meta": require("@babel/plugin-syntax-import-meta"),
   "syntax-jsx": require("@babel/plugin-syntax-jsx"),
   "syntax-object-rest-spread": require("@babel/plugin-syntax-object-rest-spread"),
   "syntax-optional-catch-binding": require("@babel/plugin-syntax-optional-catch-binding"),
