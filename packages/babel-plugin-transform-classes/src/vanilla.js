@@ -536,7 +536,16 @@ export default class ClassTransformer {
       if (this._processMethod(node, scope)) return;
     }
 
+    // Check if it is a static get or set
+    if (node.static && ["get", "set"].indexOf(node.kind) > -1) {
+      if (this._processSetGet(node, path)) return;
+    }
+
     this.pushToMap(node, false, null, scope);
+  }
+
+  _processSetGet() {
+    return false;
   }
 
   _processMethod() {

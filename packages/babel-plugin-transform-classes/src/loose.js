@@ -1,6 +1,14 @@
 import nameFunction from "@babel/helper-function-name";
 import VanillaTransformer from "./vanilla";
-import { types as t } from "@babel/core";
+import { template, types as t } from "@babel/core";
+
+const objectDefineProperty = template(`
+  Object.defineProperty(CLASS_NAME, KEY, {
+    KIND: FUNCTION_BODY,
+    enumerable: true,
+    configurable: true
+  });
+`);
 
 export default class LooseClassTransformer extends VanillaTransformer {
   constructor() {
@@ -63,5 +71,23 @@ export default class LooseClassTransformer extends VanillaTransformer {
       this.body.push(expr);
       return true;
     }
+  }
+
+  _processSetGet(node, path) {
+    const nonConstructorMethod = path.container.filter(containedNode => {
+      return containedNode.kind !== "constructor";
+    });
+    if (nonConstructorMethod.length === 1) {
+      this.body.push(
+        objectDefineProperty({
+          KIND: t.identifier(node.kind),
+          KEY: t.stringLiteral(node.key.name),
+          CLASS_NAME: t.identifier(this.classRef.name),
+          FUNCTION_BODY: t.functionExpression(null, node.params, node.body),
+        }),
+      );
+      return true;
+    }
+    return false;
   }
 }
