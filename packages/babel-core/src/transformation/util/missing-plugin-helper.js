@@ -97,6 +97,12 @@ const pluginNameMap = {
       url: "https://git.io/vb4SZ",
     },
   },
+  importMeta: {
+    syntax: {
+      name: "@babel/plugin-syntax-import-meta",
+      url: "https://git.io/vbKK6",
+    },
+  },
   jsx: {
     syntax: {
       name: "@babel/plugin-syntax-jsx",
