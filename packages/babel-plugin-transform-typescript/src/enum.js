@@ -14,25 +14,14 @@ export default function transpileEnum(path, t) {
 
   switch (path.parent.type) {
     case "BlockStatement":
+    case "ExportNamedDeclaration":
     case "Program": {
-      const isGlobal = t.isProgram(path.parent); // && !path.parent.body.some(t.isModuleDeclaration);
-      if (seen(path.parentPath)) {
-        path.replaceWith(fill);
-      } else {
-        path.replaceWithMultiple([
-          makeVar(node.id, t, isGlobal ? "var" : "let"),
-          fill,
-        ]);
-      }
-      break;
-    }
-
-    case "ExportNamedDeclaration": {
       path.insertAfter(fill);
-      if (seen(path.parentPath.parentPath)) {
+      if (seen(path.parentPath)) {
         path.remove();
       } else {
-        path.replaceWith(makeVar(node.id, t, "let"));
+        const isGlobal = t.isProgram(path.parent); // && !path.parent.body.some(t.isModuleDeclaration);
+        path.replaceWith(makeVar(node.id, t, isGlobal ? "var" : "let"));
       }
       break;
     }
@@ -42,6 +31,10 @@ export default function transpileEnum(path, t) {
   }
 
   function seen(parentPath: Path<Node>) {
+    if (parentPath.isExportDeclaration()) {
+      return seen(parentPath.parentPath);
+    }
+
     if (parentPath.getData(name)) {
       return true;
     } else {
