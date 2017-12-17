@@ -149,11 +149,8 @@ describe("modification", function() {
         const path = bodyPath.get("body.0.declaration");
         path.insertBefore(t.identifier("x"));
 
-        assert.equal(bodyPath.get("body").length, 1);
-        assert.deepEqual(
-          bodyPath.get("body.0.declaration.expressions.0").node,
-          t.identifier("x"),
-        );
+        assert.equal(bodyPath.get("body").length, 2);
+        assert.deepEqual(bodyPath.get("body.0").node, t.identifier("x"));
       });
     });
   });
@@ -240,15 +237,7 @@ describe("modification", function() {
         path.insertAfter(t.identifier("x"));
 
         assert.equal(bodyPath.get("body").length, 2);
-        0 &&
-          assert.deepEqual(
-            bodyPath.get("body.1.declaration.expressions.1").node,
-            t.identifier("x"),
-          );
-        assert.equal(
-          generateCode({ parentPath: bodyPath }),
-          "var _temp;\n\nexport default (_temp = 2, x, _temp);",
-        );
+        assert.deepEqual(bodyPath.get("body.1").node, t.identifier("x"));
       });
     });
   });

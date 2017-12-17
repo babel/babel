@@ -17,7 +17,7 @@ export function insertBefore(nodes) {
   if (
     this.parentPath.isExpressionStatement() ||
     this.parentPath.isLabeledStatement() ||
-    (this.parentPath.isExportDeclaration() && this.isDeclaration())
+    this.parentPath.isExportDeclaration()
   ) {
     return this.parentPath.insertBefore(nodes);
   } else if (
@@ -98,7 +98,7 @@ export function insertAfter(nodes) {
   if (
     this.parentPath.isExpressionStatement() ||
     this.parentPath.isLabeledStatement() ||
-    (this.parentPath.isExportDeclaration() && this.isDeclaration())
+    this.parentPath.isExportDeclaration()
   ) {
     return this.parentPath.insertAfter(nodes);
   } else if (
