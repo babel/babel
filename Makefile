@@ -126,7 +126,7 @@ publish:
 	make test
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
 	# --only-explicit-updates
-	./node_modules/.bin/lerna publish --force-publish=* --exact --skip-temp-tag --yes --repo-version $(cat lerna.json | jq '.version' | tr '"' ' ')
+	../node_modules/.bin/lerna publish --force-publish=* --exact --skip-temp-tag --yes --repo-version node -p "require('../lerna.json').version"
 	make clean
 
 bootstrap:
