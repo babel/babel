@@ -28,7 +28,7 @@ export default function transpileEnum(path, t) {
     }
 
     case "ExportNamedDeclaration": {
-      path.parentPath.insertAfter(fill);
+      path.insertAfter(fill);
       if (seen(path.parentPath.parentPath)) {
         path.remove();
       } else {
