@@ -6,6 +6,7 @@ import convertSourceMap, { typeof Converter } from "convert-source-map";
 import { parse } from "babylon";
 import { codeFrameColumns } from "@babel/code-frame";
 import File from "./file/file";
+import generateMissingPluginMessage from "./util/missing-plugin-helper";
 
 const shebangRegex = /^#!.*/;
 
@@ -88,21 +89,27 @@ function parser(pluginPasses, options, code) {
     }
     throw new Error("More than one plugin attempted to override parsing.");
   } catch (err) {
-    const loc = err.loc;
+    const { loc, missingPlugin } = err;
     if (loc) {
       err.loc = null;
-      err.message =
-        `${options.filename || "unknown"}: ${err.message}\n` +
-        codeFrameColumns(
-          code,
-          {
-            start: {
-              line: loc.line,
-              column: loc.column + 1,
-            },
+      const codeFrame = codeFrameColumns(
+        code,
+        {
+          start: {
+            line: loc.line,
+            column: loc.column + 1,
           },
-          options,
-        );
+        },
+        options,
+      );
+      if (missingPlugin) {
+        err.message =
+          `${options.filename || "unknown"}: ` +
+          generateMissingPluginMessage(missingPlugin[0], loc, codeFrame);
+      } else {
+        err.message =
+          `${options.filename || "unknown"}: ${err.message}\n\n` + codeFrame;
+      }
     }
     throw err;
   }

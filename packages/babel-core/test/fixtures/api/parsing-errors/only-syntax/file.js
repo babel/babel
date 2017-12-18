@@ -1,0 +1,1 @@
+var $ = import("jquery");
