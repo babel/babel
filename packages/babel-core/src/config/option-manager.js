@@ -68,7 +68,6 @@ class OptionManager {
       presets.forEach(({ preset, pass }) => {
         this.mergeOptions(
           {
-            // Call dedupDescriptors() to remove 'false' descriptors.
             plugins: preset.plugins,
             presets: preset.presets,
           },
@@ -77,7 +76,7 @@ class OptionManager {
         );
 
         preset.options.forEach(opts => {
-          merge(this.optionDefaults, normalizeOptions(opts));
+          merge(this.optionDefaults, opts);
         });
       });
     }
@@ -99,7 +98,7 @@ class OptionManager {
     );
 
     chain.options.forEach(opts => {
-      merge(this.options, normalizeOptions(opts));
+      merge(this.options, opts);
     });
   }
 
@@ -143,25 +142,6 @@ class OptionManager {
       passes: this.passes,
     };
   }
-}
-
-function normalizeOptions(opts: ValidatedOptions): ValidatedOptions {
-  const options = Object.assign({}, opts);
-  delete options.extends;
-  delete options.env;
-  delete options.plugins;
-  delete options.presets;
-  delete options.passPerPreset;
-  delete options.ignore;
-  delete options.only;
-
-  // "sourceMap" is just aliased to sourceMap, so copy it over as
-  // we merge the options together.
-  if (options.sourceMap) {
-    options.sourceMaps = options.sourceMap;
-    delete options.sourceMap;
-  }
-  return options;
 }
 
 type LoadedDescriptor = {
