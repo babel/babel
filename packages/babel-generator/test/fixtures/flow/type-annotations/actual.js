@@ -98,7 +98,7 @@ import type { foo, bar } from "baz";
 import type { foo as bar } from "baz";
 import type from "foo";
 import type, { foo } from "bar";
-import type * as namespace from "bar";
+import typeof * as namespace from "bar";
 import { type Foo } from "bar";
 import { typeof Foo } from "bar";
 import { type Foo as Bar } from "bar";

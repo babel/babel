@@ -1926,6 +1926,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       if (kind) {
         const lh = this.lookahead();
+
+        // import type * is not allowed
+        if (kind === "type" && lh.type === tt.star) {
+          this.unexpected(lh.start);
+        }
+
         if (
           isMaybeDefaultImport(lh) ||
           lh.type === tt.braceL ||
