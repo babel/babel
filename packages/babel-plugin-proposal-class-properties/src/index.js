@@ -228,15 +228,9 @@ export default function(api, options) {
         if (path.isClassExpression()) {
           path.scope.push({ id: ref });
           path.replaceWith(t.assignmentExpression("=", ref, path.node));
-        } else {
-          // path.isClassDeclaration()
-          if (!path.node.id) {
-            path.node.id = ref;
-          }
-
-          if (path.parentPath.isExportDeclaration()) {
-            path = path.parentPath;
-          }
+        } else if (!path.node.id) {
+          // Anonymous class declaration
+          path.node.id = ref;
         }
 
         path.insertAfter(nodes);
