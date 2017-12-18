@@ -6,21 +6,51 @@ import buildDebug from "debug";
 import {
   validate,
   type ValidatedOptions,
+  type PluginItem,
   type PluginList,
   type IgnoreList,
 } from "./options";
 
 const debug = buildDebug("babel:config:config-chain");
 
-import { findConfigs, loadConfig, type ConfigFile } from "./loading/files";
+import {
+  loadPlugin,
+  loadPreset,
+  findConfigs,
+  loadConfig,
+  type ConfigFile,
+} from "./loading/files";
 
 import { makeWeakCache, makeStrongCache } from "./caching";
 
-export type ConfigItem = {
+type ConfigItem = {
   type: "arguments" | "env" | "file",
   options: ValidatedOptions,
   alias: string,
   dirname: string,
+};
+
+export type ConfigChain = {
+  plugins: Array<BasicDescriptor>,
+  presets: Array<BasicDescriptor>,
+  options: Array<ValidatedOptions>,
+};
+
+export type BasicDescriptor = {
+  name: string | void,
+  value: {} | Function,
+  options: {} | void | false,
+  dirname: string,
+  alias: string,
+  ownPass?: boolean,
+};
+
+export type PresetInstance = SimpleConfig;
+
+type LoadedConfig = {
+  options: ValidatedOptions,
+  plugins: Array<BasicDescriptor>,
+  presets: Array<BasicDescriptor>,
 };
 
 type ConfigPart =
@@ -38,11 +68,29 @@ type ConfigPart =
       activeEnv: string | null,
     };
 
-export default function buildConfigChain(
+type SimpleConfig = {
+  options: ValidatedOptions,
+  alias: string,
+  dirname: string,
+};
+
+export const buildPresetChain = makeWeakCache(
+  (preset: PresetInstance): ConfigChain => {
+    const loaded = processConfig(preset);
+
+    return {
+      plugins: loaded.plugins,
+      presets: loaded.presets,
+      options: [loaded.options],
+    };
+  },
+);
+
+export function buildRootChain(
   cwd: string,
   opts: ValidatedOptions,
   envName: string,
-): Array<ConfigItem> | null {
+): ConfigChain | null {
   const filename = opts.filename ? path.resolve(cwd, opts.filename) : null;
   const builder = new ConfigChainBuilder(
     filename ? new LoadedFile(filename) : null,
@@ -63,7 +111,9 @@ export default function buildConfigChain(
     return null;
   }
 
-  return builder.configs.reverse();
+  return dedupLoadedConfigs(
+    builder.configs.reverse().map(config => processConfig(config)),
+  );
 }
 
 class ConfigChainBuilder {
@@ -124,6 +174,198 @@ class ConfigChainBuilder {
       );
     }
   }
+}
+
+/**
+ * Given a plugin/preset item, resolve it into a standard format.
+ */
+function createDescriptor(
+  pair: PluginItem,
+  resolver,
+  dirname,
+  {
+    index,
+    alias,
+    ownPass,
+  }: {
+    index: number,
+    alias: string,
+    ownPass?: boolean,
+  },
+): BasicDescriptor {
+  let name;
+  let options;
+  let value = pair;
+  if (Array.isArray(value)) {
+    if (value.length === 3) {
+      // $FlowIgnore - Flow doesn't like the multiple tuple types.
+      [value, options, name] = value;
+    } else {
+      [value, options] = value;
+    }
+  }
+
+  let filepath = null;
+  if (typeof value === "string") {
+    ({ filepath, value } = resolver(value, dirname));
+  }
+
+  if (!value) {
+    throw new Error(`Unexpected falsy value: ${String(value)}`);
+  }
+
+  if (typeof value === "object" && value.__esModule) {
+    if (value.default) {
+      value = value.default;
+    } else {
+      throw new Error("Must export a default export when using ES6 modules.");
+    }
+  }
+
+  if (typeof value !== "object" && typeof value !== "function") {
+    throw new Error(
+      `Unsupported format: ${typeof value}. Expected an object or a function.`,
+    );
+  }
+
+  if (filepath !== null && typeof value === "object" && value) {
+    // We allow object values for plugins/presets nested directly within a
+    // config object, because it can be useful to define them in nested
+    // configuration contexts.
+    throw new Error(
+      "Plugin/Preset files are not allowed to export objects, only functions.",
+    );
+  }
+
+  return {
+    name,
+    alias: filepath || `${alias}$${index}`,
+    value,
+    options,
+    dirname,
+    ownPass,
+  };
+}
+
+/**
+ * Load and validate the given config into a set of options, plugins, and presets.
+ */
+const processConfig = makeWeakCache((config: SimpleConfig): LoadedConfig => {
+  const options = config.options;
+
+  const plugins = (config.options.plugins || []).map((plugin, index) =>
+    createDescriptor(plugin, loadPlugin, config.dirname, {
+      index,
+      alias: config.alias,
+    }),
+  );
+
+  assertNoDuplicates(plugins);
+
+  const presets = (config.options.presets || []).map((preset, index) =>
+    createDescriptor(preset, loadPreset, config.dirname, {
+      index,
+      alias: config.alias,
+      ownPass: options.passPerPreset,
+    }),
+  );
+
+  assertNoDuplicates(presets);
+
+  return { options, plugins, presets };
+});
+
+function assertNoDuplicates(items: Array<BasicDescriptor>): void {
+  const map = new Map();
+
+  for (const item of items) {
+    if (typeof item.value !== "function") continue;
+
+    let nameMap = map.get(item.value);
+    if (!nameMap) {
+      nameMap = new Set();
+      map.set(item.value, nameMap);
+    }
+
+    if (nameMap.has(item.name)) {
+      throw new Error(
+        [
+          `Duplicate plugin/preset detected.`,
+          `If you'd like to use two separate instances of a plugin,`,
+          `they neen separate names, e.g.`,
+          ``,
+          `  plugins: [`,
+          `    ['some-plugin', {}],`,
+          `    ['some-plugin', {}, 'some unique name'],`,
+          `  ]`,
+        ].join("\n"),
+      );
+    }
+
+    nameMap.add(item.name);
+  }
+}
+
+function dedupLoadedConfigs(items: Array<LoadedConfig>): ConfigChain {
+  const options = [];
+  const plugins = [];
+  const presets = [];
+
+  for (const item of items) {
+    plugins.push(...item.plugins);
+    presets.push(...item.presets);
+    options.push(item.options);
+  }
+
+  return {
+    options,
+    plugins: dedupDescriptors(plugins),
+    presets: dedupDescriptors(presets),
+  };
+}
+
+function dedupDescriptors(
+  items: Array<BasicDescriptor>,
+): Array<BasicDescriptor> {
+  const map: Map<
+    Function,
+    Map<string | void, { value: BasicDescriptor | null }>,
+  > = new Map();
+
+  const descriptors = [];
+
+  for (const item of items) {
+    if (typeof item.value === "function") {
+      const fnKey = item.value;
+      let nameMap = map.get(fnKey);
+      if (!nameMap) {
+        nameMap = new Map();
+        map.set(fnKey, nameMap);
+      }
+      let desc = nameMap.get(item.name);
+      if (!desc) {
+        desc = { value: null };
+        descriptors.push(desc);
+
+        // Treat passPerPreset presets as unique, skipping them
+        // in the merge processing steps.
+        if (!item.ownPass) nameMap.set(item.name, desc);
+      }
+
+      if (item.options === false) {
+        desc.value = null;
+      } else {
+        desc.value = item;
+      }
+    } else {
+      descriptors.push({ value: item });
+    }
+  }
+
+  return descriptors.reduce((acc, desc) => {
+    if (desc.value) acc.push(desc.value);
+    return acc;
+  }, []);
 }
 
 /**
