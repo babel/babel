@@ -16,9 +16,19 @@ export default function(api, options) {
     strict,
     strictMode,
     noInterop,
+    lazy = false,
     // Defaulting to 'true' for now. May change before 7.x major.
     allowCommonJSExports = true,
   } = options;
+
+  if (
+    typeof lazy !== "boolean" &&
+    typeof lazy !== "function" &&
+    (!Array.isArray(lazy) || !lazy.every(item => typeof item === "string"))
+  ) {
+    throw new Error(`.lazy must be a boolean, array of strings, or a function`);
+  }
+
   const getAssertion = localName => template.expression.ast`
     (function(){
       throw new Error("The CommonJS '" + "${localName}" + "' variable is not available in ES6 modules.");
@@ -122,6 +132,7 @@ export default function(api, options) {
               strictMode,
               allowTopLevelThis,
               noInterop,
+              lazy,
             },
           );
 
@@ -132,14 +143,26 @@ export default function(api, options) {
 
             let header;
             if (isSideEffectImport(metadata)) {
+              if (metadata.lazy) throw new Error("Assertion failure");
+
               header = t.expressionStatement(loadExpr);
             } else {
-              header = t.variableDeclaration("var", [
-                t.variableDeclarator(
-                  t.identifier(metadata.name),
-                  wrapInterop(path, loadExpr, metadata.interop) || loadExpr,
-                ),
-              ]);
+              const init =
+                wrapInterop(path, loadExpr, metadata.interop) || loadExpr;
+
+              if (metadata.lazy) {
+                header = template.ast`
+                  function ${metadata.name}() {
+                    const data = ${init};
+                    ${metadata.name} = function(){ return data; };
+                    return data;
+                  }
+                `;
+              } else {
+                header = template.ast`
+                  var ${metadata.name} = ${init};
+                `;
+              }
             }
             header.loc = metadata.loc;
 

@@ -127,3 +127,37 @@ function _interopRequireDefault(obj) {
 In cases where the auto-unwrapping of `default` is not needed, you can set the
 `noInterop` option to `true` to avoid the usage of the `interopRequireDefault`
 helper (shown in inline form above).
+
+### `lazy`
+
+`boolean`, `Array<string>`, or `(string) => boolean`, defaults to `false`
+
+Changes Babel's compiled `import` statements to be lazily evaluated when their
+imported bindings are used for the first time.
+
+This can improve initial load time of your module because evaluating
+dependencies up front is sometimes entirely un-necessary. This is especially
+the case when implementing a library module.
+
+The value of `lazy` has a few possible effects:
+
+* `false` - No lazy initialization of any imported module.
+* `true` - Do not lazy-initialize local `./foo` imports, but lazy-init `foo` dependencies.
+
+  Local paths are much more likely to have circular dependencies, which may break if loaded lazily,
+  so they are not lazy by default, whereas dependencies between independent modules are rarely cyclical.
+
+* `Array<string>` - Lazy-initialize all imports with source matching one of the given strings.
+* `(string) => boolean` - Pass a callback that will be called to decide if a given source string should be lazy-loaded.
+
+The two cases where imports can never be lazy are:
+
+* `import "foo";`
+
+  Side-effect imports are automatically non-lazy since their very existence means
+  that there is no binding to later kick off initialization.
+
+* `export * from "foo"`
+
+  Re-exporting all names requires up-front execution because otherwise there is no
+  way to know what names need to be exported.
