@@ -15,133 +15,112 @@ import traverse from "@babel/traverse";
 import clone from "lodash/clone";
 import { makeWeakCache, type CacheConfigurator } from "./caching";
 import { getEnv } from "./helpers/environment";
-import { validate, type ValidatedOptions } from "./options";
+import { validate } from "./options";
 
-export default function manageOptions(opts: {}): {
+export default function manageOptions(inputOpts: {}): {
   options: Object,
   passes: Array<Array<Plugin>>,
 } | null {
-  return new OptionManager().init(opts);
-}
+  const args = validate("arguments", inputOpts);
 
-class OptionManager {
-  optionDefaults: ValidatedOptions = {};
-  options: ValidatedOptions = {};
-  passes: Array<Array<Plugin>> = [[]];
+  const { envName = getEnv(), cwd = "." } = args;
+  const absoluteCwd = path.resolve(cwd);
 
-  /**
-   * This is called when we want to merge the input `opts` into the
-   * base options.
-   *
-   *  - `alias` is used to output pretty traces back to the original source.
-   *  - `loc` is used to point to the original config.
-   *  - `dirname` is used to resolve plugins relative to it.
-   */
-  mergeOptions(
-    config: {
-      plugins: Array<BasicDescriptor>,
-      presets: Array<BasicDescriptor>,
-    },
-    pass: Array<Plugin>,
-    envName: string,
-  ) {
-    const plugins = config.plugins.map(descriptor =>
-      loadPluginDescriptor(descriptor, envName),
-    );
-    const presets = config.presets.map(descriptor => {
-      return {
-        preset: loadPresetDescriptor(descriptor, envName),
-        pass: descriptor.ownPass ? [] : pass,
-      };
-    });
+  const configChain = buildRootChain(absoluteCwd, args, envName);
+  if (!configChain) return null;
 
-    // resolve presets
-    if (presets.length > 0) {
-      // The passes are created in the same order as the preset list, but are inserted before any
-      // existing additional passes.
-      this.passes.splice(
-        1,
-        0,
-        ...presets.map(o => o.pass).filter(p => p !== pass),
+  const optionDefaults = {};
+  const options = {};
+  const passes = [[]];
+  try {
+    (function recurseDescriptors(
+      config: {
+        plugins: Array<BasicDescriptor>,
+        presets: Array<BasicDescriptor>,
+      },
+      pass: Array<Plugin>,
+      envName: string,
+    ) {
+      const plugins = config.plugins.map(descriptor =>
+        loadPluginDescriptor(descriptor, envName),
       );
+      const presets = config.presets.map(descriptor => {
+        return {
+          preset: loadPresetDescriptor(descriptor, envName),
+          pass: descriptor.ownPass ? [] : pass,
+        };
+      });
 
-      presets.forEach(({ preset, pass }) => {
-        this.mergeOptions(
-          {
-            plugins: preset.plugins,
-            presets: preset.presets,
-          },
-          pass,
-          envName,
+      // resolve presets
+      if (presets.length > 0) {
+        // The passes are created in the same order as the preset list, but are inserted before any
+        // existing additional passes.
+        passes.splice(
+          1,
+          0,
+          ...presets.map(o => o.pass).filter(p => p !== pass),
         );
 
-        preset.options.forEach(opts => {
-          merge(this.optionDefaults, opts);
-        });
-      });
-    }
+        for (const { preset, pass } of presets) {
+          recurseDescriptors(
+            {
+              plugins: preset.plugins,
+              presets: preset.presets,
+            },
+            pass,
+            envName,
+          );
 
-    // resolve plugins
-    if (plugins.length > 0) {
-      pass.unshift(...plugins);
-    }
-  }
+          preset.options.forEach(opts => {
+            merge(optionDefaults, opts);
+          });
+        }
+      }
 
-  mergeConfigChain(chain: ConfigChain, envName: string) {
-    this.mergeOptions(
+      // resolve plugins
+      if (plugins.length > 0) {
+        pass.unshift(...plugins);
+      }
+    })(
       {
-        plugins: chain.plugins,
-        presets: chain.presets,
+        plugins: configChain.plugins,
+        presets: configChain.presets,
       },
-      this.passes[0],
+      passes[0],
       envName,
     );
 
-    chain.options.forEach(opts => {
-      merge(this.options, opts);
+    configChain.options.forEach(opts => {
+      merge(options, opts);
     });
-  }
-
-  init(inputOpts: {}) {
-    const args = validate("arguments", inputOpts);
-
-    const { envName = getEnv(), cwd = "." } = args;
-    const absoluteCwd = path.resolve(cwd);
-
-    const configChain = buildRootChain(absoluteCwd, args, envName);
-    if (!configChain) return null;
-
-    try {
-      this.mergeConfigChain(configChain, envName);
-    } catch (e) {
-      // There are a few case where thrown errors will try to annotate themselves multiple times, so
-      // to keep things simple we just bail out if re-wrapping the message.
-      if (!/^\[BABEL\]/.test(e.message)) {
-        e.message = `[BABEL] ${args.filename || "unknown"}: ${e.message}`;
-      }
-
-      throw e;
+  } catch (e) {
+    // There are a few case where thrown errors will try to annotate themselves multiple times, so
+    // to keep things simple we just bail out if re-wrapping the message.
+    if (!/^\[BABEL\]/.test(e.message)) {
+      e.message = `[BABEL] ${args.filename || "unknown"}: ${e.message}`;
     }
 
-    const opts: Object = merge(this.optionDefaults, this.options);
-
-    // Tack the passes onto the object itself so that, if this object is passed back to Babel a second time,
-    // it will be in the right structure to not change behavior.
-    opts.babelrc = false;
-    opts.plugins = this.passes[0];
-    opts.presets = this.passes
-      .slice(1)
-      .filter(plugins => plugins.length > 0)
-      .map(plugins => ({ plugins }));
-    opts.passPerPreset = opts.presets.length > 0;
-    opts.envName = envName;
-    opts.cwd = absoluteCwd;
-
-    return {
-      options: opts,
-      passes: this.passes,
-    };
+    throw e;
   }
+
+  const opts: Object = merge(optionDefaults, options);
+
+  // Tack the passes onto the object itself so that, if this object is passed back to Babel a second time,
+  // it will be in the right structure to not change behavior.
+  opts.babelrc = false;
+  opts.plugins = passes[0];
+  opts.presets = passes
+    .slice(1)
+    .filter(plugins => plugins.length > 0)
+    .map(plugins => ({ plugins }));
+  opts.passPerPreset = opts.presets.length > 0;
+  opts.envName = envName;
+  opts.cwd = absoluteCwd;
+
+  return {
+    options: opts,
+    passes: passes,
+  };
 }
 
 type LoadedDescriptor = {
