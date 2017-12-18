@@ -247,12 +247,29 @@ function createDescriptor(
   };
 }
 
+function normalizeOptions(opts: ValidatedOptions): ValidatedOptions {
+  const options = Object.assign({}, opts);
+  delete options.extends;
+  delete options.env;
+  delete options.plugins;
+  delete options.presets;
+  delete options.passPerPreset;
+  delete options.ignore;
+  delete options.only;
+
+  // "sourceMap" is just aliased to sourceMap, so copy it over as
+  // we merge the options together.
+  if (options.sourceMap) {
+    options.sourceMaps = options.sourceMap;
+    delete options.sourceMap;
+  }
+  return options;
+}
+
 /**
  * Load and validate the given config into a set of options, plugins, and presets.
  */
 const processConfig = makeWeakCache((config: SimpleConfig): LoadedConfig => {
-  const options = config.options;
-
   const plugins = (config.options.plugins || []).map((plugin, index) =>
     createDescriptor(plugin, loadPlugin, config.dirname, {
       index,
@@ -266,13 +283,17 @@ const processConfig = makeWeakCache((config: SimpleConfig): LoadedConfig => {
     createDescriptor(preset, loadPreset, config.dirname, {
       index,
       alias: config.alias,
-      ownPass: options.passPerPreset,
+      ownPass: config.options.passPerPreset,
     }),
   );
 
   assertNoDuplicates(presets);
 
-  return { options, plugins, presets };
+  return {
+    options: normalizeOptions(config.options),
+    plugins,
+    presets,
+  };
 });
 
 function assertNoDuplicates(items: Array<BasicDescriptor>): void {
