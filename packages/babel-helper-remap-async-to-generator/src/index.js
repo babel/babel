@@ -68,8 +68,6 @@ export default function(path: NodePath, file: Object, helpers: Object) {
     wrapAwait: helpers.wrapAwait,
   });
 
-  const isIIFE = checkIsIIFE(path);
-
   path.node.async = false;
   path.node.generator = true;
 
@@ -81,37 +79,13 @@ export default function(path: NodePath, file: Object, helpers: Object) {
     path.parentPath.isObjectProperty() ||
     path.parentPath.isClassProperty();
 
-  if (!isProperty && !isIIFE && path.isExpression()) {
-    annotateAsPure(path);
-  }
-
-  function checkIsIIFE(path: NodePath) {
-    if (path.parentPath.isCallExpression({ callee: path.node })) {
-      return true;
-    }
-
-    // try to catch calls to Function#bind, as emitted by arrowFunctionToExpression in spec mode
-    // this may also catch .bind(this) written by users, but does it matter? 🤔
-    const { parentPath } = path;
-    if (
-      parentPath.isMemberExpression() &&
-      t.isIdentifier(parentPath.node.property, { name: "bind" })
-    ) {
-      const { parentPath: bindCall } = parentPath;
-
-      // (function () { ... }).bind(this)()
-
-      return (
-        // first, check if the .bind is actually being called
-        bindCall.isCallExpression() &&
-        // and whether its sole argument is 'this'
-        bindCall.node.arguments.length === 1 &&
-        t.isThisExpression(bindCall.node.arguments[0]) &&
-        // and whether the result of the .bind(this) is being called
-        bindCall.parentPath.isCallExpression({ callee: bindCall.node })
-      );
-    }
-
-    return false;
+  if (!isProperty && path.isExpression()) {
+    // if this node is still used as part of another expression, the other
+    // expression may not necesarily be pure. Parenthesize this to avoid contaminating
+    // the outer expression.
+    //
+    // We have to replace before annotating as path.replaceWith moves comments around.
+    path.replaceWith(t.parenthesizedExpression(path.node));
+    annotateAsPure(path.get("expression"));
   }
 }

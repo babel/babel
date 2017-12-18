@@ -68,9 +68,10 @@ export default function(api, options) {
         );
 
         if (path.isCallExpression()) {
-          annotateAsPure(path);
-          if (path.get("callee").isArrowFunctionExpression()) {
-            path.get("callee").arrowFunctionToExpression();
+          path.replaceWith(t.parenthesizedExpression(path.node));
+          annotateAsPure(path.get("expression"));
+          if (path.get("expression.callee").isArrowFunctionExpression()) {
+            path.get("expression.callee").arrowFunctionToExpression();
           }
         }
       },

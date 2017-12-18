@@ -4,7 +4,7 @@ const PURE_ANNOTATION = "#__PURE__";
 
 const isPureAnnotated = node => {
   const { leadingComments } = node;
-  if (leadingComments === undefined) {
+  if (leadingComments === null || leadingComments === undefined) {
     return false;
   }
   return leadingComments.some(comment => /[@#]__PURE__/.test(comment.value));
