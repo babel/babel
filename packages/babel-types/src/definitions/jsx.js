@@ -65,7 +65,7 @@ defineType("JSXElement", {
 });
 
 defineType("JSXEmptyExpression", {
-  aliases: ["JSX", "Expression"],
+  aliases: ["JSX"],
 });
 
 defineType("JSXExpressionContainer", {
@@ -90,7 +90,7 @@ defineType("JSXSpreadChild", {
 
 defineType("JSXIdentifier", {
   builder: ["name"],
-  aliases: ["JSX", "Expression"],
+  aliases: ["JSX"],
   fields: {
     name: {
       validate: assertValueType("string"),
@@ -100,7 +100,7 @@ defineType("JSXIdentifier", {
 
 defineType("JSXMemberExpression", {
   visitor: ["object", "property"],
-  aliases: ["JSX", "Expression"],
+  aliases: ["JSX"],
   fields: {
     object: {
       validate: assertNodeType("JSXMemberExpression", "JSXIdentifier"),

@@ -1111,7 +1111,7 @@ t.jSXEmptyExpression()
 
 See also `t.isJSXEmptyExpression(node, opts)` and `t.assertJSXEmptyExpression(node, opts)`.
 
-Aliases: `JSX`, `Expression`
+Aliases: `JSX`
 
 
 ---
@@ -1151,7 +1151,7 @@ t.jSXIdentifier(name)
 
 See also `t.isJSXIdentifier(node, opts)` and `t.assertJSXIdentifier(node, opts)`.
 
-Aliases: `JSX`, `Expression`
+Aliases: `JSX`
 
  - `name`: `string` (required)
 
@@ -1164,7 +1164,7 @@ t.jSXMemberExpression(object, property)
 
 See also `t.isJSXMemberExpression(node, opts)` and `t.assertJSXMemberExpression(node, opts)`.
 
-Aliases: `JSX`, `Expression`
+Aliases: `JSX`
 
  - `object`: `JSXMemberExpression | JSXIdentifier` (required)
  - `property`: `JSXIdentifier` (required)
