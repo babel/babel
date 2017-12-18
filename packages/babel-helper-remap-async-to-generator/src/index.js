@@ -111,5 +111,7 @@ export default function(path: NodePath, file: Object, helpers: Object) {
         bindCall.parentPath.isCallExpression({ callee: bindCall.node })
       );
     }
+
+    return false;
   }
 }
