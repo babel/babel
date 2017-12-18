@@ -3,6 +3,7 @@
   "version": "7.0.0-beta.35",
   "description": "Compile Unicode property escapes in Unicode regular expressions to ES5.",
   "homepage": "https://babeljs.io/",
+  "license": "MIT",
   "main": "lib/index.js",
   "engines": {
     "node": ">=4"
