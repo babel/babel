@@ -9,7 +9,7 @@ Compile [Unicode property escapes](https://github.com/mathiasbynens/regexpu-core
 ## Installation
 
 ```sh
-npm install @babel/plugin-proposal-unicode-property-regex
+npm install --save-dev @babel/plugin-proposal-unicode-property-regex
 ```
 
 ## Usage
