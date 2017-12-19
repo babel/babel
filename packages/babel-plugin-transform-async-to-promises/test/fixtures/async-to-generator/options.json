@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "external-helpers",
+    "transform-parameters",
+    "transform-async-to-generator"
+  ]
+}
