@@ -8,6 +8,7 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
+  transform-dotall-regex { "chrome":"60" }
   proposal-async-generator-functions { "chrome":"60" }
   syntax-object-rest-spread { "chrome":"60" }
   proposal-optional-catch-binding { "chrome":"60" }

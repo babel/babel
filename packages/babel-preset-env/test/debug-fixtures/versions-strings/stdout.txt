@@ -33,6 +33,7 @@ Using plugins:
   transform-regenerator { "ie":"10" }
   transform-exponentiation-operator { "ie":"10", "node":"6.10" }
   transform-async-to-generator { "chrome":"54", "ie":"10", "node":"6.10" }
+  transform-dotall-regex { "chrome":"54", "ie":"10", "node":"6.10" }
 
 Using polyfills with `entry` option:
 

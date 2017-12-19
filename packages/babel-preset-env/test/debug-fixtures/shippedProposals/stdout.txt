@@ -29,6 +29,7 @@ Using plugins:
   transform-regenerator {}
   transform-exponentiation-operator {}
   transform-async-to-generator {}
+  transform-dotall-regex {}
   proposal-async-generator-functions {}
   proposal-object-rest-spread {}
   proposal-optional-catch-binding {}

@@ -31,6 +31,7 @@ Using plugins:
   transform-regenerator { "android":"4" }
   transform-exponentiation-operator { "android":"4" }
   transform-async-to-generator { "android":"4" }
+  transform-dotall-regex { "android":"4" }
 
 Using polyfills with `entry` option:
 

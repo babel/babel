@@ -45,6 +45,7 @@
     "@babel/plugin-transform-classes": "7.0.0-beta.35",
     "@babel/plugin-transform-computed-properties": "7.0.0-beta.35",
     "@babel/plugin-transform-destructuring": "7.0.0-beta.35",
+    "@babel/plugin-transform-dotall-regex": "7.0.0-beta.35",
     "@babel/plugin-transform-duplicate-keys": "7.0.0-beta.35",
     "@babel/plugin-transform-eval": "7.0.0-beta.35",
     "@babel/plugin-transform-exponentiation-operator": "7.0.0-beta.35",
