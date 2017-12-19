@@ -12,27 +12,30 @@ export const logMessage = (message, context) => {
   console.log(logStr);
 };
 
-export const logPlugin = (plugin, targets, list, context) => {
-  const envList = list[plugin] || {};
-  const filteredList = Object.keys(targets).reduce((a, b) => {
-    const version = envList[b];
-    const target = targets[b];
+// Outputs a message that shows which target(s) caused an item to be included:
+// transform-foo { "edge":"13", "firefox":"49", "ie":"10" }
+export const logPlugin = (item, targetVersions, list, context) => {
+  const minVersions = list[item] || {};
 
-    if (!version) {
-      a[b] = prettifyVersion(target);
+  const filteredList = Object.keys(targetVersions).reduce((result, env) => {
+    const minVersion = minVersions[env];
+    const targetVersion = targetVersions[env];
+
+    if (!minVersion) {
+      result[env] = prettifyVersion(targetVersion);
     } else {
-      const versionIsUnreleased = isUnreleasedVersion(version, b);
-      const targetIsUnreleased = isUnreleasedVersion(target, b);
+      const minIsUnreleased = isUnreleasedVersion(minVersion, env);
+      const targetIsUnreleased = isUnreleasedVersion(targetVersion, env);
 
       if (
-        (versionIsUnreleased && !targetIsUnreleased) ||
-        (!targetIsUnreleased && semver.lt(target, semverify(version)))
+        !targetIsUnreleased &&
+        (minIsUnreleased || semver.lt(targetVersion, semverify(minVersion)))
       ) {
-        a[b] = prettifyVersion(target);
+        result[env] = prettifyVersion(targetVersion);
       }
     }
 
-    return a;
+    return result;
   }, {});
 
   const formattedTargets = JSON.stringify(filteredList)
@@ -40,7 +43,7 @@ export const logPlugin = (plugin, targets, list, context) => {
     .replace(/^\{"/, '{ "')
     .replace(/"\}$/, '" }');
 
-  logMessage(`${plugin} ${formattedTargets}`, context);
+  logMessage(`${item} ${formattedTargets}`, context);
 };
 
 export const logEntryPolyfills = (
