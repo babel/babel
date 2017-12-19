@@ -74,6 +74,17 @@ type SimpleConfig = {
   dirname: string,
 };
 
+type ConfigContext = {
+  filename: string | null,
+  cwd: string,
+  envName: string,
+};
+
+type ConfigContextNamed = {
+  ...ConfigContext,
+  filename: string,
+};
+
 export const buildPresetChain = makeWeakCache(
   (preset: PresetInstance): ConfigChain => {
     const loaded = processConfig(preset);
@@ -91,18 +102,20 @@ export function buildRootChain(
   opts: ValidatedOptions,
   envName: string,
 ): ConfigChain | null {
-  const filename = opts.filename ? path.resolve(cwd, opts.filename) : null;
-  const builder = new ConfigChainBuilder(
-    filename ? new LoadedFile(filename) : null,
-  );
+  const context = {
+    filename: opts.filename ? path.resolve(cwd, opts.filename) : null,
+    cwd,
+    envName,
+  };
+  const builder = new ConfigChainBuilder(context);
 
   try {
-    builder.mergeConfigArguments(opts, cwd, envName);
+    builder.mergeConfigArguments(opts);
 
     // resolve all .babelrc files
-    if (opts.babelrc !== false && filename) {
-      findConfigs(path.dirname(filename), envName).forEach(configFile =>
-        builder.mergeConfigFile(configFile, envName),
+    if (opts.babelrc !== false && context.filename !== null) {
+      findConfigs(path.dirname(context.filename), envName).forEach(configFile =>
+        builder.mergeConfigFile(configFile),
       );
     }
   } catch (e) {
@@ -117,25 +130,23 @@ export function buildRootChain(
 }
 
 class ConfigChainBuilder {
-  file: LoadedFile | null;
+  context: ConfigContext;
   configs: Array<ConfigItem> = [];
   seenFiles: Set<ConfigFile> = new Set();
 
-  constructor(file: LoadedFile | null) {
-    this.file = file;
+  constructor(context: ConfigContext) {
+    this.context = context;
   }
 
-  mergeConfigArguments(
-    opts: ValidatedOptions,
-    dirname: string,
-    envKey: string,
-  ) {
-    flattenArgumentsOptionsParts(opts, dirname, envKey).forEach(part =>
-      this._processConfigPart(part, envKey),
-    );
+  mergeConfigArguments(opts: ValidatedOptions) {
+    flattenArgumentsOptionsParts(
+      opts,
+      this.context.cwd,
+      this.context.envName,
+    ).forEach(part => this._processConfigPart(part));
   }
 
-  mergeConfigFile(file: ConfigFile, envName: string) {
+  mergeConfigFile(file: ConfigFile) {
     if (this.seenFiles.has(file)) {
       throw new Error(
         `Cycle detected in Babel configuration file through "${
@@ -144,22 +155,19 @@ class ConfigChainBuilder {
       );
     }
 
-    const parts = flattenFileOptionsParts(file)(envName);
+    const parts = flattenFileOptionsParts(file)(this.context.envName);
 
     this.seenFiles.add(file);
-    parts.forEach(part => this._processConfigPart(part, envName));
+    parts.forEach(part => this._processConfigPart(part));
     this.seenFiles.delete(file);
   }
 
-  _processConfigPart(part: ConfigPart, envName: string) {
+  _processConfigPart(part: ConfigPart) {
     if (part.part === "config") {
       const { ignore, only } = part;
 
       // Bail out ASAP if this file is ignored so that we run as little logic as possible on ignored files.
-      if (
-        this.file &&
-        this.file.shouldIgnore(ignore, only, part.config.dirname)
-      ) {
+      if (shouldIgnore(this.context, ignore, only, part.config.dirname)) {
         // TODO(logan): This is a really gross way to bail out. Avoid this in rewrite.
         throw Object.assign((new Error("This file has been ignored."): any), {
           code: "BABEL_IGNORED_FILE",
@@ -169,8 +177,7 @@ class ConfigChainBuilder {
       this.configs.push(part.config);
     } else {
       this.mergeConfigFile(
-        loadConfig(part.path, part.dirname, envName),
-        envName,
+        loadConfig(part.path, part.dirname, this.context.envName),
       );
     }
   }
@@ -585,103 +592,101 @@ function flattenOptionsParts(
 }
 
 /**
- * Track a given file and expose function to check if it should be ignored.
+ * Tests if a filename should be ignored based on "ignore" and "only" options.
  */
-class LoadedFile {
-  filename: string;
-  possibleDirs: null | Array<string> = null;
+function shouldIgnore(
+  context: ConfigContext,
+  ignore: ?IgnoreList,
+  only: ?IgnoreList,
+  dirname: string,
+): boolean {
+  if (context.filename === null) return false;
+  // $FlowIgnore - Flow refinements aren't quite smart enough for this :(
+  const ctx: ConfigContextNamed = context;
 
-  constructor(filename) {
-    this.filename = filename;
+  if (ignore) {
+    if (matchesPatterns(ctx, ignore, dirname)) {
+      debug(
+        "Ignored %o because it matched one of %O from %o",
+        context.filename,
+        ignore,
+        dirname,
+      );
+      return true;
+    }
   }
 
-  /**
-   * Tests if a filename should be ignored based on "ignore" and "only" options.
-   */
-  shouldIgnore(
-    ignore: ?IgnoreList,
-    only: ?IgnoreList,
-    dirname: string,
-  ): boolean {
-    if (ignore) {
-      if (this._matchesPatterns(ignore, dirname)) {
-        debug(
-          "Ignored %o because it matched one of %O from %o",
-          this.filename,
-          ignore,
-          dirname,
-        );
-        return true;
-      }
+  if (only) {
+    if (!matchesPatterns(ctx, only, dirname)) {
+      debug(
+        "Ignored %o because it failed to match one of %O from %o",
+        context.filename,
+        only,
+        dirname,
+      );
+      return true;
     }
-
-    if (only) {
-      if (!this._matchesPatterns(only, dirname)) {
-        debug(
-          "Ignored %o because it failed to match one of %O from %o",
-          this.filename,
-          only,
-          dirname,
-        );
-        return true;
-      }
-    }
-
-    return false;
   }
 
-  /**
-   * Returns result of calling function with filename if pattern is a function.
-   * Otherwise returns result of matching pattern Regex with filename.
-   */
-  _matchesPatterns(patterns: IgnoreList, dirname: string): boolean {
-    const res = [];
-    const strings = [];
-    const fns = [];
+  return false;
+}
 
-    patterns.forEach(pattern => {
-      if (typeof pattern === "string") strings.push(pattern);
-      else if (typeof pattern === "function") fns.push(pattern);
-      else res.push(pattern);
+/**
+ * Returns result of calling function with filename if pattern is a function.
+ * Otherwise returns result of matching pattern Regex with filename.
+ */
+function matchesPatterns(
+  context: ConfigContextNamed,
+  patterns: IgnoreList,
+  dirname: string,
+): boolean {
+  const res = [];
+  const strings = [];
+  const fns = [];
+
+  patterns.forEach(pattern => {
+    if (typeof pattern === "string") strings.push(pattern);
+    else if (typeof pattern === "function") fns.push(pattern);
+    else res.push(pattern);
+  });
+
+  const filename = context.filename;
+  if (res.some(re => re.test(context.filename))) return true;
+  if (fns.some(fn => fn(filename))) return true;
+
+  if (strings.length > 0) {
+    const possibleDirs = getPossibleDirs(context);
+
+    const absolutePatterns = strings.map(pattern => {
+      // Preserve the "!" prefix so that micromatch can use it for negation.
+      const negate = pattern[0] === "!";
+      if (negate) pattern = pattern.slice(1);
+
+      return (negate ? "!" : "") + path.resolve(dirname, pattern);
     });
 
-    const filename = this.filename;
-    if (res.some(re => re.test(filename))) return true;
-    if (fns.some(fn => fn(filename))) return true;
-
-    if (strings.length > 0) {
-      let possibleDirs = this.possibleDirs;
-      // Lazy-init so we don't initialize this for files that have no glob patterns.
-      if (!possibleDirs) {
-        possibleDirs = this.possibleDirs = [];
-
-        possibleDirs.push(filename);
-
-        let current = filename;
-        while (true) {
-          const previous = current;
-          current = path.dirname(current);
-          if (previous === current) break;
-
-          possibleDirs.push(current);
-        }
-      }
-
-      const absolutePatterns = strings.map(pattern => {
-        // Preserve the "!" prefix so that micromatch can use it for negation.
-        const negate = pattern[0] === "!";
-        if (negate) pattern = pattern.slice(1);
-
-        return (negate ? "!" : "") + path.resolve(dirname, pattern);
-      });
-
-      if (
-        micromatch(possibleDirs, absolutePatterns, { nocase: true }).length > 0
-      ) {
-        return true;
-      }
+    if (
+      micromatch(possibleDirs, absolutePatterns, { nocase: true }).length > 0
+    ) {
+      return true;
     }
-
-    return false;
   }
+
+  return false;
 }
+
+const getPossibleDirs = makeWeakCache((context: ConfigContextNamed) => {
+  let current = context.filename;
+  if (current === null) return [];
+
+  const possibleDirs = [current];
+  while (true) {
+    const previous = current;
+    current = path.dirname(current);
+    if (previous === current) break;
+
+    possibleDirs.push(current);
+  }
+
+  return possibleDirs;
+});
