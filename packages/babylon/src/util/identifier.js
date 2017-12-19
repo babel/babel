@@ -87,8 +87,10 @@ export function isIdentifierStart(code: number): boolean {
   return isInAstralSet(code, astralIdentifierStartCodes);
 }
 
-export function isIteratorStart(code: number, next: number): boolean {
-  return code === 64 && next === 64;
+// Test whether a current state character code and next character code  is @
+
+export function isIteratorStart(current: number, next: number): boolean {
+  return current === 64 && next === 64;
 }
 
 // Test whether a given character is part of an identifier.
