@@ -121,12 +121,11 @@ publish:
 	make clean-lib
 	rm -rf packages/babel-runtime/helpers
 	rm -rf packages/babel-runtime/core-js
-	./node_modules/.bin/lerna publish --skip-npm --skip-git --skip-temp-tag
 	BABEL_ENV=production make build-dist
 	make test
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
 	# --only-explicit-updates
-	./node_modules/.bin/lerna publish --force-publish=* --exact --skip-temp-tag --yes --repo-version $(node -p "require('./lerna.json').version")
+	./node_modules/.bin/lerna publish --force-publish=* --exact --skip-temp-tag
 	make clean
 
 bootstrap:
