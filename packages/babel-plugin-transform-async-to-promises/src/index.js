@@ -18,7 +18,7 @@ function parse(code) {
 const transform = require("nodent-transform").transform;
 
 function transformAsyncToPromises(api, options) {
-  let requiresTranspilation;
+  let requiresTranspilation = (options, false);
 
   return {
     visitor: {
