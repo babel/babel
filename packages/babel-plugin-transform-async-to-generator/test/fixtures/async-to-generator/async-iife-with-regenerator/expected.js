@@ -51,3 +51,20 @@ regeneratorRuntime.mark(function _callee2() {
     return _notIIFE.apply(this, arguments);
   };
 })();
+
+/*#__PURE__*/
+babelHelpers.asyncToGenerator(
+/*#__PURE__*/
+regeneratorRuntime.mark(function _callee4() {
+  return regeneratorRuntime.wrap(function _callee4$(_context4) {
+    while (1) switch (_context4.prev = _context4.next) {
+      case 0:
+        _context4.next = 2;
+        return 'not iife';
+
+      case 2:
+      case "end":
+        return _context4.stop();
+    }
+  }, _callee4, this);
+}));
