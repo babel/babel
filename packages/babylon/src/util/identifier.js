@@ -87,6 +87,10 @@ export function isIdentifierStart(code: number): boolean {
   return isInAstralSet(code, astralIdentifierStartCodes);
 }
 
+export function isIteratorStart(code: number, next: number): boolean {
+  return code === 64 && next === 64;
+}
+
 // Test whether a given character is part of an identifier.
 
 export function isIdentifierChar(code: number): boolean {

@@ -1240,6 +1240,9 @@ export default class Tokenizer extends LocationParser {
       const ch = this.fullCharCodeAtPos();
       if (isIdentifierChar(ch)) {
         this.state.pos += ch <= 0xffff ? 1 : 2;
+      } else if (this.state.isIterator) {
+        this.state.pos += 2;
+        delete this.state.isIterator;
       } else if (ch === charCodes.backslash) {
         this.state.containsEsc = true;
 
