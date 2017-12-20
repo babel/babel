@@ -1,6 +1,6 @@
-import { d } from "./lib/foo";
+import { A, d } from "./lib/foo";
 import { c } from "./lib";
 const a = 1;
-const b = {};
+const b = new A();
 const cc = c;
 const dd = d;
