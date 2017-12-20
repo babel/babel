@@ -2,7 +2,7 @@ function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.crea
 
 var _gPO = Object.getPrototypeOf || function _gPO(o) { return o.__proto__; };
 
-var _sPO = Object.setPrototypeOf || function _sPO(o, p) { o.__proto__ = p; };
+var _sPO = Object.setPrototypeOf || function _sPO(o, p) { o.__proto__ = p; return o; };
 
 var _construct = typeof Reflect === "object" && Reflect.construct || function _construct(Parent, args, Class) { var Constructor, a = [null]; a.push.apply(a, args); Constructor = Parent.bind.apply(Parent, a); return _sPO(new Constructor(), Class.prototype); };
 

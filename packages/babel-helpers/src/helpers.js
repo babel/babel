@@ -428,7 +428,7 @@ helpers.inheritsLoose = defineHelper(`
 // Based on https://github.com/WebReflection/babel-plugin-transform-builtin-classes
 helpers.wrapNativeSuper = defineHelper(`
   var _gPO = Object.getPrototypeOf || function _gPO(o) { return o.__proto__ };
-  var _sPO = Object.setPrototypeOf || function _sPO(o, p) { o.__proto__ = p };
+  var _sPO = Object.setPrototypeOf || function _sPO(o, p) { o.__proto__ = p; return o };
   var _construct = (typeof Reflect === "object" && Reflect.construct) ||
     function _construct(Parent, args, Class) {
       var Constructor, a = [null];
