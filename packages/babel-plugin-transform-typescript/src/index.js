@@ -206,8 +206,8 @@ export default function() {
 
       TSImportEqualsDeclaration(path) {
         throw path.buildCodeFrameError(
-          "`import =` is not supported in Babel's Typescript parser " +
-            "because there is no valid ES6 implementation for it.\nPlease consider using " +
+          "`import =` is not supported by @babel/plugin-transform-typescript \n" +
+            "Please consider using " +
             "`import <moduleName> from '<moduleName>';` alongside " +
             "Typescript's --allowSyntheticDefaultImports option.",
         );
@@ -215,8 +215,8 @@ export default function() {
 
       TSExportAssignment(path) {
         throw path.buildCodeFrameError(
-          "`export =` is not supported in Babel's Typescript parser because " +
-            "there is no valid ES6 implementation for it.\nPlease consider using `export <value>;`.",
+          "`export =` is not supported by @babel/plugin-transform-typescript\n" +
+            "Please consider using `export <value>;`.",
         );
       },
 
