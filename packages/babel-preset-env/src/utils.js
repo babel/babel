@@ -58,7 +58,7 @@ export const prettifyTargets = (targets: Targets): Object => {
 export const isUnreleasedVersion = (version: string, env: string): boolean => {
   const unreleasedLabel = unreleasedLabels[env];
   return (
-    unreleasedLabel && unreleasedLabel === version.toString().toLowerCase()
+    !!unreleasedLabel && unreleasedLabel === version.toString().toLowerCase()
   );
 };
 

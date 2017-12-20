@@ -11,6 +11,7 @@ export default {
   "transform-classes": require("@babel/plugin-transform-classes"),
   "transform-computed-properties": require("@babel/plugin-transform-computed-properties"),
   "transform-destructuring": require("@babel/plugin-transform-destructuring"),
+  "transform-dotall-regex": require("@babel/plugin-transform-dotall-regex"),
   "transform-duplicate-keys": require("@babel/plugin-transform-duplicate-keys"),
   "transform-for-of": require("@babel/plugin-transform-for-of"),
   "transform-function-name": require("@babel/plugin-transform-function-name"),

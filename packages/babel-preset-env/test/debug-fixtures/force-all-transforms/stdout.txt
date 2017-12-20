@@ -31,6 +31,7 @@ Using plugins:
   transform-regenerator {}
   transform-exponentiation-operator {}
   transform-async-to-generator {}
+  transform-dotall-regex { "chrome":"55" }
 
 Using polyfills with `entry` option:
 

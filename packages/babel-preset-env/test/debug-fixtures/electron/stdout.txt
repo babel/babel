@@ -26,6 +26,7 @@ Using plugins:
   transform-regenerator { "electron":"0.36" }
   transform-exponentiation-operator { "electron":"0.36" }
   transform-async-to-generator { "electron":"0.36" }
+  transform-dotall-regex { "electron":"0.36" }
 
 Using polyfills with `entry` option:
 

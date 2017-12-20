@@ -228,6 +228,11 @@
     "opera": "42",
     "electron": "1.6"
   },
+  "transform-dotall-regex": {
+    "chrome": "62",
+    "safari": "tp",
+    "opera": "49"
+  },
   "proposal-async-generator-functions": {
     "chrome": "63",
     "firefox": "57",
@@ -246,6 +251,8 @@
     "safari": "tp"
   },
   "proposal-unicode-property-regex": {
-    "safari": "tp"
+    "chrome": "64",
+    "safari": "tp",
+    "opera": "51"
   }
 }
