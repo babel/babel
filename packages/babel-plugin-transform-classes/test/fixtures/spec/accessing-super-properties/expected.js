@@ -7,7 +7,7 @@ function (_Foo) {
     var _this;
 
     babelHelpers.classCallCheck(this, Test);
-    _this = babelHelpers.possibleConstructorReturn(this, (Test.__proto__ || Object.getPrototypeOf(Test)).call(this));
+    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Test, [], this));
     babelHelpers.get(Test.prototype.__proto__ || Object.getPrototypeOf(Test.prototype), "test", babelHelpers.assertThisInitialized(_this));
     babelHelpers.get(Test.prototype.__proto__ || Object.getPrototypeOf(Test.prototype), "test", babelHelpers.assertThisInitialized(_this)).whatever;
     return _this;

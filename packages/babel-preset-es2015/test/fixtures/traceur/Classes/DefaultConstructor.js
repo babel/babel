@@ -18,9 +18,8 @@ assert.isFalse(
 assert.isFalse(
     Object.getOwnPropertyDescriptor(C.prototype, 'constructor').enumerable);
 
-// Ensure that we don't try to call super() in the default constructor.
 class D extends null {}
-var d = new D();
+assert.throws(() => new D());
 
 
 class E extends function(x) {

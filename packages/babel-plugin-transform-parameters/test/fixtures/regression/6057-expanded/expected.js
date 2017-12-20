@@ -21,6 +21,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
+function _constructSuperInstance(Derived, args, existingThis) { var Super = Derived.__proto__ || Object.getPrototypeOf(Derived); return typeof Reflect !== "undefined" && typeof Reflect.construct === "function" ? Reflect.construct(Super, args, existingThis.constructor || Derived) : Super.apply(existingThis, args); }
+
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
@@ -31,8 +33,6 @@ function (_Component) {
   _inherits(App, _Component);
 
   function App() {
-    var _ref;
-
     var _temp, _this;
 
     _classCallCheck(this, App);
@@ -41,7 +41,7 @@ function (_Component) {
       args[_key] = arguments[_key];
     }
 
-    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), Object.defineProperty(_assertThisInitialized(_this), "exportType", {
+    return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, _constructSuperInstance(App, args.concat(), this)), Object.defineProperty(_assertThisInitialized(_this), "exportType", {
       configurable: true,
       enumerable: true,
       writable: true,

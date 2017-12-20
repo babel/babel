@@ -6,7 +6,7 @@ var x = {
 
     function _class() {
       babelHelpers.classCallCheck(this, _class);
-      return babelHelpers.possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).apply(this, arguments));
+      return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(_class, Array.prototype.slice.call(arguments), this));
     }
 
     return _class;

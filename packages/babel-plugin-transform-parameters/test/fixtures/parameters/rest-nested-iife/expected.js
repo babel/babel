@@ -7,7 +7,7 @@ function broken(x) {
 
       function Foo() {
         babelHelpers.classCallCheck(this, Foo);
-        return babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).apply(this, arguments));
+        return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Foo, Array.prototype.slice.call(arguments), this));
       }
 
       return Foo;

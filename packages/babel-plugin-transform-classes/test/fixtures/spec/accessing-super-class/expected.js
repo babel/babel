@@ -4,16 +4,16 @@ function (_Foo) {
   babelHelpers.inherits(Test, _Foo);
 
   function Test() {
-    var _ref, _babelHelpers$get;
+    var _babelHelpers$get;
 
     var _this;
 
     babelHelpers.classCallCheck(this, Test);
     woops.super.test();
-    _this = babelHelpers.possibleConstructorReturn(this, (Test.__proto__ || Object.getPrototypeOf(Test)).call(this));
+    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Test, [], this));
     babelHelpers.get(Test.prototype.__proto__ || Object.getPrototypeOf(Test.prototype), "test", babelHelpers.assertThisInitialized(_this)).call(_this);
-    _this = babelHelpers.possibleConstructorReturn(this, (Test.__proto__ || Object.getPrototypeOf(Test)).apply(this, arguments));
-    _this = babelHelpers.possibleConstructorReturn(this, (_ref = Test.__proto__ || Object.getPrototypeOf(Test)).call.apply(_ref, [this, "test"].concat(Array.prototype.slice.call(arguments))));
+    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Test, Array.prototype.slice.call(arguments), this));
+    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Test, ["test"].concat(Array.prototype.slice.call(arguments)), this));
     babelHelpers.get(Test.prototype.__proto__ || Object.getPrototypeOf(Test.prototype), "test", babelHelpers.assertThisInitialized(_this)).apply(_this, arguments);
 
     (_babelHelpers$get = babelHelpers.get(Test.prototype.__proto__ || Object.getPrototypeOf(Test.prototype), "test", babelHelpers.assertThisInitialized(_this))).call.apply(_babelHelpers$get, [_this, "test"].concat(Array.prototype.slice.call(arguments)));

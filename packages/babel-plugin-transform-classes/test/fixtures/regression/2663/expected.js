@@ -21,7 +21,7 @@ function (_EventEmitter) {
     var _this;
 
     babelHelpers.classCallCheck(this, Connection);
-    _this = babelHelpers.possibleConstructorReturn(this, (Connection.__proto__ || Object.getPrototypeOf(Connection)).call(this));
+    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Connection, [], this));
     _this.isConnected = false;
     _this.roomId = roomId; // ...
 

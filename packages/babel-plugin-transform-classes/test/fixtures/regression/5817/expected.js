@@ -7,7 +7,7 @@ function (_B) {
     var _this;
 
     babelHelpers.classCallCheck(this, A);
-    _this = babelHelpers.possibleConstructorReturn(this, (A.__proto__ || Object.getPrototypeOf(A)).call(this));
+    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(A, [], this));
 
     _this.arrow1 = function (x) {
       return x;

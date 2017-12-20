@@ -6,6 +6,8 @@ function _classCallCheck(instance, Constructor) { if (!_instanceof(instance, Con
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
+function _constructSuperInstance(Derived, args, existingThis) { var Super = Derived.__proto__ || Object.getPrototypeOf(Derived); return typeof Reflect !== "undefined" && typeof Reflect.construct === "function" ? Reflect.construct(Super, args, existingThis.constructor || Derived) : Super.apply(existingThis, args); }
+
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 function generateAsyncAction(type) {
@@ -31,7 +33,7 @@ function (_B) {
 
     _classCallCheck(this, A);
 
-    _this = _possibleConstructorReturn(this, (A.__proto__ || Object.getPrototypeOf(A)).call(this));
+    _this = _possibleConstructorReturn(this, _constructSuperInstance(A, [], this));
     _this.timestamp = timestamp;
     _this.moment = moment(timestamp);
     return _this;
