@@ -1,51 +1,38 @@
-function s(_x) {
-  return _s.apply(this, arguments);
-}
+function s(x, ...args) {
+  var $args = arguments;
+  return new Promise(function ($return, $error) {
+    let t;
 
-function _s() {
-  _s = babelHelpers.asyncToGenerator(function* (x) {
-    var _this = this,
-        _arguments = arguments;
+    t = (y, a) => new Promise(function ($return, $error) {
+      let r;
 
-    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-      args[_key - 1] = arguments[_key];
-    }
+      r = (z, b, ...innerArgs) => new Promise(function ($return, $error) {
+        return Promise.resolve(z).then(function ($await_1) {
+          try {
+            console.log(this, innerArgs, $args);
+            return $return(this.x);
+          } catch ($boundEx) {
+            return $error($boundEx);
+          }
+        }.bind(this), $error);
+      }.bind(this));
 
-    let t =
-    /*#__PURE__*/
-    function () {
-      var _ref = babelHelpers.asyncToGenerator(function* (y, a) {
-        let r =
-        /*#__PURE__*/
-        function () {
-          var _ref2 = babelHelpers.asyncToGenerator(function* (z, b) {
-            yield z;
+      return Promise.resolve(r()).then(function ($await_2) {
+        try {
+          console.log(this, args, $args);
+          return $return(this.g(r));
+        } catch ($boundEx) {
+          return $error($boundEx);
+        }
+      }.bind(this), $error);
+    }.bind(this));
 
-            for (var _len2 = arguments.length, innerArgs = new Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
-              innerArgs[_key2 - 2] = arguments[_key2];
-            }
-
-            console.log(_this, innerArgs, _arguments);
-            return _this.x;
-          });
-
-          return function r(_x4, _x5) {
-            return _ref2.apply(this, arguments);
-          };
-        }();
-
-        yield r();
-        console.log(_this, args, _arguments);
-        return _this.g(r);
-      });
-
-      return function t(_x2, _x3) {
-        return _ref.apply(this, arguments);
-      };
-    }();
-
-    yield t();
-    return this.h(t);
-  });
-  return _s.apply(this, arguments);
+    return Promise.resolve(t()).then(function ($await_3) {
+      try {
+        return $return(this.h(t));
+      } catch ($boundEx) {
+        return $error($boundEx);
+      }
+    }.bind(this), $error);
+  }.bind(this));
 }

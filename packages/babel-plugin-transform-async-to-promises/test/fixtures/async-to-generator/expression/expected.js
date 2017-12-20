@@ -1,34 +1,41 @@
-var foo =
-/*#__PURE__*/
-function () {
-  var _ref = babelHelpers.asyncToGenerator(function* () {
-    var wat = yield bar();
+var foo = function () {
+  return new Promise(function ($return, $error) {
+    var wat;
+    return Promise.resolve(bar()).then(function ($await_1) {
+      try {
+        wat = $await_1;
+        return $return();
+      } catch ($boundEx) {
+        return $error($boundEx);
+      }
+    }, $error);
   });
+};
 
-  return function foo() {
-    return _ref.apply(this, arguments);
-  };
-}();
-
-var foo2 =
-/*#__PURE__*/
-function () {
-  var _ref2 = babelHelpers.asyncToGenerator(function* () {
-    var wat = yield bar();
+var foo2 = function () {
+  return new Promise(function ($return, $error) {
+    var wat;
+    return Promise.resolve(bar()).then(function ($await_2) {
+      try {
+        wat = $await_2;
+        return $return();
+      } catch ($boundEx) {
+        return $error($boundEx);
+      }
+    }, $error);
   });
+};
 
-  return function foo2() {
-    return _ref2.apply(this, arguments);
-  };
-}(),
-    bar =
-/*#__PURE__*/
-function () {
-  var _ref3 = babelHelpers.asyncToGenerator(function* () {
-    var wat = yield foo();
+var bar = function () {
+  return new Promise(function ($return, $error) {
+    var wat;
+    return Promise.resolve(foo()).then(function ($await_3) {
+      try {
+        wat = $await_3;
+        return $return();
+      } catch ($boundEx) {
+        return $error($boundEx);
+      }
+    }, $error);
   });
-
-  return function bar() {
-    return _ref3.apply(this, arguments);
-  };
-}();
+};

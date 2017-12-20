@@ -5,10 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _default =
-/*#__PURE__*/
-babelHelpers.asyncToGenerator(function* () {
-  return yield foo();
+var _default = () => new Promise(function ($return, $error) {
+  return Promise.resolve(foo()).then($return, $error);
 });
 
 exports.default = _default;

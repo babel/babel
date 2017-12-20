@@ -1,48 +1,44 @@
 class Class {
   method() {
-    var _this = this;
+    return new Promise(function ($return, $error) {
+      this;
 
-    return babelHelpers.asyncToGenerator(function* () {
-      _this;
-
-      () => _this;
+      () => this;
 
       () => {
-        _this;
+        this;
 
-        () => _this;
+        () => this;
 
         function x() {
-          var _this2 = this;
-
           this;
 
           () => {
             this;
           };
 
-          /*#__PURE__*/
-          babelHelpers.asyncToGenerator(function* () {
-            _this2;
-          });
+          () => new Promise(function ($return, $error) {
+            this;
+            return $return();
+          }.bind(this));
         }
       };
 
       function x() {
-        var _this3 = this;
-
         this;
 
         () => {
           this;
         };
 
-        /*#__PURE__*/
-        babelHelpers.asyncToGenerator(function* () {
-          _this3;
-        });
+        () => new Promise(function ($return, $error) {
+          this;
+          return $return();
+        }.bind(this));
       }
-    })();
+
+      return $return();
+    }.bind(this));
   }
 
 }

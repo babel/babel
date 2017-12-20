@@ -1,7 +1,7 @@
 {
   "plugins": [
     "transform-arrow-functions",
-    "transform-async-to-generator",
+    "transform-async-to-promises",
     "external-helpers"
   ]
 }

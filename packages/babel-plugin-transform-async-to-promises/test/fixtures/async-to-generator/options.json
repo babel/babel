@@ -1,7 +1,6 @@
 {
   "plugins": [
     "external-helpers",
-    "transform-parameters",
-    "transform-async-to-generator"
+    "transform-async-to-promises"
   ]
 }

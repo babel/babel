@@ -1,9 +1,13 @@
-/*#__PURE__*/
-babelHelpers.asyncToGenerator(function* () {
-  return yield promise;
+() => new Promise(function ($return, $error) {
+  return Promise.resolve(promise).then($return, $error);
 });
 
-/*#__PURE__*/
-babelHelpers.asyncToGenerator(function* () {
-  yield promise;
+() => new Promise(function ($return, $error) {
+  return Promise.resolve(promise).then(function ($await_2) {
+    try {
+      return $return();
+    } catch ($boundEx) {
+      return $error($boundEx);
+    }
+  }, $error);
 });

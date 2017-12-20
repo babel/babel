@@ -1,3 +1,5 @@
-foo(
-/*#__PURE__*/
-babelHelpers.asyncToGenerator(function* () {}));
+foo(function () {
+  return new Promise(function ($return, $error) {
+    return $return();
+  });
+});

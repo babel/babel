@@ -1,7 +1,7 @@
 /* Babel 7 transform */
 
-const babylon = require("@babel/babylon");
-const generate = require("@babel/babel-generator").default;
+const babylon = require("babylon");
+const generate = require("@babel/generator").default;
 
 function printNode(ast) {
   return generate(ast, {}).code;
@@ -28,7 +28,7 @@ function transformAsyncToPromises(api, options) {
         },
         exit: function(path, state) {
           state;
-          /*`runtime` Falsy for none (inline all the runtime calls), or a 
+          /*`runtime` Falsy for none (inline all the runtime calls), or a
            * string specifying the local identifier for the runtime
            */
           const runtime = "";

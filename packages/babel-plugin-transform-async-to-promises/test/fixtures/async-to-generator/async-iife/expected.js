@@ -1,17 +1,33 @@
-babelHelpers.asyncToGenerator(function* () {
-  yield 'ok';
-})();
-babelHelpers.asyncToGenerator(function* () {
-  yield 'ok';
-})();
-
-/*#__PURE__*/
 (function () {
-  var _notIIFE = babelHelpers.asyncToGenerator(function* () {
-    yield 'ok';
+  return new Promise(function ($return, $error) {
+    return Promise.resolve('ok').then(function ($await_1) {
+      try {
+        return $return();
+      } catch ($boundEx) {
+        return $error($boundEx);
+      }
+    }, $error);
   });
-
-  return function notIIFE() {
-    return _notIIFE.apply(this, arguments);
-  };
 })();
+
+(() => new Promise(function ($return, $error) {
+  return Promise.resolve('ok').then(function ($await_2) {
+    try {
+      return $return();
+    } catch ($boundEx) {
+      return $error($boundEx);
+    }
+  }, $error);
+}))();
+
+(function notIIFE() {
+  return new Promise(function ($return, $error) {
+    return Promise.resolve('ok').then(function ($await_3) {
+      try {
+        return $return();
+      } catch ($boundEx) {
+        return $error($boundEx);
+      }
+    }, $error);
+  });
+});

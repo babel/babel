@@ -1,9 +1,8 @@
 {
   "plugins": [
     "external-helpers",
-    "transform-async-to-generator",
+    "transform-async-to-promises",
     "transform-block-scoping",
-    "transform-arrow-functions",
-    "transform-regenerator"
+    "transform-arrow-functions"
   ]
 }

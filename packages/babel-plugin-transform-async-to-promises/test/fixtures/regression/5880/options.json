@@ -1,7 +1,7 @@
 {
   "plugins": [
     "external-helpers",
-    "transform-async-to-generator",
+    "transform-async-to-promises",
     "transform-destructuring",
     "syntax-async-generators"
   ]

@@ -1,11 +1,6 @@
-var foo =
-/*#__PURE__*/
-function () {
-  var _bar = babelHelpers.asyncToGenerator(function* () {
+var foo = function bar() {
+  return new Promise(function ($return, $error) {
     console.log(bar);
+    return $return();
   });
-
-  return function bar() {
-    return _bar.apply(this, arguments);
-  };
-}();
+};
