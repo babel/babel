@@ -9,7 +9,7 @@
     "src"
   ],
   "scripts": {
-    "prepublish": "make -C ../../ build-standalone"
+    "version": "make -C ../../ build-standalone"
   },
   "devDependencies": {
     "@babel/core": "7.0.0-beta.35",

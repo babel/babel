@@ -9,7 +9,7 @@
     "src"
   ],
   "scripts": {
-    "prepublish": "make -C ../../ build-preset-env-standalone"
+    "version": "make -C ../../ build-preset-env-standalone"
   },
   "devDependencies": {
     "@babel/plugin-transform-new-target": "7.0.0-beta.35",
