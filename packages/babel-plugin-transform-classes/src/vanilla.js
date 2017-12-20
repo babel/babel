@@ -1,6 +1,5 @@
 import type { NodePath } from "@babel/traverse";
 import ReplaceSupers from "@babel/helper-replace-supers";
-import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as defineMap from "@babel/helper-define-map";
 import { traverse, template, types as t } from "@babel/core";
 
@@ -397,20 +396,13 @@ export default class ClassTransformer {
         );
       }
     } else {
-      bareSuperNode = optimiseCall(
-        t.logicalExpression(
-          "||",
-          t.memberExpression(this.classRef, t.identifier("__proto__")),
-          t.callExpression(
-            t.memberExpression(
-              t.identifier("Object"),
-              t.identifier("getPrototypeOf"),
-            ),
-            [this.classRef],
-          ),
-        ),
-        t.thisExpression(),
-        bareSuperNode.arguments,
+      bareSuperNode = t.callExpression(
+        this.file.addHelper("constructSuperInstance"),
+        [
+          this.classRef,
+          t.arrayExpression(bareSuperNode.arguments),
+          t.thisExpression(),
+        ],
       );
     }
 

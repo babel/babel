@@ -9,7 +9,6 @@
     "@babel/helper-annotate-as-pure": "7.0.0-beta.35",
     "@babel/helper-define-map": "7.0.0-beta.35",
     "@babel/helper-function-name": "7.0.0-beta.35",
-    "@babel/helper-optimise-call-expression": "7.0.0-beta.35",
     "@babel/helper-replace-supers": "7.0.0-beta.35",
     "globals": "^11.1.0"
   },
