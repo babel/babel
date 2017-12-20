@@ -3,10 +3,7 @@ const t = require('@babel/types');
 module.exports = () => ({
   visitor: {
     ImportDeclaration(path) {
-      const {
-        specifiers,
-        source: {value: library},
-      } = path.node;
+      const library = path.node.source.value;
 
       if (library !== './lib' || path.node.skip) {
         return;
@@ -14,7 +11,7 @@ module.exports = () => ({
 
       const newSpecifiers1 = [];
       const newSpecifiers2 = [];
-      for (const specifier of specifiers) {
+      for (const specifier of path.node.specifiers) {
         if (specifier.local.name === 'd' || specifier.local.name === 'A') {
           newSpecifiers1.push(t.importSpecifier(specifier.local, specifier.imported));
           continue;
