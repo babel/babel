@@ -42,7 +42,7 @@ export default function() {
         let allElided = true;
         const importsToRemove: Path<Node>[] = [];
 
-        for (let i = 0, len = path.node.specifiers.length; i < len; i++) {
+        for (let i = 0; i < path.node.specifiers.length; i++) {
           const specifier = path.node.specifiers[i];
           const binding = path.scope.getBinding(specifier.local.name);
 
