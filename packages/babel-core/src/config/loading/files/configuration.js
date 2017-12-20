@@ -15,68 +15,75 @@ export type ConfigFile = {
   options: {},
 };
 
+export type IgnoreFile = {
+  filepath: string,
+  dirname: string,
+  ignore: Array<string>,
+};
+
 const BABELRC_FILENAME = ".babelrc";
 const BABELRC_JS_FILENAME = ".babelrc.js";
 const PACKAGE_FILENAME = "package.json";
 const BABELIGNORE_FILENAME = ".babelignore";
 
-export function findConfigs(
-  dirname: string,
+export function findBabelrc(
+  filepath: string,
   envName: string,
-): Array<ConfigFile> {
-  let foundConfig = false;
-  let foundIgnore = false;
-
-  const confs = [];
-
+): ConfigFile | null {
+  const dirname = path.dirname(filepath);
   let loc = dirname;
   while (true) {
-    if (!foundIgnore) {
-      const ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
-      const ignore = readIgnoreConfig(ignoreLoc);
+    const conf = [
+      BABELRC_FILENAME,
+      BABELRC_JS_FILENAME,
+      PACKAGE_FILENAME,
+    ].reduce((previousConfig: ConfigFile | null, name) => {
+      const filepath = path.join(loc, name);
+      const config = readConfig(filepath, envName);
 
-      if (ignore) {
-        debug("Found ignore %o from %o.", ignore.filepath, dirname);
-        confs.push(ignore);
-        foundIgnore = true;
+      if (config && previousConfig) {
+        throw new Error(
+          `Multiple configuration files found. Please remove one:\n` +
+            ` - ${path.basename(previousConfig.filepath)}\n` +
+            ` - ${name}\n` +
+            `from ${loc}`,
+        );
       }
+
+      return config || previousConfig;
+    }, null);
+
+    if (conf) {
+      debug("Found configuration %o from %o.", conf.filepath, dirname);
+      return conf;
     }
 
-    if (!foundConfig) {
-      const conf = [
-        BABELRC_FILENAME,
-        BABELRC_JS_FILENAME,
-        PACKAGE_FILENAME,
-      ].reduce((previousConfig: ConfigFile | null, name) => {
-        const filepath = path.join(loc, name);
-        const config = readConfig(filepath, envName);
-
-        if (config && previousConfig) {
-          throw new Error(
-            `Multiple configuration files found. Please remove one:\n- ${path.basename(
-              previousConfig.filepath,
-            )}\n- ${name}\nfrom ${loc}`,
-          );
-        }
-
-        return config || previousConfig;
-      }, null);
-
-      if (conf) {
-        debug("Found configuration %o from %o.", conf.filepath, dirname);
-        confs.push(conf);
-        foundConfig = true;
-      }
-    }
-
-    if (foundIgnore && foundConfig) break;
-
-    if (loc === path.dirname(loc)) break;
-
-    loc = path.dirname(loc);
+    const nextLoc = path.dirname(loc);
+    if (loc === nextLoc) break;
+    loc = nextLoc;
   }
 
-  return confs;
+  return null;
+}
+
+export function findBabelignore(filepath: string): IgnoreFile | null {
+  const dirname = path.dirname(filepath);
+  let loc = dirname;
+  while (true) {
+    const ignoreLoc = path.join(loc, BABELIGNORE_FILENAME);
+    const ignore = readIgnoreConfig(ignoreLoc);
+
+    if (ignore) {
+      debug("Found ignore %o from %o.", ignore.filepath, dirname);
+      return ignore;
+    }
+
+    const nextLoc = path.dirname(loc);
+    if (loc === nextLoc) break;
+    loc = nextLoc;
+  }
+
+  return null;
 }
 
 export function loadConfig(
@@ -224,7 +231,7 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
   return {
     filepath,
     dirname: path.dirname(filepath),
-    options: { ignore },
+    ignore,
   };
 });
 

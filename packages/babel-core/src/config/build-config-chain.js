@@ -16,7 +16,8 @@ const debug = buildDebug("babel:config:config-chain");
 import {
   loadPlugin,
   loadPreset,
-  findConfigs,
+  findBabelrc,
+  findBabelignore,
   loadConfig,
   type ConfigFile,
 } from "./loading/files";
@@ -114,9 +115,22 @@ export function buildRootChain(
 
     // resolve all .babelrc files
     if (opts.babelrc !== false && context.filename !== null) {
-      findConfigs(path.dirname(context.filename), envName).forEach(configFile =>
-        builder.mergeConfigFile(configFile),
-      );
+      const filename = context.filename;
+      const babelrcFile = findBabelrc(filename, context.envName);
+      if (babelrcFile) builder.mergeConfigFile(babelrcFile);
+
+      const babelignoreFile = findBabelignore(filename);
+      if (
+        babelignoreFile &&
+        shouldIgnore(
+          context,
+          babelignoreFile.ignore,
+          null,
+          babelignoreFile.dirname,
+        )
+      ) {
+        return null;
+      }
     }
   } catch (e) {
     if (e.code !== "BABEL_IGNORED_FILE") throw e;
