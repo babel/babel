@@ -1354,7 +1354,7 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(node, "ExportNamedDeclaration");
   }
 
-  parseExportDefaultExpression(): N.Expression {
+  parseExportDefaultExpression(): N.Expression | N.Declaration {
     const expr = this.startNode();
     if (this.eat(tt._function)) {
       return this.parseFunction(expr, true, false, false, true);

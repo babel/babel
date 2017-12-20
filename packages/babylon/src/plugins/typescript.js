@@ -1426,7 +1426,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    parseExportDefaultExpression(): N.Expression {
+    parseExportDefaultExpression(): N.Expression | N.Declaration {
       if (
         this.isContextual("abstract") &&
         this.lookahead().type === tt._class
