@@ -206,7 +206,7 @@ export default function() {
 
       TSImportEqualsDeclaration(path) {
         throw path.buildCodeFrameError(
-          "`import =` is not supported by @babel/plugin-transform-typescript \n" +
+          "`import =` is not supported by @babel/plugin-transform-typescript\n" +
             "Please consider using " +
             "`import <moduleName> from '<moduleName>';` alongside " +
             "Typescript's --allowSyntheticDefaultImports option.",
