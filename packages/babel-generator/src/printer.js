@@ -539,7 +539,9 @@ export default class Printer {
     // whitespace before
     this.newline(this._whitespace ? this._whitespace.getNewlinesBefore(comment) : 0);
 
-    if (!this.endsWith("[") && !this.endsWith("{")) this.space();
+    // force a space even in compact mode to avoid turning a division operator into a line comment
+    if (this.endsWith("/")) this._space();
+    else if (!this.endsWith("[") && !this.endsWith("{")) this.space();
 
     let val = comment.type === "CommentLine" ? `//${comment.value}\n` : `/*${comment.value}*/`;
 
