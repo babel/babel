@@ -205,11 +205,19 @@ export default function() {
       },
 
       TSImportEqualsDeclaration(path) {
-        throw path.buildCodeFrameError("`import =` is not supported in Babel's Typescript parser because there is no valid ES6 implementation for it.\nPlease consider using `import <moduleName> from '<moduleName>';` alongside Typescript's --allowSyntheticDefaultImports option.");
+        throw path.buildCodeFrameError(
+          "`import =` is not supported in Babel's Typescript parser " +
+            "because there is no valid ES6 implementation for it.\nPlease consider using " +
+            "`import <moduleName> from '<moduleName>';` alongside " +
+            "Typescript's --allowSyntheticDefaultImports option.",
+        );
       },
 
       TSExportAssignment(path) {
-        throw path.buildCodeFrameError("`export =` is not supported in Babel's Typescript parser because there is no valid ES6 implementation for it.\nPlease consider using `export <value>;`.");
+        throw path.buildCodeFrameError(
+          "`export =` is not supported in Babel's Typescript parser because " +
+            "there is no valid ES6 implementation for it.\nPlease consider using `export <value>;`.",
+        );
       },
 
       TSTypeAssertion(path) {
