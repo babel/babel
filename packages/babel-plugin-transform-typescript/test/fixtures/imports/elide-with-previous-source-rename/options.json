@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "./plugin",
+    "transform-typescript"
+  ]
+}

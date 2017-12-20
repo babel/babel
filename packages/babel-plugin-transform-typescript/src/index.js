@@ -42,7 +42,8 @@ export default function() {
         let allElided = true;
         const importsToRemove: Path<Node>[] = [];
 
-        for (const specifier of path.node.specifiers) {
+        for (let i = 0, len = path.node.specifiers.length; i < len; i++) {
+          const specifier = path.node.specifiers[i];
           const binding = path.scope.getBinding(specifier.local.name);
 
           // The binding may not exist if the import node was explicitly
@@ -50,9 +51,16 @@ export default function() {
           // of keeping scope bindings synchronized with the AST. For now we
           // just bail if there is no binding, since chances are good that if
           // the import statement was injected then it wasn't a typescript type
-          // import anyway.
+          // import anyway
           if (binding && isImportTypeOnly(binding, state.programPath)) {
-            importsToRemove.push(binding.path);
+            // Binding points to originally existing import specifier. If
+            // another plugin replaces original import declaration with custom
+            // one, removing bindings won't change this declaration
+            const specifierPath = path.get(`specifiers.${i}`);
+
+            if (specifierPath) {
+              importsToRemove.push(specifierPath);
+            }
           } else {
             allElided = false;
           }
