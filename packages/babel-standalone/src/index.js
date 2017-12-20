@@ -158,6 +158,7 @@ registerPlugins({
   "syntax-optional-catch-binding": require("@babel/plugin-syntax-optional-catch-binding"),
   "syntax-pipeline-operator": require("@babel/plugin-syntax-pipeline-operator"),
   "transform-async-to-generator": require("@babel/plugin-transform-async-to-generator"),
+  "proposal-async-generator-functions": require("@babel/plugin-proposal-async-generator-functions"),
   "proposal-class-properties": require("@babel/plugin-proposal-class-properties"),
   "proposal-decorators": require("@babel/plugin-proposal-decorators"),
   "proposal-do-expressions": require("@babel/plugin-proposal-do-expressions"),
