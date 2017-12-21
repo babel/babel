@@ -44,7 +44,7 @@ function assign(target) {
 const transform = require("nodent-transform").transform;
 
 function transformAsyncToPromises(api, options) {
-  let requiresTranspilation = (options, false);
+  let requiresTranspilation;
 
   return {
     visitor: {
@@ -52,7 +52,7 @@ function transformAsyncToPromises(api, options) {
         enter: function() {
           requiresTranspilation = false;
         },
-        exit: function(path) {
+        exit: function(path, state) {
           const runtime = options.runtime ? options.runtime : null;
 
           // Check if there was an async or await keyword before bothering to process the AST
@@ -61,7 +61,7 @@ function transformAsyncToPromises(api, options) {
           const newAst = transform(
             {
               // Input: the ast and filename
-              filename: "filename-goes-here",
+              filename: state.filename,
               ast: path.node,
             },
             assign(
