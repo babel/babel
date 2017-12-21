@@ -2,7 +2,7 @@
 
 import path from "path";
 import * as context from "../index";
-import Plugin, { validatePluginObject } from "./plugin";
+import Plugin from "./plugin";
 import merge from "lodash/merge";
 import {
   buildRootChain,
@@ -15,7 +15,8 @@ import traverse from "@babel/traverse";
 import clone from "lodash/clone";
 import { makeWeakCache, type CacheConfigurator } from "./caching";
 import { getEnv } from "./helpers/environment";
-import { validate } from "./options";
+import { validate } from "./validation/options";
+import { validatePluginObject } from "./validation/plugins";
 
 export default function manageOptions(inputOpts: {}): {
   options: Object,

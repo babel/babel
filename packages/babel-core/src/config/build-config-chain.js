@@ -9,7 +9,7 @@ import {
   type PluginItem,
   type PluginList,
   type IgnoreList,
-} from "./options";
+} from "./validation/options";
 
 const debug = buildDebug("babel:config:config-chain");
 
