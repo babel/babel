@@ -2313,7 +2313,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.skipBlockComment();
     }
 
-    skipFlowComment(): ?number {
+    skipFlowComment(): number | boolean {
       const ch2 = this.input.charCodeAt(this.state.pos + 2);
       const ch3 = this.input.charCodeAt(this.state.pos + 3);
 
@@ -2329,7 +2329,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return false;
     }
 
-    hasFlowCommentCompletion() {
+    hasFlowCommentCompletion(): void {
       const end = this.input.indexOf("*/", this.state.pos);
       if (end === -1) {
         this.raise(this.state.pos - 2, "Unterminated comment");
