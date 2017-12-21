@@ -116,6 +116,8 @@ export default class Printer {
 
   word(str: string): void {
     if (this._endsWithWord) this._space();
+    // prevent concatenating division and regexp tokens into a line comment
+    if (this.endsWith("/") && str.length > 0 && str[0] == "/") this._space();
 
     this._maybeAddAuxComment();
     this._append(str);
