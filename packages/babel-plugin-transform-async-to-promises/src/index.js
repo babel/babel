@@ -15,37 +15,40 @@ function parse(code) {
   }).program;
 }
 
-/* Polyfill for Object.assign(...) from: 
- * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign#Polyfill
- */
-function assign(target) {
-  // .length of function is 2
-  "use strict";
-  if (target == null) {
-    throw new TypeError("Cannot convert undefined or null to object");
-  }
-
-  const to = Object(target);
-
-  for (let index = 1; index < arguments.length; index++) {
-    const nextSource = arguments[index];
-
-    if (nextSource != null) {
-      for (const nextKey in nextSource) {
-        if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-          to[nextKey] = nextSource[nextKey];
-        }
-      }
-    }
-  }
-  return to;
-}
-
 const transform = require("nodent-transform").transform;
 
 function transformAsyncToPromises(api, options) {
   let requiresTranspilation;
+  const runtime = options.runtime ? options.runtime : null;
+  let opts = {
+          // Code generation options
+          es6target: false,
+          babelTree: true,
+          engine: false,
+          generators: false,
+          promises: true,
+          lazyThenables: false,
+          wrapAwait: true,
+          noRuntime: !runtime,
+          $runtime: runtime,
+          generatedSymbolPrefix: "$",
+          $return: "$return",
+          $error: "$error",
+          $arguments: "$args",
+          $Promise: "Promise",
+          $asyncspawn: "$asyncspawn",
+          $asyncbind: "$asyncbind",
+          $makeThenable: "$makeThenable",
+        }; 
 
+  if (options.codeGenerationOptions) {
+      let keys = Object.keys(options.codeGenerationOptions);
+      for (let i=0; i<keys.length;i++) {
+	  if (keys[i] in opts)
+	      opts[keys[i]] = options.codeGenerationOptions[keys[i]];
+      }
+  }
+  
   return {
     visitor: {
       Program: {
@@ -53,8 +56,6 @@ function transformAsyncToPromises(api, options) {
           requiresTranspilation = false;
         },
         exit: function(path, state) {
-          const runtime = options.runtime ? options.runtime : null;
-
           // Check if there was an async or await keyword before bothering to process the AST
           if (!requiresTranspilation) return;
 
@@ -64,29 +65,7 @@ function transformAsyncToPromises(api, options) {
               filename: state.filename,
               ast: path.node,
             },
-            assign(
-              {
-                // Code generation options
-                es6target: false,
-                babelTree: true,
-                engine: false,
-                generators: false,
-                promises: true,
-                lazyThenables: false,
-                wrapAwait: true,
-                noRuntime: !runtime,
-                $runtime: runtime,
-                generatedSymbolPrefix: "$",
-                $return: "$return",
-                $error: "$error",
-                $arguments: "$args",
-                $Promise: "Promise",
-                $asyncspawn: "$asyncspawn",
-                $asyncbind: "$asyncbind",
-                $makeThenable: "$makeThenable",
-              },
-              options.codeGenerationOptions,
-            ),
+            opts,
             {
               // Helpers for the transformer:
               parse: parse, // Parse a JS fragment into an AST
