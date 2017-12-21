@@ -2316,13 +2316,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     skipFlowComment(): ?number {
       const ch2 = this.input.charCodeAt(this.state.pos + 2);
       const ch3 = this.input.charCodeAt(this.state.pos + 3);
-      const includeComment =
-        ch2 === charCodes.colon && ch3 === charCodes.colon && 4; // check for /*::
-      const flowincludeComment =
-        this.input.slice(this.state.pos + 2, 14) === "flow-include" && 14; // check for /*flow-include
-      const annotationComment =
-        ch2 === charCodes.colon && ch3 !== charCodes.colon && 2; // check for /*:
-      return includeComment || annotationComment || flowincludeComment;
+
+      if (ch2 === charCodes.colon && ch3 === charCodes.colon) {
+        return 4; // check for /*::
+      }
+      if (this.input.slice(this.state.pos + 2, 14) === "flow-include") {
+        return 14; // check for /*flow-include
+      }
+      if (ch2 === charCodes.colon && ch3 !== charCodes.colon && 2) {
+        return 2; // check for /*:, advance only 2 steps
+      }
+      return false;
     }
 
     hasFlowCommentCompletion() {
