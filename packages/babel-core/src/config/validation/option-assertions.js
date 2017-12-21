@@ -105,6 +105,13 @@ export function assertObject(key: string, value: mixed): {} | void {
   return value;
 }
 
+export function assertArray(key: string, value: mixed): ?$ReadOnlyArray<mixed> {
+  if (value != null && !Array.isArray(value)) {
+    throw new Error(`.${key} must be an array, or undefined`);
+  }
+  return value;
+}
+
 export function assertIgnoreList(key: string, value: mixed): IgnoreList | void {
   const arr = assertArray(key, value);
   if (arr) {
@@ -222,13 +229,6 @@ function assertPluginTarget(
         inArray ? `[0]` : ""
       } must be a string, object, function`,
     );
-  }
-  return value;
-}
-
-function assertArray(key: string, value: mixed): ?$ReadOnlyArray<mixed> {
-  if (value != null && !Array.isArray(value)) {
-    throw new Error(`.${key} must be an array, or undefined`);
   }
   return value;
 }

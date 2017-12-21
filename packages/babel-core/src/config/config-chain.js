@@ -62,6 +62,9 @@ export const buildPresetChain: (
   init: arg => arg,
   root: preset => loadPresetDescriptors(preset),
   env: (preset, envName) => loadPresetEnvDescriptors(preset)(envName),
+  overrides: (preset, index) => loadPresetOverridesDescriptors(preset)(index),
+  overridesEnv: (preset, index, envName) =>
+    loadPresetOverridesEnvDescriptors(preset)(index)(envName),
 });
 const loadPresetDescriptors = makeWeakCache((preset: PresetInstance) =>
   buildRootDescriptors(preset, preset.alias, createUncachedDescriptors),
@@ -75,6 +78,30 @@ const loadPresetEnvDescriptors = makeWeakCache((preset: PresetInstance) =>
       envName,
     ),
   ),
+);
+const loadPresetOverridesDescriptors = makeWeakCache((preset: PresetInstance) =>
+  makeStrongCache((index: number) =>
+    buildOverrideDescriptors(
+      preset,
+      preset.alias,
+      createUncachedDescriptors,
+      index,
+    ),
+  ),
+);
+const loadPresetOverridesEnvDescriptors = makeWeakCache(
+  (preset: PresetInstance) =>
+    makeStrongCache((index: number) =>
+      makeStrongCache((envName: string) =>
+        buildOverrideEnvDescriptors(
+          preset,
+          preset.alias,
+          createUncachedDescriptors,
+          index,
+          envName,
+        ),
+      ),
+    ),
 );
 
 /**
@@ -142,6 +169,16 @@ const loadProgrammaticChain = makeChainWalker({
   root: input => buildRootDescriptors(input, "base", createCachedDescriptors),
   env: (input, envName) =>
     buildEnvDescriptors(input, "base", createCachedDescriptors, envName),
+  overrides: (input, index) =>
+    buildOverrideDescriptors(input, "base", createCachedDescriptors, index),
+  overridesEnv: (input, index, envName) =>
+    buildOverrideEnvDescriptors(
+      input,
+      "base",
+      createCachedDescriptors,
+      index,
+      envName,
+    ),
 });
 
 /**
@@ -151,6 +188,9 @@ const loadFileChain = makeChainWalker({
   init: input => validateFile(input),
   root: file => loadFileDescriptors(file),
   env: (file, envName) => loadFileEnvDescriptors(file)(envName),
+  overrides: (file, index) => loadFileOverridesDescriptors(file)(index),
+  overridesEnv: (file, index, envName) =>
+    loadFileOverridesEnvDescriptors(file)(index)(envName),
 });
 const validateFile = makeWeakCache((file: ConfigFile): ValidatedFile => ({
   filepath: file.filepath,
@@ -170,6 +210,29 @@ const loadFileEnvDescriptors = makeWeakCache((file: ValidatedFile) =>
     ),
   ),
 );
+const loadFileOverridesDescriptors = makeWeakCache((file: ValidatedFile) =>
+  makeStrongCache((index: number) =>
+    buildOverrideDescriptors(
+      file,
+      file.filepath,
+      createUncachedDescriptors,
+      index,
+    ),
+  ),
+);
+const loadFileOverridesEnvDescriptors = makeWeakCache((file: ValidatedFile) =>
+  makeStrongCache((index: number) =>
+    makeStrongCache((envName: string) =>
+      buildOverrideEnvDescriptors(
+        file,
+        file.filepath,
+        createUncachedDescriptors,
+        index,
+        envName,
+      ),
+    ),
+  ),
+);
 
 function buildRootDescriptors({ dirname, options }, alias, descriptors) {
   return descriptors(dirname, options, alias);
@@ -185,6 +248,38 @@ function buildEnvDescriptors(
   return opts ? descriptors(dirname, opts, `${alias}.env["${envName}"]`) : null;
 }
 
+function buildOverrideDescriptors(
+  { dirname, options },
+  alias,
+  descriptors,
+  index,
+) {
+  const opts = options.overrides && options.overrides[index];
+  if (!opts) throw new Error("Assertion failure - missing override");
+
+  return descriptors(dirname, opts, `${alias}.overrides[${index}]`);
+}
+
+function buildOverrideEnvDescriptors(
+  { dirname, options },
+  alias,
+  descriptors,
+  index,
+  envName,
+) {
+  const override = options.overrides && options.overrides[index];
+  if (!override) throw new Error("Assertion failure - missing override");
+
+  const opts = override.env && override.env[envName];
+  return opts
+    ? descriptors(
+        dirname,
+        opts,
+        `${alias}.overrides[${index}].env["${envName}"]`,
+      )
+    : null;
+}
+
 function makeChainWalker<
   ArgT,
   InnerT: { options: ValidatedOptions, dirname: string },
@@ -192,10 +287,14 @@ function makeChainWalker<
   init,
   root,
   env,
+  overrides,
+  overridesEnv,
 }: {
   init: ArgT => InnerT,
   root: InnerT => OptionsAndDescriptors,
   env: (InnerT, string) => OptionsAndDescriptors | null,
+  overrides: (InnerT, number) => OptionsAndDescriptors,
+  overridesEnv: (InnerT, number, string) => OptionsAndDescriptors | null,
 }): (ArgT, ConfigContext, Set<ConfigFile> | void) => ConfigChain | null {
   return (arg, context, files = new Set()) => {
     const input = init(arg);
@@ -212,6 +311,21 @@ function makeChainWalker<
       if (envOpts && configIsApplicable(envOpts, dirname, context)) {
         flattenedConfigs.push(envOpts);
       }
+
+      (rootOpts.options.overrides || []).forEach((_, index) => {
+        const overrideOps = overrides(input, index);
+        if (configIsApplicable(overrideOps, dirname, context)) {
+          flattenedConfigs.push(overrideOps);
+
+          const overrideEnvOpts = overridesEnv(input, index, context.envName);
+          if (
+            overrideEnvOpts &&
+            configIsApplicable(overrideEnvOpts, dirname, context)
+          ) {
+            flattenedConfigs.push(overrideEnvOpts);
+          }
+        }
+      });
     }
 
     // Process 'ignore' and 'only' before 'extends' items are processed so

@@ -801,6 +801,40 @@ describe("buildConfigChain", function() {
     });
   });
 
+  describe("overrides merging", () => {
+    it("should apply matching overrides over base configs", () => {
+      const opts = loadOptions({
+        filename: fixture("nonexistant-fake", "src.js"),
+        babelrc: false,
+        comments: true,
+        overrides: [
+          {
+            test: fixture("nonexistant-fake"),
+            comments: false,
+          },
+        ],
+      });
+
+      assert.equal(opts.comments, false);
+    });
+
+    it("should not apply non-matching overrides over base configs", () => {
+      const opts = loadOptions({
+        filename: fixture("nonexistant-fake", "src.js"),
+        babelrc: false,
+        comments: true,
+        overrides: [
+          {
+            test: fixture("nonexistant-unknown"),
+            comments: false,
+          },
+        ],
+      });
+
+      assert.equal(opts.comments, true);
+    });
+  });
+
   describe("config files", () => {
     const getDefaults = () => ({
       babelrc: false,
