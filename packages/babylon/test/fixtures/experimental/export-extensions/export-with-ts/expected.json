@@ -454,7 +454,7 @@
             "name": "G"
           },
           "typeAnnotation": {
-            "type": "TSTypeQuery",
+            "type": "TSTypeAnnotation",
             "start": 153,
             "end": 163,
             "loc": {
@@ -467,22 +467,37 @@
                 "column": 26
               }
             },
-            "exprName": {
-              "type": "Identifier",
-              "start": 160,
+            "typeAnnotation": {
+              "type": "TSTypeQuery",
+              "start": 153,
               "end": 163,
               "loc": {
                 "start": {
                   "line": 7,
-                  "column": 23
+                  "column": 16
                 },
                 "end": {
                   "line": 7,
                   "column": 26
-                },
-                "identifierName": "foo"
+                }
               },
-              "name": "foo"
+              "exprName": {
+                "type": "Identifier",
+                "start": 160,
+                "end": 163,
+                "loc": {
+                  "start": {
+                    "line": 7,
+                    "column": 23
+                  },
+                  "end": {
+                    "line": 7,
+                    "column": 26
+                  },
+                  "identifierName": "foo"
+                },
+                "name": "foo"
+              }
             }
           }
         }

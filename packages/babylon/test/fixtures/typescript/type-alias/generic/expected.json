@@ -93,7 +93,7 @@
           ]
         },
         "typeAnnotation": {
-          "type": "TSTypeReference",
+          "type": "TSTypeAnnotation",
           "start": 12,
           "end": 13,
           "loc": {
@@ -106,8 +106,8 @@
               "column": 13
             }
           },
-          "typeName": {
-            "type": "Identifier",
+          "typeAnnotation": {
+            "type": "TSTypeReference",
             "start": 12,
             "end": 13,
             "loc": {
@@ -118,10 +118,25 @@
               "end": {
                 "line": 1,
                 "column": 13
-              },
-              "identifierName": "U"
+              }
             },
-            "name": "U"
+            "typeName": {
+              "type": "Identifier",
+              "start": 12,
+              "end": 13,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 12
+                },
+                "end": {
+                  "line": 1,
+                  "column": 13
+                },
+                "identifierName": "U"
+              },
+              "name": "U"
+            }
           }
         }
       }

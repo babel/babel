@@ -348,7 +348,7 @@ export function TSTypeAliasDeclaration(node) {
   this.space();
   this.token("=");
   this.space();
-  this.print(typeAnnotation, node);
+  this.print(typeAnnotation.typeAnnotation, node);
   this.token(";");
 }
 

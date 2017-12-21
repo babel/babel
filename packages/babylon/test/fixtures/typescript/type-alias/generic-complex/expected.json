@@ -188,7 +188,7 @@
           ]
         },
         "typeAnnotation": {
-          "type": "TSTypeReference",
+          "type": "TSTypeAnnotation",
           "start": 43,
           "end": 51,
           "loc": {
@@ -201,10 +201,10 @@
               "column": 51
             }
           },
-          "typeName": {
-            "type": "Identifier",
+          "typeAnnotation": {
+            "type": "TSTypeReference",
             "start": 43,
-            "end": 48,
+            "end": 51,
             "loc": {
               "start": {
                 "line": 1,
@@ -212,43 +212,43 @@
               },
               "end": {
                 "line": 1,
-                "column": 48
-              },
-              "identifierName": "Array"
-            },
-            "name": "Array"
-          },
-          "typeParameters": {
-            "type": "TSTypeParameterInstantiation",
-            "start": 48,
-            "end": 51,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 48
-              },
-              "end": {
-                "line": 1,
                 "column": 51
               }
             },
-            "params": [
-              {
-                "type": "TSTypeReference",
-                "start": 49,
-                "end": 50,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 49
-                  },
-                  "end": {
-                    "line": 1,
-                    "column": 50
-                  }
+            "typeName": {
+              "type": "Identifier",
+              "start": 43,
+              "end": 48,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 43
                 },
-                "typeName": {
-                  "type": "Identifier",
+                "end": {
+                  "line": 1,
+                  "column": 48
+                },
+                "identifierName": "Array"
+              },
+              "name": "Array"
+            },
+            "typeParameters": {
+              "type": "TSTypeParameterInstantiation",
+              "start": 48,
+              "end": 51,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 48
+                },
+                "end": {
+                  "line": 1,
+                  "column": 51
+                }
+              },
+              "params": [
+                {
+                  "type": "TSTypeReference",
                   "start": 49,
                   "end": 50,
                   "loc": {
@@ -259,13 +259,28 @@
                     "end": {
                       "line": 1,
                       "column": 50
-                    },
-                    "identifierName": "U"
+                    }
                   },
-                  "name": "U"
+                  "typeName": {
+                    "type": "Identifier",
+                    "start": 49,
+                    "end": 50,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 49
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 50
+                      },
+                      "identifierName": "U"
+                    },
+                    "name": "U"
+                  }
                 }
-              }
-            ]
+              ]
+            }
           }
         }
       }

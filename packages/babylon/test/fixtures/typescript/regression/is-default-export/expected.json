@@ -76,7 +76,7 @@
             "name": "T"
           },
           "typeAnnotation": {
-            "type": "TSNumberKeyword",
+            "type": "TSTypeAnnotation",
             "start": 16,
             "end": 22,
             "loc": {
@@ -87,6 +87,21 @@
               "end": {
                 "line": 1,
                 "column": 22
+              }
+            },
+            "typeAnnotation": {
+              "type": "TSNumberKeyword",
+              "start": 16,
+              "end": 22,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 16
+                },
+                "end": {
+                  "line": 1,
+                  "column": 22
+                }
               }
             }
           }
