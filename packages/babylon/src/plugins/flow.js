@@ -2332,7 +2332,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     hasFlowCommentCompletion(): void {
       const end = this.input.indexOf("*/", this.state.pos);
       if (end === -1) {
-        this.raise(this.state.pos - 2, "Unterminated comment");
+        this.raise(this.state.pos, "Unterminated comment");
       }
     }
   };
