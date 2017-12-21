@@ -5,7 +5,7 @@ import path from "path";
 import fs from "fs";
 import json5 from "json5";
 import resolve from "resolve";
-import { makeStrongCache, type CacheConfigurator } from "../../caching";
+import { makeStrongCache, type CacheConfigurator } from "../caching";
 
 const debug = buildDebug("babel:config:loading:files:configuration");
 

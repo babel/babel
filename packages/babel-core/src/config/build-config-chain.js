@@ -20,7 +20,7 @@ import {
   findBabelignore,
   loadConfig,
   type ConfigFile,
-} from "./loading/files";
+} from "./files";
 
 import { makeWeakCache, makeStrongCache } from "./caching";
 
