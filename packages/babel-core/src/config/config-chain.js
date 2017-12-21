@@ -7,6 +7,7 @@ import {
   validate,
   type ValidatedOptions,
   type IgnoreList,
+  type ConfigApplicableTest,
 } from "./validation/options";
 
 const debug = buildDebug("babel:config:config-chain");
@@ -204,11 +205,13 @@ function makeChainWalker<
     const flattenedConfigs = [];
 
     const rootOpts = root(input);
-    flattenedConfigs.push(rootOpts);
+    if (configIsApplicable(rootOpts, dirname, context)) {
+      flattenedConfigs.push(rootOpts);
 
-    const envOpts = env(input, context.envName);
-    if (envOpts) {
-      flattenedConfigs.push(envOpts);
+      const envOpts = env(input, context.envName);
+      if (envOpts && configIsApplicable(envOpts, dirname, context)) {
+        flattenedConfigs.push(envOpts);
+      }
     }
 
     // Process 'ignore' and 'only' before 'extends' items are processed so
@@ -355,6 +358,42 @@ function dedupDescriptors(
   }, []);
 }
 
+function configIsApplicable(
+  { options }: OptionsAndDescriptors,
+  dirname: string,
+  context: ConfigContext,
+): boolean {
+  return (
+    (options.test === undefined ||
+      configFieldIsApplicable(context, options.test, dirname)) &&
+    (options.include === undefined ||
+      configFieldIsApplicable(context, options.include, dirname)) &&
+    (options.exclude === undefined ||
+      !configFieldIsApplicable(context, options.exclude, dirname))
+  );
+}
+
+function configFieldIsApplicable(
+  context: ConfigContext,
+  test: ConfigApplicableTest,
+  dirname: string,
+): boolean {
+  if (context.filename === null) {
+    throw new Error(
+      `Configuration contains explicit test/include/exclude checks, but no filename was passed to Babel`,
+    );
+  }
+  // $FlowIgnore - Flow refinements aren't quite smart enough for this :(
+  const ctx: ConfigContextNamed = context;
+
+  const patterns = Array.isArray(test) ? test : [test];
+
+  // Disabling negation here because it's a bit buggy from
+  // https://github.com/babel/babel/issues/6907 and it's not clear that it is
+  // needed since users can use 'exclude' alongside 'test'/'include'.
+  return matchesPatterns(ctx, patterns, dirname, false /* allowNegation */);
+}
+
 /**
  * Tests if a filename should be ignored based on "ignore" and "only" options.
  */
@@ -403,6 +442,7 @@ function matchesPatterns(
   context: ConfigContextNamed,
   patterns: IgnoreList,
   dirname: string,
+  allowNegation?: boolean = true,
 ): boolean {
   const res = [];
   const strings = [];
@@ -424,13 +464,19 @@ function matchesPatterns(
     const absolutePatterns = strings.map(pattern => {
       // Preserve the "!" prefix so that micromatch can use it for negation.
       const negate = pattern[0] === "!";
+      if (negate && !allowNegation) {
+        throw new Error(`Negation of file paths is not supported.`);
+      }
       if (negate) pattern = pattern.slice(1);
 
       return (negate ? "!" : "") + path.resolve(dirname, pattern);
     });
 
     if (
-      micromatch(possibleDirs, absolutePatterns, { nocase: true }).length > 0
+      micromatch(possibleDirs, absolutePatterns, {
+        nocase: true,
+        nonegate: !allowNegation,
+      }).length > 0
     ) {
       return true;
     }

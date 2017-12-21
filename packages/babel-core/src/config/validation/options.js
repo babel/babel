@@ -8,6 +8,7 @@ import {
   assertInputSourceMap,
   assertIgnoreList,
   assertPluginList,
+  assertConfigApplicableTest,
   assertFunction,
   assertSourceMaps,
   assertCompact,
@@ -44,6 +45,19 @@ const NONPRESET_VALIDATORS: ValidatorSet = {
     $PropertyType<ValidatedOptions, "ignore">,
   >),
   only: (assertIgnoreList: Validator<$PropertyType<ValidatedOptions, "only">>),
+
+  // We could limit these to 'overrides' blocks, but it's not clear why we'd
+  // bother, when the ability to limit a config to a specific set of files
+  // is a fairly general useful feature.
+  test: (assertConfigApplicableTest: Validator<
+    $PropertyType<ValidatedOptions, "test">,
+  >),
+  include: (assertConfigApplicableTest: Validator<
+    $PropertyType<ValidatedOptions, "include">,
+  >),
+  exclude: (assertConfigApplicableTest: Validator<
+    $PropertyType<ValidatedOptions, "exclude">,
+  >),
 };
 
 const COMMON_VALIDATORS: ValidatorSet = {
@@ -143,6 +157,11 @@ export type ValidatedOptions = {
   ignore?: IgnoreList,
   only?: IgnoreList,
 
+  // Generally verify if a given config object should be applied to the given file.
+  test?: ConfigApplicableTest,
+  include?: ConfigApplicableTest,
+  exclude?: ConfigApplicableTest,
+
   presets?: PluginList,
   plugins?: PluginList,
   passPerPreset?: boolean,
@@ -195,6 +214,8 @@ export type PluginItem =
   | [PluginTarget, PluginOptions]
   | [PluginTarget, PluginOptions, string];
 export type PluginList = $ReadOnlyArray<PluginItem>;
+
+export type ConfigApplicableTest = IgnoreItem | Array<IgnoreItem>;
 
 export type SourceMapsOption = boolean | "inline" | "both";
 export type SourceTypeOption = "module" | "script" | "unambiguous";
