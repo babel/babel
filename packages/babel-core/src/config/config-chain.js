@@ -40,7 +40,7 @@ export type PresetInstance = {
   dirname: string,
 };
 
-type ConfigContext = {
+export type ConfigContext = {
   filename: string | null,
   cwd: string,
   envName: string,
@@ -54,16 +54,26 @@ type ConfigContextNamed = {
 /**
  * Build a config chain for a given preset.
  */
-export const buildPresetChain = makeWeakCache(
-  ({ dirname, options, alias }: PresetInstance): ConfigChain => {
-    const result = createUncachedDescriptors(dirname, options, alias);
-    const { plugins, presets } = result;
-    return {
-      plugins: plugins(),
-      presets: presets(),
-      options: [normalizeOptions(result.options)],
-    };
-  },
+export const buildPresetChain: (
+  arg: PresetInstance,
+  context: *,
+) => * = makeChainWalker({
+  init: arg => arg,
+  root: preset => loadPresetDescriptors(preset),
+  env: (preset, envName) => loadPresetEnvDescriptors(preset)(envName),
+});
+const loadPresetDescriptors = makeWeakCache((preset: PresetInstance) =>
+  buildRootDescriptors(preset, preset.alias, createUncachedDescriptors),
+);
+const loadPresetEnvDescriptors = makeWeakCache((preset: PresetInstance) =>
+  makeStrongCache((envName: string) =>
+    buildEnvDescriptors(
+      preset,
+      preset.alias,
+      createUncachedDescriptors,
+      envName,
+    ),
+  ),
 );
 
 /**
@@ -72,14 +82,8 @@ export const buildPresetChain = makeWeakCache(
 export function buildRootChain(
   cwd: string,
   opts: ValidatedOptions,
-  envName: string,
+  context: ConfigContext,
 ): ConfigChain | null {
-  const context = {
-    filename: opts.filename ? path.resolve(cwd, opts.filename) : null,
-    cwd,
-    envName,
-  };
-
   const programmaticChain = loadProgrammaticChain(
     {
       options: opts,
