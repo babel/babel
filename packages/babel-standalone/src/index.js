@@ -247,7 +247,7 @@ export const version = VERSION;
 if (typeof window !== "undefined" && window && window.addEventListener) {
   window.addEventListener(
     "DOMContentLoaded",
-    () => transformScriptTags(),
+    transformScriptTags,
     false,
   );
 }
