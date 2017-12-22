@@ -3,7 +3,10 @@
 import semver from "semver";
 import builtInsList from "../data/built-ins.json";
 import { logPlugin } from "./debug";
-import { defaultWebIncludes } from "./default-includes";
+import {
+  getPlatformSpecificDefaultFor,
+  getOptionSpecificExcludesFor,
+} from "./defaults";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
@@ -113,26 +116,6 @@ export const transformIncludesAndExcludes = (opts: Array<string>): Object => {
       builtIns: new Set(),
     },
   );
-};
-
-const getPlatformSpecificDefaultFor = (targets: Targets): ?Array<string> => {
-  const targetNames = Object.keys(targets);
-  const isAnyTarget = !targetNames.length;
-  const isWebTarget = targetNames.some(name => name !== "node");
-
-  return isAnyTarget || isWebTarget ? defaultWebIncludes : null;
-};
-
-const getOptionSpecificExcludesFor = ({
-  loose,
-}: {
-  loose: boolean,
-}): Array<string> => {
-  const defaultExcludes = [];
-  if (loose) {
-    defaultExcludes.push("transform-typeof-symbol");
-  }
-  return defaultExcludes;
 };
 
 const filterItems = (
