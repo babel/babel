@@ -5,7 +5,7 @@ function (_ref) {
 
   function TestEmpty() {
     babelHelpers.classCallCheck(this, TestEmpty);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(TestEmpty, Array.prototype.slice.call(arguments), this));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(TestEmpty, arguments, this));
   }
 
   return TestEmpty;
@@ -26,7 +26,7 @@ function (_ref2) {
 
   function TestConstructorOnly() {
     babelHelpers.classCallCheck(this, TestConstructorOnly);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(TestConstructorOnly, Array.prototype.slice.call(arguments), this));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(TestConstructorOnly, arguments, this));
   }
 
   return TestConstructorOnly;
@@ -47,7 +47,7 @@ function (_ref3) {
 
   function TestMethodOnly() {
     babelHelpers.classCallCheck(this, TestMethodOnly);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(TestMethodOnly, Array.prototype.slice.call(arguments), this));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(TestMethodOnly, arguments, this));
   }
 
   return TestMethodOnly;
@@ -72,7 +72,7 @@ function (_ref4) {
 
   function TestConstructorAndMethod() {
     babelHelpers.classCallCheck(this, TestConstructorAndMethod);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(TestConstructorAndMethod, Array.prototype.slice.call(arguments), this));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(TestConstructorAndMethod, arguments, this));
   }
 
   return TestConstructorAndMethod;
@@ -97,7 +97,7 @@ function (_ref5) {
 
   function TestMultipleMethods() {
     babelHelpers.classCallCheck(this, TestMultipleMethods);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(TestMultipleMethods, Array.prototype.slice.call(arguments), this));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(TestMultipleMethods, arguments, this));
   }
 
   return TestMultipleMethods;

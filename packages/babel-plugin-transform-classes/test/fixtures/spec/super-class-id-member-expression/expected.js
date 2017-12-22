@@ -5,7 +5,7 @@ function (_Chaplin$Controller) {
 
   function BaseController() {
     babelHelpers.classCallCheck(this, BaseController);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(BaseController, Array.prototype.slice.call(arguments), this));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(BaseController, arguments, this));
   }
 
   return BaseController;
@@ -18,7 +18,7 @@ function (_Chaplin$Controller$A) {
 
   function BaseController2() {
     babelHelpers.classCallCheck(this, BaseController2);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(BaseController2, Array.prototype.slice.call(arguments), this));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(BaseController2, arguments, this));
   }
 
   return BaseController2;

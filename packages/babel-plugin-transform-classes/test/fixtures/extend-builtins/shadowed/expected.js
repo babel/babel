@@ -9,7 +9,7 @@ function (_Array) {
 
   function List() {
     babelHelpers.classCallCheck(this, List);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(List, [...arguments], this));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(List, arguments, this));
   }
 
   return List;

@@ -14,7 +14,7 @@ function (_Bar) {
   function Foo() {
     _classCallCheck(this, Foo);
 
-    return _possibleConstructorReturn(this, _constructSuperInstance(Foo, [...arguments], this));
+    return _possibleConstructorReturn(this, _constructSuperInstance(Foo, arguments, this));
   }
 
   return Foo;

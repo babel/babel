@@ -24,7 +24,7 @@ function (_Array) {
   function List() {
     _classCallCheck(this, List);
 
-    return _possibleConstructorReturn(this, _constructSuperInstance(List, [...arguments], this));
+    return _possibleConstructorReturn(this, _constructSuperInstance(List, arguments, this));
   }
 
   return List;

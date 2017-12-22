@@ -5,7 +5,7 @@ function (_A) {
 
   function _class() {
     babelHelpers.classCallCheck(this, _class);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(_class, Array.prototype.slice.call(arguments), this));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(_class, arguments, this));
   }
 
   return _class;

@@ -12,7 +12,7 @@ function (_Foo) {
     woops.super.test();
     _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Test, [], this));
     babelHelpers.get(Test.prototype.__proto__ || Object.getPrototypeOf(Test.prototype), "test", babelHelpers.assertThisInitialized(_this)).call(_this);
-    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Test, Array.prototype.slice.call(arguments), this));
+    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Test, arguments, this));
     _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Test, ["test"].concat(Array.prototype.slice.call(arguments)), this));
     babelHelpers.get(Test.prototype.__proto__ || Object.getPrototypeOf(Test.prototype), "test", babelHelpers.assertThisInitialized(_this)).apply(_this, arguments);
 

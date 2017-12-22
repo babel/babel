@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-classes", "external-helpers"],
+  "minNodeVersion": "6.0.0"
+}

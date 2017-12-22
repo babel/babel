@@ -14,7 +14,7 @@ function (_React$Component) {
 
   function Login() {
     babelHelpers.classCallCheck(this, Login);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Login, [...arguments], this));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Login, arguments, this));
   }
 
   babelHelpers.createClass(Login, [{

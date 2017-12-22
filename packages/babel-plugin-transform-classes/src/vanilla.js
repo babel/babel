@@ -374,16 +374,14 @@ export default class ClassTransformer {
   wrapSuperCall(bareSuper, superRef, thisRef, body) {
     let bareSuperNode = bareSuper.node;
 
+    const isSingleArgumentsSpread =
+      bareSuper.get("arguments").length === 1 &&
+      bareSuper.get("arguments.0").isSpreadElement() &&
+      bareSuper.get("arguments.0.argument").isIdentifier({ name: "arguments" });
+
     if (this.isLoose) {
       bareSuperNode.arguments.unshift(t.thisExpression());
-      if (
-        bareSuperNode.arguments.length === 2 &&
-        t.isSpreadElement(bareSuperNode.arguments[1]) &&
-        t.isIdentifier(bareSuperNode.arguments[1].argument, {
-          name: "arguments",
-        })
-      ) {
-        // special case single arguments spread
+      if (isSingleArgumentsSpread) {
         bareSuperNode.arguments[1] = bareSuperNode.arguments[1].argument;
         bareSuperNode.callee = t.memberExpression(
           superRef,
@@ -400,7 +398,9 @@ export default class ClassTransformer {
         this.file.addHelper("constructSuperInstance"),
         [
           this.classRef,
-          t.arrayExpression(bareSuperNode.arguments),
+          isSingleArgumentsSpread
+            ? t.identifier("arguments")
+            : t.arrayExpression(bareSuperNode.arguments),
           t.thisExpression(),
         ],
       );
