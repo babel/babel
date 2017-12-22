@@ -6,9 +6,22 @@ export type ConfigFile = {
   options: {},
 };
 
+export type IgnoreFile = {
+  filepath: string,
+  dirname: string,
+  ignore: Array<string>,
+};
+
+export function findBabelrc(
+  filepath: string,
+  envName: string, // eslint-disable-line no-unused-vars
+): ConfigFile | null {
+  return null;
+}
+
 // eslint-disable-next-line no-unused-vars
-export function findConfigs(dirname: string): Array<ConfigFile> {
-  return [];
+export function findBabelignore(filepath: string): IgnoreFile | null {
+  return null;
 }
 
 export function loadConfig(name: string, dirname: string): ConfigFile {

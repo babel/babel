@@ -194,17 +194,50 @@ describe("buildConfigChain", function() {
         assert.notEqual(opts1.plugins[0], opts2.plugins[1]);
       });
 
-      it("should cache the env options by identity", () => {
-        const env = {
-          foo: {
-            plugins: plugins1,
+      it("should cache the env plugins by identity", () => {
+        const plugins = [() => ({})];
+
+        const opts1 = loadOptions({
+          envName: "foo",
+          env: {
+            foo: {
+              plugins,
+            },
           },
-        };
+        });
+        const opts2 = loadOptions({
+          envName: "foo",
+          env: {
+            foo: {
+              plugins,
+            },
+          },
+        });
 
-        const opts1 = loadOptions({ envName: "foo", env });
+        assert.equal(opts1.plugins.length, 1);
+        assert.equal(opts2.plugins.length, 1);
+        assert.equal(opts1.plugins[0], opts2.plugins[0]);
+      });
 
-        env.foo.plugins = plugins2;
-        const opts2 = loadOptions({ envName: "foo", env });
+      it("should cache the env presets by identity", () => {
+        const presets = [() => ({ plugins: [() => ({})] })];
+
+        const opts1 = loadOptions({
+          envName: "foo",
+          env: {
+            foo: {
+              presets,
+            },
+          },
+        });
+        const opts2 = loadOptions({
+          envName: "foo",
+          env: {
+            foo: {
+              presets,
+            },
+          },
+        });
 
         assert.equal(opts1.plugins.length, 1);
         assert.equal(opts2.plugins.length, 1);

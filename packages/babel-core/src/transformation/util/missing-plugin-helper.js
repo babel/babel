@@ -208,8 +208,8 @@ to enable [parsing|transformation].
 */
 export default function generateMissingPluginMessage(
   missingPluginName: string,
-  loc,
-  codeFrame,
+  loc: { line: number, column: number },
+  codeFrame: string,
 ): string {
   let helpMessage =
     `Support for the experimental syntax '${missingPluginName}' isn't currently enabled ` +

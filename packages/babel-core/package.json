@@ -23,7 +23,7 @@
     "compiler"
   ],
   "browser": {
-    "./lib/config/loading/files/index.js": "./lib/config/loading/files/index-browser.js",
+    "./lib/config/files/index.js": "./lib/config/files/index-browser.js",
     "./lib/transform-file.js": "./lib/transform-file-browser.js",
     "./lib/transform-file-sync.js": "./lib/transform-file-sync-browser.js"
   },
