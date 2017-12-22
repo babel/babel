@@ -1282,7 +1282,6 @@ export default class Tokenizer extends LocationParser {
     return (
       prevType === tt._let || prevType === tt._const || prevType === tt._var
     );
-    // return prevToken === "var" || prevToken === "const" || prevToken === "let";
   }
 
   // Read an identifier or keyword token. Will check for reserved
