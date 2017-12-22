@@ -7,3 +7,5 @@ type T = { ...U, p: V, };
 type T = { ...{}|{ p: V, }};
 type T = { foo(): number }
 type T = { foo: () => number }
+type T = { [string]: U };
+type T = { [param: string]: U };
