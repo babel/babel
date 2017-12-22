@@ -517,11 +517,14 @@ function shouldIgnore(
   only: ?IgnoreList,
   dirname: string,
 ): boolean {
-  if (context.filename === null) return false;
-  // $FlowIgnore - Flow refinements aren't quite smart enough for this :(
-  const ctx: ConfigContextNamed = context;
-
   if (ignore) {
+    if (context.filename === null) {
+      throw new Error(
+        `Configuration contains ignore checks, but no filename was passed to Babel`,
+      );
+    }
+    // $FlowIgnore - Flow refinements aren't quite smart enough for this :(
+    const ctx: ConfigContextNamed = context;
     if (matchesPatterns(ctx, ignore, dirname)) {
       debug(
         "Ignored %o because it matched one of %O from %o",
@@ -534,6 +537,14 @@ function shouldIgnore(
   }
 
   if (only) {
+    if (context.filename === null) {
+      throw new Error(
+        `Configuration contains ignore checks, but no filename was passed to Babel`,
+      );
+    }
+    // $FlowIgnore - Flow refinements aren't quite smart enough for this :(
+    const ctx: ConfigContextNamed = context;
+
     if (!matchesPatterns(ctx, only, dirname)) {
       debug(
         "Ignored %o because it failed to match one of %O from %o",
