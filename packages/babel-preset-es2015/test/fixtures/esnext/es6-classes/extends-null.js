@@ -1,4 +1,4 @@
 class Obj extends null {}
 
 assert.strictEqual(Obj.toString, Function.toString);
-assert.throws(() => new Obj());
+if (NODE_VERSION > 4) assert.throws(() => new Obj());

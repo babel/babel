@@ -19,7 +19,7 @@ assert.isFalse(
     Object.getOwnPropertyDescriptor(C.prototype, 'constructor').enumerable);
 
 class D extends null {}
-assert.throws(() => new D());
+if (NODE_VERSION > 4) assert.throws(() => new D());
 
 
 class E extends function(x) {
