@@ -347,7 +347,7 @@ export default class Printer {
 
     let needsParens = n.needsParens(node, parent, this._printStack);
     if (
-      (this.format.retainParens ||
+      (this.format.retainExtraParens ||
         (this.format.retainFunctionParens &&
           node.type === "FunctionExpression")) &&
       node.extra &&
