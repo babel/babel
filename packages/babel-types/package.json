@@ -7,6 +7,7 @@
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-types",
   "main": "lib/index.js",
+  "types": "lib/index.d.ts",
   "dependencies": {
     "esutils": "^2.0.2",
     "lodash": "^4.2.0",
