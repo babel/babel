@@ -143,12 +143,7 @@ for (const type in t.FLIPPED_ALIAS_KEYS) {
     .join(" | ")};\n`;
 }
 
-code += `\ndeclare module "@babel/types" {
-  ${lines
-    .join("\n")
-    .replace(/\n/g, "\n  ")
-    .trim()}
-}\n`;
+code += lines.join("\n") + "\n";
 
 //
 
