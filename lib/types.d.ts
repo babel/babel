@@ -39,7 +39,7 @@ export class Node {
 
 export class ArrayExpression extends Node {
   type: "ArrayExpression";
-  elements?: any;
+  elements?: Array<any>;
 }
 
 export class AssignmentExpression extends Node {
@@ -68,26 +68,26 @@ export class DirectiveLiteral extends Node {
 
 export class BlockStatement extends Node {
   type: "BlockStatement";
-  body: any;
-  directives?: any;
+  body: Array<Statement>;
+  directives?: Array<Directive>;
 }
 
 export class BreakStatement extends Node {
   type: "BreakStatement";
-  label?: Identifier | null;
+  label?: Identifier;
 }
 
 export class CallExpression extends Node {
   type: "CallExpression";
   callee: Expression;
-  arguments: any;
+  arguments: Array<Expression | SpreadElement | JSXNamespacedName>;
   optional?: true | false;
-  typeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation | null;
+  typeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation;
 }
 
 export class CatchClause extends Node {
   type: "CatchClause";
-  param?: Identifier | null;
+  param?: Identifier;
   body: BlockStatement;
 }
 
@@ -100,7 +100,7 @@ export class ConditionalExpression extends Node {
 
 export class ContinueStatement extends Node {
   type: "ContinueStatement";
-  label?: Identifier | null;
+  label?: Identifier;
 }
 
 export class DebuggerStatement extends Node {
@@ -138,48 +138,48 @@ export class ForInStatement extends Node {
 
 export class ForStatement extends Node {
   type: "ForStatement";
-  init?: VariableDeclaration | Expression | null;
-  test?: Expression | null;
-  update?: Expression | null;
+  init?: VariableDeclaration | Expression;
+  test?: Expression;
+  update?: Expression;
   body: Statement;
 }
 
 export class FunctionDeclaration extends Node {
   type: "FunctionDeclaration";
-  id?: Identifier | null;
-  params: any;
+  id?: Identifier;
+  params: Array<LVal>;
   body: BlockStatement;
   generator?: boolean;
   async?: boolean;
   declare?: boolean;
-  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop | null;
+  returnType?: TypeAnnotation | TSTypeAnnotation | Noop;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop;
 }
 
 export class FunctionExpression extends Node {
   type: "FunctionExpression";
-  id?: Identifier | null;
-  params: any;
+  id?: Identifier;
+  params: Array<LVal>;
   body: BlockStatement;
   generator?: boolean;
   async?: boolean;
-  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop | null;
+  returnType?: TypeAnnotation | TSTypeAnnotation | Noop;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop;
 }
 
 export class Identifier extends Node {
   type: "Identifier";
   name: any;
-  decorators?: any;
+  decorators?: Array<Decorator>;
   optional?: boolean;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop;
 }
 
 export class IfStatement extends Node {
   type: "IfStatement";
   test: Expression;
   consequent: Statement;
-  alternate?: Statement | null;
+  alternate?: Statement;
 }
 
 export class LabeledStatement extends Node {
@@ -231,36 +231,36 @@ export class MemberExpression extends Node {
 export class NewExpression extends Node {
   type: "NewExpression";
   callee: Expression;
-  arguments: any;
+  arguments: Array<Expression | SpreadElement | JSXNamespacedName>;
   optional?: true | false;
-  typeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation | null;
+  typeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation;
 }
 
 export class Program extends Node {
   type: "Program";
-  body: any;
-  directives?: any;
+  body: Array<Statement>;
+  directives?: Array<Directive>;
   sourceType?: "script" | "module";
   sourceFile?: string;
 }
 
 export class ObjectExpression extends Node {
   type: "ObjectExpression";
-  properties: any;
+  properties: Array<ObjectMethod | ObjectProperty | SpreadElement>;
 }
 
 export class ObjectMethod extends Node {
   type: "ObjectMethod";
-  kind?: any;
+  kind?: "method" | "get" | "set";
   key: any;
-  params: any;
+  params: Array<LVal>;
   body: BlockStatement;
   computed?: boolean;
   async?: boolean;
-  decorators?: any;
+  decorators?: Array<Decorator>;
   generator?: boolean;
-  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop | null;
+  returnType?: TypeAnnotation | TSTypeAnnotation | Noop;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop;
 }
 
 export class ObjectProperty extends Node {
@@ -269,36 +269,36 @@ export class ObjectProperty extends Node {
   value: Expression | PatternLike;
   computed?: boolean;
   shorthand?: boolean;
-  decorators?: any;
+  decorators?: Array<Decorator>;
 }
 
 export class RestElement extends Node {
   type: "RestElement";
   argument: LVal;
-  decorators?: any;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  decorators?: Array<Decorator>;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop;
 }
 
 export class ReturnStatement extends Node {
   type: "ReturnStatement";
-  argument?: Expression | null;
+  argument?: Expression;
 }
 
 export class SequenceExpression extends Node {
   type: "SequenceExpression";
-  expressions: any;
+  expressions: Array<Expression>;
 }
 
 export class SwitchCase extends Node {
   type: "SwitchCase";
-  test?: Expression | null;
-  consequent: any;
+  test?: Expression;
+  consequent: Array<Statement>;
 }
 
 export class SwitchStatement extends Node {
   type: "SwitchStatement";
   discriminant: Expression;
-  cases: any;
+  cases: Array<SwitchCase>;
 }
 
 export class ThisExpression extends Node {
@@ -313,8 +313,8 @@ export class ThrowStatement extends Node {
 export class TryStatement extends Node {
   type: "TryStatement";
   block: BlockStatement;
-  handler?: CatchClause | null;
-  finalizer?: BlockStatement | null;
+  handler?: CatchClause;
+  finalizer?: BlockStatement;
 }
 
 export class UnaryExpression extends Node {
@@ -333,15 +333,15 @@ export class UpdateExpression extends Node {
 
 export class VariableDeclaration extends Node {
   type: "VariableDeclaration";
-  kind: any;
-  declarations: any;
+  kind: "var" | "let" | "const";
+  declarations: Array<VariableDeclarator>;
   declare?: boolean;
 }
 
 export class VariableDeclarator extends Node {
   type: "VariableDeclarator";
   id: LVal;
-  init?: Expression | null;
+  init?: Expression;
 }
 
 export class WhileStatement extends Node {
@@ -360,55 +360,55 @@ export class AssignmentPattern extends Node {
   type: "AssignmentPattern";
   left: Identifier | ObjectPattern | ArrayPattern;
   right: Expression;
-  decorators?: any;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  decorators?: Array<Decorator>;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop;
 }
 
 export class ArrayPattern extends Node {
   type: "ArrayPattern";
-  elements: any;
-  decorators?: any;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  elements: Array<PatternLike>;
+  decorators?: Array<Decorator>;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop;
 }
 
 export class ArrowFunctionExpression extends Node {
   type: "ArrowFunctionExpression";
-  params: any;
+  params: Array<LVal>;
   body: BlockStatement | Expression;
   async?: boolean;
   expression?: boolean;
   generator?: boolean;
-  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop | null;
+  returnType?: TypeAnnotation | TSTypeAnnotation | Noop;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop;
 }
 
 export class ClassBody extends Node {
   type: "ClassBody";
-  body: any;
+  body: Array<ClassMethod | ClassProperty | TSDeclareMethod | TSIndexSignature>;
 }
 
 export class ClassDeclaration extends Node {
   type: "ClassDeclaration";
-  id?: Identifier | null;
-  superClass?: Expression | null;
+  id?: Identifier;
+  superClass?: Expression;
   body: ClassBody;
-  decorators?: any;
+  decorators?: Array<Decorator>;
   abstract?: boolean;
   declare?: boolean;
   mixins?: any;
-  superTypeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation | null;
-  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop | null;
+  superTypeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop;
 }
 
 export class ClassExpression extends Node {
   type: "ClassExpression";
-  id?: Identifier | null;
-  superClass?: Expression | null;
+  id?: Identifier;
+  superClass?: Expression;
   body: ClassBody;
-  decorators?: any;
+  decorators?: Array<Decorator>;
   mixins?: any;
-  superTypeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation | null;
-  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop | null;
+  superTypeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop;
 }
 
 export class ExportAllDeclaration extends Node {
@@ -423,9 +423,9 @@ export class ExportDefaultDeclaration extends Node {
 
 export class ExportNamedDeclaration extends Node {
   type: "ExportNamedDeclaration";
-  declaration?: Declaration | null;
-  specifiers: any;
-  source?: StringLiteral | null;
+  declaration?: Declaration;
+  specifiers: Array<ExportSpecifier | ExportDefaultSpecifier | ExportNamespaceSpecifier>;
+  source?: StringLiteral;
 }
 
 export class ExportSpecifier extends Node {
@@ -443,7 +443,7 @@ export class ForOfStatement extends Node {
 
 export class ImportDeclaration extends Node {
   type: "ImportDeclaration";
-  specifiers: any;
+  specifiers: Array<ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier>;
   source: StringLiteral;
 }
 
@@ -472,27 +472,27 @@ export class MetaProperty extends Node {
 
 export class ClassMethod extends Node {
   type: "ClassMethod";
-  kind?: any;
+  kind?: "get" | "set" | "method" | "constructor";
   key: any;
-  params: any;
+  params: Array<LVal>;
   body: BlockStatement;
   computed?: boolean;
   abstract?: boolean;
-  access?: any;
-  accessibility?: any;
+  access?: "public" | "private" | "protected";
+  accessibility?: "public" | "private" | "protected";
   async?: boolean;
-  decorators?: any;
+  decorators?: Array<Decorator>;
   generator?: boolean;
   optional?: boolean;
-  returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop | null;
+  returnType?: TypeAnnotation | TSTypeAnnotation | Noop;
+  typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop;
 }
 
 export class ObjectPattern extends Node {
   type: "ObjectPattern";
-  properties: any;
-  decorators?: any;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
+  properties: Array<RestElement | ObjectProperty>;
+  decorators?: Array<Decorator>;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop;
 }
 
 export class SpreadElement extends Node {
@@ -518,13 +518,13 @@ export class TemplateElement extends Node {
 
 export class TemplateLiteral extends Node {
   type: "TemplateLiteral";
-  quasis: any;
-  expressions: any;
+  quasis: Array<TemplateElement>;
+  expressions: Array<Expression>;
 }
 
 export class YieldExpression extends Node {
   type: "YieldExpression";
-  argument?: Expression | null;
+  argument?: Expression;
   delegate?: boolean;
 }
 
@@ -774,18 +774,18 @@ export class TypeCastExpression extends Node {
 
 export class TypeParameter extends Node {
   type: "TypeParameter";
-  bound?: TypeAnnotation | null;
+  bound?: TypeAnnotation;
   name?: string;
 }
 
 export class TypeParameterDeclaration extends Node {
   type: "TypeParameterDeclaration";
-  params: any;
+  params: Array<TypeParameter>;
 }
 
 export class TypeParameterInstantiation extends Node {
   type: "TypeParameterInstantiation";
-  params: any;
+  params: Array<Flow>;
 }
 
 export class UnionTypeAnnotation extends Node {
@@ -800,7 +800,7 @@ export class VoidTypeAnnotation extends Node {
 export class JSXAttribute extends Node {
   type: "JSXAttribute";
   name: JSXIdentifier | JSXNamespacedName;
-  value?: JSXElement | JSXFragment | StringLiteral | JSXExpressionContainer | null;
+  value?: JSXElement | JSXFragment | StringLiteral | JSXExpressionContainer;
 }
 
 export class JSXClosingElement extends Node {
@@ -811,8 +811,8 @@ export class JSXClosingElement extends Node {
 export class JSXElement extends Node {
   type: "JSXElement";
   openingElement: JSXOpeningElement;
-  closingElement?: JSXClosingElement | null;
-  children: any;
+  closingElement?: JSXClosingElement;
+  children: Array<JSXText | JSXExpressionContainer | JSXSpreadChild | JSXElement | JSXFragment>;
   selfClosing: any;
 }
 
@@ -850,7 +850,7 @@ export class JSXNamespacedName extends Node {
 export class JSXOpeningElement extends Node {
   type: "JSXOpeningElement";
   name: JSXIdentifier | JSXMemberExpression;
-  attributes: any;
+  attributes: Array<JSXAttribute | JSXSpreadAttribute>;
   selfClosing?: boolean;
 }
 
@@ -868,7 +868,7 @@ export class JSXFragment extends Node {
   type: "JSXFragment";
   openingFragment: JSXOpeningFragment;
   closingFragment: JSXClosingFragment;
-  children: any;
+  children: Array<JSXText | JSXExpressionContainer | JSXSpreadChild | JSXElement | JSXFragment>;
 }
 
 export class JSXOpeningFragment extends Node {
@@ -902,12 +902,12 @@ export class BindExpression extends Node {
 export class ClassProperty extends Node {
   type: "ClassProperty";
   key: any;
-  value?: Expression | null;
-  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null;
-  decorators?: any;
+  value?: Expression;
+  typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop;
+  decorators?: Array<Decorator>;
   computed?: boolean;
   abstract?: boolean;
-  accessibility?: any;
+  accessibility?: "public" | "private" | "protected";
   optional?: boolean;
   readonly?: boolean;
 }
@@ -945,10 +945,10 @@ export class TSParameterProperty extends Node {
 
 export class TSDeclareFunction extends Node {
   type: "TSDeclareFunction";
-  id?: Identifier | null;
-  typeParameters?: TSTypeParameterDeclaration | Noop | null;
-  params: any;
-  returnType?: TSTypeAnnotation | Noop | null;
+  id?: Identifier;
+  typeParameters?: TSTypeParameterDeclaration | Noop;
+  params: Array<LVal>;
+  returnType?: TSTypeAnnotation | Noop;
   async?: boolean;
   declare?: boolean;
   generator?: boolean;
@@ -956,18 +956,18 @@ export class TSDeclareFunction extends Node {
 
 export class TSDeclareMethod extends Node {
   type: "TSDeclareMethod";
-  decorators?: any;
+  decorators?: Array<Decorator>;
   key: any;
-  typeParameters?: TSTypeParameterDeclaration | Noop | null;
-  params: any;
-  returnType?: TSTypeAnnotation | Noop | null;
+  typeParameters?: TSTypeParameterDeclaration | Noop;
+  params: Array<LVal>;
+  returnType?: TSTypeAnnotation | Noop;
   abstract?: boolean;
-  access?: any;
-  accessibility?: any;
+  access?: "public" | "private" | "protected";
+  accessibility?: "public" | "private" | "protected";
   async?: boolean;
   computed?: boolean;
   generator?: boolean;
-  kind?: any;
+  kind?: "get" | "set" | "method" | "constructor";
   optional?: boolean;
 }
 
@@ -979,23 +979,23 @@ export class TSQualifiedName extends Node {
 
 export class TSCallSignatureDeclaration extends Node {
   type: "TSCallSignatureDeclaration";
-  typeParameters?: TSTypeParameterDeclaration | null;
-  parameters?: any;
-  typeAnnotation?: TSTypeAnnotation | null;
+  typeParameters?: TSTypeParameterDeclaration;
+  parameters?: Array<Identifier | RestElement>;
+  typeAnnotation?: TSTypeAnnotation;
 }
 
 export class TSConstructSignatureDeclaration extends Node {
   type: "TSConstructSignatureDeclaration";
-  typeParameters?: TSTypeParameterDeclaration | null;
-  parameters?: any;
-  typeAnnotation?: TSTypeAnnotation | null;
+  typeParameters?: TSTypeParameterDeclaration;
+  parameters?: Array<Identifier | RestElement>;
+  typeAnnotation?: TSTypeAnnotation;
 }
 
 export class TSPropertySignature extends Node {
   type: "TSPropertySignature";
   key: Expression;
-  typeAnnotation?: TSTypeAnnotation | null;
-  initializer?: Expression | null;
+  typeAnnotation?: TSTypeAnnotation;
+  initializer?: Expression;
   computed?: boolean;
   optional?: boolean;
   readonly?: boolean;
@@ -1004,17 +1004,17 @@ export class TSPropertySignature extends Node {
 export class TSMethodSignature extends Node {
   type: "TSMethodSignature";
   key: Expression;
-  typeParameters?: TSTypeParameterDeclaration | null;
-  parameters?: any;
-  typeAnnotation?: TSTypeAnnotation | null;
+  typeParameters?: TSTypeParameterDeclaration;
+  parameters?: Array<Identifier | RestElement>;
+  typeAnnotation?: TSTypeAnnotation;
   computed?: boolean;
   optional?: boolean;
 }
 
 export class TSIndexSignature extends Node {
   type: "TSIndexSignature";
-  parameters: any;
-  typeAnnotation?: TSTypeAnnotation | null;
+  parameters: Array<Identifier>;
+  typeAnnotation?: TSTypeAnnotation;
   readonly?: boolean;
 }
 
@@ -1064,22 +1064,22 @@ export class TSThisType extends Node {
 
 export class TSFunctionType extends Node {
   type: "TSFunctionType";
-  typeParameters?: TSTypeParameterDeclaration | null;
-  typeAnnotation?: TSTypeAnnotation | null;
-  parameters?: any;
+  typeParameters?: TSTypeParameterDeclaration;
+  typeAnnotation?: TSTypeAnnotation;
+  parameters?: Array<Identifier | RestElement>;
 }
 
 export class TSConstructorType extends Node {
   type: "TSConstructorType";
-  typeParameters?: TSTypeParameterDeclaration | null;
-  typeAnnotation?: TSTypeAnnotation | null;
-  parameters?: any;
+  typeParameters?: TSTypeParameterDeclaration;
+  typeAnnotation?: TSTypeAnnotation;
+  parameters?: Array<Identifier | RestElement>;
 }
 
 export class TSTypeReference extends Node {
   type: "TSTypeReference";
   typeName: TSEntityName;
-  typeParameters?: TSTypeParameterInstantiation | null;
+  typeParameters?: TSTypeParameterInstantiation;
 }
 
 export class TSTypePredicate extends Node {
@@ -1095,7 +1095,7 @@ export class TSTypeQuery extends Node {
 
 export class TSTypeLiteral extends Node {
   type: "TSTypeLiteral";
-  members: any;
+  members: Array<TSTypeElement>;
 }
 
 export class TSArrayType extends Node {
@@ -1105,17 +1105,17 @@ export class TSArrayType extends Node {
 
 export class TSTupleType extends Node {
   type: "TSTupleType";
-  elementTypes: any;
+  elementTypes: Array<TSType>;
 }
 
 export class TSUnionType extends Node {
   type: "TSUnionType";
-  types: any;
+  types: Array<TSType>;
 }
 
 export class TSIntersectionType extends Node {
   type: "TSIntersectionType";
-  types: any;
+  types: Array<TSType>;
 }
 
 export class TSParenthesizedType extends Node {
@@ -1138,7 +1138,7 @@ export class TSIndexedAccessType extends Node {
 export class TSMappedType extends Node {
   type: "TSMappedType";
   typeParameter: TSTypeParameter;
-  typeAnnotation?: TSType | null;
+  typeAnnotation?: TSType;
   optional?: boolean;
   readonly?: boolean;
 }
@@ -1151,26 +1151,26 @@ export class TSLiteralType extends Node {
 export class TSExpressionWithTypeArguments extends Node {
   type: "TSExpressionWithTypeArguments";
   expression: TSEntityName;
-  typeParameters?: TSTypeParameterInstantiation | null;
+  typeParameters?: TSTypeParameterInstantiation;
 }
 
 export class TSInterfaceDeclaration extends Node {
   type: "TSInterfaceDeclaration";
   id: Identifier;
-  typeParameters?: TSTypeParameterDeclaration | null;
+  typeParameters?: TSTypeParameterDeclaration;
   body: TSInterfaceBody;
   declare?: boolean;
 }
 
 export class TSInterfaceBody extends Node {
   type: "TSInterfaceBody";
-  body: any;
+  body: Array<TSTypeElement>;
 }
 
 export class TSTypeAliasDeclaration extends Node {
   type: "TSTypeAliasDeclaration";
   id: Identifier;
-  typeParameters?: TSTypeParameterDeclaration | null;
+  typeParameters?: TSTypeParameterDeclaration;
   typeAnnotation: TSType;
   declare?: boolean;
 }
@@ -1190,15 +1190,15 @@ export class TSTypeAssertion extends Node {
 export class TSEnumDeclaration extends Node {
   type: "TSEnumDeclaration";
   id: Identifier;
-  members: any;
+  members: Array<TSEnumMember>;
   declare?: boolean;
-  initializer?: Expression | null;
+  initializer?: Expression;
 }
 
 export class TSEnumMember extends Node {
   type: "TSEnumMember";
   id: Identifier | StringLiteral;
-  initializer?: Expression | null;
+  initializer?: Expression;
 }
 
 export class TSModuleDeclaration extends Node {
@@ -1211,7 +1211,7 @@ export class TSModuleDeclaration extends Node {
 
 export class TSModuleBlock extends Node {
   type: "TSModuleBlock";
-  body: any;
+  body: Array<Statement>;
 }
 
 export class TSImportEqualsDeclaration extends Node {
@@ -1248,17 +1248,17 @@ export class TSTypeAnnotation extends Node {
 
 export class TSTypeParameterInstantiation extends Node {
   type: "TSTypeParameterInstantiation";
-  params: any;
+  params: Array<TSType>;
 }
 
 export class TSTypeParameterDeclaration extends Node {
   type: "TSTypeParameterDeclaration";
-  params: any;
+  params: Array<TSTypeParameter>;
 }
 
 export class TSTypeParameter extends Node {
   type: "TSTypeParameter";
-  constraint?: TSType | null;
+  constraint?: TSType;
   name?: string;
 }
 
@@ -1304,28 +1304,28 @@ type TSTypeElement = TSCallSignatureDeclaration | TSConstructSignatureDeclaratio
 type TSType = TSAnyKeyword | TSNumberKeyword | TSObjectKeyword | TSBooleanKeyword | TSStringKeyword | TSSymbolKeyword | TSVoidKeyword | TSUndefinedKeyword | TSNullKeyword | TSNeverKeyword | TSThisType | TSFunctionType | TSConstructorType | TSTypeReference | TSTypePredicate | TSTypeQuery | TSTypeLiteral | TSArrayType | TSTupleType | TSUnionType | TSIntersectionType | TSParenthesizedType | TSTypeOperator | TSIndexedAccessType | TSMappedType | TSLiteralType | TSExpressionWithTypeArguments;
 
 declare module "@babel/types" {
-  export function arrayExpression(elements?: any): ArrayExpression;
+  export function arrayExpression(elements?: Array<any>): ArrayExpression;
   export function assignmentExpression(operator: string, left: LVal, right: Expression): AssignmentExpression;
   export function binaryExpression(operator: "+" | "-" | "/" | "%" | "*" | "**" | "&" | "|" | ">>" | ">>>" | "<<" | "^" | "==" | "===" | "!=" | "!==" | "in" | "instanceof" | ">" | "<" | ">=" | "<=", left: Expression, right: Expression): BinaryExpression;
   export function directive(value: DirectiveLiteral): Directive;
   export function directiveLiteral(value: string): DirectiveLiteral;
-  export function blockStatement(body: any, directives?: any): BlockStatement;
-  export function breakStatement(label?: Identifier | null): BreakStatement;
-  export function callExpression(callee: Expression, _arguments: any, optional?: true | false, typeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation | null): CallExpression;
-  export function catchClause(param?: Identifier | null, body: BlockStatement): CatchClause;
+  export function blockStatement(body: Array<Statement>, directives?: Array<Directive>): BlockStatement;
+  export function breakStatement(label?: Identifier): BreakStatement;
+  export function callExpression(callee: Expression, _arguments: Array<Expression | SpreadElement | JSXNamespacedName>, optional?: true | false, typeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation): CallExpression;
+  export function catchClause(param?: Identifier, body: BlockStatement): CatchClause;
   export function conditionalExpression(test: Expression, consequent: Expression, alternate: Expression): ConditionalExpression;
-  export function continueStatement(label?: Identifier | null): ContinueStatement;
+  export function continueStatement(label?: Identifier): ContinueStatement;
   export function debuggerStatement(): DebuggerStatement;
   export function doWhileStatement(test: Expression, body: Statement): DoWhileStatement;
   export function emptyStatement(): EmptyStatement;
   export function expressionStatement(expression: Expression): ExpressionStatement;
   export function file(program: Program, comments: any, tokens: any): File;
   export function forInStatement(left: VariableDeclaration | LVal, right: Expression, body: Statement): ForInStatement;
-  export function forStatement(init?: VariableDeclaration | Expression | null, test?: Expression | null, update?: Expression | null, body: Statement): ForStatement;
-  export function functionDeclaration(id?: Identifier | null, params: any, body: BlockStatement, generator?: boolean, async?: boolean, declare?: boolean, returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop | null): FunctionDeclaration;
-  export function functionExpression(id?: Identifier | null, params: any, body: BlockStatement, generator?: boolean, async?: boolean, returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop | null): FunctionExpression;
-  export function identifier(name: any, decorators?: any, optional?: boolean, typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null): Identifier;
-  export function ifStatement(test: Expression, consequent: Statement, alternate?: Statement | null): IfStatement;
+  export function forStatement(init?: VariableDeclaration | Expression, test?: Expression, update?: Expression, body: Statement): ForStatement;
+  export function functionDeclaration(id?: Identifier, params: Array<LVal>, body: BlockStatement, generator?: boolean, async?: boolean, declare?: boolean, returnType?: TypeAnnotation | TSTypeAnnotation | Noop, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop): FunctionDeclaration;
+  export function functionExpression(id?: Identifier, params: Array<LVal>, body: BlockStatement, generator?: boolean, async?: boolean, returnType?: TypeAnnotation | TSTypeAnnotation | Noop, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop): FunctionExpression;
+  export function identifier(name: any, decorators?: Array<Decorator>, optional?: boolean, typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop): Identifier;
+  export function ifStatement(test: Expression, consequent: Statement, alternate?: Statement): IfStatement;
   export function labeledStatement(label: Identifier, body: Statement): LabeledStatement;
   export function stringLiteral(value: string): StringLiteral;
   export function numericLiteral(value: number): NumericLiteral;
@@ -1334,48 +1334,48 @@ declare module "@babel/types" {
   export function regExpLiteral(pattern: string, flags?: string): RegExpLiteral;
   export function logicalExpression(operator: "||" | "&&" | "??", left: Expression, right: Expression): LogicalExpression;
   export function memberExpression(object: Expression, property: any, computed?: boolean, optional?: true | false): MemberExpression;
-  export function newExpression(callee: Expression, _arguments: any, optional?: true | false, typeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation | null): NewExpression;
-  export function program(body: any, directives?: any, sourceType?: "script" | "module", sourceFile?: string): Program;
-  export function objectExpression(properties: any): ObjectExpression;
-  export function objectMethod(kind?: any, key: any, params: any, body: BlockStatement, computed?: boolean, async?: boolean, decorators?: any, generator?: boolean, returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop | null): ObjectMethod;
-  export function objectProperty(key: any, value: Expression | PatternLike, computed?: boolean, shorthand?: boolean, decorators?: any): ObjectProperty;
-  export function restElement(argument: LVal, decorators?: any, typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null): RestElement;
-  export function returnStatement(argument?: Expression | null): ReturnStatement;
-  export function sequenceExpression(expressions: any): SequenceExpression;
-  export function switchCase(test?: Expression | null, consequent: any): SwitchCase;
-  export function switchStatement(discriminant: Expression, cases: any): SwitchStatement;
+  export function newExpression(callee: Expression, _arguments: Array<Expression | SpreadElement | JSXNamespacedName>, optional?: true | false, typeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation): NewExpression;
+  export function program(body: Array<Statement>, directives?: Array<Directive>, sourceType?: "script" | "module", sourceFile?: string): Program;
+  export function objectExpression(properties: Array<ObjectMethod | ObjectProperty | SpreadElement>): ObjectExpression;
+  export function objectMethod(kind?: "method" | "get" | "set", key: any, params: Array<LVal>, body: BlockStatement, computed?: boolean, async?: boolean, decorators?: Array<Decorator>, generator?: boolean, returnType?: TypeAnnotation | TSTypeAnnotation | Noop, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop): ObjectMethod;
+  export function objectProperty(key: any, value: Expression | PatternLike, computed?: boolean, shorthand?: boolean, decorators?: Array<Decorator>): ObjectProperty;
+  export function restElement(argument: LVal, decorators?: Array<Decorator>, typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop): RestElement;
+  export function returnStatement(argument?: Expression): ReturnStatement;
+  export function sequenceExpression(expressions: Array<Expression>): SequenceExpression;
+  export function switchCase(test?: Expression, consequent: Array<Statement>): SwitchCase;
+  export function switchStatement(discriminant: Expression, cases: Array<SwitchCase>): SwitchStatement;
   export function thisExpression(): ThisExpression;
   export function throwStatement(argument: Expression): ThrowStatement;
-  export function tryStatement(block: BlockStatement, handler?: CatchClause | null, finalizer?: BlockStatement | null): TryStatement;
+  export function tryStatement(block: BlockStatement, handler?: CatchClause, finalizer?: BlockStatement): TryStatement;
   export function unaryExpression(operator: "void" | "throw" | "delete" | "!" | "+" | "-" | "~" | "typeof", argument: Expression, prefix?: boolean): UnaryExpression;
   export function updateExpression(operator: "++" | "--", argument: Expression, prefix?: boolean): UpdateExpression;
-  export function variableDeclaration(kind: any, declarations: any, declare?: boolean): VariableDeclaration;
-  export function variableDeclarator(id: LVal, init?: Expression | null): VariableDeclarator;
+  export function variableDeclaration(kind: "var" | "let" | "const", declarations: Array<VariableDeclarator>, declare?: boolean): VariableDeclaration;
+  export function variableDeclarator(id: LVal, init?: Expression): VariableDeclarator;
   export function whileStatement(test: Expression, body: BlockStatement | Statement): WhileStatement;
   export function withStatement(object: Expression, body: BlockStatement | Statement): WithStatement;
-  export function assignmentPattern(left: Identifier | ObjectPattern | ArrayPattern, right: Expression, decorators?: any, typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null): AssignmentPattern;
-  export function arrayPattern(elements: any, decorators?: any, typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null): ArrayPattern;
-  export function arrowFunctionExpression(params: any, body: BlockStatement | Expression, async?: boolean, expression?: boolean, generator?: boolean, returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop | null): ArrowFunctionExpression;
-  export function classBody(body: any): ClassBody;
-  export function classDeclaration(id?: Identifier | null, superClass?: Expression | null, body: ClassBody, decorators?: any, abstract?: boolean, declare?: boolean, _implements?: any, mixins?: any, superTypeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation | null, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop | null): ClassDeclaration;
-  export function classExpression(id?: Identifier | null, superClass?: Expression | null, body: ClassBody, decorators?: any, _implements?: any, mixins?: any, superTypeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation | null, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop | null): ClassExpression;
+  export function assignmentPattern(left: Identifier | ObjectPattern | ArrayPattern, right: Expression, decorators?: Array<Decorator>, typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop): AssignmentPattern;
+  export function arrayPattern(elements: Array<PatternLike>, decorators?: Array<Decorator>, typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop): ArrayPattern;
+  export function arrowFunctionExpression(params: Array<LVal>, body: BlockStatement | Expression, async?: boolean, expression?: boolean, generator?: boolean, returnType?: TypeAnnotation | TSTypeAnnotation | Noop, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop): ArrowFunctionExpression;
+  export function classBody(body: Array<ClassMethod | ClassProperty | TSDeclareMethod | TSIndexSignature>): ClassBody;
+  export function classDeclaration(id?: Identifier, superClass?: Expression, body: ClassBody, decorators?: Array<Decorator>, abstract?: boolean, declare?: boolean, _implements?: Array<TSExpressionWithTypeArguments | FlowClassImplements>, mixins?: any, superTypeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop): ClassDeclaration;
+  export function classExpression(id?: Identifier, superClass?: Expression, body: ClassBody, decorators?: Array<Decorator>, _implements?: Array<TSExpressionWithTypeArguments | FlowClassImplements>, mixins?: any, superTypeParameters?: TypeParameterInstantiation | TSTypeParameterInstantiation, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop): ClassExpression;
   export function exportAllDeclaration(source: StringLiteral): ExportAllDeclaration;
   export function exportDefaultDeclaration(declaration: FunctionDeclaration | TSDeclareFunction | ClassDeclaration | Expression): ExportDefaultDeclaration;
-  export function exportNamedDeclaration(declaration?: Declaration | null, specifiers: any, source?: StringLiteral | null): ExportNamedDeclaration;
+  export function exportNamedDeclaration(declaration?: Declaration, specifiers: Array<ExportSpecifier | ExportDefaultSpecifier | ExportNamespaceSpecifier>, source?: StringLiteral): ExportNamedDeclaration;
   export function exportSpecifier(local: Identifier, exported: Identifier): ExportSpecifier;
   export function forOfStatement(left: VariableDeclaration | LVal, right: Expression, body: Statement, _await?: boolean): ForOfStatement;
-  export function importDeclaration(specifiers: any, source: StringLiteral): ImportDeclaration;
+  export function importDeclaration(specifiers: Array<ImportSpecifier | ImportDefaultSpecifier | ImportNamespaceSpecifier>, source: StringLiteral): ImportDeclaration;
   export function importDefaultSpecifier(local: Identifier): ImportDefaultSpecifier;
   export function importNamespaceSpecifier(local: Identifier): ImportNamespaceSpecifier;
   export function importSpecifier(local: Identifier, imported: Identifier, importKind?: null | "type" | "typeof"): ImportSpecifier;
   export function metaProperty(meta: Identifier, property: Identifier): MetaProperty;
-  export function classMethod(kind?: any, key: any, params: any, body: BlockStatement, computed?: boolean, _static?: boolean, abstract?: boolean, access?: any, accessibility?: any, async?: boolean, decorators?: any, generator?: boolean, optional?: boolean, returnType?: TypeAnnotation | TSTypeAnnotation | Noop | null, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop | null): ClassMethod;
-  export function objectPattern(properties: any, decorators?: any, typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null): ObjectPattern;
+  export function classMethod(kind?: "get" | "set" | "method" | "constructor", key: any, params: Array<LVal>, body: BlockStatement, computed?: boolean, _static?: boolean, abstract?: boolean, access?: "public" | "private" | "protected", accessibility?: "public" | "private" | "protected", async?: boolean, decorators?: Array<Decorator>, generator?: boolean, optional?: boolean, returnType?: TypeAnnotation | TSTypeAnnotation | Noop, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop): ClassMethod;
+  export function objectPattern(properties: Array<RestElement | ObjectProperty>, decorators?: Array<Decorator>, typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop): ObjectPattern;
   export function spreadElement(argument: Expression): SpreadElement;
   export function taggedTemplateExpression(tag: Expression, quasi: TemplateLiteral): TaggedTemplateExpression;
   export function templateElement(value: any, tail?: boolean): TemplateElement;
-  export function templateLiteral(quasis: any, expressions: any): TemplateLiteral;
-  export function yieldExpression(argument?: Expression | null, delegate?: boolean): YieldExpression;
+  export function templateLiteral(quasis: Array<TemplateElement>, expressions: Array<Expression>): TemplateLiteral;
+  export function yieldExpression(argument?: Expression, delegate?: boolean): YieldExpression;
   export function anyTypeAnnotation(): AnyTypeAnnotation;
   export function arrayTypeAnnotation(elementType: any): ArrayTypeAnnotation;
   export function booleanTypeAnnotation(): BooleanTypeAnnotation;
@@ -1421,44 +1421,44 @@ declare module "@babel/types" {
   export function typeAlias(id: any, typeParameters: any, right: any): TypeAlias;
   export function typeAnnotation(typeAnnotation: Flow): TypeAnnotation;
   export function typeCastExpression(expression: any, typeAnnotation: any): TypeCastExpression;
-  export function typeParameter(bound?: TypeAnnotation | null, _default?: Flow | null, name?: string): TypeParameter;
-  export function typeParameterDeclaration(params: any): TypeParameterDeclaration;
-  export function typeParameterInstantiation(params: any): TypeParameterInstantiation;
+  export function typeParameter(bound?: TypeAnnotation, _default?: Flow, name?: string): TypeParameter;
+  export function typeParameterDeclaration(params: Array<TypeParameter>): TypeParameterDeclaration;
+  export function typeParameterInstantiation(params: Array<Flow>): TypeParameterInstantiation;
   export function unionTypeAnnotation(types: any): UnionTypeAnnotation;
   export function voidTypeAnnotation(): VoidTypeAnnotation;
-  export function jSXAttribute(name: JSXIdentifier | JSXNamespacedName, value?: JSXElement | JSXFragment | StringLiteral | JSXExpressionContainer | null): JSXAttribute;
+  export function jSXAttribute(name: JSXIdentifier | JSXNamespacedName, value?: JSXElement | JSXFragment | StringLiteral | JSXExpressionContainer): JSXAttribute;
   export function jSXClosingElement(name: JSXIdentifier | JSXMemberExpression): JSXClosingElement;
-  export function jSXElement(openingElement: JSXOpeningElement, closingElement?: JSXClosingElement | null, children: any, selfClosing: any): JSXElement;
+  export function jSXElement(openingElement: JSXOpeningElement, closingElement?: JSXClosingElement, children: Array<JSXText | JSXExpressionContainer | JSXSpreadChild | JSXElement | JSXFragment>, selfClosing: any): JSXElement;
   export function jSXEmptyExpression(): JSXEmptyExpression;
   export function jSXExpressionContainer(expression: Expression): JSXExpressionContainer;
   export function jSXSpreadChild(expression: Expression): JSXSpreadChild;
   export function jSXIdentifier(name: string): JSXIdentifier;
   export function jSXMemberExpression(object: JSXMemberExpression | JSXIdentifier, property: JSXIdentifier): JSXMemberExpression;
   export function jSXNamespacedName(namespace: JSXIdentifier, name: JSXIdentifier): JSXNamespacedName;
-  export function jSXOpeningElement(name: JSXIdentifier | JSXMemberExpression, attributes: any, selfClosing?: boolean): JSXOpeningElement;
+  export function jSXOpeningElement(name: JSXIdentifier | JSXMemberExpression, attributes: Array<JSXAttribute | JSXSpreadAttribute>, selfClosing?: boolean): JSXOpeningElement;
   export function jSXSpreadAttribute(argument: Expression): JSXSpreadAttribute;
   export function jSXText(value: string): JSXText;
-  export function jSXFragment(openingFragment: JSXOpeningFragment, closingFragment: JSXClosingFragment, children: any): JSXFragment;
+  export function jSXFragment(openingFragment: JSXOpeningFragment, closingFragment: JSXClosingFragment, children: Array<JSXText | JSXExpressionContainer | JSXSpreadChild | JSXElement | JSXFragment>): JSXFragment;
   export function jSXOpeningFragment(): JSXOpeningFragment;
   export function jSXClosingFragment(): JSXClosingFragment;
   export function noop(): Noop;
   export function parenthesizedExpression(expression: Expression): ParenthesizedExpression;
   export function awaitExpression(argument: Expression): AwaitExpression;
   export function bindExpression(object: any, callee: any): BindExpression;
-  export function classProperty(key: any, value?: Expression | null, typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop | null, decorators?: any, computed?: boolean, abstract?: boolean, accessibility?: any, optional?: boolean, readonly?: boolean, _static?: boolean): ClassProperty;
+  export function classProperty(key: any, value?: Expression, typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop, decorators?: Array<Decorator>, computed?: boolean, abstract?: boolean, accessibility?: "public" | "private" | "protected", optional?: boolean, readonly?: boolean, _static?: boolean): ClassProperty;
   export function decorator(expression: Expression): Decorator;
   export function doExpression(body: BlockStatement): DoExpression;
   export function exportDefaultSpecifier(exported: Identifier): ExportDefaultSpecifier;
   export function exportNamespaceSpecifier(exported: Identifier): ExportNamespaceSpecifier;
   export function tSParameterProperty(parameter: Identifier | AssignmentPattern, accessibility?: "public" | "private" | "protected", readonly?: boolean): TSParameterProperty;
-  export function tSDeclareFunction(id?: Identifier | null, typeParameters?: TSTypeParameterDeclaration | Noop | null, params: any, returnType?: TSTypeAnnotation | Noop | null, async?: boolean, declare?: boolean, generator?: boolean): TSDeclareFunction;
-  export function tSDeclareMethod(decorators?: any, key: any, typeParameters?: TSTypeParameterDeclaration | Noop | null, params: any, returnType?: TSTypeAnnotation | Noop | null, abstract?: boolean, access?: any, accessibility?: any, async?: boolean, computed?: boolean, generator?: boolean, kind?: any, optional?: boolean, _static?: boolean): TSDeclareMethod;
+  export function tSDeclareFunction(id?: Identifier, typeParameters?: TSTypeParameterDeclaration | Noop, params: Array<LVal>, returnType?: TSTypeAnnotation | Noop, async?: boolean, declare?: boolean, generator?: boolean): TSDeclareFunction;
+  export function tSDeclareMethod(decorators?: Array<Decorator>, key: any, typeParameters?: TSTypeParameterDeclaration | Noop, params: Array<LVal>, returnType?: TSTypeAnnotation | Noop, abstract?: boolean, access?: "public" | "private" | "protected", accessibility?: "public" | "private" | "protected", async?: boolean, computed?: boolean, generator?: boolean, kind?: "get" | "set" | "method" | "constructor", optional?: boolean, _static?: boolean): TSDeclareMethod;
   export function tSQualifiedName(left: TSEntityName, right: Identifier): TSQualifiedName;
-  export function tSCallSignatureDeclaration(typeParameters?: TSTypeParameterDeclaration | null, parameters?: any, typeAnnotation?: TSTypeAnnotation | null): TSCallSignatureDeclaration;
-  export function tSConstructSignatureDeclaration(typeParameters?: TSTypeParameterDeclaration | null, parameters?: any, typeAnnotation?: TSTypeAnnotation | null): TSConstructSignatureDeclaration;
-  export function tSPropertySignature(key: Expression, typeAnnotation?: TSTypeAnnotation | null, initializer?: Expression | null, computed?: boolean, optional?: boolean, readonly?: boolean): TSPropertySignature;
-  export function tSMethodSignature(key: Expression, typeParameters?: TSTypeParameterDeclaration | null, parameters?: any, typeAnnotation?: TSTypeAnnotation | null, computed?: boolean, optional?: boolean): TSMethodSignature;
-  export function tSIndexSignature(parameters: any, typeAnnotation?: TSTypeAnnotation | null, readonly?: boolean): TSIndexSignature;
+  export function tSCallSignatureDeclaration(typeParameters?: TSTypeParameterDeclaration, parameters?: Array<Identifier | RestElement>, typeAnnotation?: TSTypeAnnotation): TSCallSignatureDeclaration;
+  export function tSConstructSignatureDeclaration(typeParameters?: TSTypeParameterDeclaration, parameters?: Array<Identifier | RestElement>, typeAnnotation?: TSTypeAnnotation): TSConstructSignatureDeclaration;
+  export function tSPropertySignature(key: Expression, typeAnnotation?: TSTypeAnnotation, initializer?: Expression, computed?: boolean, optional?: boolean, readonly?: boolean): TSPropertySignature;
+  export function tSMethodSignature(key: Expression, typeParameters?: TSTypeParameterDeclaration, parameters?: Array<Identifier | RestElement>, typeAnnotation?: TSTypeAnnotation, computed?: boolean, optional?: boolean): TSMethodSignature;
+  export function tSIndexSignature(parameters: Array<Identifier>, typeAnnotation?: TSTypeAnnotation, readonly?: boolean): TSIndexSignature;
   export function tSAnyKeyword(): TSAnyKeyword;
   export function tSNumberKeyword(): TSNumberKeyword;
   export function tSObjectKeyword(): TSObjectKeyword;
@@ -1470,40 +1470,40 @@ declare module "@babel/types" {
   export function tSNullKeyword(): TSNullKeyword;
   export function tSNeverKeyword(): TSNeverKeyword;
   export function tSThisType(): TSThisType;
-  export function tSFunctionType(typeParameters?: TSTypeParameterDeclaration | null, typeAnnotation?: TSTypeAnnotation | null, parameters?: any): TSFunctionType;
-  export function tSConstructorType(typeParameters?: TSTypeParameterDeclaration | null, typeAnnotation?: TSTypeAnnotation | null, parameters?: any): TSConstructorType;
-  export function tSTypeReference(typeName: TSEntityName, typeParameters?: TSTypeParameterInstantiation | null): TSTypeReference;
+  export function tSFunctionType(typeParameters?: TSTypeParameterDeclaration, typeAnnotation?: TSTypeAnnotation, parameters?: Array<Identifier | RestElement>): TSFunctionType;
+  export function tSConstructorType(typeParameters?: TSTypeParameterDeclaration, typeAnnotation?: TSTypeAnnotation, parameters?: Array<Identifier | RestElement>): TSConstructorType;
+  export function tSTypeReference(typeName: TSEntityName, typeParameters?: TSTypeParameterInstantiation): TSTypeReference;
   export function tSTypePredicate(parameterName: Identifier | TSThisType, typeAnnotation: TSTypeAnnotation): TSTypePredicate;
   export function tSTypeQuery(exprName: TSEntityName): TSTypeQuery;
-  export function tSTypeLiteral(members: any): TSTypeLiteral;
+  export function tSTypeLiteral(members: Array<TSTypeElement>): TSTypeLiteral;
   export function tSArrayType(elementType: TSType): TSArrayType;
-  export function tSTupleType(elementTypes: any): TSTupleType;
-  export function tSUnionType(types: any): TSUnionType;
-  export function tSIntersectionType(types: any): TSIntersectionType;
+  export function tSTupleType(elementTypes: Array<TSType>): TSTupleType;
+  export function tSUnionType(types: Array<TSType>): TSUnionType;
+  export function tSIntersectionType(types: Array<TSType>): TSIntersectionType;
   export function tSParenthesizedType(typeAnnotation: TSType): TSParenthesizedType;
   export function tSTypeOperator(typeAnnotation: TSType, operator?: string): TSTypeOperator;
   export function tSIndexedAccessType(objectType: TSType, indexType: TSType): TSIndexedAccessType;
-  export function tSMappedType(typeParameter: TSTypeParameter, typeAnnotation?: TSType | null, optional?: boolean, readonly?: boolean): TSMappedType;
+  export function tSMappedType(typeParameter: TSTypeParameter, typeAnnotation?: TSType, optional?: boolean, readonly?: boolean): TSMappedType;
   export function tSLiteralType(literal: NumericLiteral | StringLiteral | BooleanLiteral): TSLiteralType;
-  export function tSExpressionWithTypeArguments(expression: TSEntityName, typeParameters?: TSTypeParameterInstantiation | null): TSExpressionWithTypeArguments;
-  export function tSInterfaceDeclaration(id: Identifier, typeParameters?: TSTypeParameterDeclaration | null, _extends?: any, body: TSInterfaceBody, declare?: boolean): TSInterfaceDeclaration;
-  export function tSInterfaceBody(body: any): TSInterfaceBody;
-  export function tSTypeAliasDeclaration(id: Identifier, typeParameters?: TSTypeParameterDeclaration | null, typeAnnotation: TSType, declare?: boolean): TSTypeAliasDeclaration;
+  export function tSExpressionWithTypeArguments(expression: TSEntityName, typeParameters?: TSTypeParameterInstantiation): TSExpressionWithTypeArguments;
+  export function tSInterfaceDeclaration(id: Identifier, typeParameters?: TSTypeParameterDeclaration, _extends?: Array<TSExpressionWithTypeArguments>, body: TSInterfaceBody, declare?: boolean): TSInterfaceDeclaration;
+  export function tSInterfaceBody(body: Array<TSTypeElement>): TSInterfaceBody;
+  export function tSTypeAliasDeclaration(id: Identifier, typeParameters?: TSTypeParameterDeclaration, typeAnnotation: TSType, declare?: boolean): TSTypeAliasDeclaration;
   export function tSAsExpression(expression: Expression, typeAnnotation: TSType): TSAsExpression;
   export function tSTypeAssertion(typeAnnotation: TSType, expression: Expression): TSTypeAssertion;
-  export function tSEnumDeclaration(id: Identifier, members: any, _const?: boolean, declare?: boolean, initializer?: Expression | null): TSEnumDeclaration;
-  export function tSEnumMember(id: Identifier | StringLiteral, initializer?: Expression | null): TSEnumMember;
+  export function tSEnumDeclaration(id: Identifier, members: Array<TSEnumMember>, _const?: boolean, declare?: boolean, initializer?: Expression): TSEnumDeclaration;
+  export function tSEnumMember(id: Identifier | StringLiteral, initializer?: Expression): TSEnumMember;
   export function tSModuleDeclaration(id: Identifier | StringLiteral, body: TSModuleBlock | TSModuleDeclaration, declare?: boolean, global?: boolean): TSModuleDeclaration;
-  export function tSModuleBlock(body: any): TSModuleBlock;
+  export function tSModuleBlock(body: Array<Statement>): TSModuleBlock;
   export function tSImportEqualsDeclaration(id: Identifier, moduleReference: TSEntityName | TSExternalModuleReference, isExport?: boolean): TSImportEqualsDeclaration;
   export function tSExternalModuleReference(expression: StringLiteral): TSExternalModuleReference;
   export function tSNonNullExpression(expression: Expression): TSNonNullExpression;
   export function tSExportAssignment(expression: Expression): TSExportAssignment;
   export function tSNamespaceExportDeclaration(id: Identifier): TSNamespaceExportDeclaration;
   export function tSTypeAnnotation(typeAnnotation: TSType): TSTypeAnnotation;
-  export function tSTypeParameterInstantiation(params: any): TSTypeParameterInstantiation;
-  export function tSTypeParameterDeclaration(params: any): TSTypeParameterDeclaration;
-  export function tSTypeParameter(constraint?: TSType | null, _default?: TSType | null, name?: string): TSTypeParameter;
+  export function tSTypeParameterInstantiation(params: Array<TSType>): TSTypeParameterInstantiation;
+  export function tSTypeParameterDeclaration(params: Array<TSTypeParameter>): TSTypeParameterDeclaration;
+  export function tSTypeParameter(constraint?: TSType, _default?: TSType, name?: string): TSTypeParameter;
   export function isArrayExpression(node: object, opts?: object | null): node is ArrayExpression;
   export function isAssignmentExpression(node: object, opts?: object | null): node is AssignmentExpression;
   export function isBinaryExpression(node: object, opts?: object | null): node is BinaryExpression;

@@ -73,31 +73,7 @@ for (const type in t.NODE_FIELDS) {
 
       const validate = field.validate;
       if (validate) {
-        if (validate.oneOf) {
-          typeAnnotation = validate.oneOf
-            .map(function(val) {
-              return JSON.stringify(val);
-            })
-            .join(" | ");
-        }
-
-        if (validate.type) {
-          typeAnnotation = validate.type;
-
-          if (typeAnnotation === "array") {
-            typeAnnotation = "Array<any>";
-          }
-        }
-
-        if (validate.oneOfNodeTypes) {
-          const types = validate.oneOfNodeTypes.map(
-            type => `${NODE_PREFIX}${type}`
-          );
-          typeAnnotation = types.join(" | ");
-          if (suffix === "?") {
-            typeAnnotation = typeAnnotation + " | null";
-          }
-        }
+        typeAnnotation = stringifyValidator(validate);
       }
 
       if (typeAnnotation) {
@@ -176,3 +152,31 @@ code += `\ndeclare module "@babel/types" {
 //
 
 fs.writeFileSync(__dirname + "/../lib/types.d.ts", code);
+
+function stringifyValidator(validator) {
+  if (validator === undefined) {
+    return "any";
+  }
+
+  if (validator.each) {
+    return `Array<${stringifyValidator(validator.each)}>`;
+  }
+
+  if (validator.chainOf) {
+    return stringifyValidator(validator.chainOf[1]);
+  }
+
+  if (validator.oneOf) {
+    return validator.oneOf.map(JSON.stringify).join(" | ");
+  }
+
+  if (validator.oneOfNodeTypes) {
+    return validator.oneOfNodeTypes.map(_ => NODE_PREFIX + _).join(" | ");
+  }
+
+  if (validator.type) {
+    return NODE_PREFIX + validator.type;
+  }
+
+  return ["any"];
+}
