@@ -19,6 +19,10 @@ build: clean
 	node ./packages/babel-types/scripts/generateTypeHelpers.js
 	# call build again as the generated files might need to be compiled again.
 	./node_modules/.bin/gulp build
+	# generate flow and typescript typings
+	node scripts/generators/flow.js
+	node scripts/generators/typescript.js
+	cp ./lib/types.d.ts ./packages/babel-types/lib/index.d.ts
 ifneq ("$(BABEL_ENV)", "cov")
 	make build-standalone
 	make build-preset-env-standalone
