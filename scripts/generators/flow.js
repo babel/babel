@@ -1,7 +1,8 @@
 "use strict";
 
 const fs = require("fs");
-const t = require("../packages/babel-types");
+const t = require("../../packages/babel-types");
+const { stringifyValidator } = require("./utils");
 
 const NODE_PREFIX = "BabelNode";
 
@@ -73,29 +74,7 @@ for (const type in t.NODE_FIELDS) {
 
       const validate = field.validate;
       if (validate) {
-        if (validate.oneOf) {
-          typeAnnotation = validate.oneOf
-            .map(function(val) {
-              return JSON.stringify(val);
-            })
-            .join(" | ");
-        }
-
-        if (validate.type) {
-          typeAnnotation = validate.type;
-
-          if (typeAnnotation === "array") {
-            typeAnnotation = "Array<any>";
-          }
-        }
-
-        if (validate.oneOfNodeTypes) {
-          const types = validate.oneOfNodeTypes.map(
-            type => `${NODE_PREFIX}${type}`
-          );
-          typeAnnotation = types.join(" | ");
-          if (suffix === "?") typeAnnotation = "?" + typeAnnotation;
-        }
+        typeAnnotation = stringifyValidator(validate, NODE_PREFIX);
       }
 
       if (typeAnnotation) {
@@ -171,4 +150,4 @@ code += `\ndeclare module "@babel/types" {
 
 //
 
-fs.writeFileSync(__dirname + "/../lib/types.js", code);
+fs.writeFileSync(__dirname + "/../../lib/types.js", code);

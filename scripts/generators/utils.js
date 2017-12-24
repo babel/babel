@@ -23,7 +23,7 @@ exports.stringifyValidator = function stringifyValidator(
   }
 
   if (validator.type) {
-    return nodePrefix + validator.type;
+    return validator.type;
   }
 
   return ["any"];
