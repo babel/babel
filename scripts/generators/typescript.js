@@ -2,7 +2,7 @@
 
 const fs = require("fs");
 const t = require("../../packages/babel-types");
-const { stringifyValidator } = require("./utils");
+const utils = require("./utils");
 
 const NODE_PREFIX = "";
 
@@ -74,7 +74,7 @@ for (const type in t.NODE_FIELDS) {
 
       const validate = field.validate;
       if (validate) {
-        typeAnnotation = stringifyValidator(validate, NODE_PREFIX);
+        typeAnnotation = utils.stringifyValidator(validate, NODE_PREFIX);
       }
 
       if (typeAnnotation) {
