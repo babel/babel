@@ -1867,7 +1867,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "TSParameterProperty":
           return super.toAssignable(node, isBinding, contextDescription);
         case "TSAsExpression":
-          return super.toAssignable(
+          return this.toAssignable(
             node.expression,
             isBinding,
             contextDescription,

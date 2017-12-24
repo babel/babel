@@ -1,0 +1,518 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 124,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 11,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 124,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 11,
+        "column": 1
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start": 0,
+        "end": 30,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 10,
+          "end": 11,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 11
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start": 12,
+          "end": 30,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 12
+            },
+            "end": {
+              "line": 3,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "TSPropertySignature",
+              "start": 16,
+              "end": 28,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 14
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 16,
+                "end": 20,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 6
+                  },
+                  "identifierName": "name"
+                },
+                "name": "name"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 20,
+                "end": 28,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 14
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSStringKeyword",
+                  "start": 22,
+                  "end": 28,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 14
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "TSInterfaceDeclaration",
+        "start": 31,
+        "end": 70,
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 0
+          },
+          "end": {
+            "line": 6,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 41,
+          "end": 42,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 10
+            },
+            "end": {
+              "line": 4,
+              "column": 11
+            },
+            "identifierName": "B"
+          },
+          "name": "B"
+        },
+        "extends": [
+          {
+            "type": "TSExpressionWithTypeArguments",
+            "start": 51,
+            "end": 52,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 20
+              },
+              "end": {
+                "line": 4,
+                "column": 21
+              }
+            },
+            "expression": {
+              "type": "Identifier",
+              "start": 51,
+              "end": 52,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 20
+                },
+                "end": {
+                  "line": 4,
+                  "column": 21
+                },
+                "identifierName": "A"
+              },
+              "name": "A"
+            }
+          }
+        ],
+        "body": {
+          "type": "TSInterfaceBody",
+          "start": 53,
+          "end": 70,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 22
+            },
+            "end": {
+              "line": 6,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "TSPropertySignature",
+              "start": 57,
+              "end": 68,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 2
+                },
+                "end": {
+                  "line": 5,
+                  "column": 13
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 57,
+                "end": 60,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 5
+                  },
+                  "identifierName": "age"
+                },
+                "name": "age"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 60,
+                "end": 68,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 13
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start": 62,
+                  "end": 68,
+                  "loc": {
+                    "start": {
+                      "line": 5,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 5,
+                      "column": 13
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "VariableDeclaration",
+        "start": 71,
+        "end": 77,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 0
+          },
+          "end": {
+            "line": 7,
+            "column": 6
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 75,
+            "end": 76,
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 4
+              },
+              "end": {
+                "line": 7,
+                "column": 5
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 75,
+              "end": 76,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 4
+                },
+                "end": {
+                  "line": 7,
+                  "column": 5
+                },
+                "identifierName": "a"
+              },
+              "name": "a"
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 78,
+        "end": 124,
+        "loc": {
+          "start": {
+            "line": 8,
+            "column": 0
+          },
+          "end": {
+            "line": 11,
+            "column": 1
+          }
+        },
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 78,
+          "end": 124,
+          "loc": {
+            "start": {
+              "line": 8,
+              "column": 0
+            },
+            "end": {
+              "line": 11,
+              "column": 1
+            }
+          },
+          "operator": "=",
+          "left": {
+            "type": "Identifier",
+            "start": 79,
+            "end": 80,
+            "loc": {
+              "start": {
+                "line": 8,
+                "column": 1
+              },
+              "end": {
+                "line": 8,
+                "column": 2
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "right": {
+            "type": "ObjectExpression",
+            "start": 94,
+            "end": 124,
+            "loc": {
+              "start": {
+                "line": 8,
+                "column": 16
+              },
+              "end": {
+                "line": 11,
+                "column": 1
+              }
+            },
+            "properties": [
+              {
+                "type": "ObjectProperty",
+                "start": 98,
+                "end": 111,
+                "loc": {
+                  "start": {
+                    "line": 9,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 9,
+                    "column": 15
+                  }
+                },
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 98,
+                  "end": 102,
+                  "loc": {
+                    "start": {
+                      "line": 9,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 9,
+                      "column": 6
+                    },
+                    "identifierName": "name"
+                  },
+                  "name": "name"
+                },
+                "computed": false,
+                "shorthand": false,
+                "value": {
+                  "type": "StringLiteral",
+                  "start": 104,
+                  "end": 111,
+                  "loc": {
+                    "start": {
+                      "line": 9,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 9,
+                      "column": 15
+                    }
+                  },
+                  "extra": {
+                    "rawValue": "Alice",
+                    "raw": "'Alice'"
+                  },
+                  "value": "Alice"
+                }
+              },
+              {
+                "type": "ObjectProperty",
+                "start": 115,
+                "end": 122,
+                "loc": {
+                  "start": {
+                    "line": 10,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 10,
+                    "column": 9
+                  }
+                },
+                "method": false,
+                "key": {
+                  "type": "Identifier",
+                  "start": 115,
+                  "end": 118,
+                  "loc": {
+                    "start": {
+                      "line": 10,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 10,
+                      "column": 5
+                    },
+                    "identifierName": "age"
+                  },
+                  "name": "age"
+                },
+                "computed": false,
+                "shorthand": false,
+                "value": {
+                  "type": "NumericLiteral",
+                  "start": 120,
+                  "end": 122,
+                  "loc": {
+                    "start": {
+                      "line": 10,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 10,
+                      "column": 9
+                    }
+                  },
+                  "extra": {
+                    "rawValue": 23,
+                    "raw": "23"
+                  },
+                  "value": 23
+                }
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}
