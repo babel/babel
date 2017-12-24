@@ -2,10 +2,9 @@
   "name": "babel-eslint",
   "version": "8.0.3",
   "description": "Custom parser for ESLint",
-  "main": "index.js",
+  "main": "lib/index.js",
   "files": [
-    "index.js",
-    "babylon-to-espree"
+    "lib"
   ],
   "repository": {
     "type": "git",
@@ -15,7 +14,9 @@
     "@babel/code-frame": "7.0.0-beta.31",
     "@babel/traverse": "7.0.0-beta.31",
     "@babel/types": "7.0.0-beta.31",
-    "babylon": "7.0.0-beta.31"
+    "babylon": "7.0.0-beta.31",
+    "eslint-scope": "~3.7.1",
+    "eslint-visitor-keys": "^1.0.0"
   },
   "scripts": {
     "test": "npm run lint && npm run test-only",
@@ -38,7 +39,7 @@
   "devDependencies": {
     "babel-eslint": "^8.0.0",
     "dedent": "^0.7.0",
-    "eslint": "^4.1.0",
+    "eslint": "^4.12.1",
     "eslint-config-babel": "^7.0.1",
     "eslint-plugin-flowtype": "^2.30.3",
     "eslint-plugin-prettier": "^2.1.2",

@@ -81,7 +81,10 @@ function parseAndAssertSame(code) {
     ecmaVersion: 8,
     sourceType: "module",
   });
-  var babylonAST = babelEslint.parse(code);
+  var babylonAST = babelEslint.parseForESLint(code, {
+    eslintVisitorKeys: true,
+    eslintScopeManager: true,
+  }).ast;
   try {
     assertImplementsAST(esAST, babylonAST);
   } catch (err) {
@@ -112,7 +115,10 @@ function parseAndAssertSame(code) {
 describe("babylon-to-esprima", () => {
   describe("compatibility", () => {
     it("should allow ast.analyze to be called without options", function() {
-      var esAST = babelEslint.parse("`test`");
+      var esAST = babelEslint.parseForESLint("`test`", {
+        eslintScopeManager: true,
+        eslintVisitorKeys: true,
+      }).ast;
 
       assert.doesNotThrow(
         () => {

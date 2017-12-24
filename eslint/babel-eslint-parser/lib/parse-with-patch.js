@@ -1,12 +1,9 @@
-var babylonToEspree = require("./babylon-to-espree");
+"use strict";
+
+var parse = require("./parse");
 var Module = require("module");
 var path = require("path");
-var parse = require("babylon").parse;
 var t = require("@babel/types");
-var tt = require("babylon").tokTypes;
-var traverse = require("@babel/traverse").default;
-var codeFrameColumns = require("@babel/code-frame").codeFrameColumns;
-
 var hasPatched = false;
 var eslintOptions = {};
 
@@ -357,7 +354,7 @@ function monkeypatch(modules) {
   };
 }
 
-exports.parse = function(code, options) {
+module.exports = function(code, options) {
   options = options || {};
   eslintOptions.ecmaVersion = options.ecmaVersion = options.ecmaVersion || 6;
   eslintOptions.sourceType = options.sourceType =
@@ -380,81 +377,5 @@ exports.parse = function(code, options) {
     }
   }
 
-  return exports.parseNoPatch(code, options);
-};
-
-exports.parseNoPatch = function(code, options) {
-  var opts = {
-    codeFrame: options.hasOwnProperty("codeFrame") ? options.codeFrame : true,
-    sourceType: options.sourceType,
-    allowImportExportEverywhere: options.allowImportExportEverywhere, // consistent with espree
-    allowReturnOutsideFunction: true,
-    allowSuperOutsideMethod: true,
-    ranges: true,
-    tokens: true,
-    plugins: [
-      "flow",
-      "jsx",
-      "estree",
-      "asyncFunctions",
-      "asyncGenerators",
-      "classConstructorCall",
-      "classProperties",
-      "decorators",
-      "doExpressions",
-      "exponentiationOperator",
-      "exportExtensions",
-      "functionBind",
-      "functionSent",
-      "objectRestSpread",
-      "trailingFunctionCommas",
-      "dynamicImport",
-      "numericSeparator",
-      "optionalChaining",
-      "importMeta",
-      "classPrivateProperties",
-      "bigInt",
-      "optionalCatchBinding",
-    ],
-  };
-
-  var ast;
-  try {
-    ast = parse(code, opts);
-  } catch (err) {
-    if (err instanceof SyntaxError) {
-      err.lineNumber = err.loc.line;
-      err.column = err.loc.column;
-
-      if (opts.codeFrame) {
-        err.lineNumber = err.loc.line;
-        err.column = err.loc.column + 1;
-
-        // remove trailing "(LINE:COLUMN)" acorn message and add in esprima syntax error message start
-        err.message =
-          "Line " +
-          err.lineNumber +
-          ": " +
-          err.message.replace(/ \((\d+):(\d+)\)$/, "") +
-          // add codeframe
-          "\n\n" +
-          codeFrameColumns(
-            code,
-            {
-              start: {
-                line: err.lineNumber,
-                column: err.column,
-              },
-            },
-            { highlightCode: true }
-          );
-      }
-    }
-
-    throw err;
-  }
-
-  babylonToEspree(ast, traverse, tt, code);
-
-  return ast;
+  return parse(code, options);
 };
