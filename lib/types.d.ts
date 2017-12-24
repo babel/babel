@@ -169,7 +169,7 @@ export class FunctionExpression extends Node {
 
 export class Identifier extends Node {
   type: "Identifier";
-  name: any;
+  name: string;
   decorators?: Array<Decorator>;
   optional?: boolean;
   typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop;
@@ -1322,7 +1322,7 @@ export function forInStatement(left: VariableDeclaration | LVal, right: Expressi
 export function forStatement(init?: VariableDeclaration | Expression, test?: Expression, update?: Expression, body: Statement): ForStatement;
 export function functionDeclaration(id?: Identifier, params: Array<LVal>, body: BlockStatement, generator?: boolean, async?: boolean, declare?: boolean, returnType?: TypeAnnotation | TSTypeAnnotation | Noop, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop): FunctionDeclaration;
 export function functionExpression(id?: Identifier, params: Array<LVal>, body: BlockStatement, generator?: boolean, async?: boolean, returnType?: TypeAnnotation | TSTypeAnnotation | Noop, typeParameters?: TypeParameterDeclaration | TSTypeParameterDeclaration | Noop): FunctionExpression;
-export function identifier(name: any, decorators?: Array<Decorator>, optional?: boolean, typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop): Identifier;
+export function identifier(name: string, decorators?: Array<Decorator>, optional?: boolean, typeAnnotation?: TypeAnnotation | TSTypeAnnotation | Noop): Identifier;
 export function ifStatement(test: Expression, consequent: Statement, alternate?: Statement): IfStatement;
 export function labeledStatement(label: Identifier, body: Statement): LabeledStatement;
 export function stringLiteral(value: string): StringLiteral;
