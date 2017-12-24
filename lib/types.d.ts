@@ -39,7 +39,7 @@ export class Node {
 
 export class ArrayExpression extends Node {
   type: "ArrayExpression";
-  elements?: Array<any>;
+  elements?: Array<null | Expression | SpreadElement>;
 }
 
 export class AssignmentExpression extends Node {
@@ -1304,7 +1304,7 @@ export type TSTypeElement = TSCallSignatureDeclaration | TSConstructSignatureDec
 export type TSType = TSAnyKeyword | TSNumberKeyword | TSObjectKeyword | TSBooleanKeyword | TSStringKeyword | TSSymbolKeyword | TSVoidKeyword | TSUndefinedKeyword | TSNullKeyword | TSNeverKeyword | TSThisType | TSFunctionType | TSConstructorType | TSTypeReference | TSTypePredicate | TSTypeQuery | TSTypeLiteral | TSArrayType | TSTupleType | TSUnionType | TSIntersectionType | TSParenthesizedType | TSTypeOperator | TSIndexedAccessType | TSMappedType | TSLiteralType | TSExpressionWithTypeArguments;
 
 declare module "@babel/types" {
-  export function arrayExpression(elements?: Array<any>): ArrayExpression;
+  export function arrayExpression(elements?: Array<null | Expression | SpreadElement>): ArrayExpression;
   export function assignmentExpression(operator: string, left: LVal, right: Expression): AssignmentExpression;
   export function binaryExpression(operator: "+" | "-" | "/" | "%" | "*" | "**" | "&" | "|" | ">>" | ">>>" | "<<" | "^" | "==" | "===" | "!=" | "!==" | "in" | "instanceof" | ">" | "<" | ">=" | "<=", left: Expression, right: Expression): BinaryExpression;
   export function directive(value: DirectiveLiteral): Directive;

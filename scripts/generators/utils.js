@@ -22,9 +22,25 @@ exports.stringifyValidator = function stringifyValidator(
     return validator.oneOfNodeTypes.map(_ => nodePrefix + _).join(" | ");
   }
 
+  if (validator.oneOfNodeOrValueTypes) {
+    return validator.oneOfNodeOrValueTypes
+      .map(_ => {
+        return isValueType(_) ? _ : nodePrefix + _;
+      })
+      .join(" | ");
+  }
+
   if (validator.type) {
     return validator.type;
   }
 
   return ["any"];
 };
+
+/**
+ * Heuristic to decide whether or not the given type is a value type (eg. "null")
+ * or a Node type (eg. "Expression").
+ */
+function isValueType(type) {
+  return type.charAt(0).toLowerCase() === type.charAt(0);
+}
