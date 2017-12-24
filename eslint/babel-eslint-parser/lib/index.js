@@ -15,3 +15,7 @@ exports.parseForESLint = function(code, options) {
   patched = true;
   return { ast: require("./parse-with-patch")(code, options) };
 };
+
+exports.parseNoPatch = function(code, options) {
+  return require("./parse")(code, options);
+};

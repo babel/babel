@@ -531,3 +531,12 @@ describe("babylon-to-esprima", () => {
     });
   });
 });
+
+describe("Public API", () => {
+  it("exports a parseNoPatch function", () => {
+    assertImplementsAST(
+      espree.parse("foo"),
+      babelEslint.parseNoPatch("foo", {})
+    );
+  });
+});
