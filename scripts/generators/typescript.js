@@ -138,7 +138,7 @@ lines.push(
 
 for (const type in t.FLIPPED_ALIAS_KEYS) {
   const types = t.FLIPPED_ALIAS_KEYS[type];
-  code += `type ${NODE_PREFIX}${type} = ${types
+  code += `export type ${NODE_PREFIX}${type} = ${types
     .map(type => `${NODE_PREFIX}${type}`)
     .join(" | ")};\n`;
 }
