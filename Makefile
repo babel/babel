@@ -23,6 +23,7 @@ build: clean
 	node scripts/generators/flow.js
 	node scripts/generators/typescript.js
 	cp ./lib/types.d.ts ./packages/babel-types/lib/index.d.ts
+	cp ./lib/types.js ./packages/babel-types/lib/index.js.flow
 ifneq ("$(BABEL_ENV)", "cov")
 	make build-standalone
 	make build-preset-env-standalone
