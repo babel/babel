@@ -1,6 +1,5 @@
 "use strict";
 
-const fs = require("fs");
 const t = require("../../packages/babel-types");
 const utils = require("./utils");
 
@@ -95,7 +94,7 @@ for (const type in t.NODE_FIELDS) {
   // super and import are reserved words in JavaScript
   if (type !== "Super" && type !== "Import") {
     lines.push(
-      `export function ${type[0].toLowerCase() + type.slice(1)}(${args.join(
+      `export function ${utils.toFunctionName(type)}(${args.join(
         ", "
       )}): ${NODE_PREFIX}${type};`
     );
@@ -147,4 +146,4 @@ code += lines.join("\n") + "\n";
 
 //
 
-fs.writeFileSync(__dirname + "/../../lib/types.d.ts", code);
+process.stdout.write(code);

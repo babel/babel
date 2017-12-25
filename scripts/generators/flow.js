@@ -1,8 +1,7 @@
 "use strict";
 
-const fs = require("fs");
 const t = require("../../packages/babel-types");
-const { stringifyValidator } = require("./utils");
+const utils = require("./utils");
 
 const NODE_PREFIX = "BabelNode";
 
@@ -74,7 +73,7 @@ for (const type in t.NODE_FIELDS) {
 
       const validate = field.validate;
       if (validate) {
-        typeAnnotation = stringifyValidator(validate, NODE_PREFIX);
+        typeAnnotation = utils.stringifyValidator(validate, NODE_PREFIX);
       }
 
       if (typeAnnotation) {
@@ -95,7 +94,7 @@ for (const type in t.NODE_FIELDS) {
   // Flow chokes on super() and import() :/
   if (type !== "Super" && type !== "Import") {
     lines.push(
-      `declare function ${type[0].toLowerCase() + type.slice(1)}(${args.join(
+      `declare function ${utils.toFunctionName(type)}(${args.join(
         ", "
       )}): ${NODE_PREFIX}${type};`
     );
@@ -150,4 +149,4 @@ code += `\ndeclare module "@babel/types" {
 
 //
 
-fs.writeFileSync(__dirname + "/../../lib/types.js", code);
+process.stdout.write(code);

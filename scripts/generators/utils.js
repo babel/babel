@@ -37,6 +37,11 @@ exports.stringifyValidator = function stringifyValidator(
   return ["any"];
 };
 
+exports.toFunctionName = function toFunctionName(typeName) {
+  const _ = typeName.replace(/^TS/, "ts").replace(/^JSX/, "jsx");
+  return _.slice(0, 1).toLowerCase() + _.slice(1);
+};
+
 /**
  * Heuristic to decide whether or not the given type is a value type (eg. "null")
  * or a Node type (eg. "Expression").
