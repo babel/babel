@@ -318,9 +318,16 @@ module.exports = function(ast, parserOptions) {
     impliedStrict: false,
     sourceType: ast.sourceType,
     ecmaVersion: parserOptions.ecmaVersion || 6,
-    childVisitorKeys,
     fallback,
   };
+
+  if (OriginalReferencer._babelEslintPatched) {
+    require("./patch-eslint-scope")(parserOptions);
+    return escope.analyze(ast, options);
+  }
+
+  options.childVisitorKeys = childVisitorKeys;
+
   const scopeManager = new escope.ScopeManager(options);
   const referencer = new Referencer(options, scopeManager);
 

@@ -1,18 +1,19 @@
 "use strict";
 
-let patched = false;
-
 exports.parse = function(code, options) {
-  patched = true;
-  return require("./parse-with-patch")(code, options);
+  return exports.parseForESLint(code, options).ast;
 };
 
 exports.parseForESLint = function(code, options) {
-  if (!patched && options.eslintVisitorKeys && options.eslintScopeManager) {
+  options = options || {};
+  options.ecmaVersion = options.ecmaVersion || 6;
+  options.sourceType = options.sourceType || "module";
+  options.allowImportExportEverywhere =
+    options.allowImportExportEverywhere || false;
+
+  if (options.eslintVisitorKeys && options.eslintScopeManager) {
     return require("./parse-with-scope")(code, options);
   }
-
-  patched = true;
   return { ast: require("./parse-with-patch")(code, options) };
 };
 

@@ -1,0 +1,11 @@
+root: true
+
+# babel-eslint
+parser: ../../../lib/index.js
+
+# use eslint-plugin-import
+plugins:
+  - import
+rules:
+  import/no-named-as-default: error
+  no-unused-vars: error
