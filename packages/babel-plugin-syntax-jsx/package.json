@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-jsx",
-  "version": "7.0.0-beta.35",
+  "version": "7.0.0-beta.36",
   "description": "Allow parsing of jsx",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-jsx",
   "license": "MIT",
@@ -9,9 +9,9 @@
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.35"
+    "@babel/core": "7.0.0-beta.36"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.35"
+    "@babel/core": "7.0.0-beta.36"
   }
 }
