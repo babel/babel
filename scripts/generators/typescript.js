@@ -36,12 +36,12 @@ export class ${NODE_PREFIX}SourceLocation {
 }
 
 export class Node {
-  leadingComments?: Array<${NODE_PREFIX}Comment> | null;
-  innerComments?: Array<${NODE_PREFIX}Comment> | null;
-  trailingComments?: Array<${NODE_PREFIX}Comment> | null;
-  start?: number | null;
-  end?: number | null;
-  loc?: ${NODE_PREFIX}SourceLocation | null;
+  leadingComments: Array<${NODE_PREFIX}Comment> | null;
+  innerComments: Array<${NODE_PREFIX}Comment> | null;
+  trailingComments: Array<${NODE_PREFIX}Comment> | null;
+  start: number | null;
+  end: number | null;
+  loc: ${NODE_PREFIX}SourceLocation | null;
 }\n\n`;
 
 //
@@ -65,25 +65,20 @@ for (const type in t.NODE_FIELDS) {
     })
     .forEach(fieldName => {
       const field = fields[fieldName];
+      let typeAnnotation = utils.stringifyValidator(
+        field.validate,
+        NODE_PREFIX
+      );
 
-      let suffix = "";
-      if (field.optional || field.default != null) suffix += "?";
-
-      let typeAnnotation = "any";
-
-      const validate = field.validate;
-      if (validate) {
-        typeAnnotation = utils.stringifyValidator(validate, NODE_PREFIX);
+      if (field.optional || field.default != null) {
+        typeAnnotation += " | null";
       }
 
-      if (typeAnnotation) {
-        suffix += ": " + typeAnnotation;
-      }
-
-      args.push(t.toBindingIdentifierName(fieldName) + suffix);
+      const _ = ": " + typeAnnotation;
+      args.push(t.toBindingIdentifierName(fieldName) + _);
 
       if (t.isValidIdentifier(fieldName)) {
-        struct.push(fieldName + suffix + ";");
+        struct.push(fieldName + _ + ";");
       }
     });
 
