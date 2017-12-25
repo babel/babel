@@ -2,6 +2,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
+function _constructSuperInstance(Derived, args, existingThis) { var Super = Derived.__proto__ || Object.getPrototypeOf(Derived); return typeof Reflect !== "undefined" && typeof Reflect.construct === "function" ? Reflect.construct(Super, args, existingThis.constructor || Derived) : Super.apply(existingThis, args); }
+
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _gPO = Object.getPrototypeOf || function _gPO(o) { return o.__proto__; };
@@ -22,7 +24,7 @@ function (_Array) {
   function List() {
     _classCallCheck(this, List);
 
-    return _possibleConstructorReturn(this, (List.__proto__ || Object.getPrototypeOf(List)).apply(this, arguments));
+    return _possibleConstructorReturn(this, _constructSuperInstance(List, arguments, this));
   }
 
   return List;

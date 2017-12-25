@@ -12,4 +12,6 @@ export function multiline(arr) {
   return arr.join("\n");
 }
 
+export const NODE_VERSION = parseInt(process.version.slice(1), 10);
+
 export const assertArrayEquals = assert.deepEqual;

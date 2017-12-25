@@ -1,6 +1,5 @@
 import type { NodePath } from "@babel/traverse";
 import ReplaceSupers from "@babel/helper-replace-supers";
-import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as defineMap from "@babel/helper-define-map";
 import { traverse, template, types as t } from "@babel/core";
 
@@ -375,16 +374,14 @@ export default class ClassTransformer {
   wrapSuperCall(bareSuper, superRef, thisRef, body) {
     let bareSuperNode = bareSuper.node;
 
+    const isSingleArgumentsSpread =
+      bareSuper.get("arguments").length === 1 &&
+      bareSuper.get("arguments.0").isSpreadElement() &&
+      bareSuper.get("arguments.0.argument").isIdentifier({ name: "arguments" });
+
     if (this.isLoose) {
       bareSuperNode.arguments.unshift(t.thisExpression());
-      if (
-        bareSuperNode.arguments.length === 2 &&
-        t.isSpreadElement(bareSuperNode.arguments[1]) &&
-        t.isIdentifier(bareSuperNode.arguments[1].argument, {
-          name: "arguments",
-        })
-      ) {
-        // special case single arguments spread
+      if (isSingleArgumentsSpread) {
         bareSuperNode.arguments[1] = bareSuperNode.arguments[1].argument;
         bareSuperNode.callee = t.memberExpression(
           superRef,
@@ -397,20 +394,15 @@ export default class ClassTransformer {
         );
       }
     } else {
-      bareSuperNode = optimiseCall(
-        t.logicalExpression(
-          "||",
-          t.memberExpression(this.classRef, t.identifier("__proto__")),
-          t.callExpression(
-            t.memberExpression(
-              t.identifier("Object"),
-              t.identifier("getPrototypeOf"),
-            ),
-            [this.classRef],
-          ),
-        ),
-        t.thisExpression(),
-        bareSuperNode.arguments,
+      bareSuperNode = t.callExpression(
+        this.file.addHelper("constructSuperInstance"),
+        [
+          this.classRef,
+          isSingleArgumentsSpread
+            ? t.identifier("arguments")
+            : t.arrayExpression(bareSuperNode.arguments),
+          t.thisExpression(),
+        ],
       );
     }
 

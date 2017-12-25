@@ -470,6 +470,16 @@ helpers.wrapNativeSuper = defineHelper(`
   }
 `);
 
+helpers.constructSuperInstance = defineHelper(`
+  export default function _constructSuperInstance(Derived, args, existingThis) {
+    const Super = Derived.__proto__ || Object.getPrototypeOf(Derived);
+    return typeof Reflect !== "undefined" && typeof Reflect.construct === "function" 
+      ? Reflect.construct(Super, args, existingThis.constructor || Derived)
+      : Super.apply(existingThis, args);
+  }
+
+`);
+
 helpers.instanceof = defineHelper(`
   export default function _instanceof(left, right) {
     if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {

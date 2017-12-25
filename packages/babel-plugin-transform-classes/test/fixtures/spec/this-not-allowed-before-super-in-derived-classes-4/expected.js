@@ -10,7 +10,7 @@ function (_Bar) {
 
     var fn = () => babelHelpers.assertThisInitialized(_this);
 
-    _this = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this));
+    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Foo, [], this));
     fn();
     return _this;
   }

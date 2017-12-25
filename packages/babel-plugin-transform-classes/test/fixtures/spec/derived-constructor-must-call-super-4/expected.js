@@ -8,7 +8,7 @@ function (_Bar) {
 
     babelHelpers.classCallCheck(this, Foo);
 
-    var fn = () => _this = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this));
+    var fn = () => _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Foo, [], this));
 
     return babelHelpers.possibleConstructorReturn(_this);
   }

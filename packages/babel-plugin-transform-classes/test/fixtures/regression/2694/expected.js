@@ -14,7 +14,7 @@ function (_BaseFoo) {
 
   function SubFoo() {
     babelHelpers.classCallCheck(this, SubFoo);
-    return babelHelpers.possibleConstructorReturn(this, (SubFoo.__proto__ || Object.getPrototypeOf(SubFoo)).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(SubFoo, arguments, this));
   }
 
   babelHelpers.createClass(SubFoo, null, [{

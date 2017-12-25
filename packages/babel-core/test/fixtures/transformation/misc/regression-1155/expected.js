@@ -11,7 +11,7 @@ function (_Bar) {
       this;
     };
 
-    return babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this, parentOptions));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.constructSuperInstance(Foo, [parentOptions], this));
   }
 
   return Foo;
