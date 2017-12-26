@@ -79,15 +79,12 @@ defineType("DeclareInterface", {
 });
 
 defineType("DeclareModule", {
-  visitor: ["id", "body"],
+  visitor: ["id", "body", "kind"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
     id: validateType(["Identifier", "StringLiteral"]),
     body: validateType("BlockStatement"),
-    kind: {
-      optional: true,
-      validate: validate(assertOneOf("CommonJS", "ES")),
-    },
+    kind: validateOptional(assertOneOf("CommonJS", "ES")),
   },
 });
 
@@ -131,7 +128,7 @@ defineType("DeclareExportDeclaration", {
   visitor: ["declaration", "specifiers", "source"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
-    declaration: validateOptionalType("TSType"),
+    declaration: validateOptionalType("Flow"),
     specifiers: validateOptional(
       arrayOfType(["ExportSpecifier", "ExportNamespaceSpecifier"]),
     ),
@@ -281,6 +278,7 @@ defineType("ObjectTypeIndexer", {
     key: validateType("Flow"),
     value: validateType(["Flow", "Identifier"]),
     static: validate(assertValueType("boolean")),
+    variance: validateOptionalType("Variance"),
   },
 });
 
@@ -290,7 +288,7 @@ defineType("ObjectTypeProperty", {
   fields: {
     key: validateType("Identifier"),
     value: validateType(["Flow", "Identifier"]),
-    kind: validate(assertOneOf("init")),
+    kind: validate(assertOneOf("init", "get", "set")),
     static: validate(assertValueType("boolean")),
     optional: validate(assertValueType("boolean")),
     variance: validateOptionalType("Variance"),
