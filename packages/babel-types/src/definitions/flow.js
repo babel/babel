@@ -79,7 +79,8 @@ defineType("DeclareInterface", {
 });
 
 defineType("DeclareModule", {
-  visitor: ["id", "body", "kind"],
+  builder: ["id", "body", "kind"],
+  visitor: ["id", "body"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
     id: validateType(["Identifier", "StringLiteral"]),
@@ -271,7 +272,7 @@ defineType("ObjectTypeCallProperty", {
 });
 
 defineType("ObjectTypeIndexer", {
-  visitor: ["id", "key", "value"],
+  visitor: ["id", "key", "value", "variance"],
   aliases: ["Flow", "UserWhitespacable"],
   fields: {
     id: validateOptionalType("Identifier"),
@@ -283,7 +284,7 @@ defineType("ObjectTypeIndexer", {
 });
 
 defineType("ObjectTypeProperty", {
-  visitor: ["key", "value"],
+  visitor: ["key", "value", "variance"],
   aliases: ["Flow", "UserWhitespacable"],
   fields: {
     key: validateType("Identifier"),
@@ -383,7 +384,7 @@ defineType("TypeCastExpression", {
 
 defineType("TypeParameter", {
   aliases: ["Flow"],
-  visitor: ["bound", "default"],
+  visitor: ["bound", "default", "variance"],
   fields: {
     name: validate(assertValueType("string")),
     bound: validateOptionalType("TypeAnnotation"),
