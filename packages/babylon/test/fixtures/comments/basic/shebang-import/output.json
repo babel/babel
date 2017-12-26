@@ -72,8 +72,7 @@
                 },
                 "identifierName": "spawn"
               },
-              "name": "spawn",
-              "leadingComments": null
+              "name": "spawn"
             },
             "local": {
               "type": "Identifier",
@@ -91,8 +90,7 @@
                 "identifierName": "spawn"
               },
               "name": "spawn"
-            },
-            "leadingComments": null
+            }
           }
         ],
         "source": {

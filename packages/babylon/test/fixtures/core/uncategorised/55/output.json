@@ -60,9 +60,7 @@
             "rawValue": 42,
             "raw": "42"
           },
-          "value": 42,
-          "leadingComments": null,
-          "trailingComments": null
+          "value": 42
         },
         "trailingComments": [
           {

@@ -209,9 +209,7 @@
                           "column": 18
                         }
                       },
-                      "label": null,
-                      "leadingComments": null,
-                      "trailingComments": null
+                      "label": null
                     }
                   ],
                   "test": {

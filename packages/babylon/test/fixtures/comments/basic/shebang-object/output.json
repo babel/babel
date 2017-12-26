@@ -102,8 +102,7 @@
                       },
                       "identifierName": "spawn"
                     },
-                    "name": "spawn",
-                    "leadingComments": null
+                    "name": "spawn"
                   },
                   "computed": false,
                   "shorthand": true,
@@ -124,13 +123,11 @@
                     },
                     "name": "spawn"
                   },
-                  "leadingComments": null,
                   "extra": {
                     "shorthand": true
                   }
                 }
-              ],
-              "leadingComments": null
+              ]
             },
             "init": {
               "type": "Identifier",
@@ -148,8 +145,7 @@
                 "identifierName": "x"
               },
               "name": "x"
-            },
-            "leadingComments": null
+            }
           }
         ],
         "kind": "var",

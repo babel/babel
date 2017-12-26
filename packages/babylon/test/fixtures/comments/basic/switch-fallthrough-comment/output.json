@@ -93,8 +93,7 @@
                 "rawValue": 1,
                 "raw": "1"
               },
-              "value": 1,
-              "leadingComments": null
+              "value": 1
             },
             "leadingComments": [
               {
@@ -215,8 +214,7 @@
                 "rawValue": 2,
                 "raw": "2"
               },
-              "value": 2,
-              "leadingComments": null
+              "value": 2
             },
             "leadingComments": [
               {

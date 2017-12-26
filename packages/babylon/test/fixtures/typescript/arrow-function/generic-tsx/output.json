@@ -218,11 +218,9 @@
                     "column": 2
                   }
                 },
-                "name": "T",
-                "leadingComments": null
+                "name": "T"
               }
-            ],
-            "leadingComments": null
+            ]
           }
         },
         "leadingComments": [

@@ -120,11 +120,9 @@
                     },
                     "identifierName": "foo"
                   },
-                  "name": "foo",
-                  "leadingComments": null
+                  "name": "foo"
                 },
-                "arguments": [],
-                "leadingComments": null
+                "arguments": []
               },
               "leadingComments": [
                 {

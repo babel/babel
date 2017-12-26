@@ -118,11 +118,9 @@
                       },
                       "identifierName": "bingo"
                     },
-                    "name": "bingo",
-                    "leadingComments": null
+                    "name": "bingo"
                   },
-                  "arguments": [],
-                  "leadingComments": null
+                  "arguments": []
                 },
                 "leadingComments": [
                   {

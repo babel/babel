@@ -89,9 +89,7 @@
                     "column": 14
                   }
                 },
-                "label": null,
-                "leadingComments": null,
-                "trailingComments": null
+                "label": null
               }
             ],
             "test": {

@@ -72,7 +72,6 @@
               "identifierName": "foo"
             },
             "name": "foo",
-            "leadingComments": null,
             "trailingComments": [
               {
                 "type": "CommentLine",

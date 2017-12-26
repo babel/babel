@@ -57,8 +57,7 @@
             },
             "identifierName": "C"
           },
-          "name": "C",
-          "leadingComments": null
+          "name": "C"
         },
         "superClass": {
           "type": "Identifier",

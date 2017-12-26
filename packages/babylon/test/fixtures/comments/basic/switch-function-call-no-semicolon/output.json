@@ -174,10 +174,8 @@
                       },
                       "value": "1"
                     }
-                  ],
-                  "trailingComments": null
-                },
-                "trailingComments": null
+                  ]
+                }
               }
             ],
             "test": {
@@ -248,8 +246,7 @@
                     "column": 10
                   }
                 },
-                "label": null,
-                "leadingComments": null
+                "label": null
               }
             ],
             "test": null,

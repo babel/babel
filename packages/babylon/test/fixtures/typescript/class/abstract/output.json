@@ -192,11 +192,8 @@
                 "column": 26
               }
             },
-            "body": [],
-            "leadingComments": null,
-            "trailingComments": null
-          },
-          "trailingComments": null
+            "body": []
+          }
         },
         "trailingComments": [
           {
@@ -261,10 +258,8 @@
                 "column": 33
               }
             },
-            "body": [],
-            "leadingComments": null
+            "body": []
           },
-          "leadingComments": null,
           "abstract": true
         },
         "leadingComments": [
@@ -346,11 +341,8 @@
                 "column": 35
               }
             },
-            "body": [],
-            "leadingComments": null,
-            "trailingComments": null
+            "body": []
           },
-          "trailingComments": null,
           "abstract": true
         },
         "trailingComments": [

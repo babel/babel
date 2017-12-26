@@ -78,7 +78,6 @@
               "identifierName": "param"
             },
             "name": "param",
-            "leadingComments": null,
             "trailingComments": [
               {
                 "type": "CommentBlock",
