@@ -65,20 +65,25 @@ for (const type in t.NODE_FIELDS) {
     })
     .forEach(fieldName => {
       const field = fields[fieldName];
-      let typeAnnotation = utils.stringifyValidator(
+      const typeAnnotation = utils.stringifyValidator(
         field.validate,
         NODE_PREFIX
       );
 
-      if (field.optional || field.default != null) {
-        typeAnnotation += " | null";
-      }
-
-      const _ = ": " + typeAnnotation;
-      args.push(t.toBindingIdentifierName(fieldName) + _);
+      args.push(
+        t.toBindingIdentifierName(fieldName) +
+          (isNullable(field) ? "?: " : ": ") +
+          typeAnnotation
+      );
 
       if (t.isValidIdentifier(fieldName)) {
-        struct.push(fieldName + _ + ";");
+        struct.push(
+          fieldName +
+            ": " +
+            typeAnnotation +
+            (isNullable(field) ? " | null" : "") +
+            ";"
+        );
       }
     });
 
@@ -142,3 +147,9 @@ code += lines.join("\n") + "\n";
 //
 
 process.stdout.write(code);
+
+//
+
+function isNullable(field) {
+  return field.optional || field.default != null;
+}
