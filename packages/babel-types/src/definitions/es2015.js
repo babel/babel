@@ -124,7 +124,7 @@ const classCommon = {
     validate: chain(
       assertValueType("array"),
       assertEach(
-        assertNodeType("TSExpressionWithTypeArguments", "FlowClassImplements"),
+        assertNodeType("TSExpressionWithTypeArguments", "ClassImplements"),
       ),
     ),
     optional: true,
