@@ -20,7 +20,52 @@ function getType(val) {
   }
 }
 
-export function assertEach(callback: Function): Function {
+// TODO: Import and use Node instead of any
+opaque type Validator = (any, string, any) => void;
+
+type FieldOptions = {
+  default?: boolean,
+  optional?: boolean,
+  validate?: Validator,
+};
+
+export function validate(validate: Validator): FieldOptions {
+  return { validate };
+}
+
+export function typeIs(typeName: string | string[]) {
+  return typeof typeName === "string"
+    ? assertNodeType(typeName)
+    : assertNodeType(...typeName);
+}
+
+export function validateType(typeName: string | string[]) {
+  return validate(typeIs(typeName));
+}
+
+export function validateOptional(validate: Validator): FieldOptions {
+  return { validate, optional: true };
+}
+
+export function validateOptionalType(
+  typeName: string | string[],
+): FieldOptions {
+  return { validate: typeIs(typeName), optional: true };
+}
+
+export function arrayOf(elementType: Validator): Validator {
+  return chain(assertValueType("array"), assertEach(elementType));
+}
+
+export function arrayOfType(typeName: string | string[]) {
+  return arrayOf(typeIs(typeName));
+}
+
+export function validateArrayOfType(typeName: string | string[]) {
+  return validate(arrayOfType(typeName));
+}
+
+export function assertEach(callback: Validator): Validator {
   function validator(node, key, val) {
     if (!Array.isArray(val)) return;
 
@@ -32,7 +77,7 @@ export function assertEach(callback: Function): Function {
   return validator;
 }
 
-export function assertOneOf(...values: Array<any>): Function {
+export function assertOneOf(...values: Array<any>): Validator {
   function validate(node: Object, key: string, val: any) {
     if (values.indexOf(val) < 0) {
       throw new TypeError(
@@ -48,7 +93,7 @@ export function assertOneOf(...values: Array<any>): Function {
   return validate;
 }
 
-export function assertNodeType(...types: Array<string>): Function {
+export function assertNodeType(...types: Array<string>): Validator {
   function validate(node, key, val) {
     let valid = false;
 
@@ -74,7 +119,7 @@ export function assertNodeType(...types: Array<string>): Function {
   return validate;
 }
 
-export function assertNodeOrValueType(...types: Array<string>): Function {
+export function assertNodeOrValueType(...types: Array<string>): Validator {
   function validate(node, key, val) {
     let valid = false;
 
@@ -100,7 +145,7 @@ export function assertNodeOrValueType(...types: Array<string>): Function {
   return validate;
 }
 
-export function assertValueType(type: string): Function {
+export function assertValueType(type: string): Validator {
   function validate(node, key, val) {
     const valid = getType(val) === type;
 
@@ -116,7 +161,7 @@ export function assertValueType(type: string): Function {
   return validate;
 }
 
-export function chain(...fns: Array<Function>): Function {
+export function chain(...fns: Array<Validator>): Validator {
   function validate(...args) {
     for (const fn of fns) {
       fn(...args);
@@ -130,7 +175,7 @@ export default function defineType(
   type: string,
   opts: {
     fields?: {
-      [string]: {| validate?: Function, default?: any, optional?: boolean |},
+      [string]: FieldOptions,
     },
     visitor?: Array<string>,
     aliases?: Array<string>,
