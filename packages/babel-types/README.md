@@ -19,7 +19,7 @@ t.anyTypeAnnotation()
 
 See also `t.isAnyTypeAnnotation(node, opts)` and `t.assertAnyTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -59,9 +59,9 @@ t.arrayTypeAnnotation(elementType)
 
 See also `t.isArrayTypeAnnotation(node, opts)` and `t.assertArrayTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
- - `elementType`: `Flow` (required)
+ - `elementType`: `FlowType` (required)
 
 ---
 
@@ -191,7 +191,7 @@ t.booleanLiteralTypeAnnotation()
 
 See also `t.isBooleanLiteralTypeAnnotation(node, opts)` and `t.assertBooleanLiteralTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
  - `value`: `boolean` (default: `null`)
 
@@ -204,7 +204,7 @@ t.booleanTypeAnnotation()
 
 See also `t.isBooleanTypeAnnotation(node, opts)` and `t.assertBooleanTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -540,7 +540,7 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id`: `Identifier` (required)
  - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
- - `right`: `Flow` (required)
+ - `right`: `FlowType` (required)
 
 ---
 
@@ -649,7 +649,7 @@ t.emptyTypeAnnotation()
 
 See also `t.isEmptyTypeAnnotation(node, opts)` and `t.assertEmptyTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -661,7 +661,7 @@ t.existsTypeAnnotation()
 
 See also `t.isExistsTypeAnnotation(node, opts)` and `t.assertExistsTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
 
 ---
@@ -866,7 +866,7 @@ t.functionTypeAnnotation(typeParameters, params, rest, returnType)
 
 See also `t.isFunctionTypeAnnotation(node, opts)` and `t.assertFunctionTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
  - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
  - `params`: `Array<FunctionTypeParam>` (required)
@@ -897,7 +897,7 @@ t.genericTypeAnnotation(id, typeParameters)
 
 See also `t.isGenericTypeAnnotation(node, opts)` and `t.assertGenericTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
  - `id`: `Identifier` (required)
  - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
@@ -1052,7 +1052,7 @@ t.intersectionTypeAnnotation(types)
 
 See also `t.isIntersectionTypeAnnotation(node, opts)` and `t.assertIntersectionTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
  - `types`: `Array<Flow>` (required)
 
@@ -1326,7 +1326,7 @@ t.mixedTypeAnnotation()
 
 See also `t.isMixedTypeAnnotation(node, opts)` and `t.assertMixedTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -1376,7 +1376,7 @@ t.nullLiteralTypeAnnotation()
 
 See also `t.isNullLiteralTypeAnnotation(node, opts)` and `t.assertNullLiteralTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -1388,7 +1388,7 @@ t.nullableTypeAnnotation(typeAnnotation)
 
 See also `t.isNullableTypeAnnotation(node, opts)` and `t.assertNullableTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
  - `typeAnnotation`: `Flow` (required)
 
@@ -1401,7 +1401,7 @@ t.numberLiteralTypeAnnotation()
 
 See also `t.isNumberLiteralTypeAnnotation(node, opts)` and `t.assertNumberLiteralTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
  - `value`: `number` (default: `null`)
 
@@ -1414,7 +1414,7 @@ t.numberTypeAnnotation()
 
 See also `t.isNumberTypeAnnotation(node, opts)` and `t.assertNumberTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -1506,7 +1506,7 @@ t.objectTypeAnnotation(properties, indexers, callProperties)
 
 See also `t.isObjectTypeAnnotation(node, opts)` and `t.assertObjectTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
  - `properties`: `Array<ObjectTypeProperty | ObjectTypeSpreadProperty>` (required)
  - `indexers`: `Array<ObjectTypeIndexer>` (default: `null`)
@@ -1531,7 +1531,7 @@ Aliases: `Flow`, `UserWhitespacable`
 
 ### objectTypeIndexer
 ```javascript
-t.objectTypeIndexer(id, key, value)
+t.objectTypeIndexer(id, key, value, variance)
 ```
 
 See also `t.isObjectTypeIndexer(node, opts)` and `t.assertObjectTypeIndexer(node, opts)`.
@@ -1541,14 +1541,14 @@ Aliases: `Flow`, `UserWhitespacable`
  - `id`: `Identifier` (default: `null`)
  - `key`: `Flow` (required)
  - `value`: `Flow | Identifier` (required)
- - `static`: `boolean` (default: `null`)
  - `variance`: `Variance` (default: `null`)
+ - `static`: `boolean` (default: `null`)
 
 ---
 
 ### objectTypeProperty
 ```javascript
-t.objectTypeProperty(key, value)
+t.objectTypeProperty(key, value, variance)
 ```
 
 See also `t.isObjectTypeProperty(node, opts)` and `t.assertObjectTypeProperty(node, opts)`.
@@ -1557,10 +1557,10 @@ Aliases: `Flow`, `UserWhitespacable`
 
  - `key`: `Identifier` (required)
  - `value`: `Flow | Identifier` (required)
+ - `variance`: `Variance` (default: `null`)
  - `kind`: `'init' | 'get' | 'set'` (default: `null`)
  - `optional`: `boolean` (default: `null`)
  - `static`: `boolean` (default: `null`)
- - `variance`: `Variance` (default: `null`)
 
 ---
 
@@ -1725,7 +1725,7 @@ t.stringLiteralTypeAnnotation()
 
 See also `t.isStringLiteralTypeAnnotation(node, opts)` and `t.assertStringLiteralTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
  - `value`: `string` (default: `null`)
 
@@ -1738,7 +1738,7 @@ t.stringTypeAnnotation()
 
 See also `t.isStringTypeAnnotation(node, opts)` and `t.assertStringTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -2584,7 +2584,7 @@ t.thisTypeAnnotation()
 
 See also `t.isThisTypeAnnotation(node, opts)` and `t.assertThisTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -2624,7 +2624,7 @@ t.tupleTypeAnnotation(types)
 
 See also `t.isTupleTypeAnnotation(node, opts)` and `t.assertTupleTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
  - `types`: `Array<Flow>` (required)
 
@@ -2674,7 +2674,7 @@ Aliases: `Flow`, `ExpressionWrapper`, `Expression`
 
 ### typeParameter
 ```javascript
-t.typeParameter(bound, default)
+t.typeParameter(bound, default, variance)
 ```
 
 See also `t.isTypeParameter(node, opts)` and `t.assertTypeParameter(node, opts)`.
@@ -2683,8 +2683,8 @@ Aliases: `Flow`
 
  - `bound`: `TypeAnnotation` (default: `null`)
  - `default`: `Flow` (default: `null`)
- - `name`: `string` (default: `null`)
  - `variance`: `Variance` (default: `null`)
+ - `name`: `string` (default: `null`)
 
 ---
 
@@ -2721,7 +2721,7 @@ t.typeofTypeAnnotation(argument)
 
 See also `t.isTypeofTypeAnnotation(node, opts)` and `t.assertTypeofTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
  - `argument`: `Flow` (required)
 
@@ -2749,7 +2749,7 @@ t.unionTypeAnnotation(types)
 
 See also `t.isUnionTypeAnnotation(node, opts)` and `t.assertUnionTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
  - `types`: `Array<Flow>` (required)
 
@@ -2804,7 +2804,7 @@ t.voidTypeAnnotation()
 
 See also `t.isVoidTypeAnnotation(node, opts)` and `t.assertVoidTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---

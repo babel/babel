@@ -10,30 +10,30 @@ import defineType, {
 } from "./utils";
 
 defineType("AnyTypeAnnotation", {
-  aliases: ["Flow", "FlowBaseAnnotation"],
+  aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
 });
 
 defineType("ArrayTypeAnnotation", {
   visitor: ["elementType"],
-  aliases: ["Flow"],
+  aliases: ["Flow", "FlowType"],
   fields: {
-    elementType: validateType("Flow"),
+    elementType: validateType("FlowType"),
   },
 });
 
 defineType("BooleanTypeAnnotation", {
-  aliases: ["Flow", "FlowBaseAnnotation"],
+  aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
 });
 
 defineType("BooleanLiteralTypeAnnotation", {
-  aliases: ["Flow"],
+  aliases: ["Flow", "FlowType"],
   fields: {
     value: validate(assertValueType("boolean")),
   },
 });
 
 defineType("NullLiteralTypeAnnotation", {
-  aliases: ["Flow", "FlowBaseAnnotation"],
+  aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
 });
 
 defineType("ClassImplements", {
@@ -103,7 +103,7 @@ defineType("DeclareTypeAlias", {
   fields: {
     id: validateType("Identifier"),
     typeParameters: validateOptionalType("TypeParameterDeclaration"),
-    right: validateType("Flow"),
+    right: validateType("FlowType"),
   },
 });
 
@@ -156,12 +156,12 @@ defineType("DeclaredPredicate", {
 });
 
 defineType("ExistsTypeAnnotation", {
-  aliases: ["Flow"],
+  aliases: ["Flow", "FlowType"],
 });
 
 defineType("FunctionTypeAnnotation", {
   visitor: ["typeParameters", "params", "rest", "returnType"],
-  aliases: ["Flow"],
+  aliases: ["Flow", "FlowType"],
   fields: {
     typeParameters: validateOptionalType("TypeParameterDeclaration"),
     params: validate(arrayOfType("FunctionTypeParam")),
@@ -182,7 +182,7 @@ defineType("FunctionTypeParam", {
 
 defineType("GenericTypeAnnotation", {
   visitor: ["id", "typeParameters"],
-  aliases: ["Flow"],
+  aliases: ["Flow", "FlowType"],
   fields: {
     id: validateType("Identifier"),
     typeParameters: validateOptionalType("TypeParameterInstantiation"),
@@ -216,42 +216,42 @@ defineType("InterfaceDeclaration", {
 
 defineType("IntersectionTypeAnnotation", {
   visitor: ["types"],
-  aliases: ["Flow"],
+  aliases: ["Flow", "FlowType"],
   fields: {
     types: validate(arrayOfType("Flow")),
   },
 });
 
 defineType("MixedTypeAnnotation", {
-  aliases: ["Flow", "FlowBaseAnnotation"],
+  aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
 });
 
 defineType("EmptyTypeAnnotation", {
-  aliases: ["Flow", "FlowBaseAnnotation"],
+  aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
 });
 
 defineType("NullableTypeAnnotation", {
   visitor: ["typeAnnotation"],
-  aliases: ["Flow"],
+  aliases: ["Flow", "FlowType"],
   fields: {
     typeAnnotation: validateType("Flow"),
   },
 });
 
 defineType("NumberLiteralTypeAnnotation", {
-  aliases: ["Flow"],
+  aliases: ["Flow", "FlowType"],
   fields: {
     value: validate(assertValueType("number")),
   },
 });
 
 defineType("NumberTypeAnnotation", {
-  aliases: ["Flow", "FlowBaseAnnotation"],
+  aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
 });
 
 defineType("ObjectTypeAnnotation", {
   visitor: ["properties", "indexers", "callProperties"],
-  aliases: ["Flow"],
+  aliases: ["Flow", "FlowType"],
   fields: {
     properties: validate(
       arrayOfType(["ObjectTypeProperty", "ObjectTypeSpreadProperty"]),
@@ -325,23 +325,23 @@ defineType("QualifiedTypeIdentifier", {
 });
 
 defineType("StringLiteralTypeAnnotation", {
-  aliases: ["Flow"],
+  aliases: ["Flow", "FlowType"],
   fields: {
     value: validate(assertValueType("string")),
   },
 });
 
 defineType("StringTypeAnnotation", {
-  aliases: ["Flow", "FlowBaseAnnotation"],
+  aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
 });
 
 defineType("ThisTypeAnnotation", {
-  aliases: ["Flow", "FlowBaseAnnotation"],
+  aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
 });
 
 defineType("TupleTypeAnnotation", {
   visitor: ["types"],
-  aliases: ["Flow"],
+  aliases: ["Flow", "FlowType"],
   fields: {
     types: validate(arrayOfType("Flow")),
   },
@@ -349,7 +349,7 @@ defineType("TupleTypeAnnotation", {
 
 defineType("TypeofTypeAnnotation", {
   visitor: ["argument"],
-  aliases: ["Flow"],
+  aliases: ["Flow", "FlowType"],
   fields: {
     argument: validateType("Flow"),
   },
@@ -411,12 +411,12 @@ defineType("TypeParameterInstantiation", {
 
 defineType("UnionTypeAnnotation", {
   visitor: ["types"],
-  aliases: ["Flow"],
+  aliases: ["Flow", "FlowType"],
   fields: {
     types: validate(arrayOfType("Flow")),
   },
 });
 
 defineType("VoidTypeAnnotation", {
-  aliases: ["Flow", "FlowBaseAnnotation"],
+  aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
 });

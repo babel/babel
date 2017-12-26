@@ -788,6 +788,9 @@ export function isModuleSpecifier(node: Object, opts?: Object): boolean {
 export function isFlow(node: Object, opts?: Object): boolean {
   return is("Flow", node, opts);
 }
+export function isFlowType(node: Object, opts?: Object): boolean {
+  return is("FlowType", node, opts);
+}
 export function isFlowBaseAnnotation(node: Object, opts?: Object): boolean {
   return is("FlowBaseAnnotation", node, opts);
 }
