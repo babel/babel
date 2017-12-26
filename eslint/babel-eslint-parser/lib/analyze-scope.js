@@ -309,6 +309,7 @@ class Referencer extends OriginalReferencer {
 
 module.exports = function(ast, parserOptions) {
   const options = {
+    ignoreEval: true,
     optimistic: false,
     directive: false,
     nodejsScope:

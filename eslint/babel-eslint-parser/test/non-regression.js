@@ -1874,4 +1874,16 @@ describe("verify", () => {
       []
     );
   });
+
+  it("ignore eval in scope analysis", () => {
+    verifyAndAssertMessages(
+      unpad(`
+        const a = 1;
+        console.log(a);
+        eval('');
+      `),
+      { "no-unused-vars": 1, "no-undef": 1 },
+      []
+    );
+  });
 });
