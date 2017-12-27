@@ -48,7 +48,8 @@ export default function(commander, filenames, opts) {
         outputFileSync(dest, res.code);
         util.chmod(src, dest);
 
-        return callback(null, src + " -> " + dest);
+        util.log(src + " -> " + dest);
+        return callback(null, true);
       },
     );
   }
@@ -72,7 +73,27 @@ export default function(commander, filenames, opts) {
         util.chmod(src, dest);
       }
 
-      return callback(null, res);
+      return callback();
+    });
+  }
+
+  function sequentialHandleFile(files, dirname, index, callback) {
+    if (typeof index === "function") {
+      callback = index;
+      index = 0;
+    }
+
+    const filename = files[index];
+    const src = path.join(dirname, filename);
+
+    handleFile(src, filename, dirname, function(err) {
+      if (err) return callback(err);
+      index++;
+      if (index !== files.length) {
+        sequentialHandleFile(files, dirname, index, callback);
+      } else {
+        callback();
+      }
     });
   }
 
@@ -88,21 +109,8 @@ export default function(commander, filenames, opts) {
         util.deleteDir(commander.outDir);
       }
 
-      const results = [];
-      let filesProcessed = 0;
-
       const files = util.readdir(dirname, commander.includeDotfiles);
-      files.forEach(function(filename, index) {
-        const src = path.join(dirname, filename);
-        handleFile(src, filename, dirname, function(err, res) {
-          if (err) return callback(err);
-          results[index] = res;
-          filesProcessed++;
-          if (filesProcessed === files.length) {
-            return callback(null, results);
-          }
-        });
-      });
+      sequentialHandleFile(files, dirname, callback);
     } else {
       write(
         filename,
@@ -113,32 +121,20 @@ export default function(commander, filenames, opts) {
     }
   }
 
-  function output(resultsArray) {
-    resultsArray.forEach(function(result) {
-      if (result) {
-        if (Array.isArray(result)) {
-          result.forEach(singleResult => {
-            if (singleResult) util.log(singleResult);
-          });
-        } else util.log(result);
+  function sequentialHandle(filenames, index = 0) {
+    const filename = filenames[index];
+
+    handle(filename, function(err) {
+      if (err) throw err;
+      index++;
+      if (index !== filenames.length) {
+        sequentialHandle(filenames, index);
       }
     });
   }
 
-  const results = [];
-  let filesProcessed = 0;
-
   if (!commander.skipInitialBuild) {
-    filenames.forEach((filename, index) => {
-      handle(filename, function(err, res) {
-        if (err) throw err;
-        results[index] = res;
-        filesProcessed++;
-        if (filesProcessed === filenames.length) {
-          output(results);
-        }
-      });
-    });
+    sequentialHandle(filenames);
   }
 
   if (commander.watch) {
