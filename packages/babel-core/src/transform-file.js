@@ -10,21 +10,22 @@ type TransformFile = {
 };
 
 export default ((function transformFile(filename, opts, callback) {
+  let options;
   if (typeof opts === "function") {
     callback = opts;
     opts = undefined;
   }
 
   if (opts == null) {
-    opts = { filename };
+    options = { filename };
   } else if (opts && typeof opts === "object") {
-    opts = Object.assign(opts, { filename });
+    options = Object.assign({}, opts, { filename });
   }
 
   process.nextTick(() => {
     let cfg;
     try {
-      cfg = loadConfig(opts);
+      cfg = loadConfig(options);
       if (cfg === null) return callback(null, null);
     } catch (err) {
       return callback(err);

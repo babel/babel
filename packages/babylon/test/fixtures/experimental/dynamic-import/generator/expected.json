@@ -60,7 +60,6 @@
           "name": "a"
         },
         "generator": true,
-        "expression": false,
         "async": false,
         "params": [],
         "body": {

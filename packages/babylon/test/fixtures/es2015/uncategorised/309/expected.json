@@ -119,7 +119,6 @@
                       }
                     },
                     "method": false,
-                    "computed": false,
                     "key": {
                       "type": "Identifier",
                       "start": 5,
@@ -137,6 +136,7 @@
                       },
                       "name": "b"
                     },
+                    "computed": false,
                     "shorthand": false,
                     "value": {
                       "type": "ObjectPattern",
@@ -168,7 +168,6 @@
                             }
                           },
                           "method": false,
-                          "computed": false,
                           "key": {
                             "type": "Identifier",
                             "start": 9,
@@ -186,6 +185,7 @@
                             },
                             "name": "c"
                           },
+                          "computed": false,
                           "shorthand": true,
                           "value": {
                             "type": "AssignmentPattern",

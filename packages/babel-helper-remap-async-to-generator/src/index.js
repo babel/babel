@@ -68,6 +68,8 @@ export default function(path: NodePath, file: Object, helpers: Object) {
     wrapAwait: helpers.wrapAwait,
   });
 
+  const isIIFE = path.parentPath.isCallExpression({ callee: path.node });
+
   path.node.async = false;
   path.node.generator = true;
 
@@ -79,9 +81,7 @@ export default function(path: NodePath, file: Object, helpers: Object) {
     path.parentPath.isObjectProperty() ||
     path.parentPath.isClassProperty();
 
-  if (!isProperty) {
-    annotateAsPure(
-      path.isDeclaration() ? path.get("declarations.0.init") : path,
-    );
+  if (!isProperty && !isIIFE && path.isExpression()) {
+    annotateAsPure(path);
   }
 }

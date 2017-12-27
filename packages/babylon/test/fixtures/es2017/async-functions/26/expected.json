@@ -107,7 +107,6 @@
               },
               "id": null,
               "generator": false,
-              "expression": true,
               "async": true,
               "params": [
                 {

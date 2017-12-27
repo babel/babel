@@ -19,8 +19,8 @@ const buildLooseDestructuredDefaultParam = template(`
   let ASSIGNMENT_IDENTIFIER = PARAMETER_NAME === UNDEFINED ? DEFAULT_VALUE : PARAMETER_NAME ;
 `);
 
-const buildArgumentsAccess = template(`
-  let $0 = arguments[$1];
+const buildSafeArgumentsAccess = template(`
+  let $0 = arguments.length > $1 ? arguments[$1] : undefined;
 `);
 
 function isSafeBinding(scope, node) {
@@ -110,7 +110,10 @@ export default function convertFunctionParams(path, loose) {
       });
       body.push(defNode);
     } else if (firstOptionalIndex !== null) {
-      const defNode = buildArgumentsAccess([param.node, t.numericLiteral(i)]);
+      const defNode = buildSafeArgumentsAccess([
+        param.node,
+        t.numericLiteral(i),
+      ]);
       body.push(defNode);
     } else if (param.isObjectPattern() || param.isArrayPattern()) {
       const uid = path.scope.generateUidIdentifier("ref");

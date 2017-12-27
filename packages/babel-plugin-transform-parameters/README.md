@@ -45,7 +45,7 @@ npm install --save-dev @babel/plugin-transform-parameters
 
 Default parameters desugar into `let` declarations to retain proper semantics. If this is
 not supported in your environment then you'll need the
-[transform-block-scoping](http://babeljs.io/docs/plugins/transform-block-scoping) plugin.
+[@babel/plugin-transform-block-scoping](http://babeljs.io/docs/plugins/transform-block-scoping) plugin.
 
 ## Usage
 
@@ -55,21 +55,21 @@ not supported in your environment then you'll need the
 
 ```json
 {
-  "plugins": ["@babel/transform-parameters"]
+  "plugins": ["@babel/plugin-transform-parameters"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-parameters script.js
+babel --plugins @babel/plugin-transform-parameters script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-parameters"]
+  plugins: ["@babel/plugin-transform-parameters"]
 });
 ```
 

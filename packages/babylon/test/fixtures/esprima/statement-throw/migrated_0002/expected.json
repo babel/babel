@@ -72,7 +72,6 @@
                 }
               },
               "method": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 8,
@@ -90,6 +89,7 @@
                 },
                 "name": "message"
               },
+              "computed": false,
               "shorthand": false,
               "value": {
                 "type": "StringLiteral",

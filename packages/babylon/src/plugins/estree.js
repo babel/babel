@@ -66,10 +66,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // Overrides
     // ==================================
 
-    checkDeclaration(node: N.Pattern): void {
+    initFunction(
+      node: N.BodilessFunctionOrMethodBase,
+      isAsync: ?boolean,
+    ): void {
+      super.initFunction(node, isAsync);
+      node.expression = false;
+    }
+
+    checkDeclaration(node: N.Pattern | N.ObjectProperty): void {
       if (isSimpleProperty(node)) {
-        // $FlowFixMe
-        this.checkDeclaration(node.value);
+        this.checkDeclaration(((node: any): N.EstreeProperty).value);
       } else {
         super.checkDeclaration(node);
       }
@@ -128,11 +135,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    isStrictBody(
-      node: { body: N.BlockStatement },
-      isExpression: ?boolean,
-    ): boolean {
-      if (!isExpression && node.body.body.length > 0) {
+    isStrictBody(node: { body: N.BlockStatement }): boolean {
+      const isBlockStatement = node.body.type === "BlockStatement";
+
+      if (isBlockStatement && node.body.body.length > 0) {
         for (const directive of node.body.body) {
           if (
             directive.type === "ExpressionStatement" &&
@@ -240,6 +246,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       delete node.extra;
 
       return node;
+    }
+
+    parseFunctionBody(node: N.Function, allowExpression: ?boolean): void {
+      super.parseFunctionBody(node, allowExpression);
+      node.expression = node.body.type !== "BlockStatement";
     }
 
     parseMethod<T: N.MethodLike>(

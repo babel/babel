@@ -14,20 +14,20 @@ npm install --save-dev @babel/plugin-transform-instanceof
 
 ```json
 {
-  "plugins": ["@babel/transform-instanceof"]
+  "plugins": ["@babel/plugin-transform-instanceof"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-instanceof script.js
+babel --plugins @babel/plugin-transform-instanceof script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-instanceof"]
+  plugins: ["@babel/plugin-transform-instanceof"]
 });
 ```

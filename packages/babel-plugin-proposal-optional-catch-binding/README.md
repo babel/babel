@@ -38,21 +38,21 @@ npm install --save-dev @babel/plugin-proposal-optional-catch-binding
 
 ```json
 {
-  "plugins": ["@babel/proposal-optional-catch-binding"]
+  "plugins": ["@babel/plugin-proposal-optional-catch-binding"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/proposal-optional-catch-binding script.js
+babel --plugins @babel/plugin-proposal-optional-catch-binding script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/proposal-optional-catch-binding"]
+  plugins: ["@babel/plugin-proposal-optional-catch-binding"]
 });
 ```
 

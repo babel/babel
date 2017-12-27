@@ -133,7 +133,6 @@
                         "column": 37
                       }
                     },
-                    "computed": false,
                     "key": {
                       "type": "Identifier",
                       "start": 28,
@@ -151,6 +150,7 @@
                       },
                       "name": "x"
                     },
+                    "computed": false,
                     "typeAnnotation": {
                       "type": "TSTypeAnnotation",
                       "start": 29,

@@ -1,4 +1,0 @@
-{
-  "plugins": ["root"],
-  "extends": "./extended.babelrc.json"
-}

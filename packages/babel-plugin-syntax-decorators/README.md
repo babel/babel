@@ -16,20 +16,20 @@ npm install --save-dev @babel/plugin-syntax-decorators
 
 ```json
 {
-  "plugins": ["@babel/syntax-decorators"]
+  "plugins": ["@babel/plugin-syntax-decorators"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/syntax-decorators script.js
+babel --plugins @babel/plugin-syntax-decorators script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/syntax-decorators"]
+  plugins: ["@babel/plugin-syntax-decorators"]
 });
 ```

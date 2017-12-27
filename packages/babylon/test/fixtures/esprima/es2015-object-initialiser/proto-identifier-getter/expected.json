@@ -72,7 +72,6 @@
                 }
               },
               "method": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 3,
@@ -90,6 +89,7 @@
                 },
                 "name": "__proto__"
               },
+              "computed": false,
               "shorthand": false,
               "value": {
                 "type": "NullLiteral",
@@ -122,7 +122,6 @@
                 }
               },
               "method": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 24,
@@ -140,10 +139,10 @@
                 },
                 "name": "__proto__"
               },
+              "computed": false,
               "kind": "get",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {

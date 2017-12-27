@@ -122,7 +122,6 @@
           },
           "id": null,
           "generator": false,
-          "expression": true,
           "async": false,
           "params": [
             {

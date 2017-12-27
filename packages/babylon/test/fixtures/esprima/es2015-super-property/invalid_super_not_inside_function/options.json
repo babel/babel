@@ -1,3 +1,3 @@
 {
-  "throws": "'super' outside of function or class (1:8)"
+  "throws": "super is only allowed in object methods and classes (1:8)"
 }

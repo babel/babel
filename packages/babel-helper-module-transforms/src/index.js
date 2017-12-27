@@ -22,13 +22,15 @@ export { hasExports, isSideEffectImport, isModule };
  */
 export function rewriteModuleStatementsAndPrepareHeader(
   path: NodePath,
-  { exportName, strict, allowTopLevelThis, strictMode, loose, noInterop },
+  { exportName, strict, allowTopLevelThis, strictMode, loose, noInterop, lazy },
 ) {
   assert(isModule(path), "Cannot process module statements in a script");
   path.node.sourceType = "script";
 
   const meta = normalizeAndLoadModuleMetadata(path, exportName, {
     noInterop,
+    loose,
+    lazy,
   });
 
   if (!allowTopLevelThis) {
@@ -55,6 +57,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
   }
 
   const nameList = buildExportNameListDeclaration(path, meta);
+
   if (nameList) {
     meta.exportNameListName = nameList.name;
     headers.push(nameList.statement);
@@ -115,6 +118,9 @@ export function buildNamespaceInitStatements(
 ) {
   const statements = [];
 
+  let srcNamespace = t.identifier(sourceMetadata.name);
+  if (sourceMetadata.lazy) srcNamespace = t.callExpression(srcNamespace, []);
+
   for (const localName of sourceMetadata.importsNamespace) {
     if (localName === sourceMetadata.name) continue;
 
@@ -122,24 +128,36 @@ export function buildNamespaceInitStatements(
     statements.push(
       template.statement`var NAME = SOURCE;`({
         NAME: localName,
-        SOURCE: sourceMetadata.name,
+        SOURCE: t.cloneDeep(srcNamespace),
       }),
     );
+  }
+  if (loose) {
+    statements.push(...buildReexportsFromMeta(metadata, sourceMetadata, loose));
   }
   for (const exportName of sourceMetadata.reexportNamespace) {
     // Assign export to namespace object.
     statements.push(
-      template.statement`EXPORTS.NAME = NAMESPACE;`({
+      (sourceMetadata.lazy
+        ? template.statement`
+            Object.defineProperty(EXPORTS, "NAME", {
+              enumerable: true,
+              get: function() {
+                return NAMESPACE;
+              }
+            });
+          `
+        : template.statement`EXPORTS.NAME = NAMESPACE;`)({
         EXPORTS: metadata.exportName,
         NAME: exportName,
-        NAMESPACE: sourceMetadata.name,
+        NAMESPACE: t.cloneDeep(srcNamespace),
       }),
     );
   }
   if (sourceMetadata.reexportAll) {
     const statement = buildNamespaceReexport(
       metadata,
-      sourceMetadata.name,
+      t.cloneDeep(srcNamespace),
       loose,
     );
     statement.loc = sourceMetadata.reexportAll.loc;
@@ -149,6 +167,35 @@ export function buildNamespaceInitStatements(
   }
   return statements;
 }
+
+const getTemplateForReexport = loose => {
+  return loose
+    ? template.statement`EXPORTS.EXPORT_NAME = NAMESPACE.IMPORT_NAME;`
+    : template`
+      Object.defineProperty(EXPORTS, "EXPORT_NAME", {
+        enumerable: true,
+        get: function() {
+          return NAMESPACE.IMPORT_NAME;
+        },
+      });
+    `;
+};
+
+const buildReexportsFromMeta = (meta, metadata, loose) => {
+  const namespace = metadata.lazy
+    ? t.callExpression(t.identifier(metadata.name), [])
+    : t.identifier(metadata.name);
+
+  const templateForCurrentMode = getTemplateForReexport(loose);
+  return Array.from(metadata.reexports, ([exportName, importName]) =>
+    templateForCurrentMode({
+      EXPORTS: meta.exportName,
+      EXPORT_NAME: exportName,
+      NAMESPACE: t.cloneDeep(namespace),
+      IMPORT_NAME: importName,
+    }),
+  );
+};
 
 /**
  * Build an "__esModule" header statement setting the property on a given object.
@@ -269,25 +316,10 @@ function buildExportInitializationStatements(
       exportNames.push(...data.names);
     }
   }
+
   for (const data of metadata.source.values()) {
-    for (const [exportName, importName] of data.reexports) {
-      initStatements.push(
-        (loose
-          ? template.statement`EXPORTS.EXPORT_NAME = NAMESPACE.IMPORT_NAME;`
-          : template`
-            Object.defineProperty(EXPORTS, "EXPORT_NAME", {
-              enumerable: true,
-              get: function() {
-                return NAMESPACE.IMPORT_NAME;
-              },
-            });
-          `)({
-          EXPORTS: metadata.exportName,
-          EXPORT_NAME: exportName,
-          NAMESPACE: data.name,
-          IMPORT_NAME: importName,
-        }),
-      );
+    if (!loose) {
+      initStatements.push(...buildReexportsFromMeta(metadata, data, loose));
     }
     for (const exportName of data.reexportNamespace) {
       exportNames.push(exportName);

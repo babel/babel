@@ -58,7 +58,6 @@
           },
           "id": null,
           "generator": false,
-          "expression": false,
           "async": false,
           "params": [
             {
@@ -126,7 +125,6 @@
                   "name": "inner"
                 },
                 "generator": false,
-                "expression": false,
                 "async": true,
                 "params": [],
                 "body": {

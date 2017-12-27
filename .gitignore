@@ -34,6 +34,9 @@ package-lock.json
 /babel.sublime-workspace
 packages/babel-standalone/babel.js
 packages/babel-standalone/babel.min.js
+packages/babel-preset-env-standalone/babel-preset-env.js
+packages/babel-preset-env-standalone/babel-preset-env.min.js
 /codemods/*/lib
 /codemods/*/node_modules
 /packages/babylon/build
+.idea/

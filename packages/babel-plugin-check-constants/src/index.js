@@ -1,50 +1,37 @@
 import { types as t } from "@babel/core";
 
 export default function() {
-  /**
-   * Helper function to run a statement before an expression by replacing it with a comma expression
-   * and wrapping the statement in an IIFE as the first operand.
-   */
-  function statementBeforeExpression(statement, expression) {
-    return t.sequenceExpression([
-      t.callExpression(
-        t.functionExpression(null, [], t.blockStatement([statement])),
-        [],
-      ),
-      expression,
-    ]);
-  }
-
   return {
     visitor: {
-      Scope({ scope }) {
+      Scope({ scope }, state) {
         for (const name in scope.bindings) {
           const binding = scope.bindings[name];
           if (binding.kind !== "const") continue;
 
           for (const violation of (binding.constantViolations: Array)) {
-            const throwNode = t.throwStatement(
-              t.newExpression(t.identifier("Error"), [
-                t.stringLiteral(`"${name}" is read-only`),
-              ]),
-            );
+            const readOnlyError = state.addHelper("readOnlyError");
+            const throwNode = t.callExpression(readOnlyError, [
+              t.stringLiteral(name),
+            ]);
 
             if (violation.isAssignmentExpression()) {
               violation
                 .get("right")
                 .replaceWith(
-                  statementBeforeExpression(
+                  t.sequenceExpression([
                     throwNode,
                     violation.get("right").node,
-                  ),
+                  ]),
                 );
             } else if (violation.isUpdateExpression()) {
               violation.replaceWith(
-                statementBeforeExpression(throwNode, violation.node),
+                t.sequenceExpression([throwNode, violation.node]),
               );
             } else if (violation.isForXStatement()) {
               violation.ensureBlock();
-              violation.node.body.body.unshift(throwNode);
+              violation.node.body.body.unshift(
+                t.expressionStatement(throwNode),
+              );
             }
           }
         }

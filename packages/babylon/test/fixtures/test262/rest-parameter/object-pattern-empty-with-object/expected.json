@@ -60,7 +60,6 @@
           "name": "emptyWithObject"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "params": [
           {
@@ -107,7 +106,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 29,
@@ -125,6 +123,7 @@
                     },
                     "name": "p"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "ObjectPattern",

@@ -76,7 +76,6 @@
             "name": "foo"
           },
           "generator": false,
-          "expression": false,
           "async": false,
           "params": [],
           "body": {

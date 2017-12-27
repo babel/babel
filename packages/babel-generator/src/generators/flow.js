@@ -182,7 +182,8 @@ export function FunctionTypeAnnotation(node: Object, parent: Object) {
   // this node type is overloaded, not sure why but it makes it EXTREMELY annoying
   if (
     parent.type === "ObjectTypeCallProperty" ||
-    parent.type === "DeclareFunction"
+    parent.type === "DeclareFunction" ||
+    (parent.type === "ObjectTypeProperty" && parent.method)
   ) {
     this.token(":");
   } else {
@@ -419,9 +420,11 @@ export function ObjectTypeIndexer(node: Object) {
   }
   this._variance(node);
   this.token("[");
-  this.print(node.id, node);
-  this.token(":");
-  this.space();
+  if (node.id) {
+    this.print(node.id, node);
+    this.token(":");
+    this.space();
+  }
   this.print(node.key, node);
   this.token("]");
   this.token(":");
@@ -437,8 +440,10 @@ export function ObjectTypeProperty(node: Object) {
   this._variance(node);
   this.print(node.key, node);
   if (node.optional) this.token("?");
-  this.token(":");
-  this.space();
+  if (!node.method) {
+    this.token(":");
+    this.space();
+  }
   this.print(node.value, node);
 }
 

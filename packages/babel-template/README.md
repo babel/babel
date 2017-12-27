@@ -88,7 +88,7 @@ valid to perform replacements using template literal replacements.
 
 ## AST results
 
-The `babel-template` API exposes a few flexible APIs to make it as easy as
+The `@babel/template` API exposes a few flexible APIs to make it as easy as
 possible to create ASTs with an expected structure. Each of these also has
 the `.ast` property mentioned above.
 

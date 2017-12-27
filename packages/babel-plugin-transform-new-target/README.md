@@ -85,20 +85,20 @@ npm install --save-dev @babel/plugin-transform-new-target
 
 ```json
 {
-  "plugins": ["@babel/transform-new-target"]
+  "plugins": ["@babel/plugin-transform-new-target"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-new-target script.js
+babel --plugins @babel/plugin-transform-new-target script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-new-target"]
+  plugins: ["@babel/plugin-transform-new-target"]
 });
 ```

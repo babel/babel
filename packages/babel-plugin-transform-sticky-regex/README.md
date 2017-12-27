@@ -30,20 +30,20 @@ npm install --save-dev @babel/plugin-transform-sticky-regex
 
 ```json
 {
-  "plugins": ["@babel/transform-sticky-regex"]
+  "plugins": ["@babel/plugin-transform-sticky-regex"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-sticky-regex script.js
+babel --plugins @babel/plugin-transform-sticky-regex script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-sticky-regex"]
+  plugins: ["@babel/plugin-transform-sticky-regex"]
 });
 ```

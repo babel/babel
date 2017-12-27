@@ -130,7 +130,6 @@
                 }
               },
               "method": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 21,
@@ -148,6 +147,7 @@
                 },
                 "name": "__proto__"
               },
+              "computed": false,
               "shorthand": false,
               "value": {
                 "type": "NumericLiteral",

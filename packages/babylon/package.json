@@ -1,6 +1,6 @@
 {
   "name": "babylon",
-  "version": "7.0.0-beta.32",
+  "version": "7.0.0-beta.36",
   "description": "A JavaScript parser",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -23,15 +23,19 @@
     "node": ">=4.2.0"
   },
   "devDependencies": {
-    "@babel/helper-fixtures": "7.0.0-beta.32",
-    "babel-plugin-transform-for-of-as-array": "1.0.4",
+    "@babel/helper-fixtures": "7.0.0-beta.36",
+    "babel-plugin-transform-charcodes": "0.0.10",
+    "charcodes": "0.0.10",
     "rollup": "^0.50.0",
     "rollup-plugin-babel": "^4.0.0-beta.0",
     "rollup-plugin-node-resolve": "^3.0.0",
     "rollup-watch": "^4.0.0",
-    "unicode-9.0.0": "~0.7.0"
+    "unicode-10.0.0": "^0.7.4"
   },
   "bin": {
     "babylon": "./bin/babylon.js"
+  },
+  "publishConfig": {
+    "tag": "next"
   }
 }

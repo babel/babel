@@ -387,7 +387,6 @@
                                                                                                   }
                                                                                                 },
                                                                                                 "method": false,
-                                                                                                "computed": false,
                                                                                                 "key": {
                                                                                                   "type": "Identifier",
                                                                                                   "start": 21,
@@ -405,6 +404,7 @@
                                                                                                   },
                                                                                                   "name": "a"
                                                                                                 },
+                                                                                                "computed": false,
                                                                                                 "shorthand": true,
                                                                                                 "value": {
                                                                                                   "type": "AssignmentPattern",

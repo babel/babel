@@ -35,21 +35,21 @@ npm install --save-dev @babel/plugin-proposal-nullish-coalescing-operator
 
 ```json
 {
-  "plugins": ["@babel/proposal-nullish-coalescing-operator"]
+  "plugins": ["@babel/plugin-proposal-nullish-coalescing-operator"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/proposal-nullish-coalescing-operator script.js
+babel --plugins @babel/plugin-proposal-nullish-coalescing-operator script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/proposal-nullish-coalescing-operator"]
+  plugins: ["@babel/plugin-proposal-nullish-coalescing-operator"]
 });
 ```
 

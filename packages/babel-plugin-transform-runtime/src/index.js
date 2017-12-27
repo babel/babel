@@ -12,7 +12,7 @@ export default function(api, options) {
     useBuiltIns,
     useESModules,
   } = options;
-  const notRegenerator = regenerator !== false;
+  const regeneratorEnabled = regenerator !== false;
   const notPolyfillOrDoesUseBuiltIns = polyfill === false || useBuiltIns;
   const isPolyfillAndUseBuiltIns = polyfill && useBuiltIns;
   const baseHelpersDir = useBuiltIns ? "helpers/builtin" : "helpers";
@@ -80,7 +80,7 @@ export default function(api, options) {
     visitor: {
       ReferencedIdentifier(path) {
         const { node, parent, scope } = path;
-        if (node.name === "regeneratorRuntime" && notRegenerator) {
+        if (node.name === "regeneratorRuntime" && regeneratorEnabled) {
           path.replaceWith(
             this.addDefaultImport(
               `${this.moduleName}/regenerator`,

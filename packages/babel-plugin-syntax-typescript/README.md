@@ -14,20 +14,20 @@ npm install --save-dev @babel/plugin-syntax-typescript
 
 ```json
 {
-  "plugins": ["@babel/syntax-typescript"]
+  "plugins": ["@babel/plugin-syntax-typescript"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/syntax-typescript script.js
+babel --plugins @babel/plugin-syntax-typescript script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/syntax-typescript"]
+  plugins: ["@babel/plugin-syntax-typescript"]
 });
 ```

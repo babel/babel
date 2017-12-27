@@ -104,7 +104,6 @@
                   }
                 },
                 "method": true,
-                "computed": false,
                 "key": {
                   "type": "Identifier",
                   "start": 6,
@@ -122,10 +121,10 @@
                   },
                   "name": "f"
                 },
+                "computed": false,
                 "kind": "method",
                 "id": null,
                 "generator": false,
-                "expression": false,
                 "async": false,
                 "params": [
                   {

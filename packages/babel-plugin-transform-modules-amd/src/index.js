@@ -25,16 +25,16 @@ export default function(api, options) {
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          const {
-            meta,
-            headers,
-          } = rewriteModuleStatementsAndPrepareHeader(path, {
-            loose,
-            strict,
-            strictMode,
-            allowTopLevelThis,
-            noInterop,
-          });
+          const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
+            path,
+            {
+              loose,
+              strict,
+              strictMode,
+              allowTopLevelThis,
+              noInterop,
+            },
+          );
 
           const amdArgs = [];
           const importNames = [];

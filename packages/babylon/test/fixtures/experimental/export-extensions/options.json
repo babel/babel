@@ -1,4 +1,0 @@
-{
-  "plugins": ["exportExtensions"],
-  "sourceType": "module"
-}

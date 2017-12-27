@@ -58,23 +58,23 @@ Add the following line to your .babelrc file:
 
 ```json
 {
-  "plugins": ["@babel/proposal-decorators"]
+  "plugins": ["@babel/plugin-proposal-decorators"]
 }
 ```
 
 #### NOTE: Order of Plugins Matters!
 
-If you are including your plugins manually and using `proposal-class-properties`, make sure that `proposal-decorators` comes *before* `proposal-class-properties`.
+If you are including your plugins manually and using `@babel/plugin-proposal-class-properties`, make sure that `@babel/plugin-proposal-decorators` comes *before* `@babel/plugin-proposal-class-properties`.
 
-Currently, `proposal-class-properties` must be used in `loose` mode to support the `proposal-decorators`. To use `proposal-class-properties` in spec mode with decorators, wait for the next major version of decorators (Stage 2).
+Currently, `@babel/plugin-proposal-class-properties` must be used in `loose` mode to support the `@babel/plugin-proposal-decorators`. To use `@babel/plugin-proposal-class-properties` in spec mode with decorators, wait for the next major version of decorators (Stage 2).
 
 Wrong:
 
 ```json
 {
   "plugins": [
-    "@babel/proposal-class-properties",
-    "@babel/proposal-decorators"
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-decorators"
   ]
 }
 ```
@@ -84,8 +84,8 @@ Right:
 ```json
 {
   "plugins": [
-    "@babel/proposal-decorators",
-    ["@babel/proposal-class-properties", { "loose" : true }]
+    "@babel/plugin-proposal-decorators",
+    ["@babel/plugin-proposal-class-properties", { "loose" : true }]
   ]
 }
 ```
@@ -93,14 +93,14 @@ Right:
 ### Via CLI
 
 ```sh
-babel --plugins @babel/proposal-decorators script.js
+babel --plugins @babel/plugin-proposal-decorators script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/proposal-decorators"]
+  plugins: ["@babel/plugin-proposal-decorators"]
 });
 ```
 

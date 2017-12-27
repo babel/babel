@@ -9,7 +9,7 @@ Compile [Unicode property escapes](https://github.com/mathiasbynens/regexpu-core
 ## Installation
 
 ```sh
-npm install @babel/plugin-proposal-unicode-property-regex
+npm install --save-dev @babel/plugin-proposal-unicode-property-regex
 ```
 
 ## Usage
@@ -20,21 +20,21 @@ npm install @babel/plugin-proposal-unicode-property-regex
 
 ```json
 {
-  "plugins": ["@babel/proposal-unicode-property-regex"]
+  "plugins": ["@babel/plugin-proposal-unicode-property-regex"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/@babel/proposal-unicode-property-regex script.js
+babel --plugins @babel/@babel/plugin-proposal-unicode-property-regex script.js
 ```
 
 ### Via Node.js API
 
 ```js
 require("@babel/core").transform(code, {
-  "plugins": ["@babel/proposal-unicode-property-regex"]
+  "plugins": ["@babel/plugin-proposal-unicode-property-regex"]
 });
 ```
 
@@ -43,7 +43,7 @@ To transpile to ES6/ES2015:
 ```js
 require("@babel/core").transform(code, {
   "plugins": [
-    ["@babel/proposal-unicode-property-regex", { "useUnicodeFlag": false }]
+    ["@babel/plugin-proposal-unicode-property-regex", { "useUnicodeFlag": false }]
   ]
 });
 ```

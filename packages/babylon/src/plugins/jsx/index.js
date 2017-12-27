@@ -1,5 +1,7 @@
 // @flow
 
+import * as charCodes from "charcodes";
+
 import XHTMLEntities from "./xhtml";
 import type Parser from "../../parser";
 import { TokenType, types as tt } from "../../tokenizer/types";
@@ -84,10 +86,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const ch = this.input.charCodeAt(this.state.pos);
 
         switch (ch) {
-          case 60: // "<"
-          case 123: // "{"
+          case charCodes.lessThan:
+          case charCodes.leftCurlyBrace:
             if (this.state.pos === this.state.start) {
-              if (ch === 60 && this.state.exprAllowed) {
+              if (ch === charCodes.lessThan && this.state.exprAllowed) {
                 ++this.state.pos;
                 return this.finishToken(tt.jsxTagStart);
               }
@@ -96,7 +98,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             out += this.input.slice(chunkStart, this.state.pos);
             return this.finishToken(tt.jsxText, out);
 
-          case 38: // "&"
+          case charCodes.ampersand:
             out += this.input.slice(chunkStart, this.state.pos);
             out += this.jsxReadEntity();
             chunkStart = this.state.pos;
@@ -118,7 +120,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const ch = this.input.charCodeAt(this.state.pos);
       let out;
       ++this.state.pos;
-      if (ch === 13 && this.input.charCodeAt(this.state.pos) === 10) {
+      if (
+        ch === charCodes.carriageReturn &&
+        this.input.charCodeAt(this.state.pos) === charCodes.lineFeed
+      ) {
         ++this.state.pos;
         out = normalizeCRLF ? "\n" : "\r\n";
       } else {
@@ -140,8 +145,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         const ch = this.input.charCodeAt(this.state.pos);
         if (ch === quote) break;
-        if (ch === 38) {
-          // "&"
+        if (ch === charCodes.ampersand) {
           out += this.input.slice(chunkStart, this.state.pos);
           out += this.jsxReadEntity();
           chunkStart = this.state.pos;
@@ -205,7 +209,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const start = this.state.pos;
       do {
         ch = this.input.charCodeAt(++this.state.pos);
-      } while (isIdentifierChar(ch) || ch === 45); // "-"
+      } while (isIdentifierChar(ch) || ch === charCodes.dash);
       return this.finishToken(
         tt.jsxName,
         this.input.slice(start, this.state.pos),
@@ -513,17 +517,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.jsxReadWord();
         }
 
-        if (code === 62) {
+        if (code === charCodes.greaterThan) {
           ++this.state.pos;
           return this.finishToken(tt.jsxTagEnd);
         }
 
-        if ((code === 34 || code === 39) && context === tc.j_oTag) {
+        if (
+          (code === charCodes.quotationMark || code === charCodes.apostrophe) &&
+          context === tc.j_oTag
+        ) {
           return this.jsxReadString(code);
         }
       }
 
-      if (code === 60 && this.state.exprAllowed) {
+      if (code === charCodes.lessThan && this.state.exprAllowed) {
         ++this.state.pos;
         return this.finishToken(tt.jsxTagStart);
       }

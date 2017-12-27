@@ -211,11 +211,11 @@ function _evaluate(path, state) {
   if (path.isArrayExpression()) {
     const arr = [];
     const elems: Array<NodePath> = path.get("elements");
-    for (let elem of elems) {
-      elem = elem.evaluate();
+    for (const elem of elems) {
+      const elemValue = elem.evaluate();
 
-      if (elem.confident) {
-        arr.push(elem.value);
+      if (elemValue.confident) {
+        arr.push(elemValue.value);
       } else {
         return deopt(elem, state);
       }
@@ -268,7 +268,7 @@ function _evaluate(path, state) {
     switch (node.operator) {
       case "||":
         // TODO consider having a "truthy type" that doesn't bail on
-        // left uncertainity but can still evaluate to truthy.
+        // left uncertainty but can still evaluate to truthy.
         if (left && leftConfident) {
           state.confident = true;
           return left;

@@ -94,21 +94,21 @@ npm install --save-dev @babel/plugin-proposal-do-expressions
 
 ```json
 {
-  "plugins": ["@babel/proposal-do-expressions"]
+  "plugins": ["@babel/plugin-proposal-do-expressions"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/proposal-do-expressions script.js
+babel --plugins @babel/plugin-proposal-do-expressions script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/proposal-do-expressions"]
+  plugins: ["@babel/plugin-proposal-do-expressions"]
 });
 ```
 

@@ -89,7 +89,6 @@
                   "column": 21
                 }
               },
-              "static": false,
               "kind": "method",
               "computed": false,
               "key": {
@@ -109,9 +108,9 @@
                 },
                 "name": "static"
               },
+              "static": false,
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {

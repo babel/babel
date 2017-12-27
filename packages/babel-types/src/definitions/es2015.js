@@ -1,13 +1,16 @@
-/* eslint max-len: "off" */
-
+// @flow
 import defineType, {
   assertNodeType,
   assertValueType,
   chain,
   assertEach,
   assertOneOf,
-} from "./index";
-import { functionCommon, patternLikeCommon } from "./core";
+} from "./utils";
+import {
+  functionCommon,
+  functionTypeAnnotationCommon,
+  patternLikeCommon,
+} from "./core";
 
 defineType("AssignmentPattern", {
   visitor: ["left", "right"],
@@ -64,6 +67,7 @@ defineType("ArrowFunctionExpression", {
   ],
   fields: {
     ...functionCommon,
+    ...functionTypeAnnotationCommon,
     expression: {
       // https://github.com/babel/babylon/issues/505
       validate: assertValueType("boolean"),
@@ -95,7 +99,11 @@ defineType("ClassBody", {
 
 const classCommon = {
   typeParameters: {
-    validate: assertNodeType("TypeParameterDeclaration", "Noop"),
+    validate: assertNodeType(
+      "TypeParameterDeclaration",
+      "TSTypeParameterDeclaration",
+      "Noop",
+    ),
     optional: true,
   },
   body: {
@@ -106,7 +114,10 @@ const classCommon = {
     validate: assertNodeType("Expression"),
   },
   superTypeParameters: {
-    validate: assertNodeType("TypeParameterInstantiation"),
+    validate: assertNodeType(
+      "TypeParameterInstantiation",
+      "TSTypeParameterInstantiation",
+    ),
     optional: true,
   },
   implements: {
@@ -396,7 +407,7 @@ export const classMethodOrPropertyCommon = {
       );
       const computed = assertNodeType("Expression");
 
-      return function(node, key, val) {
+      return function(node: Object, key: string, val: any) {
         const validator = node.computed ? computed : normal;
         validator(node, key, val);
       };
@@ -443,6 +454,7 @@ defineType("ClassMethod", {
   ],
   fields: {
     ...classMethodOrDeclareMethodCommon,
+    ...functionTypeAnnotationCommon,
     body: {
       validate: assertNodeType("BlockStatement"),
     },
@@ -467,6 +479,7 @@ defineType("ObjectPattern", {
 defineType("SpreadElement", {
   visitor: ["argument"],
   aliases: ["UnaryLike"],
+  deprecatedAlias: "SpreadProperty",
   fields: {
     argument: {
       validate: assertNodeType("Expression"),

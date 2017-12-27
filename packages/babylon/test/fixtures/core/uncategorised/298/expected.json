@@ -106,7 +106,6 @@
                 "name": "hi"
               },
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {

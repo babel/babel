@@ -220,7 +220,6 @@
               },
               "name": "a"
             },
-            "optional": true,
             "property": {
               "type": "Identifier",
               "start": 27,
@@ -238,7 +237,8 @@
               },
               "name": "func"
             },
-            "computed": false
+            "computed": false,
+            "optional": true
           },
           "arguments": [],
           "optional": true
@@ -303,7 +303,6 @@
               },
               "name": "a"
             },
-            "optional": true,
             "property": {
               "type": "Identifier",
               "start": 40,
@@ -321,7 +320,8 @@
               },
               "name": "func"
             },
-            "computed": false
+            "computed": false,
+            "optional": true
           },
           "arguments": [
             {

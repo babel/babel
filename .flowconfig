@@ -4,14 +4,11 @@
 .*/packages/.*/test
 .*/codemods/.*/lib
 .*/codemods/.*/test
-.*/experimental/.*/lib
-.*/experimental/.*/test
 .*/node_modules/conventional-changelog-core/
 
 [include]
 packages/*/src
 codemods/*/src
-experimental/*/src
 
 [libs]
 lib/file.js
@@ -20,6 +17,7 @@ lib/types.js
 lib/third-party-libs.js.flow
 
 [options]
+include_warnings=true
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 suppress_comment= \\(.\\|\n\\)*\\$FlowIssue
 suppress_comment= \\(.\\|\n\\)*\\$FlowIgnore

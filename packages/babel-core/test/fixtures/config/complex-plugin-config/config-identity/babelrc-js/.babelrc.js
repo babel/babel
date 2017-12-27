@@ -2,6 +2,8 @@ module.exports = function(api) {
   api.env();
 
   return {
-    comments: false,
+    plugins: [
+      require("./plugin"),
+    ],
   };
 }

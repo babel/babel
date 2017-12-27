@@ -31,12 +31,6 @@ export function _methodHead(node: Object) {
   const kind = node.kind;
   const key = node.key;
 
-  if (kind === "method" || kind === "init") {
-    if (node.generator) {
-      this.token("*");
-    }
-  }
-
   if (kind === "get" || kind === "set") {
     this.word(kind);
     this.space();
@@ -45,6 +39,12 @@ export function _methodHead(node: Object) {
   if (node.async) {
     this.word("async");
     this.space();
+  }
+
+  if (kind === "method" || kind === "init") {
+    if (node.generator) {
+      this.token("*");
+    }
   }
 
   if (node.computed) {

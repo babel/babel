@@ -1,0 +1,47 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "52",
+  "firefox": "50",
+  "ie": "11"
+}
+
+Using modules transform: commonjs
+
+Using plugins:
+  check-constants { "firefox":"50", "ie":"11" }
+  transform-arrow-functions { "ie":"11" }
+  transform-block-scoping { "firefox":"50", "ie":"11" }
+  transform-classes { "ie":"11" }
+  transform-computed-properties { "ie":"11" }
+  transform-destructuring { "firefox":"50", "ie":"11" }
+  transform-duplicate-keys { "ie":"11" }
+  transform-for-of { "firefox":"50", "ie":"11" }
+  transform-function-name { "firefox":"50", "ie":"11" }
+  transform-literals { "firefox":"50", "ie":"11" }
+  transform-object-super { "ie":"11" }
+  transform-parameters { "firefox":"50", "ie":"11" }
+  transform-shorthand-properties { "ie":"11" }
+  transform-spread { "ie":"11" }
+  transform-sticky-regex { "ie":"11" }
+  transform-template-literals { "ie":"11" }
+  transform-typeof-symbol { "ie":"11" }
+  transform-unicode-regex { "ie":"11" }
+  transform-new-target { "ie":"11" }
+  transform-regenerator { "firefox":"50", "ie":"11" }
+  transform-exponentiation-operator { "firefox":"50", "ie":"11" }
+  transform-async-to-generator { "chrome":"52", "firefox":"50", "ie":"11" }
+  transform-dotall-regex { "chrome":"52", "firefox":"50", "ie":"11" }
+
+Using polyfills with `usage` option:
+
+[src/in.js] Added following polyfills:
+  es6.promise { "ie":"11" }
+  es6.map { "firefox":"50", "ie":"11" }
+src/in.js -> lib/in.js
+
+[src/in2.js] Added following polyfills:
+  regenerator-runtime { "chrome":"52", "firefox":"50", "ie":"11" }
+  web.dom.iterable { "chrome":"52", "firefox":"50", "ie":"11" }
+src/in2.js -> lib/in2.js

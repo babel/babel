@@ -284,6 +284,7 @@
                       },
                       "static": false,
                       "kind": "init",
+                      "method": false,
                       "value": {
                         "type": "StringTypeAnnotation",
                         "start": 25,

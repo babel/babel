@@ -90,7 +90,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 12,
@@ -108,6 +107,7 @@
                 },
                 "name": "prop1"
               },
+              "computed": false,
               "variance": null,
               "typeAnnotation": {
                 "type": "TypeAnnotation",
@@ -156,7 +156,6 @@
                 }
               },
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 26,
@@ -174,6 +173,7 @@
                 },
                 "name": "prop2"
               },
+              "computed": false,
               "variance": null,
               "typeAnnotation": {
                 "type": "TypeAnnotation",

@@ -1,13 +1,13 @@
 {
   "name": "@babel/helper-explode-class",
-  "version": "7.0.0-beta.32",
+  "version": "7.0.0-beta.36",
   "description": "Helper function to explode class",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-explode-class",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-bindify-decorators": "7.0.0-beta.32",
-    "@babel/traverse": "7.0.0-beta.32",
-    "@babel/types": "7.0.0-beta.32"
+    "@babel/helper-bindify-decorators": "7.0.0-beta.36",
+    "@babel/traverse": "7.0.0-beta.36",
+    "@babel/types": "7.0.0-beta.36"
   }
 }

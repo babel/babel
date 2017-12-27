@@ -136,6 +136,7 @@
                       },
                       "static": false,
                       "kind": "init",
+                      "method": false,
                       "value": {
                         "type": "NullableTypeAnnotation",
                         "start": 16,
@@ -199,6 +200,7 @@
                               },
                               "static": false,
                               "kind": "init",
+                              "method": false,
                               "value": {
                                 "type": "StringTypeAnnotation",
                                 "start": 26,

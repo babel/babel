@@ -1,0 +1,11 @@
+{
+  "presets": [
+    ["../../../../lib", {
+      "configPath": "../fixtures/preset-options/browserslist-package",
+      "targets": {
+        "chrome": 55
+      },
+      "modules": false
+    }]
+  ]
+}

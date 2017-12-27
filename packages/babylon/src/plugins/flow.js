@@ -123,7 +123,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     flowParseDeclareClass(node: N.FlowDeclareClass): N.FlowDeclareClass {
       this.next();
-      this.flowParseInterfaceish(node);
+      this.flowParseInterfaceish(node, /*isClass*/ true);
       return this.finishNode(node, "DeclareClass");
     }
 
@@ -392,8 +392,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Interfaces
 
-    flowParseInterfaceish(node: N.FlowDeclare): void {
-      node.id = this.parseIdentifier();
+    flowParseInterfaceish(node: N.FlowDeclare, isClass?: boolean): void {
+      node.id = this.flowParseRestrictedIdentifier(/*liberal*/ !isClass);
 
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -407,7 +407,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.eat(tt._extends)) {
         do {
           node.extends.push(this.flowParseInterfaceExtends());
-        } while (this.eat(tt.comma));
+        } while (!isClass && this.eat(tt.comma));
       }
 
       if (this.isContextual("mixins")) {
@@ -471,7 +471,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       declare: boolean,
     ): N.FlowOpaqueType {
       this.expectContextual("type");
-      node.id = this.flowParseRestrictedIdentifier();
+      node.id = this.flowParseRestrictedIdentifier(/*liberal*/ true);
 
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
@@ -751,6 +751,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         let optional = false;
         if (this.isRelational("<") || this.match(tt.parenL)) {
           // This is a method property
+          node.method = true;
+
           if (variance) {
             this.unexpected(variance.start);
           }
@@ -763,6 +765,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
         } else {
           if (kind !== "init") this.unexpected();
+
+          node.method = false;
+
           if (this.eat(tt.question)) {
             optional = true;
           }
@@ -1059,7 +1064,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (this.state.value === "-") {
             this.next();
             if (!this.match(tt.num)) {
-              this.unexpected(null, "Unexpected token, expected number");
+              this.unexpected(null, `Unexpected token, expected "number"`);
             }
 
             return this.parseLiteral(
@@ -1585,13 +1590,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
     }
 
-    parseExportStar(node: N.ExportNamedDeclaration, allowNamed: boolean): void {
+    parseExportStar(node: N.ExportNamedDeclaration): void {
       if (this.eatContextual("type")) {
         node.exportKind = "type";
-        allowNamed = false;
       }
 
-      return super.parseExportStar(node, allowNamed);
+      return super.parseExportStar(node);
+    }
+
+    parseExportNamespace(node: N.ExportNamedDeclaration) {
+      if (node.exportKind === "type") {
+        this.unexpected();
+      }
+
+      return super.parseExportNamespace(node);
     }
 
     parseClassId(node: N.Class, isStatement: boolean, optionalId: ?boolean) {
@@ -1780,7 +1792,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const implemented: N.FlowClassImplements[] = (node.implements = []);
         do {
           const node = this.startNode();
-          node.id = this.parseIdentifier();
+          node.id = this.flowParseRestrictedIdentifier(/*liberal*/ true);
           if (this.isRelational("<")) {
             node.typeParameters = this.flowParseTypeParameterInstantiation();
           } else {
@@ -1914,6 +1926,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
       if (kind) {
         const lh = this.lookahead();
+
+        // import type * is not allowed
+        if (kind === "type" && lh.type === tt.star) {
+          this.unexpected(lh.start);
+        }
+
         if (
           isMaybeDefaultImport(lh) ||
           lh.type === tt.braceL ||
@@ -2219,8 +2237,45 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.callee = base;
         node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
         base = this.finishNode(node, "CallExpression");
+      } else if (
+        base.type === "Identifier" &&
+        base.name === "async" &&
+        this.isRelational("<")
+      ) {
+        const state = this.state.clone();
+        let error;
+        try {
+          const node = this.parseAsyncArrowWithTypeParameters(
+            startPos,
+            startLoc,
+          );
+          if (node) return node;
+        } catch (e) {
+          error = e;
+        }
+
+        this.state = state;
+        try {
+          return super.parseSubscripts(base, startPos, startLoc, noCalls);
+        } catch (e) {
+          throw error || e;
+        }
       }
 
       return super.parseSubscripts(base, startPos, startLoc, noCalls);
+    }
+
+    parseAsyncArrowWithTypeParameters(
+      startPos: number,
+      startLoc: Position,
+    ): ?N.ArrowFunctionExpression {
+      const node = this.startNodeAt(startPos, startLoc);
+      this.parseFunctionParams(node);
+      if (!this.parseArrow(node)) return;
+      return this.parseArrowExpression(
+        node,
+        /* params */ undefined,
+        /* isAsync */ true,
+      );
     }
   };

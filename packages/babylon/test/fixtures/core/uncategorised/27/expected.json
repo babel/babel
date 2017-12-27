@@ -104,7 +104,6 @@
                   }
                 },
                 "method": false,
-                "computed": false,
                 "key": {
                   "type": "StringLiteral",
                   "start": 6,
@@ -125,6 +124,7 @@
                   },
                   "value": "answer"
                 },
+                "computed": false,
                 "shorthand": false,
                 "value": {
                   "type": "NumericLiteral",

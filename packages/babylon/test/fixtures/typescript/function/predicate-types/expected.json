@@ -60,7 +60,6 @@
           "name": "f"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "params": [
           {
@@ -236,7 +235,6 @@
           },
           "id": null,
           "generator": false,
-          "expression": false,
           "async": false,
           "params": [
             {

@@ -30,20 +30,20 @@ npm install --save-dev @babel/plugin-transform-react-jsx-self
 
 ```json
 {
-  "plugins": ["@babel/transform-react-jsx-self"]
+  "plugins": ["@babel/plugin-transform-react-jsx-self"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-react-jsx-self script.js
+babel --plugins @babel/plugin-transform-react-jsx-self script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-react-jsx-self"]
+  plugins: ["@babel/plugin-transform-react-jsx-self"]
 });
 ```

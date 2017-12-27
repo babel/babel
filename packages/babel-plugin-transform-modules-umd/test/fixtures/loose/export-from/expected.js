@@ -14,5 +14,6 @@
   "use strict";
 
   _exports.__esModule = true;
+  _exports.foo = void 0;
   _exports.foo = _foo.foo;
 });

@@ -104,7 +104,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 10,
@@ -122,6 +121,7 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "NumericLiteral",
@@ -159,7 +159,6 @@
                     }
                   },
                   "method": true,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 22,
@@ -177,10 +176,10 @@
                     },
                     "name": "foo"
                   },
+                  "computed": false,
                   "kind": "method",
                   "id": null,
                   "generator": false,
-                  "expression": false,
                   "async": true,
                   "params": [
                     {

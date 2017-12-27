@@ -1,5 +1,5 @@
 MAKEFLAGS = -j1
-FLOW_COMMIT = 4cc2b9f7fadf2e9e445ee9b7b980c65d69d3fbc0
+FLOW_COMMIT = 622bbc4f07acb77eb1109830c70815f827401d90
 TEST262_COMMIT = 1282e842febf418ca27df13fa4b32f7e5021b470
 
 export NODE_ENV = test
@@ -7,7 +7,7 @@ export NODE_ENV = test
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
 
-SOURCES = packages codemods experimental
+SOURCES = packages codemods
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
@@ -16,8 +16,12 @@ build: clean
   # Build babylon before building all other projects
 	make build-babylon
 	./node_modules/.bin/gulp build
+	node ./packages/babel-types/scripts/generateTypeHelpers.js
+	# call build again as the generated files might need to be compiled again.
+	./node_modules/.bin/gulp build
 ifneq ("$(BABEL_ENV)", "cov")
 	make build-standalone
+	make build-preset-env-standalone
 endif
 
 build-babylon:
@@ -26,6 +30,9 @@ build-babylon:
 
 build-standalone:
 	./node_modules/.bin/gulp build-babel-standalone
+
+build-preset-env-standalone:
+	./node_modules/.bin/gulp build-babel-preset-env-standalone
 
 build-dist: build
 	cd packages/babel-polyfill; \
@@ -37,6 +44,10 @@ build-dist: build
 watch: clean
 	make clean-lib
 	BABEL_ENV=development ./node_modules/.bin/gulp watch
+
+watch-babylon:
+	cd packages/babylon; \
+	./node_modules/.bin/rollup -c -w
 
 flow:
 	./node_modules/.bin/flow check --strip-root
@@ -50,8 +61,6 @@ fix:
 clean: test-clean
 	rm -rf packages/babel-polyfill/browser*
 	rm -rf packages/babel-polyfill/dist
-	# rm -rf packages/babel-runtime/helpers
-	# rm -rf packages/babel-runtime/core-js
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
 
@@ -110,6 +119,8 @@ test-test262-update-whitelist:
 publish:
 	git pull --rebase
 	make clean-lib
+	rm -rf packages/babel-runtime/helpers
+	rm -rf packages/babel-runtime/core-js
 	BABEL_ENV=production make build-dist
 	make test
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^

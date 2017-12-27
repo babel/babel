@@ -148,9 +148,12 @@ export default class LValParser extends NodeUtils {
         const arg = last.argument;
         this.toAssignable(arg, isBinding, contextDescription);
         if (
-          arg.type !== "Identifier" &&
-          arg.type !== "MemberExpression" &&
-          arg.type !== "ArrayPattern"
+          [
+            "Identifier",
+            "MemberExpression",
+            "ArrayPattern",
+            "ObjectPattern",
+          ].indexOf(arg.type) === -1
         ) {
           this.unexpected(arg.start);
         }

@@ -57,20 +57,20 @@ npm install --save-dev @babel/plugin-transform-proto-to-assign
 
 ```json
 {
-  "plugins": ["@babel/transform-proto-to-assign"]
+  "plugins": ["@babel/plugin-transform-proto-to-assign"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-proto-to-assign script.js
+babel --plugins @babel/plugin-transform-proto-to-assign script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-proto-to-assign"]
+  plugins: ["@babel/plugin-transform-proto-to-assign"]
 });
 ```

@@ -49,6 +49,11 @@ commander.option(
   collect,
 );
 commander.option("--config-file [path]", "Path a to .babelrc file to use");
+commander.option(
+  "--env-name [name]",
+  "The name of the 'env' to use when loading configs and plugins. " +
+    "Defaults to the value of BABEL_ENV, or else NODE_ENV, or else 'development'.",
+);
 
 // Basic file input configuration.
 commander.option("--source-type [script|module]", "");

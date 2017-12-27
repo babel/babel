@@ -1,4 +1,4 @@
+function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
+
 var foo = 1;
-(function () {
-  throw new Error("\"foo\" is read-only");
-})(), foo++;
+_readOnlyError("foo"), foo++;

@@ -60,7 +60,6 @@
           "name": "fn"
         },
         "generator": true,
-        "expression": false,
         "async": false,
         "params": [],
         "body": {
@@ -110,7 +109,6 @@
                 "name": "fn2"
               },
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [
                 {

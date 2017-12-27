@@ -36,21 +36,21 @@ npm install --save-dev @babel/plugin-codemod-optional-catch-binding
 
 ```json
 {
-  "plugins": ["@babel/codemod-optional-catch-binding"]
+  "plugins": ["@babel/plugin-codemod-optional-catch-binding"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/codemod-optional-catch-binding script.js
+babel --plugins @babel/plugin-codemod-optional-catch-binding script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/codemod-optional-catch-binding"]
+  plugins: ["@babel/plugin-codemod-optional-catch-binding"]
 });
 ```
 

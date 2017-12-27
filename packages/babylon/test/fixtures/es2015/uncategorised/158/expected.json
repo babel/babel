@@ -58,7 +58,6 @@
           },
           "id": null,
           "generator": false,
-          "expression": false,
           "async": false,
           "params": [
             {
@@ -105,7 +104,6 @@
                       }
                     },
                     "method": false,
-                    "computed": false,
                     "key": {
                       "type": "Identifier",
                       "start": 3,
@@ -123,6 +121,7 @@
                       },
                       "name": "x"
                     },
+                    "computed": false,
                     "shorthand": true,
                     "value": {
                       "type": "Identifier",
@@ -177,7 +176,6 @@
                       }
                     },
                     "method": false,
-                    "computed": false,
                     "key": {
                       "type": "Identifier",
                       "start": 9,
@@ -195,6 +193,7 @@
                       },
                       "name": "x"
                     },
+                    "computed": false,
                     "shorthand": false,
                     "value": {
                       "type": "NumericLiteral",

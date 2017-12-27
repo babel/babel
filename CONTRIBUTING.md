@@ -24,7 +24,7 @@ contributing, please read the
 ## Not sure where to start?
 
 - If you aren't just making a documentation change, you'll probably want to learn a bit about a few topics.
- - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babel/tree/master/packages/babylon/blob/master/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://github.com/babel/babel/tree/master/packages/babylon#output).
+ - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babel/blob/master/packages/babylon/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://github.com/babel/babel/tree/master/packages/babylon#output).
  - Check out [`/doc`](https://github.com/babel/babel/tree/master/doc) for information about Babel's internals
  - Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
  - Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
@@ -115,7 +115,7 @@ $ TEST_ONLY=babel-cli make test
 `TEST_ONLY` will also match substrings of the package name:
 
 ```sh
-# Run tests for the babel-plugin-transform-classes package.
+# Run tests for the @babel/plugin-transform-classes package.
 $ TEST_ONLY=es2015-class make test
 ```
 
@@ -161,16 +161,16 @@ In case you're locally getting errors which are not on the CI, it may be due to
 
 Most packages in [`/packages`](https://github.com/babel/babel/tree/master/packages) have a `test` folder, however some tests might be in other packages or in [`/packages/babel-core`](https://github.com/babel/babel/tree/master/packages/babel-core/test/fixtures).
 
-#### `babel-plugin-x`
+#### `@babel/plugin-x`
 
 All the Babel plugins (and other packages) that have a `/test/fixtures` are written in a similar way.
 
-For example, in [`babel-plugin-transform-exponentiation-operator/test`](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator/test):
+For example, in [`@babel/plugin-transform-exponentiation-operator/test`](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator/test):
 
 - There is an `index.js` file. It imports our [test helper](https://github.com/babel/babel/tree/master/packages/babel-helper-plugin-test-runner). (You don't have to worry about this).
 - There can be multiple folders under [`/fixtures`](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures)
    - There is an [`options.json`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/options.json) file whose function is similar to a `.babelrc` file, allowing you to pass in the plugins and settings you need for your tests.
-   - For this test, we only need the relevant plugin, so it's just `{ "plugins": ["@babel/transform-exponentiation-operator"] }`.
+   - For this test, we only need the relevant plugin, so it's just `{ "plugins": ["@babel/plugin-transform-exponentiation-operator"] }`.
    - If necessary, you can have an `options.json` with different options in each subfolder.
 
 - In each subfolder, you can organize your directory structure by categories of tests. (Example: these folders can be named after the feature you are testing or can reference the issue number they fix)
@@ -205,8 +205,8 @@ If you need to check for an error that is thrown you can add to the `options.jso
 ```js
 // options.json example
 {
-  "plugins": [["@babel/proposal-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
-  "throws": "@babel/proposal-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
+  "plugins": [["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": "invalidOption" }]],
+  "throws": "@babel/plugin-proposal-object-rest-spread currently only accepts a boolean option for useBuiltIns (defaults to false)"
 }
 ```
 
@@ -231,9 +231,21 @@ descriptive name, and add the following:
 
 * Add an `expected.json` file with the expected parser output. For added convenience, if there is no `expected.json` present, the test runner will generate one for you.
 
+After writing tests for babylon, just build it by running:
+
+```sh
+$ make build-babylon
+```
+
+Then, to run the tests, use:
+
+```sh
+$ TEST_ONLY=babylon make test-only
+```
+
 #### Bootstrapping expected output
 
-For both `babel-plugin-x` and `babylon`, you can easily generate an `expected.js`/`expected.json` automatically by just providing `actual.js` and running the tests as you usually would.
+For both `@babel/plugin-x` and `babylon`, you can easily generate an `expected.js`/`expected.json` automatically by just providing `actual.js` and running the tests as you usually would.
 
 ```
 // Example
@@ -267,7 +279,7 @@ To include the changes, we have to make sure to build Babel:
 $ make build
 ```
 
-Next, we need to execute `Generator.generate()`, which can be achieved by running a test case in the `babel-generator` package.
+Next, we need to execute `Generator.generate()`, which can be achieved by running a test case in the `@babel/generator` package.
 For example, we can run the test case that tests the generation of class declarations:
 
 ```bash
@@ -275,7 +287,6 @@ $ TEST_DEBUG=true TEST_GREP=ClassDeclaration make test-only
 
 ./scripts/test.sh
 Debugger listening on port 9229.
-Warning: This is an experimental feature and could change at any time.
 To start debugging, open the following URL in Chrome:
     chrome-devtools://devtools/remote/serve_file/@60cd6e859b9f557d2312f5bf532f6aec5f284980/inspector.html?experiments=true&v8only=true&ws=127.0.0.1:9229/3cdaebd2-be88-4e7b-a94b-432950ab72d0
 ```
@@ -298,8 +309,8 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 - Start working about the Babel transform itself!
 
 ## Internals
-- AST spec ([babylon/ast/spec.md](https://github.com/babel/babel/tree/master/packages/babylon/blob/master/ast/spec.md))
-- Versioning ([doc/design/versioning.md](https://github.com/babel/babel/blob/master/doc/design/versioning.md)
+- AST spec ([babylon/ast/spec.md](https://github.com/babel/babel/blob/master/packages/babylon/ast/spec.md))
+- Versioning ([doc/design/versioning.md](https://github.com/babel/babel/blob/master/doc/design/versioning.md))
 - Monorepo ([doc/design/monorepo.md](https://github.com/babel/babel/blob/master/doc/design/monorepo.md))
 - Compiler environment support ([doc/design/compiler-environment-support.md](https://github.com/babel/babel/blob/master/doc/design/compiler-environment-support.md))
 - Compiler assumptions ([doc/design/compiler-assumptions.md](https://github.com/babel/babel/blob/master/doc/design/compiler-assumptions.md))

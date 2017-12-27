@@ -4,6 +4,8 @@ import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as defineMap from "@babel/helper-define-map";
 import { traverse, template, types as t } from "@babel/core";
 
+type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
+
 const noMethodVisitor = {
   "FunctionExpression|FunctionDeclaration"(path) {
     path.skip();
@@ -17,22 +19,6 @@ const noMethodVisitor = {
 const verifyConstructorVisitor = traverse.visitors.merge([
   noMethodVisitor,
   {
-    MemberExpression: {
-      exit(path) {
-        const objectPath = path.get("object");
-        if (this.isDerived && !this.hasBareSuper && objectPath.isSuper()) {
-          const hasArrowFunctionParent = path.findParent(p =>
-            p.isArrowFunctionExpression(),
-          );
-          if (!hasArrowFunctionParent) {
-            throw objectPath.buildCodeFrameError(
-              "'super.*' is not allowed before super()",
-            );
-          }
-        }
-      },
-    },
-
     CallExpression: {
       exit(path) {
         if (path.get("callee").isSuper()) {
@@ -48,14 +34,20 @@ const verifyConstructorVisitor = traverse.visitors.merge([
     },
 
     ThisExpression(path) {
-      if (this.isDerived && !this.hasBareSuper) {
-        const fn = path.find(p => p.isFunction());
-
-        if (!fn || !fn.isArrowFunctionExpression()) {
-          throw path.buildCodeFrameError(
-            "'this' is not allowed before super()",
-          );
+      if (this.isDerived) {
+        if (path.parentPath.isMemberExpression({ object: path.node })) {
+          // In cases like this.foo or this[foo], there is no need to add
+          // assertThisInitialized, since they already throw if this is
+          // undefined.
+          return;
         }
+
+        const assertion = t.callExpression(
+          this.file.addHelper("assertThisInitialized"),
+          [path.node],
+        );
+        path.replaceWith(assertion);
+        path.skip();
       }
     },
   },
@@ -71,7 +63,7 @@ const findThisesVisitor = traverse.visitors.merge([
 ]);
 
 export default class ClassTransformer {
-  constructor(path: NodePath, file) {
+  constructor(path: NodePath, file, builtinClasses: ReadonlySet<string>) {
     this.parent = path.parent;
     this.scope = path.scope;
     this.node = path.node;
@@ -103,6 +95,12 @@ export default class ClassTransformer {
 
     this.superName = this.node.superClass || t.identifier("Function");
     this.isDerived = !!this.node.superClass;
+
+    const { name } = this.superName;
+    this.extendsNative =
+      this.isDerived &&
+      builtinClasses.has(name) &&
+      !this.scope.hasBinding(name, /* noGlobals */ true);
   }
 
   run() {
@@ -122,7 +120,13 @@ export default class ClassTransformer {
 
     //
     if (this.isDerived) {
-      closureArgs.push(superName);
+      if (this.extendsNative) {
+        closureArgs.push(
+          t.callExpression(this.file.addHelper("wrapNativeSuper"), [superName]),
+        );
+      } else {
+        closureArgs.push(superName);
+      }
 
       superName = this.scope.generateUidIdentifierBasedOnNode(superName);
       closureParams.push(superName);
@@ -271,6 +275,7 @@ export default class ClassTransformer {
             methodNode: node,
             objectRef: this.classRef,
             superRef: this.superName,
+            inConstructor: isConstructor,
             isStatic: node.static,
             isLoose: this.isLoose,
             scope: this.scope,
@@ -444,10 +449,6 @@ export default class ClassTransformer {
     const path = this.userConstructorPath;
     const body = path.get("body");
 
-    if (!this.hasBareSuper && !this.superReturns.length) {
-      throw path.buildCodeFrameError("missing super() call in constructor");
-    }
-
     path.traverse(findThisesVisitor, this);
 
     let guaranteedSuperBeforeFinish = !!this.bareSupers.length;
@@ -469,7 +470,11 @@ export default class ClassTransformer {
             return true;
           }
 
-          if (parentPath.isLoop() || parentPath.isConditional()) {
+          if (
+            parentPath.isLoop() ||
+            parentPath.isConditional() ||
+            parentPath.isArrowFunctionExpression()
+          ) {
             guaranteedSuperBeforeFinish = false;
             return true;
           }
@@ -485,9 +490,13 @@ export default class ClassTransformer {
 
     if (this.isLoose) {
       wrapReturn = returnArg => {
+        const thisExpr = t.callExpression(
+          this.file.addHelper("assertThisInitialized"),
+          [thisRef()],
+        );
         return returnArg
-          ? t.logicalExpression("||", returnArg, thisRef())
-          : thisRef();
+          ? t.logicalExpression("||", returnArg, thisExpr)
+          : thisExpr;
       };
     } else {
       wrapReturn = returnArg =>
@@ -500,7 +509,7 @@ export default class ClassTransformer {
     // if we have a return as the last node in the body then we've already caught that
     // return
     const bodyPaths = body.get("body");
-    if (bodyPaths.length && !bodyPaths.pop().isReturnStatement()) {
+    if (!bodyPaths.length || !bodyPaths.pop().isReturnStatement()) {
       body.pushContainer(
         "body",
         t.returnStatement(

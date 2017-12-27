@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-class-properties", "transform-classes"],
+  "minNodeVersion": "6.0.0"
+}

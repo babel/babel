@@ -4,9 +4,9 @@
 
 ## Note
 
-When used alongside `transform-runtime`, polyfills (by default including `Symbol`) are specifically scoped to not pollute the global scope. This breaks usage with React, as it won't have access to that polyfill and will cause your application to fail in legacy browsers.
+When used alongside `@babel/plugin-transform-runtime`, polyfills (by default including `Symbol`) are specifically scoped to not pollute the global scope. This breaks usage with React, as it won't have access to that polyfill and will cause your application to fail in legacy browsers.
 
-Even if `['transform-runtime', { helpers: true, polyfill: false }]` is specified, it might still break, since `helpers` come precompiled.
+Even if `['@babel/plugin-transform-runtime', { helpers: true, polyfill: false }]` is specified, it might still break, since `helpers` come precompiled.
 
 In this case, we recommend importing/requiring `@babel/polyfill` in the entry point of your application and using `@babel/preset-env` with the `useBuiltIns` option to only include the polyfills your targets need. Alternatively, you can also import/require `core-js/modules/es6.symbol` by itself.
 
@@ -59,21 +59,21 @@ npm install --save-dev @babel/plugin-transform-react-inline-elements
 
 ```json
 {
-  "plugins": ["@babel/transform-react-inline-elements"]
+  "plugins": ["@babel/plugin-transform-react-inline-elements"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-react-inline-elements script.js
+babel --plugins @babel/plugin-transform-react-inline-elements script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-react-inline-elements"]
+  plugins: ["@babel/plugin-transform-react-inline-elements"]
 });
 ```
 

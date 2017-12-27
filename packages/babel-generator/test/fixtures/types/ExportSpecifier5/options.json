@@ -1,1 +1,1 @@
-{ "plugins": ["exportExtensions"] }
+{ "plugins": ["exportDefaultFrom"] }

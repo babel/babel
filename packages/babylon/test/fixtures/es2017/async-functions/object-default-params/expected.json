@@ -90,7 +90,6 @@
               },
               "id": null,
               "generator": false,
-              "expression": false,
               "async": true,
               "params": [
                 {
@@ -123,7 +122,6 @@
                         }
                       },
                       "method": false,
-                      "computed": false,
                       "key": {
                         "type": "Identifier",
                         "start": 18,
@@ -141,6 +139,7 @@
                         },
                         "name": "bar"
                       },
+                      "computed": false,
                       "shorthand": true,
                       "value": {
                         "type": "AssignmentPattern",

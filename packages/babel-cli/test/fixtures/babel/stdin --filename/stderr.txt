@@ -1,1 +1,1 @@
-SyntaxError: test.js: Unexpected token, expected ; (2:10)
+SyntaxError: test.js: Unexpected token, expected ";" (2:10)

@@ -3,6 +3,15 @@ import VanillaTransformer from "./vanilla";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import nameFunction from "@babel/helper-function-name";
 import { types as t } from "@babel/core";
+import globals from "globals";
+
+const getBuiltinClasses = category =>
+  Object.keys(globals[category]).filter(name => /^[A-Z]/.test(name));
+
+const builtinClasses = new Set([
+  ...getBuiltinClasses("builtin"),
+  ...getBuiltinClasses("browser"),
+]);
 
 export default function(api, options) {
   const { loose } = options;
@@ -54,7 +63,9 @@ export default function(api, options) {
 
         node[VISITED] = true;
 
-        path.replaceWith(new Constructor(path, state.file).run());
+        path.replaceWith(
+          new Constructor(path, state.file, builtinClasses).run(),
+        );
 
         if (path.isCallExpression()) {
           annotateAsPure(path);

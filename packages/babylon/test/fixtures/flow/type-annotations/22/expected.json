@@ -104,7 +104,6 @@
                   }
                 },
                 "method": false,
-                "computed": false,
                 "key": {
                   "type": "Identifier",
                   "start": 7,
@@ -122,11 +121,11 @@
                   },
                   "name": "fooProp"
                 },
+                "computed": false,
                 "kind": "get",
                 "variance": null,
                 "id": null,
                 "generator": false,
-                "expression": false,
                 "async": false,
                 "params": [],
                 "predicate": null,

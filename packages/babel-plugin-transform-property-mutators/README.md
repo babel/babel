@@ -42,20 +42,20 @@ npm install --save-dev @babel/plugin-transform-property-mutators
 
 ```json
 {
-  "plugins": ["@babel/transform-property-mutators"]
+  "plugins": ["@babel/plugin-transform-property-mutators"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-property-mutators script.js
+babel --plugins @babel/plugin-transform-property-mutators script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-property-mutators"]
+  plugins: ["@babel/plugin-transform-property-mutators"]
 });
 ```

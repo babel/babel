@@ -60,7 +60,6 @@
           "name": "multiElement"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "params": [
           {
@@ -107,7 +106,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 26,
@@ -125,6 +123,7 @@
                     },
                     "name": "a"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "Identifier",
@@ -159,7 +158,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 32,
@@ -177,6 +175,7 @@
                     },
                     "name": "b"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "Identifier",
@@ -211,7 +210,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 38,
@@ -229,6 +227,7 @@
                     },
                     "name": "c"
                   },
+                  "computed": false,
                   "shorthand": false,
                   "value": {
                     "type": "Identifier",

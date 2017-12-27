@@ -106,6 +106,7 @@ export default class ReplaceSupers {
     this.isStatic = opts.isStatic;
     this.hasSuper = false;
     this.inClass = inClass;
+    this.inConstructor = opts.inConstructor;
     this.isLoose = opts.isLoose;
     this.scope = this.methodPath.scope;
     this.file = opts.file;
@@ -123,6 +124,7 @@ export default class ReplaceSupers {
   isStatic: boolean;
   hasSuper: boolean;
   inClass: boolean;
+  inConstructor: boolean;
   isLoose: boolean;
   scope: Scope;
   file;
@@ -132,6 +134,7 @@ export default class ReplaceSupers {
     methodPath: NodePath,
     methodNode: Object,
     superRef: Object,
+    inConstructor: boolean,
     isStatic: boolean,
     isLoose: boolean,
     file: any,
@@ -174,10 +177,18 @@ export default class ReplaceSupers {
    */
 
   getSuperProperty(property: Object, isComputed: boolean): Object {
+    let thisExpr = t.thisExpression();
+    if (this.inConstructor) {
+      thisExpr = t.callExpression(
+        this.file.addHelper("assertThisInitialized"),
+        [thisExpr],
+      );
+    }
+
     return t.callExpression(this.file.addHelper("get"), [
       getPrototypeOfExpression(this.getObjectRef(), this.isStatic),
       isComputed ? property : t.stringLiteral(property.name),
-      t.thisExpression(),
+      thisExpr,
     ]);
   }
 

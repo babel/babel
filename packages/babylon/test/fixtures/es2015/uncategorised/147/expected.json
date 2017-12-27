@@ -156,7 +156,6 @@
                     }
                   },
                   "method": false,
-                  "computed": false,
                   "key": {
                     "type": "Identifier",
                     "start": 16,
@@ -174,6 +173,7 @@
                     },
                     "name": "y"
                   },
+                  "computed": false,
                   "shorthand": true,
                   "value": {
                     "type": "Identifier",

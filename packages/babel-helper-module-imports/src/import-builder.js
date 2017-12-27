@@ -43,7 +43,7 @@ export default class ImportBuilder {
     return this;
   }
 
-  namespace(name) {
+  namespace(name = "namespace") {
     name = this._scope.generateUidIdentifier(name);
 
     const statement = this._statements[this._statements.length - 1];

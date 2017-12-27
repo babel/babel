@@ -1,24 +1,22 @@
-let f =
-/*#__PURE__*/
-(() => {
-  var _ref = babelHelpers.asyncToGenerator(function* () {
-    let g =
-    /*#__PURE__*/
-    (() => {
-      var _ref2 = babelHelpers.wrapAsyncGenerator(function* () {
+function f() {
+  return _f.apply(this, arguments);
+}
+
+function _f() {
+  _f = babelHelpers.asyncToGenerator(function* () {
+    yield 1;
+
+    function g() {
+      return _g.apply(this, arguments);
+    }
+
+    function _g() {
+      _g = babelHelpers.wrapAsyncGenerator(function* () {
         yield babelHelpers.awaitAsyncGenerator(2);
         yield 3;
       });
-
-      return function g() {
-        return _ref2.apply(this, arguments);
-      };
-    })();
-
-    yield 1;
+      return _g.apply(this, arguments);
+    }
   });
-
-  return function f() {
-    return _ref.apply(this, arguments);
-  };
-})();
+  return _f.apply(this, arguments);
+}

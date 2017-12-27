@@ -126,13 +126,13 @@ var a: {
   [b: number]: string,
 };
 var a: {
-  add: (x: number, ...y: Array<string>) => void
+  add(x: number, ...y: Array<string>): void
 };
 var a: {
   subtract: (x: number, ...y: Array<string>) => void
 };
 var a: {
-  id: <T>(x: T) => T
+  id<T>(x: T): T
 };
 var a: Array<number> = [1, 2, 3];
 a = class Foo<T> {};
@@ -221,7 +221,7 @@ import type { foo, bar } from "baz";
 import type { foo as bar } from "baz";
 import type from "foo";
 import type, { foo } from "bar";
-import type * as namespace from "bar";
+import typeof * as namespace from "bar";
 import { type Foo } from "bar";
 import { typeof Foo } from "bar";
 import { type Foo as Bar } from "bar";
@@ -275,13 +275,13 @@ var a: {|
   [b: number]: string,
 |};
 var a: {|
-  add: (x: number, ...y: Array<string>) => void
+  add(x: number, ...y: Array<string>): void
 |};
 var a: {|
   subtract: (x: number, ...y: Array<string>) => void
 |};
 var a: {|
-  id: <T>(x: T) => T
+  id<T>(x: T): T
 |};
 
 function foo(numVal: number = 2) {}

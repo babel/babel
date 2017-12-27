@@ -60,7 +60,6 @@
           "name": "eval"
         },
         "generator": false,
-        "expression": false,
         "async": false,
         "params": [],
         "body": {
@@ -110,7 +109,6 @@
                 "name": "inner"
               },
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {

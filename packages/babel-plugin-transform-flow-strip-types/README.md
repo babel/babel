@@ -30,21 +30,21 @@ npm install --save-dev @babel/plugin-transform-flow-strip-types
 
 ```json
 {
-  "plugins": ["@babel/transform-flow-strip-types"]
+  "plugins": ["@babel/plugin-transform-flow-strip-types"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-flow-strip-types script.js
+babel --plugins @babel/plugin-transform-flow-strip-types script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-flow-strip-types"]
+  plugins: ["@babel/plugin-transform-flow-strip-types"]
 });
 ```
 

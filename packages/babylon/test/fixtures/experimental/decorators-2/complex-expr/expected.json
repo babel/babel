@@ -274,7 +274,6 @@
                 }
               ],
               "static": false,
-              "computed": false,
               "key": {
                 "type": "Identifier",
                 "start": 29,
@@ -292,10 +291,10 @@
                 },
                 "name": "m"
               },
+              "computed": false,
               "kind": "method",
               "id": null,
               "generator": false,
-              "expression": false,
               "async": false,
               "params": [],
               "body": {

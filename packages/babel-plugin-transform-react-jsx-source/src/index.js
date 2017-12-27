@@ -34,7 +34,7 @@ export default function() {
 
   const visitor = {
     JSXOpeningElement(path, state) {
-      const id = t.jSXIdentifier(TRACE_ID);
+      const id = t.jsxIdentifier(TRACE_ID);
       const location = path.container.openingElement.loc;
       if (!location) {
         // the element was generated and doesn't have location information
@@ -64,7 +64,7 @@ export default function() {
       }
 
       const trace = makeTrace(state.fileNameIdentifier, location.start.line);
-      attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
+      attributes.push(t.jsxAttribute(id, t.jsxExpressionContainer(trace)));
     },
   };
 

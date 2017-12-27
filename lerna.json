@@ -1,6 +1,6 @@
 {
   "lerna": "2.0.0-rc.4",
-  "version": "7.0.0-beta.32",
+  "version": "7.0.0-beta.36",
   "changelog": {
     "repo": "babel/babel",
     "labels": {
@@ -19,15 +19,13 @@
       "ignore": [
         "*.md",
         "test/**",
-        "codemods/**",
-        "experimental/**"
+        "codemods/**"
       ]
     }
   },
   "packages": [
     "packages/*",
-    "codemods/*",
-    "experimental/*"
+    "codemods/*"
   ],
   "npmClient": "yarn",
   "npmClientArgs": [
