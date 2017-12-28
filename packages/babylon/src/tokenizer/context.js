@@ -103,8 +103,8 @@ tt.incDec.updateContext = function() {
   // tokExprAllowed stays unchanged
 };
 
-tt._function.updateContext = function() {
-  if (this.curContext() !== types.braceStatement) {
+tt._function.updateContext = function(prevType) {
+  if (this.curContext() !== types.braceStatement || prevType.isAssign) {
     this.state.context.push(types.functionExpression);
   }
 
