@@ -85,7 +85,7 @@ export default function(path: NodePath, file: Object, helpers: Object) {
     // the outer expression.
     //
     // We have to replace before annotating as path.replaceWith moves comments around.
-    path.replaceWith(t.parenthesizedExpression(path.node));
-    annotateAsPure(path.get("expression"));
+    path.replaceWith(t.sequenceExpression([t.numericLiteral(0), path.node]));
+    annotateAsPure(path.get("expressions.1").node);
   }
 }

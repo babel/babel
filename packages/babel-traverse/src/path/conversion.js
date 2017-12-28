@@ -152,8 +152,10 @@ export function arrowFunctionToExpression(
     // We want to annotate the .bind(this) call as pure without affecting
     // any other expressions that may involve this node.
     // We have to .replaceWith before annotating as it will move comments around.
-    this.replaceWith(t.parenthesizedExpression(callExpression));
-    annotateAsPure(this.get("expression"));
+    this.replaceWith(
+      t.sequenceExpression([t.numericLiteral(0), callExpression]),
+    );
+    annotateAsPure(this.get("expressions.1").node);
   }
 }
 
