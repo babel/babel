@@ -1,4 +1,0 @@
-{
-  "throws": "Class \"C\" cannot be referenced in computed property keys.",
-  "plugins": [["proposal-class-properties", {"loose": true}]]
-}

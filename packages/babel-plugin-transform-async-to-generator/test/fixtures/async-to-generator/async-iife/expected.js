@@ -15,3 +15,8 @@ babelHelpers.asyncToGenerator(function* () {
     return _notIIFE.apply(this, arguments);
   };
 })();
+
+/*#__PURE__*/
+babelHelpers.asyncToGenerator(function* () {
+  yield 'not iife';
+});
