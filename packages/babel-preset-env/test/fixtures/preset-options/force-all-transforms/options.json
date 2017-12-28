@@ -2,11 +2,11 @@
   "presets": [
     ["../../../../lib", {
       "targets": {
-        "chrome": 55,
-        "uglify": true
+        "chrome": 55
       },
       "modules": false,
-      "useBuiltIns": "entry"
+      "useBuiltIns": "entry",
+      "forceAllTransforms": true
     }]
   ]
 }
