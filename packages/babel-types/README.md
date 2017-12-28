@@ -1,3 +1,52 @@
+- [Babel types](#babeltypes)
+  - [Install](#install)
+  - [API](#api)
+    -[anyTypeAnnotation](#anytypeannotation)
+    -[arrayExpression](#arrayexpression)
+    -[arrayPattern](#arraypattern)
+    -[arrayTypeAnnotation](#arraytypeannotation)
+    -[arrowFunctionExpression](#arrowfunctionexpression)
+    -[assignmentExpression](#assignmentexpression)
+    -[assignmentPattern](#assignmentpattern)
+    -[awaitExpression](#awaitepxression)
+    -[binaryExpression](#binaryexpression)
+    -[bindExpression](#bindexpression)
+    -[blockStatement](#blockstatement)
+    -[booleanLiteral](#booleanliteral)
+    -[booleanLiteralTypeAnnotation](#booleanliterltypeannotation)
+    -[booleanTypeAnnotation](#booleantypeannotation)
+    -[breakStatement](#breakstatement)
+    -[callExpression](#callexpression)
+    -[catchClause](#catchclause)
+    -[classBody](#classbody)
+    -[classDeclaration](#classdeclaration)
+    -[classExpression](#classexpression)
+    -[classImplements](#classimplements)
+    -[classMethod](#classmethod)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+    -[](#)
+
+
+
 # @babel/types
 
 > This module contains methods for building ASTs manually and for checking the types of AST nodes.
@@ -2832,4 +2881,3 @@ Aliases: `Expression`, `Terminatorless`
 
 
 <!-- end generated section -->
-
