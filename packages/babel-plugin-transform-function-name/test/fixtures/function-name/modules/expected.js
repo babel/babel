@@ -2,7 +2,7 @@
 
 var _events2 = babelHelpers.interopRequireDefault(require("events"));
 
-let Template =
+let Template = (0,
 /*#__PURE__*/
 function () {
   function Template() {
@@ -16,6 +16,5 @@ function () {
     }
   }]);
   return Template;
-}();
-
+}());
 console.log(new Template().events());

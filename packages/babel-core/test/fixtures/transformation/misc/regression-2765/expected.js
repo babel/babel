@@ -1,7 +1,7 @@
 function f() {
   var _this = this;
 
-  let g =
+  let g = (0,
   /*#__PURE__*/
   function () {
     var _ref = babelHelpers.asyncToGenerator(function* () {
@@ -11,7 +11,7 @@ function f() {
     return function g() {
       return _ref.apply(this, arguments);
     };
-  }();
+  }());
 }
 
 class Class {
@@ -19,7 +19,7 @@ class Class {
     var _this2 = this;
 
     return babelHelpers.asyncToGenerator(function* () {
-      var c =
+      var c = (0,
       /*#__PURE__*/
       function () {
         var _ref2 = babelHelpers.asyncToGenerator(function* (b) {
@@ -29,7 +29,7 @@ class Class {
         return function c(_x) {
           return _ref2.apply(this, arguments);
         };
-      }();
+      }());
     })();
   }
 

@@ -1,4 +1,4 @@
-var Child =
+var Child = (0,
 /*#__PURE__*/
 function (_Base) {
   babelHelpers.inherits(Child, _Base);
@@ -11,4 +11,4 @@ function (_Base) {
   }
 
   return Child;
-}(Base);
+}(Base));

@@ -1,4 +1,4 @@
-var A =
+var A = (0,
 /*#__PURE__*/
 function () {
   function A() {
@@ -12,4 +12,4 @@ function () {
     }
   }]);
   return A;
-}();
+}());

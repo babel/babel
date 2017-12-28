@@ -1,5 +1,5 @@
 function f() {
-  g(
+  g((0,
   /*#__PURE__*/
   babelHelpers.asyncToGenerator(function* () {
     var _this = this;
@@ -7,9 +7,10 @@ function f() {
     c(function () {
       return _this;
     });
-  }));
+  })));
 }
 
+(0,
 /*#__PURE__*/
 babelHelpers.asyncToGenerator(function* () {
   var _this2 = this;
@@ -19,4 +20,4 @@ babelHelpers.asyncToGenerator(function* () {
   (function () {
     console.log('nested arrow:', _this2 === 'foo');
   })();
-}).call('foo');
+})).call('foo');

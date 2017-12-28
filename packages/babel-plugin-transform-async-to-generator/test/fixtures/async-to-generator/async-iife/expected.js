@@ -1,12 +1,16 @@
-babelHelpers.asyncToGenerator(function* () {
-  yield 'ok';
-})();
-babelHelpers.asyncToGenerator(function* () {
-  yield 'ok';
-})();
-
+(0,
 /*#__PURE__*/
-(function () {
+babelHelpers.asyncToGenerator(function* () {
+  yield 'ok';
+}))();
+(0,
+/*#__PURE__*/
+babelHelpers.asyncToGenerator(function* () {
+  yield 'ok';
+}))();
+0,
+/*#__PURE__*/
+function () {
   var _notIIFE = babelHelpers.asyncToGenerator(function* () {
     yield 'ok';
   });
@@ -14,8 +18,8 @@ babelHelpers.asyncToGenerator(function* () {
   return function notIIFE() {
     return _notIIFE.apply(this, arguments);
   };
-})();
-
+}();
+0,
 /*#__PURE__*/
 babelHelpers.asyncToGenerator(function* () {
   yield 'not iife';

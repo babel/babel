@@ -4,7 +4,7 @@ var _possibleConstructorReturn = require("@babel/runtime/helpers/builtin/possibl
 
 var _inherits = require("@babel/runtime/helpers/builtin/inherits");
 
-let Foo =
+let Foo = (0,
 /*#__PURE__*/
 function (_Bar) {
   _inherits(Foo, _Bar);
@@ -16,4 +16,4 @@ function (_Bar) {
   }
 
   return Foo;
-}(Bar);
+}(Bar));

@@ -2,7 +2,7 @@ let A = function A() {
   console.log('a');
 };
 
-let B =
+let B = (0,
 /*#__PURE__*/
 function () {
   function B() {}
@@ -14,4 +14,4 @@ function () {
   };
 
   return B;
-}();
+}());

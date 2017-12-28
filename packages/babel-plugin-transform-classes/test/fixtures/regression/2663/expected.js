@@ -12,7 +12,7 @@ var _events = require("events");
 var _binarySerializer = babelHelpers.interopRequireDefault(require("./helpers/binary-serializer"));
 
 // import ...
-var Connection =
+var Connection = (0,
 /*#__PURE__*/
 function (_EventEmitter) {
   babelHelpers.inherits(Connection, _EventEmitter);
@@ -40,6 +40,5 @@ function (_EventEmitter) {
     }
   }]);
   return Connection;
-}(_events.EventEmitter);
-
+}(_events.EventEmitter));
 exports.default = Connection;

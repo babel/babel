@@ -4,7 +4,7 @@ function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.crea
 
 let B = function B() {};
 
-let A =
+let A = (0,
 /*#__PURE__*/
 function (_B) {
   _inheritsLoose(A, _B);
@@ -17,4 +17,4 @@ function (_B) {
   }
 
   return A;
-}(B);
+}(B));

@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _BaseFoo2 = babelHelpers.interopRequireDefault(require("./BaseFoo"));
 
-var SubFoo =
+var SubFoo = (0,
 /*#__PURE__*/
 function (_BaseFoo) {
   babelHelpers.inherits(SubFoo, _BaseFoo);
@@ -25,6 +25,5 @@ function (_BaseFoo) {
     }
   }]);
   return SubFoo;
-}(_BaseFoo2.default);
-
+}(_BaseFoo2.default));
 exports.default = SubFoo;

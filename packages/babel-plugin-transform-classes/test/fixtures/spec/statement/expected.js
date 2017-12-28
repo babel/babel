@@ -8,7 +8,7 @@ var BaseView = function BaseView() {
   this.autoRender = true;
 };
 
-var BaseView =
+var BaseView = (0,
 /*#__PURE__*/
 function () {
   function BaseView() {
@@ -22,4 +22,4 @@ function () {
     }
   }]);
   return BaseView;
-}();
+}());

@@ -4,11 +4,11 @@ class Test {
 
     return babelHelpers.asyncToGenerator(function* () {
       console.log(_this);
-      setTimeout(
+      setTimeout((0,
       /*#__PURE__*/
       babelHelpers.asyncToGenerator(function* () {
         console.log(_this);
-      }));
+      })));
     })();
   }
 
@@ -17,7 +17,7 @@ class Test {
 
     return babelHelpers.asyncToGenerator(function* () {
       console.log(_this2);
-      setTimeout(
+      setTimeout((0,
       /*#__PURE__*/
       function () {
         var _ref2 = babelHelpers.asyncToGenerator(function* (arg) {
@@ -27,7 +27,7 @@ class Test {
         return function (_x) {
           return _ref2.apply(this, arguments);
         };
-      }());
+      }()));
     })();
   }
 
@@ -36,11 +36,11 @@ class Test {
 
     return babelHelpers.asyncToGenerator(function* () {
       console.log(_this3);
-      setTimeout(
+      setTimeout((0,
       /*#__PURE__*/
       babelHelpers.asyncToGenerator(function* () {
         console.log(_this3);
-      }));
+      })));
     })();
   }
 
@@ -49,7 +49,7 @@ class Test {
 
     return babelHelpers.asyncToGenerator(function* () {
       console.log(_this4);
-      setTimeout(
+      setTimeout((0,
       /*#__PURE__*/
       function () {
         var _ref4 = babelHelpers.asyncToGenerator(function* (arg) {
@@ -59,7 +59,7 @@ class Test {
         return function (_x2) {
           return _ref4.apply(this, arguments);
         };
-      }());
+      }()));
     })();
   }
 

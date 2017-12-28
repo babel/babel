@@ -17,7 +17,7 @@ var Test = function Test() {
 
   _classCallCheck(this, Test);
 
-  var Other =
+  var Other = (0,
   /*#__PURE__*/
   function (_Test) {
     _inherits(Other, _Test);
@@ -44,8 +44,7 @@ var Test = function Test() {
     }
 
     return Other;
-  }(Test);
-
+  }(Test));
   Object.defineProperty(Other, "a", {
     configurable: true,
     enumerable: true,

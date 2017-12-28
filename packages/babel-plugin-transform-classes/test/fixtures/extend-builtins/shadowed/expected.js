@@ -2,7 +2,7 @@ let Array = function Array() {
   babelHelpers.classCallCheck(this, Array);
 };
 
-let List =
+let List = (0,
 /*#__PURE__*/
 function (_Array) {
   babelHelpers.inherits(List, _Array);
@@ -13,4 +13,4 @@ function (_Array) {
   }
 
   return List;
-}(Array);
+}(Array));

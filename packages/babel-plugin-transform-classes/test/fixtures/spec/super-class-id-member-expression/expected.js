@@ -1,4 +1,4 @@
-var BaseController =
+var BaseController = (0,
 /*#__PURE__*/
 function (_Chaplin$Controller) {
   babelHelpers.inherits(BaseController, _Chaplin$Controller);
@@ -9,9 +9,8 @@ function (_Chaplin$Controller) {
   }
 
   return BaseController;
-}(Chaplin.Controller);
-
-var BaseController2 =
+}(Chaplin.Controller));
+var BaseController2 = (0,
 /*#__PURE__*/
 function (_Chaplin$Controller$A) {
   babelHelpers.inherits(BaseController2, _Chaplin$Controller$A);
@@ -22,4 +21,4 @@ function (_Chaplin$Controller$A) {
   }
 
   return BaseController2;
-}(Chaplin.Controller.Another);
+}(Chaplin.Controller.Another));

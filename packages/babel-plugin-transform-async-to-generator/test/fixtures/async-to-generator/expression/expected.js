@@ -1,4 +1,4 @@
-var foo =
+var foo = (0,
 /*#__PURE__*/
 function () {
   var _ref = babelHelpers.asyncToGenerator(function* () {
@@ -8,9 +8,8 @@ function () {
   return function foo() {
     return _ref.apply(this, arguments);
   };
-}();
-
-var foo2 =
+}());
+var foo2 = (0,
 /*#__PURE__*/
 function () {
   var _ref2 = babelHelpers.asyncToGenerator(function* () {
@@ -20,8 +19,8 @@ function () {
   return function foo2() {
     return _ref2.apply(this, arguments);
   };
-}(),
-    bar =
+}()),
+    bar = (0,
 /*#__PURE__*/
 function () {
   var _ref3 = babelHelpers.asyncToGenerator(function* () {
@@ -31,4 +30,4 @@ function () {
   return function bar() {
     return _ref3.apply(this, arguments);
   };
-}();
+}());

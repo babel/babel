@@ -3,8 +3,7 @@ var foo = "foo";
 var bar = () => {};
 
 var four = 4;
-
-var MyClass =
+var MyClass = (0,
 /*#__PURE__*/
 function () {
   function MyClass() {
@@ -83,7 +82,7 @@ function () {
     value: function () {}
   }]);
   return MyClass;
-}();
+}());
 
 var _one = one();
 

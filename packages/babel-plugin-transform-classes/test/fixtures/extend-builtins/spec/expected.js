@@ -14,7 +14,7 @@ var _cache = typeof Map === "function" && new Map();
 
 function _wrapNativeSuper(Class) { if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() {} Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writeable: true, configurable: true } }); return _sPO(Wrapper, _sPO(function Super() { return _construct(Class, arguments, _gPO(this).constructor); }, Class)); }
 
-var List =
+var List = (0,
 /*#__PURE__*/
 function (_Array) {
   _inherits(List, _Array);
@@ -26,4 +26,4 @@ function (_Array) {
   }
 
   return List;
-}(_wrapNativeSuper(Array));
+}(_wrapNativeSuper(Array)));

@@ -2,7 +2,7 @@
 
 var _a2 = require("./a");
 
-var Foo =
+var Foo = (0,
 /*#__PURE__*/
 function () {
   function Foo() {
@@ -16,4 +16,4 @@ function () {
     }
   }]);
   return Foo;
-}();
+}());
