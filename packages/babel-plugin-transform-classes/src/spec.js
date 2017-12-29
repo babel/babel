@@ -32,7 +32,7 @@ export default class SpecClassTransformer extends VanillaTransformer {
           ),
         );
     }
-    // Don't prevent pushign to map.
+    // Don't prevent pushing to the mutatorMap
     return false;
   }
 }
