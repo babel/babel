@@ -75,6 +75,11 @@ function getType(validator) {
 Object.keys(types.BUILDER_KEYS)
   .sort()
   .forEach(function(key) {
+    readme.push("- [" + key[0].toLowerCase() + key.substr(1) + "](#" + ( key.substr(0).toLowerCase() ) + ")");
+  });
+Object.keys(types.BUILDER_KEYS)
+  .sort()
+  .forEach(function(key) {
     readme.push("### " + key[0].toLowerCase() + key.substr(1));
     readme.push("```javascript");
     readme.push(
