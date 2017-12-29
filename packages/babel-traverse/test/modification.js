@@ -143,14 +143,13 @@ describe("modification", function() {
       });
 
       it("the exported expression", function() {
-        const bodyPath = getPath("export default 2;", {
+        const declPath = getPath("export default 2;", {
           sourceType: "module",
-        }).parentPath;
-        const path = bodyPath.get("body.0.declaration");
+        });
+        const path = declPath.get("declaration");
         path.insertBefore(t.identifier("x"));
 
-        assert.equal(bodyPath.get("body").length, 2);
-        assert.deepEqual(bodyPath.get("body.0").node, t.identifier("x"));
+        assert.equal(generateCode(declPath), "export default (x, 2);");
       });
     });
   });
@@ -236,8 +235,10 @@ describe("modification", function() {
         const path = bodyPath.get("body.0.declaration");
         path.insertAfter(t.identifier("x"));
 
-        assert.equal(bodyPath.get("body").length, 2);
-        assert.deepEqual(bodyPath.get("body.1").node, t.identifier("x"));
+        assert.equal(
+          generateCode({ parentPath: bodyPath }),
+          "var _temp;\n\nexport default (_temp = 2, x, _temp);",
+        );
       });
     });
   });
