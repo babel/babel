@@ -23,20 +23,27 @@ const readme = [
 Object.keys(types.BUILDER_KEYS)
   .sort()
   .forEach(function(key) {
-    readme.push("  - [" + key[0].toLowerCase() + key.substr(1) + "](#" + ( key.substr(0).toLowerCase() ) + ")");
+    readme.push(
+      "  - [" +
+        key[0].toLowerCase() +
+        key.substr(1) +
+        "](#" +
+        key.substr(0).toLowerCase() +
+        ")"
+    );
   });
 readme.push(
-    "",
-    "<!-- end TOC generated section -->",
-    "",
-    readmeSrc.split("<!-- end TOC generated section -->")[1].trim()
-  );
+  "",
+  "<!-- end TOC generated section -->",
+  "",
+  readmeSrc.split("<!-- end TOC generated section -->")[1].trim()
+);
 readme.push(
   "",
   readmeSrc.split("<!-- begin generated section -->")[0].trim(),
   "",
   "<!-- begin generated section -->",
-  "",
+  ""
 );
 
 const customTypes = {
