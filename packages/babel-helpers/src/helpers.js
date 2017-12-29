@@ -523,7 +523,7 @@ helpers.newArrowCheck = defineHelper(`
 helpers.newMethodCheck = defineHelper(`
   export default function _newMethodCheck(innerThis, methodRef) {
     if (innerThis instanceof methodRef) {
-      throw new TypeError("Cannot instantiate a class method");
+      throw new TypeError("Cannot instantiate a method");
     }
   }
 `);

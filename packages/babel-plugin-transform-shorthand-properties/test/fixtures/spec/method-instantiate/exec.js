@@ -4,4 +4,4 @@ assert.throws(function() {
   }
   new a.b();
 
-}, 'Cannot instantiate an object method');
+}, 'Cannot instantiate a method');

@@ -67,3 +67,11 @@ require("@babel/core").transform("code", {
   plugins: ["@babel/plugin-transform-shorthand-properties"]
 });
 ```
+
+## Options
+
+### `spec`
+
+`boolean`, defaults to `false`.
+
+Adds a runtime check to ensure the function created from the object method is not instantiated.

@@ -3,4 +3,4 @@ class A {
   }
 }
 
-assert.throws(() => new A.a(), "Cannot instantiate a class method");
+assert.throws(() => new A.a(), "Cannot instantiate a method");

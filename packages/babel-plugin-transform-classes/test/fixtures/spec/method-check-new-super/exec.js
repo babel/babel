@@ -16,4 +16,4 @@ class Test extends Foo {
 
 const test = new Test();
 
-assert.throws(() => new test.create(), "Cannot instantiate a class method");
+assert.throws(() => new test.create(), "Cannot instantiate a method");

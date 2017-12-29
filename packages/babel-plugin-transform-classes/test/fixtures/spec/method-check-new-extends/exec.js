@@ -5,4 +5,4 @@ class Bar {
 class Foo extends Bar {}
 const foo = new Foo();
 
-assert.throws(() => new foo.bar(), "Cannot instantiate a class method");
+assert.throws(() => new foo.bar(), "Cannot instantiate a method");
