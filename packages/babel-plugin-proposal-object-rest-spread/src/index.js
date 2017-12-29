@@ -128,18 +128,6 @@ export default function(api, opts) {
     }
   }
 
-  function combinedRestSpread(copiedObj, newObj, excludedNames) {
-    const rest = {};
-
-    for (const prop in copiedObj) {
-      if (!excludedNames.includes(prop)) {
-        rest[prop] = copiedObj[prop];
-      }
-    }
-
-    return { ...rest, ...newObj };
-  }
-
   return {
     inherits: syntaxObjectRestSpread,
 
