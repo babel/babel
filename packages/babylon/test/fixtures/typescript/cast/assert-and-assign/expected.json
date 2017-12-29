@@ -284,9 +284,9 @@
           },
           "operator": "=",
           "left": {
-            "type": "Identifier",
+            "type": "TSAsExpression",
             "start": 72,
-            "end": 80,
+            "end": 96,
             "loc": {
               "start": {
                 "line": 7,
@@ -294,11 +294,62 @@
               },
               "end": {
                 "line": 7,
-                "column": 9
-              },
-              "identifierName": "response"
+                "column": 25
+              }
             },
-            "name": "response"
+            "expression": {
+              "type": "Identifier",
+              "start": 72,
+              "end": 80,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 1
+                },
+                "end": {
+                  "line": 7,
+                  "column": 9
+                },
+                "identifierName": "response"
+              },
+              "name": "response"
+            },
+            "typeAnnotation": {
+              "type": "TSTypeReference",
+              "start": 84,
+              "end": 96,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 13
+                },
+                "end": {
+                  "line": 7,
+                  "column": 25
+                }
+              },
+              "typeName": {
+                "type": "Identifier",
+                "start": 84,
+                "end": 96,
+                "loc": {
+                  "start": {
+                    "line": 7,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 7,
+                    "column": 25
+                  },
+                  "identifierName": "ResponseBody"
+                },
+                "name": "ResponseBody"
+              }
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 71
+            }
           },
           "right": {
             "type": "ObjectExpression",
