@@ -2,8 +2,6 @@
 
 > This module contains methods for building ASTs manually and for checking the types of AST nodes.
 
-# Table of Contents
-
 - [Install](#install)
 - [API](#api)
   - [anyTypeAnnotation](#anytypeannotation)
