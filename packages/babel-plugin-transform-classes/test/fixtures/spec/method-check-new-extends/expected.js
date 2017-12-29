@@ -15,7 +15,7 @@ function (_Bar) {
   babelHelpers.createClass(Foo, [{
     key: "bar",
     value: function bar() {
-      babelHelpers.newClassMethodCheck(this, Foo.prototype.bar);
+      babelHelpers.newMethodCheck(this, Foo.prototype.bar);
       return 1;
     }
   }]);

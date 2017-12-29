@@ -11,7 +11,7 @@ function (_Foo) {
   babelHelpers.createClass(Test, [{
     key: "test",
     value: function test() {
-      babelHelpers.newClassMethodCheck(this, Test.prototype.test);
+      babelHelpers.newMethodCheck(this, Test.prototype.test);
       new (babelHelpers.get(Test.prototype.__proto__ || Object.getPrototypeOf(Test.prototype), "test", this))();
     }
   }]);

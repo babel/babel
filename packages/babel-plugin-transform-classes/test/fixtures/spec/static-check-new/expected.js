@@ -8,12 +8,12 @@ function () {
   babelHelpers.createClass(A, [{
     key: "b",
     value: function b() {
-      babelHelpers.newClassMethodCheck(this, A.prototype.b);
+      babelHelpers.newMethodCheck(this, A.prototype.b);
     }
   }], [{
     key: "a",
     value: function a() {
-      babelHelpers.newClassMethodCheck(this, A.a);
+      babelHelpers.newMethodCheck(this, A.a);
     }
   }, {
     key: "b",

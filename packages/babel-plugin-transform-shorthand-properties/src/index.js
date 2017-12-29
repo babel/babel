@@ -8,7 +8,7 @@ export default function(api, options) {
       ObjectMethod(path, state) {
         const { node } = path;
         if (node.kind === "method") {
-          const func = t.functionExpression(
+          let func = t.functionExpression(
             null,
             node.params,
             node.body,
@@ -18,9 +18,12 @@ export default function(api, options) {
           func.returnType = node.returnType;
 
           if (spec) {
+            const methodRef = path.scope.generateUidIdentifierBasedOnNode(
+              path.node,
+            );
             const newMethodCheckCall = t.callExpression(
-              state.addHelper("newObjectMethodCheck"),
-              [t.thisExpression()],
+              state.addHelper("newMethodCheck"),
+              [t.thisExpression(), methodRef],
             );
             path
               .get("body")
@@ -28,6 +31,7 @@ export default function(api, options) {
                 "body",
                 t.expressionStatement(newMethodCheckCall),
               );
+            func = t.assignmentExpression("=", methodRef, func);
           }
 
           path.replaceWith(t.objectProperty(node.key, func, node.computed));

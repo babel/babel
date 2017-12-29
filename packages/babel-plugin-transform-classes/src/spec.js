@@ -25,7 +25,7 @@ export default class SpecClassTransformer extends VanillaTransformer {
         .unshiftContainer(
           "body",
           t.expressionStatement(
-            t.callExpression(this.file.addHelper("newClassMethodCheck"), [
+            t.callExpression(this.file.addHelper("newMethodCheck"), [
               t.thisExpression(),
               methodRef,
             ]),

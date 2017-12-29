@@ -520,16 +520,8 @@ helpers.newArrowCheck = defineHelper(`
   }
 `);
 
-helpers.newObjectMethodCheck = defineHelper(`
-  export default function _newObjectMethodCheck(innerThis) {
-    if (innerThis.constructor !== Object) {
-      throw new TypeError("Cannot instantiate an object method");
-    }
-  }
-`);
-
-helpers.newClassMethodCheck = defineHelper(`
-  export default function _newClassMethodCheck(innerThis, methodRef) {
+helpers.newMethodCheck = defineHelper(`
+  export default function _newMethodCheck(innerThis, methodRef) {
     if (innerThis instanceof methodRef) {
       throw new TypeError("Cannot instantiate a class method");
     }

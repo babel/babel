@@ -1,6 +1,6 @@
 var obj = {
-  method: function () {
-    babelHelpers.newObjectMethodCheck(this);
+  method: _method = function () {
+    babelHelpers.newMethodCheck(this, _method);
     return 1;
   }
 };
