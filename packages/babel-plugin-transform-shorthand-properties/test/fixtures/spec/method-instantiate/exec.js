@@ -5,3 +5,11 @@ assert.throws(function() {
   new a.b();
 
 }, 'Cannot instantiate a method');
+
+assert.doesNotThrow(function() {
+  const a = {
+    b() {}
+  }
+  a.b();
+
+});
