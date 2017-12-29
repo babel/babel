@@ -93,8 +93,6 @@ export const isPluginRequired = (
   return isRequiredForEnvironments.length > 0;
 };
 
-let hasBeenLogged = false;
-
 const getBuiltInTargets = targets => {
   const builtInTargets = Object.assign({}, targets);
   if (builtInTargets.uglify != null) {
@@ -236,8 +234,7 @@ export default function buildPreset(
 
   const regenerator = transformations.has("transform-regenerator");
 
-  if (debug && !hasBeenLogged) {
-    hasBeenLogged = true;
+  if (debug) {
     console.log("@babel/preset-env: `DEBUG` option");
     console.log("\nUsing targets:");
     console.log(JSON.stringify(prettifyTargets(targets), null, 2));

@@ -40,3 +40,4 @@ packages/babel-preset-env-standalone/babel-preset-env.min.js
 /codemods/*/node_modules
 /packages/babylon/build
 .idea/
+.vscode/
