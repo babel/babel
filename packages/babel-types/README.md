@@ -525,7 +525,7 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id`: `Identifier` (required)
  - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
- - `supertype`: `Flow` (default: `null`)
+ - `supertype`: `FlowType` (default: `null`)
 
 ---
 
@@ -871,7 +871,7 @@ Aliases: `Flow`, `FlowType`
  - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
  - `params`: `Array<FunctionTypeParam>` (required)
  - `rest`: `FunctionTypeParam` (default: `null`)
- - `returnType`: `Flow` (required)
+ - `returnType`: `FlowType` (required)
 
 ---
 
@@ -885,7 +885,7 @@ See also `t.isFunctionTypeParam(node, opts)` and `t.assertFunctionTypeParam(node
 Aliases: `Flow`
 
  - `name`: `Identifier` (default: `null`)
- - `typeAnnotation`: `Flow` (required)
+ - `typeAnnotation`: `FlowType` (required)
  - `optional`: `boolean` (default: `null`)
 
 ---
@@ -1054,7 +1054,7 @@ See also `t.isIntersectionTypeAnnotation(node, opts)` and `t.assertIntersectionT
 
 Aliases: `Flow`, `FlowType`
 
- - `types`: `Array<Flow>` (required)
+ - `types`: `Array<FlowType>` (required)
 
 ---
 
@@ -1390,7 +1390,7 @@ See also `t.isNullableTypeAnnotation(node, opts)` and `t.assertNullableTypeAnnot
 
 Aliases: `Flow`, `FlowType`
 
- - `typeAnnotation`: `Flow` (required)
+ - `typeAnnotation`: `FlowType` (required)
 
 ---
 
@@ -1524,7 +1524,7 @@ See also `t.isObjectTypeCallProperty(node, opts)` and `t.assertObjectTypeCallPro
 
 Aliases: `Flow`, `UserWhitespacable`
 
- - `value`: `Flow` (required)
+ - `value`: `FlowType` (required)
  - `static`: `boolean` (default: `null`)
 
 ---
@@ -1539,8 +1539,8 @@ See also `t.isObjectTypeIndexer(node, opts)` and `t.assertObjectTypeIndexer(node
 Aliases: `Flow`, `UserWhitespacable`
 
  - `id`: `Identifier` (default: `null`)
- - `key`: `Flow` (required)
- - `value`: `Flow | Identifier` (required)
+ - `key`: `FlowType` (required)
+ - `value`: `FlowType` (required)
  - `variance`: `Variance` (default: `null`)
  - `static`: `boolean` (default: `null`)
 
@@ -1556,7 +1556,7 @@ See also `t.isObjectTypeProperty(node, opts)` and `t.assertObjectTypeProperty(no
 Aliases: `Flow`, `UserWhitespacable`
 
  - `key`: `Identifier` (required)
- - `value`: `Flow | Identifier` (required)
+ - `value`: `FlowType` (required)
  - `variance`: `Variance` (default: `null`)
  - `kind`: `'init' | 'get' | 'set'` (default: `null`)
  - `optional`: `boolean` (default: `null`)
@@ -1573,7 +1573,7 @@ See also `t.isObjectTypeSpreadProperty(node, opts)` and `t.assertObjectTypeSprea
 
 Aliases: `Flow`, `UserWhitespacable`
 
- - `argument`: `Flow` (required)
+ - `argument`: `FlowType` (required)
 
 ---
 
@@ -1588,8 +1588,8 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id`: `Identifier` (required)
  - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
- - `supertype`: `Flow` (default: `null`)
- - `impltype`: `Flow` (required)
+ - `supertype`: `FlowType` (default: `null`)
+ - `impltype`: `FlowType` (required)
 
 ---
 
@@ -1632,8 +1632,7 @@ See also `t.isQualifiedTypeIdentifier(node, opts)` and `t.assertQualifiedTypeIde
 Aliases: `Flow`
 
  - `id`: `Identifier` (required)
- - `qualification` (required)
- - `qualifications`: `Identifier` (default: `null`)
+ - `qualification`: `Identifier | QualifiedTypeIdentifier` (required)
 
 ---
 
@@ -2626,7 +2625,7 @@ See also `t.isTupleTypeAnnotation(node, opts)` and `t.assertTupleTypeAnnotation(
 
 Aliases: `Flow`, `FlowType`
 
- - `types`: `Array<Flow>` (required)
+ - `types`: `Array<FlowType>` (required)
 
 ---
 
@@ -2641,7 +2640,7 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id`: `Identifier` (required)
  - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
- - `right`: `Flow` (required)
+ - `right`: `FlowType` (required)
 
 ---
 
@@ -2654,7 +2653,7 @@ See also `t.isTypeAnnotation(node, opts)` and `t.assertTypeAnnotation(node, opts
 
 Aliases: `Flow`
 
- - `typeAnnotation`: `Flow` (required)
+ - `typeAnnotation`: `FlowType` (required)
 
 ---
 
@@ -2667,7 +2666,7 @@ See also `t.isTypeCastExpression(node, opts)` and `t.assertTypeCastExpression(no
 
 Aliases: `Flow`, `ExpressionWrapper`, `Expression`
 
- - `expression`: `Flow` (required)
+ - `expression`: `Expression` (required)
  - `typeAnnotation`: `TypeAnnotation` (required)
 
 ---
@@ -2682,7 +2681,7 @@ See also `t.isTypeParameter(node, opts)` and `t.assertTypeParameter(node, opts)`
 Aliases: `Flow`
 
  - `bound`: `TypeAnnotation` (default: `null`)
- - `default`: `Flow` (default: `null`)
+ - `default`: `FlowType` (default: `null`)
  - `variance`: `Variance` (default: `null`)
  - `name`: `string` (default: `null`)
 
@@ -2710,7 +2709,7 @@ See also `t.isTypeParameterInstantiation(node, opts)` and `t.assertTypeParameter
 
 Aliases: `Flow`
 
- - `params`: `Array<Flow>` (required)
+ - `params`: `Array<FlowType>` (required)
 
 ---
 
@@ -2723,7 +2722,7 @@ See also `t.isTypeofTypeAnnotation(node, opts)` and `t.assertTypeofTypeAnnotatio
 
 Aliases: `Flow`, `FlowType`
 
- - `argument`: `Flow` (required)
+ - `argument`: `FlowType` (required)
 
 ---
 
@@ -2751,7 +2750,7 @@ See also `t.isUnionTypeAnnotation(node, opts)` and `t.assertUnionTypeAnnotation(
 
 Aliases: `Flow`, `FlowType`
 
- - `types`: `Array<Flow>` (required)
+ - `types`: `Array<FlowType>` (required)
 
 ---
 
