@@ -1610,6 +1610,19 @@ describe("function declaration hoisting", function() {
     original = safe;
     check(safe(), [safe, safe, safe]);
   });
+
+  it("should not interfere with nested function rebinding itself", function() {
+    function *parent() {
+      function toBeRebound() {
+        toBeRebound = 42;
+      }
+
+      toBeRebound();
+      yield toBeRebound;
+    }
+
+    check(parent(), [42]);
+  });
 });
 
 describe("the arguments object", function() {
