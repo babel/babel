@@ -104,7 +104,7 @@ tt.incDec.updateContext = function() {
 };
 
 tt._function.updateContext = function(prevType) {
-  if (this.curContext() !== types.braceStatement || prevType.beforeExpr) {
+  if (this.curContext() !== types.braceStatement) {
     this.state.context.push(types.functionExpression);
   }
 
