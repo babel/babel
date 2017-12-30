@@ -87,7 +87,7 @@ exports.hoist = function(funPath) {
           "=",
           node.id,
           t.functionExpression(
-            null,
+            path.scope.generateUidIdentifierBasedOnNode(node),
             node.params,
             node.body,
             node.generator,
