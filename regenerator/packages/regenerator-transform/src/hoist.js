@@ -87,7 +87,7 @@ exports.hoist = function(funPath) {
           "=",
           node.id,
           t.functionExpression(
-            node.id,
+            null,
             node.params,
             node.body,
             node.generator,
