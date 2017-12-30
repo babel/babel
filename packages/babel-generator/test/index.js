@@ -335,7 +335,7 @@ describe("programmatic generation", function() {
         t.objectTypeIndexer(
           t.identifier("key"),
           t.anyTypeAnnotation(),
-          t.identifier("Test"),
+          t.numberTypeAnnotation(),
         ),
       ],
     );
@@ -345,7 +345,7 @@ describe("programmatic generation", function() {
     assert.equal(
       output,
       `{
-  [key: any]: Test
+  [key: any]: number
 }`,
     );
   });

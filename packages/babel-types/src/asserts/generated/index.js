@@ -1017,6 +1017,9 @@ export function assertModuleSpecifier(node: Object, opts?: Object = {}): void {
 export function assertFlow(node: Object, opts?: Object = {}): void {
   assert("Flow", node, opts);
 }
+export function assertFlowType(node: Object, opts?: Object = {}): void {
+  assert("FlowType", node, opts);
+}
 export function assertFlowBaseAnnotation(
   node: Object,
   opts?: Object = {},
