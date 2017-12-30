@@ -68,7 +68,7 @@ function _foo() {
       while (1) {
         switch (_context3.prev = _context3.next) {
           case 0:
-            _bar2 = function _bar2() {
+            _bar2 = function _ref2() {
               _bar2 = _asyncToGenerator(
               /*#__PURE__*/
               regeneratorRuntime.mark(function _callee2() {
@@ -89,7 +89,7 @@ function _foo() {
               return _bar2.apply(this, arguments);
             };
 
-            bar = function bar() {
+            bar = function _ref() {
               return _bar2.apply(this, arguments);
             };
 
