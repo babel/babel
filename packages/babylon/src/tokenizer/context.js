@@ -104,7 +104,11 @@ tt.incDec.updateContext = function() {
 };
 
 tt._function.updateContext = function(prevType) {
-  if (this.curContext() !== types.braceStatement || prevType.isAssign || (prevType === tt._return && !this.braceIsBlock(prevType))) {
+  if (
+    this.curContext() !== types.braceStatement ||
+    prevType.isAssign ||
+    (prevType === tt._return && !this.braceIsBlock(prevType))
+  ) {
     this.state.context.push(types.functionExpression);
   }
 
@@ -112,7 +116,6 @@ tt._function.updateContext = function(prevType) {
 };
 
 tt.backQuote.updateContext = function() {
-  debugger
   if (this.curContext() === types.template) {
     this.state.context.pop();
   } else {
