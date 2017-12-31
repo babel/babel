@@ -7,11 +7,12 @@ const sinon = require("sinon");
 describe("use-built-ins-plugin", () => {
   describe("usage option", () => {
     it("should remove all babel-polyfill imports", () => {
-      const codeWithImports = `import "@babel/polyfill";
-import "@babel/polyfill";
-require("@babel/polyfill");
-require("@babel/polyfill");
-`;
+      const codeWithImports = `
+        import "@babel/polyfill";
+        import "@babel/polyfill";
+        require("@babel/polyfill");
+        require("@babel/polyfill");
+      `;
       const presetOptions = {
         presets: [
           [
