@@ -1,1 +1,1 @@
-function foo() {} /42/i
+!function fn() {} /42/i;

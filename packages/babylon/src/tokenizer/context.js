@@ -104,11 +104,7 @@ tt.incDec.updateContext = function() {
 };
 
 tt._function.updateContext = function(prevType) {
-  if (
-    this.curContext() !== types.braceStatement ||
-    prevType.isAssign ||
-    (prevType === tt._return && !this.braceIsBlock(prevType))
-  ) {
+  if (this.state.exprAllowed && !this.braceIsBlock(prevType)) {
     this.state.context.push(types.functionExpression);
   }
 
