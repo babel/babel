@@ -47,18 +47,22 @@ require("@babel/register")({
 
 ```javascript
 require("@babel/register")({
-  // Optional ignore regex - if any filenames **do** match this regex then they
-  // aren't compiled.
-  ignore: [/regex/],
+  // Optional ignore array
+  ignore: [
+    // if any filenames **do** match this regex then they aren't compiled.
+    /regex/,
+    
+    // Ignore entries can also be functions.
+    // A function receives the filename, and should return a boolean. 
+    function( filename ) {
+      if (filename === "/path/to/es6-file.js") {
+        return false;
+      } else {
 
-  // Ignore can also be specified as a function.
-  ignore: [function(filename) {
-    if (filename === "/path/to/es6-file.js") {
-      return false;
-    } else {
       return true;
     }
-  }],
+  } 
+  ],
 
   // Optional only regex - if any filenames **don't** match this regex then they
   // aren't compiled
