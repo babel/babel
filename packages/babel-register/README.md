@@ -52,11 +52,8 @@ require("@babel/register")({
   // When a file path **matchs** this regex then then it is **not** compiled.
   // When a function is invoked, it is called with the file path, and is **not** compiled if it returns true.
   ignore: [
-    // if any filenames **do** match this regex then they aren't compiled.
     /regex/,
-    
-    // Ignore entries can also be functions.
-    // A function receives the filename, and should return a boolean. 
+
     function( filepath ) {
       if (filepath === "/path/to/es6-file.js") {
         return false;
