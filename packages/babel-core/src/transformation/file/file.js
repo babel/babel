@@ -203,7 +203,7 @@ export default class File {
       msg += ` (${txt})`;
     }
 
-    if (loc) {
+    if (loc && loc.start) {
       const { highlightCode = true } = this.opts;
 
       msg +=
@@ -212,8 +212,8 @@ export default class File {
           this.code,
           {
             start: {
-              line: loc.line,
-              column: loc.column + 1,
+              line: loc.start.line,
+              column: loc.start.column + 1,
             },
           },
           { highlightCode },
