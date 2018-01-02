@@ -1280,8 +1280,6 @@ export type TsAsExpression = TsTypeAssertionLikeBase & {
 
 export type TsTypeAssertion = TsTypeAssertionLikeBase & {
   type: "TSTypeAssertion",
-  typeAnnotation: TsType,
-  expression: Expression,
 };
 
 export type TsNonNullExpression = NodeBase & {
