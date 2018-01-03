@@ -1,4 +1,6 @@
 function test(x) {
+  var _x = x;
+
   var F = function F() {
     babelHelpers.classCallCheck(this, F);
     Object.defineProperty(this, _x, {
@@ -9,7 +11,6 @@ function test(x) {
     });
   };
 
-  var _x = x;
   x = 'deadbeef';
   assert.strictEqual(new F().foo, 1);
   x = 'wrong';

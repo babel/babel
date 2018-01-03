@@ -4,6 +4,23 @@ var bar = () => {};
 
 var four = 4;
 
+var _one = one();
+
+var _ref = 2 * four + seven;
+
+var _undefined = undefined;
+
+var _computed = computed();
+
+var _computed2 = computed();
+
+var _ref2 = "test" + one;
+
+var _ref3 = /regex/;
+var _bar = bar;
+var _baz = baz;
+var _ref4 = `template${expression}`;
+
 var MyClass =
 /*#__PURE__*/
 function () {
@@ -85,22 +102,6 @@ function () {
   return MyClass;
 }();
 
-var _one = one();
-
-var _ref = 2 * four + seven;
-
-var _undefined = undefined;
-
-var _computed = computed();
-
-var _computed2 = computed();
-
-var _ref2 = "test" + one;
-
-var _ref3 = /regex/;
-var _bar = bar;
-var _baz = baz;
-var _ref4 = `template${expression}`;
 Object.defineProperty(MyClass, _one, {
   configurable: true,
   enumerable: true,
