@@ -8,7 +8,7 @@ function _get(object, property, receiver) { if (object === null) object = Functi
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-var Foo =
+var Foo = (0,
 /*#__PURE__*/
 function (_Bar) {
   _inherits(Foo, _Bar);
@@ -24,4 +24,4 @@ function (_Bar) {
   }
 
   return Foo;
-}(Bar);
+}(Bar));

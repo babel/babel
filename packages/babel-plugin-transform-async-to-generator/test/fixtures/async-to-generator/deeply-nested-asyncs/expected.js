@@ -11,11 +11,11 @@ function _s() {
       args[_key - 1] = arguments[_key];
     }
 
-    let t =
+    let t = (0,
     /*#__PURE__*/
     function () {
       var _ref = babelHelpers.asyncToGenerator(function* (y, a) {
-        let r =
+        let r = (0,
         /*#__PURE__*/
         function () {
           var _ref2 = babelHelpers.asyncToGenerator(function* (z, b) {
@@ -32,8 +32,7 @@ function _s() {
           return function r(_x4, _x5) {
             return _ref2.apply(this, arguments);
           };
-        }();
-
+        }());
         yield r();
         console.log(_this, args, _arguments);
         return _this.g(r);
@@ -42,8 +41,7 @@ function _s() {
       return function t(_x2, _x3) {
         return _ref.apply(this, arguments);
       };
-    }();
-
+    }());
     yield t();
     return this.h(t);
   });

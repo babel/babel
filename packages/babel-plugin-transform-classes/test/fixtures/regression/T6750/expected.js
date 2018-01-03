@@ -6,18 +6,17 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = _default;
 
 function _default() {
-  return (
-    /*#__PURE__*/
-    function () {
-      function Select() {
-        babelHelpers.classCallCheck(this, Select);
-      }
+  return 0,
+  /*#__PURE__*/
+  function () {
+    function Select() {
+      babelHelpers.classCallCheck(this, Select);
+    }
 
-      babelHelpers.createClass(Select, [{
-        key: "query",
-        value: function query(_query) {}
-      }]);
-      return Select;
-    }()
-  );
+    babelHelpers.createClass(Select, [{
+      key: "query",
+      value: function query(_query) {}
+    }]);
+    return Select;
+  }();
 }

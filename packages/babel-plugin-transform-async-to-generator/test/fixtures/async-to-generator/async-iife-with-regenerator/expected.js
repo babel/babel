@@ -1,3 +1,5 @@
+(0,
+/*#__PURE__*/
 babelHelpers.asyncToGenerator(
 /*#__PURE__*/
 regeneratorRuntime.mark(function _callee() {
@@ -12,7 +14,9 @@ regeneratorRuntime.mark(function _callee() {
         return _context.stop();
     }
   }, _callee, this);
-}))();
+})))();
+(0,
+/*#__PURE__*/
 babelHelpers.asyncToGenerator(
 /*#__PURE__*/
 regeneratorRuntime.mark(function _callee2() {
@@ -27,10 +31,10 @@ regeneratorRuntime.mark(function _callee2() {
         return _context2.stop();
     }
   }, _callee2, this);
-}))();
-
+})))();
+0,
 /*#__PURE__*/
-(function () {
+function () {
   var _notIIFE = babelHelpers.asyncToGenerator(
   /*#__PURE__*/
   regeneratorRuntime.mark(function _callee3() {
@@ -50,8 +54,8 @@ regeneratorRuntime.mark(function _callee2() {
   return function notIIFE() {
     return _notIIFE.apply(this, arguments);
   };
-})();
-
+}();
+0,
 /*#__PURE__*/
 babelHelpers.asyncToGenerator(
 /*#__PURE__*/

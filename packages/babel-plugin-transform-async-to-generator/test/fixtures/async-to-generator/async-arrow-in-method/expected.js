@@ -4,7 +4,7 @@ let TestClass = {
   testMethodFailure() {
     var _this = this;
 
-    return new Promise(
+    return new Promise((0,
     /*#__PURE__*/
     function () {
       var _ref = babelHelpers.asyncToGenerator(function* (resolve) {
@@ -15,7 +15,7 @@ let TestClass = {
       return function (_x) {
         return _ref.apply(this, arguments);
       };
-    }());
+    }()));
   }
 
 };

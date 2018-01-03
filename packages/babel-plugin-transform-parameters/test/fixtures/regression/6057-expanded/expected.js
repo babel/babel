@@ -25,7 +25,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
-var App =
+var App = (0,
 /*#__PURE__*/
 function (_Component) {
   _inherits(App, _Component);
@@ -57,6 +57,5 @@ function (_Component) {
   }]);
 
   return App;
-}(Component);
-
+}(Component));
 exports.default = App;

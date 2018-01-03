@@ -1,4 +1,4 @@
-var concat =
+var concat = (0,
 /*#__PURE__*/
 function () {
   var _ref = babelHelpers.asyncToGenerator(function* () {
@@ -9,9 +9,8 @@ function () {
   return function concat() {
     return _ref.apply(this, arguments);
   };
-}();
-
-var x =
+}());
+var x = (0,
 /*#__PURE__*/
 function () {
   var _ref2 = babelHelpers.asyncToGenerator(function* () {
@@ -27,4 +26,4 @@ function () {
   return function x() {
     return _ref2.apply(this, arguments);
   };
-}();
+}());

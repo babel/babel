@@ -2,13 +2,15 @@ var _this = this;
 
 var fooCalls = [];
 
-var _jumpTable = function jumpTable(name, arg) {
+var _jumpTable = (0,
+/*#__PURE__*/
+function jumpTable(name, arg) {
   babelHelpers.newArrowCheck(this, _this);
 
   if (_jumpTable[name]) {
     _jumpTable[name](arg);
   }
-}.bind(this);
+}.bind(this));
 
 Object.assign(_jumpTable, {
   foo(arg) {

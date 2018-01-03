@@ -21,6 +21,7 @@ class Class {
             this;
           };
 
+          0,
           /*#__PURE__*/
           babelHelpers.asyncToGenerator(function* () {
             _this2;
@@ -37,6 +38,7 @@ class Class {
           this;
         };
 
+        0,
         /*#__PURE__*/
         babelHelpers.asyncToGenerator(function* () {
           _this3;

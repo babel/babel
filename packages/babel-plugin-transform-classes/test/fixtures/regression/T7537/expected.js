@@ -12,7 +12,7 @@ var B = function B() {
   _classCallCheck(this, B);
 };
 
-var A =
+var A = (0,
 /*#__PURE__*/
 function (_B) {
   _inherits(A, _B);
@@ -27,4 +27,4 @@ function (_B) {
   }
 
   return A;
-}(B);
+}(B));

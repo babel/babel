@@ -1,14 +1,18 @@
 var _this = this;
 
 "1".concat(a);
-(function () {
+0,
+/*#__PURE__*/
+function () {
   babelHelpers.newArrowCheck(this, _this);
-}).bind(this);
+}.bind(this);
 
 function a() {
   var _this2 = this;
 
-  (function () {
+  0,
+  /*#__PURE__*/
+  function () {
     babelHelpers.newArrowCheck(this, _this2);
-  }).bind(this);
+  }.bind(this);
 }

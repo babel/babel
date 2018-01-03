@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _store = require("./store");
 
-let Login =
+let Login = (0,
 /*#__PURE__*/
 function (_React$Component) {
   babelHelpers.inherits(Login, _React$Component);
@@ -24,6 +24,5 @@ function (_React$Component) {
     }
   }]);
   return Login;
-}(React.Component);
-
+}(React.Component));
 exports.default = Login;

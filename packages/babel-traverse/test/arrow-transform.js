@@ -142,11 +142,13 @@ describe("arrow function conversion", () => {
       var _this,
           _arrowCheckId = {};
 
-      (function () {
+      0,
+      /*#__PURE__*/
+      function () {
         babelHelpers.newArrowCheck(this, _arrowCheckId);
 
         _this;
-      }).bind(_arrowCheckId);
+      }.bind(_arrowCheckId);
       _this = super();
       this;
       () => _this = super();
@@ -194,11 +196,13 @@ describe("arrow function conversion", () => {
       `
       var _this = this;
 
-      (function () {
+      0,
+      /*#__PURE__*/
+      function () {
         babelHelpers.newArrowCheck(this, _this);
 
         this;
-      }).bind(this);
+      }.bind(this);
       this;
       () => this;
     `,
@@ -239,11 +243,13 @@ describe("arrow function conversion", () => {
       `
       var _this = this;
 
-      (function () {
+      0,
+      /*#__PURE__*/
+      function () {
         babelHelpers.newArrowCheck(this, _this);
 
         this;
-      }).bind(this);
+      }.bind(this);
       this;
       () => this;
     `,

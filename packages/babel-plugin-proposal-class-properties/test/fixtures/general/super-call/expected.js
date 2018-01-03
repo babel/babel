@@ -1,4 +1,4 @@
-var A =
+var A = (0,
 /*#__PURE__*/
 function () {
   function A() {
@@ -12,9 +12,8 @@ function () {
     }
   }]);
   return A;
-}();
-
-var B =
+}());
+var B = (0,
 /*#__PURE__*/
 function (_A) {
   babelHelpers.inherits(B, _A);
@@ -32,4 +31,4 @@ function (_A) {
   }
 
   return B;
-}(A);
+}(A));

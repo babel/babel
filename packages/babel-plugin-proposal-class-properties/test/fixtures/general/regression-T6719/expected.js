@@ -1,7 +1,7 @@
 function withContext(ComposedComponent) {
   var _class, _temp;
 
-  return _temp = _class =
+  return _temp = _class = (0,
   /*#__PURE__*/
   function (_Component) {
     babelHelpers.inherits(WithContext, _Component);
@@ -12,7 +12,7 @@ function withContext(ComposedComponent) {
     }
 
     return WithContext;
-  }(Component), Object.defineProperty(_class, "propTypes", {
+  }(Component)), Object.defineProperty(_class, "propTypes", {
     configurable: true,
     enumerable: true,
     writable: true,

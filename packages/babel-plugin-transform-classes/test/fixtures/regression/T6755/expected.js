@@ -1,4 +1,4 @@
-var Example =
+var Example = (0,
 /*#__PURE__*/
 function () {
   function Example() {}
@@ -27,4 +27,4 @@ function () {
     }, test2, this);
   });
   return Example;
-}();
+}());

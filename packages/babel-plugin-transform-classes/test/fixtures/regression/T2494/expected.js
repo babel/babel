@@ -1,5 +1,5 @@
 var x = {
-  Foo:
+  Foo: (0,
   /*#__PURE__*/
   function (_Foo) {
     babelHelpers.inherits(_class, _Foo);
@@ -10,5 +10,5 @@ var x = {
     }
 
     return _class;
-  }(Foo)
+  }(Foo))
 };

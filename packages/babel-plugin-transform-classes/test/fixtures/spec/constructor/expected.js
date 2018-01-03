@@ -3,7 +3,7 @@ var Test = function Test() {
   this.state = "test";
 };
 
-var Foo =
+var Foo = (0,
 /*#__PURE__*/
 function (_Bar) {
   babelHelpers.inherits(Foo, _Bar);
@@ -18,7 +18,7 @@ function (_Bar) {
   }
 
   return Foo;
-}(Bar);
+}(Bar));
 
 var ConstructorScoping = function ConstructorScoping() {
   babelHelpers.classCallCheck(this, ConstructorScoping);

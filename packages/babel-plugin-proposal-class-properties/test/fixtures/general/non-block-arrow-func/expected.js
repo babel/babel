@@ -1,7 +1,7 @@
 export default (param => {
   var _class, _temp;
 
-  return _temp = _class =
+  return _temp = _class = (0,
   /*#__PURE__*/
   function () {
     function App() {
@@ -15,7 +15,7 @@ export default (param => {
       }
     }]);
     return App;
-  }(), Object.defineProperty(_class, "props", {
+  }()), Object.defineProperty(_class, "props", {
     configurable: true,
     enumerable: true,
     writable: true,

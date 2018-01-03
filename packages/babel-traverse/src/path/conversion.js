@@ -2,6 +2,7 @@
 
 import * as t from "@babel/types";
 import nameFunction from "@babel/helper-function-name";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 export function toComputedKey(): Object {
   const node = this.node;
@@ -141,15 +142,20 @@ export function arrowFunctionToExpression(
       ),
     );
 
-    this.replaceWith(
-      t.callExpression(
-        t.memberExpression(
-          nameFunction(this, true) || this.node,
-          t.identifier("bind"),
-        ),
-        [checkBinding ? t.identifier(checkBinding.name) : t.thisExpression()],
+    const callExpression = t.callExpression(
+      t.memberExpression(
+        nameFunction(this, true) || this.node,
+        t.identifier("bind"),
       ),
+      [checkBinding ? t.identifier(checkBinding.name) : t.thisExpression()],
     );
+    // We want to annotate the .bind(this) call as pure without affecting
+    // any other expressions that may involve this node.
+    // We have to .replaceWith before annotating as it will move comments around.
+    this.replaceWith(
+      t.sequenceExpression([t.numericLiteral(0), callExpression]),
+    );
+    annotateAsPure(this.get("expressions.1").node);
   }
 }
 

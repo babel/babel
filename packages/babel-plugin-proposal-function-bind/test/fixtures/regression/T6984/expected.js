@@ -8,7 +8,7 @@ function _one() {}
 
 function _two() {}
 
-let Test1 =
+let Test1 = (0,
 /*#__PURE__*/
 function () {
   function Test1() {
@@ -28,4 +28,4 @@ function () {
   }]);
 
   return Test1;
-}();
+}());

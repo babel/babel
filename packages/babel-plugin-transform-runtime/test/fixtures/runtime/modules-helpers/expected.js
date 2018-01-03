@@ -8,7 +8,7 @@ var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/creat
 
 var _foo = _interopRequireDefault(require("foo"));
 
-let Example =
+let Example = (0,
 /*#__PURE__*/
 function () {
   function Example() {
@@ -20,4 +20,4 @@ function () {
     value: function method() {}
   }]);
   return Example;
-}();
+}());

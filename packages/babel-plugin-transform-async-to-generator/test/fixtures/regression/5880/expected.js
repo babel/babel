@@ -1,3 +1,5 @@
+(0,
+/*#__PURE__*/
 babelHelpers.asyncToGenerator(function* () {
   var _iteratorNormalCompletion = true;
   var _didIteratorError = false;
@@ -24,4 +26,4 @@ babelHelpers.asyncToGenerator(function* () {
       }
     }
   }
-})();
+}))();

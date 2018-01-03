@@ -7,7 +7,7 @@ exports.default = void 0;
 
 var _last2 = babelHelpers.interopRequireDefault(require("lodash/last"));
 
-let Container =
+let Container = (0,
 /*#__PURE__*/
 function () {
   function Container() {
@@ -25,6 +25,5 @@ function () {
     }
   }]);
   return Container;
-}();
-
+}());
 exports.default = Container;

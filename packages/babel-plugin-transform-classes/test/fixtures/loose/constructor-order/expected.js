@@ -1,4 +1,4 @@
-var x =
+var x = (0,
 /*#__PURE__*/
 function () {
   var _proto = x.prototype;
@@ -16,4 +16,4 @@ function () {
   }
 
   return x;
-}();
+}());
