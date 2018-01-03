@@ -49,7 +49,7 @@ require("@babel/register")({
 require("@babel/register")({
   // Array of ignore conditions ( Optional )
   // A condition can be either a regex, or a function.
-  // When a file path **matchs** this regex then then it is **not** compiled.
+  // When a file path matches this regex then it is **not** compiled
   // When a function is invoked, it is called with the file path, and is **not** compiled if it returns true.
   ignore: [
     /regex/,
@@ -57,11 +57,11 @@ require("@babel/register")({
     function( filepath ) {
       if (filepath === "/path/to/es6-file.js") {
         return false;
-      } else {
-
-      return true;
+      }
+      else {
+        return true;
+      }
     }
-  } 
   ],
 
   // Optional only regex - if any filenames **don't** match this regex then they
