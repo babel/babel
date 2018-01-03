@@ -47,7 +47,7 @@ require("@babel/register")({
 
 ```javascript
 require("@babel/register")({
-  // Array of ignore conditions ( Optional )
+  // Array of ignore conditions (Optional)
   // A condition can be either a regex, or a function.
   // When a file path matches this regex then it is **not** compiled
   // When a function is invoked, it is called with the file path, and is **not** compiled if it returns true.
