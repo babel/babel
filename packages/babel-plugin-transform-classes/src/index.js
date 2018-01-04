@@ -1,6 +1,5 @@
 import LooseTransformer from "./loose";
 import VanillaTransformer from "./vanilla";
-import SpecTransformer from "./spec";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import nameFunction from "@babel/helper-function-name";
 import { types as t } from "@babel/core";
@@ -16,12 +15,7 @@ const builtinClasses = new Set([
 
 export default function(api, options) {
   const { loose, spec } = options;
-  let Constructor = VanillaTransformer;
-  if (spec) {
-    Constructor = SpecTransformer;
-  } else if (loose) {
-    Constructor = LooseTransformer;
-  }
+  const Constructor = !spec && loose ? LooseTransformer : VanillaTransformer;
 
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
@@ -70,7 +64,7 @@ export default function(api, options) {
         node[VISITED] = true;
 
         path.replaceWith(
-          new Constructor(path, state.file, builtinClasses).run(),
+          new Constructor(path, state.file, builtinClasses, spec).run(),
         );
 
         if (path.isCallExpression()) {
