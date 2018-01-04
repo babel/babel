@@ -179,8 +179,8 @@ export default class File {
 
   buildCodeFrameError(
     node: ?{
-      loc?: { line: number, column: number },
-      _loc?: { line: number, column: number },
+      loc?: { start: { line: number, column: number } },
+      _loc?: { start: { line: number, column: number } },
     },
     msg: string,
     Error: typeof Error = SyntaxError,
@@ -212,8 +212,8 @@ export default class File {
           this.code,
           {
             start: {
-              line: loc.line,
-              column: loc.column + 1,
+              line: loc.start.line,
+              column: loc.start.column + 1,
             },
           },
           { highlightCode },

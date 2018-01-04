@@ -1,0 +1,3 @@
+{
+  "throws": "undefined: someMsg\n> 1 | function f() {}"
+}

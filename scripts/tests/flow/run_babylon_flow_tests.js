@@ -99,7 +99,13 @@ function update_whitelist(summary) {
 }
 
 const options = {
-  plugins: ["jsx", "flow", "asyncGenerators", "objectRestSpread"],
+  plugins: [
+    "jsx",
+    "flow",
+    "flowComments",
+    "asyncGenerators",
+    "objectRestSpread",
+  ],
   sourceType: "module",
   ranges: true,
 };
@@ -109,6 +115,7 @@ const flowOptionsMapping = {
   esproposal_class_static_fields: "classProperties",
   esproposal_export_star_as: "exportNamespaceFrom",
   esproposal_decorators: "decorators",
+  types: "flowComments",
 };
 
 const summary = {
@@ -142,7 +149,15 @@ tests.forEach(section => {
 
     if (test.options) {
       Object.keys(test.options).forEach(option => {
-        if (!test.options[option]) return;
+        if (!test.options[option]) {
+          const idx = babylonOptions.plugins.indexOf(
+            flowOptionsMapping[option]
+          );
+          if (idx) {
+            babylonOptions.plugins.splice(idx, 1);
+          }
+          return;
+        }
         if (!flowOptionsMapping[option]) {
           throw new Error("Parser options not mapped " + option);
         }
