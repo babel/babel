@@ -91,7 +91,9 @@ export function JSXClosingElement(node: Object) {
   this.token(">");
 }
 
-export function JSXEmptyExpression() {}
+export function JSXEmptyExpression(node: Object) {
+  this.printInnerComments(node);
+}
 
 export function JSXFragment(node: Object) {
   this.print(node.openingFragment, node);
