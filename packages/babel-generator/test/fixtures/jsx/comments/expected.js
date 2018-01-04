@@ -8,7 +8,7 @@ class Demo extends React.Component {
     return <div>
       <Dialog>
         {
-          /**<div>I am a jsx comment!!</div>**/
+          /*<div>I am a jsx comment!!</div>*/
         }
       </Dialog>
     </div>;
