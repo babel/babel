@@ -1,13 +1,15 @@
 assert.throws(function() {
+  const key = 'key';
   const a = {
-    b() {}
+    [key + 'foo']() {}
   }
-  new a.b();
+  new a[key + 'foo']();
 }, 'Cannot instantiate a method');
 
 assert.doesNotThrow(function() {
+  const key = 'key';
   const a = {
-    b() {}
+    [key + 'foo']() {}
   }
-  a.b();
+  a[key + 'foo']();
 });

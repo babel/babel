@@ -1,9 +1,10 @@
+let key = 'b';
 class A {
   constructor() {
-    new this.b
+    new this[key]
   }
 
-  b() {}
+  [key]() {}
 }
 
 assert.throws(() => new A, "Cannot instantiate a method");

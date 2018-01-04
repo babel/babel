@@ -1,5 +1,5 @@
 var obj = {
-  method: _method = function () {
+  method: function _method() {
     babelHelpers.newMethodCheck(this, _method);
     return 1;
   }

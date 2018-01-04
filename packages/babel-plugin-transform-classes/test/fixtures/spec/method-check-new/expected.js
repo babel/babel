@@ -7,8 +7,8 @@ function () {
 
   babelHelpers.createClass(Foo, [{
     key: "foo",
-    value: function foo() {
-      babelHelpers.newMethodCheck(this, Foo.prototype.foo);
+    value: function _foo() {
+      babelHelpers.newMethodCheck(this, _foo);
       return 1;
     }
   }]);

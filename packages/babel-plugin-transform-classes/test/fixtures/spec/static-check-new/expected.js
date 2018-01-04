@@ -7,13 +7,13 @@ function () {
 
   babelHelpers.createClass(A, [{
     key: "b",
-    value: function b() {
-      babelHelpers.newMethodCheck(this, A.prototype.b);
+    value: function _b() {
+      babelHelpers.newMethodCheck(this, _b);
     }
   }], [{
     key: "a",
-    value: function a() {
-      babelHelpers.newMethodCheck(this, A.a);
+    value: function _a() {
+      babelHelpers.newMethodCheck(this, _a);
     }
   }, {
     key: "b",

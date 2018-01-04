@@ -10,8 +10,8 @@ function (_Foo) {
 
   babelHelpers.createClass(Test, [{
     key: "test",
-    value: function test() {
-      babelHelpers.newMethodCheck(this, Test.prototype.test);
+    value: function _test() {
+      babelHelpers.newMethodCheck(this, _test);
       new (babelHelpers.get(Test.prototype.__proto__ || Object.getPrototypeOf(Test.prototype), "test", this))();
     }
   }]);

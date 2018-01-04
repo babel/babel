@@ -8,31 +8,25 @@ export default function(api, options) {
       ObjectMethod(path, state) {
         const { node } = path;
         if (node.kind === "method") {
-          let func = t.functionExpression(
+          const args = [
             null,
             node.params,
             node.body,
             node.generator,
             node.async,
-          );
-          func.returnType = node.returnType;
+          ];
 
           if (spec) {
-            const methodRef = path.scope.generateUidIdentifierBasedOnNode(
-              path.node,
-            );
+            const methodRef = path.scope.generateUidIdentifierBasedOnNode(node);
+            args[0] = methodRef;
             const newMethodCheckCall = t.callExpression(
               state.addHelper("newMethodCheck"),
               [t.thisExpression(), methodRef],
             );
-            path
-              .get("body")
-              .unshiftContainer(
-                "body",
-                t.expressionStatement(newMethodCheckCall),
-              );
-            func = t.assignmentExpression("=", methodRef, func);
+            node.body.body.unshift(t.expressionStatement(newMethodCheckCall));
           }
+          const func = t.functionExpression(...args);
+          func.returnType = node.returnType;
 
           path.replaceWith(t.objectProperty(node.key, func, node.computed));
         }
