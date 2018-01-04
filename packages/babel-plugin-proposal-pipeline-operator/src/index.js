@@ -15,6 +15,7 @@ export default function() {
 
         let optimizeArrow =
           t.isArrowFunctionExpression(right) && t.isExpression(right.body);
+        const isAwait = t.isAwaitExpression(right);
         let param;
 
         if (optimizeArrow) {
@@ -24,6 +25,11 @@ export default function() {
           } else if (params.length > 0) {
             optimizeArrow = false;
           }
+        } else if (isAwait) {
+          right.argument = t.sequenceExpression([
+            t.numericLiteral(0),
+            right.argument,
+          ]);
         } else if (t.isIdentifier(right, { name: "eval" })) {
           right = t.sequenceExpression([t.numericLiteral(0), right]);
         }
@@ -44,7 +50,9 @@ export default function() {
 
         const call = optimizeArrow
           ? right.body
-          : t.callExpression(right, [placeholder]);
+          : isAwait
+            ? t.awaitExpression(t.callExpression(right.argument, [placeholder]))
+            : t.callExpression(right, [placeholder]);
         path.replaceWith(
           t.sequenceExpression([
             t.assignmentExpression("=", placeholder, left),
