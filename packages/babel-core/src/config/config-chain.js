@@ -93,14 +93,6 @@ export function buildRootChain(
   // resolve all .babelrc files
   if (opts.babelrc !== false && context.filename !== null) {
     const filename = context.filename;
-    const babelrcFile = findBabelrc(filename, context.envName);
-    if (babelrcFile) {
-      const result = loadFileChain(babelrcFile, context);
-      if (!result) return null;
-
-      mergeChain(fileChain, result);
-    }
-
     const babelignoreFile = findBabelignore(filename);
     if (
       babelignoreFile &&
@@ -112,6 +104,14 @@ export function buildRootChain(
       )
     ) {
       return null;
+    }
+
+    const babelrcFile = findBabelrc(filename, context.envName);
+    if (babelrcFile) {
+      const result = loadFileChain(babelrcFile, context);
+      if (!result) return null;
+
+      mergeChain(fileChain, result);
     }
   }
 
