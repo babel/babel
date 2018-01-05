@@ -326,6 +326,9 @@ export type VariableDeclarator = NodeBase & {
   type: "VariableDeclarator",
   id: Pattern,
   init: ?Expression,
+
+  // TypeScript only:
+  exclamation?: true,
 };
 
 // Misc
@@ -631,7 +634,7 @@ export type ClassMemberBase = NodeBase &
     // TypeScript only:
     accessibility?: ?Accessibility,
     abstract?: ?true,
-    optional?: ?true,
+    optional?: ?true, //!
   };
 
 export type ClassMember =
@@ -684,6 +687,7 @@ export type ClassProperty = ClassMemberBase & {
 
   // TypeScript only: (TODO: Not in spec)
   readonly?: true,
+  exclamation?: true,
 };
 
 export type ClassPrivateProperty = NodeBase & {

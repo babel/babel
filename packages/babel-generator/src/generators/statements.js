@@ -290,6 +290,7 @@ export function VariableDeclaration(node: Object, parent: Object) {
 
 export function VariableDeclarator(node: Object) {
   this.print(node.id, node);
+  if (node.exclamation) this.token("!"); // TS
   this.print(node.id.typeAnnotation, node);
   if (node.init) {
     this.space();

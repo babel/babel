@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 60,
+  "end": 84,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 6,
+      "line": 8,
       "column": 1
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 60,
+    "end": 84,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 6,
+        "line": 8,
         "column": 1
       }
     },
@@ -31,14 +31,14 @@
       {
         "type": "ClassDeclaration",
         "start": 0,
-        "end": 60,
+        "end": 84,
         "loc": {
           "start": {
             "line": 1,
             "column": 0
           },
           "end": {
-            "line": 6,
+            "line": 8,
             "column": 1
           }
         },
@@ -63,14 +63,14 @@
         "body": {
           "type": "ClassBody",
           "start": 8,
-          "end": 60,
+          "end": 84,
           "loc": {
             "start": {
               "line": 1,
               "column": 8
             },
             "end": {
-              "line": 6,
+              "line": 8,
               "column": 1
             }
           },
@@ -294,6 +294,108 @@
                 },
                 "value": 1
               }
+            },
+            {
+              "type": "ClassProperty",
+              "start": 63,
+              "end": 66,
+              "loc": {
+                "start": {
+                  "line": 6,
+                  "column": 4
+                },
+                "end": {
+                  "line": 6,
+                  "column": 7
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 63,
+                "end": 64,
+                "loc": {
+                  "start": {
+                    "line": 6,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 6,
+                    "column": 5
+                  },
+                  "identifierName": "x"
+                },
+                "name": "x"
+              },
+              "computed": false,
+              "exclamation": true,
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start": 71,
+              "end": 82,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 4
+                },
+                "end": {
+                  "line": 7,
+                  "column": 15
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 71,
+                "end": 72,
+                "loc": {
+                  "start": {
+                    "line": 7,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 7,
+                    "column": 5
+                  },
+                  "identifierName": "x"
+                },
+                "name": "x"
+              },
+              "computed": false,
+              "exclamation": true,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 73,
+                "end": 81,
+                "loc": {
+                  "start": {
+                    "line": 7,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 7,
+                    "column": 14
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start": 75,
+                  "end": 81,
+                  "loc": {
+                    "start": {
+                      "line": 7,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 7,
+                      "column": 14
+                    }
+                  }
+                }
+              },
+              "value": null
             }
           ]
         }

@@ -836,6 +836,10 @@ defineType("VariableDeclarator", {
     id: {
       validate: assertNodeType("LVal"),
     },
+    exclamation: {
+      optional: true,
+      validate: assertValueType("boolean"),
+    },
     init: {
       optional: true,
       validate: assertNodeType("Expression"),

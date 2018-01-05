@@ -79,6 +79,10 @@ export default function() {
         if (path.node.declare) path.remove();
       },
 
+      VariableDeclarator({ node }) {
+        if (node.exclamation) node.exclamation = null;
+      },
+
       ClassMethod(path) {
         const { node } = path;
 
@@ -152,7 +156,9 @@ export default function() {
 
         if (node.accessibility) node.accessibility = null;
         if (node.abstract) node.abstract = null;
+        if (node.readonly) node.readonly = null;
         if (node.optional) node.optional = null;
+        if (node.exclamation) node.exclamation = null;
         if (node.typeAnnotation) node.typeAnnotation = null;
       },
 
