@@ -634,7 +634,7 @@ export type ClassMemberBase = NodeBase &
     // TypeScript only:
     accessibility?: ?Accessibility,
     abstract?: ?true,
-    optional?: ?true, //!
+    optional?: ?true,
   };
 
 export type ClassMember =
