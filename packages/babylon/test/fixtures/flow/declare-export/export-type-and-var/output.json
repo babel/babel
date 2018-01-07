@@ -1,0 +1,231 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 90,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 90
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 90,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 90
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "DeclareModule",
+        "start": 0,
+        "end": 90,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 90
+          }
+        },
+        "id": {
+          "type": "StringLiteral",
+          "start": 15,
+          "end": 20,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 20
+            }
+          },
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start": 21,
+          "end": 90,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 21
+            },
+            "end": {
+              "line": 1,
+              "column": 90
+            }
+          },
+          "body": [
+            {
+              "type": "DeclareExportDeclaration",
+              "start": 23,
+              "end": 56,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 23
+                },
+                "end": {
+                  "line": 1,
+                  "column": 56
+                }
+              },
+              "specifiers": [],
+              "source": null,
+              "declaration": {
+                "type": "TypeAlias",
+                "start": 38,
+                "end": 56,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 38
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 56
+                  }
+                },
+                "id": {
+                  "type": "Identifier",
+                  "start": 43,
+                  "end": 46,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 43
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 46
+                    },
+                    "identifierName": "bar"
+                  },
+                  "name": "bar"
+                },
+                "typeParameters": null,
+                "right": {
+                  "type": "NumberTypeAnnotation",
+                  "start": 49,
+                  "end": 55,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 49
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 55
+                    }
+                  }
+                }
+              },
+              "default": false
+            },
+            {
+              "type": "DeclareExportDeclaration",
+              "start": 57,
+              "end": 88,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 57
+                },
+                "end": {
+                  "line": 1,
+                  "column": 88
+                }
+              },
+              "declaration": {
+                "type": "DeclareVariable",
+                "start": 72,
+                "end": 88,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 72
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 88
+                  }
+                },
+                "id": {
+                  "type": "Identifier",
+                  "start": 76,
+                  "end": 87,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 76
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 87
+                    },
+                    "identifierName": "baz"
+                  },
+                  "name": "baz",
+                  "typeAnnotation": {
+                    "type": "TypeAnnotation",
+                    "start": 79,
+                    "end": 87,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 79
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 87
+                      }
+                    },
+                    "typeAnnotation": {
+                      "type": "NumberTypeAnnotation",
+                      "start": 81,
+                      "end": 87,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 81
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 87
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "default": false
+            }
+          ]
+        },
+        "kind": "ES"
+      }
+    ],
+    "directives": []
+  }
+}

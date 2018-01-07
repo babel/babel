@@ -1,0 +1,133 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 20,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 20
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 20,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 20
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "start": 0,
+        "end": 20,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 20
+          }
+        },
+        "await": false,
+        "left": {
+          "type": "VariableDeclaration",
+          "start": 5,
+          "end": 11,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 5
+            },
+            "end": {
+              "line": 1,
+              "column": 11
+            }
+          },
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start": 9,
+              "end": 11,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 11
+                }
+              },
+              "id": {
+                "type": "Identifier",
+                "start": 9,
+                "end": 11,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 11
+                  },
+                  "identifierName": "of"
+                },
+                "name": "of"
+              },
+              "init": null
+            }
+          ],
+          "kind": "let"
+        },
+        "right": {
+          "type": "Identifier",
+          "start": 15,
+          "end": 18,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 18
+            },
+            "identifierName": "xyz"
+          },
+          "name": "xyz"
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 19,
+          "end": 20,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 19
+            },
+            "end": {
+              "line": 1,
+              "column": 20
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

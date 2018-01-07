@@ -1,0 +1,175 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 56,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 56
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 56,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 56
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "DeclareModule",
+        "start": 0,
+        "end": 56,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 56
+          }
+        },
+        "id": {
+          "type": "StringLiteral",
+          "start": 15,
+          "end": 20,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 20
+            }
+          },
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start": 21,
+          "end": 56,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 21
+            },
+            "end": {
+              "line": 1,
+              "column": 56
+            }
+          },
+          "body": [
+            {
+              "type": "DeclareExportDeclaration",
+              "start": 23,
+              "end": 54,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 23
+                },
+                "end": {
+                  "line": 1,
+                  "column": 54
+                }
+              },
+              "declaration": null,
+              "specifiers": [
+                {
+                  "type": "ExportSpecifier",
+                  "start": 39,
+                  "end": 40,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 39
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 40
+                    }
+                  },
+                  "local": {
+                    "type": "Identifier",
+                    "start": 39,
+                    "end": 40,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 39
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 40
+                      },
+                      "identifierName": "a"
+                    },
+                    "name": "a"
+                  },
+                  "exported": {
+                    "type": "Identifier",
+                    "start": 39,
+                    "end": 40,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 39
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 40
+                      },
+                      "identifierName": "a"
+                    },
+                    "name": "a"
+                  }
+                }
+              ],
+              "source": {
+                "type": "StringLiteral",
+                "start": 48,
+                "end": 53,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 48
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 53
+                  }
+                },
+                "extra": {
+                  "rawValue": "bar",
+                  "raw": "\"bar\""
+                },
+                "value": "bar"
+              },
+              "default": false
+            }
+          ]
+        },
+        "kind": "ES"
+      }
+    ],
+    "directives": []
+  }
+}

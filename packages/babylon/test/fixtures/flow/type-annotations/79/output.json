@@ -1,0 +1,218 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 43,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 43
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 43,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 43
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 43,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 43
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 42,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 42
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 7,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 7
+                },
+                "identifierName": "foo"
+              },
+              "name": "foo"
+            },
+            "init": {
+              "type": "ConditionalExpression",
+              "start": 10,
+              "end": 42,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 1,
+                  "column": 42
+                }
+              },
+              "test": {
+                "type": "Identifier",
+                "start": 10,
+                "end": 13,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 13
+                  },
+                  "identifierName": "bar"
+                },
+                "name": "bar"
+              },
+              "consequent": {
+                "type": "ArrowFunctionExpression",
+                "start": 16,
+                "end": 36,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 16
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 36
+                  }
+                },
+                "predicate": null,
+                "returnType": {
+                  "type": "TypeAnnotation",
+                  "start": 22,
+                  "end": 30,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 22
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 30
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "NumberTypeAnnotation",
+                    "start": 24,
+                    "end": 30,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 24
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 30
+                      }
+                    }
+                  }
+                },
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 17,
+                    "end": 20,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 17
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 20
+                      },
+                      "identifierName": "foo"
+                    },
+                    "name": "foo"
+                  }
+                ],
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 34,
+                  "end": 36,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 34
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 36
+                    }
+                  },
+                  "body": [],
+                  "directives": []
+                }
+              },
+              "alternate": {
+                "type": "Identifier",
+                "start": 39,
+                "end": 42,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 39
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 42
+                  },
+                  "identifierName": "baz"
+                },
+                "name": "baz"
+              }
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

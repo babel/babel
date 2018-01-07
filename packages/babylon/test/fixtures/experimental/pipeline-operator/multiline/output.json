@@ -1,0 +1,203 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 65,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 4,
+      "column": 13
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 65,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 4,
+        "column": 13
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 65,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 13
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 64,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 4,
+                "column": 12
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 10,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 10
+                },
+                "identifierName": "result"
+              },
+              "name": "result"
+            },
+            "init": {
+              "type": "BinaryExpression",
+              "start": 13,
+              "end": 64,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 13
+                },
+                "end": {
+                  "line": 4,
+                  "column": 12
+                }
+              },
+              "left": {
+                "type": "BinaryExpression",
+                "start": 13,
+                "end": 51,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 15
+                  }
+                },
+                "left": {
+                  "type": "BinaryExpression",
+                  "start": 13,
+                  "end": 35,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 13
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 14
+                    }
+                  },
+                  "left": {
+                    "type": "StringLiteral",
+                    "start": 13,
+                    "end": 20,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 20
+                      }
+                    },
+                    "extra": {
+                      "rawValue": "hello",
+                      "raw": "\"hello\""
+                    },
+                    "value": "hello"
+                  },
+                  "operator": "|>",
+                  "right": {
+                    "type": "Identifier",
+                    "start": 26,
+                    "end": 35,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 5
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 14
+                      },
+                      "identifierName": "doubleSay"
+                    },
+                    "name": "doubleSay"
+                  }
+                },
+                "operator": "|>",
+                "right": {
+                  "type": "Identifier",
+                  "start": 41,
+                  "end": 51,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 15
+                    },
+                    "identifierName": "capitalize"
+                  },
+                  "name": "capitalize"
+                }
+              },
+              "operator": "|>",
+              "right": {
+                "type": "Identifier",
+                "start": 57,
+                "end": 64,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 12
+                  },
+                  "identifierName": "exclaim"
+                },
+                "name": "exclaim"
+              }
+            }
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}
