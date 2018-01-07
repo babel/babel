@@ -84,12 +84,12 @@ export default function get(entryLoc): Array<Suite> {
     }
 
     function push(taskName, taskDir) {
-      let actualLocAlias = suiteName + "/" + taskName + "/input.js";
-      let expectLocAlias = suiteName + "/" + taskName + "/output.js";
+      let actualLocAlias = suiteName + "/" + taskName + "/actual.js";
+      let expectLocAlias = suiteName + "/" + taskName + "/expected.js";
       let execLocAlias = suiteName + "/" + taskName + "/exec.js";
 
-      let actualLoc = taskDir + "/input.js";
-      let expectLoc = taskDir + "/output.js";
+      let actualLoc = taskDir + "/actual.js";
+      let expectLoc = taskDir + "/expected.js";
       let execLoc = taskDir + "/exec.js";
 
       const hasExecJS = fs.existsSync(execLoc);
