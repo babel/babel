@@ -58,7 +58,7 @@ export default function(api, opts) {
           scope,
           throwIfClosureRequired,
           tdzEnabled,
-          addHelper: this.addHelper,
+          this.addHelper,
         );
         const replace = blockScoping.run();
         if (replace) path.replaceWith(replace);
@@ -73,7 +73,7 @@ export default function(api, opts) {
           scope,
           throwIfClosureRequired,
           tdzEnabled,
-          addHelper: this.addHelper,
+          this.addHelper,
         );
         blockScoping.run();
       },
@@ -87,7 +87,7 @@ export default function(api, opts) {
             path.scope,
             throwIfClosureRequired,
             tdzEnabled,
-            addHelper: this.addHelper,
+            this.addHelper,
           );
           blockScoping.run();
         }
