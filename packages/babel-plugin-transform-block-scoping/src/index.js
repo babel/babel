@@ -341,7 +341,7 @@ class BlockScoping {
     scope: Scope,
     throwIfClosureRequired: boolean,
     tdzEnabled: boolean,
-    addHelper: func
+    addHelper: func,
   ) {
     this.parent = parent;
     this.scope = scope;
