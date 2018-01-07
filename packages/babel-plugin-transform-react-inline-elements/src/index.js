@@ -19,7 +19,9 @@ export default function() {
 
   const visitor = helper({
     filter(node) {
-      return !hasRefOrSpread(node.openingElement.attributes);
+      return (
+        node.openingElement && !hasRefOrSpread(node.openingElement.attributes)
+      );
     },
     pre(state) {
       const tagName = state.tagName;
