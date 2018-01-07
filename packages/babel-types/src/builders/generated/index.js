@@ -493,6 +493,10 @@ export function UnionTypeAnnotation(...args: Array<any>): Object {
   return builder("UnionTypeAnnotation", ...args);
 }
 export { UnionTypeAnnotation as unionTypeAnnotation };
+export function Variance(...args: Array<any>): Object {
+  return builder("Variance", ...args);
+}
+export { Variance as variance };
 export function VoidTypeAnnotation(...args: Array<any>): Object {
   return builder("VoidTypeAnnotation", ...args);
 }

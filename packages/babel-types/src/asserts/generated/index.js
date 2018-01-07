@@ -552,6 +552,9 @@ export function assertUnionTypeAnnotation(
 ): void {
   assert("UnionTypeAnnotation", node, opts);
 }
+export function assertVariance(node: Object, opts?: Object = {}): void {
+  assert("Variance", node, opts);
+}
 export function assertVoidTypeAnnotation(
   node: Object,
   opts?: Object = {},

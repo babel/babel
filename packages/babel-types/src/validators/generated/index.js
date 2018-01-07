@@ -416,6 +416,9 @@ export function isTypeParameterInstantiation(
 export function isUnionTypeAnnotation(node: Object, opts?: Object): boolean {
   return is("UnionTypeAnnotation", node, opts);
 }
+export function isVariance(node: Object, opts?: Object): boolean {
+  return is("Variance", node, opts);
+}
 export function isVoidTypeAnnotation(node: Object, opts?: Object): boolean {
   return is("VoidTypeAnnotation", node, opts);
 }

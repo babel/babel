@@ -432,7 +432,7 @@ See also `t.isDeclareExportAllDeclaration(node, opts)` and `t.assertDeclareExpor
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `source`: `StringLiteral` (required)
- - `exportKind`: `[ 'type', 'value' ]` (default: `null`)
+ - `exportKind`: `["type","value"]` (default: `null`)
 
 ---
 
@@ -494,7 +494,7 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id`: `Identifier | StringLiteral` (required)
  - `body`: `BlockStatement` (required)
- - `kind`: `'CommonJS' | 'ES'` (default: `null`)
+ - `kind`: `"CommonJS" | "ES"` (default: `null`)
 
 ---
 
@@ -1555,7 +1555,7 @@ Aliases: `Flow`, `UserWhitespacable`
  - `key`: `Identifier` (required)
  - `value`: `FlowType` (required)
  - `variance`: `Variance` (default: `null`)
- - `kind`: `'init' | 'get' | 'set'` (default: `null`)
+ - `kind`: `"init" | "get" | "set"` (default: `null`)
  - `optional`: `boolean` (default: `null`)
  - `static`: `boolean` (default: `null`)
 
@@ -2790,6 +2790,19 @@ See also `t.isVariableDeclarator(node, opts)` and `t.assertVariableDeclarator(no
 
  - `id`: `LVal` (required)
  - `init`: `Expression` (default: `null`)
+
+---
+
+### variance
+```javascript
+t.variance(kind)
+```
+
+See also `t.isVariance(node, opts)` and `t.assertVariance(node, opts)`.
+
+Aliases: `Flow`
+
+ - `kind`: `"minus" | "plus"` (required)
 
 ---
 
