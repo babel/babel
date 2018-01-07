@@ -1,0 +1,328 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 73,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 73
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 73,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 73
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 73,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 73
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 6,
+            "end": 73,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 6
+              },
+              "end": {
+                "line": 1,
+                "column": 73
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 6,
+              "end": 12,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 6
+                },
+                "end": {
+                  "line": 1,
+                  "column": 12
+                },
+                "identifierName": "parser"
+              },
+              "name": "parser"
+            },
+            "init": {
+              "type": "ArrowFunctionExpression",
+              "start": 15,
+              "end": 73,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 15
+                },
+                "end": {
+                  "line": 1,
+                  "column": 73
+                }
+              },
+              "predicate": null,
+              "returnType": {
+                "type": "TypeAnnotation",
+                "start": 65,
+                "end": 67,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 65
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 67
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "GenericTypeAnnotation",
+                  "start": 66,
+                  "end": 67,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 66
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 67
+                    }
+                  },
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 66,
+                    "end": 67,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 66
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 67
+                      },
+                      "identifierName": "a"
+                    },
+                    "name": "a"
+                  }
+                }
+              },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 16,
+                  "end": 32,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 32
+                    },
+                    "identifierName": "rootPath"
+                  },
+                  "name": "rootPath",
+                  "typeAnnotation": {
+                    "type": "TypeAnnotation",
+                    "start": 24,
+                    "end": 32,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 24
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 32
+                      }
+                    },
+                    "typeAnnotation": {
+                      "type": "StringTypeAnnotation",
+                      "start": 26,
+                      "end": 32,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 26
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 32
+                        }
+                      }
+                    }
+                  }
+                },
+                {
+                  "type": "RestElement",
+                  "start": 34,
+                  "end": 64,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 34
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 64
+                    }
+                  },
+                  "argument": {
+                    "type": "Identifier",
+                    "start": 37,
+                    "end": 49,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 37
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 49
+                      },
+                      "identifierName": "filesToParse"
+                    },
+                    "name": "filesToParse"
+                  },
+                  "typeAnnotation": {
+                    "type": "TypeAnnotation",
+                    "start": 49,
+                    "end": 64,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 49
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 64
+                      }
+                    },
+                    "typeAnnotation": {
+                      "type": "GenericTypeAnnotation",
+                      "start": 51,
+                      "end": 64,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 51
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 64
+                        }
+                      },
+                      "typeParameters": {
+                        "type": "TypeParameterInstantiation",
+                        "start": 56,
+                        "end": 64,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 56
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 64
+                          }
+                        },
+                        "params": [
+                          {
+                            "type": "StringTypeAnnotation",
+                            "start": 57,
+                            "end": 63,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 57
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 63
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "id": {
+                        "type": "Identifier",
+                        "start": 51,
+                        "end": 56,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 51
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 56
+                          },
+                          "identifierName": "Array"
+                        },
+                        "name": "Array"
+                      }
+                    }
+                  }
+                }
+              ],
+              "body": {
+                "type": "BlockStatement",
+                "start": 71,
+                "end": 73,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 71
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 73
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "const"
+      }
+    ],
+    "directives": []
+  }
+}

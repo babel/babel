@@ -23,7 +23,7 @@ export default 42;
       exports: {}
     };
     factory(mod.exports);
-    global.actual = mod.exports;
+    global.input = mod.exports;
   }
 })(this, function (exports) {
   "use strict";
