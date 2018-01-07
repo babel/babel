@@ -39,7 +39,9 @@ helpers.jsx = defineHelper(`
     if (!props && childrenLength !== 0) {
       // If we're going to assign props.children, we create a new object now
       // to avoid mutating defaultProps.
-      props = {};
+      props = {
+        children: void 0,
+      };
     }
     if (props && defaultProps) {
       for (var propName in defaultProps) {
