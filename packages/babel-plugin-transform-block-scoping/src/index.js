@@ -58,6 +58,7 @@ export default function(api, opts) {
           scope,
           throwIfClosureRequired,
           tdzEnabled,
+          addHelper: this.addHelper,
         );
         const replace = blockScoping.run();
         if (replace) path.replaceWith(replace);
@@ -72,6 +73,7 @@ export default function(api, opts) {
           scope,
           throwIfClosureRequired,
           tdzEnabled,
+          addHelper: this.addHelper,
         );
         blockScoping.run();
       },
@@ -85,6 +87,7 @@ export default function(api, opts) {
             path.scope,
             throwIfClosureRequired,
             tdzEnabled,
+            addHelper: this.addHelper,
           );
           blockScoping.run();
         }
@@ -338,11 +341,13 @@ class BlockScoping {
     scope: Scope,
     throwIfClosureRequired: boolean,
     tdzEnabled: boolean,
+    addHelper: func
   ) {
     this.parent = parent;
     this.scope = scope;
     this.throwIfClosureRequired = throwIfClosureRequired;
     this.tdzEnabled = tdzEnabled;
+    this.addHelper = addHelper;
 
     this.blockPath = blockPath;
     this.block = blockPath.node;
