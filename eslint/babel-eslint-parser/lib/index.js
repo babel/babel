@@ -6,7 +6,7 @@ exports.parse = function(code, options) {
 
 exports.parseForESLint = function(code, options) {
   options = options || {};
-  options.ecmaVersion = options.ecmaVersion || 6;
+  options.ecmaVersion = options.ecmaVersion || 2018;
   options.sourceType = options.sourceType || "module";
   options.allowImportExportEverywhere =
     options.allowImportExportEverywhere || false;

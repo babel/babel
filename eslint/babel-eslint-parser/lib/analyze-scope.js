@@ -318,7 +318,7 @@ module.exports = function(ast, parserOptions) {
           parserOptions.ecmaFeatures.globalReturn) === true,
     impliedStrict: false,
     sourceType: ast.sourceType,
-    ecmaVersion: parserOptions.ecmaVersion || 6,
+    ecmaVersion: parserOptions.ecmaVersion || 2018,
     fallback,
   };
 

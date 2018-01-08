@@ -19,7 +19,7 @@ function verifyAndAssertMessagesWithSpecificESLint(
       es6: true,
     },
     parserOptions: {
-      ecmaVersion: 8,
+      ecmaVersion: 2018,
       ecmaFeatures: {
         jsx: true,
         experimentalObjectRestSpread: true,

@@ -37,7 +37,7 @@ function parseAndAssertSame(code) {
     range: true,
     comment: true,
     attachComment: true,
-    ecmaVersion: 8,
+    ecmaVersion: 2018,
     sourceType: "module",
   });
   var babylonAST = babelEslint.parseForESLint(code, {
@@ -71,7 +71,7 @@ function parseAndAssertSame(code) {
   // assert.equal(esAST, babylonAST);
 }
 
-describe("babylon-to-esprima", () => {
+describe("babylon-to-espree", () => {
   describe("compatibility", () => {
     it("should allow ast.analyze to be called without options", function() {
       var esAST = babelEslint.parseForESLint("`test`", {
