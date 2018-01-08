@@ -1,0 +1,6 @@
+{
+  "plugins": ["proposal-pipeline-operator", "external-helpers", "transform-async-to-generator"],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  }
+}
