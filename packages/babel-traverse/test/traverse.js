@@ -2,6 +2,7 @@ import cloneDeep from "lodash/cloneDeep";
 import traverse from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
+import * as t from "babel-types";
 
 describe("traverse", function() {
   const code = `
@@ -172,5 +173,32 @@ describe("traverse", function() {
     scopes2.forEach(function(p, i) {
       assert.notStrictEqual(p, scopes[i]);
     });
+  });
+
+  it("shared node leads to wrong path", function() {
+    const code = "function y() { f(); } function z() { g(); }";
+    const ast = parse(code);
+    const foo = t.memberExpression(t.identifier("foo"), t.identifier("bar"));
+
+    traverse(ast, {
+      CallExpression: function(path) {
+        path.node.callee = foo;
+      },
+    });
+
+    traverse.cache.clear();
+
+    const paths = [];
+    traverse(ast, {
+      ReferencedIdentifier: function(path) {
+        if (path.node.name !== "foo") {
+          return;
+        }
+
+        paths.push(path);
+      },
+    });
+
+    assert.notStrictEqual(paths[0], paths[1]);
   });
 });
