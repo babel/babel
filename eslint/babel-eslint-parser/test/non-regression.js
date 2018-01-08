@@ -1079,17 +1079,6 @@ describe("verify", () => {
       );
     });
 
-    it("42", () => {
-      verifyAndAssertMessages(
-        unpad(`
-          import type * as namespace from 'bar';
-          namespace;
-        `),
-        { "no-unused-vars": 1, "no-undef": 1 },
-        []
-      );
-    });
-
     it("43", () => {
       verifyAndAssertMessages(
         unpad(`
