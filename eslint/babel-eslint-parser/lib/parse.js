@@ -38,6 +38,9 @@ module.exports = function(code, options) {
       "classPrivateProperties",
       "bigInt",
       "optionalCatchBinding",
+      "throwExpressions",
+      "pipelineOperator",
+      "nullishCoalescingOperator",
     ],
   };
 
