@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-reserved-words",
-  "version": "7.0.0-beta.36",
+  "version": "7.0.0-beta.37",
   "description": "Ensure that no reserved words are used.",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-reserved-words",
   "license": "MIT",
@@ -9,10 +9,10 @@
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.36"
+    "@babel/core": "7.0.0-beta.37"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.36",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.36"
+    "@babel/core": "7.0.0-beta.37",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.37"
   }
 }
