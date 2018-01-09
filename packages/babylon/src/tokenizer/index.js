@@ -1299,12 +1299,10 @@ export default class Tokenizer extends LocationParser {
       type = keywordTypes[word];
     }
 
-    // Allow @@iterator and @@asyncIterator as a identifier, other than declaration and type
+    // Allow @@iterator and @@asyncIterator as a identifier only inside type
     if (
       this.state.isIterator &&
-      (!this.isIterator(word) ||
-        this.isDeclaration() ||
-        this.state.value === "type")
+      (!this.isIterator(word) || !this.state.inType)
     ) {
       this.raise(this.state.pos, `Invalid identifier ${word}`);
     }
