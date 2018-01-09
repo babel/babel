@@ -4,7 +4,8 @@ const fs = require("fs-extra");
 const helper = require("@babel/helper-fixtures");
 const path = require("path");
 
-const fixtureLoc = path.join(__dirname, "debug-fixtures");
+const debugFixtureLoc = path.join(__dirname, "debug-fixtures");
+const silentFixtureLoc = path.join(__dirname, "silent-fixtures");
 const tmpLoc = path.join(__dirname, "tmp");
 
 const clear = () => {
@@ -59,7 +60,9 @@ const buildTest = opts => {
     let stderr = "";
 
     spawn.stdout.on("data", chunk => (stdout += chunk));
-    spawn.stderr.on("data", chunk => (stderr += chunk));
+    if (opts.withStderr) {
+      spawn.stderr.on("data", chunk => (stderr += chunk));
+    }
 
     spawn.on("close", () => {
       let err;
@@ -75,25 +78,27 @@ const buildTest = opts => {
   };
 };
 
-describe("debug output", () => {
-  fs.readdirSync(fixtureLoc).forEach(testName => {
+const checkOutput = checkOpts => {
+  fs.readdirSync(checkOpts.fixtureLoc).forEach(testName => {
     if (testName.slice(0, 1) === ".") return;
-    const testLoc = path.join(fixtureLoc, testName);
-    if (testName.slice(0, 1) === ".") return;
+    const testLoc = path.join(checkOpts.fixtureLoc, testName);
 
     const opts = {
-      args: ["src", "--out-dir", "lib"],
+      args: checkOpts.args,
       testLoc: testLoc,
+      withStderr: !!checkOpts.stderrName,
     };
 
-    const stdoutLoc = path.join(testLoc, "stdout.txt");
-    const stderrLoc = path.join(testLoc, "stderr.txt");
+    const stdoutLoc = path.join(testLoc, checkOpts.stdoutName);
+    const stderrLoc = checkOpts.stderrName
+      ? path.join(testLoc, checkOpts.stderrName)
+      : null;
 
     if (fs.existsSync(stdoutLoc)) {
       opts.stdout = helper.readFile(stdoutLoc);
     }
 
-    if (fs.existsSync(stderrLoc)) {
+    if (stderrLoc && fs.existsSync(stderrLoc)) {
       opts.stderr = helper.readFile(stderrLoc);
     }
 
@@ -105,21 +110,42 @@ describe("debug output", () => {
       );
     }
 
-    const inFilesFolderLoc = path.join(testLoc, "in");
-
     opts.inFiles = {
       ".babelrc": helper.readFile(optionsLoc),
     };
 
-    if (!fs.existsSync(inFilesFolderLoc)) {
+    const inFilesFolderLoc = checkOpts.dirName
+      ? path.join(testLoc, checkOpts.dirName)
+      : testLoc;
+
+    if (checkOpts.dirName && !fs.existsSync(inFilesFolderLoc)) {
       opts.inFiles["src/in.js"] = "";
     } else {
       fs.readdirSync(inFilesFolderLoc).forEach(filename => {
+        if (filename === "options.json") return;
         opts.inFiles[`src/${filename}`] = helper.readFile(
           path.join(inFilesFolderLoc, filename),
         );
       });
     }
     it(testName, buildTest(opts));
+  });
+};
+
+describe("debug output", () => {
+  checkOutput({
+    args: ["src", "--out-dir", "lib"],
+    fixtureLoc: debugFixtureLoc,
+    stdoutName: "stdout.txt",
+    stderrName: "stderr.txt",
+    dirName: "in",
+  });
+});
+
+describe("silent output", () => {
+  checkOutput({
+    args: ["src/actual.js"],
+    fixtureLoc: silentFixtureLoc,
+    stdoutName: "expected.js",
   });
 });
