@@ -1,3 +1,0 @@
-const x = (foo
-/*: string*/
-) => {};

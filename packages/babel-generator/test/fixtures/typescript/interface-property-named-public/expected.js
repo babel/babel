@@ -1,3 +1,0 @@
-interface I {
-  public: number;
-}

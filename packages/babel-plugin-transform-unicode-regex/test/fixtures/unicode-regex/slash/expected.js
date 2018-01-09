@@ -1,1 +1,0 @@
-/^https?:\/\//.test(string);
