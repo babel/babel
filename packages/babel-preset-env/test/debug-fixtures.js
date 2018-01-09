@@ -144,8 +144,8 @@ describe("debug output", () => {
 
 describe("silent output", () => {
   checkOutput({
-    args: ["src/actual.js"],
+    args: ["src/input.js"],
     fixtureLoc: silentFixtureLoc,
-    stdoutName: "expected.js",
+    stdoutName: "output.js",
   });
 });
