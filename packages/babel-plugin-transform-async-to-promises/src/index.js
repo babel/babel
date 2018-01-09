@@ -44,8 +44,8 @@ function transformAsyncToPromises(api, options) {
   if (options.codeGenerationOptions) {
     let keys = Object.keys(options.codeGenerationOptions);
     for (let i=0; i<keys.length;i++) {
-	    if (keys[i] in opts) {
-	      opts[keys[i]] = options.codeGenerationOptions[keys[i]];
+      if (keys[i] in opts) {
+        opts[keys[i]] = options.codeGenerationOptions[keys[i]];
       } 
     }
   }
