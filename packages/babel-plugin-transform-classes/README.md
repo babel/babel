@@ -6,8 +6,8 @@
 
 When extending a native class (e.g., `class extends Array {}`), the super class
 needs to be wrapped. This is needed to workaround two problems:
-- Babel transpiles classes using `SuperClass.apply(/* ... */)`, but native
-  classes aren't callable and thus throw in this case.
+- When extending native classes the `this.constructor` must not be tampered,
+  since it is the only way that Babel has of obtaining the class constructor.
 - Some built-in functions (like `Array`) always return a new object. Instead of
   returning it, Babel should treat it as the new `this`.
 
