@@ -1277,13 +1277,6 @@ export default class Tokenizer extends LocationParser {
     return word === "@@iterator" || word === "@@asyncIterator";
   }
 
-  isDeclaration(): boolean {
-    const prevType = this.state.type;
-    return (
-      prevType === tt._let || prevType === tt._const || prevType === tt._var
-    );
-  }
-
   // Read an identifier or keyword token. Will check for reserved
   // words when necessary.
 
