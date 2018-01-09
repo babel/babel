@@ -1,0 +1,3 @@
+function multiply(num
+/*:: ?: number*/
+) {}
