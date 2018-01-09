@@ -79,7 +79,6 @@ describe("debug output", () => {
   fs.readdirSync(fixtureLoc).forEach(testName => {
     if (testName.slice(0, 1) === ".") return;
     const testLoc = path.join(fixtureLoc, testName);
-    if (testName.slice(0, 1) === ".") return;
 
     const opts = {
       args: ["src", "--out-dir", "lib"],
