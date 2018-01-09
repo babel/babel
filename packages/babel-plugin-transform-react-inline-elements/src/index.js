@@ -19,7 +19,11 @@ export default function() {
 
   const visitor = helper({
     filter(node) {
-      return !hasRefOrSpread(node.openingElement.attributes);
+      return (
+        // Regular JSX nodes have an `openingElement`. JSX fragments, however, don't have an
+        // `openingElement` which causes `node.openingElement.attributes` to throw.
+        node.openingElement && !hasRefOrSpread(node.openingElement.attributes)
+      );
     },
     pre(state) {
       const tagName = state.tagName;
