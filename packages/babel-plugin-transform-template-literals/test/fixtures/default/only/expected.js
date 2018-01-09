@@ -1,1 +1,0 @@
-var foo = "".concat(test);
