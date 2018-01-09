@@ -1200,7 +1200,7 @@ export type TsTypeAliasDeclaration = DeclarationBase & {
   type: "TSTypeAliasDeclaration",
   id: Identifier,
   typeParameters: ?TsTypeParameterDeclaration,
-  typeAnnotation: TsType,
+  typeAnnotation: TsTypeAnnotation,
 };
 
 export type TsEnumDeclaration = DeclarationBase & {

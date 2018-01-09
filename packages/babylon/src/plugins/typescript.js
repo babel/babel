@@ -854,7 +854,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.id = this.parseIdentifier();
       node.typeParameters = this.tsTryParseTypeParameters();
       this.expect(tt.eq);
-      node.typeAnnotation = this.tsParseType();
+      node.typeAnnotation = this.tsParseTypeAnnotation(/* eatColon */ false);
       this.semicolon();
       return this.finishNode(node, "TSTypeAliasDeclaration");
     }

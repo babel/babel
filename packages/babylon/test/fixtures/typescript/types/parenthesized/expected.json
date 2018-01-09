@@ -60,7 +60,7 @@
           "name": "T"
         },
         "typeAnnotation": {
-          "type": "TSParenthesizedType",
+          "type": "TSTypeAnnotation",
           "start": 9,
           "end": 13,
           "loc": {
@@ -74,20 +74,35 @@
             }
           },
           "typeAnnotation": {
-            "type": "TSTypeLiteral",
-            "start": 10,
-            "end": 12,
+            "type": "TSParenthesizedType",
+            "start": 9,
+            "end": 13,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 10
+                "column": 9
               },
               "end": {
                 "line": 1,
-                "column": 12
+                "column": 13
               }
             },
-            "members": []
+            "typeAnnotation": {
+              "type": "TSTypeLiteral",
+              "start": 10,
+              "end": 12,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 1,
+                  "column": 12
+                }
+              },
+              "members": []
+            }
           }
         }
       }
