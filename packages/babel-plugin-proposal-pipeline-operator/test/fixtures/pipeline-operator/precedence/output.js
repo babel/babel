@@ -1,0 +1,13 @@
+var _ref, _ref2, _;
+
+var inc = x => x + 1;
+
+var result = (_ref = 4 || 9, inc(_ref));
+assert.equal(result, 5);
+
+var f = x => x + 10;
+
+var h = x => x + 20;
+
+var result2 = (_ref2 = (_ = 10, (f || h)(_)), inc(_ref2));
+assert.equal(result2, 21);

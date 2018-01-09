@@ -1,0 +1,1 @@
+babelHelpers.jsx("foo", {});
