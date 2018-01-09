@@ -22,3 +22,9 @@ type T = {
 type T = {
   foo: () => number
 };
+type T = {
+  [string]: U
+};
+type T = {
+  [param: string]: U
+};

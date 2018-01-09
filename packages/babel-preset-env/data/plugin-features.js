@@ -130,6 +130,10 @@ const es2017 = {
   },
 };
 
+const es2018 = {
+  "transform-dotall-regex": "s (dotAll) flag for regular expressions",
+};
+
 const proposals = require("./shipped-proposals").features;
 
-module.exports = Object.assign({}, es2015, es2016, es2017, proposals);
+module.exports = Object.assign({}, es2015, es2016, es2017, es2018, proposals);

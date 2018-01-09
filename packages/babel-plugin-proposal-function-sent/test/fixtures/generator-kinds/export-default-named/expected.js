@@ -1,15 +1,14 @@
-let gen = (() => {
-  var _ref = _skipFirstGeneratorNext(function* () {
+function _skipFirstGeneratorNext(fn) { return function () { var it = fn.apply(this, arguments); it.next(); return it; }; }
+
+export default function gen() {
+  return _gen.apply(this, arguments);
+}
+
+function _gen() {
+  _gen = _skipFirstGeneratorNext(function* () {
     let _functionSent = yield;
 
     return _functionSent;
   });
-
-  return function gen() {
-    return _ref.apply(this, arguments);
-  };
-})();
-
-function _skipFirstGeneratorNext(fn) { return function () { var it = fn.apply(this, arguments); it.next(); return it; }; }
-
-export { gen as default };
+  return _gen.apply(this, arguments);
+}

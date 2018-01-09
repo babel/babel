@@ -6,4 +6,3 @@ var example2 = "".concat(1);
 var example3 = 1 + "".concat(foo).concat(bar).concat(baz);
 var example4 = 1 + "".concat(foo, "bar").concat(baz);
 var example5 = "";
-

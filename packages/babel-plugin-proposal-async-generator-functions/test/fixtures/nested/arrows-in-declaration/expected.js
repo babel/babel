@@ -1,7 +1,9 @@
-let g =
-/*#__PURE__*/
-(() => {
-  var _ref = babelHelpers.wrapAsyncGenerator(function* () {
+function g() {
+  return _g.apply(this, arguments);
+}
+
+function _g() {
+  _g = babelHelpers.wrapAsyncGenerator(function* () {
     var _this = this;
 
     () => this;
@@ -17,8 +19,5 @@ let g =
     });
     yield babelHelpers.awaitAsyncGenerator(1);
   });
-
-  return function g() {
-    return _ref.apply(this, arguments);
-  };
-})();
+  return _g.apply(this, arguments);
+}

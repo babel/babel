@@ -3,7 +3,10 @@
 import semver from "semver";
 import builtInsList from "../data/built-ins.json";
 import { logPlugin } from "./debug";
-import { defaultWebIncludes } from "./default-includes";
+import {
+  getPlatformSpecificDefaultFor,
+  getOptionSpecificExcludesFor,
+} from "./defaults";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
@@ -90,8 +93,6 @@ export const isPluginRequired = (
   return isRequiredForEnvironments.length > 0;
 };
 
-let hasBeenLogged = false;
-
 const getBuiltInTargets = targets => {
   const builtInTargets = Object.assign({}, targets);
   if (builtInTargets.uglify != null) {
@@ -113,26 +114,6 @@ export const transformIncludesAndExcludes = (opts: Array<string>): Object => {
       builtIns: new Set(),
     },
   );
-};
-
-const getPlatformSpecificDefaultFor = (targets: Targets): ?Array<string> => {
-  const targetNames = Object.keys(targets);
-  const isAnyTarget = !targetNames.length;
-  const isWebTarget = targetNames.some(name => name !== "node");
-
-  return isAnyTarget || isWebTarget ? defaultWebIncludes : null;
-};
-
-const getOptionSpecificExcludesFor = ({
-  loose,
-}: {
-  loose: boolean,
-}): Array<string> => {
-  const defaultExcludes = [];
-  if (loose) {
-    defaultExcludes.push("transform-typeof-symbol");
-  }
-  return defaultExcludes;
 };
 
 const filterItems = (
@@ -253,8 +234,7 @@ export default function buildPreset(
 
   const regenerator = transformations.has("transform-regenerator");
 
-  if (debug && !hasBeenLogged) {
-    hasBeenLogged = true;
+  if (debug) {
     console.log("@babel/preset-env: `DEBUG` option");
     console.log("\nUsing targets:");
     console.log(JSON.stringify(prettifyTargets(targets), null, 2));

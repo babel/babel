@@ -14,9 +14,10 @@ type SimpleCacheConfiguratorObj = {
   invalidate: <T>(handler: () => T) => T,
 };
 
-type CacheEntry<ResultT, SideChannel> = Array<
-  [ResultT, (SideChannel) => boolean],
->;
+type CacheEntry<ResultT, SideChannel> = Array<{
+  value: ResultT,
+  valid: SideChannel => boolean,
+}>;
 
 export type { CacheConfigurator };
 
@@ -64,7 +65,7 @@ function makeCachedFunction<
     );
 
     if (cachedValue) {
-      for (const [value, valid] of cachedValue) {
+      for (const { value, valid } of cachedValue) {
         if (valid(data)) return value;
       }
     }
@@ -79,18 +80,18 @@ function makeCachedFunction<
 
     switch (cache.mode()) {
       case "forever":
-        cachedValue = [[value, () => true]];
+        cachedValue = [{ value, valid: () => true }];
         callCache.set(arg, cachedValue);
         break;
       case "invalidate":
-        cachedValue = [[value, cache.validator()]];
+        cachedValue = [{ value, valid: cache.validator() }];
         callCache.set(arg, cachedValue);
         break;
       case "valid":
         if (cachedValue) {
-          cachedValue.push([value, cache.validator()]);
+          cachedValue.push({ value, valid: cache.validator() });
         } else {
-          cachedValue = [[value, cache.validator()]];
+          cachedValue = [{ value, valid: cache.validator() }];
           callCache.set(arg, cachedValue);
         }
     }

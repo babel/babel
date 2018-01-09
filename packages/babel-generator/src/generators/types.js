@@ -124,7 +124,7 @@ export function NumericLiteral(node: Object) {
   }
 }
 
-export function StringLiteral(node: Object, parent: Object) {
+export function StringLiteral(node: Object) {
   const raw = this.getPossibleRaw(node);
   if (!this.format.minified && raw != null) {
     this.token(raw);
@@ -133,7 +133,7 @@ export function StringLiteral(node: Object, parent: Object) {
 
   // ensure the output is ASCII-safe
   const opts = {
-    quotes: t.isJSX(parent) ? "double" : this.format.quotes,
+    quotes: "double",
     wrap: true,
   };
   if (this.format.jsonCompatibleStrings) {

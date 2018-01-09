@@ -6,8 +6,7 @@
         "chrome": 55,
         "browsers": []
       },
-      "modules": false,
-      "debug": true
+      "modules": false
     }]
   ]
 }

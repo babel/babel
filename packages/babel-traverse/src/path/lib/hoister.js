@@ -128,12 +128,6 @@ export default class PathHoister {
       }
     }
 
-    // We can't insert before/after a child of an export declaration, so move up
-    // to the declaration itself.
-    if (path.parentPath.isExportDeclaration()) {
-      path = path.parentPath;
-    }
-
     return path;
   }
 

@@ -599,4 +599,52 @@ describe("api", function() {
       assert.ok(script.indexOf("typeof") >= 0);
     });
   });
+
+  describe("handle parsing errors", function() {
+    const options = {
+      babelrc: false,
+    };
+
+    it("only syntax plugin available", function(done) {
+      babel.transformFile(
+        __dirname + "/fixtures/api/parsing-errors/only-syntax/file.js",
+        options,
+        function(err) {
+          assert.ok(
+            RegExp(
+              "Support for the experimental syntax 'dynamicImport' isn't currently enabled \\(1:9\\):",
+            ).exec(err.message),
+          );
+          assert.ok(
+            RegExp(
+              "Add @babel/plugin-syntax-dynamic-import \\(https://git.io/vb4Sv\\) to the " +
+                "'plugins' section of your Babel config to enable parsing.",
+            ).exec(err.message),
+          );
+          done();
+        },
+      );
+    });
+
+    it("both syntax and transform plugin available", function(done) {
+      babel.transformFile(
+        __dirname + "/fixtures/api/parsing-errors/syntax-and-transform/file.js",
+        options,
+        function(err) {
+          assert.ok(
+            RegExp(
+              "Support for the experimental syntax 'asyncGenerators' isn't currently enabled \\(1:15\\):",
+            ).exec(err.message),
+          );
+          assert.ok(
+            RegExp(
+              "Add @babel/plugin-proposal-async-generator-functions \\(https://git.io/vb4yp\\) to the " +
+                "'plugins' section of your Babel config to enable transformation.",
+            ).exec(err.message),
+          );
+          done();
+        },
+      );
+    });
+  });
 });

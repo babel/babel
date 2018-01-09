@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 225,
+  "end": 250,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 6,
+      "line": 7,
       "column": 50
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 225,
+    "end": 250,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 6,
+        "line": 7,
         "column": 50
       }
     },
@@ -201,9 +201,9 @@
         "trailingComments": [
           {
             "type": "CommentLine",
-            "value": " `export abstract class { }` is not valid.",
+            "value": " `export abstract class {}` is not valid TypeScript.",
             "start": 75,
-            "end": 119,
+            "end": 129,
             "loc": {
               "start": {
                 "line": 4,
@@ -211,38 +211,161 @@
               },
               "end": {
                 "line": 4,
-                "column": 44
-              }
-            }
-          },
-          {
-            "type": "CommentLine",
-            "value": " `export default abstract class C { }` is not valid.",
-            "start": 120,
-            "end": 174,
-            "loc": {
-              "start": {
-                "line": 5,
-                "column": 0
-              },
-              "end": {
-                "line": 5,
                 "column": 54
               }
             }
+          }
+        ]
+      },
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 130,
+        "end": 163,
+        "loc": {
+          "start": {
+            "line": 5,
+            "column": 0
           },
-          {
-            "type": "CommentLine",
-            "value": " `abstract class` is not valid as an expression.",
-            "start": 175,
-            "end": 225,
+          "end": {
+            "line": 5,
+            "column": 33
+          }
+        },
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start": 145,
+          "end": 163,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 15
+            },
+            "end": {
+              "line": 5,
+              "column": 33
+            }
+          },
+          "id": null,
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 160,
+            "end": 163,
             "loc": {
               "start": {
-                "line": 6,
+                "line": 5,
+                "column": 30
+              },
+              "end": {
+                "line": 5,
+                "column": 33
+              }
+            },
+            "body": [],
+            "leadingComments": null
+          },
+          "leadingComments": null,
+          "abstract": true
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " `export abstract class {}` is not valid TypeScript.",
+            "start": 75,
+            "end": 129,
+            "loc": {
+              "start": {
+                "line": 4,
                 "column": 0
               },
               "end": {
+                "line": 4,
+                "column": 54
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 164,
+        "end": 199,
+        "loc": {
+          "start": {
+            "line": 6,
+            "column": 0
+          },
+          "end": {
+            "line": 6,
+            "column": 35
+          }
+        },
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start": 179,
+          "end": 199,
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 15
+            },
+            "end": {
+              "line": 6,
+              "column": 35
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 194,
+            "end": 195,
+            "loc": {
+              "start": {
                 "line": 6,
+                "column": 30
+              },
+              "end": {
+                "line": 6,
+                "column": 31
+              },
+              "identifierName": "C"
+            },
+            "name": "C"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 196,
+            "end": 199,
+            "loc": {
+              "start": {
+                "line": 6,
+                "column": 32
+              },
+              "end": {
+                "line": 6,
+                "column": 35
+              }
+            },
+            "body": [],
+            "leadingComments": null,
+            "trailingComments": null
+          },
+          "trailingComments": null,
+          "abstract": true
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " `abstract class` is not valid as an expression.",
+            "start": 200,
+            "end": 250,
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 0
+              },
+              "end": {
+                "line": 7,
                 "column": 50
               }
             }
@@ -255,9 +378,9 @@
   "comments": [
     {
       "type": "CommentLine",
-      "value": " `export abstract class { }` is not valid.",
+      "value": " `export abstract class {}` is not valid TypeScript.",
       "start": 75,
-      "end": 119,
+      "end": 129,
       "loc": {
         "start": {
           "line": 4,
@@ -265,22 +388,6 @@
         },
         "end": {
           "line": 4,
-          "column": 44
-        }
-      }
-    },
-    {
-      "type": "CommentLine",
-      "value": " `export default abstract class C { }` is not valid.",
-      "start": 120,
-      "end": 174,
-      "loc": {
-        "start": {
-          "line": 5,
-          "column": 0
-        },
-        "end": {
-          "line": 5,
           "column": 54
         }
       }
@@ -288,15 +395,15 @@
     {
       "type": "CommentLine",
       "value": " `abstract class` is not valid as an expression.",
-      "start": 175,
-      "end": 225,
+      "start": 200,
+      "end": 250,
       "loc": {
         "start": {
-          "line": 6,
+          "line": 7,
           "column": 0
         },
         "end": {
-          "line": 6,
+          "line": 7,
           "column": 50
         }
       }

@@ -32,6 +32,7 @@ Using plugins:
   transform-regenerator { "firefox":"50", "ie":"11" }
   transform-exponentiation-operator { "firefox":"50", "ie":"11" }
   transform-async-to-generator { "chrome":"52", "firefox":"50", "ie":"11" }
+  transform-dotall-regex { "chrome":"52", "firefox":"50", "ie":"11" }
 
 Using polyfills with `usage` option:
 

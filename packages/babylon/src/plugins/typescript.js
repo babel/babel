@@ -1426,6 +1426,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
+    parseExportDefaultExpression(): N.Expression | N.Declaration {
+      if (
+        this.isContextual("abstract") &&
+        this.lookahead().type === tt._class
+      ) {
+        const cls = this.startNode();
+        this.next(); // Skip "abstract"
+        this.parseClass(cls, true, true);
+        cls.abstract = true;
+        return cls;
+      }
+      return super.parseExportDefaultExpression();
+    }
+
     parseStatementContent(
       declaration: boolean,
       topLevel: ?boolean,
@@ -1852,6 +1866,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           );
         case "TSParameterProperty":
           return super.toAssignable(node, isBinding, contextDescription);
+        case "TSAsExpression":
+          node.expression = this.toAssignable(
+            node.expression,
+            isBinding,
+            contextDescription,
+          );
+          return node;
         default:
           return super.toAssignable(node, isBinding, contextDescription);
       }
@@ -1875,6 +1896,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             isBinding,
             checkClashes,
             "parameter property",
+          );
+          return;
+        case "TSAsExpression":
+          this.checkLVal(
+            expr.expression,
+            isBinding,
+            checkClashes,
+            contextDescription,
           );
           return;
         default:

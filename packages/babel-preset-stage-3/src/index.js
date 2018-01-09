@@ -1,4 +1,5 @@
 import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
+import syntaxImportMeta from "@babel/plugin-syntax-import-meta";
 import transformAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
 import transformClassProperties from "@babel/plugin-proposal-class-properties";
 import transformObjectRestSpread from "@babel/plugin-proposal-object-rest-spread";
@@ -26,6 +27,7 @@ export default function(context, opts = {}) {
   return {
     plugins: [
       syntaxDynamicImport,
+      syntaxImportMeta,
       transformAsyncGeneratorFunctions,
       [transformClassProperties, { loose }],
       [transformObjectRestSpread, { useBuiltIns }],

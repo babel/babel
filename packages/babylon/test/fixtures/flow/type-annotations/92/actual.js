@@ -1,1 +1,0 @@
-import typeof {foo as bar} from "baz";

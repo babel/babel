@@ -152,21 +152,27 @@ registerPlugins({
   "syntax-flow": require("@babel/plugin-syntax-flow"),
   "syntax-function-bind": require("@babel/plugin-syntax-function-bind"),
   "syntax-function-sent": require("@babel/plugin-syntax-function-sent"),
+  "syntax-import-meta": require("@babel/plugin-syntax-import-meta"),
   "syntax-jsx": require("@babel/plugin-syntax-jsx"),
   "syntax-object-rest-spread": require("@babel/plugin-syntax-object-rest-spread"),
   "syntax-optional-catch-binding": require("@babel/plugin-syntax-optional-catch-binding"),
+  "syntax-pipeline-operator": require("@babel/plugin-syntax-pipeline-operator"),
+  "syntax-typescript": require("@babel/plugin-syntax-typescript"),
   "transform-async-to-generator": require("@babel/plugin-transform-async-to-generator"),
+  "proposal-async-generator-functions": require("@babel/plugin-proposal-async-generator-functions"),
   "proposal-class-properties": require("@babel/plugin-proposal-class-properties"),
   "proposal-decorators": require("@babel/plugin-proposal-decorators"),
   "proposal-do-expressions": require("@babel/plugin-proposal-do-expressions"),
   "proposal-export-default-from": require("@babel/plugin-proposal-export-default-from"),
   "proposal-export-namespace-from": require("@babel/plugin-proposal-export-namespace-from"),
+  "proposal-pipeline-operator": require("@babel/plugin-proposal-pipeline-operator"),
   "transform-arrow-functions": require("@babel/plugin-transform-arrow-functions"),
   "transform-block-scoped-functions": require("@babel/plugin-transform-block-scoped-functions"),
   "transform-block-scoping": require("@babel/plugin-transform-block-scoping"),
   "transform-classes": require("@babel/plugin-transform-classes"),
   "transform-computed-properties": require("@babel/plugin-transform-computed-properties"),
   "transform-destructuring": require("@babel/plugin-transform-destructuring"),
+  "transform-dotall-regex": require("@babel/plugin-transform-dotall-regex"),
   "transform-duplicate-keys": require("@babel/plugin-transform-duplicate-keys"),
   "transform-for-of": require("@babel/plugin-transform-for-of"),
   "transform-function-name": require("@babel/plugin-transform-function-name"),
@@ -183,6 +189,7 @@ registerPlugins({
   "transform-sticky-regex": require("@babel/plugin-transform-sticky-regex"),
   "transform-template-literals": require("@babel/plugin-transform-template-literals"),
   "transform-typeof-symbol": require("@babel/plugin-transform-typeof-symbol"),
+  "transform-typescript": require("@babel/plugin-transform-typescript"),
   "transform-unicode-regex": require("@babel/plugin-transform-unicode-regex"),
   "transform-member-expression-literals": require("@babel/plugin-transform-member-expression-literals"),
   "transform-property-literals": require("@babel/plugin-transform-property-literals"),
@@ -237,14 +244,14 @@ registerPresets({
 
 export const version = VERSION;
 
+function onDOMContentLoaded() {
+  transformScriptTags();
+}
+
 // Listen for load event if we're in a browser and then kick off finding and
 // running of scripts with "text/babel" type.
 if (typeof window !== "undefined" && window && window.addEventListener) {
-  window.addEventListener(
-    "DOMContentLoaded",
-    () => transformScriptTags(),
-    false,
-  );
+  window.addEventListener("DOMContentLoaded", onDOMContentLoaded, false);
 }
 
 /**
@@ -259,5 +266,5 @@ export function transformScriptTags(scriptTags) {
  * Disables automatic transformation of <script> tags with "text/babel" type.
  */
 export function disableScriptTags() {
-  window.removeEventListener("DOMContentLoaded", transformScriptTags);
+  window.removeEventListener("DOMContentLoaded", onDOMContentLoaded);
 }
