@@ -1864,6 +1864,26 @@ describe("verify", () => {
     );
   });
 
+  it("exportDefaultFrom", () => {
+    verifyAndAssertMessages(
+      unpad(`
+        export v from "mod"
+      `),
+      {},
+      []
+    );
+  });
+
+  it("exportNamespaceFrom", () => {
+    verifyAndAssertMessages(
+      unpad(`
+        export * as ns from "mod"
+      `),
+      {},
+      []
+    );
+  });
+
   it("ignore eval in scope analysis", () => {
     verifyAndAssertMessages(
       unpad(`
