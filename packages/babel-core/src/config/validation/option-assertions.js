@@ -6,6 +6,7 @@ import type {
   PluginList,
   PluginItem,
   PluginTarget,
+  ConfigApplicableTest,
   SourceMapsOption,
   SourceTypeOption,
   CompactOption,
@@ -104,6 +105,13 @@ export function assertObject(key: string, value: mixed): {} | void {
   return value;
 }
 
+export function assertArray(key: string, value: mixed): ?$ReadOnlyArray<mixed> {
+  if (value != null && !Array.isArray(value)) {
+    throw new Error(`.${key} must be an array, or undefined`);
+  }
+  return value;
+}
+
 export function assertIgnoreList(key: string, value: mixed): IgnoreList | void {
   const arr = assertArray(key, value);
   if (arr) {
@@ -122,10 +130,36 @@ function assertIgnoreItem(
     !(value instanceof RegExp)
   ) {
     throw new Error(
-      `.${key}[${index}] must be an array of string/Funtion/RegExp values, or or undefined`,
+      `.${key}[${index}] must be an array of string/Funtion/RegExp values, or undefined`,
     );
   }
   return value;
+}
+
+export function assertConfigApplicableTest(
+  key: string,
+  value: mixed,
+): ConfigApplicableTest | void {
+  if (Array.isArray(value)) {
+    value.forEach((item, i) => {
+      if (!checkValidTest(item)) {
+        throw new Error(`.${key}[${i}] must be a string/Function/RegExp.`);
+      }
+    });
+  } else if (!checkValidTest(value)) {
+    throw new Error(
+      `.${key} must be a string/Function/RegExp, or an array of those`,
+    );
+  }
+  return (value: any);
+}
+
+function checkValidTest(value: mixed): boolean {
+  return (
+    typeof value === "string" ||
+    typeof value === "function" ||
+    value instanceof RegExp
+  );
 }
 
 export function assertPluginList(key: string, value: mixed): PluginList | void {
@@ -195,13 +229,6 @@ function assertPluginTarget(
         inArray ? `[0]` : ""
       } must be a string, object, function`,
     );
-  }
-  return value;
-}
-
-function assertArray(key: string, value: mixed): ?$ReadOnlyArray<mixed> {
-  if (value != null && !Array.isArray(value)) {
-    throw new Error(`.${key} must be an array, or undefined`);
   }
   return value;
 }

@@ -145,7 +145,7 @@ export default function(api, options) {
           }
         }
 
-        const nodes = computedNodes.concat(staticNodes);
+        const afterNodes = [...staticNodes];
 
         if (instanceBody.length) {
           if (!constructor) {
@@ -183,7 +183,7 @@ export default function(api, options) {
               "initialiseProps",
             );
 
-            nodes.push(
+            afterNodes.push(
               t.variableDeclaration("var", [
                 t.variableDeclarator(
                   initialisePropsRef,
@@ -223,7 +223,7 @@ export default function(api, options) {
           prop.remove();
         }
 
-        if (!nodes.length) return;
+        if (computedNodes.length === 0 && afterNodes.length === 0) return;
 
         if (path.isClassExpression()) {
           path.scope.push({ id: ref });
@@ -233,7 +233,8 @@ export default function(api, options) {
           path.node.id = ref;
         }
 
-        path.insertAfter(nodes);
+        path.insertBefore(computedNodes);
+        path.insertAfter(afterNodes);
       },
     },
   };

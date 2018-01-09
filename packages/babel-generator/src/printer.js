@@ -19,7 +19,6 @@ export type Format = {
   auxiliaryCommentAfter: string,
   compact: boolean | "auto",
   minified: boolean,
-  quotes: "single" | "double",
   concise: boolean,
   indent: {
     adjustMultilineComment: boolean,
@@ -116,7 +115,10 @@ export default class Printer {
    */
 
   word(str: string): void {
-    if (this._endsWithWord) this._space();
+    // prevent concatenating words and creating // comment out of division and regex
+    if (this._endsWithWord || (this.endsWith("/") && str.indexOf("/") === 0)) {
+      this._space();
+    }
 
     this._maybeAddAuxComment();
     this._append(str);

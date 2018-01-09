@@ -157,6 +157,7 @@ registerPlugins({
   "syntax-object-rest-spread": require("@babel/plugin-syntax-object-rest-spread"),
   "syntax-optional-catch-binding": require("@babel/plugin-syntax-optional-catch-binding"),
   "syntax-pipeline-operator": require("@babel/plugin-syntax-pipeline-operator"),
+  "syntax-typescript": require("@babel/plugin-syntax-typescript"),
   "transform-async-to-generator": require("@babel/plugin-transform-async-to-generator"),
   "proposal-async-generator-functions": require("@babel/plugin-proposal-async-generator-functions"),
   "proposal-class-properties": require("@babel/plugin-proposal-class-properties"),
@@ -188,6 +189,7 @@ registerPlugins({
   "transform-sticky-regex": require("@babel/plugin-transform-sticky-regex"),
   "transform-template-literals": require("@babel/plugin-transform-template-literals"),
   "transform-typeof-symbol": require("@babel/plugin-transform-typeof-symbol"),
+  "transform-typescript": require("@babel/plugin-transform-typescript"),
   "transform-unicode-regex": require("@babel/plugin-transform-unicode-regex"),
   "transform-member-expression-literals": require("@babel/plugin-transform-member-expression-literals"),
   "transform-property-literals": require("@babel/plugin-transform-property-literals"),
@@ -242,14 +244,14 @@ registerPresets({
 
 export const version = VERSION;
 
+function onDOMContentLoaded() {
+  transformScriptTags();
+}
+
 // Listen for load event if we're in a browser and then kick off finding and
 // running of scripts with "text/babel" type.
 if (typeof window !== "undefined" && window && window.addEventListener) {
-  window.addEventListener(
-    "DOMContentLoaded",
-    () => transformScriptTags(),
-    false,
-  );
+  window.addEventListener("DOMContentLoaded", onDOMContentLoaded, false);
 }
 
 /**
@@ -264,5 +266,5 @@ export function transformScriptTags(scriptTags) {
  * Disables automatic transformation of <script> tags with "text/babel" type.
  */
 export function disableScriptTags() {
-  window.removeEventListener("DOMContentLoaded", transformScriptTags);
+  window.removeEventListener("DOMContentLoaded", onDOMContentLoaded);
 }

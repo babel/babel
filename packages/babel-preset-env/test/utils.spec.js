@@ -33,15 +33,6 @@ describe("utils", () => {
 
       assert.deepStrictEqual(
         prettifyTargets({
-          uglify: true,
-        }),
-        {
-          uglify: true,
-        },
-      );
-
-      assert.deepStrictEqual(
-        prettifyTargets({
           chrome: "54.0.0",
           electron: "1.6.0",
           node: "0.12.0",
