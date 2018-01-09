@@ -1,1 +1,1 @@
-<f:image />;
+<f:image n:attr />;
