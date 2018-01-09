@@ -154,9 +154,8 @@ export default function(commander, filenames, opts) {
         watcher.on(type, function(filename) {
           const relative = path.relative(dirname, filename) || filename;
           try {
-            handleFile(filename, relative, function(err, res) {
+            handleFile(filename, relative, function(err) {
               if (err) throw err;
-              util.log(res);
             });
           } catch (err) {
             console.error(err.stack);
