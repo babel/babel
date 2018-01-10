@@ -22,6 +22,7 @@
 - Make `"usage"` option the default after it is stable.
 
 ### Build/publish workflow
+
   - Guide on compiling/publishing ES2015+, .mjs, etc: https://twitter.com/philwalton/status/908082461799616512
   - Support multi-build/folder outputs?
 
@@ -36,6 +37,7 @@
   - Can we somehow combine forces in: babel-codemod/jscodeshift/lebab, prettier/recast/babel-generator? I really don't want to update all of these: new syntax equals re-writing the printer in all of these places separately/out of sync.
 
 ## Increasing the quality of community plugins
+
 - Work with the community to create guides on how to write plugins or understand ASTs, etc
 - Analysis of API's/syntax used (Google BigQuery)
 - Have #blessed/sanctioned/curated packages according to some standard
@@ -49,6 +51,7 @@
   - Documented/tested set of options
 
 ### ASTExplorer
+
 - allow custom version of babel-standalone (same as REPL to allow per PR tests)
 - integrate with repl? (both are in react)
 - auto publish a plugin to npm?
@@ -105,6 +108,7 @@ Better set of tests for stability/spec compliancy.
 - Need to do the same for the transforms.
 
 ### Smoke Tests
+
 - Babel itself https://github.com/babel/babel/issues/6134
 - Important community plugins (`babel-plugin-instanbul`, css-in-js)
 - `babel-core` integrations (wrappers like `babel-loader`, test frameworks, etc)
@@ -132,12 +136,14 @@ Can run these benchmarks for perf PRs, should track some over time.
 - Translatable docs
 
 #### Expanded Docs
+
 - Real documentation on APIs
 - Up to date babel-handbook/merge into rehauled website
 - Continue our [videos page](https://babeljs.io/docs/community/videos/)
 - Link to common errors pages
 
 #### Better REPL
+
 - Dropdown examples/examples of syntax from github?
 - Import any package from npm
 - Run any plugin from npm
@@ -162,6 +168,7 @@ References: https://github.com/eslint/eslint-github-bot, https://github.com/open
 ---
 
 ## Wishlist (might be out of scope/complex)
+
 - Should Babel operate multi-file/take in a dep graph?
 - Should Babel use type info (from other things like ts/flow/runtime info)
 - AST
