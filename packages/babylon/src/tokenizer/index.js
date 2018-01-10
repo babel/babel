@@ -827,13 +827,22 @@ export default class Tokenizer extends LocationParser {
     }
     const content = this.input.slice(start, this.state.pos);
     ++this.state.pos;
-    // Need to use `readWord1` because '\uXXXX' sequences are allowed
-    // here (don't ask).
-    const mods = this.readWord1();
-    if (mods) {
-      const validFlags = /^[gmsiyu]*$/;
-      if (!validFlags.test(mods)) {
-        this.raise(start, "Invalid regular expression flag");
+
+    const validFlags = /^[gmsiyu]$/;
+    let mods = "";
+    while (this.state.pos < this.input.length) {
+      const char = this.input[this.state.pos];
+      const charCode = this.fullCharCodeAtPos();
+      if (validFlags.test(char)) {
+        ++this.state.pos;
+        mods += char;
+      } else if (
+        isIdentifierChar(charCode) ||
+        charCode === charCodes.backslash
+      ) {
+        this.raise(this.state.pos, "Invalid regular expression flag");
+      } else {
+        break;
       }
     }
 
