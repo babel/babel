@@ -537,7 +537,7 @@ export default class ClassTransformer {
     }
 
     // Check if it is a static get or set
-    if (node.static && ["get", "set"].indexOf(node.kind) > -1) {
+    if (node.static && (node.kind === "get" || node.kind === "set")) {
       if (this._processSetGet(node, path)) return;
     }
 

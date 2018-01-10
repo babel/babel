@@ -5,7 +5,6 @@ import { template, types as t } from "@babel/core";
 const objectDefineProperty = template(`
   Object.defineProperty(CLASS_NAME, KEY, {
     KIND: FUNCTION_BODY,
-    enumerable: true,
     configurable: true
   });
 `);
