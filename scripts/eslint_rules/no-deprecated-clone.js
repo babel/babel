@@ -6,7 +6,9 @@ function getVariableDefinition(name /*: string */, scope /*: Scope */) {
   let currentScope = scope;
   do {
     const variable = currentScope.set.get(name);
-    if (variable) return { scope: currentScope, definition: variable.defs[0] };
+    if (variable && variable.defs[0]) {
+      return { scope: currentScope, definition: variable.defs[0] };
+    }
   } while ((currentScope = currentScope.upper));
 }
 
@@ -165,13 +167,13 @@ function getPatternPath(node /*: Node */) /*: ?string[] */ {
 
 function reportError(context /*: Context */, node /*: Node */) {
   const isMemberExpression = node.type === "MemberExpression";
+  const id = isMemberExpression ? node.property : node;
   context.report({
-    node: isMemberExpression ? node.property : node,
-    message:
-      "t.clone() and t.cloneDeep() are deprecated. Use t.cloneNode() instead.",
+    node: id,
+    message: `t.${id.name}() is deprecated. Use t.cloneNode() instead.`,
     fix(fixer) {
       if (isMemberExpression) {
-        return fixer.replaceText(node.property, "cloneNode");
+        return fixer.replaceText(id, "cloneNode");
       }
     },
   });
