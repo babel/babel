@@ -10,28 +10,63 @@ function getVariableDefinition(name /*: string */, scope /*: Scope */) {
   } while ((currentScope = currentScope.upper));
 }
 
-function isImportedFrom(
+function isImportedFromTypes(
+  context /*: Context */,
   node /*: Node */,
-  scope /*: Scope */,
-  module /*: string */,
   kind /*: "named" | "namespace" */
 ) {
-  const definition = getVariableDefinition(node.name, scope);
-  if (!definition) return false;
+  const definition = getVariableDefinition(node.name, context.getScope());
 
-  if (
-    definition.type === "ImportBinding" &&
-    definition.parent.source.value === module
-  ) {
-    if (kind === "named") {
-      return definition.node.type === "ImportSpecifier";
-    }
-    if (kind === "namespace") {
-      return definition.node.type === "ImportNamespaceSpecifier";
-    }
+  if (!definition) return false;
+  if (definition.type !== "ImportBinding") return false;
+  if (definition.parent.source.value !== "@@babel/types") return false;
+
+  if (kind === "named") {
+    return definition.node.type === "ImportSpecifier";
+  } else if (kind === "namespace") {
+    return definition.node.type === "ImportNamespaceSpecifier";
   }
 
   return false;
+}
+
+function isDefaultFunctionParameterTypes(
+  context /*: Context */,
+  id /*: Node */
+) {
+  const definition = getVariableDefinition(id.name, context.getScope());
+
+  if (!definition) return false;
+  if (definition.type !== "Parameter") return false;
+
+  const node = definition.node;
+
+  if (node.type === "FunctionDeclaration") {
+    // Expect "export default function (DEFINITION) {}"
+    if (node.parent.type !== "ExportDefaultDeclaration") return false;
+  } else if (node.type === "FunctionExpression") {
+    // Expect "module.exports = function (DEFINITION) {}"
+    if (
+      node.parent.type !== "AssignmentExpression" ||
+      node.parent.left.type !== "MemberExpression" ||
+      !isIdentifier(node.parent.left.object, "module") ||
+      !isIdentifier(node.parent.left.property, "exports")
+    ) {
+      return false;
+    }
+  } else {
+    return false;
+  }
+
+  const param = node.params[0];
+
+  return (
+    param &&
+    param.type === "ObjectPattern" &&
+    param.properties.some(
+      prop => isIdentifier(prop.key, "types") && prop.value === definition.name
+    )
+  );
 }
 
 function isIdentifier(node /*: Node */, name /*?: string */) {
@@ -40,6 +75,17 @@ function isIdentifier(node /*: Node */, name /*?: string */) {
 
 function isDeprecatedFunctionId(node /*: Node */) {
   return isIdentifier(node, "clone") || isIdentifier(node, "cloneDeep");
+}
+
+function reportError(context /*: Context */, node /*: Node */) {
+  context.report({
+    node,
+    message:
+      "t.clone() and t.cloneDeep() are deprecated. Use t.cloneNode() instead.",
+    fix(fixer) {
+      return fixer.replaceText(node, "cloneNode");
+    },
+  });
 }
 
 module.exports = {
@@ -52,42 +98,21 @@ module.exports = {
       CallExpression(node /*: Node */) {
         const callee /*: Node */ = node.callee;
 
-        let maybeDeprecatedIdentifier /*: ?Node */;
-
         if (
           isDeprecatedFunctionId(callee) &&
-          isImportedFrom(callee, context.getScope(), "@babel/types", "named")
+          isImportedFromTypes(context, callee, "named")
         ) {
-          maybeDeprecatedIdentifier = callee;
+          return reportError(context, callee);
         }
 
-        if (callee.type === "MemberExpression" && isIdentifier(callee.object)) {
-          if (
-            isDeprecatedFunctionId(callee.property) &&
-            isImportedFrom(
-              callee.object,
-              context.getScope(),
-              "@babel/types",
-              "namespace"
-            )
-          ) {
-            maybeDeprecatedIdentifier = callee.property;
-          }
-        }
-
-        if (maybeDeprecatedIdentifier) {
-          // This is needed because type refinements are lost inside callbacks.
-          const deprecatedIdentifier /*: Node */ = maybeDeprecatedIdentifier;
-
-          context.report({
-            node,
-            message:
-              "t.clone() and t.cloneDeep() are deprecated. " +
-              "Use t.cloneNode() instead.",
-            fix(fixer) {
-              return fixer.replaceText(deprecatedIdentifier, "cloneNode");
-            },
-          });
+        if (
+          callee.type === "MemberExpression" &&
+          isIdentifier(callee.object) &&
+          isDeprecatedFunctionId(callee.property) &&
+          (isImportedFromTypes(context, callee.object, "namespace") ||
+            isDefaultFunctionParameterTypes(context, callee.object))
+        ) {
+          return reportError(context, callee.property);
         }
       },
     };
