@@ -6,84 +6,173 @@ function getVariableDefinition(name /*: string */, scope /*: Scope */) {
   let currentScope = scope;
   do {
     const variable = currentScope.set.get(name);
-    if (variable) return variable.defs[0];
+    if (variable) return { scope: currentScope, definition: variable.defs[0] };
   } while ((currentScope = currentScope.upper));
 }
 
-function isImportedFromTypes(
-  context /*: Context */,
+/*::
+type ReferenceOriginImport = { kind: "import", source: string, name: string };
+type ReferenceOriginParam = {
+  kind: "export param",
+  exportName: string,
+  index: number,
+};
+
+type ReferenceOrigin =
+  | ReferenceOriginImport
+  | ReferenceOriginParam
+  | { kind: "import *", source: string }
+  | {
+      kind: "property",
+      base: ReferenceOriginImport | ReferenceOriginParam,
+      path: string,
+    };
+*/
+
+// Given a node and a context, returns a description of where its value comes
+// from.
+// It resolves imports, parameters of exported functions and property accesses.
+// See the ReferenceOrigin type for more informations.
+function getReferenceOrigin(
   node /*: Node */,
-  kind /*: "named" | "namespace" */
-) {
-  const definition = getVariableDefinition(node.name, context.getScope());
+  scope /*: Scope */
+) /*: ?ReferenceOrigin */ {
+  if (node.type === "Identifier") {
+    const variable = getVariableDefinition(node.name, scope);
+    if (!variable) return null;
 
-  if (!definition) return false;
-  if (definition.type !== "ImportBinding") return false;
-  if (definition.parent.source.value !== "@@babel/types") return false;
+    const definition = variable.definition;
+    const defNode = definition.node;
 
-  if (kind === "named") {
-    return definition.node.type === "ImportSpecifier";
-  } else if (kind === "namespace") {
-    return definition.node.type === "ImportNamespaceSpecifier";
-  }
-
-  return false;
-}
-
-function isDefaultFunctionParameterTypes(
-  context /*: Context */,
-  id /*: Node */
-) {
-  const definition = getVariableDefinition(id.name, context.getScope());
-
-  if (!definition) return false;
-  if (definition.type !== "Parameter") return false;
-
-  const node = definition.node;
-
-  if (node.type === "FunctionDeclaration") {
-    // Expect "export default function (DEFINITION) {}"
-    if (node.parent.type !== "ExportDefaultDeclaration") return false;
-  } else if (node.type === "FunctionExpression") {
-    // Expect "module.exports = function (DEFINITION) {}"
-    if (
-      node.parent.type !== "AssignmentExpression" ||
-      node.parent.left.type !== "MemberExpression" ||
-      !isIdentifier(node.parent.left.object, "module") ||
-      !isIdentifier(node.parent.left.property, "exports")
-    ) {
-      return false;
+    if (definition.type === "ImportBinding") {
+      if (defNode.type === "ImportSpecifier") {
+        return {
+          kind: "import",
+          source: definition.parent.source.value,
+          name: defNode.imported.name,
+        };
+      }
+      if (defNode.type === "ImportNamespaceSpecifier") {
+        return {
+          kind: "import *",
+          source: definition.parent.source.value,
+        };
+      }
     }
-  } else {
-    return false;
+
+    if (definition.type === "Variable" && defNode.init) {
+      const origin = getReferenceOrigin(defNode.init, variable.scope);
+      return origin && patternToProperty(definition.name, origin);
+    }
+
+    if (definition.type === "Parameter") {
+      const parent = defNode.parent;
+      let exportName /*: string */;
+      if (parent.type === "ExportDefaultDeclaration") {
+        exportName = "default";
+      } else if (parent.type === "ExportNamedDeclaration") {
+        exportName = defNode.id.name;
+      } else if (
+        parent.type === "AssignmentExpression" &&
+        parent.left.type === "MemberExpression" &&
+        parent.left.object.type === "Identifier" &&
+        parent.left.object.name === "module" &&
+        parent.left.property.type === "Identifier" &&
+        parent.left.property.name === "exports"
+      ) {
+        exportName = "module.exports";
+      } else {
+        return null;
+      }
+      return patternToProperty(definition.name, {
+        kind: "export param",
+        exportName,
+        index: definition.index,
+      });
+    }
   }
 
-  const param = node.params[0];
+  if (node.type === "MemberExpression" && !node.computed) {
+    const origin = getReferenceOrigin(node.object, scope);
+    return origin && addProperty(origin, node.property.name);
+  }
 
-  return (
-    param &&
-    param.type === "ObjectPattern" &&
-    param.properties.some(
-      prop => isIdentifier(prop.key, "types") && prop.value === definition.name
-    )
-  );
+  return null;
 }
 
-function isIdentifier(node /*: Node */, name /*?: string */) {
-  return node.type === "Identifier" && (!name || node.name === name);
+function patternToProperty(
+  id /*: Node */,
+  base /*: ReferenceOrigin */
+) /*: ?ReferenceOrigin */ {
+  const path = getPatternPath(id);
+  return path && path.reduce(addProperty, base);
 }
 
-function isDeprecatedFunctionId(node /*: Node */) {
-  return isIdentifier(node, "clone") || isIdentifier(node, "cloneDeep");
+// Adds a property to a given origin. If it was a namespace import it becomes
+// a named import, so that `import * as x from "foo"; x.bar` and
+// `import { bar } from "foo"` have the same origin.
+function addProperty(
+  origin /*: ReferenceOrigin */,
+  name /*: string */
+) /* ReferenceOrigin */ {
+  if (origin.kind === "import *") {
+    return {
+      kind: "import",
+      source: origin.source,
+      name,
+    };
+  }
+  if (origin.kind === "property") {
+    return {
+      kind: "property",
+      base: origin.base,
+      path: origin.path + "." + name,
+    };
+  }
+  return {
+    kind: "property",
+    base: origin,
+    path: name,
+  };
+}
+
+// if "node" is c of { a: { b: c } }, the result is ["a","b"]
+function getPatternPath(node /*: Node */) /*: ?string[] */ {
+  let current = node;
+  const path = [];
+
+  // Unshift keys to path while going up
+  do {
+    const property = current.parent;
+    if (
+      property.type === "ArrayPattern" ||
+      property.type === "AssignmentPattern" ||
+      property.computed
+    ) {
+      // These nodes are not supported.
+      return null;
+    }
+    if (property.type === "Property") {
+      path.unshift(property.key.name);
+    } else {
+      // The destructuring pattern is finished
+      break;
+    }
+  } while ((current = current.parent.parent));
+
+  return path;
 }
 
 function reportError(context /*: Context */, node /*: Node */) {
+  const isMemberExpression = node.type === "MemberExpression";
   context.report({
-    node,
+    node: isMemberExpression ? node.property : node,
     message:
       "t.clone() and t.cloneDeep() are deprecated. Use t.cloneNode() instead.",
     fix(fixer) {
-      return fixer.replaceText(node, "cloneNode");
+      if (isMemberExpression) {
+        return fixer.replaceText(node.property, "cloneNode");
+      }
     },
   });
 }
@@ -96,23 +185,42 @@ module.exports = {
   create(context /*: Context */) {
     return {
       CallExpression(node /*: Node */) {
-        const callee /*: Node */ = node.callee;
+        const origin = getReferenceOrigin(node.callee, context.getScope());
+
+        if (!origin) return;
 
         if (
-          isDeprecatedFunctionId(callee) &&
-          isImportedFromTypes(context, callee, "named")
+          origin.kind === "import" &&
+          (origin.name === "clone" || origin.name === "cloneDeep") &&
+          origin.source === "@babel/types"
         ) {
-          return reportError(context, callee);
+          // imported from @babel/types
+          return reportError(context, node.callee);
         }
 
         if (
-          callee.type === "MemberExpression" &&
-          isIdentifier(callee.object) &&
-          isDeprecatedFunctionId(callee.property) &&
-          (isImportedFromTypes(context, callee.object, "namespace") ||
-            isDefaultFunctionParameterTypes(context, callee.object))
+          origin.kind === "property" &&
+          (origin.path === "clone" || origin.path === "cloneDeep") &&
+          origin.base.kind === "import" &&
+          origin.base.name === "types" &&
+          origin.base.source === "@babel/core"
         ) {
-          return reportError(context, callee.property);
+          // imported from @babel/core
+          return reportError(context, node.callee);
+        }
+
+        if (
+          origin.kind === "property" &&
+          (origin.path === "types.clone" ||
+            origin.path === "types.cloneDeep") &&
+          origin.base.kind === "export param" &&
+          (origin.base.exportName === "default" ||
+            origin.base.exportName === "module.exports") &&
+          origin.base.index === 0
+        ) {
+          // export default function ({ types: t }) {}
+          // module.exports = function ({ types: t }) {}
+          return reportError(context, node.callee);
         }
       },
     };
@@ -125,6 +233,7 @@ type Node = { type: string, [string]: any };
 
 type Definition = {
   type: "ImportedBinding",
+  name: Node,
   node: Node,
   parent: Node,
 };
@@ -142,7 +251,7 @@ type Context = {
   report(options: {
     node: Node,
     message: string,
-    fix?: (fixer: Fixer) => Fixer,
+    fix?: (fixer: Fixer) => ?Fixer,
   }): void,
 
   getScope(): Scope,
