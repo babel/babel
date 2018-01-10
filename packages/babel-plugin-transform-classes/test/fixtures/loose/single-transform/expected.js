@@ -7,7 +7,6 @@ function () {
     get: function get() {
       return VERSION;
     },
-    enumerable: true,
     configurable: true
   });
   return Alert;
