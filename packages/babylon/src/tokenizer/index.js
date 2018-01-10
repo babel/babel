@@ -828,7 +828,7 @@ export default class Tokenizer extends LocationParser {
     const content = this.input.slice(start, this.state.pos);
     ++this.state.pos;
 
-    const validFlags = /^[gmsiyu]*$/;
+    const validFlags = /^[gmsiyu]$/;
     let mods = "";
     while (this.state.pos < this.input.length) {
       const char = this.input[this.state.pos];
@@ -836,7 +836,10 @@ export default class Tokenizer extends LocationParser {
       if (validFlags.test(char)) {
         ++this.state.pos;
         mods += char;
-      } else if (!validFlags.test(mods) || charCode === charCodes.backslash) {
+      } else if (
+        isIdentifierChar(charCode) ||
+        charCode === charCodes.backslash
+      ) {
         this.raise(this.state.pos, "Invalid regular expression flag");
       } else {
         break;
