@@ -72,7 +72,7 @@ export default function(api, options) {
 
         let templateObject = this.templates.get(name);
         if (templateObject) {
-          templateObject = t.clone(templateObject);
+          templateObject = t.cloneNode(templateObject);
         } else {
           const programPath = path.find(p => p.isProgram());
           templateObject = programPath.scope.generateUidIdentifier(

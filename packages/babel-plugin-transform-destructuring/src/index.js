@@ -221,7 +221,7 @@ export default function(api, options) {
         if (t.isRestElement(prop)) {
           this.pushObjectRest(pattern, objRef, prop, i);
         } else {
-          this.pushObjectProperty(prop, t.clone(objRef));
+          this.pushObjectProperty(prop, t.cloneNode(objRef));
         }
       }
     }

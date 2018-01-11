@@ -128,7 +128,7 @@ export default function(api, options) {
                 t.variableDeclarator(ident, computedNode.key),
               ]),
             );
-            computedNode.key = t.clone(ident);
+            computedNode.key = t.cloneNode(ident);
           }
         }
 

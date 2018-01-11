@@ -13,7 +13,7 @@ export default function(api, options) {
 
           let wrapAsync = state.methodWrapper;
           if (wrapAsync) {
-            wrapAsync = t.cloneDeep(wrapAsync);
+            wrapAsync = t.cloneNode(wrapAsync);
           } else {
             wrapAsync = state.methodWrapper = addNamed(path, method, module);
           }
