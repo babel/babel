@@ -263,14 +263,7 @@ export default class Scope {
     return `_${id}`;
   }
 
-  /**
-   * Generate a unique identifier based on a node.
-   */
-
-  generateUidIdentifierBasedOnNode(
-    parent: Object,
-    defaultName?: String,
-  ): Object {
+  generateUidBasedOnNode(parent: Object, defaultName?: String) {
     let node = parent;
 
     if (t.isAssignmentExpression(parent)) {
@@ -287,7 +280,18 @@ export default class Scope {
     let id = parts.join("$");
     id = id.replace(/^_/, "") || defaultName || "ref";
 
-    return this.generateUidIdentifier(id.slice(0, 20));
+    return this.generateUid(id.slice(0, 20));
+  }
+
+  /**
+   * Generate a unique identifier based on a node.
+   */
+
+  generateUidIdentifierBasedOnNode(
+    parent: Object,
+    defaultName?: String,
+  ): Object {
+    return t.identifier(this.generateUidBasedOnNode(parent, defaultName));
   }
 
   /**

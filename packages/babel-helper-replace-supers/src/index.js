@@ -41,7 +41,7 @@ function getPrototypeOfExpression(objectRef, isStatic) {
         t.identifier("Object"),
         t.identifier("getPrototypeOf"),
       ),
-      [targetRef],
+      [t.cloneNode(targetRef)],
     ),
   );
 }
@@ -141,7 +141,7 @@ export default class ReplaceSupers {
   };
 
   getObjectRef() {
-    return this.opts.objectRef || this.opts.getObjectRef();
+    return t.cloneNode(this.opts.objectRef || this.opts.getObjectRef());
   }
 
   /**
@@ -244,7 +244,7 @@ export default class ReplaceSupers {
       ref = ref || path.scope.generateUidIdentifier("ref");
       return [
         t.variableDeclaration("var", [
-          t.variableDeclarator(t.cloneNode(ref), node.left),
+          t.variableDeclarator(t.cloneNode(ref), t.cloneNode(node.left)),
         ]),
         t.expressionStatement(
           t.assignmentExpression(

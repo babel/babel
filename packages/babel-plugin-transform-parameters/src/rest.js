@@ -289,8 +289,7 @@ export default function convertFunctionRest(path) {
   const key = scope.generateUidIdentifier("key");
   const len = scope.generateUidIdentifier("len");
 
-  let arrKey = key;
-  let arrLen = len;
+  let arrKey, arrLen;
   if (node.params.length) {
     // this method has additional params, so we need to subtract
     // the index of the current argument position from the
@@ -308,6 +307,9 @@ export default function convertFunctionRest(path) {
       t.binaryExpression("-", t.cloneNode(len), t.cloneNode(start)),
       t.numericLiteral(0),
     );
+  } else {
+    arrKey = t.identifier(key.name);
+    arrLen = t.identifier(len.name);
   }
 
   const loop = buildRest({
