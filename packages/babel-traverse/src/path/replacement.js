@@ -237,7 +237,9 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
       if (!uid) {
         const callee = this.get("callee");
         uid = callee.scope.generateDeclaredUidIdentifier("ret");
-        callee.get("body").pushContainer("body", t.returnStatement(uid));
+        callee
+          .get("body")
+          .pushContainer("body", t.returnStatement(t.cloneNode(uid)));
         loop.setData("expressionReplacementReturnUid", uid);
       } else {
         uid = t.identifier(uid.name);
@@ -245,7 +247,9 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
 
       path
         .get("expression")
-        .replaceWith(t.assignmentExpression("=", uid, path.node.expression));
+        .replaceWith(
+          t.assignmentExpression("=", t.cloneNode(uid), path.node.expression),
+        );
     } else {
       path.replaceWith(t.returnStatement(path.node.expression));
     }

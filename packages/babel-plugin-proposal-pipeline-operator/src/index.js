@@ -44,10 +44,10 @@ export default function() {
 
         const call = optimizeArrow
           ? right.body
-          : t.callExpression(right, [placeholder]);
+          : t.callExpression(right, [t.cloneNode(placeholder)]);
         path.replaceWith(
           t.sequenceExpression([
-            t.assignmentExpression("=", placeholder, left),
+            t.assignmentExpression("=", t.cloneNode(placeholder), left),
             call,
           ]),
         );

@@ -96,7 +96,10 @@ export default function(api, options) {
         }
 
         path.replaceWith(
-          t.callExpression(node.tag, [templateObject, ...quasi.expressions]),
+          t.callExpression(node.tag, [
+            t.cloneNode(templateObject),
+            ...quasi.expressions,
+          ]),
         );
       },
 
