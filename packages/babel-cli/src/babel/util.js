@@ -4,6 +4,7 @@ import * as babel from "@babel/core";
 import includes from "lodash/includes";
 import path from "path";
 import fs from "fs";
+import child from "child_process";
 
 export function chmod(src, dest) {
   fs.chmodSync(dest, fs.statSync(src).mode);
@@ -110,4 +111,35 @@ export function adjustRelative(relative, keepFileExtension) {
     return relative;
   }
   return relative.replace(/\.(\w*?)$/, "") + ".js";
+}
+
+export function printSettings() {
+  const hasYarn = cwd =>
+    fs.existsSync(path.resolve(cwd || process.cwd(), "yarn.lock"));
+  const indent = str =>
+    `\n ${str
+      .trim()
+      .split("\n")
+      .join("\n")}`;
+  const log = [];
+  log.push("-------Babel Settings--------");
+  log.push(`Node version: ${indent(process.versions.node)}`);
+  log.push(`Npm version: ${indent(child.execSync("npm -v").toString())}`);
+
+  if (hasYarn()) {
+    log.push(`Yarn version: ${indent(child.execSync("yarn -v").toString())}`);
+  }
+  log.push("-------Babel packages--------");
+  const packages = child
+    .execSync("npm list --silent | grep babel")
+    .toString()
+    .split("\n");
+  for (let i = 0; i < packages.length; i++) {
+    if (packages[i].substring(0, 2) == "├─") {
+      log.push(packages[i]);
+    }
+  }
+  log.push("-------Babel presets--------");
+  log.push("-------Babel plugins--------");
+  console.log(log.join("\n") + "\n");
 }

@@ -8,6 +8,7 @@ import glob from "glob";
 
 import dirCommand from "./dir";
 import fileCommand from "./file";
+import { printSettings } from "./util";
 
 import pkg from "../../package.json";
 
@@ -168,6 +169,9 @@ commander.option(
   "--delete-dir-on-start",
   "Delete the out directory before compilation",
 );
+
+commander.option("-S, --settings", "Show configuration settings");
+
 /* eslint-enable max-len */
 
 commander.version(pkg.version + " (@babel/core " + version + ")");
@@ -221,6 +225,11 @@ if (commander.deleteDirOnStart && !commander.outDir) {
   errors.push("--delete-dir-on-start requires --out-dir");
 }
 
+if (commander.settings) {
+  printSettings();
+  process.exit(2);
+}
+
 if (errors.length) {
   console.error(errors.join(". "));
   process.exit(2);
@@ -248,6 +257,7 @@ delete opts.configFile;
 delete opts.deleteDirOnStart;
 delete opts.keepFileExtension;
 delete opts.relative;
+delete opts.settings;
 
 // Commander will default the "--no-" arguments to true, but we want to leave them undefined so that
 // @babel/core can handle the default-assignment logic on its own.
@@ -256,4 +266,7 @@ if (opts.comments === true) opts.comments = undefined;
 if (opts.highlightCode === true) opts.highlightCode = undefined;
 
 const fn = commander.outDir ? dirCommand : fileCommand;
+
+console.log(fn, commander, filenames, opts);
+
 fn(commander, filenames, opts);
