@@ -22,7 +22,7 @@ const awaitVisitor = {
     path.replaceWith(
       t.yieldExpression(
         wrapAwait
-          ? t.callExpression(wrapAwait, [argument.node])
+          ? t.callExpression(t.cloneNode(wrapAwait), [argument.node])
           : argument.node,
       ),
     );
@@ -73,7 +73,7 @@ export default function(path: NodePath, file: Object, helpers: Object) {
   path.node.async = false;
   path.node.generator = true;
 
-  wrapFunction(path, helpers.wrapAsync);
+  wrapFunction(path, t.cloneNode(helpers.wrapAsync));
 
   const isProperty =
     path.isObjectMethod() ||

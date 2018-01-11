@@ -112,12 +112,10 @@ export default function(api, options) {
       // we need to assign the current value of the assignment to avoid evaluating
       // it more than once
 
-      const tempValueRef = this.scope.generateUidIdentifierBasedOnNode(
-        valueRef,
-      );
+      const tempValueRef = this.scope.generateUidBasedOnNode(valueRef);
 
       const declar = t.variableDeclaration("var", [
-        t.variableDeclarator(tempValueRef, valueRef),
+        t.variableDeclarator(t.identifier(tempValueRef), valueRef),
       ]);
       declar._blockHoist = this.blockHoist;
       this.nodes.push(declar);
@@ -127,22 +125,26 @@ export default function(api, options) {
       const tempConditional = t.conditionalExpression(
         t.binaryExpression(
           "===",
-          tempValueRef,
+          t.identifier(tempValueRef),
           this.scope.buildUndefinedNode(),
         ),
         pattern.right,
-        tempValueRef,
+        t.identifier(tempValueRef),
       );
 
       const left = pattern.left;
       if (t.isPattern(left)) {
         const tempValueDefault = t.expressionStatement(
-          t.assignmentExpression("=", tempValueRef, tempConditional),
+          t.assignmentExpression(
+            "=",
+            t.identifier(tempValueRef),
+            tempConditional,
+          ),
         );
         tempValueDefault._blockHoist = this.blockHoist;
 
         this.nodes.push(tempValueDefault);
-        this.push(left, tempValueRef);
+        this.push(left, t.identifier(tempValueRef));
       } else {
         this.nodes.push(this.buildVariableAssignment(left, tempConditional));
       }

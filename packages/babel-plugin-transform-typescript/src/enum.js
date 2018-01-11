@@ -1,4 +1,5 @@
 import assert from "assert";
+import { template } from "@babel/core";
 
 export default function transpileEnum(path, t) {
   const { node } = path;
@@ -50,37 +51,41 @@ function makeVar(id, t, kind): VariableDeclaration {
   return t.variableDeclaration(kind, [t.variableDeclarator(id)]);
 }
 
+const buildEnumWrapper = template(`
+  (function (ID) {
+    ASSIGNMENTS;
+  })(ID || (ID = {}));
+`);
+
+const buildStringAssignment = template(`
+  ENUM["NAME"] = VALUE;
+`);
+
+const buildNumericAssignment = template(`
+  ENUM[ENUM["NAME"] = VALUE] = "NAME";
+`);
+
+const buildEnumMember = (isString, options) =>
+  (isString ? buildStringAssignment : buildNumericAssignment)(options);
+
 /**
  * Generates the statement that fills in the variable declared by the enum.
  * `(function (E) { ... assignments ... })(E || (E = {}));`
  */
 function enumFill(path, t, id) {
   const x = translateEnumValues(path, t);
-  const assignments = x.map(([memberName, memberValue]) => {
-    const inner = t.assignmentExpression(
-      "=",
-      t.memberExpression(id, t.stringLiteral(memberName), /*computed*/ true),
-      memberValue,
-    );
-    const outer = t.isStringLiteral(memberValue)
-      ? inner
-      : t.assignmentExpression(
-          "=",
-          t.memberExpression(id, inner, /*computed*/ true),
-          t.stringLiteral(memberName),
-        );
-    return t.expressionStatement(outer);
-  });
-
-  // E || (E = {})
-  const callArg = t.logicalExpression(
-    "||",
-    id,
-    t.assignmentExpression("=", id, t.objectExpression([])),
+  const assignments = x.map(([memberName, memberValue]) =>
+    buildEnumMember(t.isStringLiteral(memberValue), {
+      ENUM: t.cloneNode(id),
+      NAME: memberName,
+      VALUE: memberValue,
+    }),
   );
-  const body = t.blockStatement(assignments);
-  const callee = t.functionExpression(null, [id], body);
-  return t.expressionStatement(t.callExpression(callee, [callArg]));
+
+  return buildEnumWrapper({
+    ID: t.cloneNode(id),
+    ASSIGNMENTS: assignments,
+  });
 }
 
 /**
