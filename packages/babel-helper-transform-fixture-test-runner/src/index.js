@@ -130,6 +130,195 @@ function wrapPackagesArray(type, names, optionsDir) {
   });
 }
 
+function checkDuplicatedNodes(ast) {
+  // TODO Remove all these function when regenerator doesn't
+  // insert duplicated nodes
+
+  const nodes = new WeakSet();
+  const parents = new WeakMap();
+
+  const setParent = (child, parent) => {
+    if (typeof child === "object" && child !== null) {
+      let p = parents.get(child);
+      if (!p) {
+        p = [];
+        parents.set(child, p);
+      }
+      p.unshift(parent);
+    }
+  };
+  const registerChildren = node => {
+    for (const key in node) {
+      if (Array.isArray(node[key])) {
+        node[key].forEach(child => setParent(child, node));
+      } else {
+        setParent(node[key], node);
+      }
+    }
+  };
+
+  const parentIs = (node, test) => {
+    return (parents.get(node) || []).some(parent => test(parent));
+  };
+  const isByRegenerator = node => {
+    if (!node) {
+      return false;
+    } else if (node.type === "Identifier") {
+      if (/^_(?:context|value|callee|marked)\d*$/.test(node.name)) {
+        return true;
+      } else if (
+        /^t\d+$/.test(node.name) &&
+        parentIs(
+          node,
+          parent =>
+            parent.type === "MemberExpression" &&
+            isByRegenerator(parent.object),
+        )
+      ) {
+        // _context.t* // <-- t*
+        return true;
+      } else if (
+        parentIs(
+          node,
+          parent =>
+            parent.type === "VariableDeclarator" &&
+            parentIs(
+              parent,
+              parent =>
+                parent.type === "VariableDeclaration" &&
+                parentIs(
+                  parent,
+                  parent =>
+                    parent.type === "BlockStatement" &&
+                    parentIs(
+                      parent,
+                      parent =>
+                        parent.type === "FunctionExpression" &&
+                        isByRegenerator(parent.id),
+                    ),
+                ),
+            ),
+        )
+      ) {
+        // regeneratorRuntime.mark(function _callee3() {
+        //   var bar, _bar2; // <-- Those identifiers
+        return true;
+      } else if (
+        parentIs(
+          node,
+          parent =>
+            parent.type === "VariableDeclarator" &&
+            parentIs(
+              parent,
+              parent =>
+                parent.type === "VariableDeclaration" &&
+                parentIs(
+                  parent,
+                  parent =>
+                    parent.type === "BlockStatement" &&
+                    parent.body.length === 2 &&
+                    parent.body[1].type === "ReturnStatement" &&
+                    parent.body[1].argument.type === "CallExpression" &&
+                    parent.body[1].argument.callee.type ===
+                      "MemberExpression" &&
+                    parent.body[1].argument.callee.property.type ===
+                      "Identifier" &&
+                    parent.body[1].argument.callee.property.name === "wrap",
+                ),
+            ),
+        )
+      ) {
+        // function foo() {
+        //   var _len, // <-- Those identifiers
+        //     items,
+        //     _key,
+        //     _args = arguments;
+        //   return regeneratorRuntime.wrap(function foo$(_context) {
+        return true;
+      } else if (
+        parentIs(
+          node,
+          parent =>
+            parent.type === "CallExpression" &&
+            parent.arguments.length === 3 &&
+            parent.arguments[1] === node &&
+            parent.callee.type === "MemberExpression" &&
+            parent.callee.property.type === "Identifier" &&
+            parent.callee.property.name === "wrap",
+        )
+      ) {
+        // regeneratorRuntime.wrap(function foo$(_context) {
+        //   ...
+        // }, foo, this); // <- foo
+        return true;
+      } else if (
+        parentIs(
+          node,
+          parent =>
+            parent.type === "CallExpression" &&
+            parent.callee.type === "MemberExpression" &&
+            parent.callee.property.type === "Identifier" &&
+            parent.callee.property.name === "mark",
+        )
+      ) {
+        // regeneratorRuntime.mark(foo); // foo
+        return true;
+      }
+    } else if (node.type === "MemberExpression") {
+      // _context.next
+      return isByRegenerator(node.object);
+    } else if (node.type === "CallExpression") {
+      return isByRegenerator(node.callee);
+    } else if (node.type === "AssignmentExpression") {
+      // _context.next = 4;
+      return isByRegenerator(node.left);
+    } else if (node.type === "NumericLiteral") {
+      if (
+        parentIs(
+          node,
+          parent =>
+            parent.type === "AssignmentExpression" &&
+            isByRegenerator(parent.left),
+        )
+      ) {
+        // _context.next = 4; // <-- The 4
+        return true;
+      } else if (
+        parentIs(
+          node,
+          parent =>
+            parent.type === "CallExpression" &&
+            parent.callee.type === "MemberExpression" &&
+            isByRegenerator(parent.callee.object),
+        )
+      ) {
+        // return _context.abrupt("break", 11); // <-- The 11
+        return true;
+      }
+    }
+    return false;
+  };
+  const hidePrivateProperties = (key, val) => {
+    // Hides properties like _shadowedFunctionLiteral,
+    // which makes the AST circular
+    if (key[0] === "_") return "[Private]";
+    return val;
+  };
+  babel.types.traverseFast(ast, node => {
+    registerChildren(node);
+    if (isByRegenerator(node)) return;
+    if (nodes.has(node)) {
+      throw new Error(
+        "Do not reuse nodes. Use `t.clone` or `t.cloneDeep` to copy them.\n" +
+          JSON.stringify(node, hidePrivateProperties, 2) +
+          "\nParent:\n" +
+          JSON.stringify(parents.get(node), hidePrivateProperties, 2),
+      );
+    }
+    nodes.add(node);
+  });
+}
+
 function run(task) {
   const actual = task.actual;
   const expect = task.expect;
@@ -172,6 +361,7 @@ function run(task) {
   if (execCode) {
     const execOpts = getOpts(exec);
     result = babel.transform(execCode, execOpts);
+    checkDuplicatedNodes(result.ast);
     execCode = result.code;
 
     try {
@@ -188,6 +378,7 @@ function run(task) {
   const expectCode = expect.code;
   if (!execCode || actualCode) {
     result = babel.transform(actualCode, getOpts(actual));
+    checkDuplicatedNodes(result.ast);
     if (
       !expect.code &&
       result.code &&
