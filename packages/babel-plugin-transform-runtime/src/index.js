@@ -63,7 +63,7 @@ export default function(api, options) {
 
         let cached = cache.get(key);
         if (cached) {
-          cached = t.cloneDeep(cached);
+          cached = t.cloneNode(cached);
         } else {
           cached = addDefault(file.path, source, {
             importedInterop: "uncompiled",

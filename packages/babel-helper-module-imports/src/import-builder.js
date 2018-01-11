@@ -50,7 +50,7 @@ export default class ImportBuilder {
     assert(statement.type === "ImportDeclaration");
     assert(statement.specifiers.length === 0);
     statement.specifiers = [t.importNamespaceSpecifier(name)];
-    this._resultName = t.clone(name);
+    this._resultName = t.cloneNode(name);
     return this;
   }
   default(name) {
@@ -59,7 +59,7 @@ export default class ImportBuilder {
     assert(statement.type === "ImportDeclaration");
     assert(statement.specifiers.length === 0);
     statement.specifiers = [t.importDefaultSpecifier(name)];
-    this._resultName = t.clone(name);
+    this._resultName = t.cloneNode(name);
     return this;
   }
   named(name, importName) {
@@ -70,7 +70,7 @@ export default class ImportBuilder {
     assert(statement.type === "ImportDeclaration");
     assert(statement.specifiers.length === 0);
     statement.specifiers = [t.importSpecifier(name, t.identifier(importName))];
-    this._resultName = t.clone(name);
+    this._resultName = t.cloneNode(name);
     return this;
   }
 
@@ -86,7 +86,7 @@ export default class ImportBuilder {
       "var",
       [t.variableDeclarator(name, statement.expression)],
     );
-    this._resultName = t.clone(name);
+    this._resultName = t.cloneNode(name);
     return this;
   }
 

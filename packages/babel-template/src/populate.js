@@ -8,7 +8,7 @@ export default function populatePlaceholders(
   metadata: Metadata,
   replacements: TemplateReplacements,
 ): BabelNodeFile {
-  const ast = t.cloneDeep(metadata.ast);
+  const ast = t.cloneNode(metadata.ast);
 
   if (replacements) {
     metadata.placeholders.forEach(placeholder => {
@@ -57,9 +57,9 @@ function applyReplacement(
   // once to avoid injecting the same node multiple times.
   if (placeholder.isDuplicate) {
     if (Array.isArray(replacement)) {
-      replacement = replacement.map(node => t.cloneDeep(node));
+      replacement = replacement.map(node => t.cloneNode(node));
     } else if (typeof replacement === "object") {
-      replacement = t.cloneDeep(replacement);
+      replacement = t.cloneNode(replacement);
     }
   }
 

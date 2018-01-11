@@ -215,7 +215,7 @@ function permuteHelperAST(file, metadata, id, localBindings, getDependency) {
 
       for (const path of imps) path.remove();
       for (const path of impsBindingRefs) {
-        const node = t.cloneDeep(dependenciesRefs[path.node.name]);
+        const node = t.cloneNode(dependenciesRefs[path.node.name]);
         path.replaceWith(node);
       }
 

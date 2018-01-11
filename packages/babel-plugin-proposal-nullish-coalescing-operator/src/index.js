@@ -15,7 +15,11 @@ export default function(api, { loose = false }) {
         const ref = scope.generateUidIdentifierBasedOnNode(node.left);
         scope.push({ id: ref });
 
-        const assignment = t.assignmentExpression("=", t.clone(ref), node.left);
+        const assignment = t.assignmentExpression(
+          "=",
+          t.cloneNode(ref),
+          node.left,
+        );
 
         path.replaceWith(
           t.conditionalExpression(
@@ -28,11 +32,11 @@ export default function(api, { loose = false }) {
                   t.binaryExpression("!==", assignment, t.nullLiteral()),
                   t.binaryExpression(
                     "!==",
-                    t.clone(ref),
+                    t.cloneNode(ref),
                     scope.buildUndefinedNode(),
                   ),
                 ),
-            t.clone(ref),
+            t.cloneNode(ref),
             node.right,
           ),
         );

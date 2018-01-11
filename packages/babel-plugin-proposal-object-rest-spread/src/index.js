@@ -74,7 +74,7 @@ export default function(api, opts) {
     const props = path.get("properties");
     const last = props[props.length - 1];
     t.assertRestElement(last.node);
-    const restElement = t.clone(last.node);
+    const restElement = t.cloneNode(last.node);
     last.remove();
 
     const impureComputedPropertyDeclarators = replaceImpureComputedKeys(path);
@@ -291,7 +291,7 @@ export default function(api, opts) {
             );
           }
 
-          const nodeWithoutSpread = t.clone(path.node);
+          const nodeWithoutSpread = t.cloneNode(path.node);
           nodeWithoutSpread.right = ref;
           nodes.push(t.expressionStatement(nodeWithoutSpread));
           nodes.push(

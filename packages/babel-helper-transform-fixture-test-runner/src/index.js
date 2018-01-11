@@ -309,7 +309,7 @@ function checkDuplicatedNodes(ast) {
     if (isByRegenerator(node)) return;
     if (nodes.has(node)) {
       throw new Error(
-        "Do not reuse nodes. Use `t.clone` or `t.cloneDeep` to copy them.\n" +
+        "Do not reuse nodes. Use `t.cloneNode` to copy them.\n" +
           JSON.stringify(node, hidePrivateProperties, 2) +
           "\nParent:\n" +
           JSON.stringify(parents.get(node), hidePrivateProperties, 2),
