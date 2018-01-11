@@ -267,6 +267,4 @@ if (opts.highlightCode === true) opts.highlightCode = undefined;
 
 const fn = commander.outDir ? dirCommand : fileCommand;
 
-console.log(fn, commander, filenames, opts);
-
 fn(commander, filenames, opts);
