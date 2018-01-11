@@ -387,12 +387,12 @@ export default class ClassTransformer {
         // special case single arguments spread
         bareSuperNode.arguments[1] = bareSuperNode.arguments[1].argument;
         bareSuperNode.callee = t.memberExpression(
-          superRef,
+          t.cloneNode(superRef),
           t.identifier("apply"),
         );
       } else {
         bareSuperNode.callee = t.memberExpression(
-          superRef,
+          t.cloneNode(superRef),
           t.identifier("call"),
         );
       }
@@ -456,7 +456,7 @@ export default class ClassTransformer {
     const superRef = this.superName || t.identifier("Function");
     let thisRef = function() {
       const ref = path.scope.generateDeclaredUidIdentifier("this");
-      thisRef = () => ref;
+      thisRef = () => t.cloneNode(ref);
       return ref;
     };
 

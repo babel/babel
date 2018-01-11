@@ -62,10 +62,12 @@ export default function(api, options) {
       let node;
 
       if (op) {
-        node = t.expressionStatement(t.assignmentExpression(op, id, init));
+        node = t.expressionStatement(
+          t.assignmentExpression(op, id, t.cloneNode(init)),
+        );
       } else {
         node = t.variableDeclaration(this.kind, [
-          t.variableDeclarator(id, init),
+          t.variableDeclarator(id, t.cloneNode(init)),
         ]);
       }
 
@@ -76,13 +78,14 @@ export default function(api, options) {
 
     buildVariableDeclaration(id, init) {
       const declar = t.variableDeclaration("var", [
-        t.variableDeclarator(id, init),
+        t.variableDeclarator(t.cloneNode(id), t.cloneNode(init)),
       ]);
       declar._blockHoist = this.blockHoist;
       return declar;
     }
 
-    push(id, init) {
+    push(id, _init) {
+      const init = t.cloneNode(_init);
       if (t.isObjectPattern(id)) {
         this.pushObjectPattern(id, init);
       } else if (t.isArrayPattern(id)) {
@@ -164,7 +167,7 @@ export default function(api, options) {
         if (t.isIdentifier(key) && !prop.computed) {
           key = t.stringLiteral(prop.key.name);
         }
-        keys.push(key);
+        keys.push(t.cloneNode(key));
       }
 
       keys = t.arrayExpression(keys);
@@ -173,7 +176,7 @@ export default function(api, options) {
 
       const value = t.callExpression(
         this.addHelper("objectWithoutProperties"),
-        [objRef, keys],
+        [t.cloneNode(objRef), keys],
       );
       this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
     }
@@ -182,7 +185,11 @@ export default function(api, options) {
       if (t.isLiteral(prop.key)) prop.computed = true;
 
       const pattern = prop.value;
-      const objRef = t.memberExpression(propRef, prop.key, prop.computed);
+      const objRef = t.memberExpression(
+        t.cloneNode(propRef),
+        prop.key,
+        prop.computed,
+      );
 
       if (t.isPattern(pattern)) {
         this.push(pattern, objRef);
@@ -221,7 +228,7 @@ export default function(api, options) {
         if (t.isRestElement(prop)) {
           this.pushObjectRest(pattern, objRef, prop, i);
         } else {
-          this.pushObjectProperty(prop, t.cloneNode(objRef));
+          this.pushObjectProperty(prop, objRef);
         }
       }
     }
@@ -344,7 +351,9 @@ export default function(api, options) {
       if (!t.isArrayExpression(ref) && !t.isMemberExpression(ref)) {
         const memo = this.scope.maybeGenerateMemoised(ref, true);
         if (memo) {
-          this.nodes.push(this.buildVariableDeclaration(memo, ref));
+          this.nodes.push(
+            this.buildVariableDeclaration(memo, t.cloneNode(ref)),
+          );
           ref = memo;
         }
       }
@@ -367,8 +376,9 @@ export default function(api, options) {
         const specifiers = [];
 
         for (const name in path.getOuterBindingIdentifiers(path)) {
-          const id = t.identifier(name);
-          specifiers.push(t.exportSpecifier(id, id));
+          specifiers.push(
+            t.exportSpecifier(t.identifier(name), t.identifier(name)),
+          );
         }
 
         // Split the declaration and export list into two declarations so that the variable
@@ -484,7 +494,7 @@ export default function(api, options) {
         destructuring.init(node.left, ref || node.right);
 
         if (ref) {
-          nodes.push(t.expressionStatement(ref));
+          nodes.push(t.expressionStatement(t.cloneNode(ref)));
         }
 
         path.replaceWithMultiple(nodes);
@@ -526,7 +536,10 @@ export default function(api, options) {
           } else {
             nodes.push(
               t.inherits(
-                destructuring.buildVariableAssignment(declar.id, declar.init),
+                destructuring.buildVariableAssignment(
+                  declar.id,
+                  t.cloneNode(declar.init),
+                ),
                 declar,
               ),
             );

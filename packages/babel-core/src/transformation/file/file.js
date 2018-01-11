@@ -123,7 +123,7 @@ export default class File {
 
   addHelper(name: string): Object {
     const declar = this.declarations[name];
-    if (declar) return declar;
+    if (declar) return t.cloneNode(declar);
 
     const generator = this.get("helperGenerator");
     const runtime = this.get("helpersNamespace");

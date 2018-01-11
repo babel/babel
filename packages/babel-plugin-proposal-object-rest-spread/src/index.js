@@ -95,7 +95,7 @@ export default function(api, opts) {
       impureComputedPropertyDeclarators,
       restElement.argument,
       t.callExpression(file.addHelper("objectWithoutProperties"), [
-        objRef,
+        t.cloneNode(objRef),
         keyExpression,
       ]),
     ];
@@ -124,7 +124,7 @@ export default function(api, opts) {
 
       parentPath.ensureBlock();
       parentPath.get("body").unshiftContainer("body", declar);
-      paramPath.replaceWith(uid);
+      paramPath.replaceWith(t.cloneNode(uid));
     }
   }
 
@@ -180,7 +180,10 @@ export default function(api, opts) {
                 );
                 // replace foo() with _foo
                 this.originalPath.replaceWith(
-                  t.variableDeclarator(this.originalPath.node.id, initRef),
+                  t.variableDeclarator(
+                    this.originalPath.node.id,
+                    t.cloneNode(initRef),
+                  ),
                 );
 
                 return;
@@ -247,8 +250,9 @@ export default function(api, opts) {
         const specifiers = [];
 
         for (const name in path.getOuterBindingIdentifiers(path)) {
-          const id = t.identifier(name);
-          specifiers.push(t.exportSpecifier(id, id));
+          specifiers.push(
+            t.exportSpecifier(t.identifier(name), t.identifier(name)),
+          );
         }
 
         // Split the declaration and export list into two declarations so that the variable
@@ -324,7 +328,9 @@ export default function(api, opts) {
           path.ensureBlock();
 
           node.body.body.unshift(
-            t.variableDeclaration("var", [t.variableDeclarator(left, temp)]),
+            t.variableDeclaration("var", [
+              t.variableDeclarator(left, t.cloneNode(temp)),
+            ]),
           );
 
           return;
@@ -344,7 +350,7 @@ export default function(api, opts) {
 
         node.body.body.unshift(
           t.variableDeclaration(node.left.kind, [
-            t.variableDeclarator(pattern, key),
+            t.variableDeclarator(pattern, t.cloneNode(key)),
           ]),
         );
       },

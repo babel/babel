@@ -118,7 +118,7 @@ export default function(api, options) {
           contextLiteral = t.thisExpression();
         }
 
-        node.arguments.unshift(contextLiteral);
+        node.arguments.unshift(t.cloneNode(contextLiteral));
       },
 
       NewExpression(path, state) {
