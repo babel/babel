@@ -73,6 +73,9 @@ tt.name.updateContext = function(prevType) {
       this.state.exprAllowed = true;
     }
   }
+  if (this.state.isIterator) {
+    this.state.isIterator = false;
+  }
 };
 
 tt.braceL.updateContext = function(prevType) {

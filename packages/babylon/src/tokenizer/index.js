@@ -1240,6 +1240,8 @@ export default class Tokenizer extends LocationParser {
       const ch = this.fullCharCodeAtPos();
       if (isIdentifierChar(ch)) {
         this.state.pos += ch <= 0xffff ? 1 : 2;
+      } else if (this.state.isIterator && ch === charCodes.atSign) {
+        this.state.pos += 1;
       } else if (ch === charCodes.backslash) {
         this.state.containsEsc = true;
 
@@ -1271,6 +1273,10 @@ export default class Tokenizer extends LocationParser {
     return word + this.input.slice(chunkStart, this.state.pos);
   }
 
+  isIterator(word): boolean {
+    return word === "@@iterator" || word === "@@asyncIterator";
+  }
+
   // Read an identifier or keyword token. Will check for reserved
   // words when necessary.
 
@@ -1284,6 +1290,14 @@ export default class Tokenizer extends LocationParser {
       }
 
       type = keywordTypes[word];
+    }
+
+    // Allow @@iterator and @@asyncIterator as a identifier only inside type
+    if (
+      this.state.isIterator &&
+      (!this.isIterator(word) || !this.state.inType)
+    ) {
+      this.raise(this.state.pos, `Invalid identifier ${word}`);
     }
 
     this.finishToken(type, word);

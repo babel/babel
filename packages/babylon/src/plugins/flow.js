@@ -8,6 +8,7 @@ import * as N from "../types";
 import type { Pos, Position } from "../util/location";
 import type State from "../tokenizer/state";
 import * as charCodes from "charcodes";
+import { isIteratorStart } from "../util/identifier";
 
 const primitiveTypes = [
   "any",
@@ -1626,8 +1627,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // ensure that inside flow types, we bypass the jsx parser plugin
     readToken(code: number): void {
+      const next = this.input.charCodeAt(this.state.pos + 1);
       if (this.state.inType && (code === 62 || code === 60)) {
         return this.finishOp(tt.relational, 1);
+      } else if (isIteratorStart(code, next)) {
+        this.state.isIterator = true;
+        return super.readWord(code);
       } else {
         return super.readToken(code);
       }
