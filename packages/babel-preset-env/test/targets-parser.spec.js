@@ -78,6 +78,22 @@ describe("getTargets", () => {
     });
   });
 
+  describe("modules", () => {
+    it("returns browsers supporting modules", () => {
+      assert.deepEqual(
+        getTargets({
+          modules: true,
+        }),
+        {
+          chrome: "61.0.0",
+          safari: "10.1.0",
+          ios: "10.3.0",
+          edge: "16.0.0",
+        },
+      );
+    });
+  });
+
   describe("node", () => {
     it("should return the current node version with option 'current'", () => {
       assert.deepEqual(
