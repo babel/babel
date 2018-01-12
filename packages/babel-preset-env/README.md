@@ -37,7 +37,7 @@ You may also target browsers supporting ES Modules (https://www.ecma-internation
   "presets": [
     ["@babel/preset-env", {
       "targets": {
-        "modules": true
+        "esmodules": true
       }
     }]
   ]

@@ -4,7 +4,7 @@ import browserslist from "browserslist";
 import semver from "semver";
 import { semverify, isUnreleasedVersion, getLowestUnreleased } from "./utils";
 import { objectToBrowserslist } from "./normalize-options";
-import browsersSupportingModules from "../data/built-in-modules";
+import browsersSupportESModules from "../data/built-in-modules";
 import type { Targets } from "./types";
 
 const browserNameMap = {
@@ -111,10 +111,10 @@ type ParsedResult = {
 const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
   const targetOpts: Targets = {};
 
-  // `modules` as a target indicates the specific set of browsers supporting ES Modules.
+  // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
   // These values OVERRIDE the `browsers` field.
-  if (targets.modules) {
-    targets.browsers = browsersSupportingModules;
+  if (targets.esmodules) {
+    targets.browsers = browsersSupportESModules;
   }
   // Parse browsers target via browserslist;
   const queryIsValid = isBrowsersQueryValid(targets.browsers);
@@ -128,7 +128,7 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
   }
   // Parse remaining targets
   const parsed = Object.keys(targets)
-    .filter(value => value !== "modules")
+    .filter(value => value !== "esmodules")
     .sort()
     .reduce(
       (results: ParsedResult, target: string): ParsedResult => {

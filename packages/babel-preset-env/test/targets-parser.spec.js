@@ -78,11 +78,11 @@ describe("getTargets", () => {
     });
   });
 
-  describe("modules", () => {
+  describe("esmodules", () => {
     it("returns browsers supporting modules", () => {
       assert.deepEqual(
         getTargets({
-          modules: true,
+          esmodules: true,
         }),
         {
           chrome: "61.0.0",
