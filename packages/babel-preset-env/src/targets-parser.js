@@ -4,7 +4,7 @@ import browserslist from "browserslist";
 import semver from "semver";
 import { semverify, isUnreleasedVersion, getLowestUnreleased } from "./utils";
 import { objectToBrowserslist } from "./normalize-options";
-import browsersSupportESModules from "../data/built-in-modules";
+import browserModulesData from "../data/built-in-modules.json";
 import type { Targets } from "./types";
 
 const browserNameMap = {
@@ -114,7 +114,10 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
   // These values OVERRIDE the `browsers` field.
   if (targets.esmodules) {
-    targets.browsers = browsersSupportESModules;
+    const supportsESModules = browserModulesData["es6.module"];
+    targets.browsers = Object.keys(supportsESModules)
+      .map(browser => `${browser} ${supportsESModules[browser]}`)
+      .join(", ");
   }
   // Parse browsers target via browserslist;
   const queryIsValid = isBrowsersQueryValid(targets.browsers);
