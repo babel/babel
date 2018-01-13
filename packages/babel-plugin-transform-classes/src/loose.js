@@ -73,10 +73,10 @@ export default class LooseClassTransformer extends VanillaTransformer {
   }
 
   _processSetGet(node, path) {
-    const nonConstructorMethod = path.container.filter(containedNode => {
+    const nonConstructorMethods = path.container.filter(containedNode => {
       return containedNode.kind !== "constructor";
     });
-    if (nonConstructorMethod.length === 1) {
+    if (nonConstructorMethods.length === 1) {
       this.body.push(
         objectDefineProperty({
           KIND: t.identifier(node.kind),
