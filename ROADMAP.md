@@ -23,8 +23,9 @@
 
 ### Build/publish workflow
 
-  - Guide on compiling/publishing ES2015+, .mjs, etc: https://twitter.com/philwalton/status/908082461799616512
-  - Support multi-build/folder outputs?
+- Guide on compiling/publishing ES2015+, .mjs, etc: https://twitter.com/philwalton/status/908082461799616512
+- Support multi-build/folder outputs based on ES version/browser/engines?
+- Includes making sure you can run Babel safely over node_modules [like with #6280](https://github.com/babel/babel/pull/6280). [create-react-app has an issue for this](https://github.com/facebookincubator/create-react-app/issues/3777)
 
 ### Codemods for TC39 Proposals
 
@@ -145,10 +146,12 @@ Can run these benchmarks for perf PRs, should track some over time.
 #### Better REPL
 
 - Dropdown examples/examples of syntax from github?
-- Import any package from npm
+- Import any package from npm (can give test examples for 3rd party plugins, debugging issues)
 - Run any plugin from npm
-- Create a plugin from the repl (merge into/with ASTExplorer?)
+- Create a plugin from the repl (can we merge it with ASTExplorer/codesandbox?), even publish, run from URL?
 - Import/Export a `.babelrc` file
+- Combine ^ with the ability to run the version of Babel in a PR/master.
+- Use plugin's tests in the repo as "examples" for docs.
 
 ### `babel-bot`
 
