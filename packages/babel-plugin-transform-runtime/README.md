@@ -85,7 +85,7 @@ require("@babel/core").transform("code", {
 
 Toggles whether or not inlined Babel helpers (`classCallCheck`, `extends`, etc.) are replaced with calls to `moduleName`.
 
-For more information, see [Helper aliasing](#helper-aliasing).
+For more information, see [Helper aliasing](#technical-details-helper-aliasing).
 
 ### `polyfill`
 
@@ -93,7 +93,7 @@ For more information, see [Helper aliasing](#helper-aliasing).
 
 Toggles whether or not new built-ins (`Promise`, `Set`, `Map`, etc.) are transformed to use a non-global polluting polyfill.
 
-For more information, see [`core-js` aliasing](#core-js-aliasing).
+For more information, see [`core-js` aliasing](#technical-detailscore-js-aliasing).
 
 ### `regenerator`
 
@@ -101,7 +101,7 @@ For more information, see [`core-js` aliasing](#core-js-aliasing).
 
 Toggles whether or not generator functions are transformed to use a regenerator runtime that does not pollute the global scope.
 
-For more information, see [Regenerator aliasing](#regenerator-aliasing).
+For more information, see [Regenerator aliasing](#technical-details-regenerator-aliasing).
 
 ### `moduleName`
 
