@@ -2,6 +2,10 @@
 
 > Not everything is set in stone or has an issue for it! Looking to post these to get more people involved or integrate with other projects.
 
+## Babel 7
+
+Mentioned these in [babel/notes](https://github.com/babel/notes/blob/master/2017/2017-12/dec-21.md#before-the-v7-final) and some of the [high priority items](https://github.com/babel/babel/labels/Priority%3A%20High).
+
 ## Ecosystem
 
 ### Remake `compat-table` used in preset-env
