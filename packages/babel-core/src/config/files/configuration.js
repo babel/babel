@@ -30,7 +30,7 @@ export function findBabelrc(
   filepath: string,
   envName: string,
 ): ConfigFile | null {
-  const dirname = path.dirname(filepath);
+  const dirname = filepath ? path.dirname(filepath) : process.cwd();
   let loc = dirname;
   while (true) {
     const conf = [

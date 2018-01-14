@@ -227,7 +227,7 @@ if (commander.deleteDirOnStart && !commander.outDir) {
 
 if (commander.settings) {
   printSettings();
-  process.exit(2);
+  process.exit();
 }
 
 if (errors.length) {

@@ -122,14 +122,14 @@ export function printSettings() {
       .split("\n")
       .join("\n")}`;
   const log = [];
-  log.push("-------Babel Settings--------");
+  log.push("Babel Settings :- ");
   log.push(`Node version: ${indent(process.versions.node)}`);
   log.push(`Npm version: ${indent(child.execSync("npm -v").toString())}`);
 
   if (hasYarn()) {
     log.push(`Yarn version: ${indent(child.execSync("yarn -v").toString())}`);
   }
-  log.push("-------Babel packages--------");
+  log.push("Babel packages :- ");
   const packages = child
     .execSync("npm list --silent | grep babel")
     .toString()
@@ -139,7 +139,25 @@ export function printSettings() {
       log.push(packages[i]);
     }
   }
-  log.push("-------Babel presets--------");
-  log.push("-------Babel plugins--------");
+  log.push("Babel presets :- ");
+  const babelrc = babel.findBabelrc();
+  const presets = babelrc.options.presets;
+  for (let i = 0; i < presets.length; i++) {
+    if (Array.isArray(presets[i])) {
+      log.push(presets[i][0]);
+    } else {
+      log.push(presets[i]);
+    }
+  }
+
+  log.push("Babel plugins :- ");
+  const plugins = babelrc.options.plugins;
+  for (let i = 0; i < plugins.length; i++) {
+    if (Array.isArray(plugins[i])) {
+      log.push(plugins[i][0]);
+    } else {
+      log.push(plugins[i]);
+    }
+  }
   console.log(log.join("\n") + "\n");
 }
