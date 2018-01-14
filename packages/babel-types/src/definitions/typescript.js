@@ -313,7 +313,7 @@ defineType("TSTypeAliasDeclaration", {
 });
 
 defineType("TSAsExpression", {
-  aliases: ["Expression"],
+  aliases: ["Expression", "LVal"],
   visitor: ["expression", "typeAnnotation"],
   fields: {
     expression: validateType("Expression"),

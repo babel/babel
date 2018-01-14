@@ -1812,7 +1812,7 @@ t.tSAsExpression(expression, typeAnnotation)
 
 See also `t.isTSAsExpression(node, opts)` and `t.assertTSAsExpression(node, opts)`.
 
-Aliases: `Expression`
+Aliases: `Expression`, `LVal`
 
  - `expression`: `Expression` (required)
  - `typeAnnotation`: `TSType` (required)
