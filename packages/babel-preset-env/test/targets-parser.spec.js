@@ -92,6 +92,21 @@ describe("getTargets", () => {
         },
       );
     });
+
+    it("returns browser supporting modules, overriding browsers field", () => {
+      assert.deepEqual(
+        getTargets({
+          esmodules: true,
+          browsers: "ie 8",
+        }),
+        {
+          chrome: "61.0.0",
+          safari: "10.1.0",
+          ios: "10.3.0",
+          edge: "16.0.0",
+        },
+      );
+    });
   });
 
   describe("node", () => {
