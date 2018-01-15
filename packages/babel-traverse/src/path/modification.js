@@ -56,7 +56,7 @@ export function _containerInsert(from, nodes) {
   this.container.splice(from, 0, ...nodes);
   for (let i = 0; i < nodes.length; i++) {
     const to = from + i;
-    const path = this.getSibling(`${to}`);
+    const path = this.getSibling(to);
     paths.push(path);
 
     if (this.context && this.context.queue) {
