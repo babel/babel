@@ -1643,8 +1643,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseClassProperty(node: N.ClassProperty): N.ClassProperty {
-      if (this.eat(tt.bang)) {
-        node.exclamation = true;
+      if (!node.optional && this.eat(tt.bang)) {
+        node.definiteAssignment = true;
       }
 
       const type = this.tsTryParseTypeAnnotation();
@@ -1708,8 +1708,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // `let x: number;`
     parseVarHead(decl: N.VariableDeclarator): void {
       super.parseVarHead(decl);
-      if (this.eat(tt.bang)) {
-        decl.exclamation = true;
+      if (decl.id.type === "Identifier" && this.eat(tt.bang)) {
+        decl.definiteAssignment = true;
       }
 
       const type = this.tsTryParseTypeAnnotation();

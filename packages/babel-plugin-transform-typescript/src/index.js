@@ -80,7 +80,7 @@ export default function() {
       },
 
       VariableDeclarator({ node }) {
-        if (node.exclamation) node.exclamation = null;
+        if (node.definiteAssignment) node.definiteAssignment = null;
       },
 
       ClassMethod(path) {
@@ -158,7 +158,7 @@ export default function() {
         if (node.abstract) node.abstract = null;
         if (node.readonly) node.readonly = null;
         if (node.optional) node.optional = null;
-        if (node.exclamation) node.exclamation = null;
+        if (node.definiteAssignment) node.definiteAssignment = null;
         if (node.typeAnnotation) node.typeAnnotation = null;
       },
 

@@ -328,7 +328,7 @@
                 "name": "x"
               },
               "computed": false,
-              "exclamation": true,
+              "definiteAssignment": true,
               "value": null
             },
             {
@@ -364,7 +364,7 @@
                 "name": "x"
               },
               "computed": false,
-              "exclamation": true,
+              "definiteAssignment": true,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start": 73,

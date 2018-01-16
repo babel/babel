@@ -328,7 +328,7 @@ export type VariableDeclarator = NodeBase & {
   init: ?Expression,
 
   // TypeScript only:
-  exclamation?: true,
+  definiteAssignment?: true,
 };
 
 // Misc
@@ -687,7 +687,7 @@ export type ClassProperty = ClassMemberBase & {
 
   // TypeScript only: (TODO: Not in spec)
   readonly?: true,
-  exclamation?: true,
+  definiteAssignment?: true,
 };
 
 export type ClassPrivateProperty = NodeBase & {
