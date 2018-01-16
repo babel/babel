@@ -796,16 +796,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsTryParseTypeArgumentsInExpression(): ?N.TsTypeParameterInstantiation {
       return this.tsTryParseAndCatch(() => {
-        const res: N.TsTypeParameterInstantiation = this.startNode();
-        const typeArguments = this.tsExpectLessThanThenParseInType(() =>
-          this.tsParseDelimitedList(
-            "TypeParametersOrArguments",
-            this.tsParseType.bind(this),
-          ),
-        );
-        this.expectRelational(">");
-        res.params = typeArguments;
-        this.finishNode(res, "TSTypeParameterInstantiation");
+        const res = this.tsParseTypeArguments();
         this.expect(tt.parenL);
         return res;
       });
@@ -885,13 +876,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.tsInType(() => {
         cb();
         return this.tsParseType();
-      });
-    }
-
-    tsExpectLessThanThenParseInType<T>(cb: () => T): T {
-      return this.tsInType(() => {
-        this.expectRelational("<");
-        return cb();
       });
     }
 
@@ -1215,12 +1199,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseTypeArguments(): N.TsTypeParameterInstantiation {
       const node = this.startNode();
-      node.params = this.tsExpectLessThanThenParseInType(() =>
-        this.tsParseDelimitedList(
+      node.params = this.tsInType(() => {
+        this.expectRelational("<");
+        return this.tsParseDelimitedList(
           "TypeParametersOrArguments",
           this.tsParseType.bind(this),
-        ),
-      );
+        );
+      });
       this.expectRelational(">");
       return this.finishNode(node, "TSTypeParameterInstantiation");
     }
