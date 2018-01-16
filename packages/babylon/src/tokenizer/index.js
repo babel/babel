@@ -1280,7 +1280,7 @@ export default class Tokenizer extends LocationParser {
     return word + this.input.slice(chunkStart, this.state.pos);
   }
 
-  isIterator(word): boolean {
+  isIterator(word: string): boolean {
     return word === "@@iterator" || word === "@@asyncIterator";
   }
 
