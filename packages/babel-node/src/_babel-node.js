@@ -5,7 +5,6 @@ import path from "path";
 import repl from "repl";
 import * as babel from "@babel/core";
 import vm from "vm";
-import "@babel/polyfill";
 import register from "@babel/register";
 
 import pkg from "../package.json";
@@ -41,11 +40,20 @@ program.option(
 );
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
+program.option(
+  "-n, --nopolyfill [script]",
+  "Skip automatic inclusion of babel-polyfill",
+  false,
+);
 /* eslint-enable max-len */
 
 program.version(pkg.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
+
+if (!program.nopolyfill) {
+  require("@babel/polyfill");
+}
 
 register({
   extensions: program.extensions,
