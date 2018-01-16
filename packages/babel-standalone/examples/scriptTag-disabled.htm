@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>babel-standalone example - Script tag</title>
+</head>
+<body>
+  <pre id="output">This line should not be overwritten!</pre>
+
+  <script src="../babel.js"></script>
+  <script>Babel.disableScriptTags()</script>
+  <script type="text/babel">
+    const doStuff = () => {
+      document.getElementById('output').innerHTML = `I did an evil operation!`;
+    };
+    doStuff();
+  </script>
+</body>
+</html>

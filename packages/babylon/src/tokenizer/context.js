@@ -73,6 +73,9 @@ tt.name.updateContext = function(prevType) {
       this.state.exprAllowed = true;
     }
   }
+  if (this.state.isIterator) {
+    this.state.isIterator = false;
+  }
 };
 
 tt.braceL.updateContext = function(prevType) {
@@ -103,8 +106,8 @@ tt.incDec.updateContext = function() {
   // tokExprAllowed stays unchanged
 };
 
-tt._function.updateContext = function() {
-  if (this.curContext() !== types.braceStatement) {
+tt._function.updateContext = function(prevType) {
+  if (this.state.exprAllowed && !this.braceIsBlock(prevType)) {
     this.state.context.push(types.functionExpression);
   }
 

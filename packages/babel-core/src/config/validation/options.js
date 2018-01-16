@@ -5,9 +5,11 @@ import {
   assertString,
   assertBoolean,
   assertObject,
+  assertArray,
   assertInputSourceMap,
   assertIgnoreList,
   assertPluginList,
+  assertConfigApplicableTest,
   assertFunction,
   assertSourceMaps,
   assertCompact,
@@ -44,6 +46,22 @@ const NONPRESET_VALIDATORS: ValidatorSet = {
     $PropertyType<ValidatedOptions, "ignore">,
   >),
   only: (assertIgnoreList: Validator<$PropertyType<ValidatedOptions, "only">>),
+  overrides: (assertOverridesList: Validator<
+    $PropertyType<ValidatedOptions, "overrides">,
+  >),
+
+  // We could limit these to 'overrides' blocks, but it's not clear why we'd
+  // bother, when the ability to limit a config to a specific set of files
+  // is a fairly general useful feature.
+  test: (assertConfigApplicableTest: Validator<
+    $PropertyType<ValidatedOptions, "test">,
+  >),
+  include: (assertConfigApplicableTest: Validator<
+    $PropertyType<ValidatedOptions, "include">,
+  >),
+  exclude: (assertConfigApplicableTest: Validator<
+    $PropertyType<ValidatedOptions, "exclude">,
+  >),
 };
 
 const COMMON_VALIDATORS: ValidatorSet = {
@@ -142,6 +160,12 @@ export type ValidatedOptions = {
   env?: EnvSet<ValidatedOptions>,
   ignore?: IgnoreList,
   only?: IgnoreList,
+  overrides?: OverridesList,
+
+  // Generally verify if a given config object should be applied to the given file.
+  test?: ConfigApplicableTest,
+  include?: ConfigApplicableTest,
+  exclude?: ConfigApplicableTest,
 
   presets?: PluginList,
   plugins?: PluginList,
@@ -196,12 +220,15 @@ export type PluginItem =
   | [PluginTarget, PluginOptions, string];
 export type PluginList = $ReadOnlyArray<PluginItem>;
 
+export type OverridesList = Array<ValidatedOptions>;
+export type ConfigApplicableTest = IgnoreItem | Array<IgnoreItem>;
+
 export type SourceMapsOption = boolean | "inline" | "both";
 export type SourceTypeOption = "module" | "script" | "unambiguous";
 export type CompactOption = boolean | "auto";
 export type RootInputSourceMapOption = {} | boolean;
 
-export type OptionsType = "arguments" | "file" | "env" | "preset";
+export type OptionsType = "arguments" | "file" | "env" | "preset" | "override";
 
 export function validate(type: OptionsType, opts: {}): ValidatedOptions {
   assertNoDuplicateSourcemap(opts);
@@ -215,6 +242,12 @@ export function validate(type: OptionsType, opts: {}): ValidatedOptions {
     }
     if (type === "env" && key === "env") {
       throw new Error(`.${key} is not allowed inside another env block`);
+    }
+    if (type === "env" && key === "overrides") {
+      throw new Error(`.${key} is not allowed inside an env block`);
+    }
+    if (type === "override" && key === "overrides") {
+      throw new Error(`.${key} is not allowed inside an overrides block`);
     }
 
     const validator =
@@ -265,4 +298,17 @@ function assertEnvSet(key: string, value: mixed): EnvSet<ValidatedOptions> {
     }
   }
   return (obj: any);
+}
+
+function assertOverridesList(key: string, value: mixed): OverridesList {
+  const arr = assertArray(key, value);
+  if (arr) {
+    for (const [index, item] of arr.entries()) {
+      const env = assertObject(`${index}`, item);
+      if (!env) throw new Error(`.${key}[${index}] must be an object`);
+
+      validate("override", env);
+    }
+  }
+  return (arr: any);
 }

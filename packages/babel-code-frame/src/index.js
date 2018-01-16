@@ -190,7 +190,7 @@ export function codeFrameColumns(
     (opts.highlightCode && Chalk.supportsColor) || opts.forceColor;
   let chalk = Chalk;
   if (opts.forceColor) {
-    chalk = new Chalk.constructor({ enabled: true });
+    chalk = new Chalk.constructor({ enabled: true, level: 1 });
   }
   const maybeHighlight = (chalkFn, string) => {
     return highlighted ? chalkFn(string) : string;
