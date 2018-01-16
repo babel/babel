@@ -64,6 +64,8 @@ function keywordTypeFromName(
 
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
+    +jsxTagStartToRelational: () => void;
+
     tsIsIdentifier(): boolean {
       // TODO: actually a bit more complex in TypeScript, but shouldn't matter.
       // See https://github.com/Microsoft/TypeScript/issues/15008
@@ -270,8 +272,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSTypeParameter");
     }
 
+    tsIsStartOfTypeParameters(): boolean {
+      return this.isRelational("<") || this.match(tt.jsxTagStart);
+    }
+
     tsTryParseTypeParameters(): ?N.TsTypeParameterDeclaration {
-      if (this.isRelational("<")) {
+      if (this.tsIsStartOfTypeParameters()) {
         return this.tsParseTypeParameters();
       }
     }
@@ -279,7 +285,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseTypeParameters() {
       const node: N.TsTypeParameterDeclaration = this.startNode();
 
-      if (this.isRelational("<") || this.match(tt.jsxTagStart)) {
+      // In case the first token of the type has been parsed as a JSX tag
+      // start, we need to translate it.
+      if (this.match(tt.jsxTagStart)) {
+        this.jsxTagStartToRelational();
+      }
+
+      if (this.isRelational("<")) {
         this.next();
       } else {
         this.unexpected();
@@ -402,7 +414,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTypeMember(): N.TsTypeElement {
-      if (this.match(tt.parenL) || this.isRelational("<")) {
+      if (this.match(tt.parenL) || this.tsIsStartOfTypeParameters()) {
         return this.tsParseSignatureMember("TSCallSignatureDeclaration");
       }
       if (
@@ -425,7 +437,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsIsStartOfConstructSignature() {
       this.next();
-      return this.match(tt.parenL) || this.isRelational("<");
+      return this.match(tt.parenL) || this.tsIsStartOfTypeParameters();
     }
 
     tsParseTypeLiteral(): N.TsTypeLiteral {
@@ -669,7 +681,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsIsStartOfFunctionType() {
-      if (this.isRelational("<")) {
+      if (this.tsIsStartOfTypeParameters()) {
         return true;
       }
       return (
@@ -1289,7 +1301,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.finishNode(nonNullExpression, "TSNonNullExpression");
       }
 
-      if (!noCalls && this.isRelational("<")) {
+      if (!noCalls && this.tsIsStartOfTypeParameters()) {
         if (this.atPossibleAsync(base)) {
           // Almost certainly this is a generic async function `async <T>() => ...
           // But it might be a call with a type argument `async<T>();`
@@ -1744,11 +1756,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
 
           this.state = state;
-          // Pop the context added by the jsxTagStart.
-          assert(this.curContext() === ct.j_oTag);
-          this.state.context.pop();
-          assert(this.curContext() === ct.j_expr);
-          this.state.context.pop();
+          this.jsxTagStartToRelational();
           jsxError = err;
         }
       }
@@ -1757,7 +1765,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return super.parseMaybeAssign(...args);
       }
 
-      // Either way, we're looking at a '<': tt.jsxTagStart or relational.
+      // ASSERT: this.isRelational("<")
 
       let arrowExpression;
       let typeParameters: N.TsTypeParameterDeclaration;
@@ -1928,7 +1936,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // === === === === === === === === === === === === === === === ===
 
     isClassMethod(): boolean {
-      return this.isRelational("<") || super.isClassMethod();
+      return this.tsIsStartOfTypeParameters() || super.isClassMethod();
     }
 
     isClassProperty(): boolean {

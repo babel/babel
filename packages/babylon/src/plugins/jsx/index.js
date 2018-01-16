@@ -71,8 +71,26 @@ function getQualifiedJSXName(
   throw new Error("Node had unexpected type: " + object.type);
 }
 
+function assert(x: boolean): void {
+  if (!x) {
+    throw new Error("Assert fail");
+  }
+}
+
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
+    jsxTagStartToRelational() {
+      assert(this.match(tt.jsxTagStart));
+      this.state.type = tt.relational;
+      this.state.value = "<";
+
+      // Pop the context added by the jsxTagStart.
+      assert(this.curContext() === tc.j_oTag);
+      this.state.context.pop();
+      assert(this.curContext() === tc.j_expr);
+      this.state.context.pop();
+    }
+
     // Reads inline JSX contents token.
 
     jsxReadToken(): void {
