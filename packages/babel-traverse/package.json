@@ -10,6 +10,7 @@
   "dependencies": {
     "@babel/code-frame": "7.0.0-beta.37",
     "@babel/helper-function-name": "7.0.0-beta.37",
+    "@babel/generator": "7.0.0-beta.37",
     "@babel/types": "7.0.0-beta.37",
     "babylon": "7.0.0-beta.37",
     "debug": "^3.0.1",
@@ -18,7 +19,6 @@
     "lodash": "^4.2.0"
   },
   "devDependencies": {
-    "@babel/generator": "7.0.0-beta.37",
     "@babel/helper-plugin-test-runner": "7.0.0-beta.37"
   }
 }
