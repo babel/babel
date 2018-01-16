@@ -1,3 +1,5 @@
+import assert from "assert";
+
 export default function transpileEnum(path, t) {
   const { node } = path;
   if (node.declare) {
@@ -90,12 +92,12 @@ function enumFill(path, t, id) {
  *     Z = X | Y,
  *   }
  */
-type PreviousEnumMembers = { [name: string]: number | string | undefined };
+type PreviousEnumMembers = { [name: string]: number | string };
 
 function translateEnumValues(path, t) {
   const seen: PreviousEnumMembers = Object.create(null);
   // Start at -1 so the first enum member is its increment, 0.
-  let prev: number | undefined = -1;
+  let prev: number | typeof undefined = -1;
   return path.node.members.map(member => {
     const name = t.isIdentifier(member.id) ? member.id.name : member.id.value;
     const initializer = member.initializer;
@@ -108,6 +110,7 @@ function translateEnumValues(path, t) {
           value = t.numericLiteral(constValue);
           prev = constValue;
         } else {
+          assert(typeof constValue === "string");
           value = t.stringLiteral(constValue);
           prev = undefined;
         }
@@ -133,18 +136,19 @@ function translateEnumValues(path, t) {
 function evaluate(
   expr,
   seen: PreviousEnumMembers,
-): number | string | undefined {
+): number | string | typeof undefined {
+  if (expr.type === "StringLiteral") {
+    return expr.value;
+  }
   return evalConstant(expr);
 
-  function evalConstant(expr): number | string | undefined {
+  function evalConstant(expr): number | typeof undefined {
     switch (expr.type) {
       case "UnaryExpression":
         return evalUnaryExpression(expr);
       case "BinaryExpression":
         return evalBinaryExpression(expr);
       case "NumericLiteral":
-        return expr.value;
-      case "StringLiteral":
         return expr.value;
       case "ParenthesizedExpression":
         return evalConstant(expr.expression);
@@ -155,9 +159,12 @@ function evaluate(
     }
   }
 
-  function evalUnaryExpression({ argument, operator }): number | undefined {
+  function evalUnaryExpression({
+    argument,
+    operator,
+  }): number | typeof undefined {
     const value = evalConstant(argument);
-    if (typeof value !== "number") {
+    if (value === undefined) {
       return undefined;
     }
 
@@ -173,13 +180,13 @@ function evaluate(
     }
   }
 
-  function evalBinaryExpression(expr): number | undefined {
+  function evalBinaryExpression(expr): number | typeof undefined {
     const left = evalConstant(expr.left);
-    if (typeof left !== "number") {
+    if (left === undefined) {
       return undefined;
     }
     const right = evalConstant(expr.right);
-    if (typeof right !== "number") {
+    if (right === undefined) {
       return undefined;
     }
 
