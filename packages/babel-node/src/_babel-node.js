@@ -41,7 +41,7 @@ program.option(
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
 program.option(
-  "-n, --nopolyfill [script]",
+  "-n, --no-polyfill [script]",
   "Skip automatic inclusion of babel-polyfill",
   false,
 );
@@ -51,7 +51,7 @@ program.version(pkg.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
 
-if (!program.nopolyfill) {
+if (program.polyfill) {
   require("@babel/polyfill");
 }
 
