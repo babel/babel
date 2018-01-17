@@ -128,7 +128,7 @@ describe("getTargets", () => {
       assert.deepEqual(
         getTargets({
           esmodules: true,
-          browsers: "ie 11",
+          browsers: "ie 10",
           ie: 11,
         }),
         {
