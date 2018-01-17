@@ -417,6 +417,14 @@ defineType("UnionTypeAnnotation", {
   },
 });
 
+defineType("Variance", {
+  aliases: ["Flow"],
+  builder: ["kind"],
+  fields: {
+    kind: validate(assertOneOf("minus", "plus")),
+  },
+});
+
 defineType("VoidTypeAnnotation", {
   aliases: ["Flow", "FlowType", "FlowBaseAnnotation"],
 });

@@ -1,24 +1,22 @@
 "use strict";
 
 const util = require("util");
-const path = require("path");
-const fs = require("fs");
+const utils = require("./utils");
 
-const types = require("../packages/babel-types");
+const types = require("../../packages/babel-types");
 
-const readmePath = path.join(
-  __dirname,
-  "..",
-  "packages",
-  "babel-types",
-  "README.md"
-);
-const readmeSrc = fs.readFileSync(readmePath, "utf8");
 const readme = [
-  readmeSrc.split("<!-- begin generated section -->")[0].trim(),
-  "",
-  "<!-- begin generated section -->",
-  "",
+  `# @babel/types
+
+> This module contains methods for building ASTs manually and for checking the types of AST nodes.
+
+## Install
+
+\`\`\`sh
+npm install --save-dev @babel/types
+\`\`\`
+
+## API`,
 ];
 
 const customTypes = {
@@ -38,40 +36,6 @@ const customTypes = {
     key: "if computed then `Expression` else `Identifier | Literal`",
   },
 };
-function getType(validator) {
-  if (validator.type) {
-    return validator.type;
-  } else if (validator.oneOfNodeTypes) {
-    return validator.oneOfNodeTypes.join(" | ");
-  } else if (validator.oneOfNodeOrValueTypes) {
-    return validator.oneOfNodeOrValueTypes.join(" | ");
-  } else if (validator.oneOf) {
-    return validator.oneOf.map(val => util.inspect(val)).join(" | ");
-  } else if (validator.chainOf) {
-    if (
-      validator.chainOf.length === 2 &&
-      validator.chainOf[0].type === "array" &&
-      validator.chainOf[1].each
-    ) {
-      return "Array<" + getType(validator.chainOf[1].each) + ">";
-    }
-    if (
-      validator.chainOf.length === 2 &&
-      validator.chainOf[0].type === "string" &&
-      validator.chainOf[1].oneOf
-    ) {
-      return validator.chainOf[1].oneOf
-        .map(function(val) {
-          return JSON.stringify(val);
-        })
-        .join(" | ");
-    }
-  }
-  const err = new Error("Unrecognised validator type");
-  err.code = "UNEXPECTED_VALIDATOR_TYPE";
-  err.validator = validator;
-  throw err;
-}
 Object.keys(types.BUILDER_KEYS)
   .sort()
   .forEach(function(key) {
@@ -79,8 +43,7 @@ Object.keys(types.BUILDER_KEYS)
     readme.push("```javascript");
     readme.push(
       "t." +
-        key[0].toLowerCase() +
-        key.substr(1) +
+        utils.toFunctionName(key) +
         "(" +
         types.BUILDER_KEYS[key].join(", ") +
         ")"
@@ -123,7 +86,9 @@ Object.keys(types.BUILDER_KEYS)
           fieldDescription.push(`: ${customTypes[key][field]}`);
         } else if (validator) {
           try {
-            fieldDescription.push(": `" + getType(validator) + "`");
+            fieldDescription.push(
+              ": `" + utils.stringifyValidator(validator, "") + "`"
+            );
           } catch (ex) {
             if (ex.code === "UNEXPECTED_VALIDATOR_TYPE") {
               console.log(
@@ -148,12 +113,4 @@ Object.keys(types.BUILDER_KEYS)
     readme.push("");
   });
 
-readme.push(
-  "",
-  "<!-- end generated section -->",
-  "",
-  readmeSrc.split("<!-- end generated section -->")[1].trim()
-);
-
-fs.writeFileSync(readmePath, readme.join("\n"));
-// console.log(readme.join('\n'));
+process.stdout.write(readme.join("\n"));
