@@ -1,6 +1,9 @@
+import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { loose = false } = options;
   if (typeof loose !== "boolean") {
     throw new Error(`.loose must be a boolean or undefined`);
@@ -583,4 +586,4 @@ export default function(api, options) {
       },
     },
   };
-}
+});

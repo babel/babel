@@ -19,6 +19,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-unicode-property-regex",
   "bugs": "https://github.com/babel/babel/issues",
   "dependencies": {
+    "@babel/helper-plugin-utils": "7.0.0-beta.40",
     "@babel/helper-regex": "7.0.0-beta.40",
     "regexpu-core": "^4.1.3"
   },

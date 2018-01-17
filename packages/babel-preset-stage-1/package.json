@@ -8,6 +8,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-stage-1",
   "main": "lib/index.js",
   "dependencies": {
+    "@babel/helper-plugin-utils": "7.0.0-beta.40",
     "@babel/plugin-proposal-decorators": "7.0.0-beta.40",
     "@babel/plugin-proposal-do-expressions": "7.0.0-beta.40",
     "@babel/plugin-proposal-export-default-from": "7.0.0-beta.40",

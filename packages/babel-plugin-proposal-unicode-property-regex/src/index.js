@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import rewritePattern from "regexpu-core";
 import * as regex from "@babel/helper-regex";
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { useUnicodeFlag = true } = options;
   if (typeof useUnicodeFlag !== "boolean") {
     throw new Error(".useUnicodeFlag must be a boolean, or undefined");
@@ -24,4 +27,4 @@ export default function(api, options) {
       },
     },
   };
-}
+});

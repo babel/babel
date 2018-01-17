@@ -1,3 +1,4 @@
+import { declare } from "@babel/helper-plugin-utils";
 import { basename, extname } from "path";
 import {
   isModule,
@@ -30,7 +31,9 @@ const buildWrapper = template(`
   })
 `);
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const {
     globals,
     exactGlobals,
@@ -225,4 +228,4 @@ export default function(api, options) {
       },
     },
   };
-}
+});

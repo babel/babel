@@ -1,3 +1,4 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
 import { types as t } from "@babel/core";
 
@@ -19,7 +20,9 @@ interface State {
   programPath: any;
 }
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     inherits: syntaxTypeScript,
     visitor: {
@@ -276,4 +279,4 @@ export default function() {
     });
     return !sourceFileHasJsx;
   }
-}
+});

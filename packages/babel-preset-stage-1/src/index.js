@@ -1,3 +1,4 @@
+import { declare } from "@babel/helper-plugin-utils";
 import presetStage2 from "@babel/preset-stage-2";
 
 import transformDecorators from "@babel/plugin-proposal-decorators";
@@ -7,7 +8,9 @@ import transformPipelineOperator from "@babel/plugin-proposal-pipeline-operator"
 import transformNullishCoalescingOperator from "@babel/plugin-proposal-nullish-coalescing-operator";
 import transformDoExpressions from "@babel/plugin-proposal-do-expressions";
 
-export default function(context, opts = {}) {
+export default declare((api, opts) => {
+  api.assertVersion(7);
+
   let loose = false;
   let useBuiltIns = false;
 
@@ -36,4 +39,4 @@ export default function(context, opts = {}) {
       transformDoExpressions,
     ],
   };
-}
+});

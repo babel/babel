@@ -1,6 +1,9 @@
+import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { loose } = options;
 
   function getSpreadLiteral(spread, scope) {
@@ -156,4 +159,4 @@ export default function(api, options) {
       },
     },
   };
-}
+});

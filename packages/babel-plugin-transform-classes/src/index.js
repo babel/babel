@@ -1,3 +1,4 @@
+import { declare } from "@babel/helper-plugin-utils";
 import LooseTransformer from "./loose";
 import VanillaTransformer from "./vanilla";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
@@ -14,7 +15,9 @@ const builtinClasses = new Set([
   ...getBuiltinClasses("browser"),
 ]);
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { loose } = options;
   const Constructor = loose ? LooseTransformer : VanillaTransformer;
 
@@ -65,4 +68,4 @@ export default function(api, options) {
       },
     },
   };
-}
+});

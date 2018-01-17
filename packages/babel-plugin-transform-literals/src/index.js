@@ -1,4 +1,8 @@
-export default function() {
+import { declare } from "@babel/helper-plugin-utils";
+
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     visitor: {
       NumericLiteral({ node }) {
@@ -16,4 +20,4 @@ export default function() {
       },
     },
   };
-}
+});

@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import { types as t } from "@babel/core";
 
-export default function(api, opts) {
+export default declare((api, opts) => {
+  api.assertVersion(7);
+
   const { useBuiltIns = false, loose = false } = opts;
 
   if (typeof loose !== "boolean") {
@@ -404,4 +407,4 @@ export default function(api, opts) {
       },
     },
   };
-}
+});

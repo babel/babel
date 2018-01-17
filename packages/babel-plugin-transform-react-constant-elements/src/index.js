@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 
-export default function transformReactConstantElement(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { allowMutablePropsOnTags } = options;
 
   if (
@@ -111,4 +114,4 @@ export default function transformReactConstantElement(api, options) {
       },
     },
   };
-}
+});

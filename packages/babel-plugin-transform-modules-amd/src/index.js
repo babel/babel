@@ -1,3 +1,4 @@
+import { declare } from "@babel/helper-plugin-utils";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
@@ -14,7 +15,9 @@ const buildWrapper = template(`
   })
 `);
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { loose, allowTopLevelThis, strict, strictMode, noInterop } = options;
   return {
     visitor: {
@@ -97,4 +100,4 @@ export default function(api, options) {
       },
     },
   };
-}
+});

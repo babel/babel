@@ -1,3 +1,4 @@
+import { declare } from "@babel/helper-plugin-utils";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import { types as t } from "@babel/core";
 
@@ -14,7 +15,9 @@ function replacePropertySuper(path, node, scope, getObjectRef, file) {
   replaceSupers.replace();
 }
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     visitor: {
       ObjectExpression(path, state) {
@@ -47,4 +50,4 @@ export default function() {
       },
     },
   };
-}
+});

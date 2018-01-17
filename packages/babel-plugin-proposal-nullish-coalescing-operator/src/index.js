@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxNullishCoalescingOperator from "@babel/plugin-syntax-nullish-coalescing-operator";
 import { types as t } from "@babel/core";
 
-export default function(api, { loose = false }) {
+export default declare((api, { loose = false }) => {
+  api.assertVersion(7);
+
   return {
     inherits: syntaxNullishCoalescingOperator,
 
@@ -43,4 +46,4 @@ export default function(api, { loose = false }) {
       },
     },
   };
-}
+});

@@ -9,6 +9,7 @@
     "babel-plugin"
   ],
   "dependencies": {
+    "@babel/helper-plugin-utils": "7.0.0-beta.40",
     "@babel/helper-wrap-function": "7.0.0-beta.40",
     "@babel/plugin-syntax-function-sent": "7.0.0-beta.40"
   },

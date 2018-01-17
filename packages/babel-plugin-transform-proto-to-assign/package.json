@@ -11,6 +11,9 @@
   "dependencies": {
     "lodash": "^4.2.0"
   },
+  "dependencies": {
+    "@babel/helper-plugin-utils": "7.0.0-beta.40"
+  },
   "peerDependencies": {
     "@babel/core": "7.0.0-beta.40"
   },

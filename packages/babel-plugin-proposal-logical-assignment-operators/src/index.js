@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxLogicalAssignmentOperators from "@babel/plugin-syntax-logical-assignment-operators";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     inherits: syntaxLogicalAssignmentOperators,
 
@@ -39,4 +42,4 @@ export default function() {
       },
     },
   };
-}
+});

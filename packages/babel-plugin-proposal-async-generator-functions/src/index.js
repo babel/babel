@@ -1,8 +1,11 @@
+import { declare } from "@babel/helper-plugin-utils";
 import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
 import syntaxAsyncGenerators from "@babel/plugin-syntax-async-generators";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   const yieldStarVisitor = {
     Function(path) {
       path.skip();
@@ -33,4 +36,4 @@ export default function() {
       },
     },
   };
-}
+});

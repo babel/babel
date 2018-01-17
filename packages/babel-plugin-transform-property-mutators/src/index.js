@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import * as defineMap from "@babel/helper-define-map";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     visitor: {
       ObjectExpression(path, file) {
@@ -38,4 +41,4 @@ export default function() {
       },
     },
   };
-}
+});
