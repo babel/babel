@@ -101,9 +101,10 @@ export function unwrapFunctionEnvironment() {
 /**
  * Convert a given arrow function into a normal ES5 function expression.
  */
-export function arrowFunctionToExpression(
-  { allowInsertArrow = true, specCompliant = false } = {},
-) {
+export function arrowFunctionToExpression({
+  allowInsertArrow = true,
+  specCompliant = false,
+} = {}) {
   if (!this.isArrowFunctionExpression()) {
     throw this.buildCodeFrameError(
       "Cannot convert non-arrow function to a function expression.",
