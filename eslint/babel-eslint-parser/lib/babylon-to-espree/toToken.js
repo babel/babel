@@ -38,7 +38,8 @@ module.exports = function(token, tt, source) {
     type === tt.plusMin ||
     type === tt.modulo ||
     type === tt.exponent ||
-    type === tt.prefix ||
+    type === tt.bang ||
+    type === tt.tilde ||
     type === tt.doubleColon ||
     type.isAssign
   ) {

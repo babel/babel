@@ -48,12 +48,6 @@ function parseAndAssertSame(code) {
     assertImplementsAST(esAST, babylonAST);
   } catch (err) {
     var traversal = err.message.slice(3, err.message.indexOf(":"));
-    if (esAST.tokens) {
-      delete esAST.tokens;
-    }
-    if (babylonAST.tokens) {
-      delete babylonAST.tokens;
-    }
     err.message += unpad(`
       espree:
       ${util.inspect(lookup(esAST, traversal, 2), {
@@ -168,6 +162,14 @@ describe("babylon-to-espree", () => {
 
   it("simple expression", () => {
     parseAndAssertSame("a = 1");
+  });
+
+  it("logical NOT", () => {
+    parseAndAssertSame("!0");
+  });
+
+  it("bitwise NOT", () => {
+    parseAndAssertSame("~0");
   });
 
   it("class declaration", () => {
