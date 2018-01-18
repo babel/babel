@@ -9,14 +9,13 @@ function* foo() {
   return 42 |> (yield 10);
 }
 
-var fooGen;
 return Promise.all([result(), result2()]).then((results) => {
   var r = results[0];
   var r2 = results[1];
   assert.equal(r, 11);
   assert.equal(r2, 22);
 
-  fooGen = foo();
+  var fooGen = foo();
   var amount = fooGen.next().value;
   assert.equal(fooGen.next(x => x + amount).value, 52);
 });
