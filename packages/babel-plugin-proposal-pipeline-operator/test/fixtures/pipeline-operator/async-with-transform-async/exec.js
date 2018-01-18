@@ -10,7 +10,9 @@ function* foo() {
 }
 
 var fooGen;
-return Promise.all([result(), result2()]).then(([r, r2]) => {
+return Promise.all([result(), result2()]).then((results) => {
+  var r = results[0];
+  var r2 = results[1];
   assert.equal(r, 11);
   assert.equal(r2, 22);
 
