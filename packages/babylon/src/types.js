@@ -1149,7 +1149,7 @@ export type TsParenthesizedType = TsTypeBase & {
 
 export type TsTypeOperator = TsTypeBase & {
   type: "TSTypeOperator",
-  operator: "keyof",
+  operator: "keyof" | "unique",
   typeAnnotation: TsType,
 };
 
