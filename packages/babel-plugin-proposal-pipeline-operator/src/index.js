@@ -15,8 +15,8 @@ export default function() {
 
         let optimizeArrow =
           t.isArrowFunctionExpression(right) && t.isExpression(right.body);
-        const isAwait = t.isAwaitExpression(right);
-        const isYield = t.isYieldExpression(right);
+        const wasAwait = right.argument && right.argument.__wasAwait;
+        const isAwait = t.isAwaitExpression(right) || wasAwait;
         let param;
 
         if (optimizeArrow) {
@@ -26,7 +26,7 @@ export default function() {
           } else if (params.length > 0) {
             optimizeArrow = false;
           }
-        } else if (isAwait || isYield) {
+        } else if (isAwait) {
           right.argument = t.sequenceExpression([
             t.numericLiteral(0),
             right.argument,
@@ -51,8 +51,8 @@ export default function() {
 
         const call = optimizeArrow
           ? right.body
-          : isAwait || isYield
-            ? t[isAwait ? "awaitExpression" : "yieldExpression"](
+          : isAwait
+            ? t[wasAwait ? "yieldExpression" : "awaitExpression"](
                 t.callExpression(right.argument, [placeholder]),
               )
             : t.callExpression(right, [placeholder]);
