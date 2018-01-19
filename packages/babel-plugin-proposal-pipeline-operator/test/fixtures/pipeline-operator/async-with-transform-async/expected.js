@@ -1,7 +1,5 @@
 var incPromise = x => Promise.resolve(x + 1);
 
-var incFuncPromise = Promise.resolve(x => x + 10);
-
 var double = x => x * 2;
 
 var result =
@@ -35,5 +33,5 @@ function () {
 function* foo() {
   var _3;
 
-  return _3 = 42, (yield incFuncPromise)(_3);
+  return _3 = 42, (yield 10)(_3);
 }
