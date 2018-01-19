@@ -5,7 +5,6 @@ const assert = require("assert");
 
 const {
   checkDuplicateIncludeExcludes,
-  normalizePluginNames,
   validateBoolOption,
   validateIncludesAndExcludes,
   validateModulesOption,
@@ -32,10 +31,21 @@ describe("normalize-options", () => {
       };
       assert.throws(normalizeWithSameIncludes, Error);
     });
+  });
+
+  describe("RegExp include/excludes", () => {
+    it("should not allow invalid plugins in `include` and `exclude`", () => {
+      const normalizeWithInvalidPlugin = () => {
+        normalizeOptions.default({
+          include: ["invalid"],
+        });
+      };
+      assert.throws(normalizeWithInvalidPlugin, Error);
+    });
 
     it("should expand regular expressions in `include` and `exclude`", () => {
       const normalized = normalizeOptions.default({
-        include: ["transform-spread", "transform-class"],
+        include: ["^[a-z]*-spread", "transform-class"],
       });
       assert.deepEqual(normalized.include, [
         "transform-spread",
@@ -72,24 +82,6 @@ describe("normalize-options", () => {
           ["transform-regenerator", "map"],
         );
       }, Error);
-    });
-
-    it("should not throw if no duplicate names in both", function() {
-      assert.doesNotThrow(() => {
-        checkDuplicateIncludeExcludes(["transform-regenerator"], ["map"]);
-      }, Error);
-    });
-  });
-
-  describe("normalizePluginNames", function() {
-    it("should drop `babel-plugin-` prefix if needed", function() {
-      assert.deepEqual(
-        normalizePluginNames([
-          "babel-plugin-transform-object-super",
-          "transform-parameters",
-        ]),
-        ["transform-object-super", "transform-parameters"],
-      );
     });
 
     it("should not throw if no duplicate names in both", function() {
