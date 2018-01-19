@@ -15,7 +15,10 @@ export default function() {
 
         let optimizeArrow =
           t.isArrowFunctionExpression(right) && t.isExpression(right.body);
-        const wasAwait = right.argument && right.argument.__wasAwait;
+        const wasAwait =
+          t.isYieldExpression(right) &&
+          right.argument &&
+          right.argument.__wasAwait;
         const isAwait = t.isAwaitExpression(right) || wasAwait;
         let param;
 
