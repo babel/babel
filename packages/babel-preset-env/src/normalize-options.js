@@ -15,6 +15,38 @@ const validIncludesAndExcludes = new Set([
   ...defaultWebIncludes,
 ]);
 
+const validRegExp = (regexp: string): boolean => {
+  try {
+    new RegExp(regexp);
+    return true;
+  } catch (e) {
+    return false;
+  }
+};
+
+const expandIncludesAndExcludes = (
+  plugins: Array<string>,
+  type: string,
+): Array<string> => {
+  const invalidRegExp = plugins.filter(plugin => !validRegExp(plugin));
+
+  invariant(
+    invalidRegExp.length === 0,
+    `Invalid RegExp: The given regular expression '${invalidRegExp.join(
+      ", ",
+    )}' passed to the '${type}' option are not valid.`,
+  );
+
+  const validIncludesAndExcludesArray = Array.from(validIncludesAndExcludes);
+
+  const pluginRegExpList = plugins.map(plugin => new RegExp(plugin));
+
+  const pluginIsSpecified = plugin =>
+    !!pluginRegExpList.find(regexp => plugin.match(regexp));
+
+  return validIncludesAndExcludesArray.filter(pluginIsSpecified);
+};
+
 export const validateIncludesAndExcludes = (
   opts: Array<string> = [],
   type: string,
@@ -139,11 +171,15 @@ export const validateUseBuiltInsOption = (
 
 export default function normalizeOptions(opts: Options) {
   if (opts.exclude) {
-    opts.exclude = normalizePluginNames(opts.exclude);
+    opts.exclude = normalizePluginNames(
+      expandIncludesAndExcludes(opts.exclude),
+    );
   }
 
   if (opts.include) {
-    opts.include = normalizePluginNames(opts.include);
+    opts.include = normalizePluginNames(
+      expandIncludesAndExcludes(opts.include),
+    );
   }
 
   checkDuplicateIncludeExcludes(opts.include, opts.exclude);
