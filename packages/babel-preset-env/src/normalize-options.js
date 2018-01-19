@@ -41,10 +41,13 @@ const expandIncludesAndExcludes = (
 
   const pluginRegExpList = plugins.map(plugin => new RegExp(plugin));
 
-  const pluginIsSpecified = plugin =>
-    !!pluginRegExpList.find(regexp => plugin.match(regexp));
+  const selectPlugins = regexp =>
+    validIncludesAndExcludesArray.filter(item => item.match(regexp));
 
-  return validIncludesAndExcludesArray.filter(pluginIsSpecified);
+  const populatePlugins = (pluginList, regexp) =>
+    pluginList.concat(selectPlugins(regexp));
+
+  return pluginRegExpList.reduce(populatePlugins, []);
 };
 
 export const validateIncludesAndExcludes = (
@@ -171,14 +174,14 @@ export const validateUseBuiltInsOption = (
 
 export default function normalizeOptions(opts: Options) {
   if (opts.exclude) {
-    opts.exclude = normalizePluginNames(
-      expandIncludesAndExcludes(opts.exclude),
+    opts.exclude = expandIncludesAndExcludes(
+      normalizePluginNames(opts.exclude),
     );
   }
 
   if (opts.include) {
-    opts.include = normalizePluginNames(
-      expandIncludesAndExcludes(opts.include),
+    opts.include = expandIncludesAndExcludes(
+      normalizePluginNames(opts.include),
     );
   }
 

@@ -32,6 +32,16 @@ describe("normalize-options", () => {
       };
       assert.throws(normalizeWithSameIncludes, Error);
     });
+
+    it("should expand regular expressions in `include` and `exclude`", () => {
+      const normalized = normalizeOptions.default({
+        include: ["transform-spread", "transform-class"],
+      });
+      assert.deepEqual(normalized.include, [
+        "transform-spread",
+        "transform-classes",
+      ]);
+    });
   });
 
   describe("validateBoolOption", () => {
