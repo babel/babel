@@ -24,11 +24,28 @@ const validRegExp = (regexp: string): boolean => {
   }
 };
 
+const selectPlugins = (regexp: RegExp): Array<string> =>
+  Array.from(validIncludesAndExcludes).filter(item => item.match(regexp));
+
+const pluginToRegExp = (plugin: any): RegExp => {
+  return plugin instanceof RegExp
+    ? plugin
+    : new RegExp(normalizePluginName(plugin));
+};
+
+const populatePlugins = (
+  pluginList: Array<RegExp>,
+  regexp: RegExp,
+): Array<string> => pluginList.concat(selectPlugins(regexp));
+
+const isValidPlugin = (plugin: any): boolean =>
+  validRegExp(plugin) && selectPlugins(pluginToRegExp(plugin)).length > 0;
+
 const expandIncludesAndExcludes = (
   plugins: Array<string>,
   type: string,
 ): Array<string> => {
-  const invalidRegExp = plugins.filter(plugin => !validRegExp(plugin));
+  const invalidRegExp = plugins.filter(plugin => !isValidPlugin(plugin));
 
   invariant(
     invalidRegExp.length === 0,
@@ -37,17 +54,7 @@ const expandIncludesAndExcludes = (
     )}' passed to the '${type}' option are not valid.`,
   );
 
-  const validIncludesAndExcludesArray = Array.from(validIncludesAndExcludes);
-
-  const pluginRegExpList = plugins.map(plugin => new RegExp(plugin));
-
-  const selectPlugins = regexp =>
-    validIncludesAndExcludesArray.filter(item => item.match(regexp));
-
-  const populatePlugins = (pluginList, regexp) =>
-    pluginList.concat(selectPlugins(regexp));
-
-  return pluginRegExpList.reduce(populatePlugins, []);
+  return plugins.map(pluginToRegExp).reduce(populatePlugins, []);
 };
 
 export const validateIncludesAndExcludes = (
@@ -77,11 +84,8 @@ const validBrowserslistTargets = [
   ...Object.keys(browserslist.aliases),
 ];
 
-export const normalizePluginName = (plugin: string): string =>
+const normalizePluginName = (plugin: string): string =>
   plugin.replace(/^babel-plugin-/, "");
-
-export const normalizePluginNames = (plugins: Array<string>): Array<string> =>
-  plugins.map(normalizePluginName);
 
 export const checkDuplicateIncludeExcludes = (
   include: Array<string> = [],
@@ -174,15 +178,11 @@ export const validateUseBuiltInsOption = (
 
 export default function normalizeOptions(opts: Options) {
   if (opts.exclude) {
-    opts.exclude = expandIncludesAndExcludes(
-      normalizePluginNames(opts.exclude),
-    );
+    opts.exclude = expandIncludesAndExcludes(opts.exclude);
   }
 
   if (opts.include) {
-    opts.include = expandIncludesAndExcludes(
-      normalizePluginNames(opts.include),
-    );
+    opts.include = expandIncludesAndExcludes(opts.include);
   }
 
   checkDuplicateIncludeExcludes(opts.include, opts.exclude);
