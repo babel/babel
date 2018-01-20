@@ -201,7 +201,7 @@ export function codeFrameColumns(
 
   const lines = rawLines.split(NEWLINE);
   const { start, end, markerLines } = getMarkerLines(loc, lines, opts);
-  const hasColumns = typeof loc.start.column === "number";
+  const hasColumns = loc.start && typeof loc.start.column === "number";
 
   const numberMaxWidth = String(end).length;
 
