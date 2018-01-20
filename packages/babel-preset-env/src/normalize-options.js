@@ -31,9 +31,11 @@ const selectPlugins = (regexp: RegExp): Array<string> =>
   );
 
 const expandIncludesAndExcludes = (
-  plugins: Array<string>,
+  plugins: Array<string> = [],
   type: string,
 ): Array<string> => {
+  if (plugins.length === 0) return plugins;
+
   const selectedPlugins = plugins.map(plugin =>
     selectPlugins(pluginToRegExp(plugin)),
   );
@@ -150,20 +152,16 @@ export const validateUseBuiltInsOption = (
 };
 
 export default function normalizeOptions(opts: Options) {
-  if (opts.exclude) {
-    opts.exclude = expandIncludesAndExcludes(opts.exclude, "exclude");
-  }
+  const include = expandIncludesAndExcludes(opts.include, "include");
+  const exclude = expandIncludesAndExcludes(opts.exclude, "exclude");
 
-  if (opts.include) {
-    opts.include = expandIncludesAndExcludes(opts.include, "include");
-  }
-
-  checkDuplicateIncludeExcludes(opts.include, opts.exclude);
+  checkDuplicateIncludeExcludes(include, exclude);
 
   return {
     configPath: validateConfigPathOption(opts.configPath),
     debug: opts.debug,
-    exclude: opts.exclude,
+    include,
+    exclude,
     forceAllTransforms: validateBoolOption(
       "forceAllTransforms",
       opts.forceAllTransforms,
@@ -172,7 +170,6 @@ export default function normalizeOptions(opts: Options) {
     ignoreBrowserslistConfig: validateIgnoreBrowserslistConfig(
       opts.ignoreBrowserslistConfig,
     ),
-    include: opts.include,
     loose: validateBoolOption("loose", opts.loose, false),
     modules: validateModulesOption(opts.modules),
     shippedProposals: validateBoolOption(
