@@ -211,7 +211,7 @@ Enable more spec compliant, but potentially slower, transformations for any plug
 
 `boolean`, defaults to `false`.
 
-Enable "loose" transformations for any plugins in this preset that allow them.
+Enable ["loose" transformations](http://2ality.com/2015/12/babel6-loose-mode.html) for any plugins in this preset that allow them.
 
 ### `modules`
 
