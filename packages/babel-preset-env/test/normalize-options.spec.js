@@ -63,6 +63,16 @@ describe("normalize-options", () => {
         "es6.math.log2",
       ]);
     });
+
+    it("should not allow the same modules in `include` and `exclude`", () => {
+      const normalizeWithNonExistingPlugin = () => {
+        normalizeOptions.default({
+          include: ["es6.math.log2"],
+          exclude: ["es6.math.log"],
+        });
+      };
+      assert.throws(normalizeWithNonExistingPlugin, Error);
+    });
   });
 
   describe("validateBoolOption", () => {
