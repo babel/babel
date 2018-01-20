@@ -35,21 +35,32 @@ describe("normalize-options", () => {
 
   describe("RegExp include/excludes", () => {
     it("should not allow invalid plugins in `include` and `exclude`", () => {
-      const normalizeWithInvalidPlugin = () => {
+      const normalizeWithNonExistingPlugin = () => {
         normalizeOptions.default({
-          include: ["invalid"],
+          include: ["non-existing-plugin"],
         });
       };
-      assert.throws(normalizeWithInvalidPlugin, Error);
+      assert.throws(normalizeWithNonExistingPlugin, Error);
     });
 
     it("should expand regular expressions in `include` and `exclude`", () => {
       const normalized = normalizeOptions.default({
-        include: ["^[a-z]*-spread", "transform-class"],
+        include: ["^[a-z]*-spread", "babel-plugin-transform-classes"],
       });
       assert.deepEqual(normalized.include, [
         "transform-spread",
         "transform-classes",
+      ]);
+    });
+
+    it("should expand regular expressions in `include` and `exclude`", () => {
+      const normalized = normalizeOptions.default({
+        exclude: ["es6.math.log"],
+      });
+      assert.deepEqual(normalized.exclude, [
+        "es6.math.log1p",
+        "es6.math.log10",
+        "es6.math.log2",
       ]);
     });
   });
