@@ -26,19 +26,20 @@ const pluginToRegExp = (plugin: any): RegExp => {
 };
 
 const selectPlugins = (regexp: RegExp): Array<string> =>
-  Array.from(validIncludesAndExcludes).filter(item => item.match(regexp));
-
-const populatePlugins = (
-  pluginList: Array<RegExp>,
-  regexp: RegExp,
-): Array<string> => pluginList.concat(selectPlugins(regexp));
+  Array.from(validIncludesAndExcludes).filter(
+    item => regexp instanceof RegExp && item.match(regexp),
+  );
 
 const expandIncludesAndExcludes = (
   plugins: Array<string>,
   type: string,
 ): Array<string> => {
-  const pluginRegExpList = plugins.map(pluginToRegExp);
-  const invalidRegExpList = plugins.filter((p, i) => !pluginRegExpList[i]);
+  const selectedPlugins = plugins.map(plugin =>
+    selectPlugins(pluginToRegExp(plugin)),
+  );
+  const invalidRegExpList = plugins.filter(
+    (p, i) => selectedPlugins[i].length === 0,
+  );
 
   invariant(
     invalidRegExpList.length === 0,
@@ -48,7 +49,7 @@ const expandIncludesAndExcludes = (
     valid. Please check data/[plugin-features|built-in-features].js in babel-preset-env`,
   );
 
-  return pluginRegExpList.reduce(populatePlugins, []);
+  return [].concat(...selectedPlugins);
 };
 
 const validBrowserslistTargets = [
