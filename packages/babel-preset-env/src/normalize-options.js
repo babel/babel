@@ -15,59 +15,40 @@ const validIncludesAndExcludes = new Set([
   ...defaultWebIncludes,
 ]);
 
+const pluginToRegExp = (plugin: any): RegExp => {
+  try {
+    return plugin instanceof RegExp
+      ? plugin
+      : new RegExp(`^${normalizePluginName(plugin)}$`);
+  } catch (e) {
+    return null;
+  }
+};
+
 const selectPlugins = (regexp: RegExp): Array<string> =>
   Array.from(validIncludesAndExcludes).filter(item => item.match(regexp));
-
-const pluginToRegExp = (plugin: any): RegExp => {
-  return plugin instanceof RegExp
-    ? plugin
-    : new RegExp(`^${normalizePluginName(plugin)}$`);
-};
 
 const populatePlugins = (
   pluginList: Array<RegExp>,
   regexp: RegExp,
 ): Array<string> => pluginList.concat(selectPlugins(regexp));
 
-const isValidPlugin = (plugin: any): boolean =>
-  selectPlugins(pluginToRegExp(plugin)).length > 0;
-
 const expandIncludesAndExcludes = (
   plugins: Array<string>,
   type: string,
 ): Array<string> => {
-  const invalidRegExp = plugins.filter(plugin => !isValidPlugin(plugin));
+  const pluginRegExpList = plugins.map(pluginToRegExp);
+  const invalidRegExpList = plugins.filter((p, i) => !pluginRegExpList[i]);
 
   invariant(
-    invalidRegExp.length === 0,
-    `Invalid RegExp: The given regular expression '${invalidRegExp.join(
-      ", ",
-    )}' passed to the '${type}' option are not valid.`,
-  );
-
-  return plugins.map(pluginToRegExp).reduce(populatePlugins, []);
-};
-
-export const validateIncludesAndExcludes = (
-  opts: Array<string> = [],
-  type: string,
-): Array<string> => {
-  invariant(
-    Array.isArray(opts),
-    `Invalid Option: The '${type}' option must be an Array<String> of plugins/built-ins`,
-  );
-
-  const unknownOpts = opts.filter(opt => !validIncludesAndExcludes.has(opt));
-
-  invariant(
-    unknownOpts.length === 0,
-    `Invalid Option: The plugins/built-ins '${unknownOpts.join(
+    invalidRegExpList.length === 0,
+    `Invalid Option: The plugins/built-ins '${invalidRegExpList.join(
       ", ",
     )}' passed to the '${type}' option are not
     valid. Please check data/[plugin-features|built-in-features].js in babel-preset-env`,
   );
 
-  return opts;
+  return pluginRegExpList.reduce(populatePlugins, []);
 };
 
 const validBrowserslistTargets = [
@@ -169,11 +150,11 @@ export const validateUseBuiltInsOption = (
 
 export default function normalizeOptions(opts: Options) {
   if (opts.exclude) {
-    opts.exclude = expandIncludesAndExcludes(opts.exclude);
+    opts.exclude = expandIncludesAndExcludes(opts.exclude, "exclude");
   }
 
   if (opts.include) {
-    opts.include = expandIncludesAndExcludes(opts.include);
+    opts.include = expandIncludesAndExcludes(opts.include, "include");
   }
 
   checkDuplicateIncludeExcludes(opts.include, opts.exclude);
@@ -181,7 +162,7 @@ export default function normalizeOptions(opts: Options) {
   return {
     configPath: validateConfigPathOption(opts.configPath),
     debug: opts.debug,
-    exclude: validateIncludesAndExcludes(opts.exclude, "exclude"),
+    exclude: opts.exclude,
     forceAllTransforms: validateBoolOption(
       "forceAllTransforms",
       opts.forceAllTransforms,
@@ -190,7 +171,7 @@ export default function normalizeOptions(opts: Options) {
     ignoreBrowserslistConfig: validateIgnoreBrowserslistConfig(
       opts.ignoreBrowserslistConfig,
     ),
-    include: validateIncludesAndExcludes(opts.include, "include"),
+    include: opts.include,
     loose: validateBoolOption("loose", opts.loose, false),
     modules: validateModulesOption(opts.modules),
     shippedProposals: validateBoolOption(

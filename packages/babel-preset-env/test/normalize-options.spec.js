@@ -6,7 +6,6 @@ const assert = require("assert");
 const {
   checkDuplicateIncludeExcludes,
   validateBoolOption,
-  validateIncludesAndExcludes,
   validateModulesOption,
 } = normalizeOptions;
 
@@ -155,16 +154,6 @@ describe("normalize-options", () => {
     it("array option is invalid", () => {
       assert.throws(() => {
         assert(validateModulesOption([]));
-      }, Error);
-    });
-  });
-  describe("validateIncludesAndExcludes", function() {
-    it("should return empty arrays if undefined", function() {
-      assert.deepEqual(validateIncludesAndExcludes(), []);
-    });
-    it("should throw if not in features", function() {
-      assert.throws(() => {
-        validateIncludesAndExcludes(["asdf"]);
       }, Error);
     });
   });
