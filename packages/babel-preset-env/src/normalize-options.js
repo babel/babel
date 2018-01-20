@@ -15,15 +15,6 @@ const validIncludesAndExcludes = new Set([
   ...defaultWebIncludes,
 ]);
 
-const validRegExp = (regexp: string): boolean => {
-  try {
-    new RegExp(regexp);
-    return true;
-  } catch (e) {
-    return false;
-  }
-};
-
 const selectPlugins = (regexp: RegExp): Array<string> =>
   Array.from(validIncludesAndExcludes).filter(item => item.match(regexp));
 
@@ -39,8 +30,7 @@ const populatePlugins = (
 ): Array<string> => pluginList.concat(selectPlugins(regexp));
 
 const isValidPlugin = (plugin: any): boolean =>
-  validRegExp(plugin) &&
-  selectPlugins(`^${normalizePluginName(plugin)}$`).length > 0;
+  selectPlugins(pluginToRegExp(plugin)).length > 0;
 
 const expandIncludesAndExcludes = (
   plugins: Array<string>,
