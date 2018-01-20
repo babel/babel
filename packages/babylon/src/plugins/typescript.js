@@ -860,7 +860,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    tsEatThenParseType(token: TokenType): N.TsType | undefined {
+    tsEatThenParseType(token: TokenType): N.TsType | typeof undefined {
       return !this.match(token) ? undefined : this.tsNextThenParseType();
     }
 
