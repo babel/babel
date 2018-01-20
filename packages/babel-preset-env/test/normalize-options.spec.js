@@ -33,7 +33,7 @@ describe("normalize-options", () => {
     });
   });
 
-  describe("RegExp include/excludes", () => {
+  describe("RegExp include/exclude", () => {
     it("should not allow invalid plugins in `include` and `exclude`", () => {
       const normalizeWithNonExistingPlugin = () => {
         normalizeOptions.default({
@@ -55,7 +55,7 @@ describe("normalize-options", () => {
 
     it("should expand regular expressions in `include` and `exclude`", () => {
       const normalized = normalizeOptions.default({
-        exclude: ["es6.math.log"],
+        exclude: ["es6.math.log.*"],
       });
       assert.deepEqual(normalized.exclude, [
         "es6.math.log1p",
@@ -68,10 +68,19 @@ describe("normalize-options", () => {
       const normalizeWithNonExistingPlugin = () => {
         normalizeOptions.default({
           include: ["es6.math.log2"],
-          exclude: ["es6.math.log"],
+          exclude: ["es6.math.log.*"],
         });
       };
       assert.throws(normalizeWithNonExistingPlugin, Error);
+    });
+
+    it("should not do partial match if not explicitly defined `include` and `exclude`", () => {
+      const normalized = normalizeOptions.default({
+        include: ["es6.reflect.set-prototype-of"],
+        exclude: ["es6.reflect.set"],
+      });
+      assert.deepEqual(normalized.include, ["es6.reflect.set-prototype-of"]);
+      assert.deepEqual(normalized.exclude, ["es6.reflect.set"]);
     });
   });
 

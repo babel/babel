@@ -30,7 +30,7 @@ const selectPlugins = (regexp: RegExp): Array<string> =>
 const pluginToRegExp = (plugin: any): RegExp => {
   return plugin instanceof RegExp
     ? plugin
-    : new RegExp(normalizePluginName(plugin));
+    : new RegExp(`^${normalizePluginName(plugin)}$`);
 };
 
 const populatePlugins = (
@@ -39,7 +39,8 @@ const populatePlugins = (
 ): Array<string> => pluginList.concat(selectPlugins(regexp));
 
 const isValidPlugin = (plugin: any): boolean =>
-  validRegExp(plugin) && selectPlugins(pluginToRegExp(plugin)).length > 0;
+  validRegExp(plugin) &&
+  selectPlugins(`^${normalizePluginName(plugin)}$`).length > 0;
 
 const expandIncludesAndExcludes = (
   plugins: Array<string>,
