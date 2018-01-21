@@ -32,6 +32,7 @@ function getDefs(chalk) {
     invalid: chalk.white.bgRed.bold,
     gutter: chalk.grey,
     marker: chalk.red.bold,
+    message: chalk.red.bold,
   };
 }
 
@@ -200,16 +201,18 @@ export function codeFrameColumns(
 
   const lines = rawLines.split(NEWLINE);
   const { start, end, markerLines } = getMarkerLines(loc, lines, opts);
+  const hasColumns = loc.start && typeof loc.start.column === "number";
 
   const numberMaxWidth = String(end).length;
 
-  const frame = lines
+  let frame = lines
     .slice(start, end)
     .map((line, index) => {
       const number = start + 1 + index;
       const paddedNumber = ` ${number}`.slice(-numberMaxWidth);
       const gutter = ` ${paddedNumber} | `;
       const hasMarker = markerLines[number];
+      const lastMarkerLine = !markerLines[number + 1];
       if (hasMarker) {
         let markerLine = "";
         if (Array.isArray(hasMarker)) {
@@ -224,6 +227,10 @@ export function codeFrameColumns(
             markerSpacing,
             maybeHighlight(defs.marker, "^").repeat(numberOfMarkers),
           ].join("");
+
+          if (lastMarkerLine && opts.message) {
+            markerLine += " " + maybeHighlight(defs.message, opts.message);
+          }
         }
         return [
           maybeHighlight(defs.marker, ">"),
@@ -236,6 +243,10 @@ export function codeFrameColumns(
       }
     })
     .join("\n");
+
+  if (opts.message && !hasColumns) {
+    frame = `${" ".repeat(numberMaxWidth + 1)}${opts.message}\n${frame}`;
+  }
 
   if (highlighted) {
     return chalk.reset(frame);
