@@ -68,6 +68,7 @@ console.log(result);
 
 Toggles syntax highlighting the code as JavaScript for terminals.
 
+
 ### `linesAbove`
 
 `number`, defaults to `2`.
@@ -85,6 +86,21 @@ Adjust the number of lines to show below the error.
 `boolean`, defaults to `false`.
 
 Enable this to forcibly syntax highlight the code as JavaScript (for non-terminals); overrides `highlightCode`.
+
+### `message`
+
+`string`, otherwise nothing
+
+Pass in a string to be displayed inline (if possible) next to the highlighted
+location in the code. If it can't be positioned inline, it will be placed above
+the code frame.
+
+```
+1 | class Foo {
+> 2 |   constructor()
+  |                ^ Missing {
+3 | };
+```
 
 ## Upgrading from prior versions
 
