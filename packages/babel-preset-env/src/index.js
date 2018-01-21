@@ -183,6 +183,15 @@ export default function buildPreset(
     console.log("");
   }
 
+  if (optionsTargets && optionsTargets.esmodules && optionsTargets.browsers) {
+    console.log("");
+    console.log(
+      "@babel/preset-env: esmodules and browsers targets have been specified together.",
+    );
+    console.log(`\`browsers\` target, \`${optionsTargets.browsers}\` will be ignored.`);
+    console.log("");
+  }
+
   const targets = getTargets(optionsTargets, {
     ignoreBrowserslistConfig,
     configPath,
@@ -236,6 +245,7 @@ export default function buildPreset(
 
   if (debug) {
     console.log("@babel/preset-env: `DEBUG` option");
+    console.log(`\nUsing esmodules target: ${!!optionsTargets.esmodules}`);
     console.log("\nUsing targets:");
     console.log(JSON.stringify(prettifyTargets(targets), null, 2));
     console.log(`\nUsing modules transform: ${modules.toString()}`);
