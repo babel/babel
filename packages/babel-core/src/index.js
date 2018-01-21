@@ -12,6 +12,7 @@ export { getEnv } from "./config/helpers/environment";
 export * as types from "@babel/types";
 export { default as traverse } from "@babel/traverse";
 export { default as template } from "@babel/template";
+export { parse } from "babylon";
 
 import loadConfig from "./config";
 
