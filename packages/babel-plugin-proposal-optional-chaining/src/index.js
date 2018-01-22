@@ -10,11 +10,7 @@ export default function(api, options) {
     const nil = scope.buildUndefinedNode();
 
     let objectPath = path;
-    while (
-      objectPath.isMemberExpression() ||
-      objectPath.isCallExpression() ||
-      objectPath.isNewExpression()
-    ) {
+    while (objectPath.isMemberExpression() || objectPath.isCallExpression()) {
       const { node } = objectPath;
       if (node.optional) {
         optionals.push(node);
@@ -32,8 +28,7 @@ export default function(api, options) {
       node.optional = false;
 
       const isCall = t.isCallExpression(node);
-      const replaceKey =
-        isCall || t.isNewExpression(node) ? "callee" : "object";
+      const replaceKey = isCall ? "callee" : "object";
       const chain = node[replaceKey];
 
       let ref;
@@ -102,24 +97,20 @@ export default function(api, options) {
       const { parentPath } = path;
 
       if (path.key == "left" && parentPath.isAssignmentExpression()) {
-        return false;
+        throw path.buildCodeFrameError(
+          "Illegal optional chain in assignment expression",
+        );
       }
+      if (path.key == "argument" && parentPath.isUpdateExpression()) {
+        throw path.buildCodeFrameError(
+          "Illegal optional chain in update expression",
+        );
+      }
+
       if (path.key == "object" && parentPath.isMemberExpression()) {
         return false;
       }
-      if (
-        path.key == "callee" &&
-        (parentPath.isCallExpression() || parentPath.isNewExpression())
-      ) {
-        return false;
-      }
-      if (path.key == "argument" && parentPath.isUpdateExpression()) {
-        return false;
-      }
-      if (
-        path.key == "argument" &&
-        parentPath.isUnaryExpression({ operator: "delete" })
-      ) {
+      if (path.key == "callee" && parentPath.isCallExpression()) {
         return false;
       }
 
@@ -131,7 +122,7 @@ export default function(api, options) {
     inherits: syntaxOptionalChaining,
 
     visitor: {
-      "MemberExpression|NewExpression|CallExpression"(path) {
+      "MemberExpression|CallExpression"(path) {
         if (!path.node.optional) {
           return;
         }
