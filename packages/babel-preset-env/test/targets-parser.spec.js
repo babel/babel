@@ -78,6 +78,70 @@ describe("getTargets", () => {
     });
   });
 
+  describe("esmodules", () => {
+    it("returns browsers supporting modules", () => {
+      assert.deepEqual(
+        getTargets({
+          esmodules: true,
+        }),
+        {
+          chrome: "61.0.0",
+          safari: "10.1.0",
+          ios: "10.3.0",
+          edge: "16.0.0",
+        },
+      );
+    });
+
+    it("returns browsers supporting modules, ignoring browsers key", () => {
+      assert.deepEqual(
+        getTargets({
+          esmodules: true,
+          browsers: "ie 8",
+        }),
+        {
+          chrome: "61.0.0",
+          safari: "10.1.0",
+          ios: "10.3.0",
+          edge: "16.0.0",
+        },
+      );
+    });
+
+    it("returns browser supporting modules and keyed browser overrides", () => {
+      assert.deepEqual(
+        getTargets({
+          esmodules: true,
+          ie: 11,
+        }),
+        {
+          chrome: "61.0.0",
+          safari: "10.1.0",
+          ios: "10.3.0",
+          ie: "11.0.0",
+          edge: "16.0.0",
+        },
+      );
+    });
+
+    it("returns browser supporting modules and keyed browser overrides, ignoring browsers field", () => {
+      assert.deepEqual(
+        getTargets({
+          esmodules: true,
+          browsers: "ie 10",
+          ie: 11,
+        }),
+        {
+          chrome: "61.0.0",
+          safari: "10.1.0",
+          ios: "10.3.0",
+          ie: "11.0.0",
+          edge: "16.0.0",
+        },
+      );
+    });
+  });
+
   describe("node", () => {
     it("should return the current node version with option 'current'", () => {
       assert.deepEqual(
