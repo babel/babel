@@ -609,8 +609,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return type;
     }
 
-    tsParseTypeOperator(operator: "keyof"): N.TsTypeOperator {
-      const node = this.startNode();
+    tsParseTypeOperator(operator: "keyof" | "unique"): N.TsTypeOperator {
+      const node: N.TsTypeOperator = this.startNode();
       this.expectContextual(operator);
       node.operator = operator;
       node.typeAnnotation = this.tsParseTypeOperatorOrHigher();
@@ -618,10 +618,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTypeOperatorOrHigher(): N.TsType {
-      if (this.isContextual("keyof")) {
-        return this.tsParseTypeOperator("keyof");
-      }
-      return this.tsParseArrayTypeOrHigher();
+      const operator = ["keyof", "unique"].find(kw => this.isContextual(kw));
+      return operator
+        ? this.tsParseTypeOperator(operator)
+        : this.tsParseArrayTypeOrHigher();
     }
 
     tsParseUnionOrIntersectionType(
