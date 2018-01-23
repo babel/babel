@@ -113,6 +113,12 @@ export default function(api, options) {
       if (path.key == "callee" && parentPath.isCallExpression()) {
         return false;
       }
+      if (
+        path.key == "argument" &&
+        parentPath.isUnaryExpression({ operator: "delete" })
+      ) {
+        return false;
+      }
 
       return true;
     });
