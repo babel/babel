@@ -1,3 +1,15 @@
-delete a?.b
+"use strict";
 
-delete a?.b?.c?.d
+const obj = {
+  a: {
+    b: 0,
+  },
+};
+
+let test = delete obj?.a?.b;
+
+test = delete obj?.a.b;
+
+test = delete obj?.b?.b;
+
+delete obj?.a;
