@@ -377,6 +377,8 @@ class BlockScoping {
 
     const needsClosure = this.getLetReferences();
 
+    this.checkConstants();
+
     // this is a block within a `Function/Program` so we can safely leave it be
     if (t.isFunction(this.parent) || t.isProgram(this.block)) {
       this.updateScopeInfo();
@@ -399,7 +401,7 @@ class BlockScoping {
     }
   }
 
-  updateScopeInfo(wrappedInClosure) {
+  checkConstants() {
     const scope = this.scope;
     const state = this.state;
 
@@ -429,6 +431,10 @@ class BlockScoping {
         }
       }
     }
+  }
+
+  updateScopeInfo(wrappedInClosure) {
+    const scope = this.scope;
 
     const parentScope = scope.getFunctionParent() || scope.getProgramParent();
     const letRefs = this.letReferences;
