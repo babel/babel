@@ -138,7 +138,7 @@ describe("babel-template", function() {
         `Error: No substitution given for "ANOTHER_ID". If this is not meant to be a
           placeholder you may want to consider passing one of the following options to babel-template:
           - { placeholderPattern: false, placeholderWhitelist: new Set(['ANOTHER_ID']) }
-          - { placeholderPattern: /^ANOTHER_ID/ }`,
+          - { placeholderPattern: /^ANOTHER_ID$/ }`,
       );
     });
 
