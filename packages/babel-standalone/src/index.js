@@ -194,7 +194,6 @@ registerPlugins({
   "transform-member-expression-literals": require("@babel/plugin-transform-member-expression-literals"),
   "transform-property-literals": require("@babel/plugin-transform-property-literals"),
   "transform-property-mutators": require("@babel/plugin-transform-property-mutators"),
-  "transform-eval": require("@babel/plugin-transform-eval"),
   "transform-exponentiation-operator": require("@babel/plugin-transform-exponentiation-operator"),
   "transform-flow-comments": require("@babel/plugin-transform-flow-comments"),
   "transform-flow-strip-types": require("@babel/plugin-transform-flow-strip-types"),

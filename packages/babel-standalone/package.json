@@ -48,7 +48,6 @@
     "@babel/plugin-transform-destructuring": "7.0.0-beta.38",
     "@babel/plugin-transform-dotall-regex": "7.0.0-beta.38",
     "@babel/plugin-transform-duplicate-keys": "7.0.0-beta.38",
-    "@babel/plugin-transform-eval": "7.0.0-beta.38",
     "@babel/plugin-transform-exponentiation-operator": "7.0.0-beta.38",
     "@babel/plugin-transform-flow-comments": "7.0.0-beta.38",
     "@babel/plugin-transform-flow-strip-types": "7.0.0-beta.38",
