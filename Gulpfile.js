@@ -36,7 +36,7 @@ function getIndexFromPackage(name) {
   return `${name}/src/index.js`;
 }
 
-function compilationLogger(rollup = false) {
+function compilationLogger(rollup) {
   return through.obj(function(file, enc, callback) {
     gutil.log(
       `Compiling '${chalk.cyan(file.relative)}'${
@@ -70,7 +70,8 @@ function buildBabel(exclude) {
       let stream = gulp.src(getGlobFromSource(source), { base: base });
 
       if (exclude) {
-        const filters = ["**", ...exclude.map(p => `!**/${p}/**`)];
+        const filters = exclude.map(p => `!**/${p}/**`);
+        filters.unshift("**");
         stream = stream.pipe(filter(filters));
       }
 

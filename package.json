@@ -52,6 +52,7 @@
     "output-file-sync": "^2.0.0",
     "prettier": "1.10.2",
     "pump": "^1.0.2",
+    "require-relative": "^0.8.7",
     "rimraf": "^2.4.3",
     "rollup-plugin-babel": "^4.0.0-beta.0",
     "rollup-plugin-node-resolve": "^3.0.2",
