@@ -15,10 +15,14 @@ export default function populatePlaceholders(
       if (
         !Object.prototype.hasOwnProperty.call(replacements, placeholder.name)
       ) {
-        throw new Error(`Error: No substitution given for "NODE_ENV". If this is not meant to be a
+        throw new Error(`Error: No substitution given for "${
+          placeholder.name
+        }". If this is not meant to be a
           placeholder you may want to consider passing one of the following options to babel-template:
-          - { placeholderPattern: false, placeholderWhitelist: new Set(['NODE']) }
-          - { placeholderPattern: /^NODE$/ }`);
+          - { placeholderPattern: false, placeholderWhitelist: new Set(['${
+            placeholder.name
+          }']) }
+          - { placeholderPattern: /^${placeholder.name}$/ }`);
       }
     });
     Object.keys(replacements).forEach(key => {
