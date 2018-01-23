@@ -30,6 +30,10 @@ function istanbulHacks() {
   };
 }
 
+const babylonTransformCharcodes = require.resolve("babel-plugin-transform-charcodes", {
+  paths: ["./packages/babylon"],
+});
+
 let envOpts = {
   loose: true,
 };
@@ -38,14 +42,23 @@ const config = {
   comments: false,
   presets: [
     ["@babel/env", envOpts],
-    "@babel/flow"
   ],
   plugins: [
+    // TODO: Use @babel/preset-flow when 
+    // https://github.com/babel/babel/issues/7233 is fixed
+    "@babel/plugin-transform-flow-strip-types",
     ["@babel/proposal-class-properties", { loose: true }],
     "@babel/proposal-export-namespace-from",
     "@babel/proposal-numeric-separator",
     ["@babel/proposal-object-rest-spread", { useBuiltIns: true }],
-  ]
+  ],
+  overrides: [{
+    test: "packages/babylon",
+    plugins: [
+      babylonTransformCharcodes,
+      ["@babel/transform-for-of", { assumeArray: true }],
+    ],
+  }],
 };
 
 if (process.env.BABEL_ENV === "cov") {
