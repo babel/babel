@@ -15,14 +15,14 @@ export default function populatePlaceholders(
       if (
         !Object.prototype.hasOwnProperty.call(replacements, placeholder.name)
       ) {
-        throw new Error(`Error: No substitution given for "${
-          placeholder.name
-        }". If this is not meant to be a
-          placeholder you may want to consider passing one of the following options to babel-template:
-          - { placeholderPattern: false, placeholderWhitelist: new Set(['${
-            placeholder.name
-          }']) }
-          - { placeholderPattern: /^${placeholder.name}$/ }`);
+        const placeholderName = placeholder.name;
+
+        throw new Error(
+          `Error: No substitution given for "${placeholderName}". If this is not meant to be a placeholder` +
+            `you may want to consider passing one of the following options to babel-template:` +
+            `- { placeholderPattern: false, placeholderWhitelist: new Set(['${placeholderName}'])}` +
+            `- { placeholderPattern: /^${placeholderName}$/ }`,
+        );
       }
     });
     Object.keys(replacements).forEach(key => {
