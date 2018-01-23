@@ -133,7 +133,13 @@ describe("babel-template", function() {
           ID;
           ANOTHER_ID;
         `)({ ID: t.identifier("someIdent") });
-      }).to.throw(Error, 'No substitution given for "ANOTHER_ID"');
+      }).to.throw(
+        Error,
+        `Error: No substitution given for "ANOTHER_ID". If this is not meant to be a
+          placeholder you may want to consider passing one of the following options to babel-template:
+          - { placeholderPattern: false, placeholderWhitelist: new Set(['ANOTHER_ID']) }
+          - { placeholderPattern: /^ANOTHER_ID/ }`,
+      );
     });
 
     it("should return the AST directly when using .ast", () => {
