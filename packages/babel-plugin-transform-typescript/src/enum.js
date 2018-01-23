@@ -1,3 +1,5 @@
+import assert from "assert";
+
 export default function transpileEnum(path, t) {
   const { node } = path;
   if (node.declare) {
@@ -60,11 +62,13 @@ function enumFill(path, t, id) {
       t.memberExpression(id, t.stringLiteral(memberName), /*computed*/ true),
       memberValue,
     );
-    const outer = t.assignmentExpression(
-      "=",
-      t.memberExpression(id, inner, /*computed*/ true),
-      t.stringLiteral(memberName),
-    );
+    const outer = t.isStringLiteral(memberValue)
+      ? inner
+      : t.assignmentExpression(
+          "=",
+          t.memberExpression(id, inner, /*computed*/ true),
+          t.stringLiteral(memberName),
+        );
     return t.expressionStatement(outer);
   });
 
@@ -88,7 +92,7 @@ function enumFill(path, t, id) {
  *     Z = X | Y,
  *   }
  */
-type PreviousEnumMembers = { [name: string]: number | typeof undefined };
+type PreviousEnumMembers = { [name: string]: number | string };
 
 function translateEnumValues(path, t) {
   const seen: PreviousEnumMembers = Object.create(null);
@@ -101,8 +105,15 @@ function translateEnumValues(path, t) {
     if (initializer) {
       const constValue = evaluate(initializer, seen);
       if (constValue !== undefined) {
-        value = t.numericLiteral(constValue);
-        prev = constValue;
+        seen[name] = constValue;
+        if (typeof constValue === "number") {
+          value = t.numericLiteral(constValue);
+          prev = constValue;
+        } else {
+          assert(typeof constValue === "string");
+          value = t.stringLiteral(constValue);
+          prev = undefined;
+        }
       } else {
         value = initializer;
         prev = undefined;
@@ -111,6 +122,7 @@ function translateEnumValues(path, t) {
       if (prev !== undefined) {
         prev++;
         value = t.numericLiteral(prev);
+        seen[name] = prev;
       } else {
         throw path.buildCodeFrameError("Enum member must have initializer.");
       }
@@ -121,10 +133,16 @@ function translateEnumValues(path, t) {
 }
 
 // Based on the TypeScript repository's `evalConstant` in `checker.ts`.
-function evaluate(expr, seen: PreviousEnumMembers) {
+function evaluate(
+  expr,
+  seen: PreviousEnumMembers,
+): number | string | typeof undefined {
+  if (expr.type === "StringLiteral") {
+    return expr.value;
+  }
   return evalConstant(expr);
 
-  function evalConstant(expr) {
+  function evalConstant(expr): number | typeof undefined {
     switch (expr.type) {
       case "UnaryExpression":
         return evalUnaryExpression(expr);
@@ -141,7 +159,10 @@ function evaluate(expr, seen: PreviousEnumMembers) {
     }
   }
 
-  function evalUnaryExpression({ argument, operator }) {
+  function evalUnaryExpression({
+    argument,
+    operator,
+  }): number | typeof undefined {
     const value = evalConstant(argument);
     if (value === undefined) {
       return undefined;
@@ -159,7 +180,7 @@ function evaluate(expr, seen: PreviousEnumMembers) {
     }
   }
 
-  function evalBinaryExpression(expr) {
+  function evalBinaryExpression(expr): number | typeof undefined {
     const left = evalConstant(expr.left);
     if (left === undefined) {
       return undefined;
