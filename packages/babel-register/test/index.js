@@ -119,4 +119,20 @@ describe("@babel/register", function() {
 
     chai.expect(require(DATA_ES2015)).to.equal("hello");
   });
+
+  it("Resets babel next register", () => {
+    function crash() {
+      throw new Error("shouldn't be called");
+    }
+
+    setupRegister({
+      babel: {
+        transform: crash,
+        getEnv: crash,
+      },
+    });
+    setupRegister();
+
+    chai.expect(require(DATA_ES2015)).to.be.ok;
+  });
 });

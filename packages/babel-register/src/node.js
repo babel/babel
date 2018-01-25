@@ -10,7 +10,7 @@ import path from "path";
 
 const maps = {};
 const transformOpts = {};
-let babel = babelCore;
+let babel = null;
 let piratesRevert = null;
 
 function installSourceMapSupport() {
@@ -102,7 +102,7 @@ export default function register(opts?: Object = {}) {
   // Clone to avoid mutating the arguments object with the 'delete's below.
   opts = Object.assign({}, opts);
 
-  if (opts.babel) babel = opts.babel;
+  babel = opts.babel ? opts.babel : babelCore;
 
   if (opts.extensions) hookExtensions(opts.extensions);
 
