@@ -103,4 +103,20 @@ describe("@babel/register", function() {
     chai.expect((gen_error = require(GEN_ERROR))).to.be.ok;
     chai.expect(gen_error()).to.match(/gen_error\.js:2:86/);
   });
+
+  it("uses custom babel when requested", () => {
+    setupRegister({
+      babel: {
+        transform() {
+          return { code: "module.exports = 'hello';" };
+        },
+        getEnv() {
+          return {};
+        },
+        version: "custom",
+      },
+    });
+
+    chai.expect(require(DATA_ES2015)).to.equal("hello");
+  });
 });
