@@ -88,28 +88,36 @@ export default class LooseClassTransformer extends VanillaTransformer {
     let GET_FUNCTION_BODY = null;
     const KEY = t.stringLiteral(node.key.name);
     const CLASS_NAME = t.identifier(this.classRef.name);
+    const CONTAINER_LENGTH = path.container.length;
+    let containerNodesTraversed = 0;
+    let keyOfCurrentNodeInContainer = 0;
 
-    path.container.map(containedNode => {
-      if (containedNode.kind === "constructor") {
-        return;
+    while (containerNodesTraversed < CONTAINER_LENGTH) {
+      containerNodesTraversed++;
+      if (
+        path.getSibling(keyOfCurrentNodeInContainer).node.kind === "constructor"
+      ) {
+        keyOfCurrentNodeInContainer++;
+        continue;
       }
 
-      if (containedNode.kind === "get") {
+      if (path.getSibling(keyOfCurrentNodeInContainer).node.kind === "get") {
         GET_FUNCTION_BODY = t.functionExpression(
           null,
-          containedNode.params,
-          containedNode.body,
+          path.getSibling(keyOfCurrentNodeInContainer).node.params,
+          path.getSibling(keyOfCurrentNodeInContainer).node.body,
         );
       }
 
-      if (containedNode.kind === "set") {
+      if (path.getSibling(keyOfCurrentNodeInContainer).node.kind === "set") {
         SET_FUNCTION_BODY = t.functionExpression(
           null,
-          containedNode.params,
-          containedNode.body,
+          path.getSibling(keyOfCurrentNodeInContainer).node.params,
+          path.getSibling(keyOfCurrentNodeInContainer).node.body,
         );
       }
-    });
+      path.getSibling(keyOfCurrentNodeInContainer).remove();
+    }
 
     return {
       CLASS_NAME,

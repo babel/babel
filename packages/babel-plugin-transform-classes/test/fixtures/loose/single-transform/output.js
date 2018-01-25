@@ -3,11 +3,16 @@ var Alert =
 function () {
   function Alert() {}
 
-  Object.defineProperty(Alert, "VERSION", {
-    get: function get() {
-      return VERSION;
-    },
-    configurable: true
-  });
+  {
+    Object.defineProperty(Alert, "VERSION", {
+      configurable: true,
+      set: function set() {
+        return VERSION;
+      },
+      get: function get(version) {
+        this.VERSION = version;
+      }
+    });
+  }
   return Alert;
 }();
