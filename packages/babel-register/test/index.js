@@ -120,7 +120,7 @@ describe("@babel/register", function() {
     chai.expect(require(DATA_ES2015)).to.equal("hello");
   });
 
-  it("Resets babel next register", () => {
+  it("resets babel on subsequent register calls", () => {
     function crash() {
       throw new Error("shouldn't be called");
     }
