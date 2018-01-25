@@ -1,13 +1,6 @@
 import nameFunction from "@babel/helper-function-name";
 import VanillaTransformer from "./vanilla";
-import { template, types as t } from "@babel/core";
-
-const objectDefineProperty = template(`
-  Object.defineProperty(CLASS_NAME, KEY, {
-    KIND: FUNCTION_BODY,
-    configurable: true
-  });
-`);
+import { types as t } from "@babel/core";
 
 export default class LooseClassTransformer extends VanillaTransformer {
   constructor() {
@@ -72,18 +65,107 @@ export default class LooseClassTransformer extends VanillaTransformer {
     }
   }
 
-  _processSetGet(node, path) {
-    const nonConstructorMethods = path.container.filter(containedNode => {
-      return containedNode.kind !== "constructor";
+  _isSingleSetGet(path) {
+    const setGetMethods = new Set();
+    let hasMethods = false;
+    let hasComputedNode = false;
+    path.container.map(containedNode => {
+      if (containedNode.kind === "set" || containedNode.kind === "get") {
+        setGetMethods.add(containedNode.key.name);
+      }
+      if (containedNode.kind === "method") {
+        hasMethods = true;
+      }
+      if (containedNode.computed) {
+        hasComputedNode = true;
+      }
     });
-    if (nonConstructorMethods.length === 1) {
+    return !hasComputedNode && !hasMethods && setGetMethods.size === 1;
+  }
+
+  _getSetAndGetDetails(node, path) {
+    let SET_FUNCTION_BODY = null;
+    let GET_FUNCTION_BODY = null;
+    const KEY = t.stringLiteral(node.key.name);
+    const CLASS_NAME = t.identifier(this.classRef.name);
+
+    path.container.map(containedNode => {
+      if (containedNode.kind === "constructor") {
+        return;
+      }
+
+      if (containedNode.kind === "get") {
+        GET_FUNCTION_BODY = t.functionExpression(
+          null,
+          containedNode.params,
+          containedNode.body,
+        );
+      }
+
+      if (containedNode.kind === "set") {
+        SET_FUNCTION_BODY = t.functionExpression(
+          null,
+          containedNode.params,
+          containedNode.body,
+        );
+      }
+    });
+
+    return {
+      CLASS_NAME,
+      KEY,
+      GET_FUNCTION_BODY,
+      SET_FUNCTION_BODY,
+    };
+  }
+
+  _createObjectNode(CLASS_NAME, KEY, SET_FUNCTION_BODY, GET_FUNCTION_BODY) {
+    const objectContent = [
+      t.objectProperty(t.identifier("configurable"), t.booleanLiteral(true)),
+    ];
+
+    if (SET_FUNCTION_BODY) {
+      objectContent.push(
+        t.objectProperty(t.identifier("set"), SET_FUNCTION_BODY),
+      );
+    }
+
+    if (GET_FUNCTION_BODY) {
+      objectContent.push(
+        t.objectProperty(t.identifier("get"), GET_FUNCTION_BODY),
+      );
+    }
+
+    return t.blockStatement([
+      t.expressionStatement(
+        t.callExpression(
+          t.memberExpression(
+            t.identifier("Object"),
+            t.identifier("defineProperty"),
+          ),
+          [CLASS_NAME, KEY, t.objectExpression(objectContent)],
+        ),
+      ),
+    ]);
+  }
+
+  _processSetGet(node, path) {
+    const shouldOptimize = this._isSingleSetGet(path);
+
+    if (shouldOptimize) {
+      const {
+        CLASS_NAME,
+        KEY,
+        GET_FUNCTION_BODY,
+        SET_FUNCTION_BODY,
+      } = this._getSetAndGetDetails(node, path);
       this.body.push(
-        objectDefineProperty({
-          KIND: t.identifier(node.kind),
-          KEY: t.stringLiteral(node.key.name),
-          CLASS_NAME: t.identifier(this.classRef.name),
-          FUNCTION_BODY: t.functionExpression(null, node.params, node.body),
-        }),
+        this._createObjectNode(
+          CLASS_NAME,
+          KEY,
+          GET_FUNCTION_BODY,
+          SET_FUNCTION_BODY,
+        ),
       );
       return true;
     }
