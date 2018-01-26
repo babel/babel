@@ -1,5 +1,4 @@
 export default {
-  "check-constants": require("@babel/plugin-check-constants"),
   "syntax-async-generators": require("@babel/plugin-syntax-async-generators"),
   "syntax-object-rest-spread": require("@babel/plugin-syntax-object-rest-spread"),
   "syntax-optional-catch-binding": require("@babel/plugin-syntax-optional-catch-binding"),

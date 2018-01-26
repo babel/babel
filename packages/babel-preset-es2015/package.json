@@ -8,7 +8,6 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-es2015",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/plugin-check-constants": "7.0.0-beta.38",
     "@babel/plugin-transform-arrow-functions": "7.0.0-beta.38",
     "@babel/plugin-transform-block-scoped-functions": "7.0.0-beta.38",
     "@babel/plugin-transform-block-scoping": "7.0.0-beta.38",

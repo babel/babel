@@ -15,7 +15,6 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-constants { "electron":"0.36" }
   transform-block-scoping { "electron":"0.36" }
   transform-destructuring { "electron":"0.36" }
   transform-for-of { "electron":"0.36" }

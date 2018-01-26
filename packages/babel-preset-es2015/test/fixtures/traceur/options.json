@@ -12,7 +12,6 @@
     "transform-for-of",
     "transform-sticky-regex",
     "transform-unicode-regex",
-    "check-constants",
     "transform-spread",
     "transform-parameters",
     "transform-destructuring",
