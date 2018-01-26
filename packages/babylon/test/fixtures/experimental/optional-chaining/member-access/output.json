@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 23,
+  "end": 53,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 3,
-      "column": 13
+      "line": 7,
+      "column": 12
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 23,
+    "end": 53,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 3,
-        "column": 13
+        "line": 7,
+        "column": 12
       }
     },
     "sourceType": "script",
@@ -97,49 +97,49 @@
       {
         "type": "ExpressionStatement",
         "start": 10,
-        "end": 23,
+        "end": 39,
         "loc": {
           "start": {
             "line": 3,
             "column": 0
           },
           "end": {
-            "line": 3,
-            "column": 13
+            "line": 5,
+            "column": 14
           }
         },
         "expression": {
           "type": "MemberExpression",
           "start": 10,
-          "end": 23,
+          "end": 39,
           "loc": {
             "start": {
               "line": 3,
               "column": 0
             },
             "end": {
-              "line": 3,
-              "column": 13
+              "line": 5,
+              "column": 14
             }
           },
           "object": {
-            "type": "MemberExpression",
+            "type": "CallExpression",
             "start": 10,
-            "end": 18,
+            "end": 35,
             "loc": {
               "start": {
                 "line": 3,
                 "column": 0
               },
               "end": {
-                "line": 3,
-                "column": 8
+                "line": 5,
+                "column": 10
               }
             },
-            "object": {
-              "type": "Identifier",
+            "callee": {
+              "type": "MemberExpression",
               "start": 10,
-              "end": 13,
+              "end": 23,
               "loc": {
                 "start": {
                   "line": 3,
@@ -147,6 +147,208 @@
                 },
                 "end": {
                   "line": 3,
+                  "column": 13
+                }
+              },
+              "object": {
+                "type": "MemberExpression",
+                "start": 10,
+                "end": 18,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 0
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 8
+                  }
+                },
+                "object": {
+                  "type": "Identifier",
+                  "start": 10,
+                  "end": 13,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 0
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 3
+                    },
+                    "identifierName": "foo"
+                  },
+                  "name": "foo"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 15,
+                  "end": 18,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 8
+                    },
+                    "identifierName": "bar"
+                  },
+                  "name": "bar"
+                },
+                "computed": false,
+                "optional": true
+              },
+              "property": {
+                "type": "Identifier",
+                "start": 20,
+                "end": 23,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 13
+                  },
+                  "identifierName": "baz"
+                },
+                "name": "baz"
+              },
+              "computed": false,
+              "optional": true
+            },
+            "arguments": [
+              {
+                "type": "MemberExpression",
+                "start": 26,
+                "end": 34,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 9
+                  }
+                },
+                "object": {
+                  "type": "Identifier",
+                  "start": 26,
+                  "end": 29,
+                  "loc": {
+                    "start": {
+                      "line": 5,
+                      "column": 1
+                    },
+                    "end": {
+                      "line": 5,
+                      "column": 4
+                    },
+                    "identifierName": "foo"
+                  },
+                  "name": "foo"
+                },
+                "property": {
+                  "type": "Identifier",
+                  "start": 31,
+                  "end": 34,
+                  "loc": {
+                    "start": {
+                      "line": 5,
+                      "column": 6
+                    },
+                    "end": {
+                      "line": 5,
+                      "column": 9
+                    },
+                    "identifierName": "bar"
+                  },
+                  "name": "bar"
+                },
+                "computed": false,
+                "optional": true
+              }
+            ]
+          },
+          "property": {
+            "type": "Identifier",
+            "start": 36,
+            "end": 39,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 11
+              },
+              "end": {
+                "line": 5,
+                "column": 14
+              },
+              "identifierName": "baz"
+            },
+            "name": "baz"
+          },
+          "computed": false,
+          "optional": false
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 41,
+        "end": 53,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 0
+          },
+          "end": {
+            "line": 7,
+            "column": 12
+          }
+        },
+        "expression": {
+          "type": "MemberExpression",
+          "start": 41,
+          "end": 53,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 0
+            },
+            "end": {
+              "line": 7,
+              "column": 12
+            }
+          },
+          "object": {
+            "type": "MemberExpression",
+            "start": 41,
+            "end": 49,
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 0
+              },
+              "end": {
+                "line": 7,
+                "column": 8
+              }
+            },
+            "object": {
+              "type": "Identifier",
+              "start": 41,
+              "end": 44,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 0
+                },
+                "end": {
+                  "line": 7,
                   "column": 3
                 },
                 "identifierName": "foo"
@@ -155,15 +357,15 @@
             },
             "property": {
               "type": "Identifier",
-              "start": 15,
-              "end": 18,
+              "start": 46,
+              "end": 49,
               "loc": {
                 "start": {
-                  "line": 3,
+                  "line": 7,
                   "column": 5
                 },
                 "end": {
-                  "line": 3,
+                  "line": 7,
                   "column": 8
                 },
                 "identifierName": "bar"
@@ -175,23 +377,23 @@
           },
           "property": {
             "type": "Identifier",
-            "start": 20,
-            "end": 23,
+            "start": 50,
+            "end": 53,
             "loc": {
               "start": {
-                "line": 3,
-                "column": 10
+                "line": 7,
+                "column": 9
               },
               "end": {
-                "line": 3,
-                "column": 13
+                "line": 7,
+                "column": 12
               },
               "identifierName": "baz"
             },
             "name": "baz"
           },
           "computed": false,
-          "optional": true
+          "optional": false
         }
       }
     ],

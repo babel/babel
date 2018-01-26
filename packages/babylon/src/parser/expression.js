@@ -454,7 +454,7 @@ export default class ExpressionParser extends LValParser {
       );
     } else if (this.match(tt.questionDot)) {
       this.expectPlugin("optionalChaining");
-
+      state.optionalChainMember = true;
       if (noCalls && this.lookahead().type == tt.parenL) {
         state.stop = true;
         return base;
@@ -462,12 +462,12 @@ export default class ExpressionParser extends LValParser {
       this.next();
 
       const node = this.startNodeAt(startPos, startLoc);
-
       if (this.eat(tt.bracketL)) {
         node.object = base;
         node.property = this.parseExpression();
         node.computed = true;
-        node.optional = true;
+        node.optional = state.optionalChainMember;
+        state.optionalChainMember = false;
         this.expect(tt.bracketR);
         return this.finishNode(node, "MemberExpression");
       } else if (this.eat(tt.parenL)) {
@@ -478,14 +478,17 @@ export default class ExpressionParser extends LValParser {
           tt.parenR,
           possibleAsync,
         );
-        node.optional = true;
+        node.optional = state.optionalChainMember;
+        state.optionalChainMember = false;
 
         return this.finishNode(node, "CallExpression");
       } else {
         node.object = base;
         node.property = this.parseIdentifier(true);
         node.computed = false;
-        node.optional = true;
+        node.optional = state.optionalChainMember;
+        state.optionalChainMember = false;
+
         return this.finishNode(node, "MemberExpression");
       }
     } else if (this.eat(tt.dot)) {
@@ -493,12 +496,14 @@ export default class ExpressionParser extends LValParser {
       node.object = base;
       node.property = this.parseMaybePrivateName();
       node.computed = false;
+      node.optional = state.optionalChainMember;
       return this.finishNode(node, "MemberExpression");
     } else if (this.eat(tt.bracketL)) {
       const node = this.startNodeAt(startPos, startLoc);
       node.object = base;
       node.property = this.parseExpression();
       node.computed = true;
+      node.optional = state.optionalChainMember;
       this.expect(tt.bracketR);
       return this.finishNode(node, "MemberExpression");
     } else if (!noCalls && this.match(tt.parenL)) {

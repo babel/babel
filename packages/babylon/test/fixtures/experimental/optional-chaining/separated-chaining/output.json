@@ -166,7 +166,8 @@
                   },
                   "name": "c"
                 },
-                "computed": false
+                "computed": false,
+                "optional": false
               },
               "property": {
                 "type": "Identifier",
@@ -185,7 +186,8 @@
                 },
                 "name": "d"
               },
-              "computed": false
+              "computed": false,
+              "optional": false
             },
             "property": {
               "type": "Identifier",
@@ -204,7 +206,8 @@
               },
               "name": "e"
             },
-            "computed": false
+            "computed": false,
+            "optional": false
           },
           "property": {
             "type": "Identifier",
@@ -403,7 +406,8 @@
               },
               "name": "e"
             },
-            "computed": false
+            "computed": false,
+            "optional": false
           },
           "property": {
             "type": "Identifier",
@@ -422,7 +426,8 @@
             },
             "name": "f"
           },
-          "computed": false
+          "computed": false,
+          "optional": false
         }
       }
     ],
