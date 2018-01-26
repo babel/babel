@@ -316,8 +316,7 @@
                   },
                   "identifierName": "async"
                 },
-                "name": "async",
-                "leadingComments": null
+                "name": "async"
               },
               "operator": "<",
               "right": {
@@ -369,8 +368,7 @@
                   },
                   "name": "U"
                 }
-              },
-              "leadingComments": null
+              }
             },
             "operator": ">",
             "right": {
@@ -456,8 +454,7 @@
                 "parenthesized": true,
                 "parenStart": 149
               }
-            },
-            "leadingComments": null
+            }
           },
           "typeAnnotation": {
             "type": "TypeAnnotation",
@@ -576,7 +573,6 @@
               "typeParameters": null
             }
           },
-          "leadingComments": null,
           "extra": {
             "parenthesized": true,
             "parenStart": 135

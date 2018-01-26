@@ -174,8 +174,7 @@
                       },
                       "identifierName": "b"
                     },
-                    "name": "b",
-                    "leadingComments": null
+                    "name": "b"
                   },
                   "computed": false,
                   "shorthand": false,
@@ -248,8 +247,7 @@
                       },
                       "identifierName": "c"
                     },
-                    "name": "c",
-                    "leadingComments": null
+                    "name": "c"
                   },
                   "computed": false,
                   "shorthand": false,

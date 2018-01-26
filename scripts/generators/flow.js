@@ -36,9 +36,9 @@ declare class ${NODE_PREFIX}SourceLocation {
 }
 
 declare class ${NODE_PREFIX} {
-  leadingComments: ?Array<${NODE_PREFIX}Comment>;
-  innerComments: ?Array<${NODE_PREFIX}Comment>;
-  trailingComments: ?Array<${NODE_PREFIX}Comment>;
+  leadingComments?: Array<${NODE_PREFIX}Comment>;
+  innerComments?: Array<${NODE_PREFIX}Comment>;
+  trailingComments?: Array<${NODE_PREFIX}Comment>;
   start: ?number;
   end: ?number;
   loc: ?${NODE_PREFIX}SourceLocation;

@@ -537,8 +537,7 @@
                                       "computed": true
                                     }
                                   ]
-                                },
-                                "trailingComments": null
+                                }
                               }
                             ],
                             "test": {

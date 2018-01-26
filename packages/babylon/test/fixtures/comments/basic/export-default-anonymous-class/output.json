@@ -103,8 +103,7 @@
                     },
                     "identifierName": "method1"
                   },
-                  "name": "method1",
-                  "leadingComments": null
+                  "name": "method1"
                 },
                 "computed": false,
                 "kind": "method",
@@ -148,10 +147,8 @@
                   }
                 ]
               }
-            ],
-            "leadingComments": null
-          },
-          "leadingComments": null
+            ]
+          }
         },
         "leadingComments": [
           {

@@ -263,8 +263,7 @@
               },
               "identifierName": "x"
             },
-            "name": "x",
-            "leadingComments": null
+            "name": "x"
           },
           "operator": "===",
           "right": {
@@ -316,8 +315,7 @@
                 }
               }
             }
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -413,8 +411,7 @@
                 },
                 "identifierName": "x"
               },
-              "name": "x",
-              "leadingComments": null
+              "name": "x"
             },
             "typeAnnotation": {
               "type": "TSAnyKeyword",
@@ -430,8 +427,7 @@
                   "column": 8
                 }
               }
-            },
-            "leadingComments": null
+            }
           },
           "typeAnnotation": {
             "type": "TSTypeReference",
@@ -464,8 +460,7 @@
               },
               "name": "T"
             }
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {

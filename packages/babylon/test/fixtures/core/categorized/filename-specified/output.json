@@ -77,8 +77,7 @@
                 "filename": "path/to/input-file.js",
                 "identifierName": "node"
               },
-              "name": "node",
-              "leadingComments": null
+              "name": "node"
             },
             "init": {
               "type": "StringLiteral",
@@ -100,8 +99,7 @@
                 "raw": "\"shouldHaveFilenameLocProp\""
               },
               "value": "shouldHaveFilenameLocProp"
-            },
-            "leadingComments": null
+            }
           }
         ],
         "kind": "var",

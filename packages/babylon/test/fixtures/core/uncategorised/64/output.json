@@ -117,11 +117,9 @@
                     },
                     "identifierName": "doThat"
                   },
-                  "name": "doThat",
-                  "leadingComments": null
+                  "name": "doThat"
                 },
-                "arguments": [],
-                "leadingComments": null
+                "arguments": []
               },
               "leadingComments": [
                 {
