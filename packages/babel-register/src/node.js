@@ -2,7 +2,7 @@ import deepClone from "lodash/cloneDeep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
 import escapeRegExp from "lodash/escapeRegExp";
-import * as babel from "@babel/core";
+import * as babelCore from "@babel/core";
 import { OptionManager, DEFAULT_EXTENSIONS } from "@babel/core";
 import { addHook } from "pirates";
 import fs from "fs";
@@ -10,6 +10,7 @@ import path from "path";
 
 const maps = {};
 const transformOpts = {};
+let babel = null;
 let piratesRevert = null;
 
 function installSourceMapSupport() {
@@ -100,6 +101,9 @@ register({
 export default function register(opts?: Object = {}) {
   // Clone to avoid mutating the arguments object with the 'delete's below.
   opts = Object.assign({}, opts);
+
+  babel = opts.babel ? opts.babel : babelCore;
+
   if (opts.extensions) hookExtensions(opts.extensions);
 
   if (opts.cache === false && cache) {
@@ -110,6 +114,7 @@ export default function register(opts?: Object = {}) {
     cache = registerCache.get();
   }
 
+  delete opts.babel;
   delete opts.extensions;
   delete opts.cache;
 
