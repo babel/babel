@@ -225,7 +225,11 @@ export default function() {
       },
 
       TSAsExpression(path) {
-        path.replaceWith(path.node.expression);
+        let { node } = path;
+        do {
+          node = node.expression;
+        } while (t.isTSAsExpression(node));
+        path.replaceWith(node);
       },
 
       TSNonNullExpression(path) {
