@@ -71,7 +71,7 @@ require("@babel/register")({
   cache: true,
 
   // Specify the version of babel-core used for transformation. (Optional)
-  babel: require('babel-core')
+  babel: require('@babel/core')
 });
 ```
 
