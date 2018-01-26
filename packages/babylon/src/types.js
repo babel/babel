@@ -506,6 +506,7 @@ export type MemberExpression = NodeBase & {
   type: "MemberExpression",
   object: Expression | Super,
   property: Expression,
+  optional?: boolean,
   computed: boolean,
 };
 
