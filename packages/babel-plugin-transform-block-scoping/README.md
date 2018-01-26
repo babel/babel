@@ -24,6 +24,11 @@ let a = 3
 var a = 3;
 ```
 
+## Constant checks
+
+This plugin also validates all `const` variables.
+Reassignment of constants is a runtime error and it will insert the necessary error code for those.
+
 ## Installation
 
 ```sh
