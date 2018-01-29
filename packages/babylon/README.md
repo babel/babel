@@ -77,19 +77,19 @@ AST for JSX code is based on [Facebook JSX AST][] with the addition of one node 
 [Property]: https://github.com/estree/estree/blob/master/es5.md#property
 [MethodDefinition]: https://github.com/estree/estree/blob/master/es2015.md#methoddefinition
 
-[StringLiteral]: https://github.com/babel/babylon/blob/master/ast/spec.md#stringliteral
-[NumericLiteral]: https://github.com/babel/babylon/blob/master/ast/spec.md#numericliteral
-[BooleanLiteral]: https://github.com/babel/babylon/blob/master/ast/spec.md#booleanliteral
-[NullLiteral]: https://github.com/babel/babylon/blob/master/ast/spec.md#nullliteral
-[RegExpLiteral]: https://github.com/babel/babylon/blob/master/ast/spec.md#regexpliteral
-[ObjectProperty]: https://github.com/babel/babylon/blob/master/ast/spec.md#objectproperty
-[ObjectMethod]: https://github.com/babel/babylon/blob/master/ast/spec.md#objectmethod
-[ClassMethod]: https://github.com/babel/babylon/blob/master/ast/spec.md#classmethod
-[Program]: https://github.com/babel/babylon/blob/master/ast/spec.md#programs
-[BlockStatement]: https://github.com/babel/babylon/blob/master/ast/spec.md#blockstatement
-[Directive]: https://github.com/babel/babylon/blob/master/ast/spec.md#directive
-[DirectiveLiteral]: https://github.com/babel/babylon/blob/master/ast/spec.md#directiveliteral
-[FunctionExpression]: https://github.com/babel/babylon/blob/master/ast/spec.md#functionexpression
+[StringLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#stringliteral
+[NumericLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#numericliteral
+[BooleanLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#booleanliteral
+[NullLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#nullliteral
+[RegExpLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#regexpliteral
+[ObjectProperty]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#objectproperty
+[ObjectMethod]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#objectmethod
+[ClassMethod]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#classmethod
+[Program]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#programs
+[BlockStatement]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#blockstatement
+[Directive]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#directive
+[DirectiveLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#directiveliteral
+[FunctionExpression]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#functionexpression
 
 [Facebook JSX AST]: https://github.com/facebook/jsx/blob/master/AST.md
 
@@ -148,7 +148,7 @@ require("babylon").parse("code", {
 
 #### Will Babylon support a plugin system?
 
-Previous issues: [babel/babel#1351](https://github.com/babel/babel/issues/1351), [#500](https://github.com/babel/babylon/issues/500).
+Previous issues: [babel/babel#1351](https://github.com/babel/babel/issues/1351), [#500](https://github.com/babel/babel/issues/6694).
 
 We currently aren't willing to commit to supporting the API for plugins or the resulting ecosystem (there is already enough work maintaining Babel's own plugin system). It's not clear how to make that API effective, and it would limit out ability to refactor and optimize the codebase.
 
