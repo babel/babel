@@ -433,13 +433,13 @@ export default class ExpressionParser extends LValParser {
     return base;
   }
 
-  /** @param state Set 'state.stop = true' to indicate that we should stop parsing subscripts. */
+  /** @param state Set 'state.stop = true' to indicate that we should stop parsing subscripts.  'state.optionalChainMember to indicate that the member is currently in OptionalChain'*/
   parseSubscript(
     base: N.Expression,
     startPos: number,
     startLoc: Position,
     noCalls: ?boolean,
-    state: { stop: boolean },
+    state: { stop: boolean, optionalChainMember?: boolean },
   ): N.Expression {
     if (!noCalls && this.eat(tt.doubleColon)) {
       const node = this.startNodeAt(startPos, startLoc);
@@ -454,7 +454,7 @@ export default class ExpressionParser extends LValParser {
       );
     } else if (this.match(tt.questionDot)) {
       this.expectPlugin("optionalChaining");
-
+      state.optionalChainMember = true;
       if (noCalls && this.lookahead().type == tt.parenL) {
         state.stop = true;
         return base;
@@ -469,7 +469,7 @@ export default class ExpressionParser extends LValParser {
         node.computed = true;
         node.optional = true;
         this.expect(tt.bracketR);
-        return this.finishNode(node, "MemberExpression");
+        return this.finishNode(node, "OptionalMemberExpression");
       } else if (this.eat(tt.parenL)) {
         const possibleAsync = this.atPossibleAsync(base);
 
@@ -480,19 +480,23 @@ export default class ExpressionParser extends LValParser {
         );
         node.optional = true;
 
-        return this.finishNode(node, "CallExpression");
+        return this.finishNode(node, "OptionalCallExpression");
       } else {
         node.object = base;
         node.property = this.parseIdentifier(true);
         node.computed = false;
         node.optional = true;
-        return this.finishNode(node, "MemberExpression");
+        return this.finishNode(node, "OptionalMemberExpression");
       }
     } else if (this.eat(tt.dot)) {
       const node = this.startNodeAt(startPos, startLoc);
       node.object = base;
       node.property = this.parseMaybePrivateName();
       node.computed = false;
+      if (state.optionalChainMember) {
+        node.optional = false;
+        return this.finishNode(node, "OptionalMemberExpression");
+      }
       return this.finishNode(node, "MemberExpression");
     } else if (this.eat(tt.bracketL)) {
       const node = this.startNodeAt(startPos, startLoc);
@@ -500,6 +504,10 @@ export default class ExpressionParser extends LValParser {
       node.property = this.parseExpression();
       node.computed = true;
       this.expect(tt.bracketR);
+      if (state.optionalChainMember) {
+        node.optional = false;
+        return this.finishNode(node, "OptionalMemberExpression");
+      }
       return this.finishNode(node, "MemberExpression");
     } else if (!noCalls && this.match(tt.parenL)) {
       const possibleAsync = this.atPossibleAsync(base);

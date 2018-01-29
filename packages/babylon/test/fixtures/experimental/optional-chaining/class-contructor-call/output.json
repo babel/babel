@@ -190,7 +190,7 @@
             }
           },
           "callee": {
-            "type": "MemberExpression",
+            "type": "OptionalMemberExpression",
             "start": 30,
             "end": 34,
             "loc": {
@@ -273,7 +273,7 @@
             }
           },
           "callee": {
-            "type": "MemberExpression",
+            "type": "OptionalMemberExpression",
             "start": 44,
             "end": 48,
             "loc": {
@@ -391,7 +391,7 @@
             }
           },
           "callee": {
-            "type": "MemberExpression",
+            "type": "OptionalMemberExpression",
             "start": 62,
             "end": 66,
             "loc": {
