@@ -13,6 +13,7 @@ const awaitVisitor = {
 
   AwaitExpression(path, { wrapAwait }) {
     const argument = path.get("argument");
+    argument.node.__wasAwait = true;
 
     if (path.parentPath.isYieldExpression()) {
       path.replaceWith(argument.node);
