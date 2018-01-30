@@ -24,12 +24,7 @@
   },
   "devDependencies": {
     "@babel/helper-fixtures": "7.0.0-beta.39",
-    "babel-plugin-transform-charcodes": "0.0.10",
     "charcodes": "0.0.10",
-    "rollup": "^0.50.0",
-    "rollup-plugin-babel": "^4.0.0-beta.0",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "rollup-watch": "^4.0.0",
     "unicode-10.0.0": "^0.7.4"
   },
   "bin": {
