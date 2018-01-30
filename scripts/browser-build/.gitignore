@@ -1,0 +1,4 @@
+!dist
+
+dist/babel-preset-env.js
+dist/babel-preset-env.min.js
