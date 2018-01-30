@@ -1,15 +1,15 @@
 {
   "name": "@babel/helper-remap-async-to-generator",
-  "version": "7.0.0-beta.38",
+  "version": "7.0.0-beta.39",
   "description": "Helper function to remap async functions to generators",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-remap-async-to-generator",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "7.0.0-beta.38",
-    "@babel/helper-wrap-function": "7.0.0-beta.38",
-    "@babel/template": "7.0.0-beta.38",
-    "@babel/traverse": "7.0.0-beta.38",
-    "@babel/types": "7.0.0-beta.38"
+    "@babel/helper-annotate-as-pure": "7.0.0-beta.39",
+    "@babel/helper-wrap-function": "7.0.0-beta.39",
+    "@babel/template": "7.0.0-beta.39",
+    "@babel/traverse": "7.0.0-beta.39",
+    "@babel/types": "7.0.0-beta.39"
   }
 }

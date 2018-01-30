@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-stage-3",
-  "version": "7.0.0-beta.38",
+  "version": "7.0.0-beta.39",
   "description": "Babel preset for stage 3 plugins",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -8,18 +8,18 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-stage-3",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/plugin-proposal-async-generator-functions": "7.0.0-beta.38",
-    "@babel/plugin-proposal-class-properties": "7.0.0-beta.38",
-    "@babel/plugin-proposal-object-rest-spread": "7.0.0-beta.38",
-    "@babel/plugin-proposal-optional-catch-binding": "7.0.0-beta.38",
-    "@babel/plugin-proposal-unicode-property-regex": "7.0.0-beta.38",
-    "@babel/plugin-syntax-dynamic-import": "7.0.0-beta.38",
-    "@babel/plugin-syntax-import-meta": "7.0.0-beta.38"
+    "@babel/plugin-proposal-async-generator-functions": "7.0.0-beta.39",
+    "@babel/plugin-proposal-class-properties": "7.0.0-beta.39",
+    "@babel/plugin-proposal-object-rest-spread": "7.0.0-beta.39",
+    "@babel/plugin-proposal-optional-catch-binding": "7.0.0-beta.39",
+    "@babel/plugin-proposal-unicode-property-regex": "7.0.0-beta.39",
+    "@babel/plugin-syntax-dynamic-import": "7.0.0-beta.39",
+    "@babel/plugin-syntax-import-meta": "7.0.0-beta.39"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.38"
+    "@babel/core": "7.0.0-beta.39"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.38"
+    "@babel/core": "7.0.0-beta.39"
   }
 }

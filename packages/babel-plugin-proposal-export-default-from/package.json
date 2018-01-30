@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-export-default-from",
-  "version": "7.0.0-beta.38",
+  "version": "7.0.0-beta.39",
   "description": "Compile export default to ES2015",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-export-default-from",
   "license": "MIT",
@@ -9,13 +9,13 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/plugin-syntax-export-default-from": "7.0.0-beta.38"
+    "@babel/plugin-syntax-export-default-from": "7.0.0-beta.39"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.38"
+    "@babel/core": "7.0.0-beta.39"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.38",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.38"
+    "@babel/core": "7.0.0-beta.39",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.39"
   }
 }
