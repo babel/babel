@@ -68,10 +68,7 @@ require("@babel/register")({
   extensions: [".es6", ".es", ".jsx", ".js", ".mjs"],
 
   // Setting this to false will disable the cache.
-  cache: true,
-
-  // Specify the version of babel-core used for transformation. (Optional)
-  babel: require('@babel/core')
+  cache: true
 });
 ```
 
