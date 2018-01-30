@@ -111,6 +111,8 @@ function loadScripts(transformFn, scripts) {
   const result = [];
   const count = scripts.length;
 
+  let count_complete = 0;
+
   function check() {
     let script, i;
 
@@ -120,9 +122,15 @@ function loadScripts(transformFn, scripts) {
       if (script.loaded && !script.executed) {
         script.executed = true;
         run(transformFn, script);
+        count_complete++;
       } else if (!script.loaded && !script.error && !script.async) {
         break;
       }
+    }
+
+    if (count_complete === count) {
+      let event = new Event('BabelScriptsRun');
+      window.document.dispatchEvent(event);
     }
   }
 
