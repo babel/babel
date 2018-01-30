@@ -1,3 +1,5 @@
+import "core-js/modules/es6.array.sort";
+import "core-js/modules/es6.function.bind";
 import "core-js/modules/es7.object.values";
 import "core-js/modules/es7.object.entries";
 import "core-js/modules/es7.object.get-own-property-descriptors";

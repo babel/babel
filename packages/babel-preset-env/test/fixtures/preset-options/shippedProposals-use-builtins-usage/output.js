@@ -6,6 +6,8 @@ require("core-js/modules/es6.symbol");
 
 require("core-js/modules/es6.promise");
 
+require("core-js/modules/es6.array.index-of");
+
 require("core-js/modules/es6.object.assign");
 
 function _awaitAsyncGenerator(value) { return new _AwaitValue(value); }

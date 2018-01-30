@@ -46,6 +46,23 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+  es6.array.every { "electron":"0.36" }
+  es6.array.filter { "electron":"0.36" }
+  es6.array.for-each { "electron":"0.36" }
+  es6.array.index-of { "electron":"0.36" }
+  es6.array.is-array { "electron":"0.36" }
+  es6.array.last-index-of { "electron":"0.36" }
+  es6.array.map { "electron":"0.36" }
+  es6.array.reduce { "electron":"0.36" }
+  es6.array.reduce-right { "electron":"0.36" }
+  es6.array.some { "electron":"0.36" }
+  es6.array.sort { "chrome":"54", "electron":"0.36", "node":"6.1" }
+  es6.date.now { "electron":"0.36" }
+  es6.date.to-iso-string { "electron":"0.36" }
+  es6.date.to-json { "electron":"0.36" }
+  es6.function.bind { "electron":"0.36" }
+  es6.string.iterator { "electron":"0.36" }
+  es6.string.trim { "electron":"0.36" }
   es6.typed.array-buffer { "electron":"0.36", "ie":"10", "node":"6.1" }
   es6.typed.data-view { "electron":"0.36" }
   es6.typed.int8-array { "electron":"0.36", "ie":"10", "node":"6.1" }
