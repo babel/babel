@@ -10,15 +10,20 @@ export default function(api, options) {
     const nil = scope.buildUndefinedNode();
 
     let objectPath = path;
-    while (objectPath.isMemberExpression() || objectPath.isCallExpression()) {
+    while (
+      objectPath.isOptionalMemberExpression() ||
+      objectPath.isOptionalCallExpression()
+    ) {
       const { node } = objectPath;
       if (node.optional) {
         optionals.push(node);
       }
 
-      if (objectPath.isMemberExpression()) {
+      if (objectPath.isOptionalMemberExpression()) {
+        objectPath.node.type = "MemberExpression";
         objectPath = objectPath.get("object");
       } else {
+        objectPath.node.type = "CallExpression";
         objectPath = objectPath.get("callee");
       }
     }
@@ -107,10 +112,17 @@ export default function(api, options) {
         );
       }
 
-      if (path.key == "object" && parentPath.isMemberExpression()) {
+      if (
+        path.key == "object" &&
+        (parentPath.isOptionalMemberExpression() ||
+          parentPath.isMemberExpression())
+      ) {
         return false;
       }
-      if (path.key == "callee" && parentPath.isCallExpression()) {
+      if (
+        path.key == "callee" &&
+        (parentPath.isOptionalCallExpression() || parentPath.isCallExpression())
+      ) {
         return false;
       }
       if (
@@ -128,8 +140,12 @@ export default function(api, options) {
     inherits: syntaxOptionalChaining,
 
     visitor: {
-      "MemberExpression|CallExpression"(path) {
+      "OptionalCallExpression|OptionalMemberExpression"(path) {
         if (!path.node.optional) {
+          path.node.type =
+            path.node.type === "OptionalMemberExpression"
+              ? "MemberExpression"
+              : "CallExpression";
           return;
         }
 
