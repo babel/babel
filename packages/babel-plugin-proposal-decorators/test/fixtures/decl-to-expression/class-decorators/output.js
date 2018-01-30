@@ -1,5 +1,7 @@
 var _class, _class2;
 
-export default dec(_class = class A {}) || _class;
+let A = dec(_class2 = class A {}) || _class2;
 
-let B = dec(_class2 = class B {}) || _class2;
+export { A as default };
+
+let B = dec(_class = class B {}) || _class;
