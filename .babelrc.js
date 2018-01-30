@@ -2,7 +2,7 @@
 
 const relative = require("require-relative");
 
-// Blame Logan for this.
+// Thanks Logan for this.
 // This works around https://github.com/istanbuljs/istanbuljs/issues/92 until
 // we have a version of Istanbul that actually works with 7.x.
 function istanbulHacks() {
