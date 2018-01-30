@@ -1,7 +1,5 @@
 "use strict";
 
-const relative = require("require-relative");
-
 // Thanks Logan for this.
 // This works around https://github.com/istanbuljs/istanbuljs/issues/92 until
 // we have a version of Istanbul that actually works with 7.x.
@@ -32,11 +30,6 @@ function istanbulHacks() {
   };
 }
 
-const babylonTransformCharcodes = relative.resolve(
-  "babel-plugin-transform-charcodes",
-  "./packages/babylon"
-);
-
 let envOpts = {
   loose: true,
 };
@@ -58,7 +51,7 @@ const config = {
   overrides: [{
     test: "packages/babylon",
     plugins: [
-      babylonTransformCharcodes,
+      "babel-plugin-transform-charcodes",
       ["@babel/transform-for-of", { assumeArray: true }],
     ],
   }],

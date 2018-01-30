@@ -670,7 +670,7 @@
     invariant "^2.2.0"
     lodash "^4.2.0"
 
-"@babel/traverse@7.0.0-beta.38":
+"@babel/traverse@7.0.0-beta.38", "@babel/traverse@^7.0.0-beta.31":
   version "7.0.0-beta.38"
   resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.0.0-beta.38.tgz#56462b91753dd5c6faf36e56a77c64077ddb85b8"
   dependencies:
@@ -1143,6 +1143,13 @@ babel-plugin-istanbul@^4.1.4:
     istanbul-lib-instrument "^1.7.5"
     test-exclude "^4.1.1"
 
+babel-plugin-transform-charcodes@0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-charcodes/-/babel-plugin-transform-charcodes-0.0.10.tgz#cdb76363e1e91ac105f3f94b168f41cf27983e80"
+  dependencies:
+    "@babel/traverse" "^7.0.0-beta.31"
+    babylon "^7.0.0-beta.31"
+
 babel-runtime@^6.22.0, babel-runtime@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-runtime/-/babel-runtime-6.26.0.tgz#965c7058668e82b55d7bfe04ff2337bc8b5647fe"
@@ -1187,7 +1194,7 @@ babylon@7.0.0-beta.36:
   version "7.0.0-beta.36"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.36.tgz#3a3683ba6a9a1e02b0aa507c8e63435e39305b9e"
 
-babylon@7.0.0-beta.38:
+babylon@7.0.0-beta.38, babylon@^7.0.0-beta.31:
   version "7.0.0-beta.38"
   resolved "https://registry.yarnpkg.com/babylon/-/babylon-7.0.0-beta.38.tgz#9b3a33e571a47464a2d20cb9dd5a570f00e3f996"
 
@@ -1595,6 +1602,10 @@ chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0:
     ansi-styles "^3.1.0"
     escape-string-regexp "^1.0.5"
     supports-color "^4.0.0"
+
+charcodes@0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/charcodes/-/charcodes-0.0.10.tgz#98d67a7a1e17ce154d1faafd01e72e9a6cff54f5"
 
 chardet@^0.4.0:
   version "0.4.2"
@@ -5890,10 +5901,6 @@ require-from-string@^2.0.1:
 require-main-filename@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-1.0.1.tgz#97f717b69d48784f5f526a6c5aa8ffdda055a4d1"
-
-require-relative@^0.8.7:
-  version "0.8.7"
-  resolved "https://registry.yarnpkg.com/require-relative/-/require-relative-0.8.7.tgz#7999539fc9e047a37928fa196f8e1563dabd36de"
 
 require-uncached@^1.0.3:
   version "1.0.3"
