@@ -1683,7 +1683,13 @@ export default class ExpressionParser extends LValParser {
     if (allowEmpty && this.match(tt.comma)) {
       elt = null;
     } else if (this.match(tt.ellipsis)) {
-      elt = this.parseSpread(refShorthandDefaultPos);
+      const spreadNodeStartPos = this.state.start;
+      const spreadNodeStartLoc = this.state.startLoc;
+      elt = this.parseParenItem(
+        this.parseSpread(refShorthandDefaultPos),
+        spreadNodeStartPos,
+        spreadNodeStartLoc,
+      );
 
       if (refTrailingCommaPos && this.match(tt.comma)) {
         refTrailingCommaPos.start = this.state.start;
