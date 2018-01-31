@@ -1686,7 +1686,7 @@ export default class ExpressionParser extends LValParser {
       const spreadNodeStartPos = this.state.start;
       const spreadNodeStartLoc = this.state.startLoc;
       elt = this.parseParenItem(
-        this.parseSpread(refShorthandDefaultPos),
+        this.parseSpread(refShorthandDefaultPos, refNeedsArrowPos),
         spreadNodeStartPos,
         spreadNodeStartLoc,
       );
