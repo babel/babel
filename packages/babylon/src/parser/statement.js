@@ -1310,21 +1310,44 @@ export default class StatementParser extends ExpressionParser {
       this.parseExportStar(node);
       if (node.type === "ExportAllDeclaration") return node;
     } else if (this.isExportDefaultSpecifier()) {
-      this.expectPlugin("exportDefaultFrom");
       const specifier = this.startNode();
       specifier.exported = this.parseIdentifier(true);
+      let isDefaultfrom = false;
+      if (specifier.exported.name === "default" && this.isContextual("from")) {
+        isDefaultfrom = true;
+        const lookaheadState = this.lookahead();
+        if (
+          lookaheadState.value === "=" ||
+          lookaheadState.type === tt.semi ||
+          lookaheadState.type === tt.eof ||
+          lookaheadState.type === tt.braceR ||
+          lineBreak.test(
+            this.input.slice(lookaheadState.lastTokEnd, lookaheadState.start),
+          )
+        ) {
+          node.declaration = this.parseMaybeAssign();
+          this.checkExport(node, true, true);
+          return this.finishNode(node, "ExportDefaultDeclaration");
+        }
+      }
+      this.expectPlugin("exportDefaultFrom");
       const specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")];
       node.specifiers = specifiers;
-      if (this.match(tt.comma) && this.lookahead().type === tt.star) {
-        this.expect(tt.comma);
-        const specifier = this.startNode();
-        this.expect(tt.star);
-        this.expectContextual("as");
-        specifier.exported = this.parseIdentifier();
-        specifiers.push(this.finishNode(specifier, "ExportNamespaceSpecifier"));
-      } else {
-        this.parseExportSpecifiersMaybe(node);
+      if (!isDefaultfrom) {
+        if (this.match(tt.comma) && this.lookahead().type === tt.star) {
+          this.expect(tt.comma);
+          const specifier = this.startNode();
+          this.expect(tt.star);
+          this.expectContextual("as");
+          specifier.exported = this.parseIdentifier();
+          specifiers.push(
+            this.finishNode(specifier, "ExportNamespaceSpecifier"),
+          );
+        } else {
+          this.parseExportSpecifiersMaybe(node);
+        }
       }
+
       this.parseExportFrom(node, true);
     } else if (this.eat(tt._default)) {
       // export default ...
