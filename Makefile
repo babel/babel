@@ -110,6 +110,8 @@ test-test262-ci:
 test-test262-update-whitelist:
 	node scripts/tests/test262/run_babylon_test262.js --update-whitelist
 
+clone-license:
+	./scripts/clone-license.sh
 publish:
 	git pull --rebase
 	make clean-lib
