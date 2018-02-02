@@ -91,7 +91,6 @@ function parser(pluginPasses, options, code) {
   } catch (err) {
     const { loc, missingPlugin } = err;
     if (loc) {
-      err.loc = null;
       const codeFrame = codeFrameColumns(
         code,
         {
@@ -110,6 +109,7 @@ function parser(pluginPasses, options, code) {
         err.message =
           `${options.filename || "unknown"}: ${err.message}\n\n` + codeFrame;
       }
+      err.code = "BABEL_PARSE_ERROR";
     }
     throw err;
   }
