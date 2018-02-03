@@ -13,7 +13,7 @@ export default function(commander, filenames, opts) {
       base = undefined;
     }
     if (!util.isCompilableExtension(relative, commander.extensions)) {
-      return callback();
+      return process.nextTick(callback);
     }
 
     // remove extension and then append back on .js
