@@ -4,10 +4,16 @@
 
 This preset includes the following plugins/presets:
 
-- [preset-flow](https://babeljs.io/docs/plugins/preset-flow/)
-- [syntax-jsx](https://babeljs.io/docs/plugins/syntax-jsx/)
-- [transform-react-jsx](https://babeljs.io/docs/plugins/transform-react-jsx/)
-- [transform-react-display-name](https://babeljs.io/docs/plugins/transform-react-display-name/)
+- [preset-flow](https://babeljs.io/docs/en/babel-preset-flow)
+- [syntax-jsx](https://babeljs.io/docs/en/babel-plugin-syntax-jsx)
+- [transform-react-jsx](https://babeljs.io/docs/en/babel-plugin-transform-react-jsx)
+- [transform-react-display-name](https://babeljs.io/docs/en/babel-plugin-transform-react-display-name)
+
+> Also check out:
+
+- [transform-react-constant-elements](https://babeljs.io/docs/en/transform-react-constant-elements)
+- [transform-react-jsx-self](https://babeljs.io/docs/en/transform-react-jsx-self)
+- [transform-react-jsx-source](https://babeljs.io/docs/en/transform-react-jsx-source)
 
 ## Install
 

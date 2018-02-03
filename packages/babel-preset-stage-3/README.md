@@ -14,14 +14,14 @@ The gist of Stage 3 is:
 
 This preset includes the following plugins:
 
-- [transform-object-rest-spread](https://www.npmjs.com/package/babel-plugin-transform-object-rest-spread/)
-- [transform-async-generator-functions](https://www.npmjs.com/package/babel-plugin-transform-async-generator-functions/)
+- [transform-object-rest-spread](https://babeljs.io/docs/en/babel-plugin-transform-object-rest-spread)
+- [transform-async-generator-functions](https://babeljs.io/docs/en/babel-plugin-transform-async-generator-functions)
 
 > trailing-commas, async, exponentiation will be removed in the next major since they are stage 4 already
 
-- [syntax-trailing-function-commas](https://www.npmjs.com/package/babel-plugin-syntax-trailing-function-commas/)
-- [transform-async-to-generator](https://www.npmjs.com/package/babel-plugin-transform-async-to-generator/)
-- [transform-exponentiation-operator](https://www.npmjs.com/package/babel-plugin-transform-exponentiation-operator/)
+- [syntax-trailing-function-commas](https://babeljs.io/docs/en/babel-plugin-syntax-trailing-function-commas)
+- [transform-async-to-generator](https://babeljs.io/docs/en/babel-plugin-transform-async-to-generator)
+- [transform-exponentiation-operator](https://babeljs.io/docs/en/babel-plugin-transform-exponentiation-operator)
 
 ## Install
 

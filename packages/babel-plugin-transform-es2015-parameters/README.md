@@ -18,7 +18,7 @@ npm install --save-dev babel-plugin-transform-es2015-parameters
 
 Default parameters desugar into `let` declarations to retain proper semantics. If this is
 not supported in your environment then you'll need the
-[transform-block-scoping](http://babeljs.io/docs/plugins/transform-es2015-block-scoping) plugin.
+[transform-block-scoping](https://babeljs.io/docs/en/babel-plugin-transform-es2015-block-scoping) plugin.
 
 ## Usage
 

@@ -2,15 +2,15 @@
 
 > Babel preset including es2015, es2016, es2017.
 
-> This is deprecated; use [preset-env](https://www.npmjs.com/package/babel-preset-env) instead.
+> This is deprecated; use [preset-env](https://babeljs.io/docs/en/babel-preset-env) instead.
 
 This is a special preset that will contain all yearly presets so user's won't need to specify each one individually.
 
 It currently includes:
 
-- [es2017](https://www.npmjs.com/package/babel-preset-es2015)
-- [es2016](https://www.npmjs.com/package/babel-preset-es2016)
-- [es2015](https://www.npmjs.com/package/babel-preset-es2017/)
+- [es2017](https://babeljs.io/docs/en/babel-preset-es2017)
+- [es2016](https://babeljs.io/docs/en/babel-preset-es2016)
+- [es2015](https://babeljs.io/docs/en/babel-preset-es2015)
 
 ## Install
 
@@ -50,7 +50,7 @@ require("babel-core").transform("code", {
 
 `boolean`, defaults to `true`.
 
-Toggles including plugins from the [es2015 preset](https://babeljs.io/docs/plugins/preset-es2015/).
+Toggles including plugins from the [es2015 preset](https://babeljs.io/docs/en/babel-preset-es2015).
 
 ```json
 {
@@ -82,10 +82,10 @@ You can also pass options down to the `es2015` preset.
 
 `boolean`, defaults to `true`.
 
-Toggles including plugins from the [es2016 preset](https://babeljs.io/docs/plugins/preset-es2016/).
+Toggles including plugins from the [es2016 preset](https://babeljs.io/docs/en/babel-preset-es2016).
 
 ### `es2017`
 
 `boolean`, defaults to `true`.
 
-Toggles including plugins from the [es2017 preset](https://babeljs.io/docs/plugins/preset-es2017/).
+Toggles including plugins from the [es2017 preset](https://babeljs.io/docs/en/babel-preset-es2017).

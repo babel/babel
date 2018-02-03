@@ -14,13 +14,13 @@ The gist of Stage 1 is:
 
 This preset includes the following plugins:
 
-- [transform-class-constructor-call](https://www.npmjs.com/package/babel-plugin-transform-class-constructor-call/) (Deprecated)
-- [transform-export-extensions](https://www.npmjs.com/package/babel-plugin-transform-export-extensions/)
+- [transform-class-constructor-call](https://babeljs.io/docs/en/babel-plugin-transform-class-constructor-call) (Deprecated)
+- [transform-export-extensions](https://babeljs.io/docs/en/babel-plugin-transform-export-extensions)
 
 And all plugins from presets:
 
-- [preset-stage-2](https://www.npmjs.com/package/babel-preset-stage-2/)
-- [preset-stage-3](https://www.npmjs.com/package/babel-preset-stage-3/)
+- [preset-stage-2](https://babeljs.io/docs/en/babel-preset-stage-2)
+- [preset-stage-3](https://babeljs.io/docs/en/babel-preset-stage-3)
 
 > You can check the src/index.js to be sure the plugins used.
 

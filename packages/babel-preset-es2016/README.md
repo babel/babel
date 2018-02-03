@@ -2,11 +2,11 @@
 
 > Babel preset for all es2016 plugins.
 
-> This is deprecated. If you want to stay up to date, use the [env preset](https://www.npmjs.com/package/babel-preset-env)
+> This is deprecated. If you want to stay up to date, use the [env preset](https://babeljs.io/docs/en/babel-preset-env)
 
 This preset includes the following plugins:
 
-- [transform-exponentiation-operator](https://www.npmjs.com/package/babel-plugin-transform-exponentiation-operator/)
+- [transform-exponentiation-operator](https://babeljs.io/docs/en/babel-plugin-transform-exponentiation-operator)
 
 ## Install
 
@@ -42,7 +42,7 @@ require("babel-core").transform("code", {
 
 ## Basic Setup (with the CLI)
 
-> For more info, check out docs for [babel-cli](https://www.npmjs.com/package/babel-cli)
+> For more info, check out docs for [babel-cli](https://babeljs.io/docs/en/babel-cli)
 
 Install the CLI and this preset
 

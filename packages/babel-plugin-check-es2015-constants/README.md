@@ -22,7 +22,7 @@ repl: "a" is read-only
 
 > #### Syntax only
 > 
-> This check will only validate consts. If you need it to compile down to \`var\` then you must also install and enable [transform-es2015-block-scoping](https://www.npmjs.com/package/babel-plugin-transform-es2015-block-scoping).
+> This check will only validate consts. If you need it to compile down to \`var\` then you must also install and enable [transform-es2015-block-scoping](babeljs.io/docs/en/babel-plugin-transform-es2015-block-scoping).
 
 ## Installation
 
@@ -58,4 +58,4 @@ require("babel-core").transform("code", {
 
 ## Note
 
-This check will only validate consts. If you need it to compile down to `var` then you must also install and enable [`transform-es2015-block-scoping`](http://babeljs.io/docs/plugins/transform-es2015-block-scoping/).
+This check will only validate consts. If you need it to compile down to `var` then you must also install and enable [`transform-es2015-block-scoping`](https://babeljs.io/docs/en/babel-plugin-transform-es2015-block-scoping/).

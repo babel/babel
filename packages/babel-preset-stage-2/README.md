@@ -14,13 +14,13 @@ The gist of Stage 2 is:
 
 This preset includes the following plugins:
 
-- [syntax-dynamic-import](https://www.npmjs.com/package/babel-plugin-syntax-dynamic-import/)
-- [transform-class-properties](https://www.npmjs.com/package/babel-plugin-transform-class-properties/)
-- <del>[transform-decorators](https://www.npmjs.com/package/babel-plugin-transform-decorators/)</del> – *disabled pending proposal update* (can use the [legacy](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) transform in the meantime)
+- [syntax-dynamic-import](https://babeljs.io/docs/en/babel-plugin-syntax-dynamic-import)
+- [transform-class-properties](https://babeljs.io/docs/en/babel-plugin-transform-class-properties)
+- [transform-decorators](https://babeljs.io/docs/en/babel-plugin-transform-decorators) *disabled pending proposal update* (can use the [legacy](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) transform in the meantime)
 
 And all plugins from presets:
 
-- [preset-stage-3](https://www.npmjs.com/package/babel-preset-stage-3/)
+- [preset-stage-3](https://babeljs.io/docs/en/babel-preset-stage-3)
 
 > You can check the src/index.js to be sure the plugins used.
 

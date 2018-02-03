@@ -24,7 +24,7 @@ and `.js` will be transformed by Babel.
 
 > #### Polyfill not included
 > 
-> You must include a [polyfill](https://www.npmjs.com/package/babel-polyfill) separately when using features that require it, like generators.
+> You must include a [polyfill](https://babeljs.io/docs/en/babel-polyfill) separately when using features that require it, like generators.
 
 ### Ignores `node_modules` by default
 
@@ -69,8 +69,8 @@ require("babel-register")({
 });
 ```
 
-You can pass in all other [options](https://babeljs.io/docs/usage/api/#options) as well,
-including `plugins` and `presets`. But note that the closest [`.babelrc`](https://babeljs.io/docs/usage/babelrc/)
+You can pass in all other [options](https://babeljs.io/docs/en/babel-core#options) as well,
+including `plugins` and `presets`. But note that the closest [`.babelrc`](https://babeljs.io/docs/en/babelrc)
 to each file still applies, and takes precedence over any options you pass in here.
 
 ## Environment variables

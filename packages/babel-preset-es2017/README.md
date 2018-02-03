@@ -2,12 +2,12 @@
 
 > Babel preset for all es2017 plugins.
 
-> This is deprecated. If you want to stay up to date, use the [env preset](https://www.npmjs.com/package/babel-preset-env)
+> This is deprecated. If you want to stay up to date, use the [env preset](https://babeljs.io/docs/en/babel-preset-env)
 
 This preset includes the following plugins:
 
-- [syntax-trailing-function-commas](https://www.npmjs.com/package/babel-plugin-syntax-trailing-function-commas/)
-- [transform-async-to-generator](https://www.npmjs.com/package/babel-plugin-transform-async-to-generator/)
+- [syntax-trailing-function-commas](https://babeljs.io/docs/en/babel-plugin-syntax-trailing-function-commas)
+- [transform-async-to-generator](https://babeljs.io/docs/en/babel-plugin-transform-async-to-generator)
 
 ## Install
 
@@ -44,7 +44,7 @@ require("babel-core").transform("code", {
 
 ## Basic Setup (with the CLI)
 
-> For more info, check out docs for [babel-cli](https://www.npmjs.com/package/babel-cli)
+> For more info, check out docs for [babel-cli](https://babeljs.io/docs/en/babel-cli)
 
 Install the CLI and this preset
 

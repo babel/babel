@@ -72,15 +72,11 @@ const { code, map, ast } = babel.transformFromAst(ast, code, options);
 
 ## Options
 
-<blockquote class="babel-callout babel-callout-info">
-  <h4>Babel CLI</h4>
-  <p>
-    You can pass these options from the Babel CLI like so:
-  </p>
-  <p>
-    <code>babel --name<span class="o">=</span>value</code>
-  </p>
-</blockquote>
+> #### Babel CLI
+> 
+> You can pass these options from the Babel CLI like so:
+> 
+> `babel --name=value`
 
 Following is a table of the options you can use:
 
@@ -89,7 +85,7 @@ Following is a table of the options you can use:
 | `ast`                    | `true`               | Include the AST in the returned object |
 | `auxiliaryCommentAfter`  | `null`               | Attach a comment after all non-user injected code. |
 | `auxiliaryCommentBefore` | `null`               | Attach a comment before all non-user injected code. |
-| `babelrc`                | `true`               | Specify whether or not to use .babelrc and .babelignore files. Not available when using the CLI, [use `--no-babelrc` instead](https://babeljs.io/docs/usage/cli/#babel-ignoring-babelrc). |
+| `babelrc`                | `true`               | Specify whether or not to use .babelrc and .babelignore files. Not available when using the CLI, [use `--no-babelrc` instead](https://babeljs.io/docs/en/babel-cli#ignoring-babelrc). |
 | `code`                   | `true`               | Enable code generation |
 | `comments`               | `true`               | Output comments in generated output. |
 | `compact`                | `"auto"`             | Do not include superfluous whitespace characters and line terminators. When set to `"auto"` compact is set to `true` on input sizes of >500KB. |
@@ -108,8 +104,8 @@ Following is a table of the options you can use:
 | `moduleRoot`             | `(sourceRoot)`       | Optional prefix for the AMD module formatter that will be prepend to the filename on module definitions. |
 | `only`                   | `null`               | A [glob](https://github.com/isaacs/minimatch), regex, or mixed array of both, matching paths to **only** compile. Can also be an array of arrays containing paths to explicitly match. When attempting to compile a non-matching file it's returned verbatim. |
 | `parserOpts`             | `{}`                 | An object containing the options to be passed down to the babel parser, babylon |
-| `plugins`                | `[]`                 | List of [plugins](https://babeljs.io/docs/plugins/) to load and use. |
-| `presets`                | `[]`                 | List of [presets](https://babeljs.io/docs/plugins/#presets) (a set of plugins) to load and use. |
+| `plugins`                | `[]`                 | List of [plugins](https://babeljs.io/docs/en/plugins) to load and use. |
+| `presets`                | `[]`                 | List of [presets](https://babeljs.io/docs/en/plugins#presets) (a set of plugins) to load and use. |
 | `retainLines`            | `false`              | Retain line numbers. This will lead to wacky code but is handy for scenarios where you can't use source maps. (**NOTE:** This will not retain the columns) |
 | `resolveModuleSource`    | `null`               | Resolve a module source ie. `import "SOURCE";` to a custom value. Called as `resolveModuleSource(source, filename)`. |
 | `shouldPrintComment`     | `null`               | An optional callback that controls whether a comment should be output or not. Called as `shouldPrintComment(commentContents)`. **NOTE:** This overrides the `comment` option when used. |

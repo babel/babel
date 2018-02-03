@@ -4,7 +4,7 @@
 
 This preset includes the following plugins:
 
-- [transform-flow-strip-types](https://babeljs.io/docs/plugins/transform-flow-strip-types/)
+- [transform-flow-strip-types](https://babeljs.io/docs/en/babel-plugin-transform-flow-strip-types/)
 
 ## Example
 
