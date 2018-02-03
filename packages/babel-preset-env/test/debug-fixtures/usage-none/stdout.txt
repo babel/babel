@@ -10,7 +10,6 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-constants { "firefox":"50", "ie":"11" }
   transform-arrow-functions { "ie":"11" }
   transform-block-scoping { "firefox":"50", "ie":"11" }
   transform-classes { "ie":"11" }

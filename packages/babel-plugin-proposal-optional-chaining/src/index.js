@@ -7,14 +7,9 @@ export default function(api, options) {
   function optional(path, replacementPath) {
     const { scope } = path;
     const optionals = [];
-    const nil = scope.buildUndefinedNode();
 
     let objectPath = path;
-    while (
-      objectPath.isMemberExpression() ||
-      objectPath.isCallExpression() ||
-      objectPath.isNewExpression()
-    ) {
+    while (objectPath.isMemberExpression() || objectPath.isCallExpression()) {
       const { node } = objectPath;
       if (node.optional) {
         optionals.push(node);
@@ -32,8 +27,7 @@ export default function(api, options) {
       node.optional = false;
 
       const isCall = t.isCallExpression(node);
-      const replaceKey =
-        isCall || t.isNewExpression(node) ? "callee" : "object";
+      const replaceKey = isCall ? "callee" : "object";
       const chain = node[replaceKey];
 
       let ref;
@@ -45,7 +39,13 @@ export default function(api, options) {
       } else {
         ref = scope.maybeGenerateMemoised(chain);
         if (ref) {
-          check = t.assignmentExpression("=", ref, chain);
+          check = t.assignmentExpression(
+            "=",
+            t.cloneNode(ref),
+            // Here `chain` MUST NOT be cloned because it could be updated
+            // when generating the memoised context of a call espression
+            chain,
+          );
           node[replaceKey] = ref;
         } else {
           check = ref = chain;
@@ -70,7 +70,7 @@ export default function(api, options) {
             context = object;
           }
 
-          node.arguments.unshift(context);
+          node.arguments.unshift(t.cloneNode(context));
           node.callee = t.memberExpression(node.callee, t.identifier("call"));
         }
       }
@@ -78,17 +78,17 @@ export default function(api, options) {
       replacementPath.replaceWith(
         t.conditionalExpression(
           loose
-            ? t.binaryExpression("==", t.clone(check), t.nullLiteral())
+            ? t.binaryExpression("==", t.cloneNode(check), t.nullLiteral())
             : t.logicalExpression(
                 "||",
-                t.binaryExpression("===", t.clone(check), t.nullLiteral()),
+                t.binaryExpression("===", t.cloneNode(check), t.nullLiteral()),
                 t.binaryExpression(
                   "===",
-                  t.clone(ref),
+                  t.cloneNode(ref),
                   scope.buildUndefinedNode(),
                 ),
               ),
-          nil,
+          scope.buildUndefinedNode(),
           replacementPath.node,
         ),
       );
@@ -102,18 +102,20 @@ export default function(api, options) {
       const { parentPath } = path;
 
       if (path.key == "left" && parentPath.isAssignmentExpression()) {
-        return false;
+        throw path.buildCodeFrameError(
+          "Illegal optional chain in assignment expression",
+        );
       }
+      if (path.key == "argument" && parentPath.isUpdateExpression()) {
+        throw path.buildCodeFrameError(
+          "Illegal optional chain in update expression",
+        );
+      }
+
       if (path.key == "object" && parentPath.isMemberExpression()) {
         return false;
       }
-      if (
-        path.key == "callee" &&
-        (parentPath.isCallExpression() || parentPath.isNewExpression())
-      ) {
-        return false;
-      }
-      if (path.key == "argument" && parentPath.isUpdateExpression()) {
+      if (path.key == "callee" && parentPath.isCallExpression()) {
         return false;
       }
       if (
@@ -131,7 +133,7 @@ export default function(api, options) {
     inherits: syntaxOptionalChaining,
 
     visitor: {
-      "MemberExpression|NewExpression|CallExpression"(path) {
+      "MemberExpression|CallExpression"(path) {
         if (!path.node.optional) {
           return;
         }

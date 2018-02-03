@@ -1,49 +1,21 @@
 // @flow
 import defineType, {
+  arrayOfType,
   assertEach,
   assertNodeType,
   assertOneOf,
   assertValueType,
   chain,
+  validate,
+  validateArrayOfType,
+  validateOptional,
+  validateOptionalType,
+  validateType,
 } from "./utils";
 import { functionDeclarationCommon } from "./core";
 import { classMethodOrDeclareMethodCommon } from "./es2015";
 
 const bool = assertValueType("boolean");
-
-function validate(validate) {
-  return { validate };
-}
-
-function typeIs(typeName) {
-  return typeof typeName === "string"
-    ? assertNodeType(typeName)
-    : assertNodeType(...typeName);
-}
-
-function validateType(name) {
-  return validate(typeIs(name));
-}
-
-function validateOptional(validate) {
-  return { validate, optional: true };
-}
-
-function validateOptionalType(typeName) {
-  return { validate: typeIs(typeName), optional: true };
-}
-
-function arrayOf(elementType) {
-  return chain(assertValueType("array"), assertEach(elementType));
-}
-
-function arrayOfType(nodeTypeName) {
-  return arrayOf(typeIs(nodeTypeName));
-}
-
-function validateArrayOfType(nodeTypeName) {
-  return validate(arrayOfType(nodeTypeName));
-}
 
 const tSFunctionTypeAnnotationCommon = {
   returnType: {

@@ -10,11 +10,10 @@ export default function() {
         const { operator, argument } = path.node;
         if (operator !== "throw") return;
 
-        const arg = t.identifier("e");
         const arrow = t.functionExpression(
           null,
-          [arg],
-          t.blockStatement([t.throwStatement(arg)]),
+          [t.identifier("e")],
+          t.blockStatement([t.throwStatement(t.identifier("e"))]),
         );
 
         path.replaceWith(t.callExpression(arrow, [argument]));

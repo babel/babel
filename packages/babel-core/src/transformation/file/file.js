@@ -123,7 +123,7 @@ export default class File {
 
   addHelper(name: string): Object {
     const declar = this.declarations[name];
-    if (declar) return declar;
+    if (declar) return t.cloneNode(declar);
 
     const generator = this.get("helperGenerator");
     const runtime = this.get("helpersNamespace");
@@ -131,7 +131,7 @@ export default class File {
       const res = generator(name);
       if (res) return res;
     } else if (runtime) {
-      return t.memberExpression(runtime, t.identifier(name));
+      return t.memberExpression(t.cloneNode(runtime), t.identifier(name));
     }
 
     const uid = (this.declarations[name] = this.scope.generateUidIdentifier(
@@ -179,8 +179,8 @@ export default class File {
 
   buildCodeFrameError(
     node: ?{
-      loc?: { line: number, column: number },
-      _loc?: { line: number, column: number },
+      loc?: { start: { line: number, column: number } },
+      _loc?: { start: { line: number, column: number } },
     },
     msg: string,
     Error: typeof Error = SyntaxError,
@@ -212,8 +212,8 @@ export default class File {
           this.code,
           {
             start: {
-              line: loc.line,
-              column: loc.column + 1,
+              line: loc.start.line,
+              column: loc.start.column + 1,
             },
           },
           { highlightCode },

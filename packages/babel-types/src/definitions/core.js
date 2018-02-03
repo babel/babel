@@ -383,11 +383,11 @@ defineType("Identifier", {
   fields: {
     ...patternLikeCommon,
     name: {
-      validate(node, key, val) {
+      validate: chain(function(node, key, val) {
         if (!isValidIdentifier(val)) {
           // throw new TypeError(`"${val}" is not a valid identifer name`);
         }
-      },
+      }, assertValueType("string")),
     },
     optional: {
       validate: assertValueType("boolean"),

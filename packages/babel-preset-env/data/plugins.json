@@ -1,14 +1,4 @@
 {
-  "check-constants": {
-    "chrome": "49",
-    "edge": "14",
-    "firefox": "51",
-    "safari": "10",
-    "node": "6",
-    "ios": "10",
-    "opera": "36",
-    "electron": "1"
-  },
   "transform-arrow-functions": {
     "chrome": "47",
     "edge": "13",

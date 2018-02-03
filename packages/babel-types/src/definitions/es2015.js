@@ -124,7 +124,7 @@ const classCommon = {
     validate: chain(
       assertValueType("array"),
       assertEach(
-        assertNodeType("TSExpressionWithTypeArguments", "FlowClassImplements"),
+        assertNodeType("TSExpressionWithTypeArguments", "ClassImplements"),
       ),
     ),
     optional: true,
@@ -399,19 +399,27 @@ export const classMethodOrPropertyCommon = {
     optional: true,
   },
   key: {
-    validate: (function() {
-      const normal = assertNodeType(
+    validate: chain(
+      (function() {
+        const normal = assertNodeType(
+          "Identifier",
+          "StringLiteral",
+          "NumericLiteral",
+        );
+        const computed = assertNodeType("Expression");
+
+        return function(node: Object, key: string, val: any) {
+          const validator = node.computed ? computed : normal;
+          validator(node, key, val);
+        };
+      })(),
+      assertNodeType(
         "Identifier",
         "StringLiteral",
         "NumericLiteral",
-      );
-      const computed = assertNodeType("Expression");
-
-      return function(node: Object, key: string, val: any) {
-        const validator = node.computed ? computed : normal;
-        validator(node, key, val);
-      };
-    })(),
+        "Expression",
+      ),
+    ),
   },
 };
 

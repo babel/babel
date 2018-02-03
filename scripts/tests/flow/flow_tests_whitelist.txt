@@ -33,14 +33,9 @@ invalid_syntax/migrated_0000.js
 invalid_syntax/migrated_0001.js
 invalid_syntax/migrated_0002.js
 invalid_syntax/migrated_0003.js
-invalid_syntax/migrated_0010.js
 private_class_properties/valid.js
 types/annotations/migrated_0001.js
-types/annotations_in_comments_invalid/migrated_0000.js
-types/annotations_in_comments_invalid/migrated_0001.js
-types/annotations_in_comments_invalid/migrated_0002.js
 types/annotations_in_comments_invalid/migrated_0003.js
-types/annotations_in_comments_invalid/migrated_0004.js
 types/annotations/static_is_reserved_param.js
 types/annotations/static_is_reserved_type.js
 types/annotations/void_is_reserved_param.js

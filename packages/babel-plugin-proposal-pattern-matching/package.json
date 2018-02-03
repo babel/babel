@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-pattern-matching",
-  "version": "7.0.0-beta.36",
+  "version": "7.0.0-beta.39",
   "description": "Compile pattern mathching",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-pattern-matching",
   "license": "MIT",
@@ -9,13 +9,13 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/plugin-syntax-pattern-matching": "7.0.0-beta.36"
+    "@babel/plugin-syntax-pattern-matching": "7.0.0-beta.39"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.36"
+    "@babel/core": "7.0.0-beta.39"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.36",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.36"
+    "@babel/core": "7.0.0-beta.39",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.39"
   }
 }

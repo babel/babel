@@ -43,7 +43,7 @@ export default function(api, opts) {
       } else if (t.isLiteral(prop.key)) {
         keys.push(t.stringLiteral(String(prop.key.value)));
       } else {
-        keys.push(prop.key);
+        keys.push(t.cloneNode(prop.key));
         allLiteral = false;
       }
     }
@@ -58,12 +58,10 @@ export default function(api, opts) {
     for (const propPath of path.get("properties")) {
       const key = propPath.get("key");
       if (propPath.node.computed && !key.isPure()) {
-        const identifier = path.scope.generateUidIdentifierBasedOnNode(
-          key.node,
-        );
-        const declarator = t.variableDeclarator(identifier, key.node);
+        const name = path.scope.generateUidBasedOnNode(key.node);
+        const declarator = t.variableDeclarator(t.identifier(name), key.node);
         impureComputedPropertyDeclarators.push(declarator);
-        key.replaceWith(identifier);
+        key.replaceWith(t.identifier(name));
       }
     }
     return impureComputedPropertyDeclarators;
@@ -74,7 +72,7 @@ export default function(api, opts) {
     const props = path.get("properties");
     const last = props[props.length - 1];
     t.assertRestElement(last.node);
-    const restElement = t.clone(last.node);
+    const restElement = t.cloneNode(last.node);
     last.remove();
 
     const impureComputedPropertyDeclarators = replaceImpureComputedKeys(path);
@@ -95,7 +93,7 @@ export default function(api, opts) {
       impureComputedPropertyDeclarators,
       restElement.argument,
       t.callExpression(file.addHelper("objectWithoutProperties"), [
-        objRef,
+        t.cloneNode(objRef),
         keyExpression,
       ]),
     ];
@@ -124,7 +122,7 @@ export default function(api, opts) {
 
       parentPath.ensureBlock();
       parentPath.get("body").unshiftContainer("body", declar);
-      paramPath.replaceWith(uid);
+      paramPath.replaceWith(t.cloneNode(uid));
     }
   }
 
@@ -180,7 +178,10 @@ export default function(api, opts) {
                 );
                 // replace foo() with _foo
                 this.originalPath.replaceWith(
-                  t.variableDeclarator(this.originalPath.node.id, initRef),
+                  t.variableDeclarator(
+                    this.originalPath.node.id,
+                    t.cloneNode(initRef),
+                  ),
                 );
 
                 return;
@@ -247,8 +248,9 @@ export default function(api, opts) {
         const specifiers = [];
 
         for (const name in path.getOuterBindingIdentifiers(path)) {
-          const id = t.identifier(name);
-          specifiers.push(t.exportSpecifier(id, id));
+          specifiers.push(
+            t.exportSpecifier(t.identifier(name), t.identifier(name)),
+          );
         }
 
         // Split the declaration and export list into two declarations so that the variable
@@ -268,14 +270,14 @@ export default function(api, opts) {
         if (leftPath.isObjectPattern() && hasRestElement(leftPath)) {
           const nodes = [];
 
-          const ref = path.scope.generateUidIdentifierBasedOnNode(
+          const refName = path.scope.generateUidBasedOnNode(
             path.node.right,
             "ref",
           );
 
           nodes.push(
             t.variableDeclaration("var", [
-              t.variableDeclarator(ref, path.node.right),
+              t.variableDeclarator(t.identifier(refName), path.node.right),
             ]),
           );
 
@@ -283,7 +285,7 @@ export default function(api, opts) {
             impureComputedPropertyDeclarators,
             argument,
             callExpression,
-          ] = createObjectSpread(leftPath, file, ref);
+          ] = createObjectSpread(leftPath, file, t.identifier(refName));
 
           if (impureComputedPropertyDeclarators.length > 0) {
             nodes.push(
@@ -291,18 +293,15 @@ export default function(api, opts) {
             );
           }
 
-          const nodeWithoutSpread = t.clone(path.node);
-          nodeWithoutSpread.right = ref;
+          const nodeWithoutSpread = t.cloneNode(path.node);
+          nodeWithoutSpread.right = t.identifier(refName);
           nodes.push(t.expressionStatement(nodeWithoutSpread));
           nodes.push(
             t.toStatement(
               t.assignmentExpression("=", argument, callExpression),
             ),
           );
-
-          if (ref) {
-            nodes.push(t.expressionStatement(ref));
-          }
+          nodes.push(t.expressionStatement(t.identifier(refName)));
 
           path.replaceWithMultiple(nodes);
         }
@@ -324,7 +323,9 @@ export default function(api, opts) {
           path.ensureBlock();
 
           node.body.body.unshift(
-            t.variableDeclaration("var", [t.variableDeclarator(left, temp)]),
+            t.variableDeclaration("var", [
+              t.variableDeclarator(left, t.cloneNode(temp)),
+            ]),
           );
 
           return;
@@ -344,7 +345,7 @@ export default function(api, opts) {
 
         node.body.body.unshift(
           t.variableDeclaration(node.left.kind, [
-            t.variableDeclarator(pattern, key),
+            t.variableDeclarator(pattern, t.cloneNode(key)),
           ]),
         );
       },

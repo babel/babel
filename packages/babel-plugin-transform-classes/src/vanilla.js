@@ -122,16 +122,18 @@ export default class ClassTransformer {
     if (this.isDerived) {
       if (this.extendsNative) {
         closureArgs.push(
-          t.callExpression(this.file.addHelper("wrapNativeSuper"), [superName]),
+          t.callExpression(this.file.addHelper("wrapNativeSuper"), [
+            t.cloneNode(superName),
+          ]),
         );
       } else {
-        closureArgs.push(superName);
+        closureArgs.push(t.cloneNode(superName));
       }
 
       superName = this.scope.generateUidIdentifierBasedOnNode(superName);
       closureParams.push(superName);
 
-      this.superName = superName;
+      this.superName = t.cloneNode(superName);
     }
 
     //
@@ -143,13 +145,15 @@ export default class ClassTransformer {
         t.expressionStatement(
           t.callExpression(file.addHelper("classCallCheck"), [
             t.thisExpression(),
-            this.classRef,
+            t.cloneNode(this.classRef),
           ]),
         ),
       );
     }
 
-    body = body.concat(this.staticPropBody.map(fn => fn(this.classRef)));
+    body = body.concat(
+      this.staticPropBody.map(fn => fn(t.cloneNode(this.classRef))),
+    );
 
     if (this.classId) {
       // named class with only a constructor
@@ -157,7 +161,7 @@ export default class ClassTransformer {
     }
 
     //
-    body.push(t.returnStatement(this.classRef));
+    body.push(t.returnStatement(t.cloneNode(this.classRef)));
 
     const container = t.arrowFunctionExpression(
       closureParams,
@@ -167,7 +171,11 @@ export default class ClassTransformer {
   }
 
   buildConstructor() {
-    const func = t.functionDeclaration(this.classRef, [], this.constructorBody);
+    const func = t.functionDeclaration(
+      t.cloneNode(this.classRef),
+      [],
+      this.constructorBody,
+    );
     t.inherits(func, this.node);
     return func;
   }
@@ -327,14 +335,12 @@ export default class ClassTransformer {
         staticProps = defineMap.toComputedObjectFromClass(staticProps);
       }
 
-      const nullNode = t.nullLiteral();
-
       let args = [
-        this.classRef, // Constructor
-        nullNode, // instanceDescriptors
-        nullNode, // staticDescriptors
-        nullNode, // instanceInitializers
-        nullNode, // staticInitializers
+        t.cloneNode(this.classRef), // Constructor
+        t.nullLiteral(), // instanceDescriptors
+        t.nullLiteral(), // staticDescriptors
+        t.nullLiteral(), // instanceInitializers
+        t.nullLiteral(), // staticInitializers
       ];
 
       if (instanceProps) args[1] = instanceProps;
@@ -352,7 +358,7 @@ export default class ClassTransformer {
 
       let lastNonNullIndex = 0;
       for (let i = 0; i < args.length; i++) {
-        if (args[i] !== nullNode) lastNonNullIndex = i;
+        if (!t.isNullLiteral(args[i])) lastNonNullIndex = i;
       }
       args = args.slice(0, lastNonNullIndex + 1);
 
@@ -387,12 +393,12 @@ export default class ClassTransformer {
         // special case single arguments spread
         bareSuperNode.arguments[1] = bareSuperNode.arguments[1].argument;
         bareSuperNode.callee = t.memberExpression(
-          superRef,
+          t.cloneNode(superRef),
           t.identifier("apply"),
         );
       } else {
         bareSuperNode.callee = t.memberExpression(
-          superRef,
+          t.cloneNode(superRef),
           t.identifier("call"),
         );
       }
@@ -400,13 +406,16 @@ export default class ClassTransformer {
       bareSuperNode = optimiseCall(
         t.logicalExpression(
           "||",
-          t.memberExpression(this.classRef, t.identifier("__proto__")),
+          t.memberExpression(
+            t.cloneNode(this.classRef),
+            t.identifier("__proto__"),
+          ),
           t.callExpression(
             t.memberExpression(
               t.identifier("Object"),
               t.identifier("getPrototypeOf"),
             ),
-            [this.classRef],
+            [t.cloneNode(this.classRef)],
           ),
         ),
         t.thisExpression(),
@@ -456,7 +465,7 @@ export default class ClassTransformer {
     const superRef = this.superName || t.identifier("Function");
     let thisRef = function() {
       const ref = path.scope.generateDeclaredUidIdentifier("this");
-      thisRef = () => ref;
+      thisRef = () => t.cloneNode(ref);
       return ref;
     };
 
@@ -607,7 +616,7 @@ export default class ClassTransformer {
           this.isLoose
             ? this.file.addHelper("inheritsLoose")
             : this.file.addHelper("inherits"),
-          [this.classRef, this.superName],
+          [t.cloneNode(this.classRef), t.cloneNode(this.superName)],
         ),
       ),
     );

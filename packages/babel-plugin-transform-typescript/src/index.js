@@ -114,9 +114,11 @@ export default function() {
             );
           }
 
-          const id = t.identifier(name);
-          const thisDotName = t.memberExpression(t.thisExpression(), id);
-          const assign = t.assignmentExpression("=", thisDotName, id);
+          const assign = t.assignmentExpression(
+            "=",
+            t.memberExpression(t.thisExpression(), t.identifier(name)),
+            t.identifier(name),
+          );
           return t.expressionStatement(assign);
         });
 

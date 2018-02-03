@@ -17,7 +17,8 @@ export function insertBefore(nodes) {
   if (
     this.parentPath.isExpressionStatement() ||
     this.parentPath.isLabeledStatement() ||
-    this.parentPath.isExportDeclaration()
+    this.parentPath.isExportNamedDeclaration() ||
+    (this.parentPath.isExportDefaultDeclaration() && this.isDeclaration())
   ) {
     return this.parentPath.insertBefore(nodes);
   } else if (
@@ -55,7 +56,7 @@ export function _containerInsert(from, nodes) {
   this.container.splice(from, 0, ...nodes);
   for (let i = 0; i < nodes.length; i++) {
     const to = from + i;
-    const path = this.getSibling(`${to}`);
+    const path = this.getSibling(to);
     paths.push(path);
 
     if (this.context && this.context.queue) {
@@ -98,7 +99,8 @@ export function insertAfter(nodes) {
   if (
     this.parentPath.isExpressionStatement() ||
     this.parentPath.isLabeledStatement() ||
-    this.parentPath.isExportDeclaration()
+    this.parentPath.isExportNamedDeclaration() ||
+    (this.parentPath.isExportDefaultDeclaration() && this.isDeclaration())
   ) {
     return this.parentPath.insertAfter(nodes);
   } else if (
@@ -108,9 +110,11 @@ export function insertAfter(nodes) {
     if (this.node) {
       const temp = this.scope.generateDeclaredUidIdentifier();
       nodes.unshift(
-        t.expressionStatement(t.assignmentExpression("=", temp, this.node)),
+        t.expressionStatement(
+          t.assignmentExpression("=", t.cloneNode(temp), this.node),
+        ),
       );
-      nodes.push(t.expressionStatement(temp));
+      nodes.push(t.expressionStatement(t.cloneNode(temp)));
     }
     return this.replaceExpressionWithStatements(nodes);
   } else if (Array.isArray(this.container)) {

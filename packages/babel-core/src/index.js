@@ -43,6 +43,8 @@ export { default as transformFileSync } from "./transform-file-sync";
 export { default as transformFromAst } from "./transform-ast";
 export { default as transformFromAstSync } from "./transform-ast-sync";
 
+export { default as parse } from "./parse";
+
 /**
  * Recommended set of compilable extensions. Not used in @babel/core directly, but meant as
  * as an easy source for tooling making use of @babel/core.

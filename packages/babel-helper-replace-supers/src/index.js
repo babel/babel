@@ -41,7 +41,7 @@ function getPrototypeOfExpression(objectRef, isStatic) {
         t.identifier("Object"),
         t.identifier("getPrototypeOf"),
       ),
-      [targetRef],
+      [t.cloneNode(targetRef)],
     ),
   );
 }
@@ -141,7 +141,7 @@ export default class ReplaceSupers {
   };
 
   getObjectRef() {
-    return this.opts.objectRef || this.opts.getObjectRef();
+    return t.cloneNode(this.opts.objectRef || this.opts.getObjectRef());
   }
 
   /**
@@ -206,9 +206,12 @@ export default class ReplaceSupers {
       return;
     } else if (t.isMemberExpression(parent) && !methodNode.static) {
       // super.test -> objectRef.prototype.test
-      return t.memberExpression(superRef, t.identifier("prototype"));
+      return t.memberExpression(
+        t.cloneNode(superRef),
+        t.identifier("prototype"),
+      );
     } else {
-      return superRef;
+      return t.cloneNode(superRef);
     }
   }
 
@@ -240,12 +243,18 @@ export default class ReplaceSupers {
       // super.age += 2; -> let _ref = super.age; super.age = _ref + 2;
       ref = ref || path.scope.generateUidIdentifier("ref");
       return [
-        t.variableDeclaration("var", [t.variableDeclarator(ref, node.left)]),
+        t.variableDeclaration("var", [
+          t.variableDeclarator(t.cloneNode(ref), t.cloneNode(node.left)),
+        ]),
         t.expressionStatement(
           t.assignmentExpression(
             "=",
             node.left,
-            t.binaryExpression(node.operator.slice(0, -1), ref, node.right),
+            t.binaryExpression(
+              node.operator.slice(0, -1),
+              t.cloneNode(ref),
+              node.right,
+            ),
           ),
         ),
       ];

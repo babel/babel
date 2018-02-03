@@ -1,13 +1,13 @@
 {
   "name": "@babel/helper-call-delegate",
-  "version": "7.0.0-beta.36",
+  "version": "7.0.0-beta.39",
   "description": "Helper function to call delegate",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-call-delegate",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-hoist-variables": "7.0.0-beta.36",
-    "@babel/traverse": "7.0.0-beta.36",
-    "@babel/types": "7.0.0-beta.36"
+    "@babel/helper-hoist-variables": "7.0.0-beta.39",
+    "@babel/traverse": "7.0.0-beta.39",
+    "@babel/types": "7.0.0-beta.39"
   }
 }

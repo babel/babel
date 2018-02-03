@@ -1,6 +1,6 @@
 "use strict";
 
-// Blame Logan for this.
+// Thanks Logan for this.
 // This works around https://github.com/istanbuljs/istanbuljs/issues/92 until
 // we have a version of Istanbul that actually works with 7.x.
 function istanbulHacks() {
@@ -38,14 +38,23 @@ const config = {
   comments: false,
   presets: [
     ["@babel/env", envOpts],
-    "@babel/flow"
   ],
   plugins: [
+    // TODO: Use @babel/preset-flow when 
+    // https://github.com/babel/babel/issues/7233 is fixed
+    "@babel/plugin-transform-flow-strip-types",
     ["@babel/proposal-class-properties", { loose: true }],
     "@babel/proposal-export-namespace-from",
     "@babel/proposal-numeric-separator",
     ["@babel/proposal-object-rest-spread", { useBuiltIns: true }],
-  ]
+  ],
+  overrides: [{
+    test: "packages/babylon",
+    plugins: [
+      "babel-plugin-transform-charcodes",
+      ["@babel/transform-for-of", { assumeArray: true }],
+    ],
+  }],
 };
 
 if (process.env.BABEL_ENV === "cov") {

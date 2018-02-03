@@ -416,6 +416,9 @@ export function isTypeParameterInstantiation(
 export function isUnionTypeAnnotation(node: Object, opts?: Object): boolean {
   return is("UnionTypeAnnotation", node, opts);
 }
+export function isVariance(node: Object, opts?: Object): boolean {
+  return is("Variance", node, opts);
+}
 export function isVoidTypeAnnotation(node: Object, opts?: Object): boolean {
   return is("VoidTypeAnnotation", node, opts);
 }
@@ -805,6 +808,9 @@ export function isModuleSpecifier(node: Object, opts?: Object): boolean {
 }
 export function isFlow(node: Object, opts?: Object): boolean {
   return is("Flow", node, opts);
+}
+export function isFlowType(node: Object, opts?: Object): boolean {
+  return is("FlowType", node, opts);
 }
 export function isFlowBaseAnnotation(node: Object, opts?: Object): boolean {
   return is("FlowBaseAnnotation", node, opts);

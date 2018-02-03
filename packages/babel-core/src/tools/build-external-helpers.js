@@ -69,7 +69,7 @@ function buildModule(whitelist) {
     t.exportNamedDeclaration(
       null,
       Object.keys(refs).map(name => {
-        return t.exportSpecifier(t.clone(refs[name]), t.identifier(name));
+        return t.exportSpecifier(t.cloneNode(refs[name]), t.identifier(name));
       }),
     ),
   );

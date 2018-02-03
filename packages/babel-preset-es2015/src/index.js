@@ -11,7 +11,6 @@ import transformES2015ComputedProperties from "@babel/plugin-transform-computed-
 import transformES2015ForOf from "@babel/plugin-transform-for-of";
 import transformES2015StickyRegex from "@babel/plugin-transform-sticky-regex";
 import transformES2015UnicodeRegex from "@babel/plugin-transform-unicode-regex";
-import checkES2015Constants from "@babel/plugin-check-constants";
 import transformES2015Spread from "@babel/plugin-transform-spread";
 import transformES2015Parameters from "@babel/plugin-transform-parameters";
 import transformES2015Destructuring from "@babel/plugin-transform-destructuring";
@@ -25,7 +24,7 @@ import transformES2015Instanceof from "@babel/plugin-transform-instanceof";
 import transformRegenerator from "@babel/plugin-transform-regenerator";
 
 export default function(api, opts = {}) {
-  const moduleTypes = ["commonjs", "amd", "umd", "systemjs"];
+  const moduleTypes = ["commonjs", "cjs", "amd", "umd", "systemjs"];
   let loose = false;
   let modules = "commonjs";
   let spec = false;
@@ -67,14 +66,16 @@ export default function(api, opts = {}) {
       [transformES2015ForOf, optsLoose],
       transformES2015StickyRegex,
       transformES2015UnicodeRegex,
-      checkES2015Constants,
       [transformES2015Spread, optsLoose],
       [transformES2015Parameters, optsLoose],
       [transformES2015Destructuring, optsLoose],
       transformES2015BlockScoping,
       transformES2015TypeofSymbol,
       transformES2015Instanceof,
-      modules === "commonjs" && [transformES2015ModulesCommonJS, optsLoose],
+      (modules === "commonjs" || modules === "cjs") && [
+        transformES2015ModulesCommonJS,
+        optsLoose,
+      ],
       modules === "systemjs" && [transformES2015ModulesSystemJS, optsLoose],
       modules === "amd" && [transformES2015ModulesAMD, optsLoose],
       modules === "umd" && [transformES2015ModulesUMD, optsLoose],

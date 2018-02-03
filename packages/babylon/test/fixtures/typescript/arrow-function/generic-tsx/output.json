@@ -1,0 +1,266 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 79,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 18
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 79,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 18
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 61,
+        "end": 79,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 18
+          }
+        },
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start": 62,
+          "end": 78,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 1
+            },
+            "end": {
+              "line": 2,
+              "column": 17
+            }
+          },
+          "returnType": {
+            "type": "TSTypeAnnotation",
+            "start": 70,
+            "end": 73,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 9
+              },
+              "end": {
+                "line": 2,
+                "column": 12
+              }
+            },
+            "typeAnnotation": {
+              "type": "TSTypeReference",
+              "start": 72,
+              "end": 73,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 11
+                },
+                "end": {
+                  "line": 2,
+                  "column": 12
+                }
+              },
+              "typeName": {
+                "type": "Identifier",
+                "start": 72,
+                "end": 73,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 12
+                  },
+                  "identifierName": "T"
+                },
+                "name": "T"
+              }
+            }
+          },
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "Identifier",
+              "start": 65,
+              "end": 69,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 4
+                },
+                "end": {
+                  "line": 2,
+                  "column": 8
+                },
+                "identifierName": "a"
+              },
+              "name": "a",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 66,
+                "end": 69,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 8
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSTypeReference",
+                  "start": 68,
+                  "end": 69,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 8
+                    }
+                  },
+                  "typeName": {
+                    "type": "Identifier",
+                    "start": 68,
+                    "end": 69,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 7
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 8
+                      },
+                      "identifierName": "T"
+                    },
+                    "name": "T"
+                  }
+                }
+              }
+            }
+          ],
+          "body": {
+            "type": "Identifier",
+            "start": 77,
+            "end": 78,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 16
+              },
+              "end": {
+                "line": 2,
+                "column": 17
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "typeParameters": {
+            "type": "TSTypeParameterDeclaration",
+            "start": 61,
+            "end": 64,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 0
+              },
+              "end": {
+                "line": 2,
+                "column": 3
+              }
+            },
+            "params": [
+              {
+                "type": "TSTypeParameter",
+                "start": 62,
+                "end": 63,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 2
+                  }
+                },
+                "name": "T"
+              }
+            ]
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Same as `generic`. Verify that JSX doesn't change things.",
+            "start": 0,
+            "end": 60,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 60
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Same as `generic`. Verify that JSX doesn't change things.",
+      "start": 0,
+      "end": 60,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 60
+        }
+      }
+    }
+  ]
+}

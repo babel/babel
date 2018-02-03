@@ -7,6 +7,8 @@ import { types as tt, type TokenType } from "../tokenizer/types";
 import * as N from "../types";
 import type { Pos, Position } from "../util/location";
 import type State from "../tokenizer/state";
+import * as charCodes from "charcodes";
+import { isIteratorStart } from "../util/identifier";
 
 const primitiveTypes = [
   "any",
@@ -1625,8 +1627,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // ensure that inside flow types, we bypass the jsx parser plugin
     readToken(code: number): void {
+      const next = this.input.charCodeAt(this.state.pos + 1);
       if (this.state.inType && (code === 62 || code === 60)) {
         return this.finishOp(tt.relational, 1);
+      } else if (isIteratorStart(code, next)) {
+        this.state.isIterator = true;
+        return super.readWord(code);
       } else {
         return super.readToken(code);
       }
@@ -2277,5 +2283,67 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         /* params */ undefined,
         /* isAsync */ true,
       );
+    }
+
+    readToken_mult_modulo(code: number): void {
+      const next = this.input.charCodeAt(this.state.pos + 1);
+      if (
+        code === charCodes.asterisk &&
+        next === charCodes.slash &&
+        this.state.hasFlowComment
+      ) {
+        this.state.hasFlowComment = false;
+        this.state.pos += 2;
+        this.nextToken();
+        return;
+      }
+
+      super.readToken_mult_modulo(code);
+    }
+
+    skipBlockComment(): void {
+      if (
+        this.hasPlugin("flow") &&
+        this.hasPlugin("flowComments") &&
+        this.skipFlowComment()
+      ) {
+        this.hasFlowCommentCompletion();
+        this.state.pos += this.skipFlowComment();
+        this.state.hasFlowComment = true;
+        return;
+      }
+
+      let end;
+      if (this.hasPlugin("flow") && this.state.hasFlowComment) {
+        end = this.input.indexOf("*-/", (this.state.pos += 2));
+        if (end === -1) this.raise(this.state.pos - 2, "Unterminated comment");
+        this.state.pos = end + 3;
+        return;
+      }
+
+      super.skipBlockComment();
+    }
+
+    skipFlowComment(): number | boolean {
+      const ch2 = this.input.charCodeAt(this.state.pos + 2);
+      const ch3 = this.input.charCodeAt(this.state.pos + 3);
+
+      if (ch2 === charCodes.colon && ch3 === charCodes.colon) {
+        return 4; // check for /*::
+      }
+      if (this.input.slice(this.state.pos + 2, 14) === "flow-include") {
+        return 14; // check for /*flow-include
+      }
+      if (ch2 === charCodes.colon && ch3 !== charCodes.colon && 2) {
+        return 2; // check for /*:, advance only 2 steps
+      }
+      return false;
+    }
+
+    hasFlowCommentCompletion(): void {
+      const end = this.input.indexOf("*/", this.state.pos);
+      if (end === -1) {
+        this.raise(this.state.pos, "Unterminated comment");
+      }
     }
   };

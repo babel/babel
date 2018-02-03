@@ -1,6 +1,6 @@
 // @flow
 import { isIdentifier, isStringLiteral } from "../validators/generated";
-import cloneDeep from "../clone/cloneDeep";
+import cloneNode from "../clone/cloneNode";
 import removePropertiesDeep from "../modifications/removePropertiesDeep";
 
 export default function toKeyAlias(
@@ -16,7 +16,7 @@ export default function toKeyAlias(
   } else if (isStringLiteral(key)) {
     alias = JSON.stringify(key.value);
   } else {
-    alias = JSON.stringify(removePropertiesDeep(cloneDeep(key)));
+    alias = JSON.stringify(removePropertiesDeep(cloneNode(key)));
   }
 
   if (node.computed) {

@@ -3,11 +3,11 @@
     ["../../../../lib", {
       "targets": {
         "chrome": "55",
-        "node": "7.6",
-        "uglify": true
+        "node": "7.6"
       },
       "modules": false,
-      "useBuiltIns": "entry"
+      "useBuiltIns": "entry",
+      "forceAllTransforms": true
     }]
   ]
 }
