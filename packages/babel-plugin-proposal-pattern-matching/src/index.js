@@ -4,24 +4,25 @@ import { template } from "@babel/core";
 export default function({ types: t }) {
   function makeIsArrayTest(body) {
     return template.expression(`Array.isArray(BODY)`)({
-      BODY: body,
+      BODY: t.cloneNode(body),
     });
   }
 
   function makeArrayLengthTest(id, length) {
     return template.expression(`ID.length === LENGTH`)({
-      ID: id,
+      ID: t.cloneNode(id),
       LENGTH: t.numericLiteral(length),
     });
   }
 
   function makeIsObjectTest(body) {
     return template.expression(`typeof BODY === "object"`)({
-      BODY: body,
+      BODY: t.cloneNode(body),
     });
   }
 
   function makeRestTest(id, keys) {
+    id = t.cloneNode(id);
     if (!Array.isArray(keys) || keys.length === 0) {
       throw new Error(
         "The second param must be array, and its length must bigger than zero",
@@ -41,6 +42,7 @@ export default function({ types: t }) {
   }
 
   function makeTest(path, id, pattern, defines, isRoot) {
+    id = t.cloneNode(id);
     let arrayTest;
     let objectTest;
     let objectPropTest;
@@ -58,7 +60,7 @@ export default function({ types: t }) {
       case "StringLiteral":
       case "NullLiteral":
       case "BooleanLiteral":
-        return t.binaryExpression("===", id, pattern);
+        return t.binaryExpression("===", t.cloneNode(id), t.cloneNode(pattern));
         break;
       case "ArrayMatchPattern":
         arrayTest = makeIsArrayTest(id);
@@ -74,8 +76,8 @@ export default function({ types: t }) {
           const count = pattern.children.length;
           defines.push(
             template(`var REST_ID = ID.slice(COUNT);`)({
-              REST_ID: pattern.restIdentifier,
-              ID: id,
+              REST_ID: t.cloneNode(pattern.restIdentifier),
+              ID: t.cloneNode(id),
               COUNT: t.numericLiteral(count),
             }),
           );
@@ -83,7 +85,7 @@ export default function({ types: t }) {
 
         pattern.children.forEach((patternNode, index) => {
           const newId = t.memberExpression(
-            id /* object */,
+            t.cloneNode(id) /* object */,
             t.numericLiteral(index) /* property */,
             true /* computed */,
           );
@@ -123,7 +125,7 @@ export default function({ types: t }) {
             defines.push(
               t.variableDeclaration("var", [
                 t.variableDeclarator(
-                  pattern.restIdentifier,
+                  t.cloneNode(pattern.restIdentifier),
                   t.objectExpression([]),
                 ),
               ]),
@@ -138,10 +140,10 @@ export default function({ types: t }) {
                 }
               }
               `)({
-                KEY_ID: key_id,
+                KEY_ID: t.cloneNode(key_id),
                 REST_TEST: makeRestTest(key_id, exists_key),
-                REST_ID: pattern.restIdentifier,
-                ID: id,
+                REST_ID: t.cloneNode(pattern.restIdentifier),
+                ID: t.cloneNode(id),
               }),
             );
           } else {
@@ -150,8 +152,8 @@ export default function({ types: t }) {
               template(`
               var REST_ID = Object.assign({}, ID);
               `)({
-                REST_ID: pattern.restIdentifier,
-                ID: id,
+                REST_ID: t.cloneNode(pattern.restIdentifier),
+                ID: t.cloneNode(id),
               }),
             );
           }
@@ -160,11 +162,19 @@ export default function({ types: t }) {
         return objectTest;
       case "ObjectPropertyMatchPattern":
         objectPropTest = t.callExpression(
-          t.memberExpression(id, t.identifier("hasOwnProperty"), false),
+          t.memberExpression(
+            t.cloneNode(id),
+            t.identifier("hasOwnProperty"),
+            false,
+          ),
           [t.stringLiteral(pattern.key.name)],
         );
 
-        newId = t.memberExpression(id, pattern.key, false);
+        newId = t.memberExpression(
+          t.cloneNode(id),
+          t.cloneNode(pattern.key),
+          false,
+        );
         if (pattern.value === null) {
           pattern.value = pattern.key;
         }
@@ -181,19 +191,21 @@ export default function({ types: t }) {
         if (isRoot) {
           if (pattern.name === "Array") {
             return template.expression(`Array.isArray(ID)`)({
-              ID: id,
+              ID: t.cloneNode(id),
             });
           } else {
             return template.expression(`(PATTERN[Symbol.match] &&
               PATTERN[Symbol.match](ID) !== null) ||
               (typeof PATTERN === "function" && ID instanceof PATTERN)`)({
-              PATTERN: pattern,
-              ID: id,
+              PATTERN: t.cloneNode(pattern),
+              ID: t.cloneNode(id),
             });
           }
         } else {
           defines.push(
-            t.variableDeclaration("const", [t.variableDeclarator(pattern, id)]),
+            t.variableDeclaration("const", [
+              t.variableDeclarator(t.cloneNode(pattern), t.cloneNode(id)),
+            ]),
           );
           return t.binaryExpression(
             "!==",
@@ -224,7 +236,7 @@ export default function({ types: t }) {
         BODY
       }();
       `)({
-      BODY: body,
+      BODY: t.cloneNode(body),
     });
   }
 
