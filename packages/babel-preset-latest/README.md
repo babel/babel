@@ -1,6 +1,15 @@
 # babel-preset-latest
 
 > Babel preset including es2015, es2016, es2017.
+> This is deprecated; use [preset-env](https://www.npmjs.com/package/babel-preset-env) instead.
+
+This is a special preset that will contain all yearly presets so user's won't need to specify each one individually.
+
+It currently includes:
+
+- [es2017](https://www.npmjs.com/package/babel-preset-es2015)
+- [es2016](https://www.npmjs.com/package/babel-preset-es2016)
+- [es2015](https://www.npmjs.com/package/babel-preset-es2017/)
 
 ## Install
 

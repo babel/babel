@@ -22,13 +22,9 @@ require("babel-register");
 All subsequent files required by node with the extensions `.es6`, `.es`, `.jsx`
 and `.js` will be transformed by Babel.
 
-<blockquote class="babel-callout babel-callout-info">
-  <h4>Polyfill not included</h4>
-  <p>
-    You must include the <a href="https://babeljs.io/docs/usage/polyfill/">polyfill</a> separately
-    when using features that require it, like generators.
-  </p>
-</blockquote>
+> #### Polyfill not included
+> 
+> You must include a [polyfill](https://www.npmjs.com/package/babel-polyfill) separately when using features that require it, like generators.
 
 ### Ignores `node_modules` by default
 

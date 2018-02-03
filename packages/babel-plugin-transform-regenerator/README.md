@@ -1,6 +1,15 @@
 # babel-plugin-transform-regenerator
 
-> Transform async/generator functions with [regenerator](https://github.com/facebook/regenerator)
+> This plugin uses the [regenerator](https://github.com/facebook/regenerator) module to
+transform async and generator functions. `regeneratorRuntime` is not included.
+
+> #### Runtime required
+> 
+> You need to use either the [Babel polyfill](/docs/usage/polyfill) or the [regenerator runtime](https://github.com/facebook/regenerator/blob/master/packages/regenerator-runtime/runtime.js) so that `regeneratorRuntime` will be defined.
+
+> #### Async functions
+> 
+> These are only usable if you enable their syntax plugin. See [syntax-async-functions](/docs/plugins/syntax-async-functions) for information.
 
 ## Example
 
