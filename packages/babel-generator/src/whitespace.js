@@ -41,7 +41,7 @@ export default class Whitespace {
       while (index && node.end === tokens[index - 1].end) --index;
       startToken = tokens[index];
       endToken = tokens[index + 1];
-      if (endToken.type.label === ",") endToken = tokens[index + 2];
+      if (endToken && endToken.type.label === ",") endToken = tokens[index + 2];
     }
 
     if (endToken && endToken.type.label === "eof") {

@@ -291,6 +291,14 @@ describe("whitespace", function () {
     const w = new Whitespace([]);
     assert.equal(w.getNewlinesBefore(t.stringLiteral("1")), 0);
   });
+  it("handles getNewlinesAfter EOF node", function () {
+    const w = new Whitespace([{
+      type : { label : "eof" },
+      start: 446,
+      end: 446,
+    }]);
+    assert.equal(w.getNewlinesAfter({ end : 446 }), 0);
+  });
 });
 
 const suites = fixtures(`${__dirname}/fixtures`);
