@@ -62,6 +62,7 @@ test-ci-coverage:
 	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
 publish:
+	node scripts/verify-lerna-version.js
 	git pull --rebase
 	rm -rf packages/*/lib
 	BABEL_ENV=production make build-dist
