@@ -1,6 +1,7 @@
 # babel-plugin-transform-flow-strip-types
 
 > Strip all [flow](http://flowtype.org) type annotations and declarations from your output code.
+
 > #### Syntax only
 > 
 > This plugin only removes flow types. It doesn't actually check if the types are valid itself. You'll need to use flow itself or a different babel plugin.

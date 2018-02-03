@@ -1,6 +1,7 @@
 # babel-preset-es2015
 
 > Babel preset for all es2015 plugins.
+
 > This is deprecated. If you want to stay up to date, use the [env preset](https://www.npmjs.com/package/babel-preset-env)
 
 This preset includes the following plugins:

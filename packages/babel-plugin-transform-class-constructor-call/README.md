@@ -1,5 +1,7 @@
 # babel-plugin-transform-class-constructor-call (deprecated)
 
+>
+
 > #### Class constructor call is a deprecated feature
 > 
 > The class constructor call proposal has been withdrawn ([Withdrawn Proposals](https://github.com/tc39/ecma262/blob/master/withdrawn-proposals.md#withdrawn-proposals)) and [it will be removed in Babel 7](https://github.com/babel/babel/wiki/Babel-7). It can be solved with decorators.

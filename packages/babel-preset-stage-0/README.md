@@ -2,9 +2,9 @@
 
 > Babel preset for stage 0 plugins.
 
-The gist of Stage 1 is:
+The gist of Stage 0 is:
 
-> **Stage 1**: strawman
+> **Stage 0**: strawman
 >
 > **What is it?** A free-form way of submitting ideas for evolving ECMAScript. Submissions must come either from a TC39 member or a non-member who [has registered as a TC39 contributor](http://www.ecma-international.org/memento/contribute_TC39_Royalty_Free_Task_Group.php).
 >
