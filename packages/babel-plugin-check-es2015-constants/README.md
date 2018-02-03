@@ -20,6 +20,9 @@ repl: "a" is read-only
     | ^
 ```
 
+> #### Syntax only
+> 
+> This check will only validate consts. If you need it to compile down to \`var\` then you must also install and enable [transform-es2015-block-scoping](https://www.npmjs.com/package/babel-plugin-transform-es2015-block-scoping).
 
 ## Installation
 

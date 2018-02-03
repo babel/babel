@@ -1,6 +1,14 @@
 # babel-plugin-transform-es2015-modules-commonjs
 
 > This plugin transforms ES2015 modules to [CommonJS](http://wiki.commonjs.org/wiki/Modules/1.1).
+>
+> #### Babel 6 Changes
+> 
+> Babel 6 changed some behavior by not doing `module.exports = exports['default']` anymore in the modules transforms.
+> 
+> There are some caveats, but you can use [babel-plugin-add-module-exports](https://www.npmjs.com/package/babel-plugin-add-module-exports), so that updating to Babel 6 isn't a breaking change since users that don't use ES modules don't have to do `require("your-module").default`.
+> 
+> However, it may not match how Node eventually implements ES modules natively given the [the current proposal](https://github.com/nodejs/node-eps/blob/master/002-es-modules.md#46-es-consuming-commonjs).
 
 ## Example
 

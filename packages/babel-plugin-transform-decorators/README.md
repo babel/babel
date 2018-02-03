@@ -1,6 +1,10 @@
 # babel-plugin-transform-decorators
 
 > Compile class and object decorators to ES5
+>
+> Stage 2 decorators are in progress [babel/babel#2645](https://github.com/babel/babel/issues/2645). Patches welcome!
+> 
+> In Babel 7, [transform-decorators-legacy](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) will be the default plugin in Stage-0.
 
 ## Example
 

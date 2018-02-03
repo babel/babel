@@ -12,6 +12,18 @@ The gist of Stage 1 is:
 >
 > **What’s next?** By accepting a proposal for stage 1, TC39 declares its willingness to examine, discuss and contribute to the proposal. Going forward, major changes to the proposal are expected
 
+This preset includes the following plugins:
+
+- [transform-class-constructor-call](https://www.npmjs.com/package/babel-plugin-transform-class-constructor-call/) (Deprecated)
+- [transform-export-extensions](https://www.npmjs.com/package/babel-plugin-transform-export-extensions/)
+
+And all plugins from presets:
+
+- [preset-stage-2](https://www.npmjs.com/package/babel-preset-stage-2/)
+- [preset-stage-3](https://www.npmjs.com/package/babel-preset-stage-3/)
+
+> You can check the src/index.js to be sure the plugins used.
+
 ## Install
 
 ```sh
