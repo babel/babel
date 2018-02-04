@@ -12,13 +12,11 @@ import estreePlugin from "./plugins/estree";
 import flowPlugin from "./plugins/flow";
 import jsxPlugin from "./plugins/jsx";
 import typescriptPlugin from "./plugins/typescript";
-import patternMatchingPlugin from "./plugins/patternMatching";
 
 plugins.estree = estreePlugin;
 plugins.flow = flowPlugin;
 plugins.jsx = jsxPlugin;
 plugins.typescript = typescriptPlugin;
-plugins.patternMatching = patternMatchingPlugin;
 
 export function parse(input: string, options?: Options): File {
   if (options && options.sourceType === "unambiguous") {
@@ -75,12 +73,7 @@ function getParserClass(
 
   // Filter out just the plugins that have an actual mixin associated with them.
   let pluginList = pluginsFromOptions.filter(
-    p =>
-      p === "estree" ||
-      p === "flow" ||
-      p === "jsx" ||
-      p === "typescript" ||
-      p === "patternMatching",
+    p => p === "estree" || p === "flow" || p === "jsx" || p === "typescript",
   );
 
   if (pluginList.indexOf("flow") >= 0) {
