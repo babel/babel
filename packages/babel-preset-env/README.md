@@ -342,6 +342,8 @@ import "core-js/modules/es7.string.pad-start";
 import "core-js/modules/es7.string.pad-end";
 ```
 
+This will also work for `core-js` directly (`import "core-js";` or `require('core-js');`)
+
 #### `useBuiltIns: false`
 
 Don't add polyfills automatically per file, or transform `import "@babel/polyfill"` to individual polyfills.
