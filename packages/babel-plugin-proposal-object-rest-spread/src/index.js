@@ -189,11 +189,13 @@ export default function(api, opts) {
 
               let ref = this.originalPath.node.init;
               const refPropertyPath = [];
+              let kind;
 
               path.findParent(path => {
                 if (path.isObjectProperty()) {
                   refPropertyPath.unshift(path.node.key.name);
                 } else if (path.isVariableDeclarator()) {
+                  kind = path.parentPath.node.kind;
                   return true;
                 }
               });
@@ -222,6 +224,8 @@ export default function(api, opts) {
               );
 
               insertionPath = insertionPath.getSibling(insertionPath.key + 1);
+
+              path.scope.registerBinding(kind, insertionPath);
 
               if (objectPatternPath.node.properties.length === 0) {
                 objectPatternPath
