@@ -108,43 +108,40 @@ export default function(api, options) {
       }
     }
 
-    pushAssignmentPattern(pattern, valueRef) {
+    pushAssignmentPattern({ left, right }, valueRef) {
       // we need to assign the current value of the assignment to avoid evaluating
       // it more than once
+      const tempId = this.scope.generateUidIdentifierBasedOnNode(valueRef);
 
-      const tempValueRef = this.scope.generateUidBasedOnNode(valueRef);
-
-      const declar = t.variableDeclaration("var", [
-        t.variableDeclarator(t.identifier(tempValueRef), valueRef),
-      ]);
-      declar._blockHoist = this.blockHoist;
-      this.nodes.push(declar);
-
-      //
+      this.nodes.push(this.buildVariableDeclaration(tempId, valueRef));
 
       const tempConditional = t.conditionalExpression(
         t.binaryExpression(
           "===",
-          t.identifier(tempValueRef),
+          t.cloneNode(tempId),
           this.scope.buildUndefinedNode(),
         ),
-        pattern.right,
-        t.identifier(tempValueRef),
+        right,
+        t.cloneNode(tempId),
       );
 
-      const left = pattern.left;
       if (t.isPattern(left)) {
-        const tempValueDefault = t.expressionStatement(
-          t.assignmentExpression(
-            "=",
-            t.identifier(tempValueRef),
-            tempConditional,
-          ),
-        );
-        tempValueDefault._blockHoist = this.blockHoist;
+        let patternId;
+        let node;
 
-        this.nodes.push(tempValueDefault);
-        this.push(left, t.identifier(tempValueRef));
+        if (this.kind === "const") {
+          patternId = this.scope.generateUidIdentifier(tempId.name);
+          node = this.buildVariableDeclaration(patternId, tempConditional);
+        } else {
+          patternId = tempId;
+
+          node = t.expressionStatement(
+            t.assignmentExpression("=", t.cloneNode(tempId), tempConditional),
+          );
+        }
+
+        this.nodes.push(node);
+        this.push(left, patternId);
       } else {
         this.nodes.push(this.buildVariableAssignment(left, tempConditional));
       }
