@@ -127,10 +127,7 @@ function getMarkerLines(
     loc.start,
   );
   const endLoc: Location = Object.assign({}, startLoc, loc.end);
-  const {
-    linesAbove = 2,
-    linesBelow = 3,
-  } = opts || {};
+  const { linesAbove = 2, linesBelow = 3 } = opts || {};
   const startLine = startLoc.line;
   const startColumn = startLoc.column;
   const endLine = endLoc.line;

@@ -184,6 +184,57 @@ describe("@babel/code-frame", function() {
     );
   });
 
+  it("opts.linesAbove no lines above", function() {
+    const rawLines = [
+      "class Foo {",
+      "  constructor() {",
+      "    console.log(arguments);",
+      "  }",
+      "};",
+    ].join("\n");
+    assert.equal(
+      codeFrameColumns(rawLines, { start: { line: 2 } }, { linesAbove: 0 }),
+      [
+        "> 2 |   constructor() {",
+        "  3 |     console.log(arguments);",
+        "  4 |   }",
+        "  5 | };",
+      ].join("\n"),
+    );
+  });
+
+  it("opts.linesBelow no lines below", function() {
+    const rawLines = [
+      "class Foo {",
+      "  constructor() {",
+      "    console.log(arguments);",
+      "  }",
+      "};",
+    ].join("\n");
+    assert.equal(
+      codeFrameColumns(rawLines, { start: { line: 2 } }, { linesBelow: 0 }),
+      ["  1 | class Foo {", "> 2 |   constructor() {"].join("\n"),
+    );
+  });
+
+  it("opts.linesBelow single line", function() {
+    const rawLines = [
+      "class Foo {",
+      "  constructor() {",
+      "    console.log(arguments);",
+      "  }",
+      "};",
+    ].join("\n");
+    assert.equal(
+      codeFrameColumns(
+        rawLines,
+        { start: { line: 2 } },
+        { linesAbove: 0, linesBelow: 0 },
+      ),
+      ["> 2 |   constructor() {"].join("\n"),
+    );
+  });
+
   it("opts.forceColor", function() {
     const marker = chalk.red.bold;
     const gutter = chalk.grey;
