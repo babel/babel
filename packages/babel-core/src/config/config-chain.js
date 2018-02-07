@@ -108,7 +108,6 @@ const loadPresetOverridesEnvDescriptors = makeWeakCache(
  * Build a config chain for Babel's full root configuration.
  */
 export function buildRootChain(
-  cwd: string,
   opts: ValidatedOptions,
   context: ConfigContext,
 ): ConfigChain | null {
