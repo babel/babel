@@ -52,7 +52,9 @@ const buildTest = opts => {
     let args = [binLoc];
     args = args.concat(opts.args);
 
-    const spawn = child.spawn(process.execPath, args);
+    const spawn = child.spawn(process.execPath, args, {
+      cwd: tmpLoc,
+    });
 
     let stdout = "";
     let stderr = "";

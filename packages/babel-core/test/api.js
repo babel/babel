@@ -294,6 +294,7 @@ describe("api", function() {
     process.env.BABEL_ENV = "development";
 
     const result = babel.transform("", {
+      cwd: path.join(__dirname, "fixtures", "config", "complex-plugin-config"),
       filename: path.join(
         __dirname,
         "fixtures",

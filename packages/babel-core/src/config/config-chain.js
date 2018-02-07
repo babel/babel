@@ -8,6 +8,7 @@ import {
   type ValidatedOptions,
   type IgnoreList,
   type ConfigApplicableTest,
+  type BabelrcSearch,
 } from "./validation/options";
 
 const debug = buildDebug("babel:config:config-chain");
@@ -19,6 +20,7 @@ import {
   loadConfig,
   type ConfigFile,
   type IgnoreFile,
+  type FilePackageData,
 } from "./files";
 
 import { makeWeakCache, makeStrongCache } from "./caching";
@@ -128,12 +130,16 @@ export function buildRootChain(
   );
   if (!programmaticChain) return null;
 
-  const { root: rootDir = ".", configFile: configFileName } = opts;
+  const {
+    root: rootDir = ".",
+    babelrc = undefined,
+    configFile: configFileName = true,
+  } = opts;
 
   let configFile;
   if (typeof configFileName === "string") {
     configFile = loadConfig(configFileName, context.cwd, context.envName);
-  } else if (configFileName === undefined || configFileName === true) {
+  } else if (configFileName === true) {
     configFile = findRootConfig(
       path.resolve(context.cwd, rootDir),
       context.envName,
@@ -153,21 +159,24 @@ export function buildRootChain(
       ? findPackageData(context.filename)
       : null;
 
-  let ignore, babelrc;
+  let ignoreFile, babelrcFile;
   const fileChain = emptyChain();
   // resolve all .babelrc files
-  if (opts.babelrc !== false && pkgData) {
-    ({ ignore, config: babelrc } = findRelativeConfig(
+  if (pkgData && babelrcLoadEnabled(context, pkgData, babelrc, rootDir)) {
+    ({ ignore: ignoreFile, config: babelrcFile } = findRelativeConfig(
       pkgData,
       context.envName,
     ));
 
-    if (ignore && shouldIgnore(context, ignore.ignore, null, ignore.dirname)) {
+    if (
+      ignoreFile &&
+      shouldIgnore(context, ignoreFile.ignore, null, ignoreFile.dirname)
+    ) {
       return null;
     }
 
-    if (babelrc) {
-      const result = loadFileChain(babelrc, context);
+    if (babelrcFile) {
+      const result = loadFileChain(babelrcFile, context);
       if (!result) return null;
 
       mergeChain(fileChain, result);
@@ -185,10 +194,37 @@ export function buildRootChain(
     plugins: dedupDescriptors(chain.plugins),
     presets: dedupDescriptors(chain.presets),
     options: chain.options.map(o => normalizeOptions(o)),
-    ignore: ignore || undefined,
-    babelrc: babelrc || undefined,
+    ignore: ignoreFile || undefined,
+    babelrc: babelrcFile || undefined,
     config: configFile || undefined,
   };
+}
+
+function babelrcLoadEnabled(
+  context: ConfigContext,
+  pkgData: FilePackageData,
+  babelrc: BabelrcSearch | void,
+  rootDir: string,
+): boolean {
+  if (typeof babelrc === "boolean") return babelrc;
+
+  const absoluteRoot = path.resolve(context.cwd, rootDir);
+
+  // Fast path to avoid having to load micromatch if the babelrc is just
+  // loading in the standard root directory.
+  if (
+    babelrc === undefined ||
+    babelrc === rootDir ||
+    (Array.isArray(babelrc) && babelrc.length === 1 && babelrc[0] === rootDir)
+  ) {
+    return pkgData.directories.indexOf(absoluteRoot) !== -1;
+  }
+
+  const babelrcRoots = (Array.isArray(babelrc) ? babelrc : [babelrc]).map(pat =>
+    path.resolve(context.cwd, pat),
+  );
+
+  return micromatch(pkgData.directories, babelrcRoots).length > 0;
 }
 
 /**
