@@ -526,7 +526,11 @@ export default class ExpressionParser extends LValParser {
         possibleAsync,
         refTrailingCommaPos,
       );
-      this.finishCallExpression(node);
+      if (!state.optionalChainMember) {
+        this.finishCallExpression(node);
+      } else {
+        this.finishOptionalCallExpression(node);
+      }
 
       if (possibleAsync && this.shouldParseAsyncArrow()) {
         state.stop = true;
@@ -550,7 +554,14 @@ export default class ExpressionParser extends LValParser {
       const node = this.startNodeAt(startPos, startLoc);
       node.tag = base;
       node.quasi = this.parseTemplate(true);
-      return this.finishNode(node, "TaggedTemplateExpression");
+      if (!state.optionalChainMember) {
+        return this.finishNode(node, "TaggedTemplateExpression");
+      } else {
+        this.raise(
+          startPos,
+          "Tagged Template Literals are not allowed in optionalChain",
+        );
+      }
     } else {
       state.stop = true;
       return base;
@@ -578,6 +589,20 @@ export default class ExpressionParser extends LValParser {
       }
     }
     return this.finishNode(node, "CallExpression");
+  }
+
+  finishOptionalCallExpression(node: N.CallExpression): N.CallExpression {
+    if (node.callee.type === "Import") {
+      if (node.arguments.length !== 1) {
+        this.raise(node.start, "import() requires exactly one argument");
+      }
+
+      const importArg = node.arguments[0];
+      if (importArg && importArg.type === "SpreadElement") {
+        this.raise(importArg.start, "... is not allowed in import()");
+      }
+    }
+    return this.finishNode(node, "OptionalCallExpression");
   }
 
   parseCallExpressionArguments(

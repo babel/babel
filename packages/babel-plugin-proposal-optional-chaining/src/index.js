@@ -101,28 +101,10 @@ export default function(api, options) {
     return path.find(path => {
       const { parentPath } = path;
 
-      if (path.key == "left" && parentPath.isAssignmentExpression()) {
-        throw path.buildCodeFrameError(
-          "Illegal optional chain in assignment expression",
-        );
-      }
-      if (path.key == "argument" && parentPath.isUpdateExpression()) {
-        throw path.buildCodeFrameError(
-          "Illegal optional chain in update expression",
-        );
-      }
-
-      if (
-        path.key == "object" &&
-        (parentPath.isOptionalMemberExpression() ||
-          parentPath.isMemberExpression())
-      ) {
+      if (path.key == "object" && parentPath.isOptionalMemberExpression()) {
         return false;
       }
-      if (
-        path.key == "callee" &&
-        (parentPath.isOptionalCallExpression() || parentPath.isCallExpression())
-      ) {
+      if (path.key == "callee" && parentPath.isOptionalCallExpression()) {
         return false;
       }
       if (
@@ -141,11 +123,8 @@ export default function(api, options) {
 
     visitor: {
       "OptionalCallExpression|OptionalMemberExpression"(path) {
+        debugger;//eslint-disable-line
         if (!path.node.optional) {
-          path.node.type =
-            path.node.type === "OptionalMemberExpression"
-              ? "MemberExpression"
-              : "CallExpression";
           return;
         }
 
