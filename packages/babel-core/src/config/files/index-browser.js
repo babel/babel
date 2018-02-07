@@ -12,16 +12,16 @@ export type IgnoreFile = {
   ignore: Array<string>,
 };
 
-export function findBabelrc(
+export type RelativeConfig = {
+  config: ConfigFile | null,
+  ignore: IgnoreFile | null,
+};
+
+export function findRelativeConfig(
   filepath: string,
   envName: string, // eslint-disable-line no-unused-vars
-): ConfigFile | null {
-  return null;
-}
-
-// eslint-disable-next-line no-unused-vars
-export function findBabelignore(filepath: string): IgnoreFile | null {
-  return null;
+): RelativeConfig {
+  return { config: null, ignore: null };
 }
 
 export function loadConfig(name: string, dirname: string): ConfigFile {

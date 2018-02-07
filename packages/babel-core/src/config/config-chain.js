@@ -12,12 +12,7 @@ import {
 
 const debug = buildDebug("babel:config:config-chain");
 
-import {
-  findBabelrc,
-  findBabelignore,
-  loadConfig,
-  type ConfigFile,
-} from "./files";
+import { findRelativeConfig, loadConfig, type ConfigFile } from "./files";
 
 import { makeWeakCache, makeStrongCache } from "./caching";
 
@@ -124,22 +119,15 @@ export function buildRootChain(
   // resolve all .babelrc files
   if (opts.babelrc !== false && context.filename !== null) {
     const filename = context.filename;
-    const babelignoreFile = findBabelignore(filename);
-    if (
-      babelignoreFile &&
-      shouldIgnore(
-        context,
-        babelignoreFile.ignore,
-        null,
-        babelignoreFile.dirname,
-      )
-    ) {
+
+    const { ignore, config } = findRelativeConfig(filename, context.envName);
+
+    if (ignore && shouldIgnore(context, ignore.ignore, null, ignore.dirname)) {
       return null;
     }
 
-    const babelrcFile = findBabelrc(filename, context.envName);
-    if (babelrcFile) {
-      const result = loadFileChain(babelrcFile, context);
+    if (config) {
+      const result = loadFileChain(config, context);
       if (!result) return null;
 
       mergeChain(fileChain, result);
