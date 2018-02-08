@@ -140,6 +140,8 @@ export function assertConfigApplicableTest(
   key: string,
   value: mixed,
 ): ConfigApplicableTest | void {
+  if (value === undefined) return value;
+
   if (Array.isArray(value)) {
     value.forEach((item, i) => {
       if (!checkValidTest(item)) {

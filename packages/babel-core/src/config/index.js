@@ -62,7 +62,7 @@ export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
     envName,
   };
 
-  const configChain = buildRootChain(absoluteCwd, args, context);
+  const configChain = buildRootChain(args, context);
   if (!configChain) return null;
 
   const optionDefaults = {};
