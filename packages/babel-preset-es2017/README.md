@@ -33,3 +33,27 @@ require("@babel/core").transform("code", {
   presets: ["@babel/preset-es2017"]
 });
 ```
+
+### Webpack
+
+Your entrypoint needs to load the polyfills:
+
+import 'babel-preset-es2017/polyfill';
+
+in your webpack.config.js you will need to load additional presets to transpile down to browser compatible js:
+
+```module.exports = {
+  module: {
+    loaders: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        loader: 'babel',
+        query: {
+          presets: ['es2015', 'es2017', 'react'],
+          plugins: ['transform-runtime', 'transform-decorators-legacy', 'transform-class-properties'],
+        },
+      },
+    ],
+  },
+};```
