@@ -20,11 +20,12 @@ before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
 
 before_script:
+  - 'make bootstrap'
   - 'if [ "$JOB" = "babylon-flow-tests" ]; then make bootstrap-flow; fi'
   - 'if [ "$JOB" = "babylon-test262-tests" ]; then make bootstrap-test262; fi'
 
 script:
-  - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
+  - 'if [ "$JOB" = "test" ]; then make test-only; fi'
   - 'if [ "$JOB" = "lint" ]; then make lint && make flow; fi'
   - 'if [ "$JOB" = "babylon-flow-tests" ]; then make test-flow-ci; fi'
   - 'if [ "$JOB" = "babylon-test262-tests" ]; then make test-test262-ci; fi'

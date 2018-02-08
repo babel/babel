@@ -9,7 +9,7 @@ export FORCE_COLOR = true
 
 SOURCES = packages codemods
 
-.PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
+.PHONY: build build-dist watch lint fix clean test-clean test-only test publish bootstrap
 
 build: clean
 	make clean-lib
@@ -67,10 +67,6 @@ test-only:
 	make test-clean
 
 test: lint test-only
-
-test-ci:
-	make bootstrap
-	make test-only
 
 test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
