@@ -485,6 +485,15 @@ export function isBindExpression(node: Object, opts?: Object): boolean {
 export function isClassProperty(node: Object, opts?: Object): boolean {
   return is("ClassProperty", node, opts);
 }
+export function isOptionalMemberExpression(
+  node: Object,
+  opts?: Object,
+): boolean {
+  return is("OptionalMemberExpression", node, opts);
+}
+export function isOptionalCallExpression(node: Object, opts?: Object): boolean {
+  return is("OptionalCallExpression", node, opts);
+}
 export function isImport(node: Object, opts?: Object): boolean {
   return is("Import", node, opts);
 }

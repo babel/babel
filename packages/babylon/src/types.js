@@ -509,6 +509,18 @@ export type MemberExpression = NodeBase & {
   computed: boolean,
 };
 
+export type OptionalMemberExpression = NodeBase & {
+  type: "OptionalMemberExpression",
+  object: Expression | Super,
+  property: Expression,
+  computed: boolean,
+  optional: boolean,
+};
+
+export type OptionalCallExpression = CallOrNewBase & {
+  type: "OptionalCallExpression",
+  optional: boolean,
+};
 export type BindExpression = NodeBase & {
   type: "BindExpression",
   object: $ReadOnlyArray<?Expression>,

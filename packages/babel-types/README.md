@@ -1590,6 +1590,38 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
 ---
 
+### optionalCallExpression
+```javascript
+t.optionalCallExpression(callee, arguments, optional)
+```
+
+See also `t.isOptionalCallExpression(node, opts)` and `t.assertOptionalCallExpression(node, opts)`.
+
+Aliases: `Expression`
+
+ - `callee`: `Expression` (required)
+ - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
+ - `optional`: `boolean` (required)
+ - `typeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
+
+---
+
+### optionalMemberExpression
+```javascript
+t.optionalMemberExpression(object, property, computed, optional)
+```
+
+See also `t.isOptionalMemberExpression(node, opts)` and `t.assertOptionalMemberExpression(node, opts)`.
+
+Aliases: `Expression`
+
+ - `object`: `Expression` (required)
+ - `property`: `any` (required)
+ - `computed`: `boolean` (default: `false`)
+ - `optional`: `boolean` (required)
+
+---
+
 ### parenthesizedExpression
 ```javascript
 t.parenthesizedExpression(expression)
