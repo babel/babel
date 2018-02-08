@@ -123,7 +123,6 @@ export default function(api, options) {
 
     visitor: {
       "OptionalCallExpression|OptionalMemberExpression"(path) {
-        debugger;//eslint-disable-line
         if (!path.node.optional) {
           return;
         }
