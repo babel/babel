@@ -8,11 +8,10 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-code-frame",
   "main": "lib/index.js",
   "dependencies": {
-    "chalk": "^2.0.0",
-    "esutils": "^2.0.2",
-    "js-tokens": "^3.0.0"
+    "@babel/highlight": "7.0.0-beta.39"
   },
   "devDependencies": {
+    "chalk": "^2.0.0",
     "strip-ansi": "^4.0.0"
   }
 }
