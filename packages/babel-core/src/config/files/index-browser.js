@@ -1,21 +1,8 @@
 // @flow
 
-export type ConfigFile = {
-  filepath: string,
-  dirname: string,
-  options: {},
-};
+import type { ConfigFile, IgnoreFile, RelativeConfig } from "./configuration";
 
-export type IgnoreFile = {
-  filepath: string,
-  dirname: string,
-  ignore: Array<string>,
-};
-
-export type RelativeConfig = {
-  config: ConfigFile | null,
-  ignore: IgnoreFile | null,
-};
+export type { ConfigFile, IgnoreFile, RelativeConfig };
 
 export function findRelativeConfig(
   filepath: string,
