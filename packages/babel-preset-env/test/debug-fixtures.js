@@ -142,6 +142,8 @@ describe("debug output", () => {
     }
 
     const options = JSON.parse(helper.readFile(optionsLoc));
+    /* This test is intentionally set to silent to suppress the polyfill warnings,
+       since we want to ensure these imports get removed. */
     const isSilent = options.silent;
     delete options.silent;
 
