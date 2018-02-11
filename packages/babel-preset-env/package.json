@@ -45,7 +45,7 @@
     "@babel/plugin-transform-template-literals": "7.0.0-beta.39",
     "@babel/plugin-transform-typeof-symbol": "7.0.0-beta.39",
     "@babel/plugin-transform-unicode-regex": "7.0.0-beta.39",
-    "browserslist": "^2.4.0",
+    "browserslist": "^3.0.0",
     "invariant": "^2.2.2",
     "semver": "^5.3.0"
   },
