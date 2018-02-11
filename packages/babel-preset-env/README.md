@@ -405,7 +405,7 @@ Toggles whether or not [browserslist config sources](https://github.com/ai/brows
 
 `boolean`, defaults to `false`
 
-Toggles enabling support for builtin/feature proposals that have shipped in browsers. If your target environments have native support for a feature proposal, its matching parser syntax plugin is enabled instead of performing any transform. Note that this _does not_ enable the same transformations as [`@babel/preset-stage3`](https://babeljs.io/docs/plugins/preset-stage-3/), since proposals can continue to change before landing in browsers.
+Toggles enabling support for builtin/feature proposals that have shipped in browsers. If your target environments have native support for a feature proposal, its matching parser syntax plugin is enabled instead of performing any transform. Note that this _does not_ enable the same transformations as [`@babel/preset-stage-3`](https://babeljs.io/docs/plugins/preset-stage-3/), since proposals can continue to change before landing in browsers.
 
 The following are currently supported:
 
