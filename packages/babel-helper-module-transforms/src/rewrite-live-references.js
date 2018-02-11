@@ -112,6 +112,7 @@ const rewriteBindingInitVisitor = {
 
     Object.keys(path.getOuterBindingIdentifiers()).forEach(localName => {
       const exportNames = exported.get(localName) || [];
+
       if (exportNames.length > 0) {
         const statement = t.expressionStatement(
           buildBindingExportAssignmentExpression(
