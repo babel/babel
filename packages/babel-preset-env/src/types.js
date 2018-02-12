@@ -5,10 +5,11 @@ export type Target = string;
 export type Targets = {
   [target: string]: Target,
 };
-
 // Options
 // Use explicit modules to prevent typo errors.
-export type ModuleOption = false | "amd" | "commonjs" | "systemjs" | "umd";
+export type KnownModuleFormat = "amd" | "commonjs" | "systemjs" | "umd";
+export type TransformModulesPlugin = [KnownModuleFormat, ?Object];
+export type ModulesOption = false | KnownModuleFormat | TransformModulesPlugin;
 export type BuiltInsOption = false | "entry" | "usage";
 
 export type Options = {
@@ -19,7 +20,7 @@ export type Options = {
   ignoreBrowserslistConfig: boolean,
   include: Array<string>,
   loose: boolean,
-  modules: ModuleOption,
+  modules: ModulesOption,
   shippedProposals: boolean,
   spec: boolean,
   targets: Targets,

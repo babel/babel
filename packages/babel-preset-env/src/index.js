@@ -7,8 +7,8 @@ import {
   getPlatformSpecificDefaultFor,
   getOptionSpecificExcludesFor,
 } from "./defaults";
-import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options.js";
+import moduleTransformations from "./module-transformations";
 import pluginList from "../data/plugins.json";
 import {
   builtIns as proposalBuiltIns,
@@ -232,8 +232,15 @@ export default function buildPreset(
 
   // NOTE: not giving spec here yet to avoid compatibility issues when
   // transform-modules-commonjs gets its spec mode
-  if (modules !== false && moduleTransformations[modules]) {
-    plugins.push([getPlugin(moduleTransformations[modules]), { loose }]);
+  if (Array.isArray(modules) && modules.length) {
+    const [modulesType, modulesTypeOpts] = modules;
+
+    if (moduleTransformations[modulesType]) {
+      plugins.push([
+        getPlugin(moduleTransformations[modules]),
+        modulesTypeOpts,
+      ]);
+    }
   }
 
   transformations.forEach(pluginName =>

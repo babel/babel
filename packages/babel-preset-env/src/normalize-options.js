@@ -6,7 +6,13 @@ import builtInsList from "../data/built-ins.json";
 import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
 import pluginsList from "../data/plugins.json";
-import type { Targets, Options, ModuleOption, BuiltInsOption } from "./types";
+import type {
+  Targets,
+  Options,
+  KnownModuleFormat,
+  ModulesOption,
+  BuiltInsOption,
+} from "./types";
 
 const validIncludesAndExcludes = new Set([
   ...Object.keys(pluginsList),
@@ -100,17 +106,32 @@ export const validateIgnoreBrowserslistConfig = (
     false,
   );
 
-export const validateModulesOption = (
-  modulesOpt: ModuleOption = "commonjs",
+const isKnownModuleType = modulesOpt =>
+  Object.keys(moduleTransformations).indexOf(modulesOpt) > -1;
+
+export const normalizeModulesOption = (
+  modulesOpt: ModulesOption = "commonjs",
+  pluginOptions: Object = {},
 ) => {
   invariant(
     modulesOpt === false ||
-      Object.keys(moduleTransformations).indexOf(modulesOpt) > -1,
-    `Invalid Option: The 'modules' option must be either 'false' to indicate no modules, or a
-    module type which can be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'.`,
+      (Array.isArray(modulesOpt) && isKnownModuleType(modulesOpt[0])) ||
+      isKnownModuleType(modulesOpt),
+    `Invalid Option: The 'modules' option must be either 'false' to indicate no modules, a
+    module type of: 'commonjs' (default), 'amd', 'umd', 'systemjs',
+    or a tuple: [<'commonjs'|'amd'|'umd'|'systemjs'>, ...<plugin options>]`,
   );
 
-  return modulesOpt;
+  if (modulesOpt === false) {
+    return false;
+  }
+
+  const [
+    modulesType: KnownModuleFormat,
+    userPluginOptions: KnownModuleFormatOptions = {},
+  ] = Array.isArray(modulesOpt) ? modulesOpt : [modulesOpt, {}];
+
+  return [modulesType, { ...pluginOptions, ...userPluginOptions }];
 };
 
 export const objectToBrowserslist = (object: Targets) => {
@@ -148,6 +169,8 @@ export default function normalizeOptions(opts: Options) {
 
   checkDuplicateIncludeExcludes(opts.include, opts.exclude);
 
+  const loose = validateBoolOption("loose", opts.loose, false);
+
   return {
     configPath: validateConfigPathOption(opts.configPath),
     debug: opts.debug,
@@ -161,8 +184,8 @@ export default function normalizeOptions(opts: Options) {
       opts.ignoreBrowserslistConfig,
     ),
     include: validateIncludesAndExcludes(opts.include, "include"),
-    loose: validateBoolOption("loose", opts.loose, false),
-    modules: validateModulesOption(opts.modules),
+    loose,
+    modules: normalizeModulesOption(opts.modules, { loose }),
     shippedProposals: validateBoolOption(
       "shippedProposals",
       opts.shippedProposals,
