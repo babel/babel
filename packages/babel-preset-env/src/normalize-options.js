@@ -123,7 +123,7 @@ export const normalizeModulesOption = (
   );
 
   if (modulesOpt === false) {
-    return false;
+    return [false];
   }
 
   const [

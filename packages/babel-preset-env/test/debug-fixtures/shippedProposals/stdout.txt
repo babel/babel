@@ -3,7 +3,10 @@
 Using targets:
 {}
 
-Using modules transform: commonjs
+Using modules transform: commonjs, with options:
+{
+  "loose": false
+}
 
 Using plugins:
   transform-arrow-functions {}

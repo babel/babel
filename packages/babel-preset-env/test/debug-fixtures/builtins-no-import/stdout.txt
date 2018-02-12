@@ -5,7 +5,10 @@ Using targets:
   "node": "6"
 }
 
-Using modules transform: commonjs
+Using modules transform: commonjs, with options:
+{
+  "loose": false
+}
 
 Using plugins:
   transform-destructuring { "node":"6" }
