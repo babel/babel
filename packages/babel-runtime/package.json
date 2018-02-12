@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime",
-  "version": "7.0.0-beta.39",
+  "version": "7.0.0-beta.40",
   "description": "babel selfContained runtime",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-runtime",
@@ -10,10 +10,10 @@
     "regenerator-runtime": "^0.11.1"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.39",
-    "@babel/helpers": "7.0.0-beta.39",
-    "@babel/plugin-transform-runtime": "7.0.0-beta.39",
-    "@babel/preset-env": "7.0.0-beta.39",
-    "@babel/types": "7.0.0-beta.39"
+    "@babel/core": "7.0.0-beta.40",
+    "@babel/helpers": "7.0.0-beta.40",
+    "@babel/plugin-transform-runtime": "7.0.0-beta.40",
+    "@babel/preset-env": "7.0.0-beta.40",
+    "@babel/types": "7.0.0-beta.40"
   }
 }

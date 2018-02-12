@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-nullish-coalescing-operator",
-  "version": "7.0.0-beta.39",
+  "version": "7.0.0-beta.40",
   "description": "Allow parsing of the nullish-coalescing operator",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-nullish-coalescing-operator",
   "license": "MIT",
@@ -9,9 +9,9 @@
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.39"
+    "@babel/core": "7.0.0-beta.40"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.39"
+    "@babel/core": "7.0.0-beta.40"
   }
 }
