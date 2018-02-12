@@ -36,7 +36,7 @@ describe("normalize-options", () => {
 
   describe("validateBoolOption", () => {
     it("`undefined` option returns false", () => {
-      assert(validateBoolOption("test", undefined, false) === [false]);
+      assert(validateBoolOption("test", undefined, false) === false);
     });
 
     it("`false` option returns false", () => {
@@ -95,7 +95,7 @@ describe("normalize-options", () => {
     });
 
     it("`false` option returns false", () => {
-      assert(normalizeModulesOption(false) === false);
+      assert(normalizeModulesOption(false)[0] === false);
     });
 
     it("commonjs option is valid", () => {
