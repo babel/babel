@@ -231,7 +231,7 @@ Enable ["loose" transformations](http://2ality.com/2015/12/babel6-loose-mode.htm
 
 ### `modules`
 
-`"amd" | "umd" | "systemjs" | "commonjs" | "cjs" | false`, defaults to `"commonjs"`.
+`"amd" | "umd" | "systemjs" | "commonjs" | "cjs" | false | [<module type>, <plugin options>]`, defaults to `"commonjs"`.
 
 Enable transformation of ES6 module syntax to another module type.
 
@@ -580,6 +580,25 @@ Using polyfills:
       },
       "include": ["@babel/plugin-transform-arrow-functions", "es6.map"],
       "exclude": ["@babel/plugin-transform-regenerator", "es6.set"]
+    }]
+  ]
+}
+```
+
+### Pass-through plugin options when using [`modules`](#modules) option.
+
+> always include arrow functions, explicitly exclude generators
+
+```json
+{
+  "presets": [
+    ["@babel/preset-env", {
+      "targets": {
+        "browsers": ["last 2 versions", "safari >= 7"]
+      },
+      "modules": ["commonjs", {
+        "noInterop": true
+      }]
     }]
   ]
 }
