@@ -10,6 +10,7 @@
   "dependencies": {
     "@babel/helper-module-imports": "7.0.0-beta.40",
     "@babel/helper-simple-access": "7.0.0-beta.40",
+    "@babel/helper-split-export-declaration": "7.0.0-beta.40",
     "@babel/template": "7.0.0-beta.40",
     "@babel/types": "7.0.0-beta.40",
     "lodash": "^4.2.0"
