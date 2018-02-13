@@ -63,6 +63,13 @@ export default function(commander, filenames, opts) {
     return path.join(commander.outDir, filename);
   }
 
+  function outputDestFolder(outDir) {
+    const outDirPath = path.resolve(outDir);
+    if (!fs.existsSync(outDirPath)) {
+      fs.mkdirSync(outDirPath);
+    }
+  }
+
   function handleFile(src, filename, base, callback) {
     if (typeof base === "function") {
       callback = base;
@@ -82,6 +89,11 @@ export default function(commander, filenames, opts) {
   }
 
   function sequentialHandleFile(files, dirname, index, callback) {
+    if (files.length === 0) {
+      outputDestFolder(commander.outDir);
+      return;
+    }
+
     if (typeof index === "function") {
       callback = index;
       index = 0;
