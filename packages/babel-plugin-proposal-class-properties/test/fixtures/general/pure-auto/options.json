@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "external-helpers",
+    "proposal-class-properties",
+    "transform-block-scoping"
+  ]
+}

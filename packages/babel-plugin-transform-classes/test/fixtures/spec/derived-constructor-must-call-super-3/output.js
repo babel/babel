@@ -1,3 +1,7 @@
+var Bar = function Bar() {
+  babelHelpers.classCallCheck(this, Bar);
+};
+
 var Foo =
 /*#__PURE__*/
 function (_Bar) {

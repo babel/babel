@@ -1,9 +1,7 @@
-function withContext(ComposedComponent) {
-  var _class, _temp;
+import { Component } from "react";
 
-  return _temp = _class =
-  /*#__PURE__*/
-  function (_Component) {
+function withContext(ComposedComponent) {
+  return (_Component => {
     babelHelpers.inherits(WithContext, _Component);
 
     function WithContext() {
@@ -11,17 +9,18 @@ function withContext(ComposedComponent) {
       return babelHelpers.possibleConstructorReturn(this, (WithContext.__proto__ || Object.getPrototypeOf(WithContext)).apply(this, arguments));
     }
 
+    Object.defineProperty(WithContext, "propTypes", {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: {
+        context: PropTypes.shape({
+          addCss: PropTypes.func,
+          setTitle: PropTypes.func,
+          setMeta: PropTypes.func
+        })
+      }
+    });
     return WithContext;
-  }(Component), Object.defineProperty(_class, "propTypes", {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    value: {
-      context: PropTypes.shape({
-        addCss: PropTypes.func,
-        setTitle: PropTypes.func,
-        setMeta: PropTypes.func
-      })
-    }
-  }), _temp;
+  })(Component);
 }

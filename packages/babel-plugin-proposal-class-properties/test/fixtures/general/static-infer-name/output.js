@@ -1,10 +1,15 @@
-var _class, _temp;
+var Foo =
+/*#__PURE__*/
+(() => {
+  var Foo = function Foo() {
+    babelHelpers.classCallCheck(this, Foo);
+  };
 
-var Foo = (_temp = _class = function Foo() {
-  babelHelpers.classCallCheck(this, Foo);
-}, Object.defineProperty(_class, "num", {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  value: 0
-}), _temp);
+  Object.defineProperty(Foo, "num", {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    value: 0
+  });
+  return Foo;
+})();

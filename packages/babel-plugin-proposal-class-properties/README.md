@@ -144,6 +144,17 @@ Bork.a = 'foo';
 Bork.b = void 0;
 ```
 
+### `assumePure`
+
+`boolean`, defaults to `false` (`true` in `loose` mode).
+
+This plugin wraps a class in an IIFE when static properties are used, that way
+a class after transformation can still be represented as a single node
+and this makes dead code elimination easier for other tools that perform it.
+Normally a check for purity is performed before annotating the created IIFE
+with `#__PURE__` comment, you can force those annotations on all IIFEs or
+have the plugin perform a check in `loose` mode.
+
 ## References
 
 * [Proposal: ES Class Fields & Static Properties](https://github.com/jeffmo/es-class-static-properties-and-fields)

@@ -9,7 +9,9 @@
     "babel-plugin"
   ],
   "dependencies": {
+    "@babel/helper-class-iife": "7.0.0-beta.40",
     "@babel/helper-function-name": "7.0.0-beta.40",
+    "@babel/helper-split-export-declaration": "7.0.0-beta.40",
     "@babel/plugin-syntax-class-properties": "7.0.0-beta.40"
   },
   "peerDependencies": {

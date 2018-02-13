@@ -1,25 +1,29 @@
 import LooseTransformer from "./loose";
 import VanillaTransformer from "./vanilla";
-import annotateAsPure from "@babel/helper-annotate-as-pure";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import { types as t } from "@babel/core";
-import globals from "globals";
+import { builtinClasses } from "@babel/lists";
 
-const getBuiltinClasses = category =>
-  Object.keys(globals[category]).filter(name => /^[A-Z]/.test(name));
-
-const builtinClasses = new Set([
-  ...getBuiltinClasses("builtin"),
-  ...getBuiltinClasses("browser"),
-]);
+const finalizeTransformedClass = path => {
+  if (path.isCallExpression()) {
+    if (path.get("callee").isArrowFunctionExpression()) {
+      path.get("callee").arrowFunctionToExpression();
+    }
+  }
+};
 
 export default function(api, options) {
-  const { loose } = options;
-  const Constructor = loose ? LooseTransformer : VanillaTransformer;
-
-  // todo: investigate traversal requeueing
-  const VISITED = Symbol();
+  const { loose, assumePure: _assumePure } = options;
+  const Transformer = loose ? LooseTransformer : VanillaTransformer;
+  let assumePure;
+  if (typeof _assumePure === "boolean") {
+    assumePure = _assumePure;
+  } else if (typeof _assumePure === "undefined") {
+    assumePure = !!loose;
+  } else {
+    throw new Error("assumePure option must be a boolean or undefined.");
+  }
 
   return {
     visitor: {
@@ -28,21 +32,30 @@ export default function(api, options) {
         splitExportDeclaration(path);
       },
 
-      ClassDeclaration(path) {
+      ClassDeclaration(path, state) {
         const { node } = path;
 
-        const ref = node.id || path.scope.generateUidIdentifier("class");
+        const transformed = new Transformer(
+          path,
+          state.file,
+          builtinClasses,
+          assumePure,
+        ).run();
 
-        path.replaceWith(
-          t.variableDeclaration("let", [
-            t.variableDeclarator(ref, t.toExpression(node)),
-          ]),
-        );
+        if (Array.isArray(transformed)) {
+          path.replaceWithMultiple(transformed);
+        } else {
+          path.replaceWith(
+            t.variableDeclaration("let", [
+              t.variableDeclarator(node.id, transformed),
+            ]),
+          );
+          finalizeTransformedClass(path.get("declarations.0.init"));
+        }
       },
 
       ClassExpression(path, state) {
         const { node } = path;
-        if (node[VISITED]) return;
 
         const inferred = nameFunction(path);
         if (inferred && inferred !== node) {
@@ -50,17 +63,23 @@ export default function(api, options) {
           return;
         }
 
-        node[VISITED] = true;
+        const transformed = new Transformer(
+          path,
+          state.file,
+          builtinClasses,
+          assumePure,
+        ).run();
 
-        path.replaceWith(
-          new Constructor(path, state.file, builtinClasses).run(),
-        );
+        if (Array.isArray(transformed)) {
+          // inline into class iife
+          transformed
+            .reverse()
+            .forEach(statement => path.insertAfter(statement));
 
-        if (path.isCallExpression()) {
-          annotateAsPure(path);
-          if (path.get("callee").isArrowFunctionExpression()) {
-            path.get("callee").arrowFunctionToExpression();
-          }
+          path.remove();
+        } else {
+          path.replaceWith(transformed);
+          finalizeTransformedClass(path);
         }
       },
     },

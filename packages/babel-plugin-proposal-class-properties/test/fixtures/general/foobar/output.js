@@ -1,6 +1,4 @@
-var Child =
-/*#__PURE__*/
-function (_Parent) {
+var Child = function (_Parent) {
   babelHelpers.inherits(Child, _Parent);
 
   function Child() {

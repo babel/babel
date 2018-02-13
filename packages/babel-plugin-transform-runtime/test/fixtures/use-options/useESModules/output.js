@@ -6,9 +6,7 @@ var _possibleConstructorReturn = require("@babel/runtime/helpers/es6/possibleCon
 
 var _inherits = require("@babel/runtime/helpers/es6/inherits");
 
-let Foo =
-/*#__PURE__*/
-function (_Bar) {
+let Foo = function (_Bar) {
   _inherits(Foo, _Bar);
 
   function Foo() {

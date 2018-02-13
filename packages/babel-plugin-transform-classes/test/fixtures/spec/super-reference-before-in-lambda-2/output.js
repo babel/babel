@@ -1,3 +1,17 @@
+var Bar =
+/*#__PURE__*/
+function () {
+  function Bar() {
+    babelHelpers.classCallCheck(this, Bar);
+  }
+
+  babelHelpers.createClass(Bar, [{
+    key: "test",
+    value: function test() {}
+  }]);
+  return Bar;
+}();
+
 var Foo =
 /*#__PURE__*/
 function (_Bar) {

@@ -21,9 +21,7 @@ function generateAsyncAction(type) {
   return request;
 }
 
-var A =
-/*#__PURE__*/
-function (_B) {
+var A = function (_B) {
   _inherits(A, _B);
 
   function A(timestamp) {

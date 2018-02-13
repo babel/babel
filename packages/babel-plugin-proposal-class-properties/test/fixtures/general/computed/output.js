@@ -4,26 +4,24 @@ var bar = () => {};
 
 var four = 4;
 
-var _one = one();
+var MyClass = (() => {
+  var _one = one();
 
-var _ref = 2 * four + seven;
+  var _ref = 2 * four + seven;
 
-var _undefined = undefined;
+  var _undefined = undefined;
 
-var _computed = computed();
+  var _computed = computed();
 
-var _computed2 = computed();
+  var _computed2 = computed();
 
-var _ref2 = "test" + one;
+  var _ref2 = "test" + one;
 
-var _ref3 = /regex/;
-var _bar = bar;
-var _baz = baz;
-var _ref4 = `template${expression}`;
+  var _ref3 = /regex/;
+  var _bar = bar;
+  var _baz = baz;
+  var _ref4 = `template${expression}`;
 
-var MyClass =
-/*#__PURE__*/
-function () {
   function MyClass() {
     babelHelpers.classCallCheck(this, MyClass);
     Object.defineProperty(this, null, {
@@ -99,30 +97,29 @@ function () {
     key: 10,
     value: function () {}
   }]);
+  Object.defineProperty(MyClass, _one, {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    value: "test"
+  });
+  Object.defineProperty(MyClass, 2 * 4 + 7, {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    value: "247"
+  });
+  Object.defineProperty(MyClass, 2 * four + 7, {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    value: "247"
+  });
+  Object.defineProperty(MyClass, _ref, {
+    configurable: true,
+    enumerable: true,
+    writable: true,
+    value: "247"
+  });
   return MyClass;
-}();
-
-Object.defineProperty(MyClass, _one, {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  value: "test"
-});
-Object.defineProperty(MyClass, 2 * 4 + 7, {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  value: "247"
-});
-Object.defineProperty(MyClass, 2 * four + 7, {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  value: "247"
-});
-Object.defineProperty(MyClass, _ref, {
-  configurable: true,
-  enumerable: true,
-  writable: true,
-  value: "247"
-});
+})();

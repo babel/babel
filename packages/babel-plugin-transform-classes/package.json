@@ -7,12 +7,13 @@
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-annotate-as-pure": "7.0.0-beta.40",
+    "@babel/helper-class-iife": "7.0.0-beta.40",
     "@babel/helper-define-map": "7.0.0-beta.40",
     "@babel/helper-function-name": "7.0.0-beta.40",
     "@babel/helper-optimise-call-expression": "7.0.0-beta.40",
     "@babel/helper-replace-supers": "7.0.0-beta.40",
     "@babel/helper-split-export-declaration": "7.0.0-beta.40",
-    "globals": "^11.1.0"
+    "@babel/lists": "7.0.0-beta.40"
   },
   "keywords": [
     "babel-plugin"

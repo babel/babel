@@ -7,6 +7,7 @@ import defaults from "lodash/defaults";
 import Binding from "./binding";
 import globals from "globals";
 import * as t from "@babel/types";
+import { builtinClasses } from "@babel/lists";
 import { scope as scopeCache } from "../cache";
 
 // Recursively gathers the identifying names of a node.
@@ -588,13 +589,18 @@ export default class Scope {
       if (constantsOnly) return binding.constant;
       return true;
     } else if (t.isClass(node)) {
-      if (node.superClass && !this.isPure(node.superClass, constantsOnly)) {
+      const { superClass } = node;
+      if (
+        superClass &&
+        !builtinClasses.has(superClass.name) &&
+        !this.isPure(superClass, constantsOnly)
+      ) {
         return false;
       }
       return this.isPure(node.body, constantsOnly);
     } else if (t.isClassBody(node)) {
-      for (const method of node.body) {
-        if (!this.isPure(method, constantsOnly)) return false;
+      for (const bodyPart of node.body) {
+        if (!this.isPure(bodyPart, constantsOnly)) return false;
       }
       return true;
     } else if (t.isBinary(node)) {
@@ -614,10 +620,13 @@ export default class Scope {
       return true;
     } else if (t.isClassMethod(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
-      if (node.kind === "get" || node.kind === "set") return false;
       return true;
     } else if (t.isClassProperty(node) || t.isObjectProperty(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
+      if (!node.value) {
+        // class Foo { static bar; }
+        return true;
+      }
       return this.isPure(node.value, constantsOnly);
     } else if (t.isUnaryExpression(node)) {
       return this.isPure(node.argument, constantsOnly);

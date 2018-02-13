@@ -1,9 +1,21 @@
 import nameFunction from "@babel/helper-function-name";
 import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
+import getClassIIFE from "@babel/helper-class-iife";
+import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import { template, types as t } from "@babel/core";
 
 export default function(api, options) {
-  const { loose } = options;
+  const { loose, assumePure: _assumePure } = options;
+  let assumePure;
+  if (typeof _assumePure === "boolean") {
+    assumePure = _assumePure;
+  } else if (typeof _assumePure === "undefined") {
+    assumePure = !!loose;
+  } else {
+    throw new Error("assumePure option must be a boolean or undefined.");
+  }
+
+  const seen = new WeakSet();
 
   const findBareSupers = {
     Super(path) {
@@ -80,7 +92,16 @@ export default function(api, options) {
 
     visitor: {
       Class(path) {
+        const { node } = path;
+
+        if (seen.has(node)) {
+          return;
+        }
+
+        seen.add(node);
+
         const isDerived = !!path.node.superClass;
+        const isClassExpression = path.isClassExpression();
         let constructor;
         const props = [];
         const computedPaths = [];
@@ -102,9 +123,10 @@ export default function(api, options) {
 
         let ref;
 
-        if (path.isClassExpression() || !path.node.id) {
+        if (isClassExpression || !path.node.id) {
           nameFunction(path);
-          ref = path.scope.generateUidIdentifier("class");
+          ref = path.node.id || path.scope.generateUidIdentifier("class");
+          path.node.id = path.node.id || ref;
         } else {
           // path.isClassDeclaration() && path.node.id
           ref = path.node.id;
@@ -213,8 +235,6 @@ export default function(api, options) {
             ];
           }
 
-          //
-
           if (isDerived) {
             const bareSupers = [];
             constructor.traverse(findBareSupers, bareSupers);
@@ -226,24 +246,45 @@ export default function(api, options) {
           }
         }
 
+        let iife;
+
+        if (staticNodes.length > 0) {
+          // prepare iife before removing properties
+          iife = getClassIIFE(path, assumePure);
+        }
+
         for (const prop of props) {
           prop.remove();
         }
 
         if (computedNodes.length === 0 && afterNodes.length === 0) return;
 
-        if (path.isClassExpression()) {
-          path.scope.push({ id: ref });
-          path.replaceWith(
-            t.assignmentExpression("=", t.cloneNode(ref), path.node),
+        if (staticNodes.length === 0) {
+          path.insertBefore(computedNodes);
+          path.insertAfter(afterNodes);
+        } else {
+          iife.callee.body.body.push(
+            ...computedNodes,
+            node,
+            ...afterNodes,
+            t.returnStatement(t.cloneNode(ref)),
           );
-        } else if (!path.node.id) {
-          // Anonymous class declaration
-          path.node.id = ref;
-        }
 
-        path.insertBefore(computedNodes);
-        path.insertAfter(afterNodes);
+          if (isClassExpression) {
+            path.replaceWith(iife);
+            node.type = "ClassDeclaration";
+          } else {
+            // path.isClassDeclaration()
+            if (path.parentPath.isExportDefaultDeclaration()) {
+              path = splitExportDeclaration(path.parentPath);
+            }
+            path.replaceWith(
+              t.variableDeclaration("let", [
+                t.variableDeclarator(t.cloneNode(ref), iife),
+              ]),
+            );
+          }
+        }
       },
     },
   };

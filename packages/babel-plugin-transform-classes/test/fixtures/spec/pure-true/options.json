@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    "external-helpers",
+    "transform-function-name",
+    ["transform-classes", { "assumePure": true }],
+    "transform-spread",
+    "transform-block-scoping"
+  ]
+}

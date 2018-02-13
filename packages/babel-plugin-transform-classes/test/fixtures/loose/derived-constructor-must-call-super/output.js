@@ -1,3 +1,5 @@
+var Bar = function Bar() {};
+
 var Foo =
 /*#__PURE__*/
 function (_Bar) {

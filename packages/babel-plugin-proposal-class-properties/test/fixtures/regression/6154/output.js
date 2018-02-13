@@ -1,6 +1,6 @@
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 function _instanceof(left, right) { if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) { return right[Symbol.hasInstance](left); } else { return left instanceof right; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
@@ -13,7 +13,7 @@ function _get(object, property, receiver) { if (object === null) object = Functi
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 var Test = function Test() {
-  var _this2 = this;
+  var _this = this;
 
   _classCallCheck(this, Test);
 
@@ -25,7 +25,7 @@ var Test = function Test() {
     function Other() {
       var _ref;
 
-      var _temp, _this;
+      var _temp, _this2;
 
       _classCallCheck(this, Other);
 
@@ -33,25 +33,24 @@ var Test = function Test() {
         args[_key] = arguments[_key];
       }
 
-      return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_ref = Other.__proto__ || Object.getPrototypeOf(Other)).call.apply(_ref, [this].concat(args))), Object.defineProperty(_assertThisInitialized(_this), "a", {
+      return _possibleConstructorReturn(_this2, (_temp = _this2 = _possibleConstructorReturn(this, (_ref = Other.__proto__ || Object.getPrototypeOf(Other)).call.apply(_ref, [this].concat(args))), Object.defineProperty(_assertThisInitialized(_this2), "a", {
         configurable: true,
         enumerable: true,
         writable: true,
         value: function value() {
-          return _get(Other.prototype.__proto__ || Object.getPrototypeOf(Other.prototype), "test", _assertThisInitialized(_this));
+          return _get(Other.prototype.__proto__ || Object.getPrototypeOf(Other.prototype), "test", _assertThisInitialized(_this2));
         }
       }), _temp));
     }
 
+    Object.defineProperty(Other, "a", {
+      configurable: true,
+      enumerable: true,
+      writable: true,
+      value: function value() {
+        return _get(Test.prototype.__proto__ || Object.getPrototypeOf(Test.prototype), "test", _assertThisInitialized(_this));
+      }
+    });
     return Other;
   }(Test);
-
-  Object.defineProperty(Other, "a", {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    value: function value() {
-      return _get(Test.prototype.__proto__ || Object.getPrototypeOf(Test.prototype), "test", _assertThisInitialized(_this2));
-    }
-  });
 };

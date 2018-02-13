@@ -5,6 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _react = require("react");
+
 var _args = _interopRequireDefault(require("utils/url/args"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -45,18 +47,18 @@ function (_Component) {
       configurable: true,
       enumerable: true,
       writable: true,
-      value: ''
+      value: ""
     }), _temp));
   }
 
   _createClass(App, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.exportType = _args.default.get('type', window.location.href);
+      this.exportType = _args.default.get("type", window.location.href);
     }
   }]);
 
   return App;
-}(Component);
+}(_react.Component);
 
 exports.default = App;

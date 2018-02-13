@@ -5,11 +5,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
+var _react = babelHelpers.interopRequireDefault(require("react"));
+
 var _store = require("./store");
 
-let Login =
-/*#__PURE__*/
-function (_React$Component) {
+let Login = function (_React$Component) {
   babelHelpers.inherits(Login, _React$Component);
 
   function Login() {
@@ -24,6 +24,6 @@ function (_React$Component) {
     }
   }]);
   return Login;
-}(React.Component);
+}(_react.default.Component);
 
 exports.default = Login;
