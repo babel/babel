@@ -180,7 +180,10 @@ const rewriteReferencesVisitor = {
     if (importData) {
       const ref = buildImportReference(importData, path.node);
 
-      if (path.parentPath.isCallExpression({ callee: path.node })) {
+      if (
+        path.parentPath.isCallExpression({ callee: path.node }) &&
+        t.isMemberExpression(ref)
+      ) {
         path.replaceWith(t.sequenceExpression([t.numericLiteral(0), ref]));
       } else if (path.isJSXIdentifier() && t.isMemberExpression(ref)) {
         const { object, property } = ref;
