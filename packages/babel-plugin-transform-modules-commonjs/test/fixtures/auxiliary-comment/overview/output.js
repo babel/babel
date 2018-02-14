@@ -61,25 +61,49 @@ exports.test2 = test2;
 /*after*/
 
 /*before*/
-(0, _foo4.bar)
+(0,
+/*after*/
+
+/*before*/
+_foo4
+/*after*/
+.
+/*before*/
+bar)
 /*after*/
 (
 /*before*/
-_foo2.default
+_foo2
+/*after*/
+.
+/*before*/
+default
 /*after*/
 ,
 /*before*/
-_foo5.foo
+_foo5
+/*after*/
+.
+/*before*/
+foo
 /*after*/
 );
 /* my comment */
 
 /*before*/
-_foo5.foo
+_foo5
+/*after*/
+.
+/*before*/
+foo
 /*after*/
 ;
 
 /*before*/
-_foo2.default
+_foo2
+/*after*/
+.
+/*before*/
+default
 /*after*/
 ;

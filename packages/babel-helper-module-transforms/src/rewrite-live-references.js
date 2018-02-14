@@ -180,6 +180,9 @@ const rewriteReferencesVisitor = {
     if (importData) {
       const ref = buildImportReference(importData, path.node);
 
+      // Preserve the binding location so that sourcemaps are nicer.
+      ref.loc = path.node.loc;
+
       if (
         path.parentPath.isCallExpression({ callee: path.node }) &&
         t.isMemberExpression(ref)
