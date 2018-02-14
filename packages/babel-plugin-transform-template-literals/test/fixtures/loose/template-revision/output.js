@@ -6,7 +6,7 @@ var _templateObject = /*#__PURE__*/ _taggedTemplateLiteralLoose([void 0], ["\\un
     _templateObject6 = /*#__PURE__*/ _taggedTemplateLiteralLoose(["left", void 0, "right"], ["left", "\\u000g", "right"]),
     _templateObject7 = /*#__PURE__*/ _taggedTemplateLiteralLoose(["left", void 0, "right"], ["left", "\\u{-0}", "right"]);
 
-function _taggedTemplateLiteralLoose(strings, raw) { strings.raw = raw; return strings; }
+function _taggedTemplateLiteralLoose(strings, raw) { if (!raw) { raw = strings.slice(0); } strings.raw = raw; return strings; }
 
 tag(_templateObject);
 tag(_templateObject2);
