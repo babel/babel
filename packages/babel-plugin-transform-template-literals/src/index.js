@@ -89,15 +89,15 @@ export default function(api, options) {
           this.templates.set(name, templateObject);
 
           const helperId = this.addHelper(helperName);
+          const callExpressionInput = [];
+          callExpressionInput.push(t.arrayExpression(strings));
+
+          if (!isStringsRawEqual) {
+            callExpressionInput.push(t.arrayExpression(raws));
+          }
 
           // only add raw arrayExpression if there is any difference between raws and strings
-          const init = t.callExpression(
-            helperId,
-            [
-              t.arrayExpression(strings),
-              !isStringsRawEqual ? t.arrayExpression(raws) : null,
-            ].filter(x => x),
-          );
+          const init = t.callExpression(helperId, callExpressionInput);
           annotateAsPure(init);
           init._compact = true;
           programPath.scope.push({
