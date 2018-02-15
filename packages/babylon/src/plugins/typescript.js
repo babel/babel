@@ -1644,7 +1644,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     parseClassProperty(node: N.ClassProperty): N.ClassProperty {
       if (!node.optional && this.eat(tt.bang)) {
-        node.definiteAssignment = true;
+        node.definite = true;
       }
 
       const type = this.tsTryParseTypeAnnotation();
@@ -1709,7 +1709,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseVarHead(decl: N.VariableDeclarator): void {
       super.parseVarHead(decl);
       if (decl.id.type === "Identifier" && this.eat(tt.bang)) {
-        decl.definiteAssignment = true;
+        decl.definite = true;
       }
 
       const type = this.tsTryParseTypeAnnotation();

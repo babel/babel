@@ -328,7 +328,7 @@
                 "name": "x"
               },
               "computed": false,
-              "definiteAssignment": true,
+              "definite": true,
               "value": null
             },
             {
@@ -364,7 +364,7 @@
                 "name": "x"
               },
               "computed": false,
-              "definiteAssignment": true,
+              "definite": true,
               "typeAnnotation": {
                 "type": "TSTypeAnnotation",
                 "start": 73,

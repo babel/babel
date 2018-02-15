@@ -103,7 +103,7 @@ export function ClassProperty(node: Object) {
   if (node.optional) {
     this.token("?");
   }
-  if (node.definiteAssignment) {
+  if (node.definite) {
     this.token("!");
   }
 

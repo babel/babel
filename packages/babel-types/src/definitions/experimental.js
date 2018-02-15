@@ -36,7 +36,7 @@ defineType("ClassProperty", {
       validate: assertNodeType("Expression"),
       optional: true,
     },
-    definiteAssignment: {
+    definite: {
       validate: assertValueType("boolean"),
       optional: true,
     },
