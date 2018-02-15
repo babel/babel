@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 83,
+  "end": 180,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 2,
-      "column": 46
+      "line": 4,
+      "column": 47
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 83,
+    "end": 180,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 2,
-        "column": 46
+        "line": 4,
+        "column": 47
       }
     },
     "sourceType": "module",
@@ -273,6 +273,264 @@
                       "end": {
                         "line": 2,
                         "column": 42
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start": 84,
+        "end": 132,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 48
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 88,
+            "end": 131,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 4
+              },
+              "end": {
+                "line": 3,
+                "column": 47
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 88,
+              "end": 131,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 4
+                },
+                "end": {
+                  "line": 3,
+                  "column": 47
+                },
+                "identifierName": "map"
+              },
+              "name": "map",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 91,
+                "end": 131,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 47
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSMappedType",
+                  "start": 93,
+                  "end": 131,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 47
+                    }
+                  },
+                  "readonly": "+",
+                  "typeParameter": {
+                    "type": "TSTypeParameter",
+                    "start": 106,
+                    "end": 117,
+                    "loc": {
+                      "start": {
+                        "line": 3,
+                        "column": 22
+                      },
+                      "end": {
+                        "line": 3,
+                        "column": 33
+                      }
+                    },
+                    "name": "P",
+                    "constraint": {
+                      "type": "TSStringKeyword",
+                      "start": 111,
+                      "end": 117,
+                      "loc": {
+                        "start": {
+                          "line": 3,
+                          "column": 27
+                        },
+                        "end": {
+                          "line": 3,
+                          "column": 33
+                        }
+                      }
+                    }
+                  },
+                  "optional": "+",
+                  "typeAnnotation": {
+                    "type": "TSNumberKeyword",
+                    "start": 122,
+                    "end": 128,
+                    "loc": {
+                      "start": {
+                        "line": 3,
+                        "column": 38
+                      },
+                      "end": {
+                        "line": 3,
+                        "column": 44
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start": 133,
+        "end": 180,
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 47
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 137,
+            "end": 179,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 4
+              },
+              "end": {
+                "line": 4,
+                "column": 46
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 137,
+              "end": 179,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 4
+                },
+                "end": {
+                  "line": 4,
+                  "column": 46
+                },
+                "identifierName": "map"
+              },
+              "name": "map",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 140,
+                "end": 179,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 7
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 46
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSMappedType",
+                  "start": 142,
+                  "end": 179,
+                  "loc": {
+                    "start": {
+                      "line": 4,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 4,
+                      "column": 46
+                    }
+                  },
+                  "readonly": "-",
+                  "typeParameter": {
+                    "type": "TSTypeParameter",
+                    "start": 155,
+                    "end": 166,
+                    "loc": {
+                      "start": {
+                        "line": 4,
+                        "column": 22
+                      },
+                      "end": {
+                        "line": 4,
+                        "column": 33
+                      }
+                    },
+                    "name": "P",
+                    "constraint": {
+                      "type": "TSStringKeyword",
+                      "start": 160,
+                      "end": 166,
+                      "loc": {
+                        "start": {
+                          "line": 4,
+                          "column": 27
+                        },
+                        "end": {
+                          "line": 4,
+                          "column": 33
+                        }
+                      }
+                    }
+                  },
+                  "optional": "-",
+                  "typeAnnotation": {
+                    "type": "TSNumberKeyword",
+                    "start": 171,
+                    "end": 177,
+                    "loc": {
+                      "start": {
+                        "line": 4,
+                        "column": 38
+                      },
+                      "end": {
+                        "line": 4,
+                        "column": 44
                       }
                     }
                   }

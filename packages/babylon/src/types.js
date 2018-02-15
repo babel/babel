@@ -1161,9 +1161,9 @@ export type TsIndexedAccessType = TsTypeBase & {
 
 export type TsMappedType = TsTypeBase & {
   type: "TSMappedType",
-  readonly?: true,
+  readonly?: true | "+" | "-",
   typeParameter: TsTypeParameter,
-  optional?: true,
+  optional?: true | "+" | "-",
   typeAnnotation: ?TsType,
 };
 

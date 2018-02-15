@@ -446,6 +446,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsIsStartOfMappedType(): boolean {
       this.next();
+      if (this.eat(tt.plusMin)) {
+        return this.isContextual("readonly");
+      }
       if (this.isContextual("readonly")) {
         this.next();
       }
@@ -472,15 +475,27 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node: N.TsMappedType = this.startNode();
 
       this.expect(tt.braceL);
-      if (this.eatContextual("readonly")) {
+
+      if (this.match(tt.plusMin)) {
+        node.readonly = this.state.value;
+        this.next();
+        this.expectContextual("readonly");
+      } else if (this.eatContextual("readonly")) {
         node.readonly = true;
       }
+
       this.expect(tt.bracketL);
       node.typeParameter = this.tsParseMappedTypeParameter();
       this.expect(tt.bracketR);
-      if (this.eat(tt.question)) {
+
+      if (this.match(tt.plusMin)) {
+        node.optional = this.state.value;
+        this.next();
+        this.expect(tt.question);
+      } else if (this.eat(tt.question)) {
         node.optional = true;
       }
+
       node.typeAnnotation = this.tsTryParseType();
       this.semicolon();
       this.expect(tt.braceR);
