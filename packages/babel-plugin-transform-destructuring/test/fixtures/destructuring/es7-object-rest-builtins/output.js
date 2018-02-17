@@ -1,6 +1,6 @@
 var z = {};
 var _z = z,
-    x = babelHelpers.extends({}, _z);
+    x = Object.assign({}, _z);
 var _z2 = z,
     x = _z2.x,
     y = babelHelpers.objectWithoutProperties(_z2, ["x"]);

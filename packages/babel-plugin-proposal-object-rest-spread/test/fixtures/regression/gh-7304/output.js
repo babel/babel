@@ -7,7 +7,7 @@ exports.default = void 0;
 
 class _default {
   method(_ref) {
-    let object = babelHelpers.objectWithoutProperties(_ref, []);
+    let object = Object.assign({}, _ref);
   }
 
 }

@@ -11,6 +11,12 @@ export default declare((api, opts) => {
     throw new Error(".loose must be a boolean, or undefined");
   }
 
+  function getExtendsHelper(file) {
+    return useBuiltIns
+      ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
+      : file.addHelper("extends");
+  }
+
   function hasRestElement(path) {
     let foundRestElement = false;
     visitRestElements(path, () => {
@@ -96,6 +102,17 @@ export default declare((api, opts) => {
 
     const impureComputedPropertyDeclarators = replaceImpureComputedKeys(path);
     const { keys, allLiteral } = extractNormalizedKeys(path);
+
+    if (keys.length === 0) {
+      return [
+        impureComputedPropertyDeclarators,
+        restElement.argument,
+        t.callExpression(getExtendsHelper(file), [
+          t.objectExpression([]),
+          t.cloneNode(objRef),
+        ]),
+      ];
+    }
 
     let keyExpression;
     if (!allLiteral) {
@@ -396,9 +413,7 @@ export default declare((api, opts) => {
 
         let helper;
         if (loose) {
-          helper = useBuiltIns
-            ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
-            : file.addHelper("extends");
+          helper = getExtendsHelper(file);
         } else {
           helper = file.addHelper("objectSpread");
         }

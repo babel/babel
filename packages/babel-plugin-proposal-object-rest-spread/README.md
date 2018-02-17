@@ -71,8 +71,7 @@ For detailed information please check out [Spread VS. Object.assign](http://2ali
 
 `boolean`, defaults to `false`.
 
-Enabling this option will use `Object.assign` directly instead of the Babel's `extends` helper. Keep in mind that this flag only applies when `loose: true`.
-
+Enabling this option will use `Object.assign` directly instead of the Babel's `extends` helper. 
 
 ##### Example
 

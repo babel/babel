@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    "external-helpers",
+    ["transform-destructuring", { "useBuiltIns": true }],
+    "transform-spread",
+    "transform-parameters",
+    "transform-block-scoping",
+    "proposal-object-rest-spread",
+    "transform-regenerator"
+  ]
+}
