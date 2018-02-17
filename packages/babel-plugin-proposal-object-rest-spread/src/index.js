@@ -150,6 +150,12 @@ export default function(api, opts) {
 
         path.get("id").traverse(
           {
+            // If there's a default-value AssignmentPattern within the ObjectPattern,
+            // we should not traverse into it, lest we end up in another function body.
+            // (The parent traversal will handle it.)
+            AssignmentPattern(path) {
+              path.skip();
+            },
             RestElement(path) {
               if (!path.parentPath.isObjectPattern()) {
                 // Return early if the parent is not an ObjectPattern, but
