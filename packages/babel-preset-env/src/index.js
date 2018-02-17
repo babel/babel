@@ -7,8 +7,8 @@ import {
   getPlatformSpecificDefaultFor,
   getOptionSpecificExcludesFor,
 } from "./defaults";
-import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options.js";
+import moduleTransformations from "./module-transformations";
 import pluginList from "../data/plugins.json";
 import {
   builtIns as proposalBuiltIns,
@@ -172,6 +172,7 @@ export default function buildPreset(
   } = normalizeOptions(opts);
   // TODO: remove this in next major
   let hasUglifyTarget = false;
+  const [modulesType, modulePluginOptions] = modules;
 
   if (optionsTargets && optionsTargets.uglify) {
     hasUglifyTarget = true;
@@ -232,8 +233,15 @@ export default function buildPreset(
 
   // NOTE: not giving spec here yet to avoid compatibility issues when
   // transform-modules-commonjs gets its spec mode
-  if (modules !== false && moduleTransformations[modules]) {
-    plugins.push([getPlugin(moduleTransformations[modules]), { loose }]);
+  if (modulesType !== false) {
+    const [modulesType, modulePluginOptions] = modules;
+
+    if (moduleTransformations[modulesType]) {
+      plugins.push([
+        getPlugin(moduleTransformations[modulesType]),
+        modulePluginOptions,
+      ]);
+    }
   }
 
   transformations.forEach(pluginName =>
@@ -249,7 +257,14 @@ export default function buildPreset(
     console.log("@babel/preset-env: `DEBUG` option");
     console.log("\nUsing targets:");
     console.log(JSON.stringify(prettifyTargets(targets), null, 2));
-    console.log(`\nUsing modules transform: ${modules.toString()}`);
+    if (modulePluginOptions) {
+      console.log(
+        `\nUsing modules transform: ${modulesType.toString()}, with options:`,
+      );
+      console.log(JSON.stringify(modules[1], null, 2));
+    } else {
+      console.log(`\nUsing modules transform: ${modulesType.toString()}`);
+    }
     console.log("\nUsing plugins:");
     transformations.forEach(transform => {
       logPlugin(transform, targets, pluginList);

@@ -12,7 +12,10 @@ Using targets:
   "electron": "0.36"
 }
 
-Using modules transform: commonjs
+Using modules transform: commonjs, with options:
+{
+  "loose": false
+}
 
 Using plugins:
   transform-block-scoping { "electron":"0.36" }

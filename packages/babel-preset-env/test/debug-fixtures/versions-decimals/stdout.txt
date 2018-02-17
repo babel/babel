@@ -16,7 +16,10 @@ Using targets:
   "node": "6.1"
 }
 
-Using modules transform: commonjs
+Using modules transform: commonjs, with options:
+{
+  "loose": false
+}
 
 Using plugins:
   transform-arrow-functions { "ie":"10" }

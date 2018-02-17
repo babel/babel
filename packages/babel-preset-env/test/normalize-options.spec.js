@@ -8,7 +8,7 @@ const {
   normalizePluginNames,
   validateBoolOption,
   validateIncludesAndExcludes,
-  validateModulesOption,
+  normalizeModulesOption,
 } = normalizeOptions;
 
 describe("normalize-options", () => {
@@ -89,40 +89,68 @@ describe("normalize-options", () => {
     });
   });
 
-  describe("validateModulesOption", () => {
+  describe("normalizeModulesOption", () => {
     it("`undefined` option returns commonjs", () => {
-      assert(validateModulesOption() === "commonjs");
+      assert(normalizeModulesOption()[0] === "commonjs");
     });
 
-    it("`false` option returns commonjs", () => {
-      assert(validateModulesOption(false) === false);
+    it("`false` option returns false", () => {
+      assert(normalizeModulesOption(false)[0] === false);
     });
 
     it("commonjs option is valid", () => {
-      assert(validateModulesOption("commonjs") === "commonjs");
+      assert(normalizeModulesOption("commonjs")[0] === "commonjs");
     });
 
     it("systemjs option is valid", () => {
-      assert(validateModulesOption("systemjs") === "systemjs");
+      assert(normalizeModulesOption("systemjs")[0] === "systemjs");
     });
 
     it("amd option is valid", () => {
-      assert(validateModulesOption("amd") === "amd");
+      assert(normalizeModulesOption("amd")[0] === "amd");
     });
 
     it("umd option is valid", () => {
-      assert(validateModulesOption("umd") === "umd");
+      assert(normalizeModulesOption("umd")[0] === "umd");
+    });
+
+    it("commonjs option with options is valid", () => {
+      const [format, options] = normalizeModulesOption("commonjs", {
+        strictMode: true,
+      });
+      assert(format === "commonjs");
+      assert.deepStrictEqual(options, { strictMode: true });
+    });
+
+    it("systemjs option with options is valid", () => {
+      const [format, options] = normalizeModulesOption("systemjs", {
+        strictMode: true,
+        loose: true,
+      });
+      assert(format === "systemjs");
+      assert.deepStrictEqual(options, { loose: true, strictMode: true });
+    });
+
+    it("amd option with options is valid", () => {
+      const [format, options] = normalizeModulesOption("amd", {
+        strictMode: true,
+        loose: false,
+      });
+      assert(format === "amd");
+      assert.deepStrictEqual(options, { loose: false, strictMode: true });
+    });
+
+    it("umd option with options is valid", () => {
+      const [format, options] = normalizeModulesOption("umd", {
+        strictMode: true,
+      });
+      assert(format === "umd");
+      assert.deepStrictEqual(options, { strictMode: true });
     });
 
     it("`true` option is invalid", () => {
       assert.throws(() => {
-        validateModulesOption(true);
-      }, Error);
-    });
-
-    it("array option is invalid", () => {
-      assert.throws(() => {
-        assert(validateModulesOption([]));
+        normalizeModulesOption(true);
       }, Error);
     });
   });

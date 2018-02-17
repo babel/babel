@@ -10,7 +10,10 @@ Using targets:
   "safari": "7"
 }
 
-Using modules transform: commonjs
+Using modules transform: commonjs, with options:
+{
+  "loose": false
+}
 
 Using plugins:
   transform-arrow-functions { "ie":"10", "ios":"9", "safari":"7" }

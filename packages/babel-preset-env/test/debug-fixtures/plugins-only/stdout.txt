@@ -13,7 +13,10 @@ Using targets:
   "node": "7.4"
 }
 
-Using modules transform: commonjs
+Using modules transform: commonjs, with options:
+{
+  "loose": false
+}
 
 Using plugins:
   transform-destructuring { "firefox":"52" }

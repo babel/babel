@@ -5,7 +5,10 @@ Using targets:
   "chrome": "60"
 }
 
-Using modules transform: commonjs
+Using modules transform: commonjs, with options:
+{
+  "loose": false
+}
 
 Using plugins:
   transform-dotall-regex { "chrome":"60" }
