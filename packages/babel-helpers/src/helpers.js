@@ -374,6 +374,26 @@ helpers.extends = defineHelper(`
   }
 `);
 
+helpers.objectSpread = defineHelper(`
+  import defineProperty from "defineProperty";
+
+  export default function _objectSpread(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = (arguments[i] != null) ? arguments[i] : {};
+      var ownKeys = Object.keys(source);
+      if (typeof Object.getOwnPropertySymbols === 'function') {
+        ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+          return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+        }));
+      }
+      ownKeys.forEach(function(key) {
+        defineProperty(target, key, source[key]);
+      });
+    }
+    return target;
+  }
+`);
+
 helpers.get = defineHelper(`
   export default function _get(object, property, receiver) {
     if (object === null) object = Function.prototype;

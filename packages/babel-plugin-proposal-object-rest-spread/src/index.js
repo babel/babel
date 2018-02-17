@@ -2,9 +2,10 @@ import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import { types as t } from "@babel/core";
 
 export default function(api, opts) {
-  const { useBuiltIns = false } = opts;
-  if (typeof useBuiltIns !== "boolean") {
-    throw new Error(".useBuiltIns must be a boolean, or undefined");
+  const { useBuiltIns = false, loose = false } = opts;
+
+  if (typeof loose !== "boolean") {
+    throw new Error(".loose must be a boolean, or undefined");
   }
 
   function hasRestElement(path) {
@@ -366,6 +367,10 @@ export default function(api, opts) {
           props = [];
         }
 
+        if (t.isSpreadElement(path.node.properties[0])) {
+          args.push(t.objectExpression([]));
+        }
+
         for (const prop of (path.node.properties: Array)) {
           if (t.isSpreadElement(prop)) {
             push();
@@ -377,13 +382,14 @@ export default function(api, opts) {
 
         push();
 
-        if (!t.isObjectExpression(args[0])) {
-          args.unshift(t.objectExpression([]));
+        let helper;
+        if (loose) {
+          helper = useBuiltIns
+            ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
+            : file.addHelper("extends");
+        } else {
+          helper = file.addHelper("objectSpread");
         }
-
-        const helper = useBuiltIns
-          ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
-          : file.addHelper("extends");
 
         path.replaceWith(t.callExpression(helper, args));
       },
