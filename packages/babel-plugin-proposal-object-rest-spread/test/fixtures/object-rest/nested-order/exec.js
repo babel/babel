@@ -1,6 +1,6 @@
-let result = "";
+var result = "";
 
-const obj = {
+var obj = {
   get foo() {
     result += "foo"
   },
@@ -16,6 +16,6 @@ const obj = {
   }
 };
 
-const { a: { ...bar }, b: { ...baz }, ...foo } = obj;
+var { a: { ...bar }, b: { ...baz }, ...foo } = obj;
 
 assert.strictEqual(result, "barbazfoo");
