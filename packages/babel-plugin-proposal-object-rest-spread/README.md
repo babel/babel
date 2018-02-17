@@ -54,18 +54,34 @@ require("@babel/core").transform("code", {
 
 ## Options
 
+By default, this plugin will produce spec compliant code. The Babel's `objectSpread` helper will be used.
+
+### `loose`
+
+`boolean`, defaults to `false`.
+
+Enabling this option will use Babel's `extends` helper, which is basically the same as `Object.assign` (see `useBuiltIns` below to use it directly).
+
+:warning: Please take in mind that even if they're almost equivalent, there's an important difference between spread and `Object.assign`: to summarize, **spread defines new properties, while `Object.assign()` sets them**, so using this mode might produce unexpected results in some case.
+
+For detailed information please check out [Spread VS. Object.assign](http://2ality.com/2016/10/rest-spread-properties.html#spreading-objects-versus-objectassign) and [Assigning VS. defining properties](http://exploringjs.com/es6/ch_oop-besides-classes.html#sec_assigning-vs-defining-properties).
+
+
 ### `useBuiltIns`
 
 `boolean`, defaults to `false`.
 
-By default, this plugin uses Babel's `extends` helper which polyfills `Object.assign`. Enabling this option will use `Object.assign` directly.
+Enabling this option will use `Object.assign` directly instead of the Babel's `extends` helper. Keep in mind that this flag only applies when `loose: true`.
+
+
+##### Example
 
 **.babelrc**
 
 ```json
 {
   "plugins": [
-    ["@babel/plugin-proposal-object-rest-spread", { "useBuiltIns": true }]
+    ["@babel/plugin-proposal-object-rest-spread", { "loose": true, "useBuiltIns": true }]
   ]
 }
 ```
@@ -86,3 +102,5 @@ z = Object.assign({ x }, y);
 
 * [Proposal: Object Rest/Spread Properties for ECMAScript](https://github.com/sebmarkbage/ecmascript-rest-spread)
 * [Spec](http://sebmarkbage.github.io/ecmascript-rest-spread)
+* [Spread VS. Object.assign](http://2ality.com/2016/10/rest-spread-properties.html#spreading-objects-versus-objectassign)
+* [Assigning VS. defining properties](http://exploringjs.com/es6/ch_oop-besides-classes.html#sec_assigning-vs-defining-properties)
