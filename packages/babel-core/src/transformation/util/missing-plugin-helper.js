@@ -113,6 +113,16 @@ const pluginNameMap = {
       url: "https://git.io/vb4yd",
     },
   },
+  logicalAssignment: {
+    syntax: {
+      name: "@babel/plugin-syntax-logical-assignment-operators",
+      url: "https://git.io/vAlBp",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-logical-assignment-operators",
+      url: "https://git.io/vAlRe",
+    },
+  },
   nullishCoalescingOperator: {
     syntax: {
       name: "@babel/plugin-syntax-nullish-coalescing-operator",

@@ -464,9 +464,16 @@ export default class Tokenizer extends LocationParser {
     const next = this.input.charCodeAt(this.state.pos + 1);
 
     if (next === code) {
+      const assign =
+        this.input.charCodeAt(this.state.pos + 2) === charCodes.equalsTo;
+      if (assign) {
+        this.expectPlugin("logicalAssignment");
+      }
       this.finishOp(
-        code === charCodes.verticalBar ? tt.logicalOR : tt.logicalAND,
-        2,
+        assign
+          ? tt.assign
+          : code === charCodes.verticalBar ? tt.logicalOR : tt.logicalAND,
+        assign ? 3 : 2,
       );
       return;
     }
