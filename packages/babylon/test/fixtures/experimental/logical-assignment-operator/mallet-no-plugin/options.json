@@ -1,4 +1,4 @@
 {
   "plugins": [],
-  "throws": "Unexpected token (1:4)"
+  "throws": "This experimental syntax requires enabling the parser plugin: 'logicalAssignment' (1:2)"
 }
