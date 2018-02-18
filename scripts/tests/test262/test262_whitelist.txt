@@ -610,7 +610,6 @@ annexB/language/global-code/if-stmt-else-decl-global-skip-early-err-switch.js(de
 annexB/language/global-code/if-stmt-else-decl-global-skip-early-err-try.js(default)
 annexB/language/global-code/if-stmt-else-decl-global-skip-early-err.js(default)
 annexB/language/global-code/if-stmt-else-decl-global-update.js(default)
-annexB/language/statements/for-in/nonstrict-initializer.js(default)
 built-ins/Function/prototype/toString/intrinsics.js(strict mode)
 language/expressions/assignment/destructuring/obj-prop-__proto__dup.js(default)
 language/expressions/assignment/destructuring/obj-prop-__proto__dup.js(strict mode)
