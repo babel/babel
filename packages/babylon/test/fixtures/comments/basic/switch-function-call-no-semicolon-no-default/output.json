@@ -174,10 +174,8 @@
                       },
                       "value": "1"
                     }
-                  ],
-                  "trailingComments": null
-                },
-                "trailingComments": null
+                  ]
+                }
               }
             ],
             "test": {

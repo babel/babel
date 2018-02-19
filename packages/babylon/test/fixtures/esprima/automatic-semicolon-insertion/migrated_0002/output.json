@@ -72,9 +72,7 @@
                 },
                 "identifierName": "x"
               },
-              "name": "x",
-              "leadingComments": null,
-              "trailingComments": null
+              "name": "x"
             },
             "init": null,
             "trailingComments": [

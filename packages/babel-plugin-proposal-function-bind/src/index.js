@@ -17,7 +17,7 @@ export default function() {
 
   function inferBindContext(bind, scope) {
     const staticContext = getStaticContext(bind, scope);
-    if (staticContext) return t.cloneDeep(staticContext);
+    if (staticContext) return t.cloneNode(staticContext);
 
     const tempId = getTempId(scope);
     if (bind.object) {

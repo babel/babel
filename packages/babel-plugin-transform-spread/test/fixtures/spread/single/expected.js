@@ -1,1 +1,0 @@
-babelHelpers.toConsumableArray(foo);

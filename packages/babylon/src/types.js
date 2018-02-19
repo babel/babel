@@ -26,9 +26,9 @@ export interface NodeBase {
   end: number;
   loc: SourceLocation;
   range: [number, number];
-  leadingComments?: ?Array<Comment>;
-  trailingComments?: ?Array<Comment>;
-  innerComments?: ?Array<Comment>;
+  leadingComments?: Array<Comment>;
+  trailingComments?: Array<Comment>;
+  innerComments?: Array<Comment>;
 
   extra: { [key: string]: any };
 }
@@ -509,6 +509,18 @@ export type MemberExpression = NodeBase & {
   computed: boolean,
 };
 
+export type OptionalMemberExpression = NodeBase & {
+  type: "OptionalMemberExpression",
+  object: Expression | Super,
+  property: Expression,
+  computed: boolean,
+  optional: boolean,
+};
+
+export type OptionalCallExpression = CallOrNewBase & {
+  type: "OptionalCallExpression",
+  optional: boolean,
+};
 export type BindExpression = NodeBase & {
   type: "BindExpression",
   object: $ReadOnlyArray<?Expression>,
@@ -1149,7 +1161,7 @@ export type TsParenthesizedType = TsTypeBase & {
 
 export type TsTypeOperator = TsTypeBase & {
   type: "TSTypeOperator",
-  operator: "keyof",
+  operator: "keyof" | "unique",
   typeAnnotation: TsType,
 };
 

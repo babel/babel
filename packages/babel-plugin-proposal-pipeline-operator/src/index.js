@@ -14,7 +14,10 @@ export default function() {
         if (operator !== "|>") return;
 
         let optimizeArrow =
-          t.isArrowFunctionExpression(right) && t.isExpression(right.body);
+          t.isArrowFunctionExpression(right) &&
+          t.isExpression(right.body) &&
+          !right.async &&
+          !right.generator;
         let param;
 
         if (optimizeArrow) {
@@ -44,10 +47,10 @@ export default function() {
 
         const call = optimizeArrow
           ? right.body
-          : t.callExpression(right, [placeholder]);
+          : t.callExpression(right, [t.cloneNode(placeholder)]);
         path.replaceWith(
           t.sequenceExpression([
-            t.assignmentExpression("=", placeholder, left),
+            t.assignmentExpression("=", t.cloneNode(placeholder), left),
             call,
           ]),
         );

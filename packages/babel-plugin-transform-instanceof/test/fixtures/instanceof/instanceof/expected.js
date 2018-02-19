@@ -1,1 +1,0 @@
-babelHelpers.instanceof(a, b);

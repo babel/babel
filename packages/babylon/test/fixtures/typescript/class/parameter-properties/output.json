@@ -385,8 +385,7 @@
                         },
                         "identifierName": "x"
                       },
-                      "name": "x",
-                      "leadingComments": null
+                      "name": "x"
                     },
                     "right": {
                       "type": "NumericLiteral",
@@ -407,8 +406,7 @@
                         "raw": "0"
                       },
                       "value": 0
-                    },
-                    "leadingComments": null
+                    }
                   },
                   "leadingComments": [
                     {

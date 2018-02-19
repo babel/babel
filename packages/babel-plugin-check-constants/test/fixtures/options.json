@@ -1,3 +1,0 @@
-{
-  "plugins": ["check-constants", "transform-block-scoping", "transform-destructuring"]
-}

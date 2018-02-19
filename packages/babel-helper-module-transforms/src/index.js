@@ -128,7 +128,7 @@ export function buildNamespaceInitStatements(
     statements.push(
       template.statement`var NAME = SOURCE;`({
         NAME: localName,
-        SOURCE: t.cloneDeep(srcNamespace),
+        SOURCE: t.cloneNode(srcNamespace),
       }),
     );
   }
@@ -150,14 +150,14 @@ export function buildNamespaceInitStatements(
         : template.statement`EXPORTS.NAME = NAMESPACE;`)({
         EXPORTS: metadata.exportName,
         NAME: exportName,
-        NAMESPACE: t.cloneDeep(srcNamespace),
+        NAMESPACE: t.cloneNode(srcNamespace),
       }),
     );
   }
   if (sourceMetadata.reexportAll) {
     const statement = buildNamespaceReexport(
       metadata,
-      t.cloneDeep(srcNamespace),
+      t.cloneNode(srcNamespace),
       loose,
     );
     statement.loc = sourceMetadata.reexportAll.loc;
@@ -191,7 +191,7 @@ const buildReexportsFromMeta = (meta, metadata, loose) => {
     templateForCurrentMode({
       EXPORTS: meta.exportName,
       EXPORT_NAME: exportName,
-      NAMESPACE: t.cloneDeep(namespace),
+      NAMESPACE: t.cloneNode(namespace),
       IMPORT_NAME: importName,
     }),
   );

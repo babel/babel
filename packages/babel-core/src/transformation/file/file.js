@@ -123,7 +123,7 @@ export default class File {
 
   addHelper(name: string): Object {
     const declar = this.declarations[name];
-    if (declar) return declar;
+    if (declar) return t.cloneNode(declar);
 
     const generator = this.get("helperGenerator");
     const runtime = this.get("helpersNamespace");
@@ -131,7 +131,7 @@ export default class File {
       const res = generator(name);
       if (res) return res;
     } else if (runtime) {
-      return t.memberExpression(runtime, t.identifier(name));
+      return t.memberExpression(t.cloneNode(runtime), t.identifier(name));
     }
 
     const uid = (this.declarations[name] = this.scope.generateUidIdentifier(

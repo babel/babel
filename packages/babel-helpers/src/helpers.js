@@ -39,7 +39,9 @@ helpers.jsx = defineHelper(`
     if (!props && childrenLength !== 0) {
       // If we're going to assign props.children, we create a new object now
       // to avoid mutating defaultProps.
-      props = {};
+      props = {
+        children: void 0,
+      };
     }
     if (props && defaultProps) {
       for (var propName in defaultProps) {
@@ -369,6 +371,26 @@ helpers.extends = defineHelper(`
     };
 
     return _extends.apply(this, arguments);
+  }
+`);
+
+helpers.objectSpread = defineHelper(`
+  import defineProperty from "defineProperty";
+
+  export default function _objectSpread(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = (arguments[i] != null) ? arguments[i] : {};
+      var ownKeys = Object.keys(source);
+      if (typeof Object.getOwnPropertySymbols === 'function') {
+        ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+          return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+        }));
+      }
+      ownKeys.forEach(function(key) {
+        defineProperty(target, key, source[key]);
+      });
+    }
+    return target;
   }
 `);
 

@@ -552,6 +552,9 @@ export function assertUnionTypeAnnotation(
 ): void {
   assert("UnionTypeAnnotation", node, opts);
 }
+export function assertVariance(node: Object, opts?: Object = {}): void {
+  assert("Variance", node, opts);
+}
 export function assertVoidTypeAnnotation(
   node: Object,
   opts?: Object = {},
@@ -647,6 +650,18 @@ export function assertBindExpression(node: Object, opts?: Object = {}): void {
 }
 export function assertClassProperty(node: Object, opts?: Object = {}): void {
   assert("ClassProperty", node, opts);
+}
+export function assertOptionalMemberExpression(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("OptionalMemberExpression", node, opts);
+}
+export function assertOptionalCallExpression(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("OptionalCallExpression", node, opts);
 }
 export function assertImport(node: Object, opts?: Object = {}): void {
   assert("Import", node, opts);

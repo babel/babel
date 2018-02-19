@@ -1,9 +1,4 @@
 const es2015 = {
-  "check-constants": {
-    features: [
-      "const",
-    ],
-  },
   "transform-arrow-functions": {
     features: [
       "arrow functions",

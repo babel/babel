@@ -475,6 +475,14 @@ export function TypeCastExpression(node: Object) {
   this.token(")");
 }
 
+export function Variance(node: Object) {
+  if (node.kind === "plus") {
+    this.token("+");
+  } else {
+    this.token("-");
+  }
+}
+
 export function VoidTypeAnnotation() {
   this.word("void");
 }

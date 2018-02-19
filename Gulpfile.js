@@ -12,6 +12,11 @@ const gulp = require("gulp");
 const path = require("path");
 const webpack = require("webpack");
 const merge = require("merge-stream");
+const rollup = require("rollup-stream");
+const source = require("vinyl-source-stream");
+const buffer = require("vinyl-buffer");
+const rollupBabel = require("rollup-plugin-babel");
+const rollupNodeResolve = require("rollup-plugin-node-resolve");
 const registerStandalonePackageTask = require("./scripts/gulp-tasks")
   .registerStandalonePackageTask;
 
@@ -27,53 +32,100 @@ function getGlobFromSource(source) {
   return `./${source}/*/src/**/*.js`;
 }
 
-gulp.task("default", ["build"]);
+function getIndexFromPackage(name) {
+  return `${name}/src/index.js`;
+}
 
-gulp.task("build", function() {
+function compilationLogger(rollup) {
+  return through.obj(function(file, enc, callback) {
+    gutil.log(
+      `Compiling '${chalk.cyan(file.relative)}'${
+        rollup ? " with rollup " : ""
+      }...`
+    );
+    callback(null, file);
+  });
+}
+
+function errorsLogger() {
+  return plumber({
+    errorHandler(err) {
+      gutil.log(err.stack);
+    },
+  });
+}
+
+function rename(fn) {
+  return through.obj(function(file, enc, callback) {
+    file.path = fn(file);
+    callback(null, file);
+  });
+}
+
+function buildBabel(exclude) {
   return merge(
     sources.map(source => {
       const base = path.join(__dirname, source);
-      const f = filter(["**", "!**/packages/babylon/**"]);
 
-      return gulp
-        .src(getGlobFromSource(source), { base: base })
-        .pipe(f)
-        .pipe(
-          plumber({
-            errorHandler: function(err) {
-              gutil.log(err.stack);
-            },
-          })
-        )
-        .pipe(
-          newer({
-            dest: base,
-            map: swapSrcWithLib,
-          })
-        )
-        .pipe(
-          through.obj(function(file, enc, callback) {
-            gutil.log("Compiling", "'" + chalk.cyan(file.relative) + "'...");
-            callback(null, file);
-          })
-        )
+      let stream = gulp.src(getGlobFromSource(source), { base: base });
+
+      if (exclude) {
+        const filters = exclude.map(p => `!**/${p}/**`);
+        filters.unshift("**");
+        stream = stream.pipe(filter(filters));
+      }
+
+      return stream
+        .pipe(errorsLogger())
+        .pipe(newer({ dest: base, map: swapSrcWithLib }))
+        .pipe(compilationLogger())
         .pipe(babel())
         .pipe(
-          through.obj(function(file, enc, callback) {
-            // Passing 'file.relative' because newer() above uses a relative
-            // path and this keeps it consistent.
-            file.path = path.resolve(file.base, swapSrcWithLib(file.relative));
-            callback(null, file);
-          })
+          // Passing 'file.relative' because newer() above uses a relative
+          // path and this keeps it consistent.
+          rename(file => path.resolve(file.base, swapSrcWithLib(file.relative)))
         )
         .pipe(gulp.dest(base));
     })
   );
+}
+
+function buildRollup(packages) {
+  return merge(
+    packages.map(pkg => {
+      return rollup({
+        input: getIndexFromPackage(pkg),
+        format: "cjs",
+        plugins: [
+          rollupBabel({
+            babelrc: false,
+            extends: "./.babelrc.rollup.js",
+          }),
+          rollupNodeResolve(),
+        ],
+      })
+        .pipe(source("index.js"))
+        .pipe(buffer())
+        .pipe(errorsLogger())
+        .pipe(compilationLogger(/* rollup */ true))
+        .pipe(gulp.dest(path.join(pkg, "lib")));
+    })
+  );
+}
+
+gulp.task("default", ["build"]);
+
+gulp.task("build", function() {
+  const bundles = ["packages/babylon"];
+
+  return merge([buildBabel(/* exclude */ bundles), buildRollup(bundles)]);
 });
 
-gulp.task("watch", ["build"], function() {
+gulp.task("build-no-bundle", () => buildBabel());
+
+gulp.task("watch", ["build-no-bundle"], function() {
   watch(sources.map(getGlobFromSource), { debounceDelay: 200 }, function() {
-    gulp.start("build");
+    gulp.start("build-no-bundle");
   });
 });
 

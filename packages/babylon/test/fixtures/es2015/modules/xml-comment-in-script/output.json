@@ -57,9 +57,7 @@
             },
             "identifierName": "foo"
           },
-          "name": "foo",
-          "leadingComments": null,
-          "trailingComments": null
+          "name": "foo"
         },
         "trailingComments": [
           {

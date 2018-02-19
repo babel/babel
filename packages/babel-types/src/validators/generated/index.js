@@ -416,6 +416,9 @@ export function isTypeParameterInstantiation(
 export function isUnionTypeAnnotation(node: Object, opts?: Object): boolean {
   return is("UnionTypeAnnotation", node, opts);
 }
+export function isVariance(node: Object, opts?: Object): boolean {
+  return is("Variance", node, opts);
+}
 export function isVoidTypeAnnotation(node: Object, opts?: Object): boolean {
   return is("VoidTypeAnnotation", node, opts);
 }
@@ -481,6 +484,15 @@ export function isBindExpression(node: Object, opts?: Object): boolean {
 }
 export function isClassProperty(node: Object, opts?: Object): boolean {
   return is("ClassProperty", node, opts);
+}
+export function isOptionalMemberExpression(
+  node: Object,
+  opts?: Object,
+): boolean {
+  return is("OptionalMemberExpression", node, opts);
+}
+export function isOptionalCallExpression(node: Object, opts?: Object): boolean {
+  return is("OptionalCallExpression", node, opts);
 }
 export function isImport(node: Object, opts?: Object): boolean {
   return is("Import", node, opts);

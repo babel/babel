@@ -5,8 +5,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _class = function _class() {
-  babelHelpers.classCallCheck(this, _class);
+var _default = function _default() {
+  babelHelpers.classCallCheck(this, _default);
 };
 
-exports.default = _class;
+exports.default = _default;

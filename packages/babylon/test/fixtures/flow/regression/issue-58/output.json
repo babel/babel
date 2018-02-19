@@ -71,8 +71,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "Identifier",
@@ -148,8 +147,7 @@
               },
               "name": "d"
             }
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -231,8 +229,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "ArrowFunctionExpression",
@@ -353,8 +350,7 @@
               "identifierName": "e"
             },
             "name": "e"
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -436,8 +432,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "Identifier",
@@ -562,8 +557,7 @@
               },
               "name": "e"
             }
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -661,8 +655,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "AssignmentExpression",
@@ -808,8 +801,7 @@
               },
               "name": "f"
             }
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -907,8 +899,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "ArrowFunctionExpression",
@@ -1098,8 +1089,7 @@
               "identifierName": "g"
             },
             "name": "g"
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -1197,8 +1187,7 @@
               },
               "identifierName": "b"
             },
-            "name": "b",
-            "leadingComments": null
+            "name": "b"
           },
           "consequent": {
             "type": "ConditionalExpression",
@@ -1372,8 +1361,7 @@
               "identifierName": "h"
             },
             "name": "h"
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -1471,8 +1459,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "ConditionalExpression",
@@ -1650,8 +1637,7 @@
               "identifierName": "h"
             },
             "name": "h"
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -1733,8 +1719,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "ConditionalExpression",
@@ -1908,8 +1893,7 @@
               "identifierName": "g"
             },
             "name": "g"
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -2007,8 +1991,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "ArrowFunctionExpression",
@@ -2215,8 +2198,7 @@
               },
               "name": "g"
             }
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -2330,8 +2312,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "ArrowFunctionExpression",
@@ -2538,8 +2519,7 @@
               "identifierName": "g"
             },
             "name": "g"
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -2637,8 +2617,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "Identifier",
@@ -2834,8 +2813,7 @@
                 ]
               }
             }
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -2917,8 +2895,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "ArrowFunctionExpression",
@@ -3114,8 +3091,7 @@
               },
               "name": "f"
             }
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -3213,8 +3189,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "ArrowFunctionExpression",
@@ -3327,8 +3302,7 @@
               },
               "name": "e"
             }
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -3426,8 +3400,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "ConditionalExpression",
@@ -3589,8 +3562,7 @@
               "identifierName": "g"
             },
             "name": "g"
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -3688,8 +3660,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "ArrowFunctionExpression",
@@ -3888,8 +3859,7 @@
               },
               "name": "g"
             }
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -3987,8 +3957,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "ConditionalExpression",
@@ -4228,8 +4197,7 @@
               },
               "name": "i"
             }
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -4327,8 +4295,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "ArrowFunctionExpression",
@@ -4518,8 +4485,7 @@
               "identifierName": "f"
             },
             "name": "f"
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -4633,8 +4599,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "CallExpression",
@@ -4740,8 +4705,7 @@
               },
               "name": "d"
             }
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -4839,8 +4803,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "ArrowFunctionExpression",
@@ -4960,8 +4923,7 @@
               "identifierName": "e"
             },
             "name": "e"
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -5043,8 +5005,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "CallExpression",
@@ -5187,8 +5148,7 @@
               },
               "name": "e"
             }
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -5270,8 +5230,7 @@
               },
               "identifierName": "a"
             },
-            "name": "a",
-            "leadingComments": null
+            "name": "a"
           },
           "consequent": {
             "type": "ArrowFunctionExpression",
@@ -5421,8 +5380,7 @@
               },
               "name": "f"
             }
-          },
-          "leadingComments": null
+          }
         },
         "leadingComments": [
           {
@@ -5521,8 +5479,7 @@
                 },
                 "identifierName": "icecream"
               },
-              "name": "icecream",
-              "leadingComments": null
+              "name": "icecream"
             },
             "init": {
               "type": "ConditionalExpression",
@@ -5968,8 +5925,7 @@
                   ]
                 }
               }
-            },
-            "leadingComments": null
+            }
           }
         ],
         "kind": "let",

@@ -57,8 +57,7 @@
             },
             "identifierName": "commentsAttachedToIdentifier"
           },
-          "name": "commentsAttachedToIdentifier",
-          "leadingComments": null
+          "name": "commentsAttachedToIdentifier"
         },
         "generator": false,
         "async": false,

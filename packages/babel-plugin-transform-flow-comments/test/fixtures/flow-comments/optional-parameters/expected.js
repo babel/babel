@@ -1,3 +1,0 @@
-function multiply(num
-/*:: ?: number*/
-) {}

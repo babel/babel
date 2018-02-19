@@ -77,10 +77,6 @@ export function replaceWithSourceString(replacement) {
   } catch (err) {
     const loc = err.loc;
     if (loc) {
-      // Set the location to null or else the re-thrown exception could
-      // incorrectly interpret the location as referencing the file being
-      // transformed.
-      err.loc = null;
       err.message +=
         " - make sure this is an expression.\n" +
         codeFrameColumns(replacement, {
@@ -89,6 +85,7 @@ export function replaceWithSourceString(replacement) {
             column: loc.column + 1,
           },
         });
+      err.code = "BABEL_REPLACE_SOURCE_ERROR";
     }
     throw err;
   }
@@ -237,7 +234,9 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
       if (!uid) {
         const callee = this.get("callee");
         uid = callee.scope.generateDeclaredUidIdentifier("ret");
-        callee.get("body").pushContainer("body", t.returnStatement(uid));
+        callee
+          .get("body")
+          .pushContainer("body", t.returnStatement(t.cloneNode(uid)));
         loop.setData("expressionReplacementReturnUid", uid);
       } else {
         uid = t.identifier(uid.name);
@@ -245,7 +244,9 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
 
       path
         .get("expression")
-        .replaceWith(t.assignmentExpression("=", uid, path.node.expression));
+        .replaceWith(
+          t.assignmentExpression("=", t.cloneNode(uid), path.node.expression),
+        );
     } else {
       path.replaceWith(t.returnStatement(path.node.expression));
     }

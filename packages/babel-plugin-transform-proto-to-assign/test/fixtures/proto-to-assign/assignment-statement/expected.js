@@ -1,1 +1,0 @@
-babelHelpers.defaults(obj, bar);

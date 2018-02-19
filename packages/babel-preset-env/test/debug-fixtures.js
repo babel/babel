@@ -92,7 +92,6 @@ const buildTest = opts => {
 
 const checkOutput = checkOpts => {
   const { testName, testLoc, options, args, withStderr } = checkOpts;
-
   const opts = {
     args,
     testLoc,
@@ -129,6 +128,16 @@ const checkOutput = checkOpts => {
 };
 
 describe("debug output", () => {
+  let cwd;
+
+  beforeEach(() => {
+    cwd = process.cwd();
+  });
+
+  afterEach(() => {
+    process.chdir(cwd);
+  });
+
   fs.readdirSync(debugFixtureLoc).forEach(testName => {
     // Ignore hidden files.
     if (testName.slice(0, 1) === ".") return;

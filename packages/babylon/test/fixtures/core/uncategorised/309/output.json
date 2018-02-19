@@ -88,7 +88,6 @@
                 }
               },
               "label": null,
-              "leadingComments": null,
               "trailingComments": [
                 {
                   "type": "CommentBlock",
@@ -137,8 +136,7 @@
                   },
                   "identifierName": "there"
                 },
-                "name": "there",
-                "leadingComments": null
+                "name": "there"
               },
               "leadingComments": [
                 {

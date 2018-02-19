@@ -105,8 +105,7 @@
                     "column": 41
                   }
                 },
-                "value": true,
-                "leadingComments": null
+                "value": true
               },
               "body": {
                 "type": "BlockStatement",
@@ -123,9 +122,7 @@
                   }
                 },
                 "body": [],
-                "directives": [],
-                "leadingComments": null,
-                "trailingComments": null
+                "directives": []
               },
               "leadingComments": [
                 {
@@ -208,11 +205,9 @@
                       },
                       "identifierName": "each"
                     },
-                    "name": "each",
-                    "leadingComments": null
+                    "name": "each"
                   },
-                  "init": null,
-                  "leadingComments": null
+                  "init": null
                 }
               ],
               "kind": "var",

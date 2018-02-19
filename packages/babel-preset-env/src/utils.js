@@ -86,7 +86,7 @@ export const filterStageFromList = (list: any, stageList: any) => {
 };
 
 export const isPolyfillSource = (source: string): boolean =>
-  source === "@babel/polyfill";
+  source === "@babel/polyfill" || source === "core-js";
 
 export const isRequire = (t: Object, path: Object): boolean =>
   t.isExpressionStatement(path.node) &&

@@ -1,1 +1,0 @@
-(x: number): number => x;
