@@ -8,10 +8,14 @@ const request = require("request");
 // * https://html.spec.whatwg.org/multipage/scripting.html#attr-script-type
 const lastKnown = {
   chrome: 61,
-  firefox: 59,
   safari: 10.1,
   ios_saf: 10.3,
   edge: 16,
+};
+
+const acceptedWithCaveats = {
+  safari: true,
+  ios_saf: true,
 };
 
 function input() {
@@ -38,12 +42,15 @@ function input() {
               const browserVersions = stats[browser];
               const allowedVersions = Object.keys(browserVersions)
                 .filter(value => {
-                  return browserVersions[value] === "y";
+                  return acceptedWithCaveats[browser]
+                    ? browserVersions[value][0] === "a"
+                    : browserVersions[value] === "y";
                 })
                 .sort((a, b) => a - b);
 
               if (allowedVersions[0] !== undefined) {
-                allowedBrowsers[browser] = allowedVersions[0];
+                // Handle cases where caniuse specifies version as: "11.0-11.2"
+                allowedBrowsers[browser] = allowedVersions[0].split("-")[0];
               }
             }
           });
