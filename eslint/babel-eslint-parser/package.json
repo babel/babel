@@ -47,7 +47,7 @@
     "eslint-plugin-prettier": "^2.1.2",
     "espree": "^3.5.2",
     "husky": "^0.14.0",
-    "lint-staged": "^4.0.0",
+    "lint-staged": "^6.1.1",
     "mocha": "^5.0.1",
     "prettier": "^1.4.4"
   },
