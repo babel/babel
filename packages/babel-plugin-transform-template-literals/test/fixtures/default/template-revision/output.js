@@ -6,7 +6,7 @@ var _templateObject = /*#__PURE__*/ _taggedTemplateLiteral([void 0], ["\\unicode
     _templateObject6 = /*#__PURE__*/ _taggedTemplateLiteral(["left", void 0, "right"], ["left", "\\u000g", "right"]),
     _templateObject7 = /*#__PURE__*/ _taggedTemplateLiteral(["left", void 0, "right"], ["left", "\\u{-0}", "right"]);
 
-function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
 tag(_templateObject);
 tag(_templateObject2);
