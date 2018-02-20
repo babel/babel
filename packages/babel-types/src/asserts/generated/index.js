@@ -801,6 +801,15 @@ export function assertTSIntersectionType(
 ): void {
   assert("TSIntersectionType", node, opts);
 }
+export function assertTSConditionalType(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("TSConditionalType", node, opts);
+}
+export function assertTSInferType(node: Object, opts?: Object = {}): void {
+  assert("TSInferType", node, opts);
+}
 export function assertTSParenthesizedType(
   node: Object,
   opts?: Object = {},

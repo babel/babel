@@ -608,6 +608,12 @@ export function isTSUnionType(node: Object, opts?: Object): boolean {
 export function isTSIntersectionType(node: Object, opts?: Object): boolean {
   return is("TSIntersectionType", node, opts);
 }
+export function isTSConditionalType(node: Object, opts?: Object): boolean {
+  return is("TSConditionalType", node, opts);
+}
+export function isTSInferType(node: Object, opts?: Object): boolean {
+  return is("TSInferType", node, opts);
+}
 export function isTSParenthesizedType(node: Object, opts?: Object): boolean {
   return is("TSParenthesizedType", node, opts);
 }

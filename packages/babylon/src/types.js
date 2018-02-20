@@ -1154,6 +1154,19 @@ export type TsIntersectionType = TsUnionOrIntersectionTypeBase & {
   type: "TSIntersectionType",
 };
 
+export type TsConditionalType = TsTypeBase & {
+  type: "TSConditionalType",
+  checkType: TsType,
+  extendsType: TsType,
+  trueType: TsType,
+  falseType: tsType,
+};
+
+export type InferType = TsTypeBase & {
+  type: "TSInferType",
+  typeParameter: TypeParameter,
+};
+
 export type TsParenthesizedType = TsTypeBase & {
   type: "TSParenthesizedType",
   typeAnnotation: TsType,

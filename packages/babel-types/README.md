@@ -1875,6 +1875,22 @@ Aliases: `TSTypeElement`
 
 ---
 
+### tSConditionalType
+```javascript
+t.tsConditionalType(checkType, extendsType, trueType, falseType)
+```
+
+See also `t.isTSConditionalType(node, opts)` and `t.assertTSConditionalType(node, opts)`.
+
+Aliases: `TSType`
+
+ - `checkType`: `TSType` (required)
+ - `extendsType`: `TSType` (required)
+ - `trueType`: `TSType` (required)
+ - `falseType`: `TSType` (required)
+
+---
+
 ### tSConstructSignatureDeclaration
 ```javascript
 t.tsConstructSignatureDeclaration(typeParameters, parameters, typeAnnotation)
@@ -2071,6 +2087,19 @@ Aliases: `TSType`
 
  - `objectType`: `TSType` (required)
  - `indexType`: `TSType` (required)
+
+---
+
+### tSInferType
+```javascript
+t.tsInferType(typeParameter)
+```
+
+See also `t.isTSInferType(node, opts)` and `t.assertTSInferType(node, opts)`.
+
+Aliases: `TSType`
+
+ - `typeParameter`: `TSType` (required)
 
 ---
 
