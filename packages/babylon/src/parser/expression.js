@@ -557,14 +557,13 @@ export default class ExpressionParser extends LValParser {
       const node = this.startNodeAt(startPos, startLoc);
       node.tag = base;
       node.quasi = this.parseTemplate(true);
-      if (!state.optionalChainMember) {
-        return this.finishNode(node, "TaggedTemplateExpression");
-      } else {
+      if (state.optionalChainMember) {
         this.raise(
           startPos,
           "Tagged Template Literals are not allowed in optionalChain",
         );
       }
+      return this.finishNode(node, "TaggedTemplateExpression");
     } else {
       state.stop = true;
       return base;
