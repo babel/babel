@@ -1298,3 +1298,12 @@ export type TsNonNullExpression = NodeBase & {
   type: "TSNonNullExpression",
   expression: Expression,
 };
+
+// ================
+// Other
+// ================
+
+export type ParseSubscriptState = {
+  optionalChainMember: boolean,
+  stop: boolean,
+};

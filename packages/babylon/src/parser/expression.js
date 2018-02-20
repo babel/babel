@@ -426,7 +426,10 @@ export default class ExpressionParser extends LValParser {
     startLoc: Position,
     noCalls?: ?boolean,
   ): N.Expression {
-    const state = { stop: false };
+    const state = {
+      optionalChainMember: false,
+      stop: false,
+    };
     do {
       base = this.parseSubscript(base, startPos, startLoc, noCalls, state);
     } while (!state.stop);
@@ -439,7 +442,7 @@ export default class ExpressionParser extends LValParser {
     startPos: number,
     startLoc: Position,
     noCalls: ?boolean,
-    state: { stop: boolean, optionalChainMember?: boolean },
+    state: N.ParseSubscriptState,
   ): N.Expression {
     if (!noCalls && this.eat(tt.doubleColon)) {
       const node = this.startNodeAt(startPos, startLoc);
