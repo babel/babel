@@ -314,8 +314,8 @@ module.exports = function(ast, parserOptions) {
     directive: false,
     nodejsScope:
       ast.sourceType === "script" &&
-        (parserOptions.ecmaFeatures &&
-          parserOptions.ecmaFeatures.globalReturn) === true,
+      (parserOptions.ecmaFeatures &&
+        parserOptions.ecmaFeatures.globalReturn) === true,
     impliedStrict: false,
     sourceType: ast.sourceType,
     ecmaVersion: parserOptions.ecmaVersion || 2018,

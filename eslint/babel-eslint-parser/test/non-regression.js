@@ -39,18 +39,16 @@ function verifyAndAssertMessagesWithSpecificESLint(
 
   if (messages.length !== expectedMessages.length) {
     throw new Error(
-      `Expected ${expectedMessages.length} message(s), got ${messages.length}\n${JSON.stringify(
-        messages,
-        null,
-        2
-      )}`
+      `Expected ${expectedMessages.length} message(s), got ${
+        messages.length
+      }\n${JSON.stringify(messages, null, 2)}`
     );
   }
 
   messages.forEach((message, i) => {
-    var formatedMessage = `${message.line}:${message.column} ${message.message}${message.ruleId
-      ? ` ${message.ruleId}`
-      : ""}`;
+    var formatedMessage = `${message.line}:${message.column} ${
+      message.message
+    }${message.ruleId ? ` ${message.ruleId}` : ""}`;
     if (formatedMessage !== expectedMessages[i]) {
       throw new Error(
         unpad(`

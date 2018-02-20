@@ -39,7 +39,7 @@
   "devDependencies": {
     "babel-eslint": "^8.0.0",
     "dedent": "^0.7.0",
-    "eslint": "^4.14.0",
+    "eslint": "npm:eslint@4.13.1",
     "eslint-config-babel": "^7.0.1",
     "eslint-old": "npm:eslint@4.13.1",
     "eslint-plugin-flowtype": "^2.30.3",

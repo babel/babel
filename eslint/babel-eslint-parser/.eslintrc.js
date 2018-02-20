@@ -7,7 +7,7 @@ module.exports = {
   rules: {
     "no-var": 0,
     "max-len": 0,
-    "prettier/prettier": ["error", { "trailingComma": "es5" }],
+    "prettier/prettier": "error",
   },
   env: {
     node: true,
