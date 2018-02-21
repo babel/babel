@@ -1,0 +1,3 @@
+{
+  "plugins": [ "transform-destructuring", "transform-object-rest-spread" ]
+}
