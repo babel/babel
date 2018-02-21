@@ -695,9 +695,29 @@ export default function transformClass(
 
     body.push(t.returnStatement(t.cloneNode(classState.classRef)));
 
+    const strictParent = this.path.findParent(path => {
+      if (!path.isProgram() && !path.isBlockStatement()) {
+        return false;
+      }
+
+      if (path.isProgram() && path.node.sourceType === "module") {
+        return true;
+      }
+
+      return path.node.directives.some(
+        directive => directive.value.value === "use strict",
+      );
+    });
+
+    const directives = [];
+
+    if (!strictParent) {
+      directives.push(t.directive(t.directiveLiteral("use strict")));
+    }
+
     const container = t.arrowFunctionExpression(
       closureParams,
-      t.blockStatement(body),
+      t.blockStatement(body, directives),
     );
     return t.callExpression(container, closureArgs);
   }
