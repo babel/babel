@@ -1,0 +1,11 @@
+{
+  "name": "@babel/lists",
+  "version": "7.0.0-beta.40",
+  "description": "Module containing various lists such as builtin classes names",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-lists",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "dependencies": {
+    "globals": "^11.1.0"
+  }
+}

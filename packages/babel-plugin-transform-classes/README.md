@@ -125,3 +125,11 @@ class Bar extends Foo {
 When `Bar.prototype.foo` is defined it triggers the setter on `Foo`. This is a
 case that is very unlikely to appear in production code however it's something
 to keep in mind.
+
+### `assumePure`
+
+`boolean`, defaults to `false` (`true` in `loose` mode).
+
+Normally a check for purity is performed before annotating a transformed class
+with `#__PURE__` comment, you can force those annotations on all classes or
+have the plugin perform a check in `loose` mode.

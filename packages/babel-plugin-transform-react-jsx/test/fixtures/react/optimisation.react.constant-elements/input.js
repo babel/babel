@@ -1,3 +1,5 @@
+import React from "react";
+
 class App extends React.Component {
   render() {
     const navbarHeader = <div className="navbar-header">

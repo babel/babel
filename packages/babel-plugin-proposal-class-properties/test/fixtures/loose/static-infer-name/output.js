@@ -1,5 +1,10 @@
-var _class, _temp;
+var Foo =
+/*#__PURE__*/
+(() => {
+  var Foo = function Foo() {
+    babelHelpers.classCallCheck(this, Foo);
+  };
 
-var Foo = (_temp = _class = function Foo() {
-  babelHelpers.classCallCheck(this, Foo);
-}, _class.num = 0, _temp);
+  Foo.num = 0;
+  return Foo;
+})();

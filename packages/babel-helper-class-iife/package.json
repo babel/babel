@@ -1,0 +1,12 @@
+{
+  "name": "@babel/helper-class-iife",
+  "version": "7.0.0-beta.40",
+  "description": "Helper module for reusing class IIFEs",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-class-iife",
+  "license": "MIT",
+  "main": "lib/index.js",
+  "dependencies": {
+    "@babel/helper-annotate-as-pure": "7.0.0-beta.40",
+    "@babel/types": "7.0.0-beta.40"
+  }
+}

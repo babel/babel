@@ -3,6 +3,7 @@ import ReplaceSupers from "@babel/helper-replace-supers";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as defineMap from "@babel/helper-define-map";
 import { traverse, template, types as t } from "@babel/core";
+import getClassIIFE from "@babel/helper-class-iife";
 
 type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
 
@@ -63,7 +64,12 @@ const findThisesVisitor = traverse.visitors.merge([
 ]);
 
 export default class ClassTransformer {
-  constructor(path: NodePath, file, builtinClasses: ReadonlySet<string>) {
+  constructor(
+    path: NodePath,
+    file,
+    builtinClasses: ReadonlySet<string>,
+    assumePure: boolean,
+  ) {
     this.parent = path.parent;
     this.scope = path.scope;
     this.node = path.node;
@@ -82,6 +88,7 @@ export default class ClassTransformer {
     this.pushedConstructor = false;
     this.pushedInherits = false;
     this.isLoose = false;
+    this.assumePure = assumePure;
 
     this.superThises = [];
 
@@ -160,14 +167,20 @@ export default class ClassTransformer {
       if (body.length === 1) return t.toExpression(body[0]);
     }
 
-    //
-    body.push(t.returnStatement(t.cloneNode(this.classRef)));
+    const iife = getClassIIFE(this.path, this.assumePure);
 
-    const container = t.arrowFunctionExpression(
-      closureParams,
-      t.blockStatement(body),
-    );
-    return t.callExpression(container, closureArgs);
+    iife.arguments.push(...closureArgs);
+    iife.callee.params.push(...closureParams);
+
+    if (iife.callee.body.body.length === 0) {
+      iife.callee.body.body.push(
+        ...body,
+        t.returnStatement(t.cloneNode(this.classRef)),
+      );
+      return iife;
+    }
+
+    return body;
   }
 
   buildConstructor() {
