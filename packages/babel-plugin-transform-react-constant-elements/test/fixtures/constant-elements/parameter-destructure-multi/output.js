@@ -3,7 +3,9 @@ function render(_ref) {
       className = _ref.className,
       id = _ref.id;
 
-  var _ref2 = <Component text={text} className={className} id={id} />;
+  var _ref2 =
+  /*#__PURE__*/
+  <Component text={text} className={className} id={id} />;
 
   return () => _ref2;
 }

@@ -1,4 +1,6 @@
-var _ref = <div className="class-name">
+var _ref =
+/*#__PURE__*/
+<div className="class-name">
       Text
     </div>;
 

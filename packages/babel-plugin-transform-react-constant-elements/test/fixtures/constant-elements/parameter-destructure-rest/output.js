@@ -4,7 +4,9 @@ function render(_ref) {
       id = _ref.id,
       props = babelHelpers.objectWithoutProperties(_ref, ["text", "className", "id"]);
 
-  var _ref2 = <Component text={text} className={className} id={id} />;
+  var _ref2 =
+  /*#__PURE__*/
+  <Component text={text} className={className} id={id} />;
 
   // intentionally ignoring props
   return () => _ref2;
