@@ -1,0 +1,19 @@
+{
+  "name": "@babel/preset-es2018",
+  "version": "7.0.0-beta.40",
+  "description": "Babel preset for all es2018 plugins.",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "homepage": "https://babeljs.io/",
+  "license": "MIT",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-es2018",
+  "main": "lib/index.js",
+  "dependencies": {
+
+  },
+  "peerDependencies": {
+    "@babel/core": "7.0.0-beta.40"
+  },
+  "devDependencies": {
+    "@babel/core": "7.0.0-beta.40"
+  }
+}
