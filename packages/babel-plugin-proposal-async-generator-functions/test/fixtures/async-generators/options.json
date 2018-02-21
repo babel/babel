@@ -1,3 +1,0 @@
-{
-  "plugins": ["external-helpers", "proposal-async-generator-functions"]
-}
