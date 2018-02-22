@@ -21,6 +21,8 @@ var B = function B() {
 var A =
 /*#__PURE__*/
 function (_B) {
+  "use strict";
+
   _inherits(A, _B);
 
   function A(track) {

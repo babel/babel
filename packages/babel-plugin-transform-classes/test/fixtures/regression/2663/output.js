@@ -15,6 +15,8 @@ var _binarySerializer = babelHelpers.interopRequireDefault(require("./helpers/bi
 var Connection =
 /*#__PURE__*/
 function (_EventEmitter) {
+  "use strict";
+
   babelHelpers.inherits(Connection, _EventEmitter);
 
   function Connection(endpoint, joinKey, joinData, roomId) {

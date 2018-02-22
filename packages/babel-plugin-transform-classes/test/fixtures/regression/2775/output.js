@@ -10,6 +10,8 @@ var _react = babelHelpers.interopRequireDefault(require("react"));
 var RandomComponent =
 /*#__PURE__*/
 function (_Component) {
+  "use strict";
+
   babelHelpers.inherits(RandomComponent, _Component);
 
   function RandomComponent() {

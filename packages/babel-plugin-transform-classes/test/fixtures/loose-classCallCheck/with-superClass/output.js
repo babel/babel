@@ -7,6 +7,8 @@ let B = function B() {};
 let A =
 /*#__PURE__*/
 function (_B) {
+  "use strict";
+
   _inheritsLoose(A, _B);
 
   function A(track) {

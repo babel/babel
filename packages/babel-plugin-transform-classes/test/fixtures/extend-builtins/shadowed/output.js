@@ -5,6 +5,8 @@ let Array = function Array() {
 let List =
 /*#__PURE__*/
 function (_Array) {
+  "use strict";
+
   babelHelpers.inherits(List, _Array);
 
   function List() {

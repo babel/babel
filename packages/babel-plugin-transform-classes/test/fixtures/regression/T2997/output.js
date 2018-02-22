@@ -5,6 +5,8 @@ var A = function A() {
 var B =
 /*#__PURE__*/
 function (_A) {
+  "use strict";
+
   babelHelpers.inherits(B, _A);
 
   function B() {

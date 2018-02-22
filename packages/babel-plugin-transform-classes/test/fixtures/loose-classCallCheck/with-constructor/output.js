@@ -5,6 +5,8 @@ let A = function A() {
 let B =
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function B() {}
 
   var _proto = B.prototype;

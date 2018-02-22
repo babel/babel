@@ -9,6 +9,8 @@ function _default() {
   return (
     /*#__PURE__*/
     function () {
+      "use strict";
+
       function Select() {
         babelHelpers.classCallCheck(this, Select);
       }

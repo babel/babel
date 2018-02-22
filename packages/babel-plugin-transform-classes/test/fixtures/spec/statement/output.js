@@ -11,6 +11,8 @@ var BaseView = function BaseView() {
 var BaseView =
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function BaseView() {
     babelHelpers.classCallCheck(this, BaseView);
   }

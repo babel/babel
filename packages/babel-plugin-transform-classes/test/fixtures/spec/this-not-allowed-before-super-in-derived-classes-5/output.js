@@ -2,6 +2,7 @@ var Foo =
 /*#__PURE__*/
 function (_Bar) {
   "use strict";
+
   babelHelpers.inherits(Foo, _Bar);
 
   function Foo() {
