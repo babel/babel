@@ -1,6 +1,5 @@
 {
   "plugins": [
-    "check-constants",
     "transform-arrow-functions",
     "transform-block-scoped-functions",
     "transform-block-scoping",

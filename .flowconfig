@@ -13,7 +13,7 @@ codemods/*/src
 [libs]
 lib/file.js
 lib/parser.js
-lib/types.js
+lib/packages/babel-types/lib/index.js.flow
 lib/third-party-libs.js.flow
 
 [options]

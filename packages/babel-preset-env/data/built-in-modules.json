@@ -1,0 +1,8 @@
+{
+  "es6.module": {
+    "edge": "16",
+    "chrome": "61",
+    "safari": "10.1",
+    "ios_saf": "10.3"
+  }
+}

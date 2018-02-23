@@ -39,8 +39,8 @@ export default class PluginPass {
 
   buildCodeFrameError(
     node: ?{
-      loc?: { line: number, column: number },
-      _loc?: { line: number, column: number },
+      loc?: { start: { line: number, column: number } },
+      _loc?: { start: { line: number, column: number } },
     },
     msg: string,
     Error?: typeof Error,

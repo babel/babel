@@ -7,6 +7,7 @@ import merge from "lodash/merge";
 import {
   buildRootChain,
   buildPresetChain,
+  type ConfigContext,
   type ConfigChain,
   type PresetInstance,
 } from "./config-chain";
@@ -36,6 +37,12 @@ export type { Plugin };
 export type PluginPassList = Array<Plugin>;
 export type PluginPasses = Array<PluginPassList>;
 
+// Context not including filename since it is used in places that cannot
+// process 'ignore'/'only' and other filename-based logic.
+type SimpleContext = {
+  envName: string,
+};
+
 export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
   if (
     inputOpts != null &&
@@ -49,27 +56,32 @@ export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
   const { envName = getEnv(), cwd = "." } = args;
   const absoluteCwd = path.resolve(cwd);
 
-  const configChain = buildRootChain(absoluteCwd, args, envName);
+  const context: ConfigContext = {
+    filename: args.filename ? path.resolve(cwd, args.filename) : null,
+    cwd: absoluteCwd,
+    envName,
+  };
+
+  const configChain = buildRootChain(args, context);
   if (!configChain) return null;
 
   const optionDefaults = {};
   const options = {};
   const passes = [[]];
   try {
-    (function recurseDescriptors(
+    const ignored = (function recurseDescriptors(
       config: {
         plugins: Array<UnloadedDescriptor>,
         presets: Array<UnloadedDescriptor>,
       },
       pass: Array<Plugin>,
-      envName: string,
     ) {
       const plugins = config.plugins.map(descriptor =>
-        loadPluginDescriptor(descriptor, envName),
+        loadPluginDescriptor(descriptor, context),
       );
       const presets = config.presets.map(descriptor => {
         return {
-          preset: loadPresetDescriptor(descriptor, envName),
+          preset: loadPresetDescriptor(descriptor, context),
           pass: descriptor.ownPass ? [] : pass,
         };
       });
@@ -85,14 +97,16 @@ export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
         );
 
         for (const { preset, pass } of presets) {
-          recurseDescriptors(
+          if (!preset) return true;
+
+          const ignored = recurseDescriptors(
             {
               plugins: preset.plugins,
               presets: preset.presets,
             },
             pass,
-            envName,
           );
+          if (ignored) return true;
 
           preset.options.forEach(opts => {
             merge(optionDefaults, opts);
@@ -110,8 +124,9 @@ export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
         presets: configChain.presets,
       },
       passes[0],
-      envName,
     );
+
+    if (ignored) return null;
 
     configChain.options.forEach(opts => {
       merge(options, opts);
@@ -152,7 +167,7 @@ export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
 const loadDescriptor = makeWeakCache(
   (
     { value, options, dirname, alias }: UnloadedDescriptor,
-    cache: CacheConfigurator<{ envName: string }>,
+    cache: CacheConfigurator<SimpleContext>,
   ): LoadedDescriptor => {
     // Disabled presets should already have been filtered out
     if (options === false) throw new Error("Assertion failure");
@@ -199,7 +214,7 @@ const loadDescriptor = makeWeakCache(
  */
 function loadPluginDescriptor(
   descriptor: UnloadedDescriptor,
-  envName: string,
+  context: SimpleContext,
 ): Plugin {
   if (descriptor.value instanceof Plugin) {
     if (descriptor.options) {
@@ -211,15 +226,13 @@ function loadPluginDescriptor(
     return descriptor.value;
   }
 
-  return instantiatePlugin(loadDescriptor(descriptor, { envName }), {
-    envName,
-  });
+  return instantiatePlugin(loadDescriptor(descriptor, context), context);
 }
 
 const instantiatePlugin = makeWeakCache(
   (
     { value, options, dirname, alias }: LoadedDescriptor,
-    cache: CacheConfigurator<{ envName: string }>,
+    cache: CacheConfigurator<SimpleContext>,
   ): Plugin => {
     const pluginObj = validatePluginObject(value);
 
@@ -239,7 +252,7 @@ const instantiatePlugin = makeWeakCache(
 
       // If the inherited plugin changes, reinstantiate this plugin.
       const inherits = cache.invalidate(data =>
-        loadPluginDescriptor(inheritsDescriptor, data.envName),
+        loadPluginDescriptor(inheritsDescriptor, data),
       );
 
       plugin.pre = chain(inherits.pre, plugin.pre);
@@ -263,10 +276,11 @@ const instantiatePlugin = makeWeakCache(
  */
 const loadPresetDescriptor = (
   descriptor: UnloadedDescriptor,
-  envName: string,
-): ConfigChain => {
+  context: ConfigContext,
+): ConfigChain | null => {
   return buildPresetChain(
-    instantiatePreset(loadDescriptor(descriptor, { envName })),
+    instantiatePreset(loadDescriptor(descriptor, context)),
+    context,
   );
 };
 

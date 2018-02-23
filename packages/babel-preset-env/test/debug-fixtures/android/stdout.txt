@@ -8,7 +8,6 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-constants { "android":"4" }
   transform-arrow-functions { "android":"4" }
   transform-block-scoped-functions { "android":"4" }
   transform-block-scoping { "android":"4" }
@@ -36,6 +35,7 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+  es6.array.sort { "android":"4" }
   es6.typed.array-buffer { "android":"4" }
   es6.typed.int8-array { "android":"4" }
   es6.typed.uint8-array { "android":"4" }

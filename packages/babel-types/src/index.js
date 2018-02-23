@@ -17,6 +17,7 @@ export {
 export * from "./builders/generated";
 
 // clone
+export { default as cloneNode } from "./clone/cloneNode";
 export { default as clone } from "./clone/clone";
 export { default as cloneDeep } from "./clone/cloneDeep";
 export { default as cloneWithoutLoc } from "./clone/cloneWithoutLoc";

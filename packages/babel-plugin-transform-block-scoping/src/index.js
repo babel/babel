@@ -48,7 +48,7 @@ export default function(api, opts) {
         }
       },
 
-      Loop(path) {
+      Loop(path, state) {
         const { parent, scope } = path;
         path.ensureBlock();
         const blockScoping = new BlockScoping(
@@ -58,12 +58,13 @@ export default function(api, opts) {
           scope,
           throwIfClosureRequired,
           tdzEnabled,
+          state,
         );
         const replace = blockScoping.run();
         if (replace) path.replaceWith(replace);
       },
 
-      CatchClause(path) {
+      CatchClause(path, state) {
         const { parent, scope } = path;
         const blockScoping = new BlockScoping(
           null,
@@ -72,11 +73,12 @@ export default function(api, opts) {
           scope,
           throwIfClosureRequired,
           tdzEnabled,
+          state,
         );
         blockScoping.run();
       },
 
-      "BlockStatement|SwitchStatement|Program"(path) {
+      "BlockStatement|SwitchStatement|Program"(path, state) {
         if (!ignoreBlock(path)) {
           const blockScoping = new BlockScoping(
             null,
@@ -85,6 +87,7 @@ export default function(api, opts) {
             path.scope,
             throwIfClosureRequired,
             tdzEnabled,
+            state,
           );
           blockScoping.run();
         }
@@ -338,9 +341,11 @@ class BlockScoping {
     scope: Scope,
     throwIfClosureRequired: boolean,
     tdzEnabled: boolean,
+    state: Object,
   ) {
     this.parent = parent;
     this.scope = scope;
+    this.state = state;
     this.throwIfClosureRequired = throwIfClosureRequired;
     this.tdzEnabled = tdzEnabled;
 
@@ -372,6 +377,8 @@ class BlockScoping {
 
     const needsClosure = this.getLetReferences();
 
+    this.checkConstants();
+
     // this is a block within a `Function/Program` so we can safely leave it be
     if (t.isFunction(this.parent) || t.isProgram(this.block)) {
       this.updateScopeInfo();
@@ -394,8 +401,41 @@ class BlockScoping {
     }
   }
 
+  checkConstants() {
+    const scope = this.scope;
+    const state = this.state;
+
+    for (const name in scope.bindings) {
+      const binding = scope.bindings[name];
+      if (binding.kind !== "const") continue;
+
+      for (const violation of (binding.constantViolations: Array)) {
+        const readOnlyError = state.addHelper("readOnlyError");
+        const throwNode = t.callExpression(readOnlyError, [
+          t.stringLiteral(name),
+        ]);
+
+        if (violation.isAssignmentExpression()) {
+          violation
+            .get("right")
+            .replaceWith(
+              t.sequenceExpression([throwNode, violation.get("right").node]),
+            );
+        } else if (violation.isUpdateExpression()) {
+          violation.replaceWith(
+            t.sequenceExpression([throwNode, violation.node]),
+          );
+        } else if (violation.isForXStatement()) {
+          violation.ensureBlock();
+          violation.node.body.body.unshift(t.expressionStatement(throwNode));
+        }
+      }
+    }
+  }
+
   updateScopeInfo(wrappedInClosure) {
     const scope = this.scope;
+
     const parentScope = scope.getFunctionParent() || scope.getProgramParent();
     const letRefs = this.letReferences;
 
@@ -484,8 +524,8 @@ class BlockScoping {
     this.hoistVarDeclarations();
 
     // turn outsideLetReferences into an array
-    const args = values(outsideRefs);
-    const params = args.map(id => t.clone(id));
+    const args = values(outsideRefs).map(id => t.cloneNode(id));
+    const params = args.map(id => t.cloneNode(id));
 
     const isSwitch = this.blockPath.isSwitchStatement();
 
@@ -529,10 +569,12 @@ class BlockScoping {
     let placeholderPath;
     let index;
     if (this.has.hasReturn || this.has.hasBreakContinue) {
-      const ret = this.scope.generateUidIdentifier("ret");
+      const ret = this.scope.generateUid("ret");
 
       this.body.push(
-        t.variableDeclaration("var", [t.variableDeclarator(ret, call)]),
+        t.variableDeclaration("var", [
+          t.variableDeclarator(t.identifier(ret), call),
+        ]),
       );
       placeholderPath = "declarations.0.init" + basePath;
       index = this.body.length - 1;
@@ -560,12 +602,14 @@ class BlockScoping {
 
     let fnPath;
     if (this.loop) {
-      const ref = this.scope.generateUidIdentifier("loop");
+      const loopId = this.scope.generateUid("loop");
       const p = this.loopPath.insertBefore(
-        t.variableDeclaration("var", [t.variableDeclarator(ref, fn)]),
+        t.variableDeclaration("var", [
+          t.variableDeclarator(t.identifier(loopId), fn),
+        ]),
       );
 
-      placeholder.replaceWith(ref);
+      placeholder.replaceWith(t.identifier(loopId));
       fnPath = p[0].get("declarations.0.init");
     } else {
       placeholder.replaceWith(fn);
@@ -597,20 +641,33 @@ class BlockScoping {
       const param = fn.params[i];
       if (!state.reassignments[param.name]) continue;
 
-      const newParam = this.scope.generateUidIdentifier(param.name);
-      fn.params[i] = newParam;
+      const paramName = param.name;
+      const newParamName = this.scope.generateUid(param.name);
+      fn.params[i] = t.identifier(newParamName);
 
-      this.scope.rename(param.name, newParam.name, fn);
+      this.scope.rename(paramName, newParamName, fn);
 
       state.returnStatements.forEach(returnStatement => {
         returnStatement.insertBefore(
-          t.expressionStatement(t.assignmentExpression("=", param, newParam)),
+          t.expressionStatement(
+            t.assignmentExpression(
+              "=",
+              t.identifier(paramName),
+              t.identifier(newParamName),
+            ),
+          ),
         );
       });
 
       // assign outer reference as it's been modified internally and needs to be retained
       fn.body.body.push(
-        t.expressionStatement(t.assignmentExpression("=", param, newParam)),
+        t.expressionStatement(
+          t.assignmentExpression(
+            "=",
+            t.identifier(paramName),
+            t.identifier(newParamName),
+          ),
+        ),
       );
     }
   }
@@ -753,14 +810,18 @@ class BlockScoping {
       const declar = node.declarations[i];
       if (!declar.init) continue;
 
-      const expr = t.assignmentExpression("=", declar.id, declar.init);
+      const expr = t.assignmentExpression(
+        "=",
+        t.cloneNode(declar.id),
+        t.cloneNode(declar.init),
+      );
       replace.push(t.inherits(expr, declar));
     }
 
     return replace;
   }
 
-  buildHas(ret: { type: "Identifier" }) {
+  buildHas(ret: string) {
     const body = this.body;
 
     let retCheck;
@@ -770,7 +831,7 @@ class BlockScoping {
     if (has.hasReturn) {
       // typeof ret === "object"
       retCheck = buildRetCheck({
-        RETURN: ret,
+        RETURN: t.identifier(ret),
       });
     }
 
@@ -787,7 +848,7 @@ class BlockScoping {
         const single = cases[0];
         body.push(
           t.ifStatement(
-            t.binaryExpression("===", ret, single.test),
+            t.binaryExpression("===", t.identifier(ret), single.test),
             single.consequent[0],
           ),
         );
@@ -797,13 +858,15 @@ class BlockScoping {
           for (let i = 0; i < cases.length; i++) {
             const caseConsequent = cases[i].consequent[0];
             if (t.isBreakStatement(caseConsequent) && !caseConsequent.label) {
-              caseConsequent.label = this.loopLabel =
-                this.loopLabel || this.scope.generateUidIdentifier("loop");
+              if (!this.loopLabel) {
+                this.loopLabel = this.scope.generateUidIdentifier("loop");
+              }
+              caseConsequent.label = t.cloneNode(this.loopLabel);
             }
           }
         }
 
-        body.push(t.switchStatement(ret, cases));
+        body.push(t.switchStatement(t.identifier(ret), cases));
       }
     } else {
       if (has.hasReturn) {

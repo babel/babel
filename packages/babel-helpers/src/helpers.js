@@ -39,7 +39,9 @@ helpers.jsx = defineHelper(`
     if (!props && childrenLength !== 0) {
       // If we're going to assign props.children, we create a new object now
       // to avoid mutating defaultProps.
-      props = {};
+      props = {
+        children: void 0,
+      };
     }
     if (props && defaultProps) {
       for (var propName in defaultProps) {
@@ -372,6 +374,26 @@ helpers.extends = defineHelper(`
   }
 `);
 
+helpers.objectSpread = defineHelper(`
+  import defineProperty from "defineProperty";
+
+  export default function _objectSpread(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = (arguments[i] != null) ? arguments[i] : {};
+      var ownKeys = Object.keys(source);
+      if (typeof Object.getOwnPropertySymbols === 'function') {
+        ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+          return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+        }));
+      }
+      ownKeys.forEach(function(key) {
+        defineProperty(target, key, source[key]);
+      });
+    }
+    return target;
+  }
+`);
+
 helpers.get = defineHelper(`
   export default function _get(object, property, receiver) {
     if (object === null) object = Function.prototype;
@@ -668,6 +690,7 @@ helpers.slicedToArrayLoose = defineHelper(`
 
 helpers.taggedTemplateLiteral = defineHelper(`
   export default function _taggedTemplateLiteral(strings, raw) {
+    if (!raw) { raw = strings.slice(0); }
     return Object.freeze(Object.defineProperties(strings, {
         raw: { value: Object.freeze(raw) }
     }));
@@ -676,6 +699,7 @@ helpers.taggedTemplateLiteral = defineHelper(`
 
 helpers.taggedTemplateLiteralLoose = defineHelper(`
   export default function _taggedTemplateLiteralLoose(strings, raw) {
+    if (!raw) { raw = strings.slice(0); }
     strings.raw = raw;
     return strings;
   }

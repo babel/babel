@@ -6,7 +6,6 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-constants {}
   transform-arrow-functions {}
   transform-block-scoped-functions {}
   transform-block-scoping {}
@@ -38,6 +37,23 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+  es6.array.every {}
+  es6.array.filter {}
+  es6.array.for-each {}
+  es6.array.index-of {}
+  es6.array.is-array {}
+  es6.array.last-index-of {}
+  es6.array.map {}
+  es6.array.reduce {}
+  es6.array.reduce-right {}
+  es6.array.some {}
+  es6.array.sort {}
+  es6.date.now {}
+  es6.date.to-iso-string {}
+  es6.date.to-json {}
+  es6.function.bind {}
+  es6.string.iterator {}
+  es6.string.trim {}
   es6.typed.array-buffer {}
   es6.typed.data-view {}
   es6.typed.int8-array {}

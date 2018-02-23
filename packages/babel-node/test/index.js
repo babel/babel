@@ -177,6 +177,16 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
 
   const suiteLoc = path.join(fixtureLoc, binName);
   describe("bin/" + binName, function() {
+    let cwd;
+
+    beforeEach(() => {
+      cwd = process.cwd();
+    });
+
+    afterEach(() => {
+      process.chdir(cwd);
+    });
+
     fs.readdirSync(suiteLoc).forEach(function(testName) {
       if (testName[0] === ".") return;
 

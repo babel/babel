@@ -1,27 +1,14 @@
 // @flow
 
-export type ConfigFile = {
-  filepath: string,
-  dirname: string,
-  options: {},
-};
+import type { ConfigFile, IgnoreFile, RelativeConfig } from "./configuration";
 
-export type IgnoreFile = {
-  filepath: string,
-  dirname: string,
-  ignore: Array<string>,
-};
+export type { ConfigFile, IgnoreFile, RelativeConfig };
 
-export function findBabelrc(
+export function findRelativeConfig(
   filepath: string,
   envName: string, // eslint-disable-line no-unused-vars
-): ConfigFile | null {
-  return null;
-}
-
-// eslint-disable-next-line no-unused-vars
-export function findBabelignore(filepath: string): IgnoreFile | null {
-  return null;
+): RelativeConfig {
+  return { config: null, ignore: null };
 }
 
 export function loadConfig(name: string, dirname: string): ConfigFile {

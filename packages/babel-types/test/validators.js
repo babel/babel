@@ -32,6 +32,52 @@ suite("validators", function() {
     });
   });
 
+  suite("isCompatTag", function() {
+    it("should handle lowercase tag names", function() {
+      assert(t.react.isCompatTag("div"));
+      assert(t.react.isCompatTag("a")); // one letter
+      assert(t.react.isCompatTag("h3")); // letters and numbers
+    });
+
+    it("should handle custom element tag names", function() {
+      assert(t.react.isCompatTag("plastic-button")); // ascii letters
+      assert(t.react.isCompatTag("math-α")); // non-latin chars
+      assert(t.react.isCompatTag("img-viewer2")); // numbers
+      assert(t.react.isCompatTag("emotion-😍")); // emoji
+    });
+
+    it("accepts trailing dash '-' in custom element tag names", function() {
+      assert(t.react.isCompatTag("div-"));
+      assert(t.react.isCompatTag("a-"));
+      assert(t.react.isCompatTag("h3-"));
+    });
+
+    it("rejects empty or null tag names", function() {
+      assert(t.react.isCompatTag(null) === false);
+      assert(t.react.isCompatTag() === false);
+      assert(t.react.isCompatTag(undefined) === false);
+      assert(t.react.isCompatTag("") === false);
+    });
+
+    it("rejects tag names starting with an uppercase letter", function() {
+      assert(t.react.isCompatTag("Div") === false);
+      assert(t.react.isCompatTag("A") === false);
+      assert(t.react.isCompatTag("H3") === false);
+    });
+
+    it("rejects all uppercase tag names", function() {
+      assert(t.react.isCompatTag("DIV") === false);
+      assert(t.react.isCompatTag("A") === false);
+      assert(t.react.isCompatTag("H3") === false);
+    });
+
+    it("rejects leading dash '-'", function() {
+      assert(t.react.isCompatTag("-div") === false);
+      assert(t.react.isCompatTag("-a") === false);
+      assert(t.react.isCompatTag("-h3") === false);
+    });
+  });
+
   suite("patterns", function() {
     it("allows nested pattern structures", function() {
       const pattern = t.objectPattern([

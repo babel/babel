@@ -464,9 +464,16 @@ export default class Tokenizer extends LocationParser {
     const next = this.input.charCodeAt(this.state.pos + 1);
 
     if (next === code) {
+      const assign =
+        this.input.charCodeAt(this.state.pos + 2) === charCodes.equalsTo;
+      if (assign) {
+        this.expectPlugin("logicalAssignment");
+      }
       this.finishOp(
-        code === charCodes.verticalBar ? tt.logicalOR : tt.logicalAND,
-        2,
+        assign
+          ? tt.assign
+          : code === charCodes.verticalBar ? tt.logicalOR : tt.logicalAND,
+        assign ? 3 : 2,
       );
       return;
     }
@@ -827,13 +834,22 @@ export default class Tokenizer extends LocationParser {
     }
     const content = this.input.slice(start, this.state.pos);
     ++this.state.pos;
-    // Need to use `readWord1` because '\uXXXX' sequences are allowed
-    // here (don't ask).
-    const mods = this.readWord1();
-    if (mods) {
-      const validFlags = /^[gmsiyu]*$/;
-      if (!validFlags.test(mods)) {
-        this.raise(start, "Invalid regular expression flag");
+
+    const validFlags = /^[gmsiyu]$/;
+    let mods = "";
+    while (this.state.pos < this.input.length) {
+      const char = this.input[this.state.pos];
+      const charCode = this.fullCharCodeAtPos();
+      if (validFlags.test(char)) {
+        ++this.state.pos;
+        mods += char;
+      } else if (
+        isIdentifierChar(charCode) ||
+        charCode === charCodes.backslash
+      ) {
+        this.raise(this.state.pos, "Invalid regular expression flag");
+      } else {
+        break;
       }
     }
 
@@ -1231,6 +1247,8 @@ export default class Tokenizer extends LocationParser {
       const ch = this.fullCharCodeAtPos();
       if (isIdentifierChar(ch)) {
         this.state.pos += ch <= 0xffff ? 1 : 2;
+      } else if (this.state.isIterator && ch === charCodes.atSign) {
+        this.state.pos += 1;
       } else if (ch === charCodes.backslash) {
         this.state.containsEsc = true;
 
@@ -1262,6 +1280,10 @@ export default class Tokenizer extends LocationParser {
     return word + this.input.slice(chunkStart, this.state.pos);
   }
 
+  isIterator(word): boolean {
+    return word === "@@iterator" || word === "@@asyncIterator";
+  }
+
   // Read an identifier or keyword token. Will check for reserved
   // words when necessary.
 
@@ -1275,6 +1297,14 @@ export default class Tokenizer extends LocationParser {
       }
 
       type = keywordTypes[word];
+    }
+
+    // Allow @@iterator and @@asyncIterator as a identifier only inside type
+    if (
+      this.state.isIterator &&
+      (!this.isIterator(word) || !this.state.inType)
+    ) {
+      this.raise(this.state.pos, `Invalid identifier ${word}`);
     }
 
     this.finishToken(type, word);

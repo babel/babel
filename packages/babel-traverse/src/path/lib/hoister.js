@@ -206,10 +206,11 @@ export default class PathHoister {
 
     // generate declaration and insert it to our point
     let uid = attachTo.scope.generateUidIdentifier("ref");
+
     const declarator = t.variableDeclarator(uid, this.path.node);
 
     const insertFn = this.attachAfter ? "insertAfter" : "insertBefore";
-    attachTo[insertFn]([
+    const [attached] = attachTo[insertFn]([
       attachTo.isVariableDeclarator()
         ? declarator
         : t.variableDeclaration("var", [declarator]),
@@ -222,6 +223,10 @@ export default class PathHoister {
       uid = t.JSXExpressionContainer(uid);
     }
 
-    this.path.replaceWith(uid);
+    this.path.replaceWith(t.cloneNode(uid));
+
+    return attachTo.isVariableDeclarator()
+      ? attached.get("init")
+      : attached.get("declarations.0.init");
   }
 }

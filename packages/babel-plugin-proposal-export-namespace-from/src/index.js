@@ -26,8 +26,13 @@ export default function() {
         const uid = scope.generateUidIdentifier(exported.name);
 
         nodes.push(
-          t.importDeclaration([t.importNamespaceSpecifier(uid)], node.source),
-          t.exportNamedDeclaration(null, [t.exportSpecifier(uid, exported)]),
+          t.importDeclaration(
+            [t.importNamespaceSpecifier(uid)],
+            t.cloneNode(node.source),
+          ),
+          t.exportNamedDeclaration(null, [
+            t.exportSpecifier(t.cloneNode(uid), exported),
+          ]),
         );
 
         if (node.specifiers.length >= 1) {

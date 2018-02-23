@@ -77,19 +77,19 @@ AST for JSX code is based on [Facebook JSX AST][] with the addition of one node 
 [Property]: https://github.com/estree/estree/blob/master/es5.md#property
 [MethodDefinition]: https://github.com/estree/estree/blob/master/es2015.md#methoddefinition
 
-[StringLiteral]: https://github.com/babel/babylon/blob/master/ast/spec.md#stringliteral
-[NumericLiteral]: https://github.com/babel/babylon/blob/master/ast/spec.md#numericliteral
-[BooleanLiteral]: https://github.com/babel/babylon/blob/master/ast/spec.md#booleanliteral
-[NullLiteral]: https://github.com/babel/babylon/blob/master/ast/spec.md#nullliteral
-[RegExpLiteral]: https://github.com/babel/babylon/blob/master/ast/spec.md#regexpliteral
-[ObjectProperty]: https://github.com/babel/babylon/blob/master/ast/spec.md#objectproperty
-[ObjectMethod]: https://github.com/babel/babylon/blob/master/ast/spec.md#objectmethod
-[ClassMethod]: https://github.com/babel/babylon/blob/master/ast/spec.md#classmethod
-[Program]: https://github.com/babel/babylon/blob/master/ast/spec.md#programs
-[BlockStatement]: https://github.com/babel/babylon/blob/master/ast/spec.md#blockstatement
-[Directive]: https://github.com/babel/babylon/blob/master/ast/spec.md#directive
-[DirectiveLiteral]: https://github.com/babel/babylon/blob/master/ast/spec.md#directiveliteral
-[FunctionExpression]: https://github.com/babel/babylon/blob/master/ast/spec.md#functionexpression
+[StringLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#stringliteral
+[NumericLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#numericliteral
+[BooleanLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#booleanliteral
+[NullLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#nullliteral
+[RegExpLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#regexpliteral
+[ObjectProperty]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#objectproperty
+[ObjectMethod]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#objectmethod
+[ClassMethod]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#classmethod
+[Program]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#programs
+[BlockStatement]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#blockstatement
+[Directive]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#directive
+[DirectiveLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#directiveliteral
+[FunctionExpression]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#functionexpression
 
 [Facebook JSX AST]: https://github.com/facebook/jsx/blob/master/AST.md
 
@@ -129,7 +129,8 @@ require("babylon").parse("code", {
 | `classProperties` ([proposal](https://github.com/tc39/proposal-class-public-fields)) | `class A { b = 1; }` |
 | `classPrivateProperties` ([proposal](https://github.com/tc39/proposal-private-fields)) | `class A { #b = 1; }` |
 | `classPrivateMethods` ([proposal](https://github.com/tc39/proposal-private-methods)) | `class A { #c() {} }` |
-| `exportExtensions` ([proposal 1](https://github.com/leebyron/ecmascript-export-default-from)), ([proposal 2](https://github.com/leebyron/ecmascript-export-ns-from)) | Proposal 1: `export v from "mod"` Proposal 2: `export * as ns from "mod"` |
+| `exportDefaultFrom` ([proposal](https://github.com/leebyron/ecmascript-export-default-from)) | `export v from "mod"` |
+| `exportNamespaceFrom` ([proposal](https://github.com/leebyron/ecmascript-export-ns-from)) | `export * as ns from "mod"` |
 | `asyncGenerators` ([proposal](https://github.com/tc39/proposal-async-iteration)) | `async function*() {}`, `for await (let a of b) {}` |
 | `functionBind` ([proposal](https://github.com/zenparsing/es-function-bind)) | `a::b`, `::console.log` |
 | `functionSent` | `function.sent` |
@@ -147,7 +148,7 @@ require("babylon").parse("code", {
 
 #### Will Babylon support a plugin system?
 
-Previous issues: [babel/babel#1351](https://github.com/babel/babel/issues/1351), [#500](https://github.com/babel/babylon/issues/500).
+Previous issues: [#1351](https://github.com/babel/babel/issues/1351), [#6694](https://github.com/babel/babel/issues/6694).
 
 We currently aren't willing to commit to supporting the API for plugins or the resulting ecosystem (there is already enough work maintaining Babel's own plugin system). It's not clear how to make that API effective, and it would limit out ability to refactor and optimize the codebase.
 

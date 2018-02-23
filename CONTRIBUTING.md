@@ -175,21 +175,21 @@ For example, in [`@babel/plugin-transform-exponentiation-operator/test`](https:/
 
 - In each subfolder, you can organize your directory structure by categories of tests. (Example: these folders can be named after the feature you are testing or can reference the issue number they fix)
 - Generally, there are two kinds of tests for plugins
-   - The first is a simple test of the input and output produced by running Babel on some code. We do this by creating an [`actual.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/actual.js) file and an [`expected.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/expected.js) file.
-   - If you need to expect an error, you can ignore creating the `expected.js` file and pass a new `throws` key to the `options.json` that contains the error string that is created.
+   - The first is a simple test of the input and output produced by running Babel on some code. We do this by creating an [`input.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/input.js) file and an [`output.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/output.js) file.
+   - If you need to expect an error, you can ignore creating the `output.js` file and pass a new `throws` key to the `options.json` that contains the error string that is created.
    - The second and preferred type is a test that actually evaluates the produced code and asserts that certain properties are true or false. We do this by creating an [`exec.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/comprehensive/exec.js) file.
 
-In an actual/expected test, you simply write out the code you want transformed in `actual.js`.
+In a fixture test, you simply write out the code you want transformed in `input.js`.
 
 ```js
-// actual.js
+// input.js
 2 ** 2;
 ```
 
-and the expected output after transforming it with your `options.json` in `expected.js`.
+and the expected output after transforming it with your `options.json` in `output.js`.
 
 ```js
-// expected.js
+// output.js
 Math.pow(2, 2);
 ```
 In an `exec.js` test, we run or check that the code actually does what it's supposed to do rather than just check the static output.
@@ -227,9 +227,9 @@ Inside the `packages/babylon/tests/fixtures` folder are categories/groupings of 
 etc.). To add a test, create a folder under one of these groupings (or create a new one) with a
 descriptive name, and add the following:
 
-* Create an `actual.js` file that contains the code you want Babylon to parse.
+* Create an `input.js` file that contains the code you want Babylon to parse.
 
-* Add an `expected.json` file with the expected parser output. For added convenience, if there is no `expected.json` present, the test runner will generate one for you.
+* Add an `output.json` file with the expected parser output. For added convenience, if there is no `output.json` present, the test runner will generate one for you.
 
 After writing tests for babylon, just build it by running:
 
@@ -245,7 +245,7 @@ $ TEST_ONLY=babylon make test-only
 
 #### Bootstrapping expected output
 
-For both `@babel/plugin-x` and `babylon`, you can easily generate an `expected.js`/`expected.json` automatically by just providing `actual.js` and running the tests as you usually would.
+For both `@babel/plugin-x` and `babylon`, you can easily generate an `output.js`/`output.json` automatically by just providing `input.js` and running the tests as you usually would.
 
 ```
 // Example
@@ -256,8 +256,8 @@ For both `@babel/plugin-x` and `babylon`, you can easily generate an `expected.j
         - comments
           - basic
             - block-trailing-comment
-              - actual.js
-              - expected.json (will be generated if not created)
+              - input.js
+              - output.json (will be generated if not created)
 ```
 
 ### Debugging code

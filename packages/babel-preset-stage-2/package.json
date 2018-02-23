@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-stage-2",
-  "version": "7.0.0-beta.36",
+  "version": "7.0.0-beta.40",
   "description": "Babel preset for stage 2 plugins",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -8,16 +8,16 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-stage-2",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/plugin-proposal-export-namespace-from": "7.0.0-beta.36",
-    "@babel/plugin-proposal-function-sent": "7.0.0-beta.36",
-    "@babel/plugin-proposal-numeric-separator": "7.0.0-beta.36",
-    "@babel/plugin-proposal-throw-expressions": "7.0.0-beta.36",
-    "@babel/preset-stage-3": "7.0.0-beta.36"
+    "@babel/plugin-proposal-export-namespace-from": "7.0.0-beta.40",
+    "@babel/plugin-proposal-function-sent": "7.0.0-beta.40",
+    "@babel/plugin-proposal-numeric-separator": "7.0.0-beta.40",
+    "@babel/plugin-proposal-throw-expressions": "7.0.0-beta.40",
+    "@babel/preset-stage-3": "7.0.0-beta.40"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.36"
+    "@babel/core": "7.0.0-beta.40"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.36"
+    "@babel/core": "7.0.0-beta.40"
   }
 }

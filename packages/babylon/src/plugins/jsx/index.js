@@ -471,7 +471,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt.relational) && this.state.value === "<") {
         this.raise(
           this.state.start,
-          "Adjacent JSX elements must be wrapped in an enclosing tag",
+          "Adjacent JSX elements must be wrapped in an enclosing tag. " +
+            "Did you want a JSX fragment <>...</>?",
         );
       }
 

@@ -226,7 +226,7 @@ function createDescriptor(
     // config object, because it can be useful to define them in nested
     // configuration contexts.
     throw new Error(
-      "Plugin/Preset files are not allowed to export objects, only functions.",
+      `Plugin/Preset files are not allowed to export objects, only functions. In ${filepath}`,
     );
   }
 

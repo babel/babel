@@ -69,7 +69,7 @@ export default function convertFunctionParams(path, loose) {
       if (left.isIdentifier()) {
         body.push(
           buildLooseDefaultParam({
-            ASSIGNMENT_IDENTIFIER: left.node,
+            ASSIGNMENT_IDENTIFIER: t.cloneNode(left.node),
             DEFAULT_VALUE: right.node,
             UNDEFINED: undefinedNode,
           }),
@@ -81,7 +81,7 @@ export default function convertFunctionParams(path, loose) {
           buildLooseDestructuredDefaultParam({
             ASSIGNMENT_IDENTIFIER: left.node,
             DEFAULT_VALUE: right.node,
-            PARAMETER_NAME: paramName,
+            PARAMETER_NAME: t.cloneNode(paramName),
             UNDEFINED: undefinedNode,
           }),
         );
@@ -123,7 +123,7 @@ export default function convertFunctionParams(path, loose) {
       ]);
       body.push(defNode);
 
-      param.replaceWith(uid);
+      param.replaceWith(t.cloneNode(uid));
     }
 
     if (!state.iife && !param.isIdentifier()) {
