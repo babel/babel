@@ -209,7 +209,7 @@ export default class ImportInjector {
     // to a variable.
     let name = nameHint || importName;
 
-    const isMod = isModule(this._programPath, true);
+    const isMod = isModule(this._programPath);
     const isModuleForNode = isMod && importingInterop === "node";
     const isModuleForBabel = isMod && importingInterop === "babel";
 

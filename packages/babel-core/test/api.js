@@ -206,6 +206,7 @@ describe("api", function() {
 
     function execTest(passPerPreset) {
       return babel.transform("type Foo = number; let x = (y): Foo => y;", {
+        sourceType: "script",
         passPerPreset: passPerPreset,
         presets: [
           // First preset with our plugin, "before"
