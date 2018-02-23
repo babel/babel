@@ -9,7 +9,7 @@ import fs from "fs";
 import path from "path";
 
 const maps = {};
-const transformOpts = {};
+let transformOpts = {};
 let piratesRevert = null;
 
 function installSourceMapSupport() {
@@ -113,9 +113,9 @@ export default function register(opts?: Object = {}) {
   delete opts.extensions;
   delete opts.cache;
 
-  Object.assign(transformOpts, opts);
+  transformOpts = Object.assign({}, opts);
 
-  if (!transformOpts.ignore && !transformOpts.only) {
+  if (transformOpts.ignore === undefined && transformOpts.only === undefined) {
     transformOpts.only = [
       // Only compile things inside the current working directory.
       new RegExp("^" + escapeRegExp(process.cwd()), "i"),
