@@ -202,6 +202,10 @@ const rewriteReferencesVisitor = {
       }
 
       requeueInParent(path);
+
+      // The path could have been replaced with an identifier that would
+      // otherwise be re-visited, so we skip processing its children.
+      path.skip();
     }
   },
 
