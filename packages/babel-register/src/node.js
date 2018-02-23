@@ -115,16 +115,22 @@ export default function register(opts?: Object = {}) {
 
   transformOpts = Object.assign({}, opts);
 
+  let { cwd = "." } = transformOpts;
+
+  // Ensure that the working directory is resolved up front so that
+  // things don't break if it changes later.
+  cwd = transformOpts.cwd = path.resolve(cwd);
+
   if (transformOpts.ignore === undefined && transformOpts.only === undefined) {
     transformOpts.only = [
       // Only compile things inside the current working directory.
-      new RegExp("^" + escapeRegExp(process.cwd()), "i"),
+      new RegExp("^" + escapeRegExp(cwd), "i"),
     ];
     transformOpts.ignore = [
       // Ignore any node_modules inside the current working directory.
       new RegExp(
         "^" +
-          escapeRegExp(process.cwd()) +
+          escapeRegExp(cwd) +
           "(?:" +
           path.sep +
           ".*)?" +
