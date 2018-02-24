@@ -774,6 +774,16 @@ export function TSIntersectionType(...args: Array<any>): Object {
 }
 export { TSIntersectionType as tsIntersectionType };
 export { TSIntersectionType as tSIntersectionType };
+export function TSConditionalType(...args: Array<any>): Object {
+  return builder("TSConditionalType", ...args);
+}
+export { TSConditionalType as tsConditionalType };
+export { TSConditionalType as tSConditionalType };
+export function TSInferType(...args: Array<any>): Object {
+  return builder("TSInferType", ...args);
+}
+export { TSInferType as tsInferType };
+export { TSInferType as tSInferType };
 export function TSParenthesizedType(...args: Array<any>): Object {
   return builder("TSParenthesizedType", ...args);
 }
