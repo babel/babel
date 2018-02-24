@@ -45,6 +45,18 @@ const visitor = {
   },
 };
 
+function getNameFromLiteralId(id) {
+  if (t.isNullLiteral(id)) {
+    return null;
+  } else if (t.isRegExpLiteral(id)) {
+    return `_${id.pattern}_${id.flags}`;
+  } else if (t.isTemplateLiteral(id) && id.expressions.length === 0) {
+    return id.quasis[0].value.raw;
+  } else {
+    return id.value;
+  }
+}
+
 function wrap(state, method, id, scope) {
   if (state.selfReference) {
     if (scope.hasBinding(id.name) && !scope.hasGlobal(id.name)) {
@@ -168,10 +180,12 @@ export default function({ node, parent, scope, id }, localBinding = false) {
 
   let name;
   if (id && t.isLiteral(id)) {
-    name = id.value;
+    name = getNameFromLiteralId(id);
   } else if (id && t.isIdentifier(id)) {
     name = id.name;
-  } else {
+  }
+
+  if (name === undefined) {
     return;
   }
 
