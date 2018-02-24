@@ -3,10 +3,10 @@ import generate, { CodeGenerator } from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
 import chai from "chai";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import fs from "fs";
 import path from "path";
-import fixtures from "babel-helper-fixtures";
+import fixtures from "@babel/helper-fixtures";
 
 describe("generation", function() {
   it("completeness", function() {
@@ -335,7 +335,7 @@ describe("programmatic generation", function() {
         t.objectTypeIndexer(
           t.identifier("key"),
           t.anyTypeAnnotation(),
-          t.identifier("Test"),
+          t.numberTypeAnnotation(),
         ),
       ],
     );
@@ -345,7 +345,7 @@ describe("programmatic generation", function() {
     assert.equal(
       output,
       `{
-  [key: any]: Test
+  [key: any]: number
 }`,
     );
   });

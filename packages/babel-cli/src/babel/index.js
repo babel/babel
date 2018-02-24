@@ -2,7 +2,7 @@
 
 import fs from "fs";
 import commander from "commander";
-import { version } from "babel-core";
+import { version } from "@babel/core";
 import uniq from "lodash/uniq";
 import glob from "glob";
 
@@ -49,6 +49,11 @@ commander.option(
   collect,
 );
 commander.option("--config-file [path]", "Path a to .babelrc file to use");
+commander.option(
+  "--env-name [name]",
+  "The name of the 'env' to use when loading configs and plugins. " +
+    "Defaults to the value of BABEL_ENV, or else NODE_ENV, or else 'development'.",
+);
 
 // Basic file input configuration.
 commander.option("--source-type [script|module]", "");
@@ -123,7 +128,7 @@ commander.option(
   "specify a custom name for module ids",
 );
 
-// "babel" command specific arguments that are not passed to babel-core.
+// "babel" command specific arguments that are not passed to @babel/core.
 commander.option(
   "-x, --extensions [extensions]",
   "List of extensions to compile when a directory has been input [.es6,.js,.es,.jsx,.mjs]",
@@ -165,7 +170,7 @@ commander.option(
 );
 /* eslint-enable max-len */
 
-commander.version(pkg.version + " (babel-core " + version + ")");
+commander.version(pkg.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
 commander.parse(process.argv);
 
@@ -229,7 +234,7 @@ if (opts.configFile) {
   opts.extends = opts.configFile;
 }
 
-// Delete options that are specific to babel-cli and shouldn't be passed to babel-core.
+// Delete options that are specific to @babel/cli and shouldn't be passed to @babel/core.
 delete opts.version;
 delete opts.extensions;
 delete opts.watch;
@@ -242,9 +247,10 @@ delete opts.quiet;
 delete opts.configFile;
 delete opts.deleteDirOnStart;
 delete opts.keepFileExtension;
+delete opts.relative;
 
 // Commander will default the "--no-" arguments to true, but we want to leave them undefined so that
-// babel-core can handle the default-assignment logic on its own.
+// @babel/core can handle the default-assignment logic on its own.
 if (opts.babelrc === true) opts.babelrc = undefined;
 if (opts.comments === true) opts.comments = undefined;
 if (opts.highlightCode === true) opts.highlightCode = undefined;

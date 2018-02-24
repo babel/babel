@@ -5,8 +5,9 @@ import buildDebug from "debug";
 import invariant from "invariant";
 import traverse from "../index";
 import Scope from "../scope";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import { path as pathCache } from "../cache";
+import generator from "@babel/generator";
 
 // NodePath is split across many files.
 import * as NodePath_ancestry from "./ancestry";
@@ -145,6 +146,10 @@ export default class NodePath {
   debug(message) {
     if (!debug.enabled) return;
     debug(`${this.getPathLocation()} ${this.type}: ${message}`);
+  }
+
+  toString() {
+    return generator(this.node).code;
   }
 }
 

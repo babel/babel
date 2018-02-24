@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "transform-object-rest-spread",
-    "external-helpers"
-  ]
-}

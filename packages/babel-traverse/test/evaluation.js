@@ -216,4 +216,48 @@ describe("evaluation", function() {
       "\\d",
     );
   });
+
+  it("sets deopt properly when not confident after evaluating multiple expressions", () => {
+    const ast = parse(`
+      const parts = [foo, bar];
+      console.log(parts.join('-'));
+    `);
+
+    let result;
+
+    traverse(ast, {
+      MemberExpression: {
+        enter(path) {
+          result = path.get("object").evaluate();
+        },
+      },
+    });
+
+    assert.strictEqual(result.confident, false);
+    assert.strictEqual(result.deopt.type, "Identifier");
+    assert.strictEqual(result.deopt.node.name, "foo");
+  });
+
+  it("sets deopt properly when confident after evaluating multiple expressions", () => {
+    const ast = parse(`
+      const foo = 'foo';
+      const bar = 'bar';
+      const parts = [foo, bar];
+      console.log(parts.join('-'))
+    `);
+
+    let result;
+
+    traverse(ast, {
+      MemberExpression: {
+        enter(path) {
+          result = path.get("object").evaluate();
+        },
+      },
+    });
+
+    assert.strictEqual(result.confident, true);
+    assert.strictEqual(result.deopt, null);
+    assert.deepStrictEqual(result.value, ["foo", "bar"]);
+  });
 });

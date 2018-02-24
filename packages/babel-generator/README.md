@@ -1,18 +1,18 @@
-# babel-generator
+# @babel/generator
 
-> Turns an AST into code.
+> Turns a [Babylon AST](https://github.com/babel/babel/blob/master/packages/babylon/ast/spec.md) into code.
 
 ## Install
 
 ```sh
-npm install --save-dev babel-generator
+npm install --save-dev @babel/generator
 ```
 
 ## Usage
 
 ```js
 import {parse} from 'babylon';
-import generate from 'babel-generator';
+import generate from '@babel/generator';
 
 const code = 'class Example {}';
 const ast = parse(code);
@@ -59,7 +59,7 @@ Here's an example of what that might look like:
 
 ```js
 import {parse} from 'babylon';
-import generate from 'babel-generator';
+import generate from '@babel/generator';
 
 const a = 'var a = 1;';
 const b = 'var b = 2;';

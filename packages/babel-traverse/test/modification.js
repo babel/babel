@@ -1,11 +1,11 @@
 import traverse from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
-import generate from "babel-generator";
-import * as t from "babel-types";
+import generate from "@babel/generator";
+import * as t from "@babel/types";
 
-function getPath(code) {
-  const ast = parse(code);
+function getPath(code, parserOpts) {
+  const ast = parse(code, parserOpts);
   let path;
   traverse(ast, {
     Program: function(_path) {
@@ -118,6 +118,40 @@ describe("modification", function() {
         "if (x) {\n  b\n\n  for (var i = 0; i < 0; i++) {}\n}",
       );
     });
+
+    describe("when the parent is an export declaration inserts the node before", function() {
+      it("the ExportNamedDeclaration", function() {
+        const bodyPath = getPath("export function a() {}", {
+          sourceType: "module",
+        }).parentPath;
+        const fnPath = bodyPath.get("body.0.declaration");
+        fnPath.insertBefore(t.identifier("x"));
+
+        assert.equal(bodyPath.get("body").length, 2);
+        assert.deepEqual(bodyPath.get("body.0").node, t.identifier("x"));
+      });
+
+      it("the ExportDefaultDeclaration, if a declaration is exported", function() {
+        const bodyPath = getPath("export default function () {}", {
+          sourceType: "module",
+        }).parentPath;
+        const fnPath = bodyPath.get("body.0.declaration");
+        fnPath.insertBefore(t.identifier("x"));
+
+        assert.equal(bodyPath.get("body").length, 2);
+        assert.deepEqual(bodyPath.get("body.0").node, t.identifier("x"));
+      });
+
+      it("the exported expression", function() {
+        const declPath = getPath("export default 2;", {
+          sourceType: "module",
+        });
+        const path = declPath.get("declaration");
+        path.insertBefore(t.identifier("x"));
+
+        assert.equal(generateCode(declPath), "export default (x, 2);");
+      });
+    });
   });
 
   describe("insertAfter", function() {
@@ -169,6 +203,43 @@ describe("modification", function() {
         generateCode(rootPath),
         "if (x) {\n  for (var i = 0; i < 0; i++) {}\n\n  b\n}",
       );
+    });
+
+    describe("when the parent is an export declaration inserts the node after", function() {
+      it("the ExportNamedDeclaration", function() {
+        const bodyPath = getPath("export function a() {}", {
+          sourceType: "module",
+        }).parentPath;
+        const fnPath = bodyPath.get("body.0.declaration");
+        fnPath.insertAfter(t.identifier("x"));
+
+        assert.equal(bodyPath.get("body").length, 2);
+        assert.deepEqual(bodyPath.get("body.1").node, t.identifier("x"));
+      });
+
+      it("the ExportDefaultDeclaration, if a declaration is exported", function() {
+        const bodyPath = getPath("export default function () {}", {
+          sourceType: "module",
+        }).parentPath;
+        const fnPath = bodyPath.get("body.0.declaration");
+        fnPath.insertAfter(t.identifier("x"));
+
+        assert.equal(bodyPath.get("body").length, 2);
+        assert.deepEqual(bodyPath.get("body.1").node, t.identifier("x"));
+      });
+
+      it("the exported expression", function() {
+        const bodyPath = getPath("export default 2;", {
+          sourceType: "module",
+        }).parentPath;
+        const path = bodyPath.get("body.0.declaration");
+        path.insertAfter(t.identifier("x"));
+
+        assert.equal(
+          generateCode({ parentPath: bodyPath }),
+          "var _temp;\n\nexport default (_temp = 2, x, _temp);",
+        );
+      });
     });
   });
 });

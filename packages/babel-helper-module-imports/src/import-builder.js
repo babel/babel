@@ -1,5 +1,5 @@
 import assert from "assert";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 /**
  * A class to track and accumulate mutations to the AST that will eventually
@@ -43,14 +43,14 @@ export default class ImportBuilder {
     return this;
   }
 
-  namespace(name) {
+  namespace(name = "namespace") {
     name = this._scope.generateUidIdentifier(name);
 
     const statement = this._statements[this._statements.length - 1];
     assert(statement.type === "ImportDeclaration");
     assert(statement.specifiers.length === 0);
     statement.specifiers = [t.importNamespaceSpecifier(name)];
-    this._resultName = t.clone(name);
+    this._resultName = t.cloneNode(name);
     return this;
   }
   default(name) {
@@ -59,7 +59,7 @@ export default class ImportBuilder {
     assert(statement.type === "ImportDeclaration");
     assert(statement.specifiers.length === 0);
     statement.specifiers = [t.importDefaultSpecifier(name)];
-    this._resultName = t.clone(name);
+    this._resultName = t.cloneNode(name);
     return this;
   }
   named(name, importName) {
@@ -70,7 +70,7 @@ export default class ImportBuilder {
     assert(statement.type === "ImportDeclaration");
     assert(statement.specifiers.length === 0);
     statement.specifiers = [t.importSpecifier(name, t.identifier(importName))];
-    this._resultName = t.clone(name);
+    this._resultName = t.cloneNode(name);
     return this;
   }
 
@@ -86,7 +86,7 @@ export default class ImportBuilder {
       "var",
       [t.variableDeclarator(name, statement.expression)],
     );
-    this._resultName = t.clone(name);
+    this._resultName = t.cloneNode(name);
     return this;
   }
 

@@ -1,0 +1,54 @@
+# This file lists tests that are known to produce incorrect results when parsed
+# with Babylon:
+#
+# - Tests that are expected to parse successfully but for which Babylon reports
+#   a syntax error
+# - Tests that contain invalid syntax but for which Babylon reports no syntax
+#   error
+#
+# Entries should be removed incrementally as Babylon is improved.
+
+ES6/binding-pattern/object-pattern/await-prop-in-async-function.js
+JSX_invalid/migrated_0000.js
+arrow_function_invalid/migrated_0002.js
+async_await/async_generic_method.js
+async_await/migrated_0020.js
+async_await/migrated_0024.js
+async_await/migrated_0027.js
+async_generators/migrated_0007.js
+class_properties/migrated_0000.js
+class_properties/migrated_0005.js
+class_properties/migrated_0011.js
+class_properties/migrated_0016.js
+class_properties/migrated_0021.js
+class_properties/migrated_0026.js
+decorators/migrated_0003.js
+decorators/migrated_0007.js
+dynamic_import/migrated_0000.js
+dynamic_import/migrated_0001.js
+dynamic_import/migrated_0002.js
+dynamic_import/migrated_0003.js
+dynamic_import/migrated_0004.js
+invalid_syntax/migrated_0000.js
+invalid_syntax/migrated_0001.js
+invalid_syntax/migrated_0002.js
+invalid_syntax/migrated_0003.js
+private_class_properties/valid.js
+types/annotations/migrated_0001.js
+types/annotations_in_comments_invalid/migrated_0003.js
+types/annotations/static_is_reserved_param.js
+types/annotations/static_is_reserved_type.js
+types/annotations/void_is_reserved_param.js
+types/declare_export_invalid/migrated_0013.js
+types/declare_statements_invalid/migrated_0001.js
+types/member/reserved_words.js
+types/number_literal_invalid/migrated_0000.js
+types/parameter_defaults/migrated_0023.js
+types/parameter_defaults/migrated_0026.js
+types/parameter_defaults/migrated_0028.js
+types/parameter_defaults/migrated_0029.js
+types/parameter_defaults/migrated_0030.js
+types/parameter_defaults/migrated_0031.js
+types/parameter_defaults/migrated_0032.js
+types/string_literal_invalid/migrated_0000.js
+types/typecasts_invalid/migrated_0001.js

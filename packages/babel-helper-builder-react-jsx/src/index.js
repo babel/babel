@@ -1,27 +1,41 @@
 import esutils from "esutils";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 type ElementState = {
   tagExpr: Object, // tag node
-  tagName: string, // raw string tag name
+  tagName: ?string, // raw string tag name
   args: Array<Object>, // array of call arguments
   call?: Object, // optional call property that can be set to override the call expression returned
-  pre?: Function, // function called with (state: ElementState) before building attribs
-  post?: Function, // function called with (state: ElementState) after building attribs
 };
 
 export default function(opts) {
   const visitor = {};
 
   visitor.JSXNamespacedName = function(path) {
-    throw path.buildCodeFrameError(
-      "Namespace tags are not supported. ReactJSX is not XML.",
-    );
+    if (opts.throwIfNamespace) {
+      throw path.buildCodeFrameError(
+        `Namespace tags are not supported by default. React's JSX doesn't support namespace tags. \
+You can turn on the 'throwIfNamespace' flag to bypass this warning.`,
+      );
+    }
   };
-
   visitor.JSXElement = {
     exit(path, file) {
       const callExpr = buildElementCall(path, file);
+      if (callExpr) {
+        path.replaceWith(t.inherits(callExpr, path.node));
+      }
+    },
+  };
+
+  visitor.JSXFragment = {
+    exit(path, file) {
+      if (opts.compat) {
+        throw path.buildCodeFrameError(
+          "Fragment tags are only supported in React 16 and up.",
+        );
+      }
+      const callExpr = buildFragmentCall(path, file);
       if (callExpr) {
         path.replaceWith(t.inherits(callExpr, path.node));
       }
@@ -44,6 +58,12 @@ export default function(opts) {
         convertJSXIdentifier(node.object, node),
         convertJSXIdentifier(node.property, node),
       );
+    } else if (t.isJSXNamespacedName(node)) {
+      /**
+       * If there is flag "throwIfNamespace"
+       * print XMLNamespace like string literal
+       */
+      return t.stringLiteral(`${node.namespace.name}:${node.name.name}`);
     }
 
     return node;
@@ -72,7 +92,11 @@ export default function(opts) {
     if (t.isValidIdentifier(node.name.name)) {
       node.name.type = "Identifier";
     } else {
-      node.name = t.stringLiteral(node.name.name);
+      node.name = t.stringLiteral(
+        t.isJSXNamespacedName(node.name)
+          ? node.name.namespace.name + ":" + node.name.name.name
+          : node.name.name,
+      );
     }
 
     return t.inherits(t.objectProperty(node.name, value), node);
@@ -179,5 +203,36 @@ export default function(opts) {
     }
 
     return attribs;
+  }
+
+  function buildFragmentCall(path, file) {
+    if (opts.filter && !opts.filter(path.node, file)) return;
+
+    const openingPath = path.get("openingElement");
+    openingPath.parent.children = t.react.buildChildren(openingPath.parent);
+
+    const args = [];
+    const tagName = null;
+    const tagExpr = file.get("jsxFragIdentifier")();
+
+    const state: ElementState = {
+      tagExpr: tagExpr,
+      tagName: tagName,
+      args: args,
+    };
+
+    if (opts.pre) {
+      opts.pre(state, file);
+    }
+
+    // no attributes are allowed with <> syntax
+    args.push(t.nullLiteral(), ...path.node.children);
+
+    if (opts.post) {
+      opts.post(state, file);
+    }
+
+    file.set("usedFragment", true);
+    return state.call || t.callExpression(state.callee, args);
   }
 }

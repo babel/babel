@@ -1,7 +1,7 @@
 import traverse from "../lib";
 import assert from "assert";
 import { parse } from "babylon";
-import generate from "babel-generator";
+import generate from "@babel/generator";
 
 function getPath(code) {
   const ast = parse(code);

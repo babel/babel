@@ -1,11 +1,22 @@
-import { addDefault, isModule } from "babel-helper-module-imports";
+import { addDefault, isModule } from "@babel/helper-module-imports";
+import { types as t } from "@babel/core";
 
 import definitions from "./definitions";
 
-export default function({ types: t }) {
-  function getRuntimeModuleName(opts) {
-    return opts.moduleName || "babel-runtime";
-  }
+export default function(api, options) {
+  const {
+    helpers,
+    moduleName = "@babel/runtime",
+    polyfill,
+    regenerator,
+    useBuiltIns,
+    useESModules,
+  } = options;
+  const regeneratorEnabled = regenerator !== false;
+  const notPolyfillOrDoesUseBuiltIns = polyfill === false || useBuiltIns;
+  const isPolyfillAndUseBuiltIns = polyfill && useBuiltIns;
+  const baseHelpersDir = useBuiltIns ? "helpers/builtin" : "helpers";
+  const helpersDir = useESModules ? `${baseHelpersDir}/es6` : baseHelpersDir;
 
   function has(obj, key) {
     return Object.prototype.hasOwnProperty.call(obj, key);
@@ -15,15 +26,7 @@ export default function({ types: t }) {
 
   return {
     pre(file) {
-      const moduleName = getRuntimeModuleName(this.opts);
-
-      if (this.opts.helpers !== false) {
-        const baseHelpersDir = this.opts.useBuiltIns
-          ? "helpers/builtin"
-          : "helpers";
-        const helpersDir = this.opts.useESModules
-          ? `${baseHelpersDir}/es6`
-          : baseHelpersDir;
+      if (helpers !== false) {
         file.set("helperGenerator", name => {
           const isInteropHelper = HEADER_HELPERS.indexOf(name) !== -1;
 
@@ -41,7 +44,7 @@ export default function({ types: t }) {
         });
       }
 
-      if (this.opts.polyfill && this.opts.useBuiltIns) {
+      if (isPolyfillAndUseBuiltIns) {
         throw new Error(
           "The polyfill option conflicts with useBuiltIns; use one or the other",
         );
@@ -60,7 +63,7 @@ export default function({ types: t }) {
 
         let cached = cache.get(key);
         if (cached) {
-          cached = t.cloneDeep(cached);
+          cached = t.cloneNode(cached);
         } else {
           cached = addDefault(file.path, source, {
             importedInterop: "uncompiled",
@@ -75,12 +78,9 @@ export default function({ types: t }) {
     },
 
     visitor: {
-      ReferencedIdentifier(path, state) {
+      ReferencedIdentifier(path) {
         const { node, parent, scope } = path;
-        if (
-          node.name === "regeneratorRuntime" &&
-          state.opts.regenerator !== false
-        ) {
+        if (node.name === "regeneratorRuntime" && regeneratorEnabled) {
           path.replaceWith(
             this.addDefaultImport(
               `${this.moduleName}/regenerator`,
@@ -90,14 +90,13 @@ export default function({ types: t }) {
           return;
         }
 
-        if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
+        if (notPolyfillOrDoesUseBuiltIns) return;
 
         if (t.isMemberExpression(parent)) return;
         if (!has(definitions.builtins, node.name)) return;
         if (scope.getBindingIdentifier(node.name)) return;
 
         // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
-        const moduleName = getRuntimeModuleName(state.opts);
         path.replaceWith(
           this.addDefaultImport(
             `${moduleName}/core-js/${definitions.builtins[node.name]}`,
@@ -107,8 +106,8 @@ export default function({ types: t }) {
       },
 
       // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
-      CallExpression(path, state) {
-        if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
+      CallExpression(path) {
+        if (notPolyfillOrDoesUseBuiltIns) return;
 
         // we can't compile this
         if (path.node.arguments.length) return;
@@ -120,7 +119,6 @@ export default function({ types: t }) {
           return;
         }
 
-        const moduleName = getRuntimeModuleName(state.opts);
         path.replaceWith(
           t.callExpression(
             this.addDefaultImport(
@@ -133,13 +131,12 @@ export default function({ types: t }) {
       },
 
       // Symbol.iterator in arr -> core.$for.isIterable(arr)
-      BinaryExpression(path, state) {
-        if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
+      BinaryExpression(path) {
+        if (notPolyfillOrDoesUseBuiltIns) return;
 
         if (path.node.operator !== "in") return;
         if (!path.get("left").matchesPattern("Symbol.iterator")) return;
 
-        const moduleName = getRuntimeModuleName(state.opts);
         path.replaceWith(
           t.callExpression(
             this.addDefaultImport(
@@ -153,8 +150,8 @@ export default function({ types: t }) {
 
       // Array.from -> _core.Array.from
       MemberExpression: {
-        enter(path, state) {
-          if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
+        enter(path) {
+          if (notPolyfillOrDoesUseBuiltIns) return;
           if (!path.isReferenced()) return;
 
           const { node } = path;
@@ -183,7 +180,6 @@ export default function({ types: t }) {
             }
           }
 
-          const moduleName = getRuntimeModuleName(state.opts);
           path.replaceWith(
             this.addDefaultImport(
               `${moduleName}/core-js/${methods[prop.name]}`,
@@ -192,8 +188,8 @@ export default function({ types: t }) {
           );
         },
 
-        exit(path, state) {
-          if (state.opts.polyfill === false || state.opts.useBuiltIns) return;
+        exit(path) {
+          if (notPolyfillOrDoesUseBuiltIns) return;
           if (!path.isReferenced()) return;
 
           const { node } = path;
@@ -202,7 +198,6 @@ export default function({ types: t }) {
           if (!has(definitions.builtins, obj.name)) return;
           if (path.scope.getBindingIdentifier(obj.name)) return;
 
-          const moduleName = getRuntimeModuleName(state.opts);
           path.replaceWith(
             t.memberExpression(
               this.addDefaultImport(

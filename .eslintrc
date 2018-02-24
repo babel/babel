@@ -5,10 +5,31 @@
   ],
   "rules": {
     "curly": ["error", "multi-line"],
-    "prettier/prettier": ["error", { "trailingComma": "es5" }]
+    "prettier/prettier": "error",
+    "no-case-declarations": "error"
   },
   "env": {
-    "node": true,
-    "mocha": true
-  }
+    "node": true
+  },
+  "overrides": [
+    {
+      "files": [
+        "packages/*/src/**/*.js",
+        "codemods/*/src/**/*.js"
+      ],
+      "rules": {
+        "no-undefined-identifier": "error"
+      }
+    },
+    {
+      "files": [
+        "packages/*/test/**/*.js",
+        "codemods/*/test/**/*.js",
+        "test/**/*.js"
+      ],
+      "env": {
+        "mocha": true
+      }
+    }
+  ]
 }

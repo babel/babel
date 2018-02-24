@@ -1,0 +1,25 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "60"
+}
+
+Using modules transform: commonjs
+
+Using plugins:
+  transform-dotall-regex { "chrome":"60" }
+  proposal-async-generator-functions { "chrome":"60" }
+  syntax-object-rest-spread { "chrome":"60" }
+  proposal-optional-catch-binding { "chrome":"60" }
+  proposal-unicode-property-regex { "chrome":"60" }
+
+Using polyfills with `entry` option:
+
+[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+  es6.array.sort { "chrome":"60" }
+  es7.promise.finally { "chrome":"60" }
+  web.timers { "chrome":"60" }
+  web.immediate { "chrome":"60" }
+  web.dom.iterable { "chrome":"60" }
+src/in.js -> lib/in.js

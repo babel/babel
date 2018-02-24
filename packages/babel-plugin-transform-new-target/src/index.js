@@ -1,4 +1,6 @@
-export default function({ types: t }) {
+import { types as t } from "@babel/core";
+
+export default function() {
   return {
     name: "transform-new-target",
 
@@ -52,7 +54,11 @@ export default function({ types: t }) {
 
           path.replaceWith(
             t.conditionalExpression(
-              t.binaryExpression("instanceof", t.thisExpression(), node.id),
+              t.binaryExpression(
+                "instanceof",
+                t.thisExpression(),
+                t.cloneNode(node.id),
+              ),
               constructor,
               scope.buildUndefinedNode(),
             ),

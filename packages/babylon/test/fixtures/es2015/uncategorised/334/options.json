@@ -1,0 +1,4 @@
+{
+  "sourceType": "module",
+  "throws": "eval is a reserved word in strict mode (1:4)"
+}

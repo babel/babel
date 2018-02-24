@@ -12,11 +12,12 @@
  * var __jsxFileName = 'this/file.js';
  * <sometag __source={{fileName: __jsxFileName, lineNumber: 10}}/>
  */
+import { types as t } from "@babel/core";
 
 const TRACE_ID = "__source";
 const FILE_NAME_VAR = "_jsxFileName";
 
-export default function({ types: t }) {
+export default function() {
   function makeTrace(fileNameIdentifier, lineNumber) {
     const fileLineLiteral =
       lineNumber != null ? t.numericLiteral(lineNumber) : t.nullLiteral();
@@ -33,7 +34,7 @@ export default function({ types: t }) {
 
   const visitor = {
     JSXOpeningElement(path, state) {
-      const id = t.jSXIdentifier(TRACE_ID);
+      const id = t.jsxIdentifier(TRACE_ID);
       const location = path.container.openingElement.loc;
       if (!location) {
         // the element was generated and doesn't have location information
@@ -50,7 +51,7 @@ export default function({ types: t }) {
       }
 
       if (!state.fileNameIdentifier) {
-        const fileName = state.file.opts.filename || "";
+        const fileName = state.filename || "";
 
         const fileNameIdentifier = path.scope.generateUidIdentifier(
           FILE_NAME_VAR,
@@ -63,7 +64,7 @@ export default function({ types: t }) {
       }
 
       const trace = makeTrace(state.fileNameIdentifier, location.start.line);
-      attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
+      attributes.push(t.jsxAttribute(id, t.jsxExpressionContainer(trace)));
     },
   };
 

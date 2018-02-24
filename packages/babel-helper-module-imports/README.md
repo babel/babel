@@ -1,9 +1,9 @@
-# babel-helper-module-imports
+# @babel/helper-module-imports
 
 ## Installation
 
 ```sh
-npm install babel-helper-module-imports --save
+npm install @babel/helper-module-imports --save
 ```
 
 ## Usage
@@ -11,42 +11,42 @@ npm install babel-helper-module-imports --save
 ### `import "source"`
 
 ```js
-import { addSideEffect } from "babel-helper-module-imports";
+import { addSideEffect } from "@babel/helper-module-imports";
 addSideEffect(path, 'source');
 ```
 
 ### `import { named } from "source"`
 
 ```js
-import { addNamed } from "babel-helper-module-imports";
+import { addNamed } from "@babel/helper-module-imports";
 addNamed(path, 'named', 'source');
 ```
 
 ### `import { named as _hintedName } from "source"`
 
 ```js
-import { addNamed } from "babel-helper-module-imports";
+import { addNamed } from "@babel/helper-module-imports";
 addNamed(path, 'named', 'source', { nameHint: "hintedName" });
 ```
 
 ### `import _default from "source"`
 
 ```js
-import { addDefault } from "babel-helper-module-imports";
+import { addDefault } from "@babel/helper-module-imports";
 addDefault(path, 'source');
 ```
 
 ### `import hintedName from "source"`
 
 ```js
-import { addDefault } from "babel-helper-module-imports";
+import { addDefault } from "@babel/helper-module-imports";
 addDefault(path, 'source', { nameHint: "hintedName" })
 ```
 
 ### `import * as _namespace from "source"`
 
 ```js
-import { addNamespace } from "babel-helper-module-imports";
+import { addNamespace } from "@babel/helper-module-imports";
 addNamespace(path, 'source');
 ```
 
@@ -55,7 +55,7 @@ addNamespace(path, 'source');
 ### Adding a named import
 
 ```js
-import { addNamed } from "babel-helper-module-imports";
+import { addNamed } from "@babel/helper-module-imports";
 
 export default function({ types: t }) {
   return {

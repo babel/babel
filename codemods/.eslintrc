@@ -1,6 +1,0 @@
-{
-  "rules": {
-    "prettier/prettier": ["error", { "trailingComma": "all" }],
-    "no-undef": 2
-  }
-}

@@ -1,10 +1,8 @@
-import build from "babel-helper-builder-binary-assignment-operator-visitor";
-import syntaxExponentiationOperator from "babel-plugin-syntax-exponentiation-operator";
+import build from "@babel/helper-builder-binary-assignment-operator-visitor";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default function() {
   return {
-    inherits: syntaxExponentiationOperator,
-
     visitor: build({
       operator: "**",
 

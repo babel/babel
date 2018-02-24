@@ -1,4 +1,4 @@
-# babel-register
+# @babel/register
 
 > The require hook will bind itself to node's require and automatically compile files on the fly.
 
@@ -10,13 +10,13 @@ fly. This is equivalent to CoffeeScript's
 ## Install
 
 ```sh
-npm install babel-register --save-dev
+npm install @babel/core @babel/register --save-dev
 ```
 
 ## Usage
 
 ```js
-require("babel-register");
+require("@babel/register");
 ```
 
 All subsequent files required by node with the extensions `.es6`, `.es`, `.jsx`,
@@ -36,29 +36,28 @@ All subsequent files required by node with the extensions `.es6`, `.es`, `.jsx`,
 override this by passing an ignore regex via:
 
 ```js
-require("babel-register")({
+require("@babel/register")({
   // This will override `node_modules` ignoring - you can alternatively pass
   // an array of strings to be explicitly matched or a regex / glob
-  ignore: false
+  ignore: []
 });
 ```
 
 ## Specifying options
 
 ```javascript
-require("babel-register")({
-  // Optional ignore regex - if any filenames **do** match this regex then they
-  // aren't compiled.
-  ignore: /regex/,
+require("@babel/register")({
+  // Array of ignore conditions, either a regex or a function. (Optional)
+  ignore: [
+    // When a file path matches this regex then it is **not** compiled
+    /regex/,
 
-  // Ignore can also be specified as a function.
-  ignore: function(filename) {
-    if (filename === "/path/to/es6-file.js") {
-      return false;
-    } else {
-      return true;
+    // The file's path is also passed to any ignore functions. It will
+    // **not** be compiled if `true` is returned.
+    function (filepath) {
+      return filepath !== "/path/to/es6-file.js";
     }
-  },
+  ],
 
   // Optional only regex - if any filenames **don't** match this regex then they
   // aren't compiled
@@ -79,7 +78,7 @@ to each file still applies, and takes precedence over any options you pass in he
 
 ## Environment variables
 
-By default `babel-node` and `babel-register` will save to a json cache in your
+By default `@babel/node` cli and `@babel/register` will save to a json cache in your
 temporary directory.
 
 This will heavily improve with the startup and compilation of your files. There

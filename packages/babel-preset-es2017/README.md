@@ -1,11 +1,11 @@
-# babel-preset-es2017
+# @babel/preset-es2017
 
 > Babel preset for all es2017 plugins.
 
 ## Install
 
 ```sh
-npm install --save-dev babel-preset-es2017
+npm install --save-dev @babel/preset-es2017
 ```
 
 ## Usage
@@ -16,20 +16,20 @@ npm install --save-dev babel-preset-es2017
 
 ```json
 {
-  "presets": ["es2017"]
+  "presets": ["@babel/preset-es2017"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel script.js --presets es2017
+babel script.js --presets @babel/preset-es2017
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  presets: ["es2017"]
+require("@babel/core").transform("code", {
+  presets: ["@babel/preset-es2017"]
 });
 ```

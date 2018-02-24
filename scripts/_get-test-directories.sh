@@ -3,7 +3,7 @@ set -e
 
 TEST_DIRS=""
 
-sources=("codemods" "experimental" "packages")
+sources=("codemods" "packages")
 
 for source in "${sources[@]}"; do
   for f in $source/*; do
@@ -11,7 +11,7 @@ for source in "${sources[@]}"; do
       continue
     fi
     # Exclude babel-standalone from coverage runs
-    if [ "$TEST_TYPE" = "cov" ] && [ `basename $f` = 'babel-standalone' ]; then
+    if [ "$TEST_TYPE" = "cov" ] && [[ `basename $f` = 'babel-standalone' || `basename $f` = 'babel-preset-env-standalone' ]]; then
       continue
     fi
 

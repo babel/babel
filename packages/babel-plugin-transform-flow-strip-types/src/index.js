@@ -1,6 +1,7 @@
-import syntaxFlow from "babel-plugin-syntax-flow";
+import syntaxFlow from "@babel/plugin-syntax-flow";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default function() {
   const FLOW_DIRECTIVE = "@flow";
 
   let skipStrip = false;

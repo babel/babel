@@ -26,7 +26,7 @@ Choose one: is this a bug report or feature request?
 var your => (code) => here;
 ```
 
-### Babel Configuration (.babelrc, package.json, cli command)
+### Babel/Babylon Configuration (.babelrc, package.json, cli command)
 <!--- If describing a bug, tell us what your babel configuration looks like -->
 
 ```js
@@ -57,6 +57,7 @@ var your => (code) => here;
 | software         | version(s)
 | ---------------- | -------
 | Babel            |  
+| Babylon          | <!-- This is only needed if you are using Babylon directly -->
 | node             | 
 | npm              | 
 | Operating System | 

@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 export function ImportSpecifier(node: Object) {
   if (node.importKind === "type" || node.importKind === "typeof") {

@@ -1,2 +1,0 @@
-  When setting `useBuiltIns: 'usage'`, polyfills are automatically imported when needed.
-  Please remove the `import 'babel-polyfill'` call or use `useBuiltIns: 'entry'` instead.

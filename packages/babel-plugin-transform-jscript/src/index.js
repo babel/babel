@@ -1,4 +1,6 @@
-export default function({ types: t }) {
+import { types as t } from "@babel/core";
+
+export default function() {
   return {
     visitor: {
       FunctionExpression: {
@@ -13,7 +15,7 @@ export default function({ types: t }) {
                 [],
                 t.blockStatement([
                   t.toStatement(node),
-                  t.returnStatement(node.id),
+                  t.returnStatement(t.cloneNode(node.id)),
                 ]),
               ),
               [],

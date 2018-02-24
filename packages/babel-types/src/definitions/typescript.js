@@ -1,50 +1,32 @@
 // @flow
-
 import defineType, {
+  arrayOfType,
   assertEach,
   assertNodeType,
   assertOneOf,
   assertValueType,
   chain,
-} from "./index";
+  validate,
+  validateArrayOfType,
+  validateOptional,
+  validateOptionalType,
+  validateType,
+} from "./utils";
 import { functionDeclarationCommon } from "./core";
 import { classMethodOrDeclareMethodCommon } from "./es2015";
 
 const bool = assertValueType("boolean");
 
-function validate(validate) {
-  return { validate };
-}
-
-function typeIs(typeName) {
-  return typeof typeName === "string"
-    ? assertNodeType(typeName)
-    : assertNodeType(...typeName);
-}
-
-function validateType(name) {
-  return validate(typeIs(name));
-}
-
-function validateOptional(validate) {
-  return { validate, optional: true };
-}
-
-function validateOptionalType(typeName) {
-  return { validate: typeIs(typeName), optional: true };
-}
-
-function arrayOf(elementType) {
-  return chain(assertValueType("array"), assertEach(elementType));
-}
-
-function arrayOfType(nodeTypeName) {
-  return arrayOf(typeIs(nodeTypeName));
-}
-
-function validateArrayOfType(nodeTypeName) {
-  return validate(arrayOfType(nodeTypeName));
-}
+const tSFunctionTypeAnnotationCommon = {
+  returnType: {
+    validate: assertNodeType("TSTypeAnnotation", "Noop"),
+    optional: true,
+  },
+  typeParameters: {
+    validate: assertNodeType("TSTypeParameterDeclaration", "Noop"),
+    optional: true,
+  },
+};
 
 defineType("TSParameterProperty", {
   aliases: ["LVal"], // TODO: This isn't usable in general as an LVal. Should have a "Parameter" alias.
@@ -67,12 +49,18 @@ defineType("TSParameterProperty", {
 defineType("TSDeclareFunction", {
   aliases: ["Statement", "Declaration"],
   visitor: ["id", "typeParameters", "params", "returnType"],
-  fields: functionDeclarationCommon,
+  fields: {
+    ...functionDeclarationCommon,
+    ...tSFunctionTypeAnnotationCommon,
+  },
 });
 
 defineType("TSDeclareMethod", {
   visitor: ["decorators", "key", "typeParameters", "params", "returnType"],
-  fields: classMethodOrDeclareMethodCommon,
+  fields: {
+    ...classMethodOrDeclareMethodCommon,
+    ...tSFunctionTypeAnnotationCommon,
+  },
 });
 
 defineType("TSQualifiedName", {
@@ -85,7 +73,7 @@ defineType("TSQualifiedName", {
 });
 
 const signatureDeclarationCommon = {
-  typeParameters: validateOptionalType("TypeParameterDeclaration"),
+  typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
   parameters: validateArrayOfType(["Identifier", "RestElement"]),
   typeAnnotation: validateOptionalType("TSTypeAnnotation"),
 };
@@ -179,7 +167,7 @@ defineType("TSTypeReference", {
   visitor: ["typeName", "typeParameters"],
   fields: {
     typeName: validateType("TSEntityName"),
-    typeParameters: validateOptionalType("TypeParameterInstantiation"),
+    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
 
@@ -235,6 +223,25 @@ const unionOrIntersection = {
 defineType("TSUnionType", unionOrIntersection);
 defineType("TSIntersectionType", unionOrIntersection);
 
+defineType("TSConditionalType", {
+  aliases: ["TSType"],
+  visitor: ["checkType", "extendsType", "trueType", "falseType"],
+  fields: {
+    checkType: validateType("TSType"),
+    extendsType: validateType("TSType"),
+    trueType: validateType("TSType"),
+    falseType: validateType("TSType"),
+  },
+});
+
+defineType("TSInferType", {
+  aliases: ["TSType"],
+  visitor: ["typeParameter"],
+  fields: {
+    typeParameter: validateType("TSType"),
+  },
+});
+
 defineType("TSParenthesizedType", {
   aliases: ["TSType"],
   visitor: ["typeAnnotation"],
@@ -266,7 +273,7 @@ defineType("TSMappedType", {
   visitor: ["typeParameter", "typeAnnotation"],
   fields: {
     readonly: validateOptional(bool),
-    typeParameter: validateType("TypeParameter"),
+    typeParameter: validateType("TSTypeParameter"),
     optional: validateOptional(bool),
     typeAnnotation: validateOptionalType("TSType"),
   },
@@ -289,7 +296,7 @@ defineType("TSExpressionWithTypeArguments", {
   visitor: ["expression", "typeParameters"],
   fields: {
     expression: validateType("TSEntityName"),
-    typeParameters: validateOptionalType("TypeParameterInstantiation"),
+    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
 
@@ -300,7 +307,7 @@ defineType("TSInterfaceDeclaration", {
   fields: {
     declare: validateOptional(bool),
     id: validateType("Identifier"),
-    typeParameters: validateOptionalType("TypeParameterDeclaration"),
+    typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
     extends: validateOptional(arrayOfType("TSExpressionWithTypeArguments")),
     body: validateType("TSInterfaceBody"),
   },
@@ -319,7 +326,7 @@ defineType("TSTypeAliasDeclaration", {
   fields: {
     declare: validateOptional(bool),
     id: validateType("Identifier"),
-    typeParameters: validateOptionalType("TypeParameterDeclaration"),
+    typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
     typeAnnotation: validateType("TSType"),
   },
 });

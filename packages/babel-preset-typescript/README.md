@@ -1,12 +1,12 @@
-# babel-preset-typescript
+# @babel/preset-typescript
 
 > Babel preset for TypeScript.
 
 This preset includes the following plugins:
 
-- [transform-typescript](https://babeljs.io/docs/plugins/transform-typescript/)
+- [@babel/plugin-transform-typescript](https://babeljs.io/docs/plugins/transform-typescript/)
 
-> You will need to specify `--extensions ".ts"` for `babel-cli`, `babel-node` to handle `.ts` files.
+> You will need to specify `--extensions ".ts"` for `@babel/cli` & `@babel/node` cli's to handle `.ts` files.
 
 ## Example
 
@@ -25,7 +25,7 @@ const x = 0;
 ## Installation
 
 ```sh
-npm install --save-dev babel-preset-typescript
+npm install --save-dev @babel/preset-typescript
 ```
 
 ## Usage
@@ -36,20 +36,20 @@ npm install --save-dev babel-preset-typescript
 
 ```json
 {
-  "presets": ["typescript"]
+  "presets": ["@babel/preset-typescript"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --presets typescript script.ts
+babel --presets @babel/preset-typescript script.ts
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  presets: ["typescript"]
+require("@babel/core").transform("code", {
+  presets: ["@babel/preset-typescript"]
 });
 ```

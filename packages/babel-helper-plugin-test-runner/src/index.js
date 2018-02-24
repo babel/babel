@@ -1,4 +1,4 @@
-import testRunner from "babel-helper-transform-fixture-test-runner";
+import testRunner from "@babel/helper-transform-fixture-test-runner";
 import path from "path";
 
 export default function(loc) {

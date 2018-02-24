@@ -1,6 +1,6 @@
 {
-  "name": "babel-plugin-transform-react-constant-elements",
-  "version": "7.0.0-beta.2",
+  "name": "@babel/plugin-transform-react-constant-elements",
+  "version": "7.0.0-beta.40",
   "description": "Treat React JSX elements as value types and hoist them to the highest scope",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-constant-elements",
   "license": "MIT",
@@ -8,7 +8,14 @@
   "keywords": [
     "babel-plugin"
   ],
+  "dependencies": {
+    "@babel/helper-annotate-as-pure": "7.0.0-beta.40"
+  },
+  "peerDependencies": {
+    "@babel/core": "7.0.0-beta.40"
+  },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-beta.2"
+    "@babel/core": "7.0.0-beta.40",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.40"
   }
 }

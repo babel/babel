@@ -1,4 +1,5 @@
-import defineType, { assertNodeType } from "./index";
+// @flow
+import defineType, { assertNodeType } from "./utils";
 
 defineType("Noop", {
   visitor: [],

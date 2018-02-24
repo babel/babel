@@ -1,17 +1,17 @@
-# babel-code-frame
+# @babel/code-frame
 
 > Generate errors that contain a code frame that point to source locations.
 
 ## Install
 
 ```sh
-npm install --save-dev babel-code-frame
+npm install --save-dev @babel/code-frame
 ```
 
 ## Usage
 
 ```js
-import { codeFrameColumns } from 'babel-code-frame';
+import { codeFrameColumns } from '@babel/code-frame';
 
 const rawLines = `class Foo {
   constructor()
@@ -35,7 +35,7 @@ If the column number is not known, you may omit it.
 You can also pass an `end` hash in `location`.
 
 ```js
-import { codeFrameColumns } from 'babel-code-frame';
+import { codeFrameColumns } from '@babel/code-frame';
 
 const rawLines = `class Foo {
   constructor() {
@@ -68,6 +68,7 @@ console.log(result);
 
 Toggles syntax highlighting the code as JavaScript for terminals.
 
+
 ### `linesAbove`
 
 `number`, defaults to `2`.
@@ -86,6 +87,21 @@ Adjust the number of lines to show below the error.
 
 Enable this to forcibly syntax highlight the code as JavaScript (for non-terminals); overrides `highlightCode`.
 
+### `message`
+
+`string`, otherwise nothing
+
+Pass in a string to be displayed inline (if possible) next to the highlighted
+location in the code. If it can't be positioned inline, it will be placed above
+the code frame.
+
+```
+1 | class Foo {
+> 2 |   constructor()
+  |                ^ Missing {
+3 | };
+```
+
 ## Upgrading from prior versions
 
 Prior to version 7, the only API exposed by this module was for a single line and optional column pointer. The old API will now log a deprecation warning.
@@ -95,7 +111,7 @@ The new API takes a `location` object, similar to what is available in an AST.
 This is an example of the deprecated (but still available) API:
 
 ```js
-import codeFrame from 'babel-code-frame';
+import codeFrame from '@babel/code-frame';
 
 const rawLines = `class Foo {
   constructor()
@@ -111,7 +127,7 @@ console.log(result);
 To get the same highlighting using the new API:
 
 ```js
-import { codeFrameColumns } from 'babel-code-frame';
+import { codeFrameColumns } from '@babel/code-frame';
 
 const rawLines = `class Foo {
   constructor() {

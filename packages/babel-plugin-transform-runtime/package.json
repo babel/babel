@@ -1,6 +1,6 @@
 {
-  "name": "babel-plugin-transform-runtime",
-  "version": "7.0.0-beta.2",
+  "name": "@babel/plugin-transform-runtime",
+  "version": "7.0.0-beta.40",
   "description": "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-runtime",
   "license": "MIT",
@@ -9,9 +9,13 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "babel-helper-module-imports": "7.0.0-beta.2"
+    "@babel/helper-module-imports": "7.0.0-beta.40"
+  },
+  "peerDependencies": {
+    "@babel/core": "7.0.0-beta.40"
   },
   "devDependencies": {
-    "babel-helper-plugin-test-runner": "7.0.0-beta.2"
+    "@babel/core": "7.0.0-beta.40",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.40"
   }
 }

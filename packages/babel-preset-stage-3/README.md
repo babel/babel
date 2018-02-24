@@ -1,4 +1,4 @@
-# babel-preset-stage-3
+# @babel/preset-stage-3
 
 > Babel preset for stage 3 plugins.
 
@@ -12,12 +12,10 @@ The gist of Stage 3 is:
 >
 > **What’s next?** Henceforth, changes should only be made in response to critical issues raised by the implementations and their use.
 
-
-
 ## Install
 
 ```sh
-npm install --save-dev babel-preset-stage-3
+npm install --save-dev @babel/preset-stage-3
 ```
 
 ## Usage
@@ -28,23 +26,37 @@ npm install --save-dev babel-preset-stage-3
 
 ```json
 {
-  "presets": ["stage-3"]
+  "presets": ["@babel/preset-stage-3"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel script.js --presets stage-3
+babel script.js --presets @babel/preset-stage-3
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  presets: ["stage-3"]
+require("@babel/core").transform("code", {
+  presets: ["@babel/preset-stage-3"]
 });
 ```
+
+## Options
+
+### `loose`
+
+`boolean`, defaults to `false`.
+
+Enable "loose" transformations for any plugins in this preset that allow them.
+
+### `useBuiltIns`
+
+`boolean`, defaults to `false`.
+
+Will use the native built-in instead of trying to polyfill behavior for any plugins that require one.
 
 ## References
 

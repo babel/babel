@@ -1,4 +1,4 @@
-# babel-plugin-transform-typescript
+# @babel/plugin-transform-typescript
 
 > Transform [TypeScript](https://github.com/Microsoft/TypeScript) into ES.next.
 
@@ -24,7 +24,7 @@ const x = 0;
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-typescript
+npm install --save-dev @babel/plugin-transform-typescript
 ```
 
 ## Usage
@@ -35,20 +35,20 @@ npm install --save-dev babel-plugin-transform-typescript
 
 ```json
 {
-  "plugins": ["transform-typescript"]
+  "plugins": ["@babel/plugin-transform-typescript"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-typescript script.js
+babel --plugins @babel/plugin-transform-typescript script.js
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  plugins: ["transform-typescript"]
+require("@babel/core").transform("code", {
+  plugins: ["@babel/plugin-transform-typescript"]
 });
 ```

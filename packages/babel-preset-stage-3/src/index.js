@@ -1,17 +1,36 @@
-import syntaxDynamicImport from "babel-plugin-syntax-dynamic-import";
-import transformAsyncGeneratorFunctions from "babel-plugin-transform-async-generator-functions";
-import transformClassProperties from "babel-plugin-transform-class-properties";
-import transformObjectRestSpread from "babel-plugin-transform-object-rest-spread";
-import transformOptionalCatchBinding from "babel-plugin-transform-optional-catch-binding";
-import transformUnicodePropertyRegex from "babel-plugin-transform-unicode-property-regex";
+import syntaxDynamicImport from "@babel/plugin-syntax-dynamic-import";
+import syntaxImportMeta from "@babel/plugin-syntax-import-meta";
+import transformAsyncGeneratorFunctions from "@babel/plugin-proposal-async-generator-functions";
+import transformClassProperties from "@babel/plugin-proposal-class-properties";
+import transformObjectRestSpread from "@babel/plugin-proposal-object-rest-spread";
+import transformOptionalCatchBinding from "@babel/plugin-proposal-optional-catch-binding";
+import transformUnicodePropertyRegex from "@babel/plugin-proposal-unicode-property-regex";
 
-export default function() {
+export default function(context, opts = {}) {
+  let loose = false;
+  let useBuiltIns = false;
+
+  if (opts !== undefined) {
+    if (opts.loose !== undefined) loose = opts.loose;
+    if (opts.useBuiltIns !== undefined) useBuiltIns = opts.useBuiltIns;
+  }
+
+  if (typeof loose !== "boolean") {
+    throw new Error("@babel/preset-stage-3 'loose' option must be a boolean.");
+  }
+  if (typeof useBuiltIns !== "boolean") {
+    throw new Error(
+      "@babel/preset-stage-3 'useBuiltIns' option must be a boolean.",
+    );
+  }
+
   return {
     plugins: [
       syntaxDynamicImport,
+      syntaxImportMeta,
       transformAsyncGeneratorFunctions,
-      transformClassProperties,
-      transformObjectRestSpread,
+      [transformClassProperties, { loose }],
+      [transformObjectRestSpread, { useBuiltIns }],
       transformOptionalCatchBinding,
       transformUnicodePropertyRegex,
     ],

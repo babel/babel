@@ -1,7 +1,7 @@
-import * as helpers from "babel-helpers";
-import generator from "babel-generator";
-import template from "babel-template";
-import * as t from "babel-types";
+import * as helpers from "@babel/helpers";
+import generator from "@babel/generator";
+import template from "@babel/template";
+import * as t from "@babel/types";
 
 const buildUmdWrapper = template(`
   (function (root, factory) {
@@ -69,7 +69,7 @@ function buildModule(whitelist) {
     t.exportNamedDeclaration(
       null,
       Object.keys(refs).map(name => {
-        return t.exportSpecifier(t.clone(refs[name]), t.identifier(name));
+        return t.exportSpecifier(t.cloneNode(refs[name]), t.identifier(name));
       }),
     ),
   );

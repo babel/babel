@@ -1,5 +1,5 @@
 import includes from "lodash/includes";
-import runner from "babel-helper-transform-fixture-test-runner";
+import runner from "@babel/helper-transform-fixture-test-runner";
 
 runner(
   `${__dirname}/fixtures/traceur`,
@@ -84,7 +84,7 @@ runner(
   {},
   function(opts, task) {
     if (includes(task.exec.loc, "module.js")) {
-      opts.plugins.push("transform-es2015-modules-commonjs");
+      opts.plugins.push("transform-modules-commonjs");
     } else {
       opts.sourceType = "script";
     }

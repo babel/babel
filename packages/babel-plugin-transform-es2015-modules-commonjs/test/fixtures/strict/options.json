@@ -1,7 +1,0 @@
-{
-  "plugins": [
-    "external-helpers",
-    "syntax-object-rest-spread",
-    ["transform-es2015-modules-commonjs", { "strict": true }]
-  ]
-}

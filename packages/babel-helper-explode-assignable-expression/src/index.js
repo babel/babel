@@ -1,5 +1,5 @@
-import type { Scope } from "babel-traverse";
-import * as t from "babel-types";
+import type { Scope } from "@babel/traverse";
+import * as t from "@babel/types";
 
 function getObjRef(node, nodes, file, scope) {
   let ref;
@@ -33,7 +33,7 @@ function getObjRef(node, nodes, file, scope) {
 
   const temp = scope.generateUidIdentifierBasedOnNode(ref);
   scope.push({ id: temp });
-  nodes.push(t.assignmentExpression("=", temp, ref));
+  nodes.push(t.assignmentExpression("=", t.cloneNode(temp), t.cloneNode(ref)));
   return temp;
 }
 
@@ -44,7 +44,7 @@ function getPropRef(node, nodes, file, scope) {
 
   const temp = scope.generateUidIdentifierBasedOnNode(prop);
   scope.push({ id: temp });
-  nodes.push(t.assignmentExpression("=", temp, prop));
+  nodes.push(t.assignmentExpression("=", t.cloneNode(temp), t.cloneNode(prop)));
   return temp;
 }
 
@@ -68,12 +68,13 @@ export default function(
   let ref, uid;
 
   if (t.isIdentifier(node)) {
-    ref = node;
+    ref = t.cloneNode(node);
     uid = obj;
   } else {
     const prop = getPropRef(node, nodes, file, scope);
     const computed = node.computed || t.isLiteral(prop);
-    uid = ref = t.memberExpression(obj, prop, computed);
+    uid = t.memberExpression(t.cloneNode(obj), t.cloneNode(prop), computed);
+    ref = t.memberExpression(t.cloneNode(obj), t.cloneNode(prop), computed);
   }
 
   return {

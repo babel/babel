@@ -12,16 +12,18 @@ const main = defineHelper(__dirname, "main", `
   }
 `);
 
-module.exports = {
-  visitor: {
-    Identifier(path) {
-      if (path.node.name === "REPLACE_ME_1") {
-        const mainHelper = this.addHelper(main);
-        path.replaceWith(mainHelper);
-      } else if (path.node.name === "REPLACE_ME_2") {
-        const dependencyHelper = this.addHelper(dependency);
-        path.replaceWith(dependencyHelper);
-      }
+module.exports = function() {
+  return {
+    visitor: {
+      Identifier(path) {
+        if (path.node.name === "REPLACE_ME_1") {
+          const mainHelper = this.addHelper(main);
+          path.replaceWith(mainHelper);
+        } else if (path.node.name === "REPLACE_ME_2") {
+          const dependencyHelper = this.addHelper(dependency);
+          path.replaceWith(dependencyHelper);
+        }
+      },
     },
-  },
+  };
 };

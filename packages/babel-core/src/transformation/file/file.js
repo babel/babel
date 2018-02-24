@@ -1,10 +1,10 @@
 // @flow
 
-import getHelper from "babel-helpers";
-import { NodePath, Hub, Scope } from "babel-traverse";
-import { codeFrameColumns } from "babel-code-frame";
-import traverse from "babel-traverse";
-import * as t from "babel-types";
+import * as helpers from "@babel/helpers";
+import { NodePath, Hub, Scope } from "@babel/traverse";
+import { codeFrameColumns } from "@babel/code-frame";
+import traverse from "@babel/traverse";
+import * as t from "@babel/types";
 
 import type { NormalizedFile } from "../normalize-file";
 
@@ -56,45 +56,51 @@ export default class File {
     return this._map.get(key);
   }
 
+  has(key: mixed): boolean {
+    return this._map.has(key);
+  }
+
   getModuleName(): ?string {
-    const opts = this.opts;
-    if (!opts.moduleIds) {
-      return null;
-    }
+    const {
+      filename,
+      filenameRelative = filename,
+
+      moduleId,
+      moduleIds = !!moduleId,
+
+      getModuleId,
+
+      sourceRoot: sourceRootTmp,
+      moduleRoot = sourceRootTmp,
+      sourceRoot = moduleRoot,
+    } = this.opts;
+
+    if (!moduleIds) return null;
 
     // moduleId is n/a if a `getModuleId()` is provided
-    if (opts.moduleId != null && !opts.getModuleId) {
-      return opts.moduleId;
+    if (moduleId != null && !getModuleId) {
+      return moduleId;
     }
 
-    let filenameRelative = opts.filenameRelative;
-    let moduleName = "";
+    let moduleName = moduleRoot != null ? moduleRoot + "/" : "";
 
-    if (opts.moduleRoot != null) {
-      moduleName = opts.moduleRoot + "/";
+    if (filenameRelative) {
+      const sourceRootReplacer =
+        sourceRoot != null ? new RegExp("^" + sourceRoot + "/?") : "";
+
+      moduleName += filenameRelative
+        // remove sourceRoot from filename
+        .replace(sourceRootReplacer, "")
+        // remove extension
+        .replace(/\.(\w*?)$/, "");
     }
-
-    if (!opts.filenameRelative) {
-      return moduleName + opts.filename.replace(/^\//, "");
-    }
-
-    if (opts.sourceRoot != null) {
-      // remove sourceRoot from filename
-      const sourceRootRegEx = new RegExp("^" + opts.sourceRoot + "/?");
-      filenameRelative = filenameRelative.replace(sourceRootRegEx, "");
-    }
-
-    // remove extension
-    filenameRelative = filenameRelative.replace(/\.(\w*?)$/, "");
-
-    moduleName += filenameRelative;
 
     // normalize path separators
     moduleName = moduleName.replace(/\\/g, "/");
 
-    if (opts.getModuleId) {
+    if (getModuleId) {
       // If return is falsy, assume they want us to use our generated default name
-      return opts.getModuleId(moduleName) || moduleName;
+      return getModuleId(moduleName) || moduleName;
     } else {
       return moduleName;
     }
@@ -110,14 +116,14 @@ export default class File {
     throw new Error(
       "This API has been removed. If you're looking for this " +
         "functionality in Babel 7, you should import the " +
-        "'babel-helper-module-imports' module and use the functions exposed " +
+        "'@babel/helper-module-imports' module and use the functions exposed " +
         " from that module, such as 'addNamed' or 'addDefault'.",
     );
   }
 
   addHelper(name: string): Object {
     const declar = this.declarations[name];
-    if (declar) return declar;
+    if (declar) return t.cloneNode(declar);
 
     const generator = this.get("helperGenerator");
     const runtime = this.get("helpersNamespace");
@@ -125,18 +131,23 @@ export default class File {
       const res = generator(name);
       if (res) return res;
     } else if (runtime) {
-      return t.memberExpression(runtime, t.identifier(name));
+      return t.memberExpression(t.cloneNode(runtime), t.identifier(name));
     }
 
     const uid = (this.declarations[name] = this.scope.generateUidIdentifier(
       name,
     ));
 
-    const { nodes, globals } = getHelper(
+    const dependencies = {};
+    for (const dep of helpers.getDependencies(name)) {
+      dependencies[dep] = this.addHelper(dep);
+    }
+
+    const { nodes, globals } = helpers.get(
       name,
-      name => this.addHelper(name),
+      dep => dependencies[dep],
       uid,
-      () => Object.keys(this.scope.getAllBindings()),
+      Object.keys(this.scope.getAllBindings()),
     );
 
     globals.forEach(name => {
@@ -168,8 +179,8 @@ export default class File {
 
   buildCodeFrameError(
     node: ?{
-      loc?: { line: number, column: number },
-      _loc?: { line: number, column: number },
+      loc?: { start: { line: number, column: number } },
+      _loc?: { start: { line: number, column: number } },
     },
     msg: string,
     Error: typeof Error = SyntaxError,
@@ -193,17 +204,19 @@ export default class File {
     }
 
     if (loc) {
+      const { highlightCode = true } = this.opts;
+
       msg +=
         "\n" +
         codeFrameColumns(
           this.code,
           {
             start: {
-              line: loc.line,
-              column: loc.column + 1,
+              line: loc.start.line,
+              column: loc.start.column + 1,
             },
           },
-          this.opts,
+          { highlightCode },
         );
     }
 

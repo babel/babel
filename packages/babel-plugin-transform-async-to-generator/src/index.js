@@ -1,10 +1,32 @@
-import remapAsyncToGenerator from "babel-helper-remap-async-to-generator";
-import syntaxAsyncFunctions from "babel-plugin-syntax-async-functions";
+import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
+import { addNamed } from "@babel/helper-module-imports";
+import { types as t } from "@babel/core";
 
-export default function() {
+export default function(api, options) {
+  const { method, module } = options;
+
+  if (method && module) {
+    return {
+      visitor: {
+        Function(path, state) {
+          if (!path.node.async || path.node.generator) return;
+
+          let wrapAsync = state.methodWrapper;
+          if (wrapAsync) {
+            wrapAsync = t.cloneNode(wrapAsync);
+          } else {
+            wrapAsync = state.methodWrapper = addNamed(path, method, module);
+          }
+
+          remapAsyncToGenerator(path, state.file, {
+            wrapAsync,
+          });
+        },
+      },
+    };
+  }
+
   return {
-    inherits: syntaxAsyncFunctions,
-
     visitor: {
       Function(path, state) {
         if (!path.node.async || path.node.generator) return;

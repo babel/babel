@@ -1,0 +1,21 @@
+{
+  "name": "@babel/plugin-proposal-logical-assignment-operators",
+  "version": "7.0.0-beta.40",
+  "description": "Transforms logical assignment operators into short-circuited assignments",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-logical-assignment-operators",
+  "license": "MIT",
+  "main": "lib",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/plugin-syntax-logical-assignment-operators": "7.0.0-beta.40"
+  },
+  "peerDependencies": {
+    "@babel/core": "7.0.0-beta.40"
+  },
+  "devDependencies": {
+    "@babel/core": "7.0.0-beta.40",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.40"
+  }
+}

@@ -1,6 +1,6 @@
 const includes = require("lodash/includes");
 const readdir = require("fs-readdir-recursive");
-const helper = require("babel-helper-fixtures");
+const helper = require("@babel/helper-fixtures");
 const assert = require("assert");
 const rimraf = require("rimraf");
 const outputFileSync = require("output-file-sync");
@@ -24,7 +24,7 @@ const presetLocs = [
 
 const pluginLocs = [
   path.join(__dirname, "/../../babel-plugin-transform-strict-mode"),
-  path.join(__dirname, "/../../babel-plugin-transform-es2015-modules-commonjs"),
+  path.join(__dirname, "/../../babel-plugin-transform-modules-commonjs"),
 ].join(",");
 
 const readDir = function(loc, filter) {
@@ -177,6 +177,16 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
 
   const suiteLoc = path.join(fixtureLoc, binName);
   describe("bin/" + binName, function() {
+    let cwd;
+
+    beforeEach(() => {
+      cwd = process.cwd();
+    });
+
+    afterEach(() => {
+      process.chdir(cwd);
+    });
+
     fs.readdirSync(suiteLoc).forEach(function(testName) {
       if (testName[0] === ".") return;
 

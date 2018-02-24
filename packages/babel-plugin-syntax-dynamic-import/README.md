@@ -1,11 +1,11 @@
-# babel-plugin-syntax-dynamic-import
+# @babel/plugin-syntax-dynamic-import
 
 > Allow parsing of `import()`.
 
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-dynamic-import
+npm install --save-dev @babel/plugin-syntax-dynamic-import
 ```
 
 ## Usage
@@ -16,20 +16,20 @@ npm install --save-dev babel-plugin-syntax-dynamic-import
 
 ```json
 {
-  "plugins": ["syntax-dynamic-import"]
+  "plugins": ["@babel/plugin-syntax-dynamic-import"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-dynamic-import script.js
+babel --plugins @babel/plugin-syntax-dynamic-import script.js
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  plugins: ["syntax-dynamic-import"]
+require("@babel/core").transform("code", {
+  plugins: ["@babel/plugin-syntax-dynamic-import"]
 });
 ```

@@ -1,4 +1,4 @@
-# babel-helper-simple-assignment
+# @babel/helper-simple-assignment
 
 There are many cases where it is hard to perform transformations because a
 piece of code is using complex structures. Say you want to rewrite all accesses

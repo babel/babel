@@ -1,0 +1,96 @@
+{
+  "type": "BinaryExpression",
+  "start": 0,
+  "end": 15,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 15
+    }
+  },
+  "left": {
+    "type": "BinaryExpression",
+    "start": 0,
+    "end": 11,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 11
+      }
+    },
+    "left": {
+      "type": "NumericLiteral",
+      "start": 1,
+      "end": 2,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 1
+        },
+        "end": {
+          "line": 1,
+          "column": 2
+        }
+      },
+      "extra": {
+        "rawValue": 1,
+        "raw": "1",
+        "parenthesized": true,
+        "parenStart": 0
+      },
+      "value": 1
+    },
+    "operator": "+",
+    "right": {
+      "type": "NumericLiteral",
+      "start": 7,
+      "end": 8,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 7
+        },
+        "end": {
+          "line": 1,
+          "column": 8
+        }
+      },
+      "extra": {
+        "rawValue": 2,
+        "raw": "2",
+        "parenthesized": true,
+        "parenStart": 6
+      },
+      "value": 2
+    }
+  },
+  "operator": "+",
+  "right": {
+    "type": "NumericLiteral",
+    "start": 14,
+    "end": 15,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 14
+      },
+      "end": {
+        "line": 1,
+        "column": 15
+      }
+    },
+    "extra": {
+      "rawValue": 3,
+      "raw": "3"
+    },
+    "value": 3
+  }
+}

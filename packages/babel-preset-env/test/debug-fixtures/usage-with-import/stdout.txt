@@ -1,0 +1,16 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "chrome": "55"
+}
+
+Using modules transform: commonjs
+
+Using plugins:
+  transform-dotall-regex { "chrome":"55" }
+
+Using polyfills with `usage` option:
+
+[src/in.js] Based on your code and targets, none were added.
+src/in.js -> lib/in.js
