@@ -36,6 +36,10 @@ defineType("ClassProperty", {
       validate: assertNodeType("Expression"),
       optional: true,
     },
+    definite: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
     typeAnnotation: {
       validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
       optional: true,

@@ -1691,6 +1691,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseClassProperty(node: N.ClassProperty): N.ClassProperty {
+      if (!node.optional && this.eat(tt.bang)) {
+        node.definite = true;
+      }
+
       const type = this.tsTryParseTypeAnnotation();
       if (type) node.typeAnnotation = type;
       return super.parseClassProperty(node);
@@ -1752,6 +1756,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // `let x: number;`
     parseVarHead(decl: N.VariableDeclarator): void {
       super.parseVarHead(decl);
+      if (decl.id.type === "Identifier" && this.eat(tt.bang)) {
+        decl.definite = true;
+      }
+
       const type = this.tsTryParseTypeAnnotation();
       if (type) {
         decl.id.typeAnnotation = type;
@@ -1980,7 +1988,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     isClassProperty(): boolean {
-      return this.match(tt.colon) || super.isClassProperty();
+      return (
+        this.match(tt.bang) || this.match(tt.colon) || super.isClassProperty()
+      );
     }
 
     parseMaybeDefault(...args): N.Pattern {
