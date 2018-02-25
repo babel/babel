@@ -97,6 +97,9 @@
       "<rootDir>/packages/**/test/*.js",
       "<rootDir>/codemods/**/test/*.js",
       "<rootDir>/**/*.spec.js"
+    ],
+    "modulePathIgnorePatterns": [
+      "<rootDir>/packages/.*package.json"
     ]
   },
   "jest-runner-mocha": {
