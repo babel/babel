@@ -953,9 +953,7 @@ helpers.applyDecoratedDescriptor = () => template.program.ast`
         });
         desc.enumerable = !!desc.enumerable;
         desc.configurable = !!desc.configurable;
-        if ('value' in desc || desc.initializer){
-            desc.writable = true;
-        }
+        desc.writable = !!desc.writable;
 
         desc = decorators.slice().reverse().reduce(function(desc, decorator){
             return decorator(target, property, desc) || desc;
