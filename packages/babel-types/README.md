@@ -359,6 +359,7 @@ Aliases: `Property`
  - `computed`: `boolean` (default: `false`)
  - `abstract`: `boolean` (default: `null`)
  - `accessibility`: `"public" | "private" | "protected"` (default: `null`)
+ - `definite`: `boolean` (default: `null`)
  - `optional`: `boolean` (default: `null`)
  - `readonly`: `boolean` (default: `null`)
  - `static`: `boolean` (default: `null`)
@@ -2851,6 +2852,7 @@ See also `t.isVariableDeclarator(node, opts)` and `t.assertVariableDeclarator(no
 
  - `id`: `LVal` (required)
  - `init`: `Expression` (default: `null`)
+ - `definite`: `boolean` (default: `null`)
 
 ---
 

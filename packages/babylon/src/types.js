@@ -1068,6 +1068,8 @@ export type TsType =
   | TsArrayType
   | TsTupleType
   | TsUnionOrIntersectionType
+  | TsConditionalType
+  | TsInferType
   | TsParenthesizedType
   | TsTypeOperator
   | TsIndexedAccessType
@@ -1163,10 +1165,10 @@ export type TsConditionalType = TsTypeBase & {
   checkType: TsType,
   extendsType: TsType,
   trueType: TsType,
-  falseType: tsType,
+  falseType: TsType,
 };
 
-export type InferType = TsTypeBase & {
+export type TsInferType = TsTypeBase & {
   type: "TSInferType",
   typeParameter: TypeParameter,
 };

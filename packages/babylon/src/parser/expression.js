@@ -1678,7 +1678,9 @@ export default class ExpressionParser extends LValParser {
     const oldStrict = this.state.strict;
     if (isStrict) this.state.strict = isStrict;
     if (node.id) {
-      this.checkReservedWord(node.id, node.start, true, true);
+      // TODO(logan): This check is broken because it passes a node object as
+      // a binding name. Passing the actual string introduces other failures.
+      // this.checkReservedWord(node.id, node.start, true, true);
     }
     if (checkLVal) {
       const nameHash: any = Object.create(null);
