@@ -167,7 +167,7 @@ export default function({ node, parent, scope, id }, localBinding = false) {
   }
 
   let name;
-  if (id && t.isLiteral(id)) {
+  if (id && t.isLiteral(id) && id.value) {
     name = id.value;
   } else if (id && t.isIdentifier(id)) {
     name = id.name;
