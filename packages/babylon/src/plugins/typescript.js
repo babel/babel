@@ -886,7 +886,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    tsEatThenParseType(token: TokenType): N.TsType | undefined {
+    tsEatThenParseType(token: TokenType): N.TsType | typeof undefined {
       return !this.match(token) ? undefined : this.tsNextThenParseType();
     }
 
@@ -1326,7 +1326,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       startPos: number,
       startLoc: Position,
       noCalls: ?boolean,
-      state: { stop: boolean },
+      state: N.ParseSubscriptState,
     ): N.Expression {
       if (!this.hasPrecedingLineBreak() && this.eat(tt.bang)) {
         const nonNullExpression: N.TsNonNullExpression = this.startNodeAt(

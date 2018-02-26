@@ -467,6 +467,7 @@ export default class Tokenizer extends LocationParser {
       const assign =
         this.input.charCodeAt(this.state.pos + 2) === charCodes.equalsTo;
       if (assign) {
+        // $FlowFixMe
         this.expectPlugin("logicalAssignment");
       }
       this.finishOp(
@@ -1280,7 +1281,7 @@ export default class Tokenizer extends LocationParser {
     return word + this.input.slice(chunkStart, this.state.pos);
   }
 
-  isIterator(word): boolean {
+  isIterator(word: string): boolean {
     return word === "@@iterator" || word === "@@asyncIterator";
   }
 

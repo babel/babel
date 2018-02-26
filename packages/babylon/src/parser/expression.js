@@ -426,7 +426,10 @@ export default class ExpressionParser extends LValParser {
     startLoc: Position,
     noCalls?: ?boolean,
   ): N.Expression {
-    const state = { stop: false };
+    const state = {
+      optionalChainMember: false,
+      stop: false,
+    };
     do {
       base = this.parseSubscript(base, startPos, startLoc, noCalls, state);
     } while (!state.stop);
@@ -439,7 +442,7 @@ export default class ExpressionParser extends LValParser {
     startPos: number,
     startLoc: Position,
     noCalls: ?boolean,
-    state: { stop: boolean, optionalChainMember?: boolean },
+    state: N.ParseSubscriptState,
   ): N.Expression {
     if (!noCalls && this.eat(tt.doubleColon)) {
       const node = this.startNodeAt(startPos, startLoc);
@@ -554,14 +557,13 @@ export default class ExpressionParser extends LValParser {
       const node = this.startNodeAt(startPos, startLoc);
       node.tag = base;
       node.quasi = this.parseTemplate(true);
-      if (!state.optionalChainMember) {
-        return this.finishNode(node, "TaggedTemplateExpression");
-      } else {
+      if (state.optionalChainMember) {
         this.raise(
           startPos,
           "Tagged Template Literals are not allowed in optionalChain",
         );
       }
+      return this.finishNode(node, "TaggedTemplateExpression");
     } else {
       state.stop = true;
       return base;

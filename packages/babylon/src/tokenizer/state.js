@@ -21,7 +21,7 @@ export default class State {
     this.noArrowParamsConversionAt = [];
 
     // eslint-disable-next-line max-len
-    this.inMethod = this.inFunction = this.inParameters = this.maybeInArrowParameters = this.inGenerator = this.inAsync = this.inPropertyName = this.inType = this.inClassProperty = this.noAnonFunctionType = false;
+    this.inMethod = this.inFunction = this.inParameters = this.maybeInArrowParameters = this.inGenerator = this.inAsync = this.inPropertyName = this.inType = this.inClassProperty = this.noAnonFunctionType = this.hasFlowComment = this.isIterator = false;
 
     this.classLevel = 0;
 
@@ -98,6 +98,8 @@ export default class State {
   noAnonFunctionType: boolean;
   inPropertyName: boolean;
   inClassProperty: boolean;
+  hasFlowComment: boolean;
+  isIterator: boolean;
 
   // Check whether we are in a (nested) class or not.
   classLevel: number;

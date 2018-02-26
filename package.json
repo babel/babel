@@ -26,7 +26,7 @@
     "bundle-collapser": "^1.2.1",
     "chai": "^4.1.0",
     "chalk": "^2.0.0",
-    "charcodes": "0.0.10",
+    "charcodes": "0.1.0",
     "derequire": "^2.0.2",
     "eslint": "^4.5.0",
     "eslint-config-babel": "^7.0.2",

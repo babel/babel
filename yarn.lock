@@ -1671,9 +1671,9 @@ chalk@^2.0.0, chalk@^2.0.1, chalk@^2.1.0:
     escape-string-regexp "^1.0.5"
     supports-color "^4.0.0"
 
-charcodes@0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/charcodes/-/charcodes-0.0.10.tgz#98d67a7a1e17ce154d1faafd01e72e9a6cff54f5"
+charcodes@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/charcodes/-/charcodes-0.1.0.tgz#61f8c244fc7f94f186fe74f31078901a3ed7928e"
 
 chardet@^0.4.0:
   version "0.4.2"
