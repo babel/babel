@@ -116,7 +116,7 @@ $ TEST_ONLY=babel-cli make test
 
 ```sh
 # Run tests for the @babel/plugin-transform-classes package.
-$ TEST_ONLY=es2015-class make test
+$ TEST_ONLY=babel-plugin-transform-classes make test
 ```
 
 Use the `TEST_GREP` variable to run a subset of tests by name:
