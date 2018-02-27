@@ -574,6 +574,11 @@ describe("api", function() {
       it("builds external helpers in var output type", function() {
         babel.buildExternalHelpers(null, "var");
       });
+
+      it("injects external helpers in global context", function() {
+        babel.injectExternalHelpers();
+        assert.ok(global.babelHelpers);
+      });
     });
 
     it("all", function() {

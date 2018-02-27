@@ -139,7 +139,10 @@ function buildHelpers(body, namespace, whitelist) {
   });
   return refs;
 }
-export default function(
+export function injectExternalHelpers() {
+  eval(buildExternalHelpers());
+}
+export default function buildExternalHelpers(
   whitelist?: Array<string>,
   outputType: "global" | "module" | "umd" | "var" = "global",
 ) {
