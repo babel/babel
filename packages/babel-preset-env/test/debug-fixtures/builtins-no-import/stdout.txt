@@ -19,3 +19,4 @@ Using polyfills with `entry` option:
 
 [src/in.js] `import '@babel/polyfill'` was not found.
 src/in.js -> lib/in.js
+Successfully compiled 1 file.

@@ -136,3 +136,4 @@ Using polyfills with `entry` option:
   web.immediate { "chrome":"54", "ie":"10", "node":"6.10" }
   web.dom.iterable { "chrome":"54", "ie":"10", "node":"6.10" }
 src/in.js -> lib/in.js
+Successfully compiled 1 file.

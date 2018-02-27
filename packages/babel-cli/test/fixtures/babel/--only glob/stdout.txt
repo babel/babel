@@ -1,2 +1,3 @@
 src/a.foo.js -> lib/a.foo.js
 src/baz/b.foo.js -> lib/baz/b.foo.js
+Successfully compiled 2 files.

@@ -154,3 +154,4 @@ Using polyfills with `entry` option:
   web.immediate {}
   web.dom.iterable {}
 src/in.js -> lib/in.js
+Successfully compiled 1 file.

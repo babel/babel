@@ -1,2 +1,3 @@
 src/bar/index.js -> lib/bar/index.js
 src/foo/foo.js -> lib/foo/foo.js
+Successfully compiled 2 files.

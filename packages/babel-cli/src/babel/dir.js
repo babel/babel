@@ -6,6 +6,11 @@ import fs from "fs";
 
 import * as util from "./util";
 
+const result = {
+  success: 0,
+  failure: 0,
+};
+
 export default function(commander, filenames, opts) {
   function write(src, relative, base, callback) {
     if (typeof base === "function") {
@@ -31,7 +36,10 @@ export default function(commander, filenames, opts) {
         opts,
       ),
       function(err, res) {
-        if (err) return callback(err);
+        if (err) {
+          result.failure += 1;
+          return callback(err);
+        }
         if (!res) return callback();
 
         // we've requested explicit sourcemaps to be written to disk
@@ -47,6 +55,8 @@ export default function(commander, filenames, opts) {
 
         outputFileSync(dest, res.code);
         util.chmod(src, dest);
+
+        result.success += 1;
 
         util.log(src + " -> " + dest);
         return callback(null, true);
@@ -125,10 +135,17 @@ export default function(commander, filenames, opts) {
     const filename = filenames[index];
 
     handle(filename, function(err) {
-      if (err) throw err;
+      if (err) throw err.toString();
       index++;
       if (index !== filenames.length) {
         sequentialHandle(filenames, index);
+      } else {
+        util.log(
+          `Successfully compiled ${result.success} ${
+            result.success > 1 ? "files" : "file"
+          }.`,
+          true,
+        );
       }
     });
   }

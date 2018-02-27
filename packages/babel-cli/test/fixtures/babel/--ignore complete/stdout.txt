@@ -1,1 +1,2 @@
 src/foobar/foo.js -> lib/foobar/foo.js
+Successfully compiled 1 file.

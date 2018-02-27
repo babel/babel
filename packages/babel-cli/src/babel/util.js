@@ -46,8 +46,8 @@ export function addSourceMappingUrl(code, loc) {
   return code + "\n//# sourceMappingURL=" + path.basename(loc);
 }
 
-export function log(msg) {
-  if (!commander.quiet) console.log(msg);
+export function log(msg, alwaysLog) {
+  if (alwaysLog === true || !commander.quiet) console.log(msg);
 }
 
 export function transform(filename, code, opts, callback) {
