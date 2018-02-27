@@ -125,3 +125,10 @@ class Bar extends Foo {
 When `Bar.prototype.foo` is defined it triggers the setter on `Foo`. This is a
 case that is very unlikely to appear in production code however it's something
 to keep in mind.
+
+### `spec`
+
+`boolean`, defaults to `false`.
+
+Adds a runtime check to ensure the function created from the class method is not instantiated.
+

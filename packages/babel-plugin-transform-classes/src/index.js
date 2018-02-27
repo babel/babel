@@ -15,8 +15,8 @@ const builtinClasses = new Set([
 ]);
 
 export default function(api, options) {
-  const { loose } = options;
-  const Constructor = loose ? LooseTransformer : VanillaTransformer;
+  const { loose, spec } = options;
+  const Constructor = !spec && loose ? LooseTransformer : VanillaTransformer;
 
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
@@ -53,7 +53,7 @@ export default function(api, options) {
         node[VISITED] = true;
 
         path.replaceWith(
-          new Constructor(path, state.file, builtinClasses).run(),
+          new Constructor(path, state.file, builtinClasses, spec).run(),
         );
 
         if (path.isCallExpression()) {

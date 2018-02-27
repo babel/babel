@@ -63,12 +63,19 @@ const findThisesVisitor = traverse.visitors.merge([
 ]);
 
 export default class ClassTransformer {
-  constructor(path: NodePath, file, builtinClasses: ReadonlySet<string>) {
+  constructor(
+    path: NodePath,
+    file,
+    builtinClasses: ReadonlySet<string>,
+    spec?: boolean,
+  ) {
     this.parent = path.parent;
     this.scope = path.scope;
     this.node = path.node;
     this.path = path;
     this.file = file;
+
+    this.isSpec = spec;
 
     this.clearDescriptors();
 
@@ -191,6 +198,9 @@ export default class ClassTransformer {
     }
 
     const map = defineMap.push(mutatorMap, node, kind, this.file, scope);
+    if (this.isSpec && map.value) {
+      this.addNewMethodChecks(map, scope);
+    }
 
     if (enumerable) {
       map.enumerable = t.booleanLiteral(true);
@@ -620,5 +630,21 @@ export default class ClassTransformer {
         ),
       ),
     );
+  }
+
+  /**
+   * For spec mode, add instanceof check for the function block.
+   */
+
+  addNewMethodChecks(map, scope) {
+    const methodRef = scope.generateUidIdentifierBasedOnNode(map._key);
+    const newMethodCheckCall = t.callExpression(
+      this.file.addHelper("newMethodCheck"),
+      [t.thisExpression(), methodRef],
+    );
+
+    map.value.id = methodRef;
+    map.value.body.body.unshift(t.expressionStatement(newMethodCheckCall));
+    return map;
   }
 }

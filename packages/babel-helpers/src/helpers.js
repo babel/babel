@@ -542,6 +542,14 @@ helpers.newArrowCheck = defineHelper(`
   }
 `);
 
+helpers.newMethodCheck = defineHelper(`
+  export default function _newMethodCheck(innerThis, methodRef) {
+    if (innerThis instanceof methodRef) {
+      throw new TypeError("Cannot instantiate a method");
+    }
+  }
+`);
+
 helpers.objectDestructuringEmpty = defineHelper(`
   export default function _objectDestructuringEmpty(obj) {
     if (obj == null) throw new TypeError("Cannot destructure undefined");
