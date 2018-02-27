@@ -1,5 +1,6 @@
 // @flow
 import { declare } from "@babel/helper-plugin-utils";
+import type { NodePath } from "@babel/traverse";
 import transformClass from "./transformClass";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import nameFunction from "@babel/helper-function-name";
@@ -25,12 +26,12 @@ export default declare((api, options) => {
 
   return {
     visitor: {
-      ExportDefaultDeclaration(path) {
+      ExportDefaultDeclaration(path: NodePath) {
         if (!path.get("declaration").isClassDeclaration()) return;
         splitExportDeclaration(path);
       },
 
-      ClassDeclaration(path) {
+      ClassDeclaration(path: NodePath) {
         const { node } = path;
 
         const ref = node.id || path.scope.generateUidIdentifier("class");
@@ -42,7 +43,7 @@ export default declare((api, options) => {
         );
       },
 
-      ClassExpression(path, state) {
+      ClassExpression(path: NodePath, state: any) {
         const { node } = path;
         if (node[VISITED]) return;
 
