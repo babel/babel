@@ -20,36 +20,36 @@ const transform = require("nodent-transform").transform;
 function transformAsyncToPromises(api, options) {
   let requiresTranspilation;
   const runtime = options.runtime ? options.runtime : null;
-  let opts = {
-          // Code generation options
-          es6target: false,
-          babelTree: true,
-          engine: false,
-          generators: false,
-          promises: true,
-          lazyThenables: false,
-          wrapAwait: true,
-          noRuntime: !runtime,
-          $runtime: runtime,
-          generatedSymbolPrefix: "$",
-          $return: "$return",
-          $error: "$error",
-          $arguments: "$args",
-          $Promise: "Promise",
-          $asyncspawn: "$asyncspawn",
-          $asyncbind: "$asyncbind",
-          $makeThenable: "$makeThenable",
-        }; 
+  const opts = {
+    // Code generation options
+    es6target: false,
+    babelTree: true,
+    engine: false,
+    generators: false,
+    promises: true,
+    lazyThenables: false,
+    wrapAwait: true,
+    noRuntime: !runtime,
+    $runtime: runtime,
+    generatedSymbolPrefix: "$",
+    $return: "$return",
+    $error: "$error",
+    $arguments: "$args",
+    $Promise: "Promise",
+    $asyncspawn: "$asyncspawn",
+    $asyncbind: "$asyncbind",
+    $makeThenable: "$makeThenable",
+  };
 
   if (options.codeGenerationOptions) {
-    let keys = Object.keys(options.codeGenerationOptions);
-    for (let i=0; i<keys.length;i++) {
+    const keys = Object.keys(options.codeGenerationOptions);
+    for (let i = 0; i < keys.length; i++) {
       if (keys[i] in opts) {
         opts[keys[i]] = options.codeGenerationOptions[keys[i]];
-      } 
+      }
     }
   }
-  
+
   return {
     visitor: {
       Program: {
