@@ -4,8 +4,17 @@
 
 Does not type-check its input. For that, you will need to install and set up TypeScript.
 
-Does not support `namespace`s or `const enum`s because those require type information to transpile.
-Also does not support `export =` and `import =`, because those cannot be transpiled to ES.next.
+## Caveats
+
+* Does not support [`namespace`][namespace]s.
+* Does not support [`const enum`][const_enum]s because those require type information to transpile.
+* Does not support [`export =`][exin] and [`import =`][exin], because those cannot be transpiled to ES.next.
+
+## Workarounds
+
+* `namespace`: Migrate to using the `module { }` syntax instead.
+* `const enum`: Remove the `const`, which makes it available at runtime.
+* `export =` \ `import =`: Convert to using `export default` and `export const`.
 
 ## Example
 
@@ -52,3 +61,7 @@ require("@babel/core").transform("code", {
   plugins: ["@babel/plugin-transform-typescript"]
 });
 ```
+
+[const_enum]: https://www.typescriptlang.org/docs/handbook/enums.html#const-enums
+[namespace]: https://www.typescriptlang.org/docs/handbook/namespaces.html
+[exin]: https://www.typescriptlang.org/docs/handbook/modules.html#export--and-import--require
