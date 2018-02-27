@@ -15,7 +15,7 @@ export default function() {
                 [],
                 t.blockStatement([
                   t.toStatement(node),
-                  t.returnStatement(node.id),
+                  t.returnStatement(t.cloneNode(node.id)),
                 ]),
               ),
               [],

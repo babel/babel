@@ -1,3 +1,23 @@
+const es5 = {
+  "es6.array.every": "Array methods / Array.prototype.every",
+  "es6.array.filter": "Array methods / Array.prototype.filter",
+  "es6.array.for-each": "Array methods / Array.prototype.forEach",
+  "es6.array.index-of": "Array methods / Array.prototype.indexOf",
+  "es6.array.is-array": "Array methods / Array.isArray",
+  "es6.array.last-index-of": "Array methods / Array.prototype.lastIndexOf",
+  "es6.array.map": "Array methods / Array.prototype.map",
+  "es6.array.reduce": "Array methods / Array.prototype.reduce",
+  "es6.array.reduce-right": "Array methods / Array.prototype.reduceRight",
+  "es6.array.some": "Array methods / Array.prototype.some",
+  "es6.array.sort": "Array methods / Array.prototype.sort",
+  "es6.date.now": "Date methods / Date.now",
+  "es6.date.to-iso-string": "Date methods / Date.prototype.toISOString",
+  "es6.date.to-json" : "Date methods / Date.prototype.toJSON",
+  "es6.function.bind": "Function.prototype.bind",
+  "es6.string.iterator": "String properties and methods / Property access on strings",
+  "es6.string.trim": "String properties and methods / String.prototype.trim",
+};
+
 const typedArrayMethods = [
   "typed arrays / %TypedArray%.from",
   "typed arrays / %TypedArray%.of",
@@ -203,4 +223,4 @@ const es2017 = {
 
 const proposals = require("./shipped-proposals").builtIns;
 
-module.exports = Object.assign({}, es2015, es2016, es2017, proposals);
+module.exports = Object.assign({}, es5, es2015, es2016, es2017, proposals);

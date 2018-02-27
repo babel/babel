@@ -1,12 +1,11 @@
 {
   "presets": [
     ["../../../../lib", {
-      "configPath": "../fixtures/preset-options/browserslist-package",
+      "configPath": "packages/babel-preset-env/test/fixtures/preset-options/browserslist-package",
       "targets": {
         "chrome": 55
       },
-      "modules": false,
-      "debug": true
+      "modules": false
     }]
   ]
 }

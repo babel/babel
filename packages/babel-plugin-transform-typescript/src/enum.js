@@ -1,3 +1,6 @@
+import assert from "assert";
+import { template } from "@babel/core";
+
 export default function transpileEnum(path, t) {
   const { node } = path;
   if (node.declare) {
@@ -14,25 +17,14 @@ export default function transpileEnum(path, t) {
 
   switch (path.parent.type) {
     case "BlockStatement":
+    case "ExportNamedDeclaration":
     case "Program": {
-      const isGlobal = t.isProgram(path.parent); // && !path.parent.body.some(t.isModuleDeclaration);
+      path.insertAfter(fill);
       if (seen(path.parentPath)) {
-        path.replaceWith(fill);
-      } else {
-        path.replaceWithMultiple([
-          makeVar(node.id, t, isGlobal ? "var" : "let"),
-          fill,
-        ]);
-      }
-      break;
-    }
-
-    case "ExportNamedDeclaration": {
-      path.parentPath.insertAfter(fill);
-      if (seen(path.parentPath.parentPath)) {
         path.remove();
       } else {
-        path.replaceWith(makeVar(node.id, t, "let"));
+        const isGlobal = t.isProgram(path.parent); // && !path.parent.body.some(t.isModuleDeclaration);
+        path.replaceWith(makeVar(node.id, t, isGlobal ? "var" : "let"));
       }
       break;
     }
@@ -42,6 +34,10 @@ export default function transpileEnum(path, t) {
   }
 
   function seen(parentPath: Path<Node>) {
+    if (parentPath.isExportDeclaration()) {
+      return seen(parentPath.parentPath);
+    }
+
     if (parentPath.getData(name)) {
       return true;
     } else {
@@ -55,35 +51,41 @@ function makeVar(id, t, kind): VariableDeclaration {
   return t.variableDeclaration(kind, [t.variableDeclarator(id)]);
 }
 
+const buildEnumWrapper = template(`
+  (function (ID) {
+    ASSIGNMENTS;
+  })(ID || (ID = {}));
+`);
+
+const buildStringAssignment = template(`
+  ENUM["NAME"] = VALUE;
+`);
+
+const buildNumericAssignment = template(`
+  ENUM[ENUM["NAME"] = VALUE] = "NAME";
+`);
+
+const buildEnumMember = (isString, options) =>
+  (isString ? buildStringAssignment : buildNumericAssignment)(options);
+
 /**
  * Generates the statement that fills in the variable declared by the enum.
  * `(function (E) { ... assignments ... })(E || (E = {}));`
  */
 function enumFill(path, t, id) {
   const x = translateEnumValues(path, t);
-  const assignments = x.map(([memberName, memberValue]) => {
-    const inner = t.assignmentExpression(
-      "=",
-      t.memberExpression(id, t.stringLiteral(memberName), /*computed*/ true),
-      memberValue,
-    );
-    const outer = t.assignmentExpression(
-      "=",
-      t.memberExpression(id, inner, /*computed*/ true),
-      t.stringLiteral(memberName),
-    );
-    return t.expressionStatement(outer);
-  });
-
-  // E || (E = {})
-  const callArg = t.logicalExpression(
-    "||",
-    id,
-    t.assignmentExpression("=", id, t.objectExpression([])),
+  const assignments = x.map(([memberName, memberValue]) =>
+    buildEnumMember(t.isStringLiteral(memberValue), {
+      ENUM: t.cloneNode(id),
+      NAME: memberName,
+      VALUE: memberValue,
+    }),
   );
-  const body = t.blockStatement(assignments);
-  const callee = t.functionExpression(null, [id], body);
-  return t.expressionStatement(t.callExpression(callee, [callArg]));
+
+  return buildEnumWrapper({
+    ID: t.cloneNode(id),
+    ASSIGNMENTS: assignments,
+  });
 }
 
 /**
@@ -95,7 +97,7 @@ function enumFill(path, t, id) {
  *     Z = X | Y,
  *   }
  */
-type PreviousEnumMembers = { [name: string]: number | typeof undefined };
+type PreviousEnumMembers = { [name: string]: number | string };
 
 function translateEnumValues(path, t) {
   const seen: PreviousEnumMembers = Object.create(null);
@@ -108,8 +110,15 @@ function translateEnumValues(path, t) {
     if (initializer) {
       const constValue = evaluate(initializer, seen);
       if (constValue !== undefined) {
-        value = t.numericLiteral(constValue);
-        prev = constValue;
+        seen[name] = constValue;
+        if (typeof constValue === "number") {
+          value = t.numericLiteral(constValue);
+          prev = constValue;
+        } else {
+          assert(typeof constValue === "string");
+          value = t.stringLiteral(constValue);
+          prev = undefined;
+        }
       } else {
         value = initializer;
         prev = undefined;
@@ -118,6 +127,7 @@ function translateEnumValues(path, t) {
       if (prev !== undefined) {
         prev++;
         value = t.numericLiteral(prev);
+        seen[name] = prev;
       } else {
         throw path.buildCodeFrameError("Enum member must have initializer.");
       }
@@ -128,10 +138,16 @@ function translateEnumValues(path, t) {
 }
 
 // Based on the TypeScript repository's `evalConstant` in `checker.ts`.
-function evaluate(expr, seen: PreviousEnumMembers) {
+function evaluate(
+  expr,
+  seen: PreviousEnumMembers,
+): number | string | typeof undefined {
+  if (expr.type === "StringLiteral") {
+    return expr.value;
+  }
   return evalConstant(expr);
 
-  function evalConstant(expr) {
+  function evalConstant(expr): number | typeof undefined {
     switch (expr.type) {
       case "UnaryExpression":
         return evalUnaryExpression(expr);
@@ -148,7 +164,10 @@ function evaluate(expr, seen: PreviousEnumMembers) {
     }
   }
 
-  function evalUnaryExpression({ argument, operator }) {
+  function evalUnaryExpression({
+    argument,
+    operator,
+  }): number | typeof undefined {
     const value = evalConstant(argument);
     if (value === undefined) {
       return undefined;
@@ -166,7 +185,7 @@ function evaluate(expr, seen: PreviousEnumMembers) {
     }
   }
 
-  function evalBinaryExpression(expr) {
+  function evalBinaryExpression(expr): number | typeof undefined {
     const left = evalConstant(expr.left);
     if (left === undefined) {
       return undefined;

@@ -259,14 +259,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseTypeParameter(): N.TsTypeParameter {
       const node: N.TsTypeParameter = this.startNode();
       node.name = this.parseIdentifierName(node.start);
-      if (this.eat(tt._extends)) {
-        node.constraint = this.tsParseType();
-      }
-
-      if (this.eat(tt.eq)) {
-        node.default = this.tsParseType();
-      }
-
+      node.constraint = this.tsEatThenParseType(tt._extends);
+      node.default = this.tsEatThenParseType(tt.eq);
       return this.finishNode(node, "TSTypeParameter");
     }
 
@@ -463,8 +457,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseMappedTypeParameter(): N.TsTypeParameter {
       const node: N.TsTypeParameter = this.startNode();
       node.name = this.parseIdentifierName(node.start);
-      this.expect(tt._in);
-      node.constraint = this.tsParseType();
+      node.constraint = this.tsExpectThenParseType(tt._in);
       return this.finishNode(node, "TSTypeParameter");
     }
 
@@ -616,19 +609,30 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return type;
     }
 
-    tsParseTypeOperator(operator: "keyof"): N.TsTypeOperator {
-      const node = this.startNode();
+    tsParseTypeOperator(operator: "keyof" | "unique"): N.TsTypeOperator {
+      const node: N.TsTypeOperator = this.startNode();
       this.expectContextual(operator);
       node.operator = operator;
       node.typeAnnotation = this.tsParseTypeOperatorOrHigher();
       return this.finishNode(node, "TSTypeOperator");
     }
 
+    tsParseInferType(): N.TsInferType {
+      const node = this.startNode();
+      this.expectContextual("infer");
+      const typeParameter = this.startNode();
+      typeParameter.name = this.parseIdentifierName(typeParameter.start);
+      node.typeParameter = this.finishNode(typeParameter, "TypeParameter");
+      return this.finishNode(node, "TSInferType");
+    }
+
     tsParseTypeOperatorOrHigher(): N.TsType {
-      if (this.isContextual("keyof")) {
-        return this.tsParseTypeOperator("keyof");
-      }
-      return this.tsParseArrayTypeOrHigher();
+      const operator = ["keyof", "unique"].find(kw => this.isContextual(kw));
+      return operator
+        ? this.tsParseTypeOperator(operator)
+        : this.isContextual("infer")
+          ? this.tsParseInferType()
+          : this.tsParseArrayTypeOrHigher();
     }
 
     tsParseUnionOrIntersectionType(
@@ -720,26 +724,28 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseTypeOrTypePredicateAnnotation(
       returnToken: TokenType,
     ): N.TsTypeAnnotation {
-      const t: N.TsTypeAnnotation = this.startNode();
-      this.expect(returnToken);
+      return this.tsInType(() => {
+        const t: N.TsTypeAnnotation = this.startNode();
+        this.expect(returnToken);
 
-      const typePredicateVariable =
-        this.tsIsIdentifier() &&
-        this.tsTryParse(this.tsParseTypePredicatePrefix.bind(this));
+        const typePredicateVariable =
+          this.tsIsIdentifier() &&
+          this.tsTryParse(this.tsParseTypePredicatePrefix.bind(this));
 
-      if (!typePredicateVariable) {
-        return this.tsParseTypeAnnotation(/* eatColon */ false, t);
-      }
+        if (!typePredicateVariable) {
+          return this.tsParseTypeAnnotation(/* eatColon */ false, t);
+        }
 
-      const type = this.tsParseTypeAnnotation(/* eatColon */ false);
+        const type = this.tsParseTypeAnnotation(/* eatColon */ false);
 
-      const node: N.TsTypePredicate = this.startNodeAtNode(
-        typePredicateVariable,
-      );
-      node.parameterName = typePredicateVariable;
-      node.typeAnnotation = type;
-      t.typeAnnotation = this.finishNode(node, "TSTypePredicate");
-      return this.finishNode(t, "TSTypeAnnotation");
+        const node: N.TsTypePredicate = this.startNodeAtNode(
+          typePredicateVariable,
+        );
+        node.parameterName = typePredicateVariable;
+        node.typeAnnotation = type;
+        t.typeAnnotation = this.finishNode(node, "TSTypePredicate");
+        return this.finishNode(t, "TSTypeAnnotation");
+      });
     }
 
     tsTryParseTypeOrTypePredicateAnnotation(): ?N.TsTypeAnnotation {
@@ -753,7 +759,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsTryParseType(): ?N.TsType {
-      return this.eat(tt.colon) ? this.tsParseType() : undefined;
+      return this.tsEatThenParseType(tt.colon);
     }
 
     tsParseTypePredicatePrefix(): ?N.Identifier {
@@ -768,32 +774,47 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       eatColon = true,
       t: N.TsTypeAnnotation = this.startNode(),
     ): N.TsTypeAnnotation {
-      if (eatColon) this.expect(tt.colon);
-      t.typeAnnotation = this.tsParseType();
+      this.tsInType(() => {
+        if (eatColon) this.expect(tt.colon);
+        t.typeAnnotation = this.tsParseType();
+      });
       return this.finishNode(t, "TSTypeAnnotation");
     }
 
+    /** Be sure to be in a type context before calling this, using `tsInType`. */
     tsParseType(): N.TsType {
       // Need to set `state.inType` so that we don't parse JSX in a type context.
-      const oldInType = this.state.inType;
-      this.state.inType = true;
-      try {
-        if (this.tsIsStartOfFunctionType()) {
-          return this.tsParseFunctionOrConstructorType("TSFunctionType");
-        }
-        if (this.match(tt._new)) {
-          // As in `new () => Date`
-          return this.tsParseFunctionOrConstructorType("TSConstructorType");
-        }
-        return this.tsParseUnionTypeOrHigher();
-      } finally {
-        this.state.inType = oldInType;
+      assert(this.state.inType);
+      const type = this.tsParseNonConditionalType();
+      if (this.hasPrecedingLineBreak() || !this.eat(tt._extends)) {
+        return type;
       }
+      const node: N.TsConditionalType = this.startNodeAtNode(type);
+      node.checkType = type;
+      node.extendsType = this.tsParseNonConditionalType();
+      this.expect(tt.question);
+      node.trueType = this.tsParseType();
+      this.expect(tt.colon);
+      node.falseType = this.tsParseType();
+      return this.finishNode(node, "TSConditionalType");
+    }
+
+    tsParseNonConditionalType(): N.TsType {
+      if (this.tsIsStartOfFunctionType()) {
+        return this.tsParseFunctionOrConstructorType("TSFunctionType");
+      }
+      if (this.match(tt._new)) {
+        // As in `new () => Date`
+        return this.tsParseFunctionOrConstructorType("TSConstructorType");
+      }
+      return this.tsParseUnionTypeOrHigher();
     }
 
     tsParseTypeAssertion(): N.TsTypeAssertion {
       const node: N.TsTypeAssertion = this.startNode();
-      node.typeAnnotation = this.tsParseType();
+      // Not actually necessary to set state.inType because we never reach here if JSX plugin is enabled,
+      // but need `tsInType` to satisfy the assertion in `tsParseType`.
+      node.typeAnnotation = this.tsInType(() => this.tsParseType());
       this.expectRelational(">");
       node.expression = this.parseMaybeUnary();
       return this.finishNode(node, "TSTypeAssertion");
@@ -801,15 +822,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsTryParseTypeArgumentsInExpression(): ?N.TsTypeParameterInstantiation {
       return this.tsTryParseAndCatch(() => {
-        const res: N.TsTypeParameterInstantiation = this.startNode();
-        this.expectRelational("<");
-        const typeArguments = this.tsParseDelimitedList(
-          "TypeParametersOrArguments",
-          this.tsParseType.bind(this),
-        );
-        this.expectRelational(">");
-        res.params = typeArguments;
-        this.finishNode(res, "TSTypeParameterInstantiation");
+        const res = this.tsParseTypeArguments();
         this.expect(tt.parenL);
         return res;
       });
@@ -853,10 +866,43 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.TsTypeAliasDeclaration {
       node.id = this.parseIdentifier();
       node.typeParameters = this.tsTryParseTypeParameters();
-      this.expect(tt.eq);
-      node.typeAnnotation = this.tsParseType();
+      node.typeAnnotation = this.tsExpectThenParseType(tt.eq);
       this.semicolon();
       return this.finishNode(node, "TSTypeAliasDeclaration");
+    }
+
+    /**
+     * Runs `cb` in a type context.
+     * This should be called one token *before* the first type token,
+     * so that the call to `next()` is run in type context.
+     */
+    tsInType<T>(cb: () => T): T {
+      const oldInType = this.state.inType;
+      this.state.inType = true;
+      try {
+        return cb();
+      } finally {
+        this.state.inType = oldInType;
+      }
+    }
+
+    tsEatThenParseType(token: TokenType): N.TsType | typeof undefined {
+      return !this.match(token) ? undefined : this.tsNextThenParseType();
+    }
+
+    tsExpectThenParseType(token: TokenType): N.TsType {
+      return this.tsDoThenParseType(() => this.expect(token));
+    }
+
+    tsNextThenParseType(): N.TsType {
+      return this.tsDoThenParseType(() => this.next());
+    }
+
+    tsDoThenParseType(cb: () => void): N.TsType {
+      return this.tsInType(() => {
+        cb();
+        return this.tsParseType();
+      });
     }
 
     tsParseEnumMember(): N.TsEnumMember {
@@ -1179,11 +1225,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseTypeArguments(): N.TsTypeParameterInstantiation {
       const node = this.startNode();
-      this.expectRelational("<");
-      node.params = this.tsParseDelimitedList(
-        "TypeParametersOrArguments",
-        this.tsParseType.bind(this),
-      );
+      node.params = this.tsInType(() => {
+        this.expectRelational("<");
+        return this.tsParseDelimitedList(
+          "TypeParametersOrArguments",
+          this.tsParseType.bind(this),
+        );
+      });
       this.expectRelational(">");
       return this.finishNode(node, "TSTypeParameterInstantiation");
     }
@@ -1278,7 +1326,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       startPos: number,
       startLoc: Position,
       noCalls: ?boolean,
-      state: { stop: boolean },
+      state: N.ParseSubscriptState,
     ): N.Expression {
       if (!this.hasPrecedingLineBreak() && this.eat(tt.bang)) {
         const nonNullExpression: N.TsNonNullExpression = this.startNodeAt(
@@ -1349,14 +1397,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (
         nonNull(tt._in.binop) > minPrec &&
         !this.hasPrecedingLineBreak() &&
-        this.eatContextual("as")
+        this.isContextual("as")
       ) {
         const node: N.TsAsExpression = this.startNodeAt(
           leftStartPos,
           leftStartLoc,
         );
         node.expression = left;
-        node.typeAnnotation = this.tsParseType();
+        node.typeAnnotation = this.tsNextThenParseType();
         this.finishNode(node, "TSAsExpression");
         return this.parseExprOp(
           node,
@@ -1424,6 +1472,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         return super.parseExport(node);
       }
+    }
+
+    parseExportDefaultExpression(): N.Expression | N.Declaration {
+      if (
+        this.isContextual("abstract") &&
+        this.lookahead().type === tt._class
+      ) {
+        const cls = this.startNode();
+        this.next(); // Skip "abstract"
+        this.parseClass(cls, true, true);
+        cls.abstract = true;
+        return cls;
+      }
+      return super.parseExportDefaultExpression();
     }
 
     parseStatementContent(
@@ -1629,6 +1691,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseClassProperty(node: N.ClassProperty): N.ClassProperty {
+      if (!node.optional && this.eat(tt.bang)) {
+        node.definite = true;
+      }
+
       const type = this.tsTryParseTypeAnnotation();
       if (type) node.typeAnnotation = type;
       return super.parseClassProperty(node);
@@ -1690,6 +1756,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // `let x: number;`
     parseVarHead(decl: N.VariableDeclarator): void {
       super.parseVarHead(decl);
+      if (decl.id.type === "Identifier" && this.eat(tt.bang)) {
+        decl.definite = true;
+      }
+
       const type = this.tsTryParseTypeAnnotation();
       if (type) {
         decl.id.typeAnnotation = type;
@@ -1852,6 +1922,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           );
         case "TSParameterProperty":
           return super.toAssignable(node, isBinding, contextDescription);
+        case "TSAsExpression":
+          node.expression = this.toAssignable(
+            node.expression,
+            isBinding,
+            contextDescription,
+          );
+          return node;
         default:
           return super.toAssignable(node, isBinding, contextDescription);
       }
@@ -1875,6 +1952,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             isBinding,
             checkClashes,
             "parameter property",
+          );
+          return;
+        case "TSAsExpression":
+          this.checkLVal(
+            expr.expression,
+            isBinding,
+            checkClashes,
+            contextDescription,
           );
           return;
         default:
@@ -1903,7 +1988,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     isClassProperty(): boolean {
-      return this.match(tt.colon) || super.isClassProperty();
+      return (
+        this.match(tt.bang) || this.match(tt.colon) || super.isClassProperty()
+      );
     }
 
     parseMaybeDefault(...args): N.Pattern {

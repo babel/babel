@@ -79,6 +79,10 @@ export default function() {
         if (path.node.declare) path.remove();
       },
 
+      VariableDeclarator({ node }) {
+        if (node.definite) node.definite = null;
+      },
+
       ClassMethod(path) {
         const { node } = path;
 
@@ -114,9 +118,11 @@ export default function() {
             );
           }
 
-          const id = t.identifier(name);
-          const thisDotName = t.memberExpression(t.thisExpression(), id);
-          const assign = t.assignmentExpression("=", thisDotName, id);
+          const assign = t.assignmentExpression(
+            "=",
+            t.memberExpression(t.thisExpression(), t.identifier(name)),
+            t.identifier(name),
+          );
           return t.expressionStatement(assign);
         });
 
@@ -152,7 +158,9 @@ export default function() {
 
         if (node.accessibility) node.accessibility = null;
         if (node.abstract) node.abstract = null;
+        if (node.readonly) node.readonly = null;
         if (node.optional) node.optional = null;
+        if (node.definite) node.definite = null;
         if (node.typeAnnotation) node.typeAnnotation = null;
       },
 
@@ -205,11 +213,19 @@ export default function() {
       },
 
       TSImportEqualsDeclaration(path) {
-        throw path.buildCodeFrameError("`import =` is not supported.");
+        throw path.buildCodeFrameError(
+          "`import =` is not supported by @babel/plugin-transform-typescript\n" +
+            "Please consider using " +
+            "`import <moduleName> from '<moduleName>';` alongside " +
+            "Typescript's --allowSyntheticDefaultImports option.",
+        );
       },
 
       TSExportAssignment(path) {
-        throw path.buildCodeFrameError("`export =` is not supported.");
+        throw path.buildCodeFrameError(
+          "`export =` is not supported by @babel/plugin-transform-typescript\n" +
+            "Please consider using `export <value>;`.",
+        );
       },
 
       TSTypeAssertion(path) {

@@ -1,0 +1,14 @@
+import type Def from "foo";
+import type {named} from "foo";
+import type Def, {named} from "foo";
+import type switch from "foo";
+import type { switch } from "foo";
+import type { foo, bar } from "baz";
+import type from "foo";
+import type, { foo } from "bar";
+import typeof foo from "bar";
+import typeof switch from "foo";
+import typeof { switch } from "foo";
+import typeof { foo as bar } from "baz";
+import typeof * as ns from "foo";
+import typeof * as switch from "foo";

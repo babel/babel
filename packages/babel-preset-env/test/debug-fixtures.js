@@ -76,10 +76,19 @@ const buildTest = opts => {
 };
 
 describe("debug output", () => {
+  let cwd;
+
+  beforeEach(() => {
+    cwd = process.cwd();
+  });
+
+  afterEach(() => {
+    process.chdir(cwd);
+  });
+
   fs.readdirSync(fixtureLoc).forEach(testName => {
     if (testName.slice(0, 1) === ".") return;
     const testLoc = path.join(fixtureLoc, testName);
-    if (testName.slice(0, 1) === ".") return;
 
     const opts = {
       args: ["src", "--out-dir", "lib"],

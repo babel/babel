@@ -184,6 +184,57 @@ describe("@babel/code-frame", function() {
     );
   });
 
+  it("opts.linesAbove no lines above", function() {
+    const rawLines = [
+      "class Foo {",
+      "  constructor() {",
+      "    console.log(arguments);",
+      "  }",
+      "};",
+    ].join("\n");
+    assert.equal(
+      codeFrameColumns(rawLines, { start: { line: 2 } }, { linesAbove: 0 }),
+      [
+        "> 2 |   constructor() {",
+        "  3 |     console.log(arguments);",
+        "  4 |   }",
+        "  5 | };",
+      ].join("\n"),
+    );
+  });
+
+  it("opts.linesBelow no lines below", function() {
+    const rawLines = [
+      "class Foo {",
+      "  constructor() {",
+      "    console.log(arguments);",
+      "  }",
+      "};",
+    ].join("\n");
+    assert.equal(
+      codeFrameColumns(rawLines, { start: { line: 2 } }, { linesBelow: 0 }),
+      ["  1 | class Foo {", "> 2 |   constructor() {"].join("\n"),
+    );
+  });
+
+  it("opts.linesBelow single line", function() {
+    const rawLines = [
+      "class Foo {",
+      "  constructor() {",
+      "    console.log(arguments);",
+      "  }",
+      "};",
+    ].join("\n");
+    assert.equal(
+      codeFrameColumns(
+        rawLines,
+        { start: { line: 2 } },
+        { linesAbove: 0, linesBelow: 0 },
+      ),
+      ["> 2 |   constructor() {"].join("\n"),
+    );
+  });
+
   it("opts.forceColor", function() {
     const marker = chalk.red.bold;
     const gutter = chalk.grey;
@@ -291,6 +342,103 @@ describe("@babel/code-frame", function() {
     assert.equal(
       codeFrameColumns(rawLines, { start: { line: 2 }, end: { line: 4 } }),
       [
+        "  1 | class Foo {",
+        "> 2 |   constructor() {",
+        "> 3 |     console.log(arguments);",
+        "> 4 |   }",
+        "  5 | };",
+      ].join("\n"),
+    );
+  });
+
+  it("opts.message", function() {
+    const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
+    assert.equal(
+      codeFrameColumns(
+        rawLines,
+        { start: { line: 2, column: 16 } },
+        {
+          message: "Missing {",
+        },
+      ),
+      [
+        "  1 | class Foo {",
+        "> 2 |   constructor()",
+        "    |                ^ Missing {",
+        "  3 | };",
+      ].join("\n"),
+    );
+  });
+
+  it("opts.message without column", function() {
+    const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
+    assert.equal(
+      codeFrameColumns(
+        rawLines,
+        { start: { line: 2 } },
+        {
+          message: "Missing {",
+        },
+      ),
+      [
+        "  Missing {",
+        "  1 | class Foo {",
+        "> 2 |   constructor()",
+        "  3 | };",
+      ].join("\n"),
+    );
+  });
+
+  it("opts.message with multiple lines", function() {
+    const rawLines = [
+      "class Foo {",
+      "  constructor() {",
+      "    console.log(arguments);",
+      "  }",
+      "};",
+    ].join("\n");
+    assert.equal(
+      codeFrameColumns(
+        rawLines,
+        {
+          start: { line: 2, column: 17 },
+          end: { line: 4, column: 3 },
+        },
+        {
+          message: "something about the constructor body",
+        },
+      ),
+      [
+        "  1 | class Foo {",
+        "> 2 |   constructor() {",
+        "    |                 ^",
+        "> 3 |     console.log(arguments);",
+        "    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+        "> 4 |   }",
+        "    | ^^^ something about the constructor body",
+        "  5 | };",
+      ].join("\n"),
+    );
+  });
+
+  it("opts.message with multiple lines without columns", function() {
+    const rawLines = [
+      "class Foo {",
+      "  constructor() {",
+      "    console.log(arguments);",
+      "  }",
+      "};",
+    ].join("\n");
+    assert.equal(
+      codeFrameColumns(
+        rawLines,
+        { start: { line: 2 }, end: { line: 4 } },
+        {
+          message: "something about the constructor body",
+        },
+      ),
+      [
+        "  something about the constructor body",
         "  1 | class Foo {",
         "> 2 |   constructor() {",
         "> 3 |     console.log(arguments);",

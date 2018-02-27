@@ -256,6 +256,28 @@ export function tsPrintUnionOrIntersectionType(node, sep) {
   });
 }
 
+export function TSConditionalType(node) {
+  this.print(node.checkType);
+  this.space();
+  this.word("extends");
+  this.space();
+  this.print(node.extendsType);
+  this.space();
+  this.token("?");
+  this.space();
+  this.print(node.trueType);
+  this.space();
+  this.token(":");
+  this.space();
+  this.print(node.falseType);
+}
+
+export function TSInferType(node) {
+  this.token("infer");
+  this.space();
+  this.print(node.typeParameter);
+}
+
 export function TSParenthesizedType(node) {
   this.token("(");
   this.print(node.typeAnnotation, node);

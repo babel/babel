@@ -34,8 +34,14 @@ export default function() {
             t.expressionStatement(t.assignmentExpression("=", temp, left)),
           );
         }
-        nodes.push(buildDefaultsCallExpression(path.node, temp || left, file));
-        if (temp) nodes.push(temp);
+        nodes.push(
+          buildDefaultsCallExpression(
+            path.node,
+            t.cloneNode(temp || left),
+            file,
+          ),
+        );
+        if (temp) nodes.push(t.cloneNode(temp));
 
         path.replaceWithMultiple(nodes);
       },

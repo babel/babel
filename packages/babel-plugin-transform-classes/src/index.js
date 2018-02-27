@@ -2,7 +2,17 @@ import LooseTransformer from "./loose";
 import VanillaTransformer from "./vanilla";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import nameFunction from "@babel/helper-function-name";
+import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import { types as t } from "@babel/core";
+import globals from "globals";
+
+const getBuiltinClasses = category =>
+  Object.keys(globals[category]).filter(name => /^[A-Z]/.test(name));
+
+const builtinClasses = new Set([
+  ...getBuiltinClasses("builtin"),
+  ...getBuiltinClasses("browser"),
+]);
 
 export default function(api, options) {
   const { loose } = options;
@@ -15,19 +25,7 @@ export default function(api, options) {
     visitor: {
       ExportDefaultDeclaration(path) {
         if (!path.get("declaration").isClassDeclaration()) return;
-
-        const { node } = path;
-        const ref =
-          node.declaration.id || path.scope.generateUidIdentifier("class");
-        node.declaration.id = ref;
-
-        // Split the class declaration and the export into two separate statements.
-        path.replaceWith(node.declaration);
-        path.insertAfter(
-          t.exportNamedDeclaration(null, [
-            t.exportSpecifier(ref, t.identifier("default")),
-          ]),
-        );
+        splitExportDeclaration(path);
       },
 
       ClassDeclaration(path) {
@@ -54,7 +52,9 @@ export default function(api, options) {
 
         node[VISITED] = true;
 
-        path.replaceWith(new Constructor(path, state.file).run());
+        path.replaceWith(
+          new Constructor(path, state.file, builtinClasses).run(),
+        );
 
         if (path.isCallExpression()) {
           annotateAsPure(path);

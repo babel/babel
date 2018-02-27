@@ -2,14 +2,12 @@
 
 Compile [Unicode property escapes](https://github.com/mathiasbynens/regexpu-core/blob/master/property-escapes.md) (`\p{…}` and `\P{…}`) in Unicode regular expressions to ES5 or ES6 that works in today’s environments.
 
-**Note:** the Unicode property escape syntax is non-standard and may or may not reflect what eventually gets specified.
-
 [Here’s an online demo.](https://mothereff.in/regexpu#input=var+regex+%3D+/%5Cp%7BScript_Extensions%3DGreek%7D/u%3B&unicodePropertyEscape=1)
 
 ## Installation
 
 ```sh
-npm install @babel/plugin-proposal-unicode-property-regex
+npm install --save-dev @babel/plugin-proposal-unicode-property-regex
 ```
 
 ## Usage

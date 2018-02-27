@@ -10,7 +10,6 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-constants { "ie":"10" }
   transform-arrow-functions { "ie":"10" }
   transform-block-scoped-functions { "ie":"10" }
   transform-block-scoping { "ie":"10" }
@@ -33,10 +32,12 @@ Using plugins:
   transform-regenerator { "ie":"10" }
   transform-exponentiation-operator { "ie":"10", "node":"6" }
   transform-async-to-generator { "chrome":"54", "ie":"10", "node":"6" }
+  transform-dotall-regex { "chrome":"54", "ie":"10", "node":"6" }
 
 Using polyfills with `entry` option:
 
 [src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+  es6.array.sort { "chrome":"54", "node":"6" }
   es6.typed.array-buffer { "ie":"10", "node":"6" }
   es6.typed.int8-array { "ie":"10", "node":"6" }
   es6.typed.uint8-array { "ie":"10", "node":"6" }

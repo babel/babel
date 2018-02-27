@@ -148,8 +148,8 @@ function parseWithCodeFrame(code: string, parserOpts: {}): BabelNodeFile {
   } catch (err) {
     const loc = err.loc;
     if (loc) {
-      err.loc = null;
       err.message += "\n" + codeFrameColumns(code, { start: loc });
+      err.code = "BABEL_TEMPLATE_PARSE_ERROR";
     }
     throw err;
   }

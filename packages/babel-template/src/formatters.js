@@ -12,7 +12,7 @@ function makeStatementFormatter<T>(
   return {
     // We need to prepend a ";" to force statement parsing so that
     // ExpressionStatement strings won't be parsed as directives.
-    // Alonside that, we also prepend a comment so that when a syntax error
+    // Alongside that, we also prepend a comment so that when a syntax error
     // is encountered, the user will be less likely to get confused about
     // where the random semicolon came from.
     code: str => `/* @babel/template */;\n${str}`,
@@ -54,16 +54,17 @@ export const statement: Formatter<BabelNodeStatement> = makeStatementFormatter(
 
 export const expression: Formatter<BabelNodeExpression> = {
   code: str => `(\n${str}\n)`,
-  validate: (ast: BabelNodeFile) => {
-    const { program } = ast;
+  validate: ({ program }) => {
     if (program.body.length > 1) {
       throw new Error("Found multiple statements but wanted one");
     }
+    // $FlowFixMe
     const expression = program.body[0].expression;
     if (expression.start === 0) {
       throw new Error("Parse result included parens.");
     }
   },
+  // $FlowFixMe
   unwrap: ast => ast.program.body[0].expression,
 };
 

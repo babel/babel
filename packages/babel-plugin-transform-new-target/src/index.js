@@ -54,7 +54,11 @@ export default function() {
 
           path.replaceWith(
             t.conditionalExpression(
-              t.binaryExpression("instanceof", t.thisExpression(), node.id),
+              t.binaryExpression(
+                "instanceof",
+                t.thisExpression(),
+                t.cloneNode(node.id),
+              ),
               constructor,
               scope.buildUndefinedNode(),
             ),

@@ -9,9 +9,6 @@ npm install --save-dev @babel/types
 ```
 
 ## API
-
-<!-- begin generated section -->
-
 ### anyTypeAnnotation
 ```javascript
 t.anyTypeAnnotation()
@@ -19,7 +16,7 @@ t.anyTypeAnnotation()
 
 See also `t.isAnyTypeAnnotation(node, opts)` and `t.assertAnyTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -59,9 +56,9 @@ t.arrayTypeAnnotation(elementType)
 
 See also `t.isArrayTypeAnnotation(node, opts)` and `t.assertArrayTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
- - `elementType` (required)
+ - `elementType`: `FlowType` (required)
 
 ---
 
@@ -137,7 +134,7 @@ See also `t.isBinaryExpression(node, opts)` and `t.assertBinaryExpression(node, 
 
 Aliases: `Binary`, `Expression`
 
- - `operator`: `'+' | '-' | '/' | '%' | '*' | '**' | '&' | '|' | '>>' | '>>>' | '<<' | '^' | '==' | '===' | '!=' | '!==' | 'in' | 'instanceof' | '>' | '<' | '>=' | '<='` (required)
+ - `operator`: `"+" | "-" | "/" | "%" | "*" | "**" | "&" | "|" | ">>" | ">>>" | "<<" | "^" | "==" | "===" | "!=" | "!==" | "in" | "instanceof" | ">" | "<" | ">=" | "<="` (required)
  - `left`: `Expression` (required)
  - `right`: `Expression` (required)
 
@@ -191,8 +188,9 @@ t.booleanLiteralTypeAnnotation()
 
 See also `t.isBooleanLiteralTypeAnnotation(node, opts)` and `t.assertBooleanLiteralTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
+ - `value`: `boolean` (default: `null`)
 
 ---
 
@@ -203,7 +201,7 @@ t.booleanTypeAnnotation()
 
 See also `t.isBooleanTypeAnnotation(node, opts)` and `t.assertBooleanTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -277,7 +275,7 @@ Aliases: `Scopable`, `Class`, `Statement`, `Declaration`, `Pureish`
  - `decorators`: `Array<Decorator>` (default: `null`)
  - `abstract`: `boolean` (default: `null`)
  - `declare`: `boolean` (default: `null`)
- - `implements`: `Array<TSExpressionWithTypeArguments | FlowClassImplements>` (default: `null`)
+ - `implements`: `Array<TSExpressionWithTypeArguments | ClassImplements>` (default: `null`)
  - `mixins` (default: `null`)
  - `superTypeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
  - `typeParameters`: `TypeParameterDeclaration | TSTypeParameterDeclaration | Noop` (default: `null`)
@@ -297,7 +295,7 @@ Aliases: `Scopable`, `Class`, `Expression`, `Pureish`
  - `superClass`: `Expression` (default: `null`)
  - `body`: `ClassBody` (required)
  - `decorators`: `Array<Decorator>` (default: `null`)
- - `implements`: `Array<TSExpressionWithTypeArguments | FlowClassImplements>` (default: `null`)
+ - `implements`: `Array<TSExpressionWithTypeArguments | ClassImplements>` (default: `null`)
  - `mixins` (default: `null`)
  - `superTypeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
  - `typeParameters`: `TypeParameterDeclaration | TSTypeParameterDeclaration | Noop` (default: `null`)
@@ -313,8 +311,8 @@ See also `t.isClassImplements(node, opts)` and `t.assertClassImplements(node, op
 
 Aliases: `Flow`
 
- - `id` (required)
- - `typeParameters` (required)
+ - `id`: `Identifier` (required)
+ - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
 
 ---
 
@@ -354,13 +352,14 @@ See also `t.isClassProperty(node, opts)` and `t.assertClassProperty(node, opts)`
 
 Aliases: `Property`
 
- - `key` (required)
+ - `key`: `Identifier | StringLiteral | NumericLiteral | Expression` (required)
  - `value`: `Expression` (default: `null`)
  - `typeAnnotation`: `TypeAnnotation | TSTypeAnnotation | Noop` (default: `null`)
  - `decorators`: `Array<Decorator>` (default: `null`)
  - `computed`: `boolean` (default: `false`)
  - `abstract`: `boolean` (default: `null`)
  - `accessibility`: `"public" | "private" | "protected"` (default: `null`)
+ - `definite`: `boolean` (default: `null`)
  - `optional`: `boolean` (default: `null`)
  - `readonly`: `boolean` (default: `null`)
  - `static`: `boolean` (default: `null`)
@@ -416,10 +415,11 @@ See also `t.isDeclareClass(node, opts)` and `t.assertDeclareClass(node, opts)`.
 
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
- - `id` (required)
- - `typeParameters` (required)
- - `extends` (required)
- - `body` (required)
+ - `id`: `Identifier` (required)
+ - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
+ - `extends`: `Array<InterfaceExtends>` (default: `null`)
+ - `body`: `ObjectTypeAnnotation` (required)
+ - `mixins`: `Array<InterfaceExtends>` (default: `null`)
 
 ---
 
@@ -432,7 +432,8 @@ See also `t.isDeclareExportAllDeclaration(node, opts)` and `t.assertDeclareExpor
 
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
- - `source` (required)
+ - `source`: `StringLiteral` (required)
+ - `exportKind`: `["type","value"]` (default: `null`)
 
 ---
 
@@ -445,9 +446,10 @@ See also `t.isDeclareExportDeclaration(node, opts)` and `t.assertDeclareExportDe
 
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
- - `declaration` (required)
- - `specifiers` (required)
- - `source` (required)
+ - `declaration`: `Flow` (default: `null`)
+ - `specifiers`: `Array<ExportSpecifier | ExportNamespaceSpecifier>` (default: `null`)
+ - `source`: `StringLiteral` (default: `null`)
+ - `default`: `boolean` (default: `null`)
 
 ---
 
@@ -460,7 +462,8 @@ See also `t.isDeclareFunction(node, opts)` and `t.assertDeclareFunction(node, op
 
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
- - `id` (required)
+ - `id`: `Identifier` (required)
+ - `predicate`: `DeclaredPredicate` (default: `null`)
 
 ---
 
@@ -473,24 +476,26 @@ See also `t.isDeclareInterface(node, opts)` and `t.assertDeclareInterface(node, 
 
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
- - `id` (required)
- - `typeParameters` (required)
- - `extends` (required)
- - `body` (required)
+ - `id`: `Identifier` (required)
+ - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
+ - `extends`: `InterfaceExtends` (default: `null`)
+ - `body`: `ObjectTypeAnnotation` (required)
+ - `mixins`: `Array<Flow>` (default: `null`)
 
 ---
 
 ### declareModule
 ```javascript
-t.declareModule(id, body)
+t.declareModule(id, body, kind)
 ```
 
 See also `t.isDeclareModule(node, opts)` and `t.assertDeclareModule(node, opts)`.
 
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
- - `id` (required)
- - `body` (required)
+ - `id`: `Identifier | StringLiteral` (required)
+ - `body`: `BlockStatement` (required)
+ - `kind`: `"CommonJS" | "ES"` (default: `null`)
 
 ---
 
@@ -503,7 +508,7 @@ See also `t.isDeclareModuleExports(node, opts)` and `t.assertDeclareModuleExport
 
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
- - `typeAnnotation` (required)
+ - `typeAnnotation`: `TypeAnnotation` (required)
 
 ---
 
@@ -516,9 +521,9 @@ See also `t.isDeclareOpaqueType(node, opts)` and `t.assertDeclareOpaqueType(node
 
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
- - `id` (required)
- - `typeParameters` (required)
- - `supertype` (required)
+ - `id`: `Identifier` (required)
+ - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
+ - `supertype`: `FlowType` (default: `null`)
 
 ---
 
@@ -531,9 +536,9 @@ See also `t.isDeclareTypeAlias(node, opts)` and `t.assertDeclareTypeAlias(node, 
 
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
- - `id` (required)
- - `typeParameters` (required)
- - `right` (required)
+ - `id`: `Identifier` (required)
+ - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
+ - `right`: `FlowType` (required)
 
 ---
 
@@ -546,7 +551,7 @@ See also `t.isDeclareVariable(node, opts)` and `t.assertDeclareVariable(node, op
 
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
- - `id` (required)
+ - `id`: `Identifier` (required)
 
 ---
 
@@ -559,7 +564,7 @@ See also `t.isDeclaredPredicate(node, opts)` and `t.assertDeclaredPredicate(node
 
 Aliases: `Flow`, `FlowPredicate`
 
- - `value` (required)
+ - `value`: `Flow` (required)
 
 ---
 
@@ -642,7 +647,7 @@ t.emptyTypeAnnotation()
 
 See also `t.isEmptyTypeAnnotation(node, opts)` and `t.assertEmptyTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -654,7 +659,7 @@ t.existsTypeAnnotation()
 
 See also `t.isExistsTypeAnnotation(node, opts)` and `t.assertExistsTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
 
 ---
@@ -859,12 +864,12 @@ t.functionTypeAnnotation(typeParameters, params, rest, returnType)
 
 See also `t.isFunctionTypeAnnotation(node, opts)` and `t.assertFunctionTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
- - `typeParameters` (required)
- - `params` (required)
- - `rest` (required)
- - `returnType` (required)
+ - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
+ - `params`: `Array<FunctionTypeParam>` (required)
+ - `rest`: `FunctionTypeParam` (default: `null`)
+ - `returnType`: `FlowType` (required)
 
 ---
 
@@ -877,8 +882,9 @@ See also `t.isFunctionTypeParam(node, opts)` and `t.assertFunctionTypeParam(node
 
 Aliases: `Flow`
 
- - `name` (required)
- - `typeAnnotation` (required)
+ - `name`: `Identifier` (default: `null`)
+ - `typeAnnotation`: `FlowType` (required)
+ - `optional`: `boolean` (default: `null`)
 
 ---
 
@@ -889,10 +895,10 @@ t.genericTypeAnnotation(id, typeParameters)
 
 See also `t.isGenericTypeAnnotation(node, opts)` and `t.assertGenericTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
- - `id` (required)
- - `typeParameters` (required)
+ - `id`: `Identifier` (required)
+ - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
 
 ---
 
@@ -990,7 +996,7 @@ Aliases: `ModuleSpecifier`
 
  - `local`: `Identifier` (required)
  - `imported`: `Identifier` (required)
- - `importKind`: `null | 'type' | 'typeof'` (default: `null`)
+ - `importKind`: `null | "type" | "typeof"` (default: `null`)
 
 ---
 
@@ -1015,10 +1021,11 @@ See also `t.isInterfaceDeclaration(node, opts)` and `t.assertInterfaceDeclaratio
 
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
- - `id` (required)
- - `typeParameters` (required)
- - `extends` (required)
- - `body` (required)
+ - `id`: `Identifier` (required)
+ - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
+ - `extends`: `Array<InterfaceExtends>` (required)
+ - `body`: `ObjectTypeAnnotation` (required)
+ - `mixins`: `Array<InterfaceExtends>` (default: `null`)
 
 ---
 
@@ -1031,8 +1038,8 @@ See also `t.isInterfaceExtends(node, opts)` and `t.assertInterfaceExtends(node, 
 
 Aliases: `Flow`
 
- - `id` (required)
- - `typeParameters` (required)
+ - `id`: `Identifier` (required)
+ - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
 
 ---
 
@@ -1043,15 +1050,15 @@ t.intersectionTypeAnnotation(types)
 
 See also `t.isIntersectionTypeAnnotation(node, opts)` and `t.assertIntersectionTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
- - `types` (required)
+ - `types`: `Array<FlowType>` (required)
 
 ---
 
 ### jSXAttribute
 ```javascript
-t.jSXAttribute(name, value)
+t.jsxAttribute(name, value)
 ```
 
 See also `t.isJSXAttribute(node, opts)` and `t.assertJSXAttribute(node, opts)`.
@@ -1065,7 +1072,7 @@ Aliases: `JSX`, `Immutable`
 
 ### jSXClosingElement
 ```javascript
-t.jSXClosingElement(name)
+t.jsxClosingElement(name)
 ```
 
 See also `t.isJSXClosingElement(node, opts)` and `t.assertJSXClosingElement(node, opts)`.
@@ -1078,7 +1085,7 @@ Aliases: `JSX`, `Immutable`
 
 ### jSXClosingFragment
 ```javascript
-t.jSXClosingFragment()
+t.jsxClosingFragment()
 ```
 
 See also `t.isJSXClosingFragment(node, opts)` and `t.assertJSXClosingFragment(node, opts)`.
@@ -1090,7 +1097,7 @@ Aliases: `JSX`, `Immutable`
 
 ### jSXElement
 ```javascript
-t.jSXElement(openingElement, closingElement, children, selfClosing)
+t.jsxElement(openingElement, closingElement, children, selfClosing)
 ```
 
 See also `t.isJSXElement(node, opts)` and `t.assertJSXElement(node, opts)`.
@@ -1106,19 +1113,19 @@ Aliases: `JSX`, `Immutable`, `Expression`
 
 ### jSXEmptyExpression
 ```javascript
-t.jSXEmptyExpression()
+t.jsxEmptyExpression()
 ```
 
 See also `t.isJSXEmptyExpression(node, opts)` and `t.assertJSXEmptyExpression(node, opts)`.
 
-Aliases: `JSX`, `Expression`
+Aliases: `JSX`
 
 
 ---
 
 ### jSXExpressionContainer
 ```javascript
-t.jSXExpressionContainer(expression)
+t.jsxExpressionContainer(expression)
 ```
 
 See also `t.isJSXExpressionContainer(node, opts)` and `t.assertJSXExpressionContainer(node, opts)`.
@@ -1131,7 +1138,7 @@ Aliases: `JSX`, `Immutable`
 
 ### jSXFragment
 ```javascript
-t.jSXFragment(openingFragment, closingFragment, children)
+t.jsxFragment(openingFragment, closingFragment, children)
 ```
 
 See also `t.isJSXFragment(node, opts)` and `t.assertJSXFragment(node, opts)`.
@@ -1146,12 +1153,12 @@ Aliases: `JSX`, `Immutable`, `Expression`
 
 ### jSXIdentifier
 ```javascript
-t.jSXIdentifier(name)
+t.jsxIdentifier(name)
 ```
 
 See also `t.isJSXIdentifier(node, opts)` and `t.assertJSXIdentifier(node, opts)`.
 
-Aliases: `JSX`, `Expression`
+Aliases: `JSX`
 
  - `name`: `string` (required)
 
@@ -1159,12 +1166,12 @@ Aliases: `JSX`, `Expression`
 
 ### jSXMemberExpression
 ```javascript
-t.jSXMemberExpression(object, property)
+t.jsxMemberExpression(object, property)
 ```
 
 See also `t.isJSXMemberExpression(node, opts)` and `t.assertJSXMemberExpression(node, opts)`.
 
-Aliases: `JSX`, `Expression`
+Aliases: `JSX`
 
  - `object`: `JSXMemberExpression | JSXIdentifier` (required)
  - `property`: `JSXIdentifier` (required)
@@ -1173,7 +1180,7 @@ Aliases: `JSX`, `Expression`
 
 ### jSXNamespacedName
 ```javascript
-t.jSXNamespacedName(namespace, name)
+t.jsxNamespacedName(namespace, name)
 ```
 
 See also `t.isJSXNamespacedName(node, opts)` and `t.assertJSXNamespacedName(node, opts)`.
@@ -1187,7 +1194,7 @@ Aliases: `JSX`
 
 ### jSXOpeningElement
 ```javascript
-t.jSXOpeningElement(name, attributes, selfClosing)
+t.jsxOpeningElement(name, attributes, selfClosing)
 ```
 
 See also `t.isJSXOpeningElement(node, opts)` and `t.assertJSXOpeningElement(node, opts)`.
@@ -1202,7 +1209,7 @@ Aliases: `JSX`, `Immutable`
 
 ### jSXOpeningFragment
 ```javascript
-t.jSXOpeningFragment()
+t.jsxOpeningFragment()
 ```
 
 See also `t.isJSXOpeningFragment(node, opts)` and `t.assertJSXOpeningFragment(node, opts)`.
@@ -1214,7 +1221,7 @@ Aliases: `JSX`, `Immutable`
 
 ### jSXSpreadAttribute
 ```javascript
-t.jSXSpreadAttribute(argument)
+t.jsxSpreadAttribute(argument)
 ```
 
 See also `t.isJSXSpreadAttribute(node, opts)` and `t.assertJSXSpreadAttribute(node, opts)`.
@@ -1227,7 +1234,7 @@ Aliases: `JSX`
 
 ### jSXSpreadChild
 ```javascript
-t.jSXSpreadChild(expression)
+t.jsxSpreadChild(expression)
 ```
 
 See also `t.isJSXSpreadChild(node, opts)` and `t.assertJSXSpreadChild(node, opts)`.
@@ -1240,7 +1247,7 @@ Aliases: `JSX`, `Immutable`
 
 ### jSXText
 ```javascript
-t.jSXText(value)
+t.jsxText(value)
 ```
 
 See also `t.isJSXText(node, opts)` and `t.assertJSXText(node, opts)`.
@@ -1274,7 +1281,7 @@ See also `t.isLogicalExpression(node, opts)` and `t.assertLogicalExpression(node
 
 Aliases: `Binary`, `Expression`
 
- - `operator`: `'||' | '&&' | '??'` (required)
+ - `operator`: `"||" | "&&" | "??"` (required)
  - `left`: `Expression` (required)
  - `right`: `Expression` (required)
 
@@ -1317,7 +1324,7 @@ t.mixedTypeAnnotation()
 
 See also `t.isMixedTypeAnnotation(node, opts)` and `t.assertMixedTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -1367,7 +1374,7 @@ t.nullLiteralTypeAnnotation()
 
 See also `t.isNullLiteralTypeAnnotation(node, opts)` and `t.assertNullLiteralTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -1379,9 +1386,9 @@ t.nullableTypeAnnotation(typeAnnotation)
 
 See also `t.isNullableTypeAnnotation(node, opts)` and `t.assertNullableTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
- - `typeAnnotation` (required)
+ - `typeAnnotation`: `FlowType` (required)
 
 ---
 
@@ -1392,8 +1399,9 @@ t.numberLiteralTypeAnnotation()
 
 See also `t.isNumberLiteralTypeAnnotation(node, opts)` and `t.assertNumberLiteralTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
+ - `value`: `number` (default: `null`)
 
 ---
 
@@ -1404,7 +1412,7 @@ t.numberTypeAnnotation()
 
 See also `t.isNumberTypeAnnotation(node, opts)` and `t.assertNumberTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -1496,11 +1504,12 @@ t.objectTypeAnnotation(properties, indexers, callProperties)
 
 See also `t.isObjectTypeAnnotation(node, opts)` and `t.assertObjectTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
- - `properties` (required)
- - `indexers` (required)
- - `callProperties` (required)
+ - `properties`: `Array<ObjectTypeProperty | ObjectTypeSpreadProperty>` (required)
+ - `indexers`: `Array<ObjectTypeIndexer>` (default: `null`)
+ - `callProperties`: `Array<ObjectTypeCallProperty>` (default: `null`)
+ - `exact`: `boolean` (default: `null`)
 
 ---
 
@@ -1513,36 +1522,43 @@ See also `t.isObjectTypeCallProperty(node, opts)` and `t.assertObjectTypeCallPro
 
 Aliases: `Flow`, `UserWhitespacable`
 
- - `value` (required)
+ - `value`: `FlowType` (required)
+ - `static`: `boolean` (default: `null`)
 
 ---
 
 ### objectTypeIndexer
 ```javascript
-t.objectTypeIndexer(id, key, value)
+t.objectTypeIndexer(id, key, value, variance)
 ```
 
 See also `t.isObjectTypeIndexer(node, opts)` and `t.assertObjectTypeIndexer(node, opts)`.
 
 Aliases: `Flow`, `UserWhitespacable`
 
- - `id` (required)
- - `key` (required)
- - `value` (required)
+ - `id`: `Identifier` (default: `null`)
+ - `key`: `FlowType` (required)
+ - `value`: `FlowType` (required)
+ - `variance`: `Variance` (default: `null`)
+ - `static`: `boolean` (default: `null`)
 
 ---
 
 ### objectTypeProperty
 ```javascript
-t.objectTypeProperty(key, value)
+t.objectTypeProperty(key, value, variance)
 ```
 
 See also `t.isObjectTypeProperty(node, opts)` and `t.assertObjectTypeProperty(node, opts)`.
 
 Aliases: `Flow`, `UserWhitespacable`
 
- - `key` (required)
- - `value` (required)
+ - `key`: `Identifier` (required)
+ - `value`: `FlowType` (required)
+ - `variance`: `Variance` (default: `null`)
+ - `kind`: `"init" | "get" | "set"` (default: `null`)
+ - `optional`: `boolean` (default: `null`)
+ - `static`: `boolean` (default: `null`)
 
 ---
 
@@ -1555,7 +1571,7 @@ See also `t.isObjectTypeSpreadProperty(node, opts)` and `t.assertObjectTypeSprea
 
 Aliases: `Flow`, `UserWhitespacable`
 
- - `argument` (required)
+ - `argument`: `FlowType` (required)
 
 ---
 
@@ -1568,10 +1584,42 @@ See also `t.isOpaqueType(node, opts)` and `t.assertOpaqueType(node, opts)`.
 
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
- - `id` (required)
- - `typeParameters` (required)
- - `supertype` (required)
- - `impltype` (required)
+ - `id`: `Identifier` (required)
+ - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
+ - `supertype`: `FlowType` (default: `null`)
+ - `impltype`: `FlowType` (required)
+
+---
+
+### optionalCallExpression
+```javascript
+t.optionalCallExpression(callee, arguments, optional)
+```
+
+See also `t.isOptionalCallExpression(node, opts)` and `t.assertOptionalCallExpression(node, opts)`.
+
+Aliases: `Expression`
+
+ - `callee`: `Expression` (required)
+ - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
+ - `optional`: `boolean` (required)
+ - `typeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
+
+---
+
+### optionalMemberExpression
+```javascript
+t.optionalMemberExpression(object, property, computed, optional)
+```
+
+See also `t.isOptionalMemberExpression(node, opts)` and `t.assertOptionalMemberExpression(node, opts)`.
+
+Aliases: `Expression`
+
+ - `object`: `Expression` (required)
+ - `property`: `any` (required)
+ - `computed`: `boolean` (default: `false`)
+ - `optional`: `boolean` (required)
 
 ---
 
@@ -1599,7 +1647,7 @@ Aliases: `Scopable`, `BlockParent`, `Block`
 
  - `body`: `Array<Statement>` (required)
  - `directives`: `Array<Directive>` (default: `[]`)
- - `sourceType`: `'script' | 'module'` (default: `'script'`)
+ - `sourceType`: `"script" | "module"` (default: `'script'`)
  - `sourceFile`: `string` (default: `null`)
 
 ---
@@ -1613,8 +1661,8 @@ See also `t.isQualifiedTypeIdentifier(node, opts)` and `t.assertQualifiedTypeIde
 
 Aliases: `Flow`
 
- - `id` (required)
- - `qualification` (required)
+ - `id`: `Identifier` (required)
+ - `qualification`: `Identifier | QualifiedTypeIdentifier` (required)
 
 ---
 
@@ -1706,8 +1754,9 @@ t.stringLiteralTypeAnnotation()
 
 See also `t.isStringLiteralTypeAnnotation(node, opts)` and `t.assertStringLiteralTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
+ - `value`: `string` (default: `null`)
 
 ---
 
@@ -1718,7 +1767,7 @@ t.stringTypeAnnotation()
 
 See also `t.isStringTypeAnnotation(node, opts)` and `t.assertStringTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -1763,7 +1812,7 @@ Aliases: `Statement`, `BlockParent`, `Scopable`
 
 ### tSAnyKeyword
 ```javascript
-t.tSAnyKeyword()
+t.tsAnyKeyword()
 ```
 
 See also `t.isTSAnyKeyword(node, opts)` and `t.assertTSAnyKeyword(node, opts)`.
@@ -1775,7 +1824,7 @@ Aliases: `TSType`
 
 ### tSArrayType
 ```javascript
-t.tSArrayType(elementType)
+t.tsArrayType(elementType)
 ```
 
 See also `t.isTSArrayType(node, opts)` and `t.assertTSArrayType(node, opts)`.
@@ -1788,7 +1837,7 @@ Aliases: `TSType`
 
 ### tSAsExpression
 ```javascript
-t.tSAsExpression(expression, typeAnnotation)
+t.tsAsExpression(expression, typeAnnotation)
 ```
 
 See also `t.isTSAsExpression(node, opts)` and `t.assertTSAsExpression(node, opts)`.
@@ -1802,7 +1851,7 @@ Aliases: `Expression`
 
 ### tSBooleanKeyword
 ```javascript
-t.tSBooleanKeyword()
+t.tsBooleanKeyword()
 ```
 
 See also `t.isTSBooleanKeyword(node, opts)` and `t.assertTSBooleanKeyword(node, opts)`.
@@ -1814,7 +1863,7 @@ Aliases: `TSType`
 
 ### tSCallSignatureDeclaration
 ```javascript
-t.tSCallSignatureDeclaration(typeParameters, parameters, typeAnnotation)
+t.tsCallSignatureDeclaration(typeParameters, parameters, typeAnnotation)
 ```
 
 See also `t.isTSCallSignatureDeclaration(node, opts)` and `t.assertTSCallSignatureDeclaration(node, opts)`.
@@ -1827,9 +1876,25 @@ Aliases: `TSTypeElement`
 
 ---
 
+### tSConditionalType
+```javascript
+t.tsConditionalType(checkType, extendsType, trueType, falseType)
+```
+
+See also `t.isTSConditionalType(node, opts)` and `t.assertTSConditionalType(node, opts)`.
+
+Aliases: `TSType`
+
+ - `checkType`: `TSType` (required)
+ - `extendsType`: `TSType` (required)
+ - `trueType`: `TSType` (required)
+ - `falseType`: `TSType` (required)
+
+---
+
 ### tSConstructSignatureDeclaration
 ```javascript
-t.tSConstructSignatureDeclaration(typeParameters, parameters, typeAnnotation)
+t.tsConstructSignatureDeclaration(typeParameters, parameters, typeAnnotation)
 ```
 
 See also `t.isTSConstructSignatureDeclaration(node, opts)` and `t.assertTSConstructSignatureDeclaration(node, opts)`.
@@ -1844,7 +1909,7 @@ Aliases: `TSTypeElement`
 
 ### tSConstructorType
 ```javascript
-t.tSConstructorType(typeParameters, typeAnnotation)
+t.tsConstructorType(typeParameters, typeAnnotation)
 ```
 
 See also `t.isTSConstructorType(node, opts)` and `t.assertTSConstructorType(node, opts)`.
@@ -1859,7 +1924,7 @@ Aliases: `TSType`
 
 ### tSDeclareFunction
 ```javascript
-t.tSDeclareFunction(id, typeParameters, params, returnType)
+t.tsDeclareFunction(id, typeParameters, params, returnType)
 ```
 
 See also `t.isTSDeclareFunction(node, opts)` and `t.assertTSDeclareFunction(node, opts)`.
@@ -1878,13 +1943,13 @@ Aliases: `Statement`, `Declaration`
 
 ### tSDeclareMethod
 ```javascript
-t.tSDeclareMethod(decorators, key, typeParameters, params, returnType)
+t.tsDeclareMethod(decorators, key, typeParameters, params, returnType)
 ```
 
 See also `t.isTSDeclareMethod(node, opts)` and `t.assertTSDeclareMethod(node, opts)`.
 
  - `decorators`: `Array<Decorator>` (default: `null`)
- - `key` (required)
+ - `key`: `Identifier | StringLiteral | NumericLiteral | Expression` (required)
  - `typeParameters`: `TSTypeParameterDeclaration | Noop` (default: `null`)
  - `params`: `Array<LVal>` (required)
  - `returnType`: `TSTypeAnnotation | Noop` (default: `null`)
@@ -1902,7 +1967,7 @@ See also `t.isTSDeclareMethod(node, opts)` and `t.assertTSDeclareMethod(node, op
 
 ### tSEnumDeclaration
 ```javascript
-t.tSEnumDeclaration(id, members)
+t.tsEnumDeclaration(id, members)
 ```
 
 See also `t.isTSEnumDeclaration(node, opts)` and `t.assertTSEnumDeclaration(node, opts)`.
@@ -1919,7 +1984,7 @@ Aliases: `Statement`, `Declaration`
 
 ### tSEnumMember
 ```javascript
-t.tSEnumMember(id, initializer)
+t.tsEnumMember(id, initializer)
 ```
 
 See also `t.isTSEnumMember(node, opts)` and `t.assertTSEnumMember(node, opts)`.
@@ -1931,7 +1996,7 @@ See also `t.isTSEnumMember(node, opts)` and `t.assertTSEnumMember(node, opts)`.
 
 ### tSExportAssignment
 ```javascript
-t.tSExportAssignment(expression)
+t.tsExportAssignment(expression)
 ```
 
 See also `t.isTSExportAssignment(node, opts)` and `t.assertTSExportAssignment(node, opts)`.
@@ -1944,7 +2009,7 @@ Aliases: `Statement`
 
 ### tSExpressionWithTypeArguments
 ```javascript
-t.tSExpressionWithTypeArguments(expression, typeParameters)
+t.tsExpressionWithTypeArguments(expression, typeParameters)
 ```
 
 See also `t.isTSExpressionWithTypeArguments(node, opts)` and `t.assertTSExpressionWithTypeArguments(node, opts)`.
@@ -1958,7 +2023,7 @@ Aliases: `TSType`
 
 ### tSExternalModuleReference
 ```javascript
-t.tSExternalModuleReference(expression)
+t.tsExternalModuleReference(expression)
 ```
 
 See also `t.isTSExternalModuleReference(node, opts)` and `t.assertTSExternalModuleReference(node, opts)`.
@@ -1969,7 +2034,7 @@ See also `t.isTSExternalModuleReference(node, opts)` and `t.assertTSExternalModu
 
 ### tSFunctionType
 ```javascript
-t.tSFunctionType(typeParameters, typeAnnotation)
+t.tsFunctionType(typeParameters, typeAnnotation)
 ```
 
 See also `t.isTSFunctionType(node, opts)` and `t.assertTSFunctionType(node, opts)`.
@@ -1984,7 +2049,7 @@ Aliases: `TSType`
 
 ### tSImportEqualsDeclaration
 ```javascript
-t.tSImportEqualsDeclaration(id, moduleReference)
+t.tsImportEqualsDeclaration(id, moduleReference)
 ```
 
 See also `t.isTSImportEqualsDeclaration(node, opts)` and `t.assertTSImportEqualsDeclaration(node, opts)`.
@@ -1999,7 +2064,7 @@ Aliases: `Statement`
 
 ### tSIndexSignature
 ```javascript
-t.tSIndexSignature(parameters, typeAnnotation)
+t.tsIndexSignature(parameters, typeAnnotation)
 ```
 
 See also `t.isTSIndexSignature(node, opts)` and `t.assertTSIndexSignature(node, opts)`.
@@ -2014,7 +2079,7 @@ Aliases: `TSTypeElement`
 
 ### tSIndexedAccessType
 ```javascript
-t.tSIndexedAccessType(objectType, indexType)
+t.tsIndexedAccessType(objectType, indexType)
 ```
 
 See also `t.isTSIndexedAccessType(node, opts)` and `t.assertTSIndexedAccessType(node, opts)`.
@@ -2026,9 +2091,22 @@ Aliases: `TSType`
 
 ---
 
+### tSInferType
+```javascript
+t.tsInferType(typeParameter)
+```
+
+See also `t.isTSInferType(node, opts)` and `t.assertTSInferType(node, opts)`.
+
+Aliases: `TSType`
+
+ - `typeParameter`: `TSType` (required)
+
+---
+
 ### tSInterfaceBody
 ```javascript
-t.tSInterfaceBody(body)
+t.tsInterfaceBody(body)
 ```
 
 See also `t.isTSInterfaceBody(node, opts)` and `t.assertTSInterfaceBody(node, opts)`.
@@ -2039,7 +2117,7 @@ See also `t.isTSInterfaceBody(node, opts)` and `t.assertTSInterfaceBody(node, op
 
 ### tSInterfaceDeclaration
 ```javascript
-t.tSInterfaceDeclaration(id, typeParameters, extends, body)
+t.tsInterfaceDeclaration(id, typeParameters, extends, body)
 ```
 
 See also `t.isTSInterfaceDeclaration(node, opts)` and `t.assertTSInterfaceDeclaration(node, opts)`.
@@ -2056,7 +2134,7 @@ Aliases: `Statement`, `Declaration`
 
 ### tSIntersectionType
 ```javascript
-t.tSIntersectionType(types)
+t.tsIntersectionType(types)
 ```
 
 See also `t.isTSIntersectionType(node, opts)` and `t.assertTSIntersectionType(node, opts)`.
@@ -2069,7 +2147,7 @@ Aliases: `TSType`
 
 ### tSLiteralType
 ```javascript
-t.tSLiteralType(literal)
+t.tsLiteralType(literal)
 ```
 
 See also `t.isTSLiteralType(node, opts)` and `t.assertTSLiteralType(node, opts)`.
@@ -2082,7 +2160,7 @@ Aliases: `TSType`
 
 ### tSMappedType
 ```javascript
-t.tSMappedType(typeParameter, typeAnnotation)
+t.tsMappedType(typeParameter, typeAnnotation)
 ```
 
 See also `t.isTSMappedType(node, opts)` and `t.assertTSMappedType(node, opts)`.
@@ -2098,7 +2176,7 @@ Aliases: `TSType`
 
 ### tSMethodSignature
 ```javascript
-t.tSMethodSignature(key, typeParameters, parameters, typeAnnotation)
+t.tsMethodSignature(key, typeParameters, parameters, typeAnnotation)
 ```
 
 See also `t.isTSMethodSignature(node, opts)` and `t.assertTSMethodSignature(node, opts)`.
@@ -2116,7 +2194,7 @@ Aliases: `TSTypeElement`
 
 ### tSModuleBlock
 ```javascript
-t.tSModuleBlock(body)
+t.tsModuleBlock(body)
 ```
 
 See also `t.isTSModuleBlock(node, opts)` and `t.assertTSModuleBlock(node, opts)`.
@@ -2127,7 +2205,7 @@ See also `t.isTSModuleBlock(node, opts)` and `t.assertTSModuleBlock(node, opts)`
 
 ### tSModuleDeclaration
 ```javascript
-t.tSModuleDeclaration(id, body)
+t.tsModuleDeclaration(id, body)
 ```
 
 See also `t.isTSModuleDeclaration(node, opts)` and `t.assertTSModuleDeclaration(node, opts)`.
@@ -2143,7 +2221,7 @@ Aliases: `Statement`, `Declaration`
 
 ### tSNamespaceExportDeclaration
 ```javascript
-t.tSNamespaceExportDeclaration(id)
+t.tsNamespaceExportDeclaration(id)
 ```
 
 See also `t.isTSNamespaceExportDeclaration(node, opts)` and `t.assertTSNamespaceExportDeclaration(node, opts)`.
@@ -2156,7 +2234,7 @@ Aliases: `Statement`
 
 ### tSNeverKeyword
 ```javascript
-t.tSNeverKeyword()
+t.tsNeverKeyword()
 ```
 
 See also `t.isTSNeverKeyword(node, opts)` and `t.assertTSNeverKeyword(node, opts)`.
@@ -2168,7 +2246,7 @@ Aliases: `TSType`
 
 ### tSNonNullExpression
 ```javascript
-t.tSNonNullExpression(expression)
+t.tsNonNullExpression(expression)
 ```
 
 See also `t.isTSNonNullExpression(node, opts)` and `t.assertTSNonNullExpression(node, opts)`.
@@ -2181,7 +2259,7 @@ Aliases: `Expression`
 
 ### tSNullKeyword
 ```javascript
-t.tSNullKeyword()
+t.tsNullKeyword()
 ```
 
 See also `t.isTSNullKeyword(node, opts)` and `t.assertTSNullKeyword(node, opts)`.
@@ -2193,7 +2271,7 @@ Aliases: `TSType`
 
 ### tSNumberKeyword
 ```javascript
-t.tSNumberKeyword()
+t.tsNumberKeyword()
 ```
 
 See also `t.isTSNumberKeyword(node, opts)` and `t.assertTSNumberKeyword(node, opts)`.
@@ -2205,7 +2283,7 @@ Aliases: `TSType`
 
 ### tSObjectKeyword
 ```javascript
-t.tSObjectKeyword()
+t.tsObjectKeyword()
 ```
 
 See also `t.isTSObjectKeyword(node, opts)` and `t.assertTSObjectKeyword(node, opts)`.
@@ -2217,7 +2295,7 @@ Aliases: `TSType`
 
 ### tSParameterProperty
 ```javascript
-t.tSParameterProperty(parameter)
+t.tsParameterProperty(parameter)
 ```
 
 See also `t.isTSParameterProperty(node, opts)` and `t.assertTSParameterProperty(node, opts)`.
@@ -2225,14 +2303,14 @@ See also `t.isTSParameterProperty(node, opts)` and `t.assertTSParameterProperty(
 Aliases: `LVal`
 
  - `parameter`: `Identifier | AssignmentPattern` (required)
- - `accessibility`: `'public' | 'private' | 'protected'` (default: `null`)
+ - `accessibility`: `"public" | "private" | "protected"` (default: `null`)
  - `readonly`: `boolean` (default: `null`)
 
 ---
 
 ### tSParenthesizedType
 ```javascript
-t.tSParenthesizedType(typeAnnotation)
+t.tsParenthesizedType(typeAnnotation)
 ```
 
 See also `t.isTSParenthesizedType(node, opts)` and `t.assertTSParenthesizedType(node, opts)`.
@@ -2245,7 +2323,7 @@ Aliases: `TSType`
 
 ### tSPropertySignature
 ```javascript
-t.tSPropertySignature(key, typeAnnotation, initializer)
+t.tsPropertySignature(key, typeAnnotation, initializer)
 ```
 
 See also `t.isTSPropertySignature(node, opts)` and `t.assertTSPropertySignature(node, opts)`.
@@ -2263,7 +2341,7 @@ Aliases: `TSTypeElement`
 
 ### tSQualifiedName
 ```javascript
-t.tSQualifiedName(left, right)
+t.tsQualifiedName(left, right)
 ```
 
 See also `t.isTSQualifiedName(node, opts)` and `t.assertTSQualifiedName(node, opts)`.
@@ -2277,7 +2355,7 @@ Aliases: `TSEntityName`
 
 ### tSStringKeyword
 ```javascript
-t.tSStringKeyword()
+t.tsStringKeyword()
 ```
 
 See also `t.isTSStringKeyword(node, opts)` and `t.assertTSStringKeyword(node, opts)`.
@@ -2289,7 +2367,7 @@ Aliases: `TSType`
 
 ### tSSymbolKeyword
 ```javascript
-t.tSSymbolKeyword()
+t.tsSymbolKeyword()
 ```
 
 See also `t.isTSSymbolKeyword(node, opts)` and `t.assertTSSymbolKeyword(node, opts)`.
@@ -2301,7 +2379,7 @@ Aliases: `TSType`
 
 ### tSThisType
 ```javascript
-t.tSThisType()
+t.tsThisType()
 ```
 
 See also `t.isTSThisType(node, opts)` and `t.assertTSThisType(node, opts)`.
@@ -2313,7 +2391,7 @@ Aliases: `TSType`
 
 ### tSTupleType
 ```javascript
-t.tSTupleType(elementTypes)
+t.tsTupleType(elementTypes)
 ```
 
 See also `t.isTSTupleType(node, opts)` and `t.assertTSTupleType(node, opts)`.
@@ -2326,7 +2404,7 @@ Aliases: `TSType`
 
 ### tSTypeAliasDeclaration
 ```javascript
-t.tSTypeAliasDeclaration(id, typeParameters, typeAnnotation)
+t.tsTypeAliasDeclaration(id, typeParameters, typeAnnotation)
 ```
 
 See also `t.isTSTypeAliasDeclaration(node, opts)` and `t.assertTSTypeAliasDeclaration(node, opts)`.
@@ -2342,7 +2420,7 @@ Aliases: `Statement`, `Declaration`
 
 ### tSTypeAnnotation
 ```javascript
-t.tSTypeAnnotation(typeAnnotation)
+t.tsTypeAnnotation(typeAnnotation)
 ```
 
 See also `t.isTSTypeAnnotation(node, opts)` and `t.assertTSTypeAnnotation(node, opts)`.
@@ -2353,7 +2431,7 @@ See also `t.isTSTypeAnnotation(node, opts)` and `t.assertTSTypeAnnotation(node, 
 
 ### tSTypeAssertion
 ```javascript
-t.tSTypeAssertion(typeAnnotation, expression)
+t.tsTypeAssertion(typeAnnotation, expression)
 ```
 
 See also `t.isTSTypeAssertion(node, opts)` and `t.assertTSTypeAssertion(node, opts)`.
@@ -2367,7 +2445,7 @@ Aliases: `Expression`
 
 ### tSTypeLiteral
 ```javascript
-t.tSTypeLiteral(members)
+t.tsTypeLiteral(members)
 ```
 
 See also `t.isTSTypeLiteral(node, opts)` and `t.assertTSTypeLiteral(node, opts)`.
@@ -2380,7 +2458,7 @@ Aliases: `TSType`
 
 ### tSTypeOperator
 ```javascript
-t.tSTypeOperator(typeAnnotation)
+t.tsTypeOperator(typeAnnotation)
 ```
 
 See also `t.isTSTypeOperator(node, opts)` and `t.assertTSTypeOperator(node, opts)`.
@@ -2394,7 +2472,7 @@ Aliases: `TSType`
 
 ### tSTypeParameter
 ```javascript
-t.tSTypeParameter(constraint, default)
+t.tsTypeParameter(constraint, default)
 ```
 
 See also `t.isTSTypeParameter(node, opts)` and `t.assertTSTypeParameter(node, opts)`.
@@ -2407,7 +2485,7 @@ See also `t.isTSTypeParameter(node, opts)` and `t.assertTSTypeParameter(node, op
 
 ### tSTypeParameterDeclaration
 ```javascript
-t.tSTypeParameterDeclaration(params)
+t.tsTypeParameterDeclaration(params)
 ```
 
 See also `t.isTSTypeParameterDeclaration(node, opts)` and `t.assertTSTypeParameterDeclaration(node, opts)`.
@@ -2418,7 +2496,7 @@ See also `t.isTSTypeParameterDeclaration(node, opts)` and `t.assertTSTypeParamet
 
 ### tSTypeParameterInstantiation
 ```javascript
-t.tSTypeParameterInstantiation(params)
+t.tsTypeParameterInstantiation(params)
 ```
 
 See also `t.isTSTypeParameterInstantiation(node, opts)` and `t.assertTSTypeParameterInstantiation(node, opts)`.
@@ -2429,7 +2507,7 @@ See also `t.isTSTypeParameterInstantiation(node, opts)` and `t.assertTSTypeParam
 
 ### tSTypePredicate
 ```javascript
-t.tSTypePredicate(parameterName, typeAnnotation)
+t.tsTypePredicate(parameterName, typeAnnotation)
 ```
 
 See also `t.isTSTypePredicate(node, opts)` and `t.assertTSTypePredicate(node, opts)`.
@@ -2443,7 +2521,7 @@ Aliases: `TSType`
 
 ### tSTypeQuery
 ```javascript
-t.tSTypeQuery(exprName)
+t.tsTypeQuery(exprName)
 ```
 
 See also `t.isTSTypeQuery(node, opts)` and `t.assertTSTypeQuery(node, opts)`.
@@ -2456,7 +2534,7 @@ Aliases: `TSType`
 
 ### tSTypeReference
 ```javascript
-t.tSTypeReference(typeName, typeParameters)
+t.tsTypeReference(typeName, typeParameters)
 ```
 
 See also `t.isTSTypeReference(node, opts)` and `t.assertTSTypeReference(node, opts)`.
@@ -2470,7 +2548,7 @@ Aliases: `TSType`
 
 ### tSUndefinedKeyword
 ```javascript
-t.tSUndefinedKeyword()
+t.tsUndefinedKeyword()
 ```
 
 See also `t.isTSUndefinedKeyword(node, opts)` and `t.assertTSUndefinedKeyword(node, opts)`.
@@ -2482,7 +2560,7 @@ Aliases: `TSType`
 
 ### tSUnionType
 ```javascript
-t.tSUnionType(types)
+t.tsUnionType(types)
 ```
 
 See also `t.isTSUnionType(node, opts)` and `t.assertTSUnionType(node, opts)`.
@@ -2495,7 +2573,7 @@ Aliases: `TSType`
 
 ### tSVoidKeyword
 ```javascript
-t.tSVoidKeyword()
+t.tsVoidKeyword()
 ```
 
 See also `t.isTSVoidKeyword(node, opts)` and `t.assertTSVoidKeyword(node, opts)`.
@@ -2564,7 +2642,7 @@ t.thisTypeAnnotation()
 
 See also `t.isThisTypeAnnotation(node, opts)` and `t.assertThisTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -2604,9 +2682,9 @@ t.tupleTypeAnnotation(types)
 
 See also `t.isTupleTypeAnnotation(node, opts)` and `t.assertTupleTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
- - `types` (required)
+ - `types`: `Array<FlowType>` (required)
 
 ---
 
@@ -2619,9 +2697,9 @@ See also `t.isTypeAlias(node, opts)` and `t.assertTypeAlias(node, opts)`.
 
 Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
- - `id` (required)
- - `typeParameters` (required)
- - `right` (required)
+ - `id`: `Identifier` (required)
+ - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
+ - `right`: `FlowType` (required)
 
 ---
 
@@ -2634,7 +2712,7 @@ See also `t.isTypeAnnotation(node, opts)` and `t.assertTypeAnnotation(node, opts
 
 Aliases: `Flow`
 
- - `typeAnnotation`: `Flow` (required)
+ - `typeAnnotation`: `FlowType` (required)
 
 ---
 
@@ -2647,14 +2725,14 @@ See also `t.isTypeCastExpression(node, opts)` and `t.assertTypeCastExpression(no
 
 Aliases: `Flow`, `ExpressionWrapper`, `Expression`
 
- - `expression` (required)
- - `typeAnnotation` (required)
+ - `expression`: `Expression` (required)
+ - `typeAnnotation`: `TypeAnnotation` (required)
 
 ---
 
 ### typeParameter
 ```javascript
-t.typeParameter(bound, default)
+t.typeParameter(bound, default, variance)
 ```
 
 See also `t.isTypeParameter(node, opts)` and `t.assertTypeParameter(node, opts)`.
@@ -2662,7 +2740,8 @@ See also `t.isTypeParameter(node, opts)` and `t.assertTypeParameter(node, opts)`
 Aliases: `Flow`
 
  - `bound`: `TypeAnnotation` (default: `null`)
- - `default`: `Flow` (default: `null`)
+ - `default`: `FlowType` (default: `null`)
+ - `variance`: `Variance` (default: `null`)
  - `name`: `string` (default: `null`)
 
 ---
@@ -2689,7 +2768,7 @@ See also `t.isTypeParameterInstantiation(node, opts)` and `t.assertTypeParameter
 
 Aliases: `Flow`
 
- - `params`: `Array<Flow>` (required)
+ - `params`: `Array<FlowType>` (required)
 
 ---
 
@@ -2700,9 +2779,9 @@ t.typeofTypeAnnotation(argument)
 
 See also `t.isTypeofTypeAnnotation(node, opts)` and `t.assertTypeofTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
- - `argument` (required)
+ - `argument`: `FlowType` (required)
 
 ---
 
@@ -2715,7 +2794,7 @@ See also `t.isUnaryExpression(node, opts)` and `t.assertUnaryExpression(node, op
 
 Aliases: `UnaryLike`, `Expression`
 
- - `operator`: `'void' | 'throw' | 'delete' | '!' | '+' | '-' | '~' | 'typeof'` (required)
+ - `operator`: `"void" | "throw" | "delete" | "!" | "+" | "-" | "~" | "typeof"` (required)
  - `argument`: `Expression` (required)
  - `prefix`: `boolean` (default: `true`)
 
@@ -2728,9 +2807,9 @@ t.unionTypeAnnotation(types)
 
 See also `t.isUnionTypeAnnotation(node, opts)` and `t.assertUnionTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`
+Aliases: `Flow`, `FlowType`
 
- - `types` (required)
+ - `types`: `Array<FlowType>` (required)
 
 ---
 
@@ -2743,7 +2822,7 @@ See also `t.isUpdateExpression(node, opts)` and `t.assertUpdateExpression(node, 
 
 Aliases: `Expression`
 
- - `operator`: `'++' | '--'` (required)
+ - `operator`: `"++" | "--"` (required)
  - `argument`: `Expression` (required)
  - `prefix`: `boolean` (default: `false`)
 
@@ -2773,6 +2852,20 @@ See also `t.isVariableDeclarator(node, opts)` and `t.assertVariableDeclarator(no
 
  - `id`: `LVal` (required)
  - `init`: `Expression` (default: `null`)
+ - `definite`: `boolean` (default: `null`)
+
+---
+
+### variance
+```javascript
+t.variance(kind)
+```
+
+See also `t.isVariance(node, opts)` and `t.assertVariance(node, opts)`.
+
+Aliases: `Flow`
+
+ - `kind`: `"minus" | "plus"` (required)
 
 ---
 
@@ -2783,7 +2876,7 @@ t.voidTypeAnnotation()
 
 See also `t.isVoidTypeAnnotation(node, opts)` and `t.assertVoidTypeAnnotation(node, opts)`.
 
-Aliases: `Flow`, `FlowBaseAnnotation`
+Aliases: `Flow`, `FlowType`, `FlowBaseAnnotation`
 
 
 ---
@@ -2829,7 +2922,3 @@ Aliases: `Expression`, `Terminatorless`
  - `delegate`: `boolean` (default: `false`)
 
 ---
-
-
-<!-- end generated section -->
-

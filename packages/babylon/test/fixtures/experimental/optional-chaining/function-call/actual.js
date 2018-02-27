@@ -1,7 +1,0 @@
-func?.()
-
-func?.(a, b)
-
-a?.func?.()
-
-a?.func?.(a, b)

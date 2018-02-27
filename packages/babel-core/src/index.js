@@ -4,7 +4,7 @@ export { default as File } from "./transformation/file/file";
 export {
   default as buildExternalHelpers,
 } from "./tools/build-external-helpers";
-export { resolvePlugin, resolvePreset } from "./config/loading/files";
+export { resolvePlugin, resolvePreset } from "./config/files";
 
 export { version } from "../package.json";
 export { getEnv } from "./config/helpers/environment";
@@ -42,6 +42,8 @@ export { default as transformFileSync } from "./transform-file-sync";
 
 export { default as transformFromAst } from "./transform-ast";
 export { default as transformFromAstSync } from "./transform-ast-sync";
+
+export { default as parse } from "./parse";
 
 /**
  * Recommended set of compilable extensions. Not used in @babel/core directly, but meant as

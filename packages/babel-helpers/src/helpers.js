@@ -39,7 +39,9 @@ helpers.jsx = defineHelper(`
     if (!props && childrenLength !== 0) {
       // If we're going to assign props.children, we create a new object now
       // to avoid mutating defaultProps.
-      props = {};
+      props = {
+        children: void 0,
+      };
     }
     if (props && defaultProps) {
       for (var propName in defaultProps) {
@@ -372,6 +374,26 @@ helpers.extends = defineHelper(`
   }
 `);
 
+helpers.objectSpread = defineHelper(`
+  import defineProperty from "defineProperty";
+
+  export default function _objectSpread(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = (arguments[i] != null) ? arguments[i] : {};
+      var ownKeys = Object.keys(source);
+      if (typeof Object.getOwnPropertySymbols === 'function') {
+        ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+          return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+        }));
+      }
+      ownKeys.forEach(function(key) {
+        defineProperty(target, key, source[key]);
+      });
+    }
+    return target;
+  }
+`);
+
 helpers.get = defineHelper(`
   export default function _get(object, property, receiver) {
     if (object === null) object = Function.prototype;
@@ -422,6 +444,51 @@ helpers.inheritsLoose = defineHelper(`
     subClass.prototype = Object.create(superClass.prototype);
     subClass.prototype.constructor = subClass;
     subClass.__proto__ = superClass;
+  }
+`);
+
+// Based on https://github.com/WebReflection/babel-plugin-transform-builtin-classes
+helpers.wrapNativeSuper = defineHelper(`
+  var _gPO = Object.getPrototypeOf || function _gPO(o) { return o.__proto__ };
+  var _sPO = Object.setPrototypeOf || function _sPO(o, p) { o.__proto__ = p; return o };
+  var _construct = (typeof Reflect === "object" && Reflect.construct) ||
+    function _construct(Parent, args, Class) {
+      var Constructor, a = [null];
+      a.push.apply(a, args);
+      Constructor = Parent.bind.apply(Parent, a);
+      return _sPO(new Constructor, Class.prototype);
+    };
+
+  var _cache = typeof Map === "function" && new Map();
+
+  export default function _wrapNativeSuper(Class) {
+    if (typeof Class !== "function") {
+      throw new TypeError("Super expression must either be null or a function");
+    }
+
+    if (typeof _cache !== "undefined") {
+      if (_cache.has(Class)) return _cache.get(Class);
+      _cache.set(Class, Wrapper);
+    }
+
+    function Wrapper() {}
+    Wrapper.prototype = Object.create(Class.prototype, {
+      constructor: {
+        value: Wrapper,
+        enumerable: false,
+        writeable: true,
+        configurable: true,
+      }
+    });
+    return _sPO(
+      Wrapper,
+      _sPO(
+        function Super() {
+          return _construct(Class, arguments, _gPO(this).constructor);
+        },
+        Class
+      )
+    );
   }
 `);
 
@@ -623,6 +690,7 @@ helpers.slicedToArrayLoose = defineHelper(`
 
 helpers.taggedTemplateLiteral = defineHelper(`
   export default function _taggedTemplateLiteral(strings, raw) {
+    if (!raw) { raw = strings.slice(0); }
     return Object.freeze(Object.defineProperties(strings, {
         raw: { value: Object.freeze(raw) }
     }));
@@ -631,6 +699,7 @@ helpers.taggedTemplateLiteral = defineHelper(`
 
 helpers.taggedTemplateLiteralLoose = defineHelper(`
   export default function _taggedTemplateLiteralLoose(strings, raw) {
+    if (!raw) { raw = strings.slice(0); }
     strings.raw = raw;
     return strings;
   }

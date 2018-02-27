@@ -15,35 +15,59 @@ export const definitions = {
     Set: "es6.set",
     WeakMap: "es6.weak-map",
     WeakSet: "es6.weak-set",
-    Promise: "es6.promise",
+    Promise: ["es6.object.to-string", "es6.promise"],
     Symbol: "es6.symbol",
   },
 
   instanceMethods: {
+    bind: ["es6.function.bind"],
     name: ["es6.function.name"],
-    fromCodePoint: ["es6.string.from-code-point"],
+
     codePointAt: ["es6.string.code-point-at"],
+    endsWith: ["es6.string.ends-with"],
+    fromCodePoint: ["es6.string.from-code-point"],
+    includes: ["es6.string.includes", "es7.array.includes"],
     repeat: ["es6.string.repeat"],
     startsWith: ["es6.string.starts-with"],
-    endsWith: ["es6.string.ends-with"],
-    includes: ["es6.string.includes", "es7.array.includes"],
+    trim: ["es6.string.trim"],
+
     flags: ["es6.regexp.flags"],
     match: ["es6.regexp.match"],
     replace: ["es6.regexp.replace"],
     split: ["es6.regexp.split"],
     search: ["es6.regexp.search"],
+
     copyWithin: ["es6.array.copy-within"],
+    every: ["es6.array.is-array"],
     find: ["es6.array.find"],
     findIndex: ["es6.array.find-index"],
     fill: ["es6.array.fill"],
+    filter: ["es6.array.filter"],
+    forEach: ["es6.array.for-each"],
+    indexOf: ["es6.array.index-of"],
+    lastIndexOf: ["es6.array.last-index-of"],
+    map: ["es6.array.map"],
+    reduce: ["es6.array.reduce"],
+    reduceRight: ["es6.array.reduce-right"],
+    some: ["es6.array.some"],
+    sort: ["es6.array.sort"],
+
     padStart: ["es7.string.pad-start"],
     padEnd: ["es7.string.pad-end"],
+
+    toISOString: ["es6.date.to-iso-string"],
+    toJSON: ["es6.date.to-json"],
   },
 
   staticMethods: {
     Array: {
       from: "es6.array.from",
+      isArray: "es6.array.is-array",
       of: "es6.array.of",
+    },
+
+    Date: {
+      now: "es6.date.now",
     },
 
     Object: {
@@ -88,6 +112,11 @@ export const definitions = {
       EPSILON: "es6.number.epsilon",
       MIN_SAFE_INTEGER: "es6.number.min-safe-integer",
       MAX_SAFE_INTEGER: "es6.number.max-safe-integer",
+    },
+
+    Promise: {
+      all: ["es6.string.iterator", "web.dom.iterable"],
+      race: ["es6.string.iterator", "web.dom.iterable"],
     },
 
     Reflect: {

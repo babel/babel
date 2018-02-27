@@ -1328,26 +1328,7 @@ export default class StatementParser extends ExpressionParser {
       this.parseExportFrom(node, true);
     } else if (this.eat(tt._default)) {
       // export default ...
-      let expr = this.startNode();
-      let needsSemi = false;
-      if (this.eat(tt._function)) {
-        expr = this.parseFunction(expr, true, false, false, true);
-      } else if (
-        this.isContextual("async") &&
-        this.lookahead().type === tt._function
-      ) {
-        // async function declaration
-        this.eatContextual("async");
-        this.eat(tt._function);
-        expr = this.parseFunction(expr, true, false, true, true);
-      } else if (this.match(tt._class)) {
-        expr = this.parseClass(expr, true, true);
-      } else {
-        needsSemi = true;
-        expr = this.parseMaybeAssign();
-      }
-      node.declaration = expr;
-      if (needsSemi) this.semicolon();
+      node.declaration = this.parseExportDefaultExpression();
       this.checkExport(node, true, true);
       return this.finishNode(node, "ExportDefaultDeclaration");
     } else if (this.shouldParseExportDeclaration()) {
@@ -1371,6 +1352,30 @@ export default class StatementParser extends ExpressionParser {
     }
     this.checkExport(node, true);
     return this.finishNode(node, "ExportNamedDeclaration");
+  }
+
+  parseExportDefaultExpression(): N.Expression | N.Declaration {
+    const expr = this.startNode();
+    if (this.eat(tt._function)) {
+      return this.parseFunction(expr, true, false, false, true);
+    } else if (
+      this.isContextual("async") &&
+      this.lookahead().type === tt._function
+    ) {
+      // async function declaration
+      this.eatContextual("async");
+      this.eat(tt._function);
+      return this.parseFunction(expr, true, false, true, true);
+    } else if (this.match(tt._class)) {
+      return this.parseClass(expr, true, true);
+    } else if (this.match(tt.at)) {
+      this.parseDecorators(false);
+      return this.parseClass(expr, true, true);
+    } else {
+      const res = this.parseMaybeAssign();
+      this.semicolon();
+      return res;
+    }
   }
 
   // eslint-disable-next-line no-unused-vars
@@ -1483,7 +1488,10 @@ export default class StatementParser extends ExpressionParser {
           node.declaration.type === "FunctionDeclaration" ||
           node.declaration.type === "ClassDeclaration"
         ) {
-          this.checkDuplicateExports(node, node.declaration.id.name);
+          const id = node.declaration.id;
+          if (!id) throw new Error("Assertion failure");
+
+          this.checkDuplicateExports(node, id.name);
         } else if (node.declaration.type === "VariableDeclaration") {
           for (const declaration of node.declaration.declarations) {
             this.checkDeclaration(declaration.id);

@@ -1,4 +1,5 @@
 import { types as t } from "@babel/core";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
 
 export default function transformReactConstantElement(api, options) {
   const { allowMutablePropsOnTags } = options;
@@ -101,7 +102,11 @@ export default function transformReactConstantElement(api, options) {
         path.traverse(immutabilityVisitor, state);
 
         if (state.isImmutable) {
-          path.hoist();
+          const hoisted = path.hoist();
+
+          if (hoisted) {
+            annotateAsPure(hoisted);
+          }
         }
       },
     },

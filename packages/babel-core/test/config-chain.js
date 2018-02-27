@@ -8,6 +8,420 @@ function fixture(...args) {
 }
 
 describe("buildConfigChain", function() {
+  describe("test", () => {
+    describe("single", () => {
+      it("should process matching string values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          test: fixture("nonexistant-fake"),
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process matching RegExp values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          test: new RegExp(fixture("nonexistant-fake")),
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process matching function values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          test: p => p.indexOf(fixture("nonexistant-fake")) === 0,
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process non-matching string values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          test: fixture("nonexistant-fake-unknown"),
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+
+      it("should process non-matching RegExp values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          test: new RegExp(fixture("nonexistant-unknown")),
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+
+      it("should process non-matching function values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          test: p => p.indexOf(fixture("nonexistant-unknown")) === 0,
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+    });
+
+    describe("array", () => {
+      it("should process matching string values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          test: [fixture("nonexistant-fake")],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process matching RegExp values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          test: [new RegExp(fixture("nonexistant-fake"))],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process matching function values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          test: [p => p.indexOf(fixture("nonexistant-fake")) === 0],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process non-matching string values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          test: [fixture("nonexistant-fake-unknown")],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+
+      it("should process non-matching RegExp values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          test: [new RegExp(fixture("nonexistant-unknown"))],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+
+      it("should process non-matching function values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          test: [p => p.indexOf(fixture("nonexistant-unknown")) === 0],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+    });
+  });
+
+  describe("include", () => {
+    describe("single", () => {
+      it("should process matching string values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          include: fixture("nonexistant-fake"),
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process matching RegExp values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          include: new RegExp(fixture("nonexistant-fake")),
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process matching function values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          include: p => p.indexOf(fixture("nonexistant-fake")) === 0,
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process non-matching string values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          include: fixture("nonexistant-fake-unknown"),
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+
+      it("should process non-matching RegExp values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          include: new RegExp(fixture("nonexistant-unknown")),
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+
+      it("should process non-matching function values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          include: p => p.indexOf(fixture("nonexistant-unknown")) === 0,
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+    });
+
+    describe("array", () => {
+      it("should process matching string values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          include: [fixture("nonexistant-fake")],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process matching RegExp values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          include: [new RegExp(fixture("nonexistant-fake"))],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process matching function values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          include: [p => p.indexOf(fixture("nonexistant-fake")) === 0],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process non-matching string values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          include: [fixture("nonexistant-fake-unknown")],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+
+      it("should process non-matching RegExp values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          include: [new RegExp(fixture("nonexistant-unknown"))],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+
+      it("should process non-matching function values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          include: [p => p.indexOf(fixture("nonexistant-unknown")) === 0],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+    });
+  });
+
+  describe("exclude", () => {
+    describe("single", () => {
+      it("should process matching string values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          exclude: fixture("nonexistant-fake"),
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+
+      it("should process matching RegExp values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          exclude: new RegExp(fixture("nonexistant-fake")),
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+
+      it("should process matching function values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          exclude: p => p.indexOf(fixture("nonexistant-fake")) === 0,
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+
+      it("should process non-matching string values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          exclude: fixture("nonexistant-fake-unknown"),
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process non-matching RegExp values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          exclude: new RegExp(fixture("nonexistant-unknown")),
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process non-matching function values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          exclude: p => p.indexOf(fixture("nonexistant-unknown")) === 0,
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+    });
+
+    describe("array", () => {
+      it("should process matching string values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          exclude: [fixture("nonexistant-fake")],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+
+      it("should process matching RegExp values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          exclude: [new RegExp(fixture("nonexistant-fake"))],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+
+      it("should process matching function values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          exclude: [p => p.indexOf(fixture("nonexistant-fake")) === 0],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, undefined);
+      });
+
+      it("should process non-matching string values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          exclude: [fixture("nonexistant-fake-unknown")],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process non-matching RegExp values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          exclude: [new RegExp(fixture("nonexistant-unknown"))],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+
+      it("should process non-matching function values", () => {
+        const opts = loadOptions({
+          filename: fixture("nonexistant-fake", "src.js"),
+          babelrc: false,
+          exclude: [p => p.indexOf(fixture("nonexistant-unknown")) === 0],
+          comments: true,
+        });
+
+        assert.equal(opts.comments, true);
+      });
+    });
+  });
+
   describe("ignore", () => {
     it("should ignore files that match", () => {
       const opts = loadOptions({
@@ -194,17 +608,50 @@ describe("buildConfigChain", function() {
         assert.notEqual(opts1.plugins[0], opts2.plugins[1]);
       });
 
-      it("should cache the env options by identity", () => {
-        const env = {
-          foo: {
-            plugins: plugins1,
+      it("should cache the env plugins by identity", () => {
+        const plugins = [() => ({})];
+
+        const opts1 = loadOptions({
+          envName: "foo",
+          env: {
+            foo: {
+              plugins,
+            },
           },
-        };
+        });
+        const opts2 = loadOptions({
+          envName: "foo",
+          env: {
+            foo: {
+              plugins,
+            },
+          },
+        });
 
-        const opts1 = loadOptions({ envName: "foo", env });
+        assert.equal(opts1.plugins.length, 1);
+        assert.equal(opts2.plugins.length, 1);
+        assert.equal(opts1.plugins[0], opts2.plugins[0]);
+      });
 
-        env.foo.plugins = plugins2;
-        const opts2 = loadOptions({ envName: "foo", env });
+      it("should cache the env presets by identity", () => {
+        const presets = [() => ({ plugins: [() => ({})] })];
+
+        const opts1 = loadOptions({
+          envName: "foo",
+          env: {
+            foo: {
+              presets,
+            },
+          },
+        });
+        const opts2 = loadOptions({
+          envName: "foo",
+          env: {
+            foo: {
+              presets,
+            },
+          },
+        });
 
         assert.equal(opts1.plugins.length, 1);
         assert.equal(opts2.plugins.length, 1);
@@ -351,6 +798,40 @@ describe("buildConfigChain", function() {
         // Identity changed with different .env
         assert.notEqual(opts1.plugins[0], opts3.plugins[0]);
       });
+    });
+  });
+
+  describe("overrides merging", () => {
+    it("should apply matching overrides over base configs", () => {
+      const opts = loadOptions({
+        filename: fixture("nonexistant-fake", "src.js"),
+        babelrc: false,
+        comments: true,
+        overrides: [
+          {
+            test: fixture("nonexistant-fake"),
+            comments: false,
+          },
+        ],
+      });
+
+      assert.equal(opts.comments, false);
+    });
+
+    it("should not apply non-matching overrides over base configs", () => {
+      const opts = loadOptions({
+        filename: fixture("nonexistant-fake", "src.js"),
+        babelrc: false,
+        comments: true,
+        overrides: [
+          {
+            test: fixture("nonexistant-unknown"),
+            comments: false,
+          },
+        ],
+      });
+
+      assert.equal(opts.comments, true);
     });
   });
 

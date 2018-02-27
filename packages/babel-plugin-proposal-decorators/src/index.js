@@ -63,10 +63,10 @@ export default function() {
    * with the proper decorated behavior.
    */
   function applyClassDecorators(classPath) {
+    if (!hasClassDecorators(classPath.node)) return;
+
     const decorators = classPath.node.decorators || [];
     classPath.node.decorators = null;
-
-    if (decorators.length === 0) return;
 
     const name = classPath.scope.generateDeclaredUidIdentifier("class");
 
@@ -75,11 +75,15 @@ export default function() {
       .reverse()
       .reduce(function(acc, decorator) {
         return buildClassDecorator({
-          CLASS_REF: name,
-          DECORATOR: decorator,
+          CLASS_REF: t.cloneNode(name),
+          DECORATOR: t.cloneNode(decorator),
           INNER: acc,
         }).expression;
       }, classPath.node);
+  }
+
+  function hasClassDecorators(classNode) {
+    return !!(classNode.decorators && classNode.decorators.length);
   }
 
   /**
@@ -87,13 +91,13 @@ export default function() {
    * with the proper decorated behavior.
    */
   function applyMethodDecorators(path, state) {
-    const hasMethodDecorators = path.node.body.body.some(function(node) {
-      return (node.decorators || []).length > 0;
-    });
-
-    if (!hasMethodDecorators) return;
+    if (!hasMethodDecorators(path.node.body.body)) return;
 
     return applyTargetDecorators(path, state, path.node.body.body);
+  }
+
+  function hasMethodDecorators(body) {
+    return body.some(node => node.decorators && node.decorators.length);
   }
 
   /**
@@ -101,11 +105,7 @@ export default function() {
    * with the proper decorated behavior.
    */
   function applyObjectDecorators(path, state) {
-    const hasMethodDecorators = path.node.properties.some(function(node) {
-      return (node.decorators || []).length > 0;
-    });
-
-    if (!hasMethodDecorators) return;
+    if (!hasMethodDecorators(path.node.properties)) return;
 
     return applyTargetDecorators(path, state, path.node.properties);
   }
@@ -166,9 +166,11 @@ export default function() {
             "=",
             descriptor,
             t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
-              target,
-              property,
-              t.arrayExpression(decorators.map(dec => dec.expression)),
+              t.cloneNode(target),
+              t.cloneNode(property),
+              t.arrayExpression(
+                decorators.map(dec => t.cloneNode(dec.expression)),
+              ),
               t.objectExpression([
                 t.objectProperty(
                   t.identifier("enumerable"),
@@ -182,21 +184,23 @@ export default function() {
       } else {
         acc = acc.concat(
           t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
-            target,
-            property,
-            t.arrayExpression(decorators.map(dec => dec.expression)),
+            t.cloneNode(target),
+            t.cloneNode(property),
+            t.arrayExpression(
+              decorators.map(dec => t.cloneNode(dec.expression)),
+            ),
             t.isObjectProperty(node) ||
             t.isClassProperty(node, { static: true })
               ? buildGetObjectInitializer({
                   TEMP: path.scope.generateDeclaredUidIdentifier("init"),
-                  TARGET: target,
-                  PROPERTY: property,
+                  TARGET: t.cloneNode(target),
+                  PROPERTY: t.cloneNode(property),
                 }).expression
               : buildGetDescriptor({
-                  TARGET: target,
-                  PROPERTY: property,
+                  TARGET: t.cloneNode(target),
+                  PROPERTY: t.cloneNode(property),
                 }).expression,
-            target,
+            t.cloneNode(target),
           ]),
         );
       }
@@ -205,9 +209,9 @@ export default function() {
     }, []);
 
     return t.sequenceExpression([
-      t.assignmentExpression("=", name, path.node),
+      t.assignmentExpression("=", t.cloneNode(name), path.node),
       t.sequenceExpression(exprs),
-      name,
+      t.cloneNode(name),
     ]);
   }
 
@@ -215,32 +219,31 @@ export default function() {
     inherits: syntaxDecorators,
 
     visitor: {
-      ExportDefaultDeclaration(path) {
-        if (!path.get("declaration").isClassDeclaration()) return;
-
-        const { node } = path;
-        const ref =
-          node.declaration.id || path.scope.generateUidIdentifier("default");
-        node.declaration.id = ref;
-
-        // Split the class declaration and the export into two separate statements.
-        path.replaceWith(node.declaration);
-        path.insertAfter(
-          t.exportNamedDeclaration(null, [
-            t.exportSpecifier(ref, t.identifier("default")),
-          ]),
-        );
-      },
       ClassDeclaration(path) {
         const { node } = path;
 
-        const ref = node.id || path.scope.generateUidIdentifier("class");
+        if (!hasClassDecorators(node) && !hasMethodDecorators(node.body.body)) {
+          return;
+        }
 
-        path.replaceWith(
-          t.variableDeclaration("let", [
-            t.variableDeclarator(ref, t.toExpression(node)),
-          ]),
-        );
+        const ref = node.id
+          ? t.cloneNode(node.id)
+          : path.scope.generateUidIdentifier("class");
+        const letDeclaration = t.variableDeclaration("let", [
+          t.variableDeclarator(ref, t.toExpression(node)),
+        ]);
+
+        if (path.parentPath.isExportDefaultDeclaration()) {
+          // Split the class declaration and the export into two separate statements.
+          path.parentPath.replaceWithMultiple([
+            letDeclaration,
+            t.exportNamedDeclaration(null, [
+              t.exportSpecifier(t.cloneNode(ref), t.identifier("default")),
+            ]),
+          ]);
+        } else {
+          path.replaceWith(letDeclaration);
+        }
       },
       ClassExpression(path, state) {
         // Create a replacement for the class node if there is one. We do one pass to replace classes with
@@ -264,10 +267,10 @@ export default function() {
 
         path.replaceWith(
           t.callExpression(state.addHelper("initializerDefineProperty"), [
-            path.get("left.object").node,
+            t.cloneNode(path.get("left.object").node),
             t.stringLiteral(path.get("left.property").node.name),
-            path.get("right.arguments")[0].node,
-            path.get("right.arguments")[1].node,
+            t.cloneNode(path.get("right.arguments")[0].node),
+            t.cloneNode(path.get("right.arguments")[1].node),
           ]),
         );
       },

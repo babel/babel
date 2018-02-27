@@ -1,5 +1,4 @@
 export default {
-  "check-constants": require("@babel/plugin-check-constants"),
   "syntax-async-generators": require("@babel/plugin-syntax-async-generators"),
   "syntax-object-rest-spread": require("@babel/plugin-syntax-object-rest-spread"),
   "syntax-optional-catch-binding": require("@babel/plugin-syntax-optional-catch-binding"),
@@ -11,6 +10,7 @@ export default {
   "transform-classes": require("@babel/plugin-transform-classes"),
   "transform-computed-properties": require("@babel/plugin-transform-computed-properties"),
   "transform-destructuring": require("@babel/plugin-transform-destructuring"),
+  "transform-dotall-regex": require("@babel/plugin-transform-dotall-regex"),
   "transform-duplicate-keys": require("@babel/plugin-transform-duplicate-keys"),
   "transform-for-of": require("@babel/plugin-transform-for-of"),
   "transform-function-name": require("@babel/plugin-transform-function-name"),

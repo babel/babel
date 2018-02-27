@@ -420,9 +420,11 @@ export function ObjectTypeIndexer(node: Object) {
   }
   this._variance(node);
   this.token("[");
-  this.print(node.id, node);
-  this.token(":");
-  this.space();
+  if (node.id) {
+    this.print(node.id, node);
+    this.token(":");
+    this.space();
+  }
   this.print(node.key, node);
   this.token("]");
   this.token(":");
@@ -471,6 +473,14 @@ export function TypeCastExpression(node: Object) {
   this.print(node.expression, node);
   this.print(node.typeAnnotation, node);
   this.token(")");
+}
+
+export function Variance(node: Object) {
+  if (node.kind === "plus") {
+    this.token("+");
+  } else {
+    this.token("-");
+  }
 }
 
 export function VoidTypeAnnotation() {

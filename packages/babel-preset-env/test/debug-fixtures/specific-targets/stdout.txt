@@ -13,7 +13,6 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  check-constants { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-arrow-functions { "ie":"10", "ios":"9", "safari":"7" }
   transform-block-scoped-functions { "ie":"10", "ios":"9", "safari":"7" }
   transform-block-scoping { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
@@ -36,10 +35,13 @@ Using plugins:
   transform-regenerator { "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-exponentiation-operator { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-async-to-generator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  transform-dotall-regex { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
 
 Using polyfills with `entry` option:
 
 [src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+  es6.array.sort { "chrome":"54", "ios":"9", "safari":"7" }
+  es6.date.to-json { "ios":"9", "safari":"7" }
   es6.typed.array-buffer { "ie":"10", "ios":"9", "safari":"7" }
   es6.typed.int8-array { "ie":"10", "ios":"9", "safari":"7" }
   es6.typed.uint8-array { "ie":"10", "ios":"9", "safari":"7" }

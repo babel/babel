@@ -426,20 +426,23 @@ export default class ExpressionParser extends LValParser {
     startLoc: Position,
     noCalls?: ?boolean,
   ): N.Expression {
-    const state = { stop: false };
+    const state = {
+      optionalChainMember: false,
+      stop: false,
+    };
     do {
       base = this.parseSubscript(base, startPos, startLoc, noCalls, state);
     } while (!state.stop);
     return base;
   }
 
-  /** @param state Set 'state.stop = true' to indicate that we should stop parsing subscripts. */
+  /** @param state Set 'state.stop = true' to indicate that we should stop parsing subscripts.  'state.optionalChainMember to indicate that the member is currently in OptionalChain'*/
   parseSubscript(
     base: N.Expression,
     startPos: number,
     startLoc: Position,
     noCalls: ?boolean,
-    state: { stop: boolean },
+    state: N.ParseSubscriptState,
   ): N.Expression {
     if (!noCalls && this.eat(tt.doubleColon)) {
       const node = this.startNodeAt(startPos, startLoc);
@@ -454,7 +457,7 @@ export default class ExpressionParser extends LValParser {
       );
     } else if (this.match(tt.questionDot)) {
       this.expectPlugin("optionalChaining");
-
+      state.optionalChainMember = true;
       if (noCalls && this.lookahead().type == tt.parenL) {
         state.stop = true;
         return base;
@@ -469,7 +472,7 @@ export default class ExpressionParser extends LValParser {
         node.computed = true;
         node.optional = true;
         this.expect(tt.bracketR);
-        return this.finishNode(node, "MemberExpression");
+        return this.finishNode(node, "OptionalMemberExpression");
       } else if (this.eat(tt.parenL)) {
         const possibleAsync = this.atPossibleAsync(base);
 
@@ -480,19 +483,23 @@ export default class ExpressionParser extends LValParser {
         );
         node.optional = true;
 
-        return this.finishNode(node, "CallExpression");
+        return this.finishNode(node, "OptionalCallExpression");
       } else {
         node.object = base;
         node.property = this.parseIdentifier(true);
         node.computed = false;
         node.optional = true;
-        return this.finishNode(node, "MemberExpression");
+        return this.finishNode(node, "OptionalMemberExpression");
       }
     } else if (this.eat(tt.dot)) {
       const node = this.startNodeAt(startPos, startLoc);
       node.object = base;
       node.property = this.parseMaybePrivateName();
       node.computed = false;
+      if (state.optionalChainMember) {
+        node.optional = false;
+        return this.finishNode(node, "OptionalMemberExpression");
+      }
       return this.finishNode(node, "MemberExpression");
     } else if (this.eat(tt.bracketL)) {
       const node = this.startNodeAt(startPos, startLoc);
@@ -500,6 +507,10 @@ export default class ExpressionParser extends LValParser {
       node.property = this.parseExpression();
       node.computed = true;
       this.expect(tt.bracketR);
+      if (state.optionalChainMember) {
+        node.optional = false;
+        return this.finishNode(node, "OptionalMemberExpression");
+      }
       return this.finishNode(node, "MemberExpression");
     } else if (!noCalls && this.match(tt.parenL)) {
       const possibleAsync = this.atPossibleAsync(base);
@@ -518,7 +529,11 @@ export default class ExpressionParser extends LValParser {
         possibleAsync,
         refTrailingCommaPos,
       );
-      this.finishCallExpression(node);
+      if (!state.optionalChainMember) {
+        this.finishCallExpression(node);
+      } else {
+        this.finishOptionalCallExpression(node);
+      }
 
       if (possibleAsync && this.shouldParseAsyncArrow()) {
         state.stop = true;
@@ -542,6 +557,12 @@ export default class ExpressionParser extends LValParser {
       const node = this.startNodeAt(startPos, startLoc);
       node.tag = base;
       node.quasi = this.parseTemplate(true);
+      if (state.optionalChainMember) {
+        this.raise(
+          startPos,
+          "Tagged Template Literals are not allowed in optionalChain",
+        );
+      }
       return this.finishNode(node, "TaggedTemplateExpression");
     } else {
       state.stop = true;
@@ -570,6 +591,20 @@ export default class ExpressionParser extends LValParser {
       }
     }
     return this.finishNode(node, "CallExpression");
+  }
+
+  finishOptionalCallExpression(node: N.CallExpression): N.CallExpression {
+    if (node.callee.type === "Import") {
+      if (node.arguments.length !== 1) {
+        this.raise(node.start, "import() requires exactly one argument");
+      }
+
+      const importArg = node.arguments[0];
+      if (importArg && importArg.type === "SpreadElement") {
+        this.raise(importArg.start, "... is not allowed in import()");
+      }
+    }
+    return this.finishNode(node, "OptionalCallExpression");
   }
 
   parseCallExpressionArguments(
@@ -1103,7 +1138,21 @@ export default class ExpressionParser extends LValParser {
     }
 
     node.callee = this.parseNoCallExpr();
-    if (this.eat(tt.questionDot)) node.optional = true;
+    if (
+      node.callee.type === "OptionalMemberExpression" ||
+      node.callee.type === "OptionalCallExpression"
+    ) {
+      this.raise(
+        this.state.lastTokEnd,
+        "constructors in/after an Optional Chain are not allowed",
+      );
+    }
+    if (this.eat(tt.questionDot)) {
+      this.raise(
+        this.state.start,
+        "constructors in/after an Optional Chain are not allowed",
+      );
+    }
     this.parseNewArguments(node);
     return this.finishNode(node, "NewExpression");
   }
@@ -1629,7 +1678,9 @@ export default class ExpressionParser extends LValParser {
     const oldStrict = this.state.strict;
     if (isStrict) this.state.strict = isStrict;
     if (node.id) {
-      this.checkReservedWord(node.id, node.start, true, true);
+      // TODO(logan): This check is broken because it passes a node object as
+      // a binding name. Passing the actual string introduces other failures.
+      // this.checkReservedWord(node.id, node.start, true, true);
     }
     if (checkLVal) {
       const nameHash: any = Object.create(null);
@@ -1683,7 +1734,13 @@ export default class ExpressionParser extends LValParser {
     if (allowEmpty && this.match(tt.comma)) {
       elt = null;
     } else if (this.match(tt.ellipsis)) {
-      elt = this.parseSpread(refShorthandDefaultPos);
+      const spreadNodeStartPos = this.state.start;
+      const spreadNodeStartLoc = this.state.startLoc;
+      elt = this.parseParenItem(
+        this.parseSpread(refShorthandDefaultPos, refNeedsArrowPos),
+        spreadNodeStartPos,
+        spreadNodeStartLoc,
+      );
 
       if (refTrailingCommaPos && this.match(tt.comma)) {
         refTrailingCommaPos.start = this.state.start;

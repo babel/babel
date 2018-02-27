@@ -68,7 +68,9 @@ export default function(api, options) {
         const members = globalName.split(".");
         globalToAssign = members.slice(1).reduce((accum, curr) => {
           initAssignments.push(
-            buildPrerequisiteAssignment({ GLOBAL_REFERENCE: accum }),
+            buildPrerequisiteAssignment({
+              GLOBAL_REFERENCE: t.cloneNode(accum),
+            }),
           );
           return t.memberExpression(accum, t.identifier(curr));
         }, t.memberExpression(t.identifier("global"), t.identifier(members[0])));

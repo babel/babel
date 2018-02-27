@@ -9,7 +9,7 @@ import fs from "fs";
 import path from "path";
 
 const maps = {};
-const transformOpts = {};
+let transformOpts = {};
 let piratesRevert = null;
 
 function installSourceMapSupport() {
@@ -113,18 +113,24 @@ export default function register(opts?: Object = {}) {
   delete opts.extensions;
   delete opts.cache;
 
-  Object.assign(transformOpts, opts);
+  transformOpts = Object.assign({}, opts);
 
-  if (!transformOpts.ignore && !transformOpts.only) {
+  let { cwd = "." } = transformOpts;
+
+  // Ensure that the working directory is resolved up front so that
+  // things don't break if it changes later.
+  cwd = transformOpts.cwd = path.resolve(cwd);
+
+  if (transformOpts.ignore === undefined && transformOpts.only === undefined) {
     transformOpts.only = [
       // Only compile things inside the current working directory.
-      new RegExp("^" + escapeRegExp(process.cwd()), "i"),
+      new RegExp("^" + escapeRegExp(cwd), "i"),
     ];
     transformOpts.ignore = [
       // Ignore any node_modules inside the current working directory.
       new RegExp(
         "^" +
-          escapeRegExp(process.cwd()) +
+          escapeRegExp(cwd) +
           "(?:" +
           path.sep +
           ".*)?" +

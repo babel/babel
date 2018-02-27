@@ -1,0 +1,5 @@
+{
+  "plugins": ["proposal-class-properties", "transform-classes"],
+  "minNodeVersion": "6.0.0",
+  "throws": "Class \"A\" cannot be referenced in computed property keys."
+}

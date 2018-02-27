@@ -1,16 +1,12 @@
 // @flow
 
+import cloneNode from "./cloneNode";
+
 /**
- * Create a shallow clone of a `node` excluding `_private` properties.
+ * Create a shallow clone of a `node`, including only
+ * properties belonging to the node.
+ * @deprecated Use t.cloneNode instead.
  */
 export default function clone<T: Object>(node: T): T {
-  if (!node) return node;
-  const newNode = (({}: any): T);
-
-  Object.keys(node).forEach(key => {
-    if (key[0] === "_") return;
-    newNode[key] = node[key];
-  });
-
-  return newNode;
+  return cloneNode(node, /* deep */ false);
 }

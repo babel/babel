@@ -107,7 +107,7 @@ export default function(api, options) {
             callee.object = t.assignmentExpression("=", temp, callee.object);
             contextLiteral = temp;
           } else {
-            contextLiteral = t.cloneDeep(callee.object);
+            contextLiteral = t.cloneNode(callee.object);
           }
           t.appendToMemberExpression(callee, t.identifier("apply"));
         } else {
@@ -118,7 +118,7 @@ export default function(api, options) {
           contextLiteral = t.thisExpression();
         }
 
-        node.arguments.unshift(contextLiteral);
+        node.arguments.unshift(t.cloneNode(contextLiteral));
       },
 
       NewExpression(path, state) {

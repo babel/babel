@@ -1,6 +1,6 @@
 /*eslint quotes: ["error", "double", { "avoidEscape": true }]*/
 import semver from "semver";
-import { prettifyVersion, semverify } from "./utils";
+import { isUnreleasedVersion, prettifyVersion, semverify } from "./utils";
 
 const wordEnds = size => {
   return size > 1 ? "s" : "";
@@ -12,13 +12,30 @@ export const logMessage = (message, context) => {
   console.log(logStr);
 };
 
-export const logPlugin = (plugin, targets, list, context) => {
-  const envList = list[plugin] || {};
-  const filteredList = Object.keys(targets).reduce((a, b) => {
-    if (!envList[b] || semver.lt(targets[b], semverify(envList[b]))) {
-      a[b] = prettifyVersion(targets[b]);
+// Outputs a message that shows which target(s) caused an item to be included:
+// transform-foo { "edge":"13", "firefox":"49", "ie":"10" }
+export const logPlugin = (item, targetVersions, list, context) => {
+  const minVersions = list[item] || {};
+
+  const filteredList = Object.keys(targetVersions).reduce((result, env) => {
+    const minVersion = minVersions[env];
+    const targetVersion = targetVersions[env];
+
+    if (!minVersion) {
+      result[env] = prettifyVersion(targetVersion);
+    } else {
+      const minIsUnreleased = isUnreleasedVersion(minVersion, env);
+      const targetIsUnreleased = isUnreleasedVersion(targetVersion, env);
+
+      if (
+        !targetIsUnreleased &&
+        (minIsUnreleased || semver.lt(targetVersion, semverify(minVersion)))
+      ) {
+        result[env] = prettifyVersion(targetVersion);
+      }
     }
-    return a;
+
+    return result;
   }, {});
 
   const formattedTargets = JSON.stringify(filteredList)
@@ -26,7 +43,7 @@ export const logPlugin = (plugin, targets, list, context) => {
     .replace(/^\{"/, '{ "')
     .replace(/"\}$/, '" }');
 
-  logMessage(`${plugin} ${formattedTargets}`, context);
+  logMessage(`${item} ${formattedTargets}`, context);
 };
 
 export const logEntryPolyfills = (

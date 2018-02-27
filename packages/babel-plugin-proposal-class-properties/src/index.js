@@ -54,7 +54,7 @@ export default function(api, options) {
         value: VALUE
       });
     `({
-      REF: ref,
+      REF: t.cloneNode(ref),
       KEY: t.isIdentifier(key) && !computed ? t.stringLiteral(key.name) : key,
       VALUE: value || scope.buildUndefinedNode(),
     });
@@ -62,7 +62,11 @@ export default function(api, options) {
 
   const buildClassPropertyLoose = (ref, { key, value, computed }, scope) => {
     return template.statement`MEMBER = VALUE`({
-      MEMBER: t.memberExpression(ref, key, computed || t.isLiteral(key)),
+      MEMBER: t.memberExpression(
+        t.cloneNode(ref),
+        key,
+        computed || t.isLiteral(key),
+      ),
       VALUE: value || scope.buildUndefinedNode(),
     });
   };
@@ -128,7 +132,7 @@ export default function(api, options) {
                 t.variableDeclarator(ident, computedNode.key),
               ]),
             );
-            computedNode.key = t.clone(ident);
+            computedNode.key = t.cloneNode(ident);
           }
         }
 
@@ -145,7 +149,7 @@ export default function(api, options) {
           }
         }
 
-        const nodes = computedNodes.concat(staticNodes);
+        const afterNodes = [...staticNodes];
 
         if (instanceBody.length) {
           if (!constructor) {
@@ -183,7 +187,7 @@ export default function(api, options) {
               "initialiseProps",
             );
 
-            nodes.push(
+            afterNodes.push(
               t.variableDeclaration("var", [
                 t.variableDeclarator(
                   initialisePropsRef,
@@ -199,7 +203,10 @@ export default function(api, options) {
             instanceBody = [
               t.expressionStatement(
                 t.callExpression(
-                  t.memberExpression(initialisePropsRef, t.identifier("call")),
+                  t.memberExpression(
+                    t.cloneNode(initialisePropsRef),
+                    t.identifier("call"),
+                  ),
                   [t.thisExpression()],
                 ),
               ),
@@ -223,23 +230,20 @@ export default function(api, options) {
           prop.remove();
         }
 
-        if (!nodes.length) return;
+        if (computedNodes.length === 0 && afterNodes.length === 0) return;
 
         if (path.isClassExpression()) {
           path.scope.push({ id: ref });
-          path.replaceWith(t.assignmentExpression("=", ref, path.node));
-        } else {
-          // path.isClassDeclaration()
-          if (!path.node.id) {
-            path.node.id = ref;
-          }
-
-          if (path.parentPath.isExportDeclaration()) {
-            path = path.parentPath;
-          }
+          path.replaceWith(
+            t.assignmentExpression("=", t.cloneNode(ref), path.node),
+          );
+        } else if (!path.node.id) {
+          // Anonymous class declaration
+          path.node.id = ref;
         }
 
-        path.insertAfter(nodes);
+        path.insertBefore(computedNodes);
+        path.insertAfter(afterNodes);
       },
     },
   };

@@ -58,7 +58,7 @@ export const prettifyTargets = (targets: Targets): Object => {
 export const isUnreleasedVersion = (version: string, env: string): boolean => {
   const unreleasedLabel = unreleasedLabels[env];
   return (
-    unreleasedLabel && unreleasedLabel === version.toString().toLowerCase()
+    !!unreleasedLabel && unreleasedLabel === version.toString().toLowerCase()
   );
 };
 
@@ -86,7 +86,7 @@ export const filterStageFromList = (list: any, stageList: any) => {
 };
 
 export const isPolyfillSource = (source: string): boolean =>
-  source === "@babel/polyfill";
+  source === "@babel/polyfill" || source === "core-js";
 
 export const isRequire = (t: Object, path: Object): boolean =>
   t.isExpressionStatement(path.node) &&

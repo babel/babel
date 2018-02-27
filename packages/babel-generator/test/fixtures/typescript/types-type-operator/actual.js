@@ -1,1 +1,0 @@
-let x: keyof T;

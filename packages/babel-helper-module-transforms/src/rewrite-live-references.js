@@ -112,6 +112,7 @@ const rewriteBindingInitVisitor = {
 
     Object.keys(path.getOuterBindingIdentifiers()).forEach(localName => {
       const exportNames = exported.get(localName) || [];
+
       if (exportNames.length > 0) {
         const statement = t.expressionStatement(
           buildBindingExportAssignmentExpression(
@@ -180,7 +181,13 @@ const rewriteReferencesVisitor = {
     if (importData) {
       const ref = buildImportReference(importData, path.node);
 
-      if (path.parentPath.isCallExpression({ callee: path.node })) {
+      // Preserve the binding location so that sourcemaps are nicer.
+      ref.loc = path.node.loc;
+
+      if (
+        path.parentPath.isCallExpression({ callee: path.node }) &&
+        t.isMemberExpression(ref)
+      ) {
         path.replaceWith(t.sequenceExpression([t.numericLiteral(0), ref]));
       } else if (path.isJSXIdentifier() && t.isMemberExpression(ref)) {
         const { object, property } = ref;
@@ -195,6 +202,10 @@ const rewriteReferencesVisitor = {
       }
 
       requeueInParent(path);
+
+      // The path could have been replaced with an identifier that would
+      // otherwise be re-visited, so we skip processing its children.
+      path.skip();
     }
   },
 

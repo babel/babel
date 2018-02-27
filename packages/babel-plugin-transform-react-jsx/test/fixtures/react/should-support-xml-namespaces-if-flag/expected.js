@@ -1,1 +1,0 @@
-h("f:image", null);
