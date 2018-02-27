@@ -6,7 +6,7 @@ import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as defineMap from "@babel/helper-define-map";
 import { traverse, template, types as t } from "@babel/core";
 
-export type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
+type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
 
 const noMethodVisitor = {
   "FunctionExpression|FunctionDeclaration"(path) {
