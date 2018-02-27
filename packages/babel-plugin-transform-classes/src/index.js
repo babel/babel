@@ -1,6 +1,6 @@
+// @flow
 import { declare } from "@babel/helper-plugin-utils";
-import LooseTransformer from "./loose";
-import VanillaTransformer from "./vanilla";
+import transformClass from "./transformClass";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
@@ -19,7 +19,6 @@ export default declare((api, options) => {
   api.assertVersion(7);
 
   const { loose } = options;
-  const Constructor = loose ? LooseTransformer : VanillaTransformer;
 
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
@@ -56,7 +55,7 @@ export default declare((api, options) => {
         node[VISITED] = true;
 
         path.replaceWith(
-          new Constructor(path, state.file, builtinClasses).run(),
+          transformClass(path, state.file, builtinClasses, loose),
         );
 
         if (path.isCallExpression()) {

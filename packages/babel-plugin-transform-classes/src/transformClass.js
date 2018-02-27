@@ -1,10 +1,12 @@
+// @flow
 import type { NodePath } from "@babel/traverse";
+import nameFunction from "@babel/helper-function-name";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as defineMap from "@babel/helper-define-map";
 import { traverse, template, types as t } from "@babel/core";
 
-type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
+export type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
 
 const noMethodVisitor = {
   "FunctionExpression|FunctionDeclaration"(path) {
@@ -62,28 +64,56 @@ const findThisesVisitor = traverse.visitors.merge([
   },
 ]);
 
-export default class ClassTransformer {
-  constructor(path: NodePath, file, builtinClasses: ReadonlySet<string>) {
+class ClassTransformer {
+  parent: any;
+  scope: any;
+  node: any;
+  path: NodePath;
+  file: any;
+
+  classId: any;
+  classRef: any;
+  superName: any;
+  superReturns: any[];
+  isDerived: boolean;
+  extendsNative: boolean;
+
+  construct: any;
+  constructorBody: any;
+  userConstructor: any;
+  userConstructorPath: NodePath;
+  hasConstructor: boolean;
+
+  instancePropBody = [];
+  instancePropRefs = {};
+  staticPropBody = [];
+  body = [];
+  bareSupers = [];
+  superThises = [];
+  pushedConstructor = false;
+  pushedInherits = false;
+  protoAlias = null;
+  isLoose = false;
+
+  instanceInitializersId: any;
+  staticInitializersId: any;
+  hasInstanceDescriptors = false;
+  hasStaticDescriptors = false;
+  instanceMutatorMap = {};
+  staticMutatorMap = {};
+
+  constructor(
+    path: NodePath,
+    file,
+    builtinClasses: ReadonlySet<string>,
+    isLoose: boolean,
+  ) {
     this.parent = path.parent;
     this.scope = path.scope;
     this.node = path.node;
     this.path = path;
     this.file = file;
-
-    this.clearDescriptors();
-
-    this.instancePropBody = [];
-    this.instancePropRefs = {};
-    this.staticPropBody = [];
-    this.body = [];
-
-    this.bareSupers = [];
-
-    this.pushedConstructor = false;
-    this.pushedInherits = false;
-    this.isLoose = false;
-
-    this.superThises = [];
+    this.isLoose = isLoose || this.isLoose;
 
     // class id
     this.classId = this.node.id;
@@ -105,20 +135,14 @@ export default class ClassTransformer {
 
   run() {
     let superName = this.superName;
-    const file = this.file;
     let body = this.body;
 
-    //
-
     const constructorBody = (this.constructorBody = t.blockStatement([]));
-    this.constructor = this.buildConstructor();
-
-    //
+    this.construct = this.buildConstructor();
 
     const closureParams = [];
     const closureArgs = [];
 
-    //
     if (this.isDerived) {
       if (this.extendsNative) {
         closureArgs.push(
@@ -136,14 +160,13 @@ export default class ClassTransformer {
       this.superName = t.cloneNode(superName);
     }
 
-    //
     this.buildBody();
 
     // make sure this class isn't directly called (with A() instead new A())
     if (!this.isLoose) {
       constructorBody.body.unshift(
         t.expressionStatement(
-          t.callExpression(file.addHelper("classCallCheck"), [
+          t.callExpression(this.file.addHelper("classCallCheck"), [
             t.thisExpression(),
             t.cloneNode(this.classRef),
           ]),
@@ -203,11 +226,10 @@ export default class ClassTransformer {
    * [Please add a description.]
    * https://www.youtube.com/watch?v=fWNaR-rxAic
    */
-
   constructorMeMaybe() {
     let hasConstructor = false;
     const paths = this.path.get("body.body");
-    for (const path of (paths: Array)) {
+    for (const path of paths) {
       hasConstructor = path.equals("kind", "constructor");
       if (hasConstructor) break;
     }
@@ -246,7 +268,7 @@ export default class ClassTransformer {
       constructorBody.body = constructorBody.body.concat(
         this.userConstructor.body.body,
       );
-      t.inherits(this.constructor, this.userConstructor);
+      t.inherits(this.construct, this.userConstructor);
       t.inherits(constructorBody, this.userConstructor.body);
     }
 
@@ -537,7 +559,6 @@ export default class ClassTransformer {
   /**
    * Push a method to its respective mutatorMap.
    */
-
   pushMethod(node: { type: "ClassMethod" }, path?: NodePath) {
     const scope = path ? path.scope : this.scope;
 
@@ -548,14 +569,71 @@ export default class ClassTransformer {
     this.pushToMap(node, false, null, scope);
   }
 
-  _processMethod() {
+  _processMethod(node, scope) {
+    if (this.isLoose === false) {
+      return false;
+    }
+
+    if (!node.decorators) {
+      // use assignments instead of define properties for loose classes
+
+      let classRef = this.classRef;
+      if (!node.static) {
+        this._insertProtoAliasOnce();
+        classRef = this.protoAlias;
+      }
+      const methodName = t.memberExpression(
+        t.cloneNode(classRef),
+        node.key,
+        node.computed || t.isLiteral(node.key),
+      );
+
+      let func = t.functionExpression(
+        null,
+        node.params,
+        node.body,
+        node.generator,
+        node.async,
+      );
+      func.returnType = node.returnType;
+      const key = t.toComputedKey(node, node.key);
+      if (t.isStringLiteral(key)) {
+        func = nameFunction({
+          node: func,
+          id: key,
+          scope,
+        });
+      }
+
+      const expr = t.expressionStatement(
+        t.assignmentExpression("=", methodName, func),
+      );
+      t.inheritsComments(expr, node);
+      this.body.push(expr);
+      return true;
+    }
+
     return false;
+  }
+
+  _insertProtoAliasOnce() {
+    if (!this.protoAlias) {
+      this.protoAlias = this.scope.generateUidIdentifier("proto");
+      const classProto = t.memberExpression(
+        this.classRef,
+        t.identifier("prototype"),
+      );
+      const protoDeclaration = t.variableDeclaration("var", [
+        t.variableDeclarator(this.protoAlias, classProto),
+      ]);
+
+      this.body.push(protoDeclaration);
+    }
   }
 
   /**
    * Replace the constructor body of our class.
    */
-
   pushConstructor(
     replaceSupers,
     method: { type: "ClassMethod" },
@@ -569,7 +647,7 @@ export default class ClassTransformer {
       path.scope.rename(this.classRef.name);
     }
 
-    const construct = this.constructor;
+    const construct = this.construct;
 
     this.userConstructorPath = path;
     this.userConstructor = method;
@@ -595,7 +673,7 @@ export default class ClassTransformer {
       this.pushDescriptors();
     }
 
-    this.body.push(this.constructor);
+    this.body.push(this.construct);
 
     this.pushInherits();
   }
@@ -603,7 +681,6 @@ export default class ClassTransformer {
   /**
    * Push inherits helper to body.
    */
-
   pushInherits() {
     if (!this.isDerived || this.pushedInherits) return;
 
@@ -621,4 +698,14 @@ export default class ClassTransformer {
       ),
     );
   }
+}
+
+export default function transformVanilla(
+  path: NodePath,
+  file: any,
+  builtinClasses: ReadonlySet<string>,
+  isLoose: boolean,
+) {
+  const transformer = new ClassTransformer(path, file, builtinClasses, isLoose);
+  return transformer.run();
 }
