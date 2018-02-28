@@ -129,7 +129,7 @@ export default function(commander, filenames, opts) {
     const filename = filenames[index];
 
     handle(filename, function(err) {
-      if (err) throw Error(err);
+      if (err) throw new Error(err);
       index++;
       if (index !== filenames.length) {
         sequentialHandle(filenames, index);
