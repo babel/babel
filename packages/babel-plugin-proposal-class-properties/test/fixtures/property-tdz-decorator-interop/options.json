@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-decorators", ["proposal-class-properties", {"loose": true}], "transform-classes"],
+  "minNodeVersion": "6.0.0"
+}
