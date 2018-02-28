@@ -1,7 +1,7 @@
 // @flow
 import { declare } from "@babel/helper-plugin-utils";
 import type { NodePath } from "@babel/traverse";
-import transformClass from "./transformClass";
+import transformClass from "./vanilla";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
