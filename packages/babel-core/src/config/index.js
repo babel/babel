@@ -107,7 +107,7 @@ export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
           if (ignored) return true;
 
           preset.options.forEach(opts => {
-            merge(optionDefaults, opts);
+            mergeOptions(optionDefaults, opts);
           });
         }
       }
@@ -127,7 +127,7 @@ export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
     if (ignored) return null;
 
     configChain.options.forEach(opts => {
-      merge(options, opts);
+      mergeOptions(options, opts);
     });
   } catch (e) {
     // There are a few case where thrown errors will try to annotate themselves multiple times, so
@@ -140,7 +140,7 @@ export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
   }
 
   const opts: Object = optionDefaults;
-  merge(opts, options);
+  mergeOptions(opts, options);
 
   // Tack the passes onto the object itself so that, if this object is passed back to Babel a second time,
   // it will be in the right structure to not change behavior.
@@ -160,16 +160,19 @@ export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
   };
 }
 
-function merge(target: ValidatedOptions, source: ValidatedOptions): void {
+function mergeOptions(
+  target: ValidatedOptions,
+  source: ValidatedOptions,
+): void {
   for (const k of Object.keys(source)) {
     if (k === "parserOpts" && source.parserOpts) {
       const parserOpts = source.parserOpts;
       const targetObj = (target.parserOpts = target.parserOpts || {});
-      mergeObject(targetObj, parserOpts);
+      mergeDefaultFields(targetObj, parserOpts);
     } else if (k === "generatorOpts" && source.generatorOpts) {
       const generatorOpts = source.generatorOpts;
       const targetObj = (target.generatorOpts = target.generatorOpts || {});
-      mergeObject(targetObj, generatorOpts);
+      mergeDefaultFields(targetObj, generatorOpts);
     } else {
       const val = source[k];
       if (val !== undefined) target[k] = (val: any);
@@ -177,7 +180,7 @@ function merge(target: ValidatedOptions, source: ValidatedOptions): void {
   }
 }
 
-function mergeObject<T: {}>(target: T, source: T) {
+function mergeDefaultFields<T: {}>(target: T, source: T) {
   for (const k of Object.keys(source)) {
     const val = source[k];
     if (val !== undefined) target[k] = (val: any);
