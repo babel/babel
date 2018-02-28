@@ -77,10 +77,6 @@ export function replaceWithSourceString(replacement) {
   } catch (err) {
     const loc = err.loc;
     if (loc) {
-      // Set the location to null or else the re-thrown exception could
-      // incorrectly interpret the location as referencing the file being
-      // transformed.
-      err.loc = null;
       err.message +=
         " - make sure this is an expression.\n" +
         codeFrameColumns(replacement, {
@@ -89,6 +85,7 @@ export function replaceWithSourceString(replacement) {
             column: loc.column + 1,
           },
         });
+      err.code = "BABEL_REPLACE_SOURCE_ERROR";
     }
     throw err;
   }

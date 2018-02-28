@@ -464,9 +464,17 @@ export default class Tokenizer extends LocationParser {
     const next = this.input.charCodeAt(this.state.pos + 1);
 
     if (next === code) {
+      const assign =
+        this.input.charCodeAt(this.state.pos + 2) === charCodes.equalsTo;
+      if (assign) {
+        // $FlowFixMe
+        this.expectPlugin("logicalAssignment");
+      }
       this.finishOp(
-        code === charCodes.verticalBar ? tt.logicalOR : tt.logicalAND,
-        2,
+        assign
+          ? tt.assign
+          : code === charCodes.verticalBar ? tt.logicalOR : tt.logicalAND,
+        assign ? 3 : 2,
       );
       return;
     }
@@ -1273,7 +1281,7 @@ export default class Tokenizer extends LocationParser {
     return word + this.input.slice(chunkStart, this.state.pos);
   }
 
-  isIterator(word): boolean {
+  isIterator(word: string): boolean {
     return word === "@@iterator" || word === "@@asyncIterator";
   }
 

@@ -54,6 +54,9 @@ export default function(api, options) {
         const strings = [];
         const raws = [];
 
+        // Flag variable to check if contents of strings and raw are equal
+        let isStringsRawEqual = true;
+
         for (const elem of (quasi.quasis: Array)) {
           const { raw, cooked } = elem.value;
           const value =
@@ -63,6 +66,11 @@ export default function(api, options) {
 
           strings.push(value);
           raws.push(t.stringLiteral(raw));
+
+          if (raw !== cooked) {
+            // false even if one of raw and cooked are not equal
+            isStringsRawEqual = false;
+          }
         }
 
         // Generate a unique name based on the string literals so we dedupe
@@ -81,10 +89,15 @@ export default function(api, options) {
           this.templates.set(name, templateObject);
 
           const helperId = this.addHelper(helperName);
-          const init = t.callExpression(helperId, [
-            t.arrayExpression(strings),
-            t.arrayExpression(raws),
-          ]);
+          const callExpressionInput = [];
+          callExpressionInput.push(t.arrayExpression(strings));
+
+          if (!isStringsRawEqual) {
+            callExpressionInput.push(t.arrayExpression(raws));
+          }
+
+          // only add raw arrayExpression if there is any difference between raws and strings
+          const init = t.callExpression(helperId, callExpressionInput);
           annotateAsPure(init);
           init._compact = true;
           programPath.scope.push({

@@ -64,7 +64,7 @@ export function runSync(
   return {
     metadata: file.metadata,
     options: opts,
-    ast: opts.ast !== false ? file.ast : null,
+    ast: opts.ast === true ? file.ast : null,
     code: outputCode === undefined ? null : outputCode,
     map: outputMap === undefined ? null : outputMap,
   };

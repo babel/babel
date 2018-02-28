@@ -43,7 +43,7 @@
           }
         },
         "expression": {
-          "type": "MemberExpression",
+          "type": "OptionalMemberExpression",
           "start": 0,
           "end": 13,
           "loc": {
@@ -57,7 +57,7 @@
             }
           },
           "object": {
-            "type": "MemberExpression",
+            "type": "OptionalMemberExpression",
             "start": 0,
             "end": 10,
             "loc": {
@@ -71,7 +71,7 @@
               }
             },
             "object": {
-              "type": "MemberExpression",
+              "type": "OptionalMemberExpression",
               "start": 0,
               "end": 8,
               "loc": {
@@ -85,7 +85,7 @@
                 }
               },
               "object": {
-                "type": "MemberExpression",
+                "type": "OptionalMemberExpression",
                 "start": 0,
                 "end": 6,
                 "loc": {
@@ -99,7 +99,7 @@
                   }
                 },
                 "object": {
-                  "type": "MemberExpression",
+                  "type": "OptionalMemberExpression",
                   "start": 0,
                   "end": 4,
                   "loc": {
@@ -166,7 +166,8 @@
                   },
                   "name": "c"
                 },
-                "computed": false
+                "computed": false,
+                "optional": false
               },
               "property": {
                 "type": "Identifier",
@@ -185,7 +186,8 @@
                 },
                 "name": "d"
               },
-              "computed": false
+              "computed": false,
+              "optional": false
             },
             "property": {
               "type": "Identifier",
@@ -204,7 +206,8 @@
               },
               "name": "e"
             },
-            "computed": false
+            "computed": false,
+            "optional": false
           },
           "property": {
             "type": "Identifier",
@@ -242,7 +245,7 @@
           }
         },
         "expression": {
-          "type": "MemberExpression",
+          "type": "OptionalMemberExpression",
           "start": 15,
           "end": 27,
           "loc": {
@@ -256,7 +259,7 @@
             }
           },
           "object": {
-            "type": "MemberExpression",
+            "type": "OptionalMemberExpression",
             "start": 15,
             "end": 25,
             "loc": {
@@ -270,7 +273,7 @@
               }
             },
             "object": {
-              "type": "MemberExpression",
+              "type": "OptionalMemberExpression",
               "start": 15,
               "end": 23,
               "loc": {
@@ -403,7 +406,8 @@
               },
               "name": "e"
             },
-            "computed": false
+            "computed": false,
+            "optional": false
           },
           "property": {
             "type": "Identifier",
@@ -422,7 +426,8 @@
             },
             "name": "f"
           },
-          "computed": false
+          "computed": false,
+          "optional": false
         }
       }
     ],

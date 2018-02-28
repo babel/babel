@@ -15,7 +15,7 @@ export const definitions = {
     Set: "es6.set",
     WeakMap: "es6.weak-map",
     WeakSet: "es6.weak-set",
-    Promise: "es6.promise",
+    Promise: ["es6.object.to-string", "es6.promise"],
     Symbol: "es6.symbol",
   },
 
@@ -112,6 +112,11 @@ export const definitions = {
       EPSILON: "es6.number.epsilon",
       MIN_SAFE_INTEGER: "es6.number.min-safe-integer",
       MAX_SAFE_INTEGER: "es6.number.max-safe-integer",
+    },
+
+    Promise: {
+      all: ["es6.string.iterator", "web.dom.iterable"],
+      race: ["es6.string.iterator", "web.dom.iterable"],
     },
 
     Reflect: {

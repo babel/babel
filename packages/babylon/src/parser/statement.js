@@ -1488,7 +1488,10 @@ export default class StatementParser extends ExpressionParser {
           node.declaration.type === "FunctionDeclaration" ||
           node.declaration.type === "ClassDeclaration"
         ) {
-          this.checkDuplicateExports(node, node.declaration.id.name);
+          const id = node.declaration.id;
+          if (!id) throw new Error("Assertion failure");
+
+          this.checkDuplicateExports(node, id.name);
         } else if (node.declaration.type === "VariableDeclaration") {
           for (const declaration of node.declaration.declarations) {
             this.checkDeclaration(declaration.id);

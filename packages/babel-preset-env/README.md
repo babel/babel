@@ -342,6 +342,8 @@ import "core-js/modules/es7.string.pad-start";
 import "core-js/modules/es7.string.pad-end";
 ```
 
+This will also work for `core-js` directly (`import "core-js";` or `require('core-js');`)
+
 #### `useBuiltIns: false`
 
 Don't add polyfills automatically per file, or transform `import "@babel/polyfill"` to individual polyfills.
@@ -403,7 +405,7 @@ Toggles whether or not [browserslist config sources](https://github.com/ai/brows
 
 `boolean`, defaults to `false`
 
-Toggles enabling support for builtin/feature proposals that have shipped in browsers. If your target environments have native support for a feature proposal, its matching parser syntax plugin is enabled instead of performing any transform. Note that this _does not_ enable the same transformations as [`@babel/preset-stage3`](https://babeljs.io/docs/plugins/preset-stage-3/), since proposals can continue to change before landing in browsers.
+Toggles enabling support for builtin/feature proposals that have shipped in browsers. If your target environments have native support for a feature proposal, its matching parser syntax plugin is enabled instead of performing any transform. Note that this _does not_ enable the same transformations as [`@babel/preset-stage-3`](https://babeljs.io/docs/plugins/preset-stage-3/), since proposals can continue to change before landing in browsers.
 
 The following are currently supported:
 

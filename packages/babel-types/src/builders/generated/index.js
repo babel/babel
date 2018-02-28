@@ -596,6 +596,14 @@ export function ClassProperty(...args: Array<any>): Object {
   return builder("ClassProperty", ...args);
 }
 export { ClassProperty as classProperty };
+export function OptionalMemberExpression(...args: Array<any>): Object {
+  return builder("OptionalMemberExpression", ...args);
+}
+export { OptionalMemberExpression as optionalMemberExpression };
+export function OptionalCallExpression(...args: Array<any>): Object {
+  return builder("OptionalCallExpression", ...args);
+}
+export { OptionalCallExpression as optionalCallExpression };
 export function Import(...args: Array<any>): Object {
   return builder("Import", ...args);
 }
@@ -786,6 +794,16 @@ export function TSIntersectionType(...args: Array<any>): Object {
 }
 export { TSIntersectionType as tsIntersectionType };
 export { TSIntersectionType as tSIntersectionType };
+export function TSConditionalType(...args: Array<any>): Object {
+  return builder("TSConditionalType", ...args);
+}
+export { TSConditionalType as tsConditionalType };
+export { TSConditionalType as tSConditionalType };
+export function TSInferType(...args: Array<any>): Object {
+  return builder("TSInferType", ...args);
+}
+export { TSInferType as tsInferType };
+export { TSInferType as tSInferType };
 export function TSParenthesizedType(...args: Array<any>): Object {
   return builder("TSParenthesizedType", ...args);
 }

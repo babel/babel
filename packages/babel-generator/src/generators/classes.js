@@ -99,9 +99,12 @@ export function ClassProperty(node: Object) {
     this.print(node.key, node);
   }
 
+  // TS
   if (node.optional) {
-    // TS
     this.token("?");
+  }
+  if (node.definite) {
+    this.token("!");
   }
 
   this.print(node.typeAnnotation, node);

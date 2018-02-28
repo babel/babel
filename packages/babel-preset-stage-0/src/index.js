@@ -2,6 +2,7 @@ import presetStage1 from "@babel/preset-stage-1";
 
 import transformPatternMatching from "@babel/plugin-proposal-pattern-matching";
 import transformFunctionBind from "@babel/plugin-proposal-function-bind";
+import transformLogicalAssignmentOperators from "@babel/plugin-proposal-logical-assignment-operators";
 
 export default function(context, opts = {}) {
   let loose = false;
@@ -23,6 +24,10 @@ export default function(context, opts = {}) {
 
   return {
     presets: [[presetStage1, { loose, useBuiltIns }]],
-    plugins: [transformPatternMatching, transformFunctionBind],
+    plugins: [
+      transformPatternMatching,
+      transformFunctionBind,
+      transformLogicalAssignmentOperators,
+    ],
   };
 }

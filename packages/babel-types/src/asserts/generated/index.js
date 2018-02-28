@@ -651,6 +651,18 @@ export function assertBindExpression(node: Object, opts?: Object = {}): void {
 export function assertClassProperty(node: Object, opts?: Object = {}): void {
   assert("ClassProperty", node, opts);
 }
+export function assertOptionalMemberExpression(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("OptionalMemberExpression", node, opts);
+}
+export function assertOptionalCallExpression(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("OptionalCallExpression", node, opts);
+}
 export function assertImport(node: Object, opts?: Object = {}): void {
   assert("Import", node, opts);
 }
@@ -815,6 +827,15 @@ export function assertTSIntersectionType(
   opts?: Object = {},
 ): void {
   assert("TSIntersectionType", node, opts);
+}
+export function assertTSConditionalType(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("TSConditionalType", node, opts);
+}
+export function assertTSInferType(node: Object, opts?: Object = {}): void {
+  assert("TSInferType", node, opts);
 }
 export function assertTSParenthesizedType(
   node: Object,

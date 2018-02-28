@@ -371,6 +371,7 @@ Aliases: `Property`
  - `computed`: `boolean` (default: `false`)
  - `abstract`: `boolean` (default: `null`)
  - `accessibility`: `"public" | "private" | "protected"` (default: `null`)
+ - `definite`: `boolean` (default: `null`)
  - `optional`: `boolean` (default: `null`)
  - `readonly`: `boolean` (default: `null`)
  - `static`: `boolean` (default: `null`)
@@ -1651,6 +1652,38 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
 ---
 
+### optionalCallExpression
+```javascript
+t.optionalCallExpression(callee, arguments, optional)
+```
+
+See also `t.isOptionalCallExpression(node, opts)` and `t.assertOptionalCallExpression(node, opts)`.
+
+Aliases: `Expression`
+
+ - `callee`: `Expression` (required)
+ - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
+ - `optional`: `boolean` (required)
+ - `typeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
+
+---
+
+### optionalMemberExpression
+```javascript
+t.optionalMemberExpression(object, property, computed, optional)
+```
+
+See also `t.isOptionalMemberExpression(node, opts)` and `t.assertOptionalMemberExpression(node, opts)`.
+
+Aliases: `Expression`
+
+ - `object`: `Expression` (required)
+ - `property`: `any` (required)
+ - `computed`: `boolean` (default: `false`)
+ - `optional`: `boolean` (required)
+
+---
+
 ### parenthesizedExpression
 ```javascript
 t.parenthesizedExpression(expression)
@@ -1904,6 +1937,22 @@ Aliases: `TSTypeElement`
 
 ---
 
+### tSConditionalType
+```javascript
+t.tsConditionalType(checkType, extendsType, trueType, falseType)
+```
+
+See also `t.isTSConditionalType(node, opts)` and `t.assertTSConditionalType(node, opts)`.
+
+Aliases: `TSType`
+
+ - `checkType`: `TSType` (required)
+ - `extendsType`: `TSType` (required)
+ - `trueType`: `TSType` (required)
+ - `falseType`: `TSType` (required)
+
+---
+
 ### tSConstructSignatureDeclaration
 ```javascript
 t.tsConstructSignatureDeclaration(typeParameters, parameters, typeAnnotation)
@@ -2100,6 +2149,19 @@ Aliases: `TSType`
 
  - `objectType`: `TSType` (required)
  - `indexType`: `TSType` (required)
+
+---
+
+### tSInferType
+```javascript
+t.tsInferType(typeParameter)
+```
+
+See also `t.isTSInferType(node, opts)` and `t.assertTSInferType(node, opts)`.
+
+Aliases: `TSType`
+
+ - `typeParameter`: `TSType` (required)
 
 ---
 
@@ -2851,6 +2913,7 @@ See also `t.isVariableDeclarator(node, opts)` and `t.assertVariableDeclarator(no
 
  - `id`: `LVal` (required)
  - `init`: `Expression` (default: `null`)
+ - `definite`: `boolean` (default: `null`)
 
 ---
 

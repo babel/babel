@@ -34,6 +34,7 @@ describe("parser and generator options", function() {
 
   function newTransform(string) {
     return babel.transform(string, {
+      ast: true,
       parserOpts: {
         parser: recast.parse,
         plugins: ["flow"],
@@ -47,7 +48,10 @@ describe("parser and generator options", function() {
 
   it("options", function() {
     const string = "original;";
-    assert.deepEqual(newTransform(string).ast, babel.transform(string).ast);
+    assert.deepEqual(
+      newTransform(string).ast,
+      babel.transform(string, { ast: true }).ast,
+    );
     assert.equal(newTransform(string).code, string);
   });
 
@@ -57,6 +61,7 @@ describe("parser and generator options", function() {
     assert.deepEqual(
       newTransform(experimental).ast,
       babel.transform(experimental, {
+        ast: true,
         parserOpts: {
           plugins: ["flow"],
         },
@@ -66,6 +71,7 @@ describe("parser and generator options", function() {
 
     function newTransformWithPlugins(string) {
       return babel.transform(string, {
+        ast: true,
         plugins: [__dirname + "/../../babel-plugin-syntax-flow"],
         parserOpts: {
           parser: recast.parse,
@@ -79,6 +85,7 @@ describe("parser and generator options", function() {
     assert.deepEqual(
       newTransformWithPlugins(experimental).ast,
       babel.transform(experimental, {
+        ast: true,
         parserOpts: {
           plugins: ["flow"],
         },
@@ -93,6 +100,7 @@ describe("parser and generator options", function() {
     assert.notEqual(
       newTransform(experimental).ast,
       babel.transform(experimental, {
+        ast: true,
         parserOpts: {
           allowImportExportEverywhere: true,
         },
@@ -206,6 +214,7 @@ describe("api", function() {
 
     function execTest(passPerPreset) {
       return babel.transform("type Foo = number; let x = (y): Foo => y;", {
+        sourceType: "script",
         passPerPreset: passPerPreset,
         presets: [
           // First preset with our plugin, "before"
@@ -397,6 +406,18 @@ describe("api", function() {
 
   it("ast option false", function() {
     return transformAsync("foo('bar');", { ast: false }).then(function(result) {
+      assert.ok(!result.ast);
+    });
+  });
+
+  it("ast option true", function() {
+    return transformAsync("foo('bar');", { ast: true }).then(function(result) {
+      assert.ok(result.ast);
+    });
+  });
+
+  it("ast option default", function() {
+    return transformAsync("foo('bar');").then(function(result) {
       assert.ok(!result.ast);
     });
   });

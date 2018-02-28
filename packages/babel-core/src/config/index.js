@@ -3,7 +3,6 @@
 import path from "path";
 import * as context from "../index";
 import Plugin from "./plugin";
-import merge from "lodash/merge";
 import {
   buildRootChain,
   buildPresetChain,
@@ -13,10 +12,9 @@ import {
 } from "./config-chain";
 import type { UnloadedDescriptor } from "./config-descriptors";
 import traverse from "@babel/traverse";
-import clone from "lodash/clone";
 import { makeWeakCache, type CacheConfigurator } from "./caching";
 import { getEnv } from "./helpers/environment";
-import { validate } from "./validation/options";
+import { validate, type ValidatedOptions } from "./validation/options";
 import { validatePluginObject } from "./validation/plugins";
 
 type LoadedDescriptor = {
@@ -62,7 +60,7 @@ export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
     envName,
   };
 
-  const configChain = buildRootChain(absoluteCwd, args, context);
+  const configChain = buildRootChain(args, context);
   if (!configChain) return null;
 
   const optionDefaults = {};
@@ -109,7 +107,7 @@ export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
           if (ignored) return true;
 
           preset.options.forEach(opts => {
-            merge(optionDefaults, opts);
+            mergeOptions(optionDefaults, opts);
           });
         }
       }
@@ -129,7 +127,7 @@ export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
     if (ignored) return null;
 
     configChain.options.forEach(opts => {
-      merge(options, opts);
+      mergeOptions(options, opts);
     });
   } catch (e) {
     // There are a few case where thrown errors will try to annotate themselves multiple times, so
@@ -141,7 +139,8 @@ export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
     throw e;
   }
 
-  const opts: Object = merge(optionDefaults, options);
+  const opts: Object = optionDefaults;
+  mergeOptions(opts, options);
 
   // Tack the passes onto the object itself so that, if this object is passed back to Babel a second time,
   // it will be in the right structure to not change behavior.
@@ -159,6 +158,33 @@ export default function loadConfig(inputOpts: mixed): ResolvedConfig | null {
     options: opts,
     passes: passes,
   };
+}
+
+function mergeOptions(
+  target: ValidatedOptions,
+  source: ValidatedOptions,
+): void {
+  for (const k of Object.keys(source)) {
+    if (k === "parserOpts" && source.parserOpts) {
+      const parserOpts = source.parserOpts;
+      const targetObj = (target.parserOpts = target.parserOpts || {});
+      mergeDefaultFields(targetObj, parserOpts);
+    } else if (k === "generatorOpts" && source.generatorOpts) {
+      const generatorOpts = source.generatorOpts;
+      const targetObj = (target.generatorOpts = target.generatorOpts || {});
+      mergeDefaultFields(targetObj, generatorOpts);
+    } else {
+      const val = source[k];
+      if (val !== undefined) target[k] = (val: any);
+    }
+  }
+}
+
+function mergeDefaultFields<T: {}>(target: T, source: T) {
+  for (const k of Object.keys(source)) {
+    const val = source[k];
+    if (val !== undefined) target[k] = (val: any);
+  }
 }
 
 /**
@@ -238,7 +264,7 @@ const instantiatePlugin = makeWeakCache(
 
     const plugin = Object.assign({}, pluginObj);
     if (plugin.visitor) {
-      plugin.visitor = traverse.explode(clone(plugin.visitor));
+      plugin.visitor = traverse.explode(Object.assign({}, plugin.visitor));
     }
 
     if (plugin.inherits) {

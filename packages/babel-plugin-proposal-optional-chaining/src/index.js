@@ -9,15 +9,20 @@ export default function(api, options) {
     const optionals = [];
 
     let objectPath = path;
-    while (objectPath.isMemberExpression() || objectPath.isCallExpression()) {
+    while (
+      objectPath.isOptionalMemberExpression() ||
+      objectPath.isOptionalCallExpression()
+    ) {
       const { node } = objectPath;
       if (node.optional) {
         optionals.push(node);
       }
 
-      if (objectPath.isMemberExpression()) {
+      if (objectPath.isOptionalMemberExpression()) {
+        objectPath.node.type = "MemberExpression";
         objectPath = objectPath.get("object");
       } else {
+        objectPath.node.type = "CallExpression";
         objectPath = objectPath.get("callee");
       }
     }
@@ -101,21 +106,10 @@ export default function(api, options) {
     return path.find(path => {
       const { parentPath } = path;
 
-      if (path.key == "left" && parentPath.isAssignmentExpression()) {
-        throw path.buildCodeFrameError(
-          "Illegal optional chain in assignment expression",
-        );
-      }
-      if (path.key == "argument" && parentPath.isUpdateExpression()) {
-        throw path.buildCodeFrameError(
-          "Illegal optional chain in update expression",
-        );
-      }
-
-      if (path.key == "object" && parentPath.isMemberExpression()) {
+      if (path.key == "object" && parentPath.isOptionalMemberExpression()) {
         return false;
       }
-      if (path.key == "callee" && parentPath.isCallExpression()) {
+      if (path.key == "callee" && parentPath.isOptionalCallExpression()) {
         return false;
       }
       if (
@@ -133,7 +127,7 @@ export default function(api, options) {
     inherits: syntaxOptionalChaining,
 
     visitor: {
-      "MemberExpression|CallExpression"(path) {
+      "OptionalCallExpression|OptionalMemberExpression"(path) {
         if (!path.node.optional) {
           return;
         }

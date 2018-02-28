@@ -14,7 +14,10 @@ export default function() {
         if (operator !== "|>") return;
 
         let optimizeArrow =
-          t.isArrowFunctionExpression(right) && t.isExpression(right.body);
+          t.isArrowFunctionExpression(right) &&
+          t.isExpression(right.body) &&
+          !right.async &&
+          !right.generator;
         let param;
 
         if (optimizeArrow) {

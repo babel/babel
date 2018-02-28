@@ -7,6 +7,7 @@ require("../babel-preset-env");
 describe("babel-preset-env-standalone", () => {
   it("works w/o targets", () => {
     const output = Babel.transform("const a = 1;", {
+      sourceType: "script",
       presets: ["env"],
     }).code;
     assert.equal(output, "var a = 1;");
@@ -14,6 +15,7 @@ describe("babel-preset-env-standalone", () => {
 
   it("doesn't transpile `const` with chrome 60", () => {
     const output = Babel.transform("const a = 1;", {
+      sourceType: "script",
       presets: [
         [
           "env",
@@ -30,6 +32,7 @@ describe("babel-preset-env-standalone", () => {
 
   it("transpiles `const` with chrome 60 and preset-es2015", () => {
     const output = Babel.transform("const a = 1;", {
+      sourceType: "script",
       presets: [
         [
           "env",
@@ -47,6 +50,7 @@ describe("babel-preset-env-standalone", () => {
 
   it("uses transform-new-targets plugin", () => {
     const output = Babel.transform("function Foo() {new.target}", {
+      sourceType: "script",
       presets: ["env"],
     }).code;
     assert.equal(

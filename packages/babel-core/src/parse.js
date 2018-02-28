@@ -1,6 +1,6 @@
 // @flow
 
-import loadConfig, { InputOptions } from "./config";
+import loadConfig, { type InputOptions } from "./config";
 import normalizeFile from "./transformation/normalize-file";
 import normalizeOptions from "./transformation/normalize-opts";
 

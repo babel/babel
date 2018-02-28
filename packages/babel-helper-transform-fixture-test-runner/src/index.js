@@ -330,6 +330,7 @@ function run(task) {
     const newOpts = merge(
       {
         filename: self.loc,
+        sourceType: "unambiguous",
       },
       opts,
     );

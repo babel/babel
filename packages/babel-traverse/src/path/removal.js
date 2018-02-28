@@ -6,6 +6,7 @@ export function remove() {
   this._assertUnremoved();
 
   this.resync();
+  this._removeFromScope();
 
   if (this._callRemovalHooks()) {
     this._markRemoved();
@@ -15,6 +16,11 @@ export function remove() {
   this.shareCommentsWithSiblings();
   this._remove();
   this._markRemoved();
+}
+
+export function _removeFromScope() {
+  const bindings = this.getBindingIdentifiers();
+  Object.keys(bindings).forEach(name => this.scope.removeBinding(name));
 }
 
 export function _callRemovalHooks() {

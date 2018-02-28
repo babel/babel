@@ -63,7 +63,7 @@ export function compile(filename, opts, callback) {
     if (err) {
       if (commander.watch) {
         console.error(err);
-        return callback(null, { ignored: true });
+        return callback(null, null);
       } else {
         return callback(err);
       }

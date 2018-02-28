@@ -220,7 +220,7 @@
   },
   "transform-dotall-regex": {
     "chrome": "62",
-    "safari": "tp",
+    "safari": "11.1",
     "opera": "49"
   },
   "proposal-async-generator-functions": {
@@ -232,17 +232,19 @@
   "proposal-object-rest-spread": {
     "chrome": "60",
     "firefox": "55",
-    "safari": "tp",
+    "safari": "11.1",
     "node": "8.3",
     "opera": "47"
   },
   "proposal-optional-catch-binding": {
+    "chrome": "66",
     "firefox": "58",
-    "safari": "tp"
+    "safari": "11.1",
+    "opera": "53"
   },
   "proposal-unicode-property-regex": {
     "chrome": "64",
-    "safari": "tp",
+    "safari": "11.1",
     "opera": "51"
   }
 }

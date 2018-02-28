@@ -7,4 +7,6 @@ class A {
 
 export class B {}
 
-var _ref = React.createElement(B, null);
+var _ref =
+/*#__PURE__*/
+React.createElement(B, null);
