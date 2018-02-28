@@ -16,6 +16,7 @@ describe("@babel/standalone", () => {
   });
   it("handles the es2015-loose preset", () => {
     const output = Babel.transform("class A {}", {
+      sourceType: "script",
       presets: ["es2015-loose"],
     }).code;
     assert.equal(output, "var A = function A() {};");
@@ -52,7 +53,7 @@ describe("@babel/standalone", () => {
           },
         },
       ],
-      sourceType: "module",
+      sourceType: "script",
     };
     const output = Babel.transformFromAst(ast, "42", { presets: ["es2015"] })
       .code;
