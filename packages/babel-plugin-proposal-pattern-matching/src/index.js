@@ -311,9 +311,7 @@ export default function({ types: t }) {
           )();
         }
 
-        const bodyExpr = t.blockStatement(
-          first_statements_group.concat([mainIfTree]),
-        );
+        const bodyExpr = first_statements_group.concat([mainIfTree]);
 
         path.replaceWith(
           template.expression(`function() {
