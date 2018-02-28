@@ -18,202 +18,123 @@ const noMethodVisitor = {
   },
 };
 
-const verifyConstructorVisitor = traverse.visitors.merge([
-  noMethodVisitor,
-  {
-    CallExpression: {
-      exit(path) {
-        if (path.get("callee").isSuper()) {
-          this.hasBareSuper = true;
+export default function transformClass(
+  path: NodePath,
+  file: any,
+  builtinClasses: ReadonlySet<string>,
+  isLoose: boolean,
+) {
+  const classState = {
+    parent: undefined,
+    scope: undefined,
+    node: undefined,
+    path: undefined,
+    file: undefined,
 
-          if (!this.isDerived) {
-            throw path.buildCodeFrameError(
-              "super() is only allowed in a derived constructor",
-            );
+    classId: undefined,
+    classRef: undefined,
+    superName: undefined,
+    superReturns: [],
+    isDerived: false,
+    extendsNative: false,
+
+    construct: undefined,
+    constructorBody: undefined,
+    userConstructor: undefined,
+    userConstructorPath: undefined,
+    hasConstructor: false,
+
+    instancePropBody: [],
+    instancePropRefs: {},
+    staticPropBody: [],
+    body: [],
+    bareSupers: [],
+    superThises: [],
+    pushedConstructor: false,
+    pushedInherits: false,
+    protoAlias: null,
+    isLoose: false,
+    hasBareSuper: false,
+
+    instanceInitializersId: undefined,
+    staticInitializersId: undefined,
+    hasInstanceDescriptors: false,
+    hasStaticDescriptors: false,
+    instanceMutatorMap: {},
+    staticMutatorMap: {},
+  };
+
+  const setState = newState => {
+    Object.assign(classState, newState);
+  };
+
+  const verifyConstructorVisitor = traverse.visitors.merge([
+    noMethodVisitor,
+    {
+      CallExpression: {
+        exit(path) {
+          if (path.get("callee").isSuper()) {
+            classState.hasBareSuper = true;
+
+            if (!classState.isDerived) {
+              throw path.buildCodeFrameError(
+                "super() is only allowed in a derived constructor",
+              );
+            }
           }
+        },
+      },
+
+      ThisExpression(path) {
+        if (classState.isDerived) {
+          if (path.parentPath.isMemberExpression({ object: path.node })) {
+            // In cases like this.foo or this[foo], there is no need to add
+            // assertThisInitialized, since they already throw if this is
+            // undefined.
+            return;
+          }
+
+          const assertion = t.callExpression(
+            classState.file.addHelper("assertThisInitialized"),
+            [path.node],
+          );
+          path.replaceWith(assertion);
+          path.skip();
         }
       },
     },
+  ]);
 
-    ThisExpression(path) {
-      if (this.isDerived) {
-        if (path.parentPath.isMemberExpression({ object: path.node })) {
-          // In cases like this.foo or this[foo], there is no need to add
-          // assertThisInitialized, since they already throw if this is
-          // undefined.
-          return;
-        }
-
-        const assertion = t.callExpression(
-          this.file.addHelper("assertThisInitialized"),
-          [path.node],
-        );
-        path.replaceWith(assertion);
-        path.skip();
-      }
+  const findThisesVisitor = traverse.visitors.merge([
+    noMethodVisitor,
+    {
+      ThisExpression(path) {
+        classState.superThises.push(path);
+      },
     },
-  },
-]);
+  ]);
 
-const findThisesVisitor = traverse.visitors.merge([
-  noMethodVisitor,
-  {
-    ThisExpression(path) {
-      this.superThises.push(path);
-    },
-  },
-]);
-
-class ClassTransformer {
-  parent: any;
-  scope: any;
-  node: any;
-  path: NodePath;
-  file: any;
-
-  classId: any;
-  classRef: any;
-  superName: any;
-  superReturns: any[];
-  isDerived: boolean;
-  extendsNative: boolean;
-
-  construct: any;
-  constructorBody: any;
-  userConstructor: any;
-  userConstructorPath: NodePath;
-  hasConstructor: boolean;
-
-  instancePropBody = [];
-  instancePropRefs = {};
-  staticPropBody = [];
-  body = [];
-  bareSupers = [];
-  superThises = [];
-  pushedConstructor = false;
-  pushedInherits = false;
-  protoAlias = null;
-  isLoose = false;
-
-  instanceInitializersId: any;
-  staticInitializersId: any;
-  hasInstanceDescriptors = false;
-  hasStaticDescriptors = false;
-  instanceMutatorMap = {};
-  staticMutatorMap = {};
-
-  constructor(
-    path: NodePath,
-    file,
-    builtinClasses: ReadonlySet<string>,
-    isLoose: boolean,
-  ) {
-    this.parent = path.parent;
-    this.scope = path.scope;
-    this.node = path.node;
-    this.path = path;
-    this.file = file;
-    this.isLoose = isLoose || this.isLoose;
-
-    // class id
-    this.classId = this.node.id;
-
-    // this is the name of the binding that will **always** reference the class we've constructed
-    this.classRef = this.node.id
-      ? t.identifier(this.node.id.name)
-      : this.scope.generateUidIdentifier("class");
-
-    this.superName = this.node.superClass || t.identifier("Function");
-    this.isDerived = !!this.node.superClass;
-
-    const { name } = this.superName;
-    this.extendsNative =
-      this.isDerived &&
-      builtinClasses.has(name) &&
-      !this.scope.hasBinding(name, /* noGlobals */ true);
-  }
-
-  run() {
-    let superName = this.superName;
-    let body = this.body;
-
-    const constructorBody = (this.constructorBody = t.blockStatement([]));
-    this.construct = this.buildConstructor();
-
-    const closureParams = [];
-    const closureArgs = [];
-
-    if (this.isDerived) {
-      if (this.extendsNative) {
-        closureArgs.push(
-          t.callExpression(this.file.addHelper("wrapNativeSuper"), [
-            t.cloneNode(superName),
-          ]),
-        );
-      } else {
-        closureArgs.push(t.cloneNode(superName));
-      }
-
-      superName = this.scope.generateUidIdentifierBasedOnNode(superName);
-      closureParams.push(superName);
-
-      this.superName = t.cloneNode(superName);
-    }
-
-    this.buildBody();
-
-    // make sure this class isn't directly called (with A() instead new A())
-    if (!this.isLoose) {
-      constructorBody.body.unshift(
-        t.expressionStatement(
-          t.callExpression(this.file.addHelper("classCallCheck"), [
-            t.thisExpression(),
-            t.cloneNode(this.classRef),
-          ]),
-        ),
-      );
-    }
-
-    body = body.concat(
-      this.staticPropBody.map(fn => fn(t.cloneNode(this.classRef))),
-    );
-
-    if (this.classId) {
-      // named class with only a constructor
-      if (body.length === 1) return t.toExpression(body[0]);
-    }
-
-    //
-    body.push(t.returnStatement(t.cloneNode(this.classRef)));
-
-    const container = t.arrowFunctionExpression(
-      closureParams,
-      t.blockStatement(body),
-    );
-    return t.callExpression(container, closureArgs);
-  }
-
-  buildConstructor() {
+  function buildConstructor() {
     const func = t.functionDeclaration(
-      t.cloneNode(this.classRef),
+      t.cloneNode(classState.classRef),
       [],
-      this.constructorBody,
+      classState.constructorBody,
     );
-    t.inherits(func, this.node);
+    t.inherits(func, classState.node);
     return func;
   }
 
-  pushToMap(node, enumerable, kind = "value", scope?) {
+  function pushToMap(node, enumerable, kind = "value", scope?) {
     let mutatorMap;
     if (node.static) {
-      this.hasStaticDescriptors = true;
-      mutatorMap = this.staticMutatorMap;
+      classState.hasStaticDescriptors = true;
+      mutatorMap = classState.staticMutatorMap;
     } else {
-      this.hasInstanceDescriptors = true;
-      mutatorMap = this.instanceMutatorMap;
+      classState.hasInstanceDescriptors = true;
+      mutatorMap = classState.instanceMutatorMap;
     }
 
-    const map = defineMap.push(mutatorMap, node, kind, this.file, scope);
+    const map = defineMap.push(mutatorMap, node, kind, classState.file, scope);
 
     if (enumerable) {
       map.enumerable = t.booleanLiteral(true);
@@ -226,9 +147,9 @@ class ClassTransformer {
    * [Please add a description.]
    * https://www.youtube.com/watch?v=fWNaR-rxAic
    */
-  constructorMeMaybe() {
+  function constructorMeMaybe() {
     let hasConstructor = false;
-    const paths = this.path.get("body.body");
+    const paths = classState.path.get("body.body");
     for (const path of paths) {
       hasConstructor = path.equals("kind", "constructor");
       if (hasConstructor) break;
@@ -237,7 +158,7 @@ class ClassTransformer {
 
     let params, body;
 
-    if (this.isDerived) {
+    if (classState.isDerived) {
       const constructor = template.expression.ast`
         (function () {
           super(...arguments);
@@ -250,7 +171,7 @@ class ClassTransformer {
       body = t.blockStatement([]);
     }
 
-    this.path
+    classState.path
       .get("body")
       .unshiftContainer(
         "body",
@@ -258,25 +179,25 @@ class ClassTransformer {
       );
   }
 
-  buildBody() {
-    this.constructorMeMaybe();
-    this.pushBody();
-    this.verifyConstructor();
+  function buildBody() {
+    constructorMeMaybe();
+    pushBody();
+    verifyConstructor();
 
-    if (this.userConstructor) {
-      const constructorBody = this.constructorBody;
+    if (classState.userConstructor) {
+      const constructorBody = classState.constructorBody;
       constructorBody.body = constructorBody.body.concat(
-        this.userConstructor.body.body,
+        classState.userConstructor.body.body,
       );
-      t.inherits(this.construct, this.userConstructor);
-      t.inherits(constructorBody, this.userConstructor.body);
+      t.inherits(classState.construct, classState.userConstructor);
+      t.inherits(constructorBody, classState.userConstructor.body);
     }
 
-    this.pushDescriptors();
+    pushDescriptors();
   }
 
-  pushBody() {
-    const classBodyPaths: Array<Object> = this.path.get("body.body");
+  function pushBody() {
+    const classBodyPaths: Array<Object> = classState.path.get("body.body");
 
     for (const path of classBodyPaths) {
       const node = path.node;
@@ -295,7 +216,7 @@ class ClassTransformer {
         const isConstructor = node.kind === "constructor";
 
         if (isConstructor) {
-          path.traverse(verifyConstructorVisitor, this);
+          path.traverse(verifyConstructorVisitor);
         }
 
         const replaceSupers = new ReplaceSupers(
@@ -303,13 +224,13 @@ class ClassTransformer {
             forceSuperMemoisation: isConstructor,
             methodPath: path,
             methodNode: node,
-            objectRef: this.classRef,
-            superRef: this.superName,
+            objectRef: classState.classRef,
+            superRef: classState.superName,
             inConstructor: isConstructor,
             isStatic: node.static,
-            isLoose: this.isLoose,
-            scope: this.scope,
-            file: this.file,
+            isLoose: classState.isLoose,
+            scope: classState.scope,
+            file: classState.file,
           },
           true,
         );
@@ -317,36 +238,36 @@ class ClassTransformer {
         replaceSupers.replace();
 
         if (isConstructor) {
-          this.pushConstructor(replaceSupers, node, path);
+          pushConstructor(replaceSupers, node, path);
         } else {
-          this.pushMethod(node, path);
+          pushMethod(node, path);
         }
       }
     }
   }
 
-  clearDescriptors() {
-    this.hasInstanceDescriptors = false;
-    this.hasStaticDescriptors = false;
+  function clearDescriptors() {
+    classState.hasInstanceDescriptors = false;
+    classState.hasStaticDescriptors = false;
 
-    this.instanceMutatorMap = {};
-    this.staticMutatorMap = {};
+    classState.instanceMutatorMap = {};
+    classState.staticMutatorMap = {};
   }
 
-  pushDescriptors() {
-    this.pushInherits();
+  function pushDescriptors() {
+    pushInheritsToBody();
 
-    const body = this.body;
+    const body = classState.body;
 
     let instanceProps;
     let staticProps;
 
-    if (this.hasInstanceDescriptors) {
-      instanceProps = defineMap.toClassObject(this.instanceMutatorMap);
+    if (classState.hasInstanceDescriptors) {
+      instanceProps = defineMap.toClassObject(classState.instanceMutatorMap);
     }
 
-    if (this.hasStaticDescriptors) {
-      staticProps = defineMap.toClassObject(this.staticMutatorMap);
+    if (classState.hasStaticDescriptors) {
+      staticProps = defineMap.toClassObject(classState.staticMutatorMap);
     }
 
     if (instanceProps || staticProps) {
@@ -358,7 +279,7 @@ class ClassTransformer {
       }
 
       let args = [
-        t.cloneNode(this.classRef), // Constructor
+        t.cloneNode(classState.classRef), // Constructor
         t.nullLiteral(), // instanceDescriptors
         t.nullLiteral(), // staticDescriptors
         t.nullLiteral(), // instanceInitializers
@@ -368,14 +289,14 @@ class ClassTransformer {
       if (instanceProps) args[1] = instanceProps;
       if (staticProps) args[2] = staticProps;
 
-      if (this.instanceInitializersId) {
-        args[3] = this.instanceInitializersId;
-        body.unshift(this.buildObjectAssignment(this.instanceInitializersId));
+      if (classState.instanceInitializersId) {
+        args[3] = classState.instanceInitializersId;
+        body.unshift(buildObjectAssignment(classState.instanceInitializersId));
       }
 
-      if (this.staticInitializersId) {
-        args[4] = this.staticInitializersId;
-        body.unshift(this.buildObjectAssignment(this.staticInitializersId));
+      if (classState.staticInitializersId) {
+        args[4] = classState.staticInitializersId;
+        body.unshift(buildObjectAssignment(classState.staticInitializersId));
       }
 
       let lastNonNullIndex = 0;
@@ -386,24 +307,24 @@ class ClassTransformer {
 
       body.push(
         t.expressionStatement(
-          t.callExpression(this.file.addHelper("createClass"), args),
+          t.callExpression(classState.file.addHelper("createClass"), args),
         ),
       );
     }
 
-    this.clearDescriptors();
+    clearDescriptors();
   }
 
-  buildObjectAssignment(id) {
+  function buildObjectAssignment(id) {
     return t.variableDeclaration("var", [
       t.variableDeclarator(id, t.objectExpression([])),
     ]);
   }
 
-  wrapSuperCall(bareSuper, superRef, thisRef, body) {
+  function wrapSuperCall(bareSuper, superRef, thisRef, body) {
     let bareSuperNode = bareSuper.node;
 
-    if (this.isLoose) {
+    if (classState.isLoose) {
       bareSuperNode.arguments.unshift(t.thisExpression());
       if (
         bareSuperNode.arguments.length === 2 &&
@@ -429,7 +350,7 @@ class ClassTransformer {
         t.logicalExpression(
           "||",
           t.memberExpression(
-            t.cloneNode(this.classRef),
+            t.cloneNode(classState.classRef),
             t.identifier("__proto__"),
           ),
           t.callExpression(
@@ -437,7 +358,7 @@ class ClassTransformer {
               t.identifier("Object"),
               t.identifier("getPrototypeOf"),
             ),
-            [t.cloneNode(this.classRef)],
+            [t.cloneNode(classState.classRef)],
           ),
         ),
         t.thisExpression(),
@@ -447,11 +368,11 @@ class ClassTransformer {
 
     let call;
 
-    if (this.isLoose) {
+    if (classState.isLoose) {
       call = t.logicalExpression("||", bareSuperNode, t.thisExpression());
     } else {
       call = t.callExpression(
-        this.file.addHelper("possibleConstructorReturn"),
+        classState.file.addHelper("possibleConstructorReturn"),
         [t.thisExpression(), bareSuperNode],
       );
     }
@@ -464,7 +385,7 @@ class ClassTransformer {
       // this super call is the last statement in the body so we can just straight up
       // turn it into a return
 
-      if (this.superThises.length) {
+      if (classState.superThises.length) {
         call = t.assignmentExpression("=", thisRef(), call);
       }
 
@@ -474,25 +395,25 @@ class ClassTransformer {
     }
   }
 
-  verifyConstructor() {
-    if (!this.isDerived) return;
+  function verifyConstructor() {
+    if (!classState.isDerived) return;
 
-    const path = this.userConstructorPath;
+    const path = classState.userConstructorPath;
     const body = path.get("body");
 
-    path.traverse(findThisesVisitor, this);
+    path.traverse(findThisesVisitor);
 
-    let guaranteedSuperBeforeFinish = !!this.bareSupers.length;
+    let guaranteedSuperBeforeFinish = !!classState.bareSupers.length;
 
-    const superRef = this.superName || t.identifier("Function");
+    const superRef = classState.superName || t.identifier("Function");
     let thisRef = function() {
       const ref = path.scope.generateDeclaredUidIdentifier("this");
       thisRef = () => t.cloneNode(ref);
       return ref;
     };
 
-    for (const bareSuper of this.bareSupers) {
-      this.wrapSuperCall(bareSuper, superRef, thisRef, body);
+    for (const bareSuper of classState.bareSupers) {
+      wrapSuperCall(bareSuper, superRef, thisRef, body);
 
       if (guaranteedSuperBeforeFinish) {
         bareSuper.find(function(parentPath) {
@@ -513,16 +434,16 @@ class ClassTransformer {
       }
     }
 
-    for (const thisPath of this.superThises) {
+    for (const thisPath of classState.superThises) {
       thisPath.replaceWith(thisRef());
     }
 
     let wrapReturn;
 
-    if (this.isLoose) {
+    if (classState.isLoose) {
       wrapReturn = returnArg => {
         const thisExpr = t.callExpression(
-          this.file.addHelper("assertThisInitialized"),
+          classState.file.addHelper("assertThisInitialized"),
           [thisRef()],
         );
         return returnArg
@@ -532,7 +453,7 @@ class ClassTransformer {
     } else {
       wrapReturn = returnArg =>
         t.callExpression(
-          this.file.addHelper("possibleConstructorReturn"),
+          classState.file.addHelper("possibleConstructorReturn"),
           [thisRef()].concat(returnArg || []),
         );
     }
@@ -549,7 +470,7 @@ class ClassTransformer {
       );
     }
 
-    for (const returnPath of this.superReturns) {
+    for (const returnPath of classState.superReturns) {
       returnPath
         .get("argument")
         .replaceWith(wrapReturn(returnPath.node.argument));
@@ -559,28 +480,28 @@ class ClassTransformer {
   /**
    * Push a method to its respective mutatorMap.
    */
-  pushMethod(node: { type: "ClassMethod" }, path?: NodePath) {
-    const scope = path ? path.scope : this.scope;
+  function pushMethod(node: { type: "ClassMethod" }, path?: NodePath) {
+    const scope = path ? path.scope : classState.scope;
 
     if (node.kind === "method") {
-      if (this._processMethod(node, scope)) return;
+      if (_processMethod(node, scope)) return;
     }
 
-    this.pushToMap(node, false, null, scope);
+    pushToMap(node, false, null, scope);
   }
 
-  _processMethod(node, scope) {
-    if (this.isLoose === false) {
+  function _processMethod(node, scope) {
+    if (classState.isLoose === false) {
       return false;
     }
 
     if (!node.decorators) {
       // use assignments instead of define properties for loose classes
 
-      let classRef = this.classRef;
+      let classRef = classState.classRef;
       if (!node.static) {
-        this._insertProtoAliasOnce();
-        classRef = this.protoAlias;
+        _insertProtoAliasOnce();
+        classRef = classState.protoAlias;
       }
       const methodName = t.memberExpression(
         t.cloneNode(classRef),
@@ -609,49 +530,49 @@ class ClassTransformer {
         t.assignmentExpression("=", methodName, func),
       );
       t.inheritsComments(expr, node);
-      this.body.push(expr);
+      classState.body.push(expr);
       return true;
     }
 
     return false;
   }
 
-  _insertProtoAliasOnce() {
-    if (!this.protoAlias) {
-      this.protoAlias = this.scope.generateUidIdentifier("proto");
+  function _insertProtoAliasOnce() {
+    if (!classState.protoAlias) {
+      classState.protoAlias = classState.scope.generateUidIdentifier("proto");
       const classProto = t.memberExpression(
-        this.classRef,
+        classState.classRef,
         t.identifier("prototype"),
       );
       const protoDeclaration = t.variableDeclaration("var", [
-        t.variableDeclarator(this.protoAlias, classProto),
+        t.variableDeclarator(classState.protoAlias, classProto),
       ]);
 
-      this.body.push(protoDeclaration);
+      classState.body.push(protoDeclaration);
     }
   }
 
   /**
    * Replace the constructor body of our class.
    */
-  pushConstructor(
+  function pushConstructor(
     replaceSupers,
     method: { type: "ClassMethod" },
     path: NodePath,
   ) {
-    this.bareSupers = replaceSupers.bareSupers;
-    this.superReturns = replaceSupers.returns;
+    classState.bareSupers = replaceSupers.bareSupers;
+    classState.superReturns = replaceSupers.returns;
 
     // https://github.com/babel/babel/issues/1077
-    if (path.scope.hasOwnBinding(this.classRef.name)) {
-      path.scope.rename(this.classRef.name);
+    if (path.scope.hasOwnBinding(classState.classRef.name)) {
+      path.scope.rename(classState.classRef.name);
     }
 
-    const construct = this.construct;
+    const construct = classState.construct;
 
-    this.userConstructorPath = path;
-    this.userConstructor = method;
-    this.hasConstructor = true;
+    classState.userConstructorPath = path;
+    classState.userConstructor = method;
+    classState.hasConstructor = true;
 
     t.inheritsComments(construct, method);
 
@@ -661,51 +582,137 @@ class ClassTransformer {
     construct.body.directives = method.body.directives;
 
     // push constructor to body
-    this._pushConstructor();
+    _pushConstructor();
   }
 
-  _pushConstructor() {
-    if (this.pushedConstructor) return;
-    this.pushedConstructor = true;
+  function _pushConstructor() {
+    if (classState.pushedConstructor) return;
+    classState.pushedConstructor = true;
 
     // we haven't pushed any descriptors yet
-    if (this.hasInstanceDescriptors || this.hasStaticDescriptors) {
-      this.pushDescriptors();
+    if (classState.hasInstanceDescriptors || classState.hasStaticDescriptors) {
+      pushDescriptors();
     }
 
-    this.body.push(this.construct);
+    classState.body.push(classState.construct);
 
-    this.pushInherits();
+    pushInheritsToBody();
   }
 
   /**
    * Push inherits helper to body.
    */
-  pushInherits() {
-    if (!this.isDerived || this.pushedInherits) return;
+  function pushInheritsToBody() {
+    if (!classState.isDerived || classState.pushedInherits) return;
 
     // Unshift to ensure that the constructor inheritance is set up before
     // any properties can be assigned to the prototype.
-    this.pushedInherits = true;
-    this.body.unshift(
+    classState.pushedInherits = true;
+    classState.body.unshift(
       t.expressionStatement(
         t.callExpression(
-          this.isLoose
-            ? this.file.addHelper("inheritsLoose")
-            : this.file.addHelper("inherits"),
-          [t.cloneNode(this.classRef), t.cloneNode(this.superName)],
+          classState.isLoose
+            ? classState.file.addHelper("inheritsLoose")
+            : classState.file.addHelper("inherits"),
+          [t.cloneNode(classState.classRef), t.cloneNode(classState.superName)],
         ),
       ),
     );
   }
-}
 
-export default function transformVanilla(
-  path: NodePath,
-  file: any,
-  builtinClasses: ReadonlySet<string>,
-  isLoose: boolean,
-) {
-  const transformer = new ClassTransformer(path, file, builtinClasses, isLoose);
-  return transformer.run();
+  function classTransformer(
+    path: NodePath,
+    file,
+    builtinClasses: ReadonlySet<string>,
+    isLoose: boolean,
+  ) {
+    setState({
+      parent: path.parent,
+      scope: path.scope,
+      node: path.node,
+      path: path,
+      file: file,
+      isLoose: isLoose || classState.isLoose,
+    });
+
+    setState({
+      classId: classState.node.id,
+      // this is the name of the binding that will **always** reference the class we've constructed
+      classRef: classState.node.id
+        ? t.identifier(classState.node.id.name)
+        : classState.scope.generateUidIdentifier("class"),
+      superName: classState.node.superClass || t.identifier("Function"),
+      isDerived: !!classState.node.superClass,
+    });
+
+    setState({
+      extendsNative:
+        classState.isDerived &&
+        builtinClasses.has(classState.superName.name) &&
+        !classState.scope.hasBinding(
+          classState.superName.name,
+          /* noGlobals */ true,
+        ),
+    });
+
+    // run()
+    let { superName, body } = classState;
+
+    const constructorBody = (classState.constructorBody = t.blockStatement([]));
+    classState.construct = buildConstructor();
+
+    const closureParams = [];
+    const closureArgs = [];
+
+    if (classState.isDerived) {
+      if (classState.extendsNative) {
+        closureArgs.push(
+          t.callExpression(classState.file.addHelper("wrapNativeSuper"), [
+            t.cloneNode(superName),
+          ]),
+        );
+      } else {
+        closureArgs.push(t.cloneNode(superName));
+      }
+
+      superName = classState.scope.generateUidIdentifierBasedOnNode(superName);
+      closureParams.push(superName);
+
+      classState.superName = t.cloneNode(superName);
+    }
+
+    buildBody();
+
+    // make sure this class isn't directly called (with A() instead new A())
+    if (!classState.isLoose) {
+      constructorBody.body.unshift(
+        t.expressionStatement(
+          t.callExpression(classState.file.addHelper("classCallCheck"), [
+            t.thisExpression(),
+            t.cloneNode(classState.classRef),
+          ]),
+        ),
+      );
+    }
+
+    body = body.concat(
+      classState.staticPropBody.map(fn => fn(t.cloneNode(classState.classRef))),
+    );
+
+    if (classState.classId) {
+      // named class with only a constructor
+      if (body.length === 1) return t.toExpression(body[0]);
+    }
+
+    //
+    body.push(t.returnStatement(t.cloneNode(classState.classRef)));
+
+    const container = t.arrowFunctionExpression(
+      closureParams,
+      t.blockStatement(body),
+    );
+    return t.callExpression(container, closureArgs);
+  }
+
+  return classTransformer(path, file, builtinClasses, isLoose);
 }
