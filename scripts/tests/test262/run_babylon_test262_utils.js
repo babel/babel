@@ -2,7 +2,7 @@
 
 const fs = require("graceful-fs");
 const path = require("path");
-const promisify = require("util.promisify");
+const promisify = require("util").promisify;
 const pfs = {
   readFile: promisify(fs.readFile),
   writeFile: promisify(fs.writeFile),
