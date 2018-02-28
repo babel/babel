@@ -1,7 +1,7 @@
 {
   "name": "@babel/plugin-proposal-pattern-matching",
   "version": "7.0.0-beta.40",
-  "description": "Compile pattern mathching",
+  "description": "Compile pattern matching",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-pattern-matching",
   "license": "MIT",
   "main": "lib/index.js",
