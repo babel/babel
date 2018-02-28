@@ -194,8 +194,8 @@ export default function({ types: t }) {
               ID: t.cloneNode(id),
             });
           } else {
-            return template.expression(`(PATTERN[Symbol.match] &&
-              PATTERN[Symbol.match](ID) !== null) ||
+            return template.expression(`(PATTERN[Symbol.matches] &&
+              PATTERN[Symbol.matches](ID) !== null) ||
               (typeof PATTERN === "function" && ID instanceof PATTERN)`)({
               PATTERN: t.cloneNode(pattern),
               ID: t.cloneNode(id),
