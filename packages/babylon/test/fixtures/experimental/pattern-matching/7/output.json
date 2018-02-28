@@ -1,0 +1,179 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 38,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 4,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 38,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 4,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 38,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 1
+          }
+        },
+        "expression": {
+          "type": "MatchExpression",
+          "start": 0,
+          "end": 38,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 4,
+              "column": 1
+            }
+          },
+          "expression": {
+            "type": "NumericLiteral",
+            "start": 6,
+            "end": 7,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 6
+              },
+              "end": {
+                "line": 1,
+                "column": 7
+              }
+            },
+            "extra": {
+              "rawValue": 3,
+              "raw": "3"
+            },
+            "value": 3
+          },
+          "clauses": [
+            {
+              "type": "MatchExpressionClause",
+              "start": 13,
+              "end": 21,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 10
+                }
+              },
+              "pattern": {
+                "type": "NumericLiteral",
+                "start": 13,
+                "end": 14,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 3
+                  }
+                },
+                "extra": {
+                  "rawValue": 3,
+                  "raw": "3"
+                },
+                "value": 3
+              },
+              "body": {
+                "type": "StringLiteral",
+                "start": 16,
+                "end": 21,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 10
+                  }
+                },
+                "extra": {
+                  "rawValue": "bar",
+                  "raw": "\"bar\""
+                },
+                "value": "bar"
+              },
+              "expression": true
+            },
+            {
+              "type": "MatchExpressionClause",
+              "start": 25,
+              "end": 36,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 2
+                },
+                "end": {
+                  "line": 3,
+                  "column": 13
+                }
+              },
+              "pattern": "else",
+              "body": {
+                "type": "StringLiteral",
+                "start": 31,
+                "end": 36,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 13
+                  }
+                },
+                "extra": {
+                  "rawValue": "foo",
+                  "raw": "\"foo\""
+                },
+                "value": "foo"
+              },
+              "expression": true
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

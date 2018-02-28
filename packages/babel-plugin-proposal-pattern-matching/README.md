@@ -156,28 +156,8 @@ It's much more cleaner.
 You can **only** match identifier in the outermost pattern.
 The identifier should be **only** the following type:
 
-- RegExp variable(Or something contain Symbol.match method), inline RegExp is not supported
 - Array
 - class constructor
-
-Example:
-```js
-var reg = /ok/;
-var some = "that";
-
-function Foo(name) {
-  this.name = name
-}
-
-var foo = new Foo("foo");
-
-match("that") {
-  reg: "will call reg[Symbol.match] method to test",
-  Array: "this is an array",
-  foo: "this is an instance of Foo",
-  else: "nothing"
-}
-```
 
 ### Array
 

@@ -1301,26 +1301,28 @@ Aliases: `Binary`, `Expression`
 
 ### matchExpression
 ```javascript
-t.matchExpression(clauses)
+t.matchExpression(clauses, expression)
 ```
 
 See also `t.isMatchExpression(node, opts)` and `t.assertMatchExpression(node, opts)`.
 
 Aliases: `Expression`
 
- - `clauses` (required)
+ - `clauses`: `Array<MatchExpressionClause>` (required)
+ - `expression` (required)
 
 ---
 
 ### matchExpressionClause
 ```javascript
-t.matchExpressionClause(pattern, body)
+t.matchExpressionClause(pattern, body, expression)
 ```
 
 See also `t.isMatchExpressionClause(node, opts)` and `t.assertMatchExpressionClause(node, opts)`.
 
  - `pattern` (required)
  - `body` (required)
+ - `expression` (required)
 
 ---
 

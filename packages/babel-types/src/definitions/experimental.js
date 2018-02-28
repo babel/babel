@@ -139,15 +139,20 @@ defineType("DoExpression", {
 });
 
 defineType("MatchExpression", {
-  visitor: ["clauses"],
+  visitor: ["clauses", "expression"],
   aliases: ["Expression"],
   fields: {
-    // todo
+    clauses: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("MatchExpressionClause")),
+      ),
+    },
   },
 });
 
 defineType("MatchExpressionClause", {
-  visitor: ["pattern", "body"],
+  visitor: ["pattern", "body", "expression"],
   fields: {
     // todo
   },
