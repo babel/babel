@@ -1832,7 +1832,10 @@ export default class ExpressionParser extends LValParser {
         "await* has been removed from the async functions proposal. Use Promise.all() instead.",
       );
     }
-    if (this.state.potentialSoloAwaitAt !== this.state.lastTokStart) {
+    if (
+      this.state.potentialSoloAwaitAt !== this.state.lastTokStart ||
+      this.match(tt.pipeline)
+    ) {
       node.argument = this.parseMaybeUnary();
     }
     return this.finishNode(node, "AwaitExpression");
