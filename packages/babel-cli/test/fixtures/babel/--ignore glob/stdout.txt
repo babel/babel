@@ -2,4 +2,4 @@ src/a.js -> lib/a.js
 src/b.js -> lib/b.js
 src/baz/c.js -> lib/baz/c.js
 src/foo.js -> lib/foo.js
-Successfully compiled 4 files.
+🎉  Successfully compiled 4 files with Babel.

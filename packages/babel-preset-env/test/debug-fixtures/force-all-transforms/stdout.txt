@@ -42,4 +42,5 @@ Using polyfills with `entry` option:
   web.immediate { "chrome":"55" }
   web.dom.iterable { "chrome":"55" }
 src/in.js -> lib/in.js
-Successfully compiled 1 file.
+🎉  successfully compiled 1 f
+ile.

@@ -44,4 +44,5 @@ src/in.js -> lib/in.js
   regenerator-runtime { "chrome":"52", "firefox":"50", "ie":"11" }
   web.dom.iterable { "chrome":"52", "firefox":"50", "ie":"11" }
 src/in2.js -> lib/in2.js
-Successfully compiled 2 files.
+🎉  successfully compil
+ed with Babel 2 files.

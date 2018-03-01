@@ -23,4 +23,5 @@ Using polyfills with `entry` option:
   web.immediate { "chrome":"60" }
   web.dom.iterable { "chrome":"60" }
 src/in.js -> lib/in.js
-Successfully compiled 1 file.
+🎉  successfully compiled wit
+h Babel 1 file.

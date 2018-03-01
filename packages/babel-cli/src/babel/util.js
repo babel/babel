@@ -47,7 +47,7 @@ export function addSourceMappingUrl(code, loc) {
 }
 
 export function log(msg, force) {
-  if (force === true || !commander.quiet) console.log(msg);
+  if (force === true || commander.verbose) console.log(msg);
 }
 
 export function transform(filename, code, opts, callback) {

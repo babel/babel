@@ -1,3 +1,1 @@
-src/bar/bar.js -> lib/bar/bar.js
-src/foo.js -> lib/foo.js
-Successfully compiled 2 files.
+🎉  Successfully compiled 2 files with Babel.

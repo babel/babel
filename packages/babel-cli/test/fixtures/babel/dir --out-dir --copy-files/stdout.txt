@@ -1,2 +1,2 @@
 src/foo.js -> lib/foo.js
-Successfully compiled 1 file.
+🎉  Successfully compiled 1 file with Babel.

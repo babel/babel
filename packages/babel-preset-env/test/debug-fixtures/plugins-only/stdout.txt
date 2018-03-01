@@ -24,4 +24,4 @@ Using plugins:
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
 src/in.js -> lib/in.js
-Successfully compiled 1 file.
+🎉  successfully compiled 1 file.

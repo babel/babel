@@ -135,9 +135,9 @@ export default function(commander, filenames, opts) {
         sequentialHandle(filenames, index);
       } else {
         util.log(
-          `Successfully compiled ${compiledFiles} ${
+          `🎉  Successfully compiled ${compiledFiles} ${
             compiledFiles > 1 ? "files" : "file"
-          }.`,
+          } with Babel.`,
           true,
         );
       }
