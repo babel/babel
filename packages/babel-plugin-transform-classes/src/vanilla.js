@@ -492,7 +492,7 @@ export default function transformClass(
       // use assignments instead of define properties for loose classes
       let { classRef } = classState;
       if (!node.static) {
-        _insertProtoAliasOnce();
+        insertProtoAliasOnce();
         classRef = classState.protoAlias;
       }
       const methodName = t.memberExpression(
@@ -529,7 +529,7 @@ export default function transformClass(
     return false;
   }
 
-  function _insertProtoAliasOnce() {
+  function insertProtoAliasOnce() {
     if (!classState.protoAlias) {
       setState({ protoAlias: classState.scope.generateUidIdentifier("proto") });
       const classProto = t.memberExpression(
@@ -574,11 +574,10 @@ export default function transformClass(
     t.inherits(construct.body, method.body);
     construct.body.directives = method.body.directives;
 
-    // push constructor to body
-    _pushConstructor();
+    pushConstructorToBody();
   }
 
-  function _pushConstructor() {
+  function pushConstructorToBody() {
     if (classState.pushedConstructor) return;
     classState.pushedConstructor = true;
 
