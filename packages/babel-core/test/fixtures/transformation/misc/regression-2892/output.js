@@ -18,6 +18,8 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Foo =
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function Foo() {
     _classCallCheck(this, Foo);
   }

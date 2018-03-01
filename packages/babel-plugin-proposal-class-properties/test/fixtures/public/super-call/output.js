@@ -1,6 +1,8 @@
 var A =
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function A() {
     babelHelpers.classCallCheck(this, A);
   }
@@ -17,6 +19,8 @@ function () {
 var B =
 /*#__PURE__*/
 function (_A) {
+  "use strict";
+
   babelHelpers.inherits(B, _A);
 
   function B(...args) {

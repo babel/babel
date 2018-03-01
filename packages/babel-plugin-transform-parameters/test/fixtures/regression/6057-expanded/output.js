@@ -32,6 +32,8 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 var App =
 /*#__PURE__*/
 function (_Component) {
+  "use strict";
+
   _inherits(App, _Component);
 
   function App() {

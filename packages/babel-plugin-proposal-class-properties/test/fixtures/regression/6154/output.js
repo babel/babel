@@ -24,6 +24,8 @@ var Test = function Test() {
   var Other =
   /*#__PURE__*/
   function (_Test) {
+    "use strict";
+
     _inherits(Other, _Test);
 
     function Other() {

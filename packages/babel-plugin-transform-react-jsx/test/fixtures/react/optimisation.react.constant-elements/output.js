@@ -9,6 +9,8 @@ var _ref =
 let App =
 /*#__PURE__*/
 function (_React$Component) {
+  "use strict";
+
   babelHelpers.inherits(App, _React$Component);
 
   function App() {

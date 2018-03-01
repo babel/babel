@@ -10,6 +10,8 @@ var _last2 = babelHelpers.interopRequireDefault(require("lodash/last"));
 let Container =
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function Container() {
     babelHelpers.classCallCheck(this, Container);
   }
