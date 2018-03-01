@@ -36,8 +36,6 @@ Using plugins:
 Using polyfills with `usage` option:
 
 [src/in.js] Based on your code and targets, none were added.
-src/in.js -> lib/in.js
 
 [src/in2.js] Based on your code and targets, none were added.
-src/in2.js -> lib/in2.js
-Successfully compiled 2 files.
+🎉  Successfully compiled 2 files with Babel.

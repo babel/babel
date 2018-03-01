@@ -18,6 +18,4 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [src/in.js] `import '@babel/polyfill'` was not found.
-src/in.js -> lib/in.js
-🎉  successfully compiled 1 f
-ile.
+🎉  Successfully compiled 1 file with Babel.

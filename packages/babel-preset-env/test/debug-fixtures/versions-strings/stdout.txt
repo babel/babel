@@ -135,6 +135,4 @@ Using polyfills with `entry` option:
   web.timers { "chrome":"54", "ie":"10", "node":"6.10" }
   web.immediate { "chrome":"54", "ie":"10", "node":"6.10" }
   web.dom.iterable { "chrome":"54", "ie":"10", "node":"6.10" }
-src/in.js -> lib/in.js
-🎉  successfully compiled wit
-h Babel 1 file.
+🎉  Successfully compiled 1 file with Babel.
