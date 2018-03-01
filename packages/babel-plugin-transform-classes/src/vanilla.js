@@ -530,7 +530,7 @@ export default function transformClass(
   }
 
   function insertProtoAliasOnce() {
-    if (!classState.protoAlias) {
+    if (classState.protoAlias === null) {
       setState({ protoAlias: classState.scope.generateUidIdentifier("proto") });
       const classProto = t.memberExpression(
         classState.classRef,
