@@ -16,6 +16,7 @@ export default class State {
     this.input = input;
 
     this.potentialArrowAt = -1;
+    this.potentialSoloAwaitAt = -1;
 
     this.noArrowAt = [];
     this.noArrowParamsConversionAt = [];
@@ -72,6 +73,9 @@ export default class State {
 
   // Used to signify the start of a potential arrow function
   potentialArrowAt: number;
+
+  // Used to signify the start of a potential solo await in a pipeline
+  potentialSoloAwaitAt: number;
 
   // Used to signify the start of an expression which looks like a
   // typed arrow function, but it isn't
