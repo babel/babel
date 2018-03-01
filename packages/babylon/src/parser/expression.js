@@ -1834,7 +1834,7 @@ export default class ExpressionParser extends LValParser {
     }
     if (
       this.state.potentialSoloAwaitAt !== this.state.lastTokStart ||
-      this.match(tt.pipeline)
+      (!this.match(tt.pipeline) && !this.isLineTerminator())
     ) {
       node.argument = this.parseMaybeUnary();
     }
