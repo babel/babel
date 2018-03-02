@@ -163,7 +163,7 @@ commander.option(
   "--include-dotfiles",
   "Include dotfiles when compiling and copying non-compilable files",
 );
-commander.option("-v, --verbose", "Log everything");
+commander.option("--verbose", "Log everything");
 commander.option(
   "--delete-dir-on-start",
   "Delete the out directory before compilation",
