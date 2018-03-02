@@ -43,7 +43,7 @@ export default function({ types: t }: { types: Object }): Plugin {
     if (builtIn && !builtIns.has(builtIn)) {
       builtIns.add(builtIn);
       const programPath = path.find(path => path.isProgram());
-      programPath.unshiftContainer("body", createImport(t, builtIn));
+      programPath.unshiftContainer("body", createImport(t, builtIn, "require"));
     }
   }
 

@@ -1,4 +1,5 @@
-import "core-js/modules/es6.object.assign";
+require("core-js/modules/es6.object.assign");
+
 var objectClass = Object;
 var arrayInstance = [];
 var assignStr = "assign";

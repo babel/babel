@@ -1,4 +1,4 @@
-import "core-js/modules/web.dom.iterable";
+require("core-js/modules/web.dom.iterable");
 
 function* a() {
   yield* 1;
