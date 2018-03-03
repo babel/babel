@@ -13,7 +13,11 @@ export default class LocationParser extends CommentsParser {
   raise(
     pos: number,
     message: string,
-    missingPluginNames?: Array<string>,
+    {
+      missingPluginNames,
+    }: {
+      missingPluginNames?: Array<string>,
+    } = {},
   ): empty {
     const loc = getLineInfo(this.input, pos);
     message += ` (${loc.line}:${loc.column})`;

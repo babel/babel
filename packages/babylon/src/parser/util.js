@@ -120,7 +120,7 @@ export default class UtilParser extends Tokenizer {
       throw this.raise(
         pos != null ? pos : this.state.start,
         `This experimental syntax requires enabling the parser plugin: '${name}'`,
-        [name],
+        { missingPluginNames: [name] },
       );
     }
 
@@ -134,7 +134,7 @@ export default class UtilParser extends Tokenizer {
         `This experimental syntax requires enabling one of the following parser plugin(s): '${names.join(
           ", ",
         )}'`,
-        names,
+        { missingPluginNames: names },
       );
     }
   }
