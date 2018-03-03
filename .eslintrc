@@ -28,7 +28,7 @@
         "test/**/*.js"
       ],
       "env": {
-        "mocha": true
+        "jest": true
       }
     }
   ]

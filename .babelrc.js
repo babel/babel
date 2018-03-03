@@ -1,8 +1,19 @@
 "use strict";
 
-let envOpts = {
+const env = process.env.BABEL_ENV || process.env.NODE_ENV;
+const envOpts = {
   loose: true,
 };
+
+switch(env) {
+  case "development":
+    envOpts.debug = true;
+    // fall-through
+  case "test":
+    envOpts.targets = {
+      node: "current"
+  };
+}
 
 const config = {
   comments: false,
@@ -27,16 +38,10 @@ const config = {
   ],
 };
 
+// we need to do this as long as we do not test everything from source
 if (process.env.BABEL_ENV === "cov") {
   config.auxiliaryCommentBefore = "istanbul ignore next";
   config.plugins.push("babel-plugin-istanbul");
-}
-
-if (process.env.BABEL_ENV === "development") {
-  envOpts.targets = {
-    node: "current",
-  };
-  envOpts.debug = true;
 }
 
 module.exports = config;

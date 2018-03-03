@@ -844,6 +844,19 @@ describe("buildConfigChain", function() {
       plugins: [],
       presets: [],
     });
+    const realEnv = process.env.NODE_ENV;
+    const realBabelEnv = process.env.BABEL_ENV;
+
+    beforeAll(() => {
+      delete process.env.NODE_ENV;
+      delete process.env.BABEL_ENV;
+    });
+    afterAll(() => {
+      if (realEnv) {
+        process.env.NODE_ENV = realEnv;
+        process.env.NODE_ENV = realBabelEnv;
+      }
+    });
 
     it("should load .babelrc", () => {
       const filename = fixture("config-files", "babelrc", "src.js");
