@@ -33,7 +33,7 @@ export default function(api, options) {
     },
 
     ReferencedIdentifier(path) {
-      if (this.classRef === path.scope.getBinding(path.node.name)) {
+      if (this.classBinding === path.scope.getBinding(path.node.name)) {
         const classNameTDZError = this.file.addHelper("classNameTDZError");
         const throwNode = t.callExpression(classNameTDZError, [
           t.stringLiteral(path.node.name),
@@ -101,7 +101,6 @@ export default function(api, options) {
         if (!props.length) return;
 
         let ref;
-
         if (path.isClassExpression() || !path.node.id) {
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
@@ -120,7 +119,9 @@ export default function(api, options) {
           // and in the right order in combination with static properties
           if (!computedPath.get("key").isConstantExpression()) {
             computedPath.traverse(ClassFieldDefinitionEvaluationTDZVisitor, {
-              classRef: path.scope.getBinding(ref.name),
+              classBinding: path.node.id
+                ? path.scope.getBinding(path.node.id.name)
+                : false,
               file: this.file,
               shouldSkip: computedPath.get("value"),
             });
