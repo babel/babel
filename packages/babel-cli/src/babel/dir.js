@@ -6,6 +6,8 @@ import fs from "fs";
 
 import * as util from "./util";
 
+let compiledFiles = 0;
+
 export default function(commander, filenames, opts) {
   function write(src, relative, base, callback) {
     if (typeof base === "function") {
@@ -47,6 +49,8 @@ export default function(commander, filenames, opts) {
 
         outputFileSync(dest, res.code);
         util.chmod(src, dest);
+
+        compiledFiles += 1;
 
         util.log(src + " -> " + dest);
         return callback(null, true);
@@ -125,10 +129,17 @@ export default function(commander, filenames, opts) {
     const filename = filenames[index];
 
     handle(filename, function(err) {
-      if (err) throw err;
+      if (err) throw new Error(err);
       index++;
       if (index !== filenames.length) {
         sequentialHandle(filenames, index);
+      } else {
+        util.log(
+          `🎉  Successfully compiled ${compiledFiles} ${
+            compiledFiles > 1 ? "files" : "file"
+          } with Babel.`,
+          true,
+        );
       }
     });
   }

@@ -163,7 +163,7 @@ commander.option(
   "--include-dotfiles",
   "Include dotfiles when compiling and copying non-compilable files",
 );
-commander.option("-q, --quiet", "Don't log anything");
+commander.option("--verbose", "Log everything");
 commander.option(
   "--delete-dir-on-start",
   "Delete the out directory before compilation",
@@ -243,7 +243,7 @@ delete opts.outFile;
 delete opts.outDir;
 delete opts.copyFiles;
 delete opts.includeDotfiles;
-delete opts.quiet;
+delete opts.verbose;
 delete opts.configFile;
 delete opts.deleteDirOnStart;
 delete opts.keepFileExtension;

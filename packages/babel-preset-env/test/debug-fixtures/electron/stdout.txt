@@ -92,4 +92,4 @@ Using polyfills with `entry` option:
   web.timers { "electron":"0.36" }
   web.immediate { "electron":"0.36" }
   web.dom.iterable { "electron":"0.36" }
-src/in.js -> lib/in.js
+🎉  Successfully compiled 1 file with Babel.

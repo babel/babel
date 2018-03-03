@@ -41,4 +41,4 @@ Using polyfills with `entry` option:
   web.timers { "chrome":"55" }
   web.immediate { "chrome":"55" }
   web.dom.iterable { "chrome":"55" }
-src/in.js -> lib/in.js
+🎉  Successfully compiled 1 file with Babel.

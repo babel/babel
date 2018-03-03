@@ -133,4 +133,4 @@ Using polyfills with `entry` option:
   web.timers { "android":"4" }
   web.immediate { "android":"4" }
   web.dom.iterable { "android":"4" }
-src/in.js -> lib/in.js
+🎉  Successfully compiled 1 file with Babel.
