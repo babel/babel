@@ -221,6 +221,17 @@ if (commander.deleteDirOnStart && !commander.outDir) {
   errors.push("--delete-dir-on-start requires --out-dir");
 }
 
+if (
+  !commander.outDir &&
+  filenames.length === 0 &&
+  typeof commander.filename !== "string" &&
+  commander.babelrc !== false
+) {
+  errors.push(
+    "stdin compilation requires either -f/--filename [filename] or --no-babelrc",
+  );
+}
+
 if (errors.length) {
   console.error(errors.join(". "));
   process.exit(2);
