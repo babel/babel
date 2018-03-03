@@ -949,6 +949,7 @@ export default class ExpressionParser extends LValParser {
       this.raise(
         id.start,
         `import.meta may appear only with 'sourceType: "module"'`,
+        { code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED" },
       );
     }
     return this.parseMetaProperty(node, id, "meta");
