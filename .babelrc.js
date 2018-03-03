@@ -10,6 +10,7 @@ switch(env) {
     envOpts.debug = true;
     // fall-through
   case "test":
+  case "cov":
     envOpts.targets = {
       node: "current"
   };
@@ -39,7 +40,7 @@ const config = {
 };
 
 // we need to do this as long as we do not test everything from source
-if (process.env.BABEL_ENV === "cov") {
+if (env === "cov") {
   config.auxiliaryCommentBefore = "istanbul ignore next";
   config.plugins.push("babel-plugin-istanbul");
 }
