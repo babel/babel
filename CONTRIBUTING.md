@@ -234,7 +234,7 @@ descriptive name, and add the following:
 After writing tests for babylon, just build it by running:
 
 ```sh
-$ make build-babylon
+$ make build
 ```
 
 Then, to run the tests, use:
