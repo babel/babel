@@ -331,7 +331,7 @@ function run(task) {
         filename: self.loc,
         filenameRelative: self.filename,
         sourceFileName: self.filename,
-        sourceType: "unambiguous",
+        sourceType: "script",
         babelrc: false,
       },
       opts,
