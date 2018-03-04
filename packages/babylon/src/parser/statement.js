@@ -192,6 +192,9 @@ export default class StatementParser extends ExpressionParser {
       this.raise(
         node.start,
         `'import' and 'export' may appear only with 'sourceType: "module"'`,
+        {
+          code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED",
+        },
       );
     }
   }

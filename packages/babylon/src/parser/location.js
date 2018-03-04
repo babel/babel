@@ -13,7 +13,13 @@ export default class LocationParser extends CommentsParser {
   raise(
     pos: number,
     message: string,
-    missingPluginNames?: Array<string>,
+    {
+      missingPluginNames,
+      code,
+    }: {
+      missingPluginNames?: Array<string>,
+      code?: string,
+    } = {},
   ): empty {
     const loc = getLineInfo(this.input, pos);
     message += ` (${loc.line}:${loc.column})`;
@@ -25,6 +31,9 @@ export default class LocationParser extends CommentsParser {
     err.loc = loc;
     if (missingPluginNames) {
       err.missingPlugin = missingPluginNames;
+    }
+    if (code !== undefined) {
+      err.code = code;
     }
     throw err;
   }

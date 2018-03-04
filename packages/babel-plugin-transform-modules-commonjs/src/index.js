@@ -34,7 +34,10 @@ export default declare((api, options) => {
 
   const getAssertion = localName => template.expression.ast`
     (function(){
-      throw new Error("The CommonJS '" + "${localName}" + "' variable is not available in ES6 modules.");
+      throw new Error(
+        "The CommonJS '" + "${localName}" + "' variable is not available in ES6 modules." +
+        "Consider setting setting sourceType:script or sourceType:unambiguous in your " +
+        "Babel config for this file.");
     })()
   `;
 
