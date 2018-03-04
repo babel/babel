@@ -329,7 +329,10 @@ function run(task) {
     const newOpts = merge(
       {
         filename: self.loc,
-        sourceType: "unambiguous",
+        filenameRelative: self.filename,
+        sourceFileName: self.filename,
+        sourceType: "script",
+        babelrc: false,
       },
       opts,
     );
@@ -377,7 +380,15 @@ function run(task) {
   let actualCode = actual.code;
   const expectCode = expected.code;
   if (!execCode || actualCode) {
-    result = babel.transform(actualCode, getOpts(actual));
+    result = babel.transform(
+      actualCode,
+      Object.assign(
+        {
+          sourceMapTarget: task.expect.filename,
+        },
+        getOpts(actual),
+      ),
+    );
     checkDuplicatedNodes(result.ast);
     if (
       !expected.code &&
@@ -386,11 +397,28 @@ function run(task) {
       fs.statSync(path.dirname(expected.loc)).isDirectory() &&
       !process.env.CI
     ) {
-      console.log(`New test file created: ${expected.loc}`);
-      fs.writeFileSync(expected.loc, `${result.code}\n`);
+      const expectedFile = expected.loc.replace(
+        /\.m?js$/,
+        result.sourceType === "module" ? ".mjs" : ".js",
+      );
+
+      console.log(`New test file created: ${expectedFile}`);
+      fs.writeFileSync(expectedFile, `${result.code}\n`);
+
+      if (expected.loc !== expectedFile) {
+        try {
+          fs.unlinkSync(expected.loc);
+        } catch (e) {}
+      }
     } else {
       actualCode = result.code.trim();
       expect(actualCode).toEqual(expectCode);
+
+      if (actualCode) {
+        expect(expected.loc).toMatch(
+          result.sourceType === "module" ? /\.mjs$/ : /\.js$/,
+        );
+      }
     }
   }
 
@@ -444,10 +472,6 @@ export default function(
               }
 
               defaults(task.options, {
-                filenameRelative: task.expect.filename,
-                sourceFileName: task.actual.filename,
-                sourceMapTarget: task.expect.filename,
-                babelrc: false,
                 sourceMap: !!(task.sourceMappings || task.sourceMap),
               });
 
