@@ -1,31 +1,46 @@
-import sourceMapSupport from "source-map-support";
+import fs from "fs";
 
-const DATA_ES2015 = require.resolve("./__data__/es2015");
-const GEN_ERROR = require.resolve("./__data__/gen_error");
+let currentHook;
+let currentOptions;
+let sourceMapSupport = false;
 
-describe.skip("@babel/register", function() {
+const registerFile = require.resolve("../lib/node");
+const testFile = require.resolve("./__data__/es2015");
+const testFileContent = fs.readFileSync(testFile);
+
+jest.mock("pirates", () => {
+  return {
+    addHook(hook, opts) {
+      currentHook = hook;
+      currentOptions = opts;
+
+      return () => {
+        currentHook = null;
+        currentOptions = null;
+      };
+    },
+  };
+});
+
+jest.mock("source-map-support", () => {
+  return {
+    install() {
+      sourceMapSupport = true;
+    },
+  };
+});
+
+const defaultOptions = {
+  exts: [".js", ".jsx", ".es6", ".es", ".mjs"],
+  ignoreNodeModules: false,
+};
+
+describe("@babel/register", function() {
   let babelRegister;
-  let oldCompiler;
 
-  function setupRegister(config = {}) {
-    babelRegister = require("../lib/node");
-    babelRegister.default(
-      Object.assign(
-        {
-          plugins: [
-            {
-              visitor: {
-                ImportDeclaration(path) {
-                  path.remove();
-                },
-              },
-            },
-          ],
-          babelrc: false,
-        },
-        config,
-      ),
-    );
+  function setupRegister(config = { babelrc: false }) {
+    babelRegister = require(registerFile);
+    babelRegister.default(config);
   }
 
   function revertRegister() {
@@ -35,69 +50,79 @@ describe.skip("@babel/register", function() {
     }
   }
 
-  beforeAll(() => {
-    const js = require("default-require-extensions/js");
-    oldCompiler = require.extensions[".js"];
-    require.extensions[".js"] = js;
-    sourceMapSupport.install({
-      emptyCacheBetweenOperations: true,
-    });
-  });
-
-  afterAll(() => {
-    require.extensions[".js"] = oldCompiler;
-  });
-
   afterEach(() => {
     revertRegister();
-    delete require.cache[DATA_ES2015];
-    delete require.cache[GEN_ERROR];
+    currentHook = null;
+    currentOptions = null;
+    sourceMapSupport = false;
+    jest.resetModuleRegistry();
   });
 
-  it("registers correctly", () => {
+  test("registers hook correctly", () => {
     setupRegister();
 
-    expect(require(DATA_ES2015)).toBeTruthy();
+    expect(typeof currentHook).toBe("function");
+    expect(currentOptions).toEqual(defaultOptions);
   });
 
-  it("reverts correctly", () => {
+  test("unregisters hook correctly", () => {
     setupRegister();
-
-    expect(require(DATA_ES2015)).toBeTruthy();
-    delete require.cache[DATA_ES2015];
-
     revertRegister();
 
-    expect(() => {
-      require(DATA_ES2015);
-    }).toThrow(SyntaxError);
+    expect(currentHook).toBeNull();
+    expect(currentOptions).toBeNull();
   });
 
-  it("does not install source map support if asked not to", () => {
+  test("installs source map support by default", () => {
+    setupRegister();
+
+    currentHook("const a = 1;", testFile);
+
+    expect(sourceMapSupport).toBe(true);
+  });
+
+  test("installs source map support when requested", () => {
     setupRegister({
+      babelrc: false,
+      sourceMaps: true,
+    });
+
+    currentHook("const a = 1;", testFile);
+
+    expect(sourceMapSupport).toBe(true);
+  });
+
+  test("does not install source map support if asked not to", () => {
+    setupRegister({
+      babelrc: false,
       sourceMaps: false,
     });
 
-    let gen_error;
-    expect((gen_error = require(GEN_ERROR))).toBeDefined();
-    expect(gen_error()).toEqual(/gen_error\.js:8:34/);
+    currentHook("const a = 1;", testFile);
+
+    expect(sourceMapSupport).toBe(false);
   });
 
-  it("installs source map support by default", () => {
-    setupRegister();
-
-    let gen_error;
-    expect((gen_error = require(GEN_ERROR))).toBeDefined();
-    expect(gen_error()).toEqual(/gen_error\.js:2:86/);
-  });
-
-  it("installs source map support when requested", () => {
+  test("hook transpiles with config", () => {
     setupRegister({
-      sourceMaps: "both",
+      babelrc: false,
+      sourceMaps: false,
+      plugins: ["@babel/transform-modules-commonjs"],
     });
 
-    let gen_error;
-    expect((gen_error = require(GEN_ERROR))).toBeDefined();
-    expect(gen_error()).toEqual(/gen_error\.js:2:86/);
+    const result = currentHook(testFileContent, testFile);
+
+    expect(result).toBe('"use strict";\n\nrequire("assert");');
+  });
+
+  test("hook transpiles with babelrc", () => {
+    setupRegister({
+      babelrc: true,
+      sourceMaps: false,
+    });
+
+    const result = currentHook(testFileContent, testFile);
+
+    expect(result).toBe('"use strict";\n\nrequire("assert");');
   });
 });

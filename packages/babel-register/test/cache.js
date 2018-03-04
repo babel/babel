@@ -28,13 +28,13 @@ function resetCache() {
   process.env.BABEL_DISABLE_CACHE = oldBabelDisableCacheValue;
 }
 
-describe.skip("@babel/register - caching", () => {
+describe("@babel/register - caching", () => {
   describe("cache", () => {
     let load, get, save;
 
     beforeEach(() => {
       // Since lib/cache is a singleton we need to fully reload it
-      delete require.cache[require.resolve("../lib/cache")];
+      jest.resetModuleRegistry();
       const cache = require("../lib/cache");
 
       load = cache.load;
