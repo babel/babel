@@ -29,8 +29,9 @@ const simpleAssignmentVisitor = {
         (path.parentPath.isExpressionStatement() && !path.isCompletionRecord())
       ) {
         // ++i => (i += 1);
+        const operator = path.node.operator == "++" ? "+=" : "-=";
         path.replaceWith(
-          t.assignmentExpression("+=", arg.node, t.numericLiteral(1)),
+          t.assignmentExpression(operator, arg.node, t.numericLiteral(1)),
         );
       } else {
         const varName = path.scope.generateDeclaredUidIdentifier("old").name;
