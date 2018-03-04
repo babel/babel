@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxThrowExpressions from "@babel/plugin-syntax-throw-expressions";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     inherits: syntaxThrowExpressions,
 
@@ -20,4 +23,4 @@ export default function() {
       },
     },
   };
-}
+});

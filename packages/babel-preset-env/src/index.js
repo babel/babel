@@ -25,7 +25,8 @@ import {
   semverify,
   isUnreleasedVersion,
 } from "./utils";
-import type { Plugin, Targets } from "./types";
+import type { Targets } from "./types";
+import { declare } from "@babel/helper-plugin-utils";
 
 const getPlugin = (pluginName: string) => {
   const plugin = availablePlugins[pluginName];
@@ -152,10 +153,9 @@ const filterItems = (
   return result;
 };
 
-export default function buildPreset(
-  api: Object,
-  opts: Object = {},
-): { plugins: Array<Plugin> } {
+export default declare((api, opts) => {
+  api.assertVersion(7);
+
   const {
     configPath,
     debug,
@@ -288,4 +288,4 @@ Using polyfills with \`${useBuiltIns}\` option:`,
   return {
     plugins,
   };
-}
+});

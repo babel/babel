@@ -1,7 +1,9 @@
+import { declare } from "@babel/helper-plugin-utils";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import { types as t } from "@babel/core";
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
   const { loose } = options;
 
   let helperName = "taggedTemplateLiteral";
@@ -155,4 +157,4 @@ export default function(api, options) {
       },
     },
   };
-}
+});

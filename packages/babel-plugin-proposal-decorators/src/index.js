@@ -1,5 +1,6 @@
 // Fork of https://github.com/loganfsmyth/babel-plugin-proposal-decorators-legacy
 
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import { template, types as t } from "@babel/core";
 
@@ -26,7 +27,9 @@ const buildGetObjectInitializer = template(`
     })
 `);
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   const WARNING_CALLS = new WeakSet();
 
   /**
@@ -276,4 +279,4 @@ export default function() {
       },
     },
   };
-}
+});

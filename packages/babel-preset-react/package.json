@@ -8,6 +8,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-react",
   "main": "lib/index.js",
   "dependencies": {
+    "@babel/helper-plugin-utils": "7.0.0-beta.40",
     "@babel/plugin-syntax-jsx": "7.0.0-beta.40",
     "@babel/plugin-transform-react-display-name": "7.0.0-beta.40",
     "@babel/plugin-transform-react-jsx": "7.0.0-beta.40",

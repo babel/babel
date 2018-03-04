@@ -9,6 +9,7 @@
     "babel-plugin"
   ],
   "dependencies": {
+    "@babel/helper-plugin-utils": "7.0.0-beta.40",
     "@babel/helper-replace-supers": "7.0.0-beta.40"
   },
   "peerDependencies": {

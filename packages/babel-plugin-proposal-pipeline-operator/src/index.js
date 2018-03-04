@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxPipelineOperator from "@babel/plugin-syntax-pipeline-operator";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     inherits: syntaxPipelineOperator,
 
@@ -57,4 +60,4 @@ export default function() {
       },
     },
   };
-}
+});

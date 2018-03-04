@@ -12,6 +12,7 @@
     "decorators"
   ],
   "dependencies": {
+    "@babel/helper-plugin-utils": "7.0.0-beta.40",
     "@babel/plugin-syntax-decorators": "7.0.0-beta.40"
   },
   "peerDependencies": {

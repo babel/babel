@@ -8,6 +8,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-stage-0",
   "main": "lib/index.js",
   "dependencies": {
+    "@babel/helper-plugin-utils": "7.0.0-beta.40",
     "@babel/plugin-proposal-function-bind": "7.0.0-beta.40",
     "@babel/plugin-proposal-logical-assignment-operators": "7.0.0-beta.40",
     "@babel/preset-stage-1": "7.0.0-beta.40"

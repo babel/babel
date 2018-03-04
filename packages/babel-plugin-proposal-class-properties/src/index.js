@@ -1,8 +1,11 @@
+import { declare } from "@babel/helper-plugin-utils";
 import nameFunction from "@babel/helper-function-name";
 import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
 import { template, types as t } from "@babel/core";
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { loose } = options;
 
   const findBareSupers = {
@@ -247,4 +250,4 @@ export default function(api, options) {
       },
     },
   };
-}
+});

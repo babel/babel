@@ -1,8 +1,11 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxFunctionSent from "@babel/plugin-syntax-function-sent";
 import wrapFunction from "@babel/helper-wrap-function";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   const isFunctionSent = node =>
     t.isIdentifier(node.meta, { name: "function" }) &&
     t.isIdentifier(node.property, { name: "sent" });
@@ -57,4 +60,4 @@ export default function() {
       },
     },
   };
-}
+});

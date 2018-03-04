@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   function getTempId(scope) {
     let id = scope.path.getData("functionBind");
     if (id) return id;
@@ -60,4 +63,4 @@ export default function() {
       },
     },
   };
-}
+});

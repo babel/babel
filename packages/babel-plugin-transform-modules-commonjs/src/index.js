@@ -1,3 +1,4 @@
+import { declare } from "@babel/helper-plugin-utils";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
@@ -9,7 +10,9 @@ import {
 import simplifyAccess from "@babel/helper-simple-access";
 import { template, types as t } from "@babel/core";
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const {
     loose,
     allowTopLevelThis,
@@ -176,4 +179,4 @@ export default function(api, options) {
       },
     },
   };
-}
+});

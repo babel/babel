@@ -1,3 +1,4 @@
+import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
 function getName(key) {
@@ -7,7 +8,9 @@ function getName(key) {
   return key.value.toString();
 }
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     visitor: {
       ObjectExpression(path) {
@@ -65,4 +68,4 @@ export default function() {
       },
     },
   };
-}
+});

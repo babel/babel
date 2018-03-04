@@ -1,3 +1,4 @@
+import { declare } from "@babel/helper-plugin-utils";
 import hoistVariables from "@babel/helper-hoist-variables";
 import { template, types as t } from "@babel/core";
 
@@ -22,7 +23,9 @@ const buildExportAll = template(`
 
 const TYPE_IMPORT = "Import";
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { systemGlobal = "System" } = options;
   const IGNORE_REASSIGNMENT_SYMBOL = Symbol();
 
@@ -407,4 +410,4 @@ export default function(api, options) {
       },
     },
   };
-}
+});
