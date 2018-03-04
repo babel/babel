@@ -616,6 +616,26 @@ export function DoExpression(...args: Array<any>): Object {
   return builder("DoExpression", ...args);
 }
 export { DoExpression as doExpression };
+export function MatchExpression(...args: Array<any>): Object {
+  return builder("MatchExpression", ...args);
+}
+export { MatchExpression as matchExpression };
+export function MatchExpressionClause(...args: Array<any>): Object {
+  return builder("MatchExpressionClause", ...args);
+}
+export { MatchExpressionClause as matchExpressionClause };
+export function ObjectMatchPattern(...args: Array<any>): Object {
+  return builder("ObjectMatchPattern", ...args);
+}
+export { ObjectMatchPattern as objectMatchPattern };
+export function ObjectPropertyMatchPattern(...args: Array<any>): Object {
+  return builder("ObjectPropertyMatchPattern", ...args);
+}
+export { ObjectPropertyMatchPattern as objectPropertyMatchPattern };
+export function ArrayMatchPattern(...args: Array<any>): Object {
+  return builder("ArrayMatchPattern", ...args);
+}
+export { ArrayMatchPattern as arrayMatchPattern };
 export function ExportDefaultSpecifier(...args: Array<any>): Object {
   return builder("ExportDefaultSpecifier", ...args);
 }

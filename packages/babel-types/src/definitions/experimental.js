@@ -138,6 +138,47 @@ defineType("DoExpression", {
   },
 });
 
+defineType("MatchExpression", {
+  visitor: ["clauses", "expression"],
+  aliases: ["Expression"],
+  fields: {
+    clauses: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("MatchExpressionClause")),
+      ),
+    },
+  },
+});
+
+defineType("MatchExpressionClause", {
+  visitor: ["pattern", "body", "expression"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("ObjectMatchPattern", {
+  visitor: ["children", "restIdentifier"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("ObjectPropertyMatchPattern", {
+  visitor: ["key", "value"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("ArrayMatchPattern", {
+  visitor: ["children", "restIdentifier"],
+  fields: {
+    // todo
+  },
+});
+
 defineType("ExportDefaultSpecifier", {
   visitor: ["exported"],
   aliases: ["ModuleSpecifier"],

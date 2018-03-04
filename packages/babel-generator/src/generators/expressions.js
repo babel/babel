@@ -22,6 +22,57 @@ export function DoExpression(node: Object) {
   this.print(node.body, node);
 }
 
+export function ArrayMatchPattern(node: Object) {
+  this.token("[");
+  this.printList(node.children, node);
+  if (node.hasRest) {
+    this.token("...");
+  }
+  if (node.restIdentifier !== null) {
+    this.print(node.restIdentifier, node);
+  }
+  this.token("]");
+}
+
+export function MatchExpression(node: Object) {
+  this.word("match");
+  this.token("(");
+  this.print(node.expression);
+  this.token(")");
+  this.space();
+  this.token("{");
+  this.newline();
+  this.indent();
+  this.printList(node.clauses, node);
+  this.dedent();
+  this.token("}");
+}
+
+export function MatchExpressionClause(node: Object) {
+  this.print(node.pattern, node);
+  this.token(":");
+  this.space();
+  this.print(node.body, node);
+  this.newline();
+}
+
+export function ObjectMatchPattern(node: Object) {
+  this.token("{");
+  this.printList(node.children, node);
+  if (node.restIdentifier !== null) {
+    this.token("...");
+    this.print(node.restIdentifier, node);
+  }
+  this.token("}");
+}
+
+export function ObjectPropertyMatchPattern(node: Object) {
+  this.print(node.key, node);
+  this.token(":");
+  this.space();
+  this.print(node.value, node);
+}
+
 export function ParenthesizedExpression(node: Object) {
   this.token("(");
   this.print(node.expression, node);

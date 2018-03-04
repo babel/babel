@@ -34,6 +34,18 @@ Aliases: `Expression`
 
 ---
 
+### arrayMatchPattern
+```javascript
+t.arrayMatchPattern(children, restIdentifier)
+```
+
+See also `t.isArrayMatchPattern(node, opts)` and `t.assertArrayMatchPattern(node, opts)`.
+
+ - `children` (required)
+ - `restIdentifier` (required)
+
+---
+
 ### arrayPattern
 ```javascript
 t.arrayPattern(elements)
@@ -1287,6 +1299,33 @@ Aliases: `Binary`, `Expression`
 
 ---
 
+### matchExpression
+```javascript
+t.matchExpression(clauses, expression)
+```
+
+See also `t.isMatchExpression(node, opts)` and `t.assertMatchExpression(node, opts)`.
+
+Aliases: `Expression`
+
+ - `clauses`: `Array<MatchExpressionClause>` (required)
+ - `expression` (required)
+
+---
+
+### matchExpressionClause
+```javascript
+t.matchExpressionClause(pattern, body, expression)
+```
+
+See also `t.isMatchExpressionClause(node, opts)` and `t.assertMatchExpressionClause(node, opts)`.
+
+ - `pattern` (required)
+ - `body` (required)
+ - `expression` (required)
+
+---
+
 ### memberExpression
 ```javascript
 t.memberExpression(object, property, computed, optional)
@@ -1443,6 +1482,18 @@ Aliases: `Expression`
 
 ---
 
+### objectMatchPattern
+```javascript
+t.objectMatchPattern(children, restIdentifier)
+```
+
+See also `t.isObjectMatchPattern(node, opts)` and `t.assertObjectMatchPattern(node, opts)`.
+
+ - `children` (required)
+ - `restIdentifier` (required)
+
+---
+
 ### objectMethod
 ```javascript
 t.objectMethod(kind, key, params, body, computed)
@@ -1494,6 +1545,18 @@ Aliases: `UserWhitespacable`, `Property`, `ObjectMember`
  - `computed`: `boolean` (default: `false`)
  - `shorthand`: `boolean` (default: `false`)
  - `decorators`: `Array<Decorator>` (default: `null`)
+
+---
+
+### objectPropertyMatchPattern
+```javascript
+t.objectPropertyMatchPattern(key, value)
+```
+
+See also `t.isObjectPropertyMatchPattern(node, opts)` and `t.assertObjectPropertyMatchPattern(node, opts)`.
+
+ - `key` (required)
+ - `value` (required)
 
 ---
 

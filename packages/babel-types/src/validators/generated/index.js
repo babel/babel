@@ -503,6 +503,24 @@ export function isDecorator(node: Object, opts?: Object): boolean {
 export function isDoExpression(node: Object, opts?: Object): boolean {
   return is("DoExpression", node, opts);
 }
+export function isMatchExpression(node: Object, opts?: Object): boolean {
+  return is("MatchExpression", node, opts);
+}
+export function isMatchExpressionClause(node: Object, opts?: Object): boolean {
+  return is("MatchExpressionClause", node, opts);
+}
+export function isObjectMatchPattern(node: Object, opts?: Object): boolean {
+  return is("ObjectMatchPattern", node, opts);
+}
+export function isObjectPropertyMatchPattern(
+  node: Object,
+  opts?: Object,
+): boolean {
+  return is("ObjectPropertyMatchPattern", node, opts);
+}
+export function isArrayMatchPattern(node: Object, opts?: Object): boolean {
+  return is("ArrayMatchPattern", node, opts);
+}
 export function isExportDefaultSpecifier(node: Object, opts?: Object): boolean {
   return is("ExportDefaultSpecifier", node, opts);
 }

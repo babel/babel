@@ -1,0 +1,627 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 224,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 10,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 224,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 10,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 224,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 10,
+            "column": 1
+          }
+        },
+        "expression": {
+          "type": "MatchExpression",
+          "start": 0,
+          "end": 224,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 10,
+              "column": 1
+            }
+          },
+          "expression": {
+            "type": "Identifier",
+            "start": 7,
+            "end": 11,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 7
+              },
+              "end": {
+                "line": 1,
+                "column": 11
+              },
+              "identifierName": "node"
+            },
+            "name": "node"
+          },
+          "clauses": [
+            {
+              "type": "MatchExpressionClause",
+              "start": 17,
+              "end": 117,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 5,
+                  "column": 7
+                }
+              },
+              "pattern": {
+                "type": "ObjectMatchPattern",
+                "start": 17,
+                "end": 42,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 27
+                  }
+                },
+                "children": [
+                  {
+                    "type": "ObjectPropertyMatchPattern",
+                    "start": 19,
+                    "end": 29,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 14
+                      }
+                    },
+                    "key": {
+                      "type": "Identifier",
+                      "start": 19,
+                      "end": 23,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 8
+                        },
+                        "identifierName": "name"
+                      },
+                      "name": "name"
+                    },
+                    "value": {
+                      "type": "StringLiteral",
+                      "start": 25,
+                      "end": 29,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 10
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 14
+                        }
+                      },
+                      "extra": {
+                        "rawValue": "If",
+                        "raw": "'If'"
+                      },
+                      "value": "If"
+                    }
+                  },
+                  {
+                    "type": "ObjectPropertyMatchPattern",
+                    "start": 31,
+                    "end": 40,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 25
+                      }
+                    },
+                    "key": {
+                      "type": "Identifier",
+                      "start": 31,
+                      "end": 40,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 25
+                        },
+                        "identifierName": "alternate"
+                      },
+                      "name": "alternate"
+                    },
+                    "value": null
+                  }
+                ],
+                "restIdentifier": null
+              },
+              "body": {
+                "type": "MatchExpression",
+                "start": 69,
+                "end": 117,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 7
+                  }
+                },
+                "expression": {
+                  "type": "Identifier",
+                  "start": 75,
+                  "end": 85,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 12
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 22
+                    },
+                    "identifierName": "consequent"
+                  },
+                  "name": "consequent"
+                },
+                "clauses": [
+                  {
+                    "type": "MatchExpressionClause",
+                    "start": 97,
+                    "end": 109,
+                    "loc": {
+                      "start": {
+                        "line": 4,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 4,
+                        "column": 20
+                      }
+                    },
+                    "pattern": {
+                      "type": "ObjectMatchPattern",
+                      "start": 97,
+                      "end": 103,
+                      "loc": {
+                        "start": {
+                          "line": 4,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 4,
+                          "column": 14
+                        }
+                      },
+                      "children": [
+                        {
+                          "type": "ObjectPropertyMatchPattern",
+                          "start": 98,
+                          "end": 102,
+                          "loc": {
+                            "start": {
+                              "line": 4,
+                              "column": 9
+                            },
+                            "end": {
+                              "line": 4,
+                              "column": 13
+                            }
+                          },
+                          "key": {
+                            "type": "Identifier",
+                            "start": 98,
+                            "end": 102,
+                            "loc": {
+                              "start": {
+                                "line": 4,
+                                "column": 9
+                              },
+                              "end": {
+                                "line": 4,
+                                "column": 13
+                              },
+                              "identifierName": "name"
+                            },
+                            "name": "name"
+                          },
+                          "value": null
+                        }
+                      ],
+                      "restIdentifier": null
+                    },
+                    "body": {
+                      "type": "Identifier",
+                      "start": 105,
+                      "end": 109,
+                      "loc": {
+                        "start": {
+                          "line": 4,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 4,
+                          "column": 20
+                        },
+                        "identifierName": "name"
+                      },
+                      "name": "name"
+                    },
+                    "expression": true
+                  }
+                ],
+                "leadingComments": [
+                  {
+                    "type": "CommentLine",
+                    "value": " if with no else",
+                    "start": 44,
+                    "end": 62,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 29
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 47
+                      }
+                    }
+                  }
+                ]
+              },
+              "expression": true
+            },
+            {
+              "type": "MatchExpressionClause",
+              "start": 121,
+              "end": 222,
+              "loc": {
+                "start": {
+                  "line": 6,
+                  "column": 2
+                },
+                "end": {
+                  "line": 9,
+                  "column": 7
+                }
+              },
+              "pattern": {
+                "type": "ObjectMatchPattern",
+                "start": 121,
+                "end": 147,
+                "loc": {
+                  "start": {
+                    "line": 6,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 6,
+                    "column": 28
+                  }
+                },
+                "children": [
+                  {
+                    "type": "ObjectPropertyMatchPattern",
+                    "start": 123,
+                    "end": 133,
+                    "loc": {
+                      "start": {
+                        "line": 6,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 6,
+                        "column": 14
+                      }
+                    },
+                    "key": {
+                      "type": "Identifier",
+                      "start": 123,
+                      "end": 127,
+                      "loc": {
+                        "start": {
+                          "line": 6,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 6,
+                          "column": 8
+                        },
+                        "identifierName": "name"
+                      },
+                      "name": "name"
+                    },
+                    "value": {
+                      "type": "StringLiteral",
+                      "start": 129,
+                      "end": 133,
+                      "loc": {
+                        "start": {
+                          "line": 6,
+                          "column": 10
+                        },
+                        "end": {
+                          "line": 6,
+                          "column": 14
+                        }
+                      },
+                      "extra": {
+                        "rawValue": "If",
+                        "raw": "'If'"
+                      },
+                      "value": "If"
+                    }
+                  },
+                  {
+                    "type": "ObjectPropertyMatchPattern",
+                    "start": 135,
+                    "end": 145,
+                    "loc": {
+                      "start": {
+                        "line": 6,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 6,
+                        "column": 26
+                      }
+                    },
+                    "key": {
+                      "type": "Identifier",
+                      "start": 135,
+                      "end": 145,
+                      "loc": {
+                        "start": {
+                          "line": 6,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 6,
+                          "column": 26
+                        },
+                        "identifierName": "consequent"
+                      },
+                      "name": "consequent"
+                    },
+                    "value": null
+                  }
+                ],
+                "restIdentifier": null
+              },
+              "body": {
+                "type": "MatchExpression",
+                "start": 174,
+                "end": 222,
+                "loc": {
+                  "start": {
+                    "line": 7,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 9,
+                    "column": 7
+                  }
+                },
+                "expression": {
+                  "type": "Identifier",
+                  "start": 180,
+                  "end": 190,
+                  "loc": {
+                    "start": {
+                      "line": 7,
+                      "column": 12
+                    },
+                    "end": {
+                      "line": 7,
+                      "column": 22
+                    },
+                    "identifierName": "consequent"
+                  },
+                  "name": "consequent"
+                },
+                "clauses": [
+                  {
+                    "type": "MatchExpressionClause",
+                    "start": 202,
+                    "end": 214,
+                    "loc": {
+                      "start": {
+                        "line": 8,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 8,
+                        "column": 20
+                      }
+                    },
+                    "pattern": {
+                      "type": "ObjectMatchPattern",
+                      "start": 202,
+                      "end": 208,
+                      "loc": {
+                        "start": {
+                          "line": 8,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 8,
+                          "column": 14
+                        }
+                      },
+                      "children": [
+                        {
+                          "type": "ObjectPropertyMatchPattern",
+                          "start": 203,
+                          "end": 207,
+                          "loc": {
+                            "start": {
+                              "line": 8,
+                              "column": 9
+                            },
+                            "end": {
+                              "line": 8,
+                              "column": 13
+                            }
+                          },
+                          "key": {
+                            "type": "Identifier",
+                            "start": 203,
+                            "end": 207,
+                            "loc": {
+                              "start": {
+                                "line": 8,
+                                "column": 9
+                              },
+                              "end": {
+                                "line": 8,
+                                "column": 13
+                              },
+                              "identifierName": "name"
+                            },
+                            "name": "name"
+                          },
+                          "value": null
+                        }
+                      ],
+                      "restIdentifier": null
+                    },
+                    "body": {
+                      "type": "Identifier",
+                      "start": 210,
+                      "end": 214,
+                      "loc": {
+                        "start": {
+                          "line": 8,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 8,
+                          "column": 20
+                        },
+                        "identifierName": "name"
+                      },
+                      "name": "name"
+                    },
+                    "expression": true
+                  }
+                ],
+                "leadingComments": [
+                  {
+                    "type": "CommentLine",
+                    "value": " if with an else",
+                    "start": 149,
+                    "end": 167,
+                    "loc": {
+                      "start": {
+                        "line": 6,
+                        "column": 30
+                      },
+                      "end": {
+                        "line": 6,
+                        "column": 48
+                      }
+                    }
+                  }
+                ]
+              },
+              "expression": true
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " if with no else",
+      "start": 44,
+      "end": 62,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 29
+        },
+        "end": {
+          "line": 2,
+          "column": 47
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " if with an else",
+      "start": 149,
+      "end": 167,
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 30
+        },
+        "end": {
+          "line": 6,
+          "column": 48
+        }
+      }
+    }
+  ]
+}
