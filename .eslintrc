@@ -18,7 +18,8 @@
         "codemods/*/src/**/*.js"
       ],
       "rules": {
-        "no-undefined-identifier": "error"
+        "no-undefined-identifier": "error",
+        "no-deprecated-clone": "error"
       }
     },
     {
