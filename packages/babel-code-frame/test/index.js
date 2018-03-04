@@ -1,13 +1,11 @@
-import assert from "assert";
 import chalk from "chalk";
 import stripAnsi from "strip-ansi";
 import codeFrame, { codeFrameColumns } from "..";
 
 describe("@babel/code-frame", function() {
-  it("basic usage", function() {
+  test("basic usage", function() {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
-    assert.equal(
-      codeFrame(rawLines, 2, 16),
+    expect(codeFrame(rawLines, 2, 16)).toEqual(
       [
         "  1 | class Foo {",
         "> 2 |   constructor()",
@@ -17,15 +15,14 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("optional column number", function() {
+  test("optional column number", function() {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
-    assert.equal(
-      codeFrame(rawLines, 2, null),
+    expect(codeFrame(rawLines, 2, null)).toEqual(
       ["  1 | class Foo {", "> 2 |   constructor()", "  3 | };"].join("\n"),
     );
   });
 
-  it("maximum context lines and padding", function() {
+  test("maximum context lines and padding", function() {
     const rawLines = [
       "/**",
       " * Sums two numbers.",
@@ -39,8 +36,7 @@ describe("@babel/code-frame", function() {
       "  return a + b",
       "}",
     ].join("\n");
-    assert.equal(
-      codeFrame(rawLines, 7, 2),
+    expect(codeFrame(rawLines, 7, 2)).toEqual(
       [
         "   5 |  * @param b Number",
         "   6 |  * @returns Number",
@@ -53,7 +49,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("no unnecessary padding due to one-off errors", function() {
+  test("no unnecessary padding due to one-off errors", function() {
     const rawLines = [
       "/**",
       " * Sums two numbers.",
@@ -67,8 +63,7 @@ describe("@babel/code-frame", function() {
       "  return a + b",
       "}",
     ].join("\n");
-    assert.equal(
-      codeFrame(rawLines, 6, 2),
+    expect(codeFrame(rawLines, 6, 2)).toEqual(
       [
         "  4 |  * @param a Number",
         "  5 |  * @param b Number",
@@ -81,14 +76,13 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("tabs", function() {
+  test("tabs", function() {
     const rawLines = [
       "\tclass Foo {",
       "\t  \t\t    constructor\t(\t)",
       "\t};",
     ].join("\n");
-    assert.equal(
-      codeFrame(rawLines, 2, 25),
+    expect(codeFrame(rawLines, 2, 25)).toEqual(
       [
         "  1 | \tclass Foo {",
         "> 2 | \t  \t\t    constructor\t(\t)",
@@ -98,18 +92,17 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("opts.highlightCode", function() {
+  test("opts.highlightCode", function() {
     const rawLines = "console.log('babel')";
     const result = codeFrame(rawLines, 1, 9, { highlightCode: true });
     const stripped = stripAnsi(result);
-    assert.ok(result.length > stripped.length);
-    assert.equal(
-      stripped,
+    expect(result.length).toBeGreaterThan(stripped.length);
+    expect(stripped).toEqual(
       ["> 1 | console.log('babel')", "    |         ^"].join("\n"),
     );
   });
 
-  it("opts.linesAbove", function() {
+  test("opts.linesAbove", function() {
     const rawLines = [
       "/**",
       " * Sums two numbers.",
@@ -123,8 +116,7 @@ describe("@babel/code-frame", function() {
       "  return a + b",
       "}",
     ].join("\n");
-    assert.equal(
-      codeFrame(rawLines, 7, 2, { linesAbove: 1 }),
+    expect(codeFrame(rawLines, 7, 2, { linesAbove: 1 })).toEqual(
       [
         "   6 |  * @returns Number",
         ">  7 |  */",
@@ -136,7 +128,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("opts.linesBelow", function() {
+  test("opts.linesBelow", function() {
     const rawLines = [
       "/**",
       " * Sums two numbers.",
@@ -150,8 +142,7 @@ describe("@babel/code-frame", function() {
       "  return a + b",
       "}",
     ].join("\n");
-    assert.equal(
-      codeFrame(rawLines, 7, 2, { linesBelow: 1 }),
+    expect(codeFrame(rawLines, 7, 2, { linesBelow: 1 })).toEqual(
       [
         "  5 |  * @param b Number",
         "  6 |  * @returns Number",
@@ -162,7 +153,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("opts.linesAbove and opts.linesBelow", function() {
+  test("opts.linesAbove and opts.linesBelow", function() {
     const rawLines = [
       "/**",
       " * Sums two numbers.",
@@ -176,15 +167,14 @@ describe("@babel/code-frame", function() {
       "  return a + b",
       "}",
     ].join("\n");
-    assert.equal(
-      codeFrame(rawLines, 7, 2, { linesAbove: 1, linesBelow: 1 }),
+    expect(codeFrame(rawLines, 7, 2, { linesAbove: 1, linesBelow: 1 })).toEqual(
       ["  6 |  * @returns Number", "> 7 |  */", "    |  ^", "  8 | "].join(
         "\n",
       ),
     );
   });
 
-  it("opts.linesAbove no lines above", function() {
+  test("opts.linesAbove no lines above", function() {
     const rawLines = [
       "class Foo {",
       "  constructor() {",
@@ -192,8 +182,9 @@ describe("@babel/code-frame", function() {
       "  }",
       "};",
     ].join("\n");
-    assert.equal(
+    expect(
       codeFrameColumns(rawLines, { start: { line: 2 } }, { linesAbove: 0 }),
+    ).toEqual(
       [
         "> 2 |   constructor() {",
         "  3 |     console.log(arguments);",
@@ -203,7 +194,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("opts.linesBelow no lines below", function() {
+  test("opts.linesBelow no lines below", function() {
     const rawLines = [
       "class Foo {",
       "  constructor() {",
@@ -211,13 +202,12 @@ describe("@babel/code-frame", function() {
       "  }",
       "};",
     ].join("\n");
-    assert.equal(
+    expect(
       codeFrameColumns(rawLines, { start: { line: 2 } }, { linesBelow: 0 }),
-      ["  1 | class Foo {", "> 2 |   constructor() {"].join("\n"),
-    );
+    ).toEqual(["  1 | class Foo {", "> 2 |   constructor() {"].join("\n"));
   });
 
-  it("opts.linesBelow single line", function() {
+  test("opts.linesBelow single line", function() {
     const rawLines = [
       "class Foo {",
       "  constructor() {",
@@ -225,27 +215,27 @@ describe("@babel/code-frame", function() {
       "  }",
       "};",
     ].join("\n");
-    assert.equal(
+    expect(
       codeFrameColumns(
         rawLines,
         { start: { line: 2 } },
         { linesAbove: 0, linesBelow: 0 },
       ),
-      ["> 2 |   constructor() {"].join("\n"),
-    );
+    ).toEqual(["> 2 |   constructor() {"].join("\n"));
   });
 
-  it("opts.forceColor", function() {
+  test("opts.forceColor", function() {
     const marker = chalk.red.bold;
     const gutter = chalk.grey;
 
     const rawLines = ["", "", "", ""].join("\n");
-    assert.equal(
+    expect(
       codeFrame(rawLines, 3, null, {
         linesAbove: 1,
         linesBelow: 1,
         forceColor: true,
       }),
+    ).toEqual(
       chalk.reset(
         [
           " " + gutter(" 2 | "),
@@ -256,10 +246,11 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("basic usage, new API", function() {
+  test("basic usage, new API", function() {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
-    assert.equal(
+    expect(
       codeFrameColumns(rawLines, { start: { line: 2, column: 16 } }),
+    ).toEqual(
       [
         "  1 | class Foo {",
         "> 2 |   constructor()",
@@ -269,13 +260,14 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("mark multiple columns", function() {
+  test("mark multiple columns", function() {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
-    assert.equal(
+    expect(
       codeFrameColumns(rawLines, {
         start: { line: 2, column: 3 },
         end: { line: 2, column: 16 },
       }),
+    ).toEqual(
       [
         "  1 | class Foo {",
         "> 2 |   constructor()",
@@ -285,15 +277,16 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("mark multiple columns across lines", function() {
+  test("mark multiple columns across lines", function() {
     const rawLines = ["class Foo {", "  constructor() {", "  }", "};"].join(
       "\n",
     );
-    assert.equal(
+    expect(
       codeFrameColumns(rawLines, {
         start: { line: 2, column: 17 },
         end: { line: 3, column: 3 },
       }),
+    ).toEqual(
       [
         "  1 | class Foo {",
         "> 2 |   constructor() {",
@@ -305,7 +298,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("mark multiple columns across multiple lines", function() {
+  test("mark multiple columns across multiple lines", function() {
     const rawLines = [
       "class Foo {",
       "  constructor() {",
@@ -313,11 +306,12 @@ describe("@babel/code-frame", function() {
       "  }",
       "};",
     ].join("\n");
-    assert.equal(
+    expect(
       codeFrameColumns(rawLines, {
         start: { line: 2, column: 17 },
         end: { line: 4, column: 3 },
       }),
+    ).toEqual(
       [
         "  1 | class Foo {",
         "> 2 |   constructor() {",
@@ -331,7 +325,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("mark across multiple lines without columns", function() {
+  test("mark across multiple lines without columns", function() {
     const rawLines = [
       "class Foo {",
       "  constructor() {",
@@ -339,8 +333,9 @@ describe("@babel/code-frame", function() {
       "  }",
       "};",
     ].join("\n");
-    assert.equal(
+    expect(
       codeFrameColumns(rawLines, { start: { line: 2 }, end: { line: 4 } }),
+    ).toEqual(
       [
         "  1 | class Foo {",
         "> 2 |   constructor() {",
@@ -351,9 +346,9 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("opts.message", function() {
+  test("opts.message", function() {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
-    assert.equal(
+    expect(
       codeFrameColumns(
         rawLines,
         { start: { line: 2, column: 16 } },
@@ -361,6 +356,7 @@ describe("@babel/code-frame", function() {
           message: "Missing {",
         },
       ),
+    ).toEqual(
       [
         "  1 | class Foo {",
         "> 2 |   constructor()",
@@ -370,9 +366,9 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("opts.message without column", function() {
+  test("opts.message without column", function() {
     const rawLines = ["class Foo {", "  constructor()", "};"].join("\n");
-    assert.equal(
+    expect(
       codeFrameColumns(
         rawLines,
         { start: { line: 2 } },
@@ -380,6 +376,7 @@ describe("@babel/code-frame", function() {
           message: "Missing {",
         },
       ),
+    ).toEqual(
       [
         "  Missing {",
         "  1 | class Foo {",
@@ -389,7 +386,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("opts.message with multiple lines", function() {
+  test("opts.message with multiple lines", function() {
     const rawLines = [
       "class Foo {",
       "  constructor() {",
@@ -397,7 +394,7 @@ describe("@babel/code-frame", function() {
       "  }",
       "};",
     ].join("\n");
-    assert.equal(
+    expect(
       codeFrameColumns(
         rawLines,
         {
@@ -408,6 +405,7 @@ describe("@babel/code-frame", function() {
           message: "something about the constructor body",
         },
       ),
+    ).toEqual(
       [
         "  1 | class Foo {",
         "> 2 |   constructor() {",
@@ -421,7 +419,7 @@ describe("@babel/code-frame", function() {
     );
   });
 
-  it("opts.message with multiple lines without columns", function() {
+  test("opts.message with multiple lines without columns", function() {
     const rawLines = [
       "class Foo {",
       "  constructor() {",
@@ -429,7 +427,7 @@ describe("@babel/code-frame", function() {
       "  }",
       "};",
     ].join("\n");
-    assert.equal(
+    expect(
       codeFrameColumns(
         rawLines,
         { start: { line: 2 }, end: { line: 4 } },
@@ -437,6 +435,7 @@ describe("@babel/code-frame", function() {
           message: "something about the constructor body",
         },
       ),
+    ).toEqual(
       [
         "  something about the constructor body",
         "  1 | class Foo {",
