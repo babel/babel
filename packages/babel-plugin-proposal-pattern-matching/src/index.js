@@ -313,12 +313,24 @@ export default function({ types: t }) {
 
         const bodyExpr = first_statements_group.concat([mainIfTree]);
 
+        // path.replaceWith(
+        //   template.expression(`function() {
+        //     BODY
+        //   }()`)({
+        //     BODY: bodyExpr,
+        //   }),
+        // );
         path.replaceWith(
-          template.expression(`function() {
-            BODY
-          }()`)({
-            BODY: bodyExpr,
-          }),
+          t.callExpression(
+            t.functionExpression(
+              null,
+              [],
+              t.blockStatement(bodyExpr),
+              false,
+              false,
+            ),
+            [],
+          ),
         );
       },
     },
