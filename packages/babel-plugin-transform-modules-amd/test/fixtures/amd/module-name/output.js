@@ -1,4 +1,4 @@
-define("amd/module-name/output", [], function () {
+define("amd/module-name/input", [], function () {
   "use strict";
 
   foobar();

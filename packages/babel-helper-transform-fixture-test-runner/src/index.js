@@ -329,7 +329,10 @@ function run(task) {
     const newOpts = merge(
       {
         filename: self.loc,
+        filenameRelative: self.filename,
+        sourceFileName: self.filename,
         sourceType: "unambiguous",
+        babelrc: false,
       },
       opts,
     );
@@ -377,7 +380,15 @@ function run(task) {
   let actualCode = actual.code;
   const expectCode = expected.code;
   if (!execCode || actualCode) {
-    result = babel.transform(actualCode, getOpts(actual));
+    result = babel.transform(
+      actualCode,
+      Object.assign(
+        {
+          sourceMapTarget: task.expect.filename,
+        },
+        getOpts(actual),
+      ),
+    );
     checkDuplicatedNodes(result.ast);
     if (
       !expected.code &&
@@ -444,10 +455,6 @@ export default function(
               }
 
               defaults(task.options, {
-                filenameRelative: task.expect.filename,
-                sourceFileName: task.actual.filename,
-                sourceMapTarget: task.expect.filename,
-                babelrc: false,
                 sourceMap: !!(task.sourceMappings || task.sourceMap),
               });
 

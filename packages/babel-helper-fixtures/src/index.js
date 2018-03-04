@@ -124,6 +124,7 @@ export default function get(entryLoc): Array<Suite> {
         if (ext !== ".js" && ext !== ".mjs") return;
 
         execLoc = taskDir;
+        execLocAlias = suiteName + "/" + taskName;
       }
 
       if (resolve.relative(expectLoc + "on")) {

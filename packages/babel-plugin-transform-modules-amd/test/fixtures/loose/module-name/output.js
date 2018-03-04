@@ -1,4 +1,4 @@
-define("loose/module-name/output", [], function () {
+define("loose/module-name/input", [], function () {
   "use strict";
 
   foobar();
