@@ -7,7 +7,7 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
   const {
     filename,
     filenameRelative = filename || "unknown",
-    sourceType = "module",
+    sourceType = "script",
     inputSourceMap,
     sourceMaps = !!inputSourceMap,
 

@@ -105,6 +105,7 @@ describe("@babel/register", function() {
 
   test("hook transpiles with config", () => {
     setupRegister({
+      sourceType: "module",
       babelrc: false,
       sourceMaps: false,
       plugins: ["@babel/transform-modules-commonjs"],
@@ -117,6 +118,7 @@ describe("@babel/register", function() {
 
   test("hook transpiles with babelrc", () => {
     setupRegister({
+      sourceType: "module",
       babelrc: true,
       sourceMaps: false,
     });

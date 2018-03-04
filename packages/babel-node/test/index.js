@@ -123,6 +123,7 @@ const buildTest = function(binName, testName, opts) {
 
     let args = [binLoc];
 
+    args.push("--source-type", "module");
     args.push("--presets", presetLocs, "--plugins", pluginLocs);
     args.push("--only", "../../../../packages/*/test");
 
