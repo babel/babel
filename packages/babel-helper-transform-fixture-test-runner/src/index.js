@@ -397,11 +397,28 @@ function run(task) {
       fs.statSync(path.dirname(expected.loc)).isDirectory() &&
       !process.env.CI
     ) {
-      console.log(`New test file created: ${expected.loc}`);
-      fs.writeFileSync(expected.loc, `${result.code}\n`);
+      const expectedFile = expected.loc.replace(
+        /\.m?js$/,
+        result.sourceType === "module" ? ".mjs" : ".js",
+      );
+
+      console.log(`New test file created: ${expectedFile}`);
+      fs.writeFileSync(expectedFile, `${result.code}\n`);
+
+      if (expected.loc !== expectedFile) {
+        try {
+          fs.unlinkSync(expected.loc);
+        } catch (e) {}
+      }
     } else {
       actualCode = result.code.trim();
       expect(actualCode).toEqual(expectCode);
+
+      if (actualCode) {
+        expect(expected.loc).toMatch(
+          result.sourceType === "module" ? /\.mjs$/ : /\.js$/,
+        );
+      }
     }
   }
 
