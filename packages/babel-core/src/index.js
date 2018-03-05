@@ -3,6 +3,7 @@
 export { default as File } from "./transformation/file/file";
 export {
   default as buildExternalHelpers,
+  injectExternalHelpers,
 } from "./tools/build-external-helpers";
 export { resolvePlugin, resolvePreset } from "./config/files";
 
