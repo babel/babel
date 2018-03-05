@@ -687,17 +687,21 @@ helpers.slicedToArrayLoose = () => template.program.ast`
 
 helpers.toArray = () => template.program.ast`
   import arrayWithHoles from "arrayWithHoles";
+  import iterableToArray from "iterableToArray";
+  import nonIterableRest from "nonIterableRest";
 
   export default function _toConsumableArray(arr) {
-    return arrayWithHoles(arr) || Array.from(arr);
+    return arrayWithHoles(arr) || iterableToArray(arr) || nonIterableRest();
   }
 `;
 
 helpers.toConsumableArray = () => template.program.ast`
   import arrayWithoutHoles from "arrayWithoutHoles";
+  import iterableToArray from "iterableToArray";
+  import nonIterableSpread from "nonIterableSpread";
 
   export default function _toConsumableArray(arr) {
-    return arrayWithoutHoles(arr) || Array.from(arr);
+    return arrayWithoutHoles(arr) || iterableToArray(arr) || nonIterableSpread();
   }
 `;
 
@@ -713,6 +717,15 @@ helpers.arrayWithoutHoles = () => template.program.ast`
 helpers.arrayWithHoles = () => template.program.ast`
   export default function _arrayWithoutHoles(arr) {
     if (Array.isArray(arr)) return arr;
+  }
+`;
+
+helpers.iterableToArray = () => template.program.ast`
+  export default function _iterableToArray(iter) {
+    if (
+      Symbol.iterator in Object(iter) ||
+      Object.prototype.toString.call(iter) === "[object Arguments]"
+    ) return Array.from(iter);
   }
 `;
 
@@ -759,6 +772,12 @@ helpers.iterableToArrayLimitLoose = () => template.program.ast`
       if (i && _arr.length === i) break;
     }
     return _arr;
+  }
+`;
+
+helpers.nonIterableSpread = () => template.program.ast`
+  export default function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance");
   }
 `;
 
