@@ -1161,7 +1161,7 @@ export default class StatementParser extends ExpressionParser {
         );
       }
 
-      this.checkGetterSetterParamCount(publicMethod);
+      this.checkGetterSetterParams(publicMethod);
     } else if (this.isLineTerminator()) {
       // an uninitialized class property (due to ASI, since we don't otherwise recognize the next token)
       if (isPrivate) {

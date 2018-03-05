@@ -82,7 +82,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    checkGetterSetterParamCount(method: N.ObjectMethod | N.ClassMethod): void {
+    checkGetterSetterParams(method: N.ObjectMethod | N.ClassMethod): void {
       const prop = ((method: any): N.EstreeProperty | N.EstreeMethodDefinition);
       const paramCount = prop.kind === "get" ? 0 : 1;
       const start = prop.start;
