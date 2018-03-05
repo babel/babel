@@ -92,19 +92,18 @@
       "/test/tmp/",
       "/test/__data__/",
       "/test/helpers/",
-      "<rootDir>/test/warning.js",
+      "<rootDir>/test/warning\\.js",
       "<rootDir>/build/",
-      "_browser.js"
+      "_browser\\.js"
     ],
     "testEnvironment": "node",
     "setupTestFrameworkScriptFile": "<rootDir>/test/testSetupFile.js",
     "transformIgnorePatterns": [
       "/node_modules/",
-      "/test/fixtures/",
-      "/test/tmp/",
-      "/test/__data__/",
-      "<rootDir>/packages/[^/]+/lib/",
-      "<rootDir>/codemods/[^/]+/lib/"
+      "<rootDir>/packages/babel-standalone/babel(\\.min)?\\.js",
+      "<rootDir>/packages/babel-preset-env-standalone/babel-preset-env(\\.min)?\\.js",
+      "/test/(fixtures|tmp|__data__)/",
+      "<rootDir>/(packages|codemods)/[^/]+/lib/"
     ],
     "modulePathIgnorePatterns": [
       "/test/fixtures/",
