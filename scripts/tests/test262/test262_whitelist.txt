@@ -2028,8 +2028,6 @@ language/statements/class/syntax/early-errors/class-definition-evaluation-block-
 language/statements/class/syntax/early-errors/class-definition-evaluation-block-duplicate-binding.js(strict mode)
 language/statements/class/syntax/early-errors/class-definition-evaluation-scriptbody-duplicate-binding.js(default)
 language/statements/class/syntax/early-errors/class-definition-evaluation-scriptbody-duplicate-binding.js(strict mode)
-language/statements/class/syntax/escaped-static.js(default)
-language/statements/class/syntax/escaped-static.js(strict mode)
 language/statements/const/redeclaration-error-from-within-strict-mode-function-const.js(default)
 language/statements/do-while/decl-async-fun.js(default)
 language/statements/do-while/decl-async-fun.js(strict mode)
