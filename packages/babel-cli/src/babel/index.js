@@ -56,7 +56,7 @@ commander.option(
 );
 
 // Basic file input configuration.
-commander.option("--source-type [script|module]", "");
+commander.option("--source-type [script|module|unambiguous]", "");
 commander.option(
   "--no-babelrc",
   "Whether or not to look up .babelrc and .babelignore files",

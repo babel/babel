@@ -18,22 +18,26 @@ export default function(commander, filenames, opts) {
       return process.nextTick(callback);
     }
 
-    // remove extension and then append back on .js
-    relative = util.adjustRelative(relative, commander.keepFileExtension);
-
-    const dest = getDest(commander, relative, base);
-
     util.compile(
       src,
       defaults(
         {
-          sourceFileName: slash(path.relative(dest + "/..", src)),
+          sourceFileName: slash(
+            path.relative(getDest(commander, relative, base) + "/..", src),
+          ),
         },
         opts,
       ),
       function(err, res) {
         if (err) return callback(err);
         if (!res) return callback();
+
+        // remove extension and then append back on .js
+        if (!commander.keepFileExtension) {
+          relative = util.adjustRelative(relative, res.sourceType === "module");
+        }
+
+        const dest = getDest(commander, relative, base);
 
         // we've requested explicit sourcemaps to be written to disk
         if (

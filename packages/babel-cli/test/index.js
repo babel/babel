@@ -126,7 +126,7 @@ const buildTest = function(binName, testName, opts) {
 
     let args = [binLoc];
 
-    if (binName !== "babel-external-helpers") {
+    if (binName !== "babel-external-helpers" && !opts.skipDefaultPresets) {
       args.push("--presets", [presetEnvLoc, presetReactLoc].join(","));
     }
 
@@ -182,6 +182,7 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
 
       const opts = {
         args: [],
+        skipDefaultPresets: false,
       };
 
       const optionsLoc = path.join(testLoc, "options.json");
