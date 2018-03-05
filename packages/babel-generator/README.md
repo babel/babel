@@ -43,7 +43,6 @@ Options for source maps:
 name                   | type     | default         | description
 -----------------------|----------|-----------------|--------------------------------------------------------------------------
 sourceMaps             | boolean  | `false`         | Enable generating source maps
-sourceMapTarget        | string   |                 | The filename of the generated code that the source map will be associated with
 sourceRoot             | string   |                 | A root for all relative URLs in the source map
 sourceFileName         | string   |                 | The filename for the source code (i.e. the code in the `code` argument).  This will only be used if `code` is a string.
 

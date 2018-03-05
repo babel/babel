@@ -7,4 +7,4 @@ function _classCallCheck(instance, Constructor) { if (!_instanceof(instance, Con
 var Test = function Test() {
   _classCallCheck(this, Test);
 };
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9iYXIvYmFyLmpzIl0sIm5hbWVzIjpbIlRlc3QiXSwibWFwcGluZ3MiOiI7Ozs7OztJQUFNQSxJIiwiZmlsZSI6ImJhci5qcyIsInNvdXJjZXNDb250ZW50IjpbImNsYXNzIFRlc3Qge1xuXG59Il19
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uLy4uL3NyYy9iYXIvYmFyLmpzIl0sIm5hbWVzIjpbIlRlc3QiXSwibWFwcGluZ3MiOiI7Ozs7OztJQUFNQSxJIiwic291cmNlc0NvbnRlbnQiOlsiY2xhc3MgVGVzdCB7XG5cbn0iXX0=

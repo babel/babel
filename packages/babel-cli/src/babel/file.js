@@ -16,7 +16,10 @@ export default function(commander, filenames, opts) {
 
   const buildResult = function() {
     const map = new sourceMap.SourceMapGenerator({
-      file: path.basename(commander.outFile || "") || "stdout",
+      file:
+        commander.sourceMapTarget ||
+        path.basename(commander.outFile || "") ||
+        "stdout",
       sourceRoot: opts.sourceRoot,
     });
 

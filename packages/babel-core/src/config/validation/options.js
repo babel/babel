@@ -116,9 +116,6 @@ const COMMON_VALIDATORS: ValidatorSet = {
   sourceMap: (assertSourceMaps: Validator<
     $PropertyType<ValidatedOptions, "sourceMap">,
   >),
-  sourceMapTarget: (assertString: Validator<
-    $PropertyType<ValidatedOptions, "sourceMapTarget">,
-  >),
   sourceFileName: (assertString: Validator<
     $PropertyType<ValidatedOptions, "sourceFileName">,
   >),
@@ -189,7 +186,6 @@ export type ValidatedOptions = {
   // Sourcemap generation options.
   sourceMaps?: SourceMapsOption,
   sourceMap?: SourceMapsOption,
-  sourceMapTarget?: string,
   sourceFileName?: string,
   sourceRoot?: string,
 

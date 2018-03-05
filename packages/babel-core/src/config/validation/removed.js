@@ -44,7 +44,8 @@ export default {
     message: "Put the specific transforms you want in the `plugins` option",
   },
   sourceMapName: {
-    message: "Use the `sourceMapTarget` option",
+    message:
+      "The `sourceMapName` option has been removed because it makes more sense for the tooling that calls Babel to assign `map.file` themselves.",
   },
   stage: {
     message:
@@ -63,5 +64,11 @@ export default {
     version: 6,
     message:
       "Generated plugin metadata is always included in the output result",
+  },
+
+  sourceMapTarget: {
+    version: 6,
+    message:
+      "The `sourceMapTarget` option has been removed because it makes more sense for the tooling that calls Babel to assign `map.file` themselves.",
   },
 };

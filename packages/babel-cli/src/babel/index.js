@@ -259,6 +259,7 @@ delete opts.configFile;
 delete opts.deleteDirOnStart;
 delete opts.keepFileExtension;
 delete opts.relative;
+delete opts.sourceMapTarget;
 
 // Commander will default the "--no-" arguments to true, but we want to leave them undefined so that
 // @babel/core can handle the default-assignment logic on its own.

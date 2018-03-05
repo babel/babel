@@ -380,15 +380,7 @@ function run(task) {
   let actualCode = actual.code;
   const expectCode = expected.code;
   if (!execCode || actualCode) {
-    result = babel.transform(
-      actualCode,
-      Object.assign(
-        {
-          sourceMapTarget: task.expect.filename,
-        },
-        getOpts(actual),
-      ),
-    );
+    result = babel.transform(actualCode, getOpts(actual));
     checkDuplicatedNodes(result.ast);
     if (
       !expected.code &&

@@ -28,7 +28,6 @@ export default function(commander, filenames, opts) {
       defaults(
         {
           sourceFileName: slash(path.relative(dest + "/..", src)),
-          sourceMapTarget: path.basename(relative),
         },
         opts,
       ),
@@ -44,6 +43,7 @@ export default function(commander, filenames, opts) {
         ) {
           const mapLoc = dest + ".map";
           res.code = util.addSourceMappingUrl(res.code, mapLoc);
+          res.map.file = path.basename(relative);
           outputFileSync(mapLoc, JSON.stringify(res.map));
         }
 
