@@ -3519,7 +3519,7 @@ graceful-fs@^3.0.0:
   dependencies:
     natives "^1.1.0"
 
-graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6:
+graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.1.9:
   version "4.1.11"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.1.11.tgz#0e8bdfe4d1ddb8854d64e04ea7c00e2a026e5658"
 
@@ -4659,6 +4659,13 @@ js-tokens@^3.0.0, js-tokens@^3.0.2:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-3.0.2.tgz#9866df395102130e38f7f996bceb65443209c25b"
 
+js-yaml@^3.2.1:
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.11.0.tgz#597c1a8bd57152f26d622ce4117851a51f5ebaef"
+  dependencies:
+    argparse "^1.0.7"
+    esprima "^4.0.0"
+
 js-yaml@^3.7.0, js-yaml@^3.9.0, js-yaml@^3.9.1:
   version "3.10.0"
   resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-3.10.0.tgz#2e78441646bd4682e963f22b6e92823c309c62dc"
@@ -4803,6 +4810,12 @@ kind-of@^5.0.0:
 kind-of@^6.0.0, kind-of@^6.0.2:
   version "6.0.2"
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
+
+klaw@^2.1.0:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/klaw/-/klaw-2.1.1.tgz#42b76894701169cc910fd0d19ce677b5fb378af1"
+  dependencies:
+    graceful-fs "^4.1.9"
 
 labeled-stream-splicer@^2.0.0:
   version "2.0.0"
@@ -7256,6 +7269,20 @@ test-exclude@^4.1.1:
     object-assign "^4.1.0"
     read-pkg-up "^1.0.1"
     require-main-filename "^1.0.1"
+
+test262-parser@^2.0.7:
+  version "2.0.7"
+  resolved "https://registry.yarnpkg.com/test262-parser/-/test262-parser-2.0.7.tgz#733b46bf7759e747eae34b5b14d6a3c8d2082add"
+  dependencies:
+    js-yaml "^3.2.1"
+    through "^2.3.4"
+
+test262-stream@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/test262-stream/-/test262-stream-1.1.0.tgz#18265217b8ca800d9ec432e37e6b8d192e12c6fd"
+  dependencies:
+    klaw "^2.1.0"
+    test262-parser "^2.0.7"
 
 text-extensions@^1.0.0:
   version "1.7.0"
