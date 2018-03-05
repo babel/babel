@@ -101,13 +101,12 @@
       "/test/fixtures/",
       "/test/tmp/",
       "/test/__data__/",
-      "/lib/"
-    ],
-    "modulePaths": [
-      "<rootDir>/packages/"
+      "<rootDir>/packages/[^/]+/lib/"
     ],
     "modulePathIgnorePatterns": [
       "/test/fixtures/",
+      "/test/tmp/",
+      "/test/__data__/",
       "<rootDir>/build/"
     ]
   }

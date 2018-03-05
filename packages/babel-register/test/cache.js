@@ -34,7 +34,7 @@ describe("@babel/register - caching", () => {
 
     beforeEach(() => {
       // Since lib/cache is a singleton we need to fully reload it
-      jest.resetModuleRegistry();
+      jest.resetModules();
       const cache = require("../lib/cache");
 
       load = cache.load;
