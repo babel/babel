@@ -78,10 +78,12 @@
   },
   "jest": {
     "collectCoverageFrom": [
+      "packages/*/src/**/*.mjs",
       "packages/*/src/**/*.js",
+      "codemods/*/src/**/*.mjs",
       "codemods/*/src/**/*.js"
     ],
-    "testRegex": "./(packages|codemods)/[^/]+/test/.+\\.js$",
+    "testRegex": "./(packages|codemods)/[^/]+/test/.+\\.m?js$",
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/test/fixtures/",
@@ -90,24 +92,23 @@
       "/test/tmp/",
       "/test/__data__/",
       "/test/helpers/",
-      "<rootDir>/test/warning.js",
+      "<rootDir>/test/warning\\.js",
       "<rootDir>/build/",
-      "_browser.js"
+      "_browser\\.js"
     ],
     "testEnvironment": "node",
     "setupTestFrameworkScriptFile": "<rootDir>/test/testSetupFile.js",
     "transformIgnorePatterns": [
       "/node_modules/",
-      "/test/fixtures/",
-      "/test/tmp/",
-      "/test/__data__/",
-      "/lib/"
-    ],
-    "modulePaths": [
-      "<rootDir>/packages/"
+      "<rootDir>/packages/babel-standalone/babel(\\.min)?\\.js",
+      "<rootDir>/packages/babel-preset-env-standalone/babel-preset-env(\\.min)?\\.js",
+      "/test/(fixtures|tmp|__data__)/",
+      "<rootDir>/(packages|codemods)/[^/]+/lib/"
     ],
     "modulePathIgnorePatterns": [
       "/test/fixtures/",
+      "/test/tmp/",
+      "/test/__data__/",
       "<rootDir>/build/"
     ]
   }

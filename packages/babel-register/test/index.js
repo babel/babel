@@ -55,7 +55,7 @@ describe("@babel/register", function() {
     currentHook = null;
     currentOptions = null;
     sourceMapSupport = false;
-    jest.resetModuleRegistry();
+    jest.resetModules();
   });
 
   test("registers hook correctly", () => {
