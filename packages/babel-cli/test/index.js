@@ -17,15 +17,8 @@ const fileFilter = function(x) {
   return x !== ".DS_Store";
 };
 
-const presetLocs = [
-  path.join(__dirname, "../../babel-preset-es2015"),
-  path.join(__dirname, "../../babel-preset-react"),
-].join(",");
-
-const pluginLocs = [
-  path.join(__dirname, "/../../babel-plugin-transform-strict-mode"),
-  path.join(__dirname, "/../../babel-plugin-transform-modules-commonjs"),
-].join(",");
+const presetEnvLoc = path.join(__dirname, "../../babel-preset-es2015");
+const presetReactLoc = path.join(__dirname, "../../babel-preset-react");
 
 const readDir = function(loc, filter) {
   const files = {};
@@ -134,7 +127,7 @@ const buildTest = function(binName, testName, opts) {
     let args = [binLoc];
 
     if (binName !== "babel-external-helpers") {
-      args.push("--presets", presetLocs, "--plugins", pluginLocs);
+      args.push("--presets", [presetEnvLoc, presetReactLoc].join(","));
     }
 
     args = args.concat(opts.args);
