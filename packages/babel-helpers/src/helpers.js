@@ -582,17 +582,13 @@ helpers.assertThisInitialized = () => template.program.ast`
 `;
 
 helpers.possibleConstructorReturn = () => template.program.ast`
+  import assertThisInitialized from "assertThisInitialized";
+
   export default function _possibleConstructorReturn(self, call) {
     if (call && (typeof call === "object" || typeof call === "function")) {
       return call;
     }
-    // TODO: Should just be
-    //   import assertThisInitialized from "assertThisInitialized";
-    //   return assertThisInitialized(self);
-    if (self === void 0) {
-      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-    }
-    return self;
+    return assertThisInitialized(self);
   }
 `;
 
