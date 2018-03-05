@@ -941,6 +941,18 @@ export type EstreeProperty = NodeBase & {
   variance?: ?FlowVariance,
 };
 
+export type EstreeMethodDefinition = NodeBase & {
+  type: "MethodDefinition",
+  static: boolean,
+  key: Expression,
+  computed: boolean,
+  value: Expression,
+  decorators: $ReadOnlyArray<Decorator>,
+  kind?: "get" | "set" | "method",
+
+  variance?: ?FlowVariance,
+};
+
 // === === === ===
 // TypeScript
 // === === === ===

@@ -82,16 +82,23 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    checkGetterSetterParamCount(prop: N.ObjectMethod | N.ClassMethod): void {
+    checkGetterSetterParamCount(method: N.ObjectMethod | N.ClassMethod): void {
+      const prop = ((method: any): N.EstreeProperty | N.EstreeMethodDefinition);
       const paramCount = prop.kind === "get" ? 0 : 1;
-      // $FlowFixMe (prop.value present for ObjectMethod, but for ClassMethod should use prop.params?)
+      const start = prop.start;
       if (prop.value.params.length !== paramCount) {
-        const start = prop.start;
         if (prop.kind === "get") {
-          this.raise(start, "getter should have no params");
+          this.raise(start, "getter must not have any formal parameters");
         } else {
-          this.raise(start, "setter should have exactly one param");
+          this.raise(start, "setter must have exactly one formal parameter");
         }
+      }
+
+      if (prop.kind === "set" && prop.value.params[0].type === "RestElement") {
+        this.raise(
+          start,
+          "setter function argument must not be a rest parameter",
+        );
       }
     }
 

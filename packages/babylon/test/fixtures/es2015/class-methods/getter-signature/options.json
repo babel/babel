@@ -1,3 +1,3 @@
 {
-  "throws": "getter should have no params (2:2)"
+  "throws": "getter must not have any formal parameters (2:2)"
 }
