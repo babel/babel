@@ -572,6 +572,7 @@ export default class ExpressionParser extends LValParser {
 
   atPossibleAsync(base: N.Expression): boolean {
     return (
+      !this.state.containsEsc &&
       this.state.potentialArrowAt === base.start &&
       base.type === "Identifier" &&
       base.name === "async" &&
@@ -739,6 +740,7 @@ export default class ExpressionParser extends LValParser {
       case tt.name: {
         node = this.startNode();
         const allowAwait = this.state.value === "await" && this.state.inAsync;
+        const containsEsc = this.state.containsEsc;
         const allowYield = this.shouldAllowYieldIdentifier();
         const id = this.parseIdentifier(allowAwait || allowYield);
 
@@ -747,6 +749,7 @@ export default class ExpressionParser extends LValParser {
             return this.parseAwait(node);
           }
         } else if (
+          !containsEsc &&
           id.name === "async" &&
           this.match(tt._function) &&
           !this.canInsertSemicolon()

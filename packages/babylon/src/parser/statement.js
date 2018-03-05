@@ -155,7 +155,7 @@ export default class StatementParser extends ExpressionParser {
         return result;
       }
       case tt.name:
-        if (this.state.value === "async") {
+        if (this.isContextual("async")) {
           // peek ahead and see if next token is a function
           const state = this.state.clone();
           this.next();
