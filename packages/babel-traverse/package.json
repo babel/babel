@@ -14,7 +14,7 @@
     "@babel/helper-split-export-declaration": "7.0.0-beta.40",
     "@babel/types": "7.0.0-beta.40",
     "babylon": "7.0.0-beta.40",
-    "debug": "^3.0.1",
+    "debug": "^3.1.0",
     "globals": "^11.1.0",
     "invariant": "^2.2.0",
     "lodash": "^4.2.0"
