@@ -101,7 +101,8 @@
       "/test/fixtures/",
       "/test/tmp/",
       "/test/__data__/",
-      "<rootDir>/packages/[^/]+/lib/"
+      "<rootDir>/packages/[^/]+/lib/",
+      "<rootDir>/codemods/[^/]+/lib/"
     ],
     "modulePathIgnorePatterns": [
       "/test/fixtures/",
