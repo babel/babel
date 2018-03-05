@@ -78,10 +78,12 @@
   },
   "jest": {
     "collectCoverageFrom": [
+      "packages/*/src/**/*.mjs",
       "packages/*/src/**/*.js",
+      "codemods/*/src/**/*.mjs",
       "codemods/*/src/**/*.js"
     ],
-    "testRegex": "./(packages|codemods)/[^/]+/test/.+\\.js$",
+    "testRegex": "./(packages|codemods)/[^/]+/test/.+\\.m?js$",
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/test/fixtures/",
