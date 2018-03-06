@@ -5,15 +5,15 @@ const envOpts = {
   loose: true,
 };
 
-switch(env) {
+switch (env) {
   case "development":
     envOpts.debug = true;
-    // fall-through
+  // fall-through
   case "test":
   case "cov":
     envOpts.targets = {
-      node: "current"
-  };
+      node: "current",
+    };
 }
 
 const config = {
