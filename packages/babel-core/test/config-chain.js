@@ -1,4 +1,3 @@
-import assert from "assert";
 import fs from "fs";
 import path from "path";
 import { loadOptions } from "../lib";
@@ -18,7 +17,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process matching RegExp values", () => {
@@ -29,7 +28,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process matching function values", () => {
@@ -40,7 +39,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process non-matching string values", () => {
@@ -51,7 +50,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
 
       it("should process non-matching RegExp values", () => {
@@ -62,7 +61,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
 
       it("should process non-matching function values", () => {
@@ -73,7 +72,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
     });
 
@@ -86,7 +85,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process matching RegExp values", () => {
@@ -97,7 +96,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process matching function values", () => {
@@ -108,7 +107,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process non-matching string values", () => {
@@ -119,7 +118,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
 
       it("should process non-matching RegExp values", () => {
@@ -130,7 +129,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
 
       it("should process non-matching function values", () => {
@@ -141,7 +140,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
     });
   });
@@ -156,7 +155,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process matching RegExp values", () => {
@@ -167,7 +166,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process matching function values", () => {
@@ -178,7 +177,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process non-matching string values", () => {
@@ -189,7 +188,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
 
       it("should process non-matching RegExp values", () => {
@@ -200,7 +199,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
 
       it("should process non-matching function values", () => {
@@ -211,7 +210,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
     });
 
@@ -224,7 +223,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process matching RegExp values", () => {
@@ -235,7 +234,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process matching function values", () => {
@@ -246,7 +245,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process non-matching string values", () => {
@@ -257,7 +256,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
 
       it("should process non-matching RegExp values", () => {
@@ -268,7 +267,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
 
       it("should process non-matching function values", () => {
@@ -279,7 +278,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
     });
   });
@@ -294,7 +293,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
 
       it("should process matching RegExp values", () => {
@@ -305,7 +304,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
 
       it("should process matching function values", () => {
@@ -316,7 +315,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
 
       it("should process non-matching string values", () => {
@@ -327,7 +326,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process non-matching RegExp values", () => {
@@ -338,7 +337,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process non-matching function values", () => {
@@ -349,7 +348,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
     });
 
@@ -362,7 +361,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
 
       it("should process matching RegExp values", () => {
@@ -373,7 +372,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
 
       it("should process matching function values", () => {
@@ -384,7 +383,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, undefined);
+        expect(opts.comments).toBeUndefined();
       });
 
       it("should process non-matching string values", () => {
@@ -395,7 +394,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process non-matching RegExp values", () => {
@@ -406,7 +405,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
 
       it("should process non-matching function values", () => {
@@ -417,7 +416,7 @@ describe("buildConfigChain", function() {
           comments: true,
         });
 
-        assert.equal(opts.comments, true);
+        expect(opts.comments).toBe(true);
       });
     });
   });
@@ -437,7 +436,7 @@ describe("buildConfigChain", function() {
         ],
       });
 
-      assert.equal(opts, null);
+      expect(opts).toBeNull();
     });
 
     it("should not ignore files that don't match", () => {
@@ -450,7 +449,7 @@ describe("buildConfigChain", function() {
         ],
       });
 
-      assert.notEqual(opts, null);
+      expect(opts).not.toBeNull();
     });
   });
 
@@ -465,7 +464,7 @@ describe("buildConfigChain", function() {
         ],
       });
 
-      assert.equal(opts, null);
+      expect(opts).toBeNull();
     });
 
     it("should not ignore files that match", () => {
@@ -478,7 +477,7 @@ describe("buildConfigChain", function() {
         ],
       });
 
-      assert.notEqual(opts, null);
+      expect(opts).not.toBeNull();
     });
   });
 
@@ -491,7 +490,7 @@ describe("buildConfigChain", function() {
         only: [],
       });
 
-      assert.equal(opts, null);
+      expect(opts).toBeNull();
     });
 
     it("should ignore files that match ignore and also only", () => {
@@ -502,7 +501,7 @@ describe("buildConfigChain", function() {
         only: [fixture("nonexistant-fake", "src.js")],
       });
 
-      assert.equal(opts, null);
+      expect(opts).toBeNull();
     });
 
     it("should not ignore files that match only and not ignore", () => {
@@ -512,7 +511,7 @@ describe("buildConfigChain", function() {
         only: [fixture("nonexistant-fake", "src.js")],
       });
 
-      assert.notEqual(opts, null);
+      expect(opts).not.toBeNull();
     });
 
     it("should not ignore files when no ignore/only are specified", () => {
@@ -521,7 +520,7 @@ describe("buildConfigChain", function() {
         babelrc: false,
       });
 
-      assert.notEqual(opts, null);
+      expect(opts).not.toBeNull();
     });
 
     it("should allow negation of only", () => {
@@ -533,7 +532,7 @@ describe("buildConfigChain", function() {
           fixture("nonexistant-fake", "other.js"),
         ],
       });
-      assert.equal(opts1, null);
+      expect(opts1).toBeNull();
 
       const opts2 = loadOptions({
         filename: fixture("nonexistant-fake", "src.js"),
@@ -543,7 +542,7 @@ describe("buildConfigChain", function() {
           fixture("nonexistant-fake", "src.js"),
         ],
       });
-      assert.notEqual(opts2, null);
+      expect(opts2).not.toBeNull();
 
       const opts3 = loadOptions({
         filename: fixture("nonexistant-fake", "folder", "src.js"),
@@ -553,7 +552,7 @@ describe("buildConfigChain", function() {
           fixture("nonexistant-fake", "folder"),
         ],
       });
-      assert.notEqual(opts3, null);
+      expect(opts3).not.toBeNull();
     });
 
     it("should allow negation of ignore", () => {
@@ -565,7 +564,7 @@ describe("buildConfigChain", function() {
           fixture("nonexistant-fake"),
         ],
       });
-      assert.equal(opts1, null);
+      expect(opts1).toBeNull();
 
       // Tests disabled pending https://github.com/babel/babel/issues/6907
       // const opts2 = loadOptions({
@@ -603,9 +602,9 @@ describe("buildConfigChain", function() {
         inputOpts.plugins = plugins2;
         const opts2 = loadOptions(inputOpts);
 
-        assert.equal(opts1.plugins.length, 1);
-        assert.equal(opts2.plugins.length, 1);
-        assert.notEqual(opts1.plugins[0], opts2.plugins[1]);
+        expect(opts1.plugins).toHaveLength(1);
+        expect(opts2.plugins).toHaveLength(1);
+        expect(opts1.plugins[0]).not.toBe(opts2.plugins[1]);
       });
 
       it("should cache the env plugins by identity", () => {
@@ -628,9 +627,9 @@ describe("buildConfigChain", function() {
           },
         });
 
-        assert.equal(opts1.plugins.length, 1);
-        assert.equal(opts2.plugins.length, 1);
-        assert.equal(opts1.plugins[0], opts2.plugins[0]);
+        expect(opts1.plugins).toHaveLength(1);
+        expect(opts2.plugins).toHaveLength(1);
+        expect(opts1.plugins[0]).toBe(opts2.plugins[0]);
       });
 
       it("should cache the env presets by identity", () => {
@@ -653,9 +652,9 @@ describe("buildConfigChain", function() {
           },
         });
 
-        assert.equal(opts1.plugins.length, 1);
-        assert.equal(opts2.plugins.length, 1);
-        assert.equal(opts1.plugins[0], opts2.plugins[0]);
+        expect(opts1.plugins).toHaveLength(1);
+        expect(opts2.plugins).toHaveLength(1);
+        expect(opts1.plugins[0]).toBe(opts2.plugins[0]);
       });
 
       it("should cache the plugin options by identity", () => {
@@ -664,9 +663,9 @@ describe("buildConfigChain", function() {
         const opts1 = loadOptions({ plugins });
         const opts2 = loadOptions({ plugins });
 
-        assert.equal(opts1.plugins.length, 1);
-        assert.equal(opts2.plugins.length, 1);
-        assert.equal(opts1.plugins[0], opts2.plugins[0]);
+        expect(opts1.plugins).toHaveLength(1);
+        expect(opts2.plugins).toHaveLength(1);
+        expect(opts1.plugins[0]).toBe(opts2.plugins[0]);
       });
 
       it("should cache the presets options by identity", () => {
@@ -675,9 +674,9 @@ describe("buildConfigChain", function() {
         const opts1 = loadOptions({ presets });
         const opts2 = loadOptions({ presets });
 
-        assert.equal(opts1.plugins.length, 1);
-        assert.equal(opts2.plugins.length, 1);
-        assert.strictEqual(opts1.plugins[0], opts2.plugins[0]);
+        expect(opts1.plugins).toHaveLength(1);
+        expect(opts2.plugins).toHaveLength(1);
+        expect(opts1.plugins[0]).toBe(opts2.plugins[0]);
       });
 
       it("should not cache the presets options with passPerPreset", () => {
@@ -687,11 +686,11 @@ describe("buildConfigChain", function() {
         const opts2 = loadOptions({ presets, passPerPreset: true });
         const opts3 = loadOptions({ presets, passPerPreset: false });
 
-        assert.equal(opts1.plugins.length, 1);
-        assert.equal(opts2.plugins.length, 0);
-        assert.equal(opts3.plugins.length, 1);
+        expect(opts1.plugins).toHaveLength(1);
+        expect(opts2.plugins).toHaveLength(0);
+        expect(opts3.plugins).toHaveLength(1);
 
-        assert.strictEqual(opts1.plugins[0], opts3.plugins[0]);
+        expect(opts1.plugins[0]).toBe(opts3.plugins[0]);
       });
     });
 
@@ -727,16 +726,16 @@ describe("buildConfigChain", function() {
         const opts3 = loadOptions({ filename });
         const opts4 = loadOptions({ filename });
 
-        assert.equal(opts1.plugins.length, 1);
-        assert.equal(opts2.plugins.length, 1);
-        assert.equal(opts1.plugins[0], opts2.plugins[0]);
+        expect(opts1.plugins).toHaveLength(1);
+        expect(opts2.plugins).toHaveLength(1);
+        expect(opts1.plugins[0]).toBe(opts2.plugins[0]);
 
-        assert.equal(opts3.plugins.length, 1);
-        assert.equal(opts4.plugins.length, 1);
-        assert.equal(opts3.plugins[0], opts4.plugins[0]);
+        expect(opts1.plugins).toHaveLength(1);
+        expect(opts2.plugins).toHaveLength(1);
+        expect(opts3.plugins[0]).toBe(opts4.plugins[0]);
 
         // Identity changed after touch().
-        assert.notEqual(opts1.plugins[0], opts3.plugins[0]);
+        expect(opts1.plugins[0]).not.toBe(opts3.plugins[0]);
       });
 
       it("should cache .babelrc files by mtime", () => {
@@ -761,16 +760,16 @@ describe("buildConfigChain", function() {
         const opts3 = loadOptions({ filename });
         const opts4 = loadOptions({ filename });
 
-        assert.equal(opts1.plugins.length, 1);
-        assert.equal(opts2.plugins.length, 1);
-        assert.equal(opts1.plugins[0], opts2.plugins[0]);
+        expect(opts1.plugins).toHaveLength(1);
+        expect(opts2.plugins).toHaveLength(1);
+        expect(opts1.plugins[0]).toBe(opts2.plugins[0]);
 
-        assert.equal(opts3.plugins.length, 1);
-        assert.equal(opts4.plugins.length, 1);
-        assert.equal(opts3.plugins[0], opts4.plugins[0]);
+        expect(opts3.plugins).toHaveLength(1);
+        expect(opts4.plugins).toHaveLength(1);
+        expect(opts3.plugins[0]).toBe(opts4.plugins[0]);
 
         // Identity changed after touch().
-        assert.notEqual(opts1.plugins[0], opts3.plugins[0]);
+        expect(opts1.plugins[0]).not.toBe(opts3.plugins[0]);
       });
 
       it("should cache .babelrc.js files programmable behavior", () => {
@@ -787,16 +786,16 @@ describe("buildConfigChain", function() {
         const opts3 = loadOptions({ filename, envName: "new-env" });
         const opts4 = loadOptions({ filename, envName: "new-env" });
 
-        assert.equal(opts1.plugins.length, 1);
-        assert.equal(opts2.plugins.length, 1);
-        assert.equal(opts1.plugins[0], opts2.plugins[0]);
+        expect(opts1.plugins).toHaveLength(1);
+        expect(opts2.plugins).toHaveLength(1);
+        expect(opts1.plugins[0]).toBe(opts2.plugins[0]);
 
-        assert.equal(opts3.plugins.length, 1);
-        assert.equal(opts4.plugins.length, 1);
-        assert.equal(opts3.plugins[0], opts4.plugins[0]);
+        expect(opts3.plugins).toHaveLength(1);
+        expect(opts4.plugins).toHaveLength(1);
+        expect(opts3.plugins[0]).toBe(opts4.plugins[0]);
 
         // Identity changed with different .env
-        assert.notEqual(opts1.plugins[0], opts3.plugins[0]);
+        expect(opts1.plugins[0]).not.toBe(opts3.plugins[0]);
       });
     });
   });
@@ -815,7 +814,7 @@ describe("buildConfigChain", function() {
         ],
       });
 
-      assert.equal(opts.comments, false);
+      expect(opts.comments).toBe(false);
     });
 
     it("should not apply non-matching overrides over base configs", () => {
@@ -831,7 +830,7 @@ describe("buildConfigChain", function() {
         ],
       });
 
-      assert.equal(opts.comments, true);
+      expect(opts.comments).toBe(true);
     });
   });
 
@@ -861,7 +860,7 @@ describe("buildConfigChain", function() {
     it("should load .babelrc", () => {
       const filename = fixture("config-files", "babelrc", "src.js");
 
-      assert.deepEqual(loadOptions({ filename }), {
+      expect(loadOptions({ filename })).toEqual({
         ...getDefaults(),
         filename,
         comments: true,
@@ -871,7 +870,7 @@ describe("buildConfigChain", function() {
     it("should load .babelrc.js", () => {
       const filename = fixture("config-files", "babelrc-js", "src.js");
 
-      assert.deepEqual(loadOptions({ filename }), {
+      expect(loadOptions({ filename })).toEqual({
         ...getDefaults(),
         filename,
         comments: true,
@@ -881,7 +880,7 @@ describe("buildConfigChain", function() {
     it("should load package.json#babel", () => {
       const filename = fixture("config-files", "pkg", "src.js");
 
-      assert.deepEqual(loadOptions({ filename }), {
+      expect(loadOptions({ filename })).toEqual({
         ...getDefaults(),
         filename,
         comments: true,
@@ -891,14 +890,13 @@ describe("buildConfigChain", function() {
     it("should load .babelignore", () => {
       const filename = fixture("config-files", "babelignore", "src.js");
 
-      assert.deepEqual(loadOptions({ filename }), null);
+      expect(loadOptions({ filename })).toBeNull();
     });
 
     it("should throw if there are both .babelrc and .babelrc.js", () => {
       const filename = fixture("config-files", "both-babelrc", "src.js");
 
-      assert.throws(
-        () => loadOptions({ filename }),
+      expect(() => loadOptions({ filename })).toThrow(
         /Multiple configuration files found/,
       );
     });
@@ -906,8 +904,7 @@ describe("buildConfigChain", function() {
     it("should throw if there are both .babelrc and package.json", () => {
       const filename = fixture("config-files", "pkg-babelrc", "src.js");
 
-      assert.throws(
-        () => loadOptions({ filename }),
+      expect(() => loadOptions({ filename })).toThrow(
         /Multiple configuration files found/,
       );
     });
@@ -915,8 +912,7 @@ describe("buildConfigChain", function() {
     it("should throw if there are both .babelrc.js and package.json", () => {
       const filename = fixture("config-files", "pkg-babelrc-js", "src.js");
 
-      assert.throws(
-        () => loadOptions({ filename }),
+      expect(() => loadOptions({ filename })).toThrow(
         /Multiple configuration files found/,
       );
     });
@@ -924,7 +920,7 @@ describe("buildConfigChain", function() {
     it("should ignore package.json without a 'babel' property", () => {
       const filename = fixture("config-files", "pkg-ignored", "src.js");
 
-      assert.deepEqual(loadOptions({ filename }), {
+      expect(loadOptions({ filename })).toEqual({
         ...getDefaults(),
         filename,
         comments: true,
@@ -934,8 +930,7 @@ describe("buildConfigChain", function() {
     it("should show helpful errors for .babelrc", () => {
       const filename = fixture("config-files", "babelrc-error", "src.js");
 
-      assert.throws(
-        () => loadOptions({ filename }),
+      expect(() => loadOptions({ filename })).toThrow(
         /Error while parsing config - /,
       );
     });
@@ -943,14 +938,13 @@ describe("buildConfigChain", function() {
     it("should show helpful errors for .babelrc.js", () => {
       const filename = fixture("config-files", "babelrc-js-error", "src.js");
 
-      assert.throws(() => loadOptions({ filename }), /Babelrc threw an error/);
+      expect(() => loadOptions({ filename })).toThrow(/Babelrc threw an error/);
     });
 
     it("should show helpful errors for package.json", () => {
       const filename = fixture("config-files", "pkg-error", "src.js");
 
-      assert.throws(
-        () => loadOptions({ filename }),
+      expect(() => loadOptions({ filename })).toThrow(
         /Error while parsing JSON - /,
       );
     });

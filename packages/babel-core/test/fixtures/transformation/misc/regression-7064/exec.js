@@ -2,20 +2,20 @@ class Bar {
   test() {
     // pass
     (() => {
-      assert.strictEqual(this.constructor, Bar);
+      expect(this.constructor).toBe(Bar);
     })();
 
     // pass
     (() => {
-      assert.strictEqual(this.constructor, Bar);
+      expect(this.constructor).toBe(Bar);
     }).call(this);
 
     (async () => {
-      assert.strictEqual(this.constructor, Bar);
+      expect(this.constructor).toBe(Bar);
     })();
 
     (async () => {
-      assert.strictEqual(this.constructor, Bar);
+      expect(this.constructor).toBe(Bar);
     }).call(this);
   }
 }

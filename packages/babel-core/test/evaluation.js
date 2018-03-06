@@ -1,5 +1,4 @@
 import traverse from "@babel/traverse";
-import assert from "assert";
 import { parse } from "babylon";
 
 describe("evaluation", function() {
@@ -9,8 +8,8 @@ describe("evaluation", function() {
 
       visitor[type] = function(path) {
         const evaluate = path.evaluate();
-        assert.equal(evaluate.confident, !notConfident);
-        assert.deepEqual(evaluate.value, value);
+        expect(evaluate.confident).toEqual(!notConfident);
+        expect(evaluate.value).toEqual(value);
       };
 
       traverse(
