@@ -73,7 +73,11 @@ for (const type in t.NODE_FIELDS) {
 
       const validate = field.validate;
       if (validate) {
-        typeAnnotation = utils.stringifyValidator(validate, NODE_PREFIX);
+        typeAnnotation = utils.stringifyValidator(
+          validate,
+          NODE_PREFIX,
+          "flow"
+        );
       }
 
       if (typeAnnotation) {

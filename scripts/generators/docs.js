@@ -87,7 +87,7 @@ Object.keys(types.BUILDER_KEYS)
         } else if (validator) {
           try {
             fieldDescription.push(
-              ": `" + utils.stringifyValidator(validator, "") + "`"
+              ": `" + utils.stringifyValidator(validator, "", "docs") + "`"
             );
           } catch (ex) {
             if (ex.code === "UNEXPECTED_VALIDATOR_TYPE") {

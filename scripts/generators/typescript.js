@@ -61,7 +61,11 @@ for (const type in t.NODE_FIELDS) {
 
   fieldNames.forEach(fieldName => {
     const field = fields[fieldName];
-    let typeAnnotation = utils.stringifyValidator(field.validate, "");
+    let typeAnnotation = utils.stringifyValidator(
+      field.validate,
+      "",
+      "typescript"
+    );
 
     if (isNullable(field) && !hasDefault(field)) {
       typeAnnotation += " | null";

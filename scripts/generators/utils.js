@@ -1,17 +1,19 @@
 exports.stringifyValidator = function stringifyValidator(
   validator,
-  nodePrefix
+  nodePrefix,
+  syntax
 ) {
   if (validator === undefined) {
     return "any";
   }
 
   if (validator.each) {
-    return `Array<${stringifyValidator(validator.each, nodePrefix)}>`;
+    const inner = stringifyValidator(validator.each, nodePrefix, syntax);
+    return syntax === "flow" ? `$ReadOnlyArray<${inner}>` : `Array<${inner}>`;
   }
 
   if (validator.chainOf) {
-    return stringifyValidator(validator.chainOf[1], nodePrefix);
+    return stringifyValidator(validator.chainOf[1], nodePrefix, syntax);
   }
 
   if (validator.oneOf) {
