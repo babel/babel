@@ -14,7 +14,7 @@ if [ "$TEST_DEBUG" ]; then
 fi
 
 if [ -n "$CI" ]; then
-  jestArgs="${jestArgs} --runInBand --ci"
+  jestArgs="${jestArgs} --maxWorkers=4 --ci"
 fi
 
 $node node_modules/.bin/jest $jestArgs "$TEST_GREP"
