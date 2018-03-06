@@ -1383,16 +1383,23 @@ export default class ExpressionParser extends LValParser {
   }
 
   // get methods aren't allowed to have any parameters
-  // set methods must have exactly 1 parameter
-  checkGetterSetterParamCount(method: N.ObjectMethod | N.ClassMethod): void {
+  // set methods must have exactly 1 parameter which is not a rest parameter
+  checkGetterSetterParams(method: N.ObjectMethod | N.ClassMethod): void {
     const paramCount = method.kind === "get" ? 0 : 1;
+    const start = method.start;
     if (method.params.length !== paramCount) {
-      const start = method.start;
       if (method.kind === "get") {
-        this.raise(start, "getter should have no params");
+        this.raise(start, "getter must not have any formal parameters");
       } else {
-        this.raise(start, "setter should have exactly one param");
+        this.raise(start, "setter must have exactly one formal parameter");
       }
+    }
+
+    if (method.kind === "set" && method.params[0].type === "RestElement") {
+      this.raise(
+        start,
+        "setter function argument must not be a rest parameter",
+      );
     }
   }
 
@@ -1426,7 +1433,7 @@ export default class ExpressionParser extends LValParser {
         /* isConstructor */ false,
         "ObjectMethod",
       );
-      this.checkGetterSetterParamCount(prop);
+      this.checkGetterSetterParams(prop);
       return prop;
     }
   }
