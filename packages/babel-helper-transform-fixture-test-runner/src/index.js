@@ -15,6 +15,8 @@ import fs from "fs";
 import path from "path";
 import vm from "vm";
 
+import diff from "jest-diff";
+
 const moduleCache = {};
 const testContext = vm.createContext({
   ...helpers,
@@ -412,7 +414,10 @@ function run(task) {
       }
     } else {
       actualCode = result.code.trim();
-      expect(actualCode).toEqual(expectCode);
+      expect(actualCode).toEqualFile({
+        filename: expected.loc,
+        code: expectCode,
+      });
 
       if (actualCode) {
         expect(expected.loc).toMatch(
@@ -442,6 +447,28 @@ function run(task) {
   }
 }
 
+const toEqualFile = () => ({
+  compare: (actual, { filename, code }) => {
+    const pass = actual === code;
+    return {
+      pass,
+      message: () => {
+        const diffString = diff(code, actual, {
+          expand: false,
+        });
+        return (
+          `Expected ${filename} to match transform output.\n` +
+          `To autogenerate a passing version of this file, delete the file and re-run the tests.\n\n` +
+          `Diff:\n\n${diffString}`
+        );
+      },
+    };
+  },
+  negativeCompare: () => {
+    throw new Error("Negation unsupported");
+  },
+});
+
 export default function(
   fixturesLoc: string,
   name: string,
@@ -455,6 +482,10 @@ export default function(
     if (includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
 
     describe(name + "/" + testSuite.title, function() {
+      jest.addMatchers({
+        toEqualFile,
+      });
+
       for (const task of testSuite.tests) {
         if (
           includes(suiteOpts.ignoreTasks, task.title) ||
