@@ -1,4 +1,4 @@
 "use strict";
 
-var foo = babelHelpers.interopRequireWildcard(require("./foo"));
+var foo = babelHelpers.interopRequireDefault(require("./foo"));
 console.log(foo);

@@ -5,7 +5,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _react = babelHelpers.interopRequireWildcard(require("react"));
+var _react = babelHelpers.interopRequireDefault(require("react"));
 
 var RandomComponent =
 /*#__PURE__*/
