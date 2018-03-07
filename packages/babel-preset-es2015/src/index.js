@@ -82,7 +82,7 @@ export default declare((api, opts) => {
       modules === "systemjs" && [transformES2015ModulesSystemJS, optsLoose],
       modules === "amd" && [transformES2015ModulesAMD, optsLoose],
       modules === "umd" && [transformES2015ModulesUMD, optsLoose],
-      [transformRegenerator, { async: false, asyncGenerators: false }],
+      transformRegenerator,
     ].filter(Boolean), // filter out falsy values
   };
 });
