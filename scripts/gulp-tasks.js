@@ -131,10 +131,12 @@ function registerStandalonePackageTask(
           plugins,
         }),
         gulp.dest(standalonePath),
-        uglify(),
+      ].concat(
+        // Minification is super slow, so we skip it in CI.
+        process.env.CI ? [] : uglify(),
         rename({ extname: ".min.js" }),
-        gulp.dest(standalonePath),
-      ],
+        gulp.dest(standalonePath)
+      ),
       cb
     );
   });
