@@ -44,7 +44,7 @@ watch: clean
 
 	# Ensure that build artifacts for types are created during local
 	# development too.
-	BABEL_ENV=development ./node_modules/.bin/gulp build
+	BABEL_ENV=development ./node_modules/.bin/gulp build-no-bundle
 	node ./packages/babel-types/scripts/generateTypeHelpers.js
 	node scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
 	BABEL_ENV=development ./node_modules/.bin/gulp watch
