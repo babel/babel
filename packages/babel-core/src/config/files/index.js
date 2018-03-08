@@ -7,5 +7,18 @@ import typeof * as indexType from "./index";
 // exports of index-browser, since this file may be replaced at bundle time with index-browser.
 ((({}: any): $Exact<indexBrowserType>): $Exact<indexType>);
 
-export * from "./configuration";
-export * from "./plugins";
+export { findPackageData } from "./package";
+
+export { findRelativeConfig, loadConfig } from "./configuration";
+export type {
+  ConfigFile,
+  IgnoreFile,
+  RelativeConfig,
+  FilePackageData,
+} from "./types";
+export {
+  resolvePlugin,
+  resolvePreset,
+  loadPlugin,
+  loadPreset,
+} from "./plugins";

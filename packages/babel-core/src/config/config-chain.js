@@ -13,6 +13,7 @@ import {
 const debug = buildDebug("babel:config:config-chain");
 
 import {
+  findPackageData,
   findRelativeConfig,
   loadConfig,
   type ConfigFile,
@@ -125,15 +126,17 @@ export function buildRootChain(
   );
   if (!programmaticChain) return null;
 
-  let ignore, babelrc;
+  const pkgData =
+    typeof context.filename === "string"
+      ? findPackageData(context.filename)
+      : null;
 
+  let ignore, babelrc;
   const fileChain = emptyChain();
   // resolve all .babelrc files
-  if (opts.babelrc !== false && context.filename !== null) {
-    const filename = context.filename;
-
+  if (opts.babelrc !== false && pkgData) {
     ({ ignore, config: babelrc } = findRelativeConfig(
-      filename,
+      pkgData,
       context.envName,
     ));
 
