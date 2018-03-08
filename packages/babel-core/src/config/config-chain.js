@@ -12,7 +12,12 @@ import {
 
 const debug = buildDebug("babel:config:config-chain");
 
-import { findRelativeConfig, loadConfig, type ConfigFile } from "./files";
+import {
+  findRelativeConfig,
+  loadConfig,
+  type ConfigFile,
+  type IgnoreFile,
+} from "./files";
 
 import { makeWeakCache, makeStrongCache } from "./caching";
 
@@ -99,13 +104,18 @@ const loadPresetOverridesEnvDescriptors = makeWeakCache(
     ),
 );
 
+export type RootConfigChain = ConfigChain & {
+  babelrc: ConfigFile | void,
+  ignore: IgnoreFile | void,
+};
+
 /**
  * Build a config chain for Babel's full root configuration.
  */
 export function buildRootChain(
   opts: ValidatedOptions,
   context: ConfigContext,
-): ConfigChain | null {
+): RootConfigChain | null {
   const programmaticChain = loadProgrammaticChain(
     {
       options: opts,
@@ -115,19 +125,24 @@ export function buildRootChain(
   );
   if (!programmaticChain) return null;
 
+  let ignore, babelrc;
+
   const fileChain = emptyChain();
   // resolve all .babelrc files
   if (opts.babelrc !== false && context.filename !== null) {
     const filename = context.filename;
 
-    const { ignore, config } = findRelativeConfig(filename, context.envName);
+    ({ ignore, config: babelrc } = findRelativeConfig(
+      filename,
+      context.envName,
+    ));
 
     if (ignore && shouldIgnore(context, ignore.ignore, null, ignore.dirname)) {
       return null;
     }
 
-    if (config) {
-      const result = loadFileChain(config, context);
+    if (babelrc) {
+      const result = loadFileChain(babelrc, context);
       if (!result) return null;
 
       mergeChain(fileChain, result);
@@ -145,6 +160,8 @@ export function buildRootChain(
     plugins: dedupDescriptors(chain.plugins),
     presets: dedupDescriptors(chain.presets),
     options: chain.options.map(o => normalizeOptions(o)),
+    ignore: ignore || undefined,
+    babelrc: babelrc || undefined,
   };
 }
 

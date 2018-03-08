@@ -1,5 +1,8 @@
 // @flow
 
+import { ConfigItem } from "../item";
+import Plugin from "../plugin";
+
 import removed from "./removed";
 import {
   assertString,
@@ -214,10 +217,11 @@ export type IgnoreList = $ReadOnlyArray<IgnoreItem>;
 export type PluginOptions = {} | void | false;
 export type PluginTarget = string | {} | Function;
 export type PluginItem =
+  | ConfigItem
   | Plugin
   | PluginTarget
   | [PluginTarget, PluginOptions]
-  | [PluginTarget, PluginOptions, string];
+  | [PluginTarget, PluginOptions, string | void];
 export type PluginList = $ReadOnlyArray<PluginItem>;
 
 export type OverridesList = Array<ValidatedOptions>;
