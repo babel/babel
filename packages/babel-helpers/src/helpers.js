@@ -616,70 +616,6 @@ helpers.set = () => template.program.ast`
   }
 `;
 
-helpers.slicedToArray = () => template.program.ast`
-  // Broken out into a separate function to avoid deoptimizations due to the try/catch for the
-  // array iterator case.
-  function _sliceIterator(arr, i) {
-    // this is an expanded form of \`for...of\` that properly supports abrupt completions of
-    // iterators etc. variable names have been minimised to reduce the size of this massive
-    // helper. sometimes spec compliancy is annoying :(
-    //
-    // _n = _iteratorNormalCompletion
-    // _d = _didIteratorError
-    // _e = _iteratorError
-    // _i = _iterator
-    // _s = _step
-
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-    var _e = undefined;
-    try {
-      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);
-        if (i && _arr.length === i) break;
-      }
-    } catch (err) {
-      _d = true;
-      _e = err;
-    } finally {
-      try {
-        if (!_n && _i["return"] != null) _i["return"]();
-      } finally {
-        if (_d) throw _e;
-      }
-    }
-    return _arr;
-  }
-
-  export default function _slicedToArray(arr, i) {
-    if (Array.isArray(arr)) {
-      return arr;
-    } else if (Symbol.iterator in Object(arr)) {
-      return _sliceIterator(arr, i);
-    } else {
-      throw new TypeError("Invalid attempt to destructure non-iterable instance");
-    }
-  }
-`;
-
-helpers.slicedToArrayLoose = () => template.program.ast`
-  export default function _slicedToArrayLoose(arr, i) {
-    if (Array.isArray(arr)) {
-      return arr;
-    } else if (Symbol.iterator in Object(arr)) {
-      var _arr = [];
-      for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
-        _arr.push(_step.value);
-        if (i && _arr.length === i) break;
-      }
-      return _arr;
-    } else {
-      throw new TypeError("Invalid attempt to destructure non-iterable instance");
-    }
-  }
-`;
-
 helpers.taggedTemplateLiteral = () => template.program.ast`
   export default function _taggedTemplateLiteral(strings, raw) {
     if (!raw) { raw = strings.slice(0); }
@@ -725,20 +661,125 @@ helpers.temporalUndefined = () => template.program.ast`
   export default {};
 `;
 
+helpers.slicedToArray = () => template.program.ast`
+  import arrayWithHoles from "arrayWithHoles";
+  import iterableToArrayLimit from "iterableToArrayLimit";
+  import nonIterableRest from "nonIterableRest";
+
+  export default function _slicedToArray(arr, i) {
+    return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || nonIterableRest();
+  }
+`;
+
+helpers.slicedToArrayLoose = () => template.program.ast`
+  import arrayWithHoles from "arrayWithHoles";
+  import iterableToArrayLimitLoose from "iterableToArrayLimitLoose";
+  import nonIterableRest from "nonIterableRest";
+
+  export default function _slicedToArrayLoose(arr, i) {
+    return arrayWithHoles(arr) || iterableToArrayLimitLoose(arr, i) || nonIterableRest();
+  }
+`;
+
 helpers.toArray = () => template.program.ast`
-  export default function _toArray(arr) {
-    return Array.isArray(arr) ? arr : Array.from(arr);
+  import arrayWithHoles from "arrayWithHoles";
+  import iterableToArray from "iterableToArray";
+  import nonIterableRest from "nonIterableRest";
+
+  export default function _toConsumableArray(arr) {
+    return arrayWithHoles(arr) || iterableToArray(arr) || nonIterableRest();
   }
 `;
 
 helpers.toConsumableArray = () => template.program.ast`
+  import arrayWithoutHoles from "arrayWithoutHoles";
+  import iterableToArray from "iterableToArray";
+  import nonIterableSpread from "nonIterableSpread";
+
   export default function _toConsumableArray(arr) {
+    return arrayWithoutHoles(arr) || iterableToArray(arr) || nonIterableSpread();
+  }
+`;
+
+helpers.arrayWithoutHoles = () => template.program.ast`
+  export default function _arrayWithoutHoles(arr) {
     if (Array.isArray(arr)) {
       for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
       return arr2;
-    } else {
-      return Array.from(arr);
     }
+  }
+`;
+
+helpers.arrayWithHoles = () => template.program.ast`
+  export default function _arrayWithoutHoles(arr) {
+    if (Array.isArray(arr)) return arr;
+  }
+`;
+
+helpers.iterableToArray = () => template.program.ast`
+  export default function _iterableToArray(iter) {
+    if (
+      Symbol.iterator in Object(iter) ||
+      Object.prototype.toString.call(iter) === "[object Arguments]"
+    ) return Array.from(iter);
+  }
+`;
+
+helpers.iterableToArrayLimit = () => template.program.ast`
+  export default function _iterableToArrayLimit(arr, i) {
+    // this is an expanded form of \`for...of\` that properly supports abrupt completions of
+    // iterators etc. variable names have been minimised to reduce the size of this massive
+    // helper. sometimes spec compliancy is annoying :(
+    //
+    // _n = _iteratorNormalCompletion
+    // _d = _didIteratorError
+    // _e = _iteratorError
+    // _i = _iterator
+    // _s = _step
+
+    var _arr = [];
+    var _n = true;
+    var _d = false;
+    var _e = undefined;
+    try {
+      for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+        _arr.push(_s.value);
+        if (i && _arr.length === i) break;
+      }
+    } catch (err) {
+      _d = true;
+      _e = err;
+    } finally {
+      try {
+        if (!_n && _i["return"] != null) _i["return"]();
+      } finally {
+        if (_d) throw _e;
+      }
+    }
+    return _arr;
+  }
+`;
+
+helpers.iterableToArrayLimitLoose = () => template.program.ast`
+  export default function _iterableToArrayLimitLoose(arr, i) {
+    var _arr = [];
+    for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
+      _arr.push(_step.value);
+      if (i && _arr.length === i) break;
+    }
+    return _arr;
+  }
+`;
+
+helpers.nonIterableSpread = () => template.program.ast`
+  export default function _nonIterableSpread() {
+    throw new TypeError("Invalid attempt to spread non-iterable instance");
+  }
+`;
+
+helpers.nonIterableRest = () => template.program.ast`
+  export default function _nonIterableRest() {
+    throw new TypeError("Invalid attempt to destructure non-iterable instance");
   }
 `;
 
