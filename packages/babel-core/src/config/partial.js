@@ -17,6 +17,7 @@ export default function loadPrivatePartialConfig(
   context: ConfigContext,
   ignore: IgnoreFile | void,
   babelrc: ConfigFile | void,
+  config: ConfigFile | void,
 } | null {
   if (
     inputOpts != null &&
@@ -64,6 +65,7 @@ export default function loadPrivatePartialConfig(
     context,
     ignore: configChain.ignore,
     babelrc: configChain.babelrc,
+    config: configChain.config,
   };
 }
 
@@ -71,7 +73,7 @@ export function loadPartialConfig(inputOpts: mixed): PartialConfig | null {
   const result = loadPrivatePartialConfig(inputOpts);
   if (!result) return null;
 
-  const { options, babelrc, ignore } = result;
+  const { options, babelrc, ignore, config } = result;
 
   (options.plugins || []).forEach(item => {
     if (item.value instanceof Plugin) {
@@ -86,6 +88,7 @@ export function loadPartialConfig(inputOpts: mixed): PartialConfig | null {
     options,
     babelrc ? babelrc.filepath : undefined,
     ignore ? ignore.filepath : undefined,
+    config ? config.filepath : undefined,
   );
 }
 
@@ -99,15 +102,18 @@ class PartialConfig {
   options: ValidatedOptions;
   babelrc: string | void;
   babelignore: string | void;
+  config: string | void;
 
   constructor(
     options: ValidatedOptions,
     babelrc: string | void,
     ignore: string | void,
+    config: string | void,
   ) {
     this.options = options;
     this.babelignore = ignore;
     this.babelrc = babelrc;
+    this.config = config;
 
     // Freeze since this is a public API and it should be extremely obvious that
     // reassigning properties on here does nothing.

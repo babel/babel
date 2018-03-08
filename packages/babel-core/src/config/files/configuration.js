@@ -16,6 +16,8 @@ import type { FilePackageData, RelativeConfig, ConfigFile } from "./types";
 
 const debug = buildDebug("babel:config:loading:files:configuration");
 
+const BABEL_CONFIG_JS_FILENAME = "babel.config.js";
+
 const BABELRC_FILENAME = ".babelrc";
 const BABELRC_JS_FILENAME = ".babelrc.js";
 const BABELIGNORE_FILENAME = ".babelignore";
@@ -83,6 +85,19 @@ export function findRelativeConfig(
   }
 
   return { config, ignore };
+}
+
+export function findRootConfig(
+  dirname: string,
+  envName: string,
+): ConfigFile | null {
+  const filepath = path.resolve(dirname, BABEL_CONFIG_JS_FILENAME);
+
+  const conf = readConfig(filepath, envName);
+  if (conf) {
+    debug("Found root config %o in $o.", BABEL_CONFIG_JS_FILENAME, dirname);
+  }
+  return conf;
 }
 
 export function loadConfig(

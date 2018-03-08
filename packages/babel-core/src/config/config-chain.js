@@ -15,6 +15,7 @@ const debug = buildDebug("babel:config:config-chain");
 import {
   findPackageData,
   findRelativeConfig,
+  findRootConfig,
   loadConfig,
   type ConfigFile,
   type IgnoreFile,
@@ -107,6 +108,7 @@ const loadPresetOverridesEnvDescriptors = makeWeakCache(
 
 export type RootConfigChain = ConfigChain & {
   babelrc: ConfigFile | void,
+  config: ConfigFile | void,
   ignore: IgnoreFile | void,
 };
 
@@ -125,6 +127,26 @@ export function buildRootChain(
     context,
   );
   if (!programmaticChain) return null;
+
+  const { root: rootDir = ".", configFile: configFileName } = opts;
+
+  let configFile;
+  if (typeof configFileName === "string") {
+    configFile = loadConfig(configFileName, context.cwd, context.envName);
+  } else if (configFileName === undefined || configFileName === true) {
+    configFile = findRootConfig(
+      path.resolve(context.cwd, rootDir),
+      context.envName,
+    );
+  }
+
+  const configFileChain = emptyChain();
+  if (configFile) {
+    const result = loadFileChain(configFile, context);
+    if (!result) return null;
+
+    mergeChain(configFileChain, result);
+  }
 
   const pkgData =
     typeof context.filename === "string"
@@ -155,7 +177,7 @@ export function buildRootChain(
   // Insert file chain in front so programmatic options have priority
   // over configuration file chain items.
   const chain = mergeChain(
-    mergeChain(emptyChain(), fileChain),
+    mergeChain(mergeChain(emptyChain(), configFileChain), fileChain),
     programmaticChain,
   );
 
@@ -165,6 +187,7 @@ export function buildRootChain(
     options: chain.options.map(o => normalizeOptions(o)),
     ignore: ignore || undefined,
     babelrc: babelrc || undefined,
+    config: configFile || undefined,
   };
 }
 

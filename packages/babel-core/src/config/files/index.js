@@ -9,7 +9,11 @@ import typeof * as indexType from "./index";
 
 export { findPackageData } from "./package";
 
-export { findRelativeConfig, loadConfig } from "./configuration";
+export {
+  findRelativeConfig,
+  findRootConfig,
+  loadConfig,
+} from "./configuration";
 export type {
   ConfigFile,
   IgnoreFile,

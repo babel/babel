@@ -238,10 +238,6 @@ if (errors.length) {
 //
 
 const opts = commander.opts();
-//the configFile CLI option maps to the extends option in the node API
-if (opts.configFile) {
-  opts.extends = opts.configFile;
-}
 
 // Delete options that are specific to @babel/cli and shouldn't be passed to @babel/core.
 delete opts.version;
@@ -253,7 +249,6 @@ delete opts.outDir;
 delete opts.copyFiles;
 delete opts.includeDotfiles;
 delete opts.verbose;
-delete opts.configFile;
 delete opts.deleteDirOnStart;
 delete opts.keepFileExtension;
 delete opts.relative;

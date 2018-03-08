@@ -1,6 +1,7 @@
 // @flow
 
 import type {
+  ConfigFileSearch,
   IgnoreList,
   IgnoreItem,
   PluginList,
@@ -162,6 +163,24 @@ function checkValidTest(value: mixed): boolean {
     typeof value === "function" ||
     value instanceof RegExp
   );
+}
+
+export function assertConfigFileSearch(
+  key: string,
+  value: mixed,
+): ConfigFileSearch | void {
+  if (
+    value !== undefined &&
+    typeof value !== "boolean" &&
+    typeof value !== "string"
+  ) {
+    throw new Error(
+      `.${key} must be a undefined, a boolean, a string, ` +
+        `got ${JSON.stringify(value)}`,
+    );
+  }
+
+  return value;
 }
 
 export function assertPluginList(key: string, value: mixed): PluginList | void {

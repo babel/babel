@@ -25,6 +25,13 @@ export function findRelativeConfig(
   return { pkg: null, config: null, ignore: null };
 }
 
+export function findRootConfig(
+  dirname: string,
+  envName: string, // eslint-disable-line no-unused-vars
+): ConfigFile | null {
+  return null;
+}
+
 export function loadConfig(
   name: string,
   dirname: string,

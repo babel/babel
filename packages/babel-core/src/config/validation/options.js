@@ -13,6 +13,7 @@ import {
   assertIgnoreList,
   assertPluginList,
   assertConfigApplicableTest,
+  assertConfigFileSearch,
   assertFunction,
   assertSourceMaps,
   assertCompact,
@@ -23,6 +24,11 @@ import {
 
 const ROOT_VALIDATORS: ValidatorSet = {
   cwd: (assertString: Validator<$PropertyType<ValidatedOptions, "cwd">>),
+  root: (assertString: Validator<$PropertyType<ValidatedOptions, "root">>),
+  configFile: (assertConfigFileSearch: Validator<
+    $PropertyType<ValidatedOptions, "configFile">,
+  >),
+
   filename: (assertString: Validator<
     $PropertyType<ValidatedOptions, "filename">,
   >),
@@ -152,6 +158,8 @@ export type ValidatedOptions = {
   filenameRelative?: string,
   babelrc?: boolean,
   code?: boolean,
+  configFile?: ConfigFileSearch,
+  root?: string,
   ast?: boolean,
   inputSourceMap?: RootInputSourceMapOption,
   envName?: string,
@@ -223,6 +231,7 @@ export type PluginList = $ReadOnlyArray<PluginItem>;
 export type OverridesList = Array<ValidatedOptions>;
 export type ConfigApplicableTest = IgnoreItem | Array<IgnoreItem>;
 
+export type ConfigFileSearch = string | boolean;
 export type SourceMapsOption = boolean | "inline" | "both";
 export type SourceTypeOption = "module" | "script" | "unambiguous";
 export type CompactOption = boolean | "auto";
