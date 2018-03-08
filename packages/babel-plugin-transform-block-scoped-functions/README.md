@@ -20,11 +20,10 @@ name("Steve");
 
 ```javascript
 {
-  var _name = function _name(n) {
+  let name = function (n) {
     return n;
   };
 }
-
 name("Steve");
 ```
 
