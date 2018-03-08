@@ -1837,6 +1837,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isAsync: boolean,
       isPattern: boolean,
       refShorthandDefaultPos: ?Pos,
+      containsEsc: boolean,
     ): void {
       if ((prop: $FlowFixMe).variance) {
         this.unexpected((prop: $FlowFixMe).variance.start);
@@ -1859,6 +1860,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isAsync,
         isPattern,
         refShorthandDefaultPos,
+        containsEsc,
       );
 
       // add typeParameters if we found them
