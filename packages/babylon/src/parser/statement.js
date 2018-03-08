@@ -155,7 +155,7 @@ export default class StatementParser extends ExpressionParser {
         return result;
       }
       case tt.name:
-        if (this.state.value === "async") {
+        if (this.isContextual("async")) {
           // peek ahead and see if next token is a function
           const state = this.state.clone();
           this.next();
@@ -970,8 +970,11 @@ export default class StatementParser extends ExpressionParser {
     state: { hadConstructor: boolean },
   ): void {
     let isStatic = false;
+    const containsEsc = this.state.containsEsc;
+
     if (this.match(tt.name) && this.state.value === "static") {
       const key = this.parseIdentifier(true); // eats 'static'
+
       if (this.isClassMethod()) {
         const method: N.ClassMethod = (member: any);
 
@@ -997,7 +1000,10 @@ export default class StatementParser extends ExpressionParser {
         prop.static = false;
         classBody.body.push(this.parseClassProperty(prop));
         return;
+      } else if (containsEsc) {
+        throw this.unexpected();
       }
+
       // otherwise something static
       isStatic = true;
     }

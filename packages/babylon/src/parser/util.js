@@ -46,7 +46,11 @@ export default class UtilParser extends Tokenizer {
   // Tests whether parsed token is a contextual keyword.
 
   isContextual(name: string): boolean {
-    return this.match(tt.name) && this.state.value === name;
+    return (
+      this.match(tt.name) &&
+      this.state.value === name &&
+      !this.state.containsEsc
+    );
   }
 
   isLookaheadContextual(name: string): boolean {
@@ -57,7 +61,7 @@ export default class UtilParser extends Tokenizer {
   // Consumes contextual keyword if possible.
 
   eatContextual(name: string): boolean {
-    return this.state.value === name && this.eat(tt.name);
+    return this.isContextual(name) && this.eat(tt.name);
   }
 
   // Asserts that following token is given contextual keyword.
