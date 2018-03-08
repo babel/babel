@@ -92,27 +92,37 @@ export function loadPartialConfig(inputOpts: mixed): PartialConfig | null {
 export type { PartialConfig };
 
 class PartialConfig {
-  _options: ValidatedOptions;
-  _babelrc: string | void;
-  _babelignore: string | void;
+  /**
+   * These properties are public, so any changes to them should be considered
+   * a breaking change to Babel's API.
+   */
+  options: ValidatedOptions;
+  babelrc: string | void;
+  babelignore: string | void;
 
   constructor(
     options: ValidatedOptions,
     babelrc: string | void,
     ignore: string | void,
   ) {
-    this._options = options;
-    this._babelignore = ignore;
-    this._babelrc = babelrc;
+    this.options = options;
+    this.babelignore = ignore;
+    this.babelrc = babelrc;
+
+    // Freeze since this is a public API and it should be extremely obvious that
+    // reassigning properties on here does nothing.
+    Object.freeze(this);
   }
 
-  get babelignore(): string | void {
-    return this._babelignore;
-  }
-  get babelrc(): string | void {
-    return this._babelrc;
-  }
-  get options(): ValidatedOptions {
-    return this._options;
+  /**
+   * Returns true if their is a config file in the filesystem for this config.
+   *
+   * While this only means .babelrc(.mjs)?/package.json#babel right now, it
+   * may well expand in the future, so using this is recommended vs checking
+   * this.babelrc directly.
+   */
+  hasFilesystemConfig(): boolean {
+    return this.babelrc !== undefined;
   }
 }
+Object.freeze(PartialConfig.prototype);

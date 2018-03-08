@@ -93,7 +93,7 @@ babel.transformFileSync("filename.js", options).code;
 ```
 
 
-## babel.transformFromAst(ast: Object, code?: string, [options?](#options): Object, callback: Function)
+## babel.transformFromAst(ast: Object, code?: string, [options?](#options): Object, callback: Function): FileNode | null
 
 Given an [AST](https://astexplorer.net/), transform it.
 
@@ -167,6 +167,7 @@ and pass it back to Babel again.
   * It can be safely passed back to Babel. Fields like `babelrc` have been set
     to false so that later calls to Babel will not make a second attempt to 
     load config files.
+* `hasFilesystemConfig(): boolean` - Check if the resolved config loaded any settings from the filesystem.
 
 [`ConfigItem`](#configitem-type) instances expose properties to introspect the values, but each
 item should be treated as immutable. If changes are desired, the item should be
@@ -175,7 +176,7 @@ with a replacement item created by `babel.createConfigItem`. See that
 function for information about `ConfigItem` fields.
 
 
-### babel.createConfigItem(value: string | {} | Function, options?: {}, { dirname?: string, name?: string, type?: "preset" | "plugin" }): ConfigItem
+### babel.createConfigItem(value: string | {} | Function | [string | {} | Function, {} | void], { dirname?: string, type?: "preset" | "plugin" }): ConfigItem
 
 Allows build tooling to create and cache config items up front. If this function
 is called multiple times for a given plugin, Babel will call the plugin's function itself

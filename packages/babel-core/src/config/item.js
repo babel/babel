@@ -1,5 +1,7 @@
 // @flow
 
+import type { PluginTarget, PluginOptions } from "./validation/options";
+
 import path from "path";
 import {
   createDescriptor,
@@ -10,27 +12,29 @@ export function createItemFromDescriptor(desc: UnloadedDescriptor): ConfigItem {
   return new ConfigItem(desc);
 }
 
+/**
+ * Create a config item using the same value format used in Babel's config
+ * files. Items returned from this function should be cached by the caller
+ * ideally, as recreating the config item will mean re-resolving the item
+ * and re-evaluating the plugin/preset function.
+ */
 export function createConfigItem(
-  value: string | {} | Function,
-  options?: {} | void,
+  value:
+    | PluginTarget
+    | [PluginTarget, PluginOptions]
+    | [PluginTarget, PluginOptions, string | void],
   {
     dirname = ".",
-    name,
     type,
   }: {
     dirname?: string,
-    name?: string,
     type?: "preset" | "plugin",
   } = {},
 ): ConfigItem {
-  const descriptor = createDescriptor(
-    [value, options, name],
-    path.resolve(dirname),
-    {
-      type,
-      alias: "programmatic item",
-    },
-  );
+  const descriptor = createDescriptor(value, path.resolve(dirname), {
+    type,
+    alias: "programmatic item",
+  });
 
   return createItemFromDescriptor(descriptor);
 }
@@ -43,78 +47,82 @@ export function getItemDescriptor(item: mixed): UnloadedDescriptor | void {
   return undefined;
 }
 
+export type { ConfigItem };
+
 /**
  * A public representation of a plugin/preset that will _eventually_ be load.
  * Users can use this to interact with the results of a loaded Babel
  * configuration.
+ *
+ * Any changes to public properties of this class should be considered a
+ * breaking change to Babel's API.
  */
-export class ConfigItem {
+class ConfigItem {
+  /**
+   * The private underlying descriptor that Babel actually cares about.
+   * If you access this, you are a bad person.
+   */
   _descriptor: UnloadedDescriptor;
-
-  constructor(descriptor: UnloadedDescriptor) {
-    this._descriptor = descriptor;
-
-    // Make people less likely to stumble onto this if they are exploring
-    // programmatically.
-    enumerable(this, "_descriptor", false);
-  }
 
   /**
    * The resolved value of the item itself.
    */
-  get value(): {} | Function {
-    return this._descriptor.value;
-  }
+  value: {} | Function;
 
   /**
    * The options, if any, that were passed to the item.
    * Mutating this will lead to undefined behavior. If you need
    */
-  get options(): {} | void {
-    const options = this._descriptor.options;
-    if (options === false) {
-      throw new Error("Assertion failure - unexpected false options");
-    }
-
-    return options;
-  }
+  options: {} | void;
 
   /**
    * The directory that the options for this item are relative to.
    */
-  get dirname(): string {
-    return this._descriptor.dirname;
-  }
+  dirname: string;
 
   /**
    * Get the name of the plugin, if the user gave it one.
    */
-  get name(): string | void {
-    return this._descriptor.name;
-  }
+  name: string | void;
 
-  get file(): {
+  /**
+   * Data about the file that the item was loaded from, if Babel knows it.
+   */
+  file: {
+    // The requested path, e.g. "@babel/env".
     request: string,
-    resolved: string,
-  } | void {
-    const file = this._descriptor.file;
-    if (!file) return undefined;
 
-    return {
-      request: file.request,
-      resolved: file.resolved,
-    };
+    // The resolved absolute path of the file.
+    resolved: string,
+  } | void;
+
+  constructor(descriptor: UnloadedDescriptor) {
+    // Make people less likely to stumble onto this if they are exploring
+    // programmatically, and also make sure that if people happen to
+    // pass the item through JSON.stringify, it doesn't show up.
+    this._descriptor = descriptor;
+    Object.defineProperty(this, "_descriptor", ({ enumerable: false }: any));
+
+    if (this._descriptor.options === false) {
+      throw new Error("Assertion failure - unexpected false options");
+    }
+
+    this.value = this._descriptor.value;
+    this.options = this._descriptor.options;
+    this.dirname = this._descriptor.dirname;
+    this.name = this._descriptor.name;
+    this.file = this._descriptor.file
+      ? {
+          request: this._descriptor.file.request,
+          resolved: this._descriptor.file.resolved,
+        }
+      : undefined;
+
+    // Freeze the object to make it clear that people shouldn't expect mutating
+    // this object to do anything. A new item should be created if they want
+    // to change something.
+    Object.freeze(this);
   }
 }
 
-// Make these slightly easier for people to find if they are exploring the
-// API programmatically.
-enumerable(ConfigItem.prototype, "value", true);
-enumerable(ConfigItem.prototype, "options", true);
-enumerable(ConfigItem.prototype, "dirname", true);
-enumerable(ConfigItem.prototype, "name", true);
-enumerable(ConfigItem.prototype, "file", true);
-
-function enumerable(obj: {}, prop: string, enumerable: boolean) {
-  Object.defineProperty(obj, prop, { enumerable });
-}
+Object.freeze(ConfigItem.prototype);
