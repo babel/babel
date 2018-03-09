@@ -333,7 +333,7 @@ describe("programmatic generation", function() {
       [t.objectTypeProperty(t.identifier("bar"), t.stringTypeAnnotation())],
       null,
       null,
-      { exact: true },
+      true,
     );
 
     const output = generate(objectStatement).code;

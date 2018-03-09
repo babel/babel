@@ -366,7 +366,7 @@ export function OpaqueType(node: Object) {
 }
 
 export function ObjectTypeAnnotation(node: Object) {
-  if (node.builder.exact) {
+  if (node.exact) {
     this.token("{|");
   } else {
     this.token("{");
@@ -398,7 +398,7 @@ export function ObjectTypeAnnotation(node: Object) {
     this.space();
   }
 
-  if (node.builder.exact) {
+  if (node.exact) {
     this.token("|}");
   } else {
     this.token("}");
