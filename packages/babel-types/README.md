@@ -1499,7 +1499,7 @@ Aliases: `UserWhitespacable`, `Property`, `ObjectMember`
 
 ### objectTypeAnnotation
 ```javascript
-t.objectTypeAnnotation(properties, indexers, callProperties)
+t.objectTypeAnnotation(properties, indexers, callProperties, exact)
 ```
 
 See also `t.isObjectTypeAnnotation(node, opts)` and `t.assertObjectTypeAnnotation(node, opts)`.
@@ -1509,7 +1509,7 @@ Aliases: `Flow`, `FlowType`
  - `properties`: `Array<ObjectTypeProperty | ObjectTypeSpreadProperty>` (required)
  - `indexers`: `Array<ObjectTypeIndexer>` (default: `null`)
  - `callProperties`: `Array<ObjectTypeCallProperty>` (default: `null`)
- - `exact`: `boolean` (default: `null`)
+ - `exact`: `boolean` (default: `false`)
 
 ---
 
