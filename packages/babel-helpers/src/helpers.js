@@ -472,7 +472,7 @@ helpers.wrapNativeSuper = () => template.program.ast`
       constructor: {
         value: Wrapper,
         enumerable: false,
-        writeable: true,
+        writable: true,
         configurable: true,
       }
     });

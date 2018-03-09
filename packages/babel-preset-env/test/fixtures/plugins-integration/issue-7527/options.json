@@ -1,4 +1,4 @@
 {
   "plugins": [],
-  "presets": ["es2015"]
+  "presets": ["../../../../lib"]
 }
