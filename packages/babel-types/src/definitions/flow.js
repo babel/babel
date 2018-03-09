@@ -7,6 +7,7 @@ import defineType, {
   validateOptional,
   validateOptionalType,
   validateType,
+  validateDefault,
 } from "./utils";
 
 defineType("AnyTypeAnnotation", {
@@ -250,15 +251,16 @@ defineType("NumberTypeAnnotation", {
 });
 
 defineType("ObjectTypeAnnotation", {
-  visitor: ["properties", "indexers", "callProperties"],
+  visitor: ["properties", "indexers", "callProperties", "builder"],
   aliases: ["Flow", "FlowType"],
+  builder: ["exact"],
   fields: {
     properties: validate(
       arrayOfType(["ObjectTypeProperty", "ObjectTypeSpreadProperty"]),
     ),
     indexers: validateOptional(arrayOfType("ObjectTypeIndexer")),
     callProperties: validateOptional(arrayOfType("ObjectTypeCallProperty")),
-    exact: validate(assertValueType("boolean")),
+    exact: validateDefault(assertValueType("boolean"), false),
   },
 });
 

@@ -47,6 +47,13 @@ export function validateOptional(validate: Validator): FieldOptions {
   return { validate, optional: true };
 }
 
+export function validateDefault(
+  validate: Validator,
+  defaultValue: any,
+): FieldOptions {
+  return { validate, default: defaultValue };
+}
+
 export function validateOptionalType(
   typeName: string | string[],
 ): FieldOptions {

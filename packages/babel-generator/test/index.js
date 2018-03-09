@@ -328,6 +328,23 @@ describe("programmatic generation", function() {
     );
   });
 
+  it("flow object exact", function() {
+    const objectStatement = t.objectTypeAnnotation(
+      [t.objectTypeProperty(t.identifier("bar"), t.stringTypeAnnotation())],
+      null,
+      null,
+      { exact: true },
+    );
+
+    const output = generate(objectStatement).code;
+    assert.equal(
+      output,
+      `{|
+  bar: string
+|}`,
+    );
+  });
+
   it("flow object indentation with empty leading ObjectTypeProperty", function() {
     const objectStatement = t.objectTypeAnnotation(
       [],
