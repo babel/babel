@@ -50,7 +50,7 @@ export default declare(api => {
 
         const call = t.callExpression(helper, [node.argument]);
         const arg = path.get("argument");
-        if (arg.isIdentifier() && !path.scope.hasBinding(arg.node.name)) {
+        if (arg.isIdentifier() && !path.scope.hasBinding(arg.node.name, true)) {
           const unary = t.unaryExpression("typeof", t.cloneNode(node.argument));
           path.replaceWith(
             t.conditionalExpression(
