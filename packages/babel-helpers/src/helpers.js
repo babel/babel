@@ -686,7 +686,7 @@ helpers.toArray = () => template.program.ast`
   import iterableToArray from "iterableToArray";
   import nonIterableRest from "nonIterableRest";
 
-  export default function _toConsumableArray(arr) {
+  export default function _toArray(arr) {
     return arrayWithHoles(arr) || iterableToArray(arr) || nonIterableRest();
   }
 `;
