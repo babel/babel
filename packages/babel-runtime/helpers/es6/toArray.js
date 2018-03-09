@@ -1,4 +1,6 @@
-import _Array$from from "../../core-js/array/from";
+import arrayWithHoles from "./arrayWithHoles";
+import iterableToArray from "./iterableToArray";
+import nonIterableRest from "./nonIterableRest";
 export default function _toArray(arr) {
-  return Array.isArray(arr) ? arr : _Array$from(arr);
+  return arrayWithHoles(arr) || iterableToArray(arr) || nonIterableRest();
 }
