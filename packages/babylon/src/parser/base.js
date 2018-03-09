@@ -11,6 +11,7 @@ export default class BaseParser {
   inModule: boolean;
   plugins: { [key: string]: boolean };
   filename: ?string;
+  sawUnambiguousESM: boolean = false;
 
   // Initialized by Tokenizer
   state: State;

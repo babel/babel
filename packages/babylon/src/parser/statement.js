@@ -146,8 +146,25 @@ export default class StatementParser extends ExpressionParser {
         let result;
         if (starttype == tt._import) {
           result = this.parseImport(node);
+
+          if (
+            result.type === "ImportDeclaration" &&
+            (!result.importKind || result.importKind === "value")
+          ) {
+            this.sawUnambiguousESM = true;
+          }
         } else {
           result = this.parseExport(node);
+
+          if (
+            (result.type === "ExportNamedDeclaration" &&
+              (!result.exportKind || result.exportKind === "value")) ||
+            (result.type === "ExportAllDeclaration" &&
+              (!result.exportKind || result.exportKind === "value")) ||
+            result.type === "ExportDefaultDeclaration"
+          ) {
+            this.sawUnambiguousESM = true;
+          }
         }
 
         this.assertModuleNodeAllowed(node);

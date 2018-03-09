@@ -22,11 +22,12 @@ export function parse(input: string, options?: Options): File {
     options = Object.assign({}, options);
     try {
       options.sourceType = "module";
-      const ast = getParser(options, input).parse();
+      const parser = getParser(options, input);
+      const ast = parser.parse();
 
       // Rather than try to parse as a script first, we opt to parse as a module and convert back
       // to a script where possible to avoid having to do a full re-parse of the input content.
-      if (!hasModuleSyntax(ast)) ast.program.sourceType = "script";
+      if (!parser.sawUnambiguousESM) ast.program.sourceType = "script";
       return ast;
     } catch (moduleError) {
       try {
@@ -110,17 +111,4 @@ function getParserClass(
     parserClassCache[key] = cls;
   }
   return cls;
-}
-
-function hasModuleSyntax(ast) {
-  return ast.program.body.some(
-    child =>
-      (child.type === "ImportDeclaration" &&
-        (!child.importKind || child.importKind === "value")) ||
-      (child.type === "ExportNamedDeclaration" &&
-        (!child.exportKind || child.exportKind === "value")) ||
-      (child.type === "ExportAllDeclaration" &&
-        (!child.exportKind || child.exportKind === "value")) ||
-      child.type === "ExportDefaultDeclaration",
-  );
 }

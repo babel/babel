@@ -957,6 +957,8 @@ export default class ExpressionParser extends LValParser {
         { code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED" },
       );
     }
+    this.sawUnambiguousESM = true;
+
     return this.parseMetaProperty(node, id, "meta");
   }
 
