@@ -1,1 +1,1 @@
-{"version":3,"sources":["../src/foo.js"],"names":["arr","map","x","MULTIPLIER"],"mappings":";;AAAAA,IAAIC,GAAJ,CAAQ;AAAA,SAAKC,IAAIC,UAAT;AAAA,CAAR","file":"foo.js","sourcesContent":["arr.map(x => x * MULTIPLIER);"]}
+{"version":3,"sources":["../src/foo.js"],"names":["arr","map","x","MULTIPLIER"],"mappings":";;AAAAA,IAAIC,GAAJ,CAAQ;AAAA,SAAKC,IAAIC,UAAT;AAAA,CAAR","sourcesContent":["arr.map(x => x * MULTIPLIER);"],"file":"foo.js"}
