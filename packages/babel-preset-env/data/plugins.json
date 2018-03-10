@@ -234,7 +234,8 @@
     "firefox": "55",
     "safari": "11.1",
     "node": "8.3",
-    "opera": "47"
+    "opera": "47",
+    "electron": "2"
   },
   "proposal-optional-catch-binding": {
     "chrome": "66",
