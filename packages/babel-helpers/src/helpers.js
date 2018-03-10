@@ -469,7 +469,9 @@ helpers.wrapNativeSuper = () => template.program.ast`
         if (_cache.has(Class)) return _cache.get(Class);
         _cache.set(Class, Wrapper);
       }
-      function Wrapper() {}
+      function Wrapper() {
+        return _construct(Class, arguments, _gPO(this).constructor)
+      }
       Wrapper.prototype = Object.create(Class.prototype, {
         constructor: {
           value: Wrapper,
@@ -478,15 +480,8 @@ helpers.wrapNativeSuper = () => template.program.ast`
           configurable: true,
         }
       });
-      return _sPO(
-        Wrapper,
-        _sPO(
-          function Super() {
-            return construct(Class, arguments, _gPO(this).constructor);
-          },
-          Class
-        )
-      );
+
+      return _sPO(Wrapper, Class);
     }
 
     return _wrapNativeSuper(Class)
