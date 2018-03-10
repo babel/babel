@@ -24,6 +24,7 @@ const testContext = vm.createContext({
   transform: babel.transform,
   setTimeout: setTimeout,
   setImmediate: setImmediate,
+  expect,
 });
 testContext.global = testContext;
 

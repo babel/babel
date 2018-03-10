@@ -18,4 +18,4 @@ var res = transform('', {
   ],
 });
 
-assert.equal(eval(res.code), 23);
+expect(eval(res.code)).toBe(23);
