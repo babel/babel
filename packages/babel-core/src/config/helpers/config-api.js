@@ -17,7 +17,12 @@ export type PluginAPI = {
   env: EnvFunction,
   async: () => boolean,
   assertVersion: typeof assertVersion,
+  prefix: string,
 };
+
+export const UUID_prefix = `__BABEL_PRIVATE_${Math.floor(
+  Math.random() * Number.MAX_SAFE_INTEGER,
+).toString(16)}__`;
 
 export default function makeAPI(
   cache: CacheConfigurator<{ envName: string }>,
@@ -43,6 +48,7 @@ export default function makeAPI(
     env,
     async: () => false,
     assertVersion,
+    prefix: UUID_prefix,
   };
 }
 
