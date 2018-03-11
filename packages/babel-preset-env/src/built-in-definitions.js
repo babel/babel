@@ -16,7 +16,7 @@ export const definitions = {
     WeakMap: "es6.weak-map",
     WeakSet: "es6.weak-set",
     Promise: ["es6.object.to-string", "es6.promise"],
-    Symbol: "es6.symbol",
+    Symbol: ["es6.symbol", "es7.symbol.async-iterator"],
   },
 
   instanceMethods: {
