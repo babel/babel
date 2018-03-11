@@ -4,3 +4,5 @@ class MyDate extends Date {
   }
 }
 let myDate = new MyDate();
+
+expect(myDate.toString).toBe(Date.prototype.toString);
