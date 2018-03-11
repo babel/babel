@@ -412,7 +412,7 @@ The following are currently supported:
 **Builtins**
 
 - [Promise.prototype.finally](https://github.com/tc39/proposal-promise-finally)
-- [Symbol.asycIterator](https://github.com/tc39/proposal-async-iteration)
+- [Symbol.asyncIterator](https://github.com/tc39/proposal-async-iteration)
 
 **Features**
 
