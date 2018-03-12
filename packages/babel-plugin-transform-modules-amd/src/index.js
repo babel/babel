@@ -1,4 +1,4 @@
-import template from "@babel/template";
+import { declare } from "@babel/helper-plugin-utils";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
@@ -8,13 +8,16 @@ import {
   ensureStatementsHoisted,
   wrapInterop,
 } from "@babel/helper-module-transforms";
+import { template, types as t } from "@babel/core";
 
 const buildWrapper = template(`
   define(MODULE_NAME, AMD_ARGUMENTS, function(IMPORT_NAMES) {
   })
 `);
 
-export default function({ types: t }, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { loose, allowTopLevelThis, strict, strictMode, noInterop } = options;
   return {
     visitor: {
@@ -25,16 +28,16 @@ export default function({ types: t }, options) {
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          const {
-            meta,
-            headers,
-          } = rewriteModuleStatementsAndPrepareHeader(path, {
-            loose,
-            strict,
-            strictMode,
-            allowTopLevelThis,
-            noInterop,
-          });
+          const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
+            path,
+            {
+              loose,
+              strict,
+              strictMode,
+              allowTopLevelThis,
+              noInterop,
+            },
+          );
 
           const amdArgs = [];
           const importNames = [];
@@ -68,7 +71,9 @@ export default function({ types: t }, options) {
               }
             }
 
-            headers.push(...buildNamespaceInitStatements(meta, metadata));
+            headers.push(
+              ...buildNamespaceInitStatements(meta, metadata, loose),
+            );
           }
 
           ensureStatementsHoisted(headers);
@@ -95,4 +100,4 @@ export default function({ types: t }, options) {
       },
     },
   };
-}
+});

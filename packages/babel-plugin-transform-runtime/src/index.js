@@ -1,8 +1,12 @@
+import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
+import { types as t } from "@babel/core";
 
 import definitions from "./definitions";
 
-export default function({ types: t }, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const {
     helpers,
     moduleName = "@babel/runtime",
@@ -11,7 +15,7 @@ export default function({ types: t }, options) {
     useBuiltIns,
     useESModules,
   } = options;
-  const notRegenerator = regenerator !== false;
+  const regeneratorEnabled = regenerator !== false;
   const notPolyfillOrDoesUseBuiltIns = polyfill === false || useBuiltIns;
   const isPolyfillAndUseBuiltIns = polyfill && useBuiltIns;
   const baseHelpersDir = useBuiltIns ? "helpers/builtin" : "helpers";
@@ -62,7 +66,7 @@ export default function({ types: t }, options) {
 
         let cached = cache.get(key);
         if (cached) {
-          cached = t.cloneDeep(cached);
+          cached = t.cloneNode(cached);
         } else {
           cached = addDefault(file.path, source, {
             importedInterop: "uncompiled",
@@ -79,7 +83,7 @@ export default function({ types: t }, options) {
     visitor: {
       ReferencedIdentifier(path) {
         const { node, parent, scope } = path;
-        if (node.name === "regeneratorRuntime" && notRegenerator) {
+        if (node.name === "regeneratorRuntime" && regeneratorEnabled) {
           path.replaceWith(
             this.addDefaultImport(
               `${this.moduleName}/regenerator`,
@@ -211,6 +215,6 @@ export default function({ types: t }, options) {
       },
     },
   };
-}
+});
 
 export { definitions };

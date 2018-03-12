@@ -1,0 +1,565 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 51,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 51
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 51,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 51
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 51,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 51
+          }
+        },
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 0,
+          "end": 50,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 50
+            }
+          },
+          "operator": "=",
+          "left": {
+            "type": "ArrayPattern",
+            "start": 0,
+            "end": 48,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 48
+              }
+            },
+            "elements": [
+              {
+                "type": "ArrayPattern",
+                "start": 1,
+                "end": 47,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 47
+                  }
+                },
+                "elements": [
+                  {
+                    "type": "ArrayPattern",
+                    "start": 2,
+                    "end": 46,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 46
+                      }
+                    },
+                    "elements": [
+                      {
+                        "type": "ArrayPattern",
+                        "start": 3,
+                        "end": 45,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 3
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 45
+                          }
+                        },
+                        "elements": [
+                          {
+                            "type": "ArrayPattern",
+                            "start": 4,
+                            "end": 44,
+                            "loc": {
+                              "start": {
+                                "line": 1,
+                                "column": 4
+                              },
+                              "end": {
+                                "line": 1,
+                                "column": 44
+                              }
+                            },
+                            "elements": [
+                              {
+                                "type": "ArrayPattern",
+                                "start": 5,
+                                "end": 43,
+                                "loc": {
+                                  "start": {
+                                    "line": 1,
+                                    "column": 5
+                                  },
+                                  "end": {
+                                    "line": 1,
+                                    "column": 43
+                                  }
+                                },
+                                "elements": [
+                                  {
+                                    "type": "ArrayPattern",
+                                    "start": 6,
+                                    "end": 42,
+                                    "loc": {
+                                      "start": {
+                                        "line": 1,
+                                        "column": 6
+                                      },
+                                      "end": {
+                                        "line": 1,
+                                        "column": 42
+                                      }
+                                    },
+                                    "elements": [
+                                      {
+                                        "type": "ArrayPattern",
+                                        "start": 7,
+                                        "end": 41,
+                                        "loc": {
+                                          "start": {
+                                            "line": 1,
+                                            "column": 7
+                                          },
+                                          "end": {
+                                            "line": 1,
+                                            "column": 41
+                                          }
+                                        },
+                                        "elements": [
+                                          {
+                                            "type": "ArrayPattern",
+                                            "start": 8,
+                                            "end": 40,
+                                            "loc": {
+                                              "start": {
+                                                "line": 1,
+                                                "column": 8
+                                              },
+                                              "end": {
+                                                "line": 1,
+                                                "column": 40
+                                              }
+                                            },
+                                            "elements": [
+                                              {
+                                                "type": "ArrayPattern",
+                                                "start": 9,
+                                                "end": 39,
+                                                "loc": {
+                                                  "start": {
+                                                    "line": 1,
+                                                    "column": 9
+                                                  },
+                                                  "end": {
+                                                    "line": 1,
+                                                    "column": 39
+                                                  }
+                                                },
+                                                "elements": [
+                                                  {
+                                                    "type": "ArrayPattern",
+                                                    "start": 10,
+                                                    "end": 38,
+                                                    "loc": {
+                                                      "start": {
+                                                        "line": 1,
+                                                        "column": 10
+                                                      },
+                                                      "end": {
+                                                        "line": 1,
+                                                        "column": 38
+                                                      }
+                                                    },
+                                                    "elements": [
+                                                      {
+                                                        "type": "ArrayPattern",
+                                                        "start": 11,
+                                                        "end": 37,
+                                                        "loc": {
+                                                          "start": {
+                                                            "line": 1,
+                                                            "column": 11
+                                                          },
+                                                          "end": {
+                                                            "line": 1,
+                                                            "column": 37
+                                                          }
+                                                        },
+                                                        "elements": [
+                                                          {
+                                                            "type": "ArrayPattern",
+                                                            "start": 12,
+                                                            "end": 36,
+                                                            "loc": {
+                                                              "start": {
+                                                                "line": 1,
+                                                                "column": 12
+                                                              },
+                                                              "end": {
+                                                                "line": 1,
+                                                                "column": 36
+                                                              }
+                                                            },
+                                                            "elements": [
+                                                              {
+                                                                "type": "ArrayPattern",
+                                                                "start": 13,
+                                                                "end": 35,
+                                                                "loc": {
+                                                                  "start": {
+                                                                    "line": 1,
+                                                                    "column": 13
+                                                                  },
+                                                                  "end": {
+                                                                    "line": 1,
+                                                                    "column": 35
+                                                                  }
+                                                                },
+                                                                "elements": [
+                                                                  {
+                                                                    "type": "ArrayPattern",
+                                                                    "start": 14,
+                                                                    "end": 34,
+                                                                    "loc": {
+                                                                      "start": {
+                                                                        "line": 1,
+                                                                        "column": 14
+                                                                      },
+                                                                      "end": {
+                                                                        "line": 1,
+                                                                        "column": 34
+                                                                      }
+                                                                    },
+                                                                    "elements": [
+                                                                      {
+                                                                        "type": "ArrayPattern",
+                                                                        "start": 15,
+                                                                        "end": 33,
+                                                                        "loc": {
+                                                                          "start": {
+                                                                            "line": 1,
+                                                                            "column": 15
+                                                                          },
+                                                                          "end": {
+                                                                            "line": 1,
+                                                                            "column": 33
+                                                                          }
+                                                                        },
+                                                                        "elements": [
+                                                                          {
+                                                                            "type": "ArrayPattern",
+                                                                            "start": 16,
+                                                                            "end": 32,
+                                                                            "loc": {
+                                                                              "start": {
+                                                                                "line": 1,
+                                                                                "column": 16
+                                                                              },
+                                                                              "end": {
+                                                                                "line": 1,
+                                                                                "column": 32
+                                                                              }
+                                                                            },
+                                                                            "elements": [
+                                                                              {
+                                                                                "type": "ArrayPattern",
+                                                                                "start": 17,
+                                                                                "end": 31,
+                                                                                "loc": {
+                                                                                  "start": {
+                                                                                    "line": 1,
+                                                                                    "column": 17
+                                                                                  },
+                                                                                  "end": {
+                                                                                    "line": 1,
+                                                                                    "column": 31
+                                                                                  }
+                                                                                },
+                                                                                "elements": [
+                                                                                  {
+                                                                                    "type": "ArrayPattern",
+                                                                                    "start": 18,
+                                                                                    "end": 30,
+                                                                                    "loc": {
+                                                                                      "start": {
+                                                                                        "line": 1,
+                                                                                        "column": 18
+                                                                                      },
+                                                                                      "end": {
+                                                                                        "line": 1,
+                                                                                        "column": 30
+                                                                                      }
+                                                                                    },
+                                                                                    "elements": [
+                                                                                      {
+                                                                                        "type": "ArrayPattern",
+                                                                                        "start": 19,
+                                                                                        "end": 29,
+                                                                                        "loc": {
+                                                                                          "start": {
+                                                                                            "line": 1,
+                                                                                            "column": 19
+                                                                                          },
+                                                                                          "end": {
+                                                                                            "line": 1,
+                                                                                            "column": 29
+                                                                                          }
+                                                                                        },
+                                                                                        "elements": [
+                                                                                          {
+                                                                                            "type": "ObjectPattern",
+                                                                                            "start": 20,
+                                                                                            "end": 28,
+                                                                                            "loc": {
+                                                                                              "start": {
+                                                                                                "line": 1,
+                                                                                                "column": 20
+                                                                                              },
+                                                                                              "end": {
+                                                                                                "line": 1,
+                                                                                                "column": 28
+                                                                                              }
+                                                                                            },
+                                                                                            "properties": [
+                                                                                              {
+                                                                                                "type": "ObjectProperty",
+                                                                                                "start": 21,
+                                                                                                "end": 27,
+                                                                                                "loc": {
+                                                                                                  "start": {
+                                                                                                    "line": 1,
+                                                                                                    "column": 21
+                                                                                                  },
+                                                                                                  "end": {
+                                                                                                    "line": 1,
+                                                                                                    "column": 27
+                                                                                                  }
+                                                                                                },
+                                                                                                "method": false,
+                                                                                                "key": {
+                                                                                                  "type": "Identifier",
+                                                                                                  "start": 21,
+                                                                                                  "end": 22,
+                                                                                                  "loc": {
+                                                                                                    "start": {
+                                                                                                      "line": 1,
+                                                                                                      "column": 21
+                                                                                                    },
+                                                                                                    "end": {
+                                                                                                      "line": 1,
+                                                                                                      "column": 22
+                                                                                                    },
+                                                                                                    "identifierName": "a"
+                                                                                                  },
+                                                                                                  "name": "a"
+                                                                                                },
+                                                                                                "computed": false,
+                                                                                                "shorthand": true,
+                                                                                                "value": {
+                                                                                                  "type": "AssignmentPattern",
+                                                                                                  "start": 21,
+                                                                                                  "end": 27,
+                                                                                                  "loc": {
+                                                                                                    "start": {
+                                                                                                      "line": 1,
+                                                                                                      "column": 21
+                                                                                                    },
+                                                                                                    "end": {
+                                                                                                      "line": 1,
+                                                                                                      "column": 27
+                                                                                                    }
+                                                                                                  },
+                                                                                                  "left": {
+                                                                                                    "type": "Identifier",
+                                                                                                    "start": 21,
+                                                                                                    "end": 22,
+                                                                                                    "loc": {
+                                                                                                      "start": {
+                                                                                                        "line": 1,
+                                                                                                        "column": 21
+                                                                                                      },
+                                                                                                      "end": {
+                                                                                                        "line": 1,
+                                                                                                        "column": 22
+                                                                                                      },
+                                                                                                      "identifierName": "a"
+                                                                                                    },
+                                                                                                    "name": "a"
+                                                                                                  },
+                                                                                                  "right": {
+                                                                                                    "type": "MemberExpression",
+                                                                                                    "start": 23,
+                                                                                                    "end": 27,
+                                                                                                    "loc": {
+                                                                                                      "start": {
+                                                                                                        "line": 1,
+                                                                                                        "column": 23
+                                                                                                      },
+                                                                                                      "end": {
+                                                                                                        "line": 1,
+                                                                                                        "column": 27
+                                                                                                      }
+                                                                                                    },
+                                                                                                    "object": {
+                                                                                                      "type": "Identifier",
+                                                                                                      "start": 23,
+                                                                                                      "end": 24,
+                                                                                                      "loc": {
+                                                                                                        "start": {
+                                                                                                          "line": 1,
+                                                                                                          "column": 23
+                                                                                                        },
+                                                                                                        "end": {
+                                                                                                          "line": 1,
+                                                                                                          "column": 24
+                                                                                                        },
+                                                                                                        "identifierName": "b"
+                                                                                                      },
+                                                                                                      "name": "b"
+                                                                                                    },
+                                                                                                    "property": {
+                                                                                                      "type": "NumericLiteral",
+                                                                                                      "start": 25,
+                                                                                                      "end": 26,
+                                                                                                      "loc": {
+                                                                                                        "start": {
+                                                                                                          "line": 1,
+                                                                                                          "column": 25
+                                                                                                        },
+                                                                                                        "end": {
+                                                                                                          "line": 1,
+                                                                                                          "column": 26
+                                                                                                        }
+                                                                                                      },
+                                                                                                      "extra": {
+                                                                                                        "rawValue": 0,
+                                                                                                        "raw": "0"
+                                                                                                      },
+                                                                                                      "value": 0
+                                                                                                    },
+                                                                                                    "computed": true
+                                                                                                  }
+                                                                                                },
+                                                                                                "extra": {
+                                                                                                  "shorthand": true
+                                                                                                }
+                                                                                              }
+                                                                                            ]
+                                                                                          }
+                                                                                        ]
+                                                                                      }
+                                                                                    ]
+                                                                                  }
+                                                                                ]
+                                                                              }
+                                                                            ]
+                                                                          }
+                                                                        ]
+                                                                      }
+                                                                    ]
+                                                                  }
+                                                                ]
+                                                              }
+                                                            ]
+                                                          }
+                                                        ]
+                                                      }
+                                                    ]
+                                                  }
+                                                ]
+                                              }
+                                            ]
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "right": {
+            "type": "NumericLiteral",
+            "start": 49,
+            "end": 50,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 49
+              },
+              "end": {
+                "line": 1,
+                "column": 50
+              }
+            },
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -24,21 +24,21 @@ npm install --save-dev @babel/plugin-proposal-throw-expressions
 
 ```json
 {
-  "plugins": ["@babel/proposal-throw-expressions"]
+  "plugins": ["@babel/plugin-proposal-throw-expressions"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/proposal-throw-expressions script.js
+babel --plugins @babel/plugin-proposal-throw-expressions script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/proposal-throw-expressions"]
+  plugins: ["@babel/plugin-proposal-throw-expressions"]
 });
 ```
 

@@ -1,0 +1,4 @@
+{
+  "throws": "This experimental syntax requires enabling one of the following parser plugin(s): 'decorators, decorators2' (1:0)",
+  "plugins": []
+}

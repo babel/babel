@@ -43,21 +43,21 @@ npm install --save-dev @babel/plugin-proposal-function-sent
 
 ```json
 {
-  "plugins": ["@babel/proposal-function-sent"]
+  "plugins": ["@babel/plugin-proposal-function-sent"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/proposal-function-sent script.js
+babel --plugins @babel/plugin-proposal-function-sent script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/proposal-function-sent"]
+  plugins: ["@babel/plugin-proposal-function-sent"]
 });
 ```
 

@@ -1,0 +1,143 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 34,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 34
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 34,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 34
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 34,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 34
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 8,
+          "end": 34,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 8
+            },
+            "end": {
+              "line": 1,
+              "column": 34
+            }
+          },
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start": 9,
+              "end": 33,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 33
+                }
+              },
+              "static": true,
+              "computed": true,
+              "key": {
+                "type": "StringLiteral",
+                "start": 17,
+                "end": 28,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 17
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 28
+                  }
+                },
+                "extra": {
+                  "rawValue": "prototype",
+                  "raw": "\"prototype\""
+                },
+                "value": "prototype"
+              },
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 31,
+                "end": 33,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 31
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 33
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

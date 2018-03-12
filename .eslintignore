@@ -1,4 +1,6 @@
 /lib
+/build
+package.json
 packages/babel-runtime
 !packages/babel-runtime/scripts
 !packages/babel-runtime/core-js.js
@@ -12,15 +14,10 @@ codemods/*/lib
 codemods/*/dist
 codemods/*/test/fixtures
 codemods/*/test/tmp
-experimental/*/lib
-experimental/*/node_modules
-experimental/*/test/fixtures
-experimental/*/test/tmp
-experimental/babel-preset-env/data
-experimental/babel-preset-env/test/debug-fixtures
+packages/babel-preset-env/data
+packages/babel-preset-env/test/debug-fixtures
+packages/babel-preset-env-standalone/babel-preset-env.js
+packages/babel-preset-env-standalone/babel-preset-env.min.js
 packages/babel-standalone/babel.js
 packages/babel-standalone/babel.min.js
-
-# Prettier tries to insert trailing commas in function calls, which Node.js
-# doesn't natively support. This causes an error when loading the Gulp tasks.
-packages/babel-standalone/src/gulpTasks.js
+packages/babylon/test/expressions

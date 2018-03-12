@@ -1,0 +1,5 @@
+{
+  "throws": "import.meta may appear only with 'sourceType: \"module\"' (1:10)",
+  "plugins": ["dynamicImport", "importMeta"],
+  "sourceType": "script"
+}

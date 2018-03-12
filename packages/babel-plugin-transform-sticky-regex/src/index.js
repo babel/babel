@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import * as regex from "@babel/helper-regex";
-import * as t from "@babel/types";
+import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     visitor: {
       RegExpLiteral(path) {
@@ -17,4 +20,4 @@ export default function() {
       },
     },
   };
-}
+});

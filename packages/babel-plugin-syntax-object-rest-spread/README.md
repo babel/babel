@@ -16,20 +16,20 @@ npm install --save-dev @babel/plugin-syntax-object-rest-spread
 
 ```json
 {
-  "plugins": ["@babel/syntax-object-rest-spread"]
+  "plugins": ["@babel/plugin-syntax-object-rest-spread"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/syntax-object-rest-spread script.js
+babel --plugins @babel/plugin-syntax-object-rest-spread script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/syntax-object-rest-spread"]
+  plugins: ["@babel/plugin-syntax-object-rest-spread"]
 });
 ```

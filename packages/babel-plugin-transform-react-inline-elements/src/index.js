@@ -1,6 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import helper from "@babel/helper-builder-react-jsx";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default declare(api => {
+  api.assertVersion(7);
+
   function hasRefOrSpread(attrs) {
     for (let i = 0; i < attrs.length; i++) {
       const attr = attrs[i];
@@ -18,7 +22,11 @@ export default function({ types: t }) {
 
   const visitor = helper({
     filter(node) {
-      return !hasRefOrSpread(node.openingElement.attributes);
+      return (
+        // Regular JSX nodes have an `openingElement`. JSX fragments, however, don't have an
+        // `openingElement` which causes `node.openingElement.attributes` to throw.
+        node.openingElement && !hasRefOrSpread(node.openingElement.attributes)
+      );
     },
     pre(state) {
       const tagName = state.tagName;
@@ -57,4 +65,4 @@ export default function({ types: t }) {
     },
   });
   return { visitor };
-}
+});

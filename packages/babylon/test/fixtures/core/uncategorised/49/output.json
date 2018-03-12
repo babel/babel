@@ -1,0 +1,105 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 44,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 5,
+      "column": 13
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 44,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 5,
+        "column": 13
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 42,
+        "end": 44,
+        "loc": {
+          "start": {
+            "line": 5,
+            "column": 11
+          },
+          "end": {
+            "line": 5,
+            "column": 13
+          }
+        },
+        "expression": {
+          "type": "NumericLiteral",
+          "start": 42,
+          "end": 44,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 11
+            },
+            "end": {
+              "line": 5,
+              "column": 13
+            }
+          },
+          "extra": {
+            "rawValue": 42,
+            "raw": "42"
+          },
+          "value": 42
+        },
+        "leadingComments": [
+          {
+            "type": "CommentBlock",
+            "value": " multiline\ncomment\nshould\nbe\nignored ",
+            "start": 0,
+            "end": 41,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 5,
+                "column": 10
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentBlock",
+      "value": " multiline\ncomment\nshould\nbe\nignored ",
+      "start": 0,
+      "end": 41,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 10
+        }
+      }
+    }
+  ]
+}

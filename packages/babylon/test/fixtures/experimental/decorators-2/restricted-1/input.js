@@ -1,0 +1,2 @@
+@(bar.baz)
+class Foo {}

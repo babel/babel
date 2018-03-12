@@ -1,0 +1,243 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 53,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 5,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 53,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 5,
+        "column": 1
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "TSInterfaceDeclaration",
+        "start": 0,
+        "end": 53,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 10,
+          "end": 11,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 11
+            },
+            "identifierName": "I"
+          },
+          "name": "I"
+        },
+        "body": {
+          "type": "TSInterfaceBody",
+          "start": 12,
+          "end": 53,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 12
+            },
+            "end": {
+              "line": 5,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "TSPropertySignature",
+              "start": 18,
+              "end": 20,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 4
+                },
+                "end": {
+                  "line": 2,
+                  "column": 6
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 18,
+                "end": 19,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 5
+                  },
+                  "identifierName": "x"
+                },
+                "name": "x"
+              },
+              "computed": false
+            },
+            {
+              "type": "TSPropertySignature",
+              "start": 25,
+              "end": 35,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 4
+                },
+                "end": {
+                  "line": 3,
+                  "column": 14
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 25,
+                "end": 26,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 5
+                  },
+                  "identifierName": "y"
+                },
+                "name": "y"
+              },
+              "computed": false,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 26,
+                "end": 34,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 13
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start": 28,
+                  "end": 34,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 13
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "type": "TSPropertySignature",
+              "start": 40,
+              "end": 51,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 4
+                },
+                "end": {
+                  "line": 4,
+                  "column": 15
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 40,
+                "end": 41,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 5
+                  },
+                  "identifierName": "z"
+                },
+                "name": "z"
+              },
+              "computed": false,
+              "optional": true,
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 42,
+                "end": 50,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 14
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSNumberKeyword",
+                  "start": 44,
+                  "end": 50,
+                  "loc": {
+                    "start": {
+                      "line": 4,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 4,
+                      "column": 14
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

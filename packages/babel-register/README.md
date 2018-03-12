@@ -10,7 +10,7 @@ fly. This is equivalent to CoffeeScript's
 ## Install
 
 ```sh
-npm install @babel/register --save-dev
+npm install @babel/core @babel/register --save-dev
 ```
 
 ## Usage
@@ -39,7 +39,7 @@ override this by passing an ignore regex via:
 require("@babel/register")({
   // This will override `node_modules` ignoring - you can alternatively pass
   // an array of strings to be explicitly matched or a regex / glob
-  ignore: false
+  ignore: []
 });
 ```
 
@@ -47,18 +47,17 @@ require("@babel/register")({
 
 ```javascript
 require("@babel/register")({
-  // Optional ignore regex - if any filenames **do** match this regex then they
-  // aren't compiled.
-  ignore: /regex/,
+  // Array of ignore conditions, either a regex or a function. (Optional)
+  ignore: [
+    // When a file path matches this regex then it is **not** compiled
+    /regex/,
 
-  // Ignore can also be specified as a function.
-  ignore: function(filename) {
-    if (filename === "/path/to/es6-file.js") {
-      return false;
-    } else {
-      return true;
+    // The file's path is also passed to any ignore functions. It will
+    // **not** be compiled if `true` is returned.
+    function (filepath) {
+      return filepath !== "/path/to/es6-file.js";
     }
-  },
+  ],
 
   // Optional only regex - if any filenames **don't** match this regex then they
   // aren't compiled
@@ -79,7 +78,7 @@ to each file still applies, and takes precedence over any options you pass in he
 
 ## Environment variables
 
-By default `babel-node` and `@babel/register` will save to a json cache in your
+By default `@babel/node` cli and `@babel/register` will save to a json cache in your
 temporary directory.
 
 This will heavily improve with the startup and compilation of your files. There

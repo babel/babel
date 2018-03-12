@@ -50,7 +50,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["@babel/proposal-class-properties"]
+  "plugins": ["@babel/plugin-proposal-class-properties"]
 }
 ```
 
@@ -59,7 +59,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["@babel/proposal-class-properties", { "loose": true }]
+    ["@babel/plugin-proposal-class-properties", { "loose": true }]
   ]
 }
 ```
@@ -67,14 +67,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins @babel/proposal-class-properties script.js
+babel --plugins @babel/plugin-proposal-class-properties script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/proposal-class-properties"]
+  plugins: ["@babel/plugin-proposal-class-properties"]
 });
 ```
 
@@ -98,7 +98,7 @@ When `true`, class properties are compiled to use an assignment expression inste
   }
 ```
 
-Without `{ "loose": true }`, the above code will compile to the following, using `Object.definePropery`:
+Without `{ "loose": true }`, the above code will compile to the following, using `Object.defineProperty`:
 
 ```js
 var Bork = function Bork() {

@@ -48,7 +48,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["@babel/transform-regenerator"]
+  "plugins": ["@babel/plugin-transform-regenerator"]
 }
 ```
 
@@ -63,7 +63,7 @@ With options:
 ```json
 {
   "plugins": [
-    ["@babel/transform-regenerator", {
+    ["@babel/plugin-transform-regenerator", {
       "asyncGenerators": false,
       "generators": false,
       "async": false
@@ -75,13 +75,13 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-regenerator script.js
+babel --plugins @babel/plugin-transform-regenerator script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-regenerator"]
+  plugins: ["@babel/plugin-transform-regenerator"]
 });
 ```

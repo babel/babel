@@ -8,14 +8,21 @@ export default function populatePlaceholders(
   metadata: Metadata,
   replacements: TemplateReplacements,
 ): BabelNodeFile {
-  const ast = t.cloneDeep(metadata.ast);
+  const ast = t.cloneNode(metadata.ast);
 
   if (replacements) {
     metadata.placeholders.forEach(placeholder => {
       if (
         !Object.prototype.hasOwnProperty.call(replacements, placeholder.name)
       ) {
-        throw new Error(`No substitution given for "${placeholder.name}"`);
+        const placeholderName = placeholder.name;
+
+        throw new Error(
+          `Error: No substitution given for "${placeholderName}". If this is not meant to be a
+            placeholder you may want to consider passing one of the following options to @babel/template:
+            - { placeholderPattern: false, placeholderWhitelist: new Set(['${placeholderName}'])}
+            - { placeholderPattern: /^${placeholderName}$/ }`,
+        );
       }
     });
     Object.keys(replacements).forEach(key => {
@@ -38,7 +45,9 @@ export default function populatePlaceholders(
           (replacements && replacements[placeholder.name]) || null,
         );
       } catch (e) {
-        e.message = `babel-template placeholder "${placeholder.name}": ${e.message}`;
+        e.message = `@babel/template placeholder "${placeholder.name}": ${
+          e.message
+        }`;
         throw e;
       }
     });
@@ -55,9 +64,9 @@ function applyReplacement(
   // once to avoid injecting the same node multiple times.
   if (placeholder.isDuplicate) {
     if (Array.isArray(replacement)) {
-      replacement = replacement.map(node => t.cloneDeep(node));
+      replacement = replacement.map(node => t.cloneNode(node));
     } else if (typeof replacement === "object") {
-      replacement = t.cloneDeep(replacement);
+      replacement = t.cloneNode(replacement);
     }
   }
 

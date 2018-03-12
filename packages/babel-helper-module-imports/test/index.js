@@ -55,8 +55,19 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedType },
             addNamespace(),
             `
-              import * as _namespace from "source";
-              _namespace;
+              import * as _source from "source";
+              _source;
+            `,
+          );
+        });
+
+        it("should import with a name hint", () => {
+          testModule(
+            { importingInterop, importedType },
+            addNamespace({ nameHint: "hintedName" }),
+            `
+              import * as _hintedName from "source";
+              _hintedName;
             `,
           );
         });
@@ -70,8 +81,8 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedType },
             addNamespace(),
             `
-              import * as _namespace from "source";
-              _namespace;
+              import * as _source from "source";
+              _source;
             `,
           );
         });
@@ -99,8 +110,8 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop },
             addNamespace(),
             `
-              import _namespace from "source";
-              _namespace;
+              import _source from "source";
+              _source;
             `,
           );
         });
@@ -114,8 +125,8 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop },
             addNamespace(),
             `
-              import _namespace from "source";
-              _namespace;
+              import _source from "source";
+              _source;
             `,
           );
         });
@@ -127,8 +138,8 @@ describe("@babel/helper-module-imports", () => {
             { importedInterop },
             addNamespace(),
             `
-              var _namespace = require("source");
-              _namespace;
+              var _source = require("source");
+              _source;
             `,
           );
         });
@@ -146,8 +157,8 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop },
             addNamespace(),
             `
-              import _namespace from "source";
-              _namespace;
+              import _source from "source";
+              _source;
             `,
           );
         });
@@ -161,8 +172,8 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop },
             addNamespace(),
             `
-              import * as _namespace from "source";
-              _namespace;
+              import * as _source from "source";
+              _source;
             `,
           );
         });
@@ -174,8 +185,8 @@ describe("@babel/helper-module-imports", () => {
             { importedInterop },
             addNamespace(),
             `
-              var _namespace = require("source");
-              _namespace;
+              var _source = require("source");
+              _source;
             `,
           );
         });
@@ -193,9 +204,9 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop },
             addNamespace(),
             `
-            import _es6Default from "source";
-              var _namespace = babelHelpers.interopRequireWildcard(_es6Default);
-              _namespace;
+              import _source$es6Default from "source";
+              var _source = babelHelpers.interopRequireWildcard(_source$es6Default);
+              _source;
             `,
           );
         });
@@ -209,8 +220,8 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop },
             addNamespace(),
             `
-              import * as _namespace from "source";
-              _namespace;
+              import * as _source from "source";
+              _source;
             `,
           );
         });
@@ -222,8 +233,8 @@ describe("@babel/helper-module-imports", () => {
             { importedInterop },
             addNamespace(),
             `
-              var _namespace = babelHelpers.interopRequireWildcard(require("source"));
-              _namespace;
+              var _source = babelHelpers.interopRequireWildcard(require("source"));
+              _source;
             `,
           );
         });
@@ -402,8 +413,8 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop },
             addDefault(),
             `
-              import _namespace from "source";
-              _namespace.default;
+              import _source from "source";
+              _source.default;
             `,
           );
         });
@@ -413,8 +424,8 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop, ensureNoContext: true },
             addDefault(),
             `
-              import _namespace from "source";
-              0, _namespace.default;
+              import _source from "source";
+              0, _source.default;
             `,
           );
         });
@@ -474,8 +485,8 @@ describe("@babel/helper-module-imports", () => {
             { importedInterop, ensureLiveReference: true },
             addDefault(),
             `
-              var _namespace = require("source");
-              _namespace.default;
+              var _source = require("source");
+              _source.default;
             `,
           );
         });
@@ -493,9 +504,9 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop },
             addDefault(),
             `
-              import _es6Default from "source";
-              var _default = babelHelpers.interopRequireDefault(_es6Default).default;
-              _default;
+              import _source$es6Default from "source";
+              var _source = babelHelpers.interopRequireDefault(_source$es6Default).default;
+              _source;
             `,
           );
         });
@@ -505,8 +516,8 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop },
             addDefault({ nameHint: "hintedName" }),
             `
-              import _es6Default from "source";
-              var _hintedName = babelHelpers.interopRequireDefault(_es6Default).default;
+              import _source$es6Default from "source";
+              var _hintedName = babelHelpers.interopRequireDefault(_source$es6Default).default;
               _hintedName;
             `,
           );
@@ -517,9 +528,9 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop, ensureLiveReference: true },
             addDefault(),
             `
-              import _es6Default from "source";
-              var _namespace = babelHelpers.interopRequireDefault(_es6Default);
-              _namespace.default;
+              import _source$es6Default from "source";
+              var _source = babelHelpers.interopRequireDefault(_source$es6Default);
+              _source.default;
             `,
           );
         });
@@ -579,8 +590,8 @@ describe("@babel/helper-module-imports", () => {
             { importedInterop, ensureLiveReference: true },
             addDefault(),
             `
-              var _namespace = babelHelpers.interopRequireDefault(require("source"));
-              _namespace.default;
+              var _source = babelHelpers.interopRequireDefault(require("source"));
+              _source.default;
             `,
           );
         });
@@ -668,8 +679,8 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop },
             addNamed(),
             `
-              import _namespace from "source";
-              _namespace.read;
+              import _source from "source";
+              _source.read;
             `,
           );
         });
@@ -679,8 +690,8 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop, ensureNoContext: true },
             addNamed(),
             `
-              import _namespace from "source";
-              0, _namespace.read;
+              import _source from "source";
+              0, _source.read;
             `,
           );
         });
@@ -740,8 +751,8 @@ describe("@babel/helper-module-imports", () => {
             { importedInterop, ensureLiveReference: true },
             addNamed(),
             `
-              var _namespace = require("source");
-              _namespace.read;
+              var _source = require("source");
+              _source.read;
             `,
           );
         });
@@ -759,8 +770,8 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop },
             addNamed(),
             `
-              import _namespace from "source";
-              _namespace.read;
+              import _source from "source";
+              _source.read;
             `,
           );
         });
@@ -770,8 +781,8 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop, ensureNoContext: true },
             addNamed(),
             `
-              import _namespace from "source";
-              0, _namespace.read;
+              import _source from "source";
+              0, _source.read;
             `,
           );
         });
@@ -831,8 +842,8 @@ describe("@babel/helper-module-imports", () => {
             { importedInterop, ensureLiveReference: true },
             addNamed(),
             `
-              var _namespace = require("source");
-              _namespace.read;
+              var _source = require("source");
+              _source.read;
             `,
           );
         });
@@ -850,8 +861,8 @@ describe("@babel/helper-module-imports", () => {
             { importingInterop, importedInterop },
             addNamed(),
             `
-              import _es6Default from "source";
-              _es6Default.read;
+              import _source$es6Default from "source";
+              _source$es6Default.read;
             `,
           );
         });
@@ -911,8 +922,8 @@ describe("@babel/helper-module-imports", () => {
             { importedInterop, ensureLiveReference: true },
             addNamed(),
             `
-              var _namespace = require("source");
-              _namespace.read;
+              var _source = require("source");
+              _source.read;
             `,
           );
         });

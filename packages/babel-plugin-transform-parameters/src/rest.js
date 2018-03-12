@@ -1,5 +1,4 @@
-import template from "@babel/template";
-import * as t from "@babel/types";
+import { template, types as t } from "@babel/core";
 
 const buildRest = template(`
   for (var LEN = ARGUMENTS.length,
@@ -169,7 +168,11 @@ function optimiseIndexGetter(path, argsId, offset) {
     // Avoid unnecessary '+ 0'
     index = path.parent.property;
   } else {
-    index = t.binaryExpression("+", path.parent.property, offsetLiteral);
+    index = t.binaryExpression(
+      "+",
+      path.parent.property,
+      t.cloneNode(offsetLiteral),
+    );
   }
 
   const { scope } = path;
@@ -181,7 +184,7 @@ function optimiseIndexGetter(path, argsId, offset) {
         ARGUMENTS: argsId,
         OFFSET: offsetLiteral,
         INDEX: index,
-        REF: temp,
+        REF: t.cloneNode(temp),
       }),
     );
   } else {
@@ -263,15 +266,16 @@ export default function convertFunctionRest(path) {
   // There are only "shorthand" references
   if (!state.deopted && !state.references.length) {
     for (const { path, cause } of (state.candidates: Array)) {
+      const clonedArgsId = t.cloneNode(argsId);
       switch (cause) {
         case "indexGetter":
-          optimiseIndexGetter(path, argsId, state.offset);
+          optimiseIndexGetter(path, clonedArgsId, state.offset);
           break;
         case "lengthGetter":
-          optimiseLengthGetter(path, argsId, state.offset);
+          optimiseLengthGetter(path, clonedArgsId, state.offset);
           break;
         default:
-          path.replaceWith(argsId);
+          path.replaceWith(clonedArgsId);
       }
     }
     return true;
@@ -285,13 +289,12 @@ export default function convertFunctionRest(path) {
   const key = scope.generateUidIdentifier("key");
   const len = scope.generateUidIdentifier("len");
 
-  let arrKey = key;
-  let arrLen = len;
+  let arrKey, arrLen;
   if (node.params.length) {
     // this method has additional params, so we need to subtract
     // the index of the current argument position from the
     // position in the array that we want to populate
-    arrKey = t.binaryExpression("-", key, start);
+    arrKey = t.binaryExpression("-", t.cloneNode(key), t.cloneNode(start));
 
     // we need to work out the size of the array that we're
     // going to store all the rest parameters
@@ -300,10 +303,13 @@ export default function convertFunctionRest(path) {
     // with <0 if there are less arguments than params as it'll
     // cause an error
     arrLen = t.conditionalExpression(
-      t.binaryExpression(">", len, start),
-      t.binaryExpression("-", len, start),
+      t.binaryExpression(">", t.cloneNode(len), t.cloneNode(start)),
+      t.binaryExpression("-", t.cloneNode(len), t.cloneNode(start)),
       t.numericLiteral(0),
     );
+  } else {
+    arrKey = t.identifier(key.name);
+    arrLen = t.identifier(len.name);
   }
 
   const loop = buildRest({

@@ -1,5 +1,5 @@
+import { declare } from "@babel/helper-plugin-utils";
 import { basename, extname } from "path";
-import template from "@babel/template";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
@@ -9,6 +9,7 @@ import {
   ensureStatementsHoisted,
   wrapInterop,
 } from "@babel/helper-module-transforms";
+import { types as t, template } from "@babel/core";
 
 const buildPrerequisiteAssignment = template(`
   GLOBAL_REFERENCE = GLOBAL_REFERENCE || {}
@@ -30,7 +31,9 @@ const buildWrapper = template(`
   })
 `);
 
-export default function({ types: t }, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const {
     globals,
     exactGlobals,
@@ -44,10 +47,15 @@ export default function({ types: t }, options) {
   /**
    * Build the assignment statements that initialize the UMD global.
    */
-  function buildBrowserInit(browserGlobals, exactGlobals, file, moduleName) {
+  function buildBrowserInit(
+    browserGlobals,
+    exactGlobals,
+    filename,
+    moduleName,
+  ) {
     const moduleNameOrBasename = moduleName
       ? moduleName.value
-      : basename(file.opts.filename, extname(file.opts.filename));
+      : basename(filename, extname(filename));
     let globalToAssign = t.memberExpression(
       t.identifier("global"),
       t.identifier(t.toIdentifier(moduleNameOrBasename)),
@@ -63,7 +71,9 @@ export default function({ types: t }, options) {
         const members = globalName.split(".");
         globalToAssign = members.slice(1).reduce((accum, curr) => {
           initAssignments.push(
-            buildPrerequisiteAssignment({ GLOBAL_REFERENCE: accum }),
+            buildPrerequisiteAssignment({
+              GLOBAL_REFERENCE: t.cloneNode(accum),
+            }),
           );
           return t.memberExpression(accum, t.identifier(curr));
         }, t.memberExpression(t.identifier("global"), t.identifier(members[0])));
@@ -125,16 +135,16 @@ export default function({ types: t }, options) {
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          const {
-            meta,
-            headers,
-          } = rewriteModuleStatementsAndPrepareHeader(path, {
-            loose,
-            strict,
-            strictMode,
-            allowTopLevelThis,
-            noInterop,
-          });
+          const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
+            path,
+            {
+              loose,
+              strict,
+              strictMode,
+              allowTopLevelThis,
+              noInterop,
+            },
+          );
 
           const amdArgs = [];
           const commonjsArgs = [];
@@ -181,7 +191,9 @@ export default function({ types: t }, options) {
               }
             }
 
-            headers.push(...buildNamespaceInitStatements(meta, metadata));
+            headers.push(
+              ...buildNamespaceInitStatements(meta, metadata, loose),
+            );
           }
 
           ensureStatementsHoisted(headers);
@@ -202,7 +214,7 @@ export default function({ types: t }, options) {
               GLOBAL_TO_ASSIGN: buildBrowserInit(
                 browserGlobals,
                 exactGlobals,
-                this.file,
+                this.filename || "unknown",
                 moduleName,
               ),
             }),
@@ -216,4 +228,4 @@ export default function({ types: t }, options) {
       },
     },
   };
-}
+});

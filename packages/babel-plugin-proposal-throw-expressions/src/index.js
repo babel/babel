@@ -1,6 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxThrowExpressions from "@babel/plugin-syntax-throw-expressions";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     inherits: syntaxThrowExpressions,
 
@@ -9,15 +13,14 @@ export default function({ types: t }) {
         const { operator, argument } = path.node;
         if (operator !== "throw") return;
 
-        const arg = t.identifier("e");
         const arrow = t.functionExpression(
           null,
-          [arg],
-          t.blockStatement([t.throwStatement(arg)]),
+          [t.identifier("e")],
+          t.blockStatement([t.throwStatement(t.identifier("e"))]),
         );
 
         path.replaceWith(t.callExpression(arrow, [argument]));
       },
     },
   };
-}
+});

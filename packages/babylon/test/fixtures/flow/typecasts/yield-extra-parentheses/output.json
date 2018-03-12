@@ -1,0 +1,244 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 49,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 3,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 49,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 3,
+        "column": 1
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 49,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 10,
+          "end": 13,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 13
+            },
+            "identifierName": "foo"
+          },
+          "name": "foo"
+        },
+        "generator": true,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start": 14,
+            "end": 15,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 14
+              },
+              "end": {
+                "line": 1,
+                "column": 15
+              },
+              "identifierName": "z"
+            },
+            "name": "z"
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 17,
+          "end": 49,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 17
+            },
+            "end": {
+              "line": 3,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "VariableDeclaration",
+              "start": 21,
+              "end": 47,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 28
+                }
+              },
+              "declarations": [
+                {
+                  "type": "VariableDeclarator",
+                  "start": 27,
+                  "end": 47,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 28
+                    }
+                  },
+                  "id": {
+                    "type": "Identifier",
+                    "start": 27,
+                    "end": 28,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 9
+                      },
+                      "identifierName": "x"
+                    },
+                    "name": "x"
+                  },
+                  "init": {
+                    "type": "TypeCastExpression",
+                    "start": 32,
+                    "end": 46,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 27
+                      }
+                    },
+                    "expression": {
+                      "type": "YieldExpression",
+                      "start": 33,
+                      "end": 40,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 14
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 21
+                        }
+                      },
+                      "delegate": false,
+                      "argument": {
+                        "type": "NumericLiteral",
+                        "start": 39,
+                        "end": 40,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 20
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 21
+                          }
+                        },
+                        "extra": {
+                          "rawValue": 3,
+                          "raw": "3"
+                        },
+                        "value": 3
+                      },
+                      "extra": {
+                        "parenthesized": true,
+                        "parenStart": 32
+                      }
+                    },
+                    "typeAnnotation": {
+                      "type": "TypeAnnotation",
+                      "start": 41,
+                      "end": 46,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 22
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 27
+                        }
+                      },
+                      "typeAnnotation": {
+                        "type": "AnyTypeAnnotation",
+                        "start": 43,
+                        "end": 46,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 24
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 27
+                          }
+                        }
+                      }
+                    },
+                    "extra": {
+                      "parenthesized": true,
+                      "parenStart": 31
+                    }
+                  }
+                }
+              ],
+              "kind": "const"
+            }
+          ],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

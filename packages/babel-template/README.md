@@ -49,9 +49,9 @@ which will parse and return the AST directly.
 ## Template Literal Usage
 
 ```js
-import template from "babel-template";
-import generate from "babel-generator";
-import * as t from "babel-types";
+import template from "@babel/template";
+import generate from "@babel/generator";
+import * as t from "@babel/types";
 
 const fn = template`
   var IMPORT_NAME = require('${"my-module"}');
@@ -88,7 +88,7 @@ valid to perform replacements using template literal replacements.
 
 ## AST results
 
-The `babel-template` API exposes a few flexible APIs to make it as easy as
+The `@babel/template` API exposes a few flexible APIs to make it as easy as
 possible to create ASTs with an expected structure. Each of these also has
 the `.ast` property mentioned above.
 
@@ -130,7 +130,7 @@ Type: `string`
 
 #### options
 
-`@babel/template` accepts all of the options from [babylon], and specifies
+`@babel/template` accepts all of the options from [babylon](https://github.com/babel/babel/tree/master/packages/babylon), and specifies
 some defaults of its own:
 
 * `allowReturnOutsideFunction` is set to `true` by default.

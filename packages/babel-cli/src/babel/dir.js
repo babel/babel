@@ -6,10 +6,16 @@ import fs from "fs";
 
 import * as util from "./util";
 
+let compiledFiles = 0;
+
 export default function(commander, filenames, opts) {
-  function write(src, relative, base) {
+  function write(src, relative, base, callback) {
+    if (typeof base === "function") {
+      callback = base;
+      base = undefined;
+    }
     if (!util.isCompilableExtension(relative, commander.extensions)) {
-      return false;
+      return process.nextTick(callback);
     }
 
     // remove extension and then append back on .js
@@ -17,32 +23,39 @@ export default function(commander, filenames, opts) {
 
     const dest = getDest(commander, relative, base);
 
-    const data = util.compile(
+    util.compile(
       src,
       defaults(
         {
           sourceFileName: slash(path.relative(dest + "/..", src)),
-          sourceMapTarget: path.basename(relative),
         },
         opts,
       ),
+      function(err, res) {
+        if (err) return callback(err);
+        if (!res) return callback();
+
+        // we've requested explicit sourcemaps to be written to disk
+        if (
+          res.map &&
+          commander.sourceMaps &&
+          commander.sourceMaps !== "inline"
+        ) {
+          const mapLoc = dest + ".map";
+          res.code = util.addSourceMappingUrl(res.code, mapLoc);
+          res.map.file = path.basename(relative);
+          outputFileSync(mapLoc, JSON.stringify(res.map));
+        }
+
+        outputFileSync(dest, res.code);
+        util.chmod(src, dest);
+
+        compiledFiles += 1;
+
+        util.log(src + " -> " + dest);
+        return callback(null, true);
+      },
     );
-
-    if (!data) return false;
-
-    // we've requested explicit sourcemaps to be written to disk
-    if (data.map && commander.sourceMaps && commander.sourceMaps !== "inline") {
-      const mapLoc = dest + ".map";
-      data.code = util.addSourceMappingUrl(data.code, mapLoc);
-      outputFileSync(mapLoc, JSON.stringify(data.map));
-    }
-
-    outputFileSync(dest, data.code);
-    util.chmod(src, dest);
-
-    util.log(src + " -> " + dest);
-
-    return true;
   }
 
   function getDest(commander, filename, base) {
@@ -50,17 +63,57 @@ export default function(commander, filenames, opts) {
     return path.join(commander.outDir, filename);
   }
 
-  function handleFile(src, filename, base) {
-    const didWrite = write(src, filename, base);
-
-    if (!didWrite && commander.copyFiles) {
-      const dest = getDest(commander, filename, base);
-      outputFileSync(dest, fs.readFileSync(src));
-      util.chmod(src, dest);
+  function outputDestFolder(outDir) {
+    const outDirPath = path.resolve(outDir);
+    if (!fs.existsSync(outDirPath)) {
+      fs.mkdirSync(outDirPath);
     }
   }
 
-  function handle(filename) {
+  function handleFile(src, filename, base, callback) {
+    if (typeof base === "function") {
+      callback = base;
+      base = undefined;
+    }
+
+    write(src, filename, base, function(err, res) {
+      if (err) return callback(err);
+      if (!res && commander.copyFiles) {
+        const dest = getDest(commander, filename, base);
+        outputFileSync(dest, fs.readFileSync(src));
+        util.chmod(src, dest);
+      }
+
+      return callback();
+    });
+  }
+
+  function sequentialHandleFile(files, dirname, index, callback) {
+    if (files.length === 0) {
+      outputDestFolder(commander.outDir);
+      return;
+    }
+
+    if (typeof index === "function") {
+      callback = index;
+      index = 0;
+    }
+
+    const filename = files[index];
+    const src = path.join(dirname, filename);
+
+    handleFile(src, filename, dirname, function(err) {
+      if (err) return callback(err);
+      index++;
+      if (index !== files.length) {
+        sequentialHandleFile(files, dirname, index, callback);
+      } else {
+        callback();
+      }
+    });
+  }
+
+  function handle(filename, callback) {
     if (!fs.existsSync(filename)) return;
 
     const stat = fs.statSync(filename);
@@ -72,19 +125,39 @@ export default function(commander, filenames, opts) {
         util.deleteDir(commander.outDir);
       }
 
-      util
-        .readdir(dirname, commander.includeDotfiles)
-        .forEach(function(filename) {
-          const src = path.join(dirname, filename);
-          handleFile(src, filename, dirname);
-        });
+      const files = util.readdir(dirname, commander.includeDotfiles);
+      sequentialHandleFile(files, dirname, callback);
     } else {
-      write(filename, path.basename(filename), path.dirname(filename));
+      write(
+        filename,
+        path.basename(filename),
+        path.dirname(filename),
+        callback,
+      );
     }
   }
 
+  function sequentialHandle(filenames, index = 0) {
+    const filename = filenames[index];
+
+    handle(filename, function(err) {
+      if (err) throw new Error(err);
+      index++;
+      if (index !== filenames.length) {
+        sequentialHandle(filenames, index);
+      } else {
+        util.log(
+          `🎉  Successfully compiled ${compiledFiles} ${
+            compiledFiles > 1 ? "files" : "file"
+          } with Babel.`,
+          true,
+        );
+      }
+    });
+  }
+
   if (!commander.skipInitialBuild) {
-    filenames.forEach(handle);
+    sequentialHandle(filenames);
   }
 
   if (commander.watch) {
@@ -104,7 +177,9 @@ export default function(commander, filenames, opts) {
         watcher.on(type, function(filename) {
           const relative = path.relative(dirname, filename) || filename;
           try {
-            handleFile(filename, relative);
+            handleFile(filename, relative, function(err) {
+              if (err) throw err;
+            });
           } catch (err) {
             console.error(err.stack);
           }

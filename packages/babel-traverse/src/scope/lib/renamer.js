@@ -1,4 +1,5 @@
 import Binding from "../binding";
+import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import * as t from "@babel/types";
 
 const renameVisitor = {
@@ -40,48 +41,20 @@ export default class Renamer {
   binding: Binding;
 
   maybeConvertFromExportDeclaration(parentDeclar) {
-    const exportDeclar =
-      parentDeclar.parentPath.isExportDeclaration() && parentDeclar.parentPath;
-    if (!exportDeclar) return;
+    const maybeExportDeclar = parentDeclar.parentPath;
 
-    // build specifiers that point back to this export declaration
-    const isDefault = exportDeclar.isExportDefaultDeclaration();
+    if (!maybeExportDeclar.isExportDeclaration()) {
+      return;
+    }
 
     if (
-      isDefault &&
-      (parentDeclar.isFunctionDeclaration() ||
-        parentDeclar.isClassDeclaration()) &&
-      !parentDeclar.node.id
+      maybeExportDeclar.isExportDefaultDeclaration() &&
+      !maybeExportDeclar.get("declaration").node.id
     ) {
-      // Ensure that default class and function exports have a name so they have a identifier to
-      // reference from the export specifier list.
-      parentDeclar.node.id = parentDeclar.scope.generateUidIdentifier(
-        "default",
-      );
+      return;
     }
 
-    const bindingIdentifiers = parentDeclar.getOuterBindingIdentifiers();
-    const specifiers = [];
-
-    for (const name in bindingIdentifiers) {
-      const localName = name === this.oldName ? this.newName : name;
-      const exportedName = isDefault ? "default" : name;
-      specifiers.push(
-        t.exportSpecifier(t.identifier(localName), t.identifier(exportedName)),
-      );
-    }
-
-    if (specifiers.length) {
-      const aliasDeclar = t.exportNamedDeclaration(null, specifiers);
-
-      // hoist to the top if it's a function
-      if (parentDeclar.isFunctionDeclaration()) {
-        aliasDeclar._blockHoist = 3;
-      }
-
-      exportDeclar.insertAfter(aliasDeclar);
-      exportDeclar.replaceWith(parentDeclar.node);
-    }
+    splitExportDeclaration(maybeExportDeclar);
   }
 
   maybeConvertFromClassFunctionDeclaration(path) {
@@ -129,7 +102,10 @@ export default class Renamer {
     const { scope, path } = binding;
 
     const parentDeclar = path.find(
-      path => path.isDeclaration() || path.isFunctionExpression(),
+      path =>
+        path.isDeclaration() ||
+        path.isFunctionExpression() ||
+        path.isClassExpression(),
     );
     if (parentDeclar) {
       this.maybeConvertFromExportDeclaration(parentDeclar);

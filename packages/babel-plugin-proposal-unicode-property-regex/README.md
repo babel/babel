@@ -2,14 +2,12 @@
 
 Compile [Unicode property escapes](https://github.com/mathiasbynens/regexpu-core/blob/master/property-escapes.md) (`\p{…}` and `\P{…}`) in Unicode regular expressions to ES5 or ES6 that works in today’s environments.
 
-**Note:** the Unicode property escape syntax is non-standard and may or may not reflect what eventually gets specified.
-
 [Here’s an online demo.](https://mothereff.in/regexpu#input=var+regex+%3D+/%5Cp%7BScript_Extensions%3DGreek%7D/u%3B&unicodePropertyEscape=1)
 
 ## Installation
 
 ```sh
-npm install @babel/plugin-proposal-unicode-property-regex
+npm install --save-dev @babel/plugin-proposal-unicode-property-regex
 ```
 
 ## Usage
@@ -20,21 +18,21 @@ npm install @babel/plugin-proposal-unicode-property-regex
 
 ```json
 {
-  "plugins": ["@babel/proposal-unicode-property-regex"]
+  "plugins": ["@babel/plugin-proposal-unicode-property-regex"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/@babel/proposal-unicode-property-regex script.js
+babel --plugins @babel/@babel/plugin-proposal-unicode-property-regex script.js
 ```
 
 ### Via Node.js API
 
 ```js
 require("@babel/core").transform(code, {
-  "plugins": ["@babel/proposal-unicode-property-regex"]
+  "plugins": ["@babel/plugin-proposal-unicode-property-regex"]
 });
 ```
 
@@ -43,10 +41,17 @@ To transpile to ES6/ES2015:
 ```js
 require("@babel/core").transform(code, {
   "plugins": [
-    ["@babel/proposal-unicode-property-regex", { "useUnicodeFlag": true }]
+    ["@babel/plugin-proposal-unicode-property-regex", { "useUnicodeFlag": false }]
   ]
 });
 ```
+
+## Options
+
+* `useUnicodeFlag` (defaults to `true`)
+
+When disabled with `false`, the transform converts Unicode regexes to
+non-Unicode regexes for wider support, removing the `u` flag. See https://github.com/mathiasbynens/regexpu-core#useunicodeflag-default-false for more information.
 
 ## Author
 

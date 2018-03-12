@@ -61,44 +61,46 @@ export default class File {
   }
 
   getModuleName(): ?string {
-    const opts = this.opts;
-    if (!opts.moduleIds) {
-      return null;
-    }
+    const {
+      filename,
+      filenameRelative = filename,
+
+      moduleId,
+      moduleIds = !!moduleId,
+
+      getModuleId,
+
+      sourceRoot: sourceRootTmp,
+      moduleRoot = sourceRootTmp,
+      sourceRoot = moduleRoot,
+    } = this.opts;
+
+    if (!moduleIds) return null;
 
     // moduleId is n/a if a `getModuleId()` is provided
-    if (opts.moduleId != null && !opts.getModuleId) {
-      return opts.moduleId;
+    if (moduleId != null && !getModuleId) {
+      return moduleId;
     }
 
-    let filenameRelative = opts.filenameRelative;
-    let moduleName = "";
+    let moduleName = moduleRoot != null ? moduleRoot + "/" : "";
 
-    if (opts.moduleRoot != null) {
-      moduleName = opts.moduleRoot + "/";
+    if (filenameRelative) {
+      const sourceRootReplacer =
+        sourceRoot != null ? new RegExp("^" + sourceRoot + "/?") : "";
+
+      moduleName += filenameRelative
+        // remove sourceRoot from filename
+        .replace(sourceRootReplacer, "")
+        // remove extension
+        .replace(/\.(\w*?)$/, "");
     }
-
-    if (!opts.filenameRelative) {
-      return moduleName + opts.filename.replace(/^\//, "");
-    }
-
-    if (opts.sourceRoot != null) {
-      // remove sourceRoot from filename
-      const sourceRootRegEx = new RegExp("^" + opts.sourceRoot + "/?");
-      filenameRelative = filenameRelative.replace(sourceRootRegEx, "");
-    }
-
-    // remove extension
-    filenameRelative = filenameRelative.replace(/\.(\w*?)$/, "");
-
-    moduleName += filenameRelative;
 
     // normalize path separators
     moduleName = moduleName.replace(/\\/g, "/");
 
-    if (opts.getModuleId) {
+    if (getModuleId) {
       // If return is falsy, assume they want us to use our generated default name
-      return opts.getModuleId(moduleName) || moduleName;
+      return getModuleId(moduleName) || moduleName;
     } else {
       return moduleName;
     }
@@ -121,7 +123,7 @@ export default class File {
 
   addHelper(name: string): Object {
     const declar = this.declarations[name];
-    if (declar) return declar;
+    if (declar) return t.cloneNode(declar);
 
     const generator = this.get("helperGenerator");
     const runtime = this.get("helpersNamespace");
@@ -129,7 +131,7 @@ export default class File {
       const res = generator(name);
       if (res) return res;
     } else if (runtime) {
-      return t.memberExpression(runtime, t.identifier(name));
+      return t.memberExpression(t.cloneNode(runtime), t.identifier(name));
     }
 
     const uid = (this.declarations[name] = this.scope.generateUidIdentifier(
@@ -177,8 +179,8 @@ export default class File {
 
   buildCodeFrameError(
     node: ?{
-      loc?: { line: number, column: number },
-      _loc?: { line: number, column: number },
+      loc?: { start: { line: number, column: number } },
+      _loc?: { start: { line: number, column: number } },
     },
     msg: string,
     Error: typeof Error = SyntaxError,
@@ -202,17 +204,19 @@ export default class File {
     }
 
     if (loc) {
+      const { highlightCode = true } = this.opts;
+
       msg +=
         "\n" +
         codeFrameColumns(
           this.code,
           {
             start: {
-              line: loc.line,
-              column: loc.column + 1,
+              line: loc.start.line,
+              column: loc.start.column + 1,
             },
           },
-          this.opts,
+          { highlightCode },
         );
     }
 

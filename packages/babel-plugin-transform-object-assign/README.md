@@ -41,20 +41,20 @@ npm install --save-dev @babel/plugin-transform-object-assign
 
 ```json
 {
-  "plugins": ["@babel/transform-object-assign"]
+  "plugins": ["@babel/plugin-transform-object-assign"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-object-assign script.js
+babel --plugins @babel/plugin-transform-object-assign script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-object-assign"]
+  plugins: ["@babel/plugin-transform-object-assign"]
 });
 ```

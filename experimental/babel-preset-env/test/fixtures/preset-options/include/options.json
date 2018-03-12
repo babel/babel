@@ -1,9 +1,0 @@
-{
-  "presets": [
-    ["../../../../lib", {
-      "targets": {},
-      "include": ["transform-modules-commonjs"],
-      "modules": false
-    }]
-  ]
-}

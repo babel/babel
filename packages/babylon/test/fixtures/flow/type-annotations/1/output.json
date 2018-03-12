@@ -1,0 +1,181 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 44,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 44
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 44,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 44
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "FunctionDeclaration",
+        "start": 0,
+        "end": 44,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 44
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 9,
+          "end": 12,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            },
+            "identifierName": "foo"
+          },
+          "name": "foo"
+        },
+        "generator": false,
+        "async": false,
+        "params": [
+          {
+            "type": "Identifier",
+            "start": 13,
+            "end": 24,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 13
+              },
+              "end": {
+                "line": 1,
+                "column": 24
+              },
+              "identifierName": "numVal"
+            },
+            "name": "numVal",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start": 19,
+              "end": 24,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 19
+                },
+                "end": {
+                  "line": 1,
+                  "column": 24
+                }
+              },
+              "typeAnnotation": {
+                "type": "AnyTypeAnnotation",
+                "start": 21,
+                "end": 24,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 24
+                  }
+                }
+              }
+            }
+          },
+          {
+            "type": "Identifier",
+            "start": 26,
+            "end": 41,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 26
+              },
+              "end": {
+                "line": 1,
+                "column": 41
+              },
+              "identifierName": "otherVal"
+            },
+            "name": "otherVal",
+            "typeAnnotation": {
+              "type": "TypeAnnotation",
+              "start": 34,
+              "end": 41,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 34
+                },
+                "end": {
+                  "line": 1,
+                  "column": 41
+                }
+              },
+              "typeAnnotation": {
+                "type": "MixedTypeAnnotation",
+                "start": 36,
+                "end": 41,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 36
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 41
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "body": {
+          "type": "BlockStatement",
+          "start": 42,
+          "end": 44,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 42
+            },
+            "end": {
+              "line": 1,
+              "column": 44
+            }
+          },
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

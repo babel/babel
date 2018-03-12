@@ -1,0 +1,565 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 160,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 4,
+      "column": 43
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 160,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 4,
+        "column": 43
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 37,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 37
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 36,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 36
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 36,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 36
+                },
+                "identifierName": "union"
+              },
+              "name": "union",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 9,
+                "end": 36,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 36
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSUnionType",
+                  "start": 11,
+                  "end": 36,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 36
+                    }
+                  },
+                  "types": [
+                    {
+                      "type": "TSNumberKeyword",
+                      "start": 11,
+                      "end": 17,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 11
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 17
+                        }
+                      }
+                    },
+                    {
+                      "type": "TSNullKeyword",
+                      "start": 20,
+                      "end": 24,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 20
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 24
+                        }
+                      }
+                    },
+                    {
+                      "type": "TSUndefinedKeyword",
+                      "start": 27,
+                      "end": 36,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 27
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 36
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start": 38,
+        "end": 72,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 34
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 42,
+            "end": 71,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 4
+              },
+              "end": {
+                "line": 2,
+                "column": 33
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 42,
+              "end": 71,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 4
+                },
+                "end": {
+                  "line": 2,
+                  "column": 33
+                },
+                "identifierName": "intersection"
+              },
+              "name": "intersection",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 54,
+                "end": 71,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 16
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 33
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSIntersectionType",
+                  "start": 56,
+                  "end": 71,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 18
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 33
+                    }
+                  },
+                  "types": [
+                    {
+                      "type": "TSNumberKeyword",
+                      "start": 56,
+                      "end": 62,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 18
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 24
+                        }
+                      }
+                    },
+                    {
+                      "type": "TSStringKeyword",
+                      "start": 65,
+                      "end": 71,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 27
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 33
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start": 73,
+        "end": 116,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 43
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 77,
+            "end": 115,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 4
+              },
+              "end": {
+                "line": 3,
+                "column": 42
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 77,
+              "end": 115,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 4
+                },
+                "end": {
+                  "line": 3,
+                  "column": 42
+                },
+                "identifierName": "precedence1"
+              },
+              "name": "precedence1",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 88,
+                "end": 115,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 15
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 42
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSUnionType",
+                  "start": 90,
+                  "end": 115,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 17
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 42
+                    }
+                  },
+                  "types": [
+                    {
+                      "type": "TSNumberKeyword",
+                      "start": 90,
+                      "end": 96,
+                      "loc": {
+                        "start": {
+                          "line": 3,
+                          "column": 17
+                        },
+                        "end": {
+                          "line": 3,
+                          "column": 23
+                        }
+                      }
+                    },
+                    {
+                      "type": "TSIntersectionType",
+                      "start": 99,
+                      "end": 115,
+                      "loc": {
+                        "start": {
+                          "line": 3,
+                          "column": 26
+                        },
+                        "end": {
+                          "line": 3,
+                          "column": 42
+                        }
+                      },
+                      "types": [
+                        {
+                          "type": "TSStringKeyword",
+                          "start": 99,
+                          "end": 105,
+                          "loc": {
+                            "start": {
+                              "line": 3,
+                              "column": 26
+                            },
+                            "end": {
+                              "line": 3,
+                              "column": 32
+                            }
+                          }
+                        },
+                        {
+                          "type": "TSBooleanKeyword",
+                          "start": 108,
+                          "end": 115,
+                          "loc": {
+                            "start": {
+                              "line": 3,
+                              "column": 35
+                            },
+                            "end": {
+                              "line": 3,
+                              "column": 42
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start": 117,
+        "end": 160,
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 43
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 121,
+            "end": 159,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 4
+              },
+              "end": {
+                "line": 4,
+                "column": 42
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 121,
+              "end": 159,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 4
+                },
+                "end": {
+                  "line": 4,
+                  "column": 42
+                },
+                "identifierName": "precedence2"
+              },
+              "name": "precedence2",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 132,
+                "end": 159,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 15
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 42
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSUnionType",
+                  "start": 134,
+                  "end": 159,
+                  "loc": {
+                    "start": {
+                      "line": 4,
+                      "column": 17
+                    },
+                    "end": {
+                      "line": 4,
+                      "column": 42
+                    }
+                  },
+                  "types": [
+                    {
+                      "type": "TSIntersectionType",
+                      "start": 134,
+                      "end": 149,
+                      "loc": {
+                        "start": {
+                          "line": 4,
+                          "column": 17
+                        },
+                        "end": {
+                          "line": 4,
+                          "column": 32
+                        }
+                      },
+                      "types": [
+                        {
+                          "type": "TSNumberKeyword",
+                          "start": 134,
+                          "end": 140,
+                          "loc": {
+                            "start": {
+                              "line": 4,
+                              "column": 17
+                            },
+                            "end": {
+                              "line": 4,
+                              "column": 23
+                            }
+                          }
+                        },
+                        {
+                          "type": "TSStringKeyword",
+                          "start": 143,
+                          "end": 149,
+                          "loc": {
+                            "start": {
+                              "line": 4,
+                              "column": 26
+                            },
+                            "end": {
+                              "line": 4,
+                              "column": 32
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    {
+                      "type": "TSBooleanKeyword",
+                      "start": 152,
+                      "end": 159,
+                      "loc": {
+                        "start": {
+                          "line": 4,
+                          "column": 35
+                        },
+                        "end": {
+                          "line": 4,
+                          "column": 42
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

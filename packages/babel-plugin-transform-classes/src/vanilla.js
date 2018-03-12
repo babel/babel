@@ -1,10 +1,10 @@
 import type { NodePath } from "@babel/traverse";
-import { visitors } from "@babel/traverse";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as defineMap from "@babel/helper-define-map";
-import template from "@babel/template";
-import * as t from "@babel/types";
+import { traverse, template, types as t } from "@babel/core";
+
+type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
 
 const noMethodVisitor = {
   "FunctionExpression|FunctionDeclaration"(path) {
@@ -16,25 +16,9 @@ const noMethodVisitor = {
   },
 };
 
-const verifyConstructorVisitor = visitors.merge([
+const verifyConstructorVisitor = traverse.visitors.merge([
   noMethodVisitor,
   {
-    MemberExpression: {
-      exit(path) {
-        const objectPath = path.get("object");
-        if (this.isDerived && !this.hasBareSuper && objectPath.isSuper()) {
-          const hasArrowFunctionParent = path.findParent(p =>
-            p.isArrowFunctionExpression(),
-          );
-          if (!hasArrowFunctionParent) {
-            throw objectPath.buildCodeFrameError(
-              "'super.*' is not allowed before super()",
-            );
-          }
-        }
-      },
-    },
-
     CallExpression: {
       exit(path) {
         if (path.get("callee").isSuper()) {
@@ -50,20 +34,26 @@ const verifyConstructorVisitor = visitors.merge([
     },
 
     ThisExpression(path) {
-      if (this.isDerived && !this.hasBareSuper) {
-        const fn = path.find(p => p.isFunction());
-
-        if (!fn || !fn.isArrowFunctionExpression()) {
-          throw path.buildCodeFrameError(
-            "'this' is not allowed before super()",
-          );
+      if (this.isDerived) {
+        if (path.parentPath.isMemberExpression({ object: path.node })) {
+          // In cases like this.foo or this[foo], there is no need to add
+          // assertThisInitialized, since they already throw if this is
+          // undefined.
+          return;
         }
+
+        const assertion = t.callExpression(
+          this.file.addHelper("assertThisInitialized"),
+          [path.node],
+        );
+        path.replaceWith(assertion);
+        path.skip();
       }
     },
   },
 ]);
 
-const findThisesVisitor = visitors.merge([
+const findThisesVisitor = traverse.visitors.merge([
   noMethodVisitor,
   {
     ThisExpression(path) {
@@ -73,7 +63,7 @@ const findThisesVisitor = visitors.merge([
 ]);
 
 export default class ClassTransformer {
-  constructor(path: NodePath, file) {
+  constructor(path: NodePath, file, builtinClasses: ReadonlySet<string>) {
     this.parent = path.parent;
     this.scope = path.scope;
     this.node = path.node;
@@ -105,6 +95,12 @@ export default class ClassTransformer {
 
     this.superName = this.node.superClass || t.identifier("Function");
     this.isDerived = !!this.node.superClass;
+
+    const { name } = this.superName;
+    this.extendsNative =
+      this.isDerived &&
+      builtinClasses.has(name) &&
+      !this.scope.hasBinding(name, /* noGlobals */ true);
   }
 
   run() {
@@ -124,12 +120,20 @@ export default class ClassTransformer {
 
     //
     if (this.isDerived) {
-      closureArgs.push(superName);
+      if (this.extendsNative) {
+        closureArgs.push(
+          t.callExpression(this.file.addHelper("wrapNativeSuper"), [
+            t.cloneNode(superName),
+          ]),
+        );
+      } else {
+        closureArgs.push(t.cloneNode(superName));
+      }
 
       superName = this.scope.generateUidIdentifierBasedOnNode(superName);
       closureParams.push(superName);
 
-      this.superName = superName;
+      this.superName = t.cloneNode(superName);
     }
 
     //
@@ -141,13 +145,15 @@ export default class ClassTransformer {
         t.expressionStatement(
           t.callExpression(file.addHelper("classCallCheck"), [
             t.thisExpression(),
-            this.classRef,
+            t.cloneNode(this.classRef),
           ]),
         ),
       );
     }
 
-    body = body.concat(this.staticPropBody.map(fn => fn(this.classRef)));
+    body = body.concat(
+      this.staticPropBody.map(fn => fn(t.cloneNode(this.classRef))),
+    );
 
     if (this.classId) {
       // named class with only a constructor
@@ -155,7 +161,7 @@ export default class ClassTransformer {
     }
 
     //
-    body.push(t.returnStatement(this.classRef));
+    body.push(t.returnStatement(t.cloneNode(this.classRef)));
 
     const container = t.arrowFunctionExpression(
       closureParams,
@@ -165,7 +171,11 @@ export default class ClassTransformer {
   }
 
   buildConstructor() {
-    const func = t.functionDeclaration(this.classRef, [], this.constructorBody);
+    const func = t.functionDeclaration(
+      t.cloneNode(this.classRef),
+      [],
+      this.constructorBody,
+    );
     t.inherits(func, this.node);
     return func;
   }
@@ -273,6 +283,7 @@ export default class ClassTransformer {
             methodNode: node,
             objectRef: this.classRef,
             superRef: this.superName,
+            inConstructor: isConstructor,
             isStatic: node.static,
             isLoose: this.isLoose,
             scope: this.scope,
@@ -324,14 +335,12 @@ export default class ClassTransformer {
         staticProps = defineMap.toComputedObjectFromClass(staticProps);
       }
 
-      const nullNode = t.nullLiteral();
-
       let args = [
-        this.classRef, // Constructor
-        nullNode, // instanceDescriptors
-        nullNode, // staticDescriptors
-        nullNode, // instanceInitializers
-        nullNode, // staticInitializers
+        t.cloneNode(this.classRef), // Constructor
+        t.nullLiteral(), // instanceDescriptors
+        t.nullLiteral(), // staticDescriptors
+        t.nullLiteral(), // instanceInitializers
+        t.nullLiteral(), // staticInitializers
       ];
 
       if (instanceProps) args[1] = instanceProps;
@@ -349,7 +358,7 @@ export default class ClassTransformer {
 
       let lastNonNullIndex = 0;
       for (let i = 0; i < args.length; i++) {
-        if (args[i] !== nullNode) lastNonNullIndex = i;
+        if (!t.isNullLiteral(args[i])) lastNonNullIndex = i;
       }
       args = args.slice(0, lastNonNullIndex + 1);
 
@@ -384,12 +393,12 @@ export default class ClassTransformer {
         // special case single arguments spread
         bareSuperNode.arguments[1] = bareSuperNode.arguments[1].argument;
         bareSuperNode.callee = t.memberExpression(
-          superRef,
+          t.cloneNode(superRef),
           t.identifier("apply"),
         );
       } else {
         bareSuperNode.callee = t.memberExpression(
-          superRef,
+          t.cloneNode(superRef),
           t.identifier("call"),
         );
       }
@@ -397,13 +406,16 @@ export default class ClassTransformer {
       bareSuperNode = optimiseCall(
         t.logicalExpression(
           "||",
-          t.memberExpression(this.classRef, t.identifier("__proto__")),
+          t.memberExpression(
+            t.cloneNode(this.classRef),
+            t.identifier("__proto__"),
+          ),
           t.callExpression(
             t.memberExpression(
               t.identifier("Object"),
               t.identifier("getPrototypeOf"),
             ),
-            [this.classRef],
+            [t.cloneNode(this.classRef)],
           ),
         ),
         t.thisExpression(),
@@ -446,10 +458,6 @@ export default class ClassTransformer {
     const path = this.userConstructorPath;
     const body = path.get("body");
 
-    if (!this.hasBareSuper && !this.superReturns.length) {
-      throw path.buildCodeFrameError("missing super() call in constructor");
-    }
-
     path.traverse(findThisesVisitor, this);
 
     let guaranteedSuperBeforeFinish = !!this.bareSupers.length;
@@ -457,7 +465,7 @@ export default class ClassTransformer {
     const superRef = this.superName || t.identifier("Function");
     let thisRef = function() {
       const ref = path.scope.generateDeclaredUidIdentifier("this");
-      thisRef = () => ref;
+      thisRef = () => t.cloneNode(ref);
       return ref;
     };
 
@@ -471,7 +479,11 @@ export default class ClassTransformer {
             return true;
           }
 
-          if (parentPath.isLoop() || parentPath.isConditional()) {
+          if (
+            parentPath.isLoop() ||
+            parentPath.isConditional() ||
+            parentPath.isArrowFunctionExpression()
+          ) {
             guaranteedSuperBeforeFinish = false;
             return true;
           }
@@ -487,9 +499,13 @@ export default class ClassTransformer {
 
     if (this.isLoose) {
       wrapReturn = returnArg => {
+        const thisExpr = t.callExpression(
+          this.file.addHelper("assertThisInitialized"),
+          [thisRef()],
+        );
         return returnArg
-          ? t.logicalExpression("||", returnArg, thisRef())
-          : thisRef();
+          ? t.logicalExpression("||", returnArg, thisExpr)
+          : thisExpr;
       };
     } else {
       wrapReturn = returnArg =>
@@ -502,7 +518,7 @@ export default class ClassTransformer {
     // if we have a return as the last node in the body then we've already caught that
     // return
     const bodyPaths = body.get("body");
-    if (bodyPaths.length && !bodyPaths.pop().isReturnStatement()) {
+    if (!bodyPaths.length || !bodyPaths.pop().isReturnStatement()) {
       body.pushContainer(
         "body",
         t.returnStatement(
@@ -600,7 +616,7 @@ export default class ClassTransformer {
           this.isLoose
             ? this.file.addHelper("inheritsLoose")
             : this.file.addHelper("inherits"),
-          [this.classRef, this.superName],
+          [t.cloneNode(this.classRef), t.cloneNode(this.superName)],
         ),
       ),
     );

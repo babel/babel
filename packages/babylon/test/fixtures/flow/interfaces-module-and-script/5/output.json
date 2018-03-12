@@ -1,0 +1,206 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 65,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 65
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 65,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 65
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "InterfaceDeclaration",
+        "start": 0,
+        "end": 65,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 65
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 10,
+          "end": 20,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 20
+            },
+            "identifierName": "Dictionary"
+          },
+          "name": "Dictionary"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 21,
+          "end": 65,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 21
+            },
+            "end": {
+              "line": 1,
+              "column": 65
+            }
+          },
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start": 48,
+              "end": 62,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 48
+                },
+                "end": {
+                  "line": 1,
+                  "column": 62
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 48,
+                "end": 54,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 48
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 54
+                  },
+                  "identifierName": "length"
+                },
+                "name": "length"
+              },
+              "static": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "NumberTypeAnnotation",
+                "start": 56,
+                "end": 62,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 56
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 62
+                  }
+                }
+              },
+              "variance": null,
+              "optional": false
+            }
+          ],
+          "indexers": [
+            {
+              "type": "ObjectTypeIndexer",
+              "start": 23,
+              "end": 46,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 23
+                },
+                "end": {
+                  "line": 1,
+                  "column": 46
+                }
+              },
+              "static": false,
+              "id": {
+                "type": "Identifier",
+                "start": 24,
+                "end": 29,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 24
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 29
+                  },
+                  "identifierName": "index"
+                },
+                "name": "index"
+              },
+              "key": {
+                "type": "StringTypeAnnotation",
+                "start": 31,
+                "end": 37,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 31
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 37
+                  }
+                }
+              },
+              "value": {
+                "type": "StringTypeAnnotation",
+                "start": 40,
+                "end": 46,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 40
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 46
+                  }
+                }
+              },
+              "variance": null
+            }
+          ],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

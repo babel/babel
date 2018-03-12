@@ -1,0 +1,237 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 36,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 36
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 36,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 36
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 36,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 36
+          }
+        },
+        "expression": {
+          "type": "CallExpression",
+          "start": 0,
+          "end": 36,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 36
+            }
+          },
+          "callee": {
+            "type": "Identifier",
+            "start": 0,
+            "end": 1,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 1
+              },
+              "identifierName": "f"
+            },
+            "name": "f"
+          },
+          "arguments": [
+            {
+              "type": "Identifier",
+              "start": 2,
+              "end": 3,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 2
+                },
+                "end": {
+                  "line": 1,
+                  "column": 3
+                },
+                "identifierName": "a"
+              },
+              "name": "a"
+            },
+            {
+              "type": "ArrowFunctionExpression",
+              "start": 5,
+              "end": 32,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 5
+                },
+                "end": {
+                  "line": 1,
+                  "column": 32
+                }
+              },
+              "id": null,
+              "generator": false,
+              "async": true,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 11,
+                  "end": 12,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 12
+                    },
+                    "identifierName": "x"
+                  },
+                  "name": "x"
+                },
+                {
+                  "type": "Identifier",
+                  "start": 14,
+                  "end": 15,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 15
+                    },
+                    "identifierName": "y"
+                  },
+                  "name": "y"
+                }
+              ],
+              "body": {
+                "type": "AwaitExpression",
+                "start": 20,
+                "end": 32,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 20
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 32
+                  }
+                },
+                "argument": {
+                  "type": "ArrayExpression",
+                  "start": 26,
+                  "end": 32,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 26
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 32
+                    }
+                  },
+                  "elements": [
+                    {
+                      "type": "Identifier",
+                      "start": 27,
+                      "end": 28,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 27
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 28
+                        },
+                        "identifierName": "x"
+                      },
+                      "name": "x"
+                    },
+                    {
+                      "type": "Identifier",
+                      "start": 30,
+                      "end": 31,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 30
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 31
+                        },
+                        "identifierName": "y"
+                      },
+                      "name": "y"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "type": "Identifier",
+              "start": 34,
+              "end": 35,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 34
+                },
+                "end": {
+                  "line": 1,
+                  "column": 35
+                },
+                "identifierName": "b"
+              },
+              "name": "b"
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,6 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxPipelineOperator from "@babel/plugin-syntax-pipeline-operator";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     inherits: syntaxPipelineOperator,
 
@@ -13,7 +17,10 @@ export default function({ types: t }) {
         if (operator !== "|>") return;
 
         let optimizeArrow =
-          t.isArrowFunctionExpression(right) && t.isExpression(right.body);
+          t.isArrowFunctionExpression(right) &&
+          t.isExpression(right.body) &&
+          !right.async &&
+          !right.generator;
         let param;
 
         if (optimizeArrow) {
@@ -43,14 +50,14 @@ export default function({ types: t }) {
 
         const call = optimizeArrow
           ? right.body
-          : t.callExpression(right, [placeholder]);
+          : t.callExpression(right, [t.cloneNode(placeholder)]);
         path.replaceWith(
           t.sequenceExpression([
-            t.assignmentExpression("=", placeholder, left),
+            t.assignmentExpression("=", t.cloneNode(placeholder), left),
             call,
           ]),
         );
       },
     },
   };
-}
+});

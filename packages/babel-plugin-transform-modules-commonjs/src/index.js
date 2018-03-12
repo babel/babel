@@ -1,3 +1,4 @@
+import { declare } from "@babel/helper-plugin-utils";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
@@ -7,21 +8,36 @@ import {
   wrapInterop,
 } from "@babel/helper-module-transforms";
 import simplifyAccess from "@babel/helper-simple-access";
+import { template, types as t } from "@babel/core";
 
-export default function({ types: t, template }, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const {
     loose,
     allowTopLevelThis,
     strict,
     strictMode,
     noInterop,
-
+    lazy = false,
     // Defaulting to 'true' for now. May change before 7.x major.
     allowCommonJSExports = true,
   } = options;
+
+  if (
+    typeof lazy !== "boolean" &&
+    typeof lazy !== "function" &&
+    (!Array.isArray(lazy) || !lazy.every(item => typeof item === "string"))
+  ) {
+    throw new Error(`.lazy must be a boolean, array of strings, or a function`);
+  }
+
   const getAssertion = localName => template.expression.ast`
     (function(){
-      throw new Error("The CommonJS '" + "${localName}" + "' variable is not available in ES6 modules.");
+      throw new Error(
+        "The CommonJS '" + "${localName}" + "' variable is not available in ES6 modules." +
+        "Consider setting setting sourceType:script or sourceType:unambiguous in your " +
+        "Babel config for this file.");
     })()
   `;
 
@@ -88,9 +104,7 @@ export default function({ types: t, template }, options) {
     visitor: {
       Program: {
         exit(path) {
-          // For now this requires unambiguous rather that just sourceType
-          // because Babel currently parses all files as sourceType:module.
-          if (!isModule(path, true /* requireUnambiguous */)) return;
+          if (!isModule(path)) return;
 
           // Rename the bindings auto-injected into the scope so there is no
           // risk of conflict between the bindings.
@@ -113,17 +127,18 @@ export default function({ types: t, template }, options) {
           let moduleName = this.getModuleName();
           if (moduleName) moduleName = t.stringLiteral(moduleName);
 
-          const {
-            meta,
-            headers,
-          } = rewriteModuleStatementsAndPrepareHeader(path, {
-            exportName: "exports",
-            loose,
-            strict,
-            strictMode,
-            allowTopLevelThis,
-            noInterop,
-          });
+          const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
+            path,
+            {
+              exportName: "exports",
+              loose,
+              strict,
+              strictMode,
+              allowTopLevelThis,
+              noInterop,
+              lazy,
+            },
+          );
 
           for (const [source, metadata] of meta.source) {
             const loadExpr = t.callExpression(t.identifier("require"), [
@@ -132,19 +147,33 @@ export default function({ types: t, template }, options) {
 
             let header;
             if (isSideEffectImport(metadata)) {
+              if (metadata.lazy) throw new Error("Assertion failure");
+
               header = t.expressionStatement(loadExpr);
             } else {
-              header = t.variableDeclaration("var", [
-                t.variableDeclarator(
-                  t.identifier(metadata.name),
-                  wrapInterop(path, loadExpr, metadata.interop) || loadExpr,
-                ),
-              ]);
+              const init =
+                wrapInterop(path, loadExpr, metadata.interop) || loadExpr;
+
+              if (metadata.lazy) {
+                header = template.ast`
+                  function ${metadata.name}() {
+                    const data = ${init};
+                    ${metadata.name} = function(){ return data; };
+                    return data;
+                  }
+                `;
+              } else {
+                header = template.ast`
+                  var ${metadata.name} = ${init};
+                `;
+              }
             }
             header.loc = metadata.loc;
 
             headers.push(header);
-            headers.push(...buildNamespaceInitStatements(meta, metadata));
+            headers.push(
+              ...buildNamespaceInitStatements(meta, metadata, loose),
+            );
           }
 
           ensureStatementsHoisted(headers);
@@ -153,4 +182,4 @@ export default function({ types: t, template }, options) {
       },
     },
   };
-}
+});

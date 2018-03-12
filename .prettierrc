@@ -1,0 +1,23 @@
+{
+  "arrowParens": "avoid",
+  "trailingComma": "es5",
+  "useTabs": false,
+  "semi": true,
+  "singleQuote": false,
+  "bracketSpacing": true,
+  "jsxBracketSameLine": false,
+  "tabWidth": 2,
+  "parser": "babylon",
+  "printWidth": 80,
+  "overrides": [{
+    "files": [
+      "**/codemods/*/src/**/*.js",
+      "**/codemods/*/test/**/*.js",
+      "**/packages/*/src/**/*.js",
+      "**/packages/*/test/**/*.js"
+    ],
+    "options": {
+      "trailingComma": "all"
+    }
+  }]
+}

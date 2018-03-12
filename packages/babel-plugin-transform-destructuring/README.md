@@ -34,20 +34,20 @@ npm install --save-dev @babel/plugin-transform-destructuring
 
 ```json
 {
-  "plugins": ["@babel/transform-destructuring"]
+  "plugins": ["@babel/plugin-transform-destructuring"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-destructuring script.js
+babel --plugins @babel/plugin-transform-destructuring script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-destructuring"]
+  plugins: ["@babel/plugin-transform-destructuring"]
 });
 ```

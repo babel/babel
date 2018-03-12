@@ -101,9 +101,10 @@ export function unwrapFunctionEnvironment() {
 /**
  * Convert a given arrow function into a normal ES5 function expression.
  */
-export function arrowFunctionToExpression(
-  { allowInsertArrow = true, specCompliant = false } = {},
-) {
+export function arrowFunctionToExpression({
+  allowInsertArrow = true,
+  specCompliant = false,
+} = {}) {
   if (!this.isArrowFunctionExpression()) {
     throw this.buildCodeFrameError(
       "Cannot convert non-arrow function to a function expression.",
@@ -144,7 +145,7 @@ export function arrowFunctionToExpression(
     this.replaceWith(
       t.callExpression(
         t.memberExpression(
-          nameFunction(this) || this.node,
+          nameFunction(this, true) || this.node,
           t.identifier("bind"),
         ),
         [checkBinding ? t.identifier(checkBinding.name) : t.thisExpression()],
@@ -207,9 +208,12 @@ function hoistFunctionEnvironment(
       },
     });
     const superBinding = getSuperBinding(thisEnvFn);
-    allSuperCalls.forEach(superCall =>
-      superCall.get("callee").replaceWith(t.identifier(superBinding)),
-    );
+    allSuperCalls.forEach(superCall => {
+      const callee = t.identifier(superBinding);
+      callee.loc = superCall.node.callee.loc;
+
+      superCall.get("callee").replaceWith(callee);
+    });
   }
 
   // Convert all "this" references in the arrow to point at the alias.
@@ -224,11 +228,12 @@ function hoistFunctionEnvironment(
       (inConstructor && hasSuperClass(thisEnvFn))
     ) {
       thisPaths.forEach(thisChild => {
-        thisChild.replaceWith(
-          thisChild.isJSX()
-            ? t.jSXIdentifier(thisBinding)
-            : t.identifier(thisBinding),
-        );
+        const thisRef = thisChild.isJSX()
+          ? t.jsxIdentifier(thisBinding)
+          : t.identifier(thisBinding);
+
+        thisRef.loc = thisChild.node.loc;
+        thisChild.replaceWith(thisRef);
       });
 
       if (specCompliant) thisBinding = null;
@@ -242,7 +247,10 @@ function hoistFunctionEnvironment(
     );
 
     argumentsPaths.forEach(argumentsChild => {
-      argumentsChild.replaceWith(t.identifier(argumentsBinding));
+      const argsRef = t.identifier(argumentsBinding);
+      argsRef.loc = argumentsChild.node.loc;
+
+      argumentsChild.replaceWith(argsRef);
     });
   }
 
@@ -252,8 +260,11 @@ function hoistFunctionEnvironment(
       t.metaProperty(t.identifier("new"), t.identifier("target")),
     );
 
-    newTargetPaths.forEach(argumentsChild => {
-      argumentsChild.replaceWith(t.identifier(newTargetBinding));
+    newTargetPaths.forEach(targetChild => {
+      const targetRef = t.identifier(newTargetBinding);
+      targetRef.loc = targetChild.node.loc;
+
+      targetChild.replaceWith(targetRef);
     });
   }
 

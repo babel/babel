@@ -24,7 +24,7 @@ export default function rewriteLiveReferences(
       imported.set(localName, [source, importName, null]);
     }
     for (const localName of data.importsNamespace) {
-      imported.set(localName, [null, null, localName]);
+      imported.set(localName, [source, null, localName]);
     }
   }
 
@@ -60,12 +60,18 @@ export default function rewriteLiveReferences(
     scope: programPath.scope,
     imported, // local / import
     exported, // local name => exported name list
-    buildImportReference: ([source, importName, localName]) => {
-      if (localName) return null;
+    buildImportReference: ([source, importName, localName], identNode) => {
+      const meta = metadata.source.get(source);
 
-      const name = metadata.source.get(source).name;
+      if (localName) {
+        if (meta.lazy) identNode = t.callExpression(identNode, []);
+        return identNode;
+      }
 
-      return t.memberExpression(t.identifier(name), t.identifier(importName));
+      let namespace = t.identifier(meta.name);
+      if (meta.lazy) namespace = t.callExpression(namespace, []);
+
+      return t.memberExpression(namespace, t.identifier(importName));
     },
   });
 }
@@ -106,6 +112,7 @@ const rewriteBindingInitVisitor = {
 
     Object.keys(path.getOuterBindingIdentifiers()).forEach(localName => {
       const exportNames = exported.get(localName) || [];
+
       if (exportNames.length > 0) {
         const statement = t.expressionStatement(
           buildBindingExportAssignmentExpression(
@@ -172,9 +179,15 @@ const rewriteReferencesVisitor = {
 
     const importData = imported.get(localName);
     if (importData) {
-      const ref = buildImportReference(importData) || path.node;
+      const ref = buildImportReference(importData, path.node);
 
-      if (path.parentPath.isCallExpression({ callee: path.node })) {
+      // Preserve the binding location so that sourcemaps are nicer.
+      ref.loc = path.node.loc;
+
+      if (
+        path.parentPath.isCallExpression({ callee: path.node }) &&
+        t.isMemberExpression(ref)
+      ) {
         path.replaceWith(t.sequenceExpression([t.numericLiteral(0), ref]));
       } else if (path.isJSXIdentifier() && t.isMemberExpression(ref)) {
         const { object, property } = ref;
@@ -189,6 +202,10 @@ const rewriteReferencesVisitor = {
       }
 
       requeueInParent(path);
+
+      // The path could have been replaced with an identifier that would
+      // otherwise be re-visited, so we skip processing its children.
+      path.skip();
     }
   },
 
@@ -225,8 +242,7 @@ const rewriteReferencesVisitor = {
           const assignment = path.node;
 
           if (importData) {
-            assignment.left =
-              buildImportReference(importData) || assignment.left;
+            assignment.left = buildImportReference(importData, assignment.left);
 
             assignment.right = t.sequenceExpression([
               assignment.right,

@@ -1,0 +1,21 @@
+@babel/preset-env: `DEBUG` option
+
+Using targets:
+{
+  "node": "6"
+}
+
+Using modules transform: commonjs
+
+Using plugins:
+  transform-destructuring { "node":"6" }
+  transform-for-of { "node":"6" }
+  transform-function-name { "node":"6" }
+  transform-exponentiation-operator { "node":"6" }
+  transform-async-to-generator { "node":"6" }
+  transform-dotall-regex { "node":"6" }
+
+Using polyfills with `entry` option:
+
+[src/in.js] `import '@babel/polyfill'` was not found.
+🎉  Successfully compiled 1 file with Babel.

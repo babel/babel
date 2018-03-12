@@ -9,27 +9,28 @@ import fs from "fs";
 import path from "path";
 
 const maps = {};
-const transformOpts = {};
+let transformOpts = {};
 let piratesRevert = null;
 
-sourceMapSupport.install({
-  handleUncaughtExceptions: false,
-  environment: "node",
-  retrieveSourceMap(source) {
-    const map = maps && maps[source];
-    if (map) {
-      return {
-        url: null,
-        map: map,
-      };
-    } else {
-      return null;
-    }
-  },
-});
+function installSourceMapSupport() {
+  sourceMapSupport.install({
+    handleUncaughtExceptions: false,
+    environment: "node",
+    retrieveSourceMap(source) {
+      const map = maps && maps[source];
+      if (map) {
+        return {
+          url: null,
+          map: map,
+        };
+      } else {
+        return null;
+      }
+    },
+  });
+}
 
-registerCache.load();
-let cache = registerCache.get();
+let cache;
 
 function mtime(filename) {
   return +fs.statSync(filename).mtime;
@@ -61,23 +62,23 @@ function compile(code, filename) {
     }
   }
 
-  const result = babel.transform(
-    code,
-    Object.assign(opts, {
-      // Do not process config files since has already been done with the OptionManager
-      // calls above and would introduce duplicates.
-      babelrc: false,
-      sourceMaps: "both",
-      ast: false,
-    }),
-  );
+  const result = babel.transform(code, {
+    ...opts,
+    sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
+    ast: false,
+  });
 
   if (cache) {
     cache[cacheKey] = result;
     result.mtime = mtime(filename);
   }
 
-  maps[filename] = result.map;
+  if (result.map) {
+    if (Object.keys(maps).length === 0) {
+      installSourceMapSupport();
+    }
+    maps[filename] = result.map;
+  }
 
   return result.code;
 }
@@ -101,23 +102,35 @@ export default function register(opts?: Object = {}) {
   opts = Object.assign({}, opts);
   if (opts.extensions) hookExtensions(opts.extensions);
 
-  if (opts.cache === false) cache = null;
+  if (opts.cache === false && cache) {
+    registerCache.clear();
+    cache = null;
+  } else if (opts.cache !== false && !cache) {
+    registerCache.load();
+    cache = registerCache.get();
+  }
 
   delete opts.extensions;
   delete opts.cache;
 
-  Object.assign(transformOpts, opts);
+  transformOpts = Object.assign({}, opts);
 
-  if (!transformOpts.ignore && !transformOpts.only) {
+  let { cwd = "." } = transformOpts;
+
+  // Ensure that the working directory is resolved up front so that
+  // things don't break if it changes later.
+  cwd = transformOpts.cwd = path.resolve(cwd);
+
+  if (transformOpts.ignore === undefined && transformOpts.only === undefined) {
     transformOpts.only = [
       // Only compile things inside the current working directory.
-      new RegExp("^" + escapeRegExp(process.cwd()), "i"),
+      new RegExp("^" + escapeRegExp(cwd), "i"),
     ];
     transformOpts.ignore = [
       // Ignore any node_modules inside the current working directory.
       new RegExp(
         "^" +
-          escapeRegExp(process.cwd()) +
+          escapeRegExp(cwd) +
           "(?:" +
           path.sep +
           ".*)?" +

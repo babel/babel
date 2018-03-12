@@ -1,16 +1,22 @@
 // @flow
 import fs from "fs";
 
-import loadConfig from "./config";
-import runTransform, { type FileResult } from "./transformation";
+import loadConfig, { type InputOptions } from "./config";
+import { runSync, type FileResult } from "./transformation";
 
 export default function transformFileSync(
   filename: string,
-  opts?: Object = {},
+  opts: ?InputOptions,
 ): FileResult | null {
-  opts.filename = filename;
-  const config = loadConfig(opts);
+  let options;
+  if (opts == null) {
+    options = { filename };
+  } else if (opts && typeof opts === "object") {
+    options = Object.assign({}, opts, { filename });
+  }
+
+  const config = loadConfig(options);
   if (config === null) return null;
 
-  return runTransform(config, fs.readFileSync(filename, "utf8"));
+  return runSync(config, fs.readFileSync(filename, "utf8"));
 }

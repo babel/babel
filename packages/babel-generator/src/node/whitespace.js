@@ -1,4 +1,3 @@
-import map from "lodash/map";
 import * as t from "@babel/types";
 
 type WhitespaceObject = {
@@ -220,7 +219,7 @@ export const list = {
    */
 
   VariableDeclaration(node: Object): Array<Object> {
-    return map(node.declarations, "init");
+    return node.declarations.map(decl => decl.init);
   },
 
   /**

@@ -4,6 +4,7 @@
     "--out-dir", "lib",
     "--copy-files",
     "--include-dotfiles",
-    "--only", "src/foo"
+    "--only", "src/foo",
+    "--verbose"
   ]
 }

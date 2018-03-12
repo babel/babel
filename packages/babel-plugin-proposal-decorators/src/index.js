@@ -1,7 +1,8 @@
 // Fork of https://github.com/loganfsmyth/babel-plugin-proposal-decorators-legacy
 
-import template from "@babel/template";
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
+import { template, types as t } from "@babel/core";
 
 const buildClassDecorator = template(`
   DECORATOR(CLASS_REF = INNER) || CLASS_REF;
@@ -26,115 +27,10 @@ const buildGetObjectInitializer = template(`
     })
 `);
 
-const buildInitializerWarningHelper = template(`
-    function NAME(descriptor, context){
-        throw new Error(
-          'Decorating class property failed. Please ensure that ' +
-          'proposal-class-properties is enabled and set to use loose mode. ' +
-          'To use proposal-class-properties in spec mode with decorators, wait for ' +
-          'the next major version of decorators in stage 2.'
-        );
-    }
-`);
+export default declare(api => {
+  api.assertVersion(7);
 
-const buildInitializerDefineProperty = template(`
-    function NAME(target, property, descriptor, context){
-        if (!descriptor) return;
-
-        Object.defineProperty(target, property, {
-            enumerable: descriptor.enumerable,
-            configurable: descriptor.configurable,
-            writable: descriptor.writable,
-            value: descriptor.initializer ? descriptor.initializer.call(context) : void 0,
-        });
-    }
-`);
-
-const buildApplyDecoratedDescriptor = template(`
-    function NAME(target, property, decorators, descriptor, context){
-        var desc = {};
-        Object['ke' + 'ys'](descriptor).forEach(function(key){
-            desc[key] = descriptor[key];
-        });
-        desc.enumerable = !!desc.enumerable;
-        desc.configurable = !!desc.configurable;
-        if ('value' in desc || desc.initializer){
-            desc.writable = true;
-        }
-
-        desc = decorators.slice().reverse().reduce(function(desc, decorator){
-            return decorator(target, property, desc) || desc;
-        }, desc);
-
-        if (context && desc.initializer !== void 0){
-            desc.value = desc.initializer ? desc.initializer.call(context) : void 0;
-            desc.initializer = undefined;
-        }
-
-        if (desc.initializer === void 0){
-            // This is a hack to avoid this being processed by 'transform-runtime'.
-            // See issue #9.
-            Object['define' + 'Property'](target, property, desc);
-            desc = null;
-        }
-
-        return desc;
-    }
-`);
-
-export default function({ types: t }) {
-  /**
-   * Add a helper to take an initial descriptor, apply some decorators to it, and optionally
-   * define the property.
-   */
-  function ensureApplyDecoratedDescriptorHelper(path, state) {
-    if (!state.applyDecoratedDescriptor) {
-      state.applyDecoratedDescriptor = path.scope.generateUidIdentifier(
-        "applyDecoratedDescriptor",
-      );
-      const helper = buildApplyDecoratedDescriptor({
-        NAME: state.applyDecoratedDescriptor,
-      });
-      path.scope.getProgramParent().path.unshiftContainer("body", helper);
-    }
-
-    return state.applyDecoratedDescriptor;
-  }
-
-  /**
-   * Add a helper to call as a replacement for class property definition.
-   */
-  function ensureInitializerDefineProp(path, state) {
-    if (!state.initializerDefineProp) {
-      state.initializerDefineProp = path.scope.generateUidIdentifier(
-        "initDefineProp",
-      );
-      const helper = buildInitializerDefineProperty({
-        NAME: state.initializerDefineProp,
-      });
-      path.scope.getProgramParent().path.unshiftContainer("body", helper);
-    }
-
-    return state.initializerDefineProp;
-  }
-
-  /**
-   * Add a helper that will throw a useful error if the transform fails to detect the class
-   * property assignment, so users know something failed.
-   */
-  function ensureInitializerWarning(path, state) {
-    if (!state.initializerWarningHelper) {
-      state.initializerWarningHelper = path.scope.generateUidIdentifier(
-        "initializerWarningHelper",
-      );
-      const helper = buildInitializerWarningHelper({
-        NAME: state.initializerWarningHelper,
-      });
-      path.scope.getProgramParent().path.unshiftContainer("body", helper);
-    }
-
-    return state.initializerWarningHelper;
-  }
+  const WARNING_CALLS = new WeakSet();
 
   /**
    * If the decorator expressions are non-identifiers, hoist them to before the class so we can be sure
@@ -170,10 +66,10 @@ export default function({ types: t }) {
    * with the proper decorated behavior.
    */
   function applyClassDecorators(classPath) {
+    if (!hasClassDecorators(classPath.node)) return;
+
     const decorators = classPath.node.decorators || [];
     classPath.node.decorators = null;
-
-    if (decorators.length === 0) return;
 
     const name = classPath.scope.generateDeclaredUidIdentifier("class");
 
@@ -182,11 +78,15 @@ export default function({ types: t }) {
       .reverse()
       .reduce(function(acc, decorator) {
         return buildClassDecorator({
-          CLASS_REF: name,
-          DECORATOR: decorator,
+          CLASS_REF: t.cloneNode(name),
+          DECORATOR: t.cloneNode(decorator),
           INNER: acc,
         }).expression;
       }, classPath.node);
+  }
+
+  function hasClassDecorators(classNode) {
+    return !!(classNode.decorators && classNode.decorators.length);
   }
 
   /**
@@ -194,13 +94,13 @@ export default function({ types: t }) {
    * with the proper decorated behavior.
    */
   function applyMethodDecorators(path, state) {
-    const hasMethodDecorators = path.node.body.body.some(function(node) {
-      return (node.decorators || []).length > 0;
-    });
-
-    if (!hasMethodDecorators) return;
+    if (!hasMethodDecorators(path.node.body.body)) return;
 
     return applyTargetDecorators(path, state, path.node.body.body);
+  }
+
+  function hasMethodDecorators(body) {
+    return body.some(node => node.decorators && node.decorators.length);
   }
 
   /**
@@ -208,11 +108,7 @@ export default function({ types: t }) {
    * with the proper decorated behavior.
    */
   function applyObjectDecorators(path, state) {
-    const hasMethodDecorators = path.node.properties.some(function(node) {
-      return (node.decorators || []).length > 0;
-    });
-
-    if (!hasMethodDecorators) return;
+    if (!hasMethodDecorators(path.node.properties)) return;
 
     return applyTargetDecorators(path, state, path.node.properties);
   }
@@ -260,50 +156,54 @@ export default function({ types: t }) {
               t.blockStatement([t.returnStatement(node.value)]),
             )
           : t.nullLiteral();
-        node.value = t.callExpression(ensureInitializerWarning(path, state), [
-          descriptor,
-          t.thisExpression(),
-        ]);
+
+        node.value = t.callExpression(
+          state.addHelper("initializerWarningHelper"),
+          [descriptor, t.thisExpression()],
+        );
+
+        WARNING_CALLS.add(node.value);
 
         acc = acc.concat([
           t.assignmentExpression(
             "=",
             descriptor,
-            t.callExpression(
-              ensureApplyDecoratedDescriptorHelper(path, state),
-              [
-                target,
-                property,
-                t.arrayExpression(decorators.map(dec => dec.expression)),
-                t.objectExpression([
-                  t.objectProperty(
-                    t.identifier("enumerable"),
-                    t.booleanLiteral(true),
-                  ),
-                  t.objectProperty(t.identifier("initializer"), initializer),
-                ]),
-              ],
-            ),
+            t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
+              t.cloneNode(target),
+              t.cloneNode(property),
+              t.arrayExpression(
+                decorators.map(dec => t.cloneNode(dec.expression)),
+              ),
+              t.objectExpression([
+                t.objectProperty(
+                  t.identifier("enumerable"),
+                  t.booleanLiteral(true),
+                ),
+                t.objectProperty(t.identifier("initializer"), initializer),
+              ]),
+            ]),
           ),
         ]);
       } else {
         acc = acc.concat(
-          t.callExpression(ensureApplyDecoratedDescriptorHelper(path, state), [
-            target,
-            property,
-            t.arrayExpression(decorators.map(dec => dec.expression)),
+          t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
+            t.cloneNode(target),
+            t.cloneNode(property),
+            t.arrayExpression(
+              decorators.map(dec => t.cloneNode(dec.expression)),
+            ),
             t.isObjectProperty(node) ||
             t.isClassProperty(node, { static: true })
               ? buildGetObjectInitializer({
                   TEMP: path.scope.generateDeclaredUidIdentifier("init"),
-                  TARGET: target,
-                  PROPERTY: property,
+                  TARGET: t.cloneNode(target),
+                  PROPERTY: t.cloneNode(property),
                 }).expression
               : buildGetDescriptor({
-                  TARGET: target,
-                  PROPERTY: property,
+                  TARGET: t.cloneNode(target),
+                  PROPERTY: t.cloneNode(property),
                 }).expression,
-            target,
+            t.cloneNode(target),
           ]),
         );
       }
@@ -312,9 +212,9 @@ export default function({ types: t }) {
     }, []);
 
     return t.sequenceExpression([
-      t.assignmentExpression("=", name, path.node),
+      t.assignmentExpression("=", t.cloneNode(name), path.node),
       t.sequenceExpression(exprs),
-      name,
+      t.cloneNode(name),
     ]);
   }
 
@@ -322,32 +222,31 @@ export default function({ types: t }) {
     inherits: syntaxDecorators,
 
     visitor: {
-      ExportDefaultDeclaration(path) {
-        if (!path.get("declaration").isClassDeclaration()) return;
-
-        const { node } = path;
-        const ref =
-          node.declaration.id || path.scope.generateUidIdentifier("default");
-        node.declaration.id = ref;
-
-        // Split the class declaration and the export into two separate statements.
-        path.replaceWith(node.declaration);
-        path.insertAfter(
-          t.exportNamedDeclaration(null, [
-            t.exportSpecifier(ref, t.identifier("default")),
-          ]),
-        );
-      },
       ClassDeclaration(path) {
         const { node } = path;
 
-        const ref = node.id || path.scope.generateUidIdentifier("class");
+        if (!hasClassDecorators(node) && !hasMethodDecorators(node.body.body)) {
+          return;
+        }
 
-        path.replaceWith(
-          t.variableDeclaration("let", [
-            t.variableDeclarator(ref, t.toExpression(node)),
-          ]),
-        );
+        const ref = node.id
+          ? t.cloneNode(node.id)
+          : path.scope.generateUidIdentifier("class");
+        const letDeclaration = t.variableDeclaration("let", [
+          t.variableDeclarator(ref, t.toExpression(node)),
+        ]);
+
+        if (path.parentPath.isExportDefaultDeclaration()) {
+          // Split the class declaration and the export into two separate statements.
+          path.parentPath.replaceWithMultiple([
+            letDeclaration,
+            t.exportNamedDeclaration(null, [
+              t.exportSpecifier(t.cloneNode(ref), t.identifier("default")),
+            ]),
+          ]);
+        } else {
+          path.replaceWith(letDeclaration);
+        }
       },
       ClassExpression(path, state) {
         // Create a replacement for the class node if there is one. We do one pass to replace classes with
@@ -367,28 +266,17 @@ export default function({ types: t }) {
       },
 
       AssignmentExpression(path, state) {
-        if (!state.initializerWarningHelper) return;
-
-        if (!path.get("left").isMemberExpression()) return;
-        if (!path.get("left.property").isIdentifier()) return;
-        if (!path.get("right").isCallExpression()) return;
-        if (
-          !path
-            .get("right.callee")
-            .isIdentifier({ name: state.initializerWarningHelper.name })
-        ) {
-          return;
-        }
+        if (!WARNING_CALLS.has(path.node.right)) return;
 
         path.replaceWith(
-          t.callExpression(ensureInitializerDefineProp(path, state), [
-            path.get("left.object").node,
+          t.callExpression(state.addHelper("initializerDefineProperty"), [
+            t.cloneNode(path.get("left.object").node),
             t.stringLiteral(path.get("left.property").node.name),
-            path.get("right.arguments")[0].node,
-            path.get("right.arguments")[1].node,
+            t.cloneNode(path.get("right.arguments")[0].node),
+            t.cloneNode(path.get("right.arguments")[1].node),
           ]),
         );
       },
     },
   };
-}
+});

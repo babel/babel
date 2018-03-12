@@ -1,6 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import path from "path";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default declare(api => {
+  api.assertVersion(7);
+
   function addDisplayName(id, call) {
     const props = call.arguments[0].properties;
     let safe = true;
@@ -52,14 +56,13 @@ export default function({ types: t }) {
     visitor: {
       ExportDefaultDeclaration({ node }, state) {
         if (isCreateClass(node.declaration)) {
-          let displayName = path.basename(
-            state.file.opts.filename,
-            path.extname(state.file.opts.filename),
-          );
+          const filename = state.filename || "unknown";
+
+          let displayName = path.basename(filename, path.extname(filename));
 
           // ./{module name}/index.js
           if (displayName === "index") {
-            displayName = path.basename(path.dirname(state.file.opts.filename));
+            displayName = path.basename(path.dirname(filename));
           }
 
           addDisplayName(displayName, node.declaration);
@@ -104,4 +107,4 @@ export default function({ types: t }) {
       },
     },
   };
-}
+});

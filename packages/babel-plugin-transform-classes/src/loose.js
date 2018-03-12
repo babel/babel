@@ -1,6 +1,6 @@
 import nameFunction from "@babel/helper-function-name";
 import VanillaTransformer from "./vanilla";
-import * as t from "@babel/types";
+import { types as t } from "@babel/core";
 
 export default class LooseClassTransformer extends VanillaTransformer {
   constructor() {
@@ -34,7 +34,7 @@ export default class LooseClassTransformer extends VanillaTransformer {
         classRef = this._protoAlias;
       }
       const methodName = t.memberExpression(
-        classRef,
+        t.cloneNode(classRef),
         node.key,
         node.computed || t.isLiteral(node.key),
       );

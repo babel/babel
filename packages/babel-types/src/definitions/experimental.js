@@ -1,9 +1,10 @@
+// @flow
 import defineType, {
   assertEach,
   assertNodeType,
   assertValueType,
   chain,
-} from "./index";
+} from "./utils";
 import { classMethodOrPropertyCommon } from "./es2015";
 
 defineType("AwaitExpression", {
@@ -35,6 +36,10 @@ defineType("ClassProperty", {
       validate: assertNodeType("Expression"),
       optional: true,
     },
+    definite: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
     typeAnnotation: {
       validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
       optional: true,
@@ -48,6 +53,63 @@ defineType("ClassProperty", {
     },
     readonly: {
       validate: assertValueType("boolean"),
+      optional: true,
+    },
+  },
+});
+
+defineType("OptionalMemberExpression", {
+  builder: ["object", "property", "computed", "optional"],
+  visitor: ["object", "property"],
+  aliases: ["Expression"],
+  fields: {
+    object: {
+      validate: assertNodeType("Expression"),
+    },
+    property: {
+      validate: (function() {
+        const normal = assertNodeType("Identifier");
+        const computed = assertNodeType("Expression");
+
+        return function(node, key, val) {
+          const validator = node.computed ? computed : normal;
+          validator(node, key, val);
+        };
+      })(),
+    },
+    computed: {
+      default: false,
+    },
+    optional: {
+      validate: assertValueType("boolean"),
+    },
+  },
+});
+
+defineType("OptionalCallExpression", {
+  visitor: ["callee", "arguments", "typeParameters"],
+  builder: ["callee", "arguments", "optional"],
+  aliases: ["Expression"],
+  fields: {
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
+    arguments: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(
+          assertNodeType("Expression", "SpreadElement", "JSXNamespacedName"),
+        ),
+      ),
+    },
+    optional: {
+      validate: assertValueType("boolean"),
+    },
+    typeParameters: {
+      validate: assertNodeType(
+        "TypeParameterInstantiation",
+        "TSTypeParameterInstantiation",
+      ),
       optional: true,
     },
   },

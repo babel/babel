@@ -1,0 +1,136 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 26,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 4,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 26,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 4,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "BlockStatement",
+        "start": 0,
+        "end": 26,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 1
+          }
+        },
+        "body": [
+          {
+            "type": "ExpressionStatement",
+            "start": 6,
+            "end": 10,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 4
+              },
+              "end": {
+                "line": 2,
+                "column": 8
+              }
+            },
+            "expression": {
+              "type": "CallExpression",
+              "start": 6,
+              "end": 9,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 4
+                },
+                "end": {
+                  "line": 2,
+                  "column": 7
+                }
+              },
+              "callee": {
+                "type": "Identifier",
+                "start": 6,
+                "end": 7,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 5
+                  },
+                  "identifierName": "a"
+                },
+                "name": "a"
+              },
+              "arguments": []
+            },
+            "trailingComments": [
+              {
+                "type": "CommentLine",
+                "value": "comment",
+                "start": 15,
+                "end": 24,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 13
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "directives": []
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": "comment",
+      "start": 15,
+      "end": 24,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 4
+        },
+        "end": {
+          "line": 3,
+          "column": 13
+        }
+      }
+    }
+  ]
+}

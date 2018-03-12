@@ -1,0 +1,243 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 100,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 6,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 100,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 6,
+        "column": 1
+      }
+    },
+    "sourceType": "module",
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 100,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 6,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            },
+            "identifierName": "C"
+          },
+          "name": "C"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 8,
+          "end": 100,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 8
+            },
+            "end": {
+              "line": 6,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "TSDeclareMethod",
+              "start": 14,
+              "end": 25,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 4
+                },
+                "end": {
+                  "line": 2,
+                  "column": 15
+                }
+              },
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start": 21,
+                "end": 22,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 12
+                  },
+                  "identifierName": "f"
+                },
+                "name": "f"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": []
+            },
+            {
+              "type": "TSDeclareMethod",
+              "start": 30,
+              "end": 48,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 4
+                },
+                "end": {
+                  "line": 3,
+                  "column": 22
+                }
+              },
+              "accessibility": "public",
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start": 44,
+                "end": 45,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 18
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 19
+                  },
+                  "identifierName": "f"
+                },
+                "name": "f"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": []
+            },
+            {
+              "type": "TSDeclareMethod",
+              "start": 53,
+              "end": 74,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 4
+                },
+                "end": {
+                  "line": 4,
+                  "column": 25
+                }
+              },
+              "accessibility": "protected",
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start": 70,
+                "end": 71,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 22
+                  },
+                  "identifierName": "f"
+                },
+                "name": "f"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": []
+            },
+            {
+              "type": "TSDeclareMethod",
+              "start": 79,
+              "end": 98,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 4
+                },
+                "end": {
+                  "line": 5,
+                  "column": 23
+                }
+              },
+              "accessibility": "private",
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start": 94,
+                "end": 95,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 19
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 20
+                  },
+                  "identifierName": "f"
+                },
+                "name": "f"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": []
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

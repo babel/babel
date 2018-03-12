@@ -1,0 +1,61 @@
+version: 2
+aliases:
+  - &restore-node-modules-cache
+    keys:
+      - v1-yarn-deps-{{ checksum "yarn.lock" }}
+
+  - &restore-yarn-cache
+    keys:
+      - v1-yarn-cache
+
+  - &save-node-modules-cache
+    paths:
+      - node_modules
+    key: v1-yarn-deps-{{ checksum "yarn.lock" }}
+
+  - &save-yarn-cache
+    paths:
+      - ~/.yarn-cache
+    key: v1-yarn-cache
+
+  - &yarn-install
+    run: |
+      sudo npm i -g yarn@^1.5.1
+      yarn --version
+
+  - &artifact_babel
+    path: ~/babel/packages/babel-standalone/babel.js
+
+  - &artifact_babel_min
+    path: ~/babel/packages/babel-standalone/babel.min.js
+
+  - &artifact_env
+    path: ~/babel/packages/babel-preset-env-standalone/babel-preset-env.js
+
+  - &artifact_env_min
+    path: ~/babel/packages/babel-preset-env-standalone/babel-preset-env.min.js
+
+jobs:
+  build:
+    working_directory: ~/babel
+    docker:
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - restore-cache: *restore-yarn-cache
+      - restore-cache: *restore-node-modules-cache
+      - *yarn-install
+      - run: make test-ci-coverage
+      # Builds babel-standalone with the regular Babel config
+      - run: make build
+      # test-ci-coverage doesn't test babel-standalone, as trying to gather coverage
+      # data for a JS file that's several megabytes large is bound to fail. Here,
+      # we just run the babel-standalone test separately.
+      - run: ./node_modules/.bin/jest packages/babel-standalone/test/
+      - run: ./node_modules/.bin/jest packages/babel-preset-env-standalone/test/
+      - store_artifacts: *artifact_babel
+      - store_artifacts: *artifact_babel_min
+      - store_artifacts: *artifact_env
+      - store_artifacts: *artifact_env_min
+      - save_cache: *save-node-modules-cache
+      - save_cache: *save-yarn-cache

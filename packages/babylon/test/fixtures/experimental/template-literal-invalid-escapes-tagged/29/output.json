@@ -1,0 +1,119 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 17,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 17
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 17,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 17
+      }
+    },
+    "sourceType": "script",
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 17,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 17
+          }
+        },
+        "expression": {
+          "type": "TaggedTemplateExpression",
+          "start": 0,
+          "end": 17,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 17
+            }
+          },
+          "tag": {
+            "type": "Identifier",
+            "start": 0,
+            "end": 9,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 9
+              },
+              "identifierName": "sampleTag"
+            },
+            "name": "sampleTag"
+          },
+          "quasi": {
+            "type": "TemplateLiteral",
+            "start": 9,
+            "end": 17,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 9
+              },
+              "end": {
+                "line": 1,
+                "column": 17
+              }
+            },
+            "expressions": [],
+            "quasis": [
+              {
+                "type": "TemplateElement",
+                "start": 10,
+                "end": 16,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 16
+                  }
+                },
+                "value": {
+                  "raw": "\\u000g",
+                  "cooked": null
+                },
+                "tail": true
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

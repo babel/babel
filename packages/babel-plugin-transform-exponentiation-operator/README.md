@@ -39,21 +39,21 @@ npm install --save-dev @babel/plugin-transform-exponentiation-operator
 
 ```json
 {
-  "plugins": ["@babel/transform-exponentiation-operator"]
+  "plugins": ["@babel/plugin-transform-exponentiation-operator"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/transform-exponentiation-operator script.js
+babel --plugins @babel/plugin-transform-exponentiation-operator script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/transform-exponentiation-operator"]
+  plugins: ["@babel/plugin-transform-exponentiation-operator"]
 });
 ```
 

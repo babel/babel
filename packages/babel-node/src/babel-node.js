@@ -46,6 +46,7 @@ getV8Flags(function(err, v8Flags) {
       case "--debug":
       case "--debug-brk":
       case "--inspect":
+      case "--inspect-brk":
         args.unshift(arg);
         break;
 
@@ -93,6 +94,10 @@ getV8Flags(function(err, v8Flags) {
           process.exit(code);
         }
       });
+    });
+    process.on("SIGINT", () => {
+      proc.kill("SIGINT");
+      process.exit(1);
     });
   }
 });

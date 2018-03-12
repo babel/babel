@@ -1,6 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxFunctionBind from "@babel/plugin-syntax-function-bind";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default declare(api => {
+  api.assertVersion(7);
+
   function getTempId(scope) {
     let id = scope.path.getData("functionBind");
     if (id) return id;
@@ -16,7 +20,7 @@ export default function({ types: t }) {
 
   function inferBindContext(bind, scope) {
     const staticContext = getStaticContext(bind, scope);
-    if (staticContext) return t.cloneDeep(staticContext);
+    if (staticContext) return t.cloneNode(staticContext);
 
     const tempId = getTempId(scope);
     if (bind.object) {
@@ -59,4 +63,4 @@ export default function({ types: t }) {
       },
     },
   };
-}
+});

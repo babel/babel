@@ -1,4 +1,6 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxTypeScript from "@babel/plugin-syntax-typescript";
+import { types as t } from "@babel/core";
 
 import transpileEnum from "./enum";
 
@@ -18,7 +20,9 @@ interface State {
   programPath: any;
 }
 
-export default function({ types: t }) {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     inherits: syntaxTypeScript,
     visitor: {
@@ -43,7 +47,14 @@ export default function({ types: t }) {
 
         for (const specifier of path.node.specifiers) {
           const binding = path.scope.getBinding(specifier.local.name);
-          if (isImportTypeOnly(binding, state.programPath)) {
+
+          // The binding may not exist if the import node was explicitly
+          // injected by another plugin. Currently core does not do a good job
+          // of keeping scope bindings synchronized with the AST. For now we
+          // just bail if there is no binding, since chances are good that if
+          // the import statement was injected then it wasn't a typescript type
+          // import anyway.
+          if (binding && isImportTypeOnly(binding, state.programPath)) {
             importsToRemove.push(binding.path);
           } else {
             allElided = false;
@@ -69,6 +80,10 @@ export default function({ types: t }) {
 
       VariableDeclaration(path) {
         if (path.node.declare) path.remove();
+      },
+
+      VariableDeclarator({ node }) {
+        if (node.definite) node.definite = null;
       },
 
       ClassMethod(path) {
@@ -106,9 +121,11 @@ export default function({ types: t }) {
             );
           }
 
-          const id = t.identifier(name);
-          const thisDotName = t.memberExpression(t.thisExpression(), id);
-          const assign = t.assignmentExpression("=", thisDotName, id);
+          const assign = t.assignmentExpression(
+            "=",
+            t.memberExpression(t.thisExpression(), t.identifier(name)),
+            t.identifier(name),
+          );
           return t.expressionStatement(assign);
         });
 
@@ -144,7 +161,9 @@ export default function({ types: t }) {
 
         if (node.accessibility) node.accessibility = null;
         if (node.abstract) node.abstract = null;
+        if (node.readonly) node.readonly = null;
         if (node.optional) node.optional = null;
+        if (node.definite) node.definite = null;
         if (node.typeAnnotation) node.typeAnnotation = null;
       },
 
@@ -197,11 +216,19 @@ export default function({ types: t }) {
       },
 
       TSImportEqualsDeclaration(path) {
-        throw path.buildCodeFrameError("`import =` is not supported.");
+        throw path.buildCodeFrameError(
+          "`import =` is not supported by @babel/plugin-transform-typescript\n" +
+            "Please consider using " +
+            "`import <moduleName> from '<moduleName>';` alongside " +
+            "Typescript's --allowSyntheticDefaultImports option.",
+        );
       },
 
       TSExportAssignment(path) {
-        throw path.buildCodeFrameError("`export =` is not supported.");
+        throw path.buildCodeFrameError(
+          "`export =` is not supported by @babel/plugin-transform-typescript\n" +
+            "Please consider using `export <value>;`.",
+        );
       },
 
       TSTypeAssertion(path) {
@@ -252,4 +279,4 @@ export default function({ types: t }) {
     });
     return !sourceFileHasJsx;
   }
-}
+});

@@ -16,7 +16,10 @@ export default function(commander, filenames, opts) {
 
   const buildResult = function() {
     const map = new sourceMap.SourceMapGenerator({
-      file: path.basename(commander.outFile || "") || "stdout",
+      file:
+        commander.sourceMapTarget ||
+        path.basename(commander.outFile || "") ||
+        "stdout",
       sourceRoot: opts.sourceRoot,
     });
 
@@ -103,19 +106,21 @@ export default function(commander, filenames, opts) {
     });
 
     process.stdin.on("end", function() {
-      results.push(
-        util.transform(
-          commander.filename,
-          code,
-          defaults(
-            {
-              sourceFileName: "stdin",
-            },
-            opts,
-          ),
+      util.transform(
+        commander.filename,
+        code,
+        defaults(
+          {
+            sourceFileName: "stdin",
+          },
+          opts,
         ),
+        function(err, res) {
+          if (err) throw err;
+          results.push(res);
+          output();
+        },
       );
-      output();
     });
   };
 
@@ -140,7 +145,9 @@ export default function(commander, filenames, opts) {
       }
     });
 
-    _filenames.forEach(function(filename) {
+    let filesProcessed = 0;
+
+    _filenames.forEach(function(filename, index) {
       let sourceFilename = filename;
       if (commander.outFile) {
         sourceFilename = path.relative(
@@ -150,7 +157,7 @@ export default function(commander, filenames, opts) {
       }
       sourceFilename = slash(sourceFilename);
 
-      const data = util.compile(
+      util.compile(
         filename,
         defaults(
           {
@@ -158,14 +165,18 @@ export default function(commander, filenames, opts) {
           },
           opts,
         ),
+        function(err, res) {
+          if (err) throw err;
+
+          filesProcessed++;
+          if (res) results[index] = res;
+
+          if (filesProcessed === _filenames.length) {
+            output();
+          }
+        },
       );
-
-      if (!data) return;
-
-      results.push(data);
     });
-
-    output();
   };
 
   const files = function() {

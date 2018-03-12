@@ -1,4 +1,9 @@
-export default function({ types: t }, options) {
+import { declare } from "@babel/helper-plugin-utils";
+import { types as t } from "@babel/core";
+
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { loose } = options;
 
   function getSpreadLiteral(spread, scope) {
@@ -50,11 +55,11 @@ export default function({ types: t }, options) {
         if (!hasSpread(elements)) return;
 
         const nodes = build(elements, scope, state);
-        let first = nodes.shift();
+        const first = nodes.shift();
 
-        if (!t.isArrayExpression(first)) {
-          nodes.unshift(first);
-          first = t.arrayExpression([]);
+        if (nodes.length === 0 && first !== elements[0].argument) {
+          path.replaceWith(first);
+          return;
         }
 
         path.replaceWith(
@@ -105,7 +110,7 @@ export default function({ types: t }, options) {
             callee.object = t.assignmentExpression("=", temp, callee.object);
             contextLiteral = temp;
           } else {
-            contextLiteral = callee.object;
+            contextLiteral = t.cloneNode(callee.object);
           }
           t.appendToMemberExpression(callee, t.identifier("apply"));
         } else {
@@ -116,7 +121,7 @@ export default function({ types: t }, options) {
           contextLiteral = t.thisExpression();
         }
 
-        node.arguments.unshift(contextLiteral);
+        node.arguments.unshift(t.cloneNode(contextLiteral));
       },
 
       NewExpression(path, state) {
@@ -154,4 +159,4 @@ export default function({ types: t }, options) {
       },
     },
   };
-}
+});

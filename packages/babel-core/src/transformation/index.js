@@ -10,7 +10,12 @@ import normalizeOptions from "./normalize-opts";
 import normalizeFile from "./normalize-file";
 
 import generateCode from "./file/generate";
-import File from "./file/file";
+import type File from "./file/file";
+
+export type FileResultCallback = {
+  (Error, null): any,
+  (null, FileResult | null): any,
+};
 
 export type FileResult = {
   metadata: {},
@@ -20,26 +25,49 @@ export type FileResult = {
   map: SourceMap | null,
 };
 
-export default function runTransform(
+export function runAsync(
   config: ResolvedConfig,
   code: string,
-  ast?: {},
-): FileResult {
-  const options = normalizeOptions(config);
-  const input = normalizeFile(options, code, ast);
+  ast: ?(BabelNodeFile | BabelNodeProgram),
+  callback: Function,
+) {
+  let result;
+  try {
+    result = runSync(config, code, ast);
+  } catch (err) {
+    return callback(err);
+  }
 
-  const file = new File(options, input);
+  // We don't actually care about calling this synchronously here because it is
+  // already running within a .nextTick handler from the transform calls above.
+  return callback(null, result);
+}
+
+export function runSync(
+  config: ResolvedConfig,
+  code: string,
+  ast: ?(BabelNodeFile | BabelNodeProgram),
+): FileResult {
+  const file = normalizeFile(
+    config.passes,
+    normalizeOptions(config),
+    code,
+    ast,
+  );
 
   transformFile(file, config.passes);
 
-  const { outputCode, outputMap } = options.code ? generateCode(file) : {};
+  const opts = file.opts;
+  const { outputCode, outputMap } =
+    opts.code !== false ? generateCode(config.passes, file) : {};
 
   return {
     metadata: file.metadata,
-    options: options,
-    ast: options.ast ? file.ast : null,
+    options: opts,
+    ast: opts.ast === true ? file.ast : null,
     code: outputCode === undefined ? null : outputCode,
     map: outputMap === undefined ? null : outputMap,
+    sourceType: file.ast.program.sourceType,
   };
 }
 
@@ -59,7 +87,18 @@ function transformFile(file: File, pluginPasses: PluginPasses): void {
 
     for (const [plugin, pass] of passPairs) {
       const fn = plugin.pre;
-      if (fn) fn.call(pass, file);
+      if (fn) {
+        const result = fn.call(pass, file);
+
+        if (isThenable(result)) {
+          throw new Error(
+            `You appear to be using an plugin with an async .pre, ` +
+              `which your current version of Babel does not support.` +
+              `If you're using a published plugin, you may need to upgrade ` +
+              `your @babel/core version.`,
+          );
+        }
+      }
     }
 
     // merge all plugin visitors into a single visitor
@@ -72,7 +111,26 @@ function transformFile(file: File, pluginPasses: PluginPasses): void {
 
     for (const [plugin, pass] of passPairs) {
       const fn = plugin.post;
-      if (fn) fn.call(pass, file);
+      if (fn) {
+        const result = fn.call(pass, file);
+
+        if (isThenable(result)) {
+          throw new Error(
+            `You appear to be using an plugin with an async .post, ` +
+              `which your current version of Babel does not support.` +
+              `If you're using a published plugin, you may need to upgrade ` +
+              `your @babel/core version.`,
+          );
+        }
+      }
     }
   }
+}
+
+function isThenable(val: mixed): boolean {
+  return (
+    !!val &&
+    (typeof val === "object" || typeof val === "function") &&
+    typeof val.then === "function"
+  );
 }

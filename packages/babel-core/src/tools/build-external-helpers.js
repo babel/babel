@@ -3,19 +3,22 @@ import generator from "@babel/generator";
 import template from "@babel/template";
 import * as t from "@babel/types";
 
-const buildUmdWrapper = template(`
-  (function (root, factory) {
-    if (typeof define === "function" && define.amd) {
-      define(AMD_ARGUMENTS, factory);
-    } else if (typeof exports === "object") {
-      factory(COMMON_ARGUMENTS);
-    } else {
-      factory(BROWSER_ARGUMENTS);
-    }
-  })(UMD_ROOT, function (FACTORY_PARAMETERS) {
-    FACTORY_BODY
-  });
-`);
+// Wrapped to avoid wasting time parsing this when almost no-one uses
+// build-external-helpers.
+const buildUmdWrapper = replacements =>
+  template`
+    (function (root, factory) {
+      if (typeof define === "function" && define.amd) {
+        define(AMD_ARGUMENTS, factory);
+      } else if (typeof exports === "object") {
+        factory(COMMON_ARGUMENTS);
+      } else {
+        factory(BROWSER_ARGUMENTS);
+      }
+    })(UMD_ROOT, function (FACTORY_PARAMETERS) {
+      FACTORY_BODY
+    });
+  `(replacements);
 
 function buildGlobal(whitelist) {
   const namespace = t.identifier("babelHelpers");
@@ -69,7 +72,7 @@ function buildModule(whitelist) {
     t.exportNamedDeclaration(
       null,
       Object.keys(refs).map(name => {
-        return t.exportSpecifier(t.clone(refs[name]), t.identifier(name));
+        return t.exportSpecifier(t.cloneNode(refs[name]), t.identifier(name));
       }),
     ),
   );

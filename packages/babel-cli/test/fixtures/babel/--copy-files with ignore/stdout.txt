@@ -1,1 +1,2 @@
 src/index.js -> lib/index.js
+🎉  Successfully compiled 1 file with Babel.

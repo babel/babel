@@ -1,0 +1,8 @@
+{
+  "sourceType": "module",
+  "presets": [
+    ["../../../../lib", {
+      "useBuiltIns": "usage"
+    }]
+  ]
+}

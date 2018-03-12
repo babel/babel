@@ -1,0 +1,4 @@
+{
+  "throws": "delete is a reserved word (1:14)",
+  "plugins": ["flow", "jsx"]
+}

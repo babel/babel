@@ -1,7 +1,11 @@
+import { declare } from "@babel/helper-plugin-utils";
 import remapAsyncToGenerator from "@babel/helper-remap-async-to-generator";
 import { addNamed } from "@babel/helper-module-imports";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { method, module } = options;
 
   if (method && module) {
@@ -12,14 +16,12 @@ export default function({ types: t }, options) {
 
           let wrapAsync = state.methodWrapper;
           if (wrapAsync) {
-            wrapAsync = t.cloneDeep(wrapAsync);
+            wrapAsync = t.cloneNode(wrapAsync);
           } else {
             wrapAsync = state.methodWrapper = addNamed(path, method, module);
           }
 
-          remapAsyncToGenerator(path, state.file, {
-            wrapAsync,
-          });
+          remapAsyncToGenerator(path, { wrapAsync });
         },
       },
     };
@@ -30,10 +32,10 @@ export default function({ types: t }, options) {
       Function(path, state) {
         if (!path.node.async || path.node.generator) return;
 
-        remapAsyncToGenerator(path, state.file, {
+        remapAsyncToGenerator(path, {
           wrapAsync: state.addHelper("asyncToGenerator"),
         });
       },
     },
   };
-}
+});

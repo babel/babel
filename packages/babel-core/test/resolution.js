@@ -1,17 +1,17 @@
-import assert from "assert";
 import * as babel from "../lib/index";
 import path from "path";
 
 describe("addon resolution", function() {
   const base = path.join(__dirname, "fixtures", "resolution");
+  let cwd;
 
   beforeEach(function() {
-    this.cwd = process.cwd();
+    cwd = process.cwd();
     process.chdir(base);
   });
 
   afterEach(function() {
-    process.chdir(this.cwd);
+    process.chdir(cwd);
   });
 
   it("should find module: presets", function() {
@@ -237,102 +237,114 @@ describe("addon resolution", function() {
   it("should throw about module: usage for presets", function() {
     process.chdir("throw-module-paths");
 
-    assert.throws(() => {
+    expect(() => {
       babel.transform("", {
         filename: "filename.js",
         babelrc: false,
         presets: ["foo"],
       });
       // eslint-disable-next-line max-len
-    }, /Cannot find module 'babel-preset-foo'.*\n- If you want to resolve "foo", use "module:foo"/);
+    }).toThrow(
+      /Cannot find module 'babel-preset-foo'.*\n- If you want to resolve "foo", use "module:foo"/,
+    );
   });
 
   it("should throw about module: usage for plugins", function() {
     process.chdir("throw-module-paths");
 
-    assert.throws(() => {
+    expect(() => {
       babel.transform("", {
         filename: "filename.js",
         babelrc: false,
         plugins: ["foo"],
       });
       // eslint-disable-next-line max-len
-    }, /Cannot find module 'babel-plugin-foo'.*\n- If you want to resolve "foo", use "module:foo"/);
+    }).toThrow(
+      /Cannot find module 'babel-plugin-foo'.*\n- If you want to resolve "foo", use "module:foo"/,
+    );
   });
 
   it("should throw about @babel usage for presets", function() {
     process.chdir("throw-babel-paths");
 
-    assert.throws(() => {
+    expect(() => {
       babel.transform("", {
         filename: "filename.js",
         babelrc: false,
         presets: ["foo"],
       });
       // eslint-disable-next-line max-len
-    }, /Cannot find module 'babel-preset-foo'.*\n- Did you mean "@babel\/foo"\?/);
+    }).toThrow(
+      /Cannot find module 'babel-preset-foo'.*\n- Did you mean "@babel\/foo"\?/,
+    );
   });
 
   it("should throw about @babel usage for plugins", function() {
     process.chdir("throw-babel-paths");
 
-    assert.throws(() => {
+    expect(() => {
       babel.transform("", {
         filename: "filename.js",
         babelrc: false,
         plugins: ["foo"],
       });
       // eslint-disable-next-line max-len
-    }, /Cannot find module 'babel-plugin-foo'.*\n- Did you mean "@babel\/foo"\?/);
+    }).toThrow(
+      /Cannot find module 'babel-plugin-foo'.*\n- Did you mean "@babel\/foo"\?/,
+    );
   });
 
   it("should throw about passing a preset as a plugin", function() {
     process.chdir("throw-opposite-paths");
 
-    assert.throws(() => {
+    expect(() => {
       babel.transform("", {
         filename: "filename.js",
         babelrc: false,
         presets: ["testplugin"],
       });
       // eslint-disable-next-line max-len
-    }, /Cannot find module 'babel-preset-testplugin'.*\n- Did you accidentally pass a preset as a plugin\?/);
+    }).toThrow(
+      /Cannot find module 'babel-preset-testplugin'.*\n- Did you accidentally pass a preset as a plugin\?/,
+    );
   });
 
   it("should throw about passing a plugin as a preset", function() {
     process.chdir("throw-opposite-paths");
 
-    assert.throws(() => {
+    expect(() => {
       babel.transform("", {
         filename: "filename.js",
         babelrc: false,
         plugins: ["testpreset"],
       });
       // eslint-disable-next-line max-len
-    }, /Cannot find module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a plugin as a preset\?/);
+    }).toThrow(
+      /Cannot find module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a plugin as a preset\?/,
+    );
   });
 
   it("should throw about missing presets", function() {
     process.chdir("throw-missing-paths");
 
-    assert.throws(() => {
+    expect(() => {
       babel.transform("", {
         filename: "filename.js",
         babelrc: false,
         presets: ["foo"],
       });
-    }, /Cannot find module 'babel-preset-foo'/);
+    }).toThrow(/Cannot find module 'babel-preset-foo'/);
   });
 
   it("should throw about missing plugins", function() {
     process.chdir("throw-missing-paths");
 
-    assert.throws(() => {
+    expect(() => {
       babel.transform("", {
         filename: "filename.js",
         babelrc: false,
         plugins: ["foo"],
       });
-    }, /Cannot find module 'babel-plugin-foo'/);
+    }).toThrow(/Cannot find module 'babel-plugin-foo'/);
   });
 });
