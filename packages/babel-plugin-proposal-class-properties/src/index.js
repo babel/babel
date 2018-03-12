@@ -179,7 +179,7 @@ export default declare((api, options) => {
           replaceWith.arguments[0] = t.assignmentExpression("=", memo, object);
         }
 
-        const call = t.clone(grandParentPath.node);
+        const call = t.cloneNode(grandParentPath.node);
         call.callee = t.memberExpression(replaceWith, t.identifier("call"));
         call.arguments.unshift(memo || object);
 
