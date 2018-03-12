@@ -1,20 +1,26 @@
 #!/bin/bash
 set -e
 
-if [ -z "$TEST_GREP" ]; then
-   TEST_GREP=""
-fi
-
 node="node"
-jestArgs=""
+jestArgs=()
 
 if [ "$TEST_DEBUG" ]; then
   node="node --inspect-brk"
-  jestArgs="${jestArgs} --runInBand"
+  jestArgs+=("--runInBand")
 fi
 
 if [ -n "$CI" ]; then
-  jestArgs="${jestArgs} --maxWorkers=4 --ci"
+  jestArgs+=("--maxWorkers=4")
+  jestArgs+=("--ci")
 fi
 
-$node node_modules/.bin/jest $jestArgs "$TEST_GREP"
+if [ -n "$TEST_GREP" ]; then
+  jestArgs+=("-t")
+  jestArgs+=("$TEST_GREP")
+fi
+
+if [ -n "$TEST_ONLY" ]; then
+  jestArgs+=("packages/.*$TEST_ONLY.*/test")
+fi
+
+$node node_modules/.bin/jest "${jestArgs[@]}"
