@@ -219,7 +219,7 @@ export const list = {
    */
 
   VariableDeclaration(node: Object): Array<Object> {
-    return node.declarations ? node.declarations.map(decl => decl.init) : [];
+    return node.declarations.map(decl => decl.init);
   },
 
   /**
