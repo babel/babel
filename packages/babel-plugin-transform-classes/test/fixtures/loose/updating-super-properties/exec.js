@@ -14,4 +14,4 @@ class Test extends Foo {
 const obj = new Test();
 obj.inc();
 
-expect(obj.test).toBe(1);
+expect(obj.test).toBe(NaN);
