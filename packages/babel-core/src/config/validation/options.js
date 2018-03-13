@@ -1,6 +1,6 @@
 // @flow
 
-import { ConfigItem } from "../item";
+import type { ConfigItem } from "../item";
 import Plugin from "../plugin";
 
 import removed from "./removed";
