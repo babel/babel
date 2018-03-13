@@ -44,4 +44,4 @@ require("@babel/core").transform("code", {
 
 ## References
 
-* [Proposal: Numeric Separators](https://github.com/tc39/proposal-throw-expressions)
+* [Proposal: ECMAScript throw expressions](https://github.com/tc39/proposal-throw-expressions)
