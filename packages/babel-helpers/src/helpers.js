@@ -435,20 +435,21 @@ helpers.construct = () => template.program.ast`
 
   export default function _construct(Parent, args, Class) {
     if (
-      typeof Reflect !== "undefined" && Reflect.construct &&
-      // We can't use Reflect.construct.toString because it is overwritten by
-      // core-js
-      Function.toString.call(Reflect.construct).indexOf("[native code]") !== -1
+      typeof Reflect !== "undefined" && Reflect.construct
     ) {
-      _construct = Reflect.construct;
+      _construct = function _construct(Parent, args, Class) {
+        // This wrapper is needed because Reflect.construct can't be properly
+        // polyfilled, thus core-js doesn't set the correct __proto__.
+        var result = Reflect.construct(Parent, args, Class);
+        if (!result instanceof Class) result = _sPO(result, Class.prototype);
+        return result;
+      };
     } else {
       _construct = function _construct(Parent, args, Class) {
-        var a = [null];
+        var Constructor, a = [null];
         a.push.apply(a, args);
-        var Constructor = Parent.bind.apply(Parent, a);
-        var instance = new Constructor();
-        if (Class) setPrototypeOf(instance, Class.prototype);
-        return instance;
+        Constructor = Parent.bind.apply(Parent, a);
+        return _sPO(new Constructor, Class.prototype);
       };
     }
     // Avoid issues with Class being present but undefined when it wasn't
