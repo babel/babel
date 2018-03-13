@@ -87,6 +87,7 @@ describe("getTargets", () => {
         {
           chrome: "61.0.0",
           safari: "10.1.0",
+          firefox: "60.0.0",
           ios: "10.3.0",
           edge: "16.0.0",
         },
@@ -102,6 +103,7 @@ describe("getTargets", () => {
         {
           chrome: "61.0.0",
           safari: "10.1.0",
+          firefox: "60.0.0",
           ios: "10.3.0",
           edge: "16.0.0",
         },
@@ -117,6 +119,7 @@ describe("getTargets", () => {
         {
           chrome: "61.0.0",
           safari: "10.1.0",
+          firefox: "60.0.0",
           ios: "10.3.0",
           ie: "11.0.0",
           edge: "16.0.0",
@@ -137,6 +140,7 @@ describe("getTargets", () => {
           ios: "10.3.0",
           ie: "11.0.0",
           edge: "16.0.0",
+          firefox: "60.0.0",
         },
       );
     });
