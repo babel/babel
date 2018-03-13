@@ -96,30 +96,3 @@ export const isRequire = (t: Object, path: Object): boolean =>
   path.node.expression.arguments.length === 1 &&
   t.isStringLiteral(path.node.expression.arguments[0]) &&
   isPolyfillSource(path.node.expression.arguments[0].value);
-
-const modulePathMap = {
-  "regenerator-runtime": "regenerator-runtime/runtime",
-};
-
-export const getModulePath = (mod: string) =>
-  modulePathMap[mod] || `core-js/modules/${mod}`;
-
-export type RequireType = "require" | "import";
-
-export const createImport = (
-  t: Object,
-  polyfill: string,
-  requireType?: RequireType = "import",
-): Object => {
-  const modulePath = getModulePath(polyfill);
-
-  if (requireType === "import") {
-    const declar = t.importDeclaration([], t.stringLiteral(modulePath));
-    declar._blockHoist = 3;
-    return declar;
-  }
-
-  return t.expressionStatement(
-    t.callExpression(t.identifier("require"), [t.stringLiteral(modulePath)]),
-  );
-};
