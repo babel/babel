@@ -58,7 +58,7 @@
     "@babel/core": "7.0.0-beta.40",
     "@babel/helper-fixtures": "7.0.0-beta.40",
     "@babel/helper-plugin-test-runner": "7.0.0-beta.40",
-    "compat-table": "kangax/compat-table#7c202e2da648fbd9d223d48d1680ec8f15147044",
+    "compat-table": "kangax/compat-table#65fc1efb786a11238dc0128415bef71c5d12bcdc",
     "electron-to-chromium": "^1.3.27",
     "request": "^2.83.0"
   }
