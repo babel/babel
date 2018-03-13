@@ -7,7 +7,7 @@ cache:
   directories:
   - node_modules
 node_js:
-  - '9'
+  # We test the latest version on circleci
   - '8'
   - '6'
   - '4'
