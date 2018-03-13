@@ -1,0 +1,11 @@
+{
+  sourceType: "script",
+  overrides: [
+    {
+      test: "src/converted-module.mjs",
+      plugins: [
+        "@babel/plugin-transform-modules-commonjs"
+      ]
+    }
+  ]
+}

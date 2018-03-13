@@ -1,0 +1,4 @@
+{
+  "skipDefaultPresets": true,
+  "args": ["src", "--out-dir", "lib"]
+}
