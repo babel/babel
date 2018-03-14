@@ -469,7 +469,7 @@ export default declare((api, options) => {
 
             if (prop.isClassPrivateProperty()) {
               instanceBody.push(
-                buildPrivateClassProperty(thisRef, prop, path, staticNodes),
+                buildPrivateClassProperty(thisRef, prop, body, afterNodes),
               );
             } else {
               instanceBody.push(buildPublicClassProperty(thisRef, prop));
