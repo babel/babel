@@ -1,9 +1,7 @@
 // @flow
-import { addSideEffect } from "@babel/helper-module-imports";
-
 import { definitions } from "./built-in-definitions";
 import { logUsagePolyfills } from "./debug";
-import { isPolyfillSource, isRequire } from "./utils";
+import { createImport, isPolyfillSource, isRequire } from "./utils";
 
 type Plugin = {
   visitor: Object,
@@ -44,7 +42,7 @@ export default function({ types: t }: { types: Object }): Plugin {
   ): void {
     if (builtIn && !builtIns.has(builtIn)) {
       builtIns.add(builtIn);
-      addSideEffect(path, builtIn);
+      createImport(path, builtIn);
     }
   }
 

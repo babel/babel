@@ -1,6 +1,6 @@
 // @flow
-
 import semver from "semver";
+import { addSideEffect } from "@babel/helper-module-imports";
 import unreleasedLabels from "../data/unreleased-labels";
 import { semverMin } from "./targets-parser";
 import type { Targets } from "./types";
@@ -87,6 +87,16 @@ export const filterStageFromList = (list: any, stageList: any) => {
 
 export const isPolyfillSource = (source: string): boolean =>
   source === "@babel/polyfill" || source === "core-js";
+
+const modulePathMap = {
+  "regenerator-runtime": "regenerator-runtime/runtime",
+};
+
+export const getModulePath = (mod: string) =>
+  modulePathMap[mod] || `core-js/modules/${mod}`;
+
+export const createImport = (path: Object, mod: string) =>
+  addSideEffect(path, getModulePath(mod));
 
 export const isRequire = (t: Object, path: Object): boolean =>
   t.isExpressionStatement(path.node) &&
