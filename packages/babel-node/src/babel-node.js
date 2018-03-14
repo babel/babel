@@ -52,8 +52,8 @@ getV8Flags(function(err, v8Flags) {
 
       case "-r":
       case "--require":
-        args.push(babelArgs[index + 1]);
         args.push(flag);
+        args.push(babelArgs[index + 1]);
         delete babelArgs[index + 1];
         break;
 
