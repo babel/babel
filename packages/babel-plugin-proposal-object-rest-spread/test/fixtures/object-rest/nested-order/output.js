@@ -1,3 +1,3 @@
-const bar = babelHelpers.objectWithoutProperties(obj.a, []),
-      baz = babelHelpers.objectWithoutProperties(obj.b, []),
-      foo = babelHelpers.objectWithoutProperties(obj, []);
+const bar = babelHelpers.extends({}, obj.a),
+      baz = babelHelpers.extends({}, obj.b),
+      foo = babelHelpers.extends({}, obj);

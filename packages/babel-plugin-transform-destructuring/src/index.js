@@ -4,12 +4,19 @@ import { types as t } from "@babel/core";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose = false } = options;
+  const { loose = false, useBuiltIns = false } = options;
+
   if (typeof loose !== "boolean") {
     throw new Error(`.loose must be a boolean or undefined`);
   }
 
   const arrayOnlySpread = loose;
+
+  function getExtendsHelper(file) {
+    return useBuiltIns
+      ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
+      : file.addHelper("extends");
+  }
 
   /**
    * Test if a VariableDeclaration's declarations contains any Patterns.
@@ -172,14 +179,21 @@ export default declare((api, options) => {
         keys.push(t.cloneNode(key));
       }
 
-      keys = t.arrayExpression(keys);
+      let value;
+      if (keys.length === 0) {
+        value = t.callExpression(getExtendsHelper(this), [
+          t.objectExpression([]),
+          t.cloneNode(objRef),
+        ]);
+      } else {
+        keys = t.arrayExpression(keys);
 
-      //
+        value = t.callExpression(this.addHelper("objectWithoutProperties"), [
+          t.cloneNode(objRef),
+          keys,
+        ]);
+      }
 
-      const value = t.callExpression(
-        this.addHelper("objectWithoutProperties"),
-        [t.cloneNode(objRef), keys],
-      );
       this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));
     }
 
