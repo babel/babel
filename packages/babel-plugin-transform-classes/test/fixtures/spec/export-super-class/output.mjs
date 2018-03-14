@@ -1,8 +1,6 @@
 var _default =
 /*#__PURE__*/
 function (_A) {
-  "use strict";
-
   babelHelpers.inherits(_default, _A);
 
   function _default() {

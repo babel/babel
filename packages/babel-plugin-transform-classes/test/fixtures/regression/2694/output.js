@@ -10,8 +10,6 @@ var _BaseFoo2 = babelHelpers.interopRequireDefault(require("./BaseFoo"));
 var SubFoo =
 /*#__PURE__*/
 function (_BaseFoo) {
-  "use strict";
-
   babelHelpers.inherits(SubFoo, _BaseFoo);
 
   function SubFoo() {

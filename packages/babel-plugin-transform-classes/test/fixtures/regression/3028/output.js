@@ -12,8 +12,6 @@ var b = function b() {
 var a1 =
 /*#__PURE__*/
 function (_b) {
-  "use strict";
-
   babelHelpers.inherits(a1, _b);
 
   function a1() {
@@ -35,8 +33,6 @@ function (_b) {
 var a2 =
 /*#__PURE__*/
 function (_b2) {
-  "use strict";
-
   babelHelpers.inherits(a2, _b2);
 
   function a2() {
