@@ -455,7 +455,7 @@ helpers.wrapNativeSuper = () => template.program.ast`
       return _sPO(new Constructor, Class.prototype);
     };
 
-  var _cache = typeof Map === "function" && new Map();
+  var _cache = typeof Map === "function" ? new Map() : undefined;
 
   export default function _wrapNativeSuper(Class) {
     if (typeof Class !== "function") {
