@@ -60,7 +60,10 @@ export default declare((api, options) => {
       const { key, computed, static: isStatic } = path.node;
       propNames[isStatic ? "staticProps" : "instanceProps"].push(path);
 
-      if (computed) continue;
+      if (computed) {
+        propNames.computedPaths.push(path);
+        continue;
+      }
 
       const isPrivate = path.isClassPrivateProperty();
       const name = isPrivate
@@ -361,6 +364,7 @@ export default declare((api, options) => {
           privateProps: Object.create(null),
           instanceProps,
           staticProps,
+          computedPaths,
           constructor: null,
         };
         collectPropertiesVisitor(body, propNames);
