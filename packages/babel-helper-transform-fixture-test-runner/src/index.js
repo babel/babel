@@ -124,8 +124,11 @@ function wrapPackagesArray(type, names, optionsDir) {
 
       val[0] = path.resolve(optionsDir, val[0]);
     } else {
-      // check node_modules/babel-x-y
-      val[0] = __dirname + "/../../babel-" + type + "-" + val[0];
+      const monorepoPath = __dirname + "/../../babel-" + type + "-" + val[0];
+
+      if (fs.existsSync(monorepoPath)) {
+        val[0] = monorepoPath;
+      }
     }
 
     return val;
