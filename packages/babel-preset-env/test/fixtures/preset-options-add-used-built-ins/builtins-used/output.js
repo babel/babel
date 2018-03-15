@@ -1,9 +1,15 @@
-import "core-js/modules/web.dom.iterable";
-import "core-js/modules/es6.symbol";
-import "core-js/modules/es6.regexp.match";
-import "core-js/modules/es6.promise";
-import "core-js/modules/es6.map";
-import "core-js/modules/es6.array.from";
+require("core-js/modules/web.dom.iterable");
+
+require("core-js/modules/es6.symbol");
+
+require("core-js/modules/es6.regexp.match");
+
+require("core-js/modules/es6.promise");
+
+require("core-js/modules/es6.map");
+
+require("core-js/modules/es6.array.from");
+
 Array.from; // static method
 
 Map; // built-in
