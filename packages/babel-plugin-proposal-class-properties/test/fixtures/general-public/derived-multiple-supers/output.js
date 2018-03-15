@@ -11,11 +11,11 @@ function (_Bar) {
     if (condition) {
       _this2 = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this));
 
-      _initialiseProps(_this2);
+      _initialiseProps(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this2)));
     } else {
       _this2 = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this));
 
-      _initialiseProps(_this2);
+      _initialiseProps(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this2)));
     }
 
     return babelHelpers.possibleConstructorReturn(_this2);
