@@ -9,7 +9,11 @@
 /* global VERSION */
 /* eslint-disable max-len */
 
-import * as Babel from "@babel/core";
+import {
+  transform as babelTransform,
+  transformFromAst as babelTransformFromAst,
+  buildExternalHelpers as babelBuildExternalHelpers,
+} from "@babel/core";
 
 import { runScripts } from "./transformScriptTags";
 
@@ -85,15 +89,15 @@ function processOptions(options) {
 }
 
 export function transform(code, options) {
-  return Babel.transform(code, processOptions(options));
+  return babelTransform(code, processOptions(options));
 }
 
 export function transformFromAst(ast, code, options) {
-  return Babel.transformFromAst(ast, code, processOptions(options));
+  return babelTransformFromAst(ast, code, processOptions(options));
 }
 export const availablePlugins = {};
 export const availablePresets = {};
-export const buildExternalHelpers = Babel.buildExternalHelpers;
+export const buildExternalHelpers = babelBuildExternalHelpers;
 /**
  * Registers a named plugin for use with Babel.
  */

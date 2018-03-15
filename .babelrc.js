@@ -15,8 +15,7 @@ module.exports = function(api) {
 
   switch (env) {
     // Configs used during bundling builds.
-    case "babylon":
-    case "standalone":
+    case "rollup":
       convertESM = false;
       break;
     case "production":
