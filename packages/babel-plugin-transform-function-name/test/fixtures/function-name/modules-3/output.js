@@ -10,8 +10,6 @@ var _store = require("./store");
 let Login =
 /*#__PURE__*/
 function (_React$Component) {
-  "use strict";
-
   babelHelpers.inherits(Login, _React$Component);
 
   function Login() {

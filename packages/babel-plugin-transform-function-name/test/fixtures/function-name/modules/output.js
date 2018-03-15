@@ -5,8 +5,6 @@ var _events2 = babelHelpers.interopRequireDefault(require("events"));
 let Template =
 /*#__PURE__*/
 function () {
-  "use strict";
-
   function Template() {
     babelHelpers.classCallCheck(this, Template);
   }

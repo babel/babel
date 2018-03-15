@@ -4,8 +4,6 @@ export default (param => {
   return _temp = _class =
   /*#__PURE__*/
   function () {
-    "use strict";
-
     function App() {
       babelHelpers.classCallCheck(this, App);
     }
