@@ -18,8 +18,6 @@
   },
   "devDependencies": {
     "@babel/core": "7.0.0-beta.41",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.41",
-    "@babel/template": "7.0.0-beta.41",
-    "@babel/types": "7.0.0-beta.41"
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.41"
   }
 }
