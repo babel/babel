@@ -9,15 +9,15 @@ call((_temp = _class = function _class() {
   value: true
 }), _temp));
 
-var _class2 = function _class2() {
-  babelHelpers.classCallCheck(this, _class2);
+var _default = function _default() {
+  babelHelpers.classCallCheck(this, _default);
 };
 
-Object.defineProperty(_class2, "test", {
+Object.defineProperty(_default, "test", {
   configurable: true,
   enumerable: true,
   writable: true,
   value: true
 });
-export { _class2 as default };
+export { _default as default };
 ;
