@@ -1,6 +1,6 @@
 {
   "name": "@babel/register",
-  "version": "7.0.0-beta.41",
+  "version": "7.0.0-beta.42",
   "description": "babel require hook",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-register",
@@ -19,10 +19,10 @@
     "source-map-support": "^0.4.2"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.41"
+    "@babel/core": "7.0.0-beta.42"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.41",
+    "@babel/core": "7.0.0-beta.42",
     "default-require-extensions": "^2.0.0"
   }
 }
