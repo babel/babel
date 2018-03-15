@@ -174,8 +174,7 @@ const loadDescriptor = makeWeakCache(
 
     let item = value;
     if (typeof value === "function") {
-      const api = Object.assign(Object.create(context), makeAPI(cache));
-
+      const api = Object.assign({}, context, makeAPI(cache));
       try {
         item = value(api, options, dirname);
       } catch (e) {

@@ -3,7 +3,7 @@ export function declare(builder) {
     if (!api.assertVersion) {
       // Inject a custom version of 'assertVersion' for Babel 6 and early
       // versions of Babel 7's beta that didn't have it.
-      api = Object.assign({}, api, {
+      api = Object.assign(copyApiObject(api), {
         assertVersion(range) {
           throwVersionError(range, api.version);
         },
@@ -12,6 +12,33 @@ export function declare(builder) {
 
     return builder(api, options || {}, dirname);
   };
+}
+
+function copyApiObject(api) {
+  // Babel >= 7 <= beta.41 passed the API as a new object that had
+  // babel/core as the prototype. While slightly faster, it also
+  // means that the Object.assign copy below fails. Rather than
+  // keep complexity, the Babel 6 behavior has been reverted and this
+  // normalizes all that for Babel 7.
+  let proto = null;
+  if (typeof api.version === "string" && /^7\./.test(api.version)) {
+    proto = Object.getPrototypeOf(api);
+    if (
+      proto &&
+      (!has(proto, "version") ||
+        !has(proto, "transform") ||
+        !has(proto, "template") ||
+        !has(proto, "types"))
+    ) {
+      proto = null;
+    }
+  }
+
+  return Object.assign({}, proto, api);
+}
+
+function has(obj, key) {
+  return Object.prototype.hasOwnProperty.call(obj, key);
 }
 
 function throwVersionError(range, version) {
