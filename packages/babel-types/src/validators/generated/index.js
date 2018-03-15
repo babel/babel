@@ -494,6 +494,9 @@ export function isOptionalMemberExpression(
 export function isOptionalCallExpression(node: Object, opts?: Object): boolean {
   return is("OptionalCallExpression", node, opts);
 }
+export function isClassPrivateProperty(node: Object, opts?: Object): boolean {
+  return is("ClassPrivateProperty", node, opts);
+}
 export function isImport(node: Object, opts?: Object): boolean {
   return is("Import", node, opts);
 }
@@ -511,6 +514,9 @@ export function isExportNamespaceSpecifier(
   opts?: Object,
 ): boolean {
   return is("ExportNamespaceSpecifier", node, opts);
+}
+export function isPrivateName(node: Object, opts?: Object): boolean {
+  return is("PrivateName", node, opts);
 }
 export function isTSParameterProperty(node: Object, opts?: Object): boolean {
   return is("TSParameterProperty", node, opts);
@@ -820,6 +826,9 @@ export function isFlowPredicate(node: Object, opts?: Object): boolean {
 }
 export function isJSX(node: Object, opts?: Object): boolean {
   return is("JSX", node, opts);
+}
+export function isPrivate(node: Object, opts?: Object): boolean {
+  return is("Private", node, opts);
 }
 export function isTSTypeElement(node: Object, opts?: Object): boolean {
   return is("TSTypeElement", node, opts);

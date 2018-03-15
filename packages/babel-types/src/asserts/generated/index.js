@@ -663,6 +663,12 @@ export function assertOptionalCallExpression(
 ): void {
   assert("OptionalCallExpression", node, opts);
 }
+export function assertClassPrivateProperty(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("ClassPrivateProperty", node, opts);
+}
 export function assertImport(node: Object, opts?: Object = {}): void {
   assert("Import", node, opts);
 }
@@ -683,6 +689,9 @@ export function assertExportNamespaceSpecifier(
   opts?: Object = {},
 ): void {
   assert("ExportNamespaceSpecifier", node, opts);
+}
+export function assertPrivateName(node: Object, opts?: Object = {}): void {
+  assert("PrivateName", node, opts);
 }
 export function assertTSParameterProperty(
   node: Object,
@@ -1058,6 +1067,9 @@ export function assertFlowPredicate(node: Object, opts?: Object = {}): void {
 }
 export function assertJSX(node: Object, opts?: Object = {}): void {
   assert("JSX", node, opts);
+}
+export function assertPrivate(node: Object, opts?: Object = {}): void {
+  assert("Private", node, opts);
 }
 export function assertTSTypeElement(node: Object, opts?: Object = {}): void {
   assert("TSTypeElement", node, opts);
