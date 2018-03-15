@@ -22,6 +22,7 @@ module.exports = function(api) {
       ignoreLib = false;
       break;
     case "standalone":
+    case "rollup":
       convertESM = false;
       ignoreLib = false;
       includeRuntime = true;

@@ -23,7 +23,7 @@ ifneq ("$(BABEL_COVERAGE)", "true")
 endif
 
 build-standalone:
-	./node_modules/.bin/gulp build-babel-standalone
+	./node_modules/.bin/gulp bundle
 
 build-preset-env-standalone:
 	./node_modules/.bin/gulp build-babel-preset-env-standalone
