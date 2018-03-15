@@ -256,7 +256,7 @@ t.classBody(body)
 
 See also `t.isClassBody(node, opts)` and `t.assertClassBody(node, opts)`.
 
- - `body`: `Array<ClassMethod | ClassProperty | TSDeclareMethod | TSIndexSignature>` (required)
+ - `body`: `Array<ClassMethod | ClassProperty | ClassPrivateProperty | TSDeclareMethod | TSIndexSignature>` (required)
 
 ---
 
@@ -340,6 +340,20 @@ Aliases: `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
  - `optional`: `boolean` (default: `null`)
  - `returnType`: `TypeAnnotation | TSTypeAnnotation | Noop` (default: `null`)
  - `typeParameters`: `TypeParameterDeclaration | TSTypeParameterDeclaration | Noop` (default: `null`)
+
+---
+
+### classPrivateProperty
+```javascript
+t.classPrivateProperty(key, value)
+```
+
+See also `t.isClassPrivateProperty(node, opts)` and `t.assertClassPrivateProperty(node, opts)`.
+
+Aliases: `Property`, `Private`
+
+ - `key`: `PrivateName` (required)
+ - `value`: `Expression` (required)
 
 ---
 
@@ -1633,6 +1647,19 @@ See also `t.isParenthesizedExpression(node, opts)` and `t.assertParenthesizedExp
 Aliases: `Expression`, `ExpressionWrapper`
 
  - `expression`: `Expression` (required)
+
+---
+
+### privateName
+```javascript
+t.privateName(name)
+```
+
+See also `t.isPrivateName(node, opts)` and `t.assertPrivateName(node, opts)`.
+
+Aliases: `Private`
+
+ - `name`: `Identifier` (required)
 
 ---
 
