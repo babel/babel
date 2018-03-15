@@ -17,7 +17,7 @@ function (_Foo) {
     var _temp, _this;
 
     babelHelpers.classCallCheck(this, Bar);
-    return babelHelpers.possibleConstructorReturn(_this, (_temp = _this = babelHelpers.possibleConstructorReturn(this, (Bar.__proto__ || Object.getPrototypeOf(Bar)).apply(this, arguments)), _prop2.set(_this, "bar"), _temp));
+    return babelHelpers.possibleConstructorReturn(_this, (_temp = _this = babelHelpers.possibleConstructorReturn(this, (Bar.__proto__ || Object.getPrototypeOf(Bar)).apply(this, arguments)), _prop2.set(babelHelpers.assertThisInitialized(_this), "bar"), _temp));
   }
 
   return Bar;

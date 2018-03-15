@@ -19,7 +19,7 @@ function (_Foo) {
     var _temp, _this;
 
     babelHelpers.classCallCheck(this, Bar);
-    return babelHelpers.possibleConstructorReturn(_this, (_temp = _this = babelHelpers.possibleConstructorReturn(this, (Bar.__proto__ || Object.getPrototypeOf(Bar)).apply(this, arguments)), Object.defineProperty(_this, _prop2, {
+    return babelHelpers.possibleConstructorReturn(_this, (_temp = _this = babelHelpers.possibleConstructorReturn(this, (Bar.__proto__ || Object.getPrototypeOf(Bar)).apply(this, arguments)), Object.defineProperty(babelHelpers.assertThisInitialized(_this), _prop2, {
       writable: true,
       value: "bar"
     }), _temp));

@@ -11,7 +11,7 @@ function (_Bar) {
     babelHelpers.classCallCheck(this, Foo);
     _this = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this));
 
-    _bar.set(_this, "foo");
+    _bar.set(babelHelpers.assertThisInitialized(_this), "foo");
 
     return _this;
   }
