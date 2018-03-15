@@ -15,6 +15,14 @@ export default declare((api, options) => {
 
   const {
     loose,
+
+    // 'true' for non-mjs files to strictly have .default, instead of having
+    // destructuring-like behavior for their properties.
+    strictNamespace = false,
+
+    // 'true' for mjs files to strictly have .default, instead of having
+    // destructuring-like behavior for their properties.
+    mjsStrictNamespace = true,
     allowTopLevelThis,
     strict,
     strictMode,
@@ -30,6 +38,13 @@ export default declare((api, options) => {
     (!Array.isArray(lazy) || !lazy.every(item => typeof item === "string"))
   ) {
     throw new Error(`.lazy must be a boolean, array of strings, or a function`);
+  }
+
+  if (typeof strictNamespace !== "boolean") {
+    throw new Error(`.strictNamespace must be a boolean, or undefined`);
+  }
+  if (typeof mjsStrictNamespace !== "boolean") {
+    throw new Error(`.mjsStrictNamespace must be a boolean, or undefined`);
   }
 
   const getAssertion = localName => template.expression.ast`
@@ -103,7 +118,7 @@ export default declare((api, options) => {
   return {
     visitor: {
       Program: {
-        exit(path) {
+        exit(path, state) {
           if (!isModule(path)) return;
 
           // Rename the bindings auto-injected into the scope so there is no
@@ -137,6 +152,11 @@ export default declare((api, options) => {
               allowTopLevelThis,
               noInterop,
               lazy,
+              esNamespaceOnly:
+                typeof state.filename === "string" &&
+                /\.mjs$/.test(state.filename)
+                  ? mjsStrictNamespace
+                  : strictNamespace,
             },
           );
 
