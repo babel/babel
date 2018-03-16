@@ -13,24 +13,24 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
+  transform-template-literals { "ie":"10", "safari":"7" }
+  transform-literals { "firefox":"49", "ie":"10", "safari":"7" }
+  transform-function-name { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-arrow-functions { "ie":"10", "ios":"9", "safari":"7" }
   transform-block-scoped-functions { "ie":"10", "ios":"9", "safari":"7" }
-  transform-block-scoping { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-classes { "ie":"10", "ios":"9", "safari":"7" }
-  transform-computed-properties { "ie":"10", "safari":"7" }
-  transform-destructuring { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-duplicate-keys { "ie":"10", "safari":"7" }
-  transform-for-of { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-function-name { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  transform-literals { "firefox":"49", "ie":"10", "safari":"7" }
   transform-object-super { "ie":"10", "ios":"9", "safari":"7" }
-  transform-parameters { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-shorthand-properties { "ie":"10", "safari":"7" }
-  transform-spread { "ie":"10", "ios":"9", "safari":"7" }
+  transform-duplicate-keys { "ie":"10", "safari":"7" }
+  transform-computed-properties { "ie":"10", "safari":"7" }
+  transform-for-of { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-sticky-regex { "ie":"10", "ios":"9", "safari":"7" }
-  transform-template-literals { "ie":"10", "safari":"7" }
-  transform-typeof-symbol { "ie":"10", "safari":"7" }
   transform-unicode-regex { "ie":"10", "ios":"9", "safari":"7" }
+  transform-spread { "ie":"10", "ios":"9", "safari":"7" }
+  transform-parameters { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  transform-destructuring { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  transform-block-scoping { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  transform-typeof-symbol { "ie":"10", "safari":"7" }
   transform-new-target { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   transform-regenerator { "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   transform-exponentiation-operator { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
