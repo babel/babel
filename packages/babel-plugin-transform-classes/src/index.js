@@ -1,12 +1,12 @@
 // @flow
 import { declare } from "@babel/helper-plugin-utils";
-import type { NodePath } from "@babel/traverse";
-import transformClass from "./vanilla";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import { types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 import globals from "globals";
+import transformClass from "./vanilla";
 
 const getBuiltinClasses = category =>
   Object.keys(globals[category]).filter(name => /^[A-Z]/.test(name));
