@@ -268,18 +268,19 @@ export default declare((api, options) => {
     });
   };
 
-  const buildPrivateClassPropertySpec = (ref, prop, classBody, nodes) => {
+  const buildPrivateClassPropertySpec = (
+    ref,
+    prop,
+    classBody,
+    nodes,
+    privateMaps,
+  ) => {
     const { node } = prop;
     const { name } = node.key.id;
-    const { file } = classBody.hub;
     const privateMap = classBody.scope.generateDeclaredUidIdentifier(name);
-
-    classBody.traverse(privateNameRemapper, {
-      name,
-      privateMap,
-      get: file.addHelper("classPrivateFieldGet"),
-      put: file.addHelper("classPrivateFieldPut"),
-    });
+    if (privateMaps) {
+      privateMaps[name] = privateMap;
+    }
 
     nodes.push(
       t.expressionStatement(
@@ -299,17 +300,20 @@ export default declare((api, options) => {
     );
   };
 
-  const buildPrivateClassPropertyLoose = (ref, prop, classBody, nodes) => {
+  const buildPrivateClassPropertyLoose = (
+    ref,
+    prop,
+    classBody,
+    nodes,
+    privateMaps,
+  ) => {
     const { key, value } = prop.node;
     const { name } = key.id;
     const { file } = classBody.hub;
     const privateKey = classBody.scope.generateDeclaredUidIdentifier(name);
-
-    classBody.traverse(privateNameRemapperLoose, {
-      name,
-      privateKey,
-      base: file.addHelper("classPrivateFieldBase"),
-    });
+    if (privateMaps) {
+      privateMaps[name] = privateKey;
+    }
 
     nodes.push(
       t.expressionStatement(
@@ -337,6 +341,33 @@ export default declare((api, options) => {
     });
   };
 
+  const replacePrivateClassPropertySpec = (prop, classBody, privateMaps) => {
+    const { node } = prop;
+    const { name } = node.key.id;
+    const { file } = classBody.hub;
+    const privateMap = privateMaps[name];
+
+    classBody.traverse(privateNameRemapper, {
+      name,
+      privateMap,
+      get: file.addHelper("classPrivateFieldGet"),
+      put: file.addHelper("classPrivateFieldPut"),
+    });
+  };
+
+  const replacePrivateClassPropertyLoose = (prop, classBody, privateMaps) => {
+    const { node } = prop;
+    const { name } = node.key.id;
+    const { file } = classBody.hub;
+    const privateKey = privateMaps[name];
+
+    classBody.traverse(privateNameRemapperLoose, {
+      name,
+      privateKey,
+      base: file.addHelper("classPrivateFieldBase"),
+    });
+  };
+
   const buildPublicClassProperty = loose
     ? buildPublicClassPropertyLoose
     : buildPublicClassPropertySpec;
@@ -344,6 +375,10 @@ export default declare((api, options) => {
   const buildPrivateClassProperty = loose
     ? buildPrivateClassPropertyLoose
     : buildPrivateClassPropertySpec;
+
+  const replacePrivateClassProperty = loose
+    ? replacePrivateClassPropertyLoose
+    : replacePrivateClassPropertySpec;
 
   return {
     inherits: syntaxClassProperties,
@@ -407,10 +442,18 @@ export default declare((api, options) => {
           }
         }
 
+        const privateMaps = {};
+
         for (const prop of staticProps) {
           if (prop.isClassPrivateProperty()) {
             staticNodes.push(
-              buildPrivateClassProperty(ref, prop, body, staticNodes),
+              buildPrivateClassProperty(
+                ref,
+                prop,
+                body,
+                staticNodes,
+                privateMaps,
+              ),
             );
           } else {
             staticNodes.push(buildPublicClassProperty(ref, prop));
@@ -469,7 +512,13 @@ export default declare((api, options) => {
 
             if (prop.isClassPrivateProperty()) {
               instanceBody.push(
-                buildPrivateClassProperty(thisRef, prop, body, afterNodes),
+                buildPrivateClassProperty(
+                  thisRef,
+                  prop,
+                  body,
+                  afterNodes,
+                  privateMaps,
+                ),
               );
             } else {
               instanceBody.push(buildPublicClassProperty(thisRef, prop));
@@ -510,11 +559,12 @@ export default declare((api, options) => {
           }
         }
 
-        for (const prop of [...staticProps, ...instanceProps]) {
-          prop.remove();
+        if (computedNodes.length === 0 && afterNodes.length === 0) {
+          for (const prop of [...staticProps, ...instanceProps]) {
+            prop.remove();
+          }
+          return;
         }
-
-        if (computedNodes.length === 0 && afterNodes.length === 0) return;
 
         if (path.isClassExpression()) {
           scope.push({ id: ref });
@@ -528,6 +578,13 @@ export default declare((api, options) => {
 
         path.insertBefore(computedNodes);
         path.insertAfter(afterNodes);
+
+        for (const prop of [...staticProps, ...instanceProps]) {
+          if (prop.isClassPrivateProperty()) {
+            replacePrivateClassProperty(prop, body, privateMaps);
+          }
+          prop.remove();
+        }
       },
 
       PrivateName(path) {
