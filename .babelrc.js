@@ -46,7 +46,9 @@ module.exports = function(api) {
       "@babel/proposal-export-namespace-from",
       "@babel/proposal-numeric-separator",
       ["@babel/proposal-object-rest-spread", { useBuiltIns: true }],
-      convertESM ? "@babel/transform-modules-commonjs" : null,
+
+      // Explicitly use the lazy version of CommonJS modules.
+      convertESM ? ["@babel/transform-modules-commonjs", { lazy: true }] : null,
     ].filter(Boolean),
     overrides: [
       {
@@ -55,6 +57,15 @@ module.exports = function(api) {
           "babel-plugin-transform-charcodes",
           ["@babel/transform-for-of", { assumeArray: true }],
         ],
+      },
+      {
+        test: "./packages/babel-register",
+        plugins: [
+          // Override the root options to disable lazy imports for babel-register
+          // because otherwise the require hook will try to lazy-import things
+          // leading to dependency cycles.
+          convertESM ? "@babel/transform-modules-commonjs" : null,
+        ].filter(Boolean),
       },
     ],
   };
