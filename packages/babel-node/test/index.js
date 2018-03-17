@@ -64,7 +64,7 @@ const assertTest = function(stdout, stderr, opts) {
       chai.expect(stderr).to.equal(expectStderr, "stderr didn't match");
     }
   } else if (stderr) {
-    throw new Error("stderr:\n" + stderr);
+    throw new Error("stderr:\n" + stderr + "\n\nstdout:\n" + stdout);
   }
 
   const expectStdout = opts.stdout.trim();
