@@ -266,31 +266,36 @@ export default class StatementParser extends ExpressionParser {
     this.next();
 
     if (this.hasPlugin("decorators2")) {
-      const startPos = this.state.start;
-      const startLoc = this.state.startLoc;
-      let expr = this.parseIdentifier(false);
-
-      while (this.eat(tt.dot)) {
-        const node = this.startNodeAt(startPos, startLoc);
-        node.object = expr;
-        node.property = this.parseIdentifier(true);
-        node.computed = false;
-        expr = this.finishNode(node, "MemberExpression");
-      }
-
       if (this.eat(tt.parenL)) {
-        const node = this.startNodeAt(startPos, startLoc);
-        node.callee = expr;
-        // Every time a decorator class expression is evaluated, a new empty array is pushed onto the stack
-        // So that the decorators of any nested class expressions will be dealt with separately
-        this.state.decoratorStack.push([]);
-        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
-        this.state.decoratorStack.pop();
-        expr = this.finishNode(node, "CallExpression");
-        this.toReferencedList(expr.arguments);
-      }
+        node.expression = this.parseExpression();
+        this.expect(tt.parenR);
+      } else {
+        const startPos = this.state.start;
+        const startLoc = this.state.startLoc;
+        let expr = this.parseIdentifier(false);
 
-      node.expression = expr;
+        while (this.eat(tt.dot)) {
+          const node = this.startNodeAt(startPos, startLoc);
+          node.object = expr;
+          node.property = this.parseIdentifier(true);
+          node.computed = false;
+          expr = this.finishNode(node, "MemberExpression");
+        }
+
+        if (this.eat(tt.parenL)) {
+          const node = this.startNodeAt(startPos, startLoc);
+          node.callee = expr;
+          // Every time a decorator class expression is evaluated, a new empty array is pushed onto the stack
+          // So that the decorators of any nested class expressions will be dealt with separately
+          this.state.decoratorStack.push([]);
+          node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+          this.state.decoratorStack.pop();
+          expr = this.finishNode(node, "CallExpression");
+          this.toReferencedList(expr.arguments);
+        }
+
+        node.expression = expr;
+      }
     } else {
       node.expression = this.parseMaybeAssign();
     }
@@ -956,14 +961,13 @@ export default class StatementParser extends ExpressionParser {
       this.parseClassMember(classBody, member, state);
 
       if (
-        this.hasPlugin("decorators2") &&
-        ["method", "get", "set"].indexOf(member.kind) === -1 &&
+        member.kind === "constructor" &&
         member.decorators &&
         member.decorators.length > 0
       ) {
         this.raise(
           member.start,
-          "Stage 2 decorators may only be used with a class or a class method",
+          "Decorators can't be used with a constructor. Did you mean '@dec class { ... }'?",
         );
       }
     }
