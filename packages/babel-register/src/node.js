@@ -55,32 +55,29 @@ function compile(code, filename) {
 
   if (env) cacheKey += `:${env}`;
 
-  if (cache) {
-    const cached = cache[cacheKey];
-    if (cached && cached.mtime === mtime(filename)) {
-      return cached.code;
+  let cached = cache && cache[cacheKey];
+
+  if (!cached || cached.mtime !== mtime(filename)) {
+    cached = babel.transform(code, {
+      ...opts,
+      sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
+      ast: false,
+    });
+
+    if (cache) {
+      cache[cacheKey] = cached;
+      cached.mtime = mtime(filename);
     }
   }
 
-  const result = babel.transform(code, {
-    ...opts,
-    sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
-    ast: false,
-  });
-
-  if (cache) {
-    cache[cacheKey] = result;
-    result.mtime = mtime(filename);
-  }
-
-  if (result.map) {
+  if (cached.map) {
     if (Object.keys(maps).length === 0) {
       installSourceMapSupport();
     }
-    maps[filename] = result.map;
+    maps[filename] = cached.map;
   }
 
-  return result.code;
+  return cached.code;
 }
 
 function hookExtensions(exts) {
