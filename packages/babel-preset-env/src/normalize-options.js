@@ -16,10 +16,9 @@ const validIncludesAndExcludes = new Set([
 ]);
 
 const pluginToRegExp = (plugin: any): RegExp => {
+  if (plugin instanceof RegExp) return plugin;
   try {
-    return plugin instanceof RegExp
-      ? plugin
-      : new RegExp(`^${normalizePluginName(plugin)}$`);
+    return  new RegExp(`^${normalizePluginName(plugin)}$`);
   } catch (e) {
     return null;
   }
@@ -31,7 +30,7 @@ const selectPlugins = (regexp: RegExp): Array<string> =>
   );
 
 const expandIncludesAndExcludes = (
-  plugins: Array<string> = [],
+  plugins: Array<string|RegExp> = [],
   type: string,
 ): Array<string> => {
   if (plugins.length === 0) return plugins;
