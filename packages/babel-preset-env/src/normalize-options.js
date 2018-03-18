@@ -26,8 +26,10 @@ const pluginToRegExp = (plugin: any): RegExp => {
 
 const selectPlugins = (regexp: RegExp): Array<string> =>
   Array.from(validIncludesAndExcludes).filter(
-    item => regexp instanceof RegExp && item.match(regexp),
+    item => regexp instanceof RegExp && regexp.test(item),
   );
+
+const flatten = array => [].concat(...array);
 
 const expandIncludesAndExcludes = (
   plugins: Array<string | RegExp> = [],
@@ -50,7 +52,7 @@ const expandIncludesAndExcludes = (
     valid. Please check data/[plugin-features|built-in-features].js in babel-preset-env`,
   );
 
-  return [].concat(...selectedPlugins);
+  return flatten(selectedPlugins);
 };
 
 const validBrowserslistTargets = [
@@ -58,8 +60,8 @@ const validBrowserslistTargets = [
   ...Object.keys(browserslist.aliases),
 ];
 
-const normalizePluginName = (plugin: string): string =>
-  plugin.replace("babel-plugin-", "");
+export const normalizePluginName = (plugin: string): string =>
+  plugin.replace(/^babel-plugin-/, "");
 
 export const checkDuplicateIncludeExcludes = (
   include: Array<string> = [],

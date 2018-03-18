@@ -7,8 +7,8 @@ const {
   checkDuplicateIncludeExcludes,
   validateBoolOption,
   validateModulesOption,
+  normalizePluginName,
 } = normalizeOptions;
-
 describe("normalize-options", () => {
   describe("normalizeOptions", () => {
     it("should return normalized `include` and `exclude`", () => {
@@ -19,6 +19,11 @@ describe("normalize-options", () => {
         "transform-spread",
         "transform-classes",
       ]);
+    });
+
+    it("should not normalize babel-plugin with prefix", () => {
+      const normalized = normalizePluginName("prefix-babel-plugin-postfix");
+      assert.equal(normalized, "prefix-babel-plugin-postfix");
     });
 
     it("should throw if duplicate names in `include` and `exclude`", () => {
