@@ -263,7 +263,7 @@ export default class ClassTransformer {
         throw path.buildCodeFrameError("Missing class properties transform.");
       }
 
-      if (node.decorators) {
+      if (node && node.decorators) {
         throw path.buildCodeFrameError(
           "Method has decorators, put the decorator plugin before the classes one.",
         );
