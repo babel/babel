@@ -5,12 +5,10 @@ const assert = require("assert");
 
 const {
   checkDuplicateIncludeExcludes,
-  normalizePluginNames,
   validateBoolOption,
-  validateIncludesAndExcludes,
   validateModulesOption,
+  normalizePluginName,
 } = normalizeOptions;
-
 describe("normalize-options", () => {
   describe("normalizeOptions", () => {
     it("should return normalized `include` and `exclude`", () => {
@@ -23,6 +21,11 @@ describe("normalize-options", () => {
       ]);
     });
 
+    it("should not normalize babel-plugin with prefix", () => {
+      const normalized = normalizePluginName("prefix-babel-plugin-postfix");
+      assert.equal(normalized, "prefix-babel-plugin-postfix");
+    });
+
     it("should throw if duplicate names in `include` and `exclude`", () => {
       const normalizeWithSameIncludes = () => {
         normalizeOptions.default({
@@ -31,6 +34,57 @@ describe("normalize-options", () => {
         });
       };
       assert.throws(normalizeWithSameIncludes, Error);
+    });
+  });
+
+  describe("RegExp include/exclude", () => {
+    it("should not allow invalid plugins in `include` and `exclude`", () => {
+      const normalizeWithNonExistingPlugin = () => {
+        normalizeOptions.default({
+          include: ["non-existing-plugin"],
+        });
+      };
+      assert.throws(normalizeWithNonExistingPlugin, Error);
+    });
+
+    it("should expand regular expressions in `include` and `exclude`", () => {
+      const normalized = normalizeOptions.default({
+        include: ["^[a-z]*-spread", "babel-plugin-transform-classes"],
+      });
+      assert.deepEqual(normalized.include, [
+        "transform-spread",
+        "transform-classes",
+      ]);
+    });
+
+    it("should expand regular expressions in `include` and `exclude`", () => {
+      const normalized = normalizeOptions.default({
+        exclude: ["es6.math.log.*"],
+      });
+      assert.deepEqual(normalized.exclude, [
+        "es6.math.log1p",
+        "es6.math.log10",
+        "es6.math.log2",
+      ]);
+    });
+
+    it("should not allow the same modules in `include` and `exclude`", () => {
+      const normalizeWithNonExistingPlugin = () => {
+        normalizeOptions.default({
+          include: ["es6.math.log2"],
+          exclude: ["es6.math.log.*"],
+        });
+      };
+      assert.throws(normalizeWithNonExistingPlugin, Error);
+    });
+
+    it("should not do partial match if not explicitly defined `include` and `exclude`", () => {
+      const normalized = normalizeOptions.default({
+        include: ["es6.reflect.set-prototype-of"],
+        exclude: ["es6.reflect.set"],
+      });
+      assert.deepEqual(normalized.include, ["es6.reflect.set-prototype-of"]);
+      assert.deepEqual(normalized.exclude, ["es6.reflect.set"]);
     });
   });
 
@@ -62,24 +116,6 @@ describe("normalize-options", () => {
           ["transform-regenerator", "map"],
         );
       }, Error);
-    });
-
-    it("should not throw if no duplicate names in both", function() {
-      assert.doesNotThrow(() => {
-        checkDuplicateIncludeExcludes(["transform-regenerator"], ["map"]);
-      }, Error);
-    });
-  });
-
-  describe("normalizePluginNames", function() {
-    it("should drop `babel-plugin-` prefix if needed", function() {
-      assert.deepEqual(
-        normalizePluginNames([
-          "babel-plugin-transform-object-super",
-          "transform-parameters",
-        ]),
-        ["transform-object-super", "transform-parameters"],
-      );
     });
 
     it("should not throw if no duplicate names in both", function() {
@@ -123,16 +159,6 @@ describe("normalize-options", () => {
     it("array option is invalid", () => {
       assert.throws(() => {
         assert(validateModulesOption([]));
-      }, Error);
-    });
-  });
-  describe("validateIncludesAndExcludes", function() {
-    it("should return empty arrays if undefined", function() {
-      assert.deepEqual(validateIncludesAndExcludes(), []);
-    });
-    it("should throw if not in features", function() {
-      assert.throws(() => {
-        validateIncludesAndExcludes(["asdf"]);
       }, Error);
     });
   });

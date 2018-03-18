@@ -245,7 +245,7 @@ Outputs the targets/plugins used and the version specified in [plugin data versi
 
 ### `include`
 
-`Array<string>`, defaults to `[]`.
+`Array<string|RegExp>`, defaults to `[]`.
 
 An array of plugins to always include.
 
@@ -255,6 +255,16 @@ Valid options include any:
 
 - [Built-ins](https://github.com/babel/babel/blob/master/packages/babel-preset-env/data/built-in-features.js), such as `es6.map`, `es6.set`, or `es6.object.assign`.
 
+Plugin names can be fully or partially specified (or using `RegExp`).
+
+Acceptable inputs:
+
+- Full name (`string`): `"es6.math.sign"`
+- Partial name (`string`): `"es6.math.*"` (resolves to all plugins with `es6.math` prefix)
+- `RegExp` Object: `/^transform-.*$/` or `new RegExp("^transform-modules-.*")`
+
+Note that the above `.` is the `RegExp` equivalent to match any character, and not the actual `'.'` character. Also note that to match any character `.*` is used in `RegExp` as opposed to `*` in `glob` format.
+
 This option is useful if there is a bug in a native implementation, or a combination of a non-supported feature + a supported one doesn't work.
 
 For example, Node 4 supports native classes but not spread. If `super` is used with a spread argument, then the `@babel/plugin-transform-classes` transform needs to be `include`d, as it is not possible to transpile a spread with `super` otherwise.
@@ -263,7 +273,7 @@ For example, Node 4 supports native classes but not spread. If `super` is used w
 
 ### `exclude`
 
-`Array<string>`, defaults to `[]`.
+`Array<string|RegExp>`, defaults to `[]`.
 
 An array of plugins to always exclude/remove.
 
