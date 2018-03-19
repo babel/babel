@@ -144,9 +144,9 @@ export default function transformClass(
   }
 
   /**
-   * Creates a class constructor if there is none
+   * Creates a class constructor or bail out if there is none
    */
-  function createConstructor() {
+  function maybeCreateConstructor() {
     let hasConstructor = false;
     const paths = classState.path.get("body.body");
     for (const path of paths) {
@@ -179,7 +179,7 @@ export default function transformClass(
   }
 
   function buildBody() {
-    createConstructor();
+    maybeCreateConstructor();
     pushBody();
     verifyConstructor();
 
