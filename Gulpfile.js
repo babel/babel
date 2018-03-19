@@ -91,164 +91,179 @@ function buildBabel(exclude) {
     })
   );
 }
-
+let babelVersion = require("./packages/babel-core/package.json").version;
 function buildRollup(packages) {
   return merge(
-    Object.keys(packages).map(pkg => {
-      let babelVersion = require("./packages/babel-core/package.json").version;
-      const { format, dest, name, filename, minify } = packages[pkg];
-      let { version = babelVersion } = packages[pkg];
-
-      // If this build is part of a pull request, include the pull request number in
-      // the version number.
-      if (process.env.CIRCLE_PR_NUMBER) {
-        const prVersion = "+pr." + process.env.CIRCLE_PR_NUMBER;
-        babelVersion += prVersion;
-        version += prVersion;
-      }
-
-      let letMinifyArgs = [];
-      if (minify) {
-        letMinifyArgs = [
-          rename({ extname: ".min.js" }),
-          gulp.dest(path.join(pkg, dest)),
-        ];
-        if (!process.env.CI) {
-          letMinifyArgs.unshift(uglify());
+    packages.map(
+      ({
+        src,
+        format,
+        dest,
+        name,
+        filename,
+        minify,
+        version = babelVersion,
+      }) => {
+        // If this build is part of a pull request, include the pull request number in
+        // the version number.
+        if (process.env.CIRCLE_PR_NUMBER) {
+          const prVersion = "+pr." + process.env.CIRCLE_PR_NUMBER;
+          babelVersion += prVersion;
+          version += prVersion;
         }
-      }
-      return pump(
-        rollup({
-          rollup: require("rollup"),
-          input: getIndexFromPackage(pkg),
-          output: {
-            format,
-            name,
-          },
-          external: ["fs", "path"],
-          plugins: [
-            {
-              name: "babel-source",
-              load(id) {
-                const matches = id.match(/packages\/(babel-[^/]+)\/src\//);
-                if (matches) {
-                  // check if browser field exists for this file and replace
-                  const packageFolder = path.join(
-                    __dirname,
-                    "packages",
-                    matches[1]
-                  );
-                  const packageJson = require(path.join(
-                    packageFolder,
-                    "package.json"
-                  ));
 
-                  if (
-                    packageJson["browser"] &&
-                    typeof packageJson["browser"] === "object"
-                  ) {
-                    for (let nodeFile in packageJson["browser"]) {
-                      const browserFile = packageJson["browser"][
-                        nodeFile
-                      ].replace(/^(\.\/)?lib\//, "src/");
-                      nodeFile = nodeFile.replace(/^(\.\/)?lib\//, "src/");
-                      if (id.endsWith(nodeFile)) {
-                        if (browserFile === false) {
-                          console.log(`Ignore ${nodeFile}`);
-                          return "";
+        let letMinifyArgs = [];
+        if (minify) {
+          letMinifyArgs = [
+            rename({ extname: ".min.js" }),
+            gulp.dest(path.join(src, dest)),
+          ];
+          if (!process.env.CI) {
+            letMinifyArgs.unshift(uglify());
+          }
+        }
+        return pump(
+          rollup({
+            rollup: require("rollup"),
+            input: getIndexFromPackage(src),
+            output: {
+              format,
+              name,
+            },
+            external: ["fs", "path"],
+            plugins: [
+              {
+                name: "babel-source",
+                load(id) {
+                  const matches = id.match(
+                    /packages\/(babel-[^/]+|babylon)\/src\//
+                  );
+                  if (matches) {
+                    // check if browser field exists for this file and replace
+                    const packageFolder = path.join(
+                      __dirname,
+                      "packages",
+                      matches[1]
+                    );
+                    const packageJson = require(path.join(
+                      packageFolder,
+                      "package.json"
+                    ));
+
+                    if (
+                      packageJson["browser"] &&
+                      typeof packageJson["browser"] === "object"
+                    ) {
+                      for (let nodeFile in packageJson["browser"]) {
+                        const browserFile = packageJson["browser"][
+                          nodeFile
+                        ].replace(/^(\.\/)?lib\//, "src/");
+                        nodeFile = nodeFile.replace(/^(\.\/)?lib\//, "src/");
+                        if (id.endsWith(nodeFile)) {
+                          if (browserFile === false) {
+                            return "";
+                          }
+                          return fs.readFileSync(
+                            path.join(packageFolder, browserFile),
+                            "UTF-8"
+                          );
                         }
-                        console.log(`Replace ${nodeFile} with ${browserFile}`);
-                        return fs.readFileSync(
-                          path.join(packageFolder, browserFile),
-                          "UTF-8"
-                        );
                       }
                     }
                   }
-                }
+                },
+                resolveId(importee) {
+                  let packageFolderName;
+                  if (importee === "babylon") {
+                    packageFolderName = importee;
+                  } else {
+                    const matches = importee.match(/^@babel\/([^/]+)$/);
+                    if (matches) {
+                      packageFolderName = `babel-${matches[1]}`;
+                    }
+                  }
+
+                  if (packageFolderName) {
+                    // resolve babel package names to their src index file
+                    const packageFolder = path.join(
+                      __dirname,
+                      "packages",
+                      packageFolderName
+                    );
+                    const packageJson = require(path.join(
+                      packageFolder,
+                      "package.json"
+                    ));
+
+                    const filename =
+                      typeof packageJson["browser"] === "string"
+                        ? packageJson["browser"]
+                        : packageJson["main"];
+
+                    return path.join(
+                      packageFolder,
+                      // replace lib with src in the pkg.json entry
+                      filename.replace(/^(\.\/)?lib\//, "src/")
+                    );
+                  }
+                },
               },
-              resolveId(importee) {
-                const matches = importee.match(/^@babel\/([^/]+)$/);
-                if (matches) {
-                  // resolve babel package names to their src index file
-                  const packageFolder = path.join(
-                    __dirname,
-                    "packages",
-                    `babel-${matches[1]}`
-                  );
-                  const packageJson = require(path.join(
-                    packageFolder,
-                    "package.json"
-                  ));
-
-                  const filename =
-                    typeof packageJson["browser"] === "string"
-                      ? packageJson["browser"]
-                      : packageJson["main"];
-
-                  console.log(
-                    `Resolving ${importee} to ${filename.replace(
-                      /^(\.\/)?lib\//,
-                      "src/"
-                    )}`
-                  );
-
-                  return path.join(
-                    packageFolder,
-                    // replace lib with src in the pkg.json entry
-                    filename.replace(/^(\.\/)?lib\//, "src/")
-                  );
-                }
-              },
-            },
-            rollupJson(),
-            rollupNodeResolve({
-              browser: true,
-              jsnext: true,
-            }),
-            rollupReplace({
-              "process.env.NODE_ENV": '"production"',
-              "process.env.BABEL_ENV": '""',
-              "process.env.TERM": '""',
-              "process.platform": '""',
-              "process.env": JSON.stringify({}),
-              BABEL_VERSION: JSON.stringify(babelVersion),
-              VERSION: JSON.stringify(version),
-            }),
-            rollupBabel({
-              envName: "rollup",
-              babelrc: false,
-              extends: "./.babelrc.js",
-            }),
-            rollupCommonJs(),
-          ],
-        }),
-        source("index.js"),
-        buffer(),
-        errorsLogger(),
-        compilationLogger(pkg, /* rollup */ true),
-        rename(path => {
-          path.basename = filename || path.basename;
-        }),
-        gulp.dest(path.join(pkg, dest)),
-        ...letMinifyArgs,
-        function(err) {
-          if (err) throw err;
-        }
-      );
-    })
+              rollupJson(),
+              rollupNodeResolve({
+                browser: true,
+                jsnext: true,
+              }),
+              rollupReplace({
+                "process.env.NODE_ENV": '"production"',
+                "process.env.BABEL_ENV": '""',
+                "process.env.TERM": '""',
+                "process.platform": '""',
+                "process.env": JSON.stringify({}),
+                BABEL_VERSION: JSON.stringify(babelVersion),
+                VERSION: JSON.stringify(version),
+              }),
+              rollupBabel({
+                envName: "rollup",
+                babelrc: false,
+                extends: "./.babelrc.js",
+              }),
+              rollupCommonJs(),
+            ],
+          }),
+          source("index.js"),
+          buffer(),
+          errorsLogger(),
+          compilationLogger(src, /* rollup */ true),
+          rename(path => {
+            path.basename = filename || path.basename;
+          }),
+          gulp.dest(path.join(src, dest)),
+          ...letMinifyArgs,
+          function(err) {
+            if (err) throw err;
+          }
+        );
+      }
+    )
   );
 }
 
 gulp.task("default", ["build"]);
 
-const bundles = {
-  "packages/babel-parser": {
+// These are bundles which are placed in lib and
+// serve as the commonjs npm package source
+const libBundles = [
+  {
+    src: "packages/babel-parser",
     format: "cjs",
     dest: "lib",
     version: require("./packages/babel-parser/package.json").version,
   },
-  "packages/babel-standalone": {
+];
+
+const bundles = [
+  {
+    src: "packages/babel-standalone",
     format: "umd",
     name: "Babel",
     filename: "babel",
@@ -262,12 +277,15 @@ const bundles = {
     dest: "",
     minify: true,
   },*/
-};
+];
 
 gulp.task("build", function() {
   return merge(
-    buildBabel(/* exclude */ Object.keys(bundles)),
-    buildRollup({ "packages/babel-parser": bundles["packages/babel-parser"] })
+    buildBabel([
+      ...libBundles.map(entry => entry.src),
+      ...bundles.map(entry => entry.src),
+    ]),
+    buildRollup(libBundles)
   );
 });
 
@@ -275,9 +293,7 @@ gulp.task("bundle", function() {
   return buildRollup(bundles);
 });
 
-gulp.task("default", gulp.series("build"));
-
-gulp.task("build-no-bundle", () => buildBabel());
+gulp.task("build-no-bundle", () => buildBabel(bundles.map(entry => entry.src)));
 
 gulp.task(
   "watch",
