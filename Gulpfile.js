@@ -110,10 +110,12 @@ function buildRollup(packages) {
       let letMinifyArgs = [];
       if (minify) {
         letMinifyArgs = [
-          process.env.CI ? [] : uglify(),
           rename({ extname: ".min.js" }),
           gulp.dest(path.join(pkg, dest)),
         ];
+        if (!process.env.CI) {
+          letMinifyArgs.unshift(uglify());
+        }
       }
       return pump(
         rollup({
