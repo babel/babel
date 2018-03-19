@@ -6,7 +6,7 @@ import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import { types as t } from "@babel/core";
 import type { NodePath } from "@babel/traverse";
 import globals from "globals";
-import transformClass from "./vanilla";
+import transformClass from "./transformClass";
 
 const getBuiltinClasses = category =>
   Object.keys(globals[category]).filter(name => /^[A-Z]/.test(name));
