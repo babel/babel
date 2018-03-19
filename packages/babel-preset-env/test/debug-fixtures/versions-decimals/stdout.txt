@@ -19,24 +19,24 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
+  transform-template-literals { "ie":"10" }
+  transform-literals { "ie":"10" }
+  transform-function-name { "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-arrow-functions { "ie":"10" }
   transform-block-scoped-functions { "ie":"10" }
-  transform-block-scoping { "electron":"0.36", "ie":"10" }
   transform-classes { "ie":"10" }
-  transform-computed-properties { "ie":"10" }
-  transform-destructuring { "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-duplicate-keys { "ie":"10" }
-  transform-for-of { "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-function-name { "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-literals { "ie":"10" }
   transform-object-super { "ie":"10" }
-  transform-parameters { "electron":"0.36", "ie":"10" }
   transform-shorthand-properties { "ie":"10" }
-  transform-spread { "ie":"10" }
+  transform-duplicate-keys { "ie":"10" }
+  transform-computed-properties { "ie":"10" }
+  transform-for-of { "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-sticky-regex { "electron":"0.36", "ie":"10" }
-  transform-template-literals { "ie":"10" }
-  transform-typeof-symbol { "ie":"10" }
   transform-unicode-regex { "electron":"0.36", "ie":"10" }
+  transform-spread { "ie":"10" }
+  transform-parameters { "electron":"0.36", "ie":"10" }
+  transform-destructuring { "electron":"0.36", "ie":"10", "node":"6.1" }
+  transform-block-scoping { "electron":"0.36", "ie":"10" }
+  transform-typeof-symbol { "ie":"10" }
   transform-new-target { "ie":"10" }
   transform-regenerator { "electron":"0.36", "ie":"10" }
   transform-exponentiation-operator { "electron":"0.36", "ie":"10", "node":"6.1" }

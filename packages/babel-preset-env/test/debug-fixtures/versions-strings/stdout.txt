@@ -10,24 +10,24 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
+  transform-template-literals { "ie":"10" }
+  transform-literals { "ie":"10" }
+  transform-function-name { "ie":"10" }
   transform-arrow-functions { "ie":"10" }
   transform-block-scoped-functions { "ie":"10" }
-  transform-block-scoping { "ie":"10" }
   transform-classes { "ie":"10" }
-  transform-computed-properties { "ie":"10" }
-  transform-destructuring { "ie":"10" }
-  transform-duplicate-keys { "ie":"10" }
-  transform-for-of { "ie":"10" }
-  transform-function-name { "ie":"10" }
-  transform-literals { "ie":"10" }
   transform-object-super { "ie":"10" }
-  transform-parameters { "ie":"10" }
   transform-shorthand-properties { "ie":"10" }
-  transform-spread { "ie":"10" }
+  transform-duplicate-keys { "ie":"10" }
+  transform-computed-properties { "ie":"10" }
+  transform-for-of { "ie":"10" }
   transform-sticky-regex { "ie":"10" }
-  transform-template-literals { "ie":"10" }
-  transform-typeof-symbol { "ie":"10" }
   transform-unicode-regex { "ie":"10" }
+  transform-spread { "ie":"10" }
+  transform-parameters { "ie":"10" }
+  transform-destructuring { "ie":"10" }
+  transform-block-scoping { "ie":"10" }
+  transform-typeof-symbol { "ie":"10" }
   transform-new-target { "ie":"10" }
   transform-regenerator { "ie":"10" }
   transform-exponentiation-operator { "ie":"10", "node":"6.10" }

@@ -6,24 +6,24 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
+  transform-template-literals {}
+  transform-literals {}
+  transform-function-name {}
   transform-arrow-functions {}
   transform-block-scoped-functions {}
-  transform-block-scoping {}
   transform-classes {}
-  transform-computed-properties {}
-  transform-destructuring {}
-  transform-duplicate-keys {}
-  transform-for-of {}
-  transform-function-name {}
-  transform-literals {}
   transform-object-super {}
-  transform-parameters {}
   transform-shorthand-properties {}
-  transform-spread {}
+  transform-duplicate-keys {}
+  transform-computed-properties {}
+  transform-for-of {}
   transform-sticky-regex {}
-  transform-template-literals {}
-  transform-typeof-symbol {}
   transform-unicode-regex {}
+  transform-spread {}
+  transform-parameters {}
+  transform-destructuring {}
+  transform-block-scoping {}
+  transform-typeof-symbol {}
   transform-new-target {}
   transform-regenerator {}
   transform-exponentiation-operator {}

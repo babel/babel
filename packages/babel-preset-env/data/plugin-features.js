@@ -1,30 +1,55 @@
 const es2015 = {
+  "transform-template-literals": {
+    features: ["template literals"],
+  },
+  "transform-literals": {
+    features: ["Unicode code point escapes"],
+  },
+  "transform-function-name": {
+    features: ['function "name" property'],
+  },
   "transform-arrow-functions": {
-    features: [
-      "arrow functions",
-    ],
+    features: ["arrow functions"],
   },
   "transform-block-scoped-functions": {
-    features: [
-      "block-level function declaration"
-    ],
-  },
-  "transform-block-scoping": {
-    features: [
-      "const",
-      "let",
-    ],
+    features: ["block-level function declaration"],
   },
   "transform-classes": {
-    features: [
-      "class",
-      "super",
-    ],
+    features: ["class", "super"],
+  },
+  "transform-object-super": {
+    features: ["super"],
+  },
+  "transform-shorthand-properties": {
+    features: ["object literal extensions / shorthand properties"],
+  },
+  "transform-duplicate-keys": {
+    features: ["miscellaneous / duplicate property names in strict mode"],
   },
   "transform-computed-properties": {
+    features: ["object literal extensions / computed properties"],
+  },
+  "transform-for-of": {
+    features: ["for..of loops"],
+  },
+  "transform-sticky-regex": {
     features: [
-      "object literal extensions / computed properties",
+      'RegExp "y" and "u" flags / "y" flag, lastIndex',
+      'RegExp "y" and "u" flags / "y" flag',
     ],
+  },
+  "transform-unicode-regex": {
+    features: [
+      'RegExp "y" and "u" flags / "u" flag, case folding',
+      'RegExp "y" and "u" flags / "u" flag, Unicode code point escapes',
+      'RegExp "y" and "u" flags / "u" flag',
+    ],
+  },
+  "transform-spread": {
+    features: ["spread (...) operator"],
+  },
+  "transform-parameters": {
+    features: ["default function parameters", "rest parameters"],
   },
   "transform-destructuring": {
     features: [
@@ -33,95 +58,29 @@ const es2015 = {
       "destructuring, parameters",
     ],
   },
-  "transform-duplicate-keys": {
-    features: [
-      "miscellaneous / duplicate property names in strict mode",
-    ],
-  },
-  "transform-for-of": {
-    features: [
-      "for..of loops",
-    ],
-  },
-  "transform-function-name": {
-    features: [
-      "function \"name\" property",
-    ]
-  },
-  "transform-literals": {
-    features: [
-      "Unicode code point escapes",
-    ],
-  },
-  "transform-object-super": {
-    features: [
-      "super",
-    ],
-  },
-  "transform-parameters": {
-    features: [
-      "default function parameters",
-      "rest parameters",
-    ],
-  },
-  "transform-shorthand-properties": {
-    features: [
-      "object literal extensions / shorthand properties",
-    ],
-  },
-  "transform-spread": {
-    features: [
-      "spread (...) operator",
-    ],
-  },
-  "transform-sticky-regex": {
-    features: [
-      "RegExp \"y\" and \"u\" flags / \"y\" flag, lastIndex",
-      "RegExp \"y\" and \"u\" flags / \"y\" flag",
-    ],
-  },
-  "transform-template-literals": {
-    features: [
-      "template literals",
-    ],
+  "transform-block-scoping": {
+    features: ["const", "let"],
   },
   "transform-typeof-symbol": {
-    features: [
-      "Symbol / typeof support"
-    ],
-  },
-  "transform-unicode-regex": {
-    features: [
-      "RegExp \"y\" and \"u\" flags / \"u\" flag, case folding",
-      "RegExp \"y\" and \"u\" flags / \"u\" flag, Unicode code point escapes",
-      "RegExp \"y\" and \"u\" flags / \"u\" flag",
-    ],
+    features: ["Symbol / typeof support"],
   },
   "transform-new-target": {
-    features: [
-      "new.target",
-    ],
+    features: ["new.target"],
   },
   "transform-regenerator": {
-    features: [
-      "generators",
-    ],
-  }
+    features: ["generators"],
+  },
 };
 
 const es2016 = {
   "transform-exponentiation-operator": {
-    features: [
-      "exponentiation (**) operator",
-    ],
-  }
+    features: ["exponentiation (**) operator"],
+  },
 };
 
 const es2017 = {
   "transform-async-to-generator": {
-    features: [
-      "async functions",
-    ],
+    features: ["async functions"],
   },
 };
 
