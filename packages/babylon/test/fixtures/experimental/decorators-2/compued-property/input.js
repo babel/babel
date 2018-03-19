@@ -1,5 +1,5 @@
 class Foo {
-  @bar[bizz]
+  @bar [bizz]
   abc() {
 
   }
