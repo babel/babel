@@ -38,3 +38,35 @@ assert.equal(deep.obj.x &&= 0, 0);
 assert.equal(gets, 3);
 assert.equal(deep.obj.x &&= 3, 0);
 assert.equal(gets, 4);
+
+var key = 0;
+assert.equal(obj[++key] ||= 1, 1);
+assert.equal(key, 1);
+key = 0;
+assert.equal(obj[++key] ||= 2, 1);
+assert.equal(key, 1);
+
+key = 0;
+assert.equal(obj[++key] &&= 0, 0);
+assert.equal(key, 1);
+key = 0;
+assert.equal(obj[++key] &&= 3, 0);
+assert.equal(key, 1);
+
+key = 0;
+assert.equal(deep.obj[++key] ||= 1, 1);
+assert.equal(gets, 5);
+assert.equal(key, 1);
+key = 0;
+assert.equal(deep.obj[++key] ||= 2, 1);
+assert.equal(gets, 6);
+assert.equal(key, 1);
+
+key = 0;
+assert.equal(deep.obj[++key] &&= 0, 0);
+assert.equal(gets, 7);
+assert.equal(key, 1);
+key = 0;
+assert.equal(deep.obj[++key] &&= 3, 0);
+assert.equal(gets, 8);
+assert.equal(key, 1);
