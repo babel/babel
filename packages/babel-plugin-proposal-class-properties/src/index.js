@@ -69,16 +69,12 @@ export default declare((api, options) => {
       const name = isPrivate
         ? key.id.name
         : t.isIdentifier(key) ? key.name : key.value;
-      const seen =
-        propNames[
-          isPrivate
-            ? "privateProps"
-            : isStatic ? "publicStaticProps" : "publicProps"
-        ];
-      if (seen[name]) {
-        throw path.buildCodeFrameError("duplicate class field");
+      if (isPrivate) {
+        if (propNames.privateProps[name]) {
+          throw path.buildCodeFrameError("duplicate class field");
+        }
+        propNames.privateProps[name] = true;
       }
-      seen[name] = true;
     }
   }
 
@@ -394,8 +390,6 @@ export default declare((api, options) => {
         const { scope } = path;
 
         const propNames = {
-          publicProps: Object.create(null),
-          publicStaticProps: Object.create(null),
           privateProps: Object.create(null),
           instanceProps,
           staticProps,
