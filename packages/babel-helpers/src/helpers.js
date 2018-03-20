@@ -606,7 +606,6 @@ helpers.possibleConstructorReturn = () => template.program.ast`
 helpers.classPrivateFieldKey = () => template.program.ast`
   var id = 0;
   export default function _classPrivateFieldKey(name) {
-    // Can we use a middle finger emoji?
     return "__private_" + (id++) + "_" + name;
   }
 `;
