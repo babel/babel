@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 // @flow
 
 import * as N from "../types";
@@ -246,7 +244,8 @@ export default class StatementParser extends ExpressionParser {
       } else {
         this.raise(
           this.state.start,
-          "Using the export keyword between a decorator and a class is not allowed. Please use `export @dec class` instead",
+          "Using the export keyword between a decorator and a class is not allowed. " +
+            "Please use `export @dec class` instead",
         );
       }
     }
@@ -775,7 +774,8 @@ export default class StatementParser extends ExpressionParser {
           kind === tt._const &&
           !(this.match(tt._in) || this.isContextual("of"))
         ) {
-          // `const` with no initializer is allowed in TypeScript. It could be a declaration `const x: number;`.
+          // `const` with no initializer is allowed in TypeScript.
+          // It could be a declaration like `const x: number;`.
           if (!this.hasPlugin("typescript")) {
             this.unexpected();
           }
@@ -1708,7 +1708,8 @@ export default class StatementParser extends ExpressionParser {
         if (this.eat(tt.colon)) {
           this.unexpected(
             null,
-            "ES2015 named imports do not destructure. Use another statement for destructuring after the import.",
+            "ES2015 named imports do not destructure. " +
+              "Use another statement for destructuring after the import.",
           );
         }
 

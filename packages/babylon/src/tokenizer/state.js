@@ -20,8 +20,18 @@ export default class State {
     this.noArrowAt = [];
     this.noArrowParamsConversionAt = [];
 
-    // eslint-disable-next-line max-len
-    this.inMethod = this.inFunction = this.inParameters = this.maybeInArrowParameters = this.inGenerator = this.inAsync = this.inPropertyName = this.inType = this.inClassProperty = this.noAnonFunctionType = this.hasFlowComment = this.isIterator = false;
+    this.inMethod = false;
+    this.inFunction = false;
+    this.inParameters = false;
+    this.maybeInArrowParameters = false;
+    this.inGenerator = false;
+    this.inAsync = false;
+    this.inPropertyName = false;
+    this.inType = false;
+    this.inClassProperty = false;
+    this.noAnonFunctionType = false;
+    this.hasFlowComment = false;
+    this.isIterator = false;
 
     this.classLevel = 0;
 

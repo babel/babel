@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 // @flow
 
 // A recursive descent parser operates by defining functions for all
@@ -436,7 +434,10 @@ export default class ExpressionParser extends LValParser {
     return base;
   }
 
-  /** @param state Set 'state.stop = true' to indicate that we should stop parsing subscripts.  'state.optionalChainMember to indicate that the member is currently in OptionalChain'*/
+  /**
+   * @param state Set 'state.stop = true' to indicate that we should stop parsing subscripts.
+   *   state.optionalChainMember to indicate that the member is currently in OptionalChain
+   */
   parseSubscript(
     base: N.Expression,
     startPos: number,
@@ -625,7 +626,8 @@ export default class ExpressionParser extends LValParser {
         if (this.eat(close)) break;
       }
 
-      // we need to make sure that if this is an async arrow functions, that we don't allow inner parens inside the params
+      // we need to make sure that if this is an async arrow functions,
+      // that we don't allow inner parens inside the params
       if (this.match(tt.parenL) && !innerParenStart) {
         innerParenStart = this.state.start;
       }
@@ -710,7 +712,8 @@ export default class ExpressionParser extends LValParser {
         ) {
           this.raise(
             node.start,
-            "super() is only valid inside a class constructor. Make sure the method name is spelled exactly as 'constructor'.",
+            "super() is only valid inside a class constructor. " +
+              "Make sure the method name is spelled exactly as 'constructor'.",
           );
         }
         return this.finishNode(node, "Super");
@@ -913,7 +916,7 @@ export default class ExpressionParser extends LValParser {
       if (this.isContextual(propertyName)) {
         this.expectPlugin("functionSent");
       } else if (!this.hasPlugin("functionSent")) {
-        // They didn't actually say `function.sent`, just `function.`, so a simple error would be less confusing.
+        // The code wasn't `function.sent` but just `function.`, so a simple error is less confusing.
         this.unexpected();
       }
     }

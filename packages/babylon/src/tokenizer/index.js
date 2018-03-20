@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 // @flow
 
 import type { Options } from "../options";

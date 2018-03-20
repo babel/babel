@@ -21,7 +21,6 @@ function collect(value, previousValue): Array<string> {
   return previousValue ? previousValue.concat(values) : values;
 }
 
-/* eslint-disable max-len */
 program.option("-e, --eval [script]", "Evaluate script");
 program.option("-p, --print [code]", "Evaluate script and print result");
 program.option(
@@ -41,7 +40,6 @@ program.option(
 );
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
-/* eslint-enable max-len */
 
 program.version(pkg.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
