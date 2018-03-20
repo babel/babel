@@ -32,10 +32,10 @@ const selectPlugins = (regexp: ?RegExp): Array<string> =>
 const flatten = array => [].concat(...array);
 
 const expandIncludesAndExcludes = (
-  plugins: Array<string> = [],
+  plugins: Array<string | RegExp> = [],
   type: string,
 ): Array<string> => {
-  if (plugins.length === 0) return plugins;
+  if (plugins.length === 0) return [];
 
   const selectedPlugins = plugins.map(plugin =>
     selectPlugins(pluginToRegExp(plugin)),
@@ -67,9 +67,7 @@ export const checkDuplicateIncludeExcludes = (
   include: Array<string> = [],
   exclude: Array<string> = [],
 ): void => {
-  const duplicates: Array<string> = include.filter(
-    opt => exclude.indexOf(opt) >= 0,
-  );
+  const duplicates = include.filter(opt => exclude.indexOf(opt) >= 0);
 
   invariant(
     duplicates.length === 0,

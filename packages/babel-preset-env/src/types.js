@@ -14,10 +14,10 @@ export type BuiltInsOption = false | "entry" | "usage";
 export type Options = {
   configPath: string,
   debug: boolean,
-  exclude: Array<string>,
+  exclude: Array<string | RegExp>,
   forceAllTransforms: boolean,
   ignoreBrowserslistConfig: boolean,
-  include: Array<string>,
+  include: Array<string | RegExp>,
   loose: boolean,
   modules: ModuleOption,
   shippedProposals: boolean,
