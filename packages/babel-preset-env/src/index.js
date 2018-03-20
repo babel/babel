@@ -79,8 +79,8 @@ export const isPluginRequired = (
 
       if (!semver.valid(lowestTargetedVersion)) {
         throw new Error(
-          // eslint-disable-next-line max-len
-          `Invalid version passed for target "${environment}": "${lowestTargetedVersion}". Versions must be in semver format (major.minor.patch)`,
+          `Invalid version passed for target "${environment}": "${lowestTargetedVersion}". ` +
+            "Versions must be in semver format (major.minor.patch)",
         );
       }
 

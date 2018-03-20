@@ -32,7 +32,6 @@ function collect(value, previousValue): Array<string> {
   return previousValue ? previousValue.concat(values) : values;
 }
 
-/* eslint-disable max-len */
 // Standard Babel input configs.
 commander.option(
   "-f, --filename [filename]",
@@ -168,7 +167,6 @@ commander.option(
   "--delete-dir-on-start",
   "Delete the out directory before compilation",
 );
-/* eslint-enable max-len */
 
 commander.version(pkg.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");

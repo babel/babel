@@ -105,7 +105,6 @@ function resolveStandardizedName(
       } catch (e2) {}
 
       if (resolvedOriginal) {
-        // eslint-disable-next-line max-len
         e.message += `\n- If you want to resolve "${name}", use "module:${name}"`;
       }
     }
@@ -119,7 +118,6 @@ function resolveStandardizedName(
     } catch (e2) {}
 
     if (resolvedBabel) {
-      // eslint-disable-next-line max-len
       e.message += `\n- Did you mean "@babel/${name}"?`;
     }
 
@@ -131,7 +129,6 @@ function resolveStandardizedName(
     } catch (e2) {}
 
     if (resolvedOppositeType) {
-      // eslint-disable-next-line max-len
       e.message += `\n- Did you accidentally pass a ${type} as a ${oppositeType}?`;
     }
 
@@ -143,8 +140,9 @@ const LOADING_MODULES = new Set();
 function requireModule(type: string, name: string): mixed {
   if (LOADING_MODULES.has(name)) {
     throw new Error(
-      // eslint-disable-next-line max-len
-      `Reentrant ${type} detected trying to load "${name}". This module is not ignored and is trying to load itself while compiling itself, leading to a dependency cycle. We recommend adding it to your "ignore" list in your babelrc, or to a .babelignore.`,
+      `Reentrant ${type} detected trying to load "${name}". This module is not ignored ` +
+        "and is trying to load itself while compiling itself, leading to a dependency cycle. " +
+        'We recommend adding it to your "ignore" list in your babelrc, or to a .babelignore.',
     );
   }
 

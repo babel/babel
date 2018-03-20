@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 // @flow
 
 import type Parser from "../parser";
@@ -261,7 +259,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let kind = null;
       let hasModuleExport = false;
       const errorMessage =
-        "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module";
+        "Found both `declare module.exports` and `declare export` in the same module. " +
+        "Modules can only have 1 since they are either an ES module or they are a CommonJS module";
       body.forEach(bodyElement => {
         if (isEsModuleType(bodyElement)) {
           if (kind === "CommonJS") {
@@ -1902,7 +1901,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       ) {
         this.raise(
           node.typeAnnotation.start,
-          "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
+          "Type annotations must come before default assignments, " +
+            "e.g. instead of `age = 25: number` use `age: number = 25`",
         );
       }
 
@@ -2019,7 +2019,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (nodeIsTypeImport && specifierIsTypeImport) {
         this.raise(
           firstIdentLoc,
-          "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements",
+          "The `type` and `typeof` keywords on named imports can only be used on regular " +
+            "`import` statements. It cannot be used with `import type` or `import typeof` statements",
         );
       }
 

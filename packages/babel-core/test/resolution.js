@@ -243,7 +243,6 @@ describe("addon resolution", function() {
         babelrc: false,
         presets: ["foo"],
       });
-      // eslint-disable-next-line max-len
     }).toThrow(
       /Cannot find module 'babel-preset-foo'.*\n- If you want to resolve "foo", use "module:foo"/,
     );
@@ -258,7 +257,6 @@ describe("addon resolution", function() {
         babelrc: false,
         plugins: ["foo"],
       });
-      // eslint-disable-next-line max-len
     }).toThrow(
       /Cannot find module 'babel-plugin-foo'.*\n- If you want to resolve "foo", use "module:foo"/,
     );
@@ -273,7 +271,6 @@ describe("addon resolution", function() {
         babelrc: false,
         presets: ["foo"],
       });
-      // eslint-disable-next-line max-len
     }).toThrow(
       /Cannot find module 'babel-preset-foo'.*\n- Did you mean "@babel\/foo"\?/,
     );
@@ -288,7 +285,6 @@ describe("addon resolution", function() {
         babelrc: false,
         plugins: ["foo"],
       });
-      // eslint-disable-next-line max-len
     }).toThrow(
       /Cannot find module 'babel-plugin-foo'.*\n- Did you mean "@babel\/foo"\?/,
     );
@@ -303,7 +299,6 @@ describe("addon resolution", function() {
         babelrc: false,
         presets: ["testplugin"],
       });
-      // eslint-disable-next-line max-len
     }).toThrow(
       /Cannot find module 'babel-preset-testplugin'.*\n- Did you accidentally pass a preset as a plugin\?/,
     );
@@ -318,7 +313,6 @@ describe("addon resolution", function() {
         babelrc: false,
         plugins: ["testpreset"],
       });
-      // eslint-disable-next-line max-len
     }).toThrow(
       /Cannot find module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a plugin as a preset\?/,
     );
