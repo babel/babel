@@ -604,6 +604,41 @@ helpers.possibleConstructorReturn = () => template.program.ast`
   }
 `;
 
+helpers.classPrivateFieldKey = () => template.program.ast`
+  var id = 0;
+  export default function _classPrivateFieldKey(name) {
+    return "__private_" + (id++) + "_" + name;
+  }
+`;
+
+helpers.classPrivateFieldBase = () => template.program.ast`
+  export default function _classPrivateFieldBase(receiver, privateKey) {
+    if (!Object.prototype.hasOwnProperty.call(receiver, privateKey)) {
+      throw new TypeError("attempted to use private field on non-instance");
+    }
+    return receiver;
+  }
+`;
+
+helpers.classPrivateFieldGet = () => template.program.ast`
+  export default function _classPrivateFieldGet(receiver, privateMap) {
+    if (!privateMap.has(receiver)) {
+      throw new TypeError("attempted to get private field on non-instance");
+    }
+    return privateMap.get(receiver);
+  }
+`;
+
+helpers.classPrivateFieldPut = () => template.program.ast`
+  export default function _classPrivateFieldPut(receiver, privateMap, value) {
+    if (!privateMap.has(receiver)) {
+      throw new TypeError("attempted to set private field on non-instance");
+    }
+    privateMap.set(receiver, value);
+    return value;
+  }
+`;
+
 helpers.set = () => template.program.ast`
   export default function _set(object, property, value, receiver) {
     var desc = Object.getOwnPropertyDescriptor(object, property);

@@ -1,0 +1,4 @@
+{
+  "minNodeVersion": "6.0.0",
+  "plugins": ["external-helpers", ["proposal-class-properties", { "spec": true }], "transform-block-scoping", "syntax-class-properties"]
+}

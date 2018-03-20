@@ -1,0 +1,3 @@
+{
+  "plugins": ["external-helpers", "proposal-class-properties", "transform-block-scoping", "syntax-class-properties", "transform-async-to-generator"]
+}
