@@ -22,6 +22,7 @@ const rollupBabel = require("rollup-plugin-babel");
 const rollupReplace = require("rollup-plugin-replace");
 const rollupCommonJs = require("rollup-plugin-commonjs");
 const rollupNodeResolve = require("rollup-plugin-node-resolve");
+const rollupNodeGlobals = require("rollup-plugin-node-globals");
 const uglify = require("gulp-uglify");
 const rollupJson = require("rollup-plugin-json");
 const registerStandalonePackageTask = require("./scripts/gulp-tasks")
@@ -227,6 +228,7 @@ function buildRollup(packages) {
                 babelrc: false,
                 extends: "./.babelrc.js",
               }),
+              rollupNodeGlobals({ sourceMap: false }),
               rollupCommonJs(),
             ],
           }),
