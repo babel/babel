@@ -1,4 +1,3 @@
-// @flow
 import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
 import ReplaceSupers from "@babel/helper-replace-supers";
