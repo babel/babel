@@ -98,8 +98,9 @@ function buildRollup(packages) {
         format: "cjs",
         plugins: [
           rollupBabel({
+            envName: "babylon",
             babelrc: false,
-            extends: "./.babelrc.rollup.js",
+            extends: "./.babelrc.js",
           }),
           rollupNodeResolve(),
         ],

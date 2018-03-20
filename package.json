@@ -12,6 +12,7 @@
   "devDependencies": {
     "@babel/cli": "7.0.0-beta.41",
     "@babel/core": "7.0.0-beta.41",
+    "@babel/plugin-transform-modules-commonjs": "7.0.0-beta.41",
     "@babel/preset-env": "7.0.0-beta.41",
     "@babel/preset-flow": "7.0.0-beta.41",
     "@babel/preset-stage-0": "7.0.0-beta.41",
