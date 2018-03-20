@@ -1,4 +1,4 @@
-var _deep$obj, _deep$obj2, _deep$obj3, _deep$obj4;
+var _deep$obj, _deep$obj2, _deep$obj3, _deep$obj4, _ref, _ref2, _ref3, _ref4;
 
 var x = 0;
 var sets = 0;
@@ -37,3 +37,15 @@ assert.equal((_deep$obj3 = deep.obj).x && (_deep$obj3.x = 0), 0);
 assert.equal(gets, 3);
 assert.equal((_deep$obj4 = deep.obj).x && (_deep$obj4.x = 3), 0);
 assert.equal(gets, 4);
+var key = 0;
+assert.equal(obj[_ref = ++key] || (obj[_ref] = 1), 1);
+assert.equal(key, 1);
+key = 0;
+assert.equal(obj[_ref2 = ++key] || (obj[_ref2] = 2), 1);
+assert.equal(key, 1);
+key = 0;
+assert.equal(obj[_ref3 = ++key] && (obj[_ref3] = 0), 0);
+assert.equal(key, 1);
+key = 0;
+assert.equal(obj[_ref4 = ++key] && (obj[_ref4] = 3), 0);
+assert.equal(key, 1);

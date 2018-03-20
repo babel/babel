@@ -16,27 +16,33 @@ export default declare(api => {
           return;
         }
 
-        let ref;
+        const lhs = t.cloneNode(left);
         if (t.isMemberExpression(left)) {
-          const { object } = left;
+          const { object, property, computed } = left;
           const memo = scope.maybeGenerateMemoised(object);
           if (memo) {
-            path
-              .get("left.object")
-              .replaceWith(
-                t.assignmentExpression("=", t.cloneNode(memo), object),
-              );
+            left.object = memo;
+            lhs.object = t.assignmentExpression("=", t.cloneNode(memo), object);
+          }
 
-            ref = t.cloneNode(left);
-            ref.object = t.cloneNode(memo);
+          if (computed) {
+            const memo = scope.maybeGenerateMemoised(property);
+            if (memo) {
+              left.property = memo;
+              lhs.property = t.assignmentExpression(
+                "=",
+                t.cloneNode(memo),
+                property,
+              );
+            }
           }
         }
 
         path.replaceWith(
           t.logicalExpression(
             operator.slice(0, -1),
-            left,
-            t.assignmentExpression("=", ref || t.cloneNode(left), right),
+            lhs,
+            t.assignmentExpression("=", left, right),
           ),
         );
       },
