@@ -2,7 +2,7 @@ MAKEFLAGS = -j1
 FLOW_COMMIT = 622bbc4f07acb77eb1109830c70815f827401d90
 TEST262_COMMIT = 52f70e2f637731aae92a9c9a2d831310c3ab2e1e
 
-export NODE_ENV = test
+export BABEL_ENV = test
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -22,7 +22,7 @@ build: clean
 	node scripts/generators/typescript.js > ./packages/babel-types/lib/index.d.ts
 	# generate docs
 	node scripts/generators/docs.js > ./packages/babel-types/README.md
-ifneq ("$(BABEL_ENV)", "cov")
+ifneq ("$(BABEL_COVERAGE)", "true")
 	make build-standalone
 	make build-preset-env-standalone
 endif
@@ -82,7 +82,7 @@ test-ci:
 
 test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
-	BABEL_ENV=cov make bootstrap
+	BABEL_COVERAGE=true BABEL_ENV=test make bootstrap
 	TEST_TYPE=cov ./scripts/test-cov.sh
 	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
