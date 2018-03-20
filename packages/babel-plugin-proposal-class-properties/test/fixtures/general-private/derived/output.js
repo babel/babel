@@ -13,11 +13,11 @@ var Bar =
 function (_Foo) {
   babelHelpers.inherits(Bar, _Foo);
 
-  function Bar() {
+  function Bar(...args) {
     var _temp, _this;
 
     babelHelpers.classCallCheck(this, Bar);
-    return babelHelpers.possibleConstructorReturn(_this, (_temp = _this = babelHelpers.possibleConstructorReturn(this, (Bar.__proto__ || Object.getPrototypeOf(Bar)).apply(this, arguments)), _prop2.set(babelHelpers.assertThisInitialized(_this), "bar"), _temp));
+    return babelHelpers.possibleConstructorReturn(_this, (_temp = _this = babelHelpers.possibleConstructorReturn(this, (Bar.__proto__ || Object.getPrototypeOf(Bar)).call(this, ...args)), _prop2.set(babelHelpers.assertThisInitialized(_this), "bar"), _temp));
   }
 
   return Bar;

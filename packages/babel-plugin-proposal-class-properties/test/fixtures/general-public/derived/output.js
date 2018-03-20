@@ -3,11 +3,11 @@ var Foo =
 function (_Bar) {
   babelHelpers.inherits(Foo, _Bar);
 
-  function Foo() {
+  function Foo(...args) {
     var _temp, _this;
 
     babelHelpers.classCallCheck(this, Foo);
-    return babelHelpers.possibleConstructorReturn(_this, (_temp = _this = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).apply(this, arguments)), Object.defineProperty(babelHelpers.assertThisInitialized(_this), "bar", {
+    return babelHelpers.possibleConstructorReturn(_this, (_temp = _this = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this, ...args)), Object.defineProperty(babelHelpers.assertThisInitialized(_this), "bar", {
       configurable: true,
       enumerable: true,
       writable: true,
