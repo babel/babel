@@ -466,10 +466,11 @@ export default declare((api, options) => {
               t.blockStatement([]),
             );
             if (isDerived) {
+              newConstructor.params = [t.restElement(t.identifier("args"))];
               newConstructor.body.body.push(
                 t.returnStatement(
                   t.callExpression(t.super(), [
-                    t.spreadElement(t.identifier("arguments")),
+                    t.spreadElement(t.identifier("args")),
                   ]),
                 ),
               );

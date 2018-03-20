@@ -21,11 +21,11 @@ var B =
 function (_A) {
   babelHelpers.inherits(B, _A);
 
-  function B() {
+  function B(...args) {
     var _temp, _this;
 
     babelHelpers.classCallCheck(this, B);
-    return babelHelpers.possibleConstructorReturn(_this, (_temp = _this = babelHelpers.possibleConstructorReturn(this, (B.__proto__ || Object.getPrototypeOf(B)).apply(this, arguments)), _foo.set(babelHelpers.assertThisInitialized(_this), babelHelpers.get(B.prototype.__proto__ || Object.getPrototypeOf(B.prototype), "foo", babelHelpers.assertThisInitialized(_this)).call(_this)), _temp));
+    return babelHelpers.possibleConstructorReturn(_this, (_temp = _this = babelHelpers.possibleConstructorReturn(this, (B.__proto__ || Object.getPrototypeOf(B)).call(this, ...args)), _foo.set(babelHelpers.assertThisInitialized(_this), babelHelpers.get(B.prototype.__proto__ || Object.getPrototypeOf(B.prototype), "foo", babelHelpers.assertThisInitialized(_this)).call(_this)), _temp));
   }
 
   return B;
