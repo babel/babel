@@ -1,0 +1,4 @@
+{
+  "args": ["--no-polyfill", "--print", "--eval", "global._babelPolyfill"],
+  "stdout": "undefined"
+}
