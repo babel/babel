@@ -297,6 +297,7 @@ export default class ExpressionParser extends LValParser {
           this.expectPlugin("pipelineOperator");
           // Support syntax such as 10 |> x => x + 1
           this.state.potentialArrowAt = startPos;
+          this.state.potentialSoloAwaitAt = startPos;
         }
 
         if (node.operator === "??") {
@@ -1860,7 +1861,12 @@ export default class ExpressionParser extends LValParser {
         "await* has been removed from the async functions proposal. Use Promise.all() instead.",
       );
     }
-    node.argument = this.parseMaybeUnary();
+    if (
+      this.state.potentialSoloAwaitAt !== this.state.lastTokStart ||
+      (!this.match(tt.pipeline) && !this.isLineTerminator())
+    ) {
+      node.argument = this.parseMaybeUnary();
+    }
     return this.finishNode(node, "AwaitExpression");
   }
 
