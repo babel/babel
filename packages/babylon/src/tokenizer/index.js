@@ -20,6 +20,8 @@ import {
 } from "../util/whitespace";
 import State from "./state";
 
+const VALID_REGEX_FLAGS = "gmsiyu";
+
 // The following character codes are forbidden from being
 // an immediate sibling of NumericLiteralSeparator _
 
@@ -834,19 +836,24 @@ export default class Tokenizer extends LocationParser {
     const content = this.input.slice(start, this.state.pos);
     ++this.state.pos;
 
-    const validFlags = /^[gmsiyu]$/;
     let mods = "";
+
     while (this.state.pos < this.input.length) {
       const char = this.input[this.state.pos];
       const charCode = this.fullCharCodeAtPos();
-      if (validFlags.test(char)) {
+
+      if (VALID_REGEX_FLAGS.indexOf(char) > -1) {
+        if (mods.indexOf(char) > -1) {
+          this.raise(this.state.pos + 1, "Duplicate regular expression flag");
+        }
+
         ++this.state.pos;
         mods += char;
       } else if (
         isIdentifierChar(charCode) ||
         charCode === charCodes.backslash
       ) {
-        this.raise(this.state.pos, "Invalid regular expression flag");
+        this.raise(this.state.pos + 1, "Invalid regular expression flag");
       } else {
         break;
       }
