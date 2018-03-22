@@ -233,12 +233,12 @@ export default function generateMissingPluginMessage(
         const transformPluginInfo = getNameURLCombination(transformPlugin);
         helpMessage +=
           `\n\nAdd ${transformPluginInfo} to the 'plugins' section of your Babel config ` +
-          `to enable transformation.`;
+          `to enable the transformation.`;
       } else {
         const syntaxPluginInfo = getNameURLCombination(syntaxPlugin);
         helpMessage +=
           `\n\nAdd ${syntaxPluginInfo} to the 'plugins' section of your Babel config ` +
-          `to enable parsing.`;
+          `to enable the parsing.`;
       }
     }
   }
