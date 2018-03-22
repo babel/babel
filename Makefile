@@ -3,6 +3,7 @@ FLOW_COMMIT = 622bbc4f07acb77eb1109830c70815f827401d90
 TEST262_COMMIT = 52f70e2f637731aae92a9c9a2d831310c3ab2e1e
 
 export BABEL_ENV = test
+export PATH := ./node_modules/.bin:$(PATH)
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -11,12 +12,11 @@ SOURCES = packages codemods
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
-build: clean
-	make clean-lib
-	./node_modules/.bin/gulp build
+build: clean clean-lib
+	gulp build
 	node ./packages/babel-types/scripts/generateTypeHelpers.js
 	# call build again as the generated files might need to be compiled again.
-	./node_modules/.bin/gulp build
+	gulp build
 	# generate flow and typescript typings
 	node scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
 	node scripts/generators/typescript.js > ./packages/babel-types/lib/index.d.ts
@@ -28,10 +28,10 @@ ifneq ("$(BABEL_COVERAGE)", "true")
 endif
 
 build-standalone:
-	./node_modules/.bin/gulp build-babel-standalone
+	gulp build-babel-standalone
 
 build-preset-env-standalone:
-	./node_modules/.bin/gulp build-babel-preset-env-standalone
+	gulp build-babel-preset-env-standalone
 
 build-dist: build
 	cd packages/babel-polyfill; \
@@ -39,26 +39,25 @@ build-dist: build
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
 
-watch: clean
-	make clean-lib
+watch: clean clean-lib
 
 	# Ensure that build artifacts for types are created during local
 	# development too.
-	BABEL_ENV=development ./node_modules/.bin/gulp build-no-bundle
+	BABEL_ENV=development gulp build-no-bundle
 	node ./packages/babel-types/scripts/generateTypeHelpers.js
 	node scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
-	BABEL_ENV=development ./node_modules/.bin/gulp watch
+	BABEL_ENV=development gulp watch
 
 flow:
-	./node_modules/.bin/flow check --strip-root
+	flow check --strip-root
 
 lint:
-	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' '**/.*.js' --format=codeframe --rulesdir="./scripts/eslint_rules"
+	eslint scripts $(SOURCES) '*.js' '**/.*.js' --format=codeframe --rulesdir="./scripts/eslint_rules"
 
 fix:
 	# The config is hardcoded because otherwise prettier searches for it and also picks up some broken package.json files from tests
-	./node_modules/.bin/prettier --config .prettierrc --write --ignore-path .eslintignore '**/*.json'
-	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' '**/.*.js' --format=codeframe --fix --rulesdir="./scripts/eslint_rules"
+	prettier --config .prettierrc --write --ignore-path .eslintignore '**/*.json'
+	eslint scripts $(SOURCES) '*.js' '**/.*.js' --format=codeframe --fix --rulesdir="./scripts/eslint_rules"
 
 clean: test-clean
 	rm -rf packages/babel-polyfill/browser*
@@ -76,9 +75,7 @@ test-only:
 
 test: lint test-only
 
-test-ci:
-	make bootstrap
-	make test-only
+test-ci: bootstrap test-only
 
 test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
@@ -95,9 +92,7 @@ bootstrap-flow:
 test-flow:
 	node scripts/tests/flow/run_babylon_flow_tests.js
 
-test-flow-ci:
-	make bootstrap
-	make test-flow
+test-flow-ci: bootstrap test-flow
 
 test-flow-update-whitelist:
 	node scripts/tests/flow/run_babylon_flow_tests.js --update-whitelist
@@ -111,9 +106,7 @@ bootstrap-test262:
 test-test262:
 	node scripts/tests/test262/run_babylon_test262.js
 
-test-test262-ci:
-	make bootstrap
-	make test-test262
+test-test262-ci: bootstrap test-test262
 
 test-test262-update-whitelist:
 	node scripts/tests/test262/run_babylon_test262.js --update-whitelist
@@ -127,13 +120,12 @@ publish:
 	make test
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
 	# --only-explicit-updates
-	./node_modules/.bin/lerna publish --force-publish=* --exact --skip-temp-tag
+	lerna publish --force-publish=* --exact --skip-temp-tag
 	make clean
 
-bootstrap:
-	make clean-all
+bootstrap: clean-all
 	yarn --ignore-engines
-	./node_modules/.bin/lerna bootstrap -- --ignore-engines
+	lerna bootstrap -- --ignore-engines
 	make build
 	cd packages/babel-runtime; \
 	node scripts/build-dist.js
