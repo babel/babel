@@ -1,3 +1,3 @@
-assert.equal(do {
+expect(do {
   "foo";
-}, "foo");
+}).toBe("foo");
