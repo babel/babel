@@ -12,14 +12,14 @@
     }
   }
 
-  assert.deepEqual(stack[0](), [0, 0, 0]);
-  assert.deepEqual(stack[1](), [0, 1, 0]);
-  assert.deepEqual(stack[2](), [0, 2, 0]);
-  assert.deepEqual(stack[3](), [0, 3, 0]);
-  assert.deepEqual(stack[4](), [0, 4, 0]);
-  assert.deepEqual(stack[5](), [0, 5, 0]);
-  assert.deepEqual(stack[6](), [0, 6, 0]);
-  assert.deepEqual(stack[7](), [0, 7, 0]);
-  assert.deepEqual(stack[8](), [0, 8, 0]);
-  assert.deepEqual(stack[9](), [0, 9, 0]);
+  expect(stack[0]()).toEqual([0, 0, 0]);
+  expect(stack[1]()).toEqual([0, 1, 0]);
+  expect(stack[2]()).toEqual([0, 2, 0]);
+  expect(stack[3]()).toEqual([0, 3, 0]);
+  expect(stack[4]()).toEqual([0, 4, 0]);
+  expect(stack[5]()).toEqual([0, 5, 0]);
+  expect(stack[6]()).toEqual([0, 6, 0]);
+  expect(stack[7]()).toEqual([0, 7, 0]);
+  expect(stack[8]()).toEqual([0, 8, 0]);
+  expect(stack[9]()).toEqual([0, 9, 0]);
 })();

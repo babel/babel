@@ -5,8 +5,8 @@ for (let i = 0; i < 10; i++) {
   i += 1;
 }
 
-assert.equal(fns[0](), 1);
-assert.equal(fns[1](), 3);
-assert.equal(fns[2](), 5);
-assert.equal(fns[3](), 7);
-assert.equal(fns[4](), 9);
+expect(fns[0]()).toBe(1);
+expect(fns[1]()).toBe(3);
+expect(fns[2]()).toBe(5);
+expect(fns[3]()).toBe(7);
+expect(fns[4]()).toBe(9);

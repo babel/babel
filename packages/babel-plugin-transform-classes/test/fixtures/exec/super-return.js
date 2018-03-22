@@ -6,8 +6,8 @@ class Foo {
 
 class Bar extends Foo {
   constructor() {
-    assert.equal(super().i, 1);
-    assert.equal(this.i, 1);
+    expect(super().i).toBe(1);
+    expect(this.i).toBe(1);
   }
 }
 

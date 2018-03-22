@@ -1,3 +1,3 @@
 let a = 1;
 a++;
-assert.equal(a, 2);
+expect(a).toBe(2);;

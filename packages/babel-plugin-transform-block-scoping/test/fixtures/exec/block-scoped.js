@@ -1,13 +1,13 @@
 let x = 1;
 {
   let x = 2;
-  assert.equal(x, 2);
+  expect(x).toBe(2);
   {
     let x = 3;
-    assert.equal(x, 3);
+    expect(x).toBe(3);
 
     x++;
-    assert.equal(x, 4);
+    expect(x).toBe(4);
   }
 }
-assert.equal(x, 1);
+expect(x).toBe(1);
