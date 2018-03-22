@@ -632,7 +632,7 @@ describe("api", function() {
           );
           expect(err.message).toMatch(
             "Add @babel/plugin-syntax-dynamic-import (https://git.io/vb4Sv) to the " +
-              "'plugins' section of your Babel config to enable parsing.",
+              "'plugins' section of your Babel config to enable the parsing.",
           );
           done();
         },
@@ -649,7 +649,7 @@ describe("api", function() {
           );
           expect(err.message).toMatch(
             "Add @babel/plugin-proposal-async-generator-functions (https://git.io/vb4yp) to the " +
-              "'plugins' section of your Babel config to enable transformation.",
+              "'plugins' section of your Babel config to enable the transformation.",
           );
           done();
         },
