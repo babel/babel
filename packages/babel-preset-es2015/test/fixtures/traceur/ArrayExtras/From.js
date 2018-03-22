@@ -1,5 +1,5 @@
 // should have a length of 1
-assert.equal(Array.from.length, 1);
+expect(Array.from.length).toBe(1);
 var arr;
 var obj;
 
@@ -9,24 +9,24 @@ function arrayFromArgs() {
 }
 arr = arrayFromArgs('a', 1);
 
-assert.equal(arr.length, 2);
-assert.deepEqual(arr, ['a', 1]);
-assert.isTrue(Array.isArray(arr));
+expect(arr.length).toBe(2);
+expect(arr).toEqual(['a', 1]);
+expect(Array.isArray(arr)).toBe(true);
 
 // should handle undefined values
 var arrayLike = {0: 'a', 2: 'c', length: 3};
 arr = Array.from(arrayLike);
 
-assert.equal(arr.length, 3);
-assert.deepEqual(arr, ['a', undefined, 'c']);
-assert.isTrue(Array.isArray(arr));
+expect(arr.length).toBe(3);
+expect(arr).toEqual(['a', undefined, 'c']);
+expect(Array.isArray(arr)).toBe(true);
 
 // should use a mapFn
 arr = Array.from([{'a': 1}, {'a': 2}], function(item, i) {
   return item.a + i;
 });
 
-assert.deepEqual(arr, [1, 3]);
+expect(arr).toEqual([1, 3]);
 
 // should set this in mapFn
 var thisObj = {a: 10};
@@ -34,19 +34,19 @@ arr = Array.from([{'a': 1}, {'a': 2}], function(item, i) {
   return this.a + item.a + i;
 }, thisObj);
 
-assert.deepEqual(arr, [11, 13]);
+expect(arr).toEqual([11, 13]);
 
 // should map on array-like object
 arr = Array.from({0: {'a': 5}, length: 1}, function(item, i) {
   return item.a + i;
 });
 
-assert.deepEqual(arr, [5]);
+expect(arr).toEqual([5]);
 
 // should throw on bad map fn
-assert.throws(function() {
+expect(function() {
   Array.from([], null)
-}, TypeError);
+}).toThrow();
 
 // should make from an array-like object
 var arrayLikeObj = function(len) {
@@ -55,8 +55,8 @@ var arrayLikeObj = function(len) {
 arrayLikeObj.from = Array.from;
 obj = arrayLikeObj.from(['a', 'b', 'c']);
 
-assert.equal(obj.length, 3);
-assert.deepEqual(obj, {0: 'a', 1: 'b', 2: 'c', length: 3});
+expect(obj).toHaveLength(3);
+expect(obj).toEqual({0: 'a', 1: 'b', 2: 'c', length: 3});
 
 // should make from a non-array iterable
 var calledIterator = 0;
@@ -77,11 +77,11 @@ it[1] = 'b';
 it[2] = 'c';
 obj = Array.from(it);
 
-assert.equal(obj.length, 3);
-assert.equal(obj[0], 'a');
-assert.equal(obj[1], 'b');
-assert.equal(obj[2], 'c');
-assert.equal(calledIterator, 3);
+expect(obj).toHaveLength(3);
+expect(obj[0]).toBe('a');
+expect(obj[1]).toBe('b');
+expect(obj[2]).toBe('c');
+expect(calledIterator).toBe(3);
 
 // should make from a sub-classed array
 var length = 0;
@@ -93,7 +93,7 @@ class MyArray extends Array {
   constructor(v) {
     super();
     constructorCounter++;
-    assert.isUndefined(v);
+    expect(v).toBeUndefined();
   }
 
   set length(v) {
@@ -109,15 +109,15 @@ class MyArray extends Array {
 
 var ma = MyArray.from(['a', 'b']);
 assert.instanceOf(ma, MyArray);
-assert.equal(constructorCounter, 1);
-assert.equal(lengthSetCounter, 1);
-assert.equal(lengthGetCounter, 0);
-assert.isTrue(ma.hasOwnProperty('0'));
-assert.isTrue(ma.hasOwnProperty('1'));
-assert.isFalse(ma.hasOwnProperty('length'));
-assert.equal(ma[0], 'a');
-assert.equal(ma[1], 'b');
-assert.equal(ma.length, 2);
+expect(constructorCounter).toBe(1);
+expect(lengthSetCounter).toBe(1);
+expect(lengthGetCounter).toBe(0);
+expect(ma).toContain('0');
+expect(ma).toContain('1');
+expect(ma).not.toContain('length');
+expect(ma[0]).toBe('a');
+expect(ma[1]).toBe('b');
+expect(ma).toHaveLength(2);
 
 // should make from a sub-classed array without iterable
 length = 0;
@@ -129,7 +129,7 @@ class MyArray2 extends MyArray {
   constructor(v) {
     super();
     constructorCounter++;
-    assert.equal(v, 2);
+    expect(v).toBe(2);
   }
 };
 MyArray2.prototype[Symbol.iterator] = undefined;
@@ -147,12 +147,12 @@ ma3[0] = 'a';
 ma3[1] = 'b';
 ma = MyArray2.from(ma3);
 assert.instanceOf(ma, MyArray2);
-assert.equal(constructorCounter, 2);
-assert.equal(lengthSetCounter, 1);
-assert.equal(lengthGetCounter, 0);
-assert.isTrue(ma.hasOwnProperty('0'));
-assert.isTrue(ma.hasOwnProperty('1'));
-assert.isFalse(ma.hasOwnProperty('length'));
-assert.equal(ma[0], 'a');
-assert.equal(ma[1], 'b');
-assert.equal(ma.length, 2);
+expect(constructorCounter).toBe(2);
+expect(lengthSetCounter).toBe(1);
+expect(lengthGetCounter).toBe(0);
+expect(ma).toContain('0');
+expect(ma).toContain('1');
+expect(ma).not.toContain('length');
+expect(ma[0]).toBe('a');
+expect(ma[1]).toBe('b');
+expect(ma).toHaveLength(2);

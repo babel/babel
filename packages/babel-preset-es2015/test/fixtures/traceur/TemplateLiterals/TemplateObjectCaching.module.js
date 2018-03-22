@@ -1,13 +1,13 @@
 import {cooked, raw} from './resources/template-objects.js';
 
 function assertCooked(obj) {
-  assert.equal(obj, cooked);
-  assert.notEqual(obj, raw);
+  expect(obj).toBe(cooked);
+  expect(obj).not.toBe(raw);
 }
 
 function assertRaw(obj) {
-  assert.equal(obj, raw);
-  assert.notEqual(obj, cooked);
+  expect(obj).toBe(raw);
+  expect(obj).not.toBe(cooked);
 }
 
 assertCooked `a${1}b`;

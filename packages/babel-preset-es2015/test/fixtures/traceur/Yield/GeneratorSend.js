@@ -5,7 +5,7 @@ function assertThrownEquals(x, func) {
   } catch (err) {
     actualError = err;
   }
-  assert.equal(x, actualError);
+  expect(x).toBe(actualError);
 }
 
 //-----------------------------------------------------------------------------
@@ -74,8 +74,8 @@ function* G2() {
 var closeMethods = [
   (g) => assertThrownEquals(42, () => g.throw(42)),
   (g) => {
-    assert.deepEqual({value: 1, done: false}, g.next());
-    assert.deepEqual({value: undefined, done: true}, g.next());
+    expect({value: 1, done: false}).toEqual(g.next());
+    expect({value: undefined, done: true}).toEqual(g.next());
   }
 ];
 
@@ -83,7 +83,7 @@ closeMethods.forEach((closeMethod) => {
   g = W(G2)();
   closeMethod(g);
   for (var i = 0; i < 8; i++) {
-    assert.deepEqual({value: undefined, done: true}, g.next());
+    expect({value: undefined, done: true}).toEqual(g.next());
   }
 });
 
@@ -97,7 +97,7 @@ for (var i = 0; i < 8; i++) {
   assert.throw(() => g.next(42), /^attempt to send (.*?) to newborn generator$/);
 }
 
-assert.deepEqual({value: 1, done: false}, g.next(undefined));
+expect({value: 1, done: false}).toEqual(g.next(undefined));
 
 
 //-----------------------------------------------------------------------------
@@ -165,7 +165,7 @@ function* fibD() {
     fn2 = fn1;
     fn1 = fn1 + current;
     [reset, tmp] = yield current;
-    assert.equal(reset, tmp);
+    expect(reset).toBe(tmp);
     if (reset) {
       fn1 = 1;
       fn2 = 1;
@@ -183,7 +183,7 @@ function* fibVarD() {
     fn2 = fn1;
     fn1 = fn1 + current;
     var [reset, tmp] = yield current;
-    assert.equal(reset, tmp);
+    expect(reset).toBe(tmp);
     if (reset) {
       fn1 = 1;
       fn2 = 1;
@@ -209,17 +209,17 @@ function sendD(g, v) {
 
 function testfib(fibonacci, next, send) {
   var sequence = fibonacci();
-  assert.deepEqual({value: 1, done: false}, sequence.next());
-  assert.deepEqual({value: 1, done: false}, next(sequence));
-  assert.deepEqual({value: 2, done: false}, next(sequence));
-  assert.deepEqual({value: 3, done: false}, next(sequence));
-  assert.deepEqual({value: 5, done: false}, next(sequence));
-  assert.deepEqual({value: 8, done: false}, next(sequence));
-  assert.deepEqual({value: 13, done: false}, next(sequence));
-  assert.deepEqual({value: 1, done: false}, send(sequence, true));
-  assert.deepEqual({value: 1, done: false}, next(sequence));
-  assert.deepEqual({value: 2, done: false}, next(sequence));
-  assert.deepEqual({value: 3, done: false}, next(sequence));
+  expect({value: 1, done: false}).toEqual(sequence.next());
+  expect({value: 1, done: false}).toEqual(next(sequence));
+  expect({value: 2, done: false}).toEqual(next(sequence));
+  expect({value: 3, done: false}).toEqual(next(sequence));
+  expect({value: 5, done: false}).toEqual(next(sequence));
+  expect({value: 8, done: false}).toEqual(next(sequence));
+  expect({value: 13, done: false}).toEqual(next(sequence));
+  expect({value: 1, done: false}).toEqual(send(sequence, true));
+  expect({value: 1, done: false}).toEqual(next(sequence));
+  expect({value: 2, done: false}).toEqual(next(sequence));
+  expect({value: 3, done: false}).toEqual(next(sequence));
 }
 
 //----

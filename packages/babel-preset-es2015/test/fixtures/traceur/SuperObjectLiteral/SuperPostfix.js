@@ -11,11 +11,11 @@ var p = {
 var o = {
   __proto__: p,
   m() {
-    assert.equal(this.x, 0);
-    assert.equal(super.x++, 0);
-    assert.equal(this.x, 1);
-    assert.equal(super.x--, 1);
-    assert.equal(this.x, 0);
+    expect(this.x).toBe(0);
+    expect(super.x++).toBe(0);
+    expect(this.x).toBe(1);
+    expect(super.x--).toBe(1);
+    expect(this.x).toBe(0);
   }
 };
 

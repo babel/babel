@@ -1,34 +1,34 @@
-assert.isTrue(Object.is(1, 1));
-assert.isTrue(Object.is(0, 0));
-assert.isTrue(Object.is(-0, -0));
-assert.isTrue(Object.is(NaN, NaN));
-assert.isTrue(Object.is(Infinity, Infinity));
-assert.isTrue(Object.is(-Infinity, -Infinity));
+expect(Object.is(1, 1)).toBe(true);
+expect(Object.is(0, 0)).toBe(true);
+expect(Object.is(-0, -0)).toBe(true);
+expect(Object.is(NaN, NaN)).toBe(true);
+expect(Object.is(Infinity, Infinity)).toBe(true);
+expect(Object.is(-Infinity, -Infinity)).toBe(true);
 
-assert.isFalse(Object.is(0, -0));
-assert.isFalse(Object.is(-0, 0));
-assert.isFalse(Object.is(Infinity, -Infinity));
-assert.isFalse(Object.is(-Infinity, Infinity));
+expect(Object.is(0, -0)).toBe(false);
+expect(Object.is(-0, 0)).toBe(false);
+expect(Object.is(Infinity, -Infinity)).toBe(false);
+expect(Object.is(-Infinity, Infinity)).toBe(false);
 
-assert.isTrue(Object.is(true, true));
-assert.isTrue(Object.is(false, false));
+expect(Object.is(true, true)).toBe(true);
+expect(Object.is(false, false)).toBe(true);
 
-assert.isTrue(Object.is(null, null));
-assert.isTrue(Object.is(undefined, undefined));
+expect(Object.is(null, null)).toBe(true);
+expect(Object.is(undefined, undefined)).toBe(true);
 
-assert.isTrue(Object.is('', ''));
-assert.isTrue(Object.is('a', 'a'));
+expect(Object.is('', '')).toBe(true);
+expect(Object.is('a', 'a')).toBe(true);
 
 {
   var object = {};
-  assert.isTrue(Object.is(object, object));
+  expect(Object.is(object, object)).toBe(true);
 }
 
-assert.isFalse(Object.is(new String('a'), new String('a')));
-assert.isFalse(Object.is(new Boolean, new Boolean));
-assert.isFalse(Object.is(new Number, new Number));
-assert.isFalse(Object.is(new Date(0), new Date(0)));
-assert.isFalse(Object.is(/re/, /re/));
-assert.isFalse(Object.is({}, {}));
-assert.isFalse(Object.is([], []));
-assert.isFalse(Object.is(function() {}, function() {}));
+expect(Object.is(new String('a'), new String('a'))).toBe(false);
+expect(Object.is(new Boolean, new Boolean)).toBe(false);
+expect(Object.is(new Number, new Number)).toBe(false);
+expect(Object.is(new Date(0), new Date(0))).toBe(false);
+expect(Object.is(/re/, /re/)).toBe(false);
+expect(Object.is({}, {})).toBe(false);
+expect(Object.is([], [])).toBe(false);
+expect(Object.is(function() {}, function() {})).toBe(false);

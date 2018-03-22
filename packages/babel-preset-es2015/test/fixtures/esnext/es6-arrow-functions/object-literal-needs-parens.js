@@ -1,2 +1,2 @@
 var keyMaker = val => ({ key: val });
-assert.deepEqual(keyMaker(9), { key: 9 });
+expect(keyMaker(9)).toEqual({ key: 9 });

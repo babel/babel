@@ -5,9 +5,9 @@ function MyError(s) {
 
 var object = {
   set x({message: [head, ...tail], name}) {
-    assert.equal('a', head);
-    assertArrayEquals(['b', 'c'], tail);
-    assert.equal('Error', name);
+    expect(head).toBe('a');
+    expect(tail).toEqual(['b', 'c']);;
+    expect(name).toBe('Error');
   }
 };
 

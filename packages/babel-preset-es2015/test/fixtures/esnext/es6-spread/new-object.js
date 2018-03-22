@@ -4,8 +4,8 @@ function getArray() {
   return Array;
 }
 
-assert.deepEqual([1, 2, 3], new Array(...[1, 2, 3]));
+expect([1, 2, 3]).toEqual(new Array(...[1, 2, 3]));
 
 // Ensure the expression of the function being initialized is not copied.
-assert.deepEqual([1, 2, 3], new (getArray())(...[1, 2, 3]));
-assert.equal(callCount, 1);
+expect([1, 2, 3]).toEqual(new (getArray())(...[1, 2, 3]));
+expect(callCount).toBe(1);

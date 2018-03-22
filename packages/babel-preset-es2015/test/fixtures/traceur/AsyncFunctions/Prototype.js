@@ -3,5 +3,5 @@
 async function f() {
 }
 
-assert.equal(Object.getPrototypeOf(f), Function.prototype);
-assert.instanceOf(f(), Promise);
+expect(Object.getPrototypeOf(f)).toBe(Function.prototype);
+expect(f() instanceof Promise).toBe(true);

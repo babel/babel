@@ -19,4 +19,4 @@ var derived = {
 };
 
 derived.p();
-assert.equal(log, '[derived][base][otherBase]');
+expect(log).toBe('[derived][base][otherBase]');

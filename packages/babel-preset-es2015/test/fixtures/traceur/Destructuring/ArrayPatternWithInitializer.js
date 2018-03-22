@@ -2,4 +2,4 @@
 
 var x;
 [x = 1] = [];
-assert.equal(x, 1);
+expect(x).toBe(1);

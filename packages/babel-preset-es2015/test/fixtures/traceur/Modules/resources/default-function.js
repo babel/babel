@@ -2,4 +2,4 @@ export default function f() {
   return 123;
 }
 
-assert.instanceOf(f, Function);
+expect(f instanceof Function).toBe(true);

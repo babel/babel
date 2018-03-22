@@ -1,29 +1,29 @@
 var s = Symbol();
 var object = {};
 object[s] = 42;
-assert.equal(42, object[s]);
+expect(object[s]).toBe(42);
 // Native Symbol throws for ToString.
 // assert.isUndefined(object[s + '']);
-assertArrayEquals([], Object.getOwnPropertyNames(object));
-assert.isTrue(object.hasOwnProperty(s));
+expect(Object.getOwnPropertyNames(object)).toEqual([]);;
+expect(object.hasOwnProperty(s)).toBe(true);
 
-assert.equal(32, object[s] -= 10);
-assert.equal(16, object[s] /= 2);
-assert.equal(16, object[s]);
+expect(object[s] -= 10).toBe(32);
+expect(object[s] /= 2).toBe(16);
+expect(object[s]).toBe(16);
 
 var n = Symbol();
-assert.equal(object[n] = 1, 1);
-assert.equal(object[n] += 2, 3);
+expect(object[n] = 1).toBe(1);
+expect(object[n] += 2).toBe(3);
 
-assert.isTrue(Object.getOwnPropertyDescriptor(object, n).enumerable);
+expect(Object.getOwnPropertyDescriptor(object, n).enumerable).toBe(true);
 
-assert.isTrue(n in object);
-assert.isTrue(delete object[n]);
-assert.isFalse(n in object);
+expect(n in object).toBe(true);
+expect(delete object[n]).toBe(true);
+expect(n in object).toBe(false);
 
 var keys = [];
 for (var k in object) {
   keys.push(k);
 }
-assert.equal(0, keys.length, keys + '');
-assert.equal(0, Object.keys(object).length);
+expect(keys).toHaveLength(0);
+expect(Object.keys(object)).toBe(0);

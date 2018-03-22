@@ -15,5 +15,5 @@ function destructScopeThis() {
 // ----------------------------------------------------------------------------
 
 var result = destructScopeThis();
-assert.isUndefined(result.x);
-assert.equal(1, result.o_x);
+expect(result.x).toBeUndefined();
+expect(result.o_x).toBe(1);

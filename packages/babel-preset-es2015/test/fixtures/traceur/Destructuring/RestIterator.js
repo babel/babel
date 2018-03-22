@@ -8,17 +8,17 @@
   }
   var x, x2, xs;
   [, x, , x2, , ...xs] = f();
-  assert.equal(1, x);
-  assert.equal(3, x2);
-  assertArrayEquals([5, 6, 7], xs);
+  expect(x).toBe(1);
+  expect(x2).toBe(3);
+  expect(xs).toEqual([5, 6, 7]);;
 
   [] = f();
-  assert.equal(8, i);  // Since we never call next().
+  expect(i).toBe(8);  // Since we never call next().
 
   x = -1;
   [x] = f();
-  assert.equal(0, x);
-  assert.equal(0, i);  // Since we called next once.
+  expect(x).toBe(0);
+  expect(i).toBe(0);  // Since we called next once.
 })();
 
 // Same but with VariableDeclarations instead of AssignmenExpressions.
@@ -32,14 +32,14 @@
   }
 
   var [, x, , x2, , ...xs] = f();
-  assert.equal(1, x);
-  assert.equal(3, x2);
-  assertArrayEquals([5, 6, 7], xs);
+  expect(x).toBe(1);
+  expect(x2).toBe(3);
+  expect(xs).toEqual([5, 6, 7]);;
 
   var [] = f();
-  assert.equal(8, i);  // Since we never call next().
+  expect(i).toBe(8);  // Since we never call next().
 
   var [y] = f();
-  assert.equal(0, y);
-  assert.equal(0, i);  // Since we called next once.
+  expect(y).toBe(0);
+  expect(i).toBe(0);  // Since we called next once.
 })();

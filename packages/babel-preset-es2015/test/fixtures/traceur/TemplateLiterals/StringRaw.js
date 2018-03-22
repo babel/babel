@@ -1,10 +1,10 @@
-assert.equal('', String.raw ``);
-assert.equal('\n', String.raw `
-`);
-assert.equal('\\n', String.raw `\n`);
-assert.equal('\\n42\\t', String.raw `\n${ 40 + 2 }\t`);
-assert.equal('\n42\t', String.raw `
-${42}	`);
-assert.equal('\\\n42\\\n', String.raw `\
+expect(String.raw ``).toBe('');
+expect(String.raw `
+`).toBe('\n');
+expect(String.raw `\n`).toBe('\\n');
+expect(String.raw `\n${ 40 + 2 }\t`).toBe('\\n42\\t');
+expect(String.raw `
+${42}	`).toBe('\n42\t');
+expect(String.raw `\
 ${42}\
-`);
+`).toBe('\\\n42\\\n');

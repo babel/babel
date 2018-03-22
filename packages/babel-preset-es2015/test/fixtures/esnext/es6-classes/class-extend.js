@@ -12,4 +12,4 @@ class Dog extends Animal {
   }
 }
 
-assert.equal(new Dog().sayHi(), 'Hi, I am a dog. WOOF!');
+expect(new Dog().sayHi()).toBe('Hi, I am a dog. WOOF!');

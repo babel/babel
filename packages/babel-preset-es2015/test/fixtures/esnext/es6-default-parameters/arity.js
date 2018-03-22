@@ -1,3 +1,3 @@
-assert.equal((function(a){}).length, 1);
-assert.equal((function(a=5){}).length, 0);
-assert.equal((function(a, b, c=5){}).length, 2);
+expect((function(a){})).toHaveLength(1);
+expect((function(a=5){})).toHaveLength(0);
+expect((function(a, b, c=5){})).toHaveLength(2);

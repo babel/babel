@@ -4,8 +4,8 @@ var assigned = Object.assign(target, source);
 
 // ----------------------------------------------------------------------------
 
-assert.isTrue(Object.hasOwnProperty("assign"));
-assert.equal(assigned.a, source.a);
-assert.equal(assigned.b, target.b);
-assert.equal(assigned.c, source.c);
-assert.equal(assigned.d, source.d);
+expect(Object.hasOwnProperty("assign")).toBe(true);
+expect(assigned.a).toBe(source.a);
+expect(assigned.b).toBe(target.b);
+expect(assigned.c).toBe(source.c);
+expect(assigned.d).toBe(source.d);

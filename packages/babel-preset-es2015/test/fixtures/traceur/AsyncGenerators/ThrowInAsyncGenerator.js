@@ -19,9 +19,9 @@ async function* f() {
       list.push(i);
     }
   } catch (ex) {
-    assert.equal(ex, 'ex');
+    expect(ex).toBe('ex');
   }
-  assert.deepEqual(list, [1]);
+  expect(list).toEqual([1]);
 
   done();
 })().catch(done);

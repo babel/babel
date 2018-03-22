@@ -8,4 +8,4 @@ function destructNestedScopeArguments(x) {
 
 var result = [];
 destructNestedScopeArguments(result);
-assert.equal(42, result[0]);
+expect(result[0]).toBe(42);

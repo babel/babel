@@ -3,8 +3,8 @@
 var x = 1;
 {
   let x;
-  assert.equal(undefined, x);
+  expect(x).toBeUndefined();;
   x = 2;
-  assert.equal(2, x);
+  expect(x).toBe(2);
 }
-assert.equal(1, x);
+expect(x).toBe(1);

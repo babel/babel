@@ -55,41 +55,41 @@ function* f7() {
 }
 
 var g0 = f0();
-assert.deepEqual(g0.next(), {value: 0, done: false});
-assert.deepEqual(g0.next(), {value: 1, done: false});
-assert.deepEqual(g0.next(), {value: 2, done: false});
+expect(g0.next()).toEqual({value: 0, done: false});
+expect(g0.next()).toEqual({value: 1, done: false});
+expect(g0.next()).toEqual({value: 2, done: false});
 
 var g1 = f1();
-assert.deepEqual(g1.next(), {value: 0, done: false});
-assert.deepEqual(g1.next(), {value: 1, done: false});
-assert.deepEqual(g1.next(), {value: 2, done: false});
+expect(g1.next()).toEqual({value: 0, done: false});
+expect(g1.next()).toEqual({value: 1, done: false});
+expect(g1.next()).toEqual({value: 2, done: false});
 
 var g2 = f2();
-assert.deepEqual(g2.next(), {value: 0, done: false});
-assert.deepEqual(g2.next(), {value: 1, done: false});
-assert.deepEqual(g2.next(), {value: 2, done: false});
+expect(g2.next()).toEqual({value: 0, done: false});
+expect(g2.next()).toEqual({value: 1, done: false});
+expect(g2.next()).toEqual({value: 2, done: false});
 
 var g3 = f3();
-assert.deepEqual(g3.next(), {value: 0, done: false});
-assert.deepEqual(g3.next(), {value: 1, done: false});
-assert.deepEqual(g3.next(), {value: 2, done: false});
+expect(g3.next()).toEqual({value: 0, done: false});
+expect(g3.next()).toEqual({value: 1, done: false});
+expect(g3.next()).toEqual({value: 2, done: false});
 
 var g4 = f4();
-assert.deepEqual(g4.next(), {value: 0, done: false});
-assert.deepEqual(g4.next(), {value: 1, done: false});
-assert.deepEqual(g4.next(), {value: 2, done: false});
+expect(g4.next()).toEqual({value: 0, done: false});
+expect(g4.next()).toEqual({value: 1, done: false});
+expect(g4.next()).toEqual({value: 2, done: false});
 
 var g5 = f5();
-assert.deepEqual(g5.next(), {value: 0, done: false});
-assert.deepEqual(g5.next(), {value: 1, done: false});
-assert.deepEqual(g5.next(), {value: 2, done: false});
+expect(g5.next()).toEqual({value: 0, done: false});
+expect(g5.next()).toEqual({value: 1, done: false});
+expect(g5.next()).toEqual({value: 2, done: false});
 
 var g6 = f6();
-assert.deepEqual(g6.next(), {value: 0, done: false});
-assert.deepEqual(g6.next(), {value: 1, done: false});
-assert.deepEqual(g6.next(), {value: 2, done: false});
+expect(g6.next()).toEqual({value: 0, done: false});
+expect(g6.next()).toEqual({value: 1, done: false});
+expect(g6.next()).toEqual({value: 2, done: false});
 
 var g7 = f7();
-assert.deepEqual(g7.next(), {value: 0, done: false});
-assert.deepEqual(g7.next(), {value: 1, done: false});
-assert.deepEqual(g7.next(), {value: 2, done: false});
+expect(g7.next()).toEqual({value: 0, done: false});
+expect(g7.next()).toEqual({value: 1, done: false});
+expect(g7.next()).toEqual({value: 2, done: false});

@@ -35,12 +35,12 @@ class NoExtends {
 }
 
 var call = Function.prototype.call;
-assertArrayEquals([NoExtends, 42, call], NoExtends.method());
+expect(NoExtends.method()).toEqual([NoExtends, 42, call]);;
 
-assertArrayEquals([NoExtends, 42, call], NoExtends.getter);
+expect(NoExtends.getter).toEqual([NoExtends, 42, call]);;
 
 NoExtends.setter = 1;
-assertArrayEquals([NoExtends, 1, call], x);
+expect(x).toEqual([NoExtends, 1, call]);;
 
 delete Function.prototype.testFunction;
 delete Function.prototype.testGetter;

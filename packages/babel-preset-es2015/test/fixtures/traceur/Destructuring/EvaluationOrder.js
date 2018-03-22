@@ -7,4 +7,4 @@ function destructEvaluationOrder() {
 // ----------------------------------------------------------------------------
 
 var result = destructEvaluationOrder();
-assert.equal(3, result);
+expect(3).toBe(result);

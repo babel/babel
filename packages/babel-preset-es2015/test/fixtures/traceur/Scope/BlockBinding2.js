@@ -10,6 +10,6 @@ for (let x in obj) {
 
 // ----------------------------------------------------------------------------
 
-assert.equal('hello a', result[0]());
-assert.equal('hello b', result[1]());
-assert.equal('hello c', result[2]());
+expect(result[0]()).toBe('hello a');;;
+expect(result[1]()).toBe('hello b');;;
+expect(result[2]()).toBe('hello c');;;

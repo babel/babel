@@ -11,5 +11,3 @@ export function assertLacksOwnProperty() {}
 export function multiline(arr) {
   return arr.join("\n");
 }
-
-export const assertArrayEquals = assert.deepEqual;

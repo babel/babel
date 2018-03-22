@@ -9,14 +9,14 @@ function* test() {
 }
 
 var it = test();
-assert.deepEqual({value: 42, done: false}, it.next());
-assert.isFalse(finallyVisited);
+expect({value: 42, done: false}).toEqual(it.next());
+expect(finallyVisited).toBe(false);
 
-assert.deepEqual({value: undefined, done: true}, it.next());
-assert.isTrue(finallyVisited);
+expect({value: undefined, done: true}).toEqual(it.next());
+expect(finallyVisited).toBe(true);
 
 finallyVisited = false;
 for (var i of test()) {
-  assert.equal(42, i);
+  expect(42).toBe(i);
 }
-assert.isTrue(finallyVisited);
+expect(finallyVisited).toBe(true);

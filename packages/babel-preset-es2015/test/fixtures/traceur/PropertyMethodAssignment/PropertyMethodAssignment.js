@@ -20,7 +20,7 @@ var object = {
 
 // ----------------------------------------------------------------------------
 
-assertArrayEquals([
+expect(Object.keys(object)).toEqual([
   '42',
   'x',
   'f',
@@ -32,16 +32,16 @@ assertArrayEquals([
   'function',
   'var',
   'class'
-], Object.keys(object));
+]);;
 
 function assertMethod(object, name) {
-  assert.isTrue(object.hasOwnProperty(name));
+  expect(object.hasOwnProperty(name)).toBe(true);
   var descriptor = Object.getOwnPropertyDescriptor(object, name);
-  assert.equal('object', typeof descriptor);
-  assert.isTrue(descriptor.enumerable);
-  assert.equal('function', typeof object[name]);
+  expect(typeof descriptor).toBe('object');
+  expect(descriptor.enumerable).toBe(true);
+  expect(typeof object[name]).toBe('function');
   // IE does not have a name property on functions.
-  assert.isTrue(object[name].name === '' || object[name].name === undefined);
+  expect(object[name].name === '' || object[name].name === undefined).toBe(true);
 }
 
 assertMethod(object, 'f');
@@ -55,10 +55,10 @@ assertMethod(object, 'function');
 assertMethod(object, 'var');
 assertMethod(object, 'class');
 
-assert.equal(object.f, object.f());
+expect(object.f).toBe(object.f());
 
 // Test the nested object.
-assertArrayEquals(['j'], Object.keys(object.x));
+expect(Object.keys(object.x)).toEqual(['j']);;
 assertMethod(object.x, 'j');
 
 // Test name binding.
@@ -68,4 +68,4 @@ class C {
     return m;
   }
 }
-assert.equal(42, new C().m())
+expect(new C().m()).toBe(42);

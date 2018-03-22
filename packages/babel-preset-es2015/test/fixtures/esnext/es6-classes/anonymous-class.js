@@ -20,10 +20,10 @@ var Dog = class extends Animal {
   }
 };
 
-assert.equal(new Dog().sayHi(), 'Hi, I am a dog. WOOF!');
-assert.equal(Dog.getName(), 'Animal/Dog');
+expect(new Dog().sayHi()).toBe('Hi, I am a dog. WOOF!');
+expect(Dog.getName()).toBe('Animal/Dog');
 
 var count = 0;
 var Cat = class extends (function(){ count++; return Animal; })() {};
 
-assert.equal(count, 1);
+expect(count).toBe(1);

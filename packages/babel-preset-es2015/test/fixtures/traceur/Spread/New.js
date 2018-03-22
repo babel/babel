@@ -17,10 +17,10 @@ var object = new F(0, ...[1, 2], ...G());
 
 // ----------------------------------------------------------------------------
 
-assert.equal(0, object.x);
-assert.equal(1, object.y);
-assert.equal(2, object.z);
-assert.equal(3, object.a);
-assert.equal(4, object.b);
-assert.equal(object, object.self);
-assert.isTrue(object instanceof object.F);
+expect(object.x).toBe(0);
+expect(object.y).toBe(1);
+expect(object.z).toBe(2);
+expect(object.a).toBe(3);
+expect(object.b).toBe(4);
+expect(object.self).toBe(object);
+expect(true).toBe(object instanceof object.F);

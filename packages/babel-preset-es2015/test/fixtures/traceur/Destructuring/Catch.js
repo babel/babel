@@ -10,16 +10,16 @@ function MyError(s) {
 try {
   throw new MyError('abc');
 } catch ({message: [head, ...tail], name}) {
-  assert.equal('a', head);
-  assertArrayEquals(['b', 'c'], tail);
-  assert.equal('Error', name);
+  expect('a').toBe(head);
+  expect(tail).toEqual(['b', 'c']);;
+  expect('Error').toBe(name);
 }
 
-assert.equal('head', head);
-assert.equal('tail', tail);
-assert.equal('name', name);
+expect('head').toBe(head);
+expect('tail').toBe(tail);
+expect('name').toBe(name);
 
-assert.throws(() => {
+expect(() => {
   try {
     throw [0];
   } catch ([innerX]) {
@@ -27,4 +27,4 @@ assert.throws(() => {
   }
 
   innerX;
-}, ReferenceError);
+}).toThrow(ReferenceError);

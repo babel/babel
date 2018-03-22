@@ -19,7 +19,7 @@ var o1 = new AsyncGeneratorFunction(function* () {
   for (var i on o1) {
     squares.push(i * i);
   }
-  assert.deepEqual(squares, [1, 4, 9]);
+  expect(squares).toEqual([1, 4, 9]);
 
   // test break
   var cubes = [];
@@ -29,7 +29,7 @@ var o1 = new AsyncGeneratorFunction(function* () {
     }
     cubes.push(i * i * i);
   }
-  assert.deepEqual(cubes, [1, 8]);
+  expect(cubes).toEqual([1, 8]);
 
   // test continue
   var list = [];
@@ -39,7 +39,7 @@ var o1 = new AsyncGeneratorFunction(function* () {
     }
     list.push(i);
   }
-  assert.deepEqual(list, [1, 3]);
+  expect(list).toEqual([1, 3]);
 
   // test outer continue
   var almostEmpty = [];
@@ -51,7 +51,7 @@ var o1 = new AsyncGeneratorFunction(function* () {
       almostEmpty.push(i);
     }
   } while (false);
-  assert.deepEqual(almostEmpty, [1]);
+  expect(almostEmpty).toEqual([1]);
 
   // test return
   var value = await (async function () {
@@ -60,8 +60,7 @@ var o1 = new AsyncGeneratorFunction(function* () {
         return 42;
       }
     }
-  })();
-  assert.equal(value, 42);
+  })() => expect(value).toBe(42);
 
   // test asynchronous loop body
   var sum = 0;
@@ -69,7 +68,7 @@ var o1 = new AsyncGeneratorFunction(function* () {
     sum += i;
     await Promise.resolve();
   }
-  assert.equal(sum, 6);
+  expect(sum).toBe(6);
 
   done();
 }()).catch(done);

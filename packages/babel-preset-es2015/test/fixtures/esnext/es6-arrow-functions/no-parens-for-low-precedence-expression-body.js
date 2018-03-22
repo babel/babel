@@ -1,2 +1,2 @@
 var square = x => x * x;
-assert.equal(square(4), 16);
+expect(square(4)).toBe(16);

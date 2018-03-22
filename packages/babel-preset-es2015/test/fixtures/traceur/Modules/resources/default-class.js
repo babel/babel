@@ -4,4 +4,4 @@ export default class C {
   }
 }
 
-assert.instanceOf(C, Function);
+expect(C instanceof Function).toBe(true);

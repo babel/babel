@@ -7,4 +7,4 @@ var object = {
 };
 
 object.append(1, 2, ...[3, 4]);
-assert.deepEqual(object.list, [1, 2, 3, 4]);
+expect(object.list).toEqual([1, 2, 3, 4]);

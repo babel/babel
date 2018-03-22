@@ -3,15 +3,15 @@ var self = {};
 
 function outer() {
   var f = () => {
-    assert.equal(this, self);
+    expect(this).toBe(self);
 
     var g = () => {
-      assert.equal(this, self);
+      expect(this).toBe(self);
     };
     g();
 
     var h = function() {
-      assert.equal(this, global);
+      expect(this).toBe(global);
     };
     h();
   };

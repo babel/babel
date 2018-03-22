@@ -7,12 +7,12 @@ function f() {
 }
 
 async = 1;
-assert.equal(async, 1);
-assert.equal(f(), 2);
+expect(async).toBe(1);
+expect(f()).toBe(2);
 
 async = async
 function g() {
 
 }
 
-assert.equal(async, 1);
+expect(async).toBe(1);

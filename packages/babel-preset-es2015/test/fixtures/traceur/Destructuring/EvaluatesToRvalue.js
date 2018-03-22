@@ -6,4 +6,4 @@ function destructEvaluatesToRvalue() {
 // ----------------------------------------------------------------------------
 
 var result = destructEvaluatesToRvalue();
-assertArrayEquals([1, 2, 3], result);
+expect(result).toEqual([1, 2, 3]);;

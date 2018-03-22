@@ -13,6 +13,6 @@ function* f() {
 }
 
 var g = f();
-assert.deepEqual(g.next(), {value: 1, done: false});
-assert.deepEqual(g.next(), {value: undefined, done: true});
-assert.equal(x, ':i:0j:0i:1j:1i:2j:2');
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.next()).toEqual({value: undefined, done: true});
+expect(x).toBe(':i:0j:0i:1j:1i:2j:2');

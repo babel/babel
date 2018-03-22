@@ -4,6 +4,6 @@ class SimpleDerived extends SimpleBase {}
 // ----------------------------------------------------------------------------
 
 var derived = new SimpleDerived();
-assert.isTrue(derived instanceof SimpleDerived);
-assert.isTrue(derived instanceof SimpleBase);
-assert.isTrue(derived instanceof Object);
+expect(derived instanceof SimpleDerived).toBe(true);
+expect(derived instanceof SimpleBase).toBe(true);
+expect(derived instanceof Object).toBe(true);

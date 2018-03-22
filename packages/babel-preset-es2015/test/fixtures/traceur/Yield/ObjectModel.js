@@ -3,37 +3,36 @@
 var GeneratorFunctionPrototype = f.__proto__;
 var GeneratorFunction = GeneratorFunctionPrototype.constructor;
 
-assert.equal(GeneratorFunction.name, 'GeneratorFunction');
-assert.equal(GeneratorFunction.prototype, GeneratorFunctionPrototype);
-assert.equal(GeneratorFunctionPrototype.prototype.constructor,
-    GeneratorFunctionPrototype);
-assert.equal(GeneratorFunctionPrototype.prototype, f.prototype.__proto__);
-assert.equal(GeneratorFunctionPrototype.__proto__, Function.prototype);
+expect(GeneratorFunction.name).toBe('GeneratorFunction');
+expect(GeneratorFunction.prototype).toBe(GeneratorFunctionPrototype);
+expect(GeneratorFunctionPrototype.prototype.constructor).toBe(GeneratorFunctionPrototype);
+expect(GeneratorFunctionPrototype.prototype).toBe(f.prototype.__proto__);
+expect(GeneratorFunctionPrototype.__proto__).toBe(Function.prototype);
 
 var g = f();
 assert.instanceOf(g, f);
 
-assert.equal(g.__proto__, f.prototype);
+expect(g.__proto__).toBe(f.prototype);
 
-assert.deepEqual([], Object.getOwnPropertyNames(f.prototype));
-assert.deepEqual([], Object.getOwnPropertyNames(g));
+expect(Object.getOwnPropertyNames(f.prototype)).toEqual([]);
+expect(Object.getOwnPropertyNames(g)).toEqual([]);
 
 f.prototype.x = 42;
 
 var g2 = f();
-assert.equal(g2.x, 42);
+expect(g2.x).toBe(42);
 
 var g3 = new f();
-assert.equal(g3.x, 42);
+expect(g3.x).toBe(42);
 
 function* f2() {
   yield 1;
 }
 
-assert.equal(f.__proto__, f2.__proto__);
+expect(f.__proto__).toBe(f2.__proto__);
 
-assert.isFalse(f.hasOwnProperty('constructor'));
-assert.equal(f.__proto__.constructor.name, 'GeneratorFunction');
+expect(f.hasOwnProperty('constructor')).toBe(false);
+expect(f.__proto__.constructor.name).toBe('GeneratorFunction');
 
 // Intentionally at the end to test hoisting.
 function* f() {

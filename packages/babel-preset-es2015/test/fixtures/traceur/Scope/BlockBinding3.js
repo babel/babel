@@ -13,5 +13,5 @@ var f1, f2;
 
 // ----------------------------------------------------------------------------
 
-assert.equal('z1 value', f1());
-assert.equal('z2 value', f2());
+expect(f1()).toBe('z1 value');
+expect(f2()).toBe('z2 value');

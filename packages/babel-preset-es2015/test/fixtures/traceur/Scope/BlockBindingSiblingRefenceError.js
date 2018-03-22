@@ -1,6 +1,6 @@
-assert.throws(() => {
+expect(() => {
   {
     let inner = 'inner value';
   }
   var x = inner;
-}, ReferenceError);
+}).toThrow(ReferenceError);

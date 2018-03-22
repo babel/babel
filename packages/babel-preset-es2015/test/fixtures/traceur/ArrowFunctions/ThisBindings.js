@@ -8,11 +8,11 @@ const obj = {
     return () => this;
   }
 };
-assert.equal(obj.method()(), obj);
+expect(obj.method()()).toBe(obj);
 
 let fake = {steal: obj.method()};
-assert.equal(fake.steal(), obj);
+expect(fake.steal()).toBe(obj);
 
 let real = {borrow: obj.method};
-assert.equal(real.borrow()(), real);
+expect(real.borrow()()).toBe(real);
 

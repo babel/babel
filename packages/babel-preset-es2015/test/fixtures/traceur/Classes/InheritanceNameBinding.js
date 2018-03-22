@@ -8,4 +8,4 @@ class NameBindingDerived extends NameBindingBase {
 
 var derived = new NameBindingDerived();
 derived.x = 12;
-assert.equal(12, derived.getX());
+expect(derived.getX()).toBe(12);

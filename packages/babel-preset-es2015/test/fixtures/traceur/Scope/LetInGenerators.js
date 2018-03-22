@@ -9,7 +9,7 @@ function* f() {
 }
 
 var g = f();
-assert.deepEqual(g.next(), {value: 0, done: false});
-assert.deepEqual(g.next(), {value: 1, done: false});
-assert.deepEqual(g.next(), {value: 2, done: false});
+expect(g.next()).toEqual({value: 0, done: false});;
+expect(g.next()).toEqual({value: 1, done: false});;
+expect(g.next()).toEqual({value: 2, done: false});;
 

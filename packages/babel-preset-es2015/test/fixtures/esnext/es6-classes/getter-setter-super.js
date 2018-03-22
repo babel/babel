@@ -32,6 +32,6 @@ class Cat extends Animal {
 
 var cat = new Cat();
 
-assert.equal(cat.sound, 'I am a cat. MEOW!');
+expect(cat.sound).toBe('I am a cat. MEOW!');
 cat.name = 'Nyan';
-assert.equal(cat.name, 'Nyan Cat');
+expect(cat.name).toBe('Nyan Cat');

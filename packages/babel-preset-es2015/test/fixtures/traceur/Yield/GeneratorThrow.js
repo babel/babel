@@ -5,11 +5,11 @@ function assertThrownEquals(x, func) {
   } catch (err) {
     actualError = err;
   }
-  assert.equal(x, actualError);
+  expect(x).toBe(actualError);
 }
 
 function assertClosed(g) {
-  assert.deepEqual({value: undefined, done: true}, g.next());
+  expect(g.next()).toEqual({value: undefined, done: true});
 }
 
 //-----------------------------------------------------------------------------
@@ -54,7 +54,7 @@ function* G1() {
   yield g.throw();
 }
 g = W(G1)();
-assert.throw(() => g.next(), 'Generator is already running');
+expect(() => g.next()).toThrow('Generator is already running');
 
 //-----------------------------------------------------------------------------
 //
@@ -76,16 +76,16 @@ function* G2() {
 
 var closeMethods = [
   (g) => {
-    assert.deepEqual({value: 1, done: false}, g.next());
-    assert.deepEqual({value: '(22)', done: false}, g.throw(22));
-    assert.deepEqual({value: 3, done: false}, g.next());
+    expect(g.next()).toEqual({value: 1, done: false});
+    expect(g.throw(22)).toEqual({value: '(22)', done: false});
+    expect(g.next()).toEqual({value: 3, done: false});
     assertThrownEquals(42, () => g.throw(42));
   },
   (g) => {
-    assert.deepEqual({value: 1, done: false}, g.next());
-    assert.deepEqual({value: 2, done: false}, g.next());
-    assert.deepEqual({value: 3, done: false}, g.next());
-    assert.deepEqual({value: undefined, done: true}, g.next());
+    expect(g.next()).toEqual({value: 1, done: false});
+    expect(g.next()).toEqual({value: 2, done: false});
+    expect(g.next()).toEqual({value: 3, done: false});
+    expect(g.next()).toEqual({value: undefined, done: true});
   }
 ];
 
@@ -124,9 +124,9 @@ g = W(G2)();
 // the last 'yield' with a 'throw x' and calling next() on that generator. So
 // it could either throw an exception, or return a value, depending on the
 // flow of control.
-assert.deepEqual({value: 1, done: false}, g.next());
-assert.deepEqual({value: '(22)', done: false}, g.throw(22));
-assert.deepEqual({value: 3, done: false}, g.next());
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.throw(22)).toEqual({value: '(22)', done: false});
+expect(g.next()).toEqual({value: 3, done: false});
 
 assertThrownEquals(44, () => g.throw(44));
 assertClosed(g);
@@ -146,8 +146,8 @@ g = W(G3)();
 // Note: this behavior differs from ionmonkey, which throws 'undefined', and
 // not StopIteration, but the StopIteration behavior better matches what I'd
 // expect, given the description from the previous test.
-assert.deepEqual({value: 1, done: false}, g.next());
-assert.deepEqual({value: undefined, done: true}, g.throw(44));
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.throw(44)).toEqual({value: undefined, done: true});
 assertClosed(g);
 
 }); // end wrap_forEach

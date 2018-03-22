@@ -8,7 +8,7 @@
   ({eval} = {eval});
   eval += 1;
   eval /= 2;
-  assert.equal(1, eval);
+  expect(eval).toBe(1);
 })();
 
 (function() {
@@ -21,7 +21,7 @@
   ({arguments} = {arguments});
   arguments += 1;
   arguments /= 2;
-  assert.equal(1, arguments);
+  expect(arguments).toBe(1);
 })();
 
 (function() {
@@ -34,5 +34,5 @@
   ({yield} = {yield});
   yield += 1;
   yield /= 2;
-  assert.equal(1, yield);
+  expect(yield).toBe(1);
 })();

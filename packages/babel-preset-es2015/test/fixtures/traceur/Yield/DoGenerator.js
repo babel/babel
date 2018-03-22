@@ -16,4 +16,4 @@ function accumulate(iterator) {
 
 // ----------------------------------------------------------------------------
 
-assert.equal('135', accumulate(doGenerator()));
+expect(accumulate(doGenerator())).toBe('135');

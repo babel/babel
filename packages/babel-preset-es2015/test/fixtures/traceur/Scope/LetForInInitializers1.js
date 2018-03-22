@@ -17,6 +17,6 @@ var result;
 
 // ----------------------------------------------------------------------------
 
-assertArrayEquals(['0', 'one'], result[0]());
-assertArrayEquals(['1', 'two'], result[1]());
-assertArrayEquals(['2', 'three'], result[2]());
+expect(result[0]()).toEqual(['0', 'one']);;
+expect(result[1]()).toEqual(['1', 'two']);;
+expect(result[2]()).toEqual(['2', 'three']);;

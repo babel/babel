@@ -29,9 +29,9 @@ var o = {
 };
 
 o.m();
-assert.equal(o.name, 'p');
-assert.equal(o.inner.name, 'inner');
+expect(o.name).toBe('p');
+expect(o.inner.name).toBe('inner');
 
 o.inner.m();
-assert.equal(o.name, 'p');
-assert.equal(o.inner.name, 'p2');
+expect(o.name).toBe('p');
+expect(o.inner.name).toBe('p2');

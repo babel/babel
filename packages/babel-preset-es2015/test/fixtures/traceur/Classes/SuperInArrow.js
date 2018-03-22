@@ -16,4 +16,4 @@ class D extends B {
 }
 
 new D().n(42);
-assert.equal(x, 42);
+expect(x).toBe(42);

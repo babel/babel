@@ -11,7 +11,7 @@ var object = new SpreadTestClass(...[0, 1]);
 
 // ----------------------------------------------------------------------------
 
-assert.equal(object.x, 0);
-assert.equal(object.y, 1);
-assert.equal(object.self, object);
-assert.isTrue(object instanceof object.SpreadTestClass);
+expect(object.x).toBe(0);
+expect(object.y).toBe(1);
+expect(object.self).toBe(object);
+expect(object instanceof object.SpreadTestClass).toBe(true);

@@ -11,5 +11,5 @@ class ZeroPoint extends Point {
   }
 }
 
-assert.equal(new ZeroPoint().x, 0);
-assert.equal(new ZeroPoint().y, 0);
+expect(new ZeroPoint().x).toBe(0);
+expect(new ZeroPoint().y).toBe(0);

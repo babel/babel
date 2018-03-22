@@ -14,9 +14,9 @@ function* f() {
 }
 
 var g = f();
-assert.deepEqual(g.next(), {value: 1, done: false});
-assert.deepEqual(g.next(), {value: undefined, done: true});
-assert.equal(x, ':abd');
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.next()).toEqual({value: undefined, done: true});
+expect(x).toBe(':abd');
 
 
 x = ':';
@@ -43,6 +43,6 @@ function* f2() {
 }
 
 g = f2();
-assert.deepEqual(g.next(), {value: 3, done: false});
-assert.deepEqual(g.next(), {value: undefined, done: true});
-assert.equal(x, ':abcdh');
+expect(g.next()).toEqual({value: 3, done: false});
+expect(g.next()).toEqual({value: undefined, done: true});
+expect(x).toBe(':abcdh');

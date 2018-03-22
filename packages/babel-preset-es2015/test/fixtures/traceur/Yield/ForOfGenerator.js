@@ -46,4 +46,4 @@ function accumulate(iterator) {
 
 // ----------------------------------------------------------------------------
 
-assert.equal('abcda0c2', accumulate(forEachGenerator()));
+expect(accumulate(forEachGenerator())).toBe('abcda0c2');

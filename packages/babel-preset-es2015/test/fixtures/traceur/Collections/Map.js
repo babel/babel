@@ -10,7 +10,7 @@ var nanKey = NaN;
 var zeroKey = 0;
 
 
-assert.equal(t.size, 0);
+expect(t.size).toBe(0);
 
 t.set(undefinedKey, 'value8');
 t.set(nullKey, 'value9');
@@ -21,49 +21,49 @@ t.set(objectKey, 'value1');
 t.set(nanKey, 'value10');
 t.set(zeroKey, 'value11');
 
-assert.equal(t.size, 8);
+expect(t.size).toBe(8);
 
-assert.equal(t.get(objectKey), 'value1');
-assert.equal(t.get(stringKey), 'value5');
-assert.equal(t.get(numberKey), 'value6');
-assert.equal(t.get(booleanKey), 'value7');
-assert.equal(t.get(undefinedKey), 'value8');
-assert.equal(t.get(nullKey), 'value9');
-assert.equal(t.get(nanKey), 'value10');
-assert.equal(t.get(zeroKey), 'value11');
+expect(t.get(objectKey)).toBe('value1');
+expect(t.get(stringKey)).toBe('value5');
+expect(t.get(numberKey)).toBe('value6');
+expect(t.get(booleanKey)).toBe('value7');
+expect(t.get(undefinedKey)).toBe('value8');
+expect(t.get(nullKey)).toBe('value9');
+expect(t.get(nanKey)).toBe('value10');
+expect(t.get(zeroKey)).toBe('value11');
 
-assert.equal(t.get({}), undefined);
-assert.equal(t.get('keykeykey'), 'value5');
-assert.equal(t.get(42.24), 'value6');
-assert.equal(t.get(true), 'value7');
-assert.equal(t.get(undefined), 'value8');
-assert.equal(t.get(null), 'value9');
-assert.equal(t.get(NaN), 'value10');
-assert.equal(t.get(0), 'value11');
-assert.equal(t.get(1 / Infinity), 'value11');
+expect(t.get({})).toBe(undefined);
+expect(t.get('keykeykey')).toBe('value5');
+expect(t.get(42.24)).toBe('value6');
+expect(t.get(true)).toBe('value7');
+expect(t.get(undefined)).toBe('value8');
+expect(t.get(null)).toBe('value9');
+expect(t.get(NaN)).toBe('value10');
+expect(t.get(0)).toBe('value11');
+expect(t.get(1 / Infinity)).toBe('value11');
 
 // V8 is broken for -0
 // https://code.google.com/p/v8/issues/detail?id=3906
 // assert.equal(t.get(-1 / Infinity), 'value11');
 
-assert.isTrue(!t.has({}));
+expect(t.has({})).toBe(false);
 
-assert.isTrue(t.has(objectKey));
-assert.isTrue(t.has(stringKey));
-assert.isTrue(t.has(numberKey));
-assert.isTrue(t.has(booleanKey));
-assert.isTrue(t.has(undefinedKey));
-assert.isTrue(t.has(nullKey));
-assert.isTrue(t.has(nanKey));
-assert.isTrue(t.has(zeroKey));
+expect(t.has(objectKey)).toBe(true);
+expect(t.has(stringKey)).toBe(true);
+expect(t.has(numberKey)).toBe(true);
+expect(t.has(booleanKey)).toBe(true);
+expect(t.has(undefinedKey)).toBe(true);
+expect(t.has(nullKey)).toBe(true);
+expect(t.has(nanKey)).toBe(true);
+expect(t.has(zeroKey)).toBe(true);
 
-assert.isTrue(t.has('keykeykey'));
-assert.isTrue(t.has(42.24));
-assert.isTrue(t.has(true));
-assert.isTrue(t.has(undefined));
-assert.isTrue(t.has(null));
-assert.isTrue(t.has(NaN));
-assert.isTrue(t.has(0));
+expect(t.has('keykeykey')).toBe(true);
+expect(t.has(42.24)).toBe(true);
+expect(t.has(true)).toBe(true);
+expect(t.has(undefined)).toBe(true);
+expect(t.has(null)).toBe(true);
+expect(t.has(NaN)).toBe(true);
+expect(t.has(0)).toBe(true);
 
 // V8 is broken for -0
 // https://code.google.com/p/v8/issues/detail?id=3906
@@ -78,15 +78,15 @@ t.forEach(function (value, key, map) {
   if (cnt === 0) {
     t.set('foo', 42);
   }
-  assert.equal(map, t);
+  expect(map).toBe(t);
   arrKeys.push(key);
   arr.push(value);
   cnt++;
 });
-assert.equal(cnt, 9);
+expect(cnt).toBe(9);
 t.delete('foo');
 
-assertArrayEquals(arrKeys, [
+expect([
   undefinedKey,
   nullKey,
   stringKey,
@@ -96,8 +96,8 @@ assertArrayEquals(arrKeys, [
   nanKey,
   zeroKey,
   'foo'
-]);
-assertArrayEquals(arr, [
+]).toEqual(arrKeys);;
+expect([
   'value8',
   'value9',
   'value5',
@@ -107,7 +107,7 @@ assertArrayEquals(arr, [
   'value10',
   'value11',
   42
-]);
+]).toEqual(arr);;
 
 // iterator
 arrKeys = [];
@@ -123,13 +123,13 @@ for (var mapIterItem of t) {
   arr.push(mapIterItemVal);
   cnt++;
 }
-assert.equal(cnt, 9);
+expect(cnt).toBe(9);
 t.delete('foo');
 
-assertArrayEquals(arrKeys, [ undefinedKey, nullKey, stringKey,
+expect([ undefinedKey, nullKey, stringKey,
     numberKey, booleanKey, objectKey,
-    nanKey, zeroKey, 'foo' ]);
-assertArrayEquals(arr, [
+    nanKey, zeroKey, 'foo' ]).toEqual(arrKeys);;
+expect([
   'value8',
   'value9',
   'value5',
@@ -139,7 +139,7 @@ assertArrayEquals(arr, [
   'value10',
   'value11',
   42
-]);
+]).toEqual(arr);;
 
 
 // .entries()
@@ -153,9 +153,9 @@ for (var mapIterItem of t.entries()) {
   arr.push(mapIterItemVal);
   cnt++;
 }
-assert.equal(cnt, 8);
+expect(cnt).toBe(8);
 
-assertArrayEquals(arrKeys, [
+expect([
   undefinedKey,
   nullKey,
   stringKey,
@@ -164,8 +164,8 @@ assertArrayEquals(arrKeys, [
   objectKey,
   nanKey,
   zeroKey
-]);
-assertArrayEquals(arr, [
+]).toEqual(arrKeys);;
+expect([
   'value8',
   'value9',
   'value5',
@@ -174,7 +174,7 @@ assertArrayEquals(arr, [
   'value1',
   'value10',
   'value11'
-]);
+]).toEqual(arr);;
 
 
 // .keys()
@@ -185,9 +185,9 @@ for (var mapIterKey of t.keys()) {
   arrKeys.push(mapIterKey);
   cnt++;
 }
-assert.equal(cnt, 8);
+expect(cnt).toBe(8);
 
-assertArrayEquals(arrKeys, [
+expect([
   undefinedKey,
   nullKey,
   stringKey,
@@ -196,7 +196,7 @@ assertArrayEquals(arrKeys, [
   objectKey,
   nanKey,
   zeroKey
-]);
+]).toEqual(arrKeys);;
 
 
 // .values()
@@ -207,9 +207,9 @@ for (var mapIterVal of t.values()) {
   arr.push(mapIterVal);
   cnt++;
 }
-assert.equal(cnt, 8);
+expect(cnt).toBe(8);
 
-assertArrayEquals(arr, [
+expect([
   'value8',
   'value9',
   'value5',
@@ -218,23 +218,23 @@ assertArrayEquals(arr, [
   'value1',
   'value10',
   'value11'
-]);
+]).toEqual(arr);;
 
 
 var t3 = new Map([ [[],[]], [{},{}], [NaN,NaN] ]);
 var deleteReturnValue;
 
-assert.equal(t3.size, 3);
-assert.isTrue(t3.has(NaN));
-assert.isTrue(isNaN(t3.get(NaN)));
-assert.equal(t3.set(NaN, NaN), t3); // test of 23.1.3.9.11
+expect(t3.size).toBe(3);
+expect(t3.has(NaN)).toBe(true);
+expect(isNaN(t3.get(NaN))).toBe(true);
+expect(t3.set(NaN, NaN)).toBe(t3); // test of 23.1.3.9.11
 deleteReturnValue = t3.delete(NaN);
-assert.equal(t3.size, 2);
-assert.isTrue(deleteReturnValue);
+expect(t3.size).toBe(2);
+expect(deleteReturnValue).toBe(true);
 deleteReturnValue = t3.delete(NaN);
-assert.equal(t3.size, 2);
-assert.isFalse(deleteReturnValue);
+expect(t3.size).toBe(2);
+expect(deleteReturnValue).toBe(false);
 t3.clear();
-assert.equal(t3.size, 0);
+expect(t3.size).toBe(0);
 
-assert.equal(Map.prototype[Symbol.iterator], Map.prototype.entries);
+expect(Map.prototype[Symbol.iterator]).toBe(Map.prototype.entries);

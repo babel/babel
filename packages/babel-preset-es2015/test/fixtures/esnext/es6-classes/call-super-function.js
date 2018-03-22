@@ -18,4 +18,4 @@ class Horse extends Animal {
   }
 }
 
-assert.equal(new Horse().sayHi(), 'WAT?!');
+expect(new Horse().sayHi()).toBe('WAT?!');

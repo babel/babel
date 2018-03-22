@@ -24,4 +24,4 @@ function accumulate(iterator) {
 
 // ----------------------------------------------------------------------------
 
-assert.equal('abcd',accumulate(forInGenerator3()));
+expect(accumulate(forInGenerator3())).toBe('abcd');

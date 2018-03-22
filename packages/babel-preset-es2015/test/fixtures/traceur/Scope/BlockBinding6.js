@@ -11,4 +11,4 @@ function testBlock() {
 // ----------------------------------------------------------------------------
 
 var result = testBlock();
-assert.equal('g', result());
+expect(result()).toBe('g');

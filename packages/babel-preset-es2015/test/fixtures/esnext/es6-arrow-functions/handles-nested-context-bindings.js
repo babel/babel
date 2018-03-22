@@ -8,5 +8,5 @@ var obj = {
   }
 };
 
-assert.strictEqual(obj.method()()(), obj);
-assert.strictEqual(obj.method2()()(), obj);
+expect(obj.method()()()).toBe(obj);
+expect(obj.method2()()()).toBe(obj);
