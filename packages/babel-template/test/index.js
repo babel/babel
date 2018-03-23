@@ -204,5 +204,20 @@ describe("@babel/template", function() {
       expect(result.test.type).to.equal("BinaryExpression");
       expect(result.test.left).to.equal(value);
     });
+
+    it("should replace JSX placeholder", () => {
+      const result = template.expression(
+        `
+        <TAG>{'content'}</TAG>
+      `,
+        {
+          plugins: ["jsx"],
+        },
+      )({
+        TAG: t.jsxIdentifier("div"),
+      });
+
+      expect(generator(result).code).to.equal("<div>{'content'}</div>");
+    });
   });
 });

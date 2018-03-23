@@ -64,7 +64,7 @@ function placeholderVisitorHandler(
   state: MetadataState,
 ) {
   let name;
-  if (t.isIdentifier(node)) {
+  if (t.isIdentifier(node) || t.isJSXIdentifier(node)) {
     name = ((node: any): BabelNodeIdentifier).name;
   } else if (t.isStringLiteral(node)) {
     name = ((node: any): BabelNodeStringLiteral).value;
