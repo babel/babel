@@ -619,7 +619,10 @@ export default class Scope {
       }
       return true;
     } else if (t.isMemberExpression(node)) {
-      return this.isPure(node.object, constantsOnly);
+      return (
+        this.isPure(node.object, constantsOnly) &&
+        this.isPure(node.property, constantsOnly)
+      );
     } else if (t.isClassMethod(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       if (node.kind === "get" || node.kind === "set") return false;
