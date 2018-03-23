@@ -136,7 +136,11 @@ export default function(commander, filenames, opts) {
         const dirname = filename;
 
         util
-          .readdirForCompilable(filename, commander.includeDotfiles)
+          .readdirForCompilable(
+            filename,
+            commander.includeDotfiles,
+            commander.extensions,
+          )
           .forEach(function(filename) {
             _filenames.push(path.join(dirname, filename));
           });
