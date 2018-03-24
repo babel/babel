@@ -1,7 +1,6 @@
 "use strict";
 
 const defaults = require("../lib/defaults.js");
-const assert = require("assert");
 
 const {
   getPlatformSpecificDefaultFor,
@@ -15,7 +14,7 @@ describe("defaults", () => {
         chrome: "63",
         node: "8",
       });
-      assert.deepEqual(defaultWebIncludesForChromeAndNode, [
+      expect(defaultWebIncludesForChromeAndNode).toEqual([
         "web.timers",
         "web.immediate",
         "web.dom.iterable",
@@ -26,7 +25,7 @@ describe("defaults", () => {
       const defaultWebIncludesForChromeAndNode = getPlatformSpecificDefaultFor({
         node: "8",
       });
-      assert.equal(defaultWebIncludesForChromeAndNode, null);
+      expect(defaultWebIncludesForChromeAndNode).toBeNull();
     });
   });
 
@@ -35,7 +34,7 @@ describe("defaults", () => {
       const defaultWebIncludesForChromeAndNode = getOptionSpecificExcludesFor({
         loose: true,
       });
-      assert.deepEqual(defaultWebIncludesForChromeAndNode, [
+      expect(defaultWebIncludesForChromeAndNode).toEqual([
         "transform-typeof-symbol",
       ]);
     });
@@ -44,7 +43,7 @@ describe("defaults", () => {
       const defaultWebIncludesForChromeAndNode = getOptionSpecificExcludesFor({
         loose: false,
       });
-      assert.deepEqual(defaultWebIncludesForChromeAndNode, null);
+      expect(defaultWebIncludesForChromeAndNode).toBeNull();
     });
   });
 });

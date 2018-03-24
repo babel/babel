@@ -1,6 +1,5 @@
 import generator from "../../babel-generator";
 import template from "../lib";
-import { expect } from "chai";
 import * as t from "@babel/types";
 
 const comments = "// Sum two numbers\nconst add = (a, b) => a + b;";
@@ -9,24 +8,24 @@ describe("@babel/template", function() {
   it("import statements are allowed by default", function() {
     expect(function() {
       template("import foo from 'foo'")({});
-    }).not.to.throw();
+    }).not.toThrow();
   });
 
   it("with statements are allowed with sourceType: script", function() {
     expect(function() {
       template("with({}){}", { sourceType: "script" })({});
-    }).not.to.throw();
+    }).not.toThrow();
   });
 
   it("should strip comments by default", function() {
     const code = "const add = (a, b) => a + b;";
     const output = template(comments)();
-    expect(generator(output).code).to.be.equal(code);
+    expect(generator(output).code).toBe(code);
   });
 
   it("should preserve comments with a flag", function() {
     const output = template(comments, { preserveComments: true })();
-    expect(generator(output).code).to.be.equal(comments);
+    expect(generator(output).code).toBe(comments);
   });
 
   describe("string-based", () => {
@@ -38,9 +37,9 @@ describe("@babel/template", function() {
         SOME_VAR: value,
       });
 
-      expect(result.type).to.equal("IfStatement");
-      expect(result.test.type).to.equal("BinaryExpression");
-      expect(result.test.left).to.equal(value);
+      expect(result.type).toBe("IfStatement");
+      expect(result.test.type).toBe("BinaryExpression");
+      expect(result.test.left).toBe(value);
     });
 
     it("should handle replacing values given an array", () => {
@@ -49,9 +48,9 @@ describe("@babel/template", function() {
         if ($0 === "") {}
       `)([value]);
 
-      expect(result.type).to.equal("IfStatement");
-      expect(result.test.type).to.equal("BinaryExpression");
-      expect(result.test.left).to.equal(value);
+      expect(result.type).toBe("IfStatement");
+      expect(result.test.type).toBe("BinaryExpression");
+      expect(result.test.left).toBe(value);
     });
 
     it("should handle replacing values with null to remove them", () => {
@@ -59,9 +58,9 @@ describe("@babel/template", function() {
         callee(ARG);
       `)({ ARG: null });
 
-      expect(result.type).to.equal("ExpressionStatement");
-      expect(result.expression.type).to.equal("CallExpression");
-      expect(result.expression.arguments).to.eql([]);
+      expect(result.type).toBe("ExpressionStatement");
+      expect(result.expression.type).toBe("CallExpression");
+      expect(result.expression.arguments).toEqual([]);
     });
 
     it("should handle replacing values that are string content", () => {
@@ -69,9 +68,9 @@ describe("@babel/template", function() {
         ("ARG");
       `)({ ARG: "some new content" });
 
-      expect(result.type).to.equal("ExpressionStatement");
-      expect(result.expression.type).to.equal("StringLiteral");
-      expect(result.expression.value).to.equal("some new content");
+      expect(result.type).toBe("ExpressionStatement");
+      expect(result.expression.type).toBe("StringLiteral");
+      expect(result.expression.value).toBe("some new content");
     });
 
     it("should automatically clone nodes if they are injected twice", () => {
@@ -82,11 +81,11 @@ describe("@babel/template", function() {
         ID;
       `)({ ID: id });
 
-      expect(result[0].type).to.equal("ExpressionStatement");
-      expect(result[0].expression).to.equal(id);
-      expect(result[1].type).to.equal("ExpressionStatement");
-      expect(result[1].expression).not.to.equal(id);
-      expect(result[1].expression).to.eql(id);
+      expect(result[0].type).toBe("ExpressionStatement");
+      expect(result[0].expression).toBe(id);
+      expect(result[1].type).toBe("ExpressionStatement");
+      expect(result[1].expression).not.toBe(id);
+      expect(result[1].expression).toEqual(id);
     });
 
     it("should allow passing in a whitelist of replacement names", () => {
@@ -98,8 +97,8 @@ describe("@babel/template", function() {
         { placeholderWhitelist: new Set(["some_id"]) },
       )({ some_id: id });
 
-      expect(result.type).to.equal("ExpressionStatement");
-      expect(result.expression).to.equal(id);
+      expect(result.type).toBe("ExpressionStatement");
+      expect(result.expression).toBe(id);
     });
 
     it("should allow passing in a RegExp to match replacement patterns", () => {
@@ -112,11 +111,11 @@ describe("@babel/template", function() {
         { placeholderPattern: /^ID$/ },
       )({ ID: id });
 
-      expect(result[0].type).to.equal("ExpressionStatement");
-      expect(result[0].expression).to.equal(id);
-      expect(result[1].type).to.equal("ExpressionStatement");
-      expect(result[1].expression.type).to.equal("Identifier");
-      expect(result[1].expression.name).to.equal("ANOTHER_ID");
+      expect(result[0].type).toBe("ExpressionStatement");
+      expect(result[0].expression).toBe(id);
+      expect(result[1].type).toBe("ExpressionStatement");
+      expect(result[1].expression.type).toBe("Identifier");
+      expect(result[1].expression.name).toBe("ANOTHER_ID");
     });
 
     it("should throw if unknown replacements are provided", () => {
@@ -124,7 +123,7 @@ describe("@babel/template", function() {
         template(`
           ID;
         `)({ ID: t.identifier("someIdent"), ANOTHER_ID: null });
-      }).to.throw(Error, 'Unknown substitution "ANOTHER_ID" given');
+      }).toThrow('Unknown substitution "ANOTHER_ID" given');
     });
 
     it("should throw if placeholders are not given explicit values", () => {
@@ -133,8 +132,7 @@ describe("@babel/template", function() {
           ID;
           ANOTHER_ID;
         `)({ ID: t.identifier("someIdent") });
-      }).to.throw(
-        Error,
+      }).toThrow(
         `Error: No substitution given for "ANOTHER_ID". If this is not meant to be a
             placeholder you may want to consider passing one of the following options to @babel/template:
             - { placeholderPattern: false, placeholderWhitelist: new Set(['ANOTHER_ID'])}
@@ -147,10 +145,10 @@ describe("@babel/template", function() {
         if ("some string value" === "") {}
       `);
 
-      expect(result.type).to.equal("IfStatement");
-      expect(result.test.type).to.equal("BinaryExpression");
-      expect(result.test.left.type).to.equal("StringLiteral");
-      expect(result.test.left.value).to.equal("some string value");
+      expect(result.type).toBe("IfStatement");
+      expect(result.test.type).toBe("BinaryExpression");
+      expect(result.test.left.type).toBe("StringLiteral");
+      expect(result.test.left.value).toBe("some string value");
     });
   });
 
@@ -161,9 +159,9 @@ describe("@babel/template", function() {
         if (${value} === "") {}
       `();
 
-      expect(result.type).to.equal("IfStatement");
-      expect(result.test.type).to.equal("BinaryExpression");
-      expect(result.test.left).to.equal(value);
+      expect(result.type).toBe("IfStatement");
+      expect(result.test.type).toBe("BinaryExpression");
+      expect(result.test.left).toBe(value);
     });
 
     it("should handle replacing values with null to remove them", () => {
@@ -171,9 +169,9 @@ describe("@babel/template", function() {
         callee(${null});
       `();
 
-      expect(result.type).to.equal("ExpressionStatement");
-      expect(result.expression.type).to.equal("CallExpression");
-      expect(result.expression.arguments).to.eql([]);
+      expect(result.type).toBe("ExpressionStatement");
+      expect(result.expression.type).toBe("CallExpression");
+      expect(result.expression.arguments).toEqual([]);
     });
 
     it("should handle replacing values that are string content", () => {
@@ -181,9 +179,9 @@ describe("@babel/template", function() {
         ("${"some new content"}");
       `();
 
-      expect(result.type).to.equal("ExpressionStatement");
-      expect(result.expression.type).to.equal("StringLiteral");
-      expect(result.expression.value).to.equal("some new content");
+      expect(result.type).toBe("ExpressionStatement");
+      expect(result.expression.type).toBe("StringLiteral");
+      expect(result.expression.value).toBe("some new content");
     });
 
     it("should allow setting options by passing an object", () => {
@@ -191,7 +189,7 @@ describe("@babel/template", function() {
         with({}){}
       `();
 
-      expect(result.type).to.equal("WithStatement");
+      expect(result.type).toBe("WithStatement");
     });
 
     it("should return the AST directly when using .ast", () => {
@@ -200,9 +198,9 @@ describe("@babel/template", function() {
         if (${value} === "") {}
       `;
 
-      expect(result.type).to.equal("IfStatement");
-      expect(result.test.type).to.equal("BinaryExpression");
-      expect(result.test.left).to.equal(value);
+      expect(result.type).toBe("IfStatement");
+      expect(result.test.type).toBe("BinaryExpression");
+      expect(result.test.left).toBe(value);
     });
 
     it("should replace JSX placeholder", () => {
