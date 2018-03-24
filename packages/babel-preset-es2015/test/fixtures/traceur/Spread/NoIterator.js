@@ -1,1 +1,1 @@
-assert.throw(() => [...{}], TypeError);
+expect(() => [...{}]).toThrow(TypeError);

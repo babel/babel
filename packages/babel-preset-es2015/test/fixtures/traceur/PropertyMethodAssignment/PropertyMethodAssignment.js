@@ -32,7 +32,7 @@ expect(Object.keys(object)).toEqual([
   'function',
   'var',
   'class'
-]);;
+]);
 
 function assertMethod(object, name) {
   expect(object.hasOwnProperty(name)).toBe(true);
@@ -58,7 +58,7 @@ assertMethod(object, 'class');
 expect(object.f).toBe(object.f());
 
 // Test the nested object.
-expect(Object.keys(object.x)).toEqual(['j']);;
+expect(Object.keys(object.x)).toEqual(['j']);
 assertMethod(object.x, 'j');
 
 // Test name binding.

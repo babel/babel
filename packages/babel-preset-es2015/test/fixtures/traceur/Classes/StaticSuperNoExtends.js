@@ -35,12 +35,12 @@ class NoExtends {
 }
 
 var call = Function.prototype.call;
-expect(NoExtends.method()).toEqual([NoExtends, 42, call]);;
+expect(NoExtends.method()).toEqual([NoExtends, 42, call]);
 
-expect(NoExtends.getter).toEqual([NoExtends, 42, call]);;
+expect(NoExtends.getter).toEqual([NoExtends, 42, call]);
 
 NoExtends.setter = 1;
-expect(x).toEqual([NoExtends, 1, call]);;
+expect(x).toEqual([NoExtends, 1, call]);
 
 delete Function.prototype.testFunction;
 delete Function.prototype.testGetter;

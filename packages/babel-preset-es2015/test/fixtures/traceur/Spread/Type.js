@@ -1,29 +1,29 @@
 
-assert.throw(() => {
+expect(() => {
   [0, ...{}, 1];
-}, TypeError);
+}).toThrow(TypeError);
 
-assert.throw(() => {
+expect(() => {
   [0, ...{0: 1, 1: 2, length: 2}, 3];
-}, TypeError);
+}).toThrow(TypeError);
 
-assert.throw(() => {
+expect(() => {
   [0, ...true, 1];
-}, TypeError);
+}).toThrow(TypeError);
 
-assert.throw(() => {
+expect(() => {
   [0, ...1, 1];
-}, TypeError);
+}).toThrow(TypeError);
 
-assert.throw(() => {
+expect(() => {
   [0, ...function() {}, 1];
-}, TypeError);
+}).toThrow(TypeError);
 
-assert.throw(function() {
+expect(function() {
   [0, ...null, 1];
-}, TypeError);
+}).toThrow(TypeError);
 
-assert.throw(function() {
+expect(function() {
   [0, ...undefined, 1];
-}, TypeError);
+}).toThrow(TypeError);
 

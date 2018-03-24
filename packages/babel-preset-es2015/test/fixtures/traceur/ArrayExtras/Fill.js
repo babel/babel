@@ -26,7 +26,7 @@ expect([1, 2, 3].fill(5, 1, -1)).toEqual([1, 5, 3]);
 expect(Array.prototype.fill.call({'0': 1, 'length': 3}, 5)).toEqual({'0': 5, '1': 5, '2': 5, 'length': 3});
 
 // should handle custom object with negative length
-//assert.deepEqual(Array.prototype.fill.call({'0': 2, 'length': -1}, 5), {'0': 2, 'length': -1});
+// expect(Array.prototype.fill.call({'0': 2, 'length': -1}, 5)).toEqual({'0': 2, 'length': -1});
 
 // should handle no elements
 expect([].fill(5)).toEqual([]);

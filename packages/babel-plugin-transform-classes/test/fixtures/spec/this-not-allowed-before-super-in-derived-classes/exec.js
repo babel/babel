@@ -7,4 +7,4 @@ class Foo extends Bar {
   }
 }
 
-assert.throws(() => new Foo());
+expect(() => new Foo()).toThrow();

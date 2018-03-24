@@ -78,7 +78,7 @@ t.forEach(function(val, val2, obj) {
 expect(cnt).toBe(8);
 
 arr.sort();
-expect(expected).toEqual(arr);;
+expect(arr).toEqual(expected);
 
 // iterator
 arr = [];
@@ -92,7 +92,7 @@ expect(cnt).toBe(8);
 
 
 arr.sort();
-expect(expected).toEqual(arr);;
+expect(arr).toEqual(expected);
 
 // .values()
 arr = [];
@@ -106,7 +106,7 @@ expect(cnt).toBe(8);
 
 
 arr.sort();
-expect(expected).toEqual(arr);;
+expect(arr).toEqual(expected);
 
 var t3 = new Set([[], {}, NaN]);
 expect(t3.size).toBe(3);

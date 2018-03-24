@@ -13,4 +13,4 @@ Object.assign(jumpTable, {
 
 });
 jumpTable('foo', 'bar');
-assert.strictEqual(fooCalls[0], 'bar');
+expect(fooCalls[0]).toBe('bar');

@@ -7,16 +7,16 @@ const obj = {
 };
 
 let test = delete obj?.a?.b;
-assert.equal(obj.a.b, undefined);
-assert.equal(test, true);
+expect(obj.a.b).toBeUndefined();
+expect(test).toBe(true);
 
 test = delete obj?.a.b;
-assert.equal(obj.a.b, undefined);
-assert.equal(test, true);
+expect(obj.a.b).toBeUndefined();
+expect(test).toBe(true);
 
 test = delete obj?.b?.b;
-assert.equal(obj.b, undefined);
-assert.equal(test, undefined);
+expect(obj.b).toBeUndefined();
+expect(test).toBeUndefined();
 
 delete obj?.a;
-assert.equal(obj.a, undefined);
+expect(obj.a).toBeUndefined();

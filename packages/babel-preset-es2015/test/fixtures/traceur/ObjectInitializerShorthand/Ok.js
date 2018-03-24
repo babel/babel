@@ -4,5 +4,5 @@ var object = {x, y};
 
 // ----------------------------------------------------------------------------
 
-expect(object.x).toBe(42);;
-expect(object.y).toBe(43);;
+expect(object.x).toBe(42);
+expect(object.y).toBe(43);

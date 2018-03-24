@@ -1,5 +1,5 @@
 import * as foo from "./moduleWithGetter";
 
-assert.throws(() => foo.boo);
+expect(() => foo.boo).toThrow();
 
 // No exception should be thrown

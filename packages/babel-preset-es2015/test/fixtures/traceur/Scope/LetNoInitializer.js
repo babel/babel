@@ -3,7 +3,7 @@
 var x = 1;
 {
   let x;
-  expect(x).toBeUndefined();;
+  expect(x).toBeUndefined();
   x = 2;
   expect(x).toBe(2);
 }

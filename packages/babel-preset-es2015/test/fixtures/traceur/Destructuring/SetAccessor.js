@@ -6,7 +6,7 @@ function MyError(s) {
 var object = {
   set x({message: [head, ...tail], name}) {
     expect(head).toBe('a');
-    expect(tail).toEqual(['b', 'c']);;
+    expect(tail).toEqual(['b', 'c']);
     expect(name).toBe('Error');
   }
 };

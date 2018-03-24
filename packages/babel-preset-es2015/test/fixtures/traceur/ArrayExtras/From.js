@@ -108,7 +108,7 @@ class MyArray extends Array {
 }
 
 var ma = MyArray.from(['a', 'b']);
-assert.instanceOf(ma, MyArray);
+expect(ma instanceof MyArray).toBe(true);
 expect(constructorCounter).toBe(1);
 expect(lengthSetCounter).toBe(1);
 expect(lengthGetCounter).toBe(0);
@@ -146,7 +146,7 @@ var ma3 = new MyArray3(2);
 ma3[0] = 'a';
 ma3[1] = 'b';
 ma = MyArray2.from(ma3);
-assert.instanceOf(ma, MyArray2);
+expect(ma instanceof MyArray2).toBe(true);
 expect(constructorCounter).toBe(2);
 expect(lengthSetCounter).toBe(1);
 expect(lengthGetCounter).toBe(0);

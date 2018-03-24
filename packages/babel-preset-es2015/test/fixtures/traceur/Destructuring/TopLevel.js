@@ -3,7 +3,7 @@ var a, b, c, d;
 
 // ----------------------------------------------------------------------------
 
-expect('hello').toBe(a);
-expect(',').toBe(b);
-expect('junk').toBe(c);
-expect(d).toEqual(['world']);;
+expect(a).toBe('hello');
+expect(b).toBe(',');
+expect(c).toBe('junk');
+expect(d).toEqual(['world']);

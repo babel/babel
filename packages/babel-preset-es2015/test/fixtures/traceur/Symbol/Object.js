@@ -4,7 +4,7 @@ object[s] = 42;
 expect(object[s]).toBe(42);
 // Native Symbol throws for ToString.
 // assert.isUndefined(object[s + '']);
-expect(Object.getOwnPropertyNames(object)).toEqual([]);;
+expect(Object.getOwnPropertyNames(object)).toEqual([]);
 expect(object.hasOwnProperty(s)).toBe(true);
 
 expect(object[s] -= 10).toBe(32);

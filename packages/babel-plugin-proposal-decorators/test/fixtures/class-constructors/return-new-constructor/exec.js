@@ -9,5 +9,5 @@ class Parent {
   parent(){}
 }
 
-assert.equal(typeof Parent.prototype.parent, "function")
-assert.equal(typeof Parent.prototype.child, "function")
+expect(typeof Parent.prototype.parent).toBe("function");
+expect(typeof Parent.prototype.child).toBe("function");

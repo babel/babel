@@ -6,12 +6,12 @@ expect(Array.of.length).toBe(0);
 //should return an array from arguments
 arr = Array.of(1, 'a', 3);
 expect(arr).toEqual([1, 'a', 3]);
-//assert.isTrue(arr instanceof Array);
+// expect(arr instanceof Array).toBe(true);
 
 //should work with no arguments
 arr = Array.of();
 expect(arr).toEqual([]);
-//assert.isTrue(arr instanceof Array);
+// expect(arr instanceof Array).toBe(true);
 
 //should work with sub-classed array
 class MyArray extends Array {}
@@ -20,7 +20,7 @@ arr = MyArray.of(4, 'b');
 expect(arr[0]).toBe(4);
 expect(arr[1]).toBe('b');
 expect(arr).toHaveLength(2);
-//assert.isTrue(arr instanceof MyArray);
+// expect(arr instanceof MyArray).toBe(true);
 
 //should call with exotic array
 class ExoticArray {
@@ -34,4 +34,4 @@ expect(arr[1]).toBe('c');
 expect(arr[2]).toBe(6);
 expect(arr[3]).toBe('d');
 expect(arr).toHaveLength(4);
-//assert.isTrue(arr instanceof ExoticArray);
+expect(arr instanceof ExoticArray).toBe(true);

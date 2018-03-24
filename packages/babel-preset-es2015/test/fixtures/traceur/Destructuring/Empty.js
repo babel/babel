@@ -3,14 +3,14 @@ var calls = 0;
 var {} = Object(calls++);
 expect(calls).toBe(1);
 
-assert.throw(function() {
+expect(function() {
   var [] = Object(calls++);
-}, TypeError);
+}).toThrow(TypeError);
 expect(calls).toBe(2);
 
-assert.throw(function() {
+expect(function() {
   var {} = Object(calls++), [] = Object(calls++);
-});
+}).toThrow();
 expect(calls).toBe(4);
 
 
@@ -21,12 +21,12 @@ calls = 0;
 (((((((((((({} = Object(calls++)))))))))))));
 expect(calls).toBe(1);
 
-assert.throw(function() {
+expect(function() {
   [] = Object(calls++);
-}, TypeError);
+}).toThrow(TypeError);
 expect(calls).toBe(2);
 
-assert.throw(function() {
+expect(function() {
   (((((((((((({} = Object(calls++)))))))))))), [] = Object(calls++));
-}, TypeError);
+}).toThrow(TypeError);
 expect(calls).toBe(4);

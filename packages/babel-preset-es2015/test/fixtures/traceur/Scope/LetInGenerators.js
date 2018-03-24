@@ -9,7 +9,7 @@ function* f() {
 }
 
 var g = f();
-expect(g.next()).toEqual({value: 0, done: false});;
-expect(g.next()).toEqual({value: 1, done: false});;
-expect(g.next()).toEqual({value: 2, done: false});;
+expect(g.next()).toEqual({value: 0, done: false});
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.next()).toEqual({value: 2, done: false});
 

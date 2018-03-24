@@ -3,7 +3,7 @@ class Foo {
   static str = "foo";
 }
 
-assert.equal(Foo.num, 0);
-assert.equal(Foo.num = 1, 1);
-assert.equal(Foo.str, "foo");
-assert.equal(Foo.str = "bar", "bar");
+expect(Foo.num).toBe(0);
+expect(Foo.num = 1).toBe(1);
+expect(Foo.str).toBe("foo");
+expect(Foo.str = "bar").toBe("bar");

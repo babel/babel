@@ -10,7 +10,7 @@
   [, x, , x2, , ...xs] = f();
   expect(x).toBe(1);
   expect(x2).toBe(3);
-  expect(xs).toEqual([5, 6, 7]);;
+  expect(xs).toEqual([5, 6, 7]);
 
   [] = f();
   expect(i).toBe(8);  // Since we never call next().
@@ -34,7 +34,7 @@
   var [, x, , x2, , ...xs] = f();
   expect(x).toBe(1);
   expect(x2).toBe(3);
-  expect(xs).toEqual([5, 6, 7]);;
+  expect(xs).toEqual([5, 6, 7]);
 
   var [] = f();
   expect(i).toBe(8);  // Since we never call next().

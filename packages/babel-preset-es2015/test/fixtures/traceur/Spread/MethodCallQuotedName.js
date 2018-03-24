@@ -15,4 +15,4 @@ var result = {
 // ----------------------------------------------------------------------------
 
 expect(result.obj).toBe(result.result.self);
-expect(result.result.args).toEqual([0, 1, 2, 3]);;
+expect(result.result.args).toEqual([0, 1, 2, 3]);

@@ -10,7 +10,7 @@ var expectedTails = [['b', 'c'], ['e','f']];
 var i = 0;
 for (var [head, ...tail] of gen()) {
   expect(expectedHeads[i]).toBe(head);
-  expect(tail).toEqual(expectedTails[i]);;
+  expect(tail).toEqual(expectedTails[i]);
   i++;
 }
 expect(i).toBe(2);

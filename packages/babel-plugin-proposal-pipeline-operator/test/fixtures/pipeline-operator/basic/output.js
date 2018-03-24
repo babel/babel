@@ -2,4 +2,4 @@ var _;
 
 var inc = x => x + 1;
 
-assert.equal((_ = 10, inc(_)), 11);
+expect((_ = 10, inc(_))).toBe(11);

@@ -7,5 +7,5 @@ class Example {
 }
 
 let inst = new Example();
-assert(inst.hasOwnProperty("prop"));
-assert.equal(inst.prop, undefined);
+expect(inst.hasOwnProperty("prop")).toBe(true);
+expect(inst.prop).toBeUndefined();

@@ -7,7 +7,7 @@ var f = [... new String('abc')];
 
 // ----------------------------------------------------------------------------
 
-expect(b).toEqual(['b']);;
-expect(c).toEqual(['b', 'b']);;
-expect(e).toEqual([0, '1', '2', 3]);;
-expect(f).toEqual(['a', 'b', 'c']);;
+expect(b).toEqual(['b']);
+expect(c).toEqual(['b', 'b']);
+expect(e).toEqual([0, '1', '2', 3]);
+expect(f).toEqual(['a', 'b', 'c']);

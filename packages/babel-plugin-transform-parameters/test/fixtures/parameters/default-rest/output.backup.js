@@ -16,12 +16,7 @@ rest2(undefined, 2);
 
 function rest3() {
   var b = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : a;
-
-  for (var _len = arguments.length, a = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    a[_key - 1] = arguments[_key];
-  }
-
-  expect(a).toHaveLength(1);
+  expect(arguments.length <= 1 ? 0 : arguments.length - 1).toBe(1);
 }
 
 rest3(undefined, 2);

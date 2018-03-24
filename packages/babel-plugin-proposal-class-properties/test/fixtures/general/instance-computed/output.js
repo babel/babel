@@ -12,9 +12,9 @@ function test(x) {
   };
 
   x = 'deadbeef';
-  assert.strictEqual(new F().foo, 1);
+  expect(new F().foo).toBe(1);
   x = 'wrong';
-  assert.strictEqual(new F().foo, 1);
+  expect(new F().foo).toBe(1);
 }
 
 test('foo');

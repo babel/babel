@@ -215,7 +215,7 @@ describe("@babel/template", function() {
         TAG: t.jsxIdentifier("div"),
       });
 
-      expect(generator(result).code).to.equal("<div>{'content'}</div>");
+      expect(generator(result).code).toEqual("<div>{'content'}</div>");
     });
   });
 });

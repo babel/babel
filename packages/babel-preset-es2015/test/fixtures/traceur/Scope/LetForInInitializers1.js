@@ -17,6 +17,6 @@ var result;
 
 // ----------------------------------------------------------------------------
 
-expect(result[0]()).toEqual(['0', 'one']);;
-expect(result[1]()).toEqual(['1', 'two']);;
-expect(result[2]()).toEqual(['2', 'three']);;
+expect(result[0]()).toEqual(['0', 'one']);
+expect(result[1]()).toEqual(['1', 'two']);
+expect(result[2]()).toEqual(['2', 'three']);

@@ -24,15 +24,15 @@ class MyClass {
 const inst = new MyClass();
 
 const expectedOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-assert.deepEqual(actualOrder, expectedOrder);
+expect(actualOrder).toEqual(expectedOrder);
 
-assert.equal(MyClass[1], 10);
-assert.equal(inst[2], 13);
-assert.equal(inst[3], "foo");
+expect(MyClass[1]).toBe(10);
+expect(inst[2]).toBe(13);
+expect(inst[3]).toBe("foo");
 inst[4] = "baz";
-assert.equal(inst.bar, "baz");
-assert.equal(inst[5], 14);
-assert.equal(MyClass[6], 11);
-assert.equal(MyClass[7], 12);
-assert.ok(typeof inst[8] === "function");
-assert.equal(inst[9], 15);
+expect(inst.bar).toBe("baz");
+expect(inst[5]).toBe(14);
+expect(MyClass[6]).toBe(11);
+expect(MyClass[7]).toBe(12);
+expect(typeof inst[8]).toBe("function");
+expect(inst[9]).toBe(15);

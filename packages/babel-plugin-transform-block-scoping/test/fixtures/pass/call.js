@@ -4,4 +4,4 @@ function b() {
   return a + 1;
 }
 
-expect(b()).toBe(2);;
+expect(b()).toBe(2);

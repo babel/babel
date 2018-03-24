@@ -1,7 +1,7 @@
 var _ref, _ref2, _sum;
 
 var result = (_ref = [5, 10], (_ref2 = _ref.map(x => x * 2), (_sum = _ref2.reduce((a, b) => a + b), _sum + 1)));
-assert.equal(result, 31);
+expect(result).toBe(31);
 
 var inc = x => x + 1;
 
@@ -12,4 +12,4 @@ var result2 = [4, 9].map(x => {
 
   return _ref3 = (_x = x, inc(_x)), double(_ref3);
 });
-assert.deepEqual(result2, [10, 20]);
+expect(result2).toEqual([10, 20]);

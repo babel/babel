@@ -4,8 +4,8 @@
 import {asyncFunction} from './resources/async-function.js';
 import asyncFunctionDefault from './resources/async-function.js';
 
-assert.instanceOf(asyncFunction(), Promise);
-assert.instanceOf(asyncFunctionDefault(), Promise);
+expect(asyncFunction() instanceof Promise);
+expect(asyncFunctionDefault() instanceof Promise);
 
 (async function() {
   var x = await asyncFunction();

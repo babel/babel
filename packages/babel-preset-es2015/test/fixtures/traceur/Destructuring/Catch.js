@@ -11,7 +11,7 @@ try {
   throw new MyError('abc');
 } catch ({message: [head, ...tail], name}) {
   expect('a').toBe(head);
-  expect(tail).toEqual(['b', 'c']);;
+  expect(tail).toEqual(['b', 'c']);
   expect('Error').toBe(name);
 }
 

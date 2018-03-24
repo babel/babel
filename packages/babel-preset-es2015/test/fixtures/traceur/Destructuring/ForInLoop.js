@@ -9,20 +9,20 @@ var expectedHeads = ['a', 'd'];
 var expectedTails = [['b', 'c'], ['e','f']];
 var i = 0;
 for (var [head, ...tail] in object) {
-  expect(expectedHeads[i]).toBe(head);
-  expect(tail).toEqual(expectedTails[i]);;
+  expect(head).toBe(expectedHeads[i]);
+  expect(tail).toEqual(expectedTails[i]);
   i++;
 }
-expect(2).toBe(i);
+expect(i).toBe(2);
 
 {
   let x = 42;
   for (let {length: x} in object) {
-    expect(3).toBe(x);
+    expect(x).toBe(3);
   }
-  expect(42).toBe(x);
+  expect(x).toBe(42);
 }
 
 var k;
 for ({length: k} in {abc: 3})  // No block
-  expect(3).toBe(k);
+  expect(k).toBe(3);

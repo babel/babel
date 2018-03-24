@@ -5,21 +5,21 @@ function MyError(s) {
 
 class C {
   constructor({message: [head, ...tail], name}) {
-    expect('a').toBe(head);
-    expect(tail).toEqual(['b', 'c']);;
-    expect('Error').toBe(name);
+    expect(head).toBe('a');
+    expect(tail).toEqual(['b', 'c']);
+    expect(name).toBe('Error');
   }
 
   method({message: [head, ...tail], name}) {
-    expect('a').toBe(head);
-    expect(tail).toEqual(['b', 'c']);;
-    expect('Error').toBe(name);
+    expect(head).toBe('a');
+    expect(tail).toEqual(['b', 'c']);
+    expect(name).toBe('Error');
   }
 
   set x({message: [head, ...tail], name}) {
-    expect('a').toBe(head);
-    expect(tail).toEqual(['b', 'c']);;
-    expect('Error').toBe(name);
+    expect(head).toBe('a');
+    expect(tail).toEqual(['b', 'c']);
+    expect(name).toBe('Error');
   }
 }
 

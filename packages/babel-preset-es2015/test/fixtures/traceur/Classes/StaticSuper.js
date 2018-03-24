@@ -28,8 +28,8 @@ class C extends B {
   }
 }
 
-expect(C.method()).toEqual([C, 'B.method']);;
-expect(C.getter).toEqual([C, 'B.getter']);;
+expect(C.method()).toEqual([C, 'B.method']);
+expect(C.getter).toEqual([C, 'B.getter']);
 
 C.setter = 'B.setter';
-expect(x).toEqual([C, 'B.setter']);;
+expect(x).toEqual([C, 'B.setter']);

@@ -2,5 +2,5 @@ class Foo {
   static num;
 }
 
-assert.equal("num" in Foo, true);
-assert.equal(Foo.num, undefined);
+expect("num" in Foo).toBe(true);
+expect(Foo.num).toBeUndefined();

@@ -5,4 +5,4 @@ var result = a
   |> () => b
   |> () => c;
 
-assert.equal(result, c)
+expect(result).toBe(c);

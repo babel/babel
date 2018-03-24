@@ -2,6 +2,6 @@ var Foo = class {
   static num = 0;
 }
 
-assert.equal(Foo.num, 0);
-assert.equal(Foo.num = 1, 1);
-assert.equal(Foo.name, "Foo");
+expect(Foo.num).toBe(0);
+expect(Foo.num = 1).toBe(1);
+expect(Foo.name).toBe("Foo");

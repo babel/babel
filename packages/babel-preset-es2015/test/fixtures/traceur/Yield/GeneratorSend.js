@@ -56,7 +56,7 @@ function* G1() {
 g = W(G1)();
 // To be nitpicky, ionmonkey throws TypeError, and not Error. I'm not checking
 // things quite that closely at this point in time.
-assert.throw(() => g.next(), 'Generator is already running');
+expect(() => g.next()).toThrow('Generator is already running');
 
 //-----------------------------------------------------------------------------
 //
@@ -94,7 +94,7 @@ closeMethods.forEach((closeMethod) => {
 
 g = W(G2)();
 for (var i = 0; i < 8; i++) {
-  assert.throw(() => g.next(42), /^attempt to send (.*?) to newborn generator$/);
+  expect(() => g.next(42)).toThrow(/^attempt to send (.*?) to newborn generator$/);
 }
 
 expect({value: 1, done: false}).toEqual(g.next(undefined));

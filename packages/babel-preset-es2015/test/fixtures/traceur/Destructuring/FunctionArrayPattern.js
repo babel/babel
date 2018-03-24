@@ -1,7 +1,7 @@
 function f([a, b, ...c], d) {
   return [a, b, c, d];
 }
-expect(f([1, 2, 3, 4], 5)).toEqual([1, 2, [3, 4], 5]);;
+expect(f([1, 2, 3, 4], 5)).toEqual([1, 2, [3, 4], 5]);
 
 function g([, a]) {
   return a;

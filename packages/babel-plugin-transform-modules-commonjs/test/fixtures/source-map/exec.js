@@ -28,5 +28,5 @@ tests.forEach(function (code) {
   });
 
   // Should create mapping
-  expect(res.map.mappings).not.toBe('');;
+  expect(res.map.mappings).not.toBe('');
 });

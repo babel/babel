@@ -30,7 +30,7 @@
     0B11: 3,
     0B0100: 4
   };
-  expect(Object.keys(o)).toEqual(['0', '1', '2', '3', '4']);;
+  expect(Object.keys(o)).toEqual(['0', '1', '2', '3', '4']);
 
   var o = {
     0o0: 0,
@@ -39,7 +39,7 @@
     0O10: 8,
     0O011: 9
   };
-  expect(Object.keys(o)).toEqual(['0', '1', '7', '8', '9']);;
+  expect(Object.keys(o)).toEqual(['0', '1', '7', '8', '9']);
 
   var o = {
     get 0b0() {},
@@ -48,7 +48,7 @@
     get 0B11() {},
     get 0B0100() {}
   };
-  expect(Object.keys(o)).toEqual(['0', '1', '2', '3', '4']);;
+  expect(Object.keys(o)).toEqual(['0', '1', '2', '3', '4']);
 
   var o = {
     set 0o0(v) {},
@@ -57,7 +57,7 @@
     set 0O10(v) {},
     set 0O011(v) {}
   };
-  expect(Object.keys(o)).toEqual(['0', '1', '7', '8', '9']);;
+  expect(Object.keys(o)).toEqual(['0', '1', '7', '8', '9']);
 
   var o = {
     0b0() {},
@@ -66,7 +66,7 @@
     0B11() {},
     0B0100() {}
   };
-  expect(Object.keys(o)).toEqual(['0', '1', '2', '3', '4']);;
+  expect(Object.keys(o)).toEqual(['0', '1', '2', '3', '4']);
 
   class C {
     0b0() {}
@@ -84,18 +84,18 @@
     static set 0O13(v) {}
   }
 
-  expect(C.prototype.hasOwnProperty('0')).toBe(true);;
-  expect(C.prototype.hasOwnProperty('1')).toBe(true);;
-  expect(C.prototype.hasOwnProperty('2')).toBe(true);;
-  expect(C.prototype.hasOwnProperty('6')).toBe(true);;
-  expect(C.prototype.hasOwnProperty('7')).toBe(true);;
-  expect(C.prototype.hasOwnProperty('8')).toBe(true);;
+  expect(C.prototype.hasOwnProperty('0')).toBe(true);
+  expect(C.prototype.hasOwnProperty('1')).toBe(true);
+  expect(C.prototype.hasOwnProperty('2')).toBe(true);
+  expect(C.prototype.hasOwnProperty('6')).toBe(true);
+  expect(C.prototype.hasOwnProperty('7')).toBe(true);
+  expect(C.prototype.hasOwnProperty('8')).toBe(true);
 
-  expect(C.hasOwnProperty('3')).toBe(true);;
-  expect(C.hasOwnProperty('4')).toBe(true);;
-  expect(C.hasOwnProperty('5')).toBe(true);;
-  expect(C.hasOwnProperty('9')).toBe(true);;
-  expect(C.hasOwnProperty('10')).toBe(true);;
-  expect(C.hasOwnProperty('11')).toBe(true);;
+  expect(C.hasOwnProperty('3')).toBe(true);
+  expect(C.hasOwnProperty('4')).toBe(true);
+  expect(C.hasOwnProperty('5')).toBe(true);
+  expect(C.hasOwnProperty('9')).toBe(true);
+  expect(C.hasOwnProperty('10')).toBe(true);
+  expect(C.hasOwnProperty('11')).toBe(true);
 
 })();

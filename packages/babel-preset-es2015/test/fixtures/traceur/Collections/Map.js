@@ -32,7 +32,7 @@ expect(t.get(nullKey)).toBe('value9');
 expect(t.get(nanKey)).toBe('value10');
 expect(t.get(zeroKey)).toBe('value11');
 
-expect(t.get({})).toBe(undefined);
+expect(t.get({})).toBeUndefined();
 expect(t.get('keykeykey')).toBe('value5');
 expect(t.get(42.24)).toBe('value6');
 expect(t.get(true)).toBe('value7');
@@ -86,7 +86,7 @@ t.forEach(function (value, key, map) {
 expect(cnt).toBe(9);
 t.delete('foo');
 
-expect([
+expect(arrKeys).toEqual([
   undefinedKey,
   nullKey,
   stringKey,
@@ -96,8 +96,8 @@ expect([
   nanKey,
   zeroKey,
   'foo'
-]).toEqual(arrKeys);;
-expect([
+]);
+expect(arr).toEqual([
   'value8',
   'value9',
   'value5',
@@ -107,7 +107,7 @@ expect([
   'value10',
   'value11',
   42
-]).toEqual(arr);;
+]);
 
 // iterator
 arrKeys = [];
@@ -126,10 +126,18 @@ for (var mapIterItem of t) {
 expect(cnt).toBe(9);
 t.delete('foo');
 
-expect([ undefinedKey, nullKey, stringKey,
-    numberKey, booleanKey, objectKey,
-    nanKey, zeroKey, 'foo' ]).toEqual(arrKeys);;
-expect([
+expect(arrKeys).toEqual([
+  undefinedKey,
+  nullKey,
+  stringKey,
+  numberKey,
+  booleanKey,
+  objectKey,
+  nanKey,
+  zeroKey,
+  'foo'
+]);
+expect(arr).toEqual([
   'value8',
   'value9',
   'value5',
@@ -139,7 +147,7 @@ expect([
   'value10',
   'value11',
   42
-]).toEqual(arr);;
+]);
 
 
 // .entries()
@@ -155,7 +163,7 @@ for (var mapIterItem of t.entries()) {
 }
 expect(cnt).toBe(8);
 
-expect([
+expect(arrKeys).toEqual([
   undefinedKey,
   nullKey,
   stringKey,
@@ -164,8 +172,8 @@ expect([
   objectKey,
   nanKey,
   zeroKey
-]).toEqual(arrKeys);;
-expect([
+]);
+expect(arr).toEqual([
   'value8',
   'value9',
   'value5',
@@ -174,7 +182,7 @@ expect([
   'value1',
   'value10',
   'value11'
-]).toEqual(arr);;
+]);
 
 
 // .keys()
@@ -187,7 +195,7 @@ for (var mapIterKey of t.keys()) {
 }
 expect(cnt).toBe(8);
 
-expect([
+expect(arrKeys).toEqual([
   undefinedKey,
   nullKey,
   stringKey,
@@ -196,7 +204,7 @@ expect([
   objectKey,
   nanKey,
   zeroKey
-]).toEqual(arrKeys);;
+]);
 
 
 // .values()
@@ -209,7 +217,7 @@ for (var mapIterVal of t.values()) {
 }
 expect(cnt).toBe(8);
 
-expect([
+expect(arr).toEqual([
   'value8',
   'value9',
   'value5',
@@ -218,7 +226,7 @@ expect([
   'value1',
   'value10',
   'value11'
-]).toEqual(arr);;
+]);
 
 
 var t3 = new Map([ [[],[]], [{},{}], [NaN,NaN] ]);

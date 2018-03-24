@@ -10,7 +10,7 @@ expect(GeneratorFunctionPrototype.prototype).toBe(f.prototype.__proto__);
 expect(GeneratorFunctionPrototype.__proto__).toBe(Function.prototype);
 
 var g = f();
-assert.instanceOf(g, f);
+expect(g instanceof f).toBe(true);
 
 expect(g.__proto__).toBe(f.prototype);
 

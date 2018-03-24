@@ -14,7 +14,7 @@ function destructArray() {
 var result = destructArray();
 expect(result.a).toBe('hello');
 expect(result.b).toBe(',');
-expect(result.c).toEqual(['world']);;
+expect(result.c).toEqual(['world']);
 expect(result.d).toBeUndefined();
 
 function testNested() {

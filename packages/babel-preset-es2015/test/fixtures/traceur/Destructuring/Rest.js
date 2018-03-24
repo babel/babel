@@ -7,10 +7,10 @@ function destructRest() {
 }
 
 var result = destructRest();
-expect(result.a).toEqual([1, 2, 3]);;
+expect(result.a).toEqual([1, 2, 3]);
 expect(result.b).toBe(1);
-expect(result.c).toEqual([2, 3]);;
-expect(result.d).toEqual([]);;
+expect(result.c).toEqual([2, 3]);
+expect(result.d).toEqual([]);
 
 assert.throw(function() {
   var e;

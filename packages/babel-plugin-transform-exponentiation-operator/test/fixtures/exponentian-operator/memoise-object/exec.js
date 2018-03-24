@@ -7,4 +7,4 @@ Object.defineProperty(global, "reader", {
   configurable: true
 });
 reader.x **= 2;
-assert.ok(counters === 1);
+expect(counters).toBe(1);

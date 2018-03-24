@@ -6,5 +6,5 @@ class D extends (x, y) {
 
 }
 
-assert.instanceOf(new D(), C);
-assert.instanceOf(new D(), D);
+expect(new D() instanceof C).toBe(true);
+expect(new D() instanceof D).toBe(true);

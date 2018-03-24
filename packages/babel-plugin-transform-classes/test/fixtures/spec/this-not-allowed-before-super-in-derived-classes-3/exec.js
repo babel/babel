@@ -8,4 +8,4 @@ class Foo extends Bar {
   }
 }
 
-assert.throws(() => new Foo(), /this hasn't been initialised/);
+expect(() => new Foo()).toThrow("this hasn't been initialised");

@@ -6,5 +6,5 @@ class Example {
   @dec static prop;
 }
 
-assert(Example.hasOwnProperty("prop"));
-assert.equal(Example.prop, undefined);
+expect(Example.hasOwnProperty("prop")).toBeTruthy();
+expect(Example.prop).toBe(undefined);
