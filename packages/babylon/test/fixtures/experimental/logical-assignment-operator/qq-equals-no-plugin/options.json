@@ -1,0 +1,4 @@
+{
+  "plugins": ["nullishCoalescingOperator"],
+  "throws": "This experimental syntax requires enabling the parser plugin: 'logicalAssignment' (1:2)"
+}
