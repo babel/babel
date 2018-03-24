@@ -62,7 +62,7 @@ expect(`${ null }`).toBe('null');
   //   return ' ' if x else ''
   // for i in range(16):
   //   v = (s(i&8), s(i&4), s(i&2), s(i&1))
-  //   print "assert.equal('%s3%s5%s8%s', `%s${x}%s${y}%s${x+y}%s`);" % (v+v)
+  //   print "expect('%s3%s5%s8%s').toBe(`%s${x}%s${y}%s${x+y}%s`);" % (v+v)
   expect(`${x}${y}${x+y}`).toBe('358');
   expect(`${x}${y}${x+y} `).toBe('358 ');
   expect(`${x}${y} ${x+y}`).toBe('35 8');

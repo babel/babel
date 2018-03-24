@@ -3,7 +3,7 @@ var object = {};
 object[s] = 42;
 expect(object[s]).toBe(42);
 // Native Symbol throws for ToString.
-// assert.isUndefined(object[s + '']);
+// expect(object[s + '']).toBeUndefined();
 expect(Object.getOwnPropertyNames(object)).toEqual([]);
 expect(object.hasOwnProperty(s)).toBe(true);
 

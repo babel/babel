@@ -43,7 +43,7 @@ expect(t.has(0)).toBe(true);
 
 // V8 is broken for -0
 // https://code.google.com/p/v8/issues/detail?id=3906
-// assert.isTrue(t.has(-0));
+// expect(t.has(-0)).toBe(true);
 
 var expected = [
   undefinedKey,

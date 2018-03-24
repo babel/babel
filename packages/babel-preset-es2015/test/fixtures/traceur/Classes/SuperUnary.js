@@ -18,7 +18,6 @@ class C extends B {
     expect(--super.x).toBe(0);
     expect(this.x).toBe(0);
 
-    // Don't use assert.typeOf since we are testing typeof.
     expect(typeof super.x).toBe('number');
   }
 }

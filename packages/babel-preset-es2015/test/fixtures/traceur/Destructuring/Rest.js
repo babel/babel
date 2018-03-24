@@ -12,8 +12,8 @@ expect(result.b).toBe(1);
 expect(result.c).toEqual([2, 3]);
 expect(result.d).toEqual([]);
 
-assert.throw(function() {
+expect(function() {
   var e;
   // No iterator.
   [...e] = {x: 'boom'};
-}, TypeError);
+}).toThrow(TypeError);

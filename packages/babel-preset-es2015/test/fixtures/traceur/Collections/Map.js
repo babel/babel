@@ -44,7 +44,7 @@ expect(t.get(1 / Infinity)).toBe('value11');
 
 // V8 is broken for -0
 // https://code.google.com/p/v8/issues/detail?id=3906
-// assert.equal(t.get(-1 / Infinity), 'value11');
+// expect(t.get(-1 / Infinity)).toBe('value11');
 
 expect(t.has({})).toBe(false);
 
@@ -67,7 +67,7 @@ expect(t.has(0)).toBe(true);
 
 // V8 is broken for -0
 // https://code.google.com/p/v8/issues/detail?id=3906
-// assert.isTrue(t.has(-0));
+// expect(t.has(-0)).toBe(true);
 
 
 // forEach

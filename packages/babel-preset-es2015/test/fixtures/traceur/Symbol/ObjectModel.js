@@ -9,5 +9,5 @@ expect(() => {
 
 // TODO(jjb): Our impl not to spec so generators can use Symbols without
 // requiring transcoding
-// assert.equal(s.toString(), 'Symbol(s)');
+// expect(s.toString()).toBe('Symbol(s)');
 expect(s.valueOf()).toBe(s);

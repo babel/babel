@@ -26,7 +26,7 @@ expect(obj.getElement()).toBe(40);
 expect(obj.makeFilterCapturedThis()(40)).toBe(true);
 
 // http://code.google.com/p/v8/issues/detail?id=1381
-// assert.isUndefined(obj.makeFilterLostThis()());
+// expect(obj.makeFilterLostThis()()).toBeUndefined();
 
 obj.element = 39;
 expect(obj.makeFilterCapturedThis()(40)).toBe(false);
