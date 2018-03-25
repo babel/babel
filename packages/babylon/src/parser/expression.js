@@ -298,16 +298,18 @@ export default class ExpressionParser extends LValParser {
         }
 
         const op = this.state.type;
+        if (op === tt.nullishCoalescing) {
+          this.expectPlugin("nullishCoalescingOperator");
+        } else if (op === tt.pipeline) {
+          this.expectPlugin("pipelineOperator");
+        }
+
         this.next();
 
         const startPos = this.state.start;
         const startLoc = this.state.startLoc;
 
-        if (operator === "??") {
-          this.expectPlugin("nullishCoalescingOperator");
-        }
-        if (operator === "|>") {
-          this.expectPlugin("pipelineOperator");
+        if (op === tt.pipeline) {
           // Support syntax such as 10 |> x => x + 1
           this.state.potentialArrowAt = startPos;
         }
