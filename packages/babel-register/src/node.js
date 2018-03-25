@@ -80,9 +80,22 @@ function compile(code, filename) {
   return cached.code;
 }
 
+let compiling = false;
+
+function compileHook(code, filename) {
+  if (compiling) return code;
+
+  try {
+    compiling = true;
+    return compile(code, filename);
+  } finally {
+    compiling = false;
+  }
+}
+
 function hookExtensions(exts) {
   if (piratesRevert) piratesRevert();
-  piratesRevert = addHook(compile, { exts, ignoreNodeModules: false });
+  piratesRevert = addHook(compileHook, { exts, ignoreNodeModules: false });
 }
 
 export function revert() {
