@@ -151,7 +151,16 @@ export default class ExpressionParser extends LValParser {
     }
     if (this.state.type.isAssign) {
       const node = this.startNodeAt(startPos, startLoc);
-      node.operator = this.state.value;
+      const operator = this.state.value;
+      node.operator = operator;
+
+      if (operator === "??=") {
+        this.expectPlugin("nullishCoalescingOperator");
+        this.expectPlugin("logicalAssignment");
+      }
+      if (operator === "||=" || operator === "&&=") {
+        this.expectPlugin("logicalAssignment");
+      }
       node.left = this.match(tt.eq)
         ? this.toAssignable(left, undefined, "assignment expression")
         : left;
@@ -271,11 +280,12 @@ export default class ExpressionParser extends LValParser {
     if (prec != null && (!noIn || !this.match(tt._in))) {
       if (prec > minPrec) {
         const node = this.startNodeAt(leftStartPos, leftStartLoc);
+        const operator = this.state.value;
         node.left = left;
-        node.operator = this.state.value;
+        node.operator = operator;
 
         if (
-          node.operator === "**" &&
+          operator === "**" &&
           left.type === "UnaryExpression" &&
           left.extra &&
           !left.extra.parenthesizedArgument &&
@@ -288,13 +298,18 @@ export default class ExpressionParser extends LValParser {
         }
 
         const op = this.state.type;
+        if (op === tt.nullishCoalescing) {
+          this.expectPlugin("nullishCoalescingOperator");
+        } else if (op === tt.pipeline) {
+          this.expectPlugin("pipelineOperator");
+        }
+
         this.next();
 
         const startPos = this.state.start;
         const startLoc = this.state.startLoc;
 
-        if (node.operator === "|>") {
-          this.expectPlugin("pipelineOperator");
+        if (op === tt.pipeline) {
           // Support syntax such as 10 |> x => x + 1
           this.state.potentialArrowAt = startPos;
         }

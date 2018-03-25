@@ -464,18 +464,14 @@ export default class Tokenizer extends LocationParser {
     const next = this.input.charCodeAt(this.state.pos + 1);
 
     if (next === code) {
-      const assign =
-        this.input.charCodeAt(this.state.pos + 2) === charCodes.equalsTo;
-      if (assign) {
-        // $FlowFixMe
-        this.expectPlugin("logicalAssignment");
+      if (this.input.charCodeAt(this.state.pos + 2) === charCodes.equalsTo) {
+        this.finishOp(tt.assign, 3);
+      } else {
+        this.finishOp(
+          code === charCodes.verticalBar ? tt.logicalOR : tt.logicalAND,
+          2,
+        );
       }
-      this.finishOp(
-        assign
-          ? tt.assign
-          : code === charCodes.verticalBar ? tt.logicalOR : tt.logicalAND,
-        assign ? 3 : 2,
-      );
       return;
     }
 
@@ -607,11 +603,8 @@ export default class Tokenizer extends LocationParser {
     const next = this.input.charCodeAt(this.state.pos + 1);
     const next2 = this.input.charCodeAt(this.state.pos + 2);
     if (next === charCodes.questionMark) {
-      this.expectPlugin("nullishCoalescingOperator");
-
       if (next2 === charCodes.equalsTo) {
         // '??='
-        this.expectPlugin("logicalAssignment");
         this.finishOp(tt.assign, 3);
       } else {
         // '??'
