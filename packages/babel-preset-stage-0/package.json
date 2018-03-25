@@ -10,7 +10,6 @@
   "dependencies": {
     "@babel/helper-plugin-utils": "7.0.0-beta.42",
     "@babel/plugin-proposal-function-bind": "7.0.0-beta.42",
-    "@babel/plugin-proposal-logical-assignment-operators": "7.0.0-beta.42",
     "@babel/preset-stage-1": "7.0.0-beta.42"
   },
   "peerDependencies": {
