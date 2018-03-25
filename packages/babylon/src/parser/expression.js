@@ -299,10 +299,6 @@ export default class ExpressionParser extends LValParser {
           this.state.potentialArrowAt = startPos;
         }
 
-        if (node.operator === "??") {
-          this.expectPlugin("nullishCoalescingOperator");
-        }
-
         node.right = this.parseExprOp(
           this.parseMaybeUnary(),
           startPos,

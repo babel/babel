@@ -607,8 +607,16 @@ export default class Tokenizer extends LocationParser {
     const next = this.input.charCodeAt(this.state.pos + 1);
     const next2 = this.input.charCodeAt(this.state.pos + 2);
     if (next === charCodes.questionMark) {
-      // '??'
-      this.finishOp(tt.nullishCoalescing, 2);
+      this.expectPlugin("nullishCoalescingOperator");
+
+      if (next2 === charCodes.equalsTo) {
+        // '??='
+        this.expectPlugin("logicalAssignment");
+        this.finishOp(tt.assign, 3);
+      } else {
+        // '??'
+        this.finishOp(tt.nullishCoalescing, 2);
+      }
     } else if (
       next === charCodes.dot &&
       !(next2 >= charCodes.digit0 && next2 <= charCodes.digit9)
