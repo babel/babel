@@ -3,4 +3,4 @@ function sum(...numbers) {
 }
 
 var numbers = [1, 2, 3];
-assert.equal(sum(...numbers), 6);
+expect(sum(...numbers)).toBe(6);

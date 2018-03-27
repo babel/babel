@@ -1,3 +1,3 @@
 import {f} from './f.js';
 
-assert.equal('a', (f `a`)[0][0]);
+expect('a').toBe((f `a`)[0][0]);

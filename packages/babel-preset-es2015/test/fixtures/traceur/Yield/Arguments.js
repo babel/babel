@@ -3,6 +3,6 @@ function* f() {
 }
 
 for (var arr of f(1, 2)) {
-  assert.equal(1, arr[0]);
-  assert.equal(2, arr[1]);
+  expect(arr[0]).toBe(1);
+  expect(arr[1]).toBe(2);
 }

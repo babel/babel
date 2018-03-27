@@ -12,7 +12,7 @@ async function* f(a) {
   for (var i on g) {
     list.push(i);
   }
-  assert.deepEqual(list, [1, 2]);
+  expect(list).toEqual([1, 2]);
 
   done();
 })().catch(done);

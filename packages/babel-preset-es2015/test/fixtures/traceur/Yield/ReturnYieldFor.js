@@ -10,6 +10,6 @@ function* h() {
 
 var g = f();
 
-assert.deepEqual({value: 111, done: false}, g.next());
-assert.deepEqual({value: 222, done: false}, g.next());
-assert.deepEqual({value: 333, done: true}, g.next());
+expect(g.next()).toEqual({value: 111, done: false});
+expect(g.next()).toEqual({value: 222, done: false});
+expect(g.next()).toEqual({value: 333, done: true});

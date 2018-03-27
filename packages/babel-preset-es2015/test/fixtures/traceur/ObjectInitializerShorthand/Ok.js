@@ -4,5 +4,5 @@ var object = {x, y};
 
 // ----------------------------------------------------------------------------
 
-assert.equal(42, object.x);
-assert.equal(43, object.y);
+expect(object.x).toBe(42);
+expect(object.y).toBe(43);

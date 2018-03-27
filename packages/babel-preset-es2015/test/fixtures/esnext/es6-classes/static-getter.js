@@ -9,4 +9,4 @@ class Point {
   }
 }
 
-assert.deepEqual(Point.ORIGIN, new Point(0, 0));
+expect(Point.ORIGIN).toEqual(new Point(0, 0));

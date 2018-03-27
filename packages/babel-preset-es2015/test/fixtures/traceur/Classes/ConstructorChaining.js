@@ -14,9 +14,9 @@ class ConstructorB extends ConstructorA {
 // ----------------------------------------------------------------------------
 
 var a = new ConstructorA('ax');
-assert.equal('ax', a.x);
-assert.isFalse(a.hasOwnProperty('y'));
+expect('ax').toBe(a.x);
+expect(a).not.toHaveProperty('y');
 
 var b = new ConstructorB('bx', 'by');
-assert.equal('bx', b.x);
-assert.equal('by', b.y);
+expect('bx').toBe(b.x);
+expect('by').toBe(b.y);

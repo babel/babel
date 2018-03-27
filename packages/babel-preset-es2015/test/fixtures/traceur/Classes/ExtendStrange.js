@@ -1,14 +1,14 @@
 class C extends null {}
 
 var c = new C;
-assert.isTrue(c instanceof C);
-assert.isFalse(c instanceof Object);
+expect(c).toBeInstanceOf(C);
+expect(c).toBeInstanceOf(Object);
 
 // Closure testing framework tries to toString the object and fails.
-assert.isTrue(Object.getPrototypeOf(c) === C.prototype);
-assert.isTrue(Object.getPrototypeOf(Object.getPrototypeOf(c)) === null);
+expect(Object.getPrototypeOf(c)).toBe(C.prototype);
+expect(Object.getPrototypeOf(Object.getPrototypeOf(c))).toBeNull();
 
-assert.equal(c.toString, undefined);
+expect(c.toString).toBe(undefined);
 
 class D extends null {
   constructor(...args) {
@@ -39,7 +39,7 @@ class F extends f {
   }
 }
 
-assert.equal(1, new F().x);
+expect(1).toBe(new F().x);
 
 
 function g() {}
@@ -51,4 +51,4 @@ class G extends g {
   }
 }
 
-assert.equal(2, new G().x);
+expect(2).toBe(new G().x);

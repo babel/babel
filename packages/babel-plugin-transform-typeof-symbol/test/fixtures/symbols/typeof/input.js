@@ -1,9 +1,7 @@
 var s = Symbol("s");
-assert.ok(typeof s === "symbol");
-assert.equal(typeof s, "symbol");
-assert.equal(typeof typeof s.foo, "symbol");
+expect(typeof s).toBe("symbol");
+expect(typeof typeof s.foo).toBe("symbol");
 typeof s === "string";
-assert.isNotOk(typeof o === "symbol");
-assert.notEqual(typeof o, "symbol");
-assert.notEqual(typeof typeof o.foo, "symbol");
+expect(typeof o).not.toBe("symbol");
+expect(typeof typeof o.foo).not.toBe("symbol");
 typeof o === "string";

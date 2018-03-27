@@ -1,26 +1,26 @@
 var arr;
 
 // should have a length of 0
-assert.equal(Array.of.length, 0);
+expect(Array.of.length).toBe(0);
 
 //should return an array from arguments
 arr = Array.of(1, 'a', 3);
-assert.deepEqual(arr, [1, 'a', 3]);
-//assert.isTrue(arr instanceof Array);
+expect(arr).toEqual([1, 'a', 3]);
+// expect(arr).toBeInstanceof(Array);
 
 //should work with no arguments
 arr = Array.of();
-assert.deepEqual(arr, []);
-//assert.isTrue(arr instanceof Array);
+expect(arr).toEqual([]);
+// expect(arr).toBeInstanceof(Array);
 
 //should work with sub-classed array
 class MyArray extends Array {}
 
 arr = MyArray.of(4, 'b');
-assert.equal(arr[0], 4);
-assert.equal(arr[1], 'b');
-assert.equal(arr.length, 2);
-//assert.isTrue(arr instanceof MyArray);
+expect(arr[0]).toBe(4);
+expect(arr[1]).toBe('b');
+expect(arr).toHaveLength(2);
+// expect(arr).toBeInstanceof(MyArray);
 
 //should call with exotic array
 class ExoticArray {
@@ -29,9 +29,9 @@ class ExoticArray {
   }
 }
 arr = Array.of.call(ExoticArray, 5, 'c', 6, 'd');
-assert.equal(arr[0], 5);
-assert.equal(arr[1], 'c');
-assert.equal(arr[2], 6);
-assert.equal(arr[3], 'd');
-assert.equal(arr.length, 4);
-//assert.isTrue(arr instanceof ExoticArray);
+expect(arr[0]).toBe(5);
+expect(arr[1]).toBe('c');
+expect(arr[2]).toBe(6);
+expect(arr[3]).toBe('d');
+expect(arr).toHaveLength(4);
+expect(arr).toBeInstanceOf(ExoticArray);

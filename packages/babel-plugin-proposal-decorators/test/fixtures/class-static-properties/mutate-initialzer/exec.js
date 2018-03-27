@@ -1,7 +1,7 @@
 function dec(target, name, descriptor){
-  assert(target);
-  assert.equal(name, "prop");
-  assert.equal(typeof descriptor, "object");
+  expect(target).toBeTruthy();
+  expect(name).toBe("prop");
+  expect(typeof descriptor).toBe("object");
 
   let {initializer} = descriptor;
   delete descriptor.initializer;
@@ -22,4 +22,4 @@ class Example {
   static prop = 3;
 }
 
-assert.equal(Example.prop, "__3__");
+expect(Example.prop).toBe("__3__");

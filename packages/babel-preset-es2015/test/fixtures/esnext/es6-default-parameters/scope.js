@@ -5,7 +5,7 @@ function call(fn, context=this) {
 var context = {a: 99};
 
 // use the default parameter
-assert.strictEqual(call.call(context, function(){ return this.a; }), 99);
+expect(call.call(context, function(){ return this.a; })).toBe(99);
 
 // explicitly provide the default parameter value
-assert.strictEqual(call(function(){ return this.a; }, context), 99);
+expect(call(function(){ return this.a; }, context)).toBe(99);

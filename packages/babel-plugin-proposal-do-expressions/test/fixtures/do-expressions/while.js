@@ -1,5 +1,5 @@
-assert.equal(do {
+expect(do {
   var i = 5;
   while (i > 3) i--;
   i;
-}, 3);
+}).toBe(3);

@@ -3,8 +3,8 @@ foo[Symbol.hasInstance]= function () { return true; };
 
 var bar = {};
 
-assert.ok(bar instanceof foo);
-assert.ok(new String instanceof String);
+expect(bar instanceof foo).toBe(true);
+expect(new String).toBeInstanceOf(String);
 
 //
 
@@ -21,5 +21,5 @@ Object.defineProperty(Greeting, Symbol.hasInstance, {
 var a = new Greeting("hello");
 var b = new Greeting("world");
 
-assert.ok(a instanceof Greeting);
-assert.ok(!(b instanceof Greeting));
+expect(a).toBeInstanceOf(Greeting);
+expect(b instanceof Greeting).not.toBe(true);

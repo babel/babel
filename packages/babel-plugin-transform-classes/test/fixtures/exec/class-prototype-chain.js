@@ -5,19 +5,19 @@ B.b = function() {
 
 class C extends B {}
 
-assert.equal(Object.getPrototypeOf(C), B);
-assert.equal(Object.getPrototypeOf(C.prototype), B.prototype);
+expect(Object.getPrototypeOf(C)).toBe(B);
+expect(Object.getPrototypeOf(C.prototype)).toBe(B.prototype);
 
-assert.equal(C.b(), 'B.b');
+expect(C.b()).toBe('B.b');
 
 class D extends Object {}
 
-assert.ok(D instanceof Object)
-assert.ok(D.prototype instanceof Object);
-assert.equal(D.keys, Object.keys);
+expect(D).toBeInstanceOf(Object);
+expect(D.prototype).toBeInstanceOf(Object);
+expect(D.keys).toBe(Object.keys);
 
 class E {}
 
-assert.equal(Object.getPrototypeOf(E), Function.prototype);
-assert.equal(Object.getPrototypeOf(E.prototype), Object.prototype);
-assert.isFalse('keys' in E);
+expect(Object.getPrototypeOf(E)).toBe(Function.prototype);
+expect(Object.getPrototypeOf(E.prototype)).toBe(Object.prototype);
+expect(E).not.toContain('keys');

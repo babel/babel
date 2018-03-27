@@ -5,8 +5,8 @@ function g() {
   var f = async (x = this) => [x, this];
   var p = {};
   f.call(p).then((result) => {
-    assert.equal(result[0], o);
-    assert.equal(result[1], o);
+    expect(result[0]).toBe(o);
+    expect(result[1]).toBe(o);
     done();
   }).catch(done);
 }

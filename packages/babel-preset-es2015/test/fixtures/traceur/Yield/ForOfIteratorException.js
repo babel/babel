@@ -20,8 +20,8 @@ class Iterable {
 
 var iterable = new Iterable();
 var i;
-assert.throws(() => {
+expect(() => {
   for (i of iterable) {
   }
-}, "ex");
-assert.isFalse(iterable.returnCalled);
+}).toThrow("ex");
+expect(iterable.returnCalled).toBe(false);

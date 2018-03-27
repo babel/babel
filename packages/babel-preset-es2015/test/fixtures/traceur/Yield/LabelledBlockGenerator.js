@@ -17,4 +17,4 @@ function* f() {
 
 var g = f();
 g.next();
-assert.equal(s, 'abcebcebcef');
+expect(s).toBe('abcebcebcef');

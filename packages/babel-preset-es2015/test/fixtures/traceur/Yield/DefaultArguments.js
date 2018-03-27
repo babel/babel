@@ -3,5 +3,5 @@ function* f(x = 1) {
 }
 
 for (var x of f(42)) {
-  assert.equal(42, x);
+  expect(x).toBe(42);
 }

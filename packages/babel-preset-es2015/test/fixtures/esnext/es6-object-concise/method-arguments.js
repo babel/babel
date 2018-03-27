@@ -4,4 +4,4 @@ var a = {
   }
 };
 
-assert.strictEqual(a.echo(1), 1);
+expect(a.echo(1)).toBe(1);

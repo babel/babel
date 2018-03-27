@@ -1,9 +1,6 @@
 var Person = (class Person {});
-assert.equal(typeof Person, 'function');
+expect(typeof Person).toBe('function');
 
-assert.equal(
-  (function(){ return (class Person {}); })().name,
-  'Person'
-);
+expect((function(){ return (class Person {}); })().name).toBe('Person');
 
-assert.equal(typeof (class {}), 'function');
+expect(typeof (class {})).toBe('function');

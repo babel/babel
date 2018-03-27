@@ -10,5 +10,5 @@
 
     f();
   }
-  assert.equal(2, x);
+  expect(x).toBe(2);
 })();

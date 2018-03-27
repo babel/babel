@@ -5,4 +5,4 @@ var o = {
   }
 };
 
-assert.isTrue(o.m());
+expect(o.m()).toBe(true);

@@ -12,9 +12,9 @@ var obj = {};
 var value;
 
 async function A() {
-  assert.equal(this, self);
+  expect(this).toBe(self);
   var value = await asyncComplete(this, arguments[0]);
-  assert.deepEqual([self, obj], value);
+  expect([self, obj]).toEqual(value);
   done();
 }
 

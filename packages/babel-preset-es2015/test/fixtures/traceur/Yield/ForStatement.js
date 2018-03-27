@@ -6,11 +6,11 @@ function* f() {
 }
 
 var g = f();
-assert.deepEqual(g.next(), {value: 'init', done: false});
-assert.deepEqual(g.next(), {value: 0, done: false});
-assert.deepEqual(g.next(), {value: 1, done: false});
-assert.deepEqual(g.next(), {value: 2, done: false});
-assert.deepEqual(g.next(), {value: undefined, done: true});
+expect(g.next()).toEqual({value: 'init', done: false});
+expect(g.next()).toEqual({value: 0, done: false});
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.next()).toEqual({value: 2, done: false});
+expect(g.next()).toEqual({value: undefined, done: true});
 
 function* f2() {
   for (var x = 0; yield 'test'; x++) {
@@ -19,14 +19,14 @@ function* f2() {
 }
 
 var g2 = f2();
-assert.deepEqual(g2.next(), {value: 'test', done: false});
-assert.deepEqual(g2.next(true), {value: 0, done: false});
-assert.deepEqual(g2.next(), {value: 'test', done: false});
-assert.deepEqual(g2.next(true), {value: 1, done: false});
-assert.deepEqual(g2.next(), {value: 'test', done: false});
-assert.deepEqual(g2.next(true), {value: 2, done: false});
-assert.deepEqual(g2.next(), {value: 'test', done: false});
-assert.deepEqual(g2.next(false), {value: undefined, done: true});
+expect(g2.next()).toEqual({value: 'test', done: false});
+expect(g2.next(true)).toEqual({value: 0, done: false});
+expect(g2.next()).toEqual({value: 'test', done: false});
+expect(g2.next(true)).toEqual({value: 1, done: false});
+expect(g2.next()).toEqual({value: 'test', done: false});
+expect(g2.next(true)).toEqual({value: 2, done: false});
+expect(g2.next()).toEqual({value: 'test', done: false});
+expect(g2.next(false)).toEqual({value: undefined, done: true});
 
 function* f3() {
   for (var x = 0; x < 5; x = yield 'inc') {
@@ -35,12 +35,12 @@ function* f3() {
 }
 
 var g3 = f3();
-assert.deepEqual(g3.next(), {value: 0, done: false});
-assert.deepEqual(g3.next(), {value: 'inc', done: false});
-assert.deepEqual(g3.next(2), {value: 2, done: false});
-assert.deepEqual(g3.next(), {value: 'inc', done: false});
-assert.deepEqual(g3.next(4), {value: 4, done: false});
-assert.deepEqual(g3.next(), {value: 'inc', done: false});
-assert.deepEqual(g3.next(1), {value: 1, done: false});
-assert.deepEqual(g3.next(), {value: 'inc', done: false});
-assert.deepEqual(g3.next(5), {value: undefined, done: true});
+expect(g3.next()).toEqual({value: 0, done: false});
+expect(g3.next()).toEqual({value: 'inc', done: false});
+expect(g3.next(2)).toEqual({value: 2, done: false});
+expect(g3.next()).toEqual({value: 'inc', done: false});
+expect(g3.next(4)).toEqual({value: 4, done: false});
+expect(g3.next()).toEqual({value: 'inc', done: false});
+expect(g3.next(1)).toEqual({value: 1, done: false});
+expect(g3.next()).toEqual({value: 'inc', done: false});
+expect(g3.next(5)).toEqual({value: undefined, done: true});

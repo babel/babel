@@ -12,4 +12,4 @@ function blockTest() {
 
 // ----------------------------------------------------------------------------
 
-assert.equal('let x value', blockTest()());
+expect(blockTest()()).toBe('let x value');

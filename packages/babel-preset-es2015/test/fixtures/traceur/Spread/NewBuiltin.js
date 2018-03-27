@@ -2,6 +2,6 @@ var d = new Date(...[2011, 4, 3]);
 
 // ----------------------------------------------------------------------------
 
-assert.equal(2011, d.getFullYear());
-assert.equal(4, d.getMonth());
-assert.equal(3, d.getDate());
+expect(d.getFullYear()).toBe(2011);
+expect(d.getMonth()).toBe(4);
+expect(d.getDate()).toBe(3);

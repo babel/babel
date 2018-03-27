@@ -1,3 +1,3 @@
-assert.equal(do {
+expect(do {
   var bar = "foo";
-}, undefined);
+}).toBeUndefined();

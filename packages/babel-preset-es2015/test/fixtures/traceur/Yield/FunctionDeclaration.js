@@ -7,6 +7,6 @@
     yield g;
   }
 
-  assert.equal(42, f().next().value());
+  expect(f().next().value()).toBe(42);
 
 })();

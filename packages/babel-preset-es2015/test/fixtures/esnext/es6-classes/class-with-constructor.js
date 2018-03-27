@@ -8,7 +8,7 @@ class Multiplier {
   }
 }
 
-assert.equal(new Multiplier().n, 1);
-assert.equal(new Multiplier(6).n, 6);
-assert.equal(new Multiplier().multiply(), 1);
-assert.equal(new Multiplier(2).multiply(3), 6);
+expect(new Multiplier().n).toBe(1);
+expect(new Multiplier(6).n).toBe(6);
+expect(new Multiplier().multiply()).toBe(1);
+expect(new Multiplier(2).multiply(3)).toBe(6);

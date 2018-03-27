@@ -2,7 +2,7 @@ var length = function (a, b, ...items) {
   return items.length;
 };
 
-assert.equal(length(), 0);
-assert.equal(length(1), 0);
-assert.equal(length(1, 2), 0);
-assert.equal(length(1, 2, 3), 1);
+expect(length()).toBe(0);
+expect(length(1)).toBe(0);
+expect(length(1, 2)).toBe(0);
+expect(length(1, 2, 3)).toBe(1);

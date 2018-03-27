@@ -18,4 +18,4 @@ var obj = {
 
 var { a: { ...bar }, b: { ...baz }, ...foo } = obj;
 
-assert.strictEqual(result, "barbazfoo");
+expect(result).toBe("barbazfoo");

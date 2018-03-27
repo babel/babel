@@ -1,1 +1,1 @@
-assert.throw(() => [...null], TypeError);
+expect(() => [...null]).toThrow(TypeError);

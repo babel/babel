@@ -5,5 +5,5 @@ var y = 'var';
 
 // ----------------------------------------------------------------------------
 
-assert.equal('let', x);
-assert.equal('var', y);
+expect(x).toBe('let');
+expect(y).toBe('var');

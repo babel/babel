@@ -8,13 +8,13 @@ Object.defineProperty(src, sym2, { value: "not enumerable" });
 
 const {...rest} = src;
 
-assert.strictEqual(rest[sym], "symbol");
-assert.strictEqual(rest.a, "string");
-assert.deepEqual(Object.getOwnPropertyNames(rest), ["a"]);
-assert.deepEqual(Object.getOwnPropertySymbols(rest), [sym]);
+expect(rest[sym]).toBe("symbol");
+expect(rest.a).toBe("string");
+expect(Object.getOwnPropertyNames(rest)).toEqual(["a"]);
+expect(Object.getOwnPropertySymbols(rest)).toEqual([sym]);
 
 const { [sym]: dst, ...noSym } = src;
 
-assert.strictEqual(dst, "symbol");
-assert.strictEqual(noSym.a, "string");
-assert.deepEqual(Object.getOwnPropertySymbols(noSym), []);
+expect(dst).toBe("symbol");
+expect(noSym.a).toBe("string");
+expect(Object.getOwnPropertySymbols(noSym)).toEqual([]);

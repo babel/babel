@@ -1,12 +1,11 @@
 import annotateAsPure from "../";
-import assert from "assert";
 
 describe("@babel/helper-annotate-as-pure", () => {
   it("will add leading comment", () => {
     const node = {};
     annotateAsPure(node);
 
-    assert.deepEqual(node.leadingComments, [
+    expect(node.leadingComments).toEqual([
       {
         type: "CommentBlock",
         value: "#__PURE__",
@@ -26,7 +25,7 @@ describe("@babel/helper-annotate-as-pure", () => {
 
     annotateAsPure(node);
 
-    assert.deepEqual(node.leadingComments, [
+    expect(node.leadingComments).toEqual([
       {
         type: "CommentBlock",
         value: "#__PURE__",

@@ -33,4 +33,4 @@ if (x) {
   var bar = 1;
 }`;
 
-assert.equal(res.code, expected);
+expect(res.code).toBe(expected);

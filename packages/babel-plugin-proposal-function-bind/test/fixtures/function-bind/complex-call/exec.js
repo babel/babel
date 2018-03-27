@@ -19,7 +19,7 @@ var lib = {};
 ::lib.g()
 ::lib.h();
 
-assert.deepEqual(operations, [
+expect(operations).toEqual([
   'get lib.f',
   'lib.f()',
   'get lib.g',

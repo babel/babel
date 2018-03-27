@@ -10,12 +10,12 @@ function asyncTimeout(ms) {
 (async function() {
   var x = 0;
   await asyncTimeout(1);
-  assert.equal(1, ++x);
+  expect(1).toBe(++x);
   await asyncTimeout(1);
-  assert.equal(2, ++x);
+  expect(2).toBe(++x);
   await asyncTimeout(1);
-  assert.equal(3, ++x);
+  expect(3).toBe(++x);
   await asyncTimeout(1);
-  assert.equal(4, ++x);
+  expect(4).toBe(++x);
   done();
 })();

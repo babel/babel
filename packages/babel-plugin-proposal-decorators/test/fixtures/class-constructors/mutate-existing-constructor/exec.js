@@ -7,4 +7,4 @@ class Parent {
   parent() {};
 }
 
-assert.equal(Parent.staticProp, "prop");
+expect(Parent.staticProp).toBe("prop");

@@ -5,8 +5,8 @@ function f(arr) {
   return 'survived';
 }
 
-assert.throws(function() {
+expect(function() {
   f([1,2,3]);
-}, '"MULTIPLIER" is read-only');
+}).toThrow('"MULTIPLIER" is read-only');
 
-assert.equal(f([]), 'survived', 'For-in over empty array should not throw.');
+expect(f([])).toBe('survived');

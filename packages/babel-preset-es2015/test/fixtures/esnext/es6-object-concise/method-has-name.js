@@ -4,4 +4,4 @@ var a = {
   }
 };
 
-assert.equal(a.b.name, 'b');
+expect(a.b.name).toBe('b');

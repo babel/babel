@@ -6,4 +6,4 @@ var a = {
   }
 };
 
-assert.equal(a.b(), 1);
+expect(a.b()).toBe(1);

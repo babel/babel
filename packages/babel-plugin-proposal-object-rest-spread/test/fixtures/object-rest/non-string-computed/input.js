@@ -8,8 +8,8 @@ const {
   ...rest
 } = a;
 
-assert.deepEqual(rest, {"foo": "bar"});
-assert.equal(omit, "three");
+expect(rest).toEqual({"foo": "bar"});
+expect(omit).toBe("three");
 
 const [k1, k2, k3, k4, k5] = [null, undefined, true, false, {toString() { return "warrior"; }}];
 const c = {
@@ -29,12 +29,12 @@ const {
   ...vrest
 } = c;
 
-assert.equal(v1, "1");
-assert.equal(v2, "2");
-assert.equal(v3, "3");
-assert.equal(v4, "4");
-assert.equal(v5, "5");
-assert.deepEqual(vrest, {});
+expect(v1).toBe("1");
+expect(v2).toBe("2");
+expect(v3).toBe("3");
+expect(v4).toBe("4");
+expect(v5).toBe("5");
+expect(vrest).toEqual({});
 
 // shouldn't convert symbols to strings
 const sx = Symbol();
@@ -50,5 +50,5 @@ const {
   [sy]: dy
 } = d;
 
-assert.equal(dx, "sx");
-assert.equal(dy, "sy");
+expect(dx).toBe("sx");
+expect(dy).toBe("sy");

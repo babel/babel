@@ -6,4 +6,4 @@ function f() {
   return a;
 }
 
-assert.equal(f(), "foo", 'Const violation in not taken branch should be ignored.')
+expect(f()).toBe("foo");

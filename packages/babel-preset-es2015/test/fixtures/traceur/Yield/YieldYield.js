@@ -3,9 +3,9 @@ function* f(x) {
 }
 
 var g = f(1);
-assert.deepEqual(g.next(), {value: 1, done: false});
-assert.deepEqual(g.next(2), {value: 2, done: false});
-assert.deepEqual(g.next(3), {value: undefined, done: true});
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.next(2)).toEqual({value: 2, done: false});
+expect(g.next(3)).toEqual({value: undefined, done: true});
 
 function* f2(x) {
   yield* (yield x);
@@ -13,7 +13,7 @@ function* f2(x) {
 
 g = f(1);
 var g2 = f2(1);
-assert.deepEqual(g2.next(), {value: 1, done: false});
-assert.deepEqual(g2.next(g), {value: 1, done: false});
-assert.deepEqual(g2.next(2), {value: 2, done: false});
-assert.deepEqual(g2.next(3), {value: undefined, done: true});
+expect(g2.next()).toEqual({value: 1, done: false});
+expect(g2.next(g)).toEqual({value: 1, done: false});
+expect(g2.next(2)).toEqual({value: 2, done: false});
+expect(g2.next(3)).toEqual({value: undefined, done: true});

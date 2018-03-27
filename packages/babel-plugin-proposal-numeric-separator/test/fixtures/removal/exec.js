@@ -1,4 +1,4 @@
-assert.equal(1_000, 1000);
-assert.equal(0xAE_BE_CE, 0xAEBECE);
-assert.equal(0b1010_0001_1000_0101, 0b1010000110000101);
-assert.equal(0o0_6_6_6, 0o0666);
+expect(1_000).toBe(1000);
+expect(0xAE_BE_CE).toBe(0xAEBECE);
+expect(0b1010_0001_1000_0101).toBe(0b1010000110000101);
+expect(0o0_6_6_6).toBe(0o0666);

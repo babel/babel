@@ -1,4 +1,3 @@
-const assert = require("assert");
 const babel = require("@babel/core");
 const vm = require("vm");
 
@@ -27,9 +26,5 @@ test("Re-export doesn't overwrite __esModule flag", function() {
   vm.runInNewContext(code, context);
 
   // exports.__esModule shouldn't be overwritten.
-  assert.equal(
-    context.exports.__esModule,
-    true,
-    "Expected exports.__esModule === true",
-  );
+  expect(context.exports.__esModule).toBe(true);
 });

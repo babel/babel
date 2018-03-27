@@ -22,19 +22,19 @@ Reflect.construct(Bar, []);
 Reflect.construct(Bar, [], Baz);
 Reflect.construct(Foo, [], Baz);
 
-assert.equal(targets[0], Foo);
+expect(targets[0]).toBe(Foo);
 
-assert.equal(targets[1], Bar);
+expect(targets[1]).toBe(Bar);
 
-assert.throws(() => {
+expect(() => {
   // Wish we could support this...
   // Then again, this is what a transformed class does.
-  assert.equal(targets[2], undefined);
-});
+  expect(targets[2]).toBeUndefined();
+}).toThrow();
 
-assert.equal(targets[3], undefined);
+expect(targets[3]).toBeUndefined();
 
-assert.throws(() => {
+expect(() => {
   // Wish we could support this...
-  assert.equal(targets[4], Baz);
-});
+  expect(targets[4]).toBe(Baz);
+}).toThrow();

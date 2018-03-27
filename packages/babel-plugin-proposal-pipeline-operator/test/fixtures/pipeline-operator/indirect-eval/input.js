@@ -3,5 +3,5 @@
   var result = '(function() { return this; })()'
     |> eval;
 
-  assert.notEqual(result, undefined);
+  expect(result).not.toBeUndefined();
 })();

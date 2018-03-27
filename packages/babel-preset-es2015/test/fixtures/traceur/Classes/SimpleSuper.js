@@ -22,10 +22,10 @@ class SuperDerived extends SuperBase {
 // ----------------------------------------------------------------------------
 
 var obj = new SuperDerived();
-assert.equal(41, obj.m());
-assert.equal(40, obj.superM());
-assert.equal(10, obj.baseX);
-assert.equal(10, obj.x);
-assert.equal(10, obj.superX());
-assert.equal(2, obj.baseC);
-assert.equal(3, obj.derC);
+expect(obj.m()).toBe(41);
+expect(obj.superM()).toBe(40);
+expect(obj.baseX).toBe(10);
+expect(obj.x).toBe(10);
+expect(obj.superX()).toBe(10);
+expect(obj.baseC).toBe(2);
+expect(obj.derC).toBe(3);

@@ -11,18 +11,18 @@ const obj = {
 };
 
 const a = obj?.a;
-assert.equal(a, obj.a);
+expect(a).toBe(obj.a);
 
 const b = obj?.a?.b;
-assert.equal(b, obj.a.b);
+expect(b).toBe(obj.a.b);
 
 const bad = obj?.b?.b;
-assert.equal(bad, undefined);
+expect(bad).toBeUndefined();
 
 let val;
 val = obj?.a?.b;
-assert.equal(val, obj.a.b);
+expect(val).toBe(obj.a.b);
 
-assert.throws(() => {
+expect(() => {
   const bad = obj?.b.b;
-});
+}).toThrow();

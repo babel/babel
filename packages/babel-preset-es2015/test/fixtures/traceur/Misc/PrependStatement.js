@@ -8,4 +8,4 @@ var o = {
 
 function f({x}) {}
 f(o);
-assert.equal(1, count);
+expect(count).toBe(1);

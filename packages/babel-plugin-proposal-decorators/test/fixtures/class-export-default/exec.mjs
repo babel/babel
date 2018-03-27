@@ -11,4 +11,4 @@ export default class Foo {
   }
 }
 
-assert.deepEqual(calls, ["Foo"]);
+expect(calls).toEqual(["Foo"]);

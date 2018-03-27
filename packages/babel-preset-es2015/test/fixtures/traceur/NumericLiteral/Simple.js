@@ -1,27 +1,27 @@
 // Options: --numeric-literals
 
 (function() {
-  assert.equal(0, 0b0);
-  assert.equal(1, 0b1);
-  assert.equal(3, 0b11);
-  assert.equal(3, 0b011);
-  assert.equal(0, 0B0);
-  assert.equal(1, 0B1);
-  assert.equal(3, 0B11);
-  assert.equal(3, 0B011);
+  expect(0b0).toBe(0);
+  expect(0b1).toBe(1);
+  expect(0b11).toBe(3);
+  expect(0b011).toBe(3);
+  expect(0B0).toBe(0);
+  expect(0B1).toBe(1);
+  expect(0B11).toBe(3);
+  expect(0B011).toBe(3);
 
-  assert.equal(0, 0o0);
-  assert.equal(1, 0o1);
-  assert.equal(7, 0o7);
-  assert.equal(8, 0o10);
-  assert.equal(8, 0o010);
-  assert.equal(63, 0o77);
-  assert.equal(0, 0O0);
-  assert.equal(1, 0O1);
-  assert.equal(7, 0O7);
-  assert.equal(8, 0O10);
-  assert.equal(8, 0O010);
-  assert.equal(63, 0O77);
+  expect(0o0).toBe(0);
+  expect(0o1).toBe(1);
+  expect(0o7).toBe(7);
+  expect(0o10).toBe(8);
+  expect(0o010).toBe(8);
+  expect(0o77).toBe(63);
+  expect(0O0).toBe(0);
+  expect(0O1).toBe(1);
+  expect(0O7).toBe(7);
+  expect(0O10).toBe(8);
+  expect(0O010).toBe(8);
+  expect(0O77).toBe(63);
 
   var o = {
     0b0: 0,
@@ -30,7 +30,7 @@
     0B11: 3,
     0B0100: 4
   };
-  assertArrayEquals(['0', '1', '2', '3', '4'], Object.keys(o));
+  expect(Object.keys(o)).toEqual(['0', '1', '2', '3', '4']);
 
   var o = {
     0o0: 0,
@@ -39,7 +39,7 @@
     0O10: 8,
     0O011: 9
   };
-  assertArrayEquals(['0', '1', '7', '8', '9'], Object.keys(o));
+  expect(Object.keys(o)).toEqual(['0', '1', '7', '8', '9']);
 
   var o = {
     get 0b0() {},
@@ -48,7 +48,7 @@
     get 0B11() {},
     get 0B0100() {}
   };
-  assertArrayEquals(['0', '1', '2', '3', '4'], Object.keys(o));
+  expect(Object.keys(o)).toEqual(['0', '1', '2', '3', '4']);
 
   var o = {
     set 0o0(v) {},
@@ -57,7 +57,7 @@
     set 0O10(v) {},
     set 0O011(v) {}
   };
-  assertArrayEquals(['0', '1', '7', '8', '9'], Object.keys(o));
+  expect(Object.keys(o)).toEqual(['0', '1', '7', '8', '9']);
 
   var o = {
     0b0() {},
@@ -66,7 +66,7 @@
     0B11() {},
     0B0100() {}
   };
-  assertArrayEquals(['0', '1', '2', '3', '4'], Object.keys(o));
+  expect(Object.keys(o)).toEqual(['0', '1', '2', '3', '4']);
 
   class C {
     0b0() {}
@@ -84,18 +84,17 @@
     static set 0O13(v) {}
   }
 
-  assert.isTrue(C.prototype.hasOwnProperty('0'));
-  assert.isTrue(C.prototype.hasOwnProperty('1'));
-  assert.isTrue(C.prototype.hasOwnProperty('2'));
-  assert.isTrue(C.prototype.hasOwnProperty('6'));
-  assert.isTrue(C.prototype.hasOwnProperty('7'));
-  assert.isTrue(C.prototype.hasOwnProperty('8'));
+  expect(C.prototype).toHaveProperty('0');
+  expect(C.prototype).toHaveProperty('1');
+  expect(C.prototype).toHaveProperty('2');
+  expect(C.prototype).toHaveProperty('6');
+  expect(C.prototype).toHaveProperty('7');
+  expect(C.prototype).toHaveProperty('8');
 
-  assert.isTrue(C.hasOwnProperty('3'));
-  assert.isTrue(C.hasOwnProperty('4'));
-  assert.isTrue(C.hasOwnProperty('5'));
-  assert.isTrue(C.hasOwnProperty('9'));
-  assert.isTrue(C.hasOwnProperty('10'));
-  assert.isTrue(C.hasOwnProperty('11'));
-
+  expect(C).toHaveProperty('3');
+  expect(C).toHaveProperty('4');
+  expect(C).toHaveProperty('5');
+  expect(C).toHaveProperty('9');
+  expect(C).toHaveProperty('10');
+  expect(C).toHaveProperty('11');
 })();

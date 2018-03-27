@@ -1,6 +1,6 @@
 // Options: --block-binding
 
-let result = []; 
+let result = [];
 for (let i = 1; i < 3; i ++) {
   for (let j = 9; j > 7; j --) {
     result.push(
@@ -11,8 +11,8 @@ for (let i = 1; i < 3; i ++) {
 
 // ----------------------------------------------------------------------------
 
-assert.equal('1:9', result[0]());
-assert.equal('1:8', result[1]());
-assert.equal('2:9', result[2]());
-assert.equal('2:8', result[3]());
-assert.equal(4, result.length);
+expect(result).toHaveLength(4);
+expect(result[0]()).toBe('1:9');
+expect(result[1]()).toBe('1:8');
+expect(result[2]()).toBe('2:9');
+expect(result[3]()).toBe('2:8');

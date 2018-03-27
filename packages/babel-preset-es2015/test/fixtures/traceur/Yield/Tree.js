@@ -68,6 +68,6 @@ function accumulate(iterator) {
 
 var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 var root = tree(alphabet);
-assert.equal(alphabet, accumulate(inorder1(root)));
-assert.equal(alphabet, accumulate(inorder2(root)));
-assert.equal(alphabet, accumulate(root));
+expect(accumulate(inorder1(root))).toBe(alphabet);
+expect(accumulate(inorder2(root))).toBe(alphabet);
+expect(accumulate(root)).toBe(alphabet);

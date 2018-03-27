@@ -1,6 +1,6 @@
 function r(strings) {
-  assert.equal(strings.raw[0], '\\n');
+  expect(strings.raw[0]).toBe('\\n');
   return strings.raw.join('');
 }
 
-assert.equal(r `\n`, '\\n');
+expect(r `\n`).toBe('\\n');

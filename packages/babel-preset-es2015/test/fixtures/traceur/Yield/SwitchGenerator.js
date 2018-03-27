@@ -31,7 +31,7 @@ function accumulate(iterator) {
 
 // ----------------------------------------------------------------------------
 
-assert.equal('125', accumulate(switchGenerator(1)));
-assert.equal('410', accumulate(switchGenerator(2)));
-assert.equal('15', accumulate(switchGenerator(3)));
-assert.equal('4020', accumulate(switchGenerator(4)));
+expect(accumulate(switchGenerator(1))).toBe('125');
+expect(accumulate(switchGenerator(2))).toBe('410');
+expect(accumulate(switchGenerator(3))).toBe('15');
+expect(accumulate(switchGenerator(4))).toBe('4020');

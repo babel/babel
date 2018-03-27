@@ -11,13 +11,13 @@ function* gen() {
 }
 
 const it = gen();
-assert.deepEqual(values, []);
+expect(values).toEqual([]);
 
-assert.equal(it.next(1).value, "foo");
-assert.deepEqual(values, [ 1, 1 ]);
+expect(it.next(1).value).toBe("foo");
+expect(values).toEqual([ 1, 1 ]);
 
-assert.equal(it.next(2).value, undefined);
-assert.deepEqual(values, [ 1, 1, 2, 2 ]);
+expect(it.next(2).value).toBeUndefined();
+expect(values).toEqual([ 1, 1, 2, 2 ]);
 
-assert.equal(it.next(3).done, true);
-assert.deepEqual(values, [ 1, 1, 2, 2, 3, 3, 3 ]);
+expect(it.next(3).done).toBe(true);
+expect(values).toEqual([ 1, 1, 2, 2, 3, 3, 3 ]);

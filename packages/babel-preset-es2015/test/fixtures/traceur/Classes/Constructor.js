@@ -12,14 +12,14 @@ class A {
 };
 
 var p = new Point(1, 2);
-assert.equal(1, p.x);
-assert.equal(2, p.y);
+expect(1).toBe(p.x);
+expect(2).toBe(p.y);
 
 var p2 = new Point(3, 4);
-assert.equal(3, p2.x);
-assert.equal(4, p2.y);
-assert.equal(1, p.x);
-assert.equal(2, p.y);
+expect(3).toBe(p2.x);
+expect(4).toBe(p2.y);
+expect(1).toBe(p.x);
+expect(2).toBe(p.y);
 
 for (var element in Point) {
   fail('Point contains static member : ' + element);
@@ -29,6 +29,6 @@ for (var element in Point) {
 var a = new A();
 var tmpA = A;
 A = 42;
-assert.equal(tmpA, a.classRef());
+expect(tmpA).toBe(a.classRef());
 // IE does not have a name property on functions.
-assert.isTrue(tmpA.name === 'A' || tmpA.name === undefined);
+expect(tmpA.name === 'A' || tmpA.name === undefined).toBe(true);

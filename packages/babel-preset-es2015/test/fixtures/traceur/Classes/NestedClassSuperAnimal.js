@@ -34,12 +34,12 @@ class Roo extends Animal {
 // ----------------------------------------------------------------------------
 
 var o = new Roo('Kanga');
-assert.equal('Kanga II Koala', o.a.n);
-assert.equal('Kanga II Animal', o.a.sn);
-assert.equal('Kanga II Koala aka Kanga II Animal', o.a.fn);
+expect(o.a.n).toBe('Kanga II Koala');
+expect(o.a.sn).toBe('Kanga II Animal');
+expect(o.a.fn).toBe('Kanga II Koala aka Kanga II Animal');
 
-assert.equal('Kanga Roo (with Kanga II Koala)', o.n);
-assert.equal('Kanga Animal (with Kanga II Animal)', o.sn);
-assert.equal('Kanga Roo (with Kanga II Koala) aka ' +
+expect(o.n).toBe('Kanga Roo (with Kanga II Koala)');
+expect(o.sn).toBe('Kanga Animal (with Kanga II Animal)');
+expect(o.fn).toBe('Kanga Roo (with Kanga II Koala) aka ' +
              'Kanga Animal (with Kanga II Animal) ' +
-             '(with Kanga II Koala aka Kanga II Animal)', o.fn);
+             '(with Kanga II Koala aka Kanga II Animal)');

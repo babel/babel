@@ -16,15 +16,15 @@ class MegaTripler extends Tripler {
 
 var tripler = new Tripler();
 
-assert.equal(Tripler.triple(), 3);
-assert.equal(Tripler.triple(2), 6);
-assert.equal(tripler.triple, undefined);
+expect(Tripler.triple()).toBe(3);
+expect(Tripler.triple(2)).toBe(6);
+expect(tripler.triple).toBeUndefined();
 
-assert.equal(Tripler.toString(), '3' + Object.toString.call(Tripler) + '3');
+expect(Tripler.toString()).toBe('3' + Object.toString.call(Tripler) + '3');
 
 var mega = new MegaTripler();
 
-assert.equal(MegaTripler.triple(2), 36);
-assert.equal(mega.triple, undefined);
+expect(MegaTripler.triple(2)).toBe(36);
+expect(mega.triple).toBeUndefined();
 
-assert.equal(MegaTripler.toString(), '3' + Object.toString.call(MegaTripler) + '3');
+expect(MegaTripler.toString()).toBe('3' + Object.toString.call(MegaTripler) + '3');

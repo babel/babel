@@ -1,7 +1,7 @@
 function dec(target, name, descriptor){
-  assert(target);
-  assert.equal(typeof name, "string");
-  assert.equal(typeof descriptor, "object");
+  expect(target).toBeTruthy();
+  expect(typeof name).toBe("string");
+  expect(typeof descriptor).toBe("object");
 
   target.decoratedProps = (target.decoratedProps || []).concat([name]);
 
@@ -23,5 +23,5 @@ class Example extends Base {
 
 let inst = new Example();
 
-assert.equal(inst.prop, "__3__");
-assert.equal(inst.prop2, "__4__");
+expect(inst.prop).toBe("__3__");
+expect(inst.prop2).toBe("__4__");

@@ -1,5 +1,5 @@
 function b() {
-  assert.equal(a, 1);
+  expect(a).toBe(1);
 }
 
 b();

@@ -2,27 +2,27 @@ function f() {
   return /*
       */ 1;
 }
-assert.equal(undefined, f());
+expect(f()).toBeUndefined();
 
 function g() {
   return /* */ 1;
 }
-assert.equal(1, g());
+expect(g()).toBe(1);
 
 function h() {
   return /* */ /*
       */ 1;
 }
-assert.equal(undefined, h());
+expect(h()).toBeUndefined();
 
 function i() {
   return /* */ //
       1;
 }
-assert.equal(undefined, i());
+expect(i()).toBeUndefined();
 
 function j() {
   return //
       1;
 }
-assert.equal(undefined, j());
+expect(j()).toBeUndefined();

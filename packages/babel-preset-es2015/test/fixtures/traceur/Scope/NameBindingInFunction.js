@@ -6,5 +6,5 @@
   }
   var g = f;
   f = 42;
-  assert.equal(42, g());
+  expect(g()).toBe(42);
 }

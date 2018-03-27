@@ -17,4 +17,4 @@ class B extends A {
 }
 
 new B();
-assert.equal(called, true);
+expect(called).toBe(true);
