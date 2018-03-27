@@ -84,18 +84,17 @@
     static set 0O13(v) {}
   }
 
-  expect(C.prototype.hasOwnProperty('0')).toBe(true);
-  expect(C.prototype.hasOwnProperty('1')).toBe(true);
-  expect(C.prototype.hasOwnProperty('2')).toBe(true);
-  expect(C.prototype.hasOwnProperty('6')).toBe(true);
-  expect(C.prototype.hasOwnProperty('7')).toBe(true);
-  expect(C.prototype.hasOwnProperty('8')).toBe(true);
+  expect(C.prototype).toHaveProperty('0');
+  expect(C.prototype).toHaveProperty('1');
+  expect(C.prototype).toHaveProperty('2');
+  expect(C.prototype).toHaveProperty('6');
+  expect(C.prototype).toHaveProperty('7');
+  expect(C.prototype).toHaveProperty('8');
 
-  expect(C.hasOwnProperty('3')).toBe(true);
-  expect(C.hasOwnProperty('4')).toBe(true);
-  expect(C.hasOwnProperty('5')).toBe(true);
-  expect(C.hasOwnProperty('9')).toBe(true);
-  expect(C.hasOwnProperty('10')).toBe(true);
-  expect(C.hasOwnProperty('11')).toBe(true);
-
+  expect(C).toHaveProperty('3');
+  expect(C).toHaveProperty('4');
+  expect(C).toHaveProperty('5');
+  expect(C).toHaveProperty('9');
+  expect(C).toHaveProperty('10');
+  expect(C).toHaveProperty('11');
 })();

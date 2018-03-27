@@ -22,6 +22,7 @@
       "files": [
         "packages/*/test/**/*.js",
         "codemods/*/test/**/*.js",
+        "packages/babel-helper-transform-fixture-test-runner/src/helpers.js",
         "test/**/*.js"
       ],
       "env": {

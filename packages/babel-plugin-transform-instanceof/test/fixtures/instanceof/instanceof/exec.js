@@ -4,7 +4,7 @@ foo[Symbol.hasInstance]= function () { return true; };
 var bar = {};
 
 expect(bar instanceof foo).toBe(true);
-expect(new String instanceof String).toBe(true);
+expect(new String).toBeInstanceOf(String);
 
 //
 
@@ -21,5 +21,5 @@ Object.defineProperty(Greeting, Symbol.hasInstance, {
 var a = new Greeting("hello");
 var b = new Greeting("world");
 
-expect(a instanceof Greeting).toBe(true);
-expect(b instanceof Greeting).toBe(false);
+expect(a).toBeInstanceOf(Greeting);
+expect(b instanceof Greeting).not.toBe(true);

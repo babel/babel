@@ -59,7 +59,7 @@ class Example {
 }
 
 
-expect(Example.hasOwnProperty("decoratedProps"));
+expect(Example).toHaveProperty("decoratedProps");
 expect(Example.decoratedProps).toEqual([
   "enumconfwrite",
   "enumconf",

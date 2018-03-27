@@ -10,7 +10,7 @@ expect(GeneratorFunctionPrototype.prototype).toBe(f.prototype.__proto__);
 expect(GeneratorFunctionPrototype.__proto__).toBe(Function.prototype);
 
 var g = f();
-expect(g instanceof f).toBe(true);
+expect(g).toBeInstanceOf(f);
 
 expect(g.__proto__).toBe(f.prototype);
 
@@ -31,7 +31,7 @@ function* f2() {
 
 expect(f.__proto__).toBe(f2.__proto__);
 
-expect(f.hasOwnProperty('constructor')).toBe(false);
+expect(f).not.toHaveProperty('constructor');
 expect(f.__proto__.constructor.name).toBe('GeneratorFunction');
 
 // Intentionally at the end to test hoisting.

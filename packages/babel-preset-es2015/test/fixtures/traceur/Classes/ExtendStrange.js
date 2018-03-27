@@ -1,8 +1,8 @@
 class C extends null {}
 
 var c = new C;
-expect(c instanceof C).toBe(true);
-expect(c instanceof Object).toBe(false);
+expect(c).toBeInstanceOf(C);
+expect(c).toBeInstanceOf(Object);
 
 // Closure testing framework tries to toString the object and fails.
 expect(Object.getPrototypeOf(c)).toBe(C.prototype);

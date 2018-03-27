@@ -42,7 +42,7 @@ const inst = {
   _: 8,
 };
 
-expect(inst.hasOwnProperty("decoratedProps")).toBeTruthy();
+expect(inst).toHaveProperty("decoratedProps");
 expect(inst.decoratedProps).toEqual([
   "enumconfwrite",
   "enumconf",

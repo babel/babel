@@ -20,10 +20,10 @@ for (var element in Empty) {
 var e2 = new Empty();
 expect(e).not.toBe(e2);
 
-expect(e instanceof Empty).toBe(true);
-expect(e instanceof EmptyB).toBe(false);
+expect(e).toBeInstanceOf(Empty);
+expect(e).not.toBeInstanceOf(EmptyB);
 
 var b = new EmptyB();
 
-expect(b instanceof Empty).toBe(true);
-expect(b instanceof EmptyB).toBe(true);
+expect(b).toBeInstanceOf(Empty);
+expect(b).toBeInstanceOf(EmptyB);

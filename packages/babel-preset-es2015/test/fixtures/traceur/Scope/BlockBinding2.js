@@ -10,6 +10,6 @@ for (let x in obj) {
 
 // ----------------------------------------------------------------------------
 
-expect(result[0]()).toBe('hello a');;
-expect(result[1]()).toBe('hello b');;
-expect(result[2]()).toBe('hello c');;
+expect(result[0]()).toBe('hello a');
+expect(result[1]()).toBe('hello b');
+expect(result[2]()).toBe('hello c');

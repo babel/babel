@@ -14,4 +14,4 @@ var object = new SpreadTestClass(...[0, 1]);
 expect(object.x).toBe(0);
 expect(object.y).toBe(1);
 expect(object.self).toBe(object);
-expect(object instanceof object.SpreadTestClass).toBe(true);
+expect(object).toBeInstanceOf(object.SpreadTestClass);

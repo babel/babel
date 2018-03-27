@@ -35,7 +35,7 @@ expect(Object.keys(object)).toEqual([
 ]);
 
 function assertMethod(object, name) {
-  expect(object.hasOwnProperty(name)).toBe(true);
+  expect(object).toHaveProperty(name);
   var descriptor = Object.getOwnPropertyDescriptor(object, name);
   expect(typeof descriptor).toBe('object');
   expect(descriptor.enumerable).toBe(true);

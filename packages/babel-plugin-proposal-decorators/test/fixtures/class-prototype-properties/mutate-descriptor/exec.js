@@ -44,7 +44,7 @@ class Example {
 
 const inst = new Example();
 
-expect(Example.prototype.hasOwnProperty("decoratedProps")).toBeTruthy();
+expect(Example.prototype).toHaveProperty("decoratedProps");
 expect(inst.decoratedProps).toEqual([
   "enumconfwrite",
   "enumconf",

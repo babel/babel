@@ -35,6 +35,6 @@ try {
 }
 
 expect(actualF).toBe(expectedF);
-expect(expectedM instanceof TypeError).toBe(true);
-expect(actualM instanceof TypeError).toBe(true);
+expect(expectedM).toBeInstanceOf(TypeError);
+expect(actualM).toBeInstanceOf(TypeError);
 expect(Object.getPrototypeOf(actualM)).toBe(Object.getPrototypeOf(expectedM));

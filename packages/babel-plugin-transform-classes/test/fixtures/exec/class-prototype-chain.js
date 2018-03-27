@@ -12,8 +12,8 @@ expect(C.b()).toBe('B.b');
 
 class D extends Object {}
 
-expect(D instanceof Object).toBeTruthy();
-expect(D.prototype instanceof Object).toBeTruthy();
+expect(D).toBeInstanceOf(Object);
+expect(D.prototype).toBeInstanceOf(Object);
 expect(D.keys).toBe(Object.keys);
 
 class E {}

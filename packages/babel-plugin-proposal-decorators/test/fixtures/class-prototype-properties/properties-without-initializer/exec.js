@@ -7,5 +7,5 @@ class Example {
 }
 
 let inst = new Example();
-expect(inst.hasOwnProperty("prop")).toBe(true);
+expect(inst).toHaveProperty("prop");
 expect(inst.prop).toBeUndefined();

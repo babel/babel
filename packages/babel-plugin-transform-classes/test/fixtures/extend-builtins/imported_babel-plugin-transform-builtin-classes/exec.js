@@ -11,8 +11,8 @@ class List extends Array {
   }
 }
 
-expect(new List(1) instanceof List).toBe(true);
-expect(new List(2) instanceof Array).toBe(true);
+expect(new List(1)).toBeInstanceOf(List);
+expect(new List(2)).toBeInstanceOf(Array);
 
 var l = new List(3);
 expect(l).toHaveLength(1);
@@ -27,9 +27,9 @@ class SecondLevel extends List {
   }
 }
 
-expect(new SecondLevel(1) instanceof SecondLevel).toBe(true);
-expect(new SecondLevel(2) instanceof List).toBe(true);
-expect(new SecondLevel(3) instanceof Array).toBe(true);
+expect(new SecondLevel(1)).toBeInstanceOf(SecondLevel);
+expect(new SecondLevel(2)).toBeInstanceOf(List);
+expect(new SecondLevel(3)).toBeInstanceOf(Array);
 
 var s = new SecondLevel(4);
 expect(s).toHaveLength(1);

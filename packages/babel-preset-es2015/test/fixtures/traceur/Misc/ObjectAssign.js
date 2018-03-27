@@ -4,7 +4,7 @@ var assigned = Object.assign(target, source);
 
 // ----------------------------------------------------------------------------
 
-expect(Object.hasOwnProperty("assign")).toBe(true);
+expect(Object).toHaveProperty("assign");
 expect(assigned.a).toBe(source.a);
 expect(assigned.b).toBe(target.b);
 expect(assigned.c).toBe(source.c);

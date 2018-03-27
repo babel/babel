@@ -6,5 +6,5 @@ class Example {
   @dec static prop;
 }
 
-expect(Example.hasOwnProperty("prop")).toBeTruthy();
+expect(Example).toHaveProperty("prop");
 expect(Example.prop).toBe(undefined);
