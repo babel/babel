@@ -753,13 +753,21 @@ export default class ExpressionParser extends LValParser {
 
       case tt.name: {
         node = this.startNode();
-        const allowAwait = this.state.value === "await" && this.state.inAsync;
+        const allowAwait =
+          this.state.value === "await" &&
+          (this.state.inAsync ||
+            (!this.state.inFunction && this.options.allowAwaitOutsideFunction));
+
         const containsEsc = this.state.containsEsc;
         const allowYield = this.shouldAllowYieldIdentifier();
         const id = this.parseIdentifier(allowAwait || allowYield);
 
         if (id.name === "await") {
-          if (this.state.inAsync || this.inModule) {
+          if (
+            this.state.inAsync ||
+            this.inModule ||
+            (!this.state.inFunction && this.options.allowAwaitOutsideFunction)
+          ) {
             return this.parseAwait(node);
           }
         } else if (
@@ -1862,7 +1870,10 @@ export default class ExpressionParser extends LValParser {
 
   parseAwait(node: N.AwaitExpression): N.AwaitExpression {
     // istanbul ignore next: this condition is checked at the call site so won't be hit here
-    if (!this.state.inAsync) {
+    if (
+      !this.state.inAsync &&
+      (this.state.inFunction || !this.options.allowAwaitOutsideFunction)
+    ) {
       this.unexpected();
     }
     if (this.match(tt.star)) {
