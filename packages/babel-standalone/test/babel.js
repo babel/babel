@@ -78,6 +78,7 @@ const assert = require("assert");
 
     it("handles presets with options", () => {
       const output = Babel.transform("export let x", {
+        sourceType: "module",
         presets: [["es2015", { modules: false }]],
       }).code;
       assert.equal(output, "export var x;");

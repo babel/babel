@@ -38,6 +38,7 @@ program.option(
   "List of extensions to hook into [.es6,.js,.es,.jsx,.mjs]",
   collect,
 );
+program.option("--source-type [script|module|unambiguous]", "");
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
 
@@ -51,6 +52,7 @@ register({
   only: program.only,
   plugins: program.plugins,
   presets: program.presets,
+  sourceType: program.sourceType,
 });
 
 const replPlugin = ({ types: t }) => ({
@@ -88,6 +90,7 @@ const _eval = function(code, filename) {
     filename: filename,
     presets: program.presets,
     plugins: (program.plugins || []).concat([replPlugin]),
+    sourceType: program.sourceType,
   }).code;
 
   return vm.runInThisContext(code, {
@@ -129,7 +132,10 @@ if (program.eval || program.print) {
       }
 
       if (arg[0] === "-") {
-        const parsedArg = program[arg.slice(2)];
+        const name = arg.slice(2);
+        const parsedArg =
+          name === "source-type" ? program.sourceType : program[arg.slice(2)];
+
         if (parsedArg && parsedArg !== true) {
           ignoreNext = true;
         }

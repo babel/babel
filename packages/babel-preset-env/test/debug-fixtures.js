@@ -51,7 +51,7 @@ const buildTest = opts => {
     saveInFiles(opts.inFiles);
 
     let args = [binLoc];
-    args = args.concat(opts.args);
+    args = args.concat(opts.args, "--source-type", "module");
 
     const spawn = child.spawn(process.execPath, args);
 

@@ -28,8 +28,7 @@ export default declare((api, options) => {
     strictMode,
     noInterop,
     lazy = false,
-    // Defaulting to 'true' for now. May change before 7.x major.
-    allowCommonJSExports = true,
+    allowCommonJSExports = false,
   } = options;
 
   if (

@@ -134,6 +134,7 @@ function loadScripts(transformFn, scripts) {
       executed: false,
       plugins: getPluginsOrPresetsFromScript(script, "data-plugins"),
       presets: getPluginsOrPresetsFromScript(script, "data-presets"),
+      sourceType: script.getAttribute("data-source-type") || undefined,
     };
 
     if (script.src) {
