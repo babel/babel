@@ -22,6 +22,7 @@ function collect(value, previousValue): Array<string> {
 }
 
 program.option("-e, --eval [script]", "Evaluate script");
+program.option("-r, --require [module]", "Require module");
 program.option("-p, --print [code]", "Evaluate script and print result");
 program.option(
   "-o, --only [globs]",
@@ -130,7 +131,11 @@ if (program.eval || program.print) {
 
       if (arg[0] === "-") {
         const parsedArg = program[arg.slice(2)];
-        if (parsedArg && parsedArg !== true) {
+        if (
+          arg === "-r" ||
+          arg === "--require" ||
+          (parsedArg && parsedArg !== true)
+        ) {
           ignoreNext = true;
         }
       } else {
@@ -139,6 +144,15 @@ if (program.eval || program.print) {
       }
     });
     args = args.slice(i);
+
+    // We have to handle require ourselfs, as we want to require it in the context of babel-register
+    if (program.require) {
+      let requireFileName = program.require;
+      if (!path.isAbsolute(requireFileName)) {
+        requireFileName = path.join(process.cwd(), requireFileName);
+      }
+      require(requireFileName);
+    }
 
     // make the filename absolute
     const filename = args[0];
