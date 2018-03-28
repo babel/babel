@@ -51,7 +51,7 @@ const assertTest = function(stdout, stderr, opts) {
 
   if (opts.stderr) {
     if (opts.stderrContains) {
-      expect(includes(stderr, expectStderr)).toBeTruthy();
+      expect(includes(stderr, expectStderr)).toBe(true);
     } else {
       expect(stderr).toBe(expectStderr);
     }
@@ -65,7 +65,7 @@ const assertTest = function(stdout, stderr, opts) {
 
   if (opts.stdout) {
     if (opts.stdoutContains) {
-      expect(includes(stdout, expectStdout)).toBeTruthy();
+      expect(includes(stdout, expectStdout)).toBe(true);
     } else {
       expect(stdout).toBe(expectStdout);
     }
