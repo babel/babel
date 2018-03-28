@@ -11,10 +11,10 @@ var obj = {
   },
 };
 
-assert.equal(obj.x ??= 1, 1);
-assert.equal(sets, 1);
-assert.equal(obj.x ??= 2, 1);
-assert.equal(sets, 1);
+expect(obj.x ??= 1).toBe(1);
+expect(sets).toBe(1);
+expect(obj.x ??= 2).toBe(1);
+expect(sets).toBe(1);
 
 var gets = 0;
 var deep = {
@@ -25,25 +25,25 @@ var deep = {
 };
 
 obj.x = undefined;
-assert.equal(deep.obj.x ??= 1, 1);
-assert.equal(gets, 1);
-assert.equal(deep.obj.x ??= 2, 1);
-assert.equal(gets, 2);
+expect(deep.obj.x ??= 1).toBe(1);
+expect(gets).toBe(1);
+expect(deep.obj.x ??= 2).toBe(1);
+expect(gets).toBe(2);
 
 var key = 0;
 obj.x = undefined;
-assert.equal(obj[++key] ??= 1, 1);
-assert.equal(key, 1);
+expect(obj[++key] ??= 1).toBe(1);
+expect(key).toBe(1);
 key = 0;
-assert.equal(obj[++key] ??= 2, 1);
-assert.equal(key, 1);
+expect(obj[++key] ??= 2).toBe(1);
+expect(key).toBe(1);
 
 obj.x = undefined;
 key = 0;
-assert.equal(deep.obj[++key] ??= 1, 1);
-assert.equal(gets, 3);
-assert.equal(key, 1);
+expect(deep.obj[++key] ??= 1).toBe(1);
+expect(gets).toBe(3);
+expect(key).toBe(1);
 key = 0;
-assert.equal(deep.obj[++key] ??= 2, 1);
-assert.equal(gets, 4);
-assert.equal(key, 1);
+expect(deep.obj[++key] ??= 2).toBe(1);
+expect(gets).toBe(4);
+expect(key).toBe(1);
