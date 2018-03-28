@@ -291,7 +291,7 @@ defineType("ObjectTypeProperty", {
   visitor: ["key", "value", "variance"],
   aliases: ["Flow", "UserWhitespacable"],
   fields: {
-    key: validateType("Identifier"),
+    key: validateType(["Identifier", "StringLiteral"]),
     value: validateType("FlowType"),
     kind: validate(assertOneOf("init", "get", "set")),
     static: validate(assertValueType("boolean")),
