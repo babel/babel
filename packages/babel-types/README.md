@@ -1553,7 +1553,7 @@ See also `t.isObjectTypeProperty(node, opts)` and `t.assertObjectTypeProperty(no
 
 Aliases: `Flow`, `UserWhitespacable`
 
- - `key`: `Identifier` (required)
+ - `key`: `Identifier | StringLiteral` (required)
  - `value`: `FlowType` (required)
  - `variance`: `Variance` (default: `null`)
  - `kind`: `"init" | "get" | "set"` (default: `null`)
