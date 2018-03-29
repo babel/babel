@@ -7,6 +7,7 @@ export type Options = {
   sourceType: "script" | "module",
   sourceFilename?: string,
   startLine: number,
+  allowAwaitOutsideFunction: boolean,
   allowReturnOutsideFunction: boolean,
   allowImportExportEverywhere: boolean,
   allowSuperOutsideMethod: boolean,
@@ -24,6 +25,9 @@ export const defaultOptions: Options = {
   // Line from which to start counting source. Useful for
   // integration with other tools.
   startLine: 1,
+  // When enabled, await at the top level is not considered an
+  // error.
+  allowAwaitOutsideFunction: false,
   // When enabled, a return at the top level is not considered an
   // error.
   allowReturnOutsideFunction: false,
