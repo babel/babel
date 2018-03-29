@@ -675,11 +675,11 @@ export function assertDoExpression(node: Object, opts?: Object = {}): void {
 export function assertMatchExpression(node: Object, opts?: Object = {}): void {
   assert("MatchExpression", node, opts);
 }
-export function assertMatchExpressionClause(
-  node: Object,
-  opts?: Object = {},
-): void {
-  assert("MatchExpressionClause", node, opts);
+export function assertMatchClause(node: Object, opts?: Object = {}): void {
+  assert("MatchClause", node, opts);
+}
+export function assertMatchGuard(node: Object, opts?: Object = {}): void {
+  assert("MatchGuard", node, opts);
 }
 export function assertObjectMatchPattern(
   node: Object,

@@ -148,7 +148,7 @@
           },
           "clauses": [
             {
-              "type": "MatchExpressionClause",
+              "type": "MatchClause",
               "start": 29,
               "end": 39,
               "loc": {

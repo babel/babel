@@ -138,12 +138,12 @@ export type Program = NodeBase & {
 export type MatchExpression = NodeBase & {
   type: "MatchExpression",
   expression: Expression,
-  clauses: MatchExpressionClauses,
+  clauses: MatchClauses,
 };
 
-export type MatchExpressionClauses = $ReadOnlyArray<MatchExpressionClause>;
+export type MatchClauses = $ReadOnlyArray<MatchClause>;
 
-export type MatchExpressionClause = NodeBase & {
+export type MatchClause = NodeBase & {
   type: "MatchExpressionClause",
   pattern: MatchExpressionPattern,
   body: Expression,

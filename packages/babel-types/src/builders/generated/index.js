@@ -620,10 +620,14 @@ export function MatchExpression(...args: Array<any>): Object {
   return builder("MatchExpression", ...args);
 }
 export { MatchExpression as matchExpression };
-export function MatchExpressionClause(...args: Array<any>): Object {
-  return builder("MatchExpressionClause", ...args);
+export function MatchClause(...args: Array<any>): Object {
+  return builder("MatchClause", ...args);
 }
-export { MatchExpressionClause as matchExpressionClause };
+export { MatchClause as matchClause };
+export function MatchGuard(...args: Array<any>): Object {
+  return builder("MatchGuard", ...args);
+}
+export { MatchGuard as matchGuard };
 export function ObjectMatchPattern(...args: Array<any>): Object {
   return builder("ObjectMatchPattern", ...args);
 }

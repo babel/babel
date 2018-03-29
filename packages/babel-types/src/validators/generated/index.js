@@ -506,8 +506,11 @@ export function isDoExpression(node: Object, opts?: Object): boolean {
 export function isMatchExpression(node: Object, opts?: Object): boolean {
   return is("MatchExpression", node, opts);
 }
-export function isMatchExpressionClause(node: Object, opts?: Object): boolean {
-  return is("MatchExpressionClause", node, opts);
+export function isMatchClause(node: Object, opts?: Object): boolean {
+  return is("MatchClause", node, opts);
+}
+export function isMatchGuard(node: Object, opts?: Object): boolean {
+  return is("MatchGuard", node, opts);
 }
 export function isObjectMatchPattern(node: Object, opts?: Object): boolean {
   return is("ObjectMatchPattern", node, opts);

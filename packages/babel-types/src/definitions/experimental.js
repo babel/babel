@@ -145,14 +145,21 @@ defineType("MatchExpression", {
     clauses: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("MatchExpressionClause")),
+        assertEach(assertNodeType("MatchClause")),
       ),
     },
   },
 });
 
-defineType("MatchExpressionClause", {
-  visitor: ["pattern", "body", "expression"],
+defineType("MatchClause", {
+  visitor: ["pattern", "body", "expression", "guard"],
+  fields: {
+    // todo
+  },
+});
+
+defineType("MatchGuard", {
+  visitor: ["expression"],
   fields: {
     // todo
   },

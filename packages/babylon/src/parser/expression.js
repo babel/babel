@@ -457,7 +457,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // pattern '=>' expression
-  parseMatchClause(): N.MatchExpressionClause {
+  parseMatchClause(): N.MatchClause {
     const node = this.startNode();
 
     const pattern = this.parseMatchPattern();
@@ -469,7 +469,7 @@ export default class ExpressionParser extends LValParser {
     node.pattern = pattern;
     this.parseClauseBody(node, true);
 
-    return this.finishNode(node, "MatchExpressionClause");
+    return this.finishNode(node, "MatchClause");
   }
 
   parseClauseBody(
@@ -507,21 +507,6 @@ export default class ExpressionParser extends LValParser {
   }
 
   parseMatchPattern(): N.MatchExpressionPattern | null {
-    const basic = this.parseBasicMatchPattern();
-    if (basic === null) {
-      if (this.match(tt._else)) {
-        this.next();
-        return "else";
-      } else {
-        this.unexpected();
-        return null;
-      }
-    } else {
-      return basic;
-    }
-  }
-
-  parseBasicMatchPattern(): N.MatchExpressionPattern | null {
     let node;
 
     if (this.match(tt.braceL)) {
@@ -594,7 +579,7 @@ export default class ExpressionParser extends LValParser {
 
     if (this.match(tt.colon)) {
       this.next();
-      node.value = this.parseBasicMatchPattern();
+      node.value = this.parseMatchPattern();
       if (node.value === null) {
         this.raise(this.state.pos, "not a correct pattern");
       }
@@ -626,7 +611,7 @@ export default class ExpressionParser extends LValParser {
         }
         return this.finishNode(node, "ArrayMatchPattern");
       } else {
-        const pattern = this.parseBasicMatchPattern();
+        const pattern = this.parseMatchPattern();
         node.children.push(pattern);
       }
 

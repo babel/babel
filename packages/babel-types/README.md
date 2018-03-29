@@ -1299,6 +1299,20 @@ Aliases: `Binary`, `Expression`
 
 ---
 
+### matchClause
+```javascript
+t.matchClause(pattern, body, expression, guard)
+```
+
+See also `t.isMatchClause(node, opts)` and `t.assertMatchClause(node, opts)`.
+
+ - `pattern` (required)
+ - `body` (required)
+ - `expression` (required)
+ - `guard` (required)
+
+---
+
 ### matchExpression
 ```javascript
 t.matchExpression(clauses, expression)
@@ -1308,20 +1322,18 @@ See also `t.isMatchExpression(node, opts)` and `t.assertMatchExpression(node, op
 
 Aliases: `Expression`
 
- - `clauses`: `Array<MatchExpressionClause>` (required)
+ - `clauses`: `Array<MatchClause>` (required)
  - `expression` (required)
 
 ---
 
-### matchExpressionClause
+### matchGuard
 ```javascript
-t.matchExpressionClause(pattern, body, expression)
+t.matchGuard(expression)
 ```
 
-See also `t.isMatchExpressionClause(node, opts)` and `t.assertMatchExpressionClause(node, opts)`.
+See also `t.isMatchGuard(node, opts)` and `t.assertMatchGuard(node, opts)`.
 
- - `pattern` (required)
- - `body` (required)
  - `expression` (required)
 
 ---
