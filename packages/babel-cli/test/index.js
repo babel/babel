@@ -85,7 +85,7 @@ const assertTest = function(stdout, stderr, opts) {
         const expected = opts.outFiles[filename];
         const actual = actualFiles[filename];
 
-        expect(expected).not.toBe(undefined);
+        expect(expected).not.toBeUndefined();
 
         if (expected) {
           expect(actual).toBe(expected);
