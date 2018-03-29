@@ -456,14 +456,14 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
-  // pattern ':' expression
+  // pattern '=>' expression
   parseMatchClause(): N.MatchExpressionClause {
     const node = this.startNode();
 
     const pattern = this.parseMatchPattern();
 
-    if (!this.eat(tt.colon)) {
-      this.unexpected(this.state.pos, tt.colon);
+    if (!this.eat(tt.arrow)) {
+      this.unexpected(this.state.pos, tt.arrow);
     }
 
     node.pattern = pattern;

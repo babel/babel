@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 77,
+  "end": 85,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 77,
+    "end": 85,
     "loc": {
       "start": {
         "line": 1,
@@ -31,7 +31,7 @@
       {
         "type": "ExpressionStatement",
         "start": 0,
-        "end": 77,
+        "end": 85,
         "loc": {
           "start": {
             "line": 1,
@@ -45,7 +45,7 @@
         "expression": {
           "type": "MatchExpression",
           "start": 0,
-          "end": 77,
+          "end": 85,
           "loc": {
             "start": {
               "line": 1,
@@ -77,7 +77,7 @@
             {
               "type": "MatchExpressionClause",
               "start": 16,
-              "end": 21,
+              "end": 23,
               "loc": {
                 "start": {
                   "line": 2,
@@ -85,7 +85,7 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 7
+                  "column": 9
                 }
               },
               "pattern": {
@@ -108,16 +108,16 @@
               },
               "body": {
                 "type": "NumericLiteral",
-                "start": 20,
-                "end": 21,
+                "start": 22,
+                "end": 23,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 6
+                    "column": 8
                   },
                   "end": {
                     "line": 2,
-                    "column": 7
+                    "column": 9
                   }
                 },
                 "extra": {
@@ -130,8 +130,8 @@
             },
             {
               "type": "MatchExpressionClause",
-              "start": 25,
-              "end": 34,
+              "start": 27,
+              "end": 38,
               "loc": {
                 "start": {
                   "line": 3,
@@ -139,13 +139,13 @@
                 },
                 "end": {
                   "line": 3,
-                  "column": 11
+                  "column": 13
                 }
               },
               "pattern": {
                 "type": "ArrayMatchPattern",
-                "start": 25,
-                "end": 31,
+                "start": 27,
+                "end": 33,
                 "loc": {
                   "start": {
                     "line": 3,
@@ -159,8 +159,8 @@
                 "children": [
                   {
                     "type": "NumericLiteral",
-                    "start": 26,
-                    "end": 27,
+                    "start": 28,
+                    "end": 29,
                     "loc": {
                       "start": {
                         "line": 3,
@@ -179,8 +179,8 @@
                   },
                   {
                     "type": "NumericLiteral",
-                    "start": 29,
-                    "end": 30,
+                    "start": 31,
+                    "end": 32,
                     "loc": {
                       "start": {
                         "line": 3,
@@ -203,16 +203,16 @@
               },
               "body": {
                 "type": "NumericLiteral",
-                "start": 33,
-                "end": 34,
+                "start": 37,
+                "end": 38,
                 "loc": {
                   "start": {
                     "line": 3,
-                    "column": 10
+                    "column": 12
                   },
                   "end": {
                     "line": 3,
-                    "column": 11
+                    "column": 13
                   }
                 },
                 "extra": {
@@ -225,8 +225,8 @@
             },
             {
               "type": "MatchExpressionClause",
-              "start": 38,
-              "end": 53,
+              "start": 42,
+              "end": 59,
               "loc": {
                 "start": {
                   "line": 4,
@@ -234,13 +234,13 @@
                 },
                 "end": {
                   "line": 4,
-                  "column": 17
+                  "column": 19
                 }
               },
               "pattern": {
                 "type": "ArrayMatchPattern",
-                "start": 38,
-                "end": 50,
+                "start": 42,
+                "end": 54,
                 "loc": {
                   "start": {
                     "line": 4,
@@ -254,8 +254,8 @@
                 "children": [
                   {
                     "type": "NumericLiteral",
-                    "start": 39,
-                    "end": 40,
+                    "start": 43,
+                    "end": 44,
                     "loc": {
                       "start": {
                         "line": 4,
@@ -274,8 +274,8 @@
                   },
                   {
                     "type": "NumericLiteral",
-                    "start": 42,
-                    "end": 43,
+                    "start": 46,
+                    "end": 47,
                     "loc": {
                       "start": {
                         "line": 4,
@@ -294,8 +294,8 @@
                   },
                   {
                     "type": "NumericLiteral",
-                    "start": 45,
-                    "end": 46,
+                    "start": 49,
+                    "end": 50,
                     "loc": {
                       "start": {
                         "line": 4,
@@ -314,8 +314,8 @@
                   },
                   {
                     "type": "NumericLiteral",
-                    "start": 48,
-                    "end": 49,
+                    "start": 52,
+                    "end": 53,
                     "loc": {
                       "start": {
                         "line": 4,
@@ -338,16 +338,16 @@
               },
               "body": {
                 "type": "NumericLiteral",
-                "start": 52,
-                "end": 53,
+                "start": 58,
+                "end": 59,
                 "loc": {
                   "start": {
                     "line": 4,
-                    "column": 16
+                    "column": 18
                   },
                   "end": {
                     "line": 4,
-                    "column": 17
+                    "column": 19
                   }
                 },
                 "extra": {
@@ -360,8 +360,8 @@
             },
             {
               "type": "MatchExpressionClause",
-              "start": 57,
-              "end": 75,
+              "start": 63,
+              "end": 83,
               "loc": {
                 "start": {
                   "line": 5,
@@ -369,13 +369,13 @@
                 },
                 "end": {
                   "line": 5,
-                  "column": 20
+                  "column": 22
                 }
               },
               "pattern": {
                 "type": "ArrayMatchPattern",
-                "start": 57,
-                "end": 72,
+                "start": 63,
+                "end": 78,
                 "loc": {
                   "start": {
                     "line": 5,
@@ -389,8 +389,8 @@
                 "children": [
                   {
                     "type": "NumericLiteral",
-                    "start": 58,
-                    "end": 59,
+                    "start": 64,
+                    "end": 65,
                     "loc": {
                       "start": {
                         "line": 5,
@@ -409,8 +409,8 @@
                   },
                   {
                     "type": "NumericLiteral",
-                    "start": 61,
-                    "end": 62,
+                    "start": 67,
+                    "end": 68,
                     "loc": {
                       "start": {
                         "line": 5,
@@ -429,8 +429,8 @@
                   },
                   {
                     "type": "NumericLiteral",
-                    "start": 64,
-                    "end": 65,
+                    "start": 70,
+                    "end": 71,
                     "loc": {
                       "start": {
                         "line": 5,
@@ -449,8 +449,8 @@
                   },
                   {
                     "type": "NumericLiteral",
-                    "start": 67,
-                    "end": 68,
+                    "start": 73,
+                    "end": 74,
                     "loc": {
                       "start": {
                         "line": 5,
@@ -469,8 +469,8 @@
                   },
                   {
                     "type": "NumericLiteral",
-                    "start": 70,
-                    "end": 71,
+                    "start": 76,
+                    "end": 77,
                     "loc": {
                       "start": {
                         "line": 5,
@@ -493,16 +493,16 @@
               },
               "body": {
                 "type": "NumericLiteral",
-                "start": 74,
-                "end": 75,
+                "start": 82,
+                "end": 83,
                 "loc": {
                   "start": {
                     "line": 5,
-                    "column": 19
+                    "column": 21
                   },
                   "end": {
                     "line": 5,
-                    "column": 20
+                    "column": 22
                   }
                 },
                 "extra": {

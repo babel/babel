@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 24,
+  "end": 26,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 24,
+    "end": 26,
     "loc": {
       "start": {
         "line": 1,
@@ -31,7 +31,7 @@
       {
         "type": "ExpressionStatement",
         "start": 0,
-        "end": 24,
+        "end": 26,
         "loc": {
           "start": {
             "line": 1,
@@ -45,7 +45,7 @@
         "expression": {
           "type": "MatchExpression",
           "start": 0,
-          "end": 24,
+          "end": 26,
           "loc": {
             "start": {
               "line": 1,
@@ -77,7 +77,7 @@
             {
               "type": "MatchExpressionClause",
               "start": 13,
-              "end": 22,
+              "end": 24,
               "loc": {
                 "start": {
                   "line": 2,
@@ -85,7 +85,7 @@
                 },
                 "end": {
                   "line": 2,
-                  "column": 11
+                  "column": 13
                 }
               },
               "pattern": {
@@ -149,16 +149,16 @@
               },
               "body": {
                 "type": "NumericLiteral",
-                "start": 21,
-                "end": 22,
+                "start": 23,
+                "end": 24,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 10
+                    "column": 12
                   },
                   "end": {
                     "line": 2,
-                    "column": 11
+                    "column": 13
                   }
                 },
                 "extra": {
