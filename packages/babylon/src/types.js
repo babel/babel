@@ -150,6 +150,10 @@ export type MatchClause = NodeBase & {
   expression: boolean,
 };
 
+export type MatchGuard = NodeBase & {
+  body: Expression,
+};
+
 export type BasicMatchExpressionPattern =
   | ObjectMatchPattern
   | ArrayMatchPattern

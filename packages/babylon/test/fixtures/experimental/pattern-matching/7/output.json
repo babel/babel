@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 42,
+  "end": 67,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 5,
+      "line": 6,
       "column": 1
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 42,
+    "end": 67,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 5,
+        "line": 6,
         "column": 1
       }
     },
@@ -101,33 +101,33 @@
       {
         "type": "ExpressionStatement",
         "start": 16,
-        "end": 42,
+        "end": 67,
         "loc": {
           "start": {
             "line": 3,
             "column": 0
           },
           "end": {
-            "line": 5,
+            "line": 6,
             "column": 1
           }
         },
         "expression": {
           "type": "MatchExpression",
           "start": 16,
-          "end": 42,
+          "end": 67,
           "loc": {
             "start": {
               "line": 3,
               "column": 0
             },
             "end": {
-              "line": 5,
+              "line": 6,
               "column": 1
             }
           },
           "expression": {
-            "type": "NumericLiteral",
+            "type": "Identifier",
             "start": 22,
             "end": 23,
             "loc": {
@@ -138,19 +138,16 @@
               "end": {
                 "line": 3,
                 "column": 7
-              }
+              },
+              "identifierName": "a"
             },
-            "extra": {
-              "rawValue": 3,
-              "raw": "3"
-            },
-            "value": 3
+            "name": "a"
           },
           "clauses": [
             {
               "type": "MatchClause",
               "start": 29,
-              "end": 39,
+              "end": 50,
               "loc": {
                 "start": {
                   "line": 4,
@@ -158,7 +155,75 @@
                 },
                 "end": {
                   "line": 4,
-                  "column": 12
+                  "column": 23
+                }
+              },
+              "guard": {
+                "type": "MatchGuard",
+                "start": 31,
+                "end": 41,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 14
+                  }
+                },
+                "body": {
+                  "type": "BinaryExpression",
+                  "start": 35,
+                  "end": 40,
+                  "loc": {
+                    "start": {
+                      "line": 4,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 4,
+                      "column": 13
+                    }
+                  },
+                  "left": {
+                    "type": "Identifier",
+                    "start": 35,
+                    "end": 36,
+                    "loc": {
+                      "start": {
+                        "line": 4,
+                        "column": 8
+                      },
+                      "end": {
+                        "line": 4,
+                        "column": 9
+                      },
+                      "identifierName": "a"
+                    },
+                    "name": "a"
+                  },
+                  "operator": ">",
+                  "right": {
+                    "type": "NumericLiteral",
+                    "start": 39,
+                    "end": 40,
+                    "loc": {
+                      "start": {
+                        "line": 4,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 4,
+                        "column": 13
+                      }
+                    },
+                    "extra": {
+                      "rawValue": 3,
+                      "raw": "3"
+                    },
+                    "value": 3
+                  }
                 }
               },
               "pattern": {
@@ -174,21 +239,74 @@
                     "line": 4,
                     "column": 3
                   },
+                  "identifierName": "a"
+                },
+                "name": "a"
+              },
+              "body": {
+                "type": "StringLiteral",
+                "start": 45,
+                "end": 50,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 18
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 23
+                  }
+                },
+                "extra": {
+                  "rawValue": "foo",
+                  "raw": "\"foo\""
+                },
+                "value": "foo"
+              },
+              "expression": true
+            },
+            {
+              "type": "MatchClause",
+              "start": 54,
+              "end": 64,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 2
+                },
+                "end": {
+                  "line": 5,
+                  "column": 12
+                }
+              },
+              "pattern": {
+                "type": "Identifier",
+                "start": 54,
+                "end": 55,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 3
+                  },
                   "identifierName": "$"
                 },
                 "name": "$"
               },
               "body": {
                 "type": "StringLiteral",
-                "start": 34,
-                "end": 39,
+                "start": 59,
+                "end": 64,
                 "loc": {
                   "start": {
-                    "line": 4,
+                    "line": 5,
                     "column": 7
                   },
                   "end": {
-                    "line": 4,
+                    "line": 5,
                     "column": 12
                   }
                 },

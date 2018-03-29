@@ -1329,12 +1329,12 @@ Aliases: `Expression`
 
 ### matchGuard
 ```javascript
-t.matchGuard(expression)
+t.matchGuard(body)
 ```
 
 See also `t.isMatchGuard(node, opts)` and `t.assertMatchGuard(node, opts)`.
 
- - `expression` (required)
+ - `body` (required)
 
 ---
 

@@ -1,5 +1,6 @@
 const $ = '$';
 
-match(3) {
+match(a) {
+  a if (a > 3) => "foo",
   $ => "bar",
 }

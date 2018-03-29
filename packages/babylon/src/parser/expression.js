@@ -462,6 +462,10 @@ export default class ExpressionParser extends LValParser {
 
     const pattern = this.parseMatchPattern();
 
+    if (this.match(tt._if)) {
+      this.parseMatchGuard(node);
+    }
+
     if (!this.eat(tt.arrow)) {
       this.unexpected(this.state.pos, tt.arrow);
     }
@@ -470,6 +474,26 @@ export default class ExpressionParser extends LValParser {
     this.parseClauseBody(node, true);
 
     return this.finishNode(node, "MatchClause");
+  }
+
+  parseMatchGuard(clause: N.MatchClause): N.MatchGuard {
+    const node = this.startNode();
+
+    if (!this.eat(tt._if)) {
+      this.unexpected(this.state.pos, tt._if);
+    }
+
+    if (!this.eat(tt.parenL)) {
+      this.unexpected(this.state.pos, tt.parenL);
+    }
+
+    node.body = this.parseExpression();
+
+    if (!this.eat(tt.parenR)) {
+      this.unexpected(this.state.pos, tt.parenR);
+    }
+
+    clause.guard = this.finishNode(node, "MatchGuard");
   }
 
   parseClauseBody(
