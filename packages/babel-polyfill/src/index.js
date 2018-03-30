@@ -1,4 +1,4 @@
-import "core-js/shim";
+import "core-js";
 import "regenerator-runtime/runtime";
 
 if (global._babelPolyfill && typeof console !== "undefined" && console.warn) {
