@@ -632,10 +632,14 @@ export function ObjectMatchPattern(...args: Array<any>): Object {
   return builder("ObjectMatchPattern", ...args);
 }
 export { ObjectMatchPattern as objectMatchPattern };
-export function ObjectPropertyMatchPattern(...args: Array<any>): Object {
-  return builder("ObjectPropertyMatchPattern", ...args);
+export function MatchRestProperty(...args: Array<any>): Object {
+  return builder("MatchRestProperty", ...args);
 }
-export { ObjectPropertyMatchPattern as objectPropertyMatchPattern };
+export { MatchRestProperty as matchRestProperty };
+export function MatchProperty(...args: Array<any>): Object {
+  return builder("MatchProperty", ...args);
+}
+export { MatchProperty as matchProperty };
 export function ArrayMatchPattern(...args: Array<any>): Object {
   return builder("ArrayMatchPattern", ...args);
 }

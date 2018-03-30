@@ -466,6 +466,11 @@ export default class ExpressionParser extends LValParser {
       this.parseMatchGuard(node);
     }
 
+    if (this.match(tt.eq)) {
+      this.next();
+      node.initializer = this.parseMaybeAssign();
+    }
+
     if (!this.eat(tt.arrow)) {
       this.unexpected(this.state.pos, tt.arrow);
     }

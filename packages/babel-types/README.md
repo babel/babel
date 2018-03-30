@@ -36,13 +36,13 @@ Aliases: `Expression`
 
 ### arrayMatchPattern
 ```javascript
-t.arrayMatchPattern(children, restIdentifier)
+t.arrayMatchPattern(children, restElement)
 ```
 
 See also `t.isArrayMatchPattern(node, opts)` and `t.assertArrayMatchPattern(node, opts)`.
 
- - `children` (required)
- - `restIdentifier` (required)
+ - `children`: `array` (required)
+ - `restElement` (required)
 
 ---
 
@@ -1301,15 +1301,15 @@ Aliases: `Binary`, `Expression`
 
 ### matchClause
 ```javascript
-t.matchClause(pattern, body, expression, guard)
+t.matchClause(pattern, body, guard, initializer)
 ```
 
 See also `t.isMatchClause(node, opts)` and `t.assertMatchClause(node, opts)`.
 
- - `pattern` (required)
- - `body` (required)
- - `expression` (required)
+ - `pattern`: `ObjectMatchPattern` (required)
+ - `body`: `BlockStatement | Expression` (required)
  - `guard` (required)
+ - `initializer` (required)
 
 ---
 
@@ -1334,7 +1334,31 @@ t.matchGuard(body)
 
 See also `t.isMatchGuard(node, opts)` and `t.assertMatchGuard(node, opts)`.
 
- - `body` (required)
+ - `body`: `Expression` (required)
+
+---
+
+### matchProperty
+```javascript
+t.matchProperty(key, value, computed)
+```
+
+See also `t.isMatchProperty(node, opts)` and `t.assertMatchProperty(node, opts)`.
+
+ - `key`: `any` (required)
+ - `value`: `ObjectMatchPattern` (required)
+ - `computed`: `boolean` (default: `false`)
+
+---
+
+### matchRestProperty
+```javascript
+t.matchRestProperty(pattern)
+```
+
+See also `t.isMatchRestProperty(node, opts)` and `t.assertMatchRestProperty(node, opts)`.
+
+ - `pattern`: `Identifier` (required)
 
 ---
 
@@ -1496,13 +1520,13 @@ Aliases: `Expression`
 
 ### objectMatchPattern
 ```javascript
-t.objectMatchPattern(children, restIdentifier)
+t.objectMatchPattern(children, restProperty)
 ```
 
 See also `t.isObjectMatchPattern(node, opts)` and `t.assertObjectMatchPattern(node, opts)`.
 
- - `children` (required)
- - `restIdentifier` (required)
+ - `children`: `Array<MatchProperty>` (required)
+ - `restProperty` (required)
 
 ---
 
@@ -1557,18 +1581,6 @@ Aliases: `UserWhitespacable`, `Property`, `ObjectMember`
  - `computed`: `boolean` (default: `false`)
  - `shorthand`: `boolean` (default: `false`)
  - `decorators`: `Array<Decorator>` (default: `null`)
-
----
-
-### objectPropertyMatchPattern
-```javascript
-t.objectPropertyMatchPattern(key, value)
-```
-
-See also `t.isObjectPropertyMatchPattern(node, opts)` and `t.assertObjectPropertyMatchPattern(node, opts)`.
-
- - `key` (required)
- - `value` (required)
 
 ---
 

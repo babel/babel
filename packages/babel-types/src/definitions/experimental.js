@@ -152,37 +152,99 @@ defineType("MatchExpression", {
 });
 
 defineType("MatchClause", {
-  visitor: ["pattern", "body", "expression", "guard"],
+  visitor: ["pattern", "body", "guard", "initializer"],
   fields: {
-    // todo
+    pattern: {
+      validate: assertValueType(
+        "ObjectMatchPattern",
+        "ArrayMatchPattern",
+        "Identifier",
+        "NullLiteral",
+        "BooleanLiteral",
+        "NumericLiteral",
+        "StringLiteral",
+        "RegExpLiteral",
+      ),
+    },
+    body: {
+      validate: assertNodeType("BlockStatement", "Expression"),
+    },
   },
 });
 
 defineType("MatchGuard", {
   visitor: ["body"],
   fields: {
-    // todo
+    body: {
+      validate: assertNodeType("Expression"),
+    },
   },
 });
 
 defineType("ObjectMatchPattern", {
-  visitor: ["children", "restIdentifier"],
+  visitor: ["children", "restProperty"],
   fields: {
-    // todo
+    children: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("MatchProperty")),
+      ),
+    },
   },
 });
 
-defineType("ObjectPropertyMatchPattern", {
-  visitor: ["key", "value"],
+defineType("MatchRestProperty", {
+  visitor: ["pattern"],
   fields: {
-    // todo
+    pattern: {
+      validate: assertNodeType("Identifier"),
+    },
+  },
+});
+
+defineType("MatchProperty", {
+  visitor: ["key", "value", "computed"],
+  fields: {
+    computed: {
+      validate: assertValueType("boolean"),
+      default: false,
+    },
+    key: {
+      validate: (function() {
+        const normal = assertNodeType(
+          "Identifier",
+          "StringLiteral",
+          "NumericLiteral",
+        );
+        const computed = assertNodeType("Expression");
+
+        return function(node, key, val) {
+          const validator = node.computed ? computed : normal;
+          validator(node, key, val);
+        };
+      })(),
+    },
+    value: {
+      validate: assertValueType(
+        "ObjectMatchPattern",
+        "ArrayMatchPattern",
+        "Identifier",
+        "NullLiteral",
+        "BooleanLiteral",
+        "NumericLiteral",
+        "StringLiteral",
+        "RegExpLiteral",
+      ),
+    },
   },
 });
 
 defineType("ArrayMatchPattern", {
-  visitor: ["children", "restIdentifier"],
+  visitor: ["children", "restElement"],
   fields: {
-    // todo
+    children: {
+      validate: assertValueType("array"),
+    },
   },
 });
 

@@ -687,11 +687,14 @@ export function assertObjectMatchPattern(
 ): void {
   assert("ObjectMatchPattern", node, opts);
 }
-export function assertObjectPropertyMatchPattern(
+export function assertMatchRestProperty(
   node: Object,
   opts?: Object = {},
 ): void {
-  assert("ObjectPropertyMatchPattern", node, opts);
+  assert("MatchRestProperty", node, opts);
+}
+export function assertMatchProperty(node: Object, opts?: Object = {}): void {
+  assert("MatchProperty", node, opts);
 }
 export function assertArrayMatchPattern(
   node: Object,

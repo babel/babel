@@ -515,11 +515,11 @@ export function isMatchGuard(node: Object, opts?: Object): boolean {
 export function isObjectMatchPattern(node: Object, opts?: Object): boolean {
   return is("ObjectMatchPattern", node, opts);
 }
-export function isObjectPropertyMatchPattern(
-  node: Object,
-  opts?: Object,
-): boolean {
-  return is("ObjectPropertyMatchPattern", node, opts);
+export function isMatchRestProperty(node: Object, opts?: Object): boolean {
+  return is("MatchRestProperty", node, opts);
+}
+export function isMatchProperty(node: Object, opts?: Object): boolean {
+  return is("MatchProperty", node, opts);
 }
 export function isArrayMatchPattern(node: Object, opts?: Object): boolean {
   return is("ArrayMatchPattern", node, opts);
