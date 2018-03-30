@@ -1,1 +1,1 @@
-module.exports = require("core-js/library/fn/map");
+module.exports = require("core-js-pure/features/map");

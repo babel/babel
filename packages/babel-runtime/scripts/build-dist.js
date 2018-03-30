@@ -24,7 +24,7 @@ Object.keys(coreDefinitions.methods).forEach((key) => {
 paths.forEach(function(path) {
   writeFile(
     "core-js/" + path + ".js",
-    defaultify(`require("core-js/library/fn/${path}")`)
+    defaultify(`require("core-js-pure/features/${path}")`)
   );
 });
 

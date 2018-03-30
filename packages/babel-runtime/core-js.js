@@ -1,1 +1,1 @@
-module.exports = require("core-js/library");
+module.exports = require("core-js-pure");
