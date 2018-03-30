@@ -168,8 +168,8 @@ export type ObjectMatchPattern = NodeBase & {
   restIdentifier: IdentifierMatchPattern | null,
 };
 
-export type ObjectPropertyMatchPattern = NodeBase & {
-  type: "ObjectPropertyMatchPattern",
+export type MatchProperty = NodeBase & {
+  type: "MatchProperty",
   key: IdentifierMatchPattern,
   value: BasicMatchExpressionPattern | null,
 };

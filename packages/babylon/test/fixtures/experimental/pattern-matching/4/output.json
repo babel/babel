@@ -104,7 +104,7 @@
                 },
                 "children": [
                   {
-                    "type": "ObjectPropertyMatchPattern",
+                    "type": "MatchProperty",
                     "start": 19,
                     "end": 29,
                     "loc": {
@@ -156,7 +156,7 @@
                     }
                   },
                   {
-                    "type": "ObjectPropertyMatchPattern",
+                    "type": "MatchProperty",
                     "start": 31,
                     "end": 40,
                     "loc": {
@@ -253,7 +253,7 @@
                       },
                       "children": [
                         {
-                          "type": "ObjectPropertyMatchPattern",
+                          "type": "MatchProperty",
                           "start": 100,
                           "end": 104,
                           "loc": {
@@ -359,7 +359,7 @@
                 },
                 "children": [
                   {
-                    "type": "ObjectPropertyMatchPattern",
+                    "type": "MatchProperty",
                     "start": 127,
                     "end": 137,
                     "loc": {
@@ -411,7 +411,7 @@
                     }
                   },
                   {
-                    "type": "ObjectPropertyMatchPattern",
+                    "type": "MatchProperty",
                     "start": 139,
                     "end": 149,
                     "loc": {
@@ -508,7 +508,7 @@
                       },
                       "children": [
                         {
-                          "type": "ObjectPropertyMatchPattern",
+                          "type": "MatchProperty",
                           "start": 209,
                           "end": 213,
                           "loc": {

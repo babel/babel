@@ -104,7 +104,7 @@
                 },
                 "children": [
                   {
-                    "type": "ObjectPropertyMatchPattern",
+                    "type": "MatchProperty",
                     "start": 14,
                     "end": 15,
                     "loc": {

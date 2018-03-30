@@ -176,7 +176,7 @@
                 },
                 "children": [
                   {
-                    "type": "ObjectPropertyMatchPattern",
+                    "type": "MatchProperty",
                     "start": 165,
                     "end": 166,
                     "loc": {
