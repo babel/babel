@@ -78,6 +78,9 @@ function extractPatterns(patterns, type) {
                 thisPattern.code += " /* should error */";
             }
 
+            delete thisPattern.invalid;
+            delete thisPattern.valid;
+
             return thisPattern;
         });
     });

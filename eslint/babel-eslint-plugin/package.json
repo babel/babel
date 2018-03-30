@@ -27,11 +27,14 @@
   },
   "homepage": "https://github.com/babel/eslint-plugin-babel#readme",
   "peerDependencies": {
-    "eslint": ">=3.0.0"
+    "eslint": ">=4.0.0"
+  },
+  "dependencies": {
+    "eslint-rule-composer": "^0.1.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.1.0",
-    "eslint": "^3.0.0",
+    "eslint": "^4.19.1",
     "lodash.clonedeep": "^4.5.0",
     "mocha": "^3.0.0"
   }
