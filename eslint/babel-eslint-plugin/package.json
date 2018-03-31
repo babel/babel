@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-babel",
-  "version": "4.1.2",
+  "version": "5.0.0",
   "description": "an eslint rule plugin companion to babel-eslint",
   "main": "index.js",
   "scripts": {
