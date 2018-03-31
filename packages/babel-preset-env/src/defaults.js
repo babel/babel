@@ -1,6 +1,12 @@
 import type { Targets } from "./types";
 
-const defaultWebIncludes = ["web.timers", "web.immediate", "web.dom.iterable"];
+const defaultWebIncludes = [
+  "web.timers",
+  "web.immediate",
+  "web.dom-collections.for-each",
+  "web.dom-collections.iterator",
+];
+
 const defaultExcludesForLooseMode = ["transform-typeof-symbol"];
 
 export const getPlatformSpecificDefaultFor = (

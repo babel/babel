@@ -1,5 +1,6 @@
 export const defaultWebIncludes = [
   "web.timers",
   "web.immediate",
-  "web.dom.iterable",
+  "web.dom-collections.for-each",
+  "web.dom-collections.iterator",
 ];

@@ -119,7 +119,10 @@ export default function({ types: t }: { types: Object }): Plugin {
         return;
       }
 
-      addImport(path, "web.dom.iterable", this.builtIns);
+      addImport(path, "es.array.iterator", this.builtIns);
+      addImport(path, "es.string.iterator", this.builtIns);
+      addImport(path, "es.typed-array.iterator", this.builtIns);
+      addImport(path, "web.dom-collections.iterator", this.builtIns);
     },
 
     // Symbol.iterator in arr
@@ -127,14 +130,20 @@ export default function({ types: t }: { types: Object }): Plugin {
       if (path.node.operator !== "in") return;
       if (!path.get("left").matchesPattern("Symbol.iterator")) return;
 
-      addImport(path, "web.dom.iterable", this.builtIns);
+      addImport(path, "es.array.iterator", this.builtIns);
+      addImport(path, "es.string.iterator", this.builtIns);
+      addImport(path, "es.typed-array.iterator", this.builtIns);
+      addImport(path, "web.dom-collections.iterator", this.builtIns);
     },
 
     // yield*
     YieldExpression(path) {
       if (!path.node.delegate) return;
 
-      addImport(path, "web.dom.iterable", this.builtIns);
+      addImport(path, "es.array.iterator", this.builtIns);
+      addImport(path, "es.string.iterator", this.builtIns);
+      addImport(path, "es.typed-array.iterator", this.builtIns);
+      addImport(path, "web.dom-collections.iterator", this.builtIns);
     },
 
     // Array.from
