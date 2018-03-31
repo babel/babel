@@ -6,7 +6,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-runtime",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "dependencies": {
-    "core-js-pure": "3.0.0-alpha.2",
+    "core-js-pure": "3.0.0-alpha.3",
     "regenerator-runtime": "^0.11.1"
   },
   "devDependencies": {
