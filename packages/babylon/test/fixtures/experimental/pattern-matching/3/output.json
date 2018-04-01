@@ -852,7 +852,7 @@
                       },
                       "children": [],
                       "hasRest": true,
-                      "restIdentifier": {
+                      "restElement": {
                         "type": "Identifier",
                         "start": 143,
                         "end": 146,

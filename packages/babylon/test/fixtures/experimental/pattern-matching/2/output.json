@@ -145,7 +145,7 @@
                   }
                 ],
                 "hasRest": false,
-                "restIdentifier": null
+                "restElement": null
               },
               "body": {
                 "type": "NumericLiteral",

@@ -104,7 +104,7 @@
                 },
                 "children": [],
                 "hasRest": false,
-                "restIdentifier": null
+                "restElement": null
               },
               "body": {
                 "type": "NumericLiteral",
@@ -199,7 +199,7 @@
                   }
                 ],
                 "hasRest": false,
-                "restIdentifier": null
+                "restElement": null
               },
               "body": {
                 "type": "NumericLiteral",
@@ -334,7 +334,7 @@
                   }
                 ],
                 "hasRest": false,
-                "restIdentifier": null
+                "restElement": null
               },
               "body": {
                 "type": "NumericLiteral",
@@ -489,7 +489,7 @@
                   }
                 ],
                 "hasRest": false,
-                "restIdentifier": null
+                "restElement": null
               },
               "body": {
                 "type": "NumericLiteral",

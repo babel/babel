@@ -539,9 +539,9 @@ export default class ExpressionParser extends LValParser {
     let node;
 
     if (this.match(tt.braceL)) {
-      return this.parseObjectPattern();
+      return this.parseObjectMatchPattern();
     } else if (this.match(tt.bracketL)) {
-      return this.parseArrayPattern();
+      return this.parseArrayMatchPattern();
     } else if (this.match(tt.num)) {
       return this.parseLiteral(this.state.value, "NumericLiteral");
     } else if (this.match(tt.bigint)) {
@@ -564,7 +564,7 @@ export default class ExpressionParser extends LValParser {
   }
 
   // '{' ( propertyPattern ',')+ propertyPattern? '}'
-  parseObjectPattern(): N.ObjectMatchPattern {
+  parseObjectMatchPattern(): N.ObjectMatchPattern {
     const node = this.startNode();
     if (!this.eat(tt.braceL)) {
       this.unexpected(this.state.pos, tt.braceL);
@@ -617,8 +617,11 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "MatchProperty");
   }
 
-  // '[' ( pattern ',' )+ pattern? ']'
-  parseArrayPattern(): N.ArrayMatchPattern {
+  // `[` `]`
+  // `[` Elision[opt] MatchRestElement `]`
+  // `[` MatchElementList `]`
+  // `[` MatchElementList `,` Elision[opts] MatchRestElement[opt] `]`
+  parseArrayMatchPattern(): N.ArrayMatchPattern {
     const node = this.startNode();
     if (!this.eat(tt.bracketL)) {
       this.unexpected(this.state.pos, tt.braceL);
@@ -626,17 +629,22 @@ export default class ExpressionParser extends LValParser {
 
     node.children = [];
     node.hasRest = false;
-    node.restIdentifier = null;
+    node.restElement = null;
 
     while (!this.match(tt.bracketR)) {
       if (this.match(tt.ellipsis)) {
         this.next();
         node.hasRest = true;
-        if (this.match(tt.name)) {
-          node.restIdentifier = this.parseIdentifier();
-        }
-        if (!this.eat(tt.bracketR)) {
-          this.unexpected(this.state.pos, tt.braceR);
+        if (this.match(tt.bracketR)) {
+          this.next();
+        } else {
+          node.restElement = this.parseMatchPattern();
+          if (node.restElement === null) {
+            this.unexpected(this.state.pos, tt.bracketR);
+          }
+          if (!this.eat(tt.bracketR)) {
+            this.unexpected(this.state.pos, tt.bracketR);
+          }
         }
         return this.finishNode(node, "ArrayMatchPattern");
       } else {

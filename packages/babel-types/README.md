@@ -1306,7 +1306,7 @@ t.matchClause(pattern, body, guard, initializer)
 
 See also `t.isMatchClause(node, opts)` and `t.assertMatchClause(node, opts)`.
 
- - `pattern`: `ObjectMatchPattern` (required)
+ - `pattern`: `ObjectMatchPattern | ArrayMatchPattern | Identifier | NullLiteral | BooleanLiteral | NumericLiteral | StringLiteral | RegExpLiteral` (required)
  - `body`: `BlockStatement | Expression` (required)
  - `guard` (required)
  - `initializer` (required)
@@ -1346,7 +1346,7 @@ t.matchProperty(key, value, computed)
 See also `t.isMatchProperty(node, opts)` and `t.assertMatchProperty(node, opts)`.
 
  - `key`: `any` (required)
- - `value`: `ObjectMatchPattern` (required)
+ - `value`: `ObjectMatchPattern | ArrayMatchPattern | Identifier | NullLiteral | BooleanLiteral | NumericLiteral | StringLiteral | RegExpLiteral` (required)
  - `computed`: `boolean` (default: `false`)
 
 ---

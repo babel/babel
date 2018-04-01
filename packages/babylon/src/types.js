@@ -160,11 +160,11 @@ export type BasicMatchExpressionPattern =
   | LiteralMatchPattern
   | IdentifierMatchPattern;
 
-export type MatchExpressionPattern = BasicMatchExpressionPattern | "else";
+export type MatchExpressionPattern = BasicMatchExpressionPattern;
 
 export type ObjectMatchPattern = NodeBase & {
   type: "ObjectMatchPattern",
-  children: $ReadOnlyArray<ObjectPropertyMatchPattern>,
+  children: $ReadOnlyArray<MatchProperty>,
   restIdentifier: IdentifierMatchPattern | null,
 };
 
