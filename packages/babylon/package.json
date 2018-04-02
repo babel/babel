@@ -1,6 +1,6 @@
 {
   "name": "babylon",
-  "version": "7.0.0-beta.42",
+  "version": "7.0.0-beta.43",
   "description": "A JavaScript parser",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -23,7 +23,7 @@
     "node": ">=4.2.0"
   },
   "devDependencies": {
-    "@babel/helper-fixtures": "7.0.0-beta.42",
+    "@babel/helper-fixtures": "7.0.0-beta.43",
     "charcodes": "0.1.0",
     "unicode-10.0.0": "^0.7.4"
   },

@@ -1,6 +1,6 @@
 {
   "lerna": "2.0.0-rc.4",
-  "version": "7.0.0-beta.42",
+  "version": "7.0.0-beta.43",
   "changelog": {
     "repo": "babel/babel",
     "labels": {
@@ -16,10 +16,19 @@
   "cacheDir": ".changelog",
   "commands": {
     "publish": {
-      "ignore": ["*.md", "test/**", "codemods/**"]
+      "ignore": [
+        "*.md",
+        "test/**",
+        "codemods/**"
+      ]
     }
   },
-  "packages": ["packages/*", "codemods/*"],
+  "packages": [
+    "packages/*",
+    "codemods/*"
+  ],
   "npmClient": "yarn",
-  "npmClientArgs": ["--no-lockfile"]
+  "npmClientArgs": [
+    "--no-lockfile"
+  ]
 }
