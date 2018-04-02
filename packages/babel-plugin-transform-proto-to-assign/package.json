@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-proto-to-assign",
-  "version": "7.0.0-beta.43",
+  "version": "7.0.0-beta.44",
   "description": "Babel plugin for turning __proto__ into a shallow property clone",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-proto-to-assign",
   "license": "MIT",
@@ -9,13 +9,13 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.43"
+    "@babel/helper-plugin-utils": "7.0.0-beta.44"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.43"
+    "@babel/core": "7.0.0-beta.44"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.43",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.43"
+    "@babel/core": "7.0.0-beta.44",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.44"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-typescript",
-  "version": "7.0.0-beta.43",
+  "version": "7.0.0-beta.44",
   "description": "Allow parsing of TypeScript syntax",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-typescript",
   "license": "MIT",
@@ -10,12 +10,12 @@
     "typescript"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.43"
+    "@babel/helper-plugin-utils": "7.0.0-beta.44"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.43"
+    "@babel/core": "7.0.0-beta.44"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.43"
+    "@babel/core": "7.0.0-beta.44"
   }
 }
