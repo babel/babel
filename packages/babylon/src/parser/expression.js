@@ -463,12 +463,12 @@ export default class ExpressionParser extends LValParser {
     const pattern = this.parseMatchPattern();
 
     if (this.match(tt._if)) {
-      this.parseMatchGuard(node);
+      node.guard = this.parseMatchGuard();
     }
 
     if (this.match(tt.eq)) {
       this.next();
-      node.initializer = this.parseMaybeAssign();
+      node.initializer = this.parseMaybeAssign(false, node.loc.start);
     }
 
     if (!this.eat(tt.arrow)) {
@@ -481,7 +481,7 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "MatchClause");
   }
 
-  parseMatchGuard(clause: N.MatchClause): N.MatchGuard {
+  parseMatchGuard(): N.MatchGuard {
     const node = this.startNode();
 
     if (!this.eat(tt._if)) {
@@ -498,13 +498,10 @@ export default class ExpressionParser extends LValParser {
       this.unexpected(this.state.pos, tt.parenR);
     }
 
-    clause.guard = this.finishNode(node, "MatchGuard");
+    return this.finishNode(node, "MatchGuard");
   }
 
-  parseClauseBody(
-    node: N.MatchExpressionClause,
-    allowExpression: ?boolean,
-  ): void {
+  parseClauseBody(node: N.MatchClause, allowExpression: ?boolean): void {
     const isExpression = allowExpression && !this.match(tt.braceL);
 
     const oldInParameters = this.state.inParameters;
@@ -605,8 +602,12 @@ export default class ExpressionParser extends LValParser {
 
     node.key = this.parseIdentifier();
     node.value = null;
+    node.initializer = null;
 
-    if (this.match(tt.colon)) {
+    if (this.match(tt.eq)) {
+      this.next();
+      node.initializer = this.parseMaybeAssign(false, node.loc.start);
+    } else if (this.match(tt.colon)) {
       this.next();
       node.value = this.parseMatchPattern();
       if (node.value === null) {

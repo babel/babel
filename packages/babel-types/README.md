@@ -1340,13 +1340,14 @@ See also `t.isMatchGuard(node, opts)` and `t.assertMatchGuard(node, opts)`.
 
 ### matchProperty
 ```javascript
-t.matchProperty(key, value, computed)
+t.matchProperty(key, value, initializer, computed)
 ```
 
 See also `t.isMatchProperty(node, opts)` and `t.assertMatchProperty(node, opts)`.
 
  - `key`: `any` (required)
  - `value`: `ObjectMatchPattern | ArrayMatchPattern | Identifier | NullLiteral | BooleanLiteral | NumericLiteral | StringLiteral | RegExpLiteral` (required)
+ - `initializer` (required)
  - `computed`: `boolean` (default: `false`)
 
 ---

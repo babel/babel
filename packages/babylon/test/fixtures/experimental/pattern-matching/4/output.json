@@ -153,7 +153,8 @@
                         "raw": "'If'"
                       },
                       "value": "If"
-                    }
+                    },
+                    "initializer": null
                   },
                   {
                     "type": "MatchProperty",
@@ -186,7 +187,8 @@
                       },
                       "name": "alternate"
                     },
-                    "value": null
+                    "value": null,
+                    "initializer": null
                   }
                 ],
                 "restIdentifier": null
@@ -283,7 +285,8 @@
                             },
                             "name": "name"
                           },
-                          "value": null
+                          "value": null,
+                          "initializer": null
                         }
                       ],
                       "restIdentifier": null
@@ -408,7 +411,8 @@
                         "raw": "'If'"
                       },
                       "value": "If"
-                    }
+                    },
+                    "initializer": null
                   },
                   {
                     "type": "MatchProperty",
@@ -441,7 +445,8 @@
                       },
                       "name": "consequent"
                     },
-                    "value": null
+                    "value": null,
+                    "initializer": null
                   }
                 ],
                 "restIdentifier": null
@@ -538,7 +543,8 @@
                             },
                             "name": "name"
                           },
-                          "value": null
+                          "value": null,
+                          "initializer": null
                         }
                       ],
                       "restIdentifier": null

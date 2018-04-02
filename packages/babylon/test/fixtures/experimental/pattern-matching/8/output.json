@@ -206,7 +206,8 @@
                       },
                       "name": "x"
                     },
-                    "value": null
+                    "value": null,
+                    "initializer": null
                   }
                 ],
                 "restIdentifier": null

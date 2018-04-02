@@ -172,6 +172,7 @@ export type MatchProperty = NodeBase & {
   type: "MatchProperty",
   key: IdentifierMatchPattern,
   value: BasicMatchExpressionPattern | null,
+  initializer: BasicMatchExpressionPattern | null,
 };
 
 export type ArrayMatchPattern = NodeBase & {
