@@ -2,8 +2,6 @@ MAKEFLAGS = -j1
 FLOW_COMMIT = 622bbc4f07acb77eb1109830c70815f827401d90
 TEST262_COMMIT = 52f70e2f637731aae92a9c9a2d831310c3ab2e1e
 
-export BABEL_ENV = test
-
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
 
@@ -69,7 +67,7 @@ test-clean:
 		$(call clean-source-test, $(source)))
 
 test-only:
-	./scripts/test.sh
+	BABEL_ENV=test ./scripts/test.sh
 	make test-clean
 
 test: lint test-only
@@ -79,7 +77,7 @@ test-ci: bootstrap test-only
 test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
 	BABEL_COVERAGE=true BABEL_ENV=test make bootstrap
-	TEST_TYPE=cov ./scripts/test-cov.sh
+	BABEL_ENV=test TEST_TYPE=cov ./scripts/test-cov.sh
 	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
 bootstrap-flow:
