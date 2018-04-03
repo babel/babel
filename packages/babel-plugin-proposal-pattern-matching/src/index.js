@@ -31,7 +31,7 @@ export default function({ types: t }) {
         generatePattyCakeArgument(child),
       );
 
-      if (pattern.restElement) {
+      if (pattern.hasRest) {
         children.push(
           t.memberExpression(t.identifier("$"), t.identifier("rest")),
         );

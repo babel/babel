@@ -11,7 +11,7 @@ assert.equal(match(test, {
   c: [[_, _2], [d, _3]]
 }) => d, bbb, bbb => "foo"), 3);
 assert.equal(match(test, {
-  a: [1, it]
+  a: [1, it, $.rest]
 }, ({
   a: [_4, it]
 }) => it + 100, bbb, bbb => "foo"), 102);
