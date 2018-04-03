@@ -30,6 +30,9 @@ Using plugins:
   transform-regenerator { "android":"4" }
   transform-exponentiation-operator { "android":"4" }
   transform-async-to-generator { "android":"4" }
+  proposal-async-generator-functions { "android":"4" }
+  proposal-object-rest-spread { "android":"4" }
+  proposal-unicode-property-regex { "android":"4" }
   transform-dotall-regex { "android":"4" }
 
 Using polyfills with `entry` option:
@@ -130,6 +133,8 @@ Using polyfills with `entry` option:
   es7.object.get-own-property-descriptors { "android":"4" }
   es7.string.pad-start { "android":"4" }
   es7.string.pad-end { "android":"4" }
+  es7.promise.finally { "android":"4" }
+  es7.symbol.async-iterator { "android":"4" }
   web.timers { "android":"4" }
   web.immediate { "android":"4" }
   web.dom.iterable { "android":"4" }
