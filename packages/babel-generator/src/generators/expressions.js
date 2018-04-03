@@ -48,12 +48,19 @@ export function MatchExpression(node: Object) {
   this.token("}");
 }
 
-export function MatchExpressionClause(node: Object) {
+export function MatchClause(node: Object) {
   this.print(node.pattern, node);
-  this.token(":");
+  this.token("=>");
   this.space();
   this.print(node.body, node);
   this.newline();
+}
+
+export function MatchGuard(node: Object) {
+  this.workd("if");
+  this.token("(");
+  this.print(node.body, node);
+  this.token(")");
 }
 
 export function ObjectMatchPattern(node: Object) {
@@ -66,7 +73,7 @@ export function ObjectMatchPattern(node: Object) {
   this.token("}");
 }
 
-export function ObjectPropertyMatchPattern(node: Object) {
+export function MatchProperty(node: Object) {
   this.print(node.key, node);
   this.token(":");
   this.space();

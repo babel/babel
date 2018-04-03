@@ -1352,17 +1352,6 @@ See also `t.isMatchProperty(node, opts)` and `t.assertMatchProperty(node, opts)`
 
 ---
 
-### matchRestProperty
-```javascript
-t.matchRestProperty(pattern)
-```
-
-See also `t.isMatchRestProperty(node, opts)` and `t.assertMatchRestProperty(node, opts)`.
-
- - `pattern`: `Identifier` (required)
-
----
-
 ### memberExpression
 ```javascript
 t.memberExpression(object, property, computed, optional)

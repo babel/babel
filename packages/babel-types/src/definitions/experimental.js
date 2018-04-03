@@ -193,15 +193,6 @@ defineType("ObjectMatchPattern", {
   },
 });
 
-defineType("MatchRestProperty", {
-  visitor: ["pattern"],
-  fields: {
-    pattern: {
-      validate: assertNodeType("Identifier"),
-    },
-  },
-});
-
 defineType("MatchProperty", {
   visitor: ["key", "value", "initializer", "computed"],
   fields: {

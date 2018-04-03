@@ -7,11 +7,11 @@ var test = {
 }
 
 assert.equal(match(test) {
-  {c:[[1,2], [d, 4]]}: d,
-  else: "foo"
+  {c:[[1,2], [d, 4]]} => d,
+  bbb => "foo"
 }, 3);
 
 assert.equal(match(test) {
-  {a: [1, it, ...]}: it + 100,
-  else: "foo"
+  {a: [1, it, ...]} => it + 100,
+  bbb => "foo"
 }, 102);

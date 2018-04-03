@@ -9,11 +9,9 @@ var test = {
 };
 
 assert.equal(match(test) {
-  {a, ...rest}: rest.b,
-  else: "foo"
+  {a, ...rest} => rest.b,
 }, 2);
 
 assert.equal(match(test) {
-  {c: {cc, ...rest}}: cc + rest.ccc,
-  else: "foo"
+  {c: {cc, ...rest}} => cc + rest.ccc,
 }, "hello world");

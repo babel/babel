@@ -574,7 +574,7 @@ export default class ExpressionParser extends LValParser {
       if (this.match(tt.ellipsis)) {
         this.next();
         const id = this.parseIdentifier();
-        node.restIdentifier = id;
+        node.restProperty = id;
 
         if (!this.match(tt.braceR)) {
           this.unexpected(this.state.pos, tt.braceR);

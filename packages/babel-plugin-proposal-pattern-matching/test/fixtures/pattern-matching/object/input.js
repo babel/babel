@@ -5,16 +5,15 @@ var test = {
 };
 
 assert.equal(match(test) {
-  {a}: "bar",
-  else: "foo"
+  {a} => "bar",
+  {b: 1} => "foo"
 }, "bar");
 
 assert.equal(match(test) {
-  {a}: a + 100,
-  else: "foo"
+  {a} => a + 100,
+  {d} => "foo"
 }, 101);
 
 assert.equal(match(test) {
-  {...rest}: rest.a + rest.b + rest.c,
-  else: "foo"
+  {...rest} => rest.a + rest.b + rest.c,
 }, 6);
