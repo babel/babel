@@ -22,7 +22,7 @@ export default declare((api, options) => {
     },
     ReferencedIdentifier(path) {
       if (this.scope.hasOwnBinding(path.node.name)) {
-        this.collision = true;
+        this.scope.rename(path.node.name);
         path.skip();
       }
     },
@@ -115,7 +115,7 @@ export default declare((api, options) => {
 
         const computedNodes = [];
         const staticNodes = [];
-        let instanceBody = [];
+        const instanceBody = [];
 
         for (const computedPath of computedPaths) {
           const computedNode = computedPath.node;
@@ -175,46 +175,8 @@ export default declare((api, options) => {
             [constructor] = body.unshiftContainer("body", newConstructor);
           }
 
-          const collisionState = {
-            collision: false,
-            scope: constructor.scope,
-          };
-
-          for (const prop of props) {
-            prop.traverse(referenceVisitor, collisionState);
-            if (collisionState.collision) break;
-          }
-
-          if (collisionState.collision) {
-            const initialisePropsRef = path.scope.generateUidIdentifier(
-              "initialiseProps",
-            );
-
-            afterNodes.push(
-              t.variableDeclaration("var", [
-                t.variableDeclarator(
-                  initialisePropsRef,
-                  t.functionExpression(
-                    null,
-                    [],
-                    t.blockStatement(instanceBody),
-                  ),
-                ),
-              ]),
-            );
-
-            instanceBody = [
-              t.expressionStatement(
-                t.callExpression(
-                  t.memberExpression(
-                    t.cloneNode(initialisePropsRef),
-                    t.identifier("call"),
-                  ),
-                  [t.thisExpression()],
-                ),
-              ),
-            ];
-          }
+          const state = { scope: constructor.scope };
+          for (const prop of props) prop.traverse(referenceVisitor, state);
 
           //
 
