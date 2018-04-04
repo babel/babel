@@ -250,9 +250,13 @@ describe("generation", function() {
     });
 
     expect(Array.isArray(generated.rawMappings)).toBe(true);
+
+    expect(
+      Object.getOwnPropertyDescriptor(generated, "map"),
+    ).not.toHaveProperty("value");
+
     expect(generated).toHaveProperty("map");
     expect(typeof generated.map).toBe("object");
-    expect(generated.map).not.toHaveProperty("value");
   });
 });
 
