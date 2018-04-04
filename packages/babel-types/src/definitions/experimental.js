@@ -125,6 +125,7 @@ defineType("ClassPrivateProperty", {
     },
     value: {
       validate: assertNodeType("Expression"),
+      optional: true,
     },
   },
 });
