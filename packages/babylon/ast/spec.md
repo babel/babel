@@ -1212,7 +1212,7 @@ interface OptFunctionDeclaration <: FunctionDeclaration {
   id: Identifier | null;
 }
 
-interface OptClasDeclaration <: ClassDeclaration {
+interface OptClassDeclaration <: ClassDeclaration {
   id: Identifier | null;
 }
 
