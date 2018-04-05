@@ -107,6 +107,24 @@ export default function({ types: t }: { types: Object }): Plugin {
       addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
     },
 
+    // for-of loop
+    ForOfStatement(path) {
+      addImport(path, "es.array.iterator", this.builtIns);
+      addImport(path, "es.string.iterator", this.builtIns);
+      addImport(path, "web.dom-collections.iterator", this.builtIns);
+    },
+
+    // spread
+    ArrayExpression(path) {
+      if (
+        path.node.elements.some(element => element.type === "SpreadElement")
+      ) {
+        addImport(path, "es.array.iterator", this.builtIns);
+        addImport(path, "es.string.iterator", this.builtIns);
+        addImport(path, "web.dom-collections.iterator", this.builtIns);
+      }
+    },
+
     // yield*
     YieldExpression(path) {
       if (!path.node.delegate) return;
