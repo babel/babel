@@ -1,6 +1,6 @@
-class C {}
+"use strict";
 
-;
+class C {}
 
 class A extends C {
   constructor() {
@@ -27,7 +27,6 @@ class A extends C {
 
 }
 
-;
 new A(); // ensure superClass is still transformed
 
 class Obj {
@@ -36,8 +35,6 @@ class Obj {
   }
 
 }
-
-;
 
 class O extends Obj {
   constructor() {

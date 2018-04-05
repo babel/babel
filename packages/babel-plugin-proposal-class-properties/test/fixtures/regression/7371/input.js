@@ -1,5 +1,6 @@
+"use strict";
 class C {
-};
+}
 
 class A extends C {
   field = 1;
@@ -19,7 +20,7 @@ class A extends C {
 
     new B();
   }
-};
+}
 
 new A();
 
@@ -28,7 +29,7 @@ class Obj {
   constructor() {
     return {};
   }
-};
+}
 class O extends Obj {
   field = 1;
 
