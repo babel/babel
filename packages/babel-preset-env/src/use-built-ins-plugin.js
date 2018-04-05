@@ -107,33 +107,6 @@ export default function({ types: t }: { types: Object }): Plugin {
       addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
     },
 
-    // arr[Symbol.iterator]()
-    CallExpression(path) {
-      // we can't compile this
-      if (path.node.arguments.length) return;
-
-      const callee = path.node.callee;
-      if (!t.isMemberExpression(callee)) return;
-      if (!callee.computed) return;
-      if (!path.get("callee.property").matchesPattern("Symbol.iterator")) {
-        return;
-      }
-
-      addImport(path, "es.array.iterator", this.builtIns);
-      addImport(path, "es.string.iterator", this.builtIns);
-      addImport(path, "web.dom-collections.iterator", this.builtIns);
-    },
-
-    // Symbol.iterator in arr
-    BinaryExpression(path) {
-      if (path.node.operator !== "in") return;
-      if (!path.get("left").matchesPattern("Symbol.iterator")) return;
-
-      addImport(path, "es.array.iterator", this.builtIns);
-      addImport(path, "es.string.iterator", this.builtIns);
-      addImport(path, "web.dom-collections.iterator", this.builtIns);
-    },
-
     // yield*
     YieldExpression(path) {
       if (!path.node.delegate) return;
