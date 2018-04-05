@@ -22,7 +22,7 @@ function (_Bar) {
 
     _classCallCheck(this, Foo);
 
-    _get(Foo.prototype.__proto__ || Object.getPrototypeOf(Foo.prototype), "foo", _assertThisInitialized(_this)).call(_this, _this = _possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this)));
+    _get(_getPrototypeOf(Foo.prototype), "foo", _assertThisInitialized(_this)).call(_this, _this = _possibleConstructorReturn(this, _getPrototypeOf(Foo).call(this)));
 
     return _this;
   }

@@ -349,20 +349,9 @@ export default function transformClass(
       call = t.logicalExpression("||", bareSuperNode, t.thisExpression());
     } else {
       bareSuperNode = optimiseCall(
-        t.logicalExpression(
-          "||",
-          t.memberExpression(
-            t.cloneNode(classState.classRef),
-            t.identifier("__proto__"),
-          ),
-          t.callExpression(
-            t.memberExpression(
-              t.identifier("Object"),
-              t.identifier("getPrototypeOf"),
-            ),
-            [t.cloneNode(classState.classRef)],
-          ),
-        ),
+        t.callExpression(classState.file.addHelper("getPrototypeOf"), [
+          t.cloneNode(classState.classRef),
+        ]),
         t.thisExpression(),
         bareSuperNode.arguments,
       );

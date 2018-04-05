@@ -27,7 +27,7 @@ var Test = function Test() {
     _inherits(Other, _Test);
 
     function Other() {
-      var _ref;
+      var _getPrototypeOf2;
 
       var _temp, _this;
 
@@ -37,12 +37,12 @@ var Test = function Test() {
         args[_key] = arguments[_key];
       }
 
-      return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_ref = Other.__proto__ || Object.getPrototypeOf(Other)).call.apply(_ref, [this].concat(args))), Object.defineProperty(_assertThisInitialized(_this), "a", {
+      return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Other)).call.apply(_getPrototypeOf2, [this].concat(args))), Object.defineProperty(_assertThisInitialized(_this), "a", {
         configurable: true,
         enumerable: true,
         writable: true,
         value: function value() {
-          return _get(Other.prototype.__proto__ || Object.getPrototypeOf(Other.prototype), "test", _assertThisInitialized(_this));
+          return _get(_getPrototypeOf(Other.prototype), "test", _assertThisInitialized(_this));
         }
       }), _temp));
     }
@@ -55,7 +55,7 @@ var Test = function Test() {
     enumerable: true,
     writable: true,
     value: function value() {
-      return _get(Test.prototype.__proto__ || Object.getPrototypeOf(Test.prototype), "test", _assertThisInitialized(_this2));
+      return _get(_getPrototypeOf(Test.prototype), "test", _assertThisInitialized(_this2));
     }
   });
 };

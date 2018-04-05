@@ -8,7 +8,7 @@ function withContext(ComposedComponent) {
 
     function WithContext() {
       babelHelpers.classCallCheck(this, WithContext);
-      return babelHelpers.possibleConstructorReturn(this, (WithContext.__proto__ || Object.getPrototypeOf(WithContext)).apply(this, arguments));
+      return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(WithContext).apply(this, arguments));
     }
 
     return WithContext;
