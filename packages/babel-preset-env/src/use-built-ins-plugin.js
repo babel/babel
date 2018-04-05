@@ -121,7 +121,6 @@ export default function({ types: t }: { types: Object }): Plugin {
 
       addImport(path, "es.array.iterator", this.builtIns);
       addImport(path, "es.string.iterator", this.builtIns);
-      addImport(path, "es.typed-array.iterator", this.builtIns);
       addImport(path, "web.dom-collections.iterator", this.builtIns);
     },
 
@@ -132,7 +131,6 @@ export default function({ types: t }: { types: Object }): Plugin {
 
       addImport(path, "es.array.iterator", this.builtIns);
       addImport(path, "es.string.iterator", this.builtIns);
-      addImport(path, "es.typed-array.iterator", this.builtIns);
       addImport(path, "web.dom-collections.iterator", this.builtIns);
     },
 
@@ -142,7 +140,6 @@ export default function({ types: t }: { types: Object }): Plugin {
 
       addImport(path, "es.array.iterator", this.builtIns);
       addImport(path, "es.string.iterator", this.builtIns);
-      addImport(path, "es.typed-array.iterator", this.builtIns);
       addImport(path, "web.dom-collections.iterator", this.builtIns);
     },
 

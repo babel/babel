@@ -1,3 +1,46 @@
+const ArrayNatureIterators = [
+  "es.array.iterator",
+  "web.dom-collections.iterator",
+];
+
+const CommonIterators = ["es.string.iterator"].concat(ArrayNatureIterators);
+
+const CollectionsDependencies = ["es.object.to-string"].concat(CommonIterators);
+
+const TypedArrayDependencies = [
+  "es.array.iterator",
+  "es.array-buffer.slice",
+  "es.object.to-string",
+  "es.typed-array.copy-within",
+  "es.typed-array.every",
+  "es.typed-array.fill",
+  "es.typed-array.filter",
+  "es.typed-array.find",
+  "es.typed-array.find-index",
+  "es.typed-array.for-each",
+  "es.typed-array.includes",
+  "es.typed-array.index-of",
+  "es.typed-array.iterator",
+  "es.typed-array.join",
+  "es.typed-array.last-index-of",
+  "es.typed-array.map",
+  "es.typed-array.reduce",
+  "es.typed-array.reduce-right",
+  "es.typed-array.reverse",
+  "es.typed-array.set",
+  "es.typed-array.slice",
+  "es.typed-array.some",
+  "es.typed-array.sort",
+  "es.typed-array.subarray",
+  "es.typed-array.to-locale-string",
+  "es.typed-array.to-string",
+];
+
+const TypedArrayStaticMethods = {
+  from: "es.typed-array.from",
+  of: "es.typed-array.of",
+};
+
 // TODO: this is the opposite of built-in-features so maybe generate one from the other?
 export const definitions = {
   builtins: {
@@ -5,86 +48,31 @@ export const definitions = {
     RegExp: ["es.regexp.constructor"],
     Symbol: ["es.object.to-string", "es.symbol"],
     Promise: ["es.object.to-string", "es.promise"],
-    Map: [
+    Map: ["es.map"].concat(CollectionsDependencies),
+    Set: ["es.set"].concat(CollectionsDependencies),
+    WeakMap: ["es.weak-map"].concat(CollectionsDependencies),
+    WeakSet: ["es.weak-set"].concat(CollectionsDependencies),
+    ArrayBuffer: [
       "es.object.to-string",
-      "es.map",
-      "es.array.iterator",
-      "web.dom-collections.iterator",
+      "es.array-buffer.constructor",
+      "es.array-buffer.slice",
     ],
-    Set: [
-      "es.object.to-string",
-      "es.set",
-      "es.array.iterator",
-      "web.dom-collections.iterator",
-    ],
-    WeakMap: [
-      "es.object.to-string",
-      "es.weak-map",
-      "es.array.iterator",
-      "web.dom-collections.iterator",
-    ],
-    WeakSet: [
-      "es.object.to-string",
-      "es.weak-set",
-      "es.array.iterator",
-      "web.dom-collections.iterator",
-    ],
-    ArrayBuffer: ["es.object.to-string", "es.array-buffer.constructor"],
-    DataView: ["es.object.to-string", "es.data-view"],
-    Int8Array: [
-      "es.object.to-string",
-      "es.typed-array.int8-array",
-      "es.array.iterator",
-      "web.dom-collections.iterator",
-    ],
-    Uint8Array: [
-      "es.object.to-string",
-      "es.typed-array.uint8-array",
-      "es.array.iterator",
-      "es.array.iterator",
-      "web.dom-collections.iterator",
-    ],
-    Uint8ClampedArray: [
-      "es.object.to-string",
-      "es.typed-array.uint8-clamped-array",
-      "es.array.iterator",
-      "web.dom-collections.iterator",
-    ],
-    Int16Array: [
-      "es.object.to-string",
-      "es.typed-array.int16-array",
-      "es.array.iterator",
-      "web.dom-collections.iterator",
-    ],
-    Uint16Array: [
-      "es.object.to-string",
-      "es.typed-array.uint16-array",
-      "es.array.iterator",
-      "web.dom-collections.iterator",
-    ],
-    Int32Array: [
-      "es.object.to-string",
-      "es.typed-array.int32-array",
-      "es.array.iterator",
-      "web.dom-collections.iterator",
-    ],
-    Uint32Array: [
-      "es.object.to-string",
-      "es.typed-array.uint32-array",
-      "es.array.iterator",
-      "web.dom-collections.iterator",
-    ],
-    Float32Array: [
-      "es.object.to-string",
-      "es.typed-array.float32-array",
-      "web.dom-collections.iterator",
-    ],
-    Float64Array: [
-      "es.object.to-string",
-      "es.typed-array.float64-array",
-      "es.array.iterator",
-      "web.dom-collections.iterator",
-    ],
+    DataView: ["es.object.to-string", "es.data-view", "es.array-buffer.slice"],
+    Int8Array: ["es.typed-array.int8-array"].concat(TypedArrayDependencies),
+    Uint8Array: ["es.typed-array.uint8-array"].concat(TypedArrayDependencies),
+    Uint8ClampedArray: ["es.typed-array.uint8-clamped-array"].concat(
+      TypedArrayDependencies,
+    ),
+    Int16Array: ["es.typed-array.int16-array"].concat(TypedArrayDependencies),
+    Uint16Array: ["es.typed-array.uint16-array"].concat(TypedArrayDependencies),
+    Int32Array: ["es.typed-array.int32-array"].concat(TypedArrayDependencies),
+    Uint32Array: ["es.typed-array.uint32-array"].concat(TypedArrayDependencies),
+    Float32Array: ["es.typed-array.float32-array"].concat(
+      TypedArrayDependencies,
+    ),
+    Float64Array: ["es.typed-array.float64-array"].concat(
+      TypedArrayDependencies,
+    ),
   },
 
   instanceMethods: {
@@ -95,76 +83,54 @@ export const definitions = {
     bold: ["es.string.bold"],
     codePointAt: ["es.string.code-point-at"],
     concat: ["es.array.concat"],
-    copyWithin: ["es.array.copy-within", "es.typed-array.copy-within"],
+    copyWithin: ["es.array.copy-within"],
     endsWith: ["es.string.ends-with"],
-    entries: [
-      "es.array.iterator",
-      "es.typed-array.iterator",
-      "web.dom-collections.iterator",
-    ],
-    every: ["es.array.is-array", "es.typed-array.every"],
-    fill: ["es.array.fill", "es.typed-array.fill"],
-    filter: ["es.array.filter", "es.typed-array.filter"],
-    find: ["es.array.find", "es.typed-array.find"],
-    findIndex: ["es.array.find-index", "es.typed-array.find-index"],
+    entries: ArrayNatureIterators,
+    every: ["es.array.is-array"],
+    fill: ["es.array.fill"],
+    filter: ["es.array.filter"],
+    find: ["es.array.find"],
+    findIndex: ["es.array.find-index"],
     fixed: ["es.string.fixed"],
     flags: ["es.regexp.flags"],
     fontcolor: ["es.string.fontcolor"],
     fontsize: ["es.string.fontsize"],
-    forEach: ["es.array.for-each", "es.typed-array.for-each"],
-    join: ["es.typed-array.join"],
-    includes: [
-      "es.string.includes",
-      "es.array.includes",
-      "es.typed-array.includes",
-    ],
-    indexOf: ["es.array.index-of", "es.typed-array.index-of"],
+    forEach: ["es.array.for-each", "web.dom-collections.for-each"],
+    includes: ["es.string.includes", "es.array.includes"],
+    indexOf: ["es.array.index-of"],
     italic: ["es.string.italics"],
-    keys: [
-      "es.array.iterator",
-      "es.typed-array.iterator",
-      "web.dom-collections.iterator",
-    ],
-    lastIndexOf: ["es.array.last-index-of", "es.typed-array.last-index-of"],
+    keys: ArrayNatureIterators,
+    lastIndexOf: ["es.array.last-index-of"],
     link: ["es.string.link"],
     match: ["es.string.match"],
-    map: ["es.array.map", "es.typed-array.map"],
+    map: ["es.array.map"],
     name: ["es.function.name"],
     padStart: ["es.string.pad-start"],
     padEnd: ["es.string.pad-end"],
-    reduce: ["es.array.reduce", "es.typed-array.reduce"],
-    reduceRight: ["es.array.reduce-right", "es.typed-array.reduce-right"],
+    reduce: ["es.array.reduce"],
+    reduceRight: ["es.array.reduce-right"],
     repeat: ["es.string.repeat"],
     replace: ["es.string.replace"],
-    reverse: ["es.typed-array.reverse"],
     search: ["es.string.search"],
-    set: ["es.typed-array.set"],
-    slice: ["es.array.slice", "es.array-buffer.slice", "es.typed-array.slice"],
+    slice: ["es.array.slice"],
     small: ["es.string.small"],
-    some: ["es.array.some", "es.typed-array.some"],
-    sort: ["es.array.sort", "es.typed-array.sort"],
+    some: ["es.array.some"],
+    sort: ["es.array.sort"],
     splice: ["es.array.splice"],
     split: ["es.string.split"],
     startsWith: ["es.string.starts-with"],
     strike: ["es.string.strike"],
     sub: ["es.string.sub"],
-    subarray: ["es.typed-array.subarray"],
     sup: ["es.string.sup"],
     toISOString: ["es.date.to-iso-string"],
     toJSON: ["es.date.to-json"],
-    toLocaleString: ["es.typed-array.to-locale-string"],
     toString: [
       "es.object.to-string",
       "es.date.to-string",
       "es.regexp.to-string",
-      "es.typed-array.to-string",
     ],
     trim: ["es.string.trim"],
-    values: [
-      "es.array.iterator",
-      "es.typed-array.iterator",
-      "web.dom-collections.iterator",
-    ],
+    values: ArrayNatureIterators,
     __defineGetter__: ["es.object.define-getter"],
     __defineSetter__: ["es.object.define-setter"],
     __lookupGetter__: ["es.object.lookup-getter"],
@@ -192,7 +158,7 @@ export const definitions = {
       getOwnPropertyDescriptor: "es.object.get-own-property-descriptor",
       getOwnPropertyDescriptors: "es.object.get-own-property-descriptors",
       getOwnPropertyNames: "es.object.get-own-property-names",
-      getOwnPropertySymbols: "es.object.get-own-property-symbols",
+      getOwnPropertySymbols: "es.symbol",
       getPrototypeOf: "es.object.get-prototype-of",
       is: "es.object.is",
       isExtensible: "es.object.is-extensible",
@@ -243,16 +209,8 @@ export const definitions = {
     },
 
     Promise: {
-      all: [
-        "es.array.iterator",
-        "es.string.iterator",
-        "web.dom-collections.iterator",
-      ],
-      race: [
-        "es.array.iterator",
-        "es.string.iterator",
-        "web.dom-collections.iterator",
-      ],
+      all: CommonIterators,
+      race: CommonIterators,
     },
 
     Reflect: {
@@ -273,55 +231,29 @@ export const definitions = {
 
     Symbol: {
       asyncIterator: "es.symbol.async-iterator",
+      hasInstance: "es.function.has-instance",
+      isConcatSpreadable: "es.array.concat",
+      iterator: CommonIterators,
+      match: "es.string.match",
+      replace: "es.string.replace",
+      search: "es.string.search",
+      split: "es.string.split",
+      toPrimitive: "es.date.to-primitive",
+      toStringTag: "es.object.to-string",
     },
 
     ArrayBuffer: {
       isView: ["es.array-buffer.is-view"],
     },
 
-    Int8Array: {
-      from: "es.typed-array.from",
-      of: "es.typed-array.of",
-    },
-
-    Uint8Array: {
-      from: "es.typed-array.from",
-      of: "es.typed-array.of",
-    },
-
-    Uint8ClampedArray: {
-      from: "es.typed-array.from",
-      of: "es.typed-array.of",
-    },
-
-    Int16Array: {
-      from: "es.typed-array.from",
-      of: "es.typed-array.of",
-    },
-
-    Uint16Array: {
-      from: "es.typed-array.from",
-      of: "es.typed-array.of",
-    },
-
-    Int32Array: {
-      from: "es.typed-array.from",
-      of: "es.typed-array.of",
-    },
-
-    Uint32Array: {
-      from: "es.typed-array.from",
-      of: "es.typed-array.of",
-    },
-
-    Float32Array: {
-      from: "es.typed-array.from",
-      of: "es.typed-array.of",
-    },
-
-    Float64Array: {
-      from: "es.typed-array.from",
-      of: "es.typed-array.of",
-    },
+    Int8Array: TypedArrayStaticMethods,
+    Uint8Array: TypedArrayStaticMethods,
+    Uint8ClampedArray: TypedArrayStaticMethods,
+    Int16Array: TypedArrayStaticMethods,
+    Uint16Array: TypedArrayStaticMethods,
+    Int32Array: TypedArrayStaticMethods,
+    Uint32Array: TypedArrayStaticMethods,
+    Float32Array: TypedArrayStaticMethods,
+    Float64Array: TypedArrayStaticMethods,
   },
 };
