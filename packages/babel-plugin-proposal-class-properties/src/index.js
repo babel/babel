@@ -16,7 +16,8 @@ export default declare((api, options) => {
       }
     },
 
-    ClassBody(path) {
+    Function(path) {
+      if (path.isArrowFunctionExpression()) return;
       path.skip();
     },
   };

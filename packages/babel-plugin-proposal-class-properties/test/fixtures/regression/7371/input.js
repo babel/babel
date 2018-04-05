@@ -24,13 +24,14 @@ class A extends C {
 
 new A();
 
-// ensure superClass is still transformed
 class Obj {
   constructor() {
     return {};
   }
 }
-class O extends Obj {
+
+// ensure superClass is still transformed
+class SuperClass extends Obj {
   field = 1;
 
   constructor() {
@@ -47,3 +48,5 @@ class O extends Obj {
     new B();
   }
 }
+
+new SuperClass();
