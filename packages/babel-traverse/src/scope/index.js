@@ -36,6 +36,10 @@ function gatherNodeParts(node: Object, parts: Array) {
     for (const prop of (node.properties: Array)) {
       gatherNodeParts(prop.key || prop.argument, parts);
     }
+  } else if (t.isPrivateName(node)) {
+    gatherNodeParts(node.id, parts);
+  } else if (t.isThisExpression(node)) {
+    parts.push("this");
   }
 }
 
@@ -622,7 +626,7 @@ export default class Scope {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       if (node.kind === "get" || node.kind === "set") return false;
       return true;
-    } else if (t.isClassProperty(node) || t.isObjectProperty(node)) {
+    } else if (t.isProperty(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       return this.isPure(node.value, constantsOnly);
     } else if (t.isUnaryExpression(node)) {

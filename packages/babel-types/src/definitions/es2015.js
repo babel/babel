@@ -88,6 +88,7 @@ defineType("ClassBody", {
           assertNodeType(
             "ClassMethod",
             "ClassProperty",
+            "ClassPrivateProperty",
             "TSDeclareMethod",
             "TSIndexSignature",
           ),

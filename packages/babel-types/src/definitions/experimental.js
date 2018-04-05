@@ -115,6 +115,21 @@ defineType("OptionalCallExpression", {
   },
 });
 
+defineType("ClassPrivateProperty", {
+  visitor: ["key", "value"],
+  builder: ["key", "value"],
+  aliases: ["Property", "Private"],
+  fields: {
+    key: {
+      validate: assertNodeType("PrivateName"),
+    },
+    value: {
+      validate: assertNodeType("Expression"),
+      optional: true,
+    },
+  },
+});
+
 defineType("Import", {
   aliases: ["Expression"],
 });
@@ -153,6 +168,16 @@ defineType("ExportNamespaceSpecifier", {
   aliases: ["ModuleSpecifier"],
   fields: {
     exported: {
+      validate: assertNodeType("Identifier"),
+    },
+  },
+});
+
+defineType("PrivateName", {
+  visitor: ["id"],
+  aliases: ["Private"],
+  fields: {
+    id: {
       validate: assertNodeType("Identifier"),
     },
   },
