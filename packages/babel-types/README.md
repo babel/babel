@@ -353,7 +353,7 @@ See also `t.isClassPrivateProperty(node, opts)` and `t.assertClassPrivatePropert
 Aliases: `Property`, `Private`
 
  - `key`: `PrivateName` (required)
- - `value`: `Expression` (required)
+ - `value`: `Expression` (default: `null`)
 
 ---
 
