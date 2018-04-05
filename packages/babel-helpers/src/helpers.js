@@ -613,6 +613,15 @@ helpers.set = () => template.program.ast`
 
       if (parent !== null) {
         _set(parent, property, value, receiver);
+      } else if (Object.defineProperty) {
+        Object.defineProperty(receiver, property, {
+          value: value,
+          enumerable: true,
+          configurable: true,
+          writable: true
+        });
+      } else {
+        receiver[property] = value;
       }
     } else if ("value" in desc && desc.writable) {
       desc.value = value;
