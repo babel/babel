@@ -114,7 +114,7 @@ export default {
       EPSILON: "number/epsilon",
       MAX_SAFE_INTEGER: "number/max-safe-integer",
       MIN_SAFE_INTEGER: "number/min-safe-integer",
-      formString: "number/from-string",
+      fromString: "number/from-string",
       isFinite: "number/is-finite",
       isInteger: "number/is-integer",
       isNaN: "number/is-nan",
