@@ -30,18 +30,16 @@ export default function isReferenced(node: Object, parent: Object): boolean {
     case "VariableDeclarator":
       return parent.init === node;
 
+    // yes: () => NODE
+    // no: (NODE) => {}
+    case "ArrowFunctionExpression":
+      return parent.body === node;
+
     // no: function NODE() {}
     // no: function foo(NODE) {}
-    case "ArrowFunctionExpression":
     case "FunctionDeclaration":
     case "FunctionExpression":
-      if (parent.id === node) {
-        return false;
-      }
-      for (const param of (parent.params: Array<any>)) {
-        if (param === node) return false;
-      }
-      return true;
+      return false;
 
     // no: export { foo as NODE };
     // yes: export { NODE as foo };
