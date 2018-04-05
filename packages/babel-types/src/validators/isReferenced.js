@@ -7,7 +7,7 @@ export default function isReferenced(node: Object, parent: Object): boolean {
     // yes: object::NODE
     // yes: NODE::callee
     case "BindExpression":
-      return parent.object === node || parent.callee === node;
+      return true;
 
     // yes: PARENT[NODE]
     // yes: NODE.child
@@ -15,42 +15,33 @@ export default function isReferenced(node: Object, parent: Object): boolean {
     case "MemberExpression":
     case "JSXMemberExpression":
     case "OptionalMemberExpression":
-      if (parent.property === node && parent.computed) {
-        return true;
-      } else if (parent.object === node) {
-        return true;
-      } else {
-        return false;
+      if (parent.property === node) {
+        return !!parent.computed;
       }
+      return parent.object === node;
 
     // no: new.NODE
     // no: NODE.target
     case "MetaProperty":
       return false;
 
-    // yes: { [NODE]: "" }
-    // yes: { NODE }
-    // no: { NODE: "" }
-    case "ObjectProperty":
-      if (parent.key === node) {
-        return parent.computed;
-      }
-
     // no: let NODE = init;
     // yes: let id = NODE;
     case "VariableDeclarator":
-      return parent.id !== node;
+      return parent.init === node;
 
     // no: function NODE() {}
     // no: function foo(NODE) {}
     case "ArrowFunctionExpression":
     case "FunctionDeclaration":
     case "FunctionExpression":
+      if (parent.id === node) {
+        return false;
+      }
       for (const param of (parent.params: Array<any>)) {
         if (param === node) return false;
       }
-
-      return parent.id !== node;
+      return true;
 
     // no: export { foo as NODE };
     // yes: export { NODE as foo };
@@ -58,9 +49,8 @@ export default function isReferenced(node: Object, parent: Object): boolean {
     case "ExportSpecifier":
       if (parent.source) {
         return false;
-      } else {
-        return parent.local === node;
       }
+      return parent.local === node;
 
     // no: export NODE from "foo";
     // no: export * as NODE from "foo";
@@ -70,18 +60,25 @@ export default function isReferenced(node: Object, parent: Object): boolean {
 
     // no: <div NODE="foo" />
     case "JSXAttribute":
-      return parent.name !== node;
+      return false;
 
+    // yes: { [NODE]: "" }
+    // no: { NODE: "" }
+    // depends: { NODE }
+    case "ObjectProperty":
     // no: class { NODE = value; }
     // yes: class { [NODE] = value; }
     // yes: class { key = NODE; }
     case "ClassProperty":
     case "ClassPrivateProperty":
+    // no: class { NODE() {} }
+    // yes: class { [NODE]() {} }
+    case "ClassMethod":
+    case "ObjectMethod":
       if (parent.key === node) {
         return !!parent.computed;
-      } else {
-        return parent.value === node;
       }
+      return parent.value === node;
 
     // no: import NODE from "foo";
     // no: import * as NODE from "foo";
@@ -94,14 +91,10 @@ export default function isReferenced(node: Object, parent: Object): boolean {
       return false;
 
     // no: class NODE {}
+    // yes: class Foo extends NODE {}
     case "ClassDeclaration":
     case "ClassExpression":
-      return parent.id !== node;
-
-    // yes: class { [NODE]() {} }
-    case "ClassMethod":
-    case "ObjectMethod":
-      return parent.key === node && parent.computed;
+      return parent.superClass === node;
 
     // no: NODE: for (;;) {}
     case "LabeledStatement":
@@ -109,7 +102,7 @@ export default function isReferenced(node: Object, parent: Object): boolean {
 
     // no: try {} catch (NODE) {}
     case "CatchClause":
-      return parent.param !== node;
+      return false;
 
     // no: function foo(...NODE) {}
     case "RestElement":
