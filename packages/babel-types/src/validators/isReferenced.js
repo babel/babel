@@ -4,11 +4,6 @@
  */
 export default function isReferenced(node: Object, parent: Object): boolean {
   switch (parent.type) {
-    // yes: object::NODE
-    // yes: NODE::callee
-    case "BindExpression":
-      return true;
-
     // yes: PARENT[NODE]
     // yes: NODE.child
     // no: parent.NODE
@@ -20,11 +15,6 @@ export default function isReferenced(node: Object, parent: Object): boolean {
       }
       return parent.object === node;
 
-    // no: new.NODE
-    // no: NODE.target
-    case "MetaProperty":
-      return false;
-
     // no: let NODE = init;
     // yes: let id = NODE;
     case "VariableDeclarator":
@@ -35,12 +25,6 @@ export default function isReferenced(node: Object, parent: Object): boolean {
     case "ArrowFunctionExpression":
       return parent.body === node;
 
-    // no: function NODE() {}
-    // no: function foo(NODE) {}
-    case "FunctionDeclaration":
-    case "FunctionExpression":
-      return false;
-
     // no: export { foo as NODE };
     // yes: export { NODE as foo };
     // no: export { NODE as foo } from "foo";
@@ -49,16 +33,6 @@ export default function isReferenced(node: Object, parent: Object): boolean {
         return false;
       }
       return parent.local === node;
-
-    // no: export NODE from "foo";
-    // no: export * as NODE from "foo";
-    case "ExportNamespaceSpecifier":
-    case "ExportDefaultSpecifier":
-      return false;
-
-    // no: <div NODE="foo" />
-    case "JSXAttribute":
-      return false;
 
     // yes: { [NODE]: "" }
     // no: { NODE: "" }
@@ -78,21 +52,21 @@ export default function isReferenced(node: Object, parent: Object): boolean {
       }
       return parent.value === node;
 
-    // no: import NODE from "foo";
-    // no: import * as NODE from "foo";
-    // no: import { NODE as foo } from "foo";
-    // no: import { foo as NODE } from "foo";
-    // no: import NODE from "bar";
-    case "ImportDefaultSpecifier":
-    case "ImportNamespaceSpecifier":
-    case "ImportSpecifier":
-      return false;
-
     // no: class NODE {}
     // yes: class Foo extends NODE {}
     case "ClassDeclaration":
     case "ClassExpression":
       return parent.superClass === node;
+
+    // yes: left = NODE;
+    // no: NODE = right;
+    case "AssignmentExpression":
+      return parent.right === node;
+
+    // no: [NODE = foo] = [];
+    // yes: [foo = NODE] = [];
+    case "AssignmentPattern":
+      return parent.right === node;
 
     // no: NODE: for (;;) {}
     case "LabeledStatement":
@@ -106,20 +80,41 @@ export default function isReferenced(node: Object, parent: Object): boolean {
     case "RestElement":
       return false;
 
-    // yes: left = NODE;
-    // no: NODE = right;
-    case "AssignmentExpression":
-      return parent.right === node;
+    // no: function NODE() {}
+    // no: function foo(NODE) {}
+    case "FunctionDeclaration":
+    case "FunctionExpression":
+      return false;
 
-    // no: [NODE = foo] = [];
-    // yes: [foo = NODE] = [];
-    case "AssignmentPattern":
-      return parent.right === node;
+    // no: export NODE from "foo";
+    // no: export * as NODE from "foo";
+    case "ExportNamespaceSpecifier":
+    case "ExportDefaultSpecifier":
+      return false;
+
+    // no: import NODE from "foo";
+    // no: import * as NODE from "foo";
+    // no: import { NODE as foo } from "foo";
+    // no: import { foo as NODE } from "foo";
+    // no: import NODE from "bar";
+    case "ImportDefaultSpecifier":
+    case "ImportNamespaceSpecifier":
+    case "ImportSpecifier":
+      return false;
+
+    // no: <div NODE="foo" />
+    case "JSXAttribute":
+      return false;
 
     // no: [NODE] = [];
     // no: ({ NODE }) = [];
     case "ObjectPattern":
     case "ArrayPattern":
+      return false;
+
+    // no: new.NODE
+    // no: NODE.target
+    case "MetaProperty":
       return false;
   }
 
