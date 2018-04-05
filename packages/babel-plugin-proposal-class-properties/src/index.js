@@ -10,9 +10,14 @@ export default declare((api, options) => {
 
   const findBareSupers = {
     Super(path) {
-      if (path.parentPath.isCallExpression({ callee: path.node })) {
-        this.push(path.parentPath);
+      const { node, parentPath } = path;
+      if (parentPath.isCallExpression({ callee: node })) {
+        this.push(parentPath);
       }
+    },
+
+    ClassBody(path) {
+      path.skip();
     },
   };
 
