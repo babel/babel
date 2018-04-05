@@ -1,31 +1,41 @@
 import { declare } from "@babel/helper-plugin-utils";
 import nameFunction from "@babel/helper-function-name";
 import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
-import { template, types as t } from "@babel/core";
+import { template, traverse, types as t } from "@babel/core";
 
 export default declare((api, options) => {
   api.assertVersion(7);
 
   const { loose } = options;
 
-  const findBareSupers = {
-    Super(path) {
-      const { node, parentPath } = path;
-      if (parentPath.isCallExpression({ callee: node })) {
-        this.push(parentPath);
-      }
-    },
-
+  const classMethodSkipper = {
     Function(path) {
       if (path.isArrowFunctionExpression()) return;
       path.skip();
     },
+
+    "ClassProperty|ClassPrivateProperty"(path) {
+      path.get("value").skip();
+    },
   };
+
+  const findBareSupers = traverse.visitors.merge([
+    {
+      Super(path) {
+        const { node, parentPath } = path;
+        if (parentPath.isCallExpression({ callee: node })) {
+          this.push(parentPath);
+        }
+      },
+    },
+    classMethodSkipper,
+  ]);
 
   const referenceVisitor = {
     "TSTypeAnnotation|TypeAnnotation"(path) {
       path.skip();
     },
+
     ReferencedIdentifier(path) {
       if (this.scope.hasOwnBinding(path.node.name)) {
         this.scope.rename(path.node.name);
@@ -34,25 +44,22 @@ export default declare((api, options) => {
     },
   };
 
-  const ClassFieldDefinitionEvaluationTDZVisitor = {
-    Expression(path) {
-      if (path === this.shouldSkip) {
-        path.skip();
-      }
-    },
+  const classFieldDefinitionEvaluationTDZVisitor = traverse.visitors.merge([
+    {
+      ReferencedIdentifier(path) {
+        if (this.classRef === path.scope.getBinding(path.node.name)) {
+          const classNameTDZError = this.file.addHelper("classNameTDZError");
+          const throwNode = t.callExpression(classNameTDZError, [
+            t.stringLiteral(path.node.name),
+          ]);
 
-    ReferencedIdentifier(path) {
-      if (this.classRef === path.scope.getBinding(path.node.name)) {
-        const classNameTDZError = this.file.addHelper("classNameTDZError");
-        const throwNode = t.callExpression(classNameTDZError, [
-          t.stringLiteral(path.node.name),
-        ]);
-
-        path.replaceWith(t.sequenceExpression([throwNode, path.node]));
-        path.skip();
-      }
+          path.replaceWith(t.sequenceExpression([throwNode, path.node]));
+          path.skip();
+        }
+      },
     },
-  };
+    classMethodSkipper,
+  ]);
 
   const buildClassPropertySpec = (ref, { key, value, computed }, scope) => {
     return template.statement`
@@ -128,7 +135,7 @@ export default declare((api, options) => {
           // Make sure computed property names are only evaluated once (upon class definition)
           // and in the right order in combination with static properties
           if (!computedPath.get("key").isConstantExpression()) {
-            computedPath.traverse(ClassFieldDefinitionEvaluationTDZVisitor, {
+            computedPath.traverse(classFieldDefinitionEvaluationTDZVisitor, {
               classRef: path.scope.getBinding(ref.name),
               file: this.file,
               shouldSkip: computedPath.get("value"),

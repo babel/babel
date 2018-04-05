@@ -15,47 +15,48 @@ class A extends C {
     class B extends C {
       constructor() {
         super();
-        assert.equal(this.field === undefined);
+        assert.equal(this.field, undefined);
       }
 
     }
 
-    ;
-    assert.equal(this.field === 1);
+    assert.equal(this.field, 1);
     new B();
   }
 
 }
 
-new A(); // ensure superClass is still transformed
+new A();
 
 class Obj {
   constructor() {
     return {};
   }
 
-}
+} // ensure superClass is still transformed
 
-class O extends Obj {
+
+class SuperClass extends Obj {
   constructor() {
     var _temp;
 
-    class B extends (_temp = super(), Object.defineProperty(this, "field", {
+    class B extends ((_temp = super(), Object.defineProperty(this, "field", {
       configurable: true,
       enumerable: true,
       writable: true,
       value: 1
-    }), _temp) {
+    }), _temp), Obj) {
       constructor() {
         super();
-        assert.equal(this.field === undefined);
+        assert.equal(this.field, undefined);
       }
 
     }
 
-    ;
-    assert.equal(this.field === 1);
+    assert.equal(this.field, 1);
     new B();
   }
 
 }
+
+new SuperClass();

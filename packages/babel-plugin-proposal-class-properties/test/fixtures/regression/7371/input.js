@@ -12,11 +12,11 @@ class A extends C {
       constructor() {
         super();
 
-        assert.equal(this.field === undefined);
+        assert.equal(this.field, undefined);
       }
-    };
+    }
 
-    assert.equal(this.field === 1)
+    assert.equal(this.field, 1)
 
     new B();
   }
@@ -35,15 +35,39 @@ class SuperClass extends Obj {
   field = 1;
 
   constructor() {
-    class B extends super() {
+    class B extends (super(), Obj) {
       constructor() {
         super();
 
-        assert.equal(this.field === undefined)
+        assert.equal(this.field, undefined)
       }
-    };
+    }
 
-    assert.equal(this.field === 1)
+    assert.equal(this.field, 1)
+
+    new B();
+  }
+}
+
+new SuperClass();
+
+
+// ensure ComputedKey is still transformed
+class Computed extends Obj {
+  field = 1;
+
+  constructor() {
+    class B extends Obj {
+      constructor() {
+        super();
+
+        assert.equal(this.field, undefined)
+      }
+
+      [super()]() { }
+    }
+
+    assert.equal(this.field, 1)
 
     new B();
   }
