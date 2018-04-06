@@ -16,15 +16,16 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
-  es6.array.sort { "chrome":"60" }
-  es7.object.define-getter { "chrome":"60" }
-  es7.object.define-setter { "chrome":"60" }
-  es7.object.lookup-getter { "chrome":"60" }
-  es7.object.lookup-setter { "chrome":"60" }
-  es7.promise.finally { "chrome":"60" }
-  es7.symbol.async-iterator { "chrome":"60" }
+[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+  es.symbol.async-iterator { "chrome":"60" }
+  es.object.define-getter { "chrome":"60" }
+  es.object.define-setter { "chrome":"60" }
+  es.object.lookup-getter { "chrome":"60" }
+  es.object.lookup-setter { "chrome":"60" }
+  es.array.sort { "chrome":"60" }
+  es.promise.finally { "chrome":"60" }
   web.timers { "chrome":"60" }
   web.immediate { "chrome":"60" }
-  web.dom.iterable { "chrome":"60" }
+  web.dom-collections.for-each { "chrome":"60" }
+  web.dom-collections.iterator { "chrome":"60" }
 🎉  Successfully compiled 1 file with Babel.

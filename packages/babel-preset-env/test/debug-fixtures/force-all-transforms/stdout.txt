@@ -37,17 +37,18 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
-  es6.array.sort { "chrome":"55" }
-  es7.object.define-getter { "chrome":"55" }
-  es7.object.define-setter { "chrome":"55" }
-  es7.object.lookup-getter { "chrome":"55" }
-  es7.object.lookup-setter { "chrome":"55" }
-  es7.promise.finally { "chrome":"55" }
-  es7.symbol.async-iterator { "chrome":"55" }
-  es7.string.pad-start { "chrome":"55" }
-  es7.string.pad-end { "chrome":"55" }
+[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+  es.symbol.async-iterator { "chrome":"55" }
+  es.object.define-getter { "chrome":"55" }
+  es.object.define-setter { "chrome":"55" }
+  es.object.lookup-getter { "chrome":"55" }
+  es.object.lookup-setter { "chrome":"55" }
+  es.array.sort { "chrome":"55" }
+  es.string.pad-start { "chrome":"55" }
+  es.string.pad-end { "chrome":"55" }
+  es.promise.finally { "chrome":"55" }
   web.timers { "chrome":"55" }
   web.immediate { "chrome":"55" }
-  web.dom.iterable { "chrome":"55" }
+  web.dom-collections.for-each { "chrome":"55" }
+  web.dom-collections.iterator { "chrome":"55" }
 🎉  Successfully compiled 1 file with Babel.

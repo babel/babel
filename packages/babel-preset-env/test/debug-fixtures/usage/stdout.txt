@@ -38,13 +38,18 @@ Using plugins:
 
 Using polyfills with `usage` option:
 
-[<CWD>/src/in.js] Added following polyfills:
-  es6.promise { "ie":"11" }
-  es6.map { "firefox":"50", "ie":"11" }
-  es6.array.iterator { "ie":"11" }
-  web.dom.iterable { "chrome":"52", "firefox":"50", "ie":"11" }
+[src/in.js] Added following polyfills:
+  es.object.to-string { "firefox":"50", "ie":"11" }
+  es.promise.finally { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.promise { "ie":"11" }
+  es.map { "firefox":"50", "ie":"11" }
+  es.string.iterator { "ie":"11" }
+  es.array.iterator { "ie":"11" }
+  web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
 
-[<CWD>/src/in2.js] Added following polyfills:
+[src/in2.js] Added following polyfills:
   regenerator-runtime { "chrome":"52", "firefox":"50", "ie":"11" }
-  web.dom.iterable { "chrome":"52", "firefox":"50", "ie":"11" }
+  es.array.iterator { "ie":"11" }
+  es.string.iterator { "ie":"11" }
+  web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
 🎉  Successfully compiled 2 files with Babel.

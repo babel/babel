@@ -39,128 +39,160 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
-  es6.array.copy-within { "ie":"10" }
-  es6.array.fill { "ie":"10" }
-  es6.array.find { "ie":"10" }
-  es6.array.find-index { "ie":"10" }
-  es6.array.from { "ie":"10" }
-  es7.array.includes { "ie":"10" }
-  es6.array.iterator { "ie":"10" }
-  es6.array.of { "ie":"10" }
-  es6.array.sort { "chrome":"54", "node":"6.10" }
-  es6.array.species { "ie":"10" }
-  es6.date.to-primitive { "ie":"10" }
-  es6.function.has-instance { "ie":"10" }
-  es6.function.name { "ie":"10" }
-  es6.map { "ie":"10" }
-  es6.math.acosh { "ie":"10" }
-  es6.math.asinh { "ie":"10" }
-  es6.math.atanh { "ie":"10" }
-  es6.math.cbrt { "ie":"10" }
-  es6.math.clz32 { "ie":"10" }
-  es6.math.cosh { "ie":"10" }
-  es6.math.expm1 { "ie":"10" }
-  es6.math.fround { "ie":"10" }
-  es6.math.hypot { "ie":"10" }
-  es6.math.imul { "ie":"10" }
-  es6.math.log1p { "ie":"10" }
-  es6.math.log10 { "ie":"10" }
-  es6.math.log2 { "ie":"10" }
-  es6.math.sign { "ie":"10" }
-  es6.math.sinh { "ie":"10" }
-  es6.math.tanh { "ie":"10" }
-  es6.math.trunc { "ie":"10" }
-  es6.number.constructor { "ie":"10" }
-  es6.number.epsilon { "ie":"10" }
-  es6.number.is-finite { "ie":"10" }
-  es6.number.is-integer { "ie":"10" }
-  es6.number.is-nan { "ie":"10" }
-  es6.number.is-safe-integer { "ie":"10" }
-  es6.number.max-safe-integer { "ie":"10" }
-  es6.number.min-safe-integer { "ie":"10" }
-  es6.number.parse-float { "ie":"10" }
-  es6.number.parse-int { "ie":"10" }
-  es6.object.assign { "ie":"10" }
-  es7.object.define-getter { "chrome":"54", "ie":"10", "node":"6.10" }
-  es7.object.define-setter { "chrome":"54", "ie":"10", "node":"6.10" }
-  es7.object.entries { "ie":"10", "node":"6.10" }
-  es6.object.freeze { "ie":"10" }
-  es6.object.get-own-property-descriptor { "ie":"10" }
-  es7.object.get-own-property-descriptors { "ie":"10", "node":"6.10" }
-  es6.object.get-own-property-names { "ie":"10" }
-  es6.object.get-prototype-of { "ie":"10" }
-  es7.object.lookup-getter { "chrome":"54", "ie":"10", "node":"6.10" }
-  es7.object.lookup-setter { "chrome":"54", "ie":"10", "node":"6.10" }
-  es6.object.prevent-extensions { "ie":"10" }
-  es6.object.is { "ie":"10" }
-  es6.object.is-frozen { "ie":"10" }
-  es6.object.is-sealed { "ie":"10" }
-  es6.object.is-extensible { "ie":"10" }
-  es6.object.keys { "ie":"10" }
-  es6.object.seal { "ie":"10" }
-  es6.object.set-prototype-of { "ie":"10" }
-  es7.object.values { "ie":"10", "node":"6.10" }
-  es6.promise { "ie":"10" }
-  es7.promise.finally { "chrome":"54", "ie":"10", "node":"6.10" }
-  es6.reflect.apply { "ie":"10" }
-  es6.reflect.construct { "ie":"10" }
-  es6.reflect.define-property { "ie":"10" }
-  es6.reflect.delete-property { "ie":"10" }
-  es6.reflect.get { "ie":"10" }
-  es6.reflect.get-own-property-descriptor { "ie":"10" }
-  es6.reflect.get-prototype-of { "ie":"10" }
-  es6.reflect.has { "ie":"10" }
-  es6.reflect.is-extensible { "ie":"10" }
-  es6.reflect.own-keys { "ie":"10" }
-  es6.reflect.prevent-extensions { "ie":"10" }
-  es6.reflect.set { "ie":"10" }
-  es6.reflect.set-prototype-of { "ie":"10" }
-  es6.regexp.constructor { "ie":"10" }
-  es6.regexp.flags { "ie":"10" }
-  es6.regexp.match { "ie":"10" }
-  es6.regexp.replace { "ie":"10" }
-  es6.regexp.split { "ie":"10" }
-  es6.regexp.search { "ie":"10" }
-  es6.regexp.to-string { "ie":"10" }
-  es6.set { "ie":"10" }
-  es6.symbol { "ie":"10" }
-  es7.symbol.async-iterator { "chrome":"54", "ie":"10", "node":"6.10" }
-  es6.string.anchor { "ie":"10" }
-  es6.string.big { "ie":"10" }
-  es6.string.blink { "ie":"10" }
-  es6.string.bold { "ie":"10" }
-  es6.string.code-point-at { "ie":"10" }
-  es6.string.ends-with { "ie":"10" }
-  es6.string.fixed { "ie":"10" }
-  es6.string.fontcolor { "ie":"10" }
-  es6.string.fontsize { "ie":"10" }
-  es6.string.from-code-point { "ie":"10" }
-  es6.string.includes { "ie":"10" }
-  es6.string.italics { "ie":"10" }
-  es6.string.link { "ie":"10" }
-  es7.string.pad-start { "chrome":"54", "ie":"10", "node":"6.10" }
-  es7.string.pad-end { "chrome":"54", "ie":"10", "node":"6.10" }
-  es6.string.raw { "ie":"10" }
-  es6.string.repeat { "ie":"10" }
-  es6.string.small { "ie":"10" }
-  es6.string.starts-with { "ie":"10" }
-  es6.string.strike { "ie":"10" }
-  es6.string.sub { "ie":"10" }
-  es6.string.sup { "ie":"10" }
-  es6.typed.array-buffer { "ie":"10" }
-  es6.typed.int8-array { "ie":"10" }
-  es6.typed.uint8-array { "ie":"10" }
-  es6.typed.uint8-clamped-array { "ie":"10" }
-  es6.typed.int16-array { "ie":"10" }
-  es6.typed.uint16-array { "ie":"10" }
-  es6.typed.int32-array { "ie":"10" }
-  es6.typed.uint32-array { "ie":"10" }
-  es6.typed.float32-array { "ie":"10" }
-  es6.typed.float64-array { "ie":"10" }
-  es6.weak-map { "ie":"10" }
-  es6.weak-set { "ie":"10" }
+[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+  es.symbol { "ie":"10" }
+  es.symbol.async-iterator { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.assign { "ie":"10" }
+  es.object.get-own-property-descriptor { "ie":"10" }
+  es.object.get-own-property-descriptors { "ie":"10", "node":"6.10" }
+  es.object.get-prototype-of { "ie":"10" }
+  es.object.keys { "ie":"10" }
+  es.object.values { "ie":"10", "node":"6.10" }
+  es.object.entries { "ie":"10", "node":"6.10" }
+  es.object.get-own-property-names { "ie":"10" }
+  es.object.freeze { "ie":"10" }
+  es.object.seal { "ie":"10" }
+  es.object.prevent-extensions { "ie":"10" }
+  es.object.is-frozen { "ie":"10" }
+  es.object.is-sealed { "ie":"10" }
+  es.object.is-extensible { "ie":"10" }
+  es.object.is { "ie":"10" }
+  es.object.set-prototype-of { "ie":"10" }
+  es.object.to-string { "ie":"10", "node":"6.10" }
+  es.object.define-getter { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.define-setter { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.lookup-getter { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.lookup-setter { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.function.name { "ie":"10" }
+  es.function.has-instance { "ie":"10" }
+  es.array.from { "ie":"10" }
+  es.array.of { "ie":"10" }
+  es.array.concat { "ie":"10" }
+  es.array.copy-within { "ie":"10" }
+  es.array.fill { "ie":"10" }
+  es.array.filter { "ie":"10" }
+  es.array.find { "ie":"10" }
+  es.array.find-index { "ie":"10" }
+  es.array.includes { "ie":"10" }
+  es.array.map { "ie":"10" }
+  es.array.slice { "ie":"10" }
+  es.array.sort { "chrome":"54", "node":"6.10" }
+  es.array.splice { "ie":"10" }
+  es.array.iterator { "ie":"10" }
+  es.array.species { "ie":"10" }
+  es.string.from-code-point { "ie":"10" }
+  es.string.raw { "ie":"10" }
+  es.string.match { "ie":"10" }
+  es.string.replace { "ie":"10" }
+  es.string.split { "ie":"10" }
+  es.string.search { "ie":"10" }
+  es.string.code-point-at { "ie":"10" }
+  es.string.ends-with { "ie":"10" }
+  es.string.includes { "ie":"10" }
+  es.string.repeat { "ie":"10" }
+  es.string.starts-with { "ie":"10" }
+  es.string.pad-start { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.pad-end { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.iterator { "ie":"10" }
+  es.string.anchor { "ie":"10" }
+  es.string.big { "ie":"10" }
+  es.string.blink { "ie":"10" }
+  es.string.bold { "ie":"10" }
+  es.string.fixed { "ie":"10" }
+  es.string.fontcolor { "ie":"10" }
+  es.string.fontsize { "ie":"10" }
+  es.string.italics { "ie":"10" }
+  es.string.link { "ie":"10" }
+  es.string.small { "ie":"10" }
+  es.string.strike { "ie":"10" }
+  es.string.sub { "ie":"10" }
+  es.string.sup { "ie":"10" }
+  es.regexp.constructor { "ie":"10" }
+  es.regexp.to-string { "ie":"10" }
+  es.regexp.flags { "ie":"10" }
+  es.number.constructor { "ie":"10" }
+  es.number.epsilon { "ie":"10" }
+  es.number.is-finite { "ie":"10" }
+  es.number.is-integer { "ie":"10" }
+  es.number.is-safe-integer { "ie":"10" }
+  es.number.is-nan { "ie":"10" }
+  es.number.min-safe-integer { "ie":"10" }
+  es.number.max-safe-integer { "ie":"10" }
+  es.number.parse-float { "ie":"10" }
+  es.number.parse-int { "ie":"10" }
+  es.math.acosh { "ie":"10" }
+  es.math.asinh { "ie":"10" }
+  es.math.atanh { "ie":"10" }
+  es.math.cbrt { "ie":"10" }
+  es.math.clz32 { "ie":"10" }
+  es.math.cosh { "ie":"10" }
+  es.math.expm1 { "ie":"10" }
+  es.math.fround { "ie":"10" }
+  es.math.hypot { "ie":"10" }
+  es.math.imul { "ie":"10" }
+  es.math.log1p { "ie":"10" }
+  es.math.log10 { "ie":"10" }
+  es.math.log2 { "ie":"10" }
+  es.math.sign { "ie":"10" }
+  es.math.tanh { "ie":"10" }
+  es.promise { "ie":"10" }
+  es.promise.finally { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.map { "ie":"10" }
+  es.set { "ie":"10" }
+  es.weak-map { "ie":"10" }
+  es.weak-set { "ie":"10" }
+  es.date.to-primitive { "ie":"10" }
+  es.reflect.apply { "ie":"10" }
+  es.reflect.construct { "ie":"10" }
+  es.reflect.define-property { "ie":"10" }
+  es.reflect.delete-property { "ie":"10" }
+  es.reflect.get { "ie":"10" }
+  es.reflect.get-own-property-descriptor { "ie":"10" }
+  es.reflect.get-prototype-of { "ie":"10" }
+  es.reflect.has { "ie":"10" }
+  es.reflect.is-extensible { "ie":"10" }
+  es.reflect.own-keys { "ie":"10" }
+  es.reflect.prevent-extensions { "ie":"10" }
+  es.reflect.set { "ie":"10" }
+  es.reflect.set-prototype-of { "ie":"10" }
+  es.array-buffer.constructor { "ie":"10" }
+  es.array-buffer.is-view { "ie":"10" }
+  es.typed-array.int8-array { "ie":"10" }
+  es.typed-array.uint8-array { "ie":"10" }
+  es.typed-array.uint8-clamped-array { "ie":"10" }
+  es.typed-array.int16-array { "ie":"10" }
+  es.typed-array.uint16-array { "ie":"10" }
+  es.typed-array.int32-array { "ie":"10" }
+  es.typed-array.uint32-array { "ie":"10" }
+  es.typed-array.float32-array { "ie":"10" }
+  es.typed-array.float64-array { "ie":"10" }
+  es.typed-array.from { "ie":"10" }
+  es.typed-array.of { "ie":"10" }
+  es.typed-array.copy-within { "ie":"10" }
+  es.typed-array.every { "ie":"10" }
+  es.typed-array.fill { "ie":"10" }
+  es.typed-array.filter { "ie":"10" }
+  es.typed-array.find { "ie":"10" }
+  es.typed-array.find-index { "ie":"10" }
+  es.typed-array.for-each { "ie":"10" }
+  es.typed-array.includes { "ie":"10" }
+  es.typed-array.index-of { "ie":"10" }
+  es.typed-array.iterator { "ie":"10" }
+  es.typed-array.join { "ie":"10" }
+  es.typed-array.last-index-of { "ie":"10" }
+  es.typed-array.map { "ie":"10" }
+  es.typed-array.reduce { "ie":"10" }
+  es.typed-array.reduce-right { "ie":"10" }
+  es.typed-array.reverse { "ie":"10" }
+  es.typed-array.set { "ie":"10" }
+  es.typed-array.slice { "ie":"10" }
+  es.typed-array.some { "ie":"10" }
+  es.typed-array.sort { "ie":"10" }
+  es.typed-array.subarray { "ie":"10" }
+  es.typed-array.to-locale-string { "ie":"10" }
+  es.typed-array.to-string { "ie":"10" }
   web.timers { "chrome":"54", "ie":"10", "node":"6.10" }
   web.immediate { "chrome":"54", "ie":"10", "node":"6.10" }
-  web.dom.iterable { "chrome":"54", "ie":"10", "node":"6.10" }
+  web.dom-collections.for-each { "chrome":"54", "ie":"10", "node":"6.10" }
+  web.dom-collections.iterator { "chrome":"54", "ie":"10", "node":"6.10" }
 🎉  Successfully compiled 1 file with Babel.

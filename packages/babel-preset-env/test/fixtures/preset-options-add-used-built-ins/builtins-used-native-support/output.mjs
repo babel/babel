@@ -1,3 +1,4 @@
+import "core-js/modules/es.promise.finally";
 import "core-js/modules/web.dom-collections.iterator";
 Array.from; // static method
 
