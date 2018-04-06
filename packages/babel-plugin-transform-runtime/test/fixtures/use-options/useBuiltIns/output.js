@@ -2,6 +2,8 @@ var _classCallCheck = require("@babel/runtime/helpers/builtin/classCallCheck");
 
 var _possibleConstructorReturn = require("@babel/runtime/helpers/builtin/possibleConstructorReturn");
 
+var _getPrototypeOf = require("@babel/runtime/helpers/builtin/getPrototypeOf");
+
 var _inherits = require("@babel/runtime/helpers/builtin/inherits");
 
 let Foo =
@@ -12,7 +14,7 @@ function (_Bar) {
   function Foo() {
     _classCallCheck(this, Foo);
 
-    return _possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(Foo).apply(this, arguments));
   }
 
   return Foo;

@@ -7,7 +7,7 @@ function (_Bar) {
     var _this;
 
     babelHelpers.classCallCheck(this, Foo);
-    if (eval("false")) _this = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this));
+    if (eval("false")) _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
     return babelHelpers.possibleConstructorReturn(_this);
   }
 

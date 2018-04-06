@@ -10,6 +10,6 @@ var A = function A(_force) {
     configurable: true,
     enumerable: true,
     writable: true,
-    value: babelHelpers.get(A.prototype.__proto__ || Object.getPrototypeOf(A.prototype), "method", babelHelpers.assertThisInitialized(this)).call(this)
+    value: babelHelpers.get(babelHelpers.getPrototypeOf(A.prototype), "method", babelHelpers.assertThisInitialized(this)).call(this)
   });
 };

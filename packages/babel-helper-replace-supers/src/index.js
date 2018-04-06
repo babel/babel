@@ -28,22 +28,14 @@ function isMemberExpressionSuper(node) {
  *
  *   CLASS.prototype.__proto__ || Object.getPrototypeOf(CLASS.prototype)
  */
-function getPrototypeOfExpression(objectRef, isStatic) {
+function getPrototypeOfExpression(objectRef, isStatic, file) {
   const targetRef = isStatic
     ? objectRef
     : t.memberExpression(objectRef, t.identifier("prototype"));
 
-  return t.logicalExpression(
-    "||",
-    t.memberExpression(targetRef, t.identifier("__proto__")),
-    t.callExpression(
-      t.memberExpression(
-        t.identifier("Object"),
-        t.identifier("getPrototypeOf"),
-      ),
-      [t.cloneNode(targetRef)],
-    ),
-  );
+  return t.callExpression(file.addHelper("getPrototypeOf"), [
+    t.cloneNode(targetRef),
+  ]);
 }
 
 const visitor = {
@@ -160,7 +152,7 @@ export default class ReplaceSupers {
     isComputed: boolean,
   ): Object {
     return t.callExpression(this.file.addHelper("set"), [
-      getPrototypeOfExpression(this.getObjectRef(), this.isStatic),
+      getPrototypeOfExpression(this.getObjectRef(), this.isStatic, this.file),
       isComputed ? property : t.stringLiteral(property.name),
       value,
       t.thisExpression(),
@@ -186,7 +178,7 @@ export default class ReplaceSupers {
     }
 
     return t.callExpression(this.file.addHelper("get"), [
-      getPrototypeOfExpression(this.getObjectRef(), this.isStatic),
+      getPrototypeOfExpression(this.getObjectRef(), this.isStatic, this.file),
       isComputed ? property : t.stringLiteral(property.name),
       thisExpr,
     ]);

@@ -11,7 +11,7 @@ function (_Bar) {
     var fn = () => babelHelpers.assertThisInitialized(_this);
 
     fn();
-    return _this = babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this));
+    return _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
   }
 
   return Foo;
