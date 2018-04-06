@@ -15,7 +15,7 @@ node_js:
 env:
   global:
     - PATH=$HOME/.yarn/bin:$PATH
-    - JOB=test
+    - JOB=lint
 
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
@@ -28,7 +28,7 @@ before_script:
 
 script:
   - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
-  - 'if [ "$JOB" = "lint" ]; then make lint && make flow; fi'
+  - 'if [ "$JOB" = "lint" ]; then make bootstrap && yarn flow; fi'
   - 'if [ "$JOB" = "babylon-flow-tests" ]; then make test-flow-ci; fi'
   - 'if [ "$JOB" = "babylon-test262-tests" ]; then make test-test262-ci; fi'
 
@@ -37,10 +37,6 @@ matrix:
   include:
     - node_js: "node"
       env: JOB=lint
-    - node_js: "node"
-      env: JOB=babylon-flow-tests
-    - node_js: "node"
-      env: JOB=babylon-test262-tests
 
 notifications:
   slack:

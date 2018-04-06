@@ -3,9 +3,11 @@
  */
 
 declare module "micromatch" {
-  declare module.exports: {
-    (Array<string>, Array<string>, ?{ nocase: boolean }): Array<string>,
-  };
+  declare module.exports: (
+    list: Array<string>,
+    patterns: string | Array<string>,
+    options: ?{ nocase: boolean, }
+  ) => Array<string>;
 }
 
 declare module "resolve" {

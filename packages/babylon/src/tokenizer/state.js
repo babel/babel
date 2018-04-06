@@ -115,7 +115,11 @@ export default class State {
   classLevel: number;
 
   // Labels in scope.
-  labels: Array<{ kind: ?("loop" | "switch"), statementStart?: number }>;
+  labels: Array<{
+    kind: ?("loop" | "switch"),
+    name?: string,
+    statementStart?: number,
+  }>;
 
   // Leading decorators. Last element of the stack represents the decorators in current context.
   // Supports nesting of decorators, e.g. @foo(@bar class inner {}) class outer {}
@@ -137,8 +141,9 @@ export default class State {
   trailingComments: Array<N.Comment>;
   leadingComments: Array<N.Comment>;
   commentStack: Array<{
-    start: number,
     leadingComments: ?Array<N.Comment>,
+    start: number,
+    type: string,
     trailingComments: ?Array<N.Comment>,
   }>;
   commentPreviousNode: N.Node;
