@@ -407,10 +407,17 @@ function run(task) {
       }
     } else {
       actualCode = result.code.trim();
-      expect(actualCode).toEqualFile({
-        filename: expected.loc,
-        code: expectCode,
-      });
+      try {
+        expect(actualCode).toEqualFile({
+          filename: expected.loc,
+          code: expectCode,
+        });
+      } catch (e) {
+        if (!process.env.OVERWRITE) throw e;
+
+        console.log(`Updated test file: ${expected.loc}`);
+        fs.writeFileSync(expected.loc, `${result.code}\n`);
+      }
 
       if (actualCode) {
         expect(expected.loc).toMatch(
