@@ -46,6 +46,7 @@ export default function({ types: t }) {
       case "ArrayMatchPattern":
         return generateArrayPattyCake(pattern);
       case "Identifier":
+        return t.identifier("$");
       case "NullLiteral":
       case "BooleanLiteral":
       case "NumericLiteral":
