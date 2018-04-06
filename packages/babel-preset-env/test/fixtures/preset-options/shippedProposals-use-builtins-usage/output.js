@@ -1,26 +1,34 @@
 "use strict";
 
-require("core-js/modules/es6.array.for-each");
+require("core-js/modules/web.dom-collections.for-each");
 
-require("core-js/modules/es6.array.filter");
+require("core-js/modules/es.array.for-each");
 
-require("core-js/modules/es6.object.define-property");
+require("core-js/modules/es.object.get-own-property-descriptor");
 
-require("core-js/modules/es6.array.index-of");
+require("core-js/modules/es.array.filter");
 
-require("core-js/modules/web.dom.iterable");
+require("core-js/modules/es.array.concat");
 
-require("core-js/modules/es6.array.iterator");
+require("core-js/modules/es.object.define-property");
 
-require("core-js/modules/es6.object.keys");
+require("core-js/modules/es.array.index-of");
+
+require("core-js/modules/web.dom-collections.iterator");
+
+require("core-js/modules/es.array.iterator");
+
+require("core-js/modules/es.object.keys");
 
 require("regenerator-runtime/runtime");
 
-require("core-js/modules/es7.symbol.async-iterator");
+require("core-js/modules/es.symbol.async-iterator");
 
-require("core-js/modules/es6.symbol");
+require("core-js/modules/es.symbol");
 
-require("core-js/modules/es6.promise");
+require("core-js/modules/es.promise");
+
+require("core-js/modules/es.object.to-string");
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
 

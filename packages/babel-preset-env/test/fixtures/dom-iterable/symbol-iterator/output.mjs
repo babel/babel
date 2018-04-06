@@ -1,4 +1,6 @@
-import "core-js/modules/es7.symbol.async-iterator";
-import "core-js/modules/es6.symbol";
-import "core-js/modules/web.dom.iterable";
+import "core-js/modules/es.symbol";
+import "core-js/modules/web.dom-collections.iterator";
+import "core-js/modules/es.array.iterator";
+import "core-js/modules/es.object.to-string";
+import "core-js/modules/es.string.iterator";
 arr[Symbol.iterator]();

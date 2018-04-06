@@ -1,25 +1,27 @@
-require("core-js/modules/es6.array.sort");
+require("core-js/modules/es.symbol.async-iterator");
 
-require("core-js/modules/es7.object.define-getter");
+require("core-js/modules/es.object.define-getter");
 
-require("core-js/modules/es7.object.define-setter");
+require("core-js/modules/es.object.define-setter");
 
-require("core-js/modules/es7.object.lookup-getter");
+require("core-js/modules/es.object.lookup-getter");
 
-require("core-js/modules/es7.object.lookup-setter");
+require("core-js/modules/es.object.lookup-setter");
 
-require("core-js/modules/es7.promise.finally");
+require("core-js/modules/es.array.sort");
 
-require("core-js/modules/es7.symbol.async-iterator");
+require("core-js/modules/es.string.pad-start");
 
-require("core-js/modules/es7.string.pad-start");
+require("core-js/modules/es.string.pad-end");
 
-require("core-js/modules/es7.string.pad-end");
+require("core-js/modules/es.promise.finally");
 
 require("core-js/modules/web.timers");
 
 require("core-js/modules/web.immediate");
 
-require("core-js/modules/web.dom.iterable");
+require("core-js/modules/web.dom-collections.for-each");
+
+require("core-js/modules/web.dom-collections.iterator");
 
 1 ** 2;

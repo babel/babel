@@ -1,23 +1,24 @@
-import "core-js/modules/es6.regexp.split";
-import "core-js/modules/es6.regexp.replace";
-import "core-js/modules/es6.regexp.search";
-import "core-js/modules/es6.array.copy-within";
-import "core-js/modules/es6.string.ends-with";
-import "core-js/modules/es6.string.code-point-at";
-import "core-js/modules/es6.string.starts-with";
-import "core-js/modules/es7.string.pad-end";
-import "core-js/modules/es7.string.pad-start";
-import "core-js/modules/es6.array.fill";
-import "core-js/modules/es6.function.bind";
-import "core-js/modules/es6.array.find-index";
-import "core-js/modules/es6.array.find";
-import "core-js/modules/es7.array.includes";
-import "core-js/modules/es6.string.includes";
-import "core-js/modules/web.dom.iterable";
-import "core-js/modules/es6.array.iterator";
-import "core-js/modules/es6.map";
-import "core-js/modules/es6.string.iterator";
-import "core-js/modules/es6.array.from";
+import "core-js/modules/es.string.split";
+import "core-js/modules/es.string.replace";
+import "core-js/modules/es.string.search";
+import "core-js/modules/es.array.copy-within";
+import "core-js/modules/es.string.ends-with";
+import "core-js/modules/es.string.code-point-at";
+import "core-js/modules/es.string.starts-with";
+import "core-js/modules/es.string.pad-end";
+import "core-js/modules/es.string.pad-start";
+import "core-js/modules/es.array.fill";
+import "core-js/modules/es.function.bind";
+import "core-js/modules/es.array.find-index";
+import "core-js/modules/es.array.find";
+import "core-js/modules/es.array.includes";
+import "core-js/modules/es.string.includes";
+import "core-js/modules/web.dom-collections.iterator";
+import "core-js/modules/es.array.iterator";
+import "core-js/modules/es.object.to-string";
+import "core-js/modules/es.map";
+import "core-js/modules/es.string.iterator";
+import "core-js/modules/es.array.from";
 Array.from; // static function
 
 Map; // top level built-in
