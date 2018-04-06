@@ -24,7 +24,7 @@
   <a href="https://medium.com/friendship-dot-js/i-peeked-into-my-node-modules-directory-and-you-wont-believe-what-happened-next-b89f63d21558"><img alt="Business Strategy Status" src="https://img.shields.io/badge/business%20model-flavortown-green.svg"></a>
 </p>
 
-Babel is community-driven and thus mostly maintained by a group of [volunteers](https://babeljs.io/team). It has a lot of [companies and projects](https://babeljs.io/users) using it, but close to the equivalent amount of sponsors. If you'd like to help maintain the future of the project, please consider:
+Babel is a community-driven project used by many companies and projects, and is maintained by a group of [volunteers](https://babeljs.io/team). If you'd like to help support the future of the project, please consider:
 
 - Giving developer time on the project. (Message us on [Twitter](https://twitter.com/babeljs) or [Slack](https://slack.babeljs.io/))
 - [Giving funds by becoming a backer/sponsor on OpenCollective](https://opencollective.com/babel)
