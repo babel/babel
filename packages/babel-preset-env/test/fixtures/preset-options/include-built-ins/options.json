@@ -5,8 +5,8 @@
         "chrome": 55
       },
       "include": [
-        "es6.map",
-        "es6.set"
+        "es.map",
+        "es.set"
       ],
       "modules": false,
       "useBuiltIns": "entry"

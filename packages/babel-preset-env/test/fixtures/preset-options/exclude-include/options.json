@@ -9,11 +9,11 @@
       "exclude": [
         "transform-async-to-generator",
         "transform-regenerator",
-        "es7.string.pad-start"
+        "es.string.pad-start"
       ],
       "include": [
         "transform-arrow-functions",
-        "es6.map"
+        "es.map"
       ]
     }]
   ]

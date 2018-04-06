@@ -58,20 +58,20 @@ describe("normalize-options", () => {
 
     it("should expand regular expressions in `include` and `exclude`", () => {
       const normalized = normalizeOptions.default({
-        exclude: ["es6.math.log.*"],
+        exclude: ["es.math.log.*"],
       });
       expect(normalized.exclude).toEqual([
-        "es6.math.log1p",
-        "es6.math.log10",
-        "es6.math.log2",
+        "es.math.log1p",
+        "es.math.log10",
+        "es.math.log2",
       ]);
     });
 
     it("should not allow the same modules in `include` and `exclude`", () => {
       const normalizeWithNonExistingPlugin = () => {
         normalizeOptions.default({
-          include: ["es6.math.log2"],
-          exclude: ["es6.math.log.*"],
+          include: ["es.math.log2"],
+          exclude: ["es.math.log.*"],
         });
       };
       expect(normalizeWithNonExistingPlugin).toThrow(Error);
@@ -79,11 +79,11 @@ describe("normalize-options", () => {
 
     it("should not do partial match if not explicitly defined `include` and `exclude`", () => {
       const normalized = normalizeOptions.default({
-        include: ["es6.reflect.set-prototype-of"],
-        exclude: ["es6.reflect.set"],
+        include: ["es.reflect.set-prototype-of"],
+        exclude: ["es.reflect.set"],
       });
-      expect(normalized.include).toEqual(["es6.reflect.set-prototype-of"]);
-      expect(normalized.exclude).toEqual(["es6.reflect.set"]);
+      expect(normalized.include).toEqual(["es.reflect.set-prototype-of"]);
+      expect(normalized.exclude).toEqual(["es.reflect.set"]);
     });
   });
 

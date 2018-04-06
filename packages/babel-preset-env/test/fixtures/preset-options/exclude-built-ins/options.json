@@ -7,11 +7,11 @@
       "modules": false,
       "useBuiltIns": "entry",
       "exclude": [
-        "es7.string.pad-start",
-        "es7.string.pad-end",
+        "es.string.pad-start",
+        "es.string.pad-end",
         "web.timers",
-        "web.immediate",
-        "web.dom.iterable"
+        "web.dom-collections.for-each",
+        "web.dom-collections.iterator"
       ]
     }]
   ]
