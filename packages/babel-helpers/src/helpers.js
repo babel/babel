@@ -391,13 +391,15 @@ helpers.objectSpread = () => template.program.ast`
 `;
 
 helpers.get = () => template.program.ast`
+  import getPrototypeOf from "getPrototypeOf";
+
   export default function _get(object, property, receiver) {
     if (object === null) object = Function.prototype;
 
     var desc = Object.getOwnPropertyDescriptor(object, property);
 
     if (desc === undefined) {
-      var parent = Object.getPrototypeOf(object);
+      var parent = getPrototypeOf(object);
 
       if (parent === null) {
         return undefined;
@@ -419,6 +421,8 @@ helpers.get = () => template.program.ast`
 `;
 
 helpers.inherits = () => template.program.ast`
+  import setPrototypeOf from "setPrototypeOf";
+
   export default function _inherits(subClass, superClass) {
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
@@ -431,8 +435,7 @@ helpers.inherits = () => template.program.ast`
         configurable: true
       }
     });
-    if (superClass)
-      Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+    if (superClass) setPrototypeOf(subClass, superClass);
   }
 `;
 
@@ -444,26 +447,48 @@ helpers.inheritsLoose = () => template.program.ast`
   }
 `;
 
-// Based on https://github.com/WebReflection/babel-plugin-transform-builtin-classes
-helpers.wrapNativeSuper = () => template.program.ast`
-  function _gPO(o) {
-    _gPO = Object.getPrototypeOf || function _gPO(o) { return o.__proto__ };
-    return _gPO(o);
+helpers.getPrototypeOf = () => template.program.ast`
+  export default function _getPrototypeOf(o) {
+    _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) {
+      return o.__proto__;
+    };
+    return _getPrototypeOf(o);
   }
-  function _sPO(o, p) {
-    _sPO = Object.setPrototypeOf || function _sPO(o, p) { o.__proto__ = p; return o };
-    return _sPO(o, p);
+`;
+
+helpers.setPrototypeOf = () => template.program.ast`
+  export default function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+      o.__proto__ = p;
+      return o;
+    };
+    return _setPrototypeOf(o, p);
   }
-  function _construct(Parent, args, Class) {
-    _construct = (typeof Reflect === "object" && Reflect.construct) ||
-      function _construct(Parent, args, Class) {
+`;
+
+helpers.construct = () => template.program.ast`
+  import setPrototypeOf from "setPrototypeOf";
+
+  export default function _construct(Parent, args, Class) {
+    if (typeof Reflect === "object" && Reflect.construct) {
+      _construct = Reflect.construct;
+    } else {
+      _construct = function _construct(Parent, args, Class) {
         var Constructor, a = [null];
         a.push.apply(a, args);
         Constructor = Parent.bind.apply(Parent, a);
-        return _sPO(new Constructor, Class.prototype);
+        return setPrototypeOf(new Constructor, Class.prototype);
       };
+    }
     return _construct(Parent, args, Class);
   }
+`;
+
+// Based on https://github.com/WebReflection/babel-plugin-transform-builtin-classes
+helpers.wrapNativeSuper = () => template.program.ast`
+  import _gPO from "getPrototypeOf";
+  import _sPO from "setPrototypeOf";
+  import construct from "construct";
 
   export default function _wrapNativeSuper(Class) {
     var _cache = typeof Map === "function" ? new Map() : undefined;
@@ -489,7 +514,7 @@ helpers.wrapNativeSuper = () => template.program.ast`
         Wrapper,
         _sPO(
           function Super() {
-            return _construct(Class, arguments, _gPO(this).constructor);
+            return construct(Class, arguments, _gPO(this).constructor);
           },
           Class
         )
@@ -605,11 +630,13 @@ helpers.possibleConstructorReturn = () => template.program.ast`
 `;
 
 helpers.set = () => template.program.ast`
+  import getPrototypeOf from "getPrototypeOf";
+
   export default function _set(object, property, value, receiver) {
     var desc = Object.getOwnPropertyDescriptor(object, property);
 
     if (desc === undefined) {
-      var parent = Object.getPrototypeOf(object);
+      var parent = getPrototypeOf(object);
 
       if (parent !== null) {
         _set(parent, property, value, receiver);
