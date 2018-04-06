@@ -18,24 +18,22 @@ function isMemberExpressionSuper(node) {
 
 /**
  * Creates an expression which result is the proto of objectRef.
- * Uses CLASS.__proto__ first for InternetExplorer <= 10 support
  *
  * @example <caption>isStatic === true</caption>
  *
- *   CLASS.__proto__ || Object.getPrototypeOf(CLASS)
+ *   helpers.getPrototypeOf(CLASS)
  *
  * @example <caption>isStatic === false</caption>
  *
- *   CLASS.prototype.__proto__ || Object.getPrototypeOf(CLASS.prototype)
+ *   helpers.getPrototypeOf(CLASS.prototype)
  */
 function getPrototypeOfExpression(objectRef, isStatic, file) {
+  objectRef = t.cloneNode(objectRef);
   const targetRef = isStatic
     ? objectRef
     : t.memberExpression(objectRef, t.identifier("prototype"));
 
-  return t.callExpression(file.addHelper("getPrototypeOf"), [
-    t.cloneNode(targetRef),
-  ]);
+  return t.callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
 const visitor = {
@@ -43,8 +41,16 @@ const visitor = {
     if (!path.isArrowFunctionExpression()) path.skip();
   },
 
-  ClassProperty(path) {
-    if (!path.node.static) path.skip();
+  "ClassProperty|ClassPrivateProperty"(path, state) {
+    const { node } = path;
+    if (node.static) return;
+    path.skip();
+
+    // We have to traverse the key, since it's evaluated in the outer class
+    // context.
+    if (node.computed) {
+      path.get("key").traverse(visitor, state);
+    }
   },
 
   ReturnStatement(path, state) {
