@@ -7,9 +7,9 @@ let List =
 function (_Array) {
   babelHelpers.inherits(List, _Array);
 
-  function List() {
+  function List(...args) {
     babelHelpers.classCallCheck(this, List);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(List).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(List).call(this, ...args));
   }
 
   return List;

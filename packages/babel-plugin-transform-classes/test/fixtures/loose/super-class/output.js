@@ -3,8 +3,8 @@ var Test =
 function (_Foo) {
   babelHelpers.inheritsLoose(Test, _Foo);
 
-  function Test() {
-    return _Foo.apply(this, arguments) || this;
+  function Test(...args) {
+    return _Foo.call.apply(_Foo, [this].concat(args)) || this;
   }
 
   return Test;

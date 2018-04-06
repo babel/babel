@@ -3,9 +3,11 @@ var TestEmpty =
 function (_ref) {
   babelHelpers.inherits(TestEmpty, _ref);
 
-  function TestEmpty() {
+  function TestEmpty(...args) {
+    var _babelHelpers$getProt;
+
     babelHelpers.classCallCheck(this, TestEmpty);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestEmpty).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, (_babelHelpers$getProt = babelHelpers.getPrototypeOf(TestEmpty)).call.apply(_babelHelpers$getProt, [this].concat(args)));
   }
 
   return TestEmpty;
@@ -24,9 +26,11 @@ var TestConstructorOnly =
 function (_ref2) {
   babelHelpers.inherits(TestConstructorOnly, _ref2);
 
-  function TestConstructorOnly() {
+  function TestConstructorOnly(...args) {
+    var _babelHelpers$getProt2;
+
     babelHelpers.classCallCheck(this, TestConstructorOnly);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestConstructorOnly).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, (_babelHelpers$getProt2 = babelHelpers.getPrototypeOf(TestConstructorOnly)).call.apply(_babelHelpers$getProt2, [this].concat(args)));
   }
 
   return TestConstructorOnly;
@@ -45,9 +49,11 @@ var TestMethodOnly =
 function (_ref3) {
   babelHelpers.inherits(TestMethodOnly, _ref3);
 
-  function TestMethodOnly() {
+  function TestMethodOnly(...args) {
+    var _babelHelpers$getProt3;
+
     babelHelpers.classCallCheck(this, TestMethodOnly);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestMethodOnly).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, (_babelHelpers$getProt3 = babelHelpers.getPrototypeOf(TestMethodOnly)).call.apply(_babelHelpers$getProt3, [this].concat(args)));
   }
 
   return TestMethodOnly;
@@ -70,9 +76,11 @@ var TestConstructorAndMethod =
 function (_ref4) {
   babelHelpers.inherits(TestConstructorAndMethod, _ref4);
 
-  function TestConstructorAndMethod() {
+  function TestConstructorAndMethod(...args) {
+    var _babelHelpers$getProt4;
+
     babelHelpers.classCallCheck(this, TestConstructorAndMethod);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestConstructorAndMethod).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, (_babelHelpers$getProt4 = babelHelpers.getPrototypeOf(TestConstructorAndMethod)).call.apply(_babelHelpers$getProt4, [this].concat(args)));
   }
 
   return TestConstructorAndMethod;
@@ -95,9 +103,11 @@ var TestMultipleMethods =
 function (_ref5) {
   babelHelpers.inherits(TestMultipleMethods, _ref5);
 
-  function TestMultipleMethods() {
+  function TestMultipleMethods(...args) {
+    var _babelHelpers$getProt5;
+
     babelHelpers.classCallCheck(this, TestMultipleMethods);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestMultipleMethods).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, (_babelHelpers$getProt5 = babelHelpers.getPrototypeOf(TestMultipleMethods)).call.apply(_babelHelpers$getProt5, [this].concat(args)));
   }
 
   return TestMultipleMethods;

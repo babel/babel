@@ -11,9 +11,9 @@ let App =
 function (_React$Component) {
   babelHelpers.inherits(App, _React$Component);
 
-  function App() {
+  function App(...args) {
     babelHelpers.classCallCheck(this, App);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(App).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(App).call(this, ...args));
   }
 
   babelHelpers.createClass(App, [{

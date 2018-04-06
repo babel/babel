@@ -13,8 +13,8 @@ var List =
 function (_Array) {
   _inheritsLoose(List, _Array);
 
-  function List() {
-    return _Array.apply(this, arguments) || this;
+  function List(...args) {
+    return _Array.call(this, ...args) || this;
   }
 
   return List;

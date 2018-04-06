@@ -146,20 +146,17 @@ export default function transformClass(
    * Creates a class constructor or bail out if there is none
    */
   function maybeCreateConstructor() {
-    let hasConstructor = false;
     const paths = classState.path.get("body.body");
     for (const path of paths) {
-      hasConstructor = path.equals("kind", "constructor");
-      if (hasConstructor) break;
+      if (path.equals("kind", "constructor")) return;
     }
-    if (hasConstructor) return;
 
     let params, body;
 
     if (classState.isDerived) {
       const constructor = template.expression.ast`
-        (function () {
-          super(...arguments);
+        (function (...args) {
+          super(...args);
         })
       `;
       params = constructor.params;

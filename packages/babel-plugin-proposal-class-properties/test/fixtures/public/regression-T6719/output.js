@@ -6,9 +6,9 @@ function withContext(ComposedComponent) {
   function (_Component) {
     babelHelpers.inherits(WithContext, _Component);
 
-    function WithContext() {
+    function WithContext(...args) {
       babelHelpers.classCallCheck(this, WithContext);
-      return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(WithContext).apply(this, arguments));
+      return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(WithContext).call(this, ...args));
     }
 
     return WithContext;

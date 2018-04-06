@@ -19,10 +19,10 @@ var List =
 function (_Array) {
   _inherits(List, _Array);
 
-  function List() {
+  function List(...args) {
     _classCallCheck(this, List);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(List).apply(this, arguments));
+    return _possibleConstructorReturn(this, _getPrototypeOf(List).call(this, ...args));
   }
 
   return List;

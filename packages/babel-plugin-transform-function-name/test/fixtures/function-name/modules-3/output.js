@@ -12,9 +12,9 @@ let Login =
 function (_React$Component) {
   babelHelpers.inherits(Login, _React$Component);
 
-  function Login() {
+  function Login(...args) {
     babelHelpers.classCallCheck(this, Login);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Login).apply(this, arguments));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Login).call(this, ...args));
   }
 
   babelHelpers.createClass(Login, [{

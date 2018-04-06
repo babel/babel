@@ -6,8 +6,15 @@ function broken(x) {
       babelHelpers.inherits(Foo, _Bar);
 
       function Foo() {
+        var _babelHelpers$getProt;
+
         babelHelpers.classCallCheck(this, Foo);
-        return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).apply(this, arguments));
+
+        for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+          args[_key2] = arguments[_key2];
+        }
+
+        return babelHelpers.possibleConstructorReturn(this, (_babelHelpers$getProt = babelHelpers.getPrototypeOf(Foo)).call.apply(_babelHelpers$getProt, [this].concat(args)));
       }
 
       return Foo;

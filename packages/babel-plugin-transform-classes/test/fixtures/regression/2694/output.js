@@ -13,8 +13,15 @@ function (_BaseFoo) {
   babelHelpers.inherits(SubFoo, _BaseFoo);
 
   function SubFoo() {
+    var _babelHelpers$getProt;
+
     babelHelpers.classCallCheck(this, SubFoo);
-    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(SubFoo).apply(this, arguments));
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return babelHelpers.possibleConstructorReturn(this, (_babelHelpers$getProt = babelHelpers.getPrototypeOf(SubFoo)).call.apply(_babelHelpers$getProt, [this].concat(args)));
   }
 
   babelHelpers.createClass(SubFoo, null, [{
