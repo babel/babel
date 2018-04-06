@@ -138,10 +138,10 @@ const es = {
   "es.array.map": "well-known symbols / Symbol.species, Array.prototype.map",
   "es.array.reduce": "Array methods / Array.prototype.reduce",
   "es.array.reduce-right": "Array methods / Array.prototype.reduceRight",
-  "es.array.slice": "Symbol.species, Array.prototype.slice",
+  "es.array.slice": "well-known symbols / Symbol.species, Array.prototype.slice",
   "es.array.some": "Array methods / Array.prototype.some",
   "es.array.sort": "Array methods / Array.prototype.sort",
-  "es.array.splice": "Symbol.species, Array.prototype.splice",
+  "es.array.splice": "well-known symbols / Symbol.species, Array.prototype.splice",
   "es.array.iterator": {
     features: [
       "Array.prototype methods / Array.prototype.keys",
@@ -158,7 +158,7 @@ const es = {
   "es.string.replace": "RegExp.prototype properties / RegExp.prototype[Symbol.replace]",
   "es.string.split": "RegExp.prototype properties / RegExp.prototype[Symbol.split]",
   "es.string.search": "RegExp.prototype properties / RegExp.prototype[Symbol.search]",
-  "es.string.trim": "String.prototype methods / String.prototype.trim", // required additional tests
+  "es.string.trim": "String properties and methods / String.prototype.trim", // required additional tests
   "es.string.code-point-at": "String.prototype methods / String.prototype.codePointAt",
   "es.string.ends-with": "String.prototype methods / String.prototype.endsWith",
   "es.string.includes": "String.prototype methods / String.prototype.includes",
@@ -182,7 +182,12 @@ const es = {
   "es.string.sub": "String.prototype HTML methods",
   "es.string.sup": "String.prototype HTML methods",
 
-  "es.regexp.constructor": "miscellaneous / RegExp constructor can alter flags",
+  "es.regexp.constructor":  {
+    features: [
+      "miscellaneous / RegExp constructor can alter flags",
+      "well-known symbols / Symbol.match, RegExp constructor",
+    ],
+  },
   "es.regexp.to-string": "miscellaneous / RegExp.prototype.toString generic and uses \"flags\" property",
   "es.regexp.flags": "RegExp.prototype properties / RegExp.prototype.flags",
 

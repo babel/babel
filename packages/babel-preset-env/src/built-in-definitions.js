@@ -1,11 +1,10 @@
 const ArrayNatureIterators = [
+  "es.object.to-string",
   "es.array.iterator",
   "web.dom-collections.iterator",
 ];
 
 const CommonIterators = ["es.string.iterator"].concat(ArrayNatureIterators);
-
-const CollectionsDependencies = ["es.object.to-string"].concat(CommonIterators);
 
 const TypedArrayDependencies = [
   "es.array.iterator",
@@ -48,10 +47,10 @@ export const definitions = {
     RegExp: ["es.regexp.constructor"],
     Symbol: ["es.object.to-string", "es.symbol"],
     Promise: ["es.object.to-string", "es.promise"],
-    Map: ["es.map"].concat(CollectionsDependencies),
-    Set: ["es.set"].concat(CollectionsDependencies),
-    WeakMap: ["es.weak-map"].concat(CollectionsDependencies),
-    WeakSet: ["es.weak-set"].concat(CollectionsDependencies),
+    Map: ["es.map"].concat(CommonIterators),
+    Set: ["es.set"].concat(CommonIterators),
+    WeakMap: ["es.weak-map"].concat(CommonIterators),
+    WeakSet: ["es.weak-set"].concat(CommonIterators),
     ArrayBuffer: [
       "es.object.to-string",
       "es.array-buffer.constructor",

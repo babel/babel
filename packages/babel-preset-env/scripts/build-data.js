@@ -186,16 +186,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
     }, []);
 
   const unreleasedLabelForEnv = unreleasedLabels[env];
-  const envTests = tests.map(({ res: test, isBuiltIn }, i) => {
-    // Babel itself doesn't implement the feature correctly,
-    // don't count against it
-    // only doing this for built-ins atm
-    //
-    // NOTE: when/if compat-table adds a babel7 key, we'll want to update this
-    if (!test.babel6 && isBuiltIn) {
-      return "-1";
-    }
-
+  const envTests = tests.map(({ res: test }, i) => {
     return (
       Object.keys(test)
         .filter(t => t.startsWith(env))
