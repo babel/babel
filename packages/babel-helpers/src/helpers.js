@@ -662,10 +662,10 @@ helpers.set = () => template.program.ast`
       if (desc.set) {
         desc.set.call(receiver, value);
         return value;
-      } else if (desc.get) {
+      } else if (desc.get || !desc.writable) {
         // this will throw an error in strict code, and will silently fail in
         // non-strict.
-        base[property] = value;
+        return base[property] = value;
       }
     }
 
