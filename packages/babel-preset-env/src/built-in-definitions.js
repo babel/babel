@@ -72,6 +72,10 @@ export const definitions = {
     Float64Array: ["es.typed-array.float64-array"].concat(
       TypedArrayDependencies,
     ),
+    setTimeout: ["web.timers"],
+    setInterval: ["web.timers"],
+    setImmediate: ["web.immediate"],
+    clearImmediate: ["web.immediate"],
   },
 
   instanceMethods: {
