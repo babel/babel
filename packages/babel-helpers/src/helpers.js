@@ -440,7 +440,7 @@ helpers.construct = () => template.program.ast`
   import setPrototypeOf from "setPrototypeOf";
 
   export default function _construct(Parent, args, Class) {
-    if (typeof Reflect === "object" && Reflect.construct) {
+    if (typeof Reflect !== "undefined" && Reflect.construct) {
       _construct = Reflect.construct;
     } else {
       _construct = function _construct(Parent, args, Class) {
@@ -620,17 +620,24 @@ helpers.get = () => template.program.ast`
   import getPrototypeOf from "getPrototypeOf";
   import superPropBase from "superPropBase";
 
-  export default function _get(object, property, receiver) {
-    var base = superPropBase(object, property);
+  export default function _get(target, property, receiver) {
+    if (typeof Reflect !== "undefined" && Reflect.get) {
+      _get = Reflect.get;
+    } else {
+      _get = function _get(target, property, receiver) {
+        var base = superPropBase(target, property);
 
-    if (!base) return;
+        if (!base) return;
 
-    var desc = Object.getOwnPropertyDescriptor(base, property);
-    if (desc.get) {
-      return desc.get.call(receiver);
-    } else if ("value" in desc) {
-      return desc.value;
+        var desc = Object.getOwnPropertyDescriptor(base, property);
+        if (desc.get) {
+          return desc.get.call(receiver);
+        } else if ("value" in desc) {
+          return desc.value;
+        }
+      };
     }
+    return _get(target, property, receiver || target);
   }
 `;
 
@@ -654,42 +661,51 @@ helpers.set = () => template.program.ast`
   import isStrict from "isStrict";
   import defineProperty from "defineProperty";
 
-  export default function _set(object, property, value, receiver) {
-    var base = superPropBase(object, property);
-    var desc;
+  function set(target, property, value, receiver) {
+    if (typeof Reflect !== "undefined" && Reflect.set) {
+      set = Reflect.set;
+    } else {
+      set = function set(target, property, value, receiver) {
+        var base = superPropBase(target, property);
+        var desc;
 
-    if (base) {
-      desc = Object.getOwnPropertyDescriptor(base, property);
-      if (desc.set) {
-        desc.set.call(receiver, value);
-        return value;
-      } else if (desc.get || !desc.writable) {
-        // this will throw an error in strict code, and will silently fail in
-        // non-strict.
-        return base[property] = value;
-      }
-    }
-
-    // Without a super that defines the property, spec boils down to "define on
-    // receiver" for some reason.
-    desc = Object.getOwnPropertyDescriptor(receiver, property);
-    if (desc) {
-      if (desc.set) {
-        if (isStrict()) {
-          throw new Error("cannot redefine property");
+        if (base) {
+          desc = Object.getOwnPropertyDescriptor(base, property);
+          if (desc.set) {
+            desc.set.call(receiver, value);
+            return true;
+          } else if (!desc.writable) {
+            // Both getter and non-writable fall into this.
+            return false;
+          }
         }
-        // Loose mode doesn't call the setter.
-        return value;
-      } else {
-        return receiver[property] = value;
-      }
+
+        // Without a super that defines the property, spec boils down to "define on
+        // receiver" for some reason.
+        desc = Object.getOwnPropertyDescriptor(receiver, property);
+        if (desc && !desc.writable) {
+          // Setter, getter, and non-writable fall into this.
+          return false;
+        }
+
+        // Avoid setters (that may be defined on Sub's prototype, but not on the
+        // instance).
+        defineProperty(receiver, property, value);
+        return true;
+      };
     }
 
-    // Avoid setters (that may be defined on Sub's prototype, but no on the
-    // instance).
-    defineProperty(receiver, property, value);
-    return value;
+    return set(target, property, value, receiver);
   }
+
+  export default function _set(target, property, value, receiver) {
+    const s = set(target, property, value, receiver || target);
+    if (!s && isStrict()) {
+      throw new Error('failed to set property');
+    }
+
+    return value;
+  };
 `;
 
 helpers.taggedTemplateLiteral = () => template.program.ast`
