@@ -652,6 +652,7 @@ helpers.set = () => template.program.ast`
   import getPrototypeOf from "getPrototypeOf";
   import superPropBase from "superPropBase";
   import isStrict from "isStrict";
+  import defineProperty from "defineProperty";
 
   export default function _set(object, property, value, receiver) {
     var base = superPropBase(object, property);
@@ -669,6 +670,8 @@ helpers.set = () => template.program.ast`
       }
     }
 
+    // Without a super that defines the property, spec boils down to "define on
+    // receiver" for some reason.
     desc = Object.getOwnPropertyDescriptor(receiver, property);
     if (desc) {
       if (desc.set) {
@@ -682,14 +685,9 @@ helpers.set = () => template.program.ast`
       }
     }
 
-    // Without a super that defines the property, spec boils down to "define on
-    // receiver" for some reason.
-    Object.defineProperty(receiver, property, {
-      value: value,
-      writable: true,
-      configurable: true,
-      enumerable: true,
-    });
+    // Avoid setters (that may be defined on Sub's prototype, but no on the
+    // instance).
+    defineProperty(receiver, property, value);
     return value;
   }
 `;
