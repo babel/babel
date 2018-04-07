@@ -170,8 +170,9 @@ Object.assign(
 
 for (const type of (t.TYPES: Array<string>)) {
   const typeKey = `is${type}`;
+  const fn = t[typeKey];
   NodePath.prototype[typeKey] = function(opts) {
-    return t[typeKey](this.node, opts);
+    return fn(this.node, opts);
   };
 
   NodePath.prototype[`assert${type}`] = function(opts) {
