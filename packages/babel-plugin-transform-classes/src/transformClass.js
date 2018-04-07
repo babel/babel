@@ -397,7 +397,7 @@ export default function transformClass(
       return ref;
     };
 
-    for (const bareSuper of classState.bareSupers) {
+    for (const bareSuper of new Set(classState.bareSupers)) {
       wrapSuperCall(bareSuper, superRef, thisRef, body);
 
       if (guaranteedSuperBeforeFinish) {
