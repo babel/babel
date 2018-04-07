@@ -634,9 +634,24 @@ helpers.get = () => template.program.ast`
   }
 `;
 
+helpers.isStrict = () => template.program.ast`
+  export default function _isStrict() {
+    var strict = false;
+    try {
+      var obj = { get test() {} };
+      obj.test = 1;
+    } catch (e) {
+      strict = true;
+    }
+    _isStrict = function() { return strict; };
+    return strict;
+  }
+`;
+
 helpers.set = () => template.program.ast`
   import getPrototypeOf from "getPrototypeOf";
   import superPropBase from "superPropBase";
+  import isStrict from "isStrict";
 
   export default function _set(object, property, value, receiver) {
     var base = superPropBase(object, property);
@@ -656,11 +671,15 @@ helpers.set = () => template.program.ast`
 
     desc = Object.getOwnPropertyDescriptor(receiver, property);
     if (desc) {
-      if (!("value" in desc) || !desc.writable) {
-        // TODO: this should silently fail in loose code?
-        throw new Error("cannot redefine property");
+      if (desc.set) {
+        if (isStrict()) {
+          throw new Error("cannot redefine property");
+        }
+        // Loose mode doesn't call the setter.
+        return value;
+      } else {
+        return receiver[property] = value;
       }
-      return receiver[property] = value;
     }
 
     // Without a super that defines the property, spec boils down to "define on
