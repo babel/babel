@@ -660,9 +660,10 @@ helpers.set = () => template.program.ast`
         // TODO: this should silently fail in loose code?
         throw new Error("cannot redefine property");
       }
+      return receiver[property] = value;
     }
 
-    // Without a super that defines the property, spec boils down to "set on
+    // Without a super that defines the property, spec boils down to "define on
     // receiver" for some reason.
     Object.defineProperty(receiver, property, {
       value: value,
