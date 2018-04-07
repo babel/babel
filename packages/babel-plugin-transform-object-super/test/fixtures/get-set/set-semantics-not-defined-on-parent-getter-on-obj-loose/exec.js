@@ -1,7 +1,7 @@
-const Base = {
+var Base = {
 };
 
-const obj = {
+var obj = {
   get test() { },
 
   set() {

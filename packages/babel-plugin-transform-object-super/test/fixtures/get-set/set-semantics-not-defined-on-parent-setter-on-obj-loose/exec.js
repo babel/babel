@@ -1,8 +1,8 @@
-const Base = {
+var Base = {
 };
 
-let value = 2;
-const obj = {
+var value = 2;
+var obj = {
   set test(v) {
     value = v;
   },

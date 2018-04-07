@@ -1,4 +1,4 @@
-const Base = {
+var Base = {
 };
 Object.defineProperty(Base, 'test', {
   value: 1,
@@ -6,7 +6,7 @@ Object.defineProperty(Base, 'test', {
   configurable: true,
 });
 
-const obj = {
+var obj = {
   test: 2,
 
   set() {
