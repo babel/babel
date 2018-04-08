@@ -176,7 +176,7 @@ for (const type of (t.TYPES: Array<string>)) {
   };
 
   NodePath.prototype[`assert${type}`] = function(opts) {
-    if (!this[typeKey](opts)) {
+    if (!fn(this.node, opts)) {
       throw new TypeError(`Expected node path of type ${type}`);
     }
   };
