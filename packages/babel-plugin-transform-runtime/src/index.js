@@ -99,7 +99,7 @@ export default declare((api, options) => {
         if (!has(definitions.builtins, node.name)) return;
         if (scope.getBindingIdentifier(node.name)) return;
 
-        // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
+        // Symbol() -> core.Symbol(); new Promise -> new core.Promise
         path.replaceWith(
           this.addDefaultImport(
             `${moduleName}/core-js/${definitions.builtins[node.name]}`,
@@ -108,7 +108,7 @@ export default declare((api, options) => {
         );
       },
 
-      // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
+      // arr[Symbol.iterator]() -> core.getIterator(arr)
       CallExpression(path) {
         if (notPolyfillOrDoesUseBuiltIns) return;
 
@@ -133,7 +133,7 @@ export default declare((api, options) => {
         );
       },
 
-      // Symbol.iterator in arr -> core.$for.isIterable(arr)
+      // Symbol.iterator in arr -> core.isIterable(arr)
       BinaryExpression(path) {
         if (notPolyfillOrDoesUseBuiltIns) return;
 
@@ -151,7 +151,7 @@ export default declare((api, options) => {
         );
       },
 
-      // Array.from -> _core.Array.from
+      // Array.from -> core.Array.from
       MemberExpression: {
         enter(path) {
           if (notPolyfillOrDoesUseBuiltIns) return;
@@ -162,7 +162,23 @@ export default declare((api, options) => {
           const prop = node.property;
 
           if (!t.isReferenced(obj, node)) return;
-          if (node.computed) return;
+
+          if (node.computed) {
+            // arr[Symbol.iterator] -> core.getIteratorMethod(arr)
+            if (path.get("property").matchesPattern("Symbol.iterator")) {
+              path.replaceWith(
+                t.callExpression(
+                  this.addDefaultImport(
+                    `${moduleName}/core-js/get-iterator-method`,
+                    "getIteratorMethod",
+                  ),
+                  [obj],
+                ),
+              );
+            }
+            return;
+          }
+
           if (!has(definitions.methods, obj.name)) return;
 
           const methods = definitions.methods[obj.name];

@@ -6,7 +6,7 @@ const helpers = require("@babel/helpers");
 const babel = require("@babel/core");
 const t = require("@babel/types");
 
-const paths = ["is-iterable", "get-iterator"];
+const paths = ["is-iterable", "get-iterator", "get-iterator-method"];
 
 Object.keys(coreDefinitions.builtins).forEach((key) => {
   const path = coreDefinitions.builtins[key];
