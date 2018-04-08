@@ -46,6 +46,12 @@ export default function({ types: t }: { types: Object }): Plugin {
     }
   }
 
+  function addCommonIterators(path: Object, builtIns: Set<string>): void {
+    addImport(path, "es.array.iterator", builtIns);
+    addImport(path, "es.string.iterator", builtIns);
+    addImport(path, "web.dom-collections.iterator", builtIns);
+  }
+
   function addUnsupported(
     path: Object,
     polyfills: Set<string>,
@@ -109,19 +115,17 @@ export default function({ types: t }: { types: Object }): Plugin {
 
     // for-of loop
     ForOfStatement(path) {
-      addImport(path, "es.array.iterator", this.builtIns);
-      addImport(path, "es.string.iterator", this.builtIns);
-      addImport(path, "web.dom-collections.iterator", this.builtIns);
+      addCommonIterators(path, this.builtIns);
     },
 
     // spread
     ArrayExpression(path) {
       if (
-        path.node.elements.some(element => element.type === "SpreadElement")
+        path.node.elements.some(element => {
+          return element.type === "SpreadElement";
+        })
       ) {
-        addImport(path, "es.array.iterator", this.builtIns);
-        addImport(path, "es.string.iterator", this.builtIns);
-        addImport(path, "web.dom-collections.iterator", this.builtIns);
+        addCommonIterators(path, this.builtIns);
       }
     },
 
@@ -129,9 +133,7 @@ export default function({ types: t }: { types: Object }): Plugin {
     YieldExpression(path) {
       if (!path.node.delegate) return;
 
-      addImport(path, "es.array.iterator", this.builtIns);
-      addImport(path, "es.string.iterator", this.builtIns);
-      addImport(path, "web.dom-collections.iterator", this.builtIns);
+      addCommonIterators(path, this.builtIns);
     },
 
     // Array.from
@@ -207,9 +209,15 @@ export default function({ types: t }: { types: Object }): Plugin {
 
     // var { repeat, startsWith } = String
     VariableDeclarator(path, state) {
+      const { node } = path;
+
+      // destructuring
+      if (node.id.type === "ArrayPattern") {
+        addCommonIterators(path, this.builtIns);
+      }
+
       if (!path.isReferenced()) return;
 
-      const { node } = path;
       const obj = node.init;
 
       if (!t.isObjectPattern(node.id)) return;
@@ -236,8 +244,38 @@ export default function({ types: t }: { types: Object }): Plugin {
       }
     },
 
+    // destructuring
+    AssignmentExpression(path) {
+      if (path.node.left.type === "ArrayPattern") {
+        addCommonIterators(path, this.builtIns);
+      }
+    },
+
+    // destructuring
+    CatchClause(path) {
+      const { node } = path;
+
+      if (node.param && node.param.type === "ArrayPattern") {
+        addCommonIterators(path, this.builtIns);
+      }
+    },
+
+    // destructuring
+    ForXStatement(path) {
+      if (path.node.left.type === "ArrayPattern") {
+        addCommonIterators(path, this.builtIns);
+      }
+    },
+
     Function(path, state) {
-      if (!this.usesRegenerator && (path.node.generator || path.node.async)) {
+      const { node } = path;
+
+      // destructuring
+      if (node.params.some(param => param.type === "ArrayPattern")) {
+        addCommonIterators(path, this.builtIns);
+      }
+
+      if (!this.usesRegenerator && (node.generator || node.async)) {
         this.usesRegenerator = true;
         if (state.opts.regenerator) {
           addImport(path, "regenerator-runtime", this.builtIns);
