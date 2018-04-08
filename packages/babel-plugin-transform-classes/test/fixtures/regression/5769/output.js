@@ -25,7 +25,7 @@ function (_Point) {
     babelHelpers.classCallCheck(this, ColorPoint);
     _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(ColorPoint).call(this));
     _this.x = 2;
-    babelHelpers.set(babelHelpers.getPrototypeOf(ColorPoint.prototype), "x", 3, _this);
+    babelHelpers.set(babelHelpers.getPrototypeOf(ColorPoint.prototype), "x", 3, _this, false);
     assert.equal(_this.x, 3); // A
 
     assert.equal(babelHelpers.get(babelHelpers.getPrototypeOf(ColorPoint.prototype), "x", babelHelpers.assertThisInitialized(_this)), undefined); // B

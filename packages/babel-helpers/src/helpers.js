@@ -641,24 +641,9 @@ helpers.get = () => template.program.ast`
   }
 `;
 
-helpers.isStrict = () => template.program.ast`
-  export default function _isStrict() {
-    var strict = false;
-    try {
-      var obj = { get test() {} };
-      obj.test = 1;
-    } catch (e) {
-      strict = true;
-    }
-    _isStrict = function() { return strict; };
-    return strict;
-  }
-`;
-
 helpers.set = () => template.program.ast`
   import getPrototypeOf from "getPrototypeOf";
   import superPropBase from "superPropBase";
-  import isStrict from "isStrict";
   import defineProperty from "defineProperty";
 
   function set(target, property, value, receiver) {
@@ -704,9 +689,9 @@ helpers.set = () => template.program.ast`
     return set(target, property, value, receiver);
   }
 
-  export default function _set(target, property, value, receiver) {
+  export default function _set(target, property, value, receiver, isStrict) {
     const s = set(target, property, value, receiver || target);
-    if (!s && isStrict()) {
+    if (!s && isStrict) {
       throw new Error('failed to set property');
     }
 
