@@ -1,24 +1,25 @@
-var Base = {
+"use strict";
+const Base = {
 };
 
-var obj = {
+const obj = {
   set() {
     return super.test = 3;
   },
 };
 Object.defineProperty(obj, 'test', {
   value: 2,
-  writable: false,
+  writable: true,
   configurable: true,
-  enumerable: true,
+  enumerable: false,
 });
 Object.setPrototypeOf(obj, Base);
 
 assert.equal(obj.set(), 3);
 assert.equal(Base.test, undefined);
-assert.equal(obj.test, 2);
+assert.equal(obj.test, 3);
 
 const desc = Object.getOwnPropertyDescriptor(obj, 'test');
 assert.equal(desc.configurable, true);
-assert.equal(desc.writable, false);
-assert.equal(desc.enumerable, true);
+assert.equal(desc.writable, true);
+assert.equal(desc.enumerable, false);

@@ -632,9 +632,9 @@ helpers.get = () => template.program.ast`
         var desc = Object.getOwnPropertyDescriptor(base, property);
         if (desc.get) {
           return desc.get.call(receiver);
-        } else if ("value" in desc) {
-          return desc.value;
         }
+
+        return desc.value;
       };
     }
     return _get(target, property, receiver || target);
@@ -680,17 +680,23 @@ helpers.set = () => template.program.ast`
           }
         }
 
-        // Without a super that defines the property, spec boils down to "define on
-        // receiver" for some reason.
+        // Without a super that defines the property, spec boils down to
+        // "define on receiver" for some reason.
         desc = Object.getOwnPropertyDescriptor(receiver, property);
-        if (desc && !desc.writable) {
-          // Setter, getter, and non-writable fall into this.
-          return false;
+        if (desc) {
+          if (!desc.writable) {
+            // Setter, getter, and non-writable fall into this.
+            return false;
+          }
+
+          desc.value = value;
+          Object.defineProperty(receiver, property, desc);
+        } else {
+          // Avoid setters that may be defined on Sub's prototype, but not on
+          // the instance.
+          defineProperty(receiver, property, value);
         }
 
-        // Avoid setters (that may be defined on Sub's prototype, but not on the
-        // instance).
-        defineProperty(receiver, property, value);
         return true;
       };
     }

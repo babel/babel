@@ -11,6 +11,7 @@ Object.defineProperty(obj, 'test', {
   value: 2,
   writable: false,
   configurable: true,
+  enumerable: true,
 });
 Object.setPrototypeOf(obj, Base);
 
@@ -23,3 +24,4 @@ assert.equal(obj.test, 2);
 const desc = Object.getOwnPropertyDescriptor(obj, 'test');
 assert.equal(desc.configurable, true);
 assert.equal(desc.writable, false);
+assert.equal(desc.enumerable, true);

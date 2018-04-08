@@ -15,20 +15,23 @@ function _superPropBase(object, property) { while (!Object.prototype.hasOwnPrope
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
 
 const Base = {};
-let value = 2;
 const obj = _obj = {
-  set test(v) {
-    assert.equal(this, obj);
-    value = v;
-  },
-
   set() {
     return _set(_getPrototypeOf(_obj), "test", 3, this);
   }
 
 };
+Object.defineProperty(obj, 'test', {
+  value: 2,
+  writable: true,
+  configurable: true,
+  enumerable: false
+});
 Object.setPrototypeOf(obj, Base);
 assert.equal(obj.set(), 3);
 assert.equal(Base.test, undefined);
-assert.equal(value, 3);
-assert.equal(obj.test, undefined);
+assert.equal(obj.test, 3);
+const desc = Object.getOwnPropertyDescriptor(obj, 'test');
+assert.equal(desc.configurable, true);
+assert.equal(desc.writable, true);
+assert.equal(desc.enumerable, false);
