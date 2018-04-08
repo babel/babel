@@ -705,7 +705,7 @@ helpers.set = () => template.program.ast`
     }
 
     return value;
-  };
+  }
 `;
 
 helpers.taggedTemplateLiteral = () => template.program.ast`
