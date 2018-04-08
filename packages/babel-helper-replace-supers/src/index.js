@@ -27,12 +27,25 @@ function getPrototypeOfExpression(objectRef, isStatic, file) {
 
 const visitor = {
   Function(path) {
-    if (!path.isArrowFunctionExpression()) path.skip();
+    if (path.isMethod()) return;
+    if (path.isArrowFunctionExpression()) return;
+    path.skip();
   },
 
-  "ClassProperty|ClassPrivateProperty|ClassMethod"(path, state) {
-    // Don't traverse ClassMethod's body, nor the ClassProp's value.
-    if (path.isClassMethod() || !path.node.static) path.skip();
+  Method(path, state) {
+    // Don't traverse ClassMethod's body
+    path.skip();
+
+    // We do have to traverse the key, since it's evaluated in the outer class
+    // context.
+    if (path.node.computed) {
+      path.get("key").traverse(visitor, state);
+    }
+  },
+
+  "ClassProperty|ClassPrivateProperty"(path, state) {
+    // Don't traverse the ClassProp's value.
+    if (!path.node.static) path.skip();
 
     // We do have to traverse the key, since it's evaluated in the outer class
     // context.
