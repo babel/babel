@@ -275,21 +275,18 @@ export default class ReplaceSupers {
       );
       grandParentPath.replaceWith(assignment);
 
-      let nodes;
+      // ++super.foo;
+      // to
+      // _ref = Number(super.foo), super.foo = _ref + 1
+      // super.foo++;
+      // to
+      // _ref = Number(super.foo), super.foo = _ref + 1, _ref
+      const nodes = this.specHandleAssignmentExpression(grandParentPath);
+      const [first] = nodes;
+      first.right = t.callExpression(t.identifier("Number"), [first.right]);
 
-      // TODO this needs some more cleanup.
-      if (prefix) {
-        // ++super.foo;
-        // to
-        // _ref = super.foo, super.foo = _ref + 1
-        nodes = this.specHandleAssignmentExpression(grandParentPath);
-      } else {
-        // super.foo++;
-        // to
-        // _ref = Number(super.foo), super.foo = _ref + 1, _ref
-        nodes = this.specHandleAssignmentExpression(grandParentPath);
-        const [first] = nodes;
-        first.right = t.callExpression(t.identifier("Number"), [first.right]);
+      // Postfix returns the old value, not the new.
+      if (!prefix) {
         nodes.push(t.cloneNode(first.left));
       }
       grandParentPath.replaceWith(t.sequenceExpression(nodes));
