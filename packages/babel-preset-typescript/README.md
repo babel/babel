@@ -4,7 +4,7 @@
 
 This preset includes the following plugins:
 
-- [@babel/plugin-transform-typescript](https://babeljs.io/docs/plugins/transform-typescript/)
+- [@babel/plugin-transform-typescript](https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-typescript)
 
 > You will need to specify `--extensions ".ts"` for `@babel/cli` & `@babel/node` cli's to handle `.ts` files.
 
