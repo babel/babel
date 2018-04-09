@@ -228,12 +228,16 @@ export default class ReplaceSupers {
   specHandleAssignmentExpression(ref, path, node) {
     if (node.operator === "=") {
       const strictParent = path.findParent(path => {
-        if (!path.isProgram() && !path.isBlockStatement()) {
-          return false;
+        if (path.isClassBody()) {
+          return true;
         }
 
         if (path.isProgram() && path.node.sourceType === "module") {
           return true;
+        }
+
+        if (!path.isProgram() && !path.isBlockStatement()) {
+          return false;
         }
 
         return path.node.directives.some(
