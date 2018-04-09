@@ -89,7 +89,7 @@ export const definitions = {
     copyWithin: ["es.array.copy-within"],
     endsWith: ["es.string.ends-with"],
     entries: ArrayNatureIterators,
-    every: ["es.array.is-array"],
+    every: ["es.array.every"],
     fill: ["es.array.fill"],
     filter: ["es.array.filter"],
     find: ["es.array.find"],
