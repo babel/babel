@@ -17,6 +17,6 @@ Object.setPrototypeOf(obj, Base);
 assert.throws(() => {
   obj.set();
 });
-assert.equal(Base.test, undefined);
 assert.equal(value, 2);
+assert.equal(Base.test, undefined);
 assert.equal(obj.test, undefined);

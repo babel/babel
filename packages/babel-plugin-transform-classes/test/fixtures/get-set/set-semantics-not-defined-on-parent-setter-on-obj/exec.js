@@ -5,7 +5,6 @@ class Base {
 let value = 2;
 class Obj extends Base {
   set test(v) {
-    assert.equal(this, obj);
     value = v;
   }
 
