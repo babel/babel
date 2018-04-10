@@ -689,12 +689,16 @@ export default function transformClass(
     );
 
     const strictParent = path.findParent(path => {
-      if (!path.isProgram() && !path.isBlockStatement()) {
-        return false;
-      }
-
       if (path.isProgram() && path.node.sourceType === "module") {
         return true;
+      }
+
+      if (path.isClassBody()) {
+        return true;
+      }
+
+      if (!path.isProgram() && !path.isBlockStatement()) {
+        return false;
       }
 
       return path.node.directives.some(
@@ -703,7 +707,7 @@ export default function transformClass(
     });
 
     let constructorOnly = classState.classId && body.length === 1;
-    if (constructorOnly) {
+    if (constructorOnly && !strictParent) {
       for (const param of classState.construct.params) {
         // It's illegal to put a use strict directive into the body of a function
         // with non-simple parameters for some reason. So, we have to use a strict
