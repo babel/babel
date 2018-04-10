@@ -183,14 +183,14 @@ Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
 
 ### booleanLiteralTypeAnnotation
 ```javascript
-t.booleanLiteralTypeAnnotation()
+t.booleanLiteralTypeAnnotation(value)
 ```
 
 See also `t.isBooleanLiteralTypeAnnotation(node, opts)` and `t.assertBooleanLiteralTypeAnnotation(node, opts)`.
 
 Aliases: `Flow`, `FlowType`
 
- - `value`: `boolean` (default: `null`)
+ - `value`: `boolean` (required)
 
 ---
 
@@ -1408,14 +1408,14 @@ Aliases: `Flow`, `FlowType`
 
 ### numberLiteralTypeAnnotation
 ```javascript
-t.numberLiteralTypeAnnotation()
+t.numberLiteralTypeAnnotation(value)
 ```
 
 See also `t.isNumberLiteralTypeAnnotation(node, opts)` and `t.assertNumberLiteralTypeAnnotation(node, opts)`.
 
 Aliases: `Flow`, `FlowType`
 
- - `value`: `number` (default: `null`)
+ - `value`: `number` (required)
 
 ---
 
@@ -1776,14 +1776,14 @@ Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
 
 ### stringLiteralTypeAnnotation
 ```javascript
-t.stringLiteralTypeAnnotation()
+t.stringLiteralTypeAnnotation(value)
 ```
 
 See also `t.isStringLiteralTypeAnnotation(node, opts)` and `t.assertStringLiteralTypeAnnotation(node, opts)`.
 
 Aliases: `Flow`, `FlowType`
 
- - `value`: `string` (default: `null`)
+ - `value`: `string` (required)
 
 ---
 

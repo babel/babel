@@ -26,6 +26,7 @@ defineType("BooleanTypeAnnotation", {
 });
 
 defineType("BooleanLiteralTypeAnnotation", {
+  builder: ["value"],
   aliases: ["Flow", "FlowType"],
   fields: {
     value: validate(assertValueType("boolean")),
@@ -239,6 +240,7 @@ defineType("NullableTypeAnnotation", {
 });
 
 defineType("NumberLiteralTypeAnnotation", {
+  builder: ["value"],
   aliases: ["Flow", "FlowType"],
   fields: {
     value: validate(assertValueType("number")),
@@ -329,6 +331,7 @@ defineType("QualifiedTypeIdentifier", {
 });
 
 defineType("StringLiteralTypeAnnotation", {
+  builder: ["value"],
   aliases: ["Flow", "FlowType"],
   fields: {
     value: validate(assertValueType("string")),
