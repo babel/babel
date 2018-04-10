@@ -17,6 +17,8 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || functio
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 var Test = function Test() {
+  "use strict";
+
   var _this2 = this;
 
   _classCallCheck(this, Test);

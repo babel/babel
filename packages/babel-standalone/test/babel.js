@@ -19,7 +19,7 @@
         sourceType: "script",
         presets: ["es2015-loose"],
       }).code;
-      expect(output).toBe("var A = function A() {};");
+      expect(output).toBe('var A = function A() {\n  "use strict";\n};');
     });
     it("handles the typescript preset", () => {
       const output = Babel.transform("var a: string;", {

@@ -1,6 +1,8 @@
 var Foo =
 /*#__PURE__*/
 function (_Bar) {
+  "use strict";
+
   babelHelpers.inheritsLoose(Foo, _Bar);
 
   function Foo() {

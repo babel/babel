@@ -2,6 +2,8 @@ function test(x) {
   var _x = x;
 
   var F = function F() {
+    "use strict";
+
     babelHelpers.classCallCheck(this, F);
     this[_x] = 1;
   };

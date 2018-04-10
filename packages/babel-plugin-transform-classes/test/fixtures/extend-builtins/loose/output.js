@@ -11,6 +11,8 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || functio
 var List =
 /*#__PURE__*/
 function (_Array) {
+  "use strict";
+
   _inheritsLoose(List, _Array);
 
   function List() {

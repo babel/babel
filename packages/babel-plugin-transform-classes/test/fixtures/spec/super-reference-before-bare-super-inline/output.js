@@ -15,6 +15,8 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 var Foo =
 /*#__PURE__*/
 function (_Bar) {
+  "use strict";
+
   _inherits(Foo, _Bar);
 
   function Foo() {

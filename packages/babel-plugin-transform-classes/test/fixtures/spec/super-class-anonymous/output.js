@@ -1,6 +1,8 @@
 var TestEmpty =
 /*#__PURE__*/
 function (_ref) {
+  "use strict";
+
   babelHelpers.inherits(TestEmpty, _ref);
 
   function TestEmpty() {
@@ -12,6 +14,8 @@ function (_ref) {
 }(
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function _class() {
     babelHelpers.classCallCheck(this, _class);
   }
@@ -22,6 +26,8 @@ function () {
 var TestConstructorOnly =
 /*#__PURE__*/
 function (_ref2) {
+  "use strict";
+
   babelHelpers.inherits(TestConstructorOnly, _ref2);
 
   function TestConstructorOnly() {
@@ -33,6 +39,8 @@ function (_ref2) {
 }(
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function _class2() {
     babelHelpers.classCallCheck(this, _class2);
   }
@@ -43,6 +51,8 @@ function () {
 var TestMethodOnly =
 /*#__PURE__*/
 function (_ref3) {
+  "use strict";
+
   babelHelpers.inherits(TestMethodOnly, _ref3);
 
   function TestMethodOnly() {
@@ -54,6 +64,8 @@ function (_ref3) {
 }(
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function _class3() {
     babelHelpers.classCallCheck(this, _class3);
   }
@@ -68,6 +80,8 @@ function () {
 var TestConstructorAndMethod =
 /*#__PURE__*/
 function (_ref4) {
+  "use strict";
+
   babelHelpers.inherits(TestConstructorAndMethod, _ref4);
 
   function TestConstructorAndMethod() {
@@ -79,6 +93,8 @@ function (_ref4) {
 }(
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function _class4() {
     babelHelpers.classCallCheck(this, _class4);
   }
@@ -93,6 +109,8 @@ function () {
 var TestMultipleMethods =
 /*#__PURE__*/
 function (_ref5) {
+  "use strict";
+
   babelHelpers.inherits(TestMultipleMethods, _ref5);
 
   function TestMultipleMethods() {
@@ -104,6 +122,8 @@ function (_ref5) {
 }(
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function _class5() {
     babelHelpers.classCallCheck(this, _class5);
   }

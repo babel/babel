@@ -24,6 +24,8 @@ var _ref4 = `template${expression}`;
 var MyClass =
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function MyClass() {
     babelHelpers.classCallCheck(this, MyClass);
     Object.defineProperty(this, null, {

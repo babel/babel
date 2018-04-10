@@ -9,6 +9,8 @@ var _inherits = require("@babel/runtime/helpers/builtin/es6/inherits");
 let Foo =
 /*#__PURE__*/
 function (_Bar) {
+  "use strict";
+
   _inherits(Foo, _Bar);
 
   function Foo() {

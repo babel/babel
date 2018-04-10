@@ -688,16 +688,51 @@ export default function transformClass(
       classState.staticPropBody.map(fn => fn(t.cloneNode(classState.classRef))),
     );
 
-    if (classState.classId && body.length === 1) {
+    const strictParent = path.findParent(path => {
+      if (path.isProgram() && path.node.sourceType === "module") {
+        return true;
+      }
+
+      if (path.isClassBody()) {
+        return true;
+      }
+
+      if (!path.isProgram() && !path.isBlockStatement()) {
+        return false;
+      }
+
+      return path.node.directives.some(
+        directive => directive.value.value === "use strict",
+      );
+    });
+
+    let constructorOnly = classState.classId && body.length === 1;
+    if (constructorOnly && !strictParent) {
+      for (const param of classState.construct.params) {
+        // It's illegal to put a use strict directive into the body of a function
+        // with non-simple parameters for some reason. So, we have to use a strict
+        // wrapper function.
+        if (!t.isIdentifier(param)) {
+          constructorOnly = false;
+          break;
+        }
+      }
+    }
+
+    const directives = constructorOnly ? body[0].body.directives : [];
+    if (!strictParent) {
+      directives.push(t.directive(t.directiveLiteral("use strict")));
+    }
+
+    if (constructorOnly) {
       // named class with only a constructor
       return t.toExpression(body[0]);
     }
 
     body.push(t.returnStatement(t.cloneNode(classState.classRef)));
-
     const container = t.arrowFunctionExpression(
       closureParams,
-      t.blockStatement(body),
+      t.blockStatement(body, directives),
     );
     return t.callExpression(container, closureArgs);
   }

@@ -2,6 +2,8 @@ var x = {
   Foo:
   /*#__PURE__*/
   function (_Foo) {
+    "use strict";
+
     babelHelpers.inherits(_class, _Foo);
 
     function _class() {

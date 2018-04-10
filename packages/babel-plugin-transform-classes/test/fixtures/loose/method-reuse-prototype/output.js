@@ -1,6 +1,8 @@
 var Test =
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function Test() {}
 
   var _proto = Test.prototype;
