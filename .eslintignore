@@ -1,5 +1,6 @@
 /lib
 /build
+/.git
 package.json
 lerna.json
 packages/babel-runtime
