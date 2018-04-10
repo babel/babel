@@ -1,4 +1,6 @@
 var A = function A(_force) {
+  "use strict";
+
   babelHelpers.classCallCheck(this, A);
   Object.defineProperty(this, "force", {
     configurable: true,

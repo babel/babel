@@ -51,6 +51,8 @@ var innerclassproperties = function () {
   }
 
   return _temp = _class = function _class() {
+    "use strict";
+
     babelHelpers.classCallCheck(this, _class);
     this.args = args;
   }, _class.args = args, _temp;

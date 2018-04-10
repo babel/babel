@@ -1,4 +1,6 @@
 var Test = function Test() {
+  "use strict";
+
   babelHelpers.classCallCheck(this, Test);
   this.state = "test";
 };
@@ -23,6 +25,8 @@ function (_Bar) {
 }(Bar);
 
 var ConstructorScoping = function ConstructorScoping() {
+  "use strict";
+
   babelHelpers.classCallCheck(this, ConstructorScoping);
   var bar;
   {

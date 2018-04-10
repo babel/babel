@@ -2,6 +2,8 @@ function test(x) {
   var _x = x;
 
   var F = function F() {
+    "use strict";
+
     babelHelpers.classCallCheck(this, F);
     Object.defineProperty(this, _x, {
       configurable: true,

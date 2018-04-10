@@ -1,4 +1,6 @@
 let A = function A() {
+  "use strict";
+
   console.log('a');
 };
 

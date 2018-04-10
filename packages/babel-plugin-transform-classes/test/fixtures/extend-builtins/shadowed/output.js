@@ -1,4 +1,6 @@
 let Array = function Array() {
+  "use strict";
+
   babelHelpers.classCallCheck(this, Array);
 };
 

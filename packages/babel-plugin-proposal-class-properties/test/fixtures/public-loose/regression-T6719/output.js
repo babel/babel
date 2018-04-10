@@ -4,6 +4,8 @@ function withContext(ComposedComponent) {
   return _temp = _class =
   /*#__PURE__*/
   function (_Component) {
+    "use strict";
+
     babelHelpers.inherits(WithContext, _Component);
 
     function WithContext() {
