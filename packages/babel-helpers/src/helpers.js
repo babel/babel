@@ -754,7 +754,7 @@ helpers.arrayWithoutHoles = () => template.program.ast`
 `;
 
 helpers.arrayWithHoles = () => template.program.ast`
-  export default function _arrayWithoutHoles(arr) {
+  export default function _arrayWithHoles(arr) {
     if (Array.isArray(arr)) return arr;
   }
 `;
