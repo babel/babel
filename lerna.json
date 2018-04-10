@@ -16,10 +16,19 @@
   "cacheDir": ".changelog",
   "commands": {
     "publish": {
-      "ignore": ["*.md", "test/**", "codemods/**"]
+      "ignore": [
+        "*.md",
+        "test/**",
+        "codemods/**"
+      ]
     }
   },
-  "packages": ["packages/*", "codemods/*"],
+  "packages": [
+    "packages/*",
+    "codemods/*"
+  ],
   "npmClient": "yarn",
-  "npmClientArgs": ["--no-lockfile"]
+  "npmClientArgs": [
+    "--no-lockfile"
+  ]
 }
