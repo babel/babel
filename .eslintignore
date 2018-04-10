@@ -1,6 +1,8 @@
 /lib
 /build
+/.git
 package.json
+lerna.json
 packages/babel-runtime
 !packages/babel-runtime/scripts
 !packages/babel-runtime/core-js.js
