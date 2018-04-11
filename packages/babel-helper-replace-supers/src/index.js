@@ -224,7 +224,7 @@ export default class ReplaceSupers {
     if (operator === "=") {
       // super.name = "val"
       // to
-      // _set(Object.getPrototypeOf(objectRef.prototype), "name", this);
+      // _set(Object.getPrototypeOf(CLASS.prototype), "name", this);
       const setter = this.setSuperProperty(
         property,
         node.right,
@@ -237,7 +237,7 @@ export default class ReplaceSupers {
     // super.age += 2;
     // to
     // _set(
-    //   Object.getPrototypeOf(objectRef.prototype),
+    //   Object.getPrototypeOf(CLASS.prototype),
     //   "name",
     //   _get(Object.getPrototypeOf(CLASS.prototype), "METHOD", this) + 2,
     //   this,
@@ -303,7 +303,7 @@ export default class ReplaceSupers {
     if (parentPath.isMemberExpression({ object: node })) {
       // super.name;
       // to
-      // _get(Object.getPrototypeOf(objectRef.prototype), "name", this);
+      // _get(Object.getPrototypeOf(CLASS.prototype), "name", this);
       const { node } = parentPath;
       const { computed, property } = node;
 
@@ -312,9 +312,9 @@ export default class ReplaceSupers {
     }
 
     if (grandParentPath.isCallExpression({ callee: parent })) {
-      // _get(Object.getPrototypeOf(objectRef.prototype), "test", this)();
+      // _get(Object.getPrototypeOf(CLASS.prototype), "test", this)();
       // to
-      // _get(Object.getPrototypeOf(objectRef.prototype), "test", this).call(this);
+      // _get(Object.getPrototypeOf(CLASS.prototype), "test", this).call(this);
       const call = this.optimiseCall(parent, grandParentPath.node.arguments);
       grandParentPath.replaceWith(call);
       return;
