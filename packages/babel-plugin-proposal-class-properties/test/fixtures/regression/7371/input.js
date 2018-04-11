@@ -51,9 +51,8 @@ class SuperClass extends Obj {
 
 new SuperClass();
 
-
-// ensure ComputedKey is still transformed
-class Computed extends Obj {
+// ensure ComputedKey Method is still transformed
+class ComputedMethod extends Obj {
   field = 1;
 
   constructor() {
@@ -73,4 +72,28 @@ class Computed extends Obj {
   }
 }
 
-new SuperClass();
+new ComputedMethod();
+
+
+// ensure ComputedKey Field is still transformed
+class ComputedField extends Obj {
+  field = 1;
+
+  constructor() {
+    class B extends Obj {
+      constructor() {
+        super();
+
+        assert.equal(this.field, undefined)
+      }
+
+      [super()] = 1;
+    }
+
+    assert.equal(this.field, 1)
+
+    new B();
+  }
+}
+
+new ComputedField();

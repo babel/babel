@@ -14,18 +14,20 @@ export function insertBefore(nodes) {
 
   nodes = this._verifyNodeList(nodes);
 
+  const { parentPath } = this;
+
   if (
-    this.parentPath.isExpressionStatement() ||
-    this.parentPath.isLabeledStatement() ||
-    this.parentPath.isExportNamedDeclaration() ||
-    (this.parentPath.isExportDefaultDeclaration() && this.isDeclaration())
+    parentPath.isExpressionStatement() ||
+    parentPath.isLabeledStatement() ||
+    parentPath.isExportNamedDeclaration() ||
+    (parentPath.isExportDefaultDeclaration() && this.isDeclaration())
   ) {
-    return this.parentPath.insertBefore(nodes);
+    return parentPath.insertBefore(nodes);
   } else if (
     (this.isNodeType("Expression") &&
       this.listKey !== "params" &&
       this.listKey !== "arguments") ||
-    (this.parentPath.isForStatement() && this.key === "init")
+    (parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) nodes.push(this.node);
     return this.replaceExpressionWithStatements(nodes);
@@ -96,19 +98,26 @@ export function insertAfter(nodes) {
 
   nodes = this._verifyNodeList(nodes);
 
+  const { parentPath } = this;
   if (
-    this.parentPath.isExpressionStatement() ||
-    this.parentPath.isLabeledStatement() ||
-    this.parentPath.isExportNamedDeclaration() ||
-    (this.parentPath.isExportDefaultDeclaration() && this.isDeclaration())
+    parentPath.isExpressionStatement() ||
+    parentPath.isLabeledStatement() ||
+    parentPath.isExportNamedDeclaration() ||
+    (parentPath.isExportDefaultDeclaration() && this.isDeclaration())
   ) {
-    return this.parentPath.insertAfter(nodes);
+    return parentPath.insertAfter(nodes);
   } else if (
     this.isNodeType("Expression") ||
-    (this.parentPath.isForStatement() && this.key === "init")
+    (parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) {
-      const temp = this.scope.generateDeclaredUidIdentifier();
+      let { scope } = this;
+      // Inserting after the computed key of a method should insert the
+      // temporary binding in the method's parent's scope.
+      if (parentPath.isMethod({ computed: true, key: this.node })) {
+        scope = scope.parent;
+      }
+      const temp = scope.generateDeclaredUidIdentifier();
       nodes.unshift(
         t.expressionStatement(
           t.assignmentExpression("=", t.cloneNode(temp), this.node),
