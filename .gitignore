@@ -13,6 +13,7 @@ dist
 /.package.json
 package-lock.json
 /packages/babel-runtime/core-js/**/*.js
+!/packages/babel-runtime/core-js/instance/*.js
 !/packages/babel-runtime/core-js/map.js
 /packages/babel-runtime/helpers/*.js
 !/packages/babel-runtime/helpers/toArray.js

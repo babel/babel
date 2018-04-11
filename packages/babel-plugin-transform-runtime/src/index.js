@@ -108,15 +108,48 @@ export default declare((api, options) => {
         );
       },
 
-      // arr[Symbol.iterator]() -> core.getIterator(arr)
       CallExpression(path) {
         if (notPolyfillOrDoesUseBuiltIns) return;
 
-        // we can't compile this
-        if (path.node.arguments.length) return;
-
-        const callee = path.node.callee;
+        const node = path.node;
+        const callee = node.callee;
         if (!t.isMemberExpression(callee)) return;
+
+        const object = callee.object;
+        const property = callee.property;
+
+        // array.includes()
+        if (
+          !has(definitions.methods, object.name) ||
+          !has(definitions.methods[object.name], property.name)
+        ) {
+          if (has(definitions.instanceMethods, property.name)) {
+            let context1, context2;
+            if (object.type === "Identifier") {
+              context1 = context2 = object;
+            } else {
+              context1 = path.scope.generateDeclaredUidIdentifier("context");
+              context2 = t.assignmentExpression("=", context1, object);
+            }
+            node.callee = t.memberExpression(
+              t.callExpression(
+                this.addDefaultImport(
+                  `${moduleName}/core-js/instance/${
+                    definitions.instanceMethods[property.name]
+                  }`,
+                  `${property.name}InstanceProperty`,
+                ),
+                [context2],
+              ),
+              t.identifier("call"),
+            );
+            node.arguments.unshift(context1);
+            return;
+          }
+        }
+
+        // we can't compile this
+        if (node.arguments.length) return;
         if (!callee.computed) return;
         if (!path.get("callee.property").matchesPattern("Symbol.iterator")) {
           return;
@@ -128,7 +161,7 @@ export default declare((api, options) => {
               `${moduleName}/core-js/get-iterator`,
               "getIterator",
             ),
-            [callee.object],
+            [object],
           ),
         );
       },
@@ -179,10 +212,29 @@ export default declare((api, options) => {
             return;
           }
 
-          if (!has(definitions.methods, obj.name)) return;
+          // method = array.includes
+          if (
+            !has(definitions.methods, obj.name) ||
+            !has(definitions.methods[obj.name], prop.name)
+          ) {
+            if (has(definitions.instanceMethods, prop.name)) {
+              path.replaceWith(
+                t.callExpression(
+                  this.addDefaultImport(
+                    `${moduleName}/core-js/instance/${
+                      definitions.instanceMethods[prop.name]
+                    }`,
+                    `${prop.name}InstanceProperty`,
+                  ),
+                  [obj],
+                ),
+              );
+            }
+
+            return;
+          }
 
           const methods = definitions.methods[obj.name];
-          if (!has(methods, prop.name)) return;
 
           // doesn't reference the global
           if (path.scope.getBindingIdentifier(obj.name)) return;
