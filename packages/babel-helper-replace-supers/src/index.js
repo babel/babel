@@ -71,7 +71,7 @@ const visitor = {
 
     const { node, parentPath } = path;
     if (parentPath.isCallExpression({ callee: node })) {
-      state.bareSupers.push(parentPath);
+      state.bareSupers.add(parentPath);
       return;
     }
     state[state.isLoose ? "looseHandle" : "specHandle"](path);
@@ -93,7 +93,7 @@ export default class ReplaceSupers {
     this.file = opts.file;
     this.opts = opts;
 
-    this.bareSupers = [];
+    this.bareSupers = new Set();
     this.returns = [];
     this.thises = [];
   }
