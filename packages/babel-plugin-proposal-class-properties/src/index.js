@@ -2,22 +2,12 @@ import { declare } from "@babel/helper-plugin-utils";
 import nameFunction from "@babel/helper-function-name";
 import syntaxClassProperties from "@babel/plugin-syntax-class-properties";
 import { template, traverse, types as t } from "@babel/core";
+import { environmentVisitor } from "@babel/helper-replace-supers";
 
 export default declare((api, options) => {
   api.assertVersion(7);
 
   const { loose } = options;
-
-  const classMethodSkipper = {
-    Function(path) {
-      if (path.isArrowFunctionExpression()) return;
-      path.skip();
-    },
-
-    "ClassProperty|ClassPrivateProperty"(path) {
-      path.get("value").skip();
-    },
-  };
 
   const findBareSupers = traverse.visitors.merge([
     {
@@ -28,7 +18,7 @@ export default declare((api, options) => {
         }
       },
     },
-    classMethodSkipper,
+    environmentVisitor,
   ]);
 
   const referenceVisitor = {
@@ -58,7 +48,7 @@ export default declare((api, options) => {
         }
       },
     },
-    classMethodSkipper,
+    environmentVisitor,
   ]);
 
   const buildClassPropertySpec = (ref, { key, value, computed }, scope) => {

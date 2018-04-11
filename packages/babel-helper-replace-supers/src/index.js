@@ -1,4 +1,5 @@
 import type { NodePath, Scope } from "@babel/traverse";
+import traverse from "@babel/traverse";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as t from "@babel/types";
 
@@ -25,7 +26,7 @@ function getPrototypeOfExpression(objectRef, isStatic, file) {
   return t.callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
-const visitor = {
+export const environmentVisitor = {
   Function(path) {
     if (path.isMethod()) return;
     if (path.isArrowFunctionExpression()) return;
@@ -39,7 +40,7 @@ const visitor = {
     // We do have to traverse the key, since it's evaluated in the outer class
     // context.
     if (path.node.computed) {
-      path.get("key").traverse(visitor, state);
+      path.get("key").traverse(path.context.opts, state);
     }
   },
 
@@ -50,33 +51,38 @@ const visitor = {
     // We do have to traverse the key, since it's evaluated in the outer class
     // context.
     if (path.node.computed) {
-      path.get("key").traverse(visitor, state);
+      path.get("key").traverse(path.context.opts, state);
     }
-  },
-
-  ReturnStatement(path, state) {
-    if (!path.getFunctionParent().isArrowFunctionExpression()) {
-      state.returns.push(path);
-    }
-  },
-
-  ThisExpression(path, state) {
-    if (!HARDCORE_THIS_REF.has(path.node)) {
-      state.thises.push(path);
-    }
-  },
-
-  Super(path, state) {
-    state.hasSuper = true;
-
-    const { node, parentPath } = path;
-    if (parentPath.isCallExpression({ callee: node })) {
-      state.bareSupers.add(parentPath);
-      return;
-    }
-    state[state.isLoose ? "looseHandle" : "specHandle"](path);
   },
 };
+
+const visitor = traverse.visitors.merge([
+  environmentVisitor,
+  {
+    ReturnStatement(path, state) {
+      if (!path.getFunctionParent().isArrowFunctionExpression()) {
+        state.returns.push(path);
+      }
+    },
+
+    ThisExpression(path, state) {
+      if (!HARDCORE_THIS_REF.has(path.node)) {
+        state.thises.push(path);
+      }
+    },
+
+    Super(path, state) {
+      state.hasSuper = true;
+
+      const { node, parentPath } = path;
+      if (parentPath.isCallExpression({ callee: node })) {
+        state.bareSupers.add(parentPath);
+        return;
+      }
+      state[state.isLoose ? "looseHandle" : "specHandle"](path);
+    },
+  },
+]);
 
 export default class ReplaceSupers {
   constructor(opts: Object, inClass?: boolean = false) {

@@ -1,21 +1,13 @@
 import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
-import ReplaceSupers from "@babel/helper-replace-supers";
+import ReplaceSupers, {
+  environmentVisitor,
+} from "@babel/helper-replace-supers";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as defineMap from "@babel/helper-define-map";
 import { traverse, template, types as t } from "@babel/core";
 
 type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
-
-const noMethodVisitor = {
-  "FunctionExpression|FunctionDeclaration"(path) {
-    path.skip();
-  },
-
-  Method(path) {
-    path.skip();
-  },
-};
 
 function buildConstructor(classRef, constructorBody, node) {
   const func = t.functionDeclaration(
@@ -78,7 +70,7 @@ export default function transformClass(
   };
 
   const verifyConstructorVisitor = traverse.visitors.merge([
-    noMethodVisitor,
+    environmentVisitor,
     {
       CallExpression: {
         exit(path) {
@@ -115,7 +107,7 @@ export default function transformClass(
   ]);
 
   const findThisesVisitor = traverse.visitors.merge([
-    noMethodVisitor,
+    environmentVisitor,
     {
       ThisExpression(path) {
         classState.superThises.push(path);
