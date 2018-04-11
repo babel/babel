@@ -227,24 +227,6 @@ export default class ReplaceSupers {
 
   specHandleAssignmentExpression(ref, path, node) {
     if (node.operator === "=") {
-      const strictParent = path.findParent(path => {
-        if (path.isClassBody()) {
-          return true;
-        }
-
-        if (path.isProgram() && path.node.sourceType === "module") {
-          return true;
-        }
-
-        if (!path.isProgram() && !path.isBlockStatement()) {
-          return false;
-        }
-
-        return path.node.directives.some(
-          directive => directive.value.value === "use strict",
-        );
-      });
-
       // super.name = "val"
       // to
       // _set(Object.getPrototypeOf(objectRef.prototype), "name", this, isStrict);
@@ -252,7 +234,7 @@ export default class ReplaceSupers {
         node.left.property,
         node.right,
         node.left.computed,
-        !!strictParent,
+        path.isInStrictMode(),
       );
     } else {
       // super.age += 2
