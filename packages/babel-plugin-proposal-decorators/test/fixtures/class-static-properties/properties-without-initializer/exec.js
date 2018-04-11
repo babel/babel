@@ -7,4 +7,4 @@ class Example {
 }
 
 expect(Example).toHaveProperty("prop");
-expect(Example.prop).toBe(undefined);
+expect(Example.prop).toBeUndefined();

@@ -8,7 +8,7 @@ expect(c).toBeInstanceOf(Object);
 expect(Object.getPrototypeOf(c)).toBe(C.prototype);
 expect(Object.getPrototypeOf(Object.getPrototypeOf(c))).toBeNull();
 
-expect(c.toString).toBe(undefined);
+expect(c.toString).toBeUndefined();
 
 class D extends null {
   constructor(...args) {

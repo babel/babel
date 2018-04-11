@@ -575,7 +575,7 @@ describe("buildConfigChain", function() {
       //     fixture("nonexistant-fake"),
       //   ],
       // });
-      // assert.notEqual(opts2, null);
+      // expect(opts2).not.toBeNull();
       //
       // const opts3 = loadOptions({
       //   filename: fixture("nonexistant-fake", "folder", "src.js"),
@@ -585,7 +585,7 @@ describe("buildConfigChain", function() {
       //     fixture("nonexistant-fake"),
       //   ],
       // });
-      // assert.notEqual(opts3, null);
+      // expect(opts3).not.toBeNull();
     });
   });
 
