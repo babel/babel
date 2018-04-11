@@ -450,11 +450,15 @@ export function isInStrictMode() {
 
     if (!path.isProgram() && !path.isFunction()) return false;
 
+    if (
+      path.isArrowFunctionExpression() &&
+      !path.get("body").isBlockStatement()
+    ) {
+      return false;
+    }
+
     let { node } = path;
     if (path.isFunction()) node = node.body;
-
-    const { directives } = node;
-    if (!directives) return false;
 
     for (const directive of node.directives) {
       if (directive.value.value === "use strict") {
