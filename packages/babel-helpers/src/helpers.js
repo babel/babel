@@ -390,36 +390,6 @@ helpers.objectSpread = () => template.program.ast`
   }
 `;
 
-helpers.get = () => template.program.ast`
-  import getPrototypeOf from "getPrototypeOf";
-
-  export default function _get(object, property, receiver) {
-    if (object === null) object = Function.prototype;
-
-    var desc = Object.getOwnPropertyDescriptor(object, property);
-
-    if (desc === undefined) {
-      var parent = getPrototypeOf(object);
-
-      if (parent === null) {
-        return undefined;
-      } else {
-        return _get(parent, property, receiver);
-      }
-    } else if ("value" in desc) {
-      return desc.value;
-    } else {
-      var getter = desc.get;
-
-      if (getter === undefined) {
-        return undefined;
-      }
-
-      return getter.call(receiver);
-    }
-  }
-`;
-
 helpers.inherits = () => template.program.ast`
   import setPrototypeOf from "setPrototypeOf";
 
@@ -470,7 +440,7 @@ helpers.construct = () => template.program.ast`
   import setPrototypeOf from "setPrototypeOf";
 
   export default function _construct(Parent, args, Class) {
-    if (typeof Reflect === "object" && Reflect.construct) {
+    if (typeof Reflect !== "undefined" && Reflect.construct) {
       _construct = Reflect.construct;
     } else {
       _construct = function _construct(Parent, args, Class) {
@@ -633,26 +603,96 @@ helpers.possibleConstructorReturn = () => template.program.ast`
   }
 `;
 
-helpers.set = () => template.program.ast`
+helpers.superPropBase = () => template.program.ast`
   import getPrototypeOf from "getPrototypeOf";
 
-  export default function _set(object, property, value, receiver) {
-    var desc = Object.getOwnPropertyDescriptor(object, property);
+  export default function _superPropBase(object, property) {
+    // Yes, this throws if object is null to being with, that's on purpose.
+    while (!Object.prototype.hasOwnProperty.call(object, property)) {
+      object = getPrototypeOf(object);
+      if (object === null) break;
+    }
+    return object;
+  }
+`;
 
-    if (desc === undefined) {
-      var parent = getPrototypeOf(object);
+helpers.get = () => template.program.ast`
+  import getPrototypeOf from "getPrototypeOf";
+  import superPropBase from "superPropBase";
 
-      if (parent !== null) {
-        _set(parent, property, value, receiver);
-      }
-    } else if ("value" in desc && desc.writable) {
-      desc.value = value;
+  export default function _get(target, property, receiver) {
+    if (typeof Reflect !== "undefined" && Reflect.get) {
+      _get = Reflect.get;
     } else {
-      var setter = desc.set;
+      _get = function _get(target, property, receiver) {
+        var base = superPropBase(target, property);
 
-      if (setter !== undefined) {
-        setter.call(receiver, value);
-      }
+        if (!base) return;
+
+        var desc = Object.getOwnPropertyDescriptor(base, property);
+        if (desc.get) {
+          return desc.get.call(receiver);
+        }
+
+        return desc.value;
+      };
+    }
+    return _get(target, property, receiver || target);
+  }
+`;
+
+helpers.set = () => template.program.ast`
+  import getPrototypeOf from "getPrototypeOf";
+  import superPropBase from "superPropBase";
+  import defineProperty from "defineProperty";
+
+  function set(target, property, value, receiver) {
+    if (typeof Reflect !== "undefined" && Reflect.set) {
+      set = Reflect.set;
+    } else {
+      set = function set(target, property, value, receiver) {
+        var base = superPropBase(target, property);
+        var desc;
+
+        if (base) {
+          desc = Object.getOwnPropertyDescriptor(base, property);
+          if (desc.set) {
+            desc.set.call(receiver, value);
+            return true;
+          } else if (!desc.writable) {
+            // Both getter and non-writable fall into this.
+            return false;
+          }
+        }
+
+        // Without a super that defines the property, spec boils down to
+        // "define on receiver" for some reason.
+        desc = Object.getOwnPropertyDescriptor(receiver, property);
+        if (desc) {
+          if (!desc.writable) {
+            // Setter, getter, and non-writable fall into this.
+            return false;
+          }
+
+          desc.value = value;
+          Object.defineProperty(receiver, property, desc);
+        } else {
+          // Avoid setters that may be defined on Sub's prototype, but not on
+          // the instance.
+          defineProperty(receiver, property, value);
+        }
+
+        return true;
+      };
+    }
+
+    return set(target, property, value, receiver);
+  }
+
+  export default function _set(target, property, value, receiver, isStrict) {
+    const s = set(target, property, value, receiver || target);
+    if (!s && isStrict) {
+      throw new Error('failed to set property');
     }
 
     return value;

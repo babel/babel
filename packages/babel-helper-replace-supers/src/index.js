@@ -142,7 +142,7 @@ export default class ReplaceSupers {
    * @example
    *
    *   _set(CLASS.prototype.__proto__ || Object.getPrototypeOf(CLASS.prototype), "METHOD", "VALUE",
-   *     this)
+   *     this, isStrict)
    *
    */
 
@@ -150,12 +150,14 @@ export default class ReplaceSupers {
     property: Object,
     value: Object,
     isComputed: boolean,
+    isStrict: boolean,
   ): Object {
     return t.callExpression(this.file.addHelper("set"), [
       getPrototypeOfExpression(this.getObjectRef(), this.isStatic, this.file),
       isComputed ? property : t.stringLiteral(property.name),
       value,
       t.thisExpression(),
+      t.booleanLiteral(isStrict),
     ]);
   }
 
@@ -225,14 +227,37 @@ export default class ReplaceSupers {
 
   specHandleAssignmentExpression(ref, path, node) {
     if (node.operator === "=") {
-      // super.name = "val"; -> _set(Object.getPrototypeOf(objectRef.prototype), "name", this);
+      const strictParent = path.findParent(path => {
+        if (path.isClassBody()) {
+          return true;
+        }
+
+        if (path.isProgram() && path.node.sourceType === "module") {
+          return true;
+        }
+
+        if (!path.isProgram() && !path.isBlockStatement()) {
+          return false;
+        }
+
+        return path.node.directives.some(
+          directive => directive.value.value === "use strict",
+        );
+      });
+
+      // super.name = "val"
+      // to
+      // _set(Object.getPrototypeOf(objectRef.prototype), "name", this, isStrict);
       return this.setSuperProperty(
         node.left.property,
         node.right,
         node.left.computed,
+        !!strictParent,
       );
     } else {
-      // super.age += 2; -> let _ref = super.age; super.age = _ref + 2;
+      // super.age += 2
+      // to
+      // let _ref = super.age; super.age = _ref + 2;
       ref = ref || path.scope.generateUidIdentifier("ref");
       return [
         t.variableDeclaration("var", [
