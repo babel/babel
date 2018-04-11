@@ -35,7 +35,7 @@ contributing, please read the
 
 ## Chat
 
-Feel free to check out the `#discussion`/`#development` channels on our [Slack](https://slack.babeljs.io). Some of us are always online to chat!
+Feel free to check out the `#discussion`/`#development` channels on our [Slack](https://slack.babeljs.io) (you can sign-up [here](https://slack.babeljs.io/) for an invite). Some of us are always online to chat!
 
 ## Developing
 
