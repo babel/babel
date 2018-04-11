@@ -1,6 +1,8 @@
 var Point =
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function Point() {
     babelHelpers.classCallCheck(this, Point);
   }
@@ -17,6 +19,8 @@ function () {
 var ColorPoint =
 /*#__PURE__*/
 function (_Point) {
+  "use strict";
+
   babelHelpers.inherits(ColorPoint, _Point);
 
   function ColorPoint() {
