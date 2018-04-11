@@ -2,6 +2,18 @@
 
 describe("babel-runtime", () => {
   describe("instance methods entries", () => {
+    it("at, exists", () => {
+      expect(
+        require("../core-js/instance/at")("").call("a", 0),
+      ).toEqual("a");
+    });
+
+    it("at, missing", () => {
+      expect(
+        require("../core-js/instance/at")({}),
+      ).toEqual(undefined);
+    });
+
     it("bind, exists", () => {
       expect(
         require("../core-js/instance/bind")(() => {}).call(function () { return this; }, 42)(),
@@ -146,6 +158,30 @@ describe("babel-runtime", () => {
       ).toEqual(undefined);
     });
 
+    it("flatMap, exists", () => {
+      expect(
+        require("../core-js/instance/flat-map")([]).call([1, 2, [3, 4]], it => it).length,
+      ).toEqual(4);
+    });
+
+    it("flatMap, missing", () => {
+      expect(
+        require("../core-js/instance/flat-map")({}),
+      ).toEqual(undefined);
+    });
+
+    it("flatten, exists", () => {
+      expect(
+        require("../core-js/instance/flatten")([]).call([1, 2, [3, 4]]).length,
+      ).toEqual(4);
+    });
+
+    it("flatten, missing", () => {
+      expect(
+        require("../core-js/instance/flatten")({}),
+      ).toEqual(undefined);
+    });
+
     it("forEach, exists", () => {
       expect(
         typeof require("../core-js/instance/for-each")([]),
@@ -223,19 +259,19 @@ describe("babel-runtime", () => {
         require("../core-js/instance/map")({}),
       ).toEqual(undefined);
     });
-    /*
-    it("match, exists", () => {
+
+    it("matchAll, exists", () => {
       expect(
-        require("../core-js/instance/match")("").call("qwe", /./)[0],
-      ).toEqual("q");
+        typeof require("../core-js/instance/match-all")("").call("qwe", /./).next,
+      ).toEqual("function");
     });
 
-    it("match, missing", () => {
+    it("matchAll, missing", () => {
       expect(
-        require("../core-js/instance/match")({}),
+        require("../core-js/instance/match-all")({}),
       ).toEqual(undefined);
     });
-    */
+
     it("padEnd, exists", () => {
       expect(
         require("../core-js/instance/pad-end")("").call("qwe", 6),
@@ -295,31 +331,18 @@ describe("babel-runtime", () => {
         require("../core-js/instance/repeat")({}),
       ).toEqual(undefined);
     });
-    /*
-    it("replace, exists", () => {
+
+    it("replaceAll, exists", () => {
       expect(
-        require("../core-js/instance/replace")("").call("qwe", /w/, "r"),
+        require("../core-js/instance/replace-all")("").call("qwe", "w", "r"),
       ).toEqual("qre");
     });
 
-    it("replace, missing", () => {
+    it("replaceAll, missing", () => {
       expect(
-        require("../core-js/instance/replace")({}),
+        require("../core-js/instance/replace-all")({}),
       ).toEqual(undefined);
     });
-
-    it("search, exists", () => {
-      expect(
-        require("../core-js/instance/search")("").call("qwe", /w/),
-      ).toEqual(1);
-    });
-
-    it("search, missing", () => {
-      expect(
-        require("../core-js/instance/search")({}),
-      ).toEqual(undefined);
-    });
-    */
 
     it("slice, exists", () => {
       expect(
@@ -368,19 +391,7 @@ describe("babel-runtime", () => {
         require("../core-js/instance/splice")({}),
       ).toEqual(undefined);
     });
-    /*
-    it("split, exists", () => {
-      expect(
-        require("../core-js/instance/split")("").call("qwert", /e/)[1],
-      ).toEqual("rt");
-    });
 
-    it("split, missing", () => {
-      expect(
-        require("../core-js/instance/split")({}),
-      ).toEqual(undefined);
-    });
-    */
     it("startsWith, exists", () => {
       expect(
         require("../core-js/instance/starts-with")("").call("qwe", "qw"),
@@ -402,6 +413,54 @@ describe("babel-runtime", () => {
     it("trim, missing", () => {
       expect(
         require("../core-js/instance/trim")({}),
+      ).toEqual(undefined);
+    });
+
+    it("trimEnd, exists", () => {
+      expect(
+        require("../core-js/instance/trim-end")("").call(" qwe  "),
+      ).toEqual(" qwe");
+    });
+
+    it("trimEnd, missing", () => {
+      expect(
+        require("../core-js/instance/trim-end")({}),
+      ).toEqual(undefined);
+    });
+
+    it("trimLeft, exists", () => {
+      expect(
+        require("../core-js/instance/trim-left")("").call(" qwe  "),
+      ).toEqual("qwe  ");
+    });
+
+    it("trimLeft, missing", () => {
+      expect(
+        require("../core-js/instance/trim-left")({}),
+      ).toEqual(undefined);
+    });
+
+    it("trimRight, exists", () => {
+      expect(
+        require("../core-js/instance/trim-right")("").call(" qwe  "),
+      ).toEqual(" qwe");
+    });
+
+    it("trimRight, missing", () => {
+      expect(
+        require("../core-js/instance/trim-right")({}),
+      ).toEqual(undefined);
+    });
+
+    it("trimStart, exists", () => {
+      expect(
+        require("../core-js/instance/trim-start")("").call(" qwe  "),
+      ).toEqual("qwe  ");
+    });
+
+    it("trimStart, missing", () => {
+      expect(
+        require("../core-js/instance/trim-start")({}),
       ).toEqual(undefined);
     });
 
