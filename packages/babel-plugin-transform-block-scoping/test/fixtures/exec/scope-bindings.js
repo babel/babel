@@ -13,12 +13,12 @@ var res = transform(code, {
           Scope: {
             exit: function(path) {
               if (innerScope) {
-                assert(Object.keys(path.scope.bindings).length === 0, 'Inner scope should not have any bindings');
+                expect(Object.keys(path.scope.bindings)).toHaveLength(0);
                 innerScope = false;
                 return;
               }
 
-              assert(Object.keys(path.scope.bindings).length === 2, 'Outer scope subsume the inner-scope binding');
+              expect(Object.keys(path.scope.bindings)).toHaveLength(2);
             }
           }
         }
