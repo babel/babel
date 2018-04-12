@@ -1294,10 +1294,13 @@ export default class StatementParser extends ExpressionParser {
   parseClassPrivateProperty(
     node: N.ClassPrivateProperty,
   ): N.ClassPrivateProperty {
+    const oldInMethod = this.state.inMethod;
+    this.state.inMethod = false;
     this.state.inClassProperty = true;
     node.value = this.eat(tt.eq) ? this.parseMaybeAssign() : null;
     this.semicolon();
     this.state.inClassProperty = false;
+    this.state.inMethod = oldInMethod;
     return this.finishNode(node, "ClassPrivateProperty");
   }
 
@@ -1306,6 +1309,8 @@ export default class StatementParser extends ExpressionParser {
       this.expectPlugin("classProperties");
     }
 
+    const oldInMethod = this.state.inMethod;
+    this.state.inMethod = false;
     this.state.inClassProperty = true;
 
     if (this.match(tt.eq)) {
@@ -1317,6 +1322,7 @@ export default class StatementParser extends ExpressionParser {
     }
     this.semicolon();
     this.state.inClassProperty = false;
+    this.state.inMethod = oldInMethod;
 
     return this.finishNode(node, "ClassProperty");
   }
