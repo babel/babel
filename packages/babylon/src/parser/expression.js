@@ -1861,6 +1861,13 @@ export default class ExpressionParser extends LValParser {
       );
     }
 
+    if (this.state.inClassProperty && word === "arguments") {
+      this.raise(
+        startLoc,
+        "'arguments' is not allowed in class field initializer",
+      );
+    }
+
     if (this.isReservedWord(word) || (checkKeywords && this.isKeyword(word))) {
       this.raise(startLoc, word + " is a reserved word");
     }
