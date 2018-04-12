@@ -108,7 +108,7 @@ Mostly a handful of volunteers! Please check out our [team page](https://babeljs
 
 ### Looking for support?
 
-For questions and support please visit join our [Slack Community](https://slack.babeljs.io/), ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs).
+For questions and support please visit join our [Slack Community](https://slack.babeljs.io/) (you can sign-up [here](https://slack.babeljs.io/) for an invite), ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs).
 
 ### Is there a Babel song?
 
