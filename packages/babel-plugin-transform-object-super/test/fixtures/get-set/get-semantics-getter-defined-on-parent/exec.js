@@ -1,7 +1,7 @@
 "use strict";
 const Base = {
   get test() {
-    assert.equal(this, obj);
+    expect(this).toBe(obj);
     return 1;
   }
 };
@@ -15,5 +15,5 @@ const obj = {
 };
 Object.setPrototypeOf(obj, Base);
 
-assert.equal(obj.test, 2);
-assert.equal(obj.get(), 1);
+expect(obj.test).toBe(2);
+expect(obj.get()).toBe(1);

@@ -14,11 +14,11 @@ Object.defineProperty(obj, 'test', {
 });
 Object.setPrototypeOf(obj, Base);
 
-assert.equal(obj.set(), 3);
-assert.equal(Base.test, undefined);
-assert.equal(obj.test, 2);
+expect(obj.set()).toBe(3);
+expect(Base.test).toBeUndefined();
+expect(obj.test).toBe(2);
 
 const desc = Object.getOwnPropertyDescriptor(obj, 'test');
-assert.equal(desc.configurable, true);
-assert.equal(desc.writable, false);
-assert.equal(desc.enumerable, true);
+expect(desc.configurable).toBe(true);
+expect(desc.writable).toBe(false);
+expect(desc.enumerable).toBe(true);
