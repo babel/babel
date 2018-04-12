@@ -135,10 +135,17 @@ defineType("Import", {
 });
 
 defineType("Decorator", {
-  visitor: ["expression"],
+  visitor: ["expression", "arguments"],
   fields: {
     expression: {
       validate: assertNodeType("Expression"),
+    },
+    arguments: {
+      optional: true,
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Expression", "SpreadElement")),
+      ),
     },
   },
 });

@@ -336,6 +336,7 @@ export type VariableDeclarator = NodeBase & {
 export type Decorator = NodeBase & {
   type: "Decorator",
   expression: Expression,
+  arguments?: Array<Expression | SpreadElement>,
 };
 
 export type Directive = NodeBase & {
