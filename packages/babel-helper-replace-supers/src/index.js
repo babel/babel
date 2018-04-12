@@ -5,46 +5,53 @@ import * as t from "@babel/types";
 // ✌️
 const HARDCORE_THIS_REF = new WeakSet();
 
-function isIllegalBareSuper(node, parent) {
-  if (!t.isSuper(node)) return false;
-  if (t.isMemberExpression(parent, { computed: false })) return false;
-  if (t.isCallExpression(parent, { callee: node })) return false;
-  return true;
-}
-
-function isMemberExpressionSuper(node) {
-  return t.isMemberExpression(node) && t.isSuper(node.object);
-}
-
 /**
  * Creates an expression which result is the proto of objectRef.
- * Uses CLASS.__proto__ first for InternetExplorer <= 10 support
  *
  * @example <caption>isStatic === true</caption>
  *
- *   CLASS.__proto__ || Object.getPrototypeOf(CLASS)
+ *   helpers.getPrototypeOf(CLASS)
  *
  * @example <caption>isStatic === false</caption>
  *
- *   CLASS.prototype.__proto__ || Object.getPrototypeOf(CLASS.prototype)
+ *   helpers.getPrototypeOf(CLASS.prototype)
  */
 function getPrototypeOfExpression(objectRef, isStatic, file) {
+  objectRef = t.cloneNode(objectRef);
   const targetRef = isStatic
     ? objectRef
     : t.memberExpression(objectRef, t.identifier("prototype"));
 
-  return t.callExpression(file.addHelper("getPrototypeOf"), [
-    t.cloneNode(targetRef),
-  ]);
+  return t.callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
 const visitor = {
   Function(path) {
-    if (!path.isArrowFunctionExpression()) path.skip();
+    if (path.isMethod()) return;
+    if (path.isArrowFunctionExpression()) return;
+    path.skip();
   },
 
-  ClassProperty(path) {
+  Method(path, state) {
+    // Don't traverse ClassMethod's body
+    path.skip();
+
+    // We do have to traverse the key, since it's evaluated in the outer class
+    // context.
+    if (path.node.computed) {
+      path.get("key").traverse(visitor, state);
+    }
+  },
+
+  "ClassProperty|ClassPrivateProperty"(path, state) {
+    // Don't traverse the ClassProp's value.
     if (!path.node.static) path.skip();
+
+    // We do have to traverse the key, since it's evaluated in the outer class
+    // context.
+    if (path.node.computed) {
+      path.get("key").traverse(visitor, state);
+    }
   },
 
   ReturnStatement(path, state) {
@@ -59,33 +66,15 @@ const visitor = {
     }
   },
 
-  enter(path, state) {
-    let callback = state.specHandle;
-    if (state.isLoose) callback = state.looseHandle;
+  Super(path, state) {
+    state.hasSuper = true;
 
-    const isBareSuper = path.isCallExpression() && path.get("callee").isSuper();
-
-    const result = callback.call(state, path);
-
-    if (result) {
-      state.hasSuper = true;
+    const { node, parentPath } = path;
+    if (parentPath.isCallExpression({ callee: node })) {
+      state.bareSupers.add(parentPath);
+      return;
     }
-
-    if (isBareSuper) {
-      state.bareSupers.push(path);
-    }
-
-    if (result === true) {
-      path.requeue();
-    }
-
-    if (result !== true && result) {
-      if (Array.isArray(result)) {
-        path.replaceWithMultiple(result);
-      } else {
-        path.replaceWith(result);
-      }
-    }
+    state[state.isLoose ? "looseHandle" : "specHandle"](path);
   },
 };
 
@@ -104,7 +93,7 @@ export default class ReplaceSupers {
     this.file = opts.file;
     this.opts = opts;
 
-    this.bareSupers = [];
+    this.bareSupers = new Set();
     this.returns = [];
     this.thises = [];
   }
@@ -141,8 +130,7 @@ export default class ReplaceSupers {
    *
    * @example
    *
-   *   _set(CLASS.prototype.__proto__ || Object.getPrototypeOf(CLASS.prototype), "METHOD", "VALUE",
-   *     this, isStrict)
+   *   _set(Object.getPrototypeOf(CLASS.prototype), "METHOD", "VALUE", this, isStrict)
    *
    */
 
@@ -166,7 +154,7 @@ export default class ReplaceSupers {
    *
    * @example
    *
-   *   _get(CLASS.prototype.__proto__ || Object.getPrototypeOf(CLASS.prototype), "METHOD", this)
+   *   _get(Object.getPrototypeOf(CLASS.prototype), "METHOD", this)
    *
    */
 
@@ -190,144 +178,146 @@ export default class ReplaceSupers {
     this.methodPath.traverse(visitor, this);
   }
 
-  getLooseSuperProperty(id: Object, parent: Object) {
-    const methodNode = this.methodNode;
-    const superRef = this.superRef || t.identifier("Function");
+  getLooseSuperProperty(path) {
+    const { isStatic, superRef } = this;
 
-    if (parent.property === id) {
-      return;
-    } else if (t.isCallExpression(parent, { callee: id })) {
-      return;
-    } else if (t.isMemberExpression(parent) && !methodNode.static) {
-      // super.test -> objectRef.prototype.test
-      return t.memberExpression(
-        t.cloneNode(superRef),
-        t.identifier("prototype"),
-      );
+    let object;
+    if (isStatic) {
+      object = superRef
+        ? t.cloneNode(superRef)
+        : t.memberExpression(
+            t.identifier("Function"),
+            t.identifier("prototype"),
+          );
     } else {
-      return t.cloneNode(superRef);
+      object = superRef
+        ? t.memberExpression(t.cloneNode(superRef), t.identifier("prototype"))
+        : t.memberExpression(t.identifier("Object"), t.identifier("prototype"));
     }
+    path.get("object").replaceWith(object);
   }
 
   looseHandle(path: NodePath) {
-    const node = path.node;
-    if (path.isSuper()) {
-      return this.getLooseSuperProperty(node, path.parent);
-    } else if (path.isCallExpression()) {
-      const callee = node.callee;
-      if (!t.isMemberExpression(callee)) return;
-      if (!t.isSuper(callee.object)) return;
+    const { node, parentPath } = path;
 
-      // super.test(); -> objectRef.prototype.MethodName.call(this);
-      t.appendToMemberExpression(callee, t.identifier("call"));
-      node.arguments.unshift(t.thisExpression());
-      return true;
+    // super.test
+    if (parentPath.isMemberExpression({ object: node })) {
+      this.getLooseSuperProperty(parentPath);
+    }
+
+    // super.test()
+    // though, it's SUPER.prototype.test() after the above.
+    const grandParentPath = parentPath.parentPath;
+    const callee = parentPath.node;
+    if (grandParentPath.isCallExpression({ callee })) {
+      grandParentPath
+        .get("callee")
+        .replaceWith(t.memberExpression(callee, t.identifier("call")));
+      grandParentPath.node.arguments.unshift(t.thisExpression());
     }
   }
 
-  specHandleAssignmentExpression(ref, path, node) {
-    if (node.operator === "=") {
+  specHandleAssignmentExpression(path) {
+    const { node } = path;
+    const { operator } = node;
+    const { computed, property } = node.left;
+    if (operator === "=") {
       // super.name = "val"
       // to
-      // _set(Object.getPrototypeOf(objectRef.prototype), "name", this, isStrict);
-      return this.setSuperProperty(
-        node.left.property,
+      // _set(Object.getPrototypeOf(CLASS.prototype), "name", this);
+      const setter = this.setSuperProperty(
+        property,
         node.right,
-        node.left.computed,
+        computed,
         path.isInStrictMode(),
       );
-    } else {
-      // super.age += 2
-      // to
-      // let _ref = super.age; super.age = _ref + 2;
-      ref = ref || path.scope.generateUidIdentifier("ref");
-      return [
-        t.variableDeclaration("var", [
-          t.variableDeclarator(t.cloneNode(ref), t.cloneNode(node.left)),
-        ]),
-        t.expressionStatement(
-          t.assignmentExpression(
-            "=",
-            node.left,
-            t.binaryExpression(
-              node.operator.slice(0, -1),
-              t.cloneNode(ref),
-              node.right,
-            ),
-          ),
-        ),
-      ];
+      return [setter];
     }
+
+    // super.age += 2;
+    // to
+    // _set(
+    //   Object.getPrototypeOf(CLASS.prototype),
+    //   "name",
+    //   _get(Object.getPrototypeOf(CLASS.prototype), "METHOD", this) + 2,
+    //   this,
+    //   true,
+    // );
+    // TODO this needs cleanup. Should be a single proto lookup
+    const ref = path.scope.generateDeclaredUidIdentifier("ref");
+    const setter = this.setSuperProperty(
+      property,
+      t.binaryExpression(operator.slice(0, -1), t.cloneNode(ref), node.right),
+      computed,
+      path.isInStrictMode(),
+    );
+    return [
+      t.assignmentExpression(
+        "=",
+        t.cloneNode(ref),
+        this.getSuperProperty(property, computed),
+      ),
+      setter,
+    ];
   }
 
   specHandle(path: NodePath) {
-    let property;
-    let computed;
-    let args;
+    const { node, parentPath } = path;
+    const grandParentPath = parentPath.parentPath;
+    let parent = parentPath.node;
 
-    const parent = path.parent;
-    const node = path.node;
-
-    if (isIllegalBareSuper(node, parent)) {
-      throw path.buildCodeFrameError("Illegal use of bare super");
-    }
-
-    if (t.isCallExpression(node)) {
-      const callee = node.callee;
-      if (t.isSuper(callee)) {
-        return;
-      } else if (isMemberExpressionSuper(callee)) {
-        // super.test();
-        // to
-        // _get(Object.getPrototypeOf(objectRef.prototype), "test", this).call(this);
-        property = callee.property;
-        computed = callee.computed;
-        args = node.arguments;
-      }
-    } else if (t.isMemberExpression(node) && t.isSuper(node.object)) {
-      // super.name;
-      // to
-      // _get(Object.getPrototypeOf(objectRef.prototype), "name", this);
-      property = node.property;
-      computed = node.computed;
-    } else if (
-      t.isUpdateExpression(node) &&
-      isMemberExpressionSuper(node.argument)
-    ) {
-      const binary = t.assignmentExpression(
-        node.operator[0] + "=",
-        node.argument,
+    if (grandParentPath.isUpdateExpression({ argument: parent })) {
+      const { operator, prefix } = grandParentPath.node;
+      const assignment = t.assignmentExpression(
+        operator[0] + "=",
+        parent,
         t.numericLiteral(1),
       );
-      if (node.prefix) {
-        // ++super.foo;
-        // to
-        // super.foo += 1;
-        return this.specHandleAssignmentExpression(null, path, binary);
-      } else {
-        // super.foo++;
-        // to
-        // let _ref = super.foo; super.foo = _ref + 1;
-        const ref = path.scope.generateUidIdentifier("ref");
-        return this.specHandleAssignmentExpression(ref, path, binary).concat(
-          t.expressionStatement(ref),
-        );
+      grandParentPath.replaceWith(assignment);
+
+      // ++super.foo;
+      // to
+      // _ref = Number(super.foo), super.foo = _ref + 1
+      // super.foo++;
+      // to
+      // _ref = Number(super.foo), super.foo = _ref + 1, _ref
+      const nodes = this.specHandleAssignmentExpression(grandParentPath);
+      const [first] = nodes;
+      first.right = t.callExpression(t.identifier("Number"), [first.right]);
+
+      // Postfix returns the old value, not the new.
+      if (!prefix) {
+        nodes.push(t.cloneNode(first.left));
       }
-    } else if (
-      t.isAssignmentExpression(node) &&
-      isMemberExpressionSuper(node.left)
-    ) {
-      return this.specHandleAssignmentExpression(null, path, node);
+      grandParentPath.replaceWith(t.sequenceExpression(nodes));
+      return;
     }
 
-    if (!property) return;
+    if (grandParentPath.isAssignmentExpression({ left: parent })) {
+      grandParentPath.replaceWithMultiple(
+        this.specHandleAssignmentExpression(grandParentPath),
+      );
+      return;
+    }
 
-    const superProperty = this.getSuperProperty(property, computed);
+    if (parentPath.isMemberExpression({ object: node })) {
+      // super.name;
+      // to
+      // _get(Object.getPrototypeOf(CLASS.prototype), "name", this);
+      const { node } = parentPath;
+      const { computed, property } = node;
 
-    if (args) {
-      return this.optimiseCall(superProperty, args);
-    } else {
-      return superProperty;
+      parent = this.getSuperProperty(property, computed);
+      parentPath.replaceWith(parent);
+    }
+
+    if (grandParentPath.isCallExpression({ callee: parent })) {
+      // _get(Object.getPrototypeOf(CLASS.prototype), "test", this)();
+      // to
+      // _get(Object.getPrototypeOf(CLASS.prototype), "test", this).call(this);
+      const call = this.optimiseCall(parent, grandParentPath.node.arguments);
+      grandParentPath.replaceWith(call);
+      return;
     }
   }
 

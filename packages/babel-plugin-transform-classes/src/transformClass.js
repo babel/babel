@@ -57,7 +57,7 @@ export default function transformClass(
     instancePropRefs: {},
     staticPropBody: [],
     body: [],
-    bareSupers: [],
+    bareSupers: new Set(),
     superThises: [],
     pushedConstructor: false,
     pushedInherits: false,
@@ -388,7 +388,7 @@ export default function transformClass(
 
     path.traverse(findThisesVisitor);
 
-    let guaranteedSuperBeforeFinish = !!classState.bareSupers.length;
+    let guaranteedSuperBeforeFinish = !!classState.bareSupers.size;
 
     const superRef = classState.superName || t.identifier("Function");
     let thisRef = function() {
