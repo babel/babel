@@ -3,5 +3,5 @@ var StringPrototype = String.prototype;
 
 module.exports = function (it) {
   var own = it.codePointAt;
-  return (own === StringPrototype.codePointAt && (typeof it === "string" || it instanceof String)) ? codePointAt : own;
+  return typeof it === "string" || it === StringPrototype || (it instanceof String && own === StringPrototype.codePointAt) ? codePointAt : own;
 };

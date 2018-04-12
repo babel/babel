@@ -3,5 +3,5 @@ var ArrayPrototype = Array.prototype;
 
 module.exports = function (it) {
   var own = it.reduce;
-  return (own === ArrayPrototype.reduce && it instanceof Array) ? reduce : own;
+  return it === ArrayPrototype || (it instanceof Array && own === ArrayPrototype.reduce) ? reduce : own;
 };

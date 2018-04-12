@@ -3,5 +3,5 @@ var StringPrototype = String.prototype;
 
 module.exports = function (it) {
   var own = it.matchAll;
-  return (own === StringPrototype.matchAll && (typeof it === "string" || it instanceof String)) ? matchAll : own;
+  return typeof it === "string" || it === StringPrototype || (it instanceof String && own === StringPrototype.matchAll) ? matchAll : own;
 };

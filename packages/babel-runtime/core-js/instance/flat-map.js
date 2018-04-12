@@ -3,5 +3,5 @@ var ArrayPrototype = Array.prototype;
 
 module.exports = function (it) {
   var own = it.flatMap;
-  return (own === ArrayPrototype.flatMap && it instanceof Array) ? flatMap : own;
+  return it === ArrayPrototype || (it instanceof Array && own === ArrayPrototype.flatMap) ? flatMap : own;
 };

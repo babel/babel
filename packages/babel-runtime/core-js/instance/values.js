@@ -9,5 +9,5 @@ var DOMIterables = {
 
 module.exports = function (it) {
   var own = it.values;
-  return (own === ArrayPrototype.values && (it instanceof Array || DOMIterables.hasOwnProperty(toString.call(it)))) ? values : own;
+  return it === ArrayPrototype || (it instanceof Array && own === ArrayPrototype.values) || DOMIterables.hasOwnProperty(toString.call(it)) ? values : own;
 };

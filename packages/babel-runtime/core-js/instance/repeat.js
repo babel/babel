@@ -3,5 +3,5 @@ var StringPrototype = String.prototype;
 
 module.exports = function (it) {
   var own = it.repeat;
-  return (own === StringPrototype.repeat && (typeof it === "string" || it instanceof String)) ? repeat : own;
+  return typeof it === "string" || it === StringPrototype || (it instanceof String && own === StringPrototype.repeat) ? repeat : own;
 };

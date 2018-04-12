@@ -3,5 +3,5 @@ var ArrayPrototype = Array.prototype;
 
 module.exports = function (it) {
   var own = it.copyWithin;
-  return (own === ArrayPrototype.copyWithin && it instanceof Array) ? copyWithin : own;
+  return it === ArrayPrototype || (it instanceof Array && own === ArrayPrototype.copyWithin) ? copyWithin : own;
 };

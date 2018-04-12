@@ -3,5 +3,5 @@ var StringPrototype = String.prototype;
 
 module.exports = function (it) {
   var own = it.endsWith;
-  return (own === StringPrototype.endsWith && (typeof it === "string" || it instanceof String)) ? endsWith : own;
+  return typeof it === "string" || it === StringPrototype || (it instanceof String && own === StringPrototype.endsWith) ? endsWith : own;
 };

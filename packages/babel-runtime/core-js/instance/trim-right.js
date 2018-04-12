@@ -3,5 +3,5 @@ var StringPrototype = String.prototype;
 
 module.exports = function (it) {
   var own = it.trimRight;
-  return (own === StringPrototype.trimRight && (typeof it === "string" || it instanceof String)) ? trimRight : own;
+  return typeof it === "string" || it === StringPrototype || (it instanceof String && own === StringPrototype.trimRight) ? trimRight : own;
 };

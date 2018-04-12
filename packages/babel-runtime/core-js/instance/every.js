@@ -3,5 +3,5 @@ var ArrayPrototype = Array.prototype;
 
 module.exports = function (it) {
   var own = it.every;
-  return (own === ArrayPrototype.every && it instanceof Array) ? every : own;
+  return it === ArrayPrototype || (it instanceof Array && own === ArrayPrototype.every) ? every : own;
 };

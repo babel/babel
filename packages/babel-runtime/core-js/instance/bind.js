@@ -3,5 +3,5 @@ var FunctionPrototype = Function.prototype;
 
 module.exports = function (it) {
   var own = it.bind;
-  return (own === FunctionPrototype.bind && it instanceof Function) ? bind : own;
+  return it === FunctionPrototype || (it instanceof Function && own === FunctionPrototype.bind) ? bind : own;
 };

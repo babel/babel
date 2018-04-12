@@ -3,5 +3,5 @@ var ArrayPrototype = Array.prototype;
 
 module.exports = function (it) {
   var own = it.lastIndexOf;
-  return (own === ArrayPrototype.lastIndexOf && it instanceof Array) ? lastIndexOf : own;
+  return it === ArrayPrototype || (it instanceof Array && own === ArrayPrototype.lastIndexOf) ? lastIndexOf : own;
 };

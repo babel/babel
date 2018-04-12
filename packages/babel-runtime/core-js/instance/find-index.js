@@ -3,5 +3,5 @@ var ArrayPrototype = Array.prototype;
 
 module.exports = function (it) {
   var own = it.findIndex;
-  return (own === ArrayPrototype.findIndex && it instanceof Array) ? findIndex : own;
+  return it === ArrayPrototype || (it instanceof Array && own === ArrayPrototype.findIndex) ? findIndex : own;
 };
