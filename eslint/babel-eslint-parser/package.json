@@ -11,10 +11,10 @@
     "url": "https://github.com/babel/babel-eslint.git"
   },
   "dependencies": {
-    "@babel/code-frame": "^7.0.0-beta.40",
-    "@babel/traverse": "^7.0.0-beta.40",
-    "@babel/types": "^7.0.0-beta.40",
-    "babylon": "^7.0.0-beta.40",
+    "@babel/code-frame": "7.0.0-beta.40",
+    "@babel/traverse": "7.0.0-beta.40",
+    "@babel/types": "7.0.0-beta.40",
+    "babylon": "7.0.0-beta.40",
     "eslint-scope": "~3.7.1",
     "eslint-visitor-keys": "^1.0.0"
   },
