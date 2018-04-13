@@ -19,10 +19,10 @@ Object.defineProperty(Obj.prototype, 'test', {
 });
 
 const obj = new Obj();
-assert.throws(() => {
+expect(() => {
   obj.set();
-});
-assert.equal(called, false);
-assert.equal(Base.prototype.test, 1);
-assert.equal(Obj.prototype.test, 2);
-assert.equal(obj.test, 2);
+}).toThrow();
+expect(called).toBe(false);
+expect(Base.prototype.test).toBe(1);
+expect(Obj.prototype.test).toBe(2);
+expect(obj.test).toBe(2);
