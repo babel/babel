@@ -6,6 +6,6 @@ function foo() {
 function bar() {
   return tag`some template`;
 }
-assert.equal(foo(), foo());
-assert.equal(bar(), bar());
-assert.notEqual(foo(), bar());
+expect(foo()).toBe(foo());
+expect(bar()).toBe(bar());
+expect(bar()).not.toBe(foo());

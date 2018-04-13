@@ -72,10 +72,8 @@ export default declare((api, options) => {
           }
         }
 
-        const programPath = path.find(p => p.isProgram());
-        const templateObject = programPath.scope.generateUidIdentifier(
-          "templateObject",
-        );
+        const scope = path.scope.getProgramParent();
+        const templateObject = scope.generateUidIdentifier("templateObject");
 
         const helperId = this.addHelper(helperName);
         const callExpressionInput = [t.arrayExpression(strings)];
@@ -88,7 +86,7 @@ export default declare((api, options) => {
         const init = t.callExpression(helperId, callExpressionInput);
         annotateAsPure(init);
         init._compact = true;
-        programPath.scope.push({
+        scope.push({
           id: templateObject,
           init,
           // This ensures that we don't fail if not using function expression helpers

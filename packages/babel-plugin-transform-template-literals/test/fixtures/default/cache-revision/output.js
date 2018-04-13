@@ -13,6 +13,6 @@ function bar() {
   return tag(_templateObject2);
 }
 
-assert.equal(foo(), foo());
-assert.equal(bar(), bar());
-assert.notEqual(foo(), bar());
+expect(foo()).toBe(foo());
+expect(bar()).toBe(bar());
+expect(bar()).not.toBe(foo());
