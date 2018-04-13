@@ -47,6 +47,7 @@ It just needs to export a `parse` method that takes in a string of code and outp
 
 ESLint | babel-eslint
 ------------ | -------------
+4.x | >= 6.x
 3.x | >= 6.x
 2.x | >= 6.x
 1.x | >= 5.x
@@ -56,9 +57,9 @@ ESLint | babel-eslint
 Ensure that you have substituted the correct version lock for `eslint` and `babel-eslint` into this command:
 
 ```sh
-$ npm install eslint@3.x babel-eslint@7 --save-dev
+$ npm install eslint@4.x babel-eslint@8 --save-dev
 # or
-$ yarn add eslint@3.x babel-eslint@7 -D
+$ yarn add eslint@4.x babel-eslint@8 -D
 ```
 
 ### Setup
