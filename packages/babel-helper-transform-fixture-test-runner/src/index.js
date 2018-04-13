@@ -28,17 +28,6 @@ const testContext = vm.createContext({
 });
 testContext.global = testContext;
 
-// Add chai's assert to the global context
-// It has to be required inside the testContext as otherwise some assertions do not
-// work as chai would reference globals (RegExp, Array, ...) from this context
-vm.runInContext(
-  "(function(require) { global.assert=require('chai').assert; });",
-  testContext,
-  {
-    displayErrors: true,
-  },
-)(id => runModuleInTestContext(id, __filename));
-
 // Initialize the test context with the polyfill, and then freeze the global to prevent implicit
 // global creation in tests, which could cause things to bleed between tests.
 runModuleInTestContext("@babel/polyfill", __filename);
