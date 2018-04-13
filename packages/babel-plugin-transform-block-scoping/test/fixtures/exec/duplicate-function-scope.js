@@ -7,4 +7,4 @@ function test () {
   }();
 }
 
-assert(test(), "inner");
+expect(test()).toBe("inner");

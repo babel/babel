@@ -1,6 +1,6 @@
 class Point {
   getX() {
-    assert.equal(this.x, 3); // C
+    expect(this.x).toBe(3); // C
   }
 }
 
@@ -9,8 +9,8 @@ class ColorPoint extends Point {
     super();
     this.x = 2;
     super.x = 3;
-    assert.equal(this.x, 3);   // A
-    assert.equal(super.x, undefined);  // B
+    expect(this.x).toBe(3);   // A
+    expect(super.x).toBeUndefined();  // B
   }
 
   m() {

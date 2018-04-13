@@ -6,7 +6,7 @@ const test = () => {
     return true;
   }
 }
-assert(test());
+expect(test()).toBe(true);
 
 const test2 = () => {
   try {
@@ -16,4 +16,4 @@ const test2 = () => {
     return true;
   }
 }
-assert(test2());
+expect(test2()).toBe(true);

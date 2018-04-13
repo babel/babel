@@ -16,8 +16,8 @@ const obj = {
 };
 Object.setPrototypeOf(obj, Base);
 
-assert.throws(() => {
+expect(() => {
   obj.set();
-});
-assert.equal(Base.test, 1);
-assert.equal(obj.test, 2);
+}).toThrow();
+expect(Base.test).toBe(1);
+expect(obj.test).toBe(2);

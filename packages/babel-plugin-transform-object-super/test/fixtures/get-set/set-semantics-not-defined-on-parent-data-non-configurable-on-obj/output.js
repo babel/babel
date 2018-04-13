@@ -26,10 +26,10 @@ Object.defineProperty(obj, 'test', {
   enumerable: true
 });
 Object.setPrototypeOf(obj, Base);
-assert.equal(obj.set(), 3);
-assert.equal(Base.test, undefined);
-assert.equal(obj.test, 3);
+expect(obj.set()).toBe(3);
+expect(Base.test).toBeUndefined();
+expect(obj.test).toBe(3);
 const desc = Object.getOwnPropertyDescriptor(obj, 'test');
-assert.equal(desc.configurable, false);
-assert.equal(desc.writable, true);
-assert.equal(desc.enumerable, true);
+expect(desc.configurable).toBe(false);
+expect(desc.writable).toBe(true);
+expect(desc.enumerable).toBe(true);

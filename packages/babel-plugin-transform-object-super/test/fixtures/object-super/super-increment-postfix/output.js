@@ -11,6 +11,6 @@ var obj = _obj = {
   }
 };
 Object.setPrototypeOf(obj, Base);
-assert.strictEqual(obj.bar(), 1);
-assert.strictEqual(Base.test, '1');
-assert.strictEqual(obj.test, 2);
+expect(obj.bar()).toBe(1);
+expect(Base.test).toBe('1');
+expect(obj.test).toBe(2);

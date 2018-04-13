@@ -10,7 +10,7 @@ function () {
   babelHelpers.createClass(Point, [{
     key: "getX",
     value: function getX() {
-      assert.equal(this.x, 3); // C
+      expect(this.x).toBe(3); // C
     }
   }]);
   return Point;
@@ -30,9 +30,9 @@ function (_Point) {
     _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(ColorPoint).call(this));
     _this.x = 2;
     babelHelpers.set(babelHelpers.getPrototypeOf(ColorPoint.prototype), "x", 3, _this, true)
-    assert.equal(_this.x, 3); // A
+    expect(_this.x).toBe(3); // A
 
-    assert.equal(babelHelpers.get(babelHelpers.getPrototypeOf(ColorPoint.prototype), "x", babelHelpers.assertThisInitialized(_this)), undefined); // B
+    expect(babelHelpers.get(babelHelpers.getPrototypeOf(ColorPoint.prototype), "x", babelHelpers.assertThisInitialized(_this))).toBeUndefined(); // B
 
     return _this;
   }

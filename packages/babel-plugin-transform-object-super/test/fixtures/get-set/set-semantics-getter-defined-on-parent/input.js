@@ -14,10 +14,10 @@ const obj = {
 };
 Object.setPrototypeOf(obj, Base);
 
-assert.throws(() => {
+expect(() => {
   // this requires helpers to be in file (not external), so they
   // are in "strict" mode code.
   obj.set();
-});
-assert.equal(Base.test, 1);
-assert.equal(obj.test, 2);
+}).toThrow();
+expect(Base.test).toBe(1);
+expect(obj.test).toBe(2);

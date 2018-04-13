@@ -70,8 +70,8 @@ Object.defineProperty(Obj.prototype, 'test', {
   configurable: true
 });
 const obj = new Obj();
-assert.equal(obj.set(), 3);
-assert.equal(value, 3);
-assert.equal(Base.prototype.test, undefined);
-assert.equal(Obj.prototype.test, 2);
-assert.equal(obj.test, 2);
+expect(obj.set()).toBe(3);
+expect(value).toBe(3);
+expect(Base.prototype.test).toBeUndefined();
+expect(Obj.prototype.test).toBe(2);
+expect(obj.test).toBe(2);

@@ -53,7 +53,7 @@ function (_Base) {
 }(Base);
 
 const obj = new Obj();
-assert.equal(obj.set(), 3);
-assert.equal(Base.prototype.test, undefined);
-assert.equal(Obj.prototype.test, undefined);
-assert.equal(obj.test, 3);
+expect(obj.set()).toBe(3);
+expect(Base.prototype.test).toBeUndefined();
+expect(Obj.prototype.test).toBeUndefined();
+expect(obj.test).toBe(3);

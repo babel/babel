@@ -70,11 +70,11 @@ Object.defineProperty(Obj.prototype, 'test', {
   configurable: true
 });
 const obj = new Obj();
-assert.throws(() => {
+expect(() => {
   // this requires helpers to be in file (not external), so they
   // are in "strict" mode code.
   obj.set();
-});
-assert.equal(Base.prototype.test, 1);
-assert.equal(Obj.prototype.test, 2);
-assert.equal(obj.test, 2);
+}).toThrow();
+expect(Base.prototype.test).toBe(1);
+expect(Obj.prototype.test).toBe(2);
+expect(obj.test).toBe(2);

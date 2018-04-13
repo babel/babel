@@ -13,7 +13,7 @@ var obj = {
 };
 Object.setPrototypeOf(obj, Base);
 
-assert.equal(obj.set(), 3);
-assert.equal(Base.test, undefined);
-assert.equal(value, 2);
-assert.equal(obj.test, undefined);
+expect(obj.set()).toBe(3);
+expect(Base.test).toBeUndefined();
+expect(value).toBe(2);
+expect(obj.test).toBeUndefined();

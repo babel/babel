@@ -20,4 +20,4 @@ const Outer = _obj = {
   }
 };
 Object.setPrototypeOf(Outer, Hello);
-assert.equal(Outer.constructor().hello(), 'hello');
+expect(Outer.constructor().hello()).toBe('hello');

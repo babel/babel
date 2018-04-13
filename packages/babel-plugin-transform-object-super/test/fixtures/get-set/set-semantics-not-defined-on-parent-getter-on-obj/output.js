@@ -22,10 +22,10 @@ const obj = _obj = {
 
 };
 Object.setPrototypeOf(obj, Base);
-assert.throws(() => {
+expect(() => {
   // this requires helpers to be in file (not external), so they
   // are in "strict" mode code.
   obj.set();
-});
-assert.equal(Base.test, undefined);
-assert.equal(obj.test, undefined);
+}).toThrow();
+expect(Base.test).toBeUndefined();
+expect(obj.test).toBeUndefined();

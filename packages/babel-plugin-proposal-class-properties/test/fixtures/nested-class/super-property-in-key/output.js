@@ -45,4 +45,4 @@ function (_Hello) {
   return Outer;
 }(Hello);
 
-assert.equal(new Outer().hello, 'hello');
+expect(new Outer().hello).toBe('hello');

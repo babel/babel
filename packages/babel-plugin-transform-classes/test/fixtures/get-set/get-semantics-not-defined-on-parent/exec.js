@@ -14,5 +14,5 @@ Object.defineProperty(Obj.prototype, 'test', {
 });
 
 const obj = new Obj();
-assert.equal(obj.test, 2);
-assert.equal(obj.get(), undefined);
+expect(obj.test).toBe(2);
+expect(obj.get()).toBeUndefined();

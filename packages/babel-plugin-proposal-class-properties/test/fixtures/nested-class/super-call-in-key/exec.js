@@ -19,4 +19,4 @@ class Outer extends Hello {
   }
 }
 
-assert.equal(new Outer().hello, 'hello');
+expect(new Outer().hello).toBe('hello');

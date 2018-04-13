@@ -12,6 +12,6 @@ const obj = {
 };
 Object.setPrototypeOf(obj, Base);
 
-assert.equal(obj.set(), 3);
-assert.equal(Base.test, 3);
-assert.equal(obj.test, 2);
+expect(obj.set()).toBe(3);
+expect(Base.test).toBe(3);
+expect(obj.test).toBe(2);

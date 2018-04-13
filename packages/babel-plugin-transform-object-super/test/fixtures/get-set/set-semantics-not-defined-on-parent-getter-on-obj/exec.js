@@ -14,9 +14,9 @@ const obj = {
 };
 Object.setPrototypeOf(obj, Base);
 
-assert.throws(() => {
+expect(() => {
   obj.set();
-});
-assert.equal(called, false);
-assert.equal(Base.test, undefined);
-assert.equal(obj.test, undefined);
+}).toThrow();
+expect(called).toBe(false);
+expect(Base.test).toBeUndefined();
+expect(obj.test).toBeUndefined();
