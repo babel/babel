@@ -4,7 +4,8 @@ var _templateObject = /*#__PURE__*/ _taggedTemplateLiteralLoose([void 0], ["\\un
     _templateObject4 = /*#__PURE__*/ _taggedTemplateLiteralLoose(["left", void 0], ["left", "\\xg"]),
     _templateObject5 = /*#__PURE__*/ _taggedTemplateLiteralLoose(["left", void 0, "right"], ["left", "\\xg", "right"]),
     _templateObject6 = /*#__PURE__*/ _taggedTemplateLiteralLoose(["left", void 0, "right"], ["left", "\\u000g", "right"]),
-    _templateObject7 = /*#__PURE__*/ _taggedTemplateLiteralLoose(["left", void 0, "right"], ["left", "\\u{-0}", "right"]);
+    _templateObject7 = /*#__PURE__*/ _taggedTemplateLiteralLoose(["left", void 0, "right"], ["left", "\\u{-0}", "right"]),
+    _templateObject8 = /*#__PURE__*/ _taggedTemplateLiteralLoose([void 0], ["\\01"]);
 
 function _taggedTemplateLiteralLoose(strings, raw) { if (!raw) { raw = strings.slice(0); } strings.raw = raw; return strings; }
 
@@ -18,5 +19,5 @@ tag(_templateObject7, 0, 1);
 
 function a() {
   var undefined = 4;
-  tag(_templateObject2);
+  tag(_templateObject8);
 }
