@@ -842,10 +842,12 @@ export default class StatementParser extends ExpressionParser {
   ): T {
     const oldInFunc = this.state.inFunction;
     const oldInMethod = this.state.inMethod;
+    const oldInAsync = this.state.inAsync;
     const oldInGenerator = this.state.inGenerator;
     const oldInClassProperty = this.state.inClassProperty;
     this.state.inFunction = true;
     this.state.inMethod = false;
+    this.state.inAsync = isAsync;
     this.state.inClassProperty = false;
 
     this.initFunction(node, isAsync);
@@ -887,6 +889,7 @@ export default class StatementParser extends ExpressionParser {
 
     this.state.inFunction = oldInFunc;
     this.state.inMethod = oldInMethod;
+    this.state.inAsync = oldInAsync;
     this.state.inGenerator = oldInGenerator;
     this.state.inClassProperty = oldInClassProperty;
 
