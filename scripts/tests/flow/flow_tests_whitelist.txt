@@ -11,6 +11,7 @@
 JSX_invalid/migrated_0000.js
 arrow_function_invalid/migrated_0002.js
 async_await/async_generic_method.js
+async_await/migrated_0007.js
 async_await/migrated_0020.js
 async_await/migrated_0024.js
 async_await/migrated_0027.js
