@@ -128,7 +128,6 @@ export default declare((api, options) => {
             computedPath.traverse(classFieldDefinitionEvaluationTDZVisitor, {
               classRef: path.scope.getBinding(ref.name),
               file: this.file,
-              shouldSkip: computedPath.get("value"),
             });
             const ident = path.scope.generateUidIdentifierBasedOnNode(
               computedNode.key,
