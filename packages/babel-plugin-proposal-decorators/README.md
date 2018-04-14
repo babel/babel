@@ -62,11 +62,33 @@ Add the following line to your .babelrc file:
 }
 ```
 
-#### NOTE: Order of Plugins Matters!
+### Via CLI
+
+```sh
+babel --plugins @babel/plugin-proposal-decorators script.js
+```
+
+### Via Node API
+
+```javascript
+require("@babel/core").transform("code", {
+  plugins: ["@babel/plugin-proposal-decorators"]
+});
+```
+
+## Options
+
+### `legacy`
+
+`boolean`, defaults to `false`.
+
+Use the legacy (stage 1) decorators syntax and behavior.
+
+#### NOTE: Compatibility with `@babel/plugin-proposal-class-properties`
 
 If you are including your plugins manually and using `@babel/plugin-proposal-class-properties`, make sure that `@babel/plugin-proposal-decorators` comes *before* `@babel/plugin-proposal-class-properties`.
 
-Currently, `@babel/plugin-proposal-class-properties` must be used in `loose` mode to support the `@babel/plugin-proposal-decorators`. To use `@babel/plugin-proposal-class-properties` in spec mode with decorators, wait for the next major version of decorators (Stage 2).
+When using the `legacy: true` mode, `@babel/plugin-proposal-class-properties` must be used in `loose` mode to support the `@babel/plugin-proposal-decorators`.
 
 Wrong:
 
@@ -85,23 +107,18 @@ Right:
 {
   "plugins": [
     "@babel/plugin-proposal-decorators",
-    ["@babel/plugin-proposal-class-properties", { "loose" : true }]
+    "@babel/plugin-proposal-class-properties"
   ]
 }
 ```
 
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-proposal-decorators script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-proposal-decorators"]
-});
+```json
+{
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    ["@babel/plugin-proposal-class-properties", { "loose" : true }]
+  ]
+}
 ```
 
 ## References

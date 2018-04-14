@@ -32,7 +32,7 @@ export default declare((api, opts) => {
   return {
     presets: [[presetStage2, { loose, useBuiltIns }]],
     plugins: [
-      transformDecorators,
+      [transformDecorators, { legacy: true }],
       transformExportDefaultFrom,
       transformLogicalAssignmentOperators,
       [transformOptionalChaining, { loose }],

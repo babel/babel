@@ -1,4 +1,7 @@
 {
   "presets": ["es2015"],
-  "plugins": ["proposal-decorators", ["proposal-class-properties", {"loose": true}]]
+  "plugins": [
+    ["proposal-decorators", { "legacy": true }],
+    ["proposal-class-properties", { "loose": true }]
+  ]
 }
