@@ -26,33 +26,38 @@ function getPrototypeOfExpression(objectRef, isStatic, file) {
   return t.callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
+function skipAllButComputedKey(path) {
+  // If the path isn't computed, just skip everything.
+  if (!path.node.computed) {
+    path.skip();
+    return;
+  }
+
+  // So it's got a computed key. Make sure to skip every other key the
+  // traversal would visit.
+  const keys = t.VISITOR_KEYS[path.type];
+  for (const key of keys) {
+    if (key !== "key") path.skipKey(key);
+  }
+}
+
 export const environmentVisitor = {
   Function(path) {
+    // Methods will be handled by the Method visit
     if (path.isMethod()) return;
+    // Arrow functions inherit their parent's environment
     if (path.isArrowFunctionExpression()) return;
     path.skip();
   },
 
-  Method(path, state) {
-    // Don't traverse ClassMethod's body
-    path.skip();
-
-    // We do have to traverse the key, since it's evaluated in the outer class
-    // context.
-    if (path.node.computed) {
-      path.get("key").traverse(path.context.opts, state);
-    }
+  Method(path) {
+    skipAllButComputedKey(path);
   },
 
-  "ClassProperty|ClassPrivateProperty"(path, state) {
-    // Don't traverse the ClassProp's value.
-    if (!path.node.static) path.skip();
-
-    // We do have to traverse the key, since it's evaluated in the outer class
-    // context.
-    if (path.node.computed) {
-      path.get("key").traverse(path.context.opts, state);
-    }
+  "ClassProperty|ClassPrivateProperty"(path) {
+    // If the property is computed, we need to visit everything.
+    if (path.node.static) return;
+    skipAllButComputedKey(path);
   },
 };
 
