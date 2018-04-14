@@ -26,10 +26,10 @@
 
 Babel is a community-driven project used by many companies and projects, and is maintained by a group of [volunteers](https://babeljs.io/team). If you'd like to help support the future of the project, please consider:
 
-- Giving developer time on the project. (Message us on [Twitter](https://twitter.com/babeljs) or [Slack](https://slack.babeljs.io/))
-- [Giving funds by becoming a backer/sponsor on OpenCollective](https://opencollective.com/babel)
+- Giving developer time on the project. (Message us on [Twitter](https://twitter.com/babeljs) or [Slack](https://slack.babeljs.io/) for guidance!)
+- Giving funds by becoming a sponsor (see below)!
 
-## Sponsors
+## Open Collective Sponsors
 
 Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/babel#sponsor)]
 
@@ -66,7 +66,7 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 
 ## Patreon Sponsors
 
-Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://opencollective.com/babel#sponsor)]
+Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://www.patreon.com/henryzhu)]
 
 ## Gold
 
