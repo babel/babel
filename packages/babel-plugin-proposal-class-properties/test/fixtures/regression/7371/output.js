@@ -15,12 +15,12 @@ class A extends C {
     class B extends C {
       constructor() {
         super();
-        assert.equal(this.field, undefined);
+        expect(this.field).toBeUndefined();
       }
 
     }
 
-    assert.equal(this.field, 1);
+    expect(this.field).toBe(1);
     new B();
   }
 
@@ -48,12 +48,12 @@ class SuperClass extends Obj {
     }), _temp), Obj) {
       constructor() {
         super();
-        assert.equal(this.field, undefined);
+        expect(this.field).toBeUndefined();
       }
 
     }
 
-    assert.equal(this.field, 1);
+    expect(this.field).toBe(1);
     new B();
   }
 
@@ -68,7 +68,7 @@ class ComputedMethod extends Obj {
     class B extends Obj {
       constructor() {
         super();
-        assert.equal(this.field, undefined);
+        expect(this.field).toBeUndefined();
       }
 
       [(_temp2 = super(), Object.defineProperty(this, "field", {
@@ -80,7 +80,7 @@ class ComputedMethod extends Obj {
 
     }
 
-    assert.equal(this.field, 1);
+    expect(this.field).toBe(1);
     new B();
   }
 
@@ -108,12 +108,12 @@ class ComputedField extends Obj {
           writable: true,
           value: 1
         });
-        assert.equal(this.field, undefined);
+        expect(this.field).toBeUndefined();
       }
 
     }
 
-    assert.equal(this.field, 1);
+    expect(this.field).toBe(1);
     new B();
   }
 

@@ -197,8 +197,8 @@ In an `exec.js` test, we run or check that the code actually does what it's supp
 
 ```js
 // exec.js
-assert.equal(8, 2 ** 3);
-assert.equal(24, 3 * 2 ** 3);
+expect(2 ** 3).toBe(8);
+expect(3 * 2 ** 3).toBe(24);
 ```
 
 If you need to check for an error that is thrown you can add to the `options.json`
