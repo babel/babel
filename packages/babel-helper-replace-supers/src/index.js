@@ -3,9 +3,6 @@ import traverse from "@babel/traverse";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as t from "@babel/types";
 
-// ✌️
-const HARDCORE_THIS_REF = new WeakSet();
-
 /**
  * Creates an expression which result is the proto of objectRef.
  *
@@ -65,20 +62,13 @@ const visitor = traverse.visitors.merge([
   environmentVisitor,
   {
     ReturnStatement(path, state) {
+      // TODO get this shit out of here
       if (!path.getFunctionParent().isArrowFunctionExpression()) {
         state.returns.push(path);
       }
     },
 
-    ThisExpression(path, state) {
-      if (!HARDCORE_THIS_REF.has(path.node)) {
-        state.thises.push(path);
-      }
-    },
-
     Super(path, state) {
-      state.hasSuper = true;
-
       const { node, parentPath } = path;
       if (parentPath.isCallExpression({ callee: node })) {
         state.bareSupers.add(parentPath);
@@ -90,44 +80,37 @@ const visitor = traverse.visitors.merge([
 ]);
 
 export default class ReplaceSupers {
-  constructor(opts: Object, inClass?: boolean = false) {
-    this.forceSuperMemoisation = opts.forceSuperMemoisation;
-    this.methodPath = opts.methodPath;
-    this.methodNode = opts.methodNode;
-    this.superRef = opts.superRef;
-    this.isStatic = opts.isStatic;
-    this.hasSuper = false;
-    this.inClass = inClass;
-    this.inConstructor = opts.inConstructor;
-    this.isLoose = opts.isLoose;
+  constructor(opts: Object) {
+    const path = opts.methodPath;
+
+    this.methodPath = path;
+    this.isStatic =
+      path.isClassMethod({ static: true }) || path.isObjectMethod();
+    this.inClass = path.isClassMethod();
+    this.inConstructor = path.isClassMethod({ kind: "constructor" });
     this.scope = this.methodPath.scope;
+
     this.file = opts.file;
+    this.superRef = opts.superRef;
+    this.isLoose = opts.isLoose;
     this.opts = opts;
 
     this.bareSupers = new Set();
     this.returns = [];
-    this.thises = [];
   }
 
-  forceSuperMemoisation: boolean;
   methodPath: NodePath;
-  methodNode: Object;
   superRef: Object;
   isStatic: boolean;
-  hasSuper: boolean;
   inClass: boolean;
   inConstructor: boolean;
   isLoose: boolean;
   scope: Scope;
   file;
   opts: {
-    forceSuperMemoisation: boolean,
     getObjetRef: Function,
     methodPath: NodePath,
-    methodNode: Object,
     superRef: Object,
-    inConstructor: boolean,
-    isStatic: boolean,
     isLoose: boolean,
     file: any,
   };
@@ -255,7 +238,9 @@ export default class ReplaceSupers {
     //   true,
     // );
     // TODO this needs cleanup. Should be a single proto lookup
-    const ref = path.scope.generateDeclaredUidIdentifier("ref");
+    const { scope } = path;
+    const ref = scope.generateUidIdentifierBasedOnNode(node);
+    scope.push({ id: ref });
     const setter = this.setSuperProperty(
       property,
       t.binaryExpression(operator.slice(0, -1), t.cloneNode(ref), node.right),
@@ -333,8 +318,6 @@ export default class ReplaceSupers {
   }
 
   optimiseCall(callee, args) {
-    const thisNode = t.thisExpression();
-    HARDCORE_THIS_REF.add(thisNode);
-    return optimiseCall(callee, thisNode, args);
+    return optimiseCall(callee, t.thisExpression(), args);
   }
 }

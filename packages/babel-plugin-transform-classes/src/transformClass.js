@@ -209,21 +209,13 @@ export default function transformClass(
           path.traverse(verifyConstructorVisitor);
         }
 
-        const replaceSupers = new ReplaceSupers(
-          {
-            forceSuperMemoisation: isConstructor,
-            methodPath: path,
-            methodNode: node,
-            objectRef: classState.classRef,
-            superRef: classState.superName,
-            inConstructor: isConstructor,
-            isStatic: node.static,
-            isLoose: classState.isLoose,
-            scope: classState.scope,
-            file: classState.file,
-          },
-          true,
-        );
+        const replaceSupers = new ReplaceSupers({
+          methodPath: path,
+          objectRef: classState.classRef,
+          superRef: classState.superName,
+          isLoose: classState.isLoose,
+          file: classState.file,
+        });
 
         replaceSupers.replace();
 
