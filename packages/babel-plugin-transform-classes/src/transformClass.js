@@ -382,7 +382,6 @@ export default function transformClass(
 
     let guaranteedSuperBeforeFinish = !!classState.bareSupers.size;
 
-    const superRef = classState.superName || t.identifier("Function");
     let thisRef = function() {
       const ref = path.scope.generateDeclaredUidIdentifier("this");
       thisRef = () => t.cloneNode(ref);
@@ -390,7 +389,7 @@ export default function transformClass(
     };
 
     for (const bareSuper of classState.bareSupers) {
-      wrapSuperCall(bareSuper, superRef, thisRef, body);
+      wrapSuperCall(bareSuper, classState.superName, thisRef, body);
 
       if (guaranteedSuperBeforeFinish) {
         bareSuper.find(function(parentPath) {
@@ -638,7 +637,7 @@ export default function transformClass(
       classRef: classState.node.id
         ? t.identifier(classState.node.id.name)
         : classState.scope.generateUidIdentifier("class"),
-      superName: classState.node.superClass || t.identifier("Function"),
+      superName: classState.node.superClass,
       isDerived: !!classState.node.superClass,
       constructorBody: t.blockStatement([]),
     });
