@@ -25,7 +25,6 @@
     "babylon": "7.0.0-beta.44",
     "browserify": "^13.1.1",
     "bundle-collapser": "^1.2.1",
-    "chai": "^4.1.0",
     "chalk": "^2.3.2",
     "charcodes": "^0.1.0",
     "derequire": "^2.0.2",
