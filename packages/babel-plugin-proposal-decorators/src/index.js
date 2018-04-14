@@ -44,18 +44,18 @@ export default declare(api => {
     ).reduce((acc, prop) => acc.concat(prop.node.decorators || []), []);
 
     const identDecorators = decorators.filter(
-      decorator => !t.isIdentifier(decorator.expression),
+      decorator => !t.isIdentifier(decorator.callee),
     );
     if (identDecorators.length === 0) return;
 
     return t.sequenceExpression(
       identDecorators
         .map(decorator => {
-          const expression = decorator.expression;
-          const id = (decorator.expression = path.scope.generateDeclaredUidIdentifier(
+          const callee = decorator.callee;
+          const id = (decorator.callee = path.scope.generateDeclaredUidIdentifier(
             "dec",
           ));
-          return t.assignmentExpression("=", id, expression);
+          return t.assignmentExpression("=", id, callee);
         })
         .concat([path.node]),
     );
@@ -74,7 +74,7 @@ export default declare(api => {
     const name = classPath.scope.generateDeclaredUidIdentifier("class");
 
     return decorators
-      .map(dec => dec.expression)
+      .map(dec => dec.callee)
       .reverse()
       .reduce(function(acc, decorator) {
         return buildClassDecorator({
@@ -171,9 +171,7 @@ export default declare(api => {
             t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
               t.cloneNode(target),
               t.cloneNode(property),
-              t.arrayExpression(
-                decorators.map(dec => t.cloneNode(dec.expression)),
-              ),
+              t.arrayExpression(decorators.map(dec => t.cloneNode(dec.callee))),
               t.objectExpression([
                 t.objectProperty(
                   t.identifier("enumerable"),
@@ -189,9 +187,7 @@ export default declare(api => {
           t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
             t.cloneNode(target),
             t.cloneNode(property),
-            t.arrayExpression(
-              decorators.map(dec => t.cloneNode(dec.expression)),
-            ),
+            t.arrayExpression(decorators.map(dec => t.cloneNode(dec.callee))),
             t.isObjectProperty(node) ||
             t.isClassProperty(node, { static: true })
               ? buildGetObjectInitializer({

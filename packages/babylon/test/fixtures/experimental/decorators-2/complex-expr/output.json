@@ -104,7 +104,7 @@
                       "column": 16
                     }
                   },
-                  "expression": {
+                  "callee": {
                     "type": "MemberExpression",
                     "start": 13,
                     "end": 20,

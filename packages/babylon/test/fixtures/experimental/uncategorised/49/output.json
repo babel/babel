@@ -118,7 +118,7 @@
                           "column": 16
                         }
                       },
-                      "expression": {
+                      "callee": {
                         "type": "Identifier",
                         "start": 13,
                         "end": 16,

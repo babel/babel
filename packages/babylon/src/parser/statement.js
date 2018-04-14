@@ -270,7 +270,7 @@ export default class StatementParser extends ExpressionParser {
       this.state.decoratorStack.push([]);
 
       if (this.eat(tt.parenL)) {
-        node.expression = this.parseExpression();
+        node.callee = this.parseExpression();
         this.expect(tt.parenR);
       } else {
         const startPos = this.state.start;
@@ -285,7 +285,7 @@ export default class StatementParser extends ExpressionParser {
           expr = this.finishNode(node, "MemberExpression");
         }
 
-        node.expression = expr;
+        node.callee = expr;
       }
 
       if (this.eat(tt.parenL)) {
@@ -295,7 +295,7 @@ export default class StatementParser extends ExpressionParser {
 
       this.state.decoratorStack.pop();
     } else {
-      node.expression = this.parseMaybeAssign();
+      node.callee = this.parseMaybeAssign();
     }
     return this.finishNode(node, "Decorator");
   }
