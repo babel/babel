@@ -1,4 +1,5 @@
 import type { NodePath, Scope } from "@babel/traverse";
+import traverse from "@babel/traverse";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as t from "@babel/types";
 
@@ -25,58 +26,68 @@ function getPrototypeOfExpression(objectRef, isStatic, file) {
   return t.callExpression(file.addHelper("getPrototypeOf"), [targetRef]);
 }
 
-const visitor = {
+function skipAllButComputedKey(path) {
+  // If the path isn't computed, just skip everything.
+  if (!path.node.computed) {
+    path.skip();
+    return;
+  }
+
+  // So it's got a computed key. Make sure to skip every other key the
+  // traversal would visit.
+  const keys = t.VISITOR_KEYS[path.type];
+  for (const key of keys) {
+    if (key !== "key") path.skipKey(key);
+  }
+}
+
+export const environmentVisitor = {
   Function(path) {
+    // Methods will be handled by the Method visit
     if (path.isMethod()) return;
+    // Arrow functions inherit their parent's environment
     if (path.isArrowFunctionExpression()) return;
     path.skip();
   },
 
-  Method(path, state) {
-    // Don't traverse ClassMethod's body
-    path.skip();
-
-    // We do have to traverse the key, since it's evaluated in the outer class
-    // context.
-    if (path.node.computed) {
-      path.get("key").traverse(visitor, state);
-    }
+  Method(path) {
+    skipAllButComputedKey(path);
   },
 
-  "ClassProperty|ClassPrivateProperty"(path, state) {
-    // Don't traverse the ClassProp's value.
-    if (!path.node.static) path.skip();
-
-    // We do have to traverse the key, since it's evaluated in the outer class
-    // context.
-    if (path.node.computed) {
-      path.get("key").traverse(visitor, state);
-    }
-  },
-
-  ReturnStatement(path, state) {
-    if (!path.getFunctionParent().isArrowFunctionExpression()) {
-      state.returns.push(path);
-    }
-  },
-
-  ThisExpression(path, state) {
-    if (!HARDCORE_THIS_REF.has(path.node)) {
-      state.thises.push(path);
-    }
-  },
-
-  Super(path, state) {
-    state.hasSuper = true;
-
-    const { node, parentPath } = path;
-    if (parentPath.isCallExpression({ callee: node })) {
-      state.bareSupers.add(parentPath);
-      return;
-    }
-    state[state.isLoose ? "looseHandle" : "specHandle"](path);
+  "ClassProperty|ClassPrivateProperty"(path) {
+    // If the property is computed, we need to visit everything.
+    if (path.node.static) return;
+    skipAllButComputedKey(path);
   },
 };
+
+const visitor = traverse.visitors.merge([
+  environmentVisitor,
+  {
+    ReturnStatement(path, state) {
+      if (!path.getFunctionParent().isArrowFunctionExpression()) {
+        state.returns.push(path);
+      }
+    },
+
+    ThisExpression(path, state) {
+      if (!HARDCORE_THIS_REF.has(path.node)) {
+        state.thises.push(path);
+      }
+    },
+
+    Super(path, state) {
+      state.hasSuper = true;
+
+      const { node, parentPath } = path;
+      if (parentPath.isCallExpression({ callee: node })) {
+        state.bareSupers.add(parentPath);
+        return;
+      }
+      state[state.isLoose ? "looseHandle" : "specHandle"](path);
+    },
+  },
+]);
 
 export default class ReplaceSupers {
   constructor(opts: Object, inClass?: boolean = false) {

@@ -22,8 +22,6 @@ function (_Hello) {
   babelHelpers.inherits(Outer, _Hello);
 
   function Outer() {
-    var _this2 = this;
-
     var _this;
 
     babelHelpers.classCallCheck(this, Outer);
@@ -37,7 +35,7 @@ function (_Hello) {
       }
 
       babelHelpers.createClass(Inner, [{
-        key: babelHelpers.get(babelHelpers.getPrototypeOf(Outer.prototype), "toString", babelHelpers.assertThisInitialized(_this2)).call(_this2),
+        key: babelHelpers.get(babelHelpers.getPrototypeOf(Outer.prototype), "toString", babelHelpers.assertThisInitialized(_this)).call(_this),
         value: function value() {
           return 'hello';
         }
