@@ -8,6 +8,8 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!_instanceof(instance, Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
@@ -41,25 +43,15 @@ var Test = function Test() {
         args[_key] = arguments[_key];
       }
 
-      return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Other)).call.apply(_getPrototypeOf2, [this].concat(args))), Object.defineProperty(_assertThisInitialized(_this), "a", {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: function value() {
-          return _get(_getPrototypeOf(Other.prototype), "test", _assertThisInitialized(_this));
-        }
+      return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Other)).call.apply(_getPrototypeOf2, [this].concat(args))), _defineProperty(_assertThisInitialized(_this), "a", function () {
+        return _get(_getPrototypeOf(Other.prototype), "test", _assertThisInitialized(_this));
       }), _temp));
     }
 
     return Other;
   }(Test);
 
-  Object.defineProperty(Other, "a", {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    value: function value() {
-      return _get(_getPrototypeOf(Test.prototype), "test", _assertThisInitialized(_this2));
-    }
+  _defineProperty(Other, "a", function () {
+    return _get(_getPrototypeOf(Test.prototype), "test", _assertThisInitialized(_this2));
   });
 };

@@ -14,16 +14,11 @@ function withContext(ComposedComponent) {
     }
 
     return WithContext;
-  }(Component), Object.defineProperty(_class, "propTypes", {
-    configurable: true,
-    enumerable: true,
-    writable: true,
-    value: {
-      context: PropTypes.shape({
-        addCss: PropTypes.func,
-        setTitle: PropTypes.func,
-        setMeta: PropTypes.func
-      })
-    }
+  }(Component), babelHelpers.defineProperty(_class, "propTypes", {
+    context: PropTypes.shape({
+      addCss: PropTypes.func,
+      setTitle: PropTypes.func,
+      setMeta: PropTypes.func
+    })
   }), _temp;
 }
