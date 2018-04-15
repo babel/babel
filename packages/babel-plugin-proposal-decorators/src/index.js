@@ -1,5 +1,3 @@
-// Fork of https://github.com/loganfsmyth/babel-plugin-proposal-decorators-legacy
-
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import visitor from "./transformer";
