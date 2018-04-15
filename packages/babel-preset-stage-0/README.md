@@ -47,3 +47,9 @@ Enable "loose" transformations for any plugins in this preset that allow them.
 `boolean`, defaults to `false`.
 
 Will use the native built-in instead of trying to polyfill behavior for any plugins that require one.
+
+### `decoratorsLegacy`
+
+`boolean`, defaults to `false`.
+
+Use the legacy (stage 1) decorators syntax and behavior.
