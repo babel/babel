@@ -19,6 +19,41 @@ function buildConstructor(classRef, constructorBody, node) {
   return func;
 }
 
+const verifyConstructorVisitor = traverse.visitors.merge([
+  environmentVisitor,
+  {
+    Super(path, state) {
+      if (state.isDerived) return;
+
+      const { node, parentPath } = path;
+      if (parentPath.isCallExpression({ callee: node })) {
+        throw path.buildCodeFrameError(
+          "super() is only allowed in a derived constructor",
+        );
+      }
+    },
+
+    ThisExpression(path, state) {
+      if (!state.isDerived) return;
+
+      const { node, parentPath } = path;
+      if (parentPath.isMemberExpression({ object: node })) {
+        // In cases like this.foo or this[foo], there is no need to add
+        // assertThisInitialized, since they already throw if this is
+        // undefined.
+        return;
+      }
+
+      const assertion = t.callExpression(
+        state.file.addHelper("assertThisInitialized"),
+        [node],
+      );
+      path.replaceWith(assertion);
+      path.skip();
+    },
+  },
+]);
+
 export default function transformClass(
   path: NodePath,
   file: any,
@@ -55,10 +90,7 @@ export default function transformClass(
     pushedInherits: false,
     protoAlias: null,
     isLoose: false,
-    hasBareSuper: false,
 
-    instanceInitializersId: undefined,
-    staticInitializersId: undefined,
     hasInstanceDescriptors: false,
     hasStaticDescriptors: false,
     instanceMutatorMap: {},
@@ -68,43 +100,6 @@ export default function transformClass(
   const setState = newState => {
     Object.assign(classState, newState);
   };
-
-  const verifyConstructorVisitor = traverse.visitors.merge([
-    environmentVisitor,
-    {
-      CallExpression: {
-        exit(path) {
-          if (path.get("callee").isSuper()) {
-            setState({ hasBareSuper: true });
-
-            if (!classState.isDerived) {
-              throw path.buildCodeFrameError(
-                "super() is only allowed in a derived constructor",
-              );
-            }
-          }
-        },
-      },
-
-      ThisExpression(path) {
-        if (classState.isDerived) {
-          if (path.parentPath.isMemberExpression({ object: path.node })) {
-            // In cases like this.foo or this[foo], there is no need to add
-            // assertThisInitialized, since they already throw if this is
-            // undefined.
-            return;
-          }
-
-          const assertion = t.callExpression(
-            classState.file.addHelper("assertThisInitialized"),
-            [path.node],
-          );
-          path.replaceWith(assertion);
-          path.skip();
-        }
-      },
-    },
-  ]);
 
   const findThisesVisitor = traverse.visitors.merge([
     environmentVisitor,
@@ -206,7 +201,10 @@ export default function transformClass(
         const isConstructor = node.kind === "constructor";
 
         if (isConstructor) {
-          path.traverse(verifyConstructorVisitor);
+          path.traverse(verifyConstructorVisitor, {
+            isDerived: classState.isDerived,
+            file: classState.file,
+          });
         }
 
         const replaceSupers = new ReplaceSupers({
@@ -265,22 +263,10 @@ export default function transformClass(
         t.cloneNode(classState.classRef), // Constructor
         t.nullLiteral(), // instanceDescriptors
         t.nullLiteral(), // staticDescriptors
-        t.nullLiteral(), // instanceInitializers
-        t.nullLiteral(), // staticInitializers
       ];
 
       if (instanceProps) args[1] = instanceProps;
       if (staticProps) args[2] = staticProps;
-
-      if (classState.instanceInitializersId) {
-        args[3] = classState.instanceInitializersId;
-        body.unshift(buildObjectAssignment(classState.instanceInitializersId));
-      }
-
-      if (classState.staticInitializersId) {
-        args[4] = classState.staticInitializersId;
-        body.unshift(buildObjectAssignment(classState.staticInitializersId));
-      }
 
       let lastNonNullIndex = 0;
       for (let i = 0; i < args.length; i++) {
@@ -296,12 +282,6 @@ export default function transformClass(
     }
 
     clearDescriptors();
-  }
-
-  function buildObjectAssignment(id) {
-    return t.variableDeclaration("var", [
-      t.variableDeclarator(id, t.objectExpression([])),
-    ]);
   }
 
   function wrapSuperCall(bareSuper, superRef, thisRef, body) {
