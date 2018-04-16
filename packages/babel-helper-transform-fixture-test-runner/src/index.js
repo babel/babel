@@ -325,6 +325,7 @@ function run(task) {
         sourceFileName: self.filename,
         sourceType: "script",
         babelrc: false,
+        inputSourceMap: task.inputSourceMap || undefined,
       },
       opts,
     );
