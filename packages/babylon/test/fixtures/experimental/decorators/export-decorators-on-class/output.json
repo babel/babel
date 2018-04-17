@@ -73,7 +73,7 @@
                   "column": 4
                 }
               },
-              "expression": {
+              "callee": {
                 "type": "Identifier",
                 "start": 1,
                 "end": 4,

@@ -91,7 +91,7 @@ export function Super() {
 
 export function Decorator(node: Object) {
   this.token("@");
-  this.print(node.expression, node);
+  this.print(node.callee, node);
   this.newline();
 }
 

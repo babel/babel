@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 25,
+  "end": 42,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 3,
+      "line": 6,
       "column": 1
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 25,
+    "end": 42,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 3,
+        "line": 6,
         "column": 1
       }
     },
@@ -31,21 +31,21 @@
       {
         "type": "ClassDeclaration",
         "start": 0,
-        "end": 25,
+        "end": 42,
         "loc": {
           "start": {
             "line": 1,
             "column": 0
           },
           "end": {
-            "line": 3,
+            "line": 6,
             "column": 1
           }
         },
         "id": {
           "type": "Identifier",
           "start": 6,
-          "end": 7,
+          "end": 9,
           "loc": {
             "start": {
               "line": 1,
@@ -53,32 +53,32 @@
             },
             "end": {
               "line": 1,
-              "column": 7
+              "column": 9
             },
-            "identifierName": "A"
+            "identifierName": "Foo"
           },
-          "name": "A"
+          "name": "Foo"
         },
         "superClass": null,
         "body": {
           "type": "ClassBody",
-          "start": 8,
-          "end": 25,
+          "start": 10,
+          "end": 42,
           "loc": {
             "start": {
               "line": 1,
-              "column": 8
+              "column": 10
             },
             "end": {
-              "line": 3,
+              "line": 6,
               "column": 1
             }
           },
           "body": [
             {
-              "type": "ClassMethod",
-              "start": 12,
-              "end": 23,
+              "type": "ClassProperty",
+              "start": 14,
+              "end": 25,
               "loc": {
                 "start": {
                   "line": 2,
@@ -92,8 +92,8 @@
               "decorators": [
                 {
                   "type": "Decorator",
-                  "start": 12,
-                  "end": 16,
+                  "start": 14,
+                  "end": 18,
                   "loc": {
                     "start": {
                       "line": 2,
@@ -106,8 +106,8 @@
                   },
                   "callee": {
                     "type": "Identifier",
-                    "start": 13,
-                    "end": 16,
+                    "start": 15,
+                    "end": 18,
                     "loc": {
                       "start": {
                         "line": 2,
@@ -117,18 +117,18 @@
                         "line": 2,
                         "column": 6
                       },
-                      "identifierName": "dec"
+                      "identifierName": "bar"
                     },
-                    "name": "dec"
+                    "name": "bar"
                   }
                 }
               ],
               "static": false,
-              "kind": "method",
+              "computed": true,
               "key": {
                 "type": "Identifier",
-                "start": 18,
-                "end": 19,
+                "start": 20,
+                "end": 24,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -136,29 +136,64 @@
                   },
                   "end": {
                     "line": 2,
-                    "column": 9
+                    "column": 12
                   },
-                  "identifierName": "m"
+                  "identifierName": "bizz"
                 },
-                "name": "m"
+                "name": "bizz"
+              },
+              "value": null
+            },
+            {
+              "type": "ClassMethod",
+              "start": 28,
+              "end": 40,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 2
+                },
+                "end": {
+                  "line": 5,
+                  "column": 3
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 28,
+                "end": 31,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 5
+                  },
+                  "identifierName": "abc"
+                },
+                "name": "abc"
               },
               "computed": false,
+              "kind": "method",
               "id": null,
-              "generator": true,
+              "generator": false,
               "async": false,
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 21,
-                "end": 23,
+                "start": 34,
+                "end": 40,
                 "loc": {
                   "start": {
-                    "line": 2,
-                    "column": 11
+                    "line": 3,
+                    "column": 8
                   },
                   "end": {
-                    "line": 2,
-                    "column": 13
+                    "line": 5,
+                    "column": 3
                   }
                 },
                 "body": [],

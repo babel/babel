@@ -1,2 +1,2 @@
-@(bar.baz)
-class Foo {}
+@foo().bar
+class Baz {}
