@@ -72,12 +72,15 @@ helpers.jsx = () => template.program.ast`
 
 helpers.asyncIterator = () => template.program.ast`
   export default function _asyncIterator(iterable) {
+    var method
     if (typeof Symbol === "function") {
-      if (Symbol.asyncIterator && iterable[Symbol.asyncIterator] != null) {
-        return iterable[Symbol.asyncIterator]();
+      if (Symbol.asyncIterator) {
+        method = iterable[Symbol.asyncIterator]
+        if (method != null) return method();
       }
-      if (Symbol.iterator && iterable[Symbol.iterator] != null) {
-        return iterable[Symbol.iterator]();
+      if (Symbol.iterator) {
+        method = iterable[Symbol.iterator]
+        if (method != null) return method();
       }
     }
     throw new TypeError("Object is not async iterable");
