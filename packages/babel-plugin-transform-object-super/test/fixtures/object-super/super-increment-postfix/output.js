@@ -5,9 +5,9 @@ var Base = {
 };
 var obj = _obj = {
   bar: function () {
-    var _ref;
+    var _super$test;
 
-    return _ref = Number(babelHelpers.get(babelHelpers.getPrototypeOf(_obj), "test", this)), babelHelpers.set(babelHelpers.getPrototypeOf(_obj), "test", _ref + 1, this, false), _ref;
+    return _super$test = Number(babelHelpers.get(babelHelpers.getPrototypeOf(_obj), "test", this)), babelHelpers.set(babelHelpers.getPrototypeOf(_obj), "test", _super$test + 1, this, false), _super$test;
   }
 };
 Object.setPrototypeOf(obj, Base);

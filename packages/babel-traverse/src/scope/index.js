@@ -40,6 +40,8 @@ function gatherNodeParts(node: Object, parts: Array) {
     gatherNodeParts(node.id, parts);
   } else if (t.isThisExpression(node)) {
     parts.push("this");
+  } else if (t.isSuper(node)) {
+    parts.push("super");
   }
 }
 

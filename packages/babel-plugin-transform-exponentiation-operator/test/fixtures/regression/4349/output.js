@@ -14,9 +14,9 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || functio
 
 foo = _obj = {
   bar() {
-    var _ref;
+    var _super$baz;
 
-    return _ref = _get(_getPrototypeOf(_obj), "baz", this), _set(_getPrototypeOf(_obj), "baz", Math.pow(_ref, 12), this, false);
+    return _super$baz = _get(_getPrototypeOf(_obj), "baz", this), _set(_getPrototypeOf(_obj), "baz", Math.pow(_super$baz, 12), this, false);
   }
 
 };
