@@ -1,0 +1,3 @@
+{
+  "plugins": ["transform-runtime", ["transform-modules-commonjs", { "loose": true }]]
+}

@@ -8,11 +8,7 @@ var _context;
 
 var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
 
-var _Object$defineProperty = require("@babel/runtime/core-js/object/define-property");
-
-_Object$defineProperty(exports, "__esModule", {
-  value: true
-});
+exports.__esModule = true;
 
 var _bar = _interopRequireDefault(require("bar"));
 
@@ -20,13 +16,7 @@ var _mod = require("mod");
 
 _forEachInstanceProperty(_context = _Object$keys(_mod)).call(_context, function (key) {
   if (key === "default" || key === "__esModule") return;
-
-  _Object$defineProperty(exports, key, {
-    enumerable: true,
-    get: function () {
-      return _mod[key];
-    }
-  });
+  exports[key] = _mod[key];
 });
 
 _bar.default;

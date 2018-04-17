@@ -239,18 +239,6 @@ export default declare((api, options) => {
           // doesn't reference the global
           if (path.scope.getBindingIdentifier(obj.name)) return;
 
-          // special case Object.defineProperty to not use core-js when using string keys
-          if (
-            obj.name === "Object" &&
-            prop.name === "defineProperty" &&
-            path.parentPath.isCallExpression()
-          ) {
-            const call = path.parentPath.node;
-            if (call.arguments.length === 3 && t.isLiteral(call.arguments[1])) {
-              return;
-            }
-          }
-
           path.replaceWith(
             this.addDefaultImport(
               `${moduleName}/core-js/${methods[prop.name]}`,
