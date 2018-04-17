@@ -30,6 +30,9 @@ Using plugins:
   transform-regenerator {}
   transform-exponentiation-operator {}
   transform-async-to-generator {}
+  proposal-async-generator-functions { "chrome":"55" }
+  proposal-object-rest-spread { "chrome":"55" }
+  proposal-unicode-property-regex { "chrome":"55" }
   transform-dotall-regex { "chrome":"55" }
 
 Using polyfills with `entry` option:
@@ -38,6 +41,8 @@ Using polyfills with `entry` option:
   es6.array.sort { "chrome":"55" }
   es7.string.pad-start { "chrome":"55" }
   es7.string.pad-end { "chrome":"55" }
+  es7.promise.finally { "chrome":"55" }
+  es7.symbol.async-iterator { "chrome":"55" }
   web.timers { "chrome":"55" }
   web.immediate { "chrome":"55" }
   web.dom.iterable { "chrome":"55" }

@@ -41,6 +41,9 @@ Using plugins:
   transform-regenerator { "electron":"0.36", "ie":"10" }
   transform-exponentiation-operator { "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-async-to-generator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  proposal-async-generator-functions { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  proposal-object-rest-spread { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  proposal-unicode-property-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-dotall-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
 
 Using polyfills with `entry` option:
@@ -158,6 +161,8 @@ Using polyfills with `entry` option:
   es7.object.get-own-property-descriptors { "electron":"0.36", "ie":"10", "node":"6.1" }
   es7.string.pad-start { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es7.string.pad-end { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es7.promise.finally { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es7.symbol.async-iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   web.timers { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   web.immediate { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   web.dom.iterable { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }

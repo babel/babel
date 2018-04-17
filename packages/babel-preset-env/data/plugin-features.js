@@ -85,6 +85,9 @@ const es2017 = {
 };
 
 const es2018 = {
+  "proposal-async-generator-functions": "Asynchronous Iterators",
+  "proposal-object-rest-spread": "object rest/spread properties",
+  "proposal-unicode-property-regex": "RegExp Unicode Property Escapes",
   "transform-dotall-regex": "s (dotAll) flag for regular expressions",
 };
 
