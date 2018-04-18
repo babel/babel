@@ -433,6 +433,7 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
  - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
  - `extends`: `Array<InterfaceExtends>` (default: `null`)
  - `body`: `ObjectTypeAnnotation` (required)
+ - `implements`: `Array<ClassImplements>` (default: `null`)
  - `mixins`: `Array<InterfaceExtends>` (default: `null`)
 
 ---
@@ -492,9 +493,10 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id`: `Identifier` (required)
  - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
- - `extends`: `InterfaceExtends` (default: `null`)
+ - `extends`: `Array<InterfaceExtends>` (default: `null`)
  - `body`: `ObjectTypeAnnotation` (required)
- - `mixins`: `Array<Flow>` (default: `null`)
+ - `implements`: `Array<ClassImplements>` (default: `null`)
+ - `mixins`: `Array<InterfaceExtends>` (default: `null`)
 
 ---
 
@@ -1038,8 +1040,9 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id`: `Identifier` (required)
  - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
- - `extends`: `Array<InterfaceExtends>` (required)
+ - `extends`: `Array<InterfaceExtends>` (default: `null`)
  - `body`: `ObjectTypeAnnotation` (required)
+ - `implements`: `Array<ClassImplements>` (default: `null`)
  - `mixins`: `Array<InterfaceExtends>` (default: `null`)
 
 ---
