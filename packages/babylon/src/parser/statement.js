@@ -1425,7 +1425,7 @@ export default class StatementParser extends ExpressionParser {
       this.match(tt._const) ||
       this.match(tt._var)
     ) {
-      this.raise(
+      return this.raise(
         this.state.start,
         "Only expressions, functions or classes are allowed as the `default` export.",
       );
