@@ -41,7 +41,7 @@ Feel free to check out the `#discussion`/`#development` channels on our [Slack](
 
 **Note:** Versions `< 5.1.10` can't be built.
 
-Babel is built for Node 4 and up but we develop using Node 8 and yarn. You can check this with `node -v`.
+Babel is built for Node 6 and up but we develop using Node 8 and yarn. You can check this with `node -v`.
 
 Make sure that Yarn is installed with version >= `0.28.0`.
 Installation instructions can be found here: https://yarnpkg.com/en/docs/install.
