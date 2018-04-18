@@ -5,7 +5,7 @@ function () {
 
   function Test() {
     babelHelpers.classCallCheck(this, Test);
-    return babelHelpers.get(babelHelpers.getPrototypeOf(Test.prototype), "constructor", babelHelpers.assertThisInitialized(this));
+    return babelHelpers.get(babelHelpers.getPrototypeOf(Test.prototype), "constructor", this);
   }
 
   babelHelpers.createClass(Test, null, [{

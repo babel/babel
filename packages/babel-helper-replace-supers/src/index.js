@@ -1,4 +1,4 @@
-import type { NodePath, Scope } from "@babel/traverse";
+import type { NodePath } from "@babel/traverse";
 import traverse from "@babel/traverse";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
@@ -62,19 +62,9 @@ export const environmentVisitor = {
 const visitor = traverse.visitors.merge([
   environmentVisitor,
   {
-    ReturnStatement(path, state) {
-      // TODO get this shit out of here
-      if (!path.getFunctionParent().isArrowFunctionExpression()) {
-        state.returns.push(path);
-      }
-    },
-
     Super(path, state) {
       const { node, parentPath } = path;
-      if (parentPath.isCallExpression({ callee: node })) {
-        state.bareSupers.add(parentPath);
-        return;
-      }
+      if (!parentPath.isMemberExpression({ object: node })) return;
       state.handle(parentPath);
     },
   },
@@ -99,15 +89,7 @@ const specHandlers = {
 
   get(superMember) {
     const { computed, property } = superMember.node;
-    let thisExpr = t.thisExpression();
-
-    // TODO Remove
-    if (this.inConstructor) {
-      thisExpr = t.callExpression(
-        this.file.addHelper("assertThisInitialized"),
-        [thisExpr],
-      );
-    }
+    const thisExpr = t.thisExpression();
 
     let prop;
     if (computed && memoized.has(property)) {
@@ -193,26 +175,17 @@ export default class ReplaceSupers {
     this.methodPath = path;
     this.isStatic =
       path.isClassMethod({ static: true }) || path.isObjectMethod();
-    this.inClass = path.isClassMethod();
-    this.inConstructor = path.isClassMethod({ kind: "constructor" });
-    this.scope = this.methodPath.scope;
 
     this.file = opts.file;
     this.superRef = opts.superRef;
     this.isLoose = opts.isLoose;
     this.opts = opts;
-
-    this.bareSupers = new Set();
-    this.returns = [];
   }
 
   methodPath: NodePath;
   superRef: Object;
   isStatic: boolean;
-  inClass: boolean;
-  inConstructor: boolean;
   isLoose: boolean;
-  scope: Scope;
   file;
   opts: {
     getObjetRef: Function,
@@ -229,24 +202,12 @@ export default class ReplaceSupers {
   replace() {
     const handler = this.isLoose ? looseHandlers : specHandlers;
 
-    memberExpressionToFunctions(
-      this.methodPath,
-      visitor,
-      Object.assign(
-        {
-          // Necessary state
-          file: this.file,
-          isStatic: this.isStatic,
-          getObjectRef: this.getObjectRef.bind(this),
-          superRef: this.superRef,
-
-          // TODO Remove this shit.
-          inConstructor: this.inConstructor,
-          returns: this.returns,
-          bareSupers: this.bareSupers,
-        },
-        handler,
-      ),
-    );
+    memberExpressionToFunctions(this.methodPath, visitor, {
+      file: this.file,
+      isStatic: this.isStatic,
+      getObjectRef: this.getObjectRef.bind(this),
+      superRef: this.superRef,
+      ...handler,
+    });
   }
 }

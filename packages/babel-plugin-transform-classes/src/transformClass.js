@@ -218,8 +218,34 @@ export default function transformClass(
 
         replaceSupers.replace();
 
+        // TODO this needs to be cleaned up. But, one step at a time.
+        const state = {
+          returns: [],
+          bareSupers: new Set(),
+        };
+        path.traverse(
+          traverse.visitors.merge([
+            environmentVisitor,
+            {
+              ReturnStatement(path, state) {
+                if (!path.getFunctionParent().isArrowFunctionExpression()) {
+                  state.returns.push(path);
+                }
+              },
+
+              Super(path, state) {
+                const { node, parentPath } = path;
+                if (parentPath.isCallExpression({ callee: node })) {
+                  state.bareSupers.add(parentPath);
+                }
+              },
+            },
+          ]),
+          state,
+        );
+
         if (isConstructor) {
-          pushConstructor(replaceSupers, node, path);
+          pushConstructor(state, node, path);
         } else {
           pushMethod(node, path);
         }
@@ -382,7 +408,16 @@ export default function transformClass(
     }
 
     for (const thisPath of classState.superThises) {
-      thisPath.replaceWith(thisRef());
+      const { node, parentPath } = thisPath;
+      if (parentPath.isMemberExpression({ object: node })) {
+        thisPath.replaceWith(thisRef());
+        continue;
+      }
+      thisPath.replaceWith(
+        t.callExpression(classState.file.addHelper("assertThisInitialized"), [
+          thisRef(),
+        ]),
+      );
     }
 
     let wrapReturn;
