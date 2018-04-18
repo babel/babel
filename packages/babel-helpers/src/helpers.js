@@ -948,7 +948,7 @@ helpers.initializerDefineProperty = () => template.program.ast`
 helpers.applyDecoratedDescriptor = () => template.program.ast`
     export default function _applyDecoratedDescriptor(target, property, decorators, descriptor, context){
         var desc = {};
-        Object['ke' + 'ys'](descriptor).forEach(function(key){
+        Object.keys(descriptor).forEach(function(key){
             desc[key] = descriptor[key];
         });
         desc.enumerable = !!desc.enumerable;
@@ -967,9 +967,7 @@ helpers.applyDecoratedDescriptor = () => template.program.ast`
         }
 
         if (desc.initializer === void 0){
-            // This is a hack to avoid this being processed by 'transform-runtime'.
-            // See issue #9.
-            Object['define' + 'Property'](target, property, desc);
+            Object.defineProperty(target, property, desc);
             desc = null;
         }
 
