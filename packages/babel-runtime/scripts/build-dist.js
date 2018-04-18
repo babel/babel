@@ -54,6 +54,12 @@ function makeTransformOpts(modules, useBuiltIns) {
         require("@babel/plugin-transform-runtime"),
         { useBuiltIns, useESModules: modules === false },
       ],
+      [
+        require("@babel/plugin-transform-member-expression-literals"),
+      ],
+      [
+        require("@babel/plugin-transform-property-literals"),
+      ],
     ],
   };
   return opts;
