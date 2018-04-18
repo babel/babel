@@ -841,7 +841,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): ?N.TsTypeParameterInstantiation {
       return this.tsTryParseAndCatch(() => {
         const res = this.tsParseTypeArguments();
-        if (eatNextToken) this.expect(tt.parenL);
+        if (eatNextToken && !this.match(tt.parenL) && !this.match(tt.backQuote)) {
+          this.unexpected(); // will be caught
+        }
         return res;
       });
     }
@@ -1398,14 +1400,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           /*eatNextToken*/ true,
         );
         if (typeArguments) {
-          // possibleAsync always false here, because we would have handled it above.
-          // $FlowIgnore (won't be any undefined arguments)
-          node.arguments = this.parseCallExpressionArguments(
-            tt.parenR,
-            /* possibleAsync */ false,
-          );
-          node.typeParameters = typeArguments;
-          return this.finishCallExpression(node);
+          if (this.eat(tt.parenL)) {
+            // possibleAsync always false here, because we would have handled it above.
+            // $FlowIgnore (won't be any undefined arguments)
+            node.arguments = this.parseCallExpressionArguments(
+              tt.parenR,
+              /* possibleAsync */ false,
+            );
+            node.typeParameters = typeArguments;
+            return this.finishCallExpression(node);
+          } else {
+            return this.parseTaggedTemplateExpression(
+              startPos,
+              startLoc,
+              base,
+              state,
+              typeArguments,
+            );
+          }
         }
       }
 

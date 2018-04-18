@@ -510,6 +510,13 @@ defineType("TaggedTemplateExpression", {
     quasi: {
       validate: assertNodeType("TemplateLiteral"),
     },
+    typeParameters: {
+      validate: assertNodeType(
+        "TypeParameterInstantiation",
+        "TSTypeParameterInstantiation",
+      ),
+      optional: true,
+    },
   },
 });
 
