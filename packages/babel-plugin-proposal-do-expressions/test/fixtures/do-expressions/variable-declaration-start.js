@@ -1,4 +1,4 @@
-assert.equal(do {
+expect(do {
   var bar = "foo";
   bar;
-}, "foo");
+}).toBe("foo");

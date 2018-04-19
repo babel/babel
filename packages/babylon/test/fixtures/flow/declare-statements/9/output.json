@@ -177,6 +177,7 @@
             }
           }
         ],
+        "implements": [],
         "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",

@@ -1,5 +1,6 @@
 // Fork of https://github.com/loganfsmyth/babel-plugin-proposal-decorators-legacy
 
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import { template, types as t } from "@babel/core";
 
@@ -26,7 +27,9 @@ const buildGetObjectInitializer = template(`
     })
 `);
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   const WARNING_CALLS = new WeakSet();
 
   /**
@@ -41,18 +44,18 @@ export default function() {
     ).reduce((acc, prop) => acc.concat(prop.node.decorators || []), []);
 
     const identDecorators = decorators.filter(
-      decorator => !t.isIdentifier(decorator.expression),
+      decorator => !t.isIdentifier(decorator.callee),
     );
     if (identDecorators.length === 0) return;
 
     return t.sequenceExpression(
       identDecorators
         .map(decorator => {
-          const expression = decorator.expression;
-          const id = (decorator.expression = path.scope.generateDeclaredUidIdentifier(
+          const callee = decorator.callee;
+          const id = (decorator.callee = path.scope.generateDeclaredUidIdentifier(
             "dec",
           ));
-          return t.assignmentExpression("=", id, expression);
+          return t.assignmentExpression("=", id, callee);
         })
         .concat([path.node]),
     );
@@ -71,7 +74,7 @@ export default function() {
     const name = classPath.scope.generateDeclaredUidIdentifier("class");
 
     return decorators
-      .map(dec => dec.expression)
+      .map(dec => dec.callee)
       .reverse()
       .reduce(function(acc, decorator) {
         return buildClassDecorator({
@@ -168,9 +171,7 @@ export default function() {
             t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
               t.cloneNode(target),
               t.cloneNode(property),
-              t.arrayExpression(
-                decorators.map(dec => t.cloneNode(dec.expression)),
-              ),
+              t.arrayExpression(decorators.map(dec => t.cloneNode(dec.callee))),
               t.objectExpression([
                 t.objectProperty(
                   t.identifier("enumerable"),
@@ -186,9 +187,7 @@ export default function() {
           t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
             t.cloneNode(target),
             t.cloneNode(property),
-            t.arrayExpression(
-              decorators.map(dec => t.cloneNode(dec.expression)),
-            ),
+            t.arrayExpression(decorators.map(dec => t.cloneNode(dec.callee))),
             t.isObjectProperty(node) ||
             t.isClassProperty(node, { static: true })
               ? buildGetObjectInitializer({
@@ -276,4 +275,4 @@ export default function() {
       },
     },
   };
-}
+});

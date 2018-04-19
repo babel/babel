@@ -15,26 +15,44 @@ const validIncludesAndExcludes = new Set([
   ...defaultWebIncludes,
 ]);
 
-export const validateIncludesAndExcludes = (
-  opts: Array<string> = [],
-  type: string,
-): Array<string> => {
-  invariant(
-    Array.isArray(opts),
-    `Invalid Option: The '${type}' option must be an Array<String> of plugins/built-ins`,
+const pluginToRegExp = (plugin: any): ?RegExp => {
+  if (plugin instanceof RegExp) return plugin;
+  try {
+    return new RegExp(`^${normalizePluginName(plugin)}$`);
+  } catch (e) {
+    return null;
+  }
+};
+
+const selectPlugins = (regexp: ?RegExp): Array<string> =>
+  Array.from(validIncludesAndExcludes).filter(
+    item => regexp instanceof RegExp && regexp.test(item),
   );
 
-  const unknownOpts = opts.filter(opt => !validIncludesAndExcludes.has(opt));
+const flatten = array => [].concat(...array);
+
+const expandIncludesAndExcludes = (
+  plugins: Array<string | RegExp> = [],
+  type: string,
+): Array<string> => {
+  if (plugins.length === 0) return [];
+
+  const selectedPlugins = plugins.map(plugin =>
+    selectPlugins(pluginToRegExp(plugin)),
+  );
+  const invalidRegExpList = plugins.filter(
+    (p, i) => selectedPlugins[i].length === 0,
+  );
 
   invariant(
-    unknownOpts.length === 0,
-    `Invalid Option: The plugins/built-ins '${unknownOpts.join(
+    invalidRegExpList.length === 0,
+    `Invalid Option: The plugins/built-ins '${invalidRegExpList.join(
       ", ",
     )}' passed to the '${type}' option are not
     valid. Please check data/[plugin-features|built-in-features].js in babel-preset-env`,
   );
 
-  return opts;
+  return flatten(selectedPlugins);
 };
 
 const validBrowserslistTargets = [
@@ -45,16 +63,11 @@ const validBrowserslistTargets = [
 export const normalizePluginName = (plugin: string): string =>
   plugin.replace(/^babel-plugin-/, "");
 
-export const normalizePluginNames = (plugins: Array<string>): Array<string> =>
-  plugins.map(normalizePluginName);
-
 export const checkDuplicateIncludeExcludes = (
   include: Array<string> = [],
   exclude: Array<string> = [],
 ): void => {
-  const duplicates: Array<string> = include.filter(
-    opt => exclude.indexOf(opt) >= 0,
-  );
+  const duplicates = include.filter(opt => exclude.indexOf(opt) >= 0);
 
   invariant(
     duplicates.length === 0,
@@ -138,20 +151,16 @@ export const validateUseBuiltInsOption = (
 };
 
 export default function normalizeOptions(opts: Options) {
-  if (opts.exclude) {
-    opts.exclude = normalizePluginNames(opts.exclude);
-  }
+  const include = expandIncludesAndExcludes(opts.include, "include");
+  const exclude = expandIncludesAndExcludes(opts.exclude, "exclude");
 
-  if (opts.include) {
-    opts.include = normalizePluginNames(opts.include);
-  }
-
-  checkDuplicateIncludeExcludes(opts.include, opts.exclude);
+  checkDuplicateIncludeExcludes(include, exclude);
 
   return {
     configPath: validateConfigPathOption(opts.configPath),
     debug: opts.debug,
-    exclude: validateIncludesAndExcludes(opts.exclude, "exclude"),
+    include,
+    exclude,
     forceAllTransforms: validateBoolOption(
       "forceAllTransforms",
       opts.forceAllTransforms,
@@ -160,7 +169,6 @@ export default function normalizeOptions(opts: Options) {
     ignoreBrowserslistConfig: validateIgnoreBrowserslistConfig(
       opts.ignoreBrowserslistConfig,
     ),
-    include: validateIncludesAndExcludes(opts.include, "include"),
     loose: validateBoolOption("loose", opts.loose, false),
     modules: validateModulesOption(opts.modules),
     shippedProposals: validateBoolOption(
@@ -169,7 +177,7 @@ export default function normalizeOptions(opts: Options) {
       false,
     ),
     spec: validateBoolOption("loose", opts.spec, false),
-    targets: opts.targets,
+    targets: Object.assign({}, opts.targets),
     useBuiltIns: validateUseBuiltInsOption(opts.useBuiltIns),
   };
 }

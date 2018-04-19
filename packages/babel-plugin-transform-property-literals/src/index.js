@@ -1,6 +1,9 @@
+import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     visitor: {
       ObjectProperty: {
@@ -18,4 +21,4 @@ export default function() {
       },
     },
   };
-}
+});

@@ -1,0 +1,3 @@
+{
+  "plugins": ["classProperties", "classPrivateProperties", "decorators2"]
+}

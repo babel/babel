@@ -13,14 +13,14 @@ class MutablePoint {
 // ----------------------------------------------------------------------------
 
 var immutable = new ImmutablePoint();
-assert.equal(undefined, immutable.x);
-assert.equal(undefined, immutable.y);
+expect(immutable.x).toBeUndefined();
+expect(immutable.y).toBeUndefined();
 immutable.x_ = 10;
 immutable.y_ = 20;
-assert.equal(10, immutable.x);
-assert.equal(20, immutable.y);
-assert.equal(10, immutable.x_);
-assert.equal(20, immutable.y_);
+expect(immutable.x).toBe(10);
+expect(immutable.y).toBe(20);
+expect(immutable.x_).toBe(10);
+expect(immutable.y_).toBe(20);
 
 try {
   immutable.x = 11;
@@ -32,18 +32,18 @@ try {
   fail('should not be able to set a get only property');
 } catch (except) {
 }
-assert.equal(10, immutable.x);
-assert.equal(20, immutable.y);
+expect(immutable.x).toBe(10);
+expect(immutable.y).toBe(20);
 
 var mutable = new MutablePoint();
-assert.equal(undefined, mutable.x);
-assert.equal(undefined, mutable.y);
+expect(mutable.x).toBeUndefined();
+expect(mutable.y).toBeUndefined();
 mutable.x_ = 10;
 mutable.y_ = 20;
-assert.equal(10, mutable.x);
-assert.equal(20, mutable.y);
-assert.equal(10, mutable.x_);
-assert.equal(20, mutable.y_);
+expect(mutable.x).toBe(10);
+expect(mutable.y).toBe(20);
+expect(mutable.x_).toBe(10);
+expect(mutable.y_).toBe(20);
 
 try {
   mutable.x = 11;
@@ -55,5 +55,5 @@ try {
 } catch (except) {
   fail('should be able to set a read/write property');
 }
-assert.equal(11, mutable.x);
-assert.equal(12, mutable.y);
+expect(mutable.x).toBe(11);
+expect(mutable.y).toBe(12);

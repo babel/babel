@@ -1,2 +1,2 @@
 import x from './resources/re-export-default.js';
-assert.equal(x, 42);
+expect(x).toBe(42);

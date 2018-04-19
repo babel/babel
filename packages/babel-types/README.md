@@ -183,14 +183,14 @@ Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
 
 ### booleanLiteralTypeAnnotation
 ```javascript
-t.booleanLiteralTypeAnnotation()
+t.booleanLiteralTypeAnnotation(value)
 ```
 
 See also `t.isBooleanLiteralTypeAnnotation(node, opts)` and `t.assertBooleanLiteralTypeAnnotation(node, opts)`.
 
 Aliases: `Flow`, `FlowType`
 
- - `value`: `boolean` (default: `null`)
+ - `value`: `boolean` (required)
 
 ---
 
@@ -256,7 +256,7 @@ t.classBody(body)
 
 See also `t.isClassBody(node, opts)` and `t.assertClassBody(node, opts)`.
 
- - `body`: `Array<ClassMethod | ClassProperty | TSDeclareMethod | TSIndexSignature>` (required)
+ - `body`: `Array<ClassMethod | ClassProperty | ClassPrivateProperty | TSDeclareMethod | TSIndexSignature>` (required)
 
 ---
 
@@ -343,6 +343,20 @@ Aliases: `Function`, `Scopable`, `BlockParent`, `FunctionParent`, `Method`
 
 ---
 
+### classPrivateProperty
+```javascript
+t.classPrivateProperty(key, value)
+```
+
+See also `t.isClassPrivateProperty(node, opts)` and `t.assertClassPrivateProperty(node, opts)`.
+
+Aliases: `Property`, `Private`
+
+ - `key`: `PrivateName` (required)
+ - `value`: `Expression` (default: `null`)
+
+---
+
 ### classProperty
 ```javascript
 t.classProperty(key, value, typeAnnotation, decorators, computed)
@@ -419,6 +433,7 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
  - `typeParameters`: `TypeParameterInstantiation` (default: `null`)
  - `extends`: `Array<InterfaceExtends>` (default: `null`)
  - `body`: `ObjectTypeAnnotation` (required)
+ - `implements`: `Array<ClassImplements>` (default: `null`)
  - `mixins`: `Array<InterfaceExtends>` (default: `null`)
 
 ---
@@ -478,9 +493,10 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id`: `Identifier` (required)
  - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
- - `extends`: `InterfaceExtends` (default: `null`)
+ - `extends`: `Array<InterfaceExtends>` (default: `null`)
  - `body`: `ObjectTypeAnnotation` (required)
- - `mixins`: `Array<Flow>` (default: `null`)
+ - `implements`: `Array<ClassImplements>` (default: `null`)
+ - `mixins`: `Array<InterfaceExtends>` (default: `null`)
 
 ---
 
@@ -570,12 +586,13 @@ Aliases: `Flow`, `FlowPredicate`
 
 ### decorator
 ```javascript
-t.decorator(expression)
+t.decorator(callee, arguments)
 ```
 
 See also `t.isDecorator(node, opts)` and `t.assertDecorator(node, opts)`.
 
- - `expression`: `Expression` (required)
+ - `callee`: `Expression` (required)
+ - `arguments`: `Array<Expression | SpreadElement>` (default: `null`)
 
 ---
 
@@ -1023,8 +1040,9 @@ Aliases: `Flow`, `FlowDeclaration`, `Statement`, `Declaration`
 
  - `id`: `Identifier` (required)
  - `typeParameters`: `TypeParameterDeclaration` (default: `null`)
- - `extends`: `Array<InterfaceExtends>` (required)
+ - `extends`: `Array<InterfaceExtends>` (default: `null`)
  - `body`: `ObjectTypeAnnotation` (required)
+ - `implements`: `Array<ClassImplements>` (default: `null`)
  - `mixins`: `Array<InterfaceExtends>` (default: `null`)
 
 ---
@@ -1394,14 +1412,14 @@ Aliases: `Flow`, `FlowType`
 
 ### numberLiteralTypeAnnotation
 ```javascript
-t.numberLiteralTypeAnnotation()
+t.numberLiteralTypeAnnotation(value)
 ```
 
 See also `t.isNumberLiteralTypeAnnotation(node, opts)` and `t.assertNumberLiteralTypeAnnotation(node, opts)`.
 
 Aliases: `Flow`, `FlowType`
 
- - `value`: `number` (default: `null`)
+ - `value`: `number` (required)
 
 ---
 
@@ -1499,7 +1517,7 @@ Aliases: `UserWhitespacable`, `Property`, `ObjectMember`
 
 ### objectTypeAnnotation
 ```javascript
-t.objectTypeAnnotation(properties, indexers, callProperties)
+t.objectTypeAnnotation(properties, indexers, callProperties, exact)
 ```
 
 See also `t.isObjectTypeAnnotation(node, opts)` and `t.assertObjectTypeAnnotation(node, opts)`.
@@ -1509,7 +1527,7 @@ Aliases: `Flow`, `FlowType`
  - `properties`: `Array<ObjectTypeProperty | ObjectTypeSpreadProperty>` (required)
  - `indexers`: `Array<ObjectTypeIndexer>` (default: `null`)
  - `callProperties`: `Array<ObjectTypeCallProperty>` (default: `null`)
- - `exact`: `boolean` (default: `null`)
+ - `exact`: `boolean` (default: `false`)
 
 ---
 
@@ -1553,7 +1571,7 @@ See also `t.isObjectTypeProperty(node, opts)` and `t.assertObjectTypeProperty(no
 
 Aliases: `Flow`, `UserWhitespacable`
 
- - `key`: `Identifier` (required)
+ - `key`: `Identifier | StringLiteral` (required)
  - `value`: `FlowType` (required)
  - `variance`: `Variance` (default: `null`)
  - `kind`: `"init" | "get" | "set"` (default: `null`)
@@ -1633,6 +1651,19 @@ See also `t.isParenthesizedExpression(node, opts)` and `t.assertParenthesizedExp
 Aliases: `Expression`, `ExpressionWrapper`
 
  - `expression`: `Expression` (required)
+
+---
+
+### privateName
+```javascript
+t.privateName(id)
+```
+
+See also `t.isPrivateName(node, opts)` and `t.assertPrivateName(node, opts)`.
+
+Aliases: `Private`
+
+ - `id`: `Identifier` (required)
 
 ---
 
@@ -1749,14 +1780,14 @@ Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
 
 ### stringLiteralTypeAnnotation
 ```javascript
-t.stringLiteralTypeAnnotation()
+t.stringLiteralTypeAnnotation(value)
 ```
 
 See also `t.isStringLiteralTypeAnnotation(node, opts)` and `t.assertStringLiteralTypeAnnotation(node, opts)`.
 
 Aliases: `Flow`, `FlowType`
 
- - `value`: `string` (default: `null`)
+ - `value`: `string` (required)
 
 ---
 

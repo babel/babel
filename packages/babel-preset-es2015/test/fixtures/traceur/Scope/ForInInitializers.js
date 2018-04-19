@@ -3,8 +3,8 @@
 (function() {
   var y;
   for (var x in {a: 'A'}) {
-    assert.equal(x, 'a');
+    expect(x).toBe('a');
     y = x;
   }
-  assert.equal(y, 'a');
+  expect(y).toBe('a');
 })();

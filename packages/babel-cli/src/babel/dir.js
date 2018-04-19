@@ -6,6 +6,8 @@ import fs from "fs";
 
 import * as util from "./util";
 
+let compiledFiles = 0;
+
 export default function(commander, filenames, opts) {
   function write(src, relative, base, callback) {
     if (typeof base === "function") {
@@ -26,7 +28,6 @@ export default function(commander, filenames, opts) {
       defaults(
         {
           sourceFileName: slash(path.relative(dest + "/..", src)),
-          sourceMapTarget: path.basename(relative),
         },
         opts,
       ),
@@ -42,11 +43,14 @@ export default function(commander, filenames, opts) {
         ) {
           const mapLoc = dest + ".map";
           res.code = util.addSourceMappingUrl(res.code, mapLoc);
+          res.map.file = path.basename(relative);
           outputFileSync(mapLoc, JSON.stringify(res.map));
         }
 
         outputFileSync(dest, res.code);
         util.chmod(src, dest);
+
+        compiledFiles += 1;
 
         util.log(src + " -> " + dest);
         return callback(null, true);
@@ -57,6 +61,13 @@ export default function(commander, filenames, opts) {
   function getDest(commander, filename, base) {
     if (commander.relative) return path.join(base, commander.outDir, filename);
     return path.join(commander.outDir, filename);
+  }
+
+  function outputDestFolder(outDir) {
+    const outDirPath = path.resolve(outDir);
+    if (!fs.existsSync(outDirPath)) {
+      fs.mkdirSync(outDirPath);
+    }
   }
 
   function handleFile(src, filename, base, callback) {
@@ -78,6 +89,11 @@ export default function(commander, filenames, opts) {
   }
 
   function sequentialHandleFile(files, dirname, index, callback) {
+    if (files.length === 0) {
+      outputDestFolder(commander.outDir);
+      return;
+    }
+
     if (typeof index === "function") {
       callback = index;
       index = 0;
@@ -125,10 +141,17 @@ export default function(commander, filenames, opts) {
     const filename = filenames[index];
 
     handle(filename, function(err) {
-      if (err) throw err;
+      if (err) throw new Error(err);
       index++;
       if (index !== filenames.length) {
         sequentialHandle(filenames, index);
+      } else {
+        util.log(
+          `🎉  Successfully compiled ${compiledFiles} ${
+            compiledFiles > 1 ? "files" : "file"
+          } with Babel.`,
+          true,
+        );
       }
     });
   }

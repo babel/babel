@@ -11,6 +11,8 @@ function _two() {}
 let Test1 =
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function Test1() {
     _classCallCheck(this, Test1);
   }

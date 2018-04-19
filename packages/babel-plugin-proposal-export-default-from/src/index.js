@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxExportDefaultFrom from "@babel/plugin-syntax-export-default-from";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     inherits: syntaxExportDefaultFrom,
 
@@ -33,4 +36,4 @@ export default function() {
       },
     },
   };
-}
+});

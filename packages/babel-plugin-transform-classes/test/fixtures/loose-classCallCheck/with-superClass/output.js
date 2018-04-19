@@ -2,11 +2,15 @@ function _assertThisInitialized(self) { if (self === void 0) { throw new Referen
 
 function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
-let B = function B() {};
+let B = function B() {
+  "use strict";
+};
 
 let A =
 /*#__PURE__*/
 function (_B) {
+  "use strict";
+
   _inheritsLoose(A, _B);
 
   function A(track) {

@@ -1,6 +1,9 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxDoExpressions from "@babel/plugin-syntax-do-expressions";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     inherits: syntaxDoExpressions,
 
@@ -17,4 +20,4 @@ export default function() {
       },
     },
   };
-}
+});

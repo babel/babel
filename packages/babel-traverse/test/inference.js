@@ -1,5 +1,4 @@
 import traverse from "../lib";
-import assert from "assert";
 import { parse } from "babylon";
 import * as t from "@babel/types";
 
@@ -25,7 +24,7 @@ describe("inference", function() {
       const right = path.get("right");
       const strictMatch = left.baseTypeStrictlyMatches(right);
 
-      assert.ok(strictMatch, "null should be equal to null");
+      expect(strictMatch).toBeTruthy();
     });
 
     it("it should work with numbers", function() {
@@ -36,7 +35,7 @@ describe("inference", function() {
       const right = path.get("right");
       const strictMatch = left.baseTypeStrictlyMatches(right);
 
-      assert.ok(strictMatch, "number should be equal to number");
+      expect(strictMatch).toBeTruthy();
     });
 
     it("it should bail when type changes", function() {
@@ -48,7 +47,7 @@ describe("inference", function() {
 
       const strictMatch = left.baseTypeStrictlyMatches(right);
 
-      assert.ok(!strictMatch, "type might change in if statement");
+      expect(strictMatch).toBeFalsy();
     });
 
     it("it should differentiate between null and undefined", function() {
@@ -59,7 +58,7 @@ describe("inference", function() {
       const right = path.get("right");
       const strictMatch = left.baseTypeStrictlyMatches(right);
 
-      assert.ok(!strictMatch, "null should not match undefined");
+      expect(strictMatch).toBeFalsy();
     });
   });
   describe("getTypeAnnotation", function() {
@@ -67,247 +66,194 @@ describe("inference", function() {
       const path = getPath("(x: number)")
         .get("body")[0]
         .get("expression");
-      assert.ok(
-        t.isNumberTypeAnnotation(path.getTypeAnnotation()),
-        "should be number",
-      );
+      expect(t.isNumberTypeAnnotation(path.getTypeAnnotation())).toBeTruthy();
     });
     it("should infer string from template literal", function() {
       const path = getPath("`hey`")
         .get("body")[0]
         .get("expression");
-      assert.ok(
-        t.isStringTypeAnnotation(path.getTypeAnnotation()),
-        "should be string",
-      );
+      expect(t.isStringTypeAnnotation(path.getTypeAnnotation())).toBeTruthy();
     });
     it("should infer number from +x", function() {
       const path = getPath("+x")
         .get("body")[0]
         .get("expression");
-      assert.ok(
-        t.isNumberTypeAnnotation(path.getTypeAnnotation()),
-        "should be number",
-      );
+      expect(t.isNumberTypeAnnotation(path.getTypeAnnotation())).toBeTruthy();
     });
     it("should infer T from new T", function() {
       const path = getPath("new T")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(
+      expect(
         t.isGenericTypeAnnotation(type) && type.id.name === "T",
-        "should be T",
-      );
+      ).toBeTruthy();
     });
     it("should infer number from ++x", function() {
       const path = getPath("++x")
         .get("body")[0]
         .get("expression");
-      assert.ok(
-        t.isNumberTypeAnnotation(path.getTypeAnnotation()),
-        "should be number",
-      );
+      expect(t.isNumberTypeAnnotation(path.getTypeAnnotation())).toBeTruthy();
     });
     it("should infer number from --x", function() {
       const path = getPath("--x")
         .get("body")[0]
         .get("expression");
-      assert.ok(
-        t.isNumberTypeAnnotation(path.getTypeAnnotation()),
-        "should be number",
-      );
+      expect(t.isNumberTypeAnnotation(path.getTypeAnnotation())).toBeTruthy();
     });
     it("should infer void from void x", function() {
       const path = getPath("void x")
         .get("body")[0]
         .get("expression");
-      assert.ok(
-        t.isVoidTypeAnnotation(path.getTypeAnnotation()),
-        "should be void",
-      );
+      expect(t.isVoidTypeAnnotation(path.getTypeAnnotation())).toBeTruthy();
     });
     it("should infer string from typeof x", function() {
       const path = getPath("typeof x")
         .get("body")[0]
         .get("expression");
-      assert.ok(
-        t.isStringTypeAnnotation(path.getTypeAnnotation()),
-        "should be string",
-      );
+      expect(t.isStringTypeAnnotation(path.getTypeAnnotation())).toBeTruthy();
     });
     it("should infer boolean from !x", function() {
       const path = getPath("!x")
         .get("body")[0]
         .get("expression");
-      assert.ok(
-        t.isBooleanTypeAnnotation(path.getTypeAnnotation()),
-        "should be boolean",
-      );
+      expect(t.isBooleanTypeAnnotation(path.getTypeAnnotation())).toBeTruthy();
     });
     it("should infer type of sequence expression", function() {
       const path = getPath("a,1")
         .get("body")[0]
         .get("expression");
-      assert.ok(
-        t.isNumberTypeAnnotation(path.getTypeAnnotation()),
-        "should be number",
-      );
+      expect(t.isNumberTypeAnnotation(path.getTypeAnnotation())).toBeTruthy();
     });
     it("should infer type of logical expression", function() {
       const path = getPath("'a' && 1")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(t.isUnionTypeAnnotation(type), "should be a union");
-      assert.ok(
-        t.isStringTypeAnnotation(type.types[0]),
-        "first type in union should be string",
-      );
-      assert.ok(
-        t.isNumberTypeAnnotation(type.types[1]),
-        "second type in union should be number",
-      );
+      expect(t.isUnionTypeAnnotation(type)).toBeTruthy();
+      expect(t.isStringTypeAnnotation(type.types[0])).toBeTruthy();
+      expect(t.isNumberTypeAnnotation(type.types[1])).toBeTruthy();
     });
     it("should infer type of conditional expression", function() {
       const path = getPath("q ? true : 0")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(t.isUnionTypeAnnotation(type), "should be a union");
-      assert.ok(
-        t.isBooleanTypeAnnotation(type.types[0]),
-        "first type in union should be boolean",
-      );
-      assert.ok(
-        t.isNumberTypeAnnotation(type.types[1]),
-        "second type in union should be number",
-      );
+      expect(t.isUnionTypeAnnotation(type)).toBeTruthy();
+      expect(t.isBooleanTypeAnnotation(type.types[0])).toBeTruthy();
+      expect(t.isNumberTypeAnnotation(type.types[1])).toBeTruthy();
     });
     it("should infer RegExp from RegExp literal", function() {
       const path = getPath("/.+/")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(
+      expect(
         t.isGenericTypeAnnotation(type) && type.id.name === "RegExp",
-        "should be RegExp",
-      );
+      ).toBeTruthy();
     });
     it("should infer Object from object expression", function() {
       const path = getPath("({ a: 5 })")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(
+      expect(
         t.isGenericTypeAnnotation(type) && type.id.name === "Object",
-        "should be Object",
-      );
+      ).toBeTruthy();
     });
     it("should infer Array from array expression", function() {
       const path = getPath("[ 5 ]")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(
+      expect(
         t.isGenericTypeAnnotation(type) && type.id.name === "Array",
-        "should be Array",
-      );
+      ).toBeTruthy();
     });
     it("should infer Function from function", function() {
       const path = getPath("(function (): string {})")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(
+      expect(
         t.isGenericTypeAnnotation(type) && type.id.name === "Function",
-        "should be Function",
-      );
+      ).toBeTruthy();
     });
     it("should infer call return type using function", function() {
       const path = getPath("(function (): string {})()")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(t.isStringTypeAnnotation(type), "should be string");
+      expect(t.isStringTypeAnnotation(type)).toBeTruthy();
     });
     it("should infer call return type using async function", function() {
       const path = getPath("(async function (): string {})()")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(
+      expect(
         t.isGenericTypeAnnotation(type) && type.id.name === "Promise",
-        "should be Promise",
-      );
+      ).toBeTruthy();
     });
     it("should infer call return type using async generator function", function() {
       const path = getPath("(async function * (): string {})()")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(
+      expect(
         t.isGenericTypeAnnotation(type) && type.id.name === "AsyncIterator",
-        "should be AsyncIterator",
-      );
+      ).toBeTruthy();
     });
     it("should infer number from x/y", function() {
       const path = getPath("x/y")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(t.isNumberTypeAnnotation(type), "should be number");
+      expect(t.isNumberTypeAnnotation(type)).toBeTruthy();
     });
     it("should infer boolean from x instanceof y", function() {
       const path = getPath("x instanceof y")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(t.isBooleanTypeAnnotation(type), "should be boolean");
+      expect(t.isBooleanTypeAnnotation(type)).toBeTruthy();
     });
     it("should infer number from 1 + 2", function() {
       const path = getPath("1 + 2")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(t.isNumberTypeAnnotation(type), "should be number");
+      expect(t.isNumberTypeAnnotation(type)).toBeTruthy();
     });
     it("should infer string|number from x + y", function() {
       const path = getPath("x + y")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(t.isUnionTypeAnnotation(type), "should be a union");
-      assert.ok(
-        t.isStringTypeAnnotation(type.types[0]),
-        "first type in union should be string",
-      );
-      assert.ok(
-        t.isNumberTypeAnnotation(type.types[1]),
-        "second type in union should be number",
-      );
+      expect(t.isUnionTypeAnnotation(type)).toBeTruthy();
+      expect(t.isStringTypeAnnotation(type.types[0])).toBeTruthy();
+      expect(t.isNumberTypeAnnotation(type.types[1])).toBeTruthy();
     });
     it("should infer type of tagged template literal", function() {
       const path = getPath("(function (): RegExp {}) `hey`")
         .get("body")[0]
         .get("expression");
       const type = path.getTypeAnnotation();
-      assert.ok(
+      expect(
         t.isGenericTypeAnnotation(type) && type.id.name === "RegExp",
-        "should be RegExp",
-      );
+      ).toBeTruthy();
     });
     it("should infer constant identifier", function() {
       const path = getPath("const x = 0; x").get("body.1.expression");
       const type = path.getTypeAnnotation();
-      assert.ok(t.isNumberTypeAnnotation(type), "should be number");
+      expect(t.isNumberTypeAnnotation(type)).toBeTruthy();
     });
     it("should infer indirect constant identifier", function() {
       const path = getPath("const x = 0; const y = x; y").get(
         "body.2.expression",
       );
       const type = path.getTypeAnnotation();
-      assert.ok(t.isNumberTypeAnnotation(type), "should be number");
+      expect(t.isNumberTypeAnnotation(type)).toBeTruthy();
     });
     it("should infer identifier type from if statement (===)", function() {
       const path = getPath(
@@ -316,7 +262,7 @@ describe("inference", function() {
       }`,
       ).get("body.0.body.body.0.consequent.expression");
       const type = path.getTypeAnnotation();
-      assert.ok(t.isBooleanTypeAnnotation(type), "should be boolean");
+      expect(t.isBooleanTypeAnnotation(type)).toBeTruthy();
     });
     it("should infer identifier type from if statement (typeof)", function() {
       let path = getPath(
@@ -325,14 +271,14 @@ describe("inference", function() {
       }`,
       ).get("body.0.body.body.0.consequent.expression");
       let type = path.getTypeAnnotation();
-      assert.ok(t.isStringTypeAnnotation(type), "should be string");
+      expect(t.isStringTypeAnnotation(type)).toBeTruthy();
       path = getPath(
         `function test(x) {
         if (typeof x === 'number') x;
       }`,
       ).get("body.0.body.body.0.consequent.expression");
       type = path.getTypeAnnotation();
-      assert.ok(t.isNumberTypeAnnotation(type), "should be string");
+      expect(t.isNumberTypeAnnotation(type)).toBeTruthy();
     });
     it("should infer identifier type from if statement (&&)", function() {
       let path = getPath(
@@ -341,29 +287,23 @@ describe("inference", function() {
       }`,
       ).get("body.0.body.body.0.consequent.expression");
       let type = path.getTypeAnnotation();
-      assert.ok(t.isUnionTypeAnnotation(type), "should be a union");
-      assert.ok(
-        t.isStringTypeAnnotation(type.types[0]),
-        "first type in union should be string",
-      );
-      assert.ok(
-        t.isNumberTypeAnnotation(type.types[1]),
-        "second type in union should be number",
-      );
+      expect(t.isUnionTypeAnnotation(type)).toBeTruthy();
+      expect(t.isStringTypeAnnotation(type.types[0])).toBeTruthy();
+      expect(t.isNumberTypeAnnotation(type.types[1])).toBeTruthy();
       path = getPath(
         `function test(x) {
         if (true && x === 3) x;
       }`,
       ).get("body.0.body.body.0.consequent.expression");
       type = path.getTypeAnnotation();
-      assert.ok(t.isNumberTypeAnnotation(type), "should be number");
+      expect(t.isNumberTypeAnnotation(type)).toBeTruthy();
       path = getPath(
         `function test(x) {
         if (x === 'test' && true) x;
       }`,
       ).get("body.0.body.body.0.consequent.expression");
       type = path.getTypeAnnotation();
-      assert.ok(t.isStringTypeAnnotation(type), "should be string");
+      expect(t.isStringTypeAnnotation(type)).toBeTruthy();
     });
     it("should infer identifier type from if statement (||)", function() {
       const path = getPath(
@@ -372,7 +312,7 @@ describe("inference", function() {
       }`,
       ).get("body.0.body.body.0.consequent.expression");
       const type = path.getTypeAnnotation();
-      assert.ok(t.isAnyTypeAnnotation(type), "should be a any type");
+      expect(t.isAnyTypeAnnotation(type)).toBeTruthy();
     });
     it("should not infer identifier type from incorrect binding", function() {
       const path = getPath(
@@ -385,7 +325,7 @@ describe("inference", function() {
       }`,
       ).get("body.0.body.body.0.consequent.body.0.body.body.0.expression");
       const type = path.getTypeAnnotation();
-      assert.ok(t.isAnyTypeAnnotation(type), "should be a any type");
+      expect(t.isAnyTypeAnnotation(type)).toBeTruthy();
     });
   });
 });

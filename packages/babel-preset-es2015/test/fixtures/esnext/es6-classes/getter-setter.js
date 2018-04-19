@@ -16,13 +16,13 @@ class Person {
 }
 
 var mazer = new Person('Mazer', 'Rackham');
-assert.equal(mazer.name, 'Mazer Rackham');
+expect(mazer.name).toBe('Mazer Rackham');
 mazer.name = 'Ender Wiggin';
-assert.equal(mazer.firstName, 'Ender');
-assert.equal(mazer.lastName, 'Wiggin');
+expect(mazer.firstName).toBe('Ender');
+expect(mazer.lastName).toBe('Wiggin');
 
 var forLoopProperties = [];
 for (var key in mazer) {
   forLoopProperties.push(key);
 }
-assert.ok(forLoopProperties.indexOf('name') === -1, 'getters/setters should be unenumerable');
+expect(forLoopProperties).not.toEqual(expect.stringContaining('name'));

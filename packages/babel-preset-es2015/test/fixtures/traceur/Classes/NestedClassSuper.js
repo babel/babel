@@ -16,7 +16,7 @@ class OneExtWrapper {
       constructor() {
         var o = {};
         super(o);
-        assert.equal('c1', o.r);
+        expect(o.r).toBe('c1');
       }
       m() { return super.m(); }
       get g() { return super.g; }
@@ -30,7 +30,7 @@ class OneExtWrapper {
       constructor() {
         var o = {};
         super(o);
-        assert.equal('c1', o.r);
+        expect(o.r).toBe('c1');
       }
       m() { return super.m(); }
       get g() { return super.g; }
@@ -45,7 +45,7 @@ class OneExtWrapper {
         constructor() {
           var o = {};
           super(o);
-          assert.equal('c1', o.r);
+          expect(o.r).toBe('c1');
         }
         m() { return super.m(); }
         get g() { return super.g; }
@@ -60,7 +60,7 @@ class OneExtWrapper {
       constructor() {
         var o = {};
         super(o);
-        assert.equal('c1', o.r);
+        expect(o.r).toBe('c1');
       }
       m() { return super.m(); }
       get g() { return super.g; }
@@ -74,7 +74,7 @@ class OneExtWrapper {
       constructor() {
         var o = {};
         super(o);
-        assert.equal('c1', o.r);
+        expect(o.r).toBe('c1');
       }
       m() { return super.m(); }
       get g() { return super.g; }
@@ -92,10 +92,10 @@ class OneExtWrapper {
 
 function checkClass(C) {
   var o = new C();
-  assert.equal('m1', o.m());
-  assert.equal('g1', o.g);
+  expect(o.m()).toBe('m1');
+  expect(o.g).toBe('g1');
   o.x = 'x';
-  assert.equal('x1', o.x);
+  expect(o.x).toBe('x1');
 }
 
 var o = new OneExtWrapper();

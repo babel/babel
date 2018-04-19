@@ -4,11 +4,11 @@ var obj = {
     var f = (x) => ({[this.name]: x});
 
     var o = f(1);
-    assert.equal(1, o.x);
+    expect(1).toBe(o.x);
 
     this.name = 2;
     o = f(3);
-    assert.equal(3, o[2]);
+    expect(3).toBe(o[2]);
   }
 };
 

@@ -1,10 +1,12 @@
-import LooseTransformer from "./loose";
-import VanillaTransformer from "./vanilla";
+// @flow
+import { declare } from "@babel/helper-plugin-utils";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
 import nameFunction from "@babel/helper-function-name";
 import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import { types as t } from "@babel/core";
+import type { NodePath } from "@babel/traverse";
 import globals from "globals";
+import transformClass from "./transformClass";
 
 const getBuiltinClasses = category =>
   Object.keys(globals[category]).filter(name => /^[A-Z]/.test(name));
@@ -14,21 +16,22 @@ const builtinClasses = new Set([
   ...getBuiltinClasses("browser"),
 ]);
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { loose } = options;
-  const Constructor = loose ? LooseTransformer : VanillaTransformer;
 
   // todo: investigate traversal requeueing
   const VISITED = Symbol();
 
   return {
     visitor: {
-      ExportDefaultDeclaration(path) {
+      ExportDefaultDeclaration(path: NodePath) {
         if (!path.get("declaration").isClassDeclaration()) return;
         splitExportDeclaration(path);
       },
 
-      ClassDeclaration(path) {
+      ClassDeclaration(path: NodePath) {
         const { node } = path;
 
         const ref = node.id || path.scope.generateUidIdentifier("class");
@@ -40,7 +43,7 @@ export default function(api, options) {
         );
       },
 
-      ClassExpression(path, state) {
+      ClassExpression(path: NodePath, state: any) {
         const { node } = path;
         if (node[VISITED]) return;
 
@@ -53,7 +56,7 @@ export default function(api, options) {
         node[VISITED] = true;
 
         path.replaceWith(
-          new Constructor(path, state.file, builtinClasses).run(),
+          transformClass(path, state.file, builtinClasses, loose),
         );
 
         if (path.isCallExpression()) {
@@ -65,4 +68,4 @@ export default function(api, options) {
       },
     },
   };
-}
+});

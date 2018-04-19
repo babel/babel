@@ -9,8 +9,8 @@ async function ret(x) {
 
 (async function() {
   var v = await ret(4);
-  assert.equal(v, 2);
+  expect(v).toBe(2);
   v = await ret(0);
-  assert.equal(v, 3);
+  expect(v).toBe(3);
   done();
 })();

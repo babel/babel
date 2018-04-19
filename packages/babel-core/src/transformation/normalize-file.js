@@ -89,6 +89,12 @@ function parser(pluginPasses, options, code) {
     }
     throw new Error("More than one plugin attempted to override parsing.");
   } catch (err) {
+    if (err.code === "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED") {
+      err.message +=
+        "\nConsider renaming the file to '.mjs', or setting sourceType:module " +
+        "or sourceType:unambiguous in your Babel config for this file.";
+    }
+
     const { loc, missingPlugin } = err;
     if (loc) {
       const codeFrame = codeFrameColumns(

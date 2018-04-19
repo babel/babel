@@ -2,16 +2,16 @@ import * as a from './resources/i.js';
 
 (function() {
   'use strict';
-  assert.equal(0, a.i);
+  expect(a.i).toBe(0);
   a.inc();
-  assert.equal(1, a.i);
+  expect(a.i).toBe(1);
 
-  assert.throws(function() {
+  expect(function() {
     a.i = 2;
-  }, TypeError);
+  }).toThrow(TypeError);
 })();
 
-assert.equal(1, a.i);
+expect(a.i).toBe(1);
 
 import * as d from './resources/d.js';
-assert.equal('A', d.a);
+expect(d.a).toBe('A');

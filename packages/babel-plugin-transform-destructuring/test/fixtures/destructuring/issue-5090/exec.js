@@ -6,4 +6,4 @@ const assign = function([...arr], index, value) {
 const arr = [1, 2, 3];
 assign(arr, 1, 42);
 
-assert.deepEqual(arr, [1, 2, 3]);
+expect(arr).toEqual([1, 2, 3]);

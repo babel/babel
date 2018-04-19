@@ -7,13 +7,13 @@ const obj = {
 };
 
 let test = +obj?.a?.b;
-assert.equal(test, 0);
+expect(test).toBe(0);
 
 test = +obj?.a.b;
-assert.equal(test, 0);
+expect(test).toBe(0);
 
 test = +obj?.b?.b;
-assert.isNaN(test);
+expect(test).toBe(NaN);
 
 test = +obj?.b?.b;
-assert.isNaN(test);
+expect(test).toBe(NaN);

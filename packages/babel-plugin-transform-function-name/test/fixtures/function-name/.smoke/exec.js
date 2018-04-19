@@ -1,23 +1,23 @@
 var foo = function () {};
-assert.equal(foo.name, "foo");
+expect(foo.name).toBe("foo");
 
 var obj = { foo: function () {} };
-assert.equal(obj.foo.name, "foo");
+expect(obj.foo.name).toBe("foo");
 
 var obj = { "foo": function () {} };
-assert.equal(obj.foo.name, "foo");
+expect(obj.foo.name).toBe("foo");
 
 var obj = { foo() {} };
-assert.equal(obj.foo.name, "foo");
+expect(obj.foo.name).toBe("foo");
 
 var obj = { "foo"() {} };
-assert.equal(obj.foo.name, "foo");
+expect(obj.foo.name).toBe("foo");
 
 function noop() {}
 
 var obj = { @noop foo() {} };
-assert.equal(obj.foo.name, "foo");
+expect(obj.foo.name).toBe("foo");
 
 
 var obj = { @noop foo: function () { return "foo"; } };
-assert.equal(obj.foo.name, "foo");
+expect(obj.foo.name).toBe("foo");

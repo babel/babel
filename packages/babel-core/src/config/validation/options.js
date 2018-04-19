@@ -1,5 +1,8 @@
 // @flow
 
+import type { ConfigItem } from "../item";
+import Plugin from "../plugin";
+
 import removed from "./removed";
 import {
   assertString,
@@ -116,9 +119,6 @@ const COMMON_VALIDATORS: ValidatorSet = {
   sourceMap: (assertSourceMaps: Validator<
     $PropertyType<ValidatedOptions, "sourceMap">,
   >),
-  sourceMapTarget: (assertString: Validator<
-    $PropertyType<ValidatedOptions, "sourceMapTarget">,
-  >),
   sourceFileName: (assertString: Validator<
     $PropertyType<ValidatedOptions, "sourceFileName">,
   >),
@@ -189,7 +189,6 @@ export type ValidatedOptions = {
   // Sourcemap generation options.
   sourceMaps?: SourceMapsOption,
   sourceMap?: SourceMapsOption,
-  sourceMapTarget?: string,
   sourceFileName?: string,
   sourceRoot?: string,
 
@@ -214,10 +213,11 @@ export type IgnoreList = $ReadOnlyArray<IgnoreItem>;
 export type PluginOptions = {} | void | false;
 export type PluginTarget = string | {} | Function;
 export type PluginItem =
+  | ConfigItem
   | Plugin
   | PluginTarget
   | [PluginTarget, PluginOptions]
-  | [PluginTarget, PluginOptions, string];
+  | [PluginTarget, PluginOptions, string | void];
 export type PluginList = $ReadOnlyArray<PluginItem>;
 
 export type OverridesList = Array<ValidatedOptions>;

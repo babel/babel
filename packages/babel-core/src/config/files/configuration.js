@@ -6,6 +6,7 @@ import fs from "fs";
 import json5 from "json5";
 import resolve from "resolve";
 import { makeStrongCache, type CacheConfigurator } from "../caching";
+import makeAPI from "../helpers/config-api";
 
 const debug = buildDebug("babel:config:loading:files:configuration");
 
@@ -150,12 +151,7 @@ const readConfigJS = makeStrongCache(
     }
 
     if (typeof options === "function") {
-      options = options({
-        cache: cache.simple(),
-        // Expose ".env()" so people can easily get the same env that we expose using the "env" key.
-        env: () => cache.using(data => data.envName),
-        async: () => false,
-      });
+      options = options(makeAPI(cache));
 
       if (!cache.configured()) throwConfigError();
     }

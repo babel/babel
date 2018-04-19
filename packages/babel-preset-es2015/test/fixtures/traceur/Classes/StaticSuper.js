@@ -28,8 +28,8 @@ class C extends B {
   }
 }
 
-assertArrayEquals([C, 'B.method'], C.method());
-assertArrayEquals([C, 'B.getter'], C.getter);
+expect(C.method()).toEqual([C, 'B.method']);
+expect(C.getter).toEqual([C, 'B.getter']);
 
 C.setter = 'B.setter';
-assertArrayEquals([C, 'B.setter'], x);
+expect(x).toEqual([C, 'B.setter']);

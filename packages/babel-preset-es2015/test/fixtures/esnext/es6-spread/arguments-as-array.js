@@ -2,5 +2,5 @@ function arrayOf() {
   return [...arguments];
 }
 
-assert.equal(Object.prototype.toString.call(arrayOf()), '[object Array]');
-assert.deepEqual(arrayOf(1, 2, 3), [1, 2, 3]);
+expect(Object.prototype.toString.call(arrayOf())).toBe('[object Array]');
+expect(arrayOf(1, 2, 3)).toEqual([1, 2, 3]);

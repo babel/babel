@@ -1,2 +1,2 @@
 var s = `str`;
-assert.equal(s, 'str');
+expect(s).toBe('str');

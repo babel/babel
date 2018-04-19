@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxExportNamespaceFrom from "@babel/plugin-syntax-export-namespace-from";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     inherits: syntaxExportNamespaceFrom,
 
@@ -43,4 +46,4 @@ export default function() {
       },
     },
   };
-}
+});

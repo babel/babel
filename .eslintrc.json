@@ -1,0 +1,33 @@
+{
+  "root": true,
+  "extends": "babel",
+  "plugins": ["prettier"],
+  "rules": {
+    "curly": ["error", "multi-line"],
+    "prettier/prettier": "error",
+    "no-case-declarations": "error"
+  },
+  "env": {
+    "node": true
+  },
+  "overrides": [
+    {
+      "files": ["packages/*/src/**/*.js", "codemods/*/src/**/*.js"],
+      "rules": {
+        "no-undefined-identifier": "error",
+        "no-deprecated-clone": "error"
+      }
+    },
+    {
+      "files": [
+        "packages/*/test/**/*.js",
+        "codemods/*/test/**/*.js",
+        "packages/babel-helper-transform-fixture-test-runner/src/helpers.js",
+        "test/**/*.js"
+      ],
+      "env": {
+        "jest": true
+      }
+    }
+  ]
+}

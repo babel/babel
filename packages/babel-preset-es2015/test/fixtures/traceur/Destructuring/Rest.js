@@ -7,13 +7,13 @@ function destructRest() {
 }
 
 var result = destructRest();
-assertArrayEquals([1, 2, 3], result.a);
-assert.equal(1, result.b);
-assertArrayEquals([2, 3], result.c);
-assertArrayEquals([], result.d);
+expect(result.a).toEqual([1, 2, 3]);
+expect(result.b).toBe(1);
+expect(result.c).toEqual([2, 3]);
+expect(result.d).toEqual([]);
 
-assert.throw(function() {
+expect(function() {
   var e;
   // No iterator.
   [...e] = {x: 'boom'};
-}, TypeError);
+}).toThrow(TypeError);

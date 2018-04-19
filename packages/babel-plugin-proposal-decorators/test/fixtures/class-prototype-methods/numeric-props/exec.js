@@ -1,7 +1,7 @@
 function dec(target, name, descriptor) {
-  assert(target);
-  assert.equal(name, 4);
-  assert.equal(typeof descriptor, "object");
+  expect(target).toBeTruthy();
+  expect(name).toBe(4);
+  expect(typeof descriptor).toBe("object");
 }
 
 class Example {

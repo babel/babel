@@ -1,4 +1,4 @@
 import {x, y} from './resources/export-destructuring.js';
 
-assert.equal(x, 1);
-assert.equal(y, 2);
+expect(x).toBe(1);
+expect(y).toBe(2);

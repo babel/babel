@@ -9,6 +9,6 @@ for (let a = 1; a < 3; a++) {
 
 // ----------------------------------------------------------------------------
 
-assert.equal('for 1', result[0]());
-assert.equal('for 2', result[1]());
-assert.equal(2, result.length);
+expect(result).toHaveLength(2);
+expect(result[0]()).toBe('for 1');
+expect(result[1]()).toBe('for 2');

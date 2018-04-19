@@ -10,23 +10,23 @@ a = b = c = x = y = z = undefined;
 // ----------------------------------------------------------------------------
 
 function checkA() {
-  assert.equal(1, a);
-  assert.isUndefined(b);
-  assert.isUndefined(c);
+  expect(a).toBe(1);
+  expect(b).toBeUndefined();
+  expect(c).toBeUndefined();
   a = b = c = undefined;
 }
 
 function checkAb() {
-  assert.equal(1, a);
-  assert.equal(2, b);
-  assert.isUndefined(c);
+  expect(a).toBe(1);
+  expect(b).toBe(2);
+  expect(c).toBeUndefined();
   a = b = c = undefined;
 }
 
 function checkAbc() {
-  assert.equal(1, a);
-  assert.equal(2, b);
-  assert.equal(3, c);
+  expect(1).toBe(a);
+  expect(2).toBe(b);
+  expect(3).toBe(c);
   a = b = c = undefined;
 }
 

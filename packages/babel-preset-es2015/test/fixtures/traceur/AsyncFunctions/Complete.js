@@ -11,6 +11,6 @@ function asyncComplete() {
 
 (async function() {
   var value = await asyncComplete();
-  assert.equal('complete', value);
+  expect('complete').toBe(value);
   done();
 })();

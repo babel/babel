@@ -15,11 +15,11 @@ async function test() {
   } finally {
     finallyVisited = true;
   }
-  assert.equal(42, v);
-  assert.isTrue(finallyVisited);
+  expect(42).toBe(v);
+  expect(finallyVisited).toBe(true);
   done();
 }
 
 test();
-assert.isFalse(finallyVisited);
+expect(finallyVisited).toBe(false);
 resolve(42);

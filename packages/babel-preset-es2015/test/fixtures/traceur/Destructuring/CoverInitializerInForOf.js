@@ -3,7 +3,7 @@
 var count = 0;
 for ({a = 0} of [{}]) {
   count++;
-  assert.equal(a, 0);
+  expect(a).toBe(0);
 }
 
-assert.equal(count, 1);
+expect(count).toBe(1);

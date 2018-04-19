@@ -31,7 +31,7 @@ _foo2 = babelHelpers.interopRequireDefault(require("foo2"))
 
 var
 /*before*/
-foo2 = babelHelpers.interopRequireWildcard(require("foo3"))
+foo2 = babelHelpers.interopRequireDefault(require("foo3"))
 /*after*/
 ;
 

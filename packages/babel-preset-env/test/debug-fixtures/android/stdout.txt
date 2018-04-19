@@ -8,28 +8,31 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
+  transform-template-literals { "android":"4" }
+  transform-literals { "android":"4" }
+  transform-function-name { "android":"4" }
   transform-arrow-functions { "android":"4" }
   transform-block-scoped-functions { "android":"4" }
-  transform-block-scoping { "android":"4" }
   transform-classes { "android":"4" }
-  transform-computed-properties { "android":"4" }
-  transform-destructuring { "android":"4" }
-  transform-duplicate-keys { "android":"4" }
-  transform-for-of { "android":"4" }
-  transform-function-name { "android":"4" }
-  transform-literals { "android":"4" }
   transform-object-super { "android":"4" }
-  transform-parameters { "android":"4" }
   transform-shorthand-properties { "android":"4" }
-  transform-spread { "android":"4" }
+  transform-duplicate-keys { "android":"4" }
+  transform-computed-properties { "android":"4" }
+  transform-for-of { "android":"4" }
   transform-sticky-regex { "android":"4" }
-  transform-template-literals { "android":"4" }
-  transform-typeof-symbol { "android":"4" }
   transform-unicode-regex { "android":"4" }
+  transform-spread { "android":"4" }
+  transform-parameters { "android":"4" }
+  transform-destructuring { "android":"4" }
+  transform-block-scoping { "android":"4" }
+  transform-typeof-symbol { "android":"4" }
   transform-new-target { "android":"4" }
   transform-regenerator { "android":"4" }
   transform-exponentiation-operator { "android":"4" }
   transform-async-to-generator { "android":"4" }
+  proposal-async-generator-functions { "android":"4" }
+  proposal-object-rest-spread { "android":"4" }
+  proposal-unicode-property-regex { "android":"4" }
   transform-dotall-regex { "android":"4" }
 
 Using polyfills with `entry` option:
@@ -130,7 +133,9 @@ Using polyfills with `entry` option:
   es7.object.get-own-property-descriptors { "android":"4" }
   es7.string.pad-start { "android":"4" }
   es7.string.pad-end { "android":"4" }
+  es7.promise.finally { "android":"4" }
+  es7.symbol.async-iterator { "android":"4" }
   web.timers { "android":"4" }
   web.immediate { "android":"4" }
   web.dom.iterable { "android":"4" }
-src/in.js -> lib/in.js
+🎉  Successfully compiled 1 file with Babel.

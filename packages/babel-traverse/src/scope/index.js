@@ -36,6 +36,12 @@ function gatherNodeParts(node: Object, parts: Array) {
     for (const prop of (node.properties: Array)) {
       gatherNodeParts(prop.key || prop.argument, parts);
     }
+  } else if (t.isPrivateName(node)) {
+    gatherNodeParts(node.id, parts);
+  } else if (t.isThisExpression(node)) {
+    parts.push("this");
+  } else if (t.isSuper(node)) {
+    parts.push("super");
   }
 }
 
@@ -401,7 +407,7 @@ export default class Scope {
     console.log(sep);
   }
 
-  toArray(node: Object, i?: number) {
+  toArray(node: Object, i?: number | boolean) {
     const file = this.hub.file;
 
     if (t.isIdentifier(node)) {
@@ -431,14 +437,20 @@ export default class Scope {
       );
     }
 
-    let helperName = "toArray";
+    let helperName;
     const args = [node];
     if (i === true) {
+      // Used in array-spread to create an array.
       helperName = "toConsumableArray";
     } else if (i) {
       args.push(t.numericLiteral(i));
+
+      // Used in array-rest to create an array from a subset of an iterable.
       helperName = "slicedToArray";
       // TODO if (this.hub.file.isLoose("es6.forOf")) helperName += "-loose";
+    } else {
+      // Used in array-rest to create an array
+      helperName = "toArray";
     }
     return t.callExpression(file.addHelper(helperName), args);
   }
@@ -616,7 +628,7 @@ export default class Scope {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       if (node.kind === "get" || node.kind === "set") return false;
       return true;
-    } else if (t.isClassProperty(node) || t.isObjectProperty(node)) {
+    } else if (t.isProperty(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       return this.isPure(node.value, constantsOnly);
     } else if (t.isUnaryExpression(node)) {

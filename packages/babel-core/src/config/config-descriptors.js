@@ -2,6 +2,8 @@
 
 import { loadPlugin, loadPreset } from "./files";
 
+import { getItemDescriptor } from "./item";
+
 import {
   makeWeakCache,
   makeStrongCache,
@@ -33,6 +35,10 @@ export type UnloadedDescriptor = {
   dirname: string,
   alias: string,
   ownPass?: boolean,
+  file?: {
+    request: string,
+    resolved: string,
+  } | void,
 };
 
 export type ValidatedFile = {
@@ -152,16 +158,11 @@ function createDescriptors(
   ownPass?: boolean,
 ): Array<UnloadedDescriptor> {
   const descriptors = items.map((item, index) =>
-    createDescriptor(
-      item,
-      type === "plugin" ? loadPlugin : loadPreset,
-      dirname,
-      {
-        index,
-        alias,
-        ownPass: !!ownPass,
-      },
-    ),
+    createDescriptor(item, dirname, {
+      type,
+      alias: `${alias}$${index}`,
+      ownPass: !!ownPass,
+    }),
   );
 
   assertNoDuplicates(descriptors);
@@ -172,20 +173,24 @@ function createDescriptors(
 /**
  * Given a plugin/preset item, resolve it into a standard format.
  */
-function createDescriptor(
+export function createDescriptor(
   pair: PluginItem,
-  resolver,
-  dirname,
+  dirname: string,
   {
-    index,
+    type,
     alias,
     ownPass,
   }: {
-    index: number,
+    type?: "plugin" | "preset",
     alias: string,
     ownPass?: boolean,
   },
 ): UnloadedDescriptor {
+  const desc = getItemDescriptor(pair);
+  if (desc) {
+    return desc;
+  }
+
   let name;
   let options;
   let value = pair;
@@ -198,9 +203,23 @@ function createDescriptor(
     }
   }
 
+  let file = undefined;
   let filepath = null;
   if (typeof value === "string") {
+    if (typeof type !== "string") {
+      throw new Error(
+        "To resolve a string-based item, the type of item must be given",
+      );
+    }
+    const resolver = type === "plugin" ? loadPlugin : loadPreset;
+    const request = value;
+
     ({ filepath, value } = resolver(value, dirname));
+
+    file = {
+      request,
+      resolved: filepath,
+    };
   }
 
   if (!value) {
@@ -232,11 +251,12 @@ function createDescriptor(
 
   return {
     name,
-    alias: filepath || `${alias}$${index}`,
+    alias: filepath || alias,
     value,
     options,
     dirname,
     ownPass,
+    file,
   };
 }
 

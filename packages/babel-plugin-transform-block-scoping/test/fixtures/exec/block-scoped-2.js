@@ -1,4 +1,4 @@
-assert.equal((() => {
+expect((() => {
   let sum = 0;
   let a = 0;
   {
@@ -9,4 +9,4 @@ assert.equal((() => {
     }
   }
   return sum;
-})(), 10);
+})()).toBe(10);

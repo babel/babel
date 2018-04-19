@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import rewritePattern from "regexpu-core";
 import * as regex from "@babel/helper-regex";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     visitor: {
       RegExpLiteral({ node }) {
@@ -11,4 +14,4 @@ export default function() {
       },
     },
   };
-}
+});

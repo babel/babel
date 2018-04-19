@@ -1,8 +1,6 @@
 var s = Symbol("s");
-assert.equal(typeof s, "symbol");
-assert.ok(typeof s === "symbol");
-assert.ok(typeof Symbol.prototype === 'object', "`typeof Symbol.prototype` should be 'object'");
-assert.isNotOk(typeof o === "symbol");
-assert.notEqual(typeof o, "symbol");
-assert.notEqual(typeof typeof o, "symbol");
+expect(typeof s).toBe("symbol");
+expect(typeof Symbol.prototype).toBe("object");
+expect(typeof o).not.toBe("symbol");
+expect(typeof typeof o).not.toBe("symbol");
 typeof o === "string";

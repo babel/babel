@@ -15,9 +15,9 @@ function* f1() {
 }
 
 var g1 = f1();
-assert.deepEqual(g1.next(), {value: 4, done: false});
-assert.deepEqual(g1.throw(42), {value: 10, done: false});
-assert.deepEqual(g1.next(), {value: undefined, done: true});
+expect(g1.next()).toEqual({value: 4, done: false});
+expect(g1.throw(42)).toEqual({value: 10, done: false});
+expect(g1.next()).toEqual({value: undefined, done: true});
 
 function* f2() {
   try {
@@ -28,7 +28,7 @@ function* f2() {
 }
 
 var g2 = f2();
-assert.deepEqual(g2.next(), {value: 1, done: false});
-assert.deepEqual(g2.throw(42), {value: 42, done: false});
-assert.deepEqual(g2.next(), {value: undefined, done: true});
+expect(g2.next()).toEqual({value: 1, done: false});
+expect(g2.throw(42)).toEqual({value: 42, done: false});
+expect(g2.next()).toEqual({value: undefined, done: true});
 

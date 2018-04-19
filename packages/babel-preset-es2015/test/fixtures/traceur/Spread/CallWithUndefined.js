@@ -2,7 +2,7 @@ function f(...args) {
   return args;
 }
 
-assert.throw(function() {
+expect(function() {
   // Should throw due to ToObject(undefined)
   f(0, ...undefined, 1);
-}, TypeError)
+}).toThrow(TypeError);

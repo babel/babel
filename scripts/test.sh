@@ -1,14 +1,26 @@
 #!/bin/bash
 set -e
 
-if [ -z "$TEST_GREP" ]; then
-   TEST_GREP=""
-fi
-
 node="node"
+jestArgs=()
 
 if [ "$TEST_DEBUG" ]; then
-   node="node --inspect-brk"
+  node="node --inspect-brk"
+  jestArgs+=("--runInBand")
 fi
 
-$node node_modules/mocha/bin/_mocha `scripts/_get-test-directories.sh` --opts test/mocha.opts --grep "$TEST_GREP"
+if [ -n "$CI" ]; then
+  jestArgs+=("--maxWorkers=4")
+  jestArgs+=("--ci")
+fi
+
+if [ -n "$TEST_GREP" ]; then
+  jestArgs+=("-t")
+  jestArgs+=("$TEST_GREP")
+fi
+
+if [ -n "$TEST_ONLY" ]; then
+  jestArgs+=("packages/.*$TEST_ONLY.*/test")
+fi
+
+$node node_modules/.bin/jest "${jestArgs[@]}"

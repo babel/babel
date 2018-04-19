@@ -20,5 +20,5 @@ function accumulate(iterator) {
 
 // ----------------------------------------------------------------------------
 
-assert.equal('1undefined2', accumulate(yieldUndefinedGenerator1()));
-assert.equal('1undefined2', accumulate(yieldUndefinedGenerator2()));
+expect(accumulate(yieldUndefinedGenerator1())).toBe('1undefined2');
+expect(accumulate(yieldUndefinedGenerator2())).toBe('1undefined2');

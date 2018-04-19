@@ -1,3 +1,3 @@
 {
-  "throws": "setter should have exactly one param (1:10)"
+  "throws": "setter must have exactly one formal parameter (1:10)"
 }

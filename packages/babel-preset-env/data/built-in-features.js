@@ -12,9 +12,10 @@ const es5 = {
   "es6.array.sort": "Array methods / Array.prototype.sort",
   "es6.date.now": "Date methods / Date.now",
   "es6.date.to-iso-string": "Date methods / Date.prototype.toISOString",
-  "es6.date.to-json" : "Date methods / Date.prototype.toJSON",
+  "es6.date.to-json": "Date methods / Date.prototype.toJSON",
   "es6.function.bind": "Function.prototype.bind",
-  "es6.string.iterator": "String properties and methods / Property access on strings",
+  "es6.string.iterator":
+    "String properties and methods / Property access on strings",
   "es6.string.trim": "String properties and methods / String.prototype.trim",
 };
 
@@ -50,31 +51,31 @@ const es2015 = {
   "es6.typed.array-buffer": "typed arrays / ArrayBuffer[Symbol.species]",
   "es6.typed.data-view": "typed arrays / DataView",
   "es6.typed.int8-array": {
-    features: ["typed arrays / Int8Array"].concat(typedArrayMethods)
+    features: ["typed arrays / Int8Array"].concat(typedArrayMethods),
   },
   "es6.typed.uint8-array": {
-    features: ["typed arrays / Uint8Array"].concat(typedArrayMethods)
+    features: ["typed arrays / Uint8Array"].concat(typedArrayMethods),
   },
   "es6.typed.uint8-clamped-array": {
-    features: ["typed arrays / Uint8ClampedArray"].concat(typedArrayMethods)
+    features: ["typed arrays / Uint8ClampedArray"].concat(typedArrayMethods),
   },
   "es6.typed.int16-array": {
-    features: ["typed arrays / Int16Array"].concat(typedArrayMethods)
+    features: ["typed arrays / Int16Array"].concat(typedArrayMethods),
   },
   "es6.typed.uint16-array": {
-    features: ["typed arrays / Uint16Array"].concat(typedArrayMethods)
+    features: ["typed arrays / Uint16Array"].concat(typedArrayMethods),
   },
   "es6.typed.int32-array": {
-    features: ["typed arrays / Int32Array"].concat(typedArrayMethods)
+    features: ["typed arrays / Int32Array"].concat(typedArrayMethods),
   },
   "es6.typed.uint32-array": {
-    features: ["typed arrays / Uint32Array"].concat(typedArrayMethods)
+    features: ["typed arrays / Uint32Array"].concat(typedArrayMethods),
   },
   "es6.typed.float32-array": {
-    features: ["typed arrays / Float32Array"].concat(typedArrayMethods)
+    features: ["typed arrays / Float32Array"].concat(typedArrayMethods),
   },
   "es6.typed.float64-array": {
-    features: ["typed arrays / Float64Array"].concat(typedArrayMethods)
+    features: ["typed arrays / Float64Array"].concat(typedArrayMethods),
   },
 
   "es6.map": "Map",
@@ -89,7 +90,8 @@ const es2015 = {
   "es6.reflect.define-property": "Reflect / Reflect.defineProperty",
   "es6.reflect.delete-property": "Reflect / Reflect.deleteProperty",
   "es6.reflect.get": "Reflect / Reflect.get",
-  "es6.reflect.get-own-property-descriptor": "Reflect / Reflect.getOwnPropertyDescriptor",
+  "es6.reflect.get-own-property-descriptor":
+    "Reflect / Reflect.getOwnPropertyDescriptor",
   "es6.reflect.get-prototype-of": "Reflect / Reflect.getPrototypeOf",
   "es6.reflect.has": "Reflect / Reflect.has",
   "es6.reflect.is-extensible": "Reflect / Reflect.isExtensible",
@@ -102,13 +104,13 @@ const es2015 = {
     features: [
       "Promise / basic functionality",
       "Promise / constructor requires new",
-      "Promise / Promise.prototype isn\'t an instance",
+      "Promise / Promise.prototype isn't an instance",
       "Promise / Promise.all",
       "Promise / Promise.all, generic iterables",
       "Promise / Promise.race",
       "Promise / Promise.race, generic iterables",
-      "Promise / Promise[Symbol.species]"
-    ]
+      "Promise / Promise[Symbol.species]",
+    ],
   },
 
   "es6.symbol": {
@@ -126,47 +128,63 @@ const es2015 = {
       "well-known symbols / Symbol.toPrimitive",
       "well-known symbols / Symbol.toStringTag",
       "well-known symbols / Symbol.unscopables",
-    ]
+    ],
   },
 
-  "es6.object.freeze": "Object static methods accept primitives / Object.freeze",
+  "es6.object.freeze":
+    "Object static methods accept primitives / Object.freeze",
   "es6.object.seal": "Object static methods accept primitives / Object.seal",
-  "es6.object.prevent-extensions": "Object static methods accept primitives / Object.preventExtensions",
-  "es6.object.is-frozen": "Object static methods accept primitives / Object.isFrozen",
-  "es6.object.is-sealed": "Object static methods accept primitives / Object.isSealed",
-  "es6.object.is-extensible": "Object static methods accept primitives / Object.isExtensible",
+  "es6.object.prevent-extensions":
+    "Object static methods accept primitives / Object.preventExtensions",
+  "es6.object.is-frozen":
+    "Object static methods accept primitives / Object.isFrozen",
+  "es6.object.is-sealed":
+    "Object static methods accept primitives / Object.isSealed",
+  "es6.object.is-extensible":
+    "Object static methods accept primitives / Object.isExtensible",
   "es6.object.get-own-property-descriptor":
     "Object static methods accept primitives / Object.getOwnPropertyDescriptor",
-  "es6.object.get-prototype-of": "Object static methods accept primitives / Object.getPrototypeOf",
+  "es6.object.get-prototype-of":
+    "Object static methods accept primitives / Object.getPrototypeOf",
   "es6.object.keys": "Object static methods accept primitives / Object.keys",
-  "es6.object.get-own-property-names": "Object static methods accept primitives / Object.getOwnPropertyNames",
+  "es6.object.get-own-property-names":
+    "Object static methods accept primitives / Object.getOwnPropertyNames",
 
   "es6.object.assign": "Object static methods / Object.assign",
   "es6.object.is": "Object static methods / Object.is",
-  "es6.object.set-prototype-of": "Object static methods / Object.setPrototypeOf",
+  "es6.object.set-prototype-of":
+    "Object static methods / Object.setPrototypeOf",
 
-  "es6.function.name": "function \"name\" property",
+  "es6.function.name": 'function "name" property',
 
   "es6.string.raw": "String static methods / String.raw",
   "es6.string.from-code-point": "String static methods / String.fromCodePoint",
 
-  "es6.string.code-point-at": "String.prototype methods / String.prototype.codePointAt",
+  "es6.string.code-point-at":
+    "String.prototype methods / String.prototype.codePointAt",
   // "String.prototype methods / String.prototype.normalize" not implemented
   "es6.string.repeat": "String.prototype methods / String.prototype.repeat",
-  "es6.string.starts-with": "String.prototype methods / String.prototype.startsWith",
-  "es6.string.ends-with": "String.prototype methods / String.prototype.endsWith",
+  "es6.string.starts-with":
+    "String.prototype methods / String.prototype.startsWith",
+  "es6.string.ends-with":
+    "String.prototype methods / String.prototype.endsWith",
   "es6.string.includes": "String.prototype methods / String.prototype.includes",
 
   "es6.regexp.flags": "RegExp.prototype properties / RegExp.prototype.flags",
-  "es6.regexp.match": "RegExp.prototype properties / RegExp.prototype[Symbol.match]",
-  "es6.regexp.replace": "RegExp.prototype properties / RegExp.prototype[Symbol.replace]",
-  "es6.regexp.split": "RegExp.prototype properties / RegExp.prototype[Symbol.split]",
-  "es6.regexp.search": "RegExp.prototype properties / RegExp.prototype[Symbol.search]",
+  "es6.regexp.match":
+    "RegExp.prototype properties / RegExp.prototype[Symbol.match]",
+  "es6.regexp.replace":
+    "RegExp.prototype properties / RegExp.prototype[Symbol.replace]",
+  "es6.regexp.split":
+    "RegExp.prototype properties / RegExp.prototype[Symbol.split]",
+  "es6.regexp.search":
+    "RegExp.prototype properties / RegExp.prototype[Symbol.search]",
 
   "es6.array.from": "Array static methods / Array.from",
   "es6.array.of": "Array static methods / Array.of",
 
-  "es6.array.copy-within": "Array.prototype methods / Array.prototype.copyWithin",
+  "es6.array.copy-within":
+    "Array.prototype methods / Array.prototype.copyWithin",
   "es6.array.find": "Array.prototype methods / Array.prototype.find",
   "es6.array.find-index": "Array.prototype methods / Array.prototype.findIndex",
   "es6.array.fill": "Array.prototype methods / Array.prototype.fill",
@@ -174,10 +192,10 @@ const es2015 = {
   "es6.array.iterator": {
     features: [
       "Array.prototype methods / Array.prototype.keys",
-     // can use Symbol.iterator, not implemented in many environments
-     // "Array.prototype methods / Array.prototype.values",
+      // can use Symbol.iterator, not implemented in many environments
+      // "Array.prototype methods / Array.prototype.values",
       "Array.prototype methods / Array.prototype.entries",
-    ]
+    ],
   },
 
   "es6.number.is-finite": "Number properties / Number.isFinite",
@@ -216,11 +234,25 @@ const es2016 = {
 const es2017 = {
   "es7.object.values": "Object static methods / Object.values",
   "es7.object.entries": "Object static methods / Object.entries",
-  "es7.object.get-own-property-descriptors": "Object static methods / Object.getOwnPropertyDescriptors",
+  "es7.object.get-own-property-descriptors":
+    "Object static methods / Object.getOwnPropertyDescriptors",
   "es7.string.pad-start": "String padding / String.prototype.padStart",
   "es7.string.pad-end": "String padding / String.prototype.padEnd",
 };
 
+const es2018 = {
+  "es7.promise.finally": "Promise.prototype.finally",
+  "es7.symbol.async-iterator": "Asynchronous Iterators",
+};
+
 const proposals = require("./shipped-proposals").builtIns;
 
-module.exports = Object.assign({}, es5, es2015, es2016, es2017, proposals);
+module.exports = Object.assign(
+  {},
+  es5,
+  es2015,
+  es2016,
+  es2017,
+  es2018,
+  proposals
+);

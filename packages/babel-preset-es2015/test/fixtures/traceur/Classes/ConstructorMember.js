@@ -11,17 +11,17 @@ class DerivedConstructorMember extends ConstructorMember {
 // ----------------------------------------------------------------------------
 
 var cm = new ConstructorMember;
-assert.equal(cm.constructor, ConstructorMember.prototype.constructor);
-assert.isTrue(ConstructorMember.prototype.hasOwnProperty('constructor'));
+expect(cm.constructor).toBe(ConstructorMember.prototype.constructor);
+expect(ConstructorMember.prototype).toHaveProperty('constructor');
 
 for (var key in ConstructorMember) {
-  assert.notEqual('constructor should not be enumerable', 'constructor', key);
+  expect('constructor should not be enumerable').not.toBe('constructor');
 }
 
 var dcm = new DerivedConstructorMember;
-assert.equal(dcm.constructor, DerivedConstructorMember.prototype.constructor);
-assert.isTrue(DerivedConstructorMember.prototype.hasOwnProperty('constructor'));
+expect(dcm.constructor).toBe(DerivedConstructorMember.prototype.constructor);
+expect(DerivedConstructorMember.prototype).toHaveProperty('constructor');
 
 for (var key in DerivedConstructorMember) {
-  assert.notEqual('constructor should not be enumerable', 'constructor', key);
+  expect('constructor should not be enumerable').not.toBe('constructor');
 }

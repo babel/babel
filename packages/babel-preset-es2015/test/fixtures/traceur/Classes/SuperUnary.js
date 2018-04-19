@@ -12,14 +12,13 @@ class B {
 
 class C extends B {
   m() {
-    assert.equal(this.x, 0);
-    assert.equal(++super.x, 1);
-    assert.equal(this.x, 1);
-    assert.equal(--super.x, 0);
-    assert.equal(this.x, 0);
+    expect(this.x).toBe(0);
+    expect(++super.x).toBe(1);
+    expect(this.x).toBe(1);
+    expect(--super.x).toBe(0);
+    expect(this.x).toBe(0);
 
-    // Don't use assert.typeOf since we are testing typeof.
-    assert.equal(typeof super.x, 'number');
+    expect(typeof super.x).toBe('number');
   }
 }
 

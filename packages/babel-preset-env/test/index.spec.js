@@ -1,14 +1,13 @@
 "use strict";
 
 const babelPresetEnv = require("../lib/index.js");
-const assert = require("assert");
 
 describe("babel-preset-env", () => {
   describe("isPluginRequired", () => {
     const MAX_VERSION = `${Number.MAX_SAFE_INTEGER}.0.0`;
 
     it("returns true if no targets are specified", () => {
-      assert.strictEqual(babelPresetEnv.isPluginRequired({}, {}), true);
+      expect(babelPresetEnv.isPluginRequired({}, {})).toBe(true);
     });
 
     it("returns true if plugin feature is not implemented in one or more targets", () => {
@@ -23,18 +22,12 @@ describe("babel-preset-env", () => {
         chrome: MAX_VERSION,
         firefox: MAX_VERSION,
       };
-      assert.strictEqual(
-        babelPresetEnv.isPluginRequired(targets, plugin),
-        false,
-      );
+      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(false);
 
       targets = {
         edge: "12",
       };
-      assert.strictEqual(
-        babelPresetEnv.isPluginRequired(targets, plugin),
-        true,
-      );
+      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(true);
     });
 
     it("returns false if plugin feature is implemented by lower than target", () => {
@@ -45,10 +38,7 @@ describe("babel-preset-env", () => {
         chrome: MAX_VERSION,
       };
 
-      assert.strictEqual(
-        babelPresetEnv.isPluginRequired(targets, plugin),
-        false,
-      );
+      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(false);
     });
 
     it("returns false if plugin feature is implemented is equal to target", () => {
@@ -58,10 +48,7 @@ describe("babel-preset-env", () => {
       const targets = {
         chrome: "49.0.0",
       };
-      assert.strictEqual(
-        babelPresetEnv.isPluginRequired(targets, plugin),
-        false,
-      );
+      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(false);
     });
 
     it("returns true if plugin feature is implemented is greater than target", () => {
@@ -71,10 +58,7 @@ describe("babel-preset-env", () => {
       const targets = {
         chrome: "49.0.0",
       };
-      assert.strictEqual(
-        babelPresetEnv.isPluginRequired(targets, plugin),
-        true,
-      );
+      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(true);
     });
 
     it("returns when target is a decimal", () => {
@@ -84,10 +68,7 @@ describe("babel-preset-env", () => {
       const targets = {
         node: "6.10.0",
       };
-      assert.strictEqual(
-        babelPresetEnv.isPluginRequired(targets, plugin),
-        false,
-      );
+      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(false);
     });
 
     it("throws an error if target version is invalid", () => {
@@ -97,33 +78,29 @@ describe("babel-preset-env", () => {
       const targets = {
         chrome: 55,
       };
-      assert.throws(() => babelPresetEnv.isPluginRequired(targets, plugin));
+      expect(() => babelPresetEnv.isPluginRequired(targets, plugin)).toThrow();
     });
   });
 
   describe("transformIncludesAndExcludes", () => {
     it("should return in transforms array", () => {
-      assert.deepEqual(
+      expect(
         babelPresetEnv.transformIncludesAndExcludes([
           "transform-arrow-functions",
         ]),
-        {
-          all: ["transform-arrow-functions"],
-          plugins: new Set(["transform-arrow-functions"]),
-          builtIns: new Set(),
-        },
-      );
+      ).toEqual({
+        all: ["transform-arrow-functions"],
+        plugins: new Set(["transform-arrow-functions"]),
+        builtIns: new Set(),
+      });
     });
 
     it("should return in built-ins array", () => {
-      assert.deepEqual(
-        babelPresetEnv.transformIncludesAndExcludes(["es6.map"]),
-        {
-          all: ["es6.map"],
-          plugins: new Set(),
-          builtIns: new Set(["es6.map"]),
-        },
-      );
+      expect(babelPresetEnv.transformIncludesAndExcludes(["es6.map"])).toEqual({
+        all: ["es6.map"],
+        plugins: new Set(),
+        builtIns: new Set(["es6.map"]),
+      });
     });
   });
 });

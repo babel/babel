@@ -1,3 +1,3 @@
 const fn = () => `${Symbol()}`;
 
-assert.throws(fn, TypeError);
+expect(fn).toThrow(TypeError);

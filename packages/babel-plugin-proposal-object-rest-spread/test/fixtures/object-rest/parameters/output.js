@@ -1,5 +1,5 @@
 function a(_ref) {
-  let a34 = babelHelpers.objectWithoutProperties(_ref, []);
+  let a34 = babelHelpers.extends({}, _ref);
 }
 
 function a2(_ref2) {
@@ -57,7 +57,7 @@ function a7(_ref8 = {}) {
 }
 
 function a8([_ref9]) {
-  let a1 = babelHelpers.objectWithoutProperties(_ref9, []);
+  let a1 = babelHelpers.extends({}, _ref9);
 }
 
 function a9([_ref10]) {
@@ -68,7 +68,7 @@ function a9([_ref10]) {
 }
 
 function a10([a1, _ref11]) {
-  let a2 = babelHelpers.objectWithoutProperties(_ref11, []);
+  let a2 = babelHelpers.extends({}, _ref11);
 } // Unchanged
 
 

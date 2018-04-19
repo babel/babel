@@ -12,9 +12,9 @@ export function runFixtureTests(fixturesPath, parseFunction) {
           try {
             runTest(task, parseFunction);
           } catch (err) {
-            const message =
+            err.message =
               name + "/" + task.actual.filename + ": " + err.message;
-            throw new Error(message);
+            throw err;
           }
         });
       });
@@ -39,9 +39,9 @@ export function runThrowTestsWithEstree(fixturesPath, parseFunction) {
           try {
             runTest(task, parseFunction);
           } catch (err) {
-            const message =
+            err.message =
               name + "/" + task.actual.filename + ": " + err.message;
-            throw new Error(message);
+            throw err;
           }
         });
       });

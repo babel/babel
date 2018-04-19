@@ -1,4 +1,3 @@
-import chai from "chai";
 import * as babel from "@babel/core";
 
 import { ImportInjector } from "../";
@@ -33,9 +32,9 @@ function test(sourceType, opts, initializer, expectedCode) {
     ],
   });
 
-  chai
-    .expect(result.code.replace(/\s+/g, " ").trim())
-    .to.equal((expectedCode || "").replace(/\s+/g, " ").trim());
+  expect(result.code.replace(/\s+/g, " ").trim()).toBe(
+    (expectedCode || "").replace(/\s+/g, " ").trim(),
+  );
 }
 const testScript = test.bind(undefined, "script");
 const testModule = test.bind(undefined, "module");
@@ -90,11 +89,9 @@ describe("@babel/helper-module-imports", () => {
 
       describe("using a CommonJS loader", () => {
         it("should import", () => {
-          chai
-            .expect(() => {
-              testScript({ importedType }, addNamespace());
-            })
-            .to.throw(Error, "Cannot import an ES6 module from CommonJS");
+          expect(() => {
+            testScript({ importedType }, addNamespace());
+          }).toThrow("Cannot import an ES6 module from CommonJS");
         });
       });
     });
@@ -302,11 +299,9 @@ describe("@babel/helper-module-imports", () => {
 
       describe("using a CommonJS loader", () => {
         it("should import", () => {
-          chai
-            .expect(() => {
-              testScript({ importedType }, addDefault());
-            })
-            .to.throw(Error, "Cannot import an ES6 module from CommonJS");
+          expect(() => {
+            testScript({ importedType }, addDefault());
+          }).toThrow("Cannot import an ES6 module from CommonJS");
         });
       });
     });
@@ -390,14 +385,12 @@ describe("@babel/helper-module-imports", () => {
         });
 
         it("should fail to import with force-enabled liveness", () => {
-          chai
-            .expect(() => {
-              testScript(
-                { importedInterop, ensureLiveReference: true },
-                addDefault(),
-              );
-            })
-            .to.throw(Error, "No live reference for commonjs default");
+          expect(() => {
+            testScript(
+              { importedInterop, ensureLiveReference: true },
+              addDefault(),
+            );
+          }).toThrow("No live reference for commonjs default");
         });
       });
     });
@@ -659,11 +652,9 @@ describe("@babel/helper-module-imports", () => {
 
       describe("using a CommonJS loader", () => {
         it("should import", () => {
-          chai
-            .expect(() => {
-              testScript({ importedType }, addNamed());
-            })
-            .to.throw(Error, "Cannot import an ES6 module from CommonJS");
+          expect(() => {
+            testScript({ importedType }, addNamed());
+          }).toThrow("Cannot import an ES6 module from CommonJS");
         });
       });
     });
@@ -967,11 +958,9 @@ describe("@babel/helper-module-imports", () => {
 
       describe("using a CommonJS loader", () => {
         it("should import", () => {
-          chai
-            .expect(() => {
-              testScript({ importedType }, addSideEffect());
-            })
-            .to.throw(Error, "Cannot import an ES6 module from CommonJS");
+          expect(() => {
+            testScript({ importedType }, addSideEffect());
+          }).toThrow("Cannot import an ES6 module from CommonJS");
         });
       });
     });

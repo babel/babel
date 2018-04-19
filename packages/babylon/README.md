@@ -32,6 +32,10 @@ mind. When in doubt, use `.parse()`.
   declarations can only appear at a program's top level. Setting this
   option to `true` allows them anywhere where a statement is allowed.
 
+- **allowAwaitOutsideFunction**: By default, `await` use is not allowed
+  outside of an async function. Set this to `true` to accept such
+  code.
+
 - **allowReturnOutsideFunction**: By default, a return statement at
   the top level raises an error. Set this to `true` to accept such
   code.
@@ -66,9 +70,7 @@ It is based on [ESTree spec][] with the following deviations:
 - [Program][] and [BlockStatement][] contain additional `directives` field with [Directive][] and [DirectiveLiteral][]
 - [ClassMethod][], [ObjectProperty][], and [ObjectMethod][] value property's properties in [FunctionExpression][] is coerced/brought into the main method node.
 
-AST for JSX code is based on [Facebook JSX AST][] with the addition of one node type:
-
-- `JSXText`
+AST for JSX code is based on [Facebook JSX AST][].
 
 [Babel AST format]: https://github.com/babel/babylon/blob/master/ast/spec.md
 [ESTree spec]: https://github.com/estree/estree

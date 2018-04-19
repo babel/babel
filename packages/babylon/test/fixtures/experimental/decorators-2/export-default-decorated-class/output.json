@@ -71,7 +71,7 @@
                   "column": 4
                 }
               },
-              "expression": {
+              "callee": {
                 "type": "Identifier",
                 "start": 17,
                 "end": 20,

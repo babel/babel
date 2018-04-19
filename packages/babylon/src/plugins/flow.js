@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 // @flow
 
 import type Parser from "../parser";
@@ -261,7 +259,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let kind = null;
       let hasModuleExport = false;
       const errorMessage =
-        "Found both `declare module.exports` and `declare export` in the same module. Modules can only have 1 since they are either an ES module or they are a CommonJS module";
+        "Found both `declare module.exports` and `declare export` in the same module. " +
+        "Modules can only have 1 since they are either an ES module or they are a CommonJS module";
       body.forEach(bodyElement => {
         if (isEsModuleType(bodyElement)) {
           if (kind === "CommonJS") {
@@ -404,6 +403,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       node.extends = [];
+      node.implements = [];
       node.mixins = [];
 
       if (this.eat(tt._extends)) {
@@ -416,6 +416,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.next();
         do {
           node.mixins.push(this.flowParseInterfaceExtends());
+        } while (this.eat(tt.comma));
+      }
+
+      if (this.isContextual("implements")) {
+        this.next();
+        do {
+          node.implements.push(this.flowParseInterfaceExtends());
         } while (this.eat(tt.comma));
       }
 
@@ -763,7 +770,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             this.startNodeAt(node.start, node.loc.start),
           );
           if (kind === "get" || kind === "set") {
-            this.flowCheckGetterSetterParamCount(node);
+            this.flowCheckGetterSetterParams(node);
           }
         } else {
           if (kind !== "init") this.unexpected();
@@ -783,19 +790,28 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    // This is similar to checkGetterSetterParamCount, but as
+    // This is similar to checkGetterSetterParams, but as
     // babylon uses non estree properties we cannot reuse it here
-    flowCheckGetterSetterParamCount(
+    flowCheckGetterSetterParams(
       property: N.FlowObjectTypeProperty | N.FlowObjectTypeSpreadProperty,
     ): void {
       const paramCount = property.kind === "get" ? 0 : 1;
-      if (property.value.params.length !== paramCount) {
-        const start = property.start;
+      const start = property.start;
+      const length =
+        property.value.params.length + (property.value.rest ? 1 : 0);
+      if (length !== paramCount) {
         if (property.kind === "get") {
-          this.raise(start, "getter should have no params");
+          this.raise(start, "getter must not have any formal parameters");
         } else {
-          this.raise(start, "setter should have exactly one param");
+          this.raise(start, "setter must have exactly one formal parameter");
         }
+      }
+
+      if (property.kind === "set" && property.value.rest) {
+        this.raise(
+          start,
+          "setter function argument must not be a rest parameter",
+        );
       }
     }
 
@@ -1828,6 +1844,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       isAsync: boolean,
       isPattern: boolean,
       refShorthandDefaultPos: ?Pos,
+      containsEsc: boolean,
     ): void {
       if ((prop: $FlowFixMe).variance) {
         this.unexpected((prop: $FlowFixMe).variance.start);
@@ -1850,6 +1867,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         isAsync,
         isPattern,
         refShorthandDefaultPos,
+        containsEsc,
       );
 
       // add typeParameters if we found them
@@ -1891,7 +1909,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       ) {
         this.raise(
           node.typeAnnotation.start,
-          "Type annotations must come before default assignments, e.g. instead of `age = 25: number` use `age: number = 25`",
+          "Type annotations must come before default assignments, " +
+            "e.g. instead of `age = 25: number` use `age: number = 25`",
         );
       }
 
@@ -2008,7 +2027,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (nodeIsTypeImport && specifierIsTypeImport) {
         this.raise(
           firstIdentLoc,
-          "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements",
+          "The `type` and `typeof` keywords on named imports can only be used on regular " +
+            "`import` statements. It cannot be used with `import type` or `import typeof` statements",
         );
       }
 

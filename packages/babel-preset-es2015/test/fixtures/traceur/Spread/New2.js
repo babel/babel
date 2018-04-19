@@ -15,9 +15,9 @@ var object = new F(0, ...[1, 2]);
 
 // ----------------------------------------------------------------------------
 
-assert.equal(0, object.x);
-assert.equal(1, object.y);
-assert.equal(2, object.z);
-assert.isFalse(object instanceof object.F);
-assert.isTrue(object instanceof object.G);
-assert.isTrue(object.f instanceof object.F);
+expect(object.x).toBe(0);
+expect(object.y).toBe(1);
+expect(object.z).toBe(2);
+expect(object).not.toBeInstanceOf(object.F);
+expect(object).toBeInstanceOf(object.G);
+expect(object.f).toBeInstanceOf(object.F);

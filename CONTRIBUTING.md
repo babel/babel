@@ -29,12 +29,13 @@ contributing, please read the
  - Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
  - Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
 - When you feel ready to jump into the Babel source code, a good place to start is to look for issues tagged with [help wanted](https://github.com/babel/babel/labels/help%20wanted) and/or [good first issue](https://github.com/babel/babel/labels/good%20first%20issue).
-- Follow along with what we are working on by joining our Slack, following our announcements on [Twitter](https://twitter.com/babeljs), and reading (or participating!) in our [meeting notes](https://github.com/babel/notes).
+- Follow along with what we are working on by joining our [Slack](https://babeljs.slack.com) (you can sign-up [here](https://slack.babeljs.io/)
+    for an invite), following our announcements on [Twitter](https://twitter.com/babeljs), and reading (or participating!) in our [meeting notes](https://github.com/babel/notes).
 - Check out our [website](http://babeljs.io/) and the [repo](https://github.com/babel/website)
 
 ## Chat
 
-Feel free to check out the `#discussion`/`#development` channels on our [Slack](https://slack.babeljs.io). Some of us are always online to chat!
+Feel free to check out the `#discussion`/`#development` channels on our [Slack](https://slack.babeljs.io) (you can sign-up [here](https://slack.babeljs.io/) for an invite). Some of us are always online to chat!
 
 ## Developing
 
@@ -116,7 +117,7 @@ $ TEST_ONLY=babel-cli make test
 
 ```sh
 # Run tests for the @babel/plugin-transform-classes package.
-$ TEST_ONLY=es2015-class make test
+$ TEST_ONLY=babel-plugin-transform-classes make test
 ```
 
 Use the `TEST_GREP` variable to run a subset of tests by name:
@@ -175,7 +176,7 @@ For example, in [`@babel/plugin-transform-exponentiation-operator/test`](https:/
 
 - In each subfolder, you can organize your directory structure by categories of tests. (Example: these folders can be named after the feature you are testing or can reference the issue number they fix)
 - Generally, there are two kinds of tests for plugins
-   - The first is a simple test of the input and output produced by running Babel on some code. We do this by creating an [`input.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/input.js) file and an [`output.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/output.js) file.
+   - The first is a simple test of the input and output produced by running Babel on some code. We do this by creating an [`input.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/input.js) file and an [`output.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/output.js) file. This kind of test only works in sub-subdirectories of `/fixtures`, i.e. `/fixtures/exponentian-operator/binary/input.js` and **not** `/fixtures/exponentian-operator/input.js`.
    - If you need to expect an error, you can ignore creating the `output.js` file and pass a new `throws` key to the `options.json` that contains the error string that is created.
    - The second and preferred type is a test that actually evaluates the produced code and asserts that certain properties are true or false. We do this by creating an [`exec.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/comprehensive/exec.js) file.
 
@@ -196,8 +197,8 @@ In an `exec.js` test, we run or check that the code actually does what it's supp
 
 ```js
 // exec.js
-assert.equal(8, 2 ** 3);
-assert.equal(24, 3 * 2 ** 3);
+expect(2 ** 3).toBe(8);
+expect(3 * 2 ** 3).toBe(24);
 ```
 
 If you need to check for an error that is thrown you can add to the `options.json`
@@ -234,7 +235,7 @@ descriptive name, and add the following:
 After writing tests for babylon, just build it by running:
 
 ```sh
-$ make build-babylon
+$ make build
 ```
 
 Then, to run the tests, use:

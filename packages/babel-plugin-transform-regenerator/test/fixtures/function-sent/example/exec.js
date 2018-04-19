@@ -16,4 +16,4 @@ tally.next(0.1);
 tally.next(0.1);
 tally.next(0.1);
 let last = tally.next("done");
-assert.equal(last.value, 0.30000000000000004);
+expect(last.value).toBeCloseTo(0.3, 10);

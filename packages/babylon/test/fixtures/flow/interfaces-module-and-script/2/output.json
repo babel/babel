@@ -95,6 +95,7 @@
             "typeParameters": null
           }
         ],
+        "implements": [],
         "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",

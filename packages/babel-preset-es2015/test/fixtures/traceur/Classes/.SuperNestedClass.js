@@ -17,5 +17,5 @@ class Roo extends Animal {
 
 
 var r = new Roo();
-assert.equal('R', r.name);
-assert.equal('K', r.a.name);
+expect(r.name).toBe('R');
+expect(r.a.name).toBe('K');

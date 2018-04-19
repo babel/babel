@@ -12,4 +12,4 @@ var obj = {
 
 };
 var result = (_obj$prop = obj.prop, obj.method(_obj$prop));
-assert.equal(result, 1);
+expect(result).toBe(1);

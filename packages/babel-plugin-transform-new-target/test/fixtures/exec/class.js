@@ -9,4 +9,4 @@ class Foo {
 
 new Foo;
 
-assert.equal(targets[0], Foo);
+expect(targets[0]).toBe(Foo);

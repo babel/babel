@@ -16,8 +16,8 @@ class D extends B {
   static set l(v) {}
 }
 
-assert.equal(0, Object.keys(B).length);
-assert.equal(0, Object.keys(B.prototype).length);
+expect(Object.keys(B)).toHaveLength(0);
+expect(Object.keys(B.prototype)).toHaveLength(0)
 
-assert.equal(0, Object.keys(D).length);
-assert.equal(0, Object.keys(D.prototype).length);
+expect(Object.keys(D)).toHaveLength(0)
+expect(Object.keys(D.prototype)).toHaveLength(0)

@@ -7,6 +7,7 @@ cache:
   directories:
   - node_modules
 node_js:
+  # We test the latest version on circleci
   - '8'
   - '6'
   - '4'
@@ -18,6 +19,8 @@ env:
 
 before_install:
   - curl -o- -L https://yarnpkg.com/install.sh | bash
+
+install: yarn --ignore-engines
 
 before_script:
   - 'if [ "$JOB" = "babylon-flow-tests" ]; then make bootstrap-flow; fi'

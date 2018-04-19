@@ -1,36 +1,36 @@
 // should have a length of 1
-assert.equal(Array.prototype.find.length, 1);
+expect(Array.prototype.find.length).toBe(1);
 
 // should handle basic case
-assert.equal([1, 2, 3].find(function(v) {
+expect([1, 2, 3].find(function(v) {
   return v * v === 4;
-}), 2);
+})).toBe(2);
 
 // should handle arrow functions
-assert.equal([1, 2, 3].find(v => v * v === 4), 2);
+expect([1, 2, 3].find(v => v * v === 4)).toBe(2);
 
 // should return undefined when not found
-assert.equal([1, 2, 3].find(v => v > 10), undefined);
+expect([1, 2, 3].find(v => v > 10)).toBeUndefined();
 
 // should return first match
-assert.equal([2, 2, 3].find(v => v * v === 4), 2);
+expect([2, 2, 3].find(v => v * v === 4)).toBe(2);
 
 // should handle custom objects
-assert.equal(Array.prototype.find.call({
+expect(Array.prototype.find.call({
   'length': 2,
   '0': false,
   '1': true
-}, v => v), true);
+}, v => v)).toBe(true);
 
 // should handle bad predicate
-assert.throws(function() {
+expect(function() {
   [1, 2, 3].find(1)
-}, TypeError);
+}).toThrow('TypeError');
 
 // should handle bad this
-assert.throws(function() {
+expect(function() {
   Array.prototype.find.call(null, function() {})
-}, TypeError);
+}).toThrow('TypeError');
 
 // should correctly handle this
 var global = this;
@@ -40,25 +40,25 @@ var global = this;
 
     // should be global this
     [1, 2, 3].find(function() {
-      assert.notEqual(this, self);
-      assert.equal(this, global);
+      expect(this).not.toBe(self);
+      expect(this).toBe(global);
     });
 
     // should be the same this
     [1, 2, 3].find(function() {
-      assert.equal(this, self);
+      expect(this).toBe(self);
     }, self);
 
     // should not have an effect on arrow functions
-    [1, 2, 3].find(() => assert.equal(this, self));
-    [1, 2, 3].find(() => assert.equal(this, self), self);
+    [1, 2, 3].find(() => expect(this).toBe(self));
+    [1, 2, 3].find(() => expect(this).toBe(self), self);
 
     // should call with correct args
     var arr = [5];
     arr.find(function(value, i, object) {
-      assert.equal(value, 5);
-      assert.equal(i, 0);
-      assert.equal(arr, object);
+      expect(value).toBe(5);
+      expect(i).toBe(0);
+      expect(arr).toBe(object);
     });
   }
 }).assert();
@@ -79,10 +79,10 @@ var object = {
   }
 };
 
-assert.equal(Array.prototype.find.call(object, (v) => {
+expect(Array.prototype.find.call(object, (v) => {
   callbackCalls++;
   return v === 'a';
-}), 'a');
-assert.equal(lengthCalls, 1);
-assert.equal(itemCalls, 1);
-assert.equal(callbackCalls, 3);
+})).toBe('a');
+expect(lengthCalls).toBe(1);
+expect(itemCalls).toBe(1);
+expect(callbackCalls).toBe(3);

@@ -35,7 +35,7 @@ function wrap(G) {
 
 // ----------------------------------------------------------------------------
 
-assert.equal('12', accumulate(tryCatchGenerator()));
+expect(accumulate(tryCatchGenerator())).toBe('12');
 
 // ----------------------------------------------------------------------------
 
@@ -85,9 +85,9 @@ function repeat(s, n) {
 
 // ----------------------------------------------------------------------------
 
-assert.equal('1 [2]', accumulateCatch(W(throwGenerator)()));
-assert.equal('1 [2]', accumulateCatch(W(throwFromCatchGenerator)()));
-assert.equal('1 [2]', accumulateCatch(W(throwFromFinallyGenerator)()));
+expect(accumulateCatch(W(throwGenerator)())).toBe('1 [2]');
+expect(accumulateCatch(W(throwFromCatchGenerator)())).toBe('1 [2]');
+expect(accumulateCatch(W(throwFromFinallyGenerator)())).toBe('1 [2]');
 
 // ----------------------------------------------------------------------------
 
@@ -147,7 +147,7 @@ function accumulateCatchOOB(iterator) {
 // ----------------------------------------------------------------------------
 
 var emptyResult = repeat(' <>', 3);
-assert.equal('1 [2] <4>' + emptyResult, accumulateCatchOOB(W(throwOOBGen)()));
-assert.equal('17(2) [8] <49>' + emptyResult, accumulateCatchOOB(W(throwOOB2xGen)()));
+expect(accumulateCatchOOB(W(throwOOBGen)())).toBe('1 [2] <4>' + emptyResult);
+expect(accumulateCatchOOB(W(throwOOB2xGen)())).toBe('17(2) [8] <49>' + emptyResult);
 
 }); // end wrap_forEach

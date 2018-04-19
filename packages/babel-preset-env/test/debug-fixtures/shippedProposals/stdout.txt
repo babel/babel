@@ -6,33 +6,33 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
+  transform-template-literals {}
+  transform-literals {}
+  transform-function-name {}
   transform-arrow-functions {}
   transform-block-scoped-functions {}
-  transform-block-scoping {}
   transform-classes {}
-  transform-computed-properties {}
-  transform-destructuring {}
-  transform-duplicate-keys {}
-  transform-for-of {}
-  transform-function-name {}
-  transform-literals {}
   transform-object-super {}
-  transform-parameters {}
   transform-shorthand-properties {}
-  transform-spread {}
+  transform-duplicate-keys {}
+  transform-computed-properties {}
+  transform-for-of {}
   transform-sticky-regex {}
-  transform-template-literals {}
-  transform-typeof-symbol {}
   transform-unicode-regex {}
+  transform-spread {}
+  transform-parameters {}
+  transform-destructuring {}
+  transform-block-scoping {}
+  transform-typeof-symbol {}
   transform-new-target {}
   transform-regenerator {}
   transform-exponentiation-operator {}
   transform-async-to-generator {}
-  transform-dotall-regex {}
   proposal-async-generator-functions {}
   proposal-object-rest-spread {}
-  proposal-optional-catch-binding {}
   proposal-unicode-property-regex {}
+  transform-dotall-regex {}
+  proposal-optional-catch-binding {}
 
 Using polyfills with `entry` option:
 
@@ -150,7 +150,8 @@ Using polyfills with `entry` option:
   es7.string.pad-start {}
   es7.string.pad-end {}
   es7.promise.finally {}
+  es7.symbol.async-iterator {}
   web.timers {}
   web.immediate {}
   web.dom.iterable {}
-src/in.js -> lib/in.js
+🎉  Successfully compiled 1 file with Babel.

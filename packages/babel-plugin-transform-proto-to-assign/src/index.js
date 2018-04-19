@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import pull from "lodash/pull";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   function isProtoKey(node) {
     return t.isLiteral(t.toComputedKey(node, node.key), { value: "__proto__" });
   }
@@ -76,4 +79,4 @@ export default function() {
       },
     },
   };
-}
+});

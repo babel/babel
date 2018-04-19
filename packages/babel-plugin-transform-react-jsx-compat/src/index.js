@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import helper from "@babel/helper-builder-react-jsx";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     manipulateOptions(opts, parserOpts) {
       parserOpts.plugins.push("jsx");
@@ -27,4 +30,4 @@ export default function() {
       compat: true,
     }),
   };
-}
+});

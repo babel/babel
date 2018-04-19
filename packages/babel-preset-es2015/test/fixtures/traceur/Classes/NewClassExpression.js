@@ -1,18 +1,18 @@
 
-assert.equal((new class {
+expect((new class {
   get x() {
     return 'x';
   }
   getX() {
     return this.x;
   }
-}).getX(), 'x');
+}).getX()).toBe('x');
 
-assert.equal(new class {
+expect(new class {
   get y() {
     return 'y';
   }
   getY() {
     return this.y;
   }
-}().getY(), 'y');
+}().getY()).toBe('y');

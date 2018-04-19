@@ -30,7 +30,7 @@ var C4 = class extends C3 {
   }
 };
 
-assert.isUndefined(new C1().m());
-assert.isUndefined(new C2().m());
-assert.isUndefined(new C3().m());
-assert.isUndefined(new C4().m());
+expect(new C1().m()).toBeUndefined();
+expect(new C2().m()).toBeUndefined();
+expect(new C3().m()).toBeUndefined();
+expect(new C4().m()).toBeUndefined();

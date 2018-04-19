@@ -16,4 +16,4 @@ const expected = multiline([
 ]);
 
 
-assert.equal(actual, expected);
+expect(actual).toBe(expected);

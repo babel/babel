@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxNumericSeparator from "@babel/plugin-syntax-numeric-separator";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   function replaceNumberArg({ node }) {
     if (node.callee.name !== "Number") {
       return;
@@ -29,4 +32,4 @@ export default function() {
       },
     },
   };
-}
+});

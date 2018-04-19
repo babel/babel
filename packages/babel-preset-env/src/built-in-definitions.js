@@ -16,7 +16,7 @@ export const definitions = {
     WeakMap: "es6.weak-map",
     WeakSet: "es6.weak-set",
     Promise: ["es6.object.to-string", "es6.promise"],
-    Symbol: "es6.symbol",
+    Symbol: ["es6.symbol", "es7.symbol.async-iterator"],
   },
 
   instanceMethods: {
@@ -109,6 +109,8 @@ export const definitions = {
       isInteger: "es6.number.is-integer",
       isSafeInteger: "es6.number.is-safe-integer",
       isNaN: "es6.number.is-nan",
+      parseFloat: "es6.number.parse-float",
+      parseInt: "es6.number.parse-int",
       EPSILON: "es6.number.epsilon",
       MIN_SAFE_INTEGER: "es6.number.min-safe-integer",
       MAX_SAFE_INTEGER: "es6.number.max-safe-integer",

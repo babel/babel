@@ -12,10 +12,10 @@ var s = '';
 for (var x of new C()) {
   s += x;
 }
-assert.equal(s, '012');
+expect(s).toBe('012');
 
 s = '';
 for (var x of new C) {
   s += x;
 }
-assert.equal(s, '012');
+expect(s).toBe('012');

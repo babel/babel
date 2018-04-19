@@ -1,11 +1,6 @@
 // @flow
 import { logEntryPolyfills } from "./debug";
-import {
-  createImport,
-  isPolyfillSource,
-  isRequire,
-  type RequireType,
-} from "./utils";
+import { createImport, isPolyfillSource, isRequire } from "./utils";
 
 type Plugin = {
   visitor: Object,
@@ -15,21 +10,22 @@ type Plugin = {
 };
 
 export default function({ types: t }: { types: Object }): Plugin {
-  function createImports(
-    polyfills: Array<string>,
-    requireType: RequireType,
+  function replaceWithPolyfillImports(
+    path: Object,
+    polyfills: Array<string> | Set<string>,
     regenerator: boolean,
-  ): Array<Object> {
-    const items = Array.isArray(polyfills) ? new Set(polyfills) : polyfills;
-    const imports = [];
-
-    items.forEach(p => imports.push(createImport(t, p, requireType)));
-
+  ): void {
     if (regenerator) {
-      imports.push(createImport(t, "regenerator-runtime", requireType));
+      createImport(path, "regenerator-runtime");
     }
 
-    return imports;
+    const items = Array.isArray(polyfills) ? new Set(polyfills) : polyfills;
+
+    for (const p of Array.from(items).reverse()) {
+      createImport(path, p);
+    }
+
+    path.remove();
   }
 
   const isPolyfillImport = {
@@ -39,20 +35,21 @@ export default function({ types: t }: { types: Object }): Plugin {
         isPolyfillSource(path.node.source.value)
       ) {
         this.importPolyfillIncluded = true;
-        path.replaceWithMultiple(
-          createImports(state.opts.polyfills, "import", state.opts.regenerator),
+
+        replaceWithPolyfillImports(
+          path,
+          state.opts.polyfills,
+          state.opts.regenerator,
         );
       }
     },
     Program(path, state) {
       path.get("body").forEach(bodyPath => {
         if (isRequire(t, bodyPath)) {
-          bodyPath.replaceWithMultiple(
-            createImports(
-              state.opts.polyfills,
-              "require",
-              state.opts.regenerator,
-            ),
+          replaceWithPolyfillImports(
+            bodyPath,
+            state.opts.polyfills,
+            state.opts.regenerator,
           );
         }
       });

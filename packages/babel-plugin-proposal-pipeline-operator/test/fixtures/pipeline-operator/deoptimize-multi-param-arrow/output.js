@@ -8,4 +8,4 @@ var result = (_a = a, ((a, b) => {
 
   return _b = b, ((a, b) => c)(_b);
 })(_a));
-assert.equal(result, c);
+expect(result).toBe(c);

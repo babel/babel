@@ -1,5 +1,5 @@
 function assertClosed(g) {
-  assert.deepEqual({value: undefined, done: true}, g.next());
+  expect(g.next()).toEqual({value: undefined, done: true});
 }
 
 var x, y;
@@ -23,56 +23,56 @@ function* f() {
 }
 
 var g = f();
-assert.deepEqual(g.next(), {value: 1, done: false});
-assert.deepEqual(g.next(), {value: 2, done: false});
-assert.deepEqual(g.next(), {value: 3, done: false});
-assert.deepEqual(g.next(), {value: 4, done: false});
-assert.deepEqual(g.next(), {value: 5, done: false});
-assert.deepEqual(g.next(), {value: undefined, done: true});
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.next()).toEqual({value: 2, done: false});
+expect(g.next()).toEqual({value: 3, done: false});
+expect(g.next()).toEqual({value: 4, done: false});
+expect(g.next()).toEqual({value: 5, done: false});
+expect(g.next()).toEqual({value: undefined, done: true});
 assertClosed(g);
-assert.equal(x, 4);
-assert.equal(y, 5);
+expect(x).toBe(4);
+expect(y).toBe(5);
 
 g = f();
-assert.deepEqual(g.next(), {value: 1, done: false});
-assert.throws(() => g.throw('ex'));
-assert.equal(x, 0);
-assert.equal(y, 0);
+expect(g.next()).toEqual({value: 1, done: false});
+expect(() => g.throw('ex')).toThrow();
+expect(x).toBe(0);
+expect(y).toBe(0);
 
 g = f();
-assert.deepEqual(g.next(), {value: 1, done: false});
-assert.deepEqual(g.next(), {value: 2, done: false});
-assert.throws(() => g.throw('ex'));
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.next()).toEqual({value: 2, done: false});
+expect(() => g.throw('ex')).toThrow();
 assertClosed(g);
-assert.equal(x, 0);
-assert.equal(y, 5);
+expect(x).toBe(0);
+expect(y).toBe(5);
 
 g = f();
-assert.deepEqual(g.next(), {value: 1, done: false});
-assert.deepEqual(g.next(), {value: 2, done: false});
-assert.deepEqual(g.next(), {value: 3, done: false});
-assert.throws(() => g.throw('ex'));
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.next()).toEqual({value: 2, done: false});
+expect(g.next()).toEqual({value: 3, done: false});
+expect(() => g.throw('ex')).toThrow();
 assertClosed(g);
-assert.equal(x, 4);
-assert.equal(y, 5);
+expect(x).toBe(4);
+expect(y).toBe(5);
 
 g = f();
-assert.deepEqual(g.next(), {value: 1, done: false});
-assert.deepEqual(g.next(), {value: 2, done: false});
-assert.deepEqual(g.next(), {value: 3, done: false});
-assert.deepEqual(g.next(), {value: 4, done: false});
-assert.throws(() => g.throw('ex'));
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.next()).toEqual({value: 2, done: false});
+expect(g.next()).toEqual({value: 3, done: false});
+expect(g.next()).toEqual({value: 4, done: false});
+expect(() => g.throw('ex')).toThrow();
 assertClosed(g);
-assert.equal(x, 4);
-assert.equal(y, 5);
+expect(x).toBe(4);
+expect(y).toBe(5);
 
 g = f();
-assert.deepEqual(g.next(), {value: 1, done: false});
-assert.deepEqual(g.next(), {value: 2, done: false});
-assert.deepEqual(g.next(), {value: 3, done: false});
-assert.deepEqual(g.next(), {value: 4, done: false});
-assert.deepEqual(g.next(), {value: 5, done: false});
-assert.throws(() => g.throw('ex'));
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.next()).toEqual({value: 2, done: false});
+expect(g.next()).toEqual({value: 3, done: false});
+expect(g.next()).toEqual({value: 4, done: false});
+expect(g.next()).toEqual({value: 5, done: false});
+expect(() => g.throw('ex')).toThrow();
 assertClosed(g);
-assert.equal(x, 4);
-assert.equal(y, 5);
+expect(x).toBe(4);
+expect(y).toBe(5);

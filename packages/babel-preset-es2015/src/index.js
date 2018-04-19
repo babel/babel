@@ -1,3 +1,4 @@
+import { declare } from "@babel/helper-plugin-utils";
 import transformES2015TemplateLiterals from "@babel/plugin-transform-template-literals";
 import transformES2015Literals from "@babel/plugin-transform-literals";
 import transformES2015FunctionName from "@babel/plugin-transform-function-name";
@@ -23,7 +24,9 @@ import transformES2015ModulesUMD from "@babel/plugin-transform-modules-umd";
 import transformES2015Instanceof from "@babel/plugin-transform-instanceof";
 import transformRegenerator from "@babel/plugin-transform-regenerator";
 
-export default function(api, opts = {}) {
+export default declare((api, opts) => {
+  api.assertVersion(7);
+
   const moduleTypes = ["commonjs", "cjs", "amd", "umd", "systemjs"];
   let loose = false;
   let modules = "commonjs";
@@ -82,4 +85,4 @@ export default function(api, opts = {}) {
       [transformRegenerator, { async: false, asyncGenerators: false }],
     ].filter(Boolean), // filter out falsy values
   };
-}
+});

@@ -1,6 +1,9 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxOptionalCatchBinding from "@babel/plugin-syntax-optional-catch-binding";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     inherits: syntaxOptionalCatchBinding,
 
@@ -14,4 +17,4 @@ export default function() {
       },
     },
   };
-}
+});

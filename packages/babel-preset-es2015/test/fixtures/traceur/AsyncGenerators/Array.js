@@ -7,7 +7,7 @@
   for (var i on g) {
     list.push(i);
   }
-  assert.deepEqual(list, [1, 2, 3]);
+  expect(list).toEqual([1, 2, 3]);
 
   done();
 })().catch(done);

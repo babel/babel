@@ -604,6 +604,10 @@ export function OptionalCallExpression(...args: Array<any>): Object {
   return builder("OptionalCallExpression", ...args);
 }
 export { OptionalCallExpression as optionalCallExpression };
+export function ClassPrivateProperty(...args: Array<any>): Object {
+  return builder("ClassPrivateProperty", ...args);
+}
+export { ClassPrivateProperty as classPrivateProperty };
 export function Import(...args: Array<any>): Object {
   return builder("Import", ...args);
 }
@@ -624,6 +628,10 @@ export function ExportNamespaceSpecifier(...args: Array<any>): Object {
   return builder("ExportNamespaceSpecifier", ...args);
 }
 export { ExportNamespaceSpecifier as exportNamespaceSpecifier };
+export function PrivateName(...args: Array<any>): Object {
+  return builder("PrivateName", ...args);
+}
+export { PrivateName as privateName };
 export function TSParameterProperty(...args: Array<any>): Object {
   return builder("TSParameterProperty", ...args);
 }

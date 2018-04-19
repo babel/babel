@@ -5,6 +5,6 @@ async function empty() {
 }
 
 empty().then((v) => {
-  assert.isUndefined(v);
+  expect(v).toBeUndefined();
   done();
 });

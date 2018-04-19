@@ -100,3 +100,34 @@ Disable the cache.
 ```sh
 BABEL_DISABLE_CACHE=1 babel-node script.js
 ```
+
+## Compiling plugins and presets on the fly
+
+`@babel/register` uses Node's `require()` hook system to compile files
+on the fly when they are loaded. While this is quite helpful overall, it means
+that there can be confusing cases where code within a `require()` hook causes
+_more_ calls to `require`, causing a dependency cycle. In Babel's case for
+instance, this could mean that in the process of Babel trying to compile a
+user's file, Babel could end up trying to compile itself _as it is loading_.
+
+To avoid this problem, this module explicitly disallows re-entrant compilation,
+e.g. Babel's own compilation logic explicitly cannot trigger further compilation
+of any other files on the fly. The downside of this is that if you want to 
+define a plugin or preset that is itself live-compiled, the process is 
+complicated.
+
+The crux of it is that your own code needs to load the plugin/preset first. 
+Assuming the plugin/preset loads all of its dependencies up front, what you'll 
+want to do is:
+
+```
+require("@babel/register")({
+  // ...
+});
+
+require("./my-plugin");
+```
+
+Because it is your own code that triggered the load, and not the logic within
+`@babel/register` itself, this should successfully compile any plugin/preset
+that that loads synchronously.

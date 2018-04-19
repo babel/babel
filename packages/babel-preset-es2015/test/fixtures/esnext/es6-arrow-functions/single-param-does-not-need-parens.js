@@ -1,2 +1,2 @@
 var identity = x => x;
-assert.equal(identity(1), 1);
+expect(identity(1)).toBe(1);

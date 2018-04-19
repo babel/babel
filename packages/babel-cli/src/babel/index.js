@@ -32,7 +32,6 @@ function collect(value, previousValue): Array<string> {
   return previousValue ? previousValue.concat(values) : values;
 }
 
-/* eslint-disable max-len */
 // Standard Babel input configs.
 commander.option(
   "-f, --filename [filename]",
@@ -163,12 +162,11 @@ commander.option(
   "--include-dotfiles",
   "Include dotfiles when compiling and copying non-compilable files",
 );
-commander.option("-q, --quiet", "Don't log anything");
+commander.option("--verbose", "Log everything");
 commander.option(
   "--delete-dir-on-start",
   "Delete the out directory before compilation",
 );
-/* eslint-enable max-len */
 
 commander.version(pkg.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
@@ -221,6 +219,17 @@ if (commander.deleteDirOnStart && !commander.outDir) {
   errors.push("--delete-dir-on-start requires --out-dir");
 }
 
+if (
+  !commander.outDir &&
+  filenames.length === 0 &&
+  typeof commander.filename !== "string" &&
+  commander.babelrc !== false
+) {
+  errors.push(
+    "stdin compilation requires either -f/--filename [filename] or --no-babelrc",
+  );
+}
+
 if (errors.length) {
   console.error(errors.join(". "));
   process.exit(2);
@@ -243,11 +252,12 @@ delete opts.outFile;
 delete opts.outDir;
 delete opts.copyFiles;
 delete opts.includeDotfiles;
-delete opts.quiet;
+delete opts.verbose;
 delete opts.configFile;
 delete opts.deleteDirOnStart;
 delete opts.keepFileExtension;
 delete opts.relative;
+delete opts.sourceMapTarget;
 
 // Commander will default the "--no-" arguments to true, but we want to leave them undefined so that
 // @babel/core can handle the default-assignment logic on its own.

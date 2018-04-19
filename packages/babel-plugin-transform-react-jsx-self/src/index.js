@@ -11,11 +11,14 @@
  *
  * <sometag __self={this} />
  */
+import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
 const TRACE_ID = "__self";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   const visitor = {
     JSXOpeningElement({ node }) {
       const id = t.jsxIdentifier(TRACE_ID);
@@ -28,4 +31,4 @@ export default function() {
   return {
     visitor,
   };
-}
+});

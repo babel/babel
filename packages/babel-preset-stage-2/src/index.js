@@ -1,3 +1,4 @@
+import { declare } from "@babel/helper-plugin-utils";
 import presetStage3 from "@babel/preset-stage-3";
 
 import transformFunctionSent from "@babel/plugin-proposal-function-sent";
@@ -5,7 +6,9 @@ import transformExportNamespaceFrom from "@babel/plugin-proposal-export-namespac
 import transformNumericSeparator from "@babel/plugin-proposal-numeric-separator";
 import transformThrowExpressions from "@babel/plugin-proposal-throw-expressions";
 
-export default function(context, opts = {}) {
+export default declare((api, opts) => {
+  api.assertVersion(7);
+
   let loose = false;
   let useBuiltIns = false;
 
@@ -32,4 +35,4 @@ export default function(context, opts = {}) {
       transformThrowExpressions,
     ],
   };
-}
+});

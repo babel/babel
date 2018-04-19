@@ -11,5 +11,5 @@ class C {
   }
 }
 
-assert.isTrue(new C().m());
-assert.isTrue(C.m());
+expect(new C().m()).toBe(true);
+expect(C.m()).toBe(true);

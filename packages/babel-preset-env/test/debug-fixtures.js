@@ -1,4 +1,3 @@
-const chai = require("chai");
 const child = require("child_process");
 const fs = require("fs-extra");
 const helper = require("@babel/helper-fixtures");
@@ -28,7 +27,7 @@ const testOutputType = (type, stdTarg, opts) => {
 
   if (optsTarg) {
     const expectStdout = optsTarg.trim();
-    chai.expect(stdTarg).to.equal(expectStdout, `${type} didn't match`);
+    expect(stdTarg).toBe(expectStdout);
   } else {
     const file = path.join(opts.testLoc, `${type}.txt`);
     console.log(`New test file created: ${file}`);

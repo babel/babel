@@ -61,6 +61,7 @@
         },
         "typeParameters": null,
         "extends": [],
+        "implements": [],
         "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",

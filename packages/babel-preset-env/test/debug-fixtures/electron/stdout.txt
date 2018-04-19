@@ -15,16 +15,19 @@ Using targets:
 Using modules transform: commonjs
 
 Using plugins:
-  transform-block-scoping { "electron":"0.36" }
-  transform-destructuring { "electron":"0.36" }
-  transform-for-of { "electron":"0.36" }
   transform-function-name { "electron":"0.36" }
-  transform-parameters { "electron":"0.36" }
+  transform-for-of { "electron":"0.36" }
   transform-sticky-regex { "electron":"0.36" }
   transform-unicode-regex { "electron":"0.36" }
+  transform-parameters { "electron":"0.36" }
+  transform-destructuring { "electron":"0.36" }
+  transform-block-scoping { "electron":"0.36" }
   transform-regenerator { "electron":"0.36" }
   transform-exponentiation-operator { "electron":"0.36" }
   transform-async-to-generator { "electron":"0.36" }
+  proposal-async-generator-functions { "electron":"0.36" }
+  proposal-object-rest-spread { "electron":"0.36" }
+  proposal-unicode-property-regex { "electron":"0.36" }
   transform-dotall-regex { "electron":"0.36" }
 
 Using polyfills with `entry` option:
@@ -89,7 +92,9 @@ Using polyfills with `entry` option:
   es7.object.get-own-property-descriptors { "electron":"0.36" }
   es7.string.pad-start { "electron":"0.36" }
   es7.string.pad-end { "electron":"0.36" }
+  es7.promise.finally { "electron":"0.36" }
+  es7.symbol.async-iterator { "electron":"0.36" }
   web.timers { "electron":"0.36" }
   web.immediate { "electron":"0.36" }
   web.dom.iterable { "electron":"0.36" }
-src/in.js -> lib/in.js
+🎉  Successfully compiled 1 file with Babel.

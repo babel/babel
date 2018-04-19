@@ -24,6 +24,6 @@ async function* asyncStream() {
       break; // stops the async generator as well
     }
   }
-  assert.equal(count, 6); // 6 = 1 + 2 + 3
+  expect(count).toBe(6); // 6 = 1 + 2 + 3
   done();
 })();

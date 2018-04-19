@@ -5,5 +5,5 @@ const y = 'const';
 
 // ----------------------------------------------------------------------------
 
-assert.equal('let', x);
-assert.equal('const', y);
+expect(x).toBe('let');
+expect(y).toBe('const');

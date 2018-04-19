@@ -17,9 +17,9 @@ function letInClosure(n) {
 // ----------------------------------------------------------------------------
 
 var result = letInClosure(10);
-assert.equal(1, result[0]());
-assert.equal(2, result[1]());
-assert.equal(4, result[2]());
-assert.equal(5, result[3]());
-assert.equal(7, result[4]());
-assert.equal(8, result[5]());
+expect(result[0]()).toBe(1);
+expect(result[1]()).toBe(2);
+expect(result[2]()).toBe(4);
+expect(result[3]()).toBe(5);
+expect(result[4]()).toBe(7);
+expect(result[5]()).toBe(8);

@@ -5,4 +5,4 @@ function destructureArguments(x, y) {
 
 // ----------------------------------------------------------------------------
 
-assert.equal(3, destructureArguments(1, 2));
+expect(destructureArguments(1, 2)).toBe(3);

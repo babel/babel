@@ -15,7 +15,6 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
     sourceRoot = moduleRoot,
 
     sourceFileName = filenameRelative,
-    sourceMapTarget = filenameRelative,
 
     comments = true,
     compact = "auto",
@@ -47,7 +46,6 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
 
         // Source-map generation flags.
         sourceMaps,
-        sourceMapTarget,
         sourceRoot,
         sourceFileName,
       },

@@ -1,7 +1,5 @@
 import traverse from "../lib";
-import assert from "assert";
 import { parse } from "babylon";
-import { expect } from "chai";
 
 describe("path/ancestry", function() {
   describe("isAncestor", function() {
@@ -17,7 +15,7 @@ describe("path/ancestry", function() {
 
       const [programPath, numberPath] = paths;
 
-      assert(programPath.isAncestor(numberPath));
+      expect(programPath.isAncestor(numberPath)).toBeTruthy();
     });
 
     it("returns false if not ancestor", function() {
@@ -30,7 +28,7 @@ describe("path/ancestry", function() {
 
       const [, numberPath, stringPath] = paths;
 
-      assert(!stringPath.isAncestor(numberPath));
+      expect(stringPath.isAncestor(numberPath)).toBeFalsy();
     });
   });
 
@@ -47,7 +45,7 @@ describe("path/ancestry", function() {
 
       const [programPath, numberPath] = paths;
 
-      assert(numberPath.isDescendant(programPath));
+      expect(numberPath.isDescendant(programPath)).toBeTruthy();
     });
 
     it("returns false if not descendant", function() {
@@ -60,7 +58,7 @@ describe("path/ancestry", function() {
 
       const [, numberPath, stringPath] = paths;
 
-      assert(!numberPath.isDescendant(stringPath));
+      expect(numberPath.isDescendant(stringPath)).toBeFalsy();
     });
   });
 
@@ -73,7 +71,7 @@ describe("path/ancestry", function() {
             path.getStatementParent();
           },
         });
-      }).to.throw(/File\/Program node/);
+      }).toThrow(/File\/Program node/);
     });
   });
 });

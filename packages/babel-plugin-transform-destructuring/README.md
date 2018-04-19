@@ -51,3 +51,42 @@ require("@babel/core").transform("code", {
   plugins: ["@babel/plugin-transform-destructuring"]
 });
 ```
+
+## Options
+
+### `loose`
+
+`boolean`, defaults to `false`.
+
+Enabling this option will assume that what you want to destructure is an array and won't use `Array.from` on other iterables.
+
+### `useBuiltIns`
+
+`boolean`, defaults to `false`.
+
+Enabling this option will use `Object.assign` directly instead of the Babel's `extends` helper. 
+
+##### Example
+
+**.babelrc**
+
+```json
+{
+  "plugins": [
+    ["@babel/plugin-transform-destructuring", { "useBuiltIns": true }]
+  ]
+}
+```
+
+**In**
+
+```js
+var { ...x } = z;
+```
+
+**Out**
+
+```js
+var _z = z,
+    x = Object.assign({}, _z);
+```

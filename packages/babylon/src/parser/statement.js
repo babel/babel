@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 // @flow
 
 import * as N from "../types";
@@ -146,8 +144,25 @@ export default class StatementParser extends ExpressionParser {
         let result;
         if (starttype == tt._import) {
           result = this.parseImport(node);
+
+          if (
+            result.type === "ImportDeclaration" &&
+            (!result.importKind || result.importKind === "value")
+          ) {
+            this.sawUnambiguousESM = true;
+          }
         } else {
           result = this.parseExport(node);
+
+          if (
+            (result.type === "ExportNamedDeclaration" &&
+              (!result.exportKind || result.exportKind === "value")) ||
+            (result.type === "ExportAllDeclaration" &&
+              (!result.exportKind || result.exportKind === "value")) ||
+            result.type === "ExportDefaultDeclaration"
+          ) {
+            this.sawUnambiguousESM = true;
+          }
         }
 
         this.assertModuleNodeAllowed(node);
@@ -155,7 +170,7 @@ export default class StatementParser extends ExpressionParser {
         return result;
       }
       case tt.name:
-        if (this.state.value === "async") {
+        if (this.isContextual("async")) {
           // peek ahead and see if next token is a function
           const state = this.state.clone();
           this.next();
@@ -192,6 +207,9 @@ export default class StatementParser extends ExpressionParser {
       this.raise(
         node.start,
         `'import' and 'export' may appear only with 'sourceType: "module"'`,
+        {
+          code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED",
+        },
       );
     }
   }
@@ -226,7 +244,8 @@ export default class StatementParser extends ExpressionParser {
       } else {
         this.raise(
           this.state.start,
-          "Using the export keyword between a decorator and a class is not allowed. Please use `export @dec class` instead",
+          "Using the export keyword between a decorator and a class is not allowed. " +
+            "Please use `export @dec class` instead",
         );
       }
     }
@@ -246,33 +265,37 @@ export default class StatementParser extends ExpressionParser {
     this.next();
 
     if (this.hasPlugin("decorators2")) {
-      const startPos = this.state.start;
-      const startLoc = this.state.startLoc;
-      let expr = this.parseIdentifier(false);
+      // Every time a decorator class expression is evaluated, a new empty array is pushed onto the stack
+      // So that the decorators of any nested class expressions will be dealt with separately
+      this.state.decoratorStack.push([]);
 
-      while (this.eat(tt.dot)) {
-        const node = this.startNodeAt(startPos, startLoc);
-        node.object = expr;
-        node.property = this.parseIdentifier(true);
-        node.computed = false;
-        expr = this.finishNode(node, "MemberExpression");
+      if (this.eat(tt.parenL)) {
+        node.callee = this.parseExpression();
+        this.expect(tt.parenR);
+      } else {
+        const startPos = this.state.start;
+        const startLoc = this.state.startLoc;
+        let expr = this.parseIdentifier(false);
+
+        while (this.eat(tt.dot)) {
+          const node = this.startNodeAt(startPos, startLoc);
+          node.object = expr;
+          node.property = this.parseIdentifier(true);
+          node.computed = false;
+          expr = this.finishNode(node, "MemberExpression");
+        }
+
+        node.callee = expr;
       }
 
       if (this.eat(tt.parenL)) {
-        const node = this.startNodeAt(startPos, startLoc);
-        node.callee = expr;
-        // Every time a decorator class expression is evaluated, a new empty array is pushed onto the stack
-        // So that the decorators of any nested class expressions will be dealt with separately
-        this.state.decoratorStack.push([]);
         node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
-        this.state.decoratorStack.pop();
-        expr = this.finishNode(node, "CallExpression");
-        this.toReferencedList(expr.arguments);
+        this.toReferencedList(node.arguments);
       }
 
-      node.expression = expr;
+      this.state.decoratorStack.pop();
     } else {
-      node.expression = this.parseMaybeAssign();
+      node.callee = this.parseMaybeAssign();
     }
     return this.finishNode(node, "Decorator");
   }
@@ -364,8 +387,19 @@ export default class StatementParser extends ExpressionParser {
       this.finishNode(init, "VariableDeclaration");
 
       if (this.match(tt._in) || this.isContextual("of")) {
-        if (init.declarations.length === 1 && !init.declarations[0].init) {
-          return this.parseForIn(node, init, forAwait);
+        if (init.declarations.length === 1) {
+          const declaration = init.declarations[0];
+          const isForInInitializer =
+            varKind === tt._var &&
+            declaration.init &&
+            declaration.id.type != "ObjectPattern" &&
+            declaration.id.type != "ArrayPattern" &&
+            !this.isContextual("of");
+          if (this.state.strict && isForInInitializer) {
+            this.raise(this.state.start, "for-in initializer in strict mode");
+          } else if (isForInInitializer || !declaration.init) {
+            return this.parseForIn(node, init, forAwait);
+          }
         }
       }
       if (forAwait) {
@@ -744,7 +778,8 @@ export default class StatementParser extends ExpressionParser {
           kind === tt._const &&
           !(this.match(tt._in) || this.isContextual("of"))
         ) {
-          // `const` with no initializer is allowed in TypeScript. It could be a declaration `const x: number;`.
+          // `const` with no initializer is allowed in TypeScript.
+          // It could be a declaration like `const x: number;`.
           if (!this.hasPlugin("typescript")) {
             this.unexpected();
           }
@@ -783,8 +818,10 @@ export default class StatementParser extends ExpressionParser {
     const oldInFunc = this.state.inFunction;
     const oldInMethod = this.state.inMethod;
     const oldInGenerator = this.state.inGenerator;
+    const oldInClassProperty = this.state.inClassProperty;
     this.state.inFunction = true;
     this.state.inMethod = false;
+    this.state.inClassProperty = false;
 
     this.initFunction(node, isAsync);
 
@@ -829,6 +866,7 @@ export default class StatementParser extends ExpressionParser {
     this.state.inFunction = oldInFunc;
     this.state.inMethod = oldInMethod;
     this.state.inGenerator = oldInGenerator;
+    this.state.inClassProperty = oldInClassProperty;
 
     return node;
   }
@@ -925,14 +963,13 @@ export default class StatementParser extends ExpressionParser {
       this.parseClassMember(classBody, member, state);
 
       if (
-        this.hasPlugin("decorators2") &&
-        ["method", "get", "set"].indexOf(member.kind) === -1 &&
+        member.kind === "constructor" &&
         member.decorators &&
         member.decorators.length > 0
       ) {
         this.raise(
           member.start,
-          "Stage 2 decorators may only be used with a class or a class method",
+          "Decorators can't be used with a constructor. Did you mean '@dec class { ... }'?",
         );
       }
     }
@@ -956,8 +993,11 @@ export default class StatementParser extends ExpressionParser {
     state: { hadConstructor: boolean },
   ): void {
     let isStatic = false;
+    const containsEsc = this.state.containsEsc;
+
     if (this.match(tt.name) && this.state.value === "static") {
       const key = this.parseIdentifier(true); // eats 'static'
+
       if (this.isClassMethod()) {
         const method: N.ClassMethod = (member: any);
 
@@ -983,7 +1023,10 @@ export default class StatementParser extends ExpressionParser {
         prop.static = false;
         classBody.body.push(this.parseClassProperty(prop));
         return;
+      } else if (containsEsc) {
+        throw this.unexpected();
       }
+
       // otherwise something static
       isStatic = true;
     }
@@ -1147,7 +1190,7 @@ export default class StatementParser extends ExpressionParser {
         );
       }
 
-      this.checkGetterSetterParamCount(publicMethod);
+      this.checkGetterSetterParams(publicMethod);
     } else if (this.isLineTerminator()) {
       // an uninitialized class property (due to ASI, since we don't otherwise recognize the next token)
       if (isPrivate) {
@@ -1254,10 +1297,13 @@ export default class StatementParser extends ExpressionParser {
   parseClassPrivateProperty(
     node: N.ClassPrivateProperty,
   ): N.ClassPrivateProperty {
+    const oldInMethod = this.state.inMethod;
+    this.state.inMethod = false;
     this.state.inClassProperty = true;
     node.value = this.eat(tt.eq) ? this.parseMaybeAssign() : null;
     this.semicolon();
     this.state.inClassProperty = false;
+    this.state.inMethod = oldInMethod;
     return this.finishNode(node, "ClassPrivateProperty");
   }
 
@@ -1266,6 +1312,8 @@ export default class StatementParser extends ExpressionParser {
       this.expectPlugin("classProperties");
     }
 
+    const oldInMethod = this.state.inMethod;
+    this.state.inMethod = false;
     this.state.inClassProperty = true;
 
     if (this.match(tt.eq)) {
@@ -1277,6 +1325,7 @@ export default class StatementParser extends ExpressionParser {
     }
     this.semicolon();
     this.state.inClassProperty = false;
+    this.state.inMethod = oldInMethod;
 
     return this.finishNode(node, "ClassProperty");
   }
@@ -1371,6 +1420,15 @@ export default class StatementParser extends ExpressionParser {
     } else if (this.match(tt.at)) {
       this.parseDecorators(false);
       return this.parseClass(expr, true, true);
+    } else if (
+      this.match(tt._let) ||
+      this.match(tt._const) ||
+      this.match(tt._var)
+    ) {
+      return this.raise(
+        this.state.start,
+        "Only expressions, functions or classes are allowed as the `default` export.",
+      );
     } else {
       const res = this.parseMaybeAssign();
       this.semicolon();
@@ -1671,7 +1729,8 @@ export default class StatementParser extends ExpressionParser {
         if (this.eat(tt.colon)) {
           this.unexpected(
             null,
-            "ES2015 named imports do not destructure. Use another statement for destructuring after the import.",
+            "ES2015 named imports do not destructure. " +
+              "Use another statement for destructuring after the import.",
           );
         }
 

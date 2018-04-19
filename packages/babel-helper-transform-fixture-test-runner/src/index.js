@@ -1,4 +1,4 @@
-/* eslint-env mocha */
+/* eslint-env jest */
 import * as babel from "@babel/core";
 import { buildExternalHelpers } from "@babel/core";
 import getFixtures from "@babel/helper-fixtures";
@@ -11,10 +11,11 @@ import extend from "lodash/extend";
 import merge from "lodash/merge";
 import resolve from "resolve";
 import assert from "assert";
-import chai from "chai";
 import fs from "fs";
 import path from "path";
 import vm from "vm";
+
+import diff from "jest-diff";
 
 const moduleCache = {};
 const testContext = vm.createContext({
@@ -23,19 +24,9 @@ const testContext = vm.createContext({
   transform: babel.transform,
   setTimeout: setTimeout,
   setImmediate: setImmediate,
+  expect,
 });
 testContext.global = testContext;
-
-// Add chai's assert to the global context
-// It has to be required inside the testContext as otherwise some assertions do not
-// work as chai would reference globals (RegExp, Array, ...) from this context
-vm.runInContext(
-  "(function(require) { global.assert=require('chai').assert; });",
-  testContext,
-  {
-    displayErrors: true,
-  },
-)(id => runModuleInTestContext(id, __filename));
 
 // Initialize the test context with the polyfill, and then freeze the global to prevent implicit
 // global creation in tests, which could cause things to bleed between tests.
@@ -321,7 +312,7 @@ function checkDuplicatedNodes(ast) {
 
 function run(task) {
   const actual = task.actual;
-  const expect = task.expect;
+  const expected = task.expect;
   const exec = task.exec;
   const opts = task.options;
   const optionsDir = task.optionsDir;
@@ -330,6 +321,10 @@ function run(task) {
     const newOpts = merge(
       {
         filename: self.loc,
+        filenameRelative: self.filename,
+        sourceFileName: self.filename,
+        sourceType: "script",
+        babelrc: false,
       },
       opts,
     );
@@ -375,29 +370,54 @@ function run(task) {
   }
 
   let actualCode = actual.code;
-  const expectCode = expect.code;
+  const expectCode = expected.code;
   if (!execCode || actualCode) {
     result = babel.transform(actualCode, getOpts(actual));
     checkDuplicatedNodes(result.ast);
     if (
-      !expect.code &&
+      !expected.code &&
       result.code &&
       !opts.throws &&
-      fs.statSync(path.dirname(expect.loc)).isDirectory() &&
+      fs.statSync(path.dirname(expected.loc)).isDirectory() &&
       !process.env.CI
     ) {
-      console.log(`New test file created: ${expect.loc}`);
-      fs.writeFileSync(expect.loc, `${result.code}\n`);
+      const expectedFile = expected.loc.replace(
+        /\.m?js$/,
+        result.sourceType === "module" ? ".mjs" : ".js",
+      );
+
+      console.log(`New test file created: ${expectedFile}`);
+      fs.writeFileSync(expectedFile, `${result.code}\n`);
+
+      if (expected.loc !== expectedFile) {
+        try {
+          fs.unlinkSync(expected.loc);
+        } catch (e) {}
+      }
     } else {
       actualCode = result.code.trim();
-      chai
-        .expect(actualCode)
-        .to.be.equal(expectCode, actual.loc + " !== " + expect.loc);
+      try {
+        expect(actualCode).toEqualFile({
+          filename: expected.loc,
+          code: expectCode,
+        });
+      } catch (e) {
+        if (!process.env.OVERWRITE) throw e;
+
+        console.log(`Updated test file: ${expected.loc}`);
+        fs.writeFileSync(expected.loc, `${result.code}\n`);
+      }
+
+      if (actualCode) {
+        expect(expected.loc).toMatch(
+          result.sourceType === "module" ? /\.mjs$/ : /\.js$/,
+        );
+      }
     }
   }
 
   if (task.sourceMap) {
-    chai.expect(result.map).to.deep.equal(task.sourceMap);
+    expect(result.map).toEqual(task.sourceMap);
   }
 
   if (task.sourceMappings) {
@@ -406,10 +426,8 @@ function run(task) {
     task.sourceMappings.forEach(function(mapping) {
       const actual = mapping.original;
 
-      const expect = consumer.originalPositionFor(mapping.generated);
-      chai
-        .expect({ line: expect.line, column: expect.column })
-        .to.deep.equal(actual);
+      const expected = consumer.originalPositionFor(mapping.generated);
+      expect({ line: expected.line, column: expected.column }).toEqual(actual);
     });
   }
 
@@ -417,6 +435,28 @@ function run(task) {
     return resultExec;
   }
 }
+
+const toEqualFile = () => ({
+  compare: (actual, { filename, code }) => {
+    const pass = actual === code;
+    return {
+      pass,
+      message: () => {
+        const diffString = diff(code, actual, {
+          expand: false,
+        });
+        return (
+          `Expected ${filename} to match transform output.\n` +
+          `To autogenerate a passing version of this file, delete the file and re-run the tests.\n\n` +
+          `Diff:\n\n${diffString}`
+        );
+      },
+    };
+  },
+  negativeCompare: () => {
+    throw new Error("Negation unsupported");
+  },
+});
 
 export default function(
   fixturesLoc: string,
@@ -431,6 +471,10 @@ export default function(
     if (includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
 
     describe(name + "/" + testSuite.title, function() {
+      jest.addMatchers({
+        toEqualFile,
+      });
+
       for (const task of testSuite.tests) {
         if (
           includes(suiteOpts.ignoreTasks, task.title) ||
@@ -448,10 +492,6 @@ export default function(
               }
 
               defaults(task.options, {
-                filenameRelative: task.expect.filename,
-                sourceFileName: task.actual.filename,
-                sourceMapTarget: task.expect.filename,
-                babelrc: false,
                 sourceMap: !!(task.sourceMappings || task.sourceMap),
               });
 

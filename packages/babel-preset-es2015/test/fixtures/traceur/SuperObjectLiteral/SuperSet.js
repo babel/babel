@@ -25,27 +25,27 @@ var p = {
 var o = {
   __proto__: p,
   set x(value) {
-    assert.equal(super.x = value, value);
+    expect(super.x = value).toBe(value);
   },
   set v(value) {
     return super.x.v = value;
   },
   inc(val) {
-    assert.equal(super.z += val, 4);
+    expect(super.z += val).toBe(4);
   },
   incLookup(val) {
-    assert.equal(super['z'] += val, 9);
+    expect(super['z'] += val).toBe(9);
   }
 };
 
 o.x = 42;
-assert.equal(42, o.getX());
+expect(o.getX()).toBe(42);
 
 o.v = 123;
-assert.equal(123, o.getV());
+expect(o.getV()).toBe(123);
 
 o.inc(3);
-assert.equal(4, o.z);
+expect(o.z).toBe(4);
 
 o.incLookup(5);
-assert.equal(9, o.z);
+expect(o.z).toBe(9);

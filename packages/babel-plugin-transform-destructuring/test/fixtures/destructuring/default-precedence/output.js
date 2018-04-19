@@ -4,7 +4,7 @@ var f0 = function (a) {
   return [a, b, c];
 };
 
-assert.deepEqual(f0(1), [1, 1, 1]);
+expect(f0(1)).toEqual([1, 1, 1]);
 
 var f1 = function (_ref) {
   var a = _ref.a;
@@ -13,9 +13,9 @@ var f1 = function (_ref) {
   return [a, b, c];
 };
 
-assert.deepEqual(f1({
+expect(f1({
   a: 1
-}), [1, 1, 1]);
+})).toEqual([1, 1, 1]);
 
 var f2 = function (_ref2) {
   var a = _ref2.a;
@@ -24,6 +24,6 @@ var f2 = function (_ref2) {
   return [a, b, c];
 };
 
-assert.deepEqual(f2({
+expect(f2({
   a: 1
-}), [1, 1, 1]);
+})).toEqual([1, 1, 1]);

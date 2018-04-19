@@ -1,3 +1,3 @@
 var x = 'y';
-assert.equal({[x]: 10}.y, 10);
-assert.equal({[x + 'y']: 10}.yy, 10);
+expect({[x]: 10}.y).toBe(10);
+expect({[x + 'y']: 10}.yy).toBe(10);

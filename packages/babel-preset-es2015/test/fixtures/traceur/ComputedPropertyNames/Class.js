@@ -30,19 +30,19 @@ class C {
 }
 
 var object = new C;
-assert.equal(object[0](), 0);
-assert.equal(object[1], 1);
+expect(object[0]()).toBe(0);
+expect(object[1]).toBe(1);
 object[2] = 2;
-assert.equal(y, 2);
+expect(y).toBe(2);
 var g = object[3]();
-assert.deepEqual(g.next(), {value: 3, done: false});
-assert.deepEqual(g.next(), {value: undefined, done: true});
+expect(g.next()).toEqual({value: 3, done: false});
+expect(g.next()).toEqual({value: undefined, done: true});
 
 
-assert.equal(C[4](), 4);
-assert.equal(C[5], 5);
+expect(C[4]()).toBe(4);
+expect(C[5]).toBe(5);
 C[6] = 6;
-assert.equal(y, 6);
+expect(y).toBe(6);
 var g = C[7]();
-assert.deepEqual(g.next(), {value: 7, done: false});
-assert.deepEqual(g.next(), {value: undefined, done: true});
+expect(g.next()).toEqual({value: 7, done: false});
+expect(g.next()).toEqual({value: undefined, done: true});

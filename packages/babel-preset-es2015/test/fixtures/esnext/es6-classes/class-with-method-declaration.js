@@ -7,4 +7,4 @@ class Person {
 var me = new Person();
 me.firstName = 'Brian';
 me.lastName = 'Donovan';
-assert.equal(me.getName(), 'Brian Donovan');
+expect(me.getName()).toBe('Brian Donovan');

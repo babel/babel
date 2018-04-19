@@ -17,4 +17,4 @@ class Derived extends Base {
 }
 
 new Derived().p();
-assert.equal(log, '[Derived][Base][OtherBase]');
+expect(log).toBe('[Derived][Base][OtherBase]');

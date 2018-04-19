@@ -4,4 +4,4 @@ var object = {
   [s]: 42
 };
 
-assert.equal(object[s], 42);
+expect(object[s]).toBe(42);

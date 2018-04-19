@@ -1,7 +1,7 @@
 function dec(target, name, descriptor){
-  assert(target);
-  assert.equal(name, "str");
-  assert.equal(typeof descriptor, "object");
+  expect(target).toBeTruthy();
+  expect(name).toBe("str");
+  expect(typeof descriptor).toBe("object");
 }
 
 const inst = {

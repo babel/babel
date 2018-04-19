@@ -9,7 +9,7 @@ async function* f1() {
 
 async function* f2() {
   yield 2;
-  yield 3;  
+  yield 3;
 }
 
 (async function() {
@@ -18,7 +18,7 @@ async function* f2() {
   for (var i on g) {
     list.push(i);
   }
-  assert.deepEqual(list, [1, 2, 3, 4]);
+  expect(list).toEqual([1, 2, 3, 4]);
 
   done();
 })().catch(done);

@@ -3,7 +3,7 @@ var a, b, c, d;
 
 // ----------------------------------------------------------------------------
 
-assert.equal('hello', a);
-assert.equal(',', b);
-assert.equal('junk', c);
-assertArrayEquals(['world'], d);
+expect(a).toBe('hello');
+expect(b).toBe(',');
+expect(c).toBe('junk');
+expect(d).toEqual(['world']);

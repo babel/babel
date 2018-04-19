@@ -1,7 +1,7 @@
 function dec(target, name, descriptor) {
-  assert(target);
-  assert.equal(typeof name, "string");
-  assert.equal(typeof descriptor, "object");
+  expect(target).toBeTruthy();
+  expect(typeof name).toBe("string");
+  expect(typeof descriptor).toBe("object");
 
   target.decoratedProps = (target.decoratedProps || []).concat([name]);
 
@@ -58,8 +58,8 @@ class Example {
   }
 }
 
-assert(Example.hasOwnProperty("decoratedProps"));
-assert.deepEqual(Example.decoratedProps, [
+expect(Example).toHaveProperty("decoratedProps");
+expect(Example.decoratedProps).toEqual([
   "enumconfwrite",
   "enumconf",
   "enumwrite",
@@ -72,42 +72,42 @@ assert.deepEqual(Example.decoratedProps, [
 
 const descs = Object.getOwnPropertyDescriptors(Example);
 
-assert(descs.enumconfwrite.enumerable);
-assert(descs.enumconfwrite.writable);
-assert(descs.enumconfwrite.configurable);
-assert.equal(Example.enumconfwrite(), "__1__");
+expect(descs.enumconfwrite.enumerable).toBeTruthy();
+expect(descs.enumconfwrite.writable).toBeTruthy();
+expect(descs.enumconfwrite.configurable).toBeTruthy();
+expect(Example.enumconfwrite()).toBe("__1__");
 
-assert(descs.enumconf.enumerable);
-assert.equal(descs.enumconf.writable, false);
-assert(descs.enumconf.configurable);
-assert.equal(Example.enumconf(), "__2__");
+expect(descs.enumconf.enumerable).toBeTruthy();
+expect(descs.enumconf.writable).toBe(false);
+expect(descs.enumconf.configurable).toBeTruthy();
+expect(Example.enumconf()).toBe("__2__");
 
-assert(descs.enumwrite.enumerable);
-assert(descs.enumwrite.writable);
-assert.equal(descs.enumwrite.configurable, false);
-assert.equal(Example.enumwrite(), "__3__");
+expect(descs.enumwrite.enumerable).toBeTruthy();
+expect(descs.enumwrite.writable).toBeTruthy();
+expect(descs.enumwrite.configurable).toBe(false);
+expect(Example.enumwrite()).toBe("__3__");
 
-assert(descs.enum.enumerable);
-assert.equal(descs.enum.writable, false);
-assert.equal(descs.enum.configurable, false);
-assert.equal(Example.enum(), "__4__");
+expect(descs.enum.enumerable).toBeTruthy();
+expect(descs.enum.writable).toBe(false);
+expect(descs.enum.configurable).toBe(false);
+expect(Example.enum()).toBe("__4__");
 
-assert.equal(descs.confwrite.enumerable, false);
-assert(descs.confwrite.writable);
-assert(descs.confwrite.configurable);
-assert.equal(Example.confwrite(), "__5__");
+expect(descs.confwrite.enumerable).toBe(false);
+expect(descs.confwrite.writable).toBeTruthy();
+expect(descs.confwrite.configurable).toBeTruthy();
+expect(Example.confwrite()).toBe("__5__");
 
-assert.equal(descs.conf.enumerable, false);
-assert.equal(descs.conf.writable, false);
-assert(descs.conf.configurable);
-assert.equal(Example.conf(), "__6__");
+expect(descs.conf.enumerable).toBe(false);
+expect(descs.conf.writable).toBe(false);
+expect(descs.conf.configurable).toBeTruthy();
+expect(Example.conf()).toBe("__6__");
 
-assert.equal(descs.write.enumerable, false);
-assert(descs.write.writable);
-assert.equal(descs.write.configurable, false);
-assert.equal(Example.write(), "__7__");
+expect(descs.write.enumerable).toBe(false);
+expect(descs.write.writable).toBeTruthy();
+expect(descs.write.configurable).toBe(false);
+expect(Example.write()).toBe("__7__");
 
-assert.equal(descs._.enumerable, false);
-assert.equal(descs._.writable, false);
-assert.equal(descs._.configurable, false);
-assert.equal(Example._(), "__8__");
+expect(descs._.enumerable).toBe(false);
+expect(descs._.writable).toBe(false);
+expect(descs._.configurable).toBe(false);
+expect(Example._()).toBe("__8__");

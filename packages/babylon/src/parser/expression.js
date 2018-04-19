@@ -1,5 +1,3 @@
-/* eslint max-len: 0 */
-
 // @flow
 
 // A recursive descent parser operates by defining functions for all
@@ -153,7 +151,16 @@ export default class ExpressionParser extends LValParser {
     }
     if (this.state.type.isAssign) {
       const node = this.startNodeAt(startPos, startLoc);
-      node.operator = this.state.value;
+      const operator = this.state.value;
+      node.operator = operator;
+
+      if (operator === "??=") {
+        this.expectPlugin("nullishCoalescingOperator");
+        this.expectPlugin("logicalAssignment");
+      }
+      if (operator === "||=" || operator === "&&=") {
+        this.expectPlugin("logicalAssignment");
+      }
       node.left = this.match(tt.eq)
         ? this.toAssignable(left, undefined, "assignment expression")
         : left;
@@ -273,11 +280,12 @@ export default class ExpressionParser extends LValParser {
     if (prec != null && (!noIn || !this.match(tt._in))) {
       if (prec > minPrec) {
         const node = this.startNodeAt(leftStartPos, leftStartLoc);
+        const operator = this.state.value;
         node.left = left;
-        node.operator = this.state.value;
+        node.operator = operator;
 
         if (
-          node.operator === "**" &&
+          operator === "**" &&
           left.type === "UnaryExpression" &&
           left.extra &&
           !left.extra.parenthesizedArgument &&
@@ -290,19 +298,20 @@ export default class ExpressionParser extends LValParser {
         }
 
         const op = this.state.type;
+        if (op === tt.nullishCoalescing) {
+          this.expectPlugin("nullishCoalescingOperator");
+        } else if (op === tt.pipeline) {
+          this.expectPlugin("pipelineOperator");
+        }
+
         this.next();
 
         const startPos = this.state.start;
         const startLoc = this.state.startLoc;
 
-        if (node.operator === "|>") {
-          this.expectPlugin("pipelineOperator");
+        if (op === tt.pipeline) {
           // Support syntax such as 10 |> x => x + 1
           this.state.potentialArrowAt = startPos;
-        }
-
-        if (node.operator === "??") {
-          this.expectPlugin("nullishCoalescingOperator");
         }
 
         node.right = this.parseExprOp(
@@ -436,7 +445,10 @@ export default class ExpressionParser extends LValParser {
     return base;
   }
 
-  /** @param state Set 'state.stop = true' to indicate that we should stop parsing subscripts.  'state.optionalChainMember to indicate that the member is currently in OptionalChain'*/
+  /**
+   * @param state Set 'state.stop = true' to indicate that we should stop parsing subscripts.
+   *   state.optionalChainMember to indicate that the member is currently in OptionalChain
+   */
   parseSubscript(
     base: N.Expression,
     startPos: number,
@@ -572,6 +584,7 @@ export default class ExpressionParser extends LValParser {
 
   atPossibleAsync(base: N.Expression): boolean {
     return (
+      !this.state.containsEsc &&
       this.state.potentialArrowAt === base.start &&
       base.type === "Identifier" &&
       base.name === "async" &&
@@ -624,7 +637,8 @@ export default class ExpressionParser extends LValParser {
         if (this.eat(close)) break;
       }
 
-      // we need to make sure that if this is an async arrow functions, that we don't allow inner parens inside the params
+      // we need to make sure that if this is an async arrow functions,
+      // that we don't allow inner parens inside the params
       if (this.match(tt.parenL) && !innerParenStart) {
         innerParenStart = this.state.start;
       }
@@ -709,7 +723,8 @@ export default class ExpressionParser extends LValParser {
         ) {
           this.raise(
             node.start,
-            "super() is only valid inside a class constructor. Make sure the method name is spelled exactly as 'constructor'.",
+            "super() is only valid inside a class constructor. " +
+              "Make sure the method name is spelled exactly as 'constructor'.",
           );
         }
         return this.finishNode(node, "Super");
@@ -738,15 +753,25 @@ export default class ExpressionParser extends LValParser {
 
       case tt.name: {
         node = this.startNode();
-        const allowAwait = this.state.value === "await" && this.state.inAsync;
+        const allowAwait =
+          this.state.value === "await" &&
+          (this.state.inAsync ||
+            (!this.state.inFunction && this.options.allowAwaitOutsideFunction));
+
+        const containsEsc = this.state.containsEsc;
         const allowYield = this.shouldAllowYieldIdentifier();
         const id = this.parseIdentifier(allowAwait || allowYield);
 
         if (id.name === "await") {
-          if (this.state.inAsync || this.inModule) {
+          if (
+            this.state.inAsync ||
+            this.inModule ||
+            (!this.state.inFunction && this.options.allowAwaitOutsideFunction)
+          ) {
             return this.parseAwait(node);
           }
         } else if (
+          !containsEsc &&
           id.name === "async" &&
           this.match(tt._function) &&
           !this.canInsertSemicolon()
@@ -910,14 +935,16 @@ export default class ExpressionParser extends LValParser {
       if (this.isContextual(propertyName)) {
         this.expectPlugin("functionSent");
       } else if (!this.hasPlugin("functionSent")) {
-        // They didn't actually say `function.sent`, just `function.`, so a simple error would be less confusing.
+        // The code wasn't `function.sent` but just `function.`, so a simple error is less confusing.
         this.unexpected();
       }
     }
 
+    const containsEsc = this.state.containsEsc;
+
     node.property = this.parseIdentifier(true);
 
-    if (node.property.name !== propertyName) {
+    if (node.property.name !== propertyName || containsEsc) {
       this.raise(
         node.property.start,
         `The only valid meta property for ${meta.name} is ${
@@ -949,8 +976,11 @@ export default class ExpressionParser extends LValParser {
       this.raise(
         id.start,
         `import.meta may appear only with 'sourceType: "module"'`,
+        { code: "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED" },
       );
     }
+    this.sawUnambiguousESM = true;
+
     return this.parseMetaProperty(node, id, "meta");
   }
 
@@ -1303,6 +1333,8 @@ export default class ExpressionParser extends LValParser {
         isGenerator = this.eat(tt.star);
       }
 
+      const containsEsc = this.state.containsEsc;
+
       if (!isPattern && this.isContextual("async")) {
         if (isGenerator) this.unexpected();
 
@@ -1337,6 +1369,7 @@ export default class ExpressionParser extends LValParser {
         isAsync,
         isPattern,
         refShorthandDefaultPos,
+        containsEsc,
       );
       this.checkPropClash(prop, propHash);
 
@@ -1382,16 +1415,23 @@ export default class ExpressionParser extends LValParser {
   }
 
   // get methods aren't allowed to have any parameters
-  // set methods must have exactly 1 parameter
-  checkGetterSetterParamCount(method: N.ObjectMethod | N.ClassMethod): void {
+  // set methods must have exactly 1 parameter which is not a rest parameter
+  checkGetterSetterParams(method: N.ObjectMethod | N.ClassMethod): void {
     const paramCount = method.kind === "get" ? 0 : 1;
+    const start = method.start;
     if (method.params.length !== paramCount) {
-      const start = method.start;
       if (method.kind === "get") {
-        this.raise(start, "getter should have no params");
+        this.raise(start, "getter must not have any formal parameters");
       } else {
-        this.raise(start, "setter should have exactly one param");
+        this.raise(start, "setter must have exactly one formal parameter");
       }
+    }
+
+    if (method.kind === "set" && method.params[0].type === "RestElement") {
+      this.raise(
+        start,
+        "setter function argument must not be a rest parameter",
+      );
     }
   }
 
@@ -1400,6 +1440,7 @@ export default class ExpressionParser extends LValParser {
     isGenerator: boolean,
     isAsync: boolean,
     isPattern: boolean,
+    containsEsc: boolean,
   ): ?N.ObjectMethod {
     if (isAsync || isGenerator || this.match(tt.parenL)) {
       if (isPattern) this.unexpected();
@@ -1414,7 +1455,7 @@ export default class ExpressionParser extends LValParser {
       );
     }
 
-    if (this.isGetterOrSetterMethod(prop, isPattern)) {
+    if (!containsEsc && this.isGetterOrSetterMethod(prop, isPattern)) {
       if (isGenerator || isAsync) this.unexpected();
       prop.kind = prop.key.name;
       this.parsePropertyName(prop);
@@ -1425,7 +1466,7 @@ export default class ExpressionParser extends LValParser {
         /* isConstructor */ false,
         "ObjectMethod",
       );
-      this.checkGetterSetterParamCount(prop);
+      this.checkGetterSetterParams(prop);
       return prop;
     }
   }
@@ -1482,9 +1523,16 @@ export default class ExpressionParser extends LValParser {
     isAsync: boolean,
     isPattern: boolean,
     refShorthandDefaultPos: ?Pos,
+    containsEsc: boolean,
   ): void {
     const node =
-      this.parseObjectMethod(prop, isGenerator, isAsync, isPattern) ||
+      this.parseObjectMethod(
+        prop,
+        isGenerator,
+        isAsync,
+        isPattern,
+        containsEsc,
+      ) ||
       this.parseObjectProperty(
         prop,
         startPos,
@@ -1677,11 +1725,7 @@ export default class ExpressionParser extends LValParser {
 
     const oldStrict = this.state.strict;
     if (isStrict) this.state.strict = isStrict;
-    if (node.id) {
-      // TODO(logan): This check is broken because it passes a node object as
-      // a binding name. Passing the actual string introduces other failures.
-      // this.checkReservedWord(node.id, node.start, true, true);
-    }
+
     if (checkLVal) {
       const nameHash: any = Object.create(null);
       if (node.id) {
@@ -1817,6 +1861,13 @@ export default class ExpressionParser extends LValParser {
       );
     }
 
+    if (this.state.inClassProperty && word === "arguments") {
+      this.raise(
+        startLoc,
+        "'arguments' is not allowed in class field initializer",
+      );
+    }
+
     if (this.isReservedWord(word) || (checkKeywords && this.isKeyword(word))) {
       this.raise(startLoc, word + " is a reserved word");
     }
@@ -1826,7 +1877,10 @@ export default class ExpressionParser extends LValParser {
 
   parseAwait(node: N.AwaitExpression): N.AwaitExpression {
     // istanbul ignore next: this condition is checked at the call site so won't be hit here
-    if (!this.state.inAsync) {
+    if (
+      !this.state.inAsync &&
+      (this.state.inFunction || !this.options.allowAwaitOutsideFunction)
+    ) {
       this.unexpected();
     }
     if (this.match(tt.star)) {

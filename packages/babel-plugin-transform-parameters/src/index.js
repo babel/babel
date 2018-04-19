@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import convertFunctionParams from "./params";
 import convertFunctionRest from "./rest";
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { loose } = options;
   return {
     visitor: {
@@ -26,4 +29,4 @@ export default function(api, options) {
       },
     },
   };
-}
+});

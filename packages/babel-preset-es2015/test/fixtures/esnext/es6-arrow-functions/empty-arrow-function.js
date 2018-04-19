@@ -1,2 +1,2 @@
 var empty = () => {};
-assert.equal(empty(), undefined);
+expect(empty()).toBeUndefined();

@@ -1,4 +1,3 @@
-import assert from "assert";
 import { runCodeInTestContext } from "..";
 
 describe("helper-transform-fixture-test-runner", function() {
@@ -6,13 +5,13 @@ describe("helper-transform-fixture-test-runner", function() {
     try {
       global.foo = "outer";
       runCodeInTestContext(`
-        assert.equal(global.foo, undefined);
+        expect(global.foo).toBeUndefined();
         global.foo = "inner";
       `);
 
-      assert.equal(global.foo, "outer");
+      expect(global.foo).toBe("outer");
       runCodeInTestContext(`
-        assert.equal(global.foo, "inner");
+        expect(global.foo).toBe("inner");
       `);
     } finally {
       delete global.foo;

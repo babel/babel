@@ -921,6 +921,7 @@
         },
         "typeParameters": null,
         "extends": [],
+        "implements": [],
         "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
@@ -1045,6 +1046,7 @@
         },
         "typeParameters": null,
         "extends": [],
+        "implements": [],
         "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
@@ -1169,6 +1171,7 @@
         },
         "typeParameters": null,
         "extends": [],
+        "implements": [],
         "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",
@@ -1273,6 +1276,7 @@
         },
         "typeParameters": null,
         "extends": [],
+        "implements": [],
         "mixins": [],
         "body": {
           "type": "ObjectTypeAnnotation",

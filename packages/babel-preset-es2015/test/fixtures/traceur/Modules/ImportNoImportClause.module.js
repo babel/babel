@@ -1,4 +1,4 @@
 this.sideEffect = 1;
 import './resources/side-effect.js';
-assert.equal(2, this.sideEffect);
+expect(this.sideEffect).toBe(2);
 this.sideEffect = 1;

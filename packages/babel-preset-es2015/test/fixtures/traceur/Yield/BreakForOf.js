@@ -16,7 +16,7 @@ for (let i of g) {
   break;
 }
 
-assert.equal(x, 42);
+expect(x).toBe(42);
 
 g = f();
 x = 10;
@@ -27,7 +27,7 @@ x = 10;
   }
 }());
 
-assert.equal(x, 42);
+expect(x).toBe(42);
 
 g = f();
 x = 20;
@@ -37,7 +37,7 @@ for (let i of g) {
   if (i == 1) {
     continue label1;
   }
-  assert.equal(x, 20);
+  expect(x).toBe(20);
 }
 
 g = f();
@@ -49,6 +49,6 @@ for (let i of g) {
   if (i == 1) {
     continue label2;
   }
-  assert.equal(x, 30);
+  expect(x).toBe(30);
 }
 
