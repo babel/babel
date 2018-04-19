@@ -14,6 +14,7 @@ module.exports = {
     'object-shorthand': require('./rules/object-shorthand'),
     'quotes': require('./rules/quotes'),
     'semi': require('./rules/semi'),
+    'no-unused-expressions': require('./rules/no-unused-expressions'),
   },
   rulesConfig: {
     'generator-star-spacing': 0,
@@ -28,5 +29,6 @@ module.exports = {
     'no-invalid-this': 0,
     'quotes': 0,
     'semi': 0,
+    'no-unused-expressions': 0,
   }
 };

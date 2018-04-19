@@ -32,7 +32,8 @@ original ones as well!).
     "babel/no-invalid-this": 1,
     "babel/object-curly-spacing": 1,
     "babel/quotes": 1,
-    "babel/semi": 1
+    "babel/semi": 1,
+    "babel/no-unused-expressions": 1
   }
 }
 ```
@@ -47,6 +48,7 @@ Each rule corresponds to a core `eslint` rule, and has the same options.
 - `babel/object-curly-spacing`: doesn't complain about `export x from "mod";` or `export * as x from "mod";` (🛠)
 - `babel/quotes`: doesn't complain about JSX fragment shorthand syntax (`<>foo</>;`)
 - `babel/semi`: doesn't fail when using `for await (let something of {})`. Includes class properties (🛠)
+- `babel/no-unused-expressions`: doesn't fail when using `do` expressions
 
 #### Deprecated
 
