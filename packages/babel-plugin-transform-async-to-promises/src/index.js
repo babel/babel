@@ -19,9 +19,9 @@ const transform = require("nodent-transform").transform;
 
 function transformAsyncToPromises(api, options) {
   let requiresTranspilation;
-  const runtime = options.runtime ? 
-  	(typeof options.runtime==="string" ? options.runtime : "$nodent_runtime") : 
-  	null;
+  const runtime = options.runtime
+    ? typeof options.runtime === "string" ? options.runtime : "$nodent_runtime"
+    : null;
   const opts = {
     // Code generation options
     es6target: false,
@@ -71,10 +71,13 @@ function transformAsyncToPromises(api, options) {
             opts,
             {
               // Helpers for the transformer:
-              parse: parse, // Parse a JS fragment into an AST
-              printNode: printNode, // Print a node as JS source
-              logger: false /* console.log.bind(console)*/ // Log a warning
-            }
+              // Parse a JS fragment into an AST
+              parse: parse,
+              // Print a node as JS source
+              printNode: printNode,
+              // Log a warning, eg: console.log.bind(console)
+              logger: false,
+            },
           ).ast;
 
           if (runtime) {
