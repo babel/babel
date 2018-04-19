@@ -33,3 +33,11 @@ require("@babel/core").transform("code", {
   plugins: ["@babel/plugin-syntax-decorators"]
 });
 ```
+
+## Options
+
+### `legacy`
+
+`boolean`, defaults to `false`.
+
+Use the legacy (stage 1) decorators syntax.

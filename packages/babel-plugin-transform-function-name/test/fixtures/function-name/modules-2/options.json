@@ -1,3 +1,9 @@
 {
-  "plugins": ["external-helpers", "transform-function-name", "transform-classes", "proposal-decorators", "transform-modules-commonjs"]
+  "plugins": [
+    "external-helpers",
+    "transform-function-name",
+    "transform-classes",
+    ["proposal-decorators", { "legacy": true }],
+    "transform-modules-commonjs"
+  ]
 }

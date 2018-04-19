@@ -1,7 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import presetStage2 from "@babel/preset-stage-2";
 
-import transformDecorators from "@babel/plugin-proposal-decorators";
 import transformExportDefaultFrom from "@babel/plugin-proposal-export-default-from";
 import transformLogicalAssignmentOperators from "@babel/plugin-proposal-logical-assignment-operators";
 import transformOptionalChaining from "@babel/plugin-proposal-optional-chaining";
@@ -9,16 +8,10 @@ import transformPipelineOperator from "@babel/plugin-proposal-pipeline-operator"
 import transformNullishCoalescingOperator from "@babel/plugin-proposal-nullish-coalescing-operator";
 import transformDoExpressions from "@babel/plugin-proposal-do-expressions";
 
-export default declare((api, opts) => {
+export default declare((api, opts = {}) => {
   api.assertVersion(7);
 
-  let loose = false;
-  let useBuiltIns = false;
-
-  if (opts !== undefined) {
-    if (opts.loose !== undefined) loose = opts.loose;
-    if (opts.useBuiltIns !== undefined) useBuiltIns = opts.useBuiltIns;
-  }
+  const { loose = false, useBuiltIns = false, decoratorsLegacy = false } = opts;
 
   if (typeof loose !== "boolean") {
     throw new Error("@babel/preset-stage-1 'loose' option must be a boolean.");
@@ -28,11 +21,23 @@ export default declare((api, opts) => {
       "@babel/preset-stage-1 'useBuiltIns' option must be a boolean.",
     );
   }
+  if (typeof decoratorsLegacy !== "boolean") {
+    throw new Error(
+      "@babel/preset-stage-1 'decoratorsLegacy' option must be a boolean.",
+    );
+  }
+
+  if (decoratorsLegacy !== true) {
+    throw new Error(
+      "The new decorators proposal is not supported yet." +
+        ' You muse pass the `"decoratorsLegacy": true` option to' +
+        " @babel/preset-stage-1",
+    );
+  }
 
   return {
-    presets: [[presetStage2, { loose, useBuiltIns }]],
+    presets: [[presetStage2, { loose, useBuiltIns, decoratorsLegacy }]],
     plugins: [
-      transformDecorators,
       transformExportDefaultFrom,
       transformLogicalAssignmentOperators,
       [transformOptionalChaining, { loose }],
