@@ -30,7 +30,7 @@
     "eslint": ">=4.0.0"
   },
   "dependencies": {
-    "eslint-rule-composer": "^0.1.1"
+    "eslint-rule-composer": "^0.3.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
