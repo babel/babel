@@ -25,7 +25,12 @@ export default function mergeSourceMap(
       column: mapping.generatedColumn,
       source: source,
     });
-    if (generatedPosition.column != null) {
+    if (generatedPosition.line != null && generatedPosition.column != null) {
+      const generated = {
+        line: generatedPosition.line,
+        column: generatedPosition.column,
+      };
+
       mergedGenerator.addMapping({
         source: mapping.source,
 
@@ -37,7 +42,7 @@ export default function mergeSourceMap(
                 column: mapping.originalColumn,
               },
 
-        generated: generatedPosition,
+        generated,
 
         name: mapping.name,
       });
