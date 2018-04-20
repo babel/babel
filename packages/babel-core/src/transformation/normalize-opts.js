@@ -14,7 +14,7 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
     moduleRoot,
     sourceRoot = moduleRoot,
 
-    sourceFileName = filenameRelative,
+    sourceFileName = path.basename(filenameRelative),
 
     comments = true,
     compact = "auto",

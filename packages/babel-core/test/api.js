@@ -394,6 +394,15 @@ describe("api", function() {
     });
   });
 
+  it("default source map filename", function() {
+    return transformAsync("var a = 10;", {
+      filename: "/some/absolute/file/path.js",
+      sourceMaps: true,
+    }).then(function(result) {
+      expect(result.map.sources).toEqual(["path.js"]);
+    });
+  });
+
   it("code option false", function() {
     return transformAsync("foo('bar');", { code: false }).then(function(
       result,
