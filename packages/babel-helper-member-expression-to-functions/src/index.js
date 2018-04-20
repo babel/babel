@@ -31,8 +31,8 @@ const handle = {
       return;
     }
 
-    // MEMBER = 1   ->   _set(MEMBER, 1)
-    // MEMBER += 1   ->   _set(MEMBER, _get(MEMBER) + 1)
+    // MEMBER = VALUE   ->   _set(MEMBER, VALUE)
+    // MEMBER += VALUE   ->   _set(MEMBER, _get(MEMBER) + VALUE)
     if (parentPath.isAssignmentExpression({ left: node })) {
       const { operator, right } = parent;
       let value = right;
@@ -49,8 +49,7 @@ const handle = {
       return;
     }
 
-    // MEMBER(1)   ->   _call(MEMBER, [1])
-    // MEMBER(1, ...args)   ->   _call(MEMBER, [1, ...args])
+    // MEMBER(ARGS)   ->   _call(MEMBER, ARGS)
     if (parentPath.isCallExpression({ callee: node })) {
       const { arguments: args } = parent;
 
