@@ -83,11 +83,11 @@ const semiRuleWithClassProperty = ruleComposer.joinReports([
                 }
             } else {
                 if (!isSemicolon(lastToken)) {
-                    if (!exceptOneLine || !isOneLinerBlock(node)) {
+                    if (!exceptOneLine || !isOneLinerBlock(context, node)) {
                         report(context, node);
                     }
                 } else {
-                    if (exceptOneLine && isOneLinerBlock(node)) {
+                    if (exceptOneLine && isOneLinerBlock(context, node)) {
                         report(context, node, true);
                     }
                 }
