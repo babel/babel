@@ -30,7 +30,7 @@ export default declare((api, opts = {}) => {
   if (decoratorsLegacy !== true) {
     throw new Error(
       "The new decorators proposal is not supported yet." +
-        ' You muse pass the `"decoratorsLegacy": true` option to' +
+        ' You must pass the `"decoratorsLegacy": true` option to' +
         " @babel/preset-stage-1",
     );
   }

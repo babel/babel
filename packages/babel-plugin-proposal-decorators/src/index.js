@@ -14,7 +14,7 @@ export default declare((api, options) => {
   if (legacy !== true) {
     throw new Error(
       "The new decorators proposal is not supported yet." +
-        ' You muse pass the `"legacy": true` option to' +
+        ' You must pass the `"legacy": true` option to' +
         " @babel/plugin-proposal-decorators",
     );
   }
