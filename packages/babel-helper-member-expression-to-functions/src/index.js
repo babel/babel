@@ -4,14 +4,14 @@ const handle = {
   handle(member) {
     const { node, parent, parentPath } = member;
 
-    // MEMBER++   ->   _set(MEMBER, (_ref = Number(_get(MEMBER))) + 1), _ref
-    // ++MEMBER   ->   _set(MEMBER, Number(_get(MEMBER)) + 1)
+    // MEMBER++   ->   _set(MEMBER, (_ref = (+_get(MEMBER))) + 1), _ref
+    // ++MEMBER   ->   _set(MEMBER, (+_get(MEMBER)) + 1)
     if (parentPath.isUpdateExpression({ argument: node })) {
       const { operator, prefix } = parent;
 
       const value = t.binaryExpression(
         operator[0],
-        t.callExpression(t.identifier("Number"), [this.get(member)]),
+        t.unaryExpression("+", this.get(member)),
         t.numericLiteral(1),
       );
 
