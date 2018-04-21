@@ -140,6 +140,12 @@ $ TEST_DEBUG=true make test
 
 You can combine `TEST_DEBUG` with `TEST_GREP` or `TEST_ONLY` to debug a subset of tests. If you plan to stay long in the debugger (which you'll likely do!), you may increase the test timeout by editing [test/mocha.opts](https://github.com/babel/babel/blob/master/test/mocha.opts).
 
+To overwrite any test fixtures when fixing a bug or anything, add the env variable `OVERWRITE=true`
+
+```sh
+$ OVERWRITE=true TEST_ONLY=babel-plugin-transform-classes make test-only
+```
+
 To test the code coverage, use:
 
 ```sh
