@@ -5,6 +5,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-member-expression-to-functions",
   "license": "MIT",
   "main": "lib/index.js",
+  "author": "Justin Ridgewell <justin@ridgewell.name>",
   "dependencies": {
     "@babel/template": "7.0.0-beta.44",
     "@babel/traverse": "7.0.0-beta.44",
