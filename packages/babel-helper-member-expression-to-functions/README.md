@@ -26,6 +26,8 @@ const visitor = {
 
 // The helper requires three special methods on state: `get`, `set`, and
 // `call`.
+// Optionally, a special `memoize` method may be defined, which gets
+// called if the member is in a self-referential update expression.
 // Everything else will be passed through as normal.
 const state = {
   get(memberPath) {
@@ -36,7 +38,7 @@ const state = {
     );
   },
 
-  get(memberPath, value) {
+  set(memberPath, value) {
     // Return some AST that will set the member
     return t.callExpression(
       this.file.addHelper('superSet'),
@@ -51,6 +53,13 @@ const state = {
       t.memberExpression(this.get(memberPath), t.identifier("apply")),
       [t.thisExpression(), t.arrayExpression(args)]
     );
+  },
+
+  memoize(memberPath) {
+    const { node } = memberPath;
+    if (node.computed) {
+      MEMOIZED.set(node, ...);
+    }
   },
 
   // The handle method is provided by memberExpressionToFunctions.

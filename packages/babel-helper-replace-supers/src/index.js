@@ -80,7 +80,23 @@ const visitor = traverse.visitors.merge([
   },
 ]);
 
+const memoized = new WeakMap();
 const specHandlers = {
+  memoize(superMember) {
+    const { scope, node } = superMember;
+    const { computed, property } = node;
+    if (!computed) {
+      return;
+    }
+
+    const memo = scope.maybeGenerateMemoised(property);
+    if (!memo) {
+      return;
+    }
+
+    memoized.set(property, memo);
+  },
+
   get(superMember) {
     const { computed, property } = superMember.node;
     let thisExpr = t.thisExpression();
@@ -93,9 +109,16 @@ const specHandlers = {
       );
     }
 
+    let prop;
+    if (computed && memoized.has(property)) {
+      prop = t.cloneNode(memoized.get(property));
+    } else {
+      prop = computed ? property : t.stringLiteral(property.name);
+    }
+
     return t.callExpression(this.file.addHelper("get"), [
       getPrototypeOfExpression(this.getObjectRef(), this.isStatic, this.file),
-      computed ? property : t.stringLiteral(property.name),
+      prop,
       thisExpr,
     ]);
   },
@@ -103,9 +126,20 @@ const specHandlers = {
   set(superMember, value) {
     const { computed, property } = superMember.node;
 
+    let prop;
+    if (computed && memoized.has(property)) {
+      prop = t.assignmentExpression(
+        "=",
+        t.cloneNode(memoized.get(property)),
+        property,
+      );
+    } else {
+      prop = computed ? property : t.stringLiteral(property.name);
+    }
+
     return t.callExpression(this.file.addHelper("set"), [
       getPrototypeOfExpression(this.getObjectRef(), this.isStatic, this.file),
-      computed ? property : t.stringLiteral(property.name),
+      prop,
       value,
       t.thisExpression(),
       t.booleanLiteral(superMember.isInStrictMode()),
@@ -193,23 +227,26 @@ export default class ReplaceSupers {
   }
 
   replace() {
-    const { get, set, call } = this.isLoose ? looseHandlers : specHandlers;
+    const handler = this.isLoose ? looseHandlers : specHandlers;
 
-    memberExpressionToFunctions(this.methodPath, visitor, {
-      get,
-      set,
-      call,
+    memberExpressionToFunctions(
+      this.methodPath,
+      visitor,
+      Object.assign(
+        {
+          // Necessary state
+          file: this.file,
+          isStatic: this.isStatic,
+          getObjectRef: this.getObjectRef.bind(this),
+          superRef: this.superRef,
 
-      // Necessary state
-      file: this.file,
-      isStatic: this.isStatic,
-      getObjectRef: this.getObjectRef.bind(this),
-      superRef: this.superRef,
-
-      // TODO Remove this shit.
-      inConstructor: this.inConstructor,
-      returns: this.returns,
-      bareSupers: this.bareSupers,
-    });
+          // TODO Remove this shit.
+          inConstructor: this.inConstructor,
+          returns: this.returns,
+          bareSupers: this.bareSupers,
+        },
+        handler,
+      ),
+    );
   }
 }
