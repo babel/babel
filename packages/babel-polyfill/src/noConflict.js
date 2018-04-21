@@ -1,3 +1,2 @@
-import "./index";
-
-global._babelPolyfill = false;
+import "core-js/shim";
+import "regenerator-runtime/runtime";
