@@ -8,3 +8,4 @@ type union = {
   type: "B"
 };
 type overloads = (x: string) => number & (x: number) => string;
+type func = (string) => string;

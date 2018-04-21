@@ -198,8 +198,10 @@ export function FunctionTypeAnnotation(node: Object, parent: Object) {
 export function FunctionTypeParam(node: Object) {
   this.print(node.name, node);
   if (node.optional) this.token("?");
-  this.token(":");
-  this.space();
+  if (node.name) {
+    this.token(":");
+    this.space();
+  }
   this.print(node.typeAnnotation, node);
 }
 
