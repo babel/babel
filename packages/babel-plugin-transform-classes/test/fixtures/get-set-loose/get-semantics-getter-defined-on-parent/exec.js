@@ -1,7 +1,10 @@
 "use strict";
 class Base {
-  set test(v) {
-    throw new Error("called");
+  get test() {
+    // This is incorrect according to the spec,
+    // but close enough for loose.
+    expect(this).toBe(Base.prototype);
+    return 1;
   }
 }
 
@@ -18,4 +21,4 @@ Object.defineProperty(Obj.prototype, 'test', {
 
 const obj = new Obj();
 expect(obj.test).toBe(2);
-expect(obj.get()).toBeUndefined();
+expect(obj.get()).toBe(1);

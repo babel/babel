@@ -1,8 +1,5 @@
 "use strict";
 class Base {
-  set test(v) {
-    throw new Error("called");
-  }
 }
 
 class Obj extends Base {

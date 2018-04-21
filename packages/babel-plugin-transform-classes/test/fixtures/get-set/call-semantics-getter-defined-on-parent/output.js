@@ -29,8 +29,13 @@ function () {
 
   _createClass(Base, [{
     key: "test",
-    set: function (v) {
-      throw new Error("called");
+    get: function () {
+      expect(this).toBe(obj);
+      return function (...args) {
+        expect(this).toBe(obj);
+        expect(args).toEqual([1, 2, 3]);
+        return 1;
+      };
     }
   }]);
 
@@ -47,9 +52,20 @@ function (_Base) {
   }
 
   _createClass(Obj, [{
-    key: "get",
-    value: function get() {
-      return _get(_getPrototypeOf(Obj.prototype), "test", this);
+    key: "call",
+    value: function call() {
+      _get(_getPrototypeOf(Obj.prototype), "test", this).call(this, 1, 2, 3);
+
+      _get(_getPrototypeOf(Obj.prototype), "test", this).call(this, 1, ...[2, 3]);
+
+      _get(_getPrototypeOf(Obj.prototype), "test", this).call(this, ...[1, 2, 3]);
+
+      return _get(_getPrototypeOf(Obj.prototype), "test", this).apply(this, arguments);
+    }
+  }, {
+    key: "test",
+    value: function test() {
+      throw new Error("called");
     }
   }]);
 
@@ -58,11 +74,5 @@ function (_Base) {
   return Obj;
 }(Base);
 
-Object.defineProperty(Obj.prototype, 'test', {
-  value: 2,
-  writable: true,
-  configurable: true
-});
 const obj = new Obj();
-expect(obj.test).toBe(2);
-expect(obj.get()).toBeUndefined();
+expect(obj.call(1, 2, 3)).toBe(1);

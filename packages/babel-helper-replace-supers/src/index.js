@@ -156,15 +156,16 @@ const looseHandlers = {
   },
 
   set(superMember, value) {
-    // TODO https://github.com/babel/babel/pull/7553#issuecomment-381434519
-    return t.assignmentExpression("=", this.get(superMember), value);
+    const { property, computed } = superMember.node;
+    return t.assignmentExpression(
+      "=",
+      t.memberExpression(t.thisExpression(), property, computed),
+      value,
+    );
   },
 
   call(superMember, args) {
-    return t.callExpression(
-      t.memberExpression(this.get(superMember), t.identifier("call")),
-      [t.thisExpression(), ...args],
-    );
+    return optimiseCall(this.get(superMember), t.thisExpression(), args);
   },
 };
 

@@ -30,7 +30,7 @@ function () {
   _createClass(Base, [{
     key: "test",
     set: function (v) {
-      throw new Error("called");
+      throw new Error("gobbledygook");
     }
   }]);
 
@@ -47,9 +47,14 @@ function (_Base) {
   }
 
   _createClass(Obj, [{
-    key: "get",
-    value: function get() {
-      return _get(_getPrototypeOf(Obj.prototype), "test", this);
+    key: "call",
+    value: function call() {
+      return _get(_getPrototypeOf(Obj.prototype), "test", this).call(this);
+    }
+  }, {
+    key: "test",
+    value: function test() {
+      throw new Error("gobbledygook");
     }
   }]);
 
@@ -58,11 +63,8 @@ function (_Base) {
   return Obj;
 }(Base);
 
-Object.defineProperty(Obj.prototype, 'test', {
-  value: 2,
-  writable: true,
-  configurable: true
-});
 const obj = new Obj();
-expect(obj.test).toBe(2);
-expect(obj.get()).toBeUndefined();
+expect(() => {
+  obj.call(); // Asser that this throws, but that it's not
+  // a gobbledygook error that is thrown
+}).toThrowError(TypeError);
