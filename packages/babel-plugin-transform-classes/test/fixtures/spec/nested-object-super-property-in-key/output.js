@@ -19,8 +19,6 @@ function () {
 var Outer =
 /*#__PURE__*/
 function (_Hello) {
-  babelHelpers.inherits(Outer, _Hello);
-
   function Outer() {
     var _this;
 
@@ -35,6 +33,7 @@ function (_Hello) {
     return babelHelpers.possibleConstructorReturn(_this, Inner);
   }
 
+  babelHelpers.inherits(Outer, _Hello);
   return Outer;
 }(Hello);
 

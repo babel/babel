@@ -3,13 +3,12 @@ var Foo =
 function (_Bar) {
   "use strict";
 
-  babelHelpers.inheritsLoose(Foo, _Bar);
-
   function Foo() {
     var _this;
 
     return babelHelpers.assertThisInitialized(_this);
   }
 
+  babelHelpers.inheritsLoose(Foo, _Bar);
   return Foo;
 }(Bar);

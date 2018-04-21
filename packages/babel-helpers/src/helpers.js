@@ -399,22 +399,14 @@ helpers.inherits = () => template.program.ast`
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
-    subClass.prototype = Object.create(superClass && superClass.prototype, {
-      constructor: {
-        value: subClass,
-        enumerable: false,
-        writable: true,
-        configurable: true
-      }
-    });
+    setPrototypeOf(subClass.prototype, superClass && superClass.prototype);
     if (superClass) setPrototypeOf(subClass, superClass);
   }
 `;
 
 helpers.inheritsLoose = () => template.program.ast`
   export default function _inheritsLoose(subClass, superClass) {
-    subClass.prototype = Object.create(superClass.prototype);
-    subClass.prototype.constructor = subClass;
+    subClass.prototype.__proto__ = superClass && superClass.prototype;
     subClass.__proto__ = superClass;
   }
 `;

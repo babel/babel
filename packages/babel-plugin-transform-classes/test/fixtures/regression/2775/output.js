@@ -10,8 +10,6 @@ var _react = babelHelpers.interopRequireDefault(require("react"));
 var RandomComponent =
 /*#__PURE__*/
 function (_Component) {
-  babelHelpers.inherits(RandomComponent, _Component);
-
   function RandomComponent() {
     babelHelpers.classCallCheck(this, RandomComponent);
     return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(RandomComponent).call(this));
@@ -25,6 +23,7 @@ function (_Component) {
       }, _react.default.createElement("h2", null, "Hi there!"));
     }
   }]);
+  babelHelpers.inherits(RandomComponent, _Component);
   return RandomComponent;
 }(_react.Component);
 

@@ -179,6 +179,7 @@ export default function transformClass(
     }
 
     pushDescriptors();
+    pushInheritsToBody();
   }
 
   function pushBody() {
@@ -236,8 +237,6 @@ export default function transformClass(
   }
 
   function pushDescriptors() {
-    pushInheritsToBody();
-
     const { body } = classState;
 
     let instanceProps;
@@ -538,8 +537,6 @@ export default function transformClass(
     }
 
     classState.body.push(classState.construct);
-
-    pushInheritsToBody();
   }
 
   /**
@@ -550,9 +547,9 @@ export default function transformClass(
 
     setState({ pushedInherits: true });
 
-    // Unshift to ensure that the constructor inheritance is set up before
+    // Push to ensure that the constructor inheritance is set up after
     // any properties can be assigned to the prototype.
-    classState.body.unshift(
+    classState.body.push(
       t.expressionStatement(
         t.callExpression(
           classState.file.addHelper(
