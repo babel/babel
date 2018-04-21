@@ -12,8 +12,6 @@ var b = function b() {
 var a1 =
 /*#__PURE__*/
 function (_b) {
-  babelHelpers.inherits(a1, _b);
-
   function a1() {
     var _this;
 
@@ -27,14 +25,13 @@ function (_b) {
     return _this;
   }
 
+  babelHelpers.inherits(a1, _b);
   return a1;
 }(b);
 
 var a2 =
 /*#__PURE__*/
 function (_b2) {
-  babelHelpers.inherits(a2, _b2);
-
   function a2() {
     var _this2;
 
@@ -48,6 +45,7 @@ function (_b2) {
     return _this2;
   }
 
+  babelHelpers.inherits(a2, _b2);
   return a2;
 }(b);
 

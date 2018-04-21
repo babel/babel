@@ -3,12 +3,11 @@ var Test =
 function (_Foo) {
   "use strict";
 
-  babelHelpers.inherits(Test, _Foo);
-
   function Test() {
     babelHelpers.classCallCheck(this, Test);
     return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Test).apply(this, arguments));
   }
 
+  babelHelpers.inherits(Test, _Foo);
   return Test;
 }(Foo);

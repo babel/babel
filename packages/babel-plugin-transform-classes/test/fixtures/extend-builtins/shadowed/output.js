@@ -9,12 +9,11 @@ let List =
 function (_Array) {
   "use strict";
 
-  babelHelpers.inherits(List, _Array);
-
   function List() {
     babelHelpers.classCallCheck(this, List);
     return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(List).apply(this, arguments));
   }
 
+  babelHelpers.inherits(List, _Array);
   return List;
 }(Array);
