@@ -10,7 +10,6 @@ node_js:
   # We test the latest version on circleci
   - '8'
   - '6'
-  - '4'
 
 env:
   global:

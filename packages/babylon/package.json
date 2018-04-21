@@ -20,7 +20,7 @@
     "lib"
   ],
   "engines": {
-    "node": ">=4.2.0"
+    "node": ">=6.0.0"
   },
   "devDependencies": {
     "@babel/helper-fixtures": "7.0.0-beta.44",
