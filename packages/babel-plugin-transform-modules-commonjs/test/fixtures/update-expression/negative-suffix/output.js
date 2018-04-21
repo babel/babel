@@ -9,7 +9,7 @@ let diffLevel = 0;
 exports.diffLevel = diffLevel;
 
 function diff() {
-  if (!(exports.diffLevel = diffLevel = diffLevel - 1)) {
+  if (!(exports.diffLevel = diffLevel = +diffLevel - 1)) {
     console.log("hey");
   }
 }
