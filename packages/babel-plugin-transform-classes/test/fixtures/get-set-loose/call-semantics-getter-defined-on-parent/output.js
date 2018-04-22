@@ -45,22 +45,18 @@ function (_Base) {
     _Base.prototype.test.call(this, ...[1, 2, 3]);
 
     return _Base.prototype.test.apply(this, arguments);
-  }; // TODO: After #7772, we can define this normally
-  // test() {
-  // throw new Error("called");
-  // }
+  };
 
+  _proto.test = function test() {
+    throw new Error("called");
+  };
+
+  _inheritsLoose(Obj, _Base);
 
   _inheritsLoose(Obj, _Base);
 
   return Obj;
 }(Base);
 
-Object.defineProperty(Obj.prototype, "test", {
-  value() {
-    throw new Error("called");
-  }
-
-});
 const obj = new Obj();
 expect(obj.call(1, 2, 3)).toBe(1);

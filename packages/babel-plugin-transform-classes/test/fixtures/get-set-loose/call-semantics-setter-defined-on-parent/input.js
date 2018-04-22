@@ -10,16 +10,10 @@ class Obj extends Base {
     return super.test();
   }
 
-  // TODO: After #7772, we can define this normally
-  // test() {
-    // throw new Error("called");
-  // }
-}
-Object.defineProperty(Obj.prototype, "test", {
-  value() {
+  test() {
     throw new Error("gobbledygook");
   }
-});
+}
 
 const obj = new Obj();
 expect(() => {

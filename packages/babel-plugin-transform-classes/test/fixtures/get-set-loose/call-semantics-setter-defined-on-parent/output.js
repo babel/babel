@@ -32,23 +32,19 @@ function (_Base) {
 
   _proto.call = function call() {
     return _Base.prototype.test.call(this);
-  }; // TODO: After #7772, we can define this normally
-  // test() {
-  // throw new Error("called");
-  // }
+  };
 
+  _proto.test = function test() {
+    throw new Error("gobbledygook");
+  };
+
+  _inheritsLoose(Obj, _Base);
 
   _inheritsLoose(Obj, _Base);
 
   return Obj;
 }(Base);
 
-Object.defineProperty(Obj.prototype, "test", {
-  value() {
-    throw new Error("gobbledygook");
-  }
-
-});
 const obj = new Obj();
 expect(() => {
   obj.call(); // Asser that this throws, but that it's not
