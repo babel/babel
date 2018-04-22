@@ -40,8 +40,6 @@ function (_Base) {
 
   _inheritsLoose(Obj, _Base);
 
-  _inheritsLoose(Obj, _Base);
-
   return Obj;
 }(Base);
 

@@ -134,11 +134,14 @@ const specHandlers = {
 };
 
 const looseHandlers = {
+  memoize: specHandlers.memoize,
+  call: specHandlers.call,
+
   get(superMember) {
     const { isStatic, superRef } = this;
     const { property, computed } = superMember.node;
-    let object;
 
+    let object;
     if (isStatic) {
       object = superRef
         ? t.cloneNode(superRef)
@@ -152,20 +155,35 @@ const looseHandlers = {
         : t.memberExpression(t.identifier("Object"), t.identifier("prototype"));
     }
 
-    return t.memberExpression(object, property, computed);
+    let prop;
+    if (computed && memoized.has(property)) {
+      prop = t.cloneNode(memoized.get(property));
+    } else {
+      prop = property;
+    }
+
+    return t.memberExpression(object, prop, computed);
   },
 
   set(superMember, value) {
     const { property, computed } = superMember.node;
+
+    let prop;
+    if (computed && memoized.has(property)) {
+      prop = t.assignmentExpression(
+        "=",
+        t.cloneNode(memoized.get(property)),
+        property,
+      );
+    } else {
+      prop = property;
+    }
+
     return t.assignmentExpression(
       "=",
-      t.memberExpression(t.thisExpression(), property, computed),
+      t.memberExpression(t.thisExpression(), prop, computed),
       value,
     );
-  },
-
-  call(superMember, args) {
-    return optimiseCall(this.get(superMember), t.thisExpression(), args);
   },
 };
 
