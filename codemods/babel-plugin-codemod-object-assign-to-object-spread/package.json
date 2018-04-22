@@ -1,8 +1,8 @@
 {
-  "name": "@babel/plugin-codemod-optional-catch-binding",
+  "name": "@babel/plugin-codemod-object-assign-to-object-spread",
   "version": "7.0.0-beta.44",
-  "description": "Remove unused catch bindings",
-  "repository": "https://github.com/babel/babel/tree/master/codemods/babel-plugin-codemod-remove-unused-catch-binding",
+  "description": "Transforms Object.assign into object spread syntax",
+  "repository": "https://github.com/babel/babel/tree/master/codemods/babel-plugin-codemod-object-assign-to-object-spread",
   "license": "MIT",
   "main": "lib/index.js",
   "keywords": [
@@ -10,7 +10,7 @@
     "@babel/plugin"
   ],
   "dependencies": {
-    "@babel/plugin-syntax-optional-catch-binding": "7.0.0-beta.44"
+    "@babel/plugin-syntax-object-rest-spread": "7.0.0-beta.44"
   },
   "peerDependencies": {
     "@babel/core": "7.0.0-beta.44"

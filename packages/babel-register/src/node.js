@@ -39,11 +39,12 @@ function mtime(filename) {
 function compile(code, filename) {
   // merge in base options and resolve all the plugins and presets relative to this file
   const opts = new OptionManager().init(
-    Object.assign(
-      { sourceRoot: path.dirname(filename) }, // sourceRoot can be overwritten
-      deepClone(transformOpts),
-      { filename },
-    ),
+    // sourceRoot can be overwritten
+    {
+      sourceRoot: path.dirname(filename),
+      ...deepClone(transformOpts),
+      filename,
+    },
   );
 
   // Bail out ASAP if the file has been ignored.
@@ -109,7 +110,9 @@ register({
 
 export default function register(opts?: Object = {}) {
   // Clone to avoid mutating the arguments object with the 'delete's below.
-  opts = Object.assign({}, opts);
+  opts = {
+    ...opts,
+  };
   if (opts.extensions) hookExtensions(opts.extensions);
 
   if (opts.cache === false && cache) {
@@ -123,7 +126,9 @@ export default function register(opts?: Object = {}) {
   delete opts.extensions;
   delete opts.cache;
 
-  transformOpts = Object.assign({}, opts);
+  transformOpts = {
+    ...opts,
+  };
 
   let { cwd = "." } = transformOpts;
 

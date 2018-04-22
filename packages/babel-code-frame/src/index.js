@@ -38,12 +38,15 @@ function getMarkerLines(
   source: Array<string>,
   opts: Object,
 ): { start: number, end: number, markerLines: Object } {
-  const startLoc: Location = Object.assign(
-    {},
-    { column: 0, line: -1 },
-    loc.start,
-  );
-  const endLoc: Location = Object.assign({}, startLoc, loc.end);
+  const startLoc: Location = {
+    column: 0,
+    line: -1,
+    ...loc.start,
+  };
+  const endLoc: Location = {
+    ...startLoc,
+    ...loc.end,
+  };
   const { linesAbove = 2, linesBelow = 3 } = opts || {};
   const startLine = startLoc.line;
   const startColumn = startLoc.column;

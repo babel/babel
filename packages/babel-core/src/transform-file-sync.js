@@ -12,7 +12,10 @@ export default function transformFileSync(
   if (opts == null) {
     options = { filename };
   } else if (opts && typeof opts === "object") {
-    options = Object.assign({}, opts, { filename });
+    options = {
+      ...opts,
+      filename,
+    };
   }
 
   const config = loadConfig(options);

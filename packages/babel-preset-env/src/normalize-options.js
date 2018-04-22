@@ -177,7 +177,9 @@ export default function normalizeOptions(opts: Options) {
       false,
     ),
     spec: validateBoolOption("loose", opts.spec, false),
-    targets: Object.assign({}, opts.targets),
+    targets: {
+      ...opts.targets,
+    },
     useBuiltIns: validateUseBuiltInsOption(opts.useBuiltIns),
   };
 }

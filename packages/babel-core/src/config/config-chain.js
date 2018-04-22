@@ -414,7 +414,9 @@ function emptyChain(): ConfigChain {
 }
 
 function normalizeOptions(opts: ValidatedOptions): ValidatedOptions {
-  const options = Object.assign({}, opts);
+  const options = {
+    ...opts,
+  };
   delete options.extends;
   delete options.env;
   delete options.plugins;

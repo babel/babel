@@ -19,7 +19,9 @@ plugins.typescript = typescriptPlugin;
 
 export function parse(input: string, options?: Options): File {
   if (options && options.sourceType === "unambiguous") {
-    options = Object.assign({}, options);
+    options = {
+      ...options,
+    };
     try {
       options.sourceType = "module";
       const parser = getParser(options, input);
