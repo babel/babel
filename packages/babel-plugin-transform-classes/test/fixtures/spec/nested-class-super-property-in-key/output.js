@@ -33,7 +33,7 @@ function (_Hello) {
       }
 
       babelHelpers.createClass(Inner, [{
-        key: babelHelpers.get(babelHelpers.getPrototypeOf(Outer.prototype), "toString", babelHelpers.assertThisInitialized(_this)).call(_this),
+        key: babelHelpers.get(babelHelpers.getPrototypeOf(Outer.prototype), "toString", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this)),
         value: function value() {
           return 'hello';
         }

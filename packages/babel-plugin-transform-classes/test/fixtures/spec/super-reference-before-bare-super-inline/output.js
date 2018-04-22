@@ -6,13 +6,13 @@ function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || func
 
 function _possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
 function _get(target, property, receiver) { if (typeof Reflect !== "undefined" && Reflect.get) { _get = Reflect.get; } else { _get = function _get(target, property, receiver) { var base = _superPropBase(target, property); if (!base) return; var desc = Object.getOwnPropertyDescriptor(base, property); if (desc.get) { return desc.get.call(receiver); } return desc.value; }; } return _get(target, property, receiver || target); }
 
 function _superPropBase(object, property) { while (!Object.prototype.hasOwnProperty.call(object, property)) { object = _getPrototypeOf(object); if (object === null) break; } return object; }
 
 function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) { return o.__proto__; }; return _getPrototypeOf(o); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 var Foo =
 /*#__PURE__*/
@@ -24,7 +24,7 @@ function (_Bar) {
 
     _classCallCheck(this, Foo);
 
-    _get(_getPrototypeOf(Foo.prototype), "foo", _assertThisInitialized(_this)).call(_this, _this = _possibleConstructorReturn(this, _getPrototypeOf(Foo).call(this)));
+    _get(_getPrototypeOf(Foo.prototype), "foo", _assertThisInitialized(_this)).call(_assertThisInitialized(_this), _this = _possibleConstructorReturn(this, _getPrototypeOf(Foo).call(this)));
 
     return _this;
   }
