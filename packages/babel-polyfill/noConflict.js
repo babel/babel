@@ -1,1 +1,1 @@
-import "lib/noConflict";
+require("./lib/noConflict");
