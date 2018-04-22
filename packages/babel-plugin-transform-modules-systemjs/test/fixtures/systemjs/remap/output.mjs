@@ -5,15 +5,13 @@ System.register([], function (_export, _context) {
   return {
     setters: [],
     execute: function () {
-      var _test;
-
       _export("test", test = 2);
 
       _export("test", test);
 
       _export("test", test = 5);
 
-      _export("test", _test = test++), _test;
+      _export("test", +test + 1), test++;
 
       (function () {
         var test = 2;

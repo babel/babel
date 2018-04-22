@@ -48,22 +48,23 @@ export default declare((api, options) => {
       let node = path.node;
 
       // if it is a non-prefix update expression (x++ etc)
-      // then we must replace with the expression (_export('x', _x = x++), _x)
+      // then we must replace with the expression (_export('x', x + 1), x++)
       // in order to ensure the same update expression value
-      let old;
-      if (path.isUpdateExpression({ prefix: false })) {
-        const { scope } = path;
-        old = scope.generateUidIdentifierBasedOnNode(node.argument);
-        scope.push({ id: old });
-        node = t.assignmentExpression("=", t.cloneNode(old), node);
+      const isPostUpdateExpression = path.isUpdateExpression({ prefix: false });
+      if (isPostUpdateExpression) {
+        node = t.binaryExpression(
+          node.operator[0],
+          t.unaryExpression("+", t.cloneNode(node.argument)),
+          t.numericLiteral(1),
+        );
       }
 
       for (const exportedName of exportedNames) {
         node = this.buildCall(exportedName, node).expression;
       }
 
-      if (old) {
-        node = t.sequenceExpression([node, t.cloneNode(old)]);
+      if (isPostUpdateExpression) {
+        node = t.sequenceExpression([node, path.node]);
       }
 
       path.replaceWith(node);
