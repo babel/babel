@@ -8,15 +8,19 @@ import {
   type ValidatedOptions,
   type IgnoreList,
   type ConfigApplicableTest,
+  type BabelrcSearch,
 } from "./validation/options";
 
 const debug = buildDebug("babel:config:config-chain");
 
 import {
+  findPackageData,
   findRelativeConfig,
+  findRootConfig,
   loadConfig,
   type ConfigFile,
   type IgnoreFile,
+  type FilePackageData,
 } from "./files";
 
 import { makeWeakCache, makeStrongCache } from "./caching";
@@ -106,6 +110,7 @@ const loadPresetOverridesEnvDescriptors = makeWeakCache(
 
 export type RootConfigChain = ConfigChain & {
   babelrc: ConfigFile | void,
+  config: ConfigFile | void,
   ignore: IgnoreFile | void,
 };
 
@@ -125,24 +130,57 @@ export function buildRootChain(
   );
   if (!programmaticChain) return null;
 
-  let ignore, babelrc;
+  const {
+    root: rootDir = ".",
+    babelrc = true,
+    babelrcRoots,
+    configFile: configFileName = true,
+  } = opts;
 
+  const absoluteRoot = path.resolve(context.cwd, rootDir);
+
+  let configFile;
+  if (typeof configFileName === "string") {
+    configFile = loadConfig(configFileName, context.cwd, context.envName);
+  } else if (configFileName === true) {
+    configFile = findRootConfig(absoluteRoot, context.envName);
+  }
+
+  const configFileChain = emptyChain();
+  if (configFile) {
+    const result = loadFileChain(configFile, context);
+    if (!result) return null;
+
+    mergeChain(configFileChain, result);
+  }
+
+  const pkgData =
+    typeof context.filename === "string"
+      ? findPackageData(context.filename)
+      : null;
+
+  let ignoreFile, babelrcFile;
   const fileChain = emptyChain();
   // resolve all .babelrc files
-  if (opts.babelrc !== false && context.filename !== null) {
-    const filename = context.filename;
-
-    ({ ignore, config: babelrc } = findRelativeConfig(
-      filename,
+  if (
+    babelrc &&
+    pkgData &&
+    babelrcLoadEnabled(context, pkgData, babelrcRoots, absoluteRoot)
+  ) {
+    ({ ignore: ignoreFile, config: babelrcFile } = findRelativeConfig(
+      pkgData,
       context.envName,
     ));
 
-    if (ignore && shouldIgnore(context, ignore.ignore, null, ignore.dirname)) {
+    if (
+      ignoreFile &&
+      shouldIgnore(context, ignoreFile.ignore, null, ignoreFile.dirname)
+    ) {
       return null;
     }
 
-    if (babelrc) {
-      const result = loadFileChain(babelrc, context);
+    if (babelrcFile) {
+      const result = loadFileChain(babelrcFile, context);
       if (!result) return null;
 
       mergeChain(fileChain, result);
@@ -152,7 +190,7 @@ export function buildRootChain(
   // Insert file chain in front so programmatic options have priority
   // over configuration file chain items.
   const chain = mergeChain(
-    mergeChain(emptyChain(), fileChain),
+    mergeChain(mergeChain(emptyChain(), configFileChain), fileChain),
     programmaticChain,
   );
 
@@ -160,9 +198,37 @@ export function buildRootChain(
     plugins: dedupDescriptors(chain.plugins),
     presets: dedupDescriptors(chain.presets),
     options: chain.options.map(o => normalizeOptions(o)),
-    ignore: ignore || undefined,
-    babelrc: babelrc || undefined,
+    ignore: ignoreFile || undefined,
+    babelrc: babelrcFile || undefined,
+    config: configFile || undefined,
   };
+}
+
+function babelrcLoadEnabled(
+  context: ConfigContext,
+  pkgData: FilePackageData,
+  babelrcRoots: BabelrcSearch | void,
+  absoluteRoot: string,
+): boolean {
+  if (typeof babelrcRoots === "boolean") return babelrcRoots;
+
+  // Fast path to avoid having to load micromatch if the babelrc is just
+  // loading in the standard root directory.
+  if (babelrcRoots === undefined) {
+    return pkgData.directories.indexOf(absoluteRoot) !== -1;
+  }
+
+  let babelrcPatterns = babelrcRoots;
+  if (!Array.isArray(babelrcPatterns)) babelrcPatterns = [babelrcPatterns];
+  babelrcPatterns = babelrcPatterns.map(pat => path.resolve(context.cwd, pat));
+
+  // Fast path to avoid having to load micromatch if the babelrc is just
+  // loading in the standard root directory.
+  if (babelrcPatterns.length === 1 && babelrcPatterns[0] === absoluteRoot) {
+    return pkgData.directories.indexOf(absoluteRoot) !== -1;
+  }
+
+  return micromatch(pkgData.directories, babelrcPatterns).length > 0;
 }
 
 /**
