@@ -1,9 +1,11 @@
 "use strict";
 class Base {
-  set test(v) {
-    throw new Error("called");
-  }
 }
+Object.defineProperty(Base.prototype, 'test', {
+  value: 1,
+  writable: true,
+  configurable: true,
+});
 
 class Obj extends Base {
   get() {
@@ -18,4 +20,4 @@ Object.defineProperty(Obj.prototype, 'test', {
 
 const obj = new Obj();
 expect(obj.test).toBe(2);
-expect(obj.get()).toBeUndefined();
+expect(obj.get()).toBe(1);

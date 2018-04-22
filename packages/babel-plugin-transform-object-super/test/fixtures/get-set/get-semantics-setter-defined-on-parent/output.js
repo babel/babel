@@ -10,7 +10,7 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || functio
 
 const Base = {
   set test(v) {
-    throw new Error("not called");
+    throw new Error("called");
   }
 
 };

@@ -4,6 +4,10 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
 function _possibleConstructorReturn(self, call) { if (call && (typeof call === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
@@ -16,26 +20,9 @@ function _getPrototypeOf(o) { _getPrototypeOf = Object.getPrototypeOf || functio
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-let Base =
-/*#__PURE__*/
-function () {
-  function Base() {
-    _classCallCheck(this, Base);
-  }
-
-  _createClass(Base, [{
-    key: "test",
-    set: function (v) {
-      throw new Error("called");
-    }
-  }]);
-
-  return Base;
-}();
+let Base = function Base() {
+  _classCallCheck(this, Base);
+};
 
 let Obj =
 /*#__PURE__*/
@@ -47,9 +34,14 @@ function (_Base) {
   }
 
   _createClass(Obj, [{
-    key: "get",
-    value: function get() {
-      return _get(_getPrototypeOf(Obj.prototype), "test", this);
+    key: "call",
+    value: function call() {
+      return _get(_getPrototypeOf(Obj.prototype), "test", this).call(this);
+    }
+  }, {
+    key: "test",
+    value: function test() {
+      throw new Error("gobbledygook");
     }
   }]);
 
@@ -58,11 +50,8 @@ function (_Base) {
   return Obj;
 }(Base);
 
-Object.defineProperty(Obj.prototype, 'test', {
-  value: 2,
-  writable: true,
-  configurable: true
-});
 const obj = new Obj();
-expect(obj.test).toBe(2);
-expect(obj.get()).toBeUndefined();
+expect(() => {
+  obj.call(); // Asser that this throws, but that it's not
+  // Obj.p.test's error that is thrown
+}).toThrowError(TypeError);

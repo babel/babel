@@ -134,11 +134,14 @@ const specHandlers = {
 };
 
 const looseHandlers = {
+  memoize: specHandlers.memoize,
+  call: specHandlers.call,
+
   get(superMember) {
     const { isStatic, superRef } = this;
     const { property, computed } = superMember.node;
-    let object;
 
+    let object;
     if (isStatic) {
       object = superRef
         ? t.cloneNode(superRef)
@@ -152,18 +155,34 @@ const looseHandlers = {
         : t.memberExpression(t.identifier("Object"), t.identifier("prototype"));
     }
 
-    return t.memberExpression(object, property, computed);
+    let prop;
+    if (computed && memoized.has(property)) {
+      prop = t.cloneNode(memoized.get(property));
+    } else {
+      prop = property;
+    }
+
+    return t.memberExpression(object, prop, computed);
   },
 
   set(superMember, value) {
-    // TODO https://github.com/babel/babel/pull/7553#issuecomment-381434519
-    return t.assignmentExpression("=", this.get(superMember), value);
-  },
+    const { property, computed } = superMember.node;
 
-  call(superMember, args) {
-    return t.callExpression(
-      t.memberExpression(this.get(superMember), t.identifier("call")),
-      [t.thisExpression(), ...args],
+    let prop;
+    if (computed && memoized.has(property)) {
+      prop = t.assignmentExpression(
+        "=",
+        t.cloneNode(memoized.get(property)),
+        property,
+      );
+    } else {
+      prop = property;
+    }
+
+    return t.assignmentExpression(
+      "=",
+      t.memberExpression(t.thisExpression(), prop, computed),
+      value,
     );
   },
 };
