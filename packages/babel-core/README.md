@@ -218,7 +218,8 @@ Following is a table of the options you can use:
 | `auxiliaryCommentBefore` | `null`               | Attach a comment before all non-user injected code |
 | `root`                   | `"."`                | Specify the "root" folder that defines the location to search for "babel.config.js", and the default folder to allow `.babelrc` files inside of.|
 | `configFile`             | `undefined`          | The config file to load Babel's config from. Defaults to searching for "babel.config.js" inside the "root" folder. `false` will disable searching for config files.|
-| `babelrc`                | `(root)`             | Specify whether or not to use .babelrc and .babelignore files. Not available when using the CLI, [use `--no-babelrc` instead](https://babeljs.io/docs/usage/cli/#babel-ignoring-babelrc). `false` to disable searching, and `true` to always search, a string path of the package to search inside of, or an array of paths to packages to search inside of. |
+| `babelrc`                | `true`               | Specify whether or not to use .babelrc and .babelignore files. Not available when using the CLI, [use `--no-babelrc` instead](https://babeljs.io/docs/usage/cli/#babel-ignoring-babelrc) |
+| `babelrcRoots`           | `(root)`             | Specify which packages should be search for .babelrc files when they are being compiled. `true` to _always_ search, or a path string or an array of paths to packages to search inside of. Defaults to only searching the "root" package. |
 | `envName`                | env vars             | Defaults to environment variable `BABEL_ENV` if set, or else `NODE_ENV` if set, or else it defaults to `"development"` |
 | `code`                   | `true`               | Enable code generation |
 | `comments`               | `true`               | Output comments in generated output |

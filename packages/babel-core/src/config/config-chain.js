@@ -132,18 +132,18 @@ export function buildRootChain(
 
   const {
     root: rootDir = ".",
-    babelrc = undefined,
+    babelrc = true,
+    babelrcRoots,
     configFile: configFileName = true,
   } = opts;
+
+  const absoluteRoot = path.resolve(context.cwd, rootDir);
 
   let configFile;
   if (typeof configFileName === "string") {
     configFile = loadConfig(configFileName, context.cwd, context.envName);
   } else if (configFileName === true) {
-    configFile = findRootConfig(
-      path.resolve(context.cwd, rootDir),
-      context.envName,
-    );
+    configFile = findRootConfig(absoluteRoot, context.envName);
   }
 
   const configFileChain = emptyChain();
@@ -162,7 +162,11 @@ export function buildRootChain(
   let ignoreFile, babelrcFile;
   const fileChain = emptyChain();
   // resolve all .babelrc files
-  if (pkgData && babelrcLoadEnabled(context, pkgData, babelrc, rootDir)) {
+  if (
+    babelrc &&
+    pkgData &&
+    babelrcLoadEnabled(context, pkgData, babelrcRoots, absoluteRoot)
+  ) {
     ({ ignore: ignoreFile, config: babelrcFile } = findRelativeConfig(
       pkgData,
       context.envName,
@@ -203,28 +207,28 @@ export function buildRootChain(
 function babelrcLoadEnabled(
   context: ConfigContext,
   pkgData: FilePackageData,
-  babelrc: BabelrcSearch | void,
-  rootDir: string,
+  babelrcRoots: BabelrcSearch | void,
+  absoluteRoot: string,
 ): boolean {
-  if (typeof babelrc === "boolean") return babelrc;
-
-  const absoluteRoot = path.resolve(context.cwd, rootDir);
+  if (typeof babelrcRoots === "boolean") return babelrcRoots;
 
   // Fast path to avoid having to load micromatch if the babelrc is just
   // loading in the standard root directory.
-  if (
-    babelrc === undefined ||
-    babelrc === rootDir ||
-    (Array.isArray(babelrc) && babelrc.length === 1 && babelrc[0] === rootDir)
-  ) {
+  if (babelrcRoots === undefined) {
     return pkgData.directories.indexOf(absoluteRoot) !== -1;
   }
 
-  const babelrcRoots = (Array.isArray(babelrc) ? babelrc : [babelrc]).map(pat =>
-    path.resolve(context.cwd, pat),
-  );
+  let babelrcPatterns = babelrcRoots;
+  if (!Array.isArray(babelrcPatterns)) babelrcPatterns = [babelrcPatterns];
+  babelrcPatterns = babelrcPatterns.map(pat => path.resolve(context.cwd, pat));
 
-  return micromatch(pkgData.directories, babelrcRoots).length > 0;
+  // Fast path to avoid having to load micromatch if the babelrc is just
+  // loading in the standard root directory.
+  if (babelrcPatterns.length === 1 && babelrcPatterns[0] === absoluteRoot) {
+    return pkgData.directories.indexOf(absoluteRoot) !== -1;
+  }
+
+  return micromatch(pkgData.directories, babelrcPatterns).length > 0;
 }
 
 /**

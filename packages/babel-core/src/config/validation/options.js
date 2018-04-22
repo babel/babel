@@ -36,8 +36,11 @@ const ROOT_VALIDATORS: ValidatorSet = {
   filenameRelative: (assertString: Validator<
     $PropertyType<ValidatedOptions, "filenameRelative">,
   >),
-  babelrc: (assertBabelrcSearch: Validator<
+  babelrc: (assertBoolean: Validator<
     $PropertyType<ValidatedOptions, "babelrc">,
+  >),
+  babelrcRoots: (assertBabelrcSearch: Validator<
+    $PropertyType<ValidatedOptions, "babelrcRoots">,
   >),
   code: (assertBoolean: Validator<$PropertyType<ValidatedOptions, "code">>),
   ast: (assertBoolean: Validator<$PropertyType<ValidatedOptions, "ast">>),
@@ -157,10 +160,11 @@ export type ValidatedOptions = {
   cwd?: string,
   filename?: string,
   filenameRelative?: string,
-  babelrc?: BabelrcSearch,
-  code?: boolean,
+  babelrc?: boolean,
+  babelrcRoots?: BabelrcSearch,
   configFile?: ConfigFileSearch,
   root?: string,
+  code?: boolean,
   ast?: boolean,
   inputSourceMap?: RootInputSourceMapOption,
   envName?: string,

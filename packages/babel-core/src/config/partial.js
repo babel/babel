@@ -128,7 +128,7 @@ class PartialConfig {
    * this.babelrc directly.
    */
   hasFilesystemConfig(): boolean {
-    return this.babelrc !== undefined;
+    return this.babelrc !== undefined || this.config !== undefined;
   }
 }
 Object.freeze(PartialConfig.prototype);
