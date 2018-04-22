@@ -50,23 +50,13 @@ export default declare((api, options) => {
       // if it is a non-prefix update expression (x++ etc)
       // then we must replace with the expression (_export('x', x + 1), x++)
       // in order to ensure the same update expression value
-      let isPostUpdateExpression = path.isUpdateExpression() && !node.prefix;
+      const isPostUpdateExpression = path.isUpdateExpression({ prefix: false });
       if (isPostUpdateExpression) {
-        if (node.operator === "++") {
-          node = t.binaryExpression(
-            "+",
-            t.cloneNode(node.argument),
-            t.numericLiteral(1),
-          );
-        } else if (node.operator === "--") {
-          node = t.binaryExpression(
-            "-",
-            t.cloneNode(node.argument),
-            t.numericLiteral(1),
-          );
-        } else {
-          isPostUpdateExpression = false;
-        }
+        node = t.binaryExpression(
+          node.operator[0],
+          t.unaryExpression("+", t.cloneNode(node.argument)),
+          t.numericLiteral(1),
+        );
       }
 
       for (const exportedName of exportedNames) {
