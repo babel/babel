@@ -1,6 +1,6 @@
 {
   "name": "@babel/core",
-  "version": "7.0.0-beta.45",
+  "version": "7.0.0-beta.46",
   "description": "Babel compiler core.",
   "main": "./lib/index.js",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
@@ -28,13 +28,13 @@
     "./lib/transform-file-sync.js": "./lib/transform-file-sync-browser.js"
   },
   "dependencies": {
-    "@babel/code-frame": "7.0.0-beta.45",
-    "@babel/generator": "7.0.0-beta.45",
-    "@babel/helpers": "7.0.0-beta.45",
-    "@babel/template": "7.0.0-beta.45",
-    "@babel/traverse": "7.0.0-beta.45",
-    "@babel/types": "7.0.0-beta.45",
-    "babylon": "7.0.0-beta.45",
+    "@babel/code-frame": "7.0.0-beta.46",
+    "@babel/generator": "7.0.0-beta.46",
+    "@babel/helpers": "7.0.0-beta.46",
+    "@babel/template": "7.0.0-beta.46",
+    "@babel/traverse": "7.0.0-beta.46",
+    "@babel/types": "7.0.0-beta.46",
+    "babylon": "7.0.0-beta.46",
     "convert-source-map": "^1.1.0",
     "debug": "^3.1.0",
     "json5": "^0.5.0",
@@ -45,7 +45,7 @@
     "source-map": "^0.5.0"
   },
   "devDependencies": {
-    "@babel/helper-transform-fixture-test-runner": "7.0.0-beta.45",
-    "@babel/register": "7.0.0-beta.45"
+    "@babel/helper-transform-fixture-test-runner": "7.0.0-beta.46",
+    "@babel/register": "7.0.0-beta.46"
   }
 }
