@@ -8,6 +8,8 @@ npm install @babel/preset-env --save-dev
 
 Without any configuration options, @babel/preset-env behaves exactly the same as @babel/preset-latest (or @babel/preset-es2015, @babel/preset-es2016, and @babel/preset-es2017 together).
 
+> We don't recommend using `preset-env` this way because it doesn't take advantage of it's greater capabilities of targeting specific browsers.
+
 ```json
 {
   "presets": ["@babel/preset-env"]
@@ -23,7 +25,7 @@ This example only includes the polyfills and code transforms needed for the last
   "presets": [
     ["@babel/preset-env", {
       "targets": {
-        "browsers": ["last 2 versions", "safari >= 7"]
+        "browsers": [ ">0.25%", "not ie 11", "not op_mini all"]
       }
     }]
   ]
