@@ -12,11 +12,35 @@ function assertNotIgnored(result) {
   expect(result.ignored).toBeFalsy();
 }
 
+function transform(code, opts) {
+  return babel.transform(code, {
+    cwd: __dirname,
+    ...opts,
+  });
+}
+
+function transformFile(filename, opts, cb) {
+  return babel.transformFile(
+    filename,
+    {
+      cwd: __dirname,
+      ...opts,
+    },
+    cb,
+  );
+}
+function transformFileSync(filename, opts) {
+  return babel.transformFileSync(filename, {
+    cwd: __dirname,
+    ...opts,
+  });
+}
+
 // shim
 function transformAsync(code, opts) {
   return {
     then: function(resolve) {
-      resolve(babel.transform(code, opts));
+      resolve(transform(code, opts));
     },
   };
 }
@@ -32,7 +56,7 @@ describe("parser and generator options", function() {
   };
 
   function newTransform(string) {
-    return babel.transform(string, {
+    return transform(string, {
       ast: true,
       parserOpts: {
         parser: recast.parse,
@@ -48,7 +72,7 @@ describe("parser and generator options", function() {
   it("options", function() {
     const string = "original;";
     expect(newTransform(string).ast).toEqual(
-      babel.transform(string, { ast: true }).ast,
+      transform(string, { ast: true }).ast,
     );
     expect(newTransform(string).code).toBe(string);
   });
@@ -57,7 +81,7 @@ describe("parser and generator options", function() {
     const experimental = "var a: number = 1;";
 
     expect(newTransform(experimental).ast).toEqual(
-      babel.transform(experimental, {
+      transform(experimental, {
         ast: true,
         parserOpts: {
           plugins: ["flow"],
@@ -67,7 +91,7 @@ describe("parser and generator options", function() {
     expect(newTransform(experimental).code).toBe(experimental);
 
     function newTransformWithPlugins(string) {
-      return babel.transform(string, {
+      return transform(string, {
         ast: true,
         plugins: [__dirname + "/../../babel-plugin-syntax-flow"],
         parserOpts: {
@@ -80,7 +104,7 @@ describe("parser and generator options", function() {
     }
 
     expect(newTransformWithPlugins(experimental).ast).toEqual(
-      babel.transform(experimental, {
+      transform(experimental, {
         ast: true,
         parserOpts: {
           plugins: ["flow"],
@@ -94,7 +118,7 @@ describe("parser and generator options", function() {
     const experimental = "if (true) {\n  import a from 'a';\n}";
 
     expect(newTransform(experimental).ast).not.toBe(
-      babel.transform(experimental, {
+      transform(experimental, {
         ast: true,
         parserOpts: {
           allowImportExportEverywhere: true,
@@ -123,7 +147,7 @@ describe("api", function() {
       babelrc: false,
     };
     Object.freeze(options);
-    babel.transformFile(__dirname + "/fixtures/api/file.js", options, function(
+    transformFile(__dirname + "/fixtures/api/file.js", options, function(
       err,
       res,
     ) {
@@ -141,15 +165,14 @@ describe("api", function() {
     };
     Object.freeze(options);
     expect(
-      babel.transformFileSync(__dirname + "/fixtures/api/file.js", options)
-        .code,
+      transformFileSync(__dirname + "/fixtures/api/file.js", options).code,
     ).toBe("foo();");
     expect(options).toEqual({ babelrc: false });
   });
 
   it("options throw on falsy true", function() {
     return expect(function() {
-      babel.transform("", {
+      transform("", {
         plugins: [__dirname + "/../../babel-plugin-syntax-jsx", false],
       });
     }).toThrow(/.plugins\[1\] must be a string, object, function/);
@@ -170,7 +193,7 @@ describe("api", function() {
     let calledRaw = 0;
     let calledIntercept = 0;
 
-    babel.transform("function foo() { bar(foobar); }", {
+    transform("function foo() { bar(foobar); }", {
       wrapPluginVisitorMethod: function(pluginAlias, visitorType, callback) {
         if (pluginAlias !== "foobar") {
           return callback;
@@ -204,7 +227,7 @@ describe("api", function() {
     let aliasBaseType = null;
 
     function execTest(passPerPreset) {
-      return babel.transform("type Foo = number; let x = (y): Foo => y;", {
+      return transform("type Foo = number; let x = (y): Foo => y;", {
         sourceType: "script",
         passPerPreset: passPerPreset,
         presets: [
@@ -293,7 +316,7 @@ describe("api", function() {
     const oldEnv = process.env.BABEL_ENV;
     process.env.BABEL_ENV = "development";
 
-    const result = babel.transform("", {
+    const result = transform("", {
       cwd: path.join(__dirname, "fixtures", "config", "complex-plugin-config"),
       filename: path.join(
         __dirname,
@@ -348,7 +371,7 @@ describe("api", function() {
   });
 
   it("source map merging", function() {
-    const result = babel.transform(
+    const result = transform(
       [
         /* eslint-disable max-len */
         'function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }',
@@ -555,7 +578,7 @@ describe("api", function() {
     });
 
     it("default", function() {
-      const result = babel.transform("foo;", {
+      const result = transform("foo;", {
         env: {
           development: { comments: false },
         },
@@ -566,7 +589,7 @@ describe("api", function() {
 
     it("BABEL_ENV", function() {
       process.env.BABEL_ENV = "foo";
-      const result = babel.transform("foo;", {
+      const result = transform("foo;", {
         env: {
           foo: { comments: false },
         },
@@ -576,7 +599,7 @@ describe("api", function() {
 
     it("NODE_ENV", function() {
       process.env.NODE_ENV = "foo";
-      const result = babel.transform("foo;", {
+      const result = transform("foo;", {
         env: {
           foo: { comments: false },
         },
@@ -634,7 +657,7 @@ describe("api", function() {
     };
 
     it("only syntax plugin available", function(done) {
-      babel.transformFile(
+      transformFile(
         __dirname + "/fixtures/api/parsing-errors/only-syntax/file.js",
         options,
         function(err) {
@@ -651,7 +674,7 @@ describe("api", function() {
     });
 
     it("both syntax and transform plugin available", function(done) {
-      babel.transformFile(
+      transformFile(
         __dirname + "/fixtures/api/parsing-errors/syntax-and-transform/file.js",
         options,
         function(err) {

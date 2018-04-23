@@ -10,6 +10,7 @@ function test(sourceType, opts, initializer, expectedCode) {
   }
 
   const result = babel.transform("", {
+    cwd: __dirname,
     sourceType,
     filename: "example" + (sourceType === "module" ? ".mjs" : ".js"),
     babelrc: false,

@@ -1,9 +1,16 @@
 import fs from "fs";
 import path from "path";
-import { loadOptions } from "../lib";
+import { loadOptions as loadOptionsOrig } from "../lib";
 
 function fixture(...args) {
   return path.join(__dirname, "fixtures", "config", ...args);
+}
+
+function loadOptions(opts) {
+  return loadOptionsOrig({
+    cwd: __dirname,
+    ...opts,
+  });
 }
 
 describe("buildConfigChain", function() {
