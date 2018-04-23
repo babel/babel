@@ -684,7 +684,7 @@ helpers.set = () => template.program.ast`
   }
 
   export default function _set(target, property, value, receiver, isStrict) {
-    const s = set(target, property, value, receiver || target);
+    var s = set(target, property, value, receiver || target);
     if (!s && isStrict) {
       throw new Error('failed to set property');
     }
