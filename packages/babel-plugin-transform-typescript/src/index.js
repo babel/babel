@@ -264,6 +264,10 @@ export default declare((api, { jsxPragma = "React" }) => {
       NewExpression(path) {
         path.node.typeParameters = null;
       },
+
+      JSXOpeningElement(path) {
+        path.node.typeParameters = null;
+      },
     },
   };
 

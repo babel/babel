@@ -142,6 +142,13 @@ defineType("JSXOpeningElement", {
         assertEach(assertNodeType("JSXAttribute", "JSXSpreadAttribute")),
       ),
     },
+    typeParameters: {
+      validate: assertNodeType(
+        "TypeParameterInstantiation",
+        "TSTypeParameterInstantiation",
+      ),
+      optional: true,
+    },
   },
 });
 

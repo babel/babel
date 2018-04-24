@@ -836,10 +836,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSTypeAssertion");
     }
 
-    tsTryParseTypeArgumentsInExpression(): ?N.TsTypeParameterInstantiation {
+    tsTryParseTypeArgumentsInExpression(
+      eatNextToken: boolean,
+    ): ?N.TsTypeParameterInstantiation {
       return this.tsTryParseAndCatch(() => {
         const res = this.tsParseTypeArguments();
-        this.expect(tt.parenL);
+        if (eatNextToken) this.expect(tt.parenL);
         return res;
       });
     }
@@ -885,6 +887,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.typeAnnotation = this.tsExpectThenParseType(tt.eq);
       this.semicolon();
       return this.finishNode(node, "TSTypeAliasDeclaration");
+    }
+
+    tsInNoContext<T>(cb: () => T): T {
+      const oldContext = this.state.context;
+      this.state.context = [oldContext[0]];
+      try {
+        return cb();
+      } finally {
+        this.state.context = oldContext;
+      }
     }
 
     /**
@@ -1241,13 +1253,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseTypeArguments(): N.TsTypeParameterInstantiation {
       const node = this.startNode();
-      node.params = this.tsInType(() => {
-        this.expectRelational("<");
-        return this.tsParseDelimitedList(
-          "TypeParametersOrArguments",
-          this.tsParseType.bind(this),
-        );
-      });
+      node.params = this.tsInType(() =>
+        // Temporarily remove a JSX parsing context, which makes us scan different tokens.
+        this.tsInNoContext(() => {
+          this.expectRelational("<");
+          return this.tsParseDelimitedList(
+            "TypeParametersOrArguments",
+            this.tsParseType.bind(this),
+          );
+        }),
+      );
+      // This reads the next token after the `>` too, so do this in the enclosing context.
+      // But be sure not to parse a regex in the jsx expression `<C<number> />`, so set exprAllowed = false
+      this.state.exprAllowed = false;
       this.expectRelational(">");
       return this.finishNode(node, "TSTypeParameterInstantiation");
     }
@@ -1375,7 +1393,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.callee = base;
 
         // May be passing type arguments. But may just be the `<` operator.
-        const typeArguments = this.tsTryParseTypeArgumentsInExpression(); // Also eats the "("
+        // Note: With `/*eatNextToken*/ true` this also eats the `(` following the type arguments
+        const typeArguments = this.tsTryParseTypeArgumentsInExpression(
+          /*eatNextToken*/ true,
+        );
         if (typeArguments) {
           // possibleAsync always false here, because we would have handled it above.
           // $FlowIgnore (won't be any undefined arguments)
@@ -2101,5 +2122,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     canHaveLeadingDecorator() {
       // Avoid unnecessary lookahead in checking for abstract class unless needed!
       return super.canHaveLeadingDecorator() || this.isAbstractClass();
+    }
+
+    jsxParseOpeningElementAfterName(
+      node: N.JSXOpeningElement,
+    ): N.JSXOpeningElement {
+      const typeArguments = this.tsTryParseTypeArgumentsInExpression(
+        /*eatNextToken*/ false,
+      );
+      if (typeArguments) node.typeParameters = typeArguments;
+      return super.jsxParseOpeningElementAfterName(node);
     }
   };
