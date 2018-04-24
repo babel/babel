@@ -1,7 +1,6 @@
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
-import { types as t } from "@babel/core";
 
-export default function() {
+export default function({ types: t }) {
   return {
     inherits: syntaxObjectRestSpread,
 
@@ -9,13 +8,15 @@ export default function() {
       CallExpression(path) {
         if (!path.get("callee").matchesPattern("Object.assign")) return;
 
-        const objPath = path.get("arguments.0");
+        const args = path.get("arguments");
+        if (args.length === 0) return;
+
+        const [objPath] = args;
         if (!objPath.isObjectExpression()) return;
 
         const obj = objPath.node;
         const { properties } = obj;
 
-        const args = path.get("arguments");
         for (let i = 1; i < args.length; i++) {
           const arg = args[i];
           const { node } = arg;
