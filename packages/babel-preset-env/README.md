@@ -18,13 +18,14 @@ Without any configuration options, @babel/preset-env behaves exactly the same as
 
 You can also configure it to only include the polyfills and transforms needed for the browsers you support. Compiling only what's needed can make your bundles smaller and your life easier.
 
-This example only includes the polyfills and code transforms needed for the last two versions of each browser, and versions of Safari greater than or equal to 7. We use [browserslist](https://github.com/ai/browserslist) to parse this information, so you can use [any valid query format supported by browserslist](https://github.com/ai/browserslist#queries).
+This example only includes the polyfills and code transforms needed for coverage of users > 0.25%, ignoring Internet Explorer 11 and Opera Mini. We use [browserslist](https://github.com/ai/browserslist) to parse this information, so you can use [any valid query format supported by browserslist](https://github.com/ai/browserslist#queries).
 
-```json
+```js
 {
   "presets": [
     ["@babel/preset-env", {
       "targets": {
+        // The % refers to the global coverage of users from browserslist
         "browsers": [ ">0.25%", "not ie 11", "not op_mini all"]
       }
     }]
