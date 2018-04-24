@@ -82,5 +82,8 @@ const handle = {
 // Optionally, a memoize method may be defined on the state, which will be
 // called when the member is a self-referential update.
 export default function memberExpressionToFunctions(path, visitor, state) {
-  path.traverse(visitor, Object.assign({}, state, handle));
+  path.traverse(visitor, {
+    ...state,
+    ...handle,
+  });
 }
