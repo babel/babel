@@ -50,7 +50,7 @@ module.exports = function(api) {
       "@babel/proposal-numeric-separator",
       [
         "@babel/proposal-object-rest-spread",
-        { useBuiltIns: true, loose: true }
+        { useBuiltIns: true, loose: true },
       ],
 
       // Explicitly use the lazy version of CommonJS modules.
