@@ -19,7 +19,10 @@ export default ((function transformFile(filename, opts, callback) {
   if (opts == null) {
     options = { filename };
   } else if (opts && typeof opts === "object") {
-    options = Object.assign({}, opts, { filename });
+    options = {
+      ...opts,
+      filename,
+    };
   }
 
   process.nextTick(() => {

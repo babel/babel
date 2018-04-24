@@ -20,7 +20,7 @@ if [ -n "$TEST_GREP" ]; then
 fi
 
 if [ -n "$TEST_ONLY" ]; then
-  jestArgs+=("packages/.*$TEST_ONLY.*/test")
+  jestArgs+=("(packages|codemods)/.*$TEST_ONLY.*/test")
 fi
 
 $node node_modules/.bin/jest "${jestArgs[@]}"

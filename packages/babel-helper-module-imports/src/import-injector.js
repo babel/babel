@@ -170,7 +170,9 @@ export default class ImportInjector {
       optsList.push(importedSource);
     }
 
-    const newOpts = Object.assign({}, this._defaultOpts);
+    const newOpts = {
+      ...this._defaultOpts,
+    };
     for (const opts of optsList) {
       if (!opts) continue;
       Object.keys(newOpts).forEach(key => {

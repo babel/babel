@@ -1,4 +1,4 @@
-function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype.__proto__ = superClass && superClass.prototype; subClass.__proto__ = superClass; }
 
 function _wrapNativeSuper(Class) { var _cache = typeof Map === "function" ? new Map() : undefined; _wrapNativeSuper = function _wrapNativeSuper(Class) { if (typeof Class !== "function") { throw new TypeError("Super expression must either be null or a function"); } if (typeof _cache !== "undefined") { if (_cache.has(Class)) return _cache.get(Class); _cache.set(Class, Wrapper); } function Wrapper() {} Wrapper.prototype = Object.create(Class.prototype, { constructor: { value: Wrapper, enumerable: false, writable: true, configurable: true } }); return _setPrototypeOf(Wrapper, _setPrototypeOf(function Super() { return _construct(Class, arguments, _getPrototypeOf(this).constructor); }, Class)); }; return _wrapNativeSuper(Class); }
 
@@ -13,11 +13,11 @@ var List =
 function (_Array) {
   "use strict";
 
-  _inheritsLoose(List, _Array);
-
   function List() {
     return _Array.apply(this, arguments) || this;
   }
+
+  _inheritsLoose(List, _Array);
 
   return List;
 }(_wrapNativeSuper(Array));

@@ -12,8 +12,6 @@ var b = function b() {
 var a1 =
 /*#__PURE__*/
 function (_b) {
-  babelHelpers.inherits(a1, _b);
-
   function a1() {
     var _this;
 
@@ -21,20 +19,19 @@ function (_b) {
     _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(a1).call(this));
 
     _this.x = function () {
-      return babelHelpers.assertThisInitialized(_this);
+      return babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this));
     };
 
     return _this;
   }
 
+  babelHelpers.inherits(a1, _b);
   return a1;
 }(b);
 
 var a2 =
 /*#__PURE__*/
 function (_b2) {
-  babelHelpers.inherits(a2, _b2);
-
   function a2() {
     var _this2;
 
@@ -42,12 +39,13 @@ function (_b2) {
     _this2 = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(a2).call(this));
 
     _this2.x = function () {
-      return babelHelpers.assertThisInitialized(_this2);
+      return babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this2));
     };
 
     return _this2;
   }
 
+  babelHelpers.inherits(a2, _b2);
   return a2;
 }(b);
 

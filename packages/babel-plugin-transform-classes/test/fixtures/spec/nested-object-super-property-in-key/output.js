@@ -19,15 +19,13 @@ function () {
 var Outer =
 /*#__PURE__*/
 function (_Hello) {
-  babelHelpers.inherits(Outer, _Hello);
-
   function Outer() {
     var _this;
 
     babelHelpers.classCallCheck(this, Outer);
     _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Outer).call(this));
     var Inner = {
-      [babelHelpers.get(babelHelpers.getPrototypeOf(Outer.prototype), "toString", babelHelpers.assertThisInitialized(_this)).call(_this)]() {
+      [babelHelpers.get(babelHelpers.getPrototypeOf(Outer.prototype), "toString", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this))]() {
         return 'hello';
       }
 
@@ -35,6 +33,7 @@ function (_Hello) {
     return babelHelpers.possibleConstructorReturn(_this, Inner);
   }
 
+  babelHelpers.inherits(Outer, _Hello);
   return Outer;
 }(Hello);
 

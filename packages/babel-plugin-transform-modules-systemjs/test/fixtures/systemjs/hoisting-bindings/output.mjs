@@ -5,7 +5,7 @@ System.register([], function (_export, _context) {
 
   function a() {
     alert("a");
-    _export("c", c + 1), c++;
+    _export("c", +c + 1), c++;
   }
 
   _export("a", a);

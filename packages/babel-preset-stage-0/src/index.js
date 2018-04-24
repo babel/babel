@@ -3,16 +3,10 @@ import presetStage1 from "@babel/preset-stage-1";
 
 import transformFunctionBind from "@babel/plugin-proposal-function-bind";
 
-export default declare((api, opts) => {
+export default declare((api, opts = {}) => {
   api.assertVersion(7);
 
-  let loose = false;
-  let useBuiltIns = false;
-
-  if (opts !== undefined) {
-    if (opts.loose !== undefined) loose = opts.loose;
-    if (opts.useBuiltIns !== undefined) useBuiltIns = opts.useBuiltIns;
-  }
+  const { loose = false, useBuiltIns = false, decoratorsLegacy = false } = opts;
 
   if (typeof loose !== "boolean") {
     throw new Error("@babel/preset-stage-0 'loose' option must be a boolean.");
@@ -22,9 +16,22 @@ export default declare((api, opts) => {
       "@babel/preset-stage-0 'useBuiltIns' option must be a boolean.",
     );
   }
+  if (typeof decoratorsLegacy !== "boolean") {
+    throw new Error(
+      "@babel/preset-stage-0 'decoratorsLegacy' option must be a boolean.",
+    );
+  }
+
+  if (decoratorsLegacy !== true) {
+    throw new Error(
+      "The new decorators proposal is not supported yet." +
+        ' You must pass the `"decoratorsLegacy": true` option to' +
+        " @babel/preset-stage-0",
+    );
+  }
 
   return {
-    presets: [[presetStage1, { loose, useBuiltIns }]],
+    presets: [[presetStage1, { loose, useBuiltIns, decoratorsLegacy }]],
     plugins: [transformFunctionBind],
   };
 });

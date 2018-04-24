@@ -11,7 +11,7 @@ System.register([], function (_export, _context) {
 
       _export("test", test = 5);
 
-      _export("test", test + 1), test++;
+      _export("test", +test + 1), test++;
 
       (function () {
         var test = 2;

@@ -9,8 +9,6 @@ var B =
 function (_A) {
   "use strict";
 
-  babelHelpers.inherits(B, _A);
-
   function B() {
     var _this;
 
@@ -18,5 +16,6 @@ function (_A) {
     return babelHelpers.possibleConstructorReturn(_this, _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(B).call(this)));
   }
 
+  babelHelpers.inherits(B, _A);
   return B;
 }(A);

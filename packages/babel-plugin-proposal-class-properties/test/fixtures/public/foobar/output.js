@@ -3,18 +3,17 @@ var Child =
 function (_Parent) {
   "use strict";
 
-  babelHelpers.inherits(Child, _Parent);
-
   function Child() {
     var _this;
 
     babelHelpers.classCallCheck(this, Child);
     _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Child).call(this));
-    babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "scopedFunctionWithThis", function () {
+    babelHelpers.defineProperty(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this)), "scopedFunctionWithThis", function () {
       _this.name = {};
     });
     return _this;
   }
 
+  babelHelpers.inherits(Child, _Parent);
   return Child;
 }(Parent);

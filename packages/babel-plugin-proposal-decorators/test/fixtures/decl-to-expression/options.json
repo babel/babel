@@ -1,4 +1,4 @@
 {
   "presets": [],
-  "plugins": ["proposal-decorators"]
+  "plugins": [["proposal-decorators", { "legacy": true }]]
 }

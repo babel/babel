@@ -13,6 +13,8 @@ import {
   assertIgnoreList,
   assertPluginList,
   assertConfigApplicableTest,
+  assertConfigFileSearch,
+  assertBabelrcSearch,
   assertFunction,
   assertSourceMaps,
   assertCompact,
@@ -23,6 +25,11 @@ import {
 
 const ROOT_VALIDATORS: ValidatorSet = {
   cwd: (assertString: Validator<$PropertyType<ValidatedOptions, "cwd">>),
+  root: (assertString: Validator<$PropertyType<ValidatedOptions, "root">>),
+  configFile: (assertConfigFileSearch: Validator<
+    $PropertyType<ValidatedOptions, "configFile">,
+  >),
+
   filename: (assertString: Validator<
     $PropertyType<ValidatedOptions, "filename">,
   >),
@@ -31,6 +38,9 @@ const ROOT_VALIDATORS: ValidatorSet = {
   >),
   babelrc: (assertBoolean: Validator<
     $PropertyType<ValidatedOptions, "babelrc">,
+  >),
+  babelrcRoots: (assertBabelrcSearch: Validator<
+    $PropertyType<ValidatedOptions, "babelrcRoots">,
   >),
   code: (assertBoolean: Validator<$PropertyType<ValidatedOptions, "code">>),
   ast: (assertBoolean: Validator<$PropertyType<ValidatedOptions, "ast">>),
@@ -151,6 +161,9 @@ export type ValidatedOptions = {
   filename?: string,
   filenameRelative?: string,
   babelrc?: boolean,
+  babelrcRoots?: BabelrcSearch,
+  configFile?: ConfigFileSearch,
+  root?: string,
   code?: boolean,
   ast?: boolean,
   inputSourceMap?: RootInputSourceMapOption,
@@ -223,6 +236,8 @@ export type PluginList = $ReadOnlyArray<PluginItem>;
 export type OverridesList = Array<ValidatedOptions>;
 export type ConfigApplicableTest = IgnoreItem | Array<IgnoreItem>;
 
+export type ConfigFileSearch = string | boolean;
+export type BabelrcSearch = boolean | string | Array<string>;
 export type SourceMapsOption = boolean | "inline" | "both";
 export type SourceTypeOption = "module" | "script" | "unambiguous";
 export type CompactOption = boolean | "auto";

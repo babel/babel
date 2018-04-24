@@ -25,6 +25,7 @@ describe("@babel/core config loading", () => {
 
   function makeOpts(skipProgrammatic = false) {
     return {
+      cwd: path.dirname(FILEPATH),
       filename: FILEPATH,
       presets: skipProgrammatic
         ? null

@@ -95,7 +95,9 @@ export const isPluginRequired = (
 };
 
 const getBuiltInTargets = targets => {
-  const builtInTargets = Object.assign({}, targets);
+  const builtInTargets = {
+    ...targets,
+  };
   if (builtInTargets.uglify != null) {
     delete builtInTargets.uglify;
   }

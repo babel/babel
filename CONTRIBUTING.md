@@ -41,7 +41,7 @@ Feel free to check out the `#discussion`/`#development` channels on our [Slack](
 
 **Note:** Versions `< 5.1.10` can't be built.
 
-Babel is built for Node 4 and up but we develop using Node 8 and yarn. You can check this with `node -v`.
+Babel is built for Node 6 and up but we develop using Node 8 and yarn. You can check this with `node -v`.
 
 Make sure that Yarn is installed with version >= `0.28.0`.
 Installation instructions can be found here: https://yarnpkg.com/en/docs/install.
@@ -139,6 +139,12 @@ $ TEST_DEBUG=true make test
 ```
 
 You can combine `TEST_DEBUG` with `TEST_GREP` or `TEST_ONLY` to debug a subset of tests. If you plan to stay long in the debugger (which you'll likely do!), you may increase the test timeout by editing [test/mocha.opts](https://github.com/babel/babel/blob/master/test/mocha.opts).
+
+To overwrite any test fixtures when fixing a bug or anything, add the env variable `OVERWRITE=true`
+
+```sh
+$ OVERWRITE=true TEST_ONLY=babel-plugin-transform-classes make test-only
+```
 
 To test the code coverage, use:
 

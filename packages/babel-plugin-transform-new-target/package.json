@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-new-target",
-  "version": "7.0.0-beta.44",
+  "version": "7.0.0-beta.46",
   "description": "Transforms new.target meta property",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-new-target",
   "license": "MIT",
@@ -9,15 +9,15 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.44"
+    "@babel/helper-plugin-utils": "7.0.0-beta.46"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.44"
+    "@babel/core": "7.0.0-beta.46"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.44",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.44",
-    "@babel/plugin-proposal-class-properties": "7.0.0-beta.44",
-    "@babel/plugin-transform-arrow-functions": "7.0.0-beta.44"
+    "@babel/core": "7.0.0-beta.46",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.46",
+    "@babel/plugin-proposal-class-properties": "7.0.0-beta.46",
+    "@babel/plugin-transform-arrow-functions": "7.0.0-beta.46"
   }
 }

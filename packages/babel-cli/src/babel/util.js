@@ -51,9 +51,10 @@ export function log(msg, force) {
 }
 
 export function transform(filename, code, opts, callback) {
-  opts = Object.assign({}, opts, {
+  opts = {
+    ...opts,
     filename,
-  });
+  };
 
   babel.transform(code, opts, callback);
 }

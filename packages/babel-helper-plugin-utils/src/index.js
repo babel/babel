@@ -34,7 +34,10 @@ function copyApiObject(api) {
     }
   }
 
-  return Object.assign({}, proto, api);
+  return {
+    ...proto,
+    ...api,
+  };
 }
 
 function has(obj, key) {

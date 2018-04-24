@@ -1,7 +1,7 @@
 "use strict";
 const Base = {
   set test(v) {
-    throw new Error("not called");
+    throw new Error("called");
   }
 };
 

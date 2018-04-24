@@ -134,14 +134,12 @@ type MetadataState = {
 };
 
 function parseWithCodeFrame(code: string, parserOpts: {}): BabelNodeFile {
-  parserOpts = Object.assign(
-    {
-      allowReturnOutsideFunction: true,
-      allowSuperOutsideMethod: true,
-      sourceType: "module",
-    },
-    parserOpts,
-  );
+  parserOpts = {
+    allowReturnOutsideFunction: true,
+    allowSuperOutsideMethod: true,
+    sourceType: "module",
+    ...parserOpts,
+  };
 
   try {
     return parse(code, parserOpts);

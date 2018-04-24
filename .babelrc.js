@@ -21,6 +21,9 @@ module.exports = function(api) {
       break;
     case "production":
       // Config during builds before publish.
+      envOpts.targets = {
+        node: 6,
+      };
       break;
     case "development":
       envOpts.debug = true;
@@ -45,7 +48,10 @@ module.exports = function(api) {
       ["@babel/proposal-class-properties", { loose: true }],
       "@babel/proposal-export-namespace-from",
       "@babel/proposal-numeric-separator",
-      ["@babel/proposal-object-rest-spread", { useBuiltIns: true }],
+      [
+        "@babel/proposal-object-rest-spread",
+        { useBuiltIns: true, loose: true },
+      ],
 
       // Explicitly use the lazy version of CommonJS modules.
       convertESM ? ["@babel/transform-modules-commonjs", { lazy: true }] : null,

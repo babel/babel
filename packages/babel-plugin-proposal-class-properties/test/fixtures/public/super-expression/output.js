@@ -3,15 +3,14 @@ var Foo =
 function (_Bar) {
   "use strict";
 
-  babelHelpers.inherits(Foo, _Bar);
-
   function Foo() {
     var _temp, _this;
 
     babelHelpers.classCallCheck(this, Foo);
-    foo((_temp = _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this)), babelHelpers.defineProperty(babelHelpers.assertThisInitialized(_this), "bar", "foo"), _temp));
+    foo((_temp = _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this)), babelHelpers.defineProperty(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this)), "bar", "foo"), _temp));
     return _this;
   }
 
+  babelHelpers.inherits(Foo, _Bar);
   return Foo;
 }(Bar);
