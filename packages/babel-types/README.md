@@ -2870,7 +2870,6 @@ Aliases: `Statement`, `Declaration`
 
  - `kind`: `"var" | "let" | "const"` (required)
  - `declarations`: `Array<VariableDeclarator>` (required)
- - `declare`: `boolean` (default: `null`)
 
 ---
 
