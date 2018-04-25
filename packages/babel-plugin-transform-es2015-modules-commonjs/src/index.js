@@ -58,14 +58,19 @@ export default function () {
       // redeclared in this scope
       if (this.scope.getBinding(name) !== path.scope.getBinding(name)) return;
 
+      const replacement = t.cloneDeep(remap);
+
+      // Preserve the binding location so that sourcemaps are nicer.
+      replacement.loc = path.node.loc;
+
       if (path.parentPath.isCallExpression({ callee: path.node })) {
-        path.replaceWith(t.sequenceExpression([t.numericLiteral(0), remap]));
-      } else if (path.isJSXIdentifier() && t.isMemberExpression(remap)) {
-        const { object, property } = remap;
+        path.replaceWith(t.sequenceExpression([t.numericLiteral(0), replacement]));
+      } else if (path.isJSXIdentifier() && t.isMemberExpression(replacement)) {
+        const { object, property } = replacement;
         path.replaceWith(t.JSXMemberExpression(t.JSXIdentifier(object.name),
           t.JSXIdentifier(property.name)));
       } else {
-        path.replaceWith(remap);
+        path.replaceWith(replacement);
       }
       this.requeueInParent(path);
     },
@@ -481,8 +486,10 @@ export default function () {
                       topNodes.push(varDecl);
                     }
                   }
-                  remaps[specifier.local.name] = t.memberExpression(target,
-                    t.cloneWithoutLoc(specifier.imported));
+                  remaps[specifier.local.name] = t.memberExpression(
+                    t.cloneWithoutLoc(target),
+                    t.cloneWithoutLoc(specifier.imported)
+                  );
                 }
               }
             } else {
