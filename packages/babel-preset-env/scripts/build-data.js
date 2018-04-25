@@ -190,7 +190,9 @@ const getLowestImplementedVersion = ({ features }, env) => {
     // Babel itself doesn't implement the feature correctly,
     // don't count against it
     // only doing this for built-ins atm
-    if (!test.babel && isBuiltIn) {
+    //
+    // NOTE: when/if compat-table adds a babel7 key, we'll want to update this
+    if (!test.babel6 && isBuiltIn) {
       return "-1";
     }
 

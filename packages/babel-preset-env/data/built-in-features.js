@@ -79,7 +79,33 @@ const es2015 = {
   },
 
   "es6.map": "Map",
-  "es6.set": "Set",
+
+  // This is explicit due to prevent the stage-1 Set proposals under the
+  // category "Set methods" from being included.
+  "es6.set": {
+    features: [
+      "Set / basic functionality",
+      "Set / constructor arguments",
+      "Set / constructor requires new",
+      "Set / constructor accepts null",
+      "Set / constructor invokes add",
+      "Set / iterator closing",
+      "Set / Set.prototype.add returns this",
+      "Set / -0 key converts to +0",
+      "Set / Set.prototype.size",
+      "Set / Set.prototype.delete",
+      "Set / Set.prototype.clear",
+      "Set / Set.prototype.forEach",
+      "Set / Set.prototype.keys",
+      "Set / Set.prototype.values",
+      "Set / Set.prototype.entries",
+      "Set / Set.prototype[Symbol.iterator]",
+      "Set / Set.prototype isn't an instance",
+      "Set / Set iterator prototype chain",
+      "Set / Set[Symbol.species]",
+    ],
+  },
+
   "es6.weak-map": "WeakMap",
   "es6.weak-set": "WeakSet",
 
