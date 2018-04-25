@@ -426,15 +426,11 @@ The following are currently supported:
 
 **Builtins**
 
-- [Promise.prototype.finally](https://github.com/tc39/proposal-promise-finally)
-- [Symbol.asyncIterator](https://github.com/tc39/proposal-async-iteration)
+- None
 
 **Features**
 
-- [Asynchronous Iterators](https://github.com/tc39/proposal-async-iteration)
-- [Object rest/spread properties](https://github.com/tc39/proposal-object-rest-spread)
 - [Optional catch binding](https://github.com/tc39/proposal-optional-catch-binding)
-- [Unicode property escapes in regular expressions](https://github.com/tc39/proposal-regexp-unicode-property-escapes)
 
 ---
 
