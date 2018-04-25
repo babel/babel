@@ -1,0 +1,18 @@
+{
+  "file": "arrow-functions/arguments-source-maps/expected.js",
+  "mappings": "AAAA,SAASA,EAAT,GAAc;AAAA;;AACZ,MAAIC,QAAQ,YAAM;AAChBC,YAAQC,GAAR,CAAYC,UAAZ;AACD,GAFD;AAGD",
+  "names": [
+    "fn",
+    "inner",
+    "console",
+    "log",
+    "arguments"
+  ],
+  "sources": [
+    "arrow-functions/arguments-source-maps/actual.js"
+  ],
+  "sourcesContent": [
+    "function fn() {\n  var inner = () => {\n    console.log(arguments);\n  };\n}"
+  ],
+  "version": 3
+}

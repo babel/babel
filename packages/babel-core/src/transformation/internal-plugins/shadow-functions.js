@@ -91,29 +91,33 @@ function remap(path, key) {
   // binding since arrow function syntax already does that.
   if (!passedShadowFunction) return;
 
-  const cached = fnPath.getData(key);
-  if (cached) return path.replaceWith(cached);
+  let cached = fnPath.getData(key);
+  if (!cached) {
+    const id = path.scope.generateUidIdentifier(key);
 
-  const id   = path.scope.generateUidIdentifier(key);
+    fnPath.setData(key, id);
+    cached = id;
 
-  fnPath.setData(key, id);
+    const classPath = fnPath.findParent((p) => p.isClass());
+    const hasSuperClass = !!(classPath && classPath.node && classPath.node.superClass);
 
-  const classPath = fnPath.findParent((p) => p.isClass());
-  const hasSuperClass = !!(classPath && classPath.node && classPath.node.superClass);
+    if (key === "this" && fnPath.isMethod({ kind: "constructor" }) && hasSuperClass) {
+      fnPath.scope.push({ id });
 
-  if (key === "this" && fnPath.isMethod({ kind: "constructor" }) && hasSuperClass) {
-    fnPath.scope.push({ id });
+      fnPath.traverse(superVisitor, { id });
+    } else {
+      const init = key === "this" ? t.thisExpression() : t.identifier(key);
 
-    fnPath.traverse(superVisitor, { id });
-  } else {
-    const init = key === "this" ? t.thisExpression() : t.identifier(key);
+      // Forward the shadowed function, so that the identifiers do not get hoisted
+      // up to the first non shadow function but rather up to the bound shadow function
+      if (shadowFunction) init._shadowedFunctionLiteral = shadowFunction;
 
-    // Forward the shadowed function, so that the identifiers do not get hoisted
-    // up to the first non shadow function but rather up to the bound shadow function
-    if (shadowFunction) init._shadowedFunctionLiteral = shadowFunction;
-
-    fnPath.scope.push({ id, init });
+      fnPath.scope.push({ id, init });
+    }
   }
 
-  return path.replaceWith(id);
+  const node = t.cloneDeep(cached);
+  node.loc = path.node.loc;
+
+  return path.replaceWith(node);
 }
