@@ -134,6 +134,7 @@ clean-lib:
 clean-all:
 	rm -rf node_modules
 	rm -rf package-lock.json
+	rm -rf .changelog
 
 	$(foreach source, $(SOURCES), \
 		$(call clean-source-all, $(source)))
