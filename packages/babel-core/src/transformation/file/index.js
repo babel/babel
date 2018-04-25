@@ -7,7 +7,6 @@ import OptionManager from "./options/option-manager";
 import type Pipeline from "../pipeline";
 import PluginPass from "../plugin-pass";
 import { NodePath, Hub, Scope } from "babel-traverse";
-import sourceMap from "source-map";
 import generate from "babel-generator";
 import codeFrame from "babel-code-frame";
 import defaults from "lodash/defaults";
@@ -19,6 +18,7 @@ import * as util from  "../../util";
 import path from "path";
 import * as t from "babel-types";
 
+import mergeSourceMap from "./merge-map";
 import resolve from "../../helpers/resolve";
 
 import blockHoistPlugin from "../internal-plugins/block-hoist";
@@ -368,42 +368,8 @@ export default class File extends Store {
   mergeSourceMap(map: Object) {
     const inputMap = this.opts.inputSourceMap;
 
-    if (inputMap) {
-      const inputMapConsumer   = new sourceMap.SourceMapConsumer(inputMap);
-      const outputMapConsumer  = new sourceMap.SourceMapConsumer(map);
-
-      const mergedGenerator = new sourceMap.SourceMapGenerator({
-        file: inputMapConsumer.file,
-        sourceRoot: inputMapConsumer.sourceRoot
-      });
-
-      // This assumes the output map always has a single source, since Babel always compiles a
-      // single source file to a single output file.
-      const source = outputMapConsumer.sources[0];
-
-      inputMapConsumer.eachMapping(function (mapping) {
-        const generatedPosition = outputMapConsumer.generatedPositionFor({
-          line: mapping.generatedLine,
-          column: mapping.generatedColumn,
-          source: source
-        });
-        if (generatedPosition.column != null) {
-          mergedGenerator.addMapping({
-            source: mapping.source,
-
-            original: mapping.source == null ? null : {
-              line: mapping.originalLine,
-              column: mapping.originalColumn
-            },
-
-            generated: generatedPosition
-          });
-        }
-      });
-
-      const mergedMap = mergedGenerator.toJSON();
-      inputMap.mappings = mergedMap.mappings;
-      return inputMap;
+    if (inputMap && map) {
+      return mergeSourceMap(inputMap, map);
     } else {
       return map;
     }
