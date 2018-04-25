@@ -26,21 +26,123 @@ declare module "lodash/defaults" {
 
 declare module "lodash/clone" {
   declare export default <T>(obj: T) => T;
- }
+}
 
 declare module "lodash/merge" {
   declare export default <T: Object>(T, Object) => T;
 }
 
-declare module "convert-source-map" {
+declare module "source-map" {
   declare export type SourceMap = {
     version: 3,
     file: ?string,
+    sourceRoot: ?string,
     sources: [?string],
     sourcesContent: [?string],
     names: [?string],
     mappings: string,
   };
+
+  declare module.exports: {
+    SourceMapConsumer: typeof SourceMapConsumer,
+    SourceMapGenerator: typeof SourceMapGenerator,
+  }
+
+  declare class SourceMapConsumer {
+    static GENERATED_ORDER: 1;
+    static ORIGINAL_ORDER: 2;
+
+    file: string | null;
+    sourceRoot: string | null;
+    sources: Array<string>;
+
+    constructor(?SourceMap): this;
+
+    computeColumnSpans(): string;
+    originalPositionFor({
+      line: number,
+      column: number,
+    }): {|
+      source: string,
+      line: number,
+      column: number,
+      name: string | null
+    |} | {|
+      source: null,
+      line: null,
+      column: null,
+      name: null
+    |};
+
+    generatedPositionFor({
+      source: string,
+      line: number,
+      column: number,
+    }): {|
+      line: number,
+      column: number,
+      lastColumn: number | null | void,
+    |} | {|
+      line: null,
+      column: null,
+      lastColumn: null | void,
+    |};
+
+    allGeneratedPositionsFor({
+      source: string,
+      line: number,
+      column: number,
+    }): Array<{|
+      line: number,
+      column: number,
+      lastColumn: number,
+    |}>;
+
+    sourceContentFor(string, boolean | void): string | null;
+
+    eachMapping(
+      ({|
+        generatedLine: number,
+        generatedColumn: number,
+        source: string,
+        originalLine: number,
+        originalColumn: number,
+        name: string | null,
+      |} | {|
+        generatedLine: number,
+        generatedColumn: number,
+        source: null,
+        originalLine: null,
+        originalColumn: null,
+        name: null,
+      |}) => mixed,
+      context: mixed,
+      order: ?(1 | 2),
+    ): void;
+  }
+
+  declare class SourceMapGenerator {
+    constructor(?{
+      file?: string | null,
+      sourceRoot?: string | null,
+      skipValidation?: boolean | null,
+    }): this;
+
+    addMapping({
+      generated: {
+        line: number,
+        column: number,
+      }
+    }): void;
+
+    setSourceContent(string, string): void;
+
+    toJSON(): SourceMap;
+  }
+}
+
+declare module "convert-source-map" {
+  import type { SourceMap } from "source-map";
 
   declare class Converter {
     toJSON(): string;

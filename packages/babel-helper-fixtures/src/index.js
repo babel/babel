@@ -196,6 +196,11 @@ export default function get(entryLoc): Array<Suite> {
       if (fs.existsSync(sourceMapLoc)) {
         test.sourceMap = JSON.parse(readFile(sourceMapLoc));
       }
+
+      const inputMapLoc = taskDir + "/input-source-map.json";
+      if (fs.existsSync(inputMapLoc)) {
+        test.inputSourceMap = JSON.parse(readFile(inputMapLoc));
+      }
     }
   }
 
