@@ -34,6 +34,7 @@ const buildExportsAssignment = template(`
 const buildExportAll = template(`
   Object.keys(OBJECT).forEach(function (key) {
     if (key === "default" || key === "__esModule") return;
+    if (Object.prototype.hasOwnProperty.call(EXPORTS_LIST, key)) return;
     Object.defineProperty(exports, key, {
       enumerable: true,
       get: function () {
@@ -184,6 +185,9 @@ export default function () {
       },
 
       Program: {
+        enter(path) {
+          this.exportNamesIdentifier = path.scope.generateUidIdentifier("exportNames");
+        },
         exit(path) {
           this.ranCommonJS = true;
 
@@ -199,11 +203,13 @@ export default function () {
 
           let hasExports = false;
           let hasImports = false;
+          let needsExportNames = false;
 
           const body: Array<Object> = path.get("body");
           const imports = Object.create(null);
           const exports = Object.create(null);
 
+          const allExportNames = Object.create(null);
           const nonHoistedExportNames = Object.create(null);
 
           const topNodes = [];
@@ -324,6 +330,7 @@ export default function () {
                   addTo(exports, id.name, id);
                   topNodes.push(buildExportsAssignment(id, id));
                   path.replaceWith(declaration.node);
+                  allExportNames[id.name] = true;
                 } else if (declaration.isClassDeclaration()) {
                   const id = declaration.node.id;
                   addTo(exports, id.name, id);
@@ -332,6 +339,7 @@ export default function () {
                     buildExportsAssignment(id, id)
                   ]);
                   nonHoistedExportNames[id.name] = true;
+                  allExportNames[id.name] = true;
                 } else if (declaration.isVariableDeclaration()) {
                   const declarators = declaration.get("declarations");
                   for (const decl of declarators) {
@@ -345,6 +353,7 @@ export default function () {
                       addTo(exports, id.node.name, id.node);
                       init.replaceWith(buildExportsAssignment(id.node, init.node).expression);
                       nonHoistedExportNames[id.node.name] = true;
+                      allExportNames[id.node.name] = true;
                     } else if (id.isObjectPattern()) {
                       for (let i = 0; i < id.node.properties.length; i++) {
                         const prop = id.node.properties[i];
@@ -357,6 +366,7 @@ export default function () {
                         addTo(exports, propValue.name, propValue);
                         exportsToInsert.push(buildExportsAssignment(propValue, propValue));
                         nonHoistedExportNames[propValue.name] = true;
+                        allExportNames[propValue.name] = true;
                       }
                     } else if (id.isArrayPattern() && id.node.elements) {
                       for (let i = 0; i < id.node.elements.length; i++) {
@@ -371,6 +381,7 @@ export default function () {
                         addTo(exports, name, elem);
                         exportsToInsert.push(buildExportsAssignment(elem, elem));
                         nonHoistedExportNames[name] = true;
+                        allExportNames[name] = true;
                       }
                     }
                     path.insertAfter(exportsToInsert);
@@ -403,6 +414,9 @@ export default function () {
                       topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name),
                         t.memberExpression(ref, specifier.node.local)));
                     }
+                    if (specifier.node.exported.name !== "default") {
+                      allExportNames[specifier.node.exported.name] = true;
+                    }
                     nonHoistedExportNames[specifier.node.exported.name] = true;
                   }
                 }
@@ -410,6 +424,9 @@ export default function () {
                 for (const specifier of specifiers) {
                   if (specifier.isExportSpecifier()) {
                     addTo(exports, specifier.node.local.name, specifier.node.exported);
+                    if (specifier.node.exported.name !== "default") {
+                      allExportNames[specifier.node.exported.name] = true;
+                    }
                     nonHoistedExportNames[specifier.node.exported.name] = true;
                     nodes.push(buildExportsAssignment(specifier.node.exported, specifier.node.local));
                   }
@@ -418,8 +435,10 @@ export default function () {
               path.replaceWithMultiple(nodes);
             } else if (path.isExportAllDeclaration()) {
               const exportNode = buildExportAll({
-                OBJECT: addRequire(path.node.source.value, path.node._blockHoist)
+                OBJECT: addRequire(path.node.source.value, path.node._blockHoist),
+                EXPORTS_LIST: this.exportNamesIdentifier
               });
+              needsExportNames = true;
               exportNode.loc = path.node.loc;
               topNodes.push(exportNode);
               path.remove();
@@ -527,6 +546,12 @@ export default function () {
 
               topNodes.unshift(node);
             }
+          }
+
+          if (needsExportNames) {
+            topNodes.unshift(t.variableDeclaration("var", [
+              t.variableDeclarator(this.exportNamesIdentifier, t.valueToNode(allExportNames)),
+            ]));
           }
 
           // add __esModule declaration if this file has any exports
