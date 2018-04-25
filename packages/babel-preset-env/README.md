@@ -8,7 +8,7 @@ npm install @babel/preset-env --save-dev
 
 Without any configuration options, @babel/preset-env behaves exactly the same as @babel/preset-latest (or @babel/preset-es2015, @babel/preset-es2016, and @babel/preset-es2017 together).
 
-> We don't recommend using `preset-env` this way because it doesn't take advantage of it's greater capabilities of targeting specific browsers.
+> We don't recommend using `preset-env` this way because it doesn't take advantage of its ability to target specific browsers.
 
 ```json
 {
