@@ -226,7 +226,7 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseDecorators(allowExport?: boolean): void {
-    if (this.hasPlugin("decorators2")) {
+    if (this.hasPlugin("decorators")) {
       allowExport = false;
     }
 
@@ -259,12 +259,12 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseDecorator(): N.Decorator {
-    this.expectOnePlugin(["decorators", "decorators2"]);
+    this.expectOnePlugin(["decorators-legacy", "decorators"]);
 
     const node = this.startNode();
     this.next();
 
-    if (this.hasPlugin("decorators2")) {
+    if (this.hasPlugin("decorators")) {
       // Every time a decorator class expression is evaluated, a new empty array is pushed onto the stack
       // So that the decorators of any nested class expressions will be dealt with separately
       this.state.decoratorStack.push([]);
@@ -1521,7 +1521,7 @@ export default class StatementParser extends ExpressionParser {
       this.state.type.keyword === "function" ||
       this.state.type.keyword === "class" ||
       this.isContextual("async") ||
-      (this.match(tt.at) && this.expectPlugin("decorators2"))
+      (this.match(tt.at) && this.expectPlugin("decorators"))
     );
   }
 

@@ -1,6 +1,6 @@
 {
   "plugins": [
     "classProperties",
-    "decorators"
+    "decorators-legacy"
   ]
 }

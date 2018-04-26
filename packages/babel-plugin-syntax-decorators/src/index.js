@@ -10,7 +10,7 @@ export default declare((api, options) => {
 
   return {
     manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push(legacy ? "decorators" : "decorators2");
+      parserOpts.plugins.push(legacy ? "decorators-legacy" : "decorators");
     },
   };
 });
