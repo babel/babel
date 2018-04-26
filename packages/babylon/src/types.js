@@ -856,6 +856,7 @@ export type TypeParameterBase = NodeBase & {
 
 export type TypeParameter = TypeParameterBase & {
   type: "TypeParameter",
+  default?: TypeAnnotation,
 };
 
 export type TsTypeParameter = TypeParameterBase & {
