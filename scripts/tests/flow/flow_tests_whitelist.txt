@@ -8,7 +8,6 @@
 #
 # Entries should be removed incrementally as Babylon is improved.
 
-ES6/binding-pattern/object-pattern/await-prop-in-async-function.js
 JSX_invalid/migrated_0000.js
 arrow_function_invalid/migrated_0002.js
 async_await/async_generic_method.js
@@ -29,18 +28,11 @@ dynamic_import/migrated_0001.js
 dynamic_import/migrated_0002.js
 dynamic_import/migrated_0003.js
 dynamic_import/migrated_0004.js
-invalid_syntax/migrated_0000.js
-invalid_syntax/migrated_0001.js
-invalid_syntax/migrated_0002.js
-invalid_syntax/migrated_0003.js
 private_class_properties/valid.js
 types/annotations/migrated_0001.js
 types/annotations_in_comments_invalid/migrated_0003.js
-types/annotations/static_is_reserved_param.js
-types/annotations/static_is_reserved_type.js
 types/annotations/void_is_reserved_param.js
 types/member/reserved_words.js
-types/number_literal_invalid/migrated_0000.js
 types/parameter_defaults/migrated_0023.js
 types/parameter_defaults/migrated_0026.js
 types/parameter_defaults/migrated_0028.js
@@ -48,7 +40,6 @@ types/parameter_defaults/migrated_0029.js
 types/parameter_defaults/migrated_0030.js
 types/parameter_defaults/migrated_0031.js
 types/parameter_defaults/migrated_0032.js
-types/string_literal_invalid/migrated_0000.js
 types/typecasts_invalid/migrated_0001.js
 class_method_kinds/polymorphic_getter.js
 types/interfaces/prop_named_static.js
