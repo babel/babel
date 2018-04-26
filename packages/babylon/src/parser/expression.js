@@ -310,8 +310,25 @@ export default class ExpressionParser extends LValParser {
         const startLoc = this.state.startLoc;
 
         if (op === tt.pipeline) {
-          // Support syntax such as 10 |> x => x + 1
-          this.state.potentialArrowAt = startPos;
+          const lookahead = this.lookahead();
+
+          if (lookahead.type === tt.arrow) {
+            throw this.raise(
+              this.state.start,
+              `Unexpected arrow "=>" after pipeline body; arrow function in pipeline body must be parenthesized`, // eslint-disable-line
+            );
+          }
+
+          if (
+            this.match(tt.name) &&
+            this.state.value === "await" &&
+            this.state.inAsync
+          ) {
+            throw this.raise(
+              this.state.start,
+              `Unexpected "await" after pipeline body; await must have parentheses in minimal proposal`,
+            );
+          }
         }
 
         node.right = this.parseExprOp(

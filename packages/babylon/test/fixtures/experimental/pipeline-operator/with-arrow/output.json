@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 17,
+  "end": 19,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 17
+      "column": 19
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 17,
+    "end": 19,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 17
+        "column": 19
       }
     },
     "sourceType": "script",
@@ -31,7 +31,7 @@
       {
         "type": "ExpressionStatement",
         "start": 0,
-        "end": 17,
+        "end": 19,
         "loc": {
           "start": {
             "line": 1,
@@ -39,13 +39,13 @@
           },
           "end": {
             "line": 1,
-            "column": 17
+            "column": 19
           }
         },
         "expression": {
           "type": "BinaryExpression",
           "start": 0,
-          "end": 16,
+          "end": 18,
           "loc": {
             "start": {
               "line": 1,
@@ -53,7 +53,7 @@
             },
             "end": {
               "line": 1,
-              "column": 16
+              "column": 18
             }
           },
           "left": {
@@ -79,16 +79,16 @@
           "operator": "|>",
           "right": {
             "type": "ArrowFunctionExpression",
-            "start": 6,
-            "end": 16,
+            "start": 7,
+            "end": 17,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 6
+                "column": 7
               },
               "end": {
                 "line": 1,
-                "column": 16
+                "column": 17
               }
             },
             "id": null,
@@ -97,16 +97,16 @@
             "params": [
               {
                 "type": "Identifier",
-                "start": 6,
-                "end": 7,
+                "start": 7,
+                "end": 8,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 6
+                    "column": 7
                   },
                   "end": {
                     "line": 1,
-                    "column": 7
+                    "column": 8
                   },
                   "identifierName": "x"
                 },
@@ -115,30 +115,30 @@
             ],
             "body": {
               "type": "BinaryExpression",
-              "start": 11,
-              "end": 16,
+              "start": 12,
+              "end": 17,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 11
+                  "column": 12
                 },
                 "end": {
                   "line": 1,
-                  "column": 16
+                  "column": 17
                 }
               },
               "left": {
                 "type": "Identifier",
-                "start": 11,
-                "end": 12,
+                "start": 12,
+                "end": 13,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 11
+                    "column": 12
                   },
                   "end": {
                     "line": 1,
-                    "column": 12
+                    "column": 13
                   },
                   "identifierName": "x"
                 },
@@ -147,16 +147,16 @@
               "operator": "+",
               "right": {
                 "type": "NumericLiteral",
-                "start": 15,
-                "end": 16,
+                "start": 16,
+                "end": 17,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 15
+                    "column": 16
                   },
                   "end": {
                     "line": 1,
-                    "column": 16
+                    "column": 17
                   }
                 },
                 "extra": {
@@ -165,6 +165,10 @@
                 },
                 "value": 1
               }
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 6
             }
           }
         }

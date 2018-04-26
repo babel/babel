@@ -1,6 +1,6 @@
-var _ref, _ref2, _sum;
+var _sum, _ref, _ref2;
 
-var result = (_ref = [5, 10], (_ref2 = _ref.map(x => x * 2), (_sum = _ref2.reduce((a, b) => a + b), _sum + 1)));
+var result = (_sum = (_ref = (_ref2 = [5, 10], _ref2.map(x => x * 2)), _ref.reduce((a, b) => a + b)), _sum + 1);
 expect(result).toBe(31);
 
 var inc = x => x + 1;
