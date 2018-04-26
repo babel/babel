@@ -23,11 +23,6 @@ class_properties/migrated_0021.js
 class_properties/migrated_0026.js
 decorators/migrated_0003.js
 decorators/migrated_0007.js
-dynamic_import/migrated_0000.js
-dynamic_import/migrated_0001.js
-dynamic_import/migrated_0002.js
-dynamic_import/migrated_0003.js
-dynamic_import/migrated_0004.js
 private_class_properties/valid.js
 types/annotations/migrated_0001.js
 types/annotations_in_comments_invalid/migrated_0003.js
