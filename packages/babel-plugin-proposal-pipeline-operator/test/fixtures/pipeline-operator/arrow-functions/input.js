@@ -1,7 +1,7 @@
 var result = [5,10]
-  |> _ => _.map(x => x * 2)
-  |> _ => _.reduce( (a,b) => a + b )
-  |> sum => sum + 1
+  |> (_ => _.map(x => x * 2))
+  |> (_ => _.reduce( (a,b) => a + b ))
+  |> (sum => sum + 1)
 
 expect(result).toBe(31);
 
