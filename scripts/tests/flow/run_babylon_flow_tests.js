@@ -114,7 +114,7 @@ const flowOptionsMapping = {
   esproposal_class_instance_fields: "classProperties",
   esproposal_class_static_fields: "classProperties",
   esproposal_export_star_as: "exportNamespaceFrom",
-  esproposal_decorators: "decorators",
+  esproposal_decorators: "decorators-legacy",
   esproposal_optional_chaining: "optionalChaining",
   types: "flowComments",
 };
