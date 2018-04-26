@@ -35,7 +35,8 @@
     "chokidar": "^1.6.1"
   },
   "devDependencies": {
-    "babel-helper-fixtures": "^6.26.0"
+    "babel-helper-fixtures": "^6.26.0",
+    "semver": "^5.5.0"
   },
   "bin": {
     "babel-doctor": "./bin/babel-doctor.js",
