@@ -3,7 +3,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 class C {
   // Output should not use `_initialiseProps`
   constructor(T) {
-    _defineProperty(_defineProperty(this, "x", void 0), "y", 0);
+    _defineProperty(this, "x", void 0);
+
+    _defineProperty(this, "y", 0);
   }
 
 }
