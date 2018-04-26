@@ -668,10 +668,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       while (!this.match(endDelim)) {
         let isStatic = false;
         const node = this.startNode();
+        const lookahead = this.lookahead();
+
         if (
           allowStatic &&
           this.isContextual("static") &&
-          this.lookahead().type !== tt.colon
+          // static is a valid identifier name
+          (lookahead.type !== tt.colon && lookahead.type !== tt.question)
         ) {
           this.next();
           isStatic = true;
