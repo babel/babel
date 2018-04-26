@@ -1,6 +1,6 @@
 {
   "name": "babel-core",
-  "version": "6.26.0",
+  "version": "6.26.2",
   "description": "Babel compiler core.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -47,8 +47,8 @@
     "source-map": "^0.5.7"
   },
   "devDependencies": {
-    "babel-helper-fixtures": "^6.26.0",
-    "babel-helper-transform-fixture-test-runner": "^6.26.0",
+    "babel-helper-fixtures": "^6.26.2",
+    "babel-helper-transform-fixture-test-runner": "^6.26.2",
     "babel-polyfill": "^6.26.0"
   }
 }
