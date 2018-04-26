@@ -39,9 +39,10 @@ var _this = this;
     constructor(_force) {
       var _this4 = this;
 
-      babelHelpers.defineProperty(babelHelpers.defineProperty(this, "fn", function () {
+      babelHelpers.defineProperty(this, "fn", function () {
         return console.log(_this4);
-      }), "force", force);
+      });
+      babelHelpers.defineProperty(this, "force", force);
     }
 
   }

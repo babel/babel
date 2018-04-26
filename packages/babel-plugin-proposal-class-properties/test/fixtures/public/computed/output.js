@@ -28,7 +28,15 @@ function () {
 
   function MyClass() {
     babelHelpers.classCallCheck(this, MyClass);
-    babelHelpers.defineProperty(babelHelpers.defineProperty(babelHelpers.defineProperty(babelHelpers.defineProperty(babelHelpers.defineProperty(babelHelpers.defineProperty(babelHelpers.defineProperty(babelHelpers.defineProperty(babelHelpers.defineProperty(this, null, "null"), _undefined, "undefined"), void 0, "void 0"), _ref3, "regex"), foo, "foo"), _bar, "bar"), _baz, "baz"), `template`, "template"), _ref4, "template-with-expression");
+    babelHelpers.defineProperty(this, null, "null");
+    babelHelpers.defineProperty(this, _undefined, "undefined");
+    babelHelpers.defineProperty(this, void 0, "void 0");
+    babelHelpers.defineProperty(this, _ref3, "regex");
+    babelHelpers.defineProperty(this, foo, "foo");
+    babelHelpers.defineProperty(this, _bar, "bar");
+    babelHelpers.defineProperty(this, _baz, "baz");
+    babelHelpers.defineProperty(this, `template`, "template");
+    babelHelpers.defineProperty(this, _ref4, "template-with-expression");
   }
 
   babelHelpers.createClass(MyClass, [{
@@ -51,4 +59,7 @@ function () {
   return MyClass;
 }();
 
-babelHelpers.defineProperty(babelHelpers.defineProperty(babelHelpers.defineProperty(babelHelpers.defineProperty(MyClass, _one, "test"), 2 * 4 + 7, "247"), 2 * four + 7, "247"), _ref, "247");
+babelHelpers.defineProperty(MyClass, _one, "test");
+babelHelpers.defineProperty(MyClass, 2 * 4 + 7, "247");
+babelHelpers.defineProperty(MyClass, 2 * four + 7, "247");
+babelHelpers.defineProperty(MyClass, _ref, "247");
