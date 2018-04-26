@@ -310,15 +310,6 @@ export default class ExpressionParser extends LValParser {
         const startLoc = this.state.startLoc;
 
         if (op === tt.pipeline) {
-          const lookahead = this.lookahead();
-
-          if (lookahead.type === tt.arrow) {
-            throw this.raise(
-              this.state.start,
-              `Unexpected arrow "=>" after pipeline body; arrow function in pipeline body must be parenthesized`, // eslint-disable-line
-            );
-          }
-
           if (
             this.match(tt.name) &&
             this.state.value === "await" &&
