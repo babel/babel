@@ -173,15 +173,18 @@ tests.forEach(section => {
     } catch (e) {
       exception = e;
       failed = true;
+
       // lets retry in script mode
-      try {
-        parse(
-          test.content,
-          Object.assign({}, babylonOptions, { sourceType: "script" })
-        );
-        exception = null;
-        failed = false;
-      } catch (e) {}
+      if (shouldSuccess) {
+        try {
+          parse(
+            test.content,
+            Object.assign({}, babylonOptions, { sourceType: "script" })
+          );
+          exception = null;
+          failed = false;
+        } catch (e) {}
+      }
     }
 
     const isSuccess = shouldSuccess !== failed;
