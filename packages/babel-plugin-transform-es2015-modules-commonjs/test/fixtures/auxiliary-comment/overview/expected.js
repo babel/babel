@@ -26,8 +26,8 @@ var /*before*/_foo5 = require("foo5") /*after*/;
 /*before*/exports. /*after*/test = test;
 var test2 = /*before*/exports. /*after*/test2 = 5;
 
-/*before*/(0, _foo4.bar) /*after*/( /*before*/_foo2.default /*after*/, /*before*/_foo5.foo /*after*/);
+/*before*/(0, /*after*/ /*before*/_foo4 /*after*/. /*before*/bar) /*after*/( /*before*/_foo2 /*after*/. /*before*/default /*after*/, /*before*/_foo5 /*after*/. /*before*/foo /*after*/);
 
 /* my comment */
-/*before*/_foo5.foo /*after*/;
-/*before*/_foo2.default /*after*/;
+/*before*/_foo5 /*after*/. /*before*/foo /*after*/;
+/*before*/_foo2 /*after*/. /*before*/default /*after*/;

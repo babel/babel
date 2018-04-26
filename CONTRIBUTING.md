@@ -195,6 +195,15 @@ If you need to check for an error that is thrown you can add to the `options.jso
 }
 ```
 
+If the test requires a minimum Node version, you can add `minNodeVersion` (must be in semver format).
+
+```js
+// options.json example
+{
+  "minNodeVersion": "5.0.0"
+}
+```
+
 #### Bootstrapping expected output
 
 For both `babel-plugin-x` and `babylon`, you can easily generate an `expected.js`/`expected.json` automatically by just providing `actual.js` and running the tests as you usually would.

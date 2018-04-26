@@ -1,0 +1,16 @@
+{
+  "file": "strict/import/expected.js",
+  "mappings": ";;AAAA;;AAKAA;AACAC;AACAC;AACA",
+  "names": [
+    "foo",
+    "foo2",
+    "foo3"
+  ],
+  "sources": [
+    "strict/import/actual.js"
+  ],
+  "sourcesContent": [
+    "import foo from \"foo\";\nimport { default as foo2 } from \"foo\";\nimport { foo3 } from \"foo\";\nimport * as foo4 from \"foo\";\n\nfoo;\nfoo2;\nfoo3;\nfoo3();"
+  ],
+  "version": 3
+}

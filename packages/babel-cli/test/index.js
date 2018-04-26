@@ -9,6 +9,9 @@ const merge          = require("lodash/merge");
 const path           = require("path");
 const chai           = require("chai");
 const fs             = require("fs");
+const semver         = require("semver");
+
+const nodeVersion = semver.clean(process.version.slice(1));
 
 const fixtureLoc = path.join(__dirname, "fixtures");
 const tmpLoc = path.join(__dirname, "tmp");
@@ -172,6 +175,22 @@ fs.readdirSync(fixtureLoc).forEach(function (binName) {
       if (fs.existsSync(babelrcLoc)) {
         // copy .babelrc file to tmp directory
         opts.inFiles[".babelrc"] = helper.readFile(babelrcLoc);
+      }
+
+      // If there's node requirement, check it before pushing task
+      if (opts.minNodeVersion) {
+        const minimumVersion = semver.clean(opts.minNodeVersion);
+
+        if (minimumVersion == null) {
+          throw new Error(`'minNodeVersion' has invalid semver format: ${opts.minNodeVersion}`);
+        }
+
+        if (semver.lt(nodeVersion, minimumVersion)) {
+          return;
+        }
+
+        // Delete to avoid option validation error
+        delete opts.minNodeVersion;
       }
 
       it(testName, buildTest(binName, testName, opts));

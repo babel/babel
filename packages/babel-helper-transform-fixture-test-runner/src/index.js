@@ -165,6 +165,7 @@ export default function (
             suppressDeprecationMessages: true,
             babelrc: false,
             sourceMap: !!(task.sourceMappings || task.sourceMap),
+            inputSourceMap: task.inputSourceMap || undefined,
           });
 
           extend(task.options, taskOpts);
