@@ -33,7 +33,7 @@ export default declare((api, opts) => {
       syntaxImportMeta,
       transformAsyncGeneratorFunctions,
       [transformClassProperties, { loose }],
-      [transformObjectRestSpread, { useBuiltIns }],
+      [transformObjectRestSpread, { loose, useBuiltIns }],
       transformOptionalCatchBinding,
       transformUnicodePropertyRegex,
     ],
