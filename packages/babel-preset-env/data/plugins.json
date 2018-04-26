@@ -229,23 +229,27 @@
     "firefox": "55",
     "safari": "11.1",
     "node": "8.3",
+    "ios": "11.3",
     "opera": "47",
     "electron": "2"
   },
   "proposal-unicode-property-regex": {
     "chrome": "64",
     "safari": "11.1",
+    "ios": "11.3",
     "opera": "51"
   },
   "transform-dotall-regex": {
     "chrome": "62",
     "safari": "11.1",
+    "ios": "11.3",
     "opera": "49"
   },
   "proposal-optional-catch-binding": {
     "chrome": "66",
     "firefox": "58",
     "safari": "11.1",
+    "ios": "11.3",
     "opera": "53"
   }
 }

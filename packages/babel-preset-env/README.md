@@ -8,7 +8,7 @@ npm install @babel/preset-env --save-dev
 
 Without any configuration options, @babel/preset-env behaves exactly the same as @babel/preset-latest (or @babel/preset-es2015, @babel/preset-es2016, and @babel/preset-es2017 together).
 
-> We don't recommend using `preset-env` this way because it doesn't take advantage of it's greater capabilities of targeting specific browsers.
+> We don't recommend using `preset-env` this way because it doesn't take advantage of its ability to target specific browsers.
 
 ```json
 {
@@ -426,15 +426,11 @@ The following are currently supported:
 
 **Builtins**
 
-- [Promise.prototype.finally](https://github.com/tc39/proposal-promise-finally)
-- [Symbol.asyncIterator](https://github.com/tc39/proposal-async-iteration)
+- None
 
 **Features**
 
-- [Asynchronous Iterators](https://github.com/tc39/proposal-async-iteration)
-- [Object rest/spread properties](https://github.com/tc39/proposal-object-rest-spread)
 - [Optional catch binding](https://github.com/tc39/proposal-optional-catch-binding)
-- [Unicode property escapes in regular expressions](https://github.com/tc39/proposal-regexp-unicode-property-escapes)
 
 ---
 
