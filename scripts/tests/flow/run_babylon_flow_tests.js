@@ -100,10 +100,11 @@ function update_whitelist(summary) {
 
 const options = {
   plugins: [
-    "jsx",
+    "asyncGenerators",
+    "dynamicImport",
     "flow",
     "flowComments",
-    "asyncGenerators",
+    "jsx",
     "objectRestSpread",
   ],
   sourceType: "module",
