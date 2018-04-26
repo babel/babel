@@ -199,7 +199,10 @@ export default declare((api, options) => {
           }
 
           const state = { scope: constructor.scope };
-          for (const prop of props) prop.traverse(referenceVisitor, state);
+          for (const prop of props) {
+            if (prop.node.static) continue;
+            prop.traverse(referenceVisitor, state);
+          }
 
           //
 
