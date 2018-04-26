@@ -46,7 +46,7 @@ export const definitions = {
     Number: ["es.number.constructor"],
     RegExp: ["es.regexp.constructor"],
     Symbol: ["es.object.to-string", "es.symbol"],
-    Promise: ["es.object.to-string", "es.promise"],
+    Promise: ["es.object.to-string", "es.promise.finally", "es.promise"],
     Map: ["es.map"].concat(CommonIterators),
     Set: ["es.set"].concat(CommonIterators),
     WeakMap: ["es.weak-map"].concat(CommonIterators),
