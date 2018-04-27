@@ -7,12 +7,6 @@ export default function mergeSourceMap(
   const input = buildMappingData(inputMap);
   const output = buildMappingData(map);
 
-  // Babel-generated maps always map to a single input filename.
-  if (output.sources.length !== 1) {
-    throw new Error("Assertion failure - expected a single output file");
-  }
-  const defaultSource = output.sources[0];
-
   const mergedGenerator = new sourceMap.SourceMapGenerator();
   for (const { source } of input.sources) {
     if (typeof source.content === "string") {
@@ -20,66 +14,70 @@ export default function mergeSourceMap(
     }
   }
 
-  const insertedMappings = new Map();
+  // Babel-generated maps always map to a single input filename.
+  if (output.sources.length === 1) {
+    const defaultSource = output.sources[0];
+    const insertedMappings = new Map();
 
-  // Process each generated range in the input map, e.g. each range over the
-  // code that Babel was originally given.
-  eachInputGeneratedRange(input, (generated, original, source) => {
-    // Then pick out each range over Babel's _output_ that corresponds with
-    // the given range on the code given to Babel.
-    eachOverlappingGeneratedOutputRange(defaultSource, generated, (item) => {
-      // It's possible that multiple input ranges will overlap the same
-      // generated range. Since sourcemap don't traditionally represent
-      // generated locations with multiple original locations, we explicitly
-      // skip generated locations once we've seen them the first time.
-      const key = makeMappingKey(item);
-      if (insertedMappings.has(key)) return;
-      insertedMappings.set(key, item);
+    // Process each generated range in the input map, e.g. each range over the
+    // code that Babel was originally given.
+    eachInputGeneratedRange(input, (generated, original, source) => {
+      // Then pick out each range over Babel's _output_ that corresponds with
+      // the given range on the code given to Babel.
+      eachOverlappingGeneratedOutputRange(defaultSource, generated, (item) => {
+        // It's possible that multiple input ranges will overlap the same
+        // generated range. Since sourcemap don't traditionally represent
+        // generated locations with multiple original locations, we explicitly
+        // skip generated locations once we've seen them the first time.
+        const key = makeMappingKey(item);
+        if (insertedMappings.has(key)) return;
+        insertedMappings.set(key, item);
 
-      mergedGenerator.addMapping({
-        source: source.path,
-        original: {
-          line: original.line,
-          column: original.columnStart,
-        },
-        generated: {
-          line: item.line,
-          column: item.columnStart,
-        },
-        name: original.name,
+        mergedGenerator.addMapping({
+          source: source.path,
+          original: {
+            line: original.line,
+            column: original.columnStart,
+          },
+          generated: {
+            line: item.line,
+            column: item.columnStart,
+          },
+          name: original.name,
+        });
       });
     });
-  });
 
-  // Since mappings are manipulated using single locations, but are interpreted
-  // as ranges, the insertions above may not actually have their ending
-  // locations mapped yet. Here be go through each one and ensure that it has
-  // a well-defined ending location, if one wasn't already created by the start
-  // of a different range.
-  for (const item of insertedMappings.values()) {
-    if (item.columnEnd === Infinity) {
-      continue;
+    // Since mappings are manipulated using single locations, but are
+    // interpreted as ranges, the insertions above may not actually have their
+    // ending locations mapped yet. Here be go through each one and ensure
+    // that it has a well-defined ending location, if one wasn't already
+    // created by the start of a different range.
+    for (const item of insertedMappings.values()) {
+      if (item.columnEnd === Infinity) {
+        continue;
+      }
+
+      const clearItem = {
+        line: item.line,
+        columnStart: item.columnEnd,
+      };
+
+      const key = makeMappingKey(clearItem);
+      if (insertedMappings.has(key)) {
+        continue;
+      }
+
+      // Insert mappings with no original position to terminate any mappings
+      // that were found above, so that they don't expand beyond their correct
+      // range.
+      mergedGenerator.addMapping({
+        generated: {
+          line: clearItem.line,
+          column: clearItem.columnStart,
+        },
+      });
     }
-
-    const clearItem = {
-      line: item.line,
-      columnStart: item.columnEnd,
-    };
-
-    const key = makeMappingKey(clearItem);
-    if (insertedMappings.has(key)) {
-      continue;
-    }
-
-    // Insert mappings with no original position to terminate any mappings
-    // that were found above, so that they don't expand beyond their correct
-    // range.
-    mergedGenerator.addMapping({
-      generated: {
-        line: clearItem.line,
-        column: clearItem.columnStart,
-      },
-    });
   }
 
   const result = mergedGenerator.toJSON();
