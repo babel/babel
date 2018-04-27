@@ -1,5 +1,12 @@
-import { loadOptions } from "../lib";
+import { loadOptions as loadOptionsOrig } from "../lib";
 import path from "path";
+
+function loadOptions(opts) {
+  return loadOptionsOrig({
+    cwd: __dirname,
+    ...opts,
+  });
+}
 
 describe("option-manager", () => {
   it("throws for babel 5 plugin", () => {

@@ -88,14 +88,21 @@ export function runCodeInTestContext(
     exports: {},
   };
 
-  // Expose the test options as "opts", but otherwise run the test in a CommonJS-like environment.
-  // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
-  // rely on 'this === global'.
-  const src = `(function(exports, require, module, __filename, __dirname, opts) {${code}\n});`;
-  return vm.runInContext(src, testContext, {
-    filename,
-    displayErrors: true,
-  })(module.exports, req, module, filename, dirname, opts);
+  const oldCwd = process.cwd();
+  try {
+    if (opts.filename) process.chdir(path.dirname(opts.filename));
+
+    // Expose the test options as "opts", but otherwise run the test in a CommonJS-like environment.
+    // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
+    // rely on 'this === global'.
+    const src = `(function(exports, require, module, __filename, __dirname, opts) {${code}\n});`;
+    return vm.runInContext(src, testContext, {
+      filename,
+      displayErrors: true,
+    })(module.exports, req, module, filename, dirname, opts);
+  } finally {
+    process.chdir(oldCwd);
+  }
 }
 
 function wrapPackagesArray(type, names, optionsDir) {
@@ -320,6 +327,7 @@ function run(task) {
   function getOpts(self) {
     const newOpts = merge(
       {
+        cwd: path.dirname(self.filename),
         filename: self.loc,
         filenameRelative: self.filename,
         sourceFileName: self.filename,

@@ -42,15 +42,6 @@ function webpackBuild(opts) {
             // Use the bundled config so that module syntax is passed through
             // for Webpack.
             envName: "standalone",
-
-            // Some of the node_modules may have their own "babel" section in
-            // their project.json (or a ".babelrc" file). We need to ignore
-            // those as we're using our own Babel options.
-            babelrc: false,
-
-            // We explicitly load the `.babelrc.js` file since searching is
-            // turned off, but we still want to use the main config.
-            extends: "./.babelrc.js",
           },
         },
       ],
