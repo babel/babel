@@ -26,7 +26,7 @@ This example only includes the polyfills and code transforms needed for coverage
     ["@babel/preset-env", {
       "targets": {
         // The % refers to the global coverage of users from browserslist
-        "browsers": [ ">0.25%", "not ie 11", "not op_mini all"]
+        "browsers": [ ">0.25%", "not dead"]
       }
     }]
   ]
