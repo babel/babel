@@ -58,26 +58,27 @@ export default declare((api, options) => {
   // restricted visitor (which doesn't traverse the inner class's inner scope).
   const privateNameVisitor = {
     PrivateName(path) {
+      const { name } = this;
       const { node, parentPath } = path;
-      if (parentPath.isMemberExpression({ property: node })) {
-        this.handle(parentPath);
-      }
+
+      if (!parentPath.isMemberExpression({ property: node })) return;
+      if (node.id.name !== name) return;
+      this.handle(parentPath);
     },
 
     Class(path) {
       const { name } = this;
-      const { body } = path.node.body;
+      const body = path.get("body.body");
 
       for (const prop of body) {
-        if (prop.isClassPrivateProperty()) {
-          if (prop.node.key.id.name === name) {
-            // This class redeclares the private name.
-            // So, we can only evaluate the things in the outer scope.
-            path.traverse(privateNameInnerVisitor, this);
-            path.skip();
-            break;
-          }
-        }
+        if (!prop.isClassPrivateProperty()) continue;
+        if (prop.node.key.id.name !== name) continue;
+
+        // This class redeclares the private name.
+        // So, we can only evaluate the things in the outer scope.
+        path.traverse(privateNameInnerVisitor, this);
+        path.skip();
+        break;
       }
     },
   };
