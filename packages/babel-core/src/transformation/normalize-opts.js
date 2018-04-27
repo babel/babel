@@ -6,7 +6,10 @@ import type { ResolvedConfig } from "../config";
 export default function normalizeOptions(config: ResolvedConfig): {} {
   const {
     filename,
-    filenameRelative = filename || "unknown",
+    cwd,
+    filenameRelative = typeof filename === "string"
+      ? path.relative(cwd, filename)
+      : "unknown",
     sourceType = "module",
     inputSourceMap,
     sourceMaps = !!inputSourceMap,
@@ -14,7 +17,7 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
     moduleRoot,
     sourceRoot = moduleRoot,
 
-    sourceFileName = filenameRelative,
+    sourceFileName = path.basename(filenameRelative),
 
     comments = true,
     compact = "auto",
