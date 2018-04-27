@@ -27,6 +27,7 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
 
   const options = {
     ...opts,
+
     parserOpts: {
       sourceType:
         path.extname(filenameRelative) === ".mjs" ? "module" : sourceType,
