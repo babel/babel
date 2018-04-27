@@ -396,10 +396,12 @@ describe("api", function() {
 
   it("default source map filename", function() {
     return transformAsync("var a = 10;", {
+      cwd: "/some/absolute",
       filename: "/some/absolute/file/path.js",
       sourceMaps: true,
     }).then(function(result) {
-      expect(result.map.sources).toEqual(["path.js"]);
+      expect(result.map.sources).toEqual(["file/path.js"]);
+      expect(result.map.file).toEqual("file/path.js");
     });
   });
 

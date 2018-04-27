@@ -19,6 +19,7 @@ export default class SourceMap {
   get() {
     if (!this._cachedMap) {
       const map = (this._cachedMap = new sourceMap.SourceMapGenerator({
+        file: this._opts.filename,
         sourceRoot: this._opts.sourceRoot,
       }));
 

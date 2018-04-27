@@ -6,7 +6,10 @@ import type { ResolvedConfig } from "../config";
 export default function normalizeOptions(config: ResolvedConfig): {} {
   const {
     filename,
-    filenameRelative = filename || "unknown",
+    cwd,
+    filenameRelative = typeof filename === "string"
+      ? path.relative(cwd, filename)
+      : "unknown",
     sourceType = "module",
     inputSourceMap,
     sourceMaps = !!inputSourceMap,
@@ -14,7 +17,7 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
     moduleRoot,
     sourceRoot = moduleRoot,
 
-    sourceFileName = path.basename(filenameRelative),
+    sourceFileName = filenameRelative,
 
     comments = true,
     compact = "auto",
@@ -24,7 +27,6 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
 
   const options = {
     ...opts,
-
     parserOpts: {
       sourceType:
         path.extname(filenameRelative) === ".mjs" ? "module" : sourceType,
@@ -36,7 +38,7 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
 
     generatorOpts: {
       // General generator flags.
-      filename,
+      filename: filenameRelative,
 
       auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
       auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
