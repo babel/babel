@@ -260,6 +260,10 @@ export default declare(api => {
   }
 
   function isImportTypeOnly(binding, programPath) {
+    if (!binding.referencePaths.length) {
+      return false;
+    }
+
     for (const path of binding.referencePaths) {
       if (!isInType(path)) {
         return false;
