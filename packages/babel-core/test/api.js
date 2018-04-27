@@ -400,7 +400,7 @@ describe("api", function() {
       filename: "/some/absolute/file/path.js",
       sourceMaps: true,
     }).then(function(result) {
-      expect(result.map.sources).toEqual(["file/path.js"]);
+      expect(result.map.sources).toEqual(["path.js"]);
     });
   });
 
