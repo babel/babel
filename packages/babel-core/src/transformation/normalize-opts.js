@@ -38,7 +38,7 @@ export default function normalizeOptions(config: ResolvedConfig): {} {
 
     generatorOpts: {
       // General generator flags.
-      filename: filenameRelative,
+      filename,
 
       auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
       auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
