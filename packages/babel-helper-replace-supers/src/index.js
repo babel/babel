@@ -70,9 +70,8 @@ const visitor = traverse.visitors.merge([
   },
 ]);
 
-const memoized = new WeakMap();
 const specHandlers = {
-  memoize(superMember) {
+  memoise(superMember, count) {
     const { scope, node } = superMember;
     const { computed, property } = node;
     if (!computed) {
@@ -84,44 +83,34 @@ const specHandlers = {
       return;
     }
 
-    memoized.set(property, memo);
+    this.memoiser.set(property, memo, count);
+  },
+
+  prop(superMember) {
+    const { computed, property } = superMember.node;
+    if (this.memoiser.has(property)) {
+      return t.cloneNode(this.memoiser.get(property));
+    }
+
+    if (computed) {
+      return t.cloneNode(property);
+    }
+
+    return t.stringLiteral(property.name);
   },
 
   get(superMember) {
-    const { computed, property } = superMember.node;
-    const thisExpr = t.thisExpression();
-
-    let prop;
-    if (computed && memoized.has(property)) {
-      prop = t.cloneNode(memoized.get(property));
-    } else {
-      prop = computed ? property : t.stringLiteral(property.name);
-    }
-
     return t.callExpression(this.file.addHelper("get"), [
       getPrototypeOfExpression(this.getObjectRef(), this.isStatic, this.file),
-      prop,
-      thisExpr,
+      this.prop(superMember),
+      t.thisExpression(),
     ]);
   },
 
   set(superMember, value) {
-    const { computed, property } = superMember.node;
-
-    let prop;
-    if (computed && memoized.has(property)) {
-      prop = t.assignmentExpression(
-        "=",
-        t.cloneNode(memoized.get(property)),
-        property,
-      );
-    } else {
-      prop = computed ? property : t.stringLiteral(property.name);
-    }
-
     return t.callExpression(this.file.addHelper("set"), [
       getPrototypeOfExpression(this.getObjectRef(), this.isStatic, this.file),
-      prop,
+      this.prop(superMember),
       value,
       t.thisExpression(),
       t.booleanLiteral(superMember.isInStrictMode()),
@@ -134,12 +123,21 @@ const specHandlers = {
 };
 
 const looseHandlers = {
-  memoize: specHandlers.memoize,
-  call: specHandlers.call,
+  ...specHandlers,
+
+  prop(superMember) {
+    const { property } = superMember.node;
+    if (this.memoiser.has(property)) {
+      return t.cloneNode(this.memoiser.get(property));
+    }
+
+    return t.cloneNode(property);
+  },
 
   get(superMember) {
     const { isStatic, superRef } = this;
-    const { property, computed } = superMember.node;
+    const { computed } = superMember.node;
+    const prop = this.prop(superMember);
 
     let object;
     if (isStatic) {
@@ -155,29 +153,12 @@ const looseHandlers = {
         : t.memberExpression(t.identifier("Object"), t.identifier("prototype"));
     }
 
-    let prop;
-    if (computed && memoized.has(property)) {
-      prop = t.cloneNode(memoized.get(property));
-    } else {
-      prop = property;
-    }
-
     return t.memberExpression(object, prop, computed);
   },
 
   set(superMember, value) {
-    const { property, computed } = superMember.node;
-
-    let prop;
-    if (computed && memoized.has(property)) {
-      prop = t.assignmentExpression(
-        "=",
-        t.cloneNode(memoized.get(property)),
-        property,
-      );
-    } else {
-      prop = property;
-    }
+    const { computed } = superMember.node;
+    const prop = this.prop(superMember);
 
     return t.assignmentExpression(
       "=",

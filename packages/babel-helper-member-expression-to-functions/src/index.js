@@ -1,6 +1,31 @@
 import * as t from "@babel/types";
 
+class AssignmentMemoiser extends WeakMap {
+  get(key) {
+    if (!this.has(key)) return;
+
+    const record = super.get(key);
+    const { value } = record;
+
+    record.count--;
+    if (record.count === 0) {
+      // The `count` access is the outermost function call (hopefully), so it
+      // does the assignment.
+      return t.assignmentExpression("=", value, key);
+    }
+    return value;
+  }
+
+  set(key, value, count) {
+    return super.set(key, { count, value });
+  }
+}
+
 const handle = {
+  memoise() {
+    // noop.
+  },
+
   handle(member) {
     const { node, parent, parentPath } = member;
 
@@ -9,11 +34,10 @@ const handle = {
     if (parentPath.isUpdateExpression({ argument: node })) {
       const { operator, prefix } = parent;
 
-      // Give the state handler a chance to memoize the member,
-      // since we'll reference it twice.
-      if (this.memoize) {
-        this.memoize(member);
-      }
+      // Give the state handler a chance to memoise the member, since we'll
+      // reference it twice. The second access (the set) should do the memo
+      // assignment.
+      this.memoise(member, 2);
 
       const value = t.binaryExpression(
         operator[0],
@@ -44,11 +68,10 @@ const handle = {
       let value = right;
 
       if (operator !== "=") {
-        // Give the state handler a chance to memoize the member,
-        // since we'll reference it twice.
-        if (this.memoize) {
-          this.memoize(member);
-        }
+        // Give the state handler a chance to memoise the member, since we'll
+        // reference it twice. The second access (the set) should do the memo
+        // assignment.
+        this.memoise(member, 2);
 
         value = t.binaryExpression(
           operator.slice(0, -1),
@@ -79,11 +102,12 @@ const handle = {
 // it wishes to be transformed.
 // Additionally, the caller must pass in a state object with at least
 // get, set, and call methods.
-// Optionally, a memoize method may be defined on the state, which will be
+// Optionally, a memoise method may be defined on the state, which will be
 // called when the member is a self-referential update.
 export default function memberExpressionToFunctions(path, visitor, state) {
   path.traverse(visitor, {
-    ...state,
     ...handle,
+    ...state,
+    memoiser: new AssignmentMemoiser(),
   });
 }
