@@ -401,7 +401,6 @@ describe("api", function() {
       sourceMaps: true,
     }).then(function(result) {
       expect(result.map.sources).toEqual(["file/path.js"]);
-      expect(result.map.file).toEqual("file/path.js");
     });
   });
 
