@@ -1,6 +1,6 @@
 {
   "lerna": "2.0.0-beta.38",
-  "version": "6.26.2",
+  "version": "6.26.3",
   "changelog": {
     "repo": "babel/babel",
     "labels": {

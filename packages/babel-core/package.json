@@ -1,6 +1,6 @@
 {
   "name": "babel-core",
-  "version": "6.26.2",
+  "version": "6.26.3",
   "description": "Babel compiler core.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
