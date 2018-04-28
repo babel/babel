@@ -34,7 +34,7 @@ jobs:
   build:
     working_directory: ~/babel
     docker:
-      - image: circleci/node:9
+      - image: circleci/node:latest
     steps:
       - checkout
       - restore-cache: *restore-yarn-cache
