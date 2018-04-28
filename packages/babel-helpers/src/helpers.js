@@ -993,8 +993,8 @@ helpers.classPrivateFieldGet = () => template.program.ast`
   }
 `;
 
-helpers.classPrivateFieldPut = () => template.program.ast`
-  export default function _classPrivateFieldPut(receiver, privateMap, value) {
+helpers.classPrivateFieldSet = () => template.program.ast`
+  export default function _classPrivateFieldSet(receiver, privateMap, value) {
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to set private field on non-instance");
     }

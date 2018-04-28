@@ -331,18 +331,28 @@ export default declare((api, options) => {
           }
         }
 
+        // Transform private props before publics.
+        const privates = [];
+        const privateInits = [];
+        for (const prop of props) {
+          const inits = [];
+          privateInits.push(inits);
+
+          if (prop.isPrivate()) {
+            privates.push(
+              buildClassPrivateProperty(t.thisExpression(), prop, inits, state),
+            );
+          }
+        }
+
+        let p = 0;
         for (const prop of props) {
           if (prop.node.static) {
             staticNodes.push(buildClassProperty(t.cloneNode(ref), prop, state));
           } else if (prop.isPrivate()) {
-            instanceBody.push(
-              buildClassPrivateProperty(
-                t.thisExpression(),
-                prop,
-                staticNodes,
-                state,
-              ),
-            );
+            instanceBody.push(privates[p]);
+            staticNodes.push(...privateInits[p]);
+            p++;
           } else {
             instanceBody.push(
               buildClassProperty(t.thisExpression(), prop, state),
