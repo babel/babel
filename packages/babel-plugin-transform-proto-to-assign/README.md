@@ -38,7 +38,7 @@ bar.__proto__ = foo;
 **Out**
 
 ```javascript
-var _defaults = ...;
+function _defaults(obj, defaults) { ... }
 
 _defaults(bar, foo);
 ```
@@ -74,3 +74,7 @@ require("@babel/core").transform("code", {
   plugins: ["@babel/plugin-transform-proto-to-assign"]
 });
 ```
+
+## References
+
+* [MDN: Object.prototype.\_\_proto\_\_](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto)

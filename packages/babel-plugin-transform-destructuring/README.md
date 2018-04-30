@@ -7,17 +7,25 @@
 **In**
 
 ```javascript
-let arr = [1,2,3];
-let {x, y, z} = arr;
+let {x, y} = obj;
+
+let [a, b, ...rest] = arr;
 ```
 
 **Out**
 
 ```javascript
-var arr = [1, 2, 3];
-var x = arr.x,
-    y = arr.y,
-    z = arr.z;
+function _toArray(arr) { ... }
+
+let _obj = obj,
+    x = _obj.x,
+    y = _obj.y;
+
+let _arr = arr,
+    _arr2 = _toArray(_arr),
+    a = _arr2[0],
+    b = _arr2[1],
+    rest = _arr2.slice(2);
 ```
 
 ## Installation
@@ -90,3 +98,7 @@ var { ...x } = z;
 var _z = z,
     x = Object.assign({}, _z);
 ```
+
+## References
+
+* [MDN: Destructuring assignment](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment)

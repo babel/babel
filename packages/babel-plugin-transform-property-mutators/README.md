@@ -9,7 +9,10 @@
 ```javascript
 var foo = {
   get bar() {
-    return "bar";
+    return this._bar;
+  },
+  set bar(value) {
+    this._bar = value;
   }
 };
 ```
@@ -20,10 +23,13 @@ var foo = {
 var foo = Object.defineProperties({}, {
   bar: {
     get: function () {
-      return "bar";
+      return this._bar;
     },
-    enumerable: true,
-    configurable: true
+    set: function (value) {
+      this._bar = value;
+    },
+    configurable: true,
+    enumerable: true
   }
 });
 ```
