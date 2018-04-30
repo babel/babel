@@ -18,22 +18,18 @@ Without any configuration options, @babel/preset-env behaves exactly the same as
 
 You can also configure it to only include the polyfills and transforms needed for the browsers you support. Compiling only what's needed can make your bundles smaller and your life easier.
 
-This example only includes the polyfills and code transforms needed for coverage of users > 0.25%, ignoring Internet Explorer 11 and Opera Mini. We use [browserslist](https://github.com/ai/browserslist) to parse this information, so you can use [any valid query format supported by browserslist](https://github.com/ai/browserslist#queries).
+If you want to specify own target browsers, we recommend to target specific browsers, we recommend using a [`.browserslistrc`](https://github.com/browserslist/browserslist) config, which is also used by many tools including Autoprefixer.
 
-```js
-{
-  "presets": [
-    ["@babel/preset-env", {
-      "targets": {
-        // The % refers to the global coverage of users from browserslist
-        "browsers": [ ">0.25%", "not dead"]
-      }
-    }]
-  ]
-}
+For example, to only include polyfills and code transforms needed for users whose browsers have >0.25% market share (ignoring browsers without security updates like IE 10 and BlackBerry):
+
+```
+> 0.25%
+not dead
 ```
 
-> You can also target individual versions of browsers instead of using a query with `"targets": { "chrome": "66" }`.
+The full list of queries could be found in [Browserslist docs](https://github.com/browserslist/browserslist#queries).
+
+If you need to use different browsers for Babel, you can also specify Browserslist queries in the [targets.browsers option](https://github.com/babel/babel/tree/master/packages/babel-preset-env#targetsbrowsers) in your Babel config.
 
 You may also target browsers supporting ES Modules (https://www.ecma-international.org/ecma-262/6.0/#sec-modules). When specifying this option, the browsers field will be ignored. You can use this approach in combination with `<script type="module"></script>` to conditionally serve smaller scripts to users (https://jakearchibald.com/2017/es-modules-in-browsers/#nomodule-for-backwards-compatibility).
 
@@ -51,7 +47,7 @@ You may also target browsers supporting ES Modules (https://www.ecma-internation
 }
 ```
 
-Similarly, if you're targeting Node.js instead of the browser, you can configure @babel/preset-env to only include the polyfills and transforms necessary for a particular version:
+Similarly, if you're targeting Node.js instead of the browser, you can configure `@babel/preset-env` to only include the polyfills and transforms necessary for a particular version:
 
 ```json
 {
