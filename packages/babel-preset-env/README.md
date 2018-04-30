@@ -18,8 +18,6 @@ Without any configuration options, @babel/preset-env behaves exactly the same as
 
 You can also configure it to only include the polyfills and transforms needed for the browsers you support. Compiling only what's needed can make your bundles smaller and your life easier.
 
-By default, it includes the polyfills and code transforms needed for [this modern browsers](http://browserl.ist/?q=defaults).
-
 If you want to specify own target browsers, we recommend to use [`.browserslistrc`](https://github.com/browserslist/browserslist) config. This config is used by many tools including Autoprefixer.
 
 This example only includes the polyfills and code transforms needed for coverage of users > 0.25%, ignoring browsers without security updates like IE Internet Explorer 10 and BlackBerry.
