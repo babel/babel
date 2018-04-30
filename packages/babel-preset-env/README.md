@@ -29,7 +29,7 @@ not dead
 
 The full list of queries could be found in [Browserslist docs](https://github.com/browserslist/browserslist#queries).
 
-If you need to use different browsers for Autoprefixer and Babel, you can use `browsers` options of each tool.
+If you need to use different browsers for Babel, you can specify Browserslist queries in `targets.browsers` option.
 
 You may also target browsers supporting ES Modules (https://www.ecma-international.org/ecma-262/6.0/#sec-modules). When specifying this option, the browsers field will be ignored. You can use this approach in combination with `<script type="module"></script>` to conditionally serve smaller scripts to users (https://jakearchibald.com/2017/es-modules-in-browsers/#nomodule-for-backwards-compatibility).
 
@@ -47,7 +47,7 @@ You may also target browsers supporting ES Modules (https://www.ecma-internation
 }
 ```
 
-Similarly, if you're targeting Node.js instead of the browser, you can configure @babel/preset-env to only include the polyfills and transforms necessary for a particular version:
+Similarly, if you're targeting Node.js instead of the browser, you can configure `@babel/preset-env` to only include the polyfills and transforms necessary for a particular version:
 
 ```json
 {
