@@ -8,14 +8,20 @@
 
 ```js
 var a = ['a', 'b', 'c'];
+
 var b = [...a, 'foo'];
+
+var c = foo(...a);
 ```
 
 **Out**
 
 ```js
-var a = [ 'a', 'b', 'c' ];
-var b = a.concat([ 'foo' ]);
+var a = ['a', 'b', 'c'];
+
+var b = a.concat(['foo']);
+
+var c = foo.apply(void 0, a);
 ```
 
 ## Installation
@@ -71,3 +77,7 @@ require("@babel/core").transform("code", {
 `boolean`, defaults to `false`.
 
 In loose mode, **all** iterables are assumed to be arrays.
+
+## References
+
+* [MDN: Spread syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax)

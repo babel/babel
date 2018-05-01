@@ -4,25 +4,20 @@
 
 ## Example
 
-```js
-// x ** y
+**In**
 
-let squared = 2 ** 2;
-// same as: 2 * 2
+```javascript
+let x = 10 ** 2;
 
-let cubed = 2 ** 3;
-// same as: 2 * 2 * 2
+x **= 3;
+```
 
+**Out**
 
-// x **= y
+```javascript
+let x = Math.pow(10, 2);
 
-let a = 2;
-a **= 2;
-// same as: a = a * a;
-
-let b = 3;
-b **= 3;
-// same as: b = b * b * b;
+x = Math.pow(x, 3);
 ```
 
 ## Installation
