@@ -13,3 +13,4 @@ lockComment: false
 #   - no-locking
 # Limit to only `issues` or `pulls`
 # only: issues
+lockLabel: 'outdated'
