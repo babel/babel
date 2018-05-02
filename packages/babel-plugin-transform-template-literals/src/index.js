@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import annotateAsPure from "@babel/helper-annotate-as-pure";
 import { types as t } from "@babel/core";
 
 export default declare((api, options) => {
@@ -83,19 +82,27 @@ export default declare((api, options) => {
           callExpressionInput.push(t.arrayExpression(raws));
         }
 
-        const init = t.callExpression(helperId, callExpressionInput);
-        annotateAsPure(init);
-        init._compact = true;
         scope.push({
           id: templateObject,
-          init,
           // This ensures that we don't fail if not using function expression helpers
           _blockHoist: 1.9,
         });
 
+        const lazyLoad = t.logicalExpression(
+          "||",
+          t.cloneNode(templateObject),
+          t.callExpression(helperId, callExpressionInput),
+        );
+
+        const conditionalAssignment = t.assignmentExpression(
+          "=",
+          t.cloneNode(templateObject),
+          lazyLoad,
+        );
+
         path.replaceWith(
           t.callExpression(node.tag, [
-            t.cloneNode(templateObject),
+            t.parenthesizedExpression(conditionalAssignment),
             ...quasi.expressions,
           ]),
         );
