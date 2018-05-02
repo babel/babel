@@ -6,4 +6,4 @@ var _taggedTemplateLiteral2 = _interopRequireDefault(require("@babel/runtime/hel
 
 var _templateObject;
 
-tag((_templateObject = _templateObject || (0, _taggedTemplateLiteral2.default)(["foo"])));
+tag(_templateObject = _templateObject || /*#__PURE__*/ (0, _taggedTemplateLiteral2.default)(["foo"]));
