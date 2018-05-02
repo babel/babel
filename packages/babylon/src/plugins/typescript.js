@@ -2089,6 +2089,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     canHaveLeadingDecorator() {
-      return this.isAbstractClass() || super.canHaveLeadingDecorator();
+      // Avoid unnecessary lookahead in checking for abstract class unless needed!
+      return super.canHaveLeadingDecorator() || this.isAbstractClass();
     }
   };
