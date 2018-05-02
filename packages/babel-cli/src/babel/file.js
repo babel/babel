@@ -7,12 +7,8 @@ import fs from "fs";
 
 import * as util from "./util";
 
-export default function({ cliOptions, babelOptions }) {
-  const filenames = cliOptions.filenames;
-
-  let results = [];
-
-  const buildResult = function() {
+export default async function({ cliOptions, babelOptions }) {
+  function buildResult(fileResults) {
     const map = new sourceMap.SourceMapGenerator({
       file:
         cliOptions.sourceMapTarget ||
@@ -24,7 +20,9 @@ export default function({ cliOptions, babelOptions }) {
     let code = "";
     let offset = 0;
 
-    results.forEach(function(result) {
+    for (const result of fileResults) {
+      if (!result) continue;
+
       code += result.code + "\n";
 
       if (result.map) {
@@ -59,7 +57,7 @@ export default function({ cliOptions, babelOptions }) {
 
         offset = code.split("\n").length - 1;
       }
-    });
+    }
 
     // add the inline sourcemap comment if we've either explicitly asked for inline source
     // maps, or we've requested them without any output file
@@ -74,10 +72,10 @@ export default function({ cliOptions, babelOptions }) {
       map: map,
       code: code,
     };
-  };
+  }
 
-  const output = function() {
-    const result = buildResult();
+  function output(fileResults) {
+    const result = buildResult(fileResults);
 
     if (cliOptions.outFile) {
       // we've requested for a sourcemap to be written to disk
@@ -91,40 +89,45 @@ export default function({ cliOptions, babelOptions }) {
     } else {
       process.stdout.write(result.code + "\n");
     }
-  };
+  }
 
-  const stdin = function() {
-    let code = "";
+  function readStdin() {
+    return new Promise((resolve, reject) => {
+      let code = "";
 
-    process.stdin.setEncoding("utf8");
+      process.stdin.setEncoding("utf8");
 
-    process.stdin.on("readable", function() {
-      const chunk = process.stdin.read();
-      if (chunk !== null) code += chunk;
+      process.stdin.on("readable", function() {
+        const chunk = process.stdin.read();
+        if (chunk !== null) code += chunk;
+      });
+
+      process.stdin.on("end", function() {
+        resolve(code);
+      });
+      process.stdin.on("error", reject);
     });
+  }
 
-    process.stdin.on("end", function() {
-      util.transform(
-        cliOptions.filename,
-        code,
-        defaults(
-          {
-            sourceFileName: "stdin",
-          },
-          babelOptions,
-        ),
-        function(err, res) {
-          if (err) throw err;
-          results.push(res);
-          output();
+  async function stdin() {
+    const code = await readStdin();
+
+    const res = await util.transform(
+      cliOptions.filename,
+      code,
+      defaults(
+        {
+          sourceFileName: "stdin",
         },
-      );
-    });
-  };
+        babelOptions,
+      ),
+    );
 
-  const walk = function() {
+    output([res]);
+  }
+
+  async function walk(filenames) {
     const _filenames = [];
-    results = [];
 
     filenames.forEach(function(filename) {
       if (!fs.existsSync(filename)) return;
@@ -143,55 +146,51 @@ export default function({ cliOptions, babelOptions }) {
       }
     });
 
-    let filesProcessed = 0;
+    const results = await Promise.all(
+      _filenames.map(async function(filename) {
+        let sourceFilename = filename;
+        if (cliOptions.outFile) {
+          sourceFilename = path.relative(
+            path.dirname(cliOptions.outFile),
+            sourceFilename,
+          );
+        }
+        sourceFilename = slash(sourceFilename);
 
-    _filenames.forEach(function(filename, index) {
-      let sourceFilename = filename;
-      if (cliOptions.outFile) {
-        sourceFilename = path.relative(
-          path.dirname(cliOptions.outFile),
-          sourceFilename,
-        );
-      }
-      sourceFilename = slash(sourceFilename);
-
-      util.compile(
-        filename,
-        defaults(
-          {
-            sourceFileName: sourceFilename,
-            // Since we're compiling everything to be merged together,
-            // "inline" applies to the final output file, but to the individual
-            // files being concatenated.
-            sourceMaps:
-              babelOptions.sourceMaps === "inline"
-                ? true
-                : babelOptions.sourceMaps,
-          },
-          babelOptions,
-        ),
-        function(err, res) {
-          if (err && cliOptions.watch) {
-            console.error(err);
-            err = null;
+        try {
+          return await util.compile(
+            filename,
+            defaults(
+              {
+                sourceFileName: sourceFilename,
+                // Since we're compiling everything to be merged together,
+                // "inline" applies to the final output file, but to the individual
+                // files being concatenated.
+                sourceMaps:
+                  babelOptions.sourceMaps === "inline"
+                    ? true
+                    : babelOptions.sourceMaps,
+              },
+              babelOptions,
+            ),
+          );
+        } catch (err) {
+          if (!cliOptions.watch) {
+            throw err;
           }
 
-          if (err) throw err;
+          console.error(err);
+          return null;
+        }
+      }),
+    );
 
-          filesProcessed++;
-          if (res) results[index] = res;
+    output(results);
+  }
 
-          if (filesProcessed === _filenames.length) {
-            output();
-          }
-        },
-      );
-    });
-  };
-
-  const files = function() {
+  async function files(filenames) {
     if (!cliOptions.skipInitialBuild) {
-      walk();
+      await walk(filenames);
     }
 
     if (cliOptions.watch) {
@@ -214,19 +213,18 @@ export default function({ cliOptions, babelOptions }) {
             if (cliOptions.verbose) {
               console.log(type + " " + filename);
             }
-            try {
-              walk();
-            } catch (err) {
-              console.error(err.stack);
-            }
+
+            walk(filenames).catch(err => {
+              console.error(err);
+            });
           }
         });
     }
-  };
+  }
 
-  if (filenames.length) {
-    files();
+  if (cliOptions.filenames.length) {
+    await files(cliOptions.filenames);
   } else {
-    stdin();
+    await stdin();
   }
 }

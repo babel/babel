@@ -45,17 +45,27 @@ export function addSourceMappingUrl(code, loc) {
   return code + "\n//# sourceMappingURL=" + path.basename(loc);
 }
 
-export function transform(filename, code, opts, callback) {
+export function transform(filename, code, opts) {
   opts = {
     ...opts,
     filename,
   };
 
-  babel.transform(code, opts, callback);
+  return new Promise((resolve, reject) => {
+    babel.transform(code, opts, (err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    });
+  });
 }
 
-export function compile(filename, opts, callback) {
-  babel.transformFile(filename, opts, callback);
+export function compile(filename, opts) {
+  return new Promise((resolve, reject) => {
+    babel.transformFile(filename, opts, (err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    });
+  });
 }
 
 export function deleteDir(path) {

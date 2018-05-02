@@ -7,4 +7,7 @@ import fileCommand from "./file";
 const opts = parseArgv(process.argv);
 
 const fn = opts.cliOptions.outDir ? dirCommand : fileCommand;
-fn(opts);
+fn(opts).catch(err => {
+  console.error(err);
+  process.exit(1);
+});

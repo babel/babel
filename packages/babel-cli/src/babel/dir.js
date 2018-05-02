@@ -6,15 +6,14 @@ import fs from "fs";
 
 import * as util from "./util";
 
-let compiledFiles = 0;
-
-export default function({ cliOptions, babelOptions }) {
+export default async function({ cliOptions, babelOptions }) {
   const filenames = cliOptions.filenames;
 
-  function write(src, base, callback) {
+  async function write(src, base) {
     let relative = path.relative(base, src);
+
     if (!util.isCompilableExtension(relative, cliOptions.extensions)) {
-      return process.nextTick(callback);
+      return false;
     }
 
     // remove extension and then append back on .js
@@ -22,45 +21,47 @@ export default function({ cliOptions, babelOptions }) {
 
     const dest = getDest(relative, base);
 
-    util.compile(
-      src,
-      defaults(
-        {
-          sourceFileName: slash(path.relative(dest + "/..", src)),
-        },
-        babelOptions,
-      ),
-      function(err, res) {
-        if (err && cliOptions.watch) {
-          console.error(err);
-          err = null;
-        }
-        if (err) return callback(err);
-        if (!res) return callback();
+    try {
+      const res = await util.compile(
+        src,
+        defaults(
+          {
+            sourceFileName: slash(path.relative(dest + "/..", src)),
+          },
+          babelOptions,
+        ),
+      );
 
-        // we've requested explicit sourcemaps to be written to disk
-        if (
-          res.map &&
-          babelOptions.sourceMaps &&
-          babelOptions.sourceMaps !== "inline"
-        ) {
-          const mapLoc = dest + ".map";
-          res.code = util.addSourceMappingUrl(res.code, mapLoc);
-          res.map.file = path.basename(relative);
-          outputFileSync(mapLoc, JSON.stringify(res.map));
-        }
+      if (!res) return false;
 
-        outputFileSync(dest, res.code);
-        util.chmod(src, dest);
+      // we've requested explicit sourcemaps to be written to disk
+      if (
+        res.map &&
+        babelOptions.sourceMaps &&
+        babelOptions.sourceMaps !== "inline"
+      ) {
+        const mapLoc = dest + ".map";
+        res.code = util.addSourceMappingUrl(res.code, mapLoc);
+        res.map.file = path.basename(relative);
+        outputFileSync(mapLoc, JSON.stringify(res.map));
+      }
 
-        compiledFiles += 1;
+      outputFileSync(dest, res.code);
+      util.chmod(src, dest);
 
-        if (cliOptions.verbose) {
-          console.log(src + " -> " + dest);
-        }
-        return callback(null, true);
-      },
-    );
+      if (cliOptions.verbose) {
+        console.log(src + " -> " + dest);
+      }
+
+      return true;
+    } catch (err) {
+      if (cliOptions.watch) {
+        console.error(err);
+        return false;
+      }
+
+      throw err;
+    }
   }
 
   function getDest(filename, base) {
@@ -77,84 +78,62 @@ export default function({ cliOptions, babelOptions }) {
     }
   }
 
-  function handleFile(src, base, callback) {
-    write(src, base, function(err, res) {
-      if (err) return callback(err);
-      if (!res && cliOptions.copyFiles) {
-        const filename = path.relative(base, src);
-        const dest = getDest(filename, base);
-        outputFileSync(dest, fs.readFileSync(src));
-        util.chmod(src, dest);
-      }
+  async function handleFile(src, base) {
+    const written = await write(src, base);
 
-      return callback();
-    });
+    if (!written && cliOptions.copyFiles) {
+      const filename = path.relative(base, src);
+      const dest = getDest(filename, base);
+      outputFileSync(dest, fs.readFileSync(src));
+      util.chmod(src, dest);
+    }
+    return written;
   }
 
-  function sequentialHandleFile(files, dirname, index, callback) {
-    if (files.length === 0) {
-      outputDestFolder(cliOptions.outDir);
-      return;
-    }
+  async function handle(filenameOrDir) {
+    if (!fs.existsSync(filenameOrDir)) return 0;
 
-    if (typeof index === "function") {
-      callback = index;
-      index = 0;
-    }
+    const stat = fs.statSync(filenameOrDir);
 
-    const filename = files[index];
-    const src = path.join(dirname, filename);
+    if (stat.isDirectory(filenameOrDir)) {
+      const dirname = filenameOrDir;
 
-    handleFile(src, dirname, function(err) {
-      if (err) return callback(err);
-      index++;
-      if (index !== files.length) {
-        sequentialHandleFile(files, dirname, index, callback);
-      } else {
-        callback();
-      }
-    });
-  }
-
-  function handle(filename, callback) {
-    if (!fs.existsSync(filename)) return;
-
-    const stat = fs.statSync(filename);
-
-    if (stat.isDirectory(filename)) {
-      const dirname = filename;
-
-      if (cliOptions.deleteDirOnStart) {
-        util.deleteDir(cliOptions.outDir);
-      }
+      let count = 0;
 
       const files = util.readdir(dirname, cliOptions.includeDotfiles);
-      sequentialHandleFile(files, dirname, callback);
-    } else {
-      write(filename, path.dirname(filename), callback);
-    }
-  }
+      for (const filename of files) {
+        const src = path.join(dirname, filename);
 
-  function sequentialHandle(filenames, index = 0) {
-    const filename = filenames[index];
-
-    handle(filename, function(err) {
-      if (err) throw new Error(err);
-      index++;
-      if (index !== filenames.length) {
-        sequentialHandle(filenames, index);
-      } else {
-        console.log(
-          `🎉  Successfully compiled ${compiledFiles} ${
-            compiledFiles > 1 ? "files" : "file"
-          } with Babel.`,
-        );
+        const written = await handleFile(src, dirname);
+        if (written) count += 1;
       }
-    });
+
+      return count;
+    } else {
+      const filename = filenameOrDir;
+      const written = await handleFile(filename, path.dirname(filename));
+
+      return written ? 1 : 0;
+    }
   }
 
   if (!cliOptions.skipInitialBuild) {
-    sequentialHandle(filenames);
+    if (cliOptions.deleteDirOnStart) {
+      util.deleteDir(cliOptions.outDir);
+    }
+
+    outputDestFolder(cliOptions.outDir);
+
+    let compiledFiles = 0;
+    for (const filename of cliOptions.filenames) {
+      compiledFiles += await handle(filename);
+    }
+
+    console.log(
+      `🎉  Successfully compiled ${compiledFiles} ${
+        compiledFiles !== 1 ? "files" : "file"
+      } with Babel.`,
+    );
   }
 
   if (cliOptions.watch) {
@@ -177,10 +156,9 @@ export default function({ cliOptions, babelOptions }) {
             filename === filenameOrDir
               ? path.dirname(filenameOrDir)
               : filenameOrDir,
-            function(err) {
-              if (err) console.error(err.stack);
-            },
-          );
+          ).catch(err => {
+            console.error(err);
+          });
         });
       });
     });
