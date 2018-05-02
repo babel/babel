@@ -8,17 +8,19 @@ import * as util from "./util";
 
 let compiledFiles = 0;
 
-export default function(commander, filenames, opts) {
+export default function({ cliOptions, babelOptions }) {
+  const filenames = cliOptions.filenames;
+
   function write(src, base, callback) {
     let relative = path.relative(base, src);
-    if (!util.isCompilableExtension(relative, commander.extensions)) {
+    if (!util.isCompilableExtension(relative, cliOptions.extensions)) {
       return process.nextTick(callback);
     }
 
     // remove extension and then append back on .js
-    relative = util.adjustRelative(relative, commander.keepFileExtension);
+    relative = util.adjustRelative(relative, cliOptions.keepFileExtension);
 
-    const dest = getDest(commander, relative, base);
+    const dest = getDest(relative, base);
 
     util.compile(
       src,
@@ -26,17 +28,21 @@ export default function(commander, filenames, opts) {
         {
           sourceFileName: slash(path.relative(dest + "/..", src)),
         },
-        opts,
+        babelOptions,
       ),
       function(err, res) {
+        if (err && cliOptions.watch) {
+          console.error(err);
+          err = null;
+        }
         if (err) return callback(err);
         if (!res) return callback();
 
         // we've requested explicit sourcemaps to be written to disk
         if (
           res.map &&
-          commander.sourceMaps &&
-          commander.sourceMaps !== "inline"
+          babelOptions.sourceMaps &&
+          babelOptions.sourceMaps !== "inline"
         ) {
           const mapLoc = dest + ".map";
           res.code = util.addSourceMappingUrl(res.code, mapLoc);
@@ -49,15 +55,19 @@ export default function(commander, filenames, opts) {
 
         compiledFiles += 1;
 
-        util.log(src + " -> " + dest);
+        if (cliOptions.verbose) {
+          console.log(src + " -> " + dest);
+        }
         return callback(null, true);
       },
     );
   }
 
-  function getDest(commander, filename, base) {
-    if (commander.relative) return path.join(base, commander.outDir, filename);
-    return path.join(commander.outDir, filename);
+  function getDest(filename, base) {
+    if (cliOptions.relative) {
+      return path.join(base, cliOptions.outDir, filename);
+    }
+    return path.join(cliOptions.outDir, filename);
   }
 
   function outputDestFolder(outDir) {
@@ -70,9 +80,9 @@ export default function(commander, filenames, opts) {
   function handleFile(src, base, callback) {
     write(src, base, function(err, res) {
       if (err) return callback(err);
-      if (!res && commander.copyFiles) {
+      if (!res && cliOptions.copyFiles) {
         const filename = path.relative(base, src);
-        const dest = getDest(commander, filename, base);
+        const dest = getDest(filename, base);
         outputFileSync(dest, fs.readFileSync(src));
         util.chmod(src, dest);
       }
@@ -83,7 +93,7 @@ export default function(commander, filenames, opts) {
 
   function sequentialHandleFile(files, dirname, index, callback) {
     if (files.length === 0) {
-      outputDestFolder(commander.outDir);
+      outputDestFolder(cliOptions.outDir);
       return;
     }
 
@@ -114,11 +124,11 @@ export default function(commander, filenames, opts) {
     if (stat.isDirectory(filename)) {
       const dirname = filename;
 
-      if (commander.deleteDirOnStart) {
-        util.deleteDir(commander.outDir);
+      if (cliOptions.deleteDirOnStart) {
+        util.deleteDir(cliOptions.outDir);
       }
 
-      const files = util.readdir(dirname, commander.includeDotfiles);
+      const files = util.readdir(dirname, cliOptions.includeDotfiles);
       sequentialHandleFile(files, dirname, callback);
     } else {
       write(filename, path.dirname(filename), callback);
@@ -134,21 +144,20 @@ export default function(commander, filenames, opts) {
       if (index !== filenames.length) {
         sequentialHandle(filenames, index);
       } else {
-        util.log(
+        console.log(
           `🎉  Successfully compiled ${compiledFiles} ${
             compiledFiles > 1 ? "files" : "file"
           } with Babel.`,
-          true,
         );
       }
     });
   }
 
-  if (!commander.skipInitialBuild) {
+  if (!cliOptions.skipInitialBuild) {
     sequentialHandle(filenames);
   }
 
-  if (commander.watch) {
+  if (cliOptions.watch) {
     const chokidar = util.requireChokidar();
 
     filenames.forEach(function(filenameOrDir) {

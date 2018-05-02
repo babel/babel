@@ -7,20 +7,18 @@ import fs from "fs";
 
 import * as util from "./util";
 
-export default function(commander, filenames, opts) {
-  if (commander.sourceMaps === "inline") {
-    opts.sourceMaps = true;
-  }
+export default function({ cliOptions, babelOptions }) {
+  const filenames = cliOptions.filenames;
 
   let results = [];
 
   const buildResult = function() {
     const map = new sourceMap.SourceMapGenerator({
       file:
-        commander.sourceMapTarget ||
-        path.basename(commander.outFile || "") ||
+        cliOptions.sourceMapTarget ||
+        path.basename(cliOptions.outFile || "") ||
         "stdout",
-      sourceRoot: opts.sourceRoot,
+      sourceRoot: babelOptions.sourceRoot,
     });
 
     let code = "";
@@ -66,8 +64,8 @@ export default function(commander, filenames, opts) {
     // add the inline sourcemap comment if we've either explicitly asked for inline source
     // maps, or we've requested them without any output file
     if (
-      commander.sourceMaps === "inline" ||
-      (!commander.outFile && commander.sourceMaps)
+      babelOptions.sourceMaps === "inline" ||
+      (!cliOptions.outFile && babelOptions.sourceMaps)
     ) {
       code += "\n" + convertSourceMap.fromObject(map).toComment();
     }
@@ -81,15 +79,15 @@ export default function(commander, filenames, opts) {
   const output = function() {
     const result = buildResult();
 
-    if (commander.outFile) {
+    if (cliOptions.outFile) {
       // we've requested for a sourcemap to be written to disk
-      if (commander.sourceMaps && commander.sourceMaps !== "inline") {
-        const mapLoc = commander.outFile + ".map";
+      if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
+        const mapLoc = cliOptions.outFile + ".map";
         result.code = util.addSourceMappingUrl(result.code, mapLoc);
         fs.writeFileSync(mapLoc, JSON.stringify(result.map));
       }
 
-      fs.writeFileSync(commander.outFile, result.code);
+      fs.writeFileSync(cliOptions.outFile, result.code);
     } else {
       process.stdout.write(result.code + "\n");
     }
@@ -107,13 +105,13 @@ export default function(commander, filenames, opts) {
 
     process.stdin.on("end", function() {
       util.transform(
-        commander.filename,
+        cliOptions.filename,
         code,
         defaults(
           {
             sourceFileName: "stdin",
           },
-          opts,
+          babelOptions,
         ),
         function(err, res) {
           if (err) throw err;
@@ -136,7 +134,7 @@ export default function(commander, filenames, opts) {
         const dirname = filename;
 
         util
-          .readdirForCompilable(filename, commander.includeDotfiles)
+          .readdirForCompilable(filename, cliOptions.includeDotfiles)
           .forEach(function(filename) {
             _filenames.push(path.join(dirname, filename));
           });
@@ -149,9 +147,9 @@ export default function(commander, filenames, opts) {
 
     _filenames.forEach(function(filename, index) {
       let sourceFilename = filename;
-      if (commander.outFile) {
+      if (cliOptions.outFile) {
         sourceFilename = path.relative(
-          path.dirname(commander.outFile),
+          path.dirname(cliOptions.outFile),
           sourceFilename,
         );
       }
@@ -162,10 +160,22 @@ export default function(commander, filenames, opts) {
         defaults(
           {
             sourceFileName: sourceFilename,
+            // Since we're compiling everything to be merged together,
+            // "inline" applies to the final output file, but to the individual
+            // files being concatenated.
+            sourceMaps:
+              babelOptions.sourceMaps === "inline"
+                ? true
+                : babelOptions.sourceMaps,
           },
-          opts,
+          babelOptions,
         ),
         function(err, res) {
+          if (err && cliOptions.watch) {
+            console.error(err);
+            err = null;
+          }
+
           if (err) throw err;
 
           filesProcessed++;
@@ -180,11 +190,11 @@ export default function(commander, filenames, opts) {
   };
 
   const files = function() {
-    if (!commander.skipInitialBuild) {
+    if (!cliOptions.skipInitialBuild) {
       walk();
     }
 
-    if (commander.watch) {
+    if (cliOptions.watch) {
       const chokidar = util.requireChokidar();
       chokidar
         .watch(filenames, {
@@ -196,12 +206,14 @@ export default function(commander, filenames, opts) {
           },
         })
         .on("all", function(type, filename) {
-          if (!util.isCompilableExtension(filename, commander.extensions)) {
+          if (!util.isCompilableExtension(filename, cliOptions.extensions)) {
             return;
           }
 
           if (type === "add" || type === "change") {
-            util.log(type + " " + filename);
+            if (cliOptions.verbose) {
+              console.log(type + " " + filename);
+            }
             try {
               walk();
             } catch (err) {
