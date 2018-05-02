@@ -225,6 +225,10 @@ export default class StatementParser extends ExpressionParser {
     }
   }
 
+  canHaveLeadingDecorator(): boolean {
+    return this.match(tt._class);
+  }
+
   parseDecorators(allowExport?: boolean): void {
     if (this.hasPlugin("decorators2")) {
       allowExport = false;
@@ -250,7 +254,7 @@ export default class StatementParser extends ExpressionParser {
       }
     }
 
-    if (!this.match(tt._class)) {
+    if (!this.canHaveLeadingDecorator()) {
       this.raise(
         this.state.start,
         "Leading decorators must be attached to a class declaration",
