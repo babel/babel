@@ -14,8 +14,7 @@ A clear and concise description of what the bug is.
 var your => (code) => here;
 ```
 
-### Babel/Babylon Configuration (.babelrc, package.json, cli command)
-<!--- If describing a bug, tell us what your babel configuration looks like -->
+### Babel Configuration (.babelrc, package.json, cli command)
 
 ```js
 {
@@ -27,8 +26,7 @@ var your => (code) => here;
 A clear and concise description of what you expected to happen (or code).
 
 **Possible Solution**
-<!--- Not obligatory, but suggest a fix/reason for the bug, -->
-<!--- or ideas how to implement the addition or change -->
+<!--- Only if you have suggestions on a fix/reason for the bug -->
 
 **Environment**
 - Babel version(s): [e.g. v6.0.0, v7.0.0-beta.34]
