@@ -1,6 +1,6 @@
 ---
 name: Support Question
-about: If you just have a question
+about: If you have a support question: please check out our Slack, StackOverflow, Twitter
 
 ---
 
