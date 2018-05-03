@@ -1,6 +1,6 @@
 ---
 name: 🐛 Bug Report
-about: If something not working as expected
+about: If something isn't working as expected 🤔.
 
 ---
 
