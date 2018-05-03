@@ -8,7 +8,7 @@ about: If something not working as expected
 A clear and concise description of the behavior.
 
 **Input Code**
-<!--- If you have link to our REPL or a standalone repo please link that! -->
+- REPL or Repo link if applicable:
 
 ```js
 var your => (code) => here;
