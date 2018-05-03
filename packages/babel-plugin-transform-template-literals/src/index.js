@@ -90,22 +90,17 @@ export default declare((api, options) => {
         const lazyLoad = t.logicalExpression(
           "||",
           t.cloneNode(templateObject),
-          callExpression,
-        );
-
-        const conditionalAssignment = t.assignmentExpression(
-          "=",
-          t.cloneNode(templateObject),
-          lazyLoad,
+          t.assignmentExpression(
+            "=",
+            t.cloneNode(templateObject),
+            callExpression,
+          ),
         );
 
         scope.push({ id: templateObject });
 
         path.replaceWith(
-          t.callExpression(node.tag, [
-            conditionalAssignment,
-            ...quasi.expressions,
-          ]),
+          t.callExpression(node.tag, [lazyLoad, ...quasi.expressions]),
         );
       },
 
