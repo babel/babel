@@ -5,7 +5,6 @@ about: If you have a question 💬, please check out our Slack or StackOverflow!
 ---
 
 --------------^ Click "Preview"!
-
 Issues on GitHub are intended to be related to problems with Babel itself,
 so we recommend not using this medium to ask them here 😁.
 
