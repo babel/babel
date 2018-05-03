@@ -1,14 +1,11 @@
 ---
-name: Feature Request
-about: Suggest an idea for this project
+name: 🚀 Feature Request
+about: I have a suggestion (and might want to implement 🙂)!
 
 ---
 
 **Is your feature request related to a problem? Please describe.**
-A clear and concise description of what the problem is. Ex. I'm always frustrated when [...]
-
-**Basic Example**
-Describe an example where this could be better.
+A clear and concise description of what the problem is. Ex. I have an issue when [...]
 
 **Describe the solution you'd like**
 A clear and concise description of what you want to happen. Add any considered drawbacks.
@@ -17,7 +14,5 @@ A clear and concise description of what you want to happen. Add any considered d
 A clear and concise description of any alternative solutions or features you've considered.
 
 **Teachability, Documentation, Adoption, Migration Strategy**
-Explain how how users will be able to use this and possibly write out a version the docs.
-
-**Additional context**
-Add any other context or screenshots about the feature request here.
+If you can, explain how users will be able to use this and possibly write out a version the docs.
+Maybe a screenshot or design?
