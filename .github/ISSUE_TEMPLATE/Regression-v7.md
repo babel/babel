@@ -1,8 +1,11 @@
 ---
-name: v7 Regression
-about: Report a regression in v7 from v6
+name: 💥 v7 Regression
+about: Report an unexpected behavior in v7 from v6 (check upgrade guide first ✌️)
 
 ---
+
+> First check out: https://new.babeljs.io/docs/en/next/v7-migration.html
+> Also a partial upgrade tool: https://github.com/babel/babel-upgrade
 
 **Potential Commit/PR that introduced the regression**
 If you have time to investigate, what PR/date introduced this issue.
