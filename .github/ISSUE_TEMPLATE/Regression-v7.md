@@ -1,6 +1,6 @@
 ---
 name: 💥 v7 Regression
-about: Report an unexpected behavior in v7 from v6 (check upgrade guide first ✌️)
+about: Report an unexpected behavior in v7 from v6 (Check the upgrade guide first ✌️)
 
 ---
 
