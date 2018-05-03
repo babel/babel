@@ -67,39 +67,39 @@ function getParserClass(
   pluginsFromOptions: $ReadOnlyArray<string>,
 ): Class<Parser> {
   if (
-    pluginsFromOptions.indexOf("decorators-legacy") >= 0 &&
-    pluginsFromOptions.indexOf("decorators") >= 0
+    hasPlugin(pluginsFromOptions, "decorators") &&
+    hasPlugin(pluginsFromOptions, "decorators-legacy")
   ) {
-    throw new Error("Cannot use decorators and decorators2 plugin together");
+    throw new Error(
+      "Cannot use decorators and decorators-legacy plugin together",
+    );
   }
 
   // Filter out just the plugins that have an actual mixin associated with them.
-  let pluginList = pluginsFromOptions.filter(
-    p => p === "estree" || p === "flow" || p === "jsx" || p === "typescript",
-  );
+  let pluginList = pluginsFromOptions.filter(plugin => {
+    const p = getPluginName(plugin);
+    return p === "estree" || p === "flow" || p === "jsx" || p === "typescript";
+  });
 
-  if (pluginList.indexOf("flow") >= 0) {
+  if (hasPlugin(pluginList, "flow")) {
     // ensure flow plugin loads last
-    pluginList = pluginList.filter(plugin => plugin !== "flow");
+    pluginList = pluginList.filter(p => getPluginName(p) !== "flow");
     pluginList.push("flow");
   }
 
-  if (
-    pluginList.indexOf("flow") >= 0 &&
-    pluginList.indexOf("typescript") >= 0
-  ) {
+  if (hasPlugin(pluginList, "flow") && hasPlugin(pluginList, "typescript")) {
     throw new Error("Cannot combine flow and typescript plugins.");
   }
 
-  if (pluginList.indexOf("typescript") >= 0) {
+  if (hasPlugin(pluginList, "typescript")) {
     // ensure typescript plugin loads last
-    pluginList = pluginList.filter(plugin => plugin !== "typescript");
+    pluginList = pluginList.filter(p => getPluginName(p) !== "typescript");
     pluginList.push("typescript");
   }
 
-  if (pluginList.indexOf("estree") >= 0) {
+  if (hasPlugin(pluginList, "estree")) {
     // ensure estree plugin loads first
-    pluginList = pluginList.filter(plugin => plugin !== "estree");
+    pluginList = pluginList.filter(p => getPluginName(p) !== "estree");
     pluginList.unshift("estree");
   }
 
@@ -113,4 +113,12 @@ function getParserClass(
     parserClassCache[key] = cls;
   }
   return cls;
+}
+
+function getPluginName(plugin) {
+  return Array.isArray(plugin) ? plugin[0] : plugin;
+}
+
+function hasPlugin(pluginsList, name) {
+  return pluginsList.some(plugin => getPluginName(plugin) === name);
 }

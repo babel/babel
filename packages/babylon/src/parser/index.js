@@ -41,9 +41,10 @@ export default class Parser extends StatementParser {
 function pluginsMap(
   pluginList: $ReadOnlyArray<string>,
 ): { [key: string]: boolean } {
-  const pluginMap = {};
-  for (const name of pluginList) {
-    pluginMap[name] = true;
+  const pluginMap = Object.create(null);
+  for (const plugin of pluginList) {
+    const [name, options = {}] = Array.isArray(plugin) ? plugin : [plugin];
+    pluginMap[name] = options;
   }
   return pluginMap;
 }
