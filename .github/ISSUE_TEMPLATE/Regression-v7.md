@@ -4,6 +4,8 @@ about: Report an unexpected behavior in v7 from v6 (Check the upgrade guide firs
 
 ---
 
+# v7 Regression
+
 > First check out: https://new.babeljs.io/docs/en/next/v7-migration.html
 > Also a partial upgrade tool: https://github.com/babel/babel-upgrade
 
@@ -20,7 +22,7 @@ A clear and concise description of what the regression is.
 var your => (code) => here;
 ```
 
-### Babel Configuration (.babelrc, package.json, cli command)
+**Babel Configuration (.babelrc, package.json, cli command)**
 
 ```js
 {

@@ -4,6 +4,8 @@ about: If something isn't working as expected 🤔.
 
 ---
 
+## Bug Report
+
 **Current Behavior**
 A clear and concise description of the behavior.
 
@@ -13,10 +15,11 @@ A clear and concise description of the behavior.
 ```js
 var your => (code) => here;
 ```
+
 **Expected behavior/code**
 A clear and concise description of what you expected to happen (or code).
 
-## Babel Configuration (.babelrc, package.json, cli command)
+**Babel Configuration (.babelrc, package.json, cli command)**
 
 ```js
 {
@@ -32,7 +35,7 @@ A clear and concise description of what you expected to happen (or code).
 - How you are using Babel: [e.g. `cli`, `register`, `loader`]
 
 **Possible Solution**
-<!--- Only if you have suggestions on a fix/reason for the bug -->
+<!--- Only if you have suggestions on a fix for the bug -->
 
 **Additional context/Screenshots**
 Add any other context about the problem here. If applicable, add screenshots to help explain.

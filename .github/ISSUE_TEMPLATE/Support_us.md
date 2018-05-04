@@ -4,7 +4,7 @@ about: If you would like to support our efforts in maintaining this community-dr
 
 ---
 
-> Would recommend clicking preview for the rendered view.
+--------------^ Click "Preview" for a nicer view!
 > Open Collective: https://opencollective.com/babel
 > Henry's Patreon: https://www.patreon.com/henryzhu
 
