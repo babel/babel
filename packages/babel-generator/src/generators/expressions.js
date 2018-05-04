@@ -57,7 +57,7 @@ export function MatchClause(node: Object) {
 }
 
 export function MatchGuard(node: Object) {
-  this.workd("if");
+  this.work("if");
   this.token("(");
   this.print(node.body, node);
   this.token(")");
