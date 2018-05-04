@@ -1,4 +1,4 @@
 {
   "plugins": ["decorators-legacy", "decorators"],
-  "throws": "Cannot use decorators and decorators2 plugin together"
+  "throws": "Cannot use decorators and decorators-legacy plugin together"
 }
