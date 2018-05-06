@@ -8,10 +8,10 @@ var Foo = function Foo() {
   });
   Object.defineProperty(this, _y, {
     writable: true,
-    value: babelHelpers.classPrivateFieldBase(this, _x)[_x]
+    value: babelHelpers.classPrivateFieldLooseBase(this, _x)[_x]
   });
 };
 
-var _x = babelHelpers.classPrivateFieldKey("x");
+var _x = babelHelpers.classPrivateFieldLooseKey("x");
 
-var _y = babelHelpers.classPrivateFieldKey("y");
+var _y = babelHelpers.classPrivateFieldLooseKey("y");

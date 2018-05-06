@@ -17,7 +17,7 @@ var Outer = function Outer() {
 
     babelHelpers.inherits(Test, _babelHelpers$classPr);
     return Test;
-  }(babelHelpers.classPrivateFieldBase(this, _outer)[_outer]);
+  }(babelHelpers.classPrivateFieldLooseBase(this, _outer)[_outer]);
 };
 
-var _outer = babelHelpers.classPrivateFieldKey("outer");
+var _outer = babelHelpers.classPrivateFieldLooseKey("outer");

@@ -21,4 +21,4 @@ function (_Parent) {
   return Child;
 }(Parent);
 
-var _scopedFunctionWithThis = babelHelpers.classPrivateFieldKey("scopedFunctionWithThis");
+var _scopedFunctionWithThis = babelHelpers.classPrivateFieldLooseKey("scopedFunctionWithThis");

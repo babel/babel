@@ -14,13 +14,13 @@ function () {
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
-      babelHelpers.classPrivateFieldBase(this, _foo)[_foo] += 1;
-      babelHelpers.classPrivateFieldBase(this, _foo)[_foo] = 2;
-      babelHelpers.classPrivateFieldBase(other.obj, _foo)[_foo] += 1;
-      babelHelpers.classPrivateFieldBase(other.obj, _foo)[_foo] = 2;
+      babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo] += 1;
+      babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo] = 2;
+      babelHelpers.classPrivateFieldLooseBase(other.obj, _foo)[_foo] += 1;
+      babelHelpers.classPrivateFieldLooseBase(other.obj, _foo)[_foo] = 2;
     }
   }]);
   return Foo;
 }();
 
-var _foo = babelHelpers.classPrivateFieldKey("foo");
+var _foo = babelHelpers.classPrivateFieldLooseKey("foo");

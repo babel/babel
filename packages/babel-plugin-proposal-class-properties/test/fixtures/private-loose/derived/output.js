@@ -8,7 +8,7 @@ var Foo = function Foo() {
   });
 };
 
-var _prop = babelHelpers.classPrivateFieldKey("prop");
+var _prop = babelHelpers.classPrivateFieldLooseKey("prop");
 
 var Bar =
 /*#__PURE__*/
@@ -29,4 +29,4 @@ function (_Foo) {
   return Bar;
 }(Foo);
 
-var _prop2 = babelHelpers.classPrivateFieldKey("prop");
+var _prop2 = babelHelpers.classPrivateFieldLooseKey("prop");

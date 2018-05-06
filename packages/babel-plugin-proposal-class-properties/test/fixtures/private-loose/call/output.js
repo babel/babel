@@ -16,12 +16,12 @@ function () {
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(other) {
-      babelHelpers.classPrivateFieldBase(this, _foo)[_foo]();
+      babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo]();
 
-      babelHelpers.classPrivateFieldBase(other.obj, _foo)[_foo]();
+      babelHelpers.classPrivateFieldLooseBase(other.obj, _foo)[_foo]();
     }
   }]);
   return Foo;
 }();
 
-var _foo = babelHelpers.classPrivateFieldKey("foo");
+var _foo = babelHelpers.classPrivateFieldLooseKey("foo");

@@ -14,6 +14,6 @@ var Foo = function Foo(_foo) {
   });
 };
 
-var _bar = babelHelpers.classPrivateFieldKey("bar");
+var _bar = babelHelpers.classPrivateFieldLooseKey("bar");
 
-var _baz = babelHelpers.classPrivateFieldKey("baz");
+var _baz = babelHelpers.classPrivateFieldLooseKey("baz");

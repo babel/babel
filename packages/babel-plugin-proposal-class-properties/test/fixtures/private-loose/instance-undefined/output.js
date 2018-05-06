@@ -8,4 +8,4 @@ var Foo = function Foo() {
   });
 };
 
-var _bar = babelHelpers.classPrivateFieldKey("bar");
+var _bar = babelHelpers.classPrivateFieldLooseKey("bar");

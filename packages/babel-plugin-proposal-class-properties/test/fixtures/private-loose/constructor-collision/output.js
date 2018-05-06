@@ -11,4 +11,4 @@ var Foo = function Foo() {
   var _foo = "foo";
 };
 
-var _bar = babelHelpers.classPrivateFieldKey("bar");
+var _bar = babelHelpers.classPrivateFieldLooseKey("bar");

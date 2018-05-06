@@ -149,7 +149,7 @@ export default declare((api, options) => {
 
       member.replaceWith(
         template.expression`BASE(REF, PROP)[PROP]`({
-          BASE: file.addHelper("classPrivateFieldBase"),
+          BASE: file.addHelper("classPrivateFieldLooseBase"),
           REF: object,
           PROP: prop,
         }),
@@ -215,7 +215,7 @@ export default declare((api, options) => {
     const prop = scope.generateUidIdentifier(name);
     const init = template.statement`var PROP = HELPER(NAME);`({
       PROP: prop,
-      HELPER: state.addHelper("classPrivateFieldKey"),
+      HELPER: state.addHelper("classPrivateFieldLooseKey"),
       NAME: t.stringLiteral(name),
     });
     const add = template.statement`

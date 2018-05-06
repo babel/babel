@@ -19,4 +19,4 @@ function (_Bar) {
   return Foo;
 }(Bar);
 
-var _bar = babelHelpers.classPrivateFieldKey("bar");
+var _bar = babelHelpers.classPrivateFieldLooseKey("bar");

@@ -968,14 +968,14 @@ helpers.applyDecoratedDescriptor = () => template.program.ast`
     }
 `;
 
-helpers.classPrivateFieldKey = () => template.program.ast`
+helpers.classPrivateFieldLooseKey = () => template.program.ast`
   var id = 0;
   export default function _classPrivateFieldKey(name) {
     return "__private_" + (id++) + "_" + name;
   }
 `;
 
-helpers.classPrivateFieldBase = () => template.program.ast`
+helpers.classPrivateFieldLooseBase = () => template.program.ast`
   export default function _classPrivateFieldBase(receiver, privateKey) {
     if (!Object.prototype.hasOwnProperty.call(receiver, privateKey)) {
       throw new TypeError("attempted to use private field on non-instance");

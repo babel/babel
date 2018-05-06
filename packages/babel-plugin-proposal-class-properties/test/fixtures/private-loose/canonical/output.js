@@ -13,40 +13,40 @@ function () {
       writable: true,
       value: void 0
     });
-    babelHelpers.classPrivateFieldBase(this, _x)[_x] = +_x2;
-    babelHelpers.classPrivateFieldBase(this, _y)[_y] = +_y2;
+    babelHelpers.classPrivateFieldLooseBase(this, _x)[_x] = +_x2;
+    babelHelpers.classPrivateFieldLooseBase(this, _y)[_y] = +_y2;
   }
 
   babelHelpers.createClass(Point, [{
     key: "equals",
     value: function equals(p) {
-      return babelHelpers.classPrivateFieldBase(this, _x)[_x] === babelHelpers.classPrivateFieldBase(p, _x)[_x] && babelHelpers.classPrivateFieldBase(this, _y)[_y] === babelHelpers.classPrivateFieldBase(p, _y)[_y];
+      return babelHelpers.classPrivateFieldLooseBase(this, _x)[_x] === babelHelpers.classPrivateFieldLooseBase(p, _x)[_x] && babelHelpers.classPrivateFieldLooseBase(this, _y)[_y] === babelHelpers.classPrivateFieldLooseBase(p, _y)[_y];
     }
   }, {
     key: "toString",
     value: function toString() {
-      return `Point<${babelHelpers.classPrivateFieldBase(this, _x)[_x]},${babelHelpers.classPrivateFieldBase(this, _y)[_y]}>`;
+      return `Point<${babelHelpers.classPrivateFieldLooseBase(this, _x)[_x]},${babelHelpers.classPrivateFieldLooseBase(this, _y)[_y]}>`;
     }
   }, {
     key: "x",
     get: function () {
-      return babelHelpers.classPrivateFieldBase(this, _x)[_x];
+      return babelHelpers.classPrivateFieldLooseBase(this, _x)[_x];
     },
     set: function (value) {
-      babelHelpers.classPrivateFieldBase(this, _x)[_x] = +value;
+      babelHelpers.classPrivateFieldLooseBase(this, _x)[_x] = +value;
     }
   }, {
     key: "y",
     get: function () {
-      return babelHelpers.classPrivateFieldBase(this, _y)[_y];
+      return babelHelpers.classPrivateFieldLooseBase(this, _y)[_y];
     },
     set: function (value) {
-      babelHelpers.classPrivateFieldBase(this, _y)[_y] = +value;
+      babelHelpers.classPrivateFieldLooseBase(this, _y)[_y] = +value;
     }
   }]);
   return Point;
 }();
 
-var _x = babelHelpers.classPrivateFieldKey("x");
+var _x = babelHelpers.classPrivateFieldLooseKey("x");
 
-var _y = babelHelpers.classPrivateFieldKey("y");
+var _y = babelHelpers.classPrivateFieldLooseKey("y");
