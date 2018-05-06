@@ -183,19 +183,9 @@ export default declare((api, options) => {
 
   function buildClassPrivatePropertySpec(ref, path, initNodes, state) {
     const { parentPath, scope } = path;
-    const { key, value } = path.node;
-    const { name } = key.id;
+    const { name } = path.node.key.id;
 
     const map = scope.generateUidIdentifier(name);
-    const init = template.statement`var MAP = new WeakMap();`({
-      MAP: map,
-    });
-    const add = template.statement`MAP.set(REF, VALUE);`({
-      MAP: map,
-      REF: ref,
-      VALUE: value || scope.buildUndefinedNode(),
-    });
-
     memberExpressionToFunctions(parentPath, privateNameVisitor, {
       name,
       map,
@@ -203,33 +193,26 @@ export default declare((api, options) => {
       ...privateNameHandlerSpec,
     });
 
-    initNodes.push(init);
-    return add;
+    initNodes.push(
+      template.statement`var MAP = new WeakMap();`({
+        MAP: map,
+      }),
+    );
+
+    // Must be late evaluated in case it references another private field.
+    return () =>
+      template.statement`MAP.set(REF, VALUE);`({
+        MAP: map,
+        REF: ref,
+        VALUE: path.node.value || scope.buildUndefinedNode(),
+      });
   }
 
   function buildClassPrivatePropertyLoose(ref, path, initNodes, state) {
     const { parentPath, scope } = path;
-    const { key, value } = path.node;
-    const { name } = key.id;
+    const { name } = path.node.key.id;
 
     const prop = scope.generateUidIdentifier(name);
-    const init = template.statement`var PROP = HELPER(NAME);`({
-      PROP: prop,
-      HELPER: state.addHelper("classPrivateFieldLooseKey"),
-      NAME: t.stringLiteral(name),
-    });
-    const add = template.statement`
-      Object.defineProperty(REF, PROP, {
-        // configurable is false by default
-        // enumerable is false by default
-        writable: true,
-        value: VALUE
-      });
-    `({
-      REF: ref,
-      PROP: prop,
-      VALUE: value || scope.buildUndefinedNode(),
-    });
 
     parentPath.traverse(privateNameVisitor, {
       name,
@@ -238,8 +221,28 @@ export default declare((api, options) => {
       ...privateNameHandlerLoose,
     });
 
-    initNodes.push(init);
-    return add;
+    initNodes.push(
+      template.statement`var PROP = HELPER(NAME);`({
+        PROP: prop,
+        HELPER: state.addHelper("classPrivateFieldLooseKey"),
+        NAME: t.stringLiteral(name),
+      }),
+    );
+
+    // Must be late evaluated in case it references another private field.
+    return () =>
+      template.statement`
+      Object.defineProperty(REF, PROP, {
+        // configurable is false by default
+        // enumerable is false by default
+        writable: true,
+        value: VALUE
+      });
+    `({
+        REF: ref,
+        PROP: prop,
+        VALUE: path.node.value || scope.buildUndefinedNode(),
+      });
   }
 
   const buildClassProperty = loose
@@ -332,14 +335,14 @@ export default declare((api, options) => {
         }
 
         // Transform private props before publics.
-        const privates = [];
-        const privateInits = [];
+        const privateMaps = [];
+        const privateMapInits = [];
         for (const prop of props) {
-          const inits = [];
-          privateInits.push(inits);
-
           if (prop.isPrivate()) {
-            privates.push(
+            const inits = [];
+            privateMapInits.push(inits);
+
+            privateMaps.push(
               buildClassPrivateProperty(t.thisExpression(), prop, inits, state),
             );
           }
@@ -350,8 +353,8 @@ export default declare((api, options) => {
           if (prop.node.static) {
             staticNodes.push(buildClassProperty(t.cloneNode(ref), prop, state));
           } else if (prop.isPrivate()) {
-            instanceBody.push(privates[p]);
-            staticNodes.push(...privateInits[p]);
+            instanceBody.push(privateMaps[p]());
+            staticNodes.push(...privateMapInits[p]);
             p++;
           } else {
             instanceBody.push(

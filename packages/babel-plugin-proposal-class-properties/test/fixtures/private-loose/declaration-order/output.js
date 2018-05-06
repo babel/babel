@@ -9,6 +9,8 @@ var C = function C() {
   });
 };
 
+var _x = babelHelpers.classPrivateFieldLooseKey("x");
+
 expect(() => {
   new C();
 }).toThrow();

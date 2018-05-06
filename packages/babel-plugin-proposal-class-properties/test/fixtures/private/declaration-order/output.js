@@ -7,6 +7,8 @@ var C = function C() {
   _x.set(this, void 0);
 };
 
+var _x = new WeakMap();
+
 expect(() => {
   new C();
 }).toThrow();
