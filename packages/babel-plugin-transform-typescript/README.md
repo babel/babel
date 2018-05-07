@@ -56,6 +56,15 @@ require("@babel/core").transform("code", {
   plugins: ["@babel/plugin-transform-typescript"]
 });
 ```
+## Options
+
+### `jsxPragma`
+
+`string`
+
+Replace the function used when compiling JSX expressions.
+
+This is so that we know that the import is not a type import, and should not be removed
 
 [const_enum]: https://www.typescriptlang.org/docs/handbook/enums.html#const-enums
 [namespace]: https://www.typescriptlang.org/docs/handbook/namespaces.html
