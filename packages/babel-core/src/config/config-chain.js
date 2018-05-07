@@ -8,6 +8,7 @@ import {
   type IgnoreList,
   type ConfigApplicableTest,
   type BabelrcSearch,
+  type CallerMetadata,
 } from "./validation/options";
 import pathPatternToRegex from "./pattern-to-regex";
 
@@ -50,6 +51,7 @@ export type ConfigContext = {
   cwd: string,
   root: string,
   envName: string,
+  caller: CallerMetadata | void,
 };
 
 /**
@@ -248,7 +250,7 @@ function babelrcLoadEnabled(
     if (typeof pat === "string") pat = pathPatternToRegex(pat, context.cwd);
 
     return pkgData.directories.some(directory => {
-      return matchPattern(pat, context.cwd, directory);
+      return matchPattern(pat, context.cwd, directory, context);
     });
   });
 }
@@ -643,12 +645,23 @@ function matchesPatterns(
   dirname: string,
 ): boolean {
   return patterns.some(pattern =>
-    matchPattern(pattern, dirname, context.filename),
+    matchPattern(pattern, dirname, context.filename, context),
   );
 }
 
-function matchPattern(pattern, dirname, pathToTest): boolean {
-  if (typeof pattern === "function") return !!pattern(pathToTest);
+function matchPattern(
+  pattern,
+  dirname,
+  pathToTest,
+  context: ConfigContext,
+): boolean {
+  if (typeof pattern === "function") {
+    return !!pattern(pathToTest, {
+      dirname,
+      envName: context.envName,
+      caller: context.caller,
+    });
+  }
 
   if (typeof pathToTest !== "string") {
     throw new Error(
