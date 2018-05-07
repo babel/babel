@@ -68,11 +68,6 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 
 Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://www.patreon.com/henryzhu)]
 
-## Gold
-
-<a href="https://vueschool.io/?babel" target="_blank"><img src="http://new.babeljs.io/img/sponsors/vueschool.png" height="64"></a>
-<a href="https://devrant.com/?babel" target="_blank"><img src="http://new.babeljs.io/img/sponsors/devRant.png" height="64"></a>
-
 ## Bronze
 
 <a href="http://teamextension.io/" target="_blank"><img src="https://teamextension.io/dist/img/logo/te-logo-compact.png" height="64"></a>
