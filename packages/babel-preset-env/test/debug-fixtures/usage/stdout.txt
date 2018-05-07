@@ -41,6 +41,8 @@ Using polyfills with `usage` option:
 [src/in.js] Added following polyfills:
   es6.promise { "ie":"11" }
   es6.map { "firefox":"50", "ie":"11" }
+  es6.array.iterator { "ie":"11" }
+  web.dom.iterable { "chrome":"52", "firefox":"50", "ie":"11" }
 
 [src/in2.js] Added following polyfills:
   regenerator-runtime { "chrome":"52", "firefox":"50", "ie":"11" }

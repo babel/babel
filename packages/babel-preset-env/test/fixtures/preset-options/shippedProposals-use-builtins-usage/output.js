@@ -6,6 +6,12 @@ require("core-js/modules/es6.array.filter");
 
 require("core-js/modules/es6.array.index-of");
 
+require("core-js/modules/web.dom.iterable");
+
+require("core-js/modules/es6.array.iterator");
+
+require("core-js/modules/es6.object.keys");
+
 require("regenerator-runtime/runtime");
 
 require("core-js/modules/es7.symbol.async-iterator");
