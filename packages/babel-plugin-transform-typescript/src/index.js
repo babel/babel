@@ -20,7 +20,7 @@ interface State {
   programPath: any;
 }
 
-export default declare(api => {
+export default declare((api, options) => {
   api.assertVersion(7);
 
   return {
@@ -266,11 +266,14 @@ export default declare(api => {
       }
     }
 
-    if (binding.identifier.name != "React") {
+    if (
+      binding.identifier.name !== "React" &&
+      binding.identifier.name !== options.jsxPragma
+    ) {
       return true;
     }
 
-    // "React" is referenced as a value if there are any JSX elements in the code.
+    // "React" or the JSX pragma is referenced as a value if there are any JSX elements in the code.
     let sourceFileHasJsx = false;
     programPath.traverse({
       JSXElement() {
