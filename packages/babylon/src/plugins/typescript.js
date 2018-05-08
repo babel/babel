@@ -1941,6 +1941,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "TSParameterProperty":
           return super.toAssignable(node, isBinding, contextDescription);
         case "TSAsExpression":
+        case "TSNonNullExpression":
+        case "TSTypeAssertion":
           node.expression = this.toAssignable(
             node.expression,
             isBinding,
@@ -1973,6 +1975,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           );
           return;
         case "TSAsExpression":
+        case "TSNonNullExpression":
+        case "TSTypeAssertion":
           this.checkLVal(
             expr.expression,
             isBinding,
