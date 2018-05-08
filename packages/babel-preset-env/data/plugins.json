@@ -242,6 +242,7 @@
   "transform-dotall-regex": {
     "chrome": "62",
     "safari": "11.1",
+    "node": "8.10",
     "ios": "11.3",
     "opera": "49"
   },

@@ -2,7 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
-
+const semver = require("semver");
 const flattenDeep = require("lodash/flattenDeep");
 const isEqual = require("lodash/isEqual");
 const mapValues = require("lodash/mapValues");
@@ -229,14 +229,13 @@ const getLowestImplementedVersion = ({ features }, env) => {
     return null;
   }
 
-  return envTests
-    .map(str => {
-      const version = str.replace(env, "");
-      return version === unreleasedLabelForEnv ? version : parseFloat(version);
-    })
-    .reduce((a, b) => {
-      return b === unreleasedLabelForEnv || a < b ? b : a;
-    });
+  return envTests.map(str => str.replace(env, "")).reduce((a, b) => {
+    if (b === unreleasedLabelForEnv) {
+      return b;
+    }
+
+    return semver.lt(semver.coerce(a), semver.coerce(b)) ? b : a;
+  });
 };
 
 const generateData = (environments, features) => {
