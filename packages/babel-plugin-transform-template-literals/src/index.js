@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
-import { types as t } from "@babel/core";
+import { template, types as t } from "@babel/core";
 
 export default declare((api, options) => {
   api.assertVersion(7);
@@ -87,20 +87,20 @@ export default declare((api, options) => {
         annotateAsPure(callExpression);
         callExpression._compact = true;
 
-        const lazyLoad = t.logicalExpression(
-          "||",
-          t.cloneNode(templateObject),
-          t.assignmentExpression(
-            "=",
-            t.cloneNode(templateObject),
-            callExpression,
-          ),
-        );
+        const lazyLoad = template.ast`
+          function ${templateObject}() {
+            const data = ${callExpression};
+            ${templateObject} = function() { return data };
+            return data;
+          } 
+        `;
 
-        scope.push({ id: templateObject });
-
+        scope.path.unshiftContainer("body", lazyLoad);
         path.replaceWith(
-          t.callExpression(node.tag, [lazyLoad, ...quasi.expressions]),
+          t.callExpression(node.tag, [
+            t.callExpression(t.cloneNode(templateObject), []),
+            ...quasi.expressions,
+          ]),
         );
       },
 
