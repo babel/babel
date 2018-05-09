@@ -20,7 +20,7 @@ interface State {
   programPath: any;
 }
 
-export default declare((api, options) => {
+export default declare((api, { jsxPragma = "React" }) => {
   api.assertVersion(7);
 
   return {
@@ -266,10 +266,7 @@ export default declare((api, options) => {
       }
     }
 
-    if (
-      binding.identifier.name !== "React" &&
-      binding.identifier.name !== options.jsxPragma
-    ) {
+    if (binding.identifier.name !== jsxPragma) {
       return true;
     }
 
