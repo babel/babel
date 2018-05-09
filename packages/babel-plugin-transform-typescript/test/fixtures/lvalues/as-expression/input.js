@@ -1,2 +1,1 @@
-let x: any = 1;
-(x as number) += 2;
+(x as number) += 1;
