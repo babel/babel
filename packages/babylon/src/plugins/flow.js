@@ -34,7 +34,6 @@ function isEsModuleType(bodyElement: N.Node): boolean {
   );
 }
 
-
 function hasTypeImportKind(node: N.Node): boolean {
   return node.importKind === "type" || node.importKind === "typeof";
 }
