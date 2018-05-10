@@ -4,6 +4,14 @@ var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefau
 
 var _taggedTemplateLiteral2 = _interopRequireDefault(require("@babel/runtime/helpers/taggedTemplateLiteral"));
 
-var _templateObject = /*#__PURE__*/ (0, _taggedTemplateLiteral2.default)(["foo"]);
+function _templateObject() {
+  const data = /*#__PURE__*/ (0, _taggedTemplateLiteral2.default)(["foo"]);
 
-tag(_templateObject);
+  _templateObject = function () {
+    return data;
+  };
+
+  return data;
+}
+
+tag(_templateObject());

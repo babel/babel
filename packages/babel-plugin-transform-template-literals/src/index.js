@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import annotateAsPure from "@babel/helper-annotate-as-pure";
-import { types as t } from "@babel/core";
+import { template, types as t } from "@babel/core";
 
 export default declare((api, options) => {
   api.assertVersion(7);
@@ -83,19 +83,22 @@ export default declare((api, options) => {
           callExpressionInput.push(t.arrayExpression(raws));
         }
 
-        const init = t.callExpression(helperId, callExpressionInput);
-        annotateAsPure(init);
-        init._compact = true;
-        scope.push({
-          id: templateObject,
-          init,
-          // This ensures that we don't fail if not using function expression helpers
-          _blockHoist: 1.9,
-        });
+        const callExpression = t.callExpression(helperId, callExpressionInput);
+        annotateAsPure(callExpression);
+        callExpression._compact = true;
 
+        const lazyLoad = template.ast`
+          function ${templateObject}() {
+            const data = ${callExpression};
+            ${templateObject} = function() { return data };
+            return data;
+          } 
+        `;
+
+        scope.path.unshiftContainer("body", lazyLoad);
         path.replaceWith(
           t.callExpression(node.tag, [
-            t.cloneNode(templateObject),
+            t.callExpression(t.cloneNode(templateObject), []),
             ...quasi.expressions,
           ]),
         );
