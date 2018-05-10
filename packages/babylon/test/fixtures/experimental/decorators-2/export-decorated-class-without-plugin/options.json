@@ -1,5 +1,5 @@
 {
   "sourceType": "module",
-  "throws": "This experimental syntax requires enabling the parser plugin: 'decorators2' (1:7)",
+  "throws": "This experimental syntax requires enabling the parser plugin: 'decorators' (1:7)",
   "plugins": null
 }

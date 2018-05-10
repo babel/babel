@@ -261,7 +261,7 @@ export default class LValParser extends NodeUtils {
         break;
       } else {
         const decorators = [];
-        if (this.match(tt.at) && this.hasPlugin("decorators2")) {
+        if (this.match(tt.at) && this.hasPlugin("decorators")) {
           this.raise(
             this.state.start,
             "Stage 2 decorators cannot be used to decorate parameters",

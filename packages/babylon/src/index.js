@@ -67,8 +67,8 @@ function getParserClass(
   pluginsFromOptions: $ReadOnlyArray<string>,
 ): Class<Parser> {
   if (
-    pluginsFromOptions.indexOf("decorators") >= 0 &&
-    pluginsFromOptions.indexOf("decorators2") >= 0
+    pluginsFromOptions.indexOf("decorators-legacy") >= 0 &&
+    pluginsFromOptions.indexOf("decorators") >= 0
   ) {
     throw new Error("Cannot use decorators and decorators2 plugin together");
   }

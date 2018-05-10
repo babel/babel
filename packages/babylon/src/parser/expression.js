@@ -1273,7 +1273,7 @@ export default class ExpressionParser extends LValParser {
       }
 
       if (this.match(tt.at)) {
-        if (this.hasPlugin("decorators2")) {
+        if (this.hasPlugin("decorators")) {
           this.raise(
             this.state.start,
             "Stage 2 decorators disallow object literal property decorators",
