@@ -34,6 +34,7 @@ function isEsModuleType(bodyElement: N.Node): boolean {
   );
 }
 
+
 function hasTypeImportKind(node: N.Node): boolean {
   return node.importKind === "type" || node.importKind === "typeof";
 }
@@ -1487,8 +1488,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return { consequent, failed };
     }
 
-    // Given an expression, walks throught its arrow functions whose body is
-    // an expression and throught conditional expressions. It returns every
+    // Given an expression, walks through out its arrow functions whose body is
+    // an expression and through out conditional expressions. It returns every
     // function which has been parsed with a return type but could have been
     // parenthesized expressions.
     // These functions are separated into two arrays: one containing the ones
