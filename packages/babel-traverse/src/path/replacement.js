@@ -166,6 +166,7 @@ export function replaceWith(replacement) {
   if (oldNode) {
     t.inheritsComments(replacement, oldNode);
     t.removeComments(oldNode);
+    t.inheritParens(replacement, oldNode);
   }
 
   // replace the node
