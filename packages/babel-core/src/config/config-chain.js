@@ -148,7 +148,7 @@ export function buildRootChain(
 
   const configFileChain = emptyChain();
   if (configFile) {
-    const result = loadFileChain(validateFile(configFile), context);
+    const result = loadFileChain(validateConfigFile(configFile), context);
     if (!result) return null;
 
     mergeChain(configFileChain, result);
@@ -180,7 +180,7 @@ export function buildRootChain(
     }
 
     if (babelrcFile) {
-      const result = loadFileChain(validateFile(babelrcFile), context);
+      const result = loadFileChain(validateBabelrcFile(babelrcFile), context);
       if (!result) return null;
 
       mergeChain(fileChain, result);
@@ -231,10 +231,24 @@ function babelrcLoadEnabled(
   return micromatch(pkgData.directories, babelrcPatterns).length > 0;
 }
 
-const validateFile = makeWeakCache((file: ConfigFile): ValidatedFile => ({
+const validateConfigFile = makeWeakCache((file: ConfigFile): ValidatedFile => ({
   filepath: file.filepath,
   dirname: file.dirname,
-  options: validate("file", file.options),
+  options: validate("configfile", file.options),
+}));
+
+const validateBabelrcFile = makeWeakCache(
+  (file: ConfigFile): ValidatedFile => ({
+    filepath: file.filepath,
+    dirname: file.dirname,
+    options: validate("babelrcfile", file.options),
+  }),
+);
+
+const validateExtendFile = makeWeakCache((file: ConfigFile): ValidatedFile => ({
+  filepath: file.filepath,
+  dirname: file.dirname,
+  options: validate("extendsfile", file.options),
 }));
 
 /**
@@ -434,7 +448,7 @@ function mergeExtendsChain(
   }
 
   files.add(file);
-  const fileChain = loadFileChain(validateFile(file), context, files);
+  const fileChain = loadFileChain(validateExtendFile(file), context, files);
   files.delete(file);
 
   if (!fileChain) return false;

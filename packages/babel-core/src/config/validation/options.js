@@ -243,7 +243,14 @@ export type SourceTypeOption = "module" | "script" | "unambiguous";
 export type CompactOption = boolean | "auto";
 export type RootInputSourceMapOption = {} | boolean;
 
-export type OptionsType = "arguments" | "file" | "env" | "preset" | "override";
+export type OptionsType =
+  | "arguments"
+  | "env"
+  | "preset"
+  | "override"
+  | "configfile"
+  | "babelrcfile"
+  | "extendsfile";
 
 export function validate(type: OptionsType, opts: {}): ValidatedOptions {
   assertNoDuplicateSourcemap(opts);
