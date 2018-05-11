@@ -64,8 +64,37 @@ function partition<T>(
   return [list1, list2];
 }
 
+const FLOW_PRAGMA_REGEX = /\*?\s*@((?:no)?flow)\b/;
+
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
+    // The value of the @flow/@noflow pragma. Initially undefined, transitions
+    // to "@flow" or "@noflow" if we see a pragma. Transitions to null if we are
+    // past the initial comment.
+    flowPragma: void | null | "flow" | "noflow";
+
+    constructor(options: ?Options, input: string) {
+      super(options, input);
+      this.flowPragma = undefined;
+    }
+
+    addComment(comment: Comment): void {
+      if (this.flowPragma === undefined) {
+        // Try to parse a flow pragma.
+        const matches = FLOW_PRAGMA_REGEX.exec(comment.value);
+        if (!matches) {
+          this.flowPragma = null;
+        } else if (matches[1] === "flow") {
+          this.flowPragma = "flow";
+        } else if (matches[1] === "noflow") {
+          this.flowPragma = "noflow";
+        } else {
+          throw new Error("Unexpected flow pragma");
+        }
+      }
+      return super.addComment(comment);
+    }
+
     flowParseTypeInitialiser(tok?: TokenType): N.FlowType {
       const oldInType = this.state.inType;
       this.state.inType = true;
@@ -1335,7 +1364,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.next();
         return this.flowParseInterface(node);
       } else {
-        return super.parseStatement(declaration, topLevel);
+        const stmt = super.parseStatement(declaration, topLevel);
+        // We will parse a flow pragma in any comment before the first statement.
+        if (this.flowPragma === undefined && !this.isValidDirective(stmt)) {
+          this.flowPragma = null;
+        }
+        return stmt;
       }
     }
 
