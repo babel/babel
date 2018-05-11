@@ -8,6 +8,7 @@ cache:
     - node_modules
 node_js:
   # We test the latest version on circleci
+  - '9'
   - '8'
   - '6'
 
