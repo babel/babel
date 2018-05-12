@@ -130,12 +130,8 @@ export function buildRootChain(
   );
   if (!programmaticChain) return null;
 
-  const {
-    root: rootDir = ".",
-    babelrc = true,
-    babelrcRoots,
-    configFile: configFileName = true,
-  } = opts;
+  const { root: rootDir = ".", configFile: configFileName = true } = opts;
+  let { babelrc, babelrcRoots } = opts;
 
   const absoluteRoot = path.resolve(context.cwd, rootDir);
 
@@ -148,8 +144,18 @@ export function buildRootChain(
 
   const configFileChain = emptyChain();
   if (configFile) {
-    const result = loadFileChain(validateConfigFile(configFile), context);
+    const validatedFile = validateConfigFile(configFile);
+    const result = loadFileChain(validatedFile, context);
     if (!result) return null;
+
+    // Allow config files to toggle `.babelrc` resolution on and off and
+    // specify where the roots are.
+    if (babelrc === undefined) {
+      babelrc = validatedFile.options.babelrc;
+    }
+    if (babelrcRoots === undefined) {
+      babelrcRoots = validatedFile.options.babelrcRoots;
+    }
 
     mergeChain(configFileChain, result);
   }
@@ -163,7 +169,7 @@ export function buildRootChain(
   const fileChain = emptyChain();
   // resolve all .babelrc files
   if (
-    babelrc &&
+    (babelrc === true || babelrc === undefined) &&
     pkgData &&
     babelrcLoadEnabled(context, pkgData, babelrcRoots, absoluteRoot)
   ) {

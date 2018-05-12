@@ -36,17 +36,20 @@ const ROOT_VALIDATORS: ValidatorSet = {
   filenameRelative: (assertString: Validator<
     $PropertyType<ValidatedOptions, "filenameRelative">,
   >),
-  babelrc: (assertBoolean: Validator<
-    $PropertyType<ValidatedOptions, "babelrc">,
-  >),
-  babelrcRoots: (assertBabelrcSearch: Validator<
-    $PropertyType<ValidatedOptions, "babelrcRoots">,
-  >),
   code: (assertBoolean: Validator<$PropertyType<ValidatedOptions, "code">>),
   ast: (assertBoolean: Validator<$PropertyType<ValidatedOptions, "ast">>),
 
   envName: (assertString: Validator<
     $PropertyType<ValidatedOptions, "envName">,
+  >),
+};
+
+const BABELRC_VALIDATORS: ValidatorSet = {
+  babelrc: (assertBoolean: Validator<
+    $PropertyType<ValidatedOptions, "babelrc">,
+  >),
+  babelrcRoots: (assertBabelrcSearch: Validator<
+    $PropertyType<ValidatedOptions, "babelrcRoots">,
   >),
 };
 
@@ -262,6 +265,22 @@ export function validate(type: OptionsType, opts: {}): ValidatedOptions {
     if (type !== "arguments" && ROOT_VALIDATORS[key]) {
       throw new Error(`.${key} is only allowed in root programmatic options`);
     }
+    if (
+      type !== "arguments" &&
+      type !== "configfile" &&
+      BABELRC_VALIDATORS[key]
+    ) {
+      if (type === "babelrcfile" || type === "extendsfile") {
+        throw new Error(
+          `.${key} is not allowed in .babelrc or "extend"ed files, only in root programmatic options, ` +
+            `or babel.config.js/config file options`,
+        );
+      }
+
+      throw new Error(
+        `.${key} is only allowed in root programmatic options, or babel.config.js/config file options`,
+      );
+    }
     if (type === "env" && key === "env") {
       throw new Error(`.${key} is not allowed inside another env block`);
     }
@@ -275,6 +294,7 @@ export function validate(type: OptionsType, opts: {}): ValidatedOptions {
     const validator =
       COMMON_VALIDATORS[key] ||
       NONPRESET_VALIDATORS[key] ||
+      BABELRC_VALIDATORS[key] ||
       ROOT_VALIDATORS[key];
 
     if (validator) validator(key, opts[key]);
