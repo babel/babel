@@ -33,6 +33,18 @@ function getNormalizedV8Flag(arg) {
   return arg;
 }
 
+const availableNodeFlags = [
+  "--abort-on-uncaught-exception",
+  "--preserve-symlinks",
+  "--inspect-port",
+  "--napi-modules",
+  "--no-deprecation",
+  "--no-warnings",
+  "--pending-deprecation",
+  "--v8-pool-size",
+  "--zero-fill-buffers",
+];
+
 getV8Flags(function(err, v8Flags) {
   babelArgs.forEach(function(arg, index) {
     const flag = arg.split("=")[0];
@@ -68,6 +80,7 @@ getV8Flags(function(err, v8Flags) {
       default:
         if (
           v8Flags.indexOf(getNormalizedV8Flag(flag)) >= 0 ||
+          availableNodeFlags.indexOf(flag) >= 0 ||
           arg.indexOf("--trace") === 0
         ) {
           args.unshift(arg);

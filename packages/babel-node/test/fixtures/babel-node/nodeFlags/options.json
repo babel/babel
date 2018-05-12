@@ -1,0 +1,15 @@
+{
+  "args": [
+    "--abort-on-uncaught-exception",
+    "--preserve-symlinks",
+    "--inspect-port=12000",
+    "--napi-modules",
+    "--no-deprecation",
+    "--no-warnings",
+    "--pending-deprecation",
+    "--v8-pool-size=1",
+    "--zero-fill-buffers",
+    "--eval", "console.log('foo')"
+  ],
+  "stdout": "foo"
+}
