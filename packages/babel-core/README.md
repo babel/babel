@@ -205,7 +205,7 @@ Each `ConfigItem` exposes all of the information Babel knows. The fields are:
     You can pass these options from the Babel CLI like so:
   </p>
   <p>
-    <code>babel --name<span class="o">=</span>value</code>
+    <code>babel --config-file<span class="o">=</span>value</code>
   </p>
 </blockquote>
 
