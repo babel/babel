@@ -904,6 +904,7 @@ describe("buildConfigChain", function() {
   describe("config files", () => {
     const getDefaults = () => ({
       babelrc: false,
+      configFile: false,
       cwd: process.cwd(),
       envName: "development",
       passPerPreset: false,
