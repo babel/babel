@@ -1,5 +1,4 @@
 import { declare } from "@babel/helper-plugin-utils";
-import annotateAsPure from "@babel/helper-annotate-as-pure";
 import { template, types as t } from "@babel/core";
 
 export default declare((api, options) => {
@@ -83,13 +82,9 @@ export default declare((api, options) => {
           callExpressionInput.push(t.arrayExpression(raws));
         }
 
-        const callExpression = t.callExpression(helperId, callExpressionInput);
-        annotateAsPure(callExpression);
-        callExpression._compact = true;
-
         const lazyLoad = template.ast`
           function ${templateObject}() {
-            const data = ${callExpression};
+            const data = ${t.callExpression(helperId, callExpressionInput)};
             ${templateObject} = function() { return data };
             return data;
           } 
