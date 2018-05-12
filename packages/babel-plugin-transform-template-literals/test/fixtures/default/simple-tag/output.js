@@ -1,5 +1,5 @@
 function _templateObject2() {
-  const data = /*#__PURE__*/ _taggedTemplateLiteral(["first", "second"]);
+  const data = _taggedTemplateLiteral(["first", "second"]);
 
   _templateObject2 = function () {
     return data;
@@ -9,7 +9,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = /*#__PURE__*/ _taggedTemplateLiteral(["wow"]);
+  const data = _taggedTemplateLiteral(["wow"]);
 
   _templateObject = function () {
     return data;

@@ -1,5 +1,5 @@
 function _templateObject3() {
-  const data = /*#__PURE__*/ _taggedTemplateLiteral(["wow\naB", " ", ""], ["wow\\naB", " ", ""]);
+  const data = _taggedTemplateLiteral(["wow\naB", " ", ""], ["wow\\naB", " ", ""]);
 
   _templateObject3 = function () {
     return data;
@@ -9,7 +9,7 @@ function _templateObject3() {
 }
 
 function _templateObject2() {
-  const data = /*#__PURE__*/ _taggedTemplateLiteral(["wow\nab", " ", ""], ["wow\\nab", " ", ""]);
+  const data = _taggedTemplateLiteral(["wow\nab", " ", ""], ["wow\\nab", " ", ""]);
 
   _templateObject2 = function () {
     return data;
@@ -19,7 +19,7 @@ function _templateObject2() {
 }
 
 function _templateObject() {
-  const data = /*#__PURE__*/ _taggedTemplateLiteral(["wow\na", "b ", ""], ["wow\\na", "b ", ""]);
+  const data = _taggedTemplateLiteral(["wow\na", "b ", ""], ["wow\\na", "b ", ""]);
 
   _templateObject = function () {
     return data;
