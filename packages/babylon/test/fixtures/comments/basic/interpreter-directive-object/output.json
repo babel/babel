@@ -27,6 +27,22 @@
       }
     },
     "sourceType": "script",
+    "interpreter": {
+      "type": "InterpreterDirective",
+      "start": 0,
+      "end": 25,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 25
+        }
+      },
+      "value": "/usr/bin/env babel-node"
+    },
     "body": [
       {
         "type": "VariableDeclaration",
@@ -148,45 +164,9 @@
             }
           }
         ],
-        "kind": "var",
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": "/usr/bin/env babel-node",
-            "start": 0,
-            "end": 25,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 0
-              },
-              "end": {
-                "line": 1,
-                "column": 25
-              }
-            }
-          }
-        ]
+        "kind": "var"
       }
     ],
     "directives": []
-  },
-  "comments": [
-    {
-      "type": "CommentLine",
-      "value": "/usr/bin/env babel-node",
-      "start": 0,
-      "end": 25,
-      "loc": {
-        "start": {
-          "line": 1,
-          "column": 0
-        },
-        "end": {
-          "line": 1,
-          "column": 25
-        }
-      }
-    }
-  ]
+  }
 }

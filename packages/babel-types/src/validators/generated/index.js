@@ -47,6 +47,20 @@ export function isBinaryExpression(node: Object, opts?: Object): boolean {
 
   return false;
 }
+export function isInterpreterDirective(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "InterpreterDirective") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isDirective(node: Object, opts?: Object): boolean {
   if (!node) return false;
 

@@ -112,6 +112,9 @@ export const types: { [name: string]: TokenType } = {
   at: new TokenType("@"),
   hash: new TokenType("#"),
 
+  // Special hashbang token.
+  interpreterDirective: new TokenType("#!..."),
+
   // Operators. These carry several kinds of properties to help the
   // parser use them properly (the presence of these properties is
   // what categorizes them as operators).

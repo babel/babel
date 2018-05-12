@@ -19,15 +19,6 @@ export default class Parser extends StatementParser {
     this.input = input;
     this.plugins = pluginsMap(this.options.plugins);
     this.filename = options.sourceFilename;
-
-    // If enabled, skip leading hashbang line.
-    if (
-      this.state.pos === 0 &&
-      this.input[0] === "#" &&
-      this.input[1] === "!"
-    ) {
-      this.skipLineComment(2);
-    }
   }
 
   parse(): File {
