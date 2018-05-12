@@ -1,4 +1,6 @@
 import "core-js/modules/es6.object.assign";
+import "core-js/modules/web.dom.iterable";
+import "core-js/modules/es6.array.iterator";
 var objectClass = Object;
 var arrayInstance = [];
 var assignStr = "assign";

@@ -10,7 +10,7 @@
   "types": "lib/index.d.ts",
   "dependencies": {
     "esutils": "^2.0.2",
-    "lodash": "^4.2.0",
+    "lodash": "^4.17.5",
     "to-fast-properties": "^2.0.0"
   },
   "devDependencies": {

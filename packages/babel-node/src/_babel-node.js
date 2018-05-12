@@ -145,7 +145,7 @@ if (program.eval || program.print) {
     });
     args = args.slice(i);
 
-    // We have to handle require ourselfs, as we want to require it in the context of babel-register
+    // We have to handle require ourselves, as we want to require it in the context of babel-register
     if (program.require) {
       let requireFileName = program.require;
       if (!path.isAbsolute(requireFileName)) {
