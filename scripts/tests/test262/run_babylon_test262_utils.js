@@ -28,7 +28,10 @@ function getPlugins(features) {
 }
 
 exports.getTests = function(testDir) {
-  const stream = new TestStream(testDir, { omitRuntime: true });
+  const stream = new TestStream(testDir, {
+    omitRuntime: true,
+    acceptVersion: "3.0.0",
+  });
   const tests = [];
 
   stream.on("data", test => {
