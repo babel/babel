@@ -6,7 +6,6 @@ const utils = require("./run_babylon_test262_utils");
 
 const testDir = path.join(__dirname, "../../../build/test262");
 const whitelistFile = path.join(__dirname, "test262_whitelist.txt");
-const plugins = ["asyncGenerators", "objectRestSpread", "optionalCatchBinding"];
 const shouldUpdate = process.argv.indexOf("--update-whitelist") > -1;
 
 Promise.all([utils.getTests(testDir), utils.getWhitelist(whitelistFile)])
@@ -21,7 +20,7 @@ Promise.all([utils.getTests(testDir), utils.getWhitelist(whitelistFile)])
         console.log(`> ${Math.round(100 * idx / total)}% complete`);
       }
 
-      return utils.runTest(test, plugins);
+      return utils.runTest(test);
     });
 
     return utils.interpret(results, whitelist);

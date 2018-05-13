@@ -12,6 +12,21 @@ const pfs = {
 
 const parse = require("../../../packages/babylon").parse;
 
+const featuresToPlugins = {
+  BigInt: "bigInt",
+  "class-fields-public": "classProperties",
+  "class-fields-private": "classPrivateProperties",
+  "async-iteration": "asyncGenerators",
+  "object-rest": "objectRestSpread",
+  "object-spread": "objectRestSpread",
+  "optional-catch-binding": "optionalCatchBinding",
+  "numeric-separator-literal": "numericSeparator",
+};
+
+function getPlugins(features) {
+  return features && features.map(f => featuresToPlugins[f]).filter(Boolean);
+}
+
 exports.getTests = function(testDir) {
   const stream = new TestStream(testDir, { omitRuntime: true });
   const tests = [];
@@ -25,6 +40,7 @@ exports.getTests = function(testDir) {
       fileName,
       id: `${fileName}(${test.scenario})`,
       sourceType: test.attrs.flags.module ? "module" : "script",
+      plugins: getPlugins(test.attrs.features),
       expectedError:
         !!test.attrs.negative &&
         (test.attrs.negative.phase === "parse" ||
@@ -38,9 +54,12 @@ exports.getTests = function(testDir) {
   });
 };
 
-exports.runTest = function(test, plugins) {
+exports.runTest = function(test) {
   try {
-    parse(test.contents, { sourceType: test.sourceType, plugins: plugins });
+    parse(test.contents, {
+      sourceType: test.sourceType,
+      plugins: test.plugins,
+    });
     test.actualError = false;
   } catch (err) {
     test.actualError = true;
