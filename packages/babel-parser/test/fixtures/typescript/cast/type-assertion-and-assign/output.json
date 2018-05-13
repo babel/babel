@@ -71,6 +71,21 @@
                 "column": 11
               }
             },
+            "typeAnnotation": {
+              "type": "TSNumberKeyword",
+              "start": 2,
+              "end": 8,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 2
+                },
+                "end": {
+                  "line": 1,
+                  "column": 8
+                }
+              }
+            },
             "expression": {
               "type": "Identifier",
               "start": 10,
@@ -87,21 +102,6 @@
                 "identifierName": "x"
               },
               "name": "x"
-            },
-            "typeAnnotation": {
-              "type": "TSNumberKeyword",
-              "start": 2,
-              "end": 8,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 2
-                },
-                "end": {
-                  "line": 1,
-                  "column": 8
-                }
-              }
             },
             "extra": {
               "parenthesized": true,
