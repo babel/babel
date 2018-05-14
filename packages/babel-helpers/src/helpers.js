@@ -440,7 +440,8 @@ helpers.construct = () => template.program.ast`
       _construct = function _construct(Parent, args, Class) {
         // This wrapper is needed because Reflect.construct can't be properly
         // polyfilled, thus core-js doesn't set the correct __proto__.
-        var result = Reflect.construct(Parent, args, Class);
+        if (Class === undefined) return Reflect.construct(Parent, args);
+        var result = Reflect.construct.apply(null, arguments);
         if (!(result instanceof Class)) result = setPrototypeOf(result, Class.prototype);
         return result;
       };
