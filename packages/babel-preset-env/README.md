@@ -6,7 +6,7 @@
 npm install @babel/preset-env --save-dev
 ```
 
-Without any configuration options, `@babel/preset-env` behaves exactly the same as [`@babel/preset-es2015`](https://github.com/babel/babel/tree/master/packages/babel-es2015), [`@babel/preset-es2016`](https://github.com/babel/babel/tree/master/packages/babel-es2016) and [`@babel/preset-es2017`](https://github.com/babel/babel/tree/master/packages/babel-es2017) together (or the deprecated `babel-preset-lastest`).
+Without any configuration options, `@babel/preset-env` behaves exactly the same as [`@babel/preset-es2015`](https://github.com/babel/babel/tree/master/packages/babel-preset-es2015), [`@babel/preset-es2016`](https://github.com/babel/babel/tree/master/packages/babel-preset-es2016) and [`@babel/preset-es2017`](https://github.com/babel/babel/tree/master/packages/babel-preset-es2017) together (or the deprecated `babel-preset-latest`).
 
 > We don't recommend using `preset-env` this way because it doesn't take advantage of its ability to target specific browsers.
 
