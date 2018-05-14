@@ -83,18 +83,27 @@ function update_whitelist(summary) {
   const contains = (tests, file) =>
     tests.some(({ test }) => test.file === file);
 
-  const result = fs
+  const disallowed = summary.disallowed.success.concat(
+    summary.disallowed.failure
+  );
+
+  const oldLines = fs
     .readFileSync(WHITELIST_PATH, "utf8")
+    .trim()
     .split("\n")
     .filter(line => {
       const file = line.replace(/#.*$/, "").trim();
       return (
-        !contains(summary.disallowed.success, file) &&
-        !contains(summary.disallowed.failure, file) &&
-        summary.unrecognized.indexOf(file) === -1
+        !contains(disallowed, file) && summary.unrecognized.indexOf(file) === -1
       );
-    })
-    .join("\n");
+    });
+
+  const newLines = disallowed
+    .map(({ test }) => test.file)
+    .filter(test => oldLines.indexOf(test) === -1);
+
+  const result = oldLines.concat(newLines).join("\n") + "\n";
+
   fs.writeFileSync(WHITELIST_PATH, result);
 }
 
@@ -116,6 +125,7 @@ const flowOptionsMapping = {
   esproposal_class_static_fields: "classProperties",
   esproposal_export_star_as: "exportNamespaceFrom",
   esproposal_decorators: "decorators-legacy",
+  esproposal_nullish_coalescing: "nullishCoalescingOperator",
   esproposal_optional_chaining: "optionalChaining",
   types: "flowComments",
 };
