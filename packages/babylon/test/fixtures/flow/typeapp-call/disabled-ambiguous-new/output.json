@@ -101,6 +101,7 @@
                 },
                 "name": "C"
               },
+              "typeArguments": null,
               "arguments": []
             },
             "operator": "<",

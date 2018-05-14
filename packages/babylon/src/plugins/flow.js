@@ -78,6 +78,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.flowPragma = undefined;
     }
 
+    shouldParseTypes(): boolean {
+      return this.options.all || this.flowPragma === "flow";
+    }
+
     addComment(comment: Comment): void {
       if (this.flowPragma === undefined) {
         // Try to parse a flow pragma.
@@ -2372,6 +2376,25 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       return super.parseSubscripts(base, startPos, startLoc, noCalls);
+    }
+
+    parseNewArguments(node: N.NewExpression): void {
+      let targs = null;
+      if (this.shouldParseTypes() && this.isRelational("<")) {
+        const state = this.state.clone();
+        try {
+          targs = this.flowParseTypeParameterInstantiation();
+        } catch (e) {
+          if (e instanceof SyntaxError) {
+            this.state = state;
+          } else {
+            throw e;
+          }
+        }
+      }
+      node.typeArguments = targs;
+
+      super.parseNewArguments(node);
     }
 
     parseAsyncArrowWithTypeParameters(
