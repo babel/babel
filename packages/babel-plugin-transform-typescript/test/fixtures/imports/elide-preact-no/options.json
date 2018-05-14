@@ -1,0 +1,3 @@
+{
+    "plugins": ["syntax-jsx", ["transform-typescript", { "jsxPragma": "h" }]]
+}
