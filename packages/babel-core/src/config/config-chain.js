@@ -130,12 +130,8 @@ export function buildRootChain(
   );
   if (!programmaticChain) return null;
 
-  const {
-    root: rootDir = ".",
-    babelrc = true,
-    babelrcRoots,
-    configFile: configFileName = true,
-  } = opts;
+  const { root: rootDir = ".", configFile: configFileName = true } = opts;
+  let { babelrc, babelrcRoots } = opts;
 
   const absoluteRoot = path.resolve(context.cwd, rootDir);
 
@@ -148,8 +144,18 @@ export function buildRootChain(
 
   const configFileChain = emptyChain();
   if (configFile) {
-    const result = loadFileChain(configFile, context);
+    const validatedFile = validateConfigFile(configFile);
+    const result = loadFileChain(validatedFile, context);
     if (!result) return null;
+
+    // Allow config files to toggle `.babelrc` resolution on and off and
+    // specify where the roots are.
+    if (babelrc === undefined) {
+      babelrc = validatedFile.options.babelrc;
+    }
+    if (babelrcRoots === undefined) {
+      babelrcRoots = validatedFile.options.babelrcRoots;
+    }
 
     mergeChain(configFileChain, result);
   }
@@ -163,7 +169,7 @@ export function buildRootChain(
   const fileChain = emptyChain();
   // resolve all .babelrc files
   if (
-    babelrc &&
+    (babelrc === true || babelrc === undefined) &&
     pkgData &&
     babelrcLoadEnabled(context, pkgData, babelrcRoots, absoluteRoot)
   ) {
@@ -180,7 +186,7 @@ export function buildRootChain(
     }
 
     if (babelrcFile) {
-      const result = loadFileChain(babelrcFile, context);
+      const result = loadFileChain(validateBabelrcFile(babelrcFile), context);
       if (!result) return null;
 
       mergeChain(fileChain, result);
@@ -231,11 +237,30 @@ function babelrcLoadEnabled(
   return micromatch(pkgData.directories, babelrcPatterns).length > 0;
 }
 
+const validateConfigFile = makeWeakCache((file: ConfigFile): ValidatedFile => ({
+  filepath: file.filepath,
+  dirname: file.dirname,
+  options: validate("configfile", file.options),
+}));
+
+const validateBabelrcFile = makeWeakCache(
+  (file: ConfigFile): ValidatedFile => ({
+    filepath: file.filepath,
+    dirname: file.dirname,
+    options: validate("babelrcfile", file.options),
+  }),
+);
+
+const validateExtendFile = makeWeakCache((file: ConfigFile): ValidatedFile => ({
+  filepath: file.filepath,
+  dirname: file.dirname,
+  options: validate("extendsfile", file.options),
+}));
+
 /**
  * Build a config chain for just the programmatic options passed into Babel.
  */
 const loadProgrammaticChain = makeChainWalker({
-  init: arg => arg,
   root: input => buildRootDescriptors(input, "base", createCachedDescriptors),
   env: (input, envName) =>
     buildEnvDescriptors(input, "base", createCachedDescriptors, envName),
@@ -255,18 +280,12 @@ const loadProgrammaticChain = makeChainWalker({
  * Build a config chain for a given file.
  */
 const loadFileChain = makeChainWalker({
-  init: input => validateFile(input),
   root: file => loadFileDescriptors(file),
   env: (file, envName) => loadFileEnvDescriptors(file)(envName),
   overrides: (file, index) => loadFileOverridesDescriptors(file)(index),
   overridesEnv: (file, index, envName) =>
     loadFileOverridesEnvDescriptors(file)(index)(envName),
 });
-const validateFile = makeWeakCache((file: ConfigFile): ValidatedFile => ({
-  filepath: file.filepath,
-  dirname: file.dirname,
-  options: validate("file", file.options),
-}));
 const loadFileDescriptors = makeWeakCache((file: ValidatedFile) =>
   buildRootDescriptors(file, file.filepath, createUncachedDescriptors),
 );
@@ -350,25 +369,18 @@ function buildOverrideEnvDescriptors(
     : null;
 }
 
-function makeChainWalker<
-  ArgT,
-  InnerT: { options: ValidatedOptions, dirname: string },
->({
-  init,
+function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
   root,
   env,
   overrides,
   overridesEnv,
 }: {
-  init: ArgT => InnerT,
-  root: InnerT => OptionsAndDescriptors,
-  env: (InnerT, string) => OptionsAndDescriptors | null,
-  overrides: (InnerT, number) => OptionsAndDescriptors,
-  overridesEnv: (InnerT, number, string) => OptionsAndDescriptors | null,
+  root: ArgT => OptionsAndDescriptors,
+  env: (ArgT, string) => OptionsAndDescriptors | null,
+  overrides: (ArgT, number) => OptionsAndDescriptors,
+  overridesEnv: (ArgT, number, string) => OptionsAndDescriptors | null,
 }): (ArgT, ConfigContext, Set<ConfigFile> | void) => ConfigChain | null {
-  return (arg, context, files = new Set()) => {
-    const input = init(arg);
-
+  return (input, context, files = new Set()) => {
     const { dirname } = input;
 
     const flattenedConfigs = [];
@@ -442,7 +454,7 @@ function mergeExtendsChain(
   }
 
   files.add(file);
-  const fileChain = loadFileChain(file, context, files);
+  const fileChain = loadFileChain(validateExtendFile(file), context, files);
   files.delete(file);
 
   if (!fileChain) return false;

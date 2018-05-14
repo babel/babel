@@ -49,6 +49,7 @@ export default function loadPrivatePartialConfig(
   // passed back to Babel a second time, it will be in the right structure
   // to not change behavior.
   options.babelrc = false;
+  options.configFile = false;
   options.envName = envName;
   options.cwd = absoluteCwd;
   options.passPerPreset = false;
