@@ -1,5 +1,5 @@
 {
-  "mappings": "AAEAA,QAAQC,GAAR,CAAY,eAAZ",
+  "mappings": "AAAA;AAEAA,QAAQC,GAAR,CAAY,eAAZ",
   "names": [
     "console",
     "log"
@@ -8,7 +8,7 @@
     "source-maps/interpreter-directive-prefix/input.js"
   ],
   "sourcesContent": [
-    "\n\nconsole.log(\"Hello, world!\");"
+    "#!env node\n\nconsole.log(\"Hello, world!\");"
   ],
   "version": 3
 }

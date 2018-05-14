@@ -1,3 +1,2 @@
 #!env node
-"use strict";
-var someFirstLine;
+"use strict";var someFirstLine;
