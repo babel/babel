@@ -33,7 +33,9 @@ testContext.global = testContext;
 runModuleInTestContext("@babel/polyfill", __filename);
 
 // Populate the "babelHelpers" global with Babel's helper utilities.
-runCodeInTestContext(buildExternalHelpers());
+runCodeInTestContext(buildExternalHelpers(), {
+  filename: path.join(__dirname, "babel-helpers-in-memory.js"),
+});
 
 /**
  * A basic implementation of CommonJS so we can execute `@babel/polyfill` inside our test context.
@@ -75,13 +77,10 @@ function runModuleInTestContext(id: string, relativeFilename: string) {
  *
  * Exposed for unit tests, not for use as an API.
  */
-export function runCodeInTestContext(
-  code: string,
-  opts: { filename?: string } = {},
-) {
-  const filename = opts.filename || null;
-  const dirname = filename ? path.dirname(filename) : null;
-  const req = filename ? id => runModuleInTestContext(id, filename) : null;
+export function runCodeInTestContext(code: string, opts: { filename: string }) {
+  const filename = opts.filename;
+  const dirname = path.dirname(filename);
+  const req = id => runModuleInTestContext(id, filename);
 
   const module = {
     id: filename,
