@@ -1,0 +1,7 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    ["decorators", { "decoratorsBeforeExport": true }]
+  ],
+  "throws": "Unexpected token (1:15)"
+}
