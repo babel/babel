@@ -433,23 +433,39 @@ helpers.setPrototypeOf = () => template.program.ast`
 helpers.construct = () => template.program.ast`
   import setPrototypeOf from "setPrototypeOf";
 
+  function isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+
+    // core-js@3
+    if (Reflect.construct.sham) return false;
+
+    // Proxy can't be polyfilled. Every browser implemented
+    // proxies before or at the same time of Reflect.construct,
+    // so if they support Proxy they also support Reflect.construct.
+    if (typeof Proxy === "funcion") return true;
+
+    // Since Reflect.construct can't be properly polyfilled, some
+    // implementations (e.g. core-js@2) don't set the correct internal slots.
+    // Those polyfills don't allow us to subclass built-ins, so we need to
+    // use our fallback implementation.
+    try {
+      // If the internal slots aren't set, this throws an error similar to
+      //   TypeError: this is not a Date object.
+      Date.prototype.toString.call(Reflect.construct(Date, [], function() {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   export default function _construct(Parent, args, Class) {
-    if (
-      typeof Reflect !== "undefined" && Reflect.construct
-    ) {
-      _construct = function _construct(Parent, args, Class) {
-        // This wrapper is needed because Reflect.construct can't be properly
-        // polyfilled, thus core-js doesn't set the correct __proto__.
-        if (Class === undefined) return Reflect.construct(Parent, args);
-        var result = Reflect.construct.apply(null, arguments);
-        if (!(result instanceof Class)) result = setPrototypeOf(result, Class.prototype);
-        return result;
-      };
+    if (isNativeReflectConstruct()) {
+      _construct = Reflect.construct;
     } else {
       _construct = function _construct(Parent, args, Class) {
         var a = [null];
         a.push.apply(a, args);
-        var Constructor = Parent.bind.apply(Parent, a);
+        var Constructor = Function.bind.apply(Parent, a);
         var instance = new Constructor();
         if (Class) setPrototypeOf(instance, Class.prototype);
         return instance;
