@@ -15,7 +15,6 @@ export type Options = {
   strictMode: ?boolean,
   ranges: boolean,
   tokens: boolean,
-  flowAll: boolean,
 };
 
 export const defaultOptions: Options = {
@@ -52,9 +51,6 @@ export const defaultOptions: Options = {
   ranges: false,
   // Adds all parsed tokens to a `tokens` property on the `File` node
   tokens: false,
-  // When enabled and plugins includes flow, all files should be parsed as if
-  // the @flow pragma was provided.
-  flowAll: false,
 };
 
 // Interpret and default an options object

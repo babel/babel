@@ -111,14 +111,13 @@ const options = {
   plugins: [
     "asyncGenerators",
     "dynamicImport",
-    "flow",
+    ["flow", { all: true }],
     "flowComments",
     "jsx",
     "objectRestSpread",
   ],
   sourceType: "module",
   ranges: true,
-  flowAll: true,
 };
 
 const flowOptionsMapping = {

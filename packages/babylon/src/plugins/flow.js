@@ -79,7 +79,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     shouldParseTypes(): boolean {
-      return this.options.flowAll || this.flowPragma === "flow";
+      return this.getPluginOption("flow", "all") || this.flowPragma === "flow";
     }
 
     addComment(comment: Comment): void {
