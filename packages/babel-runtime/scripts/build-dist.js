@@ -1,77 +1,112 @@
 "use strict";
 
+const path = require("path");
 const outputFile = require("output-file-sync");
-const coreDefinitions = require("@babel/plugin-transform-runtime").definitions;
 const helpers = require("@babel/helpers");
 const babel = require("@babel/core");
+const template = require("@babel/template");
 const t = require("@babel/types");
 
-const paths = ["is-iterable", "get-iterator"];
+const transformRuntime = require("@babel/plugin-transform-runtime");
+const corejs2Definitions = require("@babel/plugin-transform-runtime").definitions;
 
-Object.keys(coreDefinitions.builtins).forEach((key) => {
-  const path = coreDefinitions.builtins[key];
-  paths.push(path);
-});
+const runtimeRoot = path.resolve(__dirname, "..");
 
-Object.keys(coreDefinitions.methods).forEach((key) => {
-  const props = coreDefinitions.methods[key];
-  Object.keys(props).forEach((key2) => {
-    const path = props[key2];
+writeCoreJS2(runtimeRoot);
+
+writeHelpers(runtimeRoot, { esm: false, corejs2: false });
+writeHelpers(runtimeRoot, { esm: false, corejs2: true });
+writeHelpers(runtimeRoot, { esm: true, corejs2: false });
+writeHelpers(runtimeRoot, { esm: true, corejs2: true });
+
+function writeCoreJS2(pkgDirname) {
+  const paths = ["is-iterable", "get-iterator"];
+
+  Object.keys(corejs2Definitions.builtins).forEach(key => {
+    const path = corejs2Definitions.builtins[key];
     paths.push(path);
   });
-});
 
-paths.forEach(function(path) {
-  writeFile(
-    "core-js/" + path + ".js",
-    defaultify(`require("core-js/library/fn/${path}")`)
-  );
-});
+  Object.keys(corejs2Definitions.methods).forEach(key => {
+    const props = corejs2Definitions.methods[key];
+    Object.keys(props).forEach(key2 => {
+      paths.push(props[key2]);
+    });
+  });
 
-function relative(filename) {
-  return `${__dirname}/../${filename}`;
+  paths.forEach(function(corePath) {
+    outputFile(
+      path.join(pkgDirname, "core-js", `${corePath}.js`),
+      `module.exports = require("core-js/library/fn/${corePath}");`
+    );
+  });
 }
 
-function defaultify(name) {
-  return `module.exports = ${name};`;
-}
+function writeHelpers(pkgDirname, { esm, corejs2 }) {
+  for (const helperName of helpers.list) {
+    const helperFilename = path.join(
+      pkgDirname,
+      "helpers",
+      corejs2 ? "" : "builtin",
+      esm ? "es6" : "",
+      `${helperName}.js`
+    );
 
-function writeRootFile(filename, content) {
-  filename = relative(filename);
-  outputFile(filename, content);
-}
-
-function writeFile(filename, content) {
-  return writeRootFile(filename, content);
-}
-
-function makeTransformOpts(modules, useBuiltIns) {
-  const opts = {
-    presets: [[require("@babel/preset-env"), { modules: false }]],
-
-    plugins: [
-      [
-        require("@babel/plugin-transform-runtime"),
-        { useBuiltIns, useESModules: modules === false },
-      ],
-    ],
-  };
-  return opts;
-}
-
-function adjustImportPath(node, relativePath) {
-  if (helpers.list.indexOf(node.value) >= 0) {
-    node.value = `./${node.value}`;
-  } else {
-    node.value = node.value.replace(/^@babel\/runtime/, relativePath);
+    outputFile(
+      helperFilename,
+      buildHelper(pkgDirname, helperFilename, helperName, { esm, corejs2 })
+    );
   }
 }
 
-function buildRuntimeRewritePlugin(relativePath, helperName, dependencies) {
+function buildHelper(pkgDirname, helperFilename, helperName, { esm, corejs2 }) {
+  const tree = t.program([], [], esm ? "module" : "script");
+  const dependencies = {};
+  let bindings = null;
+
+  if (!esm) {
+    bindings = [];
+    for (const dep of helpers.getDependencies(helperName)) {
+      const id = (dependencies[dep] = t.identifier(t.toIdentifier(dep)));
+      tree.body.push(template.statement.ast`
+        var ${id} = require("${`./${dep}`}");
+      `);
+      bindings.push(id.name);
+    }
+  }
+
+  const helper = helpers.get(
+    helperName,
+    dep => dependencies[dep],
+    esm ? null : template.expression.ast`module.exports`,
+    bindings
+  );
+  tree.body.push(...helper.nodes);
+
+  return babel.transformFromAst(tree, null, {
+    presets: [[require("@babel/preset-env"), { modules: false }]],
+    plugins: [
+      [transformRuntime, { useBuiltIns: !corejs2, useESModules: esm }],
+      buildRuntimeRewritePlugin(
+        path.relative(path.dirname(helperFilename), pkgDirname),
+        helperName
+      ),
+    ],
+  }).code;
+}
+
+function buildRuntimeRewritePlugin(relativePath, helperName) {
+  function adjustImportPath(node, relativePath) {
+    node.value =
+      helpers.list.indexOf(node.value) !== -1
+        ? `./${node.value}`
+        : node.value.replace(/^@babel\/runtime/, relativePath);
+  }
+
   return {
     pre(file) {
       const original = file.get("helperGenerator");
-      file.set("helperGenerator", (name) => {
+      file.set("helperGenerator", name => {
         // make sure that helpers won't insert circular references to themselves
         if (name === helperName) return false;
 
@@ -97,69 +132,4 @@ function buildRuntimeRewritePlugin(relativePath, helperName, dependencies) {
       },
     },
   };
-}
-
-function buildRequireCall(id, dep) {
-  return t.variableDeclaration("var", [
-    t.variableDeclarator(
-      id,
-      t.callExpression(t.identifier("require"), [t.stringLiteral(dep)])
-    )
-  ]);
-}
-
-function buildHelper(helperName, modules, useBuiltIns) {
-  const id =
-    modules === "commonjs"
-      ? t.memberExpression(t.identifier("module"), t.identifier("exports"))
-      : null;
-  const sourceType = modules === "commonjs" ? "script" : "module";
-
-  const tree = t.program([], [], sourceType);
-  const dependencies = {};
-  let bindings = null;
-
-  if (modules === "commonjs") {
-    bindings = [];
-    for (const dep of helpers.getDependencies(helperName)) {
-      const id = dependencies[dep] = t.identifier(t.toIdentifier(dep));
-      tree.body.push(buildRequireCall(id, dep));
-      bindings.push(id.name);
-    }
-  }
-
-  const helper = helpers.get(
-    helperName,
-    dep => dependencies[dep],
-    id,
-    bindings
-  );
-  tree.body.push.apply(tree.body, helper.nodes);
-
-  const transformOpts = makeTransformOpts(modules, useBuiltIns);
-
-  const relative = useBuiltIns ? "../.." : "..";
-  
-  return babel.transformFromAst(tree, null, {
-    presets: transformOpts.presets,
-    plugins: transformOpts.plugins.concat([
-      buildRuntimeRewritePlugin(
-        modules === false ? `../${relative}` : relative,
-        helperName
-      ),
-    ]),
-  }).code;
-}
-
-for (const modules of ["commonjs", false]) {
-  for (const builtin of [false, true]) {
-    const dirname = `helpers/${builtin ? "builtin/" : ""}${!modules ? "es6/" : ""}`;
-
-    for (const helperName of helpers.list) {
-      writeFile(
-        `${dirname}${helperName}.js`,
-        buildHelper(helperName, modules, builtin)
-      );
-    }
-  }
 }
