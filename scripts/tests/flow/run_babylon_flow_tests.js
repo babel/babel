@@ -118,6 +118,7 @@ const options = {
   ],
   sourceType: "module",
   ranges: true,
+  flowAll: true,
 };
 
 const flowOptionsMapping = {
