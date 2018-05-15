@@ -24,7 +24,7 @@ module.exports = function(api) {
     case "production":
       // Config during builds before publish.
       envOpts.targets = {
-        node: 6,
+        node: "6.9",
       };
       break;
     case "development":

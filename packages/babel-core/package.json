@@ -22,6 +22,9 @@
     "babel-core",
     "compiler"
   ],
+  "engines": {
+    "node": ">=6.9.0 < 11.0.0-0"
+  },
   "browser": {
     "./lib/config/files/index.js": "./lib/config/files/index-browser.js",
     "./lib/transform-file.js": "./lib/transform-file-browser.js",
