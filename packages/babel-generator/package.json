@@ -1,6 +1,6 @@
 {
   "name": "@babel/generator",
-  "version": "7.0.0-beta.46",
+  "version": "7.0.0-beta.47",
   "description": "Turns an AST into code.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -11,14 +11,14 @@
     "lib"
   ],
   "dependencies": {
-    "@babel/types": "7.0.0-beta.46",
+    "@babel/types": "7.0.0-beta.47",
     "jsesc": "^2.5.1",
     "lodash": "^4.17.5",
     "source-map": "^0.5.0",
     "trim-right": "^1.0.1"
   },
   "devDependencies": {
-    "@babel/helper-fixtures": "7.0.0-beta.46",
-    "babylon": "7.0.0-beta.46"
+    "@babel/helper-fixtures": "7.0.0-beta.47",
+    "babylon": "7.0.0-beta.47"
   }
 }
