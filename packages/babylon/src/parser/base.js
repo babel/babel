@@ -26,6 +26,10 @@ export default class BaseParser {
   }
 
   hasPlugin(name: string): boolean {
-    return !!this.plugins[name];
+    return Object.hasOwnProperty.call(this.plugins, name);
+  }
+
+  getPluginOption(plugin: string, name: string) {
+    if (this.hasPlugin(plugin)) return this.plugins[plugin][name];
   }
 }

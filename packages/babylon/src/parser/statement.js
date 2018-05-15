@@ -230,7 +230,10 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseDecorators(allowExport?: boolean): void {
-    if (this.hasPlugin("decorators")) {
+    if (
+      this.hasPlugin("decorators") &&
+      !this.getPluginOption("decorators", "decoratorsBeforeExport")
+    ) {
       allowExport = false;
     }
 
@@ -1422,6 +1425,12 @@ export default class StatementParser extends ExpressionParser {
     } else if (this.match(tt._class)) {
       return this.parseClass(expr, true, true);
     } else if (this.match(tt.at)) {
+      if (
+        this.hasPlugin("decorators") &&
+        this.getPluginOption("decorators", "decoratorsBeforeExport")
+      ) {
+        this.unexpected();
+      }
       this.parseDecorators(false);
       return this.parseClass(expr, true, true);
     } else if (
@@ -1518,14 +1527,24 @@ export default class StatementParser extends ExpressionParser {
   }
 
   shouldParseExportDeclaration(): boolean {
+    if (this.match(tt.at)) {
+      this.expectOnePlugin(["decorators", "decorators-legacy"]);
+      if (this.hasPlugin("decorators")) {
+        if (this.getPluginOption("decorators", "decoratorsBeforeExport")) {
+          this.unexpected();
+        } else {
+          return true;
+        }
+      }
+    }
+
     return (
       this.state.type.keyword === "var" ||
       this.state.type.keyword === "const" ||
       this.state.type.keyword === "let" ||
       this.state.type.keyword === "function" ||
       this.state.type.keyword === "class" ||
-      this.isContextual("async") ||
-      (this.match(tt.at) && this.expectPlugin("decorators"))
+      this.isContextual("async")
     );
   }
 

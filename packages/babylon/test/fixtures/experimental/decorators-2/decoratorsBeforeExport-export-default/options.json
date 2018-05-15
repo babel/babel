@@ -1,0 +1,6 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    ["decorators", { "decoratorsBeforeExport": true }]
+  ]
+}
