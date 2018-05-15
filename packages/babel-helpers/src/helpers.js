@@ -447,10 +447,12 @@ helpers.construct = () => template.program.ast`
       };
     } else {
       _construct = function _construct(Parent, args, Class) {
-        var Constructor, a = [null];
+        var a = [null];
         a.push.apply(a, args);
-        Constructor = Parent.bind.apply(Parent, a);
-        return setPrototypeOf(new Constructor, Class.prototype);
+        var Constructor = Parent.bind.apply(Parent, a);
+        var instance = new Constructor();
+        if (Class) setPrototypeOf(instance, Class.prototype);
+        return instance;
       };
     }
     // Avoid issues with Class being present but undefined when it wasn't
