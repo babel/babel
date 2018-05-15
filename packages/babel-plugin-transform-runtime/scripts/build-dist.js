@@ -10,16 +10,14 @@ const t = require("@babel/types");
 const transformRuntime = require("../");
 const corejs2Definitions = require("../lib/definitions").default;
 
-const runtimeRoot = path.resolve(__dirname, "..", "..", "babel-runtime");
+writeHelpers("@babel/runtime", { corejs2: false });
 
-writeCoreJS2(runtimeRoot);
+writeCoreJS2("@babel/runtime");
+writeHelpers("@babel/runtime", { corejs2: true });
 
-writeHelpers(runtimeRoot, { esm: false, corejs2: false });
-writeHelpers(runtimeRoot, { esm: false, corejs2: true });
-writeHelpers(runtimeRoot, { esm: true, corejs2: false });
-writeHelpers(runtimeRoot, { esm: true, corejs2: true });
+function writeCoreJS2(runtimeName) {
+  const pkgDirname = getRuntimeRoot(runtimeName);
 
-function writeCoreJS2(pkgDirname) {
   const paths = ["is-iterable", "get-iterator"];
 
   Object.keys(corejs2Definitions.builtins).forEach(key => {
@@ -42,7 +40,14 @@ function writeCoreJS2(pkgDirname) {
   });
 }
 
-function writeHelpers(pkgDirname, { esm, corejs2 }) {
+function writeHelpers(runtimeName, { corejs2 } = {}) {
+  writeHelperFiles(runtimeName, { corejs2, esm: false });
+  writeHelperFiles(runtimeName, { corejs2, esm: true });
+}
+
+function writeHelperFiles(runtimeName, { esm, corejs2 }) {
+  const pkgDirname = getRuntimeRoot(runtimeName);
+
   for (const helperName of helpers.list) {
     const helperFilename = path.join(
       pkgDirname,
@@ -54,12 +59,33 @@ function writeHelpers(pkgDirname, { esm, corejs2 }) {
 
     outputFile(
       helperFilename,
-      buildHelper(pkgDirname, helperFilename, helperName, { esm, corejs2 })
+      buildHelper(
+        runtimeName,
+        pkgDirname,
+        helperFilename,
+        helperName,
+        { esm, corejs2 }
+      )
     );
   }
 }
 
-function buildHelper(pkgDirname, helperFilename, helperName, { esm, corejs2 }) {
+function getRuntimeRoot(runtimeName) {
+  return path.resolve(
+    __dirname,
+    "..",
+    "..",
+    runtimeName.replace(/^@babel\//, "babel-")
+  );
+}
+
+function buildHelper(
+  runtimeName,
+  pkgDirname,
+  helperFilename,
+  helperName,
+  { esm, corejs2 }
+) {
   const tree = t.program([], [], esm ? "module" : "script");
   const dependencies = {};
   let bindings = null;
@@ -88,6 +114,7 @@ function buildHelper(pkgDirname, helperFilename, helperName, { esm, corejs2 }) {
     plugins: [
       [transformRuntime, { useBuiltIns: !corejs2, useESModules: esm }],
       buildRuntimeRewritePlugin(
+        runtimeName,
         path.relative(path.dirname(helperFilename), pkgDirname),
         helperName
       ),
@@ -95,12 +122,12 @@ function buildHelper(pkgDirname, helperFilename, helperName, { esm, corejs2 }) {
   }).code;
 }
 
-function buildRuntimeRewritePlugin(relativePath, helperName) {
+function buildRuntimeRewritePlugin(runtimeName, relativePath, helperName) {
   function adjustImportPath(node, relativePath) {
     node.value =
       helpers.list.indexOf(node.value) !== -1
         ? `./${node.value}`
-        : node.value.replace(/^@babel\/runtime/, relativePath);
+        : node.value.replace(runtimeName, relativePath);
   }
 
   return {
