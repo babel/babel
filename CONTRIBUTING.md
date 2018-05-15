@@ -228,13 +228,13 @@ If the test requires a minimum Node version, you can add `minNodeVersion` (must 
 
 #### `babel-parser`
 
-Writing tests for Babylon is very
+Writing tests for Babel parser is very
 similar to the other packages.
 Inside the `packages/babel-parser/tests/fixtures` folder are categories/groupings of test fixtures (es2015, flow,
 etc.). To add a test, create a folder under one of these groupings (or create a new one) with a
 descriptive name, and add the following:
 
-* Create an `input.js` file that contains the code you want Babylon to parse.
+* Create an `input.js` file that contains the code you want Babel parser to parse.
 
 * Add an `output.json` file with the expected parser output. For added convenience, if there is no `output.json` present, the test runner will generate one for you.
 
@@ -247,7 +247,7 @@ $ make build
 Then, to run the tests, use:
 
 ```sh
-$ TEST_ONLY=babylon make test-only
+$ TEST_ONLY=babel-parser make test-only
 ```
 
 #### Bootstrapping expected output
@@ -257,7 +257,7 @@ For both `@babel/plugin-x` and `babel-parser`, you can easily generate an `outpu
 ```
 // Example
 - packages
-  - babylon
+  - babel-parser
     - test
       - fixtures
         - comments
@@ -311,12 +311,12 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 - The pull request should include:
   - [ ] An update to the [plugins](https://github.com/babel/babel/tree/master/packages/babel-parser#plugins) part of the readme. Add a new entry to that list for the new plugin flag (and link to the proposal)
   - [ ] If any new nodes or modifications need to be added to the AST, update [ast/spec.md](https://github.com/babel/babel/bloc/master/packages/babel-parser/ast/spec.md)
-  - [ ] Make sure you use the `this.hasPlugin("plugin-name-here")` check in Babylon so that your new plugin code only runs when that flag is turned on (not default behavior)
+  - [ ] Make sure you use the `this.hasPlugin("plugin-name-here")` check in Babel parser so that your new plugin code only runs when that flag is turned on (not default behavior)
   - [ ] Add failing/passing tests according to spec behavior
 - Start working about the Babel transform itself!
 
 ## Internals
-- AST spec ([babylon/ast/spec.md](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md))
+- AST spec ([babel-parser/ast/spec.md](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md))
 - Versioning ([doc/design/versioning.md](https://github.com/babel/babel/blob/master/doc/design/versioning.md))
 - Monorepo ([doc/design/monorepo.md](https://github.com/babel/babel/blob/master/doc/design/monorepo.md))
 - Compiler environment support ([doc/design/compiler-environment-support.md](https://github.com/babel/babel/blob/master/doc/design/compiler-environment-support.md))

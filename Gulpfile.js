@@ -98,7 +98,7 @@ function buildRollup(packages) {
         format: "cjs",
         plugins: [
           rollupBabel({
-            envName: "babylon",
+            envName: "babel-parser",
           }),
           rollupNodeResolve(),
         ],
