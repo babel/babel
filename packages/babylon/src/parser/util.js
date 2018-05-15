@@ -23,6 +23,11 @@ export default class UtilParser extends Tokenizer {
     return this.match(tt.relational) && this.state.value === op;
   }
 
+  isLookaheadRelational(op: "<" | ">"): boolean {
+    const l = this.lookahead();
+    return l.type == tt.relational && l.value == op;
+  }
+
   // TODO
 
   expectRelational(op: "<" | ">"): void {

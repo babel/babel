@@ -502,7 +502,6 @@ export default class ExpressionParser extends LValParser {
           possibleAsync,
         );
         node.optional = true;
-
         return this.finishNode(node, "OptionalCallExpression");
       } else {
         node.object = base;

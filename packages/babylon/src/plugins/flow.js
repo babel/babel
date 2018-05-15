@@ -2383,10 +2383,49 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       startPos: number,
       startLoc: Position,
       noCalls: ?boolean,
-      state: N.ParseSubscriptState,
+      subscriptState: N.ParseSubscriptState,
     ): N.Expression {
-      // TODO: optional calls
-      if (!noCalls && this.shouldParseTypes() && this.isRelational("<")) {
+      if (this.match(tt.questionDot) && this.isLookaheadRelational("<")) {
+        this.expectPlugin("optionalChaining");
+        subscriptState.optionalChainMember = true;
+        if (noCalls) {
+          subscriptState.stop = true;
+          return base;
+        }
+        this.next();
+        const state = this.state.clone();
+        try {
+          const node: N.OptionalCallExpression = this.startNodeAt(
+            startPos,
+            startLoc,
+          );
+          node.callee = base;
+          node.typeArguments = this.flowParseTypeParameterInstantiation();
+          this.expect(tt.parenL);
+          node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+          node.optional = true;
+          return this.finishNode(node, "OptionalCallExpression");
+        } catch (e) {
+          if (e instanceof SyntaxError) {
+            this.state = state;
+            const node: N.OptionalMemberExpression = this.startNodeAt(
+              startPos,
+              startLoc,
+            );
+            node.object = base;
+            node.property = this.parseIdentifier(true);
+            node.computed = false;
+            node.optional = true;
+            return this.finishNode(node, "OptionalMemberExpression");
+          } else {
+            throw e;
+          }
+        }
+      } else if (
+        !noCalls &&
+        this.shouldParseTypes() &&
+        this.isRelational("<")
+      ) {
         const node: N.CallExpression = this.startNodeAt(startPos, startLoc);
         node.callee = base;
         const state = this.state.clone();
@@ -2394,6 +2433,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           node.typeArguments = this.flowParseTypeParameterInstantiation();
           this.expect(tt.parenL);
           node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+          if (subscriptState.optionalChainMember) {
+            node.optional = false;
+            return this.finishNode(node, "OptionalCallExpression");
+          }
           return this.finishNode(node, "CallExpression");
         } catch (e) {
           if (e instanceof SyntaxError) {
@@ -2404,7 +2447,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      return super.parseSubscript(base, startPos, startLoc, noCalls, state);
+      return super.parseSubscript(
+        base,
+        startPos,
+        startLoc,
+        noCalls,
+        subscriptState,
+      );
     }
 
     parseNewArguments(node: N.NewExpression): void {
