@@ -2378,6 +2378,35 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseSubscripts(base, startPos, startLoc, noCalls);
     }
 
+    parseSubscript(
+      base: N.Expression,
+      startPos: number,
+      startLoc: Position,
+      noCalls: ?boolean,
+      state: N.ParseSubscriptState,
+    ): N.Expression {
+      // TODO: optional calls
+      if (!noCalls && this.shouldParseTypes() && this.isRelational("<")) {
+        const node: N.CallExpression = this.startNodeAt(startPos, startLoc);
+        node.callee = base;
+        const state = this.state.clone();
+        try {
+          node.typeArguments = this.flowParseTypeParameterInstantiation();
+          this.expect(tt.parenL);
+          node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+          return this.finishNode(node, "CallExpression");
+        } catch (e) {
+          if (e instanceof SyntaxError) {
+            this.state = state;
+          } else {
+            throw e;
+          }
+        }
+      }
+
+      return super.parseSubscript(base, startPos, startLoc, noCalls, state);
+    }
+
     parseNewArguments(node: N.NewExpression): void {
       let targs = null;
       if (this.shouldParseTypes() && this.isRelational("<")) {

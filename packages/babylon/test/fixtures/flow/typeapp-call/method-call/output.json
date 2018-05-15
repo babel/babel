@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 23,
+  "end": 18,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 2,
-      "column": 14
+      "column": 9
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 23,
+    "end": 18,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 2,
-        "column": 14
+        "column": 9
       }
     },
     "sourceType": "module",
@@ -31,7 +31,7 @@
       {
         "type": "ExpressionStatement",
         "start": 9,
-        "end": 23,
+        "end": 18,
         "loc": {
           "start": {
             "line": 2,
@@ -39,13 +39,13 @@
           },
           "end": {
             "line": 2,
-            "column": 14
+            "column": 9
           }
         },
         "expression": {
           "type": "CallExpression",
           "start": 9,
-          "end": 22,
+          "end": 17,
           "loc": {
             "start": {
               "line": 2,
@@ -53,13 +53,13 @@
             },
             "end": {
               "line": 2,
-              "column": 13
+              "column": 8
             }
           },
           "callee": {
-            "type": "CallExpression",
+            "type": "MemberExpression",
             "start": 9,
-            "end": 16,
+            "end": 12,
             "loc": {
               "start": {
                 "line": 2,
@@ -67,10 +67,10 @@
               },
               "end": {
                 "line": 2,
-                "column": 7
+                "column": 3
               }
             },
-            "callee": {
+            "object": {
               "type": "Identifier",
               "start": 9,
               "end": 10,
@@ -83,149 +83,80 @@
                   "line": 2,
                   "column": 1
                 },
-                "identifierName": "f"
+                "identifierName": "o"
               },
-              "name": "f"
+              "name": "o"
             },
-            "typeArguments": {
-              "type": "TypeParameterInstantiation",
-              "start": 10,
-              "end": 13,
+            "property": {
+              "type": "Identifier",
+              "start": 11,
+              "end": 12,
               "loc": {
                 "start": {
                   "line": 2,
-                  "column": 1
+                  "column": 2
                 },
                 "end": {
                   "line": 2,
-                  "column": 4
-                }
-              },
-              "params": [
-                {
-                  "type": "GenericTypeAnnotation",
-                  "start": 11,
-                  "end": 12,
-                  "loc": {
-                    "start": {
-                      "line": 2,
-                      "column": 2
-                    },
-                    "end": {
-                      "line": 2,
-                      "column": 3
-                    }
-                  },
-                  "typeParameters": null,
-                  "id": {
-                    "type": "Identifier",
-                    "start": 11,
-                    "end": 12,
-                    "loc": {
-                      "start": {
-                        "line": 2,
-                        "column": 2
-                      },
-                      "end": {
-                        "line": 2,
-                        "column": 3
-                      },
-                      "identifierName": "T"
-                    },
-                    "name": "T"
-                  }
-                }
-              ]
-            },
-            "arguments": [
-              {
-                "type": "Identifier",
-                "start": 14,
-                "end": 15,
-                "loc": {
-                  "start": {
-                    "line": 2,
-                    "column": 5
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 6
-                  },
-                  "identifierName": "x"
+                  "column": 3
                 },
-                "name": "x"
-              }
-            ]
+                "identifierName": "m"
+              },
+              "name": "m"
+            },
+            "computed": false
           },
           "typeArguments": {
             "type": "TypeParameterInstantiation",
-            "start": 16,
-            "end": 19,
+            "start": 12,
+            "end": 15,
             "loc": {
               "start": {
                 "line": 2,
-                "column": 7
+                "column": 3
               },
               "end": {
                 "line": 2,
-                "column": 10
+                "column": 6
               }
             },
             "params": [
               {
                 "type": "GenericTypeAnnotation",
-                "start": 17,
-                "end": 18,
+                "start": 13,
+                "end": 14,
                 "loc": {
                   "start": {
                     "line": 2,
-                    "column": 8
+                    "column": 4
                   },
                   "end": {
                     "line": 2,
-                    "column": 9
+                    "column": 5
                   }
                 },
                 "typeParameters": null,
                 "id": {
                   "type": "Identifier",
-                  "start": 17,
-                  "end": 18,
+                  "start": 13,
+                  "end": 14,
                   "loc": {
                     "start": {
                       "line": 2,
-                      "column": 8
+                      "column": 4
                     },
                     "end": {
                       "line": 2,
-                      "column": 9
+                      "column": 5
                     },
-                    "identifierName": "U"
+                    "identifierName": "T"
                   },
-                  "name": "U"
+                  "name": "T"
                 }
               }
             ]
           },
-          "arguments": [
-            {
-              "type": "Identifier",
-              "start": 20,
-              "end": 21,
-              "loc": {
-                "start": {
-                  "line": 2,
-                  "column": 11
-                },
-                "end": {
-                  "line": 2,
-                  "column": 12
-                },
-                "identifierName": "y"
-              },
-              "name": "y"
-            }
-          ]
+          "arguments": []
         },
         "leadingComments": [
           {
