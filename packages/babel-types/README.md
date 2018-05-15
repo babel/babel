@@ -231,7 +231,8 @@ Aliases: `Expression`
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
  - `optional`: `true | false` (default: `null`)
- - `typeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
+ - `typeArguments`: `TypeParameterInstantiation` (default: `null`)
+ - `typeParameters`: `TSTypeParameterInstantiation` (default: `null`)
 
 ---
 
@@ -1359,7 +1360,8 @@ Aliases: `Expression`
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
  - `optional`: `true | false` (default: `null`)
- - `typeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
+ - `typeArguments`: `TypeParameterInstantiation` (default: `null`)
+ - `typeParameters`: `TSTypeParameterInstantiation` (default: `null`)
 
 ---
 
@@ -1621,7 +1623,8 @@ Aliases: `Expression`
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
  - `optional`: `boolean` (required)
- - `typeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
+ - `typeArguments`: `TypeParameterInstantiation` (default: `null`)
+ - `typeParameters`: `TSTypeParameterInstantiation` (default: `null`)
 
 ---
 
