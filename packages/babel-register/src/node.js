@@ -104,16 +104,14 @@ export function revert() {
   delete require.cache[require.resolve(__filename)];
 }
 
-register({
-  extensions: DEFAULT_EXTENSIONS,
-});
+register();
 
 export default function register(opts?: Object = {}) {
   // Clone to avoid mutating the arguments object with the 'delete's below.
   opts = {
     ...opts,
   };
-  if (opts.extensions) hookExtensions(opts.extensions);
+  hookExtensions(opts.extensions || DEFAULT_EXTENSIONS);
 
   if (opts.cache === false && cache) {
     registerCache.clear();
