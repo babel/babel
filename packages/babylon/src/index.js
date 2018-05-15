@@ -71,7 +71,7 @@ function getParserClass(
     hasPlugin(pluginsFromOptions, "decorators-legacy")
   ) {
     throw new Error(
-      "Cannot use decorators and decorators-legacy plugin together",
+      "Cannot use the decorators and decorators-legacy plugin together",
     );
   }
 
