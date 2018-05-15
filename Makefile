@@ -31,7 +31,7 @@ build-preset-env-standalone:
 build-dist: build
 	cd packages/babel-polyfill; \
 	scripts/build-dist.sh
-	cd packages/babel-runtime; \
+	cd packages/babel-plugin-transform-runtime; \
 	node scripts/build-dist.js
 
 watch: clean clean-lib
@@ -120,7 +120,7 @@ bootstrap: clean-all
 	yarn --ignore-engines
 	./node_modules/.bin/lerna bootstrap -- --ignore-engines
 	make build
-	cd packages/babel-runtime; \
+	cd packages/babel-plugin-transform-runtime; \
 	node scripts/build-dist.js
 
 clean-lib:

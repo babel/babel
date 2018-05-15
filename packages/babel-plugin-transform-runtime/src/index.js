@@ -227,5 +227,3 @@ export default declare((api, options) => {
     },
   };
 });
-
-export { definitions };

@@ -7,10 +7,10 @@ const babel = require("@babel/core");
 const template = require("@babel/template");
 const t = require("@babel/types");
 
-const transformRuntime = require("@babel/plugin-transform-runtime");
-const corejs2Definitions = require("@babel/plugin-transform-runtime").definitions;
+const transformRuntime = require("../");
+const corejs2Definitions = require("../lib/definitions").default;
 
-const runtimeRoot = path.resolve(__dirname, "..");
+const runtimeRoot = path.resolve(__dirname, "..", "..", "babel-runtime");
 
 writeCoreJS2(runtimeRoot);
 
