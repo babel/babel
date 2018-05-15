@@ -24,7 +24,7 @@ contributing, please read the
 ## Not sure where to start?
 
 - If you aren't just making a documentation change, you'll probably want to learn a bit about a few topics.
- - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babel/blob/master/packages/babylon/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://github.com/babel/babel/tree/master/packages/babylon#output).
+ - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://github.com/babel/babel/tree/master/packages/babel-parser#output).
  - Check out [`/doc`](https://github.com/babel/babel/tree/master/doc) for information about Babel's internals
  - Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
  - Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
@@ -226,11 +226,11 @@ If the test requires a minimum Node version, you can add `minNodeVersion` (must 
 }
 ```
 
-#### `babylon`
+#### `babel-parser`
 
 Writing tests for Babylon is very
 similar to the other packages.
-Inside the `packages/babylon/tests/fixtures` folder are categories/groupings of test fixtures (es2015, flow,
+Inside the `packages/babel-parser/tests/fixtures` folder are categories/groupings of test fixtures (es2015, flow,
 etc.). To add a test, create a folder under one of these groupings (or create a new one) with a
 descriptive name, and add the following:
 
@@ -238,7 +238,7 @@ descriptive name, and add the following:
 
 * Add an `output.json` file with the expected parser output. For added convenience, if there is no `output.json` present, the test runner will generate one for you.
 
-After writing tests for babylon, just build it by running:
+After writing tests for babel-parser, just build it by running:
 
 ```sh
 $ make build
@@ -252,7 +252,7 @@ $ TEST_ONLY=babylon make test-only
 
 #### Bootstrapping expected output
 
-For both `@babel/plugin-x` and `babylon`, you can easily generate an `output.js`/`output.json` automatically by just providing `input.js` and running the tests as you usually would.
+For both `@babel/plugin-x` and `babel-parser`, you can easily generate an `output.js`/`output.json` automatically by just providing `input.js` and running the tests as you usually would.
 
 ```
 // Example
@@ -309,14 +309,14 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 
 - Create a new issue that describes the proposal (ex: [#538](https://github.com/babel/babylon/issues/538)). Include any relevant information like proposal repo/author, examples, parsing approaches, meeting notes, presentation slides, and more.
 - The pull request should include:
-  - [ ] An update to the [plugins](https://github.com/babel/babel/tree/master/packages/babylon#plugins) part of the readme. Add a new entry to that list for the new plugin flag (and link to the proposal)
-  - [ ] If any new nodes or modifications need to be added to the AST, update [ast/spec.md](https://github.com/babel/babel/bloc/master/packages/babylon/ast/spec.md)
+  - [ ] An update to the [plugins](https://github.com/babel/babel/tree/master/packages/babel-parser#plugins) part of the readme. Add a new entry to that list for the new plugin flag (and link to the proposal)
+  - [ ] If any new nodes or modifications need to be added to the AST, update [ast/spec.md](https://github.com/babel/babel/bloc/master/packages/babel-parser/ast/spec.md)
   - [ ] Make sure you use the `this.hasPlugin("plugin-name-here")` check in Babylon so that your new plugin code only runs when that flag is turned on (not default behavior)
   - [ ] Add failing/passing tests according to spec behavior
 - Start working about the Babel transform itself!
 
 ## Internals
-- AST spec ([babylon/ast/spec.md](https://github.com/babel/babel/blob/master/packages/babylon/ast/spec.md))
+- AST spec ([babylon/ast/spec.md](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md))
 - Versioning ([doc/design/versioning.md](https://github.com/babel/babel/blob/master/doc/design/versioning.md))
 - Monorepo ([doc/design/monorepo.md](https://github.com/babel/babel/blob/master/doc/design/monorepo.md))
 - Compiler environment support ([doc/design/compiler-environment-support.md](https://github.com/babel/babel/blob/master/doc/design/compiler-environment-support.md))

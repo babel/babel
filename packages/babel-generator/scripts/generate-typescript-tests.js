@@ -1,5 +1,5 @@
 /*
-Copies tests from babylon's TypeScript test suite to @babel/generator.
+Copies tests from babel-parser's TypeScript test suite to @babel/generator.
 */
 const {
   copySync,
@@ -10,7 +10,10 @@ const {
 } = require("fs-extra");
 const { join } = require("path");
 
-const testsFrom = join(__dirname, "../../babylon/test/fixtures/typescript");
+const testsFrom = join(
+  __dirname,
+  "../../babel-parser/test/fixtures/typescript"
+);
 const testsTo = join(__dirname, "../test/fixtures/typescript");
 
 emptyDirSync(testsTo);

@@ -18,9 +18,9 @@ thanks to the awesome work of [@RReverser](https://github.com/RReverser) and [@m
 
 ## API
 
-### `babylon.parse(code, [options])`
+### `babelParser.parse(code, [options])`
 
-### `babylon.parseExpression(code, [options])`
+### `babelParser.parseExpression(code, [options])`
 
 `parse()` parses the provided `code` as an entire ECMAScript program, while
 `parseExpression()` tries to parse a single Expression with performance in
@@ -79,19 +79,19 @@ AST for JSX code is based on [Facebook JSX AST][].
 [Property]: https://github.com/estree/estree/blob/master/es5.md#property
 [MethodDefinition]: https://github.com/estree/estree/blob/master/es2015.md#methoddefinition
 
-[StringLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#stringliteral
-[NumericLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#numericliteral
-[BooleanLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#booleanliteral
-[NullLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#nullliteral
-[RegExpLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#regexpliteral
-[ObjectProperty]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#objectproperty
-[ObjectMethod]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#objectmethod
-[ClassMethod]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#classmethod
-[Program]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#programs
-[BlockStatement]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#blockstatement
-[Directive]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#directive
-[DirectiveLiteral]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#directiveliteral
-[FunctionExpression]: https://github.com/babel/babel/tree/master/packages/babylon/ast/spec.md#functionexpression
+[StringLiteral]: https://github.com/babel/babel/tree/master/packages/babel-parser/ast/spec.md#stringliteral
+[NumericLiteral]: https://github.com/babel/babel/tree/master/packages/babel-parser/ast/spec.md#numericliteral
+[BooleanLiteral]: https://github.com/babel/babel/tree/master/packages/babel-parser/ast/spec.md#booleanliteral
+[NullLiteral]: https://github.com/babel/babel/tree/master/packages/babel-parser/ast/spec.md#nullliteral
+[RegExpLiteral]: https://github.com/babel/babel/tree/master/packages/babel-parser/ast/spec.md#regexpliteral
+[ObjectProperty]: https://github.com/babel/babel/tree/master/packages/babel-parser/ast/spec.md#objectproperty
+[ObjectMethod]: https://github.com/babel/babel/tree/master/packages/babel-parser/ast/spec.md#objectmethod
+[ClassMethod]: https://github.com/babel/babel/tree/master/packages/babel-parser/ast/spec.md#classmethod
+[Program]: https://github.com/babel/babel/tree/master/packages/babel-parser/ast/spec.md#programs
+[BlockStatement]: https://github.com/babel/babel/tree/master/packages/babel-parser/ast/spec.md#blockstatement
+[Directive]: https://github.com/babel/babel/tree/master/packages/babel-parser/ast/spec.md#directive
+[DirectiveLiteral]: https://github.com/babel/babel/tree/master/packages/babel-parser/ast/spec.md#directiveliteral
+[FunctionExpression]: https://github.com/babel/babel/tree/master/packages/babel-parser/ast/spec.md#functionexpression
 
 [Facebook JSX AST]: https://github.com/facebook/jsx/blob/master/AST.md
 

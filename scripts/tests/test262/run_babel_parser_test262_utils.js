@@ -10,7 +10,7 @@ const pfs = {
   stat: promisify(fs.stat),
 };
 
-const parse = require("../../../packages/babylon").parse;
+const parse = require("../../../packages/babel-parser").parse;
 
 const featuresToPlugins = {
   BigInt: "bigInt",

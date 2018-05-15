@@ -209,7 +209,7 @@ const getNameURLCombination = ({ name, url }) => `${name} (${url})`;
 
 /*
 Returns a string of the format:
-Support for the experimental syntax [babylon plugin name] isn't currently enabled ([loc]):
+Support for the experimental syntax [babel-parser plugin name] isn't currently enabled ([loc]):
 
 [code frame]
 

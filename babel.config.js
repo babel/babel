@@ -16,7 +16,7 @@ module.exports = function(api) {
 
   switch (env) {
     // Configs used during bundling builds.
-    case "babylon":
+    case "babel-parser":
     case "standalone":
       convertESM = false;
       ignoreLib = false;
@@ -69,7 +69,7 @@ module.exports = function(api) {
     ].filter(Boolean),
     overrides: [
       {
-        test: "packages/babylon",
+        test: "packages/babel-parser",
         plugins: [
           "babel-plugin-transform-charcodes",
           ["@babel/transform-for-of", { assumeArray: true }],

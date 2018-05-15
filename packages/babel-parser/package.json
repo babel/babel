@@ -13,7 +13,7 @@
     "ecmascript",
     "babylon"
   ],
-  "repository": "https://github.com/babel/babel/tree/master/packages/babylon",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-parser",
   "main": "lib/index.js",
   "files": [
     "bin",

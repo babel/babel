@@ -3,7 +3,7 @@
 const path = require("path");
 const fs = require("fs");
 const chalk = require("chalk");
-const parse = require("../../../packages/babylon").parse;
+const parse = require("../../../packages/babel-parser").parse;
 
 const TESTS_FOLDER = path.join(
   __dirname,
@@ -156,31 +156,31 @@ tests.forEach(section => {
         test.expected_ast.errors.length === 0);
     const inWhitelist = whitelist.indexOf(test.file) > -1;
 
-    const babylonOptions = Object.assign({}, options);
-    babylonOptions.plugins = babylonOptions.plugins.slice();
+    const babelParserOptions = Object.assign({}, options);
+    babelParserOptions.plugins = babelParserOptions.plugins.slice();
 
     if (test.options) {
       Object.keys(test.options).forEach(option => {
         if (!test.options[option]) {
-          const idx = babylonOptions.plugins.indexOf(
+          const idx = babelParserOptions.plugins.indexOf(
             flowOptionsMapping[option]
           );
           if (idx) {
-            babylonOptions.plugins.splice(idx, 1);
+            babelParserOptions.plugins.splice(idx, 1);
           }
           return;
         }
         if (!flowOptionsMapping[option]) {
           throw new Error("Parser options not mapped " + option);
         }
-        babylonOptions.plugins.push(flowOptionsMapping[option]);
+        babelParserOptions.plugins.push(flowOptionsMapping[option]);
       });
     }
 
     let failed = false;
     let exception = null;
     try {
-      parse(test.content, babylonOptions);
+      parse(test.content, babelParserOptions);
     } catch (e) {
       exception = e;
       failed = true;
@@ -190,7 +190,7 @@ tests.forEach(section => {
         try {
           parse(
             test.content,
-            Object.assign({}, babylonOptions, { sourceType: "script" })
+            Object.assign({}, babelParserOptions, { sourceType: "script" })
           );
           exception = null;
           failed = false;
@@ -203,7 +203,7 @@ tests.forEach(section => {
 
     summary[isAllowed ? "allowed" : "disallowed"][
       isSuccess ? "success" : "failure"
-    ].push({ test, exception, shouldSuccess, babylonOptions });
+    ].push({ test, exception, shouldSuccess, babelParserOptions });
     summary.passed &= isAllowed;
 
     unrecognized.delete(test.file);
@@ -222,7 +222,7 @@ console.log();
 if (summary.disallowed.failure.length || summary.disallowed.success.length) {
   console.log("\n-- FAILED TESTS --");
   summary.disallowed.failure.forEach(
-    ({ test, shouldSuccess, exception, babylonOptions }) => {
+    ({ test, shouldSuccess, exception, babelParserOptions }) => {
       console.log(chalk.red(`✘ ${test.file}`));
       if (shouldSuccess) {
         console.log(chalk.yellow("  Should parse successfully, but did not"));
@@ -232,13 +232,13 @@ if (summary.disallowed.failure.length || summary.disallowed.success.length) {
       }
       console.log(
         chalk.yellow(
-          `  Active plugins: ${JSON.stringify(babylonOptions.plugins)}`
+          `  Active plugins: ${JSON.stringify(babelParserOptions.plugins)}`
         )
       );
     }
   );
   summary.disallowed.success.forEach(
-    ({ test, shouldSuccess, babylonOptions }) => {
+    ({ test, shouldSuccess, babelParserOptions }) => {
       console.log(chalk.red(`✘ ${test.file}`));
       if (shouldSuccess) {
         console.log(
@@ -257,7 +257,7 @@ if (summary.disallowed.failure.length || summary.disallowed.success.length) {
       }
       console.log(
         chalk.yellow(
-          `  Active plugins: ${JSON.stringify(babylonOptions.plugins)}`
+          `  Active plugins: ${JSON.stringify(babelParserOptions.plugins)}`
         )
       );
     }

@@ -130,7 +130,7 @@ Type: `string`
 
 #### options
 
-`@babel/template` accepts all of the options from [babylon](https://github.com/babel/babel/tree/master/packages/babylon), and specifies
+`@babel/template` accepts all of the options from [babylon](https://github.com/babel/babel/tree/master/packages/babel-parser), and specifies
 some defaults of its own:
 
 * `allowReturnOutsideFunction` is set to `true` by default.
