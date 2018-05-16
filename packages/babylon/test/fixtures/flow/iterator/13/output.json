@@ -165,6 +165,7 @@
               }
             ],
             "indexers": [],
+            "internalSlots": [],
             "exact": false
           }
         },

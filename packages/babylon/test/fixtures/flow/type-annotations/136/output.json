@@ -127,6 +127,7 @@
                 "callProperties": [],
                 "properties": [],
                 "indexers": [],
+                "internalSlots": [],
                 "exact": false
               },
               "variance": null,
@@ -163,11 +164,13 @@
                 "callProperties": [],
                 "properties": [],
                 "indexers": [],
+                "internalSlots": [],
                 "exact": false
               }
             }
           ],
           "indexers": [],
+          "internalSlots": [],
           "exact": false
         }
       }

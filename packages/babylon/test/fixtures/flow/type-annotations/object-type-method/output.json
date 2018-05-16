@@ -148,6 +148,7 @@
             }
           ],
           "indexers": [],
+          "internalSlots": [],
           "exact": false
         }
       },
@@ -304,6 +305,7 @@
             }
           ],
           "indexers": [],
+          "internalSlots": [],
           "exact": false
         }
       },
@@ -426,6 +428,7 @@
             }
           ],
           "indexers": [],
+          "internalSlots": [],
           "exact": false
         }
       },
@@ -581,6 +584,7 @@
             }
           ],
           "indexers": [],
+          "internalSlots": [],
           "exact": false
         }
       },
@@ -683,6 +687,7 @@
           ],
           "properties": [],
           "indexers": [],
+          "internalSlots": [],
           "exact": false
         }
       },
@@ -885,6 +890,7 @@
           ],
           "properties": [],
           "indexers": [],
+          "internalSlots": [],
           "exact": false
         }
       },
@@ -1010,6 +1016,7 @@
             }
           ],
           "indexers": [],
+          "internalSlots": [],
           "exact": false
         }
       },
@@ -1135,6 +1142,7 @@
             }
           ],
           "indexers": [],
+          "internalSlots": [],
           "exact": false
         }
       },
@@ -1240,6 +1248,7 @@
           ],
           "properties": [],
           "indexers": [],
+          "internalSlots": [],
           "exact": false
         }
       },
@@ -1345,6 +1354,7 @@
           ],
           "properties": [],
           "indexers": [],
+          "internalSlots": [],
           "exact": false
         }
       }

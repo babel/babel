@@ -248,19 +248,37 @@ defineType("NumberTypeAnnotation", {
 });
 
 defineType("ObjectTypeAnnotation", {
-  visitor: ["properties", "indexers", "callProperties"],
+  visitor: ["properties", "indexers", "callProperties", "internalSlots"],
   aliases: ["Flow", "FlowType"],
-  builder: ["properties", "indexers", "callProperties", "exact"],
+  builder: [
+    "properties",
+    "indexers",
+    "callProperties",
+    "internalSlots",
+    "exact",
+  ],
   fields: {
     properties: validate(
       arrayOfType(["ObjectTypeProperty", "ObjectTypeSpreadProperty"]),
     ),
     indexers: validateOptional(arrayOfType("ObjectTypeIndexer")),
     callProperties: validateOptional(arrayOfType("ObjectTypeCallProperty")),
+    internalSlots: validateOptional(arrayOfType("ObjectTypeInternalSlot")),
     exact: {
       validate: assertValueType("boolean"),
       default: false,
     },
+  },
+});
+
+defineType("ObjectTypeInternalSlot", {
+  visitor: ["id", "value", "static", "method"],
+  aliases: ["Flow", "UserWhitespacable"],
+  fields: {
+    id: validateType("Identifier"),
+    value: validateType("FlowType"),
+    static: validate(assertValueType("boolean")),
+    method: validate(assertValueType("boolean")),
   },
 });
 

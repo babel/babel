@@ -171,6 +171,7 @@
                       }
                     ],
                     "indexers": [],
+                    "internalSlots": [],
                     "exact": false
                   }
                 }

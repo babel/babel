@@ -689,6 +689,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       nodeStart.callProperties = [];
       nodeStart.properties = [];
       nodeStart.indexers = [];
+      nodeStart.internalSlots = [];
 
       let endDelim;
       let exact;
