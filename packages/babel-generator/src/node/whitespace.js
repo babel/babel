@@ -209,6 +209,22 @@ nodes.ObjectTypeIndexer = function(node: Object, parent): ?WhitespaceObject {
   }
 };
 
+nodes.ObjectTypeInternalSlot = function(
+  node: Object,
+  parent,
+): ?WhitespaceObject {
+  if (
+    parent.internalSlots[0] === node &&
+    (!parent.properties || !parent.properties.length) &&
+    (!parent.callProperties || !parent.callProperties.length) &&
+    (!parent.indexers || !parent.indexers.length)
+  ) {
+    return {
+      before: true,
+    };
+  }
+};
+
 /**
  * Returns lists from node types that need whitespace.
  */
