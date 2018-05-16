@@ -1,0 +1,7 @@
+"use strict";
+
+arr.map(function (x) {
+  return x * x;
+});
+
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInN0ZGluIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7O0FBQUEsSUFBSSxHQUFKLENBQVE7QUFBQSxTQUFLLElBQUksQ0FBVDtBQUFBLENBQVIiLCJmaWxlIjoic3Rkb3V0Iiwic291cmNlc0NvbnRlbnQiOlsiYXJyLm1hcCh4ID0+IHggKiB4KTsiXX0=

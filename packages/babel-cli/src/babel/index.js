@@ -186,16 +186,16 @@ filenames = uniq(filenames);
 
 filenames.forEach(function(filename) {
   if (!fs.existsSync(filename)) {
-    errors.push(filename + " doesn't exist");
+    errors.push(filename + " does not exist");
   }
 });
 
 if (commander.outDir && !filenames.length) {
-  errors.push("filenames required for --out-dir");
+  errors.push("--out-dir requires filenames");
 }
 
 if (commander.outFile && commander.outDir) {
-  errors.push("cannot have --out-file and --out-dir");
+  errors.push("--out-file and --out-dir cannot be used together");
 }
 
 if (commander.relative && !commander.outDir) {
@@ -231,7 +231,10 @@ if (
 }
 
 if (errors.length) {
-  console.error(errors.join(". "));
+  console.error("babel:");
+  errors.forEach(function (e) {
+    console.error("  " + e);
+  });
   process.exit(2);
 }
 
