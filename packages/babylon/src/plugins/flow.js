@@ -2393,34 +2393,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return base;
         }
         this.next();
-        const state = this.state.clone();
-        try {
-          const node: N.OptionalCallExpression = this.startNodeAt(
-            startPos,
-            startLoc,
-          );
-          node.callee = base;
-          node.typeArguments = this.flowParseTypeParameterInstantiation();
-          this.expect(tt.parenL);
-          node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
-          node.optional = true;
-          return this.finishNode(node, "OptionalCallExpression");
-        } catch (e) {
-          if (e instanceof SyntaxError) {
-            this.state = state;
-            const node: N.OptionalMemberExpression = this.startNodeAt(
-              startPos,
-              startLoc,
-            );
-            node.object = base;
-            node.property = this.parseIdentifier(true);
-            node.computed = false;
-            node.optional = true;
-            return this.finishNode(node, "OptionalMemberExpression");
-          } else {
-            throw e;
-          }
-        }
+        const node: N.OptionalCallExpression = this.startNodeAt(
+          startPos,
+          startLoc,
+        );
+        node.callee = base;
+        node.typeArguments = this.flowParseTypeParameterInstantiation();
+        this.expect(tt.parenL);
+        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+        node.optional = true;
+        return this.finishNode(node, "OptionalCallExpression");
       } else if (
         !noCalls &&
         this.shouldParseTypes() &&
