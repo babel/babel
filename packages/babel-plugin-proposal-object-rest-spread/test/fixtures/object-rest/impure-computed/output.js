@@ -40,11 +40,12 @@ var _$z = {
   2: "two",
   z: "zee"
 };
+var _key = key;
 ({
-  [key]: y,
+  [_key]: y,
   z
 } = _$z);
-x = babelHelpers.objectWithoutProperties(_$z, [key, "z"].map(babelHelpers.toPropertyKey));
+x = babelHelpers.objectWithoutProperties(_$z, [_key, "z"].map(babelHelpers.toPropertyKey));
 _$z;
 expect(y).toBe("two");
 expect(x).toEqual({});

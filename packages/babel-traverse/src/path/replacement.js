@@ -45,6 +45,7 @@ const hoistVariablesVisitor = {
 
 export function replaceWithMultiple(nodes: Array<Object>) {
   this.resync();
+  this._removeFromScope();
 
   nodes = this._verifyNodeList(nodes);
   t.inheritLeadingComments(nodes[0], this.node);
@@ -53,6 +54,7 @@ export function replaceWithMultiple(nodes: Array<Object>) {
   const paths = this.insertAfter(nodes);
 
   if (this.node) {
+    if (this.scope) this.scope.registerPath(this);
     this.requeue();
   } else {
     this.remove();
@@ -198,7 +200,9 @@ export function _replaceWith(node) {
 
   this.debug(`Replace with ${node && node.type}`);
 
+  this._removeFromScope();
   this.node = this.container[this.key] = node;
+  if (this.scope) this.scope.registerPath(this);
 }
 
 /**

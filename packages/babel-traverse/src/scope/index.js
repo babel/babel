@@ -686,6 +686,10 @@ export default class Scope {
     if (!this.references) this.crawl();
   }
 
+  registerPath(path) {
+    this._crawl(path, true);
+  }
+
   crawl() {
     const path = this.path;
 
@@ -740,6 +744,10 @@ export default class Scope {
     const parent = this.getProgramParent();
     if (parent.crawling) return;
 
+    this._crawl(path);
+  }
+
+  _crawl(path, topLevel?) {
     const state = {
       references: [],
       constantViolations: [],
@@ -747,6 +755,15 @@ export default class Scope {
     };
 
     this.crawling = true;
+    if (topLevel) {
+      traverse.explode(collectorVisitor);
+      collectorVisitor.enter.forEach(f => f(path, state));
+      Object.keys(collectorVisitor).forEach(type => {
+        if (collectorVisitor[type].enter && path[`is${type}`]()) {
+          collectorVisitor[type].enter.forEach(f => f(path, state));
+        }
+      });
+    }
     path.traverse(collectorVisitor, state);
     this.crawling = false;
 

@@ -1,5 +1,6 @@
 import traverse from "../lib";
 import { parse } from "babylon";
+import * as t from "@babel/types";
 
 function getPath(code, options) {
   const ast = parse(code, options);
@@ -184,6 +185,24 @@ describe("scope", function() {
         line: 1,
         column: 32,
       });
+    });
+  });
+
+  describe("update", function() {
+    test("Path#replaceWith updates the bindings", function() {
+      const path = getPath("var bar;");
+
+      expect(Object.keys(path.scope.bindings)).toEqual(["bar"]);
+
+      path
+        .get("body.0")
+        .replaceWith(
+          t.variableDeclaration("var", [
+            t.variableDeclarator(t.identifier("baz")),
+          ]),
+        );
+
+      expect(Object.keys(path.scope.bindings)).toEqual(["baz"]);
     });
   });
 });
