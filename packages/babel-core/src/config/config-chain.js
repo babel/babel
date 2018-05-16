@@ -46,8 +46,9 @@ export type PresetInstance = {
 };
 
 export type ConfigContext = {
-  filename: string | null,
+  filename: string | void,
   cwd: string,
+  root: string,
   envName: string,
 };
 
@@ -130,17 +131,14 @@ export function buildRootChain(
   );
   if (!programmaticChain) return null;
 
-  const { root: rootDir = ".", configFile: configFileName = true } = opts;
-  let { babelrc, babelrcRoots } = opts;
-
-  const absoluteRoot = path.resolve(context.cwd, rootDir);
-
   let configFile;
-  if (typeof configFileName === "string") {
-    configFile = loadConfig(configFileName, context.cwd, context.envName);
-  } else if (configFileName === true) {
-    configFile = findRootConfig(absoluteRoot, context.envName);
+  if (typeof opts.configFile === "string") {
+    configFile = loadConfig(opts.configFile, context.cwd, context.envName);
+  } else if (opts.configFile !== false) {
+    configFile = findRootConfig(context.root, context.envName);
   }
+
+  let { babelrc, babelrcRoots } = opts;
 
   const configFileChain = emptyChain();
   if (configFile) {
@@ -171,7 +169,7 @@ export function buildRootChain(
   if (
     (babelrc === true || babelrc === undefined) &&
     pkgData &&
-    babelrcLoadEnabled(context, pkgData, babelrcRoots, absoluteRoot)
+    babelrcLoadEnabled(context, pkgData, babelrcRoots)
   ) {
     ({ ignore: ignoreFile, config: babelrcFile } = findRelativeConfig(
       pkgData,
@@ -214,9 +212,10 @@ function babelrcLoadEnabled(
   context: ConfigContext,
   pkgData: FilePackageData,
   babelrcRoots: BabelrcSearch | void,
-  absoluteRoot: string,
 ): boolean {
   if (typeof babelrcRoots === "boolean") return babelrcRoots;
+
+  const absoluteRoot = context.root;
 
   // Fast path to avoid having to load micromatch if the babelrc is just
   // loading in the standard root directory.
@@ -576,7 +575,7 @@ function configFieldIsApplicable(
   test: ConfigApplicableTest,
   dirname: string,
 ): boolean {
-  if (context.filename === null) {
+  if (typeof context.filename !== "string") {
     throw new Error(
       `Configuration contains explicit test/include/exclude checks, but no filename was passed to Babel`,
     );
@@ -602,7 +601,7 @@ function shouldIgnore(
   dirname: string,
 ): boolean {
   if (ignore) {
-    if (context.filename === null) {
+    if (typeof context.filename !== "string") {
       throw new Error(
         `Configuration contains ignore checks, but no filename was passed to Babel`,
       );
@@ -621,7 +620,7 @@ function shouldIgnore(
   }
 
   if (only) {
-    if (context.filename === null) {
+    if (typeof context.filename !== "string") {
       throw new Error(
         `Configuration contains ignore checks, but no filename was passed to Babel`,
       );
@@ -696,7 +695,7 @@ function matchesPatterns(
 
 const getPossibleDirs = makeWeakCache((context: ConfigContextNamed) => {
   let current = context.filename;
-  if (current === null) return [];
+  if (typeof current !== "string") return [];
 
   const possibleDirs = [current];
   while (true) {
