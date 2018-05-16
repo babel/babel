@@ -915,6 +915,7 @@ export type FlowInterfaceExtends = Node;
 export type FlowTypeAlias = Node;
 export type FlowOpaqueType = Node;
 export type FlowObjectTypeIndexer = Node;
+export type FlowObjectTypeInternalSlot = Node;
 export type FlowFunctionTypeAnnotation = Node;
 export type FlowObjectTypeProperty = Node;
 export type FlowObjectTypeSpreadProperty = Node;
