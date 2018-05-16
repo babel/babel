@@ -384,6 +384,7 @@ export function ObjectTypeAnnotation(node: Object) {
   const props = node.properties.concat(
     node.callProperties || [],
     node.indexers || [],
+    node.internalSlots || [],
   );
 
   if (props.length) {
