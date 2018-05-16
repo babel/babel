@@ -10,7 +10,7 @@
     "./lib/node.js": "./lib/browser.js"
   },
   "dependencies": {
-    "core-js": "^2.5.3",
+    "core-js": "^2.5.6",
     "find-cache-dir": "^1.0.0",
     "home-or-tmp": "^3.0.0",
     "lodash": "^4.17.5",
