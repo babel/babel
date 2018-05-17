@@ -433,14 +433,39 @@ helpers.setPrototypeOf = () => template.program.ast`
 helpers.construct = () => template.program.ast`
   import setPrototypeOf from "setPrototypeOf";
 
+  function isNativeReflectConstruct() {
+    if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+
+    // core-js@3
+    if (Reflect.construct.sham) return false;
+
+    // Proxy can't be polyfilled. Every browser implemented
+    // proxies before or at the same time of Reflect.construct,
+    // so if they support Proxy they also support Reflect.construct.
+    if (typeof Proxy === "function") return true;
+
+    // Since Reflect.construct can't be properly polyfilled, some
+    // implementations (e.g. core-js@2) don't set the correct internal slots.
+    // Those polyfills don't allow us to subclass built-ins, so we need to
+    // use our fallback implementation.
+    try {
+      // If the internal slots aren't set, this throws an error similar to
+      //   TypeError: this is not a Date object.
+      Date.prototype.toString.call(Reflect.construct(Date, [], function() {}));
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
   export default function _construct(Parent, args, Class) {
-    if (typeof Reflect !== "undefined" && Reflect.construct) {
+    if (isNativeReflectConstruct()) {
       _construct = Reflect.construct;
     } else {
       _construct = function _construct(Parent, args, Class) {
         var a = [null];
         a.push.apply(a, args);
-        var Constructor = Parent.bind.apply(Parent, a);
+        var Constructor = Function.bind.apply(Parent, a);
         var instance = new Constructor();
         if (Class) setPrototypeOf(instance, Class.prototype);
         return instance;
@@ -462,6 +487,7 @@ helpers.wrapNativeSuper = () => template.program.ast`
     var _cache = typeof Map === "function" ? new Map() : undefined;
 
     _wrapNativeSuper = function _wrapNativeSuper(Class) {
+      if (Class === null) return null;
       if (typeof Class !== "function") {
         throw new TypeError("Super expression must either be null or a function");
       }
@@ -469,7 +495,9 @@ helpers.wrapNativeSuper = () => template.program.ast`
         if (_cache.has(Class)) return _cache.get(Class);
         _cache.set(Class, Wrapper);
       }
-      function Wrapper() {}
+      function Wrapper() {
+        return _construct(Class, arguments, _gPO(this).constructor)
+      }
       Wrapper.prototype = Object.create(Class.prototype, {
         constructor: {
           value: Wrapper,
@@ -478,15 +506,8 @@ helpers.wrapNativeSuper = () => template.program.ast`
           configurable: true,
         }
       });
-      return _sPO(
-        Wrapper,
-        _sPO(
-          function Super() {
-            return construct(Class, arguments, _gPO(this).constructor);
-          },
-          Class
-        )
-      );
+
+      return _sPO(Wrapper, Class);
     }
 
     return _wrapNativeSuper(Class)
