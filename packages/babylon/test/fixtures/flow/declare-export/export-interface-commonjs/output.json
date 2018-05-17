@@ -145,6 +145,7 @@
                   "callProperties": [],
                   "properties": [],
                   "indexers": [],
+                  "internalSlots": [],
                   "exact": false
                 }
               },

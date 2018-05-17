@@ -233,6 +233,7 @@
                       "variance": null
                     }
                   ],
+                  "internalSlots": [],
                   "exact": false
                 }
               }

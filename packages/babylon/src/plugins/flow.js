@@ -621,7 +621,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): N.FlowObjectTypeIndexer {
       node.static = isStatic;
 
-      this.expect(tt.bracketL);
+      // Note: bracketL has already been consumed
       if (this.lookahead().type === tt.colon) {
         node.id = this.flowParseObjectPropertyKey();
         node.key = this.flowParseTypeInitialiser();
@@ -634,6 +634,27 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.variance = variance;
 
       return this.finishNode(node, "ObjectTypeIndexer");
+    }
+
+    flowParseObjectTypeInternalSlot(
+      node: N.FlowObjectTypeInternalSlot,
+      isStatic: boolean,
+    ): N.FlowObjectTypeInternalSlot {
+      node.static = isStatic;
+      // Note: both bracketL have already been consumed
+      node.id = this.flowParseObjectPropertyKey();
+      this.expect(tt.bracketR);
+      this.expect(tt.bracketR);
+      if (this.isRelational("<") || this.match(tt.parenL)) {
+        node.method = true;
+        node.value = this.flowParseObjectTypeMethodish(
+          this.startNodeAt(node.start, node.loc.start),
+        );
+      } else {
+        node.method = false;
+        node.value = this.flowParseTypeInitialiser();
+      }
+      return this.finishNode(node, "ObjectTypeInternalSlot");
     }
 
     flowParseObjectTypeMethodish(
@@ -689,6 +710,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       nodeStart.callProperties = [];
       nodeStart.properties = [];
       nodeStart.indexers = [];
+      nodeStart.internalSlots = [];
 
       let endDelim;
       let exact;
@@ -720,10 +742,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         const variance = this.flowParseVariance();
 
-        if (this.match(tt.bracketL)) {
-          nodeStart.indexers.push(
-            this.flowParseObjectTypeIndexer(node, isStatic, variance),
-          );
+        if (this.eat(tt.bracketL)) {
+          if (this.eat(tt.bracketL)) {
+            if (variance) {
+              this.unexpected(variance.start);
+            }
+            nodeStart.internalSlots.push(
+              this.flowParseObjectTypeInternalSlot(node, isStatic),
+            );
+          } else {
+            nodeStart.indexers.push(
+              this.flowParseObjectTypeIndexer(node, isStatic, variance),
+            );
+          }
         } else if (this.match(tt.parenL) || this.isRelational("<")) {
           if (variance) {
             this.unexpected(variance.start);

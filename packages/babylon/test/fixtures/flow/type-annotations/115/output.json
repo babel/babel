@@ -193,6 +193,7 @@
               }
             }
           ],
+          "internalSlots": [],
           "exact": false
         }
       }

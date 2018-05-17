@@ -154,6 +154,7 @@
                   ],
                   "properties": [],
                   "indexers": [],
+                  "internalSlots": [],
                   "exact": false
                 }
               }

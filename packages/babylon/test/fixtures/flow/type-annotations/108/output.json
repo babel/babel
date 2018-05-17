@@ -209,6 +209,7 @@
                     }
                   ],
                   "indexers": [],
+                  "internalSlots": [],
                   "exact": true
                 }
               }
@@ -525,6 +526,7 @@
                     }
                   ],
                   "indexers": [],
+                  "internalSlots": [],
                   "exact": true
                 }
               }
@@ -736,6 +738,7 @@
                   "callProperties": [],
                   "properties": [],
                   "indexers": [],
+                  "internalSlots": [],
                   "exact": true
                 }
               }
@@ -991,6 +994,7 @@
                           }
                         ],
                         "indexers": [],
+                        "internalSlots": [],
                         "exact": true
                       },
                       "variance": null,
@@ -1050,6 +1054,7 @@
                     }
                   ],
                   "indexers": [],
+                  "internalSlots": [],
                   "exact": false
                 }
               }
@@ -1519,6 +1524,7 @@
                           }
                         ],
                         "indexers": [],
+                        "internalSlots": [],
                         "exact": false
                       },
                       "variance": null,
@@ -1578,6 +1584,7 @@
                     }
                   ],
                   "indexers": [],
+                  "internalSlots": [],
                   "exact": true
                 }
               }

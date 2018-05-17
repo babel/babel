@@ -31,9 +31,6 @@ types/member/reserved_words.js
 types/parameter_defaults/migrated_0032.js
 types/typecasts_invalid/migrated_0001.js
 class_method_kinds/polymorphic_getter.js
-internal_slot/interface_method.js
-internal_slot/object_method.js
-internal_slot/object_variance.js
 numbers/underscored_bin.js
 numbers/underscored_float.js
 numbers/underscored_float_whole.js
