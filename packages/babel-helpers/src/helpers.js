@@ -442,7 +442,7 @@ helpers.construct = () => template.program.ast`
     // Proxy can't be polyfilled. Every browser implemented
     // proxies before or at the same time of Reflect.construct,
     // so if they support Proxy they also support Reflect.construct.
-    if (typeof Proxy === "funcion") return true;
+    if (typeof Proxy === "function") return true;
 
     // Since Reflect.construct can't be properly polyfilled, some
     // implementations (e.g. core-js@2) don't set the correct internal slots.
