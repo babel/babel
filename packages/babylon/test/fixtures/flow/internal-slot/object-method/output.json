@@ -111,6 +111,7 @@
                 "name": "foo"
               },
               "method": true,
+              "optional": false,
               "value": {
                 "type": "FunctionTypeAnnotation",
                 "start": 11,

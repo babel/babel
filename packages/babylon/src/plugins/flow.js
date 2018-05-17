@@ -647,11 +647,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.expect(tt.bracketR);
       if (this.isRelational("<") || this.match(tt.parenL)) {
         node.method = true;
+        node.optional = false;
         node.value = this.flowParseObjectTypeMethodish(
           this.startNodeAt(node.start, node.loc.start),
         );
       } else {
         node.method = false;
+        if (this.eat(tt.question)) {
+          node.optional = true;
+        }
         node.value = this.flowParseTypeInitialiser();
       }
       return this.finishNode(node, "ObjectTypeInternalSlot");

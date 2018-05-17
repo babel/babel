@@ -272,11 +272,12 @@ defineType("ObjectTypeAnnotation", {
 });
 
 defineType("ObjectTypeInternalSlot", {
-  visitor: ["id", "value", "static", "method"],
+  visitor: ["id", "value", "optional", "static", "method"],
   aliases: ["Flow", "UserWhitespacable"],
   fields: {
     id: validateType("Identifier"),
     value: validateType("FlowType"),
+    optional: validate(assertValueType("boolean")),
     static: validate(assertValueType("boolean")),
     method: validate(assertValueType("boolean")),
   },

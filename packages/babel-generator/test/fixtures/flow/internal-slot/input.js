@@ -4,3 +4,4 @@ interface T { [[foo]]: X }
 interface T { [[foo]](): X }
 type T = { [[foo]]: X }
 type T = { [[foo]](): X }
+type T = { [[foo]]?: X }

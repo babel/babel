@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 28,
+  "end": 24,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 28
+      "column": 24
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 28,
+    "end": 24,
     "loc": {
       "start": {
         "line": 1,
@@ -23,15 +23,15 @@
       },
       "end": {
         "line": 1,
-        "column": 28
+        "column": 24
       }
     },
     "sourceType": "module",
     "body": [
       {
-        "type": "InterfaceDeclaration",
+        "type": "TypeAlias",
         "start": 0,
-        "end": 28,
+        "end": 24,
         "loc": {
           "start": {
             "line": 1,
@@ -39,42 +39,39 @@
           },
           "end": {
             "line": 1,
-            "column": 28
+            "column": 24
           }
         },
         "id": {
           "type": "Identifier",
-          "start": 10,
-          "end": 11,
+          "start": 5,
+          "end": 6,
           "loc": {
             "start": {
               "line": 1,
-              "column": 10
+              "column": 5
             },
             "end": {
               "line": 1,
-              "column": 11
+              "column": 6
             },
             "identifierName": "T"
           },
           "name": "T"
         },
         "typeParameters": null,
-        "extends": [],
-        "implements": [],
-        "mixins": [],
-        "body": {
+        "right": {
           "type": "ObjectTypeAnnotation",
-          "start": 12,
-          "end": 28,
+          "start": 9,
+          "end": 24,
           "loc": {
             "start": {
               "line": 1,
-              "column": 12
+              "column": 9
             },
             "end": {
               "line": 1,
-              "column": 28
+              "column": 24
             }
           },
           "callProperties": [],
@@ -83,87 +80,69 @@
           "internalSlots": [
             {
               "type": "ObjectTypeInternalSlot",
-              "start": 14,
-              "end": 26,
+              "start": 11,
+              "end": 22,
               "loc": {
                 "start": {
                   "line": 1,
-                  "column": 14
+                  "column": 11
                 },
                 "end": {
                   "line": 1,
-                  "column": 26
+                  "column": 22
                 }
               },
               "static": false,
               "id": {
                 "type": "Identifier",
-                "start": 16,
-                "end": 19,
+                "start": 13,
+                "end": 16,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 16
+                    "column": 13
                   },
                   "end": {
                     "line": 1,
-                    "column": 19
+                    "column": 16
                   },
                   "identifierName": "foo"
                 },
                 "name": "foo"
               },
-              "method": true,
-              "optional": false,
+              "method": false,
+              "optional": true,
               "value": {
-                "type": "FunctionTypeAnnotation",
-                "start": 14,
-                "end": 26,
+                "type": "GenericTypeAnnotation",
+                "start": 21,
+                "end": 22,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 14
+                    "column": 21
                   },
                   "end": {
                     "line": 1,
-                    "column": 26
+                    "column": 22
                   }
                 },
-                "params": [],
-                "rest": null,
                 "typeParameters": null,
-                "returnType": {
-                  "type": "GenericTypeAnnotation",
-                  "start": 25,
-                  "end": 26,
+                "id": {
+                  "type": "Identifier",
+                  "start": 21,
+                  "end": 22,
                   "loc": {
                     "start": {
                       "line": 1,
-                      "column": 25
+                      "column": 21
                     },
                     "end": {
                       "line": 1,
-                      "column": 26
-                    }
-                  },
-                  "typeParameters": null,
-                  "id": {
-                    "type": "Identifier",
-                    "start": 25,
-                    "end": 26,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 25
-                      },
-                      "end": {
-                        "line": 1,
-                        "column": 26
-                      },
-                      "identifierName": "X"
+                      "column": 22
                     },
-                    "name": "X"
-                  }
+                    "identifierName": "X"
+                  },
+                  "name": "X"
                 }
               }
             }

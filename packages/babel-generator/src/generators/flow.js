@@ -424,6 +424,7 @@ export function ObjectTypeInternalSlot(node: Object) {
   this.print(node.id, node);
   this.token("]");
   this.token("]");
+  if (node.optional) this.token("?");
   if (!node.method) {
     this.token(":");
     this.space();

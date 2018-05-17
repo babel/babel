@@ -16,3 +16,6 @@ type T = {
 type T = {
   [[foo]]() => X
 };
+type T = {
+  [[foo]]?: X
+};
