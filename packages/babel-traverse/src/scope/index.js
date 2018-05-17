@@ -68,9 +68,6 @@ const collectorVisitor = {
       return;
     }
 
-    // TODO(amasad): remove support for flow as bindings (See warning below).
-    //if (path.isFlow()) return;
-
     // we've ran into a declaration!
     const parent =
       path.scope.getFunctionParent() || path.scope.getProgramParent();
@@ -468,8 +465,6 @@ export default class Scope {
   }
 
   registerDeclaration(path: NodePath) {
-    if (path.isFlow()) return;
-
     if (path.isLabeledStatement()) {
       this.registerLabel(path);
     } else if (path.isFunctionDeclaration()) {
