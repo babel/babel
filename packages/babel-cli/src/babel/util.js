@@ -1,4 +1,3 @@
-import commander from "commander";
 import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "@babel/core";
 import includes from "lodash/includes";
@@ -46,30 +45,26 @@ export function addSourceMappingUrl(code, loc) {
   return code + "\n//# sourceMappingURL=" + path.basename(loc);
 }
 
-export function log(msg, force) {
-  if (force === true || commander.verbose) console.log(msg);
-}
-
-export function transform(filename, code, opts, callback) {
+export function transform(filename, code, opts) {
   opts = {
     ...opts,
     filename,
   };
 
-  babel.transform(code, opts, callback);
+  return new Promise((resolve, reject) => {
+    babel.transform(code, opts, (err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    });
+  });
 }
 
-export function compile(filename, opts, callback) {
-  babel.transformFile(filename, opts, function(err, res) {
-    if (err) {
-      if (commander.watch) {
-        console.error(err);
-        return callback(null, null);
-      } else {
-        return callback(err);
-      }
-    }
-    return callback(null, res);
+export function compile(filename, opts) {
+  return new Promise((resolve, reject) => {
+    babel.transformFile(filename, opts, (err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    });
   });
 }
 
