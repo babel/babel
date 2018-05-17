@@ -130,7 +130,7 @@ Type: `string`
 
 #### options
 
-`@babel/template` accepts all of the options from [babylon](https://github.com/babel/babel/tree/master/packages/babel-parser), and specifies
+`@babel/template` accepts all of the options from [Babel Parser](https://github.com/babel/babel/tree/master/packages/babel-parser), and specifies
 some defaults of its own:
 
 * `allowReturnOutsideFunction` is set to `true` by default.
@@ -169,4 +169,4 @@ optional object of replacements. See the usage section for an example.
 
 When using `.ast`, the AST will be returned directly.
 
-[babylon]: https://github.com/babel/babylon#options
+[babel-parser]: https://github.com/babel/babylon#options

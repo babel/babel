@@ -10,17 +10,17 @@ $ npm install --save @babel/traverse
 
 ## Usage
 
-We can use it alongside Babylon to traverse and update nodes:
+We can use it alongside Babel Parser to traverse and update nodes:
 
 ```js
-import * as babylon from "babylon";
+import * as babelParser from "@babel/parser";
 import traverse from "@babel/traverse";
 
 const code = `function square(n) {
   return n * n;
 }`;
 
-const ast = babylon.parse(code);
+const ast = babelParser.parse(code);
 
 traverse(ast, {
   enter(path) {
