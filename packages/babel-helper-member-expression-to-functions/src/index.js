@@ -1,10 +1,18 @@
 import * as t from "@babel/types";
 
-class AssignmentMemoiser extends WeakMap {
+class AssignmentMemoiser {
+  constructor() {
+    this._map = new WeakMap();
+  }
+
+  has(key) {
+    return this._map.has(key);
+  }
+
   get(key) {
     if (!this.has(key)) return;
 
-    const record = super.get(key);
+    const record = this._map.get(key);
     const { value } = record;
 
     record.count--;
@@ -17,7 +25,7 @@ class AssignmentMemoiser extends WeakMap {
   }
 
   set(key, value, count) {
-    return super.set(key, { count, value });
+    return this._map.set(key, { count, value });
   }
 }
 
