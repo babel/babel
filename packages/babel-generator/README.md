@@ -1,6 +1,6 @@
 # @babel/generator
 
-> Turns a [Babylon AST](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md) into code.
+> Turns a [The Babel Parser AST](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md) into code.
 
 ## Install
 

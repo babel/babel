@@ -226,19 +226,19 @@ If the test requires a minimum Node version, you can add `minNodeVersion` (must 
 }
 ```
 
-#### `babel-parser`
+#### `@babel/parser`
 
-Writing tests for Babel parser is very
+Writing tests for the babel parser is very
 similar to the other packages.
 Inside the `packages/babel-parser/tests/fixtures` folder are categories/groupings of test fixtures (es2015, flow,
 etc.). To add a test, create a folder under one of these groupings (or create a new one) with a
 descriptive name, and add the following:
 
-* Create an `input.js` file that contains the code you want Babel parser to parse.
+* Create an `input.js` file that contains the code you want the babel parser to parse.
 
 * Add an `output.json` file with the expected parser output. For added convenience, if there is no `output.json` present, the test runner will generate one for you.
 
-After writing tests for babel-parser, just build it by running:
+After writing tests for @babel/parser, just build it by running:
 
 ```sh
 $ make build
@@ -252,7 +252,7 @@ $ TEST_ONLY=babel-parser make test-only
 
 #### Bootstrapping expected output
 
-For both `@babel/plugin-x` and `babel-parser`, you can easily generate an `output.js`/`output.json` automatically by just providing `input.js` and running the tests as you usually would.
+For both `@babel/plugin-x` and `@babel/parser`, you can easily generate an `output.js`/`output.json` automatically by just providing `input.js` and running the tests as you usually would.
 
 ```
 // Example
@@ -311,7 +311,7 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 - The pull request should include:
   - [ ] An update to the [plugins](https://github.com/babel/babel/tree/master/packages/babel-parser#plugins) part of the readme. Add a new entry to that list for the new plugin flag (and link to the proposal)
   - [ ] If any new nodes or modifications need to be added to the AST, update [ast/spec.md](https://github.com/babel/babel/bloc/master/packages/babel-parser/ast/spec.md)
-  - [ ] Make sure you use the `this.hasPlugin("plugin-name-here")` check in Babel parser so that your new plugin code only runs when that flag is turned on (not default behavior)
+  - [ ] Make sure you use the `this.hasPlugin("plugin-name-here")` check in the babel parser so that your new plugin code only runs when that flag is turned on (not default behavior)
   - [ ] Add failing/passing tests according to spec behavior
 - Start working about the Babel transform itself!
 

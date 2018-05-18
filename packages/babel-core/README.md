@@ -99,7 +99,7 @@ Given an [AST](https://astexplorer.net/), transform it.
 
 ```js
 const sourceCode = "if (true) return;";
-const parsedAst = babelParser.parse(sourceCode, { allowReturnOutsideFunction: true });
+const parsedAst = babel.parser.parse(sourceCode, { allowReturnOutsideFunction: true });
 babel.transformFromAst(parsedAst, sourceCode, options, function(err, result) {
   const { code, map, ast } = result;
 });
@@ -119,7 +119,7 @@ Given an [AST](https://astexplorer.net/), transform it.
 
 ```js
 const sourceCode = "if (true) return;";
-const parsedAst = babelParser.parse(sourceCode, { allowReturnOutsideFunction: true });
+const parsedAst = babel.parser.parse(sourceCode, { allowReturnOutsideFunction: true });
 const { code, map, ast } = babel.transformFromAstSync(parsedAst, sourceCode, options);
 ```
 
@@ -238,7 +238,7 @@ Following is a table of the options you can use:
 | `moduleIds`              | `false`              | If truthy, insert an explicit id for modules. By default, all modules are anonymous. (Not available for `common` modules) |
 | `moduleRoot`             | `(sourceRoot)`       | Optional prefix for the AMD module formatter that will be prepend to the filename on module definitions |
 | `only`                   | `null`               | A [glob](https://github.com/isaacs/minimatch), regex, or mixed array of both, matching paths to **only** compile. Can also be an array of arrays containing paths to explicitly match. When attempting to compile a non-matching file it's returned verbatim |
-| `parserOpts`             | `{}`                 | An object containing the options to be passed down to the babel parser, babel-parser |
+| `parserOpts`             | `{}`                 | An object containing the options to be passed down to the babel parser, @babel/parser |
 | `plugins`                | `[]`                 | List of [plugins](https://babeljs.io/docs/plugins/) to load and use |
 | `presets`                | `[]`                 | List of [presets](https://babeljs.io/docs/plugins/#presets) (a set of plugins) to load and use |
 | `retainLines`            | `false`              | Retain line numbers. This will lead to wacky code but is handy for scenarios where you can't use source maps. (**NOTE:** This will not retain the columns) |

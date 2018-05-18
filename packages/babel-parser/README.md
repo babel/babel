@@ -1,9 +1,9 @@
 <p align="center">
-  <img alt="babylon" src="https://raw.githubusercontent.com/babel/logo/master/babylon.png" width="700">
+  <img alt="@babel/parser" src="https://raw.githubusercontent.com/babel/logo/master/babylon.png" width="700">
 </p>
 
 <p align="center">
-  Babylon is a JavaScript parser used in <a href="https://github.com/babel/babel">Babel</a>.
+  The Babel parser (previously babylon) is a JavaScript parser used in <a href="https://github.com/babel/babel">Babel</a>.
 </p>
 
  - The latest ECMAScript version enabled by default (ES2017).
@@ -18,9 +18,9 @@ thanks to the awesome work of [@RReverser](https://github.com/RReverser) and [@m
 
 ## API
 
-### `babelParser.parse(code, [options])`
+### `babel.parser.parse(code, [options])`
 
-### `babelParser.parseExpression(code, [options])`
+### `babel.parser.parseExpression(code, [options])`
 
 `parse()` parses the provided `code` as an entire ECMAScript program, while
 `parseExpression()` tries to parse a single Expression with performance in
@@ -43,7 +43,7 @@ mind. When in doubt, use `.parse()`.
 - **allowSuperOutsideMethod**: TODO
 
 - **sourceType**: Indicate the mode the code should be parsed in. Can be
-  one of `"script"`, `"module"`, or `"unambiguous"`. Defaults to `"script"`. `"unambiguous"` will make Babylon attempt to _guess_, based on the presence of ES6 `import` or `export` statements. Files with ES6 `import`s and `export`s are considered `"module"` and are otherwise `"script"`.
+  one of `"script"`, `"module"`, or `"unambiguous"`. Defaults to `"script"`. `"unambiguous"` will make @babel/parser attempt to _guess_, based on the presence of ES6 `import` or `export` statements. Files with ES6 `import`s and `export`s are considered `"module"` and are otherwise `"script"`.
 
 - **sourceFilename**: Correlate output AST nodes with their source filename.  Useful when generating code and source maps from the ASTs of multiple input files.
 
@@ -59,7 +59,7 @@ mind. When in doubt, use `.parse()`.
 
 ### Output
 
-Babylon generates AST according to [Babel AST format][].
+The Babel parser generates AST according to [Babel AST format][].
 It is based on [ESTree spec][] with the following deviations:
 
 > There is now an `estree` plugin which reverts these deviations
@@ -72,7 +72,7 @@ It is based on [ESTree spec][] with the following deviations:
 
 AST for JSX code is based on [Facebook JSX AST][].
 
-[Babel AST format]: https://github.com/babel/babylon/blob/master/ast/spec.md
+[Babel AST format]: https://github.com/babel/babel/tree/master/packages/babel-parser/ast/spec.md
 [ESTree spec]: https://github.com/estree/estree
 
 [Literal]: https://github.com/estree/estree/blob/master/es5.md#literal
@@ -97,14 +97,14 @@ AST for JSX code is based on [Facebook JSX AST][].
 
 ### Semver
 
-Babylon follows semver in most situations. The only thing to note is that some spec-compliancy bug fixes may be released under patch versions.
+The Bael Parser follows semver in most situations. The only thing to note is that some spec-compliancy bug fixes may be released under patch versions.
 
 For example: We push a fix to early error on something like [#107](https://github.com/babel/babylon/pull/107) - multiple default exports per file. That would be considered a bug fix even though it would cause a build to fail.
 
 ### Example
 
 ```javascript
-require("babylon").parse("code", {
+require("@babel/parser").parse("code", {
   // parse in strict mode and allow module declarations
   sourceType: "module",
 
@@ -148,20 +148,20 @@ require("babylon").parse("code", {
 
 ### FAQ
 
-#### Will Babylon support a plugin system?
+#### Will the babel parser support a plugin system?
 
 Previous issues: [#1351](https://github.com/babel/babel/issues/1351), [#6694](https://github.com/babel/babel/issues/6694).
 
 We currently aren't willing to commit to supporting the API for plugins or the resulting ecosystem (there is already enough work maintaining Babel's own plugin system). It's not clear how to make that API effective, and it would limit our ability to refactor and optimize the codebase.
 
-Our current recommendation for those that want to create their own custom syntax is for users to fork Babylon.
+Our current recommendation for those that want to create their own custom syntax is for users to fork babel parser.
 
 To consume your custom parser, you can add to your `.babelrc` via its npm package name or require it if using JavaScript,
 
 ```json
 {
   "parserOpts": {
-    "parser": "custom-fork-of-babylon-on-npm-here"
+    "parser": "custom-fork-of-babel-parser-on-npm-here"
   }
 }
 ```
