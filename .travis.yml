@@ -40,6 +40,10 @@ matrix:
       env: JOB=babylon-flow-tests
     - node_js: "node"
       env: JOB=babylon-test262-tests
+    - os: osx
+      node_js: "node"
+  allow_failures:
+    - os: osx
 
 notifications:
   slack:
