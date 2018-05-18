@@ -3,7 +3,7 @@
 import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "../index";
 import NodePath from "./index";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
 const hoistVariablesVisitor = {

@@ -1,5 +1,5 @@
 import traverse from "../lib";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 
 function getPath(code, options = { sourceType: "script" }) {
   const ast = parse(code, options);
