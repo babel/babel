@@ -99,7 +99,7 @@ Given an [AST](https://astexplorer.net/), transform it.
 
 ```js
 const sourceCode = "if (true) return;";
-const parsedAst = babel.parser.parse(sourceCode, { allowReturnOutsideFunction: true });
+const parsedAst = babel.parse(sourceCode, { allowReturnOutsideFunction: true });
 babel.transformFromAst(parsedAst, sourceCode, options, function(err, result) {
   const { code, map, ast } = result;
 });
@@ -119,7 +119,7 @@ Given an [AST](https://astexplorer.net/), transform it.
 
 ```js
 const sourceCode = "if (true) return;";
-const parsedAst = babel.parser.parse(sourceCode, { allowReturnOutsideFunction: true });
+const parsedAst = babel.parse(sourceCode, { allowReturnOutsideFunction: true });
 const { code, map, ast } = babel.transformFromAstSync(parsedAst, sourceCode, options);
 ```
 

@@ -18,9 +18,9 @@ thanks to the awesome work of [@RReverser](https://github.com/RReverser) and [@m
 
 ## API
 
-### `babel.parser.parse(code, [options])`
+### `babel.parse(code, [options])`
 
-### `babel.parser.parseExpression(code, [options])`
+### `babel.parseExpression(code, [options])`
 
 `parse()` parses the provided `code` as an entire ECMAScript program, while
 `parseExpression()` tries to parse a single Expression with performance in
