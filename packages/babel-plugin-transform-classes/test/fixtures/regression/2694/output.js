@@ -10,6 +10,8 @@ var _BaseFoo2 = babelHelpers.interopRequireDefault(require("./BaseFoo"));
 var SubFoo =
 /*#__PURE__*/
 function (_BaseFoo) {
+  babelHelpers.inherits(SubFoo, _BaseFoo);
+
   function SubFoo() {
     babelHelpers.classCallCheck(this, SubFoo);
     return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(SubFoo).apply(this, arguments));
@@ -22,7 +24,6 @@ function (_BaseFoo) {
       console.log('SubFoo.talk');
     }
   }]);
-  babelHelpers.inherits(SubFoo, _BaseFoo);
   return SubFoo;
 }(_BaseFoo2.default);
 

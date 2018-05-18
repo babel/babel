@@ -3,6 +3,8 @@ var Foo =
 function (_Bar) {
   "use strict";
 
+  babelHelpers.inherits(Foo, _Bar);
+
   function Foo(options) {
     babelHelpers.classCallCheck(this, Foo);
     var parentOptions = {};
@@ -14,6 +16,5 @@ function (_Bar) {
     return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this, parentOptions));
   }
 
-  babelHelpers.inherits(Foo, _Bar);
   return Foo;
 }(Bar);

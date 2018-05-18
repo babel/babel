@@ -21,6 +21,8 @@ var ColorPoint =
 function (_Point) {
   "use strict";
 
+  babelHelpers.inherits(ColorPoint, _Point);
+
   function ColorPoint() {
     var _this;
 
@@ -41,7 +43,6 @@ function (_Point) {
       this.getX();
     }
   }]);
-  babelHelpers.inherits(ColorPoint, _Point);
   return ColorPoint;
 }(Point);
 

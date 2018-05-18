@@ -11,6 +11,8 @@ let App =
 function (_React$Component) {
   "use strict";
 
+  babelHelpers.inherits(App, _React$Component);
+
   function App() {
     babelHelpers.classCallCheck(this, App);
     return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(App).apply(this, arguments));
@@ -29,6 +31,5 @@ function (_React$Component) {
     </div>;
     }
   }]);
-  babelHelpers.inherits(App, _React$Component);
   return App;
 }(React.Component);

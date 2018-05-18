@@ -3,12 +3,13 @@ var TestEmpty =
 function (_ref) {
   "use strict";
 
+  babelHelpers.inherits(TestEmpty, _ref);
+
   function TestEmpty() {
     babelHelpers.classCallCheck(this, TestEmpty);
     return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestEmpty).apply(this, arguments));
   }
 
-  babelHelpers.inherits(TestEmpty, _ref);
   return TestEmpty;
 }(
 /*#__PURE__*/
@@ -27,12 +28,13 @@ var TestConstructorOnly =
 function (_ref2) {
   "use strict";
 
+  babelHelpers.inherits(TestConstructorOnly, _ref2);
+
   function TestConstructorOnly() {
     babelHelpers.classCallCheck(this, TestConstructorOnly);
     return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestConstructorOnly).apply(this, arguments));
   }
 
-  babelHelpers.inherits(TestConstructorOnly, _ref2);
   return TestConstructorOnly;
 }(
 /*#__PURE__*/
@@ -51,12 +53,13 @@ var TestMethodOnly =
 function (_ref3) {
   "use strict";
 
+  babelHelpers.inherits(TestMethodOnly, _ref3);
+
   function TestMethodOnly() {
     babelHelpers.classCallCheck(this, TestMethodOnly);
     return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestMethodOnly).apply(this, arguments));
   }
 
-  babelHelpers.inherits(TestMethodOnly, _ref3);
   return TestMethodOnly;
 }(
 /*#__PURE__*/
@@ -79,12 +82,13 @@ var TestConstructorAndMethod =
 function (_ref4) {
   "use strict";
 
+  babelHelpers.inherits(TestConstructorAndMethod, _ref4);
+
   function TestConstructorAndMethod() {
     babelHelpers.classCallCheck(this, TestConstructorAndMethod);
     return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestConstructorAndMethod).apply(this, arguments));
   }
 
-  babelHelpers.inherits(TestConstructorAndMethod, _ref4);
   return TestConstructorAndMethod;
 }(
 /*#__PURE__*/
@@ -107,12 +111,13 @@ var TestMultipleMethods =
 function (_ref5) {
   "use strict";
 
+  babelHelpers.inherits(TestMultipleMethods, _ref5);
+
   function TestMultipleMethods() {
     babelHelpers.classCallCheck(this, TestMultipleMethods);
     return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(TestMultipleMethods).apply(this, arguments));
   }
 
-  babelHelpers.inherits(TestMultipleMethods, _ref5);
   return TestMultipleMethods;
 }(
 /*#__PURE__*/

@@ -1,23 +1,23 @@
 var _classCallCheck = require("@babel/runtime/helpers/builtin/classCallCheck");
 
-var _inherits = require("@babel/runtime/helpers/builtin/inherits");
-
 var _possibleConstructorReturn = require("@babel/runtime/helpers/builtin/possibleConstructorReturn");
 
 var _getPrototypeOf = require("@babel/runtime/helpers/builtin/getPrototypeOf");
+
+var _inherits = require("@babel/runtime/helpers/builtin/inherits");
 
 let Foo =
 /*#__PURE__*/
 function (_Bar) {
   "use strict";
 
+  _inherits(Foo, _Bar);
+
   function Foo() {
     _classCallCheck(this, Foo);
 
     return _possibleConstructorReturn(this, _getPrototypeOf(Foo).apply(this, arguments));
   }
-
-  _inherits(Foo, _Bar);
 
   return Foo;
 }(Bar);

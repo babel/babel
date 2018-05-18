@@ -9,11 +9,14 @@ class Obj extends Base {
   call() {
     return super.test();
   }
-
-  test() {
+}
+Object.defineProperty(Obj.prototype, 'test', {
+  writable: true,
+  configurable: true,
+  value() {
     throw new Error("gobbledygook");
   }
-}
+});
 
 const obj = new Obj();
 expect(() => {

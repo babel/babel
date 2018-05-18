@@ -1,6 +1,6 @@
 "use strict";
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype.__proto__ = superClass && superClass.prototype; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
@@ -26,6 +26,8 @@ function () {
 let Obj =
 /*#__PURE__*/
 function (_Base) {
+  _inheritsLoose(Obj, _Base);
+
   function Obj() {
     return _Base.apply(this, arguments) || this;
   }
@@ -35,8 +37,6 @@ function (_Base) {
   _proto.set = function set() {
     return this.test = 3;
   };
-
-  _inheritsLoose(Obj, _Base);
 
   return Obj;
 }(Base);

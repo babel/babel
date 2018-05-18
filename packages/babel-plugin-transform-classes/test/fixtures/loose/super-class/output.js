@@ -3,10 +3,11 @@ var Test =
 function (_Foo) {
   "use strict";
 
+  babelHelpers.inheritsLoose(Test, _Foo);
+
   function Test() {
     return _Foo.apply(this, arguments) || this;
   }
 
-  babelHelpers.inheritsLoose(Test, _Foo);
   return Test;
 }(Foo);
