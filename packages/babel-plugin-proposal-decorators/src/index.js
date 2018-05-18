@@ -11,14 +11,6 @@ export default declare((api, options) => {
     throw new Error("'legacy' must be a boolean.");
   }
 
-  if (legacy !== true && false) {
-    throw new Error(
-      "The new decorators proposal is not supported yet." +
-        ' You must pass the `"legacy": true` option to' +
-        " @babel/plugin-proposal-decorators",
-    );
-  }
-
   const { automaticParentheses } = options;
   if (automaticParentheses !== undefined) {
     if (legacy) {
