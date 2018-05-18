@@ -37,11 +37,4 @@ numbers/underscored_float_whole.js
 numbers/underscored_hex.js
 numbers/underscored_number.js
 numbers/underscored_oct.js
-typeapp_call/function_call.js
-typeapp_call/function_call_optional.js
-typeapp_call/method_call.js
-typeapp_call/method_call_computed.js
-typeapp_call/method_call_optional2.js
-typeapp_call/new.js
-typeapp_call/new_noparens.js
 types/declare_class/proto.js

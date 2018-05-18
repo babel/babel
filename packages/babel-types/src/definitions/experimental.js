@@ -105,11 +105,12 @@ defineType("OptionalCallExpression", {
     optional: {
       validate: assertValueType("boolean"),
     },
+    typeArguments: {
+      validate: assertNodeType("TypeParameterInstantiation"),
+      optional: true,
+    },
     typeParameters: {
-      validate: assertNodeType(
-        "TypeParameterInstantiation",
-        "TSTypeParameterInstantiation",
-      ),
+      validate: assertNodeType("TSTypeParameterInstantiation"),
       optional: true,
     },
   },
