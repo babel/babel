@@ -637,7 +637,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.expectContextual("infer");
       const typeParameter = this.startNode();
       typeParameter.name = this.parseIdentifierName(typeParameter.start);
-      node.typeParameter = this.finishNode(typeParameter, "TypeParameter");
+      node.typeParameter = this.finishNode(typeParameter, "TSTypeParameter");
       return this.finishNode(node, "TSInferType");
     }
 

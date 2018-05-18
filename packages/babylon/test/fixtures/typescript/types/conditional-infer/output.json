@@ -181,7 +181,7 @@
                   }
                 },
                 "typeParameter": {
-                  "type": "TypeParameter",
+                  "type": "TSTypeParameter",
                   "start": 35,
                   "end": 36,
                   "loc": {

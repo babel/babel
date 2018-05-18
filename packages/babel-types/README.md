@@ -2152,7 +2152,7 @@ See also `t.isTSInferType(node, opts)` and `t.assertTSInferType(node, opts)`.
 
 Aliases: `TSType`
 
- - `typeParameter`: `TSType` (required)
+ - `typeParameter`: `TSTypeParameter` (required)
 
 ---
 
