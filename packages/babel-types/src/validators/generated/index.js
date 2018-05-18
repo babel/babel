@@ -1522,20 +1522,6 @@ export function isObjectTypeAnnotation(node: Object, opts?: Object): boolean {
 
   return false;
 }
-export function isObjectTypeInternalSlot(node: Object, opts?: Object): boolean {
-  if (!node) return false;
-
-  const nodeType = node.type;
-  if (nodeType === "ObjectTypeInternalSlot") {
-    if (typeof opts === "undefined") {
-      return true;
-    } else {
-      return shallowEqual(node, opts);
-    }
-  }
-
-  return false;
-}
 export function isObjectTypeCallProperty(node: Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -3673,7 +3659,6 @@ export function isUserWhitespacable(node: Object, opts?: Object): boolean {
     nodeType === "UserWhitespacable" ||
     "ObjectMethod" === nodeType ||
     "ObjectProperty" === nodeType ||
-    "ObjectTypeInternalSlot" === nodeType ||
     "ObjectTypeCallProperty" === nodeType ||
     "ObjectTypeIndexer" === nodeType ||
     "ObjectTypeProperty" === nodeType ||
@@ -3897,7 +3882,6 @@ export function isFlow(node: Object, opts?: Object): boolean {
     "NumberLiteralTypeAnnotation" === nodeType ||
     "NumberTypeAnnotation" === nodeType ||
     "ObjectTypeAnnotation" === nodeType ||
-    "ObjectTypeInternalSlot" === nodeType ||
     "ObjectTypeCallProperty" === nodeType ||
     "ObjectTypeIndexer" === nodeType ||
     "ObjectTypeProperty" === nodeType ||

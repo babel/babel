@@ -468,12 +468,6 @@ export function assertObjectTypeAnnotation(
 ): void {
   assert("ObjectTypeAnnotation", node, opts);
 }
-export function assertObjectTypeInternalSlot(
-  node: Object,
-  opts?: Object = {},
-): void {
-  assert("ObjectTypeInternalSlot", node, opts);
-}
 export function assertObjectTypeCallProperty(
   node: Object,
   opts?: Object = {},
