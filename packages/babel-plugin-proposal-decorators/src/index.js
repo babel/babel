@@ -11,7 +11,7 @@ export default declare((api, options) => {
     throw new Error("'legacy' must be a boolean.");
   }
 
-  if (legacy !== true) {
+  if (legacy !== true && false) {
     throw new Error(
       "The new decorators proposal is not supported yet." +
         ' You must pass the `"legacy": true` option to' +
@@ -19,9 +19,21 @@ export default declare((api, options) => {
     );
   }
 
+  const { automaticParentheses } = options;
+  if (automaticParentheses !== undefined) {
+    if (legacy) {
+      throw new Error(
+        "'automaticParentheses' can't be used with legacy decorators.",
+      );
+    }
+    if (typeof automaticParentheses !== "boolean") {
+      throw new Error("'automaticParentheses' must be a boolean.");
+    }
+  }
+
   return {
     inherits: syntaxDecorators,
 
-    visitor: legacy ? legacyVisitor : visitor,
+    visitor: legacy ? legacyVisitor() : visitor({ automaticParentheses }),
   };
 });

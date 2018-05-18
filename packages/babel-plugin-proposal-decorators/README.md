@@ -78,6 +78,23 @@ require("@babel/core").transform("code", {
 
 ## Options
 
+### `automaticParentheses`
+
+`boolean`, defaults to `false`.
+
+When this option is `true`, the parentheses of a decorator which doesn't get any
+argument are optional. The following examples are equivalent:
+
+```js
+@dec
+class Foo {}
+
+@dec()
+class Foo {}
+```
+
+This option is not compatible with legacy decorators.
+
 ### `legacy`
 
 `boolean`, defaults to `false`.
