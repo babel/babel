@@ -402,7 +402,6 @@ helpers.inherits = () => template.program.ast`
     subClass.prototype = Object.create(superClass && superClass.prototype, {
       constructor: {
         value: subClass,
-        enumerable: false,
         writable: true,
         configurable: true
       }
@@ -421,9 +420,13 @@ helpers.inheritsLoose = () => template.program.ast`
 
 helpers.getPrototypeOf = () => template.program.ast`
   export default function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.setPrototypeOf
-      ? Object.getPrototypeOf
-      : function _getPrototypeOf(o) { return o.__proto__; };
+    if (Object.setPrototypeOf && Object.getPrototypeOf) {
+      _getPrototypeOf = Object.getPrototypeOf;
+    } else {
+      _getPrototypeOf = function _getPrototypeOf(o) {
+        return o.__proto__;
+      };
+    }
     return _getPrototypeOf(o);
   }
 `;
