@@ -22,7 +22,7 @@
     "babel-jest": "^22.4.1",
     "babel-loader": "8.0.0-beta.0",
     "babel-plugin-transform-charcodes": "^0.1.0",
-    "@babel/parser": "7.0.0-beta.46",
+    "babylon": "7.0.0-beta.46",
     "browserify": "^13.1.1",
     "bundle-collapser": "^1.2.1",
     "chalk": "^2.3.2",
