@@ -472,6 +472,10 @@ export function ObjectTypeIndexer(node: Object) {
 }
 
 export function ObjectTypeProperty(node: Object) {
+  if (node.proto) {
+    this.word("proto");
+    this.space();
+  }
   if (node.static) {
     this.word("static");
     this.space();

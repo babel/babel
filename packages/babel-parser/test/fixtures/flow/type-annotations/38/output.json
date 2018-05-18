@@ -136,6 +136,7 @@
                         "name": "subObj"
                       },
                       "static": false,
+                      "proto": false,
                       "kind": "init",
                       "method": false,
                       "value": {
@@ -200,6 +201,7 @@
                                 "name": "strVal"
                               },
                               "static": false,
+                              "proto": false,
                               "kind": "init",
                               "method": false,
                               "value": {

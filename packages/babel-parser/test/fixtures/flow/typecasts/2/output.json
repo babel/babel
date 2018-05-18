@@ -246,6 +246,7 @@
                     "name": "xxx"
                   },
                   "static": false,
+                  "proto": false,
                   "kind": "init",
                   "method": false,
                   "value": {
@@ -298,6 +299,7 @@
                     "name": "yyy"
                   },
                   "static": false,
+                  "proto": false,
                   "kind": "init",
                   "method": false,
                   "value": {

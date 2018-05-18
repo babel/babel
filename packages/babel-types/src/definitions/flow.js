@@ -321,6 +321,7 @@ defineType("ObjectTypeProperty", {
     value: validateType("FlowType"),
     kind: validate(assertOneOf("init", "get", "set")),
     static: validate(assertValueType("boolean")),
+    proto: validate(assertValueType("proto")),
     optional: validate(assertValueType("boolean")),
     variance: validateOptionalType("Variance"),
   },
