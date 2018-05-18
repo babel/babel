@@ -8,7 +8,7 @@ function _construct(Parent, args, Class) { if (isNativeReflectConstruct()) { _co
 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
-function _getPrototypeOf(o) { if (Object.setPrototypeOf && Object.getPrototypeOf) { _getPrototypeOf = Object.getPrototypeOf; } else { _getPrototypeOf = function _getPrototypeOf(o) { return o.__proto__; }; } return _getPrototypeOf(o); }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
 
 var List =
 /*#__PURE__*/
