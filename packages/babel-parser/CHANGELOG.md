@@ -9,7 +9,7 @@
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-> Semver Policy: https://github.com/babel/babylon#semver
+> Semver Policy: https://github.com/babel/babel/tree/master/packages/babel-parser#semver
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
@@ -57,7 +57,7 @@ See the [Babel Changelog](https://github.com/babel/babel/blob/master/CHANGELOG.m
 ## 7.0.0-beta.7 (2017-03-22)
 
 ### Spec Compliancy
-* Remove babel-parser plugin for template revision since it's stage-4 (#426) (Henry Zhu)
+* Remove babylon plugin for template revision since it's stage-4 (#426) (Henry Zhu)
 
 ### Bug Fix
 
@@ -151,9 +151,9 @@ Need to modify Babel for this AST node change, so moving to 7.0.
 
 ***ESTree*** compatibility as plugin ([#277](https://github.com/babel/babylon/pull/277)) (Daniel Tschinder)
 
-We finally introduce a new compatibility layer for ESTree. To put babel-parser into ESTree-compatible mode the new plugin `estree` can be enabled. In this mode the parser will output an AST that is compliant to the specs of [ESTree](https://github.com/estree/estree/)
+We finally introduce a new compatibility layer for ESTree. To put babylon into ESTree-compatible mode the new plugin `estree` can be enabled. In this mode the parser will output an AST that is compliant to the specs of [ESTree](https://github.com/estree/estree/)
 
-We highly recommend everyone who uses babel-parser outside of babel to use this plugin. This will make it much easier for users to switch between different ESTree-compatible parsers. We so far tested several projects with different parsers and exchanged their parser to babel-parser and in nearly all cases it worked out of the box. Some other estree-compatible parsers include `acorn`, `esprima`, `espree`, `flow-parser`, etc.
+We highly recommend everyone who uses babylon outside of babel to use this plugin. This will make it much easier for users to switch between different ESTree-compatible parsers. We so far tested several projects with different parsers and exchanged their parser to babylon and in nearly all cases it worked out of the box. Some other estree-compatible parsers include `acorn`, `esprima`, `espree`, `flow-parser`, etc.
 
 To enable `estree` mode simply add the plugin in the config:
 ```json
@@ -178,7 +178,7 @@ The returned AST will only consist of the expression. The options are the same a
 
 Add startLine option ([#346](https://github.com/babel/babylon/pull/346)) (Raphael Mu)
 
-A new option was added to babel-parser allowing to change the intial linenumber for the first line which is usually `1`.
+A new option was added to babylon allowing to change the intial linenumber for the first line which is usually `1`.
 Changing this for example to `100` will make line `1` of the input source to be marked as line `100`, line `2` as `101`, line `3` as `102`, ...
 
 Function predicate declaration ([#103](https://github.com/babel/babylon/pull/103)) (Panagiotis Vekris)
@@ -339,7 +339,7 @@ var f = (x): | 1 | 2 => 1;
 
 Throw error when exporting non-declaration ([#241](https://github.com/babel/babylon/pull/241)) (Kai Cataldo)
 
-Previously babel-parser parsed the following exports, although they are not valid:
+Previously babylon parsed the following exports, although they are not valid:
 ```js
 export typeof foo;
 export new Foo();
@@ -909,7 +909,7 @@ var a : {| x: number, y: string |} = { x: 0, y: 'foo' };
 
 ## 6.9.2 (2016-09-09)
 
-The only change is to remove the `babel-runtime` dependency by compiling with Babel's ES2015 loose mode. So using babel-parser standalone should be smaller.
+The only change is to remove the `babel-runtime` dependency by compiling with Babel's ES2015 loose mode. So using babylon standalone should be smaller.
 
 ## 6.9.1 (2016-08-23)
 
@@ -1005,7 +1005,7 @@ declare module "foo" {
 ### Internal
 
 - Enable skipped tests ([#16](https://github.com/babel/babylon/pull/16)) @danez
-- Add script to test latest version of babel-parser with babel ([#21](https://github.com/babel/babylon/pull/21)) @danez
+- Add script to test latest version of babylon with babel ([#21](https://github.com/babel/babylon/pull/21)) @danez
 - Upgrade test runner ava @kittens
 - Add missing generate-identifier-regex script @kittens
 - Rename parser context types @kittens

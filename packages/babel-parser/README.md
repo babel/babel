@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  The Babel parser (previously babylon) is a JavaScript parser used in <a href="https://github.com/babel/babel">Babel</a>.
+  The Babel parser (previously Babylon) is a JavaScript parser used in <a href="https://github.com/babel/babel">Babel</a>.
 </p>
 
  - The latest ECMAScript version enabled by default (ES2017).
@@ -18,9 +18,9 @@ thanks to the awesome work of [@RReverser](https://github.com/RReverser) and [@m
 
 ## API
 
-### `babel.parse(code, [options])`
+### `babelParser.parse(code, [options])`
 
-### `babel.parseExpression(code, [options])`
+### `babelParser.parseExpression(code, [options])`
 
 `parse()` parses the provided `code` as an entire ECMAScript program, while
 `parseExpression()` tries to parse a single Expression with performance in
