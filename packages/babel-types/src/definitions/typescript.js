@@ -238,7 +238,7 @@ defineType("TSInferType", {
   aliases: ["TSType"],
   visitor: ["typeParameter"],
   fields: {
-    typeParameter: validateType("TSType"),
+    typeParameter: validateType("TSTypeParameter"),
   },
 });
 
