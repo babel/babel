@@ -608,6 +608,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TypeParameterInstantiation");
     }
 
+    flowParseInterfaceType(): N.FlowInterfaceType {
+      const node = this.startNode();
+      this.expectContextual("interface");
+
+      node.extends = [];
+      if (this.eat(tt._extends)) {
+        do {
+          node.extends.push(this.flowParseInterfaceExtends());
+        } while (this.eat(tt.comma));
+      }
+
+      node.body = this.flowParseObjectType(true, false, false);
+
+      return this.finishNode(node, "InterfaceTypeAnnotation");
+    }
+
     flowParseObjectPropertyKey(): N.Expression {
       return this.match(tt.num) || this.match(tt.string)
         ? this.parseExprAtom()
@@ -1054,6 +1070,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       switch (this.state.type) {
         case tt.name:
+          if (this.isContextual("interface")) {
+            return this.flowParseInterfaceType();
+          }
+
           return this.flowIdentToTypeAnnotation(
             startPos,
             startLoc,

@@ -211,6 +211,15 @@ defineType("InterfaceExtends", {
 
 defineInterfaceishType("InterfaceDeclaration");
 
+defineType("InterfaceTypeAnnotation", {
+  visitor: ["extends", "body"],
+  aliases: ["Flow", "FlowType"],
+  fields: {
+    extends: validateOptional(arrayOfType("InterfaceExtends")),
+    body: validateType("ObjectTypeAnnotation"),
+  },
+});
+
 defineType("IntersectionTypeAnnotation", {
   visitor: ["types"],
   aliases: ["Flow", "FlowType"],
