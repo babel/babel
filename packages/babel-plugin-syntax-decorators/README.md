@@ -54,3 +54,8 @@ export class Foo {}
 // decoratorsBeforeExport: false
 export @decorator class Bar {}
 ```
+
+This option allows developers to experimet both the possible syntaxes. This will
+allow collecting an informed feedback from the community, which will help to
+decide which the final syntax should be.
+[tc39/proposal-decorators#69](https://github.com/tc39/proposal-decorators/issues/69)
