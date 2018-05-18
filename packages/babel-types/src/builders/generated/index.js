@@ -393,6 +393,10 @@ export function InterfaceDeclaration(...args: Array<any>): Object {
   return builder("InterfaceDeclaration", ...args);
 }
 export { InterfaceDeclaration as interfaceDeclaration };
+export function InterfaceTypeAnnotation(...args: Array<any>): Object {
+  return builder("InterfaceTypeAnnotation", ...args);
+}
+export { InterfaceTypeAnnotation as interfaceTypeAnnotation };
 export function IntersectionTypeAnnotation(...args: Array<any>): Object {
   return builder("IntersectionTypeAnnotation", ...args);
 }
