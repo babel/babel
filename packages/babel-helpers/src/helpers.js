@@ -421,9 +421,9 @@ helpers.inheritsLoose = () => template.program.ast`
 
 helpers.getPrototypeOf = () => template.program.ast`
   export default function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) {
-      return o.__proto__;
-    };
+    _getPrototypeOf = Object.setPrototypeOf
+      ? Object.getPrototypeOf
+      : function _getPrototypeOf(o) { return o.__proto__; };
     return _getPrototypeOf(o);
   }
 `;
