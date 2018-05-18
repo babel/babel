@@ -264,8 +264,7 @@ function andSeparator() {
 
 export function InterfaceTypeAnnotation(node: Object) {
   this.word("interface");
-  this.space();
-  if (node.extends.length) {
+  if (node.extends && node.extends.length) {
     this.space();
     this.word("extends");
     this.space();
