@@ -1387,6 +1387,23 @@ export function isInterfaceDeclaration(node: Object, opts?: Object): boolean {
 
   return false;
 }
+export function isInterfaceTypeAnnotation(
+  node: Object,
+  opts?: Object,
+): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "InterfaceTypeAnnotation") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isIntersectionTypeAnnotation(
   node: Object,
   opts?: Object,
@@ -3840,6 +3857,7 @@ export function isFlow(node: Object, opts?: Object): boolean {
     "InferredPredicate" === nodeType ||
     "InterfaceExtends" === nodeType ||
     "InterfaceDeclaration" === nodeType ||
+    "InterfaceTypeAnnotation" === nodeType ||
     "IntersectionTypeAnnotation" === nodeType ||
     "MixedTypeAnnotation" === nodeType ||
     "EmptyTypeAnnotation" === nodeType ||
@@ -3892,6 +3910,7 @@ export function isFlowType(node: Object, opts?: Object): boolean {
     "ExistsTypeAnnotation" === nodeType ||
     "FunctionTypeAnnotation" === nodeType ||
     "GenericTypeAnnotation" === nodeType ||
+    "InterfaceTypeAnnotation" === nodeType ||
     "IntersectionTypeAnnotation" === nodeType ||
     "MixedTypeAnnotation" === nodeType ||
     "EmptyTypeAnnotation" === nodeType ||
