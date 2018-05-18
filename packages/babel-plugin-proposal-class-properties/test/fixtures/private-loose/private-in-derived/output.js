@@ -10,12 +10,13 @@ var Outer = function Outer() {
   var Test =
   /*#__PURE__*/
   function (_babelHelpers$classPr) {
+    babelHelpers.inherits(Test, _babelHelpers$classPr);
+
     function Test() {
       babelHelpers.classCallCheck(this, Test);
       return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Test).apply(this, arguments));
     }
 
-    babelHelpers.inherits(Test, _babelHelpers$classPr);
     return Test;
   }(babelHelpers.classPrivateFieldLooseBase(this, _outer)[_outer]);
 };

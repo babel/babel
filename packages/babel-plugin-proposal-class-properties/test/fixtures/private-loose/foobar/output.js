@@ -3,6 +3,8 @@ var Child =
 function (_Parent) {
   "use strict";
 
+  babelHelpers.inherits(Child, _Parent);
+
   function Child() {
     var _this;
 
@@ -17,7 +19,6 @@ function (_Parent) {
     return _this;
   }
 
-  babelHelpers.inherits(Child, _Parent);
   return Child;
 }(Parent);
 
