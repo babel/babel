@@ -16,6 +16,8 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
+    "@babel/helper-replace-supers": "^7.0.0",
+    "@babel/helper-split-export-declaration": "^7.0.0",
     "@babel/plugin-syntax-decorators": "^7.0.0"
   },
   "peerDependencies": {
