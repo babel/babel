@@ -287,9 +287,7 @@ export default class ExpressionParser extends LValParser {
         if (
           operator === "**" &&
           left.type === "UnaryExpression" &&
-          left.extra &&
-          !left.extra.parenthesizedArgument &&
-          !left.extra.parenthesized
+          !(left.extra && left.extra.parenthesized)
         ) {
           this.raise(
             left.argument.start,
@@ -364,15 +362,7 @@ export default class ExpressionParser extends LValParser {
       }
       this.next();
 
-      const argType = this.state.type;
       node.argument = this.parseMaybeUnary();
-
-      this.addExtra(
-        node,
-        "parenthesizedArgument",
-        argType === tt.parenL &&
-          (!node.argument.extra || !node.argument.extra.parenthesized),
-      );
 
       if (refShorthandDefaultPos && refShorthandDefaultPos.start) {
         this.unexpected(refShorthandDefaultPos.start);

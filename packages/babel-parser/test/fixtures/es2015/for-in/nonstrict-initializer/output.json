@@ -327,9 +327,6 @@
                         "identifierName": "effects"
                       },
                       "name": "effects"
-                    },
-                    "extra": {
-                      "parenthesizedArgument": false
                     }
                   },
                   {
@@ -367,9 +364,6 @@
                         "raw": "1"
                       },
                       "value": 1
-                    },
-                    "extra": {
-                      "parenthesizedArgument": false
                     }
                   }
                 ],
@@ -692,9 +686,6 @@
                     "identifierName": "iterations"
                   },
                   "name": "iterations"
-                },
-                "extra": {
-                  "parenthesizedArgument": false
                 }
               }
             }
