@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["proposal-decorators", { "automaticParentheses": true }],
+    "proposal-class-properties",
+    "external-helpers"
+  ],
+  "presets": ["es2015"]
+}

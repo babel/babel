@@ -7,11 +7,12 @@ export default declare((api, options) => {
   api.assertVersion(7);
 
   const { legacy = false, decoratorsBeforeExport } = options;
+
   if (typeof legacy !== "boolean") {
     throw new Error("'legacy' must be a boolean.");
   }
 
-  if (legacy !== true) {
+  if (legacy !== true && false) {
     throw new Error(
       "The new decorators proposal is not supported yet." +
         ' You must pass the `"legacy": true` option to' +
