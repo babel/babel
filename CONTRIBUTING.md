@@ -226,7 +226,7 @@ If the test requires a minimum Node version, you can add `minNodeVersion` (must 
 }
 ```
 
-#### `@babel/parser`
+#### `@babel/parser` (babylon)
 
 Writing tests for the babel parser is very
 similar to the other packages.
