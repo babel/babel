@@ -1,33 +1,27 @@
-# @babel/plugin-proposal-optional-catch-binding
+# @babel/plugin-syntax-json-strings
 
-> Optional catch binding enables the catch block to execute whether or not an argument is passed to the catch statement (CatchClause).
-
+Allow parsing of the U+2028 LINE SEPARATOR and U+2029 PARAGRAPH SEPARATOR in JS strings
 
 ## Examples
 
-```js
-try {
-  throw 0;
-} catch {
-  doSomethingWhichDoesntCareAboutTheValueThrown();
-}
-```
+**In**
 
 ```js
-try {
-  throw 0;
-} catch {
-  doSomethingWhichDoesntCareAboutTheValueThrown();
-} finally {
-  doSomeCleanup();
-}
+const ex = "before after";
+//                ^ There's a U+2028 char between 'before' and 'after'
 ```
 
+**Out**
+
+```js
+const ex = "before\u2028after";
+//                ^ There's a U+2028 char between 'before' and 'after'
+```
 
 ## Installation
 
 ```sh
-npm install --save-dev @babel/plugin-proposal-optional-catch-binding
+npm install --save-dev @babel/plugin-proposal-json-strings
 ```
 
 ## Usage
@@ -38,21 +32,21 @@ npm install --save-dev @babel/plugin-proposal-optional-catch-binding
 
 ```json
 {
-  "plugins": ["@babel/plugin-proposal-optional-catch-binding"]
+  "plugins": ["@babel/plugin-proposal-json-strings"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins @babel/plugin-proposal-optional-catch-binding script.js
+babel --plugins @babel/plugin-proposal-json-strings script.js
 ```
 
 ### Via Node API
 
 ```javascript
 require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-proposal-optional-catch-binding"]
+  plugins: ["@babel/plugin-proposal-json-strings"]
 });
 ```
 
