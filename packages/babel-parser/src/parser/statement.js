@@ -230,13 +230,6 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseDecorators(allowExport?: boolean): void {
-    if (
-      this.hasPlugin("decorators") &&
-      !this.getPluginOption("decorators", "decoratorsBeforeExport")
-    ) {
-      allowExport = false;
-    }
-
     const currentContextDecorators = this.state.decoratorStack[
       this.state.decoratorStack.length - 1
     ];
@@ -246,18 +239,22 @@ export default class StatementParser extends ExpressionParser {
     }
 
     if (this.match(tt._export)) {
-      if (allowExport) {
-        return;
-      } else {
+      if (!allowExport) {
+        this.unexpected();
+      }
+
+      if (
+        this.hasPlugin("decorators") &&
+        !this.getPluginOption("decorators", "decoratorsBeforeExport")
+      ) {
         this.raise(
           this.state.start,
           "Using the export keyword between a decorator and a class is not allowed. " +
-            "Please use `export @dec class` instead",
+            "Please use `export @dec class` instead, or set the " +
+            "'decoratorsBeforeExport' option to true.",
         );
       }
-    }
-
-    if (!this.canHaveLeadingDecorator()) {
+    } else if (!this.canHaveLeadingDecorator()) {
       this.raise(
         this.state.start,
         "Leading decorators must be attached to a class declaration",
@@ -1429,7 +1426,12 @@ export default class StatementParser extends ExpressionParser {
         this.hasPlugin("decorators") &&
         this.getPluginOption("decorators", "decoratorsBeforeExport")
       ) {
-        this.unexpected();
+        this.unexpected(
+          this.state.start,
+          "Decorators must be placed *before* the 'export' keyword." +
+            " You can set the 'decoratorsBeforeExport' option to false to use" +
+            " the 'export @decorator class {}' syntax",
+        );
       }
       this.parseDecorators(false);
       return this.parseClass(expr, true, true);
@@ -1531,7 +1533,12 @@ export default class StatementParser extends ExpressionParser {
       this.expectOnePlugin(["decorators", "decorators-legacy"]);
       if (this.hasPlugin("decorators")) {
         if (this.getPluginOption("decorators", "decoratorsBeforeExport")) {
-          this.unexpected();
+          this.unexpected(
+            this.state.start,
+            "Decorators must be placed *before* the 'export' keyword." +
+              " You can set the 'decoratorsBeforeExport' option to false to use" +
+              " the 'export @decorator class {}' syntax",
+          );
         } else {
           return true;
         }

@@ -3,5 +3,5 @@
   "plugins": [
     ["decorators", { "decoratorsBeforeExport": true }]
   ],
-  "throws": "Unexpected token (1:15)"
+  "throws": "Decorators must be placed *before* the 'export' keyword. You can set the 'decoratorsBeforeExport' option to false to use the 'export @decorator class {}' syntax (1:15)"
 }
