@@ -2,7 +2,7 @@
 
 const path = require("path");
 const chalk = require("chalk");
-const utils = require("./run_babylon_test262_utils");
+const utils = require("./run_babel_parser_test262_utils");
 
 const testDir = path.join(__dirname, "../../../build/test262");
 const whitelistFile = path.join(__dirname, "test262_whitelist.txt");

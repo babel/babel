@@ -1,5 +1,5 @@
 import * as t from "../lib";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 
 describe("validators", function() {
   describe("isNodesEquivalent", function() {

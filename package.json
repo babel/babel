@@ -89,7 +89,7 @@
       "/node_modules/",
       "/test/fixtures/",
       "/test/debug-fixtures/",
-      "/babylon/test/expressions/",
+      "/babel-parser/test/expressions/",
       "/test/tmp/",
       "/test/__data__/",
       "/test/helpers/",

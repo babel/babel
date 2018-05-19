@@ -22,4 +22,4 @@ packages/babel-preset-env-standalone/babel-preset-env.js
 packages/babel-preset-env-standalone/babel-preset-env.min.js
 packages/babel-standalone/babel.js
 packages/babel-standalone/babel.min.js
-packages/babylon/test/expressions
+packages/babel-parser/test/expressions

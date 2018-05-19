@@ -1062,6 +1062,20 @@ Aliases: `Flow`
 
 ---
 
+### interfaceTypeAnnotation
+```javascript
+t.interfaceTypeAnnotation(extends, body)
+```
+
+See also `t.isInterfaceTypeAnnotation(node, opts)` and `t.assertInterfaceTypeAnnotation(node, opts)`.
+
+Aliases: `Flow`, `FlowType`
+
+ - `extends`: `Array<InterfaceExtends>` (default: `null`)
+ - `body`: `ObjectTypeAnnotation` (required)
+
+---
+
 ### intersectionTypeAnnotation
 ```javascript
 t.intersectionTypeAnnotation(types)

@@ -73,7 +73,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsNextTokenCanFollowModifier() {
       // Note: TypeScript's implementation is much more complicated because
       // more things are considered modifiers there.
-      // This implementation only handles modifiers not handled by babylon itself. And "static".
+      // This implementation only handles modifiers not handled by @babel/parser itself. And "static".
       // TODO: Would be nice to avoid lookahead. Want a hasLineBreakUpNext() method...
       this.next();
       return (
@@ -1887,7 +1887,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseArrow(node: N.ArrowFunctionExpression): ?N.ArrowFunctionExpression {
       if (this.match(tt.colon)) {
         // This is different from how the TS parser does it.
-        // TS uses lookahead. Babylon parses it as a parenthesized expression and converts.
+        // TS uses lookahead. The Babel Parser parses it as a parenthesized expression and converts.
         const state = this.state.clone();
         try {
           const returnType = this.tsParseTypeOrTypePredicateAnnotation(

@@ -1,5 +1,5 @@
 import * as t from "../lib";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 
 function getBody(program) {
   return parse(program, { sourceType: "module" }).program.body;

@@ -9,7 +9,7 @@
 > - :house:      [Internal]
 > - :nail_care:  [Polish]
 
-> Semver Policy: https://github.com/babel/babylon#semver
+> Semver Policy: https://github.com/babel/babel/tree/master/packages/babel-parser#semver
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 

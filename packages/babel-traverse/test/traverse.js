@@ -1,6 +1,6 @@
 import cloneDeep from "lodash/cloneDeep";
 import traverse from "../lib";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 
 describe("traverse", function() {
   const code = `
