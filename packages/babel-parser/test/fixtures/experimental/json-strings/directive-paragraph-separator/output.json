@@ -1,0 +1,105 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 103,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 87
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 103,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 87
+      }
+    },
+    "sourceType": "script",
+    "body": [],
+    "directives": [
+      {
+        "type": "Directive",
+        "start": 0,
+        "end": 15,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 15
+          }
+        },
+        "value": {
+          "type": "DirectiveLiteral",
+          "start": 0,
+          "end": 14,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 14
+            }
+          },
+          "value": "before after",
+          "extra": {
+            "raw": "\"before after\"",
+            "rawValue": "before after"
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": "     ^ That's a U+2029 PARAGRAPH SEPARATOR UTF-16 char (between 'before' and 'after')",
+            "start": 16,
+            "end": 103,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 0
+              },
+              "end": {
+                "line": 2,
+                "column": 87
+              }
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": "     ^ That's a U+2029 PARAGRAPH SEPARATOR UTF-16 char (between 'before' and 'after')",
+      "start": 16,
+      "end": 103,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 0
+        },
+        "end": {
+          "line": 2,
+          "column": 87
+        }
+      }
+    }
+  ]
+}
