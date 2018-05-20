@@ -1,5 +1,9 @@
-import "core-js/modules/es.symbol";
 import "core-js/modules/es.symbol.async-iterator";
+import "core-js/modules/es.symbol.has-instance";
+import "core-js/modules/es.symbol.match";
+import "core-js/modules/es.symbol.replace";
+import "core-js/modules/es.symbol.search";
+import "core-js/modules/es.symbol.split";
 import "core-js/modules/es.object.get-own-property-descriptors";
 import "core-js/modules/es.object.values";
 import "core-js/modules/es.object.entries";

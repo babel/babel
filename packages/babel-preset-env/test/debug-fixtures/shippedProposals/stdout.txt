@@ -39,6 +39,17 @@ Using polyfills with `entry` option:
 [src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es.symbol {}
   es.symbol.async-iterator {}
+  es.symbol.has-instance {}
+  es.symbol.is-concat-spreadable {}
+  es.symbol.iterator {}
+  es.symbol.match {}
+  es.symbol.replace {}
+  es.symbol.search {}
+  es.symbol.species {}
+  es.symbol.split {}
+  es.symbol.to-primitive {}
+  es.symbol.to-string-tag {}
+  es.symbol.unscopables {}
   es.object.assign {}
   es.object.create {}
   es.object.define-property {}
@@ -147,6 +158,8 @@ Using polyfills with `entry` option:
   es.math.sinh {}
   es.math.tanh {}
   es.math.trunc {}
+  es.math.to-string-tag {}
+  es.json.to-string-tag {}
   es.promise {}
   es.promise.finally {}
   es.map {}

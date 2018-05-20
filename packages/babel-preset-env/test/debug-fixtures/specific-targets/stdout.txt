@@ -43,8 +43,19 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [src/in.js] Replaced `@babel/polyfill` with the following polyfills:
-  es.symbol { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol { "ie":"10", "ios":"9", "safari":"7" }
   es.symbol.async-iterator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol.has-instance { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol.is-concat-spreadable { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol.iterator { "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol.match { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol.replace { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol.search { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol.species { "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol.split { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol.to-primitive { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol.to-string-tag { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol.unscopables { "ie":"10", "ios":"9", "safari":"7" }
   es.object.assign { "ie":"10", "ios":"9", "safari":"7" }
   es.object.get-own-property-descriptor { "ie":"10", "safari":"7" }
   es.object.get-own-property-descriptors { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
@@ -134,10 +145,14 @@ Using polyfills with `entry` option:
   es.math.hypot { "ie":"10", "safari":"7" }
   es.math.imul { "ie":"10" }
   es.math.log1p { "ie":"10", "safari":"7" }
-  es.math.log10 { "ie":"10" }
-  es.math.log2 { "ie":"10" }
-  es.math.sign { "ie":"10" }
+  es.math.log10 { "ie":"10", "safari":"7" }
+  es.math.log2 { "ie":"10", "safari":"7" }
+  es.math.sign { "ie":"10", "safari":"7" }
+  es.math.sinh { "ie":"10", "safari":"7" }
   es.math.tanh { "ie":"10", "safari":"7" }
+  es.math.trunc { "ie":"10", "safari":"7" }
+  es.math.to-string-tag { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.json.to-string-tag { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.promise { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.promise.finally { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.map { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }

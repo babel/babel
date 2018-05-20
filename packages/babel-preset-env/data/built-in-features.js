@@ -28,32 +28,27 @@ const basicTypedArrayConstructorsSupport = basicTypedArraysSupport.concat([
   "typed arrays / %TypedArray%[Symbol.species]",
 ]);
 
-const es = {
-  "es.symbol": {
-    features: [
-      "Symbol",
-      "Object static methods / Object.getOwnPropertySymbols",
-      "well-known symbols / Symbol.hasInstance",
-      "well-known symbols / Symbol.isConcatSpreadable",
-      "well-known symbols / Symbol.iterator",
-      "well-known symbols / Symbol.match",
-      "well-known symbols / Symbol.replace",
-      "well-known symbols / Symbol.search",
-      "well-known symbols / Symbol.species",
-      "well-known symbols / Symbol.split",
-      "well-known symbols / Symbol.toPrimitive",
-      "well-known symbols / Symbol.toStringTag",
-      "well-known symbols / Symbol.unscopables",
-    ]
-  },
-  "es.symbol.async-iterator": "Asynchronous Iterators",
+const basicSymbolsSupport = [
+  "Symbol",
+  "Object static methods / Object.getOwnPropertySymbols",
+];
 
-  "es.object.assign": {
-    features: [
-      "Object static methods / Object.assign",
-      "Symbol",
-    ]
-  },
+const es = {
+  "es.symbol": { features: basicSymbolsSupport },
+  "es.symbol.async-iterator": { features: basicSymbolsSupport.concat("Asynchronous Iterators") },
+  "es.symbol.has-instance": { features: basicSymbolsSupport.concat("well-known symbols / Symbol.hasInstance") },
+  "es.symbol.is-concat-spreadable": { features: basicSymbolsSupport.concat("well-known symbols / Symbol.isConcatSpreadable") },
+  "es.symbol.iterator": { features: basicSymbolsSupport.concat("well-known symbols / Symbol.iterator") },
+  "es.symbol.match": { features: basicSymbolsSupport.concat("well-known symbols / Symbol.match") },
+  "es.symbol.replace": { features: basicSymbolsSupport.concat("well-known symbols / Symbol.replace") },
+  "es.symbol.search": { features: basicSymbolsSupport.concat("well-known symbols / Symbol.search") },
+  "es.symbol.species": { features: basicSymbolsSupport.concat("well-known symbols / Symbol.species") },
+  "es.symbol.split": { features: basicSymbolsSupport.concat("well-known symbols / Symbol.split") },
+  "es.symbol.to-primitive": { features: basicSymbolsSupport.concat("well-known symbols / Symbol.toPrimitive") },
+  "es.symbol.to-string-tag": { features: basicSymbolsSupport.concat("well-known symbols / Symbol.toStringTag") },
+  "es.symbol.unscopables": { features: basicSymbolsSupport.concat("well-known symbols / Symbol.unscopables") },
+
+  "es.object.assign": { features: basicSymbolsSupport.concat("Object static methods / Object.assign") },
   "es.object.create": "Object static methods / Object.create",
   "es.object.define-property": "Object static methods / Object.defineProperty",
   "es.object.define-properties": "Object static methods / Object.defineProperties",
@@ -229,6 +224,9 @@ const es = {
   "es.math.sinh": "Math methods / Math.sinh",
   "es.math.tanh": "Math methods / Math.tanh",
   "es.math.trunc": "Math methods / Math.trunc",
+  "es.math.to-string-tag": { features: basicSymbolsSupport.concat( "well-known symbols / Symbol.toStringTag, misc. built-ins") },
+
+  "es.json.to-string-tag": { features: basicSymbolsSupport.concat( "well-known symbols / Symbol.toStringTag, misc. built-ins") },
 
   "es.promise": {
     features: [

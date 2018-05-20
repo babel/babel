@@ -7,7 +7,6 @@ import "core-js/modules/es.object.define-setter";
 import "core-js/modules/es.object.lookup-getter";
 import "core-js/modules/es.object.lookup-setter";
 import "core-js/modules/es.function.bind";
-import "core-js/modules/es.array.reduce-right";
 import "core-js/modules/es.array.sort";
 import "core-js/modules/es.string.pad-start";
 import "core-js/modules/es.string.pad-end";

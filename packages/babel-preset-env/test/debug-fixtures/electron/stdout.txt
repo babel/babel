@@ -35,6 +35,17 @@ Using polyfills with `entry` option:
 [src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es.symbol { "electron":"0.36" }
   es.symbol.async-iterator { "electron":"0.36" }
+  es.symbol.has-instance { "electron":"0.36" }
+  es.symbol.is-concat-spreadable { "electron":"0.36" }
+  es.symbol.iterator { "electron":"0.36" }
+  es.symbol.match { "electron":"0.36" }
+  es.symbol.replace { "electron":"0.36" }
+  es.symbol.search { "electron":"0.36" }
+  es.symbol.species { "electron":"0.36" }
+  es.symbol.split { "electron":"0.36" }
+  es.symbol.to-primitive { "electron":"0.36" }
+  es.symbol.to-string-tag { "electron":"0.36" }
+  es.symbol.unscopables { "electron":"0.36" }
   es.object.assign { "electron":"0.36" }
   es.object.create { "electron":"0.36" }
   es.object.define-property { "electron":"0.36" }
@@ -90,13 +101,8 @@ Using polyfills with `entry` option:
   es.regexp.constructor { "electron":"0.36" }
   es.regexp.to-string { "electron":"0.36" }
   es.regexp.flags { "electron":"0.36" }
-  es.math.cbrt { "electron":"0.36" }
-  es.math.imul { "electron":"0.36" }
-  es.math.log10 { "electron":"0.36" }
-  es.math.log2 { "electron":"0.36" }
-  es.math.sign { "electron":"0.36" }
-  es.math.sinh { "electron":"0.36" }
-  es.math.trunc { "electron":"0.36" }
+  es.math.to-string-tag { "electron":"0.36" }
+  es.json.to-string-tag { "electron":"0.36" }
   es.promise { "electron":"0.36" }
   es.promise.finally { "electron":"0.36" }
   es.map { "electron":"0.36" }

@@ -40,8 +40,19 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [src/in.js] Replaced `@babel/polyfill` with the following polyfills:
-  es.symbol { "ie":"10", "node":"6" }
+  es.symbol { "ie":"10" }
   es.symbol.async-iterator { "chrome":"54", "ie":"10", "node":"6" }
+  es.symbol.has-instance { "ie":"10", "node":"6" }
+  es.symbol.is-concat-spreadable { "ie":"10" }
+  es.symbol.iterator { "ie":"10" }
+  es.symbol.match { "ie":"10" }
+  es.symbol.replace { "ie":"10" }
+  es.symbol.search { "ie":"10" }
+  es.symbol.species { "ie":"10" }
+  es.symbol.split { "ie":"10" }
+  es.symbol.to-primitive { "ie":"10" }
+  es.symbol.to-string-tag { "ie":"10" }
+  es.symbol.unscopables { "ie":"10" }
   es.object.assign { "ie":"10" }
   es.object.get-own-property-descriptor { "ie":"10" }
   es.object.get-own-property-descriptors { "ie":"10", "node":"6" }
@@ -134,7 +145,11 @@ Using polyfills with `entry` option:
   es.math.log10 { "ie":"10" }
   es.math.log2 { "ie":"10" }
   es.math.sign { "ie":"10" }
+  es.math.sinh { "ie":"10" }
   es.math.tanh { "ie":"10" }
+  es.math.trunc { "ie":"10" }
+  es.math.to-string-tag { "ie":"10" }
+  es.json.to-string-tag { "ie":"10" }
   es.promise { "ie":"10", "node":"6" }
   es.promise.finally { "chrome":"54", "ie":"10", "node":"6" }
   es.map { "ie":"10", "node":"6" }

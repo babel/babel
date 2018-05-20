@@ -234,15 +234,17 @@ export const definitions = {
 
     Symbol: {
       asyncIterator: "es.symbol.async-iterator",
-      hasInstance: "es.function.has-instance",
-      isConcatSpreadable: "es.array.concat",
-      iterator: CommonIterators,
-      match: "es.string.match",
-      replace: "es.string.replace",
-      search: "es.string.search",
-      split: "es.string.split",
-      toPrimitive: "es.date.to-primitive",
-      toStringTag: "es.object.to-string",
+      hasInstance: ["es.function.has-instance", "es.symbol.has-instance"],
+      isConcatSpreadable: ["es.array.concat", "es.symbol.is-concat-spreadable"],
+      iterator: CommonIterators.concat("es.symbol.iterator"),
+      match: ["es.string.match", "es.symbol.match"],
+      replace: ["es.string.replace", "es.symbol.replace"],
+      search: ["es.string.search", "es.symbol.search"],
+      species: "es.symbol.species",
+      split: ["es.string.split", "es.symbol.split"],
+      toPrimitive: ["es.date.to-primitive", "es.symbol.to-primitive"],
+      toStringTag: ["es.object.to-string", "es.symbol.to-string-tag"],
+      unscopables: "es.symbol.unscopables",
     },
 
     ArrayBuffer: {

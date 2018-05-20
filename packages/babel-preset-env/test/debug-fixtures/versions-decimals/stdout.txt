@@ -49,8 +49,19 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [src/in.js] Replaced `@babel/polyfill` with the following polyfills:
-  es.symbol { "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol { "electron":"0.36", "ie":"10" }
   es.symbol.async-iterator { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.has-instance { "electron":"0.36", "ie":"10", "node":"6.1" }
+  es.symbol.is-concat-spreadable { "electron":"0.36", "ie":"10" }
+  es.symbol.iterator { "electron":"0.36", "ie":"10" }
+  es.symbol.match { "electron":"0.36", "ie":"10" }
+  es.symbol.replace { "electron":"0.36", "ie":"10" }
+  es.symbol.search { "electron":"0.36", "ie":"10" }
+  es.symbol.species { "electron":"0.36", "ie":"10" }
+  es.symbol.split { "electron":"0.36", "ie":"10" }
+  es.symbol.to-primitive { "electron":"0.36", "ie":"10" }
+  es.symbol.to-string-tag { "electron":"0.36", "ie":"10" }
+  es.symbol.unscopables { "electron":"0.36", "ie":"10" }
   es.object.assign { "electron":"0.36", "ie":"10" }
   es.object.create { "electron":"0.36" }
   es.object.define-property { "electron":"0.36" }
@@ -145,20 +156,22 @@ Using polyfills with `entry` option:
   es.math.acosh { "ie":"10" }
   es.math.asinh { "ie":"10" }
   es.math.atanh { "ie":"10" }
-  es.math.cbrt { "electron":"0.36", "ie":"10" }
+  es.math.cbrt { "ie":"10" }
   es.math.clz32 { "ie":"10" }
   es.math.cosh { "ie":"10" }
   es.math.expm1 { "ie":"10" }
   es.math.fround { "ie":"10" }
   es.math.hypot { "ie":"10" }
-  es.math.imul { "electron":"0.36", "ie":"10" }
+  es.math.imul { "ie":"10" }
   es.math.log1p { "ie":"10" }
-  es.math.log10 { "electron":"0.36", "ie":"10" }
-  es.math.log2 { "electron":"0.36", "ie":"10" }
-  es.math.sign { "electron":"0.36", "ie":"10" }
-  es.math.sinh { "electron":"0.36" }
+  es.math.log10 { "ie":"10" }
+  es.math.log2 { "ie":"10" }
+  es.math.sign { "ie":"10" }
+  es.math.sinh { "ie":"10" }
   es.math.tanh { "ie":"10" }
-  es.math.trunc { "electron":"0.36" }
+  es.math.trunc { "ie":"10" }
+  es.math.to-string-tag { "electron":"0.36", "ie":"10" }
+  es.json.to-string-tag { "electron":"0.36", "ie":"10" }
   es.promise { "electron":"0.36", "ie":"10", "node":"6.1" }
   es.promise.finally { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   es.map { "electron":"0.36", "ie":"10", "node":"6.1" }

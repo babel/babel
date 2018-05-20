@@ -40,6 +40,17 @@ Using polyfills with `entry` option:
 [src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es.symbol { "android":"4" }
   es.symbol.async-iterator { "android":"4" }
+  es.symbol.has-instance { "android":"4" }
+  es.symbol.is-concat-spreadable { "android":"4" }
+  es.symbol.iterator { "android":"4" }
+  es.symbol.match { "android":"4" }
+  es.symbol.replace { "android":"4" }
+  es.symbol.search { "android":"4" }
+  es.symbol.species { "android":"4" }
+  es.symbol.split { "android":"4" }
+  es.symbol.to-primitive { "android":"4" }
+  es.symbol.to-string-tag { "android":"4" }
+  es.symbol.unscopables { "android":"4" }
   es.object.assign { "android":"4" }
   es.object.get-own-property-descriptor { "android":"4" }
   es.object.get-own-property-descriptors { "android":"4" }
@@ -107,13 +118,22 @@ Using polyfills with `entry` option:
   es.math.acosh { "android":"4" }
   es.math.asinh { "android":"4" }
   es.math.atanh { "android":"4" }
+  es.math.cbrt { "android":"4" }
   es.math.clz32 { "android":"4" }
   es.math.cosh { "android":"4" }
   es.math.expm1 { "android":"4" }
   es.math.fround { "android":"4" }
   es.math.hypot { "android":"4" }
+  es.math.imul { "android":"4" }
   es.math.log1p { "android":"4" }
+  es.math.log10 { "android":"4" }
+  es.math.log2 { "android":"4" }
+  es.math.sign { "android":"4" }
+  es.math.sinh { "android":"4" }
   es.math.tanh { "android":"4" }
+  es.math.trunc { "android":"4" }
+  es.math.to-string-tag { "android":"4" }
+  es.json.to-string-tag { "android":"4" }
   es.promise { "android":"4" }
   es.promise.finally { "android":"4" }
   es.map { "android":"4" }

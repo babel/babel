@@ -38,6 +38,18 @@ describe("babel-runtime", () => {
       ).toEqual(undefined);
     });
 
+    it("codePoints, exists", () => {
+      expect(
+        typeof require("../core-js/instance/code-points")("").call("a").next,
+      ).toEqual("function");
+    });
+
+    it("codePoints, missing", () => {
+      expect(
+        require("../core-js/instance/code-points")({}),
+      ).toEqual(undefined);
+    });
+
     it("concat, exists", () => {
       expect(
         require("../core-js/instance/concat")([]).call([1, 2], [3, 4]).length,
