@@ -206,7 +206,7 @@ function applyTargetDecorators(path, state, decoratedProps) {
   ]);
 }
 
-export default {
+export default () => ({
   ClassDeclaration(path) {
     const { node } = path;
 
@@ -262,4 +262,4 @@ export default {
       ]),
     );
   },
-};
+});
