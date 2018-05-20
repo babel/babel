@@ -26,10 +26,6 @@ describe("'legacy' option", function() {
   test.skip("defaults to 'false'", function() {
     expect(makeParser("({ @dec fn() {} })", {})).toThrow();
   });
-
-  test("it must be true", function() {
-    expect(makeParser("", { legacy: false })).toThrow();
-  });
 });
 
 describe("'decoratorsBeforeExport' option", function() {
