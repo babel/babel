@@ -54,6 +54,8 @@ require("@babel/core").transform("code", {
 });
 ```
 
+## Options
+
 ### `jsxPragma`
 
 `string`
