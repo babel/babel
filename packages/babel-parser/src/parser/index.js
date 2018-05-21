@@ -33,8 +33,8 @@ export default class Parser extends StatementParser {
 function pluginsMap(plugins: PluginList): PluginsMap {
   const pluginMap: PluginsMap = (Object.create(null): Object);
   for (const plugin of plugins) {
-    if (Array.isArray(plugin)) pluginMap[plugin[0]] = plugin[1] || {};
-    else pluginMap[plugin] = {};
+    const [name, options = {}] = Array.isArray(plugin) ? plugin : [plugin, {}];
+    if (!pluginMap[name]) pluginMap[name] = options || {};
   }
   return pluginMap;
 }
