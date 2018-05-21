@@ -97,7 +97,7 @@ AST for JSX code is based on [Facebook JSX AST][].
 
 ### Semver
 
-The Bael Parser follows semver in most situations. The only thing to note is that some spec-compliancy bug fixes may be released under patch versions.
+The Babel Parser follows semver in most situations. The only thing to note is that some spec-compliancy bug fixes may be released under patch versions.
 
 For example: We push a fix to early error on something like [#107](https://github.com/babel/babylon/pull/107) - multiple default exports per file. That would be considered a bug fix even though it would cause a build to fail.
 
