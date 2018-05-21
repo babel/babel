@@ -277,7 +277,7 @@ function assertNoDuplicates(items: Array<UnloadedDescriptor>): void {
         [
           `Duplicate plugin/preset detected.`,
           `If you'd like to use two separate instances of a plugin,`,
-          `they neen separate names, e.g.`,
+          `they need separate names, e.g.`,
           ``,
           `  plugins: [`,
           `    ['some-plugin', {}],`,
