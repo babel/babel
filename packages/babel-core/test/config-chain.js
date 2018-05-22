@@ -906,6 +906,7 @@ describe("buildConfigChain", function() {
       babelrc: false,
       configFile: false,
       cwd: process.cwd(),
+      root: process.cwd(),
       envName: "development",
       passPerPreset: false,
       plugins: [],
@@ -935,8 +936,9 @@ describe("buildConfigChain", function() {
         }),
       ).toEqual({
         ...getDefaults(),
-        filename,
+        filename: path.basename(filename),
         cwd: path.dirname(filename),
+        root: path.dirname(filename),
         comments: true,
       });
     });
@@ -946,8 +948,9 @@ describe("buildConfigChain", function() {
 
       expect(loadOptions({ filename, cwd: path.dirname(filename) })).toEqual({
         ...getDefaults(),
-        filename,
+        filename: path.basename(filename),
         cwd: path.dirname(filename),
+        root: path.dirname(filename),
         comments: true,
       });
     });
@@ -957,8 +960,9 @@ describe("buildConfigChain", function() {
 
       expect(loadOptions({ filename, cwd: path.dirname(filename) })).toEqual({
         ...getDefaults(),
-        filename,
+        filename: path.basename(filename),
         cwd: path.dirname(filename),
+        root: path.dirname(filename),
         comments: true,
       });
     });
@@ -998,8 +1002,9 @@ describe("buildConfigChain", function() {
 
       expect(loadOptions({ filename, cwd: path.dirname(filename) })).toEqual({
         ...getDefaults(),
-        filename,
+        filename: path.basename(filename),
         cwd: path.dirname(filename),
+        root: path.dirname(filename),
         comments: true,
       });
     });
