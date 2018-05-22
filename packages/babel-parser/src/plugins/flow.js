@@ -3,6 +3,7 @@
 import type Parser from "../parser";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import * as N from "../types";
+import type { Options } from "../options";
 import type { Pos, Position } from "../util/location";
 import type State from "../tokenizer/state";
 import * as charCodes from "charcodes";
@@ -82,7 +83,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.getPluginOption("flow", "all") || this.flowPragma === "flow";
     }
 
-    addComment(comment: Comment): void {
+    addComment(comment: N.Comment): void {
       if (this.flowPragma === undefined) {
         // Try to parse a flow pragma.
         const matches = FLOW_PRAGMA_REGEX.exec(comment.value);
@@ -2455,6 +2456,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.callee = base;
         node.typeArguments = this.flowParseTypeParameterInstantiation();
         this.expect(tt.parenL);
+        // $FlowFixMe
         node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
         node.optional = true;
         return this.finishNode(node, "OptionalCallExpression");
@@ -2463,7 +2465,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.shouldParseTypes() &&
         this.isRelational("<")
       ) {
-        const node: N.CallExpression = this.startNodeAt(startPos, startLoc);
+        const node = this.startNodeAt(startPos, startLoc);
         node.callee = base;
         const state = this.state.clone();
         try {
