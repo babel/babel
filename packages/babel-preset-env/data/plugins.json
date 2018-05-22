@@ -220,7 +220,7 @@
   },
   "proposal-async-generator-functions": {
     "chrome": "63",
-    "node": "10"
+    "node": "10",
     "firefox": "57",
     "safari": "tp",
     "opera": "50"
