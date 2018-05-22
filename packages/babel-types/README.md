@@ -1076,6 +1076,17 @@ Aliases: `Flow`, `FlowType`
 
 ---
 
+### interpreterDirective
+```javascript
+t.interpreterDirective(value)
+```
+
+See also `t.isInterpreterDirective(node, opts)` and `t.assertInterpreterDirective(node, opts)`.
+
+ - `value`: `string` (required)
+
+---
+
 ### intersectionTypeAnnotation
 ```javascript
 t.intersectionTypeAnnotation(types)
@@ -1704,7 +1715,7 @@ Aliases: `Private`
 
 ### program
 ```javascript
-t.program(body, directives, sourceType)
+t.program(body, directives, sourceType, interpreter)
 ```
 
 See also `t.isProgram(node, opts)` and `t.assertProgram(node, opts)`.
@@ -1714,6 +1725,7 @@ Aliases: `Scopable`, `BlockParent`, `Block`
  - `body`: `Array<Statement>` (required)
  - `directives`: `Array<Directive>` (default: `[]`)
  - `sourceType`: `"script" | "module"` (default: `'script'`)
+ - `interpreter`: `InterpreterDirective` (default: `null`)
  - `sourceFile`: `string` (default: `null`)
 
 ---
