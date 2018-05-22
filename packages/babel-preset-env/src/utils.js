@@ -1,5 +1,6 @@
 // @flow
 import semver from "semver";
+import levenshtein from "js-levenshtein";
 import { addSideEffect } from "@babel/helper-module-imports";
 import unreleasedLabels from "../data/unreleased-labels";
 import { semverMin } from "./targets-parser";
@@ -19,6 +20,18 @@ export const semverify = (version: string | number): string => {
   }
 
   return split.join(".");
+};
+
+export const findSuggestion = (options: Array<string>, option: string) => {
+  let levenshteinValue = Infinity;
+  return options.reduce((suggestion, validOption) => {
+    const value = levenshtein(validOption, option);
+    if (value < levenshteinValue) {
+      levenshteinValue = value;
+      return validOption;
+    }
+    return suggestion;
+  }, undefined);
 };
 
 export const prettifyVersion = (version: string): string => {

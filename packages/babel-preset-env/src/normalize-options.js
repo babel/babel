@@ -5,8 +5,34 @@ import browserslist from "browserslist";
 import builtInsList from "../data/built-ins.json";
 import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
+import { findSuggestion } from "./utils";
 import pluginsList from "../data/plugins.json";
 import type { Targets, Options, ModuleOption, BuiltInsOption } from "./types";
+
+const topLevelOptions = [
+  "configPath",
+  "debug",
+  "exclude",
+  "forceAllTransforms",
+  "ignoreBrowserslistConfig",
+  "include",
+  "loose",
+  "modules",
+  "shippedProposals",
+  "spec",
+  "targets",
+  "useBuiltIns",
+];
+
+const validateTopLevelOptions = (options: Options) => {
+  for (const option in options) {
+    invariant(
+      topLevelOptions.includes(option),
+      `Invalid Option: ${option} is not a valid top-level option.
+      Maybe you meant to use '${findSuggestion(topLevelOptions, option)}'?`,
+    );
+  }
+};
 
 const validIncludesAndExcludes = new Set([
   ...Object.keys(pluginsList),
@@ -151,6 +177,8 @@ export const validateUseBuiltInsOption = (
 };
 
 export default function normalizeOptions(opts: Options) {
+  validateTopLevelOptions(opts);
+
   const include = expandIncludesAndExcludes(opts.include, "include");
   const exclude = expandIncludesAndExcludes(opts.exclude, "exclude");
 
