@@ -1,6 +1,6 @@
 {
-  "name": "babel-plugin-syntax-bigint",
-  "version": "7.0.0-alpha.16",
+  "name": "@babel/plugin-syntax-bigint",
+  "version": "7.0.0-beta.47",
   "description": "Allow parsing of BigInt literals",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-bigint",
   "license": "MIT",
@@ -8,6 +8,13 @@
   "keywords": [
     "babel-plugin"
   ],
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "@babel/helper-plugin-utils": "7.0.0-beta.47"
+  },
+  "peerDependencies": {
+    "@babel/core": "7.0.0-beta.47"
+  },
+  "devDependencies": {
+    "@babel/core": "7.0.0-beta.47"
+  }
 }
