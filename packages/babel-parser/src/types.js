@@ -523,6 +523,7 @@ export type OptionalMemberExpression = NodeBase & {
 
 export type OptionalCallExpression = CallOrNewBase & {
   type: "OptionalCallExpression",
+  optional: boolean,
 };
 export type BindExpression = NodeBase & {
   type: "BindExpression",
@@ -540,7 +541,6 @@ export type ConditionalExpression = NodeBase & {
 export type CallOrNewBase = NodeBase & {
   callee: Expression | Super | Import,
   arguments: Array<Expression | SpreadElement>, // TODO: $ReadOnlyArray
-  optional?: boolean, // For OptionalCallExpression only
   typeArguments: ?TypeParameterInstantiationBase,
   typeParameters?: ?TypeParameterInstantiationBase, // TODO: Not in spec
 };

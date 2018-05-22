@@ -2465,13 +2465,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.shouldParseTypes() &&
         this.isRelational("<")
       ) {
-        const node: N.CallExpression = this.startNodeAt(startPos, startLoc);
+        const node = this.startNodeAt(startPos, startLoc);
         node.callee = base;
         const state = this.state.clone();
         try {
           node.typeArguments = this.flowParseTypeParameterInstantiation();
           this.expect(tt.parenL);
-          // $FlowFixMe
           node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
           if (subscriptState.optionalChainMember) {
             node.optional = false;
