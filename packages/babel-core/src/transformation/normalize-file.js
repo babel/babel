@@ -49,6 +49,9 @@ export default function normalizeFile(
       throw new Error("AST root must be a Program or File node");
     }
   } else {
+    // The parser's AST types aren't fully compatible with the types generated
+    // by the logic in babel-types.
+    // $FlowFixMe
     ast = parser(pluginPasses, options, code);
   }
 

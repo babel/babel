@@ -142,6 +142,7 @@ function parseWithCodeFrame(code: string, parserOpts: {}): BabelNodeFile {
   };
 
   try {
+    // $FlowFixMe - The parser AST is not the same type as the babel-types type.
     return parse(code, parserOpts);
   } catch (err) {
     const loc = err.loc;
