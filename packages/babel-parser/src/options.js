@@ -1,5 +1,7 @@
 // @flow
 
+import type { PluginList } from "./plugin-utils";
+
 // A second optional argument can be given to further configure
 // the parser process. These options are recognized:
 
@@ -11,7 +13,7 @@ export type Options = {
   allowReturnOutsideFunction: boolean,
   allowImportExportEverywhere: boolean,
   allowSuperOutsideMethod: boolean,
-  plugins: $ReadOnlyArray<string>,
+  plugins: PluginList,
   strictMode: ?boolean,
   ranges: boolean,
   tokens: boolean,
