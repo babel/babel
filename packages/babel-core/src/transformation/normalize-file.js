@@ -8,12 +8,9 @@ import { codeFrameColumns } from "@babel/code-frame";
 import File from "./file/file";
 import generateMissingPluginMessage from "./util/missing-plugin-helper";
 
-const shebangRegex = /^#!.*/;
-
 export type NormalizedFile = {
   code: string,
   ast: {},
-  shebang: string | null,
   inputMap: Converter | null,
 };
 
@@ -25,7 +22,6 @@ export default function normalizeFile(
 ): File {
   code = `${code || ""}`;
 
-  let shebang = null;
   let inputMap = null;
   if (options.inputSourceMap !== false) {
     inputMap = convertSourceMap.fromSource(code);
@@ -34,12 +30,6 @@ export default function normalizeFile(
     } else if (typeof options.inputSourceMap === "object") {
       inputMap = convertSourceMap.fromObject(options.inputSourceMap);
     }
-  }
-
-  const shebangMatch = shebangRegex.exec(code);
-  if (shebangMatch) {
-    shebang = shebangMatch[0];
-    code = code.replace(shebangRegex, "");
   }
 
   if (ast) {
@@ -58,7 +48,6 @@ export default function normalizeFile(
   return new File(options, {
     code,
     ast,
-    shebang,
     inputMap,
   });
 }

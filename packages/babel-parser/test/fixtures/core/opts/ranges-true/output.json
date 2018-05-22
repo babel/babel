@@ -35,6 +35,7 @@
       26
     ],
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",

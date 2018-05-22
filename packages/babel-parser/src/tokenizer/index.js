@@ -437,6 +437,32 @@ export default class Tokenizer extends LocationParser {
     }
   }
 
+  readToken_interpreter(): boolean {
+    if (this.state.pos !== 0 || this.state.input.length < 2) return false;
+
+    const start = this.state.pos;
+    this.state.pos += 1;
+
+    let ch = this.input.charCodeAt(this.state.pos);
+    if (ch !== charCodes.exclamationMark) return false;
+
+    while (
+      ch !== charCodes.lineFeed &&
+      ch !== charCodes.carriageReturn &&
+      ch !== charCodes.lineSeparator &&
+      ch !== charCodes.paragraphSeparator &&
+      ++this.state.pos < this.input.length
+    ) {
+      ch = this.input.charCodeAt(this.state.pos);
+    }
+
+    const value = this.input.slice(start + 2, this.state.pos);
+
+    this.finishToken(tt.interpreterDirective, value);
+
+    return true;
+  }
+
   readToken_mult_modulo(code: number): void {
     // '%*'
     let type = code === charCodes.asterisk ? tt.star : tt.modulo;
@@ -626,6 +652,10 @@ export default class Tokenizer extends LocationParser {
   getTokenFromCode(code: number): void {
     switch (code) {
       case charCodes.numberSign:
+        if (this.state.pos === 0 && this.readToken_interpreter()) {
+          return;
+        }
+
         if (
           (this.hasPlugin("classPrivateProperties") ||
             this.hasPlugin("classPrivateMethods")) &&

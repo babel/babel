@@ -63,6 +63,11 @@ export type HasDecorators = NodeBase & {
   decorators?: $ReadOnlyArray<Decorator>,
 };
 
+export type InterpreterDirective = NodeBase & {
+  type: "InterpreterDirective",
+  value: string,
+};
+
 export type Identifier = PatternBase & {
   type: "Identifier",
   name: string,
@@ -133,6 +138,7 @@ export type Program = NodeBase & {
   sourceType: "script" | "module",
   body: Array<Statement | ModuleDeclaration>, // TODO: $ReadOnlyArray
   directives: $ReadOnlyArray<Directive>, // TODO: Not in spec
+  interpreter: InterpreterDirective | null,
 };
 
 // Functions

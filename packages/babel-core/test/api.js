@@ -370,6 +370,60 @@ describe("api", function() {
     );
   });
 
+  it("interpreter directive backward-compat", function() {
+    function doTransform(code, preHandler) {
+      return transform(code, {
+        plugins: [
+          {
+            pre: preHandler,
+          },
+        ],
+      }).code;
+    }
+
+    // Writes value properly.
+    expect(
+      doTransform("", file => {
+        file.shebang = "env node";
+      }),
+    ).toBe(`#!env node`);
+    expect(
+      doTransform("#!env node", file => {
+        file.shebang = "env node2";
+      }),
+    ).toBe(`#!env node2`);
+    expect(
+      doTransform("", file => {
+        file.shebang = "";
+      }),
+    ).toBe(``);
+    expect(
+      doTransform("#!env node", file => {
+        file.shebang = "";
+      }),
+    ).toBe(``);
+
+    // Reads value properly.
+    doTransform("", file => {
+      expect(file.shebang).toBe("");
+    });
+    doTransform("#!env node", file => {
+      expect(file.shebang).toBe("env node");
+    });
+
+    // Reads and writes properly.
+    expect(
+      doTransform("#!env node", file => {
+        expect(file.shebang).toBe("env node");
+
+        file.shebang = "env node2";
+        expect(file.shebang).toBe("env node2");
+
+        file.shebang = "env node3";
+      }),
+    ).toBe(`#!env node3`);
+  });
+
   it("source map merging", function() {
     const result = transform(
       [

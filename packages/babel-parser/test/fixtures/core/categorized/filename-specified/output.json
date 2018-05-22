@@ -29,6 +29,7 @@
       "filename": "path/to/input-file.js"
     },
     "sourceType": "script",
+    "interpreter": null,
     "body": [
       {
         "type": "VariableDeclaration",

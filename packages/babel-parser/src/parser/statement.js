@@ -23,6 +23,8 @@ export default class StatementParser extends ExpressionParser {
   parseTopLevel(file: N.File, program: N.Program): N.File {
     program.sourceType = this.options.sourceType;
 
+    program.interpreter = this.parseInterpreterDirective();
+
     this.parseBlockBody(program, true, true, tt.eof);
 
     file.program = this.finishNode(program, "Program");
@@ -55,6 +57,17 @@ export default class StatementParser extends ExpressionParser {
     );
 
     return this.finishNodeAt(directive, "Directive", stmt.end, stmt.loc.end);
+  }
+
+  parseInterpreterDirective(): N.InterpreterDirective | null {
+    if (!this.match(tt.interpreterDirective)) {
+      return null;
+    }
+
+    const node = this.startNode();
+    node.value = this.state.value;
+    this.next();
+    return this.finishNode(node, "InterpreterDirective");
   }
 
   // Parse a single statement.

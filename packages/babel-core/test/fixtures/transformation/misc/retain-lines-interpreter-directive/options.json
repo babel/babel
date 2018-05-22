@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-strict-mode"],
+  "retainLines": true
+}

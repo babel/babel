@@ -27,6 +27,12 @@ export function assertAssignmentExpression(
 export function assertBinaryExpression(node: Object, opts?: Object = {}): void {
   assert("BinaryExpression", node, opts);
 }
+export function assertInterpreterDirective(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("InterpreterDirective", node, opts);
+}
 export function assertDirective(node: Object, opts?: Object = {}): void {
   assert("Directive", node, opts);
 }
