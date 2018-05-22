@@ -1,0 +1,8 @@
+{
+  "presets": [
+    ["flow", {}, "before"],
+    "typescript",
+    ["flow", {}, "after"]
+  ],
+  "throws": "enum is a reserved word (1:0)"
+}
