@@ -231,7 +231,8 @@ Aliases: `Expression`
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
  - `optional`: `true | false` (default: `null`)
- - `typeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
+ - `typeArguments`: `TypeParameterInstantiation` (default: `null`)
+ - `typeParameters`: `TSTypeParameterInstantiation` (default: `null`)
 
 ---
 
@@ -1061,6 +1062,20 @@ Aliases: `Flow`
 
 ---
 
+### interfaceTypeAnnotation
+```javascript
+t.interfaceTypeAnnotation(extends, body)
+```
+
+See also `t.isInterfaceTypeAnnotation(node, opts)` and `t.assertInterfaceTypeAnnotation(node, opts)`.
+
+Aliases: `Flow`, `FlowType`
+
+ - `extends`: `Array<InterfaceExtends>` (default: `null`)
+ - `body`: `ObjectTypeAnnotation` (required)
+
+---
+
 ### intersectionTypeAnnotation
 ```javascript
 t.intersectionTypeAnnotation(types)
@@ -1359,7 +1374,8 @@ Aliases: `Expression`
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
  - `optional`: `true | false` (default: `null`)
- - `typeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
+ - `typeArguments`: `TypeParameterInstantiation` (default: `null`)
+ - `typeParameters`: `TSTypeParameterInstantiation` (default: `null`)
 
 ---
 
@@ -1517,7 +1533,7 @@ Aliases: `UserWhitespacable`, `Property`, `ObjectMember`
 
 ### objectTypeAnnotation
 ```javascript
-t.objectTypeAnnotation(properties, indexers, callProperties, exact)
+t.objectTypeAnnotation(properties, indexers, callProperties, internalSlots, exact)
 ```
 
 See also `t.isObjectTypeAnnotation(node, opts)` and `t.assertObjectTypeAnnotation(node, opts)`.
@@ -1527,6 +1543,7 @@ Aliases: `Flow`, `FlowType`
  - `properties`: `Array<ObjectTypeProperty | ObjectTypeSpreadProperty>` (required)
  - `indexers`: `Array<ObjectTypeIndexer>` (default: `null`)
  - `callProperties`: `Array<ObjectTypeCallProperty>` (default: `null`)
+ - `internalSlots`: `Array<ObjectTypeInternalSlot>` (default: `null`)
  - `exact`: `boolean` (default: `false`)
 
 ---
@@ -1559,6 +1576,23 @@ Aliases: `Flow`, `UserWhitespacable`
  - `value`: `FlowType` (required)
  - `variance`: `Variance` (default: `null`)
  - `static`: `boolean` (default: `null`)
+
+---
+
+### objectTypeInternalSlot
+```javascript
+t.objectTypeInternalSlot(id, value, optional, static, method)
+```
+
+See also `t.isObjectTypeInternalSlot(node, opts)` and `t.assertObjectTypeInternalSlot(node, opts)`.
+
+Aliases: `Flow`, `UserWhitespacable`
+
+ - `id`: `Identifier` (required)
+ - `value`: `FlowType` (required)
+ - `optional`: `boolean` (required)
+ - `static`: `boolean` (required)
+ - `method`: `boolean` (required)
 
 ---
 
@@ -1621,7 +1655,8 @@ Aliases: `Expression`
  - `callee`: `Expression` (required)
  - `arguments`: `Array<Expression | SpreadElement | JSXNamespacedName>` (required)
  - `optional`: `boolean` (required)
- - `typeParameters`: `TypeParameterInstantiation | TSTypeParameterInstantiation` (default: `null`)
+ - `typeArguments`: `TypeParameterInstantiation` (default: `null`)
+ - `typeParameters`: `TSTypeParameterInstantiation` (default: `null`)
 
 ---
 
@@ -2131,7 +2166,7 @@ See also `t.isTSInferType(node, opts)` and `t.assertTSInferType(node, opts)`.
 
 Aliases: `TSType`
 
- - `typeParameter`: `TSType` (required)
+ - `typeParameter`: `TSTypeParameter` (required)
 
 ---
 

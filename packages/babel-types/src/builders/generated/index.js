@@ -17,6 +17,10 @@ export function BinaryExpression(...args: Array<any>): Object {
   return builder("BinaryExpression", ...args);
 }
 export { BinaryExpression as binaryExpression };
+export function InterpreterDirective(...args: Array<any>): Object {
+  return builder("InterpreterDirective", ...args);
+}
+export { InterpreterDirective as interpreterDirective };
 export function Directive(...args: Array<any>): Object {
   return builder("Directive", ...args);
 }
@@ -393,6 +397,10 @@ export function InterfaceDeclaration(...args: Array<any>): Object {
   return builder("InterfaceDeclaration", ...args);
 }
 export { InterfaceDeclaration as interfaceDeclaration };
+export function InterfaceTypeAnnotation(...args: Array<any>): Object {
+  return builder("InterfaceTypeAnnotation", ...args);
+}
+export { InterfaceTypeAnnotation as interfaceTypeAnnotation };
 export function IntersectionTypeAnnotation(...args: Array<any>): Object {
   return builder("IntersectionTypeAnnotation", ...args);
 }
@@ -421,6 +429,10 @@ export function ObjectTypeAnnotation(...args: Array<any>): Object {
   return builder("ObjectTypeAnnotation", ...args);
 }
 export { ObjectTypeAnnotation as objectTypeAnnotation };
+export function ObjectTypeInternalSlot(...args: Array<any>): Object {
+  return builder("ObjectTypeInternalSlot", ...args);
+}
+export { ObjectTypeInternalSlot as objectTypeInternalSlot };
 export function ObjectTypeCallProperty(...args: Array<any>): Object {
   return builder("ObjectTypeCallProperty", ...args);
 }

@@ -10,6 +10,8 @@
   ],
   "dependencies": {
     "@babel/helper-function-name": "7.0.0-beta.47",
+    "@babel/helper-member-expression-to-functions": "7.0.0-beta.47",
+    "@babel/helper-optimise-call-expression": "7.0.0-beta.47",
     "@babel/helper-plugin-utils": "7.0.0-beta.47",
     "@babel/helper-replace-supers": "7.0.0-beta.47",
     "@babel/plugin-syntax-class-properties": "7.0.0-beta.47"

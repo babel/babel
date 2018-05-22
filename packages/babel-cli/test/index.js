@@ -1,4 +1,3 @@
-const includes = require("lodash/includes");
 const readdir = require("fs-readdir-recursive");
 const helper = require("@babel/helper-fixtures");
 const rimraf = require("rimraf");
@@ -51,7 +50,7 @@ const assertTest = function(stdout, stderr, opts) {
 
   if (opts.stderr) {
     if (opts.stderrContains) {
-      expect(includes(stderr, expectStderr)).toBe(true);
+      expect(stderr).toContain(expectStderr);
     } else {
       expect(stderr).toBe(expectStderr);
     }
@@ -65,7 +64,7 @@ const assertTest = function(stdout, stderr, opts) {
 
   if (opts.stdout) {
     if (opts.stdoutContains) {
-      expect(includes(stdout, expectStdout)).toBe(true);
+      expect(stdout).toContain(expectStdout);
     } else {
       expect(stdout).toBe(expectStdout);
     }

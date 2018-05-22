@@ -98,7 +98,7 @@ function buildRollup(packages) {
         format: "cjs",
         plugins: [
           rollupBabel({
-            envName: "babylon",
+            envName: "babel-parser",
           }),
           rollupNodeResolve(),
         ],
@@ -113,7 +113,7 @@ function buildRollup(packages) {
 }
 
 gulp.task("build", function() {
-  const bundles = ["packages/babylon"];
+  const bundles = ["packages/babel-parser"];
 
   return merge([buildBabel(/* exclude */ bundles), buildRollup(bundles)]);
 });

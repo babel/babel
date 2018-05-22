@@ -108,6 +108,21 @@ export default declare(api => {
         } while (t.isTypeCastExpression(node));
         path.replaceWith(node);
       },
+
+      CallExpression({ node }) {
+        if (skipStrip) return;
+        node.typeArguments = null;
+      },
+
+      OptionalCallExpression({ node }) {
+        if (skipStrip) return;
+        node.typeArguments = null;
+      },
+
+      NewExpression({ node }) {
+        if (skipStrip) return;
+        node.typeArguments = null;
+      },
     },
   };
 });

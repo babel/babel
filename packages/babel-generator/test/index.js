@@ -1,6 +1,6 @@
 import Printer from "../lib/printer";
 import generate, { CodeGenerator } from "../lib";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 import fs from "fs";
 import path from "path";

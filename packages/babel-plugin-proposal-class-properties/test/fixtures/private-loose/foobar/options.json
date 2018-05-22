@@ -1,0 +1,3 @@
+{
+  "presets": [["stage-0", { "decoratorsLegacy": true }], "es2015"]
+}

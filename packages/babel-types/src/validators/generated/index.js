@@ -47,6 +47,20 @@ export function isBinaryExpression(node: Object, opts?: Object): boolean {
 
   return false;
 }
+export function isInterpreterDirective(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "InterpreterDirective") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isDirective(node: Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -1387,6 +1401,23 @@ export function isInterfaceDeclaration(node: Object, opts?: Object): boolean {
 
   return false;
 }
+export function isInterfaceTypeAnnotation(
+  node: Object,
+  opts?: Object,
+): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "InterfaceTypeAnnotation") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isIntersectionTypeAnnotation(
   node: Object,
   opts?: Object,
@@ -1482,6 +1513,20 @@ export function isObjectTypeAnnotation(node: Object, opts?: Object): boolean {
 
   const nodeType = node.type;
   if (nodeType === "ObjectTypeAnnotation") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isObjectTypeInternalSlot(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "ObjectTypeInternalSlot") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -3610,6 +3655,7 @@ export function isUserWhitespacable(node: Object, opts?: Object): boolean {
     nodeType === "UserWhitespacable" ||
     "ObjectMethod" === nodeType ||
     "ObjectProperty" === nodeType ||
+    "ObjectTypeInternalSlot" === nodeType ||
     "ObjectTypeCallProperty" === nodeType ||
     "ObjectTypeIndexer" === nodeType ||
     "ObjectTypeProperty" === nodeType ||
@@ -3825,6 +3871,7 @@ export function isFlow(node: Object, opts?: Object): boolean {
     "InferredPredicate" === nodeType ||
     "InterfaceExtends" === nodeType ||
     "InterfaceDeclaration" === nodeType ||
+    "InterfaceTypeAnnotation" === nodeType ||
     "IntersectionTypeAnnotation" === nodeType ||
     "MixedTypeAnnotation" === nodeType ||
     "EmptyTypeAnnotation" === nodeType ||
@@ -3832,6 +3879,7 @@ export function isFlow(node: Object, opts?: Object): boolean {
     "NumberLiteralTypeAnnotation" === nodeType ||
     "NumberTypeAnnotation" === nodeType ||
     "ObjectTypeAnnotation" === nodeType ||
+    "ObjectTypeInternalSlot" === nodeType ||
     "ObjectTypeCallProperty" === nodeType ||
     "ObjectTypeIndexer" === nodeType ||
     "ObjectTypeProperty" === nodeType ||
@@ -3876,6 +3924,7 @@ export function isFlowType(node: Object, opts?: Object): boolean {
     "ExistsTypeAnnotation" === nodeType ||
     "FunctionTypeAnnotation" === nodeType ||
     "GenericTypeAnnotation" === nodeType ||
+    "InterfaceTypeAnnotation" === nodeType ||
     "IntersectionTypeAnnotation" === nodeType ||
     "MixedTypeAnnotation" === nodeType ||
     "EmptyTypeAnnotation" === nodeType ||

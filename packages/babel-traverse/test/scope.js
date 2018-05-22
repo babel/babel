@@ -1,5 +1,5 @@
 import traverse from "../lib";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 
 function getPath(code, options) {
   const ast = parse(code, options);
@@ -72,16 +72,80 @@ describe("scope", function() {
       expect(
         getPath("declare var foo;", { plugins: ["flow"] }).scope.getBinding(
           "foo",
-        ),
-      ).toBeUndefined();
+        ).path.type,
+      ).toBe("DeclareVariable");
     });
 
     it("declare function", function() {
       expect(
         getPath("declare function foo(): void;", {
           plugins: ["flow"],
-        }).scope.getBinding("foo"),
-      ).toBeUndefined();
+        }).scope.getBinding("foo").path.type,
+      ).toBe("DeclareFunction");
+    });
+
+    it("declare module", function() {
+      expect(
+        getPath("declare module foo {};", {
+          plugins: ["flow"],
+        }).scope.getBinding("foo").path.type,
+      ).toBe("DeclareModule");
+    });
+
+    it("declare type alias", function() {
+      expect(
+        getPath("declare type foo = string;", {
+          plugins: ["flow"],
+        }).scope.getBinding("foo").path.type,
+      ).toBe("DeclareTypeAlias");
+    });
+
+    it("declare opaque type", function() {
+      expect(
+        getPath("declare opaque type foo;", {
+          plugins: ["flow"],
+        }).scope.getBinding("foo").path.type,
+      ).toBe("DeclareOpaqueType");
+    });
+
+    it("declare interface", function() {
+      expect(
+        getPath("declare interface Foo {};", {
+          plugins: ["flow"],
+        }).scope.getBinding("Foo").path.type,
+      ).toBe("DeclareInterface");
+    });
+
+    it("type alias", function() {
+      expect(
+        getPath("type foo = string;", {
+          plugins: ["flow"],
+        }).scope.getBinding("foo").path.type,
+      ).toBe("TypeAlias");
+    });
+
+    it("opaque type alias", function() {
+      expect(
+        getPath("opaque type foo = string;", {
+          plugins: ["flow"],
+        }).scope.getBinding("foo").path.type,
+      ).toBe("OpaqueType");
+    });
+
+    it("interface", function() {
+      expect(
+        getPath("interface Foo {};", {
+          plugins: ["flow"],
+        }).scope.getBinding("Foo").path.type,
+      ).toBe("InterfaceDeclaration");
+    });
+
+    it("import type", function() {
+      expect(
+        getPath("import type {Foo} from 'foo';", {
+          plugins: ["flow"],
+        }).scope.getBinding("Foo").path.type,
+      ).toBe("ImportSpecifier");
     });
 
     it("variable constantness", function() {

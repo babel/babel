@@ -14,21 +14,21 @@ A monorepo, muhahahahahaha. See the [monorepo design doc](/doc/design/monorepo.m
 | Package | Version | Dependencies | Install Size |
 |--------|-------|------------|-----------|
 | [`@babel/core`](/packages/babel-core) | [![npm](https://img.shields.io/npm/v/@babel/core.svg?maxAge=2592000)](https://www.npmjs.com/package/@babel/core) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-core)](https://david-dm.org/babel/babel?path=packages/babel-core) | [![install size](https://packagephobia.now.sh/badge?p=@babel/core)](https://packagephobia.now.sh/result?p=@babel/core) |
-| [`babylon`](/packages/babylon) | [![npm](https://img.shields.io/npm/v/babylon.svg?maxAge=2592000)](https://www.npmjs.com/package/babylon) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babylon)](https://david-dm.org/babel/babel?path=packages/babylon) | [![install size](https://packagephobia.now.sh/badge?p=babylon)](https://packagephobia.now.sh/result?p=babylon) |
+| [`@babel/parser`](/packages/@babel/parser) | [![npm](https://img.shields.io/npm/v/@babel/parser.svg?maxAge=2592000)](https://www.npmjs.com/package/@babel/parser) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-parser)](https://david-dm.org/babel/babel?path=packages/babel-parser) | [![install size](https://packagephobia.now.sh/badge?p=@babel/parser)](https://packagephobia.now.sh/result?p=@babel/parser) |
 | [`@babel/traverse`](/packages/babel-traverse) | [![npm](https://img.shields.io/npm/v/@babel/traverse.svg?maxAge=2592000)](https://www.npmjs.com/package/@babel/traverse) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-traverse)](https://david-dm.org/babel/babel?path=packages/babel-traverse) | [![install size](https://packagephobia.now.sh/badge?p=@babel/traverse)](https://packagephobia.now.sh/result?p=@babel/traverse) |
 | [`@babel/generator`](/packages/babel-generator) | [![npm](https://img.shields.io/npm/v/@babel/generator.svg?maxAge=2592000)](https://www.npmjs.com/package/@babel/generator) | [![Dependency Status](https://david-dm.org/babel/babel.svg?path=packages/babel-generator)](https://david-dm.org/babel/babel?path=packages/babel-generator) | [![install size](https://packagephobia.now.sh/badge?p=@babel/generator)](https://packagephobia.now.sh/result?p=@babel/generator) |
 
 [`@babel/core`](/packages/babel-core) is the Babel compiler itself; it exposes the `babel.transform` method, where `transformedCode = transform(src).code`.
 
 The compiler can be broken down into 3 parts:
-- The parser: [`babylon`](/packages/babylon)
+- The parser: [`@babel/parser`](/packages/babel-parser)
 - The transformer[s]: All the plugins/presets
   - These all use [`@babel/traverse`](/packages/babel-traverse) to traverse through the AST
 - The generator: [`@babel/generator`](/packages/babel-generator)
 
 The flow goes like this:
 
-input string -> `babylon` parser -> `AST` -> transformer[s] -> `AST` -> `@babel/generator` -> output string
+input string -> `@babel/parser` parser -> `AST` -> transformer[s] -> `AST` -> `@babel/generator` -> output string
 
 Check out the [`babel-handbook`](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#introduction) for more information on this.
 

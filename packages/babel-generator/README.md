@@ -1,6 +1,6 @@
 # @babel/generator
 
-> Turns a [Babylon AST](https://github.com/babel/babel/blob/master/packages/babylon/ast/spec.md) into code.
+> Turns the [babel AST](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md) into code.
 
 ## Install
 
@@ -11,7 +11,7 @@ npm install --save-dev @babel/generator
 ## Usage
 
 ```js
-import {parse} from 'babylon';
+import {parse} from '@babel/parser';
 import generate from '@babel/generator';
 
 const code = 'class Example {}';
@@ -57,7 +57,7 @@ should be the source filenames, and values should be the source content.
 Here's an example of what that might look like:
 
 ```js
-import {parse} from 'babylon';
+import {parse} from '@babel/parser';
 import generate from '@babel/generator';
 
 const a = 'var a = 1;';

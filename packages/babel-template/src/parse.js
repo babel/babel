@@ -1,7 +1,7 @@
 // @flow
 import * as t from "@babel/types";
 import type { TraversalAncestors, TraversalHandler } from "@babel/types";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
 import type { TemplateOpts } from "./options";
 import type { Formatter } from "./formatters";
@@ -142,6 +142,7 @@ function parseWithCodeFrame(code: string, parserOpts: {}): BabelNodeFile {
   };
 
   try {
+    // $FlowFixMe - The parser AST is not the same type as the babel-types type.
     return parse(code, parserOpts);
   } catch (err) {
     const loc = err.loc;

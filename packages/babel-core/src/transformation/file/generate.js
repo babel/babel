@@ -14,7 +14,7 @@ export default function generateCode(
   outputCode: string,
   outputMap: SourceMap | null,
 } {
-  const { opts, ast, shebang, code, inputMap } = file;
+  const { opts, ast, code, inputMap } = file;
 
   const results = [];
   for (const plugins of pluginPasses) {
@@ -52,11 +52,6 @@ export default function generateCode(
   }
 
   let { code: outputCode, map: outputMap } = result;
-
-  if (shebang) {
-    // add back shebang
-    outputCode = `${shebang}\n${outputCode}`;
-  }
 
   if (outputMap && inputMap) {
     outputMap = mergeSourceMap(inputMap.toObject(), outputMap);

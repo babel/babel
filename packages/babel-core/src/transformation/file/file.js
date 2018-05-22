@@ -28,14 +28,12 @@ export default class File {
   metadata: {} = {};
   hub: Hub = new Hub(this);
   code: string = "";
-  shebang: string | null = "";
   inputMap: Object | null = null;
 
-  constructor(options: {}, { code, ast, shebang, inputMap }: NormalizedFile) {
+  constructor(options: {}, { code, ast, inputMap }: NormalizedFile) {
     this.opts = options;
     this.code = code;
     this.ast = ast;
-    this.shebang = shebang;
     this.inputMap = inputMap;
 
     this.path = NodePath.get({
@@ -46,6 +44,23 @@ export default class File {
       key: "program",
     }).setContext();
     this.scope = this.path.scope;
+  }
+
+  /**
+   * Provide backward-compatible access to the interpreter directive handling
+   * in Babel 6.x. If you are writing a plugin for Babel 7.x, it would be
+   * best to use 'program.interpreter' directly.
+   */
+  get shebang(): string {
+    const { interpreter } = this.path.node;
+    return interpreter ? interpreter.value : "";
+  }
+  set shebang(value: string): void {
+    if (value) {
+      this.path.get("interpreter").replaceWith(t.interpreterDirective(value));
+    } else {
+      this.path.get("interpreter").remove();
+    }
   }
 
   set(key: mixed, val: mixed) {

@@ -22,14 +22,14 @@ before_install:
 install: yarn --ignore-engines
 
 before_script:
-  - 'if [ "$JOB" = "babylon-flow-tests" ]; then make bootstrap-flow; fi'
-  - 'if [ "$JOB" = "babylon-test262-tests" ]; then make bootstrap-test262; fi'
+  - 'if [ "$JOB" = "babel-parser-flow-tests" ]; then make bootstrap-flow; fi'
+  - 'if [ "$JOB" = "babel-parser-test262-tests" ]; then make bootstrap-test262; fi'
 
 script:
   - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
   - 'if [ "$JOB" = "lint" ]; then make lint && make flow; fi'
-  - 'if [ "$JOB" = "babylon-flow-tests" ]; then make test-flow-ci; fi'
-  - 'if [ "$JOB" = "babylon-test262-tests" ]; then make test-test262-ci; fi'
+  - 'if [ "$JOB" = "babel-parser-flow-tests" ]; then make test-flow-ci; fi'
+  - 'if [ "$JOB" = "babel-parser-test262-tests" ]; then make test-test262-ci; fi'
 
 matrix:
   fast_finish: true
@@ -37,9 +37,9 @@ matrix:
     - node_js: "node"
       env: JOB=lint
     - node_js: "node"
-      env: JOB=babylon-flow-tests
+      env: JOB=babel-parser-flow-tests
     - node_js: "node"
-      env: JOB=babylon-test262-tests
+      env: JOB=babel-parser-test262-tests
 
 notifications:
   slack:

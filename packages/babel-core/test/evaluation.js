@@ -1,5 +1,5 @@
 import traverse from "@babel/traverse";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 
 describe("evaluation", function() {
   function addTest(code, type, value, notConfident) {

@@ -26,7 +26,7 @@ const visitor = {
 
 // The helper requires three special methods on state: `get`, `set`, and
 // `call`.
-// Optionally, a special `memoize` method may be defined, which gets
+// Optionally, a special `memoise` method may be defined, which gets
 // called if the member is in a self-referential update expression.
 // Everything else will be passed through as normal.
 const state = {
@@ -55,10 +55,10 @@ const state = {
     );
   },
 
-  memoize(memberPath) {
+  memoise(memberPath) {
     const { node } = memberPath;
     if (node.computed) {
-      MEMOIZED.set(node, ...);
+      MEMOISED.set(node, ...);
     }
   },
 

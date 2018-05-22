@@ -27,6 +27,12 @@ export function assertAssignmentExpression(
 export function assertBinaryExpression(node: Object, opts?: Object = {}): void {
   assert("BinaryExpression", node, opts);
 }
+export function assertInterpreterDirective(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("InterpreterDirective", node, opts);
+}
 export function assertDirective(node: Object, opts?: Object = {}): void {
   assert("Directive", node, opts);
 }
@@ -414,6 +420,12 @@ export function assertInterfaceDeclaration(
 ): void {
   assert("InterfaceDeclaration", node, opts);
 }
+export function assertInterfaceTypeAnnotation(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("InterfaceTypeAnnotation", node, opts);
+}
 export function assertIntersectionTypeAnnotation(
   node: Object,
   opts?: Object = {},
@@ -455,6 +467,12 @@ export function assertObjectTypeAnnotation(
   opts?: Object = {},
 ): void {
   assert("ObjectTypeAnnotation", node, opts);
+}
+export function assertObjectTypeInternalSlot(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("ObjectTypeInternalSlot", node, opts);
 }
 export function assertObjectTypeCallProperty(
   node: Object,

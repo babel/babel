@@ -1,0 +1,212 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 61,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 61
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 61,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 61
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "start": 0,
+        "end": 61,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 61
+          }
+        },
+        "body": {
+          "type": "LabeledStatement",
+          "start": 9,
+          "end": 61,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 61
+            }
+          },
+          "body": {
+            "type": "LabeledStatement",
+            "start": 18,
+            "end": 61,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 18
+              },
+              "end": {
+                "line": 1,
+                "column": 61
+              }
+            },
+            "body": {
+              "type": "WhileStatement",
+              "start": 27,
+              "end": 61,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 27
+                },
+                "end": {
+                  "line": 1,
+                  "column": 61
+                }
+              },
+              "test": {
+                "type": "BooleanLiteral",
+                "start": 34,
+                "end": 38,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 34
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 38
+                  }
+                },
+                "value": true
+              },
+              "body": {
+                "type": "BlockStatement",
+                "start": 40,
+                "end": 61,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 40
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 61
+                  }
+                },
+                "body": [
+                  {
+                    "type": "ContinueStatement",
+                    "start": 42,
+                    "end": 59,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 42
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 59
+                      }
+                    },
+                    "label": {
+                      "type": "Identifier",
+                      "start": 51,
+                      "end": 58,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 51
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 58
+                        },
+                        "identifierName": "target1"
+                      },
+                      "name": "target1"
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            },
+            "label": {
+              "type": "Identifier",
+              "start": 18,
+              "end": 25,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 18
+                },
+                "end": {
+                  "line": 1,
+                  "column": 25
+                },
+                "identifierName": "target3"
+              },
+              "name": "target3"
+            }
+          },
+          "label": {
+            "type": "Identifier",
+            "start": 9,
+            "end": 16,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 9
+              },
+              "end": {
+                "line": 1,
+                "column": 16
+              },
+              "identifierName": "target2"
+            },
+            "name": "target2"
+          }
+        },
+        "label": {
+          "type": "Identifier",
+          "start": 0,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 7
+            },
+            "identifierName": "target1"
+          },
+          "name": "target1"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

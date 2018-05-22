@@ -3,17 +3,14 @@
 import * as t from "@babel/types";
 import type { PluginPasses } from "../config";
 import convertSourceMap, { typeof Converter } from "convert-source-map";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
 import File from "./file/file";
 import generateMissingPluginMessage from "./util/missing-plugin-helper";
 
-const shebangRegex = /^#!.*/;
-
 export type NormalizedFile = {
   code: string,
   ast: {},
-  shebang: string | null,
   inputMap: Converter | null,
 };
 
@@ -25,7 +22,6 @@ export default function normalizeFile(
 ): File {
   code = `${code || ""}`;
 
-  let shebang = null;
   let inputMap = null;
   if (options.inputSourceMap !== false) {
     inputMap = convertSourceMap.fromSource(code);
@@ -36,12 +32,6 @@ export default function normalizeFile(
     }
   }
 
-  const shebangMatch = shebangRegex.exec(code);
-  if (shebangMatch) {
-    shebang = shebangMatch[0];
-    code = code.replace(shebangRegex, "");
-  }
-
   if (ast) {
     if (ast.type === "Program") {
       ast = t.file(ast, [], []);
@@ -49,13 +39,15 @@ export default function normalizeFile(
       throw new Error("AST root must be a Program or File node");
     }
   } else {
+    // The parser's AST types aren't fully compatible with the types generated
+    // by the logic in babel-types.
+    // $FlowFixMe
     ast = parser(pluginPasses, options, code);
   }
 
   return new File(options, {
     code,
     ast,
-    shebang,
     inputMap,
   });
 }
