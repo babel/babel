@@ -7,6 +7,10 @@ export default declare((api, options) => {
   // the @flow pragma was provided.
   const { all } = options;
 
+  if (typeof all !== "boolean" && typeof all !== "undefined") {
+    throw new Error(".all must be a boolean, or undefined");
+  }
+
   return {
     manipulateOptions(opts, parserOpts) {
       // If the file has already enabled TS, assume that this is not a
