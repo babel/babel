@@ -1,5 +1,6 @@
 // @flow
 
+import buildDebug from "debug";
 import * as t from "@babel/types";
 import type { PluginPasses } from "../config";
 import convertSourceMap, { typeof Converter } from "convert-source-map";
@@ -7,6 +8,8 @@ import { parse } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
 import File from "./file/file";
 import generateMissingPluginMessage from "./util/missing-plugin-helper";
+
+const debug = buildDebug("babel:transform:file");
 
 export type NormalizedFile = {
   code: string,
@@ -24,27 +27,30 @@ export default function normalizeFile(
 
   let inputMap = null;
   if (options.inputSourceMap !== false) {
-    // Check if sourceMap is inline
-    inputMap = convertSourceMap.fromSource(code);
+    try {
+      inputMap = convertSourceMap.fromSource(code);
 
-    // Remove inline sourceMap from code
-    if (inputMap) {
+      if (inputMap) {
+        code = convertSourceMap.removeComments(code);
+      }
+    } catch (err) {
+      debug("discarding unknown inline input sourcemap", err);
       code = convertSourceMap.removeComments(code);
     }
 
-    // if source map is not inline check if it's an external file
     if (!inputMap) {
       try {
         inputMap = convertSourceMap.fromMapFileSource(code);
-      } catch (err) {}
 
-      // remove external sourceMappingUrl from code
-      if (inputMap) {
+        if (inputMap) {
+          code = convertSourceMap.removeMapFileComments(code);
+        }
+      } catch (err) {
+        debug("discarding unknown file input sourcemap", err);
         code = convertSourceMap.removeMapFileComments(code);
       }
     }
 
-    // If no sourceMap is found and a user provides it use that
     if (!inputMap && typeof options.inputSourceMap === "object") {
       inputMap = convertSourceMap.fromObject(options.inputSourceMap);
     }
