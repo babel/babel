@@ -47,6 +47,11 @@ program.option(
   "--config-file [path]",
   "Path to the babel config file to use. Defaults to working directory babel.config.js",
 );
+program.option(
+  "--env-name [name]",
+  "The name of the 'env' to use when loading configs and plugins. " +
+    "Defaults to the value of BABEL_ENV, or else NODE_ENV, or else 'development'.",
+);
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
 
@@ -62,6 +67,7 @@ register({
   plugins: program.plugins,
   presets: program.presets,
   configFile: program.configFile,
+  envName: program.envName,
 });
 
 const replPlugin = ({ types: t }) => ({
