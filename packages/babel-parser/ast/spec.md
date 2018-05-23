@@ -239,6 +239,7 @@ interface NumericLiteral <: Literal {
 ```js
 interface Program <: Node {
   type: "Program";
+  interpreter: string | null;
   sourceType: "script" | "module";
   body: [ Statement | ModuleDeclaration ];
   directives: [ Directive ];
