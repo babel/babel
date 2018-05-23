@@ -9,7 +9,7 @@ export default declare(
       throw new Error(".allExtensions must be a boolean, or undefined");
     }
     if (typeof isTSX !== "boolean") {
-      throw new Error(".allExtensions must be a boolean, or undefined");
+      throw new Error(".isTSX must be a boolean, or undefined");
     }
 
     if (isTSX && !allExtensions) {
