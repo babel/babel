@@ -6,12 +6,13 @@ function withContext(ComposedComponent) {
   function (_Component) {
     "use strict";
 
+    babelHelpers.inherits(WithContext, _Component);
+
     function WithContext() {
       babelHelpers.classCallCheck(this, WithContext);
       return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(WithContext).apply(this, arguments));
     }
 
-    babelHelpers.inherits(WithContext, _Component);
     return WithContext;
   }(Component), _class.propTypes = {
     context: PropTypes.shape({

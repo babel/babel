@@ -15,6 +15,8 @@ var Bar =
 function (_Foo) {
   "use strict";
 
+  babelHelpers.inherits(Bar, _Foo);
+
   function Bar(...args) {
     var _temp, _this;
 
@@ -25,7 +27,6 @@ function (_Foo) {
     }), _temp));
   }
 
-  babelHelpers.inherits(Bar, _Foo);
   return Bar;
 }(Foo);
 
