@@ -43,6 +43,10 @@ program.option(
   "List of extensions to hook into [.es6,.js,.es,.jsx,.mjs]",
   collect,
 );
+program.option(
+  "--config-file [path]",
+  "Path to the babel config file to use. Defaults to working directory babel.config.js",
+);
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
 
@@ -57,6 +61,7 @@ register({
   only: program.only,
   plugins: program.plugins,
   presets: program.presets,
+  configFile: program.configFile,
 });
 
 const replPlugin = ({ types: t }) => ({
