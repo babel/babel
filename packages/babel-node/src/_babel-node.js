@@ -43,6 +43,15 @@ program.option(
   "List of extensions to hook into [.es6,.js,.es,.jsx,.mjs]",
   collect,
 );
+program.option(
+  "--config-file [path]",
+  "Path to the babel config file to use. Defaults to working directory babel.config.js",
+);
+program.option(
+  "--env-name [name]",
+  "The name of the 'env' to use when loading configs and plugins. " +
+    "Defaults to the value of BABEL_ENV, or else NODE_ENV, or else 'development'.",
+);
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
 
@@ -51,12 +60,18 @@ program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
 
 register({
-  babelrc: program.babelrc,
   extensions: program.extensions,
   ignore: program.ignore,
   only: program.only,
   plugins: program.plugins,
   presets: program.presets,
+  configFile: program.configFile,
+  envName: program.envName,
+
+  // Commander will default the "--no-" arguments to true, but we want to
+  // leave them undefined so that @babel/core can handle the
+  // default-assignment logic on its own.
+  babelrc: program.babelrc === true ? undefined : program.babelrc,
 });
 
 const replPlugin = ({ types: t }) => ({
