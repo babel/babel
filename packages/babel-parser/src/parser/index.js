@@ -2,12 +2,13 @@
 
 import type { Options } from "../options";
 import type { File } from "../types";
+import type { PluginList } from "../plugin-utils";
 import { getOptions } from "../options";
 import StatementParser from "./statement";
 
-export const plugins: {
-  [name: string]: (superClass: Class<Parser>) => Class<Parser>,
-} = {};
+export type PluginsMap = {
+  [key: string]: { [option: string]: any },
+};
 
 export default class Parser extends StatementParser {
   constructor(options: ?Options, input: string) {
@@ -29,13 +30,11 @@ export default class Parser extends StatementParser {
   }
 }
 
-function pluginsMap(
-  pluginList: $ReadOnlyArray<string>,
-): { [key: string]: boolean } {
-  const pluginMap = Object.create(null);
-  for (const plugin of pluginList) {
-    const [name, options = {}] = Array.isArray(plugin) ? plugin : [plugin];
-    pluginMap[name] = options;
+function pluginsMap(plugins: PluginList): PluginsMap {
+  const pluginMap: PluginsMap = (Object.create(null): Object);
+  for (const plugin of plugins) {
+    if (Array.isArray(plugin)) pluginMap[plugin[0]] = plugin[1] || {};
+    else pluginMap[plugin] = {};
   }
   return pluginMap;
 }

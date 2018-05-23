@@ -1,21 +1,19 @@
 // @flow
 
-import type { Options } from "./options";
-import Parser, { plugins } from "./parser";
+import { type Options } from "./options";
+import {
+  hasPlugin,
+  validatePlugins,
+  mixinPluginNames,
+  mixinPlugins,
+  type PluginList,
+} from "./plugin-utils";
+import Parser from "./parser";
 
 import { types as tokTypes } from "./tokenizer/types";
 import "./tokenizer/context";
 
 import type { Expression, File } from "./types";
-
-import estreePlugin from "./plugins/estree";
-import flowPlugin from "./plugins/flow";
-import jsxPlugin from "./plugins/jsx";
-import typescriptPlugin from "./plugins/typescript";
-plugins.estree = estreePlugin;
-plugins.flow = flowPlugin;
-plugins.jsx = jsxPlugin;
-plugins.typescript = typescriptPlugin;
 
 export function parse(input: string, options?: Options): File {
   if (options && options.sourceType === "unambiguous") {
@@ -55,70 +53,31 @@ export function parseExpression(input: string, options?: Options): Expression {
 export { tokTypes };
 
 function getParser(options: ?Options, input: string): Parser {
-  const cls =
-    options && options.plugins ? getParserClass(options.plugins) : Parser;
+  let cls = Parser;
+  if (options && options.plugins) {
+    validatePlugins(options.plugins);
+    cls = getParserClass(options.plugins);
+  }
+
   return new cls(options, input);
 }
 
 const parserClassCache: { [key: string]: Class<Parser> } = {};
 
 /** Get a Parser class with plugins applied. */
-function getParserClass(
-  pluginsFromOptions: $ReadOnlyArray<string>,
-): Class<Parser> {
-  if (
-    hasPlugin(pluginsFromOptions, "decorators") &&
-    hasPlugin(pluginsFromOptions, "decorators-legacy")
-  ) {
-    throw new Error(
-      "Cannot use the decorators and decorators-legacy plugin together",
-    );
-  }
-
-  // Filter out just the plugins that have an actual mixin associated with them.
-  let pluginList = pluginsFromOptions.filter(plugin => {
-    const p = getPluginName(plugin);
-    return p === "estree" || p === "flow" || p === "jsx" || p === "typescript";
-  });
-
-  if (hasPlugin(pluginList, "flow")) {
-    // ensure flow plugin loads last
-    pluginList = pluginList.filter(p => getPluginName(p) !== "flow");
-    pluginList.push("flow");
-  }
-
-  if (hasPlugin(pluginList, "flow") && hasPlugin(pluginList, "typescript")) {
-    throw new Error("Cannot combine flow and typescript plugins.");
-  }
-
-  if (hasPlugin(pluginList, "typescript")) {
-    // ensure typescript plugin loads last
-    pluginList = pluginList.filter(p => getPluginName(p) !== "typescript");
-    pluginList.push("typescript");
-  }
-
-  if (hasPlugin(pluginList, "estree")) {
-    // ensure estree plugin loads first
-    pluginList = pluginList.filter(p => getPluginName(p) !== "estree");
-    pluginList.unshift("estree");
-  }
+function getParserClass(pluginsFromOptions: PluginList): Class<Parser> {
+  const pluginList = mixinPluginNames.filter(name =>
+    hasPlugin(pluginsFromOptions, name),
+  );
 
   const key = pluginList.join("/");
   let cls = parserClassCache[key];
   if (!cls) {
     cls = Parser;
     for (const plugin of pluginList) {
-      cls = plugins[plugin](cls);
+      cls = mixinPlugins[plugin](cls);
     }
     parserClassCache[key] = cls;
   }
   return cls;
-}
-
-function getPluginName(plugin) {
-  return Array.isArray(plugin) ? plugin[0] : plugin;
-}
-
-function hasPlugin(pluginsList, name) {
-  return pluginsList.some(plugin => getPluginName(plugin) === name);
 }
