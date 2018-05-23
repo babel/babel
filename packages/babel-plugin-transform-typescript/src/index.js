@@ -276,10 +276,7 @@ export default declare((api, { jsxPragma = "React" }) => {
     // "React" or the JSX pragma is referenced as a value if there are any JSX elements in the code.
     let sourceFileHasJsx = false;
     programPath.traverse({
-      JSXElement() {
-        sourceFileHasJsx = true;
-      },
-      JSXFragment() {
+      JSX() {
         sourceFileHasJsx = true;
       },
     });
