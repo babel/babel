@@ -188,7 +188,7 @@ export default function transformClass(
     for (const path of classBodyPaths) {
       const node = path.node;
 
-      if (path.isClassProperty() && !node.typeAnnotation) {
+      if (path.isClassProperty()) {
         throw path.buildCodeFrameError("Missing class properties transform.");
       }
 

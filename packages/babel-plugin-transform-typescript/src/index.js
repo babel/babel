@@ -183,10 +183,22 @@ export default declare((api, { jsxPragma = "React" }) => {
         if (node.abstract) node.abstract = null;
       },
 
-      Class({ node }) {
+      Class(path) {
+        const { node } = path;
+
         if (node.typeParameters) node.typeParameters = null;
         if (node.superTypeParameters) node.superTypeParameters = null;
         if (node.implements) node.implements = null;
+
+        // Same logic is used in babel-plugin-transform-flow-strip-types:
+        // We do this here instead of in a `ClassProperty` visitor because the class transform
+        // would transform the class before we reached the class property.
+        // path.get("body.body").forEach(child => {
+        //   if (child.isClassProperty()) {
+        //     child.node.typeAnnotation = null;
+        //     if (!child.node.value) child.remove();
+        //   }
+        // });
       },
 
       Function({ node }) {
