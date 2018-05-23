@@ -22,6 +22,10 @@ function collect(value, previousValue): Array<string> {
 }
 
 program.option("-e, --eval [script]", "Evaluate script");
+program.option(
+  "--no-babelrc",
+  "Specify whether or not to use .babelrc and .babelignore files",
+);
 program.option("-r, --require [module]", "Require module");
 program.option("-p, --print [code]", "Evaluate script and print result");
 program.option(
@@ -47,6 +51,7 @@ program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
 
 register({
+  babelrc: program.babelrc,
   extensions: program.extensions,
   ignore: program.ignore,
   only: program.only,
