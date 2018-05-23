@@ -24,10 +24,28 @@ export default function normalizeFile(
 
   let inputMap = null;
   if (options.inputSourceMap !== false) {
+    // Check if sourceMap is inline
     inputMap = convertSourceMap.fromSource(code);
+
+    // Remove inline sourceMap from code
     if (inputMap) {
       code = convertSourceMap.removeComments(code);
-    } else if (typeof options.inputSourceMap === "object") {
+    }
+
+    // if source map is not inline check if it's an external file
+    if (!inputMap) {
+      try {
+        inputMap = convertSourceMap.fromMapFileSource(code);
+      } catch (err) {}
+
+      // remove external sourceMappingUrl from code
+      if (inputMap) {
+        code = convertSourceMap.removeMapFileComments(code);
+      }
+    }
+
+    // If no sourceMap is found and a user provides it use that
+    if (!inputMap && typeof options.inputSourceMap === "object") {
       inputMap = convertSourceMap.fromObject(options.inputSourceMap);
     }
   }
