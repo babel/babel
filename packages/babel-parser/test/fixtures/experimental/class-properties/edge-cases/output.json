@@ -1,0 +1,1492 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 381,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 50,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 381,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 50,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 34,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 8,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 8
+            },
+            "identifierName": "A1"
+          },
+          "name": "A1"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 9,
+          "end": 34,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 5,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start": 13,
+              "end": 23,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 3,
+                  "column": 3
+                }
+              },
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start": 22,
+                "end": 23,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 3
+                  },
+                  "identifierName": "a"
+                },
+                "name": "a"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start": 26,
+              "end": 32,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 2
+                },
+                "end": {
+                  "line": 4,
+                  "column": 8
+                }
+              },
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 26,
+                "end": 32,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 8
+                  },
+                  "identifierName": "static"
+                },
+                "name": "static"
+              },
+              "static": false,
+              "value": null
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 36,
+        "end": 50,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 0
+          },
+          "end": {
+            "line": 7,
+            "column": 14
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 42,
+          "end": 44,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 6
+            },
+            "end": {
+              "line": 7,
+              "column": 8
+            },
+            "identifierName": "A2"
+          },
+          "name": "A2"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 45,
+          "end": 50,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 9
+            },
+            "end": {
+              "line": 7,
+              "column": 14
+            }
+          },
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start": 47,
+              "end": 48,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 11
+                },
+                "end": {
+                  "line": 7,
+                  "column": 12
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 47,
+                "end": 48,
+                "loc": {
+                  "start": {
+                    "line": 7,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 7,
+                    "column": 12
+                  },
+                  "identifierName": "a"
+                },
+                "name": "a"
+              },
+              "computed": false,
+              "value": null
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 51,
+        "end": 67,
+        "loc": {
+          "start": {
+            "line": 8,
+            "column": 0
+          },
+          "end": {
+            "line": 8,
+            "column": 16
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 57,
+          "end": 59,
+          "loc": {
+            "start": {
+              "line": 8,
+              "column": 6
+            },
+            "end": {
+              "line": 8,
+              "column": 8
+            },
+            "identifierName": "A3"
+          },
+          "name": "A3"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 60,
+          "end": 67,
+          "loc": {
+            "start": {
+              "line": 8,
+              "column": 9
+            },
+            "end": {
+              "line": 8,
+              "column": 16
+            }
+          },
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start": 62,
+              "end": 65,
+              "loc": {
+                "start": {
+                  "line": 8,
+                  "column": 11
+                },
+                "end": {
+                  "line": 8,
+                  "column": 14
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 62,
+                "end": 65,
+                "loc": {
+                  "start": {
+                    "line": 8,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 8,
+                    "column": 14
+                  },
+                  "identifierName": "get"
+                },
+                "name": "get"
+              },
+              "computed": false,
+              "value": null
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 68,
+        "end": 84,
+        "loc": {
+          "start": {
+            "line": 9,
+            "column": 0
+          },
+          "end": {
+            "line": 9,
+            "column": 16
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 74,
+          "end": 76,
+          "loc": {
+            "start": {
+              "line": 9,
+              "column": 6
+            },
+            "end": {
+              "line": 9,
+              "column": 8
+            },
+            "identifierName": "A4"
+          },
+          "name": "A4"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 77,
+          "end": 84,
+          "loc": {
+            "start": {
+              "line": 9,
+              "column": 9
+            },
+            "end": {
+              "line": 9,
+              "column": 16
+            }
+          },
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start": 79,
+              "end": 82,
+              "loc": {
+                "start": {
+                  "line": 9,
+                  "column": 11
+                },
+                "end": {
+                  "line": 9,
+                  "column": 14
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 79,
+                "end": 82,
+                "loc": {
+                  "start": {
+                    "line": 9,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 9,
+                    "column": 14
+                  },
+                  "identifierName": "set"
+                },
+                "name": "set"
+              },
+              "computed": false,
+              "value": null
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 85,
+        "end": 104,
+        "loc": {
+          "start": {
+            "line": 10,
+            "column": 0
+          },
+          "end": {
+            "line": 10,
+            "column": 19
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 91,
+          "end": 93,
+          "loc": {
+            "start": {
+              "line": 10,
+              "column": 6
+            },
+            "end": {
+              "line": 10,
+              "column": 8
+            },
+            "identifierName": "A5"
+          },
+          "name": "A5"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 94,
+          "end": 104,
+          "loc": {
+            "start": {
+              "line": 10,
+              "column": 9
+            },
+            "end": {
+              "line": 10,
+              "column": 19
+            }
+          },
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start": 96,
+              "end": 102,
+              "loc": {
+                "start": {
+                  "line": 10,
+                  "column": 11
+                },
+                "end": {
+                  "line": 10,
+                  "column": 17
+                }
+              },
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 96,
+                "end": 102,
+                "loc": {
+                  "start": {
+                    "line": 10,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 10,
+                    "column": 17
+                  },
+                  "identifierName": "static"
+                },
+                "name": "static"
+              },
+              "static": false,
+              "value": null
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 105,
+        "end": 123,
+        "loc": {
+          "start": {
+            "line": 11,
+            "column": 0
+          },
+          "end": {
+            "line": 11,
+            "column": 18
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 111,
+          "end": 113,
+          "loc": {
+            "start": {
+              "line": 11,
+              "column": 6
+            },
+            "end": {
+              "line": 11,
+              "column": 8
+            },
+            "identifierName": "A6"
+          },
+          "name": "A6"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 114,
+          "end": 123,
+          "loc": {
+            "start": {
+              "line": 11,
+              "column": 9
+            },
+            "end": {
+              "line": 11,
+              "column": 18
+            }
+          },
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start": 116,
+              "end": 121,
+              "loc": {
+                "start": {
+                  "line": 11,
+                  "column": 11
+                },
+                "end": {
+                  "line": 11,
+                  "column": 16
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 116,
+                "end": 121,
+                "loc": {
+                  "start": {
+                    "line": 11,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 11,
+                    "column": 16
+                  },
+                  "identifierName": "async"
+                },
+                "name": "async"
+              },
+              "computed": false,
+              "value": null
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 125,
+        "end": 152,
+        "loc": {
+          "start": {
+            "line": 13,
+            "column": 0
+          },
+          "end": {
+            "line": 16,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 131,
+          "end": 133,
+          "loc": {
+            "start": {
+              "line": 13,
+              "column": 6
+            },
+            "end": {
+              "line": 13,
+              "column": 8
+            },
+            "identifierName": "A7"
+          },
+          "name": "A7"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 134,
+          "end": 152,
+          "loc": {
+            "start": {
+              "line": 13,
+              "column": 9
+            },
+            "end": {
+              "line": 16,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start": 138,
+              "end": 141,
+              "loc": {
+                "start": {
+                  "line": 14,
+                  "column": 2
+                },
+                "end": {
+                  "line": 14,
+                  "column": 5
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 138,
+                "end": 141,
+                "loc": {
+                  "start": {
+                    "line": 14,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 14,
+                    "column": 5
+                  },
+                  "identifierName": "get"
+                },
+                "name": "get"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassMethod",
+              "start": 144,
+              "end": 150,
+              "loc": {
+                "start": {
+                  "line": 15,
+                  "column": 2
+                },
+                "end": {
+                  "line": 15,
+                  "column": 8
+                }
+              },
+              "static": false,
+              "kind": "method",
+              "key": {
+                "type": "Identifier",
+                "start": 145,
+                "end": 146,
+                "loc": {
+                  "start": {
+                    "line": 15,
+                    "column": 3
+                  },
+                  "end": {
+                    "line": 15,
+                    "column": 4
+                  },
+                  "identifierName": "a"
+                },
+                "name": "a"
+              },
+              "computed": false,
+              "id": null,
+              "generator": true,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 148,
+                "end": 150,
+                "loc": {
+                  "start": {
+                    "line": 15,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 15,
+                    "column": 8
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 154,
+        "end": 184,
+        "loc": {
+          "start": {
+            "line": 18,
+            "column": 0
+          },
+          "end": {
+            "line": 21,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 160,
+          "end": 162,
+          "loc": {
+            "start": {
+              "line": 18,
+              "column": 6
+            },
+            "end": {
+              "line": 18,
+              "column": 8
+            },
+            "identifierName": "A8"
+          },
+          "name": "A8"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 163,
+          "end": 184,
+          "loc": {
+            "start": {
+              "line": 18,
+              "column": 9
+            },
+            "end": {
+              "line": 21,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start": 167,
+              "end": 182,
+              "loc": {
+                "start": {
+                  "line": 19,
+                  "column": 2
+                },
+                "end": {
+                  "line": 20,
+                  "column": 8
+                }
+              },
+              "static": true,
+              "kind": "method",
+              "key": {
+                "type": "Identifier",
+                "start": 177,
+                "end": 178,
+                "loc": {
+                  "start": {
+                    "line": 20,
+                    "column": 3
+                  },
+                  "end": {
+                    "line": 20,
+                    "column": 4
+                  },
+                  "identifierName": "a"
+                },
+                "name": "a"
+              },
+              "computed": false,
+              "id": null,
+              "generator": true,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 180,
+                "end": 182,
+                "loc": {
+                  "start": {
+                    "line": 20,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 20,
+                    "column": 8
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 186,
+        "end": 214,
+        "loc": {
+          "start": {
+            "line": 23,
+            "column": 0
+          },
+          "end": {
+            "line": 26,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 192,
+          "end": 194,
+          "loc": {
+            "start": {
+              "line": 23,
+              "column": 6
+            },
+            "end": {
+              "line": 23,
+              "column": 8
+            },
+            "identifierName": "A9"
+          },
+          "name": "A9"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 195,
+          "end": 214,
+          "loc": {
+            "start": {
+              "line": 23,
+              "column": 9
+            },
+            "end": {
+              "line": 26,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start": 199,
+              "end": 204,
+              "loc": {
+                "start": {
+                  "line": 24,
+                  "column": 2
+                },
+                "end": {
+                  "line": 24,
+                  "column": 7
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 199,
+                "end": 204,
+                "loc": {
+                  "start": {
+                    "line": 24,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 24,
+                    "column": 7
+                  },
+                  "identifierName": "async"
+                },
+                "name": "async"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassMethod",
+              "start": 207,
+              "end": 212,
+              "loc": {
+                "start": {
+                  "line": 25,
+                  "column": 2
+                },
+                "end": {
+                  "line": 25,
+                  "column": 7
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 207,
+                "end": 208,
+                "loc": {
+                  "start": {
+                    "line": 25,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 25,
+                    "column": 3
+                  },
+                  "identifierName": "a"
+                },
+                "name": "a"
+              },
+              "computed": false,
+              "kind": "method",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 210,
+                "end": 212,
+                "loc": {
+                  "start": {
+                    "line": 25,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 25,
+                    "column": 7
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 216,
+        "end": 250,
+        "loc": {
+          "start": {
+            "line": 28,
+            "column": 0
+          },
+          "end": {
+            "line": 32,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 222,
+          "end": 225,
+          "loc": {
+            "start": {
+              "line": 28,
+              "column": 6
+            },
+            "end": {
+              "line": 28,
+              "column": 9
+            },
+            "identifierName": "A10"
+          },
+          "name": "A10"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 226,
+          "end": 250,
+          "loc": {
+            "start": {
+              "line": 28,
+              "column": 10
+            },
+            "end": {
+              "line": 32,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start": 230,
+              "end": 244,
+              "loc": {
+                "start": {
+                  "line": 29,
+                  "column": 2
+                },
+                "end": {
+                  "line": 30,
+                  "column": 7
+                }
+              },
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start": 239,
+                "end": 244,
+                "loc": {
+                  "start": {
+                    "line": 30,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 30,
+                    "column": 7
+                  },
+                  "identifierName": "async"
+                },
+                "name": "async"
+              },
+              "computed": false,
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start": 247,
+              "end": 248,
+              "loc": {
+                "start": {
+                  "line": 31,
+                  "column": 2
+                },
+                "end": {
+                  "line": 31,
+                  "column": 3
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 247,
+                "end": 248,
+                "loc": {
+                  "start": {
+                    "line": 31,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 31,
+                    "column": 3
+                  },
+                  "identifierName": "a"
+                },
+                "name": "a"
+              },
+              "computed": false,
+              "value": null
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 252,
+        "end": 273,
+        "loc": {
+          "start": {
+            "line": 34,
+            "column": 0
+          },
+          "end": {
+            "line": 34,
+            "column": 21
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 258,
+          "end": 261,
+          "loc": {
+            "start": {
+              "line": 34,
+              "column": 6
+            },
+            "end": {
+              "line": 34,
+              "column": 9
+            },
+            "identifierName": "A11"
+          },
+          "name": "A11"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 262,
+          "end": 273,
+          "loc": {
+            "start": {
+              "line": 34,
+              "column": 10
+            },
+            "end": {
+              "line": 34,
+              "column": 21
+            }
+          },
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start": 264,
+              "end": 271,
+              "loc": {
+                "start": {
+                  "line": 34,
+                  "column": 12
+                },
+                "end": {
+                  "line": 34,
+                  "column": 19
+                }
+              },
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 264,
+                "end": 270,
+                "loc": {
+                  "start": {
+                    "line": 34,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 34,
+                    "column": 18
+                  },
+                  "identifierName": "static"
+                },
+                "name": "static"
+              },
+              "static": false,
+              "value": null
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 275,
+        "end": 302,
+        "loc": {
+          "start": {
+            "line": 36,
+            "column": 0
+          },
+          "end": {
+            "line": 38,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 281,
+          "end": 284,
+          "loc": {
+            "start": {
+              "line": 36,
+              "column": 6
+            },
+            "end": {
+              "line": 36,
+              "column": 9
+            },
+            "identifierName": "A12"
+          },
+          "name": "A12"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 285,
+          "end": 302,
+          "loc": {
+            "start": {
+              "line": 36,
+              "column": 10
+            },
+            "end": {
+              "line": 38,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ClassProperty",
+              "start": 289,
+              "end": 300,
+              "loc": {
+                "start": {
+                  "line": 37,
+                  "column": 2
+                },
+                "end": {
+                  "line": 37,
+                  "column": 13
+                }
+              },
+              "computed": false,
+              "key": {
+                "type": "Identifier",
+                "start": 289,
+                "end": 295,
+                "loc": {
+                  "start": {
+                    "line": 37,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 37,
+                    "column": 8
+                  },
+                  "identifierName": "static"
+                },
+                "name": "static"
+              },
+              "static": false,
+              "value": {
+                "type": "NumericLiteral",
+                "start": 298,
+                "end": 299,
+                "loc": {
+                  "start": {
+                    "line": 37,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 37,
+                    "column": 12
+                  }
+                },
+                "extra": {
+                  "rawValue": 0,
+                  "raw": "0"
+                },
+                "value": 0
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 304,
+        "end": 335,
+        "loc": {
+          "start": {
+            "line": 40,
+            "column": 0
+          },
+          "end": {
+            "line": 43,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 310,
+          "end": 313,
+          "loc": {
+            "start": {
+              "line": 40,
+              "column": 6
+            },
+            "end": {
+              "line": 40,
+              "column": 9
+            },
+            "identifierName": "A13"
+          },
+          "name": "A13"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 314,
+          "end": 335,
+          "loc": {
+            "start": {
+              "line": 40,
+              "column": 10
+            },
+            "end": {
+              "line": 43,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start": 318,
+              "end": 333,
+              "loc": {
+                "start": {
+                  "line": 41,
+                  "column": 2
+                },
+                "end": {
+                  "line": 42,
+                  "column": 11
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "StringLiteral",
+                "start": 325,
+                "end": 328,
+                "loc": {
+                  "start": {
+                    "line": 42,
+                    "column": 3
+                  },
+                  "end": {
+                    "line": 42,
+                    "column": 6
+                  }
+                },
+                "extra": {
+                  "rawValue": "a",
+                  "raw": "'a'"
+                },
+                "value": "a"
+              },
+              "computed": true,
+              "kind": "get",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 331,
+                "end": 333,
+                "loc": {
+                  "start": {
+                    "line": 42,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 42,
+                    "column": 11
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 337,
+        "end": 381,
+        "loc": {
+          "start": {
+            "line": 45,
+            "column": 0
+          },
+          "end": {
+            "line": 50,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 343,
+          "end": 346,
+          "loc": {
+            "start": {
+              "line": 45,
+              "column": 6
+            },
+            "end": {
+              "line": 45,
+              "column": 9
+            },
+            "identifierName": "A14"
+          },
+          "name": "A14"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 347,
+          "end": 381,
+          "loc": {
+            "start": {
+              "line": 45,
+              "column": 10
+            },
+            "end": {
+              "line": 50,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start": 351,
+              "end": 379,
+              "loc": {
+                "start": {
+                  "line": 46,
+                  "column": 2
+                },
+                "end": {
+                  "line": 49,
+                  "column": 6
+                }
+              },
+              "static": true,
+              "key": {
+                "type": "Identifier",
+                "start": 366,
+                "end": 372,
+                "loc": {
+                  "start": {
+                    "line": 48,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 48,
+                    "column": 8
+                  },
+                  "identifierName": "static"
+                },
+                "name": "static"
+              },
+              "computed": false,
+              "kind": "get",
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 377,
+                "end": 379,
+                "loc": {
+                  "start": {
+                    "line": 49,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 49,
+                    "column": 6
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

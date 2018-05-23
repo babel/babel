@@ -19,6 +19,6 @@ function asyncTimeout(ms) {
 
 (async function() {
   var value = await asyncValue(42);
-  assert.equal(42, value);
+  expect(42).toBe(value);
   done();
 })();

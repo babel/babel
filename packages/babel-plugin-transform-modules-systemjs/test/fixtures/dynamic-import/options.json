@@ -1,0 +1,3 @@
+{
+  "plugins": ["external-helpers", "syntax-dynamic-import", "transform-modules-systemjs"]
+}

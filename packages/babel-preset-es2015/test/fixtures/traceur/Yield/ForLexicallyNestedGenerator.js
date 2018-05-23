@@ -12,4 +12,4 @@ function accumulate(iterator) {
 
 // ----------------------------------------------------------------------------
 
-assert.equal('1,2,3456', accumulate(forLexicallyNestedGenerator()));
+expect(accumulate(forLexicallyNestedGenerator())).toBe('1,2,3456');

@@ -1,26 +1,26 @@
 var [a = 0] = [];
-assert.equal(0, a);
+expect(a).toBe(0);
 
 var {b = 1} = {};
-assert.equal(1, b);
+expect(b).toBe(1);
 
 var {c = 2} = {c: 3};
-assert.equal(3, c);
+expect(c).toBe(3);
 
 var {d = 4} = Object.create({d: 5});
-assert.equal(5, d);
+expect(d).toBe(5);
 
 var {e: f = 6} = {};
-assert.equal(6, f);
+expect(f).toBe(6);
 
 var {g: h = 7} = {h: 8};
-assert.equal(7, h);
+expect(h).toBe(7);
 
 var [, , , i = 9] = [10, 11, 12];
-assert.equal(9, i);
+expect(i).toBe(9);
 
 function j({x = 42}, expected) {
-  assert.equal(expected, x);
+  expect(expected).toBe(x);
 }
 
 j({}, 42);
@@ -28,20 +28,20 @@ j({x: 43}, 43);
 
 var count = 0;
 var [k = 42] = (count++, [21]);
-assert.equal(21, k);
-assert.equal(1, count);
+expect(k).toBe(21);
+expect(count).toBe(1);
 
 var {x = 1} = {x: undefined};
-assert.equal(x, 1);
+expect(x).toBe(1);
 
 var {'x': x = 2} = {x: undefined};
-assert.equal(x, 2);
+expect(x).toBe(2);
 
 var {['x']: x = 3} = {x: undefined};
-assert.equal(x, 3);
+expect(x).toBe(3);
 
 var [y = 4] = [undefined];
-assert.equal(y, 4);
+expect(y).toBe(4);
 
 
 var xCount = 0;
@@ -66,9 +66,9 @@ var object = {
 };
 
 var {y: {z = 5, w = 6}, v = 7} = object.x;
-assert.equal(z, 5);
-assert.equal(w, 6);
-assert.equal(v, 7);
-assert.equal(xCount, 1);
-assert.equal(yCount, 1);
-assert.equal(zCount, 1);
+expect(z).toBe(5);
+expect(w).toBe(6);
+expect(v).toBe(7);
+expect(xCount).toBe(1);
+expect(yCount).toBe(1);
+expect(zCount).toBe(1);

@@ -1,0 +1,138 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 39,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 4,
+      "column": 2
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 39,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 4,
+        "column": 2
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 37,
+        "end": 39,
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 2
+          }
+        },
+        "expression": {
+          "type": "NumericLiteral",
+          "start": 37,
+          "end": 39,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 0
+            },
+            "end": {
+              "line": 4,
+              "column": 2
+            }
+          },
+          "extra": {
+            "rawValue": 42,
+            "raw": "42"
+          },
+          "value": 42
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Hello, world!",
+            "start": 0,
+            "end": 16,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 16
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": "   Another hello",
+            "start": 18,
+            "end": 36,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 0
+              },
+              "end": {
+                "line": 3,
+                "column": 18
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Hello, world!",
+      "start": 0,
+      "end": 16,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 16
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": "   Another hello",
+      "start": 18,
+      "end": 36,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 0
+        },
+        "end": {
+          "line": 3,
+          "column": 18
+        }
+      }
+    }
+  ]
+}

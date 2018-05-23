@@ -7,8 +7,8 @@
   }
 
   // https://crbug.com/450942
-  assert.equal(typeof new Function`logger('a')`, 'object');
-  assert.deepEqual(log, ['a']);
+  expect(typeof new Function`logger('a')`).toBe('object');
+  expect(log).toEqual(['a']);
 
   log.length = 0;
   function tag(...e) {
@@ -21,8 +21,8 @@
     }
   }
 
-  assert.equal(typeof new tag`a``b``c`, 'object');
-  assert.deepEqual(log, [
+  expect(typeof new tag`a``b``c`).toBe('object');
+  expect(log).toEqual([
     'tag;a',
     'tag;b',
     'tag;c',
@@ -39,6 +39,6 @@
     }
   }
 
-  assert.deepEqual(new C`a``b``c`('test'), { name: 'test' });
-  assert.deepEqual(log, ['a', 'b', 'c', 't']);
+  expect(new C`a``b``c`('test')).toEqual({ name: 'test' });
+  expect(log).toEqual(['a', 'b', 'c', 't']);
 }

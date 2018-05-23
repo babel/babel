@@ -1,4 +1,4 @@
-# babel-helper-define-map
+# @babel/helper-define-map
 
 ## Usage
 

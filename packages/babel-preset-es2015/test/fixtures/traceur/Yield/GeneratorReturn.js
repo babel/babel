@@ -1,5 +1,5 @@
 function assertClosed(g) {
-  assert.deepEqual({value: undefined, done: true}, g.next());
+  expect(g.next()).toEqual({value: undefined, done: true});
 }
 
 //-----------------------------------------------------------------------------
@@ -71,16 +71,16 @@ var tests = [
 
   tests.forEach(([G, y, r]) => {
     var g = W(G)();
-    y.forEach((x) => assert.deepEqual({value: x, done: false}, g.next()));
+    y.forEach(x => expect(g.next()).toEqual({value: x, done: false}));
 
-    assert.deepEqual({value: r, done: true}, g.next());
+    expect(g.next()).toEqual({value: r, done: true});
     assertClosed(g);
   });
 
   //----
 
   g = W(G6)();
-  assert.deepEqual({value: 1000, done: false}, g.next());
-  assert.deepEqual({value: 43, done: true}, g.throw());
+  expect(g.next()).toEqual({value: 1000, done: false});
+  expect(g.throw()).toEqual({value: 43, done: true});
 
 });

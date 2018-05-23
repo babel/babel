@@ -5,13 +5,22 @@ const through = require("through2");
 const chalk = require("chalk");
 const newer = require("gulp-newer");
 const babel = require("gulp-babel");
-const watch = require("gulp-watch");
+const gulpWatch = require("gulp-watch");
 const gutil = require("gulp-util");
+const filter = require("gulp-filter");
 const gulp = require("gulp");
 const path = require("path");
+const webpack = require("webpack");
+const merge = require("merge-stream");
+const rollup = require("rollup-stream");
+const source = require("vinyl-source-stream");
+const buffer = require("vinyl-buffer");
+const rollupBabel = require("rollup-plugin-babel");
+const rollupNodeResolve = require("rollup-plugin-node-resolve");
+const registerStandalonePackageTask = require("./scripts/gulp-tasks")
+  .registerStandalonePackageTask;
 
-const base = path.join(__dirname, "packages");
-const scripts = "./packages/*/src/**/*.js";
+const sources = ["codemods", "packages"];
 
 function swapSrcWithLib(srcPath) {
   const parts = srcPath.split(path.sep);
@@ -19,34 +28,145 @@ function swapSrcWithLib(srcPath) {
   return parts.join(path.sep);
 }
 
-gulp.task("default", ["build"]);
+function getGlobFromSource(source) {
+  return `./${source}/*/src/**/*.js`;
+}
 
-gulp.task("build", function () {
-  return gulp.src(scripts, { base: base })
-    .pipe(plumber({
-      errorHandler: function (err) {
-        gutil.log(err.stack);
-      },
-    }))
-    .pipe(newer({
-      dest: base,
-      map: swapSrcWithLib,
-    }))
-    .pipe(through.obj(function (file, enc, callback) {
-      gutil.log("Compiling", "'" + chalk.cyan(file.relative) + "'...");
-      callback(null, file);
-    }))
-    .pipe(babel())
-    .pipe(through.obj(function (file, enc, callback) {
-      // Passing 'file.relative' because newer() above uses a relative path and this keeps it consistent.
-      file.path = path.resolve(file.base, swapSrcWithLib(file.relative));
-      callback(null, file);
-    }))
-    .pipe(gulp.dest(base));
-});
+function getIndexFromPackage(name) {
+  return `${name}/src/index.js`;
+}
 
-gulp.task("watch", ["build"], function () {
-  watch(scripts, { debounceDelay: 200 }, function () {
-    gulp.start("build");
+function compilationLogger(rollup) {
+  return through.obj(function(file, enc, callback) {
+    gutil.log(
+      `Compiling '${chalk.cyan(file.relative)}'${
+        rollup ? " with rollup " : ""
+      }...`
+    );
+    callback(null, file);
   });
+}
+
+function errorsLogger() {
+  return plumber({
+    errorHandler(err) {
+      gutil.log(err.stack);
+    },
+  });
+}
+
+function rename(fn) {
+  return through.obj(function(file, enc, callback) {
+    file.path = fn(file);
+    callback(null, file);
+  });
+}
+
+function buildBabel(exclude) {
+  return merge(
+    sources.map(source => {
+      const base = path.join(__dirname, source);
+
+      let stream = gulp.src(getGlobFromSource(source), { base: base });
+
+      if (exclude) {
+        const filters = exclude.map(p => `!**/${p}/**`);
+        filters.unshift("**");
+        stream = stream.pipe(filter(filters));
+      }
+
+      return stream
+        .pipe(errorsLogger())
+        .pipe(newer({ dest: base, map: swapSrcWithLib }))
+        .pipe(compilationLogger())
+        .pipe(babel())
+        .pipe(
+          // Passing 'file.relative' because newer() above uses a relative
+          // path and this keeps it consistent.
+          rename(file => path.resolve(file.base, swapSrcWithLib(file.relative)))
+        )
+        .pipe(gulp.dest(base));
+    })
+  );
+}
+
+function buildRollup(packages) {
+  return merge(
+    packages.map(pkg => {
+      return rollup({
+        input: getIndexFromPackage(pkg),
+        format: "cjs",
+        plugins: [
+          rollupBabel({
+            envName: "babel-parser",
+          }),
+          rollupNodeResolve(),
+        ],
+      })
+        .pipe(source("index.js"))
+        .pipe(buffer())
+        .pipe(errorsLogger())
+        .pipe(compilationLogger(/* rollup */ true))
+        .pipe(gulp.dest(path.join(pkg, "lib")));
+    })
+  );
+}
+
+gulp.task("build", function() {
+  const bundles = ["packages/babel-parser"];
+
+  return merge([buildBabel(/* exclude */ bundles), buildRollup(bundles)]);
 });
+
+gulp.task("default", gulp.series("build"));
+
+gulp.task("build-no-bundle", () => buildBabel());
+
+gulp.task(
+  "watch",
+  gulp.series("build-no-bundle", function watch() {
+    gulpWatch(
+      sources.map(getGlobFromSource),
+      { debounceDelay: 200 },
+      gulp.task("build-no-bundle")
+    );
+  })
+);
+
+registerStandalonePackageTask(
+  gulp,
+  "babel",
+  "Babel",
+  path.join(__dirname, "packages"),
+  require("./packages/babel-core/package.json").version
+);
+
+const presetEnvWebpackPlugins = [
+  new webpack.NormalModuleReplacementPlugin(
+    /\.\/available-plugins/,
+    require.resolve(
+      path.join(
+        __dirname,
+        "./packages/babel-preset-env-standalone/src/available-plugins"
+      )
+    )
+  ),
+  new webpack.NormalModuleReplacementPlugin(
+    /caniuse-lite\/data\/regions\/.+/,
+    require.resolve(
+      path.join(
+        __dirname,
+        "./packages/babel-preset-env-standalone/src/caniuse-lite-regions"
+      )
+    )
+  ),
+];
+
+registerStandalonePackageTask(
+  gulp,
+  "babel-preset-env",
+  "babelPresetEnv",
+  path.join(__dirname, "packages"),
+  require("./packages/babel-preset-env/package.json").version,
+  presetEnvWebpackPlugins
+);

@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "syntax-async-functions",
-    ["transform-es2015-classes", { "loose": true }]
-  ]
-}

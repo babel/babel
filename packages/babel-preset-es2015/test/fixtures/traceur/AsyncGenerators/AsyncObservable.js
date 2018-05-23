@@ -12,9 +12,9 @@ async function* f() {
   var g = f();
   for (var i on g) {
     list.push(i);
-    await Promise.resolve().then(() => list.push(i + 3));  
+    await Promise.resolve().then(() => list.push(i + 3));
   }
-  assert.deepEqual(list, [1, 4, 2, 5, 3, 6]);
+  expect(list).toEqual([1, 4, 2, 5, 3, 6]);
 
   done();
 })().catch(done);

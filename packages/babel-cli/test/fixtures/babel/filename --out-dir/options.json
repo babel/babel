@@ -1,0 +1,3 @@
+{
+  "args": ["src/foo.js", "--out-dir", "lib", "--verbose"]
+}

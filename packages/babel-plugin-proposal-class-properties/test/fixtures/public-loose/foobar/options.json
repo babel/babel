@@ -1,0 +1,7 @@
+{
+  "plugins": ["external-helpers", ["proposal-class-properties", {"loose": true}]],
+  "presets": [
+    ["stage-0", { "decoratorsLegacy": true }],
+    "es2015"
+  ]
+}

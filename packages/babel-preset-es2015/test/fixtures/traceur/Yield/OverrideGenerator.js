@@ -8,7 +8,7 @@ f = 42;
 
 var g = f2();
 
-assert.deepEqual(g.next(), {value: 1, done: false});
-assert.deepEqual(g.next(), {value: undefined, done: true});
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.next()).toEqual({value: undefined, done: true});
 
-assert.instanceOf(g, f2);
+expect(g).toBeInstanceOf(f2);

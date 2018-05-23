@@ -3,6 +3,7 @@
     "src",
     "--out-dir", "lib",
     "--copy-files",
-    "--ignore", "src/foo/*"
+    "--ignore", "src/foo/*",
+    "--verbose"
   ]
 }

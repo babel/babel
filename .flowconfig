@@ -1,16 +1,27 @@
 [ignore]
+.*/build/.*
 .*/packages/.*/lib
 .*/packages/.*/test
+.*/codemods/.*/lib
+.*/codemods/.*/test
+.*/node_modules/conventional-changelog-core/
 
 [include]
 packages/*/src
+codemods/*/src
 
 [libs]
 lib/file.js
 lib/parser.js
-lib/types.js
+lib/third-party-libs.js.flow
+packages/babel-types/lib/index.js.flow
 
 [options]
-strip_root=true
+include_warnings=true
 suppress_comment= \\(.\\|\n\\)*\\$FlowFixMe
 suppress_comment= \\(.\\|\n\\)*\\$FlowIssue
+suppress_comment= \\(.\\|\n\\)*\\$FlowIgnore
+suppress_type=$FlowFixMe
+suppress_type=$FlowSubtype
+esproposal.export_star_as=enable
+module.name_mapper='^@babel\/\([a-zA-Z0-9_\-]+\)$' -> '<PROJECT_ROOT>/packages/babel-\1/src/index'

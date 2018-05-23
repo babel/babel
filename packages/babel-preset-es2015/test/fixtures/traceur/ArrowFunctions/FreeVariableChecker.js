@@ -1,2 +1,2 @@
 var identity = (identityParam) => identityParam;
-assert.equal(1234, identity(1234));
+expect(1234).toBe(identity(1234));

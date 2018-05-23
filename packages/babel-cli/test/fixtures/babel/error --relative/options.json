@@ -1,0 +1,4 @@
+{
+  "args": ["--relative"],
+  "stderrContains": true
+}

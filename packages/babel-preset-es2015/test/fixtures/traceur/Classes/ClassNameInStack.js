@@ -9,7 +9,7 @@ try {
   fail('Should have thrown');
 } catch (ex) {
   if (ex.stack)
-    assert.isTrue(String(ex.stack).indexOf('MyClassName') >= 0);
+    expect(String(ex.stack)).toEqual(expect.stringContaining('MyClassName'));
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -25,5 +25,5 @@ try {
   fail('Should have thrown');
 } catch (ex) {
   if (ex.stack)
-    assert.isTrue(String(ex.stack).indexOf('MySecondClass') >= 0);
+    expect(String(ex.stack)).toEqual(expect.stringContaining('MySecondClass'));
 }

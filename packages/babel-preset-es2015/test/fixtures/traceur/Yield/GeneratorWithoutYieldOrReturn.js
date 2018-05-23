@@ -5,6 +5,6 @@ function* f() {
 }
 
 var g = f();
-assert.equal(x, 0);
-assert.deepEqual(g.next(), {done: true, value: undefined});
-assert.equal(x, 1);
+expect(x).toBe(0);
+expect(g.next()).toEqual({done: true, value: undefined});
+expect(x).toBe(1);

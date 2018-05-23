@@ -1,0 +1,121 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 9,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 9
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 9,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 9
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 9,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 9
+          }
+        },
+        "expression": {
+          "type": "AssignmentExpression",
+          "start": 0,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            }
+          },
+          "operator": "=",
+          "left": {
+            "type": "ArrayPattern",
+            "start": 0,
+            "end": 5,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 5
+              }
+            },
+            "elements": [
+              {
+                "type": "Identifier",
+                "start": 1,
+                "end": 2,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 2
+                  },
+                  "identifierName": "x"
+                },
+                "name": "x"
+              },
+              null
+            ]
+          },
+          "right": {
+            "type": "NumericLiteral",
+            "start": 8,
+            "end": 9,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 8
+              },
+              "end": {
+                "line": 1,
+                "column": 9
+              }
+            },
+            "extra": {
+              "rawValue": 1,
+              "raw": "1"
+            },
+            "value": 1
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

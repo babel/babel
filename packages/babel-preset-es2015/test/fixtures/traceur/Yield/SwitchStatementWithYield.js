@@ -11,13 +11,13 @@ function* f(x) {
 }
 
 var g = f(1);
-assert.deepEqual(g.next(), {value: 1, done: false});
-assert.deepEqual(g.next(2), {value: 2, done: true});
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.next(2)).toEqual({value: 2, done: true});
 
 g = f(3);
-assert.deepEqual(g.next(), {value: 3, done: false});
-assert.deepEqual(g.next(1), {value: 1, done: true});
+expect(g.next()).toEqual({value: 3, done: false});
+expect(g.next(1)).toEqual({value: 1, done: true});
 
 var g = f(4);
-assert.deepEqual(g.next(), {value: 4, done: false});
-assert.deepEqual(g.next(55), {value: 3, done: true});
+expect(g.next()).toEqual({value: 4, done: false});
+expect(g.next(55)).toEqual({value: 3, done: true});

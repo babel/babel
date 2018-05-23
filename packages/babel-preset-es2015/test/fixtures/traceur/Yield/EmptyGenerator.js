@@ -2,4 +2,4 @@ function* f() {
 }
 
 var g = f();
-assert.deepEqual(g.next(), {done: true, value: undefined});
+expect(g.next()).toEqual({done: true, value: undefined});

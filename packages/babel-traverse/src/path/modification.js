@@ -3,7 +3,7 @@
 import { path as pathCache } from "../cache";
 import PathHoister from "./lib/hoister";
 import NodePath from "./index";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 /**
  * Insert the provided nodes before the current one.
@@ -14,28 +14,40 @@ export function insertBefore(nodes) {
 
   nodes = this._verifyNodeList(nodes);
 
-  if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
-    return this.parentPath.insertBefore(nodes);
+  const { parentPath } = this;
+
+  if (
+    parentPath.isExpressionStatement() ||
+    parentPath.isLabeledStatement() ||
+    parentPath.isExportNamedDeclaration() ||
+    (parentPath.isExportDefaultDeclaration() && this.isDeclaration())
+  ) {
+    return parentPath.insertBefore(nodes);
   } else if (
-    this.isNodeType("Expression") ||
-    (this.parentPath.isForStatement() && this.key === "init")
+    (this.isNodeType("Expression") &&
+      this.listKey !== "params" &&
+      this.listKey !== "arguments") ||
+    (parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) nodes.push(this.node);
-    this.replaceExpressionWithStatements(nodes);
-  } else {
-    this._maybePopFromStatements(nodes);
-    if (Array.isArray(this.container)) {
-      return this._containerInsertBefore(nodes);
-    } else if (this.isStatementOrBlock()) {
-      if (this.node) nodes.push(this.node);
-      this._replaceWith(t.blockStatement(nodes));
-    } else {
-      throw new Error("We don't know what to do with this node type. " +
-        "We were previously a Statement but we can't fit in here?");
-    }
-  }
+    return this.replaceExpressionWithStatements(nodes);
+  } else if (Array.isArray(this.container)) {
+    return this._containerInsertBefore(nodes);
+  } else if (this.isStatementOrBlock()) {
+    const shouldInsertCurrentNode =
+      this.node &&
+      (!this.isExpressionStatement() || this.node.expression != null);
 
-  return [this];
+    this.replaceWith(
+      t.blockStatement(shouldInsertCurrentNode ? [this.node] : []),
+    );
+    return this.unshiftContainer("body", nodes);
+  } else {
+    throw new Error(
+      "We don't know what to do with this node type. " +
+        "We were previously a Statement but we can't fit in here?",
+    );
+  }
 }
 
 export function _containerInsert(from, nodes) {
@@ -43,27 +55,14 @@ export function _containerInsert(from, nodes) {
 
   const paths = [];
 
+  this.container.splice(from, 0, ...nodes);
   for (let i = 0; i < nodes.length; i++) {
     const to = from + i;
-    const node = nodes[i];
-    this.container.splice(to, 0, node);
+    const path = this.getSibling(to);
+    paths.push(path);
 
-    if (this.context) {
-      const path = this.context.create(this.parent, this.container, to, this.listKey);
-
-      // While this path may have a context, there is currently no guarantee that the context
-      // will be the active context, because `popContext` may leave a final context in place.
-      // We should remove this `if` and always push once #4145 has been resolved.
-      if (this.context.queue) path.pushContext(this.context);
-      paths.push(path);
-    } else {
-      paths.push(NodePath.get({
-        parentPath: this.parentPath,
-        parent: this.parent,
-        container: this.container,
-        listKey: this.listKey,
-        key: to,
-      }));
+    if (this.context && this.context.queue) {
+      path.pushContext(this.context);
     }
   }
 
@@ -71,7 +70,7 @@ export function _containerInsert(from, nodes) {
 
   for (const path of paths) {
     path.setScope();
-    path.debug(() => "Inserted.");
+    path.debug("Inserted.");
 
     for (const context of contexts) {
       context.maybeQueue(path, true);
@@ -89,16 +88,6 @@ export function _containerInsertAfter(nodes) {
   return this._containerInsert(this.key + 1, nodes);
 }
 
-export function _maybePopFromStatements(nodes) {
-  const last = nodes[nodes.length - 1];
-  const isIdentifier = t.isIdentifier(last) ||
-    (t.isExpressionStatement(last) && t.isIdentifier(last.expression));
-
-  if (isIdentifier && !this.isCompletionRecord()) {
-    nodes.pop();
-  }
-}
-
 /**
  * Insert the provided nodes after the current one. When inserting nodes after an
  * expression, ensure that the completion record is correct by pushing the current node.
@@ -109,32 +98,51 @@ export function insertAfter(nodes) {
 
   nodes = this._verifyNodeList(nodes);
 
-  if (this.parentPath.isExpressionStatement() || this.parentPath.isLabeledStatement()) {
-    return this.parentPath.insertAfter(nodes);
+  const { parentPath } = this;
+  if (
+    parentPath.isExpressionStatement() ||
+    parentPath.isLabeledStatement() ||
+    parentPath.isExportNamedDeclaration() ||
+    (parentPath.isExportDefaultDeclaration() && this.isDeclaration())
+  ) {
+    return parentPath.insertAfter(nodes);
   } else if (
     this.isNodeType("Expression") ||
-    (this.parentPath.isForStatement() && this.key === "init")
+    (parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) {
-      const temp = this.scope.generateDeclaredUidIdentifier();
-      nodes.unshift(t.expressionStatement(t.assignmentExpression("=", temp, this.node)));
-      nodes.push(t.expressionStatement(temp));
+      let { scope } = this;
+      // Inserting after the computed key of a method should insert the
+      // temporary binding in the method's parent's scope.
+      if (parentPath.isMethod({ computed: true, key: this.node })) {
+        scope = scope.parent;
+      }
+      const temp = scope.generateDeclaredUidIdentifier();
+      nodes.unshift(
+        t.expressionStatement(
+          t.assignmentExpression("=", t.cloneNode(temp), this.node),
+        ),
+      );
+      nodes.push(t.expressionStatement(t.cloneNode(temp)));
     }
-    this.replaceExpressionWithStatements(nodes);
-  } else {
-    this._maybePopFromStatements(nodes);
-    if (Array.isArray(this.container)) {
-      return this._containerInsertAfter(nodes);
-    } else if (this.isStatementOrBlock()) {
-      if (this.node) nodes.unshift(this.node);
-      this._replaceWith(t.blockStatement(nodes));
-    } else {
-      throw new Error("We don't know what to do with this node type. " +
-        "We were previously a Statement but we can't fit in here?");
-    }
-  }
+    return this.replaceExpressionWithStatements(nodes);
+  } else if (Array.isArray(this.container)) {
+    return this._containerInsertAfter(nodes);
+  } else if (this.isStatementOrBlock()) {
+    const shouldInsertCurrentNode =
+      this.node &&
+      (!this.isExpressionStatement() || this.node.expression != null);
 
-  return [this];
+    this.replaceWith(
+      t.blockStatement(shouldInsertCurrentNode ? [this.node] : []),
+    );
+    return this.pushContainer("body", nodes);
+  } else {
+    throw new Error(
+      "We don't know what to do with this node type. " +
+        "We were previously a Statement but we can't fit in here?",
+    );
+  }
 }
 
 /**
@@ -178,7 +186,9 @@ export function _verifyNodeList(nodes) {
 
     if (msg) {
       const type = Array.isArray(node) ? "array" : typeof node;
-      throw new Error(`Node list ${msg} with the index of ${i} and type of ${type}`);
+      throw new Error(
+        `Node list ${msg} with the index of ${i} and type of ${type}`,
+      );
     }
   }
 

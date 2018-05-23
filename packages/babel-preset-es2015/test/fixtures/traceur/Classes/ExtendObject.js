@@ -1,4 +1,4 @@
 // Can no longer extend objects.
-assert.throw(function() {
+expect(function() {
   class C extends {} {}
-}, TypeError);
+}).toThrow(TypeError);

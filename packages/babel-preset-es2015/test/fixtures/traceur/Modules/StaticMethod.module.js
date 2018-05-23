@@ -1,2 +1,2 @@
 import {TestClass} from './resources/TestClass.js';
-assert.equal(TestClass.method(), 42);
+expect(TestClass.method()).toBe(42);

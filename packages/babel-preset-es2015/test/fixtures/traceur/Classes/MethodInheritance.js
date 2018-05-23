@@ -24,9 +24,12 @@ assertNoOwnProperties(a);
 assertNoOwnProperties(b);
 assertNoOwnProperties(c);
 
-assertHasOwnProperty(pa, 'ma');
-assertLacksOwnProperty(pa, 'mb', 'mc');
-assertHasOwnProperty(pb, 'mb');
-assertLacksOwnProperty(pb, 'ma', 'mc');
-assertHasOwnProperty(pc, 'mc');
-assertLacksOwnProperty(pc, 'ma', 'mb');
+expect(pa).toHaveProperty('ma');
+expect(pa).not.toHaveProperty('mb');
+expect(pa).not.toHaveProperty('mc');
+expect(pb).toHaveProperty('mb');
+expect(pb).not.toHaveProperty('ma');
+expect(pb).not.toHaveProperty('mc');
+expect(pc).toHaveProperty('mc');
+expect(pc).not.toHaveProperty('ma');
+expect(pc).not.toHaveProperty('mb');

@@ -11,7 +11,7 @@ async function* f() {
   for (var i on g) {
     list.push(i);
   }
-  assert.deepEqual(list, [1]);
+  expect(list).toEqual([1]);
 
   done();
 })().catch(done);

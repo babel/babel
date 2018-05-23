@@ -9,4 +9,4 @@ class Foo {
 var foo = new Foo();
 foo.foo = function() { value = 2; };
 foo.foo();
-assert.equal(value, 2);
+expect(value).toBe(2);

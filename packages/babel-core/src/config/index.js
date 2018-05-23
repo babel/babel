@@ -1,30 +1,26 @@
-import type Plugin from "./plugin";
-import OptionManager from "./option-manager";
+// @flow
 
-export type ResolvedConfig = {
-  options: Object,
-  passes: Array<Array<Plugin>>,
-};
+import loadFullConfig from "./full";
+export type {
+  ResolvedConfig,
+  InputOptions,
+  PluginPasses,
+  Plugin,
+} from "./full";
 
-/**
- * Standard API for loading Babel configuration data. Not for public consumption.
- */
-export default function loadConfig(opts: Object): ResolvedConfig|null {
-  const mergedOpts = new OptionManager().init(opts);
-  if (!mergedOpts) return null;
+export { loadFullConfig as default };
+export { loadPartialConfig } from "./partial";
+export type { PartialConfig } from "./partial";
 
-  let passes = [];
-  if (mergedOpts.plugins) {
-    passes.push(mergedOpts.plugins);
+export function loadOptions(opts: {}): Object | null {
+  const config = loadFullConfig(opts);
+
+  return config ? config.options : null;
+}
+
+// For easier backward-compatibility, provide an API like the one we exposed in Babel 6.
+export class OptionManager {
+  init(opts: {}) {
+    return loadOptions(opts);
   }
-
-  // With "passPerPreset" enabled there may still be presets in the options.
-  if (mergedOpts.presets) {
-    passes = passes.concat(mergedOpts.presets.map((preset) => preset.plugins).filter(Boolean));
-  }
-
-  return {
-    options: mergedOpts,
-    passes,
-  };
 }

@@ -1,5 +1,5 @@
-import type { Scope } from "babel-traverse";
-import * as t from "babel-types";
+import type { Scope } from "@babel/traverse";
+import * as t from "@babel/types";
 
 function getObjRef(node, nodes, file, scope) {
   let ref;
@@ -20,7 +20,7 @@ function getObjRef(node, nodes, file, scope) {
   } else if (t.isMemberExpression(node)) {
     ref = node.object;
 
-    if (t.isSuper(ref) || t.isIdentifier(ref) && scope.hasBinding(ref.name)) {
+    if (t.isSuper(ref) || (t.isIdentifier(ref) && scope.hasBinding(ref.name))) {
       // the object reference that we need to save is locally declared
       // so as per the previous comment we can be 100% sure evaluating
       // it multiple times will be safe
@@ -32,9 +32,8 @@ function getObjRef(node, nodes, file, scope) {
   }
 
   const temp = scope.generateUidIdentifierBasedOnNode(ref);
-  nodes.push(t.variableDeclaration("var", [
-    t.variableDeclarator(temp, ref),
-  ]));
+  scope.push({ id: temp });
+  nodes.push(t.assignmentExpression("=", t.cloneNode(temp), t.cloneNode(ref)));
   return temp;
 }
 
@@ -44,21 +43,20 @@ function getPropRef(node, nodes, file, scope) {
   if (t.isLiteral(key) && t.isPureish(key)) return key;
 
   const temp = scope.generateUidIdentifierBasedOnNode(prop);
-  nodes.push(t.variableDeclaration("var", [
-    t.variableDeclarator(temp, prop),
-  ]));
+  scope.push({ id: temp });
+  nodes.push(t.assignmentExpression("=", t.cloneNode(temp), t.cloneNode(prop)));
   return temp;
 }
 
-export default function (
+export default function(
   node: Object,
   nodes: Array<Object>,
   file,
   scope: Scope,
   allowedSingleIdent?: boolean,
 ): {
-  uid: Object;
-  ref: Object;
+  uid: Object,
+  ref: Object,
 } {
   let obj;
   if (t.isIdentifier(node) && allowedSingleIdent) {
@@ -70,12 +68,13 @@ export default function (
   let ref, uid;
 
   if (t.isIdentifier(node)) {
-    ref = node;
+    ref = t.cloneNode(node);
     uid = obj;
   } else {
     const prop = getPropRef(node, nodes, file, scope);
     const computed = node.computed || t.isLiteral(prop);
-    uid = ref = t.memberExpression(obj, prop, computed);
+    uid = t.memberExpression(t.cloneNode(obj), t.cloneNode(prop), computed);
+    ref = t.memberExpression(t.cloneNode(obj), t.cloneNode(prop), computed);
   }
 
   return {

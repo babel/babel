@@ -1,8 +1,8 @@
 {
   "plugins": [
-    "transform-es2015-parameters",
+    "transform-parameters",
     "transform-react-constant-elements",
-    "transform-es2015-block-scoping",
+    "transform-block-scoping",
     "syntax-jsx"
   ]
 }

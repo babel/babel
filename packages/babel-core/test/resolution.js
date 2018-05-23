@@ -1,56 +1,344 @@
-import assert from "assert";
-import async from "async";
 import * as babel from "../lib/index";
-import fs from "fs";
 import path from "path";
 
-// Test that plugins & presets are resolved relative to `filename`.
-describe("addon resolution", function () {
-  it("addon resolution", function (done) {
-    const fixtures = {};
-    const paths = {};
+describe("addon resolution", function() {
+  const base = path.join(__dirname, "fixtures", "resolution");
+  let cwd;
 
-    paths.fixtures = path.join(
-      __dirname,
-      "fixtures",
-      "resolution",
-      "resolve-addons-relative-to-file"
+  beforeEach(function() {
+    cwd = process.cwd();
+    process.chdir(base);
+  });
+
+  afterEach(function() {
+    process.chdir(cwd);
+  });
+
+  it("should find module: presets", function() {
+    process.chdir("module-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["module:preset"],
+    });
+  });
+
+  it("should find module: plugins", function() {
+    process.chdir("module-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["module:plugin"],
+    });
+  });
+
+  it("should find standard presets", function() {
+    process.chdir("standard-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["mod"],
+    });
+  });
+
+  it("should find standard plugins", function() {
+    process.chdir("standard-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["mod"],
+    });
+  });
+
+  it("should find standard presets with an existing prefix", function() {
+    process.chdir("standard-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["babel-preset-mod"],
+    });
+  });
+
+  it("should find standard plugins with an existing prefix", function() {
+    process.chdir("standard-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["babel-plugin-mod"],
+    });
+  });
+
+  it("should find @babel scoped presets", function() {
+    process.chdir("babel-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["@babel/foo"],
+    });
+  });
+
+  it("should find @babel scoped plugins", function() {
+    process.chdir("babel-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["@babel/foo"],
+    });
+  });
+
+  it("should find @babel scoped presets with an existing prefix", function() {
+    process.chdir("babel-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["@babel/preset-foo"],
+    });
+  });
+
+  it("should find @babel scoped plugins", function() {
+    process.chdir("babel-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["@babel/plugin-foo"],
+    });
+  });
+
+  it("should find @foo scoped presets", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["@foo/mod"],
+    });
+  });
+
+  it("should find @foo scoped plugins", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["@foo/mod"],
+    });
+  });
+
+  it("should find @foo scoped presets with an existing prefix", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["@foo/babel-preset-mod"],
+    });
+  });
+
+  it("should find @foo scoped plugins with an existing prefix", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["@foo/babel-plugin-mod"],
+    });
+  });
+
+  it("should find relative path presets", function() {
+    process.chdir("relative-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["./dir/preset.js"],
+    });
+  });
+
+  it("should find relative path plugins", function() {
+    process.chdir("relative-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["./dir/plugin.js"],
+    });
+  });
+
+  it("should find module file presets", function() {
+    process.chdir("nested-module-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["mod/preset"],
+    });
+  });
+
+  it("should find module file plugins", function() {
+    process.chdir("nested-module-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["mod/plugin"],
+    });
+  });
+
+  it("should find @foo scoped module file presets", function() {
+    process.chdir("scoped-nested-module-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["@foo/mod/preset"],
+    });
+  });
+
+  it("should find @foo scoped module file plugins", function() {
+    process.chdir("scoped-nested-module-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["@foo/mod/plugin"],
+    });
+  });
+
+  it("should find @babel scoped module file presets", function() {
+    process.chdir("babel-scoped-nested-module-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["@babel/mod/preset"],
+    });
+  });
+
+  it("should find @babel scoped module file plugins", function() {
+    process.chdir("babel-scoped-nested-module-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["@babel/mod/plugin"],
+    });
+  });
+
+  it("should throw about module: usage for presets", function() {
+    process.chdir("throw-module-paths");
+
+    expect(() => {
+      babel.transform("", {
+        filename: "filename.js",
+        babelrc: false,
+        presets: ["foo"],
+      });
+    }).toThrow(
+      /Cannot find module 'babel-preset-foo'.*\n- If you want to resolve "foo", use "module:foo"/,
     );
+  });
 
-    async.each(
-      ["actual", "expected"],
-      function (key, mapDone) {
-        paths[key] = path.join(paths.fixtures, key + ".js");
-        fs.readFile(paths[key], { encoding: "utf8" }, function (err, data) {
-          if (err) return mapDone(err);
-          fixtures[key] = data.trim();
-          mapDone();
-        });
-      },
-      fixturesReady
+  it("should throw about module: usage for plugins", function() {
+    process.chdir("throw-module-paths");
+
+    expect(() => {
+      babel.transform("", {
+        filename: "filename.js",
+        babelrc: false,
+        plugins: ["foo"],
+      });
+    }).toThrow(
+      /Cannot find module 'babel-plugin-foo'.*\n- If you want to resolve "foo", use "module:foo"/,
     );
+  });
 
-    function fixturesReady (err) {
-      if (err) return done(err);
+  it("should throw about @babel usage for presets", function() {
+    process.chdir("throw-babel-paths");
 
-      const orignalCwd = process.cwd();
-      try {
-        process.chdir(paths.fixtures);
+    expect(() => {
+      babel.transform("", {
+        filename: "filename.js",
+        babelrc: false,
+        presets: ["foo"],
+      });
+    }).toThrow(
+      /Cannot find module 'babel-preset-foo'.*\n- Did you mean "@babel\/foo"\?/,
+    );
+  });
 
-        const actual = babel.transform(fixtures.actual, {
-          babelrc: false,
-          filename: paths.actual,
-          plugins: ["addons/plugin"],
-          presets: ["addons/preset"],
-        }).code;
+  it("should throw about @babel usage for plugins", function() {
+    process.chdir("throw-babel-paths");
 
-        assert.equal(actual, fixtures.expected);
-      } finally {
-        process.chdir(orignalCwd);
-      }
+    expect(() => {
+      babel.transform("", {
+        filename: "filename.js",
+        babelrc: false,
+        plugins: ["foo"],
+      });
+    }).toThrow(
+      /Cannot find module 'babel-plugin-foo'.*\n- Did you mean "@babel\/foo"\?/,
+    );
+  });
 
-      done();
-    }
-    // fixturesReady
+  it("should throw about passing a preset as a plugin", function() {
+    process.chdir("throw-opposite-paths");
+
+    expect(() => {
+      babel.transform("", {
+        filename: "filename.js",
+        babelrc: false,
+        presets: ["testplugin"],
+      });
+    }).toThrow(
+      /Cannot find module 'babel-preset-testplugin'.*\n- Did you accidentally pass a preset as a plugin\?/,
+    );
+  });
+
+  it("should throw about passing a plugin as a preset", function() {
+    process.chdir("throw-opposite-paths");
+
+    expect(() => {
+      babel.transform("", {
+        filename: "filename.js",
+        babelrc: false,
+        plugins: ["testpreset"],
+      });
+    }).toThrow(
+      /Cannot find module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a plugin as a preset\?/,
+    );
+  });
+
+  it("should throw about missing presets", function() {
+    process.chdir("throw-missing-paths");
+
+    expect(() => {
+      babel.transform("", {
+        filename: "filename.js",
+        babelrc: false,
+        presets: ["foo"],
+      });
+    }).toThrow(/Cannot find module 'babel-preset-foo'/);
+  });
+
+  it("should throw about missing plugins", function() {
+    process.chdir("throw-missing-paths");
+
+    expect(() => {
+      babel.transform("", {
+        filename: "filename.js",
+        babelrc: false,
+        plugins: ["foo"],
+      });
+    }).toThrow(/Cannot find module 'babel-plugin-foo'/);
   });
 });

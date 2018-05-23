@@ -1,0 +1,178 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 28,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 28
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 28,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 28
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 28,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 28
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            },
+            "identifierName": "Foo"
+          },
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 10,
+          "end": 28,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 28
+            }
+          },
+          "body": [
+            {
+              "type": "ClassMethod",
+              "start": 12,
+              "end": 26,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 12
+                },
+                "end": {
+                  "line": 1,
+                  "column": 26
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "StringLiteral",
+                "start": 12,
+                "end": 17,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 17
+                  }
+                },
+                "extra": {
+                  "rawValue": "bar",
+                  "raw": "\"bar\""
+                },
+                "value": "bar"
+              },
+              "computed": false,
+              "kind": "method",
+              "typeParameters": {
+                "type": "TypeParameterDeclaration",
+                "start": 17,
+                "end": 20,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 17
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 20
+                  }
+                },
+                "params": [
+                  {
+                    "type": "TypeParameter",
+                    "start": 18,
+                    "end": 19,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 18
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 19
+                      }
+                    },
+                    "name": "T",
+                    "variance": null
+                  }
+                ]
+              },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 23,
+                "end": 26,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 23
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 26
+                  }
+                },
+                "body": [],
+                "directives": []
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

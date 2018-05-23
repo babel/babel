@@ -4,4 +4,4 @@ class C {
     return 42;
   }
 }
-assert.equal(C[sym](), 42);
+expect(C[sym]()).toBe(42);

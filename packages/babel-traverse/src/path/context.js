@@ -5,7 +5,7 @@ import traverse from "../index";
 export function call(key): boolean {
   const opts = this.opts;
 
-  this.debug(() => key);
+  this.debug(key);
 
   if (this.node) {
     if (this._call(opts[key])) return true;
@@ -28,7 +28,17 @@ export function _call(fns?: Array<Function>): boolean {
     if (!node) return true;
 
     const ret = fn.call(this.state, this, this.state);
-    if (ret) throw new Error(`Unexpected return value from visitor method ${fn}`);
+    if (ret && typeof ret === "object" && typeof ret.then === "function") {
+      throw new Error(
+        `You appear to be using a plugin with an async traversal visitor, ` +
+          `which your current version of Babel does not support.` +
+          `If you're using a published plugin, you may need to upgrade ` +
+          `your @babel/core version.`,
+      );
+    }
+    if (ret) {
+      throw new Error(`Unexpected return value from visitor method ${fn}`);
+    }
 
     // node has been replaced, it will have been requeued
     if (this.node !== node) return true;
@@ -58,12 +68,19 @@ export function visit(): boolean {
   }
 
   if (this.call("enter") || this.shouldSkip) {
-    this.debug(() => "Skip...");
+    this.debug("Skip...");
     return this.shouldStop;
   }
 
-  this.debug(() => "Recursing into...");
-  traverse.node(this.node, this.opts, this.scope, this.state, this, this.skipKeys);
+  this.debug("Recursing into...");
+  traverse.node(
+    this.node,
+    this.opts,
+    this.scope,
+    this.state,
+    this,
+    this.skipKeys,
+  );
 
   this.call("exit");
 
@@ -86,16 +103,13 @@ export function stop() {
 export function setScope() {
   if (this.opts && this.opts.noScope) return;
 
-  let target = this.context && this.context.scope;
+  let path = this.parentPath;
+  let target;
+  while (path && !target) {
+    if (path.opts && path.opts.noScope) return;
 
-  if (!target) {
-    let path = this.parentPath;
-    while (path && !target) {
-      if (path.opts && path.opts.noScope) return;
-
-      target = path.scope;
-      path = path.parentPath;
-    }
+    target = path.scope;
+    path = path.parentPath;
   }
 
   this.scope = this.getScope(target);
@@ -177,14 +191,22 @@ export function _resyncList() {
 }
 
 export function _resyncRemoved() {
-  if (this.key == null || !this.container || this.container[this.key] !== this.node) {
+  if (
+    this.key == null ||
+    !this.container ||
+    this.container[this.key] !== this.node
+  ) {
     this._markRemoved();
   }
 }
 
 export function popContext() {
   this.contexts.pop();
-  this.setContext(this.contexts[this.contexts.length - 1]);
+  if (this.contexts.length > 0) {
+    this.setContext(this.contexts[this.contexts.length - 1]);
+  } else {
+    this.setContext(undefined);
+  }
 }
 
 export function pushContext(context) {
@@ -226,6 +248,7 @@ export function _getQueueContexts() {
   let contexts = this.contexts;
   while (!contexts.length) {
     path = path.parentPath;
+    if (!path) break;
     contexts = path.contexts;
   }
   return contexts;

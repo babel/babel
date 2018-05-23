@@ -10,10 +10,10 @@ Object.defineProperty(p, s, {
 });
 
 var o = Object.create(p);
-assert.equal(42, o[s]);
-assert.throws(function() {
+expect(o[s]).toBe(42);
+expect(function() {
   o[s] = 1;
-}, TypeError);
+}).toThrow(TypeError);
 
 var val;
 Object.defineProperty(p, s, {
@@ -24,4 +24,4 @@ Object.defineProperty(p, s, {
 });
 
 o[s] = 33;
-assert.equal(33, val);
+expect(val).toBe(33);

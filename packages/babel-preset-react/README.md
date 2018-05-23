@@ -1,42 +1,26 @@
-# babel-preset-react
+# @babel/preset-react
 
 > Babel preset for all React plugins.
 
-This preset includes the following plugins/presets:
+This preset always includes the following plugins:
 
-- [preset-flow](https://babeljs.io/docs/plugins/preset-flow/)
-- [syntax-jsx](https://babeljs.io/docs/plugins/syntax-jsx/)
-- [transform-react-jsx](https://babeljs.io/docs/plugins/transform-react-jsx/)
-- [transform-react-display-name](https://babeljs.io/docs/plugins/transform-react-display-name/)
+- [@babel/plugin-syntax-jsx](https://babeljs.io/docs/plugins/syntax-jsx/)
+- [@babel/plugin-transform-react-jsx](https://babeljs.io/docs/plugins/transform-react-jsx/)
+- [@babel/plugin-transform-react-display-name](https://babeljs.io/docs/plugins/transform-react-display-name/)
 
-## Install
+And with the `development` option:
+
+- [@babel/plugin-transform-react-jsx-self](https://babeljs.io/docs/plugins/transform-react-jsx-self/)
+- [@babel/plugin-transform-react-jsx-source](https://babeljs.io/docs/plugins/transform-react-jsx-source/)
+
+> Note: Flow syntax support is no longer enabled in v7. For that, you will need to add the [Flow preset](https://babeljs.io/docs/plugins/preset-flow/).
+
+## Installation
 
 > You can also check out the React [Getting Started page](https://facebook.github.io/react/docs/hello-world.html)
 
-> For more info, check out the setup page on the [cli](/docs/setup/) and the [usage](/docs/usage/cli/) docs.
-
-Install the CLI and this preset
-
 ```sh
-npm install --save-dev babel-cli babel-preset-react
-```
-
-Make a .babelrc config file with the preset
-
-```sh
-echo '{ "presets": ["react"] }' > .babelrc
-```
-
-Create a file to run on
-
-```sh
-echo '<h1>Hello, world!</h1>' > index.js
-```
-
-View the output
-
-```sh
-./node_modules/.bin/babel index.js
+npm install --save-dev @babel/preset-react
 ```
 
 ## Usage
@@ -45,22 +29,105 @@ View the output
 
 **.babelrc**
 
+Without options:
+
 ```json
 {
-  "presets": ["react"]
+  "presets": ["@babel/preset-react"]
+}
+```
+
+With options:
+
+```json
+{
+  "presets": [
+    ["@babel/preset-react", {
+      "pragma": "dom", // default pragma is React.createElement
+      "pragmaFrag": "DomFrag", // default is React.Fragment
+      "throwIfNamespace": false // defaults to true
+    }]
+  ]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel script.js --presets react 
+babel --presets @babel/preset-react script.js
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  presets: ["react"]
+require("@babel/core").transform("code", {
+  presets: ["@babel/preset-react"]
 });
+```
+
+## Options
+
+### `pragma`
+
+`string`, defaults to `React.createElement`.
+
+Replace the function used when compiling JSX expressions.
+
+### `pragmaFrag`
+
+`string`, defaults to `React.Fragment`.
+
+Replace the component used when compiling JSX fragments.
+
+### `useBuiltIns`
+
+`boolean`, defaults to `false`.
+
+Will use the native built-in instead of trying to polyfill behavior for any plugins that require one.
+
+### `development`
+
+`boolean`, defaults to `false`.
+
+Toggles plugins that aid in development, such as [`@babel/plugin-transform-react-jsx-self`](https://babeljs.io/docs/plugins/transform-react-jsx-self/) and [`@babel/plugin-transform-react-jsx-source`](https://babeljs.io/docs/plugins/transform-react-jsx-source/).
+
+This is useful when combined with either a `babelrc.js` or [env option in a .babelrc](https://babeljs.io/docs/usage/babelrc/#env-option) configuration:
+
+### `throwIfNamespace`
+
+`boolean`, defaults to `true`.
+
+Toggles whether or not to throw an error if a XML namespaced tag name is used. For example:
+
+    <f:image />
+
+Though the JSX spec allows this, it is disabled by default since React's JSX does not currently have support for it.
+
+#### babelrc.js
+
+```js
+module.exports = {
+  presets: [
+    ["@babel/preset-react", {
+      development: process.env.BABEL_ENV === "development",
+    }],
+  ],
+}
+```
+
+#### .babelrc
+
+> Note: the `env` option will likely get deprecated soon
+
+```json
+{
+  "presets": ["@babel/preset-react"],
+  "env": {
+    "development": {
+      "presets": [
+        ["@babel/preset-react", { "development": true }]
+      ]
+    }
+  }
+}
 ```

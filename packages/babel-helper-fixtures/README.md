@@ -1,11 +1,11 @@
-# babel-helper-fixtures
+# @babel/helper-fixtures
 
 **NOTE:** This is an internal Babel module and may not work outside. Use at your own risk.
 
 ## Usage
 
 ```javascript
-import getFixtures from "babel-helper-fixtures";
+import getFixtures from "@babel/helper-fixtures";
 
 type TestFile = {
   loc: string;

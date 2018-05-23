@@ -1,5 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
-node_modules/.bin/nyc node_modules/mocha/bin/_mocha --opts test/mocha.opts `scripts/_get-test-directories.sh`
-node_modules/.bin/nyc report --reporter=json
+jestArgs="--coverage"
+
+if [ -n "$CI" ]; then
+  jestArgs="${jestArgs} --maxWorkers=4 --ci"
+fi
+
+node_modules/.bin/jest $jestArgs

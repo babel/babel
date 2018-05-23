@@ -1,6 +1,6 @@
 class Person {
   static set DB(value) {
-    assert.equal(value, 'mysql');
+    expect(value).toBe('mysql');
   }
 }
 

@@ -1,0 +1,10 @@
+node_modules
+coverage
+lib
+test/tmp
+.DS_Store
+*.log
+.vscode
+.nyc_output
+tmp
+babel-preset-env-*.tgz

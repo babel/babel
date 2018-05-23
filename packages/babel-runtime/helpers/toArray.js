@@ -1,11 +1,11 @@
-exports.__esModule = true;
+var arrayWithHoles = require("./arrayWithHoles");
 
-var _from = require("../core-js/array/from");
+var iterableToArray = require("./iterableToArray");
 
-var _from2 = _interopRequireDefault(_from);
+var nonIterableRest = require("./nonIterableRest");
 
-exports.default = function (arr) {
-  return Array.isArray(arr) ? arr : (0, _from2.default)(arr);
-};
+function _toArray(arr) {
+  return arrayWithHoles(arr) || iterableToArray(arr) || nonIterableRest();
+}
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+module.exports = _toArray;

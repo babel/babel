@@ -1,4 +1,4 @@
-# babel-plugin-transform-proto-to-assign
+# @babel/plugin-transform-proto-to-assign
 
 > This plugin allows Babel to transform all `__proto__` assignments to a method that will do a shallow copy of all properties.
 
@@ -38,7 +38,7 @@ bar.__proto__ = foo;
 **Out**
 
 ```javascript
-var _defaults = ...;
+function _defaults(obj, defaults) { ... }
 
 _defaults(bar, foo);
 ```
@@ -46,7 +46,7 @@ _defaults(bar, foo);
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-proto-to-assign
+npm install --save-dev @babel/plugin-transform-proto-to-assign
 ```
 
 ## Usage
@@ -57,20 +57,24 @@ npm install --save-dev babel-plugin-transform-proto-to-assign
 
 ```json
 {
-  "plugins": ["transform-proto-to-assign"]
+  "plugins": ["@babel/plugin-transform-proto-to-assign"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins transform-proto-to-assign script.js
+babel --plugins @babel/plugin-transform-proto-to-assign script.js
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  plugins: ["transform-proto-to-assign"]
+require("@babel/core").transform("code", {
+  plugins: ["@babel/plugin-transform-proto-to-assign"]
 });
 ```
+
+## References
+
+* [MDN: Object.prototype.\_\_proto\_\_](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto)

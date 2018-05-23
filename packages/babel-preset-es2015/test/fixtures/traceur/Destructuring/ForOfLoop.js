@@ -9,20 +9,20 @@ var expectedHeads = ['a', 'd'];
 var expectedTails = [['b', 'c'], ['e','f']];
 var i = 0;
 for (var [head, ...tail] of gen()) {
-  assert.equal(expectedHeads[i], head);
-  assertArrayEquals(expectedTails[i], tail);
+  expect(expectedHeads[i]).toBe(head);
+  expect(tail).toEqual(expectedTails[i]);
   i++;
 }
-assert.equal(2, i);
+expect(i).toBe(2);
 
 {
   let x = 42;
   for (let {length: x} of gen()) {
-    assert.equal(3, x);
+    expect(x).toBe(3);
   }
-  assert.equal(42, x);
+  expect(x).toBe(42);
 }
 
 var k;
 for ({length: k} of [new String('abc')])  // No block
-  assert.equal(3, k);
+  expect(k).toBe(3);

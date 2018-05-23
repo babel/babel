@@ -1,58 +1,58 @@
 (function() {
   var {toFixed} = 42;
-  assert.equal(Number.prototype.toFixed, toFixed);
+  expect(Number.prototype.toFixed).toBe(toFixed);
 
   var {toString, toLocaleString} = 42;
-  assert.equal(Number.prototype.toString, toString);
-  assert.equal(Number.prototype.toLocaleString, toLocaleString);
+  expect(Number.prototype.toString).toBe(toString);
+  expect(Number.prototype.toLocaleString).toBe(toLocaleString);
 
   var [x] = 'string';
-  assert.equal('s', x);
+  expect(x).toBe('s');
 
   var [x, y] = 'string';
-  assert.equal('s', x);
-  assert.equal('t', y);
+  expect(x).toBe('s');
+  expect(y).toBe('t');
 
   var [x, ...xs] = 'string';
-  assert.equal('s', x);
-  assert.deepEqual(['t', 'r', 'i', 'n', 'g'], xs);
+  expect(x).toBe('s');
+  expect(['t', 'r', 'i', 'n', 'g']).toEqual(xs);
 
   var {toFixed: {length}} = 42;
-  assert.equal(1, length);
+  expect(length).toBe(1);
 
   var {x: {toString}} = {x: true};
-  assert.equal(Boolean.prototype.toString, toString);
+  expect(Boolean.prototype.toString).toBe(toString);
 
   var [[x]] = ['string'];
-  assert.equal('s', x);
+  expect(x).toBe('s');
 
   // Same with assignment expression
 
-  ({toFixed} = 42);
-  assert.equal(Number.prototype.toFixed, toFixed);
+  (((((((((((({toFixed} = 42))))))))))));
+  expect(Number.prototype.toFixed).toBe(toFixed);
 
-  ({toString, toLocaleString} = 42);
-  assert.equal(Number.prototype.toString, toString);
-  assert.equal(Number.prototype.toLocaleString, toLocaleString);
+  (((((((((((({toString, toLocaleString} = 42))))))))))));
+  expect(Number.prototype.toString).toBe(toString);
+  expect(Number.prototype.toLocaleString).toBe(toLocaleString);
 
   [x] = 'string';
-  assert.equal('s', x);
+  expect(x).toBe('s');
 
   [x, y] = 'string';
-  assert.equal('s', x);
-  assert.equal('t', y);
+  expect(x).toBe('s');
+  expect(y).toBe('t');
 
   [x, ...xs] = 'string';
-  assert.equal('s', x);
-  assert.deepEqual(['t', 'r', 'i', 'n', 'g'], xs);
+  expect(x).toBe('s');
+  expect(xs).toEqual(['t', 'r', 'i', 'n', 'g']);
 
-  ({toFixed: {length}} = 42);
-  assert.equal(1, length);
+  (((((((((((({toFixed: {length}} = 42))))))))))));
+  expect(length).toBe(1);
 
-  ({x: {toString}} = {x: true});
-  assert.equal(Boolean.prototype.toString, toString);
+  (((((((((((({x: {toString}} = {x: true}))))))))))));
+  expect(Boolean.prototype.toString).toBe(toString);
 
   [[x]] = ['string'];
-  assert.equal('s', x);
+  expect(x).toBe('s');
 
 })();

@@ -1,0 +1,117 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 15,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 15
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 15,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 15
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSImportEqualsDeclaration",
+        "start": 0,
+        "end": 15,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 15
+          }
+        },
+        "isExport": false,
+        "id": {
+          "type": "Identifier",
+          "start": 7,
+          "end": 8,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 7
+            },
+            "end": {
+              "line": 1,
+              "column": 8
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "moduleReference": {
+          "type": "TSQualifiedName",
+          "start": 11,
+          "end": 14,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 11
+            },
+            "end": {
+              "line": 1,
+              "column": 14
+            }
+          },
+          "left": {
+            "type": "Identifier",
+            "start": 11,
+            "end": 12,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 11
+              },
+              "end": {
+                "line": 1,
+                "column": 12
+              },
+              "identifierName": "B"
+            },
+            "name": "B"
+          },
+          "right": {
+            "type": "Identifier",
+            "start": 13,
+            "end": 14,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 13
+              },
+              "end": {
+                "line": 1,
+                "column": 14
+              },
+              "identifierName": "C"
+            },
+            "name": "C"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

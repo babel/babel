@@ -13,4 +13,4 @@ var obj = {
   }
 };
 
-assert.deepEqual([3, 2, 1], [...obj]);
+expect([3, 2, 1]).toEqual([...obj]);

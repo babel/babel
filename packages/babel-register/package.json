@@ -1,21 +1,28 @@
 {
-  "name": "babel-register",
-  "version": "7.0.0-alpha.7",
+  "name": "@babel/register",
+  "version": "7.0.0-beta.47",
   "description": "babel require hook",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-register",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
-  "main": "lib/node.js",
-  "browser": "lib/browser.js",
+  "main": "lib/index.js",
+  "browser": {
+    "./lib/node.js": "./lib/browser.js"
+  },
   "dependencies": {
-    "babel-core": "7.0.0-alpha.7",
-    "core-js": "^2.4.0",
+    "core-js": "^2.5.6",
+    "find-cache-dir": "^1.0.0",
     "home-or-tmp": "^3.0.0",
-    "lodash": "^4.2.0",
+    "lodash": "^4.17.5",
     "mkdirp": "^0.5.1",
+    "pirates": "^3.0.1",
     "source-map-support": "^0.4.2"
   },
+  "peerDependencies": {
+    "@babel/core": "7.0.0-beta.47"
+  },
   "devDependencies": {
-    "decache": "^4.1.0"
+    "@babel/core": "7.0.0-beta.47",
+    "default-require-extensions": "^2.0.0"
   }
 }

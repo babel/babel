@@ -1,0 +1,5 @@
+package1/src/bar/bar1.js -> package1/lib/bar/bar1.js
+package1/src/foo1.js -> package1/lib/foo1.js
+package2/src/bar/bar2.js -> package2/lib/bar/bar2.js
+package2/src/foo2.js -> package2/lib/foo2.js
+🎉  Successfully compiled 4 files with Babel.

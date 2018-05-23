@@ -2,9 +2,12 @@ import cloneDeep from "lodash/cloneDeep";
 import trimEnd from "lodash/trimEnd";
 import resolve from "try-resolve";
 import clone from "lodash/clone";
-import merge from "lodash/merge";
+import extend from "lodash/extend";
+import semver from "semver";
 import path from "path";
 import fs from "fs";
+
+const nodeVersion = semver.clean(process.version.slice(1));
 
 function humanize(val, noext) {
   if (noext) val = path.basename(val, path.extname(val));
@@ -12,25 +15,25 @@ function humanize(val, noext) {
 }
 
 type TestFile = {
-  loc: string;
-  code: string;
-  filename: string;
+  loc: string,
+  code: string,
+  filename: string,
 };
 
 type Test = {
-  title: string;
-  disabled: boolean;
-  options: Object;
-  exec: TestFile;
-  actual: TestFile;
-  expected: TestFile;
+  title: string,
+  disabled: boolean,
+  options: Object,
+  exec: TestFile,
+  actual: TestFile,
+  expected: TestFile,
 };
 
 type Suite = {
-  options: Object;
-  tests: Array<Test>;
-  title: string;
-  filename: string;
+  options: Object,
+  tests: Array<Test>,
+  title: string,
+  filename: string,
 };
 
 function assertDirectory(loc) {
@@ -47,7 +50,27 @@ function shouldIgnore(name, blacklist?: Array<string>) {
   const ext = path.extname(name);
   const base = path.basename(name, ext);
 
-  return name[0] === "." || ext === ".md" || base === "LICENSE" || base === "options";
+  return (
+    name[0] === "." || ext === ".md" || base === "LICENSE" || base === "options"
+  );
+}
+
+const EXTENSIONS = [".js", ".mjs", ".ts", ".tsx"];
+
+function findFile(filepath: string, allowJSON: boolean) {
+  const matches = [];
+
+  for (const ext of EXTENSIONS.concat(allowJSON ? ".json" : [])) {
+    const name = filepath + ext;
+
+    if (fs.existsSync(name)) matches.push(name);
+  }
+
+  if (matches.length > 1) {
+    throw new Error(`Found conflicting file matches: ${matches.join(", ")}`);
+  }
+
+  return matches[0] || filepath + ".js";
 }
 
 export default function get(entryLoc): Array<Suite> {
@@ -78,30 +101,29 @@ export default function get(entryLoc): Array<Suite> {
     }
 
     function push(taskName, taskDir) {
-      const actualLocAlias = suiteName + "/" + taskName + "/actual.js";
-      let expectLocAlias = suiteName + "/" + taskName + "/expected.js";
-      const execLocAlias = suiteName + "/" + taskName + "/exec.js";
+      const actualLoc = findFile(taskDir + "/input");
+      const expectLoc = findFile(taskDir + "/output", true /* allowJSON */);
+      let execLoc = findFile(taskDir + "/exec");
 
-      const actualLoc = taskDir + "/actual.js";
-      let expectLoc = taskDir + "/expected.js";
-      let execLoc = taskDir + "/exec.js";
+      const actualLocAlias =
+        suiteName + "/" + taskName + "/" + path.basename(actualLoc);
+      const expectLocAlias =
+        suiteName + "/" + taskName + "/" + path.basename(actualLoc);
+      let execLocAlias =
+        suiteName + "/" + taskName + "/" + path.basename(actualLoc);
 
       if (fs.statSync(taskDir).isFile()) {
         const ext = path.extname(taskDir);
-        if (ext !== ".js" && ext !== ".module.js") return;
+        if (EXTENSIONS.indexOf(ext) === -1) return;
 
         execLoc = taskDir;
-      }
-
-      if (resolve.relative(expectLoc + "on")) {
-        expectLoc += "on";
-        expectLocAlias += "on";
+        execLocAlias = suiteName + "/" + taskName;
       }
 
       const taskOpts = cloneDeep(suite.options);
 
       const taskOptsLoc = resolve(taskDir + "/options");
-      if (taskOptsLoc) merge(taskOpts, require(taskOptsLoc));
+      if (taskOptsLoc) extend(taskOpts, require(taskOptsLoc));
 
       const test = {
         optionsDir: taskOptsLoc ? path.dirname(taskOptsLoc) : null,
@@ -125,6 +147,26 @@ export default function get(entryLoc): Array<Suite> {
         },
       };
 
+      // If there's node requirement, check it before pushing task
+      if (taskOpts.minNodeVersion) {
+        const minimumVersion = semver.clean(taskOpts.minNodeVersion);
+
+        if (minimumVersion == null) {
+          throw new Error(
+            `'minNodeVersion' has invalid semver format: ${
+              taskOpts.minNodeVersion
+            }`,
+          );
+        }
+
+        if (semver.lt(nodeVersion, minimumVersion)) {
+          return;
+        }
+
+        // Delete to avoid option validation error
+        delete taskOpts.minNodeVersion;
+      }
+
       // traceur checks
 
       if (test.exec.code.indexOf("// Async.") >= 0) {
@@ -141,6 +183,11 @@ export default function get(entryLoc): Array<Suite> {
       const sourceMapLoc = taskDir + "/source-map.json";
       if (fs.existsSync(sourceMapLoc)) {
         test.sourceMap = JSON.parse(readFile(sourceMapLoc));
+      }
+
+      const inputMapLoc = taskDir + "/input-source-map.json";
+      if (fs.existsSync(inputMapLoc)) {
+        test.inputSourceMap = JSON.parse(readFile(inputMapLoc));
       }
     }
   }

@@ -1,4 +1,8 @@
 /lib
+/build
+/.git
+package.json
+lerna.json
 packages/babel-runtime
 !packages/babel-runtime/scripts
 !packages/babel-runtime/core-js.js
@@ -7,3 +11,15 @@ packages/*/lib
 packages/*/dist
 packages/*/test/fixtures
 packages/*/test/tmp
+codemods/*/node_modules
+codemods/*/lib
+codemods/*/dist
+codemods/*/test/fixtures
+codemods/*/test/tmp
+packages/babel-preset-env/data
+packages/babel-preset-env/test/debug-fixtures
+packages/babel-preset-env-standalone/babel-preset-env.js
+packages/babel-preset-env-standalone/babel-preset-env.min.js
+packages/babel-standalone/babel.js
+packages/babel-standalone/babel.min.js
+packages/babel-parser/test/expressions

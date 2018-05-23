@@ -10,6 +10,6 @@ class RestParams {
 // ----------------------------------------------------------------------------
 
 var obj = new RestParams(0, 1, 2);
-assertArrayEquals([0, 1, 2], obj.rest);
-assertArrayEquals([3, 4, 5], obj.instanceMethod(3, 4, 5));
+expect(obj.rest).toEqual([0, 1, 2]);
+expect(obj.instanceMethod(3, 4, 5)).toEqual([3, 4, 5]);
 

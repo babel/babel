@@ -1,5 +1,25 @@
-export function ClassDeclaration(node: Object) {
-  this.printJoin(node.decorators, node);
+import * as t from "@babel/types";
+
+export function ClassDeclaration(node: Object, parent: Object) {
+  if (
+    !t.isExportDefaultDeclaration(parent) &&
+    !t.isExportNamedDeclaration(parent)
+  ) {
+    this.printJoin(node.decorators, node);
+  }
+
+  if (node.declare) {
+    // TS
+    this.word("declare");
+    this.space();
+  }
+
+  if (node.abstract) {
+    // TS
+    this.word("abstract");
+    this.space();
+  }
+
   this.word("class");
 
   if (node.id) {
@@ -51,8 +71,23 @@ export function ClassBody(node: Object) {
 export function ClassProperty(node: Object) {
   this.printJoin(node.decorators, node);
 
+  if (node.accessibility) {
+    // TS
+    this.word(node.accessibility);
+    this.space();
+  }
   if (node.static) {
     this.word("static");
+    this.space();
+  }
+  if (node.abstract) {
+    // TS
+    this.word("abstract");
+    this.space();
+  }
+  if (node.readonly) {
+    // TS
+    this.word("readonly");
     this.space();
   }
   if (node.computed) {
@@ -63,6 +98,15 @@ export function ClassProperty(node: Object) {
     this._variance(node);
     this.print(node.key, node);
   }
+
+  // TS
+  if (node.optional) {
+    this.token("?");
+  }
+  if (node.definite) {
+    this.token("!");
+  }
+
   this.print(node.typeAnnotation, node);
   if (node.value) {
     this.space();
@@ -73,13 +117,46 @@ export function ClassProperty(node: Object) {
   this.semicolon();
 }
 
+export function ClassPrivateProperty(node: Object) {
+  if (node.static) {
+    this.word("static");
+    this.space();
+  }
+  this.print(node.key, node);
+  if (node.value) {
+    this.space();
+    this.token("=");
+    this.space();
+    this.print(node.value, node);
+  }
+  this.semicolon();
+}
+
 export function ClassMethod(node: Object) {
+  this._classMethodHead(node);
+  this.space();
+  this.print(node.body, node);
+}
+
+export function _classMethodHead(node) {
   this.printJoin(node.decorators, node);
+
+  if (node.accessibility) {
+    // TS
+    this.word(node.accessibility);
+    this.space();
+  }
+
+  if (node.abstract) {
+    // TS
+    this.word("abstract");
+    this.space();
+  }
 
   if (node.static) {
     this.word("static");
     this.space();
   }
 
-  this._method(node);
+  this._methodHead(node);
 }

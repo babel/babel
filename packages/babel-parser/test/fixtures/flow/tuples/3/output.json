@@ -1,0 +1,169 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 27,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 27
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 27,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 27
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 27,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 27
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 26,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 26
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 17,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 17
+                },
+                "identifierName": "a"
+              },
+              "name": "a",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start": 6,
+                "end": 17,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 6
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 17
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TupleTypeAnnotation",
+                  "start": 8,
+                  "end": 17,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 8
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 17
+                    }
+                  },
+                  "types": [
+                    {
+                      "type": "NumberTypeAnnotation",
+                      "start": 9,
+                      "end": 15,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 9
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 15
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "init": {
+              "type": "ArrayExpression",
+              "start": 20,
+              "end": 26,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 20
+                },
+                "end": {
+                  "line": 1,
+                  "column": 26
+                }
+              },
+              "elements": [
+                {
+                  "type": "NumericLiteral",
+                  "start": 21,
+                  "end": 24,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 21
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 24
+                    }
+                  },
+                  "extra": {
+                    "rawValue": 123,
+                    "raw": "123"
+                  },
+                  "value": 123
+                }
+              ]
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

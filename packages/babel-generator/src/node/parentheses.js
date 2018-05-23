@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 const PRECEDENCE = {
   "||": 0,
@@ -27,6 +27,10 @@ const PRECEDENCE = {
   "**": 10,
 };
 
+const isClassExtendsClause = (node: Object, parent: Object): boolean =>
+  (t.isClassDeclaration(parent) || t.isClassExpression(parent)) &&
+  parent.superClass === node;
+
 export function NullableTypeAnnotation(node: Object, parent: Object): boolean {
   return t.isArrayTypeAnnotation(parent);
 }
@@ -34,21 +38,48 @@ export function NullableTypeAnnotation(node: Object, parent: Object): boolean {
 export { NullableTypeAnnotation as FunctionTypeAnnotation };
 
 export function UpdateExpression(node: Object, parent: Object): boolean {
-  // (foo++).test()
-  return t.isMemberExpression(parent) && parent.object === node;
+  return (
+    // (foo++).test(), (foo++)[0]
+    t.isMemberExpression(parent, { object: node }) ||
+    // (foo++)()
+    t.isCallExpression(parent, { callee: node }) ||
+    // new (foo++)()
+    t.isNewExpression(parent, { callee: node }) ||
+    isClassExtendsClause(node, parent)
+  );
 }
 
-export function ObjectExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
+export function ObjectExpression(
+  node: Object,
+  parent: Object,
+  printStack: Array<Object>,
+): boolean {
   return isFirstInStatement(printStack, { considerArrow: true });
 }
 
-export function DoExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
+export function DoExpression(
+  node: Object,
+  parent: Object,
+  printStack: Array<Object>,
+): boolean {
   return isFirstInStatement(printStack);
 }
 
 export function Binary(node: Object, parent: Object): boolean {
   if (
-    ((t.isCallExpression(parent) || t.isNewExpression(parent)) && parent.callee === node) ||
+    node.operator === "**" &&
+    t.isBinaryExpression(parent, { operator: "**" })
+  ) {
+    return parent.left === node;
+  }
+
+  if (isClassExtendsClause(node, parent)) {
+    return true;
+  }
+
+  if (
+    ((t.isCallExpression(parent) || t.isNewExpression(parent)) &&
+      parent.callee === node) ||
     t.isUnaryLike(parent) ||
     (t.isMemberExpression(parent) && parent.object === node) ||
     t.isAwaitExpression(parent)
@@ -65,7 +96,9 @@ export function Binary(node: Object, parent: Object): boolean {
 
     if (
       // Logical expressions with the same precedence don't need parens.
-      (parentPos === nodePos && parent.right === node && !t.isLogicalExpression(parent)) ||
+      (parentPos === nodePos &&
+        parent.right === node &&
+        !t.isLogicalExpression(parent)) ||
       parentPos > nodePos
     ) {
       return true;
@@ -75,14 +108,35 @@ export function Binary(node: Object, parent: Object): boolean {
   return false;
 }
 
+export function UnionTypeAnnotation(node: Object, parent: Object): boolean {
+  return (
+    t.isArrayTypeAnnotation(parent) ||
+    t.isNullableTypeAnnotation(parent) ||
+    t.isIntersectionTypeAnnotation(parent) ||
+    t.isUnionTypeAnnotation(parent)
+  );
+}
+
+export { UnionTypeAnnotation as IntersectionTypeAnnotation };
+
+export function TSAsExpression() {
+  return true;
+}
+
+export function TSTypeAssertion() {
+  return true;
+}
+
 export function BinaryExpression(node: Object, parent: Object): boolean {
   // let i = (1 in []);
   // for ((1 in []);;);
-  return node.operator === "in" && (t.isVariableDeclarator(parent) || t.isFor(parent));
+  return (
+    node.operator === "in" &&
+    (t.isVariableDeclarator(parent) || t.isFor(parent))
+  );
 }
 
 export function SequenceExpression(node: Object, parent: Object): boolean {
-
   if (
     // Although parentheses wouldn"t hurt around sequence
     // expressions in the head of for loops, traditional style
@@ -106,44 +160,47 @@ export function SequenceExpression(node: Object, parent: Object): boolean {
 }
 
 export function YieldExpression(node: Object, parent: Object): boolean {
-  return t.isBinary(parent) ||
-         t.isUnaryLike(parent) ||
-         t.isCallExpression(parent) ||
-         t.isMemberExpression(parent) ||
-         t.isNewExpression(parent) ||
-         (t.isConditionalExpression(parent) && node === parent.test);
-
+  return (
+    t.isBinary(parent) ||
+    t.isUnaryLike(parent) ||
+    t.isCallExpression(parent) ||
+    t.isMemberExpression(parent) ||
+    t.isNewExpression(parent) ||
+    (t.isConditionalExpression(parent) && node === parent.test) ||
+    isClassExtendsClause(node, parent)
+  );
 }
 
 export { YieldExpression as AwaitExpression };
 
-export function ClassExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
+export function ClassExpression(
+  node: Object,
+  parent: Object,
+  printStack: Array<Object>,
+): boolean {
   return isFirstInStatement(printStack, { considerDefaultExports: true });
 }
 
 export function UnaryLike(node: Object, parent: Object): boolean {
-  return t.isMemberExpression(parent, { object: node }) ||
-         t.isCallExpression(parent, { callee: node }) ||
-         t.isNewExpression(parent, { callee: node });
+  return (
+    t.isMemberExpression(parent, { object: node }) ||
+    t.isCallExpression(parent, { callee: node }) ||
+    t.isNewExpression(parent, { callee: node }) ||
+    t.isBinaryExpression(parent, { operator: "**", left: node }) ||
+    isClassExtendsClause(node, parent)
+  );
 }
 
-export function FunctionExpression(node: Object, parent: Object, printStack: Array<Object>): boolean {
+export function FunctionExpression(
+  node: Object,
+  parent: Object,
+  printStack: Array<Object>,
+): boolean {
   return isFirstInStatement(printStack, { considerDefaultExports: true });
 }
 
 export function ArrowFunctionExpression(node: Object, parent: Object): boolean {
-  if (
-    // export default (function () {});
-    t.isExportDeclaration(parent) ||
-    t.isBinaryExpression(parent) ||
-    t.isLogicalExpression(parent) ||
-    t.isUnaryExpression(parent) ||
-    t.isTaggedTemplateExpression(parent)
-  ) {
-    return true;
-  }
-
-  return UnaryLike(node, parent);
+  return t.isExportDeclaration(parent) || ConditionalExpression(node, parent);
 }
 
 export function ConditionalExpression(node: Object, parent: Object): boolean {
@@ -151,7 +208,10 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
     t.isUnaryLike(parent) ||
     t.isBinary(parent) ||
     t.isConditionalExpression(parent, { test: node }) ||
-    t.isAwaitExpression(parent)
+    t.isAwaitExpression(parent) ||
+    t.isTaggedTemplateExpression(parent) ||
+    t.isTSTypeAssertion(parent) ||
+    t.isTSAsExpression(parent)
   ) {
     return true;
   }
@@ -167,12 +227,16 @@ export function AssignmentExpression(node: Object): boolean {
   }
 }
 
-// Walk up the print stack to deterimine if our node can come first
+export function NewExpression(node: Object, parent: Object): boolean {
+  return isClassExtendsClause(node, parent);
+}
+
+// Walk up the print stack to determine if our node can come first
 // in statement.
-function isFirstInStatement(printStack: Array<Object>, {
-    considerArrow = false,
-    considerDefaultExports = false,
-  } = {}): boolean {
+function isFirstInStatement(
+  printStack: Array<Object>,
+  { considerArrow = false, considerDefaultExports = false } = {},
+): boolean {
   let i = printStack.length - 1;
   let node = printStack[i];
   i--;
@@ -181,8 +245,9 @@ function isFirstInStatement(printStack: Array<Object>, {
     if (
       t.isExpressionStatement(parent, { expression: node }) ||
       t.isTaggedTemplateExpression(parent) ||
-      considerDefaultExports && t.isExportDefaultDeclaration(parent, { declaration: node }) ||
-      considerArrow && t.isArrowFunctionExpression(parent, { body: node })
+      (considerDefaultExports &&
+        t.isExportDefaultDeclaration(parent, { declaration: node })) ||
+      (considerArrow && t.isArrowFunctionExpression(parent, { body: node }))
     ) {
       return true;
     }

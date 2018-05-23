@@ -4,5 +4,5 @@ function* f() {
 
 var o = {};
 for (var x of f.call(o)) {
-  assert.equal(o, x);
+  expect(o).toBe(x);
 }

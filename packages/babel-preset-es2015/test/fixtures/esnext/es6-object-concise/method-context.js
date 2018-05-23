@@ -5,5 +5,5 @@ var a = {
 };
 
 var context = {};
-assert.strictEqual(a.b(), a);
-assert.strictEqual(a.b.call(context), context);
+expect(a.b()).toBe(a);
+expect(a.b.call(context)).toBe(context);

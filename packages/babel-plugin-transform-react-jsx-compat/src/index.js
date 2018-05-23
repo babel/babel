@@ -1,6 +1,10 @@
-import helper from "babel-helper-builder-react-jsx";
+import { declare } from "@babel/helper-plugin-utils";
+import helper from "@babel/helper-builder-react-jsx";
+import { types as t } from "@babel/core";
 
-export default function ({ types: t }) {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     manipulateOptions(opts, parserOpts) {
       parserOpts.plugins.push("jsx");
@@ -17,12 +21,13 @@ export default function ({ types: t }) {
             t.memberExpression(
               t.memberExpression(t.identifier("React"), t.identifier("DOM")),
               state.tagExpr,
-              t.isLiteral(state.tagExpr)
+              t.isLiteral(state.tagExpr),
             ),
-            state.args
+            state.args,
           );
         }
       },
+      compat: true,
     }),
   };
-}
+});

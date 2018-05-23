@@ -12,7 +12,7 @@ import type NodePath from "../path";
  */
 
 export default class Binding {
-  constructor({ existing, identifier, scope, path, kind }) {
+  constructor({ identifier, scope, path, kind }) {
     this.identifier = identifier;
     this.scope = scope;
     this.path = path;
@@ -26,16 +26,7 @@ export default class Binding {
     this.references = 0;
 
     this.clearValue();
-
-    if (existing) {
-      this.constantViolations = [].concat(
-        existing.path,
-        existing.constantViolations,
-        this.constantViolations
-      );
-    }
   }
-
 
   constantViolations: Array<NodePath>;
   constant: boolean;

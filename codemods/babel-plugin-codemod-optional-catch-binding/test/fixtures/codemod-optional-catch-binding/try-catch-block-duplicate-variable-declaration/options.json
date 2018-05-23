@@ -1,0 +1,4 @@
+{
+  "plugins": ["../../../../lib"],
+  "throws": "Duplicate declaration \"e\""
+}

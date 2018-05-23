@@ -1,4 +1,4 @@
-# babel-plugin-transform-react-jsx
+# @babel/plugin-transform-react-jsx
 
 > Turn JSX into React function calls
 
@@ -46,16 +46,80 @@ var profile = <div>
 
 var dom = require("deku").dom;
 
-var profile = dom( "div", null,
+var profile = dom("div", null,
   dom("img", { src: "avatar.png", className: "profile" }),
   dom("h3", null, [user.firstName, user.lastName].join(" "))
 );
 ```
 
+### Fragments
+
+Fragments are a feature available in React 16.2.0+.
+
+#### React
+
+**In**
+
+```javascript
+var descriptions = items.map(item => (
+  <>
+    <dt>{item.name}</dt>
+    <dd>{item.value}</dd>
+  </>
+));
+```
+
+**Out**
+
+```javascript
+var descriptions = items.map(item => React.createElement(
+  React.Fragment,
+  null,
+  React.createElement("dt", null, item.name),
+  React.createElement("dd", null, item.value)
+));
+```
+
+#### Custom
+
+**In**
+
+```javascript
+/** @jsx dom */
+/** @jsxFrag DomFrag */
+
+var { dom, DomFrag } = require("deku"); // DomFrag is fictional!
+
+var descriptions = items.map(item => (
+  <>
+    <dt>{item.name}</dt>
+    <dd>{item.value}</dd>
+  </>
+));
+```
+
+**Out**
+
+```javascript
+/** @jsx dom */
+/** @jsxFrag DomFrag */
+
+var { dom, DomFrag } = require("deku"); // DomFrag is fictional!
+
+var descriptions = items.map(item => dom(
+  DomFrag,
+  null,
+  dom("dt", null, item.name),
+  dom("dd", null, item.value)
+));
+```
+
+Note that if a custom pragma is specified, then a custom fragment pragma must also be specified if the `<></>` is used. Otherwise, an error will be thrown.
+
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-transform-react-jsx
+npm install --save-dev @babel/plugin-transform-react-jsx
 ```
 
 ## Usage
@@ -68,7 +132,7 @@ Without options:
 
 ```json
 {
-  "plugins": ["transform-react-jsx"]
+  "plugins": ["@babel/plugin-transform-react-jsx"]
 }
 ```
 
@@ -77,8 +141,10 @@ With options:
 ```json
 {
   "plugins": [
-    ["transform-react-jsx", {
-      "pragma": "dom" // default pragma is React.createElement
+    ["@babel/plugin-transform-react-jsx", {
+      "pragma": "dom", // default pragma is React.createElement
+      "pragmaFrag": "DomFrag", // default is React.Fragment
+      "throwIfNamespace": false // defaults to true
     }]
   ]
 }
@@ -87,14 +153,14 @@ With options:
 ### Via CLI
 
 ```sh
-babel --plugins transform-react-jsx script.js
+babel --plugins @babel/plugin-transform-react-jsx script.js
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  plugins: ["transform-react-jsx"]
+require("@babel/core").transform("code", {
+  plugins: ["@babel/plugin-transform-react-jsx"]
 });
 ```
 
@@ -108,8 +174,24 @@ Replace the function used when compiling JSX expressions.
 
 Note that the `@jsx React.DOM` pragma has been deprecated as of React v0.12
 
+### `pragmaFrag`
+
+`string`, defaults to `React.Fragment`.
+
+Replace the component used when compiling JSX fragments.
+
 ### `useBuiltIns`
 
 `boolean`, defaults to `false`.
 
 When spreading props, use `Object.assign` directly instead of Babel's extend helper.
+
+### `throwIfNamespace`
+
+`boolean`, defaults to `true`.
+
+Toggles whether or not to throw an error if a XML namespaced tag name is used. For example:
+
+    <f:image />
+
+Though the JSX spec allows this, it is disabled by default since React's JSX does not currently have support for it.

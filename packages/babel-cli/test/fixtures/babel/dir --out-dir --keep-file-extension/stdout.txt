@@ -1,0 +1,3 @@
+src/bar.mjs -> lib/bar.mjs
+src/foo.js -> lib/foo.js
+🎉  Successfully compiled 2 files with Babel.

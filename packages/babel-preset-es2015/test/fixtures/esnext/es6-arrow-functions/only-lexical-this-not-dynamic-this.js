@@ -4,4 +4,4 @@ var obj = {
   }
 };
 
-assert.strictEqual(obj.method()(), obj);
+expect(obj.method()()).toBe(obj);

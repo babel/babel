@@ -1,6 +1,6 @@
-import getFunctionArity from "babel-helper-get-function-arity";
-import template from "babel-template";
-import * as t from "babel-types";
+import getFunctionArity from "@babel/helper-get-function-arity";
+import template from "@babel/template";
+import * as t from "@babel/types";
 
 const buildPropertyMethodAssignmentWrapper = template(`
   (function (FUNCTION_KEY) {
@@ -45,6 +45,26 @@ const visitor = {
   },
 };
 
+function getNameFromLiteralId(id) {
+  if (t.isNullLiteral(id)) {
+    return "null";
+  }
+
+  if (t.isRegExpLiteral(id)) {
+    return `_${id.pattern}_${id.flags}`;
+  }
+
+  if (t.isTemplateLiteral(id)) {
+    return id.quasis.map(quasi => quasi.value.raw).join("");
+  }
+
+  if (id.value !== undefined) {
+    return id.value + "";
+  }
+
+  return "";
+}
+
 function wrap(state, method, id, scope) {
   if (state.selfReference) {
     if (scope.hasBinding(id.name) && !scope.hasGlobal(id.name)) {
@@ -56,13 +76,14 @@ function wrap(state, method, id, scope) {
 
       // need to add a wrapper since we can't change the references
       let build = buildPropertyMethodAssignmentWrapper;
-      if (method.generator) build = buildGeneratorPropertyMethodAssignmentWrapper;
+      if (method.generator) {
+        build = buildGeneratorPropertyMethodAssignmentWrapper;
+      }
       const template = build({
         FUNCTION: method,
         FUNCTION_ID: id,
         FUNCTION_KEY: scope.generateUidIdentifier(id.name),
       }).expression;
-      template.callee._skipModulesRemap = true;
 
       // shim in dummy params to retain function arity, if you try to read the
       // source then you'll get the original since it's proxied so it's all good
@@ -125,23 +146,35 @@ function visit(node, name, scope) {
   return state;
 }
 
-export default function ({ node, parent, scope, id }) {
+/**
+ * @param {NodePath} param0
+ * @param {Boolean} localBinding whether a name could shadow a self-reference (e.g. converting arrow function)
+ */
+export default function({ node, parent, scope, id }, localBinding = false) {
   // has an `id` so we don't need to infer one
   if (node.id) return;
 
-  if ((t.isObjectProperty(parent) || t.isObjectMethod(parent, { kind: "method" })) &&
-    (!parent.computed || t.isLiteral(parent.key))) {
+  if (
+    (t.isObjectProperty(parent) ||
+      t.isObjectMethod(parent, { kind: "method" })) &&
+    (!parent.computed || t.isLiteral(parent.key))
+  ) {
     // { foo() {} };
     id = parent.key;
   } else if (t.isVariableDeclarator(parent)) {
     // let foo = function () {};
     id = parent.id;
 
-    if (t.isIdentifier(id)) {
+    // but not "let foo = () => {};" being converted to function expression
+    if (t.isIdentifier(id) && !localBinding) {
       const binding = scope.parent.getBinding(id.name);
-      if (binding && binding.constant && scope.getBinding(id.name) === binding) {
+      if (
+        binding &&
+        binding.constant &&
+        scope.getBinding(id.name) === binding
+      ) {
         // always going to reference this method
-        node.id = id;
+        node.id = t.cloneNode(id);
         node.id[t.NOT_LOCAL_BINDING] = true;
         return;
       }
@@ -155,10 +188,12 @@ export default function ({ node, parent, scope, id }) {
 
   let name;
   if (id && t.isLiteral(id)) {
-    name = id.value;
+    name = getNameFromLiteralId(id);
   } else if (id && t.isIdentifier(id)) {
     name = id.name;
-  } else {
+  }
+
+  if (name === undefined) {
     return;
   }
 

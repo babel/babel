@@ -1,4 +1,11 @@
-import defineType, { assertNodeType } from "./index";
+// @flow
+import defineType, {
+  assertEach,
+  assertNodeType,
+  assertValueType,
+  chain,
+} from "./utils";
+import { classMethodOrPropertyCommon } from "./es2015";
 
 defineType("AwaitExpression", {
   builder: ["argument"],
@@ -19,15 +26,127 @@ defineType("BindExpression", {
   },
 });
 
+defineType("ClassProperty", {
+  visitor: ["key", "value", "typeAnnotation", "decorators"],
+  builder: ["key", "value", "typeAnnotation", "decorators", "computed"],
+  aliases: ["Property"],
+  fields: {
+    ...classMethodOrPropertyCommon,
+    value: {
+      validate: assertNodeType("Expression"),
+      optional: true,
+    },
+    definite: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+    typeAnnotation: {
+      validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
+      optional: true,
+    },
+    decorators: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Decorator")),
+      ),
+      optional: true,
+    },
+    readonly: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
+  },
+});
+
+defineType("OptionalMemberExpression", {
+  builder: ["object", "property", "computed", "optional"],
+  visitor: ["object", "property"],
+  aliases: ["Expression"],
+  fields: {
+    object: {
+      validate: assertNodeType("Expression"),
+    },
+    property: {
+      validate: (function() {
+        const normal = assertNodeType("Identifier");
+        const computed = assertNodeType("Expression");
+
+        return function(node, key, val) {
+          const validator = node.computed ? computed : normal;
+          validator(node, key, val);
+        };
+      })(),
+    },
+    computed: {
+      default: false,
+    },
+    optional: {
+      validate: assertValueType("boolean"),
+    },
+  },
+});
+
+defineType("OptionalCallExpression", {
+  visitor: ["callee", "arguments", "typeParameters"],
+  builder: ["callee", "arguments", "optional"],
+  aliases: ["Expression"],
+  fields: {
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
+    arguments: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(
+          assertNodeType("Expression", "SpreadElement", "JSXNamespacedName"),
+        ),
+      ),
+    },
+    optional: {
+      validate: assertValueType("boolean"),
+    },
+    typeArguments: {
+      validate: assertNodeType("TypeParameterInstantiation"),
+      optional: true,
+    },
+    typeParameters: {
+      validate: assertNodeType("TSTypeParameterInstantiation"),
+      optional: true,
+    },
+  },
+});
+
+defineType("ClassPrivateProperty", {
+  visitor: ["key", "value"],
+  builder: ["key", "value"],
+  aliases: ["Property", "Private"],
+  fields: {
+    key: {
+      validate: assertNodeType("PrivateName"),
+    },
+    value: {
+      validate: assertNodeType("Expression"),
+      optional: true,
+    },
+  },
+});
+
 defineType("Import", {
   aliases: ["Expression"],
 });
 
 defineType("Decorator", {
-  visitor: ["expression"],
+  visitor: ["callee", "arguments"],
   fields: {
-    expression: {
+    callee: {
       validate: assertNodeType("Expression"),
+    },
+    arguments: {
+      optional: true,
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Expression", "SpreadElement")),
+      ),
     },
   },
 });
@@ -60,4 +179,24 @@ defineType("ExportNamespaceSpecifier", {
       validate: assertNodeType("Identifier"),
     },
   },
+});
+
+defineType("PrivateName", {
+  visitor: ["id"],
+  aliases: ["Private"],
+  fields: {
+    id: {
+      validate: assertNodeType("Identifier"),
+    },
+  },
+});
+
+defineType("BigIntLiteral", {
+  builder: ["value"],
+  fields: {
+    value: {
+      validate: assertValueType("string"),
+    },
+  },
+  aliases: ["Expression", "Pureish", "Literal", "Immutable"],
 });

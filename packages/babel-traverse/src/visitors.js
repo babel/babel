@@ -1,6 +1,5 @@
 import * as virtualTypes from "./path/lib/virtual-types";
-import * as messages from "babel-messages";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import clone from "lodash/clone";
 
 /**
@@ -11,7 +10,7 @@ import clone from "lodash/clone";
  * The various shorthands are:
  * * `Identifier() { ... }` -> `Identifier: { enter() { ... } }`
  * * `"Identifier|NumericLiteral": { ... }` -> `Identifier: { ... }, NumericLiteral: { ... }`
- * * Aliases in `babel-types`: e.g. `Property: { ... }` -> `ObjectProperty: { ... }, ClassProperty: { ... }`
+ * * Aliases in `@babel/types`: e.g. `Property: { ... }` -> `ObjectProperty: { ... }, ClassProperty: { ... }`
  *
  * Other normalizations are:
  * * Visitors of virtual types are wrapped, so that they are only visited when
@@ -91,7 +90,9 @@ export function explode(visitor) {
 
     const deprecratedKey = t.DEPRECATED_KEYS[nodeType];
     if (deprecratedKey) {
-      console.trace(`Visitor defined for ${nodeType} but it has been renamed to ${deprecratedKey}`);
+      console.trace(
+        `Visitor defined for ${nodeType} but it has been renamed to ${deprecratedKey}`,
+      );
       aliases = [deprecratedKey];
     }
 
@@ -123,7 +124,10 @@ export function verify(visitor) {
   if (visitor._verified) return;
 
   if (typeof visitor === "function") {
-    throw new Error(messages.get("traverseVerifyRootFunction"));
+    throw new Error(
+      "You passed `traverse()` a function when it expected a visitor object, " +
+        "are you sure you didn't mean `{ enter: Function }`?",
+    );
   }
 
   for (const nodeType in visitor) {
@@ -134,7 +138,9 @@ export function verify(visitor) {
     if (shouldIgnoreKey(nodeType)) continue;
 
     if (t.TYPES.indexOf(nodeType) < 0) {
-      throw new Error(messages.get("traverseVerifyNodeType", nodeType));
+      throw new Error(
+        `You gave us a visitor for the node type ${nodeType} but it's not a valid type`,
+      );
     }
 
     const visitors = visitor[nodeType];
@@ -142,9 +148,15 @@ export function verify(visitor) {
       for (const visitorKey in visitors) {
         if (visitorKey === "enter" || visitorKey === "exit") {
           // verify that it just contains functions
-          validateVisitorMethods(`${nodeType}.${visitorKey}`, visitors[visitorKey]);
+          validateVisitorMethods(
+            `${nodeType}.${visitorKey}`,
+            visitors[visitorKey],
+          );
         } else {
-          throw new Error(messages.get("traverseVerifyVisitorProperty", nodeType, visitorKey));
+          throw new Error(
+            "You passed `traverse()` a visitor object with the property " +
+              `${nodeType} that has the invalid property ${visitorKey}`,
+          );
         }
       }
     }
@@ -157,12 +169,18 @@ function validateVisitorMethods(path, val) {
   const fns = [].concat(val);
   for (const fn of fns) {
     if (typeof fn !== "function") {
-      throw new TypeError(`Non-function found defined in ${path} with type ${typeof fn}`);
+      throw new TypeError(
+        `Non-function found defined in ${path} with type ${typeof fn}`,
+      );
     }
   }
 }
 
-export function merge(visitors: Array, states: Array = [], wrapper?: ?Function) {
+export function merge(
+  visitors: Array,
+  states: Array = [],
+  wrapper?: ?Function,
+) {
   const rootVisitor = {};
 
   for (let i = 0; i < visitors.length; i++) {
@@ -179,7 +197,7 @@ export function merge(visitors: Array, states: Array = [], wrapper?: ?Function) 
         visitorType = wrapWithStateOrWrapper(visitorType, state, wrapper);
       }
 
-      const nodeVisitor = rootVisitor[type] = rootVisitor[type] || {};
+      const nodeVisitor = (rootVisitor[type] = rootVisitor[type] || {});
       mergePair(nodeVisitor, visitorType);
     }
   }
@@ -196,11 +214,11 @@ function wrapWithStateOrWrapper(oldVisitor, state, wrapper: ?Function) {
     // not an enter/exit array of callbacks
     if (!Array.isArray(fns)) continue;
 
-    fns = fns.map(function (fn) {
+    fns = fns.map(function(fn) {
       let newFn = fn;
 
       if (state) {
-        newFn = function (path) {
+        newFn = function(path) {
           return fn.call(state, path, state);
         };
       }
@@ -235,7 +253,7 @@ function ensureCallbackArrays(obj) {
 }
 
 function wrapCheck(wrapper, fn) {
-  const newFn = function (path) {
+  const newFn = function(path) {
     if (wrapper.checkPath(path)) {
       return fn.apply(this, arguments);
     }
@@ -252,7 +270,9 @@ function shouldIgnoreKey(key) {
   if (key === "enter" || key === "exit" || key === "shouldSkip") return true;
 
   // ignore other options
-  if (key === "blacklist" || key === "noScope" || key === "skipKeys") return true;
+  if (key === "blacklist" || key === "noScope" || key === "skipKeys") {
+    return true;
+  }
 
   return false;
 }

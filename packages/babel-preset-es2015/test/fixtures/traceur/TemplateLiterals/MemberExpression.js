@@ -5,7 +5,7 @@
     return 1;
   }];
 
-  assert.equal(1, a[0] `whatevs`);
+  expect(a[0] `whatevs`).toBe(1);
 
   function f() {
     return [function() {
@@ -13,7 +13,7 @@
     }];
   }
 
-  assert.equal(2, f `abc` [0] `def`);
+  expect(f `abc` [0] `def`).toBe(2);
 
   let o = {
     g: function() {
@@ -21,5 +21,5 @@
     }
   };
 
-  assert.equal(3, o.g `ghi`);
+  expect(o.g `ghi`).toBe(3);
 }

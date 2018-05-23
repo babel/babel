@@ -1,18 +1,18 @@
-# babel-generator
+# @babel/generator
 
-> Turns an AST into code.
+> Turns the [babel AST](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md) into code.
 
 ## Install
 
 ```sh
-npm install --save-dev babel-generator
+npm install --save-dev @babel/generator
 ```
 
 ## Usage
 
 ```js
-import {parse} from 'babylon';
-import generate from 'babel-generator';
+import {parse} from '@babel/parser';
+import generate from '@babel/generator';
 
 const code = 'class Example {}';
 const ast = parse(code);
@@ -43,7 +43,6 @@ Options for source maps:
 name                   | type     | default         | description
 -----------------------|----------|-----------------|--------------------------------------------------------------------------
 sourceMaps             | boolean  | `false`         | Enable generating source maps
-sourceMapTarget        | string   |                 | The filename of the generated code that the source map will be associated with
 sourceRoot             | string   |                 | A root for all relative URLs in the source map
 sourceFileName         | string   |                 | The filename for the source code (i.e. the code in the `code` argument).  This will only be used if `code` is a string.
 
@@ -58,8 +57,8 @@ should be the source filenames, and values should be the source content.
 Here's an example of what that might look like:
 
 ```js
-import {parse} from 'babylon';
-import generate from 'babel-generator';
+import {parse} from '@babel/parser';
+import generate from '@babel/generator';
 
 const a = 'var a = 1;';
 const b = 'var b = 2;';

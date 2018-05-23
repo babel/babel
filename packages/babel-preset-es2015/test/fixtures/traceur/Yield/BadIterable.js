@@ -24,9 +24,9 @@ class BadIterable {
 
 var i1 = new BadIterable();
 var g1 = wrap(i1);
-assert.deepEqual(g1.next(), {value: 42, done: false});
-assert.throws(() => g1.throw('ex1'), TypeError);
-assert.isTrue(i1.closed);
+expect(g1.next()).toEqual({value: 42, done: false});
+expect(() => g1.throw('ex1')).toThrow(TypeError);
+expect(i1.closed).toBe(true);
 
 function* f2() {
   try {
@@ -38,7 +38,7 @@ function* f2() {
 f2.closed = false;
 
 var g2 = wrap(f2());
-assert.deepEqual(g2.next(), {value: 1, done: false});
-assert.throws(() => g2.throw('ex2'), 'ex2');
-assert.isTrue(f2.closed);
+expect(g2.next()).toEqual({value: 1, done: false});
+expect(() => g2.throw('ex2')).toThrow();
+expect(f2.closed).toBe(true);
 

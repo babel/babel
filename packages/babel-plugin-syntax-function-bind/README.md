@@ -1,11 +1,11 @@
-# babel-plugin-syntax-function-bind
+# @babel/plugin-syntax-function-bind
 
-Allow parsing of function bind.
+> Allow parsing of function bind.
 
 ## Installation
 
 ```sh
-npm install --save-dev babel-plugin-syntax-function-bind
+npm install --save-dev @babel/plugin-syntax-function-bind
 ```
 
 ## Usage
@@ -16,20 +16,20 @@ npm install --save-dev babel-plugin-syntax-function-bind
 
 ```json
 {
-  "plugins": ["syntax-function-bind"]
+  "plugins": ["@babel/plugin-syntax-function-bind"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel --plugins syntax-function-bind script.js
+babel --plugins @babel/plugin-syntax-function-bind script.js
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  plugins: ["syntax-function-bind"]
+require("@babel/core").transform("code", {
+  plugins: ["@babel/plugin-syntax-function-bind"]
 });
 ```

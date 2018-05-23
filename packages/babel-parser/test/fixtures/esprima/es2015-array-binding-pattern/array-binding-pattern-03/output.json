@@ -1,0 +1,156 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 14,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 14
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 14,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 14
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 14,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 14
+          }
+        },
+        "expression": {
+          "type": "ArrowFunctionExpression",
+          "start": 0,
+          "end": 13,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 13
+            }
+          },
+          "id": null,
+          "generator": false,
+          "async": false,
+          "params": [
+            {
+              "type": "ArrayPattern",
+              "start": 1,
+              "end": 9,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 1
+                },
+                "end": {
+                  "line": 1,
+                  "column": 9
+                }
+              },
+              "elements": [
+                {
+                  "type": "Identifier",
+                  "start": 2,
+                  "end": 3,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 2
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 3
+                    },
+                    "identifierName": "a"
+                  },
+                  "name": "a"
+                },
+                {
+                  "type": "RestElement",
+                  "start": 4,
+                  "end": 8,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 4
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 8
+                    }
+                  },
+                  "argument": {
+                    "type": "Identifier",
+                    "start": 7,
+                    "end": 8,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 7
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 8
+                      },
+                      "identifierName": "b"
+                    },
+                    "name": "b"
+                  }
+                }
+              ]
+            }
+          ],
+          "body": {
+            "type": "NumericLiteral",
+            "start": 12,
+            "end": 13,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 12
+              },
+              "end": {
+                "line": 1,
+                "column": 13
+              }
+            },
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

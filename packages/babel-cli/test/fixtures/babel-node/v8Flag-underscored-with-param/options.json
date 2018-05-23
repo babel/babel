@@ -1,4 +1,0 @@
-{
-  "args": ["--expose_debug_as=customDebug", "--eval", "console.log(customDebug.Debug.DebugEvent.Break)"],
-  "stdout": "1"
-}

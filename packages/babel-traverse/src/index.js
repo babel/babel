@@ -1,13 +1,13 @@
 import TraversalContext from "./context";
 import * as visitors from "./visitors";
-import * as messages from "babel-messages";
 import includes from "lodash/includes";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import * as cache from "./cache";
 
 export { default as NodePath } from "./path";
 export { default as Scope } from "./scope";
 export { default as Hub } from "./hub";
+
 export { visitors };
 
 export default function traverse(
@@ -22,7 +22,13 @@ export default function traverse(
 
   if (!opts.noScope && !scope) {
     if (parent.type !== "Program" && parent.type !== "File") {
-      throw new Error(messages.get("traverseNeedsParent", parent.type));
+      throw new Error(
+        "You must pass a scope and parentPath unless traversing a Program/File. " +
+          `Instead of that you tried to traverse a ${
+            parent.type
+          } node without ` +
+          "passing scope and parentPath.",
+      );
     }
   }
 
@@ -35,21 +41,17 @@ traverse.visitors = visitors;
 traverse.verify = visitors.verify;
 traverse.explode = visitors.explode;
 
-traverse.NodePath = require("./path");
-traverse.Scope = require("./scope");
-traverse.Hub = require("./hub");
-
-traverse.cheap = function (node, enter) {
+traverse.cheap = function(node, enter) {
   return t.traverseFast(node, enter);
 };
 
-traverse.node = function (
+traverse.node = function(
   node: Object,
   opts: Object,
   scope: Object,
   state: Object,
   parentPath: Object,
-  skipKeys?
+  skipKeys?,
 ) {
   const keys: Array = t.VISITOR_KEYS[node.type];
   if (!keys) return;
@@ -61,13 +63,13 @@ traverse.node = function (
   }
 };
 
-traverse.clearNode = function (node, opts) {
+traverse.clearNode = function(node, opts) {
   t.removeProperties(node, opts);
 
   cache.path.delete(node);
 };
 
-traverse.removeProperties = function (tree, opts) {
+traverse.removeProperties = function(tree, opts) {
   t.traverseFast(tree, traverse.clearNode, opts);
   return tree;
 };
@@ -79,11 +81,10 @@ function hasBlacklistedType(path, state) {
   }
 }
 
-traverse.hasType = function (
+traverse.hasType = function(
   tree: Object,
-  scope: Object,
   type: Object,
-  blacklistTypes: Array<string>
+  blacklistTypes: Array<string>,
 ): boolean {
   // the node we're searching in is blacklisted
   if (includes(blacklistTypes, tree.type)) return false;
@@ -96,10 +97,16 @@ traverse.hasType = function (
     type: type,
   };
 
-  traverse(tree, {
-    blacklist: blacklistTypes,
-    enter: hasBlacklistedType,
-  }, scope, state);
+  traverse(
+    tree,
+    {
+      noScope: true,
+      blacklist: blacklistTypes,
+      enter: hasBlacklistedType,
+    },
+    null,
+    state,
+  );
 
   return state.has;
 };

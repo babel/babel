@@ -1,12 +1,12 @@
 var x, z;
 
-({x = {y: 1}} = {});
-assert.deepEqual(x, {y: 1});
+(((((((((((({x = {y: 1}} = {}))))))))))));
+expect(x).toEqual({y: 1});
 
-({x = {y: {z = 2} = {}}} = {});
-assert.equal(z, 2);
-assert.deepEqual(x, {y: {}});
+(((((((((((({x = {y: ((((((((((({z = 2} = {})))))))))))}} = {}))))))))))));
+expect(z).toBe(2);
+expect(x).toEqual({y: {}});
 
-({x = {y: {z = 3} = {z: 4}}} = {});
-assert.equal(z, 4);
-assert.deepEqual(x, {y: {z: 4}});
+(((((((((((({x = {y: ((((((((((({z = 3} = {z: 4})))))))))))}} = {}))))))))))));
+expect(z).toBe(4);
+expect(x).toEqual({y: {z: 4}});

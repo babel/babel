@@ -4,4 +4,4 @@ class Tripler {
   }
 }
 
-assert.equal(new Tripler().triple(2), 6);
+expect(new Tripler().triple(2)).toBe(6);

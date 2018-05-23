@@ -4,6 +4,6 @@ function* f(x) {
 }
 
 var g = f(1);
-assert.deepEqual(g.next(), {value: 1, done: false});
-assert.deepEqual(g.next(1), {value: 2, done: false});
-assert.deepEqual(g.next(2), {value: 3, done: true});
+expect(g.next()).toEqual({value: 1, done: false});
+expect(g.next(1)).toEqual({value: 2, done: false});
+expect(g.next(2)).toEqual({value: 3, done: true});

@@ -1,0 +1,186 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 38,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 38
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 38,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 38
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 38,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 38
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 37,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 37
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 9,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 9
+                },
+                "identifierName": "hello"
+              },
+              "name": "hello"
+            },
+            "init": {
+              "type": "FunctionExpression",
+              "start": 12,
+              "end": 37,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 12
+                },
+                "end": {
+                  "line": 1,
+                  "column": 37
+                }
+              },
+              "id": {
+                "type": "Identifier",
+                "start": 21,
+                "end": 23,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 23
+                  },
+                  "identifierName": "hi"
+                },
+                "name": "hi"
+              },
+              "generator": false,
+              "async": false,
+              "params": [],
+              "body": {
+                "type": "BlockStatement",
+                "start": 26,
+                "end": 37,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 26
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 37
+                  }
+                },
+                "body": [
+                  {
+                    "type": "ExpressionStatement",
+                    "start": 28,
+                    "end": 35,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 28
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 35
+                      }
+                    },
+                    "expression": {
+                      "type": "CallExpression",
+                      "start": 28,
+                      "end": 35,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 28
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 35
+                        }
+                      },
+                      "callee": {
+                        "type": "Identifier",
+                        "start": 28,
+                        "end": 33,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 28
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 33
+                          },
+                          "identifierName": "sayHi"
+                        },
+                        "name": "sayHi"
+                      },
+                      "arguments": []
+                    }
+                  }
+                ],
+                "directives": []
+              }
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

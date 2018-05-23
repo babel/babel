@@ -29,28 +29,28 @@ class C extends B {
     super();
   }
   set x(value) {
-    assert.equal(super.x = value, value);
+    expect(super.x = value).toBe(value);
   }
   set v(value) {
     return super.x.v = value;
   }
   inc(val) {
-    assert.equal(super.z += val, 4);
+    expect(super.z += val).toBe(4);
   }
   incLookup(val) {
-    assert.equal(super['z'] += val, 9);
+    expect(super['z'] += val).toBe(9);
   }
 }
 
 var c = new C;
 c.x = 42;
-assert.equal(42, c.getX());
+expect(c.getX()).toBe(42);
 
 c.v = 123;
-assert.equal(123, c.getV());
+expect(c.getV()).toBe(123);
 
 c.inc(3);
-assert.equal(4, c.z);
+expect(c.z).toBe(4);
 
 c.incLookup(5);
-assert.equal(9, c.z);
+expect(c.z).toBe(9);

@@ -1,0 +1,3346 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 768,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 22,
+      "column": 20
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 768,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 22,
+        "column": 20
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start": 0,
+        "end": 22,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 22
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 5,
+          "end": 6,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 5
+            },
+            "end": {
+              "line": 1,
+              "column": 6
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 6,
+          "end": 18,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 18
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 7,
+              "end": 17,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 7
+                },
+                "end": {
+                  "line": 1,
+                  "column": 17
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 11,
+                "end": 17,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 17
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "right": {
+          "type": "GenericTypeAnnotation",
+          "start": 21,
+          "end": 22,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 21
+            },
+            "end": {
+              "line": 1,
+              "column": 22
+            }
+          },
+          "typeParameters": null,
+          "id": {
+            "type": "Identifier",
+            "start": 21,
+            "end": 22,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 21
+              },
+              "end": {
+                "line": 1,
+                "column": 22
+              },
+              "identifierName": "T"
+            },
+            "name": "T"
+          }
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start": 23,
+        "end": 40,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 17
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 28,
+          "end": 29,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 5
+            },
+            "end": {
+              "line": 2,
+              "column": 6
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 29,
+          "end": 36,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 6
+            },
+            "end": {
+              "line": 2,
+              "column": 13
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 30,
+              "end": 35,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 7
+                },
+                "end": {
+                  "line": 2,
+                  "column": 12
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "default": {
+                "type": "ExistsTypeAnnotation",
+                "start": 34,
+                "end": 35,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 12
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "right": {
+          "type": "GenericTypeAnnotation",
+          "start": 39,
+          "end": 40,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 16
+            },
+            "end": {
+              "line": 2,
+              "column": 17
+            }
+          },
+          "typeParameters": null,
+          "id": {
+            "type": "Identifier",
+            "start": 39,
+            "end": 40,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 16
+              },
+              "end": {
+                "line": 2,
+                "column": 17
+              },
+              "identifierName": "T"
+            },
+            "name": "T"
+          }
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start": 41,
+        "end": 72,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 31
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 46,
+          "end": 47,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 5
+            },
+            "end": {
+              "line": 3,
+              "column": 6
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 47,
+          "end": 68,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 6
+            },
+            "end": {
+              "line": 3,
+              "column": 27
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 48,
+              "end": 67,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 7
+                },
+                "end": {
+                  "line": 3,
+                  "column": 26
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start": 49,
+                "end": 58,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 17
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NullableTypeAnnotation",
+                  "start": 51,
+                  "end": 58,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 17
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start": 52,
+                    "end": 58,
+                    "loc": {
+                      "start": {
+                        "line": 3,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 3,
+                        "column": 17
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 61,
+                "end": 67,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 20
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 26
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "right": {
+          "type": "GenericTypeAnnotation",
+          "start": 71,
+          "end": 72,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 30
+            },
+            "end": {
+              "line": 3,
+              "column": 31
+            }
+          },
+          "typeParameters": null,
+          "id": {
+            "type": "Identifier",
+            "start": 71,
+            "end": 72,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 30
+              },
+              "end": {
+                "line": 3,
+                "column": 31
+              },
+              "identifierName": "T"
+            },
+            "name": "T"
+          }
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start": 73,
+        "end": 107,
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 34
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 78,
+          "end": 79,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 5
+            },
+            "end": {
+              "line": 4,
+              "column": 6
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 79,
+          "end": 103,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 6
+            },
+            "end": {
+              "line": 4,
+              "column": 30
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 80,
+              "end": 81,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 7
+                },
+                "end": {
+                  "line": 4,
+                  "column": 8
+                }
+              },
+              "name": "S",
+              "variance": null
+            },
+            {
+              "type": "TypeParameter",
+              "start": 83,
+              "end": 102,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 10
+                },
+                "end": {
+                  "line": 4,
+                  "column": 29
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start": 84,
+                "end": 93,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 20
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NullableTypeAnnotation",
+                  "start": 86,
+                  "end": 93,
+                  "loc": {
+                    "start": {
+                      "line": 4,
+                      "column": 13
+                    },
+                    "end": {
+                      "line": 4,
+                      "column": 20
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start": 87,
+                    "end": 93,
+                    "loc": {
+                      "start": {
+                        "line": 4,
+                        "column": 14
+                      },
+                      "end": {
+                        "line": 4,
+                        "column": 20
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 96,
+                "end": 102,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 23
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 29
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "right": {
+          "type": "GenericTypeAnnotation",
+          "start": 106,
+          "end": 107,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 33
+            },
+            "end": {
+              "line": 4,
+              "column": 34
+            }
+          },
+          "typeParameters": null,
+          "id": {
+            "type": "Identifier",
+            "start": 106,
+            "end": 107,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 33
+              },
+              "end": {
+                "line": 4,
+                "column": 34
+              },
+              "identifierName": "T"
+            },
+            "name": "T"
+          }
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start": 108,
+        "end": 151,
+        "loc": {
+          "start": {
+            "line": 5,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 43
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 113,
+          "end": 114,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 5
+            },
+            "end": {
+              "line": 5,
+              "column": 6
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 114,
+          "end": 147,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 6
+            },
+            "end": {
+              "line": 5,
+              "column": 39
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 115,
+              "end": 125,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 7
+                },
+                "end": {
+                  "line": 5,
+                  "column": 17
+                }
+              },
+              "name": "S",
+              "variance": null,
+              "default": {
+                "type": "NumberTypeAnnotation",
+                "start": 119,
+                "end": 125,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 17
+                  }
+                }
+              }
+            },
+            {
+              "type": "TypeParameter",
+              "start": 127,
+              "end": 146,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 19
+                },
+                "end": {
+                  "line": 5,
+                  "column": 38
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start": 128,
+                "end": 137,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 20
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 29
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NullableTypeAnnotation",
+                  "start": 130,
+                  "end": 137,
+                  "loc": {
+                    "start": {
+                      "line": 5,
+                      "column": 22
+                    },
+                    "end": {
+                      "line": 5,
+                      "column": 29
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start": 131,
+                    "end": 137,
+                    "loc": {
+                      "start": {
+                        "line": 5,
+                        "column": 23
+                      },
+                      "end": {
+                        "line": 5,
+                        "column": 29
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 140,
+                "end": 146,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 32
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 38
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "right": {
+          "type": "GenericTypeAnnotation",
+          "start": 150,
+          "end": 151,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 42
+            },
+            "end": {
+              "line": 5,
+              "column": 43
+            }
+          },
+          "typeParameters": null,
+          "id": {
+            "type": "Identifier",
+            "start": 150,
+            "end": 151,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 42
+              },
+              "end": {
+                "line": 5,
+                "column": 43
+              },
+              "identifierName": "T"
+            },
+            "name": "T"
+          }
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 152,
+        "end": 174,
+        "loc": {
+          "start": {
+            "line": 6,
+            "column": 0
+          },
+          "end": {
+            "line": 6,
+            "column": 22
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 158,
+          "end": 159,
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 6
+            },
+            "end": {
+              "line": 6,
+              "column": 7
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 159,
+          "end": 171,
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 7
+            },
+            "end": {
+              "line": 6,
+              "column": 19
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 160,
+              "end": 170,
+              "loc": {
+                "start": {
+                  "line": 6,
+                  "column": 8
+                },
+                "end": {
+                  "line": 6,
+                  "column": 18
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 164,
+                "end": 170,
+                "loc": {
+                  "start": {
+                    "line": 6,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 6,
+                    "column": 18
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 172,
+          "end": 174,
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 20
+            },
+            "end": {
+              "line": 6,
+              "column": 22
+            }
+          },
+          "body": []
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 175,
+        "end": 206,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 0
+          },
+          "end": {
+            "line": 7,
+            "column": 31
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 181,
+          "end": 182,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 6
+            },
+            "end": {
+              "line": 7,
+              "column": 7
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 182,
+          "end": 203,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 7
+            },
+            "end": {
+              "line": 7,
+              "column": 28
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 183,
+              "end": 202,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 8
+                },
+                "end": {
+                  "line": 7,
+                  "column": 27
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start": 184,
+                "end": 193,
+                "loc": {
+                  "start": {
+                    "line": 7,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 7,
+                    "column": 18
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NullableTypeAnnotation",
+                  "start": 186,
+                  "end": 193,
+                  "loc": {
+                    "start": {
+                      "line": 7,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 7,
+                      "column": 18
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start": 187,
+                    "end": 193,
+                    "loc": {
+                      "start": {
+                        "line": 7,
+                        "column": 12
+                      },
+                      "end": {
+                        "line": 7,
+                        "column": 18
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 196,
+                "end": 202,
+                "loc": {
+                  "start": {
+                    "line": 7,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 7,
+                    "column": 27
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 204,
+          "end": 206,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 29
+            },
+            "end": {
+              "line": 7,
+              "column": 31
+            }
+          },
+          "body": []
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 207,
+        "end": 241,
+        "loc": {
+          "start": {
+            "line": 8,
+            "column": 0
+          },
+          "end": {
+            "line": 8,
+            "column": 34
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 213,
+          "end": 214,
+          "loc": {
+            "start": {
+              "line": 8,
+              "column": 6
+            },
+            "end": {
+              "line": 8,
+              "column": 7
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 214,
+          "end": 238,
+          "loc": {
+            "start": {
+              "line": 8,
+              "column": 7
+            },
+            "end": {
+              "line": 8,
+              "column": 31
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 215,
+              "end": 216,
+              "loc": {
+                "start": {
+                  "line": 8,
+                  "column": 8
+                },
+                "end": {
+                  "line": 8,
+                  "column": 9
+                }
+              },
+              "name": "S",
+              "variance": null
+            },
+            {
+              "type": "TypeParameter",
+              "start": 218,
+              "end": 237,
+              "loc": {
+                "start": {
+                  "line": 8,
+                  "column": 11
+                },
+                "end": {
+                  "line": 8,
+                  "column": 30
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start": 219,
+                "end": 228,
+                "loc": {
+                  "start": {
+                    "line": 8,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 8,
+                    "column": 21
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NullableTypeAnnotation",
+                  "start": 221,
+                  "end": 228,
+                  "loc": {
+                    "start": {
+                      "line": 8,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 8,
+                      "column": 21
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start": 222,
+                    "end": 228,
+                    "loc": {
+                      "start": {
+                        "line": 8,
+                        "column": 15
+                      },
+                      "end": {
+                        "line": 8,
+                        "column": 21
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 231,
+                "end": 237,
+                "loc": {
+                  "start": {
+                    "line": 8,
+                    "column": 24
+                  },
+                  "end": {
+                    "line": 8,
+                    "column": 30
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 239,
+          "end": 241,
+          "loc": {
+            "start": {
+              "line": 8,
+              "column": 32
+            },
+            "end": {
+              "line": 8,
+              "column": 34
+            }
+          },
+          "body": []
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 242,
+        "end": 285,
+        "loc": {
+          "start": {
+            "line": 9,
+            "column": 0
+          },
+          "end": {
+            "line": 9,
+            "column": 43
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 248,
+          "end": 249,
+          "loc": {
+            "start": {
+              "line": 9,
+              "column": 6
+            },
+            "end": {
+              "line": 9,
+              "column": 7
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 249,
+          "end": 282,
+          "loc": {
+            "start": {
+              "line": 9,
+              "column": 7
+            },
+            "end": {
+              "line": 9,
+              "column": 40
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 250,
+              "end": 260,
+              "loc": {
+                "start": {
+                  "line": 9,
+                  "column": 8
+                },
+                "end": {
+                  "line": 9,
+                  "column": 18
+                }
+              },
+              "name": "S",
+              "variance": null,
+              "default": {
+                "type": "NumberTypeAnnotation",
+                "start": 254,
+                "end": 260,
+                "loc": {
+                  "start": {
+                    "line": 9,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 9,
+                    "column": 18
+                  }
+                }
+              }
+            },
+            {
+              "type": "TypeParameter",
+              "start": 262,
+              "end": 281,
+              "loc": {
+                "start": {
+                  "line": 9,
+                  "column": 20
+                },
+                "end": {
+                  "line": 9,
+                  "column": 39
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start": 263,
+                "end": 272,
+                "loc": {
+                  "start": {
+                    "line": 9,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 9,
+                    "column": 30
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NullableTypeAnnotation",
+                  "start": 265,
+                  "end": 272,
+                  "loc": {
+                    "start": {
+                      "line": 9,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 9,
+                      "column": 30
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start": 266,
+                    "end": 272,
+                    "loc": {
+                      "start": {
+                        "line": 9,
+                        "column": 24
+                      },
+                      "end": {
+                        "line": 9,
+                        "column": 30
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 275,
+                "end": 281,
+                "loc": {
+                  "start": {
+                    "line": 9,
+                    "column": 33
+                  },
+                  "end": {
+                    "line": 9,
+                    "column": 39
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 283,
+          "end": 285,
+          "loc": {
+            "start": {
+              "line": 9,
+              "column": 41
+            },
+            "end": {
+              "line": 9,
+              "column": 43
+            }
+          },
+          "body": []
+        }
+      },
+      {
+        "type": "EmptyStatement",
+        "start": 286,
+        "end": 287,
+        "loc": {
+          "start": {
+            "line": 10,
+            "column": 0
+          },
+          "end": {
+            "line": 10,
+            "column": 1
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 287,
+        "end": 313,
+        "loc": {
+          "start": {
+            "line": 10,
+            "column": 1
+          },
+          "end": {
+            "line": 11,
+            "column": 1
+          }
+        },
+        "expression": {
+          "type": "ClassExpression",
+          "start": 288,
+          "end": 310,
+          "loc": {
+            "start": {
+              "line": 10,
+              "column": 2
+            },
+            "end": {
+              "line": 10,
+              "column": 24
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 294,
+            "end": 295,
+            "loc": {
+              "start": {
+                "line": 10,
+                "column": 8
+              },
+              "end": {
+                "line": 10,
+                "column": 9
+              },
+              "identifierName": "A"
+            },
+            "name": "A"
+          },
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start": 295,
+            "end": 307,
+            "loc": {
+              "start": {
+                "line": 10,
+                "column": 9
+              },
+              "end": {
+                "line": 10,
+                "column": 21
+              }
+            },
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start": 296,
+                "end": 306,
+                "loc": {
+                  "start": {
+                    "line": 10,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 10,
+                    "column": 20
+                  }
+                },
+                "name": "T",
+                "variance": null,
+                "default": {
+                  "type": "StringTypeAnnotation",
+                  "start": 300,
+                  "end": 306,
+                  "loc": {
+                    "start": {
+                      "line": 10,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 10,
+                      "column": 20
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 308,
+            "end": 310,
+            "loc": {
+              "start": {
+                "line": 10,
+                "column": 22
+              },
+              "end": {
+                "line": 10,
+                "column": 24
+              }
+            },
+            "body": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 287
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 313,
+        "end": 348,
+        "loc": {
+          "start": {
+            "line": 11,
+            "column": 1
+          },
+          "end": {
+            "line": 12,
+            "column": 1
+          }
+        },
+        "expression": {
+          "type": "ClassExpression",
+          "start": 314,
+          "end": 345,
+          "loc": {
+            "start": {
+              "line": 11,
+              "column": 2
+            },
+            "end": {
+              "line": 11,
+              "column": 33
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 320,
+            "end": 321,
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 8
+              },
+              "end": {
+                "line": 11,
+                "column": 9
+              },
+              "identifierName": "A"
+            },
+            "name": "A"
+          },
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start": 321,
+            "end": 342,
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 9
+              },
+              "end": {
+                "line": 11,
+                "column": 30
+              }
+            },
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start": 322,
+                "end": 341,
+                "loc": {
+                  "start": {
+                    "line": 11,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 11,
+                    "column": 29
+                  }
+                },
+                "name": "T",
+                "variance": null,
+                "bound": {
+                  "type": "TypeAnnotation",
+                  "start": 323,
+                  "end": 332,
+                  "loc": {
+                    "start": {
+                      "line": 11,
+                      "column": 11
+                    },
+                    "end": {
+                      "line": 11,
+                      "column": 20
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "NullableTypeAnnotation",
+                    "start": 325,
+                    "end": 332,
+                    "loc": {
+                      "start": {
+                        "line": 11,
+                        "column": 13
+                      },
+                      "end": {
+                        "line": 11,
+                        "column": 20
+                      }
+                    },
+                    "typeAnnotation": {
+                      "type": "StringTypeAnnotation",
+                      "start": 326,
+                      "end": 332,
+                      "loc": {
+                        "start": {
+                          "line": 11,
+                          "column": 14
+                        },
+                        "end": {
+                          "line": 11,
+                          "column": 20
+                        }
+                      }
+                    }
+                  }
+                },
+                "default": {
+                  "type": "StringTypeAnnotation",
+                  "start": 335,
+                  "end": 341,
+                  "loc": {
+                    "start": {
+                      "line": 11,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 11,
+                      "column": 29
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 343,
+            "end": 345,
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 31
+              },
+              "end": {
+                "line": 11,
+                "column": 33
+              }
+            },
+            "body": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 313
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 348,
+        "end": 386,
+        "loc": {
+          "start": {
+            "line": 12,
+            "column": 1
+          },
+          "end": {
+            "line": 13,
+            "column": 1
+          }
+        },
+        "expression": {
+          "type": "ClassExpression",
+          "start": 349,
+          "end": 383,
+          "loc": {
+            "start": {
+              "line": 12,
+              "column": 2
+            },
+            "end": {
+              "line": 12,
+              "column": 36
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 355,
+            "end": 356,
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 8
+              },
+              "end": {
+                "line": 12,
+                "column": 9
+              },
+              "identifierName": "A"
+            },
+            "name": "A"
+          },
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start": 356,
+            "end": 380,
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 9
+              },
+              "end": {
+                "line": 12,
+                "column": 33
+              }
+            },
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start": 357,
+                "end": 358,
+                "loc": {
+                  "start": {
+                    "line": 12,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 12,
+                    "column": 11
+                  }
+                },
+                "name": "S",
+                "variance": null
+              },
+              {
+                "type": "TypeParameter",
+                "start": 360,
+                "end": 379,
+                "loc": {
+                  "start": {
+                    "line": 12,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 12,
+                    "column": 32
+                  }
+                },
+                "name": "T",
+                "variance": null,
+                "bound": {
+                  "type": "TypeAnnotation",
+                  "start": 361,
+                  "end": 370,
+                  "loc": {
+                    "start": {
+                      "line": 12,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 12,
+                      "column": 23
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "NullableTypeAnnotation",
+                    "start": 363,
+                    "end": 370,
+                    "loc": {
+                      "start": {
+                        "line": 12,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 12,
+                        "column": 23
+                      }
+                    },
+                    "typeAnnotation": {
+                      "type": "StringTypeAnnotation",
+                      "start": 364,
+                      "end": 370,
+                      "loc": {
+                        "start": {
+                          "line": 12,
+                          "column": 17
+                        },
+                        "end": {
+                          "line": 12,
+                          "column": 23
+                        }
+                      }
+                    }
+                  }
+                },
+                "default": {
+                  "type": "StringTypeAnnotation",
+                  "start": 373,
+                  "end": 379,
+                  "loc": {
+                    "start": {
+                      "line": 12,
+                      "column": 26
+                    },
+                    "end": {
+                      "line": 12,
+                      "column": 32
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 381,
+            "end": 383,
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 34
+              },
+              "end": {
+                "line": 12,
+                "column": 36
+              }
+            },
+            "body": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 348
+          }
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 386,
+        "end": 431,
+        "loc": {
+          "start": {
+            "line": 13,
+            "column": 1
+          },
+          "end": {
+            "line": 13,
+            "column": 46
+          }
+        },
+        "expression": {
+          "type": "ClassExpression",
+          "start": 387,
+          "end": 430,
+          "loc": {
+            "start": {
+              "line": 13,
+              "column": 2
+            },
+            "end": {
+              "line": 13,
+              "column": 45
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 393,
+            "end": 394,
+            "loc": {
+              "start": {
+                "line": 13,
+                "column": 8
+              },
+              "end": {
+                "line": 13,
+                "column": 9
+              },
+              "identifierName": "A"
+            },
+            "name": "A"
+          },
+          "typeParameters": {
+            "type": "TypeParameterDeclaration",
+            "start": 394,
+            "end": 427,
+            "loc": {
+              "start": {
+                "line": 13,
+                "column": 9
+              },
+              "end": {
+                "line": 13,
+                "column": 42
+              }
+            },
+            "params": [
+              {
+                "type": "TypeParameter",
+                "start": 395,
+                "end": 405,
+                "loc": {
+                  "start": {
+                    "line": 13,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 13,
+                    "column": 20
+                  }
+                },
+                "name": "S",
+                "variance": null,
+                "default": {
+                  "type": "NumberTypeAnnotation",
+                  "start": 399,
+                  "end": 405,
+                  "loc": {
+                    "start": {
+                      "line": 13,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 13,
+                      "column": 20
+                    }
+                  }
+                }
+              },
+              {
+                "type": "TypeParameter",
+                "start": 407,
+                "end": 426,
+                "loc": {
+                  "start": {
+                    "line": 13,
+                    "column": 22
+                  },
+                  "end": {
+                    "line": 13,
+                    "column": 41
+                  }
+                },
+                "name": "T",
+                "variance": null,
+                "bound": {
+                  "type": "TypeAnnotation",
+                  "start": 408,
+                  "end": 417,
+                  "loc": {
+                    "start": {
+                      "line": 13,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 13,
+                      "column": 32
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "NullableTypeAnnotation",
+                    "start": 410,
+                    "end": 417,
+                    "loc": {
+                      "start": {
+                        "line": 13,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 13,
+                        "column": 32
+                      }
+                    },
+                    "typeAnnotation": {
+                      "type": "StringTypeAnnotation",
+                      "start": 411,
+                      "end": 417,
+                      "loc": {
+                        "start": {
+                          "line": 13,
+                          "column": 26
+                        },
+                        "end": {
+                          "line": 13,
+                          "column": 32
+                        }
+                      }
+                    }
+                  }
+                },
+                "default": {
+                  "type": "StringTypeAnnotation",
+                  "start": 420,
+                  "end": 426,
+                  "loc": {
+                    "start": {
+                      "line": 13,
+                      "column": 35
+                    },
+                    "end": {
+                      "line": 13,
+                      "column": 41
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 428,
+            "end": 430,
+            "loc": {
+              "start": {
+                "line": 13,
+                "column": 43
+              },
+              "end": {
+                "line": 13,
+                "column": 45
+              }
+            },
+            "body": []
+          },
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 386
+          }
+        }
+      },
+      {
+        "type": "DeclareClass",
+        "start": 432,
+        "end": 462,
+        "loc": {
+          "start": {
+            "line": 14,
+            "column": 0
+          },
+          "end": {
+            "line": 14,
+            "column": 30
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 446,
+          "end": 447,
+          "loc": {
+            "start": {
+              "line": 14,
+              "column": 14
+            },
+            "end": {
+              "line": 14,
+              "column": 15
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 447,
+          "end": 459,
+          "loc": {
+            "start": {
+              "line": 14,
+              "column": 15
+            },
+            "end": {
+              "line": 14,
+              "column": 27
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 448,
+              "end": 458,
+              "loc": {
+                "start": {
+                  "line": 14,
+                  "column": 16
+                },
+                "end": {
+                  "line": 14,
+                  "column": 26
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 452,
+                "end": 458,
+                "loc": {
+                  "start": {
+                    "line": 14,
+                    "column": 20
+                  },
+                  "end": {
+                    "line": 14,
+                    "column": 26
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 460,
+          "end": 462,
+          "loc": {
+            "start": {
+              "line": 14,
+              "column": 28
+            },
+            "end": {
+              "line": 14,
+              "column": 30
+            }
+          },
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "DeclareClass",
+        "start": 463,
+        "end": 502,
+        "loc": {
+          "start": {
+            "line": 15,
+            "column": 0
+          },
+          "end": {
+            "line": 15,
+            "column": 39
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 477,
+          "end": 478,
+          "loc": {
+            "start": {
+              "line": 15,
+              "column": 14
+            },
+            "end": {
+              "line": 15,
+              "column": 15
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 478,
+          "end": 499,
+          "loc": {
+            "start": {
+              "line": 15,
+              "column": 15
+            },
+            "end": {
+              "line": 15,
+              "column": 36
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 479,
+              "end": 498,
+              "loc": {
+                "start": {
+                  "line": 15,
+                  "column": 16
+                },
+                "end": {
+                  "line": 15,
+                  "column": 35
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start": 480,
+                "end": 489,
+                "loc": {
+                  "start": {
+                    "line": 15,
+                    "column": 17
+                  },
+                  "end": {
+                    "line": 15,
+                    "column": 26
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NullableTypeAnnotation",
+                  "start": 482,
+                  "end": 489,
+                  "loc": {
+                    "start": {
+                      "line": 15,
+                      "column": 19
+                    },
+                    "end": {
+                      "line": 15,
+                      "column": 26
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start": 483,
+                    "end": 489,
+                    "loc": {
+                      "start": {
+                        "line": 15,
+                        "column": 20
+                      },
+                      "end": {
+                        "line": 15,
+                        "column": 26
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 492,
+                "end": 498,
+                "loc": {
+                  "start": {
+                    "line": 15,
+                    "column": 29
+                  },
+                  "end": {
+                    "line": 15,
+                    "column": 35
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 500,
+          "end": 502,
+          "loc": {
+            "start": {
+              "line": 15,
+              "column": 37
+            },
+            "end": {
+              "line": 15,
+              "column": 39
+            }
+          },
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "DeclareClass",
+        "start": 503,
+        "end": 545,
+        "loc": {
+          "start": {
+            "line": 16,
+            "column": 0
+          },
+          "end": {
+            "line": 16,
+            "column": 42
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 517,
+          "end": 518,
+          "loc": {
+            "start": {
+              "line": 16,
+              "column": 14
+            },
+            "end": {
+              "line": 16,
+              "column": 15
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 518,
+          "end": 542,
+          "loc": {
+            "start": {
+              "line": 16,
+              "column": 15
+            },
+            "end": {
+              "line": 16,
+              "column": 39
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 519,
+              "end": 520,
+              "loc": {
+                "start": {
+                  "line": 16,
+                  "column": 16
+                },
+                "end": {
+                  "line": 16,
+                  "column": 17
+                }
+              },
+              "name": "S",
+              "variance": null
+            },
+            {
+              "type": "TypeParameter",
+              "start": 522,
+              "end": 541,
+              "loc": {
+                "start": {
+                  "line": 16,
+                  "column": 19
+                },
+                "end": {
+                  "line": 16,
+                  "column": 38
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start": 523,
+                "end": 532,
+                "loc": {
+                  "start": {
+                    "line": 16,
+                    "column": 20
+                  },
+                  "end": {
+                    "line": 16,
+                    "column": 29
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NullableTypeAnnotation",
+                  "start": 525,
+                  "end": 532,
+                  "loc": {
+                    "start": {
+                      "line": 16,
+                      "column": 22
+                    },
+                    "end": {
+                      "line": 16,
+                      "column": 29
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start": 526,
+                    "end": 532,
+                    "loc": {
+                      "start": {
+                        "line": 16,
+                        "column": 23
+                      },
+                      "end": {
+                        "line": 16,
+                        "column": 29
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 535,
+                "end": 541,
+                "loc": {
+                  "start": {
+                    "line": 16,
+                    "column": 32
+                  },
+                  "end": {
+                    "line": 16,
+                    "column": 38
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 543,
+          "end": 545,
+          "loc": {
+            "start": {
+              "line": 16,
+              "column": 40
+            },
+            "end": {
+              "line": 16,
+              "column": 42
+            }
+          },
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "DeclareClass",
+        "start": 546,
+        "end": 597,
+        "loc": {
+          "start": {
+            "line": 17,
+            "column": 0
+          },
+          "end": {
+            "line": 17,
+            "column": 51
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 560,
+          "end": 561,
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 14
+            },
+            "end": {
+              "line": 17,
+              "column": 15
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 561,
+          "end": 594,
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 15
+            },
+            "end": {
+              "line": 17,
+              "column": 48
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 562,
+              "end": 572,
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 16
+                },
+                "end": {
+                  "line": 17,
+                  "column": 26
+                }
+              },
+              "name": "S",
+              "variance": null,
+              "default": {
+                "type": "NumberTypeAnnotation",
+                "start": 566,
+                "end": 572,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 20
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 26
+                  }
+                }
+              }
+            },
+            {
+              "type": "TypeParameter",
+              "start": 574,
+              "end": 593,
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 28
+                },
+                "end": {
+                  "line": 17,
+                  "column": 47
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start": 575,
+                "end": 584,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 29
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 38
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NullableTypeAnnotation",
+                  "start": 577,
+                  "end": 584,
+                  "loc": {
+                    "start": {
+                      "line": 17,
+                      "column": 31
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 38
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start": 578,
+                    "end": 584,
+                    "loc": {
+                      "start": {
+                        "line": 17,
+                        "column": 32
+                      },
+                      "end": {
+                        "line": 17,
+                        "column": 38
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 587,
+                "end": 593,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 41
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 47
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 595,
+          "end": 597,
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 49
+            },
+            "end": {
+              "line": 17,
+              "column": 51
+            }
+          },
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "InterfaceDeclaration",
+        "start": 598,
+        "end": 624,
+        "loc": {
+          "start": {
+            "line": 18,
+            "column": 0
+          },
+          "end": {
+            "line": 18,
+            "column": 26
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 608,
+          "end": 609,
+          "loc": {
+            "start": {
+              "line": 18,
+              "column": 10
+            },
+            "end": {
+              "line": 18,
+              "column": 11
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 609,
+          "end": 621,
+          "loc": {
+            "start": {
+              "line": 18,
+              "column": 11
+            },
+            "end": {
+              "line": 18,
+              "column": 23
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 610,
+              "end": 620,
+              "loc": {
+                "start": {
+                  "line": 18,
+                  "column": 12
+                },
+                "end": {
+                  "line": 18,
+                  "column": 22
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 614,
+                "end": 620,
+                "loc": {
+                  "start": {
+                    "line": 18,
+                    "column": 16
+                  },
+                  "end": {
+                    "line": 18,
+                    "column": 22
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 622,
+          "end": 624,
+          "loc": {
+            "start": {
+              "line": 18,
+              "column": 24
+            },
+            "end": {
+              "line": 18,
+              "column": 26
+            }
+          },
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "InterfaceDeclaration",
+        "start": 625,
+        "end": 660,
+        "loc": {
+          "start": {
+            "line": 19,
+            "column": 0
+          },
+          "end": {
+            "line": 19,
+            "column": 35
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 635,
+          "end": 636,
+          "loc": {
+            "start": {
+              "line": 19,
+              "column": 10
+            },
+            "end": {
+              "line": 19,
+              "column": 11
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 636,
+          "end": 657,
+          "loc": {
+            "start": {
+              "line": 19,
+              "column": 11
+            },
+            "end": {
+              "line": 19,
+              "column": 32
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 637,
+              "end": 656,
+              "loc": {
+                "start": {
+                  "line": 19,
+                  "column": 12
+                },
+                "end": {
+                  "line": 19,
+                  "column": 31
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start": 638,
+                "end": 647,
+                "loc": {
+                  "start": {
+                    "line": 19,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 19,
+                    "column": 22
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NullableTypeAnnotation",
+                  "start": 640,
+                  "end": 647,
+                  "loc": {
+                    "start": {
+                      "line": 19,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 19,
+                      "column": 22
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start": 641,
+                    "end": 647,
+                    "loc": {
+                      "start": {
+                        "line": 19,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 19,
+                        "column": 22
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 650,
+                "end": 656,
+                "loc": {
+                  "start": {
+                    "line": 19,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 19,
+                    "column": 31
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 658,
+          "end": 660,
+          "loc": {
+            "start": {
+              "line": 19,
+              "column": 33
+            },
+            "end": {
+              "line": 19,
+              "column": 35
+            }
+          },
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "InterfaceDeclaration",
+        "start": 661,
+        "end": 699,
+        "loc": {
+          "start": {
+            "line": 20,
+            "column": 0
+          },
+          "end": {
+            "line": 20,
+            "column": 38
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 671,
+          "end": 672,
+          "loc": {
+            "start": {
+              "line": 20,
+              "column": 10
+            },
+            "end": {
+              "line": 20,
+              "column": 11
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 672,
+          "end": 696,
+          "loc": {
+            "start": {
+              "line": 20,
+              "column": 11
+            },
+            "end": {
+              "line": 20,
+              "column": 35
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 673,
+              "end": 674,
+              "loc": {
+                "start": {
+                  "line": 20,
+                  "column": 12
+                },
+                "end": {
+                  "line": 20,
+                  "column": 13
+                }
+              },
+              "name": "S",
+              "variance": null
+            },
+            {
+              "type": "TypeParameter",
+              "start": 676,
+              "end": 695,
+              "loc": {
+                "start": {
+                  "line": 20,
+                  "column": 15
+                },
+                "end": {
+                  "line": 20,
+                  "column": 34
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start": 677,
+                "end": 686,
+                "loc": {
+                  "start": {
+                    "line": 20,
+                    "column": 16
+                  },
+                  "end": {
+                    "line": 20,
+                    "column": 25
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NullableTypeAnnotation",
+                  "start": 679,
+                  "end": 686,
+                  "loc": {
+                    "start": {
+                      "line": 20,
+                      "column": 18
+                    },
+                    "end": {
+                      "line": 20,
+                      "column": 25
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start": 680,
+                    "end": 686,
+                    "loc": {
+                      "start": {
+                        "line": 20,
+                        "column": 19
+                      },
+                      "end": {
+                        "line": 20,
+                        "column": 25
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 689,
+                "end": 695,
+                "loc": {
+                  "start": {
+                    "line": 20,
+                    "column": 28
+                  },
+                  "end": {
+                    "line": 20,
+                    "column": 34
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 697,
+          "end": 699,
+          "loc": {
+            "start": {
+              "line": 20,
+              "column": 36
+            },
+            "end": {
+              "line": 20,
+              "column": 38
+            }
+          },
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "InterfaceDeclaration",
+        "start": 700,
+        "end": 747,
+        "loc": {
+          "start": {
+            "line": 21,
+            "column": 0
+          },
+          "end": {
+            "line": 21,
+            "column": 47
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 710,
+          "end": 711,
+          "loc": {
+            "start": {
+              "line": 21,
+              "column": 10
+            },
+            "end": {
+              "line": 21,
+              "column": 11
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 711,
+          "end": 744,
+          "loc": {
+            "start": {
+              "line": 21,
+              "column": 11
+            },
+            "end": {
+              "line": 21,
+              "column": 44
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 712,
+              "end": 722,
+              "loc": {
+                "start": {
+                  "line": 21,
+                  "column": 12
+                },
+                "end": {
+                  "line": 21,
+                  "column": 22
+                }
+              },
+              "name": "S",
+              "variance": null,
+              "default": {
+                "type": "NumberTypeAnnotation",
+                "start": 716,
+                "end": 722,
+                "loc": {
+                  "start": {
+                    "line": 21,
+                    "column": 16
+                  },
+                  "end": {
+                    "line": 21,
+                    "column": 22
+                  }
+                }
+              }
+            },
+            {
+              "type": "TypeParameter",
+              "start": 724,
+              "end": 743,
+              "loc": {
+                "start": {
+                  "line": 21,
+                  "column": 24
+                },
+                "end": {
+                  "line": 21,
+                  "column": 43
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "bound": {
+                "type": "TypeAnnotation",
+                "start": 725,
+                "end": 734,
+                "loc": {
+                  "start": {
+                    "line": 21,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 21,
+                    "column": 34
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NullableTypeAnnotation",
+                  "start": 727,
+                  "end": 734,
+                  "loc": {
+                    "start": {
+                      "line": 21,
+                      "column": 27
+                    },
+                    "end": {
+                      "line": 21,
+                      "column": 34
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "StringTypeAnnotation",
+                    "start": 728,
+                    "end": 734,
+                    "loc": {
+                      "start": {
+                        "line": 21,
+                        "column": 28
+                      },
+                      "end": {
+                        "line": 21,
+                        "column": 34
+                      }
+                    }
+                  }
+                }
+              },
+              "default": {
+                "type": "StringTypeAnnotation",
+                "start": 737,
+                "end": 743,
+                "loc": {
+                  "start": {
+                    "line": 21,
+                    "column": 37
+                  },
+                  "end": {
+                    "line": 21,
+                    "column": 43
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 745,
+          "end": 747,
+          "loc": {
+            "start": {
+              "line": 21,
+              "column": 45
+            },
+            "end": {
+              "line": 21,
+              "column": 47
+            }
+          },
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start": 748,
+        "end": 768,
+        "loc": {
+          "start": {
+            "line": 22,
+            "column": 0
+          },
+          "end": {
+            "line": 22,
+            "column": 20
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 753,
+          "end": 754,
+          "loc": {
+            "start": {
+              "line": 22,
+              "column": 5
+            },
+            "end": {
+              "line": 22,
+              "column": 6
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": {
+          "type": "TypeParameterDeclaration",
+          "start": 754,
+          "end": 764,
+          "loc": {
+            "start": {
+              "line": 22,
+              "column": 6
+            },
+            "end": {
+              "line": 22,
+              "column": 16
+            }
+          },
+          "params": [
+            {
+              "type": "TypeParameter",
+              "start": 755,
+              "end": 763,
+              "loc": {
+                "start": {
+                  "line": 22,
+                  "column": 7
+                },
+                "end": {
+                  "line": 22,
+                  "column": 15
+                }
+              },
+              "name": "T",
+              "variance": null,
+              "default": {
+                "type": "VoidTypeAnnotation",
+                "start": 759,
+                "end": 763,
+                "loc": {
+                  "start": {
+                    "line": 22,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 22,
+                    "column": 15
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "right": {
+          "type": "GenericTypeAnnotation",
+          "start": 767,
+          "end": 768,
+          "loc": {
+            "start": {
+              "line": 22,
+              "column": 19
+            },
+            "end": {
+              "line": 22,
+              "column": 20
+            }
+          },
+          "typeParameters": null,
+          "id": {
+            "type": "Identifier",
+            "start": 767,
+            "end": 768,
+            "loc": {
+              "start": {
+                "line": 22,
+                "column": 19
+              },
+              "end": {
+                "line": 22,
+                "column": 20
+              },
+              "identifierName": "T"
+            },
+            "name": "T"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

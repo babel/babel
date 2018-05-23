@@ -1,9 +1,8 @@
-const cloneDeep = require("lodash/cloneDeep");
-const traverse = require("../lib").default;
-const assert = require("assert");
-const parse = require("babylon").parse;
+import cloneDeep from "lodash/cloneDeep";
+import traverse from "../lib";
+import { parse } from "@babel/parser";
 
-describe("traverse", function () {
+describe("traverse", function() {
   const code = `
     var foo = "bar";
     this.test = "wow";
@@ -12,7 +11,7 @@ describe("traverse", function () {
   const program = ast.program;
   const body = program.body;
 
-  it("traverse replace", function () {
+  it("traverse replace", function() {
     const replacement = {
       type: "StringLiteral",
       value: "foo",
@@ -20,72 +19,88 @@ describe("traverse", function () {
     const ast2 = cloneDeep(program);
 
     traverse(ast2, {
-      enter: function (path) {
+      enter: function(path) {
         if (path.node.type === "ThisExpression") path.replaceWith(replacement);
       },
     });
 
-    assert.equal(ast2.body[1].expression.left.object, replacement);
+    expect(ast2.body[1].expression.left.object).toBe(replacement);
   });
 
-  it("traverse", function () {
-    const expect = [
-      body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
-      body[1], body[1].expression, body[1].expression.left, body[1].expression.left.object,
-      body[1].expression.left.property, body[1].expression.right,
+  it("traverse", function() {
+    const expected = [
+      body[0],
+      body[0].declarations[0],
+      body[0].declarations[0].id,
+      body[0].declarations[0].init,
+      body[1],
+      body[1].expression,
+      body[1].expression.left,
+      body[1].expression.left.object,
+      body[1].expression.left.property,
+      body[1].expression.right,
     ];
 
     const actual = [];
 
     traverse(program, {
-      enter: function (path) {
+      enter: function(path) {
         actual.push(path.node);
       },
     });
 
-    assert.deepEqual(actual, expect);
+    expect(actual).toEqual(expected);
   });
 
-  it("traverse falsy parent", function () {
+  it("traverse falsy parent", function() {
     traverse(null, {
-      enter: function () {
+      enter: function() {
         throw new Error("should not be ran");
       },
     });
   });
 
-  it("traverse blacklistTypes", function () {
-    const expect = [
-      body[0], body[0].declarations[0], body[0].declarations[0].id, body[0].declarations[0].init,
-      body[1], body[1].expression, body[1].expression.right,
+  it("traverse blacklistTypes", function() {
+    const expected = [
+      body[0],
+      body[0].declarations[0],
+      body[0].declarations[0].id,
+      body[0].declarations[0].init,
+      body[1],
+      body[1].expression,
+      body[1].expression.right,
     ];
 
     const actual = [];
 
     traverse(program, {
       blacklist: ["MemberExpression"],
-      enter: function (path) {
+      enter: function(path) {
         actual.push(path.node);
       },
     });
 
-    assert.deepEqual(actual, expect);
+    expect(actual).toEqual(expected);
   });
 
-  it("hasType", function () {
-    assert.ok(traverse.hasType(ast, null, "ThisExpression"));
-    assert.ok(!traverse.hasType(ast, null, "ThisExpression", ["AssignmentExpression"]));
+  it("hasType", function() {
+    expect(traverse.hasType(ast, "ThisExpression")).toBeTruthy();
+    expect(
+      traverse.hasType(ast, "ThisExpression", ["AssignmentExpression"]),
+    ).toBeFalsy();
 
-    assert.ok(traverse.hasType(ast, null, "ThisExpression"));
-    assert.ok(traverse.hasType(ast, null, "Program"));
+    expect(traverse.hasType(ast, "ThisExpression")).toBeTruthy();
+    expect(traverse.hasType(ast, "Program")).toBeTruthy();
 
-    assert.ok(!traverse.hasType(ast, null, "ThisExpression", ["MemberExpression"]));
-    assert.ok(!traverse.hasType(ast, null, "ThisExpression", ["Program"]));
+    expect(
+      traverse.hasType(ast, "ThisExpression", ["MemberExpression"]),
+    ).toBeFalsy();
+    expect(traverse.hasType(ast, "ThisExpression", ["Program"])).toBeFalsy();
 
-    assert.ok(!traverse.hasType(ast, null, "ArrowFunctionExpression"));
+    expect(traverse.hasType(ast, "ArrowFunctionExpression")).toBeFalsy();
   });
 
-  it("clearCache", function () {
+  it("clearCache", function() {
     const paths = [];
     const scopes = [];
     traverse(ast, {
@@ -108,13 +123,13 @@ describe("traverse", function () {
       },
     });
 
-    scopes2.forEach(function (_, i) {
-      assert.notStrictEqual(scopes[i], scopes2[i]);
-      assert.notStrictEqual(paths[i], paths2[i]);
+    scopes2.forEach(function(_, i) {
+      expect(scopes[i]).not.toBe(scopes2[i]);
+      expect(paths[i]).not.toBe(paths2[i]);
     });
   });
 
-  it("clearPath", function () {
+  it("clearPath", function() {
     const paths = [];
     traverse(ast, {
       enter(path) {
@@ -131,12 +146,12 @@ describe("traverse", function () {
       },
     });
 
-    paths2.forEach(function (p, i) {
-      assert.notStrictEqual(p, paths[i]);
+    paths2.forEach(function(p, i) {
+      expect(p).not.toBe(paths[i]);
     });
   });
 
-  it("clearScope", function () {
+  it("clearScope", function() {
     const scopes = [];
     traverse(ast, {
       enter(path) {
@@ -155,8 +170,8 @@ describe("traverse", function () {
       },
     });
 
-    scopes2.forEach(function (p, i) {
-      assert.notStrictEqual(p, scopes[i]);
+    scopes2.forEach(function(p, i) {
+      expect(p).not.toBe(scopes[i]);
     });
   });
 });

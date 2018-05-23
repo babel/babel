@@ -6,11 +6,11 @@
     for (let x = 1; x < 2; x++) {
       for (let x = 2; x < 3; x++) {
         count++;
-        assert.equal(2, x);
+        expect(x).toBe(2);
       }
     }
   }
-  assert.equal(1, count);
+  expect(count).toBe(1);
 })();
 
 (function() {
@@ -19,11 +19,11 @@
     for (let x in {1: 1}) {
       for (let x in {2: 2}) {
         count++;
-        assert.equal('2', x);
+        expect(x).toBe('2');
       }
     }
   }
-  assert.equal(1, count);
+  expect(count).toBe(1);
 })();
 
 (function() {
@@ -32,9 +32,9 @@
     for (let x of [1]) {
       for (let x of [2]) {
         count++;
-        assert.equal(2, x);
+        expect(x).toBe(2);
       }
     }
   }
-  assert.equal(1, count);
+  expect(count).toBe(1);
 })();

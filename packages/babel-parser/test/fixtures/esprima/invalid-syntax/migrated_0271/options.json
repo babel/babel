@@ -1,0 +1,3 @@
+{
+  "throws": "Classes may not have static property named prototype (1:16)"
+}

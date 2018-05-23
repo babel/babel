@@ -1,0 +1,118 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 22,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 16
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 22,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 16
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TryStatement",
+        "start": 0,
+        "end": 22,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 16
+          }
+        },
+        "block": {
+          "type": "BlockStatement",
+          "start": 4,
+          "end": 7,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 2,
+              "column": 1
+            }
+          },
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start": 8,
+          "end": 22,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 2
+            },
+            "end": {
+              "line": 2,
+              "column": 16
+            }
+          },
+          "param": {
+            "type": "Identifier",
+            "start": 15,
+            "end": 18,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 9
+              },
+              "end": {
+                "line": 2,
+                "column": 12
+              },
+              "identifierName": "err"
+            },
+            "name": "err"
+          },
+          "body": {
+            "type": "BlockStatement",
+            "start": 20,
+            "end": 22,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 14
+              },
+              "end": {
+                "line": 2,
+                "column": 16
+              }
+            },
+            "body": [],
+            "directives": []
+          }
+        },
+        "guardedHandlers": [],
+        "finalizer": null
+      }
+    ],
+    "directives": []
+  }
+}

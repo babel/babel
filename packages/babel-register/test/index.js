@@ -1,84 +1,134 @@
-import { expect } from "chai";
 import fs from "fs";
 import path from "path";
-import decache from "decache";
 
-const testCacheFilename = path.join(__dirname, ".babel");
-const oldBabelDisableCacheValue = process.env.BABEL_DISABLE_CACHE;
+let currentHook;
+let currentOptions;
+let sourceMapSupport = false;
 
-process.env.BABEL_CACHE_PATH = testCacheFilename;
-delete process.env.BABEL_DISABLE_CACHE;
+const registerFile = require.resolve("../lib/node");
+const testFile = require.resolve("./__data__/es2015");
+const testFileContent = fs.readFileSync(testFile);
 
-function writeCache(data) {
-  if (typeof data === "object") {
-    data = JSON.stringify(data);
+jest.mock("pirates", () => {
+  return {
+    addHook(hook, opts) {
+      currentHook = hook;
+      currentOptions = opts;
+
+      return () => {
+        currentHook = null;
+        currentOptions = null;
+      };
+    },
+  };
+});
+
+jest.mock("source-map-support", () => {
+  return {
+    install() {
+      sourceMapSupport = true;
+    },
+  };
+});
+
+const defaultOptions = {
+  exts: [".js", ".jsx", ".es6", ".es", ".mjs"],
+  ignoreNodeModules: false,
+};
+
+describe("@babel/register", function() {
+  let babelRegister;
+
+  function setupRegister(config = { babelrc: false }) {
+    config = {
+      cwd: path.dirname(testFile),
+      ...config,
+    };
+
+    babelRegister = require(registerFile);
+    babelRegister.default(config);
   }
 
-  fs.writeFileSync(testCacheFilename, data);
-}
-
-function cleanCache() {
-
-  try {
-    fs.unlinkSync(testCacheFilename);
-  } catch (e) {
-    // It is convenient to always try to clear
+  function revertRegister() {
+    if (babelRegister) {
+      babelRegister.revert();
+      babelRegister = null;
+    }
   }
-}
 
-function resetCache() {
-  process.env.BABEL_CACHE_PATH = null;
-  process.env.BABEL_DISABLE_CACHE = oldBabelDisableCacheValue;
-}
+  afterEach(() => {
+    revertRegister();
+    currentHook = null;
+    currentOptions = null;
+    sourceMapSupport = false;
+    jest.resetModules();
+  });
 
-describe("babel register", () => {
+  test("registers hook correctly", () => {
+    setupRegister();
 
-  describe("cache", () => {
-    let load, get, save;
+    expect(typeof currentHook).toBe("function");
+    expect(currentOptions).toEqual(defaultOptions);
+  });
 
-    beforeEach(() => {
-      // Since lib/cache is a singleton we need to fully reload it
-      decache("../lib/cache");
-      const cache = require("../lib/cache");
+  test("unregisters hook correctly", () => {
+    setupRegister();
+    revertRegister();
 
-      load = cache.load;
-      get = cache.get;
-      save = cache.save;
+    expect(currentHook).toBeNull();
+    expect(currentOptions).toBeNull();
+  });
+
+  test("installs source map support by default", () => {
+    setupRegister();
+
+    currentHook("const a = 1;", testFile);
+
+    expect(sourceMapSupport).toBe(true);
+  });
+
+  test("installs source map support when requested", () => {
+    setupRegister({
+      babelrc: false,
+      sourceMaps: true,
     });
 
-    afterEach(cleanCache);
-    after(resetCache);
+    currentHook("const a = 1;", testFile);
 
-    it("should load and get cached data", () => {
-      writeCache({ foo: "bar" });
+    expect(sourceMapSupport).toBe(true);
+  });
 
-      load();
-
-      expect(get()).to.be.an("object");
-      expect(get()).to.deep.equal({ foo: "bar" });
+  test("does not install source map support if asked not to", () => {
+    setupRegister({
+      babelrc: false,
+      sourceMaps: false,
     });
 
-    it("should load and get an object with no cached data", () => {
-      load();
+    currentHook("const a = 1;", testFile);
 
-      expect(get()).to.be.an("object");
-      expect(get()).to.deep.equal({});
+    expect(sourceMapSupport).toBe(false);
+  });
+
+  test("hook transpiles with config", () => {
+    setupRegister({
+      babelrc: false,
+      sourceMaps: false,
+      plugins: ["@babel/transform-modules-commonjs"],
     });
 
-    it("should load and get an object with invalid cached data", () => {
-      writeCache("foobar");
+    const result = currentHook(testFileContent, testFile);
 
-      load();
+    expect(result).toBe('"use strict";\n\nrequire("assert");');
+  });
 
-      expect(get()).to.be.an("object");
-      expect(get()).to.deep.equal({});
+  test("hook transpiles with babelrc", () => {
+    setupRegister({
+      babelrc: true,
+      sourceMaps: false,
     });
 
-    it("should create the cache on save", () => {
-      save();
+    const result = currentHook(testFileContent, testFile);
 
-      expect(fs.existsSync(testCacheFilename)).to.be.true;
-      expect(get()).to.deep.equal({});
-    });
+    expect(result).toBe('"use strict";\n\nrequire("assert");');
   });
 });

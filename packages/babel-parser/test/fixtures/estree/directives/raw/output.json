@@ -1,0 +1,67 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 16,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 16
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 16,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 16
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 16,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 16
+          }
+        },
+        "expression": {
+          "type": "Literal",
+          "start": 0,
+          "end": 15,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 15
+            }
+          },
+          "value": "use strict",
+          "raw": "\"use\\x20strict\""
+        },
+        "directive": "use\\x20strict"
+      }
+    ]
+  }
+}

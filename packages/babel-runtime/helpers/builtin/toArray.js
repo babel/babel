@@ -1,5 +1,11 @@
-exports.__esModule = true;
+var arrayWithHoles = require("./arrayWithHoles");
 
-exports.default = function (arr) {
-  return Array.isArray(arr) ? arr : Array.from(arr);
-};
+var iterableToArray = require("./iterableToArray");
+
+var nonIterableRest = require("./nonIterableRest");
+
+function _toArray(arr) {
+  return arrayWithHoles(arr) || iterableToArray(arr) || nonIterableRest();
+}
+
+module.exports = _toArray;

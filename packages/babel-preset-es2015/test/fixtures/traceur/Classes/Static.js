@@ -14,10 +14,10 @@ class B {
   }
 }
 
-assert.equal(B, B.m());
-assert.equal(42, B.x);
+expect(B.m()).toBe(B);
+expect(B.x).toBe(42);
 B.x = 1;
-assert.equal(1, x);
+expect(x).toBe(1);
 
 class StaticMethod {
   static static() {
@@ -25,7 +25,7 @@ class StaticMethod {
   }
 }
 
-assert.equal('static method', StaticMethod.static());
+expect(StaticMethod.static()).toBe('static method');
 
 class StaticGetter {
   static get static() {
@@ -33,7 +33,7 @@ class StaticGetter {
   }
 }
 
-assert.equal('static getter', StaticGetter.static);
+expect(StaticGetter.static).toBe('static getter');
 
 class StaticSetter {
   static set static(value) {
@@ -42,7 +42,7 @@ class StaticSetter {
 }
 
 StaticSetter.static = 'static setter';
-assert.equal('static setter', x);
+expect(x).toBe('static setter');
 
 class MethodNamedStatic {
   static() {
@@ -51,7 +51,7 @@ class MethodNamedStatic {
 }
 
 var c = new MethodNamedStatic();
-assert.equal(c, c.static());
+expect(c.static()).toBe(c);
 
 class AccessorNamedStatic {
   get static() {
@@ -65,6 +65,6 @@ class AccessorNamedStatic {
 
 x = 2;
 c = new AccessorNamedStatic();
-assertArrayEquals([c, 2], c.static);
+expect(c.static).toEqual([c, 2]);
 c.static = 3;
-assertArrayEquals([c, 3], x);
+expect(x).toEqual([c, 3]);

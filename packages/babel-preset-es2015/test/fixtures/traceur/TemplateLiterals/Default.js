@@ -1,95 +1,95 @@
 // Options: --block-binding
 
-assert.equal('', ``);
-assert.equal('a', `a`);
-assert.equal('"', `"`);
-assert.equal("'", `'`);
-assert.equal("`", `\``);
-assert.equal('"', `\"`);
+expect(``).toBe('');
+expect(`a`).toBe('a');
+expect(`"`).toBe('"');
+expect(`'`).toBe("'");
+expect(`\``).toBe("`");
+expect(`\"`).toBe('"');
 
-assert.equal('\\"', `\\"`);
-assert.equal('"\\', `"\\`);
+expect(`\\"`).toBe('\\"');
+expect(`"\\`).toBe('"\\');
 
-assert.equal('\n', `\n`);
-assert.equal('\r', `\r`);
-assert.equal('\r\n', `\r\n`);
-assert.equal('\t', `\t`);
-assert.equal('\u2028', `\u2028`);
-assert.equal('\u2029', `\u2029`);
+expect(`\n`).toBe('\n');
+expect(`\r`).toBe('\r');
+expect(`\r\n`).toBe('\r\n');
+expect(`\t`).toBe('\t');
+expect(`\u2028`).toBe('\u2028');
+expect(`\u2029`).toBe('\u2029');
 
-assert.equal('$', `$`);
-assert.equal('$ a', `$ a`);
-assert.equal('$ {a}', `$ {a}`);
+expect(`$`).toBe('$');
+expect(`$ a`).toBe('$ a');
+expect(`$ {a}`).toBe('$ {a}');
 
-assert.equal('undefined', `${ undefined }`);
-assert.equal('null', `${ null }`);
+expect(`${ undefined }`).toBe('undefined');
+expect(`${ null }`).toBe('null');
 
 {
   let $ = 'DOLLAR';
   let $$ = 'DD'
-  assert.equal('$$', `$$`);
-  assert.equal('DOLLAR', `${$}`);
-  assert.equal('$$$', `$$$`);
-  assert.equal('DOLLARDOLLAR', `${$}${$}`);
-  assert.equal('DOLLAR$$', `${$}$$`);
-  assert.equal('$$DOLLAR', `$$${$}`);
-  assert.equal('$$$', `\$$$`);
+  expect(`$$`).toBe('$$');
+  expect(`${$}`).toBe('DOLLAR');
+  expect(`$$$`).toBe('$$$');
+  expect(`${$}${$}`).toBe('DOLLARDOLLAR');
+  expect(`${$}$$`).toBe('DOLLAR$$');
+  expect(`$$${$}`).toBe('$$DOLLAR');
+  expect(`\$$$`).toBe('$$$');
 
   let a = 'A';
   let b = 'B';
-  assert.equal('aAbB', `a${a}b${b}`);
-  assert.equal('aAb$b', `a${a}b$b`);
-  assert.equal('$a.$b', `$a.$b`);
+  expect(`a${a}b${b}`).toBe('aAbB');
+  expect(`a${a}b$b`).toBe('aAb$b');
+  expect(`$a.$b`).toBe('$a.$b');
 
   let x = 3;
   let y = 5;
 
-  assert.equal('3 + 5 = 8', `${x} + ${y} = ${ x + y}`);
+  expect(`${x} + ${y} = ${ x + y}`).toBe('3 + 5 = 8');
 
   // nested
-  assert.equal('3 + 5 = 8', `${x} + ${ `${y} = ${ `${x + y}` }` }`);
+  expect(`${x} + ${ `${y} = ${ `${x + y}` }` }`).toBe('3 + 5 = 8');
 
-  assert.equal('3', `${x}`);
-  assert.equal(' 3', ` ${x}`);
-  assert.equal('3 ', `${x} `);
-  assert.equal('35', `${x}${y}`);
-  assert.equal(' 35', ` ${x}${y}`);
-  assert.equal('3 5', `${x} ${y}`);
-  assert.equal('35 ', `${x}${y} `);
-  assert.equal(' 3 5 ', ` ${x} ${y} `);
+  expect(`${x}`).toBe('3');
+  expect(` ${x}`).toBe(' 3');
+  expect(`${x} `).toBe('3 ');
+  expect(`${x}${y}`).toBe('35');
+  expect(` ${x}${y}`).toBe(' 35');
+  expect(`${x} ${y}`).toBe('3 5');
+  expect(`${x}${y} `).toBe('35 ');
+  expect(` ${x} ${y} `).toBe(' 3 5 ');
 
   // def s(x):
   //   return ' ' if x else ''
   // for i in range(16):
   //   v = (s(i&8), s(i&4), s(i&2), s(i&1))
-  //   print "assert.equal('%s3%s5%s8%s', `%s${x}%s${y}%s${x+y}%s`);" % (v+v)
-  assert.equal('358', `${x}${y}${x+y}`);
-  assert.equal('358 ', `${x}${y}${x+y} `);
-  assert.equal('35 8', `${x}${y} ${x+y}`);
-  assert.equal('35 8 ', `${x}${y} ${x+y} `);
-  assert.equal('3 58', `${x} ${y}${x+y}`);
-  assert.equal('3 58 ', `${x} ${y}${x+y} `);
-  assert.equal('3 5 8', `${x} ${y} ${x+y}`);
-  assert.equal('3 5 8 ', `${x} ${y} ${x+y} `);
-  assert.equal(' 358', ` ${x}${y}${x+y}`);
-  assert.equal(' 358 ', ` ${x}${y}${x+y} `);
-  assert.equal(' 35 8', ` ${x}${y} ${x+y}`);
-  assert.equal(' 35 8 ', ` ${x}${y} ${x+y} `);
-  assert.equal(' 3 58', ` ${x} ${y}${x+y}`);
-  assert.equal(' 3 58 ', ` ${x} ${y}${x+y} `);
-  assert.equal(' 3 5 8', ` ${x} ${y} ${x+y}`);
-  assert.equal(' 3 5 8 ', ` ${x} ${y} ${x+y} `);
+  //   print "expect('%s3%s5%s8%s').toBe(`%s${x}%s${y}%s${x+y}%s`);" % (v+v)
+  expect(`${x}${y}${x+y}`).toBe('358');
+  expect(`${x}${y}${x+y} `).toBe('358 ');
+  expect(`${x}${y} ${x+y}`).toBe('35 8');
+  expect(`${x}${y} ${x+y} `).toBe('35 8 ');
+  expect(`${x} ${y}${x+y}`).toBe('3 58');
+  expect(`${x} ${y}${x+y} `).toBe('3 58 ');
+  expect(`${x} ${y} ${x+y}`).toBe('3 5 8');
+  expect(`${x} ${y} ${x+y} `).toBe('3 5 8 ');
+  expect(` ${x}${y}${x+y}`).toBe(' 358');
+  expect(` ${x}${y}${x+y} `).toBe(' 358 ');
+  expect(` ${x}${y} ${x+y}`).toBe(' 35 8');
+  expect(` ${x}${y} ${x+y} `).toBe(' 35 8 ');
+  expect(` ${x} ${y}${x+y}`).toBe(' 3 58');
+  expect(` ${x} ${y}${x+y} `).toBe(' 3 58 ');
+  expect(` ${x} ${y} ${x+y}`).toBe(' 3 5 8');
+  expect(` ${x} ${y} ${x+y} `).toBe(' 3 5 8 ');
 }
 
 // Line continuations
-assert.equal('ab', `a\
-b`);
-assert.equal('ab', `a\
+expect(`a\
+b`).toBe('ab');
+expect(`a\
 \
-b`);
+b`).toBe('ab');
 
-assert.equal('\n', `
-`);
-assert.equal('\n\n', `
+expect(`
+`).toBe('\n');
+expect(`
 
-`);
+`).toBe('\n\n');

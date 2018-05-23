@@ -1,7 +1,7 @@
 import * as o from './resources/o.js';
 
-assert.equal(1, o.a);
-assert.equal(2, o.b);
-assert.equal(3, o.c);
-assert.equal(4, o.d);
-assert.equal(undefined, o.default);
+expect(o.a).toBe(1);
+expect(o.b).toBe(2);
+expect(o.c).toBe(3);
+expect(o.d).toBe(4);
+expect(o.default).toBeUndefined();

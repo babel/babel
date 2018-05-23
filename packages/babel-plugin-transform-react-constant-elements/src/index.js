@@ -1,4 +1,23 @@
-export default function ({ types: t }) {
+import { declare } from "@babel/helper-plugin-utils";
+import { types as t } from "@babel/core";
+import annotateAsPure from "@babel/helper-annotate-as-pure";
+
+export default declare((api, options) => {
+  api.assertVersion(7);
+
+  const { allowMutablePropsOnTags } = options;
+
+  if (
+    allowMutablePropsOnTags != null &&
+    !Array.isArray(allowMutablePropsOnTags)
+  ) {
+    throw new Error(
+      ".allowMutablePropsOnTags must be an array, null, or undefined.",
+    );
+  }
+
+  const HOISTED = new WeakSet();
+
   const immutabilityVisitor = {
     enter(path, state) {
       const stop = () => {
@@ -12,12 +31,19 @@ export default function ({ types: t }) {
       }
 
       // Elements with refs are not safe to hoist.
-      if (path.isJSXIdentifier({ name: "ref" }) && path.parentPath.isJSXAttribute({ name: path.node })) {
+      if (
+        path.isJSXIdentifier({ name: "ref" }) &&
+        path.parentPath.isJSXAttribute({ name: path.node })
+      ) {
         return stop();
       }
 
       // Ignore identifiers & JSX expressions.
-      if (path.isJSXIdentifier() || path.isIdentifier() || path.isJSXMemberExpression()) {
+      if (
+        path.isJSXIdentifier() ||
+        path.isIdentifier() ||
+        path.isJSXMemberExpression()
+      ) {
         return;
       }
 
@@ -31,9 +57,13 @@ export default function ({ types: t }) {
           if (expressionResult.confident) {
             // We know the result; check its mutability.
             const { value } = expressionResult;
-            const isMutable = (value && typeof value === "object") || (typeof value === "function");
+            const isMutable =
+              (!state.mutablePropsAllowed &&
+                (value && typeof value === "object")) ||
+              typeof value === "function";
             if (!isMutable) {
               // It evaluated to an immutable value, so we can hoist it.
+              path.skip();
               return;
             }
           } else if (t.isIdentifier(expressionResult.deopt)) {
@@ -50,17 +80,38 @@ export default function ({ types: t }) {
   return {
     visitor: {
       JSXElement(path) {
-        if (path.node._hoisted) return;
+        if (HOISTED.has(path.node)) return;
+        HOISTED.add(path.node);
 
         const state = { isImmutable: true };
+
+        // This transform takes the option `allowMutablePropsOnTags`, which is an array
+        // of JSX tags to allow mutable props (such as objects, functions) on. Use sparingly
+        // and only on tags you know will never modify their own props.
+        if (allowMutablePropsOnTags != null) {
+          // Get the element's name. If it's a member expression, we use the last part of the path.
+          // So the option ["FormattedMessage"] would match "Intl.FormattedMessage".
+          let namePath = path.get("openingElement.name");
+          while (namePath.isJSXMemberExpression()) {
+            namePath = namePath.get("property");
+          }
+
+          const elementName = namePath.node.name;
+          state.mutablePropsAllowed =
+            allowMutablePropsOnTags.indexOf(elementName) > -1;
+        }
+
+        // Traverse all props passed to this element for immutability.
         path.traverse(immutabilityVisitor, state);
 
         if (state.isImmutable) {
-          path.hoist();
-        } else {
-          path.node._hoisted = true;
+          const hoisted = path.hoist();
+
+          if (hoisted) {
+            annotateAsPure(hoisted);
+          }
         }
       },
     },
   };
-}
+});

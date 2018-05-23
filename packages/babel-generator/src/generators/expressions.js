@@ -1,9 +1,12 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import * as n from "../node";
 
-
 export function UnaryExpression(node: Object) {
-  if (node.operator === "void" || node.operator === "delete" || node.operator === "typeof") {
+  if (
+    node.operator === "void" ||
+    node.operator === "delete" ||
+    node.operator === "typeof"
+  ) {
     this.word(node.operator);
     this.space();
   } else {
@@ -30,7 +33,9 @@ export function UpdateExpression(node: Object) {
     this.token(node.operator);
     this.print(node.argument, node);
   } else {
+    this.startTerminatorless(true);
     this.print(node.argument, node);
+    this.endTerminatorless();
     this.token(node.operator);
   }
 }
@@ -51,11 +56,23 @@ export function NewExpression(node: Object, parent: Object) {
   this.word("new");
   this.space();
   this.print(node.callee, node);
-  if (node.arguments.length === 0 && this.format.minified &&
-      !t.isCallExpression(parent, { callee: node }) &&
-      !t.isMemberExpression(parent) &&
-      !t.isNewExpression(parent)) return;
+  if (
+    this.format.minified &&
+    node.arguments.length === 0 &&
+    !node.optional &&
+    !t.isCallExpression(parent, { callee: node }) &&
+    !t.isMemberExpression(parent) &&
+    !t.isNewExpression(parent)
+  ) {
+    return;
+  }
 
+  this.print(node.typeArguments, node); // Flow
+  this.print(node.typeParameters, node); // TS
+
+  if (node.optional) {
+    this.token("?.");
+  }
   this.token("(");
   this.printList(node.arguments, node);
   this.token(")");
@@ -75,38 +92,58 @@ export function Super() {
 
 export function Decorator(node: Object) {
   this.token("@");
-  this.print(node.expression, node);
+  this.print(node.callee, node);
   this.newline();
 }
 
-function commaSeparatorNewline() {
-  this.token(",");
-  this.newline();
+export function OptionalMemberExpression(node: Object) {
+  this.print(node.object, node);
 
-  if (!this.endsWith("\n")) this.space();
+  if (!node.computed && t.isMemberExpression(node.property)) {
+    throw new TypeError("Got a MemberExpression for MemberExpression property");
+  }
+
+  let computed = node.computed;
+  if (t.isLiteral(node.property) && typeof node.property.value === "number") {
+    computed = true;
+  }
+  if (node.optional) {
+    this.token("?.");
+  }
+
+  if (computed) {
+    this.token("[");
+    this.print(node.property, node);
+    this.token("]");
+  } else {
+    if (!node.optional) {
+      this.token(".");
+    }
+    this.print(node.property, node);
+  }
+}
+
+export function OptionalCallExpression(node: Object) {
+  this.print(node.callee, node);
+
+  this.print(node.typeArguments, node); // Flow
+  this.print(node.typeParameters, node); // TS
+
+  if (node.optional) {
+    this.token("?.");
+  }
+  this.token("(");
+  this.printList(node.arguments, node);
+  this.token(")");
 }
 
 export function CallExpression(node: Object) {
   this.print(node.callee, node);
 
+  this.print(node.typeArguments, node); // Flow
+  this.print(node.typeParameters, node); // TS
   this.token("(");
-
-  const isPrettyCall = node._prettyCall;
-
-  let separator;
-  if (isPrettyCall) {
-    separator = commaSeparatorNewline;
-    this.newline();
-    this.indent();
-  }
-
-  this.printList(node.arguments, node, { separator });
-
-  if (isPrettyCall) {
-    this.newline();
-    this.dedent();
-  }
-
+  this.printList(node.arguments, node);
   this.token(")");
 }
 
@@ -115,7 +152,7 @@ export function Import() {
 }
 
 function buildYieldAwait(keyword: string) {
-  return function (node: Object) {
+  return function(node: Object) {
     this.word(keyword);
 
     if (node.delegate) {
@@ -156,8 +193,10 @@ export function AssignmentPattern(node: Object) {
 export function AssignmentExpression(node: Object, parent: Object) {
   // Somewhere inside a for statement `init` node but doesn't usually
   // needs a paren except for `in` expressions: `for (a in b ? a : b;;)`
-  const parens = this.inForStatementInitCounter && node.operator === "in" &&
-               !n.needsParens(node, parent);
+  const parens =
+    this.inForStatementInitCounter &&
+    node.operator === "in" &&
+    !n.needsParens(node, parent);
 
   if (parens) {
     this.token("(");
@@ -217,4 +256,9 @@ export function MetaProperty(node: Object) {
   this.print(node.meta, node);
   this.token(".");
   this.print(node.property, node);
+}
+
+export function PrivateName(node: Object) {
+  this.token("#");
+  this.print(node.id, node);
 }

@@ -1,0 +1,183 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 23,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 4,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 23,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 4,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 23,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 9,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 9
+            },
+            "identifierName": "Foo"
+          },
+          "name": "Foo"
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 10,
+          "end": 23,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 4,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "ClassPrivateProperty",
+              "start": 14,
+              "end": 16,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 4
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start": 14,
+                "end": 16,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 4
+                  }
+                },
+                "id": {
+                  "type": "Identifier",
+                  "start": 15,
+                  "end": 16,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 3
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 4
+                    },
+                    "identifierName": "x"
+                  },
+                  "name": "x"
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassPrivateProperty",
+              "start": 19,
+              "end": 21,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 2
+                },
+                "end": {
+                  "line": 3,
+                  "column": 4
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "PrivateName",
+                "start": 19,
+                "end": 21,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 4
+                  }
+                },
+                "id": {
+                  "type": "Identifier",
+                  "start": 20,
+                  "end": 21,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 3
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 4
+                    },
+                    "identifierName": "y"
+                  },
+                  "name": "y"
+                }
+              },
+              "value": null
+            }
+          ]
+        }
+      }
+    ],
+    "directives": []
+  }
+}

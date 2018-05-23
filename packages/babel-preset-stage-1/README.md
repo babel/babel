@@ -1,4 +1,4 @@
-# babel-preset-stage-1
+# @babel/preset-stage-1
 
 > Babel preset for stage 1 plugins.
 
@@ -15,7 +15,7 @@ The gist of Stage 1 is:
 ## Install
 
 ```sh
-npm install --save-dev babel-preset-stage-1
+npm install --save-dev @babel/preset-stage-1
 ```
 
 ## Usage
@@ -26,23 +26,43 @@ npm install --save-dev babel-preset-stage-1
 
 ```json
 {
-  "presets": ["stage-1"]
+  "presets": ["@babel/preset-stage-1"]
 }
 ```
 
 ### Via CLI
 
 ```sh
-babel script.js --presets stage-1
+babel script.js --presets @babel/preset-stage-1
 ```
 
 ### Via Node API
 
 ```javascript
-require("babel-core").transform("code", {
-  presets: ["stage-1"]
+require("@babel/core").transform("code", {
+  presets: ["@babel/preset-stage-1"]
 });
 ```
+
+## Options
+
+### `loose`
+
+`boolean`, defaults to `false`.
+
+Enable "loose" transformations for any plugins in this preset that allow them.
+
+### `useBuiltIns`
+
+`boolean`, defaults to `false`.
+
+Will use the native built-in instead of trying to polyfill behavior for any plugins that require one.
+
+### `decoratorsLegacy`
+
+`boolean`, defaults to `false`.
+
+Use the legacy (stage 1) decorators syntax and behavior.
 
 ## References
 

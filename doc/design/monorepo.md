@@ -15,13 +15,13 @@ This is quite taboo but let's look at the pros and cons:
  * Easy to coordinate changes across modules.
  * Single place to report issues.
  * Easier to setup a development environment.
- * Tests across modules are ran together which finds bugs that touch multiple modules easier.
+ * Tests across modules are run together which finds bugs that touch multiple modules easier.
 
 **Cons:**
 
  * Codebase looks more intimidating.
  * Repo is bigger in size.
- * Lower ranking in [npms](https://npms.io/) results. At least until [npms-io/npms-analyzer#83](https://github.com/npms-io/npms-analyzer/issues/83) is fixed.
+ * [Can't `npm install` modules directly from GitHub](https://github.com/npm/npm/issues/2974)
  * ???
 
 ## This is dumb! Nobody in open source does this!

@@ -1,0 +1,3 @@
+{
+  "args": ["src", "--out-dir", "lib", "--copy-files", "--include-dotfiles", "--verbose"]
+}

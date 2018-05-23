@@ -5,24 +5,41 @@ language: node_js
 cache:
   yarn: true
   directories:
-  - node_modules
+    - node_modules
 node_js:
-  - '7'
+  # We test the latest version on circleci
+  - '8'
   - '6'
-  - '4'
 
 env:
-  - JOB=test
+  global:
+    - PATH=$HOME/.yarn/bin:$PATH
+    - JOB=test
+
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash
+
+install: yarn --ignore-engines
+
+before_script:
+  - 'if [ "$JOB" = "babel-parser-flow-tests" ]; then make bootstrap-flow; fi'
+  - 'if [ "$JOB" = "babel-parser-test262-tests" ]; then make bootstrap-test262; fi'
 
 script:
   - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
   - 'if [ "$JOB" = "lint" ]; then make lint && make flow; fi'
+  - 'if [ "$JOB" = "babel-parser-flow-tests" ]; then make test-flow-ci; fi'
+  - 'if [ "$JOB" = "babel-parser-test262-tests" ]; then make test-test262-ci; fi'
 
 matrix:
   fast_finish: true
   include:
     - node_js: "node"
       env: JOB=lint
+    - node_js: "node"
+      env: JOB=babel-parser-flow-tests
+    - node_js: "node"
+      env: JOB=babel-parser-test262-tests
 
 notifications:
   slack:
@@ -33,3 +50,7 @@ notifications:
       #     travis encrypt "babeljs:<token>#activity" --add notifications.slack.rooms
       # where <token> is from the Slack integration settings.
       secure: SrwPKRe2AiNAKRo/+2yW/x4zxbWf2FBXuBuuPkdTJVTpWe++Jin1lXYJWTKP1a1i/IbmhffBO9YZcUFbeuXJpRM083vO8VYpyuBMQRqWD+Z3o+ttPlHGOJgnj0nkIcGRk6k7PpyHNnIkixfEJDvbbg9lN1Jswb3xkL8iYIHpuFE=
+
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/

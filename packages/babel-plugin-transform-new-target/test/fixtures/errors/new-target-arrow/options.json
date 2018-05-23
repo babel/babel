@@ -1,0 +1,4 @@
+{
+  "plugins": ["transform-new-target"],
+  "throws": "new.target must be under a (non-arrow) function or a class."
+}

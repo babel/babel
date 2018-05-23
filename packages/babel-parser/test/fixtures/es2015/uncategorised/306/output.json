@@ -1,0 +1,151 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 35,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 35
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 35,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 35
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 35,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 35
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 35,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 35
+              }
+            },
+            "id": {
+              "type": "ArrayPattern",
+              "start": 4,
+              "end": 29,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 29
+                }
+              },
+              "elements": [
+                {
+                  "type": "AssignmentPattern",
+                  "start": 5,
+                  "end": 28,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 28
+                    }
+                  },
+                  "left": {
+                    "type": "Identifier",
+                    "start": 5,
+                    "end": 13,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 5
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 13
+                      },
+                      "identifierName": "localVar"
+                    },
+                    "name": "localVar"
+                  },
+                  "right": {
+                    "type": "Identifier",
+                    "start": 16,
+                    "end": 28,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 28
+                      },
+                      "identifierName": "defaultValue"
+                    },
+                    "name": "defaultValue"
+                  }
+                }
+              ]
+            },
+            "init": {
+              "type": "Identifier",
+              "start": 32,
+              "end": 35,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 32
+                },
+                "end": {
+                  "line": 1,
+                  "column": 35
+                },
+                "identifierName": "obj"
+              },
+              "name": "obj"
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

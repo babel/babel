@@ -1,0 +1,1 @@
+cannot have --out-file and --out-dir

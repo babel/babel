@@ -12,10 +12,10 @@ async function test() {
   } finally {
     finallyVisited = true;
   }
-  assert.isTrue(finallyVisited);
+  expect(finallyVisited).toBe(true);
   done();
 }
 
 test();
-assert.isFalse(finallyVisited);
+expect(finallyVisited).toBe(false);
 resolve();

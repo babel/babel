@@ -15,5 +15,5 @@ class D extends C {
 }
 
 var o = new D();
-assert.equal(typeof o.x.y, 'function');
-assert.equal(o.x.y(), o);
+expect(typeof o.x.y).toBe('function');
+expect(o.x.y()).toBe(o);

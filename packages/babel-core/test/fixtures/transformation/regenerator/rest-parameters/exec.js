@@ -2,4 +2,4 @@ function* foo(...items) {
   return items;
 }
 
-assert.deepEqual(foo(1, 2, 3).next().value, [1, 2, 3]);
+expect(foo(1, 2, 3).next().value).toEqual([1, 2, 3]);

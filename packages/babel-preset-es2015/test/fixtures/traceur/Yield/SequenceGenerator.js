@@ -20,4 +20,4 @@ function accumulate(iterator) {
 
 // ----------------------------------------------------------------------------
 
-assert.equal('1463', accumulate(sequenceGenerator()));
+expect(accumulate(sequenceGenerator())).toBe('1463');

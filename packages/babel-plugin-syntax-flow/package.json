@@ -1,6 +1,6 @@
 {
-  "name": "babel-plugin-syntax-flow",
-  "version": "7.0.0-alpha.3",
+  "name": "@babel/plugin-syntax-flow",
+  "version": "7.0.0-beta.47",
   "description": "Allow parsing of the flow syntax",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-flow",
   "license": "MIT",
@@ -8,6 +8,13 @@
   "keywords": [
     "babel-plugin"
   ],
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "@babel/helper-plugin-utils": "7.0.0-beta.47"
+  },
+  "peerDependencies": {
+    "@babel/core": "7.0.0-beta.47"
+  },
+  "devDependencies": {
+    "@babel/core": "7.0.0-beta.47"
+  }
 }

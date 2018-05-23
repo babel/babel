@@ -1,0 +1,3 @@
+{
+  "throws": "new.target can only be used in functions (1:0)"
+}

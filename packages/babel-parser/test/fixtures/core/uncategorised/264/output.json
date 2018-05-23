@@ -1,0 +1,168 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 36,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 36
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 36,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 36
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "WithStatement",
+        "start": 17,
+        "end": 36,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 17
+          },
+          "end": {
+            "line": 1,
+            "column": 36
+          }
+        },
+        "object": {
+          "type": "Identifier",
+          "start": 23,
+          "end": 24,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 23
+            },
+            "end": {
+              "line": 1,
+              "column": 24
+            },
+            "identifierName": "x"
+          },
+          "name": "x"
+        },
+        "body": {
+          "type": "ExpressionStatement",
+          "start": 26,
+          "end": 36,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 26
+            },
+            "end": {
+              "line": 1,
+              "column": 36
+            }
+          },
+          "expression": {
+            "type": "AssignmentExpression",
+            "start": 26,
+            "end": 35,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 26
+              },
+              "end": {
+                "line": 1,
+                "column": 35
+              }
+            },
+            "operator": "=",
+            "left": {
+              "type": "Identifier",
+              "start": 26,
+              "end": 29,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 26
+                },
+                "end": {
+                  "line": 1,
+                  "column": 29
+                },
+                "identifierName": "foo"
+              },
+              "name": "foo"
+            },
+            "right": {
+              "type": "Identifier",
+              "start": 32,
+              "end": 35,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 32
+                },
+                "end": {
+                  "line": 1,
+                  "column": 35
+                },
+                "identifierName": "bar"
+              },
+              "name": "bar"
+            }
+          }
+        }
+      }
+    ],
+    "directives": [
+      {
+        "type": "Directive",
+        "start": 0,
+        "end": 16,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 16
+          }
+        },
+        "value": {
+          "type": "DirectiveLiteral",
+          "start": 0,
+          "end": 15,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 15
+            }
+          },
+          "value": "use\\x20strict",
+          "extra": {
+            "raw": "\"use\\x20strict\"",
+            "rawValue": "use\\x20strict"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,117 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 27,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 27
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 27,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 27
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "LabeledStatement",
+        "start": 0,
+        "end": 27,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 27
+          }
+        },
+        "body": {
+          "type": "ForStatement",
+          "start": 7,
+          "end": 27,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 7
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            }
+          },
+          "init": null,
+          "test": null,
+          "update": null,
+          "body": {
+            "type": "BreakStatement",
+            "start": 16,
+            "end": 27,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 16
+              },
+              "end": {
+                "line": 1,
+                "column": 27
+              }
+            },
+            "label": {
+              "type": "Identifier",
+              "start": 22,
+              "end": 27,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 22
+                },
+                "end": {
+                  "line": 1,
+                  "column": 27
+                },
+                "identifierName": "start"
+              },
+              "name": "start"
+            }
+          }
+        },
+        "label": {
+          "type": "Identifier",
+          "start": 0,
+          "end": 5,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 5
+            },
+            "identifierName": "start"
+          },
+          "name": "start"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

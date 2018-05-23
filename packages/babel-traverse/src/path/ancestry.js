@@ -1,6 +1,6 @@
 // This file contains that retrieve or validate anything related to the current paths ancestry.
 
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import NodePath from "./index";
 
 /**
@@ -8,23 +8,24 @@ import NodePath from "./index";
  * When the `callback` returns a truthy value, we return that node path.
  */
 
-export function findParent(callback) {
+export function findParent(callback): ?NodePath {
   let path = this;
-  while (path = path.parentPath) {
+  while ((path = path.parentPath)) {
     if (callback(path)) return path;
   }
   return null;
 }
 
 /**
- * Description
+ * Starting at current `NodePath` and going up the tree, return the first
+ * `NodePath` that causes the provided `callback` to return a truthy value.
  */
 
-export function find(callback) {
+export function find(callback): ?NodePath {
   let path = this;
   do {
     if (callback(path)) return path;
-  } while (path = path.parentPath);
+  } while ((path = path.parentPath));
   return null;
 }
 
@@ -32,21 +33,35 @@ export function find(callback) {
  * Get the parent function of the current path.
  */
 
-export function getFunctionParent() {
-  return this.findParent((path) => path.isFunction() || path.isProgram());
+export function getFunctionParent(): ?NodePath {
+  return this.findParent(p => p.isFunction());
 }
 
 /**
  * Walk up the tree until we hit a parent node path in a list.
  */
 
-export function getStatementParent() {
+export function getStatementParent(): NodePath {
   let path = this;
+
   do {
-    if (Array.isArray(path.container)) {
-      return path;
+    if (
+      !path.parentPath ||
+      (Array.isArray(path.container) && path.isStatement())
+    ) {
+      break;
+    } else {
+      path = path.parentPath;
     }
-  } while (path = path.parentPath);
+  } while (path);
+
+  if (path && (path.isProgram() || path.isFile())) {
+    throw new Error(
+      "File/Program node, we can't possibly find a statement parent to this",
+    );
+  }
+
+  return path;
 }
 
 /**
@@ -57,8 +72,14 @@ export function getStatementParent() {
  * position and visiting key.
  */
 
-export function getEarliestCommonAncestorFrom(paths: Array<NodePath>): NodePath {
-  return this.getDeepestCommonAncestorFrom(paths, function (deepest, i, ancestries) {
+export function getEarliestCommonAncestorFrom(
+  paths: Array<NodePath>,
+): NodePath {
+  return this.getDeepestCommonAncestorFrom(paths, function(
+    deepest,
+    i,
+    ancestries,
+  ) {
     let earliest;
     const keys = t.VISITOR_KEYS[deepest.type];
 
@@ -99,7 +120,10 @@ export function getEarliestCommonAncestorFrom(paths: Array<NodePath>): NodePath 
  * TODO: Possible optimisation target.
  */
 
-export function getDeepestCommonAncestorFrom(paths: Array<NodePath>, filter?: Function): NodePath {
+export function getDeepestCommonAncestorFrom(
+  paths: Array<NodePath>,
+  filter?: Function,
+): NodePath {
   if (!paths.length) {
     return this;
   }
@@ -115,7 +139,7 @@ export function getDeepestCommonAncestorFrom(paths: Array<NodePath>, filter?: Fu
   let lastCommonIndex, lastCommon;
 
   // get the ancestors of the path, breaking when the parent exceeds ourselves
-  const ancestries = paths.map((path) => {
+  const ancestries = paths.map(path => {
     const ancestry = [];
 
     do {
@@ -166,30 +190,30 @@ export function getDeepestCommonAncestorFrom(paths: Array<NodePath>, filter?: Fu
  * NOTE: The current node path is included in this.
  */
 
-export function getAncestry() {
+export function getAncestry(): Array<NodePath> {
   let path = this;
   const paths = [];
   do {
     paths.push(path);
-  } while (path = path.parentPath);
+  } while ((path = path.parentPath));
   return paths;
 }
 
 /**
  * A helper to find if `this` path is an ancestor of @param maybeDescendant
  */
-export function isAncestor(maybeDescendant) {
+export function isAncestor(maybeDescendant: NodePath): boolean {
   return maybeDescendant.isDescendant(this);
 }
 
 /**
  * A helper to find if `this` path is a descendant of @param maybeAncestor
  */
-export function isDescendant(maybeAncestor) {
-  return !!this.findParent((parent) => parent === maybeAncestor);
+export function isDescendant(maybeAncestor: NodePath): boolean {
+  return !!this.findParent(parent => parent === maybeAncestor);
 }
 
-export function inType() {
+export function inType(): boolean {
   let path = this;
   while (path) {
     for (const type of (arguments: Array)) {
@@ -199,60 +223,4 @@ export function inType() {
   }
 
   return false;
-}
-
-/**
- * Checks whether the binding for 'key' is a local binding in its current function context.
- *
- * Checks if the current path either is, or has a direct parent function that is, inside
- * of a function that is marked for shadowing of a binding matching 'key'. Also returns
- * the parent path if the parent path is an arrow, since arrow functions pass through
- * binding values to their parent, meaning they have no local bindings.
- *
- * Shadowing means that when the given binding is transformed, it will read the binding
- * value from the container containing the shadow function, rather than from inside the
- * shadow function.
- *
- * Function shadowing is acheieved by adding a "shadow" property on "FunctionExpression"
- * and "FunctionDeclaration" node types.
- *
- * Node's "shadow" props have the following behavior:
- *
- * - Boolean true will cause the function to shadow both "this" and "arguments".
- * - {this: false} Shadows "arguments" but not "this".
- * - {arguments: false} Shadows "this" but not "arguments".
- *
- * Separately, individual identifiers can be flagged with two flags:
- *
- * - _forceShadow - If truthy, this specific identifier will be bound in the closest
- *    Function that is not flagged "shadow", or the Program.
- * - _shadowedFunctionLiteral - When set to a NodePath, this specific identifier will be bound
- *    to this NodePath/Node or the Program. If this path is not found relative to the
- *    starting location path, the closest function will be used.
- *
- * Please Note, these flags are for private internal use only and should be avoided.
- * Only "shadow" is a public property that other transforms may manipulate.
- */
-
-export function inShadow(key?) {
-  const parentFn = this.isFunction() ? this : this.findParent((p) => p.isFunction());
-  if (!parentFn) return;
-
-  if (parentFn.isFunctionExpression() || parentFn.isFunctionDeclaration()) {
-    const shadow = parentFn.node.shadow;
-
-    // this is because sometimes we may have a `shadow` value of:
-    //
-    //   { this: false }
-    //
-    // we need to catch this case if `inShadow` has been passed a `key`
-    if (shadow && (!key || shadow[key] !== false)) {
-      return parentFn;
-    }
-  } else if (parentFn.isArrowFunctionExpression()) {
-    return parentFn;
-  }
-
-  // normal function, we've found our function context
-  return null;
 }

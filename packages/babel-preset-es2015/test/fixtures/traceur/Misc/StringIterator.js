@@ -5,11 +5,11 @@ var actual = [];
 for (var x of s) {
   actual.push(x);
 }
-assert.deepEqual(actual, expected);
+expect(expected).toEqual(actual);
 
 var newS = new String('abc');
 var res = [];
 for (var x of newS) {
   res.push(x);
 }
-assert.deepEqual(res, ['a', 'b', 'c']);
+expect(res).toEqual(['a', 'b', 'c']);

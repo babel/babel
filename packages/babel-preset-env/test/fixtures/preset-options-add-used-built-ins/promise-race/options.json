@@ -1,0 +1,14 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "targets": {
+          "browsers": ["ie > 10"]
+        },
+        "useBuiltIns": "usage",
+        "modules": false
+      }
+    ]
+  ]
+}

@@ -8,7 +8,7 @@ var MATH = {
   }
 };
 
-assert.equal(MATH.sum(1, ...[2, 3]), 6);
+expect(MATH.sum(1, ...[2, 3])).toBe(6);
 
 // Ensure that the below does not expand to this:
 //
@@ -28,8 +28,8 @@ var obj = {
 };
 
 obj.getSelf().doCall(...[]);
-assert.deepEqual(ops, ['getSelf', 'doCall', obj]);
+expect(ops).toEqual(['getSelf', 'doCall', obj]);
 
 ops = [];
 obj['getSelf']().doCall(...[]);
-assert.deepEqual(ops, ['getSelf', 'doCall', obj]);
+expect(ops).toEqual(['getSelf', 'doCall', obj]);

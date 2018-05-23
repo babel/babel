@@ -1,0 +1,154 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 23,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 23
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 23,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 23
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 23,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 23
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 22,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 22
+              }
+            },
+            "id": {
+              "type": "ObjectPattern",
+              "start": 4,
+              "end": 16,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 16
+                }
+              },
+              "properties": [
+                {
+                  "type": "ObjectProperty",
+                  "start": 6,
+                  "end": 14,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 6
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 14
+                    }
+                  },
+                  "method": false,
+                  "key": {
+                    "type": "Identifier",
+                    "start": 6,
+                    "end": 7,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 6
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 7
+                      },
+                      "identifierName": "x"
+                    },
+                    "name": "x"
+                  },
+                  "computed": false,
+                  "shorthand": false,
+                  "value": {
+                    "type": "Identifier",
+                    "start": 9,
+                    "end": 14,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 9
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 14
+                      },
+                      "identifierName": "yield"
+                    },
+                    "name": "yield"
+                  }
+                }
+              ]
+            },
+            "init": {
+              "type": "Identifier",
+              "start": 19,
+              "end": 22,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 19
+                },
+                "end": {
+                  "line": 1,
+                  "column": 22
+                },
+                "identifierName": "foo"
+              },
+              "name": "foo"
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

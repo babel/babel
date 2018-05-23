@@ -1,16 +1,19 @@
 {
-  "name": "babel-runtime",
-  "version": "7.0.0-alpha.7",
+  "name": "@babel/runtime",
+  "version": "7.0.0-beta.47",
   "description": "babel selfContained runtime",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-runtime",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "dependencies": {
-    "core-js": "^2.4.0",
-    "regenerator-runtime": "^0.10.0"
+    "core-js": "^2.5.6",
+    "regenerator-runtime": "^0.11.1"
   },
   "devDependencies": {
-    "babel-helpers": "7.0.0-alpha.7",
-    "babel-plugin-transform-runtime": "7.0.0-alpha.7"
+    "@babel/core": "7.0.0-beta.47",
+    "@babel/helpers": "7.0.0-beta.47",
+    "@babel/plugin-transform-runtime": "7.0.0-beta.47",
+    "@babel/preset-env": "7.0.0-beta.47",
+    "@babel/types": "7.0.0-beta.47"
   }
 }

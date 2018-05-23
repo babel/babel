@@ -34,7 +34,7 @@ try {
   actualM = e;
 }
 
-assert.equal(actualF, expectedF);
-assert.instanceOf(expectedM, TypeError);
-assert.instanceOf(actualM, TypeError);
-assert.equal(Object.getPrototypeOf(actualM), Object.getPrototypeOf(expectedM));
+expect(actualF).toBe(expectedF);
+expect(expectedM).toBeInstanceOf(TypeError);
+expect(actualM).toBeInstanceOf(TypeError);
+expect(Object.getPrototypeOf(actualM)).toBe(Object.getPrototypeOf(expectedM));

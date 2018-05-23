@@ -1,6 +1,5 @@
 export default class Hub {
-  constructor(file, options) {
+  constructor(file) {
     this.file = file;
-    this.options = options;
   }
 }

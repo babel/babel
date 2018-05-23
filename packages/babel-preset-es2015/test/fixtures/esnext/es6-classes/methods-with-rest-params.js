@@ -24,5 +24,5 @@ class ArrayLike {
 }
 
 var joiner = new Joiner(' & ');
-assert.equal(joiner.join(4, 5, 6), '4 & 5 & 6');
-assert.equal(new ArrayLike('a', 'b')[1], 'b');
+expect(joiner.join(4, 5, 6)).toBe('4 & 5 & 6');
+expect(new ArrayLike('a', 'b')[1]).toBe('b');

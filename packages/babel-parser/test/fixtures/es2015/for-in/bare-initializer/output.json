@@ -1,0 +1,184 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 25,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 18
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 25,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 18
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 6,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 6
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 5,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 5
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 5,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 5
+                },
+                "identifierName": "a"
+              },
+              "name": "a"
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      },
+      {
+        "type": "ForInStatement",
+        "start": 7,
+        "end": 25,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 18
+          }
+        },
+        "left": {
+          "type": "AssignmentPattern",
+          "start": 12,
+          "end": 17,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 5
+            },
+            "end": {
+              "line": 2,
+              "column": 10
+            }
+          },
+          "left": {
+            "type": "Identifier",
+            "start": 12,
+            "end": 13,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 5
+              },
+              "end": {
+                "line": 2,
+                "column": 6
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "right": {
+            "type": "NumericLiteral",
+            "start": 16,
+            "end": 17,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 9
+              },
+              "end": {
+                "line": 2,
+                "column": 10
+              }
+            },
+            "extra": {
+              "rawValue": 0,
+              "raw": "0"
+            },
+            "value": 0
+          }
+        },
+        "right": {
+          "type": "ObjectExpression",
+          "start": 21,
+          "end": 23,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 14
+            },
+            "end": {
+              "line": 2,
+              "column": 16
+            }
+          },
+          "properties": []
+        },
+        "body": {
+          "type": "EmptyStatement",
+          "start": 24,
+          "end": 25,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 17
+            },
+            "end": {
+              "line": 2,
+              "column": 18
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

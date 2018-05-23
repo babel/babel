@@ -3,9 +3,9 @@ var self = {};
 
 function f() {
   (() => {
-    assert.equal(self, this);
-    assert.equal(1, arguments.length);
-    assert.equal(42, arguments[0]);
+    expect(self).toBe(this);
+    expect(1).toBe(arguments.length);
+    expect(42).toBe(arguments[0]);
 
     var THIS = 0;
     var ARGUMENTS = 1;
@@ -22,20 +22,20 @@ function f() {
       }
     };
 
-    assert.equal(object, object.function()[THIS]);
-    assert.equal(2, object.function('a', 'b')[ARGUMENTS].length);
-    assert.equal('a', object.function('a', 'b')[ARGUMENTS][0]);
-    assert.equal('b', object.function('a', 'b')[ARGUMENTS][1]);
+    expect(object.function()[THIS]).toBe(object);
+    expect(object.function('a', 'b')[ARGUMENTS]).toHaveLength(2);
+    expect(object.function('a', 'b')[ARGUMENTS][0]).toBe('a');
+    expect(object.function('a', 'b')[ARGUMENTS][1]).toBe('b');
 
-    assert.equal(object, object.method()[THIS]);
-    assert.equal(3, object.method('c', 'd', 'e')[ARGUMENTS].length);
-    assert.equal('c', object.method('c', 'd', 'e')[ARGUMENTS][0]);
-    assert.equal('d', object.method('c', 'd', 'e')[ARGUMENTS][1]);
-    assert.equal('e', object.method('c', 'd', 'e')[ARGUMENTS][2]);
+    expect(object.function()[THIS]).toBe(object);
+    expect(object.method('c', 'd', 'e')[ARGUMENTS]).toHaveLength(3);
+    expect(object.method('c', 'd', 'e')[ARGUMENTS][0]).toBe('c');
+    expect(object.method('c', 'd', 'e')[ARGUMENTS][1]).toBe('d');
+    expect(object.method('c', 'd', 'e')[ARGUMENTS][2]).toBe('e');
 
-    assert.equal(self, object.arrow()[THIS]);
-    assert.equal(1, object.arrow('f', 'g')[ARGUMENTS].length);
-    assert.equal(42, object.arrow('f', 'g')[ARGUMENTS][0]);
+    expect(object.arrow()[THIS]).toBe(self);
+    expect(object.arrow('f', 'g')[ARGUMENTS]).toHaveLength(1);
+    expect(object.arrow('f', 'g')[ARGUMENTS][0]).toBe(42);
   })();
 }
 

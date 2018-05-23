@@ -3,58 +3,114 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "test": "make test",
     "build": "make build",
+    "fix": "make fix",
     "lint": "make lint",
-    "fix": "make fix"
+    "precommit": "lint-staged",
+    "test": "make test"
   },
   "devDependencies": {
-    "async": "^1.5.0",
-    "babel-core": "^7.0.0-alpha.6",
-    "babel-eslint": "^7.0.0",
-    "babel-plugin-istanbul": "^2.0.1",
-    "babel-preset-env": "^2.0.0-alpha.3",
-    "babel-preset-flow": "^7.0.0-alpha.3",
-    "babel-preset-stage-0": "^7.0.0-alpha.3",
-    "babel-register": "^7.0.0-alpha.6",
+    "@babel/cli": "7.0.0-beta.46",
+    "@babel/core": "7.0.0-beta.46",
+    "@babel/plugin-transform-modules-commonjs": "7.0.0-beta.46",
+    "@babel/preset-env": "7.0.0-beta.46",
+    "@babel/preset-flow": "7.0.0-beta.46",
+    "@babel/preset-stage-0": "7.0.0-beta.46",
+    "@babel/register": "7.0.0-beta.46",
+    "babel-core": "^7.0.0-0",
+    "babel-eslint": "^8.0.1",
+    "babel-jest": "^22.4.1",
+    "babel-loader": "8.0.0-beta.0",
+    "babel-plugin-transform-charcodes": "^0.1.0",
+    "babylon": "7.0.0-beta.46",
     "browserify": "^13.1.1",
     "bundle-collapser": "^1.2.1",
-    "chai": "^3.5.0",
-    "chalk": "1.1.1",
-    "codecov": "^1.0.1",
+    "chalk": "^2.3.2",
+    "charcodes": "^0.1.0",
     "derequire": "^2.0.2",
-    "eslint": "^3.9.0",
-    "eslint-config-babel": "^6.0.0",
+    "enhanced-resolve": "^3.0.0",
+    "eslint": "^4.18.2",
+    "eslint-config-babel": "^7.0.2",
     "eslint-plugin-flowtype": "^2.20.0",
-    "flow-bin": "^0.41.0",
-    "gulp": "^3.9.0",
-    "gulp-babel": "babel/gulp-babel#b7-alpha",
+    "eslint-plugin-prettier": "^2.5.0",
+    "flow-bin": "^0.66.0",
+    "graceful-fs": "^4.1.11",
+    "gulp": "^4.0.0",
+    "gulp-babel": "^8.0.0-beta.2",
+    "gulp-filter": "^5.1.0",
     "gulp-newer": "^1.0.0",
     "gulp-plumber": "^1.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.7",
-    "gulp-watch": "^4.3.5",
-    "lerna": "^2.0.0-beta.38",
-    "lerna-changelog": "^0.2.0",
-    "lodash": "^4.2.0",
-    "mocha": "^3.0.0",
-    "nyc": "^10.0.0",
-    "output-file-sync": "^1.1.1",
+    "gulp-watch": "^5.0.0",
+    "husky": "^0.14.3",
+    "jest": "^22.4.2",
+    "lerna": "2.0.0",
+    "lerna-changelog": "^0.5.0",
+    "lint-staged": "^6.0.1",
+    "lodash": "^4.17.5",
+    "merge-stream": "^1.0.1",
+    "output-file-sync": "^2.0.0",
+    "prettier": "1.11.1",
+    "pump": "^1.0.2",
     "rimraf": "^2.4.3",
-    "semver": "^5.0.0",
+    "rollup-plugin-babel": "^4.0.0-beta.0",
+    "rollup-plugin-node-resolve": "^3.0.2",
+    "rollup-stream": "^1.24.1",
+    "test262-stream": "^1.1.0",
     "through2": "^2.0.0",
-    "uglify-js": "^2.4.16"
+    "uglify-js": "^2.4.16",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0",
+    "webpack": "^3.4.1",
+    "webpack-dependency-suite": "^2.4.4",
+    "webpack-stream": "^4.0.0"
   },
-  "devEngines": {
-    "node": ">= 4.x <= 7.x",
-    "npm": "2.x || 3.x || 4.x"
+  "engines": {
+    "node": ">= 6.9.0 <= 11.0.0-0",
+    "npm": ">= 2.x <= 5.x",
+    "yarn": ">=0.27.5 || >=1.0.0-20170811"
   },
-  "nyc": {
-    "all": true,
-    "exclude": [
-      "scripts/*.js",
-      "packages/*/test/**"
+  "lint-staged": {
+    "*.js": [
+      "eslint --format=codeframe --rulesdir='./scripts/eslint_rules'"
+    ]
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "packages/*/src/**/*.mjs",
+      "packages/*/src/**/*.js",
+      "codemods/*/src/**/*.mjs",
+      "codemods/*/src/**/*.js"
     ],
-    "sourceMap": false,
-    "instrument": false
+    "testRegex": "./(packages|codemods)/[^/]+/test/.+\\.m?js$",
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/test/fixtures/",
+      "/test/debug-fixtures/",
+      "/babel-parser/test/expressions/",
+      "/test/tmp/",
+      "/test/__data__/",
+      "/test/helpers/",
+      "<rootDir>/test/warning\\.js",
+      "<rootDir>/build/",
+      "_browser\\.js"
+    ],
+    "testEnvironment": "node",
+    "setupTestFrameworkScriptFile": "<rootDir>/test/testSetupFile.js",
+    "transformIgnorePatterns": [
+      "/node_modules/",
+      "<rootDir>/packages/babel-standalone/babel(\\.min)?\\.js",
+      "<rootDir>/packages/babel-preset-env-standalone/babel-preset-env(\\.min)?\\.js",
+      "/test/(fixtures|tmp|__data__)/",
+      "<rootDir>/(packages|codemods)/[^/]+/lib/"
+    ],
+    "modulePathIgnorePatterns": [
+      "/test/fixtures/",
+      "/test/tmp/",
+      "/test/__data__/",
+      "<rootDir>/build/"
+    ]
   }
 }

@@ -26,32 +26,12 @@ function makeArgumentsReturner() {
 }
 
 // i.e. 2 * 3 * 4 == 24, not 16 (4 * 4)
-assert.equal(
-  makeMultiplier(2, 3)(4),
-  24,
-  'ensure `arguments` is hoisted out to the first non-arrow scope'
-);
+expect(makeMultiplier(2, 3)(4)).toBe(24);
 
-assert.deepEqual(
-  toArray(1, 2, 3),
-  [1, 2, 3],
-  'ensure `arguments` is hoisted out to the first non-arrow scope'
-);
+expect(toArray(1, 2, 3)).toEqual([1, 2, 3]);
 
-assert.equal(
-  returnDotArguments({arguments: 1}),
-  1,
-  'member accesses with `arguments` property should not be replaced'
-);
+expect(returnDotArguments({arguments: 1})).toBe(1);
 
-assert.deepEqual(
-  returnArgumentsObject(),
-  {arguments: 1},
-  'object property keys named `arguments` should not be replaced'
-);
+expect(returnArgumentsObject()).toEqual({arguments: 1});
 
-assert.deepEqual(
-  makeArgumentsReturner()(1, 2, 3),
-  [1, 2, 3],
-  'arguments should not be hoisted from inside non-arrow functions'
-);
+expect(makeArgumentsReturner()(1, 2, 3)).toEqual([1, 2, 3]);

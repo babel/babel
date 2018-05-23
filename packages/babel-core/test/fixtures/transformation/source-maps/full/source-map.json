@@ -1,7 +1,6 @@
 {
   "version": 3,
-  "file": "source-maps/full/expected.js",
-  "sources": ["source-maps/full/actual.js"],
+  "sources": ["source-maps/full/input.js"],
   "names": [
     "arr",
     "map",
