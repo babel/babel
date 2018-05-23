@@ -45,6 +45,7 @@ These are the core @babel/parser (babylon) AST node types.
   - [Decorator](#decorator)
   - [Directive](#directive)
   - [DirectiveLiteral](#directiveliteral)
+  - [InterpreterDirective](#interpreterdirective)
 - [Expressions](#expressions)
   - [Super](#super)
   - [Import](#import)
@@ -239,7 +240,7 @@ interface NumericLiteral <: Literal {
 ```js
 interface Program <: Node {
   type: "Program";
-  interpreter: string | null;
+  interpreter: InterpreterDirective | null;
   sourceType: "script" | "module";
   body: [ Statement | ModuleDeclaration ];
   directives: [ Directive ];
@@ -581,6 +582,14 @@ interface Directive <: Node {
 ```js
 interface DirectiveLiteral <: StringLiteral {
   type: "DirectiveLiteral";
+}
+```
+
+## InterpreterDirective
+
+```js
+interface InterpreterDirective <: StringLiteral {
+  type: "InterpreterDirective";
 }
 ```
 
