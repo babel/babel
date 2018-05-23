@@ -60,7 +60,6 @@ program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
 
 register({
-  babelrc: program.babelrc,
   extensions: program.extensions,
   ignore: program.ignore,
   only: program.only,
@@ -68,6 +67,11 @@ register({
   presets: program.presets,
   configFile: program.configFile,
   envName: program.envName,
+
+  // Commander will default the "--no-" arguments to true, but we want to
+  // leave them undefined so that @babel/core can handle the
+  // default-assignment logic on its own.
+  babelrc: program.babelrc === true ? undefined : program.babelrc,
 });
 
 const replPlugin = ({ types: t }) => ({
