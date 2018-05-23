@@ -28,12 +28,17 @@ export default function loadPrivatePartialConfig(
 
   const args = inputOpts ? validate("arguments", inputOpts) : {};
 
-  const { envName = getEnv(), cwd = "." } = args;
+  const { envName = getEnv(), cwd = ".", root: rootDir = "." } = args;
   const absoluteCwd = path.resolve(cwd);
+  const absoluteRootDir = path.resolve(absoluteCwd, rootDir);
 
   const context: ConfigContext = {
-    filename: args.filename ? path.resolve(cwd, args.filename) : null,
+    filename:
+      typeof args.filename === "string"
+        ? path.resolve(cwd, args.filename)
+        : undefined,
     cwd: absoluteCwd,
+    root: absoluteRootDir,
     envName,
   };
 
@@ -50,9 +55,14 @@ export default function loadPrivatePartialConfig(
   // to not change behavior.
   options.babelrc = false;
   options.configFile = false;
-  options.envName = envName;
-  options.cwd = absoluteCwd;
   options.passPerPreset = false;
+  options.envName = context.envName;
+  options.cwd = context.cwd;
+  options.root = context.root;
+  options.filename =
+    typeof context.filename === "string"
+      ? path.relative(context.cwd, context.filename)
+      : undefined;
 
   options.plugins = configChain.plugins.map(descriptor =>
     createItemFromDescriptor(descriptor),

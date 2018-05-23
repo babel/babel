@@ -1,0 +1,177 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 40,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 4,
+      "column": 4
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 40,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 4,
+        "column": 4
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 40,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 4
+          }
+        },
+        "expression": {
+          "type": "CallExpression",
+          "start": 1,
+          "end": 39,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 1
+            },
+            "end": {
+              "line": 4,
+              "column": 3
+            }
+          },
+          "callee": {
+            "type": "FunctionExpression",
+            "start": 1,
+            "end": 37,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 1
+              },
+              "end": {
+                "line": 4,
+                "column": 1
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [],
+            "body": {
+              "type": "BlockStatement",
+              "start": 13,
+              "end": 37,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 13
+                },
+                "end": {
+                  "line": 4,
+                  "column": 1
+                }
+              },
+              "body": [],
+              "directives": [
+                {
+                  "type": "Directive",
+                  "start": 16,
+                  "end": 29,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 1
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 14
+                    }
+                  },
+                  "value": {
+                    "type": "DirectiveLiteral",
+                    "start": 16,
+                    "end": 28,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 13
+                      }
+                    },
+                    "value": "use strict",
+                    "extra": {
+                      "raw": "'use strict'",
+                      "rawValue": "use strict"
+                    }
+                  }
+                },
+                {
+                  "type": "Directive",
+                  "start": 31,
+                  "end": 35,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 1
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 5
+                    }
+                  },
+                  "value": {
+                    "type": "DirectiveLiteral",
+                    "start": 31,
+                    "end": 34,
+                    "loc": {
+                      "start": {
+                        "line": 3,
+                        "column": 1
+                      },
+                      "end": {
+                        "line": 3,
+                        "column": 4
+                      }
+                    },
+                    "value": "\u0000",
+                    "extra": {
+                      "raw": "'\u0000'",
+                      "rawValue": "\u0000"
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "arguments": [],
+          "extra": {
+            "parenthesized": true,
+            "parenStart": 0
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

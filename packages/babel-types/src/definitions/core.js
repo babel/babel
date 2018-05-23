@@ -67,6 +67,15 @@ defineType("BinaryExpression", {
   aliases: ["Binary", "Expression"],
 });
 
+defineType("InterpreterDirective", {
+  builder: ["value"],
+  fields: {
+    value: {
+      validate: assertValueType("string"),
+    },
+  },
+});
+
 defineType("Directive", {
   visitor: ["value"],
   fields: {
@@ -526,8 +535,10 @@ defineType("MemberExpression", {
 defineType("NewExpression", { inherits: "CallExpression" });
 
 defineType("Program", {
+  // Note: We explicitly leave 'interpreter' out here because it is
+  // conceptually comment-like, and Babel does not traverse comments either.
   visitor: ["directives", "body"],
-  builder: ["body", "directives", "sourceType"],
+  builder: ["body", "directives", "sourceType", "interpreter"],
   fields: {
     sourceFile: {
       validate: assertValueType("string"),
@@ -535,6 +546,11 @@ defineType("Program", {
     sourceType: {
       validate: assertOneOf("script", "module"),
       default: "script",
+    },
+    interpreter: {
+      validate: assertNodeType("InterpreterDirective"),
+      default: null,
+      optional: true,
     },
     directives: {
       validate: chain(

@@ -1,5 +1,5 @@
 import traverse from "../lib";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
 function getPath(code) {

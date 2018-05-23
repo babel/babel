@@ -1,0 +1,276 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 74,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 74
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 74,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 74
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareClass",
+        "start": 0,
+        "end": 74,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 74
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 14,
+          "end": 26,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 14
+            },
+            "end": {
+              "line": 1,
+              "column": 26
+            },
+            "identifierName": "IViewFactory"
+          },
+          "name": "IViewFactory"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 27,
+          "end": 74,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 27
+            },
+            "end": {
+              "line": 1,
+              "column": 74
+            }
+          },
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start": 29,
+              "end": 71,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 29
+                },
+                "end": {
+                  "line": 1,
+                  "column": 71
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 29,
+                "end": 39,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 29
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 39
+                  },
+                  "identifierName": "didAnimate"
+                },
+                "name": "didAnimate"
+              },
+              "static": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start": 29,
+                "end": 71,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 29
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 71
+                  }
+                },
+                "params": [
+                  {
+                    "type": "FunctionTypeParam",
+                    "start": 40,
+                    "end": 51,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 40
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 51
+                      }
+                    },
+                    "name": {
+                      "type": "Identifier",
+                      "start": 40,
+                      "end": 44,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 40
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 44
+                        },
+                        "identifierName": "view"
+                      },
+                      "name": "view"
+                    },
+                    "optional": false,
+                    "typeAnnotation": {
+                      "type": "GenericTypeAnnotation",
+                      "start": 45,
+                      "end": 51,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 45
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 51
+                        }
+                      },
+                      "typeParameters": null,
+                      "id": {
+                        "type": "Identifier",
+                        "start": 45,
+                        "end": 51,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 45
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 51
+                          },
+                          "identifierName": "Object"
+                        },
+                        "name": "Object"
+                      }
+                    }
+                  },
+                  {
+                    "type": "FunctionTypeParam",
+                    "start": 53,
+                    "end": 64,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 53
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 64
+                      }
+                    },
+                    "name": {
+                      "type": "Identifier",
+                      "start": 53,
+                      "end": 57,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 53
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 57
+                        },
+                        "identifierName": "prop"
+                      },
+                      "name": "prop"
+                    },
+                    "optional": false,
+                    "typeAnnotation": {
+                      "type": "StringTypeAnnotation",
+                      "start": 58,
+                      "end": 64,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 58
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 64
+                        }
+                      }
+                    }
+                  }
+                ],
+                "rest": null,
+                "typeParameters": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start": 67,
+                  "end": 71,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 67
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 71
+                    }
+                  }
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

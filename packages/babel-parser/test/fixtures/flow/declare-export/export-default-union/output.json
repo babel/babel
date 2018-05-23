@@ -1,0 +1,151 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 62,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 62
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 62,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 62
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareModule",
+        "start": 0,
+        "end": 62,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 62
+          }
+        },
+        "id": {
+          "type": "StringLiteral",
+          "start": 15,
+          "end": 20,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 1,
+              "column": 20
+            }
+          },
+          "extra": {
+            "rawValue": "foo",
+            "raw": "\"foo\""
+          },
+          "value": "foo"
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start": 21,
+          "end": 62,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 21
+            },
+            "end": {
+              "line": 1,
+              "column": 62
+            }
+          },
+          "body": [
+            {
+              "type": "DeclareExportDeclaration",
+              "start": 23,
+              "end": 60,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 23
+                },
+                "end": {
+                  "line": 1,
+                  "column": 60
+                }
+              },
+              "declaration": {
+                "type": "UnionTypeAnnotation",
+                "start": 46,
+                "end": 59,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 46
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 59
+                  }
+                },
+                "types": [
+                  {
+                    "type": "NumberTypeAnnotation",
+                    "start": 46,
+                    "end": 52,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 46
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 52
+                      }
+                    }
+                  },
+                  {
+                    "type": "StringTypeAnnotation",
+                    "start": 53,
+                    "end": 59,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 53
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 59
+                      }
+                    }
+                  }
+                ]
+              },
+              "default": true
+            }
+          ]
+        },
+        "kind": "ES"
+      }
+    ],
+    "directives": []
+  }
+}

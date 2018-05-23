@@ -17,6 +17,10 @@ export function BinaryExpression(...args: Array<any>): Object {
   return builder("BinaryExpression", ...args);
 }
 export { BinaryExpression as binaryExpression };
+export function InterpreterDirective(...args: Array<any>): Object {
+  return builder("InterpreterDirective", ...args);
+}
+export { InterpreterDirective as interpreterDirective };
 export function Directive(...args: Array<any>): Object {
   return builder("Directive", ...args);
 }

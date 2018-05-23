@@ -1,0 +1,119 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 20,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 4,
+      "column": 5
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 20,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 4,
+        "column": 5
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start": 0,
+        "end": 13,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 1
+          }
+        },
+        "test": {
+          "type": "BooleanLiteral",
+          "start": 4,
+          "end": 8,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 8
+            }
+          },
+          "value": true
+        },
+        "consequent": {
+          "type": "BlockStatement",
+          "start": 10,
+          "end": 13,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 2,
+              "column": 1
+            }
+          },
+          "body": [],
+          "directives": []
+        },
+        "alternate": null
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 15,
+        "end": 20,
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 5
+          }
+        },
+        "expression": {
+          "type": "RegExpLiteral",
+          "start": 15,
+          "end": 20,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 0
+            },
+            "end": {
+              "line": 4,
+              "column": 5
+            }
+          },
+          "extra": {
+            "raw": "/foo/"
+          },
+          "pattern": "foo",
+          "flags": ""
+        }
+      }
+    ],
+    "directives": []
+  }
+}

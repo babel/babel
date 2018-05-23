@@ -1,0 +1,178 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 28,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 28
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 28,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 28
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "InterfaceDeclaration",
+        "start": 0,
+        "end": 28,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 28
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 10,
+          "end": 11,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 11
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 12,
+          "end": 28,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 12
+            },
+            "end": {
+              "line": 1,
+              "column": 28
+            }
+          },
+          "callProperties": [],
+          "properties": [],
+          "indexers": [],
+          "internalSlots": [
+            {
+              "type": "ObjectTypeInternalSlot",
+              "start": 14,
+              "end": 26,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 14
+                },
+                "end": {
+                  "line": 1,
+                  "column": 26
+                }
+              },
+              "static": false,
+              "id": {
+                "type": "Identifier",
+                "start": 16,
+                "end": 19,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 16
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 19
+                  },
+                  "identifierName": "foo"
+                },
+                "name": "foo"
+              },
+              "method": true,
+              "optional": false,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start": 14,
+                "end": 26,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 14
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 26
+                  }
+                },
+                "params": [],
+                "rest": null,
+                "typeParameters": null,
+                "returnType": {
+                  "type": "GenericTypeAnnotation",
+                  "start": 25,
+                  "end": 26,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 26
+                    }
+                  },
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 25,
+                    "end": 26,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 26
+                      },
+                      "identifierName": "X"
+                    },
+                    "name": "X"
+                  }
+                }
+              }
+            }
+          ],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

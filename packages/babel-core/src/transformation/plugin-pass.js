@@ -7,14 +7,19 @@ export default class PluginPass {
   key: ?string;
   file: File;
   opts: Object;
+
+  // The working directory that Babel's options are loaded relative to.
+  cwd: string;
+
+  // The path of the file being compiled, relative to the working directory.
   filename: string | void;
 
   constructor(file: File, key: ?string, options: ?Object) {
     this.key = key;
     this.file = file;
     this.opts = options || {};
-    this.filename =
-      typeof file.opts.filename === "string" ? file.opts.filename : undefined;
+    this.cwd = file.opts.cwd;
+    this.filename = file.opts.filename;
   }
 
   set(key: mixed, val: mixed) {

@@ -343,10 +343,10 @@ function run(task) {
       newOpts.presets,
       optionsDir,
     ).map(function(val) {
-      if (val.length > 2) {
+      if (val.length > 3) {
         throw new Error(
           "Unexpected extra options " +
-            JSON.stringify(val.slice(2)) +
+            JSON.stringify(val.slice(3)) +
             " passed to preset.",
         );
       }

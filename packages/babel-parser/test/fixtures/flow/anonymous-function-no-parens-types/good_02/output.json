@@ -1,0 +1,183 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 30,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 30
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 30,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 30
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start": 0,
+        "end": 30,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 30
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 5,
+          "end": 6,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 5
+            },
+            "end": {
+              "line": 1,
+              "column": 6
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "FunctionTypeAnnotation",
+          "start": 9,
+          "end": 30,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 30
+            }
+          },
+          "params": [
+            {
+              "type": "FunctionTypeParam",
+              "start": 9,
+              "end": 25,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 25
+                }
+              },
+              "name": null,
+              "optional": false,
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
+                "start": 9,
+                "end": 22,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 22
+                  }
+                },
+                "typeParameters": {
+                  "type": "TypeParameterInstantiation",
+                  "start": 14,
+                  "end": 22,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 22
+                    }
+                  },
+                  "params": [
+                    {
+                      "type": "StringTypeAnnotation",
+                      "start": 15,
+                      "end": 21,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 15
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 21
+                        }
+                      }
+                    }
+                  ]
+                },
+                "id": {
+                  "type": "Identifier",
+                  "start": 9,
+                  "end": 14,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 14
+                    },
+                    "identifierName": "Array"
+                  },
+                  "name": "Array"
+                }
+              }
+            }
+          ],
+          "rest": null,
+          "returnType": {
+            "type": "VoidTypeAnnotation",
+            "start": 26,
+            "end": 30,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 26
+              },
+              "end": {
+                "line": 1,
+                "column": 30
+              }
+            }
+          },
+          "typeParameters": null
+        }
+      }
+    ],
+    "directives": []
+  }
+}

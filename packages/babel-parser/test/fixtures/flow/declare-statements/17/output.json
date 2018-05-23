@@ -1,0 +1,248 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 62,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 5,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 62,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 5,
+        "column": 1
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareClass",
+        "start": 0,
+        "end": 62,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 14,
+          "end": 15,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 14
+            },
+            "end": {
+              "line": 1,
+              "column": 15
+            },
+            "identifierName": "X"
+          },
+          "name": "X"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 16,
+          "end": 62,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 16
+            },
+            "end": {
+              "line": 5,
+              "column": 1
+            }
+          },
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start": 19,
+              "end": 28,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 1
+                },
+                "end": {
+                  "line": 2,
+                  "column": 10
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 19,
+                "end": 20,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "identifierName": "a"
+                },
+                "name": "a"
+              },
+              "static": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "NumberTypeAnnotation",
+                "start": 22,
+                "end": 28,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 10
+                  }
+                }
+              },
+              "variance": null,
+              "optional": false
+            },
+            {
+              "type": "ObjectTypeProperty",
+              "start": 31,
+              "end": 47,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 1
+                },
+                "end": {
+                  "line": 3,
+                  "column": 17
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 38,
+                "end": 39,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 9
+                  },
+                  "identifierName": "b"
+                },
+                "name": "b"
+              },
+              "static": true,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "NumberTypeAnnotation",
+                "start": 41,
+                "end": 47,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 17
+                  }
+                }
+              },
+              "variance": null,
+              "optional": false
+            },
+            {
+              "type": "ObjectTypeProperty",
+              "start": 50,
+              "end": 59,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 1
+                },
+                "end": {
+                  "line": 4,
+                  "column": 10
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 50,
+                "end": 51,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 2
+                  },
+                  "identifierName": "c"
+                },
+                "name": "c"
+              },
+              "static": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "NumberTypeAnnotation",
+                "start": 53,
+                "end": 59,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 10
+                  }
+                }
+              },
+              "variance": null,
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}
