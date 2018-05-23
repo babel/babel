@@ -125,6 +125,19 @@ Aliases: `Expression`, `Terminatorless`
 
 ---
 
+### bigIntLiteral
+```javascript
+t.bigIntLiteral(value)
+```
+
+See also `t.isBigIntLiteral(node, opts)` and `t.assertBigIntLiteral(node, opts)`.
+
+Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
+
+ - `value`: `string` (required)
+
+---
+
 ### binaryExpression
 ```javascript
 t.binaryExpression(operator, left, right)
