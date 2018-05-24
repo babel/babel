@@ -198,8 +198,9 @@ const readConfigJS = makeStrongCache(
 
 const packageToBabelConfig = makeWeakCache(
   (file: ConfigFile): ConfigFile | null => {
-    if (typeof file.options.babel === "undefined") return null;
-    const babel = file.options.babel;
+    const babel = file.options[("babel": string)];
+
+    if (typeof babel === "undefined") return null;
 
     if (typeof babel !== "object" || Array.isArray(babel) || babel === null) {
       throw new Error(`${file.filepath}: .babel property must be an object`);

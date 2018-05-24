@@ -126,7 +126,7 @@ export const validateModulesOption = (
   return modulesOpt;
 };
 
-export const objectToBrowserslist = (object: Targets) => {
+export const objectToBrowserslist = (object: Targets): Array<string> => {
   return Object.keys(object).reduce((list, targetName) => {
     if (validBrowserslistTargets.indexOf(targetName) >= 0) {
       const targetVersion = object[targetName];
