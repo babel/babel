@@ -17,10 +17,18 @@ export { createConfigItem } from "./config/item";
 
 export { loadPartialConfig, loadOptions } from "./config";
 
-export { transform, transformSync } from "./transform";
-export { transformFile, transformFileSync } from "./transform-file";
-export { transformFromAst, transformFromAstSync } from "./transform-ast";
-export { parse, parseSync } from "./parse";
+export { transform, transformSync, transformAsync } from "./transform";
+export {
+  transformFile,
+  transformFileSync,
+  transformFileAsync,
+} from "./transform-file";
+export {
+  transformFromAst,
+  transformFromAstSync,
+  transformFromAstAsync,
+} from "./transform-ast";
+export { parse, parseSync, parseAsync } from "./parse";
 
 /**
  * Recommended set of compilable extensions. Not used in @babel/core directly, but meant as

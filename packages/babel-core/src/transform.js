@@ -53,3 +53,15 @@ export function transformSync(
 
   return runSync(config, code);
 }
+
+export function transformAsync(
+  code: string,
+  opts: ?InputOptions,
+): Promise<FileResult | null> {
+  return new Promise((res, rej) => {
+    transform(code, opts, (err, result) => {
+      if (err == null) res(result);
+      else rej(err);
+    });
+  });
+}

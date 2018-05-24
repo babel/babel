@@ -73,3 +73,15 @@ export function transformFileSync(
 
   return runSync(config, fs.readFileSync(filename, "utf8"));
 }
+
+export function transformFileAsync(
+  filename: string,
+  opts: ?InputOptions,
+): Promise<FileResult | null> {
+  return new Promise((res, rej) => {
+    transformFile(filename, opts, (err, result) => {
+      if (err == null) res(result);
+      else rej(err);
+    });
+  });
+}

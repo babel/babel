@@ -71,3 +71,16 @@ export function transformFromAstSync(
 
   return runSync(config, code, ast);
 }
+
+export function transformFromAstAsync(
+  ast: AstRoot,
+  code: string,
+  opts: ?InputOptions,
+): Promise<FileResult | null> {
+  return new Promise((res, rej) => {
+    transformFromAst(ast, code, opts, (err, result) => {
+      if (err == null) res(result);
+      else rej(err);
+    });
+  });
+}

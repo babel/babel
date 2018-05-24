@@ -70,3 +70,15 @@ export function parseSync(
 
   return normalizeFile(config.passes, normalizeOptions(config), code).ast;
 }
+
+export function parseAsync(
+  code: string,
+  opts?: InputOptions,
+): Promise<ParseResult | null> {
+  return new Promise((res, rej) => {
+    parse(code, opts, (err, result) => {
+      if (err == null) res(result);
+      else rej(err);
+    });
+  });
+}
