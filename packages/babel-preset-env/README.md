@@ -586,8 +586,8 @@ Using polyfills:
       "targets": {
         "browsers": ["last 2 versions", "safari >= 7"]
       },
-      "include": ["@babel/plugin-transform-arrow-functions", "es6.map"],
-      "exclude": ["@babel/plugin-transform-regenerator", "es6.set"]
+      "include": ["transform-arrow-functions", "es6.map"],
+      "exclude": ["transform-regenerator", "es6.set"]
     }]
   ]
 }
