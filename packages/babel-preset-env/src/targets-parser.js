@@ -11,29 +11,18 @@ import {
 } from "./utils";
 import { objectToBrowserslist } from "./normalize-options";
 import browserModulesData from "../data/built-in-modules.json";
+import { TargetNames } from "./options";
 import type { Targets } from "./types";
-
-const validTargetNames = [
-  "esmodules",
-  "node",
-  "browsers",
-  "chrome",
-  "opera",
-  "edge",
-  "firefox",
-  "safari",
-  "ie",
-  "ios",
-  "android",
-  "electron",
-];
 
 const validateTargetNames = targets => {
   for (const target in targets) {
     invariant(
-      validTargetNames.includes(target),
+      TargetNames[target],
       `Invalid Option: '${target}' is not a valid target
-      Maybe you meant to use '${findSuggestion(validTargetNames, target)}'?`,
+      Maybe you meant to use '${findSuggestion(
+        Object.values(TargetNames),
+        target,
+      )}'?`,
     );
   }
 };
@@ -66,7 +55,7 @@ export const semverMin = (first: ?string, second: string): string => {
 
 const mergeBrowsers = (fromQuery: Targets, fromTarget: Targets) => {
   return Object.keys(fromTarget).reduce((queryObj, targKey) => {
-    if (targKey !== "browsers") {
+    if (targKey !== TargetNames.browsers) {
       queryObj[targKey] = fromTarget[targKey];
     }
     return queryObj;
@@ -183,11 +172,11 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
 
   // Parse remaining targets
   const parsed = Object.keys(targets)
-    .filter(value => value !== "esmodules")
+    .filter(value => value !== TargetNames.esmodules)
     .sort()
     .reduce(
       (results: ParsedResult, target: string): ParsedResult => {
-        if (target !== "browsers") {
+        if (target !== TargetNames.browsers) {
           const value = targets[target];
 
           // Warn when specifying minor/patch as a decimal
