@@ -1,3 +1,3 @@
 var test = babelHelpers.jsx(T, {
-  "default": " some string "
+  default: " some string "
 });
