@@ -182,7 +182,7 @@ export default function normalizeOptions(opts: Options) {
 
   return {
     configPath: validateConfigPathOption(opts.configPath),
-    debug: opts.debug,
+    debug: validateBoolOption(TopLevelOptions.debug, opts.debug, false),
     include,
     exclude,
     forceAllTransforms: validateBoolOption(
