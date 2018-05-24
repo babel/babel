@@ -600,13 +600,12 @@ Aliases: `Flow`, `FlowPredicate`
 
 ### decorator
 ```javascript
-t.decorator(callee, arguments)
+t.decorator(expression)
 ```
 
 See also `t.isDecorator(node, opts)` and `t.assertDecorator(node, opts)`.
 
- - `callee`: `Expression` (required)
- - `arguments`: `Array<Expression | SpreadElement>` (default: `null`)
+ - `expression`: `Expression` (required)
 
 ---
 
