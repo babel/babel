@@ -1343,7 +1343,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       noCalls: ?boolean,
       state: N.ParseSubscriptState,
     ): N.Expression {
-      if (!this.hasPrecedingLineBreak() && this.eat(tt.bang)) {
+      if (!this.hasPrecedingLineBreak() && this.match(tt.bang)) {
+        this.state.exprAllowed = false;
+        this.next();
+
         const nonNullExpression: N.TsNonNullExpression = this.startNodeAt(
           startPos,
           startLoc,
