@@ -1,12 +1,11 @@
 // @flow
 import loadConfig, { type InputOptions } from "./config";
 import {
+  runSync,
   runAsync,
   type FileResult,
   type FileResultCallback,
 } from "./transformation";
-
-import transformSync from "./transform-sync";
 
 type Transform = {
   (code: string, callback: FileResultCallback): void,
@@ -17,7 +16,7 @@ type Transform = {
   (code: string, opts: ?InputOptions): FileResult | null,
 };
 
-export default ((function transform(code, opts, callback) {
+export const transform: Transform = (function transform(code, opts, callback) {
   if (typeof opts === "function") {
     opts = undefined;
     callback = opts;
@@ -43,4 +42,14 @@ export default ((function transform(code, opts, callback) {
 
     runAsync(cfg, code, null, cb);
   });
-}: Function): Transform);
+}: Function);
+
+export function transformSync(
+  code: string,
+  opts: ?InputOptions,
+): FileResult | null {
+  const config = loadConfig(opts);
+  if (config === null) return null;
+
+  return runSync(config, code);
+}
