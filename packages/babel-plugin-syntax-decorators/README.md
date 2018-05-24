@@ -41,3 +41,20 @@ require("@babel/core").transform("code", {
 `boolean`, defaults to `false`.
 
 Use the legacy (stage 1) decorators syntax.
+
+### `decoratorsBeforeExport`
+
+`boolean`, defaults to `true`.
+
+```js
+// decoratorsBeforeExport: true
+@decorator
+export class Foo {}
+
+// decoratorsBeforeExport: false
+export @decorator class Bar {}
+```
+
+This option was added to help tc39 collect feedback from the community by allowing experimentation with both possible syntaxes.
+
+For more information, check out: [tc39/proposal-decorators#69](https://github.com/tc39/proposal-decorators/issues/69)

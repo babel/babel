@@ -1,0 +1,28 @@
+var Foo = babelHelpers.decorate([function (_) {
+  return desc = _;
+}], function (_initialize) {
+  var Foo = function Foo() {
+    "use strict";
+
+    babelHelpers.classCallCheck(this, Foo);
+
+    _initialize(this);
+  };
+
+  return {
+    F: Foo,
+    d: [{
+      kind: "method",
+      key: getKey(),
+      value: function value() {
+        return 1;
+      }
+    }, {
+      kind: "method",
+      key: getKey(),
+      value: function value() {
+        return 2;
+      }
+    }]
+  };
+});

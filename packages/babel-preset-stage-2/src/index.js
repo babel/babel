@@ -37,7 +37,7 @@ export default declare((api, opts = {}) => {
   return {
     presets: [[presetStage3, { loose, useBuiltIns }]],
     plugins: [
-      [transformDecorators, { legacy: decoratorsLegacy }],
+      [transformDecorators, { legacy: decoratorsLegacy && false }],
       transformFunctionSent,
       transformExportNamespaceFrom,
       transformNumericSeparator,

@@ -2,8 +2,9 @@ import * as t from "@babel/types";
 
 export function ClassDeclaration(node: Object, parent: Object) {
   if (
-    !t.isExportDefaultDeclaration(parent) &&
-    !t.isExportNamedDeclaration(parent)
+    !this.format.decoratorsBeforeExport ||
+    (!t.isExportDefaultDeclaration(parent) &&
+      !t.isExportNamedDeclaration(parent))
   ) {
     this.printJoin(node.decorators, node);
   }
