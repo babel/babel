@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-instanceof",
-  "version": "7.0.0-beta.47",
+  "version": "7.0.0-beta.48",
   "description": "This plugin transforms all the ES2015 'instanceof' methods",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-instanceof",
   "license": "MIT",
@@ -9,13 +9,13 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.47"
+    "@babel/helper-plugin-utils": "7.0.0-beta.48"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.47"
+    "@babel/core": "7.0.0-beta.48"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.47",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.47"
+    "@babel/core": "7.0.0-beta.48",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.48"
   }
 }

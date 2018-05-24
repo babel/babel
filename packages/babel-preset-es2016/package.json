@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-es2016",
-  "version": "7.0.0-beta.47",
+  "version": "7.0.0-beta.48",
   "description": "Babel preset for all es2016 plugins.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -8,13 +8,13 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-es2016",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.47",
-    "@babel/plugin-transform-exponentiation-operator": "7.0.0-beta.47"
+    "@babel/helper-plugin-utils": "7.0.0-beta.48",
+    "@babel/plugin-transform-exponentiation-operator": "7.0.0-beta.48"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.47"
+    "@babel/core": "7.0.0-beta.48"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.47"
+    "@babel/core": "7.0.0-beta.48"
   }
 }

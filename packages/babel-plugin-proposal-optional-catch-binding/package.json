@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-optional-catch-binding",
-  "version": "7.0.0-beta.47",
+  "version": "7.0.0-beta.48",
   "description": "Compile optional catch bindings",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-optional-catch-binding",
   "license": "MIT",
@@ -9,14 +9,14 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.47",
-    "@babel/plugin-syntax-optional-catch-binding": "7.0.0-beta.47"
+    "@babel/helper-plugin-utils": "7.0.0-beta.48",
+    "@babel/plugin-syntax-optional-catch-binding": "7.0.0-beta.48"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.47"
+    "@babel/core": "7.0.0-beta.48"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.47",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.47"
+    "@babel/core": "7.0.0-beta.48",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.48"
   }
 }
