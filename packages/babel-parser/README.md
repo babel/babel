@@ -127,7 +127,7 @@ require("@babel/parser").parse("code", {
 | `typescript` ([repo](https://github.com/Microsoft/TypeScript)) | `var a: string = "";` |
 | `doExpressions` | `var a = do { if (true) { 'hi'; } };` |
 | `objectRestSpread` ([proposal](https://github.com/tc39/proposal-object-rest-spread)) | `var a = { b, ...c };` |
-| `decorators` (Stage 1) and `decorators2` (Stage 2 [proposal](https://github.com/tc39/proposal-decorators)) | `@a class A {}` |
+| `decorators` (Stage 2 [proposal](https://github.com/tc39/proposal-decorators)) and `decorators-legacy` (Stage 1) | `@a class A {}` |
 | `classProperties` ([proposal](https://github.com/tc39/proposal-class-public-fields)) | `class A { b = 1; }` |
 | `classPrivateProperties` ([proposal](https://github.com/tc39/proposal-private-fields)) | `class A { #b = 1; }` |
 | `classPrivateMethods` ([proposal](https://github.com/tc39/proposal-private-methods)) | `class A { #c() {} }` |
@@ -145,6 +145,25 @@ require("@babel/parser").parse("code", {
 | `throwExpressions` ([proposal](https://github.com/babel/proposals/issues/23)) | `() => throw new Error("")` |
 | `pipelineOperator` ([proposal](https://github.com/babel/proposals/issues/29)) | `a \|> b` |
 | `nullishCoalescingOperator` ([proposal](https://github.com/babel/proposals/issues/14)) | `a ?? b` |
+
+
+#### Plugins options
+
+> NOTE: When a plugin is specified multiple times, only the first options are considered.
+
+- `decorators`:
+  - `decoratorsBeforeExport` (`boolean`)
+    ```js
+    // decoratorsBeforeExport: true
+    @dec
+    export class C {}
+
+    // decoratorsBeforeExport: false
+    export @dec class C {}
+    ```
+- `flow`:
+  - `all` (`boolean`)
+    <!-- TODO -->
 
 ### FAQ
 
