@@ -1,11 +1,42 @@
 // @flow
 
 import browserslist from "browserslist";
+import invariant from "invariant";
 import semver from "semver";
-import { semverify, isUnreleasedVersion, getLowestUnreleased } from "./utils";
+import {
+  semverify,
+  isUnreleasedVersion,
+  getLowestUnreleased,
+  findSuggestion,
+} from "./utils";
 import { objectToBrowserslist } from "./normalize-options";
 import browserModulesData from "../data/built-in-modules.json";
 import type { Targets } from "./types";
+
+const validTargetNames = [
+  "esmodules",
+  "node",
+  "browsers",
+  "chrome",
+  "opera",
+  "edge",
+  "firefox",
+  "safari",
+  "ie",
+  "ios",
+  "android",
+  "electron",
+];
+
+const validateTargetNames = targets => {
+  for (const target in targets) {
+    invariant(
+      validTargetNames.includes(target),
+      `Invalid Option: '${target}' is not a valid target
+      Maybe you meant to use '${findSuggestion(validTargetNames, target)}'?`,
+    );
+  }
+};
 
 const browserNameMap = {
   android: "android",
@@ -20,6 +51,14 @@ const browserNameMap = {
 
 const isBrowsersQueryValid = (browsers: string | Array<string>): boolean =>
   typeof browsers === "string" || Array.isArray(browsers);
+
+const validateBrowsers = browsers => {
+  invariant(
+    typeof browsers === "undefined" || isBrowsersQueryValid(browsers),
+    `Invalid Option: '${browsers}' is not a valid browserslist query`,
+  );
+  return browsers;
+};
 
 export const semverMin = (first: ?string, second: string): string => {
   return first && semver.lt(first, second) ? first : second;
@@ -85,11 +124,21 @@ const outputDecimalWarning = (decimalTargets: Array<Object>): void => {
   console.log("");
 };
 
+const semverifyTarget = (target, value) => {
+  try {
+    return semverify(value);
+  } catch (error) {
+    throw new Error(
+      `Invalid Option: '${value}' is not a valid value for 'targets.${target}'.`,
+    );
+  }
+};
+
 const targetParserMap = {
   __default: (target, value) => {
     const version = isUnreleasedVersion(value, target)
       ? value.toLowerCase()
-      : semverify(value);
+      : semverifyTarget(target, value);
     return [target, version];
   },
 
@@ -98,8 +147,7 @@ const targetParserMap = {
     const parsed =
       value === true || value === "current"
         ? process.versions.node
-        : semverify(value);
-
+        : semverifyTarget(target, value);
     return [target, parsed];
   },
 };
@@ -108,8 +156,11 @@ type ParsedResult = {
   targets: Targets,
   decimalWarnings: Array<Object>,
 };
+
 const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
   const targetOpts: Targets = {};
+
+  validateTargetNames(targets);
 
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
   // These values OVERRIDE the `browsers` field.
@@ -119,16 +170,17 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
       .map(browser => `${browser} ${supportsESModules[browser]}`)
       .join(", ");
   }
-  // Parse browsers target via browserslist;
-  const queryIsValid = isBrowsersQueryValid(targets.browsers);
-  const browsersquery = queryIsValid ? targets.browsers : null;
-  if (queryIsValid || !options.ignoreBrowserslistConfig) {
+
+  // Parse browsers target via browserslist
+  const browsersquery = validateBrowsers(targets.browsers);
+  if (!options.ignoreBrowserslistConfig) {
     browserslist.defaults = objectToBrowserslist(targets);
 
     const browsers = browserslist(browsersquery, { path: options.configPath });
     const queryBrowsers = getLowestVersions(browsers);
     targets = mergeBrowsers(queryBrowsers, targets);
   }
+
   // Parse remaining targets
   const parsed = Object.keys(targets)
     .filter(value => value !== "esmodules")

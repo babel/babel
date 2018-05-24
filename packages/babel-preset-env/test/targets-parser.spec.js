@@ -19,6 +19,35 @@ describe("getTargets", () => {
     });
   });
 
+  describe("validation", () => {
+    it("throws on invalid target name", () => {
+      const invalidTargetName = () => {
+        getTargets({
+          unknown: "unknown",
+        });
+      };
+      expect(invalidTargetName).toThrow();
+    });
+
+    it("throws on invalid browsers target", () => {
+      const invalidBrowsersTarget = () => {
+        getTargets({
+          browsers: 59,
+        });
+      };
+      expect(invalidBrowsersTarget).toThrow();
+    });
+
+    it("throws on invalid target version", () => {
+      const invalidTargetVersion = () => {
+        getTargets({
+          chrome: "unknown",
+        });
+      };
+      expect(invalidTargetVersion).toThrow();
+    });
+  });
+
   describe("browser", () => {
     it("merges browser key targets", () => {
       expect(
@@ -53,21 +82,6 @@ describe("getTargets", () => {
         }),
       ).toEqual({
         safari: "tp",
-      });
-    });
-
-    it("ignores invalid", () => {
-      expect(
-        getTargets({
-          browsers: 59,
-          chrome: "49",
-          firefox: "55",
-          ie: "11",
-        }),
-      ).toEqual({
-        chrome: "49.0.0",
-        firefox: "55.0.0",
-        ie: "11.0.0",
       });
     });
   });

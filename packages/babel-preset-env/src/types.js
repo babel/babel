@@ -1,9 +1,21 @@
 //@flow
 
 // Targets
-export type Target = string;
+export type Target =
+  | "esmodules"
+  | "node"
+  | "browsers"
+  | "chrome"
+  | "opera"
+  | "edge"
+  | "firefox"
+  | "safari"
+  | "ie"
+  | "ios"
+  | "android"
+  | "electron";
 export type Targets = {
-  [target: string]: Target,
+  [target: Target]: string,
 };
 
 // Options
