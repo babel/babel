@@ -38,13 +38,13 @@ function applyEnsureOrdering(path) {
     : path.get("properties")
   ).reduce((acc, prop) => acc.concat(prop.node.decorators || []), []);
 
-  const identDecorators = decorators.filter(
+  const nonIdentDecorators = decorators.filter(
     decorator => !t.isIdentifier(decorator.callee),
   );
-  if (identDecorators.length === 0) return;
+  if (nonIdentDecorators.length === 0) return;
 
   return t.sequenceExpression(
-    identDecorators
+    nonIdentDecorators
       .map(decorator => {
         const callee = decorator.callee;
         const id = (decorator.callee = path.scope.generateDeclaredUidIdentifier(
@@ -69,7 +69,11 @@ function applyClassDecorators(classPath) {
   const name = classPath.scope.generateDeclaredUidIdentifier("class");
 
   return decorators
-    .map(dec => dec.callee)
+    .map(decorator => {
+      return decorator.arguments
+        ? t.callExpression(decorator.callee, decorator.arguments)
+        : decorator.callee;
+    })
     .reverse()
     .reduce(function(acc, decorator) {
       return buildClassDecorator({
