@@ -206,31 +206,42 @@ function applyTargetDecorators(path, state, decoratedProps) {
   ]);
 }
 
+function decoratedClassToExpression({ node, scope }) {
+  if (!hasClassDecorators(node) && !hasMethodDecorators(node.body.body)) {
+    return;
+  }
+
+  const ref = node.id
+    ? t.cloneNode(node.id)
+    : scope.generateUidIdentifier("class");
+
+  return t.variableDeclaration("let", [
+    t.variableDeclarator(ref, t.toExpression(node)),
+  ]);
+}
+
 export default {
-  ClassDeclaration(path) {
-    const { node } = path;
+  ExportDefaultDeclaration(path) {
+    const decl = path.get("declaration");
+    if (!decl.isClassDeclaration()) return;
 
-    if (!hasClassDecorators(node) && !hasMethodDecorators(node.body.body)) {
-      return;
-    }
-
-    const ref = node.id
-      ? t.cloneNode(node.id)
-      : path.scope.generateUidIdentifier("class");
-    const letDeclaration = t.variableDeclaration("let", [
-      t.variableDeclarator(ref, t.toExpression(node)),
-    ]);
-
-    if (path.parentPath.isExportDefaultDeclaration()) {
-      // Split the class declaration and the export into two separate statements.
-      path.parentPath.replaceWithMultiple([
-        letDeclaration,
+    const replacement = decoratedClassToExpression(decl);
+    if (replacement) {
+      path.replaceWithMultiple([
+        replacement,
         t.exportNamedDeclaration(null, [
-          t.exportSpecifier(t.cloneNode(ref), t.identifier("default")),
+          t.exportSpecifier(
+            t.cloneNode(replacement.declarations[0].id),
+            t.identifier("default"),
+          ),
         ]),
       ]);
-    } else {
-      path.replaceWith(letDeclaration);
+    }
+  },
+  ClassDeclaration(path) {
+    const replacement = decoratedClassToExpression(path);
+    if (replacement) {
+      path.replaceWith(replacement);
     }
   },
   ClassExpression(path, state) {
