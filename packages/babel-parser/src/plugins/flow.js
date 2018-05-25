@@ -427,7 +427,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Interfaces
 
-    flowParseInterfaceish(node: N.FlowDeclare, isClass?: boolean): void {
+    flowParseInterfaceish(
+      node: N.FlowDeclare,
+      isClass?: boolean = false,
+    ): void {
       node.id = this.flowParseRestrictedIdentifier(/*liberal*/ !isClass);
 
       if (this.isRelational("<")) {
@@ -653,7 +656,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } while (this.eat(tt.comma));
       }
 
-      node.body = this.flowParseObjectType(true, false, false);
+      node.body = this.flowParseObjectType(true, false, false, false);
 
       return this.finishNode(node, "InterfaceTypeAnnotation");
     }

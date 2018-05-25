@@ -1634,7 +1634,7 @@ Aliases: `Flow`, `UserWhitespacable`
  - `variance`: `Variance` (default: `null`)
  - `kind`: `"init" | "get" | "set"` (default: `null`)
  - `optional`: `boolean` (default: `null`)
- - `proto`: `proto` (default: `null`)
+ - `proto`: `boolean` (default: `null`)
  - `static`: `boolean` (default: `null`)
 
 ---
