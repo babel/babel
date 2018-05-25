@@ -2043,7 +2043,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       // add typeParameters if we found them
       if (typeParameters) {
-        // $FlowFixMe (trying to set '.typeParameters' on an expression)
         (prop.value || prop).typeParameters = typeParameters;
       }
     }
