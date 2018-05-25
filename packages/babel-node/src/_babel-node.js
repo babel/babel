@@ -150,7 +150,10 @@ if (program.eval || program.print) {
       }
 
       if (arg[0] === "-") {
-        const parsedArg = program[arg.slice(2)];
+        const camelArg = arg
+          .slice(2)
+          .replace(/-(\w)/, (s, c) => c.toUpperCase());
+        const parsedArg = program[camelArg];
         if (
           arg === "-r" ||
           arg === "--require" ||
