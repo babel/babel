@@ -60,9 +60,7 @@ export default function loadPrivatePartialConfig(
   options.cwd = context.cwd;
   options.root = context.root;
   options.filename =
-    typeof context.filename === "string"
-      ? path.relative(context.cwd, context.filename)
-      : undefined;
+    typeof context.filename === "string" ? context.filename : undefined;
 
   options.plugins = configChain.plugins.map(descriptor =>
     createItemFromDescriptor(descriptor),

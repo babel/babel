@@ -46,7 +46,20 @@ const saveInFiles = function(files) {
   });
 };
 
-const assertTest = function(stdout, stderr, opts) {
+const replacePaths = function(str, cwd) {
+  let prev;
+  do {
+    prev = str;
+    str = str.replace(cwd, "<CWD>");
+  } while (str !== prev);
+
+  return str;
+};
+
+const assertTest = function(stdout, stderr, opts, cwd) {
+  stdout = replacePaths(stdout, cwd);
+  stderr = replacePaths(stderr, cwd);
+
   const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();
 
@@ -138,7 +151,7 @@ const buildTest = function(binName, testName, opts) {
       let err;
 
       try {
-        assertTest(stdout, stderr, opts);
+        assertTest(stdout, stderr, opts, tmpLoc);
       } catch (e) {
         err = e;
       }

@@ -48,7 +48,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es6.array.copy-within { "ie":"10" }
   es6.array.every { "electron":"0.36" }
   es6.array.fill { "ie":"10" }
