@@ -936,7 +936,7 @@ describe("buildConfigChain", function() {
         }),
       ).toEqual({
         ...getDefaults(),
-        filename: path.basename(filename),
+        filename: filename,
         cwd: path.dirname(filename),
         root: path.dirname(filename),
         comments: true,
@@ -948,7 +948,7 @@ describe("buildConfigChain", function() {
 
       expect(loadOptions({ filename, cwd: path.dirname(filename) })).toEqual({
         ...getDefaults(),
-        filename: path.basename(filename),
+        filename: filename,
         cwd: path.dirname(filename),
         root: path.dirname(filename),
         comments: true,
@@ -960,7 +960,7 @@ describe("buildConfigChain", function() {
 
       expect(loadOptions({ filename, cwd: path.dirname(filename) })).toEqual({
         ...getDefaults(),
-        filename: path.basename(filename),
+        filename: filename,
         cwd: path.dirname(filename),
         root: path.dirname(filename),
         comments: true,
@@ -1002,7 +1002,7 @@ describe("buildConfigChain", function() {
 
       expect(loadOptions({ filename, cwd: path.dirname(filename) })).toEqual({
         ...getDefaults(),
-        filename: path.basename(filename),
+        filename: filename,
         cwd: path.dirname(filename),
         root: path.dirname(filename),
         comments: true,

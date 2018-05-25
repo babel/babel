@@ -37,7 +37,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es6.array.copy-within { "android":"4" }
   es6.array.fill { "android":"4" }
   es6.array.find { "android":"4" }

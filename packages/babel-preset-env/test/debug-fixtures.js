@@ -66,6 +66,9 @@ const buildTest = opts => {
       let err;
 
       try {
+        stdout = replacePaths(stdout);
+        stderr = replacePaths(stderr);
+
         assertTest(stdout, stderr, opts);
       } catch (e) {
         err = e;
@@ -75,6 +78,16 @@ const buildTest = opts => {
     });
   };
 };
+
+function replacePaths(str) {
+  let prev;
+  do {
+    prev = str;
+    str = str.replace(tmpLoc, "<CWD>");
+  } while (str !== prev);
+
+  return str;
+}
 
 describe("debug output", () => {
   let cwd;
