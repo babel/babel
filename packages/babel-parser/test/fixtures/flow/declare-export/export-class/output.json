@@ -175,6 +175,7 @@
                         "name": "meth"
                       },
                       "static": false,
+                      "proto": false,
                       "kind": "init",
                       "method": true,
                       "value": {

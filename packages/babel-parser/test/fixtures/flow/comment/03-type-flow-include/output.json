@@ -109,6 +109,7 @@
                 "name": "foo"
               },
               "static": false,
+              "proto": false,
               "kind": "init",
               "method": false,
               "value": {
@@ -161,6 +162,7 @@
                 "name": "bar"
               },
               "static": false,
+              "proto": false,
               "kind": "init",
               "method": false,
               "value": {
@@ -213,6 +215,7 @@
                 "name": "baz"
               },
               "static": false,
+              "proto": false,
               "kind": "init",
               "method": false,
               "value": {

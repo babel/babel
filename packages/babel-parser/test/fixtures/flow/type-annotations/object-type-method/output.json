@@ -109,6 +109,7 @@
                 "name": "a"
               },
               "static": false,
+              "proto": false,
               "kind": "init",
               "method": false,
               "value": {
@@ -233,6 +234,7 @@
                 "name": "a"
               },
               "static": false,
+              "proto": false,
               "kind": "init",
               "method": false,
               "value": {
@@ -390,6 +392,7 @@
                 "name": "a"
               },
               "static": false,
+              "proto": false,
               "kind": "init",
               "method": true,
               "value": {
@@ -513,6 +516,7 @@
                 "name": "a"
               },
               "static": false,
+              "proto": false,
               "kind": "init",
               "method": true,
               "value": {
@@ -978,6 +982,7 @@
                 "name": "foo"
               },
               "static": false,
+              "proto": false,
               "kind": "init",
               "method": true,
               "value": {
@@ -1104,6 +1109,7 @@
                 "name": "foo"
               },
               "static": true,
+              "proto": false,
               "kind": "init",
               "method": true,
               "value": {

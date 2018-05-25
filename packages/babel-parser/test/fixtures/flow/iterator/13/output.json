@@ -126,6 +126,7 @@
                   "name": "@@asyncIterator"
                 },
                 "static": false,
+                "proto": false,
                 "kind": "init",
                 "method": false,
                 "value": {
