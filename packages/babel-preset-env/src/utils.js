@@ -31,6 +31,9 @@ export const semverify = (version: string | number): string => {
   return split.join(".");
 };
 
+export const getValues = (object: Object) =>
+  Object.keys(object).map(key => object[key]);
+
 export const findSuggestion = (options: Array<string>, option: string) => {
   let levenshteinValue = Infinity;
   return options.reduce((suggestion, validOption) => {

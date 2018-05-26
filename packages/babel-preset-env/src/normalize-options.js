@@ -5,21 +5,20 @@ import browserslist from "browserslist";
 import builtInsList from "../data/built-ins.json";
 import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
-import { findSuggestion } from "./utils";
+import { getValues, findSuggestion } from "./utils";
 import pluginsList from "../data/plugins.json";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
 import type { Targets, Options, ModuleOption, BuiltInsOption } from "./types";
 
 const validateTopLevelOptions = (options: Options) => {
   for (const option in options) {
-    invariant(
-      TopLevelOptions[option],
-      `Invalid Option: ${option} is not a valid top-level option.
-      Maybe you meant to use '${findSuggestion(
-        Object.values(TopLevelOptions),
-        option,
-      )}'?`,
-    );
+    if (!TopLevelOptions[option]) {
+      const validOptions = getValues(TopLevelOptions);
+      throw new Error(
+        `Invalid Option: ${option} is not a valid top-level option.
+        Maybe you meant to use '${findSuggestion(validOptions, option)}'?`,
+      );
+    }
   }
 };
 
