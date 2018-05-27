@@ -6,7 +6,7 @@ import legacyVisitor from "./transformer-legacy";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { legacy = false } = options;
+  const { legacy = false, decoratorsBeforeExport } = options;
   if (typeof legacy !== "boolean") {
     throw new Error("'legacy' must be a boolean.");
   }
@@ -19,8 +19,23 @@ export default declare((api, options) => {
     );
   }
 
+  if (decoratorsBeforeExport !== undefined) {
+    if (legacy) {
+      throw new Error(
+        "'decoratorsBeforeExport' can't be used with legacy decorators.",
+      );
+    }
+    if (typeof decoratorsBeforeExport !== "boolean") {
+      throw new Error("'decoratorsBeforeExport' must be a boolean.");
+    }
+  }
+
   return {
     inherits: syntaxDecorators,
+
+    manipulateOptions({ generatorOpts }) {
+      generatorOpts.decoratorsBeforeExport = decoratorsBeforeExport;
+    },
 
     visitor: legacy ? legacyVisitor : visitor,
   };

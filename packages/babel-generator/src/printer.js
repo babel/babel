@@ -25,6 +25,7 @@ export type Format = {
     style: string,
     base: number,
   },
+  decoratorsBeforeExport: boolean,
 };
 
 export default class Printer {
