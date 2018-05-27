@@ -95,4 +95,23 @@ describe("validators", function() {
       expect(t.isNodesEquivalent(pattern, pattern)).toBe(true);
     });
   });
+
+  describe("isReferenced", function() {
+    it("returns false if node is a key of ObjectTypeProperty", function() {
+      const node = t.identifier("a");
+      const parent = t.objectTypeProperty(node, t.numberTypeAnnotation());
+
+      expect(t.isReferenced(node, parent)).toBe(false);
+    });
+
+    it("returns true if node is a value of ObjectTypeProperty", function() {
+      const node = t.identifier("a");
+      const parent = t.objectTypeProperty(
+        t.identifier("someKey"),
+        t.genericTypeAnnotation(node),
+      );
+
+      expect(t.isReferenced(node, parent)).toBe(true);
+    });
+  });
 });
