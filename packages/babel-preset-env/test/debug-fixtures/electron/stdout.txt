@@ -32,7 +32,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es.symbol { "electron":"0.36" }
   es.symbol.async-iterator { "electron":"0.36" }
   es.symbol.has-instance { "electron":"0.36" }

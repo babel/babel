@@ -36,7 +36,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es.symbol {}
   es.symbol.async-iterator {}
   es.symbol.has-instance {}

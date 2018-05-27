@@ -39,7 +39,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es.symbol { "ie":"10" }
   es.symbol.async-iterator { "chrome":"54", "ie":"10", "node":"6" }
   es.symbol.has-instance { "ie":"10", "node":"6" }

@@ -182,15 +182,15 @@ describe("babel-runtime", () => {
       ).toEqual(undefined);
     });
 
-    it("flatten, exists", () => {
+    it("flat, exists", () => {
       expect(
-        require("../core-js/instance/flatten")([]).call([1, 2, [3, 4]]).length,
+        require("../core-js/instance/flat")([]).call([1, 2, [3, 4]]).length,
       ).toEqual(4);
     });
 
-    it("flatten, missing", () => {
+    it("flat, missing", () => {
       expect(
-        require("../core-js/instance/flatten")({}),
+        require("../core-js/instance/flat")({}),
       ).toEqual(undefined);
     });
 

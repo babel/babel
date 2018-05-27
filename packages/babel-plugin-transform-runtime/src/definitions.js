@@ -172,7 +172,7 @@ export default {
     findIndex: "find-index",
     flags: "flags",
     flatMap: "flat-map",
-    flatten: "flatten",
+    flat: "flat",
     forEach: "for-each",
     includes: "includes",
     indexOf: "index-of",

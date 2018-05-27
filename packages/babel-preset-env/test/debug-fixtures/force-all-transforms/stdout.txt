@@ -37,7 +37,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es.symbol.async-iterator { "chrome":"55" }
   es.object.define-getter { "chrome":"55" }
   es.object.define-setter { "chrome":"55" }

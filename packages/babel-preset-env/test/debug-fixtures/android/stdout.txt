@@ -37,7 +37,7 @@ Using plugins:
 
 Using polyfills with `entry` option:
 
-[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es.symbol { "android":"4" }
   es.symbol.async-iterator { "android":"4" }
   es.symbol.has-instance { "android":"4" }
