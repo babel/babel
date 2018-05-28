@@ -1172,21 +1172,29 @@ Ep.explodeExpression = function(path, ignoreResult) {
     if (arg && expr.delegate) {
       let result = self.makeTempVar();
 
-      self.emit(t.returnStatement(t.callExpression(
-        self.contextProperty("delegateYield"), [
+      let ret = t.returnStatement(t.callExpression(
+        self.contextProperty("delegateYield"),
+        [
           arg,
           t.stringLiteral(result.property.name),
           after
         ]
-      )));
+      ));
+      ret.loc = expr.loc;
 
+      self.emit(ret);
       self.mark(after);
 
       return result;
     }
 
     self.emitAssign(self.contextProperty("next"), after);
-    self.emit(t.returnStatement(arg || null));
+
+    let ret = t.returnStatement(arg || null);
+    // Preserve the `yield` location so that source mappings for the statements
+    // link back to the yield properly.
+    ret.loc = expr.loc;
+    self.emit(ret);
     self.mark(after);
 
     return self.contextProperty("sent");
