@@ -10,8 +10,8 @@ Does not type-check its input. For that, you will need to install and set up Typ
 * Does not support [`const enum`][const_enum]s because those require type information to compile.
 **Workaround**: Remove the `const`, which makes it available at runtime.
 * Does not support [`export =`][exin] and [`import =`][exin], because those cannot be compile to ES.next. **Workaround**: Convert to using `export default` and `export const`, and `import x, {y} from "z"`.
-* Does not (yet?) support binding patterns in signature. So `export type T = ({x, y}: any) => void;` does currently not work. See [babel issue #6667](https://github.com/babel/babel/issues/6667) and [babylon issue #768](https://github.com/babel/babylon/issues/768) for details.
-* Does not (yet?) support default export of an interface. So `export default interface A {}` does currently not work. See [babel issue #7118](https://github.com/babel/babel/issues/7118) and [babel issue #7640](https://github.com/babel/babel/issues/7640) for details.
+* Does not support binding patterns in signature. So `export type T = ({x, y}: any) => void;` does currently not work. See [babel issue #6667](https://github.com/babel/babel/issues/6667) and [babylon issue #768](https://github.com/babel/babylon/issues/768) for details.
+* Does not support default export of an interface. So `export default interface A {}` does currently not work. See [babel issue #7118](https://github.com/babel/babel/issues/7118) and [babel issue #7640](https://github.com/babel/babel/issues/7640) for details.
 
 ## Example
 
