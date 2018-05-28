@@ -1,5 +1,5 @@
 before_install:
-  - npm install lerna@2.0.0
+  - npm install lerna@2.11.0
 
 install:
   - npm run bootstrap
