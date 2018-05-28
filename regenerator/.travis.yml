@@ -1,8 +1,6 @@
-before_install:
-  - npm install lerna@2.11.0
-
 install:
-  - npm run bootstrap
+  - npm install
+  - npm install packages/regenerator-*
 
 language: node_js
 node_js:
