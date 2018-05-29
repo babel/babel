@@ -5647,13 +5647,7 @@
                           "identifierName": "p"
                         },
                         "name": "p"
-                      },
-                      "extra": {
-                        "parenthesizedArgument": false
                       }
-                    },
-                    "extra": {
-                      "parenthesizedArgument": false
                     }
                   },
                   "consequent": {

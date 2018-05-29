@@ -94,7 +94,6 @@
               "value": 5
             },
             "extra": {
-              "parenthesizedArgument": false,
               "parenthesized": true,
               "parenStart": 0
             }

@@ -110,9 +110,6 @@
               "body": [],
               "directives": []
             }
-          },
-          "extra": {
-            "parenthesizedArgument": false
           }
         }
       }

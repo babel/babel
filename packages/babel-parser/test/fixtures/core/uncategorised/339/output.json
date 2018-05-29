@@ -106,9 +106,6 @@
                 },
                 "name": "x"
               }
-            },
-            "extra": {
-              "parenthesizedArgument": false
             }
           },
           "operator": "/",

@@ -494,9 +494,6 @@
                             "identifierName": "x"
                           },
                           "name": "x"
-                        },
-                        "extra": {
-                          "parenthesizedArgument": false
                         }
                       }
                     }
@@ -625,9 +622,6 @@
                             "identifierName": "y"
                           },
                           "name": "y"
-                        },
-                        "extra": {
-                          "parenthesizedArgument": false
                         }
                       }
                     }
@@ -966,9 +960,6 @@
                             "identifierName": "value"
                           },
                           "name": "value"
-                        },
-                        "extra": {
-                          "parenthesizedArgument": false
                         }
                       }
                     }
@@ -1307,9 +1298,6 @@
                             "identifierName": "value"
                           },
                           "name": "value"
-                        },
-                        "extra": {
-                          "parenthesizedArgument": false
                         }
                       }
                     }
