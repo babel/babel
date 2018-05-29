@@ -52,8 +52,6 @@ lint:
 	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' '**/.*.js' --format=codeframe --rulesdir="./scripts/eslint_rules"
 
 fix:
-	# The config is hardcoded because otherwise prettier searches for it and also picks up some broken package.json files from tests
-	./node_modules/.bin/prettier --config .prettierrc --write --ignore-path .eslintignore '**/*.json'
 	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' '**/.*.js' --format=codeframe --fix --rulesdir="./scripts/eslint_rules"
 
 clean: test-clean
