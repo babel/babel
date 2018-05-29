@@ -236,11 +236,13 @@ function babelrcLoadEnabled(
   return micromatch(pkgData.directories, babelrcPatterns).length > 0;
 }
 
-const validateConfigFile = makeWeakCache((file: ConfigFile): ValidatedFile => ({
-  filepath: file.filepath,
-  dirname: file.dirname,
-  options: validate("configfile", file.options),
-}));
+const validateConfigFile = makeWeakCache(
+  (file: ConfigFile): ValidatedFile => ({
+    filepath: file.filepath,
+    dirname: file.dirname,
+    options: validate("configfile", file.options),
+  }),
+);
 
 const validateBabelrcFile = makeWeakCache(
   (file: ConfigFile): ValidatedFile => ({
@@ -250,11 +252,13 @@ const validateBabelrcFile = makeWeakCache(
   }),
 );
 
-const validateExtendFile = makeWeakCache((file: ConfigFile): ValidatedFile => ({
-  filepath: file.filepath,
-  dirname: file.dirname,
-  options: validate("extendsfile", file.options),
-}));
+const validateExtendFile = makeWeakCache(
+  (file: ConfigFile): ValidatedFile => ({
+    filepath: file.filepath,
+    dirname: file.dirname,
+    options: validate("extendsfile", file.options),
+  }),
+);
 
 /**
  * Build a config chain for just the programmatic options passed into Babel.
