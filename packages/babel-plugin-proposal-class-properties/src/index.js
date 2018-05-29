@@ -277,7 +277,12 @@ export default declare((api, options) => {
           }
 
           if (path.isClassPrivateProperty()) {
-            const { static: isStatic, key: { id: { name } } } = path.node;
+            const {
+              static: isStatic,
+              key: {
+                id: { name },
+              },
+            } = path.node;
 
             if (isStatic) {
               throw path.buildCodeFrameError(

@@ -13,7 +13,15 @@ export default declare(api => {
     inherits: syntaxFlow,
 
     visitor: {
-      Program(path, { file: { ast: { comments } }, opts }) {
+      Program(
+        path,
+        {
+          file: {
+            ast: { comments },
+          },
+          opts,
+        },
+      ) {
         skipStrip = false;
         let directiveFound = false;
 

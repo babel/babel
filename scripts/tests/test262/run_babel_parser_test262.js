@@ -17,7 +17,7 @@ Promise.all([utils.getTests(testDir), utils.getWhitelist(whitelistFile)])
 
     const results = tests.map(function(test, idx) {
       if (idx % reportInc === 0) {
-        console.log(`> ${Math.round(100 * idx / total)}% complete`);
+        console.log(`> ${Math.round((100 * idx) / total)}% complete`);
       }
 
       return utils.runTest(test);
