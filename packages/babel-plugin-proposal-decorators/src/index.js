@@ -6,12 +6,12 @@ import legacyVisitor from "./transformer-legacy";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { legacy = false, decoratorsBeforeExport } = options;
-
+  const { legacy = false } = options;
   if (typeof legacy !== "boolean") {
     throw new Error("'legacy' must be a boolean.");
   }
 
+  let { decoratorsBeforeExport } = options;
   if (decoratorsBeforeExport !== undefined) {
     if (legacy) {
       throw new Error(
@@ -21,6 +21,8 @@ export default declare((api, options) => {
     if (typeof decoratorsBeforeExport !== "boolean") {
       throw new Error("'decoratorsBeforeExport' must be a boolean.");
     }
+  } else if (!legacy) {
+    decoratorsBeforeExport = true;
   }
 
   return {

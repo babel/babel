@@ -429,6 +429,10 @@ export function ObjectTypeAnnotation(...args: Array<any>): Object {
   return builder("ObjectTypeAnnotation", ...args);
 }
 export { ObjectTypeAnnotation as objectTypeAnnotation };
+export function ObjectTypeInternalSlot(...args: Array<any>): Object {
+  return builder("ObjectTypeInternalSlot", ...args);
+}
+export { ObjectTypeInternalSlot as objectTypeInternalSlot };
 export function ObjectTypeCallProperty(...args: Array<any>): Object {
   return builder("ObjectTypeCallProperty", ...args);
 }

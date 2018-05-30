@@ -1,1 +1,2 @@
-export default @dec() class {}
+@dec()
+export default class {}
