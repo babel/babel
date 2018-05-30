@@ -116,6 +116,11 @@ export default function isReferenced(node: Object, parent: Object): boolean {
     // no: NODE.target
     case "MetaProperty":
       return false;
+
+    // yes: type X = { somePropert: NODE }
+    // no: type X = { NODE: OtherType }
+    case "ObjectTypeProperty":
+      return parent.key !== node;
   }
 
   return true;
