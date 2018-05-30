@@ -6,7 +6,7 @@ var env = {
   }
 };
 
-// Wee need to use "with" to avoid leaking the modified Array to other tests.
+// We need to use "with" to avoid leaking the modified Array to other tests.
 with (env) {
   class List extends Array {};
   new List();

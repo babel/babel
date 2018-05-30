@@ -449,7 +449,7 @@ helpers.construct = () => template.program.ast`
     if (Reflect.construct.sham) return false;
 
     // Proxy can't be polyfilled. Every browser implemented
-    // proxies before or at the same time of Reflect.construct,
+    // proxies before or at the same time as Reflect.construct,
     // so if they support Proxy they also support Reflect.construct.
     if (typeof Proxy === "function") return true;
 
@@ -488,38 +488,34 @@ helpers.construct = () => template.program.ast`
 
 // Based on https://github.com/WebReflection/babel-plugin-transform-builtin-classes
 helpers.wrapNativeSuper = () => template.program.ast`
-  import _gPO from "getPrototypeOf";
-  import _sPO from "setPrototypeOf";
+  import getPrototypeOf from "getPrototypeOf";
+  import setPrototypeOf from "setPrototypeOf";
   import construct from "construct";
 
+  var _cache = typeof Map === "function" ? new Map() : undefined;
+
   export default function _wrapNativeSuper(Class) {
-    var _cache = typeof Map === "function" ? new Map() : undefined;
-
-    _wrapNativeSuper = function _wrapNativeSuper(Class) {
-      if (Class === null) return null;
-      if (typeof Class !== "function") {
-        throw new TypeError("Super expression must either be null or a function");
-      }
-      if (typeof _cache !== "undefined") {
-        if (_cache.has(Class)) return _cache.get(Class);
-        _cache.set(Class, Wrapper);
-      }
-      function Wrapper() {
-        return _construct(Class, arguments, _gPO(this).constructor)
-      }
-      Wrapper.prototype = Object.create(Class.prototype, {
-        constructor: {
-          value: Wrapper,
-          enumerable: false,
-          writable: true,
-          configurable: true,
-        }
-      });
-
-      return _sPO(Wrapper, Class);
+    if (Class === null) return null;
+    if (typeof Class !== "function") {
+      throw new TypeError("Super expression must either be null or a function");
     }
+    if (typeof _cache !== "undefined") {
+      if (_cache.has(Class)) return _cache.get(Class);
+      _cache.set(Class, Wrapper);
+    }
+    function Wrapper() {
+      return construct(Class, arguments, getPrototypeOf(this).constructor)
+    }
+    Wrapper.prototype = Object.create(Class.prototype, {
+      constructor: {
+        value: Wrapper,
+        enumerable: false,
+        writable: true,
+        configurable: true,
+      }
+    });
 
-    return _wrapNativeSuper(Class)
+    return setPrototypeOf(Wrapper, Class);
   }
 `;
 
