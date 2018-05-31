@@ -13,6 +13,8 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "7.0.0-beta.54",
+    "@babel/helper-replace-supers": "7.0.0-beta.54",
+    "@babel/helper-split-export-declaration": "7.0.0-beta.54",
     "@babel/plugin-syntax-decorators": "7.0.0-beta.54"
   },
   "peerDependencies": {
@@ -20,8 +22,6 @@
   },
   "devDependencies": {
     "@babel/core": "7.0.0-beta.54",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.54",
-    "@babel/helper-replace-supers": "7.0.0-beta.54",
-    "@babel/helper-split-export-declaration": "7.0.0-beta.54"
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.54"
   }
 }
