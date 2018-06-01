@@ -1410,6 +1410,10 @@ export default class StatementParser extends ExpressionParser {
       node.specifiers = [];
       node.source = null;
       node.declaration = this.parseExportDeclaration(node);
+    } else if (this.isExportFlowTypes()) {
+      // export type foo = bar || export type { foo, bar }
+      this.expectPlugin("flow");
+      node.declaration = this.parseExportDeclaration(node);
     } else {
       // export { x, y as z } [from '...']
       node.declaration = null;
@@ -1457,6 +1461,13 @@ export default class StatementParser extends ExpressionParser {
         this.state.start,
         "Only expressions, functions or classes are allowed as the `default` export.",
       );
+    } else if (this.isExportFlowTypes()) {
+      // export default type foo = 2;
+      this.expectPlugin("flow");
+      return this.raise(
+        this.state.start,
+        "Only expressions, functions or classes are allowed as the `default` export.",
+      );
     } else {
       const res = this.parseMaybeAssign();
       this.semicolon();
@@ -1470,7 +1481,12 @@ export default class StatementParser extends ExpressionParser {
   }
 
   isExportDefaultSpecifier(): boolean {
+    const lookahead = this.lookahead();
+
     if (this.match(tt.name)) {
+      if (this.state.value === "type" || this.state.value === "interface") {
+        return lookahead.type === tt.name && lookahead.value === "from";
+      }
       return this.state.value !== "async";
     }
 
@@ -1478,11 +1494,21 @@ export default class StatementParser extends ExpressionParser {
       return false;
     }
 
-    const lookahead = this.lookahead();
     return (
       lookahead.type === tt.comma ||
       (lookahead.type === tt.name && lookahead.value === "from")
     );
+  }
+
+  isExportFlowTypes(): boolean {
+    if (this.match(tt.name)) {
+      const next = this.lookahead();
+      return (
+        next.type === tt.name &&
+        (this.state.value === "type" || this.state.value === "interface")
+      );
+    }
+    return false;
   }
 
   parseExportSpecifiersMaybe(node: N.ExportNamedDeclaration): void {
