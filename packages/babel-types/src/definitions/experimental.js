@@ -136,17 +136,14 @@ defineType("Import", {
 });
 
 defineType("Decorator", {
-  visitor: ["callee", "arguments"],
+  visitor: ["expression"],
   fields: {
-    callee: {
+    expression: {
       validate: assertNodeType("Expression"),
     },
-    arguments: {
+    hasArguments: {
       optional: true,
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Expression", "SpreadElement")),
-      ),
+      validate: assertValueType("boolean"),
     },
   },
 });

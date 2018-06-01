@@ -58,7 +58,8 @@
                 "column": 12
               }
             },
-            "callee": {
+            "hasArguments": false,
+            "expression": {
               "type": "MemberExpression",
               "start": 2,
               "end": 11,
@@ -188,7 +189,8 @@
                       "column": 23
                     }
                   },
-                  "callee": {
+                  "hasArguments": false,
+                  "expression": {
                     "type": "MemberExpression",
                     "start": 29,
                     "end": 47,
@@ -311,7 +313,8 @@
                       "column": 14
                     }
                   },
-                  "callee": {
+                  "hasArguments": false,
+                  "expression": {
                     "type": "BinaryExpression",
                     "start": 66,
                     "end": 75,

@@ -58,58 +58,58 @@
                 "column": 2
               }
             },
-            "callee": {
-              "type": "Identifier",
+            "hasArguments": true,
+            "expression": {
+              "type": "CallExpression",
               "start": 1,
-              "end": 6,
+              "end": 40,
               "loc": {
                 "start": {
                   "line": 1,
                   "column": 1
                 },
                 "end": {
-                  "line": 1,
-                  "column": 6
-                },
-                "identifierName": "outer"
+                  "line": 3,
+                  "column": 2
+                }
               },
-              "name": "outer"
-            },
-            "arguments": [
-              {
-                "type": "ObjectExpression",
-                "start": 7,
-                "end": 39,
+              "callee": {
+                "type": "Identifier",
+                "start": 1,
+                "end": 6,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 7
+                    "column": 1
                   },
                   "end": {
-                    "line": 3,
-                    "column": 1
-                  }
+                    "line": 1,
+                    "column": 6
+                  },
+                  "identifierName": "outer"
                 },
-                "properties": [
-                  {
-                    "type": "ObjectProperty",
-                    "start": 11,
-                    "end": 37,
-                    "loc": {
-                      "start": {
-                        "line": 2,
-                        "column": 2
-                      },
-                      "end": {
-                        "line": 2,
-                        "column": 28
-                      }
+                "name": "outer"
+              },
+              "arguments": [
+                {
+                  "type": "ObjectExpression",
+                  "start": 7,
+                  "end": 39,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 7
                     },
-                    "method": false,
-                    "key": {
-                      "type": "Identifier",
+                    "end": {
+                      "line": 3,
+                      "column": 1
+                    }
+                  },
+                  "properties": [
+                    {
+                      "type": "ObjectProperty",
                       "start": 11,
-                      "end": 16,
+                      "end": 37,
                       "loc": {
                         "start": {
                           "line": 2,
@@ -117,101 +117,118 @@
                         },
                         "end": {
                           "line": 2,
-                          "column": 7
-                        },
-                        "identifierName": "store"
-                      },
-                      "name": "store"
-                    },
-                    "computed": false,
-                    "shorthand": false,
-                    "value": {
-                      "type": "ClassExpression",
-                      "start": 18,
-                      "end": 37,
-                      "loc": {
-                        "start": {
-                          "line": 2,
-                          "column": 9
-                        },
-                        "end": {
-                          "line": 2,
                           "column": 28
                         }
                       },
-                      "decorators": [
-                        {
-                          "type": "Decorator",
-                          "start": 18,
-                          "end": 24,
-                          "loc": {
-                            "start": {
-                              "line": 2,
-                              "column": 9
-                            },
-                            "end": {
-                              "line": 2,
-                              "column": 15
-                            }
-                          },
-                          "callee": {
-                            "type": "Identifier",
-                            "start": 19,
-                            "end": 24,
-                            "loc": {
-                              "start": {
-                                "line": 2,
-                                "column": 10
-                              },
-                              "end": {
-                                "line": 2,
-                                "column": 15
-                              },
-                              "identifierName": "inner"
-                            },
-                            "name": "inner"
-                          }
-                        }
-                      ],
-                      "id": {
+                      "method": false,
+                      "key": {
                         "type": "Identifier",
-                        "start": 31,
-                        "end": 34,
+                        "start": 11,
+                        "end": 16,
                         "loc": {
                           "start": {
                             "line": 2,
-                            "column": 22
+                            "column": 2
                           },
                           "end": {
                             "line": 2,
-                            "column": 25
+                            "column": 7
                           },
-                          "identifierName": "Foo"
+                          "identifierName": "store"
                         },
-                        "name": "Foo"
+                        "name": "store"
                       },
-                      "superClass": null,
-                      "body": {
-                        "type": "ClassBody",
-                        "start": 35,
+                      "computed": false,
+                      "shorthand": false,
+                      "value": {
+                        "type": "ClassExpression",
+                        "start": 18,
                         "end": 37,
                         "loc": {
                           "start": {
                             "line": 2,
-                            "column": 26
+                            "column": 9
                           },
                           "end": {
                             "line": 2,
                             "column": 28
                           }
                         },
-                        "body": []
+                        "decorators": [
+                          {
+                            "type": "Decorator",
+                            "start": 18,
+                            "end": 24,
+                            "loc": {
+                              "start": {
+                                "line": 2,
+                                "column": 9
+                              },
+                              "end": {
+                                "line": 2,
+                                "column": 15
+                              }
+                            },
+                            "hasArguments": false,
+                            "expression": {
+                              "type": "Identifier",
+                              "start": 19,
+                              "end": 24,
+                              "loc": {
+                                "start": {
+                                  "line": 2,
+                                  "column": 10
+                                },
+                                "end": {
+                                  "line": 2,
+                                  "column": 15
+                                },
+                                "identifierName": "inner"
+                              },
+                              "name": "inner"
+                            }
+                          }
+                        ],
+                        "id": {
+                          "type": "Identifier",
+                          "start": 31,
+                          "end": 34,
+                          "loc": {
+                            "start": {
+                              "line": 2,
+                              "column": 22
+                            },
+                            "end": {
+                              "line": 2,
+                              "column": 25
+                            },
+                            "identifierName": "Foo"
+                          },
+                          "name": "Foo"
+                        },
+                        "superClass": null,
+                        "body": {
+                          "type": "ClassBody",
+                          "start": 35,
+                          "end": 37,
+                          "loc": {
+                            "start": {
+                              "line": 2,
+                              "column": 26
+                            },
+                            "end": {
+                              "line": 2,
+                              "column": 28
+                            }
+                          },
+                          "body": []
+                        }
                       }
                     }
-                  }
-                ]
-              }
-            ]
+                  ]
+                }
+              ]
+            }
           }
         ],
         "id": {

@@ -143,7 +143,7 @@
                           "column": 20
                         }
                       },
-                      "callee": {
+                      "expression": {
                         "type": "Identifier",
                         "start": 27,
                         "end": 30,

@@ -94,7 +94,7 @@
                     "column": 20
                   }
                 },
-                "callee": {
+                "expression": {
                   "type": "CallExpression",
                   "start": 15,
                   "end": 20,
@@ -161,7 +161,7 @@
                     "column": 40
                   }
                 },
-                "callee": {
+                "expression": {
                   "type": "CallExpression",
                   "start": 25,
                   "end": 40,
@@ -282,7 +282,7 @@
                     "column": 47
                   }
                 },
-                "callee": {
+                "expression": {
                   "type": "CallExpression",
                   "start": 42,
                   "end": 47,

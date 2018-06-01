@@ -58,7 +58,8 @@
                 "column": 2
               }
             },
-            "callee": {
+            "hasArguments": false,
+            "expression": {
               "type": "ObjectExpression",
               "start": 2,
               "end": 34,
@@ -136,7 +137,8 @@
                             "column": 15
                           }
                         },
-                        "callee": {
+                        "hasArguments": false,
+                        "expression": {
                           "type": "Identifier",
                           "start": 14,
                           "end": 19,
