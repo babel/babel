@@ -72,7 +72,8 @@
                   "column": 26
                 }
               },
-              "callee": {
+              "hasArguments": false,
+              "expression": {
                 "type": "Identifier",
                 "start": 17,
                 "end": 26,
