@@ -150,6 +150,8 @@ function insertInitializeInstanceElements(path, initializeInstanceId) {
 }
 
 function transformClass(path, file) {
+  const isDeclaration = path.node.id && path.isDeclaration();
+
   path.node.type = "ClassDeclaration";
   if (!path.node.id) path.node.id = path.scope.generateUidIdentifier("class");
 
@@ -160,42 +162,30 @@ function transformClass(path, file) {
 
   insertInitializeInstanceElements(path, initializeId);
 
-  return template.expression.ast`
-    ${file.addHelper("decorate")}(
-      ${classDecorators || t.nullLiteral()},
-      function (${initializeId}) {
-        ${path.node}
-        return { F: ${t.cloneNode(path.node.id)}, d: ${definitions} };
-      }
-    )
-  `;
+  const expr = template.expression.ast`
+      ${file.addHelper("decorate")}(
+        ${classDecorators || t.nullLiteral()},
+        function (${initializeId}) {
+          ${path.node}
+          return { F: ${t.cloneNode(path.node.id)}, d: ${definitions} };
+        }
+      )
+    `;
+
+  return isDeclaration ? template.ast`let ${path.node.id} = ${expr}` : expr;
 }
 
 export default {
-  ClassDeclaration(path) {
-    if (!hasDecorators(path)) return;
+  ExportDefaultDeclaration(path) {
+    let decl = path.get("declaration");
+    if (!decl.isClassDeclaration() || !hasDecorators(decl)) return;
 
-    if (path.parentPath.isExportDefaultDeclaration()) {
-      if (!path.node.id) {
-        t.toExpression(path.node);
-        path.replaceWith(transformClass(path, this.file));
-        return;
-      }
+    if (decl.node.id) decl = splitExportDeclaration(path);
 
-      path = splitExportDeclaration(path.parentPath);
-    }
-
-    path.replaceWith(
-      t.variableDeclaration("let", [
-        t.variableDeclarator(
-          t.cloneNode(path.node.id),
-          transformClass(path, this.file),
-        ),
-      ]),
-    );
+    decl.replaceWith(transformClass(decl, this.file));
   },
 
-  ClassExpression(path) {
+  Class(path) {
     if (hasDecorators(path)) {
       path.replaceWith(transformClass(path, this.file));
     }
