@@ -38,7 +38,7 @@ export default {
 
 ## Defining Helpers
 
-> **NOTE**: This package is only meant to be used by the packages inluded in this repository. There is currently no way for third-party plugins to define an helper.
+> **NOTE**: This package is only meant to be used by the packages inluded in this repository. There is currently no way for third-party plugins to define a helper.
 
 Helpers are defined in the `src/helpers.js` file, and they must be valid modules which follow these guidelines:
  - They must have a default export, which is their entry-point.
@@ -48,7 +48,9 @@ Helpers are defined in the `src/helpers.js` file, and they must be valid modules
 ```js
 helpers.customHelper = defineHelper(`
   import dep from "dependency";
+
   const foo = 2;
+
   export default function getFooTimesDepPlusX(x) {
     return foo * dep() + x;
   }
