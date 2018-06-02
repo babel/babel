@@ -286,13 +286,15 @@ export default class StatementParser extends ExpressionParser {
       // So that the decorators of any nested class expressions will be dealt with separately
       this.state.decoratorStack.push([]);
 
+      const startPos = this.state.start;
+      const startLoc = this.state.startLoc;
+      let expr: N.Expression;
+
       if (this.eat(tt.parenL)) {
-        node.callee = this.parseExpression();
+        expr = this.parseExpression();
         this.expect(tt.parenR);
       } else {
-        const startPos = this.state.start;
-        const startLoc = this.state.startLoc;
-        let expr = this.parseIdentifier(false);
+        expr = this.parseIdentifier(false);
 
         while (this.eat(tt.dot)) {
           const node = this.startNodeAt(startPos, startLoc);
@@ -301,18 +303,20 @@ export default class StatementParser extends ExpressionParser {
           node.computed = false;
           expr = this.finishNode(node, "MemberExpression");
         }
-
-        node.callee = expr;
       }
 
       if (this.eat(tt.parenL)) {
+        const node = this.startNodeAt(startPos, startLoc);
+        node.callee = expr;
         node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
         this.toReferencedList(node.arguments);
+        expr = this.finishNode(node, "CallExpression");
       }
 
+      node.expression = expr;
       this.state.decoratorStack.pop();
     } else {
-      node.callee = this.parseMaybeAssign();
+      node.expression = this.parseMaybeAssign();
     }
     return this.finishNode(node, "Decorator");
   }

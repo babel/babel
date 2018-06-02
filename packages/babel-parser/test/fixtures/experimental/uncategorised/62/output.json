@@ -58,7 +58,7 @@
                 "column": 24
               }
             },
-            "callee": {
+            "expression": {
               "type": "CallExpression",
               "start": 1,
               "end": 24,

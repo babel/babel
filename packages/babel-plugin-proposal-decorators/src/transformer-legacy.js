@@ -39,18 +39,18 @@ function applyEnsureOrdering(path) {
   ).reduce((acc, prop) => acc.concat(prop.node.decorators || []), []);
 
   const identDecorators = decorators.filter(
-    decorator => !t.isIdentifier(decorator.callee),
+    decorator => !t.isIdentifier(decorator.expression),
   );
   if (identDecorators.length === 0) return;
 
   return t.sequenceExpression(
     identDecorators
       .map(decorator => {
-        const callee = decorator.callee;
-        const id = (decorator.callee = path.scope.generateDeclaredUidIdentifier(
+        const expression = decorator.expression;
+        const id = (decorator.expression = path.scope.generateDeclaredUidIdentifier(
           "dec",
         ));
-        return t.assignmentExpression("=", id, callee);
+        return t.assignmentExpression("=", id, expression);
       })
       .concat([path.node]),
   );
@@ -69,7 +69,7 @@ function applyClassDecorators(classPath) {
   const name = classPath.scope.generateDeclaredUidIdentifier("class");
 
   return decorators
-    .map(dec => dec.callee)
+    .map(dec => dec.expression)
     .reverse()
     .reduce(function(acc, decorator) {
       return buildClassDecorator({
@@ -164,7 +164,9 @@ function applyTargetDecorators(path, state, decoratedProps) {
           t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
             t.cloneNode(target),
             t.cloneNode(property),
-            t.arrayExpression(decorators.map(dec => t.cloneNode(dec.callee))),
+            t.arrayExpression(
+              decorators.map(dec => t.cloneNode(dec.expression)),
+            ),
             t.objectExpression([
               t.objectProperty(
                 t.identifier("enumerable"),
@@ -180,7 +182,7 @@ function applyTargetDecorators(path, state, decoratedProps) {
         t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
           t.cloneNode(target),
           t.cloneNode(property),
-          t.arrayExpression(decorators.map(dec => t.cloneNode(dec.callee))),
+          t.arrayExpression(decorators.map(dec => t.cloneNode(dec.expression))),
           t.isObjectProperty(node) || t.isClassProperty(node, { static: true })
             ? buildGetObjectInitializer({
                 TEMP: path.scope.generateDeclaredUidIdentifier("init"),

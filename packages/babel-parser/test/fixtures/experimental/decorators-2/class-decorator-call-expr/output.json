@@ -58,10 +58,10 @@
                 "column": 11
               }
             },
-            "callee": {
-              "type": "Identifier",
+            "expression": {
+              "type": "CallExpression",
               "start": 1,
-              "end": 4,
+              "end": 11,
               "loc": {
                 "start": {
                   "line": 1,
@@ -69,34 +69,49 @@
                 },
                 "end": {
                   "line": 1,
-                  "column": 4
-                },
-                "identifierName": "foo"
+                  "column": 11
+                }
               },
-              "name": "foo"
-            },
-            "arguments": [
-              {
-                "type": "StringLiteral",
-                "start": 5,
-                "end": 10,
+              "callee": {
+                "type": "Identifier",
+                "start": 1,
+                "end": 4,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 5
+                    "column": 1
                   },
                   "end": {
                     "line": 1,
-                    "column": 10
-                  }
+                    "column": 4
+                  },
+                  "identifierName": "foo"
                 },
-                "extra": {
-                  "rawValue": "bar",
-                  "raw": "'bar'"
-                },
-                "value": "bar"
-              }
-            ]
+                "name": "foo"
+              },
+              "arguments": [
+                {
+                  "type": "StringLiteral",
+                  "start": 5,
+                  "end": 10,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 10
+                    }
+                  },
+                  "extra": {
+                    "rawValue": "bar",
+                    "raw": "'bar'"
+                  },
+                  "value": "bar"
+                }
+              ]
+            }
           }
         ],
         "id": {
