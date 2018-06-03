@@ -48,6 +48,14 @@ function getSingleElementDefinition(path, superRef, classRef, file) {
   const { node } = path;
   const isMethod = path.isClassMethod();
 
+  if (path.isPrivate()) {
+    throw path.buildCodeFrameError(
+      `Private ${
+        isMethod ? "methods" : "fields"
+      } in decorated classes are not supported yet.`,
+    );
+  }
+
   new ReplaceSupers(
     {
       methodPath: path,
