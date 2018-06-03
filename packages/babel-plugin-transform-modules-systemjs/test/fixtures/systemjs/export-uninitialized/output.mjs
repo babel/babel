@@ -1,11 +1,12 @@
 System.register([], function (_export, _context) {
   "use strict";
 
-  var name;
+  var m;
+
+  _export("m", void 0);
+
   return {
     setters: [],
-    execute: function () {
-      _export("name", name = _context.id);
-    }
+    execute: function () {}
   };
 });

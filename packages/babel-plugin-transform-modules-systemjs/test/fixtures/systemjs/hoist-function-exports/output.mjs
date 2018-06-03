@@ -9,14 +9,14 @@ System.register(["./evens"], function (_export, _context) {
 
   _export("nextOdd", nextOdd);
 
+  _export("a", void 0);
+
   return {
     setters: [function (_evens) {
       isEven = _evens.isEven;
     }],
     execute: function () {
       _export("p", p = 5);
-
-      _export("p", p);
 
       for (a in b);
 
@@ -27,8 +27,6 @@ System.register(["./evens"], function (_export, _context) {
           return !isEven(n);
         };
       }(isEven));
-
-      _export("isOdd", isOdd);
     }
   };
 });

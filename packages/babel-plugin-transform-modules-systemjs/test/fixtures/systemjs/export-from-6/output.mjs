@@ -3,11 +3,10 @@ System.register(["foo"], function (_export, _context) {
 
   return {
     setters: [function (_foo) {
-      var _exportObj = {};
-      _exportObj.default = _foo.foo;
-      _exportObj.bar = _foo.bar;
-
-      _export(_exportObj);
+      _export({
+        default: _foo.foo,
+        bar: _foo.bar
+      });
     }],
     execute: function () {}
   };
