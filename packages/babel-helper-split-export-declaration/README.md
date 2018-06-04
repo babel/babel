@@ -1,23 +1,19 @@
 # @babel/helper-split-export-declaration
 
-## API
+> 
 
-```js
-declare export default splitExportDeclaration(path: NodePath);
+See our website [@babel/helper-split-export-declaration](https://new.babeljs.io/docs/en/next/babel-helper-split-export-declaration.html) for more information.
+
+## Install
+
+Using npm:
+
+```sh
+npm install --save @babel/helper-split-export-declaration
 ```
 
-## Usage
+or using yarn:
 
-```js
-import traverse from "@babel/traverse";
-import splitExportDeclaration from "@babel/helper-split-export-declaration";
-
-// ...
-
-traverse(file, {
-  ExportDefaultDeclaration(path) {
-    if (!path.get("declaration").isClassDeclaration()) return;
-    splitExportDeclaration(path);
-  },
-});
+```sh
+yarn add --save @babel/helper-split-export-declaration
 ```

@@ -1,66 +1,19 @@
 # @babel/plugin-proposal-function-sent
 
-> Compile the `function.sent` meta property, used inside generator functions, to valid ES2015 code.
+> Compile the function.sent meta propety to valid ES2015 code
 
-## Example
+See our website [@babel/plugin-proposal-function-sent](https://new.babeljs.io/docs/en/next/babel-plugin-proposal-function-sent.html) for more information.
 
-```js
-function* generator() {
-    console.log("Sent", function.sent);
-    console.log("Yield", yield);
-}
+## Install
 
-const iterator = generator();
-iterator.next(1); // Logs "Sent 1"
-iterator.next(2); // Logs "Yield 2"
-```
-
-Is compiled roughly to
-
-```js
-let generator = _skipFirstGeneratorNext(function* () {
-    const _functionSent = yield;
-    console.log("Sent", _functionSent);
-    console.log("Yield", yield);
-});
-
-const iterator = generator();
-iterator.next(1); // Logs "Sent 1"
-iterator.next(2); // Logs "Yield 1"
-```
-
-## Installation
+Using npm:
 
 ```sh
-npm install --save-dev @babel/plugin-proposal-function-sent
+npm install --save @babel/plugin-proposal-function-sent
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-proposal-function-sent"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins @babel/plugin-proposal-function-sent script.js
+yarn add --save @babel/plugin-proposal-function-sent
 ```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-proposal-function-sent"]
-});
-```
-
-## References
-
-* [Proposal](https://github.com/allenwb/ESideas/blob/master/Generator%20metaproperty.md)

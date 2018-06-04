@@ -1,55 +1,19 @@
 # @babel/preset-stage-0
 
-> Babel preset for stage 0 plugins.
+> Babel preset for stage 0 plugins
+
+See our website [@babel/preset-stage-0](https://new.babeljs.io/docs/en/next/babel-preset-stage-0.html) for more information.
 
 ## Install
 
-```sh
-npm install --save-dev @babel/preset-stage-0
-```
-
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "presets": ["@babel/preset-stage-0"]
-}
-```
-
-### Via CLI
+Using npm:
 
 ```sh
-babel script.js --presets @babel/preset-stage-0
+npm install --save @babel/preset-stage-0
 ```
 
-### Via Node API
+or using yarn:
 
-```javascript
-require("@babel/core").transform("code", {
-  presets: ["@babel/preset-stage-0"]
-});
+```sh
+yarn add --save @babel/preset-stage-0
 ```
-
-## Options
-
-### `loose`
-
-`boolean`, defaults to `false`.
-
-Enable "loose" transformations for any plugins in this preset that allow them.
-
-### `useBuiltIns`
-
-`boolean`, defaults to `false`.
-
-Will use the native built-in instead of trying to polyfill behavior for any plugins that require one.
-
-### `decoratorsLegacy`
-
-`boolean`, defaults to `false`.
-
-Use the legacy (stage 1) decorators syntax and behavior.

@@ -1,45 +1,19 @@
 # @babel/plugin-proposal-export-namespace-from
 
-> Compile export-ns-from statements to ES2015
+> Compile export namespace to ES2015
 
-## Example
+See our website [@babel/plugin-proposal-export-namespace-from](https://new.babeljs.io/docs/en/next/babel-plugin-proposal-export-namespace-from.html) for more information.
 
-```js
-export * as ns from 'mod';
-```
+## Install
 
-## Installation
+Using npm:
 
 ```sh
-npm install --save-dev @babel/plugin-proposal-export-namespace-from
+npm install --save @babel/plugin-proposal-export-namespace-from
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-proposal-export-namespace-from"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins @babel/plugin-proposal-export-namespace-from script.js
+yarn add --save @babel/plugin-proposal-export-namespace-from
 ```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-proposal-export-namespace-from"]
-});
-```
-## References
-
-* ~~[Proposal: Additional export-from statements in ES7](https://github.com/leebyron/ecmascript-more-export-from)~~ (Withdrawn)
-* [ECMAScript Proposal: export ns from](https://github.com/leebyron/ecmascript-export-ns-from)

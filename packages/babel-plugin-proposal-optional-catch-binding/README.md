@@ -1,60 +1,19 @@
 # @babel/plugin-proposal-optional-catch-binding
 
-> Optional catch binding enables the catch block to execute whether or not an argument is passed to the catch statement (CatchClause).
+> Compile optional catch bindings
 
+See our website [@babel/plugin-proposal-optional-catch-binding](https://new.babeljs.io/docs/en/next/babel-plugin-proposal-optional-catch-binding.html) for more information.
 
-## Examples
+## Install
 
-```js
-try {
-  throw 0;
-} catch {
-  doSomethingWhichDoesntCareAboutTheValueThrown();
-}
-```
-
-```js
-try {
-  throw 0;
-} catch {
-  doSomethingWhichDoesntCareAboutTheValueThrown();
-} finally {
-  doSomeCleanup();
-}
-```
-
-
-## Installation
+Using npm:
 
 ```sh
-npm install --save-dev @babel/plugin-proposal-optional-catch-binding
+npm install --save @babel/plugin-proposal-optional-catch-binding
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-proposal-optional-catch-binding"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins @babel/plugin-proposal-optional-catch-binding script.js
+yarn add --save @babel/plugin-proposal-optional-catch-binding
 ```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-proposal-optional-catch-binding"]
-});
-```
-
-## References
-- [Proposal: Optional Catch Binding for ECMAScript](https://github.com/babel/proposals/issues/7)

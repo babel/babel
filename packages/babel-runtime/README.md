@@ -1,5 +1,19 @@
 # @babel/runtime
 
-## Usage
+> babel selfContained runtime
 
-TODO
+See our website [@babel/runtime](https://new.babeljs.io/docs/en/next/babel-runtime.html) for more information.
+
+## Install
+
+Using npm:
+
+```sh
+npm install --save @babel/runtime
+```
+
+or using yarn:
+
+```sh
+yarn add --save @babel/runtime
+```

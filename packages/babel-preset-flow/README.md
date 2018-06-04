@@ -2,52 +2,18 @@
 
 > Babel preset for all Flow plugins.
 
-This preset includes the following plugins:
+See our website [@babel/preset-flow](https://new.babeljs.io/docs/en/next/babel-preset-flow.html) for more information.
 
-- [@babel/plugin-transform-flow-strip-types](https://babeljs.io/docs/plugins/transform-flow-strip-types/)
+## Install
 
-## Example
-
-**In**
-
-```javascript
-function foo(one: any, two: number, three?): string {}
-```
-
-**Out**
-
-```javascript
-function foo(one, two, three) {}
-```
-
-## Installation
+Using npm:
 
 ```sh
-npm install --save-dev @babel/preset-flow
+npm install --save @babel/preset-flow
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "presets": ["@babel/preset-flow"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --presets @babel/preset-flow script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  presets: ["@babel/preset-flow"]
-});
+yarn add --save @babel/preset-flow
 ```

@@ -1,35 +1,19 @@
 # @babel/plugin-syntax-object-rest-spread
 
-> Allow parsing of object rest/spread.
+> Allow parsing of object rest/spread
 
-## Installation
+See our website [@babel/plugin-syntax-object-rest-spread](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-object-rest-spread.html) for more information.
 
-```sh
-npm install --save-dev @babel/plugin-syntax-object-rest-spread
-```
+## Install
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-syntax-object-rest-spread"]
-}
-```
-
-### Via CLI
+Using npm:
 
 ```sh
-babel --plugins @babel/plugin-syntax-object-rest-spread script.js
+npm install --save @babel/plugin-syntax-object-rest-spread
 ```
 
-### Via Node API
+or using yarn:
 
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-syntax-object-rest-spread"]
-});
+```sh
+yarn add --save @babel/plugin-syntax-object-rest-spread
 ```
