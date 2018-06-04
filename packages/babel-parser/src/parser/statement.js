@@ -263,8 +263,7 @@ export default class StatementParser extends ExpressionParser {
         this.raise(
           this.state.start,
           "Using the export keyword between a decorator and a class is not allowed. " +
-            "Please use `export @dec class` instead, or set the " +
-            "'decoratorsBeforeExport' option to true.",
+            "Please use `export @dec class` instead.",
         );
       }
     } else if (!this.canHaveLeadingDecorator()) {
