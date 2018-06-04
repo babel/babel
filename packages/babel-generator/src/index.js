@@ -52,10 +52,7 @@ function normalizeOptions(code, opts): Format {
       style: "  ",
       base: 0,
     },
-    decoratorsBeforeExport:
-      opts.decoratorsBeforeExport === undefined
-        ? true
-        : opts.decoratorsBeforeExport,
+    decoratorsBeforeExport: !!opts.decoratorsBeforeExport,
   };
 
   if (format.minified) {

@@ -263,8 +263,7 @@ export default class StatementParser extends ExpressionParser {
         this.raise(
           this.state.start,
           "Using the export keyword between a decorator and a class is not allowed. " +
-            "Please use `export @dec class` instead, or set the " +
-            "'decoratorsBeforeExport' option to true.",
+            "Please use `export @dec class` instead.",
         );
       }
     } else if (!this.canHaveLeadingDecorator()) {
@@ -616,9 +615,7 @@ export default class StatementParser extends ExpressionParser {
 
     const kind = this.state.type.isLoop
       ? "loop"
-      : this.match(tt._switch)
-        ? "switch"
-        : null;
+      : this.match(tt._switch) ? "switch" : null;
     for (let i = this.state.labels.length - 1; i >= 0; i--) {
       const label = this.state.labels[i];
       if (label.statementStart === node.start) {
