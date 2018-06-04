@@ -8,12 +8,12 @@ See our website [@babel/plugin-proposal-object-rest-spread](https://new.babeljs.
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-proposal-object-rest-spread
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-proposal-object-rest-spread
 ```

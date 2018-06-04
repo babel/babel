@@ -8,12 +8,12 @@ See our website [@babel/helper-remap-async-to-generator](https://new.babeljs.io/
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-remap-async-to-generator
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-remap-async-to-generator
 ```

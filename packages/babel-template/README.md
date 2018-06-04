@@ -8,12 +8,12 @@ See our website [@babel/template](https://new.babeljs.io/docs/en/next/babel-temp
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/template
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/template
 ```

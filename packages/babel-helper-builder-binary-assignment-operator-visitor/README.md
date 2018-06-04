@@ -8,12 +8,12 @@ See our website [@babel/helper-builder-binary-assignment-operator-visitor](https
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-builder-binary-assignment-operator-visitor
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-builder-binary-assignment-operator-visitor
 ```

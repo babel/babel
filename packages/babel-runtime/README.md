@@ -8,12 +8,12 @@ See our website [@babel/runtime](https://new.babeljs.io/docs/en/next/babel-runti
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/runtime
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/runtime
 ```

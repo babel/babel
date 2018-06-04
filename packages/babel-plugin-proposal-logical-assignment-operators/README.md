@@ -8,12 +8,12 @@ See our website [@babel/plugin-proposal-logical-assignment-operators](https://ne
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-proposal-logical-assignment-operators
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-proposal-logical-assignment-operators
 ```

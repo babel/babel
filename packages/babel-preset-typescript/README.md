@@ -8,12 +8,12 @@ See our website [@babel/preset-typescript](https://new.babeljs.io/docs/en/next/b
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/preset-typescript
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/preset-typescript
 ```

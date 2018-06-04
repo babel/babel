@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-member-expression-literals](https://new
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-member-expression-literals
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-member-expression-literals
 ```

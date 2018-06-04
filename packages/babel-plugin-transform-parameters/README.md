@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-parameters](https://new.babeljs.io/docs
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-parameters
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-parameters
 ```

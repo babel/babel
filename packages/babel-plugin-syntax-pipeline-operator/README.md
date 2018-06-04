@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-pipeline-operator](https://new.babeljs.io/
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-pipeline-operator
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-pipeline-operator
 ```

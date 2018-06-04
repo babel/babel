@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-destructuring](https://new.babeljs.io/d
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-destructuring
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-destructuring
 ```

@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-object-set-prototype-of-to-assign](http
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-object-set-prototype-of-to-assign
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-object-set-prototype-of-to-assign
 ```

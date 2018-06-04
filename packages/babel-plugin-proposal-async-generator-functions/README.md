@@ -8,12 +8,12 @@ See our website [@babel/plugin-proposal-async-generator-functions](https://new.b
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-proposal-async-generator-functions
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-proposal-async-generator-functions
 ```

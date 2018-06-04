@@ -8,12 +8,12 @@ See our website [@babel/helper-split-export-declaration](https://new.babeljs.io/
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-split-export-declaration
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-split-export-declaration
 ```

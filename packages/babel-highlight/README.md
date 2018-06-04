@@ -8,12 +8,12 @@ See our website [@babel/highlight](https://new.babeljs.io/docs/en/next/babel-hig
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/highlight
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/highlight
 ```

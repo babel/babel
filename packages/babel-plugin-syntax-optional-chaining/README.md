@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-optional-chaining](https://new.babeljs.io/
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-optional-chaining
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-optional-chaining
 ```

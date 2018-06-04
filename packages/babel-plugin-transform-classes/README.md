@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-classes](https://new.babeljs.io/docs/en
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-classes
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-classes
 ```

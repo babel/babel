@@ -8,12 +8,12 @@ See our website [@babel/parser](https://new.babeljs.io/docs/en/next/babel-parser
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/parser
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/parser
 ```

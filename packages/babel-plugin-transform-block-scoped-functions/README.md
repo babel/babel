@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-block-scoped-functions](https://new.bab
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-block-scoped-functions
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-block-scoped-functions
 ```

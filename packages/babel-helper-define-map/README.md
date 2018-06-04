@@ -8,12 +8,12 @@ See our website [@babel/helper-define-map](https://new.babeljs.io/docs/en/next/b
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-define-map
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-define-map
 ```

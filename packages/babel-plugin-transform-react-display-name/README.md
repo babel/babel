@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-react-display-name](https://new.babeljs
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-react-display-name
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-react-display-name
 ```

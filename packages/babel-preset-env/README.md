@@ -8,12 +8,12 @@ See our website [@babel/preset-env](https://new.babeljs.io/docs/en/next/babel-pr
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/preset-env
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/preset-env
 ```

@@ -8,12 +8,12 @@ See our website [@babel/register](https://new.babeljs.io/docs/en/next/babel-regi
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/register
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/register
 ```

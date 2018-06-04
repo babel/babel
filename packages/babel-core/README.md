@@ -8,12 +8,12 @@ See our website [@babel/core](https://new.babeljs.io/docs/en/next/babel-core.htm
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/core
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/core
 ```

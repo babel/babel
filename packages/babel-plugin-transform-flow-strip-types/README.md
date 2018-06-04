@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-flow-strip-types](https://new.babeljs.i
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-flow-strip-types
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-flow-strip-types
 ```

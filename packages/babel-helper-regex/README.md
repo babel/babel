@@ -8,12 +8,12 @@ See our website [@babel/helper-regex](https://new.babeljs.io/docs/en/next/babel-
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-regex
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-regex
 ```

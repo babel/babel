@@ -8,12 +8,12 @@ See our website [@babel/polyfill](https://new.babeljs.io/docs/en/next/babel-poly
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/polyfill
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/polyfill
 ```

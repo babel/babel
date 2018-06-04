@@ -8,12 +8,12 @@ See our website [@babel/helper-transform-fixture-test-runner](https://new.babelj
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-transform-fixture-test-runner
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-transform-fixture-test-runner
 ```

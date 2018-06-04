@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-block-scoping](https://new.babeljs.io/d
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-block-scoping
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-block-scoping
 ```

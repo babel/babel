@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-flow](https://new.babeljs.io/docs/en/next/
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-flow
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-flow
 ```

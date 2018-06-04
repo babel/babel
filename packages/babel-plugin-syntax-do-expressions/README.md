@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-do-expressions](https://new.babeljs.io/doc
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-do-expressions
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-do-expressions
 ```

@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-modules-amd](https://new.babeljs.io/doc
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-modules-amd
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-modules-amd
 ```

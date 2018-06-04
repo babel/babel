@@ -8,12 +8,12 @@ See our website [@babel/helper-builder-react-jsx](https://new.babeljs.io/docs/en
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-builder-react-jsx
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-builder-react-jsx
 ```

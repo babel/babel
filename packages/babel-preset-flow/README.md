@@ -8,12 +8,12 @@ See our website [@babel/preset-flow](https://new.babeljs.io/docs/en/next/babel-p
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/preset-flow
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/preset-flow
 ```

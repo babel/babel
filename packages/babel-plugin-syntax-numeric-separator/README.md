@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-numeric-separator](https://new.babeljs.io/
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-numeric-separator
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-numeric-separator
 ```

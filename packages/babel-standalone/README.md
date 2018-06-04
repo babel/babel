@@ -8,12 +8,12 @@ See our website [@babel/standalone](https://new.babeljs.io/docs/en/next/babel-st
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/standalone
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/standalone
 ```

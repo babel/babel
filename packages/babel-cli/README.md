@@ -8,12 +8,12 @@ See our website [@babel/cli](https://new.babeljs.io/docs/en/next/babel-cli.html)
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/cli
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/cli
 ```

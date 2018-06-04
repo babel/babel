@@ -8,12 +8,12 @@ See our website [@babel/helper-explode-assignable-expression](https://new.babelj
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-explode-assignable-expression
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-explode-assignable-expression
 ```

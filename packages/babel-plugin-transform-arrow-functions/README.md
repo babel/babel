@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-arrow-functions](https://new.babeljs.io
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-arrow-functions
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-arrow-functions
 ```

@@ -8,12 +8,12 @@ See our website [@babel/helper-annotate-as-pure](https://new.babeljs.io/docs/en/
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-annotate-as-pure
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-annotate-as-pure
 ```

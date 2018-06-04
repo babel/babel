@@ -8,12 +8,12 @@ See our website [@babel/plugin-proposal-export-default-from](https://new.babeljs
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-proposal-export-default-from
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-proposal-export-default-from
 ```

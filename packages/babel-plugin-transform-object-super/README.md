@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-object-super](https://new.babeljs.io/do
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-object-super
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-object-super
 ```

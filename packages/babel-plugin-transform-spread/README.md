@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-spread](https://new.babeljs.io/docs/en/
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-spread
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-spread
 ```

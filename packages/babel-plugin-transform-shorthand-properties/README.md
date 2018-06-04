@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-shorthand-properties](https://new.babel
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-shorthand-properties
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-shorthand-properties
 ```

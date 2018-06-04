@@ -8,12 +8,12 @@ See our website [@babel/generator](https://new.babeljs.io/docs/en/next/babel-gen
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/generator
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/generator
 ```

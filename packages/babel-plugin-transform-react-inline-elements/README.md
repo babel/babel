@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-react-inline-elements](https://new.babe
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-react-inline-elements
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-react-inline-elements
 ```

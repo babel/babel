@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-literals](https://new.babeljs.io/docs/e
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-literals
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-literals
 ```

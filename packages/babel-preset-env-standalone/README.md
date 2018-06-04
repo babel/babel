@@ -8,12 +8,12 @@ See our website [@babel/preset-env-standalone](https://new.babeljs.io/docs/en/ne
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/preset-env-standalone
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/preset-env-standalone
 ```

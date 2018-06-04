@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-react-jsx-source](https://new.babeljs.i
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-react-jsx-source
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-react-jsx-source
 ```

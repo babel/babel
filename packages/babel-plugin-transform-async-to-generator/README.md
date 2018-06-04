@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-async-to-generator](https://new.babeljs
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-async-to-generator
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-async-to-generator
 ```

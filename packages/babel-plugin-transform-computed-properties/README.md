@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-computed-properties](https://new.babelj
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-computed-properties
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-computed-properties
 ```

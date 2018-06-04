@@ -8,12 +8,12 @@ See our website [@babel/helper-wrap-function](https://new.babeljs.io/docs/en/nex
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-wrap-function
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-wrap-function
 ```

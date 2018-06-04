@@ -8,12 +8,12 @@ See our website [@babel/helper-get-function-arity](https://new.babeljs.io/docs/e
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-get-function-arity
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-get-function-arity
 ```

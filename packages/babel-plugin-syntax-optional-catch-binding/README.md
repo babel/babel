@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-optional-catch-binding](https://new.babelj
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-optional-catch-binding
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-optional-catch-binding
 ```

@@ -8,12 +8,12 @@ See our website [@babel/helper-hoist-variables](https://new.babeljs.io/docs/en/n
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-hoist-variables
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-hoist-variables
 ```

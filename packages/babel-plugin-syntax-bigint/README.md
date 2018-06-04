@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-bigint](https://new.babeljs.io/docs/en/nex
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-bigint
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-bigint
 ```

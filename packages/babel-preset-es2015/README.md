@@ -8,12 +8,12 @@ See our website [@babel/preset-es2015](https://new.babeljs.io/docs/en/next/babel
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/preset-es2015
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/preset-es2015
 ```

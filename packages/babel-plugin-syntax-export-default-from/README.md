@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-export-default-from](https://new.babeljs.i
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-export-default-from
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-export-default-from
 ```

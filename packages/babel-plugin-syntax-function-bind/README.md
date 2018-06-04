@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-function-bind](https://new.babeljs.io/docs
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-function-bind
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-function-bind
 ```

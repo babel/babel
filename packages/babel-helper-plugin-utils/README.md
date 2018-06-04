@@ -8,12 +8,12 @@ See our website [@babel/helper-plugin-utils](https://new.babeljs.io/docs/en/next
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-plugin-utils
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-plugin-utils
 ```

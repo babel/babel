@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-class-properties](https://new.babeljs.io/d
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-class-properties
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-class-properties
 ```

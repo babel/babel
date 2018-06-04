@@ -8,12 +8,12 @@ See our website [@babel/plugin-proposal-function-sent](https://new.babeljs.io/do
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-proposal-function-sent
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-proposal-function-sent
 ```

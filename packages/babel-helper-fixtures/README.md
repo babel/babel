@@ -8,12 +8,12 @@ See our website [@babel/helper-fixtures](https://new.babeljs.io/docs/en/next/bab
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-fixtures
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-fixtures
 ```

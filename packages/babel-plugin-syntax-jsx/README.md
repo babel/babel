@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-jsx](https://new.babeljs.io/docs/en/next/b
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-jsx
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-jsx
 ```

@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-decorators](https://new.babeljs.io/docs/en
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-decorators
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-decorators
 ```

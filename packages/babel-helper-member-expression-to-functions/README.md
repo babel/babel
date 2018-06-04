@@ -8,12 +8,12 @@ See our website [@babel/helper-member-expression-to-functions](https://new.babel
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-member-expression-to-functions
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-member-expression-to-functions
 ```

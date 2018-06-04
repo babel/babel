@@ -8,12 +8,12 @@ See our website [@babel/preset-stage-2](https://new.babeljs.io/docs/en/next/babe
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/preset-stage-2
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/preset-stage-2
 ```

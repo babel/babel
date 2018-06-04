@@ -8,12 +8,12 @@ See our website [@babel/types](https://new.babeljs.io/docs/en/next/babel-types.h
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/types
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/types
 ```

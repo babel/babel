@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-nullish-coalescing-operator](https://new.b
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-nullish-coalescing-operator
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-nullish-coalescing-operator
 ```

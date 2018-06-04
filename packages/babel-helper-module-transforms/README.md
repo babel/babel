@@ -8,12 +8,12 @@ See our website [@babel/helper-module-transforms](https://new.babeljs.io/docs/en
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-module-transforms
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-module-transforms
 ```

@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-typescript](https://new.babeljs.io/docs/en
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-typescript
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-typescript
 ```

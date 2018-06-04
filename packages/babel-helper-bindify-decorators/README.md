@@ -8,12 +8,12 @@ See our website [@babel/helper-bindify-decorators](https://new.babeljs.io/docs/e
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-bindify-decorators
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-bindify-decorators
 ```

@@ -8,12 +8,12 @@ See our website [@babel/plugin-proposal-unicode-property-regex](https://new.babe
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-proposal-unicode-property-regex
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-proposal-unicode-property-regex
 ```

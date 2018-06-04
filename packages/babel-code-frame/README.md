@@ -8,12 +8,12 @@ See our website [@babel/code-frame](https://new.babeljs.io/docs/en/next/babel-co
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/code-frame
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/code-frame
 ```

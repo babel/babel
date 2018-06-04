@@ -8,12 +8,12 @@ See our website [@babel/traverse](https://new.babeljs.io/docs/en/next/babel-trav
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/traverse
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/traverse
 ```

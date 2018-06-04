@@ -8,12 +8,12 @@ See our website [@babel/node](https://new.babeljs.io/docs/en/next/babel-node.htm
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/node
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/node
 ```

@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-exponentiation-operator](https://new.ba
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-exponentiation-operator
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-exponentiation-operator
 ```

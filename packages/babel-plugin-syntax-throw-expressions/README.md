@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-throw-expressions](https://new.babeljs.io/
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-throw-expressions
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-throw-expressions
 ```

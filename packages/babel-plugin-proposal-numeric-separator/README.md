@@ -8,12 +8,12 @@ See our website [@babel/plugin-proposal-numeric-separator](https://new.babeljs.i
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-proposal-numeric-separator
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-proposal-numeric-separator
 ```

@@ -8,12 +8,12 @@ See our website [@babel/helper-optimise-call-expression](https://new.babeljs.io/
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-optimise-call-expression
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-optimise-call-expression
 ```

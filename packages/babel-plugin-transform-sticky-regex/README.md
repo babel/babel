@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-sticky-regex](https://new.babeljs.io/do
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-sticky-regex
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-sticky-regex
 ```

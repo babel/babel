@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-function-name](https://new.babeljs.io/d
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-function-name
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-function-name
 ```

@@ -8,12 +8,12 @@ See our website [@babel/plugin-external-helpers](https://new.babeljs.io/docs/en/
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-external-helpers
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-external-helpers
 ```

@@ -8,12 +8,12 @@ See our website [@babel/plugin-syntax-async-generators](https://new.babeljs.io/d
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-syntax-async-generators
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-syntax-async-generators
 ```

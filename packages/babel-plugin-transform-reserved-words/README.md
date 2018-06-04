@@ -8,12 +8,12 @@ See our website [@babel/plugin-transform-reserved-words](https://new.babeljs.io/
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-transform-reserved-words
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-transform-reserved-words
 ```

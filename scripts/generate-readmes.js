@@ -27,13 +27,13 @@ See our website [${name}](${link}) for more information.
 
 Using npm:
 
-\`\`\`js
+\`\`\`sh
 npm install --save ${name}
 \`\`\`
 
 or using yarn:
 
-\`\`\`js
+\`\`\`sh
 yarn add --save ${name}
 \`\`\`
 `;

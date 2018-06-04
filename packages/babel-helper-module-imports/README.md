@@ -8,12 +8,12 @@ See our website [@babel/helper-module-imports](https://new.babeljs.io/docs/en/ne
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-module-imports
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-module-imports
 ```

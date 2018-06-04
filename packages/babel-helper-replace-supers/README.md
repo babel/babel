@@ -8,12 +8,12 @@ See our website [@babel/helper-replace-supers](https://new.babeljs.io/docs/en/ne
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/helper-replace-supers
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/helper-replace-supers
 ```

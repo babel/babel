@@ -8,12 +8,12 @@ See our website [@babel/plugin-proposal-optional-catch-binding](https://new.babe
 
 Using npm:
 
-```js
+```sh
 npm install --save @babel/plugin-proposal-optional-catch-binding
 ```
 
 or using yarn:
 
-```js
+```sh
 yarn add --save @babel/plugin-proposal-optional-catch-binding
 ```
