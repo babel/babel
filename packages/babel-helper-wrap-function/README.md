@@ -1,27 +1,19 @@
 # @babel/helper-wrap-function
 
-This helper wraps a function within a call expression. It works with any function: statements, expressions and methods; both named and anonymous.
+> Helper to wrap functions inside a function call.
 
-## Example
+See our website [@babel/helper-wrap-function](https://new.babeljs.io/docs/en/next/babel-helper-wrap-function.html) for more information.
 
-**In**
+## Install
+
+Using npm:
 
 ```js
-(function () {
-}());
+npm install --save @babel/helper-wrap-function
 ```
 
-**Out**
+or using yarn:
 
 ```js
-_wrapper(function () {
-})();
-```
-
-## Usage
-
-```js
-import wrapFunction from "@babel/helper-wrap-function";
-
-wrapFunction(nodePathOfTheFunction, nodeWhichReferencesToTheWrapper);
+yarn add --save @babel/helper-wrap-function
 ```

@@ -1,51 +1,19 @@
 # @babel/plugin-transform-unicode-regex
 
-> Compile ES2015 unicode regex to ES5
+> Compile ES2015 Unicode regex to ES5
 
-## Example
+See our website [@babel/plugin-transform-unicode-regex](https://new.babeljs.io/docs/en/next/babel-plugin-transform-unicode-regex.html) for more information.
 
-**In**
+## Install
 
-```js
-var string = "foo💩bar";
-var match = string.match(/foo(.)bar/u);
-```
-
-**Out**
+Using npm:
 
 ```js
-var string = "foo💩bar";
-var match = string.match(/foo((?:[\0-\t\x0B\f\x0E-\u2027\u202A-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]))bar/);
+npm install --save @babel/plugin-transform-unicode-regex
 ```
 
-## Installation
+or using yarn:
 
-```sh
-npm install --save-dev @babel/plugin-transform-unicode-regex
-```
-
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-transform-unicode-regex"]
-}
-```
-
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-transform-unicode-regex script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-transform-unicode-regex"]
-});
+```js
+yarn add --save @babel/plugin-transform-unicode-regex
 ```

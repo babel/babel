@@ -1,114 +1,19 @@
 # @babel/plugin-proposal-numeric-separator
 
-> This plugin allows Babel to transform Decimal, Binary, Hex and Octal literals containing Numeric Literal Separator to their non-separated form.
+> Remove numeric separators from Decimal, Binary, Hex and Octal literals
 
-## Example
+See our website [@babel/plugin-proposal-numeric-separator](https://new.babeljs.io/docs/en/next/babel-plugin-proposal-numeric-separator.html) for more information.
 
-### Decimal Literals
+## Install
 
-```js
-let budget = 1_000_000_000_000;
-
-// What is the value of `budget`? It's 1 trillion!
-//
-// Let's confirm:
-console.log(budget === 10 ** 12); // true
-```
-
-### Binary Literals
+Using npm:
 
 ```js
-let nibbles = 0b1010_0001_1000_0101;
-
-// Is bit 7 on? It sure is!
-// 0b1010_0001_1000_0101
-//             ^
-//
-// We can double check:
-console.log(!!(nibbles & (1 << 7))); // true
+npm install --save @babel/plugin-proposal-numeric-separator
 ```
 
-### Hex Literal
+or using yarn:
 
 ```js
-// Messages are sent as 24 bit values, but should be
-// treated as 3 distinct bytes:
-let message = 0xA0_B0_C0;
-
-// What's the value of the upper most byte? It's A0, or 160.
-// We can confirm that:
-let a = (message >> 16) & 0xFF;
-console.log(a.toString(16), a); // a0, 160
-
-// What's the value of the middle byte? It's B0, or 176.
-// Let's just make sure...
-let b = (message >> 8) & 0xFF;
-console.log(b.toString(16), b); // b0, 176
-
-// What's the value of the lower most byte? It's C0, or 192.
-// Again, let's prove that:
-let c = message & 0xFF;
-console.log(c.toString(16), b); // c0, 192
+yarn add --save @babel/plugin-proposal-numeric-separator
 ```
-
-### Octal Literal
-
-*hand wave emoji*
-
-Octals are great for permissions, but also look better when represented in `0o0000` form. No real benefit with separators here.
-
-## Installation
-
-```sh
-npm install --save-dev @babel/plugin-proposal-numeric-separator
-```
-
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-proposal-numeric-separator"]
-}
-```
-
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-proposal-numeric-separator script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-proposal-numeric-separator"]
-});
-```
-
-## Additional Information
-
-If you need to further compile ES2015 Decimal, Binary, Hex and Octal number representations to their pre-ES2015 numeric literal form, add the [`"@babel/plugin-transform-literals"`](http://babeljs.io/docs/plugins/transform-literals/) plugin:
-
-> `@babel/plugin-transform-literals` is already included in [@babel/preset-env](https://github.com/babel/babel/tree/master/packages/babel-preset-env) and @babel/preset-es2015.
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "presets": ["@babel/preset-env"],
-  "plugins": ["@babel/plugin-proposal-numeric-separator"]
-}
-{
-  "plugins": ["@babel/plugin-proposal-numeric-separator", "@babel/plugin-transform-literals"]
-}
-```
-
-## References
-
-* [Proposal: Numeric Separators](https://github.com/samuelgoto/proposal-numeric-separator)

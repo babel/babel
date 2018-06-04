@@ -2,52 +2,18 @@
 
 > Compile ES2015 unicode string and number literals to ES5
 
-## Example
+See our website [@babel/plugin-transform-literals](https://new.babeljs.io/docs/en/next/babel-plugin-transform-literals.html) for more information.
 
-**In**
+## Install
 
-```js
-var b = 0b11; // binary integer literal
-var o = 0o7; // octal integer literal
-const u = 'Hello\u{000A}\u{0009}!'; // unicode string literals, newline and tab
-```
-
-**Out**
+Using npm:
 
 ```js
-var b = 3; // binary integer literal
-var o = 7; // octal integer literal
-const u = 'Hello\n\t!'; // unicode string literals, newline and tab
+npm install --save @babel/plugin-transform-literals
 ```
 
-## Installation
+or using yarn:
 
-```sh
-npm install --save-dev @babel/plugin-transform-literals
-```
-
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-transform-literals"]
-}
-```
-
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-transform-literals script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-transform-literals"]
-});
+```js
+yarn add --save @babel/plugin-transform-literals
 ```

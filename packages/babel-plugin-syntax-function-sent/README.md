@@ -1,35 +1,19 @@
 # @babel/plugin-syntax-function-sent
 
-> Allow parsing of the `function.sent` meta property.
+> Allow parsing of the function.sent meta property
 
-## Installation
+See our website [@babel/plugin-syntax-function-sent](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-function-sent.html) for more information.
 
-```sh
-npm install --save-dev @babel/plugin-syntax-function-sent
+## Install
+
+Using npm:
+
+```js
+npm install --save @babel/plugin-syntax-function-sent
 ```
 
-## Usage
+or using yarn:
 
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-syntax-function-sent"]
-}
-```
-
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-syntax-function-sent script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-syntax-function-sent"]
-});
+```js
+yarn add --save @babel/plugin-syntax-function-sent
 ```

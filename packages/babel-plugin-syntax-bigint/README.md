@@ -1,36 +1,19 @@
 # @babel/plugin-syntax-bigint
 
-> Allow parsing of BigInt literals.
+> Allow parsing of BigInt literals
 
+See our website [@babel/plugin-syntax-bigint](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-bigint.html) for more information.
 
-## Installation
+## Install
 
-```sh
-npm install --save-dev @babel/plugin-syntax-bigint
+Using npm:
+
+```js
+npm install --save @babel/plugin-syntax-bigint
 ```
 
-## Usage
+or using yarn:
 
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-syntax-bigint"]
-}
-```
-
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-syntax-bigint script.js
-```
-
-### Via Node API
-
-```javascript
-require("babel-core").transform("code", {
-  plugins: ["@babel/plugin-syntax-bigint"]
-});
+```js
+yarn add --save @babel/plugin-syntax-bigint
 ```

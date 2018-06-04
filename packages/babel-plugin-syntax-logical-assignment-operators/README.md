@@ -1,35 +1,19 @@
 # @babel/plugin-syntax-logical-assignment-operators
 
-> Allow parsing of the logical assignment operators.
+> Allow parsing of the logical assignment operators
 
-## Installation
+See our website [@babel/plugin-syntax-logical-assignment-operators](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-logical-assignment-operators.html) for more information.
 
-```sh
-npm install --save-dev @babel/plugin-syntax-logical-assignment-operators
+## Install
+
+Using npm:
+
+```js
+npm install --save @babel/plugin-syntax-logical-assignment-operators
 ```
 
-## Usage
+or using yarn:
 
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-syntax-logical-assignment-operators"]
-}
-```
-
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-syntax-logical-assignment-operators script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-syntax-logical-assignment-operators"]
-});
+```js
+yarn add --save @babel/plugin-syntax-logical-assignment-operators
 ```

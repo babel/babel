@@ -2,68 +2,18 @@
 
 > Compile ES2015 shorthand properties to ES5
 
-## Example
+See our website [@babel/plugin-transform-shorthand-properties](https://new.babeljs.io/docs/en/next/babel-plugin-transform-shorthand-properties.html) for more information.
 
-**In**
+## Install
 
-```js
-var o = { a, b, c };
-```
-
-**Out**
+Using npm:
 
 ```js
-var o = { a: a, b: b, c: c };
+npm install --save @babel/plugin-transform-shorthand-properties
 ```
 
-**In**
+or using yarn:
 
 ```js
-var cat = {
-  getName() {
-    return name;
-  }
-};
-```
-
-**Out**
-
-```js
-var cat = {
-  getName: function () {
-    return name;
-  }
-};
-```
-
-## Installation
-
-```sh
-npm install --save-dev @babel/plugin-transform-shorthand-properties
-```
-
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-transform-shorthand-properties"]
-}
-```
-
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-transform-shorthand-properties script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-transform-shorthand-properties"]
-});
+yarn add --save @babel/plugin-transform-shorthand-properties
 ```

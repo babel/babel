@@ -1,33 +1,19 @@
 # @babel/plugin-external-helpers
 
-## Installation
+> This plugin contains helper functions that’ll be placed at the top of the generated code
 
-```sh
-npm install --save-dev @babel/plugin-external-helpers
+See our website [@babel/plugin-external-helpers](https://new.babeljs.io/docs/en/next/babel-plugin-external-helpers.html) for more information.
+
+## Install
+
+Using npm:
+
+```js
+npm install --save @babel/plugin-external-helpers
 ```
 
-## Usage
+or using yarn:
 
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-external-helpers"]
-}
-```
-
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-external-helpers script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-external-helpers"]
-});
+```js
+yarn add --save @babel/plugin-external-helpers
 ```

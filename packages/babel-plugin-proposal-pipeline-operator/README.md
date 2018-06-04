@@ -1,35 +1,19 @@
 # @babel/plugin-proposal-pipeline-operator
 
-Transform pipeline operator `|>` into call expressions. See [the proposal](https://github.com/tc39/proposal-pipeline-operator) for details.
+> Transform pipeline operator into call expressions
 
-## Installation
+See our website [@babel/plugin-proposal-pipeline-operator](https://new.babeljs.io/docs/en/next/babel-plugin-proposal-pipeline-operator.html) for more information.
 
-```sh
-$ npm install @babel/plugin-proposal-pipeline-operator
+## Install
+
+Using npm:
+
+```js
+npm install --save @babel/plugin-proposal-pipeline-operator
 ```
 
-## Usage
+or using yarn:
 
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-proposal-pipeline-operator"]
-}
-```
-
-### Via CLI
-
-```sh
-$ babel --plugins @babel/plugin-proposal-pipeline-operator script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-proposal-pipeline-operator"]
-});
+```js
+yarn add --save @babel/plugin-proposal-pipeline-operator
 ```

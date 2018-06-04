@@ -2,88 +2,18 @@
 
 > Turn async functions into ES2015 generators
 
-> In Babel 7, `transform-async-to-module-method` was merged into this plugin
+See our website [@babel/plugin-transform-async-to-generator](https://new.babeljs.io/docs/en/next/babel-plugin-transform-async-to-generator.html) for more information.
 
-## Example
+## Install
 
-**In**
+Using npm:
 
-```javascript
-async function foo() {
-  await bar();
-}
+```js
+npm install --save @babel/plugin-transform-async-to-generator
 ```
 
-**Out**
+or using yarn:
 
-```javascript
-var _asyncToGenerator = function (fn) {
-  ...
-};
-var foo = _asyncToGenerator(function* () {
-  yield bar();
-});
+```js
+yarn add --save @babel/plugin-transform-async-to-generator
 ```
-
-**Out with options**
-
-> Turn async functions into a Bluebird coroutine
-
-```javascript
-var Bluebird = require("bluebird");
-
-var foo = Bluebird.coroutine(function* () {
-  yield bar();
-});
-```
-
-## Installation
-
-```sh
-npm install --save-dev @babel/plugin-transform-async-to-generator
-```
-
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-Without options:
-
-```json
-{
-  "plugins": ["@babel/plugin-transform-async-to-generator"]
-}
-```
-
-With options:
-
-```json
-{
-  "plugins": [
-    ["@babel/plugin-transform-async-to-generator", {
-      "module": "bluebird",
-      "method": "coroutine"
-    }]
-  ]
-}
-```
-
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-transform-async-to-generator script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-transform-async-to-generator"]
-});
-```
-
-## References
-
-* [Proposal: Async Functions for ECMAScript](https://github.com/tc39/ecmascript-asyncawait)

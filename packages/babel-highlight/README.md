@@ -2,40 +2,18 @@
 
 > Syntax highlight JavaScript strings for output in terminals.
 
+See our website [@babel/highlight](https://new.babeljs.io/docs/en/next/babel-highlight.html) for more information.
+
 ## Install
 
-```sh
+Using npm:
+
+```js
 npm install --save @babel/highlight
 ```
 
-## Usage
+or using yarn:
 
 ```js
-import highlight from "@babel/highlight";
-
-const code = `class Foo {
-  constructor()
-}`;
-
-const result = highlight(code);
-
-console.log(result);
-```
-
-```js
-class Foo {
-  constructor()
-}
-```
-
-By default, `highlight` will not highlight your code if your terminal does not support color. To force colors, pass `{ forceColor: true }` as the second argument to `highlight`.
-
-```js
-import highlight from "@babel/highlight";
-
-const code = `class Foo {
-  constructor()
-}`;
-
-const result = highlight(code, { forceColor: true });
+yarn add --save @babel/highlight
 ```

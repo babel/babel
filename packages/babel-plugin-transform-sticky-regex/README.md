@@ -2,48 +2,18 @@
 
 > Compile ES2015 sticky regex to an ES5 RegExp constructor
 
-## Examples
+See our website [@babel/plugin-transform-sticky-regex](https://new.babeljs.io/docs/en/next/babel-plugin-transform-sticky-regex.html) for more information.
 
-**In**
+## Install
 
-```javascript
-const a = /o+/y;
+Using npm:
+
+```js
+npm install --save @babel/plugin-transform-sticky-regex
 ```
 
-**Out**
+or using yarn:
 
-```javascript
-var a = new RegExp("o+", "y");
-```
-
-## Installation
-
-```sh
-npm install --save-dev @babel/plugin-transform-sticky-regex
-```
-
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-transform-sticky-regex"]
-}
-```
-
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-transform-sticky-regex script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-transform-sticky-regex"]
-});
+```js
+yarn add --save @babel/plugin-transform-sticky-regex
 ```

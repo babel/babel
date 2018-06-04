@@ -1,35 +1,19 @@
 # @babel/plugin-syntax-import-meta
 
-> Allow parsing of `import.meta`.
+> Allow parsing of import.meta
 
-## Installation
+See our website [@babel/plugin-syntax-import-meta](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-import-meta.html) for more information.
 
-```sh
-npm install --save-dev @babel/plugin-syntax-import-meta
+## Install
+
+Using npm:
+
+```js
+npm install --save @babel/plugin-syntax-import-meta
 ```
 
-## Usage
+or using yarn:
 
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-syntax-import-meta"]
-}
-```
-
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-syntax-import-meta script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-syntax-import-meta"]
-});
+```js
+yarn add --save @babel/plugin-syntax-import-meta
 ```

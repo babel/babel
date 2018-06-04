@@ -1,17 +1,19 @@
 # @babel/helper-hoist-variables
 
-## Installation
+> Helper function to hoist variables
 
-```sh
-npm install @babel/helper-hoist-variables --save
+See our website [@babel/helper-hoist-variables](https://new.babeljs.io/docs/en/next/babel-helper-hoist-variables.html) for more information.
+
+## Install
+
+Using npm:
+
+```js
+npm install --save @babel/helper-hoist-variables
 ```
 
-## API
+or using yarn:
 
-```javascript
-declare export default hoistVariables(path: NodePath, emit: Function, kind: "var" | "let" = "var");
+```js
+yarn add --save @babel/helper-hoist-variables
 ```
-
-## Usage
-
-TODO

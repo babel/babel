@@ -1,60 +1,19 @@
 # @babel/plugin-syntax-decorators
 
-> Allow parsing of decorators.
+> Allow parsing of decorators
 
-## Installation
+See our website [@babel/plugin-syntax-decorators](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-decorators.html) for more information.
 
-```sh
-npm install --save-dev @babel/plugin-syntax-decorators
-```
+## Install
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-syntax-decorators"]
-}
-```
-
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-syntax-decorators script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-syntax-decorators"]
-});
-```
-
-## Options
-
-### `legacy`
-
-`boolean`, defaults to `false`.
-
-Use the legacy (stage 1) decorators syntax.
-
-### `decoratorsBeforeExport`
-
-`boolean`, defaults to `true`.
+Using npm:
 
 ```js
-// decoratorsBeforeExport: true
-@decorator
-export class Foo {}
-
-// decoratorsBeforeExport: false
-export @decorator class Bar {}
+npm install --save @babel/plugin-syntax-decorators
 ```
 
-This option was added to help tc39 collect feedback from the community by allowing experimentation with both possible syntaxes.
+or using yarn:
 
-For more information, check out: [tc39/proposal-decorators#69](https://github.com/tc39/proposal-decorators/issues/69)
+```js
+yarn add --save @babel/plugin-syntax-decorators
+```

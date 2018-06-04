@@ -1,57 +1,19 @@
 # @babel/plugin-transform-strict-mode
 
-> This plugin places a `"use strict";` directive at the top of all files to enable [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode).
+> This plugin places a 'use strict'; directive at the top of all files to enable strict mode
 
-This plugin may be enabled via `@babel/plugin-transform-modules-commonjs`.
-If you wish to disable it you can either turn `strict` off or pass
-`strictMode: false` as an option to the commonjs transform.
+See our website [@babel/plugin-transform-strict-mode](https://new.babeljs.io/docs/en/next/babel-plugin-transform-strict-mode.html) for more information.
 
-## Example
+## Install
 
-**In**
+Using npm:
 
-```javascript
-foo();
+```js
+npm install --save @babel/plugin-transform-strict-mode
 ```
 
-**Out**
+or using yarn:
 
-```javascript
-"use strict";
-
-foo();
-```
-
-## Installation
-
-```sh
-npm install --save-dev @babel/plugin-transform-strict-mode
-```
-
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-
-```json
-{
-  "plugins": ["@babel/plugin-transform-strict-mode"]
-}
-```
-
-
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-transform-strict-mode script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-transform-strict-mode"]
-});
+```js
+yarn add --save @babel/plugin-transform-strict-mode
 ```

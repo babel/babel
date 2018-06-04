@@ -1,35 +1,19 @@
 # @babel/plugin-syntax-pipeline-operator
 
-Allow parsing of the pipeline operator `|>`. See [the proposal](https://github.com/tc39/proposal-pipeline-operator) for details.
+> Allow parsing of the pipeline operator
 
-## Installation
+See our website [@babel/plugin-syntax-pipeline-operator](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-pipeline-operator.html) for more information.
 
-```sh
-$ npm install @babel/plugin-syntax-pipeline-operator
+## Install
+
+Using npm:
+
+```js
+npm install --save @babel/plugin-syntax-pipeline-operator
 ```
 
-## Usage
+or using yarn:
 
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-syntax-pipeline-operator"]
-}
-```
-
-### Via CLI
-
-```sh
-$ babel --plugins @babel/plugin-syntax-pipeline-operator script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-syntax-pipeline-operator"]
-});
+```js
+yarn add --save @babel/plugin-syntax-pipeline-operator
 ```

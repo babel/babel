@@ -1,73 +1,19 @@
 # @babel/plugin-transform-modules-systemjs
 
-> This plugin transforms ES2015 modules to [SystemJS](https://github.com/systemjs/systemjs).
+> This plugin transforms ES2015 modules to SystemJS
 
-## Example
+See our website [@babel/plugin-transform-modules-systemjs](https://new.babeljs.io/docs/en/next/babel-plugin-transform-modules-systemjs.html) for more information.
 
-**In**
+## Install
 
-```javascript
-export default 42;
+Using npm:
+
+```js
+npm install --save @babel/plugin-transform-modules-systemjs
 ```
 
-**Out**
+or using yarn:
 
-```javascript
-System.register([], function (_export, _context) {
-  return {
-    setters: [],
-    execute: function () {
-      _export("default", 42);
-    }
-  };
-});
-```
-
-For dynamic import support (`import('./lazy.js').then(m => ...)`), enable the [@babel/plugin-syntax-dynamic-import](https://babeljs.io/docs/plugins/syntax-dynamic-import/) plugin before this one.
-
-## Installation
-
-```sh
-npm install --save-dev @babel/plugin-transform-modules-systemjs
-```
-
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-Without options:
-
-```json
-{
-  "plugins": ["@babel/plugin-transform-modules-systemjs"]
-}
-```
-
-With options:
-
-```json
-{
-  "plugins": [
-    ["@babel/plugin-transform-modules-systemjs", {
-      // outputs SystemJS.register(...)
-      "systemGlobal": "SystemJS"
-    }]
-  ]
-}
-```
-
-### Via CLI
-
-```sh
-babel --plugins @babel/plugin-transform-modules-systemjs script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-transform-modules-systemjs"]
-});
+```js
+yarn add --save @babel/plugin-transform-modules-systemjs
 ```
