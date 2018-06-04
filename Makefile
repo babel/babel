@@ -65,7 +65,6 @@ test-clean:
 		$(call clean-source-test, $(source)))
 
 test-only:
-	node -e "require('./packages/babel-node/node_modules/v8flags')((e, f) => console.log(JSON.stringify(f.sort(), null, 2)))"
 	BABEL_ENV=test ./scripts/test.sh
 	make test-clean
 
