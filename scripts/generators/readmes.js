@@ -29,7 +29,7 @@ const labels = {
   "babel-core": getIssueLabelLink("pkg: core"),
   "babel-polyfill": getIssueLabelLink("pkg: polyfill"),
   "babel-preset-env": getIssueLabelLink("pkg: preset-env"),
-  "babel-regiser": getIssueLabelLink("pkg: regiser"),
+  "babel-register": getIssueLabelLink("pkg: register"),
   "babel-traverse": getIssueLabelLink("pkg: traverse"),
   "babel-types": getIssueLabelLink("pkg: types"),
 };
