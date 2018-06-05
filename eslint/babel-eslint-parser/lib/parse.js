@@ -1,8 +1,8 @@
 "use strict";
 
 var babylonToEspree = require("./babylon-to-espree");
-var parse = require("babylon").parse;
-var tt = require("babylon").tokTypes;
+var parse = require("@babel/parser").parse;
+var tt = require("@babel/parser").tokTypes;
 var traverse = require("@babel/traverse").default;
 var codeFrameColumns = require("@babel/code-frame").codeFrameColumns;
 
