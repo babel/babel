@@ -11,7 +11,7 @@ export default declare((api, options) => {
     throw new Error("'legacy' must be a boolean.");
   }
 
-  let { decoratorsBeforeExport } = options;
+  const { decoratorsBeforeExport } = options;
   if (decoratorsBeforeExport !== undefined) {
     if (legacy) {
       throw new Error(
@@ -21,8 +21,6 @@ export default declare((api, options) => {
     if (typeof decoratorsBeforeExport !== "boolean") {
       throw new Error("'decoratorsBeforeExport' must be a boolean.");
     }
-  } else if (!legacy) {
-    decoratorsBeforeExport = true;
   }
 
   return {
