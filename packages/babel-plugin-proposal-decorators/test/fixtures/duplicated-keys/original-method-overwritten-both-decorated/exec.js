@@ -1,19 +1,13 @@
-function decorate(el) {
-  el.descriptor.value.decorated = true;
-  return el;
-}
-
 expect(() => {
   class A {
-    @decorate
+    @(el => el)
     method() {
       return 1;
     }
 
-    @decorate
+    @(el => el)
     method() {
       return 2;
     }
   }
 }).toThrow(ReferenceError);
-

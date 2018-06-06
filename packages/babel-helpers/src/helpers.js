@@ -1108,19 +1108,21 @@ helpers.decorate = () => template.program.ast`
         element.kind === "method" &&
         (other = newElements.find(isSameElement))
       ) {
-        if (element.decorators && element.decorators.length > 0) {
-          if (other.decorators && other.decorators.length > 0) {
-            throw new ReferenceError();
-          }
-          other.decorators = element.decorators;
-        }
-
         if (
           _isDataDescriptor(element.descriptor) ||
           _isDataDescriptor(other.descriptor)
         ) {
+          if (_hasDecorators(element) || _hasDecorators(other)) {
+            throw new ReferenceError();
+          }
           other.descriptor = element.descriptor;
         } else {
+          if (_hasDecorators(element)) {
+            if (_hasDecorators(other)) {
+              throw new ReferenceError();
+            }
+            other.decorators = element.decorators;
+          }
           _coalesceGetterSetter(element, other);
         }
       } else {
@@ -1129,6 +1131,10 @@ helpers.decorate = () => template.program.ast`
     }
 
     return newElements;
+  }
+
+  function _hasDecorators(element) {
+    return element.decorators && element.decorators.length;
   }
 
   function _isDataDescriptor(desc) {
