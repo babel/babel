@@ -17,7 +17,6 @@ var _computed2 = computed();
 var _ref2 = "test" + one;
 
 var _ref3 = /regex/;
-var _bar = bar;
 var _baz = baz;
 var _ref4 = `template${expression}`;
 
@@ -33,7 +32,7 @@ function () {
     babelHelpers.defineProperty(this, void 0, "void 0");
     babelHelpers.defineProperty(this, _ref3, "regex");
     babelHelpers.defineProperty(this, foo, "foo");
-    babelHelpers.defineProperty(this, _bar, "bar");
+    babelHelpers.defineProperty(this, bar, "bar");
     babelHelpers.defineProperty(this, _baz, "baz");
     babelHelpers.defineProperty(this, `template`, "template");
     babelHelpers.defineProperty(this, _ref4, "template-with-expression");
