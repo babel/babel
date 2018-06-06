@@ -1091,21 +1091,23 @@ helpers.decorate = () => template.program.ast`
 
   // CoalesceClassElements
   function _coalesceClassElements(elements) {
-    const newElements = [];
+    var newElements = [];
+
+    var isSameElement = function (other) {
+      return (
+        other.kind === "method" &&
+        other.key === element.key &&
+        other.placement === element.placement
+      );
+    };
 
     for (var i = 0; i < elements.length; i++) {
       var element = elements[i];
 
-      var index = newElements.findIndex(function(other) {
-        return (
-          other.kind === element.kind &&
-          other.key === element.key &&
-          other.placement === element.placement
-        );
-      });
-      if (element.kind === "method" && index !== -1) {
-        var other = newElements[index];
-
+      if (
+        element.kind === "method" &&
+        (other = newElements.find(isSameElement))
+      ) {
         if (element.decorators && element.decorators.length > 0) {
           if (other.decorators && other.decorators.length > 0) {
             throw new ReferenceError();
