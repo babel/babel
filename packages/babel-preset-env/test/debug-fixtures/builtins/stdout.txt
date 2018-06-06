@@ -206,8 +206,7 @@ Using polyfills with `entry` option:
   es.typed-array.subarray { "ie":"10", "node":"6" }
   es.typed-array.to-locale-string { "ie":"10", "node":"6" }
   es.typed-array.to-string { "ie":"10", "node":"6" }
-  web.timers { "chrome":"54", "ie":"10", "node":"6" }
-  web.immediate { "chrome":"54", "ie":"10", "node":"6" }
-  web.dom-collections.for-each { "chrome":"54", "ie":"10", "node":"6" }
-  web.dom-collections.iterator { "chrome":"54", "ie":"10", "node":"6" }
+  web.dom-collections.for-each { "chrome":"54", "ie":"10" }
+  web.dom-collections.iterator { "chrome":"54", "ie":"10" }
+  web.immediate { "chrome":"54" }
 🎉  Successfully compiled 1 file with Babel.

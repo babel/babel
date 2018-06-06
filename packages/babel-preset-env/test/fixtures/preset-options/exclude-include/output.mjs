@@ -7,10 +7,9 @@ import "core-js/modules/es.array.sort";
 import "core-js/modules/es.string.pad-start";
 import "core-js/modules/es.string.pad-end";
 import "core-js/modules/es.promise.finally";
-import "core-js/modules/web.timers";
-import "core-js/modules/web.immediate";
 import "core-js/modules/web.dom-collections.for-each";
 import "core-js/modules/web.dom-collections.iterator";
+import "core-js/modules/web.immediate";
 
 async function a() {
   await 1;

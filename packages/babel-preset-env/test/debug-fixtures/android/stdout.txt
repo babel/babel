@@ -190,8 +190,7 @@ Using polyfills with `entry` option:
   es.typed-array.subarray { "android":"4" }
   es.typed-array.to-locale-string { "android":"4" }
   es.typed-array.to-string { "android":"4" }
-  web.timers { "android":"4" }
-  web.immediate { "android":"4" }
   web.dom-collections.for-each { "android":"4" }
   web.dom-collections.iterator { "android":"4" }
+  web.immediate { "android":"4" }
 🎉  Successfully compiled 1 file with Babel.

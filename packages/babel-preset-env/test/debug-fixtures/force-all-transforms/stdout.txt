@@ -47,8 +47,7 @@ Using polyfills with `entry` option:
   es.string.pad-start { "chrome":"55" }
   es.string.pad-end { "chrome":"55" }
   es.promise.finally { "chrome":"55" }
-  web.timers { "chrome":"55" }
-  web.immediate { "chrome":"55" }
   web.dom-collections.for-each { "chrome":"55" }
   web.dom-collections.iterator { "chrome":"55" }
+  web.immediate { "chrome":"55" }
 🎉  Successfully compiled 1 file with Babel.

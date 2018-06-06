@@ -16,12 +16,10 @@ require("core-js/modules/es.string.pad-end");
 
 require("core-js/modules/es.promise.finally");
 
-require("core-js/modules/web.timers");
-
-require("core-js/modules/web.immediate");
-
 require("core-js/modules/web.dom-collections.for-each");
 
 require("core-js/modules/web.dom-collections.iterator");
+
+require("core-js/modules/web.immediate");
 
 1 ** 2;

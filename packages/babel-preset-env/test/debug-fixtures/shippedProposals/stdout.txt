@@ -222,8 +222,8 @@ Using polyfills with `entry` option:
   es.typed-array.subarray {}
   es.typed-array.to-locale-string {}
   es.typed-array.to-string {}
-  web.timers {}
-  web.immediate {}
   web.dom-collections.for-each {}
   web.dom-collections.iterator {}
+  web.immediate {}
+  web.timers {}
 🎉  Successfully compiled 1 file with Babel.

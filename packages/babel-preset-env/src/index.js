@@ -2,11 +2,8 @@
 
 import semver from "semver";
 import builtInsList from "../data/built-ins.json";
+import builtInsWebList from "../data/built-ins-web.json";
 import { logPlugin } from "./debug";
-import {
-  getPlatformSpecificDefaultFor,
-  getOptionSpecificExcludesFor,
-} from "./defaults";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
@@ -28,6 +25,8 @@ import {
 import type { Targets } from "./types";
 import { declare } from "@babel/helper-plugin-utils";
 
+const allBuiltInsList = Object.assign(builtInsList, builtInsWebList);
+
 const getPlugin = (pluginName: string) => {
   const plugin = availablePlugins[pluginName];
 
@@ -41,7 +40,7 @@ const getPlugin = (pluginName: string) => {
 };
 
 const builtInsListWithoutProposals = filterStageFromList(
-  builtInsList,
+  allBuiltInsList,
   proposalBuiltIns,
 );
 
@@ -210,8 +209,6 @@ export default declare((api, opts) => {
     include.plugins,
     exclude.plugins,
     transformTargets,
-    null,
-    getOptionSpecificExcludesFor({ loose }),
   );
 
   let polyfills;
@@ -221,11 +218,10 @@ export default declare((api, opts) => {
     polyfillTargets = getBuiltInTargets(targets);
 
     polyfills = filterItems(
-      shippedProposals ? builtInsList : builtInsListWithoutProposals,
+      shippedProposals ? allBuiltInsList : builtInsListWithoutProposals,
       include.builtIns,
       exclude.builtIns,
       polyfillTargets,
-      getPlatformSpecificDefaultFor(polyfillTargets),
     );
   }
 
@@ -276,7 +272,7 @@ Using polyfills with \`${useBuiltIns}\` option:`,
       regenerator,
       onDebug: (polyfills, context) => {
         polyfills.forEach(polyfill =>
-          logPlugin(polyfill, polyfillTargets, builtInsList, context),
+          logPlugin(polyfill, polyfillTargets, allBuiltInsList, context),
         );
       },
     };

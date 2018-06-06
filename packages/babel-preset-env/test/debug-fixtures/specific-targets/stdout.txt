@@ -210,8 +210,7 @@ Using polyfills with `entry` option:
   es.typed-array.subarray { "ie":"10", "ios":"9", "safari":"7" }
   es.typed-array.to-locale-string { "ie":"10", "ios":"9", "safari":"7" }
   es.typed-array.to-string { "ie":"10", "ios":"9", "safari":"7" }
-  web.timers { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  web.immediate { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   web.dom-collections.for-each { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   web.dom-collections.iterator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  web.immediate { "chrome":"54", "firefox":"49", "ios":"9", "safari":"7" }
 🎉  Successfully compiled 1 file with Babel.

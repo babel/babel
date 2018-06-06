@@ -1,0 +1,32 @@
+{
+  "web.dom-collections.for-each": {
+    "chrome": "58",
+    "edge": "16",
+    "firefox": "50",
+    "safari": "10",
+    "node": "0.10",
+    "ios": "11"
+  },
+  "web.dom-collections.iterator": {
+    "chrome": "66",
+    "firefox": "60",
+    "node": "0.10"
+  },
+  "web.immediate": {
+    "edge": "12",
+    "node": "0.10",
+    "ie": "10"
+  },
+  "web.timers": {
+    "chrome": "1",
+    "opera": "7",
+    "edge": "12",
+    "firefox": "1",
+    "safari": "1",
+    "node": "0.10",
+    "ie": "10",
+    "android": "1.5",
+    "ios": "6",
+    "electron": "0.2"
+  }
+}

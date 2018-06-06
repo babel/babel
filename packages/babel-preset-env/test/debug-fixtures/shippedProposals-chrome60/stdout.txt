@@ -24,8 +24,6 @@ Using polyfills with `entry` option:
   es.object.lookup-setter { "chrome":"60" }
   es.array.sort { "chrome":"60" }
   es.promise.finally { "chrome":"60" }
-  web.timers { "chrome":"60" }
-  web.immediate { "chrome":"60" }
-  web.dom-collections.for-each { "chrome":"60" }
   web.dom-collections.iterator { "chrome":"60" }
+  web.immediate { "chrome":"60" }
 🎉  Successfully compiled 1 file with Babel.
