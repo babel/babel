@@ -1223,7 +1223,9 @@ helpers.decorate = () => template.program.ast`
     }
 
     var result = _decorateConstructor(newElements, decorators);
-    result.finishers = finishers.concat(result.finishers);
+    finishers.push.apply(finishers, result.finishers);
+    result.finishers = finishers;
+
     return result;
   }
 
@@ -1252,8 +1254,9 @@ helpers.decorate = () => template.program.ast`
       var keys = placements[element.placement];
       keys.splice(keys.indexOf(element.key), 1);
 
+      var elementObject = _fromElementDescriptor(element);
       var elementFinisherExtras = _toElementFinisherExtras(
-        (0, decorators[i])(_fromElementDescriptor(element))
+        (0, decorators[i])(elementObject) || elementObject
       );
 
       element = elementFinisherExtras.element;
@@ -1280,8 +1283,9 @@ helpers.decorate = () => template.program.ast`
     var finishers = [];
 
     for (var i = decorators.length - 1; i >= 0; i--) {
+      var obj = _fromClassDescriptor(elements);
       var elementsAndFinisher = _toClassDescriptor(
-        (0, decorators[i])(_fromClassDescriptor(elements))
+        (0, decorators[i])(obj) || obj
       );
 
       if (elementsAndFinisher.finisher !== undefined) {
@@ -1297,7 +1301,7 @@ helpers.decorate = () => template.program.ast`
               elements[j].key === elements[k].key &&
               elements[j].placement === elements[k].placement
             ) {
-              throw new Error("Duplicated key " + elements[j].key);
+              throw new TypeError("Duplicated key " + elements[j].key);
             }
           }
         }
