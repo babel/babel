@@ -6,17 +6,19 @@ var _ref =
 
 class BugReport extends React.Component {
   constructor(...args) {
-    var _temp;
+    super(...args);
 
-    return _temp = super(...args), this.thisWontWork = ({
+    this.thisWontWork = ({
       color
     }) => data => {
       return <div color={color}>does not reference data</div>;
-    }, this.thisWorks = ({
+    };
+
+    this.thisWorks = ({
       color
     }) => data => {
       return <div color={color}>{data}</div>;
-    }, _temp;
+    };
   }
 
   render() {
