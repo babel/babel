@@ -1113,13 +1113,18 @@ helpers.decorate = () => template.program.ast`
           _isDataDescriptor(other.descriptor)
         ) {
           if (_hasDecorators(element) || _hasDecorators(other)) {
-            throw new ReferenceError();
+            throw new ReferenceError(
+              "Duplicated methods (" + element.key + ") can't be decorated."
+            );
           }
           other.descriptor = element.descriptor;
         } else {
           if (_hasDecorators(element)) {
             if (_hasDecorators(other)) {
-              throw new ReferenceError();
+              throw new ReferenceError(
+                "Decorators can't be placed on different accessors with for " +
+                "the same property (" + element.key + ")."
+              );
             }
             other.decorators = element.decorators;
           }
@@ -1233,7 +1238,7 @@ helpers.decorate = () => template.program.ast`
   function _addElementPlacement(element, placements, silent) {
     var keys = placements[element.placement];
     if (!silent && keys.indexOf(element.key) !== -1) {
-      throw new TypeError();
+      throw new TypeError("Duplicated element (" + element.key + ")");
     }
     keys.push(element.key);
   }
@@ -1301,7 +1306,9 @@ helpers.decorate = () => template.program.ast`
               elements[j].key === elements[k].key &&
               elements[j].placement === elements[k].placement
             ) {
-              throw new TypeError("Duplicated key " + elements[j].key);
+              throw new TypeError(
+                "Duplicated element (" + elements[j].key + ")"
+              );
             }
           }
         }
@@ -1344,16 +1351,9 @@ helpers.decorate = () => template.program.ast`
 
   // ToElementDescriptor
   function _toElementDescriptor(elementObject) {
-    if (elementObject === undefined) {
-      throw new Error(
-        "The element descriptor is undefined." +
-        " The decorator funciton must return an object."
-      );
-    }
-
     var kind = elementObject.kind;
     if (kind !== "method" && kind !== "field") {
-      throw new TypeError();
+      throw new TypeError('.kind must be either "method" or "field".');
     }
 
     var key = elementObject.key;
@@ -1365,7 +1365,9 @@ helpers.decorate = () => template.program.ast`
       placement !== "prototype" &&
       placement !== "own"
     ) {
-      throw new TypeError();
+      throw new TypeError(
+        '.placement must be one of "static", "prototype" or "own".'
+      );
     }
 
     var descriptor = elementObject.descriptor;
@@ -1416,7 +1418,7 @@ helpers.decorate = () => template.program.ast`
   // ToClassDescriptor
   function _toClassDescriptor(obj) {
     var kind = String(obj.kind);
-    if (kind !== "class") throw new TypeError();
+    if (kind !== "class") throw new TypeError('.kind must be "class".');
 
     _disallowProperty(obj, "key");
     _disallowProperty(obj, "placement");
@@ -1449,7 +1451,9 @@ helpers.decorate = () => template.program.ast`
     for (var i = 0; i < finishers.length; i++) {
       var newConstructor = (0, finishers[i])(constructor);
       if (newConstructor !== undefined) {
-        if (typeof newConstructor !== "function") throw new TypeError();
+        if (typeof newConstructor !== "function") {
+          throw new TypeError("Finishers must return a constructor.");
+        }
         constructor = newConstructor;
       }
     }
