@@ -1203,23 +1203,19 @@ helpers.decorate = () => template.program.ast`
   function _decorateClass(elements, decorators) {
     var newElements = [];
     var finishers = [];
-    var keys = { static: [], prototype: [], own: [] };
+    var placements = { static: [], prototype: [], own: [] };
 
     elements.forEach(function(element) {
-      keys[element.placement].push(element.key);
+      _addElementPlacement(element, placements);
     });
 
     elements.forEach(function(element) {
-      if (element.decorators && element.decorators.length) {
-        var elementFinishersExtras = _decorateElement(element, keys);
-        newElements = newElements.concat(
-          [elementFinishersExtras.element],
-          elementFinishersExtras.extras
-        );
-        finishers = finishers.concat(elementFinishersExtras.finishers);
-      } else {
-        newElements.push(element);
-      }
+      if (!_hasDecorators(element)) return newElements.push(element);
+
+      var elementFinishersExtras = _decorateElement(element, placements);
+      newElements.push(elementFinishersExtras.element);
+      newElements.push.apply(newElements, elementFinishersExtras.extras);
+      finishers.push.apply(finishers, elementFinishersExtras.finishers);
     });
 
     if (!decorators) {
@@ -1231,21 +1227,37 @@ helpers.decorate = () => template.program.ast`
     return result;
   }
 
+  // AddElementPlacement
+  function _addElementPlacement(element, placements, silent) {
+    var keys = placements[element.placement];
+    if (!silent && keys.indexOf(element.key) !== -1) {
+      throw new TypeError();
+    }
+    keys.push(element.key);
+  }
+
+  // RemoveElementPlacement
+  function _removeElementPlacement(element, placements) {
+    var keys = placements[element.placement];
+    keys.splice(keys.indexOf(element.key), 1);
+  }
+
   // DecorateElement
-  function _decorateElement(element, keys) {
+  function _decorateElement(element, placements) {
     var extras = [];
     var finishers = [];
-    var placementKeys = keys[element.placement];
 
     for (var decorators = element.decorators, i = decorators.length - 1; i >= 0; i--) {
-      placementKeys.splice(placementKeys.indexOf(element.key), 1);
+      // (inlined) RemoveElementPlacement
+      var keys = placements[element.placement];
+      keys.splice(keys.indexOf(element.key), 1);
 
       var elementFinisherExtras = _toElementFinisherExtras(
         (0, decorators[i])(_fromElementDescriptor(element))
       );
 
       element = elementFinisherExtras.element;
-      _decorateElement_pushKey(placementKeys, element);
+      _addElementPlacement(element, placements);
 
       if (elementFinisherExtras.finisher) {
         finishers.push(elementFinisherExtras.finisher);
@@ -1254,21 +1266,13 @@ helpers.decorate = () => template.program.ast`
       var newExtras = elementFinisherExtras.extras;
       if (newExtras) {
         for (var j = 0; j < newExtras.length; j++) {
-          _decorateElement_pushKey(keys[newExtras[j].placement], newExtras[j]);
+          _addElementPlacement(newExtras[j], placements);
         }
         extras = extras.concat(newExtras);
       }
     }
 
     return { element: element, finishers: finishers, extras: extras };
-  }
-
-  // DecorateElement - Steps 3.g-3.h and 3.k.i.1-3.k.i.2
-  function _decorateElement_pushKey(keys, element) {
-    if (keys.indexOf(element.key) !== -1) {
-      throw new TypeError("Duplicated key " + element.key);
-    }
-    keys.push(element.key);
   }
 
   // DecorateConstructor
