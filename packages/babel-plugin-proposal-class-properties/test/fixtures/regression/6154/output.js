@@ -35,7 +35,7 @@ var Test = function Test() {
     function Other() {
       var _getPrototypeOf2;
 
-      var _temp, _this;
+      var _this;
 
       _classCallCheck(this, Other);
 
@@ -43,9 +43,13 @@ var Test = function Test() {
         args[_key] = arguments[_key];
       }
 
-      return _possibleConstructorReturn(_this, (_temp = _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Other)).call.apply(_getPrototypeOf2, [this].concat(args))), _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "a", function () {
+      _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Other)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+      _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "a", function () {
         return _get(_getPrototypeOf(Other.prototype), "test", _assertThisInitialized(_this));
-      }), _temp));
+      });
+
+      return _this;
     }
 
     return Other;
