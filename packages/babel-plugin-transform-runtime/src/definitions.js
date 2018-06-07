@@ -98,7 +98,6 @@ export default {
       match: "symbol/match",
       observable: "symbol/observable",
       patternMatch: "symbol/pattern-match",
-      patternValue: "symbol/pattern-value",
       replace: "symbol/replace",
       search: "symbol/search",
       species: "symbol/species",
