@@ -1,0 +1,27 @@
+{
+  "name": "@babel/plugin-proposal-enhanced-classes",
+  "version": "7.0.0-beta.54",
+  "author": "The Babel Team (https://babeljs.io/team)",
+  "license": "MIT",
+  "description": "Compile class fields and decorators to ES6",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-enhanced-classes",
+  "main": "lib/index.js",
+  "keywords": [
+    "babel",
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/helper-function-name": "7.0.0-beta.54",
+    "@babel/helper-member-expression-to-functions": "7.0.0-beta.54",
+    "@babel/helper-optimise-call-expression": "7.0.0-beta.54",
+    "@babel/helper-plugin-utils": "7.0.0-beta.54",
+    "@babel/helper-replace-supers": "7.0.0-beta.54"
+  },
+  "peerDependencies": {
+    "@babel/core": "7.0.0-beta.54"
+  },
+  "devDependencies": {
+    "@babel/core": "7.0.0-beta.54",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.54"
+  }
+}
