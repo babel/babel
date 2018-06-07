@@ -1,7 +1,7 @@
 "use strict";
 
 // Which Unicode version should be used?
-const version = "10.0.0";
+const version = "11.0.0";
 
 const start = require("unicode-" +
   version +
