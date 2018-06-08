@@ -379,7 +379,7 @@ export default declare((api, options) => {
             if (isDerived) {
               newConstructor.params = [t.restElement(t.identifier("args"))];
               newConstructor.body.body.push(
-                t.returnStatement(
+                t.expressionStatement(
                   t.callExpression(t.super(), [
                     t.spreadElement(t.identifier("args")),
                   ]),

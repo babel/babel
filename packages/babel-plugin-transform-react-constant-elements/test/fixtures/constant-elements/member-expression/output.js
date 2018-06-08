@@ -12,9 +12,9 @@ var _ref2 =
 
 class Component extends React.Component {
   constructor(...args) {
-    var _temp;
+    super(...args);
 
-    return _temp = super(...args), this.render = () => _ref2, _temp;
+    this.render = () => _ref2;
   }
 
 }

@@ -4,13 +4,15 @@ var _ref =
 
 class Component extends React.Component {
   constructor(...args) {
-    var _temp;
+    super(...args);
+
+    this.subComponent = () => _ref;
 
     var _ref2 =
     /*#__PURE__*/
     <this.subComponent />;
 
-    return _temp = super(...args), this.subComponent = () => _ref, this.render = () => _ref2, _temp;
+    this.render = () => _ref2;
   }
 
 }

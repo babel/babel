@@ -18,13 +18,15 @@ function (_Foo) {
   babelHelpers.inherits(Bar, _Foo);
 
   function Bar(...args) {
-    var _temp, _this;
+    var _this;
 
     babelHelpers.classCallCheck(this, Bar);
-    return babelHelpers.possibleConstructorReturn(_this, (_temp = _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Bar).call(this, ...args)), Object.defineProperty(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this)), _prop2, {
+    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Bar).call(this, ...args));
+    Object.defineProperty(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this)), _prop2, {
       writable: true,
       value: "bar"
-    }), _temp));
+    });
+    return _this;
   }
 
   return Bar;
