@@ -46,21 +46,31 @@ const getLowestVersions = (browsers: Array<string>): Targets => {
     try {
       // Browser version can return as "10.0-10.2"
       const splitVersion = browserVersion.split("-")[0].toLowerCase();
+      const isSplitUnreleased = isUnreleasedVersion(splitVersion, browserName);
 
-      if (isUnreleasedVersion(splitVersion, browserName)) {
+      if (!all[normalizedBrowserName]) {
+        all[normalizedBrowserName] = isSplitUnreleased
+          ? splitVersion
+          : semverify(splitVersion);
+        return all;
+      }
+
+      const version = all[normalizedBrowserName];
+      const isUnreleased = isUnreleasedVersion(version, browserName);
+
+      if (isUnreleased && isSplitUnreleased) {
         all[normalizedBrowserName] = getLowestUnreleased(
-          all[normalizedBrowserName],
+          version,
           splitVersion,
           browserName,
         );
+      } else if (isUnreleased) {
+        all[normalizedBrowserName] = semverify(splitVersion);
+      } else if (!isUnreleased && !isSplitUnreleased) {
+        const parsedBrowserVersion = semverify(splitVersion);
+
+        all[normalizedBrowserName] = semverMin(version, parsedBrowserVersion);
       }
-
-      const parsedBrowserVersion = semverify(splitVersion);
-
-      all[normalizedBrowserName] = semverMin(
-        all[normalizedBrowserName],
-        parsedBrowserVersion,
-      );
     } catch (e) {}
 
     return all;
