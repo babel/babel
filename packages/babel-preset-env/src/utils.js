@@ -1,24 +1,49 @@
 // @flow
+
+import invariant from "invariant";
 import semver from "semver";
+import levenshtein from "js-levenshtein";
 import { addSideEffect } from "@babel/helper-module-imports";
 import unreleasedLabels from "../data/unreleased-labels";
 import { semverMin } from "./targets-parser";
 import type { Targets } from "./types";
 
+const versionRegExp = /^(\d+|\d+.\d+)$/;
+
 // Convert version to a semver value.
 // 2.5 -> 2.5.0; 1 -> 1.0.0;
 export const semverify = (version: string | number): string => {
-  if (typeof version === "string" && semver.valid(version)) {
+  const isString = typeof version === "string";
+
+  if (isString && semver.valid(version)) {
     return version;
   }
 
-  const split = version.toString().split(".");
+  invariant(
+    typeof version === "number" || (isString && versionRegExp.test(version)),
+    `'${version}' is not a valid version`,
+  );
 
+  const split = version.toString().split(".");
   while (split.length < 3) {
     split.push("0");
   }
-
   return split.join(".");
+};
+
+export const getValues = (object: Object): Array<any> =>
+  Object.keys(object).map(key => object[key]);
+
+export const findSuggestion = (options: Array<string>, option: string) => {
+  let levenshteinValue = Infinity;
+  return options.reduce((suggestion, validOption) => {
+    const value = levenshtein(validOption, option);
+    if (value < levenshteinValue) {
+      levenshteinValue = value;
+      return validOption;
+    }
+    return suggestion;
+  }, undefined);
 };
 
 export const prettifyVersion = (version: string): string => {
