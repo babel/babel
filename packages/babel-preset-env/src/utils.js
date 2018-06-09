@@ -31,7 +31,7 @@ export const semverify = (version: string | number): string => {
   return split.join(".");
 };
 
-export const getValues = (object: Object) =>
+export const getValues = (object: Object): Array<any> =>
   Object.keys(object).map(key => object[key]);
 
 export const findSuggestion = (options: Array<string>, option: string) => {

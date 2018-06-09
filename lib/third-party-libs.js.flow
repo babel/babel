@@ -166,3 +166,9 @@ declare module "convert-source-map" {
     generateMapFileComment(path: string, options?: ?{ multiline: boolean }): string,
   };
 }
+
+declare module "js-levenshtein" {
+  declare module.exports: {
+    (string, string): number,
+  };
+}
