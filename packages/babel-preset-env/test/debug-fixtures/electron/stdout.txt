@@ -18,6 +18,7 @@ Using plugins:
   transform-function-name { "electron":"0.36" }
   transform-for-of { "electron":"0.36" }
   transform-sticky-regex { "electron":"0.36" }
+  transform-dotall-regex { "electron":"0.36" }
   transform-unicode-regex { "electron":"0.36" }
   transform-parameters { "electron":"0.36" }
   transform-destructuring { "electron":"0.36" }
@@ -28,7 +29,6 @@ Using plugins:
   proposal-async-generator-functions { "electron":"0.36" }
   proposal-object-rest-spread { "electron":"0.36" }
   proposal-unicode-property-regex { "electron":"0.36" }
-  transform-dotall-regex { "electron":"0.36" }
 
 Using polyfills with `entry` option:
 
