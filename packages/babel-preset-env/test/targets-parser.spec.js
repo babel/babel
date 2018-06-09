@@ -46,7 +46,7 @@ describe("getTargets", () => {
       });
     });
 
-    it("preffers released version over TP", () => {
+    it("prefers released version over TP", () => {
       expect(
         getTargets({
           browsers: "safari tp, safari 11",
