@@ -18,7 +18,7 @@ const getPackageJson = pkg => require(join(packageDir, pkg, "package.json"));
 const getIssueLabelLink = l =>
   `https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22${encodeURIComponent(
     l
-  )}%22`;
+  )}%22+is%3Aopen`;
 
 const labels = {
   "babel-preset-typescript": getIssueLabelLink("area: typescript"),
