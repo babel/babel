@@ -7,11 +7,25 @@ export function runFixtureTests(fixturesPath, parseFunction) {
     fixtures[name].forEach(function(testSuite) {
       testSuite.tests.forEach(function(task) {
         const testFn = task.disabled ? it.skip : it;
+        const fs = require("fs");
+        const path = require("path");
 
         testFn(name + "/" + testSuite.title + "/" + task.title, function() {
           try {
             runTest(task, parseFunction);
           } catch (err) {
+            if (!task.expect.code && !process.env.CI) {
+              const fn = path.dirname(task.expect.loc) + "/options.json";
+              if (!fs.existsSync(fn)) {
+                task.options = task.options || {};
+                task.options.throws = err.message.replace(
+                  /^.*Got error message: /,
+                  "",
+                );
+                fs.writeFileSync(fn, JSON.stringify(task.options, null, "  "));
+              }
+            }
+
             err.message =
               name + "/" + task.actual.filename + ": " + err.message;
             throw err;
