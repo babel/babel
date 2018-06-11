@@ -23,7 +23,7 @@ module.exports = function(code, options) {
       "asyncGenerators",
       "classConstructorCall",
       "classProperties",
-      "decorators",
+      "decorators-legacy",
       "doExpressions",
       "exponentiationOperator",
       "exportDefaultFrom",
