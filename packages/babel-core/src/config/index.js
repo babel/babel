@@ -17,10 +17,3 @@ export function loadOptions(opts: {}): Object | null {
 
   return config ? config.options : null;
 }
-
-// For easier backward-compatibility, provide an API like the one we exposed in Babel 6.
-export class OptionManager {
-  init(opts: {}) {
-    return loadOptions(opts);
-  }
-}

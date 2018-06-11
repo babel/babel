@@ -57,27 +57,10 @@ const NONPRESET_VALIDATORS: ValidatorSet = {
   extends: (assertString: Validator<
     $PropertyType<ValidatedOptions, "extends">,
   >),
-  env: (assertEnvSet: Validator<$PropertyType<ValidatedOptions, "env">>),
   ignore: (assertIgnoreList: Validator<
     $PropertyType<ValidatedOptions, "ignore">,
   >),
   only: (assertIgnoreList: Validator<$PropertyType<ValidatedOptions, "only">>),
-  overrides: (assertOverridesList: Validator<
-    $PropertyType<ValidatedOptions, "overrides">,
-  >),
-
-  // We could limit these to 'overrides' blocks, but it's not clear why we'd
-  // bother, when the ability to limit a config to a specific set of files
-  // is a fairly general useful feature.
-  test: (assertConfigApplicableTest: Validator<
-    $PropertyType<ValidatedOptions, "test">,
-  >),
-  include: (assertConfigApplicableTest: Validator<
-    $PropertyType<ValidatedOptions, "include">,
-  >),
-  exclude: (assertConfigApplicableTest: Validator<
-    $PropertyType<ValidatedOptions, "exclude">,
-  >),
 };
 
 const COMMON_VALIDATORS: ValidatorSet = {
@@ -96,6 +79,25 @@ const COMMON_VALIDATORS: ValidatorSet = {
   passPerPreset: (assertBoolean: Validator<
     $PropertyType<ValidatedOptions, "passPerPreset">,
   >),
+
+  env: (assertEnvSet: Validator<$PropertyType<ValidatedOptions, "env">>),
+  overrides: (assertOverridesList: Validator<
+    $PropertyType<ValidatedOptions, "overrides">,
+  >),
+
+  // We could limit these to 'overrides' blocks, but it's not clear why we'd
+  // bother, when the ability to limit a config to a specific set of files
+  // is a fairly general useful feature.
+  test: (assertConfigApplicableTest: Validator<
+    $PropertyType<ValidatedOptions, "test">,
+  >),
+  include: (assertConfigApplicableTest: Validator<
+    $PropertyType<ValidatedOptions, "include">,
+  >),
+  exclude: (assertConfigApplicableTest: Validator<
+    $PropertyType<ValidatedOptions, "exclude">,
+  >),
+
   retainLines: (assertBoolean: Validator<
     $PropertyType<ValidatedOptions, "retainLines">,
   >),

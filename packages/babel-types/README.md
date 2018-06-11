@@ -125,6 +125,19 @@ Aliases: `Expression`, `Terminatorless`
 
 ---
 
+### bigIntLiteral
+```javascript
+t.bigIntLiteral(value)
+```
+
+See also `t.isBigIntLiteral(node, opts)` and `t.assertBigIntLiteral(node, opts)`.
+
+Aliases: `Expression`, `Pureish`, `Literal`, `Immutable`
+
+ - `value`: `string` (required)
+
+---
+
 ### binaryExpression
 ```javascript
 t.binaryExpression(operator, left, right)
@@ -587,13 +600,12 @@ Aliases: `Flow`, `FlowPredicate`
 
 ### decorator
 ```javascript
-t.decorator(callee, arguments)
+t.decorator(expression)
 ```
 
 See also `t.isDecorator(node, opts)` and `t.assertDecorator(node, opts)`.
 
- - `callee`: `Expression` (required)
- - `arguments`: `Array<Expression | SpreadElement>` (default: `null`)
+ - `expression`: `Expression` (required)
 
 ---
 
@@ -1621,6 +1633,7 @@ Aliases: `Flow`, `UserWhitespacable`
  - `variance`: `Variance` (default: `null`)
  - `kind`: `"init" | "get" | "set"` (default: `null`)
  - `optional`: `boolean` (default: `null`)
+ - `proto`: `boolean` (default: `null`)
  - `static`: `boolean` (default: `null`)
 
 ---

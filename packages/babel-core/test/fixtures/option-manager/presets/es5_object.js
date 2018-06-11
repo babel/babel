@@ -1,7 +1,10 @@
 module.exports = function() {
   return {
     plugins: [
-      require('../../../../../babel-plugin-syntax-decorators'),
+      [
+        require('../../../../../babel-plugin-syntax-decorators'),
+        { legacy: true }
+      ],
     ]
   };
 };

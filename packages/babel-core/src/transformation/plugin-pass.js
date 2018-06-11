@@ -8,10 +8,11 @@ export default class PluginPass {
   file: File;
   opts: Object;
 
-  // The working directory that Babel's options are loaded relative to.
+  // The working directory that Babel's programmatic options are loaded
+  // relative to.
   cwd: string;
 
-  // The path of the file being compiled, relative to the working directory.
+  // The absolute path of the file being compiled.
   filename: string | void;
 
   constructor(file: File, key: ?string, options: ?Object) {

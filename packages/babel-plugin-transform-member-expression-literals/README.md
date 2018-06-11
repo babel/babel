@@ -2,48 +2,18 @@
 
 > Ensure that reserved words are quoted in property accesses
 
-## Example
+See our website [@babel/plugin-transform-member-expression-literals](https://new.babeljs.io/docs/en/next/babel-plugin-transform-member-expression-literals.html) for more information.
 
-**In**
+## Install
 
-```javascript
-foo.catch;
-```
-
-**Out**
-
-```javascript
-foo["catch"];
-```
-
-## Installation
+Using npm:
 
 ```sh
-npm install --save-dev @babel/plugin-transform-member-expression-literals
+npm install --save @babel/plugin-transform-member-expression-literals
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-transform-member-expression-literals"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins @babel/plugin-transform-member-expression-literals script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-transform-member-expression-literals"]
-});
+yarn add --save @babel/plugin-transform-member-expression-literals
 ```

@@ -196,6 +196,7 @@
                       "name": "x"
                     },
                     "static": false,
+                    "proto": false,
                     "kind": "init",
                     "method": false,
                     "value": {

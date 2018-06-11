@@ -136,6 +136,7 @@
                         "name": "add"
                       },
                       "static": false,
+                      "proto": false,
                       "kind": "init",
                       "method": true,
                       "value": {

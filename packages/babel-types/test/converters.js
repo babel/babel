@@ -19,8 +19,29 @@ describe("converters", function() {
   describe("valueToNode", function() {
     it("number", function() {
       expect(t.valueToNode(Math.PI)).toEqual(t.numericLiteral(Math.PI));
-      expect(t.valueToNode(-Infinity)).toEqual(t.numericLiteral(-Infinity));
-      expect(t.valueToNode(NaN)).toEqual(t.numericLiteral(NaN));
+      expect(t.valueToNode(-Math.PI)).toEqual(
+        t.unaryExpression("-", t.numericLiteral(Math.PI)),
+      );
+      expect(t.valueToNode(0)).toEqual(t.numericLiteral(0));
+      expect(t.valueToNode(-0)).toEqual(
+        t.unaryExpression("-", t.numericLiteral(0)),
+      );
+      expect(t.valueToNode(NaN)).toEqual(
+        t.binaryExpression("/", t.numericLiteral(0), t.numericLiteral(0)),
+      );
+      expect(t.valueToNode(-NaN)).toEqual(
+        t.binaryExpression("/", t.numericLiteral(0), t.numericLiteral(0)),
+      );
+
+      expect(t.valueToNode(Infinity)).toEqual(
+        t.binaryExpression("/", t.numericLiteral(1), t.numericLiteral(0)),
+      );
+      expect(t.valueToNode(-Infinity)).toEqual(
+        t.unaryExpression(
+          "-",
+          t.binaryExpression("/", t.numericLiteral(1), t.numericLiteral(0)),
+        ),
+      );
     });
     it("string", function() {
       expect(t.valueToNode('This is a "string"')).toEqual(

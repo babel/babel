@@ -1,11 +1,19 @@
 # @babel/helper-transform-fixture-test-runner
 
-**NOTE:** This is an internal Babel module and may not work outside. Use at your own risk.
+> Transform test runner for @babel/helper-fixtures module
 
-## Usage
+See our website [@babel/helper-transform-fixture-test-runner](https://new.babeljs.io/docs/en/next/babel-helper-transform-fixture-test-runner.html) for more information.
 
-```javascript
-import runFixtures from "@babel/helper-transform-fixture-test-runner";
+## Install
 
-runFixtures("/User/sebmck/Projects/babel-something/test/fixtures");
+Using npm:
+
+```sh
+npm install --save @babel/helper-transform-fixture-test-runner
+```
+
+or using yarn:
+
+```sh
+yarn add --save @babel/helper-transform-fixture-test-runner
 ```

@@ -37,4 +37,3 @@ numbers/underscored_float_whole.js
 numbers/underscored_hex.js
 numbers/underscored_number.js
 numbers/underscored_oct.js
-types/declare_class/proto.js

@@ -129,7 +129,6 @@
                   "value": 1
                 },
                 "extra": {
-                  "parenthesizedArgument": false,
                   "parenthesized": true,
                   "parenStart": 20
                 }

@@ -1,0 +1,7 @@
+{
+  "presets": [
+    ["flow", {}, "before"],
+    "typescript",
+    ["flow", {}, "after"]
+  ]
+}

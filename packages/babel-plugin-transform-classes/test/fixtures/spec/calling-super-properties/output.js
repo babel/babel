@@ -3,6 +3,8 @@ var Test =
 function (_Foo) {
   "use strict";
 
+  babelHelpers.inherits(Test, _Foo);
+
   function Test() {
     var _this;
 
@@ -19,6 +21,5 @@ function (_Foo) {
       return babelHelpers.get(babelHelpers.getPrototypeOf(Test), "wow", this).call(this);
     }
   }]);
-  babelHelpers.inherits(Test, _Foo);
   return Test;
 }(Foo);

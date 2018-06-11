@@ -38,7 +38,7 @@ Using plugins:
 
 Using polyfills with `usage` option:
 
-[src/in.js] Based on your code and targets, none were added.
+[<CWD>/src/in.js] Based on your code and targets, none were added.
 
-[src/in2.js] Based on your code and targets, none were added.
+[<CWD>/src/in2.js] Based on your code and targets, none were added.
 🎉  Successfully compiled 2 files with Babel.

@@ -2,7 +2,7 @@
 
 const utils = require("../lib/utils");
 
-const { prettifyTargets, prettifyVersion, semverify } = utils;
+const { prettifyTargets, prettifyVersion, semverify, findSuggestion } = utils;
 
 describe("utils", () => {
   describe("semverify", () => {
@@ -12,6 +12,13 @@ describe("utils", () => {
       expect(semverify("1.0.0")).toBe("1.0.0");
       expect(semverify(1)).toBe("1.0.0");
       expect(semverify(1.2)).toBe("1.2.0");
+    });
+
+    it("throws", () => {
+      const invalidSemver = () => {
+        semverify("invalid");
+      };
+      expect(invalidSemver).toThrow();
     });
   });
 
@@ -41,6 +48,14 @@ describe("utils", () => {
         electron: "1.6",
         node: "0.12",
       });
+    });
+  });
+
+  describe("findSuggestion", () => {
+    it("returns", () => {
+      const options = ["one", "two", "three"];
+      expect(findSuggestion(options, "onr")).toEqual("one");
+      expect(findSuggestion(options, "tree")).toEqual("three");
     });
   });
 });

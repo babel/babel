@@ -1,17 +1,19 @@
 # @babel/helper-plugin-test-runner
 
-**NOTE:** This is an internal Babel module and may not work outside. Use at your own risk.
+> Helper function to support test runner
 
-## Usage:
+See our website [@babel/helper-plugin-test-runner](https://new.babeljs.io/docs/en/next/babel-helper-plugin-test-runner.html) for more information.
 
-> Check Babel for an example: https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-exponentiation-operator/test
+## Install
 
-1. Inside a `/test` directory, add an `index.js` with the contents
-```js
-import runner from "@babel/helper-plugin-test-runner";
+Using npm:
 
-runner(__dirname);
+```sh
+npm install --save @babel/helper-plugin-test-runner
 ```
-2. Inside `/test/fixtures`, create a folder for each suite (eg; one suite for each feature of your plugin).
-3. Suite folders may contain files and folders. Files will be transformed and run; use `expect()` assertions to verify correct behavior. Folders may contain `input.js`, `output.js`, and/or `exec.js`. The output of transforming `input.js` will be checked to match the contents of `output.js`. `exec.js`, if it exists, will be transformed and run, as with a file in the suite folder.
-3. To run a specific test, run `TEST_GREP=testName make test`. [Read more](https://github.com/babel/babel/blob/master/CONTRIBUTING.md#running-lintingtests).
+
+or using yarn:
+
+```sh
+yarn add --save @babel/helper-plugin-test-runner
+```

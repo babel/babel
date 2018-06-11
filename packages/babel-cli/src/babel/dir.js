@@ -73,8 +73,14 @@ export default async function({ cliOptions, babelOptions }) {
 
   function outputDestFolder(outDir) {
     const outDirPath = path.resolve(outDir);
-    if (!fs.existsSync(outDirPath)) {
+
+    try {
       fs.mkdirSync(outDirPath);
+    } catch (err) {
+      // Testing for the directory and then creating it can lead to race
+      // conditions if there are multiple processes, so we try to create it
+      // and bail if it already exists.
+      if (err.code !== "EEXIST") throw err;
     }
   }
 

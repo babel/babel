@@ -1,13 +1,13 @@
 {
   "name": "@babel/helper-define-map",
-  "version": "7.0.0-beta.47",
+  "version": "7.0.0-beta.49",
   "description": "Helper function to define a map",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-define-map",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-function-name": "7.0.0-beta.47",
-    "@babel/types": "7.0.0-beta.47",
+    "@babel/helper-function-name": "7.0.0-beta.49",
+    "@babel/types": "7.0.0-beta.49",
     "lodash": "^4.17.5"
   }
 }

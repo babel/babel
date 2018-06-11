@@ -547,6 +547,7 @@ export type ConditionalExpression = NodeBase & {
 export type CallOrNewBase = NodeBase & {
   callee: Expression | Super | Import,
   arguments: Array<Expression | SpreadElement>, // TODO: $ReadOnlyArray
+  typeArguments: ?TypeParameterInstantiationBase,
   typeParameters?: ?TypeParameterInstantiationBase, // TODO: Not in spec
 };
 
@@ -935,6 +936,12 @@ export type FlowFunctionTypeParam = Node;
 export type FlowTypeAnnotation = Node;
 export type FlowVariance = Node;
 export type FlowClassImplements = Node;
+
+export type FlowInterfaceType = NodeBase & {
+  type: "FlowInterfaceType",
+  extends: FlowInterfaceExtends,
+  body: FlowObjectTypeAnnotation,
+};
 
 // estree
 

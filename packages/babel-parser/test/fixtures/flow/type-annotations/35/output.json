@@ -150,6 +150,7 @@
                           "name": "numVal"
                         },
                         "static": false,
+                        "proto": false,
                         "kind": "init",
                         "method": false,
                         "value": {

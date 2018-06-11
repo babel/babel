@@ -20,11 +20,14 @@ class Obj extends Base {
     super.test(...[1, 2, 3]);
     return super.test(...arguments);
   }
-
-  test() {
+}
+Object.defineProperty(Obj.prototype, 'test', {
+  writable: true,
+  configurable: true,
+  value() {
     throw new Error("called");
   }
-}
+});
 
 const obj = new Obj();
 expect(obj.call(1, 2, 3)).toBe(1);

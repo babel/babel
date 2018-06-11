@@ -399,23 +399,32 @@ helpers.inherits = () => template.program.ast`
     if (typeof superClass !== "function" && superClass !== null) {
       throw new TypeError("Super expression must either be null or a function");
     }
-    setPrototypeOf(subClass.prototype, superClass && superClass.prototype);
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        writable: true,
+        configurable: true
+      }
+    });
     if (superClass) setPrototypeOf(subClass, superClass);
   }
 `;
 
 helpers.inheritsLoose = () => template.program.ast`
   export default function _inheritsLoose(subClass, superClass) {
-    subClass.prototype.__proto__ = superClass && superClass.prototype;
+    subClass.prototype = Object.create(superClass.prototype);
+    subClass.prototype.constructor = subClass;
     subClass.__proto__ = superClass;
   }
 `;
 
 helpers.getPrototypeOf = () => template.program.ast`
   export default function _getPrototypeOf(o) {
-    _getPrototypeOf = Object.getPrototypeOf || function _getPrototypeOf(o) {
-      return o.__proto__;
-    };
+    _getPrototypeOf = Object.setPrototypeOf
+      ? Object.getPrototypeOf
+      : function _getPrototypeOf(o) {
+          return o.__proto__ || Object.getPrototypeOf(o);
+        };
     return _getPrototypeOf(o);
   }
 `;
@@ -440,7 +449,7 @@ helpers.construct = () => template.program.ast`
     if (Reflect.construct.sham) return false;
 
     // Proxy can't be polyfilled. Every browser implemented
-    // proxies before or at the same time of Reflect.construct,
+    // proxies before or at the same time as Reflect.construct,
     // so if they support Proxy they also support Reflect.construct.
     if (typeof Proxy === "function") return true;
 
@@ -479,8 +488,8 @@ helpers.construct = () => template.program.ast`
 
 // Based on https://github.com/WebReflection/babel-plugin-transform-builtin-classes
 helpers.wrapNativeSuper = () => template.program.ast`
-  import _gPO from "getPrototypeOf";
-  import _sPO from "setPrototypeOf";
+  import getPrototypeOf from "getPrototypeOf";
+  import setPrototypeOf from "setPrototypeOf";
   import construct from "construct";
 
   export default function _wrapNativeSuper(Class) {
@@ -496,7 +505,7 @@ helpers.wrapNativeSuper = () => template.program.ast`
         _cache.set(Class, Wrapper);
       }
       function Wrapper() {
-        return _construct(Class, arguments, _gPO(this).constructor)
+        return construct(Class, arguments, getPrototypeOf(this).constructor)
       }
       Wrapper.prototype = Object.create(Class.prototype, {
         constructor: {
@@ -507,7 +516,7 @@ helpers.wrapNativeSuper = () => template.program.ast`
         }
       });
 
-      return _sPO(Wrapper, Class);
+      return setPrototypeOf(Wrapper, Class);
     }
 
     return _wrapNativeSuper(Class)

@@ -123,13 +123,7 @@
                   "identifierName": "bar"
                 },
                 "name": "bar"
-              },
-              "extra": {
-                "parenthesizedArgument": false
               }
-            },
-            "extra": {
-              "parenthesizedArgument": false
             }
           }
         }

@@ -1,6 +1,6 @@
 "use strict";
 
-function _inheritsLoose(subClass, superClass) { subClass.prototype.__proto__ = superClass && superClass.prototype; subClass.__proto__ = superClass; }
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
 let Base =
 /*#__PURE__*/
@@ -21,6 +21,8 @@ function () {
 let Obj =
 /*#__PURE__*/
 function (_Base) {
+  _inheritsLoose(Obj, _Base);
+
   function Obj() {
     return _Base.apply(this, arguments) || this;
   }
@@ -40,8 +42,6 @@ function (_Base) {
   _proto2.test = function test() {
     throw new Error("called");
   };
-
-  _inheritsLoose(Obj, _Base);
 
   return Obj;
 }(Base);

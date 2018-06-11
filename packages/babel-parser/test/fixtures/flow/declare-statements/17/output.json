@@ -112,6 +112,7 @@
                 "name": "a"
               },
               "static": false,
+              "proto": false,
               "kind": "init",
               "method": false,
               "value": {
@@ -164,6 +165,7 @@
                 "name": "b"
               },
               "static": true,
+              "proto": false,
               "kind": "init",
               "method": false,
               "value": {
@@ -216,6 +218,7 @@
                 "name": "c"
               },
               "static": false,
+              "proto": false,
               "kind": "init",
               "method": false,
               "value": {

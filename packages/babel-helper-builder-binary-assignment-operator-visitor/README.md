@@ -1,5 +1,19 @@
 # @babel/helper-builder-binary-assignment-operator-visitor
 
-## Usage
+> Helper function to build binary assignment operator visitors
 
-TODO
+See our website [@babel/helper-builder-binary-assignment-operator-visitor](https://new.babeljs.io/docs/en/next/babel-helper-builder-binary-assignment-operator-visitor.html) for more information.
+
+## Install
+
+Using npm:
+
+```sh
+npm install --save @babel/helper-builder-binary-assignment-operator-visitor
+```
+
+or using yarn:
+
+```sh
+yarn add --save @babel/helper-builder-binary-assignment-operator-visitor
+```

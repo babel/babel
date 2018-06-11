@@ -2,20 +2,18 @@
 
 > Babel command line.
 
-In addition, various entry point scripts live in the top-level package at `@babel/cli/bin`.
-
-There is a shell-executable utility script, `babel-external-helpers.js`, and the main Babel cli script, `babel.js`.
+See our website [@babel/cli](https://new.babeljs.io/docs/en/next/babel-cli.html) for more information or the [issues](https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20cli%22+is%3Aopen) associated with this package.
 
 ## Install
 
-```sh
-npm install --save-dev @babel/core @babel/cli
-```
-
-## Usage
+Using npm:
 
 ```sh
-babel script.js
+npm install --save @babel/cli
 ```
 
-For more in depth documentation see: http://babeljs.io/docs/usage/cli/
+or using yarn:
+
+```sh
+yarn add --save @babel/cli
+```

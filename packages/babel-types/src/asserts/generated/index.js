@@ -711,6 +711,9 @@ export function assertExportNamespaceSpecifier(
 export function assertPrivateName(node: Object, opts?: Object = {}): void {
   assert("PrivateName", node, opts);
 }
+export function assertBigIntLiteral(node: Object, opts?: Object = {}): void {
+  assert("BigIntLiteral", node, opts);
+}
 export function assertTSParameterProperty(
   node: Object,
   opts?: Object = {},

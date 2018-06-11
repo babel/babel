@@ -88,9 +88,6 @@
                 }
               },
               "properties": []
-            },
-            "extra": {
-              "parenthesizedArgument": false
             }
           },
           "operator": "/",

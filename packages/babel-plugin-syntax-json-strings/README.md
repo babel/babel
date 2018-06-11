@@ -1,35 +1,19 @@
 # @babel/plugin-syntax-json-strings
 
-Allow parsing of the U+2028 LINE SEPARATOR and U+2029 PARAGRAPH SEPARATOR in JS strings
+> Allow parsing of the U+2028 LINE SEPARATOR and U+2029 PARAGRAPH SEPARATOR in JS strings
 
-## Installation
+See our website [@babel/plugin-syntax-json-strings](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-json-strings.html) for more information.
 
-```sh
-npm install --save-dev @babel/plugin-syntax-json-strings
-```
+## Install
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-syntax-json-strings"]
-}
-```
-
-### Via CLI
+Using npm:
 
 ```sh
-babel --plugins @babel/plugin-syntax-json-strings script.js
+npm install --save @babel/plugin-syntax-json-strings
 ```
 
-### Via Node API
+or using yarn:
 
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-syntax-json-strings"]
-});
+```sh
+yarn add --save @babel/plugin-syntax-json-strings
 ```

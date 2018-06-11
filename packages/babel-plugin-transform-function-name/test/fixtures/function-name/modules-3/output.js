@@ -10,6 +10,8 @@ var _store = require("./store");
 let Login =
 /*#__PURE__*/
 function (_React$Component) {
+  babelHelpers.inherits(Login, _React$Component);
+
   function Login() {
     babelHelpers.classCallCheck(this, Login);
     return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Login).apply(this, arguments));
@@ -21,7 +23,6 @@ function (_React$Component) {
       return (0, _store.getForm)().toJS();
     }
   }]);
-  babelHelpers.inherits(Login, _React$Component);
   return Login;
 }(React.Component);
 

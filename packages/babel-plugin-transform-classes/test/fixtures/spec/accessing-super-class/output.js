@@ -3,6 +3,8 @@ var Test =
 function (_Foo) {
   "use strict";
 
+  babelHelpers.inherits(Test, _Foo);
+
   function Test() {
     var _babelHelpers$getProt, _babelHelpers$get;
 
@@ -42,6 +44,5 @@ function (_Foo) {
       (_babelHelpers$get3 = babelHelpers.get(babelHelpers.getPrototypeOf(Test), "foo", this)).call.apply(_babelHelpers$get3, [this, "test"].concat(Array.prototype.slice.call(arguments)));
     }
   }]);
-  babelHelpers.inherits(Test, _Foo);
   return Test;
 }(Foo);

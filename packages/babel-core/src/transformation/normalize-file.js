@@ -1,5 +1,6 @@
 // @flow
 
+import buildDebug from "debug";
 import * as t from "@babel/types";
 import type { PluginPasses } from "../config";
 import convertSourceMap, { typeof Converter } from "convert-source-map";
@@ -7,6 +8,8 @@ import { parse } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
 import File from "./file/file";
 import generateMissingPluginMessage from "./util/missing-plugin-helper";
+
+const debug = buildDebug("babel:transform:file");
 
 export type NormalizedFile = {
   code: string,
@@ -24,10 +27,31 @@ export default function normalizeFile(
 
   let inputMap = null;
   if (options.inputSourceMap !== false) {
-    inputMap = convertSourceMap.fromSource(code);
-    if (inputMap) {
+    try {
+      inputMap = convertSourceMap.fromSource(code);
+
+      if (inputMap) {
+        code = convertSourceMap.removeComments(code);
+      }
+    } catch (err) {
+      debug("discarding unknown inline input sourcemap", err);
       code = convertSourceMap.removeComments(code);
-    } else if (typeof options.inputSourceMap === "object") {
+    }
+
+    if (!inputMap) {
+      try {
+        inputMap = convertSourceMap.fromMapFileSource(code);
+
+        if (inputMap) {
+          code = convertSourceMap.removeMapFileComments(code);
+        }
+      } catch (err) {
+        debug("discarding unknown file input sourcemap", err);
+        code = convertSourceMap.removeMapFileComments(code);
+      }
+    }
+
+    if (!inputMap && typeof options.inputSourceMap === "object") {
       inputMap = convertSourceMap.fromObject(options.inputSourceMap);
     }
   }

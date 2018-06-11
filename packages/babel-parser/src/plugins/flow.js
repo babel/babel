@@ -3,6 +3,7 @@
 import type Parser from "../parser";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import * as N from "../types";
+import type { Options } from "../options";
 import type { Pos, Position } from "../util/location";
 import type State from "../tokenizer/state";
 import * as charCodes from "charcodes";
@@ -82,7 +83,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.getPluginOption("flow", "all") || this.flowPragma === "flow";
     }
 
-    addComment(comment: Comment): void {
+    addComment(comment: N.Comment): void {
       if (this.flowPragma === undefined) {
         // Try to parse a flow pragma.
         const matches = FLOW_PRAGMA_REGEX.exec(comment.value);
@@ -426,7 +427,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Interfaces
 
-    flowParseInterfaceish(node: N.FlowDeclare, isClass?: boolean): void {
+    flowParseInterfaceish(
+      node: N.FlowDeclare,
+      isClass?: boolean = false,
+    ): void {
       node.id = this.flowParseRestrictedIdentifier(/*liberal*/ !isClass);
 
       if (this.isRelational("<")) {
@@ -459,7 +463,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } while (this.eat(tt.comma));
       }
 
-      node.body = this.flowParseObjectType(true, false, false);
+      node.body = this.flowParseObjectType(true, false, false, isClass);
     }
 
     flowParseInterfaceExtends(): N.FlowInterfaceExtends {
@@ -652,7 +656,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } while (this.eat(tt.comma));
       }
 
-      node.body = this.flowParseObjectType(true, false, false);
+      node.body = this.flowParseObjectType(true, false, false, false);
 
       return this.finishNode(node, "InterfaceTypeAnnotation");
     }
@@ -754,6 +758,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       allowStatic: boolean,
       allowExact: boolean,
       allowSpread: boolean,
+      allowProto: boolean,
     ): N.FlowObjectTypeAnnotation {
       const oldInType = this.state.inType;
       this.state.inType = true;
@@ -781,7 +786,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       while (!this.match(endDelim)) {
         let isStatic = false;
+        let protoStart: ?number = null;
         const node = this.startNode();
+
+        if (allowProto && this.isContextual("proto")) {
+          const lookahead = this.lookahead();
+
+          if (lookahead.type !== tt.colon && lookahead.type !== tt.question) {
+            this.next();
+            protoStart = this.state.start;
+            allowStatic = false;
+          }
+        }
 
         if (allowStatic && this.isContextual("static")) {
           const lookahead = this.lookahead();
@@ -796,6 +812,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const variance = this.flowParseVariance();
 
         if (this.eat(tt.bracketL)) {
+          if (protoStart != null) {
+            this.unexpected(protoStart);
+          }
           if (this.eat(tt.bracketL)) {
             if (variance) {
               this.unexpected(variance.start);
@@ -809,6 +828,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             );
           }
         } else if (this.match(tt.parenL) || this.isRelational("<")) {
+          if (protoStart != null) {
+            this.unexpected(protoStart);
+          }
           if (variance) {
             this.unexpected(variance.start);
           }
@@ -834,6 +856,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             this.flowParseObjectTypeProperty(
               node,
               isStatic,
+              protoStart,
               variance,
               kind,
               allowSpread,
@@ -856,6 +879,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     flowParseObjectTypeProperty(
       node: N.FlowObjectTypeProperty | N.FlowObjectTypeSpreadProperty,
       isStatic: boolean,
+      protoStart: ?number,
       variance: ?N.FlowVariance,
       kind: string,
       allowSpread: boolean,
@@ -866,6 +890,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             null,
             "Spread operator cannot appear in class or interface definitions",
           );
+        }
+        if (protoStart != null) {
+          this.unexpected(protoStart);
         }
         if (variance) {
           this.unexpected(
@@ -880,6 +907,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         node.key = this.flowParseObjectPropertyKey();
         node.static = isStatic;
+        node.proto = protoStart != null;
         node.kind = kind;
 
         let optional = false;
@@ -887,6 +915,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           // This is a method property
           node.method = true;
 
+          if (protoStart != null) {
+            this.unexpected(protoStart);
+          }
           if (variance) {
             this.unexpected(variance.start);
           }
@@ -1115,10 +1146,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           );
 
         case tt.braceL:
-          return this.flowParseObjectType(false, false, true);
+          return this.flowParseObjectType(false, false, true, false);
 
         case tt.braceBarL:
-          return this.flowParseObjectType(false, true, true);
+          return this.flowParseObjectType(false, true, true, false);
 
         case tt.bracketL:
           return this.flowParseTupleType();
@@ -2012,7 +2043,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       // add typeParameters if we found them
       if (typeParameters) {
-        // $FlowFixMe (trying to set '.typeParameters' on an expression)
         (prop.value || prop).typeParameters = typeParameters;
       }
     }
@@ -2455,6 +2485,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.callee = base;
         node.typeArguments = this.flowParseTypeParameterInstantiation();
         this.expect(tt.parenL);
+        // $FlowFixMe
         node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
         node.optional = true;
         return this.finishNode(node, "OptionalCallExpression");
@@ -2463,7 +2494,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.shouldParseTypes() &&
         this.isRelational("<")
       ) {
-        const node: N.CallExpression = this.startNodeAt(startPos, startLoc);
+        const node = this.startNodeAt(startPos, startLoc);
         node.callee = base;
         const state = this.state.clone();
         try {

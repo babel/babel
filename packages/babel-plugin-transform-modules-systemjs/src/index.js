@@ -87,6 +87,20 @@ export default declare((api, options) => {
         }
       },
 
+      MetaProperty(path, state) {
+        if (
+          path.node.meta.name === "import" &&
+          path.node.property.name === "meta"
+        ) {
+          path.replaceWith(
+            t.memberExpression(
+              t.identifier(state.contextIdent),
+              t.identifier("meta"),
+            ),
+          );
+        }
+      },
+
       ReferencedIdentifier(path, state) {
         if (
           path.node.name == "__moduleName" &&

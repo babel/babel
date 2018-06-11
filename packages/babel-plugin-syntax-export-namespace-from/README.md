@@ -1,35 +1,19 @@
 # @babel/plugin-syntax-export-namespace-from
 
-> Allow parsing of `export * as namespace from`.
+> Allow parsing of export namespace from
 
-## Installation
+See our website [@babel/plugin-syntax-export-namespace-from](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-export-namespace-from.html) for more information.
 
-```sh
-npm install --save-dev @babel/plugin-syntax-export-namespace-from
-```
+## Install
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-syntax-export-namespace-from"]
-}
-```
-
-### Via CLI
+Using npm:
 
 ```sh
-babel --plugins @babel/plugin-syntax-export-namespace-from script.js
+npm install --save @babel/plugin-syntax-export-namespace-from
 ```
 
-### Via Node API
+or using yarn:
 
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-syntax-export-namespace-from"]
-});
+```sh
+yarn add --save @babel/plugin-syntax-export-namespace-from
 ```

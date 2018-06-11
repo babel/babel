@@ -112,6 +112,7 @@
                 "name": "a"
               },
               "static": false,
+              "proto": false,
               "kind": "get",
               "method": true,
               "value": {
@@ -181,6 +182,7 @@
                 "name": "b"
               },
               "static": false,
+              "proto": false,
               "kind": "set",
               "method": true,
               "value": {
@@ -302,6 +304,7 @@
                 "value": "c"
               },
               "static": false,
+              "proto": false,
               "kind": "get",
               "method": true,
               "value": {
@@ -374,6 +377,7 @@
                 "value": "d"
               },
               "static": false,
+              "proto": false,
               "kind": "set",
               "method": true,
               "value": {
@@ -495,6 +499,7 @@
                 "value": 1
               },
               "static": false,
+              "proto": false,
               "kind": "get",
               "method": true,
               "value": {
@@ -567,6 +572,7 @@
                 "value": 2
               },
               "static": false,
+              "proto": false,
               "kind": "set",
               "method": true,
               "value": {

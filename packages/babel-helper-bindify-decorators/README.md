@@ -1,9 +1,19 @@
 # @babel/helper-bindify-decorators
 
-## API
-```javascript
-declare export default bindifyDecorators(decorators: Array<NodePath>);
-```
-## Usage
+> Helper function to bindify decorators
 
-TODO
+See our website [@babel/helper-bindify-decorators](https://new.babeljs.io/docs/en/next/babel-helper-bindify-decorators.html) for more information.
+
+## Install
+
+Using npm:
+
+```sh
+npm install --save @babel/helper-bindify-decorators
+```
+
+or using yarn:
+
+```sh
+yarn add --save @babel/helper-bindify-decorators
+```

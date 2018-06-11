@@ -386,9 +386,6 @@
                                 "name": "EOF"
                               },
                               "computed": false
-                            },
-                            "extra": {
-                              "parenthesizedArgument": false
                             }
                           },
                           "body": {

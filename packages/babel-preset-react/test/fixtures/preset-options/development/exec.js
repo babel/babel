@@ -1,10 +1,10 @@
 const actual = transform(
   '<Foo bar="baz" />',
-  Object.assign({}, opts, { filename: 'fake/path/mock.js' })
+  Object.assign({}, opts, { filename: '/fake/path/mock.js' })
 ).code;
 
 const expected = multiline([
-  'var _jsxFileName = "fake/path/mock.js";',
+  'var _jsxFileName = "/fake/path/mock.js";',
   'React.createElement(Foo, {',
   '  bar: "baz",',
   '  __source: {',

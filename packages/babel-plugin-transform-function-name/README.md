@@ -2,50 +2,18 @@
 
 > Apply ES2015 function.name semantics to all functions
 
-## Examples
+See our website [@babel/plugin-transform-function-name](https://new.babeljs.io/docs/en/next/babel-plugin-transform-function-name.html) for more information.
 
-**In**
+## Install
 
-```javascript
-let number = (x) => x
-```
-
-**Out**
-
-```javascript
-var number = function number(x) {
-  return x;
-};
-```
-
-## Installation
+Using npm:
 
 ```sh
-npm install --save-dev @babel/plugin-transform-function-name
+npm install --save @babel/plugin-transform-function-name
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-transform-function-name"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins @babel/plugin-transform-function-name script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-transform-function-name"]
-});
+yarn add --save @babel/plugin-transform-function-name
 ```

@@ -39,18 +39,18 @@ function applyEnsureOrdering(path) {
   ).reduce((acc, prop) => acc.concat(prop.node.decorators || []), []);
 
   const identDecorators = decorators.filter(
-    decorator => !t.isIdentifier(decorator.callee),
+    decorator => !t.isIdentifier(decorator.expression),
   );
   if (identDecorators.length === 0) return;
 
   return t.sequenceExpression(
     identDecorators
       .map(decorator => {
-        const callee = decorator.callee;
-        const id = (decorator.callee = path.scope.generateDeclaredUidIdentifier(
+        const expression = decorator.expression;
+        const id = (decorator.expression = path.scope.generateDeclaredUidIdentifier(
           "dec",
         ));
-        return t.assignmentExpression("=", id, callee);
+        return t.assignmentExpression("=", id, expression);
       })
       .concat([path.node]),
   );
@@ -69,7 +69,7 @@ function applyClassDecorators(classPath) {
   const name = classPath.scope.generateDeclaredUidIdentifier("class");
 
   return decorators
-    .map(dec => dec.callee)
+    .map(dec => dec.expression)
     .reverse()
     .reduce(function(acc, decorator) {
       return buildClassDecorator({
@@ -164,7 +164,9 @@ function applyTargetDecorators(path, state, decoratedProps) {
           t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
             t.cloneNode(target),
             t.cloneNode(property),
-            t.arrayExpression(decorators.map(dec => t.cloneNode(dec.callee))),
+            t.arrayExpression(
+              decorators.map(dec => t.cloneNode(dec.expression)),
+            ),
             t.objectExpression([
               t.objectProperty(
                 t.identifier("enumerable"),
@@ -180,7 +182,7 @@ function applyTargetDecorators(path, state, decoratedProps) {
         t.callExpression(state.addHelper("applyDecoratedDescriptor"), [
           t.cloneNode(target),
           t.cloneNode(property),
-          t.arrayExpression(decorators.map(dec => t.cloneNode(dec.callee))),
+          t.arrayExpression(decorators.map(dec => t.cloneNode(dec.expression))),
           t.isObjectProperty(node) || t.isClassProperty(node, { static: true })
             ? buildGetObjectInitializer({
                 TEMP: path.scope.generateDeclaredUidIdentifier("init"),
@@ -206,31 +208,42 @@ function applyTargetDecorators(path, state, decoratedProps) {
   ]);
 }
 
+function decoratedClassToExpression({ node, scope }) {
+  if (!hasClassDecorators(node) && !hasMethodDecorators(node.body.body)) {
+    return;
+  }
+
+  const ref = node.id
+    ? t.cloneNode(node.id)
+    : scope.generateUidIdentifier("class");
+
+  return t.variableDeclaration("let", [
+    t.variableDeclarator(ref, t.toExpression(node)),
+  ]);
+}
+
 export default {
-  ClassDeclaration(path) {
-    const { node } = path;
+  ExportDefaultDeclaration(path) {
+    const decl = path.get("declaration");
+    if (!decl.isClassDeclaration()) return;
 
-    if (!hasClassDecorators(node) && !hasMethodDecorators(node.body.body)) {
-      return;
-    }
-
-    const ref = node.id
-      ? t.cloneNode(node.id)
-      : path.scope.generateUidIdentifier("class");
-    const letDeclaration = t.variableDeclaration("let", [
-      t.variableDeclarator(ref, t.toExpression(node)),
-    ]);
-
-    if (path.parentPath.isExportDefaultDeclaration()) {
-      // Split the class declaration and the export into two separate statements.
-      path.parentPath.replaceWithMultiple([
-        letDeclaration,
+    const replacement = decoratedClassToExpression(decl);
+    if (replacement) {
+      path.replaceWithMultiple([
+        replacement,
         t.exportNamedDeclaration(null, [
-          t.exportSpecifier(t.cloneNode(ref), t.identifier("default")),
+          t.exportSpecifier(
+            t.cloneNode(replacement.declarations[0].id),
+            t.identifier("default"),
+          ),
         ]),
       ]);
-    } else {
-      path.replaceWith(letDeclaration);
+    }
+  },
+  ClassDeclaration(path) {
+    const replacement = decoratedClassToExpression(path);
+    if (replacement) {
+      path.replaceWith(replacement);
     }
   },
   ClassExpression(path, state) {

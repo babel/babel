@@ -1,15 +1,17 @@
 //@flow
 
+import { TargetNames, ModulesOption, UseBuiltInsOption } from "./options";
+
 // Targets
-export type Target = string;
+export type Target = $Keys<typeof TargetNames>;
 export type Targets = {
-  [target: string]: Target,
+  [target: Target]: string,
 };
 
 // Options
 // Use explicit modules to prevent typo errors.
-export type ModuleOption = false | "amd" | "commonjs" | "systemjs" | "umd";
-export type BuiltInsOption = false | "entry" | "usage";
+export type ModuleOption = $Values<typeof ModulesOption>;
+export type BuiltInsOption = $Values<typeof UseBuiltInsOption>;
 
 export type Options = {
   configPath: string,

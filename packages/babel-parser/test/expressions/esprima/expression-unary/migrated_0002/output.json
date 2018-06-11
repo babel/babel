@@ -30,8 +30,5 @@
       "identifierName": "eval"
     },
     "name": "eval"
-  },
-  "extra": {
-    "parenthesizedArgument": false
   }
 }

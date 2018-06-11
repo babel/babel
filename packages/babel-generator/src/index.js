@@ -52,6 +52,7 @@ function normalizeOptions(code, opts): Format {
       style: "  ",
       base: 0,
     },
+    decoratorsBeforeExport: !!opts.decoratorsBeforeExport,
   };
 
   if (format.minified) {

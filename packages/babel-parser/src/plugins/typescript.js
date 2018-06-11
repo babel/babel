@@ -1327,7 +1327,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const bodilessType =
         type === "FunctionDeclaration"
           ? "TSDeclareFunction"
-          : type === "ClassMethod" ? "TSDeclareMethod" : undefined;
+          : type === "ClassMethod"
+            ? "TSDeclareMethod"
+            : undefined;
       if (bodilessType && !this.match(tt.braceL) && this.isLineTerminator()) {
         this.finishNode(node, bodilessType);
         return;
@@ -1343,7 +1345,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       noCalls: ?boolean,
       state: N.ParseSubscriptState,
     ): N.Expression {
-      if (!this.hasPrecedingLineBreak() && this.eat(tt.bang)) {
+      if (!this.hasPrecedingLineBreak() && this.match(tt.bang)) {
+        this.state.exprAllowed = false;
+        this.next();
+
         const nonNullExpression: N.TsNonNullExpression = this.startNodeAt(
           startPos,
           startLoc,

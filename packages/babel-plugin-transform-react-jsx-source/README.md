@@ -1,49 +1,19 @@
 # @babel/plugin-transform-react-jsx-source
 
-> Adds source file and line number to JSX elements.
+> Add a __source prop to all JSX Elements
 
-## Example
+See our website [@babel/plugin-transform-react-jsx-source](https://new.babeljs.io/docs/en/next/babel-plugin-transform-react-jsx-source.html) for more information.
 
-**In**
+## Install
 
-```
-<sometag />
-```
-
-**Out**
-
-```
-<sometag __source={ { fileName: 'this/file.js', lineNumber: 10 } } />
-```
-
-## Installation
+Using npm:
 
 ```sh
-npm install --save-dev @babel/plugin-transform-react-jsx-source
+npm install --save @babel/plugin-transform-react-jsx-source
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-transform-react-jsx-source"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins @babel/plugin-transform-react-jsx-source script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-transform-react-jsx-source"]
-});
+yarn add --save @babel/plugin-transform-react-jsx-source
 ```

@@ -21,13 +21,16 @@ var B =
 function (_A) {
   "use strict";
 
+  babelHelpers.inherits(B, _A);
+
   function B(...args) {
-    var _temp, _this;
+    var _this;
 
     babelHelpers.classCallCheck(this, B);
-    return babelHelpers.possibleConstructorReturn(_this, (_temp = _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(B).call(this, ...args)), _this.foo = babelHelpers.get(babelHelpers.getPrototypeOf(B.prototype), "foo", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this)), _temp));
+    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(B).call(this, ...args));
+    _this.foo = babelHelpers.get(babelHelpers.getPrototypeOf(B.prototype), "foo", babelHelpers.assertThisInitialized(_this)).call(babelHelpers.assertThisInitialized(_this));
+    return _this;
   }
 
-  babelHelpers.inherits(B, _A);
   return B;
 }(A);

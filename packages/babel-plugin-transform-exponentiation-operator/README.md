@@ -2,57 +2,18 @@
 
 > Compile exponentiation operator to ES5
 
-## Example
+See our website [@babel/plugin-transform-exponentiation-operator](https://new.babeljs.io/docs/en/next/babel-plugin-transform-exponentiation-operator.html) for more information.
 
-**In**
+## Install
 
-```javascript
-let x = 10 ** 2;
-
-x **= 3;
-```
-
-**Out**
-
-```javascript
-let x = Math.pow(10, 2);
-
-x = Math.pow(x, 3);
-```
-
-## Installation
+Using npm:
 
 ```sh
-npm install --save-dev @babel/plugin-transform-exponentiation-operator
+npm install --save @babel/plugin-transform-exponentiation-operator
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-transform-exponentiation-operator"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins @babel/plugin-transform-exponentiation-operator script.js
+yarn add --save @babel/plugin-transform-exponentiation-operator
 ```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-transform-exponentiation-operator"]
-});
-```
-
-## References
-
-* [Proposal: Exponentiation Operator](https://github.com/rwaldron/exponentiation-operator)
-* [Spec: Exponential Operator](https://rwaldron.github.io/exponentiation-operator/)

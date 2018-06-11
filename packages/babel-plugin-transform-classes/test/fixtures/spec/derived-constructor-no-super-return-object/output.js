@@ -3,6 +3,8 @@ var Child =
 function (_Base) {
   "use strict";
 
+  babelHelpers.inherits(Child, _Base);
+
   function Child() {
     var _this;
 
@@ -10,6 +12,5 @@ function (_Base) {
     return babelHelpers.possibleConstructorReturn(_this, {});
   }
 
-  babelHelpers.inherits(Child, _Base);
   return Child;
 }(Base);

@@ -2,14 +2,23 @@
 import fs from "fs";
 
 import loadConfig, { type InputOptions } from "./config";
-import { runAsync, type FileResultCallback } from "./transformation";
+import {
+  runSync,
+  runAsync,
+  type FileResult,
+  type FileResultCallback,
+} from "./transformation";
 
 type TransformFile = {
   (filename: string, callback: FileResultCallback): void,
   (filename: string, opts: ?InputOptions, callback: FileResultCallback): void,
 };
 
-export default ((function transformFile(filename, opts, callback) {
+export const transformFile: TransformFile = (function transformFile(
+  filename,
+  opts,
+  callback,
+) {
   let options;
   if (typeof opts === "function") {
     callback = opts;
@@ -43,4 +52,36 @@ export default ((function transformFile(filename, opts, callback) {
       runAsync(config, code, null, callback);
     });
   });
-}: Function): TransformFile);
+}: Function);
+
+export function transformFileSync(
+  filename: string,
+  opts: ?InputOptions,
+): FileResult | null {
+  let options;
+  if (opts == null) {
+    options = { filename };
+  } else if (opts && typeof opts === "object") {
+    options = {
+      ...opts,
+      filename,
+    };
+  }
+
+  const config = loadConfig(options);
+  if (config === null) return null;
+
+  return runSync(config, fs.readFileSync(filename, "utf8"));
+}
+
+export function transformFileAsync(
+  filename: string,
+  opts: ?InputOptions,
+): Promise<FileResult | null> {
+  return new Promise((res, rej) => {
+    transformFile(filename, opts, (err, result) => {
+      if (err == null) res(result);
+      else rej(err);
+    });
+  });
+}

@@ -62,12 +62,10 @@ function runModuleInTestContext(id: string, relativeFilename: string) {
   const src = fs.readFileSync(filename, "utf8");
   const code = `(function (exports, require, module, __filename, __dirname) {${src}\n});`;
 
-  vm
-    .runInContext(code, testContext, {
-      filename,
-      displayErrors: true,
-    })
-    .call(module.exports, module.exports, req, module, filename, dirname);
+  vm.runInContext(code, testContext, {
+    filename,
+    displayErrors: true,
+  }).call(module.exports, module.exports, req, module, filename, dirname);
 
   return module.exports;
 }
@@ -343,10 +341,10 @@ function run(task) {
       newOpts.presets,
       optionsDir,
     ).map(function(val) {
-      if (val.length > 2) {
+      if (val.length > 3) {
         throw new Error(
           "Unexpected extra options " +
-            JSON.stringify(val.slice(2)) +
+            JSON.stringify(val.slice(3)) +
             " passed to preset.",
         );
       }
