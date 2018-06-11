@@ -22,6 +22,7 @@ Using plugins:
   transform-computed-properties { "ie":"10" }
   transform-for-of { "ie":"10" }
   transform-sticky-regex { "ie":"10" }
+  transform-dotall-regex { "chrome":"54", "ie":"10", "node":"6.10" }
   transform-unicode-regex { "ie":"10" }
   transform-spread { "ie":"10" }
   transform-parameters { "ie":"10" }
@@ -35,7 +36,6 @@ Using plugins:
   proposal-async-generator-functions { "chrome":"54", "ie":"10", "node":"6.10" }
   proposal-object-rest-spread { "chrome":"54", "ie":"10", "node":"6.10" }
   proposal-unicode-property-regex { "chrome":"54", "ie":"10", "node":"6.10" }
-  transform-dotall-regex { "chrome":"54", "ie":"10", "node":"6.10" }
 
 Using polyfills with `entry` option:
 

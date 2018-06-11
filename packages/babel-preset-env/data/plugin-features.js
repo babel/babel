@@ -1,4 +1,4 @@
-const es2015 = {
+const es = {
   "transform-template-literals": {
     features: ["template literals"],
   },
@@ -38,6 +38,13 @@ const es2015 = {
       'RegExp "y" and "u" flags / "y" flag',
     ],
   },
+
+  // We want to apply this prior to unicode regex so that "." and "u"
+  // are properly handled.
+  //
+  // Ref: https://github.com/babel/babel/pull/7065#issuecomment-395959112
+  "transform-dotall-regex": "s (dotAll) flag for regular expressions",
+
   "transform-unicode-regex": {
     features: [
       'RegExp "y" and "u" flags / "u" flag, case folding',
@@ -45,6 +52,7 @@ const es2015 = {
       'RegExp "y" and "u" flags / "u" flag',
     ],
   },
+
   "transform-spread": {
     features: ["spread (...) operator"],
   },
@@ -70,27 +78,20 @@ const es2015 = {
   "transform-regenerator": {
     features: ["generators"],
   },
-};
 
-const es2016 = {
   "transform-exponentiation-operator": {
     features: ["exponentiation (**) operator"],
   },
-};
 
-const es2017 = {
   "transform-async-to-generator": {
     features: ["async functions"],
   },
-};
 
-const es2018 = {
   "proposal-async-generator-functions": "Asynchronous Iterators",
   "proposal-object-rest-spread": "object rest/spread properties",
   "proposal-unicode-property-regex": "RegExp Unicode Property Escapes",
-  "transform-dotall-regex": "s (dotAll) flag for regular expressions",
 };
 
 const proposals = require("./shipped-proposals").features;
 
-module.exports = Object.assign({}, es2015, es2016, es2017, es2018, proposals);
+module.exports = Object.assign({}, es, proposals);

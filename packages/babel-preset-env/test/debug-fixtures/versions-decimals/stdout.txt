@@ -31,6 +31,7 @@ Using plugins:
   transform-computed-properties { "ie":"10" }
   transform-for-of { "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-sticky-regex { "electron":"0.36", "ie":"10" }
+  transform-dotall-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   transform-unicode-regex { "electron":"0.36", "ie":"10" }
   transform-spread { "ie":"10" }
   transform-parameters { "electron":"0.36", "ie":"10" }
@@ -44,7 +45,6 @@ Using plugins:
   proposal-async-generator-functions { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-object-rest-spread { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-unicode-property-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  transform-dotall-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
 
 Using polyfills with `entry` option:
 

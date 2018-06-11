@@ -119,6 +119,13 @@
     "opera": "36",
     "electron": "1"
   },
+  "transform-dotall-regex": {
+    "chrome": "62",
+    "safari": "11.1",
+    "node": "8.10",
+    "ios": "11.3",
+    "opera": "49"
+  },
   "transform-unicode-regex": {
     "chrome": "50",
     "edge": "13",
@@ -238,13 +245,6 @@
     "safari": "11.1",
     "ios": "11.3",
     "opera": "51"
-  },
-  "transform-dotall-regex": {
-    "chrome": "62",
-    "safari": "11.1",
-    "node": "8.10",
-    "ios": "11.3",
-    "opera": "49"
   },
   "proposal-optional-catch-binding": {
     "chrome": "66",
