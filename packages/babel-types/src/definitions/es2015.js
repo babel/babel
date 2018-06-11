@@ -13,7 +13,7 @@ import {
 } from "./core";
 
 defineType("AssignmentPattern", {
-  visitor: ["left", "right"],
+  visitor: ["left", "right", "decorators", "typeAnnotation"],
   builder: ["left", "right"],
   aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
@@ -24,17 +24,11 @@ defineType("AssignmentPattern", {
     right: {
       validate: assertNodeType("Expression"),
     },
-    decorators: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Decorator")),
-      ),
-    },
   },
 });
 
 defineType("ArrayPattern", {
-  visitor: ["elements", "typeAnnotation"],
+  visitor: ["elements", "decorators", "typeAnnotation"],
   builder: ["elements"],
   aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
@@ -45,17 +39,11 @@ defineType("ArrayPattern", {
         assertEach(assertNodeType("PatternLike")),
       ),
     },
-    decorators: {
-      validate: chain(
-        assertValueType("array"),
-        assertEach(assertNodeType("Decorator")),
-      ),
-    },
   },
 });
 
 defineType("ArrowFunctionExpression", {
-  builder: ["params", "body", "async"],
+  builder: ["params", "body", "async", "generator", "expression"],
   visitor: ["params", "body", "returnType", "typeParameters"],
   aliases: [
     "Scopable",
@@ -69,8 +57,9 @@ defineType("ArrowFunctionExpression", {
     ...functionCommon,
     ...functionTypeAnnotationCommon,
     expression: {
-      // https://github.com/babel/babylon/issues/505
+      // use to differentiate between `() => true` and `() => { true }`
       validate: assertValueType("boolean"),
+      default: false,
     },
     body: {
       validate: assertNodeType("BlockStatement", "Expression"),
@@ -277,6 +266,7 @@ defineType("ExportSpecifier", {
 
 defineType("ForOfStatement", {
   visitor: ["left", "right", "body"],
+  builder: ["left", "right", "body", "await"],
   aliases: [
     "Scopable",
     "Statement",
@@ -357,6 +347,7 @@ defineType("ImportSpecifier", {
     importKind: {
       // Handle Flowtype's extension "import {typeof foo} from"
       validate: assertOneOf(null, "type", "typeof"),
+      optional: true,
     },
   },
 });
@@ -452,7 +443,16 @@ export const classMethodOrDeclareMethodCommon = {
 
 defineType("ClassMethod", {
   aliases: ["Function", "Scopable", "BlockParent", "FunctionParent", "Method"],
-  builder: ["kind", "key", "params", "body", "computed", "static"],
+  builder: [
+    "kind",
+    "key",
+    "params",
+    "body",
+    "computed",
+    "static",
+    "async",
+    "generator",
+  ],
   visitor: [
     "key",
     "params",
@@ -471,7 +471,7 @@ defineType("ClassMethod", {
 });
 
 defineType("ObjectPattern", {
-  visitor: ["properties", "typeAnnotation"],
+  visitor: ["properties", "decorators", "typeAnnotation"],
   builder: ["properties"],
   aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {

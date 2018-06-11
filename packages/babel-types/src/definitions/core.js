@@ -383,6 +383,7 @@ export const patternLikeCommon = {
       assertValueType("array"),
       assertEach(assertNodeType("Decorator")),
     ),
+    optional: true,
   },
 };
 
@@ -538,10 +539,12 @@ defineType("Program", {
   // Note: We explicitly leave 'interpreter' out here because it is
   // conceptually comment-like, and Babel does not traverse comments either.
   visitor: ["directives", "body"],
-  builder: ["body", "directives", "sourceType", "interpreter"],
+  builder: ["body", "directives", "sourceType", "interpreter", "sourceFile"],
   fields: {
     sourceFile: {
       validate: assertValueType("string"),
+      default: null,
+      optional: true,
     },
     sourceType: {
       validate: assertOneOf("script", "module"),
@@ -585,7 +588,7 @@ defineType("ObjectExpression", {
 });
 
 defineType("ObjectMethod", {
-  builder: ["kind", "key", "params", "body", "computed"],
+  builder: ["kind", "key", "params", "body", "computed", "async", "generator"],
   fields: {
     ...functionCommon,
     ...functionTypeAnnotationCommon,
@@ -620,6 +623,7 @@ defineType("ObjectMethod", {
         assertValueType("array"),
         assertEach(assertNodeType("Decorator")),
       ),
+      optional: true,
     },
     body: {
       validate: assertNodeType("BlockStatement"),
