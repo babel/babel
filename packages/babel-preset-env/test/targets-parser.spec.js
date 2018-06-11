@@ -19,6 +19,35 @@ describe("getTargets", () => {
     });
   });
 
+  describe("validation", () => {
+    it("throws on invalid target name", () => {
+      const invalidTargetName = () => {
+        getTargets({
+          unknown: "unknown",
+        });
+      };
+      expect(invalidTargetName).toThrow();
+    });
+
+    it("throws on invalid browsers target", () => {
+      const invalidBrowsersTarget = () => {
+        getTargets({
+          browsers: 59,
+        });
+      };
+      expect(invalidBrowsersTarget).toThrow();
+    });
+
+    it("throws on invalid target version", () => {
+      const invalidTargetVersion = () => {
+        getTargets({
+          chrome: "unknown",
+        });
+      };
+      expect(invalidTargetVersion).toThrow();
+    });
+  });
+
   describe("browser", () => {
     it("merges browser key targets", () => {
       expect(

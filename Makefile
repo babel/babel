@@ -1,6 +1,6 @@
 MAKEFLAGS = -j1
 FLOW_COMMIT = 395e045c18d537fcbbc552a96ef2cdcd70b4ab52
-TEST262_COMMIT = 40883f4c6ae17e073dfd03e34f73a6bf8c855595
+TEST262_COMMIT = f90a52b39609a620c0854e0bd0b3a906c930fd17
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -17,8 +17,6 @@ build: clean clean-lib
 	# generate flow and typescript typings
 	node scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
 	node scripts/generators/typescript.js > ./packages/babel-types/lib/index.d.ts
-	# generate docs
-	node scripts/generators/docs.js > ./packages/babel-types/README.md
 ifneq ("$(BABEL_COVERAGE)", "true")
 	make build-standalone
 	make build-preset-env-standalone

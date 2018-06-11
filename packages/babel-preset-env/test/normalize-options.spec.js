@@ -36,6 +36,15 @@ describe("normalize-options", () => {
     });
   });
 
+  describe("Config format validation", () => {
+    it("should throw if top-level option not found", () => {
+      const unknownTopLevelOption = () => {
+        normalizeOptions({ unknown: "option" });
+      };
+      expect(unknownTopLevelOption).toThrow();
+    });
+  });
+
   describe("RegExp include/exclude", () => {
     it("should not allow invalid plugins in `include` and `exclude`", () => {
       const normalizeWithNonExistingPlugin = () => {

@@ -18,6 +18,7 @@ Using plugins:
   transform-computed-properties {}
   transform-for-of {}
   transform-sticky-regex {}
+  transform-dotall-regex {}
   transform-unicode-regex {}
   transform-spread {}
   transform-parameters {}
@@ -31,7 +32,6 @@ Using plugins:
   proposal-async-generator-functions {}
   proposal-object-rest-spread {}
   proposal-unicode-property-regex {}
-  transform-dotall-regex {}
   proposal-optional-catch-binding {}
 
 Using polyfills with `entry` option:

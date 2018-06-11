@@ -20,6 +20,7 @@ Using plugins:
   transform-computed-properties { "android":"4" }
   transform-for-of { "android":"4" }
   transform-sticky-regex { "android":"4" }
+  transform-dotall-regex { "android":"4" }
   transform-unicode-regex { "android":"4" }
   transform-spread { "android":"4" }
   transform-parameters { "android":"4" }
@@ -33,7 +34,6 @@ Using plugins:
   proposal-async-generator-functions { "android":"4" }
   proposal-object-rest-spread { "android":"4" }
   proposal-unicode-property-regex { "android":"4" }
-  transform-dotall-regex { "android":"4" }
 
 Using polyfills with `entry` option:
 
