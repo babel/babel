@@ -21,17 +21,21 @@ const getIssueLabelLink = l =>
   )}%22+is%3Aopen`;
 
 const labels = {
-  "babel-preset-typescript": getIssueLabelLink("area: typescript"),
   "babel-preset-flow": getIssueLabelLink("area: flow"),
+  "babel-preset-node": getIssueLabelLink("area: node"),
   "babel-preset-react": getIssueLabelLink("area: react"),
+  "babel-preset-typescript": getIssueLabelLink("area: typescript"),
   "babel-parser": getIssueLabelLink("pkg: babylon"),
   "babel-cli": getIssueLabelLink("pkg: cli"),
   "babel-core": getIssueLabelLink("pkg: core"),
+  "babel-generator": getIssueLabelLink("pkg: generator"),
   "babel-polyfill": getIssueLabelLink("pkg: polyfill"),
   "babel-preset-env": getIssueLabelLink("pkg: preset-env"),
   "babel-register": getIssueLabelLink("pkg: register"),
+  "babel-template": getIssueLabelLink("pkg: template"),
   "babel-traverse": getIssueLabelLink("pkg: traverse"),
   "babel-types": getIssueLabelLink("pkg: types"),
+  "babel-standalone": getIssueLabelLink("pkg: standalone"),
 };
 
 const generateReadme = ({ websiteLink, issuesLink, name, description }) =>
