@@ -1,3 +1,4 @@
+import nodePath from "path";
 import { declare } from "@babel/helper-plugin-utils";
 import {
   isModule,
@@ -49,7 +50,14 @@ export default declare((api, options) => {
           }
 
           for (const [source, metadata] of meta.source) {
-            amdArgs.push(t.stringLiteral(source));
+            const newSource = t.stringLiteral(source);
+            if (newSource.value[0] == "." && moduleName) {
+              newSource.value = nodePath.join(
+                nodePath.dirname(moduleName.value),
+                newSource.value,
+              );
+            }
+            amdArgs.push(newSource);
             importNames.push(t.identifier(metadata.name));
 
             if (!isSideEffectImport(metadata)) {
