@@ -56,7 +56,7 @@ function normalizeOptions(code, opts): Format {
     jsescOption: {
       quotes: "double",
       wrap: true,
-      ...(opts.jsescOption || {}),
+      ...opts.jsescOption,
     },
   };
 
