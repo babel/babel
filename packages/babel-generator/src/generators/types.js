@@ -135,10 +135,12 @@ export function StringLiteral(node: Object) {
   const opts = {
     quotes: "double",
     wrap: true,
+    minimal: this.format.asciiUnsafe,
   };
   if (this.format.jsonCompatibleStrings) {
     opts.json = true;
   }
+
   const val = jsesc(node.value, opts);
 
   return this.token(val);

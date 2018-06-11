@@ -20,6 +20,7 @@ export type Format = {
   compact: boolean | "auto",
   minified: boolean,
   concise: boolean,
+  asciiUnsafe: boolean,
   indent: {
     adjustMultilineComment: boolean,
     style: string,
