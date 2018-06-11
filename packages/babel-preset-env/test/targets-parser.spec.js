@@ -75,6 +75,16 @@ describe("getTargets", () => {
       });
     });
 
+    it("prefers released version over TP", () => {
+      expect(
+        getTargets({
+          browsers: "safari tp, safari 11",
+        }),
+      ).toEqual({
+        safari: "11.0.0",
+      });
+    });
+
     it("returns TP version in lower case", () => {
       expect(
         getTargets({
@@ -82,6 +92,41 @@ describe("getTargets", () => {
         }),
       ).toEqual({
         safari: "tp",
+      });
+    });
+
+    it("works with android", () => {
+      expect(
+        getTargets({
+          browsers: "Android 4",
+        }),
+      ).toEqual({
+        android: "4.0.0",
+      });
+    });
+
+    it("works with inequalities", () => {
+      expect(
+        getTargets({
+          browsers: "Android >= 4",
+        }),
+      ).toEqual({
+        android: "4.0.0",
+      });
+    });
+
+    it("ignores invalid", () => {
+      expect(
+        getTargets({
+          browsers: 59,
+          chrome: "49",
+          firefox: "55",
+          ie: "11",
+        }),
+      ).toEqual({
+        chrome: "49.0.0",
+        firefox: "55.0.0",
+        ie: "11.0.0",
       });
     });
   });
