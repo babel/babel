@@ -21,7 +21,7 @@
   "babel": {
     "presets": [
       [
-        "env",
+        "@babel/preset-env",
         {
           "loose": true
         }
@@ -32,7 +32,7 @@
     "private": "^0.1.6"
   },
   "devDependencies": {
-    "babel-cli": "^6.9.0",
-    "babel-preset-env": "^1.2.2"
+    "@babel/cli": "^7.0.0-beta.51",
+    "@babel/preset-env": "^7.0.0-beta.51"
   }
 }
