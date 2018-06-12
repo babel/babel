@@ -26,7 +26,7 @@ describe("_blockHoist nodes", function() {
       "  return 123;",
       "}"
     ].join("\n"), {
-      parser: require("babylon")
+      parser: require("@babel/parser")
     });
 
     var hoistMeStmt = ast.program.body[0].body.body[1];
@@ -80,7 +80,7 @@ describe("uglifyjs dead code removal", function() {
 
     // parse and return the output
     return recast.parse(result.code, {
-      parser: require("babylon")
+      parser: require("@babel/parser")
     });
   }
 
@@ -160,7 +160,7 @@ context("functions", function() {
   describe("function declarations", function() {
     it("should work with a single function", function() {
       var ast = recast.parse('function* foo(){};', {
-        parser: require("babylon")
+        parser: require("@babel/parser")
       });
 
       // get our declarations
@@ -180,7 +180,7 @@ context("functions", function() {
         'function* foo() {};',
         'function* bar() {};'
       ].join("\n"), {
-        parser: require("babylon")
+        parser: require("@babel/parser")
       });
 
       // get our declarations
@@ -203,7 +203,7 @@ context("functions", function() {
   describe("function expressions", function() {
     it("should work with a named function", function() {
       var ast = recast.parse('var a = function* foo(){};', {
-        parser: require("babylon")
+        parser: require("@babel/parser")
       });
 
       // get our declarations
@@ -221,7 +221,7 @@ context("functions", function() {
 
     it("should work with an anonymous function", function() {
       var ast = recast.parse('var a = function* (){};', {
-        parser: require("babylon")
+        parser: require("@babel/parser")
       });
 
       // get our declarations
