@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-react",
-  "version": "7.0.0-beta.49",
+  "version": "7.0.0-beta.50",
   "description": "Babel preset for all React plugins.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -8,18 +8,18 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-react",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.49",
-    "@babel/plugin-transform-react-display-name": "7.0.0-beta.49",
-    "@babel/plugin-transform-react-jsx": "7.0.0-beta.49",
-    "@babel/plugin-transform-react-jsx-self": "7.0.0-beta.49",
-    "@babel/plugin-transform-react-jsx-source": "7.0.0-beta.49"
+    "@babel/helper-plugin-utils": "7.0.0-beta.50",
+    "@babel/plugin-transform-react-display-name": "7.0.0-beta.50",
+    "@babel/plugin-transform-react-jsx": "7.0.0-beta.50",
+    "@babel/plugin-transform-react-jsx-self": "7.0.0-beta.50",
+    "@babel/plugin-transform-react-jsx-source": "7.0.0-beta.50"
   },
   "peerDependencies": {
     "@babel/core": "7.0.0-beta.49"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.49",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.49",
-    "@babel/helper-transform-fixture-test-runner": "7.0.0-beta.49"
+    "@babel/core": "7.0.0-beta.50",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.50",
+    "@babel/helper-transform-fixture-test-runner": "7.0.0-beta.50"
   }
 }

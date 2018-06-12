@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-do-expressions",
-  "version": "7.0.0-beta.49",
+  "version": "7.0.0-beta.50",
   "description": "Compile do expressions to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-do-expressions",
   "license": "MIT",
@@ -9,14 +9,14 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.49",
-    "@babel/plugin-syntax-do-expressions": "7.0.0-beta.49"
+    "@babel/helper-plugin-utils": "7.0.0-beta.50",
+    "@babel/plugin-syntax-do-expressions": "7.0.0-beta.50"
   },
   "peerDependencies": {
     "@babel/core": "7.0.0-beta.49"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.49",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.49"
+    "@babel/core": "7.0.0-beta.50",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.50"
   }
 }

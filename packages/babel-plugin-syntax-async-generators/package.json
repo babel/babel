@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-async-generators",
-  "version": "7.0.0-beta.49",
+  "version": "7.0.0-beta.50",
   "description": "Allow parsing of async generator functions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-async-generators",
   "license": "MIT",
@@ -9,12 +9,12 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.49"
+    "@babel/helper-plugin-utils": "7.0.0-beta.50"
   },
   "peerDependencies": {
     "@babel/core": "7.0.0-beta.49"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.49"
+    "@babel/core": "7.0.0-beta.50"
   }
 }

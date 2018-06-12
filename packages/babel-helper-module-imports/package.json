@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-module-imports",
-  "version": "7.0.0-beta.49",
+  "version": "7.0.0-beta.50",
   "description": "Babel helper functions for inserting module loads",
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -8,10 +8,10 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-module-imports",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/types": "7.0.0-beta.49",
+    "@babel/types": "7.0.0-beta.50",
     "lodash": "^4.17.5"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.49"
+    "@babel/core": "7.0.0-beta.50"
   }
 }
