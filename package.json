@@ -45,7 +45,7 @@
     "gulp-watch": "^5.0.0",
     "husky": "^0.14.3",
     "jest": "^22.4.2",
-    "lerna": "2.0.0",
+    "lerna": "^2.11.0",
     "lerna-changelog": "^0.5.0",
     "lint-staged": "^6.0.1",
     "lodash": "^4.17.5",
