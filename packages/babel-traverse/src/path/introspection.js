@@ -402,10 +402,8 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
 export function isConstantExpression() {
   if (this.isIdentifier()) {
     const binding = this.scope.getBinding(this.node.name);
-    if (!binding) {
-      return false;
-    }
-    return binding.constant && binding.path.get("init").isConstantExpression();
+    if (!binding) return false;
+    return binding.constant;
   }
 
   if (this.isLiteral()) {

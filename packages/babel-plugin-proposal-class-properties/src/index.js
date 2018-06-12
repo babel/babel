@@ -319,14 +319,15 @@ export default declare((api, options) => {
         const instanceBody = [];
 
         for (const computedPath of computedPaths) {
+          computedPath.traverse(classFieldDefinitionEvaluationTDZVisitor, {
+            classRef: path.scope.getBinding(ref.name),
+            file: this.file,
+          });
+
           const computedNode = computedPath.node;
           // Make sure computed property names are only evaluated once (upon class definition)
           // and in the right order in combination with static properties
           if (!computedPath.get("key").isConstantExpression()) {
-            computedPath.traverse(classFieldDefinitionEvaluationTDZVisitor, {
-              classRef: path.scope.getBinding(ref.name),
-              file: this.file,
-            });
             const ident = path.scope.generateUidIdentifierBasedOnNode(
               computedNode.key,
             );
