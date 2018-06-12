@@ -291,6 +291,9 @@ export default declare((api, { jsxPragma = "React" }) => {
       JSXElement() {
         sourceFileHasJsx = true;
       },
+      JSXFragment() {
+        sourceFileHasJsx = true;
+      },
     });
     return !sourceFileHasJsx;
   }
