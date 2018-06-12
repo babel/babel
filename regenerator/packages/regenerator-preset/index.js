@@ -8,6 +8,7 @@
 module.exports = {
   plugins: [
     require("@babel/plugin-syntax-async-generators"),
+    require("@babel/plugin-proposal-function-sent"),
     require("@babel/plugin-transform-classes"),
     require("@babel/plugin-transform-arrow-functions"),
     require("@babel/plugin-transform-block-scoping"),

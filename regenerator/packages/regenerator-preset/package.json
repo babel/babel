@@ -16,6 +16,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@babel/plugin-proposal-function-sent": "^7.0.0-beta.51",
     "@babel/plugin-syntax-async-generators": "^7.0.0-beta.51",
     "@babel/plugin-transform-arrow-functions": "^7.0.0-beta.51",
     "@babel/plugin-transform-block-scoping": "^7.0.0-beta.51",
