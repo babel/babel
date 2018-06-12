@@ -16,7 +16,7 @@
     "desugaring",
     "ES6"
   ],
-  "version": "0.12.4",
+  "version": "0.13.0",
   "homepage": "http://github.com/facebook/regenerator",
   "repository": {
     "type": "git",
