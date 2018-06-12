@@ -1,4 +1,5 @@
 {
+  "lerna": "2.11.0",
   "version": "7.0.0-beta.49",
   "changelog": {
     "repo": "babel/babel",
