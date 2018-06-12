@@ -1,6 +1,6 @@
 {
   "name": "@babel/cli",
-  "version": "7.0.0-beta.50",
+  "version": "7.0.0-beta.51",
   "description": "Babel command line.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -32,8 +32,8 @@
     "@babel/core": ">=7.0.0-beta.50 <7.0.0-rc.0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.50",
-    "@babel/helper-fixtures": "7.0.0-beta.50"
+    "@babel/core": "7.0.0-beta.51",
+    "@babel/helper-fixtures": "7.0.0-beta.51"
   },
   "bin": {
     "babel": "./bin/babel.js",

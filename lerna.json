@@ -1,6 +1,6 @@
 {
   "lerna": "2.11.0",
-  "version": "7.0.0-beta.50",
+  "version": "7.0.0-beta.51",
   "changelog": {
     "repo": "babel/babel",
     "cacheDir": ".changelog",
