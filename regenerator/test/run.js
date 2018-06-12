@@ -139,7 +139,7 @@ function convertWithSpread(es6File, es5File, callback) {
       return callback(err);
     }
 
-    var es5 = require("babel-core").transform(es6, transformOptions).code;
+    var es5 = require("@babel/core").transformSync(es6, transformOptions).code;
 
     fs.writeFile(es5File, es5, callback);
   });

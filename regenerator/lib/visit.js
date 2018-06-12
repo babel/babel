@@ -15,7 +15,7 @@ exports.transform = function transform(node, options) {
     includeRuntime: false
   });
 
-  var result = require("babel-core").transformFromAst(node, null, {
+  var result = require("@babel/core").transformFromAstSync(node, null, {
     presets: [require("regenerator-preset")],
     code: false,
     ast: true

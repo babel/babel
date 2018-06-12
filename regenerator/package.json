@@ -29,7 +29,7 @@
     "test": "node test/run.js"
   },
   "dependencies": {
-    "babel-core": "^6.18.2",
+    "@babel/core": "^7.0.0-beta.51",
     "babel-plugin-syntax-async-functions": "^6.13.0",
     "babel-plugin-syntax-async-generators": "^6.13.0",
     "babel-plugin-transform-es2015-arrow-functions": "^6.8.0",

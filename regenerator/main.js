@@ -66,7 +66,7 @@ function compile(source, options) {
 
   // Shortcut: Transform only if generators or async functions present.
   if (genOrAsyncFunExp.test(source)) {
-    result = require("babel-core").transform(source, transformOptions);
+    result = require("@babel/core").transformSync(source, transformOptions);
   } else {
     result = { code: source };
   }
