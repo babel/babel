@@ -2,7 +2,7 @@
   "name": "regenerator-preset",
   "author": "Ben Newman <bn@cs.stanford.edu>",
   "description": "Babel preset for easy use of regenerator-transform.",
-  "version": "0.12.0",
+  "version": "0.12.1",
   "main": "index.js",
   "keywords": [
     "regenerator",
