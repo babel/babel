@@ -19,8 +19,6 @@ System.register([], function (_export, _context) {
     execute: function () {
       _export("c", c = 5);
 
-      _export("c", c);
-
       b();
     }
   };
