@@ -114,21 +114,6 @@ describe("getTargets", () => {
         android: "4.0.0",
       });
     });
-
-    it("ignores invalid", () => {
-      expect(
-        getTargets({
-          browsers: 59,
-          chrome: "49",
-          firefox: "55",
-          ie: "11",
-        }),
-      ).toEqual({
-        chrome: "49.0.0",
-        firefox: "55.0.0",
-        ie: "11.0.0",
-      });
-    });
   });
 
   describe("esmodules", () => {
