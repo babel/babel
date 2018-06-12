@@ -129,8 +129,8 @@ function convertWithSpread(es6File, es5File, callback) {
   var transformOptions = {
     presets:[require("regenerator-preset")],
     plugins: [
-      require("babel-plugin-transform-es2015-spread"),
-      require("babel-plugin-transform-es2015-parameters")
+      require("@babel/plugin-transform-spread"),
+      require("@babel/plugin-transform-parameters")
     ]
   };
 
