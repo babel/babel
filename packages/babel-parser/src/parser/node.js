@@ -1,6 +1,6 @@
 // @flow
 
-import Parser from "./index";
+import type Parser from "./index";
 import UtilParser from "./util";
 import { SourceLocation, type Position } from "../util/location";
 import type { Comment, Node as NodeType, NodeBase } from "../types";
