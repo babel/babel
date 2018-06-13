@@ -1,5 +1,5 @@
 // @flow
-import { NODE_FIELDS } from "../definitions";
+import { NODE_FIELDS, VISITOR_KEYS } from "../definitions";
 
 /**
  * Check if two nodes are equivalent
@@ -19,6 +19,7 @@ export default function isNodesEquivalent(a: any, b: any): boolean {
   }
 
   const fields = Object.keys(NODE_FIELDS[a.type] || a.type);
+  const visitorKeys = VISITOR_KEYS[a.type];
 
   for (const field of fields) {
     if (typeof a[field] !== typeof b[field]) {
@@ -35,6 +36,18 @@ export default function isNodesEquivalent(a: any, b: any): boolean {
 
       for (let i = 0; i < a[field].length; i++) {
         if (!isNodesEquivalent(a[field][i], b[field][i])) {
+          return false;
+        }
+      }
+      continue;
+    }
+
+    if (
+      typeof a[field] === "object" &&
+      (!visitorKeys || !visitorKeys.includes(field))
+    ) {
+      for (const key in a[field]) {
+        if (a[field][key] !== b[field][key]) {
           return false;
         }
       }

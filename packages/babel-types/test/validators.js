@@ -26,6 +26,14 @@ describe("validators", function() {
       expect(t.isNodesEquivalent(parse(program), parse(program2))).toBe(false);
     });
 
+    it("should handle nodes with object properties", function() {
+      const original = t.templateElement({ raw: "\\'a", cooked: "'a" }, true);
+      const identical = t.templateElement({ raw: "\\'a", cooked: "'a" }, true);
+      const different = t.templateElement({ raw: "'a", cooked: "'a" }, true);
+      expect(t.isNodesEquivalent(original, identical)).toBe(true);
+      expect(t.isNodesEquivalent(original, different)).toBe(false);
+    });
+
     it("rejects 'await' as an identifier", function() {
       expect(t.isValidIdentifier("await")).toBe(false);
     });
