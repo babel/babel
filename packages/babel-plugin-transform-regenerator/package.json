@@ -7,7 +7,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-regenerator",
   "main": "lib/index.js",
   "dependencies": {
-    "regenerator-transform": "^0.12.4"
+    "regenerator-transform": "^0.13.0"
   },
   "license": "MIT",
   "peerDependencies": {
