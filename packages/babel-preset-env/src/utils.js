@@ -13,14 +13,13 @@ const versionRegExp = /^(\d+|\d+.\d+)$/;
 // Convert version to a semver value.
 // 2.5 -> 2.5.0; 1 -> 1.0.0;
 export const semverify = (version: string | number): string => {
-  const isString = typeof version === "string";
-
-  if (isString && semver.valid(version)) {
+  if (typeof version === "string" && semver.valid(version)) {
     return version;
   }
 
   invariant(
-    typeof version === "number" || (isString && versionRegExp.test(version)),
+    typeof version === "number" ||
+      (typeof version === "string" && versionRegExp.test(version)),
     `'${version}' is not a valid version`,
   );
 
