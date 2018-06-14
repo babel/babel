@@ -5,8 +5,15 @@
 //                 Avi Vahl <https://github.com/AviVahl>
 // TypeScript Version: 2.9
 
+/**
+ * Parse the provided code as an entire ECMAScript program.
+ */
 export function parse(code: string, options?: ParserOptions): import('@babel/types').File;
-export function parseExpression(input: string, options?: ParserOptions): import('@babel/types').Expression;
+
+/**
+ * Parse the provided code as a single Expression.
+ */
+export function parseExpression(code: string, options?: ParserOptions): import('@babel/types').Expression;
 
 export interface ParserOptions {
     /**
