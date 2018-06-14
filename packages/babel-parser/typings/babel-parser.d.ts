@@ -11,7 +11,7 @@
 export function parse(code: string, options?: ParserOptions): import('@babel/types').File;
 
 /**
- * Parse the provided code as a single Expression.
+ * Parse the provided code as a single expression.
  */
 export function parseExpression(code: string, options?: ParserOptions): import('@babel/types').Expression;
 
