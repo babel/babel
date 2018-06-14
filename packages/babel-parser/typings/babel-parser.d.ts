@@ -5,10 +5,10 @@
 //                 Avi Vahl <https://github.com/AviVahl>
 // TypeScript Version: 2.9
 
-export function parse(code: string, opts?: BabelParserOptions): import('@babel/types').File;
-export function parseExpression(input: string, options?: BabelParserOptions): import('@babel/types').Expression;
+export function parse(code: string, options?: ParserOptions): import('@babel/types').File;
+export function parseExpression(input: string, options?: ParserOptions): import('@babel/types').Expression;
 
-export interface BabelParserOptions {
+export interface ParserOptions {
     /**
      * By default, import and export declarations can only appear at a program's top level.
      * Setting this option to true allows them anywhere where a statement is allowed.
@@ -54,7 +54,7 @@ export interface BabelParserOptions {
     /**
      * Array containing the plugins that you want to enable.
      */
-    plugins?: PluginName[];
+    plugins?: ParserPlugin[];
 
     /**
      * Should the parser work in strict mode.
@@ -73,7 +73,7 @@ export interface BabelParserOptions {
     tokens?: boolean;
 }
 
-export type PluginName =
+export type ParserPlugin =
     'estree' |
     'jsx' |
     'flow' |
