@@ -15,9 +15,11 @@
   ],
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-parser",
   "main": "lib/index.js",
+  "types": "typings/babel-parser.d.ts",
   "files": [
     "bin",
-    "lib"
+    "lib",
+    "typings"
   ],
   "engines": {
     "node": ">=6.0.0"
