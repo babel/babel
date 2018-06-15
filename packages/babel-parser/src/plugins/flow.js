@@ -2606,7 +2606,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.input.slice(this.state.pos + 2, 14) === "flow-include") {
         return 14; // check for /*flow-include
       }
-      if (ch2 === charCodes.colon && ch3 !== charCodes.colon && 2) {
+      if (ch2 === charCodes.colon && ch3 !== charCodes.colon) {
         return 2; // check for /*:, advance only 2 steps
       }
       return false;
