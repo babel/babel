@@ -256,6 +256,36 @@ describe("babylon-to-espree", () => {
     parseAndAssertSame("export { foo as bar };");
   });
 
+  // Espree doesn't support the optional chaining operator yet
+  it("optional chaining operator (token)", () => {
+    const code = "foo?.bar";
+    var babylonAST = babelEslint.parseForESLint(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+    }).ast;
+    assert.strictEqual(babylonAST.tokens[1].type, "Punctuator");
+  });
+
+  // Espree doesn't support the nullish coalescing operator yet
+  it("nullish coalescing operator (token)", () => {
+    const code = "foo ?? bar";
+    var babylonAST = babelEslint.parseForESLint(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+    }).ast;
+    assert.strictEqual(babylonAST.tokens[1].type, "Punctuator");
+  });
+
+  // Espree doesn't support the pipeline operator yet
+  it("pipeline operator (token)", () => {
+    const code = "foo |> bar";
+    var babylonAST = babelEslint.parseForESLint(code, {
+      eslintVisitorKeys: true,
+      eslintScopeManager: true,
+    }).ast;
+    assert.strictEqual(babylonAST.tokens[1].type, "Punctuator");
+  });
+
   it.skip("empty program with line comment", () => {
     parseAndAssertSame("// single comment");
   });

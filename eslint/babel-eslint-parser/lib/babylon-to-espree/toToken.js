@@ -19,16 +19,19 @@ module.exports = function(token, tt, source) {
     type === tt.bracketR ||
     type === tt.ellipsis ||
     type === tt.arrow ||
+    type === tt.pipeline ||
     type === tt.star ||
     type === tt.incDec ||
     type === tt.colon ||
     type === tt.question ||
+    type === tt.questionDot ||
     type === tt.template ||
     type === tt.backQuote ||
     type === tt.dollarBraceL ||
     type === tt.at ||
     type === tt.logicalOR ||
     type === tt.logicalAND ||
+    type === tt.nullishCoalescing ||
     type === tt.bitwiseOR ||
     type === tt.bitwiseXOR ||
     type === tt.bitwiseAND ||
