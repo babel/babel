@@ -2,7 +2,7 @@
 
 > Helper function to support test runner
 
-See our website [@babel/helper-plugin-test-runner](https://new.babeljs.io/docs/en/next/babel-helper-plugin-test-runner.html) for more information.
+See our website [@babel/helper-plugin-test-runner](https://babeljs.io/docs/en/next/babel-helper-plugin-test-runner.html) for more information.
 
 ## Install
 

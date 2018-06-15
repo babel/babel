@@ -2,7 +2,7 @@
 
 > This plugin transforms ES2015 modules to UMD
 
-See our website [@babel/plugin-transform-modules-umd](https://new.babeljs.io/docs/en/next/babel-plugin-transform-modules-umd.html) for more information.
+See our website [@babel/plugin-transform-modules-umd](https://babeljs.io/docs/en/next/babel-plugin-transform-modules-umd.html) for more information.
 
 ## Install
 

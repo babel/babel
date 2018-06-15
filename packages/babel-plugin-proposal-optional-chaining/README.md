@@ -2,7 +2,7 @@
 
 > Transform optional chaining operators into a series of nil checks
 
-See our website [@babel/plugin-proposal-optional-chaining](https://new.babeljs.io/docs/en/next/babel-plugin-proposal-optional-chaining.html) for more information.
+See our website [@babel/plugin-proposal-optional-chaining](https://babeljs.io/docs/en/next/babel-plugin-proposal-optional-chaining.html) for more information.
 
 ## Install
 

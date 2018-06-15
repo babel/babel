@@ -13,7 +13,7 @@ const cwd = process.cwd();
 const packageDir = join(cwd, "packages");
 
 const packages = readdirSync(packageDir);
-const getWebsiteLink = n => `https://new.babeljs.io/docs/en/next/${n}.html`;
+const getWebsiteLink = n => `https://babeljs.io/docs/en/next/${n}.html`;
 const getPackageJson = pkg => require(join(packageDir, pkg, "package.json"));
 const getIssueLabelLink = l =>
   `https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22${encodeURIComponent(

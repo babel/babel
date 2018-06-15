@@ -2,7 +2,7 @@
 
 > Allow parsing of BigInt literals
 
-See our website [@babel/plugin-syntax-bigint](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-bigint.html) for more information.
+See our website [@babel/plugin-syntax-bigint](https://babeljs.io/docs/en/next/babel-plugin-syntax-bigint.html) for more information.
 
 ## Install
 

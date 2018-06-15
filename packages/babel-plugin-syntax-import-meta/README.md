@@ -2,7 +2,7 @@
 
 > Allow parsing of import.meta
 
-See our website [@babel/plugin-syntax-import-meta](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-import-meta.html) for more information.
+See our website [@babel/plugin-syntax-import-meta](https://babeljs.io/docs/en/next/babel-plugin-syntax-import-meta.html) for more information.
 
 ## Install
 

@@ -2,7 +2,7 @@
 
 > Allow parsing of Throw Expressions
 
-See our website [@babel/plugin-syntax-throw-expressions](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-throw-expressions.html) for more information.
+See our website [@babel/plugin-syntax-throw-expressions](https://babeljs.io/docs/en/next/babel-plugin-syntax-throw-expressions.html) for more information.
 
 ## Install
 

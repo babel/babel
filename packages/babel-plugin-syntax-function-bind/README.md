@@ -2,7 +2,7 @@
 
 > Allow parsing of function bind
 
-See our website [@babel/plugin-syntax-function-bind](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-function-bind.html) for more information.
+See our website [@babel/plugin-syntax-function-bind](https://babeljs.io/docs/en/next/babel-plugin-syntax-function-bind.html) for more information.
 
 ## Install
 

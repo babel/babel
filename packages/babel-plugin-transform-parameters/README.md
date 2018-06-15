@@ -2,7 +2,7 @@
 
 > Compile ES2015 default and rest parameters to ES5
 
-See our website [@babel/plugin-transform-parameters](https://new.babeljs.io/docs/en/next/babel-plugin-transform-parameters.html) for more information.
+See our website [@babel/plugin-transform-parameters](https://babeljs.io/docs/en/next/babel-plugin-transform-parameters.html) for more information.
 
 ## Install
 

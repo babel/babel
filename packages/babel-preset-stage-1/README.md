@@ -2,7 +2,7 @@
 
 > Babel preset for stage 1 plugins
 
-See our website [@babel/preset-stage-1](https://new.babeljs.io/docs/en/next/babel-preset-stage-1.html) for more information.
+See our website [@babel/preset-stage-1](https://babeljs.io/docs/en/next/babel-preset-stage-1.html) for more information.
 
 ## Install
 

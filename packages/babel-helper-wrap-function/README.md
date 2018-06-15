@@ -2,7 +2,7 @@
 
 > Helper to wrap functions inside a function call.
 
-See our website [@babel/helper-wrap-function](https://new.babeljs.io/docs/en/next/babel-helper-wrap-function.html) for more information.
+See our website [@babel/helper-wrap-function](https://babeljs.io/docs/en/next/babel-helper-wrap-function.html) for more information.
 
 ## Install
 

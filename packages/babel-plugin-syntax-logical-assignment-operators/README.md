@@ -2,7 +2,7 @@
 
 > Allow parsing of the logical assignment operators
 
-See our website [@babel/plugin-syntax-logical-assignment-operators](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-logical-assignment-operators.html) for more information.
+See our website [@babel/plugin-syntax-logical-assignment-operators](https://babeljs.io/docs/en/next/babel-plugin-syntax-logical-assignment-operators.html) for more information.
 
 ## Install
 

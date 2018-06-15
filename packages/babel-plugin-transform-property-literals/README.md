@@ -2,7 +2,7 @@
 
 > Ensure that reserved words are quoted in object property keys
 
-See our website [@babel/plugin-transform-property-literals](https://new.babeljs.io/docs/en/next/babel-plugin-transform-property-literals.html) for more information.
+See our website [@babel/plugin-transform-property-literals](https://babeljs.io/docs/en/next/babel-plugin-transform-property-literals.html) for more information.
 
 ## Install
 

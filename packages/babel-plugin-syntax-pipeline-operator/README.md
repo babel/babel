@@ -2,7 +2,7 @@
 
 > Allow parsing of the pipeline operator
 
-See our website [@babel/plugin-syntax-pipeline-operator](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-pipeline-operator.html) for more information.
+See our website [@babel/plugin-syntax-pipeline-operator](https://babeljs.io/docs/en/next/babel-plugin-syntax-pipeline-operator.html) for more information.
 
 ## Install
 

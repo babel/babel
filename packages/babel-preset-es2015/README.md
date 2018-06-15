@@ -2,7 +2,7 @@
 
 > Babel preset for all es2015 plugins.
 
-See our website [@babel/preset-es2015](https://new.babeljs.io/docs/en/next/babel-preset-es2015.html) for more information.
+See our website [@babel/preset-es2015](https://babeljs.io/docs/en/next/babel-preset-es2015.html) for more information.
 
 ## Install
 

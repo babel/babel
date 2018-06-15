@@ -2,7 +2,7 @@
 
 > Compile object rest and spread to ES5
 
-See our website [@babel/plugin-proposal-object-rest-spread](https://new.babeljs.io/docs/en/next/babel-plugin-proposal-object-rest-spread.html) for more information.
+See our website [@babel/plugin-proposal-object-rest-spread](https://babeljs.io/docs/en/next/babel-plugin-proposal-object-rest-spread.html) for more information.
 
 ## Install
 
