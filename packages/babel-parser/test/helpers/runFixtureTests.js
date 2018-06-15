@@ -1,4 +1,6 @@
 import { multiple as getFixtures } from "@babel/helper-fixtures";
+import fs from "fs";
+import path from "path";
 
 export function runFixtureTests(fixturesPath, parseFunction) {
   const fixtures = getFixtures(fixturesPath);
@@ -12,6 +14,18 @@ export function runFixtureTests(fixturesPath, parseFunction) {
           try {
             runTest(task, parseFunction);
           } catch (err) {
+            if (!task.expect.code && !process.env.CI) {
+              const fn = path.dirname(task.expect.loc) + "/options.json";
+              if (!fs.existsSync(fn)) {
+                task.options = task.options || {};
+                task.options.throws = err.message.replace(
+                  /^.*Got error message: /,
+                  "",
+                );
+                fs.writeFileSync(fn, JSON.stringify(task.options, null, "  "));
+              }
+            }
+
             err.message =
               name + "/" + task.actual.filename + ": " + err.message;
             throw err;
