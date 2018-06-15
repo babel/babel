@@ -233,6 +233,10 @@ function monkeypatch(modules) {
   // visit ClassPrivateProperty as a Property.
   referencer.prototype.ClassPrivateProperty = visitClassProperty;
 
+  // visit OptionalMemberExpression as a MemberExpression.
+  referencer.prototype.OptionalMemberExpression =
+    referencer.prototype.MemberExpression;
+
   // visit flow type in FunctionDeclaration, FunctionExpression, ArrowFunctionExpression
   var visitFunction = referencer.prototype.visitFunction;
   referencer.prototype.visitFunction = function(node) {

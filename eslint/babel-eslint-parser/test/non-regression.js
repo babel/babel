@@ -1651,6 +1651,18 @@ describe("verify", () => {
     });
   });
 
+  describe("optional chaining operator", () => {
+    it("should not be undefined #595", () => {
+      verifyAndAssertMessages(
+        `
+            const foo = {};
+            foo?.bar;
+        `,
+        { "no-undef": 1 }
+      );
+    });
+  });
+
   it("flow types on class method should be visited correctly", () => {
     verifyAndAssertMessages(
       `
