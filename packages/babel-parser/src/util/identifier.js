@@ -2,6 +2,8 @@
 
 // @flow
 
+import * as charCodes from "charcodes";
+
 function makePredicate(words: string): (str: string) => boolean {
   const wordsArr = words.split(" ");
   return function(str) {
@@ -75,10 +77,10 @@ function isInAstralSet(code: number, set: $ReadOnlyArray<number>): boolean {
 // Test whether a given character code starts an identifier.
 
 export function isIdentifierStart(code: number): boolean {
-  if (code < 65) return code === 36;
-  if (code < 91) return true;
-  if (code < 97) return code === 95;
-  if (code < 123) return true;
+  if (code < charCodes.uppercaseA) return code === charCodes.dollarSign;
+  if (code <= charCodes.uppercaseZ) return true;
+  if (code < charCodes.lowercaseA) return code === charCodes.underscore;
+  if (code <= charCodes.lowercaseZ) return true;
   if (code <= 0xffff) {
     return (
       code >= 0xaa && nonASCIIidentifierStart.test(String.fromCharCode(code))
@@ -87,21 +89,21 @@ export function isIdentifierStart(code: number): boolean {
   return isInAstralSet(code, astralIdentifierStartCodes);
 }
 
-// Test whether a current state character code and next character code  is @
+// Test whether a current state character code and next character code is @
 
 export function isIteratorStart(current: number, next: number): boolean {
-  return current === 64 && next === 64;
+  return current === charCodes.atSign && next === charCodes.atSign;
 }
 
 // Test whether a given character is part of an identifier.
 
 export function isIdentifierChar(code: number): boolean {
-  if (code < 48) return code === 36;
-  if (code < 58) return true;
-  if (code < 65) return false;
-  if (code < 91) return true;
-  if (code < 97) return code === 95;
-  if (code < 123) return true;
+  if (code < charCodes.digit0) return code === charCodes.dollarSign;
+  if (code < charCodes.colon) return true;
+  if (code < charCodes.uppercaseA) return false;
+  if (code <= charCodes.uppercaseZ) return true;
+  if (code < charCodes.lowercaseA) return code === charCodes.underscore;
+  if (code <= charCodes.lowercaseZ) return true;
   if (code <= 0xffff) {
     return code >= 0xaa && nonASCIIidentifier.test(String.fromCharCode(code));
   }
