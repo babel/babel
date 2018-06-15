@@ -2452,7 +2452,7 @@ Also, thanks to [@mucsi96](https://github.com/mucsi96) for catching the extraneo
 
 #### Bug Fix
 * `babel-core`
-  * [#3508](https://github.com/babel/babel/pull/3510) Assign `_this` to `this` when there is no `Superclass` in a `Class` when using class properties. Fixes T7364. ([@ehjay](https://github.com/ehjay))
+  * [#3508](https://github.com/babel/babel/pull/3508) Assign `_this` to `this` when there is no `Superclass` in a `Class` when using class properties. Fixes T7364. ([@ehjay](https://github.com/ehjay))
 
 The fix correctly set this: `var _this;` -> `var _this = this;`
 
