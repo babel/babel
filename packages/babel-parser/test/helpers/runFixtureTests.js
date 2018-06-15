@@ -1,4 +1,6 @@
 import { multiple as getFixtures } from "@babel/helper-fixtures";
+import fs from "fs";
+import path from "path";
 
 export function runFixtureTests(fixturesPath, parseFunction) {
   const fixtures = getFixtures(fixturesPath);
@@ -7,8 +9,6 @@ export function runFixtureTests(fixturesPath, parseFunction) {
     fixtures[name].forEach(function(testSuite) {
       testSuite.tests.forEach(function(task) {
         const testFn = task.disabled ? it.skip : it;
-        const fs = require("fs");
-        const path = require("path");
 
         testFn(name + "/" + testSuite.title + "/" + task.title, function() {
           try {
