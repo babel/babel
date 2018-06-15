@@ -2,7 +2,7 @@
 
 > Compile export namespace to ES2015
 
-See our website [@babel/plugin-proposal-export-namespace-from](https://new.babeljs.io/docs/en/next/babel-plugin-proposal-export-namespace-from.html) for more information.
+See our website [@babel/plugin-proposal-export-namespace-from](https://babeljs.io/docs/en/next/babel-plugin-proposal-export-namespace-from.html) for more information.
 
 ## Install
 

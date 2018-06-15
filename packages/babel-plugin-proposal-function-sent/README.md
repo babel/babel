@@ -2,7 +2,7 @@
 
 > Compile the function.sent meta propety to valid ES2015 code
 
-See our website [@babel/plugin-proposal-function-sent](https://new.babeljs.io/docs/en/next/babel-plugin-proposal-function-sent.html) for more information.
+See our website [@babel/plugin-proposal-function-sent](https://babeljs.io/docs/en/next/babel-plugin-proposal-function-sent.html) for more information.
 
 ## Install
 

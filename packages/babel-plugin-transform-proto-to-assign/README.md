@@ -2,7 +2,7 @@
 
 > Babel plugin for turning __proto__ into a shallow property clone
 
-See our website [@babel/plugin-transform-proto-to-assign](https://new.babeljs.io/docs/en/next/babel-plugin-transform-proto-to-assign.html) for more information.
+See our website [@babel/plugin-transform-proto-to-assign](https://babeljs.io/docs/en/next/babel-plugin-transform-proto-to-assign.html) for more information.
 
 ## Install
 

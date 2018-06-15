@@ -2,7 +2,7 @@
 
 > Compile ES2015 Unicode regex to ES5
 
-See our website [@babel/plugin-transform-unicode-regex](https://new.babeljs.io/docs/en/next/babel-plugin-transform-unicode-regex.html) for more information.
+See our website [@babel/plugin-transform-unicode-regex](https://babeljs.io/docs/en/next/babel-plugin-transform-unicode-regex.html) for more information.
 
 ## Install
 

@@ -2,7 +2,7 @@
 
 > 
 
-See our website [@babel/helper-split-export-declaration](https://new.babeljs.io/docs/en/next/babel-helper-split-export-declaration.html) for more information.
+See our website [@babel/helper-split-export-declaration](https://babeljs.io/docs/en/next/babel-helper-split-export-declaration.html) for more information.
 
 ## Install
 

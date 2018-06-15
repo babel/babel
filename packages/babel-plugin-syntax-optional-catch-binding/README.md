@@ -2,7 +2,7 @@
 
 > Allow parsing of optional catch bindings
 
-See our website [@babel/plugin-syntax-optional-catch-binding](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-optional-catch-binding.html) for more information.
+See our website [@babel/plugin-syntax-optional-catch-binding](https://babeljs.io/docs/en/next/babel-plugin-syntax-optional-catch-binding.html) for more information.
 
 ## Install
 

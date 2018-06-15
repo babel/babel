@@ -2,7 +2,7 @@
 
 > Replace Object.assign with an inline helper
 
-See our website [@babel/plugin-transform-object-assign](https://new.babeljs.io/docs/en/next/babel-plugin-transform-object-assign.html) for more information.
+See our website [@babel/plugin-transform-object-assign](https://babeljs.io/docs/en/next/babel-plugin-transform-object-assign.html) for more information.
 
 ## Install
 

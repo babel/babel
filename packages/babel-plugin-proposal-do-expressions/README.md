@@ -2,7 +2,7 @@
 
 > Compile do expressions to ES5
 
-See our website [@babel/plugin-proposal-do-expressions](https://new.babeljs.io/docs/en/next/babel-plugin-proposal-do-expressions.html) for more information.
+See our website [@babel/plugin-proposal-do-expressions](https://babeljs.io/docs/en/next/babel-plugin-proposal-do-expressions.html) for more information.
 
 ## Install
 

@@ -2,7 +2,7 @@
 
 > Babel preset for all es2016 plugins.
 
-See our website [@babel/preset-es2016](https://new.babeljs.io/docs/en/next/babel-preset-es2016.html) for more information.
+See our website [@babel/preset-es2016](https://babeljs.io/docs/en/next/babel-preset-es2016.html) for more information.
 
 ## Install
 

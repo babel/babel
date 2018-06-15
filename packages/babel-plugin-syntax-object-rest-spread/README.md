@@ -2,7 +2,7 @@
 
 > Allow parsing of object rest/spread
 
-See our website [@babel/plugin-syntax-object-rest-spread](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-object-rest-spread.html) for more information.
+See our website [@babel/plugin-syntax-object-rest-spread](https://babeljs.io/docs/en/next/babel-plugin-syntax-object-rest-spread.html) for more information.
 
 ## Install
 

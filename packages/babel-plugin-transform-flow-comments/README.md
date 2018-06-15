@@ -2,7 +2,7 @@
 
 > Turn flow type annotations into comments
 
-See our website [@babel/plugin-transform-flow-comments](https://new.babeljs.io/docs/en/next/babel-plugin-transform-flow-comments.html) for more information.
+See our website [@babel/plugin-transform-flow-comments](https://babeljs.io/docs/en/next/babel-plugin-transform-flow-comments.html) for more information.
 
 ## Install
 

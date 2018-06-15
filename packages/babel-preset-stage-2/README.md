@@ -2,7 +2,7 @@
 
 > Babel preset for stage 2 plugins
 
-See our website [@babel/preset-stage-2](https://new.babeljs.io/docs/en/next/babel-preset-stage-2.html) for more information.
+See our website [@babel/preset-stage-2](https://babeljs.io/docs/en/next/babel-preset-stage-2.html) for more information.
 
 ## Install
 

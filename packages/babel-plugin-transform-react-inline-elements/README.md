@@ -2,7 +2,7 @@
 
 > Turn JSX elements into exploded React objects
 
-See our website [@babel/plugin-transform-react-inline-elements](https://new.babeljs.io/docs/en/next/babel-plugin-transform-react-inline-elements.html) for more information.
+See our website [@babel/plugin-transform-react-inline-elements](https://babeljs.io/docs/en/next/babel-plugin-transform-react-inline-elements.html) for more information.
 
 ## Install
 

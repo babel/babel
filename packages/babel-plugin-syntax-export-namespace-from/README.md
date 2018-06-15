@@ -2,7 +2,7 @@
 
 > Allow parsing of export namespace from
 
-See our website [@babel/plugin-syntax-export-namespace-from](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-export-namespace-from.html) for more information.
+See our website [@babel/plugin-syntax-export-namespace-from](https://babeljs.io/docs/en/next/babel-plugin-syntax-export-namespace-from.html) for more information.
 
 ## Install
 

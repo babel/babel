@@ -2,7 +2,7 @@
 
 > Allow parsing of import()
 
-See our website [@babel/plugin-syntax-dynamic-import](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-dynamic-import.html) for more information.
+See our website [@babel/plugin-syntax-dynamic-import](https://babeljs.io/docs/en/next/babel-plugin-syntax-dynamic-import.html) for more information.
 
 ## Install
 

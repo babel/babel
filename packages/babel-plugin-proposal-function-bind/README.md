@@ -2,7 +2,7 @@
 
 > Compile function bind operator to ES5
 
-See our website [@babel/plugin-proposal-function-bind](https://new.babeljs.io/docs/en/next/babel-plugin-proposal-function-bind.html) for more information.
+See our website [@babel/plugin-proposal-function-bind](https://babeljs.io/docs/en/next/babel-plugin-proposal-function-bind.html) for more information.
 
 ## Install
 

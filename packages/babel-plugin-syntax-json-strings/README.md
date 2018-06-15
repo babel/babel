@@ -2,7 +2,7 @@
 
 > Allow parsing of the U+2028 LINE SEPARATOR and U+2029 PARAGRAPH SEPARATOR in JS strings
 
-See our website [@babel/plugin-syntax-json-strings](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-json-strings.html) for more information.
+See our website [@babel/plugin-syntax-json-strings](https://babeljs.io/docs/en/next/babel-plugin-syntax-json-strings.html) for more information.
 
 ## Install
 

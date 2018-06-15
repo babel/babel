@@ -2,7 +2,7 @@
 
 > Allow parsing of the function.sent meta property
 
-See our website [@babel/plugin-syntax-function-sent](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-function-sent.html) for more information.
+See our website [@babel/plugin-syntax-function-sent](https://babeljs.io/docs/en/next/babel-plugin-syntax-function-sent.html) for more information.
 
 ## Install
 

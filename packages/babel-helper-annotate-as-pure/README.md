@@ -2,7 +2,7 @@
 
 > Helper function to annotate paths and nodes with #__PURE__ comment
 
-See our website [@babel/helper-annotate-as-pure](https://new.babeljs.io/docs/en/next/babel-helper-annotate-as-pure.html) for more information.
+See our website [@babel/helper-annotate-as-pure](https://babeljs.io/docs/en/next/babel-helper-annotate-as-pure.html) for more information.
 
 ## Install
 

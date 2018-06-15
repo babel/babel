@@ -2,7 +2,7 @@
 
 > Allow parsing of optional properties
 
-See our website [@babel/plugin-syntax-optional-chaining](https://new.babeljs.io/docs/en/next/babel-plugin-syntax-optional-chaining.html) for more information.
+See our website [@babel/plugin-syntax-optional-chaining](https://babeljs.io/docs/en/next/babel-plugin-syntax-optional-chaining.html) for more information.
 
 ## Install
 
