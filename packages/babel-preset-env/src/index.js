@@ -15,8 +15,8 @@ import {
   features as proposalPlugins,
   pluginSyntaxMap,
 } from "../data/shipped-proposals.js";
-import useBuiltInsEntryPlugin from "./use-built-ins-entry-plugin";
-import addUsedBuiltInsPlugin from "./use-built-ins-plugin";
+import injectPolyfillsEntryPlugin from "./inject-polyfills-entry-plugin";
+import injectPolyfillsPlugin from "./inject-polyfills-plugin";
 import getTargets from "./targets-parser";
 import availablePlugins from "./available-plugins";
 import {
@@ -171,6 +171,7 @@ export default declare((api, opts) => {
     spec,
     targets: optionsTargets,
     useBuiltIns,
+    injectPolyfills,
   } = normalizeOptions(opts);
   // TODO: remove this in next major
   let hasUglifyTarget = false;
@@ -217,7 +218,7 @@ export default declare((api, opts) => {
   let polyfills;
   let polyfillTargets;
 
-  if (useBuiltIns) {
+  if (injectPolyfills) {
     polyfillTargets = getBuiltInTargets(targets);
 
     polyfills = filterItems(
@@ -230,7 +231,6 @@ export default declare((api, opts) => {
   }
 
   const plugins = [];
-  const pluginUseBuiltIns = useBuiltIns !== false;
 
   // NOTE: not giving spec here yet to avoid compatibility issues when
   // transform-modules-commonjs gets its spec mode
@@ -239,10 +239,7 @@ export default declare((api, opts) => {
   }
 
   transformations.forEach(pluginName =>
-    plugins.push([
-      getPlugin(pluginName),
-      { spec, loose, useBuiltIns: pluginUseBuiltIns },
-    ]),
+    plugins.push([getPlugin(pluginName), { spec, loose, useBuiltIns }]),
   );
 
   const regenerator = transformations.has("transform-regenerator");
@@ -257,19 +254,19 @@ export default declare((api, opts) => {
       logPlugin(transform, targets, pluginList);
     });
 
-    if (!useBuiltIns) {
+    if (!injectPolyfills) {
       console.log(
-        "\nUsing polyfills: No polyfills were added, since the `useBuiltIns` option was not set.",
+        "\nUsing polyfills: No polyfills were added, since the `injectPolyfills` option was not set.",
       );
     } else {
       console.log(
         `
-Using polyfills with \`${useBuiltIns}\` option:`,
+Using polyfills with \`${injectPolyfills}\` option:`,
       );
     }
   }
 
-  if (useBuiltIns === "usage" || useBuiltIns === "entry") {
+  if (injectPolyfills === "usage" || injectPolyfills === "entry") {
     const pluginOptions = {
       debug,
       polyfills,
@@ -282,7 +279,9 @@ Using polyfills with \`${useBuiltIns}\` option:`,
     };
 
     plugins.push([
-      useBuiltIns === "usage" ? addUsedBuiltInsPlugin : useBuiltInsEntryPlugin,
+      injectPolyfills === "usage"
+        ? injectPolyfillsPlugin
+        : injectPolyfillsEntryPlugin,
       pluginOptions,
     ]);
   }

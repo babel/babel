@@ -73,8 +73,8 @@ export default function({ types: t }: { types: Object }): Plugin {
       ) {
         console.warn(
           `
-  When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
-  Please remove the \`import '@babel/polyfill'\` call or use \`useBuiltIns: 'entry'\` instead.`,
+  When setting \`injectPolyfills: 'usage'\`, polyfills are automatically imported when needed.
+  Please remove the \`import '@babel/polyfill'\` call or use \`injectPolyfills: 'entry'\` instead.`,
         );
         path.remove();
       }
@@ -85,8 +85,8 @@ export default function({ types: t }: { types: Object }): Plugin {
           if (isRequire(t, bodyPath)) {
             console.warn(
               `
-  When setting \`useBuiltIns: 'usage'\`, polyfills are automatically imported when needed.
-  Please remove the \`require('@babel/polyfill')\` call or use \`useBuiltIns: 'entry'\` instead.`,
+  When setting \`injectPolyfills: 'usage'\`, polyfills are automatically imported when needed.
+  Please remove the \`require('@babel/polyfill')\` call or use \`injectPolyfills: 'entry'\` instead.`,
             );
             bodyPath.remove();
           }

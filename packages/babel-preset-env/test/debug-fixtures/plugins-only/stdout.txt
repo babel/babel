@@ -25,5 +25,5 @@ Using plugins:
   proposal-object-rest-spread { "firefox":"52", "node":"7.4" }
   proposal-unicode-property-regex { "firefox":"52", "node":"7.4" }
 
-Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
+Using polyfills: No polyfills were added, since the `injectPolyfills` option was not set.
 Successfully compiled 1 file with Babel.

@@ -1,7 +1,7 @@
 {
   "presets": [
     ["../../../../lib", {
-      "useBuiltIns": "usage",
+      "injectPolyfills": "usage",
       "targets": {
         "chrome": 55
       },

@@ -1,6 +1,6 @@
 {
   "plugins": [
-    ["../../../../lib/use-built-ins-entry-plugin", {
+    ["../../../../lib/inject-polyfills-entry-plugin", {
       "regenerator": true,
       "polyfills": []
     }]

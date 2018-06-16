@@ -6,7 +6,7 @@
         "node": "7.6"
       },
       "modules": false,
-      "useBuiltIns": "entry",
+      "injectPolyfills": "entry",
       "forceAllTransforms": true
     }]
   ]

@@ -2,7 +2,7 @@
   "presets": [
     ["../../../../lib", {
       "modules": false,
-      "useBuiltIns": "usage",
+      "injectPolyfills": "usage",
       "exclude": [
         "transform-async-to-generator",
         "transform-regenerator"

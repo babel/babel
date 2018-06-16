@@ -2,7 +2,7 @@
   "presets": [
     ["../../../../lib", {
       "shippedProposals": true,
-      "useBuiltIns": "entry"
+      "injectPolyfills": "entry"
     }]
   ]
 }

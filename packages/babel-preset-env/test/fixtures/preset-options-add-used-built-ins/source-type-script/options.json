@@ -5,7 +5,7 @@
       "targets": {
         "node": "4.0.0"
       },
-      "useBuiltIns": "usage",
+      "injectPolyfills": "usage",
       "shippedProposals": true
     }]
   ]

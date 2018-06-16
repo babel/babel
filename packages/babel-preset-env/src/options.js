@@ -11,6 +11,7 @@ export const TopLevelOptions = {
   spec: "spec",
   targets: "targets",
   useBuiltIns: "useBuiltIns",
+  injectPolyfills: "injectPolyfills",
 };
 
 export const ModulesOption = {
@@ -22,7 +23,7 @@ export const ModulesOption = {
   umd: "umd",
 };
 
-export const UseBuiltInsOption = {
+export const InjectPolyfillsOption = {
   false: false,
   entry: "entry",
   usage: "usage",

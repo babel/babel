@@ -9,7 +9,7 @@
         "es6.set"
       ],
       "modules": false,
-      "useBuiltIns": "entry"
+      "injectPolyfills": "entry"
     }]
   ]
 }

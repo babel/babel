@@ -5,7 +5,7 @@
         "ie": 11
       },
       "modules": false,
-      "useBuiltIns": "entry",
+      "injectPolyfills": "entry",
       "modules": false
     }]
   ]

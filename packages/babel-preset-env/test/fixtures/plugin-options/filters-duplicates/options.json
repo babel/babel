@@ -1,6 +1,6 @@
 {
   "plugins": [
-    ["../../../../lib/use-built-ins-entry-plugin", {
+    ["../../../../lib/inject-polyfills-entry-plugin", {
       "polyfills": [
         "es6.typed.data-view",
         "es6.typed.data-view",

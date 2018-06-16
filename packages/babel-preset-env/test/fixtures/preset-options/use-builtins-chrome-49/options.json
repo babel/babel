@@ -5,7 +5,7 @@
         "chrome": 49
       },
       "modules": false,
-      "useBuiltIns": "entry"
+      "injectPolyfills": "entry"
     }]
   ]
 }

@@ -52,7 +52,7 @@ try {
   "presets": [
     ["env", {
       modules: false,
-      useBuiltIns: "usage"
+      injectPolyfills: "usage"
     }]
   ]
 }
@@ -81,7 +81,7 @@ const foo = new Promise((resolve) => {
   "presets": [
     ["env", {
       modules: false,
-      useBuiltIns: "entry"
+      injectPolyfills: "entry"
     }]
   ]
 }

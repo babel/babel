@@ -7,7 +7,11 @@ import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
 import { getValues, findSuggestion } from "./utils";
 import pluginsList from "../data/plugins.json";
-import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
+import {
+  TopLevelOptions,
+  ModulesOption,
+  InjectPolyfillsOption,
+} from "./options";
 import type { Targets, Options, ModuleOption, BuiltInsOption } from "./types";
 
 const validateTopLevelOptions = (options: Options) => {
@@ -150,13 +154,13 @@ export const objectToBrowserslist = (object: Targets): Array<string> => {
   }, []);
 };
 
-export const validateUseBuiltInsOption = (
+export const validateInjectPolyfillsOption = (
   builtInsOpt: BuiltInsOption = false,
 ): BuiltInsOption => {
   invariant(
-    UseBuiltInsOption[builtInsOpt] ||
-      UseBuiltInsOption[builtInsOpt] === UseBuiltInsOption.false,
-    `Invalid Option: The 'useBuiltIns' option must be either
+    InjectPolyfillsOption[builtInsOpt] ||
+      InjectPolyfillsOption[builtInsOpt] === InjectPolyfillsOption.false,
+    `Invalid Option: The 'injectPolyfills' option must be either
     'false' (default) to indicate no polyfill,
     '"entry"' to indicate replacing the entry polyfill, or
     '"usage"' to import only used polyfills per file`,
@@ -178,6 +182,15 @@ export default function normalizeOptions(opts: Options) {
   );
 
   checkDuplicateIncludeExcludes(include, exclude);
+
+  let injectPolyfills = validateInjectPolyfillsOption(opts.injectPolyfills);
+  let useBuiltIns;
+  if (typeof opts.useBuiltIns === "string") {
+    console.warn("'useBuiltIns' has been renamed to 'injectPolyfills'.");
+    injectPolyfills = validateInjectPolyfillsOption(opts.useBuiltIns);
+  } else {
+    useBuiltIns = opts.useBuiltIns;
+  }
 
   return {
     configPath: validateConfigPathOption(opts.configPath),
@@ -203,6 +216,11 @@ export default function normalizeOptions(opts: Options) {
     targets: {
       ...opts.targets,
     },
-    useBuiltIns: validateUseBuiltInsOption(opts.useBuiltIns),
+    useBuiltIns: validateBoolOption(
+      TopLevelOptions.useBuiltIns,
+      useBuiltIns,
+      !!injectPolyfills,
+    ),
+    injectPolyfills,
   };
 }

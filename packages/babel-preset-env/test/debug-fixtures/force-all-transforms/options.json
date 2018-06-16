@@ -6,7 +6,7 @@
       "targets": {
         "chrome": 55
       },
-      "useBuiltIns": "entry",
+      "injectPolyfills": "entry",
       "forceAllTransforms": true
     }]
   ]

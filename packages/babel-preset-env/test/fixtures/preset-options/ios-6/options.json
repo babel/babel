@@ -5,7 +5,7 @@
         "browsers": ["ios >= 6"]
       },
       "modules": false,
-      "useBuiltIns": "usage"
+      "injectPolyfills": "usage"
     }]
   ]
 }

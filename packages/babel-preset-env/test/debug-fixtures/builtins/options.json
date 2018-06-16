@@ -6,7 +6,7 @@
         "browsers": "chrome >= 54, ie 10",
         "node": 6
       },
-      "useBuiltIns": "entry"
+      "injectPolyfills": "entry"
     }]
   ]
 }

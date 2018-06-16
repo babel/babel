@@ -4,7 +4,7 @@
       "targets": {
         "node": "7"
       },
-      "useBuiltIns": "usage",
+      "injectPolyfills": "usage",
       "modules": false
     }]
   ]
