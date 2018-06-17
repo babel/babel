@@ -1,7 +1,7 @@
 {
   "name": "babel-check-duplicated-nodes",
   "version": "0.0.0",
-  "description": "",
+  "description": "Babel helper module for babel transforms authors to check the AST against duplicated nodes.",
   "main": "lib/index.js",
   "files": [
     "lib"
