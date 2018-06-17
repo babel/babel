@@ -1,0 +1,39 @@
+{
+  "name": "babel-check-duplicated-nodes",
+  "version": "0.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "precommit": "lint-staged",
+    "prebuild": "rimraf lib",
+    "build": "babel src --out-dir lib",
+    "prepare": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Andarist/babel-check-duplicated-nodes.git"
+  },
+  "keywords": [
+    "babel"
+  ],
+  "author": "Nicolò Ribaudo <nicolo.ribaudo@gmail.com> (https://github.com/nicolo-ribaudo)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Andarist/babel-check-duplicated-nodes/issues"
+  },
+  "homepage": "https://github.com/Andarist/babel-check-duplicated-nodes#readme",
+  "devDependencies": {
+    "@babel/cli": "7.0.0-beta.51",
+    "@babel/core": "7.0.0-beta.51",
+    "@babel/plugin-transform-modules-commonjs": "7.0.0-beta.51",
+    "@babel/preset-env": "7.0.0-beta.51",
+    "husky": "^0.14.3",
+    "jest": "^22.4.3",
+    "lint-staged": "^7.0.0",
+    "prettier": "^1.11.1",
+    "rimraf": "^2.6.2"
+  }
+}

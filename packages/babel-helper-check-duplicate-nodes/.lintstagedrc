@@ -1,0 +1,10 @@
+{
+  "{src,__tests__}/**/*.js": [
+    "prettier --single-quote --no-semi --trailing-comma=all --write",
+    "git add"
+  ],
+  "*.md": [
+  	"prettier --single-quote --no-semi --trailing-comma=all --prose-wrap always --write",
+    "git add"
+  ]
+}
