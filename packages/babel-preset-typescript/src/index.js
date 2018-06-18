@@ -1,5 +1,7 @@
 import { declare } from "@babel/helper-plugin-utils";
 import transformTypeScript from "@babel/plugin-transform-typescript";
+import transformClassProperties from "@babel/plugin-proposal-class-properties";
+import transformNumericSeparator from "@babel/plugin-proposal-numeric-separator";
 
 export default declare(
   (api, { jsxPragma, allExtensions = false, isTSX = false }) => {
@@ -37,6 +39,7 @@ export default declare(
               plugins: [[transformTypeScript, { jsxPragma, isTSX: true }]],
             },
           ],
+      plugins: [transformClassProperties, transformNumericSeparator],
     };
   },
 );
