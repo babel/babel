@@ -62,7 +62,7 @@ function parseAndAssertSame(code) {
     `);
     throw err;
   }
-  // assert.equal(esAST, babylonAST);
+  //assert.equal(esAST, babylonAST);
 }
 
 describe("babylon-to-espree", () => {
@@ -156,6 +156,14 @@ describe("babylon-to-espree", () => {
             return Math.max(null, \`Name: \${name}, Name: \${name}\`);
           }
         };
+      `);
+    });
+
+    it("template with arrow returning template #603", () => {
+      parseAndAssertSame(`
+        var a = \`\${() => {
+          \`\${''}\`
+        }}\`;
       `);
     });
   });
