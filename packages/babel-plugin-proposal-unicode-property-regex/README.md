@@ -15,5 +15,17 @@ npm install --save @babel/plugin-proposal-unicode-property-regex
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-proposal-unicode-property-regex
+yarn add @babel/plugin-proposal-unicode-property-regex
+```
+
+Add to your babel plugin list:
+
+```
+{
+  "babel": {
+    "plugins": [
+      "@babel/plugin-proposal-unicode-property-regex"
+    ]
+  }
+}
 ```
