@@ -27,15 +27,23 @@ export default function normalizeFile(
 
   let inputMap = null;
   if (options.inputSourceMap !== false) {
-    try {
-      inputMap = convertSourceMap.fromSource(code);
+    // If an explicit object is passed in, it overrides the processing of
+    // source maps that may be in the file itself.
+    if (typeof options.inputSourceMap === "object") {
+      inputMap = convertSourceMap.fromObject(options.inputSourceMap);
+    }
 
-      if (inputMap) {
+    if (!inputMap) {
+      try {
+        inputMap = convertSourceMap.fromSource(code);
+
+        if (inputMap) {
+          code = convertSourceMap.removeComments(code);
+        }
+      } catch (err) {
+        debug("discarding unknown inline input sourcemap", err);
         code = convertSourceMap.removeComments(code);
       }
-    } catch (err) {
-      debug("discarding unknown inline input sourcemap", err);
-      code = convertSourceMap.removeComments(code);
     }
 
     if (!inputMap) {
@@ -49,10 +57,6 @@ export default function normalizeFile(
         debug("discarding unknown file input sourcemap", err);
         code = convertSourceMap.removeMapFileComments(code);
       }
-    }
-
-    if (!inputMap && typeof options.inputSourceMap === "object") {
-      inputMap = convertSourceMap.fromObject(options.inputSourceMap);
     }
   }
 
