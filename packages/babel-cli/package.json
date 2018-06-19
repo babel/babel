@@ -21,6 +21,7 @@
     "fs-readdir-recursive": "^1.0.0",
     "glob": "^7.0.0",
     "lodash": "^4.17.5",
+    "mkdirp": "^0.5.1",
     "output-file-sync": "^2.0.0",
     "slash": "^1.0.0",
     "source-map": "^0.5.0"
