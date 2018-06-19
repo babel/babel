@@ -1,3 +1,5 @@
 {
-  "plugins": ["proposal-pipeline-operator"]
+  "plugins": [
+    ["proposal-pipeline-operator", { "proposal": "minimal" }]
+  ]
 }
