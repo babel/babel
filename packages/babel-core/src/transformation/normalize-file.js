@@ -1,5 +1,6 @@
 // @flow
 
+import path from "path";
 import buildDebug from "debug";
 import * as t from "@babel/types";
 import type { PluginPasses } from "../config";
@@ -47,14 +48,22 @@ export default function normalizeFile(
     }
 
     if (!inputMap) {
-      try {
-        inputMap = convertSourceMap.fromMapFileSource(code);
+      if (typeof options.filename === "string") {
+        try {
+          inputMap = convertSourceMap.fromMapFileSource(
+            code,
+            path.dirname(options.filename),
+          );
 
-        if (inputMap) {
+          if (inputMap) {
+            code = convertSourceMap.removeMapFileComments(code);
+          }
+        } catch (err) {
+          debug("discarding unknown file input sourcemap", err);
           code = convertSourceMap.removeMapFileComments(code);
         }
-      } catch (err) {
-        debug("discarding unknown file input sourcemap", err);
+      } else {
+        debug("discarding un-loadable file input sourcemap");
         code = convertSourceMap.removeMapFileComments(code);
       }
     }
