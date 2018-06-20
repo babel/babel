@@ -59,7 +59,7 @@ const assertTest = function(stdout, stderr, opts, cwd) {
   stderr = replacePaths(stderr, cwd);
 
   const expectStderr = opts.stderr.trim();
-  stderr = stderr.trim();
+  stderr = stderr.trim().replace(/\\/g, "/");
 
   if (opts.stderr) {
     if (opts.stderrContains) {
