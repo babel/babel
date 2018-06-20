@@ -1,0 +1,31 @@
+version: "{build}"
+
+clone_depth: 5
+
+environment:
+  PLATFORM: "x64"
+  matrix:
+    # check the current Node.js release and the minimum supported one
+    - NODEJS_VERSION: "10"
+    - NODEJS_VERSION: "6"
+
+install:
+  - ps: Install-Product node $env:NODEJS_VERSION $env:PLATFORM
+  - yarn install --ignore-engines
+
+test_script:
+  # make MSYS2 utils available like `make`
+  - set PATH=C:\msys64\usr\bin;%PATH%
+  - node -v
+  - yarn -v
+  - make test-ci
+
+matrix:
+  fast_finish: true
+
+build: off
+
+cache:
+  # cache the Yarn folder and invalidate the cache if one
+  # of the files right to the arrow changes
+  - '%LOCALAPPDATA%/Yarn -> appveyor.yml,package.json,yarn.lock'
