@@ -5,7 +5,7 @@
         "chrome": "55"
       },
       "modules": false,
-      "injectPolyfills": "usage"
+      "polyfills": "usage"
     }]
   ]
 }

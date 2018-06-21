@@ -1,7 +1,7 @@
 {
   "presets": [
     ["../../lib", {
-      "injectPolyfills": "entry",
+      "polyfills": "entry",
       "debug": true,
       "targets": {
         "chrome": "54",

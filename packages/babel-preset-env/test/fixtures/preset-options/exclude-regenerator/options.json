@@ -2,7 +2,7 @@
   "presets": [
     ["../../../../lib", {
       "modules": false,
-      "injectPolyfills": "entry",
+      "polyfills": "entry",
       "exclude": ["transform-regenerator"]
     }]
   ]

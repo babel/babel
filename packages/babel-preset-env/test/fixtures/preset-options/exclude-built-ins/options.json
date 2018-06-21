@@ -5,7 +5,7 @@
         "chrome": 63
       },
       "modules": false,
-      "injectPolyfills": "entry",
+      "polyfills": "entry",
       "exclude": [
         "es7.string.pad-start",
         "es7.string.pad-end",

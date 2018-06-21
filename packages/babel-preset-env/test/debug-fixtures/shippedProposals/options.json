@@ -3,7 +3,7 @@
     ["../../lib", {
       "debug": true,
       "shippedProposals": true,
-      "injectPolyfills": "entry"
+      "polyfills": "entry"
     }]
   ]
 }

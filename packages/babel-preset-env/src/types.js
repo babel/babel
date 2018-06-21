@@ -1,6 +1,6 @@
 //@flow
 
-import { TargetNames, ModulesOption, InjectPolyfillsOption } from "./options";
+import { TargetNames, ModulesOption, PolyfillsOption } from "./options";
 
 // Targets
 export type Target = $Keys<typeof TargetNames>;
@@ -11,7 +11,7 @@ export type Targets = {
 // Options
 // Use explicit modules to prevent typo errors.
 export type ModuleOption = $Values<typeof ModulesOption>;
-export type PolyfillsOption = $Values<typeof InjectPolyfillsOption>;
+export type PolyfillOption = $Values<typeof PolyfillsOption>;
 
 export type Options = {
   configPath: string,
@@ -26,7 +26,7 @@ export type Options = {
   spec: boolean,
   targets: Targets,
   useBuiltIns: boolean,
-  injectPolyfills: PolyfillsOption,
+  polyfills: PolyfillsOption,
 };
 
 // Babel

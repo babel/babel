@@ -7,12 +7,8 @@ import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
 import { getValues, findSuggestion } from "./utils";
 import pluginsList from "../data/plugins.json";
-import {
-  TopLevelOptions,
-  ModulesOption,
-  InjectPolyfillsOption,
-} from "./options";
-import type { Targets, Options, ModuleOption, BuiltInsOption } from "./types";
+import { TopLevelOptions, ModulesOption, PolyfillsOption } from "./options";
+import type { Targets, Options, ModuleOption, PolyfillOption } from "./types";
 
 const validateTopLevelOptions = (options: Options) => {
   for (const option in options) {
@@ -154,19 +150,19 @@ export const objectToBrowserslist = (object: Targets): Array<string> => {
   }, []);
 };
 
-export const validateInjectPolyfillsOption = (
-  builtInsOpt: BuiltInsOption = false,
-): BuiltInsOption => {
+export const validatePolyfillsOption = (
+  polyfillsOpt: PolyfillOption = false,
+): PolyfillOption => {
   invariant(
-    InjectPolyfillsOption[builtInsOpt] ||
-      InjectPolyfillsOption[builtInsOpt] === InjectPolyfillsOption.false,
-    `Invalid Option: The 'injectPolyfills' option must be either
+    PolyfillsOption[polyfillsOpt] ||
+      PolyfillsOption[polyfillsOpt] === PolyfillsOption.false,
+    `Invalid Option: The 'polyfills' option must be either
     'false' (default) to indicate no polyfill,
     '"entry"' to indicate replacing the entry polyfill, or
     '"usage"' to import only used polyfills per file`,
   );
 
-  return builtInsOpt;
+  return polyfillsOpt;
 };
 
 export default function normalizeOptions(opts: Options) {
@@ -183,11 +179,11 @@ export default function normalizeOptions(opts: Options) {
 
   checkDuplicateIncludeExcludes(include, exclude);
 
-  let injectPolyfills = validateInjectPolyfillsOption(opts.injectPolyfills);
+  let polyfills = validatePolyfillsOption(opts.polyfills);
   let useBuiltIns;
   if (typeof opts.useBuiltIns === "string") {
-    console.warn("'useBuiltIns' has been renamed to 'injectPolyfills'.");
-    injectPolyfills = validateInjectPolyfillsOption(opts.useBuiltIns);
+    console.warn("'useBuiltIns' has been renamed to 'polyfills'.");
+    polyfills = validatePolyfillsOption(opts.useBuiltIns);
   } else {
     useBuiltIns = opts.useBuiltIns;
   }
@@ -219,8 +215,8 @@ export default function normalizeOptions(opts: Options) {
     useBuiltIns: validateBoolOption(
       TopLevelOptions.useBuiltIns,
       useBuiltIns,
-      !!injectPolyfills,
+      !!polyfills,
     ),
-    injectPolyfills,
+    polyfills,
   };
 }

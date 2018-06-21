@@ -7,7 +7,7 @@
         "firefox": 50,
         "ie": 11
       },
-      "injectPolyfills": "usage"
+      "polyfills": "usage"
     }]
   ]
 }

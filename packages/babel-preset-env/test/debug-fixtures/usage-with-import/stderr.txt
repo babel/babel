@@ -1,2 +1,2 @@
-  When setting `injectPolyfills: 'usage'`, polyfills are automatically imported when needed.
-  Please remove the `import '@babel/polyfill'` call or use `injectPolyfills: 'entry'` instead.
+  When setting `polyfills: 'usage'`, polyfills are automatically imported when needed.
+  Please remove the `import '@babel/polyfill'` call or use `polyfills: 'entry'` instead.

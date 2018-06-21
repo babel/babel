@@ -6,7 +6,7 @@
         "browsers": "chrome 60"
       },
       "shippedProposals": true,
-      "injectPolyfills": "entry"
+      "polyfills": "entry"
     }]
   ]
 }

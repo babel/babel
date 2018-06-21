@@ -6,7 +6,7 @@
       "targets": {
         "chrome": 55
       },
-      "injectPolyfills": "entry",
+      "polyfills": "entry",
       "forceAllTransforms": true
     }]
   ]

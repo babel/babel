@@ -1,7 +1,7 @@
 {
   "presets": [
     ["../../../../lib", {
-      "injectPolyfills": "usage",
+      "polyfills": "usage",
       "modules": false
     }]
   ]

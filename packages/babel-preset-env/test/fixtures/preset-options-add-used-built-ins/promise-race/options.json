@@ -6,7 +6,7 @@
         "targets": {
           "browsers": ["ie > 10"]
         },
-        "injectPolyfills": "usage",
+        "polyfills": "usage",
         "modules": false
       }
     ]

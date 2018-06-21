@@ -171,7 +171,7 @@ export default declare((api, opts) => {
     spec,
     targets: optionsTargets,
     useBuiltIns,
-    injectPolyfills,
+    polyfills,
   } = normalizeOptions(opts);
   // TODO: remove this in next major
   let hasUglifyTarget = false;
@@ -215,13 +215,13 @@ export default declare((api, opts) => {
     getOptionSpecificExcludesFor({ loose }),
   );
 
-  let polyfills;
+  let polyfillList;
   let polyfillTargets;
 
-  if (injectPolyfills) {
+  if (polyfills) {
     polyfillTargets = getBuiltInTargets(targets);
 
-    polyfills = filterItems(
+    polyfillList = filterItems(
       shippedProposals ? builtInsList : builtInsListWithoutProposals,
       include.builtIns,
       exclude.builtIns,
@@ -254,22 +254,22 @@ export default declare((api, opts) => {
       logPlugin(transform, targets, pluginList);
     });
 
-    if (!injectPolyfills) {
+    if (!polyfills) {
       console.log(
-        "\nUsing polyfills: No polyfills were added, since the `injectPolyfills` option was not set.",
+        "\nUsing polyfills: No polyfills were added, since the `polyfills` option was not set.",
       );
     } else {
       console.log(
         `
-Using polyfills with \`${injectPolyfills}\` option:`,
+Using polyfills with \`${polyfills}\` option:`,
       );
     }
   }
 
-  if (injectPolyfills === "usage" || injectPolyfills === "entry") {
+  if (polyfills === "usage" || polyfills === "entry") {
     const pluginOptions = {
       debug,
-      polyfills,
+      polyfills: polyfillList,
       regenerator,
       onDebug: (polyfills, context) => {
         polyfills.forEach(polyfill =>
@@ -279,7 +279,7 @@ Using polyfills with \`${injectPolyfills}\` option:`,
     };
 
     plugins.push([
-      injectPolyfills === "usage"
+      polyfills === "usage"
         ? injectPolyfillsPlugin
         : injectPolyfillsEntryPlugin,
       pluginOptions,

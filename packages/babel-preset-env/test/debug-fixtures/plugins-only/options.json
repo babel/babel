@@ -11,7 +11,7 @@
         "firefox": 52,
         "node": 7.4
       },
-      "injectPolyfills": false
+      "polyfills": false
     }]
   ]
 }

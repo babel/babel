@@ -5,7 +5,7 @@
       "targets": {
         "browsers": [ "Android >= 4" ]
       },
-      "injectPolyfills": "entry"
+      "polyfills": "entry"
     }]
   ]
 }

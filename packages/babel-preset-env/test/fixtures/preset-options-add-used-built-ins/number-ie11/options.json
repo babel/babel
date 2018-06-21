@@ -6,7 +6,7 @@
         "targets": {
           "ie": "11"
         },
-        "injectPolyfills": "usage",
+        "polyfills": "usage",
         "modules": false
       }
     ]
