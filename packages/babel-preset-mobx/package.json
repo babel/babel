@@ -1,0 +1,16 @@
+{
+  "name": "@babel/preset-mobx",
+  "version": "1.0.4",
+  "description": "Babel preset for all Mobx.",
+  "author": "Zane Hitchcox <zwhitchcox@gmail.com>",
+  "homepage": "https://babeljs.io/",
+  "license": "MIT",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-mobx",
+  "main": "lib/index.js",
+  "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.51",
+    "@babel/plugin-proposal-decorators": "^7.0.0-beta.51",
+    "@babel/plugin-transform-classes": "^7.0.0-beta.51",
+    "@babel/plugin-transform-regenerator": "^7.0.0-beta.51"
+  }
+}
