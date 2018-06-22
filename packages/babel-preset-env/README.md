@@ -15,5 +15,5 @@ npm install --save @babel/preset-env
 or using yarn:
 
 ```sh
-yarn add --save @babel/preset-env
+yarn add @babel/preset-env --dev
 ```
