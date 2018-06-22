@@ -166,6 +166,10 @@ describe("babylon-to-espree", () => {
         }}\`;
       `);
     });
+
+    it("template string with object with template string inside", () => {
+      parseAndAssertSame("`${ { a:`${2}` } }`");
+    });
   });
 
   it("simple expression", () => {
