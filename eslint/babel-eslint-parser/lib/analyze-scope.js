@@ -181,6 +181,11 @@ class Referencer extends OriginalReferencer {
     this._visitDeclareX(node);
   }
 
+  // visit OptionalMemberExpression as a MemberExpression.
+  OptionalMemberExpression(node) {
+    super.MemberExpression(node);
+  }
+
   _visitClassProperty(node) {
     this._visitTypeAnnotation(node.typeAnnotation);
     this.visitProperty(node);
