@@ -83,6 +83,10 @@ export default declare((api, options) => {
         }
       }
 
+      if (replacementPath.isOptionalCallExpression()) {
+        replacementPath.node.type = "CallExpression";
+      }
+
       replacementPath.replaceWith(
         t.conditionalExpression(
           loose
