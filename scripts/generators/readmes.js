@@ -60,7 +60,7 @@ npm install --save ${name}
 or using yarn:
 
 \`\`\`sh
-yarn add --save ${name}
+yarn add ${name} --dev
 \`\`\`
 `;
 
