@@ -54,7 +54,7 @@ See our website [${name}](${websiteLink}) for more information${
 Using npm:
 
 \`\`\`sh
-npm install --save ${name}
+npm install --save-dev ${name}
 \`\`\`
 
 or using yarn:
