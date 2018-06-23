@@ -1169,6 +1169,17 @@ Ep.explodeExpression = function(path, ignoreResult) {
     ));
 
   case "AssignmentExpression":
+    if (expr.operator === "=") {
+      // If this is a simple assignment, the left hand side does not need
+      // to be read before the right hand side is evaluated, so we can
+      // avoid the more complicated logic below.
+      return finish(t.assignmentExpression(
+        expr.operator,
+        self.explodeExpression(path.get("left")),
+        self.explodeExpression(path.get("right"))
+      ));
+    }
+
     const lhs = self.explodeExpression(path.get("left"));
     const temp = self.emitAssign(self.makeTempVar(), lhs);
 
