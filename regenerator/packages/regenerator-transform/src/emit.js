@@ -1169,10 +1169,29 @@ Ep.explodeExpression = function(path, ignoreResult) {
     ));
 
   case "AssignmentExpression":
+    const lhs = self.explodeExpression(path.get("left"));
+    const temp = self.emitAssign(self.makeTempVar(), lhs);
+
+    // For example,
+    //
+    //   x += yield y
+    //
+    // becomes
+    //
+    //   context.t0 = x
+    //   x = context.t0 += yield y
+    //
+    // so that the left-hand side expression is read before the yield.
+    // Fixes https://github.com/facebook/regenerator/issues/345.
+
     return finish(t.assignmentExpression(
-      expr.operator,
-      self.explodeExpression(path.get("left")),
-      self.explodeExpression(path.get("right"))
+      "=",
+      t.cloneDeep(lhs),
+      t.assignmentExpression(
+        expr.operator,
+        t.cloneDeep(temp),
+        self.explodeExpression(path.get("right"))
+      )
     ));
 
   case "UpdateExpression":
