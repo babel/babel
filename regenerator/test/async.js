@@ -522,3 +522,59 @@ describe("async generator functions", function() {
     assert.strictEqual(await new B().method(), "from B from A");
   });
 });
+
+describe("update operators", function() {
+  it("should read left side before yielding", function() {
+    let x = 0;
+
+    function* test() {
+      x += yield;
+    }
+
+    var gen = test();
+    gen.next();
+    x += 1;
+    assert.strictEqual(x, 1);
+
+    gen.next(2);
+    assert.strictEqual(x, 2);
+  });
+
+  it("should explode left side before yielding", function() {
+    let obj = { count: 0 };
+
+    function* test() {
+      obj[yield "key"] += yield "value";
+    }
+
+    var gen = test();
+
+    assert.deepEqual(gen.next(), { value: "key", done: false });
+    assert.strictEqual(obj.count, 0);
+
+    assert.deepEqual(gen.next("count"), { value: "value", done: false });
+    assert.strictEqual(obj.count, 0);
+
+    obj.count += 1;
+    assert.strictEqual(obj.count, 1);
+
+    assert.deepEqual(gen.next(2), { value: void 0, done: true });
+    assert.strictEqual(obj.count, 2);
+  });
+
+  it("should read left side before awaiting", function() {
+    let x = 0;
+
+    async function test(val) {
+      x += await val;
+      return x;
+    }
+
+    const promise = test(2);
+    x += 1;
+
+    return promise.then(result => {
+      assert.strictEqual(result, 2);
+    });
+  });
+});
