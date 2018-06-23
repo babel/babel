@@ -37,7 +37,7 @@
     "recast": "^0.11.17",
     "regenerator-preset": "^0.12.0",
     "regenerator-runtime": "^0.12.0",
-    "regenerator-transform": "^0.13.0",
+    "regenerator-transform": "^0.13.3",
     "through": "^2.3.8"
   },
   "devDependencies": {

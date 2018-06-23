@@ -2,7 +2,7 @@
   "name": "regenerator-transform",
   "author": "Ben Newman <bn@cs.stanford.edu>",
   "description": "Explode async and generator functions into a state machine.",
-  "version": "0.13.2",
+  "version": "0.13.3",
   "main": "lib/index.js",
   "keywords": [
     "regenerator",
