@@ -106,6 +106,15 @@ if (semver.gte(process.version, "0.11.2")) {
   ]);
 }
 
+if (semver.gte(process.version, "8.10.0")) {
+  enqueue("mocha", [
+    "--harmony",
+    "--reporter", "spec",
+    "--require", "./test/runtime.js",
+    "./test/async.js",
+  ]);
+}
+
 if (semver.gte(process.version, "4.0.0")) {
   enqueue("mocha", [
     "--harmony",
