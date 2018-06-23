@@ -9,17 +9,34 @@ var fs = require("fs");
 var path = require("path");
 var semver = require("semver");
 var spawn = require("child_process").spawn;
+var babel = require("@babel/core");
+var checkDuplicatedNodes = require("babel-check-duplicated-nodes").default;
 var regenerator = require("../main");
 var mochaDir = path.dirname(require.resolve("mocha"));
 
 function convert(es6File, es5File, callback) {
+  var transformOptions = {
+    presets:[require("regenerator-preset")],
+    parserOpts: {
+      strictMode: false,
+    },
+    ast: true
+  };
+
   fs.readFile(es6File, "utf-8", function(err, es6) {
     if (err) {
       return callback(err);
     }
 
-    var es5 = regenerator.compile(es6).code;
-    fs.writeFile(es5File, es5, callback);
+    var { code: es5, ast } = babel.transformSync(es6, transformOptions);
+    fs.writeFileSync(es5File, es5);
+    try {
+      checkDuplicatedNodes(babel, ast);
+    } catch (err) {
+      err.message = "Occured while transforming: " + es6File + "\n" + err.message;
+      throw err;
+    }
+    callback();
   });
 }
 
@@ -131,7 +148,16 @@ function convertWithSpread(es6File, es5File, callback) {
     plugins: [
       require("@babel/plugin-transform-spread"),
       require("@babel/plugin-transform-parameters")
-    ]
+    ],
+    parserOpts: {
+      sourceType: "module",
+      allowImportExportEverywhere: true,
+      allowReturnOutsideFunction: true,
+      allowSuperOutsideMethod: true,
+      strictMode: false,
+      plugins: ["*", "jsx", "flow"]
+    },
+    ast: true
   };
 
   fs.readFile(es6File, "utf-8", function(err, es6) {
@@ -139,9 +165,15 @@ function convertWithSpread(es6File, es5File, callback) {
       return callback(err);
     }
 
-    var es5 = require("@babel/core").transformSync(es6, transformOptions).code;
-
-    fs.writeFile(es5File, es5, callback);
+    var { code: es5, ast } = babel.transformSync(es6, transformOptions);
+    fs.writeFileSync(es5File, es5);
+    try {
+      checkDuplicatedNodes(babel, ast);
+    } catch (err) {
+      err.message = "Occured while transforming: " + es6File + "\n" + err.message;
+      throw err;
+    }
+    callback();
   });
 }
 

@@ -89,14 +89,14 @@ exports.getVisitor = ({ types: t }) => ({
       // declarations with equivalent assignment expressions.
       let vars = hoist(path);
 
-      let didRenameArguments = renameArguments(path, argsId);
+      let didRenameArguments = renameArguments(path, () => t.clone(argsId));
       if (didRenameArguments) {
         vars = vars || t.variableDeclaration("var", []);
         const argumentIdentifier = t.identifier("arguments");
         // we need to do this as otherwise arguments in arrow functions gets hoisted
         argumentIdentifier._shadowedFunctionLiteral = path;
         vars.declarations.push(t.variableDeclarator(
-          argsId, argumentIdentifier
+          t.clone(argsId), argumentIdentifier
         ));
       }
 
@@ -150,6 +150,18 @@ exports.getVisitor = ({ types: t }) => ({
         path.addComment("leading", "#__PURE__");
       }
 
+      const insertedLocs = emitter.getInsertedLocs();
+
+      path.traverse({
+        NumericLiteral(path) {
+          if (!insertedLocs.has(path.node)) {
+            return;
+          }
+
+          path.replaceWith(t.numericLiteral(path.node.value));
+        },
+      })
+
       // Generators are processed in 'exit' handlers so that regenerator only has to run on
       // an ES5 AST, but that means traversal will not pick up newly inserted references
       // to things like 'regeneratorRuntime'. To avoid this, we explicitly requeue.
@@ -179,7 +191,7 @@ function getOuterFnExpr(funPath) {
     return getMarkedFunctionId(funPath);
   }
 
-  return node.id;
+  return t.clone(node.id);
 }
 
 const getMarkInfo = require("private").makeAccessor();
@@ -213,7 +225,7 @@ function getMarkedFunctionId(funPath) {
   const markedId = blockPath.scope.generateUidIdentifier("marked");
   const markCallExp = t.callExpression(
     util.runtimeProperty("mark"),
-    [node.id]
+    [t.clone(node.id)]
   );
 
   const index = info.decl.declarations.push(
@@ -227,13 +239,13 @@ function getMarkedFunctionId(funPath) {
 
   markCallExpPath.addComment("leading", "#__PURE__");
 
-  return markedId;
+  return t.clone(markedId);
 }
 
-function renameArguments(funcPath, argsId) {
+function renameArguments(funcPath, getArgsId) {
   let state = {
     didRenameArguments: false,
-    argsId: argsId
+    getArgsId: getArgsId
   };
 
   funcPath.traverse(argumentsVisitor, state);
@@ -252,7 +264,7 @@ let argumentsVisitor = {
 
   Identifier: function(path, state) {
     if (path.node.name === "arguments" && util.isReference(path)) {
-      util.replaceWithOrRemove(path, state.argsId);
+      util.replaceWithOrRemove(path, state.getArgsId());
       state.didRenameArguments = true;
     }
   }
@@ -268,7 +280,7 @@ let functionSentVisitor = {
       util.replaceWithOrRemove(
         path,
         t.memberExpression(
-          this.context,
+          t.clone(this.context),
           t.identifier("_sent")
         )
       );

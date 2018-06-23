@@ -85,7 +85,7 @@ exports.hoist = function(funPath) {
       let assignment = t.expressionStatement(
         t.assignmentExpression(
           "=",
-          node.id,
+          t.clone(node.id),
           t.functionExpression(
             path.scope.generateUidIdentifierBasedOnNode(node),
             node.params,

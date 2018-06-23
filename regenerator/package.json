@@ -44,6 +44,7 @@
     "@babel/parser": "^7.0.0-beta.51",
     "@babel/plugin-transform-parameters": "^7.0.0-beta.51",
     "@babel/plugin-transform-spread": "^7.0.0-beta.51",
+    "babel-check-duplicated-nodes": "^1.0.0",
     "lerna": "^2.11.0",
     "mocha": "^5.2.0",
     "promise": "^7.0.4",

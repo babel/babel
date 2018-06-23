@@ -34,9 +34,11 @@ function Emitter(contextId) {
   // that have been marked as branch/jump targets.
   this.marked = [true];
 
+  this.insertedLocs = new Set();
+
   // The last location will be marked when this.getDispatchLoop is
   // called.
-  this.finalLoc = loc();
+  this.finalLoc = this.loc();
 
   // A list of all leap.TryEntry statements emitted.
   this.tryEntries = [];
@@ -55,8 +57,18 @@ exports.Emitter = Emitter;
 // the amazingly convenient benefit of allowing the exact value of the
 // location to be determined at any time, even after generating code that
 // refers to the location.
-function loc() {
-  return util.getTypes().numericLiteral(-1);
+Ep.loc = function() {
+  const l = util.getTypes().numericLiteral(-1)
+  this.insertedLocs.add(l);
+  return l;
+}
+
+Ep.getInsertedLocs = function() {
+  return this.insertedLocs;
+}
+
+Ep.getContextId = function() {
+  return util.getTypes().clone(this.contextId);
 }
 
 // Sets the exact value of the given location to the offset of the next
@@ -97,7 +109,7 @@ Ep.emitAssign = function(lhs, rhs) {
 Ep.assign = function(lhs, rhs) {
   const t = util.getTypes();
   return t.expressionStatement(
-    t.assignmentExpression("=", lhs, rhs));
+    t.assignmentExpression("=", t.cloneDeep(lhs), rhs));
 };
 
 // Convenience function for generating expressions like context.next,
@@ -105,7 +117,7 @@ Ep.assign = function(lhs, rhs) {
 Ep.contextProperty = function(name, computed) {
   const t = util.getTypes();
   return t.memberExpression(
-    this.contextId,
+    this.getContextId(),
     computed ? t.stringLiteral(name) : t.identifier(name),
     !!computed
   );
@@ -136,7 +148,7 @@ Ep.clearPendingException = function(tryLoc, assignee) {
 
   let catchCall = t.callExpression(
     this.contextProperty("catch", true),
-    [tryLoc]
+    [t.clone(tryLoc)]
   );
 
   if (assignee) {
@@ -208,7 +220,7 @@ Ep.getContextFunction = function(id) {
 
   return t.functionExpression(
     id || null/*Anonymous*/,
-    [this.contextId],
+    [this.getContextId()],
     t.blockStatement([this.getDispatchLoop()]),
     false, // Not a generator anymore!
     false // Nor an expression.
@@ -313,7 +325,7 @@ Ep.getTryLocsList = function() {
         locs[3] = fe.afterLoc;
       }
 
-      return t.arrayExpression(locs);
+      return t.arrayExpression(locs.map(loc => loc && t.clone(loc)));
     })
   );
 };
@@ -412,7 +424,7 @@ Ep.explodeStatement = function(path, labelId) {
     break;
 
   case "LabeledStatement":
-    after = loc();
+    after = this.loc();
 
     // Did you know you can break from any labeled block statement or
     // control structure? Well, you can! Note: when a labeled loop is
@@ -446,8 +458,8 @@ Ep.explodeStatement = function(path, labelId) {
     break;
 
   case "WhileStatement":
-    before = loc();
-    after = loc();
+    before = this.loc();
+    after = this.loc();
 
     self.mark(before);
     self.jumpIfNot(self.explodeExpression(path.get("test")), after);
@@ -461,9 +473,9 @@ Ep.explodeStatement = function(path, labelId) {
     break;
 
   case "DoWhileStatement":
-    let first = loc();
-    let test = loc();
-    after = loc();
+    let first = this.loc();
+    let test = this.loc();
+    after = this.loc();
 
     self.mark(first);
     self.leapManager.withEntry(
@@ -477,9 +489,9 @@ Ep.explodeStatement = function(path, labelId) {
     break;
 
   case "ForStatement":
-    head = loc();
-    let update = loc();
-    after = loc();
+    head = this.loc();
+    let update = this.loc();
+    after = this.loc();
 
     if (stmt.init) {
       // We pass true here to indicate that if stmt.init is an expression
@@ -518,8 +530,8 @@ Ep.explodeStatement = function(path, labelId) {
     return self.explodeExpression(path.get("expression"));
 
   case "ForInStatement":
-    head = loc();
-    after = loc();
+    head = this.loc();
+    after = this.loc();
 
     let keyIterNextFn = self.makeTempVar();
     self.emitAssign(
@@ -538,7 +550,7 @@ Ep.explodeStatement = function(path, labelId) {
         t.assignmentExpression(
           "=",
           keyInfoTmpVar,
-          t.callExpression(keyIterNextFn, [])
+          t.callExpression(t.cloneDeep(keyIterNextFn), [])
         ),
         t.identifier("done"),
         false
@@ -549,7 +561,7 @@ Ep.explodeStatement = function(path, labelId) {
     self.emitAssign(
       stmt.left,
       t.memberExpression(
-        keyInfoTmpVar,
+        t.cloneDeep(keyInfoTmpVar),
         t.identifier("value"),
         false
       )
@@ -590,8 +602,8 @@ Ep.explodeStatement = function(path, labelId) {
       self.explodeExpression(path.get("discriminant"))
     );
 
-    after = loc();
-    let defaultLoc = loc();
+    after = this.loc();
+    let defaultLoc = this.loc();
     let condition = defaultLoc;
     let caseLocs = [];
 
@@ -604,8 +616,8 @@ Ep.explodeStatement = function(path, labelId) {
 
       if (c.test) {
         condition = t.conditionalExpression(
-          t.binaryExpression("===", disc, c.test),
-          caseLocs[i] = loc(),
+          t.binaryExpression("===", t.cloneDeep(disc), c.test),
+          caseLocs[i] = this.loc(),
           condition
         );
       } else {
@@ -640,8 +652,8 @@ Ep.explodeStatement = function(path, labelId) {
     break;
 
   case "IfStatement":
-    let elseLoc = stmt.alternate && loc();
-    after = loc();
+    let elseLoc = stmt.alternate && this.loc();
+    after = this.loc();
 
     self.jumpIfNot(
       self.explodeExpression(path.get("test")),
@@ -672,17 +684,17 @@ Ep.explodeStatement = function(path, labelId) {
     throw new Error("WithStatement not supported in generator functions.");
 
   case "TryStatement":
-    after = loc();
+    after = this.loc();
 
     let handler = stmt.handler;
 
-    let catchLoc = handler && loc();
+    let catchLoc = handler && this.loc();
     let catchEntry = catchLoc && new leap.CatchEntry(
       catchLoc,
       handler.param
     );
 
-    let finallyLoc = stmt.finalizer && loc();
+    let finallyLoc = stmt.finalizer && this.loc();
     let finallyEntry = finallyLoc &&
       new leap.FinallyEntry(finallyLoc, after);
 
@@ -718,7 +730,7 @@ Ep.explodeStatement = function(path, labelId) {
         self.clearPendingException(tryEntry.firstLoc, safeParam);
 
         bodyPath.traverse(catchParamVisitor, {
-          safeParam: safeParam,
+          getSafeParam: () => t.cloneDeep(safeParam),
           catchParamName: handler.param.name
         });
 
@@ -762,7 +774,7 @@ Ep.explodeStatement = function(path, labelId) {
 let catchParamVisitor = {
   Identifier: function(path, state) {
     if (path.node.name === state.catchParamName && util.isReference(path)) {
-      util.replaceWithOrRemove(path, state.safeParam);
+      util.replaceWithOrRemove(path, state.getSafeParam());
     }
   },
 
@@ -795,12 +807,16 @@ Ep.emitAbruptCompletion = function(record) {
   if (record.type === "break" ||
       record.type === "continue") {
     t.assertLiteral(record.target);
-    abruptArgs[1] = record.target;
+    abruptArgs[1] = this.insertedLocs.has(record.target)
+      ? record.target
+      : t.cloneDeep(record.target);
   } else if (record.type === "return" ||
              record.type === "throw") {
     if (record.value) {
       t.assertExpression(record.value);
-      abruptArgs[1] = record.value;
+      abruptArgs[1] = this.insertedLocs.has(record.value)
+        ? record.value
+        : t.cloneDeep(record.value);
     }
   }
 
@@ -861,8 +877,9 @@ Ep.getUnmarkedCurrentLoc = function() {
 // precision at all times, but we don't have that luxury here, as it would
 // be costly and verbose to set context.prev before every statement.
 Ep.updateContextPrevLoc = function(loc) {
+  const t = util.getTypes();
   if (loc) {
-    util.getTypes().assertLiteral(loc);
+    t.assertLiteral(loc);
 
     if (loc.value === -1) {
       // If an uninitialized location literal was passed in, set its value
@@ -1009,7 +1026,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
 
         newCallee = t.memberExpression(
           t.memberExpression(
-            newObject,
+            t.cloneDeep(newObject),
             newProperty,
             calleePath.node.computed
           ),
@@ -1035,7 +1052,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
         // object.
         newCallee = t.sequenceExpression([
           t.numericLiteral(0),
-          newCallee
+          t.cloneDeep(newCallee)
         ]);
       }
     }
@@ -1046,7 +1063,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
 
     return finish(t.callExpression(
       newCallee,
-      newArgs
+      newArgs.map(arg => t.cloneDeep(arg))
     ));
 
   case "NewExpression":
@@ -1093,7 +1110,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
     return result;
 
   case "LogicalExpression":
-    after = loc();
+    after = this.loc();
 
     if (!ignoreResult) {
       result = self.makeTempVar();
@@ -1115,8 +1132,8 @@ Ep.explodeExpression = function(path, ignoreResult) {
     return result;
 
   case "ConditionalExpression":
-    let elseLoc = loc();
-    after = loc();
+    let elseLoc = this.loc();
+    after = this.loc();
     let test = self.explodeExpression(path.get("test"));
 
     self.jumpIfNot(test, elseLoc);
@@ -1166,7 +1183,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
     ));
 
   case "YieldExpression":
-    after = loc();
+    after = this.loc();
     let arg = expr.argument && self.explodeExpression(path.get("argument"));
 
     if (arg && expr.delegate) {
@@ -1190,7 +1207,7 @@ Ep.explodeExpression = function(path, ignoreResult) {
 
     self.emitAssign(self.contextProperty("next"), after);
 
-    let ret = t.returnStatement(arg || null);
+    let ret = t.returnStatement(t.cloneDeep(arg) || null);
     // Preserve the `yield` location so that source mappings for the statements
     // link back to the yield properly.
     ret.loc = expr.loc;
