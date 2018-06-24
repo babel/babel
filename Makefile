@@ -108,7 +108,8 @@ publish:
 	git pull --rebase
 	make clean-lib
 	rm -rf packages/babel-runtime/helpers
-	rm -rf packages/babel-runtime/core-js
+	rm -rf packages/babel-runtime-corejs2/helpers
+	rm -rf packages/babel-runtime-corejs2/core-js
 	BABEL_ENV=production make build-dist
 	make test
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^

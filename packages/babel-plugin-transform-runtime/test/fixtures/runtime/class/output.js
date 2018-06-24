@@ -1,4 +1,4 @@
-var _classCallCheck = require("@babel/runtime/helpers/builtin/classCallCheck");
+var _classCallCheck = require("@babel/runtime/helpers/classCallCheck");
 
 let Foo = function Foo() {
   "use strict";

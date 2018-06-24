@@ -8,7 +8,7 @@ export default declare((api, options) => {
   api.assertVersion(7);
 
   const {
-    corejsVersion = false,
+    corejs: corejsVersion = false,
     helpers: useRuntimeHelpers = true,
     regenerator: useRuntimeRegenerator = true,
     useESModules = false,
@@ -34,7 +34,7 @@ export default declare((api, options) => {
     (typeof corejsVersion !== "string" || corejsVersion !== "2")
   ) {
     throw new Error(
-      `The 'corejsVersion' option must be undefined, false, or 2, or '2', ` +
+      `The 'corejs' option must be undefined, false, or 2, or '2', ` +
         `but got ${JSON.stringify(corejsVersion)}.`,
     );
   }
@@ -50,7 +50,7 @@ export default declare((api, options) => {
       );
     } else {
       throw new Error(
-        "The 'useBuiltIns' option has been removed. Use the 'corejsVersion'" +
+        "The 'useBuiltIns' option has been removed. Use the 'corejs'" +
           "option with value '2' to polyfill with CoreJS 2.x via @babel/runtime.",
       );
     }
@@ -63,7 +63,7 @@ export default declare((api, options) => {
       );
     } else {
       throw new Error(
-        "The 'polyfill' option has been removed. Use the 'corejsVersion'" +
+        "The 'polyfill' option has been removed. Use the 'corejs'" +
           "option with value '2' to polyfill with CoreJS 2.x via @babel/runtime.",
       );
     }
@@ -75,9 +75,11 @@ export default declare((api, options) => {
     );
   }
 
-  const helpersDir = useESModules ? "helpers/es6" : "helpers";
+  const helpersDir = useESModules ? "helpers/esm" : "helpers";
   const injectCoreJS2 = `${corejsVersion}` === "2";
-  const moduleName = "@babel/runtime";
+  const moduleName = injectCoreJS2
+    ? "@babel/runtime-corejs2"
+    : "@babel/runtime";
 
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
@@ -104,7 +106,7 @@ export default declare((api, options) => {
             isInteropHelper && !isModule(file.path) ? 4 : undefined;
 
           return this.addDefaultImport(
-            `${moduleName}/${helpersDir}/${injectCoreJS2 ? "" : "builtin/"}${name}`,
+            `${moduleName}/${helpersDir}/${name}`,
             name,
             blockHoist,
           );

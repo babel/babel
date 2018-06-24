@@ -1,3 +1,0 @@
-{
-  "plugins": [["transform-runtime", { "corejsVersion": 2, "useESModules": true }], "transform-classes"]
-}

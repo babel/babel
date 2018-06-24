@@ -5,7 +5,8 @@ package.json
 lerna.json
 packages/babel-runtime
 !packages/babel-plugin-transform-runtime/scripts
-!packages/babel-runtime/core-js.js
+!packages/babel-runtime-corejs2/core-js.js
+packages/babel-runtime-corejs2
 packages/*/node_modules
 packages/*/lib
 packages/*/dist
