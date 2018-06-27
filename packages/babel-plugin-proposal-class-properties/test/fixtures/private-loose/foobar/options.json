@@ -1,3 +1,6 @@
 {
-  "presets": [["stage-0", { "decoratorsLegacy": true }], "es2015"]
+  "presets": [
+    ["stage-0", { "decoratorsLegacy": true, "pipelineProposal": "minimal" }],
+    "es2015"
+  ]
 }

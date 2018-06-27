@@ -6,7 +6,12 @@ import transformFunctionBind from "@babel/plugin-proposal-function-bind";
 export default declare((api, opts = {}) => {
   api.assertVersion(7);
 
-  const { loose = false, useBuiltIns = false, decoratorsLegacy = false } = opts;
+  const {
+    loose = false,
+    useBuiltIns = false,
+    decoratorsLegacy = false,
+    pipelineProposal,
+  } = opts;
 
   if (typeof loose !== "boolean") {
     throw new Error("@babel/preset-stage-0 'loose' option must be a boolean.");
@@ -30,8 +35,21 @@ export default declare((api, opts = {}) => {
     );
   }
 
+  if (typeof pipelineProposal !== "string") {
+    throw new Error(
+      "The pipeline operator requires a proposal set." +
+        " You must pass the 'pipelineProposal' option to" +
+        " @babel/preset-stage-0",
+    );
+  }
+
   return {
-    presets: [[presetStage1, { loose, useBuiltIns, decoratorsLegacy }]],
+    presets: [
+      [
+        presetStage1,
+        { loose, useBuiltIns, decoratorsLegacy, pipelineProposal },
+      ],
+    ],
     plugins: [transformFunctionBind],
   };
 });
