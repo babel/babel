@@ -476,7 +476,7 @@ describe("verify", () => {
       );
     });
 
-    it("polymorphpic types #109", () => {
+    it("polymorphic types #109", () => {
       verifyAndAssertMessages(
         "export default function groupByEveryN<T>(array: Array<T>, n: number): Array<Array<?T>> { n; }",
         { "no-unused-vars": 1, "no-undef": 1 }
@@ -494,7 +494,7 @@ describe("verify", () => {
       );
     });
 
-    it("polymorphpic/generic types for class #123", () => {
+    it("polymorphic/generic types for class #123", () => {
       verifyAndAssertMessages(
         `
           class Box<T> {
@@ -507,7 +507,7 @@ describe("verify", () => {
       );
     });
 
-    it("polymorphpic/generic types for function #123", () => {
+    it("polymorphic/generic types for function #123", () => {
       verifyAndAssertMessages(
         `
           export function identity<T>(value) {
@@ -518,7 +518,7 @@ describe("verify", () => {
       );
     });
 
-    it("polymorphpic/generic types for type alias #123", () => {
+    it("polymorphic/generic types for type alias #123", () => {
       verifyAndAssertMessages(
         `
           import Bar from './Bar';
@@ -528,7 +528,7 @@ describe("verify", () => {
       );
     });
 
-    it("polymorphpic/generic types - outside of fn scope #123", () => {
+    it("polymorphic/generic types - outside of fn scope #123", () => {
       verifyAndAssertMessages(
         `
           export function foo<T>(value) { value; };
@@ -542,7 +542,7 @@ describe("verify", () => {
       );
     });
 
-    it("polymorphpic/generic types - extending unknown #123", () => {
+    it("polymorphic/generic types - extending unknown #123", () => {
       verifyAndAssertMessages(
         `
           import Bar from 'bar';
@@ -550,6 +550,16 @@ describe("verify", () => {
         `,
         { "no-unused-vars": 1, "no-undef": 1 },
         ["2:30 'T' is not defined. no-undef"]
+      );
+    });
+
+    it("polymorphic/generic types - function calls", () => {
+      verifyAndAssertMessages(
+        `
+          function f<T>(): T {}
+          f<T>();
+        `,
+        { "no-unused-vars": 1, "no-undef": 1 }
       );
     });
 
@@ -1124,9 +1134,32 @@ describe("verify", () => {
     );
   });
 
-  describe("decorators #72", () => {
+  describe("decorators #72 (legacy)", () => {
+    function verifyDecoratorsLegacyAndAssertMessages(
+      code,
+      rules,
+      expectedMessages,
+      sourceType
+    ) {
+      const overrideConfig = {
+        parserOptions: {
+          ecmaFeatures: {
+            legacyDecorators: true,
+          },
+          sourceType,
+        },
+      };
+      return verifyAndAssertMessages(
+        code,
+        rules,
+        expectedMessages,
+        sourceType,
+        overrideConfig
+      );
+    }
+
     it("class declaration", () => {
-      verifyAndAssertMessages(
+      verifyDecoratorsLegacyAndAssertMessages(
         `
           import classDeclaration from 'decorator';
           import decoratorParameter from 'decorator';
@@ -1134,6 +1167,101 @@ describe("verify", () => {
           @classDeclaration(decoratorParameter)
           @classDeclaration
           export class TextareaAutosize {}
+        `,
+        { "no-unused-vars": 1 }
+      );
+    });
+
+    it("method definition", () => {
+      verifyDecoratorsLegacyAndAssertMessages(
+        `
+          import classMethodDeclarationA from 'decorator';
+          import decoratorParameter from 'decorator';
+          export class TextareaAutosize {
+          @classMethodDeclarationA((parameter) => parameter)
+          @classMethodDeclarationA(decoratorParameter)
+          @classMethodDeclarationA
+          methodDeclaration(e) {
+          e();
+          }
+          }
+        `,
+        { "no-unused-vars": 1 }
+      );
+    });
+
+    it("method definition get/set", () => {
+      verifyDecoratorsLegacyAndAssertMessages(
+        `
+          import classMethodDeclarationA from 'decorator';
+          import decoratorParameter from 'decorator';
+          export class TextareaAutosize {
+          @classMethodDeclarationA((parameter) => parameter)
+          @classMethodDeclarationA(decoratorParameter)
+          @classMethodDeclarationA
+          get bar() { }
+          @classMethodDeclarationA((parameter) => parameter)
+          @classMethodDeclarationA(decoratorParameter)
+          @classMethodDeclarationA
+          set bar(val) { val; }
+          }
+        `,
+        { "no-unused-vars": 1 }
+      );
+    });
+
+    it("object property", () => {
+      verifyDecoratorsLegacyAndAssertMessages(
+        `
+          import classMethodDeclarationA from 'decorator';
+          import decoratorParameter from 'decorator';
+          var obj = {
+          @classMethodDeclarationA((parameter) => parameter)
+          @classMethodDeclarationA(decoratorParameter)
+          @classMethodDeclarationA
+          methodDeclaration(e) {
+          e();
+          }
+          };
+          obj;
+        `,
+        { "no-unused-vars": 1 }
+      );
+    });
+
+    it("object property get/set", () => {
+      verifyDecoratorsLegacyAndAssertMessages(
+        `
+          import classMethodDeclarationA from 'decorator';
+          import decoratorParameter from 'decorator';
+          var obj = {
+          @classMethodDeclarationA((parameter) => parameter)
+          @classMethodDeclarationA(decoratorParameter)
+          @classMethodDeclarationA
+          get bar() { },
+          @classMethodDeclarationA((parameter) => parameter)
+          @classMethodDeclarationA(decoratorParameter)
+          @classMethodDeclarationA
+          set bar(val) { val; }
+          };
+          obj;
+        `,
+        { "no-unused-vars": 1 }
+      );
+    });
+  });
+
+  describe("decorators #72", () => {
+    it("class declaration", () => {
+      verifyAndAssertMessages(
+        `
+          import classDeclaration from 'decorator';
+          import decoratorParameter from 'decorator';
+          export
+          @classDeclaration((parameter) => parameter)
+          @classDeclaration(decoratorParameter)
+          @classDeclaration
+          class TextareaAutosize {}
         `,
         { "no-unused-vars": 1 }
       );
@@ -1172,46 +1300,6 @@ describe("verify", () => {
           @classMethodDeclarationA
           set bar(val) { val; }
           }
-        `,
-        { "no-unused-vars": 1 }
-      );
-    });
-
-    it("object property", () => {
-      verifyAndAssertMessages(
-        `
-          import classMethodDeclarationA from 'decorator';
-          import decoratorParameter from 'decorator';
-          var obj = {
-          @classMethodDeclarationA((parameter) => parameter)
-          @classMethodDeclarationA(decoratorParameter)
-          @classMethodDeclarationA
-          methodDeclaration(e) {
-          e();
-          }
-          };
-          obj;
-        `,
-        { "no-unused-vars": 1 }
-      );
-    });
-
-    it("object property get/set", () => {
-      verifyAndAssertMessages(
-        `
-          import classMethodDeclarationA from 'decorator';
-          import decoratorParameter from 'decorator';
-          var obj = {
-          @classMethodDeclarationA((parameter) => parameter)
-          @classMethodDeclarationA(decoratorParameter)
-          @classMethodDeclarationA
-          get bar() { },
-          @classMethodDeclarationA((parameter) => parameter)
-          @classMethodDeclarationA(decoratorParameter)
-          @classMethodDeclarationA
-          set bar(val) { val; }
-          };
-          obj;
         `,
         { "no-unused-vars": 1 }
       );
