@@ -1037,9 +1037,43 @@ helpers.classPrivateFieldSet = () => template.program.ast`
   }
 `;
 
+helpers.PrivateName = () => template.program.ast`
+  export default function PrivateName(description, name) {
+    var privateNameData = new WeakMap();
+    var descriptions = new WeakMap();
+
+    PrivateName = class PrivateName {
+      constructor(description, name) {
+        var descString = description === void 0 ? void 0 : String(description);
+        descriptions.set(this, descString);
+        privateNameData.set(this, name);
+      }
+
+      get(object) {
+        return privateNameData.get(this).get(object);
+      }
+
+      set(object, value) {
+        privateNameData.get(this).set(object, value);
+      }
+
+      get description() {
+        return descriptions.get(this);
+      }
+
+      toString() {
+        throw new TypeError("Cannot convert PrivateName objects to string.");
+      }
+    }
+
+    return new PrivateName(description, name);
+  }
+`;
+
 // Don't review me, review babel-helpers/src/helpers/decorate.js :)
 helpers.decorate = () => template.program.ast`
   import toArray from "toArray";
+  import PrivateName from "PrivateName";
 
   // ClassDefinitionEvaluation (Steps 26-*)
   export default function _decorate(
@@ -1049,7 +1083,7 @@ helpers.decorate = () => template.program.ast`
   ) /*: Class<*> */ {
     var r = factory(function initialize(O) {
       _initializeInstanceElements(O, decorated.elements);
-    }, superClass);
+    }, superClass, PrivateName);
     var decorated = _decorateClass(
       _coalesceClassElements(r.d.map(_createElementDescriptor)),
       decorators,
@@ -1223,7 +1257,11 @@ helpers.decorate = () => template.program.ast`
         value: initializer === void 0 ? void 0 : initializer.call(receiver),
       };
     }
-    Object.defineProperty(receiver, element.key, descriptor);
+    if (element.key instanceof PrivateName) {
+      element.key.set(receiver, descriptor.value);
+    } else {
+      Object.defineProperty(receiver, element.key, descriptor);
+    }
   }
 
   /*::
@@ -1420,7 +1458,13 @@ helpers.decorate = () => template.program.ast`
     }
 
     var key = elementObject.key;
-    if (typeof key !== "string" && typeof key !== "symbol") key = String(key);
+    if (
+      typeof key !== "string" &&
+      typeof key !== "symbol" &&
+      !(key instanceof PrivateName)
+    ) {
+      key = String(key);
+    }
 
     var placement = String(elementObject.placement);
     if (

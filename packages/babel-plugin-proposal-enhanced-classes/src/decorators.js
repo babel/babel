@@ -22,10 +22,10 @@ function extractDecorators({ node }) {
   return result;
 }
 
-function getKey(node, buildPrivateNameId, privateNamesMap) {
+function getKey(node, privateNameId, privateNamesMap) {
   if (t.isPrivateName(node.key)) {
     const { name } = node.key.id;
-    return t.callExpression(t.cloneNode(buildPrivateNameId), [
+    return t.newExpression(t.cloneNode(privateNameId), [
       t.stringLiteral(name),
       t.cloneNode(privateNamesMap.get(name)),
     ]);
@@ -40,7 +40,7 @@ function getSingleElementDefinition(
   path,
   superRef,
   classRef,
-  buildPrivateNameId,
+  privateNameId,
   privateNamesMap,
   file,
 ) {
@@ -72,7 +72,7 @@ function getSingleElementDefinition(
     prop("kind", t.stringLiteral(isMethod ? node.kind : "field")),
     prop("decorators", extractDecorators(path)),
     prop("static", node.static && t.booleanLiteral(true)),
-    prop("key", getKey(node, buildPrivateNameId, privateNamesMap)),
+    prop("key", getKey(node, privateNameId, privateNamesMap)),
     isMethod
       ? method("value", node.params, node.body)
       : method("value", [], template.ast`{ return ${node.value} }`),
@@ -84,7 +84,7 @@ function getSingleElementDefinition(
 function getElementsDefinitions(
   path,
   fId,
-  buildPrivateNameId,
+  privateNameId,
   privateNamesMap,
   file,
 ) {
@@ -98,7 +98,7 @@ function getElementsDefinitions(
           p,
           superRef,
           fId,
-          buildPrivateNameId,
+          privateNameId,
           privateNamesMap,
           file,
         ),
@@ -128,15 +128,13 @@ export function transformDecoratedClass(
   if (!path.node.id) path.node.id = path.scope.generateUidIdentifier("class");
 
   const initializeId = path.scope.generateUidIdentifier("initialize");
-  const buildPrivateNameId = path.scope.generateUidIdentifier(
-    "buildPrivateName",
-  );
+  const privateNameId = path.scope.generateUidIdentifier("PrivateName");
 
   const classDecorators = extractDecorators(path);
   const definitions = getElementsDefinitions(
     path,
     path.node.id,
-    buildPrivateNameId,
+    privateNameId,
     privateNamesMap,
     file,
   );
@@ -146,7 +144,7 @@ export function transformDecoratedClass(
   const expr = template.expression.ast`
       ${file.addHelper("decorate")}(
         ${classDecorators || t.nullLiteral()},
-        function (${initializeId}, ${buildPrivateNameId}) {
+        function (${initializeId}, ${privateNameId}) {
           ${path.node}
           return { F: ${t.cloneNode(path.node.id)}, d: ${definitions} };
         }

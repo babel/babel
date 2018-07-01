@@ -112,7 +112,7 @@ export default declare((api, options) => {
           );
 
           if (privateNamesNodes.length !== 0) {
-            path.insertAfter(privateNamesNodes);
+            path.insertBefore(privateNamesNodes);
           }
 
           return;
