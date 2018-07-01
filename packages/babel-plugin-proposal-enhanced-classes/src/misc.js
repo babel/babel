@@ -106,11 +106,3 @@ export function extractComputedKeys(ref, path, computedPaths, file) {
 
   return declarations;
 }
-
-export function getElementKey(node) {
-  if (node.computed) {
-    return node.key;
-  } else {
-    return t.stringLiteral(node.key.name || String(node.key.value));
-  }
-}

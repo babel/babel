@@ -92,10 +92,29 @@ export default declare((api, options) => {
           }
         }
 
+        const privateNamesMap = buildPrivateNamesMap(props);
+        const privateNamesNodes = buildPrivateNamesNodes(
+          privateNamesMap,
+          loose,
+          state,
+        );
+
+        transformPrivateNamesUsage(path, privateNamesMap, loose, state);
+
         if (usesDecorators) {
           path.replaceWith(
-            transformDecoratedClass(path, constructor, this.file),
+            transformDecoratedClass(
+              path,
+              constructor,
+              privateNamesMap,
+              this.file,
+            ),
           );
+
+          if (privateNamesNodes.length !== 0) {
+            path.insertAfter(privateNamesNodes);
+          }
+
           return;
         }
 
@@ -117,15 +136,6 @@ export default declare((api, options) => {
           computedPaths,
           this.file,
         );
-
-        const privateNamesMap = buildPrivateNamesMap(props);
-        const privateNamesNodes = buildPrivateNamesNodes(
-          privateNamesMap,
-          loose,
-          state,
-        );
-
-        transformPrivateNamesUsage(path, privateNamesMap, loose, state);
 
         const { staticNodes, instanceNodes } = buildFieldsInitNodes(
           ref,

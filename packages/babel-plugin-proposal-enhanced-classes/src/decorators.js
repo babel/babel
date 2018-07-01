@@ -1,6 +1,6 @@
 import { types as t, template } from "@babel/core";
 import ReplaceSupers from "@babel/helper-replace-supers";
-import { getElementKey, injectInitialization } from "./misc.js";
+import { injectInitialization } from "./misc.js";
 
 function prop(key, value) {
   if (!value) return null;
@@ -22,11 +22,32 @@ function extractDecorators({ node }) {
   return result;
 }
 
-function getSingleElementDefinition(path, superRef, classRef, file) {
+function getKey(node, buildPrivateNameId, privateNamesMap) {
+  if (t.isPrivateName(node.key)) {
+    const { name } = node.key.id;
+    return t.callExpression(t.cloneNode(buildPrivateNameId), [
+      t.stringLiteral(name),
+      t.cloneNode(privateNamesMap.get(name)),
+    ]);
+  } else if (node.computed) {
+    return node.key;
+  } else {
+    return t.stringLiteral(node.key.name || String(node.key.value));
+  }
+}
+
+function getSingleElementDefinition(
+  path,
+  superRef,
+  classRef,
+  buildPrivateNameId,
+  privateNamesMap,
+  file,
+) {
   const { node } = path;
   const isMethod = path.isClassMethod();
 
-  if (path.isPrivate()) {
+  if (false && path.isPrivate()) {
     throw path.buildCodeFrameError(
       `Private ${
         isMethod ? "methods" : "fields"
@@ -51,7 +72,7 @@ function getSingleElementDefinition(path, superRef, classRef, file) {
     prop("kind", t.stringLiteral(isMethod ? node.kind : "field")),
     prop("decorators", extractDecorators(path)),
     prop("static", node.static && t.booleanLiteral(true)),
-    prop("key", getElementKey(node)),
+    prop("key", getKey(node, buildPrivateNameId, privateNamesMap)),
     isMethod
       ? method("value", node.params, node.body)
       : method("value", [], template.ast`{ return ${node.value} }`),
@@ -60,13 +81,28 @@ function getSingleElementDefinition(path, superRef, classRef, file) {
   return t.objectExpression(properties);
 }
 
-function getElementsDefinitions(path, fId, file) {
+function getElementsDefinitions(
+  path,
+  fId,
+  buildPrivateNameId,
+  privateNamesMap,
+  file,
+) {
   const superRef = path.node.superClass || t.identifier("Function");
 
   const elements = [];
   for (const p of path.get("body.body")) {
     if (!p.isClassMethod({ kind: "constructor" })) {
-      elements.push(getSingleElementDefinition(p, superRef, fId, file));
+      elements.push(
+        getSingleElementDefinition(
+          p,
+          superRef,
+          fId,
+          buildPrivateNameId,
+          privateNamesMap,
+          file,
+        ),
+      );
       p.remove();
     }
   }
@@ -80,23 +116,37 @@ function buildInitCall(initializeInstanceId) {
   );
 }
 
-export function transformDecoratedClass(path, constructor, file) {
+export function transformDecoratedClass(
+  path,
+  constructor,
+  privateNamesMap,
+  file,
+) {
   const isDeclaration = path.node.id && path.isDeclaration();
 
   path.node.type = "ClassDeclaration";
   if (!path.node.id) path.node.id = path.scope.generateUidIdentifier("class");
 
   const initializeId = path.scope.generateUidIdentifier("initialize");
+  const buildPrivateNameId = path.scope.generateUidIdentifier(
+    "buildPrivateName",
+  );
 
   const classDecorators = extractDecorators(path);
-  const definitions = getElementsDefinitions(path, path.node.id, file);
+  const definitions = getElementsDefinitions(
+    path,
+    path.node.id,
+    buildPrivateNameId,
+    privateNamesMap,
+    file,
+  );
 
   injectInitialization(path, constructor, [buildInitCall(initializeId)]);
 
   const expr = template.expression.ast`
       ${file.addHelper("decorate")}(
         ${classDecorators || t.nullLiteral()},
-        function (${initializeId}) {
+        function (${initializeId}, ${buildPrivateNameId}) {
           ${path.node}
           return { F: ${t.cloneNode(path.node.id)}, d: ${definitions} };
         }
