@@ -128,7 +128,10 @@ export function transformDecoratedClass(
   if (!path.node.id) path.node.id = path.scope.generateUidIdentifier("class");
 
   const initializeId = path.scope.generateUidIdentifier("initialize");
-  const privateNameId = path.scope.generateUidIdentifier("PrivateName");
+  const privateNameId =
+    privateNamesMap.size > 0
+      ? path.scope.generateUidIdentifier("PrivateName")
+      : null;
 
   const classDecorators = extractDecorators(path);
   const definitions = getElementsDefinitions(
