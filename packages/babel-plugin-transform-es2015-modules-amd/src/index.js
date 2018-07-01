@@ -25,6 +25,22 @@ export default function ({ types: t }) {
     return true;
   }
 
+  function isAlreadyCompiled(programNode) {
+    const { body } = programNode;
+    if (body.length === 1) {
+      const [node] = body;
+      if (node.type === "ExpressionStatement") {
+        const { expression } = node;
+        if (expression.type === "CallExpression") {
+          const { callee } = expression;
+          if (callee.type === "Identifier" && callee.name === "define") {
+            return true;
+          }
+        }
+      }
+    }
+  }
+
   const amdVisitor = {
     ReferencedIdentifier({ node, scope }) {
       if (node.name === "exports" && !scope.getBinding("exports")) {
@@ -74,9 +90,14 @@ export default function ({ types: t }) {
 
     visitor: {
       Program: {
-        exit(path) {
+        exit(path, { opts }) {
           if (this.ran) return;
           this.ran = true;
+
+          const { node } = path;
+          if (opts.preventDoubleCompile && isAlreadyCompiled(node)) {
+            return;
+          }
 
           path.traverse(amdVisitor, this);
 
@@ -100,7 +121,6 @@ export default function ({ types: t }) {
             params.unshift(t.identifier("module"));
           }
 
-          const { node } = path;
           const factory = buildFactory({
             PARAMS: params,
             BODY: node.body
