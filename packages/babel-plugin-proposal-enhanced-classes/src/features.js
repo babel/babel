@@ -26,12 +26,6 @@ function hasFeature(file, feature) {
 }
 
 export function verifyUsedFeatures(path, file) {
-  if (hasFeature(file, FEATURES.decorators)) {
-    throw new Error(
-      "@babel/plugin-proposal-enhanced-classes" +
-        " doesn't suport decorators yet.",
-    );
-  }
   if (hasFeature(file, FEATURES.privateMethods)) {
     throw new Error(
       "@babel/plugin-proposal-enhanced-classes" +

@@ -1,7 +1,9 @@
 import { declare } from "@babel/helper-plugin-utils";
-import syntaxDecorators from "@babel/plugin-syntax-decorators";
-import visitor from "./transformer";
 import legacyVisitor from "./transformer-legacy";
+import proposalEnhancedClasses, {
+  enableFeature,
+  FEATURES,
+} from "@babel/plugin-proposal-enhanced-classes";
 
 export default declare((api, options) => {
   api.assertVersion(7);
@@ -24,12 +26,19 @@ export default declare((api, options) => {
   }
 
   return {
-    inherits: syntaxDecorators,
+    inherits: legacy ? undefined : proposalEnhancedClasses,
 
-    manipulateOptions({ generatorOpts }) {
+    manipulateOptions({ generatorOpts, parserOpts }) {
+      parserOpts.plugins.push(legacy ? "decorators-legacy" : "decorators");
       generatorOpts.decoratorsBeforeExport = decoratorsBeforeExport;
     },
 
-    visitor: legacy ? legacyVisitor : visitor,
+    pre() {
+      if (!legacy) {
+        enableFeature(this.file, FEATURES.decorators);
+      }
+    },
+
+    visitor: legacy ? legacyVisitor : undefined,
   };
 });

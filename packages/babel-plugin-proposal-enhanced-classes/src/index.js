@@ -1,5 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import nameFunction from "@babel/helper-function-name";
+import splitExportDeclaration from "@babel/helper-split-export-declaration";
 import { types as t } from "@babel/core";
 import {
   buildPrivateNamesNodes,
@@ -7,6 +8,7 @@ import {
   transformPrivateNamesUsage,
   buildFieldsInitNodes,
 } from "./fields";
+import { hasDecorators, transformDecoratedClass } from "./decorators";
 import { injectInitialization, extractComputedKeys } from "./misc";
 import {
   enableFeature,
@@ -29,6 +31,9 @@ export default declare((api, options) => {
       if (instanceFields) {
         parserOpts.plugins.push("classProperties", "classPrivateProperties");
       }
+      if (decorators) {
+        parserOpts.plugins.push("decorators");
+      }
     },
 
     pre() {
@@ -41,11 +46,20 @@ export default declare((api, options) => {
     },
 
     visitor: {
+      ExportDefaultDeclaration(path) {
+        let decl = path.get("declaration");
+        if (!decl.isClassDeclaration() || !hasDecorators(decl)) return;
+
+        if (decl.node.id) decl = splitExportDeclaration(path);
+        else decl.node.type = "ClassExpression";
+      },
+
       Class(path, state) {
         verifyUsedFeatures(path, this.file);
         const loose = isLoose(this.file);
 
         let constructor;
+        let usesDecorators = hasDecorators(path);
         const props = [];
         const computedPaths = [];
         const privateNames = new Set();
@@ -53,6 +67,10 @@ export default declare((api, options) => {
 
         for (const path of body.get("body")) {
           verifyUsedFeatures(path, this.file);
+
+          if (!usesDecorators) {
+            usesDecorators = hasDecorators(path);
+          }
 
           if (path.node.computed) {
             computedPaths.push(path);
@@ -72,6 +90,13 @@ export default declare((api, options) => {
           } else if (path.isClassMethod({ kind: "constructor" })) {
             constructor = path;
           }
+        }
+
+        if (usesDecorators) {
+          path.replaceWith(
+            transformDecoratedClass(path, constructor, this.file),
+          );
+          return;
         }
 
         if (!props.length) return;
