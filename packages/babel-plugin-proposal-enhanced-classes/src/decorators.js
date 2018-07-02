@@ -22,10 +22,10 @@ function extractDecorators({ node }) {
   return result;
 }
 
-function getKey(node, privateNameId, privateNamesMap) {
+function getKey(node, buildPrivateNameId, privateNamesMap) {
   if (t.isPrivateName(node.key)) {
     const { name } = node.key.id;
-    return t.newExpression(t.cloneNode(privateNameId), [
+    return t.callExpression(t.cloneNode(buildPrivateNameId), [
       t.stringLiteral(name),
       t.cloneNode(privateNamesMap.get(name)),
     ]);
@@ -40,7 +40,7 @@ function getSingleElementDefinition(
   path,
   superRef,
   classRef,
-  privateNameId,
+  buildPrivateNameId,
   privateNamesMap,
   file,
 ) {
@@ -72,7 +72,7 @@ function getSingleElementDefinition(
     prop("kind", t.stringLiteral(isMethod ? node.kind : "field")),
     prop("decorators", extractDecorators(path)),
     prop("static", node.static && t.booleanLiteral(true)),
-    prop("key", getKey(node, privateNameId, privateNamesMap)),
+    prop("key", getKey(node, buildPrivateNameId, privateNamesMap)),
     isMethod
       ? method("value", node.params, node.body)
       : method("value", [], template.ast`{ return ${node.value} }`),
@@ -84,7 +84,7 @@ function getSingleElementDefinition(
 function getElementsDefinitions(
   path,
   fId,
-  privateNameId,
+  buildPrivateNameId,
   privateNamesMap,
   file,
 ) {
@@ -98,7 +98,7 @@ function getElementsDefinitions(
           p,
           superRef,
           fId,
-          privateNameId,
+          buildPrivateNameId,
           privateNamesMap,
           file,
         ),
@@ -120,6 +120,7 @@ export function transformDecoratedClass(
   path,
   constructor,
   privateNamesMap,
+  loose,
   file,
 ) {
   const isDeclaration = path.node.id && path.isDeclaration();
@@ -128,29 +129,34 @@ export function transformDecoratedClass(
   if (!path.node.id) path.node.id = path.scope.generateUidIdentifier("class");
 
   const initializeId = path.scope.generateUidIdentifier("initialize");
-  const privateNameId =
+  const buildPrivateNameId =
     privateNamesMap.size > 0
-      ? path.scope.generateUidIdentifier("PrivateName")
+      ? path.scope.generateUidIdentifier("buildPrivateName")
       : null;
 
   const classDecorators = extractDecorators(path);
   const definitions = getElementsDefinitions(
     path,
     path.node.id,
-    privateNameId,
+    buildPrivateNameId,
     privateNamesMap,
     file,
   );
+
+  const privateNameUtilsName = loose
+    ? "privateNameUtilsLoose"
+    : "privateNameUtils";
 
   injectInitialization(path, constructor, [buildInitCall(initializeId)]);
 
   const expr = template.expression.ast`
       ${file.addHelper("decorate")}(
         ${classDecorators || t.nullLiteral()},
-        function (${initializeId}, ${privateNameId}) {
+        function (${initializeId}, ${buildPrivateNameId}) {
           ${path.node}
           return { F: ${t.cloneNode(path.node.id)}, d: ${definitions} };
-        }
+        },
+        ${file.addHelper(privateNameUtilsName)}()
       )
     `;
 

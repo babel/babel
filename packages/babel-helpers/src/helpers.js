@@ -1037,59 +1037,112 @@ helpers.classPrivateFieldSet = () => template.program.ast`
   }
 `;
 
-helpers.PrivateName = () => template.program.ast`
-  export default function PrivateName(description, name) {
+helpers.privateNameUtils = () => template.program.ast`
+  import classPrivateFieldGet from "classPrivateFieldGet";
+  import classPrivateFieldSet from "classPrivateFieldSet";
+
+  function descString(desc) {
+    return desc === void 0 ? void 0 : String(desc);
+  }
+
+  export default function privateNameUtils() {
+    privateNameUtils = function() { return utils };
+
     var privateNameData = new WeakMap();
     var descriptions = new WeakMap();
 
-    PrivateName = class PrivateName {
-      constructor(description, name) {
-        var descString = description === void 0 ? void 0 : String(description);
-        descriptions.set(this, descString);
-        privateNameData.set(this, name);
-      }
+    var utils = {
+      withMap: function (description, map) {
+        var name = Object.create(utils.PrivateName.prototype);
+        descriptions.set(name, descString(description));
+        privateNameData.set(name, map);
+        return name;
+      },
+      PrivateName: class PrivateName {
+        constructor(description) {
+          descriptions.set(this, descString(description));
+          privateNameData.set(this, new WeakMap);
+        }
 
-      get(object) {
-        return privateNameData.get(this).get(object);
-      }
+        get(object) {
+          return classPrivateFieldGet(object, privateNameData.get(this));
+        }
 
-      set(object, value) {
-        privateNameData.get(this).set(object, value);
-      }
+        set(object, value) {
+          return privateNameData.get(this).set(object, value);
+        }
 
-      get description() {
-        return descriptions.get(this);
-      }
+        get description() {
+          return descriptions.get(this);
+        }
 
-      toString() {
-        throw new TypeError("Cannot convert PrivateName objects to string.");
+        toString() {
+          throw new TypeError("Cannot convert PrivateName objects to string.");
+        }
       }
-    }
+    };
+    return utils;
+  }
+`;
 
-    return new PrivateName(description, name);
+helpers.privateNameUtilsLoose = () => template.program.ast`
+  import classPrivateFieldLooseKey from "classPrivateFieldLooseKey";
+  import classPrivateFieldLooseBase from "classPrivateFieldLooseBase";
+
+  export default function privateNameUtilsLoose() {
+    privateNameUtilsLoose = function() { return utils };
+
+    var utils = {
+      withMap: function (description, key) {
+        var name = Object.create(utils.PrivateName.prototype);
+        name.description = description;
+        name.__privateKey = key;
+        return name;
+      },
+      PrivateName: class PrivateName {
+        constructor(description) {
+          this.description = description;
+          this.__privateKey = classPrivateFieldLooseKey(description);
+        }
+
+        get(object) {
+          return classPrivateFieldLooseBase(object, this.__privateKey)[this.__privateKey];
+        }
+
+        set(object, value) {
+          return object[this.__privateKey] = value;
+        }
+      }
+    };
+    return utils;
   }
 `;
 
 // Don't review me, review babel-helpers/src/helpers/decorate.js :)
 helpers.decorate = () => template.program.ast`
   import toArray from "toArray";
-  import PrivateName from "PrivateName";
 
   // ClassDefinitionEvaluation (Steps 26-*)
   export default function _decorate(
     decorators /*: ClassDecorator[] */,
     factory /*: ClassFactory */,
     superClass /*: ?Class<*> */,
+    privateNameUtils
   ) /*: Class<*> */ {
     var r = factory(function initialize(O) {
-      _initializeInstanceElements(O, decorated.elements);
-    }, superClass, PrivateName);
+      _initializeInstanceElements(O, decorated.elements, privateNameUtils.PrivateName);
+    }, superClass, privateNameUtils.withMap);
     var decorated = _decorateClass(
       _coalesceClassElements(r.d.map(_createElementDescriptor)),
       decorators,
+      privateNameUtils.PrivateName,
     );
 
-    _initializeClassElements(r.F, decorated.elements);
+    _initializeClassElements(
+      r.F,
+      decorated.elements,
+      privateNameUtils.PrivateName
+    );
 
     return _runClassFinishers(r.F, decorated.finishers);
   }
@@ -1211,6 +1264,7 @@ helpers.decorate = () => template.program.ast`
   function _initializeClassElements /*::<C>*/(
     F /*: Class<C> */,
     elements /*: ElementDescriptor[] */,
+    PrivateName
   ) {
     var proto = F.prototype;
 
@@ -1222,7 +1276,7 @@ helpers.decorate = () => template.program.ast`
           (placement === "static" || placement === "prototype")
         ) {
           var receiver = placement === "static" ? F : proto;
-          _defineClassElement(receiver, element);
+          _defineClassElement(receiver, element, PrivateName);
         }
       });
     });
@@ -1232,11 +1286,12 @@ helpers.decorate = () => template.program.ast`
   function _initializeInstanceElements /*::<C>*/(
     O /*: C */,
     elements /*: ElementDescriptor[] */,
+    PrivateName
   ) {
     ["method", "field"].forEach(function(kind) {
       elements.forEach(function(element /*: ElementDescriptor */) {
         if (element.kind === kind && element.placement === "own") {
-          _defineClassElement(O, element);
+          _defineClassElement(O, element, PrivateName);
         }
       });
     });
@@ -1246,6 +1301,7 @@ helpers.decorate = () => template.program.ast`
   function _defineClassElement /*::<C>*/(
     receiver /*: C | Class<C> */,
     element /*: ElementDescriptor */,
+    PrivateName
   ) {
     var descriptor /*: PropertyDescriptor */ = element.descriptor;
     if (element.kind === "field") {
@@ -1278,6 +1334,7 @@ helpers.decorate = () => template.program.ast`
   function _decorateClass(
     elements /*: ElementDescriptor[] */,
     decorators /*: ClassDecorator[] */,
+    PrivateName
   ) /*: ElementsFinishers */ {
     var newElements /*: ElementDescriptor[] */ = [];
     var finishers /*: ClassFinisher[] */ = [];
@@ -1293,6 +1350,7 @@ helpers.decorate = () => template.program.ast`
       var elementFinishersExtras /*: ElementFinishersExtras */ = _decorateElement(
         element,
         placements,
+        PrivateName
       );
       newElements.push(elementFinishersExtras.element);
       newElements.push.apply(newElements, elementFinishersExtras.extras);
@@ -1306,6 +1364,7 @@ helpers.decorate = () => template.program.ast`
     var result /*: ElementsFinishers */ = _decorateConstructor(
       newElements,
       decorators,
+      PrivateName
     );
     finishers.push.apply(finishers, result.finishers);
     result.finishers = finishers;
@@ -1330,6 +1389,7 @@ helpers.decorate = () => template.program.ast`
   function _decorateElement(
     element /*: ElementDescriptor */,
     placements /*: Placements */,
+    PrivateName
   ) /*: ElementFinishersExtras */ {
     var extras /*: ElementDescriptor[] */ = [];
     var finishers /*: ClassFinisher[] */ = [];
@@ -1349,6 +1409,7 @@ helpers.decorate = () => template.program.ast`
       var elementFinisherExtras /*: ElementFinisherExtras */ = _toElementFinisherExtras(
         (0, decorators[i])(elementObject) /*: ElementObjectOutput */ ||
           elementObject,
+          PrivateName
       );
 
       element = elementFinisherExtras.element;
@@ -1375,6 +1436,7 @@ helpers.decorate = () => template.program.ast`
   function _decorateConstructor(
     elements /*: ElementDescriptor[] */,
     decorators /*: ClassDecorator[] */,
+    PrivateName
   ) /*: ElementsFinishers */ {
     var finishers /*: ClassFinisher[] */ = [];
 
@@ -1382,6 +1444,7 @@ helpers.decorate = () => template.program.ast`
       var obj /*: ClassObject */ = _fromClassDescriptor(elements);
       var elementsAndFinisher /*: ElementsFinisher */ = _toClassDescriptor(
         (0, decorators[i])(obj) /*: ClassObject */ || obj,
+        PrivateName
       );
 
       if (elementsAndFinisher.finisher !== undefined) {
@@ -1432,10 +1495,11 @@ helpers.decorate = () => template.program.ast`
   // ToElementDescriptors
   function _toElementDescriptors(
     elementObjects /*: ElementObject[] */,
+    PrivateName
   ) /*: ElementDescriptor[] */ {
     if (elementObjects === undefined) return;
     return toArray(elementObjects).map(function(elementObject) {
-      var element = _toElementDescriptor(elementObject);
+      var element = _toElementDescriptor(elementObject, PrivateName);
       _disallowProperty(elementObject, "finisher", "An element descriptor");
       _disallowProperty(elementObject, "extras", "An element descriptor");
       return element;
@@ -1445,6 +1509,7 @@ helpers.decorate = () => template.program.ast`
   // ToElementDescriptor
   function _toElementDescriptor(
     elementObject /*: ElementObject */,
+    PrivateName
   ) /*: ElementDescriptor */ {
     var kind = String(elementObject.kind);
     if (kind !== "method" && kind !== "field") {
@@ -1519,14 +1584,16 @@ helpers.decorate = () => template.program.ast`
 
   function _toElementFinisherExtras(
     elementObject /*: ElementObject */,
+    PrivateName
   ) /*: ElementFinisherExtras */ {
-    var element /*: ElementDescriptor */ = _toElementDescriptor(elementObject);
+    var element /*: ElementDescriptor */ = _toElementDescriptor(elementObject, PrivateName);
     var finisher /*: ClassFinisher */ = _optionalCallableProperty(
       elementObject,
       "finisher",
     );
     var extras /*: ElementDescriptors[] */ = _toElementDescriptors(
       elementObject.extras,
+      PrivateName
     );
 
     return { element: element, finisher: finisher, extras: extras };
@@ -1548,7 +1615,7 @@ helpers.decorate = () => template.program.ast`
   }
 
   // ToClassDescriptor
-  function _toClassDescriptor(obj /*: ClassObject */) /*: ElementsFinisher */ {
+  function _toClassDescriptor(obj /*: ClassObject */, PrivateName) /*: ElementsFinisher */ {
     var kind = String(obj.kind);
     if (kind !== "class") {
       throw new TypeError(
@@ -1566,7 +1633,7 @@ helpers.decorate = () => template.program.ast`
     _disallowProperty(obj, "extras", "A class descriptor");
 
     var finisher = _optionalCallableProperty(obj, "finisher");
-    var elements = _toElementDescriptors(obj.elements);
+    var elements = _toElementDescriptors(obj.elements, PrivateName);
 
     return { elements: elements, finisher: finisher };
   }

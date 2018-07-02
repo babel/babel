@@ -107,6 +107,7 @@ export default declare((api, options) => {
               path,
               constructor,
               privateNamesMap,
+              loose,
               this.file,
             ),
           );
