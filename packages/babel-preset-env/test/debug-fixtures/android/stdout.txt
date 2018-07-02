@@ -147,4 +147,4 @@ Using polyfills with `entry` option:
   web.timers { "android":"4" }
   web.immediate { "android":"4" }
   web.dom.iterable { "android":"4" }
-🎉  Successfully compiled 1 file with Babel.
+Successfully compiled 1 file with Babel.

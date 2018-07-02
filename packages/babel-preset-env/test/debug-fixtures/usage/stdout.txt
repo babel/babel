@@ -47,4 +47,4 @@ Using polyfills with `usage` option:
 [<CWD>/src/in2.js] Added following polyfills:
   regenerator-runtime { "chrome":"52", "firefox":"50", "ie":"11" }
   web.dom.iterable { "chrome":"52", "firefox":"50", "ie":"11" }
-🎉  Successfully compiled 2 files with Babel.
+Successfully compiled 2 files with Babel.

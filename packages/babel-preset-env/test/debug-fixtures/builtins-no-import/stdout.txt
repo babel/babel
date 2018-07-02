@@ -21,4 +21,4 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [<CWD>/src/in.js] `import '@babel/polyfill'` was not found.
-🎉  Successfully compiled 1 file with Babel.
+Successfully compiled 1 file with Babel.

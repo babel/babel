@@ -124,7 +124,7 @@ export default async function({ cliOptions, babelOptions }) {
     }
 
     console.log(
-      `🎉  Successfully compiled ${compiledFiles} ${
+      `Successfully compiled ${compiledFiles} ${
         compiledFiles !== 1 ? "files" : "file"
       } with Babel.`,
     );
