@@ -167,4 +167,4 @@ Using polyfills with `entry` option:
   web.timers { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   web.immediate { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   web.dom.iterable { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-🎉  Successfully compiled 1 file with Babel.
+Successfully compiled 1 file with Babel.

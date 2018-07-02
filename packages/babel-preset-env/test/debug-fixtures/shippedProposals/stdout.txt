@@ -181,4 +181,4 @@ Using polyfills with `entry` option:
   web.timers {}
   web.immediate {}
   web.dom.iterable {}
-🎉  Successfully compiled 1 file with Babel.
+Successfully compiled 1 file with Babel.

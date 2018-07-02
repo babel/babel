@@ -1,1 +1,1 @@
-🎉  Successfully compiled 2 files with Babel.
+Successfully compiled 2 files with Babel.
