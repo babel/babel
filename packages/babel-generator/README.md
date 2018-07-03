@@ -9,11 +9,11 @@ See our website [@babel/generator](https://babeljs.io/docs/en/next/babel-generat
 Using npm:
 
 ```sh
-npm install --save @babel/generator
+npm install --save-dev @babel/generator
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/generator
+yarn add @babel/generator --dev
 ```

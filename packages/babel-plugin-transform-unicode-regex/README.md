@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-unicode-regex](https://babeljs.io/docs/
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-unicode-regex
+npm install --save-dev @babel/plugin-transform-unicode-regex
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-unicode-regex
+yarn add @babel/plugin-transform-unicode-regex --dev
 ```

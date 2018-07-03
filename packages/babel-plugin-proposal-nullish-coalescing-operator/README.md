@@ -9,11 +9,11 @@ See our website [@babel/plugin-proposal-nullish-coalescing-operator](https://bab
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-proposal-nullish-coalescing-operator
+npm install --save-dev @babel/plugin-proposal-nullish-coalescing-operator
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-proposal-nullish-coalescing-operator
+yarn add @babel/plugin-proposal-nullish-coalescing-operator --dev
 ```

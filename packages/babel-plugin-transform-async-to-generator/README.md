@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-async-to-generator](https://babeljs.io/
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-async-to-generator
+npm install --save-dev @babel/plugin-transform-async-to-generator
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-async-to-generator
+yarn add @babel/plugin-transform-async-to-generator --dev
 ```

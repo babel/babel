@@ -9,11 +9,11 @@ See our website [@babel/preset-flow](https://babeljs.io/docs/en/next/babel-prese
 Using npm:
 
 ```sh
-npm install --save @babel/preset-flow
+npm install --save-dev @babel/preset-flow
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/preset-flow
+yarn add @babel/preset-flow --dev
 ```

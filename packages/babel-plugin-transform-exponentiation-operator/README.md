@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-exponentiation-operator](https://babelj
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-exponentiation-operator
+npm install --save-dev @babel/plugin-transform-exponentiation-operator
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-exponentiation-operator
+yarn add @babel/plugin-transform-exponentiation-operator --dev
 ```

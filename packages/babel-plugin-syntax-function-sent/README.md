@@ -9,11 +9,11 @@ See our website [@babel/plugin-syntax-function-sent](https://babeljs.io/docs/en/
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-syntax-function-sent
+npm install --save-dev @babel/plugin-syntax-function-sent
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-syntax-function-sent
+yarn add @babel/plugin-syntax-function-sent --dev
 ```

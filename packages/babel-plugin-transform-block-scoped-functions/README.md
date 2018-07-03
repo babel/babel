@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-block-scoped-functions](https://babeljs
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-block-scoped-functions
+npm install --save-dev @babel/plugin-transform-block-scoped-functions
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-block-scoped-functions
+yarn add @babel/plugin-transform-block-scoped-functions --dev
 ```

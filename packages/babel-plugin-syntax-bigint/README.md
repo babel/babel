@@ -9,11 +9,11 @@ See our website [@babel/plugin-syntax-bigint](https://babeljs.io/docs/en/next/ba
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-syntax-bigint
+npm install --save-dev @babel/plugin-syntax-bigint
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-syntax-bigint
+yarn add @babel/plugin-syntax-bigint --dev
 ```

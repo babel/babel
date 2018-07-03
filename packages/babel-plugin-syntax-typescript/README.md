@@ -9,11 +9,11 @@ See our website [@babel/plugin-syntax-typescript](https://babeljs.io/docs/en/nex
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-syntax-typescript
+npm install --save-dev @babel/plugin-syntax-typescript
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-syntax-typescript
+yarn add @babel/plugin-syntax-typescript --dev
 ```

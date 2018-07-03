@@ -9,11 +9,11 @@ See our website [@babel/helper-bindify-decorators](https://babeljs.io/docs/en/ne
 Using npm:
 
 ```sh
-npm install --save @babel/helper-bindify-decorators
+npm install --save-dev @babel/helper-bindify-decorators
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/helper-bindify-decorators
+yarn add @babel/helper-bindify-decorators --dev
 ```

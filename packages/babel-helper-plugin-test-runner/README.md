@@ -9,11 +9,11 @@ See our website [@babel/helper-plugin-test-runner](https://babeljs.io/docs/en/ne
 Using npm:
 
 ```sh
-npm install --save @babel/helper-plugin-test-runner
+npm install --save-dev @babel/helper-plugin-test-runner
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/helper-plugin-test-runner
+yarn add @babel/helper-plugin-test-runner --dev
 ```

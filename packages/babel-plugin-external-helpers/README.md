@@ -9,11 +9,11 @@ See our website [@babel/plugin-external-helpers](https://babeljs.io/docs/en/next
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-external-helpers
+npm install --save-dev @babel/plugin-external-helpers
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-external-helpers
+yarn add @babel/plugin-external-helpers --dev
 ```

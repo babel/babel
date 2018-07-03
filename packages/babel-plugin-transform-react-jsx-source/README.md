@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-react-jsx-source](https://babeljs.io/do
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-react-jsx-source
+npm install --save-dev @babel/plugin-transform-react-jsx-source
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-react-jsx-source
+yarn add @babel/plugin-transform-react-jsx-source --dev
 ```

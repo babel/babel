@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-react-display-name](https://babeljs.io/
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-react-display-name
+npm install --save-dev @babel/plugin-transform-react-display-name
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-react-display-name
+yarn add @babel/plugin-transform-react-display-name --dev
 ```

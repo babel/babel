@@ -9,11 +9,11 @@ See our website [@babel/plugin-proposal-pipeline-operator](https://babeljs.io/do
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-proposal-pipeline-operator
+npm install --save-dev @babel/plugin-proposal-pipeline-operator
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-proposal-pipeline-operator
+yarn add @babel/plugin-proposal-pipeline-operator --dev
 ```

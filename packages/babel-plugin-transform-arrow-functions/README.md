@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-arrow-functions](https://babeljs.io/doc
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-arrow-functions
+npm install --save-dev @babel/plugin-transform-arrow-functions
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-arrow-functions
+yarn add @babel/plugin-transform-arrow-functions --dev
 ```

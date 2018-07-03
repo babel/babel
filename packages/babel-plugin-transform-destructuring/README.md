@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-destructuring](https://babeljs.io/docs/
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-destructuring
+npm install --save-dev @babel/plugin-transform-destructuring
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-destructuring
+yarn add @babel/plugin-transform-destructuring --dev
 ```

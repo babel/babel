@@ -9,11 +9,11 @@ See our website [@babel/preset-env-standalone](https://babeljs.io/docs/en/next/b
 Using npm:
 
 ```sh
-npm install --save @babel/preset-env-standalone
+npm install --save-dev @babel/preset-env-standalone
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/preset-env-standalone
+yarn add @babel/preset-env-standalone --dev
 ```

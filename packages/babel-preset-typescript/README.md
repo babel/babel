@@ -9,11 +9,11 @@ See our website [@babel/preset-typescript](https://babeljs.io/docs/en/next/babel
 Using npm:
 
 ```sh
-npm install --save @babel/preset-typescript
+npm install --save-dev @babel/preset-typescript
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/preset-typescript
+yarn add @babel/preset-typescript --dev
 ```

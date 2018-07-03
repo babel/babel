@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-block-scoping](https://babeljs.io/docs/
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-block-scoping
+npm install --save-dev @babel/plugin-transform-block-scoping
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-block-scoping
+yarn add @babel/plugin-transform-block-scoping --dev
 ```

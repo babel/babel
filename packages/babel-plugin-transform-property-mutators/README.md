@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-property-mutators](https://babeljs.io/d
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-property-mutators
+npm install --save-dev @babel/plugin-transform-property-mutators
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-property-mutators
+yarn add @babel/plugin-transform-property-mutators --dev
 ```

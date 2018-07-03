@@ -9,11 +9,11 @@ See our website [@babel/plugin-proposal-function-sent](https://babeljs.io/docs/e
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-proposal-function-sent
+npm install --save-dev @babel/plugin-proposal-function-sent
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-proposal-function-sent
+yarn add @babel/plugin-proposal-function-sent --dev
 ```

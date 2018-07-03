@@ -9,11 +9,11 @@ See our website [@babel/preset-es2017](https://babeljs.io/docs/en/next/babel-pre
 Using npm:
 
 ```sh
-npm install --save @babel/preset-es2017
+npm install --save-dev @babel/preset-es2017
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/preset-es2017
+yarn add @babel/preset-es2017 --dev
 ```

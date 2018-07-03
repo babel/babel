@@ -9,11 +9,11 @@ See our website [@babel/core](https://babeljs.io/docs/en/next/babel-core.html) f
 Using npm:
 
 ```sh
-npm install --save @babel/core
+npm install --save-dev @babel/core
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/core
+yarn add @babel/core --dev
 ```

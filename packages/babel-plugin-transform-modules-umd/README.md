@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-modules-umd](https://babeljs.io/docs/en
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-modules-umd
+npm install --save-dev @babel/plugin-transform-modules-umd
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-modules-umd
+yarn add @babel/plugin-transform-modules-umd --dev
 ```

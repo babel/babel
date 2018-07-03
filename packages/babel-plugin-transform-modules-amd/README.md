@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-modules-amd](https://babeljs.io/docs/en
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-modules-amd
+npm install --save-dev @babel/plugin-transform-modules-amd
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-modules-amd
+yarn add @babel/plugin-transform-modules-amd --dev
 ```

@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-modules-systemjs](https://babeljs.io/do
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-modules-systemjs
+npm install --save-dev @babel/plugin-transform-modules-systemjs
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-modules-systemjs
+yarn add @babel/plugin-transform-modules-systemjs --dev
 ```

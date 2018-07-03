@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-jscript](https://babeljs.io/docs/en/nex
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-jscript
+npm install --save-dev @babel/plugin-transform-jscript
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-jscript
+yarn add @babel/plugin-transform-jscript --dev
 ```

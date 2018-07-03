@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-proto-to-assign](https://babeljs.io/doc
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-proto-to-assign
+npm install --save-dev @babel/plugin-transform-proto-to-assign
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-proto-to-assign
+yarn add @babel/plugin-transform-proto-to-assign --dev
 ```

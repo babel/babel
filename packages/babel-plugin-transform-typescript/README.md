@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-typescript](https://babeljs.io/docs/en/
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-typescript
+npm install --save-dev @babel/plugin-transform-typescript
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-typescript
+yarn add @babel/plugin-transform-typescript --dev
 ```

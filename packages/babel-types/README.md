@@ -9,11 +9,11 @@ See our website [@babel/types](https://babeljs.io/docs/en/next/babel-types.html)
 Using npm:
 
 ```sh
-npm install --save @babel/types
+npm install --save-dev @babel/types
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/types
+yarn add @babel/types --dev
 ```

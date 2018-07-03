@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-computed-properties](https://babeljs.io
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-computed-properties
+npm install --save-dev @babel/plugin-transform-computed-properties
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-computed-properties
+yarn add @babel/plugin-transform-computed-properties --dev
 ```

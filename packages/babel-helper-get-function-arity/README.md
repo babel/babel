@@ -9,11 +9,11 @@ See our website [@babel/helper-get-function-arity](https://babeljs.io/docs/en/ne
 Using npm:
 
 ```sh
-npm install --save @babel/helper-get-function-arity
+npm install --save-dev @babel/helper-get-function-arity
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/helper-get-function-arity
+yarn add @babel/helper-get-function-arity --dev
 ```
