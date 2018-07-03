@@ -9,11 +9,11 @@ See our website [@babel/plugin-syntax-numeric-separator](https://babeljs.io/docs
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-syntax-numeric-separator
+npm install --save-dev @babel/plugin-syntax-numeric-separator
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-syntax-numeric-separator
+yarn add @babel/plugin-syntax-numeric-separator --dev
 ```

@@ -9,11 +9,11 @@ See our website [@babel/plugin-proposal-logical-assignment-operators](https://ba
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-proposal-logical-assignment-operators
+npm install --save-dev @babel/plugin-proposal-logical-assignment-operators
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-proposal-logical-assignment-operators
+yarn add @babel/plugin-proposal-logical-assignment-operators --dev
 ```

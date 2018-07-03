@@ -9,11 +9,11 @@ See our website [@babel/traverse](https://babeljs.io/docs/en/next/babel-traverse
 Using npm:
 
 ```sh
-npm install --save @babel/traverse
+npm install --save-dev @babel/traverse
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/traverse
+yarn add @babel/traverse --dev
 ```

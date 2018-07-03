@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-function-name](https://babeljs.io/docs/
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-function-name
+npm install --save-dev @babel/plugin-transform-function-name
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-function-name
+yarn add @babel/plugin-transform-function-name --dev
 ```

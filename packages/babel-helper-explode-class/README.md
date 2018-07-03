@@ -9,11 +9,11 @@ See our website [@babel/helper-explode-class](https://babeljs.io/docs/en/next/ba
 Using npm:
 
 ```sh
-npm install --save @babel/helper-explode-class
+npm install --save-dev @babel/helper-explode-class
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/helper-explode-class
+yarn add @babel/helper-explode-class --dev
 ```

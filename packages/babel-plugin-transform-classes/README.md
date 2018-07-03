@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-classes](https://babeljs.io/docs/en/nex
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-classes
+npm install --save-dev @babel/plugin-transform-classes
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-classes
+yarn add @babel/plugin-transform-classes --dev
 ```

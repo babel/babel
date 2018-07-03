@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-modules-commonjs](https://babeljs.io/do
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-modules-commonjs
+npm install --save-dev @babel/plugin-transform-modules-commonjs
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-modules-commonjs
+yarn add @babel/plugin-transform-modules-commonjs --dev
 ```

@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-react-constant-elements](https://babelj
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-react-constant-elements
+npm install --save-dev @babel/plugin-transform-react-constant-elements
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-react-constant-elements
+yarn add @babel/plugin-transform-react-constant-elements --dev
 ```

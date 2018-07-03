@@ -9,11 +9,11 @@ See our website [@babel/code-frame](https://babeljs.io/docs/en/next/babel-code-f
 Using npm:
 
 ```sh
-npm install --save @babel/code-frame
+npm install --save-dev @babel/code-frame
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/code-frame
+yarn add @babel/code-frame --dev
 ```

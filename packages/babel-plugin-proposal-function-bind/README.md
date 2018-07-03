@@ -9,11 +9,11 @@ See our website [@babel/plugin-proposal-function-bind](https://babeljs.io/docs/e
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-proposal-function-bind
+npm install --save-dev @babel/plugin-proposal-function-bind
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-proposal-function-bind
+yarn add @babel/plugin-proposal-function-bind --dev
 ```

@@ -9,11 +9,11 @@ See our website [@babel/helper-remap-async-to-generator](https://babeljs.io/docs
 Using npm:
 
 ```sh
-npm install --save @babel/helper-remap-async-to-generator
+npm install --save-dev @babel/helper-remap-async-to-generator
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/helper-remap-async-to-generator
+yarn add @babel/helper-remap-async-to-generator --dev
 ```

@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-literals](https://babeljs.io/docs/en/ne
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-literals
+npm install --save-dev @babel/plugin-transform-literals
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-literals
+yarn add @babel/plugin-transform-literals --dev
 ```

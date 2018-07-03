@@ -9,11 +9,11 @@ See our website [@babel/plugin-syntax-class-properties](https://babeljs.io/docs/
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-syntax-class-properties
+npm install --save-dev @babel/plugin-syntax-class-properties
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-syntax-class-properties
+yarn add @babel/plugin-syntax-class-properties --dev
 ```

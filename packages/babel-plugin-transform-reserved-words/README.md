@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-reserved-words](https://babeljs.io/docs
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-reserved-words
+npm install --save-dev @babel/plugin-transform-reserved-words
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-reserved-words
+yarn add @babel/plugin-transform-reserved-words --dev
 ```

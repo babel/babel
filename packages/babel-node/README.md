@@ -9,11 +9,11 @@ See our website [@babel/node](https://babeljs.io/docs/en/next/babel-node.html) f
 Using npm:
 
 ```sh
-npm install --save @babel/node
+npm install --save-dev @babel/node
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/node
+yarn add @babel/node --dev
 ```

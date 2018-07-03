@@ -9,11 +9,11 @@ See our website [@babel/helper-simple-access](https://babeljs.io/docs/en/next/ba
 Using npm:
 
 ```sh
-npm install --save @babel/helper-simple-access
+npm install --save-dev @babel/helper-simple-access
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/helper-simple-access
+yarn add @babel/helper-simple-access --dev
 ```

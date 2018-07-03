@@ -9,11 +9,11 @@ See our website [@babel/plugin-proposal-decorators](https://babeljs.io/docs/en/n
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-proposal-decorators
+npm install --save-dev @babel/plugin-proposal-decorators
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-proposal-decorators
+yarn add @babel/plugin-proposal-decorators --dev
 ```

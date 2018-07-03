@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-member-expression-literals](https://bab
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-member-expression-literals
+npm install --save-dev @babel/plugin-transform-member-expression-literals
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-member-expression-literals
+yarn add @babel/plugin-transform-member-expression-literals --dev
 ```

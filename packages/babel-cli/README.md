@@ -9,11 +9,11 @@ See our website [@babel/cli](https://babeljs.io/docs/en/next/babel-cli.html) for
 Using npm:
 
 ```sh
-npm install --save @babel/cli
+npm install --save-dev @babel/cli
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/cli
+yarn add @babel/cli --dev
 ```

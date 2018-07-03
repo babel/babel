@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-runtime](https://babeljs.io/docs/en/nex
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-runtime
+npm install --save-dev @babel/plugin-transform-runtime
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-runtime
+yarn add @babel/plugin-transform-runtime --dev
 ```

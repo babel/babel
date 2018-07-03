@@ -9,11 +9,11 @@ See our website [@babel/helper-optimise-call-expression](https://babeljs.io/docs
 Using npm:
 
 ```sh
-npm install --save @babel/helper-optimise-call-expression
+npm install --save-dev @babel/helper-optimise-call-expression
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/helper-optimise-call-expression
+yarn add @babel/helper-optimise-call-expression --dev
 ```

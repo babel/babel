@@ -9,11 +9,11 @@ See our website [@babel/preset-stage-2](https://babeljs.io/docs/en/next/babel-pr
 Using npm:
 
 ```sh
-npm install --save @babel/preset-stage-2
+npm install --save-dev @babel/preset-stage-2
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/preset-stage-2
+yarn add @babel/preset-stage-2 --dev
 ```

@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-parameters](https://babeljs.io/docs/en/
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-parameters
+npm install --save-dev @babel/plugin-transform-parameters
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-parameters
+yarn add @babel/plugin-transform-parameters --dev
 ```

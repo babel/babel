@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-shorthand-properties](https://babeljs.i
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-shorthand-properties
+npm install --save-dev @babel/plugin-transform-shorthand-properties
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-shorthand-properties
+yarn add @babel/plugin-transform-shorthand-properties --dev
 ```

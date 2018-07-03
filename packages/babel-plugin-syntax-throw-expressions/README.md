@@ -9,11 +9,11 @@ See our website [@babel/plugin-syntax-throw-expressions](https://babeljs.io/docs
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-syntax-throw-expressions
+npm install --save-dev @babel/plugin-syntax-throw-expressions
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-syntax-throw-expressions
+yarn add @babel/plugin-syntax-throw-expressions --dev
 ```

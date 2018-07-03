@@ -9,11 +9,11 @@ See our website [@babel/helper-hoist-variables](https://babeljs.io/docs/en/next/
 Using npm:
 
 ```sh
-npm install --save @babel/helper-hoist-variables
+npm install --save-dev @babel/helper-hoist-variables
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/helper-hoist-variables
+yarn add @babel/helper-hoist-variables --dev
 ```

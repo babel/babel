@@ -9,11 +9,11 @@ See our website [@babel/plugin-transform-sticky-regex](https://babeljs.io/docs/e
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-transform-sticky-regex
+npm install --save-dev @babel/plugin-transform-sticky-regex
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-sticky-regex
+yarn add @babel/plugin-transform-sticky-regex --dev
 ```

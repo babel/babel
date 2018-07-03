@@ -9,11 +9,11 @@ See our website [@babel/plugin-proposal-json-strings](https://babeljs.io/docs/en
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-proposal-json-strings
+npm install --save-dev @babel/plugin-proposal-json-strings
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-proposal-json-strings
+yarn add @babel/plugin-proposal-json-strings --dev
 ```

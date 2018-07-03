@@ -9,11 +9,11 @@ See our website [@babel/plugin-syntax-optional-chaining](https://babeljs.io/docs
 Using npm:
 
 ```sh
-npm install --save @babel/plugin-syntax-optional-chaining
+npm install --save-dev @babel/plugin-syntax-optional-chaining
 ```
 
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-syntax-optional-chaining
+yarn add @babel/plugin-syntax-optional-chaining --dev
 ```
