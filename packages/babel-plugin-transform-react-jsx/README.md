@@ -15,5 +15,5 @@ npm install --save @babel/plugin-transform-react-jsx
 or using yarn:
 
 ```sh
-yarn add --save @babel/plugin-transform-react-jsx
+yarn add @babel/plugin-transform-react-jsx
 ```
