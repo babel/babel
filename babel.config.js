@@ -50,6 +50,7 @@ module.exports = function(api) {
       ignoreLib ? "packages/*/lib" : null,
       "packages/babel-standalone/babel.js",
       "packages/babel-preset-env-standalone/babel-preset-env.js",
+      "packages/babel-helpers/src/helpers",
     ].filter(Boolean),
     presets: [["@babel/env", envOpts]],
     plugins: [
