@@ -19,14 +19,14 @@ export function findPackageData(filepath: string): FilePackageData {
 }
 
 export function findRelativeConfig(
-  pkgData: FilePackageData,
+  pkgData: FilePackageData, // eslint-disable-line no-unused-vars
   envName: string, // eslint-disable-line no-unused-vars
 ): RelativeConfig {
   return { pkg: null, config: null, ignore: null };
 }
 
 export function findRootConfig(
-  dirname: string,
+  dirname: string, // eslint-disable-line no-unused-vars
   envName: string, // eslint-disable-line no-unused-vars
 ): ConfigFile | null {
   return null;

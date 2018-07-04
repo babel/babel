@@ -1440,9 +1440,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     checkReservedWord(
-      word: string,
-      startLoc: number,
-      checkKeywords: boolean,
+      word: string, // eslint-disable-line no-unused-vars
+      startLoc: number, // eslint-disable-line no-unused-vars
+      checkKeywords: boolean, // eslint-disable-line no-unused-vars
       // eslint-disable-next-line no-unused-vars
       isBinding: boolean,
     ): void {
