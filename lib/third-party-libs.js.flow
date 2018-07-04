@@ -160,7 +160,7 @@ declare module "convert-source-map" {
     fromComment(str: string): Converter,
     fromMapFileComment(str: string): Converter,
     fromSource(str: string): Converter,
-    fromMapFileSource(str: string): Converter,
+    fromMapFileSource(str: string, dir: string): Converter,
     removeComments(str: string): string,
     removeMapFileComments(str: string): string,
     generateMapFileComment(path: string, options?: ?{ multiline: boolean }): string,
