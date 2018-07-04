@@ -188,10 +188,10 @@ export default declare((api, options) => {
       } else {
         keys = t.arrayExpression(keys);
 
-        value = t.callExpression(this.addHelper("objectWithoutProperties"), [
-          t.cloneNode(objRef),
-          keys,
-        ]);
+        value = t.callExpression(
+          this.addHelper(`objectWithoutProperties${loose ? "Loose" : ""}`),
+          [t.cloneNode(objRef), keys],
+        );
       }
 
       this.nodes.push(this.buildVariableAssignment(spreadProp.argument, value));

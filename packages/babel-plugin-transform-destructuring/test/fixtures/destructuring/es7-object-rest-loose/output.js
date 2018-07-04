@@ -2,15 +2,26 @@ function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) r
 
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
-z = _extends({
-  x
-}, y);
-z = {
-  x,
-  w: _extends({}, y)
-};
+var z = {};
 
-const {
-  q
-} = z,
-      rest = _objectWithoutPropertiesLoose(z, ["q"]);
+var _z = z,
+    x = _extends({}, _z);
+
+var _z2 = z,
+    x = _z2.x,
+    y = _objectWithoutPropertiesLoose(_z2, ["x"]);
+
+var _z3 = z,
+    x = _z3[x],
+    y = _objectWithoutPropertiesLoose(_z3, [x]);
+
+(function (_ref) {
+  let x = _ref.x,
+      y = _objectWithoutPropertiesLoose(_ref, ["x"]);
+});
+
+var _o = o;
+x = _o.x;
+y = _o.y;
+z = _objectWithoutPropertiesLoose(_o, ["x", "y"]);
+_o;
