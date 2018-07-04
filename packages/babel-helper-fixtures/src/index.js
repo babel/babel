@@ -189,6 +189,25 @@ export default function get(entryLoc): Array<Suite> {
       if (fs.existsSync(inputMapLoc)) {
         test.inputSourceMap = JSON.parse(readFile(inputMapLoc));
       }
+
+      if (taskOpts.throws) {
+        if (test.expect.code) {
+          throw new Error(
+            "Test cannot throw and also return output code: " + expectLoc,
+          );
+        }
+        if (test.sourceMappings) {
+          throw new Error(
+            "Test cannot throw and also return sourcemappings: " +
+              sourceMappingsLoc,
+          );
+        }
+        if (test.sourceMap) {
+          throw new Error(
+            "Test cannot throw and also return sourcemaps: " + sourceMapLoc,
+          );
+        }
+      }
     }
   }
 
