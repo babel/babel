@@ -157,10 +157,6 @@ export default declare((api, { jsxPragma = "React" }) => {
 
       ClassProperty(path) {
         const { node } = path;
-        if (!node.value) {
-          path.remove();
-          return;
-        }
 
         if (node.accessibility) node.accessibility = null;
         if (node.abstract) node.abstract = null;
@@ -196,7 +192,10 @@ export default declare((api, { jsxPragma = "React" }) => {
         path.get("body.body").forEach(child => {
           if (child.isClassProperty()) {
             child.node.typeAnnotation = null;
-            if (!child.node.value) child.remove();
+
+            if (!child.node.value && !child.node.decorators) {
+              child.remove();
+            }
           }
         });
       },
