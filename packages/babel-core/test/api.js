@@ -180,7 +180,7 @@ describe("api", function() {
 
   it("options merge backwards", function() {
     return transformAsync("", {
-      presets: [__dirname + "/../../babel-preset-es2015"],
+      presets: [__dirname + "/../../babel-preset-env"],
       plugins: [__dirname + "/../../babel-plugin-syntax-jsx"],
     }).then(function(result) {
       expect(result.options.plugins[0].manipulateOptions.toString()).toEqual(
@@ -259,8 +259,8 @@ describe("api", function() {
             };
           },
 
-          // ES2015 preset
-          require(__dirname + "/../../babel-preset-es2015"),
+          // env preset
+          require(__dirname + "/../../babel-preset-env"),
 
           // Third preset for Flow.
           function() {

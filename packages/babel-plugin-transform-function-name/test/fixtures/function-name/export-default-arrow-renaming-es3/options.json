@@ -1,5 +1,5 @@
 {
-  "presets": ["es2015"],
+  "presets": ["env"],
   "plugins": [
     "transform-member-expression-literals",
     "transform-property-literals"

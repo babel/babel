@@ -3,7 +3,7 @@
     "transform-async-to-generator",
     "proposal-async-generator-functions"
   ],
-  "presets": ["es2015"],
+  "presets": ["env"],
   "parserOpts": {
     "allowReturnOutsideFunction": true
   }

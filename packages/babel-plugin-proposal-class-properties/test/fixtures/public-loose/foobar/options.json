@@ -2,6 +2,6 @@
   "plugins": ["external-helpers", ["proposal-class-properties", {"loose": true}]],
   "presets": [
     ["stage-0", { "decoratorsLegacy": true, "pipelineProposal": "minimal" }],
-    "es2015"
+    "env"
   ]
 }

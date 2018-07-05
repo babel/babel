@@ -16,7 +16,7 @@ const fileFilter = function(x) {
 };
 
 const presetLocs = [
-  path.join(__dirname, "../../babel-preset-es2015"),
+  path.join(__dirname, "../../babel-preset-env"),
   path.join(__dirname, "../../babel-preset-react"),
 ].join(",");
 
