@@ -16,15 +16,22 @@ _AsyncGenerator.prototype.return = function (arg) { return this._invoke("return"
 
 function _AwaitValue(value) { this.wrapped = value; }
 
-function foo() {
-  return _foo.apply(this, arguments);
-}
-
-function _foo() {
-  _foo = _wrapAsyncGenerator(_skipFirstGeneratorNext(function* () {
+function _foo2() {
+  _foo2 = _skipFirstGeneratorNext(function* foo() {
     let _functionSent = yield;
 
     _functionSent = yield _awaitAsyncGenerator(_functionSent);
-  }));
+  });
+  return _foo2.apply(this, arguments);
+}
+
+function _foo() {
+  _foo = _wrapAsyncGenerator(function foo() {
+    return _foo2.apply(this, arguments);
+  });
+  return _foo.apply(this, arguments);
+}
+
+function foo() {
   return _foo.apply(this, arguments);
 }

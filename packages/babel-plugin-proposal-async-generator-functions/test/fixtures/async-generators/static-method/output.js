@@ -1,13 +1,16 @@
+function _g() {
+  _g = babelHelpers.wrapAsyncGenerator(function* g() {
+    this;
+    yield babelHelpers.awaitAsyncGenerator(1);
+    yield 2;
+    return 3;
+  });
+  return _g.apply(this, arguments);
+}
+
 class C {
   static g() {
-    var _this = this;
-
-    return babelHelpers.wrapAsyncGenerator(function* () {
-      _this;
-      yield babelHelpers.awaitAsyncGenerator(1);
-      yield 2;
-      return 3;
-    })();
+    return _g.apply(this, arguments);
   }
 
 }

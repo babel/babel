@@ -1,14 +1,14 @@
 function _skipFirstGeneratorNext(fn) { return function () { var it = fn.apply(this, arguments); it.next(); return it; }; }
 
-export default function () {
-  return _ref.apply(this, arguments);
-}
-
-function _ref() {
-  _ref = _skipFirstGeneratorNext(function* () {
+function _wrapped() {
+  _wrapped = _skipFirstGeneratorNext(function* () {
     let _functionSent = yield;
 
     return _functionSent;
   });
-  return _ref.apply(this, arguments);
+  return _wrapped.apply(this, arguments);
+}
+
+export default function () {
+  return _wrapped.apply(this, arguments);
 }

@@ -59,15 +59,11 @@ var n = _objectSpread({
   y: y
 }, z);
 
-function agf() {
-  return _agf.apply(this, arguments);
-}
-
 function _agf() {
   _agf = _wrapAsyncGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee() {
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+  regeneratorRuntime.mark(function agf() {
+    return regeneratorRuntime.wrap(function agf$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
           case 0:
@@ -83,7 +79,11 @@ function _agf() {
             return _context.stop();
         }
       }
-    }, _callee, this);
+    }, agf, this);
   }));
+  return _agf.apply(this, arguments);
+}
+
+function agf() {
   return _agf.apply(this, arguments);
 }

@@ -2,13 +2,18 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
-export default {
-  function(name) {
-    return _asyncToGenerator(function* () {
-      const uppercasedName = name.upperCase(); // awaits depending on uppercasedName go here
+function _wrapped() {
+  _wrapped = _asyncToGenerator(function* (name) {
+    const uppercasedName = name.upperCase(); // awaits depending on uppercasedName go here
 
-      return <Foo name={uppercasedName} />;
-    })();
+    return <Foo name={uppercasedName} />;
+  });
+  return _wrapped.apply(this, arguments);
+}
+
+export default {
+  function(_x) {
+    return _wrapped.apply(this, arguments);
   }
 
 };

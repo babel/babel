@@ -4,13 +4,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 import _Promise from 'somewhere';
 
-function foo() {
+function _foo() {
+  _foo = _asyncToGenerator(function* foo() {
+    yield _Promise.resolve();
+  });
   return _foo.apply(this, arguments);
 }
 
-function _foo() {
-  _foo = _asyncToGenerator(function* () {
-    yield _Promise.resolve();
-  });
+function foo() {
   return _foo.apply(this, arguments);
 }

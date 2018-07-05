@@ -60,6 +60,8 @@ export default class PathHoister {
   isCompatibleScope(scope) {
     for (const key in this.bindings) {
       const binding = this.bindings[key];
+      // If we're hoisting a function, does the function define the binding?
+      if (binding.scope.path === this.path) continue;
       if (!scope.bindingIdentifierEquals(key, binding.identifier)) {
         return false;
       }
@@ -204,29 +206,38 @@ export default class PathHoister {
     // evaluated more than once leading to a bad optimisation
     if (attachTo.getFunctionParent() === this.path.getFunctionParent()) return;
 
-    // generate declaration and insert it to our point
-    let uid = attachTo.scope.generateUidIdentifier("ref");
-
-    const declarator = t.variableDeclarator(uid, this.path.node);
-
     const insertFn = this.attachAfter ? "insertAfter" : "insertBefore";
-    const [attached] = attachTo[insertFn]([
-      attachTo.isVariableDeclarator()
-        ? declarator
-        : t.variableDeclaration("var", [declarator]),
-    ]);
+    if (this.path.isDeclaration()) {
+      const [attached] = attachTo[insertFn](t.cloneNode(this.path.node));
+      this.path.remove();
+      return attached;
+    } else {
+      // generate declaration and insert it to our point
+      let uid = attachTo.scope.generateUidIdentifier("ref");
 
-    const parent = this.path.parentPath;
-    if (parent.isJSXElement() && this.path.container === parent.node.children) {
-      // turning the `span` in `<div><span /></div>` to an expression so we need to wrap it with
-      // an expression container
-      uid = t.JSXExpressionContainer(uid);
+      const declarator = t.variableDeclarator(uid, this.path.node);
+
+      const [attached] = attachTo[insertFn]([
+        attachTo.isVariableDeclarator()
+          ? declarator
+          : t.variableDeclaration("var", [declarator]),
+      ]);
+
+      const parent = this.path.parentPath;
+      if (
+        parent.isJSXElement() &&
+        this.path.container === parent.node.children
+      ) {
+        // turning the `span` in `<div><span /></div>` to an expression so we need to wrap it with
+        // an expression container
+        uid = t.JSXExpressionContainer(uid);
+      }
+
+      this.path.replaceWith(t.cloneNode(uid));
+
+      return attachTo.isVariableDeclarator()
+        ? attached.get("init")
+        : attached.get("declarations.0.init");
     }
-
-    this.path.replaceWith(t.cloneNode(uid));
-
-    return attachTo.isVariableDeclarator()
-      ? attached.get("init")
-      : attached.get("declarations.0.init");
   }
 }

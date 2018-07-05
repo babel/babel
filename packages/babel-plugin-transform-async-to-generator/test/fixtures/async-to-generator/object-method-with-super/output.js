@@ -2,7 +2,7 @@ class Foo extends class {} {
   method() {
     var _superprop_callMethod = (..._args) => super.method(..._args);
 
-    return babelHelpers.asyncToGenerator(function* () {
+    return babelHelpers.asyncToGenerator(function* method() {
       _superprop_callMethod();
 
       var arrow = () => _superprop_callMethod();

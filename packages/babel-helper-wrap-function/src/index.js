@@ -1,113 +1,89 @@
 import type { NodePath } from "@babel/traverse";
-import nameFunction from "@babel/helper-function-name";
 import template from "@babel/template";
 import * as t from "@babel/types";
 
-const buildExpressionWrapper = template.expression(`
-  (function () {
-    var REF = FUNCTION;
-    return function NAME(PARAMS) {
-      return REF.apply(this, arguments);
-    };
-  })()
-`);
-
-const buildDeclarationWrapper = template(`
-  function NAME(PARAMS) { return REF.apply(this, arguments); }
-  function REF() {
-    REF = FUNCTION;
-    return REF.apply(this, arguments);
+function buildParams(params, scope) {
+  const dummies = [];
+  for (const param of params) {
+    if (t.isAssignmentPattern(param) || t.isRestElement(param)) {
+      break;
+    }
+    dummies.push(scope.generateUidIdentifier("x"));
   }
-`);
-
-function classOrObjectMethod(path: NodePath, callId: Object) {
-  const node = path.node;
-  const body = node.body;
-
-  const container = t.functionExpression(
-    null,
-    [],
-    t.blockStatement(body.body),
-    true,
-  );
-  body.body = [
-    t.returnStatement(
-      t.callExpression(t.callExpression(callId, [container]), []),
-    ),
-  ];
-
-  // Regardless of whether or not the wrapped function is a an async method
-  // or generator the outer function should not be
-  node.async = false;
-  node.generator = false;
-
-  // Unwrap the wrapper IIFE's environment so super and this and such still work.
-  path
-    .get("body.body.0.argument.callee.arguments.0")
-    .unwrapFunctionEnvironment();
+  return dummies;
 }
 
-function plainFunction(path: NodePath, callId: Object) {
-  const node = path.node;
-  const isDeclaration = path.isFunctionDeclaration();
+const superPropVisitor = {
+  MemberExpression(path) {
+    if (path.get("object").isSuper()) {
+      this.hasSuperProp = true;
+      path.stop();
+    }
+  },
+};
+
+function classOrObjectMethod(path: NodePath, callId: Object) {
+  const { node } = path;
+  const { body, key } = node;
+
+  const id =
+    node.computed || !t.isIdentifier(key) || !t.isValidES3Identifier(key.name)
+      ? null
+      : t.cloneNode(node.key);
+  const params = node.params.map(t.cloneNode);
+  const container = t.functionDeclaration(id, params, t.cloneNode(body));
+
+  path.get("body").replaceWith(t.blockStatement([container]));
+
+  const fn = path.get("body.body.0");
+
+  const state = { hasSuperProp: false };
+  fn.traverse(superPropVisitor, state);
+  const hasSuperProp = state.hasSuperProp;
+
+  plainFunction(fn, callId, hasSuperProp);
+  path.get("body").replaceWith(t.cloneNode(fn.node.body));
+  node.params = fn.node.params;
+}
+
+function plainFunction(path: NodePath, callId: Object, hasSuperProp = false) {
+  const { node } = path;
   const functionId = node.id;
-  const wrapper = isDeclaration
-    ? buildDeclarationWrapper
-    : buildExpressionWrapper;
 
   if (path.isArrowFunctionExpression()) {
     path.arrowFunctionToExpression();
   }
 
-  node.id = null;
+  const name = functionId ? functionId.name : "wrapped";
+  const ref = path.scope.generateUidIdentifier(name);
+  const fn = t.cloneNode(node);
+  fn.type = "FunctionExpression";
+  fn.generator = true;
 
-  if (isDeclaration) {
-    node.type = "FunctionExpression";
-  }
+  if (hasSuperProp) {
+    const caller = template.statement.ast`
+      return ${callId}(${fn})();
+    `;
 
-  const built = t.callExpression(callId, [node]);
-  const container = wrapper({
-    NAME: functionId || null,
-    REF: path.scope.generateUidIdentifier(functionId ? functionId.name : "ref"),
-    FUNCTION: built,
-    PARAMS: node.params.reduce(
-      (acc, param) => {
-        acc.done =
-          acc.done || t.isAssignmentPattern(param) || t.isRestElement(param);
-
-        if (!acc.done) {
-          acc.params.push(path.scope.generateUidIdentifier("x"));
-        }
-
-        return acc;
-      },
-      {
-        params: [],
-        done: false,
-      },
-    ).params,
-  });
-
-  if (isDeclaration) {
-    path.replaceWith(container[0]);
-    path.insertAfter(container[1]);
+    path.get("body").replaceWith(t.blockStatement([caller]));
+    // Unwrap the wrapper IIFE's environment so super and this and such still work.
+    path
+      .get("body.body.0.argument.callee.arguments.0")
+      .unwrapFunctionEnvironment();
   } else {
-    const retFunction = container.callee.body.body[1].argument;
-    if (!functionId) {
-      nameFunction({
-        node: retFunction,
-        parent: path.parent,
-        scope: path.scope,
-      });
-    }
+    const caller = template.statement.ast`
+      return ${ref}.apply(this, arguments);
+    `;
+    const wrapper = template.statement.ast`
+      function ${ref}() {
+        ${ref} = ${callId}(${fn});
+        ${caller}
+      }
+    `;
 
-    if (!retFunction || retFunction.id || node.params.length) {
-      // we have an inferred function id or params so we need this wrapper
-      path.replaceWith(container);
-    } else {
-      // we can omit this wrapper as the conditions it protects for do not apply
-      path.replaceWith(built);
-    }
+    path.get("body").replaceWith(t.blockStatement([caller, wrapper]));
+    node.params = buildParams(node.params, path.scope);
+    path.get("body.body.1").hoist();
   }
 }
 

@@ -17,6 +17,27 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
+function _bar() {
+  _bar = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function bar() {
+    var baz;
+    return regeneratorRuntime.wrap(function bar$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            baz = 0;
+
+          case 1:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, bar, this);
+  }));
+  return _bar.apply(this, arguments);
+}
+
 var Foo =
 /*#__PURE__*/
 function () {
@@ -26,29 +47,9 @@ function () {
 
   _createClass(Foo, [{
     key: "bar",
-    value: function () {
-      var _bar = _asyncToGenerator(
-      /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee() {
-        var baz;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                baz = 0;
-
-              case 1:
-              case "end":
-                return _context.stop();
-            }
-          }
-        }, _callee, this);
-      }));
-
-      return function bar() {
-        return _bar.apply(this, arguments);
-      };
-    }()
+    value: function bar() {
+      return _bar.apply(this, arguments);
+    }
   }]);
 
   return Foo;
@@ -56,51 +57,50 @@ function () {
 
 exports.default = Foo;
 
-function foo() {
-  return _foo.apply(this, arguments);
+function _bar2() {
+  _bar2 = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function bar() {
+    var baz;
+    return regeneratorRuntime.wrap(function bar$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            baz = {};
+
+          case 1:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, bar, this);
+  }));
+  return _bar2.apply(this, arguments);
 }
 
 function _foo() {
   _foo = _asyncToGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee3() {
-    var bar, _bar2;
-
-    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+  regeneratorRuntime.mark(function foo() {
+    var bar;
+    return regeneratorRuntime.wrap(function foo$(_context2) {
       while (1) {
-        switch (_context3.prev = _context3.next) {
+        switch (_context2.prev = _context2.next) {
           case 0:
-            _bar2 = function _ref2() {
-              _bar2 = _asyncToGenerator(
-              /*#__PURE__*/
-              regeneratorRuntime.mark(function _callee2() {
-                var baz;
-                return regeneratorRuntime.wrap(function _callee2$(_context2) {
-                  while (1) {
-                    switch (_context2.prev = _context2.next) {
-                      case 0:
-                        baz = {};
-
-                      case 1:
-                      case "end":
-                        return _context2.stop();
-                    }
-                  }
-                }, _callee2, this);
-              }));
-              return _bar2.apply(this, arguments);
-            };
-
             bar = function _ref() {
               return _bar2.apply(this, arguments);
             };
 
-          case 2:
+          case 1:
           case "end":
-            return _context3.stop();
+            return _context2.stop();
         }
       }
-    }, _callee3, this);
+    }, foo, this);
   }));
+  return _foo.apply(this, arguments);
+}
+
+function foo() {
   return _foo.apply(this, arguments);
 }
