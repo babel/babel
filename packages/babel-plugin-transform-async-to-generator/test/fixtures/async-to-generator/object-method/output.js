@@ -8,7 +8,7 @@ function _wrapped() {
 let obj = {
   a: 123,
 
-  foo(bar) {
+  foo(_x) {
     return _wrapped.apply(this, arguments);
   }
 

@@ -12,7 +12,7 @@ function _wrapped() {
 }
 
 export default {
-  function(name) {
+  function(_x) {
     return _wrapped.apply(this, arguments);
   }
 

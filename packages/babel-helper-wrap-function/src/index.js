@@ -27,6 +27,7 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
   const fn = path.get("body.body.0.expression");
   plainFunction(fn, callId);
   path.get("body").replaceWith(t.cloneNode(fn.node.body));
+  node.params = fn.node.params;
 }
 
 function plainFunction(path: NodePath, callId: Object) {
