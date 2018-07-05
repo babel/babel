@@ -127,7 +127,7 @@ defineType("BreakStatement", {
 });
 
 defineType("CallExpression", {
-  visitor: ["callee", "arguments", "typeParameters"],
+  visitor: ["callee", "arguments", "typeParameters", "typeArguments"],
   builder: ["callee", "arguments"],
   aliases: ["Expression"],
   fields: {

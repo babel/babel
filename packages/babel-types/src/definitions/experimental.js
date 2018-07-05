@@ -87,7 +87,7 @@ defineType("OptionalMemberExpression", {
 });
 
 defineType("OptionalCallExpression", {
-  visitor: ["callee", "arguments", "typeParameters"],
+  visitor: ["callee", "arguments", "typeParameters", "typeArguments"],
   builder: ["callee", "arguments", "optional"],
   aliases: ["Expression"],
   fields: {
