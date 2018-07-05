@@ -5,10 +5,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _default =
-/*#__PURE__*/
-babelHelpers.asyncToGenerator(function* () {
-  return yield foo();
-});
+function _wrapped() {
+  _wrapped = babelHelpers.asyncToGenerator(function* () {
+    return yield foo();
+  });
+  return _wrapped.apply(this, arguments);
+}
+
+var _default = function _default() {
+  return _wrapped.apply(this, arguments);
+};
 
 exports.default = _default;

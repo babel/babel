@@ -4,18 +4,17 @@ let TestClass = {
   testMethodFailure() {
     var _this = this;
 
-    return new Promise(
-    /*#__PURE__*/
-    function () {
-      var _ref = babelHelpers.asyncToGenerator(function* (resolve) {
+    function _wrapped() {
+      _wrapped = babelHelpers.asyncToGenerator(function* (resolve) {
         console.log(_this);
         setTimeout(resolve, 1000);
       });
+      return _wrapped.apply(this, arguments);
+    }
 
-      return function (_x) {
-        return _ref.apply(this, arguments);
-      };
-    }());
+    return new Promise(function (_x) {
+      return _wrapped.apply(this, arguments);
+    });
   }
 
 };

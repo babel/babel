@@ -5,11 +5,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.foo = foo;
 
-function foo() {
+function _foo() {
+  _foo = babelHelpers.asyncToGenerator(function* foo() {});
   return _foo.apply(this, arguments);
 }
 
-function _foo() {
-  _foo = babelHelpers.asyncToGenerator(function* () {});
+function foo() {
   return _foo.apply(this, arguments);
 }

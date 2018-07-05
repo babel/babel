@@ -1,9 +1,5 @@
-function g() {
-  return _g.apply(this, arguments);
-}
-
 function _g() {
-  _g = babelHelpers.wrapAsyncGenerator(function* () {
+  _g = babelHelpers.wrapAsyncGenerator(function* g() {
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
 
@@ -29,5 +25,9 @@ function _g() {
       }
     }
   });
+  return _g.apply(this, arguments);
+}
+
+function g() {
   return _g.apply(this, arguments);
 }

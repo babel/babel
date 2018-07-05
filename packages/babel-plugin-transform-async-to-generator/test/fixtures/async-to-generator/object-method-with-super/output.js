@@ -1,12 +1,15 @@
+function _wrapped() {
+  _wrapped = babelHelpers.asyncToGenerator(function* () {
+    super.method();
+
+    var arrow = () => super.method();
+  });
+  return _wrapped.apply(this, arguments);
+}
+
 class Foo extends class {} {
   method() {
-    var _superprop_callMethod = (..._args) => super.method(..._args);
-
-    return babelHelpers.asyncToGenerator(function* () {
-      _superprop_callMethod();
-
-      var arrow = () => _superprop_callMethod();
-    })();
+    return _wrapped.apply(this, arguments);
   }
 
 }

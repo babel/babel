@@ -236,4 +236,56 @@ describe("modification", function() {
       });
     });
   });
+
+  describe("hoist", function() {
+    describe("function declaration", function() {
+      it("no params", function() {
+        const rootPath = getPath(`
+        function outer() {
+          function inner() {}
+        }`);
+        const path = rootPath.get("body.body.0");
+        path.hoist();
+        expect(generateCode(rootPath)).toBe(
+          "function inner() {}\n\nfunction outer() {}",
+        );
+      });
+
+      it("params", function() {
+        const rootPath = getPath(`
+        function outer() {
+          function inner(a, b, c) {}
+        }`);
+        const path = rootPath.get("body.body.0");
+        path.hoist();
+        expect(generateCode(rootPath)).toBe(
+          "function inner(a, b, c) {}\n\nfunction outer() {}",
+        );
+      });
+
+      it("outer param", function() {
+        const rootPath = getPath(`
+        function outer(a) {
+          function inner() { a; }
+        }`);
+        const path = rootPath.get("body.body.0");
+        path.hoist();
+        expect(generateCode(rootPath)).toBe(
+          "function outer(a) {\n  function inner() {\n    a;\n  }\n}",
+        );
+      });
+
+      it("override outer param", function() {
+        const rootPath = getPath(`
+        function outer(a) {
+          function inner(a) { a; }
+        }`);
+        const path = rootPath.get("body.body.0");
+        path.hoist();
+        expect(generateCode(rootPath)).toBe(
+          "function inner(a) {\n  a;\n}\n\nfunction outer(a) {}",
+        );
+      });
+    });
+  });
 });

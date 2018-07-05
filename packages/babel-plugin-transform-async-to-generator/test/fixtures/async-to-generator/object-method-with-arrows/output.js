@@ -1,35 +1,16 @@
-class Class {
-  method() {
-    var _this = this;
+function _wrapped() {
+  _wrapped = babelHelpers.asyncToGenerator(function* () {
+    this;
 
-    return babelHelpers.asyncToGenerator(function* () {
-      _this;
+    () => this;
 
-      () => _this;
+    () => {
+      this;
 
-      () => {
-        _this;
-
-        () => _this;
-
-        function x() {
-          var _this2 = this;
-
-          this;
-
-          () => {
-            this;
-          };
-
-          /*#__PURE__*/
-          babelHelpers.asyncToGenerator(function* () {
-            _this2;
-          });
-        }
-      };
+      () => this;
 
       function x() {
-        var _this3 = this;
+        var _this = this;
 
         this;
 
@@ -37,12 +18,46 @@ class Class {
           this;
         };
 
-        /*#__PURE__*/
-        babelHelpers.asyncToGenerator(function* () {
-          _this3;
+        function _wrapped2() {
+          _wrapped2 = babelHelpers.asyncToGenerator(function* () {
+            _this;
+          });
+          return _wrapped2.apply(this, arguments);
+        }
+
+        (function () {
+          return _wrapped2.apply(this, arguments);
         });
       }
-    })();
+    };
+
+    function x() {
+      var _this2 = this;
+
+      this;
+
+      () => {
+        this;
+      };
+
+      function _wrapped3() {
+        _wrapped3 = babelHelpers.asyncToGenerator(function* () {
+          _this2;
+        });
+        return _wrapped3.apply(this, arguments);
+      }
+
+      (function () {
+        return _wrapped3.apply(this, arguments);
+      });
+    }
+  });
+  return _wrapped.apply(this, arguments);
+}
+
+class Class {
+  method() {
+    return _wrapped.apply(this, arguments);
   }
 
 }

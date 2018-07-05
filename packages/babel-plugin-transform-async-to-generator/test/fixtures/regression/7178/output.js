@@ -1,9 +1,5 @@
 const title = "Neem contact op";
 
-function action() {
-  return _action.apply(this, arguments);
-}
-
 var _ref =
 /*#__PURE__*/
 React.createElement(Contact, {
@@ -11,8 +7,12 @@ React.createElement(Contact, {
 });
 
 function _action() {
-  _action = babelHelpers.asyncToGenerator(function* () {
+  _action = babelHelpers.asyncToGenerator(function* action() {
     return _ref;
   });
+  return _action.apply(this, arguments);
+}
+
+function action() {
   return _action.apply(this, arguments);
 }

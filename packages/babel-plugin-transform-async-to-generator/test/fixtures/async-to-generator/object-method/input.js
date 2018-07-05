@@ -1,6 +1,6 @@
 let obj = {
   a: 123,
   async foo(bar) {
-    return await baz(bar);
+    return await this.baz(bar);
   }
 }

@@ -4,15 +4,15 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 let _Promise;
 
-function foo() {
-  return _foo.apply(this, arguments);
-}
-
 function _foo() {
-  _foo = _asyncToGenerator(function* () {
+  _foo = _asyncToGenerator(function* foo() {
     yield new _Promise(resolve => {
       resolve();
     });
   });
+  return _foo.apply(this, arguments);
+}
+
+function foo() {
   return _foo.apply(this, arguments);
 }

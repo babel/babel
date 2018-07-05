@@ -1,34 +1,29 @@
-var foo =
-/*#__PURE__*/
-function () {
-  var _ref = babelHelpers.asyncToGenerator(function* () {
-    var wat = yield bar();
-  });
+var foo = function () {
+  return _wrapped.apply(this, arguments);
+};
 
-  return function foo() {
-    return _ref.apply(this, arguments);
-  };
-}();
-
-var foo2 =
-/*#__PURE__*/
-function () {
-  var _ref2 = babelHelpers.asyncToGenerator(function* () {
-    var wat = yield bar();
-  });
-
-  return function foo2() {
-    return _ref2.apply(this, arguments);
-  };
-}(),
-    bar =
-/*#__PURE__*/
-function () {
-  var _ref3 = babelHelpers.asyncToGenerator(function* () {
+function _wrapped3() {
+  _wrapped3 = babelHelpers.asyncToGenerator(function* () {
     var wat = yield foo();
   });
+  return _wrapped3.apply(this, arguments);
+}
 
-  return function bar() {
-    return _ref3.apply(this, arguments);
-  };
-}();
+var foo2 = function () {
+  return _wrapped2.apply(this, arguments);
+},
+    bar = function () {
+  return _wrapped3.apply(this, arguments);
+},
+    function _wrapped2() {
+  _wrapped2 = babelHelpers.asyncToGenerator(function* () {
+    var wat = yield bar();
+  });
+  return _wrapped2.apply(this, arguments);
+},
+    function _wrapped() {
+  _wrapped = babelHelpers.asyncToGenerator(function* () {
+    var wat = yield bar();
+  });
+  return _wrapped.apply(this, arguments);
+};

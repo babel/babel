@@ -56,6 +56,7 @@ export default declare(api => {
           ]),
         );
 
+        fnPath.node.generator = false;
         wrapFunction(fnPath, state.addHelper("skipFirstGeneratorNext"));
       },
     },

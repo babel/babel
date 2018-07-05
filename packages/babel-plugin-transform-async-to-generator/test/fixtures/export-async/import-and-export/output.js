@@ -7,11 +7,11 @@ exports.foo = foo;
 
 var _bar = babelHelpers.interopRequireDefault(require("bar"));
 
-function foo() {
+function _foo() {
+  _foo = babelHelpers.asyncToGenerator(function* foo() {});
   return _foo.apply(this, arguments);
 }
 
-function _foo() {
-  _foo = babelHelpers.asyncToGenerator(function* () {});
+function foo() {
   return _foo.apply(this, arguments);
 }
