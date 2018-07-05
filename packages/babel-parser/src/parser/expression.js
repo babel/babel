@@ -1131,9 +1131,8 @@ export default class ExpressionParser extends LValParser {
 
   parseParenItem(
     node: N.Expression,
-    startPos: number,
-    // eslint-disable-next-line no-unused-vars
-    startLoc: Position,
+    startPos: number, // eslint-disable-line no-unused-vars
+    startLoc: Position, // eslint-disable-line no-unused-vars
   ): N.Expression {
     return node;
   }
