@@ -1,13 +1,13 @@
-function _wrapped() {
-  _wrapped = babelHelpers.asyncToGenerator(function* () {
+function _foo() {
+  _foo = babelHelpers.asyncToGenerator(function* foo() {
     var wat = yield bar();
   });
-  return _wrapped.apply(this, arguments);
+  return _foo.apply(this, arguments);
 }
 
 class Foo {
   foo() {
-    return _wrapped.apply(this, arguments);
+    return _foo.apply(this, arguments);
   }
 
 }

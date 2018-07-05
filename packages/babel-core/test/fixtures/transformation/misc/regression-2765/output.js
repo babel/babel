@@ -13,27 +13,27 @@ function f() {
   };
 }
 
-function _wrapped2() {
-  _wrapped2 = babelHelpers.asyncToGenerator(function* () {
+function _m() {
+  _m = babelHelpers.asyncToGenerator(function* m() {
     var _this2 = this;
 
-    function _wrapped3() {
-      _wrapped3 = babelHelpers.asyncToGenerator(function* (b) {
+    function _wrapped2() {
+      _wrapped2 = babelHelpers.asyncToGenerator(function* (b) {
         _this2;
       });
-      return _wrapped3.apply(this, arguments);
+      return _wrapped2.apply(this, arguments);
     }
 
     var c = function (_x) {
-      return _wrapped3.apply(this, arguments);
+      return _wrapped2.apply(this, arguments);
     };
   });
-  return _wrapped2.apply(this, arguments);
+  return _m.apply(this, arguments);
 }
 
 class Class {
   m() {
-    return _wrapped2.apply(this, arguments);
+    return _m.apply(this, arguments);
   }
 
 }
