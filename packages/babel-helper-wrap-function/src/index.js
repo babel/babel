@@ -18,13 +18,11 @@ function classOrObjectMethod(path: NodePath, callId: Object) {
   const { body } = node;
 
   const params = node.params.map(t.cloneNode);
-  const container = t.functionExpression(null, params, t.cloneNode(body));
+  const container = t.functionDeclaration(null, params, t.cloneNode(body));
 
-  path
-    .get("body")
-    .replaceWith(t.blockStatement([t.expressionStatement(container)]));
+  path.get("body").replaceWith(t.blockStatement([container]));
 
-  const fn = path.get("body.body.0.expression");
+  const fn = path.get("body.body.0");
   plainFunction(fn, callId);
   path.get("body").replaceWith(t.cloneNode(fn.node.body));
   node.params = fn.node.params;
