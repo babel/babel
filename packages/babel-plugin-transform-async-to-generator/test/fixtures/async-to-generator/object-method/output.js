@@ -1,6 +1,6 @@
 function _wrapped() {
   _wrapped = babelHelpers.asyncToGenerator(function* (bar) {
-    return yield this.baz(bar);
+    return yield baz(bar);
   });
   return _wrapped.apply(this, arguments);
 }
