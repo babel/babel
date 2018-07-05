@@ -1,3 +1,0 @@
-{
-  "plugins": ["transform-parameters", "transform-block-scoping"]
-}

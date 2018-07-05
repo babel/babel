@@ -1,3 +1,0 @@
-{
-  "plugins": ["transform-shorthand-properties", "transform-function-name"]
-}
