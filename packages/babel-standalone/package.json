@@ -10,6 +10,7 @@
   ],
   "devDependencies": {
     "@babel/core": "7.0.0-beta.52",
+    "@babel/helper-plugin-utils": "7.0.0-beta.52",
     "@babel/plugin-external-helpers": "7.0.0-beta.52",
     "@babel/plugin-proposal-async-generator-functions": "7.0.0-beta.52",
     "@babel/plugin-proposal-class-properties": "7.0.0-beta.52",
