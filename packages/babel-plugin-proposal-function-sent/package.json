@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-function-sent",
-  "version": "7.0.0-beta.51",
+  "version": "7.0.0-beta.52",
   "description": "Compile the function.sent meta propety to valid ES2015 code",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-function-sent",
   "license": "MIT",
@@ -9,15 +9,15 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.51",
-    "@babel/helper-wrap-function": "7.0.0-beta.51",
-    "@babel/plugin-syntax-function-sent": "7.0.0-beta.51"
+    "@babel/helper-plugin-utils": "7.0.0-beta.52",
+    "@babel/helper-wrap-function": "7.0.0-beta.52",
+    "@babel/plugin-syntax-function-sent": "7.0.0-beta.52"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0-beta.50 <7.0.0-rc.0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.51",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.51"
+    "@babel/core": "7.0.0-beta.52",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.52"
   }
 }
