@@ -14,12 +14,10 @@ const fileFilter = function(x) {
   return x !== ".DS_Store";
 };
 
-const presetLocs = [
-  path.join(__dirname, "../../babel-preset-env"),
-  path.join(__dirname, "../../babel-preset-react"),
-].join(",");
+const presetLocs = [path.join(__dirname, "../../babel-preset-react")];
 
 const pluginLocs = [
+  path.join(__dirname, "/../../babel-plugin-transform-arrow-functions"),
   path.join(__dirname, "/../../babel-plugin-transform-strict-mode"),
   path.join(__dirname, "/../../babel-plugin-transform-modules-commonjs"),
 ].join(",");
