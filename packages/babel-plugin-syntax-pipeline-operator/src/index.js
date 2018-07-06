@@ -1,12 +1,17 @@
 import { declare } from "@babel/helper-plugin-utils";
 
-const proposals = ["minimal"];
+export const proposals = ["minimal"];
 
 export default declare((api, { proposal }) => {
   api.assertVersion(7);
 
   if (typeof proposal !== "string" || !proposals.includes(proposal)) {
-    throw new Error("'proposal' must be one of: " + proposals.join(", "));
+    throw new Error(
+      "The pipeline operator plugin requires a 'proposal' option." +
+        "'proposal' must be one of: " +
+        proposals.join(", ") +
+        ". More details: https://babeljs.io/docs/en/next/babel-plugin-proposal-pipeline-operator",
+    );
   }
 
   return {

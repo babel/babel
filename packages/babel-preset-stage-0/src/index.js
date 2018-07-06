@@ -2,6 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import presetStage1 from "@babel/preset-stage-1";
 
 import transformFunctionBind from "@babel/plugin-proposal-function-bind";
+import { proposals } from "@babel/plugin-proposal-pipeline-operator";
 
 export default declare((api, opts = {}) => {
   api.assertVersion(7);
@@ -38,8 +39,9 @@ export default declare((api, opts = {}) => {
   if (typeof pipelineProposal !== "string") {
     throw new Error(
       "The pipeline operator requires a proposal set." +
-        " You must pass the 'pipelineProposal' option to" +
-        " @babel/preset-stage-0",
+        " You must pass 'pipelineProposal' option to" +
+        " @babel/preset-stage-0 whose value must be one of: " +
+        proposals.join(", "),
     );
   }
 
