@@ -23,4 +23,4 @@ if [ -n "$TEST_ONLY" ]; then
   jestArgs+=("(packages|codemods)/.*$TEST_ONLY.*/test")
 fi
 
-node_modules/.bin/jest "${jestArgs[@]}"
+$node node_modules/jest/bin/jest.js "${jestArgs[@]}"
