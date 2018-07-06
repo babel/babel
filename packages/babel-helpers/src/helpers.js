@@ -584,8 +584,8 @@ helpers.objectDestructuringEmpty = () => template.program.ast`
   }
 `;
 
-helpers.objectWithoutProperties = () => template.program.ast`
-  export default function _objectWithoutProperties(source, excluded) {
+helpers.objectWithoutPropertiesLoose = () => template.program.ast`
+  export default function _objectWithoutPropertiesLoose(source, excluded) {
     if (source == null) return {};
 
     var target = {};
@@ -597,6 +597,19 @@ helpers.objectWithoutProperties = () => template.program.ast`
       if (excluded.indexOf(key) >= 0) continue;
       target[key] = source[key];
     }
+
+    return target;
+  }
+`;
+
+helpers.objectWithoutProperties = () => template.program.ast`
+  import objectWithoutPropertiesLoose from "objectWithoutPropertiesLoose";
+
+  export default function _objectWithoutProperties(source, excluded) {
+    if (source == null) return {};
+
+    var target = objectWithoutPropertiesLoose(source, excluded);
+    var key, i;
 
     if (Object.getOwnPropertySymbols) {
       var sourceSymbolKeys = Object.getOwnPropertySymbols(source);

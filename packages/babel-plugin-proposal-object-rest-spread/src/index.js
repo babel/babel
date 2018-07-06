@@ -128,10 +128,10 @@ export default declare((api, opts) => {
     return [
       impureComputedPropertyDeclarators,
       restElement.argument,
-      t.callExpression(file.addHelper("objectWithoutProperties"), [
-        t.cloneNode(objRef),
-        keyExpression,
-      ]),
+      t.callExpression(
+        file.addHelper(`objectWithoutProperties${loose ? "Loose" : ""}`),
+        [t.cloneNode(objRef), keyExpression],
+      ),
     ];
   }
 
