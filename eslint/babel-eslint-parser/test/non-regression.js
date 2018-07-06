@@ -564,6 +564,17 @@ describe("verify", () => {
       );
     });
 
+    it("polymorphic/generic types - function calls #644", () => {
+      verifyAndAssertMessages(
+        `
+          import type {Type} from 'Type';
+          function f<T>(): T {}
+          f<Type>();
+        `,
+        { "no-unused-vars": 1, "no-undef": 1 }
+      );
+    });
+
     it("support declarations #132", () => {
       verifyAndAssertMessages(
         `
