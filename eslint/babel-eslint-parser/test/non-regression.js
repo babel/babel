@@ -559,7 +559,8 @@ describe("verify", () => {
           function f<T>(): T {}
           f<T>();
         `,
-        { "no-unused-vars": 1, "no-undef": 1 }
+        { "no-unused-vars": 1, "no-undef": 1 },
+        ["2:3 'T' is not defined. no-undef"]
       );
     });
 
