@@ -3,7 +3,7 @@ var _c = c2;
 ({
   a2
 } = _c);
-b2 = babelHelpers.objectWithoutProperties(_c, ["a2"]);
+b2 = babelHelpers.objectWithoutPropertiesLoose(_c, ["a2"]);
 _c;
 
 class Comp extends React.Component {
@@ -13,7 +13,7 @@ class Comp extends React.Component {
       used,
       used2: usedRenamed
     } = _this$props,
-          props = babelHelpers.objectWithoutProperties(_this$props, ["excluded", "excluded2", "used", "used2"]);
+          props = babelHelpers.objectWithoutPropertiesLoose(_this$props, ["excluded", "excluded2", "used", "used2"]);
     console.log(used, usedRenamed);
     return React.createElement("input", props);
   }
@@ -21,6 +21,6 @@ class Comp extends React.Component {
 }
 
 function smth(_ref) {
-  let rest = babelHelpers.objectWithoutProperties(_ref, ["unused"]);
+  let rest = babelHelpers.objectWithoutPropertiesLoose(_ref, ["unused"]);
   call(rest);
 }
