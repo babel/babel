@@ -10,7 +10,4 @@ z = {
   w: _extends({}, y)
 };
 
-const {
-  q
-} = z,
-      rest = _objectWithoutPropertiesLoose(z, ["q"]);
+const rest = _objectWithoutPropertiesLoose(z, ["q"]);
