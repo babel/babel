@@ -92,6 +92,17 @@ export default declare((api, opts) => {
     return impureComputedPropertyDeclarators;
   }
 
+  function removeUnusedExcludedKeys(path) {
+    const bindings = path.getOuterBindingIdentifierPaths();
+
+    Object.keys(bindings).forEach(bindingName => {
+      if (path.scope.getBinding(bindingName).references > 1) {
+        return;
+      }
+      bindings[bindingName].parentPath.remove();
+    });
+  }
+
   //expects path to an object pattern
   function createObjectSpread(path, file, objRef) {
     const props = path.get("properties");
@@ -241,11 +252,16 @@ export default declare((api, opts) => {
           const objectPatternPath = path.findParent(path =>
             path.isObjectPattern(),
           );
+
           const [
             impureComputedPropertyDeclarators,
             argument,
             callExpression,
           ] = createObjectSpread(objectPatternPath, file, ref);
+
+          if (loose) {
+            removeUnusedExcludedKeys(objectPatternPath);
+          }
 
           t.assertIdentifier(argument);
 
