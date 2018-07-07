@@ -14,6 +14,23 @@ _Note: Gaps between patch versions are faulty, broken or test releases._
 See [CHANGELOG - 6to5](/.github/CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0.0-beta.29 version changelog.
 
+## 6.26.3 (2018-04-27)
+
+* Fixed a small regression from the last release if the output file contains no JS content.
+
+## 6.26.2 (2018-04-26)
+
+* Landed [#7812](https://github.com/babel/babel/pull/7812) which backported several fixes to make sourcemaps behave better
+  * [#7312](https://github.com/babel/babel/pull/7312) - Include better mappings for arrow-transformed 'this' and 'arguments'
+  * [#7378](https://github.com/babel/babel/pull/7378) - Include better mappings for import bindings transformed to member expressions
+  * [#7761](https://github.com/babel/babel/pull/7761) - Re-implement inputSourceMap merging logic to more accurately reflect mappings
+
+## 6.26.1 (2018-02-03)
+
+> Not planning on supporting 6.x but [people keep asking for backports](https://github.com/babel/babel/pull/7205#issuecomment-362818338), may do so in the future for specific bugs.
+
+* Published a bugfix for [detrobutt/babel-plugin-import-graphql#2](https://github.com/detrohutt/babel-plugin-import-graphql/issues/2. PR [#7205](https://github.com/babel/babel/pull/7205)
+
 ## 6.26.0 (2017-08-16)
 
 > Backports for some folks (also other's when we accidently merged PRs from both 6.x/master)
