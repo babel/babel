@@ -2226,25 +2226,6 @@ Also started Babel to compile itself with Babel 7! (We'll be working on making i
 * `babel-helper-builder-react-jsx`
   * [#5484](https://github.com/babel/babel/pull/5484) Removes unused lodash dep from babel-helper-builder-react-jsx. ([@segphault](https://github.com/segphault))
 
-#### Committers: 17
-- Aaron Ang ([aaronang](https://github.com/aaronang))
-- Arshabh Kumar Agarwal ([arshabh](https://github.com/arshabh))
-- Artem Yavorsky ([yavorsky](https://github.com/yavorsky))
-- Boopathi Rajaa ([boopathi](https://github.com/boopathi))
-- Brian Ng ([existentialism](https://github.com/existentialism))
-- Damien Maillard ([dmail](https://github.com/dmail))
-- Diogo Franco ([Kovensky](https://github.com/Kovensky))
-- Henry Zhu ([hzoo](https://github.com/hzoo))
-- Jason Julian ([JulianJason](https://github.com/JulianJason))
-- Logan Smyth ([loganfsmyth](https://github.com/loganfsmyth))
-- Nitin Tulswani ([nitin42](https://github.com/nitin42))
-- Patrick Williams ([pwmckenna](https://github.com/pwmckenna))
-- Robert Jackson ([rwjblue](https://github.com/rwjblue))
-- Ryan Paul ([segphault](https://github.com/segphault))
-- Samuel Reed ([STRML](https://github.com/STRML))
-- Sergey Bekrin ([sergeybekrin](https://github.com/sergeybekrin))
-- Sven SAULEAU ([xtuc](https://github.com/xtuc))
-
 ## babel@7.0.0-alpha.2 (2017-03-08)
 
 #### :rocket: New Feature
