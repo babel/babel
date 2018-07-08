@@ -33,6 +33,12 @@ export default class State {
     this.hasFlowComment = false;
     this.isIterator = false;
 
+    // Used by smartPipelines.
+    this.topicContextState = {
+      maxNumOfResolvableTopics: 0,
+      maxTopicIndex: undefined,
+    };
+
     this.classLevel = 0;
 
     this.labels = [];
@@ -110,6 +116,9 @@ export default class State {
   inClassProperty: boolean;
   hasFlowComment: boolean;
   isIterator: boolean;
+
+  // For the smartPipelines plugin:
+  topicContextState: tt.TopicContextState;
 
   // Check whether we are in a (nested) class or not.
   classLevel: number;

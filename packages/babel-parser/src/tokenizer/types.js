@@ -86,6 +86,7 @@ export const types: { [name: string]: TokenType } = {
   regexp: new TokenType("regexp", { startsExpr }),
   string: new TokenType("string", { startsExpr }),
   name: new TokenType("name", { startsExpr }),
+  primaryTopicReference: new TokenType("#", { startsExpr }),
   eof: new TokenType("eof"),
 
   // Punctuation token types.
@@ -199,3 +200,17 @@ export const keywords = {
 Object.keys(keywords).forEach(name => {
   types["_" + name] = keywords[name];
 });
+
+// A type for the smartPipelines plugin.
+export type TopicContextState = {
+  // When a topic binding has been currently established,
+  // then this is 1. Otherwise, it is 0. This is forwards compatible
+  // with a future plugin for multiple lexical topics.
+  maxNumOfResolvableTopics: number,
+
+  // When a topic binding has been currently established, and if that binding
+  // has been used as a topic reference `#`, then this is 0. Otherwise, it is
+  // `null`. This is forwards compatible with a future plugin for multiple
+  // lexical topics.
+  maxTopicIndex: null | 0,
+};

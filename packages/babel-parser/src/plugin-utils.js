@@ -38,7 +38,7 @@ export function getPluginOption(
   return null;
 }
 
-const PIPELINE_PROPOSALS = ["minimal"];
+const PIPELINE_PROPOSALS = ["minimal", "smart"];
 
 export function validatePlugins(plugins: PluginList) {
   if (

@@ -1,0 +1,4 @@
+{
+  "plugins": [["pipelineOperator", { "proposal": "smart" }]],
+  "throws": "Unexpected digit after topic reference: '#4' (1:5)"
+}
