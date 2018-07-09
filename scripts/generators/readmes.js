@@ -66,6 +66,7 @@ yarn add ${name} --dev
 
 packages
   .filter(x => x !== "README.md") // ignore root readme
+  .filter(x => x.indexOf("babel-preset-stage-") === -1) // ignore stages
   .forEach(id => {
     const { name, description } = getPackageJson(id);
     const readmePath = join(packageDir, id, "README.md");
@@ -83,6 +84,4 @@ packages
 
     // write
     writeFileSync(readmePath, readme);
-
-    console.log("OK", id);
   });
