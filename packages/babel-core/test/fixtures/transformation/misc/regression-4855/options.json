@@ -1,7 +1,7 @@
 {
   "compact": false,
   "presets": [
-    "es2015",
+    "env",
     ["stage-2", { "decoratorsLegacy": true }]
   ]
 }

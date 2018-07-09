@@ -1,1 +1,0 @@
-expect(() => [...null]).toThrow(TypeError);
