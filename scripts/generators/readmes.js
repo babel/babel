@@ -84,4 +84,6 @@ packages
 
     // write
     writeFileSync(readmePath, readme);
+
+    console.log("OK", id);
   });
