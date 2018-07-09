@@ -28,6 +28,12 @@ export const UseBuiltInsOption = {
   usage: "usage",
 };
 
+export const TransformModeOption = {
+  normal: "normal",
+  performance: "performance",
+  compliance: "compliance",
+};
+
 export const TargetNames = {
   esmodules: "esmodules",
   node: "node",

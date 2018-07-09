@@ -1,6 +1,11 @@
 //@flow
 
-import { TargetNames, ModulesOption, UseBuiltInsOption } from "./options";
+import {
+  TargetNames,
+  ModulesOption,
+  UseBuiltInsOption,
+  TransformModeOption,
+} from "./options";
 
 // Targets
 export type Target = $Keys<typeof TargetNames>;
@@ -12,10 +17,12 @@ export type Targets = {
 // Use explicit modules to prevent typo errors.
 export type ModuleOption = $Values<typeof ModulesOption>;
 export type BuiltInsOption = $Values<typeof UseBuiltInsOption>;
+export type TransformMode = $Values<typeof TransformModeOption>;
 
 export type Options = {
   configPath: string,
   debug: boolean,
+  transformMode: TransformModeOption,
   exclude: Array<string | RegExp>,
   forceAllTransforms: boolean,
   ignoreBrowserslistConfig: boolean,

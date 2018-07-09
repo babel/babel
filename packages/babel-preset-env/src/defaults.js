@@ -1,7 +1,7 @@
-import type { Targets } from "./types";
+import type { Targets, TransformModeOption } from "./types";
 
 const defaultWebIncludes = ["web.timers", "web.immediate", "web.dom.iterable"];
-const defaultExcludesForLooseMode = ["transform-typeof-symbol"];
+const defaultExcludesForPerformanceMode = ["transform-typeof-symbol"];
 
 export const getPlatformSpecificDefaultFor = (
   targets: Targets,
@@ -14,12 +14,12 @@ export const getPlatformSpecificDefaultFor = (
 };
 
 export const getOptionSpecificExcludesFor = ({
-  loose,
+  transformMode,
 }: {
-  loose: boolean,
+  transformMode: TransformModeOption,
 }): ?Array<string> => {
-  if (loose) {
-    return defaultExcludesForLooseMode;
+  if (transformMode === "performance") {
+    return defaultExcludesForPerformanceMode;
   }
   return null;
 };

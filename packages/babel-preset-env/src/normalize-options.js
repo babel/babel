@@ -7,8 +7,19 @@ import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
 import { getValues, findSuggestion } from "./utils";
 import pluginsList from "../data/plugins.json";
-import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
-import type { Targets, Options, ModuleOption, BuiltInsOption } from "./types";
+import {
+  TopLevelOptions,
+  ModulesOption,
+  UseBuiltInsOption,
+  TransformModeOption,
+} from "./options";
+import type {
+  Targets,
+  Options,
+  ModuleOption,
+  BuiltInsOption,
+  TransformMode,
+} from "./types";
 
 const validateTopLevelOptions = (options: Options) => {
   for (const option in options) {
@@ -165,6 +176,67 @@ export const validateUseBuiltInsOption = (
   return builtInsOpt;
 };
 
+// Remove spec/loose options in next major version
+export const validateTransformModeOption = (
+  transformMode: TransformMode,
+  specOption: boolean,
+  looseOption: boolean,
+) => {
+  const specIsUndefined = typeof specOption === "undefined";
+  const looseIsUndefined = typeof looseOption === "undefined";
+  const transformModeIsUndefined = typeof transformMode === "undefined";
+
+  if (!specIsUndefined) {
+    console.log("");
+    console.log("The top-level `spec` option has been deprecated.");
+    console.log("Use the top-level `transformMode` option instead.");
+    console.log("");
+  }
+
+  if (!looseIsUndefined) {
+    console.log("");
+    console.log("The top-level `loose` option has been deprecated.");
+    console.log("Use the top-level `transformMode` option instead.");
+    console.log("");
+  }
+
+  const loose = validateBoolOption(TopLevelOptions.loose, specOption, false);
+  const spec = validateBoolOption(TopLevelOptions.spec, looseOption, false);
+
+  if (transformModeIsUndefined) {
+    invariant(
+      !(spec === true && loose === true),
+      `Invalid Option: Both 'spec' and 'loose' are set to true, but both cannot be true.`,
+    );
+    if (spec === true) {
+      return TransformModeOption.compliance;
+    }
+    if (loose == true) {
+      return TransformModeOption.performance;
+    }
+    return TransformModeOption.normal;
+  } else {
+    invariant(
+      specIsUndefined,
+      `Invalid Option: Invalid Option: Conflicting config options
+      'transformMode' and 'spec' are both specified.`,
+    );
+    invariant(
+      looseIsUndefined,
+      `Invalid Option: Invalid Option: Conflicting config options
+      'transformMode' and 'loose' are both specified.`,
+    );
+    invariant(
+      TransformModeOption[transformMode],
+      `Invalid Option: The 'defaultTransformMode' option must be either
+      '"normal"' (default) for pragmatic plugin defaults,
+      '"compliance"' for bias towards spec compliance,
+      '"performance"' for bias towards performance`,
+    );
+    return transformMode;
+  }
+};
+
 export default function normalizeOptions(opts: Options) {
   validateTopLevelOptions(opts);
 
@@ -182,6 +254,11 @@ export default function normalizeOptions(opts: Options) {
   return {
     configPath: validateConfigPathOption(opts.configPath),
     debug: validateBoolOption(TopLevelOptions.debug, opts.debug, false),
+    transformMode: validateTransformModeOption(
+      opts.transformMode,
+      opts.spec,
+      opts.loose,
+    ),
     include,
     exclude,
     forceAllTransforms: validateBoolOption(
@@ -192,14 +269,12 @@ export default function normalizeOptions(opts: Options) {
     ignoreBrowserslistConfig: validateIgnoreBrowserslistConfig(
       opts.ignoreBrowserslistConfig,
     ),
-    loose: validateBoolOption(TopLevelOptions.loose, opts.loose, false),
     modules: validateModulesOption(opts.modules),
     shippedProposals: validateBoolOption(
       TopLevelOptions.shippedProposals,
       opts.shippedProposals,
       false,
     ),
-    spec: validateBoolOption(TopLevelOptions.spec, opts.spec, false),
     targets: {
       ...opts.targets,
     },

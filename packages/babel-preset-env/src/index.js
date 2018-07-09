@@ -165,11 +165,10 @@ export default declare((api, opts) => {
     forceAllTransforms,
     ignoreBrowserslistConfig,
     include: optionsInclude,
-    loose,
     modules,
     shippedProposals,
-    spec,
     targets: optionsTargets,
+    transformMode,
     useBuiltIns,
   } = normalizeOptions(opts);
   // TODO: remove this in next major
@@ -196,6 +195,9 @@ export default declare((api, opts) => {
     console.log("");
   }
 
+  const loose = transformMode === "performance";
+  const spec = transformMode === "compliance";
+
   const targets = getTargets(optionsTargets, {
     ignoreBrowserslistConfig,
     configPath,
@@ -211,7 +213,7 @@ export default declare((api, opts) => {
     exclude.plugins,
     transformTargets,
     null,
-    getOptionSpecificExcludesFor({ loose }),
+    getOptionSpecificExcludesFor({ transformMode }),
   );
 
   let polyfills;
