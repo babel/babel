@@ -1,3 +1,5 @@
+// @flow
+
 export const defaultWebIncludes = [
   "web.timers",
   "web.immediate",

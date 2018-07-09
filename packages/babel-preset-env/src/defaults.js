@@ -1,5 +1,7 @@
+// @flow
+
 import { TransformModeOption } from "./options";
-import type { Targets, TransformModeOption } from "./types";
+import type { Targets, TransformMode } from "./types";
 
 const defaultWebIncludes = ["web.timers", "web.immediate", "web.dom.iterable"];
 const defaultExcludesForPerformanceMode = ["transform-typeof-symbol"];
@@ -17,7 +19,7 @@ export const getPlatformSpecificDefaultFor = (
 export const getOptionSpecificExcludesFor = ({
   transformMode,
 }: {
-  transformMode: TransformModeOption,
+  transformMode: TransformMode,
 }): ?Array<string> => {
   if (transformMode === TransformModeOption.performance) {
     return defaultExcludesForPerformanceMode;
