@@ -6,20 +6,5 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-stage-2",
-  "main": "lib/index.js",
-  "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.53",
-    "@babel/plugin-proposal-decorators": "7.0.0-beta.53",
-    "@babel/plugin-proposal-export-namespace-from": "7.0.0-beta.53",
-    "@babel/plugin-proposal-function-sent": "7.0.0-beta.53",
-    "@babel/plugin-proposal-numeric-separator": "7.0.0-beta.53",
-    "@babel/plugin-proposal-throw-expressions": "7.0.0-beta.53",
-    "@babel/preset-stage-3": "7.0.0-beta.53"
-  },
-  "peerDependencies": {
-    "@babel/core": ">=7.0.0-beta.50 <7.0.0-rc.0"
-  },
-  "devDependencies": {
-    "@babel/core": "7.0.0-beta.53"
-  }
+  "main": "lib/index.js"
 }

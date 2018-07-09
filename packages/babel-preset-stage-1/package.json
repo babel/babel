@@ -6,21 +6,5 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-stage-1",
-  "main": "lib/index.js",
-  "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.53",
-    "@babel/plugin-proposal-do-expressions": "7.0.0-beta.53",
-    "@babel/plugin-proposal-export-default-from": "7.0.0-beta.53",
-    "@babel/plugin-proposal-logical-assignment-operators": "7.0.0-beta.53",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "7.0.0-beta.53",
-    "@babel/plugin-proposal-optional-chaining": "7.0.0-beta.53",
-    "@babel/plugin-proposal-pipeline-operator": "7.0.0-beta.53",
-    "@babel/preset-stage-2": "7.0.0-beta.53"
-  },
-  "peerDependencies": {
-    "@babel/core": ">=7.0.0-beta.50 <7.0.0-rc.0"
-  },
-  "devDependencies": {
-    "@babel/core": "7.0.0-beta.53"
-  }
+  "main": "lib/index.js"
 }

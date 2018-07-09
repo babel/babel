@@ -1,65 +1,35 @@
-import { declare } from "@babel/helper-plugin-utils";
-import presetStage2 from "@babel/preset-stage-2";
+export default function() {
+  throw new Error(`
+As of v7.0.0-beta.52, we've decided to remove
+the official Babel Stage presets. You can find more information
+at issue #7770: https://github.com/babel/babel/issues/7770, but
+the TL;DR is that it's causing more harm than convenience in that
+the preset is always out of date, each change is usually going to
+require a major version bump and thus people will be behind,
+and it encouraged too many people to opt-in to too many proposals
+that they didn't intend to.
 
-import transformExportDefaultFrom from "@babel/plugin-proposal-export-default-from";
-import transformLogicalAssignmentOperators from "@babel/plugin-proposal-logical-assignment-operators";
-import transformOptionalChaining from "@babel/plugin-proposal-optional-chaining";
-import transformPipelineOperator, {
-  proposals,
-} from "@babel/plugin-proposal-pipeline-operator";
-import transformNullishCoalescingOperator from "@babel/plugin-proposal-nullish-coalescing-operator";
-import transformDoExpressions from "@babel/plugin-proposal-do-expressions";
+If you want the same configuration as before, you can use this configuration,
+although keep in mind that Stage 1 contains Stage 2 which is also deprecated.
 
-export default declare((api, opts = {}) => {
-  api.assertVersion(7);
+{
+  presets: [
+    ["@babel/preset-stage-2", { loose, useBuiltIns, decoratorsLegacy }]
+  ],
+  plugins: [
+    "@babel/plugin-proposal-export-default-from",
+    "@babel/plugin-proposal-logical-assignment-operators",
+    ["@babel/plugin-proposal-optional-chaining", { loose }],
+    ["@babel/plugin-proposal-pipeline-operator", { proposal: pipelineProposal }],
+    ["@babel/plugin-proposal-nullish-coalescing-operator", { loose }],
+    "@babel/plugin-proposal-do-expressions",
+  ]
+}
 
-  const {
-    loose = false,
-    useBuiltIns = false,
-    decoratorsLegacy = false,
-    pipelineProposal,
-  } = opts;
+This will be the last publish of "@babel/preset-stage-1", and it won't be
+in the final release.
 
-  if (typeof loose !== "boolean") {
-    throw new Error("@babel/preset-stage-1 'loose' option must be a boolean.");
-  }
-  if (typeof useBuiltIns !== "boolean") {
-    throw new Error(
-      "@babel/preset-stage-1 'useBuiltIns' option must be a boolean.",
-    );
-  }
-  if (typeof decoratorsLegacy !== "boolean") {
-    throw new Error(
-      "@babel/preset-stage-1 'decoratorsLegacy' option must be a boolean.",
-    );
-  }
-
-  if (decoratorsLegacy !== true) {
-    throw new Error(
-      "The new decorators proposal is not supported yet." +
-        ' You must pass the `"decoratorsLegacy": true` option to' +
-        " @babel/preset-stage-1",
-    );
-  }
-
-  if (typeof pipelineProposal !== "string") {
-    throw new Error(
-      "The pipeline operator requires a proposal set." +
-        " You must pass 'pipelineProposal' option to" +
-        " @babel/preset-stage-1 whose value must be one of: " +
-        proposals.join(", "),
-    );
-  }
-
-  return {
-    presets: [[presetStage2, { loose, useBuiltIns, decoratorsLegacy }]],
-    plugins: [
-      transformExportDefaultFrom,
-      transformLogicalAssignmentOperators,
-      [transformOptionalChaining, { loose }],
-      [transformPipelineOperator, { proposal: pipelineProposal }],
-      [transformNullishCoalescingOperator, { loose }],
-      transformDoExpressions,
-    ],
-  };
-});
+If it's a hassle to maintain, you can certainly make your own preset to use
+across projects, or there might be one in the community to use.
+`);
+}
