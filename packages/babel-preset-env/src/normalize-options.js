@@ -177,11 +177,15 @@ export const validateUseBuiltInsOption = (
 };
 
 // Remove spec/loose options in next major version
-export const validateTransformModeOption = (
-  transformMode: TransformMode,
-  specOption: boolean,
-  looseOption: boolean,
-) => {
+export const validateTransformModeOption = ({
+  transformMode,
+  spec: specOption,
+  loose: looseOption,
+}: {
+  transformMode?: TransformMode,
+  spec?: boolean,
+  loose?: boolean,
+}) => {
   const specIsUndefined = typeof specOption === "undefined";
   const looseIsUndefined = typeof looseOption === "undefined";
   const transformModeIsUndefined = typeof transformMode === "undefined";
@@ -200,8 +204,8 @@ export const validateTransformModeOption = (
     console.log("");
   }
 
-  const loose = validateBoolOption(TopLevelOptions.loose, specOption, false);
-  const spec = validateBoolOption(TopLevelOptions.spec, looseOption, false);
+  const loose = validateBoolOption(TopLevelOptions.loose, looseOption, false);
+  const spec = validateBoolOption(TopLevelOptions.spec, specOption, false);
 
   if (transformModeIsUndefined) {
     invariant(
@@ -211,7 +215,7 @@ export const validateTransformModeOption = (
     if (spec === true) {
       return TransformModeOption.compliance;
     }
-    if (loose == true) {
+    if (loose === true) {
       return TransformModeOption.performance;
     }
     return TransformModeOption.normal;
@@ -228,7 +232,7 @@ export const validateTransformModeOption = (
     );
     invariant(
       TransformModeOption[transformMode],
-      `Invalid Option: The 'defaultTransformMode' option must be either
+      `Invalid Option: The 'transformMode' option must be either
       '"normal"' (default) for pragmatic plugin defaults,
       '"compliance"' for bias towards spec compliance,
       '"performance"' for bias towards performance`,
@@ -254,11 +258,11 @@ export default function normalizeOptions(opts: Options) {
   return {
     configPath: validateConfigPathOption(opts.configPath),
     debug: validateBoolOption(TopLevelOptions.debug, opts.debug, false),
-    transformMode: validateTransformModeOption(
-      opts.transformMode,
-      opts.spec,
-      opts.loose,
-    ),
+    transformMode: validateTransformModeOption({
+      transformMode: opts.transformMode,
+      spec: opts.spec,
+      loose: opts.loose,
+    }),
     include,
     exclude,
     forceAllTransforms: validateBoolOption(

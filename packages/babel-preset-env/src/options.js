@@ -10,6 +10,7 @@ export const TopLevelOptions = {
   shippedProposals: "shippedProposals",
   spec: "spec",
   targets: "targets",
+  transformMode: "transformMode",
   useBuiltIns: "useBuiltIns",
 };
 

@@ -30,18 +30,25 @@ describe("defaults", () => {
   });
 
   describe("getOptionSpecificExcludesFor", () => {
-    it("should return correct excludes for `loose` mode", () => {
+    it("should return correct excludes for `transformMode: 'compliance'`", () => {
       const defaultWebIncludesForChromeAndNode = getOptionSpecificExcludesFor({
-        loose: true,
+        transformMode: "performance",
       });
       expect(defaultWebIncludesForChromeAndNode).toEqual([
         "transform-typeof-symbol",
       ]);
     });
 
-    it("shouldn't return excludes for non-`loose` mode", () => {
+    it("shouldn't return excludes for `transformMode: 'performance'`", () => {
       const defaultWebIncludesForChromeAndNode = getOptionSpecificExcludesFor({
-        loose: false,
+        transformMode: "compliance",
+      });
+      expect(defaultWebIncludesForChromeAndNode).toBeNull();
+    });
+
+    it("shouldn't return excludes for `transformMode: 'normal'`", () => {
+      const defaultWebIncludesForChromeAndNode = getOptionSpecificExcludesFor({
+        transformMode: "normal",
       });
       expect(defaultWebIncludesForChromeAndNode).toBeNull();
     });

@@ -1,7 +1,7 @@
 {
   "presets": [
     ["../../../../lib", {
-      "loose": true,
+      "transformMode": "performance",
       "include": ["transform-typeof-symbol"]
     }]
   ]

@@ -6,6 +6,7 @@ const {
   checkDuplicateIncludeExcludes,
   validateBoolOption,
   validateModulesOption,
+  validateTransformModeOption,
   normalizePluginName,
 } = normalizeOptions;
 describe("normalize-options", () => {
@@ -168,6 +169,38 @@ describe("normalize-options", () => {
       expect(() => {
         validateModulesOption([]);
       }).toThrow();
+    });
+  });
+
+  describe("validateTransformModeOption", () => {
+    it("`undefined` for everything returns normal", () => {
+      expect(validateTransformModeOption({})).toBe("normal");
+    });
+
+    it("`transformMode: 'normal'` is valid", () => {
+      expect(validateTransformModeOption({ transformMode: "normal" })).toBe(
+        "normal",
+      );
+    });
+
+    it("`transformMode: 'performance'` is valid", () => {
+      expect(
+        validateTransformModeOption({ transformMode: "performance" }),
+      ).toBe("performance");
+    });
+
+    it("`transformMode: 'compliance'` is valid", () => {
+      expect(validateTransformModeOption({ transformMode: "compliance" })).toBe(
+        "compliance",
+      );
+    });
+
+    it("`spec: true` returns 'compliance'", () => {
+      expect(validateTransformModeOption({ spec: true })).toBe("compliance");
+    });
+
+    it("`loose: true` returns 'performance'", () => {
+      expect(validateTransformModeOption({ loose: true })).toBe("performance");
     });
   });
 });

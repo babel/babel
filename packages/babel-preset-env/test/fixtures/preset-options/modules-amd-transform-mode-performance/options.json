@@ -2,7 +2,7 @@
   "presets": [
     ["../../../../lib", {
       "modules": "amd",
-      "loose": true
+      "transformMode": "performance"
     }]
   ]
 }
