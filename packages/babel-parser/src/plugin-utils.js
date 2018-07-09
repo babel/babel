@@ -18,6 +18,28 @@ export function hasPlugin(plugins: PluginList, name: string): boolean {
   });
 }
 
+export function getPluginOption(
+  plugins: PluginList,
+  name: string,
+  option: string,
+) {
+  const plugin = plugins.find(plugin => {
+    if (Array.isArray(plugin)) {
+      return plugin[0] === name;
+    } else {
+      return plugin === name;
+    }
+  });
+
+  if (plugin && Array.isArray(plugin)) {
+    return plugin[1][option];
+  }
+
+  return null;
+}
+
+const PIPELINE_PROPOSALS = ["minimal"];
+
 export function validatePlugins(plugins: PluginList) {
   if (
     hasPlugin(plugins, "decorators") &&
@@ -30,6 +52,18 @@ export function validatePlugins(plugins: PluginList) {
 
   if (hasPlugin(plugins, "flow") && hasPlugin(plugins, "typescript")) {
     throw new Error("Cannot combine flow and typescript plugins.");
+  }
+
+  if (
+    hasPlugin(plugins, "pipelineOperator") &&
+    !PIPELINE_PROPOSALS.includes(
+      getPluginOption(plugins, "pipelineOperator", "proposal"),
+    )
+  ) {
+    throw new Error(
+      "'pipelineOperator' requires 'proposal' option whose value should be one of: " +
+        PIPELINE_PROPOSALS.join(", "),
+    );
   }
 }
 

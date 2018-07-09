@@ -1,4 +1,0 @@
-{
-  "plugins": ["pipelineOperator"],
-  "throws": "Unexpected token, expected \";\" (1:10)"
-}
