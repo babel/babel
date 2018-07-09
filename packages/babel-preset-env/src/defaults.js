@@ -1,3 +1,4 @@
+import { TransformModeOption } from "./options";
 import type { Targets, TransformModeOption } from "./types";
 
 const defaultWebIncludes = ["web.timers", "web.immediate", "web.dom.iterable"];
@@ -18,7 +19,7 @@ export const getOptionSpecificExcludesFor = ({
 }: {
   transformMode: TransformModeOption,
 }): ?Array<string> => {
-  if (transformMode === "performance") {
+  if (transformMode === TransformModeOption.performance) {
     return defaultExcludesForPerformanceMode;
   }
   return null;

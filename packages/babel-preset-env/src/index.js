@@ -3,6 +3,7 @@
 import semver from "semver";
 import builtInsList from "../data/built-ins.json";
 import { logPlugin } from "./debug";
+import { TransformModeOption } from "./options";
 import {
   getPlatformSpecificDefaultFor,
   getOptionSpecificExcludesFor,
@@ -195,8 +196,8 @@ export default declare((api, opts) => {
     console.log("");
   }
 
-  const loose = transformMode === "performance";
-  const spec = transformMode === "compliance";
+  const loose = transformMode === TransformModeOption.performance;
+  const spec = transformMode === TransformModeOption.compliance;
 
   const targets = getTargets(optionsTargets, {
     ignoreBrowserslistConfig,
