@@ -12,7 +12,7 @@ export default (_, opts = {}) => {
     loose = false,
     useBuiltIns = false,
     decoratorsLegacy = false,
-    pipelineProposal,
+    pipelineProposal = "minimal",
   } = opts;
 
   return {

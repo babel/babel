@@ -13,16 +13,20 @@ If you want the same configuration as before, you can use this configuration,
 although keep in mind that Stage 1 contains Stage 2 which is also deprecated.
 
 {
-  presets: [
-    ["@babel/preset-stage-2", { loose, useBuiltIns, decoratorsLegacy }]
+  "presets": [
+    ["@babel/preset-stage-2", {
+      "loose": false,
+      "useBuiltIns": false,
+      "decoratorsLegacy": true
+    }]
   ],
-  plugins: [
+  "plugins": [
     "@babel/plugin-proposal-export-default-from",
     "@babel/plugin-proposal-logical-assignment-operators",
-    ["@babel/plugin-proposal-optional-chaining", { loose }],
-    ["@babel/plugin-proposal-pipeline-operator", { proposal: pipelineProposal }],
-    ["@babel/plugin-proposal-nullish-coalescing-operator", { loose }],
-    "@babel/plugin-proposal-do-expressions",
+    ["@babel/plugin-proposal-optional-chaining", { "loose": false }],
+    ["@babel/plugin-proposal-pipeline-operator", { "proposal": "minimal" }],
+    ["@babel/plugin-proposal-nullish-coalescing-operator", { "loose": false }],
+    "@babel/plugin-proposal-do-expressions"
   ]
 }
 

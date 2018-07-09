@@ -13,13 +13,17 @@ If you want the same configuration as before, you can use this configuration,
 although keep in mind that Stage 0 contains Stage 1 which is also deprecated.
 
 {
-  presets: [
+  "presets": [
     [
-      "@babel/preset-stage-1",
-      { loose, useBuiltIns, decoratorsLegacy, pipelineProposal },
-    ],
+      "@babel/preset-stage-1", { 
+        "loose": false,
+        "useBuiltIns": false,
+        "decoratorsLegacy": true,
+        "pipelineProposal": "minimal"
+      }
+    ]
   ],
-  plugins: ["@babel/plugin-proposal-function-bind"],
+  "plugins": ["@babel/plugin-proposal-function-bind"]
 }
 
 This will be the last publish of "@babel/preset-stage-0", and it won't be
