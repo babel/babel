@@ -1,7 +1,6 @@
 {
   "plugins": ["external-helpers", "proposal-class-properties"],
   "presets": [
-    ["stage-0", { "decoratorsLegacy": true, "pipelineProposal": "minimal" }],
     "env"
   ]
 }
