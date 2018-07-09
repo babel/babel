@@ -12,13 +12,16 @@ that they didn't intend to.
 If you want the same configuration as before, you can use this configuration.
 
 {
-  plugins: [
+  "plugins": [
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-syntax-import-meta",
     "@babel/plugin-proposal-async-generator-functions",
-    ["@babel/plugin-proposal-class-properties", { loose }],
+    ["@babel/plugin-proposal-class-properties", { "loose": false }],
     "@babel/plugin-proposal-json-strings",
-    ["@babel/plugin-proposal-object-rest-spread", { loose, useBuiltIns }],
+    ["@babel/plugin-proposal-object-rest-spread", {
+      "loose": false,
+      "useBuiltIns": false
+    }],
     "@babel/plugin-proposal-optional-catch-binding",
     "@babel/plugin-proposal-unicode-property-regex",
   ]

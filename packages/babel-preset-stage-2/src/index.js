@@ -13,13 +13,18 @@ If you want the same configuration as before, you can use this configuration,
 although keep in mind that Stage 1 contains Stage 2 which is also deprecated.
 
 {
-  presets: [["@babel/preset-stage-3", { loose, useBuiltIns }]],
-  plugins: [
-   ["@babel/plugin-proposal-decorators", { legacy: decoratorsLegacy }],
+  "presets": [
+    ["@babel/preset-stage-3", {
+    "loose": false,
+      "useBuiltIns": false
+    }]
+  ],
+  "plugins": [
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
     "@babel/plugin-proposal-function-sent",
     "@babel/plugin-proposal-export-namespace-from",
     "@babel/plugin-proposal-numeric-separator",
-    "@babel/plugin-proposal-throw-expressions",
+    "@babel/plugin-proposal-throw-expressions"
   ]
 }
 
