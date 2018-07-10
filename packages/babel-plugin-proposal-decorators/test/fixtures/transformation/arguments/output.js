@@ -1,4 +1,6 @@
 let A = babelHelpers.decorate([dec(a, b, ...c)], function (_initialize) {
+  "use strict";
+
   class A {
     constructor() {
       _initialize(this);

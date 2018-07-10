@@ -159,6 +159,7 @@ function insertInitializeInstanceElements(path, initializeInstanceId) {
 
 function transformClass(path, file) {
   const isDeclaration = path.node.id && path.isDeclaration();
+  const isStrict = path.isInStrictMode();
 
   path.node.type = "ClassDeclaration";
   if (!path.node.id) path.node.id = path.scope.generateUidIdentifier("class");
@@ -174,6 +175,7 @@ function transformClass(path, file) {
       ${file.addHelper("decorate")}(
         ${classDecorators || t.nullLiteral()},
         function (${initializeId}) {
+          ${isStrict ? null : t.stringLiteral("use strict")}
           ${path.node}
           return { F: ${t.cloneNode(path.node.id)}, d: ${definitions} };
         }

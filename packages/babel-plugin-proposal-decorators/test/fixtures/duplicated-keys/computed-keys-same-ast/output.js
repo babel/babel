@@ -1,6 +1,8 @@
 var Foo = babelHelpers.decorate([function (_) {
   return desc = _;
 }], function (_initialize) {
+  "use strict";
+
   var Foo = function Foo() {
     "use strict";
 
