@@ -7,7 +7,7 @@ class A {
 }
 
 expect(el).toEqual({
-  [Symbol.toStringTag]: "Field Descriptor",
+  [Symbol.toStringTag]: "Descriptor",
   kind: "field",
   key: "foo",
   placement: "static",

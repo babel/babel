@@ -4,7 +4,7 @@ var el = null;
 class A {}
 
 expect(el).toEqual({
-  [Symbol.toStringTag]: "Class Descriptor",
+  [Symbol.toStringTag]: "Descriptor",
   kind: "class",
   elements: []
 });

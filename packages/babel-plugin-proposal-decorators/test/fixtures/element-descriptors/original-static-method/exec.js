@@ -6,7 +6,7 @@ class A {
 }
 
 expect(el).toEqual({
-  [Symbol.toStringTag]: "Method Descriptor",
+  [Symbol.toStringTag]: "Descriptor",
   kind: "method",
   key: "foo",
   placement: "static",

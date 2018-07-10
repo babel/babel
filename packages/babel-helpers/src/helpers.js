@@ -1037,7 +1037,7 @@ helpers.classPrivateFieldSet = () => template.program.ast`
   }
 `;
 
-// Don't review me, review babel-helpers/src/helpers/decorators.js :)
+// Don't review me, review babel-helpers/src/helpers/decorate.js :)
 helpers.decorate = () => template.program.ast`
   import toArray from "toArray";
 
@@ -1325,7 +1325,7 @@ helpers.decorate = () => template.program.ast`
         for (var j = 0; j < newExtras.length; j++) {
           _addElementPlacement(newExtras[j], placements);
         }
-        extras = extras.concat(newExtras);
+        extras.push.apply(extras, newExtras);
       }
     }
 
@@ -1380,7 +1380,7 @@ helpers.decorate = () => template.program.ast`
     };
 
     var desc = {
-      value: element.kind === "method" ? "Method Descriptor" : "Field Descriptor",
+      value: "Descriptor",
       configurable: true,
     };
     Object.defineProperty(obj, Symbol.toStringTag, desc);
@@ -1397,8 +1397,8 @@ helpers.decorate = () => template.program.ast`
     if (elementObjects === undefined) return;
     return toArray(elementObjects).map(function(elementObject) {
       var element = _toElementDescriptor(elementObject);
-      _disallowProperty(elementObject, "finisher");
-      _disallowProperty(elementObject, "extras");
+      _disallowProperty(elementObject, "finisher", "An element descriptor");
+      _disallowProperty(elementObject, "extras", "An element descriptor");
       return element;
     });
   }
@@ -1407,9 +1407,15 @@ helpers.decorate = () => template.program.ast`
   function _toElementDescriptor(
     elementObject /*: ElementObject */,
   ) /*: ElementDescriptor */ {
-    var kind = elementObject.kind;
+    var kind = String(elementObject.kind);
     if (kind !== "method" && kind !== "field") {
-      throw new TypeError('.kind must be either "method" or "field".');
+      throw new TypeError(
+        'An element descriptor\\'s .kind property must be either "method" or' +
+          ' "field", but a decorator created an element descriptor with' +
+          ' .kind "' +
+          kind +
+          '"',
+      );
     }
 
     var key = elementObject.key;
@@ -1422,13 +1428,17 @@ helpers.decorate = () => template.program.ast`
       placement !== "own"
     ) {
       throw new TypeError(
-        '.placement must be one of "static", "prototype" or "own".',
+        'An element descriptor\\'s .placement property must be one of "static",' +
+          ' "prototype" or "own", but a decorator created an element descriptor' +
+          ' with .placement "' +
+          placement +
+          '"',
       );
     }
 
     var descriptor /*: PropertyDescriptor */ = elementObject.descriptor;
 
-    _disallowProperty(elementObject, "elements");
+    _disallowProperty(elementObject, "elements", "An element descriptor");
 
     var element /*: ElementDescriptor */ = {
       kind: kind,
@@ -1438,11 +1448,23 @@ helpers.decorate = () => template.program.ast`
     };
 
     if (kind !== "field") {
-      _disallowProperty(elementObject, "initializer");
+      _disallowProperty(elementObject, "initializer", "A method descriptor");
     } else {
-      _disallowProperty(descriptor, "get");
-      _disallowProperty(descriptor, "set");
-      _disallowProperty(descriptor, "value");
+      _disallowProperty(
+        descriptor,
+        "get",
+        "The property descriptor of a field descriptor",
+      );
+      _disallowProperty(
+        descriptor,
+        "set",
+        "The property descriptor of a field descriptor",
+      );
+      _disallowProperty(
+        descriptor,
+        "value",
+        "The property descriptor of a field descriptor",
+      );
 
       element.initializer = elementObject.initializer;
     }
@@ -1474,7 +1496,7 @@ helpers.decorate = () => template.program.ast`
       elements: elements.map(_fromElementDescriptor),
     };
 
-    var desc = { value: "Class Descriptor", configurable: true };
+    var desc = { value: "Descriptor", configurable: true };
     Object.defineProperty(obj, Symbol.toStringTag, desc);
 
     return obj;
@@ -1483,13 +1505,20 @@ helpers.decorate = () => template.program.ast`
   // ToClassDescriptor
   function _toClassDescriptor(obj /*: ClassObject */) /*: ElementsFinisher */ {
     var kind = String(obj.kind);
-    if (kind !== "class") throw new TypeError('.kind must be "class".');
+    if (kind !== "class") {
+      throw new TypeError(
+        'A class descriptor\\'s .kind property must be "class", but a decorator' +
+          ' created a class descriptor with .kind "' +
+          kind +
+          '"',
+      );
+    }
 
-    _disallowProperty(obj, "key");
-    _disallowProperty(obj, "placement");
-    _disallowProperty(obj, "descriptor");
-    _disallowProperty(obj, "initializer");
-    _disallowProperty(obj, "extras");
+    _disallowProperty(obj, "key", "A class descriptor");
+    _disallowProperty(obj, "placement", "A class descriptor");
+    _disallowProperty(obj, "descriptor", "A class descriptor");
+    _disallowProperty(obj, "initializer", "A class descriptor");
+    _disallowProperty(obj, "extras", "A class descriptor");
 
     var finisher = _optionalCallableProperty(obj, "finisher");
     var elements = _toElementDescriptors(obj.elements);
@@ -1497,9 +1526,9 @@ helpers.decorate = () => template.program.ast`
     return { elements: elements, finisher: finisher };
   }
 
-  function _disallowProperty(obj, name) {
+  function _disallowProperty(obj, name, objectType) {
     if (obj[name] !== undefined) {
-      throw new TypeError("Unexpected '" + name + "' property.");
+      throw new TypeError(objectType + " can't have a ." + name + " property.");
     }
   }
 
@@ -1522,6 +1551,7 @@ helpers.decorate = () => template.program.ast`
     for (var i = 0; i < finishers.length; i++) {
       var newConstructor /*: ?Class<*> */ = (0, finishers[i])(constructor);
       if (newConstructor !== undefined) {
+        // NOTE: This should check if IsConstructor(newConstructor) is false.
         if (typeof newConstructor !== "function") {
           throw new TypeError("Finishers must return a constructor.");
         }

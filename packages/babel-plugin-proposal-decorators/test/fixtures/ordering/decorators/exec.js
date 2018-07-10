@@ -2,30 +2,30 @@ var log = [];
 
 function push(x) { log.push(x); return x; }
 
-function logFinisher(a, b) {
+function logDecoratorRun(a, b) {
   push(a);
   return function (el) { push(b); return el; };
 }
 
-@logFinisher(0, 23)
-@logFinisher(1, 22)
+@logDecoratorRun(0, 23)
+@logDecoratorRun(1, 22)
 class A {
-  @logFinisher(2, 15)
-  @logFinisher(3, 14)
+  @logDecoratorRun(2, 15)
+  @logDecoratorRun(3, 14)
   [push(4)] = "4";
 
-  @logFinisher(5, 17)
-  @logFinisher(6, 16)
+  @logDecoratorRun(5, 17)
+  @logDecoratorRun(6, 16)
   static [push(7)]() {}
 
-  @logFinisher(8, 19)
-  @logFinisher(9, 18)
+  @logDecoratorRun(8, 19)
+  @logDecoratorRun(9, 18)
   static [push(10)] = "10";
 
-  @logFinisher(11, 21)
-  @logFinisher(12, 20)
+  @logDecoratorRun(11, 21)
+  @logDecoratorRun(12, 20)
   [push(13)]() {}
 }
 
-var numsFrom0to9 = Array.from({ length: 24 }, (_, i) => i);
-expect(log).toEqual(numsFrom0to9);
+var numsFrom0to23 = Array.from({ length: 24 }, (_, i) => i);
+expect(log).toEqual(numsFrom0to23);
