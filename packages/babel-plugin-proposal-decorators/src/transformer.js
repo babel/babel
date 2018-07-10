@@ -160,11 +160,17 @@ function insertInitializeInstanceElements(path, initializeInstanceId) {
 function transformClass(path, file) {
   const isDeclaration = path.node.id && path.isDeclaration();
   const isStrict = path.isInStrictMode();
+  const { superClass } = path.node;
 
   path.node.type = "ClassDeclaration";
   if (!path.node.id) path.node.id = path.scope.generateUidIdentifier("class");
 
   const initializeId = path.scope.generateUidIdentifier("initialize");
+  const superId =
+    superClass &&
+    path.scope.generateUidIdentifierBasedOnNode(path.node.superClass, "super");
+
+  if (superClass) path.node.superClass = superId;
 
   const classDecorators = extractDecorators(path);
   const definitions = getElementsDefinitions(path, path.node.id, file);
@@ -174,11 +180,12 @@ function transformClass(path, file) {
   const expr = template.expression.ast`
       ${file.addHelper("decorate")}(
         ${classDecorators || t.nullLiteral()},
-        function (${initializeId}) {
+        function (${initializeId}, ${superClass ? superId : null}) {
           ${isStrict ? null : t.stringLiteral("use strict")}
           ${path.node}
           return { F: ${t.cloneNode(path.node.id)}, d: ${definitions} };
-        }
+        },
+        ${superClass}
       )
     `;
 
