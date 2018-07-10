@@ -1,0 +1,3 @@
+{
+  "plugins": ["proposal-decorators", "proposal-class-properties", "external-helpers", "syntax-async-generators"]
+}
