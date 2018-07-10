@@ -423,7 +423,7 @@ export default class Tokenizer extends LocationParser {
 
   readToken_slash(): void {
     // '/'
-    if (this.state.exprAllowed) {
+    if (this.state.exprAllowed && !this.state.inType) {
       ++this.state.pos;
       this.readRegexp();
       return;
