@@ -206,14 +206,13 @@ describe("getTargets", () => {
 
   describe("ecmascript", () => {
     it("should be a target", () => {
-      assert.deepEqual(
+      expect(
         getTargets({
           ecmascript: 2015,
         }),
-        {
-          ecmascript: "2015",
-        },
-      );
+      ).toEqual({
+        ecmascript: "2015",
+      });
     });
   });
 
