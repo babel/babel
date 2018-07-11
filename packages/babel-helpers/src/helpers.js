@@ -1127,11 +1127,19 @@ helpers.decorate = () => template.program.ast`
     decorators /*: ClassDecorator[] */,
     factory /*: ClassFactory */,
     privateNameUtils,
-    superClass /*: ?Class<*> */
+    superClass /*: ?Class<*> */,
   ) /*: Class<*> */ {
-    var r = factory(function initialize(O) {
-      _initializeInstanceElements(O, decorated.elements, privateNameUtils.PrivateName);
-    }, privateNameUtils.withMap, superClass);
+    var r = factory(
+      function initialize(O) {
+        _initializeInstanceElements(
+          O,
+          decorated.elements,
+          privateNameUtils.PrivateName,
+        );
+      },
+      privateNameUtils.withMap,
+      superClass,
+    );
     var decorated = _decorateClass(
       _coalesceClassElements(r.d.map(_createElementDescriptor)),
       decorators,
@@ -1141,7 +1149,7 @@ helpers.decorate = () => template.program.ast`
     _initializeClassElements(
       r.F,
       decorated.elements,
-      privateNameUtils.PrivateName
+      privateNameUtils.PrivateName,
     );
 
     return _runClassFinishers(r.F, decorated.finishers);
@@ -1264,7 +1272,7 @@ helpers.decorate = () => template.program.ast`
   function _initializeClassElements /*::<C>*/(
     F /*: Class<C> */,
     elements /*: ElementDescriptor[] */,
-    PrivateName
+    PrivateName,
   ) {
     var proto = F.prototype;
 
@@ -1286,7 +1294,7 @@ helpers.decorate = () => template.program.ast`
   function _initializeInstanceElements /*::<C>*/(
     O /*: C */,
     elements /*: ElementDescriptor[] */,
-    PrivateName
+    PrivateName,
   ) {
     ["method", "field"].forEach(function(kind) {
       elements.forEach(function(element /*: ElementDescriptor */) {
@@ -1301,7 +1309,7 @@ helpers.decorate = () => template.program.ast`
   function _defineClassElement /*::<C>*/(
     receiver /*: C | Class<C> */,
     element /*: ElementDescriptor */,
-    PrivateName
+    PrivateName,
   ) {
     var descriptor /*: PropertyDescriptor */ = element.descriptor;
     if (element.kind === "field") {
@@ -1334,7 +1342,7 @@ helpers.decorate = () => template.program.ast`
   function _decorateClass(
     elements /*: ElementDescriptor[] */,
     decorators /*: ClassDecorator[] */,
-    PrivateName
+    PrivateName,
   ) /*: ElementsFinishers */ {
     var newElements /*: ElementDescriptor[] */ = [];
     var finishers /*: ClassFinisher[] */ = [];
@@ -1350,7 +1358,7 @@ helpers.decorate = () => template.program.ast`
       var elementFinishersExtras /*: ElementFinishersExtras */ = _decorateElement(
         element,
         placements,
-        PrivateName
+        PrivateName,
       );
       newElements.push(elementFinishersExtras.element);
       newElements.push.apply(newElements, elementFinishersExtras.extras);
@@ -1364,7 +1372,7 @@ helpers.decorate = () => template.program.ast`
     var result /*: ElementsFinishers */ = _decorateConstructor(
       newElements,
       decorators,
-      PrivateName
+      PrivateName,
     );
     finishers.push.apply(finishers, result.finishers);
     result.finishers = finishers;
@@ -1389,7 +1397,7 @@ helpers.decorate = () => template.program.ast`
   function _decorateElement(
     element /*: ElementDescriptor */,
     placements /*: Placements */,
-    PrivateName
+    PrivateName,
   ) /*: ElementFinishersExtras */ {
     var extras /*: ElementDescriptor[] */ = [];
     var finishers /*: ClassFinisher[] */ = [];
@@ -1409,7 +1417,7 @@ helpers.decorate = () => template.program.ast`
       var elementFinisherExtras /*: ElementFinisherExtras */ = _toElementFinisherExtras(
         (0, decorators[i])(elementObject) /*: ElementObjectOutput */ ||
           elementObject,
-          PrivateName
+        PrivateName,
       );
 
       element = elementFinisherExtras.element;
@@ -1436,7 +1444,7 @@ helpers.decorate = () => template.program.ast`
   function _decorateConstructor(
     elements /*: ElementDescriptor[] */,
     decorators /*: ClassDecorator[] */,
-    PrivateName
+    PrivateName,
   ) /*: ElementsFinishers */ {
     var finishers /*: ClassFinisher[] */ = [];
 
@@ -1444,7 +1452,7 @@ helpers.decorate = () => template.program.ast`
       var obj /*: ClassObject */ = _fromClassDescriptor(elements);
       var elementsAndFinisher /*: ElementsFinisher */ = _toClassDescriptor(
         (0, decorators[i])(obj) /*: ClassObject */ || obj,
-        PrivateName
+        PrivateName,
       );
 
       if (elementsAndFinisher.finisher !== undefined) {
@@ -1495,7 +1503,7 @@ helpers.decorate = () => template.program.ast`
   // ToElementDescriptors
   function _toElementDescriptors(
     elementObjects /*: ElementObject[] */,
-    PrivateName
+    PrivateName,
   ) /*: ElementDescriptor[] */ {
     if (elementObjects === undefined) return;
     return toArray(elementObjects).map(function(elementObject) {
@@ -1509,7 +1517,7 @@ helpers.decorate = () => template.program.ast`
   // ToElementDescriptor
   function _toElementDescriptor(
     elementObject /*: ElementObject */,
-    PrivateName
+    PrivateName,
   ) /*: ElementDescriptor */ {
     var kind = String(elementObject.kind);
     if (kind !== "method" && kind !== "field") {
@@ -1584,16 +1592,19 @@ helpers.decorate = () => template.program.ast`
 
   function _toElementFinisherExtras(
     elementObject /*: ElementObject */,
-    PrivateName
+    PrivateName,
   ) /*: ElementFinisherExtras */ {
-    var element /*: ElementDescriptor */ = _toElementDescriptor(elementObject, PrivateName);
+    var element /*: ElementDescriptor */ = _toElementDescriptor(
+      elementObject,
+      PrivateName,
+    );
     var finisher /*: ClassFinisher */ = _optionalCallableProperty(
       elementObject,
       "finisher",
     );
     var extras /*: ElementDescriptors[] */ = _toElementDescriptors(
       elementObject.extras,
-      PrivateName
+      PrivateName,
     );
 
     return { element: element, finisher: finisher, extras: extras };
@@ -1615,7 +1626,10 @@ helpers.decorate = () => template.program.ast`
   }
 
   // ToClassDescriptor
-  function _toClassDescriptor(obj /*: ClassObject */, PrivateName) /*: ElementsFinisher */ {
+  function _toClassDescriptor(
+    obj /*: ClassObject */,
+    PrivateName,
+  ) /*: ElementsFinisher */ {
     var kind = String(obj.kind);
     if (kind !== "class") {
       throw new TypeError(

@@ -118,17 +118,31 @@ type ElementsFinishers = {
 export default function _decorate(
   decorators /*: ClassDecorator[] */,
   factory /*: ClassFactory */,
+  privateNameUtils,
   superClass /*: ?Class<*> */,
 ) /*: Class<*> */ {
-  var r = factory(function initialize(O) {
-    _initializeInstanceElements(O, decorated.elements);
-  }, superClass);
+  var r = factory(
+    function initialize(O) {
+      _initializeInstanceElements(
+        O,
+        decorated.elements,
+        privateNameUtils.PrivateName,
+      );
+    },
+    privateNameUtils.withMap,
+    superClass,
+  );
   var decorated = _decorateClass(
     _coalesceClassElements(r.d.map(_createElementDescriptor)),
     decorators,
+    privateNameUtils.PrivateName,
   );
 
-  _initializeClassElements(r.F, decorated.elements);
+  _initializeClassElements(
+    r.F,
+    decorated.elements,
+    privateNameUtils.PrivateName,
+  );
 
   return _runClassFinishers(r.F, decorated.finishers);
 }
@@ -250,6 +264,7 @@ function _isDataDescriptor(desc /*: PropertyDescriptor */) /*: boolean */ {
 function _initializeClassElements /*::<C>*/(
   F /*: Class<C> */,
   elements /*: ElementDescriptor[] */,
+  PrivateName,
 ) {
   var proto = F.prototype;
 
@@ -261,7 +276,7 @@ function _initializeClassElements /*::<C>*/(
         (placement === "static" || placement === "prototype")
       ) {
         var receiver = placement === "static" ? F : proto;
-        _defineClassElement(receiver, element);
+        _defineClassElement(receiver, element, PrivateName);
       }
     });
   });
@@ -271,11 +286,12 @@ function _initializeClassElements /*::<C>*/(
 function _initializeInstanceElements /*::<C>*/(
   O /*: C */,
   elements /*: ElementDescriptor[] */,
+  PrivateName,
 ) {
   ["method", "field"].forEach(function(kind) {
     elements.forEach(function(element /*: ElementDescriptor */) {
       if (element.kind === kind && element.placement === "own") {
-        _defineClassElement(O, element);
+        _defineClassElement(O, element, PrivateName);
       }
     });
   });
@@ -285,6 +301,7 @@ function _initializeInstanceElements /*::<C>*/(
 function _defineClassElement /*::<C>*/(
   receiver /*: C | Class<C> */,
   element /*: ElementDescriptor */,
+  PrivateName,
 ) {
   var descriptor /*: PropertyDescriptor */ = element.descriptor;
   if (element.kind === "field") {
@@ -296,7 +313,11 @@ function _defineClassElement /*::<C>*/(
       value: initializer === void 0 ? void 0 : initializer.call(receiver),
     };
   }
-  Object.defineProperty(receiver, element.key, descriptor);
+  if (element.key instanceof PrivateName) {
+    element.key.set(receiver, descriptor.value);
+  } else {
+    Object.defineProperty(receiver, element.key, descriptor);
+  }
 }
 
 /*::
@@ -313,6 +334,7 @@ type Placements = {
 function _decorateClass(
   elements /*: ElementDescriptor[] */,
   decorators /*: ClassDecorator[] */,
+  PrivateName,
 ) /*: ElementsFinishers */ {
   var newElements /*: ElementDescriptor[] */ = [];
   var finishers /*: ClassFinisher[] */ = [];
@@ -328,6 +350,7 @@ function _decorateClass(
     var elementFinishersExtras /*: ElementFinishersExtras */ = _decorateElement(
       element,
       placements,
+      PrivateName,
     );
     newElements.push(elementFinishersExtras.element);
     newElements.push.apply(newElements, elementFinishersExtras.extras);
@@ -341,6 +364,7 @@ function _decorateClass(
   var result /*: ElementsFinishers */ = _decorateConstructor(
     newElements,
     decorators,
+    PrivateName,
   );
   finishers.push.apply(finishers, result.finishers);
   result.finishers = finishers;
@@ -365,6 +389,7 @@ function _addElementPlacement(
 function _decorateElement(
   element /*: ElementDescriptor */,
   placements /*: Placements */,
+  PrivateName,
 ) /*: ElementFinishersExtras */ {
   var extras /*: ElementDescriptor[] */ = [];
   var finishers /*: ClassFinisher[] */ = [];
@@ -384,6 +409,7 @@ function _decorateElement(
     var elementFinisherExtras /*: ElementFinisherExtras */ = _toElementFinisherExtras(
       (0, decorators[i])(elementObject) /*: ElementObjectOutput */ ||
         elementObject,
+      PrivateName,
     );
 
     element = elementFinisherExtras.element;
@@ -410,6 +436,7 @@ function _decorateElement(
 function _decorateConstructor(
   elements /*: ElementDescriptor[] */,
   decorators /*: ClassDecorator[] */,
+  PrivateName,
 ) /*: ElementsFinishers */ {
   var finishers /*: ClassFinisher[] */ = [];
 
@@ -417,6 +444,7 @@ function _decorateConstructor(
     var obj /*: ClassObject */ = _fromClassDescriptor(elements);
     var elementsAndFinisher /*: ElementsFinisher */ = _toClassDescriptor(
       (0, decorators[i])(obj) /*: ClassObject */ || obj,
+      PrivateName,
     );
 
     if (elementsAndFinisher.finisher !== undefined) {
@@ -467,10 +495,11 @@ function _fromElementDescriptor(
 // ToElementDescriptors
 function _toElementDescriptors(
   elementObjects /*: ElementObject[] */,
+  PrivateName,
 ) /*: ElementDescriptor[] */ {
   if (elementObjects === undefined) return;
   return toArray(elementObjects).map(function(elementObject) {
-    var element = _toElementDescriptor(elementObject);
+    var element = _toElementDescriptor(elementObject, PrivateName);
     _disallowProperty(elementObject, "finisher", "An element descriptor");
     _disallowProperty(elementObject, "extras", "An element descriptor");
     return element;
@@ -480,6 +509,7 @@ function _toElementDescriptors(
 // ToElementDescriptor
 function _toElementDescriptor(
   elementObject /*: ElementObject */,
+  PrivateName,
 ) /*: ElementDescriptor */ {
   var kind = String(elementObject.kind);
   if (kind !== "method" && kind !== "field") {
@@ -493,7 +523,13 @@ function _toElementDescriptor(
   }
 
   var key = elementObject.key;
-  if (typeof key !== "string" && typeof key !== "symbol") key = String(key);
+  if (
+    typeof key !== "string" &&
+    typeof key !== "symbol" &&
+    !(key instanceof PrivateName)
+  ) {
+    key = String(key);
+  }
 
   var placement = String(elementObject.placement);
   if (
@@ -548,14 +584,19 @@ function _toElementDescriptor(
 
 function _toElementFinisherExtras(
   elementObject /*: ElementObject */,
+  PrivateName,
 ) /*: ElementFinisherExtras */ {
-  var element /*: ElementDescriptor */ = _toElementDescriptor(elementObject);
+  var element /*: ElementDescriptor */ = _toElementDescriptor(
+    elementObject,
+    PrivateName,
+  );
   var finisher /*: ClassFinisher */ = _optionalCallableProperty(
     elementObject,
     "finisher",
   );
   var extras /*: ElementDescriptors[] */ = _toElementDescriptors(
     elementObject.extras,
+    PrivateName,
   );
 
   return { element: element, finisher: finisher, extras: extras };
@@ -577,7 +618,10 @@ function _fromClassDescriptor(
 }
 
 // ToClassDescriptor
-function _toClassDescriptor(obj /*: ClassObject */) /*: ElementsFinisher */ {
+function _toClassDescriptor(
+  obj /*: ClassObject */,
+  PrivateName,
+) /*: ElementsFinisher */ {
   var kind = String(obj.kind);
   if (kind !== "class") {
     throw new TypeError(
@@ -595,7 +639,7 @@ function _toClassDescriptor(obj /*: ClassObject */) /*: ElementsFinisher */ {
   _disallowProperty(obj, "extras", "A class descriptor");
 
   var finisher = _optionalCallableProperty(obj, "finisher");
-  var elements = _toElementDescriptors(obj.elements);
+  var elements = _toElementDescriptors(obj.elements, PrivateName);
 
   return { elements: elements, finisher: finisher };
 }
