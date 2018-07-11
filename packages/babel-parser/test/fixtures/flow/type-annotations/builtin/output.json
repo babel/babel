@@ -1,0 +1,811 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 248,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 16,
+      "column": 15
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 248,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 16,
+        "column": 15
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start": 10,
+        "end": 23,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 13
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 15,
+          "end": 16,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 5
+            },
+            "end": {
+              "line": 2,
+              "column": 6
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "AnyTypeAnnotation",
+          "start": 19,
+          "end": 22,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 9
+            },
+            "end": {
+              "line": 2,
+              "column": 12
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " bounds",
+            "start": 0,
+            "end": 9,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 9
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "TypeAlias",
+        "start": 24,
+        "end": 39,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 15
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 29,
+          "end": 30,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 5
+            },
+            "end": {
+              "line": 3,
+              "column": 6
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "MixedTypeAnnotation",
+          "start": 33,
+          "end": 38,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 9
+            },
+            "end": {
+              "line": 3,
+              "column": 14
+            }
+          }
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start": 40,
+        "end": 55,
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 15
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 45,
+          "end": 46,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 5
+            },
+            "end": {
+              "line": 4,
+              "column": 6
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "EmptyTypeAnnotation",
+          "start": 49,
+          "end": 54,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 9
+            },
+            "end": {
+              "line": 4,
+              "column": 14
+            }
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " builtins",
+            "start": 56,
+            "end": 67,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 0
+              },
+              "end": {
+                "line": 5,
+                "column": 11
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "TypeAlias",
+        "start": 68,
+        "end": 82,
+        "loc": {
+          "start": {
+            "line": 6,
+            "column": 0
+          },
+          "end": {
+            "line": 6,
+            "column": 14
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 73,
+          "end": 74,
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 5
+            },
+            "end": {
+              "line": 6,
+              "column": 6
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "VoidTypeAnnotation",
+          "start": 77,
+          "end": 81,
+          "loc": {
+            "start": {
+              "line": 6,
+              "column": 9
+            },
+            "end": {
+              "line": 6,
+              "column": 13
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " builtins",
+            "start": 56,
+            "end": 67,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 0
+              },
+              "end": {
+                "line": 5,
+                "column": 11
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "TypeAlias",
+        "start": 83,
+        "end": 99,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 0
+          },
+          "end": {
+            "line": 7,
+            "column": 16
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 88,
+          "end": 89,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 5
+            },
+            "end": {
+              "line": 7,
+              "column": 6
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "NumberTypeAnnotation",
+          "start": 92,
+          "end": 98,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 9
+            },
+            "end": {
+              "line": 7,
+              "column": 15
+            }
+          }
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start": 100,
+        "end": 116,
+        "loc": {
+          "start": {
+            "line": 8,
+            "column": 0
+          },
+          "end": {
+            "line": 8,
+            "column": 16
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 105,
+          "end": 106,
+          "loc": {
+            "start": {
+              "line": 8,
+              "column": 5
+            },
+            "end": {
+              "line": 8,
+              "column": 6
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "StringTypeAnnotation",
+          "start": 109,
+          "end": 115,
+          "loc": {
+            "start": {
+              "line": 8,
+              "column": 9
+            },
+            "end": {
+              "line": 8,
+              "column": 15
+            }
+          }
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start": 117,
+        "end": 131,
+        "loc": {
+          "start": {
+            "line": 9,
+            "column": 0
+          },
+          "end": {
+            "line": 9,
+            "column": 14
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 122,
+          "end": 123,
+          "loc": {
+            "start": {
+              "line": 9,
+              "column": 5
+            },
+            "end": {
+              "line": 9,
+              "column": 6
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "BooleanTypeAnnotation",
+          "start": 126,
+          "end": 130,
+          "loc": {
+            "start": {
+              "line": 9,
+              "column": 9
+            },
+            "end": {
+              "line": 9,
+              "column": 13
+            }
+          }
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start": 132,
+        "end": 149,
+        "loc": {
+          "start": {
+            "line": 10,
+            "column": 0
+          },
+          "end": {
+            "line": 10,
+            "column": 17
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 137,
+          "end": 138,
+          "loc": {
+            "start": {
+              "line": 10,
+              "column": 5
+            },
+            "end": {
+              "line": 10,
+              "column": 6
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "BooleanTypeAnnotation",
+          "start": 141,
+          "end": 148,
+          "loc": {
+            "start": {
+              "line": 10,
+              "column": 9
+            },
+            "end": {
+              "line": 10,
+              "column": 16
+            }
+          }
+        },
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " literal type annotations",
+            "start": 150,
+            "end": 177,
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 0
+              },
+              "end": {
+                "line": 11,
+                "column": 27
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "TypeAlias",
+        "start": 178,
+        "end": 192,
+        "loc": {
+          "start": {
+            "line": 12,
+            "column": 0
+          },
+          "end": {
+            "line": 12,
+            "column": 14
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 183,
+          "end": 184,
+          "loc": {
+            "start": {
+              "line": 12,
+              "column": 5
+            },
+            "end": {
+              "line": 12,
+              "column": 6
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "NullLiteralTypeAnnotation",
+          "start": 187,
+          "end": 191,
+          "loc": {
+            "start": {
+              "line": 12,
+              "column": 9
+            },
+            "end": {
+              "line": 12,
+              "column": 13
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " literal type annotations",
+            "start": 150,
+            "end": 177,
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 0
+              },
+              "end": {
+                "line": 11,
+                "column": 27
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "TypeAlias",
+        "start": 193,
+        "end": 205,
+        "loc": {
+          "start": {
+            "line": 13,
+            "column": 0
+          },
+          "end": {
+            "line": 13,
+            "column": 12
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 198,
+          "end": 199,
+          "loc": {
+            "start": {
+              "line": 13,
+              "column": 5
+            },
+            "end": {
+              "line": 13,
+              "column": 6
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "StringLiteralTypeAnnotation",
+          "start": 202,
+          "end": 204,
+          "loc": {
+            "start": {
+              "line": 13,
+              "column": 9
+            },
+            "end": {
+              "line": 13,
+              "column": 11
+            }
+          },
+          "extra": {
+            "rawValue": "",
+            "raw": "\"\""
+          },
+          "value": ""
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start": 206,
+        "end": 217,
+        "loc": {
+          "start": {
+            "line": 14,
+            "column": 0
+          },
+          "end": {
+            "line": 14,
+            "column": 11
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 211,
+          "end": 212,
+          "loc": {
+            "start": {
+              "line": 14,
+              "column": 5
+            },
+            "end": {
+              "line": 14,
+              "column": 6
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "NumberLiteralTypeAnnotation",
+          "start": 215,
+          "end": 216,
+          "loc": {
+            "start": {
+              "line": 14,
+              "column": 9
+            },
+            "end": {
+              "line": 14,
+              "column": 10
+            }
+          },
+          "extra": {
+            "rawValue": 0,
+            "raw": "0"
+          },
+          "value": 0
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start": 218,
+        "end": 232,
+        "loc": {
+          "start": {
+            "line": 15,
+            "column": 0
+          },
+          "end": {
+            "line": 15,
+            "column": 14
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 223,
+          "end": 224,
+          "loc": {
+            "start": {
+              "line": 15,
+              "column": 5
+            },
+            "end": {
+              "line": 15,
+              "column": 6
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "BooleanLiteralTypeAnnotation",
+          "start": 227,
+          "end": 231,
+          "loc": {
+            "start": {
+              "line": 15,
+              "column": 9
+            },
+            "end": {
+              "line": 15,
+              "column": 13
+            }
+          },
+          "value": true
+        }
+      },
+      {
+        "type": "TypeAlias",
+        "start": 233,
+        "end": 248,
+        "loc": {
+          "start": {
+            "line": 16,
+            "column": 0
+          },
+          "end": {
+            "line": 16,
+            "column": 15
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 238,
+          "end": 239,
+          "loc": {
+            "start": {
+              "line": 16,
+              "column": 5
+            },
+            "end": {
+              "line": 16,
+              "column": 6
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "BooleanLiteralTypeAnnotation",
+          "start": 242,
+          "end": 247,
+          "loc": {
+            "start": {
+              "line": 16,
+              "column": 9
+            },
+            "end": {
+              "line": 16,
+              "column": 14
+            }
+          },
+          "value": false
+        }
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " bounds",
+      "start": 0,
+      "end": 9,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 9
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " builtins",
+      "start": 56,
+      "end": 67,
+      "loc": {
+        "start": {
+          "line": 5,
+          "column": 0
+        },
+        "end": {
+          "line": 5,
+          "column": 11
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " literal type annotations",
+      "start": 150,
+      "end": 177,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 0
+        },
+        "end": {
+          "line": 11,
+          "column": 27
+        }
+      }
+    }
+  ]
+}

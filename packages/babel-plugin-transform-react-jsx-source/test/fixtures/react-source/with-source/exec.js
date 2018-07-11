@@ -5,4 +5,4 @@ var actual = transform(
 
 var expected = 'var x = <sometag __source="custom" />;';
 
-assert.equal(actual, expected);
+expect(actual).toBe(expected);

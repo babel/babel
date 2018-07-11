@@ -1,0 +1,184 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 33,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 33
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 33,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 33
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForInStatement",
+        "start": 0,
+        "end": 33,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 33
+          }
+        },
+        "left": {
+          "type": "VariableDeclaration",
+          "start": 5,
+          "end": 12,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 5
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            }
+          },
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start": 11,
+              "end": 12,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 11
+                },
+                "end": {
+                  "line": 1,
+                  "column": 12
+                }
+              },
+              "id": {
+                "type": "Identifier",
+                "start": 11,
+                "end": 12,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 12
+                  },
+                  "identifierName": "x"
+                },
+                "name": "x"
+              },
+              "init": null
+            }
+          ],
+          "kind": "const"
+        },
+        "right": {
+          "type": "Identifier",
+          "start": 16,
+          "end": 20,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 16
+            },
+            "end": {
+              "line": 1,
+              "column": 20
+            },
+            "identifierName": "list"
+          },
+          "name": "list"
+        },
+        "body": {
+          "type": "ExpressionStatement",
+          "start": 22,
+          "end": 33,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 22
+            },
+            "end": {
+              "line": 1,
+              "column": 33
+            }
+          },
+          "expression": {
+            "type": "CallExpression",
+            "start": 22,
+            "end": 32,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 22
+              },
+              "end": {
+                "line": 1,
+                "column": 32
+              }
+            },
+            "callee": {
+              "type": "Identifier",
+              "start": 22,
+              "end": 29,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 22
+                },
+                "end": {
+                  "line": 1,
+                  "column": 29
+                },
+                "identifierName": "process"
+              },
+              "name": "process"
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "start": 30,
+                "end": 31,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 30
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 31
+                  },
+                  "identifierName": "x"
+                },
+                "name": "x"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

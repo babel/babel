@@ -1,6 +1,6 @@
 {
   "name": "@babel/cli",
-  "version": "7.0.0-beta.40",
+  "version": "7.0.0-beta.52",
   "description": "Babel command line.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -20,20 +20,21 @@
     "convert-source-map": "^1.1.0",
     "fs-readdir-recursive": "^1.0.0",
     "glob": "^7.0.0",
-    "lodash": "^4.2.0",
+    "lodash": "^4.17.5",
+    "mkdirp": "^0.5.1",
     "output-file-sync": "^2.0.0",
     "slash": "^1.0.0",
     "source-map": "^0.5.0"
   },
   "optionalDependencies": {
-    "chokidar": "^1.6.1"
+    "chokidar": "^2.0.3"
   },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.40"
+    "@babel/core": ">=7.0.0-beta.50 <7.0.0-rc.0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.40",
-    "@babel/helper-fixtures": "7.0.0-beta.40"
+    "@babel/core": "7.0.0-beta.52",
+    "@babel/helper-fixtures": "7.0.0-beta.52"
   },
   "bin": {
     "babel": "./bin/babel.js",

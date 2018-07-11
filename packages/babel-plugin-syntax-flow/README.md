@@ -1,35 +1,19 @@
 # @babel/plugin-syntax-flow
 
+> Allow parsing of the flow syntax
 
+See our website [@babel/plugin-syntax-flow](https://babeljs.io/docs/en/next/babel-plugin-syntax-flow.html) for more information.
 
-## Installation
+## Install
+
+Using npm:
 
 ```sh
 npm install --save-dev @babel/plugin-syntax-flow
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-syntax-flow"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins @babel/plugin-syntax-flow script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-syntax-flow"]
-});
+yarn add @babel/plugin-syntax-flow --dev
 ```

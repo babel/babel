@@ -12,5 +12,5 @@ function Bar() {
 new Foo;
 new Bar();
 
-assert.equal(targets[0], Foo);
-assert.equal(targets[1], undefined);
+expect(targets[0]).toBe(Foo);
+expect(targets[1]).toBeUndefined();

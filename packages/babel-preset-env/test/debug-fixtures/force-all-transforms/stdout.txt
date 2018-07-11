@@ -8,37 +8,46 @@ Using targets:
 Using modules transform: false
 
 Using plugins:
+  transform-template-literals {}
+  transform-literals {}
+  transform-function-name {}
   transform-arrow-functions {}
   transform-block-scoped-functions {}
-  transform-block-scoping {}
   transform-classes {}
-  transform-computed-properties {}
-  transform-destructuring {}
-  transform-duplicate-keys {}
-  transform-for-of {}
-  transform-function-name {}
-  transform-literals {}
   transform-object-super {}
-  transform-parameters {}
   transform-shorthand-properties {}
-  transform-spread {}
+  transform-duplicate-keys {}
+  transform-computed-properties {}
+  transform-for-of {}
   transform-sticky-regex {}
-  transform-template-literals {}
-  transform-typeof-symbol {}
+  transform-dotall-regex { "chrome":"55" }
   transform-unicode-regex {}
+  transform-spread {}
+  transform-parameters {}
+  transform-destructuring {}
+  transform-block-scoping {}
+  transform-typeof-symbol {}
   transform-new-target {}
   transform-regenerator {}
   transform-exponentiation-operator {}
   transform-async-to-generator {}
-  transform-dotall-regex { "chrome":"55" }
+  proposal-async-generator-functions { "chrome":"55" }
+  proposal-object-rest-spread { "chrome":"55" }
+  proposal-unicode-property-regex { "chrome":"55" }
 
 Using polyfills with `entry` option:
 
-[src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+[<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es6.array.sort { "chrome":"55" }
+  es7.object.define-getter { "chrome":"55" }
+  es7.object.define-setter { "chrome":"55" }
+  es7.object.lookup-getter { "chrome":"55" }
+  es7.object.lookup-setter { "chrome":"55" }
+  es7.promise.finally { "chrome":"55" }
+  es7.symbol.async-iterator { "chrome":"55" }
   es7.string.pad-start { "chrome":"55" }
   es7.string.pad-end { "chrome":"55" }
   web.timers { "chrome":"55" }
   web.immediate { "chrome":"55" }
   web.dom.iterable { "chrome":"55" }
-src/in.js -> lib/in.js
+Successfully compiled 1 file with Babel.

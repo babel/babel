@@ -1,0 +1,6 @@
+{
+  "presets": [
+    ["stage-0", { "decoratorsLegacy": true, "pipelineProposal": "minimal" }],
+    "env"
+  ]
+}

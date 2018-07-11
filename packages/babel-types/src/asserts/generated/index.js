@@ -27,6 +27,12 @@ export function assertAssignmentExpression(
 export function assertBinaryExpression(node: Object, opts?: Object = {}): void {
   assert("BinaryExpression", node, opts);
 }
+export function assertInterpreterDirective(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("InterpreterDirective", node, opts);
+}
 export function assertDirective(node: Object, opts?: Object = {}): void {
   assert("Directive", node, opts);
 }
@@ -414,6 +420,12 @@ export function assertInterfaceDeclaration(
 ): void {
   assert("InterfaceDeclaration", node, opts);
 }
+export function assertInterfaceTypeAnnotation(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("InterfaceTypeAnnotation", node, opts);
+}
 export function assertIntersectionTypeAnnotation(
   node: Object,
   opts?: Object = {},
@@ -455,6 +467,12 @@ export function assertObjectTypeAnnotation(
   opts?: Object = {},
 ): void {
   assert("ObjectTypeAnnotation", node, opts);
+}
+export function assertObjectTypeInternalSlot(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("ObjectTypeInternalSlot", node, opts);
 }
 export function assertObjectTypeCallProperty(
   node: Object,
@@ -663,6 +681,12 @@ export function assertOptionalCallExpression(
 ): void {
   assert("OptionalCallExpression", node, opts);
 }
+export function assertClassPrivateProperty(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("ClassPrivateProperty", node, opts);
+}
 export function assertImport(node: Object, opts?: Object = {}): void {
   assert("Import", node, opts);
 }
@@ -683,6 +707,12 @@ export function assertExportNamespaceSpecifier(
   opts?: Object = {},
 ): void {
   assert("ExportNamespaceSpecifier", node, opts);
+}
+export function assertPrivateName(node: Object, opts?: Object = {}): void {
+  assert("PrivateName", node, opts);
+}
+export function assertBigIntLiteral(node: Object, opts?: Object = {}): void {
+  assert("BigIntLiteral", node, opts);
 }
 export function assertTSParameterProperty(
   node: Object,
@@ -800,6 +830,15 @@ export function assertTSIntersectionType(
   opts?: Object = {},
 ): void {
   assert("TSIntersectionType", node, opts);
+}
+export function assertTSConditionalType(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("TSConditionalType", node, opts);
+}
+export function assertTSInferType(node: Object, opts?: Object = {}): void {
+  assert("TSInferType", node, opts);
 }
 export function assertTSParenthesizedType(
   node: Object,
@@ -1049,6 +1088,9 @@ export function assertFlowPredicate(node: Object, opts?: Object = {}): void {
 }
 export function assertJSX(node: Object, opts?: Object = {}): void {
   assert("JSX", node, opts);
+}
+export function assertPrivate(node: Object, opts?: Object = {}): void {
+  assert("Private", node, opts);
 }
 export function assertTSTypeElement(node: Object, opts?: Object = {}): void {
   assert("TSTypeElement", node, opts);

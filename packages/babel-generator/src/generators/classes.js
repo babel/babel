@@ -2,8 +2,9 @@ import * as t from "@babel/types";
 
 export function ClassDeclaration(node: Object, parent: Object) {
   if (
-    !t.isExportDefaultDeclaration(parent) &&
-    !t.isExportNamedDeclaration(parent)
+    !this.format.decoratorsBeforeExport ||
+    (!t.isExportDefaultDeclaration(parent) &&
+      !t.isExportNamedDeclaration(parent))
   ) {
     this.printJoin(node.decorators, node);
   }
@@ -99,12 +100,30 @@ export function ClassProperty(node: Object) {
     this.print(node.key, node);
   }
 
+  // TS
   if (node.optional) {
-    // TS
     this.token("?");
+  }
+  if (node.definite) {
+    this.token("!");
   }
 
   this.print(node.typeAnnotation, node);
+  if (node.value) {
+    this.space();
+    this.token("=");
+    this.space();
+    this.print(node.value, node);
+  }
+  this.semicolon();
+}
+
+export function ClassPrivateProperty(node: Object) {
+  if (node.static) {
+    this.word("static");
+    this.space();
+  }
+  this.print(node.key, node);
   if (node.value) {
     this.space();
     this.token("=");

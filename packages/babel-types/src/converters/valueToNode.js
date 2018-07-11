@@ -12,6 +12,8 @@ import {
   arrayExpression,
   objectProperty,
   objectExpression,
+  unaryExpression,
+  binaryExpression,
 } from "../builders/generated";
 
 export default function valueToNode(value: any): Object {
@@ -37,7 +39,27 @@ export default function valueToNode(value: any): Object {
 
   // numbers
   if (typeof value === "number") {
-    return numericLiteral(value);
+    let result;
+    if (Number.isFinite(value)) {
+      result = numericLiteral(Math.abs(value));
+    } else {
+      let numerator;
+      if (Number.isNaN(value)) {
+        // NaN
+        numerator = numericLiteral(0);
+      } else {
+        // Infinity / -Infinity
+        numerator = numericLiteral(1);
+      }
+
+      result = binaryExpression("/", numerator, numericLiteral(0));
+    }
+
+    if (value < 0 || Object.is(value, -0)) {
+      result = unaryExpression("-", result);
+    }
+
+    return result;
   }
 
   // regexes

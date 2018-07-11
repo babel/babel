@@ -1,5 +1,8 @@
 // @flow
 
+import type { ConfigItem } from "../item";
+import Plugin from "../plugin";
+
 import removed from "./removed";
 import {
   assertString,
@@ -10,6 +13,8 @@ import {
   assertIgnoreList,
   assertPluginList,
   assertConfigApplicableTest,
+  assertConfigFileSearch,
+  assertBabelrcSearch,
   assertFunction,
   assertSourceMaps,
   assertCompact,
@@ -20,14 +25,16 @@ import {
 
 const ROOT_VALIDATORS: ValidatorSet = {
   cwd: (assertString: Validator<$PropertyType<ValidatedOptions, "cwd">>),
+  root: (assertString: Validator<$PropertyType<ValidatedOptions, "root">>),
+  configFile: (assertConfigFileSearch: Validator<
+    $PropertyType<ValidatedOptions, "configFile">,
+  >),
+
   filename: (assertString: Validator<
     $PropertyType<ValidatedOptions, "filename">,
   >),
   filenameRelative: (assertString: Validator<
     $PropertyType<ValidatedOptions, "filenameRelative">,
-  >),
-  babelrc: (assertBoolean: Validator<
-    $PropertyType<ValidatedOptions, "babelrc">,
   >),
   code: (assertBoolean: Validator<$PropertyType<ValidatedOptions, "code">>),
   ast: (assertBoolean: Validator<$PropertyType<ValidatedOptions, "ast">>),
@@ -37,31 +44,23 @@ const ROOT_VALIDATORS: ValidatorSet = {
   >),
 };
 
+const BABELRC_VALIDATORS: ValidatorSet = {
+  babelrc: (assertBoolean: Validator<
+    $PropertyType<ValidatedOptions, "babelrc">,
+  >),
+  babelrcRoots: (assertBabelrcSearch: Validator<
+    $PropertyType<ValidatedOptions, "babelrcRoots">,
+  >),
+};
+
 const NONPRESET_VALIDATORS: ValidatorSet = {
   extends: (assertString: Validator<
     $PropertyType<ValidatedOptions, "extends">,
   >),
-  env: (assertEnvSet: Validator<$PropertyType<ValidatedOptions, "env">>),
   ignore: (assertIgnoreList: Validator<
     $PropertyType<ValidatedOptions, "ignore">,
   >),
   only: (assertIgnoreList: Validator<$PropertyType<ValidatedOptions, "only">>),
-  overrides: (assertOverridesList: Validator<
-    $PropertyType<ValidatedOptions, "overrides">,
-  >),
-
-  // We could limit these to 'overrides' blocks, but it's not clear why we'd
-  // bother, when the ability to limit a config to a specific set of files
-  // is a fairly general useful feature.
-  test: (assertConfigApplicableTest: Validator<
-    $PropertyType<ValidatedOptions, "test">,
-  >),
-  include: (assertConfigApplicableTest: Validator<
-    $PropertyType<ValidatedOptions, "include">,
-  >),
-  exclude: (assertConfigApplicableTest: Validator<
-    $PropertyType<ValidatedOptions, "exclude">,
-  >),
 };
 
 const COMMON_VALIDATORS: ValidatorSet = {
@@ -80,6 +79,25 @@ const COMMON_VALIDATORS: ValidatorSet = {
   passPerPreset: (assertBoolean: Validator<
     $PropertyType<ValidatedOptions, "passPerPreset">,
   >),
+
+  env: (assertEnvSet: Validator<$PropertyType<ValidatedOptions, "env">>),
+  overrides: (assertOverridesList: Validator<
+    $PropertyType<ValidatedOptions, "overrides">,
+  >),
+
+  // We could limit these to 'overrides' blocks, but it's not clear why we'd
+  // bother, when the ability to limit a config to a specific set of files
+  // is a fairly general useful feature.
+  test: (assertConfigApplicableTest: Validator<
+    $PropertyType<ValidatedOptions, "test">,
+  >),
+  include: (assertConfigApplicableTest: Validator<
+    $PropertyType<ValidatedOptions, "include">,
+  >),
+  exclude: (assertConfigApplicableTest: Validator<
+    $PropertyType<ValidatedOptions, "exclude">,
+  >),
+
   retainLines: (assertBoolean: Validator<
     $PropertyType<ValidatedOptions, "retainLines">,
   >),
@@ -116,9 +134,6 @@ const COMMON_VALIDATORS: ValidatorSet = {
   sourceMap: (assertSourceMaps: Validator<
     $PropertyType<ValidatedOptions, "sourceMap">,
   >),
-  sourceMapTarget: (assertString: Validator<
-    $PropertyType<ValidatedOptions, "sourceMapTarget">,
-  >),
   sourceFileName: (assertString: Validator<
     $PropertyType<ValidatedOptions, "sourceFileName">,
   >),
@@ -151,6 +166,9 @@ export type ValidatedOptions = {
   filename?: string,
   filenameRelative?: string,
   babelrc?: boolean,
+  babelrcRoots?: BabelrcSearch,
+  configFile?: ConfigFileSearch,
+  root?: string,
   code?: boolean,
   ast?: boolean,
   inputSourceMap?: RootInputSourceMapOption,
@@ -189,7 +207,6 @@ export type ValidatedOptions = {
   // Sourcemap generation options.
   sourceMaps?: SourceMapsOption,
   sourceMap?: SourceMapsOption,
-  sourceMapTarget?: string,
   sourceFileName?: string,
   sourceRoot?: string,
 
@@ -214,21 +231,31 @@ export type IgnoreList = $ReadOnlyArray<IgnoreItem>;
 export type PluginOptions = {} | void | false;
 export type PluginTarget = string | {} | Function;
 export type PluginItem =
+  | ConfigItem
   | Plugin
   | PluginTarget
   | [PluginTarget, PluginOptions]
-  | [PluginTarget, PluginOptions, string];
+  | [PluginTarget, PluginOptions, string | void];
 export type PluginList = $ReadOnlyArray<PluginItem>;
 
 export type OverridesList = Array<ValidatedOptions>;
 export type ConfigApplicableTest = IgnoreItem | Array<IgnoreItem>;
 
+export type ConfigFileSearch = string | boolean;
+export type BabelrcSearch = boolean | string | Array<string>;
 export type SourceMapsOption = boolean | "inline" | "both";
 export type SourceTypeOption = "module" | "script" | "unambiguous";
 export type CompactOption = boolean | "auto";
 export type RootInputSourceMapOption = {} | boolean;
 
-export type OptionsType = "arguments" | "file" | "env" | "preset" | "override";
+export type OptionsType =
+  | "arguments"
+  | "env"
+  | "preset"
+  | "override"
+  | "configfile"
+  | "babelrcfile"
+  | "extendsfile";
 
 export function validate(type: OptionsType, opts: {}): ValidatedOptions {
   assertNoDuplicateSourcemap(opts);
@@ -239,6 +266,22 @@ export function validate(type: OptionsType, opts: {}): ValidatedOptions {
     }
     if (type !== "arguments" && ROOT_VALIDATORS[key]) {
       throw new Error(`.${key} is only allowed in root programmatic options`);
+    }
+    if (
+      type !== "arguments" &&
+      type !== "configfile" &&
+      BABELRC_VALIDATORS[key]
+    ) {
+      if (type === "babelrcfile" || type === "extendsfile") {
+        throw new Error(
+          `.${key} is not allowed in .babelrc or "extend"ed files, only in root programmatic options, ` +
+            `or babel.config.js/config file options`,
+        );
+      }
+
+      throw new Error(
+        `.${key} is only allowed in root programmatic options, or babel.config.js/config file options`,
+      );
     }
     if (type === "env" && key === "env") {
       throw new Error(`.${key} is not allowed inside another env block`);
@@ -253,6 +296,7 @@ export function validate(type: OptionsType, opts: {}): ValidatedOptions {
     const validator =
       COMMON_VALIDATORS[key] ||
       NONPRESET_VALIDATORS[key] ||
+      BABELRC_VALIDATORS[key] ||
       ROOT_VALIDATORS[key];
 
     if (validator) validator(key, opts[key]);

@@ -1,0 +1,229 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 56,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 3,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 56,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 3,
+        "column": 1
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareClass",
+        "start": 0,
+        "end": 56,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 14,
+          "end": 15,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 14
+            },
+            "end": {
+              "line": 1,
+              "column": 15
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 16,
+          "end": 56,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 16
+            },
+            "end": {
+              "line": 3,
+              "column": 1
+            }
+          },
+          "callProperties": [],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start": 20,
+              "end": 53,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 35
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 20,
+                "end": 35,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 17
+                  },
+                  "identifierName": "@@asyncIterator"
+                },
+                "name": "@@asyncIterator"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start": 20,
+                "end": 53,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 35
+                  }
+                },
+                "params": [],
+                "rest": null,
+                "typeParameters": null,
+                "returnType": {
+                  "type": "GenericTypeAnnotation",
+                  "start": 39,
+                  "end": 53,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 21
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 35
+                    }
+                  },
+                  "typeParameters": {
+                    "type": "TypeParameterInstantiation",
+                    "start": 47,
+                    "end": 53,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 29
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 35
+                      }
+                    },
+                    "params": [
+                      {
+                        "type": "GenericTypeAnnotation",
+                        "start": 48,
+                        "end": 52,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 30
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 34
+                          }
+                        },
+                        "typeParameters": null,
+                        "id": {
+                          "type": "Identifier",
+                          "start": 48,
+                          "end": 52,
+                          "loc": {
+                            "start": {
+                              "line": 2,
+                              "column": 30
+                            },
+                            "end": {
+                              "line": 2,
+                              "column": 34
+                            },
+                            "identifierName": "File"
+                          },
+                          "name": "File"
+                        }
+                      }
+                    ]
+                  },
+                  "id": {
+                    "type": "Identifier",
+                    "start": 39,
+                    "end": 47,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 21
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 29
+                      },
+                      "identifierName": "Iterator"
+                    },
+                    "name": "Iterator"
+                  }
+                }
+              },
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

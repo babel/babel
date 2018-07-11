@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-spread",
-  "version": "7.0.0-beta.40",
+  "version": "7.0.0-beta.52",
   "description": "Compile ES2015 spread to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-spread",
   "license": "MIT",
@@ -8,11 +8,14 @@
   "keywords": [
     "babel-plugin"
   ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "7.0.0-beta.52"
+  },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.40"
+    "@babel/core": ">=7.0.0-beta.50 <7.0.0-rc.0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.40",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.40"
+    "@babel/core": "7.0.0-beta.52",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.52"
   }
 }

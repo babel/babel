@@ -12,11 +12,11 @@ var _$a = {
 } = _$a,
     x = babelHelpers.objectWithoutProperties(_$a, [_ref].map(babelHelpers.toPropertyKey));
 
-assert.deepEqual({
+expect(x).toEqual({
   a: 1
-}, x);
-assert.equal(key, 2);
-assert.equal(1, y); // takes care of the order
+});
+expect(key).toBe(2);
+expect(y).toBe(1); // takes care of the order
 
 key = 1;
 
@@ -32,8 +32,8 @@ var _$ = {
 } = _$,
     rest = babelHelpers.objectWithoutProperties(_$, [_ref2, _ref3].map(babelHelpers.toPropertyKey));
 
-assert.equal(y, 2);
-assert.equal(z, 3); // pure, computed property should remain as-is
+expect(y).toBe(2);
+expect(z).toBe(3); // pure, computed property should remain as-is
 
 key = 2;
 var _$z = {
@@ -46,6 +46,6 @@ var _$z = {
 } = _$z);
 x = babelHelpers.objectWithoutProperties(_$z, [key, "z"].map(babelHelpers.toPropertyKey));
 _$z;
-assert.equal(y, "two");
-assert.deepEqual(x, {});
-assert.equal(z, "zee");
+expect(y).toBe("two");
+expect(x).toEqual({});
+expect(z).toBe("zee");

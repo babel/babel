@@ -1,6 +1,8 @@
 // @flow
 
 import type {
+  ConfigFileSearch,
+  BabelrcSearch,
   IgnoreList,
   IgnoreItem,
   PluginList,
@@ -162,6 +164,45 @@ function checkValidTest(value: mixed): boolean {
     typeof value === "function" ||
     value instanceof RegExp
   );
+}
+
+export function assertConfigFileSearch(
+  key: string,
+  value: mixed,
+): ConfigFileSearch | void {
+  if (
+    value !== undefined &&
+    typeof value !== "boolean" &&
+    typeof value !== "string"
+  ) {
+    throw new Error(
+      `.${key} must be a undefined, a boolean, a string, ` +
+        `got ${JSON.stringify(value)}`,
+    );
+  }
+
+  return value;
+}
+
+export function assertBabelrcSearch(
+  key: string,
+  value: mixed,
+): BabelrcSearch | void {
+  if (value === undefined || typeof value === "boolean") return value;
+
+  if (Array.isArray(value)) {
+    value.forEach((item, i) => {
+      if (typeof item !== "string") {
+        throw new Error(`.${key}[${i}] must be a string.`);
+      }
+    });
+  } else if (typeof value !== "string") {
+    throw new Error(
+      `.${key} must be a undefined, a boolean, a string, ` +
+        `or an array of strings, got ${JSON.stringify(value)}`,
+    );
+  }
+  return (value: any);
 }
 
 export function assertPluginList(key: string, value: mixed): PluginList | void {

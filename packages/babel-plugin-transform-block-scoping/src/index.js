@@ -1,3 +1,4 @@
+import { declare } from "@babel/helper-plugin-utils";
 import type NodePath from "@babel/traverse";
 import type Scope from "@babel/traverse";
 import { visitor as tdzVisitor } from "./tdz";
@@ -7,7 +8,9 @@ import { traverse, template, types as t } from "@babel/core";
 
 const DONE = new WeakSet();
 
-export default function(api, opts) {
+export default declare((api, opts) => {
+  api.assertVersion(7);
+
   const { throwIfClosureRequired = false, tdz: tdzEnabled = false } = opts;
   if (typeof throwIfClosureRequired !== "boolean") {
     throw new Error(`.throwIfClosureRequired must be a boolean, or undefined`);
@@ -94,7 +97,7 @@ export default function(api, opts) {
       },
     },
   };
-}
+});
 
 function ignoreBlock(path) {
   return t.isLoop(path.parent) || t.isCatchClause(path.parent);

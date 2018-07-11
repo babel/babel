@@ -256,6 +256,28 @@ export function tsPrintUnionOrIntersectionType(node, sep) {
   });
 }
 
+export function TSConditionalType(node) {
+  this.print(node.checkType);
+  this.space();
+  this.word("extends");
+  this.space();
+  this.print(node.extendsType);
+  this.space();
+  this.token("?");
+  this.space();
+  this.print(node.trueType);
+  this.space();
+  this.token(":");
+  this.space();
+  this.print(node.falseType);
+}
+
+export function TSInferType(node) {
+  this.token("infer");
+  this.space();
+  this.print(node.typeParameter);
+}
+
 export function TSParenthesizedType(node) {
   this.token("(");
   this.print(node.typeAnnotation, node);
@@ -280,6 +302,7 @@ export function TSMappedType(node) {
   this.token("{");
   this.space();
   if (readonly) {
+    tokenIfPlusMinus(this, readonly);
     this.word("readonly");
     this.space();
   }
@@ -293,6 +316,7 @@ export function TSMappedType(node) {
   this.token("]");
 
   if (optional) {
+    tokenIfPlusMinus(this, optional);
     this.token("?");
   }
   this.token(":");
@@ -300,6 +324,12 @@ export function TSMappedType(node) {
   this.print(node.typeAnnotation, node);
   this.space();
   this.token("}");
+}
+
+function tokenIfPlusMinus(self, tok) {
+  if (tok !== true) {
+    self.token(tok);
+  }
 }
 
 export function TSLiteralType(node) {

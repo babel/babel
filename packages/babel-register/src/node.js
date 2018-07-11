@@ -39,11 +39,12 @@ function mtime(filename) {
 function compile(code, filename) {
   // merge in base options and resolve all the plugins and presets relative to this file
   const opts = new OptionManager().init(
-    Object.assign(
-      { sourceRoot: path.dirname(filename) }, // sourceRoot can be overwritten
-      deepClone(transformOpts),
-      { filename },
-    ),
+    // sourceRoot can be overwritten
+    {
+      sourceRoot: path.dirname(filename),
+      ...deepClone(transformOpts),
+      filename,
+    },
   );
 
   // Bail out ASAP if the file has been ignored.
@@ -55,37 +56,47 @@ function compile(code, filename) {
 
   if (env) cacheKey += `:${env}`;
 
-  if (cache) {
-    const cached = cache[cacheKey];
-    if (cached && cached.mtime === mtime(filename)) {
-      return cached.code;
+  let cached = cache && cache[cacheKey];
+
+  if (!cached || cached.mtime !== mtime(filename)) {
+    cached = babel.transform(code, {
+      ...opts,
+      sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
+      ast: false,
+    });
+
+    if (cache) {
+      cache[cacheKey] = cached;
+      cached.mtime = mtime(filename);
     }
   }
 
-  const result = babel.transform(code, {
-    ...opts,
-    sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
-    ast: false,
-  });
-
-  if (cache) {
-    cache[cacheKey] = result;
-    result.mtime = mtime(filename);
-  }
-
-  if (result.map) {
+  if (cached.map) {
     if (Object.keys(maps).length === 0) {
       installSourceMapSupport();
     }
-    maps[filename] = result.map;
+    maps[filename] = cached.map;
   }
 
-  return result.code;
+  return cached.code;
+}
+
+let compiling = false;
+
+function compileHook(code, filename) {
+  if (compiling) return code;
+
+  try {
+    compiling = true;
+    return compile(code, filename);
+  } finally {
+    compiling = false;
+  }
 }
 
 function hookExtensions(exts) {
   if (piratesRevert) piratesRevert();
-  piratesRevert = addHook(compile, { exts, ignoreNodeModules: false });
+  piratesRevert = addHook(compileHook, { exts, ignoreNodeModules: false });
 }
 
 export function revert() {
@@ -93,14 +104,14 @@ export function revert() {
   delete require.cache[require.resolve(__filename)];
 }
 
-register({
-  extensions: DEFAULT_EXTENSIONS,
-});
+register();
 
 export default function register(opts?: Object = {}) {
   // Clone to avoid mutating the arguments object with the 'delete's below.
-  opts = Object.assign({}, opts);
-  if (opts.extensions) hookExtensions(opts.extensions);
+  opts = {
+    ...opts,
+  };
+  hookExtensions(opts.extensions || DEFAULT_EXTENSIONS);
 
   if (opts.cache === false && cache) {
     registerCache.clear();
@@ -113,7 +124,9 @@ export default function register(opts?: Object = {}) {
   delete opts.extensions;
   delete opts.cache;
 
-  transformOpts = Object.assign({}, opts);
+  transformOpts = {
+    ...opts,
+  };
 
   let { cwd = "." } = transformOpts;
 

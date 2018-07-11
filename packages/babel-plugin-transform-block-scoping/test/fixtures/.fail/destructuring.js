@@ -7,9 +7,9 @@ function foo({
      },
      a: c = 30
 }) {
-  assert.equal(a, 10);
-  assert.equal(b, 20);
-  assert.equal(c, 30);
+  expect(a).toBe(10);
+  expect(b).toBe(20);
+  expect(c).toBe(10);
 }
 
 foo({ x: {} });

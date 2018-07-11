@@ -1,4 +1,3 @@
-import map from "lodash/map";
 import * as t from "@babel/types";
 
 type WhitespaceObject = {
@@ -210,6 +209,22 @@ nodes.ObjectTypeIndexer = function(node: Object, parent): ?WhitespaceObject {
   }
 };
 
+nodes.ObjectTypeInternalSlot = function(
+  node: Object,
+  parent,
+): ?WhitespaceObject {
+  if (
+    parent.internalSlots[0] === node &&
+    (!parent.properties || !parent.properties.length) &&
+    (!parent.callProperties || !parent.callProperties.length) &&
+    (!parent.indexers || !parent.indexers.length)
+  ) {
+    return {
+      before: true,
+    };
+  }
+};
+
 /**
  * Returns lists from node types that need whitespace.
  */
@@ -220,7 +235,7 @@ export const list = {
    */
 
   VariableDeclaration(node: Object): Array<Object> {
-    return map(node.declarations, "init");
+    return node.declarations.map(decl => decl.init);
   },
 
   /**

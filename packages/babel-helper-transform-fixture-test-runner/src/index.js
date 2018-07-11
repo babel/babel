@@ -1,4 +1,4 @@
-/* eslint-env mocha */
+/* eslint-env jest */
 import * as babel from "@babel/core";
 import { buildExternalHelpers } from "@babel/core";
 import getFixtures from "@babel/helper-fixtures";
@@ -11,10 +11,11 @@ import extend from "lodash/extend";
 import merge from "lodash/merge";
 import resolve from "resolve";
 import assert from "assert";
-import chai from "chai";
 import fs from "fs";
 import path from "path";
 import vm from "vm";
+
+import diff from "jest-diff";
 
 const moduleCache = {};
 const testContext = vm.createContext({
@@ -23,26 +24,18 @@ const testContext = vm.createContext({
   transform: babel.transform,
   setTimeout: setTimeout,
   setImmediate: setImmediate,
+  expect,
 });
 testContext.global = testContext;
-
-// Add chai's assert to the global context
-// It has to be required inside the testContext as otherwise some assertions do not
-// work as chai would reference globals (RegExp, Array, ...) from this context
-vm.runInContext(
-  "(function(require) { global.assert=require('chai').assert; });",
-  testContext,
-  {
-    displayErrors: true,
-  },
-)(id => runModuleInTestContext(id, __filename));
 
 // Initialize the test context with the polyfill, and then freeze the global to prevent implicit
 // global creation in tests, which could cause things to bleed between tests.
 runModuleInTestContext("@babel/polyfill", __filename);
 
 // Populate the "babelHelpers" global with Babel's helper utilities.
-runCodeInTestContext(buildExternalHelpers());
+runCodeInTestContext(buildExternalHelpers(), {
+  filename: path.join(__dirname, "babel-helpers-in-memory.js"),
+});
 
 /**
  * A basic implementation of CommonJS so we can execute `@babel/polyfill` inside our test context.
@@ -69,12 +62,10 @@ function runModuleInTestContext(id: string, relativeFilename: string) {
   const src = fs.readFileSync(filename, "utf8");
   const code = `(function (exports, require, module, __filename, __dirname) {${src}\n});`;
 
-  vm
-    .runInContext(code, testContext, {
-      filename,
-      displayErrors: true,
-    })
-    .call(module.exports, module.exports, req, module, filename, dirname);
+  vm.runInContext(code, testContext, {
+    filename,
+    displayErrors: true,
+  }).call(module.exports, module.exports, req, module, filename, dirname);
 
   return module.exports;
 }
@@ -84,27 +75,31 @@ function runModuleInTestContext(id: string, relativeFilename: string) {
  *
  * Exposed for unit tests, not for use as an API.
  */
-export function runCodeInTestContext(
-  code: string,
-  opts: { filename?: string } = {},
-) {
-  const filename = opts.filename || null;
-  const dirname = filename ? path.dirname(filename) : null;
-  const req = filename ? id => runModuleInTestContext(id, filename) : null;
+export function runCodeInTestContext(code: string, opts: { filename: string }) {
+  const filename = opts.filename;
+  const dirname = path.dirname(filename);
+  const req = id => runModuleInTestContext(id, filename);
 
   const module = {
     id: filename,
     exports: {},
   };
 
-  // Expose the test options as "opts", but otherwise run the test in a CommonJS-like environment.
-  // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
-  // rely on 'this === global'.
-  const src = `(function(exports, require, module, __filename, __dirname, opts) {${code}\n});`;
-  return vm.runInContext(src, testContext, {
-    filename,
-    displayErrors: true,
-  })(module.exports, req, module, filename, dirname, opts);
+  const oldCwd = process.cwd();
+  try {
+    if (opts.filename) process.chdir(path.dirname(opts.filename));
+
+    // Expose the test options as "opts", but otherwise run the test in a CommonJS-like environment.
+    // Note: This isn't doing .call(module.exports, ...) because some of our tests currently
+    // rely on 'this === global'.
+    const src = `(function(exports, require, module, __filename, __dirname, opts) {${code}\n});`;
+    return vm.runInContext(src, testContext, {
+      filename,
+      displayErrors: true,
+    })(module.exports, req, module, filename, dirname, opts);
+  } finally {
+    process.chdir(oldCwd);
+  }
 }
 
 function wrapPackagesArray(type, names, optionsDir) {
@@ -131,9 +126,6 @@ function wrapPackagesArray(type, names, optionsDir) {
 }
 
 function checkDuplicatedNodes(ast) {
-  // TODO Remove all these function when regenerator doesn't
-  // insert duplicated nodes
-
   const nodes = new WeakSet();
   const parents = new WeakMap();
 
@@ -157,156 +149,15 @@ function checkDuplicatedNodes(ast) {
     }
   };
 
-  const parentIs = (node, test) => {
-    return (parents.get(node) || []).some(parent => test(parent));
-  };
-  const isByRegenerator = node => {
-    if (!node) {
-      return false;
-    } else if (node.type === "Identifier") {
-      if (/^_(?:context|value|callee|marked)\d*$/.test(node.name)) {
-        return true;
-      } else if (
-        /^t\d+$/.test(node.name) &&
-        parentIs(
-          node,
-          parent =>
-            parent.type === "MemberExpression" &&
-            isByRegenerator(parent.object),
-        )
-      ) {
-        // _context.t* // <-- t*
-        return true;
-      } else if (
-        parentIs(
-          node,
-          parent =>
-            parent.type === "VariableDeclarator" &&
-            parentIs(
-              parent,
-              parent =>
-                parent.type === "VariableDeclaration" &&
-                parentIs(
-                  parent,
-                  parent =>
-                    parent.type === "BlockStatement" &&
-                    parentIs(
-                      parent,
-                      parent =>
-                        parent.type === "FunctionExpression" &&
-                        isByRegenerator(parent.id),
-                    ),
-                ),
-            ),
-        )
-      ) {
-        // regeneratorRuntime.mark(function _callee3() {
-        //   var bar, _bar2; // <-- Those identifiers
-        return true;
-      } else if (
-        parentIs(
-          node,
-          parent =>
-            parent.type === "VariableDeclarator" &&
-            parentIs(
-              parent,
-              parent =>
-                parent.type === "VariableDeclaration" &&
-                parentIs(
-                  parent,
-                  parent =>
-                    parent.type === "BlockStatement" &&
-                    parent.body.length === 2 &&
-                    parent.body[1].type === "ReturnStatement" &&
-                    parent.body[1].argument.type === "CallExpression" &&
-                    parent.body[1].argument.callee.type ===
-                      "MemberExpression" &&
-                    parent.body[1].argument.callee.property.type ===
-                      "Identifier" &&
-                    parent.body[1].argument.callee.property.name === "wrap",
-                ),
-            ),
-        )
-      ) {
-        // function foo() {
-        //   var _len, // <-- Those identifiers
-        //     items,
-        //     _key,
-        //     _args = arguments;
-        //   return regeneratorRuntime.wrap(function foo$(_context) {
-        return true;
-      } else if (
-        parentIs(
-          node,
-          parent =>
-            parent.type === "CallExpression" &&
-            parent.arguments.length === 3 &&
-            parent.arguments[1] === node &&
-            parent.callee.type === "MemberExpression" &&
-            parent.callee.property.type === "Identifier" &&
-            parent.callee.property.name === "wrap",
-        )
-      ) {
-        // regeneratorRuntime.wrap(function foo$(_context) {
-        //   ...
-        // }, foo, this); // <- foo
-        return true;
-      } else if (
-        parentIs(
-          node,
-          parent =>
-            parent.type === "CallExpression" &&
-            parent.callee.type === "MemberExpression" &&
-            parent.callee.property.type === "Identifier" &&
-            parent.callee.property.name === "mark",
-        )
-      ) {
-        // regeneratorRuntime.mark(foo); // foo
-        return true;
-      }
-    } else if (node.type === "MemberExpression") {
-      // _context.next
-      return isByRegenerator(node.object);
-    } else if (node.type === "CallExpression") {
-      return isByRegenerator(node.callee);
-    } else if (node.type === "AssignmentExpression") {
-      // _context.next = 4;
-      return isByRegenerator(node.left);
-    } else if (node.type === "NumericLiteral") {
-      if (
-        parentIs(
-          node,
-          parent =>
-            parent.type === "AssignmentExpression" &&
-            isByRegenerator(parent.left),
-        )
-      ) {
-        // _context.next = 4; // <-- The 4
-        return true;
-      } else if (
-        parentIs(
-          node,
-          parent =>
-            parent.type === "CallExpression" &&
-            parent.callee.type === "MemberExpression" &&
-            isByRegenerator(parent.callee.object),
-        )
-      ) {
-        // return _context.abrupt("break", 11); // <-- The 11
-        return true;
-      }
-    }
-    return false;
-  };
   const hidePrivateProperties = (key, val) => {
     // Hides properties like _shadowedFunctionLiteral,
     // which makes the AST circular
     if (key[0] === "_") return "[Private]";
     return val;
   };
+
   babel.types.traverseFast(ast, node => {
     registerChildren(node);
-    if (isByRegenerator(node)) return;
     if (nodes.has(node)) {
       throw new Error(
         "Do not reuse nodes. Use `t.cloneNode` to copy them.\n" +
@@ -321,7 +172,7 @@ function checkDuplicatedNodes(ast) {
 
 function run(task) {
   const actual = task.actual;
-  const expect = task.expect;
+  const expected = task.expect;
   const exec = task.exec;
   const opts = task.options;
   const optionsDir = task.optionsDir;
@@ -329,7 +180,13 @@ function run(task) {
   function getOpts(self) {
     const newOpts = merge(
       {
+        cwd: path.dirname(self.filename),
         filename: self.loc,
+        filenameRelative: self.filename,
+        sourceFileName: self.filename,
+        sourceType: "script",
+        babelrc: false,
+        inputSourceMap: task.inputSourceMap || undefined,
       },
       opts,
     );
@@ -340,10 +197,10 @@ function run(task) {
       newOpts.presets,
       optionsDir,
     ).map(function(val) {
-      if (val.length > 2) {
+      if (val.length > 3) {
         throw new Error(
           "Unexpected extra options " +
-            JSON.stringify(val.slice(2)) +
+            JSON.stringify(val.slice(3)) +
             " passed to preset.",
         );
       }
@@ -375,29 +232,54 @@ function run(task) {
   }
 
   let actualCode = actual.code;
-  const expectCode = expect.code;
+  const expectCode = expected.code;
   if (!execCode || actualCode) {
     result = babel.transform(actualCode, getOpts(actual));
     checkDuplicatedNodes(result.ast);
     if (
-      !expect.code &&
+      !expected.code &&
       result.code &&
       !opts.throws &&
-      fs.statSync(path.dirname(expect.loc)).isDirectory() &&
+      fs.statSync(path.dirname(expected.loc)).isDirectory() &&
       !process.env.CI
     ) {
-      console.log(`New test file created: ${expect.loc}`);
-      fs.writeFileSync(expect.loc, `${result.code}\n`);
+      const expectedFile = expected.loc.replace(
+        /\.m?js$/,
+        result.sourceType === "module" ? ".mjs" : ".js",
+      );
+
+      console.log(`New test file created: ${expectedFile}`);
+      fs.writeFileSync(expectedFile, `${result.code}\n`);
+
+      if (expected.loc !== expectedFile) {
+        try {
+          fs.unlinkSync(expected.loc);
+        } catch (e) {}
+      }
     } else {
       actualCode = result.code.trim();
-      chai
-        .expect(actualCode)
-        .to.be.equal(expectCode, actual.loc + " !== " + expect.loc);
+      try {
+        expect(actualCode).toEqualFile({
+          filename: expected.loc,
+          code: expectCode,
+        });
+      } catch (e) {
+        if (!process.env.OVERWRITE) throw e;
+
+        console.log(`Updated test file: ${expected.loc}`);
+        fs.writeFileSync(expected.loc, `${result.code}\n`);
+      }
+
+      if (actualCode) {
+        expect(expected.loc).toMatch(
+          result.sourceType === "module" ? /\.mjs$/ : /\.js$/,
+        );
+      }
     }
   }
 
   if (task.sourceMap) {
-    chai.expect(result.map).to.deep.equal(task.sourceMap);
+    expect(result.map).toEqual(task.sourceMap);
   }
 
   if (task.sourceMappings) {
@@ -406,10 +288,8 @@ function run(task) {
     task.sourceMappings.forEach(function(mapping) {
       const actual = mapping.original;
 
-      const expect = consumer.originalPositionFor(mapping.generated);
-      chai
-        .expect({ line: expect.line, column: expect.column })
-        .to.deep.equal(actual);
+      const expected = consumer.originalPositionFor(mapping.generated);
+      expect({ line: expected.line, column: expected.column }).toEqual(actual);
     });
   }
 
@@ -417,6 +297,28 @@ function run(task) {
     return resultExec;
   }
 }
+
+const toEqualFile = () => ({
+  compare: (actual, { filename, code }) => {
+    const pass = actual === code;
+    return {
+      pass,
+      message: () => {
+        const diffString = diff(code, actual, {
+          expand: false,
+        });
+        return (
+          `Expected ${filename} to match transform output.\n` +
+          `To autogenerate a passing version of this file, delete the file and re-run the tests.\n\n` +
+          `Diff:\n\n${diffString}`
+        );
+      },
+    };
+  },
+  negativeCompare: () => {
+    throw new Error("Negation unsupported");
+  },
+});
 
 export default function(
   fixturesLoc: string,
@@ -431,6 +333,10 @@ export default function(
     if (includes(suiteOpts.ignoreSuites, testSuite.title)) continue;
 
     describe(name + "/" + testSuite.title, function() {
+      jest.addMatchers({
+        toEqualFile,
+      });
+
       for (const task of testSuite.tests) {
         if (
           includes(suiteOpts.ignoreTasks, task.title) ||
@@ -448,10 +354,6 @@ export default function(
               }
 
               defaults(task.options, {
-                filenameRelative: task.expect.filename,
-                sourceFileName: task.actual.filename,
-                sourceMapTarget: task.expect.filename,
-                babelrc: false,
                 sourceMap: !!(task.sourceMappings || task.sourceMap),
               });
 

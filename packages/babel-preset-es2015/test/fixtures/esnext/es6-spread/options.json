@@ -1,3 +1,0 @@
-{
-  "plugins": ["transform-spread", "transform-parameters", "transform-computed-properties"]
-}

@@ -1,0 +1,401 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 102,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 5,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 102,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 5,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 102,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 6,
+          "end": 15,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 15
+            },
+            "identifierName": "NodeUtils"
+          },
+          "name": "NodeUtils"
+        },
+        "superClass": {
+          "type": "Identifier",
+          "start": 24,
+          "end": 34,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 24
+            },
+            "end": {
+              "line": 1,
+              "column": 34
+            },
+            "identifierName": "UtilParser"
+          },
+          "name": "UtilParser"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start": 35,
+          "end": 102,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 35
+            },
+            "end": {
+              "line": 5,
+              "column": 1
+            }
+          },
+          "body": [
+            {
+              "type": "MethodDefinition",
+              "start": 39,
+              "end": 100,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 4,
+                  "column": 3
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 39,
+                "end": 51,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 14
+                  },
+                  "identifierName": "finishNodeAt"
+                },
+                "name": "finishNodeAt"
+              },
+              "computed": false,
+              "kind": "method",
+              "value": {
+                "type": "FunctionExpression",
+                "start": 65,
+                "end": 100,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 28
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 3
+                  }
+                },
+                "id": null,
+                "generator": false,
+                "async": false,
+                "expression": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 66,
+                    "end": 73,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 29
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 36
+                      },
+                      "identifierName": "node"
+                    },
+                    "name": "node",
+                    "typeAnnotation": {
+                      "type": "TypeAnnotation",
+                      "start": 70,
+                      "end": 73,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 33
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 36
+                        }
+                      },
+                      "typeAnnotation": {
+                        "type": "GenericTypeAnnotation",
+                        "start": 72,
+                        "end": 73,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 35
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 36
+                          }
+                        },
+                        "typeParameters": null,
+                        "id": {
+                          "type": "Identifier",
+                          "start": 72,
+                          "end": 73,
+                          "loc": {
+                            "start": {
+                              "line": 2,
+                              "column": 35
+                            },
+                            "end": {
+                              "line": 2,
+                              "column": 36
+                            },
+                            "identifierName": "T"
+                          },
+                          "name": "T"
+                        }
+                      }
+                    }
+                  }
+                ],
+                "predicate": null,
+                "returnType": {
+                  "type": "TypeAnnotation",
+                  "start": 74,
+                  "end": 77,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 37
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 40
+                    }
+                  },
+                  "typeAnnotation": {
+                    "type": "GenericTypeAnnotation",
+                    "start": 76,
+                    "end": 77,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 39
+                      },
+                      "end": {
+                        "line": 2,
+                        "column": 40
+                      }
+                    },
+                    "typeParameters": null,
+                    "id": {
+                      "type": "Identifier",
+                      "start": 76,
+                      "end": 77,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 39
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 40
+                        },
+                        "identifierName": "T"
+                      },
+                      "name": "T"
+                    }
+                  }
+                },
+                "body": {
+                  "type": "BlockStatement",
+                  "start": 78,
+                  "end": 100,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 41
+                    },
+                    "end": {
+                      "line": 4,
+                      "column": 3
+                    }
+                  },
+                  "body": [
+                    {
+                      "type": "ReturnStatement",
+                      "start": 84,
+                      "end": 96,
+                      "loc": {
+                        "start": {
+                          "line": 3,
+                          "column": 4
+                        },
+                        "end": {
+                          "line": 3,
+                          "column": 16
+                        }
+                      },
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 91,
+                        "end": 95,
+                        "loc": {
+                          "start": {
+                            "line": 3,
+                            "column": 11
+                          },
+                          "end": {
+                            "line": 3,
+                            "column": 15
+                          },
+                          "identifierName": "node"
+                        },
+                        "name": "node"
+                      }
+                    }
+                  ]
+                },
+                "typeParameters": {
+                  "type": "TypeParameterDeclaration",
+                  "start": 51,
+                  "end": 65,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 14
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 28
+                    }
+                  },
+                  "params": [
+                    {
+                      "type": "TypeParameter",
+                      "start": 52,
+                      "end": 64,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 15
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 27
+                        }
+                      },
+                      "name": "T",
+                      "variance": null,
+                      "bound": {
+                        "type": "TypeAnnotation",
+                        "start": 54,
+                        "end": 64,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 17
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 27
+                          }
+                        },
+                        "typeAnnotation": {
+                          "type": "GenericTypeAnnotation",
+                          "start": 56,
+                          "end": 64,
+                          "loc": {
+                            "start": {
+                              "line": 2,
+                              "column": 19
+                            },
+                            "end": {
+                              "line": 2,
+                              "column": 27
+                            }
+                          },
+                          "typeParameters": null,
+                          "id": {
+                            "type": "Identifier",
+                            "start": 56,
+                            "end": 64,
+                            "loc": {
+                              "start": {
+                                "line": 2,
+                                "column": 19
+                              },
+                              "end": {
+                                "line": 2,
+                                "column": 27
+                              },
+                              "identifierName": "NodeType"
+                            },
+                            "name": "NodeType"
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

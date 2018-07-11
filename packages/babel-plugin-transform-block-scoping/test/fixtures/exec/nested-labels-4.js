@@ -9,6 +9,6 @@
     }
   }
 
-  assert.deepEqual(stack.length, 1);
-  assert.deepEqual(stack[0](), [0, 0]);
+  expect(stack).toHaveLength(1);
+  expect(stack[0]()).toEqual([0, 0]);
 })();

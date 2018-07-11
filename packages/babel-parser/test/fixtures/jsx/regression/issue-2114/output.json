@@ -1,0 +1,182 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 51,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 51
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 51,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 51
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 0,
+        "end": 51,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 51
+          }
+        },
+        "expression": {
+          "type": "JSXElement",
+          "start": 0,
+          "end": 50,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 1,
+              "column": 50
+            }
+          },
+          "openingElement": {
+            "type": "JSXOpeningElement",
+            "start": 0,
+            "end": 44,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 44
+              }
+            },
+            "attributes": [
+              {
+                "type": "JSXAttribute",
+                "start": 5,
+                "end": 43,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 43
+                  }
+                },
+                "name": {
+                  "type": "JSXIdentifier",
+                  "start": 5,
+                  "end": 12,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 12
+                    }
+                  },
+                  "name": "pattern"
+                },
+                "value": {
+                  "type": "StringLiteral",
+                  "start": 13,
+                  "end": 43,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 13
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 43
+                    }
+                  },
+                  "extra": {
+                    "rawValue": "^([\\w\\.\\-]+\\s)*[\\w\\.\\-]+\\s?$",
+                    "raw": "\"^([\\w\\.\\-]+\\s)*[\\w\\.\\-]+\\s?$\""
+                  },
+                  "value": "^([\\w\\.\\-]+\\s)*[\\w\\.\\-]+\\s?$"
+                }
+              }
+            ],
+            "name": {
+              "type": "JSXIdentifier",
+              "start": 1,
+              "end": 4,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 1
+                },
+                "end": {
+                  "line": 1,
+                  "column": 4
+                }
+              },
+              "name": "div"
+            },
+            "selfClosing": false
+          },
+          "closingElement": {
+            "type": "JSXClosingElement",
+            "start": 44,
+            "end": 50,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 44
+              },
+              "end": {
+                "line": 1,
+                "column": 50
+              }
+            },
+            "name": {
+              "type": "JSXIdentifier",
+              "start": 46,
+              "end": 49,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 46
+                },
+                "end": {
+                  "line": 1,
+                  "column": 49
+                }
+              },
+              "name": "div"
+            }
+          },
+          "children": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

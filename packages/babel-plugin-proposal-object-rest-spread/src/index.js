@@ -1,11 +1,20 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxObjectRestSpread from "@babel/plugin-syntax-object-rest-spread";
 import { types as t } from "@babel/core";
 
-export default function(api, opts) {
+export default declare((api, opts) => {
+  api.assertVersion(7);
+
   const { useBuiltIns = false, loose = false } = opts;
 
   if (typeof loose !== "boolean") {
     throw new Error(".loose must be a boolean, or undefined");
+  }
+
+  function getExtendsHelper(file) {
+    return useBuiltIns
+      ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
+      : file.addHelper("extends");
   }
 
   function hasRestElement(path) {
@@ -83,6 +92,17 @@ export default function(api, opts) {
     return impureComputedPropertyDeclarators;
   }
 
+  function removeUnusedExcludedKeys(path) {
+    const bindings = path.getOuterBindingIdentifierPaths();
+
+    Object.keys(bindings).forEach(bindingName => {
+      if (path.scope.getBinding(bindingName).references > 1) {
+        return;
+      }
+      bindings[bindingName].parentPath.remove();
+    });
+  }
+
   //expects path to an object pattern
   function createObjectSpread(path, file, objRef) {
     const props = path.get("properties");
@@ -93,6 +113,17 @@ export default function(api, opts) {
 
     const impureComputedPropertyDeclarators = replaceImpureComputedKeys(path);
     const { keys, allLiteral } = extractNormalizedKeys(path);
+
+    if (keys.length === 0) {
+      return [
+        impureComputedPropertyDeclarators,
+        restElement.argument,
+        t.callExpression(getExtendsHelper(file), [
+          t.objectExpression([]),
+          t.cloneNode(objRef),
+        ]),
+      ];
+    }
 
     let keyExpression;
     if (!allLiteral) {
@@ -108,10 +139,10 @@ export default function(api, opts) {
     return [
       impureComputedPropertyDeclarators,
       restElement.argument,
-      t.callExpression(file.addHelper("objectWithoutProperties"), [
-        t.cloneNode(objRef),
-        keyExpression,
-      ]),
+      t.callExpression(
+        file.addHelper(`objectWithoutProperties${loose ? "Loose" : ""}`),
+        [t.cloneNode(objRef), keyExpression],
+      ),
     ];
   }
 
@@ -221,11 +252,16 @@ export default function(api, opts) {
           const objectPatternPath = path.findParent(path =>
             path.isObjectPattern(),
           );
+
           const [
             impureComputedPropertyDeclarators,
             argument,
             callExpression,
           ] = createObjectSpread(objectPatternPath, file, ref);
+
+          if (loose) {
+            removeUnusedExcludedKeys(objectPatternPath);
+          }
 
           t.assertIdentifier(argument);
 
@@ -393,9 +429,7 @@ export default function(api, opts) {
 
         let helper;
         if (loose) {
-          helper = useBuiltIns
-            ? t.memberExpression(t.identifier("Object"), t.identifier("assign"))
-            : file.addHelper("extends");
+          helper = getExtendsHelper(file);
         } else {
           helper = file.addHelper("objectSpread");
         }
@@ -404,4 +438,4 @@ export default function(api, opts) {
       },
     },
   };
-}
+});

@@ -1,9 +1,12 @@
+import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
 import definitions from "./definitions";
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const {
     helpers,
     moduleName = "@babel/runtime",
@@ -212,6 +215,6 @@ export default function(api, options) {
       },
     },
   };
-}
+});
 
 export { definitions };

@@ -21,6 +21,6 @@ function forEach(ai, fn) {
 var output = 0;
 return forEach(genAnswers(), function(val) { output += val.value })
 .then(function () {
-  assert.equal(output, 42);
+  expect(output).toBe(42);
 });
 

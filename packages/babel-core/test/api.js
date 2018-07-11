@@ -1,23 +1,46 @@
 import * as babel from "../lib/index";
 import sourceMap from "source-map";
-import assert from "assert";
 import path from "path";
 import Plugin from "../lib/config/plugin";
 import generator from "@babel/generator";
 
 function assertIgnored(result) {
-  assert.ok(!result);
+  expect(result).toBeFalsy();
 }
 
 function assertNotIgnored(result) {
-  assert.ok(!result.ignored);
+  expect(result.ignored).toBeFalsy();
+}
+
+function transform(code, opts) {
+  return babel.transform(code, {
+    cwd: __dirname,
+    ...opts,
+  });
+}
+
+function transformFile(filename, opts, cb) {
+  return babel.transformFile(
+    filename,
+    {
+      cwd: __dirname,
+      ...opts,
+    },
+    cb,
+  );
+}
+function transformFileSync(filename, opts) {
+  return babel.transformFileSync(filename, {
+    cwd: __dirname,
+    ...opts,
+  });
 }
 
 // shim
 function transformAsync(code, opts) {
   return {
     then: function(resolve) {
-      resolve(babel.transform(code, opts));
+      resolve(transform(code, opts));
     },
   };
 }
@@ -33,7 +56,8 @@ describe("parser and generator options", function() {
   };
 
   function newTransform(string) {
-    return babel.transform(string, {
+    return transform(string, {
+      ast: true,
       parserOpts: {
         parser: recast.parse,
         plugins: ["flow"],
@@ -47,25 +71,28 @@ describe("parser and generator options", function() {
 
   it("options", function() {
     const string = "original;";
-    assert.deepEqual(newTransform(string).ast, babel.transform(string).ast);
-    assert.equal(newTransform(string).code, string);
+    expect(newTransform(string).ast).toEqual(
+      transform(string, { ast: true }).ast,
+    );
+    expect(newTransform(string).code).toBe(string);
   });
 
   it("experimental syntax", function() {
     const experimental = "var a: number = 1;";
 
-    assert.deepEqual(
-      newTransform(experimental).ast,
-      babel.transform(experimental, {
+    expect(newTransform(experimental).ast).toEqual(
+      transform(experimental, {
+        ast: true,
         parserOpts: {
           plugins: ["flow"],
         },
       }).ast,
     );
-    assert.equal(newTransform(experimental).code, experimental);
+    expect(newTransform(experimental).code).toBe(experimental);
 
     function newTransformWithPlugins(string) {
-      return babel.transform(string, {
+      return transform(string, {
+        ast: true,
         plugins: [__dirname + "/../../babel-plugin-syntax-flow"],
         parserOpts: {
           parser: recast.parse,
@@ -76,43 +103,41 @@ describe("parser and generator options", function() {
       });
     }
 
-    assert.deepEqual(
-      newTransformWithPlugins(experimental).ast,
-      babel.transform(experimental, {
+    expect(newTransformWithPlugins(experimental).ast).toEqual(
+      transform(experimental, {
+        ast: true,
         parserOpts: {
           plugins: ["flow"],
         },
       }).ast,
     );
-    assert.equal(newTransformWithPlugins(experimental).code, experimental);
+    expect(newTransformWithPlugins(experimental).code).toBe(experimental);
   });
 
   it("other options", function() {
     const experimental = "if (true) {\n  import a from 'a';\n}";
 
-    assert.notEqual(
-      newTransform(experimental).ast,
-      babel.transform(experimental, {
+    expect(newTransform(experimental).ast).not.toBe(
+      transform(experimental, {
+        ast: true,
         parserOpts: {
           allowImportExportEverywhere: true,
         },
       }).ast,
     );
-    assert.equal(newTransform(experimental).code, experimental);
+    expect(newTransform(experimental).code).toBe(experimental);
   });
 });
 
 describe("api", function() {
   it("exposes the resolvePlugin method", function() {
-    assert.throws(
-      () => babel.resolvePlugin("nonexistent-plugin"),
+    expect(() => babel.resolvePlugin("nonexistent-plugin")).toThrow(
       /Cannot find module 'babel-plugin-nonexistent-plugin'/,
     );
   });
 
   it("exposes the resolvePreset method", function() {
-    assert.throws(
-      () => babel.resolvePreset("nonexistent-preset"),
+    expect(() => babel.resolvePreset("nonexistent-preset")).toThrow(
       /Cannot find module 'babel-preset-nonexistent-preset'/,
     );
   });
@@ -122,14 +147,14 @@ describe("api", function() {
       babelrc: false,
     };
     Object.freeze(options);
-    babel.transformFile(__dirname + "/fixtures/api/file.js", options, function(
+    transformFile(__dirname + "/fixtures/api/file.js", options, function(
       err,
       res,
     ) {
       if (err) return done(err);
-      assert.equal(res.code, "foo();");
+      expect(res.code).toBe("foo();");
       // keep user options untouched
-      assert.deepEqual(options, { babelrc: false });
+      expect(options).toEqual({ babelrc: false });
       done();
     });
   });
@@ -139,30 +164,27 @@ describe("api", function() {
       babelrc: false,
     };
     Object.freeze(options);
-    assert.equal(
-      babel.transformFileSync(__dirname + "/fixtures/api/file.js", options)
-        .code,
-      "foo();",
-    );
-    assert.deepEqual(options, { babelrc: false });
+    expect(
+      transformFileSync(__dirname + "/fixtures/api/file.js", options).code,
+    ).toBe("foo();");
+    expect(options).toEqual({ babelrc: false });
   });
 
   it("options throw on falsy true", function() {
-    return assert.throws(function() {
-      babel.transform("", {
+    return expect(function() {
+      transform("", {
         plugins: [__dirname + "/../../babel-plugin-syntax-jsx", false],
       });
-    }, /.plugins\[1\] must be a string, object, function/);
+    }).toThrow(/.plugins\[1\] must be a string, object, function/);
   });
 
   it("options merge backwards", function() {
     return transformAsync("", {
-      presets: [__dirname + "/../../babel-preset-es2015"],
+      presets: [__dirname + "/../../babel-preset-env"],
       plugins: [__dirname + "/../../babel-plugin-syntax-jsx"],
     }).then(function(result) {
-      assert.ok(
-        result.options.plugins[0].manipulateOptions.toString().indexOf("jsx") >=
-          0,
+      expect(result.options.plugins[0].manipulateOptions.toString()).toEqual(
+        expect.stringContaining("jsx"),
       );
     });
   });
@@ -171,13 +193,13 @@ describe("api", function() {
     let calledRaw = 0;
     let calledIntercept = 0;
 
-    babel.transform("function foo() { bar(foobar); }", {
+    transform("function foo() { bar(foobar); }", {
       wrapPluginVisitorMethod: function(pluginAlias, visitorType, callback) {
         if (pluginAlias !== "foobar") {
           return callback;
         }
 
-        assert.equal(visitorType, "enter");
+        expect(visitorType).toBe("enter");
 
         return function() {
           calledIntercept++;
@@ -197,15 +219,16 @@ describe("api", function() {
       ],
     });
 
-    assert.equal(calledRaw, 4);
-    assert.equal(calledIntercept, 4);
+    expect(calledRaw).toBe(4);
+    expect(calledIntercept).toBe(4);
   });
 
   it("pass per preset", function() {
     let aliasBaseType = null;
 
     function execTest(passPerPreset) {
-      return babel.transform("type Foo = number; let x = (y): Foo => y;", {
+      return transform("type Foo = number; let x = (y): Foo => y;", {
+        sourceType: "script",
         passPerPreset: passPerPreset,
         presets: [
           // First preset with our plugin, "before"
@@ -236,8 +259,8 @@ describe("api", function() {
             };
           },
 
-          // ES2015 preset
-          require(__dirname + "/../../babel-preset-es2015"),
+          // env preset
+          require(__dirname + "/../../babel-preset-env"),
 
           // Third preset for Flow.
           function() {
@@ -257,9 +280,9 @@ describe("api", function() {
 
     let result = execTest(true);
 
-    assert.equal(aliasBaseType, "NumberTypeAnnotation");
+    expect(aliasBaseType).toBe("NumberTypeAnnotation");
 
-    assert.deepEqual(result.code, "var x = function x(y) {\n  return y;\n};");
+    expect(result.code).toBe("var x = function x(y) {\n  return y;\n};");
 
     // 2. passPerPreset: false
 
@@ -267,9 +290,9 @@ describe("api", function() {
 
     result = execTest(false);
 
-    assert.equal(aliasBaseType, null);
+    expect(aliasBaseType).toBeNull();
 
-    assert.deepEqual(result.code, "var x = function x(y) {\n  return y;\n};");
+    expect(result.code).toBe("var x = function x(y) {\n  return y;\n};");
   });
 
   it("complex plugin and preset ordering", function() {
@@ -290,7 +313,11 @@ describe("api", function() {
       return { plugins: [pushPlugin(str)] };
     }
 
-    const result = babel.transform("", {
+    const oldEnv = process.env.BABEL_ENV;
+    process.env.BABEL_ENV = "development";
+
+    const result = transform("", {
+      cwd: path.join(__dirname, "fixtures", "config", "complex-plugin-config"),
       filename: path.join(
         __dirname,
         "fixtures",
@@ -307,8 +334,13 @@ describe("api", function() {
       },
     });
 
-    assert.equal(
-      result.code,
+    if (oldEnv === undefined) {
+      delete process.env.BABEL_ENV;
+    } else {
+      process.env.BABEL_ENV = oldEnv;
+    }
+
+    expect(result.code).toBe(
       [
         "thirteen;",
         "fourteen;",
@@ -338,8 +370,62 @@ describe("api", function() {
     );
   });
 
+  it("interpreter directive backward-compat", function() {
+    function doTransform(code, preHandler) {
+      return transform(code, {
+        plugins: [
+          {
+            pre: preHandler,
+          },
+        ],
+      }).code;
+    }
+
+    // Writes value properly.
+    expect(
+      doTransform("", file => {
+        file.shebang = "env node";
+      }),
+    ).toBe(`#!env node`);
+    expect(
+      doTransform("#!env node", file => {
+        file.shebang = "env node2";
+      }),
+    ).toBe(`#!env node2`);
+    expect(
+      doTransform("", file => {
+        file.shebang = "";
+      }),
+    ).toBe(``);
+    expect(
+      doTransform("#!env node", file => {
+        file.shebang = "";
+      }),
+    ).toBe(``);
+
+    // Reads value properly.
+    doTransform("", file => {
+      expect(file.shebang).toBe("");
+    });
+    doTransform("#!env node", file => {
+      expect(file.shebang).toBe("env node");
+    });
+
+    // Reads and writes properly.
+    expect(
+      doTransform("#!env node", file => {
+        expect(file.shebang).toBe("env node");
+
+        file.shebang = "env node2";
+        expect(file.shebang).toBe("env node2");
+
+        file.shebang = "env node3";
+      }),
+    ).toBe(`#!env node3`);
+  });
+
   it("source map merging", function() {
-    const result = babel.transform(
+    const result = transform(
       [
         /* eslint-disable max-len */
         'function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }',
@@ -356,7 +442,7 @@ describe("api", function() {
       },
     );
 
-    assert.deepEqual(
+    expect(
       [
         "function _classCallCheck(instance, Constructor) {",
         "  if (!(instance instanceof Constructor)) {",
@@ -368,36 +454,56 @@ describe("api", function() {
         "  _classCallCheck(this, Foo);",
         "};",
       ].join("\n"),
-      result.code,
-    );
+    ).toBe(result.code);
 
     const consumer = new sourceMap.SourceMapConsumer(result.map);
 
-    assert.deepEqual(
+    expect(
       consumer.originalPositionFor({
         line: 7,
         column: 4,
       }),
-      {
-        name: null,
-        source: "stdout",
-        line: 1,
-        column: 6,
-      },
-    );
+    ).toEqual({
+      name: null,
+      source: "stdout",
+      line: 1,
+      column: 6,
+    });
+  });
+
+  it("default source map filename", function() {
+    return transformAsync("var a = 10;", {
+      cwd: "/some/absolute",
+      filename: "/some/absolute/file/path.js",
+      sourceMaps: true,
+    }).then(function(result) {
+      expect(result.map.sources).toEqual(["path.js"]);
+    });
   });
 
   it("code option false", function() {
     return transformAsync("foo('bar');", { code: false }).then(function(
       result,
     ) {
-      assert.ok(!result.code);
+      expect(result.code).toBeFalsy();
     });
   });
 
   it("ast option false", function() {
     return transformAsync("foo('bar');", { ast: false }).then(function(result) {
-      assert.ok(!result.ast);
+      expect(result.ast).toBeFalsy();
+    });
+  });
+
+  it("ast option true", function() {
+    return transformAsync("foo('bar');", { ast: true }).then(function(result) {
+      expect(result.ast).toBeTruthy();
+    });
+  });
+
+  it("ast option default", function() {
+    return transformAsync("foo('bar');").then(function(result) {
+      expect(result.ast).toBeFalsy();
     });
   });
 
@@ -425,8 +531,7 @@ describe("api", function() {
         },
       ],
     }).then(function(result) {
-      assert.equal(
-        result.code,
+      expect(result.code).toBe(
         "/*before*/\nstart;\n\n/*after*/\nclass Foo {}\n\n/*before*/\nend;\n\n/*after*/",
       );
     });
@@ -514,46 +619,46 @@ describe("api", function() {
     const oldBabelEnv = process.env.BABEL_ENV;
     const oldNodeEnv = process.env.NODE_ENV;
 
-    setup(function() {
+    beforeEach(function() {
       // Tests need to run with the default and specific values for these. They
       // need to be cleared for each test.
       delete process.env.BABEL_ENV;
       delete process.env.NODE_ENV;
     });
 
-    suiteTeardown(function() {
+    afterAll(function() {
       process.env.BABEL_ENV = oldBabelEnv;
       process.env.NODE_ENV = oldNodeEnv;
     });
 
     it("default", function() {
-      const result = babel.transform("foo;", {
+      const result = transform("foo;", {
         env: {
           development: { comments: false },
         },
       });
 
-      assert.equal(result.options.comments, false);
+      expect(result.options.comments).toBe(false);
     });
 
     it("BABEL_ENV", function() {
       process.env.BABEL_ENV = "foo";
-      const result = babel.transform("foo;", {
+      const result = transform("foo;", {
         env: {
           foo: { comments: false },
         },
       });
-      assert.equal(result.options.comments, false);
+      expect(result.options.comments).toBe(false);
     });
 
     it("NODE_ENV", function() {
       process.env.NODE_ENV = "foo";
-      const result = babel.transform("foo;", {
+      const result = transform("foo;", {
         env: {
           foo: { comments: false },
         },
       });
-      assert.equal(result.options.comments, false);
+      expect(result.options.comments).toBe(false);
     });
   });
 
@@ -578,25 +683,25 @@ describe("api", function() {
 
     it("all", function() {
       const script = babel.buildExternalHelpers();
-      assert.ok(script.indexOf("classCallCheck") >= -1);
-      assert.ok(script.indexOf("inherits") >= 0);
+      expect(script).toEqual(expect.stringContaining("classCallCheck"));
+      expect(script).toEqual(expect.stringContaining("inherits"));
     });
 
     it("whitelist", function() {
       const script = babel.buildExternalHelpers(["inherits"]);
-      assert.ok(script.indexOf("classCallCheck") === -1);
-      assert.ok(script.indexOf("inherits") >= 0);
+      expect(script).not.toEqual(expect.stringContaining("classCallCheck"));
+      expect(script).toEqual(expect.stringContaining("inherits"));
     });
 
     it("empty whitelist", function() {
       const script = babel.buildExternalHelpers([]);
-      assert.ok(script.indexOf("classCallCheck") === -1);
-      assert.ok(script.indexOf("inherits") === -1);
+      expect(script).not.toEqual(expect.stringContaining("classCallCheck"));
+      expect(script).not.toEqual(expect.stringContaining("inherits"));
     });
 
     it("underscored", function() {
       const script = babel.buildExternalHelpers(["typeof"]);
-      assert.ok(script.indexOf("typeof") >= 0);
+      expect(script).toEqual(expect.stringContaining("typeof"));
     });
   });
 
@@ -606,20 +711,16 @@ describe("api", function() {
     };
 
     it("only syntax plugin available", function(done) {
-      babel.transformFile(
+      transformFile(
         __dirname + "/fixtures/api/parsing-errors/only-syntax/file.js",
         options,
         function(err) {
-          assert.ok(
-            RegExp(
-              "Support for the experimental syntax 'dynamicImport' isn't currently enabled \\(1:9\\):",
-            ).exec(err.message),
+          expect(err.message).toMatch(
+            "Support for the experimental syntax 'dynamicImport' isn't currently enabled (1:9)",
           );
-          assert.ok(
-            RegExp(
-              "Add @babel/plugin-syntax-dynamic-import \\(https://git.io/vb4Sv\\) to the " +
-                "'plugins' section of your Babel config to enable parsing.",
-            ).exec(err.message),
+          expect(err.message).toMatch(
+            "Add @babel/plugin-syntax-dynamic-import (https://git.io/vb4Sv) to the " +
+              "'plugins' section of your Babel config to enable parsing.",
           );
           done();
         },
@@ -627,20 +728,16 @@ describe("api", function() {
     });
 
     it("both syntax and transform plugin available", function(done) {
-      babel.transformFile(
+      transformFile(
         __dirname + "/fixtures/api/parsing-errors/syntax-and-transform/file.js",
         options,
         function(err) {
-          assert.ok(
-            RegExp(
-              "Support for the experimental syntax 'asyncGenerators' isn't currently enabled \\(1:15\\):",
-            ).exec(err.message),
+          expect(err.message).toMatch(
+            "Support for the experimental syntax 'asyncGenerators' isn't currently enabled (1:15):",
           );
-          assert.ok(
-            RegExp(
-              "Add @babel/plugin-proposal-async-generator-functions \\(https://git.io/vb4yp\\) to the " +
-                "'plugins' section of your Babel config to enable transformation.",
-            ).exec(err.message),
+          expect(err.message).toMatch(
+            "Add @babel/plugin-proposal-async-generator-functions (https://git.io/vb4yp) to the " +
+              "'plugins' section of your Babel config to enable transformation.",
           );
           done();
         },

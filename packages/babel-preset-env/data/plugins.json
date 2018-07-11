@@ -1,14 +1,35 @@
 {
-  "check-constants": {
-    "chrome": "49",
-    "edge": "14",
-    "firefox": "51",
+  "transform-template-literals": {
+    "chrome": "41",
+    "edge": "13",
+    "firefox": "34",
+    "safari": "9",
+    "node": "4",
+    "ios": "9",
+    "ecmascript": "2015",
+    "opera": "28",
+    "electron": "0.24"
+  },
+  "transform-literals": {
+    "chrome": "44",
+    "edge": "12",
+    "firefox": "53",
+    "safari": "9",
+    "node": "4",
+    "ios": "9",
+    "ecmascript": "2015",
+    "opera": "31",
+    "electron": "0.31"
+  },
+  "transform-function-name": {
+    "chrome": "51",
+    "firefox": "53",
     "safari": "10",
-    "node": "6",
+    "node": "6.5",
     "ios": "10",
     "ecmascript": "2015",
-    "opera": "36",
-    "electron": "1"
+    "opera": "38",
+    "electron": "1.2"
   },
   "transform-arrow-functions": {
     "chrome": "47",
@@ -33,17 +54,6 @@
     "opera": "28",
     "electron": "0.24"
   },
-  "transform-block-scoping": {
-    "chrome": "49",
-    "edge": "14",
-    "firefox": "51",
-    "safari": "10",
-    "node": "6",
-    "ios": "10",
-    "ecmascript": "2015",
-    "opera": "36",
-    "electron": "1"
-  },
   "transform-classes": {
     "chrome": "46",
     "edge": "13",
@@ -55,26 +65,27 @@
     "opera": "33",
     "electron": "0.36"
   },
-  "transform-computed-properties": {
-    "chrome": "44",
-    "edge": "12",
-    "firefox": "34",
-    "safari": "7.1",
-    "node": "4",
-    "ios": "8",
-    "ecmascript": "2015",
-    "opera": "31",
-    "electron": "0.31"
-  },
-  "transform-destructuring": {
-    "chrome": "51",
-    "firefox": "53",
+  "transform-object-super": {
+    "chrome": "46",
+    "edge": "13",
+    "firefox": "45",
     "safari": "10",
-    "node": "6.5",
+    "node": "5",
     "ios": "10",
     "ecmascript": "2015",
-    "opera": "38",
-    "electron": "1.2"
+    "opera": "33",
+    "electron": "0.36"
+  },
+  "transform-shorthand-properties": {
+    "chrome": "43",
+    "edge": "12",
+    "firefox": "33",
+    "safari": "9",
+    "node": "4",
+    "ios": "9",
+    "ecmascript": "2015",
+    "opera": "30",
+    "electron": "0.29"
   },
   "transform-duplicate-keys": {
     "chrome": "42",
@@ -87,6 +98,17 @@
     "opera": "29",
     "electron": "0.27"
   },
+  "transform-computed-properties": {
+    "chrome": "44",
+    "edge": "12",
+    "firefox": "34",
+    "safari": "7.1",
+    "node": "4",
+    "ios": "8",
+    "ecmascript": "2015",
+    "opera": "31",
+    "electron": "0.31"
+  },
   "transform-for-of": {
     "chrome": "51",
     "edge": "15",
@@ -98,31 +120,41 @@
     "opera": "38",
     "electron": "1.2"
   },
-  "transform-function-name": {
-    "chrome": "51",
-    "firefox": "53",
+  "transform-sticky-regex": {
+    "chrome": "49",
+    "edge": "13",
+    "firefox": "3",
     "safari": "10",
-    "node": "6.5",
+    "node": "6",
     "ios": "10",
     "ecmascript": "2015",
-    "opera": "38",
-    "electron": "1.2"
+    "opera": "36",
+    "electron": "1"
   },
-  "transform-literals": {
-    "chrome": "44",
-    "edge": "12",
-    "firefox": "53",
-    "safari": "9",
-    "node": "4",
-    "ios": "9",
+  "transform-dotall-regex": {
+    "chrome": "62",
+    "safari": "11.1",
+    "node": "8.10",
+    "ios": "11.3",
+    "ecmascript": "2018",
+    "opera": "49",
+    "electron": "3"
+  },
+  "transform-unicode-regex": {
+    "chrome": "50",
+    "edge": "13",
+    "firefox": "46",
+    "safari": "10",
+    "node": "6",
+    "ios": "10",
     "ecmascript": "2015",
-    "opera": "31",
-    "electron": "0.31"
+    "opera": "37",
+    "electron": "1.1"
   },
-  "transform-object-super": {
+  "transform-spread": {
     "chrome": "46",
     "edge": "13",
-    "firefox": "45",
+    "firefox": "36",
     "safari": "10",
     "node": "5",
     "ios": "10",
@@ -141,49 +173,26 @@
     "opera": "36",
     "electron": "1"
   },
-  "transform-shorthand-properties": {
-    "chrome": "43",
-    "edge": "12",
-    "firefox": "33",
-    "safari": "9",
-    "node": "4",
-    "ios": "9",
-    "ecmascript": "2015",
-    "opera": "30",
-    "electron": "0.29"
-  },
-  "transform-spread": {
-    "chrome": "46",
-    "edge": "13",
-    "firefox": "36",
+  "transform-destructuring": {
+    "chrome": "51",
+    "firefox": "53",
     "safari": "10",
-    "node": "5",
+    "node": "6.5",
     "ios": "10",
     "ecmascript": "2015",
-    "opera": "33",
-    "electron": "0.36"
+    "opera": "38",
+    "electron": "1.2"
   },
-  "transform-sticky-regex": {
+  "transform-block-scoping": {
     "chrome": "49",
-    "edge": "13",
-    "firefox": "3",
+    "edge": "14",
+    "firefox": "51",
     "safari": "10",
     "node": "6",
     "ios": "10",
     "ecmascript": "2015",
     "opera": "36",
     "electron": "1"
-  },
-  "transform-template-literals": {
-    "chrome": "41",
-    "edge": "13",
-    "firefox": "34",
-    "safari": "9",
-    "node": "4",
-    "ios": "9",
-    "ecmascript": "2015",
-    "opera": "28",
-    "electron": "0.24"
   },
   "transform-typeof-symbol": {
     "chrome": "38",
@@ -195,17 +204,6 @@
     "ecmascript": "2015",
     "opera": "25",
     "electron": "0.2"
-  },
-  "transform-unicode-regex": {
-    "chrome": "50",
-    "edge": "13",
-    "firefox": "46",
-    "safari": "10",
-    "node": "6",
-    "ios": "10",
-    "ecmascript": "2015",
-    "opera": "37",
-    "electron": "1.1"
   },
   "transform-new-target": {
     "chrome": "46",
@@ -251,33 +249,38 @@
     "opera": "42",
     "electron": "1.6"
   },
-  "transform-dotall-regex": {
-    "chrome": "62",
-    "safari": "11.1",
-    "opera": "49"
-  },
   "proposal-async-generator-functions": {
     "chrome": "63",
     "firefox": "57",
     "safari": "tp",
-    "opera": "50"
+    "ecmascript": "2018",
+    "opera": "50",
+    "electron": "3"
   },
   "proposal-object-rest-spread": {
     "chrome": "60",
     "firefox": "55",
     "safari": "11.1",
     "node": "8.3",
-    "opera": "47"
+    "ios": "11.3",
+    "ecmascript": "2018",
+    "opera": "47",
+    "electron": "2"
+  },
+  "proposal-unicode-property-regex": {
+    "chrome": "64",
+    "safari": "11.1",
+    "ios": "11.3",
+    "ecmascript": "2018",
+    "opera": "51",
+    "electron": "3"
   },
   "proposal-optional-catch-binding": {
     "chrome": "66",
     "firefox": "58",
     "safari": "11.1",
-    "opera": "53"
-  },
-  "proposal-unicode-property-regex": {
-    "chrome": "64",
-    "safari": "11.1",
-    "opera": "51"
+    "ios": "11.3",
+    "opera": "53",
+    "electron": "3"
   }
 }

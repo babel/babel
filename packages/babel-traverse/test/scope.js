@@ -1,6 +1,5 @@
 import traverse from "../lib";
-import assert from "assert";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 
 function getPath(code, options) {
   const ast = parse(code, options);
@@ -30,175 +29,222 @@ function getIdentifierPath(code) {
 describe("scope", function() {
   describe("binding paths", function() {
     it("function declaration id", function() {
-      assert.ok(
-        getPath("function foo() {}").scope.getBinding("foo").path.type ===
-          "FunctionDeclaration",
-      );
+      expect(
+        getPath("function foo() {}").scope.getBinding("foo").path.type,
+      ).toBe("FunctionDeclaration");
     });
 
     it("function expression id", function() {
-      assert.ok(
+      expect(
         getPath("(function foo() {})")
           .get("body")[0]
           .get("expression")
-          .scope.getBinding("foo").path.type === "FunctionExpression",
-      );
+          .scope.getBinding("foo").path.type,
+      ).toBe("FunctionExpression");
     });
 
     it("function param", function() {
-      assert.ok(
+      expect(
         getPath("(function (foo) {})")
           .get("body")[0]
           .get("expression")
-          .scope.getBinding("foo").path.type === "Identifier",
-      );
+          .scope.getBinding("foo").path.type,
+      ).toBe("Identifier");
     });
 
     it("variable declaration", function() {
-      assert.ok(
-        getPath("var foo = null;").scope.getBinding("foo").path.type ===
-          "VariableDeclarator",
+      expect(getPath("var foo = null;").scope.getBinding("foo").path.type).toBe(
+        "VariableDeclarator",
       );
-      assert.ok(
-        getPath("var { foo } = null;").scope.getBinding("foo").path.type ===
-          "VariableDeclarator",
-      );
-      assert.ok(
-        getPath("var [ foo ] = null;").scope.getBinding("foo").path.type ===
-          "VariableDeclarator",
-      );
-      assert.ok(
+      expect(
+        getPath("var { foo } = null;").scope.getBinding("foo").path.type,
+      ).toBe("VariableDeclarator");
+      expect(
+        getPath("var [ foo ] = null;").scope.getBinding("foo").path.type,
+      ).toBe("VariableDeclarator");
+      expect(
         getPath("var { bar: [ foo ] } = null;").scope.getBinding("foo").path
-          .type === "VariableDeclarator",
-      );
+          .type,
+      ).toBe("VariableDeclarator");
     });
 
     it("declare var", function() {
-      assert.equal(
+      expect(
         getPath("declare var foo;", { plugins: ["flow"] }).scope.getBinding(
           "foo",
-        ),
-        null,
-      );
+        ).path.type,
+      ).toBe("DeclareVariable");
     });
 
     it("declare function", function() {
-      assert.equal(
+      expect(
         getPath("declare function foo(): void;", {
           plugins: ["flow"],
-        }).scope.getBinding("foo"),
-        null,
-      );
+        }).scope.getBinding("foo").path.type,
+      ).toBe("DeclareFunction");
+    });
+
+    it("declare module", function() {
+      expect(
+        getPath("declare module foo {};", {
+          plugins: ["flow"],
+        }).scope.getBinding("foo").path.type,
+      ).toBe("DeclareModule");
+    });
+
+    it("declare type alias", function() {
+      expect(
+        getPath("declare type foo = string;", {
+          plugins: ["flow"],
+        }).scope.getBinding("foo").path.type,
+      ).toBe("DeclareTypeAlias");
+    });
+
+    it("declare opaque type", function() {
+      expect(
+        getPath("declare opaque type foo;", {
+          plugins: ["flow"],
+        }).scope.getBinding("foo").path.type,
+      ).toBe("DeclareOpaqueType");
+    });
+
+    it("declare interface", function() {
+      expect(
+        getPath("declare interface Foo {};", {
+          plugins: ["flow"],
+        }).scope.getBinding("Foo").path.type,
+      ).toBe("DeclareInterface");
+    });
+
+    it("type alias", function() {
+      expect(
+        getPath("type foo = string;", {
+          plugins: ["flow"],
+        }).scope.getBinding("foo").path.type,
+      ).toBe("TypeAlias");
+    });
+
+    it("opaque type alias", function() {
+      expect(
+        getPath("opaque type foo = string;", {
+          plugins: ["flow"],
+        }).scope.getBinding("foo").path.type,
+      ).toBe("OpaqueType");
+    });
+
+    it("interface", function() {
+      expect(
+        getPath("interface Foo {};", {
+          plugins: ["flow"],
+        }).scope.getBinding("Foo").path.type,
+      ).toBe("InterfaceDeclaration");
+    });
+
+    it("import type", function() {
+      expect(
+        getPath("import type {Foo} from 'foo';", {
+          plugins: ["flow"],
+        }).scope.getBinding("Foo").path.type,
+      ).toBe("ImportSpecifier");
     });
 
     it("variable constantness", function() {
-      assert.ok(getPath("var a = 1;").scope.getBinding("a").constant === true);
-      assert.ok(
-        getPath("var a = 1; a = 2;").scope.getBinding("a").constant === false,
+      expect(getPath("var a = 1;").scope.getBinding("a").constant).toBe(true);
+      expect(getPath("var a = 1; a = 2;").scope.getBinding("a").constant).toBe(
+        false,
       );
-      assert.ok(
-        getPath("var a = 1, a = 2;").scope.getBinding("a").constant === false,
+      expect(getPath("var a = 1, a = 2;").scope.getBinding("a").constant).toBe(
+        false,
       );
-      assert.ok(
-        getPath("var a = 1; var a = 2;").scope.getBinding("a").constant ===
-          false,
-      );
+      expect(
+        getPath("var a = 1; var a = 2;").scope.getBinding("a").constant,
+      ).toBe(false);
     });
 
     it("purity", function() {
-      assert.ok(
+      expect(
         getPath("({ x: 1 })")
           .get("body")[0]
           .get("expression")
           .isPure(),
-      );
-      assert.ok(
-        !getPath("`${a}`")
+      ).toBeTruthy();
+      expect(
+        getPath("`${a}`")
           .get("body")[0]
           .get("expression")
           .isPure(),
-      );
-      assert.ok(
+      ).toBeFalsy();
+      expect(
         getPath("let a = 1; `${a}`")
           .get("body")[1]
           .get("expression")
           .isPure(),
-      );
-      assert.ok(
-        !getPath("let a = 1; `${a++}`")
+      ).toBeTruthy();
+      expect(
+        getPath("let a = 1; `${a++}`")
           .get("body")[1]
           .get("expression")
           .isPure(),
-      );
-      assert.ok(
-        !getPath("tagged`foo`")
+      ).toBeFalsy();
+      expect(
+        getPath("tagged`foo`")
           .get("body")[0]
           .get("expression")
           .isPure(),
-      );
-      assert.ok(
+      ).toBeFalsy();
+      expect(
         getPath("String.raw`foo`")
           .get("body")[0]
           .get("expression")
           .isPure(),
-      );
+      ).toBeTruthy();
     });
 
     test("label", function() {
-      assert.strictEqual(
-        getPath("foo: { }").scope.getBinding("foo"),
-        undefined,
-      );
-      assert.strictEqual(
-        getPath("foo: { }").scope.getLabel("foo").type,
+      expect(getPath("foo: { }").scope.getBinding("foo")).toBeUndefined();
+      expect(getPath("foo: { }").scope.getLabel("foo").type).toBe(
         "LabeledStatement",
       );
-      assert.strictEqual(
-        getPath("foo: { }").scope.getLabel("toString"),
-        undefined,
-      );
+      expect(getPath("foo: { }").scope.getLabel("toString")).toBeUndefined();
 
-      assert.strictEqual(
+      expect(
         getPath(
           `
-        foo: { }
-      `,
+      foo: { }
+    `,
         ).scope.generateUid("foo"),
-        "_foo",
-      );
+      ).toBe("_foo");
     });
 
     test("generateUid collision check with labels", function() {
-      assert.strictEqual(
+      expect(
         getPath(
           `
-        _foo: { }
-      `,
+      _foo: { }
+    `,
         ).scope.generateUid("foo"),
-        "_foo2",
-      );
+      ).toBe("_foo2");
 
-      assert.strictEqual(
+      expect(
         getPath(
           `
-        _foo: { }
-        _foo1: { }
-        _foo2: { }
-      `,
+      _foo: { }
+      _foo1: { }
+      _foo2: { }
+    `,
         ).scope.generateUid("foo"),
-        "_foo3",
-      );
+      ).toBe("_foo3");
     });
 
     it("reference paths", function() {
       const path = getIdentifierPath("function square(n) { return n * n}");
       const referencePaths = path.context.scope.bindings.n.referencePaths;
-      assert.equal(referencePaths.length, 2);
-      assert.deepEqual(referencePaths[0].node.loc.start, {
+      expect(referencePaths).toHaveLength(2);
+      expect(referencePaths[0].node.loc.start).toEqual({
         line: 1,
         column: 28,
       });
-      assert.deepEqual(referencePaths[1].node.loc.start, {
+      expect(referencePaths[1].node.loc.start).toEqual({
         line: 1,
         column: 32,
       });

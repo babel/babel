@@ -15,8 +15,9 @@ const BABEL_PLUGIN_PREFIX_RE = /^(?!@|module:|[^/]+\/|babel-plugin-)/;
 const BABEL_PRESET_PREFIX_RE = /^(?!@|module:|[^/]+\/|babel-preset-)/;
 const BABEL_PLUGIN_ORG_RE = /^(@babel\/)(?!plugin-|[^/]+\/)/;
 const BABEL_PRESET_ORG_RE = /^(@babel\/)(?!preset-|[^/]+\/)/;
-const OTHER_PLUGIN_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?!babel-plugin-|[^/]+\/)/;
-const OTHER_PRESET_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?!babel-preset-|[^/]+\/)/;
+const OTHER_PLUGIN_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?!babel-plugin(?:-|\/|$)|[^/]+\/)/;
+const OTHER_PRESET_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?!babel-preset(?:-|\/|$)|[^/]+\/)/;
+const OTHER_ORG_DEFAULT_RE = /^(@(?!babel$)[^/]+)$/;
 
 export function resolvePlugin(name: string, dirname: string): string | null {
   return resolveStandardizedName("plugin", name, dirname);
@@ -80,6 +81,8 @@ function standardizeName(type: "plugin" | "preset", name: string) {
         isPreset ? OTHER_PRESET_ORG_RE : OTHER_PLUGIN_ORG_RE,
         `$1babel-${type}-`,
       )
+      // @foo -> @foo/babel-preset
+      .replace(OTHER_ORG_DEFAULT_RE, `$1/babel-${type}`)
       // module:mypreset -> mypreset
       .replace(EXACT_RE, "")
   );
@@ -105,7 +108,6 @@ function resolveStandardizedName(
       } catch (e2) {}
 
       if (resolvedOriginal) {
-        // eslint-disable-next-line max-len
         e.message += `\n- If you want to resolve "${name}", use "module:${name}"`;
       }
     }
@@ -119,7 +121,6 @@ function resolveStandardizedName(
     } catch (e2) {}
 
     if (resolvedBabel) {
-      // eslint-disable-next-line max-len
       e.message += `\n- Did you mean "@babel/${name}"?`;
     }
 
@@ -131,7 +132,6 @@ function resolveStandardizedName(
     } catch (e2) {}
 
     if (resolvedOppositeType) {
-      // eslint-disable-next-line max-len
       e.message += `\n- Did you accidentally pass a ${type} as a ${oppositeType}?`;
     }
 
@@ -143,8 +143,9 @@ const LOADING_MODULES = new Set();
 function requireModule(type: string, name: string): mixed {
   if (LOADING_MODULES.has(name)) {
     throw new Error(
-      // eslint-disable-next-line max-len
-      `Reentrant ${type} detected trying to load "${name}". This module is not ignored and is trying to load itself while compiling itself, leading to a dependency cycle. We recommend adding it to your "ignore" list in your babelrc, or to a .babelignore.`,
+      `Reentrant ${type} detected trying to load "${name}". This module is not ignored ` +
+        "and is trying to load itself while compiling itself, leading to a dependency cycle. " +
+        'We recommend adding it to your "ignore" list in your babelrc, or to a .babelignore.',
     );
   }
 

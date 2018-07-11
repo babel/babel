@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import path from "path";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   function addDisplayName(id, call) {
     const props = call.arguments[0].properties;
     let safe = true;
@@ -104,4 +107,4 @@ export default function() {
       },
     },
   };
-}
+});

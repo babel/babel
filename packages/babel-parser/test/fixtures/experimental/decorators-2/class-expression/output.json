@@ -1,0 +1,308 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 58,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 6,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 58,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 6,
+        "column": 1
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 58,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 6,
+            "column": 1
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 58,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 6,
+                "column": 1
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 7,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 7
+                },
+                "identifierName": "foo"
+              },
+              "name": "foo"
+            },
+            "init": {
+              "type": "ClassExpression",
+              "start": 10,
+              "end": 58,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 6,
+                  "column": 1
+                }
+              },
+              "decorators": [
+                {
+                  "type": "Decorator",
+                  "start": 10,
+                  "end": 14,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 14
+                    }
+                  },
+                  "expression": {
+                    "type": "Identifier",
+                    "start": 11,
+                    "end": 14,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 14
+                      },
+                      "identifierName": "dec"
+                    },
+                    "name": "dec"
+                  }
+                }
+              ],
+              "id": {
+                "type": "Identifier",
+                "start": 21,
+                "end": 24,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 24
+                  },
+                  "identifierName": "Bar"
+                },
+                "name": "Bar"
+              },
+              "superClass": null,
+              "body": {
+                "type": "ClassBody",
+                "start": 25,
+                "end": 58,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 6,
+                    "column": 1
+                  }
+                },
+                "body": [
+                  {
+                    "type": "ClassMethod",
+                    "start": 29,
+                    "end": 56,
+                    "loc": {
+                      "start": {
+                        "line": 2,
+                        "column": 2
+                      },
+                      "end": {
+                        "line": 5,
+                        "column": 3
+                      }
+                    },
+                    "decorators": [
+                      {
+                        "type": "Decorator",
+                        "start": 29,
+                        "end": 33,
+                        "loc": {
+                          "start": {
+                            "line": 2,
+                            "column": 2
+                          },
+                          "end": {
+                            "line": 2,
+                            "column": 6
+                          }
+                        },
+                        "expression": {
+                          "type": "Identifier",
+                          "start": 30,
+                          "end": 33,
+                          "loc": {
+                            "start": {
+                              "line": 2,
+                              "column": 3
+                            },
+                            "end": {
+                              "line": 2,
+                              "column": 6
+                            },
+                            "identifierName": "baz"
+                          },
+                          "name": "baz"
+                        }
+                      }
+                    ],
+                    "static": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 36,
+                      "end": 39,
+                      "loc": {
+                        "start": {
+                          "line": 3,
+                          "column": 2
+                        },
+                        "end": {
+                          "line": 3,
+                          "column": 5
+                        },
+                        "identifierName": "bam"
+                      },
+                      "name": "bam"
+                    },
+                    "computed": false,
+                    "kind": "method",
+                    "id": null,
+                    "generator": false,
+                    "async": false,
+                    "params": [],
+                    "body": {
+                      "type": "BlockStatement",
+                      "start": 42,
+                      "end": 56,
+                      "loc": {
+                        "start": {
+                          "line": 3,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 5,
+                          "column": 3
+                        }
+                      },
+                      "body": [
+                        {
+                          "type": "ExpressionStatement",
+                          "start": 48,
+                          "end": 52,
+                          "loc": {
+                            "start": {
+                              "line": 4,
+                              "column": 4
+                            },
+                            "end": {
+                              "line": 4,
+                              "column": 8
+                            }
+                          },
+                          "expression": {
+                            "type": "CallExpression",
+                            "start": 48,
+                            "end": 51,
+                            "loc": {
+                              "start": {
+                                "line": 4,
+                                "column": 4
+                              },
+                              "end": {
+                                "line": 4,
+                                "column": 7
+                              }
+                            },
+                            "callee": {
+                              "type": "Identifier",
+                              "start": 48,
+                              "end": 49,
+                              "loc": {
+                                "start": {
+                                  "line": 4,
+                                  "column": 4
+                                },
+                                "end": {
+                                  "line": 4,
+                                  "column": 5
+                                },
+                                "identifierName": "f"
+                              },
+                              "name": "f"
+                            },
+                            "arguments": []
+                          }
+                        }
+                      ],
+                      "directives": []
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

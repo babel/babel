@@ -1,6 +1,9 @@
+import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     visitor: {
       Scope({ scope }) {
@@ -47,7 +50,7 @@ export default function() {
 
         const call = t.callExpression(helper, [node.argument]);
         const arg = path.get("argument");
-        if (arg.isIdentifier() && !path.scope.hasBinding(arg.node.name)) {
+        if (arg.isIdentifier() && !path.scope.hasBinding(arg.node.name, true)) {
           const unary = t.unaryExpression("typeof", t.cloneNode(node.argument));
           path.replaceWith(
             t.conditionalExpression(
@@ -62,4 +65,4 @@ export default function() {
       },
     },
   };
-}
+});

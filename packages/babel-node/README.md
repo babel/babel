@@ -1,17 +1,19 @@
 # @babel/node
 
-> A Babel-powered Node.js CLI
+> Babel command line
 
-babel-node is a CLI that works exactly the same as the Node.js CLI, with the added benefit of compiling with Babel presets and plugins before running it.
+See our website [@babel/node](https://babeljs.io/docs/en/next/babel-node.html) for more information.
 
 ## Install
 
+Using npm:
+
 ```sh
-npm install --save-dev @babel/core @babel/node
+npm install --save-dev @babel/node
 ```
 
-## Usage
+or using yarn:
 
 ```sh
-babel-node [options] [ -e script | script.js ] [arguments]
+yarn add @babel/node --dev
 ```

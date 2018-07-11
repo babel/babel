@@ -9,8 +9,11 @@ Using modules transform: commonjs
 
 Using plugins:
   transform-dotall-regex { "chrome":"55" }
+  proposal-async-generator-functions { "chrome":"55" }
+  proposal-object-rest-spread { "chrome":"55" }
+  proposal-unicode-property-regex { "chrome":"55" }
 
 Using polyfills with `usage` option:
 
-[src/in.js] Based on your code and targets, none were added.
-src/in.js -> lib/in.js
+[<CWD>/src/in.js] Based on your code and targets, none were added.
+Successfully compiled 1 file with Babel.

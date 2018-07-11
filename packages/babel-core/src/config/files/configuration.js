@@ -5,44 +5,35 @@ import path from "path";
 import fs from "fs";
 import json5 from "json5";
 import resolve from "resolve";
-import { makeStrongCache, type CacheConfigurator } from "../caching";
+import {
+  makeStrongCache,
+  makeWeakCache,
+  type CacheConfigurator,
+} from "../caching";
+import makeAPI from "../helpers/config-api";
+import { makeStaticFileCache } from "./utils";
+import type { FilePackageData, RelativeConfig, ConfigFile } from "./types";
 
 const debug = buildDebug("babel:config:loading:files:configuration");
 
-export type ConfigFile = {
-  filepath: string,
-  dirname: string,
-  options: {},
-};
-
-export type IgnoreFile = {
-  filepath: string,
-  dirname: string,
-  ignore: Array<string>,
-};
-
-export type RelativeConfig = {
-  config: ConfigFile | null,
-  ignore: IgnoreFile | null,
-};
+const BABEL_CONFIG_JS_FILENAME = "babel.config.js";
 
 const BABELRC_FILENAME = ".babelrc";
 const BABELRC_JS_FILENAME = ".babelrc.js";
-const PACKAGE_FILENAME = "package.json";
 const BABELIGNORE_FILENAME = ".babelignore";
 
 export function findRelativeConfig(
-  filepath: string,
+  packageData: FilePackageData,
   envName: string,
 ): RelativeConfig {
   let config = null;
   let ignore = null;
 
-  const dirname = path.dirname(filepath);
-  let loc = dirname;
-  while (true) {
+  const dirname = path.dirname(packageData.filepath);
+
+  for (const loc of packageData.directories) {
     if (!config) {
-      config = [BABELRC_FILENAME, BABELRC_JS_FILENAME, PACKAGE_FILENAME].reduce(
+      config = [BABELRC_FILENAME, BABELRC_JS_FILENAME].reduce(
         (previousConfig: ConfigFile | null, name) => {
           const filepath = path.join(loc, name);
           const config = readConfig(filepath, envName);
@@ -61,6 +52,23 @@ export function findRelativeConfig(
         null,
       );
 
+      const pkgConfig =
+        packageData.pkg && packageData.pkg.dirname === loc
+          ? packageToBabelConfig(packageData.pkg)
+          : null;
+
+      if (pkgConfig) {
+        if (config) {
+          throw new Error(
+            `Multiple configuration files found. Please remove one:\n` +
+              ` - ${path.basename(pkgConfig.filepath)}#babel\n` +
+              ` - ${path.basename(config.filepath)}\n` +
+              `from ${loc}`,
+          );
+        }
+        config = pkgConfig;
+      }
+
       if (config) {
         debug("Found configuration %o from %o.", config.filepath, dirname);
       }
@@ -74,13 +82,22 @@ export function findRelativeConfig(
         debug("Found ignore %o from %o.", ignore.filepath, dirname);
       }
     }
-
-    const nextLoc = path.dirname(loc);
-    if (loc === nextLoc) break;
-    loc = nextLoc;
   }
 
   return { config, ignore };
+}
+
+export function findRootConfig(
+  dirname: string,
+  envName: string,
+): ConfigFile | null {
+  const filepath = path.resolve(dirname, BABEL_CONFIG_JS_FILENAME);
+
+  const conf = readConfig(filepath, envName);
+  if (conf) {
+    debug("Found root config %o in $o.", BABEL_CONFIG_JS_FILENAME, dirname);
+  }
+  return conf;
 }
 
 export function loadConfig(
@@ -106,7 +123,7 @@ export function loadConfig(
 function readConfig(filepath, envName): ConfigFile | null {
   return path.extname(filepath) === ".js"
     ? readConfigJS(filepath, { envName })
-    : readConfigFile(filepath);
+    : readConfigJSON5(filepath);
 }
 
 const LOADING_CONFIGS = new Set();
@@ -150,12 +167,7 @@ const readConfigJS = makeStrongCache(
     }
 
     if (typeof options === "function") {
-      options = options({
-        cache: cache.simple(),
-        // Expose ".env()" so people can easily get the same env that we expose using the "env" key.
-        env: () => cache.using(data => data.envName),
-        async: () => false,
-      });
+      options = options(makeAPI(cache));
 
       if (!cache.configured()) throwConfigError();
     }
@@ -184,26 +196,34 @@ const readConfigJS = makeStrongCache(
   },
 );
 
-const readConfigFile = makeStaticFileCache((filepath, content) => {
-  let options;
-  if (path.basename(filepath) === PACKAGE_FILENAME) {
-    try {
-      options = JSON.parse(content).babel;
-    } catch (err) {
-      err.message = `${filepath}: Error while parsing JSON - ${err.message}`;
-      throw err;
-    }
-    if (!options) return null;
-  } else {
-    try {
-      options = json5.parse(content);
-    } catch (err) {
-      err.message = `${filepath}: Error while parsing config - ${err.message}`;
-      throw err;
+const packageToBabelConfig = makeWeakCache(
+  (file: ConfigFile): ConfigFile | null => {
+    const babel = file.options[("babel": string)];
+
+    if (typeof babel === "undefined") return null;
+
+    if (typeof babel !== "object" || Array.isArray(babel) || babel === null) {
+      throw new Error(`${file.filepath}: .babel property must be an object`);
     }
 
-    if (!options) throw new Error(`${filepath}: No config detected`);
+    return {
+      filepath: file.filepath,
+      dirname: file.dirname,
+      options: babel,
+    };
+  },
+);
+
+const readConfigJSON5 = makeStaticFileCache((filepath, content) => {
+  let options;
+  try {
+    options = json5.parse(content);
+  } catch (err) {
+    err.message = `${filepath}: Error while parsing config - ${err.message}`;
+    throw err;
   }
+
+  if (!options) throw new Error(`${filepath}: No config detected`);
 
   if (typeof options !== "object") {
     throw new Error(`${filepath}: Config returned typeof ${typeof options}`);
@@ -231,27 +251,6 @@ const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
     ignore,
   };
 });
-
-function makeStaticFileCache<T>(fn: (string, string) => T): string => T | null {
-  return makeStrongCache((filepath, cache) => {
-    if (cache.invalidate(() => fileMtime(filepath)) === null) {
-      cache.forever();
-      return null;
-    }
-
-    return fn(filepath, fs.readFileSync(filepath, "utf8"));
-  });
-}
-
-function fileMtime(filepath: string): number | null {
-  try {
-    return +fs.statSync(filepath).mtime;
-  } catch (e) {
-    if (e.code !== "ENOENT") throw e;
-  }
-
-  return null;
-}
 
 function throwConfigError() {
   throw new Error(`\

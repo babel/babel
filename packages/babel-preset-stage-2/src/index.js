@@ -1,18 +1,16 @@
+import { declare } from "@babel/helper-plugin-utils";
 import presetStage3 from "@babel/preset-stage-3";
 
+import transformDecorators from "@babel/plugin-proposal-decorators";
 import transformFunctionSent from "@babel/plugin-proposal-function-sent";
 import transformExportNamespaceFrom from "@babel/plugin-proposal-export-namespace-from";
 import transformNumericSeparator from "@babel/plugin-proposal-numeric-separator";
 import transformThrowExpressions from "@babel/plugin-proposal-throw-expressions";
 
-export default function(context, opts = {}) {
-  let loose = false;
-  let useBuiltIns = false;
+export default declare((api, opts = {}) => {
+  api.assertVersion(7);
 
-  if (opts !== undefined) {
-    if (opts.loose !== undefined) loose = opts.loose;
-    if (opts.useBuiltIns !== undefined) useBuiltIns = opts.useBuiltIns;
-  }
+  const { loose = false, useBuiltIns = false, decoratorsLegacy = false } = opts;
 
   if (typeof loose !== "boolean") {
     throw new Error("@babel/preset-stage-2 'loose' option must be a boolean.");
@@ -22,14 +20,28 @@ export default function(context, opts = {}) {
       "@babel/preset-stage-2 'useBuiltIns' option must be a boolean.",
     );
   }
+  if (typeof decoratorsLegacy !== "boolean") {
+    throw new Error(
+      "@babel/preset-stage-2 'decoratorsLegacy' option must be a boolean.",
+    );
+  }
+
+  if (decoratorsLegacy !== true) {
+    throw new Error(
+      "The new decorators proposal is not supported yet." +
+        ' You must pass the `"decoratorsLegacy": true` option to' +
+        " @babel/preset-stage-2",
+    );
+  }
 
   return {
     presets: [[presetStage3, { loose, useBuiltIns }]],
     plugins: [
+      [transformDecorators, { legacy: decoratorsLegacy }],
       transformFunctionSent,
       transformExportNamespaceFrom,
       transformNumericSeparator,
       transformThrowExpressions,
     ],
   };
-}
+});

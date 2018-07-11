@@ -5,5 +5,5 @@ class Ref {
   }
 }
 
-assert.equal(1, new Ref().id)
-assert.equal(2, new Ref().id)
+expect(new Ref().id).toBe(1);
+expect(new Ref().id).toBe(2);

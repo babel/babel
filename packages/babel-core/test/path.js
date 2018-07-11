@@ -1,12 +1,12 @@
 import { transform } from "../lib/index";
 import Plugin from "../lib/config/plugin";
-import chai from "chai";
 
 describe("traversal path", function() {
   it("replaceWithSourceString", function() {
     const expectCode = "function foo() {}";
 
     const actualCode = transform(expectCode, {
+      cwd: __dirname,
       plugins: [
         new Plugin({
           visitor: {
@@ -18,13 +18,14 @@ describe("traversal path", function() {
       ],
     }).code;
 
-    chai.expect(actualCode).to.be.equal("console.whatever();");
+    expect(actualCode).toBe("console.whatever();");
   });
 
   it("replaceWith (arrow expression body to block statement body)", function() {
     const expectCode = "var fn = () => true;";
 
     const actualCode = transform(expectCode, {
+      cwd: __dirname,
       plugins: [
         new Plugin({
           visitor: {
@@ -47,13 +48,14 @@ describe("traversal path", function() {
       ],
     }).code;
 
-    chai.expect(actualCode).to.be.equal("var fn = () => {\n  return true;\n};");
+    expect(actualCode).toBe("var fn = () => {\n  return true;\n};");
   });
 
   it("replaceWith (arrow block statement body to expression body)", function() {
     const expectCode = "var fn = () => { return true; }";
 
     const actualCode = transform(expectCode, {
+      cwd: __dirname,
       plugins: [
         new Plugin({
           visitor: {
@@ -68,13 +70,14 @@ describe("traversal path", function() {
       ],
     }).code;
 
-    chai.expect(actualCode).to.be.equal("var fn = () => true;");
+    expect(actualCode).toBe("var fn = () => true;");
   });
 
   it("replaceWith (for-in left expression to variable declaration)", function() {
     const expectCode = "for (KEY in right);";
 
     const actualCode = transform(expectCode, {
+      cwd: __dirname,
       plugins: [
         new Plugin({
           visitor: {
@@ -98,13 +101,14 @@ describe("traversal path", function() {
       ],
     }).code;
 
-    chai.expect(actualCode).to.be.equal("for (var KEY in right);");
+    expect(actualCode).toBe("for (var KEY in right);");
   });
 
   it("replaceWith (for-in left variable declaration to expression)", function() {
     const expectCode = "for (var KEY in right);";
 
     const actualCode = transform(expectCode, {
+      cwd: __dirname,
       plugins: [
         new Plugin({
           visitor: {
@@ -119,13 +123,14 @@ describe("traversal path", function() {
       ],
     }).code;
 
-    chai.expect(actualCode).to.be.equal("for (KEY in right);");
+    expect(actualCode).toBe("for (KEY in right);");
   });
 
   it("replaceWith (for-loop left expression to variable declaration)", function() {
     const expectCode = "for (KEY;;);";
 
     const actualCode = transform(expectCode, {
+      cwd: __dirname,
       plugins: [
         new Plugin({
           visitor: {
@@ -149,13 +154,14 @@ describe("traversal path", function() {
       ],
     }).code;
 
-    chai.expect(actualCode).to.be.equal("for (var KEY;;);");
+    expect(actualCode).toBe("for (var KEY;;);");
   });
 
   it("replaceWith (for-loop left variable declaration to expression)", function() {
     const expectCode = "for (var KEY;;);";
 
     const actualCode = transform(expectCode, {
+      cwd: __dirname,
       plugins: [
         new Plugin({
           visitor: {
@@ -170,6 +176,6 @@ describe("traversal path", function() {
       ],
     }).code;
 
-    chai.expect(actualCode).to.be.equal("for (KEY;;);");
+    expect(actualCode).toBe("for (KEY;;);");
   });
 });

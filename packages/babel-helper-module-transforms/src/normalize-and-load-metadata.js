@@ -86,7 +86,12 @@ export function isSideEffectImport(source: SourceModuleMetadata) {
 export default function normalizeModuleAndLoadMetadata(
   programPath: NodePath,
   exportName?: string,
-  { noInterop = false, loose = false, lazy = false } = {},
+  {
+    noInterop = false,
+    loose = false,
+    lazy = false,
+    esNamespaceOnly = false,
+  } = {},
 ): ModuleMetadata {
   if (!exportName) {
     exportName = programPath.scope.generateUidIdentifier("exports").name;
@@ -107,6 +112,16 @@ export default function normalizeModuleAndLoadMetadata(
     }
 
     if (noInterop) metadata.interop = "none";
+    else if (esNamespaceOnly) {
+      // Both the default and namespace interops pass through __esModule
+      // objects, but the namespace interop is used to enable Babel's
+      // destructuring-like interop behavior for normal CommonJS.
+      // Since some tooling has started to remove that behavior, we expose
+      // it as the `esNamespace` option.
+      if (metadata.interop === "namespace") {
+        metadata.interop = "default";
+      }
+    }
   }
 
   return {

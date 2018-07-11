@@ -21,4 +21,4 @@ const calls = [];
   }
 `;
 
-assert.deepEqual(calls, [1, 2, 3, 4]);
+expect(calls).toEqual([1, 2, 3, 4]);

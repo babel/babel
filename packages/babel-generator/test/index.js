@@ -1,8 +1,6 @@
 import Printer from "../lib/printer";
 import generate, { CodeGenerator } from "../lib";
-import assert from "assert";
-import { parse } from "babylon";
-import chai from "chai";
+import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 import fs from "fs";
 import path from "path";
@@ -11,12 +9,12 @@ import fixtures from "@babel/helper-fixtures";
 describe("generation", function() {
   it("completeness", function() {
     Object.keys(t.VISITOR_KEYS).forEach(function(type) {
-      assert.ok(!!Printer.prototype[type], type + " should exist");
+      expect(Printer.prototype[type]).toBeTruthy();
     });
 
     Object.keys(Printer.prototype).forEach(function(type) {
       if (!/[A-Z]/.test(type[0])) return;
-      assert.ok(t.VISITOR_KEYS[type], type + " should not exist");
+      expect(t.VISITOR_KEYS[type]).toBeTruthy();
     });
   });
 
@@ -46,7 +44,7 @@ describe("generation", function() {
 
     const generated = generate(combinedAst, { sourceMaps: true }, sources);
 
-    chai.expect(generated.map).to.deep.equal(
+    expect(generated.map).toEqual(
       {
         version: 3,
         sources: ["a.js", "b.js"],
@@ -61,7 +59,7 @@ describe("generation", function() {
       "sourcemap was incorrectly generated",
     );
 
-    chai.expect(generated.rawMappings).to.deep.equal(
+    expect(generated.rawMappings).toEqual(
       [
         {
           name: undefined,
@@ -157,12 +155,9 @@ describe("generation", function() {
       "raw mappings were incorrectly generated",
     );
 
-    chai
-      .expect(generated.code)
-      .to.equal(
-        "function hi(msg) {\n  console.log(msg);\n}\n\nhi('hello');",
-        "code was incorrectly generated",
-      );
+    expect(generated.code).toBe(
+      "function hi(msg) {\n  console.log(msg);\n}\n\nhi('hello');",
+    );
   });
 
   it("identifierName", function() {
@@ -189,7 +184,7 @@ describe("generation", function() {
       code,
     );
 
-    chai.expect(generated.map).to.deep.equal(
+    expect(generated.map).toEqual(
       {
         version: 3,
         sources: ["inline"],
@@ -200,7 +195,7 @@ describe("generation", function() {
       "sourcemap was incorrectly generated",
     );
 
-    chai.expect(generated.rawMappings).to.deep.equal(
+    expect(generated.rawMappings).toEqual(
       [
         {
           name: undefined,
@@ -242,12 +237,7 @@ describe("generation", function() {
       "raw mappings were incorrectly generated",
     );
 
-    chai
-      .expect(generated.code)
-      .to.equal(
-        "function foo2() {\n  bar2;\n}",
-        "code was incorrectly generated",
-      );
+    expect(generated.code).toBe("function foo2() {\n  bar2;\n}");
   });
 
   it("lazy source map generation", function() {
@@ -259,14 +249,14 @@ describe("generation", function() {
       sourceMaps: true,
     });
 
-    chai.expect(generated.rawMappings).to.be.an("array");
+    expect(Array.isArray(generated.rawMappings)).toBe(true);
 
-    chai
-      .expect(generated)
-      .ownPropertyDescriptor("map")
-      .not.to.have.property("value");
+    expect(
+      Object.getOwnPropertyDescriptor(generated, "map"),
+    ).not.toHaveProperty("value");
 
-    chai.expect(generated.map).to.be.an("object");
+    expect(generated).toHaveProperty("map");
+    expect(typeof generated.map).toBe("object");
   });
 });
 
@@ -294,7 +284,7 @@ describe("programmatic generation", function() {
     );
 
     const ast = parse(generate(ifStatement).code);
-    assert.equal(ast.program.body[0].consequent.type, "BlockStatement");
+    expect(ast.program.body[0].consequent.type).toBe("BlockStatement");
   });
 
   it("prints directives in block with empty body", function() {
@@ -304,12 +294,9 @@ describe("programmatic generation", function() {
     );
 
     const output = generate(blockStatement).code;
-    assert.equal(
-      output,
-      `{
+    expect(output).toBe(`{
   "use strict";
-}`,
-    );
+}`);
   });
 
   it("flow object indentation", function() {
@@ -317,15 +304,28 @@ describe("programmatic generation", function() {
       [t.objectTypeProperty(t.identifier("bar"), t.stringTypeAnnotation())],
       null,
       null,
+      null,
     );
 
     const output = generate(objectStatement).code;
-    assert.equal(
-      output,
-      `{
+    expect(output).toBe(`{
   bar: string
-}`,
+}`);
+  });
+
+  it("flow object exact", function() {
+    const objectStatement = t.objectTypeAnnotation(
+      [t.objectTypeProperty(t.identifier("bar"), t.stringTypeAnnotation())],
+      null,
+      null,
+      null,
+      true,
     );
+
+    const output = generate(objectStatement).code;
+    expect(output).toBe(`{|
+  bar: string
+|}`);
   });
 
   it("flow object indentation with empty leading ObjectTypeProperty", function() {
@@ -338,16 +338,14 @@ describe("programmatic generation", function() {
           t.numberTypeAnnotation(),
         ),
       ],
+      null,
     );
 
     const output = generate(objectStatement).code;
 
-    assert.equal(
-      output,
-      `{
+    expect(output).toBe(`{
   [key: any]: number
-}`,
-    );
+}`);
   });
 });
 
@@ -355,7 +353,7 @@ describe("CodeGenerator", function() {
   it("generate", function() {
     const codeGen = new CodeGenerator(t.numericLiteral(123));
     const code = codeGen.generate().code;
-    assert.equal(parse(code).program.body[0].expression.value, 123);
+    expect(parse(code).program.body[0].expression.value).toBe(123);
   });
 });
 
@@ -368,7 +366,7 @@ suites.forEach(function(testSuite) {
         task.title,
         !task.disabled &&
           function() {
-            const expect = task.expect;
+            const expected = task.expect;
             const actual = task.actual;
             const actualCode = actual.code;
 
@@ -382,17 +380,15 @@ suites.forEach(function(testSuite) {
               const result = generate(actualAst, task.options, actualCode);
 
               if (
-                !expect.code &&
+                !expected.code &&
                 result.code &&
-                fs.statSync(path.dirname(expect.loc)).isDirectory() &&
+                fs.statSync(path.dirname(expected.loc)).isDirectory() &&
                 !process.env.CI
               ) {
-                console.log(`New test file created: ${expect.loc}`);
-                fs.writeFileSync(expect.loc, result.code);
+                console.log(`New test file created: ${expected.loc}`);
+                fs.writeFileSync(expected.loc, result.code);
               } else {
-                chai
-                  .expect(result.code)
-                  .to.be.equal(expect.code, actual.loc + " !== " + expect.loc);
+                expect(result.code).toBe(expected.code);
               }
             }
           },

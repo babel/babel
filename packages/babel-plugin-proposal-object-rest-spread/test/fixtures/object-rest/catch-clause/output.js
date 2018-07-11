@@ -1,5 +1,5 @@
 try {} catch (_ref) {
-  let a34 = babelHelpers.objectWithoutProperties(_ref, []);
+  let a34 = babelHelpers.extends({}, _ref);
 }
 
 try {} catch (_ref2) {

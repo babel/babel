@@ -10,4 +10,4 @@ for (let index = 0; index < data.length; index++) {
     let fn = function () {item;};
 }
 
-assert(data.every(item => item));
+expect(data.every(item => item)).toBe(true);

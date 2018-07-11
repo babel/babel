@@ -36,6 +36,10 @@ defineType("ClassProperty", {
       validate: assertNodeType("Expression"),
       optional: true,
     },
+    definite: {
+      validate: assertValueType("boolean"),
+      optional: true,
+    },
     typeAnnotation: {
       validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
       optional: true,
@@ -83,7 +87,7 @@ defineType("OptionalMemberExpression", {
 });
 
 defineType("OptionalCallExpression", {
-  visitor: ["callee", "arguments", "typeParameters"],
+  visitor: ["callee", "arguments", "typeParameters", "typeArguments"],
   builder: ["callee", "arguments", "optional"],
   aliases: ["Expression"],
   fields: {
@@ -101,11 +105,27 @@ defineType("OptionalCallExpression", {
     optional: {
       validate: assertValueType("boolean"),
     },
+    typeArguments: {
+      validate: assertNodeType("TypeParameterInstantiation"),
+      optional: true,
+    },
     typeParameters: {
-      validate: assertNodeType(
-        "TypeParameterInstantiation",
-        "TSTypeParameterInstantiation",
-      ),
+      validate: assertNodeType("TSTypeParameterInstantiation"),
+      optional: true,
+    },
+  },
+});
+
+defineType("ClassPrivateProperty", {
+  visitor: ["key", "value"],
+  builder: ["key", "value"],
+  aliases: ["Property", "Private"],
+  fields: {
+    key: {
+      validate: assertNodeType("PrivateName"),
+    },
+    value: {
+      validate: assertNodeType("Expression"),
       optional: true,
     },
   },
@@ -152,4 +172,24 @@ defineType("ExportNamespaceSpecifier", {
       validate: assertNodeType("Identifier"),
     },
   },
+});
+
+defineType("PrivateName", {
+  visitor: ["id"],
+  aliases: ["Private"],
+  fields: {
+    id: {
+      validate: assertNodeType("Identifier"),
+    },
+  },
+});
+
+defineType("BigIntLiteral", {
+  builder: ["value"],
+  fields: {
+    value: {
+      validate: assertValueType("string"),
+    },
+  },
+  aliases: ["Expression", "Pureish", "Literal", "Immutable"],
 });

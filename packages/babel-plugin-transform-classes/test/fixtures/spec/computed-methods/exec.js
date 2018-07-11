@@ -14,4 +14,4 @@ class Bar extends Foo {
 
 let i = new Bar();
 
-assert.equal(i[sym](), 3);
+expect(i[sym]()).toBe(3);

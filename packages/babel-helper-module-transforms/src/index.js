@@ -22,7 +22,16 @@ export { hasExports, isSideEffectImport, isModule };
  */
 export function rewriteModuleStatementsAndPrepareHeader(
   path: NodePath,
-  { exportName, strict, allowTopLevelThis, strictMode, loose, noInterop, lazy },
+  {
+    exportName,
+    strict,
+    allowTopLevelThis,
+    strictMode,
+    loose,
+    noInterop,
+    lazy,
+    esNamespaceOnly,
+  },
 ) {
   assert(isModule(path), "Cannot process module statements in a script");
   path.node.sourceType = "script";
@@ -31,6 +40,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     noInterop,
     loose,
     lazy,
+    esNamespaceOnly,
   });
 
   if (!allowTopLevelThis) {

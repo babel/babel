@@ -1,11 +1,31 @@
 // @flow
 
 import browserslist from "browserslist";
+import invariant from "invariant";
 import semver from "semver";
-import { semverify, isUnreleasedVersion, getLowestUnreleased } from "./utils";
+import {
+  semverify,
+  isUnreleasedVersion,
+  getLowestUnreleased,
+  getValues,
+  findSuggestion,
+} from "./utils";
 import { objectToBrowserslist } from "./normalize-options";
 import browserModulesData from "../data/built-in-modules.json";
+import { TargetNames } from "./options";
 import type { Targets } from "./types";
+
+const validateTargetNames = (validTargets, targets) => {
+  for (const target in targets) {
+    if (!TargetNames[target]) {
+      const validOptions = getValues(TargetNames);
+      throw new Error(
+        `Invalid Option: '${target}' is not a valid target
+        Maybe you meant to use '${findSuggestion(validOptions, target)}'?`,
+      );
+    }
+  }
+};
 
 const browserNameMap = {
   android: "android",
@@ -21,13 +41,21 @@ const browserNameMap = {
 const isBrowsersQueryValid = (browsers: string | Array<string>): boolean =>
   typeof browsers === "string" || Array.isArray(browsers);
 
+const validateBrowsers = browsers => {
+  invariant(
+    typeof browsers === "undefined" || isBrowsersQueryValid(browsers),
+    `Invalid Option: '${browsers}' is not a valid browserslist query`,
+  );
+  return browsers;
+};
+
 export const semverMin = (first: ?string, second: string): string => {
   return first && semver.lt(first, second) ? first : second;
 };
 
 const mergeBrowsers = (fromQuery: Targets, fromTarget: Targets) => {
   return Object.keys(fromTarget).reduce((queryObj, targKey) => {
-    if (targKey !== "browsers") {
+    if (targKey !== TargetNames.browsers) {
       queryObj[targKey] = fromTarget[targKey];
     }
     return queryObj;
@@ -46,21 +74,31 @@ const getLowestVersions = (browsers: Array<string>): Targets => {
     try {
       // Browser version can return as "10.0-10.2"
       const splitVersion = browserVersion.split("-")[0].toLowerCase();
+      const isSplitUnreleased = isUnreleasedVersion(splitVersion, browserName);
 
-      if (isUnreleasedVersion(splitVersion, browserName)) {
+      if (!all[normalizedBrowserName]) {
+        all[normalizedBrowserName] = isSplitUnreleased
+          ? splitVersion
+          : semverify(splitVersion);
+        return all;
+      }
+
+      const version = all[normalizedBrowserName];
+      const isUnreleased = isUnreleasedVersion(version, browserName);
+
+      if (isUnreleased && isSplitUnreleased) {
         all[normalizedBrowserName] = getLowestUnreleased(
-          all[normalizedBrowserName],
+          version,
           splitVersion,
           browserName,
         );
+      } else if (isUnreleased) {
+        all[normalizedBrowserName] = semverify(splitVersion);
+      } else if (!isUnreleased && !isSplitUnreleased) {
+        const parsedBrowserVersion = semverify(splitVersion);
+
+        all[normalizedBrowserName] = semverMin(version, parsedBrowserVersion);
       }
-
-      const parsedBrowserVersion = semverify(splitVersion);
-
-      all[normalizedBrowserName] = semverMin(
-        all[normalizedBrowserName],
-        parsedBrowserVersion,
-      );
     } catch (e) {}
 
     return all;
@@ -85,11 +123,21 @@ const outputDecimalWarning = (decimalTargets: Array<Object>): void => {
   console.log("");
 };
 
+const semverifyTarget = (target, value) => {
+  try {
+    return semverify(value);
+  } catch (error) {
+    throw new Error(
+      `Invalid Option: '${value}' is not a valid value for 'targets.${target}'.`,
+    );
+  }
+};
+
 const targetParserMap = {
   __default: (target, value) => {
     const version = isUnreleasedVersion(value, target)
       ? value.toLowerCase()
-      : semverify(value);
+      : semverifyTarget(target, value);
     return [target, version];
   },
 
@@ -98,8 +146,7 @@ const targetParserMap = {
     const parsed =
       value === true || value === "current"
         ? process.versions.node
-        : semverify(value);
-
+        : semverifyTarget(target, value);
     return [target, parsed];
   },
 
@@ -110,8 +157,11 @@ type ParsedResult = {
   targets: Targets,
   decimalWarnings: Array<Object>,
 };
+
 const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
   const targetOpts: Targets = {};
+
+  validateTargetNames(targets);
 
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
   // These values OVERRIDE the `browsers` field.
@@ -121,23 +171,24 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
       .map(browser => `${browser} ${supportsESModules[browser]}`)
       .join(", ");
   }
-  // Parse browsers target via browserslist;
-  const queryIsValid = isBrowsersQueryValid(targets.browsers);
-  const browsersquery = queryIsValid ? targets.browsers : null;
-  if (queryIsValid || !options.ignoreBrowserslistConfig) {
+
+  // Parse browsers target via browserslist
+  const browsersquery = validateBrowsers(targets.browsers);
+  if (!options.ignoreBrowserslistConfig) {
     browserslist.defaults = objectToBrowserslist(targets);
 
     const browsers = browserslist(browsersquery, { path: options.configPath });
     const queryBrowsers = getLowestVersions(browsers);
     targets = mergeBrowsers(queryBrowsers, targets);
   }
+
   // Parse remaining targets
   const parsed = Object.keys(targets)
-    .filter(value => value !== "esmodules")
+    .filter(value => value !== TargetNames.esmodules)
     .sort()
     .reduce(
       (results: ParsedResult, target: string): ParsedResult => {
-        if (target !== "browsers") {
+        if (target !== TargetNames.browsers) {
           const value = targets[target];
 
           // Warn when specifying minor/patch as a decimal

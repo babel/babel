@@ -8,11 +8,20 @@ import {
   type ValidatedOptions,
   type IgnoreList,
   type ConfigApplicableTest,
+  type BabelrcSearch,
 } from "./validation/options";
 
 const debug = buildDebug("babel:config:config-chain");
 
-import { findRelativeConfig, loadConfig, type ConfigFile } from "./files";
+import {
+  findPackageData,
+  findRelativeConfig,
+  findRootConfig,
+  loadConfig,
+  type ConfigFile,
+  type IgnoreFile,
+  type FilePackageData,
+} from "./files";
 
 import { makeWeakCache, makeStrongCache } from "./caching";
 
@@ -37,8 +46,9 @@ export type PresetInstance = {
 };
 
 export type ConfigContext = {
-  filename: string | null,
+  filename: string | void,
   cwd: string,
+  root: string,
   envName: string,
 };
 
@@ -99,13 +109,19 @@ const loadPresetOverridesEnvDescriptors = makeWeakCache(
     ),
 );
 
+export type RootConfigChain = ConfigChain & {
+  babelrc: ConfigFile | void,
+  config: ConfigFile | void,
+  ignore: IgnoreFile | void,
+};
+
 /**
  * Build a config chain for Babel's full root configuration.
  */
 export function buildRootChain(
   opts: ValidatedOptions,
   context: ConfigContext,
-): ConfigChain | null {
+): RootConfigChain | null {
   const programmaticChain = loadProgrammaticChain(
     {
       options: opts,
@@ -115,19 +131,60 @@ export function buildRootChain(
   );
   if (!programmaticChain) return null;
 
+  let configFile;
+  if (typeof opts.configFile === "string") {
+    configFile = loadConfig(opts.configFile, context.cwd, context.envName);
+  } else if (opts.configFile !== false) {
+    configFile = findRootConfig(context.root, context.envName);
+  }
+
+  let { babelrc, babelrcRoots } = opts;
+
+  const configFileChain = emptyChain();
+  if (configFile) {
+    const validatedFile = validateConfigFile(configFile);
+    const result = loadFileChain(validatedFile, context);
+    if (!result) return null;
+
+    // Allow config files to toggle `.babelrc` resolution on and off and
+    // specify where the roots are.
+    if (babelrc === undefined) {
+      babelrc = validatedFile.options.babelrc;
+    }
+    if (babelrcRoots === undefined) {
+      babelrcRoots = validatedFile.options.babelrcRoots;
+    }
+
+    mergeChain(configFileChain, result);
+  }
+
+  const pkgData =
+    typeof context.filename === "string"
+      ? findPackageData(context.filename)
+      : null;
+
+  let ignoreFile, babelrcFile;
   const fileChain = emptyChain();
   // resolve all .babelrc files
-  if (opts.babelrc !== false && context.filename !== null) {
-    const filename = context.filename;
+  if (
+    (babelrc === true || babelrc === undefined) &&
+    pkgData &&
+    babelrcLoadEnabled(context, pkgData, babelrcRoots)
+  ) {
+    ({ ignore: ignoreFile, config: babelrcFile } = findRelativeConfig(
+      pkgData,
+      context.envName,
+    ));
 
-    const { ignore, config } = findRelativeConfig(filename, context.envName);
-
-    if (ignore && shouldIgnore(context, ignore.ignore, null, ignore.dirname)) {
+    if (
+      ignoreFile &&
+      shouldIgnore(context, ignoreFile.ignore, null, ignoreFile.dirname)
+    ) {
       return null;
     }
 
-    if (config) {
-      const result = loadFileChain(config, context);
+    if (babelrcFile) {
+      const result = loadFileChain(validateBabelrcFile(babelrcFile), context);
       if (!result) return null;
 
       mergeChain(fileChain, result);
@@ -137,7 +194,7 @@ export function buildRootChain(
   // Insert file chain in front so programmatic options have priority
   // over configuration file chain items.
   const chain = mergeChain(
-    mergeChain(emptyChain(), fileChain),
+    mergeChain(mergeChain(emptyChain(), configFileChain), fileChain),
     programmaticChain,
   );
 
@@ -145,14 +202,68 @@ export function buildRootChain(
     plugins: dedupDescriptors(chain.plugins),
     presets: dedupDescriptors(chain.presets),
     options: chain.options.map(o => normalizeOptions(o)),
+    ignore: ignoreFile || undefined,
+    babelrc: babelrcFile || undefined,
+    config: configFile || undefined,
   };
 }
+
+function babelrcLoadEnabled(
+  context: ConfigContext,
+  pkgData: FilePackageData,
+  babelrcRoots: BabelrcSearch | void,
+): boolean {
+  if (typeof babelrcRoots === "boolean") return babelrcRoots;
+
+  const absoluteRoot = context.root;
+
+  // Fast path to avoid having to load micromatch if the babelrc is just
+  // loading in the standard root directory.
+  if (babelrcRoots === undefined) {
+    return pkgData.directories.indexOf(absoluteRoot) !== -1;
+  }
+
+  let babelrcPatterns = babelrcRoots;
+  if (!Array.isArray(babelrcPatterns)) babelrcPatterns = [babelrcPatterns];
+  babelrcPatterns = babelrcPatterns.map(pat => path.resolve(context.cwd, pat));
+
+  // Fast path to avoid having to load micromatch if the babelrc is just
+  // loading in the standard root directory.
+  if (babelrcPatterns.length === 1 && babelrcPatterns[0] === absoluteRoot) {
+    return pkgData.directories.indexOf(absoluteRoot) !== -1;
+  }
+
+  return micromatch(pkgData.directories, babelrcPatterns).length > 0;
+}
+
+const validateConfigFile = makeWeakCache(
+  (file: ConfigFile): ValidatedFile => ({
+    filepath: file.filepath,
+    dirname: file.dirname,
+    options: validate("configfile", file.options),
+  }),
+);
+
+const validateBabelrcFile = makeWeakCache(
+  (file: ConfigFile): ValidatedFile => ({
+    filepath: file.filepath,
+    dirname: file.dirname,
+    options: validate("babelrcfile", file.options),
+  }),
+);
+
+const validateExtendFile = makeWeakCache(
+  (file: ConfigFile): ValidatedFile => ({
+    filepath: file.filepath,
+    dirname: file.dirname,
+    options: validate("extendsfile", file.options),
+  }),
+);
 
 /**
  * Build a config chain for just the programmatic options passed into Babel.
  */
 const loadProgrammaticChain = makeChainWalker({
-  init: arg => arg,
   root: input => buildRootDescriptors(input, "base", createCachedDescriptors),
   env: (input, envName) =>
     buildEnvDescriptors(input, "base", createCachedDescriptors, envName),
@@ -172,18 +283,12 @@ const loadProgrammaticChain = makeChainWalker({
  * Build a config chain for a given file.
  */
 const loadFileChain = makeChainWalker({
-  init: input => validateFile(input),
   root: file => loadFileDescriptors(file),
   env: (file, envName) => loadFileEnvDescriptors(file)(envName),
   overrides: (file, index) => loadFileOverridesDescriptors(file)(index),
   overridesEnv: (file, index, envName) =>
     loadFileOverridesEnvDescriptors(file)(index)(envName),
 });
-const validateFile = makeWeakCache((file: ConfigFile): ValidatedFile => ({
-  filepath: file.filepath,
-  dirname: file.dirname,
-  options: validate("file", file.options),
-}));
 const loadFileDescriptors = makeWeakCache((file: ValidatedFile) =>
   buildRootDescriptors(file, file.filepath, createUncachedDescriptors),
 );
@@ -267,25 +372,18 @@ function buildOverrideEnvDescriptors(
     : null;
 }
 
-function makeChainWalker<
-  ArgT,
-  InnerT: { options: ValidatedOptions, dirname: string },
->({
-  init,
+function makeChainWalker<ArgT: { options: ValidatedOptions, dirname: string }>({
   root,
   env,
   overrides,
   overridesEnv,
 }: {
-  init: ArgT => InnerT,
-  root: InnerT => OptionsAndDescriptors,
-  env: (InnerT, string) => OptionsAndDescriptors | null,
-  overrides: (InnerT, number) => OptionsAndDescriptors,
-  overridesEnv: (InnerT, number, string) => OptionsAndDescriptors | null,
+  root: ArgT => OptionsAndDescriptors,
+  env: (ArgT, string) => OptionsAndDescriptors | null,
+  overrides: (ArgT, number) => OptionsAndDescriptors,
+  overridesEnv: (ArgT, number, string) => OptionsAndDescriptors | null,
 }): (ArgT, ConfigContext, Set<ConfigFile> | void) => ConfigChain | null {
-  return (arg, context, files = new Set()) => {
-    const input = init(arg);
-
+  return (input, context, files = new Set()) => {
     const { dirname } = input;
 
     const flattenedConfigs = [];
@@ -359,7 +457,7 @@ function mergeExtendsChain(
   }
 
   files.add(file);
-  const fileChain = loadFileChain(file, context, files);
+  const fileChain = loadFileChain(validateExtendFile(file), context, files);
   files.delete(file);
 
   if (!fileChain) return false;
@@ -397,7 +495,9 @@ function emptyChain(): ConfigChain {
 }
 
 function normalizeOptions(opts: ValidatedOptions): ValidatedOptions {
-  const options = Object.assign({}, opts);
+  const options = {
+    ...opts,
+  };
   delete options.extends;
   delete options.env;
   delete options.plugins;
@@ -479,7 +579,7 @@ function configFieldIsApplicable(
   test: ConfigApplicableTest,
   dirname: string,
 ): boolean {
-  if (context.filename === null) {
+  if (typeof context.filename !== "string") {
     throw new Error(
       `Configuration contains explicit test/include/exclude checks, but no filename was passed to Babel`,
     );
@@ -505,7 +605,7 @@ function shouldIgnore(
   dirname: string,
 ): boolean {
   if (ignore) {
-    if (context.filename === null) {
+    if (typeof context.filename !== "string") {
       throw new Error(
         `Configuration contains ignore checks, but no filename was passed to Babel`,
       );
@@ -524,7 +624,7 @@ function shouldIgnore(
   }
 
   if (only) {
-    if (context.filename === null) {
+    if (typeof context.filename !== "string") {
       throw new Error(
         `Configuration contains ignore checks, but no filename was passed to Babel`,
       );
@@ -599,7 +699,7 @@ function matchesPatterns(
 
 const getPossibleDirs = makeWeakCache((context: ConfigContextNamed) => {
   let current = context.filename;
-  if (current === null) return [];
+  if (typeof current !== "string") return [];
 
   const possibleDirs = [current];
   while (true) {

@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxOptionalChaining from "@babel/plugin-syntax-optional-chaining";
 import { types as t } from "@babel/core";
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { loose = false } = options;
 
   function optional(path, replacementPath) {
@@ -136,4 +139,4 @@ export default function(api, options) {
       },
     },
   };
-}
+});

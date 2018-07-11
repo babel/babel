@@ -2,16 +2,15 @@
 
 import loadConfig, { type InputOptions } from "./config";
 import {
+  runSync,
   runAsync,
   type FileResult,
   type FileResultCallback,
 } from "./transformation";
 
-import transformAstSync from "./transform-ast-sync";
-
 type AstRoot = BabelNodeFile | BabelNodeProgram;
 
-type TransformAst = {
+type TransformFromAst = {
   (ast: AstRoot, code: string, callback: FileResultCallback): void,
   (
     ast: AstRoot,
@@ -25,7 +24,12 @@ type TransformAst = {
   (ast: AstRoot, code: string, opts: ?InputOptions): FileResult | null,
 };
 
-export default ((function transformFromAst(ast, code, opts, callback) {
+export const transformFromAst: TransformFromAst = (function transformFromAst(
+  ast,
+  code,
+  opts,
+  callback,
+) {
   if (typeof opts === "function") {
     opts = undefined;
     callback = opts;
@@ -33,7 +37,7 @@ export default ((function transformFromAst(ast, code, opts, callback) {
 
   // For backward-compat with Babel 6, we allow sync transformation when
   // no callback is given. Will be dropped in some future Babel major version.
-  if (callback === undefined) return transformAstSync(ast, code, opts);
+  if (callback === undefined) return transformFromAstSync(ast, code, opts);
 
   // Reassign to keep Flowtype happy.
   const cb = callback;
@@ -53,4 +57,30 @@ export default ((function transformFromAst(ast, code, opts, callback) {
 
     runAsync(cfg, code, ast, cb);
   });
-}: Function): TransformAst);
+}: Function);
+
+export function transformFromAstSync(
+  ast: AstRoot,
+  code: string,
+  opts: ?InputOptions,
+): FileResult | null {
+  const config = loadConfig(opts);
+  if (config === null) return null;
+
+  if (!ast) throw new Error("No AST given");
+
+  return runSync(config, code, ast);
+}
+
+export function transformFromAstAsync(
+  ast: AstRoot,
+  code: string,
+  opts: ?InputOptions,
+): Promise<FileResult | null> {
+  return new Promise((res, rej) => {
+    transformFromAst(ast, code, opts, (err, result) => {
+      if (err == null) res(result);
+      else rej(err);
+    });
+  });
+}

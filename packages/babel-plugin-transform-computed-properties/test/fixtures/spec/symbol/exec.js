@@ -6,5 +6,5 @@ var foo = {
   }
 };
 
-assert(foo[Symbol.iterator], "foobar")
-assert(foo[k], k)
+expect(foo[Symbol.iterator]).toBe("foobar")
+expect(foo[k]).toBe(k)

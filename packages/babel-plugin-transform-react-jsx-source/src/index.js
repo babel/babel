@@ -12,12 +12,15 @@
  * var __jsxFileName = 'this/file.js';
  * <sometag __source={{fileName: __jsxFileName, lineNumber: 10}}/>
  */
+import { declare } from "@babel/helper-plugin-utils";
 import { types as t } from "@babel/core";
 
 const TRACE_ID = "__source";
 const FILE_NAME_VAR = "_jsxFileName";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   function makeTrace(fileNameIdentifier, lineNumber) {
     const fileLineLiteral =
       lineNumber != null ? t.numericLiteral(lineNumber) : t.nullLiteral();
@@ -71,4 +74,4 @@ export default function() {
   return {
     visitor,
   };
-}
+});

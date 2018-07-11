@@ -1,17 +1,20 @@
 {
   "name": "@babel/plugin-syntax-logical-assignment-operators",
-  "version": "7.0.0-beta.40",
+  "version": "7.0.0-beta.52",
   "description": "Allow parsing of the logical assignment operators",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-logical-assignment-operators",
   "license": "MIT",
-  "main": "lib",
+  "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
   ],
+  "dependencies": {
+    "@babel/helper-plugin-utils": "7.0.0-beta.52"
+  },
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.40"
+    "@babel/core": ">=7.0.0-beta.50 <7.0.0-rc.0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.40"
+    "@babel/core": "7.0.0-beta.52"
   }
 }

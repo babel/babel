@@ -25,7 +25,8 @@ import {
   semverify,
   isUnreleasedVersion,
 } from "./utils";
-import type { Plugin, Targets } from "./types";
+import type { Targets } from "./types";
+import { declare } from "@babel/helper-plugin-utils";
 
 const getPlugin = (pluginName: string) => {
   const plugin = availablePlugins[pluginName];
@@ -94,8 +95,8 @@ export const isPluginRequired = (
 
       if (!semver.valid(lowestTargetedVersion)) {
         throw new Error(
-          // eslint-disable-next-line max-len
-          `Invalid version passed for target "${environment}": "${lowestTargetedVersion}". Versions must be in semver format (major.minor.patch)`,
+          `Invalid version passed for target "${environment}": "${lowestTargetedVersion}". ` +
+            "Versions must be in semver format (major.minor.patch)",
         );
       }
 
@@ -110,7 +111,9 @@ export const isPluginRequired = (
 };
 
 const getBuiltInTargets = targets => {
-  const builtInTargets = Object.assign({}, targets);
+  const builtInTargets = {
+    ...targets,
+  };
   if (builtInTargets.uglify != null) {
     delete builtInTargets.uglify;
   }
@@ -168,10 +171,9 @@ const filterItems = (
   return result;
 };
 
-export default function buildPreset(
-  api: Object,
-  opts: Object = {},
-): { plugins: Array<Plugin> } {
+export default declare((api, opts) => {
+  api.assertVersion(7);
+
   const {
     configPath,
     debug,
@@ -305,4 +307,4 @@ Using polyfills with \`${useBuiltIns}\` option:`,
   return {
     plugins,
   };
-}
+});

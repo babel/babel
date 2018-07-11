@@ -10,6 +10,6 @@ for (let i in nums) {
   }
 }
 
-assert.equal(heh.length, 2);
-assert.equal(heh[0](2), 2);
-assert.equal(heh[1](4), 8);
+expect(heh).toHaveLength(2);
+expect(heh[0](2)).toBe(2);
+expect(heh[1](4)).toBe(8);

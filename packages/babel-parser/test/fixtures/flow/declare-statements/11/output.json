@@ -1,0 +1,156 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 53,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 53
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 53,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 53
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "DeclareClass",
+        "start": 0,
+        "end": 53,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 53
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 14,
+          "end": 15,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 14
+            },
+            "end": {
+              "line": 1,
+              "column": 15
+            },
+            "identifierName": "A"
+          },
+          "name": "A"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 16,
+          "end": 53,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 16
+            },
+            "end": {
+              "line": 1,
+              "column": 53
+            }
+          },
+          "callProperties": [],
+          "properties": [],
+          "indexers": [
+            {
+              "type": "ObjectTypeIndexer",
+              "start": 18,
+              "end": 51,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 18
+                },
+                "end": {
+                  "line": 1,
+                  "column": 51
+                }
+              },
+              "static": true,
+              "id": {
+                "type": "Identifier",
+                "start": 27,
+                "end": 34,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 27
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 34
+                  },
+                  "identifierName": "indexer"
+                },
+                "name": "indexer"
+              },
+              "key": {
+                "type": "NumberTypeAnnotation",
+                "start": 36,
+                "end": 42,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 36
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 42
+                  }
+                }
+              },
+              "value": {
+                "type": "StringTypeAnnotation",
+                "start": 45,
+                "end": 51,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 45
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 51
+                  }
+                }
+              },
+              "variance": null
+            }
+          ],
+          "internalSlots": [],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

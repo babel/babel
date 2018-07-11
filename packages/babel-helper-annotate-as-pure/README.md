@@ -1,40 +1,19 @@
 # @babel/helper-annotate-as-pure
 
-## API
+> Helper function to annotate paths and nodes with #__PURE__ comment
 
-```js
-declare export default annotateAsPure(nodeOrPath: Node | NodePath);
+See our website [@babel/helper-annotate-as-pure](https://babeljs.io/docs/en/next/babel-helper-annotate-as-pure.html) for more information.
+
+## Install
+
+Using npm:
+
+```sh
+npm install --save-dev @babel/helper-annotate-as-pure
 ```
 
-## Usage
+or using yarn:
 
-```js
-import traverse from "@babel/traverse";
-import annotateAsPure from "@babel/helper-annotate-as-pure";
-
-// ...
-
-traverse(file, {
-  CallExpression(path) {
-    annotateAsPure(path);
-  },
-});
-```
-
-## Caveat with UglifyJS pre v3.1.0
-
-`@babel/helper-annotate-as-pure` will append any existing leading comments to the `#__PURE__` annotation. Versions of UglifyJS prior to v3.1.0 will **ignore** these annotations, as they only check the _last_ leading comment for the annotation.
-
-For example, using the `Usage` snippet above:
-
-**In**
-
-```js
-const four = /* foo */ add(2, 2);
-```
-
-**Out**
-
-```js
-const four = /* #__PURE__ */ /* foo */ add(2, 2);
+```sh
+yarn add @babel/helper-annotate-as-pure --dev
 ```

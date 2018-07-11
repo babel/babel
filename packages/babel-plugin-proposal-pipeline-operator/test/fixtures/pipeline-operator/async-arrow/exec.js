@@ -9,5 +9,5 @@ var result = 1
   |> then((x) => x + 1);
 
 result.then(val => {
-  assert.equal(val, 3);
+  expect(val).toBe(3);
 });

@@ -5,8 +5,22 @@ import browserslist from "browserslist";
 import builtInsList from "../data/built-ins.json";
 import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
+import { getValues, findSuggestion } from "./utils";
 import pluginsList from "../data/plugins.json";
+import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
 import type { Targets, Options, ModuleOption, BuiltInsOption } from "./types";
+
+const validateTopLevelOptions = (options: Options) => {
+  for (const option in options) {
+    if (!TopLevelOptions[option]) {
+      const validOptions = getValues(TopLevelOptions);
+      throw new Error(
+        `Invalid Option: ${option} is not a valid top-level option.
+        Maybe you meant to use '${findSuggestion(validOptions, option)}'?`,
+      );
+    }
+  }
+};
 
 const validIncludesAndExcludes = new Set([
   ...Object.keys(pluginsList),
@@ -15,26 +29,44 @@ const validIncludesAndExcludes = new Set([
   ...defaultWebIncludes,
 ]);
 
-export const validateIncludesAndExcludes = (
-  opts: Array<string> = [],
-  type: string,
-): Array<string> => {
-  invariant(
-    Array.isArray(opts),
-    `Invalid Option: The '${type}' option must be an Array<String> of plugins/built-ins`,
+const pluginToRegExp = (plugin: any): ?RegExp => {
+  if (plugin instanceof RegExp) return plugin;
+  try {
+    return new RegExp(`^${normalizePluginName(plugin)}$`);
+  } catch (e) {
+    return null;
+  }
+};
+
+const selectPlugins = (regexp: ?RegExp): Array<string> =>
+  Array.from(validIncludesAndExcludes).filter(
+    item => regexp instanceof RegExp && regexp.test(item),
   );
 
-  const unknownOpts = opts.filter(opt => !validIncludesAndExcludes.has(opt));
+const flatten = array => [].concat(...array);
+
+const expandIncludesAndExcludes = (
+  plugins: Array<string | RegExp> = [],
+  type: string,
+): Array<string> => {
+  if (plugins.length === 0) return [];
+
+  const selectedPlugins = plugins.map(plugin =>
+    selectPlugins(pluginToRegExp(plugin)),
+  );
+  const invalidRegExpList = plugins.filter(
+    (p, i) => selectedPlugins[i].length === 0,
+  );
 
   invariant(
-    unknownOpts.length === 0,
-    `Invalid Option: The plugins/built-ins '${unknownOpts.join(
+    invalidRegExpList.length === 0,
+    `Invalid Option: The plugins/built-ins '${invalidRegExpList.join(
       ", ",
     )}' passed to the '${type}' option are not
     valid. Please check data/[plugin-features|built-in-features].js in babel-preset-env`,
   );
 
-  return opts;
+  return flatten(selectedPlugins);
 };
 
 const validBrowserslistTargets = [
@@ -45,16 +77,11 @@ const validBrowserslistTargets = [
 export const normalizePluginName = (plugin: string): string =>
   plugin.replace(/^babel-plugin-/, "");
 
-export const normalizePluginNames = (plugins: Array<string>): Array<string> =>
-  plugins.map(normalizePluginName);
-
 export const checkDuplicateIncludeExcludes = (
   include: Array<string> = [],
   exclude: Array<string> = [],
 ): void => {
-  const duplicates: Array<string> = include.filter(
-    opt => exclude.indexOf(opt) >= 0,
-  );
+  const duplicates = include.filter(opt => exclude.indexOf(opt) >= 0);
 
   invariant(
     duplicates.length === 0,
@@ -95,17 +122,17 @@ export const validateIgnoreBrowserslistConfig = (
   ignoreBrowserslistConfig: boolean,
 ) =>
   validateBoolOption(
-    "ignoreBrowserslistConfig",
+    TopLevelOptions.ignoreBrowserslistConfig,
     ignoreBrowserslistConfig,
     false,
   );
 
 export const validateModulesOption = (
-  modulesOpt: ModuleOption = "commonjs",
+  modulesOpt: ModuleOption = ModulesOption.commonjs,
 ) => {
   invariant(
-    modulesOpt === false ||
-      Object.keys(moduleTransformations).indexOf(modulesOpt) > -1,
+    ModulesOption[modulesOpt] ||
+      ModulesOption[modulesOpt] === ModulesOption.false,
     `Invalid Option: The 'modules' option must be either 'false' to indicate no modules, or a
     module type which can be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'.`,
   );
@@ -113,7 +140,7 @@ export const validateModulesOption = (
   return modulesOpt;
 };
 
-export const objectToBrowserslist = (object: Targets) => {
+export const objectToBrowserslist = (object: Targets): Array<string> => {
   return Object.keys(object).reduce((list, targetName) => {
     if (validBrowserslistTargets.indexOf(targetName) >= 0) {
       const targetVersion = object[targetName];
@@ -127,7 +154,8 @@ export const validateUseBuiltInsOption = (
   builtInsOpt: BuiltInsOption = false,
 ): BuiltInsOption => {
   invariant(
-    builtInsOpt === "usage" || builtInsOpt === false || builtInsOpt === "entry",
+    UseBuiltInsOption[builtInsOpt] ||
+      UseBuiltInsOption[builtInsOpt] === UseBuiltInsOption.false,
     `Invalid Option: The 'useBuiltIns' option must be either
     'false' (default) to indicate no polyfill,
     '"entry"' to indicate replacing the entry polyfill, or
@@ -138,38 +166,43 @@ export const validateUseBuiltInsOption = (
 };
 
 export default function normalizeOptions(opts: Options) {
-  if (opts.exclude) {
-    opts.exclude = normalizePluginNames(opts.exclude);
-  }
+  validateTopLevelOptions(opts);
 
-  if (opts.include) {
-    opts.include = normalizePluginNames(opts.include);
-  }
+  const include = expandIncludesAndExcludes(
+    opts.include,
+    TopLevelOptions.include,
+  );
+  const exclude = expandIncludesAndExcludes(
+    opts.exclude,
+    TopLevelOptions.exclude,
+  );
 
-  checkDuplicateIncludeExcludes(opts.include, opts.exclude);
+  checkDuplicateIncludeExcludes(include, exclude);
 
   return {
     configPath: validateConfigPathOption(opts.configPath),
-    debug: opts.debug,
-    exclude: validateIncludesAndExcludes(opts.exclude, "exclude"),
+    debug: validateBoolOption(TopLevelOptions.debug, opts.debug, false),
+    include,
+    exclude,
     forceAllTransforms: validateBoolOption(
-      "forceAllTransforms",
+      TopLevelOptions.forceAllTransforms,
       opts.forceAllTransforms,
       false,
     ),
     ignoreBrowserslistConfig: validateIgnoreBrowserslistConfig(
       opts.ignoreBrowserslistConfig,
     ),
-    include: validateIncludesAndExcludes(opts.include, "include"),
-    loose: validateBoolOption("loose", opts.loose, false),
+    loose: validateBoolOption(TopLevelOptions.loose, opts.loose, false),
     modules: validateModulesOption(opts.modules),
     shippedProposals: validateBoolOption(
-      "shippedProposals",
+      TopLevelOptions.shippedProposals,
       opts.shippedProposals,
       false,
     ),
-    spec: validateBoolOption("loose", opts.spec, false),
-    targets: opts.targets,
+    spec: validateBoolOption(TopLevelOptions.spec, opts.spec, false),
+    targets: {
+      ...opts.targets,
+    },
     useBuiltIns: validateUseBuiltInsOption(opts.useBuiltIns),
   };
 }

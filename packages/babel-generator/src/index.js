@@ -52,6 +52,12 @@ function normalizeOptions(code, opts): Format {
       style: "  ",
       base: 0,
     },
+    decoratorsBeforeExport: !!opts.decoratorsBeforeExport,
+    jsescOption: {
+      quotes: "double",
+      wrap: true,
+      ...opts.jsescOption,
+    },
   };
 
   if (format.minified) {

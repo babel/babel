@@ -10,4 +10,4 @@ var obj = {
 }
 
 var result = obj.prop |> obj.method;
-assert.equal(result, 1);
+expect(result).toBe(1);

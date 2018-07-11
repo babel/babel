@@ -1,2 +1,2 @@
-new (Function.prototype.bind.apply(Numbers, [null].concat(babelHelpers.toConsumableArray(nums))))();
-new (Function.prototype.bind.apply(Numbers, [null].concat([1], babelHelpers.toConsumableArray(nums))))();
+babelHelpers.construct(Numbers, babelHelpers.toConsumableArray(nums));
+babelHelpers.construct(Numbers, [1].concat(babelHelpers.toConsumableArray(nums)));

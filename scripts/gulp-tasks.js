@@ -39,25 +39,9 @@ function webpackBuild(opts) {
           test: /\.js$/,
           loader: "babel-loader",
           options: {
-            // Some of the node_modules may have their own "babel" section in
-            // their project.json (or a ".babelrc" file). We need to ignore
-            // those as we're using our own Babel options.
-            babelrc: false,
-            presets: [
-              [
-                "@babel/env",
-                {
-                  loose: true,
-                  exclude: ["transform-typeof-symbol"],
-                },
-              ],
-            ],
-            overrides: [
-              {
-                exclude: /node_modules/,
-                presets: [["@babel/stage-0", { loose: true }]],
-              },
-            ],
+            // Use the bundled config so that module syntax is passed through
+            // for Webpack.
+            envName: "standalone",
           },
         },
       ],
@@ -131,10 +115,12 @@ function registerStandalonePackageTask(
           plugins,
         }),
         gulp.dest(standalonePath),
-        uglify(),
+      ].concat(
+        // Minification is super slow, so we skip it in CI.
+        process.env.CI ? [] : uglify(),
         rename({ extname: ".min.js" }),
-        gulp.dest(standalonePath),
-      ],
+        gulp.dest(standalonePath)
+      ),
       cb
     );
   });

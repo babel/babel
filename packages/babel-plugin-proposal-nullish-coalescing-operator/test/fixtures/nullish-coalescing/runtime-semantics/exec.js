@@ -1,19 +1,19 @@
-assert.equal(null ?? undefined, undefined);
-assert.equal(undefined ?? null, null);
-assert.equal(false ?? true, false);
-assert.equal(0 ?? 1, 0);
-assert.equal("" ?? "foo", "");
+expect(null ?? undefined).toBeUndefined(undefined);
+expect(undefined ?? null).toBeNull();
+expect(false ?? true).toBe(false);
+expect(0 ?? 1).toBe(0);
+expect("" ?? "foo").toBe("");
 
 var obj = { exists: true };
-assert.equal(obj.exists ?? false, true);
-assert.equal(obj.doesNotExist ?? "foo", "foo");
+expect(obj.exists ?? false).toBe(true);
+expect(obj.doesNotExist ?? "foo").toBe("foo");
 
 var counter = 0;
 function sideEffect() { return counter++; }
-assert.equal(sideEffect() ?? -1, 0);
+expect(sideEffect() ?? -1).toBe(0);
 
 var counter2 = 0;
 var obj2 = {
     get foo() { return counter2++; }
 };
-assert.equal(obj2.foo ?? -1, 0);
+expect(obj2.foo ?? -1).toBe(0);

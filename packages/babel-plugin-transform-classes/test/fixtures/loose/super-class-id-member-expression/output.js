@@ -1,6 +1,8 @@
 var BaseController =
 /*#__PURE__*/
 function (_Chaplin$Controller) {
+  "use strict";
+
   babelHelpers.inheritsLoose(BaseController, _Chaplin$Controller);
 
   function BaseController() {
@@ -13,6 +15,8 @@ function (_Chaplin$Controller) {
 var BaseController2 =
 /*#__PURE__*/
 function (_Chaplin$Controller$A) {
+  "use strict";
+
   babelHelpers.inheritsLoose(BaseController2, _Chaplin$Controller$A);
 
   function BaseController2() {

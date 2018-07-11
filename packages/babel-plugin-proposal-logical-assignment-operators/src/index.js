@@ -1,7 +1,10 @@
+import { declare } from "@babel/helper-plugin-utils";
 import syntaxLogicalAssignmentOperators from "@babel/plugin-syntax-logical-assignment-operators";
 import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
     inherits: syntaxLogicalAssignmentOperators,
 
@@ -9,34 +12,40 @@ export default function() {
       AssignmentExpression(path) {
         const { node, scope } = path;
         const { operator, left, right } = node;
-        if (operator !== "||=" && operator !== "&&=") {
+        if (operator !== "||=" && operator !== "&&=" && operator !== "??=") {
           return;
         }
 
-        let ref;
+        const lhs = t.cloneNode(left);
         if (t.isMemberExpression(left)) {
-          const { object } = left;
+          const { object, property, computed } = left;
           const memo = scope.maybeGenerateMemoised(object);
           if (memo) {
-            path
-              .get("left.object")
-              .replaceWith(
-                t.assignmentExpression("=", t.cloneNode(memo), object),
-              );
+            left.object = memo;
+            lhs.object = t.assignmentExpression("=", t.cloneNode(memo), object);
+          }
 
-            ref = t.cloneNode(left);
-            ref.object = t.cloneNode(memo);
+          if (computed) {
+            const memo = scope.maybeGenerateMemoised(property);
+            if (memo) {
+              left.property = memo;
+              lhs.property = t.assignmentExpression(
+                "=",
+                t.cloneNode(memo),
+                property,
+              );
+            }
           }
         }
 
         path.replaceWith(
           t.logicalExpression(
             operator.slice(0, -1),
-            left,
-            t.assignmentExpression("=", ref || t.cloneNode(left), right),
+            lhs,
+            t.assignmentExpression("=", left, right),
           ),
         );
       },
     },
   };
-}
+});

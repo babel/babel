@@ -1,0 +1,133 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 38,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 27
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 38,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 27
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 11,
+        "end": 38,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 27
+          }
+        },
+        "declaration": {
+          "type": "ClassDeclaration",
+          "start": 0,
+          "end": 38,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
+            },
+            "end": {
+              "line": 2,
+              "column": 27
+            }
+          },
+          "decorators": [
+            {
+              "type": "Decorator",
+              "start": 0,
+              "end": 10,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 0
+                },
+                "end": {
+                  "line": 1,
+                  "column": 10
+                }
+              },
+              "expression": {
+                "type": "Identifier",
+                "start": 1,
+                "end": 10,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 1
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 10
+                  },
+                  "identifierName": "decorator"
+                },
+                "name": "decorator"
+              }
+            }
+          ],
+          "id": {
+            "type": "Identifier",
+            "start": 32,
+            "end": 35,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 21
+              },
+              "end": {
+                "line": 2,
+                "column": 24
+              },
+              "identifierName": "Foo"
+            },
+            "name": "Foo"
+          },
+          "superClass": null,
+          "body": {
+            "type": "ClassBody",
+            "start": 36,
+            "end": 38,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 25
+              },
+              "end": {
+                "line": 2,
+                "column": 27
+              }
+            },
+            "body": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

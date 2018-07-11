@@ -1,6 +1,8 @@
 var Foo =
 /*#__PURE__*/
 function (_Bar) {
+  "use strict";
+
   babelHelpers.inherits(Foo, _Bar);
 
   function Foo(options) {
@@ -11,7 +13,7 @@ function (_Bar) {
       this;
     };
 
-    return babelHelpers.possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).call(this, parentOptions));
+    return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this, parentOptions));
   }
 
   return Foo;

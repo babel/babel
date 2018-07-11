@@ -1,35 +1,19 @@
 # @babel/plugin-syntax-do-expressions
 
-> Allow parsing of do expressions.
+> Allow parsing of do expressions
 
-## Installation
+See our website [@babel/plugin-syntax-do-expressions](https://babeljs.io/docs/en/next/babel-plugin-syntax-do-expressions.html) for more information.
+
+## Install
+
+Using npm:
 
 ```sh
 npm install --save-dev @babel/plugin-syntax-do-expressions
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-syntax-do-expressions"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins @babel/plugin-syntax-do-expressions script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-syntax-do-expressions"]
-});
+yarn add @babel/plugin-syntax-do-expressions --dev
 ```

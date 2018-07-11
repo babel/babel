@@ -1,3 +1,3 @@
 {
-  "args": ["src", "--out-dir", "lib", "--ignore", "**/*.foo.js"]
+  "args": ["src", "--out-dir", "lib", "--ignore", "**/*.foo.js", "--verbose"]
 }

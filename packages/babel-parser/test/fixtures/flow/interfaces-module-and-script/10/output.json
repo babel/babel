@@ -1,0 +1,248 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 72,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 5,
+      "column": 1
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 72,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 5,
+        "column": 1
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "InterfaceDeclaration",
+        "start": 0,
+        "end": 72,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 1
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 10,
+          "end": 14,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 1,
+              "column": 14
+            },
+            "identifierName": "IFoo"
+          },
+          "name": "IFoo"
+        },
+        "typeParameters": null,
+        "extends": [],
+        "implements": [],
+        "mixins": [],
+        "body": {
+          "type": "ObjectTypeAnnotation",
+          "start": 15,
+          "end": 72,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 15
+            },
+            "end": {
+              "line": 5,
+              "column": 1
+            }
+          },
+          "callProperties": [
+            {
+              "type": "ObjectTypeCallProperty",
+              "start": 33,
+              "end": 48,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 2
+                },
+                "end": {
+                  "line": 3,
+                  "column": 17
+                }
+              },
+              "static": true,
+              "value": {
+                "type": "FunctionTypeAnnotation",
+                "start": 40,
+                "end": 48,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 17
+                  }
+                },
+                "params": [],
+                "rest": null,
+                "typeParameters": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start": 44,
+                  "end": 48,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 13
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 17
+                    }
+                  }
+                }
+              }
+            }
+          ],
+          "properties": [
+            {
+              "type": "ObjectTypeProperty",
+              "start": 19,
+              "end": 29,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 2
+                },
+                "end": {
+                  "line": 2,
+                  "column": 12
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 19,
+                "end": 20,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 2
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 3
+                  },
+                  "identifierName": "x"
+                },
+                "name": "x"
+              },
+              "static": false,
+              "proto": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "BooleanTypeAnnotation",
+                "start": 22,
+                "end": 29,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 12
+                  }
+                }
+              },
+              "variance": null,
+              "optional": false
+            },
+            {
+              "type": "ObjectTypeProperty",
+              "start": 52,
+              "end": 69,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 2
+                },
+                "end": {
+                  "line": 4,
+                  "column": 19
+                }
+              },
+              "key": {
+                "type": "Identifier",
+                "start": 59,
+                "end": 60,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 10
+                  },
+                  "identifierName": "y"
+                },
+                "name": "y"
+              },
+              "static": true,
+              "proto": false,
+              "kind": "init",
+              "method": false,
+              "value": {
+                "type": "BooleanTypeAnnotation",
+                "start": 62,
+                "end": 69,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 12
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 19
+                  }
+                }
+              },
+              "variance": null,
+              "optional": false
+            }
+          ],
+          "indexers": [],
+          "internalSlots": [],
+          "exact": false
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -170,7 +170,9 @@ export default class ImportInjector {
       optsList.push(importedSource);
     }
 
-    const newOpts = Object.assign({}, this._defaultOpts);
+    const newOpts = {
+      ...this._defaultOpts,
+    };
     for (const opts of optsList) {
       if (!opts) continue;
       Object.keys(newOpts).forEach(key => {
@@ -209,7 +211,7 @@ export default class ImportInjector {
     // to a variable.
     let name = nameHint || importName;
 
-    const isMod = isModule(this._programPath, true);
+    const isMod = isModule(this._programPath);
     const isModuleForNode = isMod && importingInterop === "node";
     const isModuleForBabel = isMod && importingInterop === "babel";
 

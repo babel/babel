@@ -1,14 +1,20 @@
-import assert from "assert";
-import { loadOptions } from "../lib";
+import { loadOptions as loadOptionsOrig } from "../lib";
 import path from "path";
+
+function loadOptions(opts) {
+  return loadOptionsOrig({
+    cwd: __dirname,
+    ...opts,
+  });
+}
 
 describe("option-manager", () => {
   it("throws for babel 5 plugin", () => {
-    return assert.throws(() => {
+    return expect(() => {
       loadOptions({
         plugins: [({ Plugin }) => new Plugin("object-assign", {})],
       });
-    }, /Babel 5 plugin is being run with an unsupported Babel/);
+    }).toThrow(/Babel 5 plugin is being run with an unsupported Babel/);
   });
 
   describe("config plugin/preset flattening and overriding", () => {
@@ -24,12 +30,12 @@ describe("option-manager", () => {
     it("should throw if a plugin is repeated", () => {
       const { calls, plugin } = makePlugin();
 
-      assert.throws(() => {
+      expect(() => {
         loadOptions({
           plugins: [plugin, plugin],
         });
-      }, /Duplicate plugin\/preset detected/);
-      assert.deepEqual(calls, []);
+      }).toThrow(/Duplicate plugin\/preset detected/);
+      expect(calls).toEqual([]);
     });
 
     it("should not throw if a repeated plugin has a different name", () => {
@@ -39,8 +45,8 @@ describe("option-manager", () => {
       loadOptions({
         plugins: [[plugin1, { arg: 1 }], [plugin2, { arg: 2 }, "some-name"]],
       });
-      assert.deepEqual(calls1, [{ arg: 1 }]);
-      assert.deepEqual(calls2, [{ arg: 2 }]);
+      expect(calls1).toEqual([{ arg: 1 }]);
+      expect(calls2).toEqual([{ arg: 2 }]);
     });
 
     it("should merge .env[] plugins with parent presets", () => {
@@ -56,19 +62,19 @@ describe("option-manager", () => {
           },
         },
       });
-      assert.deepEqual(calls1, [{ arg: 3 }]);
-      assert.deepEqual(calls2, [{ arg: 2 }]);
+      expect(calls1).toEqual([{ arg: 3 }]);
+      expect(calls2).toEqual([{ arg: 2 }]);
     });
 
     it("should throw if a preset is repeated", () => {
       const { calls, plugin: preset } = makePlugin();
 
-      assert.throws(() => {
+      expect(() => {
         loadOptions({
           presets: [preset, preset],
-        });
-      }, /Duplicate plugin\/preset detected/);
-      assert.deepEqual(calls, []);
+        }).toThrow(/Duplicate plugin\/preset detected/);
+      });
+      expect(calls).toEqual([]);
     });
 
     it("should not throw if a repeated preset has a different name", () => {
@@ -78,8 +84,8 @@ describe("option-manager", () => {
       loadOptions({
         presets: [[preset1, { arg: 1 }], [preset2, { arg: 2 }, "some-name"]],
       });
-      assert.deepEqual(calls1, [{ arg: 1 }]);
-      assert.deepEqual(calls2, [{ arg: 2 }]);
+      expect(calls1).toEqual([{ arg: 1 }]);
+      expect(calls2).toEqual([{ arg: 2 }]);
     });
 
     it("should merge .env[] presets with parent presets", () => {
@@ -95,8 +101,8 @@ describe("option-manager", () => {
           },
         },
       });
-      assert.deepEqual(calls1, [{ arg: 3 }]);
-      assert.deepEqual(calls2, [{ arg: 2 }]);
+      expect(calls1).toEqual([{ arg: 3 }]);
+      expect(calls2).toEqual([{ arg: 2 }]);
     });
 
     it("should not merge .env[] presets with parent presets when passPerPreset", () => {
@@ -113,41 +119,42 @@ describe("option-manager", () => {
           },
         },
       });
-      assert.deepEqual(calls1, [{ arg: 1 }, { arg: 3 }]);
-      assert.deepEqual(calls2, [{ arg: 2 }]);
+      expect(calls1).toEqual([{ arg: 1 }, { arg: 3 }]);
+      expect(calls2).toEqual([{ arg: 2 }]);
     });
   });
 
   describe("mergeOptions", () => {
     it("throws for removed babel 5 options", () => {
-      return assert.throws(() => {
+      return expect(() => {
         loadOptions({
           randomOption: true,
         });
-      }, /Unknown option: .randomOption/);
+      }).toThrow(/Unknown option: .randomOption/);
     });
 
     it("throws for removed babel 5 options", () => {
-      return assert.throws(
-        () => {
-          loadOptions({
-            auxiliaryComment: true,
-            blacklist: true,
-          });
-        },
+      return expect(() => {
+        loadOptions({
+          auxiliaryComment: true,
+          blacklist: true,
+        });
+      }).toThrow(
         // eslint-disable-next-line max-len
         /Using removed Babel 5 option: .auxiliaryComment - Use `auxiliaryCommentBefore` or `auxiliaryCommentAfter`/,
       );
     });
 
     it("throws for resolved but erroring preset", () => {
-      return assert.throws(() => {
+      return expect(() => {
         loadOptions({
           presets: [
             path.join(__dirname, "fixtures/option-manager/not-a-preset"),
           ],
         });
-      }, /While processing: .*option-manager(?:\/|\\\\)not-a-preset\.js/);
+      }).toThrow(
+        /While processing: .*option-manager(?:\/|\\\\)not-a-preset\.js/,
+      );
     });
   });
 
@@ -160,23 +167,21 @@ describe("option-manager", () => {
           ],
         });
 
-        assert.equal(true, Array.isArray(options.plugins));
-        assert.equal(1, options.plugins.length);
-        assert.equal(0, options.presets.length);
+        expect(Array.isArray(options.plugins)).toBe(true);
+        expect(options.plugins).toHaveLength(1);
+        expect(options.presets).toHaveLength(0);
       });
     }
 
     function presetThrowsTest(name, msg) {
       it(name, function() {
-        assert.throws(
-          () =>
-            loadOptions({
-              presets: [
-                path.join(__dirname, "fixtures/option-manager/presets", name),
-              ],
-            }),
-          msg,
-        );
+        expect(() =>
+          loadOptions({
+            presets: [
+              path.join(__dirname, "fixtures/option-manager/presets", name),
+            ],
+          }),
+        ).toThrow(msg);
       });
     }
 

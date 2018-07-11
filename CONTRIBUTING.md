@@ -24,23 +24,24 @@ contributing, please read the
 ## Not sure where to start?
 
 - If you aren't just making a documentation change, you'll probably want to learn a bit about a few topics.
- - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babel/blob/master/packages/babylon/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://github.com/babel/babel/tree/master/packages/babylon#output).
+ - [ASTs](https://en.wikipedia.org/wiki/Abstract_syntax_tree) (Abstract Syntax Tree): The Babel AST [spec](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md) is a bit different from [ESTree](https://github.com/estree/estree). The differences are listed [here](https://github.com/babel/babel/tree/master/packages/babel-parser#output).
  - Check out [`/doc`](https://github.com/babel/babel/tree/master/doc) for information about Babel's internals
  - Check out [the Babel Plugin Handbook](https://github.com/thejameskyle/babel-handbook/blob/master/translations/en/plugin-handbook.md#babel-plugin-handbook) - core plugins are written the same way as any other plugin!
  - Check out [AST Explorer](http://astexplorer.net/#/scUfOmVOG5) to learn more about ASTs or make your own plugin in the browser
 - When you feel ready to jump into the Babel source code, a good place to start is to look for issues tagged with [help wanted](https://github.com/babel/babel/labels/help%20wanted) and/or [good first issue](https://github.com/babel/babel/labels/good%20first%20issue).
-- Follow along with what we are working on by joining our Slack, following our announcements on [Twitter](https://twitter.com/babeljs), and reading (or participating!) in our [meeting notes](https://github.com/babel/notes).
+- Follow along with what we are working on by joining our [Slack](https://babeljs.slack.com) (you can sign-up [here](https://slack.babeljs.io/)
+    for an invite), following our announcements on [Twitter](https://twitter.com/babeljs), and reading (or participating!) in our [meeting notes](https://github.com/babel/notes).
 - Check out our [website](http://babeljs.io/) and the [repo](https://github.com/babel/website)
 
 ## Chat
 
-Feel free to check out the `#discussion`/`#development` channels on our [Slack](https://slack.babeljs.io). Some of us are always online to chat!
+Feel free to check out the `#discussion`/`#development` channels on our [Slack](https://slack.babeljs.io) (you can sign-up [here](https://slack.babeljs.io/) for an invite). Some of us are always online to chat!
 
 ## Developing
 
 **Note:** Versions `< 5.1.10` can't be built.
 
-Babel is built for Node 4 and up but we develop using Node 8 and yarn. You can check this with `node -v`.
+Babel is built for Node 6 and up but we develop using Node 8 and yarn. You can check this with `node -v`.
 
 Make sure that Yarn is installed with version >= `0.28.0`.
 Installation instructions can be found here: https://yarnpkg.com/en/docs/install.
@@ -116,7 +117,7 @@ $ TEST_ONLY=babel-cli make test
 
 ```sh
 # Run tests for the @babel/plugin-transform-classes package.
-$ TEST_ONLY=es2015-class make test
+$ TEST_ONLY=babel-plugin-transform-classes make test
 ```
 
 Use the `TEST_GREP` variable to run a subset of tests by name:
@@ -138,6 +139,12 @@ $ TEST_DEBUG=true make test
 ```
 
 You can combine `TEST_DEBUG` with `TEST_GREP` or `TEST_ONLY` to debug a subset of tests. If you plan to stay long in the debugger (which you'll likely do!), you may increase the test timeout by editing [test/mocha.opts](https://github.com/babel/babel/blob/master/test/mocha.opts).
+
+To overwrite any test fixtures when fixing a bug or anything, add the env variable `OVERWRITE=true`
+
+```sh
+$ OVERWRITE=true TEST_ONLY=babel-plugin-transform-classes make test-only
+```
 
 To test the code coverage, use:
 
@@ -175,7 +182,7 @@ For example, in [`@babel/plugin-transform-exponentiation-operator/test`](https:/
 
 - In each subfolder, you can organize your directory structure by categories of tests. (Example: these folders can be named after the feature you are testing or can reference the issue number they fix)
 - Generally, there are two kinds of tests for plugins
-   - The first is a simple test of the input and output produced by running Babel on some code. We do this by creating an [`input.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/input.js) file and an [`output.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/output.js) file.
+   - The first is a simple test of the input and output produced by running Babel on some code. We do this by creating an [`input.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/input.js) file and an [`output.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/binary/output.js) file. This kind of test only works in sub-subdirectories of `/fixtures`, i.e. `/fixtures/exponentian-operator/binary/input.js` and **not** `/fixtures/exponentian-operator/input.js`.
    - If you need to expect an error, you can ignore creating the `output.js` file and pass a new `throws` key to the `options.json` that contains the error string that is created.
    - The second and preferred type is a test that actually evaluates the produced code and asserts that certain properties are true or false. We do this by creating an [`exec.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/comprehensive/exec.js) file.
 
@@ -196,8 +203,8 @@ In an `exec.js` test, we run or check that the code actually does what it's supp
 
 ```js
 // exec.js
-assert.equal(8, 2 ** 3);
-assert.equal(24, 3 * 2 ** 3);
+expect(2 ** 3).toBe(8);
+expect(3 * 2 ** 3).toBe(24);
 ```
 
 If you need to check for an error that is thrown you can add to the `options.json`
@@ -219,38 +226,38 @@ If the test requires a minimum Node version, you can add `minNodeVersion` (must 
 }
 ```
 
-#### `babylon`
+#### `@babel/parser` (babylon)
 
-Writing tests for Babylon is very
+Writing tests for the babel parser is very
 similar to the other packages.
-Inside the `packages/babylon/tests/fixtures` folder are categories/groupings of test fixtures (es2015, flow,
+Inside the `packages/babel-parser/tests/fixtures` folder are categories/groupings of test fixtures (es2015, flow,
 etc.). To add a test, create a folder under one of these groupings (or create a new one) with a
 descriptive name, and add the following:
 
-* Create an `input.js` file that contains the code you want Babylon to parse.
+* Create an `input.js` file that contains the code you want the babel parser to parse.
 
 * Add an `output.json` file with the expected parser output. For added convenience, if there is no `output.json` present, the test runner will generate one for you.
 
-After writing tests for babylon, just build it by running:
+After writing tests for @babel/parser, just build it by running:
 
 ```sh
-$ make build-babylon
+$ make build
 ```
 
 Then, to run the tests, use:
 
 ```sh
-$ TEST_ONLY=babylon make test-only
+$ TEST_ONLY=babel-parser make test-only
 ```
 
 #### Bootstrapping expected output
 
-For both `@babel/plugin-x` and `babylon`, you can easily generate an `output.js`/`output.json` automatically by just providing `input.js` and running the tests as you usually would.
+For both `@babel/plugin-x` and `@babel/parser`, you can easily generate an `output.js`/`output.json` automatically by just providing `input.js` and running the tests as you usually would.
 
 ```
 // Example
 - packages
-  - babylon
+  - babel-parser
     - test
       - fixtures
         - comments
@@ -302,14 +309,14 @@ Note that the code shown in Chrome DevTools is compiled code and therefore diffe
 
 - Create a new issue that describes the proposal (ex: [#538](https://github.com/babel/babylon/issues/538)). Include any relevant information like proposal repo/author, examples, parsing approaches, meeting notes, presentation slides, and more.
 - The pull request should include:
-  - [ ] An update to the [plugins](https://github.com/babel/babel/tree/master/packages/babylon#plugins) part of the readme. Add a new entry to that list for the new plugin flag (and link to the proposal)
-  - [ ] If any new nodes or modifications need to be added to the AST, update [ast/spec.md](https://github.com/babel/babel/bloc/master/packages/babylon/ast/spec.md)
-  - [ ] Make sure you use the `this.hasPlugin("plugin-name-here")` check in Babylon so that your new plugin code only runs when that flag is turned on (not default behavior)
+  - [ ] An update to the [plugins](https://github.com/babel/babel/tree/master/packages/babel-parser#plugins) part of the readme. Add a new entry to that list for the new plugin flag (and link to the proposal)
+  - [ ] If any new nodes or modifications need to be added to the AST, update [ast/spec.md](https://github.com/babel/babel/bloc/master/packages/babel-parser/ast/spec.md)
+  - [ ] Make sure you use the `this.hasPlugin("plugin-name-here")` check in the babel parser so that your new plugin code only runs when that flag is turned on (not default behavior)
   - [ ] Add failing/passing tests according to spec behavior
 - Start working about the Babel transform itself!
 
 ## Internals
-- AST spec ([babylon/ast/spec.md](https://github.com/babel/babel/blob/master/packages/babylon/ast/spec.md))
+- AST spec ([babel-parser/ast/spec.md](https://github.com/babel/babel/blob/master/packages/babel-parser/ast/spec.md))
 - Versioning ([doc/design/versioning.md](https://github.com/babel/babel/blob/master/doc/design/versioning.md))
 - Monorepo ([doc/design/monorepo.md](https://github.com/babel/babel/blob/master/doc/design/monorepo.md))
 - Compiler environment support ([doc/design/compiler-environment-support.md](https://github.com/babel/babel/blob/master/doc/design/compiler-environment-support.md))

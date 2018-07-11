@@ -1,19 +1,20 @@
 // @flow
 
+import path from "path";
+import buildDebug from "debug";
 import * as t from "@babel/types";
 import type { PluginPasses } from "../config";
 import convertSourceMap, { typeof Converter } from "convert-source-map";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 import { codeFrameColumns } from "@babel/code-frame";
 import File from "./file/file";
 import generateMissingPluginMessage from "./util/missing-plugin-helper";
 
-const shebangRegex = /^#!.*/;
+const debug = buildDebug("babel:transform:file");
 
 export type NormalizedFile = {
   code: string,
   ast: {},
-  shebang: string | null,
   inputMap: Converter | null,
 };
 
@@ -25,21 +26,47 @@ export default function normalizeFile(
 ): File {
   code = `${code || ""}`;
 
-  let shebang = null;
   let inputMap = null;
   if (options.inputSourceMap !== false) {
-    inputMap = convertSourceMap.fromSource(code);
-    if (inputMap) {
-      code = convertSourceMap.removeComments(code);
-    } else if (typeof options.inputSourceMap === "object") {
+    // If an explicit object is passed in, it overrides the processing of
+    // source maps that may be in the file itself.
+    if (typeof options.inputSourceMap === "object") {
       inputMap = convertSourceMap.fromObject(options.inputSourceMap);
     }
-  }
 
-  const shebangMatch = shebangRegex.exec(code);
-  if (shebangMatch) {
-    shebang = shebangMatch[0];
-    code = code.replace(shebangRegex, "");
+    if (!inputMap) {
+      try {
+        inputMap = convertSourceMap.fromSource(code);
+
+        if (inputMap) {
+          code = convertSourceMap.removeComments(code);
+        }
+      } catch (err) {
+        debug("discarding unknown inline input sourcemap", err);
+        code = convertSourceMap.removeComments(code);
+      }
+    }
+
+    if (!inputMap) {
+      if (typeof options.filename === "string") {
+        try {
+          inputMap = convertSourceMap.fromMapFileSource(
+            code,
+            path.dirname(options.filename),
+          );
+
+          if (inputMap) {
+            code = convertSourceMap.removeMapFileComments(code);
+          }
+        } catch (err) {
+          debug("discarding unknown file input sourcemap", err);
+          code = convertSourceMap.removeMapFileComments(code);
+        }
+      } else {
+        debug("discarding un-loadable file input sourcemap");
+        code = convertSourceMap.removeMapFileComments(code);
+      }
+    }
   }
 
   if (ast) {
@@ -49,13 +76,15 @@ export default function normalizeFile(
       throw new Error("AST root must be a Program or File node");
     }
   } else {
+    // The parser's AST types aren't fully compatible with the types generated
+    // by the logic in babel-types.
+    // $FlowFixMe
     ast = parser(pluginPasses, options, code);
   }
 
   return new File(options, {
     code,
     ast,
-    shebang,
     inputMap,
   });
 }
@@ -89,6 +118,12 @@ function parser(pluginPasses, options, code) {
     }
     throw new Error("More than one plugin attempted to override parsing.");
   } catch (err) {
+    if (err.code === "BABEL_PARSER_SOURCETYPE_MODULE_REQUIRED") {
+      err.message +=
+        "\nConsider renaming the file to '.mjs', or setting sourceType:module " +
+        "or sourceType:unambiguous in your Babel config for this file.";
+    }
+
     const { loc, missingPlugin } = err;
     if (loc) {
       const codeFrame = codeFrameColumns(

@@ -1,3 +1,3 @@
 var inc = (x) => x + 1
 
-assert.equal(10 |> inc, 11);
+expect(10 |> inc).toBe(11);

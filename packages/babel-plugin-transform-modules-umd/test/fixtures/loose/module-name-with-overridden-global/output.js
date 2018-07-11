@@ -1,6 +1,6 @@
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
-    define("loose/module-name-with-overridden-global/output", ["exports"], factory);
+    define("loose/module-name-with-overridden-global/input", ["exports"], factory);
   } else if (typeof exports !== "undefined") {
     factory(exports);
   } else {
@@ -8,7 +8,7 @@
       exports: {}
     };
     factory(mod.exports);
-    global.looseModuleNameWithOverriddenGlobalOutput = mod.exports;
+    global.looseModuleNameWithOverriddenGlobalInput = mod.exports;
   }
 })(this, function (_exports) {
   "use strict";

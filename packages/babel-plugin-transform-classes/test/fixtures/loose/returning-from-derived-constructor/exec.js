@@ -5,7 +5,7 @@ class Foo {
   }
 }
 
-assert.equal(new Foo().x, 1);
+expect(new Foo().x).toBe(1);
 
 class Bar extends Foo {
   constructor() {
@@ -14,17 +14,17 @@ class Bar extends Foo {
   }
 }
 
-assert.equal(new Bar().x, 1);
+expect(new Bar().x).toBe(1);
 
 class Bar2 extends Foo {
   constructor() {
     super();
-    assert.equal(this.x, 1);
+    expect(this.x).toBe(1);
     return { x: 2 };
   }
 }
 
-assert.equal(new Bar2().x, 2);
+expect(new Bar2().x).toBe(2);
 
 
 let singleton;
@@ -38,7 +38,7 @@ class Sub extends Foo {
 }
 
 let instance = new Sub;
-assert.equal(instance, singleton);
+expect(instance).toBe(singleton);
 
 instance = new Sub;
-assert.equal(instance, singleton);
+expect(instance).toBe(singleton);

@@ -1,0 +1,225 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 45,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 45
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 45,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 45
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TypeAlias",
+        "start": 0,
+        "end": 45,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 45
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 5,
+          "end": 6,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 5
+            },
+            "end": {
+              "line": 1,
+              "column": 6
+            },
+            "identifierName": "T"
+          },
+          "name": "T"
+        },
+        "typeParameters": null,
+        "right": {
+          "type": "InterfaceTypeAnnotation",
+          "start": 9,
+          "end": 45,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 9
+            },
+            "end": {
+              "line": 1,
+              "column": 45
+            }
+          },
+          "extends": [
+            {
+              "type": "InterfaceExtends",
+              "start": 27,
+              "end": 28,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 27
+                },
+                "end": {
+                  "line": 1,
+                  "column": 28
+                }
+              },
+              "id": {
+                "type": "Identifier",
+                "start": 27,
+                "end": 28,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 27
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 28
+                  },
+                  "identifierName": "X"
+                },
+                "name": "X"
+              },
+              "typeParameters": null
+            },
+            {
+              "type": "InterfaceExtends",
+              "start": 30,
+              "end": 31,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 30
+                },
+                "end": {
+                  "line": 1,
+                  "column": 31
+                }
+              },
+              "id": {
+                "type": "Identifier",
+                "start": 30,
+                "end": 31,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 30
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 31
+                  },
+                  "identifierName": "Y"
+                },
+                "name": "Y"
+              },
+              "typeParameters": null
+            }
+          ],
+          "body": {
+            "type": "ObjectTypeAnnotation",
+            "start": 32,
+            "end": 45,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 32
+              },
+              "end": {
+                "line": 1,
+                "column": 45
+              }
+            },
+            "callProperties": [],
+            "properties": [
+              {
+                "type": "ObjectTypeProperty",
+                "start": 34,
+                "end": 43,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 34
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 43
+                  }
+                },
+                "key": {
+                  "type": "Identifier",
+                  "start": 34,
+                  "end": 35,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 34
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 35
+                    },
+                    "identifierName": "p"
+                  },
+                  "name": "p"
+                },
+                "static": false,
+                "proto": false,
+                "kind": "init",
+                "method": false,
+                "value": {
+                  "type": "StringTypeAnnotation",
+                  "start": 37,
+                  "end": 43,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 37
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 43
+                    }
+                  }
+                },
+                "variance": null,
+                "optional": false
+              }
+            ],
+            "indexers": [],
+            "internalSlots": [],
+            "exact": false
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

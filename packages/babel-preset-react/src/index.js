@@ -1,10 +1,12 @@
+import { declare } from "@babel/helper-plugin-utils";
 import transformReactJSX from "@babel/plugin-transform-react-jsx";
-import transformSyntaxJSX from "@babel/plugin-syntax-jsx";
 import transformReactDisplayName from "@babel/plugin-transform-react-display-name";
 import transformReactJSXSource from "@babel/plugin-transform-react-jsx-source";
 import transformReactJSXSelf from "@babel/plugin-transform-react-jsx-self";
 
-export default function(api, opts = {}) {
+export default declare((api, opts) => {
+  api.assertVersion(7);
+
   const pragma = opts.pragma || "React.createElement";
   const pragmaFrag = opts.pragmaFrag || "React.Fragment";
   const throwIfNamespace =
@@ -24,11 +26,10 @@ export default function(api, opts = {}) {
         transformReactJSX,
         { pragma, pragmaFrag, throwIfNamespace, useBuiltIns },
       ],
-      transformSyntaxJSX,
       transformReactDisplayName,
 
       development && transformReactJSXSource,
       development && transformReactJSXSelf,
     ].filter(Boolean),
   };
-}
+});

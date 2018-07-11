@@ -17,6 +17,10 @@ export function BinaryExpression(...args: Array<any>): Object {
   return builder("BinaryExpression", ...args);
 }
 export { BinaryExpression as binaryExpression };
+export function InterpreterDirective(...args: Array<any>): Object {
+  return builder("InterpreterDirective", ...args);
+}
+export { InterpreterDirective as interpreterDirective };
 export function Directive(...args: Array<any>): Object {
   return builder("Directive", ...args);
 }
@@ -393,6 +397,10 @@ export function InterfaceDeclaration(...args: Array<any>): Object {
   return builder("InterfaceDeclaration", ...args);
 }
 export { InterfaceDeclaration as interfaceDeclaration };
+export function InterfaceTypeAnnotation(...args: Array<any>): Object {
+  return builder("InterfaceTypeAnnotation", ...args);
+}
+export { InterfaceTypeAnnotation as interfaceTypeAnnotation };
 export function IntersectionTypeAnnotation(...args: Array<any>): Object {
   return builder("IntersectionTypeAnnotation", ...args);
 }
@@ -421,6 +429,10 @@ export function ObjectTypeAnnotation(...args: Array<any>): Object {
   return builder("ObjectTypeAnnotation", ...args);
 }
 export { ObjectTypeAnnotation as objectTypeAnnotation };
+export function ObjectTypeInternalSlot(...args: Array<any>): Object {
+  return builder("ObjectTypeInternalSlot", ...args);
+}
+export { ObjectTypeInternalSlot as objectTypeInternalSlot };
 export function ObjectTypeCallProperty(...args: Array<any>): Object {
   return builder("ObjectTypeCallProperty", ...args);
 }
@@ -604,6 +616,10 @@ export function OptionalCallExpression(...args: Array<any>): Object {
   return builder("OptionalCallExpression", ...args);
 }
 export { OptionalCallExpression as optionalCallExpression };
+export function ClassPrivateProperty(...args: Array<any>): Object {
+  return builder("ClassPrivateProperty", ...args);
+}
+export { ClassPrivateProperty as classPrivateProperty };
 export function Import(...args: Array<any>): Object {
   return builder("Import", ...args);
 }
@@ -624,6 +640,14 @@ export function ExportNamespaceSpecifier(...args: Array<any>): Object {
   return builder("ExportNamespaceSpecifier", ...args);
 }
 export { ExportNamespaceSpecifier as exportNamespaceSpecifier };
+export function PrivateName(...args: Array<any>): Object {
+  return builder("PrivateName", ...args);
+}
+export { PrivateName as privateName };
+export function BigIntLiteral(...args: Array<any>): Object {
+  return builder("BigIntLiteral", ...args);
+}
+export { BigIntLiteral as bigIntLiteral };
 export function TSParameterProperty(...args: Array<any>): Object {
   return builder("TSParameterProperty", ...args);
 }
@@ -774,6 +798,16 @@ export function TSIntersectionType(...args: Array<any>): Object {
 }
 export { TSIntersectionType as tsIntersectionType };
 export { TSIntersectionType as tSIntersectionType };
+export function TSConditionalType(...args: Array<any>): Object {
+  return builder("TSConditionalType", ...args);
+}
+export { TSConditionalType as tsConditionalType };
+export { TSConditionalType as tSConditionalType };
+export function TSInferType(...args: Array<any>): Object {
+  return builder("TSInferType", ...args);
+}
+export { TSInferType as tsInferType };
+export { TSInferType as tSInferType };
 export function TSParenthesizedType(...args: Array<any>): Object {
   return builder("TSParenthesizedType", ...args);
 }

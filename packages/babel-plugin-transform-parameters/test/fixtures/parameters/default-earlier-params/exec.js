@@ -1,3 +1,3 @@
 function f(a, b = a, c = b) { return c; }
 
-assert.equal(3, f(3));
+expect(3).toBe(f(3));

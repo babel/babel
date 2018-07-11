@@ -74,6 +74,9 @@ getBindingIdentifiers.keys = {
   DeclareFunction: ["id"],
   DeclareModule: ["id"],
   DeclareVariable: ["id"],
+  DeclareInterface: ["id"],
+  DeclareTypeAlias: ["id"],
+  DeclareOpaqueType: ["id"],
   InterfaceDeclaration: ["id"],
   TypeAlias: ["id"],
   OpaqueType: ["id"],
@@ -94,6 +97,9 @@ getBindingIdentifiers.keys = {
 
   FunctionDeclaration: ["id", "params"],
   FunctionExpression: ["id", "params"],
+  ArrowFunctionExpression: ["params"],
+  ObjectMethod: ["params"],
+  ClassMethod: ["params"],
 
   ForInStatement: ["left"],
   ForOfStatement: ["left"],

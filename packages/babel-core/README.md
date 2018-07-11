@@ -2,174 +2,18 @@
 
 > Babel compiler core.
 
+See our website [@babel/core](https://babeljs.io/docs/en/next/babel-core.html) for more information or the [issues](https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20core%22+is%3Aopen) associated with this package.
 
-```javascript
-var babel = require("@babel/core");
-import { transform } from "@babel/core";
-import * as babel from "@babel/core";
+## Install
+
+Using npm:
+
+```sh
+npm install --save-dev @babel/core
 ```
 
-All transformations will use your local configuration files (`.babelrc` or in `package.json`). See [options](#options) to disable it.
+or using yarn:
 
-
-## babel.transform(code: string, [options?](#options): Object, callback: Function)
-
-Transforms the passed in `code`. Calling a callback with an object with the generated code,
-source map, and AST.
-
-```js
-babel.transform(code, options, function(err, result) {
-  result; // => { code, map, ast }
-});
+```sh
+yarn add @babel/core --dev
 ```
-
-**Example**
-
-```js
-babel.transform("code();", options, function(err, result) {
-  result.code;
-  result.map;
-  result.ast;
-});
-```
-
-### Compat Note:
-
-In Babel 6, this method was synchronous and `transformSync` did not exist. For backward-compatibility,
-this function will behave synchronously if no callback is given. If you're starting with Babel 7
-and need synchronous behavior, please use `transformSync` since this backward-compat may be dropped in
-future major versions of Babel.
-
-
-## babel.transformSync(code: string, [options?](#options): Object)
-
-Transforms the passed in `code`. Returning an object with the generated code,
-source map, and AST.
-
-```js
-babel.transformSync(code, options) // => { code, map, ast }
-```
-
-**Example**
-
-```js
-var result = babel.transformSync("code();", options);
-result.code;
-result.map;
-result.ast;
-```
-
-
-## babel.transformFile(filename: string, [options?](#options): Object, callback: Function)
-
-Asynchronously transforms the entire contents of a file.
-
-```js
-babel.transformFile(filename, options, callback)
-```
-
-**Example**
-
-```js
-babel.transformFile("filename.js", options, function (err, result) {
-  result; // => { code, map, ast }
-});
-```
-
-
-## babel.transformFileSync(filename: string, [options?](#options): Object)
-
-Synchronous version of `babel.transformFile`. Returns the transformed contents of
-the `filename`.
-
-```js
-babel.transformFileSync(filename, options) // => { code, map, ast }
-```
-
-**Example**
-
-```js
-babel.transformFileSync("filename.js", options).code;
-```
-
-
-## babel.transformFromAst(ast: Object, code?: string, [options?](#options): Object, callback: Function)
-
-Given an [AST](https://astexplorer.net/), transform it.
-
-```js
-const sourceCode = "if (true) return;";
-const parsedAst = babylon.parse(sourceCode, { allowReturnOutsideFunction: true });
-babel.transformFromAst(parsedAst, sourceCode, options, function(err, result) {
-  const { code, map, ast } = result;
-});
-```
-
-### Compat Note:
-
-In Babel 6, this method was synchronous and `transformFromAstSync` did not exist. For backward-compatibility,
-this function will behave synchronously if no callback is given. If you're starting with Babel 7
-and need synchronous behavior, please use `transformFromAstSync` since this backward-compat may be dropped in
-future major versions of Babel.
-
-
-## babel.transformFromAstSync(ast: Object, code?: string, [options?](#options): Object)
-
-Given an [AST](https://astexplorer.net/), transform it.
-
-```js
-const sourceCode = "if (true) return;";
-const parsedAst = babylon.parse(sourceCode, { allowReturnOutsideFunction: true });
-const { code, map, ast } = babel.transformFromAstSync(parsedAst, sourceCode, options);
-```
-
-
-## Options
-
-<blockquote class="babel-callout babel-callout-info">
-  <h4>Babel CLI</h4>
-  <p>
-    You can pass these options from the Babel CLI like so:
-  </p>
-  <p>
-    <code>babel --name<span class="o">=</span>value</code>
-  </p>
-</blockquote>
-
-Following is a table of the options you can use:
-
-| Option                   | Default              | Description                     |
-| ------------------------ | -------------------- | ------------------------------- |
-| `ast`                    | `true`               | Include the AST in the returned object |
-| `auxiliaryCommentAfter`  | `null`               | Attach a comment after all non-user injected code |
-| `auxiliaryCommentBefore` | `null`               | Attach a comment before all non-user injected code |
-| `babelrc`                | `true`               | Specify whether or not to use .babelrc and .babelignore files. Not available when using the CLI, [use `--no-babelrc` instead](https://babeljs.io/docs/usage/cli/#babel-ignoring-babelrc) |
-| `envName`                | env vars             | Defaults to environment variable `BABEL_ENV` if set, or else `NODE_ENV` if set, or else it defaults to `"development"` |
-| `code`                   | `true`               | Enable code generation |
-| `comments`               | `true`               | Output comments in generated output |
-| `compact`                | `"auto"`             | Do not include superfluous whitespace characters and line terminators. When set to `"auto"` compact is set to `true` on input sizes of >500KB |
-| `env`                    | `{}`                 | This is an object of keys that represent different environments. For example, you may have: `{ env: { production: { /* specific options */ } } }` which will use those options when the `envName` is `production` |
-| `extends`                | `null`               | A path to a `.babelrc` file to extend |
-| `filename`               | `"unknown"`          | Filename for use in errors etc |
-| `filenameRelative`       | `(filename)`         | Filename relative to `sourceRoot` |
-| `generatorOpts`          | `{}`                 | An object containing the options to be passed down to the babel code generator, @babel/generator |
-| `getModuleId`            | `null`               | Specify a custom callback to generate a module id with. Called as `getModuleId(moduleName)`. If falsy value is returned then the generated module id is used |
-| `highlightCode`          | `true`               | ANSI highlight syntax error code frames |
-| `ignore`                 | `null`               | Opposite to the `only` option. `ignore` is disregarded if `only` is specified |
-| `inputSourceMap`         | `null`               | A source map object that the output source map will be based on |
-| `minified`               | `false`              | Should the output be minified (not printing last semicolons in blocks, printing literal string values instead of escaped ones, stripping `()` from `new` when safe) |
-| `moduleId`               | `null`               | Specify a custom name for module ids |
-| `moduleIds`              | `false`              | If truthy, insert an explicit id for modules. By default, all modules are anonymous. (Not available for `common` modules) |
-| `moduleRoot`             | `(sourceRoot)`       | Optional prefix for the AMD module formatter that will be prepend to the filename on module definitions |
-| `only`                   | `null`               | A [glob](https://github.com/isaacs/minimatch), regex, or mixed array of both, matching paths to **only** compile. Can also be an array of arrays containing paths to explicitly match. When attempting to compile a non-matching file it's returned verbatim |
-| `parserOpts`             | `{}`                 | An object containing the options to be passed down to the babel parser, babylon |
-| `plugins`                | `[]`                 | List of [plugins](https://babeljs.io/docs/plugins/) to load and use |
-| `presets`                | `[]`                 | List of [presets](https://babeljs.io/docs/plugins/#presets) (a set of plugins) to load and use |
-| `retainLines`            | `false`              | Retain line numbers. This will lead to wacky code but is handy for scenarios where you can't use source maps. (**NOTE:** This will not retain the columns) |
-| `shouldPrintComment`     | `null`               | An optional callback that controls whether a comment should be output or not. Called as `shouldPrintComment(commentContents)`. **NOTE:** This overrides the `comment` option when used |
-| `sourceFileName`         | `(filenameRelative)` | Set `sources[0]` on returned source map |
-| `sourceMaps`             | `false`              | If truthy, adds a `map` property to returned output. If set to `"inline"`, a comment with a sourceMappingURL directive is added to the bottom of the returned code. If set to `"both"` then a `map` property is returned as well as a source map comment appended. **This does not emit sourcemap files by itself!** To have sourcemaps emitted using the CLI, you must pass it the `--source-maps` option |
-| `sourceMapTarget`        | `(filenameRelative)` | Set `file` on returned source map |
-| `sourceRoot`             | `(moduleRoot)`       | The root from which all sources are relative |
-| `sourceType`             | `"module"`           | Indicate the mode the code should be parsed in. Can be one of "script", "module", or "unambiguous". `"unambiguous"` will make Babel attempt to _guess_, based on the presence of ES6 `import` or `export` statements. Files with ES6 `import`s and `export`s are considered `"module"` and are otherwise `"script"`. |
-| `wrapPluginVisitorMethod`| `null`               | An optional callback that can be used to wrap visitor methods. **NOTE:** This is useful for things like introspection, and not really needed for implementing anything. Called as `wrapPluginVisitorMethod(pluginAlias, visitorType, callback)`.

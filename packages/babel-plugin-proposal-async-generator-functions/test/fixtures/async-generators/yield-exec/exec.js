@@ -20,5 +20,5 @@ async function main() {
 }
 
 return main().then(() => {
-  assert.deepEqual(actual, expected);
+  expect(actual).toEqual(expected);
 });

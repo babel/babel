@@ -1,6 +1,9 @@
+import { declare } from "@babel/helper-plugin-utils";
 import type NodePath from "@babel/traverse";
 
-export default function(api, options) {
+export default declare((api, options) => {
+  api.assertVersion(7);
+
   const { spec } = options;
   return {
     visitor: {
@@ -20,4 +23,4 @@ export default function(api, options) {
       },
     },
   };
-}
+});

@@ -1,6 +1,5 @@
 {
   "version": 3,
-  "file": "source-maps/full/output.js",
   "sources": ["source-maps/full/input.js"],
   "names": [
     "arr",

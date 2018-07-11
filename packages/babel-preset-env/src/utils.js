@@ -1,9 +1,14 @@
 // @flow
 
+import invariant from "invariant";
 import semver from "semver";
+import levenshtein from "js-levenshtein";
+import { addSideEffect } from "@babel/helper-module-imports";
 import unreleasedLabels from "../data/unreleased-labels";
 import { semverMin } from "./targets-parser";
 import type { Targets } from "./types";
+
+const versionRegExp = /^(\d+|\d+.\d+)$/;
 
 // Convert version to a semver value.
 // 2.5 -> 2.5.0; 1 -> 1.0.0;
@@ -12,13 +17,32 @@ export const semverify = (version: string | number): string => {
     return version;
   }
 
-  const split = version.toString().split(".");
+  invariant(
+    typeof version === "number" ||
+      (typeof version === "string" && versionRegExp.test(version)),
+    `'${version}' is not a valid version`,
+  );
 
+  const split = version.toString().split(".");
   while (split.length < 3) {
     split.push("0");
   }
-
   return split.join(".");
+};
+
+export const getValues = (object: Object): Array<any> =>
+  Object.keys(object).map(key => object[key]);
+
+export const findSuggestion = (options: Array<string>, option: string) => {
+  let levenshteinValue = Infinity;
+  return options.reduce((suggestion, validOption) => {
+    const value = levenshtein(validOption, option);
+    if (value < levenshteinValue) {
+      levenshteinValue = value;
+      return validOption;
+    }
+    return suggestion;
+  }, undefined);
 };
 
 export const prettifyVersion = (version: string): string => {
@@ -88,6 +112,16 @@ export const filterStageFromList = (list: any, stageList: any) => {
 export const isPolyfillSource = (source: string): boolean =>
   source === "@babel/polyfill" || source === "core-js";
 
+const modulePathMap = {
+  "regenerator-runtime": "regenerator-runtime/runtime",
+};
+
+export const getModulePath = (mod: string) =>
+  modulePathMap[mod] || `core-js/modules/${mod}`;
+
+export const createImport = (path: Object, mod: string) =>
+  addSideEffect(path, getModulePath(mod));
+
 export const isRequire = (t: Object, path: Object): boolean =>
   t.isExpressionStatement(path.node) &&
   t.isCallExpression(path.node.expression) &&
@@ -96,30 +130,3 @@ export const isRequire = (t: Object, path: Object): boolean =>
   path.node.expression.arguments.length === 1 &&
   t.isStringLiteral(path.node.expression.arguments[0]) &&
   isPolyfillSource(path.node.expression.arguments[0].value);
-
-const modulePathMap = {
-  "regenerator-runtime": "regenerator-runtime/runtime",
-};
-
-export const getModulePath = (mod: string) =>
-  modulePathMap[mod] || `core-js/modules/${mod}`;
-
-export type RequireType = "require" | "import";
-
-export const createImport = (
-  t: Object,
-  polyfill: string,
-  requireType?: RequireType = "import",
-): Object => {
-  const modulePath = getModulePath(polyfill);
-
-  if (requireType === "import") {
-    const declar = t.importDeclaration([], t.stringLiteral(modulePath));
-    declar._blockHoist = 3;
-    return declar;
-  }
-
-  return t.expressionStatement(
-    t.callExpression(t.identifier("require"), [t.stringLiteral(modulePath)]),
-  );
-};

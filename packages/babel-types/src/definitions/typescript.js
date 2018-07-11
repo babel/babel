@@ -223,6 +223,25 @@ const unionOrIntersection = {
 defineType("TSUnionType", unionOrIntersection);
 defineType("TSIntersectionType", unionOrIntersection);
 
+defineType("TSConditionalType", {
+  aliases: ["TSType"],
+  visitor: ["checkType", "extendsType", "trueType", "falseType"],
+  fields: {
+    checkType: validateType("TSType"),
+    extendsType: validateType("TSType"),
+    trueType: validateType("TSType"),
+    falseType: validateType("TSType"),
+  },
+});
+
+defineType("TSInferType", {
+  aliases: ["TSType"],
+  visitor: ["typeParameter"],
+  fields: {
+    typeParameter: validateType("TSTypeParameter"),
+  },
+});
+
 defineType("TSParenthesizedType", {
   aliases: ["TSType"],
   visitor: ["typeAnnotation"],

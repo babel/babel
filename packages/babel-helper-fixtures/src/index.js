@@ -1,4 +1,3 @@
-import assert from "assert";
 import cloneDeep from "lodash/cloneDeep";
 import trimEnd from "lodash/trimEnd";
 import resolve from "try-resolve";
@@ -56,6 +55,24 @@ function shouldIgnore(name, blacklist?: Array<string>) {
   );
 }
 
+const EXTENSIONS = [".js", ".mjs", ".ts", ".tsx"];
+
+function findFile(filepath: string, allowJSON: boolean) {
+  const matches = [];
+
+  for (const ext of EXTENSIONS.concat(allowJSON ? ".json" : [])) {
+    const name = filepath + ext;
+
+    if (fs.existsSync(name)) matches.push(name);
+  }
+
+  if (matches.length > 1) {
+    throw new Error(`Found conflicting file matches: ${matches.join(", ")}`);
+  }
+
+  return matches[0] || filepath + ".js";
+}
+
 export default function get(entryLoc): Array<Suite> {
   const suites = [];
 
@@ -84,51 +101,23 @@ export default function get(entryLoc): Array<Suite> {
     }
 
     function push(taskName, taskDir) {
-      let actualLocAlias = suiteName + "/" + taskName + "/input.js";
-      let expectLocAlias = suiteName + "/" + taskName + "/output.js";
-      let execLocAlias = suiteName + "/" + taskName + "/exec.js";
+      const actualLoc = findFile(taskDir + "/input");
+      const expectLoc = findFile(taskDir + "/output", true /* allowJSON */);
+      let execLoc = findFile(taskDir + "/exec");
 
-      let actualLoc = taskDir + "/input.js";
-      let expectLoc = taskDir + "/output.js";
-      let execLoc = taskDir + "/exec.js";
-
-      const hasExecJS = fs.existsSync(execLoc);
-      const hasExecMJS = fs.existsSync(asMJS(execLoc));
-      if (hasExecMJS) {
-        assert(!hasExecJS, `${asMJS(execLoc)}: Found conflicting .js`);
-
-        execLoc = asMJS(execLoc);
-        execLocAlias = asMJS(execLocAlias);
-      }
-
-      const hasExpectJS = fs.existsSync(expectLoc);
-      const hasExpectMJS = fs.existsSync(asMJS(expectLoc));
-      if (hasExpectMJS) {
-        assert(!hasExpectJS, `${asMJS(expectLoc)}: Found conflicting .js`);
-
-        expectLoc = asMJS(expectLoc);
-        expectLocAlias = asMJS(expectLocAlias);
-      }
-
-      const hasActualJS = fs.existsSync(actualLoc);
-      const hasActualMJS = fs.existsSync(asMJS(actualLoc));
-      if (hasActualMJS) {
-        assert(!hasActualJS, `${asMJS(actualLoc)}: Found conflicting .js`);
-
-        actualLoc = asMJS(actualLoc);
-        actualLocAlias = asMJS(actualLocAlias);
-      }
+      const actualLocAlias =
+        suiteName + "/" + taskName + "/" + path.basename(actualLoc);
+      const expectLocAlias =
+        suiteName + "/" + taskName + "/" + path.basename(actualLoc);
+      let execLocAlias =
+        suiteName + "/" + taskName + "/" + path.basename(actualLoc);
 
       if (fs.statSync(taskDir).isFile()) {
         const ext = path.extname(taskDir);
-        if (ext !== ".js" && ext !== ".mjs") return;
+        if (EXTENSIONS.indexOf(ext) === -1) return;
 
         execLoc = taskDir;
-      }
-
-      if (resolve.relative(expectLoc + "on")) {
-        expectLoc += "on";
-        expectLocAlias += "on";
+        execLocAlias = suiteName + "/" + taskName;
       }
 
       const taskOpts = cloneDeep(suite.options);
@@ -195,6 +184,30 @@ export default function get(entryLoc): Array<Suite> {
       if (fs.existsSync(sourceMapLoc)) {
         test.sourceMap = JSON.parse(readFile(sourceMapLoc));
       }
+
+      const inputMapLoc = taskDir + "/input-source-map.json";
+      if (fs.existsSync(inputMapLoc)) {
+        test.inputSourceMap = JSON.parse(readFile(inputMapLoc));
+      }
+
+      if (taskOpts.throws) {
+        if (test.expect.code) {
+          throw new Error(
+            "Test cannot throw and also return output code: " + expectLoc,
+          );
+        }
+        if (test.sourceMappings) {
+          throw new Error(
+            "Test cannot throw and also return sourcemappings: " +
+              sourceMappingsLoc,
+          );
+        }
+        if (test.sourceMap) {
+          throw new Error(
+            "Test cannot throw and also return sourcemaps: " + sourceMapLoc,
+          );
+        }
+      }
     }
   }
 
@@ -214,10 +227,6 @@ export function multiple(entryLoc, ignore?: Array<string>) {
   }
 
   return categories;
-}
-
-function asMJS(filepath) {
-  return filepath.replace(/\.js$/, ".mjs");
 }
 
 export function readFile(filename) {

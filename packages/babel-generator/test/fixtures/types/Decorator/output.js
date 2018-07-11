@@ -32,15 +32,15 @@ class Foo {
 
 }
 
-@foo
-export default class Foo {
+export default @foo
+class Foo {
   bar() {
     class Baz {}
   }
 
 }
-@foo
-export class Foo {
+export @foo
+class Foo {
   bar() {
     class Baz {}
   }

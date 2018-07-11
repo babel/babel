@@ -1,7 +1,6 @@
 import cloneDeep from "lodash/cloneDeep";
 import traverse from "../lib";
-import assert from "assert";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 
 describe("traverse", function() {
   const code = `
@@ -25,11 +24,11 @@ describe("traverse", function() {
       },
     });
 
-    assert.equal(ast2.body[1].expression.left.object, replacement);
+    expect(ast2.body[1].expression.left.object).toBe(replacement);
   });
 
   it("traverse", function() {
-    const expect = [
+    const expected = [
       body[0],
       body[0].declarations[0],
       body[0].declarations[0].id,
@@ -50,7 +49,7 @@ describe("traverse", function() {
       },
     });
 
-    assert.deepEqual(actual, expect);
+    expect(actual).toEqual(expected);
   });
 
   it("traverse falsy parent", function() {
@@ -62,7 +61,7 @@ describe("traverse", function() {
   });
 
   it("traverse blacklistTypes", function() {
-    const expect = [
+    const expected = [
       body[0],
       body[0].declarations[0],
       body[0].declarations[0].id,
@@ -81,22 +80,24 @@ describe("traverse", function() {
       },
     });
 
-    assert.deepEqual(actual, expect);
+    expect(actual).toEqual(expected);
   });
 
   it("hasType", function() {
-    assert.ok(traverse.hasType(ast, "ThisExpression"));
-    assert.ok(
-      !traverse.hasType(ast, "ThisExpression", ["AssignmentExpression"]),
-    );
+    expect(traverse.hasType(ast, "ThisExpression")).toBeTruthy();
+    expect(
+      traverse.hasType(ast, "ThisExpression", ["AssignmentExpression"]),
+    ).toBeFalsy();
 
-    assert.ok(traverse.hasType(ast, "ThisExpression"));
-    assert.ok(traverse.hasType(ast, "Program"));
+    expect(traverse.hasType(ast, "ThisExpression")).toBeTruthy();
+    expect(traverse.hasType(ast, "Program")).toBeTruthy();
 
-    assert.ok(!traverse.hasType(ast, "ThisExpression", ["MemberExpression"]));
-    assert.ok(!traverse.hasType(ast, "ThisExpression", ["Program"]));
+    expect(
+      traverse.hasType(ast, "ThisExpression", ["MemberExpression"]),
+    ).toBeFalsy();
+    expect(traverse.hasType(ast, "ThisExpression", ["Program"])).toBeFalsy();
 
-    assert.ok(!traverse.hasType(ast, "ArrowFunctionExpression"));
+    expect(traverse.hasType(ast, "ArrowFunctionExpression")).toBeFalsy();
   });
 
   it("clearCache", function() {
@@ -123,8 +124,8 @@ describe("traverse", function() {
     });
 
     scopes2.forEach(function(_, i) {
-      assert.notStrictEqual(scopes[i], scopes2[i]);
-      assert.notStrictEqual(paths[i], paths2[i]);
+      expect(scopes[i]).not.toBe(scopes2[i]);
+      expect(paths[i]).not.toBe(paths2[i]);
     });
   });
 
@@ -146,7 +147,7 @@ describe("traverse", function() {
     });
 
     paths2.forEach(function(p, i) {
-      assert.notStrictEqual(p, paths[i]);
+      expect(p).not.toBe(paths[i]);
     });
   });
 
@@ -170,7 +171,7 @@ describe("traverse", function() {
     });
 
     scopes2.forEach(function(p, i) {
-      assert.notStrictEqual(p, scopes[i]);
+      expect(p).not.toBe(scopes[i]);
     });
   });
 });

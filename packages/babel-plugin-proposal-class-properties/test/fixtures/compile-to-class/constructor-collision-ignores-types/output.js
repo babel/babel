@@ -1,18 +1,9 @@
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 class C {
   // Output should not use `_initialiseProps`
   constructor(T) {
-    Object.defineProperty(this, "x", {
-      configurable: true,
-      enumerable: true,
-      writable: true,
-      value: void 0
-    });
-    Object.defineProperty(this, "y", {
-      configurable: true,
-      enumerable: true,
-      writable: true,
-      value: 0
-    });
+    _defineProperty(this, "y", 0);
   }
 
 }

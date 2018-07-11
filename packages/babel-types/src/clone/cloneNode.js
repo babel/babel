@@ -62,7 +62,9 @@ export default function cloneNode<T: Object>(node: T, deep: boolean = true): T {
     newNode.trailingComments = node.trailingComments;
   }
   if (has(node, "extra")) {
-    newNode.extra = Object.assign({}, node.extra);
+    newNode.extra = {
+      ...node.extra,
+    };
   }
 
   return newNode;

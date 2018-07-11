@@ -1,8 +1,9 @@
 {
-  "lerna": "2.0.0-rc.4",
-  "version": "7.0.0-beta.40",
+  "lerna": "2.11.0",
+  "version": "7.0.0-beta.52",
   "changelog": {
     "repo": "babel/babel",
+    "cacheDir": ".changelog",
     "labels": {
       "PR: Spec Compliancy :eyeglasses:": ":eyeglasses: Spec Compliancy",
       "PR: Breaking Change :boom:": ":boom: Breaking Change",
@@ -13,7 +14,6 @@
       "PR: Internal :house:": ":house: Internal"
     }
   },
-  "cacheDir": ".changelog",
   "commands": {
     "publish": {
       "ignore": [

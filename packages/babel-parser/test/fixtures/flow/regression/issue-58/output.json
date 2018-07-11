@@ -1,0 +1,6463 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 1930,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 44,
+      "column": 36
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 1930,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 44,
+        "column": 36
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExpressionStatement",
+        "start": 38,
+        "end": 55,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 17
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 38,
+          "end": 54,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 0
+            },
+            "end": {
+              "line": 2,
+              "column": 16
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 38,
+            "end": 39,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 0
+              },
+              "end": {
+                "line": 2,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "Identifier",
+            "start": 43,
+            "end": 44,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 5
+              },
+              "end": {
+                "line": 2,
+                "column": 6
+              },
+              "identifierName": "b"
+            },
+            "name": "b",
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 42
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start": 48,
+            "end": 54,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 10
+              },
+              "end": {
+                "line": 2,
+                "column": 16
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 48,
+                "end": 49,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 11
+                  },
+                  "identifierName": "c"
+                },
+                "name": "c"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 53,
+              "end": 54,
+              "loc": {
+                "start": {
+                  "line": 2,
+                  "column": 15
+                },
+                "end": {
+                  "line": 2,
+                  "column": 16
+                },
+                "identifierName": "d"
+              },
+              "name": "d"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " Valid lhs value inside parentheses",
+            "start": 0,
+            "end": 37,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 0
+              },
+              "end": {
+                "line": 1,
+                "column": 37
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? b : (c => d)",
+            "start": 56,
+            "end": 75,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 18
+              },
+              "end": {
+                "line": 2,
+                "column": 37
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 76,
+        "end": 97,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 21
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 76,
+          "end": 96,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 0
+            },
+            "end": {
+              "line": 3,
+              "column": 20
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 76,
+            "end": 77,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 0
+              },
+              "end": {
+                "line": 3,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start": 80,
+            "end": 92,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 4
+              },
+              "end": {
+                "line": 3,
+                "column": 16
+              }
+            },
+            "predicate": null,
+            "returnType": {
+              "type": "TypeAnnotation",
+              "start": 84,
+              "end": 87,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 8
+                },
+                "end": {
+                  "line": 3,
+                  "column": 11
+                }
+              },
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
+                "start": 86,
+                "end": 87,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 11
+                  }
+                },
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 86,
+                  "end": 87,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 11
+                    },
+                    "identifierName": "c"
+                  },
+                  "name": "c"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 81,
+                "end": 82,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 6
+                  },
+                  "identifierName": "b"
+                },
+                "name": "b"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 91,
+              "end": 92,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 15
+                },
+                "end": {
+                  "line": 3,
+                  "column": 16
+                },
+                "identifierName": "d"
+              },
+              "name": "d"
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start": 95,
+            "end": 96,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 19
+              },
+              "end": {
+                "line": 3,
+                "column": 20
+              },
+              "identifierName": "e"
+            },
+            "name": "e"
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? b : (c => d)",
+            "start": 56,
+            "end": 75,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 18
+              },
+              "end": {
+                "line": 2,
+                "column": 37
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? ((b): c => d) : e",
+            "start": 98,
+            "end": 122,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 22
+              },
+              "end": {
+                "line": 3,
+                "column": 46
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 123,
+        "end": 146,
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 23
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 123,
+          "end": 145,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 0
+            },
+            "end": {
+              "line": 4,
+              "column": 22
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 123,
+            "end": 124,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 0
+              },
+              "end": {
+                "line": 4,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "Identifier",
+            "start": 128,
+            "end": 129,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 5
+              },
+              "end": {
+                "line": 4,
+                "column": 6
+              },
+              "identifierName": "b"
+            },
+            "name": "b",
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 127
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start": 133,
+            "end": 145,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 10
+              },
+              "end": {
+                "line": 4,
+                "column": 22
+              }
+            },
+            "predicate": null,
+            "returnType": {
+              "type": "TypeAnnotation",
+              "start": 137,
+              "end": 140,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 14
+                },
+                "end": {
+                  "line": 4,
+                  "column": 17
+                }
+              },
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
+                "start": 139,
+                "end": 140,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 16
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 17
+                  }
+                },
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 139,
+                  "end": 140,
+                  "loc": {
+                    "start": {
+                      "line": 4,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 4,
+                      "column": 17
+                    },
+                    "identifierName": "d"
+                  },
+                  "name": "d"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 134,
+                "end": 135,
+                "loc": {
+                  "start": {
+                    "line": 4,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 4,
+                    "column": 12
+                  },
+                  "identifierName": "c"
+                },
+                "name": "c"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 144,
+              "end": 145,
+              "loc": {
+                "start": {
+                  "line": 4,
+                  "column": 21
+                },
+                "end": {
+                  "line": 4,
+                  "column": 22
+                },
+                "identifierName": "e"
+              },
+              "name": "e"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? ((b): c => d) : e",
+            "start": 98,
+            "end": 122,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 22
+              },
+              "end": {
+                "line": 3,
+                "column": 46
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? b : ((c): d => e)",
+            "start": 147,
+            "end": 171,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 24
+              },
+              "end": {
+                "line": 4,
+                "column": 48
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Nested arrow function inside parentheses",
+            "start": 173,
+            "end": 216,
+            "loc": {
+              "start": {
+                "line": 6,
+                "column": 0
+              },
+              "end": {
+                "line": 6,
+                "column": 43
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 217,
+        "end": 245,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 0
+          },
+          "end": {
+            "line": 7,
+            "column": 28
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 217,
+          "end": 244,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 0
+            },
+            "end": {
+              "line": 7,
+              "column": 27
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 217,
+            "end": 218,
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 0
+              },
+              "end": {
+                "line": 7,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "AssignmentExpression",
+            "start": 222,
+            "end": 234,
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 5
+              },
+              "end": {
+                "line": 7,
+                "column": 17
+              }
+            },
+            "operator": "=",
+            "left": {
+              "type": "Identifier",
+              "start": 222,
+              "end": 223,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 5
+                },
+                "end": {
+                  "line": 7,
+                  "column": 6
+                },
+                "identifierName": "b"
+              },
+              "name": "b"
+            },
+            "right": {
+              "type": "ArrowFunctionExpression",
+              "start": 226,
+              "end": 234,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 9
+                },
+                "end": {
+                  "line": 7,
+                  "column": 17
+                }
+              },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 227,
+                  "end": 228,
+                  "loc": {
+                    "start": {
+                      "line": 7,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 7,
+                      "column": 11
+                    },
+                    "identifierName": "c"
+                  },
+                  "name": "c"
+                }
+              ],
+              "body": {
+                "type": "Identifier",
+                "start": 233,
+                "end": 234,
+                "loc": {
+                  "start": {
+                    "line": 7,
+                    "column": 16
+                  },
+                  "end": {
+                    "line": 7,
+                    "column": 17
+                  },
+                  "identifierName": "d"
+                },
+                "name": "d"
+              }
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 221
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start": 238,
+            "end": 244,
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 21
+              },
+              "end": {
+                "line": 7,
+                "column": 27
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 238,
+                "end": 239,
+                "loc": {
+                  "start": {
+                    "line": 7,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 7,
+                    "column": 22
+                  },
+                  "identifierName": "e"
+                },
+                "name": "e"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 243,
+              "end": 244,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 26
+                },
+                "end": {
+                  "line": 7,
+                  "column": 27
+                },
+                "identifierName": "f"
+              },
+              "name": "f"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? b : ((c): d => e)",
+            "start": 147,
+            "end": 171,
+            "loc": {
+              "start": {
+                "line": 4,
+                "column": 24
+              },
+              "end": {
+                "line": 4,
+                "column": 48
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Nested arrow function inside parentheses",
+            "start": 173,
+            "end": 216,
+            "loc": {
+              "start": {
+                "line": 6,
+                "column": 0
+              },
+              "end": {
+                "line": 6,
+                "column": 43
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (b = (c) => d) : (e => f)",
+            "start": 246,
+            "end": 278,
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 29
+              },
+              "end": {
+                "line": 7,
+                "column": 61
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 279,
+        "end": 311,
+        "loc": {
+          "start": {
+            "line": 8,
+            "column": 0
+          },
+          "end": {
+            "line": 8,
+            "column": 32
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 279,
+          "end": 310,
+          "loc": {
+            "start": {
+              "line": 8,
+              "column": 0
+            },
+            "end": {
+              "line": 8,
+              "column": 31
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 279,
+            "end": 280,
+            "loc": {
+              "start": {
+                "line": 8,
+                "column": 0
+              },
+              "end": {
+                "line": 8,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start": 283,
+            "end": 306,
+            "loc": {
+              "start": {
+                "line": 8,
+                "column": 4
+              },
+              "end": {
+                "line": 8,
+                "column": 27
+              }
+            },
+            "predicate": null,
+            "returnType": {
+              "type": "TypeAnnotation",
+              "start": 298,
+              "end": 301,
+              "loc": {
+                "start": {
+                  "line": 8,
+                  "column": 19
+                },
+                "end": {
+                  "line": 8,
+                  "column": 22
+                }
+              },
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
+                "start": 300,
+                "end": 301,
+                "loc": {
+                  "start": {
+                    "line": 8,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 8,
+                    "column": 22
+                  }
+                },
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 300,
+                  "end": 301,
+                  "loc": {
+                    "start": {
+                      "line": 8,
+                      "column": 21
+                    },
+                    "end": {
+                      "line": 8,
+                      "column": 22
+                    },
+                    "identifierName": "e"
+                  },
+                  "name": "e"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "AssignmentPattern",
+                "start": 284,
+                "end": 296,
+                "loc": {
+                  "start": {
+                    "line": 8,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 8,
+                    "column": 17
+                  }
+                },
+                "left": {
+                  "type": "Identifier",
+                  "start": 284,
+                  "end": 285,
+                  "loc": {
+                    "start": {
+                      "line": 8,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 8,
+                      "column": 6
+                    },
+                    "identifierName": "b"
+                  },
+                  "name": "b"
+                },
+                "right": {
+                  "type": "ArrowFunctionExpression",
+                  "start": 288,
+                  "end": 296,
+                  "loc": {
+                    "start": {
+                      "line": 8,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 8,
+                      "column": 17
+                    }
+                  },
+                  "id": null,
+                  "generator": false,
+                  "async": false,
+                  "params": [
+                    {
+                      "type": "Identifier",
+                      "start": 289,
+                      "end": 290,
+                      "loc": {
+                        "start": {
+                          "line": 8,
+                          "column": 10
+                        },
+                        "end": {
+                          "line": 8,
+                          "column": 11
+                        },
+                        "identifierName": "c"
+                      },
+                      "name": "c"
+                    }
+                  ],
+                  "body": {
+                    "type": "Identifier",
+                    "start": 295,
+                    "end": 296,
+                    "loc": {
+                      "start": {
+                        "line": 8,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 8,
+                        "column": 17
+                      },
+                      "identifierName": "d"
+                    },
+                    "name": "d"
+                  }
+                }
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 305,
+              "end": 306,
+              "loc": {
+                "start": {
+                  "line": 8,
+                  "column": 26
+                },
+                "end": {
+                  "line": 8,
+                  "column": 27
+                },
+                "identifierName": "f"
+              },
+              "name": "f"
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start": 309,
+            "end": 310,
+            "loc": {
+              "start": {
+                "line": 8,
+                "column": 30
+              },
+              "end": {
+                "line": 8,
+                "column": 31
+              },
+              "identifierName": "g"
+            },
+            "name": "g"
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (b = (c) => d) : (e => f)",
+            "start": 246,
+            "end": 278,
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 29
+              },
+              "end": {
+                "line": 7,
+                "column": 61
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? ((b = (c) => d): e => f) : g",
+            "start": 312,
+            "end": 347,
+            "loc": {
+              "start": {
+                "line": 8,
+                "column": 33
+              },
+              "end": {
+                "line": 8,
+                "column": 68
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Nested conditional expressions",
+            "start": 349,
+            "end": 382,
+            "loc": {
+              "start": {
+                "line": 10,
+                "column": 0
+              },
+              "end": {
+                "line": 10,
+                "column": 33
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 387,
+        "end": 418,
+        "loc": {
+          "start": {
+            "line": 11,
+            "column": 4
+          },
+          "end": {
+            "line": 11,
+            "column": 35
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 387,
+          "end": 417,
+          "loc": {
+            "start": {
+              "line": 11,
+              "column": 4
+            },
+            "end": {
+              "line": 11,
+              "column": 34
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 387,
+            "end": 388,
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 4
+              },
+              "end": {
+                "line": 11,
+                "column": 5
+              },
+              "identifierName": "b"
+            },
+            "name": "b"
+          },
+          "consequent": {
+            "type": "ConditionalExpression",
+            "start": 391,
+            "end": 413,
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 8
+              },
+              "end": {
+                "line": 11,
+                "column": 30
+              }
+            },
+            "test": {
+              "type": "Identifier",
+              "start": 391,
+              "end": 392,
+              "loc": {
+                "start": {
+                  "line": 11,
+                  "column": 8
+                },
+                "end": {
+                  "line": 11,
+                  "column": 9
+                },
+                "identifierName": "c"
+              },
+              "name": "c"
+            },
+            "consequent": {
+              "type": "ArrowFunctionExpression",
+              "start": 395,
+              "end": 409,
+              "loc": {
+                "start": {
+                  "line": 11,
+                  "column": 12
+                },
+                "end": {
+                  "line": 11,
+                  "column": 26
+                }
+              },
+              "predicate": null,
+              "returnType": {
+                "type": "TypeAnnotation",
+                "start": 399,
+                "end": 402,
+                "loc": {
+                  "start": {
+                    "line": 11,
+                    "column": 16
+                  },
+                  "end": {
+                    "line": 11,
+                    "column": 19
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "GenericTypeAnnotation",
+                  "start": 401,
+                  "end": 402,
+                  "loc": {
+                    "start": {
+                      "line": 11,
+                      "column": 18
+                    },
+                    "end": {
+                      "line": 11,
+                      "column": 19
+                    }
+                  },
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 401,
+                    "end": 402,
+                    "loc": {
+                      "start": {
+                        "line": 11,
+                        "column": 18
+                      },
+                      "end": {
+                        "line": 11,
+                        "column": 19
+                      },
+                      "identifierName": "e"
+                    },
+                    "name": "e"
+                  }
+                }
+              },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 396,
+                  "end": 397,
+                  "loc": {
+                    "start": {
+                      "line": 11,
+                      "column": 13
+                    },
+                    "end": {
+                      "line": 11,
+                      "column": 14
+                    },
+                    "identifierName": "d"
+                  },
+                  "name": "d"
+                }
+              ],
+              "body": {
+                "type": "Identifier",
+                "start": 407,
+                "end": 408,
+                "loc": {
+                  "start": {
+                    "line": 11,
+                    "column": 24
+                  },
+                  "end": {
+                    "line": 11,
+                    "column": 25
+                  },
+                  "identifierName": "f"
+                },
+                "name": "f",
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 406
+                }
+              }
+            },
+            "alternate": {
+              "type": "Identifier",
+              "start": 412,
+              "end": 413,
+              "loc": {
+                "start": {
+                  "line": 11,
+                  "column": 29
+                },
+                "end": {
+                  "line": 11,
+                  "column": 30
+                },
+                "identifierName": "g"
+              },
+              "name": "g"
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start": 416,
+            "end": 417,
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 33
+              },
+              "end": {
+                "line": 11,
+                "column": 34
+              },
+              "identifierName": "h"
+            },
+            "name": "h"
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? ((b = (c) => d): e => f) : g",
+            "start": 312,
+            "end": 347,
+            "loc": {
+              "start": {
+                "line": 8,
+                "column": 33
+              },
+              "end": {
+                "line": 8,
+                "column": 68
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Nested conditional expressions",
+            "start": 349,
+            "end": 382,
+            "loc": {
+              "start": {
+                "line": 10,
+                "column": 0
+              },
+              "end": {
+                "line": 10,
+                "column": 33
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " b ? (c ? ((d): e => f) : g) : h",
+            "start": 419,
+            "end": 453,
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 36
+              },
+              "end": {
+                "line": 11,
+                "column": 70
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 454,
+        "end": 489,
+        "loc": {
+          "start": {
+            "line": 12,
+            "column": 0
+          },
+          "end": {
+            "line": 12,
+            "column": 35
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 454,
+          "end": 488,
+          "loc": {
+            "start": {
+              "line": 12,
+              "column": 0
+            },
+            "end": {
+              "line": 12,
+              "column": 34
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 454,
+            "end": 455,
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 0
+              },
+              "end": {
+                "line": 12,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ConditionalExpression",
+            "start": 458,
+            "end": 484,
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 4
+              },
+              "end": {
+                "line": 12,
+                "column": 30
+              }
+            },
+            "test": {
+              "type": "Identifier",
+              "start": 458,
+              "end": 459,
+              "loc": {
+                "start": {
+                  "line": 12,
+                  "column": 4
+                },
+                "end": {
+                  "line": 12,
+                  "column": 5
+                },
+                "identifierName": "b"
+              },
+              "name": "b"
+            },
+            "consequent": {
+              "type": "ConditionalExpression",
+              "start": 462,
+              "end": 480,
+              "loc": {
+                "start": {
+                  "line": 12,
+                  "column": 8
+                },
+                "end": {
+                  "line": 12,
+                  "column": 26
+                }
+              },
+              "test": {
+                "type": "Identifier",
+                "start": 462,
+                "end": 463,
+                "loc": {
+                  "start": {
+                    "line": 12,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 12,
+                    "column": 9
+                  },
+                  "identifierName": "c"
+                },
+                "name": "c"
+              },
+              "consequent": {
+                "type": "Identifier",
+                "start": 467,
+                "end": 468,
+                "loc": {
+                  "start": {
+                    "line": 12,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 12,
+                    "column": 14
+                  },
+                  "identifierName": "d"
+                },
+                "name": "d",
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 466
+                }
+              },
+              "alternate": {
+                "type": "ArrowFunctionExpression",
+                "start": 472,
+                "end": 480,
+                "loc": {
+                  "start": {
+                    "line": 12,
+                    "column": 18
+                  },
+                  "end": {
+                    "line": 12,
+                    "column": 26
+                  }
+                },
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 472,
+                    "end": 473,
+                    "loc": {
+                      "start": {
+                        "line": 12,
+                        "column": 18
+                      },
+                      "end": {
+                        "line": 12,
+                        "column": 19
+                      },
+                      "identifierName": "e"
+                    },
+                    "name": "e"
+                  }
+                ],
+                "body": {
+                  "type": "Identifier",
+                  "start": 478,
+                  "end": 479,
+                  "loc": {
+                    "start": {
+                      "line": 12,
+                      "column": 24
+                    },
+                    "end": {
+                      "line": 12,
+                      "column": 25
+                    },
+                    "identifierName": "f"
+                  },
+                  "name": "f",
+                  "extra": {
+                    "parenthesized": true,
+                    "parenStart": 477
+                  }
+                }
+              }
+            },
+            "alternate": {
+              "type": "Identifier",
+              "start": 483,
+              "end": 484,
+              "loc": {
+                "start": {
+                  "line": 12,
+                  "column": 29
+                },
+                "end": {
+                  "line": 12,
+                  "column": 30
+                },
+                "identifierName": "g"
+              },
+              "name": "g"
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start": 487,
+            "end": 488,
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 33
+              },
+              "end": {
+                "line": 12,
+                "column": 34
+              },
+              "identifierName": "h"
+            },
+            "name": "h"
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " b ? (c ? ((d): e => f) : g) : h",
+            "start": 419,
+            "end": 453,
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 36
+              },
+              "end": {
+                "line": 11,
+                "column": 70
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (b ? (c ? d : (e => f)) : g) : h",
+            "start": 490,
+            "end": 529,
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 36
+              },
+              "end": {
+                "line": 12,
+                "column": 75
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 531,
+        "end": 564,
+        "loc": {
+          "start": {
+            "line": 14,
+            "column": 0
+          },
+          "end": {
+            "line": 14,
+            "column": 33
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 531,
+          "end": 563,
+          "loc": {
+            "start": {
+              "line": 14,
+              "column": 0
+            },
+            "end": {
+              "line": 14,
+              "column": 32
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 531,
+            "end": 532,
+            "loc": {
+              "start": {
+                "line": 14,
+                "column": 0
+              },
+              "end": {
+                "line": 14,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ConditionalExpression",
+            "start": 535,
+            "end": 559,
+            "loc": {
+              "start": {
+                "line": 14,
+                "column": 4
+              },
+              "end": {
+                "line": 14,
+                "column": 28
+              }
+            },
+            "test": {
+              "type": "Identifier",
+              "start": 535,
+              "end": 536,
+              "loc": {
+                "start": {
+                  "line": 14,
+                  "column": 4
+                },
+                "end": {
+                  "line": 14,
+                  "column": 5
+                },
+                "identifierName": "b"
+              },
+              "name": "b"
+            },
+            "consequent": {
+              "type": "Identifier",
+              "start": 540,
+              "end": 541,
+              "loc": {
+                "start": {
+                  "line": 14,
+                  "column": 9
+                },
+                "end": {
+                  "line": 14,
+                  "column": 10
+                },
+                "identifierName": "c"
+              },
+              "name": "c",
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 539
+              }
+            },
+            "alternate": {
+              "type": "ArrowFunctionExpression",
+              "start": 545,
+              "end": 559,
+              "loc": {
+                "start": {
+                  "line": 14,
+                  "column": 14
+                },
+                "end": {
+                  "line": 14,
+                  "column": 28
+                }
+              },
+              "predicate": null,
+              "returnType": {
+                "type": "TypeAnnotation",
+                "start": 549,
+                "end": 554,
+                "loc": {
+                  "start": {
+                    "line": 14,
+                    "column": 18
+                  },
+                  "end": {
+                    "line": 14,
+                    "column": 23
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "GenericTypeAnnotation",
+                  "start": 552,
+                  "end": 553,
+                  "loc": {
+                    "start": {
+                      "line": 14,
+                      "column": 21
+                    },
+                    "end": {
+                      "line": 14,
+                      "column": 22
+                    }
+                  },
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 552,
+                    "end": 553,
+                    "loc": {
+                      "start": {
+                        "line": 14,
+                        "column": 21
+                      },
+                      "end": {
+                        "line": 14,
+                        "column": 22
+                      },
+                      "identifierName": "e"
+                    },
+                    "name": "e"
+                  }
+                }
+              },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 546,
+                  "end": 547,
+                  "loc": {
+                    "start": {
+                      "line": 14,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 14,
+                      "column": 16
+                    },
+                    "identifierName": "d"
+                  },
+                  "name": "d"
+                }
+              ],
+              "body": {
+                "type": "Identifier",
+                "start": 558,
+                "end": 559,
+                "loc": {
+                  "start": {
+                    "line": 14,
+                    "column": 27
+                  },
+                  "end": {
+                    "line": 14,
+                    "column": 28
+                  },
+                  "identifierName": "f"
+                },
+                "name": "f"
+              }
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start": 562,
+            "end": 563,
+            "loc": {
+              "start": {
+                "line": 14,
+                "column": 31
+              },
+              "end": {
+                "line": 14,
+                "column": 32
+              },
+              "identifierName": "g"
+            },
+            "name": "g"
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (b ? (c ? d : (e => f)) : g) : h",
+            "start": 490,
+            "end": 529,
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 36
+              },
+              "end": {
+                "line": 12,
+                "column": 75
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (b ? c : ((d): e => f)) : g",
+            "start": 565,
+            "end": 599,
+            "loc": {
+              "start": {
+                "line": 14,
+                "column": 34
+              },
+              "end": {
+                "line": 14,
+                "column": 68
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Multiple arrow functions",
+            "start": 601,
+            "end": 628,
+            "loc": {
+              "start": {
+                "line": 16,
+                "column": 0
+              },
+              "end": {
+                "line": 16,
+                "column": 27
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 629,
+        "end": 661,
+        "loc": {
+          "start": {
+            "line": 17,
+            "column": 0
+          },
+          "end": {
+            "line": 17,
+            "column": 32
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 629,
+          "end": 660,
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 0
+            },
+            "end": {
+              "line": 17,
+              "column": 31
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 629,
+            "end": 630,
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 0
+              },
+              "end": {
+                "line": 17,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start": 633,
+            "end": 645,
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 4
+              },
+              "end": {
+                "line": 17,
+                "column": 16
+              }
+            },
+            "predicate": null,
+            "returnType": {
+              "type": "TypeAnnotation",
+              "start": 637,
+              "end": 640,
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 8
+                },
+                "end": {
+                  "line": 17,
+                  "column": 11
+                }
+              },
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
+                "start": 639,
+                "end": 640,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 11
+                  }
+                },
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 639,
+                  "end": 640,
+                  "loc": {
+                    "start": {
+                      "line": 17,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 11
+                    },
+                    "identifierName": "c"
+                  },
+                  "name": "c"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 634,
+                "end": 635,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 6
+                  },
+                  "identifierName": "b"
+                },
+                "name": "b"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 644,
+              "end": 645,
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 15
+                },
+                "end": {
+                  "line": 17,
+                  "column": 16
+                },
+                "identifierName": "d"
+              },
+              "name": "d"
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start": 648,
+            "end": 660,
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 19
+              },
+              "end": {
+                "line": 17,
+                "column": 31
+              }
+            },
+            "predicate": null,
+            "returnType": {
+              "type": "TypeAnnotation",
+              "start": 652,
+              "end": 655,
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 23
+                },
+                "end": {
+                  "line": 17,
+                  "column": 26
+                }
+              },
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
+                "start": 654,
+                "end": 655,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 26
+                  }
+                },
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 654,
+                  "end": 655,
+                  "loc": {
+                    "start": {
+                      "line": 17,
+                      "column": 25
+                    },
+                    "end": {
+                      "line": 17,
+                      "column": 26
+                    },
+                    "identifierName": "f"
+                  },
+                  "name": "f"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 649,
+                "end": 650,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 20
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 21
+                  },
+                  "identifierName": "e"
+                },
+                "name": "e"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 659,
+              "end": 660,
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 30
+                },
+                "end": {
+                  "line": 17,
+                  "column": 31
+                },
+                "identifierName": "g"
+              },
+              "name": "g"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (b ? c : ((d): e => f)) : g",
+            "start": 565,
+            "end": 599,
+            "loc": {
+              "start": {
+                "line": 14,
+                "column": 34
+              },
+              "end": {
+                "line": 14,
+                "column": 68
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Multiple arrow functions",
+            "start": 601,
+            "end": 628,
+            "loc": {
+              "start": {
+                "line": 16,
+                "column": 0
+              },
+              "end": {
+                "line": 16,
+                "column": 27
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? ((b): c => d) : ((e): f => g)",
+            "start": 662,
+            "end": 698,
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 33
+              },
+              "end": {
+                "line": 17,
+                "column": 69
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Multiple nested arrow functions (<T> is needed to avoid ambiguities)",
+            "start": 700,
+            "end": 771,
+            "loc": {
+              "start": {
+                "line": 19,
+                "column": 0
+              },
+              "end": {
+                "line": 19,
+                "column": 71
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 772,
+        "end": 804,
+        "loc": {
+          "start": {
+            "line": 20,
+            "column": 0
+          },
+          "end": {
+            "line": 20,
+            "column": 32
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 772,
+          "end": 803,
+          "loc": {
+            "start": {
+              "line": 20,
+              "column": 0
+            },
+            "end": {
+              "line": 20,
+              "column": 31
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 772,
+            "end": 773,
+            "loc": {
+              "start": {
+                "line": 20,
+                "column": 0
+              },
+              "end": {
+                "line": 20,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start": 776,
+            "end": 799,
+            "loc": {
+              "start": {
+                "line": 20,
+                "column": 4
+              },
+              "end": {
+                "line": 20,
+                "column": 27
+              }
+            },
+            "predicate": null,
+            "returnType": {
+              "type": "TypeAnnotation",
+              "start": 780,
+              "end": 783,
+              "loc": {
+                "start": {
+                  "line": 20,
+                  "column": 8
+                },
+                "end": {
+                  "line": 20,
+                  "column": 11
+                }
+              },
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
+                "start": 782,
+                "end": 783,
+                "loc": {
+                  "start": {
+                    "line": 20,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 20,
+                    "column": 11
+                  }
+                },
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 782,
+                  "end": 783,
+                  "loc": {
+                    "start": {
+                      "line": 20,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 20,
+                      "column": 11
+                    },
+                    "identifierName": "c"
+                  },
+                  "name": "c"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 777,
+                "end": 778,
+                "loc": {
+                  "start": {
+                    "line": 20,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 20,
+                    "column": 6
+                  },
+                  "identifierName": "b"
+                },
+                "name": "b"
+              }
+            ],
+            "body": {
+              "type": "ArrowFunctionExpression",
+              "start": 787,
+              "end": 799,
+              "loc": {
+                "start": {
+                  "line": 20,
+                  "column": 15
+                },
+                "end": {
+                  "line": 20,
+                  "column": 27
+                }
+              },
+              "predicate": null,
+              "returnType": {
+                "type": "TypeAnnotation",
+                "start": 791,
+                "end": 794,
+                "loc": {
+                  "start": {
+                    "line": 20,
+                    "column": 19
+                  },
+                  "end": {
+                    "line": 20,
+                    "column": 22
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "GenericTypeAnnotation",
+                  "start": 793,
+                  "end": 794,
+                  "loc": {
+                    "start": {
+                      "line": 20,
+                      "column": 21
+                    },
+                    "end": {
+                      "line": 20,
+                      "column": 22
+                    }
+                  },
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 793,
+                    "end": 794,
+                    "loc": {
+                      "start": {
+                        "line": 20,
+                        "column": 21
+                      },
+                      "end": {
+                        "line": 20,
+                        "column": 22
+                      },
+                      "identifierName": "e"
+                    },
+                    "name": "e"
+                  }
+                }
+              },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 788,
+                  "end": 789,
+                  "loc": {
+                    "start": {
+                      "line": 20,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 20,
+                      "column": 17
+                    },
+                    "identifierName": "d"
+                  },
+                  "name": "d"
+                }
+              ],
+              "body": {
+                "type": "Identifier",
+                "start": 798,
+                "end": 799,
+                "loc": {
+                  "start": {
+                    "line": 20,
+                    "column": 26
+                  },
+                  "end": {
+                    "line": 20,
+                    "column": 27
+                  },
+                  "identifierName": "f"
+                },
+                "name": "f"
+              }
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start": 802,
+            "end": 803,
+            "loc": {
+              "start": {
+                "line": 20,
+                "column": 30
+              },
+              "end": {
+                "line": 20,
+                "column": 31
+              },
+              "identifierName": "g"
+            },
+            "name": "g"
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? ((b): c => d) : ((e): f => g)",
+            "start": 662,
+            "end": 698,
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 33
+              },
+              "end": {
+                "line": 17,
+                "column": 69
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Multiple nested arrow functions (<T> is needed to avoid ambiguities)",
+            "start": 700,
+            "end": 771,
+            "loc": {
+              "start": {
+                "line": 19,
+                "column": 0
+              },
+              "end": {
+                "line": 19,
+                "column": 71
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? ((b): c => ((d): e => f)) : g",
+            "start": 805,
+            "end": 841,
+            "loc": {
+              "start": {
+                "line": 20,
+                "column": 33
+              },
+              "end": {
+                "line": 20,
+                "column": 69
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 842,
+        "end": 873,
+        "loc": {
+          "start": {
+            "line": 21,
+            "column": 0
+          },
+          "end": {
+            "line": 21,
+            "column": 31
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 842,
+          "end": 872,
+          "loc": {
+            "start": {
+              "line": 21,
+              "column": 0
+            },
+            "end": {
+              "line": 21,
+              "column": 30
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 842,
+            "end": 843,
+            "loc": {
+              "start": {
+                "line": 21,
+                "column": 0
+              },
+              "end": {
+                "line": 21,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "Identifier",
+            "start": 847,
+            "end": 848,
+            "loc": {
+              "start": {
+                "line": 21,
+                "column": 5
+              },
+              "end": {
+                "line": 21,
+                "column": 6
+              },
+              "identifierName": "b"
+            },
+            "name": "b",
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 846
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start": 852,
+            "end": 872,
+            "loc": {
+              "start": {
+                "line": 21,
+                "column": 10
+              },
+              "end": {
+                "line": 21,
+                "column": 30
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 852,
+                "end": 853,
+                "loc": {
+                  "start": {
+                    "line": 21,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 21,
+                    "column": 11
+                  },
+                  "identifierName": "c"
+                },
+                "name": "c"
+              }
+            ],
+            "body": {
+              "type": "ArrowFunctionExpression",
+              "start": 857,
+              "end": 872,
+              "loc": {
+                "start": {
+                  "line": 21,
+                  "column": 15
+                },
+                "end": {
+                  "line": 21,
+                  "column": 30
+                }
+              },
+              "predicate": null,
+              "returnType": {
+                "type": "TypeAnnotation",
+                "start": 864,
+                "end": 867,
+                "loc": {
+                  "start": {
+                    "line": 21,
+                    "column": 22
+                  },
+                  "end": {
+                    "line": 21,
+                    "column": 25
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "GenericTypeAnnotation",
+                  "start": 866,
+                  "end": 867,
+                  "loc": {
+                    "start": {
+                      "line": 21,
+                      "column": 24
+                    },
+                    "end": {
+                      "line": 21,
+                      "column": 25
+                    }
+                  },
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 866,
+                    "end": 867,
+                    "loc": {
+                      "start": {
+                        "line": 21,
+                        "column": 24
+                      },
+                      "end": {
+                        "line": 21,
+                        "column": 25
+                      },
+                      "identifierName": "e"
+                    },
+                    "name": "e"
+                  }
+                }
+              },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 861,
+                  "end": 862,
+                  "loc": {
+                    "start": {
+                      "line": 21,
+                      "column": 19
+                    },
+                    "end": {
+                      "line": 21,
+                      "column": 20
+                    },
+                    "identifierName": "d"
+                  },
+                  "name": "d"
+                }
+              ],
+              "body": {
+                "type": "Identifier",
+                "start": 871,
+                "end": 872,
+                "loc": {
+                  "start": {
+                    "line": 21,
+                    "column": 29
+                  },
+                  "end": {
+                    "line": 21,
+                    "column": 30
+                  },
+                  "identifierName": "f"
+                },
+                "name": "f"
+              },
+              "typeParameters": {
+                "type": "TypeParameterDeclaration",
+                "start": 857,
+                "end": 860,
+                "loc": {
+                  "start": {
+                    "line": 21,
+                    "column": 15
+                  },
+                  "end": {
+                    "line": 21,
+                    "column": 18
+                  }
+                },
+                "params": [
+                  {
+                    "type": "TypeParameter",
+                    "start": 858,
+                    "end": 859,
+                    "loc": {
+                      "start": {
+                        "line": 21,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 21,
+                        "column": 17
+                      }
+                    },
+                    "name": "T",
+                    "variance": null
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? ((b): c => ((d): e => f)) : g",
+            "start": 805,
+            "end": 841,
+            "loc": {
+              "start": {
+                "line": 20,
+                "column": 33
+              },
+              "end": {
+                "line": 20,
+                "column": 69
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? b : (c => (<T>(d): e => f))",
+            "start": 874,
+            "end": 908,
+            "loc": {
+              "start": {
+                "line": 21,
+                "column": 32
+              },
+              "end": {
+                "line": 21,
+                "column": 66
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 909,
+        "end": 940,
+        "loc": {
+          "start": {
+            "line": 22,
+            "column": 0
+          },
+          "end": {
+            "line": 22,
+            "column": 31
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 909,
+          "end": 939,
+          "loc": {
+            "start": {
+              "line": 22,
+              "column": 0
+            },
+            "end": {
+              "line": 22,
+              "column": 30
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 909,
+            "end": 910,
+            "loc": {
+              "start": {
+                "line": 22,
+                "column": 0
+              },
+              "end": {
+                "line": 22,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start": 913,
+            "end": 930,
+            "loc": {
+              "start": {
+                "line": 22,
+                "column": 4
+              },
+              "end": {
+                "line": 22,
+                "column": 21
+              }
+            },
+            "predicate": null,
+            "returnType": {
+              "type": "TypeAnnotation",
+              "start": 920,
+              "end": 923,
+              "loc": {
+                "start": {
+                  "line": 22,
+                  "column": 11
+                },
+                "end": {
+                  "line": 22,
+                  "column": 14
+                }
+              },
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
+                "start": 922,
+                "end": 923,
+                "loc": {
+                  "start": {
+                    "line": 22,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 22,
+                    "column": 14
+                  }
+                },
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 922,
+                  "end": 923,
+                  "loc": {
+                    "start": {
+                      "line": 22,
+                      "column": 13
+                    },
+                    "end": {
+                      "line": 22,
+                      "column": 14
+                    },
+                    "identifierName": "c"
+                  },
+                  "name": "c"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 917,
+                "end": 918,
+                "loc": {
+                  "start": {
+                    "line": 22,
+                    "column": 8
+                  },
+                  "end": {
+                    "line": 22,
+                    "column": 9
+                  },
+                  "identifierName": "b"
+                },
+                "name": "b"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 928,
+              "end": 929,
+              "loc": {
+                "start": {
+                  "line": 22,
+                  "column": 19
+                },
+                "end": {
+                  "line": 22,
+                  "column": 20
+                },
+                "identifierName": "d"
+              },
+              "name": "d",
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 927
+              }
+            },
+            "typeParameters": {
+              "type": "TypeParameterDeclaration",
+              "start": 913,
+              "end": 916,
+              "loc": {
+                "start": {
+                  "line": 22,
+                  "column": 4
+                },
+                "end": {
+                  "line": 22,
+                  "column": 7
+                }
+              },
+              "params": [
+                {
+                  "type": "TypeParameter",
+                  "start": 914,
+                  "end": 915,
+                  "loc": {
+                    "start": {
+                      "line": 22,
+                      "column": 5
+                    },
+                    "end": {
+                      "line": 22,
+                      "column": 6
+                    }
+                  },
+                  "name": "T",
+                  "variance": null
+                }
+              ]
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start": 933,
+            "end": 939,
+            "loc": {
+              "start": {
+                "line": 22,
+                "column": 24
+              },
+              "end": {
+                "line": 22,
+                "column": 30
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 933,
+                "end": 934,
+                "loc": {
+                  "start": {
+                    "line": 22,
+                    "column": 24
+                  },
+                  "end": {
+                    "line": 22,
+                    "column": 25
+                  },
+                  "identifierName": "e"
+                },
+                "name": "e"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 938,
+              "end": 939,
+              "loc": {
+                "start": {
+                  "line": 22,
+                  "column": 29
+                },
+                "end": {
+                  "line": 22,
+                  "column": 30
+                },
+                "identifierName": "f"
+              },
+              "name": "f"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? b : (c => (<T>(d): e => f))",
+            "start": 874,
+            "end": 908,
+            "loc": {
+              "start": {
+                "line": 21,
+                "column": 32
+              },
+              "end": {
+                "line": 21,
+                "column": 66
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (<T>(b): c => d) : (e => f)",
+            "start": 941,
+            "end": 975,
+            "loc": {
+              "start": {
+                "line": 22,
+                "column": 32
+              },
+              "end": {
+                "line": 22,
+                "column": 66
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Invalid lhs value inside parentheses",
+            "start": 977,
+            "end": 1016,
+            "loc": {
+              "start": {
+                "line": 24,
+                "column": 0
+              },
+              "end": {
+                "line": 24,
+                "column": 39
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 1017,
+        "end": 1039,
+        "loc": {
+          "start": {
+            "line": 25,
+            "column": 0
+          },
+          "end": {
+            "line": 25,
+            "column": 22
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 1017,
+          "end": 1038,
+          "loc": {
+            "start": {
+              "line": 25,
+              "column": 0
+            },
+            "end": {
+              "line": 25,
+              "column": 21
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 1017,
+            "end": 1018,
+            "loc": {
+              "start": {
+                "line": 25,
+                "column": 0
+              },
+              "end": {
+                "line": 25,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start": 1022,
+            "end": 1028,
+            "loc": {
+              "start": {
+                "line": 25,
+                "column": 5
+              },
+              "end": {
+                "line": 25,
+                "column": 11
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 1022,
+                "end": 1023,
+                "loc": {
+                  "start": {
+                    "line": 25,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 25,
+                    "column": 6
+                  },
+                  "identifierName": "b"
+                },
+                "name": "b"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 1027,
+              "end": 1028,
+              "loc": {
+                "start": {
+                  "line": 25,
+                  "column": 10
+                },
+                "end": {
+                  "line": 25,
+                  "column": 11
+                },
+                "identifierName": "c"
+              },
+              "name": "c"
+            },
+            "extra": {
+              "parenthesized": true,
+              "parenStart": 1021
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start": 1032,
+            "end": 1038,
+            "loc": {
+              "start": {
+                "line": 25,
+                "column": 15
+              },
+              "end": {
+                "line": 25,
+                "column": 21
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 1032,
+                "end": 1033,
+                "loc": {
+                  "start": {
+                    "line": 25,
+                    "column": 15
+                  },
+                  "end": {
+                    "line": 25,
+                    "column": 16
+                  },
+                  "identifierName": "d"
+                },
+                "name": "d"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 1037,
+              "end": 1038,
+              "loc": {
+                "start": {
+                  "line": 25,
+                  "column": 20
+                },
+                "end": {
+                  "line": 25,
+                  "column": 21
+                },
+                "identifierName": "e"
+              },
+              "name": "e"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (<T>(b): c => d) : (e => f)",
+            "start": 941,
+            "end": 975,
+            "loc": {
+              "start": {
+                "line": 22,
+                "column": 32
+              },
+              "end": {
+                "line": 22,
+                "column": 66
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Invalid lhs value inside parentheses",
+            "start": 977,
+            "end": 1016,
+            "loc": {
+              "start": {
+                "line": 24,
+                "column": 0
+              },
+              "end": {
+                "line": 24,
+                "column": 39
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (b => c) : (d => e)",
+            "start": 1040,
+            "end": 1066,
+            "loc": {
+              "start": {
+                "line": 25,
+                "column": 23
+              },
+              "end": {
+                "line": 25,
+                "column": 49
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 1067,
+        "end": 1097,
+        "loc": {
+          "start": {
+            "line": 26,
+            "column": 0
+          },
+          "end": {
+            "line": 26,
+            "column": 30
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 1067,
+          "end": 1096,
+          "loc": {
+            "start": {
+              "line": 26,
+              "column": 0
+            },
+            "end": {
+              "line": 26,
+              "column": 29
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 1067,
+            "end": 1068,
+            "loc": {
+              "start": {
+                "line": 26,
+                "column": 0
+              },
+              "end": {
+                "line": 26,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ConditionalExpression",
+            "start": 1071,
+            "end": 1092,
+            "loc": {
+              "start": {
+                "line": 26,
+                "column": 4
+              },
+              "end": {
+                "line": 26,
+                "column": 25
+              }
+            },
+            "test": {
+              "type": "Identifier",
+              "start": 1071,
+              "end": 1072,
+              "loc": {
+                "start": {
+                  "line": 26,
+                  "column": 4
+                },
+                "end": {
+                  "line": 26,
+                  "column": 5
+                },
+                "identifierName": "b"
+              },
+              "name": "b"
+            },
+            "consequent": {
+              "type": "ArrowFunctionExpression",
+              "start": 1076,
+              "end": 1082,
+              "loc": {
+                "start": {
+                  "line": 26,
+                  "column": 9
+                },
+                "end": {
+                  "line": 26,
+                  "column": 15
+                }
+              },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 1076,
+                  "end": 1077,
+                  "loc": {
+                    "start": {
+                      "line": 26,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 26,
+                      "column": 10
+                    },
+                    "identifierName": "c"
+                  },
+                  "name": "c"
+                }
+              ],
+              "body": {
+                "type": "Identifier",
+                "start": 1081,
+                "end": 1082,
+                "loc": {
+                  "start": {
+                    "line": 26,
+                    "column": 14
+                  },
+                  "end": {
+                    "line": 26,
+                    "column": 15
+                  },
+                  "identifierName": "d"
+                },
+                "name": "d"
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 1075
+              }
+            },
+            "alternate": {
+              "type": "ArrowFunctionExpression",
+              "start": 1086,
+              "end": 1092,
+              "loc": {
+                "start": {
+                  "line": 26,
+                  "column": 19
+                },
+                "end": {
+                  "line": 26,
+                  "column": 25
+                }
+              },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 1086,
+                  "end": 1087,
+                  "loc": {
+                    "start": {
+                      "line": 26,
+                      "column": 19
+                    },
+                    "end": {
+                      "line": 26,
+                      "column": 20
+                    },
+                    "identifierName": "e"
+                  },
+                  "name": "e"
+                }
+              ],
+              "body": {
+                "type": "Identifier",
+                "start": 1091,
+                "end": 1092,
+                "loc": {
+                  "start": {
+                    "line": 26,
+                    "column": 24
+                  },
+                  "end": {
+                    "line": 26,
+                    "column": 25
+                  },
+                  "identifierName": "f"
+                },
+                "name": "f"
+              }
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start": 1095,
+            "end": 1096,
+            "loc": {
+              "start": {
+                "line": 26,
+                "column": 28
+              },
+              "end": {
+                "line": 26,
+                "column": 29
+              },
+              "identifierName": "g"
+            },
+            "name": "g"
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (b => c) : (d => e)",
+            "start": 1040,
+            "end": 1066,
+            "loc": {
+              "start": {
+                "line": 25,
+                "column": 23
+              },
+              "end": {
+                "line": 25,
+                "column": 49
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (b ? (c => d) : (e => f)) : g",
+            "start": 1098,
+            "end": 1134,
+            "loc": {
+              "start": {
+                "line": 26,
+                "column": 31
+              },
+              "end": {
+                "line": 26,
+                "column": 67
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Invalid lhs value inside parentheses inside arrow function",
+            "start": 1136,
+            "end": 1197,
+            "loc": {
+              "start": {
+                "line": 28,
+                "column": 0
+              },
+              "end": {
+                "line": 28,
+                "column": 61
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 1198,
+        "end": 1231,
+        "loc": {
+          "start": {
+            "line": 29,
+            "column": 0
+          },
+          "end": {
+            "line": 29,
+            "column": 33
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 1198,
+          "end": 1230,
+          "loc": {
+            "start": {
+              "line": 29,
+              "column": 0
+            },
+            "end": {
+              "line": 29,
+              "column": 32
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 1198,
+            "end": 1199,
+            "loc": {
+              "start": {
+                "line": 29,
+                "column": 0
+              },
+              "end": {
+                "line": 29,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start": 1202,
+            "end": 1221,
+            "loc": {
+              "start": {
+                "line": 29,
+                "column": 4
+              },
+              "end": {
+                "line": 29,
+                "column": 23
+              }
+            },
+            "predicate": null,
+            "returnType": {
+              "type": "TypeAnnotation",
+              "start": 1206,
+              "end": 1209,
+              "loc": {
+                "start": {
+                  "line": 29,
+                  "column": 8
+                },
+                "end": {
+                  "line": 29,
+                  "column": 11
+                }
+              },
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
+                "start": 1208,
+                "end": 1209,
+                "loc": {
+                  "start": {
+                    "line": 29,
+                    "column": 10
+                  },
+                  "end": {
+                    "line": 29,
+                    "column": 11
+                  }
+                },
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 1208,
+                  "end": 1209,
+                  "loc": {
+                    "start": {
+                      "line": 29,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 29,
+                      "column": 11
+                    },
+                    "identifierName": "c"
+                  },
+                  "name": "c"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 1203,
+                "end": 1204,
+                "loc": {
+                  "start": {
+                    "line": 29,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 29,
+                    "column": 6
+                  },
+                  "identifierName": "b"
+                },
+                "name": "b"
+              }
+            ],
+            "body": {
+              "type": "ArrowFunctionExpression",
+              "start": 1214,
+              "end": 1220,
+              "loc": {
+                "start": {
+                  "line": 29,
+                  "column": 16
+                },
+                "end": {
+                  "line": 29,
+                  "column": 22
+                }
+              },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 1214,
+                  "end": 1215,
+                  "loc": {
+                    "start": {
+                      "line": 29,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 29,
+                      "column": 17
+                    },
+                    "identifierName": "d"
+                  },
+                  "name": "d"
+                }
+              ],
+              "body": {
+                "type": "Identifier",
+                "start": 1219,
+                "end": 1220,
+                "loc": {
+                  "start": {
+                    "line": 29,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 29,
+                    "column": 22
+                  },
+                  "identifierName": "e"
+                },
+                "name": "e"
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 1213
+              }
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start": 1224,
+            "end": 1230,
+            "loc": {
+              "start": {
+                "line": 29,
+                "column": 26
+              },
+              "end": {
+                "line": 29,
+                "column": 32
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 1224,
+                "end": 1225,
+                "loc": {
+                  "start": {
+                    "line": 29,
+                    "column": 26
+                  },
+                  "end": {
+                    "line": 29,
+                    "column": 27
+                  },
+                  "identifierName": "f"
+                },
+                "name": "f"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 1229,
+              "end": 1230,
+              "loc": {
+                "start": {
+                  "line": 29,
+                  "column": 31
+                },
+                "end": {
+                  "line": 29,
+                  "column": 32
+                },
+                "identifierName": "g"
+              },
+              "name": "g"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (b ? (c => d) : (e => f)) : g",
+            "start": 1098,
+            "end": 1134,
+            "loc": {
+              "start": {
+                "line": 26,
+                "column": 31
+              },
+              "end": {
+                "line": 26,
+                "column": 67
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Invalid lhs value inside parentheses inside arrow function",
+            "start": 1136,
+            "end": 1197,
+            "loc": {
+              "start": {
+                "line": 28,
+                "column": 0
+              },
+              "end": {
+                "line": 28,
+                "column": 61
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? ((b): c => (d => e)) : (f => g)",
+            "start": 1232,
+            "end": 1270,
+            "loc": {
+              "start": {
+                "line": 29,
+                "column": 34
+              },
+              "end": {
+                "line": 29,
+                "column": 72
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 1271,
+        "end": 1313,
+        "loc": {
+          "start": {
+            "line": 30,
+            "column": 0
+          },
+          "end": {
+            "line": 30,
+            "column": 42
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 1271,
+          "end": 1312,
+          "loc": {
+            "start": {
+              "line": 30,
+              "column": 0
+            },
+            "end": {
+              "line": 30,
+              "column": 41
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 1271,
+            "end": 1272,
+            "loc": {
+              "start": {
+                "line": 30,
+                "column": 0
+              },
+              "end": {
+                "line": 30,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ConditionalExpression",
+            "start": 1275,
+            "end": 1303,
+            "loc": {
+              "start": {
+                "line": 30,
+                "column": 4
+              },
+              "end": {
+                "line": 30,
+                "column": 32
+              }
+            },
+            "test": {
+              "type": "Identifier",
+              "start": 1275,
+              "end": 1276,
+              "loc": {
+                "start": {
+                  "line": 30,
+                  "column": 4
+                },
+                "end": {
+                  "line": 30,
+                  "column": 5
+                },
+                "identifierName": "b"
+              },
+              "name": "b"
+            },
+            "consequent": {
+              "type": "ArrowFunctionExpression",
+              "start": 1280,
+              "end": 1286,
+              "loc": {
+                "start": {
+                  "line": 30,
+                  "column": 9
+                },
+                "end": {
+                  "line": 30,
+                  "column": 15
+                }
+              },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 1280,
+                  "end": 1281,
+                  "loc": {
+                    "start": {
+                      "line": 30,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 30,
+                      "column": 10
+                    },
+                    "identifierName": "c"
+                  },
+                  "name": "c"
+                }
+              ],
+              "body": {
+                "type": "Identifier",
+                "start": 1285,
+                "end": 1286,
+                "loc": {
+                  "start": {
+                    "line": 30,
+                    "column": 14
+                  },
+                  "end": {
+                    "line": 30,
+                    "column": 15
+                  },
+                  "identifierName": "d"
+                },
+                "name": "d"
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 1279
+              }
+            },
+            "alternate": {
+              "type": "ArrowFunctionExpression",
+              "start": 1290,
+              "end": 1303,
+              "loc": {
+                "start": {
+                  "line": 30,
+                  "column": 19
+                },
+                "end": {
+                  "line": 30,
+                  "column": 32
+                }
+              },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 1290,
+                  "end": 1291,
+                  "loc": {
+                    "start": {
+                      "line": 30,
+                      "column": 19
+                    },
+                    "end": {
+                      "line": 30,
+                      "column": 20
+                    },
+                    "identifierName": "e"
+                  },
+                  "name": "e"
+                }
+              ],
+              "body": {
+                "type": "ArrowFunctionExpression",
+                "start": 1296,
+                "end": 1302,
+                "loc": {
+                  "start": {
+                    "line": 30,
+                    "column": 25
+                  },
+                  "end": {
+                    "line": 30,
+                    "column": 31
+                  }
+                },
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 1296,
+                    "end": 1297,
+                    "loc": {
+                      "start": {
+                        "line": 30,
+                        "column": 25
+                      },
+                      "end": {
+                        "line": 30,
+                        "column": 26
+                      },
+                      "identifierName": "f"
+                    },
+                    "name": "f"
+                  }
+                ],
+                "body": {
+                  "type": "Identifier",
+                  "start": 1301,
+                  "end": 1302,
+                  "loc": {
+                    "start": {
+                      "line": 30,
+                      "column": 30
+                    },
+                    "end": {
+                      "line": 30,
+                      "column": 31
+                    },
+                    "identifierName": "g"
+                  },
+                  "name": "g"
+                },
+                "extra": {
+                  "parenthesized": true,
+                  "parenStart": 1295
+                }
+              }
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start": 1306,
+            "end": 1312,
+            "loc": {
+              "start": {
+                "line": 30,
+                "column": 35
+              },
+              "end": {
+                "line": 30,
+                "column": 41
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 1306,
+                "end": 1307,
+                "loc": {
+                  "start": {
+                    "line": 30,
+                    "column": 35
+                  },
+                  "end": {
+                    "line": 30,
+                    "column": 36
+                  },
+                  "identifierName": "h"
+                },
+                "name": "h"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 1311,
+              "end": 1312,
+              "loc": {
+                "start": {
+                  "line": 30,
+                  "column": 40
+                },
+                "end": {
+                  "line": 30,
+                  "column": 41
+                },
+                "identifierName": "i"
+              },
+              "name": "i"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? ((b): c => (d => e)) : (f => g)",
+            "start": 1232,
+            "end": 1270,
+            "loc": {
+              "start": {
+                "line": 29,
+                "column": 34
+              },
+              "end": {
+                "line": 29,
+                "column": 72
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (b ? (c => d) : (e => (f => g))) : (h => i)",
+            "start": 1314,
+            "end": 1364,
+            "loc": {
+              "start": {
+                "line": 30,
+                "column": 43
+              },
+              "end": {
+                "line": 30,
+                "column": 93
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Function as type annotation",
+            "start": 1366,
+            "end": 1396,
+            "loc": {
+              "start": {
+                "line": 32,
+                "column": 0
+              },
+              "end": {
+                "line": 32,
+                "column": 30
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 1397,
+        "end": 1425,
+        "loc": {
+          "start": {
+            "line": 33,
+            "column": 0
+          },
+          "end": {
+            "line": 33,
+            "column": 28
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 1397,
+          "end": 1424,
+          "loc": {
+            "start": {
+              "line": 33,
+              "column": 0
+            },
+            "end": {
+              "line": 33,
+              "column": 27
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 1397,
+            "end": 1398,
+            "loc": {
+              "start": {
+                "line": 33,
+                "column": 0
+              },
+              "end": {
+                "line": 33,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start": 1401,
+            "end": 1420,
+            "loc": {
+              "start": {
+                "line": 33,
+                "column": 4
+              },
+              "end": {
+                "line": 33,
+                "column": 23
+              }
+            },
+            "predicate": null,
+            "returnType": {
+              "type": "TypeAnnotation",
+              "start": 1405,
+              "end": 1415,
+              "loc": {
+                "start": {
+                  "line": 33,
+                  "column": 8
+                },
+                "end": {
+                  "line": 33,
+                  "column": 18
+                }
+              },
+              "typeAnnotation": {
+                "type": "FunctionTypeAnnotation",
+                "start": 1408,
+                "end": 1414,
+                "loc": {
+                  "start": {
+                    "line": 33,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 33,
+                    "column": 17
+                  }
+                },
+                "params": [
+                  {
+                    "type": "FunctionTypeParam",
+                    "start": 1408,
+                    "end": 1412,
+                    "loc": {
+                      "start": {
+                        "line": 33,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 33,
+                        "column": 15
+                      }
+                    },
+                    "name": null,
+                    "optional": false,
+                    "typeAnnotation": {
+                      "type": "GenericTypeAnnotation",
+                      "start": 1408,
+                      "end": 1409,
+                      "loc": {
+                        "start": {
+                          "line": 33,
+                          "column": 11
+                        },
+                        "end": {
+                          "line": 33,
+                          "column": 12
+                        }
+                      },
+                      "typeParameters": null,
+                      "id": {
+                        "type": "Identifier",
+                        "start": 1408,
+                        "end": 1409,
+                        "loc": {
+                          "start": {
+                            "line": 33,
+                            "column": 11
+                          },
+                          "end": {
+                            "line": 33,
+                            "column": 12
+                          },
+                          "identifierName": "c"
+                        },
+                        "name": "c"
+                      }
+                    }
+                  }
+                ],
+                "rest": null,
+                "returnType": {
+                  "type": "GenericTypeAnnotation",
+                  "start": 1413,
+                  "end": 1414,
+                  "loc": {
+                    "start": {
+                      "line": 33,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 33,
+                      "column": 17
+                    }
+                  },
+                  "typeParameters": null,
+                  "id": {
+                    "type": "Identifier",
+                    "start": 1413,
+                    "end": 1414,
+                    "loc": {
+                      "start": {
+                        "line": 33,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 33,
+                        "column": 17
+                      },
+                      "identifierName": "d"
+                    },
+                    "name": "d"
+                  }
+                },
+                "typeParameters": null
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 1402,
+                "end": 1403,
+                "loc": {
+                  "start": {
+                    "line": 33,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 33,
+                    "column": 6
+                  },
+                  "identifierName": "b"
+                },
+                "name": "b"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 1419,
+              "end": 1420,
+              "loc": {
+                "start": {
+                  "line": 33,
+                  "column": 22
+                },
+                "end": {
+                  "line": 33,
+                  "column": 23
+                },
+                "identifierName": "e"
+              },
+              "name": "e"
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start": 1423,
+            "end": 1424,
+            "loc": {
+              "start": {
+                "line": 33,
+                "column": 26
+              },
+              "end": {
+                "line": 33,
+                "column": 27
+              },
+              "identifierName": "f"
+            },
+            "name": "f"
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (b ? (c => d) : (e => (f => g))) : (h => i)",
+            "start": 1314,
+            "end": 1364,
+            "loc": {
+              "start": {
+                "line": 30,
+                "column": 43
+              },
+              "end": {
+                "line": 30,
+                "column": 93
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Function as type annotation",
+            "start": 1366,
+            "end": 1396,
+            "loc": {
+              "start": {
+                "line": 32,
+                "column": 0
+              },
+              "end": {
+                "line": 32,
+                "column": 30
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? ((b): (c => d) => e) : f",
+            "start": 1426,
+            "end": 1457,
+            "loc": {
+              "start": {
+                "line": 33,
+                "column": 29
+              },
+              "end": {
+                "line": 33,
+                "column": 60
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Async functions or calls",
+            "start": 1459,
+            "end": 1486,
+            "loc": {
+              "start": {
+                "line": 35,
+                "column": 0
+              },
+              "end": {
+                "line": 35,
+                "column": 27
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 1487,
+        "end": 1510,
+        "loc": {
+          "start": {
+            "line": 36,
+            "column": 0
+          },
+          "end": {
+            "line": 36,
+            "column": 23
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 1487,
+          "end": 1509,
+          "loc": {
+            "start": {
+              "line": 36,
+              "column": 0
+            },
+            "end": {
+              "line": 36,
+              "column": 22
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 1487,
+            "end": 1488,
+            "loc": {
+              "start": {
+                "line": 36,
+                "column": 0
+              },
+              "end": {
+                "line": 36,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "CallExpression",
+            "start": 1491,
+            "end": 1500,
+            "loc": {
+              "start": {
+                "line": 36,
+                "column": 4
+              },
+              "end": {
+                "line": 36,
+                "column": 13
+              }
+            },
+            "callee": {
+              "type": "Identifier",
+              "start": 1491,
+              "end": 1496,
+              "loc": {
+                "start": {
+                  "line": 36,
+                  "column": 4
+                },
+                "end": {
+                  "line": 36,
+                  "column": 9
+                },
+                "identifierName": "async"
+              },
+              "name": "async"
+            },
+            "arguments": [
+              {
+                "type": "Identifier",
+                "start": 1498,
+                "end": 1499,
+                "loc": {
+                  "start": {
+                    "line": 36,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 36,
+                    "column": 12
+                  },
+                  "identifierName": "b"
+                },
+                "name": "b"
+              }
+            ]
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start": 1503,
+            "end": 1509,
+            "loc": {
+              "start": {
+                "line": 36,
+                "column": 16
+              },
+              "end": {
+                "line": 36,
+                "column": 22
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 1503,
+                "end": 1504,
+                "loc": {
+                  "start": {
+                    "line": 36,
+                    "column": 16
+                  },
+                  "end": {
+                    "line": 36,
+                    "column": 17
+                  },
+                  "identifierName": "c"
+                },
+                "name": "c"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 1508,
+              "end": 1509,
+              "loc": {
+                "start": {
+                  "line": 36,
+                  "column": 21
+                },
+                "end": {
+                  "line": 36,
+                  "column": 22
+                },
+                "identifierName": "d"
+              },
+              "name": "d"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? ((b): (c => d) => e) : f",
+            "start": 1426,
+            "end": 1457,
+            "loc": {
+              "start": {
+                "line": 33,
+                "column": 29
+              },
+              "end": {
+                "line": 33,
+                "column": 60
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " Async functions or calls",
+            "start": 1459,
+            "end": 1486,
+            "loc": {
+              "start": {
+                "line": 35,
+                "column": 0
+              },
+              "end": {
+                "line": 35,
+                "column": 27
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (async(b)) : (c => d)",
+            "start": 1511,
+            "end": 1539,
+            "loc": {
+              "start": {
+                "line": 36,
+                "column": 24
+              },
+              "end": {
+                "line": 36,
+                "column": 52
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 1540,
+        "end": 1567,
+        "loc": {
+          "start": {
+            "line": 37,
+            "column": 0
+          },
+          "end": {
+            "line": 37,
+            "column": 27
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 1540,
+          "end": 1566,
+          "loc": {
+            "start": {
+              "line": 37,
+              "column": 0
+            },
+            "end": {
+              "line": 37,
+              "column": 26
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 1540,
+            "end": 1541,
+            "loc": {
+              "start": {
+                "line": 37,
+                "column": 0
+              },
+              "end": {
+                "line": 37,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start": 1544,
+            "end": 1562,
+            "loc": {
+              "start": {
+                "line": 37,
+                "column": 4
+              },
+              "end": {
+                "line": 37,
+                "column": 22
+              }
+            },
+            "returnType": {
+              "type": "TypeAnnotation",
+              "start": 1554,
+              "end": 1557,
+              "loc": {
+                "start": {
+                  "line": 37,
+                  "column": 14
+                },
+                "end": {
+                  "line": 37,
+                  "column": 17
+                }
+              },
+              "typeAnnotation": {
+                "type": "GenericTypeAnnotation",
+                "start": 1556,
+                "end": 1557,
+                "loc": {
+                  "start": {
+                    "line": 37,
+                    "column": 16
+                  },
+                  "end": {
+                    "line": 37,
+                    "column": 17
+                  }
+                },
+                "typeParameters": null,
+                "id": {
+                  "type": "Identifier",
+                  "start": 1556,
+                  "end": 1557,
+                  "loc": {
+                    "start": {
+                      "line": 37,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 37,
+                      "column": 17
+                    },
+                    "identifierName": "c"
+                  },
+                  "name": "c"
+                }
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": true,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 1551,
+                "end": 1552,
+                "loc": {
+                  "start": {
+                    "line": 37,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 37,
+                    "column": 12
+                  },
+                  "identifierName": "b"
+                },
+                "name": "b"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 1561,
+              "end": 1562,
+              "loc": {
+                "start": {
+                  "line": 37,
+                  "column": 21
+                },
+                "end": {
+                  "line": 37,
+                  "column": 22
+                },
+                "identifierName": "d"
+              },
+              "name": "d"
+            }
+          },
+          "alternate": {
+            "type": "Identifier",
+            "start": 1565,
+            "end": 1566,
+            "loc": {
+              "start": {
+                "line": 37,
+                "column": 25
+              },
+              "end": {
+                "line": 37,
+                "column": 26
+              },
+              "identifierName": "e"
+            },
+            "name": "e"
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (async(b)) : (c => d)",
+            "start": 1511,
+            "end": 1539,
+            "loc": {
+              "start": {
+                "line": 36,
+                "column": 24
+              },
+              "end": {
+                "line": 36,
+                "column": 52
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (async (b): c => d) : e",
+            "start": 1568,
+            "end": 1598,
+            "loc": {
+              "start": {
+                "line": 37,
+                "column": 28
+              },
+              "end": {
+                "line": 37,
+                "column": 58
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 1599,
+        "end": 1627,
+        "loc": {
+          "start": {
+            "line": 38,
+            "column": 0
+          },
+          "end": {
+            "line": 38,
+            "column": 28
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 1599,
+          "end": 1626,
+          "loc": {
+            "start": {
+              "line": 38,
+              "column": 0
+            },
+            "end": {
+              "line": 38,
+              "column": 27
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 1599,
+            "end": 1600,
+            "loc": {
+              "start": {
+                "line": 38,
+                "column": 0
+              },
+              "end": {
+                "line": 38,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "CallExpression",
+            "start": 1603,
+            "end": 1617,
+            "loc": {
+              "start": {
+                "line": 38,
+                "column": 4
+              },
+              "end": {
+                "line": 38,
+                "column": 18
+              }
+            },
+            "callee": {
+              "type": "Identifier",
+              "start": 1603,
+              "end": 1608,
+              "loc": {
+                "start": {
+                  "line": 38,
+                  "column": 4
+                },
+                "end": {
+                  "line": 38,
+                  "column": 9
+                },
+                "identifierName": "async"
+              },
+              "name": "async"
+            },
+            "arguments": [
+              {
+                "type": "ArrowFunctionExpression",
+                "start": 1610,
+                "end": 1616,
+                "loc": {
+                  "start": {
+                    "line": 38,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 38,
+                    "column": 17
+                  }
+                },
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 1610,
+                    "end": 1611,
+                    "loc": {
+                      "start": {
+                        "line": 38,
+                        "column": 11
+                      },
+                      "end": {
+                        "line": 38,
+                        "column": 12
+                      },
+                      "identifierName": "b"
+                    },
+                    "name": "b"
+                  }
+                ],
+                "body": {
+                  "type": "Identifier",
+                  "start": 1615,
+                  "end": 1616,
+                  "loc": {
+                    "start": {
+                      "line": 38,
+                      "column": 16
+                    },
+                    "end": {
+                      "line": 38,
+                      "column": 17
+                    },
+                    "identifierName": "c"
+                  },
+                  "name": "c"
+                }
+              }
+            ]
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start": 1620,
+            "end": 1626,
+            "loc": {
+              "start": {
+                "line": 38,
+                "column": 21
+              },
+              "end": {
+                "line": 38,
+                "column": 27
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 1620,
+                "end": 1621,
+                "loc": {
+                  "start": {
+                    "line": 38,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 38,
+                    "column": 22
+                  },
+                  "identifierName": "d"
+                },
+                "name": "d"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 1625,
+              "end": 1626,
+              "loc": {
+                "start": {
+                  "line": 38,
+                  "column": 26
+                },
+                "end": {
+                  "line": 38,
+                  "column": 27
+                },
+                "identifierName": "e"
+              },
+              "name": "e"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (async (b): c => d) : e",
+            "start": 1568,
+            "end": 1598,
+            "loc": {
+              "start": {
+                "line": 37,
+                "column": 28
+              },
+              "end": {
+                "line": 37,
+                "column": 58
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (async(b => c)) : (d => e)",
+            "start": 1628,
+            "end": 1661,
+            "loc": {
+              "start": {
+                "line": 38,
+                "column": 29
+              },
+              "end": {
+                "line": 38,
+                "column": 62
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 1662,
+        "end": 1697,
+        "loc": {
+          "start": {
+            "line": 39,
+            "column": 0
+          },
+          "end": {
+            "line": 39,
+            "column": 35
+          }
+        },
+        "expression": {
+          "type": "ConditionalExpression",
+          "start": 1662,
+          "end": 1696,
+          "loc": {
+            "start": {
+              "line": 39,
+              "column": 0
+            },
+            "end": {
+              "line": 39,
+              "column": 34
+            }
+          },
+          "test": {
+            "type": "Identifier",
+            "start": 1662,
+            "end": 1663,
+            "loc": {
+              "start": {
+                "line": 39,
+                "column": 0
+              },
+              "end": {
+                "line": 39,
+                "column": 1
+              },
+              "identifierName": "a"
+            },
+            "name": "a"
+          },
+          "consequent": {
+            "type": "ArrowFunctionExpression",
+            "start": 1666,
+            "end": 1687,
+            "loc": {
+              "start": {
+                "line": 39,
+                "column": 4
+              },
+              "end": {
+                "line": 39,
+                "column": 25
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": true,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 1673,
+                "end": 1674,
+                "loc": {
+                  "start": {
+                    "line": 39,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 39,
+                    "column": 12
+                  },
+                  "identifierName": "b"
+                },
+                "name": "b"
+              }
+            ],
+            "body": {
+              "type": "ArrowFunctionExpression",
+              "start": 1680,
+              "end": 1686,
+              "loc": {
+                "start": {
+                  "line": 39,
+                  "column": 18
+                },
+                "end": {
+                  "line": 39,
+                  "column": 24
+                }
+              },
+              "id": null,
+              "generator": false,
+              "async": false,
+              "params": [
+                {
+                  "type": "Identifier",
+                  "start": 1680,
+                  "end": 1681,
+                  "loc": {
+                    "start": {
+                      "line": 39,
+                      "column": 18
+                    },
+                    "end": {
+                      "line": 39,
+                      "column": 19
+                    },
+                    "identifierName": "c"
+                  },
+                  "name": "c"
+                }
+              ],
+              "body": {
+                "type": "Identifier",
+                "start": 1685,
+                "end": 1686,
+                "loc": {
+                  "start": {
+                    "line": 39,
+                    "column": 23
+                  },
+                  "end": {
+                    "line": 39,
+                    "column": 24
+                  },
+                  "identifierName": "d"
+                },
+                "name": "d"
+              },
+              "extra": {
+                "parenthesized": true,
+                "parenStart": 1679
+              }
+            }
+          },
+          "alternate": {
+            "type": "ArrowFunctionExpression",
+            "start": 1690,
+            "end": 1696,
+            "loc": {
+              "start": {
+                "line": 39,
+                "column": 28
+              },
+              "end": {
+                "line": 39,
+                "column": 34
+              }
+            },
+            "id": null,
+            "generator": false,
+            "async": false,
+            "params": [
+              {
+                "type": "Identifier",
+                "start": 1690,
+                "end": 1691,
+                "loc": {
+                  "start": {
+                    "line": 39,
+                    "column": 28
+                  },
+                  "end": {
+                    "line": 39,
+                    "column": 29
+                  },
+                  "identifierName": "e"
+                },
+                "name": "e"
+              }
+            ],
+            "body": {
+              "type": "Identifier",
+              "start": 1695,
+              "end": 1696,
+              "loc": {
+                "start": {
+                  "line": 39,
+                  "column": 33
+                },
+                "end": {
+                  "line": 39,
+                  "column": 34
+                },
+                "identifierName": "f"
+              },
+              "name": "f"
+            }
+          }
+        },
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (async(b => c)) : (d => e)",
+            "start": 1628,
+            "end": 1661,
+            "loc": {
+              "start": {
+                "line": 38,
+                "column": 29
+              },
+              "end": {
+                "line": 38,
+                "column": 62
+              }
+            }
+          }
+        ],
+        "trailingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (async (b) => c => d) : (e => f)",
+            "start": 1698,
+            "end": 1737,
+            "loc": {
+              "start": {
+                "line": 39,
+                "column": 36
+              },
+              "end": {
+                "line": 39,
+                "column": 75
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " https://github.com/prettier/prettier/issues/2194",
+            "start": 1739,
+            "end": 1790,
+            "loc": {
+              "start": {
+                "line": 41,
+                "column": 0
+              },
+              "end": {
+                "line": 41,
+                "column": 51
+              }
+            }
+          }
+        ]
+      },
+      {
+        "type": "VariableDeclaration",
+        "start": 1791,
+        "end": 1930,
+        "loc": {
+          "start": {
+            "line": 42,
+            "column": 0
+          },
+          "end": {
+            "line": 44,
+            "column": 36
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 1795,
+            "end": 1929,
+            "loc": {
+              "start": {
+                "line": 42,
+                "column": 4
+              },
+              "end": {
+                "line": 44,
+                "column": 35
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 1795,
+              "end": 1803,
+              "loc": {
+                "start": {
+                  "line": 42,
+                  "column": 4
+                },
+                "end": {
+                  "line": 42,
+                  "column": 12
+                },
+                "identifierName": "icecream"
+              },
+              "name": "icecream"
+            },
+            "init": {
+              "type": "ConditionalExpression",
+              "start": 1806,
+              "end": 1929,
+              "loc": {
+                "start": {
+                  "line": 42,
+                  "column": 15
+                },
+                "end": {
+                  "line": 44,
+                  "column": 35
+                }
+              },
+              "test": {
+                "type": "BinaryExpression",
+                "start": 1806,
+                "end": 1820,
+                "loc": {
+                  "start": {
+                    "line": 42,
+                    "column": 15
+                  },
+                  "end": {
+                    "line": 42,
+                    "column": 29
+                  }
+                },
+                "left": {
+                  "type": "Identifier",
+                  "start": 1806,
+                  "end": 1810,
+                  "loc": {
+                    "start": {
+                      "line": 42,
+                      "column": 15
+                    },
+                    "end": {
+                      "line": 42,
+                      "column": 19
+                    },
+                    "identifierName": "what"
+                  },
+                  "name": "what"
+                },
+                "operator": "==",
+                "right": {
+                  "type": "StringLiteral",
+                  "start": 1814,
+                  "end": 1820,
+                  "loc": {
+                    "start": {
+                      "line": 42,
+                      "column": 23
+                    },
+                    "end": {
+                      "line": 42,
+                      "column": 29
+                    }
+                  },
+                  "extra": {
+                    "rawValue": "cone",
+                    "raw": "\"cone\""
+                  },
+                  "value": "cone"
+                }
+              },
+              "consequent": {
+                "type": "ArrowFunctionExpression",
+                "start": 1825,
+                "end": 1893,
+                "loc": {
+                  "start": {
+                    "line": 43,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 43,
+                    "column": 72
+                  }
+                },
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 1825,
+                    "end": 1826,
+                    "loc": {
+                      "start": {
+                        "line": 43,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 43,
+                        "column": 5
+                      },
+                      "identifierName": "p"
+                    },
+                    "name": "p"
+                  }
+                ],
+                "body": {
+                  "type": "ConditionalExpression",
+                  "start": 1831,
+                  "end": 1892,
+                  "loc": {
+                    "start": {
+                      "line": 43,
+                      "column": 10
+                    },
+                    "end": {
+                      "line": 43,
+                      "column": 71
+                    }
+                  },
+                  "test": {
+                    "type": "UnaryExpression",
+                    "start": 1831,
+                    "end": 1834,
+                    "loc": {
+                      "start": {
+                        "line": 43,
+                        "column": 10
+                      },
+                      "end": {
+                        "line": 43,
+                        "column": 13
+                      }
+                    },
+                    "operator": "!",
+                    "prefix": true,
+                    "argument": {
+                      "type": "UnaryExpression",
+                      "start": 1832,
+                      "end": 1834,
+                      "loc": {
+                        "start": {
+                          "line": 43,
+                          "column": 11
+                        },
+                        "end": {
+                          "line": 43,
+                          "column": 13
+                        }
+                      },
+                      "operator": "!",
+                      "prefix": true,
+                      "argument": {
+                        "type": "Identifier",
+                        "start": 1833,
+                        "end": 1834,
+                        "loc": {
+                          "start": {
+                            "line": 43,
+                            "column": 12
+                          },
+                          "end": {
+                            "line": 43,
+                            "column": 13
+                          },
+                          "identifierName": "p"
+                        },
+                        "name": "p"
+                      }
+                    }
+                  },
+                  "consequent": {
+                    "type": "TemplateLiteral",
+                    "start": 1837,
+                    "end": 1860,
+                    "loc": {
+                      "start": {
+                        "line": 43,
+                        "column": 16
+                      },
+                      "end": {
+                        "line": 43,
+                        "column": 39
+                      }
+                    },
+                    "expressions": [
+                      {
+                        "type": "Identifier",
+                        "start": 1852,
+                        "end": 1853,
+                        "loc": {
+                          "start": {
+                            "line": 43,
+                            "column": 31
+                          },
+                          "end": {
+                            "line": 43,
+                            "column": 32
+                          },
+                          "identifierName": "p"
+                        },
+                        "name": "p"
+                      }
+                    ],
+                    "quasis": [
+                      {
+                        "type": "TemplateElement",
+                        "start": 1838,
+                        "end": 1850,
+                        "loc": {
+                          "start": {
+                            "line": 43,
+                            "column": 17
+                          },
+                          "end": {
+                            "line": 43,
+                            "column": 29
+                          }
+                        },
+                        "value": {
+                          "raw": "here's your ",
+                          "cooked": "here's your "
+                        },
+                        "tail": false
+                      },
+                      {
+                        "type": "TemplateElement",
+                        "start": 1854,
+                        "end": 1859,
+                        "loc": {
+                          "start": {
+                            "line": 43,
+                            "column": 33
+                          },
+                          "end": {
+                            "line": 43,
+                            "column": 38
+                          }
+                        },
+                        "value": {
+                          "raw": " cone",
+                          "cooked": " cone"
+                        },
+                        "tail": true
+                      }
+                    ]
+                  },
+                  "alternate": {
+                    "type": "TemplateLiteral",
+                    "start": 1863,
+                    "end": 1892,
+                    "loc": {
+                      "start": {
+                        "line": 43,
+                        "column": 42
+                      },
+                      "end": {
+                        "line": 43,
+                        "column": 71
+                      }
+                    },
+                    "expressions": [],
+                    "quasis": [
+                      {
+                        "type": "TemplateElement",
+                        "start": 1864,
+                        "end": 1891,
+                        "loc": {
+                          "start": {
+                            "line": 43,
+                            "column": 43
+                          },
+                          "end": {
+                            "line": 43,
+                            "column": 70
+                          }
+                        },
+                        "value": {
+                          "raw": "just the empty cone for you",
+                          "cooked": "just the empty cone for you"
+                        },
+                        "tail": true
+                      }
+                    ]
+                  },
+                  "extra": {
+                    "parenthesized": true,
+                    "parenStart": 1830
+                  }
+                }
+              },
+              "alternate": {
+                "type": "ArrowFunctionExpression",
+                "start": 1898,
+                "end": 1929,
+                "loc": {
+                  "start": {
+                    "line": 44,
+                    "column": 4
+                  },
+                  "end": {
+                    "line": 44,
+                    "column": 35
+                  }
+                },
+                "id": null,
+                "generator": false,
+                "async": false,
+                "params": [
+                  {
+                    "type": "Identifier",
+                    "start": 1898,
+                    "end": 1899,
+                    "loc": {
+                      "start": {
+                        "line": 44,
+                        "column": 4
+                      },
+                      "end": {
+                        "line": 44,
+                        "column": 5
+                      },
+                      "identifierName": "p"
+                    },
+                    "name": "p"
+                  }
+                ],
+                "body": {
+                  "type": "TemplateLiteral",
+                  "start": 1903,
+                  "end": 1929,
+                  "loc": {
+                    "start": {
+                      "line": 44,
+                      "column": 9
+                    },
+                    "end": {
+                      "line": 44,
+                      "column": 35
+                    }
+                  },
+                  "expressions": [
+                    {
+                      "type": "Identifier",
+                      "start": 1918,
+                      "end": 1919,
+                      "loc": {
+                        "start": {
+                          "line": 44,
+                          "column": 24
+                        },
+                        "end": {
+                          "line": 44,
+                          "column": 25
+                        },
+                        "identifierName": "p"
+                      },
+                      "name": "p"
+                    },
+                    {
+                      "type": "Identifier",
+                      "start": 1923,
+                      "end": 1927,
+                      "loc": {
+                        "start": {
+                          "line": 44,
+                          "column": 29
+                        },
+                        "end": {
+                          "line": 44,
+                          "column": 33
+                        },
+                        "identifierName": "what"
+                      },
+                      "name": "what"
+                    }
+                  ],
+                  "quasis": [
+                    {
+                      "type": "TemplateElement",
+                      "start": 1904,
+                      "end": 1916,
+                      "loc": {
+                        "start": {
+                          "line": 44,
+                          "column": 10
+                        },
+                        "end": {
+                          "line": 44,
+                          "column": 22
+                        }
+                      },
+                      "value": {
+                        "raw": "here's your ",
+                        "cooked": "here's your "
+                      },
+                      "tail": false
+                    },
+                    {
+                      "type": "TemplateElement",
+                      "start": 1920,
+                      "end": 1921,
+                      "loc": {
+                        "start": {
+                          "line": 44,
+                          "column": 26
+                        },
+                        "end": {
+                          "line": 44,
+                          "column": 27
+                        }
+                      },
+                      "value": {
+                        "raw": " ",
+                        "cooked": " "
+                      },
+                      "tail": false
+                    },
+                    {
+                      "type": "TemplateElement",
+                      "start": 1928,
+                      "end": 1928,
+                      "loc": {
+                        "start": {
+                          "line": 44,
+                          "column": 34
+                        },
+                        "end": {
+                          "line": 44,
+                          "column": 34
+                        }
+                      },
+                      "value": {
+                        "raw": "",
+                        "cooked": ""
+                      },
+                      "tail": true
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        ],
+        "kind": "let",
+        "leadingComments": [
+          {
+            "type": "CommentLine",
+            "value": " a ? (async (b) => c => d) : (e => f)",
+            "start": 1698,
+            "end": 1737,
+            "loc": {
+              "start": {
+                "line": 39,
+                "column": 36
+              },
+              "end": {
+                "line": 39,
+                "column": 75
+              }
+            }
+          },
+          {
+            "type": "CommentLine",
+            "value": " https://github.com/prettier/prettier/issues/2194",
+            "start": 1739,
+            "end": 1790,
+            "loc": {
+              "start": {
+                "line": 41,
+                "column": 0
+              },
+              "end": {
+                "line": 41,
+                "column": 51
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "directives": []
+  },
+  "comments": [
+    {
+      "type": "CommentLine",
+      "value": " Valid lhs value inside parentheses",
+      "start": 0,
+      "end": 37,
+      "loc": {
+        "start": {
+          "line": 1,
+          "column": 0
+        },
+        "end": {
+          "line": 1,
+          "column": 37
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? b : (c => d)",
+      "start": 56,
+      "end": 75,
+      "loc": {
+        "start": {
+          "line": 2,
+          "column": 18
+        },
+        "end": {
+          "line": 2,
+          "column": 37
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? ((b): c => d) : e",
+      "start": 98,
+      "end": 122,
+      "loc": {
+        "start": {
+          "line": 3,
+          "column": 22
+        },
+        "end": {
+          "line": 3,
+          "column": 46
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? b : ((c): d => e)",
+      "start": 147,
+      "end": 171,
+      "loc": {
+        "start": {
+          "line": 4,
+          "column": 24
+        },
+        "end": {
+          "line": 4,
+          "column": 48
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " Nested arrow function inside parentheses",
+      "start": 173,
+      "end": 216,
+      "loc": {
+        "start": {
+          "line": 6,
+          "column": 0
+        },
+        "end": {
+          "line": 6,
+          "column": 43
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? (b = (c) => d) : (e => f)",
+      "start": 246,
+      "end": 278,
+      "loc": {
+        "start": {
+          "line": 7,
+          "column": 29
+        },
+        "end": {
+          "line": 7,
+          "column": 61
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? ((b = (c) => d): e => f) : g",
+      "start": 312,
+      "end": 347,
+      "loc": {
+        "start": {
+          "line": 8,
+          "column": 33
+        },
+        "end": {
+          "line": 8,
+          "column": 68
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " Nested conditional expressions",
+      "start": 349,
+      "end": 382,
+      "loc": {
+        "start": {
+          "line": 10,
+          "column": 0
+        },
+        "end": {
+          "line": 10,
+          "column": 33
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " b ? (c ? ((d): e => f) : g) : h",
+      "start": 419,
+      "end": 453,
+      "loc": {
+        "start": {
+          "line": 11,
+          "column": 36
+        },
+        "end": {
+          "line": 11,
+          "column": 70
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? (b ? (c ? d : (e => f)) : g) : h",
+      "start": 490,
+      "end": 529,
+      "loc": {
+        "start": {
+          "line": 12,
+          "column": 36
+        },
+        "end": {
+          "line": 12,
+          "column": 75
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? (b ? c : ((d): e => f)) : g",
+      "start": 565,
+      "end": 599,
+      "loc": {
+        "start": {
+          "line": 14,
+          "column": 34
+        },
+        "end": {
+          "line": 14,
+          "column": 68
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " Multiple arrow functions",
+      "start": 601,
+      "end": 628,
+      "loc": {
+        "start": {
+          "line": 16,
+          "column": 0
+        },
+        "end": {
+          "line": 16,
+          "column": 27
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? ((b): c => d) : ((e): f => g)",
+      "start": 662,
+      "end": 698,
+      "loc": {
+        "start": {
+          "line": 17,
+          "column": 33
+        },
+        "end": {
+          "line": 17,
+          "column": 69
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " Multiple nested arrow functions (<T> is needed to avoid ambiguities)",
+      "start": 700,
+      "end": 771,
+      "loc": {
+        "start": {
+          "line": 19,
+          "column": 0
+        },
+        "end": {
+          "line": 19,
+          "column": 71
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? ((b): c => ((d): e => f)) : g",
+      "start": 805,
+      "end": 841,
+      "loc": {
+        "start": {
+          "line": 20,
+          "column": 33
+        },
+        "end": {
+          "line": 20,
+          "column": 69
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? b : (c => (<T>(d): e => f))",
+      "start": 874,
+      "end": 908,
+      "loc": {
+        "start": {
+          "line": 21,
+          "column": 32
+        },
+        "end": {
+          "line": 21,
+          "column": 66
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? (<T>(b): c => d) : (e => f)",
+      "start": 941,
+      "end": 975,
+      "loc": {
+        "start": {
+          "line": 22,
+          "column": 32
+        },
+        "end": {
+          "line": 22,
+          "column": 66
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " Invalid lhs value inside parentheses",
+      "start": 977,
+      "end": 1016,
+      "loc": {
+        "start": {
+          "line": 24,
+          "column": 0
+        },
+        "end": {
+          "line": 24,
+          "column": 39
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? (b => c) : (d => e)",
+      "start": 1040,
+      "end": 1066,
+      "loc": {
+        "start": {
+          "line": 25,
+          "column": 23
+        },
+        "end": {
+          "line": 25,
+          "column": 49
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? (b ? (c => d) : (e => f)) : g",
+      "start": 1098,
+      "end": 1134,
+      "loc": {
+        "start": {
+          "line": 26,
+          "column": 31
+        },
+        "end": {
+          "line": 26,
+          "column": 67
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " Invalid lhs value inside parentheses inside arrow function",
+      "start": 1136,
+      "end": 1197,
+      "loc": {
+        "start": {
+          "line": 28,
+          "column": 0
+        },
+        "end": {
+          "line": 28,
+          "column": 61
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? ((b): c => (d => e)) : (f => g)",
+      "start": 1232,
+      "end": 1270,
+      "loc": {
+        "start": {
+          "line": 29,
+          "column": 34
+        },
+        "end": {
+          "line": 29,
+          "column": 72
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? (b ? (c => d) : (e => (f => g))) : (h => i)",
+      "start": 1314,
+      "end": 1364,
+      "loc": {
+        "start": {
+          "line": 30,
+          "column": 43
+        },
+        "end": {
+          "line": 30,
+          "column": 93
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " Function as type annotation",
+      "start": 1366,
+      "end": 1396,
+      "loc": {
+        "start": {
+          "line": 32,
+          "column": 0
+        },
+        "end": {
+          "line": 32,
+          "column": 30
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? ((b): (c => d) => e) : f",
+      "start": 1426,
+      "end": 1457,
+      "loc": {
+        "start": {
+          "line": 33,
+          "column": 29
+        },
+        "end": {
+          "line": 33,
+          "column": 60
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " Async functions or calls",
+      "start": 1459,
+      "end": 1486,
+      "loc": {
+        "start": {
+          "line": 35,
+          "column": 0
+        },
+        "end": {
+          "line": 35,
+          "column": 27
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? (async(b)) : (c => d)",
+      "start": 1511,
+      "end": 1539,
+      "loc": {
+        "start": {
+          "line": 36,
+          "column": 24
+        },
+        "end": {
+          "line": 36,
+          "column": 52
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? (async (b): c => d) : e",
+      "start": 1568,
+      "end": 1598,
+      "loc": {
+        "start": {
+          "line": 37,
+          "column": 28
+        },
+        "end": {
+          "line": 37,
+          "column": 58
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? (async(b => c)) : (d => e)",
+      "start": 1628,
+      "end": 1661,
+      "loc": {
+        "start": {
+          "line": 38,
+          "column": 29
+        },
+        "end": {
+          "line": 38,
+          "column": 62
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " a ? (async (b) => c => d) : (e => f)",
+      "start": 1698,
+      "end": 1737,
+      "loc": {
+        "start": {
+          "line": 39,
+          "column": 36
+        },
+        "end": {
+          "line": 39,
+          "column": 75
+        }
+      }
+    },
+    {
+      "type": "CommentLine",
+      "value": " https://github.com/prettier/prettier/issues/2194",
+      "start": 1739,
+      "end": 1790,
+      "loc": {
+        "start": {
+          "line": 41,
+          "column": 0
+        },
+        "end": {
+          "line": 41,
+          "column": 51
+        }
+      }
+    }
+  ]
+}

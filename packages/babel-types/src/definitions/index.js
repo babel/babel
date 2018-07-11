@@ -24,7 +24,7 @@ toFastProperties(NODE_FIELDS);
 toFastProperties(BUILDER_KEYS);
 toFastProperties(DEPRECATED_KEYS);
 
-const TYPES = Object.keys(VISITOR_KEYS)
+const TYPES: Array<string> = Object.keys(VISITOR_KEYS)
   .concat(Object.keys(FLIPPED_ALIAS_KEYS))
   .concat(Object.keys(DEPRECATED_KEYS));
 

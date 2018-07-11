@@ -21,10 +21,10 @@ function getType(val) {
 }
 
 // TODO: Import and use Node instead of any
-opaque type Validator = (any, string, any) => void;
+type Validator = (any, string, any) => void;
 
 type FieldOptions = {
-  default?: boolean,
+  default?: any,
   optional?: boolean,
   validate?: Validator,
 };
