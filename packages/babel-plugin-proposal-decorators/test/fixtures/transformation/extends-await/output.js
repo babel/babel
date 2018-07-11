@@ -15,5 +15,5 @@ async function g() {
       F: A,
       d: []
     };
-  }, babelHelpers.privateNameUtils(), (await B));
+  }, babelHelpers.buildPrivateName, (await B));
 }

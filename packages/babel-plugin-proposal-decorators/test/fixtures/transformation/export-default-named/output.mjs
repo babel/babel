@@ -10,5 +10,5 @@ let Foo = babelHelpers.decorate([dec()], function (_initialize) {
     F: Foo,
     d: []
   };
-}, babelHelpers.privateNameUtils());
+}, babelHelpers.buildPrivateName);
 export { Foo as default };

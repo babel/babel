@@ -151,9 +151,9 @@ export function transformDecoratedClass(
     file,
   );
 
-  const privateNameUtilsName = loose
-    ? "privateNameUtilsLoose"
-    : "privateNameUtils";
+  const buildPrivateNameHelperName = loose
+    ? "buildPrivateNameLoose"
+    : "buildPrivateName";
 
   injectInitialization(path, constructor, [buildInitCall(initializeId)]);
 
@@ -169,7 +169,7 @@ export function transformDecoratedClass(
           ${path.node}
           return { F: ${t.cloneNode(path.node.id)}, d: ${definitions} };
         },
-        ${file.addHelper(privateNameUtilsName)}(),
+        ${file.addHelper(buildPrivateNameHelperName)},
         ${superClass}
       )
     `;

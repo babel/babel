@@ -27,4 +27,4 @@ var Foo = babelHelpers.decorate([function (_) {
       }
     }]
   };
-}, babelHelpers.privateNameUtils());
+}, babelHelpers.buildPrivateName);
