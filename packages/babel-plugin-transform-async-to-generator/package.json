@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-async-to-generator",
-  "version": "7.0.0-beta.52",
+  "version": "7.0.0-beta.53",
   "description": "Turn async functions into ES2015 generators",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-async-to-generator",
   "license": "MIT",
@@ -9,15 +9,15 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-module-imports": "7.0.0-beta.52",
-    "@babel/helper-plugin-utils": "7.0.0-beta.52",
-    "@babel/helper-remap-async-to-generator": "7.0.0-beta.52"
+    "@babel/helper-module-imports": "7.0.0-beta.53",
+    "@babel/helper-plugin-utils": "7.0.0-beta.53",
+    "@babel/helper-remap-async-to-generator": "7.0.0-beta.53"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0-beta.50 <7.0.0-rc.0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.52",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.52"
+    "@babel/core": "7.0.0-beta.53",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.53"
   }
 }

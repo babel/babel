@@ -573,7 +573,7 @@ export type TemplateLiteral = NodeBase & {
   expressions: $ReadOnlyArray<Expression>,
 };
 
-export type TaggedTmplateExpression = NodeBase & {
+export type TaggedTemplateExpression = NodeBase & {
   type: "TaggedTemplateExpression",
   tag: Expression,
   quasi: TemplateLiteral,
@@ -820,7 +820,13 @@ export type JSXEmptyExpression = Node;
 export type JSXSpreadChild = Node;
 export type JSXExpressionContainer = Node;
 export type JSXAttribute = Node;
-export type JSXOpeningElement = Node;
+export type JSXOpeningElement = NodeBase & {
+  type: "JSXOpeningElement",
+  name: JSXNamespacedName | JSXMemberExpression,
+  typeParameters?: ?TypeParameterInstantiationBase, // TODO: Not in spec
+  attributes: $ReadOnlyArray<JSXAttribute>,
+  selfClosing: boolean,
+};
 export type JSXClosingElement = Node;
 export type JSXElement = Node;
 export type JSXOpeningFragment = Node;

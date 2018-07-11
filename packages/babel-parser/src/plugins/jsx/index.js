@@ -358,11 +358,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.expect(tt.jsxTagEnd);
         return this.finishNode(node, "JSXOpeningFragment");
       }
-      node.attributes = [];
       node.name = this.jsxParseElementName();
+      return this.jsxParseOpeningElementAfterName(node);
+    }
+
+    jsxParseOpeningElementAfterName(
+      node: N.JSXOpeningElement,
+    ): N.JSXOpeningElement {
+      const attributes: N.JSXAttribute[] = [];
       while (!this.match(tt.slash) && !this.match(tt.jsxTagEnd)) {
-        node.attributes.push(this.jsxParseAttribute());
+        attributes.push(this.jsxParseAttribute());
       }
+      node.attributes = attributes;
       node.selfClosing = this.eat(tt.slash);
       this.expect(tt.jsxTagEnd);
       return this.finishNode(node, "JSXOpeningElement");
