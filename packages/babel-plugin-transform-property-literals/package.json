@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-property-literals",
-  "version": "7.0.0-beta.52",
+  "version": "7.0.0-beta.53",
   "description": "Ensure that reserved words are quoted in object property keys",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-property-literals",
   "license": "MIT",
@@ -9,13 +9,13 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.52"
+    "@babel/helper-plugin-utils": "7.0.0-beta.53"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0-beta.50 <7.0.0-rc.0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.52",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.52"
+    "@babel/core": "7.0.0-beta.53",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.53"
   }
 }

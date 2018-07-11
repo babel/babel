@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-env-standalone",
-  "version": "7.0.0-beta.52",
+  "version": "7.0.0-beta.53",
   "description": "Standalone build of babel-prest-env for use in non-Node.js environments.",
   "main": "babel-preset-env.js",
   "files": [
@@ -9,9 +9,9 @@
     "src"
   ],
   "devDependencies": {
-    "@babel/plugin-transform-new-target": "7.0.0-beta.52",
-    "@babel/preset-env": "7.0.0-beta.52",
-    "@babel/standalone": "7.0.0-beta.52"
+    "@babel/plugin-transform-new-target": "7.0.0-beta.53",
+    "@babel/preset-env": "7.0.0-beta.53",
+    "@babel/standalone": "7.0.0-beta.53"
   },
   "keywords": [
     "babel",
