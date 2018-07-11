@@ -137,8 +137,7 @@
     "node": "8.10",
     "ios": "11.3",
     "ecmascript": "2018",
-    "opera": "49",
-    "electron": "3"
+    "opera": "49"
   },
   "transform-unicode-regex": {
     "chrome": "50",
@@ -254,8 +253,7 @@
     "firefox": "57",
     "safari": "tp",
     "ecmascript": "2018",
-    "opera": "50",
-    "electron": "3"
+    "opera": "50"
   },
   "proposal-object-rest-spread": {
     "chrome": "60",
@@ -272,15 +270,13 @@
     "safari": "11.1",
     "ios": "11.3",
     "ecmascript": "2018",
-    "opera": "51",
-    "electron": "3"
+    "opera": "51"
   },
   "proposal-optional-catch-binding": {
     "chrome": "66",
     "firefox": "58",
     "safari": "11.1",
     "ios": "11.3",
-    "opera": "53",
-    "electron": "3"
+    "opera": "53"
   }
 }
