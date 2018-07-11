@@ -1,7 +1,7 @@
 // @flow
 
 import type { Options } from "../options";
-import type { File } from "../types";
+import type { File, JSXOpeningElement } from "../types";
 import type { PluginList } from "../plugin-utils";
 import { getOptions } from "../options";
 import StatementParser from "./statement";
@@ -11,6 +11,11 @@ export type PluginsMap = {
 };
 
 export default class Parser extends StatementParser {
+  // Forward-declaration so typescript plugin can override jsx plugin
+  +jsxParseOpeningElementAfterName: (
+    node: JSXOpeningElement,
+  ) => JSXOpeningElement;
+
   constructor(options: ?Options, input: string) {
     options = getOptions(options);
     super(options, input);
