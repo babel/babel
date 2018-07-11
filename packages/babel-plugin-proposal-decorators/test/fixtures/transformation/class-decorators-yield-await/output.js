@@ -13,5 +13,5 @@ async function* f() {
       F: A,
       d: []
     };
-  }, babelHelpers.buildPrivateName);
+  }, babelHelpers.privateNameUtils());
 }

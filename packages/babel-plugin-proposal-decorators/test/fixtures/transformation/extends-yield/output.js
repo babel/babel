@@ -15,5 +15,5 @@ function* g() {
       F: A,
       d: []
     };
-  }, babelHelpers.buildPrivateName, (yield B));
+  }, babelHelpers.privateNameUtils(), (yield B));
 }

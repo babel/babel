@@ -12,4 +12,4 @@ babelHelpers.decorate([dec()], function (_initialize) {
     F: _class,
     d: []
   };
-}, babelHelpers.buildPrivateName);
+}, babelHelpers.privateNameUtils());

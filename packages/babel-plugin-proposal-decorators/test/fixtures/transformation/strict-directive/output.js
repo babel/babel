@@ -19,7 +19,7 @@
 
       }]
     };
-  }, babelHelpers.buildPrivateName);
+  }, babelHelpers.privateNameUtils());
 };
 
 () => {
@@ -43,5 +43,5 @@
 
       }]
     };
-  }, babelHelpers.buildPrivateName);
+  }, babelHelpers.privateNameUtils());
 };

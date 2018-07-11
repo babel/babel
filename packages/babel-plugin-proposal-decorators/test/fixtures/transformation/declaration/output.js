@@ -12,4 +12,4 @@ let A = babelHelpers.decorate([dec()], function (_initialize) {
     F: A,
     d: []
   };
-}, babelHelpers.buildPrivateName);
+}, babelHelpers.privateNameUtils());

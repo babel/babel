@@ -1037,25 +1037,32 @@ helpers.classPrivateFieldSet = () => template.program.ast`
   }
 `;
 
-helpers.buildPrivateName = () => template.program.ast`
+helpers.privateNameUtils = () => template.program.ast`
   import classPrivateFieldGet from "classPrivateFieldGet";
   import classPrivateFieldSet from "classPrivateFieldSet";
 
-  export default function buildPrivateName(description, map) {
+  export default function privateNameUtils() {
+    privateNameUtils = function () { return utils };
+
     var privateNameData = new WeakMap();
     var toStringTagDesc = { value: "Private Name", configurable: true, };
 
-    // 5.1.1 PrivateNameObject ( name )
-    buildPrivateName = function(description, map) {
-      var obj = Object.create(null);
-      privateNameData.set(obj, map);
+    var utils = {
+      initialize: function(O, object, value) {
+        getPrivateName(O).set(object, value);
+      },
+      // 5.1.1 PrivateNameObject ( name )
+      create: function(description, map) {
+        var obj = Object.create(null);
+        privateNameData.set(obj, map);
 
-      Object.defineProperty(obj, Symbol.toStringTag, toStringTagDesc);
-      obj.get = privateNameGet;
-      obj.set = privateNameSet;
-      obj.description = description;
+        Object.defineProperty(obj, Symbol.toStringTag, toStringTagDesc);
+        obj.get = privateNameGet;
+        obj.set = privateNameSet;
+        obj.description = description;
 
-      return obj;
+        return obj;
+      }
     };
 
     // 5.1.2 %PrivateNameGet% ( object )
@@ -1075,26 +1082,35 @@ helpers.buildPrivateName = () => template.program.ast`
       }
       return privateNameData.get(O);
     }
+
+    return utils;
   }
 `;
 
-helpers.buildPrivateNameLoose = () => template.program.ast`
+helpers.privateNameUtilsLoose = () => template.program.ast`
   import classPrivateFieldLooseBase from "classPrivateFieldLooseBase";
 
-  export default function buildPrivateNameLoose(description, key) {
+  export default function privateNameUtilsLoose(description, key) {
+    privateNameUtilsLoose = function () { return utils };
+
     var privateNameData = Symbol("PrivateNameData");
 
-    // 5.1.1 PrivateNameObject ( name )
-    buildPrivateNameLoose = function(description, key) {
-      var obj = Object.create(null);
-      Object.defineProperty(obj, privateNameData, { value: key });
+    var utils = {
+      initialize: function(O, object, value) {
+        object[getPrivateName(O)] = value;
+      },
+      // 5.1.1 PrivateNameObject ( name )
+      create: function(description, key) {
+        var obj = Object.create(null);
+        Object.defineProperty(obj, privateNameData, { value: key });
 
-      obj[Symbol.toStringTag] = "Private Name";
-      obj.get = privateNameGet;
-      obj.set = privateNameSet;
-      obj.description = description;
+        obj[Symbol.toStringTag] = "Private Name";
+        obj.get = privateNameGet;
+        obj.set = privateNameSet;
+        obj.description = description;
 
-      return obj;
+        return obj;
+      }
     };
 
     // 5.1.2 %PrivateNameGet% ( object )
@@ -1116,6 +1132,8 @@ helpers.buildPrivateNameLoose = () => template.program.ast`
       }
       return O[privateNameData];
     }
+
+    return utils;
   }
 `;
 
@@ -1127,14 +1145,18 @@ helpers.decorate = () => template.program.ast`
   export default function _decorate(
     decorators /*: ClassDecorator[] */,
     factory /*: ClassFactory */,
-    buildPrivateName,
+    privateNameUtils,
     superClass /*: ?Class<*> */,
   ) /*: Class<*> */ {
     var r = factory(
       function initialize(O) {
-        _initializeInstanceElements(O, decorated.elements);
+        _initializeInstanceElements(
+          O,
+          decorated.elements,
+          privateNameUtils.initialize,
+        );
       },
-      buildPrivateName,
+      privateNameUtils.create,
       superClass,
     );
     var decorated = _decorateClass(
@@ -1142,7 +1164,11 @@ helpers.decorate = () => template.program.ast`
       decorators,
     );
 
-    _initializeClassElements(r.F, decorated.elements);
+    _initializeClassElements(
+      r.F,
+      decorated.elements,
+      privateNameUtils.initialize,
+    );
 
     return _runClassFinishers(r.F, decorated.finishers);
   }
@@ -1264,6 +1290,7 @@ helpers.decorate = () => template.program.ast`
   function _initializeClassElements /*::<C>*/(
     F /*: Class<C> */,
     elements /*: ElementDescriptor[] */,
+    initializePrivateName,
   ) {
     var proto = F.prototype;
 
@@ -1275,7 +1302,7 @@ helpers.decorate = () => template.program.ast`
           (placement === "static" || placement === "prototype")
         ) {
           var receiver = placement === "static" ? F : proto;
-          _defineClassElement(receiver, element);
+          _defineClassElement(receiver, element, initializePrivateName);
         }
       });
     });
@@ -1285,20 +1312,30 @@ helpers.decorate = () => template.program.ast`
   function _initializeInstanceElements /*::<C>*/(
     O /*: C */,
     elements /*: ElementDescriptor[] */,
+    initializePrivateName,
   ) {
     ["method", "field"].forEach(function(kind) {
       elements.forEach(function(element /*: ElementDescriptor */) {
         if (element.kind === kind && element.placement === "own") {
-          _defineClassElement(O, element);
+          _defineClassElement(O, element, initializePrivateName);
         }
       });
     });
+  }
+
+  function _isPrivateName(obj) {
+    // TODO: Make this check use the privateNameData weakmap.
+    return (
+      typeof obj === "object" &&
+      Object.prototype.toString.call(obj) === "[object Private Name]"
+    );
   }
 
   // DefineClassElement
   function _defineClassElement /*::<C>*/(
     receiver /*: C | Class<C> */,
     element /*: ElementDescriptor */,
+    initializePrivateName,
   ) {
     var descriptor /*: PropertyDescriptor */ = element.descriptor;
     if (element.kind === "field") {
@@ -1312,11 +1349,8 @@ helpers.decorate = () => template.program.ast`
     }
 
     // TODO: Make this check use the privateNameData weakmap.
-    if (
-      typeof element.key === "object" &&
-      Object.prototype.toString.call(element.key) === "[object Private Name]"
-    ) {
-      element.key.set(receiver, descriptor.value);
+    if (_isPrivateName(element.key)) {
+      initializePrivateName(element.key, receiver, descriptor.value);
     } else {
       Object.defineProperty(receiver, element.key, descriptor);
     }
@@ -1519,11 +1553,7 @@ helpers.decorate = () => template.program.ast`
     if (
       typeof key !== "string" &&
       typeof key !== "symbol" &&
-      // TODO: Make this check use the privateNameData weakmap.
-      !(
-        typeof key === "object" &&
-        Object.prototype.toString.call(key) === "[object Private Name]"
-      )
+      !_isPrivateName(key)
     ) {
       key = String(key);
     }

@@ -126,14 +126,18 @@ type ElementsFinishers = {
 export default function _decorate(
   decorators /*: ClassDecorator[] */,
   factory /*: ClassFactory */,
-  buildPrivateName,
+  privateNameUtils,
   superClass /*: ?Class<*> */,
 ) /*: Class<*> */ {
   var r = factory(
     function initialize(O) {
-      _initializeInstanceElements(O, decorated.elements);
+      _initializeInstanceElements(
+        O,
+        decorated.elements,
+        privateNameUtils.initialize,
+      );
     },
-    buildPrivateName,
+    privateNameUtils.create,
     superClass,
   );
   var decorated = _decorateClass(
@@ -141,7 +145,11 @@ export default function _decorate(
     decorators,
   );
 
-  _initializeClassElements(r.F, decorated.elements);
+  _initializeClassElements(
+    r.F,
+    decorated.elements,
+    privateNameUtils.initialize,
+  );
 
   return _runClassFinishers(r.F, decorated.finishers);
 }
@@ -263,6 +271,7 @@ function _isDataDescriptor(desc /*: PropertyDescriptor */) /*: boolean */ {
 function _initializeClassElements /*::<C>*/(
   F /*: Class<C> */,
   elements /*: ElementDescriptor[] */,
+  initializePrivateName,
 ) {
   var proto = F.prototype;
 
@@ -274,7 +283,7 @@ function _initializeClassElements /*::<C>*/(
         (placement === "static" || placement === "prototype")
       ) {
         var receiver = placement === "static" ? F : proto;
-        _defineClassElement(receiver, element);
+        _defineClassElement(receiver, element, initializePrivateName);
       }
     });
   });
@@ -284,20 +293,30 @@ function _initializeClassElements /*::<C>*/(
 function _initializeInstanceElements /*::<C>*/(
   O /*: C */,
   elements /*: ElementDescriptor[] */,
+  initializePrivateName,
 ) {
   ["method", "field"].forEach(function(kind) {
     elements.forEach(function(element /*: ElementDescriptor */) {
       if (element.kind === kind && element.placement === "own") {
-        _defineClassElement(O, element);
+        _defineClassElement(O, element, initializePrivateName);
       }
     });
   });
+}
+
+function _isPrivateName(obj) {
+  // TODO: Make this check use the privateNameData weakmap.
+  return (
+    typeof obj === "object" &&
+    Object.prototype.toString.call(obj) === "[object Private Name]"
+  );
 }
 
 // DefineClassElement
 function _defineClassElement /*::<C>*/(
   receiver /*: C | Class<C> */,
   element /*: ElementDescriptor */,
+  initializePrivateName,
 ) {
   var descriptor /*: PropertyDescriptor */ = element.descriptor;
   if (element.kind === "field") {
@@ -311,11 +330,8 @@ function _defineClassElement /*::<C>*/(
   }
 
   // TODO: Make this check use the privateNameData weakmap.
-  if (
-    typeof element.key === "object" &&
-    Object.prototype.toString.call(element.key) === "[object Private Name]"
-  ) {
-    element.key.set(receiver, descriptor.value);
+  if (_isPrivateName(element.key)) {
+    initializePrivateName(element.key, receiver, descriptor.value);
   } else {
     Object.defineProperty(receiver, element.key, descriptor);
   }
@@ -518,11 +534,7 @@ function _toElementDescriptor(
   if (
     typeof key !== "string" &&
     typeof key !== "symbol" &&
-    // TODO: Make this check use the privateNameData weakmap.
-    !(
-      typeof key === "object" &&
-      Object.prototype.toString.call(key) === "[object Private Name]"
-    )
+    !_isPrivateName(key)
   ) {
     key = String(key);
   }

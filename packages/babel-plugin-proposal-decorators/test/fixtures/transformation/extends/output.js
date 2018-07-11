@@ -14,4 +14,4 @@ let A = babelHelpers.decorate([dec], function (_initialize, _buildPrivateName, _
     F: A,
     d: []
   };
-}, babelHelpers.buildPrivateName, B);
+}, babelHelpers.privateNameUtils(), B);
