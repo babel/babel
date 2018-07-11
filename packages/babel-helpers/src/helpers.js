@@ -1126,12 +1126,12 @@ helpers.decorate = () => template.program.ast`
   export default function _decorate(
     decorators /*: ClassDecorator[] */,
     factory /*: ClassFactory */,
-    superClass /*: ?Class<*> */,
-    privateNameUtils
+    privateNameUtils,
+    superClass /*: ?Class<*> */
   ) /*: Class<*> */ {
     var r = factory(function initialize(O) {
       _initializeInstanceElements(O, decorated.elements, privateNameUtils.PrivateName);
-    }, superClass, privateNameUtils.withMap);
+    }, privateNameUtils.withMap, superClass);
     var decorated = _decorateClass(
       _coalesceClassElements(r.d.map(_createElementDescriptor)),
       decorators,

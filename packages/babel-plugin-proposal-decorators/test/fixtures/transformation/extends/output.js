@@ -1,4 +1,4 @@
-let A = babelHelpers.decorate([dec], function (_initialize, _B) {
+let A = babelHelpers.decorate([dec], function (_initialize, _buildPrivateName, _B) {
   "use strict";
 
   class A extends _B {
@@ -14,4 +14,4 @@ let A = babelHelpers.decorate([dec], function (_initialize, _B) {
     F: A,
     d: []
   };
-}, B);
+}, babelHelpers.privateNameUtils(), B);

@@ -1,5 +1,5 @@
 function* g() {
-  let A = babelHelpers.decorate([dec], function (_initialize, _super) {
+  let A = babelHelpers.decorate([dec], function (_initialize, _buildPrivateName, _super) {
     "use strict";
 
     class A extends _super {
@@ -15,5 +15,5 @@ function* g() {
       F: A,
       d: []
     };
-  }, (yield B));
+  }, babelHelpers.privateNameUtils(), (yield B));
 }
