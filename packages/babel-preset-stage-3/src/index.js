@@ -7,9 +7,10 @@ the TL;DR is that it's causing more harm than convenience in that
 the preset is always out of date, each change is usually going to
 require a major version bump and thus people will be behind,
 and it encouraged too many people to opt-in to too many proposals
-that they didn't intend to.
+that they didn't intend to. This is intended to be the last publish
+of "@babel/preset-stage-3"
 
-If you want the same configuration as before, you can use this configuration.
+If you want the same configuration as before:
 
 {
   "plugins": [
@@ -20,10 +21,15 @@ If you want the same configuration as before, you can use this configuration.
   ]
 }
 
-This will be the last publish of "@babel/preset-stage-3", and it won't be
-in the final release.
+We recommend that make your own presets to use across projects for
+reusability. This can be as simple as exporting a function that returns your config/array of plugins.
 
-If it's a hassle to maintain, you can certainly make your own preset to use
-across projects, or there might be one in the community to use.
+module.exports = function() {
+  return {
+    plugins: [
+      // ...
+    ]
+  };
+};
 `);
 }
