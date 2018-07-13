@@ -246,12 +246,18 @@ function getModuleMetadata(
   });
 
   for (const metadata of sourceData.values()) {
-    if (metadata.importsNamespace.size > 0) {
-      metadata.interop = "namespace";
-      continue;
-    }
     let needsDefault = false;
     let needsNamed = false;
+
+    if (metadata.importsNamespace.size > 0) {
+      needsDefault = true;
+      needsNamed = true;
+    }
+
+    if (metadata.reexportAll) {
+      needsNamed = true;
+    }
+
     for (const importName of metadata.imports.values()) {
       if (importName === "default") needsDefault = true;
       else needsNamed = true;
