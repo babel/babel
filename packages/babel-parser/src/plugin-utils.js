@@ -62,7 +62,7 @@ export function validatePlugins(plugins: PluginList) {
   ) {
     throw new Error(
       "'pipelineOperator' requires 'proposal' option whose value should be one of: " +
-        PIPELINE_PROPOSALS.join(", "),
+        PIPELINE_PROPOSALS.map(p => `'${p}'`).join(", "),
     );
   }
 }
