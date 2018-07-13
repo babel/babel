@@ -1027,6 +1027,9 @@ helpers.classPrivateFieldSet = () => template.program.ast`
     }
     var descriptor = privateMap.get(receiver);
     if (!descriptor.writable) {
+      // This should only throw in strict mode, but class bodies are
+      // always strict and private fields can only be used inside
+      // cass bodies.
       throw new TypeError("attempted to set read only private field");
     }
     descriptor.value = value;
