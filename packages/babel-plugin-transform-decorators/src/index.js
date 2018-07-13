@@ -50,18 +50,22 @@ export default function ({ types: t }) {
     return nodes;
   }
 
+  function nodeHasDecorators(node) {
+    return node.decorators && node.decorators.length > 0;
+  }
+
   function hasDecorators(path) {
     if (path.isClass()) {
-      if (path.node.decorators) return true;
+      if (nodeHasDecorators(path.node)) return true;
 
       for (const method of (path.node.body.body: Array<Object>)) {
-        if (method.decorators) {
+        if (nodeHasDecorators(method)) {
           return true;
         }
       }
     } else if (path.isObjectExpression()) {
       for (const prop of (path.node.properties: Array<Object>)) {
-        if (prop.decorators) {
+        if (nodeHasDecorators(prop)) {
           return true;
         }
       }
