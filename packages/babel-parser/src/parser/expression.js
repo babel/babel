@@ -307,7 +307,7 @@ export default class ExpressionParser extends LValParser {
 
         if (
           op === tt.pipeline &&
-          "minimal" === this.getPluginOption("pipelineOperator", "proposal")
+          this.getPluginOption("pipelineOperator", "proposal") === "minimal"
         ) {
           if (
             this.match(tt.name) &&
@@ -354,7 +354,7 @@ export default class ExpressionParser extends LValParser {
   ): N.Expression {
     switch (op) {
       case tt.pipeline:
-        if ("smart" === this.getPluginOption("pipelineOperator", "proposal")) {
+        if (this.getPluginOption("pipelineOperator", "proposal") === "smart") {
           const startPos = this.state.start;
           const startLoc = this.state.startLoc;
           return this.withTopicPermittingContext(() => {
@@ -1995,7 +1995,7 @@ export default class ExpressionParser extends LValParser {
   checkPipelineAtInfixOperator(left: N.Expression, leftStartPos: number) {
     this.expectPlugin("pipelineOperator");
 
-    if ("smart" === this.getPluginOption("pipelineOperator", "proposal")) {
+    if (this.getPluginOption("pipelineOperator", "proposal") === "smart") {
       this.checkSmartPipelineHeadEarlyErrors(left, leftStartPos);
     }
   }
