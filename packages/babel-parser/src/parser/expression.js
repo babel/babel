@@ -2118,8 +2118,8 @@ export default class ExpressionParser extends LValParser {
   // had before the function was called.
 
   withTopicPermittingContext<T>(callback: () => T): T {
-    const outerContextTopicState = this.state.topicContextState;
-    this.state.topicContextState = {
+    const outerContextTopicState = this.state.topicContext;
+    this.state.topicContext = {
       // Enable the use of the primary topic reference.
       maxNumOfResolvableTopics: 1,
       // Hide the use of any topic references from outer contexts.
@@ -2128,7 +2128,7 @@ export default class ExpressionParser extends LValParser {
 
     const callbackResult = callback();
 
-    this.state.topicContextState = outerContextTopicState;
+    this.state.topicContext = outerContextTopicState;
     return callbackResult;
   }
 
@@ -2140,8 +2140,8 @@ export default class ExpressionParser extends LValParser {
   // had before the function was called.
 
   withTopicForbiddingContext<T>(callback: () => T): T {
-    const outerContextTopicState = this.state.topicContextState;
-    this.state.topicContextState = {
+    const outerContextTopicState = this.state.topicContext;
+    this.state.topicContext = {
       // Disable the use of the primary topic reference.
       maxNumOfResolvableTopics: 0,
       // Hide the use of any topic references from outer contexts.
@@ -2150,24 +2150,24 @@ export default class ExpressionParser extends LValParser {
 
     const callbackResult = callback();
 
-    this.state.topicContextState = outerContextTopicState;
+    this.state.topicContext = outerContextTopicState;
     return callbackResult;
   }
 
   // Register the use of a primary topic reference (`#`) within the current
   // topic context.
   registerTopicReference(): void {
-    this.state.topicContextState.maxTopicIndex = 0;
+    this.state.topicContext.maxTopicIndex = 0;
   }
 
   primaryTopicReferenceIsAllowedInCurrentTopicContext(): boolean {
-    return this.state.topicContextState.maxNumOfResolvableTopics >= 1;
+    return this.state.topicContext.maxNumOfResolvableTopics >= 1;
   }
 
   topicReferenceWasUsedInCurrentTopicContext(): boolean {
     return (
-      this.state.topicContextState.maxTopicIndex != null &&
-      this.state.topicContextState.maxTopicIndex >= 0
+      this.state.topicContext.maxTopicIndex != null &&
+      this.state.topicContext.maxTopicIndex >= 0
     );
   }
 }

@@ -34,7 +34,7 @@ export default class State {
     this.isIterator = false;
 
     // Used by smartPipelines.
-    this.topicContextState = {
+    this.topicContext = {
       maxNumOfResolvableTopics: 0,
       maxTopicIndex: undefined,
     };
