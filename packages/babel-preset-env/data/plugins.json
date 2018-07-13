@@ -228,7 +228,7 @@
   "proposal-async-generator-functions": {
     "chrome": "63",
     "firefox": "57",
-    "safari": "tp",
+    "safari": "12",
     "opera": "50"
   },
   "proposal-object-rest-spread": {

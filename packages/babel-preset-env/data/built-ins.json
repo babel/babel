@@ -1052,7 +1052,7 @@
   "es7.symbol.async-iterator": {
     "chrome": "63",
     "firefox": "57",
-    "safari": "tp",
+    "safari": "12",
     "opera": "50"
   },
   "es6.string.anchor": {
