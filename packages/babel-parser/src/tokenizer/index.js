@@ -412,7 +412,6 @@ export default class Tokenizer extends LocationParser {
 
     const nextPos = this.state.pos + 1;
     const next = this.input.charCodeAt(nextPos);
-    // if (isIdentifierStart(next)) {
     if (
       (this.hasPlugin("classPrivateProperties") ||
         this.hasPlugin("classPrivateMethods")) &&
