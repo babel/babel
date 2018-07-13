@@ -4,7 +4,10 @@ var C = function C() {
   babelHelpers.classCallCheck(this, C);
   babelHelpers.defineProperty(this, "y", babelHelpers.classPrivateFieldGet(this, _x));
 
-  _x.set(this, void 0);
+  _x.set(this, {
+    writable: true,
+    value: void 0
+  });
 };
 
 var _x = new WeakMap();

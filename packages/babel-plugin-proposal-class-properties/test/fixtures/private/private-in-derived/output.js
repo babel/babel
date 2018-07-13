@@ -3,7 +3,10 @@ var Outer = function Outer() {
 
   babelHelpers.classCallCheck(this, Outer);
 
-  _outer.set(this, void 0);
+  _outer.set(this, {
+    writable: true,
+    value: void 0
+  });
 
   var Test =
   /*#__PURE__*/

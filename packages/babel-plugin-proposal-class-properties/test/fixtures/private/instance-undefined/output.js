@@ -3,7 +3,10 @@ var Foo = function Foo() {
 
   babelHelpers.classCallCheck(this, Foo);
 
-  _bar.set(this, void 0);
+  _bar.set(this, {
+    writable: true,
+    value: void 0
+  });
 };
 
 var _bar = new WeakMap();

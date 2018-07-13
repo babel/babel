@@ -3,7 +3,10 @@ var Foo = function Foo() {
 
   babelHelpers.classCallCheck(this, Foo);
 
-  _prop.set(this, "foo");
+  _prop.set(this, {
+    writable: true,
+    value: "foo"
+  });
 };
 
 var _prop = new WeakMap();
@@ -21,7 +24,10 @@ function (_Foo) {
     babelHelpers.classCallCheck(this, Bar);
     _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Bar).call(this, ...args));
 
-    _prop2.set(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this)), "bar");
+    _prop2.set(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this)), {
+      writable: true,
+      value: "bar"
+    });
 
     return _this;
   }
