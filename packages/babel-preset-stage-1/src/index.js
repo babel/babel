@@ -4,11 +4,11 @@ import presetStage2 from "@babel/preset-stage-2";
 import transformExportDefaultFrom from "@babel/plugin-proposal-export-default-from";
 import transformLogicalAssignmentOperators from "@babel/plugin-proposal-logical-assignment-operators";
 import transformOptionalChaining from "@babel/plugin-proposal-optional-chaining";
-import transformPipelineOperator, {
-  proposals,
-} from "@babel/plugin-proposal-pipeline-operator";
+import transformPipelineOperator from "@babel/plugin-proposal-pipeline-operator";
 import transformNullishCoalescingOperator from "@babel/plugin-proposal-nullish-coalescing-operator";
 import transformDoExpressions from "@babel/plugin-proposal-do-expressions";
+
+import { proposals } from "@babel/plugin-syntax-pipeline-operator";
 
 export default declare((api, opts = {}) => {
   api.assertVersion(7);

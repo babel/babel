@@ -2,7 +2,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import presetStage1 from "@babel/preset-stage-1";
 
 import transformFunctionBind from "@babel/plugin-proposal-function-bind";
-import { proposals } from "@babel/plugin-proposal-pipeline-operator";
+import { proposals } from "@babel/plugin-syntax-pipeline-operator";
 
 export default declare((api, opts = {}) => {
   api.assertVersion(7);
