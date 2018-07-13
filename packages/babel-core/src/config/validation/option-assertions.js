@@ -192,14 +192,14 @@ export function assertBabelrcSearch(
 
   if (Array.isArray(value)) {
     value.forEach((item, i) => {
-      if (typeof item !== "string") {
-        throw new Error(`.${key}[${i}] must be a string.`);
+      if (!checkValidTest(value)) {
+        throw new Error(`.${key}[${i}] must be a string/Function/RegExp.`);
       }
     });
-  } else if (typeof value !== "string") {
+  } else if (!checkValidTest(value)) {
     throw new Error(
-      `.${key} must be a undefined, a boolean, a string, ` +
-        `or an array of strings, got ${JSON.stringify(value)}`,
+      `.${key} must be a undefined, a boolean, a string/Function/RegExp ` +
+        `or an array of those, got ${JSON.stringify(value)}`,
     );
   }
   return (value: any);

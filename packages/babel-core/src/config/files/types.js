@@ -9,7 +9,7 @@ export type ConfigFile = {
 export type IgnoreFile = {
   filepath: string,
   dirname: string,
-  ignore: Array<string>,
+  ignore: Array<RegExp>,
 };
 
 export type RelativeConfig = {

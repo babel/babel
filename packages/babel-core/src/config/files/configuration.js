@@ -12,6 +12,7 @@ import {
 } from "../caching";
 import makeAPI from "../helpers/config-api";
 import { makeStaticFileCache } from "./utils";
+import pathPatternToRegex from "../pattern-to-regex";
 import type { FilePackageData, RelativeConfig, ConfigFile } from "./types";
 
 const debug = buildDebug("babel:config:loading:files:configuration");
@@ -240,15 +241,24 @@ const readConfigJSON5 = makeStaticFileCache((filepath, content) => {
 });
 
 const readIgnoreConfig = makeStaticFileCache((filepath, content) => {
-  const ignore = content
+  const ignoreDir = path.dirname(filepath);
+  const ignorePatterns = content
     .split("\n")
     .map(line => line.replace(/#(.*?)$/, "").trim())
     .filter(line => !!line);
 
+  for (const pattern of ignorePatterns) {
+    if (pattern[0] === "!") {
+      throw new Error(`Negation of file paths is not supported.`);
+    }
+  }
+
   return {
     filepath,
     dirname: path.dirname(filepath),
-    ignore,
+    ignore: ignorePatterns.map(pattern =>
+      pathPatternToRegex(pattern, ignoreDir),
+    ),
   };
 });
 

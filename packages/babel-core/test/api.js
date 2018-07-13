@@ -5,11 +5,11 @@ import Plugin from "../lib/config/plugin";
 import generator from "@babel/generator";
 
 function assertIgnored(result) {
-  expect(result).toBeFalsy();
+  expect(result).toBeNull();
 }
 
 function assertNotIgnored(result) {
-  expect(result.ignored).toBeFalsy();
+  expect(result).not.toBeNull();
 }
 
 function transform(code, opts) {
@@ -36,13 +36,11 @@ function transformFileSync(filename, opts) {
   });
 }
 
-// shim
 function transformAsync(code, opts) {
-  return {
-    then: function(resolve) {
-      resolve(transform(code, opts));
-    },
-  };
+  return babel.transformAsync(code, {
+    cwd: __dirname,
+    ...opts,
+  });
 }
 
 describe("parser and generator options", function() {
