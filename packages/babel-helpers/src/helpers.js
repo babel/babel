@@ -1029,7 +1029,7 @@ helpers.classPrivateFieldSet = () => template.program.ast`
     if (!descriptor.writable) {
       // This should only throw in strict mode, but class bodies are
       // always strict and private fields can only be used inside
-      // cass bodies.
+      // class bodies.
       throw new TypeError("attempted to set read only private field");
     }
     descriptor.value = value;
