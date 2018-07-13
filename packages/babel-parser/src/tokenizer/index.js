@@ -403,7 +403,8 @@ export default class Tokenizer extends LocationParser {
   // into it.
   //
   // All in the name of speed.
-  //
+
+  // number sign is "#"
   readToken_numberSign(code: number): void {
     if (this.state.pos === 0 && this.readToken_interpreter()) {
       return;
