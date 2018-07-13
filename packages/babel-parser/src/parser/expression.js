@@ -1996,18 +1996,14 @@ export default class ExpressionParser extends LValParser {
     this.expectPlugin("pipelineOperator");
 
     if (this.getPluginOption("pipelineOperator", "proposal") === "smart") {
-      this.checkSmartPipelineHeadEarlyErrors(left, leftStartPos);
-    }
-  }
-
-  checkSmartPipelineHeadEarlyErrors(left: N.Expression, leftStartPos: number) {
-    if (left.type === "SequenceExpression") {
-      // Ensure that the pipeline head is not a comma-delimited
-      // sequence expression.
-      throw this.raise(
-        leftStartPos,
-        `Pipeline head may not be a comma-separated sequence expression`,
-      );
+      if (left.type === "SequenceExpression") {
+        // Ensure that the pipeline head is not a comma-delimited
+        // sequence expression.
+        throw this.raise(
+          leftStartPos,
+          `Pipeline head may not be a comma-separated sequence expression`,
+        );
+      }
     }
   }
 
