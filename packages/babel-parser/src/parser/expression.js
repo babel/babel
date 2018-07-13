@@ -2083,13 +2083,7 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(bodyNode, pipelineStyle);
   }
 
-  checkSmartPipelineBodyStyle(
-    expression: N.Expression,
-  ):
-    | "PipelineBareFunction"
-    | "PipelineBareConstructor"
-    | "PipelineBareAwaitedFunction"
-    | "PipelineTopicExpression" {
+  checkSmartPipelineBodyStyle(expression: N.Expression): PipelineStyle {
     switch (expression.type) {
       case "NewExpression":
         return this.isSimpleReference(expression.callee)
