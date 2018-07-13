@@ -500,11 +500,15 @@ function normalizeOptions(opts: ValidatedOptions): ValidatedOptions {
   };
   delete options.extends;
   delete options.env;
+  delete options.overrides;
   delete options.plugins;
   delete options.presets;
   delete options.passPerPreset;
   delete options.ignore;
   delete options.only;
+  delete options.test;
+  delete options.include;
+  delete options.exclude;
 
   // "sourceMap" is just aliased to sourceMap, so copy it over as
   // we merge the options together.
