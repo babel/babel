@@ -107,7 +107,7 @@ For questions and support please visit join our [Slack Community](https://slack.
 
 ### Is there a Babel song?
 
-I'm so glad you asked: [Hallelujah —— In Praise of Babel](SONG.md) by [@angus-c](https://github.com/angus-c). Tweet us your recordings!
+I'm so glad you asked: [Hallelujah —— In Praise of Babel](SONG.md) by [@angus-c](https://github.com/angus-c), [audio version](https://youtu.be/40abpedBKK8) by [@swyx](https://twitter.com/@swyx). Tweet us your recordings!
 
 ### Where are the docs?
 
