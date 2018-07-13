@@ -2118,7 +2118,7 @@ export default class ExpressionParser extends LValParser {
   // had before the function was called.
 
   withTopicPermittingContext<T>(callback: () => T): T {
-    const outerContextTopicState = this.readTopicContextState();
+    const outerContextTopicState = this.state.topicContextState;
     this.state.topicContextState = {
       // Enable the use of the primary topic reference.
       maxNumOfResolvableTopics: 1,
@@ -2140,7 +2140,7 @@ export default class ExpressionParser extends LValParser {
   // had before the function was called.
 
   withTopicForbiddingContext<T>(callback: () => T): T {
-    const outerContextTopicState = this.readTopicContextState();
+    const outerContextTopicState = this.state.topicContextState;
     this.state.topicContextState = {
       // Disable the use of the primary topic reference.
       maxNumOfResolvableTopics: 0,
@@ -2152,10 +2152,6 @@ export default class ExpressionParser extends LValParser {
 
     this.state.topicContextState = outerContextTopicState;
     return callbackResult;
-  }
-
-  readTopicContextState(): tt.TopicContextState {
-    return this.state.topicContextState;
   }
 
   // Register the use of a primary topic reference (`#`) within the current
