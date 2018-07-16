@@ -8,8 +8,6 @@ import transformPipelineOperator from "@babel/plugin-proposal-pipeline-operator"
 import transformNullishCoalescingOperator from "@babel/plugin-proposal-nullish-coalescing-operator";
 import transformDoExpressions from "@babel/plugin-proposal-do-expressions";
 
-import { proposals } from "@babel/plugin-syntax-pipeline-operator";
-
 export default declare((api, opts = {}) => {
   api.assertVersion(7);
 
@@ -47,7 +45,7 @@ export default declare((api, opts = {}) => {
       "The pipeline operator requires a proposal set." +
         " You must pass 'pipelineProposal' option to" +
         " @babel/preset-stage-1 whose value must be one of: " +
-        proposals.join(", "),
+        ["minimal"].join(", "),
     );
   }
 
