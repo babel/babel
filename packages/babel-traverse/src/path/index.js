@@ -2,7 +2,6 @@ import type Hub from "../hub";
 import type TraversalContext from "../context";
 import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
-import invariant from "invariant";
 import traverse from "../index";
 import Scope from "../scope";
 import * as t from "@babel/types";
@@ -76,7 +75,9 @@ export default class NodePath {
       hub = parentPath.hub;
     }
 
-    invariant(parent, "To get a node path the parent needs to exist");
+    if (!parent) {
+      throw new Error("To get a node path the parent needs to exist");
+    }
 
     const targetNode = container[key];
 

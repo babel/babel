@@ -101,7 +101,6 @@ function hookExtensions(exts) {
 
 export function revert() {
   if (piratesRevert) piratesRevert();
-  delete require.cache[require.resolve(__filename)];
 }
 
 register();

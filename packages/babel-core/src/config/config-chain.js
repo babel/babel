@@ -1,7 +1,6 @@
 // @flow
 
 import path from "path";
-import micromatch from "micromatch";
 import buildDebug from "debug";
 import {
   validate,
@@ -10,6 +9,7 @@ import {
   type ConfigApplicableTest,
   type BabelrcSearch,
 } from "./validation/options";
+import pathPatternToRegex from "./pattern-to-regex";
 
 const debug = buildDebug("babel:config:config-chain");
 
@@ -50,11 +50,6 @@ export type ConfigContext = {
   cwd: string,
   root: string,
   envName: string,
-};
-
-type ConfigContextNamed = {
-  ...ConfigContext,
-  filename: string,
 };
 
 /**
@@ -217,7 +212,7 @@ function babelrcLoadEnabled(
 
   const absoluteRoot = context.root;
 
-  // Fast path to avoid having to load micromatch if the babelrc is just
+  // Fast path to avoid having to match patterns if the babelrc is just
   // loading in the standard root directory.
   if (babelrcRoots === undefined) {
     return pkgData.directories.indexOf(absoluteRoot) !== -1;
@@ -225,15 +220,23 @@ function babelrcLoadEnabled(
 
   let babelrcPatterns = babelrcRoots;
   if (!Array.isArray(babelrcPatterns)) babelrcPatterns = [babelrcPatterns];
-  babelrcPatterns = babelrcPatterns.map(pat => path.resolve(context.cwd, pat));
+  babelrcPatterns = babelrcPatterns.map(pat => {
+    return typeof pat === "string" ? path.resolve(context.cwd, pat) : pat;
+  });
 
-  // Fast path to avoid having to load micromatch if the babelrc is just
+  // Fast path to avoid having to match patterns if the babelrc is just
   // loading in the standard root directory.
   if (babelrcPatterns.length === 1 && babelrcPatterns[0] === absoluteRoot) {
     return pkgData.directories.indexOf(absoluteRoot) !== -1;
   }
 
-  return micromatch(pkgData.directories, babelrcPatterns).length > 0;
+  return babelrcPatterns.some(pat => {
+    if (typeof pat === "string") pat = pathPatternToRegex(pat, context.cwd);
+
+    return pkgData.directories.some(directory => {
+      return matchPattern(pat, context.cwd, directory);
+    });
+  });
 }
 
 const validateConfigFile = makeWeakCache(
@@ -583,20 +586,9 @@ function configFieldIsApplicable(
   test: ConfigApplicableTest,
   dirname: string,
 ): boolean {
-  if (typeof context.filename !== "string") {
-    throw new Error(
-      `Configuration contains explicit test/include/exclude checks, but no filename was passed to Babel`,
-    );
-  }
-  // $FlowIgnore - Flow refinements aren't quite smart enough for this :(
-  const ctx: ConfigContextNamed = context;
-
   const patterns = Array.isArray(test) ? test : [test];
 
-  // Disabling negation here because it's a bit buggy from
-  // https://github.com/babel/babel/issues/6907 and it's not clear that it is
-  // needed since users can use 'exclude' alongside 'test'/'include'.
-  return matchesPatterns(ctx, patterns, dirname, false /* allowNegation */);
+  return matchesPatterns(context, patterns, dirname);
 }
 
 /**
@@ -608,43 +600,24 @@ function shouldIgnore(
   only: ?IgnoreList,
   dirname: string,
 ): boolean {
-  if (ignore) {
-    if (typeof context.filename !== "string") {
-      throw new Error(
-        `Configuration contains ignore checks, but no filename was passed to Babel`,
-      );
-    }
-    // $FlowIgnore - Flow refinements aren't quite smart enough for this :(
-    const ctx: ConfigContextNamed = context;
-    if (matchesPatterns(ctx, ignore, dirname)) {
-      debug(
-        "Ignored %o because it matched one of %O from %o",
-        context.filename,
-        ignore,
-        dirname,
-      );
-      return true;
-    }
+  if (ignore && matchesPatterns(context, ignore, dirname)) {
+    debug(
+      "Ignored %o because it matched one of %O from %o",
+      context.filename,
+      ignore,
+      dirname,
+    );
+    return true;
   }
 
-  if (only) {
-    if (typeof context.filename !== "string") {
-      throw new Error(
-        `Configuration contains ignore checks, but no filename was passed to Babel`,
-      );
-    }
-    // $FlowIgnore - Flow refinements aren't quite smart enough for this :(
-    const ctx: ConfigContextNamed = context;
-
-    if (!matchesPatterns(ctx, only, dirname)) {
-      debug(
-        "Ignored %o because it failed to match one of %O from %o",
-        context.filename,
-        only,
-        dirname,
-      );
-      return true;
-    }
+  if (only && !matchesPatterns(context, only, dirname)) {
+    debug(
+      "Ignored %o because it failed to match one of %O from %o",
+      context.filename,
+      only,
+      dirname,
+    );
+    return true;
   }
 
   return false;
@@ -655,64 +628,26 @@ function shouldIgnore(
  * Otherwise returns result of matching pattern Regex with filename.
  */
 function matchesPatterns(
-  context: ConfigContextNamed,
+  context: ConfigContext,
   patterns: IgnoreList,
   dirname: string,
-  allowNegation?: boolean = true,
 ): boolean {
-  const res = [];
-  const strings = [];
-  const fns = [];
-
-  patterns.forEach(pattern => {
-    if (typeof pattern === "string") strings.push(pattern);
-    else if (typeof pattern === "function") fns.push(pattern);
-    else res.push(pattern);
-  });
-
-  const filename = context.filename;
-  if (res.some(re => re.test(context.filename))) return true;
-  if (fns.some(fn => fn(filename))) return true;
-
-  if (strings.length > 0) {
-    const possibleDirs = getPossibleDirs(context);
-
-    const absolutePatterns = strings.map(pattern => {
-      // Preserve the "!" prefix so that micromatch can use it for negation.
-      const negate = pattern[0] === "!";
-      if (negate && !allowNegation) {
-        throw new Error(`Negation of file paths is not supported.`);
-      }
-      if (negate) pattern = pattern.slice(1);
-
-      return (negate ? "!" : "") + path.resolve(dirname, pattern);
-    });
-
-    if (
-      micromatch(possibleDirs, absolutePatterns, {
-        nocase: true,
-        nonegate: !allowNegation,
-      }).length > 0
-    ) {
-      return true;
-    }
-  }
-
-  return false;
+  return patterns.some(pattern =>
+    matchPattern(pattern, dirname, context.filename),
+  );
 }
 
-const getPossibleDirs = makeWeakCache((context: ConfigContextNamed) => {
-  let current = context.filename;
-  if (typeof current !== "string") return [];
+function matchPattern(pattern, dirname, pathToTest): boolean {
+  if (typeof pattern === "function") return !!pattern(pathToTest);
 
-  const possibleDirs = [current];
-  while (true) {
-    const previous = current;
-    current = path.dirname(current);
-    if (previous === current) break;
-
-    possibleDirs.push(current);
+  if (typeof pathToTest !== "string") {
+    throw new Error(
+      `Configuration contains string/RegExp pattern, but no filename was passed to Babel`,
+    );
   }
 
-  return possibleDirs;
-});
+  if (typeof pattern === "string") {
+    pattern = pathPatternToRegex(pattern, dirname);
+  }
+  return pattern.test(pathToTest);
+}

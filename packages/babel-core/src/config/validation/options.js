@@ -242,7 +242,7 @@ export type OverridesList = Array<ValidatedOptions>;
 export type ConfigApplicableTest = IgnoreItem | Array<IgnoreItem>;
 
 export type ConfigFileSearch = string | boolean;
-export type BabelrcSearch = boolean | string | Array<string>;
+export type BabelrcSearch = boolean | IgnoreItem | IgnoreList;
 export type SourceMapsOption = boolean | "inline" | "both";
 export type SourceTypeOption = "module" | "script" | "unambiguous";
 export type CompactOption = boolean | "auto";
