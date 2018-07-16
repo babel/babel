@@ -10,7 +10,7 @@ import transformThrowExpressions from "@babel/plugin-proposal-throw-expressions"
 export default declare((api, opts = {}) => {
   api.assertVersion(7);
 
-  const { loose = false, useBuiltIns = false, decoratorsLegacy = false } = opts;
+  const { loose = false, useBuiltIns = false, decoratorsLegacy = true } = opts;
 
   if (typeof loose !== "boolean") {
     throw new Error("@babel/preset-stage-2 'loose' option must be a boolean.");
@@ -23,14 +23,6 @@ export default declare((api, opts = {}) => {
   if (typeof decoratorsLegacy !== "boolean") {
     throw new Error(
       "@babel/preset-stage-2 'decoratorsLegacy' option must be a boolean.",
-    );
-  }
-
-  if (decoratorsLegacy !== true) {
-    throw new Error(
-      "The new decorators proposal is not supported yet." +
-        ' You must pass the `"decoratorsLegacy": true` option to' +
-        " @babel/preset-stage-2",
     );
   }
 
