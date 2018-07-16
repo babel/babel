@@ -1,6 +1,6 @@
 export default function() {
   throw new Error(`
-As of v7.0.0-beta.52, we've decided to remove
+As of v7.0.0-beta.54, we've decided to remove
 the official Babel Stage presets. You can find more information
 at issue #7770: https://github.com/babel/babel/issues/7770, but
 the TL;DR is that it's causing more harm than convenience in that
@@ -37,14 +37,20 @@ If you want the same configuration as before:
   ]
 }
 
-We recommend that make your own presets to use across projects for
-reusability. This can be as simple as exporting a function that returns your config/array of plugins.
+If you're using the same configuration across many separate projects,
+keep in mind that you can also create your own custom presets with
+whichever plugins and presets you're looking to use.
 
 module.exports = function() {
   return {
     plugins: [
+      require("@babel/plugin-syntax-dynamic-import"),
+      [require("@babel/plugin-proposal-decorators"), { "legacy": true }],
+      [require("@babel/plugin-proposal-class-properties"), { "loose": false }],
+    ],
+    presets: [
       // ...
-    ]
+    ],
   };
 };
 `);
