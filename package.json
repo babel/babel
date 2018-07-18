@@ -31,6 +31,7 @@
     "eslint": "^5.0.1",
     "eslint-config-babel": "^7.0.2",
     "eslint-plugin-flowtype": "^2.49.3",
+    "eslint-plugin-local-rules": "^0.1.0",
     "eslint-plugin-prettier": "^2.6.1",
     "flow-bin": "^0.75.0",
     "graceful-fs": "^4.1.11",
@@ -73,7 +74,7 @@
   },
   "lint-staged": {
     "*.js": [
-      "eslint --format=codeframe --rulesdir='./scripts/eslint_rules'"
+      "eslint --format=codeframe"
     ]
   },
   "jest": {
