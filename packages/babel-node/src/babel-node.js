@@ -47,6 +47,7 @@ getV8Flags(function(err, v8Flags) {
       case "--debug-brk":
       case "--inspect":
       case "--inspect-brk":
+      case "--experimental-modules":  
         args.unshift(arg);
         break;
 
