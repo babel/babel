@@ -15,6 +15,68 @@ See [CHANGELOG - v4-v6](/.github/CHANGELOG-v4-v6.md) for the v4.x-v6.x changelog
 See [CHANGELOG - 6to5](/.github/CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0.0-beta.29 version changelog.
 
+## v7.0.0-beta.54 (2018-07-16)
+
+> Regarding https://github.com/babel/babel/issues/8184, we aren't using `micromatch` for paths, just basic `*/**` substitution now. For anything more complicated we will recommend using a regex/`.js` config.
+> Fixed a bug in the stage presets (https://github.com/babel/babel/issues/8307), so we just removed the requirements for setting options in the meantime for ease of use. We are removing the Stage presets next release. https://github.com/babel/babel/pull/8293
+
+#### :boom: Breaking Change
+* `babel-core`, `babel-register`, `babel-traverse`
+  * [#8327](https://github.com/babel/babel/pull/8327) Treat string ignore/only/test/include/exclude values as paths with only basic pattern matching. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+#### :bug: Bug Fix
+* `babel-core`, `babel-register`, `babel-traverse`
+  * [#8327](https://github.com/babel/babel/pull/8327) Treat string ignore/only/test/include/exclude values as paths with only basic pattern matching. ([@loganfsmyth](https://github.com/loganfsmyth))
+* `babel-preset-stage-0`, `babel-preset-stage-1`
+  * [#8317](https://github.com/babel/babel/pull/8317) Fix stage-0/1 import of pipeline proposals array. ([@mAAdhaTTah](https://github.com/mAAdhaTTah))
+* `babel-helper-module-transforms`, `babel-plugin-transform-modules-commonjs`
+  * [#8316](https://github.com/babel/babel/pull/8316) Ensure that the wildcard interop is used with re-export + default.. ([@loganfsmyth](https://github.com/loganfsmyth))
+* `babel-core`
+  * [#8315](https://github.com/babel/babel/pull/8315) Remove option-filtering options from the final options results.. ([@loganfsmyth](https://github.com/loganfsmyth))
+
+#### :memo: Documentation
+* [#8320](https://github.com/babel/babel/pull/8320) Add link to audio version of song. ([@rugk](https://github.com/rugk))
+
+## v7.0.0-beta.53 (2018-07-11)
+
+- Fix for regression with paths on windows due to micromatch upgrade, remove yearly presets (not published)
+- (There was an issue with the Stage presets in this release, but it is also deprecated) 
+
+#### :boom: Breaking Change
+* `babel-*`
+  * [#8274](https://github.com/babel/babel/pull/8274) Remove yearly presets from repo. ([@hzoo](https://github.com/hzoo))
+
+#### :rocket: New Feature
+* `babel-generator`, `babel-parser`, `babel-plugin-transform-typescript`, `babel-types`
+  * [#7799](https://github.com/babel/babel/pull/7799) TypeScript: Support type arguments on JSX opening and self-closing tags. ([@andy-ms](https://github.com/andy-ms))
+* `babel-parser`
+  * [#8291](https://github.com/babel/babel/pull/8291) Support pipeline proposal flag in  `@babel/parser`. ([@mAAdhaTTah](https://github.com/mAAdhaTTah))
+* `babel-plugin-proposal-object-rest-spread`
+  * [#8264](https://github.com/babel/babel/pull/8264) Remove unused bindings when excluding keys with rest in loose mode. ([@Andarist](https://github.com/Andarist))
+* `babel-helpers`, `babel-plugin-proposal-object-rest-spread`, `babel-plugin-transform-destructuring`, `babel-preset-env`
+  * [#8261](https://github.com/babel/babel/pull/8261) Introduce objectWithoutPropertiesLoose helper. ([@Andarist](https://github.com/Andarist))
+
+#### :bug: Bug Fix
+* `babel-core`
+  * [#8281](https://github.com/babel/babel/pull/8281) Revert micromatch upgrade (regression) [skip ci]. ([@hzoo](https://github.com/hzoo))
+* `babel-types`
+  * [#8165](https://github.com/babel/babel/pull/8165) [babel-types] Fix isNodesEquivalent() behavior for TemplateElements. ([@timkendrick](https://github.com/timkendrick))
+
+#### :nail_care: Polish
+* `babel-plugin-syntax-pipeline-operator`, `babel-preset-stage-0`, `babel-preset-stage-1`
+  * [#8279](https://github.com/babel/babel/pull/8279) Improve error messages around pipeline option. ([@mAAdhaTTah](https://github.com/mAAdhaTTah))
+
+#### :memo: Documentation
+* [#8286](https://github.com/babel/babel/pull/8286) Move v4-v6 changelog to another file and all prerelease 7.0 logs [ski…. ([@hzoo](https://github.com/hzoo))
+
+#### :house: Internal
+* `babel-preset-env`
+  * [#8299](https://github.com/babel/babel/pull/8299) Make env preset build-data scripts reproducible. ([@rtsao](https://github.com/rtsao))
+* `babel-plugin-proposal-object-rest-spread`
+  * [#8287](https://github.com/babel/babel/pull/8287) Fixed fixture tests after merge. ([@Andarist](https://github.com/Andarist))
+* Other
+  * [#8187](https://github.com/babel/babel/pull/8187) Invoke Jest main file directly. ([@ishitatsuyuki](https://github.com/ishitatsuyuki))
+
 ## v7.0.0-beta.52 (2018-07-06)
 
 Deprecating the yearly/stage presets in v7 (will remove next beta). Ran `npm deprecate` on `@babel/preset-es2015`, `@babel/preset-es2016`, `@babel/preset-es2017`, `@babel/preset-stage-0`, `@babel/preset-stage-1`, `@babel/preset-stage-2`, `@babel/preset-stage-3` only for versions `>v7.0.0-beta.52`. This means this will only break your build if you are using `^` in Babel v7 beta (which we have recommended against each release). (It is unfortunate that the default behavior of npm is to use `^` when using `npm install` though; haven't made an RFC for it yet).
