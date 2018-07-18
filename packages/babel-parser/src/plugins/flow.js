@@ -1917,6 +1917,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseClassProperty(node);
     }
 
+    parseClassPrivateProperty(
+      node: N.ClassPrivateProperty,
+    ): N.ClassPrivateProperty {
+      if (this.match(tt.colon)) {
+        node.typeAnnotation = this.flowParseTypeAnnotation();
+      }
+      return super.parseClassPrivateProperty(node);
+    }
+
     // determine whether or not we're currently in the position where a class method would appear
     isClassMethod(): boolean {
       return this.isRelational("<") || super.isClassMethod();
