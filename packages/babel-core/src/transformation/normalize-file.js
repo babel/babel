@@ -2,6 +2,7 @@
 
 import path from "path";
 import buildDebug from "debug";
+import cloneDeep from "lodash/cloneDeep";
 import * as t from "@babel/types";
 import type { PluginPasses } from "../config";
 import convertSourceMap, { typeof Converter } from "convert-source-map";
@@ -75,6 +76,7 @@ export default function normalizeFile(
     } else if (ast.type !== "File") {
       throw new Error("AST root must be a Program or File node");
     }
+    ast = cloneDeep(ast);
   } else {
     // The parser's AST types aren't fully compatible with the types generated
     // by the logic in babel-types.

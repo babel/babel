@@ -12,6 +12,13 @@ function assertNotIgnored(result) {
   expect(result).not.toBeNull();
 }
 
+function parse(code, opts) {
+  return babel.parse(code, {
+    cwd: __dirname,
+    ...opts,
+  });
+}
+
 function transform(code, opts) {
   return babel.transform(code, {
     cwd: __dirname,
@@ -38,6 +45,13 @@ function transformFileSync(filename, opts) {
 
 function transformAsync(code, opts) {
   return babel.transformAsync(code, {
+    cwd: __dirname,
+    ...opts,
+  });
+}
+
+function transformFromAst(ast, code, opts) {
+  return babel.transformFromAst(ast, code, {
     cwd: __dirname,
     ...opts,
   });
@@ -166,6 +180,30 @@ describe("api", function() {
       transformFileSync(__dirname + "/fixtures/api/file.js", options).code,
     ).toBe("foo();");
     expect(options).toEqual({ babelrc: false });
+  });
+
+  it("transformFromAst should not mutate the AST", function() {
+    const program = "const identifier = 1";
+    const node = parse(program);
+    const { code } = transformFromAst(node, program, {
+      plugins: [
+        function() {
+          return {
+            visitor: {
+              Identifier: function(path) {
+                path.node.name = "replaced";
+              },
+            },
+          };
+        },
+      ],
+    });
+
+    expect(code).toBe("const replaced = 1;");
+    expect(node.program.body[0].declarations[0].id.name).toBe(
+      "identifier",
+      "original ast should not have been mutated",
+    );
   });
 
   it("options throw on falsy true", function() {
