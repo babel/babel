@@ -30,6 +30,7 @@ export function rewriteModuleStatementsAndPrepareHeader(
     loose,
     noInterop,
     lazy,
+    throwOnUninitializedRead,
     esNamespaceOnly,
   },
 ) {
@@ -74,7 +75,14 @@ export function rewriteModuleStatementsAndPrepareHeader(
   }
 
   // Create all of the statically known named exports.
-  headers.push(...buildExportInitializationStatements(path, meta, loose));
+  headers.push(
+    ...buildExportInitializationStatements(
+      path,
+      meta,
+      loose,
+      throwOnUninitializedRead,
+    ),
+  );
 
   return { meta, headers };
 }
@@ -311,6 +319,7 @@ function buildExportInitializationStatements(
   programPath: NodePath,
   metadata: ModuleMetadata,
   loose: boolean = false,
+  throwOnUninitializedRead: boolean = false,
 ) {
   const initStatements = [];
 
@@ -336,17 +345,70 @@ function buildExportInitializationStatements(
     }
   }
 
-  initStatements.push(
-    ...chunk(exportNames, 100).map(members => {
-      return buildInitStatement(
-        metadata,
-        members,
-        programPath.scope.buildUndefinedNode(),
+  if (throwOnUninitializedRead) {
+    const setterParam = programPath.scope.generateUidIdentifier("v"); // can be reused
+    for (const exportName of exportNames) {
+      initStatements.push(
+        ...buildThrowInitStatements(
+          metadata,
+          exportName,
+          setterParam,
+          programPath.scope,
+        ),
       );
-    }),
-  );
+    }
+  } else {
+    initStatements.push(
+      ...chunk(exportNames, 100).map(members => {
+        return buildInitStatement(
+          metadata,
+          members,
+          programPath.scope.buildUndefinedNode(),
+        );
+      }),
+    );
+  }
 
   return initStatements;
+}
+
+function buildThrowInitStatements(metadata, exportName, setterParam, scope) {
+  // Ideally we would rely on the temporal dead zone for this; simply generate a getter that refers
+  // to the local that holds the exported value and an error will be thrown if the getter is
+  // invoked before the local is assigned a value. However the TDZ transform is off by default
+  // right now, and even if enabled it runs before this transform. For now this option emulates TDZ
+  // on its own, but we should follow up to use the existing TDZ transform later. See #8345.
+  const storage = scope.generateUidIdentifier(exportName + "_storage");
+  const set = scope.generateUidIdentifier(exportName + "_set");
+  return template.statements`
+    var STORAGE, SET = false;
+    Object.defineProperty(EXPORTS, NAME, {
+      get: function(){
+        if (SET === false) {
+          throw new Error(GET_ERROR);
+        }
+        return STORAGE;
+      },
+      set: function(SETTER_PARAM){
+        if (SET) {
+          throw new Error(SET_ERROR);
+        }
+        SET = true;
+        STORAGE = SETTER_PARAM;
+      },
+      enumerable: true,
+    });
+  `({
+    STORAGE: storage,
+    SET: set,
+    SETTER_PARAM: setterParam,
+    EXPORTS: metadata.exportName,
+    NAME: t.stringLiteral(exportName),
+    GET_ERROR: t.stringLiteral(
+      `Cannot access uninitialized export ${exportName}`,
+    ),
+    SET_ERROR: t.stringLiteral(`Cannot reassign exported value ${exportName}`),
+  });
 }
 
 /**
