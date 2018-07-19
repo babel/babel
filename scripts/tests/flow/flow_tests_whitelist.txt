@@ -15,6 +15,7 @@ async_await/migrated_0020.js
 async_await/migrated_0024.js
 async_await/migrated_0027.js
 async_generators/migrated_0007.js
+catch/optional_catch_binding.js
 class_properties/migrated_0000.js
 class_properties/migrated_0005.js
 class_properties/migrated_0011.js
@@ -23,7 +24,8 @@ class_properties/migrated_0021.js
 class_properties/migrated_0026.js
 decorators/migrated_0003.js
 decorators/migrated_0007.js
-private_class_properties/valid.js
+private_class_properties/multiple.js
+private_class_properties/super.js
 types/annotations/migrated_0001.js
 types/annotations_in_comments_invalid/migrated_0003.js
 types/annotations/void_is_reserved_param.js
