@@ -51,7 +51,7 @@
     "lodash": "^4.17.5",
     "merge-stream": "^1.0.1",
     "output-file-sync": "^2.0.0",
-    "prettier": "1.13.2",
+    "prettier": "^1.13.7",
     "pump": "^1.0.2",
     "rimraf": "^2.4.3",
     "rollup-plugin-babel": "^4.0.0-beta.0",
