@@ -345,44 +345,44 @@ export default function(
           continue;
         }
 
-        it(
+        const testFn = task.disabled ? it.skip : it;
+
+        testFn(
           task.title,
-          !task.disabled &&
-            function() {
-              function runTask() {
-                run(task);
-              }
 
-              defaults(task.options, {
-                sourceMap: !!(task.sourceMappings || task.sourceMap),
+          function() {
+            function runTask() {
+              run(task);
+            }
+
+            defaults(task.options, {
+              sourceMap: !!(task.sourceMappings || task.sourceMap),
+            });
+
+            extend(task.options, taskOpts);
+
+            if (dynamicOpts) dynamicOpts(task.options, task);
+
+            const throwMsg = task.options.throws;
+            if (throwMsg) {
+              // internal api doesn't have this option but it's best not to pollute
+              // the options object with useless options
+              delete task.options.throws;
+
+              assert.throws(runTask, function(err) {
+                return throwMsg === true || err.message.indexOf(throwMsg) >= 0;
               });
-
-              extend(task.options, taskOpts);
-
-              if (dynamicOpts) dynamicOpts(task.options, task);
-
-              const throwMsg = task.options.throws;
-              if (throwMsg) {
-                // internal api doesn't have this option but it's best not to pollute
-                // the options object with useless options
-                delete task.options.throws;
-
-                assert.throws(runTask, function(err) {
-                  return (
-                    throwMsg === true || err.message.indexOf(throwMsg) >= 0
-                  );
-                });
-              } else {
-                if (task.exec.code) {
-                  const result = run(task);
-                  if (result && typeof result.then === "function") {
-                    return result;
-                  }
-                } else {
-                  runTask();
+            } else {
+              if (task.exec.code) {
+                const result = run(task);
+                if (result && typeof result.then === "function") {
+                  return result;
                 }
+              } else {
+                runTask();
               }
-            },
+            }
+          },
         );
       }
     });

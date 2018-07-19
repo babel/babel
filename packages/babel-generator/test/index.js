@@ -362,36 +362,38 @@ const suites = fixtures(`${__dirname}/fixtures`);
 suites.forEach(function(testSuite) {
   describe("generation/" + testSuite.title, function() {
     testSuite.tests.forEach(function(task) {
-      it(
+      const testFn = task.disabled ? it.skip : it;
+
+      testFn(
         task.title,
-        !task.disabled &&
-          function() {
-            const expected = task.expect;
-            const actual = task.actual;
-            const actualCode = actual.code;
 
-            if (actualCode) {
-              const actualAst = parse(actualCode, {
-                filename: actual.loc,
-                plugins: task.options.plugins || [],
-                strictMode: false,
-                sourceType: "module",
-              });
-              const result = generate(actualAst, task.options, actualCode);
+        function() {
+          const expected = task.expect;
+          const actual = task.actual;
+          const actualCode = actual.code;
 
-              if (
-                !expected.code &&
-                result.code &&
-                fs.statSync(path.dirname(expected.loc)).isDirectory() &&
-                !process.env.CI
-              ) {
-                console.log(`New test file created: ${expected.loc}`);
-                fs.writeFileSync(expected.loc, result.code);
-              } else {
-                expect(result.code).toBe(expected.code);
-              }
+          if (actualCode) {
+            const actualAst = parse(actualCode, {
+              filename: actual.loc,
+              plugins: task.options.plugins || [],
+              strictMode: false,
+              sourceType: "module",
+            });
+            const result = generate(actualAst, task.options, actualCode);
+
+            if (
+              !expected.code &&
+              result.code &&
+              fs.statSync(path.dirname(expected.loc)).isDirectory() &&
+              !process.env.CI
+            ) {
+              console.log(`New test file created: ${expected.loc}`);
+              fs.writeFileSync(expected.loc, result.code);
+            } else {
+              expect(result.code).toBe(expected.code);
             }
-          },
+          }
+        },
       );
     });
   });
