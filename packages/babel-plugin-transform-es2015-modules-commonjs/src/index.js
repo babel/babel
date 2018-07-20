@@ -23,6 +23,10 @@ const buildExportsFrom = template(`
   });
 `);
 
+const buildLooseExportsFrom = template(`
+  Object.defineProperty(exports, $0, {})
+`);
+
 const buildLooseExportsModuleDeclaration = template(`
   exports.__esModule = true;
 `);
@@ -41,6 +45,13 @@ const buildExportAll = template(`
       }
     });
   });
+`);
+
+const buildLooseExportAll = template(`
+  Object.keys(OBJECT).forEach(function (key){
+    if (key === "default" || key === "__esModule") return;
+    exports[key] = OBJECT[key]
+  })
 `);
 
 const THIS_BREAK_KEYS = ["FunctionExpression", "FunctionDeclaration", "ClassProperty",
@@ -393,15 +404,28 @@ export default function () {
                     // todo
                   } else if (specifier.isExportSpecifier()) {
                     if (!noInterop && specifier.node.local.name === "default") {
-                      topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name),
-                        t.memberExpression(
-                          t.callExpression(this.addHelper("interopRequireDefault"), [ref]),
-                          specifier.node.local
-                        )
-                      ));
+                      const exportNode = this.opts.loose ?
+                        buildLooseExportsFrom(t.stringLiteral(specifier.node.exported.name),
+                          t.memberExpression(
+                            t.callExpression(this.addHelper("interopRequireDefault"), [ref]),
+                            specifier.node.local
+                          )
+                        ) :
+                        buildExportsFrom(t.stringLiteral(specifier.node.exported.name),
+                          t.memberExpression(
+                            t.callExpression(this.addHelper("interopRequireDefault"), [ref]),
+                            specifier.node.local
+                          )
+                        );
+                      topNodes.push(exportNode);
                     } else {
-                      topNodes.push(buildExportsFrom(t.stringLiteral(specifier.node.exported.name),
-                        t.memberExpression(ref, specifier.node.local)));
+                      const exportNode = this.opts.loose ?
+                        buildLooseExportsFrom(t.stringLiteral(specifier.node.exported.name),
+                        t.memberExpression(ref, specifier.node.local))
+                        :
+                        buildExportsFrom(t.stringLiteral(specifier.node.exported.name),
+                        t.memberExpression(ref, specifier.node.local));
+                      topNodes.push(exportNode);
                     }
                     nonHoistedExportNames[specifier.node.exported.name] = true;
                   }
@@ -417,7 +441,11 @@ export default function () {
               }
               path.replaceWithMultiple(nodes);
             } else if (path.isExportAllDeclaration()) {
-              const exportNode = buildExportAll({
+              const exportNode = this.opts.loose ?
+              buildLooseExportAll({
+                OBJECT: addRequire(path.node.source.value, path.node._blockHoist)
+              })
+              : buildExportAll({
                 OBJECT: addRequire(path.node.source.value, path.node._blockHoist)
               });
               exportNode.loc = path.node.loc;
