@@ -269,6 +269,11 @@ const generateData = (environments, features) => {
       if (electronVersion) {
         plugin.electron = electronVersion.toString();
       }
+
+      // add android
+      if (plugin.chrome >= 18 && !plugin.android) {
+        plugin.android = plugin.chrome;
+      }
     }
 
     return plugin;
