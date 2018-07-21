@@ -964,7 +964,7 @@ export default class ExpressionParser extends LValParser {
       } else if (!this.hasPlugin("importMeta")) {
         this.raise(
           id.start,
-          `Dynamic imports require a parameter: import('a.js').then`,
+          `Dynamic imports require a parameter: import('a.js')`,
         );
       }
     }
