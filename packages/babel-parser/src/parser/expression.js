@@ -298,6 +298,7 @@ export default class ExpressionParser extends LValParser {
         const op = this.state.type;
 
         if (op === tt.pipeline) {
+          this.state.inPipeline = true;
           this.checkPipelineAtInfixOperator(left, leftStartPos);
         } else if (op === tt.nullishCoalescing) {
           this.expectPlugin("nullishCoalescingOperator");
@@ -931,26 +932,30 @@ export default class ExpressionParser extends LValParser {
         }
       }
 
-      case tt.primaryTopicReference: {
-        this.expectPlugin("pipelineOperator");
-        node = this.startNode();
+      case tt.hash: {
+        if (this.state.inPipeline) {
+          this.expectPlugin("pipelineOperator");
+          node = this.startNode();
 
-        if ("smart" !== this.getPluginOption("pipelineOperator", "proposal")) {
-          this.raise(
-            node.start,
-            "Primary Topic Reference found but pipelineOperator not passed 'smart' for 'proposal' option.",
-          );
-        }
+          if (
+            "smart" !== this.getPluginOption("pipelineOperator", "proposal")
+          ) {
+            this.raise(
+              node.start,
+              "Primary Topic Reference found but pipelineOperator not passed 'smart' for 'proposal' option.",
+            );
+          }
 
-        this.next();
-        if (this.primaryTopicReferenceIsAllowedInCurrentTopicContext()) {
-          this.registerTopicReference();
-          return this.finishNode(node, "PrimaryTopicReference");
-        } else {
-          throw this.raise(
-            node.start,
-            `Topic reference was used in a lexical context without topic binding`,
-          );
+          this.next();
+          if (this.primaryTopicReferenceIsAllowedInCurrentTopicContext()) {
+            this.registerTopicReference();
+            return this.finishNode(node, "PrimaryTopicReference");
+          } else {
+            throw this.raise(
+              node.start,
+              `Topic reference was used in a lexical context without topic binding`,
+            );
+          }
         }
       }
 

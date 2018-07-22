@@ -1,4 +1,4 @@
 {
   "plugins": [["pipelineOperator", { "proposal": "smart" }]],
-  "throws": "Topic reference was used in a lexical context without topic binding (1:4)"
+  "throws": "Unexpected token (1:4)"
 }

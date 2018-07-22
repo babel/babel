@@ -26,6 +26,7 @@ export default class State {
     this.maybeInArrowParameters = false;
     this.inGenerator = false;
     this.inAsync = false;
+    this.inPipeline = false;
     this.inPropertyName = false;
     this.inType = false;
     this.inClassProperty = false;
@@ -110,6 +111,7 @@ export default class State {
   inGenerator: boolean;
   inMethod: boolean | N.MethodKind;
   inAsync: boolean;
+  inPipeline: boolean;
   inType: boolean;
   noAnonFunctionType: boolean;
   inPropertyName: boolean;

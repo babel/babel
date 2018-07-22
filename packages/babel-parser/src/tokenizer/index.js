@@ -431,7 +431,7 @@ export default class Tokenizer extends LocationParser {
           )}'`,
         );
       } else {
-        this.finishOp(tt.primaryTopicReference, 1);
+        this.finishOp(tt.hash, 1);
       }
     } else {
       this.raise(
