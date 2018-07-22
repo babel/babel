@@ -2131,10 +2131,11 @@ export default class ExpressionParser extends LValParser {
       maxTopicIndex: null,
     };
 
-    const callbackResult = callback();
-
-    this.state.topicContext = outerContextTopicState;
-    return callbackResult;
+    try {
+      return callback();
+    } finally {
+      this.state.topicContext = outerContextTopicState;
+    }
   }
 
   // Disable topic references from outer contexts within syntax constructs
@@ -2153,10 +2154,11 @@ export default class ExpressionParser extends LValParser {
       maxTopicIndex: null,
     };
 
-    const callbackResult = callback();
-
-    this.state.topicContext = outerContextTopicState;
-    return callbackResult;
+    try {
+      return callback();
+    } finally {
+      this.state.topicContext = outerContextTopicState;
+    }
   }
 
   // Register the use of a primary topic reference (`#`) within the current
