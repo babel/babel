@@ -6,7 +6,7 @@ import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
 import type { Token } from "./index";
-import { types as tt, type TokenType } from "./types";
+import { types as tt, type TokenType, type TopicContextState } from "./types";
 
 export default class State {
   init(options: Options, input: string): void {
@@ -36,7 +36,7 @@ export default class State {
     // Used by smartPipelines.
     this.topicContext = {
       maxNumOfResolvableTopics: 0,
-      maxTopicIndex: undefined,
+      maxTopicIndex: null,
     };
 
     this.classLevel = 0;
@@ -118,7 +118,7 @@ export default class State {
   isIterator: boolean;
 
   // For the smartPipelines plugin:
-  topicContextState: tt.TopicContextState;
+  topicContext: TopicContextState;
 
   // Check whether we are in a (nested) class or not.
   classLevel: number;
