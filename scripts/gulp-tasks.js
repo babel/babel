@@ -71,7 +71,6 @@ function webpackBuild(opts) {
         /..\/..\/package/,
         "../../../../src/babel-package-shim"
       ),*/
-      new webpack.optimize.ModuleConcatenationPlugin(),
     ].concat(plugins),
     resolve: {
       plugins: [
@@ -79,6 +78,9 @@ function webpackBuild(opts) {
         // This replaces DedupePlugin from Webpack 1.x
         new RootMostResolvePlugin(__dirname, true),
       ],
+    },
+    optimization: {
+      concatenateModules: true,
     },
   };
 
