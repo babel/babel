@@ -1,0 +1,9 @@
+{
+  "mappings": "AAAAA;AACAA;AACAA,MAAMC,GAAN;AACAC,IAAIF,GAAJ;AACAE,IAAIF,GAAJ;AACAE,IAAIF,GAAJ,CAAQC,GAAR;AACAC,IAAIF,GAAJ,GAAUC,GAAV;AACA;AACED;AACAA;AACAA,QAAMC,GAAN;AACAC,MAAIF,GAAJ;AACAE,MAAIF,GAAJ;AACAE,MAAIF,GAAJ,CAAQC,GAAR;AACAC,MAAIF,GAAJ,GAAUC,GAAV;AACD",
+  "names": ["foo", "bar", "obj"],
+  "sources": ["fixtures/sourcemaps/call-identifiers/input.js"],
+  "sourcesContent": [
+    "foo;\nfoo();\nfoo().bar;\nobj.foo;\nobj.foo();\nobj.foo.bar;\nobj.foo().bar;\n{\n  foo;\n  foo();\n  foo().bar;\n  obj.foo;\n  obj.foo();\n  obj.foo.bar;\n  obj.foo().bar;\n}"
+  ],
+  "version": 3
+}

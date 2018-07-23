@@ -378,8 +378,19 @@ suites.forEach(function(testSuite) {
               plugins: task.options.plugins || [],
               strictMode: false,
               sourceType: "module",
+              sourceMaps: !!task.sourceMap,
             });
-            const result = generate(actualAst, task.options, actualCode);
+            const options = {
+              sourceFileName: path.relative(__dirname, actual.loc),
+              ...task.options,
+              sourceMaps: task.sourceMap ? true : task.options.sourceMaps,
+            };
+
+            const result = generate(actualAst, options, actualCode);
+
+            if (options.sourceMaps) {
+              expect(result.map).toEqual(task.sourceMap);
+            }
 
             if (
               !expected.code &&
