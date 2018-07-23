@@ -33,6 +33,8 @@ function webpackBuild(opts) {
   }
 
   const config = {
+    // Opts out of any default optimization options
+    mode: "none",
     module: {
       rules: [
         {
