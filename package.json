@@ -62,9 +62,9 @@
     "uglify-js": "^3.4.5",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
-    "webpack": "^3.12.0",
+    "webpack": "^4.16.2",
     "webpack-dependency-suite": "^2.4.4",
-    "webpack-stream": "^4.0.3"
+    "webpack-stream": "^5.0.0"
   },
   "engines": {
     "node": ">= 6.9.0 <= 11.0.0-0",
