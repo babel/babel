@@ -5,6 +5,7 @@
 .*/codemods/.*/lib
 .*/codemods/.*/test
 .*/node_modules/conventional-changelog-core/
+.*/node_modules/module-deps/
 
 [include]
 packages/*/src
