@@ -1,5 +1,5 @@
 {
-  "mappings": "AAAA,IAAA,MAAU,Y;SAAM,C;AAAC,CAAjB",
+  "mappings": "AAAA,IAAA,GAAA,GAAU,Y;SAAM,C;AAAC,CAAjB",
   "names": [],
   "sources": ["original.js"],
   "sourcesContent": ["var foo = () => 4;"],
