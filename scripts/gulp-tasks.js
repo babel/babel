@@ -59,6 +59,10 @@ function webpackBuild(opts) {
       filename: opts.filename,
       library: opts.library,
       libraryTarget: "umd",
+      // workaround from https://github.com/webpack/webpack/issues/6642
+      // replace with `target: "universal" when
+      // https://github.com/webpack/webpack/issues/6525 has been implemented
+      globalObject: "this",
     },
     plugins: [
       new webpack.DefinePlugin({
