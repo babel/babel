@@ -192,7 +192,7 @@ export function assertBabelrcSearch(
 
   if (Array.isArray(value)) {
     value.forEach((item, i) => {
-      if (!checkValidTest(value)) {
+      if (!checkValidTest(item)) {
         throw new Error(`.${key}[${i}] must be a string/Function/RegExp.`);
       }
     });
