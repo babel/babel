@@ -48,7 +48,7 @@
     "lerna": "^2.11.0",
     "lerna-changelog": "^0.5.0",
     "lint-staged": "^6.0.1",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.10",
     "merge-stream": "^1.0.1",
     "output-file-sync": "^2.0.0",
     "prettier": "^1.13.7",
