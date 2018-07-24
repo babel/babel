@@ -6,22 +6,5 @@
   "homepage": "https://babeljs.io/",
   "license": "MIT",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-stage-3",
-  "main": "lib/index.js",
-  "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.54",
-    "@babel/plugin-proposal-async-generator-functions": "7.0.0-beta.54",
-    "@babel/plugin-proposal-class-properties": "7.0.0-beta.54",
-    "@babel/plugin-proposal-json-strings": "7.0.0-beta.54",
-    "@babel/plugin-proposal-object-rest-spread": "7.0.0-beta.54",
-    "@babel/plugin-proposal-optional-catch-binding": "7.0.0-beta.54",
-    "@babel/plugin-proposal-unicode-property-regex": "7.0.0-beta.54",
-    "@babel/plugin-syntax-dynamic-import": "7.0.0-beta.54",
-    "@babel/plugin-syntax-import-meta": "7.0.0-beta.54"
-  },
-  "peerDependencies": {
-    "@babel/core": ">=7.0.0-beta.50 <7.0.0-rc.0"
-  },
-  "devDependencies": {
-    "@babel/core": "7.0.0-beta.54"
-  }
+  "main": "lib/index.js"
 }

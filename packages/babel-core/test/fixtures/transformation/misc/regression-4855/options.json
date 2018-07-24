@@ -1,7 +1,10 @@
 {
   "compact": false,
   "presets": [
-    "env",
-    ["stage-2", { "decoratorsLegacy": true }]
+    "env"
+  ],
+  "plugins": [
+    "external-helpers",
+    "proposal-object-rest-spread"
   ]
 }
