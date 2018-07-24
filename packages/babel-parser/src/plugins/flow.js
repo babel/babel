@@ -463,7 +463,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } while (this.eat(tt.comma));
       }
 
-      node.body = this.flowParseObjectType(true, false, false, isClass);
+      node.body = this.flowParseObjectType(isClass, false, false, isClass);
     }
 
     flowParseInterfaceExtends(): N.FlowInterfaceExtends {
@@ -656,7 +656,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } while (this.eat(tt.comma));
       }
 
-      node.body = this.flowParseObjectType(true, false, false, false);
+      node.body = this.flowParseObjectType(false, false, false, false);
 
       return this.finishNode(node, "InterfaceTypeAnnotation");
     }
