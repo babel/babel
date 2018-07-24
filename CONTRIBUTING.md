@@ -230,7 +230,7 @@ If the test requires a minimum Node version, you can add `minNodeVersion` (must 
 
 Writing tests for the babel parser is very
 similar to the other packages.
-Inside the `packages/babel-parser/tests/fixtures` folder are categories/groupings of test fixtures (es2015, flow,
+Inside the `packages/babel-parser/test/fixtures` folder are categories/groupings of test fixtures (es2015, flow,
 etc.). To add a test, create a folder under one of these groupings (or create a new one) with a
 descriptive name, and add the following:
 
