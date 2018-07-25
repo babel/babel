@@ -98,6 +98,8 @@ export default class StatementParser extends ExpressionParser {
       case tt._continue:
         // $FlowFixMe
         return this.parseBreakContinueStatement(node, starttype.keyword);
+      case tt._case:
+        return this.parseCaseStatement(node);
       case tt._debugger:
         return this.parseDebuggerStatement(node);
       case tt._do:
@@ -358,6 +360,44 @@ export default class StatementParser extends ExpressionParser {
       node,
       isBreak ? "BreakStatement" : "ContinueStatement",
     );
+  }
+
+  parseCaseStatement(node: N.CaseStatement): N.CaseStatement {
+    this.next();
+    node.discriminant = this.parseParenExpression();
+
+    const cases = [];
+
+    this.expect(tt.braceL);
+    while (!this.match(tt.braceR)) {
+      this.expect(tt._when);
+      cases.push(this.parseWhenClause());
+    }
+    this.next();
+
+    node.cases = cases;
+    return this.finishNode(node, "CaseStatement");
+  }
+
+  parseWhenClause(): N.WhenClause {
+    const node = this.startNode();
+
+    node.pattern = this.parseBindingAtom();
+
+    if (this.match(tt._if)) {
+      this.next();
+      node.matchGuard = this.parseParenExpression();
+    }
+
+    this.expect(tt.thinArrow);
+
+    if (this.match(tt.braceL)) {
+      node.body = this.parseBlock(false);
+    } else {
+      node.body = this.parseStatement(false);
+    }
+
+    return this.finishNode(node, "WhenClause");
   }
 
   parseDebuggerStatement(node: N.DebuggerStatement): N.DebuggerStatement {

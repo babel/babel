@@ -538,7 +538,10 @@ export default class Tokenizer extends LocationParser {
     // '+-'
     const next = this.input.charCodeAt(this.state.pos + 1);
 
-    if (next === code) {
+    if (code === charCodes.dash && next === charCodes.greaterThan) {
+      this.finishOp(tt.thinArrow, 2);
+      return;
+    } else if (next === code) {
       if (
         next === charCodes.dash &&
         !this.inModule &&
