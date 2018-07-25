@@ -244,6 +244,20 @@ export type SwitchCase = NodeBase & {
   consequent: $ReadOnlyArray<Statement>,
 };
 
+export type CaseStatement = NodeBase & {
+  type: "CaseStatement",
+  discriminant: Expression,
+  cases: $ReadOnlyArray<WhenClause>,
+};
+
+export type WhenClause = NodeBase & {
+  type: "WhenClause",
+  pattern: Pattern,
+  initializer?: Expression,
+  matchGuard?: Expression,
+  body: Statement,
+};
+
 // Exceptions
 
 export type ThrowStatement = NodeBase & {
