@@ -15,6 +15,8 @@ import browserModulesData from "../data/built-in-modules.json";
 import { TargetNames } from "./options";
 import type { Targets } from "./types";
 
+const browserslistDefaults = browserslist.defaults;
+
 const validateTargetNames = (validTargets, targets) => {
   for (const target in targets) {
     if (!TargetNames[target]) {
@@ -178,6 +180,9 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
     const browsers = browserslist(browsersquery, { path: options.configPath });
     const queryBrowsers = getLowestVersions(browsers);
     targets = mergeBrowsers(queryBrowsers, targets);
+
+    // Reset browserslist defaults
+    browserslist.defaults = browserslistDefaults;
   }
 
   // Parse remaining targets
