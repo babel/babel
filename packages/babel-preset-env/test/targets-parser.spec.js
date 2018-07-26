@@ -1,3 +1,4 @@
+import browserslist from "browserslist";
 import getTargets from "../lib/targets-parser";
 
 describe("getTargets", () => {
@@ -17,6 +18,16 @@ describe("getTargets", () => {
       ie: "9.0.0",
       node: "6.10.0",
     });
+  });
+
+  it("does not clobber browserslists defaults", () => {
+    const browserslistDefaults = browserslist.defaults;
+
+    getTargets({
+      browsers: "chrome 56, ie 11, firefox 51, safari 9",
+    });
+
+    expect(browserslist.defaults).toEqual(browserslistDefaults);
   });
 
   describe("validation", () => {
