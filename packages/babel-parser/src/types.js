@@ -577,6 +577,7 @@ export type TaggedTemplateExpression = NodeBase & {
   type: "TaggedTemplateExpression",
   tag: Expression,
   quasi: TemplateLiteral,
+  typeParameters?: ?TypeParameterInstantiationBase, // TODO: Not in spec
 };
 
 export type TemplateElement = NodeBase & {

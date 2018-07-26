@@ -836,16 +836,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSTypeAssertion");
     }
 
-    tsTryParseTypeArgumentsInExpression(
-      eatNextToken: boolean,
-    ): ?N.TsTypeParameterInstantiation {
-      return this.tsTryParseAndCatch(() => {
-        const res = this.tsParseTypeArguments();
-        if (eatNextToken) this.expect(tt.parenL);
-        return res;
-      });
-    }
-
     tsParseHeritageClause(): $ReadOnlyArray<N.TsExpressionWithTypeArguments> {
       return this.tsParseDelimitedList(
         "HeritageClauseElement",
@@ -1376,38 +1366,53 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.finishNode(nonNullExpression, "TSNonNullExpression");
       }
 
-      if (!noCalls && this.isRelational("<")) {
-        if (this.atPossibleAsync(base)) {
-          // Almost certainly this is a generic async function `async <T>() => ...
-          // But it might be a call with a type argument `async<T>();`
-          const asyncArrowFn = this.tsTryParseGenericAsyncArrowFunction(
-            startPos,
-            startLoc,
-          );
-          if (asyncArrowFn) {
-            return asyncArrowFn;
+      // There are number of things we are going to "maybe" parse, like type arguments on
+      // tagged template expressions. If any of them fail, walk it back and continue.
+      const result = this.tsTryParseAndCatch(() => {
+        if (this.isRelational("<")) {
+          if (!noCalls && this.atPossibleAsync(base)) {
+            // Almost certainly this is a generic async function `async <T>() => ...
+            // But it might be a call with a type argument `async<T>();`
+            const asyncArrowFn = this.tsTryParseGenericAsyncArrowFunction(
+              startPos,
+              startLoc,
+            );
+            if (asyncArrowFn) {
+              return asyncArrowFn;
+            }
+          }
+
+          const node: N.CallExpression = this.startNodeAt(startPos, startLoc);
+          node.callee = base;
+
+          const typeArguments = this.tsParseTypeArguments();
+
+          if (typeArguments) {
+            if (!noCalls && this.eat(tt.parenL)) {
+              // possibleAsync always false here, because we would have handled it above.
+              // $FlowIgnore (won't be any undefined arguments)
+              node.arguments = this.parseCallExpressionArguments(
+                tt.parenR,
+                /* possibleAsync */ false,
+              );
+              node.typeParameters = typeArguments;
+              return this.finishCallExpression(node);
+            } else if (this.match(tt.backQuote)) {
+              return this.parseTaggedTemplateExpression(
+                startPos,
+                startLoc,
+                base,
+                state,
+                typeArguments,
+              );
+            }
           }
         }
 
-        const node: N.CallExpression = this.startNodeAt(startPos, startLoc);
-        node.callee = base;
+        this.unexpected();
+      });
 
-        // May be passing type arguments. But may just be the `<` operator.
-        // Note: With `/*eatNextToken*/ true` this also eats the `(` following the type arguments
-        const typeArguments = this.tsTryParseTypeArgumentsInExpression(
-          /*eatNextToken*/ true,
-        );
-        if (typeArguments) {
-          // possibleAsync always false here, because we would have handled it above.
-          // $FlowIgnore (won't be any undefined arguments)
-          node.arguments = this.parseCallExpressionArguments(
-            tt.parenR,
-            /* possibleAsync */ false,
-          );
-          node.typeParameters = typeArguments;
-          return this.finishCallExpression(node);
-        }
-      }
+      if (result) return result;
 
       return super.parseSubscript(base, startPos, startLoc, noCalls, state);
     }
@@ -2127,8 +2132,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     jsxParseOpeningElementAfterName(
       node: N.JSXOpeningElement,
     ): N.JSXOpeningElement {
-      const typeArguments = this.tsTryParseTypeArgumentsInExpression(
-        /*eatNextToken*/ false,
+      const typeArguments = this.tsTryParseAndCatch(() =>
+        this.tsParseTypeArguments(),
       );
       if (typeArguments) node.typeParameters = typeArguments;
       return super.jsxParseOpeningElementAfterName(node);
