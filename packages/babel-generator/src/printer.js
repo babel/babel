@@ -200,6 +200,12 @@ export default class Printer {
     this._buf.removeTrailingNewline();
   }
 
+  exactSource(loc: Object, cb: () => void) {
+    this._catchUp("start", loc);
+
+    this._buf.exactSource(loc, cb);
+  }
+
   source(prop: string, loc: Object): void {
     this._catchUp(prop, loc);
 
