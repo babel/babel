@@ -201,7 +201,14 @@ export default declare((api, options) => {
 
     // Must be late evaluated in case it references another private field.
     return () =>
-      template.statement`MAP.set(REF, VALUE);`({
+      template.statement`
+        MAP.set(REF, {
+          // configurable is always false for private elements
+          // enumerable is always false for private elements
+          writable: true,
+          value: VALUE
+        });
+      `({
         MAP: map,
         REF: ref,
         VALUE: path.node.value || scope.buildUndefinedNode(),

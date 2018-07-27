@@ -13,11 +13,17 @@ function (_Bar) {
     if (condition) {
       _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
 
-      _bar.set(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this))), "foo");
+      _bar.set(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this))), {
+        writable: true,
+        value: "foo"
+      });
     } else {
       _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
 
-      _bar.set(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this))), "foo");
+      _bar.set(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this))), {
+        writable: true,
+        value: "foo"
+      });
     }
 
     return babelHelpers.possibleConstructorReturn(_this);

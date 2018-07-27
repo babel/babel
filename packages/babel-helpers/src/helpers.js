@@ -1016,7 +1016,7 @@ helpers.classPrivateFieldGet = () => template.program.ast`
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to get private field on non-instance");
     }
-    return privateMap.get(receiver);
+    return privateMap.get(receiver).value;
   }
 `;
 
@@ -1025,7 +1025,14 @@ helpers.classPrivateFieldSet = () => template.program.ast`
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to set private field on non-instance");
     }
-    privateMap.set(receiver, value);
+    var descriptor = privateMap.get(receiver);
+    if (!descriptor.writable) {
+      // This should only throw in strict mode, but class bodies are
+      // always strict and private fields can only be used inside
+      // class bodies.
+      throw new TypeError("attempted to set read only private field");
+    }
+    descriptor.value = value;
     return value;
   }
 `;
