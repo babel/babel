@@ -1,4 +1,5 @@
 import toArray from "toArray";
+import isDataDescriptor from "isDataDescriptor";
 
 /*::
 
@@ -225,8 +226,8 @@ function _coalesceClassElements(
       (other = newElements.find(isSameElement))
     ) {
       if (
-        _isDataDescriptor(element.descriptor) ||
-        _isDataDescriptor(other.descriptor)
+        isDataDescriptor(element.descriptor) ||
+        isDataDescriptor(other.descriptor)
       ) {
         if (_hasDecorators(element) || _hasDecorators(other)) {
           throw new ReferenceError(
@@ -258,13 +259,6 @@ function _coalesceClassElements(
 
 function _hasDecorators(element /*: ElementDescriptor */) /*: boolean */ {
   return element.decorators && element.decorators.length;
-}
-
-function _isDataDescriptor(desc /*: PropertyDescriptor */) /*: boolean */ {
-  return (
-    desc !== undefined &&
-    !(desc.value === undefined && desc.writable === undefined)
-  );
 }
 
 // InitializeClassElements
@@ -331,7 +325,7 @@ function _defineClassElement /*::<C>*/(
 
   // TODO: Make this check use the privateNameData weakmap.
   if (_isPrivateName(element.key)) {
-    initializePrivateName(element.key, receiver, descriptor.value);
+    initializePrivateName(element.key, receiver, descriptor);
   } else {
     Object.defineProperty(receiver, element.key, descriptor);
   }

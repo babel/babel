@@ -1012,28 +1012,51 @@ helpers.classPrivateFieldLooseBase = () => template.program.ast`
 `;
 
 helpers.classPrivateFieldGet = () => template.program.ast`
+  import isDataDescriptor from "isDataDescriptor";
+
   export default function _classPrivateFieldGet(receiver, privateMap) {
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to get private field on non-instance");
     }
-    return privateMap.get(receiver).value;
+    var descriptor = privateMap.get(receiver);
+    if (isDataDescriptor(descriptor)) {
+      return descriptor.value;
+    }
+    var getter = descriptor.get;
+    return getter === void 0 ? getter : getter.call(receiver);
   }
 `;
 
 helpers.classPrivateFieldSet = () => template.program.ast`
+  import isDataDescriptor from "isDataDescriptor";
+
   export default function _classPrivateFieldSet(receiver, privateMap, value) {
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to set private field on non-instance");
     }
     var descriptor = privateMap.get(receiver);
-    if (!descriptor.writable) {
+    var isData = isDataDescriptor(descriptor);
+    var set = descriptor.set;
+    if (isData ? !descriptor.writable : set === void 0) {
       // This should only throw in strict mode, but class bodies are
       // always strict and private fields can only be used inside
       // class bodies.
       throw new TypeError("attempted to set read only private field");
+    } else if (isData) {
+      descriptor.value = value;
+    } else {
+      set.call(receiver, value);
     }
-    descriptor.value = value;
     return value;
+  }
+`;
+
+helpers.isDataDescriptor = () => template.program.ast`
+  export default function _isDataDescriptor(desc) {
+    return (
+      desc !== undefined &&
+      !(desc.value === undefined && desc.writable === undefined)
+    );
   }
 `;
 
@@ -1048,8 +1071,8 @@ helpers.privateNameUtils = () => template.program.ast`
     var toStringTagDesc = { value: "Private Name", configurable: true, };
 
     var utils = {
-      initialize: function(O, object, value) {
-        getPrivateName(O).set(object, value);
+      initialize: function(O, object, descriptor) {
+        getPrivateName(O).set(object, descriptor);
       },
       // 5.1.1 PrivateNameObject ( name )
       create: function(description, map) {
@@ -1096,8 +1119,8 @@ helpers.privateNameUtilsLoose = () => template.program.ast`
     var privateNameData = Symbol("PrivateNameData");
 
     var utils = {
-      initialize: function(O, object, value) {
-        object[getPrivateName(O)] = value;
+      initialize: function(O, object, descriptor) {
+        Object.defineProperty(object, getPrivateName(O), value);
       },
       // 5.1.1 PrivateNameObject ( name )
       create: function(description, key) {
@@ -1140,6 +1163,7 @@ helpers.privateNameUtilsLoose = () => template.program.ast`
 // Don't review me, review babel-helpers/src/helpers/decorate.js :)
 helpers.decorate = () => template.program.ast`
   import toArray from "toArray";
+  import isDataDescriptor from "isDataDescriptor";
 
   // ClassDefinitionEvaluation (Steps 26-*)
   export default function _decorate(
@@ -1244,8 +1268,8 @@ helpers.decorate = () => template.program.ast`
         (other = newElements.find(isSameElement))
       ) {
         if (
-          _isDataDescriptor(element.descriptor) ||
-          _isDataDescriptor(other.descriptor)
+          isDataDescriptor(element.descriptor) ||
+          isDataDescriptor(other.descriptor)
         ) {
           if (_hasDecorators(element) || _hasDecorators(other)) {
             throw new ReferenceError(
@@ -1277,13 +1301,6 @@ helpers.decorate = () => template.program.ast`
 
   function _hasDecorators(element /*: ElementDescriptor */) /*: boolean */ {
     return element.decorators && element.decorators.length;
-  }
-
-  function _isDataDescriptor(desc /*: PropertyDescriptor */) /*: boolean */ {
-    return (
-      desc !== undefined &&
-      !(desc.value === undefined && desc.writable === undefined)
-    );
   }
 
   // InitializeClassElements
@@ -1350,7 +1367,7 @@ helpers.decorate = () => template.program.ast`
 
     // TODO: Make this check use the privateNameData weakmap.
     if (_isPrivateName(element.key)) {
-      initializePrivateName(element.key, receiver, descriptor.value);
+      initializePrivateName(element.key, receiver, descriptor);
     } else {
       Object.defineProperty(receiver, element.key, descriptor);
     }
