@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-export-default-from",
-  "version": "7.0.0-beta.54",
+  "version": "7.0.0-beta.55",
   "description": "Allow parsing of export default from",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-export-default-from",
   "license": "MIT",
@@ -9,12 +9,12 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.54"
+    "@babel/helper-plugin-utils": "7.0.0-beta.55"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0-beta.50 <7.0.0-rc.0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.54"
+    "@babel/core": "7.0.0-beta.55"
   }
 }
