@@ -1,14 +1,14 @@
 export default function() {
   throw new Error(`
-As of v7.0.0-beta.54, we've decided to remove
-the official Babel Stage presets. You can find more information
-at issue #7770: https://github.com/babel/babel/issues/7770, but
-the TL;DR is that it's causing more harm than convenience in that
-the preset is always out of date, each change is usually going to
-require a major version bump and thus people will be behind,
-and it encouraged too many people to opt-in to too many proposals
-that they didn't intend to. This is intended to be the last publish
-of "@babel/preset-stage-1"
+As of v7.0.0-beta.55, we've removed Babel's Stage presets.
+Please consider reading our blog post on this decision at
+https://babeljs.io/blog/2018/07/27/removing-babels-stage-presets
+for more details. TL;DR is that it's more beneficial in the
+  long run to explicitly add which proposals to use.
+
+For a more automatic migration, we have updated babel-upgrade,
+https://github.com/babel/babel-upgrade to do this for you with
+"npx babel-upgrade".
 
 If you want the same configuration as before:
 
