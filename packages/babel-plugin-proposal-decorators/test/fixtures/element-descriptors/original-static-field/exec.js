@@ -6,8 +6,7 @@ class A {
   static foo = val;
 }
 
-expect(el).toEqual({
-  [Symbol.toStringTag]: "Descriptor",
+expect(el).toEqual(Object.defineProperty({
   kind: "field",
   key: "foo",
   placement: "static",
@@ -17,6 +16,6 @@ expect(el).toEqual({
     writable: true,
   },
   initializer: expect.any(Function),
-});
+}, Symbol.toStringTag, { value: "Descriptor" }));
 
 expect(el.initializer()).toBe(val);

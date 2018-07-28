@@ -5,8 +5,7 @@ class A {
   foo() {}
 }
 
-expect(el).toEqual({
-  [Symbol.toStringTag]: "Descriptor",
+expect(el).toEqual(Object.defineProperty({
   kind: "method",
   key: "foo",
   placement: "prototype",
@@ -16,4 +15,4 @@ expect(el).toEqual({
     writable: true,
     value: A.prototype.foo,
   },
-});
+}, Symbol.toStringTag, { value: "Descriptor" }));
