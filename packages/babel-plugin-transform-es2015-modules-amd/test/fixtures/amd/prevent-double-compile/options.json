@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "external-helpers",
+    ["transform-es2015-modules-amd", {
+      "preventDoubleCompile": true
+    }]
+  ]
+}
