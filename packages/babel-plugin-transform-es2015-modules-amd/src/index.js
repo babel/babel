@@ -26,19 +26,12 @@ export default function ({ types: t }) {
   }
 
   function isAlreadyCompiled(programNode) {
-    const { body } = programNode;
-    if (body.length === 1) {
-      const [node] = body;
-      if (node.type === "ExpressionStatement") {
-        const { expression } = node;
-        if (expression.type === "CallExpression") {
-          const { callee } = expression;
-          if (callee.type === "Identifier" && callee.name === "define") {
-            return true;
-          }
-        }
-      }
-    }
+    return (
+      programNode.body.length === 1 &&
+      t.isExpressionStatement(programNode.body[0]) &&
+      t.isCallExpression(programNode.body[0].expression) &&
+      t.isIdentifier(programNode.body[0].expression.callee, { name: "define" })
+    );
   }
 
   const amdVisitor = {
