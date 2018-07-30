@@ -174,7 +174,7 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
 
   // Parse browsers target via browserslist
   const browsersquery = validateBrowsers(targets.browsers);
-  if (!options.ignoreBrowserslistConfig) {
+  if (targets.esmodules || !options.ignoreBrowserslistConfig) {
     browserslist.defaults = objectToBrowserslist(targets);
 
     const browsers = browserslist(browsersquery, { path: options.configPath });

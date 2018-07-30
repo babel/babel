@@ -1,0 +1,12 @@
+{
+  "presets": [
+    ["../../../../lib", {
+      "configPath": "../fixtures/preset-options-add-used-built-ins/browserslist-config-ignore",
+      "modules": false,
+      "ignoreBrowserslistConfig": true,
+      "targets": { "esmodules": true },
+      "useBuiltIns": "usage",
+      "debug": true
+    }]
+  ]
+}
