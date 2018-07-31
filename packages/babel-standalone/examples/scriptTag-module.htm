@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>babel-standalone example - External script</title>
+</head>
+<body>
+  Using Babel <strong id="version"></strong>:
+  <pre id="output">Loading...</pre>
+
+  <script src="../babel.js"></script>
+  <script type="text/babel/module" data-presets='es2016'>
+    import vuid from 'https://unpkg.com/vuid'
+    const doStuff = () => {
+      const name = vuid();
+      document.getElementById('output').innerHTML = `Hello ${name}`;
+      document.getElementById('version').innerHTML = Babel.version;
+    };
+    doStuff();
+  </script>
+</body>
+</html>
