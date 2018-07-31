@@ -55,6 +55,9 @@ function buildBabelOptions(script) {
 function run(transformFn, script) {
   const scriptEl = document.createElement("script");
   scriptEl.text = transformCode(transformFn, script);
+  if (script.module) {
+    scriptEl.type = "module";
+  }
   headEl.appendChild(scriptEl);
 }
 
@@ -132,6 +135,7 @@ function loadScripts(transformFn, scripts) {
       async: script.hasAttribute("async"),
       error: false,
       executed: false,
+      module: script.type.indexOf("module") !== -1,
       plugins: getPluginsOrPresetsFromScript(script, "data-plugins"),
       presets: getPluginsOrPresetsFromScript(script, "data-presets"),
     };
