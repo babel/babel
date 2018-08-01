@@ -716,7 +716,7 @@ export type ClassPrivateProperty = NodeBase & {
   value: ?Expression, // TODO: Not in spec that this is nullable.
   static: boolean,
   computed: false,
-  typeAnnotation?: ?TypeAnnotationBase, // TODO: Not in spec
+  typeAnnotation?: ?TypeAnnotation, // TODO: Not in spec
 };
 
 export type OptClassDeclaration = ClassBase &
