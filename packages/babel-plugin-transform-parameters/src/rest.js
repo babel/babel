@@ -228,9 +228,19 @@ export default function convertFunctionRest(path) {
   const { node, scope } = path;
   if (!hasRest(node)) return false;
 
-  const rest = node.params.pop().argument;
+  let rest = node.params.pop().argument;
 
   const argsId = t.identifier("arguments");
+
+  if (t.isPattern(rest)) {
+    const pattern = rest;
+    rest = scope.generateUidIdentifier("ref");
+
+    const declar = t.variableDeclaration("let", [
+      t.variableDeclarator(pattern, rest),
+    ]);
+    node.body.body.unshift(declar);
+  }
 
   // check and optimise for extremely common cases
   const state = {
