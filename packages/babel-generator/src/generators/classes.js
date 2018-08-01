@@ -124,6 +124,7 @@ export function ClassPrivateProperty(node: Object) {
     this.space();
   }
   this.print(node.key, node);
+  this.print(node.typeAnnotation, node);
   if (node.value) {
     this.space();
     this.token("=");
