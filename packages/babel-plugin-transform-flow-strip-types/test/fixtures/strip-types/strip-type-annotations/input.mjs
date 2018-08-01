@@ -69,6 +69,10 @@ class Foo10 {
   static prop1: string;
   prop2: number;
 }
+class Foo11 {
+  #prop1: string;
+  #prop2: number;
+}
 var x: number | string = 4;
 class Array { concat(items:number | string) {}; }
 var x: () => number | () => string = fn;

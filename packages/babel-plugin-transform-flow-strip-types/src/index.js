@@ -76,6 +76,11 @@ export default declare(api => {
         if (!path.node.value) path.remove();
       },
 
+      ClassPrivateProperty(path) {
+        if (skipStrip) return;
+        path.node.typeAnnotation = null;
+      },
+
       Class(path) {
         if (skipStrip) return;
         path.node.implements = null;
