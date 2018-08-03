@@ -6,7 +6,12 @@ export default declare(api => {
 
   return {
     pre(file) {
-      file.set("helpersNamespace", t.identifier("babelHelpers"));
+      file.set("helperGenerator", name => {
+        return t.memberExpression(
+          t.identifier("babelHelpers"),
+          t.identifier(name),
+        );
+      });
     },
   };
 });

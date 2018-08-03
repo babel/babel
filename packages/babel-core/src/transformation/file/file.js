@@ -65,6 +65,16 @@ export default class File {
   }
 
   set(key: mixed, val: mixed) {
+    if (key === "helpersNamespace") {
+      throw new Error(
+        "Babel 7.0.0-beta.56 has dropped support for the 'helpersNamespace' utility." +
+          "If you are using @babel/plugin-external-helpers you will need to use a newer " +
+          "version than the one you currently have installed. " +
+          "If you have your own implementation, you'll want to explore using 'helperGenerator' " +
+          "alongside 'file.availableHelper()'.",
+      );
+    }
+
     this._map.set(key, val);
   }
 
@@ -166,12 +176,9 @@ export default class File {
     if (declar) return t.cloneNode(declar);
 
     const generator = this.get("helperGenerator");
-    const runtime = this.get("helpersNamespace");
     if (generator) {
       const res = generator(name);
       if (res) return res;
-    } else if (runtime) {
-      return t.memberExpression(t.cloneNode(runtime), t.identifier(name));
     }
 
     const uid = (this.declarations[name] = this.scope.generateUidIdentifier(
