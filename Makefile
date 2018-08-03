@@ -31,7 +31,7 @@ build-preset-env-standalone:
 build-dist: build
 	cd packages/babel-polyfill; \
 	scripts/build-dist.sh
-	cd packages/babel-runtime; \
+	cd packages/babel-plugin-transform-runtime; \
 	node scripts/build-dist.js
 
 watch: clean clean-lib
@@ -108,7 +108,8 @@ publish:
 	git pull --rebase
 	make clean-lib
 	rm -rf packages/babel-runtime/helpers
-	rm -rf packages/babel-runtime/core-js
+	rm -rf packages/babel-runtime-corejs2/helpers
+	rm -rf packages/babel-runtime-corejs2/core-js
 	BABEL_ENV=production make build-dist
 	make test
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
@@ -120,7 +121,7 @@ bootstrap: clean-all
 	yarn --ignore-engines
 	./node_modules/.bin/lerna bootstrap -- --ignore-engines
 	make build
-	cd packages/babel-runtime; \
+	cd packages/babel-plugin-transform-runtime; \
 	node scripts/build-dist.js
 
 clean-lib:

@@ -8,29 +8,84 @@ export default declare((api, options) => {
   api.assertVersion(7);
 
   const {
-    helpers,
-    moduleName = "@babel/runtime",
-    polyfill,
-    regenerator,
-    useBuiltIns,
-    useESModules,
+    corejs: corejsVersion = false,
+    helpers: useRuntimeHelpers = true,
+    regenerator: useRuntimeRegenerator = true,
+    useESModules = false,
     version: runtimeVersion = "7.0.0-beta.0",
   } = options;
-  const regeneratorEnabled = regenerator !== false;
-  const notPolyfillOrDoesUseBuiltIns = polyfill === false || useBuiltIns;
-  const isPolyfillAndUseBuiltIns = polyfill && useBuiltIns;
-  const baseHelpersDir = useBuiltIns ? "helpers/builtin" : "helpers";
-  const helpersDir = useESModules ? `${baseHelpersDir}/es6` : baseHelpersDir;
+
+  if (typeof useRuntimeRegenerator !== "boolean") {
+    throw new Error(
+      "The 'regenerator' option must be undefined, or a boolean.",
+    );
+  }
+  if (typeof useRuntimeHelpers !== "boolean") {
+    throw new Error("The 'helpers' option must be undefined, or a boolean.");
+  }
+  if (typeof useESModules !== "boolean") {
+    throw new Error(
+      "The 'useESModules' option must be undefined, or a boolean.",
+    );
+  }
+  if (
+    corejsVersion !== false &&
+    (typeof corejsVersion !== "number" || corejsVersion !== 2) &&
+    (typeof corejsVersion !== "string" || corejsVersion !== "2")
+  ) {
+    throw new Error(
+      `The 'corejs' option must be undefined, false, or 2, or '2', ` +
+        `but got ${JSON.stringify(corejsVersion)}.`,
+    );
+  }
 
   function has(obj, key) {
     return Object.prototype.hasOwnProperty.call(obj, key);
   }
+  if (has(options, "useBuiltIns")) {
+    if (options.useBuiltIns) {
+      throw new Error(
+        "The 'useBuiltIns' option has been removed. The @babel/runtime " +
+          "module now uses builtins by default.",
+      );
+    } else {
+      throw new Error(
+        "The 'useBuiltIns' option has been removed. Use the 'corejs'" +
+          "option with value '2' to polyfill with CoreJS 2.x via @babel/runtime.",
+      );
+    }
+  }
+  if (has(options, "polyfill")) {
+    if (options.polyfill === false) {
+      throw new Error(
+        "The 'polyfill' option has been removed. The @babel/runtime " +
+          "module now skips polyfilling by default.",
+      );
+    } else {
+      throw new Error(
+        "The 'polyfill' option has been removed. Use the 'corejs'" +
+          "option with value '2' to polyfill with CoreJS 2.x via @babel/runtime.",
+      );
+    }
+  }
+  if (has(options, "moduleName")) {
+    throw new Error(
+      "The 'moduleName' option has been removed. @babel/transform-runtime " +
+        "no longer supports arbitrary runtimes.",
+    );
+  }
+
+  const helpersDir = useESModules ? "helpers/esm" : "helpers";
+  const injectCoreJS2 = `${corejsVersion}` === "2";
+  const moduleName = injectCoreJS2
+    ? "@babel/runtime-corejs2"
+    : "@babel/runtime";
 
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
   return {
     pre(file) {
-      if (helpers !== false) {
+      if (useRuntimeHelpers) {
         file.set("helperGenerator", name => {
           // If the helper didn't exist yet at the version given, we bail
           // out and let Babel either insert it directly, or throw an error
@@ -57,14 +112,6 @@ export default declare((api, options) => {
           );
         });
       }
-
-      if (isPolyfillAndUseBuiltIns) {
-        throw new Error(
-          "The polyfill option conflicts with useBuiltIns; use one or the other",
-        );
-      }
-
-      this.moduleName = moduleName;
 
       const cache = new Map();
 
@@ -94,17 +141,17 @@ export default declare((api, options) => {
     visitor: {
       ReferencedIdentifier(path) {
         const { node, parent, scope } = path;
-        if (node.name === "regeneratorRuntime" && regeneratorEnabled) {
+        if (node.name === "regeneratorRuntime" && useRuntimeRegenerator) {
           path.replaceWith(
             this.addDefaultImport(
-              `${this.moduleName}/regenerator`,
+              `${moduleName}/regenerator`,
               "regeneratorRuntime",
             ),
           );
           return;
         }
 
-        if (notPolyfillOrDoesUseBuiltIns) return;
+        if (!injectCoreJS2) return;
 
         if (t.isMemberExpression(parent)) return;
         if (!has(definitions.builtins, node.name)) return;
@@ -121,7 +168,7 @@ export default declare((api, options) => {
 
       // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
       CallExpression(path) {
-        if (notPolyfillOrDoesUseBuiltIns) return;
+        if (!injectCoreJS2) return;
 
         // we can't compile this
         if (path.node.arguments.length) return;
@@ -146,7 +193,7 @@ export default declare((api, options) => {
 
       // Symbol.iterator in arr -> core.$for.isIterable(arr)
       BinaryExpression(path) {
-        if (notPolyfillOrDoesUseBuiltIns) return;
+        if (!injectCoreJS2) return;
 
         if (path.node.operator !== "in") return;
         if (!path.get("left").matchesPattern("Symbol.iterator")) return;
@@ -165,7 +212,7 @@ export default declare((api, options) => {
       // Array.from -> _core.Array.from
       MemberExpression: {
         enter(path) {
-          if (notPolyfillOrDoesUseBuiltIns) return;
+          if (!injectCoreJS2) return;
           if (!path.isReferenced()) return;
 
           const { node } = path;
@@ -203,7 +250,7 @@ export default declare((api, options) => {
         },
 
         exit(path) {
-          if (notPolyfillOrDoesUseBuiltIns) return;
+          if (!injectCoreJS2) return;
           if (!path.isReferenced()) return;
 
           const { node } = path;
@@ -227,5 +274,3 @@ export default declare((api, options) => {
     },
   };
 });
-
-export { definitions };
