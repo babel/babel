@@ -1,5 +1,4 @@
 before_install:
-  - sudo apt-get install -y tree
   - npm install --global npm@latest
 
 language: node_js

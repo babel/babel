@@ -21,8 +21,6 @@ install regenerator-runtime
 install regenerator-transform
 install regenerator-preset
 
-tree node_modules/regenerator-*
-
 # We need to use the symlink paths rather than the real paths, so that the
 # regenerator-* packages appear to reside in node_modules.
 node test/run.js
