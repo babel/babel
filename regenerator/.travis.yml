@@ -1,8 +1,5 @@
 before_install:
-  - npm install lerna@2.11.0
-
-install:
-  - npm run bootstrap
+  - npm install --global npm@latest
 
 language: node_js
 node_js:

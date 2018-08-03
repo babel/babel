@@ -25,8 +25,7 @@
   "main": "main.js",
   "bin": "bin/regenerator",
   "scripts": {
-    "bootstrap": "lerna bootstrap",
-    "test": "node test/run.js"
+    "test": "test/run.sh"
   },
   "dependencies": {
     "@babel/core": "^7.0.0-beta.51",
@@ -34,7 +33,7 @@
     "@babel/types": "^7.0.0-beta.51",
     "commoner": "^0.10.8",
     "private": "^0.1.6",
-    "recast": "^0.11.17",
+    "recast": "^0.15.3",
     "regenerator-preset": "^0.12.0",
     "regenerator-runtime": "^0.12.0",
     "regenerator-transform": "^0.13.3",
@@ -46,7 +45,6 @@
     "@babel/plugin-transform-spread": "^7.0.0-beta.51",
     "babel-check-duplicated-nodes": "^1.0.0",
     "browserify": "^16.2.2",
-    "lerna": "^2.11.0",
     "mocha": "^5.2.0",
     "promise": "^7.0.4",
     "semver": "^5.0.3",
