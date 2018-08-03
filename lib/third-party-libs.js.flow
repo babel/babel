@@ -32,6 +32,20 @@ declare module "lodash/merge" {
   declare export default <T: Object>(T, Object) => T;
 }
 
+declare module "semver" {
+  declare module.exports: {
+    valid(v: string): boolean;
+    gt(v1: string, v2: string): boolean;
+    lt(v1: string, v2: string): boolean;
+    major(v: string): number;
+    minor(v: string): number;
+    patch(v: string): number;
+    satisfies(v1: string, r1: string): boolean;
+
+    intersects(r1: string, r2: string): boolean;
+  }
+}
+
 declare module "source-map" {
   declare export type SourceMap = {
     version: 3,

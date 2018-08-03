@@ -14,6 +14,7 @@ export default declare((api, options) => {
     regenerator,
     useBuiltIns,
     useESModules,
+    version: runtimeVersion = "7.0.0-beta.0",
   } = options;
   const regeneratorEnabled = regenerator !== false;
   const notPolyfillOrDoesUseBuiltIns = polyfill === false || useBuiltIns;
@@ -31,6 +32,16 @@ export default declare((api, options) => {
     pre(file) {
       if (helpers !== false) {
         file.set("helperGenerator", name => {
+          // If the helper didn't exist yet at the version given, we bail
+          // out and let Babel either insert it directly, or throw an error
+          // so that plugins can handle that case properly.
+          if (
+            file.availableHelper &&
+            !file.availableHelper(name, runtimeVersion)
+          ) {
+            return;
+          }
+
           const isInteropHelper = HEADER_HELPERS.indexOf(name) !== -1;
 
           // Explicitly set the CommonJS interop helpers to their reserve

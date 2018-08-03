@@ -226,13 +226,19 @@ function permuteHelperAST(file, metadata, id, localBindings, getDependency) {
   });
 }
 
-const helperData = {};
+const helperData = Object.create(null);
 function loadHelper(name) {
   if (!helperData[name]) {
-    if (!helpers[name]) throw new ReferenceError(`Unknown helper ${name}`);
+    const helper = helpers[name];
+    if (!helper) {
+      throw Object.assign(new ReferenceError(`Unknown helper ${name}`), {
+        code: "BABEL_HELPER_UNKNOWN",
+        helper: name,
+      });
+    }
 
     const fn = () => {
-      return t.file(helpers[name]());
+      return t.file(helper.ast());
     };
 
     const metadata = getHelperMetadata(fn());
@@ -246,6 +252,9 @@ function loadHelper(name) {
           nodes: file.program.body,
           globals: metadata.globals,
         };
+      },
+      minVersion() {
+        return helper.minVersion;
       },
       dependencies: metadata.dependencies,
     };
@@ -261,6 +270,10 @@ export function get(
   localBindings?: string[],
 ) {
   return loadHelper(name).build(getDependency, id, localBindings);
+}
+
+export function minVersion(name: string) {
+  return loadHelper(name).minVersion();
 }
 
 export function getDependencies(name: string): $ReadOnlyArray<string> {
