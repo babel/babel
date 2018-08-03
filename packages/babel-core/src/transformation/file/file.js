@@ -5,6 +5,7 @@ import { NodePath, Hub, Scope } from "@babel/traverse";
 import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "@babel/traverse";
 import * as t from "@babel/types";
+import semver from "semver";
 
 import type { NormalizedFile } from "../normalize-file";
 
@@ -133,6 +134,30 @@ export default class File {
         "functionality in Babel 7, you should import the " +
         "'@babel/helper-module-imports' module and use the functions exposed " +
         " from that module, such as 'addNamed' or 'addDefault'.",
+    );
+  }
+
+  /**
+   * Check if a given helper is available in @babel/core's helper list.
+   *
+   * This _also_ allows you to pass a Babel version specifically. If the
+   * helper exists, but was not available for the full given range, it will be
+   * considered unavailable.
+   */
+  availableHelper(name: string, versionRange: ?string) {
+    let minVersion;
+    try {
+      minVersion = helpers.minVersion(name);
+    } catch (err) {
+      if (err.code !== "BABEL_HELPER_UNKNOWN") throw err;
+
+      return false;
+    }
+
+    return (
+      typeof versionRange !== "string" ||
+      (!semver.intersects(`<${minVersion}`, versionRange) &&
+        !semver.intersects(`>=8.0.0`, versionRange))
     );
   }
 
