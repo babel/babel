@@ -15,11 +15,15 @@ export function readdir(
   includeDotfiles: boolean,
   filter: ReaddirFilter,
 ) {
-  return readdirRecursive(
-    dirname,
-    filename =>
-      (includeDotfiles || filename[0] !== ".") && (!filter || filter(filename)),
-  );
+  return readdirRecursive(dirname, (filename, _index, currentDirectory) => {
+    const stat = fs.statSync(path.join(currentDirectory, filename));
+
+    if (stat.isDirectory()) return true;
+
+    return (
+      (includeDotfiles || filename[0] !== ".") && (!filter || filter(filename))
+    );
+  });
 }
 
 export function readdirForCompilable(
