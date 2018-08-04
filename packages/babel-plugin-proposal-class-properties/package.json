@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-class-properties",
-  "version": "7.0.0-beta.55",
+  "version": "7.0.0-beta.56",
   "description": "This plugin transforms static class properties as well as properties declared with the property initializer syntax",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-class-properties",
   "license": "MIT",
@@ -9,18 +9,18 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-function-name": "7.0.0-beta.55",
-    "@babel/helper-member-expression-to-functions": "7.0.0-beta.55",
-    "@babel/helper-optimise-call-expression": "7.0.0-beta.55",
-    "@babel/helper-plugin-utils": "7.0.0-beta.55",
-    "@babel/helper-replace-supers": "7.0.0-beta.55",
-    "@babel/plugin-syntax-class-properties": "7.0.0-beta.55"
+    "@babel/helper-function-name": "7.0.0-beta.56",
+    "@babel/helper-member-expression-to-functions": "7.0.0-beta.56",
+    "@babel/helper-optimise-call-expression": "7.0.0-beta.56",
+    "@babel/helper-plugin-utils": "7.0.0-beta.56",
+    "@babel/helper-replace-supers": "7.0.0-beta.56",
+    "@babel/plugin-syntax-class-properties": "7.0.0-beta.56"
   },
   "peerDependencies": {
     "@babel/core": ">=7.0.0-beta.50 <7.0.0-rc.0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.55",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.55"
+    "@babel/core": "7.0.0-beta.56",
+    "@babel/helper-plugin-test-runner": "7.0.0-beta.56"
   }
 }
