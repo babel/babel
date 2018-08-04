@@ -92,15 +92,8 @@
     "@babel/plugin-transform-typeof-symbol": "7.0.0-beta.55",
     "@babel/plugin-transform-typescript": "7.0.0-beta.55",
     "@babel/plugin-transform-unicode-regex": "7.0.0-beta.55",
-    "@babel/preset-es2015": "7.0.0-beta.53",
-    "@babel/preset-es2016": "7.0.0-beta.53",
-    "@babel/preset-es2017": "7.0.0-beta.53",
     "@babel/preset-flow": "7.0.0-beta.55",
     "@babel/preset-react": "7.0.0-beta.55",
-    "@babel/preset-stage-0": "7.0.0-beta.55",
-    "@babel/preset-stage-1": "7.0.0-beta.55",
-    "@babel/preset-stage-2": "7.0.0-beta.55",
-    "@babel/preset-stage-3": "7.0.0-beta.55",
     "@babel/preset-typescript": "7.0.0-beta.55"
   },
   "keywords": [
