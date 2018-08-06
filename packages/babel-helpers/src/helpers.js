@@ -883,7 +883,7 @@ helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
       _e = err;
     } finally {
       try {
-        if (!_n && _i["return"] != null) _i["return"]();
+        if (!_n && _i.return != null) _i.return();
       } finally {
         if (_d) throw _e;
       }
