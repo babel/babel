@@ -35,6 +35,8 @@ Using plugins:
   proposal-async-generator-functions { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-object-rest-spread { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-unicode-property-regex { "chrome":"52", "firefox":"50", "ie":"11" }
+  proposal-json-strings { "chrome":"52", "firefox":"50", "ie":"11" }
+  proposal-optional-catch-binding { "chrome":"52", "firefox":"50", "ie":"11" }
 
 Using polyfills with `usage` option:
 

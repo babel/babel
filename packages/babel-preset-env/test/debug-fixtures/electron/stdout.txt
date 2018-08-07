@@ -29,6 +29,8 @@ Using plugins:
   proposal-async-generator-functions { "electron":"0.36" }
   proposal-object-rest-spread { "electron":"0.36" }
   proposal-unicode-property-regex { "electron":"0.36" }
+  proposal-json-strings { "electron":"0.36" }
+  proposal-optional-catch-binding { "electron":"0.36" }
 
 Using polyfills with `entry` option:
 
