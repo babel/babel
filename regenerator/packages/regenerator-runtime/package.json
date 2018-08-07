@@ -3,7 +3,7 @@
   "author": "Ben Newman <bn@cs.stanford.edu>",
   "description": "Runtime for Regenerator-compiled generator and async functions.",
   "version": "0.12.1",
-  "main": "runtime-module.js",
+  "main": "runtime.js",
   "keywords": [
     "regenerator",
     "runtime",
