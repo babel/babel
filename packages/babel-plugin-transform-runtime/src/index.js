@@ -1,10 +1,31 @@
+import path from "path";
+import resolve from "resolve";
 import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
 import definitions from "./definitions";
 
-export default declare((api, options) => {
+function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
+  try {
+    return path.dirname(
+      resolve.sync(`${moduleName}/package.json`, { basedir: dirname }),
+    );
+  } catch (err) {
+    if (err.code !== "MODULE_NOT_FOUND") throw err;
+
+    throw Object.assign(
+      new Error(`Failed to resolve "${moduleName}" relative to "${dirname}"`),
+      {
+        code: "BABEL_RUNTIME_NOT_FOUND",
+        runtime: moduleName,
+        dirname,
+      },
+    );
+  }
+}
+
+export default declare((api, options, dirname) => {
   api.assertVersion(7);
 
   const {
@@ -13,6 +34,7 @@ export default declare((api, options) => {
     regenerator: useRuntimeRegenerator = true,
     useESModules = false,
     version: runtimeVersion = "7.0.0-beta.0",
+    absoluteRuntime = false,
   } = options;
 
   if (typeof useRuntimeRegenerator !== "boolean") {
@@ -26,6 +48,14 @@ export default declare((api, options) => {
   if (typeof useESModules !== "boolean") {
     throw new Error(
       "The 'useESModules' option must be undefined, or a boolean.",
+    );
+  }
+  if (
+    typeof absoluteRuntime !== "boolean" &&
+    typeof absoluteRuntime !== "string"
+  ) {
+    throw new Error(
+      "The 'absoluteRuntime' option must be undefined, a boolean, or a string.",
     );
   }
   if (
@@ -71,7 +101,9 @@ export default declare((api, options) => {
   if (has(options, "moduleName")) {
     throw new Error(
       "The 'moduleName' option has been removed. @babel/transform-runtime " +
-        "no longer supports arbitrary runtimes.",
+        "no longer supports arbitrary runtimes. If you were using this to " +
+        "set an absolute path for Babel's standard runtimes, please use the " +
+        "'absoluteRuntime' option.",
     );
   }
 
@@ -82,6 +114,14 @@ export default declare((api, options) => {
     : "@babel/runtime";
 
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
+
+  let modulePath = moduleName;
+  if (absoluteRuntime !== false) {
+    modulePath = resolveAbsoluteRuntime(
+      moduleName,
+      path.resolve(dirname, absoluteRuntime === true ? "." : absoluteRuntime),
+    );
+  }
 
   return {
     pre(file) {
@@ -106,7 +146,7 @@ export default declare((api, options) => {
             isInteropHelper && !isModule(file.path) ? 4 : undefined;
 
           return this.addDefaultImport(
-            `${moduleName}/${helpersDir}/${name}`,
+            `${modulePath}/${helpersDir}/${name}`,
             name,
             blockHoist,
           );
@@ -144,7 +184,7 @@ export default declare((api, options) => {
         if (node.name === "regeneratorRuntime" && useRuntimeRegenerator) {
           path.replaceWith(
             this.addDefaultImport(
-              `${moduleName}/regenerator`,
+              `${modulePath}/regenerator`,
               "regeneratorRuntime",
             ),
           );
@@ -160,7 +200,7 @@ export default declare((api, options) => {
         // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
         path.replaceWith(
           this.addDefaultImport(
-            `${moduleName}/core-js/${definitions.builtins[node.name]}`,
+            `${modulePath}/core-js/${definitions.builtins[node.name]}`,
             node.name,
           ),
         );
@@ -183,7 +223,7 @@ export default declare((api, options) => {
         path.replaceWith(
           t.callExpression(
             this.addDefaultImport(
-              `${moduleName}/core-js/get-iterator`,
+              `${modulePath}/core-js/get-iterator`,
               "getIterator",
             ),
             [callee.object],
@@ -201,7 +241,7 @@ export default declare((api, options) => {
         path.replaceWith(
           t.callExpression(
             this.addDefaultImport(
-              `${moduleName}/core-js/is-iterable`,
+              `${modulePath}/core-js/is-iterable`,
               "isIterable",
             ),
             [path.node.right],
@@ -243,7 +283,7 @@ export default declare((api, options) => {
 
           path.replaceWith(
             this.addDefaultImport(
-              `${moduleName}/core-js/${methods[prop.name]}`,
+              `${modulePath}/core-js/${methods[prop.name]}`,
               `${obj.name}$${prop.name}`,
             ),
           );
@@ -262,7 +302,7 @@ export default declare((api, options) => {
           path.replaceWith(
             t.memberExpression(
               this.addDefaultImport(
-                `${moduleName}/core-js/${definitions.builtins[obj.name]}`,
+                `${modulePath}/core-js/${definitions.builtins[obj.name]}`,
                 obj.name,
               ),
               node.property,
