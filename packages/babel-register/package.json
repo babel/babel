@@ -19,7 +19,7 @@
     "source-map-support": "^0.4.2"
   },
   "peerDependencies": {
-    "@babel/core": "^7.0.0-0 <8.0.0-0"
+    "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
     "@babel/core": "7.0.0-rc.0",
