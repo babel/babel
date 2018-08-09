@@ -1,6 +1,6 @@
 {
   "name": "@babel/code-frame",
-  "version": "7.0.0-beta.56",
+  "version": "7.0.0-rc.0",
   "description": "Generate errors that contain a code frame that point to source locations.",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -8,7 +8,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-code-frame",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/highlight": "7.0.0-beta.56"
+    "@babel/highlight": "7.0.0-rc.0"
   },
   "devDependencies": {
     "chalk": "^2.0.0",
