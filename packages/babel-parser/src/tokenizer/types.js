@@ -175,7 +175,7 @@ export const keywords = {
   var: new KeywordTokenType("var"),
   let: new KeywordTokenType("let"),
   const: new KeywordTokenType("const"),
-  when: new KeywordTokenType("when"),
+  when: new KeywordTokenType("when", { beforeExpr }),
   while: new KeywordTokenType("while", { isLoop }),
   with: new KeywordTokenType("with"),
   new: new KeywordTokenType("new", { beforeExpr, startsExpr }),

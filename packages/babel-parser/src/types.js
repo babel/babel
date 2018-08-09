@@ -253,11 +253,51 @@ export type CaseStatement = NodeBase & {
 
 export type WhenClause = NodeBase & {
   type: "WhenClause",
-  pattern: Pattern,
+  pattern: Pattern | Literal,
   initializer?: Expression,
   matchGuard?: Expression,
   body: Statement,
 };
+
+// Pattern Matching
+
+export type ObjectMatchPattern = NodeBase & {
+  type: "ObjectMatchPattern",
+  properties: $ReadOnlyArray<ObjectMatchProperty>,
+};
+
+export type ObjectMatchProperty = NodeBase & {
+  type: "ObjectMatchProperty",
+  name: Identifier,
+  initializer: Expression | null,
+  element: MatchPattern | null,
+};
+
+export type ArrayMatchPattern = NodeBase & {
+  type: "ArrayMatchPattern",
+  elements: MatchElementList,
+};
+
+export type MatchElementList = $ReadOnlyArray<MatchPattern | MatchRestElement>;
+
+export type MatchRestElement = NodeBase & {
+  type: "MatchRestElement",
+  body: IdentifierMatchPattern | MatchPattern,
+};
+
+export type IdentifierMatchPattern = Identifier;
+
+export type LiteralMatchPattern =
+  | NullLiteral
+  | BooleanLiteral
+  | NumericLiteral
+  | StringLiteral;
+
+export type MatchPattern =
+  | ObjectMatchPattern
+  | ArrayMatchPattern
+  | IdentifierMatchPattern
+  | LiteralMatchPattern;
 
 // Exceptions
 
