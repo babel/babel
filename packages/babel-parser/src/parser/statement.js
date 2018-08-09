@@ -377,7 +377,7 @@ export default class StatementParser extends ExpressionParser {
   parseWhenClause(): N.WhenClause {
     const node = this.startNode();
 
-    node.pattern = this.parseBindingAtom();
+    node.pattern = this.parseWhenClausePattern();
 
     if (this.match(tt._if)) {
       this.next();
@@ -393,6 +393,45 @@ export default class StatementParser extends ExpressionParser {
     }
 
     return this.finishNode(node, "WhenClause");
+  }
+
+  parseWhenClausePattern(): N.Pattern | N.Literal | void {
+    let node;
+    switch (this.state.type) {
+      case tt.regexp: {
+        const value = this.state.value;
+        node = this.parseLiteral(value.value, "RegExpLiteral");
+        node.pattern = value.pattern;
+        node.flags = value.flags;
+        return node;
+      }
+
+      case tt.num:
+        return this.parseLiteral(this.state.value, "NumericLiteral");
+
+      case tt.bigint:
+        return this.parseLiteral(this.state.value, "BigIntLiteral");
+
+      case tt.string:
+        return this.parseLiteral(this.state.value, "StringLiteral");
+
+      case tt._null:
+        node = this.startNode();
+        this.next();
+        return this.finishNode(node, "NullLiteral");
+
+      case tt._true:
+      case tt._false:
+        return this.parseBooleanLiteral();
+
+      case tt.name:
+      case tt.braceL:
+      case tt.bracketL:
+        return this.parseBindingAtom();
+
+      default:
+        this.unexpected();
+    }
   }
 
   parseDebuggerStatement(node: N.DebuggerStatement): N.DebuggerStatement {
