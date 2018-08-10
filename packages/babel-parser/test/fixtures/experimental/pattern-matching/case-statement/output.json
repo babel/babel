@@ -76,7 +76,7 @@
               }
             },
             "pattern": {
-              "type": "ObjectPattern",
+              "type": "ObjectMatchPattern",
               "start": 22,
               "end": 25,
               "loc": {
@@ -91,7 +91,7 @@
               },
               "properties": [
                 {
-                  "type": "ObjectProperty",
+                  "type": "ObjectMatchProperty",
                   "start": 23,
                   "end": 24,
                   "loc": {
@@ -104,8 +104,7 @@
                       "column": 9
                     }
                   },
-                  "method": false,
-                  "key": {
+                  "name": {
                     "type": "Identifier",
                     "start": 23,
                     "end": 24,
@@ -121,28 +120,6 @@
                       "identifierName": "x"
                     },
                     "name": "x"
-                  },
-                  "computed": false,
-                  "shorthand": true,
-                  "value": {
-                    "type": "Identifier",
-                    "start": 23,
-                    "end": 24,
-                    "loc": {
-                      "start": {
-                        "line": 2,
-                        "column": 8
-                      },
-                      "end": {
-                        "line": 2,
-                        "column": 9
-                      },
-                      "identifierName": "x"
-                    },
-                    "name": "x"
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 }
               ]
@@ -283,7 +260,7 @@
               }
             },
             "pattern": {
-              "type": "ArrayPattern",
+              "type": "ArrayMatchPattern",
               "start": 115,
               "end": 121,
               "loc": {
@@ -1170,7 +1147,7 @@
               }
             },
             "pattern": {
-              "type": "ObjectPattern",
+              "type": "ObjectMatchPattern",
               "start": 514,
               "end": 517,
               "loc": {
@@ -1185,7 +1162,7 @@
               },
               "properties": [
                 {
-                  "type": "ObjectProperty",
+                  "type": "ObjectMatchProperty",
                   "start": 515,
                   "end": 516,
                   "loc": {
@@ -1198,8 +1175,7 @@
                       "column": 9
                     }
                   },
-                  "method": false,
-                  "key": {
+                  "name": {
                     "type": "Identifier",
                     "start": 515,
                     "end": 516,
@@ -1215,28 +1191,6 @@
                       "identifierName": "x"
                     },
                     "name": "x"
-                  },
-                  "computed": false,
-                  "shorthand": true,
-                  "value": {
-                    "type": "Identifier",
-                    "start": 515,
-                    "end": 516,
-                    "loc": {
-                      "start": {
-                        "line": 8,
-                        "column": 8
-                      },
-                      "end": {
-                        "line": 8,
-                        "column": 9
-                      },
-                      "identifierName": "x"
-                    },
-                    "name": "x"
-                  },
-                  "extra": {
-                    "shorthand": true
                   }
                 }
               ]
