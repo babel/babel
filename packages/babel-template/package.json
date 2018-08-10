@@ -10,7 +10,6 @@
   "dependencies": {
     "@babel/code-frame": "7.0.0-rc.1",
     "@babel/parser": "7.0.0-rc.1",
-    "@babel/types": "7.0.0-rc.1",
-    "lodash": "^4.17.10"
+    "@babel/types": "7.0.0-rc.1"
   }
 }
