@@ -412,6 +412,10 @@ export default class Tokenizer extends LocationParser {
 
     const nextPos = this.state.pos + 1;
     const next = this.input.charCodeAt(nextPos);
+    if (next >= charCodes.digit0 && next <= charCodes.digit9) {
+      this.raise(this.state.pos, "Unexpected digit after hash token");
+    }
+
     if (
       (this.hasPlugin("classPrivateProperties") ||
         this.hasPlugin("classPrivateMethods")) &&
@@ -423,16 +427,7 @@ export default class Tokenizer extends LocationParser {
     } else if (
       this.getPluginOption("pipelineOperator", "proposal") === "smart"
     ) {
-      if (next >= charCodes.digit0 && next <= charCodes.digit9) {
-        this.raise(
-          this.state.pos,
-          `Unexpected digit after topic reference: '#${String.fromCodePoint(
-            next,
-          )}'`,
-        );
-      } else {
-        this.finishOp(tt.hash, 1);
-      }
+      this.finishOp(tt.hash, 1);
     } else {
       this.raise(
         this.state.pos,
