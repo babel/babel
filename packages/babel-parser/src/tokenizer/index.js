@@ -688,9 +688,6 @@ export default class Tokenizer extends LocationParser {
 
   getTokenFromCode(code: number): void {
     switch (code) {
-      // The interpretation of a number sign "#" depends on whether it is
-      // followed by an identifier or not.
-
       case charCodes.numberSign:
         this.readToken_numberSign(code);
         return;
