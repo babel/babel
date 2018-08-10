@@ -2100,7 +2100,9 @@ export default class ExpressionParser extends LValParser {
   isSimpleReference(expression: N.Expression): boolean {
     switch (expression.type) {
       case "MemberExpression":
-        return this.isSimpleReference(expression.object);
+        return (
+          !expression.computed && this.isSimpleReference(expression.object)
+        );
       case "Identifier":
         return true;
       default:
