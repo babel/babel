@@ -15,7 +15,6 @@ async_await/migrated_0020.js
 async_await/migrated_0024.js
 async_await/migrated_0027.js
 async_generators/migrated_0007.js
-catch/optional_catch_binding.js
 class_properties/migrated_0000.js
 class_properties/migrated_0005.js
 class_properties/migrated_0011.js

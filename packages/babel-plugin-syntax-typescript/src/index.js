@@ -29,11 +29,7 @@ export default declare((api, { isTSX }) => {
       // in TS depends on the extensions, and is purely dependent on 'isTSX'.
       removePlugin(plugins, "jsx");
 
-      parserOpts.plugins.push(
-        "typescript",
-        "objectRestSpread",
-        "classProperties",
-      );
+      parserOpts.plugins.push("typescript", "classProperties");
 
       if (isTSX) {
         parserOpts.plugins.push("jsx");

@@ -1,1 +1,1 @@
-{ "plugins": ["asyncGenerators", "classProperties"] }
+{ "plugins": ["classProperties"] }

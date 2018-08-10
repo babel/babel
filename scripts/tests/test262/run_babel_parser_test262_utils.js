@@ -14,6 +14,7 @@ const parse = require("../../../packages/babel-parser").parse;
 
 const ignoredFeatures = [
   "async-functions",
+  "async-iteration",
   "arrow-function",
   "class",
   "const",
@@ -59,6 +60,9 @@ const ignoredFeatures = [
   "Uint8ClampedArray",
   "computed-property-names",
   "well-formed-json-stringify",
+  "object-spread",
+  "object-rest",
+  "optional-catch-binding",
   "Object.fromEntries",
   "Object.is",
   "Reflect.setPrototypeOf",
@@ -102,7 +106,6 @@ const ignoredFeatures = [
 ];
 
 const featuresToPlugins = {
-  "async-iteration": "asyncGenerators",
   BigInt: "bigInt",
   "class-fields-private": "classPrivateProperties",
   "class-fields-public": "classProperties",
@@ -114,9 +117,6 @@ const featuresToPlugins = {
   "export-star-as-namespace-from-module": "exportNamespaceFrom",
   "import.meta": "importMeta",
   "numeric-separator-literal": "numericSeparator",
-  "object-rest": "objectRestSpread",
-  "object-spread": "objectRestSpread",
-  "optional-catch-binding": "optionalCatchBinding",
 };
 
 function getPlugins(features) {

@@ -1322,7 +1322,6 @@ export default class ExpressionParser extends LValParser {
       }
 
       if (this.match(tt.ellipsis)) {
-        this.expectPlugin("objectRestSpread");
         prop = this.parseSpread(isPattern ? { start: 0 } : undefined);
         if (isPattern) {
           this.toAssignable(prop, true, "object pattern");
@@ -1382,11 +1381,7 @@ export default class ExpressionParser extends LValParser {
           prop.computed = false;
         } else {
           isAsync = true;
-          if (this.match(tt.star)) {
-            this.expectPlugin("asyncGenerators");
-            this.next();
-            isGenerator = true;
-          }
+          isGenerator = this.eat(tt.star);
           this.parsePropertyName(prop);
         }
       } else {

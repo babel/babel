@@ -391,7 +391,6 @@ export default class StatementParser extends ExpressionParser {
 
     let forAwait = false;
     if (this.state.inAsync && this.isContextual("await")) {
-      this.expectPlugin("asyncGenerators");
       forAwait = true;
       this.next();
     }
@@ -556,7 +555,6 @@ export default class StatementParser extends ExpressionParser {
         this.checkLVal(clause.param, true, clashes, "catch clause");
         this.expect(tt.parenR);
       } else {
-        this.expectPlugin("optionalCatchBinding");
         clause.param = null;
       }
       clause.body = this.parseBlock();
@@ -853,9 +851,6 @@ export default class StatementParser extends ExpressionParser {
     this.initFunction(node, isAsync);
 
     if (this.match(tt.star)) {
-      if (node.async) {
-        this.expectPlugin("asyncGenerators");
-      }
       node.generator = true;
       this.next();
     }
@@ -1153,11 +1148,7 @@ export default class StatementParser extends ExpressionParser {
       }
     } else if (isSimple && key.name === "async" && !this.isLineTerminator()) {
       // an async method
-      const isGenerator = this.match(tt.star);
-      if (isGenerator) {
-        this.expectPlugin("asyncGenerators");
-        this.next();
-      }
+      const isGenerator = this.eat(tt.star);
 
       method.kind = "method";
       // The so-called parsed name would have been "async": get the real name.

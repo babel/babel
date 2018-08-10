@@ -1,16 +1,6 @@
 // @flow
 
 const pluginNameMap = {
-  asyncGenerators: {
-    syntax: {
-      name: "@babel/plugin-syntax-async-generators",
-      url: "https://git.io/vb4SY",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-async-generator-functions",
-      url: "https://git.io/vb4yp",
-    },
-  },
   classProperties: {
     syntax: {
       name: "@babel/plugin-syntax-class-properties",
@@ -141,26 +131,6 @@ const pluginNameMap = {
     transform: {
       name: "@babel/plugin-proposal-numeric-separator",
       url: "https://git.io/vb4yS",
-    },
-  },
-  objectRestSpread: {
-    syntax: {
-      name: "@babel/plugin-syntax-object-rest-spread",
-      url: "https://git.io/vb4y5",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-object-rest-spread",
-      url: "https://git.io/vb4Ss",
-    },
-  },
-  optionalCatchBinding: {
-    syntax: {
-      name: "@babel/plugin-syntax-optional-catch-binding",
-      url: "https://git.io/vb4Sn",
-    },
-    transform: {
-      name: "@babel/plugin-proposal-optional-catch-binding",
-      url: "https://git.io/vb4SI",
     },
   },
   optionalChaining: {
