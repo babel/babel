@@ -938,7 +938,7 @@ export default class ExpressionParser extends LValParser {
           node = this.startNode();
 
           if (
-            "smart" !== this.getPluginOption("pipelineOperator", "proposal")
+            this.getPluginOption("pipelineOperator", "proposal") !== "smart"
           ) {
             this.raise(
               node.start,
