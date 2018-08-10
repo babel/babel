@@ -2090,14 +2090,6 @@ export default class ExpressionParser extends LValParser {
 
   checkSmartPipelineBodyStyle(expression: N.Expression): PipelineStyle {
     switch (expression.type) {
-      case "NewExpression":
-        return this.isSimpleReference(expression.callee)
-          ? "PipelineBareConstructor"
-          : "PipelineTopicExpression";
-      case "AwaitExpression":
-        return this.isSimpleReference(expression.argument)
-          ? "PipelineBareAwaitedFunction"
-          : "PipelineTopicExpression";
       default:
         return this.isSimpleReference(expression)
           ? "PipelineBareFunction"
