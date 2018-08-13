@@ -17,7 +17,14 @@ export default declare((api, options) => {
   }
 
   const { decoratorsBeforeExport } = options;
-  if (decoratorsBeforeExport !== undefined) {
+  if (decoratorsBeforeExport === undefined) {
+    if (!legacy) {
+      throw new Error(
+        "The '@babel/plugin-syntax-decorators' plugin requires a" +
+          " 'decoratorsBeforeExport' option, whose value must be a boolean.",
+      );
+    }
+  } else {
     if (legacy) {
       throw new Error(
         "'decoratorsBeforeExport' can't be used with legacy decorators.",

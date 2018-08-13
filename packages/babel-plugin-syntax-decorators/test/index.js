@@ -37,6 +37,10 @@ describe("'decoratorsBeforeExport' option", function() {
     expect(makeParser("", { decoratorsBeforeExport: "before" })).toThrow();
   });
 
+  test.skip("is required", function() {
+    expect(makeParser("", { legacy: false })).toThrow(/decoratorsBeforeExport/);
+  });
+
   test("is incompatible with legacy", function() {
     expect(
       makeParser("", { decoratorsBeforeExport: false, legacy: true }),
@@ -47,8 +51,6 @@ describe("'decoratorsBeforeExport' option", function() {
   const AFTER = "export @dec class Foo {}";
 
   // These are skipped
-  run(BEFORE, undefined, true);
-  run(AFTER, undefined, false);
   run(BEFORE, true, false);
   run(AFTER, true, true);
   run(BEFORE, false, true);
