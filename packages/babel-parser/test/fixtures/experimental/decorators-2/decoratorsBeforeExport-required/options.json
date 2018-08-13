@@ -1,0 +1,4 @@
+{
+  "plugins": ["decorators"],
+  "throws": "The 'decorators' plugin requires a 'decoratorsBeforeExport' option, whose value must be a boolean."
+}

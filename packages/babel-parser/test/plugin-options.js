@@ -14,9 +14,10 @@ describe("plugin options", function() {
     const OPT_2 = [NAME, { decoratorsBeforeExport: false }];
     const SYNTAX_1 = "@dec export class C {}";
     const SYNTAX_2 = "export @dec class C {}";
-    const SYNTAX_DEFAULT = "export @dec class C {}";
+    const SYNTAX_DEFAULT = "";
 
-    it("when they aren't specified", function() {
+    // Currently every option is required, so this can't be tested.
+    it.skip("when they aren't specified", function() {
       expect(getParser(SYNTAX_DEFAULT, [NAME, OPT_1])).not.toThrow();
       expect(getParser(SYNTAX_DEFAULT, [NAME, OPT_2])).not.toThrow();
     });
