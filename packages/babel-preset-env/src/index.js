@@ -94,16 +94,6 @@ export const isPluginRequired = (
   return isRequiredForEnvironments.length > 0;
 };
 
-const getBuiltInTargets = targets => {
-  const builtInTargets = {
-    ...targets,
-  };
-  if (builtInTargets.uglify != null) {
-    delete builtInTargets.uglify;
-  }
-  return builtInTargets;
-};
-
 export const transformIncludesAndExcludes = (opts: Array<string>): Object => {
   return opts.reduce(
     (result, opt) => {
@@ -172,17 +162,12 @@ export default declare((api, opts) => {
     targets: optionsTargets,
     useBuiltIns,
   } = normalizeOptions(opts);
-  // TODO: remove this in next major
-  let hasUglifyTarget = false;
 
   if (optionsTargets && optionsTargets.uglify) {
-    hasUglifyTarget = true;
-    delete optionsTargets.uglify;
-
-    console.log("");
-    console.log("The uglify target has been deprecated. Set the top level");
-    console.log("option `forceAllTransforms: true` instead.");
-    console.log("");
+    throw new Error(
+      "The uglify target has been removed. Set the top level" +
+        " option `forceAllTransforms: true` instead.",
+    );
   }
 
   if (optionsTargets && optionsTargets.esmodules && optionsTargets.browsers) {
@@ -203,7 +188,7 @@ export default declare((api, opts) => {
   const include = transformIncludesAndExcludes(optionsInclude);
   const exclude = transformIncludesAndExcludes(optionsExclude);
 
-  const transformTargets = forceAllTransforms || hasUglifyTarget ? {} : targets;
+  const transformTargets = forceAllTransforms ? {} : targets;
 
   const transformations = filterItems(
     shippedProposals ? pluginList : pluginListWithoutProposals,
@@ -215,17 +200,14 @@ export default declare((api, opts) => {
   );
 
   let polyfills;
-  let polyfillTargets;
 
   if (useBuiltIns) {
-    polyfillTargets = getBuiltInTargets(targets);
-
     polyfills = filterItems(
       shippedProposals ? builtInsList : builtInsListWithoutProposals,
       include.builtIns,
       exclude.builtIns,
-      polyfillTargets,
-      getPlatformSpecificDefaultFor(polyfillTargets),
+      targets,
+      getPlatformSpecificDefaultFor(targets),
     );
   }
 
@@ -276,7 +258,7 @@ Using polyfills with \`${useBuiltIns}\` option:`,
       regenerator,
       onDebug: (polyfills, context) => {
         polyfills.forEach(polyfill =>
-          logPlugin(polyfill, polyfillTargets, builtInsList, context),
+          logPlugin(polyfill, targets, builtInsList, context),
         );
       },
     };
