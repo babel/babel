@@ -132,12 +132,6 @@ export default class File {
     }
   }
 
-  // TODO: Remove this before 7.x's official release. Leaving it in for now to
-  // prevent unnecessary breakage between beta versions.
-  resolveModuleSource(source: string): string {
-    return source;
-  }
-
   addImport() {
     throw new Error(
       "This API has been removed. If you're looking for this " +
