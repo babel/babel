@@ -1,0 +1,11 @@
+Error: [BABEL] <CWD>/src/in.js: The uglify target has been removed. Set the top level option `forceAllTransforms: true` instead. (While processing: "/home/nicolo/Documenti/dev/babel/packages/babel-preset-env/lib/index.js")
+    at _default (/home/nicolo/Documenti/dev/babel/packages/babel-preset-env/lib/index.js:157:11)
+    at /home/nicolo/Documenti/dev/babel/packages/babel-helper-plugin-utils/lib/index.js:19:12
+    at loadDescriptor (/home/nicolo/Documenti/dev/babel/packages/babel-core/lib/config/full.js:157:14)
+    at cachedFunction (/home/nicolo/Documenti/dev/babel/packages/babel-core/lib/config/caching.js:32:19)
+    at loadPresetDescriptor (/home/nicolo/Documenti/dev/babel/packages/babel-core/lib/config/full.js:227:63)
+    at config.presets.map.descriptor (/home/nicolo/Documenti/dev/babel/packages/babel-core/lib/config/full.js:72:19)
+    at Array.map (<anonymous>)
+    at recurseDescriptors (/home/nicolo/Documenti/dev/babel/packages/babel-core/lib/config/full.js:70:38)
+    at loadFullConfig (/home/nicolo/Documenti/dev/babel/packages/babel-core/lib/config/full.js:100:6)
+    at process.nextTick (/home/nicolo/Documenti/dev/babel/packages/babel-core/lib/transform-file.js:48:33)
