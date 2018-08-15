@@ -41,13 +41,26 @@ export function getPluginOption(
 const PIPELINE_PROPOSALS = ["minimal"];
 
 export function validatePlugins(plugins: PluginList) {
-  if (
-    hasPlugin(plugins, "decorators") &&
-    hasPlugin(plugins, "decorators-legacy")
-  ) {
-    throw new Error(
-      "Cannot use the decorators and decorators-legacy plugin together",
+  if (hasPlugin(plugins, "decorators")) {
+    if (hasPlugin(plugins, "decorators-legacy")) {
+      throw new Error(
+        "Cannot use the decorators and decorators-legacy plugin together",
+      );
+    }
+
+    const decoratorsBeforeExport = getPluginOption(
+      plugins,
+      "decorators",
+      "decoratorsBeforeExport",
     );
+    if (decoratorsBeforeExport == null) {
+      throw new Error(
+        "The 'decorators' plugin requires a" +
+          " 'decoratorsBeforeExport' option, whose value must be a boolean.",
+      );
+    } else if (typeof decoratorsBeforeExport !== "boolean") {
+      throw new Error("'decoratorsBeforeExport' must be a boolean.");
+    }
   }
 
   if (hasPlugin(plugins, "flow") && hasPlugin(plugins, "typescript")) {
