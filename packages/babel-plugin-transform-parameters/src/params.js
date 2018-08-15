@@ -46,7 +46,7 @@ const iifeVisitor = {
 
 export default function convertFunctionParams(path, loose) {
   const { node, scope } = path;
-
+  loose = node.kind === "set" ? true : loose;
   const state = {
     iife: false,
     scope: scope,
@@ -60,7 +60,8 @@ export default function convertFunctionParams(path, loose) {
   for (let i = 0; i < params.length; i++) {
     const param = params[i];
 
-    if (param.isAssignmentPattern() && loose) {
+    const paramIsAssignmentPattern = param.isAssignmentPattern();
+    if (paramIsAssignmentPattern && loose) {
       const left = param.get("left");
       const right = param.get("right");
 
@@ -87,13 +88,12 @@ export default function convertFunctionParams(path, loose) {
         );
         param.replaceWith(paramName);
       }
-    } else if (param.isAssignmentPattern()) {
+    } else if (paramIsAssignmentPattern) {
       if (firstOptionalIndex === null) firstOptionalIndex = i;
 
       const left = param.get("left");
       const right = param.get("right");
 
-      //
       if (!state.iife) {
         if (right.isIdentifier() && !isSafeBinding(scope, right.node)) {
           // the right hand side references a parameter
