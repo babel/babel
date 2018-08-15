@@ -1,4 +1,4 @@
-import loadConfig from "../lib/config";
+import loadConfig, { loadPartialConfig } from "../lib/config";
 import path from "path";
 
 describe("@babel/core config loading", () => {
@@ -35,6 +35,46 @@ describe("@babel/core config loading", () => {
         : [require("./fixtures/config-loading/plugin6")],
     };
   }
+
+  describe("loadPartialConfig", () => {
+    it("should preserve disabled plugins in the partial config", () => {
+      const plugin = function() {
+        return {};
+      };
+
+      const opts = loadPartialConfig({
+        ...makeOpts(true),
+        babelrc: false,
+        configFile: false,
+        plugins: [[plugin, false]],
+      });
+
+      expect(opts.options.plugins.length).toBe(1);
+      const item = opts.options.plugins[0];
+
+      expect(item.value).toBe(plugin);
+      expect(item.options).toBe(false);
+    });
+
+    it("should preserve disabled presets in the partial config", () => {
+      const preset = function() {
+        return {};
+      };
+
+      const opts = loadPartialConfig({
+        ...makeOpts(true),
+        babelrc: false,
+        configFile: false,
+        presets: [[preset, false]],
+      });
+
+      expect(opts.options.presets.length).toBe(1);
+      const item = opts.options.presets[0];
+
+      expect(item.value).toBe(preset);
+      expect(item.options).toBe(false);
+    });
+  });
 
   describe("config file", () => {
     it("should load and cache the config with plugins and presets", () => {

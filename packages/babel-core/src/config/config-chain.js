@@ -527,7 +527,7 @@ function dedupDescriptors(
 ): Array<UnloadedDescriptor> {
   const map: Map<
     Function,
-    Map<string | void, { value: UnloadedDescriptor | null }>,
+    Map<string | void, { value: UnloadedDescriptor }>,
   > = new Map();
 
   const descriptors = [];
@@ -542,16 +542,12 @@ function dedupDescriptors(
       }
       let desc = nameMap.get(item.name);
       if (!desc) {
-        desc = { value: null };
+        desc = { value: item };
         descriptors.push(desc);
 
         // Treat passPerPreset presets as unique, skipping them
         // in the merge processing steps.
         if (!item.ownPass) nameMap.set(item.name, desc);
-      }
-
-      if (item.options === false) {
-        desc.value = null;
       } else {
         desc.value = item;
       }
@@ -561,7 +557,7 @@ function dedupDescriptors(
   }
 
   return descriptors.reduce((acc, desc) => {
-    if (desc.value) acc.push(desc.value);
+    acc.push(desc.value);
     return acc;
   }, []);
 }
