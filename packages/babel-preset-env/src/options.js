@@ -15,6 +15,7 @@ export const TopLevelOptions = {
 
 export const ModulesOption = {
   false: false,
+  auto: "auto",
   amd: "amd",
   commonjs: "commonjs",
   cjs: "cjs",

@@ -7,7 +7,7 @@ Using targets:
   "node": "6.10"
 }
 
-Using modules transform: commonjs
+Using modules transform: auto
 
 Using plugins:
   transform-template-literals { "ie":"10" }

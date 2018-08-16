@@ -7,7 +7,7 @@ Using targets:
   "ie": "11"
 }
 
-Using modules transform: commonjs
+Using modules transform: auto
 
 Using plugins:
   transform-template-literals { "ie":"11" }
