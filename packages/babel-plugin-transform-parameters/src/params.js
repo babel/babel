@@ -46,7 +46,7 @@ const iifeVisitor = {
 
 export default function convertFunctionParams(path, loose) {
   const { node, scope } = path;
-  loose = node.kind === "set" ? true : loose;
+
   const state = {
     iife: false,
     scope: scope,
@@ -61,7 +61,7 @@ export default function convertFunctionParams(path, loose) {
     const param = params[i];
 
     const paramIsAssignmentPattern = param.isAssignmentPattern();
-    if (paramIsAssignmentPattern && loose) {
+    if (paramIsAssignmentPattern && (loose || node.kind === "set")) {
       const left = param.get("left");
       const right = param.get("right");
 
