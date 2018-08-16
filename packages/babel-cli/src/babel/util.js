@@ -49,9 +49,14 @@ export function addSourceMappingUrl(code, loc) {
   return code + "\n//# sourceMappingURL=" + path.basename(loc);
 }
 
+const CALLER = {
+  name: "@babel/cli",
+};
+
 export function transform(filename, code, opts) {
   opts = {
     ...opts,
+    caller: CALLER,
     filename,
   };
 
@@ -64,6 +69,11 @@ export function transform(filename, code, opts) {
 }
 
 export function compile(filename, opts) {
+  opts = {
+    ...opts,
+    caller: CALLER,
+  };
+
   return new Promise((resolve, reject) => {
     babel.transformFile(filename, opts, (err, result) => {
       if (err) reject(err);

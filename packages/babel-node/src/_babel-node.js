@@ -60,6 +60,9 @@ program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
 
 register({
+  caller: {
+    name: "@babel/node",
+  },
   extensions: program.extensions,
   ignore: program.ignore,
   only: program.only,
