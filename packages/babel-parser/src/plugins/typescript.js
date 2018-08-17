@@ -1539,11 +1539,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // export default interface allowed in:
       // https://github.com/Microsoft/TypeScript/pull/16040
       if (this.state.value === "interface") {
-        return this.tsParseDeclaration(
+        const result = this.tsParseDeclaration(
           this.startNode(),
           this.state.value,
           true,
         );
+
+        if (result) return result;
       }
 
       return super.parseExportDefaultExpression();
