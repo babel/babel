@@ -21,6 +21,10 @@ const registerStandalonePackageTask = require("./scripts/gulp-tasks")
   .registerStandalonePackageTask;
 
 const sources = ["codemods", "packages"];
+const helpersSource = [
+  "packages/babel-helpers/src/helpers.js",
+  "packages/babel-helpers/src/helpers/*.js",
+];
 
 function swapSrcWithLib(srcPath) {
   const parts = srcPath.split(path.sep);
@@ -67,15 +71,12 @@ function buildBabel(exclude) {
     sources.map(source => {
       const base = path.join(__dirname, source);
 
-      let stream = gulp.src(getGlobFromSource(source), { base: base });
+      const filters = ["**", ...helpersSource.map(p => "!" + p)];
+      if (exclude) filters.push(...exclude.map(p => `!**/${p}/**`));
 
-      if (exclude) {
-        const filters = exclude.map(p => `!**/${p}/**`);
-        filters.unshift("**");
-        stream = stream.pipe(filter(filters));
-      }
-
-      return stream
+      return gulp
+        .src(getGlobFromSource(source), { base: base })
+        .pipe(filter(filters))
         .pipe(errorsLogger())
         .pipe(newer({ dest: base, map: swapSrcWithLib }))
         .pipe(compilationLogger())
@@ -88,6 +89,28 @@ function buildBabel(exclude) {
         .pipe(gulp.dest(base));
     })
   );
+}
+
+function buildBabelHelpers() {
+  const base = path.join(__dirname, "packages");
+  return gulp
+    .src("packages/babel-helpers/src/helpers.js", { base: "packages" })
+    .pipe(errorsLogger())
+    .pipe(
+      newer({
+        dest: base,
+        map: swapSrcWithLib,
+        extra: "packages/babel-helpers/src/helpers/*.js",
+      })
+    )
+    .pipe(compilationLogger())
+    .pipe(babel())
+    .pipe(
+      // Passing 'file.relative' because newer() above uses a relative
+      // path and this keeps it consistent.
+      rename(file => path.resolve(file.base, swapSrcWithLib(file.relative)))
+    )
+    .pipe(gulp.dest(base));
 }
 
 function buildRollup(packages) {
@@ -115,21 +138,30 @@ function buildRollup(packages) {
 gulp.task("build", function() {
   const bundles = ["packages/babel-parser"];
 
-  return merge([buildBabel(/* exclude */ bundles), buildRollup(bundles)]);
+  return merge([
+    buildBabel(/* exclude */ bundles),
+    buildBabelHelpers(),
+    buildRollup(bundles),
+  ]);
 });
 
 gulp.task("default", gulp.series("build"));
 
-gulp.task("build-no-bundle", () => buildBabel());
+gulp.task("build-no-bundle", () => merge([buildBabel(), buildBabelHelpers()]));
 
 gulp.task(
   "watch",
   gulp.series("build-no-bundle", function watch() {
-    gulpWatch(
-      sources.map(getGlobFromSource),
-      { debounceDelay: 200 },
-      gulp.task("build-no-bundle")
-    );
+    const globs = [
+      ...sources.map(getGlobFromSource),
+      ...helpersSource.map(p => "!" + p),
+    ];
+
+    gulpWatch(globs, { debounceDelay: 200 }, () => buildBabel());
+
+    // babel-helpers/src/helpers.js needs to be watched alongside with
+    // all its preloaded dependencies.
+    gulpWatch(helpersSource, { debounceDelay: 200 }, () => buildBabelHelpers());
   })
 );
 

@@ -1,5 +1,7 @@
 "use strict";
 
+const loadHelperPlugin = require("./scripts/babel-plugins/load-helper");
+
 module.exports = function(api) {
   const env = api.env();
 
@@ -59,6 +61,8 @@ module.exports = function(api) {
       ignoreLib ? "packages/*/lib" : null,
       "packages/babel-standalone/babel.js",
       "packages/babel-preset-env-standalone/babel-preset-env.js",
+      // Helpers are preloaded in the helpers.js file.
+      /packages[\\/]babel-helpers[\\/]src[\\/]helpers[\\/][^\\/]+.js/,
     ].filter(Boolean),
     presets: [["@babel/env", envOpts]],
     plugins: [
@@ -114,6 +118,10 @@ module.exports = function(api) {
         plugins: [includeRuntime ? "@babel/transform-runtime" : null].filter(
           Boolean
         ),
+      },
+      {
+        test: "./packages/babel-helpers/src/helpers.js",
+        plugins: [loadHelperPlugin],
       },
     ].filter(Boolean),
   };

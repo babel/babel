@@ -28,6 +28,12 @@
       "env": {
         "jest": true
       }
+    },
+    {
+      "files": ["packages/babel-helpers/src/helpers/*.js"],
+      "rules": {
+        "no-var": "off"
+      }
     }
   ]
 }
