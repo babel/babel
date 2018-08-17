@@ -978,9 +978,7 @@ helpers.applyDecoratedDescriptor = helper("7.0.0-beta.0")`
         });
         desc.enumerable = !!desc.enumerable;
         desc.configurable = !!desc.configurable;
-        if ('value' in desc || desc.initializer){
-            desc.writable = true;
-        }
+        desc.writable = !!desc.writable;
 
         desc = decorators.slice().reverse().reduce(function(desc, decorator){
             return decorator(target, property, desc) || desc;
