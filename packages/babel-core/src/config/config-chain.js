@@ -55,7 +55,21 @@ export type ConfigContext = {
 /**
  * Build a config chain for a given preset.
  */
-export const buildPresetChain: (
+export function buildPresetChain(
+  arg: PresetInstance,
+  context: *,
+): ConfigChain | null {
+  const chain = buildPresetChainWalker(arg, context);
+  if (!chain) return null;
+
+  return {
+    plugins: dedupDescriptors(chain.plugins),
+    presets: dedupDescriptors(chain.presets),
+    options: chain.options,
+  };
+}
+
+export const buildPresetChainWalker: (
   arg: PresetInstance,
   context: *,
 ) => * = makeChainWalker({
