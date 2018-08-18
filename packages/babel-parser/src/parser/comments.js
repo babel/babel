@@ -122,6 +122,15 @@ export default class CommentsParser extends BaseParser {
           lastComment.end <= node.end
         ) {
           if (this.state.commentPreviousNode) {
+            for (j = 0; j < this.state.leadingComments.length; j++) {
+              if (
+                this.state.leadingComments[j].end <
+                this.state.commentPreviousNode.end
+              ) {
+                this.state.leadingComments.splice(j, 1);
+                j--;
+              }
+            }
             if (this.state.leadingComments.length > 0) {
               lastArg.trailingComments = this.state.leadingComments;
               this.state.leadingComments = [];
