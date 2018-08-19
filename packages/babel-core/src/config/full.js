@@ -13,7 +13,7 @@ import {
 import type { UnloadedDescriptor } from "./config-descriptors";
 import traverse from "@babel/traverse";
 import { makeWeakCache, type CacheConfigurator } from "./caching";
-import { validate } from "./validation/options";
+import { validate, type CallerMetadata } from "./validation/options";
 import { validatePluginObject } from "./validation/plugins";
 import makeAPI from "./helpers/config-api";
 
@@ -41,6 +41,7 @@ export type PluginPasses = Array<PluginPassList>;
 // process 'ignore'/'only' and other filename-based logic.
 type SimpleContext = {
   envName: string,
+  caller: CallerMetadata | void,
 };
 
 export default function loadFullConfig(

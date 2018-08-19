@@ -8,6 +8,8 @@ import {
   type SimpleCacheConfigurator,
 } from "../caching";
 
+import type { CallerMetadata } from "../validation/options";
+
 type EnvFunction = {
   (): string,
   <T>((string) => T): T,
@@ -24,7 +26,7 @@ export type PluginAPI = {
 };
 
 export default function makeAPI(
-  cache: CacheConfigurator<{ envName: string }>,
+  cache: CacheConfigurator<{ envName: string, caller: CallerMetadata | void }>,
 ): PluginAPI {
   const env: any = value =>
     cache.using(data => {
@@ -42,12 +44,16 @@ export default function makeAPI(
       });
     });
 
+  const caller: any = cb =>
+    cache.using(data => assertSimpleType(cb(data.caller)));
+
   return {
     version: coreVersion,
     cache: cache.simple(),
     // Expose ".env()" so people can easily get the same env that we expose using the "env" key.
     env,
     async: () => false,
+    caller,
     assertVersion,
   };
 }

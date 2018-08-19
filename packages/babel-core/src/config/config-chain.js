@@ -144,9 +144,14 @@ export function buildRootChain(
 
   let configFile;
   if (typeof opts.configFile === "string") {
-    configFile = loadConfig(opts.configFile, context.cwd, context.envName);
+    configFile = loadConfig(
+      opts.configFile,
+      context.cwd,
+      context.envName,
+      context.caller,
+    );
   } else if (opts.configFile !== false) {
-    configFile = findRootConfig(context.root, context.envName);
+    configFile = findRootConfig(context.root, context.envName, context.caller);
   }
 
   let { babelrc, babelrcRoots } = opts;
@@ -465,7 +470,12 @@ function mergeExtendsChain(
 ): boolean {
   if (opts.extends === undefined) return true;
 
-  const file = loadConfig(opts.extends, dirname, context.envName);
+  const file = loadConfig(
+    opts.extends,
+    dirname,
+    context.envName,
+    context.caller,
+  );
 
   if (files.has(file)) {
     throw new Error(
