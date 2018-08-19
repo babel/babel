@@ -2,7 +2,11 @@
 
 import semver from "semver";
 import { version as coreVersion } from "../../";
-import type { CacheConfigurator, SimpleCacheConfigurator } from "../caching";
+import {
+  assertSimpleType,
+  type CacheConfigurator,
+  type SimpleCacheConfigurator,
+} from "../caching";
 
 type EnvFunction = {
   (): string,
@@ -25,7 +29,9 @@ export default function makeAPI(
   const env: any = value =>
     cache.using(data => {
       if (typeof value === "undefined") return data.envName;
-      if (typeof value === "function") return value(data.envName);
+      if (typeof value === "function") {
+        return assertSimpleType(value(data.envName));
+      }
       if (!Array.isArray(value)) value = [value];
 
       return value.some(entry => {
