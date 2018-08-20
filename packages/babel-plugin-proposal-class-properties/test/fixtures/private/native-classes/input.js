@@ -10,9 +10,3 @@ class Foo {
     return this.#bar;
   }
 }
-
-const f = new Foo();
-expect("foo" in Foo).toBe(false)
-expect("bar" in f).toBe(false)
-expect(Foo.test()).toBe("foo")
-expect(f.test()).toBe("bar")
