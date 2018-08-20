@@ -203,6 +203,30 @@ describe("getTargets", () => {
     });
   });
 
+  describe("ecmascript", () => {
+    it("should be a target", () => {
+      expect(
+        getTargets({
+          ecmascript: 2015,
+        }),
+      ).toEqual({
+        ecmascript: "2015",
+      });
+    });
+  });
+
+  describe("ecmascript", () => {
+    it("should be a target", () => {
+      expect(
+        getTargets({
+          ecmascript: 2015,
+        }),
+      ).toEqual({
+        ecmascript: "2015",
+      });
+    });
+  });
+
   describe("electron", () => {
     it("should be its own target", () => {
       expect(

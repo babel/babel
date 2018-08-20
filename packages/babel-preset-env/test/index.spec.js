@@ -41,6 +41,17 @@ describe("babel-preset-env", () => {
       expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(false);
     });
 
+    it("returns false if plugin feature is implemented by lower than target (ecmascript)", () => {
+      const plugin = {
+        ecmascript: 2015,
+      };
+      const targets = {
+        ecmascript: "2018",
+      };
+
+      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(false);
+    });
+
     it("returns false if plugin feature is implemented is equal to target", () => {
       const plugin = {
         chrome: 49,
@@ -51,12 +62,32 @@ describe("babel-preset-env", () => {
       expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(false);
     });
 
+    it("returns false if plugin feature is implemented is equal to target (ecmascript)", () => {
+      const plugin = {
+        ecmascript: 2015,
+      };
+      const targets = {
+        ecmascript: "2015",
+      };
+      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(false);
+    });
+
     it("returns true if plugin feature is implemented is greater than target", () => {
       const plugin = {
         chrome: 50,
       };
       const targets = {
         chrome: "49.0.0",
+      };
+      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(true);
+    });
+
+    it("returns true if plugin feature is implemented is greater than target (ecmascript)", () => {
+      const plugin = {
+        ecmascript: 2018,
+      };
+      const targets = {
+        ecmascript: "5",
       };
       expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(true);
     });
