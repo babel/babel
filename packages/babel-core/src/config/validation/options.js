@@ -5,6 +5,8 @@ import Plugin from "../plugin";
 
 import removed from "./removed";
 import {
+  msg,
+  access,
   assertString,
   assertBoolean,
   assertObject,
@@ -21,6 +23,7 @@ import {
   assertSourceType,
   type ValidatorSet,
   type Validator,
+  type OptionPath,
 } from "./option-assertions";
 
 const ROOT_VALIDATORS: ValidatorSet = {
@@ -248,24 +251,62 @@ export type SourceTypeOption = "module" | "script" | "unambiguous";
 export type CompactOption = boolean | "auto";
 export type RootInputSourceMapOption = {} | boolean;
 
-export type OptionsType =
+export type OptionsSource =
   | "arguments"
-  | "env"
-  | "preset"
-  | "override"
   | "configfile"
   | "babelrcfile"
-  | "extendsfile";
+  | "extendsfile"
+  | "preset";
 
-export function validate(type: OptionsType, opts: {}): ValidatedOptions {
+type RootPath = $ReadOnly<{
+  type: "root",
+  source: OptionsSource,
+}>;
+type OverridesPath = $ReadOnly<{
+  type: "overrides",
+  index: number,
+  parent: RootPath,
+}>;
+type EnvPath = $ReadOnly<{
+  type: "env",
+  name: string,
+  parent: RootPath | OverridesPath,
+}>;
+export type NestingPath = RootPath | OverridesPath | EnvPath;
+
+function getSource(loc: NestingPath): OptionsSource {
+  return loc.type === "root" ? loc.source : getSource(loc.parent);
+}
+
+export function validate(type: OptionsSource, opts: {}): ValidatedOptions {
+  return validateNested(
+    {
+      type: "root",
+      source: type,
+    },
+    opts,
+  );
+}
+
+function validateNested(loc: NestingPath, opts: {}) {
+  const type = getSource(loc);
+
   assertNoDuplicateSourcemap(opts);
 
   Object.keys(opts).forEach(key => {
+    const optLoc = {
+      type: "option",
+      name: key,
+      parent: loc,
+    };
+
     if (type === "preset" && NONPRESET_VALIDATORS[key]) {
-      throw new Error(`.${key} is not allowed in preset options`);
+      throw new Error(`${msg(optLoc)} is not allowed in preset options`);
     }
     if (type !== "arguments" && ROOT_VALIDATORS[key]) {
-      throw new Error(`.${key} is only allowed in root programmatic options`);
+      throw new Error(
+        `${msg(optLoc)} is only allowed in root programmatic options`,
+      );
     }
     if (
       type !== "arguments" &&
@@ -274,48 +315,47 @@ export function validate(type: OptionsType, opts: {}): ValidatedOptions {
     ) {
       if (type === "babelrcfile" || type === "extendsfile") {
         throw new Error(
-          `.${key} is not allowed in .babelrc or "extend"ed files, only in root programmatic options, ` +
+          `${msg(
+            optLoc,
+          )} is not allowed in .babelrc or "extends"ed files, only in root programmatic options, ` +
             `or babel.config.js/config file options`,
         );
       }
 
       throw new Error(
-        `.${key} is only allowed in root programmatic options, or babel.config.js/config file options`,
+        `${msg(
+          optLoc,
+        )} is only allowed in root programmatic options, or babel.config.js/config file options`,
       );
-    }
-    if (type === "env" && key === "env") {
-      throw new Error(`.${key} is not allowed inside another env block`);
-    }
-    if (type === "env" && key === "overrides") {
-      throw new Error(`.${key} is not allowed inside an env block`);
-    }
-    if (type === "override" && key === "overrides") {
-      throw new Error(`.${key} is not allowed inside an overrides block`);
     }
 
     const validator =
       COMMON_VALIDATORS[key] ||
       NONPRESET_VALIDATORS[key] ||
       BABELRC_VALIDATORS[key] ||
-      ROOT_VALIDATORS[key];
+      ROOT_VALIDATORS[key] ||
+      throwUnknownError;
 
-    if (validator) validator(key, opts[key]);
-    else throw buildUnknownError(key);
+    validator(optLoc, opts[key]);
   });
 
   return (opts: any);
 }
 
-function buildUnknownError(key: string) {
+function throwUnknownError(loc: OptionPath) {
+  const key = loc.name;
+
   if (removed[key]) {
     const { message, version = 5 } = removed[key];
 
     throw new ReferenceError(
-      `Using removed Babel ${version} option: .${key} - ${message}`,
+      `Using removed Babel ${version} option: ${msg(loc)} - ${message}`,
     );
   } else {
     // eslint-disable-next-line max-len
-    const unknownOptErr = `Unknown option: .${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
+    const unknownOptErr = `Unknown option: ${msg(
+      loc,
+    )}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
 
     throw new ReferenceError(unknownOptErr);
   }
@@ -331,27 +371,53 @@ function assertNoDuplicateSourcemap(opts: {}): void {
   }
 }
 
-function assertEnvSet(key: string, value: mixed): EnvSet<ValidatedOptions> {
-  const obj = assertObject(key, value);
+function assertEnvSet(loc: OptionPath, value: mixed): EnvSet<ValidatedOptions> {
+  if (loc.parent.type === "env") {
+    throw new Error(`${msg(loc)} is not allowed inside of another .env block`);
+  }
+  const parent: RootPath | OverridesPath = loc.parent;
+
+  const obj = assertObject(loc, value);
   if (obj) {
     // Validate but don't copy the .env object in order to preserve
     // object identity for use during config chain processing.
-    for (const key of Object.keys(obj)) {
-      const env = assertObject(key, obj[key]);
-      if (env) validate("env", env);
+    for (const envName of Object.keys(obj)) {
+      const env = assertObject(access(loc, envName), obj[envName]);
+      if (!env) continue;
+
+      const envLoc = {
+        type: "env",
+        name: envName,
+        parent,
+      };
+      validateNested(envLoc, env);
     }
   }
   return (obj: any);
 }
 
-function assertOverridesList(key: string, value: mixed): OverridesList {
-  const arr = assertArray(key, value);
+function assertOverridesList(loc: OptionPath, value: mixed): OverridesList {
+  if (loc.parent.type === "env") {
+    throw new Error(`${msg(loc)} is not allowed inside an .env block`);
+  }
+  if (loc.parent.type === "overrides") {
+    throw new Error(`${msg(loc)} is not allowed inside an .overrides block`);
+  }
+  const parent: RootPath = loc.parent;
+
+  const arr = assertArray(loc, value);
   if (arr) {
     for (const [index, item] of arr.entries()) {
-      const env = assertObject(`${index}`, item);
-      if (!env) throw new Error(`.${key}[${index}] must be an object`);
+      const objLoc = access(loc, index);
+      const env = assertObject(objLoc, item);
+      if (!env) throw new Error(`${msg(objLoc)} must be an object`);
 
-      validate("override", env);
+      const overridesLoc = {
+        type: "overrides",
+        index,
+        parent,
+      };
+      validateNested(overridesLoc, env);
     }
   }
   return (arr: any);
