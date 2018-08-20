@@ -128,13 +128,16 @@ export const validateIgnoreBrowserslistConfig = (
   );
 
 export const validateModulesOption = (
-  modulesOpt: ModuleOption = ModulesOption.commonjs,
+  modulesOpt: ModuleOption = ModulesOption.auto,
 ) => {
   invariant(
     ModulesOption[modulesOpt] ||
       ModulesOption[modulesOpt] === ModulesOption.false,
-    `Invalid Option: The 'modules' option must be either 'false' to indicate no modules, or a
-    module type which can be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'.`,
+    `Invalid Option: The 'modules' option must be one of \n` +
+      ` - 'false' to indicate no module processing\n` +
+      ` - a specific module type: 'commonjs', 'amd', 'umd', 'systemjs'` +
+      ` - 'auto' (default) which will automatically select 'false' if the current\n` +
+      `   process is known to support ES module syntax, or "commonjs" otherwise\n`,
   );
 
   return modulesOpt;

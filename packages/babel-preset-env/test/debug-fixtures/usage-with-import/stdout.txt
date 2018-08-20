@@ -5,7 +5,7 @@ Using targets:
   "chrome": "55"
 }
 
-Using modules transform: commonjs
+Using modules transform: auto
 
 Using plugins:
   transform-dotall-regex { "chrome":"55" }

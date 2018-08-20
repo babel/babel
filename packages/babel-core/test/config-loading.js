@@ -323,4 +323,51 @@ describe("@babel/core config loading", () => {
       }
     });
   });
+
+  describe("caller metadata", () => {
+    it("should pass caller data through", () => {
+      const options1 = loadConfig({
+        ...makeOpts(),
+        caller: {
+          name: "babel-test",
+          someFlag: true,
+        },
+      }).options;
+
+      expect(options1.caller.name).toBe("babel-test");
+      expect(options1.caller.someFlag).toBe(true);
+    });
+
+    it("should pass unknown caller data through", () => {
+      const options1 = loadConfig({
+        ...makeOpts(),
+        caller: undefined,
+      }).options;
+
+      expect(options1.caller).toBeUndefined();
+    });
+
+    it("should pass caller data to test functions", () => {
+      const options1 = loadConfig({
+        ...makeOpts(),
+        caller: {
+          name: "babel-test",
+          someFlag: true,
+        },
+        overrides: [
+          {
+            test: (filename, { caller }) => caller.name === "babel-test",
+            comments: false,
+          },
+          {
+            test: (filename, { caller }) => caller.name !== "babel-test",
+            ast: false,
+          },
+        ],
+      }).options;
+
+      expect(options1.comments).toBe(false);
+      expect(options1.ast).not.toBe(false);
+    });
+  });
 });

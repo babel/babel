@@ -12,7 +12,7 @@ Using targets:
   "electron": "0.36"
 }
 
-Using modules transform: commonjs
+Using modules transform: auto
 
 Using plugins:
   transform-function-name { "electron":"0.36" }

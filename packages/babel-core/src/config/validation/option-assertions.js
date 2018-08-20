@@ -14,6 +14,7 @@ import type {
   CompactOption,
   RootInputSourceMapOption,
   NestingPath,
+  CallerMetadata,
 } from "./options";
 
 export type ValidatorSet = {
@@ -101,6 +102,41 @@ export function assertSourceType(
     );
   }
   return value;
+}
+
+export function assertCallerMetadata(
+  loc: OptionPath,
+  value: mixed,
+): CallerMetadata | void {
+  const obj = assertObject(loc, value);
+  if (obj) {
+    if (typeof obj[("name": string)] !== "string") {
+      throw new Error(
+        `${msg(loc)} set but does not contain "name" property string`,
+      );
+    }
+
+    for (const prop of Object.keys(obj)) {
+      const propLoc = access(loc, prop);
+      const value = obj[prop];
+      if (
+        value != null &&
+        typeof value !== "boolean" &&
+        typeof value !== "string" &&
+        typeof value !== "number"
+      ) {
+        // NOTE(logan): I'm limiting the type here so that we can guarantee that
+        // the "caller" value will serialize to JSON nicely. We can always
+        // allow more complex structures later though.
+        throw new Error(
+          `${msg(
+            propLoc,
+          )} must be null, undefined, a boolean, a string, or a number.`,
+        );
+      }
+    }
+  }
+  return (value: any);
 }
 
 export function assertInputSourceMap(

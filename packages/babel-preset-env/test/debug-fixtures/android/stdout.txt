@@ -5,7 +5,7 @@ Using targets:
   "android": "4"
 }
 
-Using modules transform: commonjs
+Using modules transform: auto
 
 Using plugins:
   transform-template-literals { "android":"4" }

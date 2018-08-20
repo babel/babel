@@ -11,6 +11,7 @@ import {
   assertBoolean,
   assertObject,
   assertArray,
+  assertCallerMetadata,
   assertInputSourceMap,
   assertIgnoreList,
   assertPluginList,
@@ -33,6 +34,9 @@ const ROOT_VALIDATORS: ValidatorSet = {
     $PropertyType<ValidatedOptions, "configFile">,
   >),
 
+  caller: (assertCallerMetadata: Validator<
+    $PropertyType<ValidatedOptions, "caller">,
+  >),
   filename: (assertString: Validator<
     $PropertyType<ValidatedOptions, "filename">,
   >),
@@ -176,6 +180,7 @@ export type ValidatedOptions = {
   ast?: boolean,
   inputSourceMap?: RootInputSourceMapOption,
   envName?: string,
+  caller?: CallerMetadata,
 
   extends?: string,
   env?: EnvSet<ValidatedOptions>,
@@ -225,6 +230,11 @@ export type ValidatedOptions = {
   generatorOpts?: {},
 };
 
+export type CallerMetadata = {
+  // If 'caller' is specified, require that the name is given for debugging
+  // messages.
+  name: string,
+};
 export type EnvSet<T> = {
   [string]: ?T,
 };
