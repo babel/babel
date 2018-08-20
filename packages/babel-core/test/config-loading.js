@@ -29,10 +29,10 @@ describe("@babel/core config loading", () => {
       filename: FILEPATH,
       presets: skipProgrammatic
         ? null
-        : [require("./fixtures/config-loading/preset3")],
+        : [[require("./fixtures/config-loading/preset3"), {}]],
       plugins: skipProgrammatic
         ? null
-        : [require("./fixtures/config-loading/plugin6")],
+        : [[require("./fixtures/config-loading/plugin6"), {}]],
     };
   }
 
@@ -213,7 +213,7 @@ describe("@babel/core config loading", () => {
       }
     });
 
-    it("should invalidate the plugins when given a fresh arrays", () => {
+    it("should not invalidate the plugins when given a fresh arrays", () => {
       const opts = makeOpts();
 
       const options1 = loadConfig(opts).options;
@@ -221,6 +221,38 @@ describe("@babel/core config loading", () => {
       const options2 = loadConfig({
         ...opts,
         plugins: opts.plugins.slice(),
+      }).options;
+      expect(options2.plugins.length).toBe(options1.plugins.length);
+
+      for (let i = 0; i < options2.plugins.length; i++) {
+        expect(options2.plugins[i]).toBe(options1.plugins[i]);
+      }
+    });
+
+    it("should not invalidate the presets when given a fresh arrays", () => {
+      const opts = makeOpts();
+
+      const options1 = loadConfig(opts).options;
+
+      const options2 = loadConfig({
+        ...opts,
+        presets: opts.presets.slice(),
+      }).options;
+      expect(options2.plugins.length).toBe(options1.plugins.length);
+
+      for (let i = 0; i < options2.plugins.length; i++) {
+        expect(options2.plugins[i]).toBe(options1.plugins[i]);
+      }
+    });
+
+    it("should invalidate the plugins when given a fresh options", () => {
+      const opts = makeOpts();
+
+      const options1 = loadConfig(opts).options;
+
+      const options2 = loadConfig({
+        ...opts,
+        plugins: opts.plugins.map(([plg, opt]) => [plg, { ...opt }]),
       }).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
 
@@ -233,14 +265,14 @@ describe("@babel/core config loading", () => {
       }
     });
 
-    it("should invalidate the presets when given a fresh arrays", () => {
+    it("should invalidate the presets when given a fresh options", () => {
       const opts = makeOpts();
 
       const options1 = loadConfig(opts).options;
 
       const options2 = loadConfig({
         ...opts,
-        presets: opts.presets.slice(),
+        presets: opts.presets.map(([plg, opt]) => [plg, { ...opt }]),
       }).options;
       expect(options2.plugins.length).toBe(options1.plugins.length);
 
