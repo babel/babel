@@ -1,4 +1,5 @@
 // @flow
+import * as t from "@babel/types";
 import traverse from "@babel/traverse";
 import type { SourceMap } from "convert-source-map";
 
@@ -8,6 +9,8 @@ import PluginPass from "./plugin-pass";
 import loadBlockHoistPlugin from "./block-hoist-plugin";
 import normalizeOptions from "./normalize-opts";
 import normalizeFile from "./normalize-file";
+
+import { UUID_prefix } from "../config/helpers/config-api";
 
 import generateCode from "./file/generate";
 import type File from "./file/file";
@@ -123,6 +126,59 @@ function transformFile(file: File, pluginPasses: PluginPasses): void {
           );
         }
       }
+    }
+  }
+
+  stripBabelMetadata(file.ast);
+}
+
+/**
+ * Babel 7.x plugins may inject directives and labelled blocks that will be
+ * entirely stripped out at the end of compilation.
+ *
+ * This is an experimental feature of Babel 7.x, so be aware that if you rely
+ * on this it is not guaranteed to exist in future versions.
+ */
+function stripBabelMetadata(ast: BabelNodeFile): void {
+  const toRemove = [];
+  t.traverse(ast, (node: BabelNode, ancestors: t.TraversalAncestors): void => {
+    // Allow plugins to inject directives to flag functions with metadata.
+    // This could for instance be used by Babel's own helper functions so
+    // that we know that a given function was injected by Babel.
+    if (
+      t.isDirective(node) &&
+      t.isDirectiveLiteral(((node: any): BabelNodeDirective).value) &&
+      ((node: any): BabelNodeDirective).value.value.indexOf(UUID_prefix) !== -1
+    ) {
+      toRemove.push(ancestors[ancestors.length - 1]);
+    }
+
+    // Allow plugins to inject blocks that contain actual real code. You could
+    // for instance imagine a plugin injecting:
+    //
+    //   babel_prefix_this_binding: this
+    //
+    // which other plugins running on the code might detect during a rename
+    //
+    //   babel_prefix_this_binding: _this2
+    //
+    // allowing plugins that manipulate the AST to detect if the logical 'this'
+    // within a given function has a different binding than you'd expect.
+    if (
+      t.isLabeledStatement(node) &&
+      ((node: any): BabelNodeLabeledStatement).label.name.indexOf(
+        UUID_prefix,
+      ) === 0
+    ) {
+      toRemove.push(ancestors[ancestors.length - 1]);
+    }
+  });
+
+  for (const ancestor of toRemove.reverse()) {
+    if (typeof ancestor.index === "number") {
+      (ancestor.node: any)[ancestor.key].splice(ancestor.index, 1);
+    } else {
+      (ancestor.node: any)[ancestor.key] = t.emptyStatement();
     }
   }
 }
