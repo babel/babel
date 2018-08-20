@@ -9,6 +9,7 @@
     "src"
   ],
   "devDependencies": {
+    "@babel/plugin-proposal-json-strings": "7.0.0-rc.1",
     "@babel/plugin-transform-new-target": "7.0.0-rc.1",
     "@babel/preset-env": "7.0.0-rc.1",
     "@babel/standalone": "7.0.0-rc.1"

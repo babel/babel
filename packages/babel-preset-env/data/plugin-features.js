@@ -54,7 +54,7 @@ const es = {
   },
 
   "transform-spread": {
-    features: ["spread (...) operator"],
+    features: "spread syntax for iterable objects",
   },
   "transform-parameters": {
     features: ["default function parameters", "rest parameters"],
@@ -90,6 +90,9 @@ const es = {
   "proposal-async-generator-functions": "Asynchronous Iterators",
   "proposal-object-rest-spread": "object rest/spread properties",
   "proposal-unicode-property-regex": "RegExp Unicode Property Escapes",
+
+  "proposal-json-strings": "", // Awaiting mapping in compat-table
+  "proposal-optional-catch-binding": "optional catch binding",
 };
 
 const proposals = require("./shipped-proposals").features;

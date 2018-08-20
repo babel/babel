@@ -206,7 +206,8 @@
     "firefox": "5",
     "safari": "10.1",
     "ie": "9",
-    "ios": "10.3"
+    "ios": "10.3",
+    "electron": "3"
   },
   "es6.array.species": {
     "chrome": "51",
@@ -618,7 +619,8 @@
     "safari": "9",
     "node": "8.10",
     "ios": "9",
-    "opera": "49"
+    "opera": "49",
+    "electron": "3"
   },
   "es7.object.define-setter": {
     "chrome": "62",
@@ -627,7 +629,8 @@
     "safari": "9",
     "node": "8.10",
     "ios": "9",
-    "opera": "49"
+    "opera": "49",
+    "electron": "3"
   },
   "es6.object.define-property": {
     "chrome": "5",
@@ -719,7 +722,8 @@
     "safari": "9",
     "node": "8.10",
     "ios": "9",
-    "opera": "49"
+    "opera": "49",
+    "electron": "3"
   },
   "es7.object.lookup-setter": {
     "chrome": "62",
@@ -727,7 +731,8 @@
     "safari": "9",
     "node": "8.10",
     "ios": "9",
-    "opera": "49"
+    "opera": "49",
+    "electron": "3"
   },
   "es6.object.prevent-extensions": {
     "chrome": "44",
@@ -835,7 +840,8 @@
     "firefox": "58",
     "safari": "11.1",
     "ios": "11.3",
-    "opera": "50"
+    "opera": "50",
+    "electron": "3"
   },
   "es6.reflect.apply": {
     "chrome": "49",
@@ -1052,8 +1058,9 @@
   "es7.symbol.async-iterator": {
     "chrome": "63",
     "firefox": "57",
-    "safari": "tp",
-    "opera": "50"
+    "safari": "12",
+    "opera": "50",
+    "electron": "3"
   },
   "es6.string.anchor": {
     "chrome": "5",
@@ -1430,5 +1437,11 @@
     "ios": "9",
     "opera": "38",
     "electron": "1.2"
+  },
+  "es7.array.flat-map": {
+    "chrome": "69",
+    "firefox": "62",
+    "safari": "12",
+    "opera": "56"
   }
 }

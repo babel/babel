@@ -36,6 +36,8 @@ Using plugins:
   proposal-async-generator-functions { "chrome":"54", "ie":"10", "node":"6" }
   proposal-object-rest-spread { "chrome":"54", "ie":"10", "node":"6" }
   proposal-unicode-property-regex { "chrome":"54", "ie":"10", "node":"6" }
+  proposal-json-strings { "chrome":"54", "ie":"10", "node":"6" }
+  proposal-optional-catch-binding { "chrome":"54", "ie":"10", "node":"6" }
 
 Using polyfills with `entry` option:
 
