@@ -1,11 +1,11 @@
 {
   "name": "@babel/helper-split-export-declaration",
-  "version": "7.0.0-rc.1",
+  "version": "7.0.0-rc.2",
   "description": "",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-split-export-declaration",
   "license": "MIT",
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/types": "7.0.0-rc.1"
+    "@babel/types": "7.0.0-rc.2"
   }
 }

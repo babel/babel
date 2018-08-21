@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-json-strings",
-  "version": "7.0.0-rc.1",
+  "version": "7.0.0-rc.2",
   "description": "Escape U+2028 LINE SEPARATOR and U+2029 PARAGRAPH SEPARATOR in JS strings",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-json-strings",
   "license": "MIT",
@@ -9,14 +9,14 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-rc.1",
-    "@babel/plugin-syntax-json-strings": "7.0.0-rc.1"
+    "@babel/helper-plugin-utils": "7.0.0-rc.2",
+    "@babel/plugin-syntax-json-strings": "7.0.0-rc.2"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-rc.1",
-    "@babel/helper-plugin-test-runner": "7.0.0-rc.1"
+    "@babel/core": "7.0.0-rc.2",
+    "@babel/helper-plugin-test-runner": "7.0.0-rc.2"
   }
 }
