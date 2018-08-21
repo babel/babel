@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/babel/babel-eslint",
   "devDependencies": {
-    "babel-eslint": "^8.0.0",
+    "babel-eslint": "^8.2.6",
     "dedent": "^0.7.0",
     "eslint": "npm:eslint@4.19.1",
     "eslint-config-babel": "^7.0.1",
@@ -46,8 +46,8 @@
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-prettier": "^2.1.2",
     "espree": "^3.5.2",
-    "husky": "^0.14.0",
-    "lint-staged": "^6.1.1",
+    "husky": "^1.0.0-rc.13",
+    "lint-staged": "^7.2.2",
     "mocha": "^5.0.1",
     "prettier": "^1.4.4"
   },
