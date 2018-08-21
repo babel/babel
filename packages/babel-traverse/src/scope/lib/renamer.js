@@ -108,7 +108,7 @@ export default class Renamer {
         path.isClassExpression(),
     );
     if (parentDeclar) {
-      const bindingIds = parentDeclar.getBindingIdentifiers();
+      const bindingIds = parentDeclar.getOuterBindingIdentifiers();
       if (bindingIds[oldName] === binding.identifier) {
         // When we are renaming an exported identifier, we need to ensure that
         // the exported binding keeps the old name.
