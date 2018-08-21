@@ -26,7 +26,9 @@ module.exports = function(code, options) {
       "asyncGenerators",
       "classConstructorCall",
       "classProperties",
-      legacyDecorators ? "decorators-legacy" : "decorators",
+      legacyDecorators
+        ? "decorators-legacy"
+        : ["decorators", { decoratorsBeforeExport: false }],
       "doExpressions",
       "exponentiationOperator",
       "exportDefaultFrom",
@@ -43,7 +45,7 @@ module.exports = function(code, options) {
       "bigInt",
       "optionalCatchBinding",
       "throwExpressions",
-      "pipelineOperator",
+      ["pipelineOperator", { proposal: "minimal" }],
       "nullishCoalescingOperator",
     ],
   };
