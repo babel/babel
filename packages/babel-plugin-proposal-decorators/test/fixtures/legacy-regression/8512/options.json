@@ -1,0 +1,5 @@
+{
+  "plugins": [
+    ["proposal-decorators", { "legacy": true }]
+  ]
+}
