@@ -108,6 +108,14 @@ describe("getTargets", () => {
       });
     });
 
+    it("does not throw on unsupported versions", () => {
+      expect(() => {
+        getTargets({
+          browsers: "node 15.0.0, chrome 1000",
+        });
+      }).not.toThrow();
+    });
+
     it("works with current node version and array type browsers", () => {
       expect(
         getTargets({
