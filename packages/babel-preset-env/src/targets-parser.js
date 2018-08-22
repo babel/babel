@@ -5,6 +5,7 @@ import invariant from "invariant";
 import semver from "semver";
 import {
   semverify,
+  roundToMinor,
   isUnreleasedVersion,
   getLowestUnreleased,
   getValues,
@@ -38,10 +39,12 @@ const browserNameMap = {
   ie: "ie",
   ios_saf: "ios",
   safari: "safari",
+  node: "node",
 };
 
-const isBrowsersQueryValid = (browsers: string | Array<string>): boolean =>
-  typeof browsers === "string" || Array.isArray(browsers);
+export const isBrowsersQueryValid = (
+  browsers: string | Array<string> | Targets,
+): boolean => typeof browsers === "string" || Array.isArray(browsers);
 
 const validateBrowsers = browsers => {
   invariant(
@@ -62,6 +65,23 @@ const mergeBrowsers = (fromQuery: Targets, fromTarget: Targets) => {
     }
     return queryObj;
   }, fromQuery);
+};
+
+const injectCurrentNodeVersion = browser => {
+  return browser.replace(
+    /(current node)|(node current)/,
+    `node ${roundToMinor(process.versions.node)}`,
+  );
+};
+
+const normalizeBrowsers = browsers => {
+  if (!browsers) return browsers;
+
+  if (typeof browsers === "string") {
+    return injectCurrentNodeVersion(browsers);
+  }
+
+  return browsers.map(injectCurrentNodeVersion);
 };
 
 const getLowestVersions = (browsers: Array<string>): Targets => {
@@ -173,8 +193,13 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
   }
 
   // Parse browsers target via browserslist
-  const browsersquery = validateBrowsers(targets.browsers);
-  if (targets.esmodules || !options.ignoreBrowserslistConfig) {
+  let browsersquery = validateBrowsers(targets.browsers);
+  browsersquery = normalizeBrowsers(targets.browsers);
+
+  const shouldParseBrowsers = !!targets.browsers;
+  const shouldSearchForConfig =
+    !options.ignoreBrowserslistConfig && !Object.keys(targets).length;
+  if (shouldParseBrowsers || shouldSearchForConfig) {
     browserslist.defaults = objectToBrowserslist(targets);
 
     const browsers = browserslist(browsersquery, { path: options.configPath });

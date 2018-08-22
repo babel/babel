@@ -2,9 +2,7 @@
   "presets": [
     ["../../../../lib", {
       "modules": false,
-      "targets": {
-        "node": "4.0.0"
-      },
+      "targets": "node 4.0.0",
       "useBuiltIns": "usage",
       "shippedProposals": true
     }]
