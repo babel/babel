@@ -1,5 +1,6 @@
 import browserslist from "browserslist";
 import getTargets from "../lib/targets-parser";
+import { roundToMinor } from "../src/utils";
 
 describe("getTargets", () => {
   it("parses", () => {
@@ -83,6 +84,39 @@ describe("getTargets", () => {
         }),
       ).toEqual({
         safari: "tp",
+      });
+    });
+
+    it("works with node versions", () => {
+      expect(
+        getTargets({
+          browsers: "node 8.5",
+        }),
+      ).toEqual({
+        node: "8.5.0",
+      });
+    });
+
+    it("works with current node version and string type browsers", () => {
+      expect(
+        getTargets({
+          browsers: "node current, chrome 55",
+        }),
+      ).toEqual({
+        node: roundToMinor(process.versions.node),
+        chrome: "55.0.0",
+      });
+    });
+
+    it("works with current node version and array type browsers", () => {
+      expect(
+        getTargets({
+          browsers: ["ie 11", "node current", "chrome 55"],
+        }),
+      ).toEqual({
+        node: roundToMinor(process.versions.node),
+        chrome: "55.0.0",
+        ie: "11.0.0",
       });
     });
 
