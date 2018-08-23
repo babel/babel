@@ -30,10 +30,6 @@ export const semverify = (version: string | number): string => {
   return split.join(".");
 };
 
-export const roundToMinor = (version: string): string => {
-  return `${semver.major(version)}.${semver.minor(version)}.0`;
-};
-
 export const getValues = (object: Object): Array<any> =>
   Object.keys(object).map(key => object[key]);
 

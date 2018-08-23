@@ -5,7 +5,6 @@ import invariant from "invariant";
 import semver from "semver";
 import {
   semverify,
-  roundToMinor,
   isUnreleasedVersion,
   getLowestUnreleased,
   getValues,
@@ -65,23 +64,6 @@ const mergeBrowsers = (fromQuery: Targets, fromTarget: Targets) => {
     }
     return queryObj;
   }, fromQuery);
-};
-
-const injectCurrentNodeVersion = browser => {
-  return browser.replace(
-    /(current node)|(node current)/,
-    `node ${roundToMinor(process.versions.node)}`,
-  );
-};
-
-const normalizeBrowsers = browsers => {
-  if (!browsers) return browsers;
-
-  if (typeof browsers === "string") {
-    return injectCurrentNodeVersion(browsers);
-  }
-
-  return browsers.map(injectCurrentNodeVersion);
 };
 
 const getLowestVersions = (browsers: Array<string>): Targets => {
@@ -193,9 +175,7 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
   }
 
   // Parse browsers target via browserslist
-  let browsersquery = validateBrowsers(targets.browsers);
-  browsersquery = normalizeBrowsers(targets.browsers);
-
+  const browsersquery = validateBrowsers(targets.browsers);
   const shouldParseBrowsers = !!targets.browsers;
   const shouldSearchForConfig =
     !options.ignoreBrowserslistConfig && !Object.keys(targets).length;
