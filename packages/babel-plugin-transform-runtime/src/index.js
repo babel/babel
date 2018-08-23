@@ -107,7 +107,6 @@ export default declare((api, options, dirname) => {
     );
   }
 
-  const helpersDir = useESModules ? "helpers/esm" : "helpers";
   const injectCoreJS2 = `${corejsVersion}` === "2";
   const moduleName = injectCoreJS2
     ? "@babel/runtime-corejs2"
@@ -144,6 +143,11 @@ export default declare((api, options, dirname) => {
           // when other things used them to import.
           const blockHoist =
             isInteropHelper && !isModule(file.path) ? 4 : undefined;
+
+          const helpersDir =
+            useESModules && file.path.node.sourceType === "module"
+              ? "helpers/esm"
+              : "helpers";
 
           return this.addDefaultImport(
             `${modulePath}/${helpersDir}/${name}`,
