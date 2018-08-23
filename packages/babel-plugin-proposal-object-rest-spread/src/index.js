@@ -96,14 +96,14 @@ export default declare((api, opts) => {
     const bindings = path.getOuterBindingIdentifierPaths();
 
     Object.keys(bindings).forEach(bindingName => {
-      const binding = bindings[bindingName].parentPath;
+      const bindingParentPath = bindings[bindingName].parentPath;
       if (
         path.scope.getBinding(bindingName).references > 1 ||
-        !binding.isObjectProperty()
+        !bindingParentPath.isObjectProperty()
       ) {
         return;
       }
-      binding.remove();
+      bindingParentPath.remove();
     });
   }
 
