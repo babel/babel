@@ -1,0 +1,3 @@
+{
+  "plugins": [["transform-runtime", { "useESModules": true }], "transform-classes"]
+}
