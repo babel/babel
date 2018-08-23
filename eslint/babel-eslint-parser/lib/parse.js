@@ -47,6 +47,7 @@ module.exports = function(code, options) {
       "throwExpressions",
       ["pipelineOperator", { proposal: "minimal" }],
       "nullishCoalescingOperator",
+      "logicalAssignment",
     ],
   };
 
