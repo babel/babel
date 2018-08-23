@@ -1,6 +1,9 @@
 .DS_Store
 /node_modules
 /packages/*/node_modules
+/packages/*/LICENSE
+!/packages/babel-parser/LICENSE
+!/packages/babel-plugin-transform-object-assign/LICENSE
 *.log
 *.cache
 /build
