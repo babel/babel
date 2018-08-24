@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-stage-2",
-  "version": "7.0.0-rc.2",
+  "version": "7.0.0-rc.3",
   "description": "Babel preset for stage 2 plugins",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
