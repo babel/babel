@@ -5,6 +5,7 @@ import browserslist from "browserslist";
 import builtInsList from "../data/built-ins.json";
 import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
+import { isBrowsersQueryValid } from "./targets-parser";
 import { getValues, findSuggestion } from "./utils";
 import pluginsList from "../data/plugins.json";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
@@ -90,6 +91,16 @@ export const checkDuplicateIncludeExcludes = (
     )}' were found in both the "include" and
     "exclude" options.`,
   );
+};
+
+const normalizeTargets = (targets: any): Targets => {
+  // TODO: Allow to use only query or strings as a targets from next breaking change.
+  if (isBrowsersQueryValid(targets)) {
+    return { browsers: targets };
+  }
+  return {
+    ...targets,
+  };
 };
 
 export const validateConfigPathOption = (
@@ -203,9 +214,7 @@ export default function normalizeOptions(opts: Options) {
       false,
     ),
     spec: validateBoolOption(TopLevelOptions.spec, opts.spec, false),
-    targets: {
-      ...opts.targets,
-    },
+    targets: normalizeTargets(opts.targets),
     useBuiltIns: validateUseBuiltInsOption(opts.useBuiltIns),
   };
 }

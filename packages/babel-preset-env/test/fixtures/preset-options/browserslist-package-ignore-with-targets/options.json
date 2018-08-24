@@ -3,8 +3,7 @@
     ["../../../../lib", {
       "configPath": "../fixtures/preset-options/browserslist-package-ignore-with-array",
       "targets": {
-        "chrome": 55,
-        "browsers": []
+        "chrome": 55
       },
       "modules": false
     }]
