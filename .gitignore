@@ -17,6 +17,8 @@ package-lock.json
 /packages/babel-runtime/helpers/*.js
 /packages/babel-register/test/.babel
 /packages/*/lib
+/packages/*/LICENSE
+!/packages/babel-plugin-transform-object-assign/LICENSE
 _babel.github.io
 /tests/.browser-build.js
 .nyc_output
