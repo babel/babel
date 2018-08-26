@@ -47,6 +47,7 @@ export default {
     },
 
     Symbol: {
+      asyncIterator: "symbol/async-iterator",
       for: "symbol/for",
       hasInstance: "symbol/has-instance",
       isConcatSpreadable: "symbol/is-concat-spreadable",
