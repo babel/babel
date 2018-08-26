@@ -10,8 +10,8 @@ export default {
     setImmediate: "set-immediate",
     clearImmediate: "clear-immediate",
     asap: "asap",
-    //parseFloat: "parse-float", // temporary disabled
-    //parseInt: "parse-int" // temporary disabled
+    parseFloat: "parse-float",
+    parseInt: "parse-int",
   },
 
   methods: {
@@ -27,7 +27,7 @@ export default {
       from: "array/from",
       includes: "array/includes",
       indexOf: "array/index-of",
-      //isArray: "array/is-array", // temporary disabled
+      isArray: "array/is-array",
       join: "array/join",
       keys: "array/keys",
       lastIndexOf: "array/last-index-of",
@@ -169,7 +169,7 @@ export default {
     },
 
     Date: {
-      //now: "date/now" // temporary disabled
+      now: "date/now",
     },
 
     Function: {
