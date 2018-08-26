@@ -91,14 +91,18 @@ export default function normalizeFile(
   });
 }
 
-function parser(pluginPasses, options, code) {
+function parser(
+  pluginPasses: PluginPasses,
+  { parserOpts, highlightCode = true, filename = "unknown" }: Object,
+  code: string,
+) {
   try {
     const results = [];
     for (const plugins of pluginPasses) {
       for (const plugin of plugins) {
         const { parserOverride } = plugin;
         if (parserOverride) {
-          const ast = parserOverride(code, options.parserOpts, parse);
+          const ast = parserOverride(code, parserOpts, parse);
 
           if (ast !== undefined) results.push(ast);
         }
@@ -106,7 +110,7 @@ function parser(pluginPasses, options, code) {
     }
 
     if (results.length === 0) {
-      return parse(code, options.parserOpts);
+      return parse(code, parserOpts);
     } else if (results.length === 1) {
       if (typeof results[0].then === "function") {
         throw new Error(
@@ -136,15 +140,16 @@ function parser(pluginPasses, options, code) {
             column: loc.column + 1,
           },
         },
-        options,
+        {
+          highlightCode,
+        },
       );
       if (missingPlugin) {
         err.message =
-          `${options.filename || "unknown"}: ` +
+          `${filename}: ` +
           generateMissingPluginMessage(missingPlugin[0], loc, codeFrame);
       } else {
-        err.message =
-          `${options.filename || "unknown"}: ${err.message}\n\n` + codeFrame;
+        err.message = `${filename}: ${err.message}\n\n` + codeFrame;
       }
       err.code = "BABEL_PARSE_ERROR";
     }
