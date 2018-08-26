@@ -365,7 +365,7 @@ function throwUnknownError(loc: OptionPath) {
     // eslint-disable-next-line max-len
     const unknownOptErr = `Unknown option: ${msg(
       loc,
-    )}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
+    )}. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.`;
 
     throw new ReferenceError(unknownOptErr);
   }
