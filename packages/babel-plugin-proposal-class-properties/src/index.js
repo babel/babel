@@ -366,13 +366,18 @@ export default declare((api, options) => {
     });
 
     const staticNodesToAdd = [
-      t.expressionStatement(
-        t.assignmentExpression(
-          "=",
-          t.memberExpression(ref, privateId),
-          value || scope.buildUndefinedNode(),
-        ),
-      ),
+      template.statement`
+        Object.defineProperty(OBJ, KEY, {
+          value: VALUE,
+          enumerable: false,
+          configurable: false,
+          writable: true
+        });
+      `({
+        OBJ: ref,
+        KEY: t.stringLiteral(privateId.name),
+        VALUE: value || scope.buildUndefinedNode(),
+      }),
     ];
 
     return [staticNodesToAdd];

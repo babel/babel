@@ -9,4 +9,9 @@ class Foo {
 
 }
 
-Foo._bar = "foo";
+Object.defineProperty(Foo, "_bar", {
+  value: "foo",
+  enumerable: false,
+  configurable: false,
+  writable: true
+});

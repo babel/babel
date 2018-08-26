@@ -6,8 +6,13 @@ export default (param => {
       return param;
     }
 
-  }, _class._props = {
-    prop1: 'prop1',
-    prop2: 'prop2'
-  }, _temp;
+  }, Object.defineProperty(_class, "_props", {
+    value: {
+      prop1: 'prop1',
+      prop2: 'prop2'
+    },
+    enumerable: false,
+    configurable: false,
+    writable: true
+  }), _temp;
 });

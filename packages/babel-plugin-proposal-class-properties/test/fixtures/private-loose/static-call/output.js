@@ -16,6 +16,11 @@ function () {
   return Foo;
 }();
 
-Foo._foo = function (x) {
-  return x;
-};
+Object.defineProperty(Foo, "_foo", {
+  value: function (x) {
+    return x;
+  },
+  enumerable: false,
+  configurable: false,
+  writable: true
+});

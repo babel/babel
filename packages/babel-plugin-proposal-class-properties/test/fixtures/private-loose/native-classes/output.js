@@ -16,7 +16,12 @@ class Foo {
 
 }
 
-Foo._foo = "foo";
+Object.defineProperty(Foo, "_foo", {
+  value: "foo",
+  enumerable: false,
+  configurable: false,
+  writable: true
+});
 
 var _bar = babelHelpers.classPrivateFieldLooseKey("bar");
 

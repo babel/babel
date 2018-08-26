@@ -25,7 +25,12 @@ function classFactory() {
       return babelHelpers.classStaticPrivateFieldLooseBase(Foo, _class)._bar;
     }
 
-  }, _foo = babelHelpers.classPrivateFieldLooseKey("foo"), _class._bar = "bar", _temp;
+  }, _foo = babelHelpers.classPrivateFieldLooseKey("foo"), Object.defineProperty(_class, "_bar", {
+    value: "bar",
+    enumerable: false,
+    configurable: false,
+    writable: true
+  }), _temp;
 }
 
 var Foo1 = classFactory();

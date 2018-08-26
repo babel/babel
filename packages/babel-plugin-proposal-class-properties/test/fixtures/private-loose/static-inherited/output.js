@@ -17,7 +17,12 @@ class Base {
 
 }
 
-Base._foo = 1;
+Object.defineProperty(Base, "_foo", {
+  value: 1,
+  enumerable: false,
+  configurable: false,
+  writable: true
+});
 
 class Sub1 extends Base {
   static update(val) {
@@ -26,6 +31,11 @@ class Sub1 extends Base {
 
 }
 
-Sub1._foo2 = 2;
+Object.defineProperty(Sub1, "_foo2", {
+  value: 2,
+  enumerable: false,
+  configurable: false,
+  writable: true
+});
 
 class Sub2 extends Base {}
