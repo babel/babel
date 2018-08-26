@@ -125,6 +125,10 @@ export default function register(opts?: Object = {}) {
 
   transformOpts = {
     ...opts,
+    caller: {
+      name: "@babel/register",
+      ...(opts.caller || {}),
+    },
   };
 
   let { cwd = "." } = transformOpts;

@@ -28,7 +28,7 @@ export default function loadPrivatePartialConfig(
 
   const args = inputOpts ? validate("arguments", inputOpts) : {};
 
-  const { envName = getEnv(), cwd = ".", root: rootDir = "." } = args;
+  const { envName = getEnv(), cwd = ".", root: rootDir = ".", caller } = args;
   const absoluteCwd = path.resolve(cwd);
   const absoluteRootDir = path.resolve(absoluteCwd, rootDir);
 
@@ -40,6 +40,7 @@ export default function loadPrivatePartialConfig(
     cwd: absoluteCwd,
     root: absoluteRootDir,
     envName,
+    caller,
   };
 
   const configChain = buildRootChain(args, context);

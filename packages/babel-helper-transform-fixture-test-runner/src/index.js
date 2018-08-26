@@ -6,6 +6,7 @@ import sourceMap from "source-map";
 import { codeFrameColumns } from "@babel/code-frame";
 import defaults from "lodash/defaults";
 import includes from "lodash/includes";
+import escapeRegExp from "lodash/escapeRegExp";
 import * as helpers from "./helpers";
 import extend from "lodash/extend";
 import merge from "lodash/merge";
@@ -180,7 +181,7 @@ function run(task) {
   function getOpts(self) {
     const newOpts = merge(
       {
-        cwd: path.dirname(self.filename),
+        cwd: path.dirname(self.loc),
         filename: self.loc,
         filenameRelative: self.filename,
         sourceFileName: self.filename,
@@ -235,10 +236,15 @@ function run(task) {
   const expectCode = expected.code;
   if (!execCode || actualCode) {
     result = babel.transform(actualCode, getOpts(actual));
+    const expectedCode = result.code.replace(
+      escapeRegExp(path.resolve(__dirname, "../../../")),
+      "<CWD>",
+    );
+
     checkDuplicatedNodes(result.ast);
     if (
       !expected.code &&
-      result.code &&
+      expectedCode &&
       !opts.throws &&
       fs.statSync(path.dirname(expected.loc)).isDirectory() &&
       !process.env.CI
@@ -249,7 +255,7 @@ function run(task) {
       );
 
       console.log(`New test file created: ${expectedFile}`);
-      fs.writeFileSync(expectedFile, `${result.code}\n`);
+      fs.writeFileSync(expectedFile, `${expectedCode}\n`);
 
       if (expected.loc !== expectedFile) {
         try {
@@ -257,7 +263,7 @@ function run(task) {
         } catch (e) {}
       }
     } else {
-      actualCode = result.code.trim();
+      actualCode = expectedCode.trim();
       try {
         expect(actualCode).toEqualFile({
           filename: expected.loc,
@@ -267,7 +273,7 @@ function run(task) {
         if (!process.env.OVERWRITE) throw e;
 
         console.log(`Updated test file: ${expected.loc}`);
-        fs.writeFileSync(expected.loc, `${result.code}\n`);
+        fs.writeFileSync(expected.loc, `${expectedCode}\n`);
       }
 
       if (actualCode) {

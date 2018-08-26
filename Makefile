@@ -1,5 +1,5 @@
 MAKEFLAGS = -j1
-FLOW_COMMIT = 395e045c18d537fcbbc552a96ef2cdcd70b4ab52
+FLOW_COMMIT = bea8b83f50f597454941d2a7ecef6e93a881e576
 TEST262_COMMIT = f90a52b39609a620c0854e0bd0b3a906c930fd17
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
@@ -31,7 +31,7 @@ build-preset-env-standalone:
 build-dist: build
 	cd packages/babel-polyfill; \
 	scripts/build-dist.sh
-	cd packages/babel-runtime; \
+	cd packages/babel-plugin-transform-runtime; \
 	node scripts/build-dist.js
 
 watch: clean clean-lib
@@ -104,13 +104,18 @@ test-test262-ci: bootstrap test-test262
 test-test262-update-whitelist:
 	node scripts/tests/test262/run_babel_parser_test262.js --update-whitelist
 
+clone-license:
+	./scripts/clone-license.sh
+
 publish:
 	git pull --rebase
 	make clean-lib
 	rm -rf packages/babel-runtime/helpers
-	rm -rf packages/babel-runtime/core-js
+	rm -rf packages/babel-runtime-corejs2/helpers
+	rm -rf packages/babel-runtime-corejs2/core-js
 	BABEL_ENV=production make build-dist
 	make test
+	make clone-license
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
 	# --only-explicit-updates
 	./node_modules/.bin/lerna publish --force-publish=* --exact --skip-temp-tag
@@ -120,7 +125,7 @@ bootstrap: clean-all
 	yarn --ignore-engines
 	./node_modules/.bin/lerna bootstrap -- --ignore-engines
 	make build
-	cd packages/babel-runtime; \
+	cd packages/babel-plugin-transform-runtime; \
 	node scripts/build-dist.js
 
 clean-lib:

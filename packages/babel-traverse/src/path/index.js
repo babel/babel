@@ -1,4 +1,4 @@
-import type Hub from "../hub";
+import type { HubInterface } from "../hub";
 import type TraversalContext from "../context";
 import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
@@ -24,7 +24,7 @@ import * as NodePath_comments from "./comments";
 const debug = buildDebug("babel");
 
 export default class NodePath {
-  constructor(hub: Hub, parent: Object) {
+  constructor(hub: HubInterface, parent: Object) {
     this.parent = parent;
     this.hub = hub;
     this.contexts = [];
@@ -49,7 +49,7 @@ export default class NodePath {
   }
 
   parent: Object;
-  hub: Hub;
+  hub: HubInterface;
   contexts: Array<TraversalContext>;
   data: Object;
   shouldSkip: boolean;
@@ -121,7 +121,7 @@ export default class NodePath {
   }
 
   buildCodeFrameError(msg: string, Error: typeof Error = SyntaxError): Error {
-    return this.hub.file.buildCodeFrameError(this.node, msg, Error);
+    return this.hub.buildError(this.node, msg, Error);
   }
 
   traverse(visitor: Object, state?: any) {

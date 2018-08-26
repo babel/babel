@@ -683,8 +683,6 @@ language/statements/while/labelled-fn-stmt.js(default)
 language/statements/with/decl-async-fun.js(default)
 language/statements/with/decl-async-gen.js(default)
 language/statements/with/labelled-fn-stmt.js(default)
-language/white-space/mongolian-vowel-separator.js(default)
-language/white-space/mongolian-vowel-separator.js(strict mode)
 
 language/identifiers/unicode-escape-nls-err.js(default)
 language/identifiers/unicode-escape-nls-err.js(strict mode)

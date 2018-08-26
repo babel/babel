@@ -16,7 +16,7 @@ import {
   lineBreak,
   lineBreakG,
   isNewLine,
-  nonASCIIwhitespace,
+  isWhitespace,
 } from "../util/whitespace";
 import State from "./state";
 
@@ -331,11 +331,6 @@ export default class Tokenizer extends LocationParser {
     loop: while (this.state.pos < this.input.length) {
       const ch = this.input.charCodeAt(this.state.pos);
       switch (ch) {
-        case charCodes.space:
-        case charCodes.nonBreakingSpace:
-          ++this.state.pos;
-          break;
-
         case charCodes.carriageReturn:
           if (
             this.input.charCodeAt(this.state.pos + 1) === charCodes.lineFeed
@@ -367,11 +362,7 @@ export default class Tokenizer extends LocationParser {
           break;
 
         default:
-          if (
-            (ch > charCodes.backSpace && ch < charCodes.shiftOut) ||
-            (ch >= charCodes.oghamSpaceMark &&
-              nonASCIIwhitespace.test(String.fromCharCode(ch)))
-          ) {
+          if (isWhitespace(ch)) {
             ++this.state.pos;
           } else {
             break loop;

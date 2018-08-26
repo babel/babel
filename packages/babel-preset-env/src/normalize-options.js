@@ -5,6 +5,7 @@ import browserslist from "browserslist";
 import builtInsList from "../data/built-ins.json";
 import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
+import { isBrowsersQueryValid } from "./targets-parser";
 import { getValues, findSuggestion } from "./utils";
 import pluginsList from "../data/plugins.json";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
@@ -92,6 +93,16 @@ export const checkDuplicateIncludeExcludes = (
   );
 };
 
+const normalizeTargets = (targets: any): Targets => {
+  // TODO: Allow to use only query or strings as a targets from next breaking change.
+  if (isBrowsersQueryValid(targets)) {
+    return { browsers: targets };
+  }
+  return {
+    ...targets,
+  };
+};
+
 export const validateConfigPathOption = (
   configPath: string = process.cwd(),
 ) => {
@@ -128,13 +139,16 @@ export const validateIgnoreBrowserslistConfig = (
   );
 
 export const validateModulesOption = (
-  modulesOpt: ModuleOption = ModulesOption.commonjs,
+  modulesOpt: ModuleOption = ModulesOption.auto,
 ) => {
   invariant(
     ModulesOption[modulesOpt] ||
       ModulesOption[modulesOpt] === ModulesOption.false,
-    `Invalid Option: The 'modules' option must be either 'false' to indicate no modules, or a
-    module type which can be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'.`,
+    `Invalid Option: The 'modules' option must be one of \n` +
+      ` - 'false' to indicate no module processing\n` +
+      ` - a specific module type: 'commonjs', 'amd', 'umd', 'systemjs'` +
+      ` - 'auto' (default) which will automatically select 'false' if the current\n` +
+      `   process is known to support ES module syntax, or "commonjs" otherwise\n`,
   );
 
   return modulesOpt;
@@ -200,9 +214,7 @@ export default function normalizeOptions(opts: Options) {
       false,
     ),
     spec: validateBoolOption(TopLevelOptions.spec, opts.spec, false),
-    targets: {
-      ...opts.targets,
-    },
+    targets: normalizeTargets(opts.targets),
     useBuiltIns: validateUseBuiltInsOption(opts.useBuiltIns),
   };
 }

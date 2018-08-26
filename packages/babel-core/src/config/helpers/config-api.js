@@ -2,7 +2,13 @@
 
 import semver from "semver";
 import { version as coreVersion } from "../../";
-import type { CacheConfigurator, SimpleCacheConfigurator } from "../caching";
+import {
+  assertSimpleType,
+  type CacheConfigurator,
+  type SimpleCacheConfigurator,
+} from "../caching";
+
+import type { CallerMetadata } from "../validation/options";
 
 type EnvFunction = {
   (): string,
@@ -20,12 +26,14 @@ export type PluginAPI = {
 };
 
 export default function makeAPI(
-  cache: CacheConfigurator<{ envName: string }>,
+  cache: CacheConfigurator<{ envName: string, caller: CallerMetadata | void }>,
 ): PluginAPI {
   const env: any = value =>
     cache.using(data => {
       if (typeof value === "undefined") return data.envName;
-      if (typeof value === "function") return value(data.envName);
+      if (typeof value === "function") {
+        return assertSimpleType(value(data.envName));
+      }
       if (!Array.isArray(value)) value = [value];
 
       return value.some(entry => {
@@ -36,12 +44,16 @@ export default function makeAPI(
       });
     });
 
+  const caller: any = cb =>
+    cache.using(data => assertSimpleType(cb(data.caller)));
+
   return {
     version: coreVersion,
     cache: cache.simple(),
     // Expose ".env()" so people can easily get the same env that we expose using the "env" key.
     env,
     async: () => false,
+    caller,
     assertVersion,
   };
 }

@@ -86,6 +86,47 @@ describe("getTargets", () => {
       });
     });
 
+    it("works with node versions", () => {
+      expect(
+        getTargets({
+          browsers: "node 8.5",
+        }),
+      ).toEqual({
+        node: "8.5.0",
+      });
+    });
+
+    it("works with current node version and string type browsers", () => {
+      expect(
+        getTargets({
+          browsers: "current node, chrome 55",
+        }),
+      ).toEqual({
+        node: process.versions.node,
+        chrome: "55.0.0",
+      });
+    });
+
+    it("does throws on unsupported versions", () => {
+      expect(() => {
+        getTargets({
+          browsers: "node 15.0.0, chrome 1000",
+        });
+      }).toThrow();
+    });
+
+    it("works with current node version and array type browsers", () => {
+      expect(
+        getTargets({
+          browsers: ["ie 11", "current node", "chrome 55"],
+        }),
+      ).toEqual({
+        node: process.versions.node,
+        chrome: "55.0.0",
+        ie: "11.0.0",
+      });
+    });
+
     it("prefers released version over TP", () => {
       expect(
         getTargets({

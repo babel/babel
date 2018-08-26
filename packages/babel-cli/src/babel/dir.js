@@ -89,7 +89,7 @@ export default async function({ cliOptions, babelOptions }) {
 
     const stat = fs.statSync(filenameOrDir);
 
-    if (stat.isDirectory(filenameOrDir)) {
+    if (stat.isDirectory()) {
       const dirname = filenameOrDir;
 
       let count = 0;

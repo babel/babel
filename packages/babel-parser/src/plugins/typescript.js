@@ -1535,6 +1535,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         cls.abstract = true;
         return cls;
       }
+
+      // export default interface allowed in:
+      // https://github.com/Microsoft/TypeScript/pull/16040
+      if (this.state.value === "interface") {
+        const result = this.tsParseDeclaration(
+          this.startNode(),
+          this.state.value,
+          true,
+        );
+
+        if (result) return result;
+      }
+
       return super.parseExportDefaultExpression();
     }
 

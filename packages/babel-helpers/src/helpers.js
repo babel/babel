@@ -1,9 +1,16 @@
+// @flow
+
 import template from "@babel/template";
 
-const helpers = {};
+const helpers = Object.create(null);
 export default helpers;
 
-helpers.typeof = () => template.program.ast`
+const helper = (minVersion: string) => tpl => ({
+  minVersion,
+  ast: () => template.program.ast(tpl),
+});
+
+helpers.typeof = helper("7.0.0-beta.0")`
   export default function _typeof(obj) {
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
       _typeof = function (obj) { return typeof obj; };
@@ -19,7 +26,7 @@ helpers.typeof = () => template.program.ast`
   }
 `;
 
-helpers.jsx = () => template.program.ast`
+helpers.jsx = helper("7.0.0-beta.0")`
   var REACT_ELEMENT_TYPE;
 
   export default function _createRawReactElement(type, props, key, children) {
@@ -70,7 +77,7 @@ helpers.jsx = () => template.program.ast`
   }
 `;
 
-helpers.asyncIterator = () => template.program.ast`
+helpers.asyncIterator = helper("7.0.0-beta.0")`
   export default function _asyncIterator(iterable) {
     var method
     if (typeof Symbol === "function") {
@@ -87,13 +94,13 @@ helpers.asyncIterator = () => template.program.ast`
   }
 `;
 
-helpers.AwaitValue = () => template.program.ast`
+helpers.AwaitValue = helper("7.0.0-beta.0")`
   export default function _AwaitValue(value) {
     this.wrapped = value;
   }
 `;
 
-helpers.AsyncGenerator = () => template.program.ast`
+helpers.AsyncGenerator = helper("7.0.0-beta.0")`
   import AwaitValue from "AwaitValue";
 
   export default function AsyncGenerator(gen) {
@@ -177,7 +184,7 @@ helpers.AsyncGenerator = () => template.program.ast`
   AsyncGenerator.prototype.return = function (arg) { return this._invoke("return", arg); };
 `;
 
-helpers.wrapAsyncGenerator = () => template.program.ast`
+helpers.wrapAsyncGenerator = helper("7.0.0-beta.0")`
   import AsyncGenerator from "AsyncGenerator";
 
   export default function _wrapAsyncGenerator(fn) {
@@ -187,7 +194,7 @@ helpers.wrapAsyncGenerator = () => template.program.ast`
   }
 `;
 
-helpers.awaitAsyncGenerator = () => template.program.ast`
+helpers.awaitAsyncGenerator = helper("7.0.0-beta.0")`
   import AwaitValue from "AwaitValue";
 
   export default function _awaitAsyncGenerator(value) {
@@ -195,7 +202,7 @@ helpers.awaitAsyncGenerator = () => template.program.ast`
   }
 `;
 
-helpers.asyncGeneratorDelegate = () => template.program.ast`
+helpers.asyncGeneratorDelegate = helper("7.0.0-beta.0")`
   export default function _asyncGeneratorDelegate(inner, awaitWrap) {
     var iter = {}, waiting = false;
 
@@ -237,7 +244,7 @@ helpers.asyncGeneratorDelegate = () => template.program.ast`
   }
 `;
 
-helpers.asyncToGenerator = () => template.program.ast`
+helpers.asyncToGenerator = helper("7.0.0-beta.0")`
   function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
       var info = gen[key](arg);
@@ -272,7 +279,7 @@ helpers.asyncToGenerator = () => template.program.ast`
   }
 `;
 
-helpers.classCallCheck = () => template.program.ast`
+helpers.classCallCheck = helper("7.0.0-beta.0")`
   export default function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -280,7 +287,7 @@ helpers.classCallCheck = () => template.program.ast`
   }
 `;
 
-helpers.createClass = () => template.program.ast`
+helpers.createClass = helper("7.0.0-beta.0")`
   function _defineProperties(target, props) {
     for (var i = 0; i < props.length; i ++) {
       var descriptor = props[i];
@@ -298,7 +305,7 @@ helpers.createClass = () => template.program.ast`
   }
 `;
 
-helpers.defineEnumerableProperties = () => template.program.ast`
+helpers.defineEnumerableProperties = helper("7.0.0-beta.0")`
   export default function _defineEnumerableProperties(obj, descs) {
     for (var key in descs) {
       var desc = descs[key];
@@ -324,7 +331,7 @@ helpers.defineEnumerableProperties = () => template.program.ast`
   }
 `;
 
-helpers.defaults = () => template.program.ast`
+helpers.defaults = helper("7.0.0-beta.0")`
   export default function _defaults(obj, defaults) {
     var keys = Object.getOwnPropertyNames(defaults);
     for (var i = 0; i < keys.length; i++) {
@@ -338,7 +345,7 @@ helpers.defaults = () => template.program.ast`
   }
 `;
 
-helpers.defineProperty = () => template.program.ast`
+helpers.defineProperty = helper("7.0.0-beta.0")`
   export default function _defineProperty(obj, key, value) {
     // Shortcircuit the slow defineProperty path when possible.
     // We are trying to avoid issues where setters defined on the
@@ -359,7 +366,7 @@ helpers.defineProperty = () => template.program.ast`
   }
 `;
 
-helpers.extends = () => template.program.ast`
+helpers.extends = helper("7.0.0-beta.0")`
   export default function _extends() {
     _extends = Object.assign || function (target) {
       for (var i = 1; i < arguments.length; i++) {
@@ -377,7 +384,7 @@ helpers.extends = () => template.program.ast`
   }
 `;
 
-helpers.objectSpread = () => template.program.ast`
+helpers.objectSpread = helper("7.0.0-beta.0")`
   import defineProperty from "defineProperty";
 
   export default function _objectSpread(target) {
@@ -397,7 +404,7 @@ helpers.objectSpread = () => template.program.ast`
   }
 `;
 
-helpers.inherits = () => template.program.ast`
+helpers.inherits = helper("7.0.0-beta.0")`
   import setPrototypeOf from "setPrototypeOf";
 
   export default function _inherits(subClass, superClass) {
@@ -415,7 +422,7 @@ helpers.inherits = () => template.program.ast`
   }
 `;
 
-helpers.inheritsLoose = () => template.program.ast`
+helpers.inheritsLoose = helper("7.0.0-beta.0")`
   export default function _inheritsLoose(subClass, superClass) {
     subClass.prototype = Object.create(superClass.prototype);
     subClass.prototype.constructor = subClass;
@@ -423,7 +430,7 @@ helpers.inheritsLoose = () => template.program.ast`
   }
 `;
 
-helpers.getPrototypeOf = () => template.program.ast`
+helpers.getPrototypeOf = helper("7.0.0-beta.0")`
   export default function _getPrototypeOf(o) {
     _getPrototypeOf = Object.setPrototypeOf
       ? Object.getPrototypeOf
@@ -434,7 +441,7 @@ helpers.getPrototypeOf = () => template.program.ast`
   }
 `;
 
-helpers.setPrototypeOf = () => template.program.ast`
+helpers.setPrototypeOf = helper("7.0.0-beta.0")`
   export default function _setPrototypeOf(o, p) {
     _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
@@ -444,7 +451,7 @@ helpers.setPrototypeOf = () => template.program.ast`
   }
 `;
 
-helpers.construct = () => template.program.ast`
+helpers.construct = helper("7.0.0-beta.0")`
   import setPrototypeOf from "setPrototypeOf";
 
   function isNativeReflectConstruct() {
@@ -476,6 +483,8 @@ helpers.construct = () => template.program.ast`
     if (isNativeReflectConstruct()) {
       _construct = Reflect.construct;
     } else {
+      // NOTE: If Parent !== Class, the correct __proto__ is set *after*
+      //       calling the constructor.
       _construct = function _construct(Parent, args, Class) {
         var a = [null];
         a.push.apply(a, args);
@@ -491,17 +500,25 @@ helpers.construct = () => template.program.ast`
   }
 `;
 
+helpers.isNativeFunction = helper("7.0.0-beta.0")`
+  export default function _isNativeFunction(fn) {
+    // Note: This function returns "true" for core-js functions.
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+`;
+
 // Based on https://github.com/WebReflection/babel-plugin-transform-builtin-classes
-helpers.wrapNativeSuper = () => template.program.ast`
+helpers.wrapNativeSuper = helper("7.0.0-beta.0")`
   import getPrototypeOf from "getPrototypeOf";
   import setPrototypeOf from "setPrototypeOf";
+  import isNativeFunction from "isNativeFunction";
   import construct from "construct";
 
   export default function _wrapNativeSuper(Class) {
     var _cache = typeof Map === "function" ? new Map() : undefined;
 
     _wrapNativeSuper = function _wrapNativeSuper(Class) {
-      if (Class === null) return null;
+      if (Class === null || !isNativeFunction(Class)) return Class;
       if (typeof Class !== "function") {
         throw new TypeError("Super expression must either be null or a function");
       }
@@ -528,7 +545,7 @@ helpers.wrapNativeSuper = () => template.program.ast`
   }
 `;
 
-helpers.instanceof = () => template.program.ast`
+helpers.instanceof = helper("7.0.0-beta.0")`
   export default function _instanceof(left, right) {
     if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
       return right[Symbol.hasInstance](left);
@@ -538,13 +555,13 @@ helpers.instanceof = () => template.program.ast`
   }
 `;
 
-helpers.interopRequireDefault = () => template.program.ast`
+helpers.interopRequireDefault = helper("7.0.0-beta.0")`
   export default function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
   }
 `;
 
-helpers.interopRequireWildcard = () => template.program.ast`
+helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
   export default function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
       return obj;
@@ -570,7 +587,7 @@ helpers.interopRequireWildcard = () => template.program.ast`
   }
 `;
 
-helpers.newArrowCheck = () => template.program.ast`
+helpers.newArrowCheck = helper("7.0.0-beta.0")`
   export default function _newArrowCheck(innerThis, boundThis) {
     if (innerThis !== boundThis) {
       throw new TypeError("Cannot instantiate an arrow function");
@@ -578,13 +595,13 @@ helpers.newArrowCheck = () => template.program.ast`
   }
 `;
 
-helpers.objectDestructuringEmpty = () => template.program.ast`
+helpers.objectDestructuringEmpty = helper("7.0.0-beta.0")`
   export default function _objectDestructuringEmpty(obj) {
     if (obj == null) throw new TypeError("Cannot destructure undefined");
   }
 `;
 
-helpers.objectWithoutPropertiesLoose = () => template.program.ast`
+helpers.objectWithoutPropertiesLoose = helper("7.0.0-beta.0")`
   export default function _objectWithoutPropertiesLoose(source, excluded) {
     if (source == null) return {};
 
@@ -602,7 +619,7 @@ helpers.objectWithoutPropertiesLoose = () => template.program.ast`
   }
 `;
 
-helpers.objectWithoutProperties = () => template.program.ast`
+helpers.objectWithoutProperties = helper("7.0.0-beta.0")`
   import objectWithoutPropertiesLoose from "objectWithoutPropertiesLoose";
 
   export default function _objectWithoutProperties(source, excluded) {
@@ -625,7 +642,7 @@ helpers.objectWithoutProperties = () => template.program.ast`
   }
 `;
 
-helpers.assertThisInitialized = () => template.program.ast`
+helpers.assertThisInitialized = helper("7.0.0-beta.0")`
   export default function _assertThisInitialized(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -634,7 +651,7 @@ helpers.assertThisInitialized = () => template.program.ast`
   }
 `;
 
-helpers.possibleConstructorReturn = () => template.program.ast`
+helpers.possibleConstructorReturn = helper("7.0.0-beta.0")`
   import assertThisInitialized from "assertThisInitialized";
 
   export default function _possibleConstructorReturn(self, call) {
@@ -645,7 +662,7 @@ helpers.possibleConstructorReturn = () => template.program.ast`
   }
 `;
 
-helpers.superPropBase = () => template.program.ast`
+helpers.superPropBase = helper("7.0.0-beta.0")`
   import getPrototypeOf from "getPrototypeOf";
 
   export default function _superPropBase(object, property) {
@@ -658,7 +675,7 @@ helpers.superPropBase = () => template.program.ast`
   }
 `;
 
-helpers.get = () => template.program.ast`
+helpers.get = helper("7.0.0-beta.0")`
   import getPrototypeOf from "getPrototypeOf";
   import superPropBase from "superPropBase";
 
@@ -683,7 +700,7 @@ helpers.get = () => template.program.ast`
   }
 `;
 
-helpers.set = () => template.program.ast`
+helpers.set = helper("7.0.0-beta.0")`
   import getPrototypeOf from "getPrototypeOf";
   import superPropBase from "superPropBase";
   import defineProperty from "defineProperty";
@@ -741,7 +758,7 @@ helpers.set = () => template.program.ast`
   }
 `;
 
-helpers.taggedTemplateLiteral = () => template.program.ast`
+helpers.taggedTemplateLiteral = helper("7.0.0-beta.0")`
   export default function _taggedTemplateLiteral(strings, raw) {
     if (!raw) { raw = strings.slice(0); }
     return Object.freeze(Object.defineProperties(strings, {
@@ -750,7 +767,7 @@ helpers.taggedTemplateLiteral = () => template.program.ast`
   }
 `;
 
-helpers.taggedTemplateLiteralLoose = () => template.program.ast`
+helpers.taggedTemplateLiteralLoose = helper("7.0.0-beta.0")`
   export default function _taggedTemplateLiteralLoose(strings, raw) {
     if (!raw) { raw = strings.slice(0); }
     strings.raw = raw;
@@ -758,7 +775,7 @@ helpers.taggedTemplateLiteralLoose = () => template.program.ast`
   }
 `;
 
-helpers.temporalRef = () => template.program.ast`
+helpers.temporalRef = helper("7.0.0-beta.0")`
   import undef from "temporalUndefined";
 
   export default function _temporalRef(val, name) {
@@ -770,23 +787,23 @@ helpers.temporalRef = () => template.program.ast`
   }
 `;
 
-helpers.readOnlyError = () => template.program.ast`
+helpers.readOnlyError = helper("7.0.0-beta.0")`
   export default function _readOnlyError(name) {
     throw new Error("\\"" + name + "\\" is read-only");
   }
 `;
 
-helpers.classNameTDZError = () => template.program.ast`
+helpers.classNameTDZError = helper("7.0.0-beta.0")`
   export default function _classNameTDZError(name) {
     throw new Error("Class \\"" + name + "\\" cannot be referenced in computed property keys.");
   }
 `;
 
-helpers.temporalUndefined = () => template.program.ast`
+helpers.temporalUndefined = helper("7.0.0-beta.0")`
   export default {};
 `;
 
-helpers.slicedToArray = () => template.program.ast`
+helpers.slicedToArray = helper("7.0.0-beta.0")`
   import arrayWithHoles from "arrayWithHoles";
   import iterableToArrayLimit from "iterableToArrayLimit";
   import nonIterableRest from "nonIterableRest";
@@ -796,7 +813,7 @@ helpers.slicedToArray = () => template.program.ast`
   }
 `;
 
-helpers.slicedToArrayLoose = () => template.program.ast`
+helpers.slicedToArrayLoose = helper("7.0.0-beta.0")`
   import arrayWithHoles from "arrayWithHoles";
   import iterableToArrayLimitLoose from "iterableToArrayLimitLoose";
   import nonIterableRest from "nonIterableRest";
@@ -806,7 +823,7 @@ helpers.slicedToArrayLoose = () => template.program.ast`
   }
 `;
 
-helpers.toArray = () => template.program.ast`
+helpers.toArray = helper("7.0.0-beta.0")`
   import arrayWithHoles from "arrayWithHoles";
   import iterableToArray from "iterableToArray";
   import nonIterableRest from "nonIterableRest";
@@ -816,7 +833,7 @@ helpers.toArray = () => template.program.ast`
   }
 `;
 
-helpers.toConsumableArray = () => template.program.ast`
+helpers.toConsumableArray = helper("7.0.0-beta.0")`
   import arrayWithoutHoles from "arrayWithoutHoles";
   import iterableToArray from "iterableToArray";
   import nonIterableSpread from "nonIterableSpread";
@@ -826,7 +843,7 @@ helpers.toConsumableArray = () => template.program.ast`
   }
 `;
 
-helpers.arrayWithoutHoles = () => template.program.ast`
+helpers.arrayWithoutHoles = helper("7.0.0-beta.0")`
   export default function _arrayWithoutHoles(arr) {
     if (Array.isArray(arr)) {
       for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
@@ -835,13 +852,13 @@ helpers.arrayWithoutHoles = () => template.program.ast`
   }
 `;
 
-helpers.arrayWithHoles = () => template.program.ast`
+helpers.arrayWithHoles = helper("7.0.0-beta.0")`
   export default function _arrayWithHoles(arr) {
     if (Array.isArray(arr)) return arr;
   }
 `;
 
-helpers.iterableToArray = () => template.program.ast`
+helpers.iterableToArray = helper("7.0.0-beta.0")`
   export default function _iterableToArray(iter) {
     if (
       Symbol.iterator in Object(iter) ||
@@ -850,7 +867,7 @@ helpers.iterableToArray = () => template.program.ast`
   }
 `;
 
-helpers.iterableToArrayLimit = () => template.program.ast`
+helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
   export default function _iterableToArrayLimit(arr, i) {
     // this is an expanded form of \`for...of\` that properly supports abrupt completions of
     // iterators etc. variable names have been minimised to reduce the size of this massive
@@ -885,7 +902,7 @@ helpers.iterableToArrayLimit = () => template.program.ast`
   }
 `;
 
-helpers.iterableToArrayLimitLoose = () => template.program.ast`
+helpers.iterableToArrayLimitLoose = helper("7.0.0-beta.0")`
   export default function _iterableToArrayLimitLoose(arr, i) {
     var _arr = [];
     for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
@@ -896,19 +913,19 @@ helpers.iterableToArrayLimitLoose = () => template.program.ast`
   }
 `;
 
-helpers.nonIterableSpread = () => template.program.ast`
+helpers.nonIterableSpread = helper("7.0.0-beta.0")`
   export default function _nonIterableSpread() {
     throw new TypeError("Invalid attempt to spread non-iterable instance");
   }
 `;
 
-helpers.nonIterableRest = () => template.program.ast`
+helpers.nonIterableRest = helper("7.0.0-beta.0")`
   export default function _nonIterableRest() {
     throw new TypeError("Invalid attempt to destructure non-iterable instance");
   }
 `;
 
-helpers.skipFirstGeneratorNext = () => template.program.ast`
+helpers.skipFirstGeneratorNext = helper("7.0.0-beta.0")`
   export default function _skipFirstGeneratorNext(fn) {
     return function () {
       var it = fn.apply(this, arguments);
@@ -918,7 +935,7 @@ helpers.skipFirstGeneratorNext = () => template.program.ast`
   }
 `;
 
-helpers.toPropertyKey = () => template.program.ast`
+helpers.toPropertyKey = helper("7.0.0-beta.0")`
   export default function _toPropertyKey(key) {
     if (typeof key === "symbol") {
       return key;
@@ -932,7 +949,7 @@ helpers.toPropertyKey = () => template.program.ast`
  * Add a helper that will throw a useful error if the transform fails to detect the class
  * property assignment, so users know something failed.
  */
-helpers.initializerWarningHelper = () => template.program.ast`
+helpers.initializerWarningHelper = helper("7.0.0-beta.0")`
     export default function _initializerWarningHelper(descriptor, context){
         throw new Error(
           'Decorating class property failed. Please ensure that ' +
@@ -946,7 +963,7 @@ helpers.initializerWarningHelper = () => template.program.ast`
 /**
  * Add a helper to call as a replacement for class property definition.
  */
-helpers.initializerDefineProperty = () => template.program.ast`
+helpers.initializerDefineProperty = helper("7.0.0-beta.0")`
     export default function _initializerDefineProperty(target, property, descriptor, context){
         if (!descriptor) return;
 
@@ -963,7 +980,7 @@ helpers.initializerDefineProperty = () => template.program.ast`
  * Add a helper to take an initial descriptor, apply some decorators to it, and optionally
  * define the property.
  */
-helpers.applyDecoratedDescriptor = () => template.program.ast`
+helpers.applyDecoratedDescriptor = helper("7.0.0-beta.0")`
     export default function _applyDecoratedDescriptor(target, property, decorators, descriptor, context){
         var desc = {};
         Object['ke' + 'ys'](descriptor).forEach(function(key){
@@ -995,14 +1012,14 @@ helpers.applyDecoratedDescriptor = () => template.program.ast`
     }
 `;
 
-helpers.classPrivateFieldLooseKey = () => template.program.ast`
+helpers.classPrivateFieldLooseKey = helper("7.0.0-beta.0")`
   var id = 0;
   export default function _classPrivateFieldKey(name) {
     return "__private_" + (id++) + "_" + name;
   }
 `;
 
-helpers.classPrivateFieldLooseBase = () => template.program.ast`
+helpers.classPrivateFieldLooseBase = helper("7.0.0-beta.0")`
   export default function _classPrivateFieldBase(receiver, privateKey) {
     if (!Object.prototype.hasOwnProperty.call(receiver, privateKey)) {
       throw new TypeError("attempted to use private field on non-instance");
@@ -1011,7 +1028,7 @@ helpers.classPrivateFieldLooseBase = () => template.program.ast`
   }
 `;
 
-helpers.classPrivateFieldGet = () => template.program.ast`
+helpers.classPrivateFieldGet = helper("7.0.0-beta.0")`
   export default function _classPrivateFieldGet(receiver, privateMap) {
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to get private field on non-instance");
@@ -1020,7 +1037,7 @@ helpers.classPrivateFieldGet = () => template.program.ast`
   }
 `;
 
-helpers.classPrivateFieldSet = () => template.program.ast`
+helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
   export default function _classPrivateFieldSet(receiver, privateMap, value) {
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to set private field on non-instance");

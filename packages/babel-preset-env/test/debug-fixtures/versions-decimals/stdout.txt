@@ -16,7 +16,7 @@ Using targets:
   "node": "6.1"
 }
 
-Using modules transform: commonjs
+Using modules transform: auto
 
 Using plugins:
   transform-template-literals { "ie":"10" }
@@ -45,6 +45,8 @@ Using plugins:
   proposal-async-generator-functions { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-object-rest-spread { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-unicode-property-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  proposal-json-strings { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  proposal-optional-catch-binding { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
 
 Using polyfills with `entry` option:
 

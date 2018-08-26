@@ -1,0 +1,9 @@
+{
+  "caller": {
+    "name": "test-fixture",
+    "supportsStaticESM": false
+  },
+  "presets": [
+    "env"
+  ]
+}

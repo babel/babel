@@ -23,7 +23,9 @@ describe("parse", function() {
     const output = require(fixture("output.json"));
 
     const result = parse(input, {
-      parserOpts: { plugins: ["decorators"] },
+      parserOpts: {
+        plugins: [["decorators", { decoratorsBeforeExport: false }]],
+      },
       cwd: fixture(),
     });
     expect(JSON.parse(JSON.stringify(result))).toEqual(output);

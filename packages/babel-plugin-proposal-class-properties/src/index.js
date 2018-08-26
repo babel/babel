@@ -39,7 +39,10 @@ export default declare((api, options) => {
   const classFieldDefinitionEvaluationTDZVisitor = traverse.visitors.merge([
     {
       ReferencedIdentifier(path) {
-        if (this.classRef === path.scope.getBinding(path.node.name)) {
+        if (
+          this.classBinding &&
+          this.classBinding === path.scope.getBinding(path.node.name)
+        ) {
           const classNameTDZError = this.file.addHelper("classNameTDZError");
           const throwNode = t.callExpression(classNameTDZError, [
             t.stringLiteral(path.node.name),
@@ -312,7 +315,6 @@ export default declare((api, options) => {
         if (!props.length) return;
 
         let ref;
-
         if (path.isClassExpression() || !path.node.id) {
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
@@ -327,7 +329,8 @@ export default declare((api, options) => {
 
         for (const computedPath of computedPaths) {
           computedPath.traverse(classFieldDefinitionEvaluationTDZVisitor, {
-            classRef: path.scope.getBinding(ref.name),
+            classBinding:
+              path.node.id && path.scope.getBinding(path.node.id.name),
             file: this.file,
           });
 

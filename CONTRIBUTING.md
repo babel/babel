@@ -186,7 +186,7 @@ For example, in [`@babel/plugin-transform-exponentiation-operator/test`](https:/
    - If you need to expect an error, you can ignore creating the `output.js` file and pass a new `throws` key to the `options.json` that contains the error string that is created.
    - The second and preferred type is a test that actually evaluates the produced code and asserts that certain properties are true or false. We do this by creating an [`exec.js`](https://github.com/babel/babel/blob/master/packages/babel-plugin-transform-exponentiation-operator/test/fixtures/exponentian-operator/comprehensive/exec.js) file.
 
-In a fixture test, you simply write out the code you want transformed in `input.js`.
+In a fixture test, you simply write out the code you want to transform in `input.js`.
 
 ```js
 // input.js
