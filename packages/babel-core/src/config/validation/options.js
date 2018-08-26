@@ -315,7 +315,7 @@ function buildUnknownError(key: string) {
     );
   } else {
     // eslint-disable-next-line max-len
-    const unknownOptErr = `Unknown option: .${key}. Check out http://babeljs.io/docs/usage/options/ for more information about options.`;
+    const unknownOptErr = `Unknown option: .${key}. Check out https://babeljs.io/docs/en/babel-core/#options for more information about options.`;
 
     throw new ReferenceError(unknownOptErr);
   }
