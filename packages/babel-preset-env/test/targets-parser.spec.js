@@ -7,7 +7,6 @@ describe("getTargets", () => {
       getTargets({
         chrome: 49,
         firefox: "55",
-        opera: "36",
         ie: "9",
         node: "6.10",
         electron: "1.6",
@@ -18,7 +17,6 @@ describe("getTargets", () => {
       firefox: "55.0.0",
       ie: "9.0.0",
       node: "6.10.0",
-      opera: "36.0.0",
     });
   });
 
@@ -101,11 +99,12 @@ describe("getTargets", () => {
     it("works with current node version and string type browsers", () => {
       expect(
         getTargets({
-          browsers: "current node, chrome 55",
+          browsers: "current node, chrome 55, opera 42",
         }),
       ).toEqual({
         node: process.versions.node,
         chrome: "55.0.0",
+        opera: "42.0.0",
       });
     });
 
@@ -180,6 +179,7 @@ describe("getTargets", () => {
         chrome: "61.0.0",
         safari: "10.1.0",
         firefox: "60.0.0",
+        opera: "48.0.0",
         ios: "10.3.0",
         edge: "16.0.0",
       });
@@ -195,6 +195,7 @@ describe("getTargets", () => {
         chrome: "61.0.0",
         safari: "10.1.0",
         firefox: "60.0.0",
+        opera: "48.0.0",
         ios: "10.3.0",
         edge: "16.0.0",
       });
@@ -210,6 +211,7 @@ describe("getTargets", () => {
         chrome: "61.0.0",
         safari: "10.1.0",
         firefox: "60.0.0",
+        opera: "48.0.0",
         ios: "10.3.0",
         ie: "11.0.0",
         edge: "16.0.0",
@@ -230,6 +232,7 @@ describe("getTargets", () => {
         ie: "11.0.0",
         edge: "16.0.0",
         firefox: "60.0.0",
+        opera: "48.0.0",
       });
     });
   });
