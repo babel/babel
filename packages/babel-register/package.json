@@ -16,7 +16,7 @@
     "lodash": "^4.17.10",
     "mkdirp": "^0.5.1",
     "pirates": "^4.0.0",
-    "source-map-support": "^0.4.2"
+    "source-map-support": "^0.5.9"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
