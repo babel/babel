@@ -118,7 +118,7 @@ publish:
 	make clone-license
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
 	# --only-explicit-updates
-	./node_modules/.bin/lerna publish --force-publish=* --exact --skip-temp-tag
+	./node_modules/.bin/lerna publish --force-publish=* --skip-temp-tag
 	make clean
 
 bootstrap: clean-all
