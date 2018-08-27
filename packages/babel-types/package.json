@@ -1,6 +1,6 @@
 {
   "name": "@babel/types",
-  "version": "7.0.0-rc.3",
+  "version": "7.0.0-rc.4",
   "description": "Babel Types is a Lodash-esque utility library for AST nodes",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
@@ -14,7 +14,7 @@
     "to-fast-properties": "^2.0.0"
   },
   "devDependencies": {
-    "@babel/generator": "7.0.0-rc.3",
-    "@babel/parser": "7.0.0-rc.3"
+    "@babel/generator": "^7.0.0-rc.4",
+    "@babel/parser": "^7.0.0-rc.4"
   }
 }

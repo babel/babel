@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-object-set-prototype-of-to-assign",
-  "version": "7.0.0-rc.3",
+  "version": "7.0.0-rc.4",
   "description": "Turn Object.setPrototypeOf to assignments",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-set-prototype-of-to-assign",
   "license": "MIT",
@@ -9,13 +9,13 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-rc.3"
+    "@babel/helper-plugin-utils": "^7.0.0-rc.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-rc.3",
-    "@babel/helper-plugin-test-runner": "7.0.0-rc.3"
+    "@babel/core": "^7.0.0-rc.4",
+    "@babel/helper-plugin-test-runner": "^7.0.0-rc.4"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-syntax-import-meta",
-  "version": "7.0.0-rc.3",
+  "version": "7.0.0-rc.4",
   "description": "Allow parsing of import.meta",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-import-meta",
   "license": "MIT",
@@ -9,12 +9,12 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-rc.3"
+    "@babel/helper-plugin-utils": "^7.0.0-rc.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-rc.3"
+    "@babel/core": "^7.0.0-rc.4"
   }
 }
