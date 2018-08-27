@@ -7,6 +7,7 @@ describe("getTargets", () => {
       getTargets({
         chrome: 49,
         firefox: "55",
+        opera: "36",
         ie: "9",
         node: "6.10",
         electron: "1.6",
@@ -17,6 +18,7 @@ describe("getTargets", () => {
       firefox: "55.0.0",
       ie: "9.0.0",
       node: "6.10.0",
+      opera: "36.0.0",
     });
   });
 
