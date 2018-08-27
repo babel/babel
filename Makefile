@@ -123,7 +123,7 @@ prepublish:
 publish: prepublish
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
 	# --only-explicit-updates
-	./node_modules/.bin/lerna publish --force-publish=*
+	./node_modules/.bin/lerna publish --force-publish=* --temp-tag
 	make clean
 
 bootstrap: clean-all
