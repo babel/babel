@@ -166,6 +166,16 @@ describe("getTargets", () => {
         android: "4.0.0",
       });
     });
+
+    it("returns Chrome version for Chromium-based browsers", () => {
+      expect(
+        getTargets({
+          browsers: "Samsung >= 6",
+        }),
+      ).toEqual({
+        chrome: "56.0.0",
+      });
+    });
   });
 
   describe("esmodules", () => {
