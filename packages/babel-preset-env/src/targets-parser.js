@@ -12,6 +12,7 @@ import {
 } from "./utils";
 import { objectToBrowserslist } from "./normalize-options";
 import browserModulesData from "../data/built-in-modules.json";
+import chromiumBrowsersData from "../data/chromium-browsers.js";
 import { TargetNames } from "./options";
 import type { Targets } from "./types";
 
@@ -68,7 +69,12 @@ const mergeBrowsers = (fromQuery: Targets, fromTarget: Targets) => {
 
 const getLowestVersions = (browsers: Array<string>): Targets => {
   return browsers.reduce((all: Object, browser: string): Object => {
-    const [browserName, browserVersion] = browser.split(" ");
+    // get Chromium version for Chromium-based browsers
+    const chromiumVersion = chromiumBrowsersData[browser];
+
+    const [browserName, browserVersion] = chromiumVersion
+      ? ["chrome", chromiumVersion]
+      : browser.split(" ");
     const normalizedBrowserName = browserNameMap[browserName];
 
     if (!normalizedBrowserName) {
