@@ -38,6 +38,7 @@ const browserNameMap = {
   ie: "ie",
   ios_saf: "ios",
   safari: "safari",
+  opera: "opera",
   node: "node",
 };
 
