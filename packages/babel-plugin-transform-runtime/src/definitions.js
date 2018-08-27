@@ -6,39 +6,17 @@ export default {
     WeakMap: "weak-map",
     Set: "set",
     WeakSet: "weak-set",
-    Observable: "observable",
     setImmediate: "set-immediate",
     clearImmediate: "clear-immediate",
-    asap: "asap",
-    //parseFloat: "parse-float", // temporary disabled
-    //parseInt: "parse-int" // temporary disabled
+    parseFloat: "parse-float",
+    parseInt: "parse-int",
   },
 
   methods: {
     Array: {
-      copyWithin: "array/copy-within",
-      entries: "array/entries",
-      every: "array/every",
-      fill: "array/fill",
-      filter: "array/filter",
-      findIndex: "array/find-index",
-      find: "array/find",
-      forEach: "array/for-each",
       from: "array/from",
-      includes: "array/includes",
-      indexOf: "array/index-of",
-      //isArray: "array/is-array", // temporary disabled
-      join: "array/join",
-      keys: "array/keys",
-      lastIndexOf: "array/last-index-of",
-      map: "array/map",
+      isArray: "array/is-array",
       of: "array/of",
-      reduceRight: "array/reduce-right",
-      reduce: "array/reduce",
-      some: "array/some",
-      sort: "array/sort",
-      splice: "array/splice",
-      values: "array/values",
     },
 
     JSON: {
@@ -68,31 +46,8 @@ export default {
       values: "object/values",
     },
 
-    Math: {
-      acosh: "math/acosh",
-      asinh: "math/asinh",
-      atanh: "math/atanh",
-      cbrt: "math/cbrt",
-      clz32: "math/clz32",
-      cosh: "math/cosh",
-      expm1: "math/expm1",
-      fround: "math/fround",
-      hypot: "math/hypot",
-      imul: "math/imul",
-      log10: "math/log10",
-      log1p: "math/log1p",
-      log2: "math/log2",
-      sign: "math/sign",
-      sinh: "math/sinh",
-      tanh: "math/tanh",
-      trunc: "math/trunc",
-      iaddh: "math/iaddh",
-      isubh: "math/isubh",
-      imulh: "math/imulh",
-      umulh: "math/umulh",
-    },
-
     Symbol: {
+      asyncIterator: "symbol/async-iterator",
       for: "symbol/for",
       hasInstance: "symbol/has-instance",
       isConcatSpreadable: "symbol/is-concat-spreadable",
@@ -110,21 +65,8 @@ export default {
 
     String: {
       at: "string/at",
-      codePointAt: "string/code-point-at",
-      endsWith: "string/ends-with",
       fromCodePoint: "string/from-code-point",
-      includes: "string/includes",
-      matchAll: "string/match-all",
-      padStart: "string/pad-start",
-      padEnd: "string/pad-end",
       raw: "string/raw",
-      repeat: "string/repeat",
-      startsWith: "string/starts-with",
-      trim: "string/trim",
-      trimLeft: "string/trim-left",
-      trimRight: "string/trim-right",
-      trimStart: "string/trim-start",
-      trimEnd: "string/trim-end",
     },
 
     Number: {
@@ -153,28 +95,10 @@ export default {
       preventExtensions: "reflect/prevent-extensions",
       setPrototypeOf: "reflect/set-prototype-of",
       set: "reflect/set",
-      defineMetadata: "reflect/define-metadata",
-      deleteMetadata: "reflect/delete-metadata",
-      getMetadata: "reflect/get-metadata",
-      getMetadataKeys: "reflect/get-metadata-keys",
-      getOwnMetadata: "reflect/get-own-metadata",
-      getOwnMetadataKeys: "reflect/get-own-metadata-keys",
-      hasMetadata: "reflect/has-metadata",
-      hasOwnMetadata: "reflect/has-own-metadata",
-      metadata: "reflect/metadata",
-    },
-
-    System: {
-      global: "system/global",
     },
 
     Date: {
-      //now: "date/now" // temporary disabled
-    },
-
-    Function: {
-      // Warning: /virtual/ method - prototype, not static, version
-      //bind: "function/virtual/bind" // temporary disabled
+      now: "date/now",
     },
   },
 };
