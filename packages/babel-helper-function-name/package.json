@@ -4,6 +4,9 @@
   "description": "Helper function to change the property 'name' of every function",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-function-name",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-get-function-arity": "^7.0.0",

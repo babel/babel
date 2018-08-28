@@ -4,6 +4,9 @@
   "description": "Helper function to replace supers",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-replace-supers",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-member-expression-to-functions": "^7.0.0",

@@ -4,6 +4,9 @@
   "description": "Compile ES2015 for...of to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-for-of",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"

@@ -4,6 +4,9 @@
   "description": "Add a __source prop to all JSX Elements",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-jsx-source",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"

@@ -4,6 +4,9 @@
   "description": "Compile export namespace to ES2015",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-export-namespace-from",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"

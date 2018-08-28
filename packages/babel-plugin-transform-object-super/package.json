@@ -4,6 +4,9 @@
   "description": "Compile ES2015 object super to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-super",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"

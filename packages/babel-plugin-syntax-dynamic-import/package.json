@@ -4,6 +4,9 @@
   "description": "Allow parsing of import()",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-dynamic-import",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"

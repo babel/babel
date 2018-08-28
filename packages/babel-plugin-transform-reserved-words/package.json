@@ -4,6 +4,9 @@
   "description": "Ensure that no reserved words are used.",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-reserved-words",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"

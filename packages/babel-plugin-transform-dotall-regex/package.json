@@ -4,6 +4,9 @@
   "description": "Compile regular expressions using the `s` (`dotAll`) flag to ES5.",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "engines": {
     "node": ">=4"

@@ -105,6 +105,9 @@
   ],
   "author": "Daniel Lo Nigro <daniel@dan.cx> (http://dan.cx/)",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "bugs": {
     "url": "https://github.com/babel/babel-standalone/issues"
   },

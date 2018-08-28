@@ -25,6 +25,9 @@
     "transpiler"
   ],
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "bugs": {
     "url": "https://github.com/babel/babel/issues"
   },

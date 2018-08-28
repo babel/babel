@@ -4,6 +4,9 @@
   "description": "Compile ES2015 classes to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-classes",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-annotate-as-pure": "^7.0.0",

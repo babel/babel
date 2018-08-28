@@ -5,6 +5,9 @@
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-module-transforms",
   "main": "lib/index.js",
   "dependencies": {

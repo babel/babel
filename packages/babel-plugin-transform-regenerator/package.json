@@ -10,6 +10,9 @@
     "regenerator-transform": "^0.13.3"
   },
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
   },

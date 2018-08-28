@@ -4,6 +4,9 @@
   "description": "Helper function to build binary assignment operator visitors",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-builder-binary-assignment-operator-visitor",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-explode-assignable-expression": "^7.0.0",

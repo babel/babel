@@ -4,6 +4,9 @@
   "description": "Apply ES2015 function.name semantics to all functions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-function-name",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"
