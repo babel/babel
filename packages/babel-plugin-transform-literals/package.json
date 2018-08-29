@@ -4,6 +4,9 @@
   "description": "Compile ES2015 unicode string and number literals to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-literals",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"

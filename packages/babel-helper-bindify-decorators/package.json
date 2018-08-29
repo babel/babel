@@ -4,6 +4,9 @@
   "description": "Helper function to bindify decorators",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-bindify-decorators",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "dependencies": {
     "@babel/traverse": "^7.0.0",

@@ -4,6 +4,9 @@
   "description": "Helper function to explode class",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-explode-class",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-bindify-decorators": "^7.0.0",

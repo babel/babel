@@ -5,6 +5,9 @@
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-plugin-utils",
   "main": "lib/index.js"
 }

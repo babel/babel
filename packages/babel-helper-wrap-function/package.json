@@ -4,6 +4,9 @@
   "description": "Helper to wrap functions inside a function call.",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-wrap-function",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-function-name": "^7.0.0",

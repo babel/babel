@@ -4,6 +4,9 @@
   "description": "Turn async functions into ES2015 generators",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-async-to-generator",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"

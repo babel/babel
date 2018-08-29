@@ -4,6 +4,9 @@
   "description": "Transforms Object.assign into object spread syntax",
   "repository": "https://github.com/babel/babel/tree/master/codemods/babel-plugin-codemod-object-assign-to-object-spread",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "@babel/codemod",

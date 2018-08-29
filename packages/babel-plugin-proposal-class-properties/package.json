@@ -4,6 +4,9 @@
   "description": "This plugin transforms static class properties as well as properties declared with the property initializer syntax",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-class-properties",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"

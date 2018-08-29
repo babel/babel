@@ -4,6 +4,9 @@
   "description": "Allow parsing of optional properties",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-optional-chaining",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"

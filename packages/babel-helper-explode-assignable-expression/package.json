@@ -4,6 +4,9 @@
   "description": "Helper function to explode an assignable expression",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-explode-assignable-expression",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "dependencies": {
     "@babel/traverse": "^7.0.0",

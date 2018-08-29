@@ -4,6 +4,9 @@
   "description": "Wraps Throw Expressions in an IIFE",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-throw-expressions",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"

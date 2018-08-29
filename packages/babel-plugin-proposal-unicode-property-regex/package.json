@@ -4,6 +4,9 @@
   "description": "Compile Unicode property escapes in Unicode regular expressions to ES5.",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "engines": {
     "node": ">=4"

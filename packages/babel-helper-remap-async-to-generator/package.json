@@ -4,6 +4,9 @@
   "description": "Helper function to remap async functions to generators",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-remap-async-to-generator",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "dependencies": {
     "@babel/helper-annotate-as-pure": "^7.0.0",

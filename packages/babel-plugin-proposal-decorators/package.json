@@ -3,6 +3,9 @@
   "version": "7.0.0",
   "author": "Logan Smyth <loganfsmyth@gmail.com>",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "Compile class and object decorators to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-decorators",
   "main": "lib/index.js",

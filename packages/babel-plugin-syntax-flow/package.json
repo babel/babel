@@ -4,6 +4,9 @@
   "description": "Allow parsing of the flow syntax",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-syntax-flow",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "babel-plugin"

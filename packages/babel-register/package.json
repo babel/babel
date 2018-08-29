@@ -3,6 +3,9 @@
   "version": "7.0.0",
   "description": "babel require hook",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-register",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "main": "lib/index.js",

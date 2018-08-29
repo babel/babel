@@ -3,6 +3,9 @@
   "version": "7.0.0",
   "description": "babel's modular runtime helpers",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-runtime",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "dependencies": {
