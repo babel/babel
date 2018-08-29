@@ -68,7 +68,7 @@ export default declare((api, options, dirname) => {
     (typeof corejsVersion !== "string" || corejsVersion !== "2")
   ) {
     throw new Error(
-      `The 'corejs' option must be undefined, false, or 2, or '2', ` +
+      `The 'corejs' option must be undefined, false, 2 or '2', ` +
         `but got ${JSON.stringify(corejsVersion)}.`,
     );
   }
