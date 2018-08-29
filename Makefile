@@ -61,12 +61,16 @@ test-ci-coverage:
 	./scripts/test-cov.sh
 	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
+clone-license:
+	./scripts/clone-license.sh
+
 publish:
 	node scripts/verify-lerna-version.js
 	git pull --rebase
 	rm -rf packages/*/lib
 	BABEL_ENV=production make build-dist
 	make test
+	make clone-license
 	# not using lerna independent mode atm, so only update packages that have changed since we use ^
 	node ./scripts/lerna.js publish --only-explicit-updates
 	make clean
