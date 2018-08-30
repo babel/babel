@@ -6,6 +6,9 @@ import { environmentVisitor } from "@babel/helper-replace-supers";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 
+const isNoInitialTypeAnnotationProp = o =>
+  o.has("typeAnnotation") && !o.has("value");
+
 export default declare((api, options) => {
   api.assertVersion(7);
 
@@ -366,6 +369,9 @@ export default declare((api, options) => {
 
         let p = 0;
         for (const prop of props) {
+          // Check property is an type annotation, and skip it
+          if (isNoInitialTypeAnnotationProp(prop)) continue;
+
           if (prop.node.static) {
             staticNodes.push(buildClassProperty(t.cloneNode(ref), prop, state));
           } else if (prop.isPrivate()) {
