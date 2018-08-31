@@ -173,6 +173,41 @@ const pluginNameMap = {
       url: "https://git.io/vb4Sm",
     },
   },
+
+  // TODO: This plugins are now supported by default by @babel/parser: they can
+  // be removed from this list. Althought emoving them isn't a breaking change,
+  // its better to keep the nice error message for users using old versions of
+  // the parser. They can be removed in Babel 8.
+  asyncGenerators: {
+    syntax: {
+      name: "@babel/plugin-syntax-async-generators",
+      url: "https://git.io/vb4SY",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-async-generator-functions",
+      url: "https://git.io/vb4yp",
+    },
+  },
+  objectRestSpread: {
+    syntax: {
+      name: "@babel/plugin-syntax-object-rest-spread",
+      url: "https://git.io/vb4y5",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-object-rest-spread",
+      url: "https://git.io/vb4Ss",
+    },
+  },
+  optionalCatchBinding: {
+    syntax: {
+      name: "@babel/plugin-syntax-optional-catch-binding",
+      url: "https://git.io/vb4Sn",
+    },
+    transform: {
+      name: "@babel/plugin-proposal-optional-catch-binding",
+      url: "https://git.io/vb4SI",
+    },
+  },
 };
 
 const getNameURLCombination = ({ name, url }) => `${name} (${url})`;
