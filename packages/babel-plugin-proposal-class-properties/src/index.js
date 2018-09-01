@@ -160,6 +160,60 @@ export default declare((api, options) => {
     },
   };
 
+  const staticPrivatePropertyHandlerSpec = {
+    ...privateNameHandlerSpec,
+
+    get(member) {
+      const { file, name, privateClassId, classRef } = this;
+
+      return t.callExpression(
+        file.addHelper("classStaticPrivateFieldSpecGet"),
+        [
+          this.receiver(member),
+          classRef,
+          privateClassId,
+          t.stringLiteral(name),
+        ],
+      );
+    },
+
+    set(member, value) {
+      const { file, name, privateClassId, classRef } = this;
+
+      return t.callExpression(
+        file.addHelper("classStaticPrivateFieldSpecSet"),
+        [
+          this.receiver(member),
+          classRef,
+          privateClassId,
+          t.stringLiteral(name),
+          value,
+        ],
+      );
+    },
+
+    call(member, args) {
+      // The first access (the get) should do the memo assignment.
+      this.memoise(member, 1);
+
+      return optimiseCall(this.get(member), this.receiver(member), args);
+    },
+  };
+
+  const staticPrivatePropertyHandlerLoose = {
+    handle(member) {
+      const { file, privateId, classRef } = this;
+      member.replaceWith(
+        template.expression`BASE(RECEIVER, CLASS).PRIVATE_ID`({
+          BASE: file.addHelper("classStaticPrivateFieldLooseBase"),
+          RECEIVER: member.node.object,
+          CLASS: classRef,
+          PRIVATE_ID: privateId,
+        }),
+      );
+    },
+  };
+
   function buildClassPropertySpec(ref, path, state) {
     const { scope } = path;
     const { key, value, computed } = path.node;
@@ -255,6 +309,80 @@ export default declare((api, options) => {
       });
   }
 
+  function buildClassStaticPrivatePropertySpec(
+    ref,
+    path,
+    state,
+    privateClassId,
+  ) {
+    const { scope, parentPath } = path;
+    const { key, value } = path.node;
+    const { name } = key.id;
+    const staticNodesToAdd = [];
+
+    if (!privateClassId) {
+      // Create a private static "host" object if it does not exist
+      privateClassId = path.scope.generateUidIdentifier(ref.name + "Statics");
+      staticNodesToAdd.push(
+        template.statement`const PRIVATE_CLASS_ID = Object.create(null);`({
+          PRIVATE_CLASS_ID: privateClassId,
+        }),
+      );
+    }
+
+    memberExpressionToFunctions(parentPath, privateNameVisitor, {
+      name,
+      privateClassId,
+      classRef: ref,
+      file: state,
+      ...staticPrivatePropertyHandlerSpec,
+    });
+
+    staticNodesToAdd.push(
+      t.expressionStatement(
+        t.callExpression(state.addHelper("defineProperty"), [
+          privateClassId,
+          t.stringLiteral(name),
+          value || scope.buildUndefinedNode(),
+        ]),
+      ),
+    );
+
+    return [staticNodesToAdd, privateClassId];
+  }
+
+  function buildClassStaticPrivatePropertyLoose(ref, path, state) {
+    const { scope, parentPath } = path;
+    const { key, value } = path.node;
+    const { name } = key.id;
+    const privateId = scope.generateUidIdentifier(name);
+
+    parentPath.traverse(privateNameVisitor, {
+      name,
+      privateId,
+      classRef: ref,
+      file: state,
+      ...staticPrivatePropertyHandlerLoose,
+    });
+
+    const staticNodesToAdd = [
+      template.statement`
+        Object.defineProperty(OBJ, KEY, {
+          value: VALUE,
+          enumerable: false,
+          configurable: false,
+          writable: true
+        });
+      `({
+        OBJ: ref,
+        KEY: t.stringLiteral(privateId.name),
+        VALUE: value || scope.buildUndefinedNode(),
+      }),
+    ];
+
+    return [staticNodesToAdd];
+  }
+
   const buildClassProperty = loose
     ? buildClassPropertyLoose
     : buildClassPropertySpec;
@@ -262,6 +390,10 @@ export default declare((api, options) => {
   const buildClassPrivateProperty = loose
     ? buildClassPrivatePropertyLoose
     : buildClassPrivatePropertySpec;
+
+  const buildClassStaticPrivateProperty = loose
+    ? buildClassStaticPrivatePropertyLoose
+    : buildClassStaticPrivatePropertySpec;
 
   return {
     inherits: syntaxClassProperties,
@@ -288,17 +420,11 @@ export default declare((api, options) => {
 
           if (path.isClassPrivateProperty()) {
             const {
-              static: isStatic,
               key: {
                 id: { name },
               },
             } = path.node;
 
-            if (isStatic) {
-              throw path.buildCodeFrameError(
-                "Static class fields are not spec'ed yet.",
-              );
-            }
             if (privateNames.has(name)) {
               throw path.buildCodeFrameError("Duplicate private field");
             }
@@ -354,7 +480,7 @@ export default declare((api, options) => {
         const privateMaps = [];
         const privateMapInits = [];
         for (const prop of props) {
-          if (prop.isPrivate()) {
+          if (prop.isPrivate() && !prop.node.static) {
             const inits = [];
             privateMapInits.push(inits);
 
@@ -363,11 +489,27 @@ export default declare((api, options) => {
             );
           }
         }
-
         let p = 0;
+        let privateClassId;
         for (const prop of props) {
           if (prop.node.static) {
-            staticNodes.push(buildClassProperty(t.cloneNode(ref), prop, state));
+            if (prop.isPrivate()) {
+              let staticNodesToAdd;
+              [
+                staticNodesToAdd,
+                privateClassId,
+              ] = buildClassStaticPrivateProperty(
+                t.cloneNode(ref),
+                prop,
+                state,
+                privateClassId,
+              );
+              staticNodes.push(...staticNodesToAdd);
+            } else {
+              staticNodes.push(
+                buildClassProperty(t.cloneNode(ref), prop, state),
+              );
+            }
           } else if (prop.isPrivate()) {
             instanceBody.push(privateMaps[p]());
             staticNodes.push(...privateMapInits[p]);

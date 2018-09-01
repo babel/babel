@@ -1,3 +1,3 @@
 {
-  "throws": "Static class fields are not spec'ed yet."
+  "plugins": ["external-helpers", ["proposal-class-properties", { "loose": true }], "transform-block-scoping", "syntax-class-properties"]
 }
