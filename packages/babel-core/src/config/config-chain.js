@@ -190,6 +190,7 @@ export function buildRootChain(
     ({ ignore: ignoreFile, config: babelrcFile } = findRelativeConfig(
       pkgData,
       context.envName,
+      context.caller,
     ));
 
     if (
