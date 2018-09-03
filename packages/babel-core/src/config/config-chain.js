@@ -542,7 +542,7 @@ function normalizeOptions(opts: ValidatedOptions): ValidatedOptions {
 
   // "sourceMap" is just aliased to sourceMap, so copy it over as
   // we merge the options together.
-  if (options.sourceMap) {
+  if (options.hasOwnProperty("sourceMap")) {
     options.sourceMaps = options.sourceMap;
     delete options.sourceMap;
   }
