@@ -1,5 +1,5 @@
 function classFactory() {
-  var _class, _temp, _foo;
+  var _class, _temp, _foo, _bar;
 
   return _temp = _class = class Foo {
     constructor() {
@@ -14,7 +14,7 @@ function classFactory() {
     }
 
     static() {
-      return babelHelpers.classStaticPrivateFieldLooseBase(Foo, _class)._bar;
+      return babelHelpers.classPrivateFieldLooseBase(Foo, _bar)[_bar];
     }
 
     static instance(inst) {
@@ -22,14 +22,12 @@ function classFactory() {
     }
 
     static static() {
-      return babelHelpers.classStaticPrivateFieldLooseBase(Foo, _class)._bar;
+      return babelHelpers.classPrivateFieldLooseBase(Foo, _bar)[_bar];
     }
 
-  }, _foo = babelHelpers.classPrivateFieldLooseKey("foo"), Object.defineProperty(_class, "_bar", {
-    value: "bar",
-    enumerable: false,
-    configurable: false,
-    writable: true
+  }, _foo = babelHelpers.classPrivateFieldLooseKey("foo"), _bar = babelHelpers.classPrivateFieldLooseKey("bar"), Object.defineProperty(_class, _bar, {
+    writable: true,
+    value: "bar"
   }), _temp;
 }
 
