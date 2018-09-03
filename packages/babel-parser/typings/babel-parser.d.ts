@@ -8,12 +8,12 @@
 /**
  * Parse the provided code as an entire ECMAScript program.
  */
-export function parse(code: string, options?: ParserOptions): import('@babel/types').File;
+export function parse(input: string, options?: ParserOptions): import('@babel/types').File;
 
 /**
  * Parse the provided code as a single expression.
  */
-export function parseExpression(code: string, options?: ParserOptions): import('@babel/types').Expression;
+export function parseExpression(input: string, options?: ParserOptions): import('@babel/types').Expression;
 
 export interface ParserOptions {
     /**
