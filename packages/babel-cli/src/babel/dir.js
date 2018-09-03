@@ -2,7 +2,7 @@
 
 import defaults from "lodash/defaults";
 import outputFileSync from "output-file-sync";
-import { sync as mkdirpSync } from "mkdirp";
+import { sync as makeDirSync } from "make-dir";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
@@ -122,7 +122,7 @@ export default async function({
       util.deleteDir(cliOptions.outDir);
     }
 
-    mkdirpSync(cliOptions.outDir);
+    makeDirSync(cliOptions.outDir);
 
     let compiledFiles = 0;
     for (const filename of cliOptions.filenames) {

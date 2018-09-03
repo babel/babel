@@ -1,0 +1,3 @@
+{
+  "args": ["script.js", "--out-file", "dist/nested/script.js"]
+}
