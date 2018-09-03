@@ -64,10 +64,6 @@ export default {
       sinh: "math/sinh",
       tanh: "math/tanh",
       trunc: "math/trunc",
-      iaddh: "math/iaddh",
-      isubh: "math/isubh",
-      imulh: "math/imulh",
-      umulh: "math/umulh",
     },
 
     Symbol: {
