@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@babel/cli@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.0.0-rc.2.tgz#0c64762f27ccd3fa255111570b6c404f81181c85"
+"@babel/cli@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/cli/-/cli-7.0.0.tgz#108b395fd43fff6681d36fb41274df4d8ffeb12e"
   dependencies:
     commander "^2.8.1"
     convert-source-map "^1.1.0"
@@ -13,7 +13,7 @@
     lodash "^4.17.10"
     mkdirp "^0.5.1"
     output-file-sync "^2.0.0"
-    slash "^1.0.0"
+    slash "^2.0.0"
     source-map "^0.5.0"
   optionalDependencies:
     chokidar "^2.0.3"
@@ -30,23 +30,23 @@
   dependencies:
     "@babel/highlight" "7.0.0-beta.44"
 
-"@babel/code-frame@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.0.0-rc.2.tgz#12b6daeb408238360744649d16c0e9fa7ab3859e"
+"@babel/code-frame@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.0.0.tgz#06e2ab19bdb535385559aabb5ba59729482800f8"
   dependencies:
-    "@babel/highlight" "7.0.0-rc.2"
+    "@babel/highlight" "^7.0.0"
 
-"@babel/core@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.0.0-rc.2.tgz#dcb46b3adb63e35b1e82c35d9130d9c27be58427"
+"@babel/core@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.0.0.tgz#0cb0c0fd2e78a0a2bec97698f549ae9ce0b99515"
   dependencies:
-    "@babel/code-frame" "7.0.0-rc.2"
-    "@babel/generator" "7.0.0-rc.2"
-    "@babel/helpers" "7.0.0-rc.2"
-    "@babel/parser" "7.0.0-rc.2"
-    "@babel/template" "7.0.0-rc.2"
-    "@babel/traverse" "7.0.0-rc.2"
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/code-frame" "^7.0.0"
+    "@babel/generator" "^7.0.0"
+    "@babel/helpers" "^7.0.0"
+    "@babel/parser" "^7.0.0"
+    "@babel/template" "^7.0.0"
+    "@babel/traverse" "^7.0.0"
+    "@babel/types" "^7.0.0"
     convert-source-map "^1.1.0"
     debug "^3.1.0"
     json5 "^0.5.0"
@@ -75,51 +75,51 @@
     source-map "^0.5.0"
     trim-right "^1.0.1"
 
-"@babel/generator@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.0.0-rc.2.tgz#7aed8fb4ef1bdcc168225096b5b431744ba76bf8"
+"@babel/generator@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.0.0.tgz#1efd58bffa951dc846449e58ce3a1d7f02d393aa"
   dependencies:
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/types" "^7.0.0"
     jsesc "^2.5.1"
     lodash "^4.17.10"
     source-map "^0.5.0"
     trim-right "^1.0.1"
 
-"@babel/helper-annotate-as-pure@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-annotate-as-pure/-/helper-annotate-as-pure-7.0.0-rc.2.tgz#490fa0e8cfe11305c3310485221c958817957cc7"
+"@babel/helper-annotate-as-pure@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-annotate-as-pure/-/helper-annotate-as-pure-7.0.0.tgz#323d39dd0b50e10c7c06ca7d7638e6864d8c5c32"
   dependencies:
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/types" "^7.0.0"
 
-"@babel/helper-builder-binary-assignment-operator-visitor@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-builder-binary-assignment-operator-visitor/-/helper-builder-binary-assignment-operator-visitor-7.0.0-rc.2.tgz#47904c65b4059893be8b9d16bfeac320df601ffa"
+"@babel/helper-builder-binary-assignment-operator-visitor@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-builder-binary-assignment-operator-visitor/-/helper-builder-binary-assignment-operator-visitor-7.0.0.tgz#ba26336beb2abb547d58b6eba5b84d77975a39eb"
   dependencies:
-    "@babel/helper-explode-assignable-expression" "7.0.0-rc.2"
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/helper-explode-assignable-expression" "^7.0.0"
+    "@babel/types" "^7.0.0"
 
-"@babel/helper-call-delegate@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-call-delegate/-/helper-call-delegate-7.0.0-rc.2.tgz#faa254987fc3b5b90a4dc366d9f65f9a1b083174"
+"@babel/helper-call-delegate@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-call-delegate/-/helper-call-delegate-7.0.0.tgz#e036956bb33d76e59c07a04a1fff144e9f62ab78"
   dependencies:
-    "@babel/helper-hoist-variables" "7.0.0-rc.2"
-    "@babel/traverse" "7.0.0-rc.2"
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/helper-hoist-variables" "^7.0.0"
+    "@babel/traverse" "^7.0.0"
+    "@babel/types" "^7.0.0"
 
-"@babel/helper-define-map@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-define-map/-/helper-define-map-7.0.0-rc.2.tgz#68f19b9f125a0985e7b81841b35cddb1e4ae1c6e"
+"@babel/helper-define-map@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-define-map/-/helper-define-map-7.0.0.tgz#a5684dd2adf30f0137cf9b0bde436f8c2db17225"
   dependencies:
-    "@babel/helper-function-name" "7.0.0-rc.2"
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/helper-function-name" "^7.0.0"
+    "@babel/types" "^7.0.0"
     lodash "^4.17.10"
 
-"@babel/helper-explode-assignable-expression@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-explode-assignable-expression/-/helper-explode-assignable-expression-7.0.0-rc.2.tgz#df9a0094aca800e3b40a317a1b3d434a61ee158f"
+"@babel/helper-explode-assignable-expression@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-explode-assignable-expression/-/helper-explode-assignable-expression-7.0.0.tgz#fdfa4c88603ae3e954d0fc3244d5ca82fb468497"
   dependencies:
-    "@babel/traverse" "7.0.0-rc.2"
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/traverse" "^7.0.0"
+    "@babel/types" "^7.0.0"
 
 "@babel/helper-function-name@7.0.0-beta.40":
   version "7.0.0-beta.40"
@@ -137,13 +137,13 @@
     "@babel/template" "7.0.0-beta.44"
     "@babel/types" "7.0.0-beta.44"
 
-"@babel/helper-function-name@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-function-name/-/helper-function-name-7.0.0-rc.2.tgz#ad7bb9df383c5f53e4bf38c0fe0c7f93e6a27729"
+"@babel/helper-function-name@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-function-name/-/helper-function-name-7.0.0.tgz#a68cc8d04420ccc663dd258f9cc41b8261efa2d4"
   dependencies:
-    "@babel/helper-get-function-arity" "7.0.0-rc.2"
-    "@babel/template" "7.0.0-rc.2"
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/helper-get-function-arity" "^7.0.0"
+    "@babel/template" "^7.0.0"
+    "@babel/types" "^7.0.0"
 
 "@babel/helper-get-function-arity@7.0.0-beta.40":
   version "7.0.0-beta.40"
@@ -157,23 +157,23 @@
   dependencies:
     "@babel/types" "7.0.0-beta.44"
 
-"@babel/helper-get-function-arity@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-get-function-arity/-/helper-get-function-arity-7.0.0-rc.2.tgz#323cb82e2d805b40c0c36be1dfcb8ffcbd0434f3"
+"@babel/helper-get-function-arity@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-get-function-arity/-/helper-get-function-arity-7.0.0.tgz#83572d4320e2a4657263734113c42868b64e49c3"
   dependencies:
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/types" "^7.0.0"
 
-"@babel/helper-hoist-variables@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-hoist-variables/-/helper-hoist-variables-7.0.0-rc.2.tgz#4bc902f06545b60d10f2fa1058a99730df6197b4"
+"@babel/helper-hoist-variables@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-hoist-variables/-/helper-hoist-variables-7.0.0.tgz#46adc4c5e758645ae7a45deb92bab0918c23bb88"
   dependencies:
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/types" "^7.0.0"
 
-"@babel/helper-member-expression-to-functions@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-member-expression-to-functions/-/helper-member-expression-to-functions-7.0.0-rc.2.tgz#5a9c585f86a35428860d8c93a315317ba565106c"
+"@babel/helper-member-expression-to-functions@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-member-expression-to-functions/-/helper-member-expression-to-functions-7.0.0.tgz#8cd14b0a0df7ff00f009e7d7a436945f47c7a16f"
   dependencies:
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/types" "^7.0.0"
 
 "@babel/helper-module-imports@7.0.0-beta.35":
   version "7.0.0-beta.35"
@@ -182,64 +182,64 @@
     "@babel/types" "7.0.0-beta.35"
     lodash "^4.2.0"
 
-"@babel/helper-module-imports@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-module-imports/-/helper-module-imports-7.0.0-rc.2.tgz#982f30e71431d3ea7e00b1b48da774c60470a21d"
+"@babel/helper-module-imports@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-module-imports/-/helper-module-imports-7.0.0.tgz#96081b7111e486da4d2cd971ad1a4fe216cc2e3d"
   dependencies:
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/types" "^7.0.0"
 
-"@babel/helper-module-transforms@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-module-transforms/-/helper-module-transforms-7.0.0-rc.2.tgz#d9b2697790875a014282973ed74343bb3ad3c7c5"
+"@babel/helper-module-transforms@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-module-transforms/-/helper-module-transforms-7.0.0.tgz#b01ee7d543e81e8c3fc404b19c9f26acb6e4cf4c"
   dependencies:
-    "@babel/helper-module-imports" "7.0.0-rc.2"
-    "@babel/helper-simple-access" "7.0.0-rc.2"
-    "@babel/helper-split-export-declaration" "7.0.0-rc.2"
-    "@babel/template" "7.0.0-rc.2"
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/helper-module-imports" "^7.0.0"
+    "@babel/helper-simple-access" "^7.0.0"
+    "@babel/helper-split-export-declaration" "^7.0.0"
+    "@babel/template" "^7.0.0"
+    "@babel/types" "^7.0.0"
     lodash "^4.17.10"
 
-"@babel/helper-optimise-call-expression@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-optimise-call-expression/-/helper-optimise-call-expression-7.0.0-rc.2.tgz#6ddfecaf9470f96de38704223646d9c20dcc2377"
+"@babel/helper-optimise-call-expression@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-optimise-call-expression/-/helper-optimise-call-expression-7.0.0.tgz#a2920c5702b073c15de51106200aa8cad20497d5"
   dependencies:
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/types" "^7.0.0"
 
-"@babel/helper-plugin-utils@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.0.0-rc.2.tgz#95bc3225bf6aeda5a5ebc90af2546b5b9317c0b4"
+"@babel/helper-plugin-utils@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-plugin-utils/-/helper-plugin-utils-7.0.0.tgz#bbb3fbee98661c569034237cc03967ba99b4f250"
 
-"@babel/helper-regex@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-regex/-/helper-regex-7.0.0-rc.2.tgz#445d802c3c50cb146a93458f421c77a7f041b495"
+"@babel/helper-regex@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-regex/-/helper-regex-7.0.0.tgz#2c1718923b57f9bbe64705ffe5640ac64d9bdb27"
   dependencies:
     lodash "^4.17.10"
 
-"@babel/helper-remap-async-to-generator@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-remap-async-to-generator/-/helper-remap-async-to-generator-7.0.0-rc.2.tgz#2025ec555eed8275fcbe24532ab1f083ff973707"
+"@babel/helper-remap-async-to-generator@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-remap-async-to-generator/-/helper-remap-async-to-generator-7.0.0.tgz#6512273c2feb91587822335cf913fdf680c26901"
   dependencies:
-    "@babel/helper-annotate-as-pure" "7.0.0-rc.2"
-    "@babel/helper-wrap-function" "7.0.0-rc.2"
-    "@babel/template" "7.0.0-rc.2"
-    "@babel/traverse" "7.0.0-rc.2"
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/helper-annotate-as-pure" "^7.0.0"
+    "@babel/helper-wrap-function" "^7.0.0"
+    "@babel/template" "^7.0.0"
+    "@babel/traverse" "^7.0.0"
+    "@babel/types" "^7.0.0"
 
-"@babel/helper-replace-supers@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-replace-supers/-/helper-replace-supers-7.0.0-rc.2.tgz#dcf619512a2171e35c0494aeb539a621f6ce7de2"
+"@babel/helper-replace-supers@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-replace-supers/-/helper-replace-supers-7.0.0.tgz#b6f21237280e0be54f591f63a464b66627ced707"
   dependencies:
-    "@babel/helper-member-expression-to-functions" "7.0.0-rc.2"
-    "@babel/helper-optimise-call-expression" "7.0.0-rc.2"
-    "@babel/traverse" "7.0.0-rc.2"
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/helper-member-expression-to-functions" "^7.0.0"
+    "@babel/helper-optimise-call-expression" "^7.0.0"
+    "@babel/traverse" "^7.0.0"
+    "@babel/types" "^7.0.0"
 
-"@babel/helper-simple-access@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-simple-access/-/helper-simple-access-7.0.0-rc.2.tgz#34043948cda9e6b883527bb827711bd427fea914"
+"@babel/helper-simple-access@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-simple-access/-/helper-simple-access-7.0.0.tgz#ff36a27983ae4c27122da2f7f294dced80ecbd08"
   dependencies:
-    "@babel/template" "7.0.0-rc.2"
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/template" "^7.0.0"
+    "@babel/types" "^7.0.0"
 
 "@babel/helper-split-export-declaration@7.0.0-beta.44":
   version "7.0.0-beta.44"
@@ -247,28 +247,28 @@
   dependencies:
     "@babel/types" "7.0.0-beta.44"
 
-"@babel/helper-split-export-declaration@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-split-export-declaration/-/helper-split-export-declaration-7.0.0-rc.2.tgz#726b2dec4e46baeab32db67caa6e88b6521464f8"
+"@babel/helper-split-export-declaration@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-split-export-declaration/-/helper-split-export-declaration-7.0.0.tgz#3aae285c0311c2ab095d997b8c9a94cad547d813"
   dependencies:
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/types" "^7.0.0"
 
-"@babel/helper-wrap-function@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helper-wrap-function/-/helper-wrap-function-7.0.0-rc.2.tgz#788cd70072254eefd33fc1f3936ba24cced28f48"
+"@babel/helper-wrap-function@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helper-wrap-function/-/helper-wrap-function-7.0.0.tgz#1c8e42a2cfb0808e3140189dfe9490782a6fa740"
   dependencies:
-    "@babel/helper-function-name" "7.0.0-rc.2"
-    "@babel/template" "7.0.0-rc.2"
-    "@babel/traverse" "7.0.0-rc.2"
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/helper-function-name" "^7.0.0"
+    "@babel/template" "^7.0.0"
+    "@babel/traverse" "^7.0.0"
+    "@babel/types" "^7.0.0"
 
-"@babel/helpers@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/helpers/-/helpers-7.0.0-rc.2.tgz#e21f54451824f55b4f5022c6e9d6fa7df65e8746"
+"@babel/helpers@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/helpers/-/helpers-7.0.0.tgz#7213388341eeb07417f44710fd7e1d00acfa6ac0"
   dependencies:
-    "@babel/template" "7.0.0-rc.2"
-    "@babel/traverse" "7.0.0-rc.2"
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/template" "^7.0.0"
+    "@babel/traverse" "^7.0.0"
+    "@babel/types" "^7.0.0"
 
 "@babel/highlight@7.0.0-beta.40":
   version "7.0.0-beta.40"
@@ -286,387 +286,387 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-"@babel/highlight@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/highlight/-/highlight-7.0.0-rc.2.tgz#0af688a69e3709d9cf392e1837cda18c08d34d4f"
+"@babel/highlight@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/highlight/-/highlight-7.0.0.tgz#f710c38c8d458e6dd9a201afb637fcb781ce99e4"
   dependencies:
     chalk "^2.0.0"
     esutils "^2.0.2"
     js-tokens "^4.0.0"
 
-"@babel/parser@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.0.0-rc.2.tgz#a98c01af5834e71d48a5108e3aeeee333cdf26c4"
+"@babel/parser@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.0.0.tgz#697655183394facffb063437ddf52c0277698775"
 
-"@babel/plugin-proposal-async-generator-functions@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-async-generator-functions/-/plugin-proposal-async-generator-functions-7.0.0-rc.2.tgz#0f3b63fa74a8ffcd9cf1f4821a4725d2696a8622"
+"@babel/plugin-proposal-async-generator-functions@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-async-generator-functions/-/plugin-proposal-async-generator-functions-7.0.0.tgz#5d1eb6b44fd388b97f964350007ab9da090b1d70"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/helper-remap-async-to-generator" "7.0.0-rc.2"
-    "@babel/plugin-syntax-async-generators" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/helper-remap-async-to-generator" "^7.0.0"
+    "@babel/plugin-syntax-async-generators" "^7.0.0"
 
-"@babel/plugin-proposal-class-properties@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-class-properties/-/plugin-proposal-class-properties-7.0.0-rc.2.tgz#71f4f2297ec9c0848b57c231ef913bc83d49d85a"
+"@babel/plugin-proposal-class-properties@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-class-properties/-/plugin-proposal-class-properties-7.0.0.tgz#a16b5c076ba6c3d87df64d2480a380e979543731"
   dependencies:
-    "@babel/helper-function-name" "7.0.0-rc.2"
-    "@babel/helper-member-expression-to-functions" "7.0.0-rc.2"
-    "@babel/helper-optimise-call-expression" "7.0.0-rc.2"
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/helper-replace-supers" "7.0.0-rc.2"
-    "@babel/plugin-syntax-class-properties" "7.0.0-rc.2"
+    "@babel/helper-function-name" "^7.0.0"
+    "@babel/helper-member-expression-to-functions" "^7.0.0"
+    "@babel/helper-optimise-call-expression" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/helper-replace-supers" "^7.0.0"
+    "@babel/plugin-syntax-class-properties" "^7.0.0"
 
-"@babel/plugin-proposal-export-namespace-from@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-export-namespace-from/-/plugin-proposal-export-namespace-from-7.0.0-rc.2.tgz#aafdbed675d50155f48bc0f2a9aa2ffebf23ccd2"
+"@babel/plugin-proposal-export-namespace-from@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-export-namespace-from/-/plugin-proposal-export-namespace-from-7.0.0.tgz#ce847cc62c3626547107a1b835592b8ee494af51"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/plugin-syntax-export-namespace-from" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/plugin-syntax-export-namespace-from" "^7.0.0"
 
-"@babel/plugin-proposal-json-strings@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-json-strings/-/plugin-proposal-json-strings-7.0.0-rc.2.tgz#ea4fd95eb00877e138e3e9f19969e66d9d47b3eb"
+"@babel/plugin-proposal-json-strings@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-json-strings/-/plugin-proposal-json-strings-7.0.0.tgz#3b4d7b5cf51e1f2e70f52351d28d44fc2970d01e"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/plugin-syntax-json-strings" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/plugin-syntax-json-strings" "^7.0.0"
 
-"@babel/plugin-proposal-numeric-separator@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-numeric-separator/-/plugin-proposal-numeric-separator-7.0.0-rc.2.tgz#da82583c765458909d4768a14e58b62745f9b0b4"
+"@babel/plugin-proposal-numeric-separator@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-numeric-separator/-/plugin-proposal-numeric-separator-7.0.0.tgz#08aa02ce62481a84bfd0d9ce7a718adaaaa773dd"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/plugin-syntax-numeric-separator" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/plugin-syntax-numeric-separator" "^7.0.0"
 
-"@babel/plugin-proposal-object-rest-spread@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-object-rest-spread/-/plugin-proposal-object-rest-spread-7.0.0-rc.2.tgz#5552e7a4c80cde25f28dfcc6d050831d1d88a01f"
+"@babel/plugin-proposal-object-rest-spread@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-object-rest-spread/-/plugin-proposal-object-rest-spread-7.0.0.tgz#9a17b547f64d0676b6c9cecd4edf74a82ab85e7e"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/plugin-syntax-object-rest-spread" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/plugin-syntax-object-rest-spread" "^7.0.0"
 
-"@babel/plugin-proposal-optional-catch-binding@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-optional-catch-binding/-/plugin-proposal-optional-catch-binding-7.0.0-rc.2.tgz#61c5968932b6d1e9e5f028b3476f8d55bc317e1f"
+"@babel/plugin-proposal-optional-catch-binding@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-optional-catch-binding/-/plugin-proposal-optional-catch-binding-7.0.0.tgz#b610d928fe551ff7117d42c8bb410eec312a6425"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/plugin-syntax-optional-catch-binding" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/plugin-syntax-optional-catch-binding" "^7.0.0"
 
-"@babel/plugin-proposal-unicode-property-regex@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-unicode-property-regex/-/plugin-proposal-unicode-property-regex-7.0.0-rc.2.tgz#6be37bb04dab59745c2a5e9f0472f8d5f6178330"
+"@babel/plugin-proposal-unicode-property-regex@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-proposal-unicode-property-regex/-/plugin-proposal-unicode-property-regex-7.0.0.tgz#498b39cd72536cd7c4b26177d030226eba08cd33"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/helper-regex" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/helper-regex" "^7.0.0"
     regexpu-core "^4.2.0"
 
-"@babel/plugin-syntax-async-generators@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-async-generators/-/plugin-syntax-async-generators-7.0.0-rc.2.tgz#2d1726dd0b4d375e1c16fcb983ab4d89c0eeb2b3"
+"@babel/plugin-syntax-async-generators@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-async-generators/-/plugin-syntax-async-generators-7.0.0.tgz#bf0891dcdbf59558359d0c626fdc9490e20bc13c"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-syntax-class-properties@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-class-properties/-/plugin-syntax-class-properties-7.0.0-rc.2.tgz#3ecbb8ba2878f07fdc350f7b7bf4bb88d071e846"
+"@babel/plugin-syntax-class-properties@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-class-properties/-/plugin-syntax-class-properties-7.0.0.tgz#e051af5d300cbfbcec4a7476e37a803489881634"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-syntax-export-namespace-from@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-export-namespace-from/-/plugin-syntax-export-namespace-from-7.0.0-rc.2.tgz#a70ac4b9db6113eaab8c9bfbc5e4eba963c6b4aa"
+"@babel/plugin-syntax-export-namespace-from@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-export-namespace-from/-/plugin-syntax-export-namespace-from-7.0.0.tgz#17a7389a1d2571ac4d9b77ea2defa74a930edf5d"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-syntax-flow@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-flow/-/plugin-syntax-flow-7.0.0-rc.2.tgz#9a7538905383db328d6c36507ec05c9f89f2f8ab"
+"@babel/plugin-syntax-flow@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-flow/-/plugin-syntax-flow-7.0.0.tgz#70638aeaad9ee426bc532e51523cff8ff02f6f17"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-syntax-json-strings@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-json-strings/-/plugin-syntax-json-strings-7.0.0-rc.2.tgz#6c16304a379620034190c06b50da3812351967f2"
+"@babel/plugin-syntax-json-strings@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-json-strings/-/plugin-syntax-json-strings-7.0.0.tgz#0d259a68090e15b383ce3710e01d5b23f3770cbd"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-syntax-numeric-separator@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-numeric-separator/-/plugin-syntax-numeric-separator-7.0.0-rc.2.tgz#d3c70bb72c3fc5d9d319e2f43c09871b350a4d72"
+"@babel/plugin-syntax-numeric-separator@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-numeric-separator/-/plugin-syntax-numeric-separator-7.0.0.tgz#9594c7ce6ce8089a14d732cb9f6b1eeb047413ba"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-syntax-object-rest-spread@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-object-rest-spread/-/plugin-syntax-object-rest-spread-7.0.0-rc.2.tgz#551e2e0a8916d63b4ddf498afde649c8a7eee1b5"
+"@babel/plugin-syntax-object-rest-spread@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-object-rest-spread/-/plugin-syntax-object-rest-spread-7.0.0.tgz#37d8fbcaf216bd658ea1aebbeb8b75e88ebc549b"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-syntax-optional-catch-binding@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-optional-catch-binding/-/plugin-syntax-optional-catch-binding-7.0.0-rc.2.tgz#8c752fe1a79490682a32836cefe03c3bd49d2180"
+"@babel/plugin-syntax-optional-catch-binding@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-syntax-optional-catch-binding/-/plugin-syntax-optional-catch-binding-7.0.0.tgz#886f72008b3a8b185977f7cb70713b45e51ee475"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-arrow-functions@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-arrow-functions/-/plugin-transform-arrow-functions-7.0.0-rc.2.tgz#ab00f72ea24535dc47940962c3a96c656f4335c8"
+"@babel/plugin-transform-arrow-functions@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-arrow-functions/-/plugin-transform-arrow-functions-7.0.0.tgz#a6c14875848c68a3b4b3163a486535ef25c7e749"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-async-to-generator@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-async-to-generator/-/plugin-transform-async-to-generator-7.0.0-rc.2.tgz#44a125e68baf24d617a9e48a4fc518371633ebf3"
+"@babel/plugin-transform-async-to-generator@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-async-to-generator/-/plugin-transform-async-to-generator-7.0.0.tgz#feaf18f4bfeaf2236eea4b2d4879da83006cc8f5"
   dependencies:
-    "@babel/helper-module-imports" "7.0.0-rc.2"
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/helper-remap-async-to-generator" "7.0.0-rc.2"
+    "@babel/helper-module-imports" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/helper-remap-async-to-generator" "^7.0.0"
 
-"@babel/plugin-transform-block-scoped-functions@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-block-scoped-functions/-/plugin-transform-block-scoped-functions-7.0.0-rc.2.tgz#953fa99802af1045b607b0f1cb2235419ee78482"
+"@babel/plugin-transform-block-scoped-functions@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-block-scoped-functions/-/plugin-transform-block-scoped-functions-7.0.0.tgz#482b3f75103927e37288b3b67b65f848e2aa0d07"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-block-scoping@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-block-scoping/-/plugin-transform-block-scoping-7.0.0-rc.2.tgz#ce5aaebaabde05af5ee2e0bdaccc7727bb4566a6"
+"@babel/plugin-transform-block-scoping@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-block-scoping/-/plugin-transform-block-scoping-7.0.0.tgz#1745075edffd7cdaf69fab2fb6f9694424b7e9bc"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
     lodash "^4.17.10"
 
-"@babel/plugin-transform-classes@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-classes/-/plugin-transform-classes-7.0.0-rc.2.tgz#900550c5fcd76e42a6f72b0e8661e82d6e36ceb5"
+"@babel/plugin-transform-classes@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-classes/-/plugin-transform-classes-7.0.0.tgz#9e65ca401747dde99e344baea90ab50dccb4c468"
   dependencies:
-    "@babel/helper-annotate-as-pure" "7.0.0-rc.2"
-    "@babel/helper-define-map" "7.0.0-rc.2"
-    "@babel/helper-function-name" "7.0.0-rc.2"
-    "@babel/helper-optimise-call-expression" "7.0.0-rc.2"
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/helper-replace-supers" "7.0.0-rc.2"
-    "@babel/helper-split-export-declaration" "7.0.0-rc.2"
+    "@babel/helper-annotate-as-pure" "^7.0.0"
+    "@babel/helper-define-map" "^7.0.0"
+    "@babel/helper-function-name" "^7.0.0"
+    "@babel/helper-optimise-call-expression" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/helper-replace-supers" "^7.0.0"
+    "@babel/helper-split-export-declaration" "^7.0.0"
     globals "^11.1.0"
 
-"@babel/plugin-transform-computed-properties@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-computed-properties/-/plugin-transform-computed-properties-7.0.0-rc.2.tgz#06e61765c350368c61eadbe0cd37c6835c21e665"
+"@babel/plugin-transform-computed-properties@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-computed-properties/-/plugin-transform-computed-properties-7.0.0.tgz#2fbb8900cd3e8258f2a2ede909b90e7556185e31"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-destructuring@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-destructuring/-/plugin-transform-destructuring-7.0.0-rc.2.tgz#ef82b75032275e2eaeba5cf4719b12b8263320b4"
+"@babel/plugin-transform-destructuring@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-destructuring/-/plugin-transform-destructuring-7.0.0.tgz#68e911e1935dda2f06b6ccbbf184ffb024e9d43a"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-dotall-regex@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-dotall-regex/-/plugin-transform-dotall-regex-7.0.0-rc.2.tgz#012766ab7dcdf6afea5b3a1366f3e6fff368a37f"
+"@babel/plugin-transform-dotall-regex@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-dotall-regex/-/plugin-transform-dotall-regex-7.0.0.tgz#73a24da69bc3c370251f43a3d048198546115e58"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/helper-regex" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/helper-regex" "^7.0.0"
     regexpu-core "^4.1.3"
 
-"@babel/plugin-transform-duplicate-keys@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-duplicate-keys/-/plugin-transform-duplicate-keys-7.0.0-rc.2.tgz#d60eeb2ff7ed31b9e691c880a97dc2e8f7b0dd95"
+"@babel/plugin-transform-duplicate-keys@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-duplicate-keys/-/plugin-transform-duplicate-keys-7.0.0.tgz#a0601e580991e7cace080e4cf919cfd58da74e86"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-exponentiation-operator@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-exponentiation-operator/-/plugin-transform-exponentiation-operator-7.0.0-rc.2.tgz#171a4b44c5bb8ba9a57190f65f87f8da045d1db3"
+"@babel/plugin-transform-exponentiation-operator@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-exponentiation-operator/-/plugin-transform-exponentiation-operator-7.0.0.tgz#c51b45e090a01876f64d32b5b46c0799c85ea56c"
   dependencies:
-    "@babel/helper-builder-binary-assignment-operator-visitor" "7.0.0-rc.2"
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-builder-binary-assignment-operator-visitor" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-flow-strip-types@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-flow-strip-types/-/plugin-transform-flow-strip-types-7.0.0-rc.2.tgz#87c482c195a3a5e2b8d392928db386a2b034c224"
+"@babel/plugin-transform-flow-strip-types@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-flow-strip-types/-/plugin-transform-flow-strip-types-7.0.0.tgz#c40ced34c2783985d90d9f9ac77a13e6fb396a01"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/plugin-syntax-flow" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/plugin-syntax-flow" "^7.0.0"
 
-"@babel/plugin-transform-for-of@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-for-of/-/plugin-transform-for-of-7.0.0-rc.2.tgz#2ef81a326faf68fb7eca37a3ebf45c5426f84bae"
+"@babel/plugin-transform-for-of@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-for-of/-/plugin-transform-for-of-7.0.0.tgz#f2ba4eadb83bd17dc3c7e9b30f4707365e1c3e39"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-function-name@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-function-name/-/plugin-transform-function-name-7.0.0-rc.2.tgz#c69c2241fdf3b8430bd6b98d06d7097e91b01bff"
+"@babel/plugin-transform-function-name@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-function-name/-/plugin-transform-function-name-7.0.0.tgz#eeda18dc22584e13c3581a68f6be4822bb1d1d81"
   dependencies:
-    "@babel/helper-function-name" "7.0.0-rc.2"
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-function-name" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-literals@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-literals/-/plugin-transform-literals-7.0.0-rc.2.tgz#a4475d70d91c7dbed6c4ee280b3b1bfcd8221324"
+"@babel/plugin-transform-literals@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-literals/-/plugin-transform-literals-7.0.0.tgz#2aec1d29cdd24c407359c930cdd89e914ee8ff86"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-modules-amd@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-amd/-/plugin-transform-modules-amd-7.0.0-rc.2.tgz#f3c37e6de732c8ac07df01ea164cf976409de469"
+"@babel/plugin-transform-modules-amd@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-amd/-/plugin-transform-modules-amd-7.0.0.tgz#2430ab73db9960c4ca89966f425b803f5d0d0468"
   dependencies:
-    "@babel/helper-module-transforms" "7.0.0-rc.2"
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-module-transforms" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-modules-commonjs@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-commonjs/-/plugin-transform-modules-commonjs-7.0.0-rc.2.tgz#f6475129473b635bd68cbbab69448c76eb52718c"
+"@babel/plugin-transform-modules-commonjs@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-commonjs/-/plugin-transform-modules-commonjs-7.0.0.tgz#20b906e5ab130dd8e456b694a94d9575da0fd41f"
   dependencies:
-    "@babel/helper-module-transforms" "7.0.0-rc.2"
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/helper-simple-access" "7.0.0-rc.2"
+    "@babel/helper-module-transforms" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/helper-simple-access" "^7.0.0"
 
-"@babel/plugin-transform-modules-systemjs@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-systemjs/-/plugin-transform-modules-systemjs-7.0.0-rc.2.tgz#ced5ac5556f0e6068b1c5d600bff2e68004038ee"
+"@babel/plugin-transform-modules-systemjs@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-systemjs/-/plugin-transform-modules-systemjs-7.0.0.tgz#8873d876d4fee23209decc4d1feab8f198cf2df4"
   dependencies:
-    "@babel/helper-hoist-variables" "7.0.0-rc.2"
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-hoist-variables" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-modules-umd@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-umd/-/plugin-transform-modules-umd-7.0.0-rc.2.tgz#0e6eeb1e9138064a2ef28991bf03fa4d14536410"
+"@babel/plugin-transform-modules-umd@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-modules-umd/-/plugin-transform-modules-umd-7.0.0.tgz#e7bb4f2a6cd199668964241951a25013450349be"
   dependencies:
-    "@babel/helper-module-transforms" "7.0.0-rc.2"
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-module-transforms" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-new-target@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-new-target/-/plugin-transform-new-target-7.0.0-rc.2.tgz#5b70d3e202a4d677ba6b12762395a85cb1ddc935"
+"@babel/plugin-transform-new-target@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-new-target/-/plugin-transform-new-target-7.0.0.tgz#ae8fbd89517fa7892d20e6564e641e8770c3aa4a"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-object-super@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-object-super/-/plugin-transform-object-super-7.0.0-rc.2.tgz#2c521240b3f817a4d08915022d1d889ee1ff10ec"
+"@babel/plugin-transform-object-super@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-object-super/-/plugin-transform-object-super-7.0.0.tgz#b8587d511309b3a0e96e9e38169908b3e392041e"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/helper-replace-supers" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/helper-replace-supers" "^7.0.0"
 
-"@babel/plugin-transform-parameters@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-parameters/-/plugin-transform-parameters-7.0.0-rc.2.tgz#5f81577721a3ce6ebc0bdc572209f75e3b723e3d"
+"@babel/plugin-transform-parameters@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-parameters/-/plugin-transform-parameters-7.0.0.tgz#da864efa111816a6df161d492f33de10e74b1949"
   dependencies:
-    "@babel/helper-call-delegate" "7.0.0-rc.2"
-    "@babel/helper-get-function-arity" "7.0.0-rc.2"
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-call-delegate" "^7.0.0"
+    "@babel/helper-get-function-arity" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-regenerator@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-regenerator/-/plugin-transform-regenerator-7.0.0-rc.2.tgz#35c26152b0ddff76d93ca1fcf55417b16111ade8"
+"@babel/plugin-transform-regenerator@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-regenerator/-/plugin-transform-regenerator-7.0.0.tgz#5b41686b4ed40bef874d7ed6a84bdd849c13e0c1"
   dependencies:
     regenerator-transform "^0.13.3"
 
-"@babel/plugin-transform-runtime@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-runtime/-/plugin-transform-runtime-7.0.0-rc.2.tgz#8e202c5144bd743038d8b8373cdfb290c9130c58"
+"@babel/plugin-transform-runtime@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-runtime/-/plugin-transform-runtime-7.0.0.tgz#0f1443c07bac16dba8efa939e0c61d6922740062"
   dependencies:
-    "@babel/helper-module-imports" "7.0.0-rc.2"
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-module-imports" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
     resolve "^1.8.1"
 
-"@babel/plugin-transform-shorthand-properties@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-shorthand-properties/-/plugin-transform-shorthand-properties-7.0.0-rc.2.tgz#b920f4ffdcc4bbe75917cfb2e22f685a6771c231"
+"@babel/plugin-transform-shorthand-properties@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-shorthand-properties/-/plugin-transform-shorthand-properties-7.0.0.tgz#85f8af592dcc07647541a0350e8c95c7bf419d15"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-spread@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-spread/-/plugin-transform-spread-7.0.0-rc.2.tgz#827e032c206c9f08d01d3d43bb8800e573b3a501"
+"@babel/plugin-transform-spread@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-spread/-/plugin-transform-spread-7.0.0.tgz#93583ce48dd8c85e53f3a46056c856e4af30b49b"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-sticky-regex@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-sticky-regex/-/plugin-transform-sticky-regex-7.0.0-rc.2.tgz#b9febc20c1624455e8d5ca1008fb32315e3a414b"
+"@babel/plugin-transform-sticky-regex@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-sticky-regex/-/plugin-transform-sticky-regex-7.0.0.tgz#30a9d64ac2ab46eec087b8530535becd90e73366"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/helper-regex" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/helper-regex" "^7.0.0"
 
-"@babel/plugin-transform-template-literals@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-template-literals/-/plugin-transform-template-literals-7.0.0-rc.2.tgz#89d701611bff91cceb478542921178f83f5a70c6"
+"@babel/plugin-transform-template-literals@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-template-literals/-/plugin-transform-template-literals-7.0.0.tgz#084f1952efe5b153ddae69eb8945f882c7a97c65"
   dependencies:
-    "@babel/helper-annotate-as-pure" "7.0.0-rc.2"
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-annotate-as-pure" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-typeof-symbol@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-typeof-symbol/-/plugin-transform-typeof-symbol-7.0.0-rc.2.tgz#3c9a0721f54ad8bbc8f469b6720304d843fd1ebe"
+"@babel/plugin-transform-typeof-symbol@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-typeof-symbol/-/plugin-transform-typeof-symbol-7.0.0.tgz#4dcf1e52e943e5267b7313bff347fdbe0f81cec9"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
 
-"@babel/plugin-transform-unicode-regex@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-unicode-regex/-/plugin-transform-unicode-regex-7.0.0-rc.2.tgz#6bc3d9e927151baa3c3715d3c46316ac3d8b4a2e"
+"@babel/plugin-transform-unicode-regex@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/plugin-transform-unicode-regex/-/plugin-transform-unicode-regex-7.0.0.tgz#c6780e5b1863a76fe792d90eded9fcd5b51d68fc"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/helper-regex" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/helper-regex" "^7.0.0"
     regexpu-core "^4.1.3"
 
-"@babel/preset-env@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/preset-env/-/preset-env-7.0.0-rc.2.tgz#66f7ed731234b67ee9a6189f1df60203873ac98b"
+"@babel/preset-env@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/preset-env/-/preset-env-7.0.0.tgz#f450f200c14e713f98cb14d113bf0c2cfbb89ca9"
   dependencies:
-    "@babel/helper-module-imports" "7.0.0-rc.2"
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/plugin-proposal-async-generator-functions" "7.0.0-rc.2"
-    "@babel/plugin-proposal-json-strings" "7.0.0-rc.2"
-    "@babel/plugin-proposal-object-rest-spread" "7.0.0-rc.2"
-    "@babel/plugin-proposal-optional-catch-binding" "7.0.0-rc.2"
-    "@babel/plugin-proposal-unicode-property-regex" "7.0.0-rc.2"
-    "@babel/plugin-syntax-async-generators" "7.0.0-rc.2"
-    "@babel/plugin-syntax-object-rest-spread" "7.0.0-rc.2"
-    "@babel/plugin-syntax-optional-catch-binding" "7.0.0-rc.2"
-    "@babel/plugin-transform-arrow-functions" "7.0.0-rc.2"
-    "@babel/plugin-transform-async-to-generator" "7.0.0-rc.2"
-    "@babel/plugin-transform-block-scoped-functions" "7.0.0-rc.2"
-    "@babel/plugin-transform-block-scoping" "7.0.0-rc.2"
-    "@babel/plugin-transform-classes" "7.0.0-rc.2"
-    "@babel/plugin-transform-computed-properties" "7.0.0-rc.2"
-    "@babel/plugin-transform-destructuring" "7.0.0-rc.2"
-    "@babel/plugin-transform-dotall-regex" "7.0.0-rc.2"
-    "@babel/plugin-transform-duplicate-keys" "7.0.0-rc.2"
-    "@babel/plugin-transform-exponentiation-operator" "7.0.0-rc.2"
-    "@babel/plugin-transform-for-of" "7.0.0-rc.2"
-    "@babel/plugin-transform-function-name" "7.0.0-rc.2"
-    "@babel/plugin-transform-literals" "7.0.0-rc.2"
-    "@babel/plugin-transform-modules-amd" "7.0.0-rc.2"
-    "@babel/plugin-transform-modules-commonjs" "7.0.0-rc.2"
-    "@babel/plugin-transform-modules-systemjs" "7.0.0-rc.2"
-    "@babel/plugin-transform-modules-umd" "7.0.0-rc.2"
-    "@babel/plugin-transform-new-target" "7.0.0-rc.2"
-    "@babel/plugin-transform-object-super" "7.0.0-rc.2"
-    "@babel/plugin-transform-parameters" "7.0.0-rc.2"
-    "@babel/plugin-transform-regenerator" "7.0.0-rc.2"
-    "@babel/plugin-transform-shorthand-properties" "7.0.0-rc.2"
-    "@babel/plugin-transform-spread" "7.0.0-rc.2"
-    "@babel/plugin-transform-sticky-regex" "7.0.0-rc.2"
-    "@babel/plugin-transform-template-literals" "7.0.0-rc.2"
-    "@babel/plugin-transform-typeof-symbol" "7.0.0-rc.2"
-    "@babel/plugin-transform-unicode-regex" "7.0.0-rc.2"
-    browserslist "^3.0.0"
+    "@babel/helper-module-imports" "^7.0.0"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/plugin-proposal-async-generator-functions" "^7.0.0"
+    "@babel/plugin-proposal-json-strings" "^7.0.0"
+    "@babel/plugin-proposal-object-rest-spread" "^7.0.0"
+    "@babel/plugin-proposal-optional-catch-binding" "^7.0.0"
+    "@babel/plugin-proposal-unicode-property-regex" "^7.0.0"
+    "@babel/plugin-syntax-async-generators" "^7.0.0"
+    "@babel/plugin-syntax-object-rest-spread" "^7.0.0"
+    "@babel/plugin-syntax-optional-catch-binding" "^7.0.0"
+    "@babel/plugin-transform-arrow-functions" "^7.0.0"
+    "@babel/plugin-transform-async-to-generator" "^7.0.0"
+    "@babel/plugin-transform-block-scoped-functions" "^7.0.0"
+    "@babel/plugin-transform-block-scoping" "^7.0.0"
+    "@babel/plugin-transform-classes" "^7.0.0"
+    "@babel/plugin-transform-computed-properties" "^7.0.0"
+    "@babel/plugin-transform-destructuring" "^7.0.0"
+    "@babel/plugin-transform-dotall-regex" "^7.0.0"
+    "@babel/plugin-transform-duplicate-keys" "^7.0.0"
+    "@babel/plugin-transform-exponentiation-operator" "^7.0.0"
+    "@babel/plugin-transform-for-of" "^7.0.0"
+    "@babel/plugin-transform-function-name" "^7.0.0"
+    "@babel/plugin-transform-literals" "^7.0.0"
+    "@babel/plugin-transform-modules-amd" "^7.0.0"
+    "@babel/plugin-transform-modules-commonjs" "^7.0.0"
+    "@babel/plugin-transform-modules-systemjs" "^7.0.0"
+    "@babel/plugin-transform-modules-umd" "^7.0.0"
+    "@babel/plugin-transform-new-target" "^7.0.0"
+    "@babel/plugin-transform-object-super" "^7.0.0"
+    "@babel/plugin-transform-parameters" "^7.0.0"
+    "@babel/plugin-transform-regenerator" "^7.0.0"
+    "@babel/plugin-transform-shorthand-properties" "^7.0.0"
+    "@babel/plugin-transform-spread" "^7.0.0"
+    "@babel/plugin-transform-sticky-regex" "^7.0.0"
+    "@babel/plugin-transform-template-literals" "^7.0.0"
+    "@babel/plugin-transform-typeof-symbol" "^7.0.0"
+    "@babel/plugin-transform-unicode-regex" "^7.0.0"
+    browserslist "^4.1.0"
     invariant "^2.2.2"
     js-levenshtein "^1.1.3"
     semver "^5.3.0"
 
-"@babel/preset-flow@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/preset-flow/-/preset-flow-7.0.0-rc.2.tgz#415539cd74968b1d2ae5b53fe9572f8d16a355b9"
+"@babel/preset-flow@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/preset-flow/-/preset-flow-7.0.0.tgz#afd764835d9535ec63d8c7d4caf1c06457263da2"
   dependencies:
-    "@babel/helper-plugin-utils" "7.0.0-rc.2"
-    "@babel/plugin-transform-flow-strip-types" "7.0.0-rc.2"
+    "@babel/helper-plugin-utils" "^7.0.0"
+    "@babel/plugin-transform-flow-strip-types" "^7.0.0"
 
-"@babel/register@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/register/-/register-7.0.0-rc.2.tgz#1289243dd0ac7deec918c236d4b31aa91fbcd760"
+"@babel/register@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/register/-/register-7.0.0.tgz#fa634bae1bfa429f60615b754fc1f1d745edd827"
   dependencies:
     core-js "^2.5.7"
     find-cache-dir "^1.0.0"
@@ -674,11 +674,11 @@
     lodash "^4.17.10"
     mkdirp "^0.5.1"
     pirates "^4.0.0"
-    source-map-support "^0.4.2"
+    source-map-support "^0.5.9"
 
-"@babel/runtime@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.0.0-rc.2.tgz#63082909bd27c39f92c27c641f278389ad30a478"
+"@babel/runtime@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.0.0.tgz#adeb78fedfc855aa05bc041640f3f6f98e85424c"
   dependencies:
     regenerator-runtime "^0.12.0"
 
@@ -700,13 +700,13 @@
     babylon "7.0.0-beta.44"
     lodash "^4.2.0"
 
-"@babel/template@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.0.0-rc.2.tgz#53f6be6c1336ddc7744625c9bdca9d10be5d5d72"
+"@babel/template@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.0.0.tgz#c2bc9870405959c89a9c814376a2ecb247838c80"
   dependencies:
-    "@babel/code-frame" "7.0.0-rc.2"
-    "@babel/parser" "7.0.0-rc.2"
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/code-frame" "^7.0.0"
+    "@babel/parser" "^7.0.0"
+    "@babel/types" "^7.0.0"
 
 "@babel/traverse@7.0.0-beta.44":
   version "7.0.0-beta.44"
@@ -723,16 +723,16 @@
     invariant "^2.2.0"
     lodash "^4.2.0"
 
-"@babel/traverse@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.0.0-rc.2.tgz#6e54ebe82aa1b3b3cf5ec05594bc14d7c59c9766"
+"@babel/traverse@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/traverse/-/traverse-7.0.0.tgz#b1fe9b6567fdf3ab542cfad6f3b31f854d799a61"
   dependencies:
-    "@babel/code-frame" "7.0.0-rc.2"
-    "@babel/generator" "7.0.0-rc.2"
-    "@babel/helper-function-name" "7.0.0-rc.2"
-    "@babel/helper-split-export-declaration" "7.0.0-rc.2"
-    "@babel/parser" "7.0.0-rc.2"
-    "@babel/types" "7.0.0-rc.2"
+    "@babel/code-frame" "^7.0.0"
+    "@babel/generator" "^7.0.0"
+    "@babel/helper-function-name" "^7.0.0"
+    "@babel/helper-split-export-declaration" "^7.0.0"
+    "@babel/parser" "^7.0.0"
+    "@babel/types" "^7.0.0"
     debug "^3.1.0"
     globals "^11.1.0"
     lodash "^4.17.10"
@@ -775,9 +775,9 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
-"@babel/types@7.0.0-rc.2":
-  version "7.0.0-rc.2"
-  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.0.0-rc.2.tgz#8e025b78764cee8751823e308558a3ca144ebd9d"
+"@babel/types@^7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/types/-/types-7.0.0.tgz#6e191793d3c854d19c6749989e3bc55f0e962118"
   dependencies:
     esutils "^2.0.2"
     lodash "^4.17.10"
@@ -1765,12 +1765,13 @@ browserify@^16.2.2:
     vm-browserify "^1.0.0"
     xtend "^4.0.0"
 
-browserslist@^3.0.0:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-3.1.1.tgz#d380fc048bc3a33e60fb87dc135110ebaaa6320a"
+browserslist@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/browserslist/-/browserslist-4.1.0.tgz#81cbb8e52dfa09918f93c6e051d779cb7360785d"
   dependencies:
-    caniuse-lite "^1.0.30000809"
-    electron-to-chromium "^1.3.33"
+    caniuse-lite "^1.0.30000878"
+    electron-to-chromium "^1.3.61"
+    node-releases "^1.0.0-alpha.11"
 
 bser@^2.0.0:
   version "2.0.0"
@@ -1898,9 +1899,9 @@ camelcase@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/camelcase/-/camelcase-4.1.0.tgz#d545635be1e33c542649c69173e5de6acfae34dd"
 
-caniuse-lite@^1.0.30000809:
-  version "1.0.30000812"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000812.tgz#d173b686b49bc941fa18ff2e7e533048e20ed92c"
+caniuse-lite@^1.0.30000878:
+  version "1.0.30000883"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30000883.tgz#597c1eabfb379bd9fbeaa778632762eb574706ac"
 
 capture-stack-trace@^1.0.0:
   version "1.0.0"
@@ -2894,9 +2895,9 @@ ecc-jsbn@~0.1.1:
   dependencies:
     jsbn "~0.1.0"
 
-electron-to-chromium@^1.3.33:
-  version "1.3.34"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.34.tgz#d93498f40391bb0c16a603d8241b9951404157ed"
+electron-to-chromium@^1.3.61:
+  version "1.3.62"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.62.tgz#2e8e2dc070c800ec8ce23ff9dfcceb585d6f9ed8"
 
 elegant-spinner@^1.0.1:
   version "1.0.1"
@@ -6143,6 +6144,12 @@ node-pre-gyp@^0.9.0:
     semver "^5.3.0"
     tar "^4"
 
+node-releases@^1.0.0-alpha.11:
+  version "1.0.0-alpha.11"
+  resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.0.0-alpha.11.tgz#73c810acc2e5b741a17ddfbb39dfca9ab9359d8a"
+  dependencies:
+    semver "^5.3.0"
+
 nopt@^4.0.1:
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/nopt/-/nopt-4.0.1.tgz#d0d4685afd5415193c8c7505602d0d17cd64474d"
@@ -7427,6 +7434,10 @@ semver-greatest-satisfied-range@^1.1.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.0.tgz#dc4bbc7a6ca9d916dee5d43516f0092b58f7b8ab"
 
+semver@^5.5.1:
+  version "5.5.1"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-5.5.1.tgz#7dfdd8814bdb7cabc7be0fb1d734cfb66c940477"
+
 set-blocking@^2.0.0, set-blocking@~2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/set-blocking/-/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
@@ -7512,6 +7523,10 @@ slash@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/slash/-/slash-1.0.0.tgz#c41f2f6c39fc16d1cd17ad4b5d896114ae470d55"
 
+slash@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/slash/-/slash-2.0.0.tgz#de552851a1759df3a8f206535442f5ec4ddeab44"
+
 slice-ansi@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/slice-ansi/-/slice-ansi-0.0.4.tgz#edbf8903f66f7ce2f8eafd6ceed65e264c831b35"
@@ -7581,7 +7596,7 @@ source-map-resolve@^0.5.0:
     source-map-url "^0.4.0"
     urix "^0.1.0"
 
-source-map-support@^0.4.15, source-map-support@^0.4.2:
+source-map-support@^0.4.15:
   version "0.4.18"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.4.18.tgz#0286a6de8be42641338594e97ccea75f0a2c585f"
   dependencies:
@@ -7590,6 +7605,13 @@ source-map-support@^0.4.15, source-map-support@^0.4.2:
 source-map-support@^0.5.6:
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.6.tgz#4435cee46b1aab62b8e8610ce60f788091c51c13"
+  dependencies:
+    buffer-from "^1.0.0"
+    source-map "^0.6.0"
+
+source-map-support@^0.5.9:
+  version "0.5.9"
+  resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.9.tgz#41bc953b2534267ea2d605bccfa7bfa3111ced5f"
   dependencies:
     buffer-from "^1.0.0"
     source-map "^0.6.0"
