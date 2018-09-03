@@ -1,35 +1,37 @@
 class Base {
   static getThis() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(this, Base, _BaseStatics, "foo");
+    return babelHelpers.classStaticPrivateFieldSpecGet(this, Base, _foo);
   }
 
   static updateThis(val) {
-    return babelHelpers.classStaticPrivateFieldSpecSet(this, Base, _BaseStatics, "foo", val);
+    return babelHelpers.classStaticPrivateFieldSpecSet(this, Base, _foo, val);
   }
 
   static getClass() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(Base, Base, _BaseStatics, "foo");
+    return babelHelpers.classStaticPrivateFieldSpecGet(Base, Base, _foo);
   }
 
   static updateClass(val) {
-    return babelHelpers.classStaticPrivateFieldSpecSet(Base, Base, _BaseStatics, "foo", val);
+    return babelHelpers.classStaticPrivateFieldSpecSet(Base, Base, _foo, val);
   }
 
 }
 
-var _BaseStatics = Object.create(null);
-
-babelHelpers.defineProperty(_BaseStatics, "foo", 1);
+var _foo = {
+  writable: true,
+  value: 1
+};
 
 class Sub1 extends Base {
   static update(val) {
-    return babelHelpers.classStaticPrivateFieldSpecSet(this, Sub1, _Sub1Statics, "foo", val);
+    return babelHelpers.classStaticPrivateFieldSpecSet(this, Sub1, _foo2, val);
   }
 
 }
 
-var _Sub1Statics = Object.create(null);
-
-babelHelpers.defineProperty(_Sub1Statics, "foo", 2);
+var _foo2 = {
+  writable: true,
+  value: 2
+};
 
 class Sub2 extends Base {}
