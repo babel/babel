@@ -295,8 +295,7 @@ export default declare((api, options) => {
       state,
     );
 
-    const staticNodesToAdd = [keyDecl, buildInit()];
-    return [staticNodesToAdd];
+    return [keyDecl, buildInit()];
   }
 
   function buildClassStaticPrivatePropertySpec(ref, path, state) {
@@ -312,7 +311,7 @@ export default declare((api, options) => {
       ...staticPrivatePropertyHandlerSpec,
     });
 
-    const staticNodesToAdd = [
+    return [
       template.statement.ast`
         var ${privateId} = {
           // configurable is always false for private elements
@@ -322,8 +321,6 @@ export default declare((api, options) => {
         }
       `,
     ];
-
-    return [staticNodesToAdd];
   }
 
   const buildClassProperty = loose
@@ -433,21 +430,16 @@ export default declare((api, options) => {
           }
         }
         let p = 0;
-        let privateClassId;
         for (const prop of props) {
           if (prop.node.static) {
             if (prop.isPrivate()) {
-              let staticNodesToAdd;
-              [
-                staticNodesToAdd,
-                privateClassId,
-              ] = buildClassStaticPrivateProperty(
-                t.cloneNode(ref),
-                prop,
-                state,
-                privateClassId,
+              staticNodes.push(
+                ...buildClassStaticPrivateProperty(
+                  t.cloneNode(ref),
+                  prop,
+                  state,
+                ),
               );
-              staticNodes.push(...staticNodesToAdd);
             } else {
               staticNodes.push(
                 buildClassProperty(t.cloneNode(ref), prop, state),
