@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    ["transform-runtime", {
+      "corejs": 2,
+      "version": "^7.0.1"
+    }],
+    "transform-regenerator"
+  ]
+}
