@@ -6,7 +6,7 @@ import type { PluginList } from "./plugin-utils";
 // the parser process. These options are recognized:
 
 export type Options = {
-  sourceType: "script" | "module",
+  sourceType: "script" | "module" | "unambiguous",
   sourceFilename?: string,
   startLine: number,
   allowAwaitOutsideFunction: boolean,
