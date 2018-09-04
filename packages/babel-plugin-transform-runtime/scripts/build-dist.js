@@ -8,7 +8,8 @@ const template = require("@babel/template");
 const t = require("@babel/types");
 
 const transformRuntime = require("../");
-const corejs2Definitions = require("../lib/definitions").default;
+const getCorejs2Definitions = require("../lib/definitions").default;
+const corejs2Definitions = getCorejs2Definitions();
 
 writeHelpers("@babel/runtime");
 

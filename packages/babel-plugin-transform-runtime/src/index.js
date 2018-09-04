@@ -4,7 +4,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
-import definitions from "./definitions";
+import getDefinitions from "./definitions";
 
 function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
   try {
@@ -40,6 +40,8 @@ export default declare((api, options, dirname) => {
     version: runtimeVersion = "7.0.0-beta.0",
     absoluteRuntime = false,
   } = options;
+
+  const definitions = getDefinitions(runtimeVersion);
 
   if (typeof useRuntimeRegenerator !== "boolean") {
     throw new Error(
