@@ -1,5 +1,6 @@
 // @flow
 
+import type { SourceType } from "./options";
 import type { Token } from "./tokenizer";
 import type { SourceLocation } from "./util/location";
 
@@ -135,7 +136,7 @@ export type File = NodeBase & {
 
 export type Program = NodeBase & {
   type: "Program",
-  sourceType: "script" | "module",
+  sourceType: SourceType,
   body: Array<Statement | ModuleDeclaration>, // TODO: $ReadOnlyArray
   directives: $ReadOnlyArray<Directive>, // TODO: Not in spec
   interpreter: InterpreterDirective | null,
