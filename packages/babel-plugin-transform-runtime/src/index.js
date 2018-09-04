@@ -74,6 +74,9 @@ export default declare((api, options, dirname) => {
         `but got ${JSON.stringify(corejsVersion)}.`,
     );
   }
+  if (typeof runtimeVersion !== "string") {
+    throw new Error(`The 'version' option must be a version string.`);
+  }
 
   function has(obj, key) {
     return Object.prototype.hasOwnProperty.call(obj, key);
