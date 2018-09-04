@@ -1,17 +1,17 @@
 class Foo {
   static test() {
-    return babelHelpers.classStaticPrivateFieldLooseBase(Foo, Foo)._bar;
+    return babelHelpers.classPrivateFieldLooseBase(Foo, _bar)[_bar];
   }
 
   test() {
-    return babelHelpers.classStaticPrivateFieldLooseBase(Foo, Foo)._bar;
+    return babelHelpers.classPrivateFieldLooseBase(Foo, _bar)[_bar];
   }
 
 }
 
-Object.defineProperty(Foo, "_bar", {
-  value: "foo",
-  enumerable: false,
-  configurable: false,
-  writable: true
+var _bar = babelHelpers.classPrivateFieldLooseKey("bar");
+
+Object.defineProperty(Foo, _bar, {
+  writable: true,
+  value: "foo"
 });

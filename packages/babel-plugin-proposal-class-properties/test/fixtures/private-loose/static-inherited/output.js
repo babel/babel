@@ -1,41 +1,41 @@
 class Base {
   static getThis() {
-    return babelHelpers.classStaticPrivateFieldLooseBase(this, Base)._foo;
+    return babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo];
   }
 
   static updateThis(val) {
-    return babelHelpers.classStaticPrivateFieldLooseBase(this, Base)._foo = val;
+    return babelHelpers.classPrivateFieldLooseBase(this, _foo)[_foo] = val;
   }
 
   static getClass() {
-    return babelHelpers.classStaticPrivateFieldLooseBase(Base, Base)._foo;
+    return babelHelpers.classPrivateFieldLooseBase(Base, _foo)[_foo];
   }
 
   static updateClass(val) {
-    return babelHelpers.classStaticPrivateFieldLooseBase(Base, Base)._foo = val;
+    return babelHelpers.classPrivateFieldLooseBase(Base, _foo)[_foo] = val;
   }
 
 }
 
-Object.defineProperty(Base, "_foo", {
-  value: 1,
-  enumerable: false,
-  configurable: false,
-  writable: true
+var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
+
+Object.defineProperty(Base, _foo, {
+  writable: true,
+  value: 1
 });
 
 class Sub1 extends Base {
   static update(val) {
-    return babelHelpers.classStaticPrivateFieldLooseBase(this, Sub1)._foo2 = val;
+    return babelHelpers.classPrivateFieldLooseBase(this, _foo2)[_foo2] = val;
   }
 
 }
 
-Object.defineProperty(Sub1, "_foo2", {
-  value: 2,
-  enumerable: false,
-  configurable: false,
-  writable: true
+var _foo2 = babelHelpers.classPrivateFieldLooseKey("foo");
+
+Object.defineProperty(Sub1, _foo2, {
+  writable: true,
+  value: 2
 });
 
 class Sub2 extends Base {}

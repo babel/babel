@@ -10,17 +10,17 @@ function () {
   babelHelpers.createClass(Foo, [{
     key: "test",
     value: function test(x) {
-      return babelHelpers.classStaticPrivateFieldLooseBase(Foo, Foo)._foo(x);
+      return babelHelpers.classPrivateFieldLooseBase(Foo, _foo)[_foo](x);
     }
   }]);
   return Foo;
 }();
 
-Object.defineProperty(Foo, "_foo", {
+var _foo = babelHelpers.classPrivateFieldLooseKey("foo");
+
+Object.defineProperty(Foo, _foo, {
+  writable: true,
   value: function (x) {
     return x;
-  },
-  enumerable: false,
-  configurable: false,
-  writable: true
+  }
 });
