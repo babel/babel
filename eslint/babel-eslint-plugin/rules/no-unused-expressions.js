@@ -42,8 +42,22 @@ function isInDoStatement(node) {
   return false;
 }
 
+/**
+ * @param {ASTNode} node - any node
+ * @returns {boolean} whether the given node is an optional call expression,
+ * see https://github.com/tc39/proposal-optional-chaining
+ */
+function isOptionalCallExpression(node) {
+  return (
+    !!node &&
+    node.type === 'ExpressionStatement' &&
+    node.expression.type === 'OptionalCallExpression'
+  );
+}
+
 module.exports = ruleComposer.filterReports(
   rule,
-  (problem, metadata) => !isInDoStatement(problem.node)
+  (problem, metadata) =>
+    !isInDoStatement(problem.node) && !isOptionalCallExpression(problem.node)
 );
 
