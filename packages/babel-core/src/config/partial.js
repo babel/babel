@@ -30,7 +30,8 @@ export default function loadPrivatePartialConfig(
 
   const { envName = getEnv(), cwd = ".", root: rootDir = ".", caller } = args;
   const absoluteCwd = path.resolve(cwd);
-  const absoluteRootDir = path.resolve(absoluteCwd, rootDir);
+  const absoluteRootDir =
+    rootDir === false ? false : path.resolve(absoluteCwd, rootDir);
 
   const context: ConfigContext = {
     filename:

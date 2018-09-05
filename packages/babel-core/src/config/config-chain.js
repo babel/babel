@@ -49,7 +49,7 @@ export type PresetInstance = {
 export type ConfigContext = {
   filename: string | void,
   cwd: string,
-  root: string,
+  root: string | false,
   envName: string,
   caller: CallerMetadata | void,
 };
@@ -150,7 +150,7 @@ export function buildRootChain(
       context.envName,
       context.caller,
     );
-  } else if (opts.configFile !== false) {
+  } else if (opts.configFile !== false && context.root !== false) {
     configFile = findRootConfig(context.root, context.envName, context.caller);
   }
 
@@ -237,6 +237,8 @@ function babelrcLoadEnabled(
   // Fast path to avoid having to match patterns if the babelrc is just
   // loading in the standard root directory.
   if (babelrcRoots === undefined) {
+    if (absoluteRoot === false) return false;
+
     return pkgData.directories.indexOf(absoluteRoot) !== -1;
   }
 
@@ -248,7 +250,11 @@ function babelrcLoadEnabled(
 
   // Fast path to avoid having to match patterns if the babelrc is just
   // loading in the standard root directory.
-  if (babelrcPatterns.length === 1 && babelrcPatterns[0] === absoluteRoot) {
+  if (
+    absoluteRoot !== false &&
+    babelrcPatterns.length === 1 &&
+    babelrcPatterns[0] === absoluteRoot
+  ) {
     return pkgData.directories.indexOf(absoluteRoot) !== -1;
   }
 
@@ -661,9 +667,9 @@ function matchesPatterns(
 }
 
 function matchPattern(
-  pattern,
-  dirname,
-  pathToTest,
+  pattern: string | RegExp | Function,
+  dirname: string,
+  pathToTest: string | void,
   context: ConfigContext,
 ): boolean {
   if (typeof pattern === "function") {

@@ -15,6 +15,7 @@ import type {
   RootInputSourceMapOption,
   NestingPath,
   CallerMetadata,
+  ProjectRoot,
 } from "./options";
 
 export type ValidatorSet = {
@@ -73,6 +74,13 @@ export function assertSourceMaps(
     throw new Error(
       `${msg(loc)} must be a boolean, "inline", "both", or undefined`,
     );
+  }
+  return value;
+}
+
+export function assertRoot(loc: OptionPath, value: mixed): ProjectRoot | void {
+  if (value !== undefined && value !== false && typeof value !== "string") {
+    throw new Error(`${msg(loc)} must be a string, false, or undefined`);
   }
   return value;
 }
