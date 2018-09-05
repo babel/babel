@@ -11,7 +11,7 @@
 
 _Note: Gaps between patch versions are faulty, broken or test releases._
 
-See [CHANGELOG - v4-v6](/.github/CHANGELOG-v4-v6.md) for the v4.x-v6.x changelog.
+See [CHANGELOG - v4](/.github/CHANGELOG-v4.md), [CHANGELOG - v5](/.github/CHANGELOG-v5.md), and [CHANGELOG - v6](/.github/CHANGELOG-v6.md) for v4.x-v6.x changes.
 See [CHANGELOG - 6to5](/.github/CHANGELOG-6to5.md) for the pre-4.0.0 version changelog.
 See [Babylon's CHANGELOG](packages/babylon/CHANGELOG.md) for the Babylon pre-7.0.0-beta.29 version changelog.
 
