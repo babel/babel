@@ -79,7 +79,11 @@ export function assertSourceMaps(
 }
 
 export function assertRoot(loc: OptionPath, value: mixed): ProjectRoot | void {
-  if (value !== undefined && value !== false && typeof value !== "string") {
+  if (
+    value !== undefined &&
+    typeof value !== "boolean" &&
+    typeof value !== "string"
+  ) {
     throw new Error(`${msg(loc)} must be a string, false, or undefined`);
   }
   return value;

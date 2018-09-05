@@ -8,7 +8,7 @@ import { buildRootChain, type ConfigContext } from "./config-chain";
 import { getEnv } from "./helpers/environment";
 import { validate, type ValidatedOptions } from "./validation/options";
 
-import type { ConfigFile, IgnoreFile } from "./files";
+import { findConfigRoot, type ConfigFile, type IgnoreFile } from "./files";
 
 export default function loadPrivatePartialConfig(
   inputOpts: mixed,
@@ -31,7 +31,11 @@ export default function loadPrivatePartialConfig(
   const { envName = getEnv(), cwd = ".", root: rootDir = ".", caller } = args;
   const absoluteCwd = path.resolve(cwd);
   const absoluteRootDir =
-    rootDir === false ? false : path.resolve(absoluteCwd, rootDir);
+    typeof rootDir === "boolean"
+      ? rootDir
+        ? findConfigRoot(absoluteCwd)
+        : false
+      : path.resolve(absoluteCwd, rootDir);
 
   const context: ConfigContext = {
     filename:

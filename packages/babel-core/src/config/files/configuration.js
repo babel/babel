@@ -24,6 +24,24 @@ const BABELRC_FILENAME = ".babelrc";
 const BABELRC_JS_FILENAME = ".babelrc.js";
 const BABELIGNORE_FILENAME = ".babelignore";
 
+export function findConfigRoot(cwd: string): string {
+  let dirname = cwd;
+  while (true) {
+    if (fs.existsSync(path.join(dirname, BABEL_CONFIG_JS_FILENAME))) {
+      return dirname;
+    }
+
+    const nextDir = path.dirname(dirname);
+    if (dirname === nextDir) break;
+    dirname = nextDir;
+  }
+
+  throw new Error(
+    `Babel was run with root:true but a root babel.config.js could not ` +
+      `be found when searching from "${dirname}"`,
+  );
+}
+
 export function findRelativeConfig(
   packageData: FilePackageData,
   envName: string,
