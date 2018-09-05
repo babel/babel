@@ -1,14 +1,15 @@
 class Foo {
   static test() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _FooStatics, "bar");
+    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _bar);
   }
 
   test() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _FooStatics, "bar");
+    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _bar);
   }
 
 }
 
-var _FooStatics = Object.create(null);
-
-babelHelpers.defineProperty(_FooStatics, "bar", void 0);
+var _bar = {
+  writable: true,
+  value: void 0
+};

@@ -164,39 +164,26 @@ export default declare((api, options) => {
     ...privateNameHandlerSpec,
 
     get(member) {
-      const { file, name, privateClassId, classRef } = this;
+      const { file, privateId, classRef } = this;
 
       return t.callExpression(
         file.addHelper("classStaticPrivateFieldSpecGet"),
-        [
-          this.receiver(member),
-          classRef,
-          privateClassId,
-          t.stringLiteral(name),
-        ],
+        [this.receiver(member), t.cloneNode(classRef), t.cloneNode(privateId)],
       );
     },
 
     set(member, value) {
-      const { file, name, privateClassId, classRef } = this;
+      const { file, privateId, classRef } = this;
 
       return t.callExpression(
         file.addHelper("classStaticPrivateFieldSpecSet"),
         [
           this.receiver(member),
-          classRef,
-          privateClassId,
-          t.stringLiteral(name),
+          t.cloneNode(classRef),
+          t.cloneNode(privateId),
           value,
         ],
       );
-    },
-
-    call(member, args) {
-      // The first access (the get) should do the memo assignment.
-      this.memoise(member, 1);
-
-      return optimiseCall(this.get(member), this.receiver(member), args);
     },
   };
 
@@ -308,50 +295,32 @@ export default declare((api, options) => {
       state,
     );
 
-    const staticNodesToAdd = [keyDecl, buildInit()];
-    return [staticNodesToAdd];
+    return [keyDecl, buildInit()];
   }
 
-  function buildClassStaticPrivatePropertySpec(
-    ref,
-    path,
-    state,
-    privateClassId,
-  ) {
-    const { scope, parentPath } = path;
-    const { key, value } = path.node;
-    const { name } = key.id;
-    const staticNodesToAdd = [];
+  function buildClassStaticPrivatePropertySpec(ref, path, state) {
+    const { parentPath, scope } = path;
+    const { name } = path.node.key.id;
 
-    if (!privateClassId) {
-      // Create a private static "host" object if it does not exist
-      privateClassId = path.scope.generateUidIdentifier(ref.name + "Statics");
-      staticNodesToAdd.push(
-        template.statement`const PRIVATE_CLASS_ID = Object.create(null);`({
-          PRIVATE_CLASS_ID: privateClassId,
-        }),
-      );
-    }
-
+    const privateId = scope.generateUidIdentifier(name);
     memberExpressionToFunctions(parentPath, privateNameVisitor, {
       name,
-      privateClassId,
+      privateId,
       classRef: ref,
       file: state,
       ...staticPrivatePropertyHandlerSpec,
     });
 
-    staticNodesToAdd.push(
-      t.expressionStatement(
-        t.callExpression(state.addHelper("defineProperty"), [
-          privateClassId,
-          t.stringLiteral(name),
-          value || scope.buildUndefinedNode(),
-        ]),
-      ),
-    );
-
-    return [staticNodesToAdd, privateClassId];
+    return [
+      template.statement.ast`
+        var ${privateId} = {
+          // configurable is always false for private elements
+          // enumerable is always false for private elements
+          writable: true,
+          value: ${path.node.value || scope.buildUndefinedNode()}
+        }
+      `,
+    ];
   }
 
   const buildClassProperty = loose
@@ -461,21 +430,16 @@ export default declare((api, options) => {
           }
         }
         let p = 0;
-        let privateClassId;
         for (const prop of props) {
           if (prop.node.static) {
             if (prop.isPrivate()) {
-              let staticNodesToAdd;
-              [
-                staticNodesToAdd,
-                privateClassId,
-              ] = buildClassStaticPrivateProperty(
-                t.cloneNode(ref),
-                prop,
-                state,
-                privateClassId,
+              staticNodes.push(
+                ...buildClassStaticPrivateProperty(
+                  t.cloneNode(ref),
+                  prop,
+                  state,
+                ),
               );
-              staticNodes.push(...staticNodesToAdd);
             } else {
               staticNodes.push(
                 buildClassProperty(t.cloneNode(ref), prop, state),

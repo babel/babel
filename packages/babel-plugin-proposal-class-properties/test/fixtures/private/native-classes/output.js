@@ -7,7 +7,7 @@ class Foo {
   }
 
   static test() {
-    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _FooStatics, "foo");
+    return babelHelpers.classStaticPrivateFieldSpecGet(Foo, Foo, _foo);
   }
 
   test() {
@@ -16,8 +16,9 @@ class Foo {
 
 }
 
-var _FooStatics = Object.create(null);
-
-babelHelpers.defineProperty(_FooStatics, "foo", "foo");
+var _foo = {
+  writable: true,
+  value: "foo"
+};
 
 var _bar = new WeakMap();

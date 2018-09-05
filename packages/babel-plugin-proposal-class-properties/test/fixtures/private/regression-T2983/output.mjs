@@ -1,16 +1,12 @@
-var _class, _temp;
+var _class, _temp, _test;
 
-call(function () {
-  _temp = _class = class {};
-
-  var _classStatics = Object.create(null);
-
-  babelHelpers.defineProperty(_classStatics, "test", true);
-  return _temp;
-}());
+call((_temp = _class = class {}, _test = {
+  writable: true,
+  value: true
+}, _temp));
 export default class _class2 {}
-
-var _class2Statics = Object.create(null);
-
-babelHelpers.defineProperty(_class2Statics, "test", true);
+var _test2 = {
+  writable: true,
+  value: true
+};
 ;
