@@ -5,8 +5,10 @@ import type { PluginList } from "./plugin-utils";
 // A second optional argument can be given to further configure
 // the parser process. These options are recognized:
 
+export type SourceType = "script" | "module" | "unambiguous";
+
 export type Options = {
-  sourceType: "script" | "module" | "unambiguous",
+  sourceType: SourceType,
   sourceFilename?: string,
   startLine: number,
   allowAwaitOutsideFunction: boolean,

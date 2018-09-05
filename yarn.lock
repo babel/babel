@@ -3516,9 +3516,9 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
-flow-bin@^0.79.0:
-  version "0.79.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.79.0.tgz#a7029f2832d45e5b78f7e77a74fee898722fb6ef"
+flow-bin@^0.80.0:
+  version "0.80.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.80.0.tgz#04cc1ee626a6f50786f78170c92ebe1745235403"
 
 flush-write-stream@^1.0.2:
   version "1.0.3"
