@@ -25,7 +25,7 @@ function hasDecorators({ node }) {
   return false;
 }
 
-function extractDecorators({ node }) {
+function takeDecorators({ node }) {
   let result;
   if (node.decorators && node.decorators.length > 0) {
     result = t.arrayExpression(
@@ -39,8 +39,10 @@ function extractDecorators({ node }) {
 function getKey(node) {
   if (node.computed) {
     return node.key;
+  } else if (t.isIdentifier(node.key)) {
+    return t.stringLiteral(node.key.name);
   } else {
-    return t.stringLiteral(node.key.name || String(node.key.value));
+    return t.stringLiteral(String(node.key.value));
   }
 }
 
@@ -71,7 +73,7 @@ function getSingleElementDefinition(path, superRef, classRef, file) {
 
   const properties = [
     prop("kind", t.stringLiteral(isMethod ? node.kind : "field")),
-    prop("decorators", extractDecorators(path)),
+    prop("decorators", takeDecorators(path)),
     prop("static", node.static && t.booleanLiteral(true)),
     prop("key", getKey(node)),
     isMethod
@@ -85,12 +87,12 @@ function getSingleElementDefinition(path, superRef, classRef, file) {
 }
 
 function getElementsDefinitions(path, fId, file) {
-  const superRef = path.node.superClass || t.identifier("Function");
-
   const elements = [];
   for (const p of path.get("body.body")) {
     if (!p.isClassMethod({ kind: "constructor" })) {
-      elements.push(getSingleElementDefinition(p, superRef, fId, file));
+      elements.push(
+        getSingleElementDefinition(p, path.node.superClass, fId, file),
+      );
       p.remove();
     }
   }
@@ -174,24 +176,42 @@ function transformClass(path, file) {
 
   if (superClass) path.node.superClass = superId;
 
-  const classDecorators = extractDecorators(path);
+  const classDecorators = takeDecorators(path);
   const definitions = getElementsDefinitions(path, path.node.id, file);
 
   insertInitializeInstanceElements(path, initializeId);
 
   const expr = template.expression.ast`
-      ${file.addHelper("decorate")}(
+      ${addDecorateHelper(file)}(
         ${classDecorators || t.nullLiteral()},
         function (${initializeId}, ${superClass ? superId : null}) {
-          ${isStrict ? null : t.stringLiteral("use strict")}
           ${path.node}
           return { F: ${t.cloneNode(path.node.id)}, d: ${definitions} };
         },
         ${superClass}
       )
     `;
+  if (!isStrict) {
+    expr.arguments[1].body.directives.push(
+      t.directive(t.directiveLiteral("use strict")),
+    );
+  }
 
   return isDeclaration ? template.ast`let ${path.node.id} = ${expr}` : expr;
+}
+
+function addDecorateHelper(file) {
+  try {
+    return file.addHelper("decorate");
+  } catch (err) {
+    if (err.code === "BABEL_HELPER_UNKNOWN") {
+      err.message +=
+        "\n  '@babel/plugin-transform-decorators' in non-legacy mode" +
+        " requires '@babel/core' version ^7.0.1 and you appear to be using" +
+        " an older version.";
+    }
+    throw err;
+  }
 }
 
 export default {

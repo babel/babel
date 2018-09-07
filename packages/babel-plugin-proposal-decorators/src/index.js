@@ -16,7 +16,8 @@ export default declare((api, options) => {
     if (!legacy) {
       throw new Error(
         "The decorators plugin requires a 'decoratorsBeforeExport' option," +
-          " whose value must be a boolean.",
+          " whose value must be a boolean. If you want to use the legacy" +
+          " decorators semantics, you can set the 'legacy: true' option.",
       );
     }
   } else {
