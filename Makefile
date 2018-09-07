@@ -64,15 +64,20 @@ test-ci-coverage:
 clone-license:
 	./scripts/clone-license.sh
 
+publish-with-licenses:
+	make clone-license
+	find packages -name LICENSE | xargs git add -f
+	git commit -m 'chore: commit LICENSE files temporarilly'
+	node ./scripts/lerna.js publish --only-explicit-updates
+	git reset HEAD^ # TMP
+
 publish:
 	node scripts/verify-lerna-version.js
 	git pull --rebase
 	rm -rf packages/*/lib
 	BABEL_ENV=production make build-dist
 	make test
-	make clone-license
-	# not using lerna independent mode atm, so only update packages that have changed since we use ^
-	node ./scripts/lerna.js publish --only-explicit-updates
+	make publish-with-licenses
 	make clean
 
 bootstrap:
