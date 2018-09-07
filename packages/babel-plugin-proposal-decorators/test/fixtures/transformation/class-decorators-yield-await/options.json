@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["proposal-decorators", { "decoratorsBeforeExport": false }],
+    "proposal-class-properties",
+    "external-helpers",
+    "syntax-async-generators"
+  ]
+}
