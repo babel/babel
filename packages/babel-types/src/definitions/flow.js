@@ -14,7 +14,14 @@ const defineInterfaceishType = (
   typeParameterType: string = "TypeParameterDeclaration",
 ) => {
   defineType(name, {
-    builder: ["id", "typeParameters", "extends", "body"],
+    builder: [
+      "id",
+      "typeParameters",
+      "extends",
+      "body",
+      "implements",
+      "mixins",
+    ],
     visitor: [
       "id",
       "typeParameters",
@@ -76,6 +83,7 @@ defineInterfaceishType("DeclareClass", "TypeParameterInstantiation");
 
 defineType("DeclareFunction", {
   visitor: ["id"],
+  builder: ["id", "predicate"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
     id: validateType("Identifier"),
@@ -134,6 +142,7 @@ defineType("DeclareVariable", {
 
 defineType("DeclareExportDeclaration", {
   visitor: ["declaration", "specifiers", "source"],
+  builder: ["declaration", "specifiers", "source", "default"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
     declaration: validateOptionalType("Flow"),
@@ -146,7 +155,7 @@ defineType("DeclareExportDeclaration", {
 });
 
 defineType("DeclareExportAllDeclaration", {
-  visitor: ["source"],
+  visitor: ["source", "exportKind"],
   aliases: ["Flow", "FlowDeclaration", "Statement", "Declaration"],
   fields: {
     source: validateType("StringLiteral"),
@@ -179,6 +188,7 @@ defineType("FunctionTypeAnnotation", {
 
 defineType("FunctionTypeParam", {
   visitor: ["name", "typeAnnotation"],
+  builder: ["name", "typeAnnotation", "optional"],
   aliases: ["Flow"],
   fields: {
     name: validateOptionalType("Identifier"),
@@ -303,26 +313,28 @@ defineType("ObjectTypeCallProperty", {
 
 defineType("ObjectTypeIndexer", {
   visitor: ["id", "key", "value", "variance"],
+  builder: ["id", "key", "value", "variance"],
   aliases: ["Flow", "UserWhitespacable"],
   fields: {
     id: validateOptionalType("Identifier"),
     key: validateType("FlowType"),
     value: validateType("FlowType"),
-    static: validate(assertValueType("boolean")),
+    static: validateOptional(assertValueType("boolean")),
     variance: validateOptionalType("Variance"),
   },
 });
 
 defineType("ObjectTypeProperty", {
   visitor: ["key", "value", "variance"],
+  builder: ["key", "value", "variance", "kind", "optional", "proto", "static"],
   aliases: ["Flow", "UserWhitespacable"],
   fields: {
     key: validateType(["Identifier", "StringLiteral"]),
     value: validateType("FlowType"),
-    kind: validate(assertOneOf("init", "get", "set")),
-    static: validate(assertValueType("boolean")),
-    proto: validate(assertValueType("boolean")),
-    optional: validate(assertValueType("boolean")),
+    kind: validateOptional(assertOneOf("init", "get", "set")),
+    static: validateOptional(assertValueType("boolean")),
+    proto: validateOptional(assertValueType("boolean")),
+    optional: validateOptional(assertValueType("boolean")),
     variance: validateOptionalType("Variance"),
   },
 });
@@ -417,6 +429,7 @@ defineType("TypeCastExpression", {
 defineType("TypeParameter", {
   aliases: ["Flow"],
   visitor: ["bound", "default", "variance"],
+  builder: ["name", "bound", "default", "variance"],
   fields: {
     name: validate(assertValueType("string")),
     bound: validateOptionalType("TypeAnnotation"),
