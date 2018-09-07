@@ -8,7 +8,7 @@ For a more automatic migration, we have updated [babel-upgrade](https://github.c
 
 If you want the same configuration as before:
 
-```json
+```jsonc
 {
   "plugins": [
     // Stage 2
