@@ -161,7 +161,7 @@ function loadScripts(transformFn, scripts) {
         ...scriptData,
         content: script.innerHTML,
         loaded: true,
-        url: null,
+        url: script.getAttribute("data-module")
       };
     }
   });
