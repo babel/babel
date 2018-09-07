@@ -36,7 +36,7 @@ npm install --save-dev @babel/plugin-codemod-object-assign-to-object-spread
 
 **.babelrc**
 
-```json
+```jsonc
 {
   "plugins": ["@babel/plugin-codemod-object-assign-to-object-spread"]
 }
