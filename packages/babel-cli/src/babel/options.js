@@ -208,7 +208,7 @@ export default function parseArgv(args: Array<string>) {
 
   if (errors.length) {
     console.error("babel:");
-    errors.forEach(function (e) {
+    errors.forEach(function(e) {
       console.error("  " + e);
     });
     process.exit(2);
