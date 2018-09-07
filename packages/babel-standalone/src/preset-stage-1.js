@@ -12,11 +12,17 @@ export default (_, opts = {}) => {
     loose = false,
     useBuiltIns = false,
     decoratorsLegacy = false,
+    decoratorsBeforeExport,
     pipelineProposal = "minimal",
   } = opts;
 
   return {
-    presets: [[presetStage2, { loose, useBuiltIns, decoratorsLegacy }]],
+    presets: [
+      [
+        presetStage2,
+        { loose, useBuiltIns, decoratorsLegacy, decoratorsBeforeExport },
+      ],
+    ],
     plugins: [
       transformExportDefaultFrom,
       transformLogicalAssignmentOperators,

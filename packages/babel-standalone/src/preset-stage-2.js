@@ -7,12 +7,20 @@ import transformNumericSeparator from "@babel/plugin-proposal-numeric-separator"
 import transformThrowExpressions from "@babel/plugin-proposal-throw-expressions";
 
 export default (_, opts = {}) => {
-  const { loose = false, useBuiltIns = false, decoratorsLegacy = false } = opts;
+  const {
+    loose = false,
+    useBuiltIns = false,
+    decoratorsLegacy = false,
+    decoratorsBeforeExport,
+  } = opts;
 
   return {
     presets: [[presetStage3, { loose, useBuiltIns }]],
     plugins: [
-      [transformDecorators, { legacy: decoratorsLegacy }],
+      [
+        transformDecorators,
+        { legacy: decoratorsLegacy, decoratorsBeforeExport },
+      ],
       transformFunctionSent,
       transformExportNamespaceFrom,
       transformNumericSeparator,

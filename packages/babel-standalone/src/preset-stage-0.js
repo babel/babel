@@ -7,6 +7,7 @@ export default (_, opts = {}) => {
     loose = false,
     useBuiltIns = false,
     decoratorsLegacy = false,
+    decoratorsBeforeExport,
     pipelineProposal = "minimal",
   } = opts;
 
@@ -14,7 +15,13 @@ export default (_, opts = {}) => {
     presets: [
       [
         presetStage1,
-        { loose, useBuiltIns, decoratorsLegacy, pipelineProposal },
+        {
+          loose,
+          useBuiltIns,
+          decoratorsLegacy,
+          decoratorsBeforeExport,
+          pipelineProposal,
+        },
       ],
     ],
     plugins: [transformFunctionBind],
