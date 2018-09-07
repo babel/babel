@@ -14,6 +14,9 @@
   <a href="https://codecov.io/github/babel/babel"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/babel/babel/master.svg?maxAge=43200"></a>
   <a href="https://slack.babeljs.io/"><img alt="Slack Status" src="https://slack.babeljs.io/badge.svg"></a>
   <a href="https://www.npmjs.com/package/babel-core"><img alt="npm Downloads" src="https://img.shields.io/npm/dm/babel-core.svg?maxAge=43200"></a>
+  <a href="https://dependabot.com/compatibility-score.html?dependency-name=babel-core&package-manager=npm_and_yarn&version-scheme=semver">
+    <img src="https://api.dependabot.com/badges/compatibility_score?dependency-name=babel-core&package-manager=npm_and_yarn&version-scheme=semver">
+  </a>
 </p>
 
 <h2 align="center">Supporting Babel</h2>
