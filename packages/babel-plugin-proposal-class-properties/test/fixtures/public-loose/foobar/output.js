@@ -3,11 +3,13 @@ var Child = /*#__PURE__*/function (_Parent) {
 
   babelHelpers.inherits(Child, _Parent);
 
+  var _super = babelHelpers.createSuper(Child);
+
   function Child() {
     var _this;
 
     babelHelpers.classCallCheck(this, Child);
-    _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Child).call(this));
+    _this = _super.call(this);
 
     _this.scopedFunctionWithThis = function () {
       _this.name = {};

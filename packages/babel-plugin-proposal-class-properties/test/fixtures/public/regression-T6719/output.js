@@ -6,9 +6,11 @@ function withContext(ComposedComponent) {
 
     babelHelpers.inherits(WithContext, _Component);
 
+    var _super = babelHelpers.createSuper(WithContext);
+
     function WithContext() {
       babelHelpers.classCallCheck(this, WithContext);
-      return babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(WithContext).apply(this, arguments));
+      return _super.apply(this, arguments);
     }
 
     return WithContext;

@@ -502,10 +502,8 @@ helpers.setPrototypeOf = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.construct = helper("7.0.0-beta.0")`
-  import setPrototypeOf from "setPrototypeOf";
-
-  function isNativeReflectConstruct() {
+helpers.isNativeReflectConstruct = helper("7.9.0")`
+  export default function _isNativeReflectConstruct() {
     if (typeof Reflect === "undefined" || !Reflect.construct) return false;
 
     // core-js@3
@@ -529,6 +527,11 @@ helpers.construct = helper("7.0.0-beta.0")`
       return false;
     }
   }
+`;
+
+helpers.construct = helper("7.0.0-beta.0")`
+  import setPrototypeOf from "setPrototypeOf";
+  import isNativeReflectConstruct from "isNativeReflectConstruct";
 
   export default function _construct(Parent, args, Class) {
     if (isNativeReflectConstruct()) {
@@ -731,6 +734,26 @@ helpers.possibleConstructorReturn = helper("7.0.0-beta.0")`
     return assertThisInitialized(self);
   }
 `;
+
+helpers.createSuper = helper("7.9.0")`
+  import getPrototypeOf from "getPrototypeOf";
+  import isNativeReflectConstruct from "isNativeReflectConstruct";
+  import possibleConstructorReturn from "possibleConstructorReturn";
+
+  export default function _createSuper(Derived) {
+    return function () {
+      var Super = getPrototypeOf(Derived), result;
+      if (isNativeReflectConstruct()) {
+        // NOTE: This doesn't work if this.__proto__.constructor has been modified.
+        var NewTarget = getPrototypeOf(this).constructor;
+        result = Reflect.construct(Super, arguments, NewTarget);
+      } else {
+        result = Super.apply(this, arguments);
+      }
+      return possibleConstructorReturn(this, result);
+    }
+  }
+ `;
 
 helpers.superPropBase = helper("7.0.0-beta.0")`
   import getPrototypeOf from "getPrototypeOf";
