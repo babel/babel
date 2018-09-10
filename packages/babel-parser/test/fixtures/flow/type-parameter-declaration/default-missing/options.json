@@ -1,0 +1,4 @@
+{
+  "throws":
+    "Type parameter declaration needs a default, since a preceding type parameter declaration has a default. (1:28)"
+}

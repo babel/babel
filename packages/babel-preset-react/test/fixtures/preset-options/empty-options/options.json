@@ -1,5 +1,3 @@
 {
-  "presets": [
-    ["react", {}]
-  ]
+  "presets": [["react", {}]]
 }

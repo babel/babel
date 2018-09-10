@@ -1,10 +1,11 @@
 // @flow
 
 import * as helpers from "@babel/helpers";
-import { NodePath, Hub, Scope } from "@babel/traverse";
+import { NodePath, Scope, type HubInterface } from "@babel/traverse";
 import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "@babel/traverse";
 import * as t from "@babel/types";
+import semver from "semver";
 
 import type { NormalizedFile } from "../normalize-file";
 
@@ -26,16 +27,22 @@ export default class File {
   ast: Object = {};
   scope: Scope;
   metadata: {} = {};
-  hub: Hub = new Hub(this);
   code: string = "";
-  shebang: string | null = "";
   inputMap: Object | null = null;
 
-  constructor(options: {}, { code, ast, shebang, inputMap }: NormalizedFile) {
+  hub: HubInterface = {
+    // keep it for the usage in babel-core, ex: path.hub.file.opts.filename
+    file: this,
+    getCode: () => this.code,
+    getScope: () => this.scope,
+    addHelper: this.addHelper.bind(this),
+    buildError: this.buildCodeFrameError.bind(this),
+  };
+
+  constructor(options: {}, { code, ast, inputMap }: NormalizedFile) {
     this.opts = options;
     this.code = code;
     this.ast = ast;
-    this.shebang = shebang;
     this.inputMap = inputMap;
 
     this.path = NodePath.get({
@@ -48,7 +55,34 @@ export default class File {
     this.scope = this.path.scope;
   }
 
+  /**
+   * Provide backward-compatible access to the interpreter directive handling
+   * in Babel 6.x. If you are writing a plugin for Babel 7.x, it would be
+   * best to use 'program.interpreter' directly.
+   */
+  get shebang(): string {
+    const { interpreter } = this.path.node;
+    return interpreter ? interpreter.value : "";
+  }
+  set shebang(value: string): void {
+    if (value) {
+      this.path.get("interpreter").replaceWith(t.interpreterDirective(value));
+    } else {
+      this.path.get("interpreter").remove();
+    }
+  }
+
   set(key: mixed, val: mixed) {
+    if (key === "helpersNamespace") {
+      throw new Error(
+        "Babel 7.0.0-beta.56 has dropped support for the 'helpersNamespace' utility." +
+          "If you are using @babel/plugin-external-helpers you will need to use a newer " +
+          "version than the one you currently have installed. " +
+          "If you have your own implementation, you'll want to explore using 'helperGenerator' " +
+          "alongside 'file.availableHelper()'.",
+      );
+    }
+
     this._map.set(key, val);
   }
 
@@ -106,12 +140,6 @@ export default class File {
     }
   }
 
-  // TODO: Remove this before 7.x's official release. Leaving it in for now to
-  // prevent unnecessary breakage between beta versions.
-  resolveModuleSource(source: string): string {
-    return source;
-  }
-
   addImport() {
     throw new Error(
       "This API has been removed. If you're looking for this " +
@@ -121,17 +149,38 @@ export default class File {
     );
   }
 
+  /**
+   * Check if a given helper is available in @babel/core's helper list.
+   *
+   * This _also_ allows you to pass a Babel version specifically. If the
+   * helper exists, but was not available for the full given range, it will be
+   * considered unavailable.
+   */
+  availableHelper(name: string, versionRange: ?string) {
+    let minVersion;
+    try {
+      minVersion = helpers.minVersion(name);
+    } catch (err) {
+      if (err.code !== "BABEL_HELPER_UNKNOWN") throw err;
+
+      return false;
+    }
+
+    return (
+      typeof versionRange !== "string" ||
+      (!semver.intersects(`<${minVersion}`, versionRange) &&
+        !semver.intersects(`>=8.0.0`, versionRange))
+    );
+  }
+
   addHelper(name: string): Object {
     const declar = this.declarations[name];
     if (declar) return t.cloneNode(declar);
 
     const generator = this.get("helperGenerator");
-    const runtime = this.get("helpersNamespace");
     if (generator) {
       const res = generator(name);
       if (res) return res;
-    } else if (runtime) {
-      return t.memberExpression(t.cloneNode(runtime), t.identifier(name));
     }
 
     const uid = (this.declarations[name] = this.scope.generateUidIdentifier(

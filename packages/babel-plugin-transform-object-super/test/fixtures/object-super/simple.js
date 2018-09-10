@@ -12,4 +12,4 @@ var b = {
 
 Object.setPrototypeOf(b, a);
 
-assert.equal(b.name(), "Suyash Verma");
+expect(b.name()).toBe("Suyash Verma");

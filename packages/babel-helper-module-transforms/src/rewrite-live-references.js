@@ -38,7 +38,7 @@ export default function rewriteLiveReferences(
     exportMeta.push(...data.names);
   }
 
-  // Rewrite inititialization of bindings to update exports.
+  // Rewrite initialization of bindings to update exports.
   programPath.traverse(rewriteBindingInitVisitor, {
     metadata,
     requeueInParent,

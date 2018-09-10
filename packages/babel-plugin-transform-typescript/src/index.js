@@ -20,7 +20,7 @@ interface State {
   programPath: any;
 }
 
-export default declare(api => {
+export default declare((api, { jsxPragma = "React" }) => {
   api.assertVersion(7);
 
   return {
@@ -33,39 +33,42 @@ export default declare(api => {
 
       Program(path, state: State) {
         state.programPath = path;
-      },
 
-      ImportDeclaration(path, state: State) {
-        // Note: this will allow both `import { } from "m"` and `import "m";`.
-        // In TypeScript, the former would be elided.
-        if (path.node.specifiers.length === 0) {
-          return;
-        }
+        // remove type imports
+        for (const stmt of path.get("body")) {
+          if (t.isImportDeclaration(stmt)) {
+            // Note: this will allow both `import { } from "m"` and `import "m";`.
+            // In TypeScript, the former would be elided.
+            if (stmt.node.specifiers.length === 0) {
+              return;
+            }
 
-        let allElided = true;
-        const importsToRemove: Path<Node>[] = [];
+            let allElided = true;
+            const importsToRemove: Path<Node>[] = [];
 
-        for (const specifier of path.node.specifiers) {
-          const binding = path.scope.getBinding(specifier.local.name);
+            for (const specifier of stmt.node.specifiers) {
+              const binding = stmt.scope.getBinding(specifier.local.name);
 
-          // The binding may not exist if the import node was explicitly
-          // injected by another plugin. Currently core does not do a good job
-          // of keeping scope bindings synchronized with the AST. For now we
-          // just bail if there is no binding, since chances are good that if
-          // the import statement was injected then it wasn't a typescript type
-          // import anyway.
-          if (binding && isImportTypeOnly(binding, state.programPath)) {
-            importsToRemove.push(binding.path);
-          } else {
-            allElided = false;
-          }
-        }
+              // The binding may not exist if the import node was explicitly
+              // injected by another plugin. Currently core does not do a good job
+              // of keeping scope bindings synchronized with the AST. For now we
+              // just bail if there is no binding, since chances are good that if
+              // the import statement was injected then it wasn't a typescript type
+              // import anyway.
+              if (binding && isImportTypeOnly(binding, state.programPath)) {
+                importsToRemove.push(binding.path);
+              } else {
+                allElided = false;
+              }
+            }
 
-        if (allElided) {
-          path.remove();
-        } else {
-          for (const importPath of importsToRemove) {
-            importPath.remove();
+            if (allElided) {
+              stmt.remove();
+            } else {
+              for (const importPath of importsToRemove) {
+                importPath.remove();
+              }
+            }
           }
         }
       },
@@ -154,10 +157,6 @@ export default declare(api => {
 
       ClassProperty(path) {
         const { node } = path;
-        if (!node.value) {
-          path.remove();
-          return;
-        }
 
         if (node.accessibility) node.accessibility = null;
         if (node.abstract) node.abstract = null;
@@ -180,10 +179,25 @@ export default declare(api => {
         if (node.abstract) node.abstract = null;
       },
 
-      Class({ node }) {
+      Class(path) {
+        const { node } = path;
+
         if (node.typeParameters) node.typeParameters = null;
         if (node.superTypeParameters) node.superTypeParameters = null;
         if (node.implements) node.implements = null;
+
+        // Same logic is used in babel-plugin-transform-flow-strip-types:
+        // We do this here instead of in a `ClassProperty` visitor because the class transform
+        // would transform the class before we reached the class property.
+        path.get("body.body").forEach(child => {
+          if (child.isClassProperty()) {
+            child.node.typeAnnotation = null;
+
+            if (!child.node.value && !child.node.decorators) {
+              child.remove();
+            }
+          }
+        });
       },
 
       Function({ node }) {
@@ -236,7 +250,11 @@ export default declare(api => {
       },
 
       TSAsExpression(path) {
-        path.replaceWith(path.node.expression);
+        let { node } = path;
+        do {
+          node = node.expression;
+        } while (t.isTSAsExpression(node));
+        path.replaceWith(node);
       },
 
       TSNonNullExpression(path) {
@@ -248,6 +266,14 @@ export default declare(api => {
       },
 
       NewExpression(path) {
+        path.node.typeParameters = null;
+      },
+
+      JSXOpeningElement(path) {
+        path.node.typeParameters = null;
+      },
+
+      TaggedTemplateExpression(path) {
         path.node.typeParameters = null;
       },
     },
@@ -266,14 +292,17 @@ export default declare(api => {
       }
     }
 
-    if (binding.identifier.name != "React") {
+    if (binding.identifier.name !== jsxPragma) {
       return true;
     }
 
-    // "React" is referenced as a value if there are any JSX elements in the code.
+    // "React" or the JSX pragma is referenced as a value if there are any JSX elements in the code.
     let sourceFileHasJsx = false;
     programPath.traverse({
       JSXElement() {
+        sourceFileHasJsx = true;
+      },
+      JSXFragment() {
         sourceFileHasJsx = true;
       },
     });

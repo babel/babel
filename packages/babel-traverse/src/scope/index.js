@@ -36,6 +36,12 @@ function gatherNodeParts(node: Object, parts: Array) {
     for (const prop of (node.properties: Array)) {
       gatherNodeParts(prop.key || prop.argument, parts);
     }
+  } else if (t.isPrivateName(node)) {
+    gatherNodeParts(node.id, parts);
+  } else if (t.isThisExpression(node)) {
+    parts.push("this");
+  } else if (t.isSuper(node)) {
+    parts.push("super");
   }
 }
 
@@ -61,9 +67,6 @@ const collectorVisitor = {
     if (path.isExportDeclaration() && path.get("declaration").isDeclaration()) {
       return;
     }
-
-    // TODO(amasad): remove support for flow as bindings (See warning below).
-    //if (path.isFlow()) return;
 
     // we've ran into a declaration!
     const parent =
@@ -359,7 +362,7 @@ export default class Scope {
       (local.kind === "param" && (kind === "let" || kind === "const"));
 
     if (duplicate) {
-      throw this.hub.file.buildCodeFrameError(
+      throw this.hub.buildError(
         id,
         `Duplicate declaration "${name}"`,
         TypeError,
@@ -401,9 +404,7 @@ export default class Scope {
     console.log(sep);
   }
 
-  toArray(node: Object, i?: number | boolean) {
-    const file = this.hub.file;
-
+  toArray(node: Object, i?: number) {
     if (t.isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (binding && binding.constant && binding.path.isGenericType("Array")) {
@@ -441,12 +442,12 @@ export default class Scope {
 
       // Used in array-rest to create an array from a subset of an iterable.
       helperName = "slicedToArray";
-      // TODO if (this.hub.file.isLoose("es6.forOf")) helperName += "-loose";
+      // TODO if (this.hub.isLoose("es6.forOf")) helperName += "-loose";
     } else {
       // Used in array-rest to create an array
       helperName = "toArray";
     }
-    return t.callExpression(file.addHelper(helperName), args);
+    return t.callExpression(this.hub.addHelper(helperName), args);
   }
 
   hasLabel(name: string) {
@@ -462,8 +463,6 @@ export default class Scope {
   }
 
   registerDeclaration(path: NodePath) {
-    if (path.isFlow()) return;
-
     if (path.isLabeledStatement()) {
       this.registerLabel(path);
     } else if (path.isFunctionDeclaration()) {
@@ -622,7 +621,7 @@ export default class Scope {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       if (node.kind === "get" || node.kind === "set") return false;
       return true;
-    } else if (t.isClassProperty(node) || t.isObjectProperty(node)) {
+    } else if (t.isProperty(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       return this.isPure(node.value, constantsOnly);
     } else if (t.isUnaryExpression(node)) {

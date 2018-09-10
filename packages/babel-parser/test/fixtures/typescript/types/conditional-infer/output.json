@@ -1,0 +1,272 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 48,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 48
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 48,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 48
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSTypeAliasDeclaration",
+        "start": 0,
+        "end": 48,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 48
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 5,
+          "end": 12,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 5
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            },
+            "identifierName": "Element"
+          },
+          "name": "Element"
+        },
+        "typeParameters": {
+          "type": "TSTypeParameterDeclaration",
+          "start": 12,
+          "end": 15,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 12
+            },
+            "end": {
+              "line": 1,
+              "column": 15
+            }
+          },
+          "params": [
+            {
+              "type": "TSTypeParameter",
+              "start": 13,
+              "end": 14,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 13
+                },
+                "end": {
+                  "line": 1,
+                  "column": 14
+                }
+              },
+              "name": "T"
+            }
+          ]
+        },
+        "typeAnnotation": {
+          "type": "TSConditionalType",
+          "start": 18,
+          "end": 47,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 18
+            },
+            "end": {
+              "line": 1,
+              "column": 47
+            }
+          },
+          "checkType": {
+            "type": "TSTypeReference",
+            "start": 18,
+            "end": 19,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 18
+              },
+              "end": {
+                "line": 1,
+                "column": 19
+              }
+            },
+            "typeName": {
+              "type": "Identifier",
+              "start": 18,
+              "end": 19,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 18
+                },
+                "end": {
+                  "line": 1,
+                  "column": 19
+                },
+                "identifierName": "T"
+              },
+              "name": "T"
+            }
+          },
+          "extendsType": {
+            "type": "TSArrayType",
+            "start": 28,
+            "end": 39,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 28
+              },
+              "end": {
+                "line": 1,
+                "column": 39
+              }
+            },
+            "elementType": {
+              "type": "TSParenthesizedType",
+              "start": 28,
+              "end": 37,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 28
+                },
+                "end": {
+                  "line": 1,
+                  "column": 37
+                }
+              },
+              "typeAnnotation": {
+                "type": "TSInferType",
+                "start": 29,
+                "end": 36,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 29
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 36
+                  }
+                },
+                "typeParameter": {
+                  "type": "TSTypeParameter",
+                  "start": 35,
+                  "end": 36,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 35
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 36
+                    }
+                  },
+                  "name": "U"
+                }
+              }
+            }
+          },
+          "trueType": {
+            "type": "TSTypeReference",
+            "start": 42,
+            "end": 43,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 42
+              },
+              "end": {
+                "line": 1,
+                "column": 43
+              }
+            },
+            "typeName": {
+              "type": "Identifier",
+              "start": 42,
+              "end": 43,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 42
+                },
+                "end": {
+                  "line": 1,
+                  "column": 43
+                },
+                "identifierName": "U"
+              },
+              "name": "U"
+            }
+          },
+          "falseType": {
+            "type": "TSTypeReference",
+            "start": 46,
+            "end": 47,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 46
+              },
+              "end": {
+                "line": 1,
+                "column": 47
+              }
+            },
+            "typeName": {
+              "type": "Identifier",
+              "start": 46,
+              "end": 47,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 46
+                },
+                "end": {
+                  "line": 1,
+                  "column": 47
+                },
+                "identifierName": "T"
+              },
+              "name": "T"
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

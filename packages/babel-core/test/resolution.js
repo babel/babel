@@ -134,6 +134,46 @@ describe("addon resolution", function() {
     });
   });
 
+  it("should find @foo scoped presets with an inner babel-preset", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["@foo/thing.babel-preset-convert"],
+    });
+  });
+
+  it("should find @foo scoped plugins with an inner babel-plugin", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["@foo/thing.babel-plugin-convert"],
+    });
+  });
+
+  it("should find @foo scoped presets with an babel-preset suffix", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["@foo/thing-babel-preset"],
+    });
+  });
+
+  it("should find @foo scoped plugins with an babel-plugin suffix", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["@foo/thing-babel-plugin"],
+    });
+  });
+
   it("should find @foo scoped presets with an existing prefix", function() {
     process.chdir("foo-org-paths");
 
@@ -151,6 +191,66 @@ describe("addon resolution", function() {
       filename: "filename.js",
       babelrc: false,
       plugins: ["@foo/babel-plugin-mod"],
+    });
+  });
+
+  it("should find @foo/babel-plugin when specified", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["@foo/babel-plugin"],
+    });
+  });
+
+  it("should find @foo/babel-preset when specified", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["@foo/babel-preset"],
+    });
+  });
+
+  it("should find @foo/babel-plugin/index when specified", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["@foo/babel-plugin/index"],
+    });
+  });
+
+  it("should find @foo/babel-preset/index when specified", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["@foo/babel-preset/index"],
+    });
+  });
+
+  it("should find @foo/babel-plugin when just scope given", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["@foo"],
+    });
+  });
+
+  it("should find @foo/babel-preset when just scope given", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["@foo"],
     });
   });
 

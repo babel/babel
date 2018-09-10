@@ -1,4 +1,3 @@
-import commander from "commander";
 import readdirRecursive from "fs-readdir-recursive";
 import * as babel from "@babel/core";
 import includes from "lodash/includes";
@@ -16,11 +15,15 @@ export function readdir(
   includeDotfiles: boolean,
   filter: ReaddirFilter,
 ) {
-  return readdirRecursive(
-    dirname,
-    filename =>
-      (includeDotfiles || filename[0] !== ".") && (!filter || filter(filename)),
-  );
+  return readdirRecursive(dirname, (filename, _index, currentDirectory) => {
+    const stat = fs.statSync(path.join(currentDirectory, filename));
+
+    if (stat.isDirectory()) return true;
+
+    return (
+      (includeDotfiles || filename[0] !== ".") && (!filter || filter(filename))
+    );
+  });
 }
 
 export function readdirForCompilable(
@@ -49,29 +52,36 @@ export function addSourceMappingUrl(code, loc) {
   return code + "\n//# sourceMappingURL=" + path.basename(loc);
 }
 
-export function log(msg, force) {
-  if (force === true || commander.verbose) console.log(msg);
-}
+const CALLER = {
+  name: "@babel/cli",
+};
 
-export function transform(filename, code, opts, callback) {
-  opts = Object.assign({}, opts, {
+export function transform(filename, code, opts) {
+  opts = {
+    ...opts,
+    caller: CALLER,
     filename,
-  });
+  };
 
-  babel.transform(code, opts, callback);
+  return new Promise((resolve, reject) => {
+    babel.transform(code, opts, (err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    });
+  });
 }
 
-export function compile(filename, opts, callback) {
-  babel.transformFile(filename, opts, function(err, res) {
-    if (err) {
-      if (commander.watch) {
-        console.error(err);
-        return callback(null, null);
-      } else {
-        return callback(err);
-      }
-    }
-    return callback(null, res);
+export function compile(filename, opts) {
+  opts = {
+    ...opts,
+    caller: CALLER,
+  };
+
+  return new Promise((resolve, reject) => {
+    babel.transformFile(filename, opts, (err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    });
   });
 }
 

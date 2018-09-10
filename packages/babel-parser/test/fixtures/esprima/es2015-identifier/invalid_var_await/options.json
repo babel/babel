@@ -1,0 +1,4 @@
+{
+  "throws":
+    "'import' and 'export' may appear only with 'sourceType: \"module\"' (1:0)"
+}

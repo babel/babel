@@ -1,4 +1,5 @@
 import fs from "fs";
+import path from "path";
 
 let currentHook;
 let currentOptions;
@@ -39,6 +40,11 @@ describe("@babel/register", function() {
   let babelRegister;
 
   function setupRegister(config = { babelrc: false }) {
+    config = {
+      cwd: path.dirname(testFile),
+      ...config,
+    };
+
     babelRegister = require(registerFile);
     babelRegister.default(config);
   }
@@ -46,6 +52,7 @@ describe("@babel/register", function() {
   function revertRegister() {
     if (babelRegister) {
       babelRegister.revert();
+      delete require.cache[registerFile];
       babelRegister = null;
     }
   }

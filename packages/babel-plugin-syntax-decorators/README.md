@@ -1,35 +1,19 @@
 # @babel/plugin-syntax-decorators
 
-> Allow parsing of decorators.
+> Allow parsing of decorators
 
-## Installation
+See our website [@babel/plugin-syntax-decorators](https://babeljs.io/docs/en/next/babel-plugin-syntax-decorators.html) for more information.
+
+## Install
+
+Using npm:
 
 ```sh
 npm install --save-dev @babel/plugin-syntax-decorators
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-syntax-decorators"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins @babel/plugin-syntax-decorators script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-syntax-decorators"]
-});
+yarn add @babel/plugin-syntax-decorators --dev
 ```

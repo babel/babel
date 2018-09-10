@@ -4,4 +4,4 @@ function* f() {
   }
 }
 var [...xs] = f();
-assert.deepEqual(xs, [0, 1, 2]);
+expect(xs).toEqual([0, 1, 2]);

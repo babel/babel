@@ -1,9 +1,12 @@
 /lib
 /build
+/.git
 package.json
+lerna.json
 packages/babel-runtime
-!packages/babel-runtime/scripts
-!packages/babel-runtime/core-js.js
+!packages/babel-plugin-transform-runtime/scripts
+!packages/babel-runtime-corejs2/core-js.js
+packages/babel-runtime-corejs2
 packages/*/node_modules
 packages/*/lib
 packages/*/dist
@@ -20,4 +23,4 @@ packages/babel-preset-env-standalone/babel-preset-env.js
 packages/babel-preset-env-standalone/babel-preset-env.min.js
 packages/babel-standalone/babel.js
 packages/babel-standalone/babel.min.js
-packages/babylon/test/expressions
+packages/babel-parser/test/expressions

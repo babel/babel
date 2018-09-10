@@ -88,6 +88,7 @@ defineType("ClassBody", {
           assertNodeType(
             "ClassMethod",
             "ClassProperty",
+            "ClassPrivateProperty",
             "TSDeclareMethod",
             "TSIndexSignature",
           ),
@@ -508,6 +509,13 @@ defineType("TaggedTemplateExpression", {
     },
     quasi: {
       validate: assertNodeType("TemplateLiteral"),
+    },
+    typeParameters: {
+      validate: assertNodeType(
+        "TypeParameterInstantiation",
+        "TSTypeParameterInstantiation",
+      ),
+      optional: true,
     },
   },
 });

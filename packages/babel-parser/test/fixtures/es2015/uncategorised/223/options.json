@@ -1,0 +1,3 @@
+{
+  "throws": "Object pattern can't contain getter or setter (1:8)"
+}

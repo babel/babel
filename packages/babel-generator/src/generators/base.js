@@ -1,4 +1,10 @@
 export function File(node: Object) {
+  if (node.program) {
+    // Print this here to ensure that Program node 'leadingComments' still
+    // get printed after the hashbang.
+    this.print(node.program.interpreter, node);
+  }
+
   this.print(node.program, node);
 }
 
@@ -42,6 +48,10 @@ export function Noop() {}
 export function Directive(node: Object) {
   this.print(node.value, node);
   this.semicolon();
+}
+
+export function InterpreterDirective(node: Object) {
+  this.token(`#!${node.value}\n`);
 }
 
 export { StringLiteral as DirectiveLiteral } from "./types";

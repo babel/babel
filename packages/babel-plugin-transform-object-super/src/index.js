@@ -2,13 +2,10 @@ import { declare } from "@babel/helper-plugin-utils";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import { types as t } from "@babel/core";
 
-function replacePropertySuper(path, node, scope, getObjectRef, file) {
+function replacePropertySuper(path, getObjectRef, file) {
   const replaceSupers = new ReplaceSupers({
     getObjectRef: getObjectRef,
-    methodNode: node,
     methodPath: path,
-    isStatic: true,
-    scope: scope,
     file: file,
   });
 
@@ -25,20 +22,10 @@ export default declare(api => {
         const getObjectRef = () =>
           (objectRef = objectRef || path.scope.generateUidIdentifier("obj"));
 
-        path.get("properties").forEach(propertyPath => {
-          if (!propertyPath.isMethod()) return;
+        path.get("properties").forEach(propPath => {
+          if (!propPath.isMethod()) return;
 
-          const propPaths: Array = path.get("properties");
-          for (let propPath of propPaths) {
-            if (propPath.isObjectProperty()) propPath = propPath.get("value");
-            replacePropertySuper(
-              propPath,
-              propPath.node,
-              path.scope,
-              getObjectRef,
-              state,
-            );
-          }
+          replacePropertySuper(propPath, getObjectRef, state);
         });
 
         if (objectRef) {

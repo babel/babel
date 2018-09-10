@@ -15,8 +15,9 @@ const BABEL_PLUGIN_PREFIX_RE = /^(?!@|module:|[^/]+\/|babel-plugin-)/;
 const BABEL_PRESET_PREFIX_RE = /^(?!@|module:|[^/]+\/|babel-preset-)/;
 const BABEL_PLUGIN_ORG_RE = /^(@babel\/)(?!plugin-|[^/]+\/)/;
 const BABEL_PRESET_ORG_RE = /^(@babel\/)(?!preset-|[^/]+\/)/;
-const OTHER_PLUGIN_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?!babel-plugin-|[^/]+\/)/;
-const OTHER_PRESET_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?!babel-preset-|[^/]+\/)/;
+const OTHER_PLUGIN_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?![^/]*babel-plugin(?:-|\/|$)|[^/]+\/)/;
+const OTHER_PRESET_ORG_RE = /^(@(?!babel\/)[^/]+\/)(?![^/]*babel-preset(?:-|\/|$)|[^/]+\/)/;
+const OTHER_ORG_DEFAULT_RE = /^(@(?!babel$)[^/]+)$/;
 
 export function resolvePlugin(name: string, dirname: string): string | null {
   return resolveStandardizedName("plugin", name, dirname);
@@ -80,6 +81,8 @@ function standardizeName(type: "plugin" | "preset", name: string) {
         isPreset ? OTHER_PRESET_ORG_RE : OTHER_PLUGIN_ORG_RE,
         `$1babel-${type}-`,
       )
+      // @foo -> @foo/babel-preset
+      .replace(OTHER_ORG_DEFAULT_RE, `$1/babel-${type}`)
       // module:mypreset -> mypreset
       .replace(EXACT_RE, "")
   );

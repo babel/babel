@@ -1,13 +1,10 @@
-const includes = require("lodash/includes");
 const readdir = require("fs-readdir-recursive");
 const helper = require("@babel/helper-fixtures");
-const assert = require("assert");
 const rimraf = require("rimraf");
 const outputFileSync = require("output-file-sync");
 const child = require("child_process");
 const merge = require("lodash/merge");
 const path = require("path");
-const chai = require("chai");
 const fs = require("fs");
 
 const fixtureLoc = path.join(__dirname, "fixtures");
@@ -17,12 +14,10 @@ const fileFilter = function(x) {
   return x !== ".DS_Store";
 };
 
-const presetLocs = [
-  path.join(__dirname, "../../babel-preset-es2015"),
-  path.join(__dirname, "../../babel-preset-react"),
-].join(",");
+const presetLocs = [path.join(__dirname, "../../babel-preset-react")];
 
 const pluginLocs = [
+  path.join(__dirname, "/../../babel-plugin-transform-arrow-functions"),
   path.join(__dirname, "/../../babel-plugin-transform-strict-mode"),
   path.join(__dirname, "/../../babel-plugin-transform-modules-commonjs"),
 ].join(",");
@@ -39,7 +34,9 @@ const readDir = function(loc, filter) {
 
 const saveInFiles = function(files) {
   // Place an empty .babelrc in each test so tests won't unexpectedly get to repo-level config.
-  outputFileSync(".babelrc", "{}");
+  if (!fs.existsSync(".babelrc")) {
+    outputFileSync(".babelrc", "{}");
+  }
 
   Object.keys(files).forEach(function(filename) {
     const content = files[filename];
@@ -47,21 +44,28 @@ const saveInFiles = function(files) {
   });
 };
 
-const assertTest = function(stdout, stderr, opts) {
+const replacePaths = function(str, cwd) {
+  let prev;
+  do {
+    prev = str;
+    str = str.replace(cwd, "<CWD>");
+  } while (str !== prev);
+
+  return str;
+};
+
+const assertTest = function(stdout, stderr, opts, cwd) {
+  stdout = replacePaths(stdout, cwd);
+  stderr = replacePaths(stderr, cwd);
+
   const expectStderr = opts.stderr.trim();
   stderr = stderr.trim();
 
   if (opts.stderr) {
     if (opts.stderrContains) {
-      assert.ok(
-        includes(stderr, expectStderr),
-        "stderr " +
-          JSON.stringify(stderr) +
-          " didn't contain " +
-          JSON.stringify(expectStderr),
-      );
+      expect(stderr).toContain(expectStderr);
     } else {
-      chai.expect(stderr).to.equal(expectStderr, "stderr didn't match");
+      expect(stderr).toBe(expectStderr);
     }
   } else if (stderr) {
     throw new Error("stderr:\n" + stderr);
@@ -73,15 +77,9 @@ const assertTest = function(stdout, stderr, opts) {
 
   if (opts.stdout) {
     if (opts.stdoutContains) {
-      assert.ok(
-        includes(stdout, expectStdout),
-        "stdout " +
-          JSON.stringify(stdout) +
-          " didn't contain " +
-          JSON.stringify(expectStdout),
-      );
+      expect(stdout).toContain(expectStdout);
     } else {
-      chai.expect(stdout).to.equal(expectStdout, "stdout didn't match");
+      expect(stdout).toBe(expectStdout);
     }
   } else if (stdout) {
     throw new Error("stdout:\n" + stdout);
@@ -96,24 +94,19 @@ const assertTest = function(stdout, stderr, opts) {
         filename !== ".babelrc" &&
         !opts.inFiles.hasOwnProperty(filename)
       ) {
-        const expect = opts.outFiles[filename];
+        const expected = opts.outFiles[filename];
         const actual = actualFiles[filename];
 
-        chai.expect(expect, "Output is missing: " + filename).to.not.be
-          .undefined;
+        expect(expected).not.toBeUndefined();
 
-        if (expect) {
-          chai
-            .expect(actual)
-            .to.equal(expect, "Compiled output does not match: " + filename);
+        if (expected) {
+          expect(actual).toBe(expected);
         }
       }
     });
 
     Object.keys(opts.outFiles).forEach(function(filename) {
-      chai
-        .expect(actualFiles, "Extraneous file in output: " + filename)
-        .to.contain.key(filename);
+      expect(actualFiles).toHaveProperty([filename]);
     });
   }
 };
@@ -156,7 +149,7 @@ const buildTest = function(binName, testName, opts) {
       let err;
 
       try {
-        assertTest(stdout, stderr, opts);
+        assertTest(stdout, stderr, opts, tmpLoc);
       } catch (e) {
         err = e;
       }

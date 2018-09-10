@@ -1,6 +1,5 @@
 import traverse from "../lib";
-import assert from "assert";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 import * as t from "@babel/types";
 
 describe("path/replacement", function() {
@@ -25,7 +24,7 @@ describe("path/replacement", function() {
         },
       });
 
-      assert(ast.program.body[0].declaration.type == "ArrayExpression");
+      expect(ast.program.body[0].declaration.type).toBe("ArrayExpression");
     });
 
     it("throws error when trying to replace Program with a non-Program node", function() {

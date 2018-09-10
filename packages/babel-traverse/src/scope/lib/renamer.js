@@ -108,7 +108,12 @@ export default class Renamer {
         path.isClassExpression(),
     );
     if (parentDeclar) {
-      this.maybeConvertFromExportDeclaration(parentDeclar);
+      const bindingIds = parentDeclar.getOuterBindingIdentifiers();
+      if (bindingIds[oldName] === binding.identifier) {
+        // When we are renaming an exported identifier, we need to ensure that
+        // the exported binding keeps the old name.
+        this.maybeConvertFromExportDeclaration(parentDeclar);
+      }
     }
 
     scope.traverse(block || scope.block, renameVisitor, this);

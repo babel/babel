@@ -1,5 +1,3 @@
 {
-  "plugins": [
-    ["transform-modules-commonjs", { "mjsStrictNamespace": false }]
-  ]
+  "plugins": [["transform-modules-commonjs", { "mjsStrictNamespace": false }]]
 }

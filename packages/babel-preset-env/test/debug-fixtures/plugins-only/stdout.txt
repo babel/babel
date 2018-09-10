@@ -13,14 +13,19 @@ Using targets:
   "node": "7.4"
 }
 
-Using modules transform: commonjs
+Using modules transform: auto
 
 Using plugins:
   transform-literals { "firefox":"52" }
   transform-function-name { "firefox":"52" }
   transform-for-of { "firefox":"52" }
-  transform-destructuring { "firefox":"52" }
   transform-dotall-regex { "firefox":"52", "node":"7.4" }
+  transform-destructuring { "firefox":"52" }
+  proposal-async-generator-functions { "firefox":"52", "node":"7.4" }
+  proposal-object-rest-spread { "firefox":"52", "node":"7.4" }
+  proposal-unicode-property-regex { "firefox":"52", "node":"7.4" }
+  proposal-json-strings { "firefox":"52", "node":"7.4" }
+  proposal-optional-catch-binding { "firefox":"52", "node":"7.4" }
 
 Using polyfills: No polyfills were added, since the `useBuiltIns` option was not set.
-🎉  Successfully compiled 1 file with Babel.
+Successfully compiled 1 file with Babel.

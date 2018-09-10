@@ -1,0 +1,267 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 84,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 4,
+      "column": 17
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 84,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 4,
+        "column": 17
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TSModuleDeclaration",
+        "start": 0,
+        "end": 24,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 24
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 18,
+          "end": 19,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 18
+            },
+            "end": {
+              "line": 1,
+              "column": 19
+            },
+            "identifierName": "N"
+          },
+          "name": "N"
+        },
+        "body": {
+          "type": "TSModuleDeclaration",
+          "start": 20,
+          "end": 24,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 20
+            },
+            "end": {
+              "line": 1,
+              "column": 24
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 20,
+            "end": 21,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 20
+              },
+              "end": {
+                "line": 1,
+                "column": 21
+              },
+              "identifierName": "M"
+            },
+            "name": "M"
+          },
+          "body": {
+            "type": "TSModuleBlock",
+            "start": 22,
+            "end": 24,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 22
+              },
+              "end": {
+                "line": 1,
+                "column": 24
+              }
+            },
+            "body": []
+          }
+        },
+        "declare": true
+      },
+      {
+        "type": "TSModuleDeclaration",
+        "start": 25,
+        "end": 44,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 19
+          }
+        },
+        "id": {
+          "type": "Identifier",
+          "start": 40,
+          "end": 41,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 15
+            },
+            "end": {
+              "line": 2,
+              "column": 16
+            },
+            "identifierName": "M"
+          },
+          "name": "M"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start": 42,
+          "end": 44,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 17
+            },
+            "end": {
+              "line": 2,
+              "column": 19
+            }
+          },
+          "body": []
+        },
+        "declare": true
+      },
+      {
+        "type": "TSModuleDeclaration",
+        "start": 45,
+        "end": 66,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 21
+          }
+        },
+        "id": {
+          "type": "StringLiteral",
+          "start": 60,
+          "end": 63,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 15
+            },
+            "end": {
+              "line": 3,
+              "column": 18
+            }
+          },
+          "extra": {
+            "rawValue": "m",
+            "raw": "\"m\""
+          },
+          "value": "m"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start": 64,
+          "end": 66,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 19
+            },
+            "end": {
+              "line": 3,
+              "column": 21
+            }
+          },
+          "body": []
+        },
+        "declare": true
+      },
+      {
+        "type": "TSModuleDeclaration",
+        "start": 67,
+        "end": 84,
+        "loc": {
+          "start": {
+            "line": 4,
+            "column": 0
+          },
+          "end": {
+            "line": 4,
+            "column": 17
+          }
+        },
+        "global": true,
+        "id": {
+          "type": "Identifier",
+          "start": 75,
+          "end": 81,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 8
+            },
+            "end": {
+              "line": 4,
+              "column": 14
+            },
+            "identifierName": "global"
+          },
+          "name": "global"
+        },
+        "body": {
+          "type": "TSModuleBlock",
+          "start": 82,
+          "end": 84,
+          "loc": {
+            "start": {
+              "line": 4,
+              "column": 15
+            },
+            "end": {
+              "line": 4,
+              "column": 17
+            }
+          },
+          "body": []
+        },
+        "declare": true
+      }
+    ],
+    "directives": []
+  }
+}

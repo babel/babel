@@ -13,7 +13,10 @@ import "core-js/modules/es6.array.find-index";
 import "core-js/modules/es6.array.find";
 import "core-js/modules/es7.array.includes";
 import "core-js/modules/es6.string.includes";
+import "core-js/modules/web.dom.iterable";
+import "core-js/modules/es6.array.iterator";
 import "core-js/modules/es6.map";
+import "core-js/modules/es6.string.iterator";
 import "core-js/modules/es6.array.from";
 Array.from; // static function
 

@@ -1,0 +1,5 @@
+{
+  "throws":
+    "This experimental syntax requires enabling the parser plugin: 'classPrivateProperties' (2:3)",
+  "plugins": []
+}

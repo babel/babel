@@ -4,4 +4,4 @@ class Ref {
   }
 }
 
-assert.equal(Ref, new Ref().ref)
+expect(new Ref().ref).toBe(Ref);

@@ -1,9 +1,13 @@
 var BaseView = function BaseView() {
+  "use strict";
+
   babelHelpers.classCallCheck(this, BaseView);
   this.autoRender = true;
 };
 
 var BaseView = function BaseView() {
+  "use strict";
+
   babelHelpers.classCallCheck(this, BaseView);
   this.autoRender = true;
 };
@@ -11,6 +15,8 @@ var BaseView = function BaseView() {
 var BaseView =
 /*#__PURE__*/
 function () {
+  "use strict";
+
   function BaseView() {
     babelHelpers.classCallCheck(this, BaseView);
   }

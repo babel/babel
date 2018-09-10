@@ -1,3 +1,8 @@
 {
-  "plugins": ["syntax-flow", "transform-flow-strip-types", "transform-parameters", "transform-block-scoping"]
+  "plugins": [
+    "syntax-flow",
+    "transform-flow-strip-types",
+    "transform-parameters",
+    "transform-block-scoping"
+  ]
 }

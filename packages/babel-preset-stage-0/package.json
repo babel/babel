@@ -1,22 +1,13 @@
 {
   "name": "@babel/preset-stage-0",
-  "version": "7.0.0-beta.42",
+  "version": "7.0.0",
   "description": "Babel preset for stage 0 plugins",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-stage-0",
-  "main": "lib/index.js",
-  "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.42",
-    "@babel/plugin-proposal-function-bind": "7.0.0-beta.42",
-    "@babel/plugin-proposal-logical-assignment-operators": "7.0.0-beta.42",
-    "@babel/preset-stage-1": "7.0.0-beta.42"
-  },
-  "peerDependencies": {
-    "@babel/core": "7.0.0-beta.42"
-  },
-  "devDependencies": {
-    "@babel/core": "7.0.0-beta.42"
-  }
+  "main": "lib/index.js"
 }

@@ -1,3 +1,5 @@
 var Test = function Test() {
-  Function.prototype.hasOwnProperty.call(this, "test");
+  "use strict";
+
+  Object.prototype.hasOwnProperty.call(this, "test");
 };

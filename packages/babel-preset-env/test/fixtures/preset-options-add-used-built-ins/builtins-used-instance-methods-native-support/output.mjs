@@ -1,3 +1,4 @@
+import "core-js/modules/web.dom.iterable";
 Array.from; // static function
 
 Map; // top level built-in

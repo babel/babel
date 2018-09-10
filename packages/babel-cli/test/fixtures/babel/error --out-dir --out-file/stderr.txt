@@ -1,1 +1,1 @@
-filenames required for --out-dir
+--out-dir requires filenames

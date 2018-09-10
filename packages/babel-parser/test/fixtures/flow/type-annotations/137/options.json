@@ -1,0 +1,4 @@
+{
+  "throws":
+    "Spread operator cannot appear in class or interface definitions (2:1)"
+}

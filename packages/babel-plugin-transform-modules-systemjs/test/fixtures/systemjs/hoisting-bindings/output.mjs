@@ -5,7 +5,7 @@ System.register([], function (_export, _context) {
 
   function a() {
     alert("a");
-    _export("c", c + 1), c++;
+    _export("c", +c + 1), c++;
   }
 
   _export("a", a);
@@ -18,8 +18,6 @@ System.register([], function (_export, _context) {
     setters: [],
     execute: function () {
       _export("c", c = 5);
-
-      _export("c", c);
 
       b();
     }

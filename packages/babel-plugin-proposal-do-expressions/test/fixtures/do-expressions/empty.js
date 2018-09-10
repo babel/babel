@@ -1,1 +1,1 @@
-assert.equal(do {}, undefined);
+expect(do {}).toBeUndefined();

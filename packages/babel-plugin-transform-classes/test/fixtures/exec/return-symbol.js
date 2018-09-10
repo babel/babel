@@ -5,5 +5,5 @@ class Foo {
 }
 
 const f = new Foo;
-assert.ok(f instanceof Foo);
-assert.ok(typeof f === "object");
+expect(f).toBeInstanceOf(Foo);
+expect(typeof f).toBe("object");

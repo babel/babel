@@ -16,4 +16,4 @@ function sum(
   return acc;
 }
 
-assert.equal(sum({arr:[1,2]}), 3);
+expect(sum({arr:[1,2]})).toBe(3);

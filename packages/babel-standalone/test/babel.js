@@ -1,5 +1,3 @@
-const assert = require("assert");
-
 // Basic smoke tests for @babel/standalone
 (process.env.TEST_TYPE === "cov" ? describe.skip : describe)(
   "@babel/standalone",
@@ -10,8 +8,7 @@ const assert = require("assert");
       const output = Babel.transform('const getMessage = () => "Hello World"', {
         presets: ["es2015-no-commonjs"],
       }).code;
-      assert.equal(
-        output,
+      expect(output).toBe(
         "var getMessage = function getMessage() {\n" +
           '  return "Hello World";\n' +
           "};",
@@ -22,19 +19,19 @@ const assert = require("assert");
         sourceType: "script",
         presets: ["es2015-loose"],
       }).code;
-      assert.equal(output, "var A = function A() {};");
+      expect(output).toBe('var A = function A() {\n  "use strict";\n};');
     });
     it("handles the typescript preset", () => {
       const output = Babel.transform("var a: string;", {
-        presets: ["typescript"],
+        presets: [["typescript", { allExtensions: true }]],
       }).code;
-      assert.equal(output, "var a;");
+      expect(output).toBe("var a;");
     });
     it("handles the flow preset", () => {
       const output = Babel.transform("var a: string;", {
         presets: ["flow"],
       }).code;
-      assert.equal(output, "var a;");
+      expect(output).toBe("var a;");
     });
     it("can translate simple ast", () => {
       const ast = {
@@ -60,7 +57,7 @@ const assert = require("assert");
       };
       const output = Babel.transformFromAst(ast, "42", { presets: ["es2015"] })
         .code;
-      assert.equal(output, "42;");
+      expect(output).toBe("42;");
     });
 
     it("handles the react preset", () => {
@@ -70,8 +67,7 @@ const assert = require("assert");
           presets: ["react"],
         },
       ).code;
-      assert.equal(
-        output,
+      expect(output).toBe(
         'const someDiv = React.createElement("div", null, getMessage());',
       );
     });
@@ -80,7 +76,7 @@ const assert = require("assert");
       const output = Babel.transform("export let x", {
         presets: [["es2015", { modules: false }]],
       }).code;
-      assert.equal(output, "export var x;");
+      expect(output).toBe("export var x;");
     });
 
     it("handles specifying a plugin by name", () => {
@@ -88,8 +84,7 @@ const assert = require("assert");
         plugins: ["transform-arrow-functions"],
       }).code;
       // Transforms arrow syntax but NOT "const".
-      assert.equal(
-        output,
+      expect(output).toBe(
         "const getMessage = function () {\n" +
           '  return "Hello World";\n' +
           "};",
@@ -100,21 +95,19 @@ const assert = require("assert");
       const output = Babel.transform("`${x}`", {
         plugins: [["transform-template-literals", { loose: true }]],
       }).code;
-      assert.equal(output, '"" + x;');
+      expect(output).toBe('"" + x;');
     });
 
     it("throws on invalid preset name", () => {
-      assert.throws(
-        () => Babel.transform("var foo", { presets: ["lolfail"] }),
-        /Invalid preset specified in Babel options: "lolfail"/,
-      );
+      expect(() =>
+        Babel.transform("var foo", { presets: ["lolfail"] }),
+      ).toThrow(/Invalid preset specified in Babel options: "lolfail"/);
     });
 
     it("throws on invalid plugin name", () => {
-      assert.throws(
-        () => Babel.transform("var foo", { plugins: ["lolfail"] }),
-        /Invalid plugin specified in Babel options: "lolfail"/,
-      );
+      expect(() =>
+        Babel.transform("var foo", { plugins: ["lolfail"] }),
+      ).toThrow(/Invalid plugin specified in Babel options: "lolfail"/);
     });
 
     describe("custom plugins and presets", () => {
@@ -132,12 +125,9 @@ const assert = require("assert");
           "function helloWorld() { alert(hello); }",
           { plugins: ["lolizer"] },
         );
-        assert.equal(
-          output.code,
-          `function LOL() {
+        expect(output.code).toBe(`function LOL() {
   LOL(LOL);
-}`,
-        );
+}`);
       });
 
       it("allows custom presets to be registered", () => {
@@ -146,12 +136,9 @@ const assert = require("assert");
           "function helloWorld() { alert(hello); }",
           { presets: ["lulz"] },
         );
-        assert.equal(
-          output.code,
-          `function LOL() {
+        expect(output.code).toBe(`function LOL() {
   LOL(LOL);
-}`,
-        );
+}`);
       });
     });
   },

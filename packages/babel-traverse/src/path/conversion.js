@@ -133,7 +133,7 @@ export function arrowFunctionToExpression({
     this.get("body").unshiftContainer(
       "body",
       t.expressionStatement(
-        t.callExpression(this.hub.file.addHelper("newArrowCheck"), [
+        t.callExpression(this.hub.addHelper("newArrowCheck"), [
           t.thisExpression(),
           checkBinding
             ? t.identifier(checkBinding.name)
@@ -163,12 +163,13 @@ function hoistFunctionEnvironment(
   specCompliant = false,
   allowInsertArrow = true,
 ) {
-  const thisEnvFn = fnPath.findParent(
-    p =>
+  const thisEnvFn = fnPath.findParent(p => {
+    return (
       (p.isFunction() && !p.isArrowFunctionExpression()) ||
       p.isProgram() ||
-      p.isClassProperty({ static: false }),
-  );
+      p.isClassProperty({ static: false })
+    );
+  });
   const inConstructor = thisEnvFn && thisEnvFn.node.kind === "constructor";
 
   if (thisEnvFn.isClassProperty()) {

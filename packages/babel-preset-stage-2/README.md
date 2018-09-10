@@ -1,63 +1,47 @@
 # @babel/preset-stage-2
 
-> Babel preset for stage 2 plugins.
+As of v7.0.0-beta.55, we've removed Babel's Stage presets. Please consider reading our [blog post](https://babeljs.io/blog/2018/07/27/removing-babels-stage-presets) on this decision for more details. TL;DR is that it's more beneficial in the long run to explicitly add which proposals to use.
 
-The gist of Stage 2 is:
+---
 
-> **Stage 2:** draft
->
-> **What is it?** A first version of what will be in the specification. At this point, an eventual inclusion of the feature in the standard is likely.
->
-> **What’s required?** The proposal must now additionally have a formal description of the syntax and semantics of the feature (using the formal language of the ECMAScript specification). The description should be as complete as possible, but can contain todos and placeholders. Two experimental implementations of the feature are needed, but one of them can be in a transpiler such as Babel.
->
-> **What’s next?** Only incremental changes are expected from now on.
+For a more automatic migration, we have updated [babel-upgrade](https://github.com/babel/babel-upgrade) to do this for you (you can run `npx babel-upgrade`).
 
-## Install
+If you want the same configuration as before:
 
-```sh
-npm install --save-dev @babel/preset-stage-2
-```
-
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
+```jsonc
 {
-  "presets": ["@babel/preset-stage-2"]
+  "plugins": [
+    // Stage 2
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    "@babel/plugin-proposal-function-sent",
+    "@babel/plugin-proposal-export-namespace-from",
+    "@babel/plugin-proposal-numeric-separator",
+    "@babel/plugin-proposal-throw-expressions",
+
+    // Stage 3
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-syntax-import-meta",
+    ["@babel/plugin-proposal-class-properties", { "loose": false }],
+    "@babel/plugin-proposal-json-strings"
+  ]
 }
 ```
 
-### Via CLI
+If you're using the same configuration across many separate projects,
+keep in mind that you can also create your own custom presets with
+whichever plugins and presets you're looking to use.
 
-```sh
-babel script.js --presets @babel/preset-stage-2
+```js
+module.exports = function() {
+  return {
+    plugins: [
+      require("@babel/plugin-syntax-dynamic-import"),
+      [require("@babel/plugin-proposal-decorators"), { "legacy": true }],
+      [require("@babel/plugin-proposal-class-properties"), { "loose": false }],
+    ],
+    presets: [
+      // ...
+    ],
+  };
+};
 ```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  presets: ["@babel/preset-stage-2"]
-});
-```
-
-## Options
-
-### `loose`
-
-`boolean`, defaults to `false`.
-
-Enable "loose" transformations for any plugins in this preset that allow them.
-
-### `useBuiltIns`
-
-`boolean`, defaults to `false`.
-
-Will use the native built-in instead of trying to polyfill behavior for any plugins that require one.
-
-## References
-
-- Chapter "[The TC39 process for ECMAScript features](http://exploringjs.com/es2016-es2017/ch_tc39-process.html)" in "Exploring ES2016 and ES2017" by Axel Rauschmayer

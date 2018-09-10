@@ -1,4 +1,4 @@
-assert.throws(function() {
+expect(function() {
   const a = 3;
   a = 7;
-}, '"a" is read-only');
+}).toThrow('"a" is read-only');

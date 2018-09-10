@@ -13,6 +13,7 @@ export default function loadBlockHoistPlugin(): Plugin {
     // which loads this file, and this 'loadConfig' loading plugins.
     const config = loadConfig({
       babelrc: false,
+      configFile: false,
       plugins: [blockHoistPlugin],
     });
     LOADED_PLUGIN = config ? config.passes[0][0] : undefined;

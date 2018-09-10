@@ -13,7 +13,15 @@ export default declare(api => {
     inherits: syntaxFlow,
 
     visitor: {
-      Program(path, { file: { ast: { comments } }, opts }) {
+      Program(
+        path,
+        {
+          file: {
+            ast: { comments },
+          },
+          opts,
+        },
+      ) {
         skipStrip = false;
         let directiveFound = false;
 
@@ -68,6 +76,11 @@ export default declare(api => {
         if (!path.node.value) path.remove();
       },
 
+      ClassPrivateProperty(path) {
+        if (skipStrip) return;
+        path.node.typeAnnotation = null;
+      },
+
       Class(path) {
         if (skipStrip) return;
         path.node.implements = null;
@@ -107,6 +120,21 @@ export default declare(api => {
           node = node.expression;
         } while (t.isTypeCastExpression(node));
         path.replaceWith(node);
+      },
+
+      CallExpression({ node }) {
+        if (skipStrip) return;
+        node.typeArguments = null;
+      },
+
+      OptionalCallExpression({ node }) {
+        if (skipStrip) return;
+        node.typeArguments = null;
+      },
+
+      NewExpression({ node }) {
+        if (skipStrip) return;
+        node.typeArguments = null;
       },
     },
   };

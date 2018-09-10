@@ -8,5 +8,5 @@ function foo() {
 foo();
 foo.call({});
 
-assert.equal(targets[0], undefined);
-assert.equal(targets[1], undefined);
+expect(targets[0]).toBeUndefined();
+expect(targets[1]).toBeUndefined();

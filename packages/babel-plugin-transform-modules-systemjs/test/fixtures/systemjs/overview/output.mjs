@@ -14,8 +14,6 @@ System.register(["foo", "foo-bar", "./directory/foo-bar"], function (_export, _c
 
       _export("test2", test2 = 5);
 
-      _export("test2", test2);
-
       _export("default", test);
     }
   };

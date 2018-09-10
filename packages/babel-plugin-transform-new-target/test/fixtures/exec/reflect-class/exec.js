@@ -16,12 +16,12 @@ Reflect.construct(Bar, []);
 Reflect.construct(Bar, [], Baz);
 Reflect.construct(Foo, [], Baz);
 
-assert.equal(targets[0], Foo);
+expect(targets[0]).toBe(Foo);
 
-assert.equal(targets[1], Bar);
+expect(targets[1]).toBe(Bar);
 
-assert.equal(targets[2], Bar);
+expect(targets[2]).toBe(Bar);
 
-assert.equal(targets[3], Baz);
+expect(targets[3]).toBe(Baz);
 
-assert.equal(targets[4], Baz);
+expect(targets[4]).toBe(Baz);

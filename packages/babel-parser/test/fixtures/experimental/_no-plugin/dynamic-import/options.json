@@ -1,0 +1,5 @@
+{
+  "throws":
+    "This experimental syntax requires enabling the parser plugin: 'dynamicImport' (1:8)",
+  "plugins": []
+}

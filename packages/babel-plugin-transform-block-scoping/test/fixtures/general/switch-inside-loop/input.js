@@ -6,11 +6,11 @@ for (i = 0; i < 10; i++) {
       break;
   }
 
-  const z = 3; // to force the plugin to convert to loop function call 
+  const z = 3; // to force the plugin to convert to loop function call
   () => z;
 }
 
-assert.equal(i, 10);
+expect(i).toBe(10);
 
 // it should continue on continue statements within switch
 var j = 0;
@@ -25,7 +25,7 @@ for (i = 0; i < 10; i++) {
   () => z;
 }
 
-assert.equal(j, 9);
+expect(j).toBe(9);
 
 // it should work with loops nested within switch
 j = 0;
@@ -45,4 +45,4 @@ for (i = 0; i < 10; i++) {
   () => z;
 }
 
-assert.equal(j, 1);
+expect(j).toBe(1);

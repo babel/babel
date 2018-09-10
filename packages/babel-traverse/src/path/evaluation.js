@@ -101,7 +101,9 @@ function _evaluate(path, state) {
     path.get("tag").isMemberExpression()
   ) {
     const object = path.get("tag.object");
-    const { node: { name } } = object;
+    const {
+      node: { name },
+    } = object;
     const property = path.get("tag.property");
 
     if (

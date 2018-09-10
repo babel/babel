@@ -1,12 +1,11 @@
 // @flow
 import loadConfig, { type InputOptions } from "./config";
 import {
+  runSync,
   runAsync,
   type FileResult,
   type FileResultCallback,
 } from "./transformation";
-
-import transformSync from "./transform-sync";
 
 type Transform = {
   (code: string, callback: FileResultCallback): void,
@@ -17,10 +16,10 @@ type Transform = {
   (code: string, opts: ?InputOptions): FileResult | null,
 };
 
-export default ((function transform(code, opts, callback) {
+export const transform: Transform = (function transform(code, opts, callback) {
   if (typeof opts === "function") {
-    opts = undefined;
     callback = opts;
+    opts = undefined;
   }
 
   // For backward-compat with Babel 6, we allow sync transformation when
@@ -43,4 +42,26 @@ export default ((function transform(code, opts, callback) {
 
     runAsync(cfg, code, null, cb);
   });
-}: Function): Transform);
+}: Function);
+
+export function transformSync(
+  code: string,
+  opts: ?InputOptions,
+): FileResult | null {
+  const config = loadConfig(opts);
+  if (config === null) return null;
+
+  return runSync(config, code);
+}
+
+export function transformAsync(
+  code: string,
+  opts: ?InputOptions,
+): Promise<FileResult | null> {
+  return new Promise((res, rej) => {
+    transform(code, opts, (err, result) => {
+      if (err == null) res(result);
+      else rej(err);
+    });
+  });
+}

@@ -221,20 +221,28 @@ registerPlugins({
 // Want to get rid of this whitelist of presets?
 // Wait! Please read https://github.com/babel/babel/pull/6177 first.
 registerPresets({
-  es2015: require("@babel/preset-es2015"),
-  es2016: require("@babel/preset-es2016"),
-  es2017: require("@babel/preset-es2017"),
+  es2015: require("./preset-es2015"),
+  es2016: () => {
+    return {
+      plugins: [availablePlugins["transform-exponentiation-operator"]],
+    };
+  },
+  es2017: () => {
+    return {
+      plugins: [availablePlugins["transform-async-to-generator"]],
+    };
+  },
   react: require("@babel/preset-react"),
-  "stage-0": require("@babel/preset-stage-0"),
-  "stage-1": require("@babel/preset-stage-1"),
-  "stage-2": require("@babel/preset-stage-2"),
-  "stage-3": require("@babel/preset-stage-3"),
+  "stage-0": require("./preset-stage-0"),
+  "stage-1": require("./preset-stage-1"),
+  "stage-2": require("./preset-stage-2"),
+  "stage-3": require("./preset-stage-3"),
   "es2015-loose": {
-    presets: [[require("@babel/preset-es2015"), { loose: true }]],
+    presets: [[require("./preset-es2015"), { loose: true }]],
   },
   // ES2015 preset with es2015-modules-commonjs removed
   "es2015-no-commonjs": {
-    presets: [[require("@babel/preset-es2015"), { modules: false }]],
+    presets: [[require("./preset-es2015"), { modules: false }]],
   },
   typescript: require("@babel/preset-typescript"),
   flow: require("@babel/preset-flow"),

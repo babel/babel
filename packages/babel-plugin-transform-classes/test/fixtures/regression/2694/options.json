@@ -1,4 +1,4 @@
 {
   "plugins": ["external-helpers"],
-  "presets": ["es2015"]
+  "presets": ["env"]
 }

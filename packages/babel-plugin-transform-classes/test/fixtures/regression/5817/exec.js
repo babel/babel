@@ -13,4 +13,4 @@ class Table extends Parent {
 
 const table = new Table();
 
-assert(table.returnParam(false) === false);
+expect(table.returnParam(false)).toBe(false);

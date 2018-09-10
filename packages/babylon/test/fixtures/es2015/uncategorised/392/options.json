@@ -1,4 +1,0 @@
-{
-  "throws": "ES2015 named imports do not destructure. Use another statement for destructuring after the import. (1:19)",
-  "sourceType": "module"
-}

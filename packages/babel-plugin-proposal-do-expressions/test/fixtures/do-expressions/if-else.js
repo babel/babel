@@ -1,7 +1,7 @@
-assert.equal(do {
+expect(do {
   if (false) {
     "foo";
   } else {
     "bar";
   }
-}, "bar");
+}).toBe("bar");

@@ -20,21 +20,21 @@ const obj2 = { NOSET: 123, NOWRITE: 456 };
 // (spread defines them)
 const obj2Spread = { ...obj2 };
 
-assert.deepEqual(obj, objSpread);
-assert.deepEqual(obj2, obj2Spread);
+expect(objSpread).toEqual(obj);
+expect(obj2Spread).toEqual(obj2);
 
 const KEY = Symbol('key');
 const obj3Spread = { ...{ get foo () { return 'bar' } }, [KEY]: 'symbol' };
-assert.equal(Object.getOwnPropertyDescriptor(obj3Spread, 'foo').value, 'bar');
-assert.equal(Object.getOwnPropertyDescriptor(obj3Spread, KEY).value, 'symbol');
+expect(Object.getOwnPropertyDescriptor(obj3Spread, 'foo').value).toBe('bar');
+expect(Object.getOwnPropertyDescriptor(obj3Spread, KEY).value).toBe('symbol');
 
 const obj4Spread = { ...Object.prototype };
-assert.isUndefined(Object.getOwnPropertyDescriptor(obj4Spread, 'hasOwnProperty'));
+expect(Object.getOwnPropertyDescriptor(obj4Spread, 'hasOwnProperty')).toBeUndefined();
 
-assert.doesNotThrow(() => ({ ...null, ...undefined }));
+expect(() => ({ ...null, ...undefined })).not.toThrow();
 
 const o = Object.create(null);
 o.a = 'foo';
 o.__proto__ = [];
 const o2 = { ...o };
-assert.equal(false, Array.isArray(Object.getPrototypeOf(o2)));
+expect(Array.isArray(Object.getPrototypeOf(o2))).toBe(false);

@@ -1,0 +1,4 @@
+{
+  "throws":
+    "`declare export let` is not supported. Use `declare export var` instead (1:15)"
+}

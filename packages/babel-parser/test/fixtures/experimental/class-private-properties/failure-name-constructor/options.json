@@ -1,0 +1,4 @@
+{
+  "throws": "Classes may not have a private field named '#constructor' (2:2)",
+  "plugins": ["classPrivateProperties"]
+}

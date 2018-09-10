@@ -1,5 +1,5 @@
 import * as t from "../lib";
-import { parse } from "babylon";
+import { parse } from "@babel/parser";
 
 describe("validators", function() {
   describe("isNodesEquivalent", function() {
@@ -24,6 +24,14 @@ describe("validators", function() {
       const program2 = "'use strict'; function lol() { wow();return -1; }";
 
       expect(t.isNodesEquivalent(parse(program), parse(program2))).toBe(false);
+    });
+
+    it("should handle nodes with object properties", function() {
+      const original = t.templateElement({ raw: "\\'a", cooked: "'a" }, true);
+      const identical = t.templateElement({ raw: "\\'a", cooked: "'a" }, true);
+      const different = t.templateElement({ raw: "'a", cooked: "'a" }, true);
+      expect(t.isNodesEquivalent(original, identical)).toBe(true);
+      expect(t.isNodesEquivalent(original, different)).toBe(false);
     });
 
     it("rejects 'await' as an identifier", function() {
@@ -93,6 +101,25 @@ describe("validators", function() {
       ]);
 
       expect(t.isNodesEquivalent(pattern, pattern)).toBe(true);
+    });
+  });
+
+  describe("isReferenced", function() {
+    it("returns false if node is a key of ObjectTypeProperty", function() {
+      const node = t.identifier("a");
+      const parent = t.objectTypeProperty(node, t.numberTypeAnnotation());
+
+      expect(t.isReferenced(node, parent)).toBe(false);
+    });
+
+    it("returns true if node is a value of ObjectTypeProperty", function() {
+      const node = t.identifier("a");
+      const parent = t.objectTypeProperty(
+        t.identifier("someKey"),
+        t.genericTypeAnnotation(node),
+      );
+
+      expect(t.isReferenced(node, parent)).toBe(true);
     });
   });
 });

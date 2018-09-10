@@ -1,11 +1,7 @@
 {
-  "version": 3,
-  "mappings": "AAAA,UAAU,Y;SAAM,A;AAAC",
+  "mappings": "AAAA,IAAA,GAAA,GAAU,Y;SAAM,C;AAAC,CAAjB",
   "names": [],
-  "sources": [
-    "original.js"
-  ],
-  "sourcesContent": [
-    "var foo = () => 4;"
-  ]
+  "sources": ["original.js"],
+  "sourcesContent": ["var foo = () => 4;"],
+  "version": 3
 }

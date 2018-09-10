@@ -6,4 +6,4 @@ class MyClass {
   }
 }
 
-assert(new MyClass().test());
+expect(new MyClass().test()).toBe(true);

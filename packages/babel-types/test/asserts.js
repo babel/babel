@@ -1,5 +1,4 @@
 import * as t from "../lib";
-import assert from "assert";
 
 describe("asserts", () => {
   const consoleTrace = console.trace;
@@ -17,17 +16,10 @@ describe("asserts", () => {
       const nodeType = k.replace("assert", "");
 
       it(nodeType, () => {
-        assert.throws(
-          () => {
-            t[k]({ type: "FlavorTownDeclaration" }, {});
-          },
-          err => {
-            return (
-              err instanceof Error &&
-              err.message ===
-                `Expected type "${nodeType}" with option {}, but instead got "FlavorTownDeclaration".`
-            );
-          },
+        expect(() => {
+          t[k]({ type: "FlavorTownDeclaration" }, {});
+        }).toThrow(
+          `Expected type "${nodeType}" with option {}, but instead got "FlavorTownDeclaration".`,
         );
       });
     }

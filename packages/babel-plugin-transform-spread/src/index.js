@@ -49,12 +49,12 @@ export default declare((api, options) => {
 
   return {
     visitor: {
-      ArrayExpression(path, state) {
+      ArrayExpression(path) {
         const { node, scope } = path;
         const elements = node.elements;
         if (!hasSpread(elements)) return;
 
-        const nodes = build(elements, scope, state);
+        const nodes = build(elements, scope);
         const first = nodes.shift();
 
         if (nodes.length === 0 && first !== elements[0].argument) {
@@ -70,7 +70,7 @@ export default declare((api, options) => {
         );
       },
 
-      CallExpression(path, state) {
+      CallExpression(path) {
         const { node, scope } = path;
 
         const args = node.arguments;
@@ -87,7 +87,7 @@ export default declare((api, options) => {
         if (args.length === 1 && args[0].argument.name === "arguments") {
           nodes = [args[0].argument];
         } else {
-          nodes = build(args, scope, state);
+          nodes = build(args, scope);
         }
 
         const first = nodes.shift();
@@ -124,37 +124,29 @@ export default declare((api, options) => {
         node.arguments.unshift(t.cloneNode(contextLiteral));
       },
 
-      NewExpression(path, state) {
+      NewExpression(path) {
         const { node, scope } = path;
         let args = node.arguments;
         if (!hasSpread(args)) return;
 
-        const nodes = build(args, scope, state);
+        const nodes = build(args, scope);
 
-        const context = t.arrayExpression([t.nullLiteral()]);
+        const first = nodes.shift();
 
-        args = t.callExpression(
-          t.memberExpression(context, t.identifier("concat")),
-          nodes,
-        );
+        if (nodes.length) {
+          args = t.callExpression(
+            t.memberExpression(first, t.identifier("concat")),
+            nodes,
+          );
+        } else {
+          args = first;
+        }
 
         path.replaceWith(
-          t.newExpression(
-            t.callExpression(
-              t.memberExpression(
-                t.memberExpression(
-                  t.memberExpression(
-                    t.identifier("Function"),
-                    t.identifier("prototype"),
-                  ),
-                  t.identifier("bind"),
-                ),
-                t.identifier("apply"),
-              ),
-              [node.callee, args],
-            ),
-            [],
-          ),
+          t.callExpression(path.hub.addHelper("construct"), [
+            node.callee,
+            args,
+          ]),
         );
       },
     },

@@ -22,7 +22,12 @@ describe("parse", function() {
     const input = fs.readFileSync(fixture("input.js"), "utf8");
     const output = require(fixture("output.json"));
 
-    const result = parse(input, { parserOpts: { plugins: ["decorators"] } });
+    const result = parse(input, {
+      parserOpts: {
+        plugins: [["decorators", { decoratorsBeforeExport: false }]],
+      },
+      cwd: fixture(),
+    });
     expect(JSON.parse(JSON.stringify(result))).toEqual(output);
   });
 });

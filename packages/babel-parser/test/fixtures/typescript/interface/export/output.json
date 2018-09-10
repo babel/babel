@@ -1,0 +1,163 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 51,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 29
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 51,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 29
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ExportNamedDeclaration",
+        "start": 0,
+        "end": 21,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 21
+          }
+        },
+        "specifiers": [],
+        "source": null,
+        "declaration": {
+          "type": "TSInterfaceDeclaration",
+          "start": 7,
+          "end": 21,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 7
+            },
+            "end": {
+              "line": 1,
+              "column": 21
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 17,
+            "end": 18,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 17
+              },
+              "end": {
+                "line": 1,
+                "column": 18
+              },
+              "identifierName": "I"
+            },
+            "name": "I"
+          },
+          "body": {
+            "type": "TSInterfaceBody",
+            "start": 19,
+            "end": 21,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 19
+              },
+              "end": {
+                "line": 1,
+                "column": 21
+              }
+            },
+            "body": []
+          }
+        }
+      },
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 22,
+        "end": 51,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 29
+          }
+        },
+        "declaration": {
+          "type": "TSInterfaceDeclaration",
+          "start": 37,
+          "end": 51,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 15
+            },
+            "end": {
+              "line": 2,
+              "column": 29
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 47,
+            "end": 48,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 25
+              },
+              "end": {
+                "line": 2,
+                "column": 26
+              },
+              "identifierName": "A"
+            },
+            "name": "A"
+          },
+          "body": {
+            "type": "TSInterfaceBody",
+            "start": 49,
+            "end": 51,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 27
+              },
+              "end": {
+                "line": 2,
+                "column": 29
+              }
+            },
+            "body": []
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

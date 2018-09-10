@@ -1,0 +1,5 @@
+{
+  "plugins": [["pipelineOperator", { "proposal": "invalid" }]],
+  "throws":
+    "'pipelineOperator' requires 'proposal' option whose value should be one of: minimal"
+}

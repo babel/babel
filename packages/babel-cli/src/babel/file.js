@@ -7,26 +7,22 @@ import fs from "fs";
 
 import * as util from "./util";
 
-export default function(commander, filenames, opts) {
-  if (commander.sourceMaps === "inline") {
-    opts.sourceMaps = true;
-  }
-
-  let results = [];
-
-  const buildResult = function() {
+export default async function({ cliOptions, babelOptions }) {
+  function buildResult(fileResults) {
     const map = new sourceMap.SourceMapGenerator({
       file:
-        commander.sourceMapTarget ||
-        path.basename(commander.outFile || "") ||
+        cliOptions.sourceMapTarget ||
+        path.basename(cliOptions.outFile || "") ||
         "stdout",
-      sourceRoot: opts.sourceRoot,
+      sourceRoot: babelOptions.sourceRoot,
     });
 
     let code = "";
     let offset = 0;
 
-    results.forEach(function(result) {
+    for (const result of fileResults) {
+      if (!result) continue;
+
       code += result.code + "\n";
 
       if (result.map) {
@@ -61,13 +57,13 @@ export default function(commander, filenames, opts) {
 
         offset = code.split("\n").length - 1;
       }
-    });
+    }
 
     // add the inline sourcemap comment if we've either explicitly asked for inline source
     // maps, or we've requested them without any output file
     if (
-      commander.sourceMaps === "inline" ||
-      (!commander.outFile && commander.sourceMaps)
+      babelOptions.sourceMaps === "inline" ||
+      (!cliOptions.outFile && babelOptions.sourceMaps)
     ) {
       code += "\n" + convertSourceMap.fromObject(map).toComment();
     }
@@ -76,57 +72,62 @@ export default function(commander, filenames, opts) {
       map: map,
       code: code,
     };
-  };
+  }
 
-  const output = function() {
-    const result = buildResult();
+  function output(fileResults) {
+    const result = buildResult(fileResults);
 
-    if (commander.outFile) {
+    if (cliOptions.outFile) {
       // we've requested for a sourcemap to be written to disk
-      if (commander.sourceMaps && commander.sourceMaps !== "inline") {
-        const mapLoc = commander.outFile + ".map";
+      if (babelOptions.sourceMaps && babelOptions.sourceMaps !== "inline") {
+        const mapLoc = cliOptions.outFile + ".map";
         result.code = util.addSourceMappingUrl(result.code, mapLoc);
         fs.writeFileSync(mapLoc, JSON.stringify(result.map));
       }
 
-      fs.writeFileSync(commander.outFile, result.code);
+      fs.writeFileSync(cliOptions.outFile, result.code);
     } else {
       process.stdout.write(result.code + "\n");
     }
-  };
+  }
 
-  const stdin = function() {
-    let code = "";
+  function readStdin() {
+    return new Promise((resolve, reject) => {
+      let code = "";
 
-    process.stdin.setEncoding("utf8");
+      process.stdin.setEncoding("utf8");
 
-    process.stdin.on("readable", function() {
-      const chunk = process.stdin.read();
-      if (chunk !== null) code += chunk;
+      process.stdin.on("readable", function() {
+        const chunk = process.stdin.read();
+        if (chunk !== null) code += chunk;
+      });
+
+      process.stdin.on("end", function() {
+        resolve(code);
+      });
+      process.stdin.on("error", reject);
     });
+  }
 
-    process.stdin.on("end", function() {
-      util.transform(
-        commander.filename,
-        code,
-        defaults(
-          {
-            sourceFileName: "stdin",
-          },
-          opts,
-        ),
-        function(err, res) {
-          if (err) throw err;
-          results.push(res);
-          output();
+  async function stdin() {
+    const code = await readStdin();
+
+    const res = await util.transform(
+      cliOptions.filename,
+      code,
+      defaults(
+        {
+          sourceFileName: "stdin",
         },
-      );
-    });
-  };
+        babelOptions,
+      ),
+    );
 
-  const walk = function() {
+    output([res]);
+  }
+
+  async function walk(filenames) {
     const _filenames = [];
-    results = [];
 
     filenames.forEach(function(filename) {
       if (!fs.existsSync(filename)) return;
@@ -138,8 +139,8 @@ export default function(commander, filenames, opts) {
         util
           .readdirForCompilable(
             filename,
-            commander.includeDotfiles,
-            commander.extensions,
+            cliOptions.includeDotfiles,
+            cliOptions.extensions,
           )
           .forEach(function(filename) {
             _filenames.push(path.join(dirname, filename));
@@ -149,46 +150,54 @@ export default function(commander, filenames, opts) {
       }
     });
 
-    let filesProcessed = 0;
+    const results = await Promise.all(
+      _filenames.map(async function(filename) {
+        let sourceFilename = filename;
+        if (cliOptions.outFile) {
+          sourceFilename = path.relative(
+            path.dirname(cliOptions.outFile),
+            sourceFilename,
+          );
+        }
+        sourceFilename = slash(sourceFilename);
 
-    _filenames.forEach(function(filename, index) {
-      let sourceFilename = filename;
-      if (commander.outFile) {
-        sourceFilename = path.relative(
-          path.dirname(commander.outFile),
-          sourceFilename,
-        );
-      }
-      sourceFilename = slash(sourceFilename);
-
-      util.compile(
-        filename,
-        defaults(
-          {
-            sourceFileName: sourceFilename,
-          },
-          opts,
-        ),
-        function(err, res) {
-          if (err) throw err;
-
-          filesProcessed++;
-          if (res) results[index] = res;
-
-          if (filesProcessed === _filenames.length) {
-            output();
+        try {
+          return await util.compile(
+            filename,
+            defaults(
+              {
+                sourceFileName: sourceFilename,
+                // Since we're compiling everything to be merged together,
+                // "inline" applies to the final output file, but to the individual
+                // files being concatenated.
+                sourceMaps:
+                  babelOptions.sourceMaps === "inline"
+                    ? true
+                    : babelOptions.sourceMaps,
+              },
+              babelOptions,
+            ),
+          );
+        } catch (err) {
+          if (!cliOptions.watch) {
+            throw err;
           }
-        },
-      );
-    });
-  };
 
-  const files = function() {
-    if (!commander.skipInitialBuild) {
-      walk();
+          console.error(err);
+          return null;
+        }
+      }),
+    );
+
+    output(results);
+  }
+
+  async function files(filenames) {
+    if (!cliOptions.skipInitialBuild) {
+      await walk(filenames);
     }
 
-    if (commander.watch) {
+    if (cliOptions.watch) {
       const chokidar = util.requireChokidar();
       chokidar
         .watch(filenames, {
@@ -200,25 +209,26 @@ export default function(commander, filenames, opts) {
           },
         })
         .on("all", function(type, filename) {
-          if (!util.isCompilableExtension(filename, commander.extensions)) {
+          if (!util.isCompilableExtension(filename, cliOptions.extensions)) {
             return;
           }
 
           if (type === "add" || type === "change") {
-            util.log(type + " " + filename);
-            try {
-              walk();
-            } catch (err) {
-              console.error(err.stack);
+            if (cliOptions.verbose) {
+              console.log(type + " " + filename);
             }
+
+            walk(filenames).catch(err => {
+              console.error(err);
+            });
           }
         });
     }
-  };
+  }
 
-  if (filenames.length) {
-    files();
+  if (cliOptions.filenames.length) {
+    await files(cliOptions.filenames);
   } else {
-    stdin();
+    await stdin();
   }
 }

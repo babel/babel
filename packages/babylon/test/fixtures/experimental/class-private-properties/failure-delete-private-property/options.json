@@ -1,4 +1,0 @@
-{
-  "throws": "Deleting a private field is not allowed (4:4)",
-  "plugins": [ "classPrivateProperties" ]
-}

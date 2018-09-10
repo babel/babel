@@ -13,7 +13,7 @@ import {
 import type { UnloadedDescriptor } from "./config-descriptors";
 import traverse from "@babel/traverse";
 import { makeWeakCache, type CacheConfigurator } from "./caching";
-import { validate } from "./validation/options";
+import { validate, type CallerMetadata } from "./validation/options";
 import { validatePluginObject } from "./validation/plugins";
 import makeAPI from "./helpers/config-api";
 
@@ -41,6 +41,7 @@ export type PluginPasses = Array<PluginPassList>;
 // process 'ignore'/'only' and other filename-based logic.
 type SimpleContext = {
   envName: string,
+  caller: CallerMetadata | void,
 };
 
 export default function loadFullConfig(
@@ -68,15 +69,21 @@ export default function loadFullConfig(
       },
       pass: Array<Plugin>,
     ) {
-      const plugins = config.plugins.map(descriptor => {
-        return loadPluginDescriptor(descriptor, context);
-      });
-      const presets = config.presets.map(descriptor => {
-        return {
-          preset: loadPresetDescriptor(descriptor, context),
-          pass: descriptor.ownPass ? [] : pass,
-        };
-      });
+      const plugins = config.plugins.reduce((acc, descriptor) => {
+        if (descriptor.options !== false) {
+          acc.push(loadPluginDescriptor(descriptor, context));
+        }
+        return acc;
+      }, []);
+      const presets = config.presets.reduce((acc, descriptor) => {
+        if (descriptor.options !== false) {
+          acc.push({
+            preset: loadPresetDescriptor(descriptor, context),
+            pass: descriptor.ownPass ? [] : pass,
+          });
+        }
+        return acc;
+      }, []);
 
       // resolve presets
       if (presets.length > 0) {
@@ -174,7 +181,10 @@ const loadDescriptor = makeWeakCache(
 
     let item = value;
     if (typeof value === "function") {
-      const api = Object.assign({}, context, makeAPI(cache));
+      const api = {
+        ...context,
+        ...makeAPI(cache),
+      };
       try {
         item = value(api, options, dirname);
       } catch (e) {
@@ -229,9 +239,13 @@ const instantiatePlugin = makeWeakCache(
   ): Plugin => {
     const pluginObj = validatePluginObject(value);
 
-    const plugin = Object.assign({}, pluginObj);
+    const plugin = {
+      ...pluginObj,
+    };
     if (plugin.visitor) {
-      plugin.visitor = traverse.explode(Object.assign({}, plugin.visitor));
+      plugin.visitor = traverse.explode({
+        ...plugin.visitor,
+      });
     }
 
     if (plugin.inherits) {

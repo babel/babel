@@ -1,3 +1,7 @@
 {
-  "plugins": ["external-helpers", "transform-object-super", "transform-shorthand-properties"]
+  "plugins": [
+    "external-helpers",
+    "transform-object-super",
+    "transform-shorthand-properties"
+  ]
 }

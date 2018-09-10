@@ -1,4 +1,9 @@
 {
-  "plugins": ["transform-block-scoping", "transform-parameters", "transform-destructuring", "transform-modules-commonjs"],
+  "plugins": [
+    "transform-block-scoping",
+    "transform-parameters",
+    "transform-destructuring",
+    "transform-modules-commonjs"
+  ],
   "throws": "is not defined - temporal dead zone"
 }

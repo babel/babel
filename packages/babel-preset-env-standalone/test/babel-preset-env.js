@@ -1,5 +1,3 @@
-const assert = require("assert");
-
 (process.env.TEST_TYPE === "cov" ? describe.skip : describe)(
   "babel-preset-env-standalone",
   () => {
@@ -14,7 +12,7 @@ const assert = require("assert");
         sourceType: "script",
         presets: ["env"],
       }).code;
-      assert.equal(output, "var a = 1;");
+      expect(output).toBe("var a = 1;");
     });
 
     it("doesn't transpile `const` with chrome 60", () => {
@@ -31,7 +29,7 @@ const assert = require("assert");
           ],
         ],
       }).code;
-      assert.equal(output, "const a = 1;");
+      expect(output).toBe("const a = 1;");
     });
 
     it("transpiles `const` with chrome 60 and preset-es2015", () => {
@@ -49,7 +47,7 @@ const assert = require("assert");
           "es2015",
         ],
       }).code;
-      assert.equal(output, "var a = 1;");
+      expect(output).toBe("var a = 1;");
     });
 
     it("uses transform-new-targets plugin", () => {
@@ -57,8 +55,7 @@ const assert = require("assert");
         sourceType: "script",
         presets: ["env"],
       }).code;
-      assert.equal(
-        output,
+      expect(output).toBe(
         "function Foo() {\n  this instanceof Foo ? this.constructor : void 0;\n}",
       );
     });

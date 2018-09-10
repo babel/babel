@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "syntax-jsx",
+    "syntax-optional-chaining",
+    "transform-flow-strip-types"
+  ]
+}

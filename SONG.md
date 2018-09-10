@@ -1,5 +1,7 @@
 ## Hallelujah—In Praise of Babel
 
+➤ [🎶 Audio version here!](https://youtu.be/40abpedBKK8)
+
 I heard there was a clever trick  
 That rewrote all your JavaScript  
 But you don’t really care for magic, do you  

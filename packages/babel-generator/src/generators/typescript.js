@@ -302,6 +302,7 @@ export function TSMappedType(node) {
   this.token("{");
   this.space();
   if (readonly) {
+    tokenIfPlusMinus(this, readonly);
     this.word("readonly");
     this.space();
   }
@@ -315,6 +316,7 @@ export function TSMappedType(node) {
   this.token("]");
 
   if (optional) {
+    tokenIfPlusMinus(this, optional);
     this.token("?");
   }
   this.token(":");
@@ -322,6 +324,12 @@ export function TSMappedType(node) {
   this.print(node.typeAnnotation, node);
   this.space();
   this.token("}");
+}
+
+function tokenIfPlusMinus(self, tok) {
+  if (tok !== true) {
+    self.token(tok);
+  }
 }
 
 export function TSLiteralType(node) {

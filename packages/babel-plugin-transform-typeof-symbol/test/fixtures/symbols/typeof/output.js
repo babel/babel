@@ -1,9 +1,7 @@
 var s = Symbol("s");
-assert.ok(babelHelpers.typeof(s) === "symbol");
-assert.equal(babelHelpers.typeof(s), "symbol");
-assert.equal(babelHelpers.typeof(babelHelpers.typeof(s.foo)), "symbol");
+expect(babelHelpers.typeof(s)).toBe("symbol");
+expect(babelHelpers.typeof(babelHelpers.typeof(s.foo))).toBe("symbol");
 typeof s === "string";
-assert.isNotOk((typeof o === "undefined" ? "undefined" : babelHelpers.typeof(o)) === "symbol");
-assert.notEqual(typeof o === "undefined" ? "undefined" : babelHelpers.typeof(o), "symbol");
-assert.notEqual(babelHelpers.typeof(babelHelpers.typeof(o.foo)), "symbol");
+expect(typeof o === "undefined" ? "undefined" : babelHelpers.typeof(o)).not.toBe("symbol");
+expect(babelHelpers.typeof(babelHelpers.typeof(o.foo))).not.toBe("symbol");
 typeof o === "string";

@@ -5,8 +5,23 @@ import browserslist from "browserslist";
 import builtInsList from "../data/built-ins.json";
 import { defaultWebIncludes } from "./default-includes";
 import moduleTransformations from "./module-transformations";
+import { isBrowsersQueryValid } from "./targets-parser";
+import { getValues, findSuggestion } from "./utils";
 import pluginsList from "../data/plugins.json";
+import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
 import type { Targets, Options, ModuleOption, BuiltInsOption } from "./types";
+
+const validateTopLevelOptions = (options: Options) => {
+  for (const option in options) {
+    if (!TopLevelOptions[option]) {
+      const validOptions = getValues(TopLevelOptions);
+      throw new Error(
+        `Invalid Option: ${option} is not a valid top-level option.
+        Maybe you meant to use '${findSuggestion(validOptions, option)}'?`,
+      );
+    }
+  }
+};
 
 const validIncludesAndExcludes = new Set([
   ...Object.keys(pluginsList),
@@ -78,6 +93,16 @@ export const checkDuplicateIncludeExcludes = (
   );
 };
 
+const normalizeTargets = (targets: any): Targets => {
+  // TODO: Allow to use only query or strings as a targets from next breaking change.
+  if (isBrowsersQueryValid(targets)) {
+    return { browsers: targets };
+  }
+  return {
+    ...targets,
+  };
+};
+
 export const validateConfigPathOption = (
   configPath: string = process.cwd(),
 ) => {
@@ -108,25 +133,28 @@ export const validateIgnoreBrowserslistConfig = (
   ignoreBrowserslistConfig: boolean,
 ) =>
   validateBoolOption(
-    "ignoreBrowserslistConfig",
+    TopLevelOptions.ignoreBrowserslistConfig,
     ignoreBrowserslistConfig,
     false,
   );
 
 export const validateModulesOption = (
-  modulesOpt: ModuleOption = "commonjs",
+  modulesOpt: ModuleOption = ModulesOption.auto,
 ) => {
   invariant(
-    modulesOpt === false ||
-      Object.keys(moduleTransformations).indexOf(modulesOpt) > -1,
-    `Invalid Option: The 'modules' option must be either 'false' to indicate no modules, or a
-    module type which can be be one of: 'commonjs' (default), 'amd', 'umd', 'systemjs'.`,
+    ModulesOption[modulesOpt] ||
+      ModulesOption[modulesOpt] === ModulesOption.false,
+    `Invalid Option: The 'modules' option must be one of \n` +
+      ` - 'false' to indicate no module processing\n` +
+      ` - a specific module type: 'commonjs', 'amd', 'umd', 'systemjs'` +
+      ` - 'auto' (default) which will automatically select 'false' if the current\n` +
+      `   process is known to support ES module syntax, or "commonjs" otherwise\n`,
   );
 
   return modulesOpt;
 };
 
-export const objectToBrowserslist = (object: Targets) => {
+export const objectToBrowserslist = (object: Targets): Array<string> => {
   return Object.keys(object).reduce((list, targetName) => {
     if (validBrowserslistTargets.indexOf(targetName) >= 0) {
       const targetVersion = object[targetName];
@@ -140,7 +168,8 @@ export const validateUseBuiltInsOption = (
   builtInsOpt: BuiltInsOption = false,
 ): BuiltInsOption => {
   invariant(
-    builtInsOpt === "usage" || builtInsOpt === false || builtInsOpt === "entry",
+    UseBuiltInsOption[builtInsOpt] ||
+      UseBuiltInsOption[builtInsOpt] === UseBuiltInsOption.false,
     `Invalid Option: The 'useBuiltIns' option must be either
     'false' (default) to indicate no polyfill,
     '"entry"' to indicate replacing the entry polyfill, or
@@ -151,33 +180,41 @@ export const validateUseBuiltInsOption = (
 };
 
 export default function normalizeOptions(opts: Options) {
-  const include = expandIncludesAndExcludes(opts.include, "include");
-  const exclude = expandIncludesAndExcludes(opts.exclude, "exclude");
+  validateTopLevelOptions(opts);
+
+  const include = expandIncludesAndExcludes(
+    opts.include,
+    TopLevelOptions.include,
+  );
+  const exclude = expandIncludesAndExcludes(
+    opts.exclude,
+    TopLevelOptions.exclude,
+  );
 
   checkDuplicateIncludeExcludes(include, exclude);
 
   return {
     configPath: validateConfigPathOption(opts.configPath),
-    debug: opts.debug,
+    debug: validateBoolOption(TopLevelOptions.debug, opts.debug, false),
     include,
     exclude,
     forceAllTransforms: validateBoolOption(
-      "forceAllTransforms",
+      TopLevelOptions.forceAllTransforms,
       opts.forceAllTransforms,
       false,
     ),
     ignoreBrowserslistConfig: validateIgnoreBrowserslistConfig(
       opts.ignoreBrowserslistConfig,
     ),
-    loose: validateBoolOption("loose", opts.loose, false),
+    loose: validateBoolOption(TopLevelOptions.loose, opts.loose, false),
     modules: validateModulesOption(opts.modules),
     shippedProposals: validateBoolOption(
-      "shippedProposals",
+      TopLevelOptions.shippedProposals,
       opts.shippedProposals,
       false,
     ),
-    spec: validateBoolOption("loose", opts.spec, false),
-    targets: Object.assign({}, opts.targets),
+    spec: validateBoolOption(TopLevelOptions.spec, opts.spec, false),
+    targets: normalizeTargets(opts.targets),
     useBuiltIns: validateUseBuiltInsOption(opts.useBuiltIns),
   };
 }

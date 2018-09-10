@@ -1,4 +1,3 @@
-import assert from "assert";
 import chalk from "chalk";
 import stripAnsi from "strip-ansi";
 import highlight, { shouldHighlight, getChalk } from "..";
@@ -24,8 +23,8 @@ describe("@babel/highlight", function() {
         const code = "console.log('hi')";
         const result = highlight(code);
         const stripped = stripAnsi(result);
-        assert.ok(result.length > stripped.length);
-        assert.equal(stripped, code);
+        expect(result.length).toBeGreaterThan(stripped.length);
+        expect(stripped).toBe(code);
       });
     });
 
@@ -36,8 +35,8 @@ describe("@babel/highlight", function() {
         const code = "console.log('hi')";
         const result = highlight(code);
         const stripped = stripAnsi(result);
-        assert.ok(result.length === stripped.length);
-        assert.equal(result, code);
+        expect(result.length).toBe(stripped.length);
+        expect(result).toBe(code);
       });
 
       describe("and the forceColor option is passed", function() {
@@ -45,8 +44,8 @@ describe("@babel/highlight", function() {
           const code = "console.log('hi')";
           const result = highlight(code, { forceColor: true });
           const stripped = stripAnsi(result);
-          assert.ok(result.length > stripped.length);
-          assert.equal(stripped, code);
+          expect(result.length).toBeGreaterThan(stripped.length);
+          expect(stripped).toBe(code);
         });
       });
     });
@@ -57,7 +56,7 @@ describe("@babel/highlight", function() {
       stubColorSupport(true);
 
       it("returns true", function() {
-        assert.ok(shouldHighlight({}));
+        expect(shouldHighlight({})).toBeTruthy();
       });
     });
 
@@ -65,12 +64,12 @@ describe("@babel/highlight", function() {
       stubColorSupport(false);
 
       it("returns false", function() {
-        assert.ok(!shouldHighlight({}));
+        expect(shouldHighlight({})).toBeFalsy();
       });
 
       describe("and the forceColor option is passed", function() {
         it("returns true", function() {
-          assert.ok(shouldHighlight({ forceColor: true }));
+          expect(shouldHighlight({ forceColor: true })).toBeTruthy();
         });
       });
     });
@@ -82,14 +81,13 @@ describe("@babel/highlight", function() {
 
       describe("when forceColor is not passed", function() {
         it("returns a Chalk instance", function() {
-          assert.equal(getChalk({}).constructor, chalk.constructor);
+          expect(getChalk({}).constructor).toBe(chalk.constructor);
         });
       });
 
       describe("when forceColor is passed", function() {
         it("returns a Chalk instance", function() {
-          assert.equal(
-            getChalk({ forceColor: true }).constructor,
+          expect(getChalk({ forceColor: true }).constructor).toBe(
             chalk.constructor,
           );
         });
@@ -101,14 +99,13 @@ describe("@babel/highlight", function() {
 
       describe("when forceColor is not passed", function() {
         it("returns a Chalk instance", function() {
-          assert.equal(getChalk({}).constructor, chalk.constructor);
+          expect(getChalk({}).constructor).toBe(chalk.constructor);
         });
       });
 
       describe("when forceColor is passed", function() {
         it("returns a Chalk instance", function() {
-          assert.equal(
-            getChalk({ forceColor: true }).constructor,
+          expect(getChalk({ forceColor: true }).constructor).toBe(
             chalk.constructor,
           );
         });

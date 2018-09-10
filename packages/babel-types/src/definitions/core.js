@@ -67,6 +67,15 @@ defineType("BinaryExpression", {
   aliases: ["Binary", "Expression"],
 });
 
+defineType("InterpreterDirective", {
+  builder: ["value"],
+  fields: {
+    value: {
+      validate: assertValueType("string"),
+    },
+  },
+});
+
 defineType("Directive", {
   visitor: ["value"],
   fields: {
@@ -118,7 +127,7 @@ defineType("BreakStatement", {
 });
 
 defineType("CallExpression", {
-  visitor: ["callee", "arguments", "typeParameters"],
+  visitor: ["callee", "arguments", "typeParameters", "typeArguments"],
   builder: ["callee", "arguments"],
   aliases: ["Expression"],
   fields: {
@@ -137,11 +146,12 @@ defineType("CallExpression", {
       validate: assertOneOf(true, false),
       optional: true,
     },
+    typeArguments: {
+      validate: assertNodeType("TypeParameterInstantiation"),
+      optional: true,
+    },
     typeParameters: {
-      validate: assertNodeType(
-        "TypeParameterInstantiation",
-        "TSTypeParameterInstantiation",
-      ),
+      validate: assertNodeType("TSTypeParameterInstantiation"),
       optional: true,
     },
   },
@@ -503,7 +513,7 @@ defineType("MemberExpression", {
     },
     property: {
       validate: (function() {
-        const normal = assertNodeType("Identifier");
+        const normal = assertNodeType("Identifier", "PrivateName");
         const computed = assertNodeType("Expression");
 
         return function(node, key, val) {
@@ -525,8 +535,10 @@ defineType("MemberExpression", {
 defineType("NewExpression", { inherits: "CallExpression" });
 
 defineType("Program", {
+  // Note: We explicitly leave 'interpreter' out here because it is
+  // conceptually comment-like, and Babel does not traverse comments either.
   visitor: ["directives", "body"],
-  builder: ["body", "directives", "sourceType"],
+  builder: ["body", "directives", "sourceType", "interpreter"],
   fields: {
     sourceFile: {
       validate: assertValueType("string"),
@@ -534,6 +546,11 @@ defineType("Program", {
     sourceType: {
       validate: assertOneOf("script", "module"),
       default: "script",
+    },
+    interpreter: {
+      validate: assertNodeType("InterpreterDirective"),
+      default: null,
+      optional: true,
     },
     directives: {
       validate: chain(

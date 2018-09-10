@@ -8,5 +8,5 @@ function then(fn) {
 
 var result = (_ref = (_ = 1, (async x => (await x) + 1)(_)), then(x => x + 1)(_ref));
 result.then(val => {
-  assert.equal(val, 3);
+  expect(val).toBe(3);
 });

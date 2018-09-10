@@ -9,5 +9,5 @@ const it = gen();
 it.next(1);
 it.next(2);
 
-assert.equal(sent, 1);
-assert.equal(yielded, 2);
+expect(sent).toBe(1);
+expect(yielded).toBe(2);

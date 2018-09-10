@@ -1,28 +1,31 @@
 {
   "name": "@babel/plugin-transform-classes",
-  "version": "7.0.0-beta.42",
+  "version": "7.0.0",
   "description": "Compile ES2015 classes to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-classes",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-annotate-as-pure": "7.0.0-beta.42",
-    "@babel/helper-define-map": "7.0.0-beta.42",
-    "@babel/helper-function-name": "7.0.0-beta.42",
-    "@babel/helper-optimise-call-expression": "7.0.0-beta.42",
-    "@babel/helper-plugin-utils": "7.0.0-beta.42",
-    "@babel/helper-replace-supers": "7.0.0-beta.42",
-    "@babel/helper-split-export-declaration": "7.0.0-beta.42",
+    "@babel/helper-annotate-as-pure": "^7.0.0",
+    "@babel/helper-define-map": "^7.0.0",
+    "@babel/helper-function-name": "^7.0.0",
+    "@babel/helper-optimise-call-expression": "^7.0.0",
+    "@babel/helper-plugin-utils": "^7.0.0",
+    "@babel/helper-replace-supers": "^7.0.0",
+    "@babel/helper-split-export-declaration": "^7.0.0",
     "globals": "^11.1.0"
   },
   "keywords": [
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": "7.0.0-beta.42"
+    "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.42",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.42"
+    "@babel/core": "^7.0.0",
+    "@babel/helper-plugin-test-runner": "^7.0.0"
   }
 }

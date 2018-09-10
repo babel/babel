@@ -1,4 +1,4 @@
 {
-  "args": ["--eval","--print", "var a = 1;"],
+  "args": ["--eval", "--print", "var a = 1;"],
   "stdout": "undefined"
 }

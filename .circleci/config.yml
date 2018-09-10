@@ -18,11 +18,6 @@ aliases:
       - ~/.yarn-cache
     key: v1-yarn-cache
 
-  - &yarn-install
-    run: |
-      sudo npm i -g yarn@^1.5.1
-      yarn --version
-
   - &artifact_babel
     path: ~/babel/packages/babel-standalone/babel.js
 
@@ -39,12 +34,12 @@ jobs:
   build:
     working_directory: ~/babel
     docker:
-      - image: circleci/node:9
+      - image: circleci/node:10
     steps:
       - checkout
       - restore-cache: *restore-yarn-cache
       - restore-cache: *restore-node-modules-cache
-      - *yarn-install
+      - run: yarn --version
       - run: make test-ci-coverage
       # Builds babel-standalone with the regular Babel config
       - run: make build

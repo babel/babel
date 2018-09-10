@@ -7,6 +7,7 @@ import * as cache from "./cache";
 export { default as NodePath } from "./path";
 export { default as Scope } from "./scope";
 export { default as Hub } from "./hub";
+export type { HubInterface } from "./hub";
 
 export { visitors };
 

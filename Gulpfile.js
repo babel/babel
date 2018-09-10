@@ -5,7 +5,7 @@ const through = require("through2");
 const chalk = require("chalk");
 const newer = require("gulp-newer");
 const babel = require("gulp-babel");
-const watch = require("gulp-watch");
+const gulpWatch = require("gulp-watch");
 const gutil = require("gulp-util");
 const filter = require("gulp-filter");
 const gulp = require("gulp");
@@ -98,9 +98,7 @@ function buildRollup(packages) {
         format: "cjs",
         plugins: [
           rollupBabel({
-            envName: "babylon",
-            babelrc: false,
-            extends: "./.babelrc.js",
+            envName: "babel-parser",
           }),
           rollupNodeResolve(),
         ],
@@ -114,21 +112,26 @@ function buildRollup(packages) {
   );
 }
 
-gulp.task("default", ["build"]);
-
 gulp.task("build", function() {
-  const bundles = ["packages/babylon"];
+  const bundles = ["packages/babel-parser"];
 
   return merge([buildBabel(/* exclude */ bundles), buildRollup(bundles)]);
 });
 
+gulp.task("default", gulp.series("build"));
+
 gulp.task("build-no-bundle", () => buildBabel());
 
-gulp.task("watch", ["build-no-bundle"], function() {
-  watch(sources.map(getGlobFromSource), { debounceDelay: 200 }, function() {
-    gulp.start("build-no-bundle");
-  });
-});
+gulp.task(
+  "watch",
+  gulp.series("build-no-bundle", function watch() {
+    gulpWatch(
+      sources.map(getGlobFromSource),
+      { debounceDelay: 200 },
+      gulp.task("build-no-bundle")
+    );
+  })
+);
 
 registerStandalonePackageTask(
   gulp,

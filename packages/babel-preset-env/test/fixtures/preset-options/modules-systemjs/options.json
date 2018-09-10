@@ -1,7 +1,10 @@
 {
   "presets": [
-    ["../../../../lib", {
-      "modules": "systemjs"
-    }]
+    [
+      "../../../../lib",
+      {
+        "modules": "systemjs"
+      }
+    ]
   ]
 }

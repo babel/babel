@@ -1,4 +1,4 @@
 {
-  "presets": ["es2015"],
+  "presets": ["env"],
   "plugins": ["transform-flow-comments", "external-helpers"]
 }

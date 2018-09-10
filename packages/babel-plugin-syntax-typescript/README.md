@@ -1,33 +1,19 @@
 # @babel/plugin-syntax-typescript
 
-## Installation
+> Allow parsing of TypeScript syntax
+
+See our website [@babel/plugin-syntax-typescript](https://babeljs.io/docs/en/next/babel-plugin-syntax-typescript.html) for more information.
+
+## Install
+
+Using npm:
 
 ```sh
 npm install --save-dev @babel/plugin-syntax-typescript
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-syntax-typescript"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins @babel/plugin-syntax-typescript script.js
-```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-syntax-typescript"]
-});
+yarn add @babel/plugin-syntax-typescript --dev
 ```

@@ -7,4 +7,4 @@ function build(val) {
 }
 
 var Class = build.call({ key: "foo" }, "bar");
-assert.equal(new Class().foo(), "bar");
+expect(new Class().foo()).toBe("bar");

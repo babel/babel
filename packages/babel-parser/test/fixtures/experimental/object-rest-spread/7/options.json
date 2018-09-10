@@ -1,0 +1,4 @@
+{
+  "throws":
+    "The rest element has to be the last element when destructuring (1:10)"
+}

@@ -12,7 +12,7 @@ export default declare(api => {
       AssignmentExpression(path) {
         const { node, scope } = path;
         const { operator, left, right } = node;
-        if (operator !== "||=" && operator !== "&&=") {
+        if (operator !== "||=" && operator !== "&&=" && operator !== "??=") {
           return;
         }
 

@@ -123,6 +123,11 @@ class Foo9 {}
 
 class Foo10 {}
 
+class Foo11 {
+  #prop1;
+  #prop2;
+}
+
 var x = 4;
 
 class Array {

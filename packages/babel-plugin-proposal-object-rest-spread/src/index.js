@@ -92,6 +92,21 @@ export default declare((api, opts) => {
     return impureComputedPropertyDeclarators;
   }
 
+  function removeUnusedExcludedKeys(path) {
+    const bindings = path.getOuterBindingIdentifierPaths();
+
+    Object.keys(bindings).forEach(bindingName => {
+      const bindingParentPath = bindings[bindingName].parentPath;
+      if (
+        path.scope.getBinding(bindingName).references > 1 ||
+        !bindingParentPath.isObjectProperty()
+      ) {
+        return;
+      }
+      bindingParentPath.remove();
+    });
+  }
+
   //expects path to an object pattern
   function createObjectSpread(path, file, objRef) {
     const props = path.get("properties");
@@ -128,10 +143,10 @@ export default declare((api, opts) => {
     return [
       impureComputedPropertyDeclarators,
       restElement.argument,
-      t.callExpression(file.addHelper("objectWithoutProperties"), [
-        t.cloneNode(objRef),
-        keyExpression,
-      ]),
+      t.callExpression(
+        file.addHelper(`objectWithoutProperties${loose ? "Loose" : ""}`),
+        [t.cloneNode(objRef), keyExpression],
+      ),
     ];
   }
 
@@ -241,11 +256,16 @@ export default declare((api, opts) => {
           const objectPatternPath = path.findParent(path =>
             path.isObjectPattern(),
           );
+
           const [
             impureComputedPropertyDeclarators,
             argument,
             callExpression,
           ] = createObjectSpread(objectPatternPath, file, ref);
+
+          if (loose) {
+            removeUnusedExcludedKeys(objectPatternPath);
+          }
 
           t.assertIdentifier(argument);
 

@@ -1,0 +1,15 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "configPath":
+          "../fixtures/preset-options/browserslist-package-ignore-with-array",
+        "targets": {
+          "chrome": 55
+        },
+        "modules": false
+      }
+    ]
+  ]
+}

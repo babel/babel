@@ -108,7 +108,7 @@ export default class ImportInjector {
   /**
    * The file used to inject helpers and resolve paths.
    */
-  _file;
+  _hub;
 
   /**
    * The default options to use with this instance when imports are added.
@@ -127,7 +127,7 @@ export default class ImportInjector {
 
     this._programPath = programPath;
     this._programScope = programPath.scope;
-    this._file = programPath.hub.file;
+    this._hub = programPath.hub;
 
     this._defaultOpts = this._applyDefaults(importedSource, opts, true);
   }
@@ -170,7 +170,9 @@ export default class ImportInjector {
       optsList.push(importedSource);
     }
 
-    const newOpts = Object.assign({}, this._defaultOpts);
+    const newOpts = {
+      ...this._defaultOpts,
+    };
     for (const opts of optsList) {
       if (!opts) continue;
       Object.keys(newOpts).forEach(key => {
@@ -216,7 +218,7 @@ export default class ImportInjector {
     const builder = new ImportBuilder(
       importedSource,
       this._programScope,
-      this._file,
+      this._hub,
     );
 
     if (importedType === "es6") {

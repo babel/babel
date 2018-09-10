@@ -1,4 +1,4 @@
 class List extends Array {}
 
-assert.ok(new List instanceof List);
-assert.ok(new List instanceof Array);
+expect(new List).toBeInstanceOf(List);
+expect(new List).toBeInstanceOf(Array);

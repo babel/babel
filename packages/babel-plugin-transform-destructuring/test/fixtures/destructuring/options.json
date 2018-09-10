@@ -1,3 +1,11 @@
 {
-  "plugins": ["external-helpers", "transform-destructuring", "transform-spread", "transform-parameters", "transform-block-scoping", "proposal-object-rest-spread", "transform-regenerator"]
+  "plugins": [
+    "external-helpers",
+    "transform-destructuring",
+    "transform-spread",
+    "transform-parameters",
+    "transform-block-scoping",
+    "proposal-object-rest-spread",
+    "transform-regenerator"
+  ]
 }

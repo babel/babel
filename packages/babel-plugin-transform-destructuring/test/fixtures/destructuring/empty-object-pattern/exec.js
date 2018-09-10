@@ -1,3 +1,3 @@
-assert.throws(function () {
+expect(function () {
   var {} = null;
-}, /Cannot destructure undefined/);
+}).toThrow("Cannot destructure undefined");

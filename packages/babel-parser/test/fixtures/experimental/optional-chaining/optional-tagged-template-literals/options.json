@@ -1,0 +1,4 @@
+{
+  "plugins": ["optionalChaining"],
+  "throws": "Tagged Template Literals are not allowed in optionalChain (1:0)"
+}

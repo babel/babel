@@ -1,6 +1,11 @@
 {
-
-  "plugins": ["transform-destructuring", "transform-parameters",
-              "transform-spread", "syntax-object-rest-spread",
-              "transform-react-constant-elements", "syntax-jsx", "external-helpers"]
+  "plugins": [
+    "transform-destructuring",
+    "transform-parameters",
+    "transform-spread",
+    "syntax-object-rest-spread",
+    "transform-react-constant-elements",
+    "syntax-jsx",
+    "external-helpers"
+  ]
 }

@@ -1,0 +1,4 @@
+{
+  "throws":
+    "Only declares and type imports are allowed inside declare module (2:2)"
+}

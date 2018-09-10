@@ -1,1 +1,1 @@
-output directory required for --relative
+--relative requires --out-dir usage

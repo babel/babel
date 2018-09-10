@@ -6,8 +6,6 @@ System.register([], function (_export, _context) {
     setters: [],
     execute: function () {
       _export("name", name = _context.id);
-
-      _export("name", name);
     }
   };
 });

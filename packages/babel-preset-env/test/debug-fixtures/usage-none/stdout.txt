@@ -7,7 +7,7 @@ Using targets:
   "ie": "11"
 }
 
-Using modules transform: commonjs
+Using modules transform: auto
 
 Using plugins:
   transform-template-literals { "ie":"11" }
@@ -21,6 +21,7 @@ Using plugins:
   transform-computed-properties { "ie":"11" }
   transform-for-of { "firefox":"50", "ie":"11" }
   transform-sticky-regex { "ie":"11" }
+  transform-dotall-regex { "chrome":"52", "firefox":"50", "ie":"11" }
   transform-unicode-regex { "ie":"11" }
   transform-spread { "ie":"11" }
   transform-parameters { "firefox":"50", "ie":"11" }
@@ -31,11 +32,15 @@ Using plugins:
   transform-regenerator { "firefox":"50", "ie":"11" }
   transform-exponentiation-operator { "firefox":"50", "ie":"11" }
   transform-async-to-generator { "chrome":"52", "firefox":"50", "ie":"11" }
-  transform-dotall-regex { "chrome":"52", "firefox":"50", "ie":"11" }
+  proposal-async-generator-functions { "chrome":"52", "firefox":"50", "ie":"11" }
+  proposal-object-rest-spread { "chrome":"52", "firefox":"50", "ie":"11" }
+  proposal-unicode-property-regex { "chrome":"52", "firefox":"50", "ie":"11" }
+  proposal-json-strings { "chrome":"52", "firefox":"50", "ie":"11" }
+  proposal-optional-catch-binding { "chrome":"52", "firefox":"50", "ie":"11" }
 
 Using polyfills with `usage` option:
 
-[src/in.js] Based on your code and targets, none were added.
+[<CWD>/src/in.js] Based on your code and targets, none were added.
 
-[src/in2.js] Based on your code and targets, none were added.
-🎉  Successfully compiled 2 files with Babel.
+[<CWD>/src/in2.js] Based on your code and targets, none were added.
+Successfully compiled 2 files with Babel.

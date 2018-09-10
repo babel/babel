@@ -1,21 +1,13 @@
 import type { NodePath } from "@babel/traverse";
 import nameFunction from "@babel/helper-function-name";
-import ReplaceSupers from "@babel/helper-replace-supers";
+import ReplaceSupers, {
+  environmentVisitor,
+} from "@babel/helper-replace-supers";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 import * as defineMap from "@babel/helper-define-map";
 import { traverse, template, types as t } from "@babel/core";
 
 type ReadonlySet<T> = Set<T> | { has(val: T): boolean };
-
-const noMethodVisitor = {
-  "FunctionExpression|FunctionDeclaration"(path) {
-    path.skip();
-  },
-
-  Method(path) {
-    path.skip();
-  },
-};
 
 function buildConstructor(classRef, constructorBody, node) {
   const func = t.functionDeclaration(
@@ -26,6 +18,41 @@ function buildConstructor(classRef, constructorBody, node) {
   t.inherits(func, node);
   return func;
 }
+
+const verifyConstructorVisitor = traverse.visitors.merge([
+  environmentVisitor,
+  {
+    Super(path, state) {
+      if (state.isDerived) return;
+
+      const { node, parentPath } = path;
+      if (parentPath.isCallExpression({ callee: node })) {
+        throw path.buildCodeFrameError(
+          "super() is only allowed in a derived constructor",
+        );
+      }
+    },
+
+    ThisExpression(path, state) {
+      if (!state.isDerived) return;
+
+      const { node, parentPath } = path;
+      if (parentPath.isMemberExpression({ object: node })) {
+        // In cases like this.foo or this[foo], there is no need to add
+        // assertThisInitialized, since they already throw if this is
+        // undefined.
+        return;
+      }
+
+      const assertion = t.callExpression(
+        state.file.addHelper("assertThisInitialized"),
+        [node],
+      );
+      path.replaceWith(assertion);
+      path.skip();
+    },
+  },
+]);
 
 export default function transformClass(
   path: NodePath,
@@ -57,16 +84,13 @@ export default function transformClass(
     instancePropRefs: {},
     staticPropBody: [],
     body: [],
-    bareSupers: [],
+    bareSupers: new Set(),
     superThises: [],
     pushedConstructor: false,
     pushedInherits: false,
     protoAlias: null,
     isLoose: false,
-    hasBareSuper: false,
 
-    instanceInitializersId: undefined,
-    staticInitializersId: undefined,
     hasInstanceDescriptors: false,
     hasStaticDescriptors: false,
     instanceMutatorMap: {},
@@ -77,45 +101,8 @@ export default function transformClass(
     Object.assign(classState, newState);
   };
 
-  const verifyConstructorVisitor = traverse.visitors.merge([
-    noMethodVisitor,
-    {
-      CallExpression: {
-        exit(path) {
-          if (path.get("callee").isSuper()) {
-            setState({ hasBareSuper: true });
-
-            if (!classState.isDerived) {
-              throw path.buildCodeFrameError(
-                "super() is only allowed in a derived constructor",
-              );
-            }
-          }
-        },
-      },
-
-      ThisExpression(path) {
-        if (classState.isDerived) {
-          if (path.parentPath.isMemberExpression({ object: path.node })) {
-            // In cases like this.foo or this[foo], there is no need to add
-            // assertThisInitialized, since they already throw if this is
-            // undefined.
-            return;
-          }
-
-          const assertion = t.callExpression(
-            classState.file.addHelper("assertThisInitialized"),
-            [path.node],
-          );
-          path.replaceWith(assertion);
-          path.skip();
-        }
-      },
-    },
-  ]);
-
   const findThisesVisitor = traverse.visitors.merge([
-    noMethodVisitor,
+    environmentVisitor,
     {
       ThisExpression(path) {
         classState.superThises.push(path);
@@ -214,29 +201,50 @@ export default function transformClass(
         const isConstructor = node.kind === "constructor";
 
         if (isConstructor) {
-          path.traverse(verifyConstructorVisitor);
+          path.traverse(verifyConstructorVisitor, {
+            isDerived: classState.isDerived,
+            file: classState.file,
+          });
         }
 
-        const replaceSupers = new ReplaceSupers(
-          {
-            forceSuperMemoisation: isConstructor,
-            methodPath: path,
-            methodNode: node,
-            objectRef: classState.classRef,
-            superRef: classState.superName,
-            inConstructor: isConstructor,
-            isStatic: node.static,
-            isLoose: classState.isLoose,
-            scope: classState.scope,
-            file: classState.file,
-          },
-          true,
-        );
+        const replaceSupers = new ReplaceSupers({
+          methodPath: path,
+          objectRef: classState.classRef,
+          superRef: classState.superName,
+          isLoose: classState.isLoose,
+          file: classState.file,
+        });
 
         replaceSupers.replace();
 
+        // TODO this needs to be cleaned up. But, one step at a time.
+        const state = {
+          returns: [],
+          bareSupers: new Set(),
+        };
+        path.traverse(
+          traverse.visitors.merge([
+            environmentVisitor,
+            {
+              ReturnStatement(path, state) {
+                if (!path.getFunctionParent().isArrowFunctionExpression()) {
+                  state.returns.push(path);
+                }
+              },
+
+              Super(path, state) {
+                const { node, parentPath } = path;
+                if (parentPath.isCallExpression({ callee: node })) {
+                  state.bareSupers.add(parentPath);
+                }
+              },
+            },
+          ]),
+          state,
+        );
+
         if (isConstructor) {
-          pushConstructor(replaceSupers, node, path);
+          pushConstructor(state, node, path);
         } else {
           pushMethod(node, path);
         }
@@ -281,22 +289,10 @@ export default function transformClass(
         t.cloneNode(classState.classRef), // Constructor
         t.nullLiteral(), // instanceDescriptors
         t.nullLiteral(), // staticDescriptors
-        t.nullLiteral(), // instanceInitializers
-        t.nullLiteral(), // staticInitializers
       ];
 
       if (instanceProps) args[1] = instanceProps;
       if (staticProps) args[2] = staticProps;
-
-      if (classState.instanceInitializersId) {
-        args[3] = classState.instanceInitializersId;
-        body.unshift(buildObjectAssignment(classState.instanceInitializersId));
-      }
-
-      if (classState.staticInitializersId) {
-        args[4] = classState.staticInitializersId;
-        body.unshift(buildObjectAssignment(classState.staticInitializersId));
-      }
 
       let lastNonNullIndex = 0;
       for (let i = 0; i < args.length; i++) {
@@ -312,12 +308,6 @@ export default function transformClass(
     }
 
     clearDescriptors();
-  }
-
-  function buildObjectAssignment(id) {
-    return t.variableDeclaration("var", [
-      t.variableDeclarator(id, t.objectExpression([])),
-    ]);
   }
 
   function wrapSuperCall(bareSuper, superRef, thisRef, body) {
@@ -349,20 +339,9 @@ export default function transformClass(
       call = t.logicalExpression("||", bareSuperNode, t.thisExpression());
     } else {
       bareSuperNode = optimiseCall(
-        t.logicalExpression(
-          "||",
-          t.memberExpression(
-            t.cloneNode(classState.classRef),
-            t.identifier("__proto__"),
-          ),
-          t.callExpression(
-            t.memberExpression(
-              t.identifier("Object"),
-              t.identifier("getPrototypeOf"),
-            ),
-            [t.cloneNode(classState.classRef)],
-          ),
-        ),
+        t.callExpression(classState.file.addHelper("getPrototypeOf"), [
+          t.cloneNode(classState.classRef),
+        ]),
         t.thisExpression(),
         bareSuperNode.arguments,
       );
@@ -399,9 +378,8 @@ export default function transformClass(
 
     path.traverse(findThisesVisitor);
 
-    let guaranteedSuperBeforeFinish = !!classState.bareSupers.length;
+    let guaranteedSuperBeforeFinish = !!classState.bareSupers.size;
 
-    const superRef = classState.superName || t.identifier("Function");
     let thisRef = function() {
       const ref = path.scope.generateDeclaredUidIdentifier("this");
       thisRef = () => t.cloneNode(ref);
@@ -409,7 +387,7 @@ export default function transformClass(
     };
 
     for (const bareSuper of classState.bareSupers) {
-      wrapSuperCall(bareSuper, superRef, thisRef, body);
+      wrapSuperCall(bareSuper, classState.superName, thisRef, body);
 
       if (guaranteedSuperBeforeFinish) {
         bareSuper.find(function(parentPath) {
@@ -431,7 +409,16 @@ export default function transformClass(
     }
 
     for (const thisPath of classState.superThises) {
-      thisPath.replaceWith(thisRef());
+      const { node, parentPath } = thisPath;
+      if (parentPath.isMemberExpression({ object: node })) {
+        thisPath.replaceWith(thisRef());
+        continue;
+      }
+      thisPath.replaceWith(
+        t.callExpression(classState.file.addHelper("assertThisInitialized"), [
+          thisRef(),
+        ]),
+      );
     }
 
     let wrapReturn;
@@ -657,7 +644,7 @@ export default function transformClass(
       classRef: classState.node.id
         ? t.identifier(classState.node.id.name)
         : classState.scope.generateUidIdentifier("class"),
-      superName: classState.node.superClass || t.identifier("Function"),
+      superName: classState.node.superClass,
       isDerived: !!classState.node.superClass,
       constructorBody: t.blockStatement([]),
     });
@@ -699,16 +686,34 @@ export default function transformClass(
       classState.staticPropBody.map(fn => fn(t.cloneNode(classState.classRef))),
     );
 
-    if (classState.classId && body.length === 1) {
+    const isStrict = path.isInStrictMode();
+    let constructorOnly = classState.classId && body.length === 1;
+    if (constructorOnly && !isStrict) {
+      for (const param of classState.construct.params) {
+        // It's illegal to put a use strict directive into the body of a function
+        // with non-simple parameters for some reason. So, we have to use a strict
+        // wrapper function.
+        if (!t.isIdentifier(param)) {
+          constructorOnly = false;
+          break;
+        }
+      }
+    }
+
+    const directives = constructorOnly ? body[0].body.directives : [];
+    if (!isStrict) {
+      directives.push(t.directive(t.directiveLiteral("use strict")));
+    }
+
+    if (constructorOnly) {
       // named class with only a constructor
       return t.toExpression(body[0]);
     }
 
     body.push(t.returnStatement(t.cloneNode(classState.classRef)));
-
     const container = t.arrowFunctionExpression(
       closureParams,
-      t.blockStatement(body),
+      t.blockStatement(body, directives),
     );
     return t.callExpression(container, closureArgs);
   }

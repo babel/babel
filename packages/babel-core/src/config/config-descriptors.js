@@ -41,6 +41,22 @@ export type UnloadedDescriptor = {
   } | void,
 };
 
+function isEqualDescriptor(
+  a: UnloadedDescriptor,
+  b: UnloadedDescriptor,
+): boolean {
+  return (
+    a.name === b.name &&
+    a.value === b.value &&
+    a.options === b.options &&
+    a.dirname === b.dirname &&
+    a.alias === b.alias &&
+    a.ownPass === b.ownPass &&
+    (a.file && a.file.request) === (b.file && b.file.request) &&
+    (a.file && a.file.resolved) === (b.file && b.file.resolved)
+  );
+}
+
 export type ValidatedFile = {
   filepath: string,
   dirname: string,
@@ -50,7 +66,7 @@ export type ValidatedFile = {
 /**
  * Create a set of descriptors from a given options object, preserving
  * descriptor identity based on the identity of the plugin/preset arrays
- * themselves.
+ * themselves, and potentially on the identity of the plugins/presets + options.
  */
 export function createCachedDescriptors(
   dirname: string,
@@ -113,25 +129,81 @@ export function createUncachedDescriptors(
   };
 }
 
+const PRESET_DESCRIPTOR_CACHE = new WeakMap();
 const createCachedPresetDescriptors = makeWeakCache(
   (items: PluginList, cache: CacheConfigurator<string>) => {
     const dirname = cache.using(dir => dir);
     return makeStrongCache((alias: string) =>
       makeStrongCache((passPerPreset: boolean) =>
-        createPresetDescriptors(items, dirname, alias, passPerPreset),
+        createPresetDescriptors(items, dirname, alias, passPerPreset).map(
+          // Items are cached using the overall preset array identity when
+          // possibly, but individual descriptors are also cached if a match
+          // can be found in the previously-used descriptor lists.
+          desc => loadCachedDescriptor(PRESET_DESCRIPTOR_CACHE, desc),
+        ),
       ),
     );
   },
 );
 
+const PLUGIN_DESCRIPTOR_CACHE = new WeakMap();
 const createCachedPluginDescriptors = makeWeakCache(
   (items: PluginList, cache: CacheConfigurator<string>) => {
     const dirname = cache.using(dir => dir);
     return makeStrongCache((alias: string) =>
-      createPluginDescriptors(items, dirname, alias),
+      createPluginDescriptors(items, dirname, alias).map(
+        // Items are cached using the overall plugin array identity when
+        // possibly, but individual descriptors are also cached if a match
+        // can be found in the previously-used descriptor lists.
+        desc => loadCachedDescriptor(PLUGIN_DESCRIPTOR_CACHE, desc),
+      ),
     );
   },
 );
+
+/**
+ * When no options object is given in a descriptor, this object is used
+ * as a WeakMap key in order to have consistent identity.
+ */
+const DEFAULT_OPTIONS = {};
+
+/**
+ * Given the cache and a descriptor, returns a matching descriptor from the
+ * cache, or else returns the input descriptor and adds it to the cache for
+ * next time.
+ */
+function loadCachedDescriptor(
+  cache: WeakMap<{} | Function, WeakMap<{}, Array<UnloadedDescriptor>>>,
+  desc: UnloadedDescriptor,
+) {
+  const { value, options = DEFAULT_OPTIONS } = desc;
+  if (options === false) return desc;
+
+  let cacheByOptions = cache.get(value);
+  if (!cacheByOptions) {
+    cacheByOptions = new WeakMap();
+    cache.set(value, cacheByOptions);
+  }
+
+  let possibilities = cacheByOptions.get(options);
+  if (!possibilities) {
+    possibilities = [];
+    cacheByOptions.set(options, possibilities);
+  }
+
+  if (possibilities.indexOf(desc) === -1) {
+    const matches = possibilities.filter(possibility =>
+      isEqualDescriptor(possibility, desc),
+    );
+    if (matches.length > 0) {
+      return matches[0];
+    }
+
+    possibilities.push(desc);
+  }
+
+  return desc;
+}
 
 function createPresetDescriptors(
   items: PluginList,
@@ -277,7 +349,7 @@ function assertNoDuplicates(items: Array<UnloadedDescriptor>): void {
         [
           `Duplicate plugin/preset detected.`,
           `If you'd like to use two separate instances of a plugin,`,
-          `they neen separate names, e.g.`,
+          `they need separate names, e.g.`,
           ``,
           `  plugins: [`,
           `    ['some-plugin', {}],`,

@@ -1,45 +1,19 @@
 # @babel/plugin-proposal-export-default-from
 
-> Compile export-default-from statements to ES2015
+> Compile export default to ES2015
 
-## Example
+See our website [@babel/plugin-proposal-export-default-from](https://babeljs.io/docs/en/next/babel-plugin-proposal-export-default-from.html) for more information.
 
-```js
-export v from 'mod';
-```
+## Install
 
-## Installation
+Using npm:
 
 ```sh
 npm install --save-dev @babel/plugin-proposal-export-default-from
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["@babel/plugin-proposal-export-default-from"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins @babel/plugin-proposal-export-default-from script.js
+yarn add @babel/plugin-proposal-export-default-from --dev
 ```
-
-### Via Node API
-
-```javascript
-require("@babel/core").transform("code", {
-  plugins: ["@babel/plugin-proposal-export-default-from"]
-});
-```
-## References
-
-* ~~[Proposal: Additional export-from statements in ES7](https://github.com/leebyron/ecmascript-more-export-from)~~ (Withdrawn)
-* [ECMAScript Proposal: export default from](https://github.com/leebyron/ecmascript-export-default-from)

@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "throws":
+    "Using the export keyword between a decorator and a class is not allowed. Please use `export @dec class` instead. (2:0)"
+}

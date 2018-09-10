@@ -1,3 +1,0 @@
-{
-  "throws": "yield is not allowed in the parameters of an arrow function inside a generator (2:3)"
-}

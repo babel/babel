@@ -1,4 +1,4 @@
 {
-  "presets": ["es2015"],
+  "presets": ["env"],
   "plugins": ["proposal-class-properties"]
 }

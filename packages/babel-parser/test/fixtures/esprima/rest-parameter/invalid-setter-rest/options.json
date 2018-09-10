@@ -1,0 +1,3 @@
+{
+  "throws": "setter function argument must not be a rest parameter (1:6)"
+}

@@ -1,33 +1,19 @@
 # @babel/helper-fixtures
 
-**NOTE:** This is an internal Babel module and may not work outside. Use at your own risk.
+> Helper function to support fixtures
 
-## Usage
+See our website [@babel/helper-fixtures](https://babeljs.io/docs/en/next/babel-helper-fixtures.html) for more information.
 
-```javascript
-import getFixtures from "@babel/helper-fixtures";
+## Install
 
-type TestFile = {
-  loc: string;
-  code: string;
-  filename: string;
-};
+Using npm:
 
-type Test = {
-  title: string;
-  disabled: boolean;
-  options: Object;
-  exec: TestFile;
-  actual: TestFile;
-  expected: TestFile;
-};
+```sh
+npm install --save-dev @babel/helper-fixtures
+```
 
-type Suite = {
-  options: Object;
-  tests: Array<Test>;
-  title: string;
-  filename: string;
-};
+or using yarn:
 
-let fixtures: Array<Suite> = getFixtures("/User/sebmck/Projects/babel-something/test/fixtures");
+```sh
+yarn add @babel/helper-fixtures --dev
 ```
