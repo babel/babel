@@ -40,7 +40,7 @@ export default declare((api, { jsxPragma = "React" }) => {
             // Note: this will allow both `import { } from "m"` and `import "m";`.
             // In TypeScript, the former would be elided.
             if (stmt.node.specifiers.length === 0) {
-              return;
+              continue;
             }
 
             let allElided = true;
