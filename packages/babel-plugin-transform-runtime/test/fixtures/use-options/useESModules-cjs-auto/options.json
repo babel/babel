@@ -3,5 +3,8 @@
     "name": "babel-test",
     "supportsStaticESM": true
   },
-  "plugins": [["transform-runtime", { "useESModules": "auto" }], "transform-classes"]
+  "plugins": [
+    ["transform-runtime", { "useESModules": "auto" }],
+    "transform-classes"
+  ]
 }

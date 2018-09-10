@@ -3,7 +3,5 @@
     "name": "test-fixture",
     "supportsStaticESM": true
   },
-  "presets": [
-    "env"
-  ]
+  "presets": ["env"]
 }

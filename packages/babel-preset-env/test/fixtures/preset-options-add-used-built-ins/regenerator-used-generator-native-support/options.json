@@ -1,11 +1,14 @@
 {
   "presets": [
-    ["../../../../lib", {
-      "useBuiltIns": "usage",
-      "modules": false,
-      "targets": {
-        "node": 6
+    [
+      "../../../../lib",
+      {
+        "useBuiltIns": "usage",
+        "modules": false,
+        "targets": {
+          "node": 6
+        }
       }
-    }]
+    ]
   ]
 }

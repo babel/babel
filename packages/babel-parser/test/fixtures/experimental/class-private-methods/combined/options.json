@@ -1,3 +1,7 @@
 {
-  "plugins": ["classProperties", "classPrivateProperties", "classPrivateMethods"]
+  "plugins": [
+    "classProperties",
+    "classPrivateProperties",
+    "classPrivateMethods"
+  ]
 }

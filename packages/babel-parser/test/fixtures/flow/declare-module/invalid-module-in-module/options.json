@@ -1,3 +1,4 @@
 {
-  "throws": "`declare module` cannot be used inside another `declare module` (1:27)"
+  "throws":
+    "`declare module` cannot be used inside another `declare module` (1:27)"
 }

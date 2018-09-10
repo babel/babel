@@ -1,3 +1,4 @@
 {
-  "throws": "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (1:22)"
+  "throws":
+    "Adjacent JSX elements must be wrapped in an enclosing tag. Did you want a JSX fragment <>...</>? (1:22)"
 }

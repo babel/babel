@@ -1,5 +1,5 @@
 {
   "sourceType": "module",
-  "throws": "`foo` has already been exported. Exported identifiers must be unique. (2:29)"
+  "throws":
+    "`foo` has already been exported. Exported identifiers must be unique. (2:29)"
 }
-

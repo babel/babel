@@ -1,12 +1,15 @@
 {
   "presets": [
-    ["../../../../lib", {
-      "targets": {
-        "ie": 9
-      },
-      "modules": false,
-      "useBuiltIns": "entry",
-      "modules": false
-    }]
+    [
+      "../../../../lib",
+      {
+        "targets": {
+          "ie": 9
+        },
+        "modules": false,
+        "useBuiltIns": "entry",
+        "modules": false
+      }
+    ]
   ]
 }

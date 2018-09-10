@@ -1,7 +1,10 @@
 {
   "presets": [
-    ["../../../../lib", {
-      "shippedProposals": true
-    }]
+    [
+      "../../../../lib",
+      {
+        "shippedProposals": true
+      }
+    ]
   ]
 }

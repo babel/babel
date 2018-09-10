@@ -1,8 +1,11 @@
 {
   "presets": [
-    ["../../../../lib", {
-      "modules": "amd",
-      "loose": true
-    }]
+    [
+      "../../../../lib",
+      {
+        "modules": "amd",
+        "loose": true
+      }
+    ]
   ]
 }

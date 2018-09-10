@@ -1,7 +1,10 @@
 {
   "presets": [
-    ["../../../../lib", {
-      "useBuiltIns": "usage"
-    }]
+    [
+      "../../../../lib",
+      {
+        "useBuiltIns": "usage"
+      }
+    ]
   ]
 }

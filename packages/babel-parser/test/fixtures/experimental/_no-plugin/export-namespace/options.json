@@ -1,4 +1,5 @@
 {
-  "throws": "This experimental syntax requires enabling the parser plugin: 'exportNamespaceFrom' (1:9)",
+  "throws":
+    "This experimental syntax requires enabling the parser plugin: 'exportNamespaceFrom' (1:9)",
   "plugins": []
 }

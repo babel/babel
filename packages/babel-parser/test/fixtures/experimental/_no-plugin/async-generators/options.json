@@ -1,4 +1,5 @@
 {
-  "throws": "This experimental syntax requires enabling the parser plugin: 'asyncGenerators' (1:15)",
+  "throws":
+    "This experimental syntax requires enabling the parser plugin: 'asyncGenerators' (1:15)",
   "plugins": []
 }

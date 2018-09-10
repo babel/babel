@@ -1,4 +1,5 @@
 {
-  "throws": "This experimental syntax requires enabling the parser plugin: 'objectRestSpread' (1:2)",
+  "throws":
+    "This experimental syntax requires enabling the parser plugin: 'objectRestSpread' (1:2)",
   "plugins": []
 }

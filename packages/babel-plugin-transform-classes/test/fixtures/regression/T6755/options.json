@@ -1,5 +1,3 @@
 {
-  "plugins": [
-    ["transform-classes", { "loose": true }]
-  ]
+  "plugins": [["transform-classes", { "loose": true }]]
 }

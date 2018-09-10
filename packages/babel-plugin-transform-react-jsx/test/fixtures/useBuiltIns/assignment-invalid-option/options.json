@@ -1,4 +1,5 @@
 {
   "plugins": [["transform-react-jsx", { "useBuiltIns": "invalidOption" }]],
-  "throws": "transform-react-jsx currently only accepts a boolean option for useBuiltIns (defaults to false)"
+  "throws":
+    "transform-react-jsx currently only accepts a boolean option for useBuiltIns (defaults to false)"
 }

@@ -1,3 +1,7 @@
 {
-  "plugins": ["external-helpers", "transform-function-name", "transform-arrow-functions"]
+  "plugins": [
+    "external-helpers",
+    "transform-function-name",
+    "transform-arrow-functions"
+  ]
 }

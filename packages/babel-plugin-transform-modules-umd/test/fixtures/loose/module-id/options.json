@@ -1,8 +1,5 @@
 {
   "sourceType": "module",
   "moduleId": "MyLib",
-  "plugins": [
-    "external-helpers",
-    ["transform-modules-umd", { "loose": true }]
-  ]
+  "plugins": ["external-helpers", ["transform-modules-umd", { "loose": true }]]
 }

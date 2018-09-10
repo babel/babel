@@ -1,11 +1,14 @@
 {
   "plugins": [
-    ["../../../../lib/use-built-ins-entry-plugin", {
-      "polyfills": [
-        "es6.typed.data-view",
-        "es6.typed.data-view",
-        "es6.reflect.apply"
-      ]
-    }]
+    [
+      "../../../../lib/use-built-ins-entry-plugin",
+      {
+        "polyfills": [
+          "es6.typed.data-view",
+          "es6.typed.data-view",
+          "es6.reflect.apply"
+        ]
+      }
+    ]
   ]
 }

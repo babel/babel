@@ -1,5 +1,6 @@
 {
-  "throws": "This experimental syntax requires enabling the parser plugin: 'importMeta' (1:17)",
+  "throws":
+    "This experimental syntax requires enabling the parser plugin: 'importMeta' (1:17)",
   "sourceType": "module",
   "plugins": []
 }

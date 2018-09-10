@@ -1,3 +1,6 @@
 {
-  "plugins": ["external-helpers", ["transform-modules-commonjs", { "strictMode": false }]]
+  "plugins": [
+    "external-helpers",
+    ["transform-modules-commonjs", { "strictMode": false }]
+  ]
 }

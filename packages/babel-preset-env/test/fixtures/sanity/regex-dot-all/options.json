@@ -1,7 +1,10 @@
 {
   "presets": [
-    ["../../../../lib", {
-      "modules": false
-    }]
+    [
+      "../../../../lib",
+      {
+        "modules": false
+      }
+    ]
   ]
 }

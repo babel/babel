@@ -1,3 +1,8 @@
 {
-  "plugins": ["external-helpers", "syntax-jsx", "transform-react-inline-elements", "transform-react-jsx"]
+  "plugins": [
+    "external-helpers",
+    "syntax-jsx",
+    "transform-react-inline-elements",
+    "transform-react-jsx"
+  ]
 }

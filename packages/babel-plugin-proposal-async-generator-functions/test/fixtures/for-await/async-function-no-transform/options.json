@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "external-helpers",
-    "proposal-async-generator-functions"
-  ]
+  "plugins": ["external-helpers", "proposal-async-generator-functions"]
 }

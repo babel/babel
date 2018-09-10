@@ -1,6 +1,4 @@
 {
-  "plugins": [
-    ["decorators", { "decoratorsBeforeExport": false }]
-  ],
+  "plugins": [["decorators", { "decoratorsBeforeExport": false }]],
   "decoratorsBeforeExport": true
 }

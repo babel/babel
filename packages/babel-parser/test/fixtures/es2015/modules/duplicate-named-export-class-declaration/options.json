@@ -1,4 +1,4 @@
 {
-  "throws": "`Foo` has already been exported. Exported identifiers must be unique. (2:0)"
+  "throws":
+    "`Foo` has already been exported. Exported identifiers must be unique. (2:0)"
 }
-

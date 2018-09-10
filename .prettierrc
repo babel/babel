@@ -7,7 +7,6 @@
   "bracketSpacing": true,
   "jsxBracketSameLine": false,
   "tabWidth": 2,
-  "parser": "babylon",
   "printWidth": 80,
   "overrides": [{
     "files": [
@@ -16,6 +15,7 @@
       "**/packages/*/src/**/*.js",
       "**/packages/*/test/**/*.js"
     ],
+    "parser": "babylon",
     "options": {
       "trailingComma": "all"
     }
