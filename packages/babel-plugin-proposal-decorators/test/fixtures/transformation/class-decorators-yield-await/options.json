@@ -2,7 +2,12 @@
   "plugins": [
     ["proposal-decorators", { "decoratorsBeforeExport": false }],
     "proposal-class-properties",
-    "external-helpers",
+    [
+      "external-helpers",
+      {
+        "helperVersion": "7.0.1"
+      }
+    ],
     "syntax-async-generators"
   ]
 }
