@@ -49,7 +49,7 @@ flow:
 lint:
 	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' --format=codeframe
 
-fix:
+fix: fix-json
 	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' --format=codeframe --fix
 
 fix-json:
