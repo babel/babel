@@ -2,7 +2,7 @@
 
 import buildDebug from "debug";
 import path from "path";
-import codeFrame from "babel-code-frame";
+import codeFrame from "@babel/code-frame";
 import fs from "fs";
 import json5 from "json5";
 import resolve from "resolve";
