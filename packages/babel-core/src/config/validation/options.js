@@ -19,6 +19,7 @@ import {
   assertConfigFileSearch,
   assertBabelrcSearch,
   assertFunction,
+  assertRootMode,
   assertSourceMaps,
   assertCompact,
   assertSourceType,
@@ -30,6 +31,9 @@ import {
 const ROOT_VALIDATORS: ValidatorSet = {
   cwd: (assertString: Validator<$PropertyType<ValidatedOptions, "cwd">>),
   root: (assertString: Validator<$PropertyType<ValidatedOptions, "root">>),
+  rootMode: (assertRootMode: Validator<
+    $PropertyType<ValidatedOptions, "rootMode">,
+  >),
   configFile: (assertConfigFileSearch: Validator<
     $PropertyType<ValidatedOptions, "configFile">,
   >),
@@ -176,6 +180,7 @@ export type ValidatedOptions = {
   babelrcRoots?: BabelrcSearch,
   configFile?: ConfigFileSearch,
   root?: string,
+  rootMode?: RootMode,
   code?: boolean,
   ast?: boolean,
   inputSourceMap?: RootInputSourceMapOption,
@@ -260,6 +265,7 @@ export type SourceMapsOption = boolean | "inline" | "both";
 export type SourceTypeOption = "module" | "script" | "unambiguous";
 export type CompactOption = boolean | "auto";
 export type RootInputSourceMapOption = {} | boolean;
+export type RootMode = "root" | "upward" | "upward-optional";
 
 export type OptionsSource =
   | "arguments"

@@ -24,6 +24,21 @@ const BABELRC_FILENAME = ".babelrc";
 const BABELRC_JS_FILENAME = ".babelrc.js";
 const BABELIGNORE_FILENAME = ".babelignore";
 
+export function findConfigUpwards(rootDir: string): string | null {
+  let dirname = rootDir;
+  while (true) {
+    if (fs.existsSync(path.join(dirname, BABEL_CONFIG_JS_FILENAME))) {
+      return dirname;
+    }
+
+    const nextDir = path.dirname(dirname);
+    if (dirname === nextDir) break;
+    dirname = nextDir;
+  }
+
+  return null;
+}
+
 export function findRelativeConfig(
   packageData: FilePackageData,
   envName: string,

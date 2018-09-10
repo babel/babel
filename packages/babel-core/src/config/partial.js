@@ -6,9 +6,43 @@ import { mergeOptions } from "./util";
 import { createItemFromDescriptor } from "./item";
 import { buildRootChain, type ConfigContext } from "./config-chain";
 import { getEnv } from "./helpers/environment";
-import { validate, type ValidatedOptions } from "./validation/options";
+import {
+  validate,
+  type ValidatedOptions,
+  type RootMode,
+} from "./validation/options";
 
-import type { ConfigFile, IgnoreFile } from "./files";
+import { findConfigUpwards, type ConfigFile, type IgnoreFile } from "./files";
+
+function resolveRootMode(rootDir: string, rootMode: RootMode): string {
+  switch (rootMode) {
+    case "root":
+      return rootDir;
+
+    case "upward-optional": {
+      const upwardRootDir = findConfigUpwards(rootDir);
+      return upwardRootDir === null ? rootDir : upwardRootDir;
+    }
+
+    case "upward": {
+      const upwardRootDir = findConfigUpwards(rootDir);
+      if (upwardRootDir !== null) return upwardRootDir;
+
+      throw Object.assign(
+        (new Error(
+          `Babel was run with rootMode:"upward" but a root could not ` +
+            `be found when searching upward from "${rootDir}"`,
+        ): any),
+        {
+          code: "BABEL_ROOT_NOT_FOUND",
+          dirname: rootDir,
+        },
+      );
+    }
+    default:
+      throw new Error(`Assertion failure - unknown rootMode value`);
+  }
+}
 
 export default function loadPrivatePartialConfig(
   inputOpts: mixed,
@@ -28,9 +62,18 @@ export default function loadPrivatePartialConfig(
 
   const args = inputOpts ? validate("arguments", inputOpts) : {};
 
-  const { envName = getEnv(), cwd = ".", root: rootDir = ".", caller } = args;
+  const {
+    envName = getEnv(),
+    cwd = ".",
+    root: rootDir = ".",
+    rootMode = "root",
+    caller,
+  } = args;
   const absoluteCwd = path.resolve(cwd);
-  const absoluteRootDir = path.resolve(absoluteCwd, rootDir);
+  const absoluteRootDir = resolveRootMode(
+    path.resolve(absoluteCwd, rootDir),
+    rootMode,
+  );
 
   const context: ConfigContext = {
     filename:
