@@ -2,6 +2,7 @@
 
 import buildDebug from "debug";
 import path from "path";
+import codeFrame from "babel-code-frame";
 import fs from "fs";
 import json5 from "json5";
 import resolve from "resolve";
@@ -230,7 +231,10 @@ const readConfigJSON5 = makeStaticFileCache((filepath, content) => {
   try {
     options = json5.parse(content);
   } catch (err) {
-    err.message = `${filepath}: Error while parsing config - ${err.message}`;
+    const code = codeFrame(content, err.lineNumber, err.columnNumber);
+    err.message =
+      `${filepath}: Error while parsing JSON (${err.message})\n\n` + code;
+
     throw err;
   }
 
