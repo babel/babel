@@ -1,4 +1,4 @@
 {
   "sourceType": "module",
-  "plugins": [ "flow", "classPrivateProperties" ]
+  "plugins": ["flow", "classPrivateProperties"]
 }

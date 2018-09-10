@@ -1,3 +1,7 @@
 {
-  "plugins": ["transform-function-name", "transform-shorthand-properties", "transform-arrow-functions"]
+  "plugins": [
+    "transform-function-name",
+    "transform-shorthand-properties",
+    "transform-arrow-functions"
+  ]
 }

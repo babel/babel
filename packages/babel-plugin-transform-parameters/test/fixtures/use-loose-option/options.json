@@ -3,7 +3,7 @@
     "proposal-class-properties",
     "external-helpers",
     "syntax-flow",
-    ["transform-parameters", { "loose": true } ],
+    ["transform-parameters", { "loose": true }],
     "transform-block-scoping",
     "transform-spread",
     "transform-classes",

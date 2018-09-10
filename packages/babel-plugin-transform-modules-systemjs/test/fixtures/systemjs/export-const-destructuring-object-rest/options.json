@@ -1,3 +1,7 @@
 {
-  "plugins": ["external-helpers", "transform-modules-systemjs", "syntax-object-rest-spread"]
+  "plugins": [
+    "external-helpers",
+    "transform-modules-systemjs",
+    "syntax-object-rest-spread"
+  ]
 }

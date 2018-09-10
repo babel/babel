@@ -1,3 +1,9 @@
 {
-  "args": ["script.js", "script2.js", "--source-maps", "--out-file", "script3.js"]
+  "args": [
+    "script.js",
+    "script2.js",
+    "--source-maps",
+    "--out-file",
+    "script3.js"
+  ]
 }

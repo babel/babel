@@ -1,3 +1,4 @@
 {
-  "throws": "super() is only valid inside a class constructor. Make sure the method name is spelled exactly as 'constructor'."
+  "throws":
+    "super() is only valid inside a class constructor. Make sure the method name is spelled exactly as 'constructor'."
 }

@@ -1,4 +1,8 @@
 {
-  "args": ["--expose_gc_as=garbageCollector", "--eval", "console.log(typeof global.garbageCollector)"],
+  "args": [
+    "--expose_gc_as=garbageCollector",
+    "--eval",
+    "console.log(typeof global.garbageCollector)"
+  ],
   "stdout": "function"
 }

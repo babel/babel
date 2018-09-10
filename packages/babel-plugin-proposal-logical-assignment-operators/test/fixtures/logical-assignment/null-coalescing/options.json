@@ -1,3 +1,6 @@
 {
-  "plugins": ["proposal-logical-assignment-operators", "proposal-nullish-coalescing-operator"]
+  "plugins": [
+    "proposal-logical-assignment-operators",
+    "proposal-nullish-coalescing-operator"
+  ]
 }

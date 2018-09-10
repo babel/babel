@@ -1,8 +1,11 @@
 {
   "plugins": [
-    ["external-helpers", {
-      "whitelist": ["createClass"]
-    }],
+    [
+      "external-helpers",
+      {
+        "whitelist": ["createClass"]
+      }
+    ],
     "transform-classes"
   ]
 }

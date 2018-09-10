@@ -1,12 +1,15 @@
 {
   "presets": [
-    ["../../../../lib", {
-      "targets": {
-        "node": "7.6"
-      },
-      "modules": false,
-      "useBuiltIns": "entry",
-      "forceAllTransforms": true
-    }]
+    [
+      "../../../../lib",
+      {
+        "targets": {
+          "node": "7.6"
+        },
+        "modules": false,
+        "useBuiltIns": "entry",
+        "forceAllTransforms": true
+      }
+    ]
   ]
 }

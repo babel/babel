@@ -1,4 +1,5 @@
 {
-  "throws": "This experimental syntax requires enabling the parser plugin: 'bigInt' (1:1)",
+  "throws":
+    "This experimental syntax requires enabling the parser plugin: 'bigInt' (1:1)",
   "plugins": []
 }

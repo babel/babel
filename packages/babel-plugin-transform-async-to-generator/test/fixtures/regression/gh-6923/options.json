@@ -1,12 +1,15 @@
 {
   "presets": [
-    ["env", {
-      "targets": {
-        "chrome": "62",
-        "edge": "15",
-        "firefox": "52",
-        "safari": "11"
+    [
+      "env",
+      {
+        "targets": {
+          "chrome": "62",
+          "edge": "15",
+          "firefox": "52",
+          "safari": "11"
+        }
       }
-    }]
+    ]
   ]
 }

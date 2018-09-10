@@ -1,3 +1,7 @@
 {
-  "plugins": ["external-helpers", ["transform-arrow-functions", { "spec": true }], "transform-function-name"]
+  "plugins": [
+    "external-helpers",
+    ["transform-arrow-functions", { "spec": true }],
+    "transform-function-name"
+  ]
 }

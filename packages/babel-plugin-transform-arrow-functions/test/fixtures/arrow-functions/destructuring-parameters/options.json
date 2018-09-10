@@ -1,3 +1,7 @@
 {
-  "plugins": ["transform-destructuring", "transform-parameters", "transform-arrow-functions"]
+  "plugins": [
+    "transform-destructuring",
+    "transform-parameters",
+    "transform-arrow-functions"
+  ]
 }

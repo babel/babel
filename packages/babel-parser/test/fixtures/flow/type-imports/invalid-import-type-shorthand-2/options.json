@@ -1,3 +1,4 @@
 {
-  "throws": "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements (1:13)"
+  "throws":
+    "The `type` and `typeof` keywords on named imports can only be used on regular `import` statements. It cannot be used with `import type` or `import typeof` statements (1:13)"
 }

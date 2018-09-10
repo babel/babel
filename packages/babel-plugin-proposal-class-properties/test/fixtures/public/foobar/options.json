@@ -1,6 +1,4 @@
 {
   "plugins": ["external-helpers", "proposal-class-properties"],
-  "presets": [
-    "env"
-  ]
+  "presets": ["env"]
 }

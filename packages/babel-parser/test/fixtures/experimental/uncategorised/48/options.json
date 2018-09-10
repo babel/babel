@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "classProperties",
-    "decorators-legacy"
-  ]
+  "plugins": ["classProperties", "decorators-legacy"]
 }

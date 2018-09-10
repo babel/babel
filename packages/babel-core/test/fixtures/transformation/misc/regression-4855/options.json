@@ -1,10 +1,5 @@
 {
   "compact": false,
-  "presets": [
-    "env"
-  ],
-  "plugins": [
-    "external-helpers",
-    "proposal-object-rest-spread"
-  ]
+  "presets": ["env"],
+  "plugins": ["external-helpers", "proposal-object-rest-spread"]
 }
