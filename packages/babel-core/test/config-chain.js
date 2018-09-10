@@ -1031,7 +1031,7 @@ describe("buildConfigChain", function() {
 
       expect(() =>
         loadOptions({ filename, cwd: path.dirname(filename) }),
-      ).toThrow(/Error while parsing config - /);
+      ).toThrow(/Error while parsing JSON/);
     });
 
     it("should show helpful errors for .babelrc.js", () => {
