@@ -20,6 +20,8 @@ interface State {
   programPath: any;
 }
 
+const PARSED_PARAMS = new WeakSet();
+
 export default declare((api, { jsxPragma = "React" }) => {
   api.assertVersion(7);
 
@@ -100,54 +102,6 @@ export default declare((api, { jsxPragma = "React" }) => {
           return;
         }
 
-        // Collect parameter properties
-        const parameterProperties = [];
-        for (const param of node.params) {
-          if (param.type === "TSParameterProperty") {
-            parameterProperties.push(param.parameter);
-          }
-        }
-
-        if (!parameterProperties.length) {
-          return;
-        }
-
-        const assigns = parameterProperties.map(p => {
-          let name;
-          if (t.isIdentifier(p)) {
-            name = p.name;
-          } else if (t.isAssignmentPattern(p) && t.isIdentifier(p.left)) {
-            name = p.left.name;
-          } else {
-            throw path.buildCodeFrameError(
-              "Parameter properties can not be destructuring patterns.",
-            );
-          }
-
-          const assign = t.assignmentExpression(
-            "=",
-            t.memberExpression(t.thisExpression(), t.identifier(name)),
-            t.identifier(name),
-          );
-          return t.expressionStatement(assign);
-        });
-
-        const statements = node.body.body;
-
-        const first = statements[0];
-        const startsWithSuperCall =
-          first !== undefined &&
-          t.isExpressionStatement(first) &&
-          t.isCallExpression(first.expression) &&
-          t.isSuper(first.expression.callee);
-
-        // Make sure to put parameter properties *after* the `super` call.
-        // TypeScript will enforce that a 'super()' call is the first statement
-        // when there are parameter properties.
-        node.body.body = startsWithSuperCall
-          ? [first, ...assigns, ...statements.slice(1)]
-          : [...assigns, ...statements];
-
         // Rest handled by Function visitor
       },
 
@@ -190,10 +144,63 @@ export default declare((api, { jsxPragma = "React" }) => {
         // We do this here instead of in a `ClassProperty` visitor because the class transform
         // would transform the class before we reached the class property.
         path.get("body.body").forEach(child => {
-          if (child.isClassProperty()) {
-            child.node.typeAnnotation = null;
+          const childNode = child.node;
 
-            if (!child.node.value && !child.node.decorators) {
+          if (t.isClassMethod(childNode) && childNode.kind === "constructor") {
+            // Collect parameter properties
+            const parameterProperties = [];
+            for (const param of childNode.params) {
+              if (
+                param.type === "TSParameterProperty" &&
+                !PARSED_PARAMS.has(param.parameter)
+              ) {
+                PARSED_PARAMS.add(param.parameter);
+                parameterProperties.push(param.parameter);
+              }
+            }
+
+            if (parameterProperties.length) {
+              const assigns = parameterProperties.map(p => {
+                let name;
+                if (t.isIdentifier(p)) {
+                  name = p.name;
+                } else if (t.isAssignmentPattern(p) && t.isIdentifier(p.left)) {
+                  name = p.left.name;
+                } else {
+                  throw path.buildCodeFrameError(
+                    "Parameter properties can not be destructuring patterns.",
+                  );
+                }
+
+                const assign = t.assignmentExpression(
+                  "=",
+                  t.memberExpression(t.thisExpression(), t.identifier(name)),
+                  t.identifier(name),
+                );
+                return t.expressionStatement(assign);
+              });
+
+              const statements = childNode.body.body;
+
+              const first = statements[0];
+
+              const startsWithSuperCall =
+                first !== undefined &&
+                t.isExpressionStatement(first) &&
+                t.isCallExpression(first.expression) &&
+                t.isSuper(first.expression.callee);
+
+              // Make sure to put parameter properties *after* the `super` call.
+              // TypeScript will enforce that a 'super()' call is the first statement
+              // when there are parameter properties.
+              childNode.body.body = startsWithSuperCall
+                ? [first, ...assigns, ...statements.slice(1)]
+                : [...assigns, ...statements];
+            }
+          } else if (child.isClassProperty()) {
+            childNode.typeAnnotation = null;
+
+            if (!childNode.value && !childNode.decorators) {
               child.remove();
             }
           }
