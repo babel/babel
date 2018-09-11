@@ -11,7 +11,7 @@
   },
   "main": "index.js",
   "peerDependencies": {
-    "babel-eslint": "^7.0.0 || ^8.0.0-alpha",
+    "babel-eslint": "^7.0.0 || ^8.0.0 || ^9.0.0",
     "eslint-plugin-flowtype": "^2.4.0"
   },
   "scripts": {
