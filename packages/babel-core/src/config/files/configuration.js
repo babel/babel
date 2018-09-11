@@ -2,7 +2,7 @@
 
 import buildDebug from "debug";
 import path from "path";
-import codeFrame from "@babel/code-frame";
+import { codeFrameColumns } from "@babel/code-frame";
 import fs from "fs";
 import json5 from "json5";
 import resolve from "resolve";
@@ -231,9 +231,20 @@ const readConfigJSON5 = makeStaticFileCache((filepath, content) => {
   try {
     options = json5.parse(content);
   } catch (err) {
-    const code = codeFrame(content, err.lineNumber, err.columnNumber);
-    err.message =
-      `${filepath}: Error while parsing JSON (${err.message})\n\n` + code;
+    // Check if the error contains source location informations
+    if (
+      typeof err.lineNumber === "number" ||
+      typeof err.columnNumber === "number"
+    ) {
+      const loc: NodeLocation = {
+        start: { column: err.columnNumber, line: err.lineNumber },
+      };
+
+      const code = codeFrameColumns(content, loc);
+
+      err.message =
+        `${filepath}: Error while parsing JSON (${err.message})\n\n` + code;
+    }
 
     throw err;
   }
