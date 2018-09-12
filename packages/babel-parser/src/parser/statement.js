@@ -3,7 +3,8 @@
 import * as N from "../types";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import ExpressionParser from "./expression";
-import { lineBreak } from "../util/whitespace";
+import { isIdentifierChar } from "../util/identifier";
+import { lineBreak, skipWhiteSpace } from "../util/whitespace";
 
 // Reused empty array added for node fields that are always empty.
 
@@ -1425,14 +1426,27 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(node, "ExportNamedDeclaration");
   }
 
+  isAsyncFunction() {
+    if (!this.isContextual("async")) return false;
+
+    const { input, pos } = this.state;
+
+    skipWhiteSpace.lastIndex = pos;
+    const skip = skipWhiteSpace.exec(input);
+    const next = pos + skip[0].length;
+
+    return (
+      !lineBreak.test(input.slice(pos, next)) &&
+      input.slice(next, next + 8) === "function" &&
+      (next + 8 === input.length || !isIdentifierChar(input.charAt(next + 8)))
+    );
+  }
+
   parseExportDefaultExpression(): N.Expression | N.Declaration {
     const expr = this.startNode();
     if (this.eat(tt._function)) {
       return this.parseFunction(expr, true, false, false, true);
-    } else if (
-      this.isContextual("async") &&
-      this.lookahead().type === tt._function
-    ) {
+    } else if (this.isAsyncFunction()) {
       // async function declaration
       this.eatContextual("async");
       this.eat(tt._function);
@@ -1569,7 +1583,7 @@ export default class StatementParser extends ExpressionParser {
       this.state.type.keyword === "let" ||
       this.state.type.keyword === "function" ||
       this.state.type.keyword === "class" ||
-      this.isContextual("async")
+      this.isAsyncFunction()
     );
   }
 
