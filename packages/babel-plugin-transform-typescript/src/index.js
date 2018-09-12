@@ -143,7 +143,7 @@ export default declare((api, { jsxPragma = "React" }) => {
         path.get("body.body").forEach(child => {
           const childNode = child.node;
 
-          if (t.isClassMethod(childNode) && childNode.kind === "constructor") {
+          if (t.isClassMethod(childNode, { kind: "constructor" })) {
             // Collects parameter properties so that we can add an assignment
             // for each of them in the constructor body
             //
