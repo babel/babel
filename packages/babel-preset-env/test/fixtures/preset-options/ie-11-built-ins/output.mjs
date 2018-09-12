@@ -94,6 +94,7 @@ import "core-js/modules/es6.string.fontsize";
 import "core-js/modules/es6.string.from-code-point";
 import "core-js/modules/es6.string.includes";
 import "core-js/modules/es6.string.italics";
+import "core-js/modules/es6.string.iterator";
 import "core-js/modules/es6.string.link";
 import "core-js/modules/es7.string.pad-start";
 import "core-js/modules/es7.string.pad-end";

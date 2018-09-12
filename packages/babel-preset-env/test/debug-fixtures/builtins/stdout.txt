@@ -140,6 +140,7 @@ Using polyfills with `entry` option:
   es6.string.from-code-point { "ie":"10" }
   es6.string.includes { "ie":"10" }
   es6.string.italics { "ie":"10" }
+  es6.string.iterator { "ie":"10" }
   es6.string.link { "ie":"10" }
   es7.string.pad-start { "chrome":"54", "ie":"10", "node":"6" }
   es7.string.pad-end { "chrome":"54", "ie":"10", "node":"6" }

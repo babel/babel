@@ -100,7 +100,6 @@ Using polyfills with `entry` option:
   es6.string.fontcolor { "electron":"0.36" }
   es6.string.fontsize { "electron":"0.36" }
   es6.string.italics { "electron":"0.36" }
-  es6.string.iterator { "electron":"0.36" }
   es6.string.link { "electron":"0.36" }
   es7.string.pad-start { "electron":"0.36" }
   es7.string.pad-end { "electron":"0.36" }

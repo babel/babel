@@ -129,6 +129,7 @@ Using polyfills with `entry` option:
   es6.string.ends-with { "android":"4" }
   es6.string.from-code-point { "android":"4" }
   es6.string.includes { "android":"4" }
+  es6.string.iterator { "android":"4" }
   es7.string.pad-start { "android":"4" }
   es7.string.pad-end { "android":"4" }
   es6.string.raw { "android":"4" }
