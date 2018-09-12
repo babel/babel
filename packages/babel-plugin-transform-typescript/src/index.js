@@ -98,10 +98,6 @@ export default declare((api, { jsxPragma = "React" }) => {
         if (node.abstract) node.abstract = null;
         if (node.optional) node.optional = null;
 
-        if (node.kind !== "constructor") {
-          return;
-        }
-
         // Rest handled by Function visitor
       },
 
@@ -140,14 +136,21 @@ export default declare((api, { jsxPragma = "React" }) => {
         if (node.superTypeParameters) node.superTypeParameters = null;
         if (node.implements) node.implements = null;
 
-        // Same logic is used in babel-plugin-transform-flow-strip-types:
-        // We do this here instead of in a `ClassProperty` visitor because the class transform
-        // would transform the class before we reached the class property.
+        // Similar to the logic in `transform-flow-strip-types`, we need to
+        // handle `TSParameterProperty` and `ClassProperty` here because the
+        // class transform would transform the class, causing more specific
+        // visitors to not run.
         path.get("body.body").forEach(child => {
           const childNode = child.node;
 
           if (t.isClassMethod(childNode) && childNode.kind === "constructor") {
-            // Collect parameter properties
+            // Collects parameter properties so that we can add an assignment
+            // for each of them in the constructor body
+            //
+            // We use a WeakSet to ensure an assignment for a parameter
+            // property is only added once. This is necessary for cases like
+            // using `transform-classes`, which causes this visitor to run
+            // twice.
             const parameterProperties = [];
             for (const param of childNode.params) {
               if (
@@ -190,9 +193,9 @@ export default declare((api, { jsxPragma = "React" }) => {
                 t.isCallExpression(first.expression) &&
                 t.isSuper(first.expression.callee);
 
-              // Make sure to put parameter properties *after* the `super` call.
-              // TypeScript will enforce that a 'super()' call is the first statement
-              // when there are parameter properties.
+              // Make sure to put parameter properties *after* the `super`
+              // call. TypeScript will enforce that a 'super()' call is the
+              // first statement when there are parameter properties.
               childNode.body.body = startsWithSuperCall
                 ? [first, ...assigns, ...statements.slice(1)]
                 : [...assigns, ...statements];
