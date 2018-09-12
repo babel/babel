@@ -1,3 +1,5 @@
+// @flow
+
 import highlight, { shouldHighlight, getChalk } from "@babel/highlight";
 
 let deprecationWarningShown = false;
@@ -7,9 +9,9 @@ type Location = {
   line: number,
 };
 
-type NodeLocation = {
-  end: Location,
+export type NodeLocation = {
   start: Location,
+  end?: Location,
 };
 
 /**
@@ -197,7 +199,7 @@ export default function(
     }
   }
 
-  colNumber = Math.max(colNumber, 0);
+  colNumber = Math.max(parseInt(colNumber, 10), 0);
 
   const location: NodeLocation = {
     start: { column: colNumber, line: lineNumber },

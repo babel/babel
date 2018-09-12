@@ -2,7 +2,7 @@
 
 import buildDebug from "debug";
 import path from "path";
-import { codeFrameColumns } from "@babel/code-frame";
+import { codeFrameColumns, type NodeLocation } from "@babel/code-frame";
 import fs from "fs";
 import json5 from "json5";
 import resolve from "resolve";
@@ -233,7 +233,7 @@ const readConfigJSON5 = makeStaticFileCache((filepath, content) => {
   } catch (err) {
     // Check if the error contains source location informations
     if (
-      typeof err.lineNumber === "number" ||
+      typeof err.lineNumber === "number" &&
       typeof err.columnNumber === "number"
     ) {
       const loc: NodeLocation = {
