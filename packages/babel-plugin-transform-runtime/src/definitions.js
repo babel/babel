@@ -1,14 +1,40 @@
 import semver from "semver";
 
+function hasMinVersion(minVersion, runtimeVersion) {
+  // If the range is unavailable, we're running the script during Babel's
+  // build process, and we want to assume that all versions are satisfied so
+  // that the built output will include all definitions.
+  if (!runtimeVersion) return true;
+
+  // semver.intersects() has some surprising behavior with comparing ranges
+  // with preprelease versions. We add '^' to ensure that we are always
+  // comparing ranges with ranges, which sidesteps this logic.
+  // For example:
+  //
+  //   semver.intersects(`<7.0.1`, "7.0.0-beta.0") // false - surprising
+  //   semver.intersects(`<7.0.1`, "^7.0.0-beta.0") // true - expected
+  //
+  // This is because the first falls back to
+  //
+  //   semver.satisfies("7.0.0-beta.0", `<7.0.1`) // false - surprising
+  //
+  // and this fails because a prerelease version can only satisfy a range
+  // if it is a prerelease within the same major/minor/patch range.
+  //
+  // Note: If this is found to have issues, please also revist the logic in
+  // babel-core's availableHelper() API.
+  if (semver.valid(runtimeVersion)) runtimeVersion = `^${runtimeVersion}`;
+
+  return (
+    !semver.intersects(`<${minVersion}`, runtimeVersion) &&
+    !semver.intersects(`>=8.0.0`, runtimeVersion)
+  );
+}
+
 export default runtimeVersion => {
-  let includeMathModule = true;
-  if (runtimeVersion) {
-    // reason for conditionally including this module:
-    // https://github.com/babel/babel/pull/8616#issuecomment-418154753
-    includeMathModule =
-      !semver.intersects(`<=7.0.0`, runtimeVersion) &&
-      !semver.intersects(`>=8.0.0`, runtimeVersion);
-  }
+  // Conditionally include 'Math' because it was not included in the 7.0.0
+  // release of '@babel/runtime'. See issue https://github.com/babel/babel/pull/8616.
+  const includeMathModule = hasMinVersion("7.0.1", runtimeVersion);
 
   return {
     builtins: {

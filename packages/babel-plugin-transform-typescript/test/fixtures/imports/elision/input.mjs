@@ -1,3 +1,4 @@
+import "lib";
 import A, { B, Used } from "lib";
 import Used2, { C } from "lib";
 import * as D from "lib";
