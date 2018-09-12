@@ -1433,6 +1433,9 @@ export default class StatementParser extends ExpressionParser {
 
     skipWhiteSpace.lastIndex = pos;
     const skip = skipWhiteSpace.exec(input);
+
+    if (!skip || !skip.length) return false;
+
     const next = pos + skip[0].length;
 
     return (
