@@ -1447,13 +1447,16 @@ export default class StatementParser extends ExpressionParser {
 
   parseExportDefaultExpression(): N.Expression | N.Declaration {
     const expr = this.startNode();
-    if (this.eat(tt._function)) {
-      return this.parseFunction(expr, true, false, false, true);
-    } else if (this.isAsyncFunction()) {
-      // async function declaration
-      this.eatContextual("async");
-      this.eat(tt._function);
-      return this.parseFunction(expr, true, false, true, true);
+
+    const isAsync = this.isAsyncFunction();
+
+    if (this.eat(tt._function) || isAsync) {
+      if (isAsync) {
+        this.eatContextual("async");
+        this.expect(tt._function);
+      }
+
+      return this.parseFunction(expr, true, false, isAsync, true);
     } else if (this.match(tt._class)) {
       return this.parseClass(expr, true, true);
     } else if (this.match(tt.at)) {
