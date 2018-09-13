@@ -1,5 +1,5 @@
 import { declare } from "@babel/helper-plugin-utils";
-import { basename, extname } from "path";
+import { basename, extname, dirname, join, normalize } from "path";
 import {
   isModule,
   rewriteModuleStatementsAndPrepareHeader,
@@ -42,6 +42,7 @@ export default declare((api, options) => {
     strict,
     strictMode,
     noInterop,
+    resolveImports,
   } = options;
 
   /**
@@ -96,7 +97,13 @@ export default declare((api, options) => {
   /**
    * Build the member expression that reads from a global for a given source.
    */
-  function buildBrowserArg(browserGlobals, exactGlobals, source) {
+  function buildBrowserArg(
+    browserGlobals,
+    exactGlobals,
+    resolveImports,
+    source,
+    modulePath,
+  ) {
     let memberExpression;
     if (exactGlobals) {
       const globalRef = browserGlobals[source];
@@ -107,12 +114,16 @@ export default declare((api, options) => {
             (accum, curr) => t.memberExpression(accum, t.identifier(curr)),
             t.identifier("global"),
           );
+      } else if (resolveImports) {
+        memberExpression = resolveImport(t, source, modulePath);
       } else {
         memberExpression = t.memberExpression(
           t.identifier("global"),
           t.identifier(t.toIdentifier(source)),
         );
       }
+    } else if (resolveImports) {
+      memberExpression = resolveImport(t, source, modulePath);
     } else {
       const requireName = basename(source, extname(source));
       const globalName = browserGlobals[requireName] || requireName;
@@ -133,7 +144,13 @@ export default declare((api, options) => {
           const browserGlobals = globals || {};
 
           let moduleName = this.getModuleName();
-          if (moduleName) moduleName = t.stringLiteral(moduleName);
+          let modulePath = moduleName;
+
+          if (moduleName) {
+            moduleName = t.stringLiteral(moduleName);
+          } else {
+            modulePath = this.file.opts.filenameRelative;
+          }
 
           const { meta, headers } = rewriteModuleStatementsAndPrepareHeader(
             path,
@@ -168,7 +185,13 @@ export default declare((api, options) => {
               ]),
             );
             browserArgs.push(
-              buildBrowserArg(browserGlobals, exactGlobals, source),
+              buildBrowserArg(
+                browserGlobals,
+                exactGlobals,
+                resolveImports,
+                source,
+                modulePath,
+              ),
             );
             importNames.push(t.identifier(metadata.name));
 
@@ -229,3 +252,23 @@ export default declare((api, options) => {
     },
   };
 });
+
+function resolveImport(t, dependency, modulePath) {
+  if (modulePath.includes("/")) {
+    modulePath = dirname(modulePath);
+  }
+
+  const [root, ...path] = modulePath.split("/");
+  let resolved;
+
+  if (dependency.startsWith("./") || dependency.startsWith("../")) {
+    resolved = root + join(`/${path.join("/")}`, dependency);
+  } else {
+    resolved = normalize(dependency);
+  }
+
+  return t.memberExpression(
+    t.identifier("global"),
+    t.identifier(t.toIdentifier(resolved)),
+  );
+}
