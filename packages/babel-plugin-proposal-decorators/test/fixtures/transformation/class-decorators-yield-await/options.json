@@ -5,7 +5,7 @@
     [
       "external-helpers",
       {
-        "helperVersion": "7.0.1"
+        "helperVersion": "7.0.2"
       }
     ],
     "syntax-async-generators"

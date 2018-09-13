@@ -207,7 +207,7 @@ function addDecorateHelper(file) {
     if (err.code === "BABEL_HELPER_UNKNOWN") {
       err.message +=
         "\n  '@babel/plugin-transform-decorators' in non-legacy mode" +
-        " requires '@babel/core' version ^7.0.1 and you appear to be using" +
+        " requires '@babel/core' version ^7.0.2 and you appear to be using" +
         " an older version.";
     }
     throw err;
