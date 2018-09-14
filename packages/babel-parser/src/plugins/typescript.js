@@ -1803,9 +1803,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseObjPropValue(prop: N.ObjectMember, ...args): void {
-      if (this.isRelational("<")) {
-        throw new Error("TODO");
-      }
+      const typeParameters = this.tsTryParseTypeParameters();
+      if (typeParameters) prop.typeParameters = typeParameters;
 
       super.parseObjPropValue(prop, ...args);
     }
