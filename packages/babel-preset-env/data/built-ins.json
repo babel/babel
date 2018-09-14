@@ -1183,16 +1183,14 @@
     "electron": "1.1"
   },
   "es6.string.iterator": {
-    "chrome": "5",
-    "opera": "10.10",
+    "chrome": "38",
     "edge": "12",
-    "firefox": "2",
-    "safari": "3.1",
-    "node": "0.10",
-    "ie": "8",
-    "android": "4.0",
-    "ios": "6",
-    "electron": "1.1"
+    "firefox": "36",
+    "safari": "9",
+    "node": "0.12",
+    "ios": "9",
+    "opera": "25",
+    "electron": "0.2"
   },
   "es6.string.link": {
     "chrome": "5",

@@ -277,7 +277,7 @@ const es = {
   "es6.string.from-code-point": "String static methods / String.fromCodePoint",
   "es6.string.includes": "String.prototype methods / String.prototype.includes",
   "es6.string.italics": "String.prototype HTML methods",
-  "es6.string.iterator": "String properties and methods / Property access on strings",
+  "es6.string.iterator": "String.prototype methods / String.prototype[Symbol.iterator]",
   "es6.string.link": "String.prototype HTML methods",
   // "String.prototype methods / String.prototype.normalize" not implemented
   "es7.string.pad-start": "String padding / String.prototype.padStart",
