@@ -3,9 +3,7 @@
   "extends": "babel",
   "plugins": ["local-rules", "prettier"],
   "rules": {
-    "curly": ["error", "multi-line"],
-    "prettier/prettier": "error",
-    "no-case-declarations": "error"
+    "prettier/prettier": "error"
   },
   "env": {
     "node": true
