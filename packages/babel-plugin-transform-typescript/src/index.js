@@ -151,10 +151,6 @@ export default declare((api, { jsxPragma = "React" }) => {
         // Rest handled by Function visitor
       },
 
-      TSParameterProperty(path) {
-        path.replaceWith(path.node.parameter);
-      },
-
       ClassProperty(path) {
         const { node } = path;
 
@@ -208,6 +204,13 @@ export default declare((api, { jsxPragma = "React" }) => {
         if (p0 && t.isIdentifier(p0) && p0.name === "this") {
           node.params.shift();
         }
+
+        // We replace `TSParameterProperty` here so that transforms that
+        // rely on a `Function` visitor to deal with arguments, like
+        // `transform-parameters`, work properly.
+        node.params = node.params.map(p => {
+          return p.type === "TSParameterProperty" ? p.parameter : p;
+        });
       },
 
       TSModuleDeclaration(path) {
