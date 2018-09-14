@@ -1054,7 +1054,7 @@ helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.classStaticPrivateFieldSpecGet = helper("7.0.1")`
+helpers.classStaticPrivateFieldSpecGet = helper("7.0.2")`
   export default function _classStaticPrivateFieldSpecGet(receiver, classConstructor, descriptor) {
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
@@ -1063,7 +1063,7 @@ helpers.classStaticPrivateFieldSpecGet = helper("7.0.1")`
   }
 `;
 
-helpers.classStaticPrivateFieldSpecSet = helper("7.0.1")`
+helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
   export default function _classStaticPrivateFieldSpecSet(receiver, classConstructor, descriptor, value) {
     if (receiver !== classConstructor) {
       throw new TypeError("Private static access of wrong provenance");
@@ -1079,7 +1079,7 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.1")`
   }
 `;
 
-helpers.decorate = helper("7.0.1")`
+helpers.decorate = helper("7.0.2")`
   import toArray from "toArray";
 
   // These comments are stripped by @babel/template
