@@ -28,6 +28,11 @@ commander.option(
   "The name of the 'env' to use when loading configs and plugins. " +
     "Defaults to the value of BABEL_ENV, or else NODE_ENV, or else 'development'.",
 );
+commander.option(
+  "--root-mode [mode]",
+  "The project-root resolution mode. " +
+    "One of 'root' (the default), 'upward', or 'upward-optional'.",
+);
 
 // Basic file input configuration.
 commander.option("--source-type [script|module]", "");
@@ -220,6 +225,7 @@ export default function parseArgv(args: Array<string>) {
     babelOptions: {
       presets: opts.presets,
       plugins: opts.plugins,
+      rootMode: opts.rootMode,
       configFile: opts.configFile,
       envName: opts.envName,
       sourceType: opts.sourceType,

@@ -15,6 +15,7 @@ import type {
   RootInputSourceMapOption,
   NestingPath,
   CallerMetadata,
+  RootMode,
 } from "./options";
 
 export type ValidatorSet = {
@@ -59,6 +60,20 @@ type AccessPath = $ReadOnly<{
   parent: GeneralPath,
 }>;
 type GeneralPath = OptionPath | AccessPath;
+
+export function assertRootMode(loc: OptionPath, value: mixed): RootMode | void {
+  if (
+    value !== undefined &&
+    value !== "root" &&
+    value !== "upward" &&
+    value !== "upward-optional"
+  ) {
+    throw new Error(
+      `${msg(loc)} must be a "root", "upward", "upward-optional" or undefined`,
+    );
+  }
+  return value;
+}
 
 export function assertSourceMaps(
   loc: OptionPath,
