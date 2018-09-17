@@ -1180,7 +1180,13 @@ export type TsArrayType = TsTypeBase & {
 
 export type TsTupleType = TsTypeBase & {
   type: "TSTupleType",
-  elementTypes: $ReadOnlyArray<TsType>,
+  elementTypes: $ReadOnlyArray<TsTupleElementType>,
+};
+
+export type TsTupleElementType = TsTypeBase & {
+  type: "TSTupleElementType",
+  elementType: TsType,
+  isOptional: boolean,
 };
 
 export type TsUnionOrIntersectionType = TsUnionType | TsIntersectionType;
