@@ -21,6 +21,8 @@ export function isNewLine(code: number): boolean {
   }
 }
 
+export const skipWhiteSpace = /(?:\s|\/\/.*|\/\*[^]*?\*\/)*/g;
+
 // https://tc39.github.io/ecma262/#sec-white-space
 export function isWhitespace(code: number): boolean {
   switch (code) {
