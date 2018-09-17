@@ -51,6 +51,7 @@ Installation instructions can be found here: https://yarnpkg.com/en/docs/install
 ```sh
 $ git clone https://github.com/babel/babel
 $ cd babel
+$ npm install
 $ make bootstrap
 ```
 
