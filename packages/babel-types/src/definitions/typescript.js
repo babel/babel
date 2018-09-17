@@ -208,7 +208,15 @@ defineType("TSTupleType", {
   aliases: ["TSType"],
   visitor: ["elementTypes"],
   fields: {
-    elementTypes: validateArrayOfType("TSType"),
+    elementTypes: validateArrayOfType("TSTupleElementType"),
+  },
+});
+
+defineType("TSTupleElementType", {
+  visitor: ["elementType"],
+  fields: {
+    isOptional: validate(bool),
+    elementType: validateType("TSType"),
   },
 });
 
