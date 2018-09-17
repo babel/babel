@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-object-super",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "description": "Compile ES2015 object super to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-object-super",
   "license": "MIT",
@@ -13,7 +13,7 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/helper-replace-supers": "^7.0.0"
+    "@babel/helper-replace-supers": "^7.1.0"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"

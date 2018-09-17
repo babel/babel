@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-function-name",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "description": "Apply ES2015 function.name semantics to all functions",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-function-name",
   "license": "MIT",
@@ -12,7 +12,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-function-name": "^7.0.0",
+    "@babel/helper-function-name": "^7.1.0",
     "@babel/helper-plugin-utils": "^7.0.0"
   },
   "peerDependencies": {

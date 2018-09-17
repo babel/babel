@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-runtime",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "description": "Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-runtime",
   "license": "MIT",

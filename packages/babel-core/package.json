@@ -1,6 +1,6 @@
 {
   "name": "@babel/core",
-  "version": "7.0.0",
+  "version": "7.1.0",
   "description": "Babel compiler core.",
   "main": "lib/index.js",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
@@ -35,10 +35,10 @@
   "dependencies": {
     "@babel/code-frame": "^7.0.0",
     "@babel/generator": "^7.0.0",
-    "@babel/helpers": "^7.0.0",
-    "@babel/parser": "^7.0.0",
-    "@babel/template": "^7.0.0",
-    "@babel/traverse": "^7.0.0",
+    "@babel/helpers": "^7.1.0",
+    "@babel/parser": "^7.1.0",
+    "@babel/template": "^7.1.0",
+    "@babel/traverse": "^7.1.0",
     "@babel/types": "^7.0.0",
     "convert-source-map": "^1.1.0",
     "debug": "^3.1.0",
