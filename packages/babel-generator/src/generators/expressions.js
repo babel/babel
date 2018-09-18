@@ -5,7 +5,9 @@ export function UnaryExpression(node: Object) {
   if (
     node.operator === "void" ||
     node.operator === "delete" ||
-    node.operator === "typeof"
+    node.operator === "typeof" ||
+    // throwExpressions
+    node.operator === "throw"
   ) {
     this.word(node.operator);
     this.space();
