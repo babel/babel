@@ -33,46 +33,48 @@ export default declare((api, { jsxPragma = "React" }) => {
       Identifier: visitPattern,
       RestElement: visitPattern,
 
-      Program(path, state: State) {
-        state.programPath = path;
+      Program: {
+        exit(path, state: State) {
+          state.programPath = path;
 
-        // remove type imports
-        for (const stmt of path.get("body")) {
-          if (t.isImportDeclaration(stmt)) {
-            // Note: this will allow both `import { } from "m"` and `import "m";`.
-            // In TypeScript, the former would be elided.
-            if (stmt.node.specifiers.length === 0) {
-              continue;
-            }
-
-            let allElided = true;
-            const importsToRemove: Path<Node>[] = [];
-
-            for (const specifier of stmt.node.specifiers) {
-              const binding = stmt.scope.getBinding(specifier.local.name);
-
-              // The binding may not exist if the import node was explicitly
-              // injected by another plugin. Currently core does not do a good job
-              // of keeping scope bindings synchronized with the AST. For now we
-              // just bail if there is no binding, since chances are good that if
-              // the import statement was injected then it wasn't a typescript type
-              // import anyway.
-              if (binding && isImportTypeOnly(binding, state.programPath)) {
-                importsToRemove.push(binding.path);
-              } else {
-                allElided = false;
+          // remove type imports
+          for (const stmt of path.get("body")) {
+            if (t.isImportDeclaration(stmt)) {
+              // Note: this will allow both `import { } from "m"` and `import "m";`.
+              // In TypeScript, the former would be elided.
+              if (stmt.node.specifiers.length === 0) {
+                continue;
               }
-            }
 
-            if (allElided) {
-              stmt.remove();
-            } else {
-              for (const importPath of importsToRemove) {
-                importPath.remove();
+              let allElided = true;
+              const importsToRemove: Path<Node>[] = [];
+
+              for (const specifier of stmt.node.specifiers) {
+                const binding = stmt.scope.getBinding(specifier.local.name);
+
+                // The binding may not exist if the import node was explicitly
+                // injected by another plugin. Currently core does not do a good job
+                // of keeping scope bindings synchronized with the AST. For now we
+                // just bail if there is no binding, since chances are good that if
+                // the import statement was injected then it wasn't a typescript type
+                // import anyway.
+                if (binding && isImportTypeOnly(binding, state.programPath)) {
+                  importsToRemove.push(binding.path);
+                } else {
+                  allElided = false;
+                }
+              }
+
+              if (allElided) {
+                stmt.remove();
+              } else {
+                for (const importPath of importsToRemove) {
+                  importPath.remove();
+                }
               }
             }
           }
-        }
+        },
       },
 
       TSDeclareFunction(path) {
