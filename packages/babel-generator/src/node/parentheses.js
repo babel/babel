@@ -224,7 +224,7 @@ export function OptionalMemberExpression(
   node: Object,
   parent: Object,
 ): boolean {
-  return t.isMemberExpression(parent);
+  return t.isCallExpression(parent) || t.isMemberExpression(parent);
 }
 
 export function AssignmentExpression(node: Object): boolean {

@@ -14,3 +14,4 @@ foo?.["bar"]?.foo;
 1.000?.toString();
 (a?.b).c;
 (a ? b : c)?.d;
+(a?.b)();
