@@ -128,6 +128,7 @@ defineType("TSIndexSignature", {
 
 const tsKeywordTypes = [
   "TSAnyKeyword",
+  "TSUnknownKeyword",
   "TSNumberKeyword",
   "TSObjectKeyword",
   "TSBooleanKeyword",

@@ -57,6 +57,8 @@ function keywordTypeFromName(
       return "TSSymbolKeyword";
     case "undefined":
       return "TSUndefinedKeyword";
+    case "unknown":
+      return "TSUnknownKeyword";
     default:
       return undefined;
   }

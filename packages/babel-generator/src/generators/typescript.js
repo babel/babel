@@ -127,6 +127,9 @@ export function TSIndexSignature(node) {
 export function TSAnyKeyword() {
   this.word("any");
 }
+export function TSUnknownKeyword() {
+  this.word("unknown");
+}
 export function TSNumberKeyword() {
   this.word("number");
 }

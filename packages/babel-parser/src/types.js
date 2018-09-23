@@ -1119,6 +1119,7 @@ export type TsTypeBase = NodeBase;
 
 export type TsKeywordTypeType =
   | "TSAnyKeyword"
+  | "TSUnknownKeyword"
   | "TSNumberKeyword"
   | "TSObjectKeyword"
   | "TSBooleanKeyword"

@@ -698,6 +698,11 @@ export function TSAnyKeyword(...args: Array<any>): Object {
 }
 export { TSAnyKeyword as tsAnyKeyword };
 export { TSAnyKeyword as tSAnyKeyword };
+export function TSUnknownKeyword(...args: Array<any>): Object {
+  return builder("TSUnknownKeyword", ...args);
+}
+export { TSUnknownKeyword as tsUnknownKeyword };
+export { TSUnknownKeyword as tSUnknownKeyword };
 export function TSNumberKeyword(...args: Array<any>): Object {
   return builder("TSNumberKeyword", ...args);
 }
