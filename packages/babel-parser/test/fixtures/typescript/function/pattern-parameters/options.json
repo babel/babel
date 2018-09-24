@@ -1,4 +1,3 @@
 {
-  "throws":
-    "A binding pattern parameter cannot be optional in an implementation signature. (1:11)"
+  "throws": "A binding pattern parameter cannot be optional in an implementation signature. (1:11)"
 }

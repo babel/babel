@@ -1,4 +1,3 @@
 {
-  "throws":
-    "`declare export const` is not supported. Use `declare export var` instead (1:15)"
+  "throws": "`declare export const` is not supported. Use `declare export var` instead (1:15)"
 }

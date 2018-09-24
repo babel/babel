@@ -6,7 +6,6 @@
     "build": "make build",
     "fix": "make fix",
     "lint": "make lint",
-    "precommit": "lint-staged",
     "test": "make test"
   },
   "devDependencies": {
@@ -32,9 +31,9 @@
     "charcodes": "^0.1.0",
     "derequire": "^2.0.2",
     "enhanced-resolve": "^3.0.0",
-    "eslint": "^5.3.0",
+    "eslint": "^5.6.0",
     "eslint-config-babel": "^8.0.0",
-    "eslint-plugin-flowtype": "^2.50.0",
+    "eslint-plugin-flowtype": "^2.50.1",
     "eslint-plugin-local-rules": "0.1.0",
     "eslint-plugin-prettier": "^2.6.2",
     "flow-bin": "^0.80.0",
@@ -48,15 +47,15 @@
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.7",
     "gulp-watch": "^5.0.0",
-    "husky": "^0.14.3",
+    "husky": "^1.0.0-rc.15",
     "jest": "^23.4.1",
     "lerna": "^2.11.0",
     "lerna-changelog": "^0.5.0",
-    "lint-staged": "^6.0.1",
+    "lint-staged": "^7.3.0",
     "lodash": "^4.17.10",
     "merge-stream": "^1.0.1",
     "output-file-sync": "^2.0.0",
-    "prettier": "^1.13.7",
+    "prettier": "^1.14.3",
     "pump": "^1.0.2",
     "rimraf": "^2.4.3",
     "rollup-plugin-babel": "^4.0.0-beta.0",
@@ -80,6 +79,11 @@
     "*.js": [
       "eslint --format=codeframe"
     ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
   },
   "jest": {
     "collectCoverageFrom": [

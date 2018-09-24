@@ -1,5 +1,4 @@
 {
-  "throws":
-    "This experimental syntax requires enabling the parser plugin: 'classPrivateMethods' (3:2)",
+  "throws": "This experimental syntax requires enabling the parser plugin: 'classPrivateMethods' (3:2)",
   "plugins": ["classPrivateProperties"]
 }

@@ -3,8 +3,7 @@
     [
       "../../../../lib",
       {
-        "configPath":
-          "../fixtures/preset-options/browserslist-config-ignore-with-false",
+        "configPath": "../fixtures/preset-options/browserslist-config-ignore-with-false",
         "modules": false,
         "ignoreBrowserslistConfig": true
       }

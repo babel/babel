@@ -1,4 +1,3 @@
 {
-  "throws":
-    "This experimental syntax requires enabling the parser plugin: 'optionalCatchBinding' (4:6)"
+  "throws": "This experimental syntax requires enabling the parser plugin: 'optionalCatchBinding' (4:6)"
 }

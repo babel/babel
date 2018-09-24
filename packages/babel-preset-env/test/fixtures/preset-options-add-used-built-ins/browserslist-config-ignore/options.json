@@ -3,8 +3,7 @@
     [
       "../../../../lib",
       {
-        "configPath":
-          "../fixtures/preset-options-add-used-built-ins/browserslist-config-ignore",
+        "configPath": "../fixtures/preset-options-add-used-built-ins/browserslist-config-ignore",
         "modules": false,
         "targets": { "esmodules": true },
         "useBuiltIns": "usage",
