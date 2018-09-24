@@ -508,12 +508,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSTupleType");
     }
 
-    tsParseTupleElementType(): N.TsTupleElementType {
-      const node: N.TsTupleElementType = this.startNode();
-      const elementType = this.tsParseType();
-      node.isOptional = this.eat(tt.question);
-      node.elementType = elementType;
-      return this.finishNode(node, "TSTupleElementType");
+    tsParseTupleElementType(): N.TsType {
+      // Maybe necessary for optional type
+      const wrapperNode = this.startNode();
+      const type = this.tsParseType();
+      if (this.eat(tt.question)) {
+        wrapperNode.innerType = type;
+        return this.finishNode(wrapperNode, "TSOptionalType");
+      }
+      return type;
     }
 
     tsParseParenthesizedType(): N.TsParenthesizedType {

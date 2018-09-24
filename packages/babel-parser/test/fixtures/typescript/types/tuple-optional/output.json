@@ -104,7 +104,7 @@
                   },
                   "elementTypes": [
                     {
-                      "type": "TSTupleElementType",
+                      "type": "TSStringKeyword",
                       "start": 8,
                       "end": 14,
                       "loc": {
@@ -116,26 +116,10 @@
                           "line": 1,
                           "column": 14
                         }
-                      },
-                      "isOptional": false,
-                      "elementType": {
-                        "type": "TSStringKeyword",
-                        "start": 8,
-                        "end": 14,
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 8
-                          },
-                          "end": {
-                            "line": 1,
-                            "column": 14
-                          }
-                        }
                       }
                     },
                     {
-                      "type": "TSTupleElementType",
+                      "type": "TSOptionalType",
                       "start": 16,
                       "end": 23,
                       "loc": {
@@ -148,8 +132,7 @@
                           "column": 23
                         }
                       },
-                      "isOptional": true,
-                      "elementType": {
+                      "innerType": {
                         "type": "TSNumberKeyword",
                         "start": 16,
                         "end": 22,
@@ -166,7 +149,7 @@
                       }
                     },
                     {
-                      "type": "TSTupleElementType",
+                      "type": "TSOptionalType",
                       "start": 25,
                       "end": 43,
                       "loc": {
@@ -179,8 +162,7 @@
                           "column": 43
                         }
                       },
-                      "isOptional": true,
-                      "elementType": {
+                      "innerType": {
                         "type": "TSParenthesizedType",
                         "start": 25,
                         "end": 42,

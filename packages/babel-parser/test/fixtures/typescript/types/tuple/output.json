@@ -104,7 +104,7 @@
                   },
                   "elementTypes": [
                     {
-                      "type": "TSTupleElementType",
+                      "type": "TSNumberKeyword",
                       "start": 8,
                       "end": 14,
                       "loc": {
@@ -116,26 +116,10 @@
                           "line": 1,
                           "column": 14
                         }
-                      },
-                      "isOptional": false,
-                      "elementType": {
-                        "type": "TSNumberKeyword",
-                        "start": 8,
-                        "end": 14,
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 8
-                          },
-                          "end": {
-                            "line": 1,
-                            "column": 14
-                          }
-                        }
                       }
                     },
                     {
-                      "type": "TSTupleElementType",
+                      "type": "TSNumberKeyword",
                       "start": 16,
                       "end": 22,
                       "loc": {
@@ -147,26 +131,10 @@
                           "line": 1,
                           "column": 22
                         }
-                      },
-                      "isOptional": false,
-                      "elementType": {
-                        "type": "TSNumberKeyword",
-                        "start": 16,
-                        "end": 22,
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 16
-                          },
-                          "end": {
-                            "line": 1,
-                            "column": 22
-                          }
-                        }
                       }
                     },
                     {
-                      "type": "TSTupleElementType",
+                      "type": "TSNumberKeyword",
                       "start": 24,
                       "end": 30,
                       "loc": {
@@ -177,22 +145,6 @@
                         "end": {
                           "line": 1,
                           "column": 30
-                        }
-                      },
-                      "isOptional": false,
-                      "elementType": {
-                        "type": "TSNumberKeyword",
-                        "start": 24,
-                        "end": 30,
-                        "loc": {
-                          "start": {
-                            "line": 1,
-                            "column": 24
-                          },
-                          "end": {
-                            "line": 1,
-                            "column": 30
-                          }
                         }
                       }
                     }

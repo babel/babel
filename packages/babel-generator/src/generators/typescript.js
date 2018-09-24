@@ -238,11 +238,9 @@ export function TSTupleType(node) {
   this.token("]");
 }
 
-export function TSTupleElementType(node) {
-  this.print(node.elementType, node);
-  if (node.isOptional) {
-    this.token("?");
-  }
+export function TSOptionalType(node) {
+  this.print(node.innerType, node);
+  this.token("?");
 }
 
 export function TSUnionType(node) {

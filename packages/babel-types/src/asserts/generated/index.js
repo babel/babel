@@ -822,6 +822,9 @@ export function assertTSArrayType(node: Object, opts?: Object = {}): void {
 export function assertTSTupleType(node: Object, opts?: Object = {}): void {
   assert("TSTupleType", node, opts);
 }
+export function assertTSOptionalType(node: Object, opts?: Object = {}): void {
+  assert("TSOptionalType", node, opts);
+}
 export function assertTSUnionType(node: Object, opts?: Object = {}): void {
   assert("TSUnionType", node, opts);
 }
