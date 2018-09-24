@@ -1,4 +1,3 @@
 {
-  "throws":
-    "A @flow directive is required when using Flow annotations with the `requireDirective` option."
+  "throws": "A @flow directive is required when using Flow annotations with the `requireDirective` option."
 }

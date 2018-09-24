@@ -1,5 +1,4 @@
 {
-  "throws":
-    "You can only use decorators on an export when exporting a class (2:0)",
+  "throws": "You can only use decorators on an export when exporting a class (2:0)",
   "sourceType": "module"
 }

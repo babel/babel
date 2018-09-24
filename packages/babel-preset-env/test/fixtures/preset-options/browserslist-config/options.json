@@ -3,8 +3,7 @@
     [
       "../../../../lib",
       {
-        "configPath":
-          "packages/babel-preset-env/test/fixtures/preset-options/browserslist-config",
+        "configPath": "packages/babel-preset-env/test/fixtures/preset-options/browserslist-config",
         "modules": false
       }
     ]
