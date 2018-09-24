@@ -11,7 +11,7 @@ expect(el).toEqual(Object.defineProperty({
   key: "foo",
   placement: "own",
   descriptor: {
-    enumerable: false,
+    enumerable: true,
     configurable: true,
     writable: true,
   },

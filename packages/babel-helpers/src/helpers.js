@@ -1232,7 +1232,7 @@ helpers.decorate = helper("7.0.2")`
     } else if (def.kind === "set") {
       descriptor = { set: def.value, configurable: true, enumerable: false };
     } else if (def.kind === "field") {
-      descriptor = { configurable: true, writable: true, enumerable: false };
+      descriptor = { configurable: true, writable: true, enumerable: true };
     }
 
     var element /*: ElementDescriptor */ = {
