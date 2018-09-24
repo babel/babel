@@ -1236,6 +1236,8 @@ helpers.decorate = helper("7.1.5")`
   function _createElementDescriptor(
     def /*: ElementDefinition */,
   ) /*: ElementDescriptor */ {
+    var key = toPropertyKey(def.key);
+
     var descriptor /*: PropertyDescriptor */;
     if (def.kind === "method") {
       descriptor = {
@@ -1244,6 +1246,10 @@ helpers.decorate = helper("7.1.5")`
         configurable: true,
         enumerable: false,
       };
+      Object.defineProperty(def.value, "name", {
+        value: typeof key === "symbol" ? "" : key,
+        configurable: true,
+      });
     } else if (def.kind === "get") {
       descriptor = { get: def.value, configurable: true, enumerable: false };
     } else if (def.kind === "set") {
@@ -1254,7 +1260,7 @@ helpers.decorate = helper("7.1.5")`
 
     var element /*: ElementDescriptor */ = {
       kind: def.kind === "field" ? "field" : "method",
-      key: def.key,
+      key: key,
       placement: def.static
         ? "static"
         : def.kind === "field"
