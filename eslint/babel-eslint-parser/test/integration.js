@@ -225,6 +225,7 @@ function strictSuite() {
     // Strip chalk colors, these are not relevant for the test
     const stripAnsi = str =>
       str.replace(
+        // eslint-disable-next-line no-control-regex
         /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g,
         ""
       );
