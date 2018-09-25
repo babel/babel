@@ -15,6 +15,7 @@
     "@babel/core": "^7.1.0",
     "@babel/helper-fixtures": "^7.0.0",
     "@babel/polyfill": "^7.0.0",
+    "babel-check-duplicated-nodes": "^1.0.0",
     "jest": "^22.4.2",
     "jest-diff": "^22.4.0",
     "lodash": "^4.17.10",
