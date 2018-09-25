@@ -19,6 +19,8 @@ export default declare((api, { isTSX }) => {
   api.assertVersion(7);
 
   return {
+    name: "syntax-typescript",
+
     manipulateOptions(opts, parserOpts) {
       const { plugins } = parserOpts;
       // If the Flow syntax plugin already ran, remove it since Typescript

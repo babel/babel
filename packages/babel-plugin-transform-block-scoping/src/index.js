@@ -20,6 +20,8 @@ export default declare((api, opts) => {
   }
 
   return {
+    name: "transform-block-scoping",
+
     visitor: {
       VariableDeclaration(path) {
         const { node, parent, scope } = path;

@@ -48,6 +48,8 @@ export default declare((api, options) => {
   }
 
   return {
+    name: "transform-spread",
+
     visitor: {
       ArrayExpression(path) {
         const { node, scope } = path;

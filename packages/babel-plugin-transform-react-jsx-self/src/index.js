@@ -29,6 +29,7 @@ export default declare(api => {
   };
 
   return {
+    name: "transform-react-jsx-self",
     visitor,
   };
 });

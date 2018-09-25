@@ -64,5 +64,8 @@ export default declare(api => {
       }
     },
   });
-  return { visitor };
+  return {
+    name: "transform-react-inline-elements",
+    visitor,
+  };
 });

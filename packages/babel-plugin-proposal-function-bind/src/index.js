@@ -39,6 +39,7 @@ export default declare(api => {
   }
 
   return {
+    name: "proposal-function-bind",
     inherits: syntaxFunctionBind,
 
     visitor: {

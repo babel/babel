@@ -127,6 +127,7 @@ export default declare((api, options) => {
   }
 
   return {
+    name: "proposal-optional-chaining",
     inherits: syntaxOptionalChaining,
 
     visitor: {

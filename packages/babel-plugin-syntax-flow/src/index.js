@@ -12,6 +12,8 @@ export default declare((api, options) => {
   }
 
   return {
+    name: "syntax-flow",
+
     manipulateOptions(opts, parserOpts) {
       // If the file has already enabled TS, assume that this is not a
       // valid Flowtype file.

@@ -15,6 +15,8 @@ export default declare((api, { proposal }) => {
   }
 
   return {
+    name: "syntax-pipeline-operator",
+
     manipulateOptions(opts, parserOpts) {
       parserOpts.plugins.push(["pipelineOperator", { proposal }]);
     },

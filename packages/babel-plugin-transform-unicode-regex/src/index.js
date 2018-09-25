@@ -6,6 +6,8 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "transform-unicode-regex",
+
     visitor: {
       RegExpLiteral({ node }) {
         if (!regex.is(node, "u")) return;

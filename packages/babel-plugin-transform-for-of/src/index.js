@@ -14,6 +14,8 @@ export default declare((api, options) => {
 
   if (assumeArray) {
     return {
+      name: "transform-for-of",
+
       visitor: {
         ForOfStatement(path) {
           const { scope } = path;

@@ -411,6 +411,8 @@ export default declare((api, options) => {
   }
 
   return {
+    name: "transform-destructuring",
+
     visitor: {
       ExportNamedDeclaration(path) {
         const declaration = path.get("declaration");

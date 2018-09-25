@@ -6,6 +6,8 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "transform-sticky-regex",
+
     visitor: {
       RegExpLiteral(path) {
         const { node } = path;

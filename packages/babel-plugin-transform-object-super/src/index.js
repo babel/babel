@@ -16,6 +16,8 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "transform-object-super",
+
     visitor: {
       ObjectExpression(path, state) {
         let objectRef;

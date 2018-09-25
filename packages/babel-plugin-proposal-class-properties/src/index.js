@@ -336,6 +336,7 @@ export default declare((api, options) => {
     : buildClassStaticPrivatePropertySpec;
 
   return {
+    name: "proposal-class-properties",
     inherits: syntaxClassProperties,
 
     visitor: {

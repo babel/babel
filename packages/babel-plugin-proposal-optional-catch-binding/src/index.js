@@ -5,6 +5,7 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "proposal-optional-catch-binding",
     inherits: syntaxOptionalCatchBinding,
 
     visitor: {

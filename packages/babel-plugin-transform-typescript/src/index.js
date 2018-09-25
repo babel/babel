@@ -26,7 +26,9 @@ export default declare((api, { jsxPragma = "React" }) => {
   api.assertVersion(7);
 
   return {
+    name: "transform-typescript",
     inherits: syntaxTypeScript,
+
     visitor: {
       //"Pattern" alias doesn't include Identifier or RestElement.
       Pattern: visitPattern,

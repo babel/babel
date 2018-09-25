@@ -78,6 +78,8 @@ export default declare((api, options) => {
   };
 
   return {
+    name: "transform-react-constant-elements",
+
     visitor: {
       JSXElement(path) {
         if (HOISTED.has(path.node)) return;

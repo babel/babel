@@ -6,6 +6,7 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "proposal-logical-assignment-operators",
     inherits: syntaxLogicalAssignmentOperators,
 
     visitor: {

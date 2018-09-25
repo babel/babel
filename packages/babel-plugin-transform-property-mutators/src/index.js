@@ -6,6 +6,8 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "transform-property-mutators",
+
     visitor: {
       ObjectExpression(path, file) {
         const { node } = path;

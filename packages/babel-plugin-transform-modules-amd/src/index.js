@@ -20,6 +20,8 @@ export default declare((api, options) => {
 
   const { loose, allowTopLevelThis, strict, strictMode, noInterop } = options;
   return {
+    name: "transform-modules-amd",
+
     visitor: {
       Program: {
         exit(path) {
