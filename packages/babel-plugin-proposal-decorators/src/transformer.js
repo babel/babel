@@ -7,8 +7,11 @@ function prop(key, value) {
   return t.objectProperty(t.identifier(key), value);
 }
 
-function value(body, params = []) {
-  return t.objectMethod("method", t.identifier("value"), params, body);
+function value(body, params = [], async, generator) {
+  const method = t.objectMethod("method", t.identifier("value"), params, body);
+  method.async = !!async;
+  method.generator = !!generator;
+  return method;
 }
 
 function hasDecorators({ node }) {
@@ -77,7 +80,7 @@ function getSingleElementDefinition(path, superRef, classRef, file) {
     prop("static", node.static && t.booleanLiteral(true)),
     prop("key", getKey(node)),
     isMethod
-      ? value(node.body, node.params)
+      ? value(node.body, node.params, node.async, node.generator)
       : node.value
         ? value(template.ast`{ return ${node.value} }`)
         : prop("value", scope.buildUndefinedNode()),
