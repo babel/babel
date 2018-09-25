@@ -15,6 +15,7 @@ import assert from "assert";
 import fs from "fs";
 import path from "path";
 import vm from "vm";
+import checkDuplicatedNodes from "babel-check-duplicated-nodes";
 
 import diff from "jest-diff";
 
@@ -129,51 +130,6 @@ function wrapPackagesArray(type, names, optionsDir) {
   });
 }
 
-function checkDuplicatedNodes(ast) {
-  const nodes = new WeakSet();
-  const parents = new WeakMap();
-
-  const setParent = (child, parent) => {
-    if (typeof child === "object" && child !== null) {
-      let p = parents.get(child);
-      if (!p) {
-        p = [];
-        parents.set(child, p);
-      }
-      p.unshift(parent);
-    }
-  };
-  const registerChildren = node => {
-    for (const key in node) {
-      if (Array.isArray(node[key])) {
-        node[key].forEach(child => setParent(child, node));
-      } else {
-        setParent(node[key], node);
-      }
-    }
-  };
-
-  const hidePrivateProperties = (key, val) => {
-    // Hides properties like _shadowedFunctionLiteral,
-    // which makes the AST circular
-    if (key[0] === "_") return "[Private]";
-    return val;
-  };
-
-  babel.types.traverseFast(ast, node => {
-    registerChildren(node);
-    if (nodes.has(node)) {
-      throw new Error(
-        "Do not reuse nodes. Use `t.cloneNode` to copy them.\n" +
-          JSON.stringify(node, hidePrivateProperties, 2) +
-          "\nParent:\n" +
-          JSON.stringify(parents.get(node), hidePrivateProperties, 2),
-      );
-    }
-    nodes.add(node);
-  });
-}
-
 function run(task) {
   const actual = task.actual;
   const expected = task.expect;
@@ -222,7 +178,7 @@ function run(task) {
   if (execCode) {
     const execOpts = getOpts(exec);
     result = babel.transform(execCode, execOpts);
-    checkDuplicatedNodes(result.ast);
+    checkDuplicatedNodes(babel, result.ast);
     execCode = result.code;
 
     try {
@@ -244,7 +200,7 @@ function run(task) {
       "<CWD>",
     );
 
-    checkDuplicatedNodes(result.ast);
+    checkDuplicatedNodes(babel, result.ast);
     if (
       !expected.code &&
       expectedCode &&
