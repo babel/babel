@@ -239,7 +239,7 @@ export function TSTupleType(node) {
 }
 
 export function TSOptionalType(node) {
-  this.print(node.innerType, node);
+  this.print(node.typeAnnotation, node);
   this.token("?");
 }
 

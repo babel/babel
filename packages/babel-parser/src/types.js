@@ -1186,7 +1186,7 @@ export type TsTupleType = TsTypeBase & {
 
 export type TsOptionalType = TsTypeBase & {
   type: "TSOptionalType",
-  innerType: TsType,
+  typeAnnotation: TsType,
 };
 
 export type TsUnionOrIntersectionType = TsUnionType | TsIntersectionType;

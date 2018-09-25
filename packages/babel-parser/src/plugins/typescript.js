@@ -513,7 +513,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const wrapperNode = this.startNode();
       const type = this.tsParseType();
       if (this.eat(tt.question)) {
-        wrapperNode.innerType = type;
+        wrapperNode.typeAnnotation = type;
         return this.finishNode(wrapperNode, "TSOptionalType");
       }
       return type;

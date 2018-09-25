@@ -214,9 +214,9 @@ defineType("TSTupleType", {
 
 defineType("TSOptionalType", {
   aliases: ["TSType"],
-  visitor: ["innerType"],
+  visitor: ["typeAnnotation"],
   fields: {
-    innerType: validateType("TSType"),
+    typeAnnotation: validateType("TSType"),
   },
 });
 

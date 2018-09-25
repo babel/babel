@@ -132,7 +132,7 @@
                           "column": 23
                         }
                       },
-                      "innerType": {
+                      "typeAnnotation": {
                         "type": "TSNumberKeyword",
                         "start": 16,
                         "end": 22,
@@ -162,7 +162,7 @@
                           "column": 43
                         }
                       },
-                      "innerType": {
+                      "typeAnnotation": {
                         "type": "TSParenthesizedType",
                         "start": 25,
                         "end": 42,
