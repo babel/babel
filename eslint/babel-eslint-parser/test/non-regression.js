@@ -1092,14 +1092,14 @@ describe("verify", () => {
       );
     });
 
-    it("cyclic type dependencies #485", () => {
+    it("cyclic type dependencies should not error #485", () => {
       verifyAndAssertMessages(
         unpad(`
           type Node<T> = { head: T, tail: Node<T> };
           type A = B[];
           type B = number;
         `),
-        { "no-use-before-define": 1 },
+        { "no-use-before-define": 0 },
         []
       );
     });
