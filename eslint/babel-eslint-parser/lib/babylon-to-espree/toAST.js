@@ -72,6 +72,15 @@ var astTransformVisitor = {
       delete node.bound;
     }
 
+    if (path.isTypeAlias()) {
+      node.type = "FunctionDeclaration";
+      node.generator = false;
+      node.async = false;
+      node.expression = false;
+      node.params = [];
+      node.body = node.right;
+    }
+
     // flow: prevent "no-undef"
     // for "Component" in: "let x: React.Component"
     if (path.isQualifiedTypeIdentifier()) {
