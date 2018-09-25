@@ -21,8 +21,8 @@
   "scripts": {
     "test": "npm run lint && npm run test-only",
     "test-only": "mocha && mocha --require test/fixtures/preprocess-to-patch.js",
-    "lint": "eslint index.js babylon-to-espree test",
-    "fix": "eslint index.js babylon-to-espree test --fix",
+    "lint": "eslint lib test",
+    "fix": "eslint lib test --fix",
     "precommit": "lint-staged",
     "preversion": "npm test",
     "changelog": "git log `git describe --tags --abbrev=0`..HEAD --pretty=format:' * %s (%an)' | grep -v 'Merge pull request'"
@@ -36,13 +36,16 @@
     "url": "https://github.com/babel/babel-eslint/issues"
   },
   "homepage": "https://github.com/babel/babel-eslint",
+  "peerDependencies": {
+    "eslint": ">= 4.12.1"
+  },
   "devDependencies": {
     "babel-eslint": "^8.2.6",
     "dedent": "^0.7.0",
-    "eslint": "npm:eslint@4.19.1",
+    "eslint": "^5.6.0",
     "eslint-config-babel": "^7.0.1",
     "eslint-plugin-flowtype": "^2.30.3",
-    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^2.1.2",
     "espree": "^3.5.2",
     "husky": "^1.0.0-rc.13",
