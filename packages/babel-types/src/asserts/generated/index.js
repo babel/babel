@@ -762,6 +762,9 @@ export function assertTSIndexSignature(node: Object, opts?: Object = {}): void {
 export function assertTSAnyKeyword(node: Object, opts?: Object = {}): void {
   assert("TSAnyKeyword", node, opts);
 }
+export function assertTSUnknownKeyword(node: Object, opts?: Object = {}): void {
+  assert("TSUnknownKeyword", node, opts);
+}
 export function assertTSNumberKeyword(node: Object, opts?: Object = {}): void {
   assert("TSNumberKeyword", node, opts);
 }
