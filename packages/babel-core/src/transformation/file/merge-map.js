@@ -94,7 +94,7 @@ export default function mergeSourceMap(
 }
 
 function makeMappingKey(item: { line: number, columnStart: number }) {
-  return JSON.stringify([item.line, item.columnStart]);
+  return `${item.line}/${item.columnStart}`;
 }
 
 function eachOverlappingGeneratedOutputRange(
