@@ -923,7 +923,19 @@ export default class ExpressionParser extends LValParser {
     if (isPrivate) {
       this.expectOnePlugin(["classPrivateProperties", "classPrivateMethods"]);
       const node = this.startNode();
+      const columnHashEnd = this.state.end;
       this.next();
+      const columnIdentifierStart = this.state.start;
+
+      const spacesBetweenHashAndIdentifier =
+        columnIdentifierStart - columnHashEnd;
+      if (spacesBetweenHashAndIdentifier != 0) {
+        this.raise(
+          columnIdentifierStart,
+          "Unexpected space between # and identifier",
+        );
+      }
+
       node.id = this.parseIdentifier(true);
       return this.finishNode(node, "PrivateName");
     } else {

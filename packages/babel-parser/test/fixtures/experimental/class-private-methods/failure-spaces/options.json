@@ -1,0 +1,4 @@
+{
+  "throws": "Unexpected space between # and identifier (2:5)",
+  "plugins": ["classPrivateMethods"]
+}
