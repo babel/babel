@@ -509,12 +509,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTupleElementType(): N.TsType {
-      // Maybe necessary for optional type
-      const wrapperNode = this.startNode();
       const type = this.tsParseType();
       if (this.eat(tt.question)) {
-        wrapperNode.typeAnnotation = type;
-        return this.finishNode(wrapperNode, "TSOptionalType");
+        const optionalTypeNode: N.TsOptionalType = this.startNodeAtNode(type);
+        optionalTypeNode.typeAnnotation = type;
+        return this.finishNode(optionalTypeNode, "TSOptionalType");
       }
       return type;
     }
