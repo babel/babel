@@ -1091,18 +1091,6 @@ describe("verify", () => {
         { "no-unused-vars": 1, "no-undef": 1 }
       );
     });
-
-    it("cyclic type dependencies should not error #485", () => {
-      verifyAndAssertMessages(
-        unpad(`
-          type Node<T> = { head: T, tail: Node<T> };
-          type A = B[];
-          type B = number;
-        `),
-        { "no-use-before-define": 0 },
-        []
-      );
-    });
   });
 
   it("class usage", () => {
