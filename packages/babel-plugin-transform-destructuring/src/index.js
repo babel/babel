@@ -44,13 +44,23 @@ export default declare((api, options) => {
     return false;
   }
 
-  const arrayUnpackVisitor = {
-    ReferencedIdentifier(path, state) {
-      if (state.bindings[path.node.name]) {
-        state.deopt = true;
-        path.stop();
-      }
-    },
+  const STOP_TRAVERSAL = {};
+
+  // NOTE: This visitor is meant to be used via t.traverse
+  const arrayUnpackVisitor = (node, ancestors, state) => {
+    if (!ancestors.length) {
+      // Top-level node: this is the array literal.
+      return;
+    }
+
+    if (
+      t.isIdentifier(node) &&
+      t.isReferenced(node, ancestors[ancestors.length - 1]) &&
+      state.bindings[node.name]
+    ) {
+      state.deopt = true;
+      throw STOP_TRAVERSAL;
+    }
   };
 
   class DestructuringTransformer {
@@ -282,7 +292,13 @@ export default declare((api, options) => {
       // deopt on reference to left side identifiers
       const bindings = t.getBindingIdentifiers(pattern);
       const state = { deopt: false, bindings };
-      this.scope.traverse(arr, arrayUnpackVisitor, state);
+
+      try {
+        t.traverse(arr, arrayUnpackVisitor, state);
+      } catch (e) {
+        if (e !== STOP_TRAVERSAL) throw e;
+      }
+
       return !state.deopt;
     }
 
