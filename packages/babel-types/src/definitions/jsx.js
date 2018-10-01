@@ -73,7 +73,7 @@ defineType("JSXExpressionContainer", {
   aliases: ["JSX", "Immutable"],
   fields: {
     expression: {
-      validate: assertNodeType("Expression"),
+      validate: assertNodeType("Expression", "JSXEmptyExpression"),
     },
   },
 });
