@@ -2047,6 +2047,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
+    parseMaybeDecoratorArguments(expr: N.Expression): N.Expression {
+      if (this.isRelational("<")) {
+        const typeArguments = this.tsParseTypeArguments();
+
+        if (this.match(tt.parenL)) {
+          const call = super.parseMaybeDecoratorArguments(expr);
+          call.typeParameters = typeArguments;
+          return call;
+        }
+
+        this.unexpected(this.state.start, tt.parenL);
+      }
+
+      return super.parseMaybeDecoratorArguments(expr);
+    }
+
     // === === === === === === === === === === === === === === === ===
     // Note: All below methods are duplicates of something in flow.js.
     // Not sure what the best way to combine these is.

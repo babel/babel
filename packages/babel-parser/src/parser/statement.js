@@ -305,20 +305,24 @@ export default class StatementParser extends ExpressionParser {
         }
       }
 
-      if (this.eat(tt.parenL)) {
-        const node = this.startNodeAt(startPos, startLoc);
-        node.callee = expr;
-        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
-        this.toReferencedList(node.arguments);
-        expr = this.finishNode(node, "CallExpression");
-      }
-
-      node.expression = expr;
+      node.expression = this.parseMaybeDecoratorArguments(expr);
       this.state.decoratorStack.pop();
     } else {
       node.expression = this.parseMaybeAssign();
     }
     return this.finishNode(node, "Decorator");
+  }
+
+  parseMaybeDecoratorArguments(expr: N.Expression): N.Expression {
+    if (this.eat(tt.parenL)) {
+      const node = this.startNodeAtNode(expr);
+      node.callee = expr;
+      node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+      this.toReferencedList(node.arguments);
+      return this.finishNode(node, "CallExpression");
+    }
+
+    return expr;
   }
 
   parseBreakContinueStatement(
