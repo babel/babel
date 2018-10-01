@@ -1368,10 +1368,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.finishNode(nonNullExpression, "TSNonNullExpression");
       }
 
-      // There are number of things we are going to "maybe" parse, like type arguments on
-      // tagged template expressions. If any of them fail, walk it back and continue.
-      const result = this.tsTryParseAndCatch(() => {
-        if (this.isRelational("<")) {
+      if (this.isRelational("<")) {
+        // tsTryParseAndCatch is expensive, so avoid if not necessary.
+        // There are number of things we are going to "maybe" parse, like type arguments on
+        // tagged template expressions. If any of them fail, walk it back and continue.
+        const result = this.tsTryParseAndCatch(() => {
           if (!noCalls && this.atPossibleAsync(base)) {
             // Almost certainly this is a generic async function `async <T>() => ...
             // But it might be a call with a type argument `async<T>();`
@@ -1409,12 +1410,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
               );
             }
           }
-        }
 
-        this.unexpected();
-      });
+          this.unexpected();
+        });
 
-      if (result) return result;
+        if (result) return result;
+      }
 
       return super.parseSubscript(base, startPos, startLoc, noCalls, state);
     }
