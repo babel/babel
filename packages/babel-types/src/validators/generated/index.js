@@ -2672,6 +2672,20 @@ export function isTSTupleType(node: Object, opts?: Object): boolean {
 
   return false;
 }
+export function isTSOptionalType(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSOptionalType") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSUnionType(node: Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -4149,6 +4163,7 @@ export function isTSType(node: Object, opts?: Object): boolean {
     "TSTypeLiteral" === nodeType ||
     "TSArrayType" === nodeType ||
     "TSTupleType" === nodeType ||
+    "TSOptionalType" === nodeType ||
     "TSUnionType" === nodeType ||
     "TSIntersectionType" === nodeType ||
     "TSConditionalType" === nodeType ||

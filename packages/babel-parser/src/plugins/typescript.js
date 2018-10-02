@@ -503,11 +503,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node: N.TsTupleType = this.startNode();
       node.elementTypes = this.tsParseBracketedList(
         "TupleElementTypes",
-        this.tsParseType.bind(this),
+        this.tsParseTupleElementType.bind(this),
         /* bracket */ true,
         /* skipFirstToken */ false,
       );
       return this.finishNode(node, "TSTupleType");
+    }
+
+    tsParseTupleElementType(): N.TsType {
+      const type = this.tsParseType();
+      if (this.eat(tt.question)) {
+        const optionalTypeNode: N.TsOptionalType = this.startNodeAtNode(type);
+        optionalTypeNode.typeAnnotation = type;
+        return this.finishNode(optionalTypeNode, "TSOptionalType");
+      }
+      return type;
     }
 
     tsParseParenthesizedType(): N.TsParenthesizedType {

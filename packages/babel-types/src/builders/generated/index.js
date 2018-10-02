@@ -793,6 +793,11 @@ export function TSTupleType(...args: Array<any>): Object {
 }
 export { TSTupleType as tsTupleType };
 export { TSTupleType as tSTupleType };
+export function TSOptionalType(...args: Array<any>): Object {
+  return builder("TSOptionalType", ...args);
+}
+export { TSOptionalType as tsOptionalType };
+export { TSOptionalType as tSOptionalType };
 export function TSUnionType(...args: Array<any>): Object {
   return builder("TSUnionType", ...args);
 }
