@@ -327,8 +327,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.expression = this.jsxParseEmptyExpression();
       } else {
         node.expression = this.parseExpression();
+
+        if (
+          node.expression.type === "SequenceExpression" &&
+          ((node.expression.extra &&
+            node.expression.extra.parenthesized === false) ||
+            node.expression.extra === undefined)
+        ) {
+          this.raise(
+            this.state.start,
+            "Sequence of values at JSX must be parenthesized.",
+          );
+        }
       }
+
       this.expect(tt.braceR);
+
       return this.finishNode(node, "JSXExpressionContainer");
     }
 
