@@ -1105,6 +1105,7 @@ export type TsType =
   | TsArrayType
   | TsTupleType
   | TsOptionalType
+  | TsVariadicType
   | TsUnionOrIntersectionType
   | TsConditionalType
   | TsInferType
@@ -1188,6 +1189,11 @@ export type TsTupleType = TsTypeBase & {
 export type TsOptionalType = TsTypeBase & {
   type: "TSOptionalType",
   typeAnnotation: TsType,
+};
+
+export type TsVariadicType = TsTypeBase & {
+  type: "TSVariadicType",
+  typeAnnotation: TSArrayType,
 };
 
 export type TsUnionOrIntersectionType = TsUnionType | TsIntersectionType;

@@ -511,7 +511,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTupleElementType(): N.TsType {
+      // parses `...TsType[]`
+      if (this.match(tt.ellipsis)) {
+        const variadicNode: N.TsVariadicType = this.startNode();
+        this.next(); // skips ellipsis
+        variadicNode.typeAnnotation = this.tsParseType();
+        if (variadicNode.typeAnnotation.type !== "TSArrayType") {
+          this.raise(
+            variadicNode.start,
+            "A rest element type must be an array type.",
+          );
+        }
+        return this.finishNode(variadicNode, "TSVariadicType");
+      }
+
       const type = this.tsParseType();
+      // parses `TsType?`
       if (this.eat(tt.question)) {
         const optionalTypeNode: N.TsOptionalType = this.startNodeAtNode(type);
         optionalTypeNode.typeAnnotation = type;
