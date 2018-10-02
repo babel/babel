@@ -1,4 +1,0 @@
-{
-  "sourceType": "module",
-  "plugins": ["typescript", "dynamicImport"]
-}
