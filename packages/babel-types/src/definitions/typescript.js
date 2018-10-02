@@ -221,6 +221,14 @@ defineType("TSOptionalType", {
   },
 });
 
+defineType("TSVariadicType", {
+  aliases: ["TSType"],
+  visitor: ["typeAnnotation"],
+  fields: {
+    typeAnnotation: validateType("TSArrayType"),
+  },
+});
+
 const unionOrIntersection = {
   aliases: ["TSType"],
   visitor: ["types"],
