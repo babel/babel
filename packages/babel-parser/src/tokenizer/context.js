@@ -106,7 +106,7 @@ tt.incDec.updateContext = function() {
   // tokExprAllowed stays unchanged
 };
 
-tt._function.updateContext = function(prevType) {
+tt._function.updateContext = tt._class.updateContext = function(prevType) {
   if (this.state.exprAllowed && !this.braceIsBlock(prevType)) {
     this.state.context.push(types.functionExpression);
   }
