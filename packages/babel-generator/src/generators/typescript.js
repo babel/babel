@@ -246,7 +246,7 @@ export function TSOptionalType(node) {
   this.token("?");
 }
 
-export function TSVariadicType(node) {
+export function TSRestType(node) {
   this.token("...");
   this.print(node.typeAnnotation, node);
 }

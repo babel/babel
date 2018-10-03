@@ -119,7 +119,7 @@
                       }
                     },
                     {
-                      "type": "TSVariadicType",
+                      "type": "TSRestType",
                       "start": 16,
                       "end": 27,
                       "loc": {

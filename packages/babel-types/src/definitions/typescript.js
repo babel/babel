@@ -221,7 +221,7 @@ defineType("TSOptionalType", {
   },
 });
 
-defineType("TSVariadicType", {
+defineType("TSRestType", {
   aliases: ["TSType"],
   visitor: ["typeAnnotation"],
   fields: {

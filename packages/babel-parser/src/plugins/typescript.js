@@ -513,10 +513,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseTupleElementType(): N.TsType {
       // parses `...TsType[]`
       if (this.match(tt.ellipsis)) {
-        const variadicNode: N.TsVariadicType = this.startNode();
+        const restNode: N.TsRestType = this.startNode();
         this.next(); // skips ellipsis
-        variadicNode.typeAnnotation = this.tsParseType();
-        return this.finishNode(variadicNode, "TSVariadicType");
+        restNode.typeAnnotation = this.tsParseType();
+        return this.finishNode(restNode, "TSRestType");
       }
 
       const type = this.tsParseType();
