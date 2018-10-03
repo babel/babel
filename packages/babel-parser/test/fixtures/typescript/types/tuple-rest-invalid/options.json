@@ -1,7 +1,0 @@
-{
-  "sourceType": "module",
-  "plugins": [
-    "typescript"
-  ],
-  "throws": "A rest element type must be an array type. (1:16)"
-}

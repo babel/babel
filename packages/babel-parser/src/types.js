@@ -1193,7 +1193,7 @@ export type TsOptionalType = TsTypeBase & {
 
 export type TsVariadicType = TsTypeBase & {
   type: "TSVariadicType",
-  typeAnnotation: TSArrayType,
+  typeAnnotation: TsType,
 };
 
 export type TsUnionOrIntersectionType = TsUnionType | TsIntersectionType;

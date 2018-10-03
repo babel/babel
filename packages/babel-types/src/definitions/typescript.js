@@ -225,7 +225,7 @@ defineType("TSVariadicType", {
   aliases: ["TSType"],
   visitor: ["typeAnnotation"],
   fields: {
-    typeAnnotation: validateType("TSArrayType"),
+    typeAnnotation: validateType("TSType"),
   },
 });
 

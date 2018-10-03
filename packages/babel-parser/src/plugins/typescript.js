@@ -516,12 +516,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const variadicNode: N.TsVariadicType = this.startNode();
         this.next(); // skips ellipsis
         variadicNode.typeAnnotation = this.tsParseType();
-        if (variadicNode.typeAnnotation.type !== "TSArrayType") {
-          this.raise(
-            variadicNode.start,
-            "A rest element type must be an array type.",
-          );
-        }
         return this.finishNode(variadicNode, "TSVariadicType");
       }
 
