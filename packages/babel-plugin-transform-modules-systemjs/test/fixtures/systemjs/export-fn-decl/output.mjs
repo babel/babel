@@ -6,6 +6,7 @@ System.register([], function (_export, _context) {
   function testFunc() {
     return 'test function';
   }
+
   _export("testFunc", testFunc);
 
   return {
