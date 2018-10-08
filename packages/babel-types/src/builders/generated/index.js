@@ -798,6 +798,11 @@ export function TSOptionalType(...args: Array<any>): Object {
 }
 export { TSOptionalType as tsOptionalType };
 export { TSOptionalType as tSOptionalType };
+export function TSRestType(...args: Array<any>): Object {
+  return builder("TSRestType", ...args);
+}
+export { TSRestType as tsRestType };
+export { TSRestType as tSRestType };
 export function TSUnionType(...args: Array<any>): Object {
   return builder("TSUnionType", ...args);
 }
