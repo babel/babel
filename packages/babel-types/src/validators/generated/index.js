@@ -2686,6 +2686,20 @@ export function isTSOptionalType(node: Object, opts?: Object): boolean {
 
   return false;
 }
+export function isTSRestType(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSRestType") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSUnionType(node: Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -4164,6 +4178,7 @@ export function isTSType(node: Object, opts?: Object): boolean {
     "TSArrayType" === nodeType ||
     "TSTupleType" === nodeType ||
     "TSOptionalType" === nodeType ||
+    "TSRestType" === nodeType ||
     "TSUnionType" === nodeType ||
     "TSIntersectionType" === nodeType ||
     "TSConditionalType" === nodeType ||
