@@ -507,6 +507,30 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         /* bracket */ true,
         /* skipFirstToken */ false,
       );
+
+      // Validate the elementTypes to ensure:
+      //   No mandatory elements may follow optional elements
+      //   If there's a rest element, it must be at the end of the tuple
+      let seenOptionalElement = false;
+      node.elementTypes.forEach((elementNode, i) => {
+        if (
+          elementNode.type === "TSRestType" &&
+          i !== node.elementTypes.length - 1
+        ) {
+          this.raise(
+            elementNode.start,
+            "A rest element must be last in a tuple type.",
+          );
+        } else if (elementNode.type === "TSOptionalType") {
+          seenOptionalElement = true;
+        } else if (seenOptionalElement) {
+          this.raise(
+            elementNode.start,
+            "A required element cannot follow an optional element.",
+          );
+        }
+      });
+
       return this.finishNode(node, "TSTupleType");
     }
 
