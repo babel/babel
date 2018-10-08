@@ -794,7 +794,12 @@ export default class ExpressionParser extends LValParser {
         ) {
           this.next();
           return this.parseFunction(node, false, false, true);
-        } else if (canBeArrow && id.name === "async" && this.match(tt.name)) {
+        } else if (
+          canBeArrow &&
+          !this.canInsertSemicolon() &&
+          id.name === "async" &&
+          this.match(tt.name)
+        ) {
           const oldYield = this.state.yieldInPossibleArrowParameters;
           this.state.yieldInPossibleArrowParameters = null;
           const params = [this.parseIdentifier()];
