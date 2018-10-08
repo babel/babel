@@ -246,6 +246,11 @@ export function TSOptionalType(node) {
   this.token("?");
 }
 
+export function TSRestType(node) {
+  this.token("...");
+  this.print(node.typeAnnotation, node);
+}
+
 export function TSUnionType(node) {
   this.tsPrintUnionOrIntersectionType(node, "|");
 }

@@ -511,7 +511,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseTupleElementType(): N.TsType {
+      // parses `...TsType[]`
+      if (this.match(tt.ellipsis)) {
+        const restNode: N.TsRestType = this.startNode();
+        this.next(); // skips ellipsis
+        restNode.typeAnnotation = this.tsParseType();
+        return this.finishNode(restNode, "TSRestType");
+      }
+
       const type = this.tsParseType();
+      // parses `TsType?`
       if (this.eat(tt.question)) {
         const optionalTypeNode: N.TsOptionalType = this.startNodeAtNode(type);
         optionalTypeNode.typeAnnotation = type;

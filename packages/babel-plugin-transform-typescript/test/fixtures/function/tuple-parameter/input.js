@@ -1,1 +1,1 @@
-function foo(...args: [number, string?]) {}
+function foo(...args: [number, string?, ...number[]]) {}
