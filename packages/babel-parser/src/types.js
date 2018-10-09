@@ -398,7 +398,7 @@ export type ObjectMemberBase = NodeBase & {
   decorators: $ReadOnlyArray<Decorator>,
   kind?: "get" | "set" | "method",
   method: boolean, // TODO: Not in spec
-
+  typeParameters?: ?TypeParameterInstantiationBase, // TODO: Not in spec
   variance?: ?FlowVariance, // TODO: Not in spec
 };
 
