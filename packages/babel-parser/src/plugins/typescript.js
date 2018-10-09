@@ -513,14 +513,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       //   If there's a rest element, it must be at the end of the tuple
       let seenOptionalElement = false;
       node.elementTypes.forEach((elementNode, i) => {
-        if (
-          elementNode.type === "TSRestType" &&
-          i !== node.elementTypes.length - 1
-        ) {
-          this.raise(
-            elementNode.start,
-            "A rest element must be last in a tuple type.",
-          );
+        if (elementNode.type === "TSRestType") {
+          if (i !== node.elementTypes.length - 1) {
+            this.raise(
+              elementNode.start,
+              "A rest element must be last in a tuple type.",
+            );
+          }
         } else if (elementNode.type === "TSOptionalType") {
           seenOptionalElement = true;
         } else if (seenOptionalElement) {
