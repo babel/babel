@@ -107,7 +107,7 @@ export function insertAfter(nodes) {
   ) {
     return parentPath.insertAfter(nodes);
   } else if (
-    this.isNodeType("Expression") ||
+    (this.isNodeType("Expression") && !this.isJSXElement()) ||
     (parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) {
