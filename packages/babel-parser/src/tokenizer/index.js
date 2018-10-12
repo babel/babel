@@ -1087,6 +1087,7 @@ export default class Tokenizer extends LocationParser {
         (ch === charCodes.lineSeparator || ch === charCodes.paragraphSeparator)
       ) {
         ++this.state.pos;
+        ++this.state.curLine;
       } else if (isNewLine(ch)) {
         this.raise(this.state.start, "Unterminated string constant");
       } else {
