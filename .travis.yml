@@ -2,6 +2,9 @@ git:
   depth: 5
 sudo: false
 language: node_js
+os:
+  - linux
+  - windows
 cache:
   yarn: true
 node_js:
