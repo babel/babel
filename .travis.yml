@@ -1,46 +1,49 @@
-git:
-  depth: 10
 sudo: false
+
+git:
+  depth: 5
+
 language: node_js
+
 cache:
   yarn: true
-  directories:
-    - node_modules
+
 node_js:
-  # We test the latest version on circleci
-  - '9'
-  - '8'
-  - '6'
+  - "10"
+  - "8"
+  - "6"
 
 env:
   global:
     - PATH=$HOME/.yarn/bin:$PATH
     - JOB=test
 
-before_install:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash
-
-install: yarn --ignore-engines
-
-before_script:
-  - 'if [ "$JOB" = "babel-parser-flow-tests" ]; then make bootstrap-flow; fi'
-  - 'if [ "$JOB" = "babel-parser-test262-tests" ]; then make bootstrap-test262; fi'
-
-script:
-  - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
-  - 'if [ "$JOB" = "lint" ]; then make lint && make flow; fi'
-  - 'if [ "$JOB" = "babel-parser-flow-tests" ]; then make test-flow-ci; fi'
-  - 'if [ "$JOB" = "babel-parser-test262-tests" ]; then make test-test262-ci; fi'
-
 matrix:
   fast_finish: true
   include:
-    - node_js: "node"
+    - node_js: "10"
       env: JOB=lint
-    - node_js: "node"
+    - node_js: "10"
       env: JOB=babel-parser-flow-tests
-    - node_js: "node"
+    - node_js: "10"
       env: JOB=babel-parser-test262-tests
+
+before_install:
+  - curl -o- -L https://yarnpkg.com/install.sh | bash
+
+install:
+  # the `make-ci` script runs this command already
+  - if [ "$JOB" != "test" ]; then yarn --ignore-engines; fi
+
+before_script:
+  - if [ "$JOB" = "babel-parser-flow-tests" ]; then make bootstrap-flow; fi
+  - if [ "$JOB" = "babel-parser-test262-tests" ]; then make bootstrap-test262; fi
+
+script:
+  - if [ "$JOB" = "test" ]; then make test-ci; fi
+  - if [ "$JOB" = "lint" ]; then make lint && make flow; fi
+  - if [ "$JOB" = "babel-parser-flow-tests" ]; then make test-flow-ci; fi
+  - if [ "$JOB" = "babel-parser-test262-tests" ]; then make test-test262-ci; fi
 
 notifications:
   slack:
