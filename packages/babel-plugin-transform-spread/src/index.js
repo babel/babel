@@ -62,12 +62,29 @@ export default declare((api, options) => {
           return;
         }
 
-        path.replaceWith(
+        const toConsumableArray = this.addHelper("toConsumableArray");
+
+        const wrapCallConsumableArray = args =>
+          t.callExpression(toConsumableArray, [args]);
+
+        const wrapCallConcat = (obj, args) =>
           t.callExpression(
-            t.memberExpression(first, t.identifier("concat")),
-            nodes,
-          ),
-        );
+            t.memberExpression(obj, t.identifier("concat")),
+            args,
+          );
+
+        const wrapConcatCall = (caller, args) => {
+          const argsMapped = args.map(i => {
+            return i.type === "Identifier" ? wrapCallConsumableArray(i) : i;
+          });
+          return wrapCallConcat(caller, argsMapped);
+        };
+
+        if (nodes.length === 0) {
+          path.replaceWith(wrapConcatCall(t.arrayExpression(), [first]));
+        } else {
+          path.replaceWith(wrapConcatCall(first, nodes));
+        }
       },
 
       CallExpression(path) {
