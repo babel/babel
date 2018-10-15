@@ -484,7 +484,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "InterfaceDeclaration");
     }
 
+    checkNotUnderscore(word: string) {
+      if (word === "_") {
+        throw this.unexpected(
+          null,
+          "`_` is only allowed as a type argument to call or new",
+        );
+      }
+    }
+
     checkReservedType(word: string, startLoc: number) {
+      this.checkNotUnderscore(word);
       if (primitiveTypes.indexOf(word) > -1) {
         this.raise(startLoc, `Cannot overwrite primitive type ${word}`);
       }
@@ -634,6 +644,27 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.expectRelational("<");
       while (!this.isRelational(">")) {
         node.params.push(this.flowParseType());
+        if (!this.isRelational(">")) {
+          this.expect(tt.comma);
+        }
+      }
+      this.expectRelational(">");
+
+      this.state.inType = oldInType;
+
+      return this.finishNode(node, "TypeParameterInstantiation");
+    }
+
+    flowParseTypeParameterInstantiationCallOrNew(): N.TypeParameterInstantiation {
+      const node = this.startNode();
+      const oldInType = this.state.inType;
+      node.params = [];
+
+      this.state.inType = true;
+
+      this.expectRelational("<");
+      while (!this.isRelational(">")) {
+        node.params.push(this.flowParseTypeOrImplicitInstantiation());
         if (!this.isRelational(">")) {
           this.expect(tt.comma);
         }
@@ -1116,6 +1147,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           return this.finishNode(node, "StringTypeAnnotation");
 
         default:
+          this.checkNotUnderscore(id.name);
           return this.flowParseGenericType(startPos, startLoc, id);
       }
     }
@@ -1357,6 +1389,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.state.exprAllowed =
         this.state.exprAllowed || this.state.noAnonFunctionType;
       return type;
+    }
+
+    flowParseTypeOrImplicitInstantiation(): N.FlowTypeAnnotation {
+      if (this.state.type === tt.name && this.state.value === "_") {
+        const startPos = this.state.start;
+        const startLoc = this.state.startLoc;
+        const node = this.parseIdentifier();
+        return this.flowParseGenericType(startPos, startLoc, node);
+      } else {
+        return this.flowParseType();
+      }
     }
 
     flowParseTypeAnnotation(): N.FlowTypeAnnotation {
@@ -2510,7 +2553,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.callee = base;
         const state = this.state.clone();
         try {
-          node.typeArguments = this.flowParseTypeParameterInstantiation();
+          node.typeArguments = this.flowParseTypeParameterInstantiationCallOrNew();
           this.expect(tt.parenL);
           node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
           if (subscriptState.optionalChainMember) {
@@ -2541,7 +2584,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.shouldParseTypes() && this.isRelational("<")) {
         const state = this.state.clone();
         try {
-          targs = this.flowParseTypeParameterInstantiation();
+          targs = this.flowParseTypeParameterInstantiationCallOrNew();
         } catch (e) {
           if (e instanceof SyntaxError) {
             this.state = state;

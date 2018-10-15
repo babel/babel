@@ -1,0 +1,8 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "jsx",
+    "flow"
+  ],
+  "throws": "`_` is only allowed as a type argument to call or new (2:13)"
+}
