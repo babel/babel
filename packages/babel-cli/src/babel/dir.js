@@ -13,6 +13,7 @@ const FILE_TYPE = Object.freeze({
   COMPILED: "COMPILED",
   IGNORED: "IGNORED",
   ERR_COMPILATION: "ERR_COMPILATION",
+  NO_REBUILD_NEEDED: "NO_REBUILD_NEEDED",
 });
 
 function outputFileSync(filePath: string, data: string | Buffer): void {
@@ -44,6 +45,8 @@ export default async function ({
     );
 
     const dest = getDest(relative, base);
+
+    if (noRebuildNeeded(src, dest)) return FILE_TYPE.NO_REBUILD_NEEDED;
 
     try {
       const res = await util.compile(src, {
@@ -90,6 +93,16 @@ export default async function ({
     return path.join(cliOptions.outDir, filename);
   }
 
+  function noRebuildNeeded(src: string, dest: string) {
+    if (!cliOptions.incremental) return false;
+    try {
+      const srcStat = fs.statSync(src);
+      const destStat = fs.statSync(dest);
+      if (srcStat.ctimeMs < destStat.ctimeMs) return true;
+    } catch (e) {}
+    return false;
+  }
+
   async function handleFile(src: string, base: string): Promise<boolean> {
     const written = await write(src, base);
 
@@ -99,8 +112,10 @@ export default async function ({
     ) {
       const filename = path.relative(base, src);
       const dest = getDest(filename, base);
+      if (noRebuildNeeded(src, dest)) return false;
       outputFileSync(dest, fs.readFileSync(src));
       util.chmod(src, dest);
+      return false;
     }
     return written === FILE_TYPE.COMPILED;
   }
