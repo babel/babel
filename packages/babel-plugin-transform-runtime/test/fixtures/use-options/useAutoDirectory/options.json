@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["transform-runtime", { "useAutoDirectory": true }],
+    "transform-classes"
+  ]
+}

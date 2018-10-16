@@ -1,0 +1,6 @@
+{
+  "name": "@babel/runtime-corejs2/helpers/auto/iterableToArray",
+  "private": true,
+  "main": "../../iterableToArray.js",
+  "module": "../../esm/iterableToArray.js"
+}

@@ -37,6 +37,7 @@ export default declare((api, options, dirname) => {
     helpers: useRuntimeHelpers = true,
     regenerator: useRuntimeRegenerator = true,
     useESModules = false,
+    useAutoDirectory = false,
     version: runtimeVersion = "7.0.0-beta.0",
     absoluteRuntime = false,
   } = options;
@@ -55,6 +56,14 @@ export default declare((api, options, dirname) => {
     throw new Error(
       "The 'useESModules' option must be undefined, or a boolean, or 'auto'.",
     );
+  }
+  if (useESModules && useAutoDirectory) {
+    throw new Error(
+      "'useESModules' & 'useAutoDirectory' options cannot be used at the same time.",
+    );
+  }
+  if (typeof useAutoDirectory !== "boolean") {
+    throw new Error("The 'useAutoDirectory' option must be a boolean.");
   }
   if (
     typeof absoluteRuntime !== "boolean" &&
@@ -156,8 +165,9 @@ export default declare((api, options, dirname) => {
           const blockHoist =
             isInteropHelper && !isModule(file.path) ? 4 : undefined;
 
-          const helpersDir =
-            esModules && file.path.node.sourceType === "module"
+          const helpersDir = useAutoDirectory
+            ? "helpers/auto"
+            : esModules && file.path.node.sourceType === "module"
               ? "helpers/esm"
               : "helpers";
 

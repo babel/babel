@@ -44,6 +44,7 @@ function writeCoreJS2(runtimeName) {
 function writeHelpers(runtimeName, { corejs } = {}) {
   writeHelperFiles(runtimeName, { corejs, esm: false });
   writeHelperFiles(runtimeName, { corejs, esm: true });
+  writeAutoHelperFiles(runtimeName);
 }
 
 function writeHelperFiles(runtimeName, { esm, corejs }) {
@@ -63,6 +64,34 @@ function writeHelperFiles(runtimeName, { esm, corejs }) {
         esm,
         corejs,
       })
+    );
+  }
+}
+
+function writeAutoHelperFiles(runtimeName) {
+  const pkgDirname = getRuntimeRoot(runtimeName);
+
+  for (const helperName of helpers.list) {
+    const filename = path.join(
+      pkgDirname,
+      "helpers",
+      "auto",
+      helperName,
+      "package.json"
+    );
+
+    outputFile(
+      filename,
+      JSON.stringify(
+        {
+          name: `${runtimeName}/helpers/auto/${helperName}`,
+          private: true,
+          main: `../../${helperName}.js`,
+          module: `../../esm/${helperName}.js`,
+        },
+        null,
+        2
+      ) + "\n"
     );
   }
 }
