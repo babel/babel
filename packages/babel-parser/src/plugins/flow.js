@@ -882,7 +882,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       this.expect(endDelim);
 
-      if (allowInexact || allowExact) {
+      /* The inexact flag should only be added on ObjectTypeAnnotations that
+       * are not the body of an interface, declare interface, or declare class.
+       * Since spreads are only allowed in objec types, checking that is
+       * sufficient here.
+       */
+      if (allowSpread) {
         nodeStart.inexact = inexact;
       }
 
