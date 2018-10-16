@@ -463,7 +463,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } while (this.eat(tt.comma));
       }
 
-      node.body = this.flowParseObjectType(isClass, false, false, isClass);
+      node.body = this.flowParseObjectType(
+        isClass,
+        false,
+        false,
+        isClass,
+        false,
+      );
     }
 
     flowParseInterfaceExtends(): N.FlowInterfaceExtends {
@@ -656,7 +662,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         } while (this.eat(tt.comma));
       }
 
-      node.body = this.flowParseObjectType(false, false, false, false);
+      node.body = this.flowParseObjectType(false, false, false, false, false);
 
       return this.finishNode(node, "InterfaceTypeAnnotation");
     }
@@ -759,6 +765,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       allowExact: boolean,
       allowSpread: boolean,
       allowProto: boolean,
+      allowInexact: boolean,
     ): N.FlowObjectTypeAnnotation {
       const oldInType = this.state.inType;
       this.state.inType = true;
@@ -772,6 +779,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       let endDelim;
       let exact;
+      let inexact = false;
       if (allowExact && this.match(tt.braceBarL)) {
         this.expect(tt.braceBarL);
         endDelim = tt.braceBarR;
@@ -852,22 +860,31 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             }
           }
 
-          nodeStart.properties.push(
-            this.flowParseObjectTypeProperty(
-              node,
-              isStatic,
-              protoStart,
-              variance,
-              kind,
-              allowSpread,
-            ),
+          const propOrInexact = this.flowParseObjectTypeProperty(
+            node,
+            isStatic,
+            protoStart,
+            variance,
+            kind,
+            allowSpread,
+            allowInexact,
           );
+
+          if (typeof propOrInexact === "boolean") {
+            inexact = inexact || propOrInexact;
+          } else {
+            nodeStart.properties.push(propOrInexact);
+          }
         }
 
         this.flowObjectTypeSemicolon();
       }
 
       this.expect(endDelim);
+
+      if (allowInexact || allowExact) {
+        nodeStart.inexact = inexact;
+      }
 
       const out = this.finishNode(nodeStart, "ObjectTypeAnnotation");
 
@@ -883,7 +900,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       variance: ?N.FlowVariance,
       kind: string,
       allowSpread: boolean,
-    ): N.FlowObjectTypeProperty | N.FlowObjectTypeSpreadProperty {
+      allowInexact: boolean,
+    ): (N.FlowObjectTypeProperty | N.FlowObjectTypeSpreadProperty) | boolean {
       if (this.match(tt.ellipsis)) {
         if (!allowSpread) {
           this.unexpected(
@@ -901,9 +919,42 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           );
         }
         this.expect(tt.ellipsis);
-        node.argument = this.flowParseType();
+        switch (this.state.type) {
+          case tt.comma:
+          case tt.semi:
+          case tt.braceR:
+          case tt.braceBarR:
+            this.flowObjectTypeSemicolon();
+            switch (this.state.type) {
+              case tt.braceR:
+                if (allowInexact) {
+                  return true;
+                } else {
+                  this.unexpected(
+                    null,
+                    "Explicit inexact syntax is only allowed inside inexact objects",
+                  );
+                }
+                return false;
+              case tt.braceBarR:
+                this.unexpected(
+                  null,
+                  "Explicit inexact syntax cannot appear inside an explicit exact object type",
+                );
+                return false;
 
-        return this.finishNode(node, "ObjectTypeSpreadProperty");
+              default:
+                this.unexpected(
+                  null,
+                  "Explicit inexact syntax must appear at the end of an inexact object",
+                );
+                return false;
+            }
+
+          default:
+            node.argument = this.flowParseType();
+            return this.finishNode(node, "ObjectTypeSpreadProperty");
+        }
       } else {
         node.key = this.flowParseObjectPropertyKey();
         node.static = isStatic;
@@ -1146,10 +1197,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           );
 
         case tt.braceL:
-          return this.flowParseObjectType(false, false, true, false);
+          return this.flowParseObjectType(false, false, true, false, true);
 
         case tt.braceBarL:
-          return this.flowParseObjectType(false, true, true, false);
+          return this.flowParseObjectType(false, true, true, false, false);
 
         case tt.bracketL:
           return this.flowParseTupleType();

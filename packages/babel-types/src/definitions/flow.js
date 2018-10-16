@@ -277,6 +277,7 @@ defineType("ObjectTypeAnnotation", {
       validate: assertValueType("boolean"),
       default: false,
     },
+    inexact: validateOptional(assertValueType("boolean")),
   },
 });
 
