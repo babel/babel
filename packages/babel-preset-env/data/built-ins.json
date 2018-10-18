@@ -1443,6 +1443,7 @@
     "firefox": "62",
     "safari": "12",
     "ios": "12",
-    "opera": "56"
+    "opera": "56",
+    "electron": "4"
   }
 }

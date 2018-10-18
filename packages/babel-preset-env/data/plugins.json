@@ -241,7 +241,7 @@
     "node": "8.3",
     "ios": "11.3",
     "opera": "47",
-    "electron": "2"
+    "electron": "2.1"
   },
   "proposal-unicode-property-regex": {
     "chrome": "64",
