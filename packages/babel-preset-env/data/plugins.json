@@ -230,6 +230,7 @@
     "chrome": "63",
     "firefox": "57",
     "safari": "12",
+    "ios": "12",
     "opera": "50",
     "electron": "3"
   },

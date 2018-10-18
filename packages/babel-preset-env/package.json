@@ -65,7 +65,7 @@
     "@babel/helper-fixtures": "^7.0.0",
     "@babel/helper-plugin-test-runner": "^7.0.0",
     "caniuse-db": "1.0.30000851",
-    "compat-table": "kangax/compat-table#ce39b436201a8d037cc1b943770a21e07769d684",
+    "compat-table": "kangax/compat-table#e3630aade96bbe1d228498c18168fe7f2cd15697",
     "electron-to-chromium": "1.3.55"
   }
 }
