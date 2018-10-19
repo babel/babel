@@ -84,8 +84,6 @@ function writeAutoHelperFiles(runtimeName) {
       filename,
       JSON.stringify(
         {
-          name: `${runtimeName}/helpers/auto/${helperName}`,
-          private: true,
           main: `../../${helperName}.js`,
           module: `../../esm/${helperName}.js`,
         },

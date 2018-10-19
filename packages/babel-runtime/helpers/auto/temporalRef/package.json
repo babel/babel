@@ -1,6 +1,4 @@
 {
-  "name": "@babel/runtime/helpers/auto/temporalRef",
-  "private": true,
   "main": "../../temporalRef.js",
   "module": "../../esm/temporalRef.js"
 }

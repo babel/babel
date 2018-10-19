@@ -1,6 +1,4 @@
 {
-  "name": "@babel/runtime/helpers/auto/toArray",
-  "private": true,
   "main": "../../toArray.js",
   "module": "../../esm/toArray.js"
 }
