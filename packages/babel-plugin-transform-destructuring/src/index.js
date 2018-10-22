@@ -538,7 +538,12 @@ export default declare((api, options) => {
         destructuring.init(node.left, ref || node.right);
 
         if (ref) {
-          nodes.push(t.expressionStatement(t.cloneNode(ref)));
+          if (path.parentPath.isArrowFunctionExpression()) {
+            path.replaceWith(t.blockStatement([]));
+            nodes.push(t.returnStatement(t.cloneNode(ref)));
+          } else {
+            nodes.push(t.expressionStatement(t.cloneNode(ref)));
+          }
         }
 
         path.replaceWithMultiple(nodes);
