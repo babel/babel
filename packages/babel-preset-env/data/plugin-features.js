@@ -57,7 +57,11 @@ const es = {
     features: "spread syntax for iterable objects",
   },
   "transform-parameters": {
-    features: ["default function parameters", "rest parameters"],
+    features: [
+      "default function parameters",
+      "rest parameters",
+      "destructuring, parameters / defaults, arrow function",
+    ],
   },
   "transform-destructuring": {
     features: [
