@@ -44,6 +44,11 @@ export default declare((api, options) => {
           }
 
           const block = t.toBlock(body);
+
+          if (path.get("body").scope.hasOwnBinding(right.name)) {
+            block.body = [t.blockStatement(block.body)];
+          }
+
           block.body.unshift(assignment);
 
           path.replaceWith(
@@ -139,6 +144,10 @@ export default declare((api, options) => {
 
     t.inherits(loop, node);
     t.ensureBlock(loop);
+
+    if (path.get("body").scope.hasOwnBinding(right.name)) {
+      loop.body.body = [t.blockStatement(loop.body.body)];
+    }
 
     const iterationValue = t.memberExpression(
       t.cloneNode(right),
