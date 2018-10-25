@@ -289,7 +289,7 @@ const loopVisitor = {
   },
 
   "BreakStatement|ContinueStatement|ReturnStatement"(path, state) {
-    const { node, parent, scope } = path;
+    const { node, scope } = path;
     if (node[this.LOOP_IGNORE]) return;
 
     let replace;
@@ -309,7 +309,7 @@ const loopVisitor = {
         if (state.ignoreLabeless) return;
 
         // break statements mean something different in this context
-        if (t.isBreakStatement(node) && t.isSwitchCase(parent)) return;
+        if (t.isBreakStatement(node) && state.inSwitchCase) return;
       }
 
       state.hasBreakContinue = true;
