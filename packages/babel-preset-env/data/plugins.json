@@ -230,6 +230,7 @@
     "chrome": "63",
     "firefox": "57",
     "safari": "12",
+    "ios": "12",
     "opera": "50",
     "electron": "3"
   },
@@ -240,7 +241,7 @@
     "node": "8.3",
     "ios": "11.3",
     "opera": "47",
-    "electron": "2"
+    "electron": "2.1"
   },
   "proposal-unicode-property-regex": {
     "chrome": "64",

@@ -837,6 +837,7 @@
   },
   "es7.promise.finally": {
     "chrome": "63",
+    "edge": "18",
     "firefox": "58",
     "safari": "11.1",
     "ios": "11.3",
@@ -1059,6 +1060,7 @@
     "chrome": "63",
     "firefox": "57",
     "safari": "12",
+    "ios": "12",
     "opera": "50",
     "electron": "3"
   },
@@ -1440,6 +1442,8 @@
     "chrome": "69",
     "firefox": "62",
     "safari": "12",
-    "opera": "56"
+    "ios": "12",
+    "opera": "56",
+    "electron": "4"
   }
 }
