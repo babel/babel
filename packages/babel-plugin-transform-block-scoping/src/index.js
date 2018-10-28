@@ -460,7 +460,9 @@ class BlockScoping {
 
   remap() {
     const letRefs = this.letReferences;
+    const outsideLetRefs = this.outsideLetReferences;
     const scope = this.scope;
+    const blockPathScope = this.blockPath.scope;
 
     // alright, so since we aren't wrapping this block in a closure
     // we have to check if any of our let variables collide with
@@ -481,9 +483,18 @@ class BlockScoping {
           scope.rename(ref.name);
         }
 
-        if (this.blockPath.scope.hasOwnBinding(key)) {
-          this.blockPath.scope.rename(ref.name);
+        if (blockPathScope.hasOwnBinding(key)) {
+          blockPathScope.rename(ref.name);
         }
+      }
+    }
+
+    for (const key in outsideLetRefs) {
+      const ref = letRefs[key];
+      // check for collisions with a for loop's init variable and the enclosing scope's bindings
+      // https://github.com/babel/babel/issues/8498
+      if (isInLoop(this.blockPath) && blockPathScope.hasOwnBinding(key)) {
+        blockPathScope.rename(ref.name);
       }
     }
   }
