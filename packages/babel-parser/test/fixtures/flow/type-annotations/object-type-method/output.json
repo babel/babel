@@ -151,7 +151,8 @@
           ],
           "indexers": [],
           "internalSlots": [],
-          "exact": false
+          "exact": false,
+          "inexact": false
         }
       },
       {
@@ -309,7 +310,8 @@
           ],
           "indexers": [],
           "internalSlots": [],
-          "exact": false
+          "exact": false,
+          "inexact": false
         }
       },
       {
@@ -433,7 +435,8 @@
           ],
           "indexers": [],
           "internalSlots": [],
-          "exact": false
+          "exact": false,
+          "inexact": false
         }
       },
       {
@@ -590,7 +593,8 @@
           ],
           "indexers": [],
           "internalSlots": [],
-          "exact": false
+          "exact": false,
+          "inexact": false
         }
       },
       {
@@ -693,7 +697,8 @@
           "properties": [],
           "indexers": [],
           "internalSlots": [],
-          "exact": false
+          "exact": false,
+          "inexact": false
         }
       },
       {
@@ -896,7 +901,8 @@
           "properties": [],
           "indexers": [],
           "internalSlots": [],
-          "exact": false
+          "exact": false,
+          "inexact": false
         }
       },
       {
