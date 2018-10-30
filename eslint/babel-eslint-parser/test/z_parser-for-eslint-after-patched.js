@@ -4,7 +4,7 @@ const eslint = require("eslint");
 const assert = require("assert");
 const babelEslint = require("..");
 const espree = require("espree");
-var assertImplementsAST = require("./fixtures/assert-implements-ast");
+const assertImplementsAST = require("./fixtures/assert-implements-ast");
 
 describe("https://github.com/babel/babel-eslint/issues/558", () => {
   it("don't crash with eslint-plugin-import", () => {

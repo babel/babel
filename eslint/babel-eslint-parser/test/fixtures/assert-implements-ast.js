@@ -1,3 +1,5 @@
+"use strict"
+
 // Checks if the source ast implements the target ast. Ignores extra keys on source ast
 module.exports = function assertImplementsAST(target, source, path) {
   if (!path) {
@@ -5,13 +7,13 @@ module.exports = function assertImplementsAST(target, source, path) {
   }
 
   function error(text) {
-    var err = new Error(`At ${path.join(".")}: ${text}:`);
+    const err = new Error(`At ${path.join(".")}: ${text}:`);
     err.depth = path.length + 1;
     throw err;
   }
 
-  var typeA = target === null ? "null" : typeof target;
-  var typeB = source === null ? "null" : typeof source;
+  const typeA = target === null ? "null" : typeof target;
+  const typeB = source === null ? "null" : typeof source;
   if (typeA !== typeB) {
     error(
       `have different types (${typeA} !== ${typeB}) (${target} !== ${source})`
@@ -26,9 +28,9 @@ module.exports = function assertImplementsAST(target, source, path) {
         .name} !== ${source.constructor.name}`
     );
   } else if (typeA === "object") {
-    var keysTarget = Object.keys(target);
-    for (var i in keysTarget) {
-      var key = keysTarget[i];
+    const keysTarget = Object.keys(target);
+    for (const i in keysTarget) {
+      const key = keysTarget[i];
       path.push(key);
       assertImplementsAST(target[key], source[key], path);
       path.pop();

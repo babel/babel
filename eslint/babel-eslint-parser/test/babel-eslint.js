@@ -1,10 +1,12 @@
-var assert = require("assert");
-var babelEslint = require("..");
-var espree = require("espree");
-var escope = require("eslint-scope");
-var util = require("util");
-var unpad = require("dedent");
-var assertImplementsAST = require("./fixtures/assert-implements-ast");
+"use strict";
+
+const assert = require("assert");
+const babelEslint = require("..");
+const espree = require("espree");
+const escope = require("eslint-scope");
+const util = require("util");
+const unpad = require("dedent");
+const assertImplementsAST = require("./fixtures/assert-implements-ast");
 
 function lookup(obj, keypath, backwardsDepth) {
   if (!keypath) {
@@ -21,7 +23,7 @@ function lookup(obj, keypath, backwardsDepth) {
 
 function parseAndAssertSame(code) {
   code = unpad(code);
-  var esAST = espree.parse(code, {
+  const esAST = espree.parse(code, {
     ecmaFeatures: {
       // enable JSX parsing
       jsx: true,
@@ -40,14 +42,14 @@ function parseAndAssertSame(code) {
     ecmaVersion: 2018,
     sourceType: "module",
   });
-  var babylonAST = babelEslint.parseForESLint(code, {
+  const babylonAST = babelEslint.parseForESLint(code, {
     eslintVisitorKeys: true,
     eslintScopeManager: true,
   }).ast;
   try {
     assertImplementsAST(esAST, babylonAST);
   } catch (err) {
-    var traversal = err.message.slice(3, err.message.indexOf(":"));
+    const traversal = err.message.slice(3, err.message.indexOf(":"));
     err.message += unpad(`
       espree:
       ${util.inspect(lookup(esAST, traversal, 2), {
@@ -68,7 +70,7 @@ function parseAndAssertSame(code) {
 describe("babylon-to-espree", () => {
   describe("compatibility", () => {
     it("should allow ast.analyze to be called without options", function() {
-      var esAST = babelEslint.parseForESLint("`test`", {
+      const esAST = babelEslint.parseForESLint("`test`", {
         eslintScopeManager: true,
         eslintVisitorKeys: true,
       }).ast;
@@ -271,7 +273,7 @@ describe("babylon-to-espree", () => {
   // Espree doesn't support the optional chaining operator yet
   it("optional chaining operator (token)", () => {
     const code = "foo?.bar";
-    var babylonAST = babelEslint.parseForESLint(code, {
+    const babylonAST = babelEslint.parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
     }).ast;
@@ -281,7 +283,7 @@ describe("babylon-to-espree", () => {
   // Espree doesn't support the nullish coalescing operator yet
   it("nullish coalescing operator (token)", () => {
     const code = "foo ?? bar";
-    var babylonAST = babelEslint.parseForESLint(code, {
+    const babylonAST = babelEslint.parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
     }).ast;
@@ -291,7 +293,7 @@ describe("babylon-to-espree", () => {
   // Espree doesn't support the pipeline operator yet
   it("pipeline operator (token)", () => {
     const code = "foo |> bar";
-    var babylonAST = babelEslint.parseForESLint(code, {
+    const babylonAST = babelEslint.parseForESLint(code, {
       eslintVisitorKeys: true,
       eslintScopeManager: true,
     }).ast;

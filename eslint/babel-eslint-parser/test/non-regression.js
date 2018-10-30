@@ -1,7 +1,7 @@
-/*eslint-env mocha*/
 "use strict";
-var eslint = require("eslint");
-var unpad = require("dedent");
+
+const eslint = require("eslint");
+const unpad = require("dedent");
 
 function verifyAndAssertMessagesWithSpecificESLint(
   code,
@@ -11,7 +11,7 @@ function verifyAndAssertMessagesWithSpecificESLint(
   overrideConfig,
   linter
 ) {
-  var config = {
+  const config = {
     parser: require.resolve(".."),
     rules,
     env: {
@@ -30,12 +30,12 @@ function verifyAndAssertMessagesWithSpecificESLint(
   };
 
   if (overrideConfig) {
-    for (var key in overrideConfig) {
+    for (const key in overrideConfig) {
       config[key] = overrideConfig[key];
     }
   }
 
-  var messages = linter.verify(code, config);
+  const messages = linter.verify(code, config);
 
   if (messages.length !== expectedMessages.length) {
     throw new Error(
@@ -46,7 +46,7 @@ function verifyAndAssertMessagesWithSpecificESLint(
   }
 
   messages.forEach((message, i) => {
-    var formatedMessage = `${message.line}:${message.column} ${
+    const formatedMessage = `${message.line}:${message.column} ${
       message.message
     }${message.ruleId ? ` ${message.ruleId}` : ""}`;
     if (formatedMessage !== expectedMessages[i]) {

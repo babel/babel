@@ -1,16 +1,18 @@
-var assert = require("assert");
-var eslint = require("eslint");
-var fs = require("fs");
-var path = require("path");
+"use strict";
 
-var paths = {
+const assert = require("assert");
+const eslint = require("eslint");
+const fs = require("fs");
+const path = require("path");
+
+const paths = {
   fixtures: path.join(__dirname, "fixtures", "rules"),
 };
 
-var encoding = "utf8";
-var errorLevel = 2;
+const encoding = "utf8";
+const errorLevel = 2;
 
-var baseEslintOpts = {
+const baseEslintOpts = {
   parser: require.resolve(".."),
   parserOptions: {
     sourceType: "script",
@@ -48,10 +50,10 @@ describe("Rules:", () => {
 // describe
 
 function strictSuite() {
-  var ruleId = "strict";
+  const ruleId = "strict";
 
   describe("when set to 'never'", () => {
-    var eslintOpts = Object.assign({}, baseEslintOpts, {
+    const eslintOpts = Object.assign({}, baseEslintOpts, {
       rules: {},
     });
     eslintOpts.rules[ruleId] = [errorLevel, "never"];
@@ -76,7 +78,7 @@ function strictSuite() {
   // describe
 
   describe("when set to 'global'", () => {
-    var eslintOpts = Object.assign({}, baseEslintOpts, {
+    const eslintOpts = Object.assign({}, baseEslintOpts, {
       rules: {},
     });
     eslintOpts.rules[ruleId] = [errorLevel, "global"];
@@ -152,7 +154,7 @@ function strictSuite() {
   // describe
 
   describe("when set to 'function'", () => {
-    var eslintOpts = Object.assign({}, baseEslintOpts, {
+    const eslintOpts = Object.assign({}, baseEslintOpts, {
       rules: {},
     });
     eslintOpts.rules[ruleId] = [errorLevel, "function"];

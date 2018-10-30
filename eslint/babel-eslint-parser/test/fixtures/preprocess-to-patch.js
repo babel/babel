@@ -1,4 +1,5 @@
 "use strict"
+
 const babelEslint = require("../..")
 
 // Apply monkeypatch to eslint-scope.

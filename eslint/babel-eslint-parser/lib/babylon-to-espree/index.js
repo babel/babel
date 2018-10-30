@@ -1,9 +1,9 @@
 "use strict";
 
-var attachComments = require("./attachComments");
-var convertComments = require("./convertComments");
-var toTokens = require("./toTokens");
-var toAST = require("./toAST");
+const attachComments = require("./attachComments");
+const convertComments = require("./convertComments");
+const toTokens = require("./toTokens");
+const toAST = require("./toAST");
 
 module.exports = function(ast, traverse, tt, code) {
   // convert tokens

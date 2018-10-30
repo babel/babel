@@ -1,16 +1,16 @@
 "use strict";
 
-var babylonToEspree = require("./babylon-to-espree");
-var parse = require("@babel/parser").parse;
-var tt = require("@babel/parser").tokTypes;
-var traverse = require("@babel/traverse").default;
-var codeFrameColumns = require("@babel/code-frame").codeFrameColumns;
+const babylonToEspree = require("./babylon-to-espree");
+const parse = require("@babel/parser").parse;
+const tt = require("@babel/parser").tokTypes;
+const traverse = require("@babel/traverse").default;
+const codeFrameColumns = require("@babel/code-frame").codeFrameColumns;
 
 module.exports = function(code, options) {
   const legacyDecorators =
     options.ecmaFeatures && options.ecmaFeatures.legacyDecorators;
 
-  var opts = {
+  const opts = {
     codeFrame: options.hasOwnProperty("codeFrame") ? options.codeFrame : true,
     sourceType: options.sourceType,
     allowImportExportEverywhere: options.allowImportExportEverywhere, // consistent with espree
@@ -51,7 +51,7 @@ module.exports = function(code, options) {
     ],
   };
 
-  var ast;
+  let ast;
   try {
     ast = parse(code, opts);
   } catch (err) {

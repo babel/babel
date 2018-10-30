@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = function(token, tt, source) {
-  var type = token.type;
+  const type = token.type;
   token.range = [token.start, token.end];
 
   if (type === tt.name) {
@@ -72,7 +72,7 @@ module.exports = function(token, tt, source) {
     token.value = source.slice(token.start, token.end);
   } else if (type === tt.regexp) {
     token.type = "RegularExpression";
-    var value = token.value;
+    const value = token.value;
     token.regex = {
       pattern: value.pattern,
       flags: value.flags,

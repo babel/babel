@@ -5,12 +5,22 @@ module.exports = {
     "prettier"
   ],
   rules: {
-    "no-var": 0,
-    "max-len": 0,
+    "max-len": "off",
+    "strict": "error",
     "prettier/prettier": "error",
   },
   env: {
     node: true,
-    mocha: true
-  }
+  },
+  parserOptions: {
+    sourceType: "script",
+  },
+  overrides: [
+    {
+      files: ["test/**/*"],
+      env: {
+        mocha: true
+      }
+    }
+  ]
 };

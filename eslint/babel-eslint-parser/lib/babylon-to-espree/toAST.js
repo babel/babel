@@ -1,10 +1,10 @@
 "use strict";
 
-var t = require("@babel/types");
-var convertComments = require("./convertComments");
+const t = require("@babel/types");
+const convertComments = require("./convertComments");
 
 module.exports = function(ast, traverse, code) {
-  var state = { source: code };
+  const state = { source: code };
 
   // Monkey patch visitor keys in order to be able to traverse the estree nodes
   t.VISITOR_KEYS.Property = t.VISITOR_KEYS.ObjectProperty;
@@ -22,10 +22,10 @@ module.exports = function(ast, traverse, code) {
   delete t.VISITOR_KEYS.MethodDefinition;
 };
 
-var astTransformVisitor = {
+const astTransformVisitor = {
   noScope: true,
   enter(path) {
-    var node = path.node;
+    const node = path.node;
 
     // private var to track original node type
     node._babelType = node.type;
@@ -44,7 +44,7 @@ var astTransformVisitor = {
     }
   },
   exit(path) {
-    var node = path.node;
+    const node = path.node;
 
     if (path.isJSXText()) {
       node.type = "Literal";
@@ -98,8 +98,8 @@ var astTransformVisitor = {
 
     // template string range fixes
     if (path.isTemplateLiteral()) {
-      for (var j = 0; j < node.quasis.length; j++) {
-        var q = node.quasis[j];
+      for (let j = 0; j < node.quasis.length; j++) {
+        const q = node.quasis[j];
         q.range[0] -= 1;
         if (q.tail) {
           q.range[1] += 1;

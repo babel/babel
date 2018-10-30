@@ -1,8 +1,8 @@
 "use strict";
 
 module.exports = function(comments) {
-  for (var i = 0; i < comments.length; i++) {
-    var comment = comments[i];
+  for (let i = 0; i < comments.length; i++) {
+    const comment = comments[i];
     if (comment.type === "CommentBlock") {
       comment.type = "Block";
     } else if (comment.type === "CommentLine") {
