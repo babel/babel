@@ -2151,6 +2151,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     toReferencedList(
       exprList: $ReadOnlyArray<?N.Expression>,
+      isInParens?: boolean, // eslint-disable-line no-unused-vars
     ): $ReadOnlyArray<?N.Expression> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
