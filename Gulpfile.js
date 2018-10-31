@@ -226,7 +226,8 @@ function buildRollup(packages) {
               rollupBabel({
                 envName: "rollup",
                 babelrc: false,
-                extends: "./.babelrc.js",
+                exclude: "**/node_modules/**",
+                extends: "./babel.config.js",
               }),
               rollupNodeGlobals({ sourceMap: false }),
               rollupCommonJs(),
@@ -249,8 +250,6 @@ function buildRollup(packages) {
     )
   );
 }
-
-gulp.task("default", ["build"]);
 
 // These are bundles which are placed in lib and
 // serve as the commonjs npm package source
@@ -307,6 +306,8 @@ gulp.task(
     );
   })
 );
+
+gulp.task("default", gulp.series("build"));
 
 registerStandalonePackageTask(
   gulp,
