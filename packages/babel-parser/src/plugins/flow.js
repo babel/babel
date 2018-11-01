@@ -638,12 +638,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.state.inType = true;
 
       this.expectRelational("<");
+      const oldNoAnonFunctionType = this.state.noAnonFunctionType;
+      this.state.noAnonFunctionType = false;
       while (!this.isRelational(">")) {
         node.params.push(this.flowParseType());
         if (!this.isRelational(">")) {
           this.expect(tt.comma);
         }
       }
+      this.state.noAnonFunctionType = oldNoAnonFunctionType;
       this.expectRelational(">");
 
       this.state.inType = oldInType;
