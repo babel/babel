@@ -861,8 +861,13 @@ helpers.arrayWithHoles = helper("7.0.0-beta.0")`
 helpers.iterableToArray = helper("7.0.0-beta.0")`
   export default function _iterableToArray(iter) {
     if (
-      Symbol.iterator in Object(iter) ||
-      Object.prototype.toString.call(iter) === "[object Arguments]"
+      Array.isArray(iter)
+      || typeof iter === 'string'
+      || (typeof Symbol === 'function' && Symbol.iterator in Object(iter))
+      || (iter && 'length' in iter)
+      || (typeof Map !== 'undefined' && iter instanceof Map)
+      || (typeof Set !== 'undefined' && iter instanceof Set)
+      || Object.prototype.toString.call(iter) === "[object Arguments]"
     ) return Array.from(iter);
   }
 `;
@@ -1562,7 +1567,9 @@ helpers.decorate = helper("7.1.5")`
       value: "Descriptor",
       configurable: true,
     };
-    Object.defineProperty(obj, Symbol.toStringTag, desc);
+
+    if (typeof Symbol === 'function' && Symbol.toStringTag)
+      Object.defineProperty(obj, Symbol.toStringTag, desc);
 
     if (element.kind === "field") obj.initializer = element.initializer;
 
@@ -1675,7 +1682,9 @@ helpers.decorate = helper("7.1.5")`
     };
 
     var desc = { value: "Descriptor", configurable: true };
-    Object.defineProperty(obj, Symbol.toStringTag, desc);
+
+    if (typeof Symbol === 'function' && Symbol.toStringTag)
+      Object.defineProperty(obj, Symbol.toStringTag, desc);
 
     return obj;
   }
