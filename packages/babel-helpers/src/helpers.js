@@ -865,8 +865,8 @@ helpers.iterableToArray = helper("7.0.0-beta.0")`
       || typeof iter === 'string'
       || (typeof Symbol === 'function' && Symbol.iterator in Object(iter))
       || (iter && 'length' in iter)
-      || (typeof Map !== 'undefined' && iter instanceof Map)
-      || (typeof Set !== 'undefined' && iter instanceof Set)
+      || Object.prototype.toString.call(iter) === "[object Map]"
+      || Object.prototype.toString.call(iter) === "[object Set]"
       || Object.prototype.toString.call(iter) === "[object Arguments]"
     ) return Array.from(iter);
   }
