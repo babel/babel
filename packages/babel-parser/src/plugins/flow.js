@@ -23,6 +23,9 @@ const primitiveTypes = [
   "true",
   "typeof",
   "void",
+  "interface",
+  "extends",
+  "_",
 ];
 
 function isEsModuleType(bodyElement: N.Node): boolean {
