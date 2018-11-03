@@ -402,7 +402,7 @@ export default class Tokenizer extends LocationParser {
     } else {
       this.raise(
         this.state.pos,
-        `Unexpected character '${codePointToString(code)}'`,
+        `Unexpected character '${String.fromCodePoint(code)}'`,
       );
     }
   }
