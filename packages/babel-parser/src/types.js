@@ -592,6 +592,12 @@ export type PipelineTopicBody = NodeBase & {
   expression: Expression,
 };
 
+export type PipelineStyle =
+  | "PipelineBareFunction"
+  | "PipelineBareConstructor"
+  | "PipelineBareAwaitedFunction"
+  | "PipelineTopicExpression";
+
 // Template Literals
 
 export type TemplateLiteral = NodeBase & {

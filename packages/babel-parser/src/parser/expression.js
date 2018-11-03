@@ -2071,7 +2071,7 @@ export default class ExpressionParser extends LValParser {
 
   checkSmartPipelineBodyEarlyErrors(
     childExpression: N.Expression,
-    pipelineStyle: PipelineStyle,
+    pipelineStyle: N.PipelineStyle,
     startPos: number,
   ): void {
     if (this.match(tt.arrow)) {
@@ -2094,7 +2094,7 @@ export default class ExpressionParser extends LValParser {
 
   parseSmartPipelineBodyInStyle(
     childExpression: N.Expression,
-    pipelineStyle: PipelineStyle,
+    pipelineStyle: N.PipelineStyle,
     startPos: number,
     startLoc: Position,
   ): N.PipelineBody {
@@ -2124,7 +2124,7 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(bodyNode, pipelineStyle);
   }
 
-  checkSmartPipelineBodyStyle(expression: N.Expression): PipelineStyle {
+  checkSmartPipelineBodyStyle(expression: N.Expression): N.PipelineStyle {
     switch (expression.type) {
       default:
         return this.isSimpleReference(expression)
@@ -2208,9 +2208,3 @@ export default class ExpressionParser extends LValParser {
     );
   }
 }
-
-type PipelineStyle =
-  | "PipelineBareFunction"
-  | "PipelineBareConstructor"
-  | "PipelineBareAwaitedFunction"
-  | "PipelineTopicExpression";
