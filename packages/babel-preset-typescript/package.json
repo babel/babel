@@ -1,23 +1,26 @@
 {
   "name": "@babel/preset-typescript",
-  "version": "7.0.0-beta.52",
+  "version": "7.1.0",
   "description": "Babel preset for TypeScript.",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-preset-typescript",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "keywords": [
     "babel-preset",
     "typescript"
   ],
   "dependencies": {
-    "@babel/helper-plugin-utils": "7.0.0-beta.52",
-    "@babel/plugin-transform-typescript": "7.0.0-beta.52"
+    "@babel/helper-plugin-utils": "^7.0.0",
+    "@babel/plugin-transform-typescript": "^7.1.0"
   },
   "peerDependencies": {
-    "@babel/core": ">=7.0.0-beta.50 <7.0.0-rc.0"
+    "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.52",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.52"
+    "@babel/core": "^7.0.0",
+    "@babel/helper-plugin-test-runner": "^7.0.0"
   }
 }

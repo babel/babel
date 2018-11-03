@@ -133,7 +133,7 @@ export function arrowFunctionToExpression({
     this.get("body").unshiftContainer(
       "body",
       t.expressionStatement(
-        t.callExpression(this.hub.file.addHelper("newArrowCheck"), [
+        t.callExpression(this.hub.addHelper("newArrowCheck"), [
           t.thisExpression(),
           checkBinding
             ? t.identifier(checkBinding.name)

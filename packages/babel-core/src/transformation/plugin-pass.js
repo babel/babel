@@ -31,6 +31,10 @@ export default class PluginPass {
     return this._map.get(key);
   }
 
+  availableHelper(name: string, versionRange: ?string) {
+    return this.file.availableHelper(name, versionRange);
+  }
+
   addHelper(name: string) {
     return this.file.addHelper(name);
   }

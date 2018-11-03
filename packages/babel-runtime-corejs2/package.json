@@ -1,0 +1,15 @@
+{
+  "name": "@babel/runtime-corejs2",
+  "version": "7.1.2",
+  "description": "babel's modular runtime helpers with core-js@2 polyfilling",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-runtime-corejs2",
+  "author": "Sebastian McKenzie <sebmck@gmail.com>",
+  "dependencies": {
+    "core-js": "^2.5.7",
+    "regenerator-runtime": "^0.12.0"
+  }
+}

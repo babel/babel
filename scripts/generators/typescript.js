@@ -81,8 +81,12 @@ for (const type in t.NODE_FIELDS) {
       );
     }
 
-    if (t.isValidIdentifier(fieldName)) {
+    const alphaNumeric = /^\w+$/;
+
+    if (t.isValidIdentifier(fieldName) || alphaNumeric.test(fieldName)) {
       struct.push(`${fieldName}: ${typeAnnotation};`);
+    } else {
+      struct.push(`"${fieldName}": ${typeAnnotation};`);
     }
   });
 

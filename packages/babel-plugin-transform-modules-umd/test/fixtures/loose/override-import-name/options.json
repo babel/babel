@@ -1,11 +1,14 @@
 {
   "plugins": [
     "external-helpers",
-    ["transform-modules-umd", {
-      "globals": {
-        "es6-promise": "Promise"
-      },
-      "loose": true
-    }]
+    [
+      "transform-modules-umd",
+      {
+        "globals": {
+          "es6-promise": "Promise"
+        },
+        "loose": true
+      }
+    ]
   ]
 }

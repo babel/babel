@@ -155,6 +155,10 @@ const filterItems = (
   return result;
 };
 
+function supportsStaticESM(caller) {
+  return !!(caller && caller.supportsStaticESM);
+}
+
 export default declare((api, opts) => {
   api.assertVersion(7);
 
@@ -232,9 +236,15 @@ export default declare((api, opts) => {
   const plugins = [];
   const pluginUseBuiltIns = useBuiltIns !== false;
 
-  // NOTE: not giving spec here yet to avoid compatibility issues when
-  // transform-modules-commonjs gets its spec mode
-  if (modules !== false && moduleTransformations[modules]) {
+  if (
+    modules !== false &&
+    moduleTransformations[modules] &&
+    // TODO: Remove the 'api.caller' check eventually. Just here to prevent
+    // unnecessary breakage in the short term for users on older betas/RCs.
+    (modules !== "auto" || !api.caller || !api.caller(supportsStaticESM))
+  ) {
+    // NOTE: not giving spec here yet to avoid compatibility issues when
+    // transform-modules-commonjs gets its spec mode
     plugins.push([getPlugin(moduleTransformations[modules]), { loose }]);
   }
 

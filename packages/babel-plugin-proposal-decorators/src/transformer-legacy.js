@@ -169,7 +169,15 @@ function applyTargetDecorators(path, state, decoratedProps) {
             ),
             t.objectExpression([
               t.objectProperty(
+                t.identifier("configurable"),
+                t.booleanLiteral(true),
+              ),
+              t.objectProperty(
                 t.identifier("enumerable"),
+                t.booleanLiteral(true),
+              ),
+              t.objectProperty(
+                t.identifier("writable"),
                 t.booleanLiteral(true),
               ),
               t.objectProperty(t.identifier("initializer"), initializer),

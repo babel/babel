@@ -130,7 +130,8 @@
                 "properties": [],
                 "indexers": [],
                 "internalSlots": [],
-                "exact": false
+                "exact": false,
+                "inexact": false
               },
               "variance": null,
               "optional": false
@@ -167,13 +168,15 @@
                 "properties": [],
                 "indexers": [],
                 "internalSlots": [],
-                "exact": false
+                "exact": false,
+                "inexact": false
               }
             }
           ],
           "indexers": [],
           "internalSlots": [],
-          "exact": false
+          "exact": false,
+          "inexact": false
         }
       }
     ],

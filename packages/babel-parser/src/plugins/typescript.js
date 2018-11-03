@@ -57,6 +57,8 @@ function keywordTypeFromName(
       return "TSSymbolKeyword";
     case "undefined":
       return "TSUndefinedKeyword";
+    case "unknown":
+      return "TSUnknownKeyword";
     default:
       return undefined;
   }
@@ -501,11 +503,30 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node: N.TsTupleType = this.startNode();
       node.elementTypes = this.tsParseBracketedList(
         "TupleElementTypes",
-        this.tsParseType.bind(this),
+        this.tsParseTupleElementType.bind(this),
         /* bracket */ true,
         /* skipFirstToken */ false,
       );
       return this.finishNode(node, "TSTupleType");
+    }
+
+    tsParseTupleElementType(): N.TsType {
+      // parses `...TsType[]`
+      if (this.match(tt.ellipsis)) {
+        const restNode: N.TsRestType = this.startNode();
+        this.next(); // skips ellipsis
+        restNode.typeAnnotation = this.tsParseType();
+        return this.finishNode(restNode, "TSRestType");
+      }
+
+      const type = this.tsParseType();
+      // parses `TsType?`
+      if (this.eat(tt.question)) {
+        const optionalTypeNode: N.TsOptionalType = this.startNodeAtNode(type);
+        optionalTypeNode.typeAnnotation = type;
+        return this.finishNode(optionalTypeNode, "TSOptionalType");
+      }
+      return type;
     }
 
     tsParseParenthesizedType(): N.TsParenthesizedType {
@@ -836,14 +857,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSTypeAssertion");
     }
 
-    tsTryParseTypeArgumentsInExpression(): ?N.TsTypeParameterInstantiation {
-      return this.tsTryParseAndCatch(() => {
-        const res = this.tsParseTypeArguments();
-        this.expect(tt.parenL);
-        return res;
-      });
-    }
-
     tsParseHeritageClause(): $ReadOnlyArray<N.TsExpressionWithTypeArguments> {
       return this.tsParseDelimitedList(
         "HeritageClauseElement",
@@ -885,6 +898,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.typeAnnotation = this.tsExpectThenParseType(tt.eq);
       this.semicolon();
       return this.finishNode(node, "TSTypeAliasDeclaration");
+    }
+
+    tsInNoContext<T>(cb: () => T): T {
+      const oldContext = this.state.context;
+      this.state.context = [oldContext[0]];
+      try {
+        return cb();
+      } finally {
+        this.state.context = oldContext;
+      }
     }
 
     /**
@@ -1241,13 +1264,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseTypeArguments(): N.TsTypeParameterInstantiation {
       const node = this.startNode();
-      node.params = this.tsInType(() => {
-        this.expectRelational("<");
-        return this.tsParseDelimitedList(
-          "TypeParametersOrArguments",
-          this.tsParseType.bind(this),
-        );
-      });
+      node.params = this.tsInType(() =>
+        // Temporarily remove a JSX parsing context, which makes us scan different tokens.
+        this.tsInNoContext(() => {
+          this.expectRelational("<");
+          return this.tsParseDelimitedList(
+            "TypeParametersOrArguments",
+            this.tsParseType.bind(this),
+          );
+        }),
+      );
+      // This reads the next token after the `>` too, so do this in the enclosing context.
+      // But be sure not to parse a regex in the jsx expression `<C<number> />`, so set exprAllowed = false
+      this.state.exprAllowed = false;
       this.expectRelational(">");
       return this.finishNode(node, "TSTypeParameterInstantiation");
     }
@@ -1358,34 +1387,53 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.finishNode(nonNullExpression, "TSNonNullExpression");
       }
 
-      if (!noCalls && this.isRelational("<")) {
-        if (this.atPossibleAsync(base)) {
-          // Almost certainly this is a generic async function `async <T>() => ...
-          // But it might be a call with a type argument `async<T>();`
-          const asyncArrowFn = this.tsTryParseGenericAsyncArrowFunction(
-            startPos,
-            startLoc,
-          );
-          if (asyncArrowFn) {
-            return asyncArrowFn;
+      if (this.isRelational("<")) {
+        // tsTryParseAndCatch is expensive, so avoid if not necessary.
+        // There are number of things we are going to "maybe" parse, like type arguments on
+        // tagged template expressions. If any of them fail, walk it back and continue.
+        const result = this.tsTryParseAndCatch(() => {
+          if (!noCalls && this.atPossibleAsync(base)) {
+            // Almost certainly this is a generic async function `async <T>() => ...
+            // But it might be a call with a type argument `async<T>();`
+            const asyncArrowFn = this.tsTryParseGenericAsyncArrowFunction(
+              startPos,
+              startLoc,
+            );
+            if (asyncArrowFn) {
+              return asyncArrowFn;
+            }
           }
-        }
 
-        const node: N.CallExpression = this.startNodeAt(startPos, startLoc);
-        node.callee = base;
+          const node: N.CallExpression = this.startNodeAt(startPos, startLoc);
+          node.callee = base;
 
-        // May be passing type arguments. But may just be the `<` operator.
-        const typeArguments = this.tsTryParseTypeArgumentsInExpression(); // Also eats the "("
-        if (typeArguments) {
-          // possibleAsync always false here, because we would have handled it above.
-          // $FlowIgnore (won't be any undefined arguments)
-          node.arguments = this.parseCallExpressionArguments(
-            tt.parenR,
-            /* possibleAsync */ false,
-          );
-          node.typeParameters = typeArguments;
-          return this.finishCallExpression(node);
-        }
+          const typeArguments = this.tsParseTypeArguments();
+
+          if (typeArguments) {
+            if (!noCalls && this.eat(tt.parenL)) {
+              // possibleAsync always false here, because we would have handled it above.
+              // $FlowIgnore (won't be any undefined arguments)
+              node.arguments = this.parseCallExpressionArguments(
+                tt.parenR,
+                /* possibleAsync */ false,
+              );
+              node.typeParameters = typeArguments;
+              return this.finishCallExpression(node);
+            } else if (this.match(tt.backQuote)) {
+              return this.parseTaggedTemplateExpression(
+                startPos,
+                startLoc,
+                base,
+                state,
+                typeArguments,
+              );
+            }
+          }
+
+          this.unexpected();
+        });
+
+        if (result) return result;
       }
 
       return super.parseSubscript(base, startPos, startLoc, noCalls, state);
@@ -1509,6 +1557,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         cls.abstract = true;
         return cls;
       }
+
+      // export default interface allowed in:
+      // https://github.com/Microsoft/TypeScript/pull/16040
+      if (this.state.value === "interface") {
+        const result = this.tsParseDeclaration(
+          this.startNode(),
+          this.state.value,
+          true,
+        );
+
+        if (result) return result;
+      }
+
       return super.parseExportDefaultExpression();
     }
 
@@ -1764,9 +1825,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseObjPropValue(prop: N.ObjectMember, ...args): void {
-      if (this.isRelational("<")) {
-        throw new Error("TODO");
-      }
+      const typeParameters = this.tsTryParseTypeParameters();
+      if (typeParameters) prop.typeParameters = typeParameters;
 
       super.parseObjPropValue(prop, ...args);
     }
@@ -2006,6 +2066,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
+    parseMaybeDecoratorArguments(expr: N.Expression): N.Expression {
+      if (this.isRelational("<")) {
+        const typeArguments = this.tsParseTypeArguments();
+
+        if (this.match(tt.parenL)) {
+          const call = super.parseMaybeDecoratorArguments(expr);
+          call.typeParameters = typeArguments;
+          return call;
+        }
+
+        this.unexpected(this.state.start, tt.parenL);
+      }
+
+      return super.parseMaybeDecoratorArguments(expr);
+    }
+
     // === === === === === === === === === === === === === === === ===
     // Note: All below methods are duplicates of something in flow.js.
     // Not sure what the best way to combine these is.
@@ -2101,5 +2177,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     canHaveLeadingDecorator() {
       // Avoid unnecessary lookahead in checking for abstract class unless needed!
       return super.canHaveLeadingDecorator() || this.isAbstractClass();
+    }
+
+    jsxParseOpeningElementAfterName(
+      node: N.JSXOpeningElement,
+    ): N.JSXOpeningElement {
+      const typeArguments = this.tsTryParseAndCatch(() =>
+        this.tsParseTypeArguments(),
+      );
+      if (typeArguments) node.typeParameters = typeArguments;
+      return super.jsxParseOpeningElementAfterName(node);
     }
   };

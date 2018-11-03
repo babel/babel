@@ -2,6 +2,6 @@
   "plugins": [
     "external-helpers",
     "transform-async-to-generator",
-    ["proposal-class-properties", {"loose": true}]
+    ["proposal-class-properties", { "loose": true }]
   ]
 }

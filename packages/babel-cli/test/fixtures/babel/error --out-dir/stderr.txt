@@ -1,1 +1,1 @@
-cannot have --out-file and --out-dir
+--out-file and --out-dir cannot be used together

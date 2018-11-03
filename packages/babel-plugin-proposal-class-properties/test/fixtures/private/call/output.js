@@ -6,8 +6,11 @@ function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
 
-    _foo.set(this, function () {
-      return this;
+    _foo.set(this, {
+      writable: true,
+      value: function () {
+        return this;
+      }
     });
   }
 

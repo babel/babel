@@ -2,6 +2,9 @@
   "plugins": [
     "external-helpers",
     "syntax-object-rest-spread",
-    ["transform-modules-commonjs", { "strict": true, "mjsStrictNamespace": false }]
+    [
+      "transform-modules-commonjs",
+      { "strict": true, "mjsStrictNamespace": false }
+    ]
   ]
 }

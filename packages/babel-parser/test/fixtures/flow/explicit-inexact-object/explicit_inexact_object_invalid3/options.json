@@ -1,0 +1,5 @@
+{
+  "sourceType": "module",
+  "plugins": ["jsx", "flow"],
+  "throws": "Explicit inexact syntax must appear at the end of an inexact object (2:26)"
+}

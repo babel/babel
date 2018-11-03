@@ -1,3 +1,9 @@
 {
-  "plugins": ["transform-block-scoping", "syntax-jsx", "transform-react-jsx", "transform-block-scoped-functions", "transform-for-of"]
+  "plugins": [
+    "transform-block-scoping",
+    "syntax-jsx",
+    "transform-react-jsx",
+    "transform-block-scoped-functions",
+    "transform-for-of"
+  ]
 }

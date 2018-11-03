@@ -308,7 +308,8 @@
                   ],
                   "indexers": [],
                   "internalSlots": [],
-                  "exact": false
+                  "exact": false,
+                  "inexact": false
                 }
               }
             },

@@ -1,3 +1,7 @@
 {
-  "plugins": ["external-helpers", "proposal-class-properties", "transform-classes"]
+  "plugins": [
+    "external-helpers",
+    "proposal-class-properties",
+    "transform-classes"
+  ]
 }

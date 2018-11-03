@@ -362,7 +362,7 @@ export default class Scope {
       (local.kind === "param" && (kind === "let" || kind === "const"));
 
     if (duplicate) {
-      throw this.hub.file.buildCodeFrameError(
+      throw this.hub.buildError(
         id,
         `Duplicate declaration "${name}"`,
         TypeError,
@@ -404,9 +404,7 @@ export default class Scope {
     console.log(sep);
   }
 
-  toArray(node: Object, i?: number | boolean) {
-    const file = this.hub.file;
-
+  toArray(node: Object, i?: number) {
     if (t.isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (binding && binding.constant && binding.path.isGenericType("Array")) {
@@ -444,12 +442,12 @@ export default class Scope {
 
       // Used in array-rest to create an array from a subset of an iterable.
       helperName = "slicedToArray";
-      // TODO if (this.hub.file.isLoose("es6.forOf")) helperName += "-loose";
+      // TODO if (this.hub.isLoose("es6.forOf")) helperName += "-loose";
     } else {
       // Used in array-rest to create an array
       helperName = "toArray";
     }
-    return t.callExpression(file.addHelper(helperName), args);
+    return t.callExpression(this.hub.addHelper(helperName), args);
   }
 
   hasLabel(name: string) {

@@ -1,6 +1,6 @@
 MAKEFLAGS = -j1
-FLOW_COMMIT = 395e045c18d537fcbbc552a96ef2cdcd70b4ab52
-TEST262_COMMIT = f90a52b39609a620c0854e0bd0b3a906c930fd17
+FLOW_COMMIT = bea8b83f50f597454941d2a7ecef6e93a881e576
+TEST262_COMMIT = 06c2f019019cf7850923de4d56828e6dfd9212b8
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
@@ -31,7 +31,7 @@ build-preset-env-standalone:
 build-dist: build
 	cd packages/babel-polyfill; \
 	scripts/build-dist.sh
-	cd packages/babel-runtime; \
+	cd packages/babel-plugin-transform-runtime; \
 	node scripts/build-dist.js
 
 watch: clean clean-lib
@@ -47,10 +47,13 @@ flow:
 	./node_modules/.bin/flow check --strip-root
 
 lint:
-	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' --format=codeframe --rulesdir="./scripts/eslint_rules"
+	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' --format=codeframe
 
-fix:
-	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' --format=codeframe --fix --rulesdir="./scripts/eslint_rules"
+fix: fix-json
+	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' --format=codeframe --fix
+
+fix-json:
+	./node_modules/.bin/prettier "{packages,codemod}/*/test/fixtures/**/options.json" --write --loglevel warn
 
 clean: test-clean
 	rm -rf packages/babel-polyfill/browser*
@@ -104,23 +107,32 @@ test-test262-ci: bootstrap test-test262
 test-test262-update-whitelist:
 	node scripts/tests/test262/run_babel_parser_test262.js --update-whitelist
 
-publish:
-	git pull --rebase
+clone-license:
+	./scripts/clone-license.sh
+
+prepublish-build:
 	make clean-lib
 	rm -rf packages/babel-runtime/helpers
-	rm -rf packages/babel-runtime/core-js
+	rm -rf packages/babel-runtime-corejs2/helpers
+	rm -rf packages/babel-runtime-corejs2/core-js
 	BABEL_ENV=production make build-dist
+	make clone-license
+
+prepublish:
+	git pull --rebase
+	make prepublish-build
 	make test
-	# not using lerna independent mode atm, so only update packages that have changed since we use ^
+
+publish: prepublish
 	# --only-explicit-updates
-	./node_modules/.bin/lerna publish --force-publish=* --exact --skip-temp-tag
+	./node_modules/.bin/lerna publish
 	make clean
 
 bootstrap: clean-all
 	yarn --ignore-engines
 	./node_modules/.bin/lerna bootstrap -- --ignore-engines
 	make build
-	cd packages/babel-runtime; \
+	cd packages/babel-plugin-transform-runtime; \
 	node scripts/build-dist.js
 
 clean-lib:

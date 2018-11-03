@@ -1,5 +1,6 @@
 // @flow
 
+import type { SourceType } from "./options";
 import type { Token } from "./tokenizer";
 import type { SourceLocation } from "./util/location";
 
@@ -135,7 +136,7 @@ export type File = NodeBase & {
 
 export type Program = NodeBase & {
   type: "Program",
-  sourceType: "script" | "module",
+  sourceType: SourceType,
   body: Array<Statement | ModuleDeclaration>, // TODO: $ReadOnlyArray
   directives: $ReadOnlyArray<Directive>, // TODO: Not in spec
   interpreter: InterpreterDirective | null,
@@ -397,7 +398,7 @@ export type ObjectMemberBase = NodeBase & {
   decorators: $ReadOnlyArray<Decorator>,
   kind?: "get" | "set" | "method",
   method: boolean, // TODO: Not in spec
-
+  typeParameters?: ?TypeParameterInstantiationBase, // TODO: Not in spec
   variance?: ?FlowVariance, // TODO: Not in spec
 };
 
@@ -599,10 +600,11 @@ export type TemplateLiteral = NodeBase & {
   expressions: $ReadOnlyArray<Expression>,
 };
 
-export type TaggedTmplateExpression = NodeBase & {
+export type TaggedTemplateExpression = NodeBase & {
   type: "TaggedTemplateExpression",
   tag: Expression,
   quasi: TemplateLiteral,
+  typeParameters?: ?TypeParameterInstantiationBase, // TODO: Not in spec
 };
 
 export type TemplateElement = NodeBase & {
@@ -742,6 +744,7 @@ export type ClassPrivateProperty = NodeBase & {
   value: ?Expression, // TODO: Not in spec that this is nullable.
   static: boolean,
   computed: false,
+  typeAnnotation?: ?TypeAnnotation, // TODO: Not in spec
 };
 
 export type OptClassDeclaration = ClassBase &
@@ -846,7 +849,13 @@ export type JSXEmptyExpression = Node;
 export type JSXSpreadChild = Node;
 export type JSXExpressionContainer = Node;
 export type JSXAttribute = Node;
-export type JSXOpeningElement = Node;
+export type JSXOpeningElement = NodeBase & {
+  type: "JSXOpeningElement",
+  name: JSXNamespacedName | JSXMemberExpression,
+  typeParameters?: ?TypeParameterInstantiationBase, // TODO: Not in spec
+  attributes: $ReadOnlyArray<JSXAttribute>,
+  selfClosing: boolean,
+};
 export type JSXClosingElement = Node;
 export type JSXElement = Node;
 export type JSXOpeningFragment = Node;
@@ -1121,6 +1130,8 @@ export type TsType =
   | TsTypeLiteral
   | TsArrayType
   | TsTupleType
+  | TsOptionalType
+  | TsRestType
   | TsUnionOrIntersectionType
   | TsConditionalType
   | TsInferType
@@ -1136,6 +1147,7 @@ export type TsTypeBase = NodeBase;
 
 export type TsKeywordTypeType =
   | "TSAnyKeyword"
+  | "TSUnknownKeyword"
   | "TSNumberKeyword"
   | "TSObjectKeyword"
   | "TSBooleanKeyword"
@@ -1198,6 +1210,16 @@ export type TsArrayType = TsTypeBase & {
 export type TsTupleType = TsTypeBase & {
   type: "TSTupleType",
   elementTypes: $ReadOnlyArray<TsType>,
+};
+
+export type TsOptionalType = TsTypeBase & {
+  type: "TSOptionalType",
+  typeAnnotation: TsType,
+};
+
+export type TsRestType = TsTypeBase & {
+  type: "TSRestType",
+  typeAnnotation: TsType,
 };
 
 export type TsUnionOrIntersectionType = TsUnionType | TsIntersectionType;

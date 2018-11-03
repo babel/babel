@@ -1,3 +1,4 @@
+import "lib";
 import { Used } from "lib";
 import Used2 from "lib";
 import * as Used3 from "lib";

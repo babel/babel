@@ -762,6 +762,9 @@ export function assertTSIndexSignature(node: Object, opts?: Object = {}): void {
 export function assertTSAnyKeyword(node: Object, opts?: Object = {}): void {
   assert("TSAnyKeyword", node, opts);
 }
+export function assertTSUnknownKeyword(node: Object, opts?: Object = {}): void {
+  assert("TSUnknownKeyword", node, opts);
+}
 export function assertTSNumberKeyword(node: Object, opts?: Object = {}): void {
   assert("TSNumberKeyword", node, opts);
 }
@@ -821,6 +824,12 @@ export function assertTSArrayType(node: Object, opts?: Object = {}): void {
 }
 export function assertTSTupleType(node: Object, opts?: Object = {}): void {
   assert("TSTupleType", node, opts);
+}
+export function assertTSOptionalType(node: Object, opts?: Object = {}): void {
+  assert("TSOptionalType", node, opts);
+}
+export function assertTSRestType(node: Object, opts?: Object = {}): void {
+  assert("TSRestType", node, opts);
 }
 export function assertTSUnionType(node: Object, opts?: Object = {}): void {
   assert("TSUnionType", node, opts);

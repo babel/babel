@@ -233,10 +233,10 @@ registerPresets({
     };
   },
   react: require("@babel/preset-react"),
-  "stage-0": require("@babel/preset-stage-0"),
-  "stage-1": require("@babel/preset-stage-1"),
-  "stage-2": require("@babel/preset-stage-2"),
-  "stage-3": require("@babel/preset-stage-3"),
+  "stage-0": require("./preset-stage-0"),
+  "stage-1": require("./preset-stage-1"),
+  "stage-2": require("./preset-stage-2"),
+  "stage-3": require("./preset-stage-3"),
   "es2015-loose": {
     presets: [[require("./preset-es2015"), { loose: true }]],
   },

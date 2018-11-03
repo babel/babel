@@ -52,6 +52,7 @@ describe("@babel/register", function() {
   function revertRegister() {
     if (babelRegister) {
       babelRegister.revert();
+      delete require.cache[registerFile];
       babelRegister = null;
     }
   }

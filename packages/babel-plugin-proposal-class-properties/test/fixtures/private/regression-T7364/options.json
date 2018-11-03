@@ -1,3 +1,14 @@
 {
-  "plugins": ["external-helpers", "proposal-class-properties", "transform-block-scoping", "syntax-class-properties", "transform-async-to-generator"]
+  "plugins": [
+    [
+      "external-helpers",
+      {
+        "helperVersion": "7.0.2"
+      }
+    ],
+    "proposal-class-properties",
+    "transform-block-scoping",
+    "syntax-class-properties",
+    "transform-async-to-generator"
+  ]
 }

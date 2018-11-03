@@ -1,0 +1,240 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 44,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 44
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 44,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 44
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 44,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 44
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 44,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 44
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 44,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 44
+                },
+                "identifierName": "x"
+              },
+              "name": "x",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 5,
+                "end": 44,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 44
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSTupleType",
+                  "start": 7,
+                  "end": 44,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 44
+                    }
+                  },
+                  "elementTypes": [
+                    {
+                      "type": "TSStringKeyword",
+                      "start": 8,
+                      "end": 14,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 14
+                        }
+                      }
+                    },
+                    {
+                      "type": "TSOptionalType",
+                      "start": 16,
+                      "end": 23,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 16
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 23
+                        }
+                      },
+                      "typeAnnotation": {
+                        "type": "TSNumberKeyword",
+                        "start": 16,
+                        "end": 22,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 16
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 22
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "type": "TSOptionalType",
+                      "start": 25,
+                      "end": 43,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 25
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 43
+                        }
+                      },
+                      "typeAnnotation": {
+                        "type": "TSParenthesizedType",
+                        "start": 25,
+                        "end": 42,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 25
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 42
+                          }
+                        },
+                        "typeAnnotation": {
+                          "type": "TSUnionType",
+                          "start": 26,
+                          "end": 41,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 26
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 41
+                            }
+                          },
+                          "types": [
+                            {
+                              "type": "TSStringKeyword",
+                              "start": 26,
+                              "end": 32,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 26
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 32
+                                }
+                              }
+                            },
+                            {
+                              "type": "TSNumberKeyword",
+                              "start": 35,
+                              "end": 41,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 35
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 41
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      }
+    ],
+    "directives": []
+  }
+}

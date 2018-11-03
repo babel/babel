@@ -1,6 +1,4 @@
 {
-  "plugins": [
-    "transform-regenerator"
-  ],
+  "plugins": ["transform-regenerator"],
   "retainLines": true
 }

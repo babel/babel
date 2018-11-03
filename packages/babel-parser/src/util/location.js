@@ -39,16 +39,14 @@ export class SourceLocation {
 // into.
 
 export function getLineInfo(input: string, offset: number): Position {
-  for (let line = 1, cur = 0; ; ) {
-    lineBreakG.lastIndex = cur;
-    const match = lineBreakG.exec(input);
-    if (match && match.index < offset) {
-      ++line;
-      cur = match.index + match[0].length;
-    } else {
-      return new Position(line, offset - cur);
-    }
+  let line = 1;
+  let lineStart = 0;
+  let match;
+  lineBreakG.lastIndex = 0;
+  while ((match = lineBreakG.exec(input)) && match.index < offset) {
+    line++;
+    lineStart = lineBreakG.lastIndex;
   }
-  // istanbul ignore next
-  throw new Error("Unreachable");
+
+  return new Position(line, offset - lineStart);
 }

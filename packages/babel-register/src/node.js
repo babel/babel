@@ -101,7 +101,6 @@ function hookExtensions(exts) {
 
 export function revert() {
   if (piratesRevert) piratesRevert();
-  delete require.cache[require.resolve(__filename)];
 }
 
 register();
@@ -126,6 +125,10 @@ export default function register(opts?: Object = {}) {
 
   transformOpts = {
     ...opts,
+    caller: {
+      name: "@babel/register",
+      ...(opts.caller || {}),
+    },
   };
 
   let { cwd = "." } = transformOpts;

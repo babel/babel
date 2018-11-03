@@ -1,3 +1,7 @@
 {
-  "plugins": ["external-helpers", "transform-spread", "transform-modules-commonjs"]
+  "plugins": [
+    "external-helpers",
+    "transform-spread",
+    "transform-modules-commonjs"
+  ]
 }

@@ -225,7 +225,8 @@
                           ],
                           "indexers": [],
                           "internalSlots": [],
-                          "exact": false
+                          "exact": false,
+                          "inexact": false
                         }
                       },
                       "variance": null,
@@ -234,7 +235,8 @@
                   ],
                   "indexers": [],
                   "internalSlots": [],
-                  "exact": false
+                  "exact": false,
+                  "inexact": false
                 }
               }
             },

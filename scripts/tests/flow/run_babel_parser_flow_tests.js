@@ -115,6 +115,7 @@ const options = {
     "flowComments",
     "jsx",
     "objectRestSpread",
+    "classPrivateProperties",
   ],
   sourceType: "module",
   ranges: true,

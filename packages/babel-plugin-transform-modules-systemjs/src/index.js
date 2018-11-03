@@ -332,8 +332,23 @@ export default declare((api, options) => {
                     const nodes = [];
 
                     for (const specifier of specifiers) {
-                      // only globals exported this way
-                      if (!path.scope.getBinding(specifier.local.name)) {
+                      const binding = path.scope.getBinding(
+                        specifier.local.name,
+                      );
+                      // hoisted function export
+                      if (
+                        binding &&
+                        t.isFunctionDeclaration(binding.path.node)
+                      ) {
+                        beforeBody.push(
+                          buildExportCall(
+                            specifier.exported.name,
+                            t.cloneNode(specifier.local),
+                          ),
+                        );
+                      }
+                      // only globals also exported this way
+                      else if (!binding) {
                         nodes.push(
                           buildExportCall(
                             specifier.exported.name,

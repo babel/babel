@@ -1,4 +1,4 @@
 {
-    "plugins":["optionalChaining"],
-    "throws": "Unexpected token (3:20)"
+  "plugins": ["optionalChaining"],
+  "throws": "Unexpected token (3:20)"
 }

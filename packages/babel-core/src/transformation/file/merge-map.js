@@ -94,7 +94,7 @@ export default function mergeSourceMap(
 }
 
 function makeMappingKey(item: { line: number, columnStart: number }) {
-  return JSON.stringify([item.line, item.columnStart]);
+  return `${item.line}/${item.columnStart}`;
 }
 
 function eachOverlappingGeneratedOutputRange(
@@ -293,7 +293,7 @@ function findInsertionLocation<T>(
   // Ensure the value is the start of any set of matches.
   let i = left;
   if (i < array.length) {
-    while (i > 0 && callback(array[i]) >= 0) {
+    while (i >= 0 && callback(array[i]) >= 0) {
       i--;
     }
     return i + 1;

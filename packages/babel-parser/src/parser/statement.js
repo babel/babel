@@ -3,7 +3,8 @@
 import * as N from "../types";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import ExpressionParser from "./expression";
-import { lineBreak } from "../util/whitespace";
+import { isIdentifierChar } from "../util/identifier";
+import { lineBreak, skipWhiteSpace } from "../util/whitespace";
 
 // Reused empty array added for node fields that are always empty.
 
@@ -304,20 +305,24 @@ export default class StatementParser extends ExpressionParser {
         }
       }
 
-      if (this.eat(tt.parenL)) {
-        const node = this.startNodeAt(startPos, startLoc);
-        node.callee = expr;
-        node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
-        this.toReferencedList(node.arguments);
-        expr = this.finishNode(node, "CallExpression");
-      }
-
-      node.expression = expr;
+      node.expression = this.parseMaybeDecoratorArguments(expr);
       this.state.decoratorStack.pop();
     } else {
       node.expression = this.parseMaybeAssign();
     }
     return this.finishNode(node, "Decorator");
+  }
+
+  parseMaybeDecoratorArguments(expr: N.Expression): N.Expression {
+    if (this.eat(tt.parenL)) {
+      const node = this.startNodeAtNode(expr);
+      node.callee = expr;
+      node.arguments = this.parseCallExpressionArguments(tt.parenR, false);
+      this.toReferencedList(node.arguments);
+      return this.finishNode(node, "CallExpression");
+    }
+
+    return expr;
   }
 
   parseBreakContinueStatement(
@@ -1497,18 +1502,37 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(node, "ExportNamedDeclaration");
   }
 
+  isAsyncFunction() {
+    if (!this.isContextual("async")) return false;
+
+    const { input, pos } = this.state;
+
+    skipWhiteSpace.lastIndex = pos;
+    const skip = skipWhiteSpace.exec(input);
+
+    if (!skip || !skip.length) return false;
+
+    const next = pos + skip[0].length;
+
+    return (
+      !lineBreak.test(input.slice(pos, next)) &&
+      input.slice(next, next + 8) === "function" &&
+      (next + 8 === input.length || !isIdentifierChar(input.charAt(next + 8)))
+    );
+  }
+
   parseExportDefaultExpression(): N.Expression | N.Declaration {
     const expr = this.startNode();
-    if (this.eat(tt._function)) {
-      return this.parseFunction(expr, true, false, false, true);
-    } else if (
-      this.isContextual("async") &&
-      this.lookahead().type === tt._function
-    ) {
-      // async function declaration
-      this.eatContextual("async");
-      this.eat(tt._function);
-      return this.parseFunction(expr, true, false, true, true);
+
+    const isAsync = this.isAsyncFunction();
+
+    if (this.eat(tt._function) || isAsync) {
+      if (isAsync) {
+        this.eatContextual("async");
+        this.expect(tt._function);
+      }
+
+      return this.parseFunction(expr, true, false, isAsync, true);
     } else if (this.match(tt._class)) {
       return this.parseClass(expr, true, true);
     } else if (this.match(tt.at)) {
@@ -1641,7 +1665,7 @@ export default class StatementParser extends ExpressionParser {
       this.state.type.keyword === "let" ||
       this.state.type.keyword === "function" ||
       this.state.type.keyword === "class" ||
-      this.isContextual("async")
+      this.isAsyncFunction()
     );
   }
 

@@ -64,8 +64,7 @@ export function validate(opts: mixed): TemplateOpts {
     placeholderPattern,
     preserveComments,
     ...parser
-  } =
-    opts || {};
+  } = opts || {};
 
   if (placeholderWhitelist != null && !(placeholderWhitelist instanceof Set)) {
     throw new Error(

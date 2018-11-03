@@ -153,7 +153,8 @@
               ],
               "indexers": [],
               "internalSlots": [],
-              "exact": false
+              "exact": false,
+              "inexact": false
             },
             {
               "type": "ObjectTypeAnnotation",
@@ -232,7 +233,8 @@
               ],
               "indexers": [],
               "internalSlots": [],
-              "exact": false
+              "exact": false,
+              "inexact": false
             }
           ]
         }
@@ -626,7 +628,8 @@
                     ],
                     "indexers": [],
                     "internalSlots": [],
-                    "exact": false
+                    "exact": false,
+                    "inexact": false
                   },
                   {
                     "type": "ObjectTypeAnnotation",
@@ -705,7 +708,8 @@
                     ],
                     "indexers": [],
                     "internalSlots": [],
-                    "exact": false
+                    "exact": false,
+                    "inexact": false
                   }
                 ]
               },
@@ -715,7 +719,8 @@
           ],
           "indexers": [],
           "internalSlots": [],
-          "exact": false
+          "exact": false,
+          "inexact": false
         }
       },
       {
@@ -893,7 +898,8 @@
                     ],
                     "indexers": [],
                     "internalSlots": [],
-                    "exact": false
+                    "exact": false,
+                    "inexact": false
                   },
                   {
                     "type": "ObjectTypeAnnotation",
@@ -972,7 +978,8 @@
                     ],
                     "indexers": [],
                     "internalSlots": [],
-                    "exact": false
+                    "exact": false,
+                    "inexact": false
                   }
                 ]
               },
@@ -982,7 +989,8 @@
           ],
           "indexers": [],
           "internalSlots": [],
-          "exact": false
+          "exact": false,
+          "inexact": false
         }
       }
     ],

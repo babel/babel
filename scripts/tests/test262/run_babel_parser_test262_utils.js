@@ -13,14 +13,15 @@ const pfs = {
 const parse = require("../../../packages/babel-parser").parse;
 
 const featuresToPlugins = {
-  BigInt: "bigInt",
-  "class-fields-public": "classProperties",
-  "class-fields-private": "classPrivateProperties",
   "async-iteration": "asyncGenerators",
+  BigInt: "bigInt",
+  "class-fields-private": "classPrivateProperties",
+  "class-fields-public": "classProperties",
+  "export-star-as-namespace-from-module": "exportNamespaceFrom",
+  "numeric-separator-literal": "numericSeparator",
   "object-rest": "objectRestSpread",
   "object-spread": "objectRestSpread",
   "optional-catch-binding": "optionalCatchBinding",
-  "numeric-separator-literal": "numericSeparator",
 };
 
 function getPlugins(features) {

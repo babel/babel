@@ -1,3 +1,7 @@
 {
-  "plugins": ["transform-async-to-generator", "transform-react-constant-elements", "syntax-jsx"]
+  "plugins": [
+    "transform-async-to-generator",
+    "transform-react-constant-elements",
+    "syntax-jsx"
+  ]
 }

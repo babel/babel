@@ -2,4 +2,3 @@
   "sourceType": "module",
   "throws": "`bar` has already been exported. Exported identifiers must be unique. (2:13)"
 }
-

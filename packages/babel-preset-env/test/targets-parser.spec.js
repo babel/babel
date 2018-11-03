@@ -1,3 +1,4 @@
+import browserslist from "browserslist";
 import getTargets from "../lib/targets-parser";
 
 describe("getTargets", () => {
@@ -17,6 +18,16 @@ describe("getTargets", () => {
       ie: "9.0.0",
       node: "6.10.0",
     });
+  });
+
+  it("does not clobber browserslists defaults", () => {
+    const browserslistDefaults = browserslist.defaults;
+
+    getTargets({
+      browsers: "chrome 56, ie 11, firefox 51, safari 9",
+    });
+
+    expect(browserslist.defaults).toEqual(browserslistDefaults);
   });
 
   describe("validation", () => {
@@ -72,6 +83,47 @@ describe("getTargets", () => {
         }),
       ).toEqual({
         safari: "tp",
+      });
+    });
+
+    it("works with node versions", () => {
+      expect(
+        getTargets({
+          browsers: "node 8.5",
+        }),
+      ).toEqual({
+        node: "8.5.0",
+      });
+    });
+
+    it("works with current node version and string type browsers", () => {
+      expect(
+        getTargets({
+          browsers: "current node, chrome 55",
+        }),
+      ).toEqual({
+        node: process.versions.node,
+        chrome: "55.0.0",
+      });
+    });
+
+    it("does throws on unsupported versions", () => {
+      expect(() => {
+        getTargets({
+          browsers: "node 15.0.0, chrome 1000",
+        });
+      }).toThrow();
+    });
+
+    it("works with current node version and array type browsers", () => {
+      expect(
+        getTargets({
+          browsers: ["ie 11", "current node", "chrome 55"],
+        }),
+      ).toEqual({
+        node: process.versions.node,
+        chrome: "55.0.0",
+        ie: "11.0.0",
       });
     });
 

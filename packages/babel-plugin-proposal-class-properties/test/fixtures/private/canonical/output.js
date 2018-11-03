@@ -6,9 +6,15 @@ function () {
   function Point(_x2 = 0, _y2 = 0) {
     babelHelpers.classCallCheck(this, Point);
 
-    _x.set(this, void 0);
+    _x.set(this, {
+      writable: true,
+      value: void 0
+    });
 
-    _y.set(this, void 0);
+    _y.set(this, {
+      writable: true,
+      value: void 0
+    });
 
     babelHelpers.classPrivateFieldSet(this, _x, +_x2);
     babelHelpers.classPrivateFieldSet(this, _y, +_y2);

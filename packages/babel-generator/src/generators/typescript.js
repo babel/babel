@@ -127,6 +127,9 @@ export function TSIndexSignature(node) {
 export function TSAnyKeyword() {
   this.word("any");
 }
+export function TSUnknownKeyword() {
+  this.word("unknown");
+}
 export function TSNumberKeyword() {
   this.word("number");
 }
@@ -236,6 +239,16 @@ export function TSTupleType(node) {
   this.token("[");
   this.printList(node.elementTypes, node);
   this.token("]");
+}
+
+export function TSOptionalType(node) {
+  this.print(node.typeAnnotation, node);
+  this.token("?");
+}
+
+export function TSRestType(node) {
+  this.token("...");
+  this.print(node.typeAnnotation, node);
 }
 
 export function TSUnionType(node) {

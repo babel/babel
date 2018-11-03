@@ -1,3 +1,15 @@
 {
-  "plugins": ["external-helpers", "proposal-class-properties", "transform-classes", "transform-block-scoping", "syntax-class-properties", "transform-exponentiation-operator"]
+  "plugins": [
+    [
+      "external-helpers",
+      {
+        "helperVersion": "7.0.2"
+      }
+    ],
+    "proposal-class-properties",
+    "transform-classes",
+    "transform-block-scoping",
+    "syntax-class-properties",
+    "transform-exponentiation-operator"
+  ]
 }

@@ -11,7 +11,10 @@ function (_Bar) {
     babelHelpers.classCallCheck(this, Foo);
     _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Foo).call(this));
 
-    _bar.set(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this)), "foo");
+    _bar.set(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this)), {
+      writable: true,
+      value: "foo"
+    });
 
     return _this;
   }

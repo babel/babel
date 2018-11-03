@@ -73,7 +73,7 @@ defineType("JSXExpressionContainer", {
   aliases: ["JSX", "Immutable"],
   fields: {
     expression: {
-      validate: assertNodeType("Expression"),
+      validate: assertNodeType("Expression", "JSXEmptyExpression"),
     },
   },
 });
@@ -141,6 +141,13 @@ defineType("JSXOpeningElement", {
         assertValueType("array"),
         assertEach(assertNodeType("JSXAttribute", "JSXSpreadAttribute")),
       ),
+    },
+    typeParameters: {
+      validate: assertNodeType(
+        "TypeParameterInstantiation",
+        "TSTypeParameterInstantiation",
+      ),
+      optional: true,
     },
   },
 });

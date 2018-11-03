@@ -899,6 +899,23 @@ describe("buildConfigChain", function() {
 
       expect(opts.comments).toBe(true);
     });
+
+    it("should remove the overrides and filtering fields from the options", () => {
+      const opts = loadOptions({
+        cwd: fixture("nonexistant-fake"),
+        filename: fixture("nonexistant-fake", "src.js"),
+        babelrc: false,
+        overrides: [],
+        test: /^/,
+        include: /^/,
+        exclude: [],
+      });
+
+      expect(opts.overrides).toBeUndefined();
+      expect(opts.test).toBeUndefined();
+      expect(opts.include).toBeUndefined();
+      expect(opts.exclude).toBeUndefined();
+    });
   });
 
   describe("config files", () => {

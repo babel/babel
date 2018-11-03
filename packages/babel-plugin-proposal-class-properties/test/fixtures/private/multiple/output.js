@@ -3,9 +3,15 @@ var Foo = function Foo() {
 
   babelHelpers.classCallCheck(this, Foo);
 
-  _x.set(this, 0);
+  _x.set(this, {
+    writable: true,
+    value: 0
+  });
 
-  _y.set(this, babelHelpers.classPrivateFieldGet(this, _x));
+  _y.set(this, {
+    writable: true,
+    value: babelHelpers.classPrivateFieldGet(this, _x)
+  });
 };
 
 var _x = new WeakMap();

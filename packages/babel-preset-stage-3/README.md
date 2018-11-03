@@ -1,19 +1,39 @@
 # @babel/preset-stage-3
 
-> Babel preset for stage 3 plugins
+As of v7.0.0-beta.55, we've removed Babel's Stage presets. Please consider reading our [blog post](https://babeljs.io/blog/2018/07/27/removing-babels-stage-presets) on this decision for more details. TL;DR is that it's more beneficial in the long run to explicitly add which proposals to use.
 
-See our website [@babel/preset-stage-3](https://babeljs.io/docs/en/next/babel-preset-stage-3.html) for more information.
+---
 
-## Install
+For a more automatic migration, we have updated [babel-upgrade](https://github.com/babel/babel-upgrade) to do this for you (you can run `npx babel-upgrade`).
 
-Using npm:
+If you want the same configuration as before:
 
-```sh
-npm install --save-dev @babel/preset-stage-3
+```json
+{
+  "plugins": [
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-syntax-import-meta",
+    ["@babel/plugin-proposal-class-properties", { "loose": false }],
+    "@babel/plugin-proposal-json-strings"
+  ]
+}
 ```
 
-or using yarn:
+If you're using the same configuration across many separate projects,
+keep in mind that you can also create your own custom presets with
+whichever plugins and presets you're looking to use.
 
-```sh
-yarn add @babel/preset-stage-3 --dev
+```js
+module.exports = function() {
+  return {
+    plugins: [
+      require("@babel/plugin-syntax-dynamic-import"),
+      [require("@babel/plugin-proposal-decorators"), { "legacy": true }],
+      [require("@babel/plugin-proposal-class-properties"), { "loose": false }],
+    ],
+    presets: [
+      // ...
+    ],
+  };
+};
 ```

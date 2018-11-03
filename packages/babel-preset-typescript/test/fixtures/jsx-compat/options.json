@@ -1,7 +1,3 @@
 {
-  "presets": [
-    ["react", {}, "before"],
-    "typescript",
-    ["react", {}, "after"]
-  ]
+  "presets": [["react", {}, "before"], "typescript", ["react", {}, "after"]]
 }

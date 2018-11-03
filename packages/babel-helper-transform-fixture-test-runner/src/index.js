@@ -6,6 +6,7 @@ import sourceMap from "source-map";
 import { codeFrameColumns } from "@babel/code-frame";
 import defaults from "lodash/defaults";
 import includes from "lodash/includes";
+import escapeRegExp from "lodash/escapeRegExp";
 import * as helpers from "./helpers";
 import extend from "lodash/extend";
 import merge from "lodash/merge";
@@ -14,6 +15,7 @@ import assert from "assert";
 import fs from "fs";
 import path from "path";
 import vm from "vm";
+import checkDuplicatedNodes from "babel-check-duplicated-nodes";
 
 import diff from "jest-diff";
 
@@ -117,56 +119,14 @@ function wrapPackagesArray(type, names, optionsDir) {
 
       val[0] = path.resolve(optionsDir, val[0]);
     } else {
-      // check node_modules/babel-x-y
-      val[0] = __dirname + "/../../babel-" + type + "-" + val[0];
+      const monorepoPath = __dirname + "/../../babel-" + type + "-" + val[0];
+
+      if (fs.existsSync(monorepoPath)) {
+        val[0] = monorepoPath;
+      }
     }
 
     return val;
-  });
-}
-
-function checkDuplicatedNodes(ast) {
-  const nodes = new WeakSet();
-  const parents = new WeakMap();
-
-  const setParent = (child, parent) => {
-    if (typeof child === "object" && child !== null) {
-      let p = parents.get(child);
-      if (!p) {
-        p = [];
-        parents.set(child, p);
-      }
-      p.unshift(parent);
-    }
-  };
-  const registerChildren = node => {
-    for (const key in node) {
-      if (Array.isArray(node[key])) {
-        node[key].forEach(child => setParent(child, node));
-      } else {
-        setParent(node[key], node);
-      }
-    }
-  };
-
-  const hidePrivateProperties = (key, val) => {
-    // Hides properties like _shadowedFunctionLiteral,
-    // which makes the AST circular
-    if (key[0] === "_") return "[Private]";
-    return val;
-  };
-
-  babel.types.traverseFast(ast, node => {
-    registerChildren(node);
-    if (nodes.has(node)) {
-      throw new Error(
-        "Do not reuse nodes. Use `t.cloneNode` to copy them.\n" +
-          JSON.stringify(node, hidePrivateProperties, 2) +
-          "\nParent:\n" +
-          JSON.stringify(parents.get(node), hidePrivateProperties, 2),
-      );
-    }
-    nodes.add(node);
   });
 }
 
@@ -180,7 +140,7 @@ function run(task) {
   function getOpts(self) {
     const newOpts = merge(
       {
-        cwd: path.dirname(self.filename),
+        cwd: path.dirname(self.loc),
         filename: self.loc,
         filenameRelative: self.filename,
         sourceFileName: self.filename,
@@ -218,7 +178,7 @@ function run(task) {
   if (execCode) {
     const execOpts = getOpts(exec);
     result = babel.transform(execCode, execOpts);
-    checkDuplicatedNodes(result.ast);
+    checkDuplicatedNodes(babel, result.ast);
     execCode = result.code;
 
     try {
@@ -235,10 +195,15 @@ function run(task) {
   const expectCode = expected.code;
   if (!execCode || actualCode) {
     result = babel.transform(actualCode, getOpts(actual));
-    checkDuplicatedNodes(result.ast);
+    const expectedCode = result.code.replace(
+      escapeRegExp(path.resolve(__dirname, "../../../")),
+      "<CWD>",
+    );
+
+    checkDuplicatedNodes(babel, result.ast);
     if (
       !expected.code &&
-      result.code &&
+      expectedCode &&
       !opts.throws &&
       fs.statSync(path.dirname(expected.loc)).isDirectory() &&
       !process.env.CI
@@ -249,7 +214,7 @@ function run(task) {
       );
 
       console.log(`New test file created: ${expectedFile}`);
-      fs.writeFileSync(expectedFile, `${result.code}\n`);
+      fs.writeFileSync(expectedFile, `${expectedCode}\n`);
 
       if (expected.loc !== expectedFile) {
         try {
@@ -257,7 +222,7 @@ function run(task) {
         } catch (e) {}
       }
     } else {
-      actualCode = result.code.trim();
+      actualCode = expectedCode.trim();
       try {
         expect(actualCode).toEqualFile({
           filename: expected.loc,
@@ -267,7 +232,7 @@ function run(task) {
         if (!process.env.OVERWRITE) throw e;
 
         console.log(`Updated test file: ${expected.loc}`);
-        fs.writeFileSync(expected.loc, `${result.code}\n`);
+        fs.writeFileSync(expected.loc, `${expectedCode}\n`);
       }
 
       if (actualCode) {
@@ -345,44 +310,44 @@ export default function(
           continue;
         }
 
-        it(
+        const testFn = task.disabled ? it.skip : it;
+
+        testFn(
           task.title,
-          !task.disabled &&
-            function() {
-              function runTask() {
-                run(task);
-              }
 
-              defaults(task.options, {
-                sourceMap: !!(task.sourceMappings || task.sourceMap),
+          function() {
+            function runTask() {
+              run(task);
+            }
+
+            defaults(task.options, {
+              sourceMap: !!(task.sourceMappings || task.sourceMap),
+            });
+
+            extend(task.options, taskOpts);
+
+            if (dynamicOpts) dynamicOpts(task.options, task);
+
+            const throwMsg = task.options.throws;
+            if (throwMsg) {
+              // internal api doesn't have this option but it's best not to pollute
+              // the options object with useless options
+              delete task.options.throws;
+
+              assert.throws(runTask, function(err) {
+                return throwMsg === true || err.message.indexOf(throwMsg) >= 0;
               });
-
-              extend(task.options, taskOpts);
-
-              if (dynamicOpts) dynamicOpts(task.options, task);
-
-              const throwMsg = task.options.throws;
-              if (throwMsg) {
-                // internal api doesn't have this option but it's best not to pollute
-                // the options object with useless options
-                delete task.options.throws;
-
-                assert.throws(runTask, function(err) {
-                  return (
-                    throwMsg === true || err.message.indexOf(throwMsg) >= 0
-                  );
-                });
-              } else {
-                if (task.exec.code) {
-                  const result = run(task);
-                  if (result && typeof result.then === "function") {
-                    return result;
-                  }
-                } else {
-                  runTask();
+            } else {
+              if (task.exec.code) {
+                const result = run(task);
+                if (result && typeof result.then === "function") {
+                  return result;
                 }
+              } else {
+                runTask();
               }
-            },
+            }
+          },
         );
       }
     });

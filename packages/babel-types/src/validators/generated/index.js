@@ -2406,6 +2406,20 @@ export function isTSAnyKeyword(node: Object, opts?: Object): boolean {
 
   return false;
 }
+export function isTSUnknownKeyword(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSUnknownKeyword") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSNumberKeyword(node: Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -2649,6 +2663,34 @@ export function isTSTupleType(node: Object, opts?: Object): boolean {
 
   const nodeType = node.type;
   if (nodeType === "TSTupleType") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isTSOptionalType(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSOptionalType") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isTSRestType(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSRestType") {
     if (typeof opts === "undefined") {
       return true;
     } else {
@@ -4116,6 +4158,7 @@ export function isTSType(node: Object, opts?: Object): boolean {
   if (
     nodeType === "TSType" ||
     "TSAnyKeyword" === nodeType ||
+    "TSUnknownKeyword" === nodeType ||
     "TSNumberKeyword" === nodeType ||
     "TSObjectKeyword" === nodeType ||
     "TSBooleanKeyword" === nodeType ||
@@ -4134,6 +4177,8 @@ export function isTSType(node: Object, opts?: Object): boolean {
     "TSTypeLiteral" === nodeType ||
     "TSArrayType" === nodeType ||
     "TSTupleType" === nodeType ||
+    "TSOptionalType" === nodeType ||
+    "TSRestType" === nodeType ||
     "TSUnionType" === nodeType ||
     "TSIntersectionType" === nodeType ||
     "TSConditionalType" === nodeType ||
