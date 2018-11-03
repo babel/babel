@@ -105,6 +105,20 @@ Promise.all([utils.getTests(testDir), utils.getWhitelist(whitelistFile)])
     } else {
       process.exitCode = summary.passed ? 0 : 1;
     }
+
+    const unmappedFeatures = utils.getUnmappedFeatures();
+
+    if (unmappedFeatures.size) {
+      console.log("");
+      console.log(
+        "The following Features are not currently mapped or ignored:"
+      );
+      console.log(
+        Array.from(unmappedFeatures)
+          .join("\n")
+          .replace(/^/gm, "   ")
+      );
+    }
   })
   .catch(function(err) {
     console.error(err);
