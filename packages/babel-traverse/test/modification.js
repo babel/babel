@@ -235,7 +235,9 @@ describe("modification", function() {
         fnPath.insertAfter(t.identifier("x"));
 
         expect(bodyPath.get("body")).toHaveLength(2);
-        expect(bodyPath.get("body.1").node).toEqual(t.identifier("x"));
+        expect(bodyPath.get("body.1").node).toEqual(
+          t.expressionStatement(t.identifier("x")),
+        );
       });
 
       it("the ExportDefaultDeclaration, if a declaration is exported", function() {
@@ -246,7 +248,9 @@ describe("modification", function() {
         fnPath.insertAfter(t.identifier("x"));
 
         expect(bodyPath.get("body")).toHaveLength(2);
-        expect(bodyPath.get("body.1").node).toEqual(t.identifier("x"));
+        expect(bodyPath.get("body.1").node).toEqual(
+          t.expressionStatement(t.identifier("x")),
+        );
       });
 
       it("the exported expression", function() {
