@@ -1,5 +1,6 @@
 export function TaggedTemplateExpression(node: Object) {
   this.print(node.tag, node);
+  this.print(node.typeParameters, node); // TS
   this.print(node.quasi, node);
 }
 

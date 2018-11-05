@@ -10,11 +10,11 @@ export default class ImportBuilder {
   _resultName = null;
 
   _scope = null;
-  _file = null;
+  _hub = null;
 
-  constructor(importedSource, scope, file) {
+  constructor(importedSource, scope, hub) {
     this._scope = scope;
-    this._file = file;
+    this._hub = hub;
     this._importedSource = importedSource;
   }
 
@@ -91,10 +91,10 @@ export default class ImportBuilder {
   }
 
   defaultInterop() {
-    return this._interop(this._file.addHelper("interopRequireDefault"));
+    return this._interop(this._hub.addHelper("interopRequireDefault"));
   }
   wildcardInterop() {
-    return this._interop(this._file.addHelper("interopRequireWildcard"));
+    return this._interop(this._hub.addHelper("interopRequireWildcard"));
   }
 
   _interop(callee) {

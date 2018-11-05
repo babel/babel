@@ -1,9 +1,16 @@
+// @flow
+
 import template from "@babel/template";
 
-const helpers = {};
+const helpers = Object.create(null);
 export default helpers;
 
-helpers.typeof = () => template.program.ast`
+const helper = (minVersion: string) => tpl => ({
+  minVersion,
+  ast: () => template.program.ast(tpl),
+});
+
+helpers.typeof = helper("7.0.0-beta.0")`
   export default function _typeof(obj) {
     if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
       _typeof = function (obj) { return typeof obj; };
@@ -19,7 +26,7 @@ helpers.typeof = () => template.program.ast`
   }
 `;
 
-helpers.jsx = () => template.program.ast`
+helpers.jsx = helper("7.0.0-beta.0")`
   var REACT_ELEMENT_TYPE;
 
   export default function _createRawReactElement(type, props, key, children) {
@@ -70,7 +77,7 @@ helpers.jsx = () => template.program.ast`
   }
 `;
 
-helpers.asyncIterator = () => template.program.ast`
+helpers.asyncIterator = helper("7.0.0-beta.0")`
   export default function _asyncIterator(iterable) {
     var method
     if (typeof Symbol === "function") {
@@ -87,13 +94,13 @@ helpers.asyncIterator = () => template.program.ast`
   }
 `;
 
-helpers.AwaitValue = () => template.program.ast`
+helpers.AwaitValue = helper("7.0.0-beta.0")`
   export default function _AwaitValue(value) {
     this.wrapped = value;
   }
 `;
 
-helpers.AsyncGenerator = () => template.program.ast`
+helpers.AsyncGenerator = helper("7.0.0-beta.0")`
   import AwaitValue from "AwaitValue";
 
   export default function AsyncGenerator(gen) {
@@ -177,7 +184,7 @@ helpers.AsyncGenerator = () => template.program.ast`
   AsyncGenerator.prototype.return = function (arg) { return this._invoke("return", arg); };
 `;
 
-helpers.wrapAsyncGenerator = () => template.program.ast`
+helpers.wrapAsyncGenerator = helper("7.0.0-beta.0")`
   import AsyncGenerator from "AsyncGenerator";
 
   export default function _wrapAsyncGenerator(fn) {
@@ -187,7 +194,7 @@ helpers.wrapAsyncGenerator = () => template.program.ast`
   }
 `;
 
-helpers.awaitAsyncGenerator = () => template.program.ast`
+helpers.awaitAsyncGenerator = helper("7.0.0-beta.0")`
   import AwaitValue from "AwaitValue";
 
   export default function _awaitAsyncGenerator(value) {
@@ -195,7 +202,7 @@ helpers.awaitAsyncGenerator = () => template.program.ast`
   }
 `;
 
-helpers.asyncGeneratorDelegate = () => template.program.ast`
+helpers.asyncGeneratorDelegate = helper("7.0.0-beta.0")`
   export default function _asyncGeneratorDelegate(inner, awaitWrap) {
     var iter = {}, waiting = false;
 
@@ -237,7 +244,7 @@ helpers.asyncGeneratorDelegate = () => template.program.ast`
   }
 `;
 
-helpers.asyncToGenerator = () => template.program.ast`
+helpers.asyncToGenerator = helper("7.0.0-beta.0")`
   function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     try {
       var info = gen[key](arg);
@@ -272,7 +279,7 @@ helpers.asyncToGenerator = () => template.program.ast`
   }
 `;
 
-helpers.classCallCheck = () => template.program.ast`
+helpers.classCallCheck = helper("7.0.0-beta.0")`
   export default function _classCallCheck(instance, Constructor) {
     if (!(instance instanceof Constructor)) {
       throw new TypeError("Cannot call a class as a function");
@@ -280,7 +287,7 @@ helpers.classCallCheck = () => template.program.ast`
   }
 `;
 
-helpers.createClass = () => template.program.ast`
+helpers.createClass = helper("7.0.0-beta.0")`
   function _defineProperties(target, props) {
     for (var i = 0; i < props.length; i ++) {
       var descriptor = props[i];
@@ -298,7 +305,7 @@ helpers.createClass = () => template.program.ast`
   }
 `;
 
-helpers.defineEnumerableProperties = () => template.program.ast`
+helpers.defineEnumerableProperties = helper("7.0.0-beta.0")`
   export default function _defineEnumerableProperties(obj, descs) {
     for (var key in descs) {
       var desc = descs[key];
@@ -324,7 +331,7 @@ helpers.defineEnumerableProperties = () => template.program.ast`
   }
 `;
 
-helpers.defaults = () => template.program.ast`
+helpers.defaults = helper("7.0.0-beta.0")`
   export default function _defaults(obj, defaults) {
     var keys = Object.getOwnPropertyNames(defaults);
     for (var i = 0; i < keys.length; i++) {
@@ -338,7 +345,7 @@ helpers.defaults = () => template.program.ast`
   }
 `;
 
-helpers.defineProperty = () => template.program.ast`
+helpers.defineProperty = helper("7.0.0-beta.0")`
   export default function _defineProperty(obj, key, value) {
     // Shortcircuit the slow defineProperty path when possible.
     // We are trying to avoid issues where setters defined on the
@@ -359,7 +366,7 @@ helpers.defineProperty = () => template.program.ast`
   }
 `;
 
-helpers.extends = () => template.program.ast`
+helpers.extends = helper("7.0.0-beta.0")`
   export default function _extends() {
     _extends = Object.assign || function (target) {
       for (var i = 1; i < arguments.length; i++) {
@@ -377,7 +384,7 @@ helpers.extends = () => template.program.ast`
   }
 `;
 
-helpers.objectSpread = () => template.program.ast`
+helpers.objectSpread = helper("7.0.0-beta.0")`
   import defineProperty from "defineProperty";
 
   export default function _objectSpread(target) {
@@ -397,7 +404,7 @@ helpers.objectSpread = () => template.program.ast`
   }
 `;
 
-helpers.inherits = () => template.program.ast`
+helpers.inherits = helper("7.0.0-beta.0")`
   import setPrototypeOf from "setPrototypeOf";
 
   export default function _inherits(subClass, superClass) {
@@ -415,7 +422,7 @@ helpers.inherits = () => template.program.ast`
   }
 `;
 
-helpers.inheritsLoose = () => template.program.ast`
+helpers.inheritsLoose = helper("7.0.0-beta.0")`
   export default function _inheritsLoose(subClass, superClass) {
     subClass.prototype = Object.create(superClass.prototype);
     subClass.prototype.constructor = subClass;
@@ -423,7 +430,7 @@ helpers.inheritsLoose = () => template.program.ast`
   }
 `;
 
-helpers.getPrototypeOf = () => template.program.ast`
+helpers.getPrototypeOf = helper("7.0.0-beta.0")`
   export default function _getPrototypeOf(o) {
     _getPrototypeOf = Object.setPrototypeOf
       ? Object.getPrototypeOf
@@ -434,7 +441,7 @@ helpers.getPrototypeOf = () => template.program.ast`
   }
 `;
 
-helpers.setPrototypeOf = () => template.program.ast`
+helpers.setPrototypeOf = helper("7.0.0-beta.0")`
   export default function _setPrototypeOf(o, p) {
     _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
       o.__proto__ = p;
@@ -444,7 +451,7 @@ helpers.setPrototypeOf = () => template.program.ast`
   }
 `;
 
-helpers.construct = () => template.program.ast`
+helpers.construct = helper("7.0.0-beta.0")`
   import setPrototypeOf from "setPrototypeOf";
 
   function isNativeReflectConstruct() {
@@ -476,6 +483,8 @@ helpers.construct = () => template.program.ast`
     if (isNativeReflectConstruct()) {
       _construct = Reflect.construct;
     } else {
+      // NOTE: If Parent !== Class, the correct __proto__ is set *after*
+      //       calling the constructor.
       _construct = function _construct(Parent, args, Class) {
         var a = [null];
         a.push.apply(a, args);
@@ -491,17 +500,25 @@ helpers.construct = () => template.program.ast`
   }
 `;
 
+helpers.isNativeFunction = helper("7.0.0-beta.0")`
+  export default function _isNativeFunction(fn) {
+    // Note: This function returns "true" for core-js functions.
+    return Function.toString.call(fn).indexOf("[native code]") !== -1;
+  }
+`;
+
 // Based on https://github.com/WebReflection/babel-plugin-transform-builtin-classes
-helpers.wrapNativeSuper = () => template.program.ast`
+helpers.wrapNativeSuper = helper("7.0.0-beta.0")`
   import getPrototypeOf from "getPrototypeOf";
   import setPrototypeOf from "setPrototypeOf";
+  import isNativeFunction from "isNativeFunction";
   import construct from "construct";
 
   export default function _wrapNativeSuper(Class) {
     var _cache = typeof Map === "function" ? new Map() : undefined;
 
     _wrapNativeSuper = function _wrapNativeSuper(Class) {
-      if (Class === null) return null;
+      if (Class === null || !isNativeFunction(Class)) return Class;
       if (typeof Class !== "function") {
         throw new TypeError("Super expression must either be null or a function");
       }
@@ -528,7 +545,7 @@ helpers.wrapNativeSuper = () => template.program.ast`
   }
 `;
 
-helpers.instanceof = () => template.program.ast`
+helpers.instanceof = helper("7.0.0-beta.0")`
   export default function _instanceof(left, right) {
     if (right != null && typeof Symbol !== "undefined" && right[Symbol.hasInstance]) {
       return right[Symbol.hasInstance](left);
@@ -538,13 +555,13 @@ helpers.instanceof = () => template.program.ast`
   }
 `;
 
-helpers.interopRequireDefault = () => template.program.ast`
+helpers.interopRequireDefault = helper("7.0.0-beta.0")`
   export default function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : { default: obj };
   }
 `;
 
-helpers.interopRequireWildcard = () => template.program.ast`
+helpers.interopRequireWildcard = helper("7.0.0-beta.0")`
   export default function _interopRequireWildcard(obj) {
     if (obj && obj.__esModule) {
       return obj;
@@ -570,7 +587,7 @@ helpers.interopRequireWildcard = () => template.program.ast`
   }
 `;
 
-helpers.newArrowCheck = () => template.program.ast`
+helpers.newArrowCheck = helper("7.0.0-beta.0")`
   export default function _newArrowCheck(innerThis, boundThis) {
     if (innerThis !== boundThis) {
       throw new TypeError("Cannot instantiate an arrow function");
@@ -578,13 +595,13 @@ helpers.newArrowCheck = () => template.program.ast`
   }
 `;
 
-helpers.objectDestructuringEmpty = () => template.program.ast`
+helpers.objectDestructuringEmpty = helper("7.0.0-beta.0")`
   export default function _objectDestructuringEmpty(obj) {
     if (obj == null) throw new TypeError("Cannot destructure undefined");
   }
 `;
 
-helpers.objectWithoutPropertiesLoose = () => template.program.ast`
+helpers.objectWithoutPropertiesLoose = helper("7.0.0-beta.0")`
   export default function _objectWithoutPropertiesLoose(source, excluded) {
     if (source == null) return {};
 
@@ -602,7 +619,7 @@ helpers.objectWithoutPropertiesLoose = () => template.program.ast`
   }
 `;
 
-helpers.objectWithoutProperties = () => template.program.ast`
+helpers.objectWithoutProperties = helper("7.0.0-beta.0")`
   import objectWithoutPropertiesLoose from "objectWithoutPropertiesLoose";
 
   export default function _objectWithoutProperties(source, excluded) {
@@ -625,7 +642,7 @@ helpers.objectWithoutProperties = () => template.program.ast`
   }
 `;
 
-helpers.assertThisInitialized = () => template.program.ast`
+helpers.assertThisInitialized = helper("7.0.0-beta.0")`
   export default function _assertThisInitialized(self) {
     if (self === void 0) {
       throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -634,7 +651,7 @@ helpers.assertThisInitialized = () => template.program.ast`
   }
 `;
 
-helpers.possibleConstructorReturn = () => template.program.ast`
+helpers.possibleConstructorReturn = helper("7.0.0-beta.0")`
   import assertThisInitialized from "assertThisInitialized";
 
   export default function _possibleConstructorReturn(self, call) {
@@ -645,7 +662,7 @@ helpers.possibleConstructorReturn = () => template.program.ast`
   }
 `;
 
-helpers.superPropBase = () => template.program.ast`
+helpers.superPropBase = helper("7.0.0-beta.0")`
   import getPrototypeOf from "getPrototypeOf";
 
   export default function _superPropBase(object, property) {
@@ -658,7 +675,7 @@ helpers.superPropBase = () => template.program.ast`
   }
 `;
 
-helpers.get = () => template.program.ast`
+helpers.get = helper("7.0.0-beta.0")`
   import getPrototypeOf from "getPrototypeOf";
   import superPropBase from "superPropBase";
 
@@ -683,7 +700,7 @@ helpers.get = () => template.program.ast`
   }
 `;
 
-helpers.set = () => template.program.ast`
+helpers.set = helper("7.0.0-beta.0")`
   import getPrototypeOf from "getPrototypeOf";
   import superPropBase from "superPropBase";
   import defineProperty from "defineProperty";
@@ -741,7 +758,7 @@ helpers.set = () => template.program.ast`
   }
 `;
 
-helpers.taggedTemplateLiteral = () => template.program.ast`
+helpers.taggedTemplateLiteral = helper("7.0.0-beta.0")`
   export default function _taggedTemplateLiteral(strings, raw) {
     if (!raw) { raw = strings.slice(0); }
     return Object.freeze(Object.defineProperties(strings, {
@@ -750,7 +767,7 @@ helpers.taggedTemplateLiteral = () => template.program.ast`
   }
 `;
 
-helpers.taggedTemplateLiteralLoose = () => template.program.ast`
+helpers.taggedTemplateLiteralLoose = helper("7.0.0-beta.0")`
   export default function _taggedTemplateLiteralLoose(strings, raw) {
     if (!raw) { raw = strings.slice(0); }
     strings.raw = raw;
@@ -758,7 +775,7 @@ helpers.taggedTemplateLiteralLoose = () => template.program.ast`
   }
 `;
 
-helpers.temporalRef = () => template.program.ast`
+helpers.temporalRef = helper("7.0.0-beta.0")`
   import undef from "temporalUndefined";
 
   export default function _temporalRef(val, name) {
@@ -770,23 +787,23 @@ helpers.temporalRef = () => template.program.ast`
   }
 `;
 
-helpers.readOnlyError = () => template.program.ast`
+helpers.readOnlyError = helper("7.0.0-beta.0")`
   export default function _readOnlyError(name) {
     throw new Error("\\"" + name + "\\" is read-only");
   }
 `;
 
-helpers.classNameTDZError = () => template.program.ast`
+helpers.classNameTDZError = helper("7.0.0-beta.0")`
   export default function _classNameTDZError(name) {
     throw new Error("Class \\"" + name + "\\" cannot be referenced in computed property keys.");
   }
 `;
 
-helpers.temporalUndefined = () => template.program.ast`
+helpers.temporalUndefined = helper("7.0.0-beta.0")`
   export default {};
 `;
 
-helpers.slicedToArray = () => template.program.ast`
+helpers.slicedToArray = helper("7.0.0-beta.0")`
   import arrayWithHoles from "arrayWithHoles";
   import iterableToArrayLimit from "iterableToArrayLimit";
   import nonIterableRest from "nonIterableRest";
@@ -796,7 +813,7 @@ helpers.slicedToArray = () => template.program.ast`
   }
 `;
 
-helpers.slicedToArrayLoose = () => template.program.ast`
+helpers.slicedToArrayLoose = helper("7.0.0-beta.0")`
   import arrayWithHoles from "arrayWithHoles";
   import iterableToArrayLimitLoose from "iterableToArrayLimitLoose";
   import nonIterableRest from "nonIterableRest";
@@ -806,7 +823,7 @@ helpers.slicedToArrayLoose = () => template.program.ast`
   }
 `;
 
-helpers.toArray = () => template.program.ast`
+helpers.toArray = helper("7.0.0-beta.0")`
   import arrayWithHoles from "arrayWithHoles";
   import iterableToArray from "iterableToArray";
   import nonIterableRest from "nonIterableRest";
@@ -816,7 +833,7 @@ helpers.toArray = () => template.program.ast`
   }
 `;
 
-helpers.toConsumableArray = () => template.program.ast`
+helpers.toConsumableArray = helper("7.0.0-beta.0")`
   import arrayWithoutHoles from "arrayWithoutHoles";
   import iterableToArray from "iterableToArray";
   import nonIterableSpread from "nonIterableSpread";
@@ -826,7 +843,7 @@ helpers.toConsumableArray = () => template.program.ast`
   }
 `;
 
-helpers.arrayWithoutHoles = () => template.program.ast`
+helpers.arrayWithoutHoles = helper("7.0.0-beta.0")`
   export default function _arrayWithoutHoles(arr) {
     if (Array.isArray(arr)) {
       for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
@@ -835,13 +852,13 @@ helpers.arrayWithoutHoles = () => template.program.ast`
   }
 `;
 
-helpers.arrayWithHoles = () => template.program.ast`
+helpers.arrayWithHoles = helper("7.0.0-beta.0")`
   export default function _arrayWithHoles(arr) {
     if (Array.isArray(arr)) return arr;
   }
 `;
 
-helpers.iterableToArray = () => template.program.ast`
+helpers.iterableToArray = helper("7.0.0-beta.0")`
   export default function _iterableToArray(iter) {
     if (
       Symbol.iterator in Object(iter) ||
@@ -850,7 +867,7 @@ helpers.iterableToArray = () => template.program.ast`
   }
 `;
 
-helpers.iterableToArrayLimit = () => template.program.ast`
+helpers.iterableToArrayLimit = helper("7.0.0-beta.0")`
   export default function _iterableToArrayLimit(arr, i) {
     // this is an expanded form of \`for...of\` that properly supports abrupt completions of
     // iterators etc. variable names have been minimised to reduce the size of this massive
@@ -885,7 +902,7 @@ helpers.iterableToArrayLimit = () => template.program.ast`
   }
 `;
 
-helpers.iterableToArrayLimitLoose = () => template.program.ast`
+helpers.iterableToArrayLimitLoose = helper("7.0.0-beta.0")`
   export default function _iterableToArrayLimitLoose(arr, i) {
     var _arr = [];
     for (var _iterator = arr[Symbol.iterator](), _step; !(_step = _iterator.next()).done;) {
@@ -896,19 +913,19 @@ helpers.iterableToArrayLimitLoose = () => template.program.ast`
   }
 `;
 
-helpers.nonIterableSpread = () => template.program.ast`
+helpers.nonIterableSpread = helper("7.0.0-beta.0")`
   export default function _nonIterableSpread() {
     throw new TypeError("Invalid attempt to spread non-iterable instance");
   }
 `;
 
-helpers.nonIterableRest = () => template.program.ast`
+helpers.nonIterableRest = helper("7.0.0-beta.0")`
   export default function _nonIterableRest() {
     throw new TypeError("Invalid attempt to destructure non-iterable instance");
   }
 `;
 
-helpers.skipFirstGeneratorNext = () => template.program.ast`
+helpers.skipFirstGeneratorNext = helper("7.0.0-beta.0")`
   export default function _skipFirstGeneratorNext(fn) {
     return function () {
       var it = fn.apply(this, arguments);
@@ -918,13 +935,28 @@ helpers.skipFirstGeneratorNext = () => template.program.ast`
   }
 `;
 
-helpers.toPropertyKey = () => template.program.ast`
-  export default function _toPropertyKey(key) {
-    if (typeof key === "symbol") {
-      return key;
-    } else {
-      return String(key);
+helpers.toPrimitive = helper("7.1.5")`
+  export default function _toPrimitive(
+    input,
+    hint /*: "default" | "string" | "number" | void */
+  ) {
+    if (typeof input !== "object" || input === null) return input;
+    var prim = input[Symbol.toPrimitive];
+    if (prim !== undefined) {
+      var res = prim.call(input, hint || "default");
+      if (typeof res !== "object") return res;
+      throw new TypeError("@@toPrimitive must return a primitive value.");
     }
+    return (hint === "string" ? String : Number)(input);
+  }
+`;
+
+helpers.toPropertyKey = helper("7.1.5")`
+  import toPrimitive from "toPrimitive";
+
+  export default function _toPropertyKey(arg) {
+    var key = toPrimitive(arg, "string");
+    return typeof key === "symbol" ? key : String(key);
   }
 `;
 
@@ -932,7 +964,7 @@ helpers.toPropertyKey = () => template.program.ast`
  * Add a helper that will throw a useful error if the transform fails to detect the class
  * property assignment, so users know something failed.
  */
-helpers.initializerWarningHelper = () => template.program.ast`
+helpers.initializerWarningHelper = helper("7.0.0-beta.0")`
     export default function _initializerWarningHelper(descriptor, context){
         throw new Error(
           'Decorating class property failed. Please ensure that ' +
@@ -946,7 +978,7 @@ helpers.initializerWarningHelper = () => template.program.ast`
 /**
  * Add a helper to call as a replacement for class property definition.
  */
-helpers.initializerDefineProperty = () => template.program.ast`
+helpers.initializerDefineProperty = helper("7.0.0-beta.0")`
     export default function _initializerDefineProperty(target, property, descriptor, context){
         if (!descriptor) return;
 
@@ -963,7 +995,7 @@ helpers.initializerDefineProperty = () => template.program.ast`
  * Add a helper to take an initial descriptor, apply some decorators to it, and optionally
  * define the property.
  */
-helpers.applyDecoratedDescriptor = () => template.program.ast`
+helpers.applyDecoratedDescriptor = helper("7.0.0-beta.0")`
     export default function _applyDecoratedDescriptor(target, property, decorators, descriptor, context){
         var desc = {};
         Object['ke' + 'ys'](descriptor).forEach(function(key){
@@ -995,14 +1027,14 @@ helpers.applyDecoratedDescriptor = () => template.program.ast`
     }
 `;
 
-helpers.classPrivateFieldLooseKey = () => template.program.ast`
+helpers.classPrivateFieldLooseKey = helper("7.0.0-beta.0")`
   var id = 0;
   export default function _classPrivateFieldKey(name) {
     return "__private_" + (id++) + "_" + name;
   }
 `;
 
-helpers.classPrivateFieldLooseBase = () => template.program.ast`
+helpers.classPrivateFieldLooseBase = helper("7.0.0-beta.0")`
   export default function _classPrivateFieldBase(receiver, privateKey) {
     if (!Object.prototype.hasOwnProperty.call(receiver, privateKey)) {
       throw new TypeError("attempted to use private field on non-instance");
@@ -1011,21 +1043,699 @@ helpers.classPrivateFieldLooseBase = () => template.program.ast`
   }
 `;
 
-helpers.classPrivateFieldGet = () => template.program.ast`
+helpers.classPrivateFieldGet = helper("7.0.0-beta.0")`
   export default function _classPrivateFieldGet(receiver, privateMap) {
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to get private field on non-instance");
     }
-    return privateMap.get(receiver);
+    return privateMap.get(receiver).value;
   }
 `;
 
-helpers.classPrivateFieldSet = () => template.program.ast`
+helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
   export default function _classPrivateFieldSet(receiver, privateMap, value) {
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to set private field on non-instance");
     }
-    privateMap.set(receiver, value);
+    var descriptor = privateMap.get(receiver);
+    if (!descriptor.writable) {
+      // This should only throw in strict mode, but class bodies are
+      // always strict and private fields can only be used inside
+      // class bodies.
+      throw new TypeError("attempted to set read only private field");
+    }
+    descriptor.value = value;
     return value;
+  }
+`;
+
+helpers.classStaticPrivateFieldSpecGet = helper("7.0.2")`
+  export default function _classStaticPrivateFieldSpecGet(receiver, classConstructor, descriptor) {
+    if (receiver !== classConstructor) {
+      throw new TypeError("Private static access of wrong provenance");
+    }
+    return descriptor.value;
+  }
+`;
+
+helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
+  export default function _classStaticPrivateFieldSpecSet(receiver, classConstructor, descriptor, value) {
+    if (receiver !== classConstructor) {
+      throw new TypeError("Private static access of wrong provenance");
+    }
+    if (!descriptor.writable) {
+      // This should only throw in strict mode, but class bodies are
+      // always strict and private fields can only be used inside
+      // class bodies.
+      throw new TypeError("attempted to set read only private field");
+    }
+    descriptor.value = value;
+    return value;
+  }
+  
+`;
+
+helpers.decorate = helper("7.1.5")`
+  import toArray from "toArray";
+  import toPropertyKey from "toPropertyKey";
+
+  // These comments are stripped by @babel/template
+  /*::
+  type PropertyDescriptor =
+    | {
+        value: any,
+        writable: boolean,
+        configurable: boolean,
+        enumerable: boolean,
+      }
+    | {
+        get?: () => any,
+        set?: (v: any) => void,
+        configurable: boolean,
+        enumerable: boolean,
+      };
+
+  type FieldDescriptor ={
+    writable: boolean,
+    configurable: boolean,
+    enumerable: boolean,
+  };
+
+  type Placement = "static" | "prototype" | "own";
+  type Key = string | symbol; // PrivateName is not supported yet.
+
+  type ElementDescriptor =
+    | {
+        kind: "method",
+        key: Key,
+        placement: Placement,
+        descriptor: PropertyDescriptor
+      }
+    | {
+        kind: "field",
+        key: Key,
+        placement: Placement,
+        descriptor: FieldDescriptor,
+        initializer?: () => any,
+      };
+
+  // This is exposed to the user code
+  type ElementObjectInput = ElementDescriptor & {
+    [@@toStringTag]?: "Descriptor"
+  };
+
+  // This is exposed to the user code
+  type ElementObjectOutput = ElementDescriptor & {
+    [@@toStringTag]?: "Descriptor"
+    extras?: ElementDescriptor[],
+    finisher?: ClassFinisher,
+  };
+
+  // This is exposed to the user code
+  type ClassObject = {
+    [@@toStringTag]?: "Descriptor",
+    kind: "class",
+    elements: ElementDescriptor[],
+  };
+
+  type ElementDecorator = (descriptor: ElementObjectInput) => ?ElementObjectOutput;
+  type ClassDecorator = (descriptor: ClassObject) => ?ClassObject;
+  type ClassFinisher = <A, B>(cl: Class<A>) => Class<B>;
+
+  // Only used by Babel in the transform output, not part of the spec.
+  type ElementDefinition =
+    | {
+        kind: "method",
+        value: any,
+        key: Key,
+        static?: boolean,
+        decorators?: ElementDecorator[],
+      }
+    | {
+        kind: "field",
+        value: () => any,
+        key: Key,
+        static?: boolean,
+        decorators?: ElementDecorator[],
+    };
+
+  declare function ClassFactory<C>(initialize: (instance: C) => void): {
+    F: Class<C>,
+    d: ElementDefinition[]
+  }
+
+  */
+
+  /*::
+  // Various combinations with/without extras and with one or many finishers
+
+  type ElementFinisherExtras = {
+    element: ElementDescriptor,
+    finisher?: ClassFinisher,
+    extras?: ElementDescriptor[],
+  };
+
+  type ElementFinishersExtras = {
+    element: ElementDescriptor,
+    finishers: ClassFinisher[],
+    extras: ElementDescriptor[],
+  };
+
+  type ElementsFinisher = {
+    elements: ElementDescriptor[],
+    finisher?: ClassFinisher,
+  };
+
+  type ElementsFinishers = {
+    elements: ElementDescriptor[],
+    finishers: ClassFinisher[],
+  };
+
+  */
+
+  // ClassDefinitionEvaluation (Steps 26-*)
+  export default function _decorate(
+    decorators /*: ClassDecorator[] */,
+    factory /*: ClassFactory */,
+    superClass /*: ?Class<*> */,
+  ) /*: Class<*> */ {
+    var r = factory(function initialize(O) {
+      _initializeInstanceElements(O, decorated.elements);
+    }, superClass);
+    var decorated = _decorateClass(
+      _coalesceClassElements(r.d.map(_createElementDescriptor)),
+      decorators,
+    );
+
+    _initializeClassElements(r.F, decorated.elements);
+
+    return _runClassFinishers(r.F, decorated.finishers);
+  }
+
+  // ClassElementEvaluation
+  function _createElementDescriptor(
+    def /*: ElementDefinition */,
+  ) /*: ElementDescriptor */ {
+    var key = toPropertyKey(def.key);
+
+    var descriptor /*: PropertyDescriptor */;
+    if (def.kind === "method") {
+      descriptor = {
+        value: def.value,
+        writable: true,
+        configurable: true,
+        enumerable: false,
+      };
+      Object.defineProperty(def.value, "name", {
+        value: typeof key === "symbol" ? "" : key,
+        configurable: true,
+      });
+    } else if (def.kind === "get") {
+      descriptor = { get: def.value, configurable: true, enumerable: false };
+    } else if (def.kind === "set") {
+      descriptor = { set: def.value, configurable: true, enumerable: false };
+    } else if (def.kind === "field") {
+      descriptor = { configurable: true, writable: true, enumerable: true };
+    }
+
+    var element /*: ElementDescriptor */ = {
+      kind: def.kind === "field" ? "field" : "method",
+      key: key,
+      placement: def.static
+        ? "static"
+        : def.kind === "field"
+          ? "own"
+          : "prototype",
+      descriptor: descriptor,
+    };
+    if (def.decorators) element.decorators = def.decorators;
+    if (def.kind === "field") element.initializer = def.value;
+
+    return element;
+  }
+
+  // CoalesceGetterSetter
+  function _coalesceGetterSetter(
+    element /*: ElementDescriptor */,
+    other /*: ElementDescriptor */,
+  ) {
+    if (element.descriptor.get !== undefined) {
+      other.descriptor.get = element.descriptor.get;
+    } else {
+      other.descriptor.set = element.descriptor.set;
+    }
+  }
+
+  // CoalesceClassElements
+  function _coalesceClassElements(
+    elements /*: ElementDescriptor[] */,
+  ) /*: ElementDescriptor[] */ {
+    var newElements /*: ElementDescriptor[] */ = [];
+
+    var isSameElement = function(other /*: ElementDescriptor */) /*: boolean */ {
+      return (
+        other.kind === "method" &&
+        other.key === element.key &&
+        other.placement === element.placement
+      );
+    };
+
+    for (var i = 0; i < elements.length; i++) {
+      var element /*: ElementDescriptor */ = elements[i];
+      var other /*: ElementDescriptor */;
+
+      if (
+        element.kind === "method" &&
+        (other = newElements.find(isSameElement))
+      ) {
+        if (
+          _isDataDescriptor(element.descriptor) ||
+          _isDataDescriptor(other.descriptor)
+        ) {
+          if (_hasDecorators(element) || _hasDecorators(other)) {
+            throw new ReferenceError(
+              "Duplicated methods (" + element.key + ") can't be decorated.",
+            );
+          }
+          other.descriptor = element.descriptor;
+        } else {
+          if (_hasDecorators(element)) {
+            if (_hasDecorators(other)) {
+              throw new ReferenceError(
+                "Decorators can't be placed on different accessors with for " +
+                  "the same property (" +
+                  element.key +
+                  ").",
+              );
+            }
+            other.decorators = element.decorators;
+          }
+          _coalesceGetterSetter(element, other);
+        }
+      } else {
+        newElements.push(element);
+      }
+    }
+
+    return newElements;
+  }
+
+  function _hasDecorators(element /*: ElementDescriptor */) /*: boolean */ {
+    return element.decorators && element.decorators.length;
+  }
+
+  function _isDataDescriptor(desc /*: PropertyDescriptor */) /*: boolean */ {
+    return (
+      desc !== undefined &&
+      !(desc.value === undefined && desc.writable === undefined)
+    );
+  }
+
+  // InitializeClassElements
+  function _initializeClassElements /*::<C>*/(
+    F /*: Class<C> */,
+    elements /*: ElementDescriptor[] */,
+  ) {
+    var proto = F.prototype;
+
+    ["method", "field"].forEach(function(kind) {
+      elements.forEach(function(element /*: ElementDescriptor */) {
+        var placement = element.placement;
+        if (
+          element.kind === kind &&
+          (placement === "static" || placement === "prototype")
+        ) {
+          var receiver = placement === "static" ? F : proto;
+          _defineClassElement(receiver, element);
+        }
+      });
+    });
+  }
+
+  // InitializeInstanceElements
+  function _initializeInstanceElements /*::<C>*/(
+    O /*: C */,
+    elements /*: ElementDescriptor[] */,
+  ) {
+    ["method", "field"].forEach(function(kind) {
+      elements.forEach(function(element /*: ElementDescriptor */) {
+        if (element.kind === kind && element.placement === "own") {
+          _defineClassElement(O, element);
+        }
+      });
+    });
+  }
+
+  // DefineClassElement
+  function _defineClassElement /*::<C>*/(
+    receiver /*: C | Class<C> */,
+    element /*: ElementDescriptor */,
+  ) {
+    var descriptor /*: PropertyDescriptor */ = element.descriptor;
+    if (element.kind === "field") {
+      var initializer = element.initializer;
+      descriptor = {
+        enumerable: descriptor.enumerable,
+        writable: descriptor.writable,
+        configurable: descriptor.configurable,
+        value: initializer === void 0 ? void 0 : initializer.call(receiver),
+      };
+    }
+    Object.defineProperty(receiver, element.key, descriptor);
+  }
+
+  /*::
+
+  type Placements = {
+    static: Key[],
+    prototype: Key[],
+    own: Key[],
+  };
+
+  */
+
+  // DecorateClass
+  function _decorateClass(
+    elements /*: ElementDescriptor[] */,
+    decorators /*: ClassDecorator[] */,
+  ) /*: ElementsFinishers */ {
+    var newElements /*: ElementDescriptor[] */ = [];
+    var finishers /*: ClassFinisher[] */ = [];
+    var placements /*: Placements */ = { static: [], prototype: [], own: [] };
+
+    elements.forEach(function(element /*: ElementDescriptor */) {
+      _addElementPlacement(element, placements);
+    });
+
+    elements.forEach(function(element /*: ElementDescriptor */) {
+      if (!_hasDecorators(element)) return newElements.push(element);
+
+      var elementFinishersExtras /*: ElementFinishersExtras */ = _decorateElement(
+        element,
+        placements,
+      );
+      newElements.push(elementFinishersExtras.element);
+      newElements.push.apply(newElements, elementFinishersExtras.extras);
+      finishers.push.apply(finishers, elementFinishersExtras.finishers);
+    });
+
+    if (!decorators) {
+      return { elements: newElements, finishers: finishers };
+    }
+
+    var result /*: ElementsFinishers */ = _decorateConstructor(
+      newElements,
+      decorators,
+    );
+    finishers.push.apply(finishers, result.finishers);
+    result.finishers = finishers;
+
+    return result;
+  }
+
+  // AddElementPlacement
+  function _addElementPlacement(
+    element /*: ElementDescriptor */,
+    placements /*: Placements */,
+    silent /*: boolean */,
+  ) {
+    var keys = placements[element.placement];
+    if (!silent && keys.indexOf(element.key) !== -1) {
+      throw new TypeError("Duplicated element (" + element.key + ")");
+    }
+    keys.push(element.key);
+  }
+
+  // DecorateElement
+  function _decorateElement(
+    element /*: ElementDescriptor */,
+    placements /*: Placements */,
+  ) /*: ElementFinishersExtras */ {
+    var extras /*: ElementDescriptor[] */ = [];
+    var finishers /*: ClassFinisher[] */ = [];
+
+    for (
+      var decorators = element.decorators, i = decorators.length - 1;
+      i >= 0;
+      i--
+    ) {
+      // (inlined) RemoveElementPlacement
+      var keys = placements[element.placement];
+      keys.splice(keys.indexOf(element.key), 1);
+
+      var elementObject /*: ElementObjectInput */ = _fromElementDescriptor(
+        element,
+      );
+      var elementFinisherExtras /*: ElementFinisherExtras */ = _toElementFinisherExtras(
+        (0, decorators[i])(elementObject) /*: ElementObjectOutput */ ||
+          elementObject,
+      );
+
+      element = elementFinisherExtras.element;
+      _addElementPlacement(element, placements);
+
+      if (elementFinisherExtras.finisher) {
+        finishers.push(elementFinisherExtras.finisher);
+      }
+
+      var newExtras /*: ElementDescriptor[] | void */ =
+        elementFinisherExtras.extras;
+      if (newExtras) {
+        for (var j = 0; j < newExtras.length; j++) {
+          _addElementPlacement(newExtras[j], placements);
+        }
+        extras.push.apply(extras, newExtras);
+      }
+    }
+
+    return { element: element, finishers: finishers, extras: extras };
+  }
+
+  // DecorateConstructor
+  function _decorateConstructor(
+    elements /*: ElementDescriptor[] */,
+    decorators /*: ClassDecorator[] */,
+  ) /*: ElementsFinishers */ {
+    var finishers /*: ClassFinisher[] */ = [];
+
+    for (var i = decorators.length - 1; i >= 0; i--) {
+      var obj /*: ClassObject */ = _fromClassDescriptor(elements);
+      var elementsAndFinisher /*: ElementsFinisher */ = _toClassDescriptor(
+        (0, decorators[i])(obj) /*: ClassObject */ || obj,
+      );
+
+      if (elementsAndFinisher.finisher !== undefined) {
+        finishers.push(elementsAndFinisher.finisher);
+      }
+
+      if (elementsAndFinisher.elements !== undefined) {
+        elements = elementsAndFinisher.elements;
+
+        for (var j = 0; j < elements.length - 1; j++) {
+          for (var k = j + 1; k < elements.length; k++) {
+            if (
+              elements[j].key === elements[k].key &&
+              elements[j].placement === elements[k].placement
+            ) {
+              throw new TypeError("Duplicated element (" + elements[j].key + ")");
+            }
+          }
+        }
+      }
+    }
+
+    return { elements: elements, finishers: finishers };
+  }
+
+  // FromElementDescriptor
+  function _fromElementDescriptor(
+    element /*: ElementDescriptor */,
+  ) /*: ElementObject */ {
+    var obj /*: ElementObject */ = {
+      kind: element.kind,
+      key: element.key,
+      placement: element.placement,
+      descriptor: element.descriptor,
+    };
+
+    var desc = {
+      value: "Descriptor",
+      configurable: true,
+    };
+    Object.defineProperty(obj, Symbol.toStringTag, desc);
+
+    if (element.kind === "field") obj.initializer = element.initializer;
+
+    return obj;
+  }
+
+  // ToElementDescriptors
+  function _toElementDescriptors(
+    elementObjects /*: ElementObject[] */,
+  ) /*: ElementDescriptor[] */ {
+    if (elementObjects === undefined) return;
+    return toArray(elementObjects).map(function(elementObject) {
+      var element = _toElementDescriptor(elementObject);
+      _disallowProperty(elementObject, "finisher", "An element descriptor");
+      _disallowProperty(elementObject, "extras", "An element descriptor");
+      return element;
+    });
+  }
+
+  // ToElementDescriptor
+  function _toElementDescriptor(
+    elementObject /*: ElementObject */,
+  ) /*: ElementDescriptor */ {
+    var kind = String(elementObject.kind);
+    if (kind !== "method" && kind !== "field") {
+      throw new TypeError(
+        'An element descriptor\\'s .kind property must be either "method" or' +
+          ' "field", but a decorator created an element descriptor with' +
+          ' .kind "' +
+          kind +
+          '"',
+      );
+    }
+
+    var key = toPropertyKey(elementObject.key);
+
+    var placement = String(elementObject.placement);
+    if (
+      placement !== "static" &&
+      placement !== "prototype" &&
+      placement !== "own"
+    ) {
+      throw new TypeError(
+        'An element descriptor\\'s .placement property must be one of "static",' +
+          ' "prototype" or "own", but a decorator created an element descriptor' +
+          ' with .placement "' +
+          placement +
+          '"',
+      );
+    }
+
+    var descriptor /*: PropertyDescriptor */ = elementObject.descriptor;
+
+    _disallowProperty(elementObject, "elements", "An element descriptor");
+
+    var element /*: ElementDescriptor */ = {
+      kind: kind,
+      key: key,
+      placement: placement,
+      descriptor: Object.assign({}, descriptor),
+    };
+
+    if (kind !== "field") {
+      _disallowProperty(elementObject, "initializer", "A method descriptor");
+    } else {
+      _disallowProperty(
+        descriptor,
+        "get",
+        "The property descriptor of a field descriptor",
+      );
+      _disallowProperty(
+        descriptor,
+        "set",
+        "The property descriptor of a field descriptor",
+      );
+      _disallowProperty(
+        descriptor,
+        "value",
+        "The property descriptor of a field descriptor",
+      );
+
+      element.initializer = elementObject.initializer;
+    }
+
+    return element;
+  }
+
+  function _toElementFinisherExtras(
+    elementObject /*: ElementObject */,
+  ) /*: ElementFinisherExtras */ {
+    var element /*: ElementDescriptor */ = _toElementDescriptor(elementObject);
+    var finisher /*: ClassFinisher */ = _optionalCallableProperty(
+      elementObject,
+      "finisher",
+    );
+    var extras /*: ElementDescriptors[] */ = _toElementDescriptors(
+      elementObject.extras,
+    );
+
+    return { element: element, finisher: finisher, extras: extras };
+  }
+
+  // FromClassDescriptor
+  function _fromClassDescriptor(
+    elements /*: ElementDescriptor[] */,
+  ) /*: ClassObject */ {
+    var obj = {
+      kind: "class",
+      elements: elements.map(_fromElementDescriptor),
+    };
+
+    var desc = { value: "Descriptor", configurable: true };
+    Object.defineProperty(obj, Symbol.toStringTag, desc);
+
+    return obj;
+  }
+
+  // ToClassDescriptor
+  function _toClassDescriptor(obj /*: ClassObject */) /*: ElementsFinisher */ {
+    var kind = String(obj.kind);
+    if (kind !== "class") {
+      throw new TypeError(
+        'A class descriptor\\'s .kind property must be "class", but a decorator' +
+          ' created a class descriptor with .kind "' +
+          kind +
+          '"',
+      );
+    }
+
+    _disallowProperty(obj, "key", "A class descriptor");
+    _disallowProperty(obj, "placement", "A class descriptor");
+    _disallowProperty(obj, "descriptor", "A class descriptor");
+    _disallowProperty(obj, "initializer", "A class descriptor");
+    _disallowProperty(obj, "extras", "A class descriptor");
+
+    var finisher = _optionalCallableProperty(obj, "finisher");
+    var elements = _toElementDescriptors(obj.elements);
+
+    return { elements: elements, finisher: finisher };
+  }
+
+  function _disallowProperty(obj, name, objectType) {
+    if (obj[name] !== undefined) {
+      throw new TypeError(objectType + " can't have a ." + name + " property.");
+    }
+  }
+
+  function _optionalCallableProperty /*::<T>*/(
+    obj /*: T */,
+    name /*: $Keys<T> */,
+  ) /*: ?Function */ {
+    var value = obj[name];
+    if (value !== undefined && typeof value !== "function") {
+      throw new TypeError("Expected '" + name + "' to be a function");
+    }
+    return value;
+  }
+
+  // RunClassFinishers
+  function _runClassFinishers(
+    constructor /*: Class<*> */,
+    finishers /*: ClassFinisher[] */,
+  ) /*: Class<*> */ {
+    for (var i = 0; i < finishers.length; i++) {
+      var newConstructor /*: ?Class<*> */ = (0, finishers[i])(constructor);
+      if (newConstructor !== undefined) {
+        // NOTE: This should check if IsConstructor(newConstructor) is false.
+        if (typeof newConstructor !== "function") {
+          throw new TypeError("Finishers must return a constructor.");
+        }
+        constructor = newConstructor;
+      }
+    }
+    return constructor;
   }
 `;

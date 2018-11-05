@@ -71,9 +71,11 @@ class ConfigItem {
 
   /**
    * The options, if any, that were passed to the item.
-   * Mutating this will lead to undefined behavior. If you need
+   * Mutating this will lead to undefined behavior.
+   *
+   * "false" means that this item has been disabled.
    */
-  options: {} | void;
+  options: {} | void | false;
 
   /**
    * The directory that the options for this item are relative to.
@@ -102,10 +104,6 @@ class ConfigItem {
     // pass the item through JSON.stringify, it doesn't show up.
     this._descriptor = descriptor;
     Object.defineProperty(this, "_descriptor", ({ enumerable: false }: any));
-
-    if (this._descriptor.options === false) {
-      throw new Error("Assertion failure - unexpected false options");
-    }
 
     this.value = this._descriptor.value;
     this.options = this._descriptor.options;

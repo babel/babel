@@ -1,180 +1,167 @@
-export default {
-  builtins: {
-    Symbol: "symbol",
-    Promise: "promise",
-    Map: "map",
-    WeakMap: "weak-map",
-    Set: "set",
-    WeakSet: "weak-set",
-    Observable: "observable",
-    setImmediate: "set-immediate",
-    clearImmediate: "clear-immediate",
-    asap: "asap",
-    //parseFloat: "parse-float", // temporary disabled
-    //parseInt: "parse-int" // temporary disabled
-  },
+import semver from "semver";
 
-  methods: {
-    Array: {
-      copyWithin: "array/copy-within",
-      entries: "array/entries",
-      every: "array/every",
-      fill: "array/fill",
-      filter: "array/filter",
-      findIndex: "array/find-index",
-      find: "array/find",
-      forEach: "array/for-each",
-      from: "array/from",
-      includes: "array/includes",
-      indexOf: "array/index-of",
-      //isArray: "array/is-array", // temporary disabled
-      join: "array/join",
-      keys: "array/keys",
-      lastIndexOf: "array/last-index-of",
-      map: "array/map",
-      of: "array/of",
-      reduceRight: "array/reduce-right",
-      reduce: "array/reduce",
-      some: "array/some",
-      sort: "array/sort",
-      splice: "array/splice",
-      values: "array/values",
+function hasMinVersion(minVersion, runtimeVersion) {
+  // If the range is unavailable, we're running the script during Babel's
+  // build process, and we want to assume that all versions are satisfied so
+  // that the built output will include all definitions.
+  if (!runtimeVersion) return true;
+
+  // semver.intersects() has some surprising behavior with comparing ranges
+  // with preprelease versions. We add '^' to ensure that we are always
+  // comparing ranges with ranges, which sidesteps this logic.
+  // For example:
+  //
+  //   semver.intersects(`<7.0.1`, "7.0.0-beta.0") // false - surprising
+  //   semver.intersects(`<7.0.1`, "^7.0.0-beta.0") // true - expected
+  //
+  // This is because the first falls back to
+  //
+  //   semver.satisfies("7.0.0-beta.0", `<7.0.1`) // false - surprising
+  //
+  // and this fails because a prerelease version can only satisfy a range
+  // if it is a prerelease within the same major/minor/patch range.
+  //
+  // Note: If this is found to have issues, please also revist the logic in
+  // babel-core's availableHelper() API.
+  if (semver.valid(runtimeVersion)) runtimeVersion = `^${runtimeVersion}`;
+
+  return (
+    !semver.intersects(`<${minVersion}`, runtimeVersion) &&
+    !semver.intersects(`>=8.0.0`, runtimeVersion)
+  );
+}
+
+export default runtimeVersion => {
+  // Conditionally include 'Math' because it was not included in the 7.0.0
+  // release of '@babel/runtime'. See issue https://github.com/babel/babel/pull/8616.
+  const includeMathModule = hasMinVersion("7.0.1", runtimeVersion);
+
+  return {
+    builtins: {
+      Symbol: "symbol",
+      Promise: "promise",
+      Map: "map",
+      WeakMap: "weak-map",
+      Set: "set",
+      WeakSet: "weak-set",
+      setImmediate: "set-immediate",
+      clearImmediate: "clear-immediate",
+      parseFloat: "parse-float",
+      parseInt: "parse-int",
     },
 
-    JSON: {
-      stringify: "json/stringify",
-    },
+    methods: {
+      Array: {
+        from: "array/from",
+        isArray: "array/is-array",
+        of: "array/of",
+      },
 
-    Object: {
-      assign: "object/assign",
-      create: "object/create",
-      defineProperties: "object/define-properties",
-      defineProperty: "object/define-property",
-      entries: "object/entries",
-      freeze: "object/freeze",
-      getOwnPropertyDescriptor: "object/get-own-property-descriptor",
-      getOwnPropertyDescriptors: "object/get-own-property-descriptors",
-      getOwnPropertyNames: "object/get-own-property-names",
-      getOwnPropertySymbols: "object/get-own-property-symbols",
-      getPrototypeOf: "object/get-prototype-of",
-      isExtensible: "object/is-extensible",
-      isFrozen: "object/is-frozen",
-      isSealed: "object/is-sealed",
-      is: "object/is",
-      keys: "object/keys",
-      preventExtensions: "object/prevent-extensions",
-      seal: "object/seal",
-      setPrototypeOf: "object/set-prototype-of",
-      values: "object/values",
-    },
+      JSON: {
+        stringify: "json/stringify",
+      },
 
-    Math: {
-      acosh: "math/acosh",
-      asinh: "math/asinh",
-      atanh: "math/atanh",
-      cbrt: "math/cbrt",
-      clz32: "math/clz32",
-      cosh: "math/cosh",
-      expm1: "math/expm1",
-      fround: "math/fround",
-      hypot: "math/hypot",
-      imul: "math/imul",
-      log10: "math/log10",
-      log1p: "math/log1p",
-      log2: "math/log2",
-      sign: "math/sign",
-      sinh: "math/sinh",
-      tanh: "math/tanh",
-      trunc: "math/trunc",
-      iaddh: "math/iaddh",
-      isubh: "math/isubh",
-      imulh: "math/imulh",
-      umulh: "math/umulh",
-    },
+      Object: {
+        assign: "object/assign",
+        create: "object/create",
+        defineProperties: "object/define-properties",
+        defineProperty: "object/define-property",
+        entries: "object/entries",
+        freeze: "object/freeze",
+        getOwnPropertyDescriptor: "object/get-own-property-descriptor",
+        getOwnPropertyDescriptors: "object/get-own-property-descriptors",
+        getOwnPropertyNames: "object/get-own-property-names",
+        getOwnPropertySymbols: "object/get-own-property-symbols",
+        getPrototypeOf: "object/get-prototype-of",
+        isExtensible: "object/is-extensible",
+        isFrozen: "object/is-frozen",
+        isSealed: "object/is-sealed",
+        is: "object/is",
+        keys: "object/keys",
+        preventExtensions: "object/prevent-extensions",
+        seal: "object/seal",
+        setPrototypeOf: "object/set-prototype-of",
+        values: "object/values",
+      },
 
-    Symbol: {
-      for: "symbol/for",
-      hasInstance: "symbol/has-instance",
-      isConcatSpreadable: "symbol/is-concat-spreadable",
-      iterator: "symbol/iterator",
-      keyFor: "symbol/key-for",
-      match: "symbol/match",
-      replace: "symbol/replace",
-      search: "symbol/search",
-      species: "symbol/species",
-      split: "symbol/split",
-      toPrimitive: "symbol/to-primitive",
-      toStringTag: "symbol/to-string-tag",
-      unscopables: "symbol/unscopables",
-    },
+      ...(includeMathModule
+        ? {
+            Math: {
+              acosh: "math/acosh",
+              asinh: "math/asinh",
+              atanh: "math/atanh",
+              cbrt: "math/cbrt",
+              clz32: "math/clz32",
+              cosh: "math/cosh",
+              expm1: "math/expm1",
+              fround: "math/fround",
+              hypot: "math/hypot",
+              imul: "math/imul",
+              log10: "math/log10",
+              log1p: "math/log1p",
+              log2: "math/log2",
+              sign: "math/sign",
+              sinh: "math/sinh",
+              tanh: "math/tanh",
+              trunc: "math/trunc",
+            },
+          }
+        : {}),
 
-    String: {
-      at: "string/at",
-      codePointAt: "string/code-point-at",
-      endsWith: "string/ends-with",
-      fromCodePoint: "string/from-code-point",
-      includes: "string/includes",
-      matchAll: "string/match-all",
-      padStart: "string/pad-start",
-      padEnd: "string/pad-end",
-      raw: "string/raw",
-      repeat: "string/repeat",
-      startsWith: "string/starts-with",
-      trim: "string/trim",
-      trimLeft: "string/trim-left",
-      trimRight: "string/trim-right",
-      trimStart: "string/trim-start",
-      trimEnd: "string/trim-end",
-    },
+      Symbol: {
+        asyncIterator: "symbol/async-iterator",
+        for: "symbol/for",
+        hasInstance: "symbol/has-instance",
+        isConcatSpreadable: "symbol/is-concat-spreadable",
+        iterator: "symbol/iterator",
+        keyFor: "symbol/key-for",
+        match: "symbol/match",
+        replace: "symbol/replace",
+        search: "symbol/search",
+        species: "symbol/species",
+        split: "symbol/split",
+        toPrimitive: "symbol/to-primitive",
+        toStringTag: "symbol/to-string-tag",
+        unscopables: "symbol/unscopables",
+      },
 
-    Number: {
-      EPSILON: "number/epsilon",
-      isFinite: "number/is-finite",
-      isInteger: "number/is-integer",
-      isNaN: "number/is-nan",
-      isSafeInteger: "number/is-safe-integer",
-      MAX_SAFE_INTEGER: "number/max-safe-integer",
-      MIN_SAFE_INTEGER: "number/min-safe-integer",
-      parseFloat: "number/parse-float",
-      parseInt: "number/parse-int",
-    },
+      String: {
+        at: "string/at",
+        fromCodePoint: "string/from-code-point",
+        raw: "string/raw",
+      },
 
-    Reflect: {
-      apply: "reflect/apply",
-      construct: "reflect/construct",
-      defineProperty: "reflect/define-property",
-      deleteProperty: "reflect/delete-property",
-      getOwnPropertyDescriptor: "reflect/get-own-property-descriptor",
-      getPrototypeOf: "reflect/get-prototype-of",
-      get: "reflect/get",
-      has: "reflect/has",
-      isExtensible: "reflect/is-extensible",
-      ownKeys: "reflect/own-keys",
-      preventExtensions: "reflect/prevent-extensions",
-      setPrototypeOf: "reflect/set-prototype-of",
-      set: "reflect/set",
-      defineMetadata: "reflect/define-metadata",
-      deleteMetadata: "reflect/delete-metadata",
-      getMetadata: "reflect/get-metadata",
-      getMetadataKeys: "reflect/get-metadata-keys",
-      getOwnMetadata: "reflect/get-own-metadata",
-      getOwnMetadataKeys: "reflect/get-own-metadata-keys",
-      hasMetadata: "reflect/has-metadata",
-      hasOwnMetadata: "reflect/has-own-metadata",
-      metadata: "reflect/metadata",
-    },
+      Number: {
+        EPSILON: "number/epsilon",
+        isFinite: "number/is-finite",
+        isInteger: "number/is-integer",
+        isNaN: "number/is-nan",
+        isSafeInteger: "number/is-safe-integer",
+        MAX_SAFE_INTEGER: "number/max-safe-integer",
+        MIN_SAFE_INTEGER: "number/min-safe-integer",
+        parseFloat: "number/parse-float",
+        parseInt: "number/parse-int",
+      },
 
-    System: {
-      global: "system/global",
-    },
+      Reflect: {
+        apply: "reflect/apply",
+        construct: "reflect/construct",
+        defineProperty: "reflect/define-property",
+        deleteProperty: "reflect/delete-property",
+        getOwnPropertyDescriptor: "reflect/get-own-property-descriptor",
+        getPrototypeOf: "reflect/get-prototype-of",
+        get: "reflect/get",
+        has: "reflect/has",
+        isExtensible: "reflect/is-extensible",
+        ownKeys: "reflect/own-keys",
+        preventExtensions: "reflect/prevent-extensions",
+        setPrototypeOf: "reflect/set-prototype-of",
+        set: "reflect/set",
+      },
 
-    Date: {
-      //now: "date/now" // temporary disabled
+      Date: {
+        now: "date/now",
+      },
     },
-
-    Function: {
-      // Warning: /virtual/ method - prototype, not static, version
-      //bind: "function/virtual/bind" // temporary disabled
-    },
-  },
+  };
 };

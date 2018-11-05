@@ -1,4 +1,5 @@
 let a: any;
+let un: unknown;
 let b: boolean;
 let ne: never;
 let nul: null;

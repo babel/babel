@@ -24,7 +24,7 @@
   <a href="https://medium.com/friendship-dot-js/i-peeked-into-my-node-modules-directory-and-you-wont-believe-what-happened-next-b89f63d21558"><img alt="Business Strategy Status" src="https://img.shields.io/badge/business%20model-flavortown-green.svg"></a>
 </p>
 
-Babel is a community-driven project used by many companies and projects, and is maintained by a group of [volunteers](https://babeljs.io/team). If you'd like to help support the future of the project, please consider:
+Babel (pronounced ["babble"](https://soundcloud.com/sebmck/how-to-pronounce-babel))  is a community-driven project used by many companies and projects, and is maintained by a group of [volunteers](https://babeljs.io/team). If you'd like to help support the future of the project, please consider:
 
 - Giving developer time on the project. (Message us on [Twitter](https://twitter.com/babeljs) or [Slack](https://slack.babeljs.io/) for guidance!)
 - Giving funds by becoming a sponsor (see below)!
@@ -68,6 +68,10 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 
 Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://www.patreon.com/henryzhu)]
 
+## Silver
+
+<a href="https://issue.sh/?utm_medium=github&utm_campaign=babel" target="_blank"><img src="https://user-images.githubusercontent.com/5557143/43912065-c8cdff78-9c33-11e8-829a-0b4166ccc215.png"></a>
+
 ## Bronze
 
 <a href="http://teamextension.io/" target="_blank"><img src="https://teamextension.io/dist/img/logo/te-logo-compact.png" height="64"></a>
@@ -103,7 +107,7 @@ Mostly a handful of volunteers! Please check out our [team page](https://babeljs
 
 ### Looking for support?
 
-For questions and support please visit join our [Slack Community](https://slack.babeljs.io/) (you can sign-up [here](https://slack.babeljs.io/) for an invite), ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs).
+For questions and support please join our [Slack Community](https://slack.babeljs.io/) (you can sign-up [here](https://slack.babeljs.io/) for an invite), ask a question on [Stack Overflow](https://stackoverflow.com/questions/tagged/babeljs), or ping us on [Twitter](https://twitter.com/babeljs).
 
 ### Is there a Babel song?
 

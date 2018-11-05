@@ -2,8 +2,5 @@
   "sourceType": "module",
   "moduleIds": true,
   "moduleId": "my custom module name",
-  "plugins": [
-    "external-helpers",
-    ["transform-modules-amd", { "loose": true }]
-  ]
+  "plugins": ["external-helpers", ["transform-modules-amd", { "loose": true }]]
 }

@@ -16,7 +16,7 @@ import {
   lineBreak,
   lineBreakG,
   isNewLine,
-  nonASCIIwhitespace,
+  isWhitespace,
 } from "../util/whitespace";
 import State from "./state";
 
@@ -109,18 +109,6 @@ export class Token {
 }
 
 // ## Tokenizer
-
-function codePointToString(code: number): string {
-  // UTF-16 Decoding
-  if (code <= 0xffff) {
-    return String.fromCharCode(code);
-  } else {
-    return String.fromCharCode(
-      ((code - 0x10000) >> 10) + 0xd800,
-      ((code - 0x10000) & 1023) + 0xdc00,
-    );
-  }
-}
 
 export default class Tokenizer extends LocationParser {
   // Forward-declarations
@@ -226,7 +214,7 @@ export default class Tokenizer extends LocationParser {
     if (curContext.override) {
       curContext.override(this);
     } else {
-      this.readToken(this.fullCharCodeAtPos());
+      this.readToken(this.input.codePointAt(this.state.pos));
     }
   }
 
@@ -238,14 +226,6 @@ export default class Tokenizer extends LocationParser {
     } else {
       this.getTokenFromCode(code);
     }
-  }
-
-  fullCharCodeAtPos(): number {
-    const code = this.input.charCodeAt(this.state.pos);
-    if (code <= 0xd7ff || code >= 0xe000) return code;
-
-    const next = this.input.charCodeAt(this.state.pos + 1);
-    return (code << 10) + next - 0x35fdc00;
   }
 
   pushComment(
@@ -331,11 +311,6 @@ export default class Tokenizer extends LocationParser {
     loop: while (this.state.pos < this.input.length) {
       const ch = this.input.charCodeAt(this.state.pos);
       switch (ch) {
-        case charCodes.space:
-        case charCodes.nonBreakingSpace:
-          ++this.state.pos;
-          break;
-
         case charCodes.carriageReturn:
           if (
             this.input.charCodeAt(this.state.pos + 1) === charCodes.lineFeed
@@ -367,11 +342,7 @@ export default class Tokenizer extends LocationParser {
           break;
 
         default:
-          if (
-            (ch > charCodes.backSpace && ch < charCodes.shiftOut) ||
-            (ch >= charCodes.oghamSpaceMark &&
-              nonASCIIwhitespace.test(String.fromCharCode(ch)))
-          ) {
+          if (isWhitespace(ch)) {
             ++this.state.pos;
           } else {
             break loop;
@@ -670,7 +641,7 @@ export default class Tokenizer extends LocationParser {
         } else {
           this.raise(
             this.state.pos,
-            `Unexpected character '${codePointToString(code)}'`,
+            `Unexpected character '${String.fromCodePoint(code)}'`,
           );
         }
 
@@ -832,7 +803,7 @@ export default class Tokenizer extends LocationParser {
 
     this.raise(
       this.state.pos,
-      `Unexpected character '${codePointToString(code)}'`,
+      `Unexpected character '${String.fromCodePoint(code)}'`,
     );
   }
 
@@ -874,7 +845,7 @@ export default class Tokenizer extends LocationParser {
 
     while (this.state.pos < this.input.length) {
       const char = this.input[this.state.pos];
-      const charCode = this.fullCharCodeAtPos();
+      const charCode = this.input.codePointAt(this.state.pos);
 
       if (VALID_REGEX_FLAGS.indexOf(char) > -1) {
         if (mods.indexOf(char) > -1) {
@@ -986,7 +957,7 @@ export default class Tokenizer extends LocationParser {
       }
     }
 
-    if (isIdentifierStart(this.fullCharCodeAtPos())) {
+    if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
       this.raise(this.state.pos, "Identifier directly after number");
     }
 
@@ -1042,7 +1013,7 @@ export default class Tokenizer extends LocationParser {
       }
     }
 
-    if (isIdentifierStart(this.fullCharCodeAtPos())) {
+    if (isIdentifierStart(this.input.codePointAt(this.state.pos))) {
       this.raise(this.state.pos, "Identifier directly after number");
     }
 
@@ -1119,6 +1090,7 @@ export default class Tokenizer extends LocationParser {
         (ch === charCodes.lineSeparator || ch === charCodes.paragraphSeparator)
       ) {
         ++this.state.pos;
+        ++this.state.curLine;
       } else if (isNewLine(ch)) {
         this.raise(this.state.start, "Unterminated string constant");
       } else {
@@ -1211,7 +1183,7 @@ export default class Tokenizer extends LocationParser {
       }
       case charCodes.lowercaseU: {
         const code = this.readCodePoint(throwOnInvalid);
-        return code === null ? null : codePointToString(code);
+        return code === null ? null : String.fromCodePoint(code);
       }
       case charCodes.lowercaseT:
         return "\t";
@@ -1289,7 +1261,7 @@ export default class Tokenizer extends LocationParser {
       first = true,
       chunkStart = this.state.pos;
     while (this.state.pos < this.input.length) {
-      const ch = this.fullCharCodeAtPos();
+      const ch = this.input.codePointAt(this.state.pos);
       if (isIdentifierChar(ch)) {
         this.state.pos += ch <= 0xffff ? 1 : 2;
       } else if (this.state.isIterator && ch === charCodes.atSign) {
@@ -1315,7 +1287,7 @@ export default class Tokenizer extends LocationParser {
         }
 
         // $FlowFixMe
-        word += codePointToString(esc);
+        word += String.fromCodePoint(esc);
         chunkStart = this.state.pos;
       } else {
         break;

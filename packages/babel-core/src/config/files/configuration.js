@@ -14,6 +14,7 @@ import makeAPI from "../helpers/config-api";
 import { makeStaticFileCache } from "./utils";
 import pathPatternToRegex from "../pattern-to-regex";
 import type { FilePackageData, RelativeConfig, ConfigFile } from "./types";
+import type { CallerMetadata } from "../validation/options";
 
 const debug = buildDebug("babel:config:loading:files:configuration");
 
@@ -23,9 +24,25 @@ const BABELRC_FILENAME = ".babelrc";
 const BABELRC_JS_FILENAME = ".babelrc.js";
 const BABELIGNORE_FILENAME = ".babelignore";
 
+export function findConfigUpwards(rootDir: string): string | null {
+  let dirname = rootDir;
+  while (true) {
+    if (fs.existsSync(path.join(dirname, BABEL_CONFIG_JS_FILENAME))) {
+      return dirname;
+    }
+
+    const nextDir = path.dirname(dirname);
+    if (dirname === nextDir) break;
+    dirname = nextDir;
+  }
+
+  return null;
+}
+
 export function findRelativeConfig(
   packageData: FilePackageData,
   envName: string,
+  caller: CallerMetadata | void,
 ): RelativeConfig {
   let config = null;
   let ignore = null;
@@ -37,7 +54,7 @@ export function findRelativeConfig(
       config = [BABELRC_FILENAME, BABELRC_JS_FILENAME].reduce(
         (previousConfig: ConfigFile | null, name) => {
           const filepath = path.join(loc, name);
-          const config = readConfig(filepath, envName);
+          const config = readConfig(filepath, envName, caller);
 
           if (config && previousConfig) {
             throw new Error(
@@ -91,10 +108,11 @@ export function findRelativeConfig(
 export function findRootConfig(
   dirname: string,
   envName: string,
+  caller: CallerMetadata | void,
 ): ConfigFile | null {
   const filepath = path.resolve(dirname, BABEL_CONFIG_JS_FILENAME);
 
-  const conf = readConfig(filepath, envName);
+  const conf = readConfig(filepath, envName, caller);
   if (conf) {
     debug("Found root config %o in $o.", BABEL_CONFIG_JS_FILENAME, dirname);
   }
@@ -105,10 +123,11 @@ export function loadConfig(
   name: string,
   dirname: string,
   envName: string,
+  caller: CallerMetadata | void,
 ): ConfigFile {
   const filepath = resolve.sync(name, { basedir: dirname });
 
-  const conf = readConfig(filepath, envName);
+  const conf = readConfig(filepath, envName, caller);
   if (!conf) {
     throw new Error(`Config file ${filepath} contains no configuration data`);
   }
@@ -121,16 +140,22 @@ export function loadConfig(
  * Read the given config file, returning the result. Returns null if no config was found, but will
  * throw if there are parsing errors while loading a config.
  */
-function readConfig(filepath, envName): ConfigFile | null {
+function readConfig(filepath, envName, caller): ConfigFile | null {
   return path.extname(filepath) === ".js"
-    ? readConfigJS(filepath, { envName })
+    ? readConfigJS(filepath, { envName, caller })
     : readConfigJSON5(filepath);
 }
 
 const LOADING_CONFIGS = new Set();
 
 const readConfigJS = makeStrongCache(
-  (filepath, cache: CacheConfigurator<{ envName: string }>) => {
+  (
+    filepath,
+    cache: CacheConfigurator<{
+      envName: string,
+      caller: CallerMetadata | void,
+    }>,
+  ) => {
     if (!fs.existsSync(filepath)) {
       cache.forever();
       return null;

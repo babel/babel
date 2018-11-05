@@ -112,7 +112,7 @@ export function wrapInterop(
     throw new Error(`Unknown interop: ${type}`);
   }
 
-  return t.callExpression(programPath.hub.file.addHelper(helper), [expr]);
+  return t.callExpression(programPath.hub.addHelper(helper), [expr]);
 }
 
 /**

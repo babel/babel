@@ -1,6 +1,3 @@
 {
-  "plugins": [
-    "transform-classes",
-    "external-helpers"
-  ]
+  "plugins": ["transform-classes", "external-helpers"]
 }

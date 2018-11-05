@@ -1,5 +1,3 @@
 {
-  "presets": [
-    ["react", { "development": true }]
-  ]
+  "presets": [["react", { "development": true }]]
 }

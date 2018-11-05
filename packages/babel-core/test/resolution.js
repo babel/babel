@@ -134,6 +134,46 @@ describe("addon resolution", function() {
     });
   });
 
+  it("should find @foo scoped presets with an inner babel-preset", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["@foo/thing.babel-preset-convert"],
+    });
+  });
+
+  it("should find @foo scoped plugins with an inner babel-plugin", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["@foo/thing.babel-plugin-convert"],
+    });
+  });
+
+  it("should find @foo scoped presets with an babel-preset suffix", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      presets: ["@foo/thing-babel-preset"],
+    });
+  });
+
+  it("should find @foo scoped plugins with an babel-plugin suffix", function() {
+    process.chdir("foo-org-paths");
+
+    babel.transform("", {
+      filename: "filename.js",
+      babelrc: false,
+      plugins: ["@foo/thing-babel-plugin"],
+    });
+  });
+
   it("should find @foo scoped presets with an existing prefix", function() {
     process.chdir("foo-org-paths");
 
@@ -360,7 +400,7 @@ describe("addon resolution", function() {
         presets: ["testplugin"],
       });
     }).toThrow(
-      /Cannot find module 'babel-preset-testplugin'.*\n- Did you accidentally pass a preset as a plugin\?/,
+      /Cannot find module 'babel-preset-testplugin'.*\n- Did you accidentally pass a plugin as a preset\?/,
     );
   });
 
@@ -374,7 +414,7 @@ describe("addon resolution", function() {
         plugins: ["testpreset"],
       });
     }).toThrow(
-      /Cannot find module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a plugin as a preset\?/,
+      /Cannot find module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a preset as a plugin\?/,
     );
   });
 

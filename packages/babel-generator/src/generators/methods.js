@@ -111,7 +111,23 @@ export function ArrowFunctionExpression(node: Object) {
     t.isIdentifier(firstParam) &&
     !hasTypes(node, firstParam)
   ) {
-    this.print(firstParam, node);
+    if (
+      this.format.retainLines &&
+      node.loc.start.line < node.body.loc.start.line
+    ) {
+      this.token("(");
+      if (firstParam.loc.start.line > node.loc.start.line) {
+        this.indent();
+        this.print(firstParam, node);
+        this.dedent();
+        this._catchUp("start", node.body.loc);
+      } else {
+        this.print(firstParam, node);
+      }
+      this.token(")");
+    } else {
+      this.print(firstParam, node);
+    }
   } else {
     this._params(node);
   }

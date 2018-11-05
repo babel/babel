@@ -563,20 +563,39 @@ export default class ExpressionParser extends LValParser {
       }
       return node;
     } else if (this.match(tt.backQuote)) {
-      const node = this.startNodeAt(startPos, startLoc);
-      node.tag = base;
-      node.quasi = this.parseTemplate(true);
-      if (state.optionalChainMember) {
-        this.raise(
-          startPos,
-          "Tagged Template Literals are not allowed in optionalChain",
-        );
-      }
-      return this.finishNode(node, "TaggedTemplateExpression");
+      return this.parseTaggedTemplateExpression(
+        startPos,
+        startLoc,
+        base,
+        state,
+      );
     } else {
       state.stop = true;
       return base;
     }
+  }
+
+  parseTaggedTemplateExpression(
+    startPos: number,
+    startLoc: Position,
+    base: N.Expression,
+    state: N.ParseSubscriptState,
+    typeArguments?: ?N.TsTypeParameterInstantiation,
+  ): N.TaggedTemplateExpression {
+    const node: N.TaggedTemplateExpression = this.startNodeAt(
+      startPos,
+      startLoc,
+    );
+    node.tag = base;
+    node.quasi = this.parseTemplate(true);
+    if (typeArguments) node.typeParameters = typeArguments;
+    if (state.optionalChainMember) {
+      this.raise(
+        startPos,
+        "Tagged Template Literals are not allowed in optionalChain",
+      );
+    }
+    return this.finishNode(node, "TaggedTemplateExpression");
   }
 
   atPossibleAsync(base: N.Expression): boolean {
@@ -775,7 +794,12 @@ export default class ExpressionParser extends LValParser {
         ) {
           this.next();
           return this.parseFunction(node, false, false, true);
-        } else if (canBeArrow && id.name === "async" && this.match(tt.name)) {
+        } else if (
+          canBeArrow &&
+          !this.canInsertSemicolon() &&
+          id.name === "async" &&
+          this.match(tt.name)
+        ) {
           const oldYield = this.state.yieldInPossibleArrowParameters;
           this.state.yieldInPossibleArrowParameters = null;
           const params = [this.parseIdentifier()];
@@ -904,7 +928,19 @@ export default class ExpressionParser extends LValParser {
     if (isPrivate) {
       this.expectOnePlugin(["classPrivateProperties", "classPrivateMethods"]);
       const node = this.startNode();
+      const columnHashEnd = this.state.end;
       this.next();
+      const columnIdentifierStart = this.state.start;
+
+      const spacesBetweenHashAndIdentifier =
+        columnIdentifierStart - columnHashEnd;
+      if (spacesBetweenHashAndIdentifier != 0) {
+        this.raise(
+          columnIdentifierStart,
+          "Unexpected space between # and identifier",
+        );
+      }
+
       node.id = this.parseIdentifier(true);
       return this.finishNode(node, "PrivateName");
     } else {

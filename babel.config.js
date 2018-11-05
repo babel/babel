@@ -13,13 +13,18 @@ module.exports = function(api) {
 
   let convertESM = true;
   let ignoreLib = true;
+  let includeRuntime = false;
 
   switch (env) {
     // Configs used during bundling builds.
     case "babel-parser":
+      convertESM = false;
+      ignoreLib = false;
+      break;
     case "standalone":
       convertESM = false;
       ignoreLib = false;
+      includeRuntime = true;
       break;
     case "production":
       // Config during builds before publish.
@@ -41,6 +46,10 @@ module.exports = function(api) {
   }
 
   const config = {
+    // Our dependencies are all standard CommonJS, along with all sorts of
+    // other random files in Babel's codebase, so we use script as the default,
+    // and then mark actual modules as modules farther down.
+    sourceType: "script",
     comments: false,
     ignore: [
       // These may not be strictly necessary with the newly-limited scope of
@@ -84,7 +93,29 @@ module.exports = function(api) {
           convertESM ? "@babel/transform-modules-commonjs" : null,
         ].filter(Boolean),
       },
-    ],
+      {
+        // The vast majority of our src files are modules, but we use
+        // unambiguous to keep things simple until we get around to renaming
+        // the modules to be more easily distinguished from CommonJS
+        test: [
+          "packages/*/src",
+          "packages/*/test",
+          "codemods/*/src",
+          "codemods/*/test",
+        ],
+        sourceType: "unambiguous",
+      },
+      {
+        // The runtime transform shouldn't process its own runtime or core-js.
+        exclude: [
+          "packages/babel-runtime",
+          /[\\/]node_modules[\\/](?:@babel\/runtime|babel-runtime|core-js)[\\/]/,
+        ],
+        plugins: [includeRuntime ? "@babel/transform-runtime" : null].filter(
+          Boolean
+        ),
+      },
+    ].filter(Boolean),
   };
 
   // we need to do this as long as we do not test everything from source

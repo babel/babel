@@ -206,12 +206,29 @@ function makeSimpleConfigurator(
       return;
     }
 
-    return cache.using(val);
+    return cache.using(() => assertSimpleType(val()));
   }
   cacheFn.forever = () => cache.forever();
   cacheFn.never = () => cache.never();
-  cacheFn.using = cb => cache.using(() => cb());
-  cacheFn.invalidate = cb => cache.invalidate(() => cb());
+  cacheFn.using = cb => cache.using(() => assertSimpleType(cb()));
+  cacheFn.invalidate = cb => cache.invalidate(() => assertSimpleType(cb()));
 
   return (cacheFn: any);
+}
+
+// Types are limited here so that in the future these values can be used
+// as part of Babel's caching logic.
+type SimpleType = string | boolean | number | null | void;
+export function assertSimpleType(value: mixed): SimpleType {
+  if (
+    value != null &&
+    typeof value !== "string" &&
+    typeof value !== "boolean" &&
+    typeof value !== "number"
+  ) {
+    throw new Error(
+      "Cache keys must be either string, boolean, number, null, or undefined.",
+    );
+  }
+  return value;
 }

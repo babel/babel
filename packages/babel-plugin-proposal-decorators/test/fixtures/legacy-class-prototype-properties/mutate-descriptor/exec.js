@@ -16,6 +16,16 @@ function dec(target, name, descriptor) {
   });
 }
 
+function plainDec(target, name, descriptor) {
+  expect(target).toBeTruthy();
+  expect(typeof name).toBe("string");
+  expect(typeof descriptor).toBe("object");
+
+  target.decoratedProps = (target.decoratedProps || []).concat([name]);
+
+  return descriptor;
+}
+
 class Example {
   @dec
   enumconfwrite = 1;
@@ -40,6 +50,9 @@ class Example {
 
   @dec
   _ = 8;
+
+  @plainDec
+  plain = 9;
 }
 
 const inst = new Example();
@@ -54,6 +67,7 @@ expect(inst.decoratedProps).toEqual([
   "conf",
   "write",
   "_",
+  "plain",
 ]);
 
 const descs = Object.getOwnPropertyDescriptors(inst);
@@ -97,3 +111,8 @@ expect(descs._.enumerable).toBe(false);
 expect(descs._.writable).toBe(false);
 expect(descs._.configurable).toBe(false);
 expect(inst._).toBe("__8__");
+
+expect(descs.plain.enumerable).toBeTruthy();
+expect(descs.plain.writable).toBeTruthy();
+expect(descs.plain.configurable).toBeTruthy();
+expect(inst.plain).toBe(9);

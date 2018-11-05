@@ -18,8 +18,8 @@ type Transform = {
 
 export const transform: Transform = (function transform(code, opts, callback) {
   if (typeof opts === "function") {
-    opts = undefined;
     callback = opts;
+    opts = undefined;
   }
 
   // For backward-compat with Babel 6, we allow sync transformation when

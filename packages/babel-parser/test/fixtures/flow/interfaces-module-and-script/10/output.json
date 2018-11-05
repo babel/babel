@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 72,
+  "end": 51,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 5,
+      "line": 4,
       "column": 1
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 72,
+    "end": 51,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 5,
+        "line": 4,
         "column": 1
       }
     },
@@ -32,14 +32,14 @@
       {
         "type": "InterfaceDeclaration",
         "start": 0,
-        "end": 72,
+        "end": 51,
         "loc": {
           "start": {
             "line": 1,
             "column": 0
           },
           "end": {
-            "line": 5,
+            "line": 4,
             "column": 1
           }
         },
@@ -67,68 +67,18 @@
         "body": {
           "type": "ObjectTypeAnnotation",
           "start": 15,
-          "end": 72,
+          "end": 51,
           "loc": {
             "start": {
               "line": 1,
               "column": 15
             },
             "end": {
-              "line": 5,
+              "line": 4,
               "column": 1
             }
           },
-          "callProperties": [
-            {
-              "type": "ObjectTypeCallProperty",
-              "start": 33,
-              "end": 48,
-              "loc": {
-                "start": {
-                  "line": 3,
-                  "column": 2
-                },
-                "end": {
-                  "line": 3,
-                  "column": 17
-                }
-              },
-              "static": true,
-              "value": {
-                "type": "FunctionTypeAnnotation",
-                "start": 40,
-                "end": 48,
-                "loc": {
-                  "start": {
-                    "line": 3,
-                    "column": 9
-                  },
-                  "end": {
-                    "line": 3,
-                    "column": 17
-                  }
-                },
-                "params": [],
-                "rest": null,
-                "typeParameters": null,
-                "returnType": {
-                  "type": "VoidTypeAnnotation",
-                  "start": 44,
-                  "end": 48,
-                  "loc": {
-                    "start": {
-                      "line": 3,
-                      "column": 13
-                    },
-                    "end": {
-                      "line": 3,
-                      "column": 17
-                    }
-                  }
-                }
-              }
-            }
-          ],
+          "callProperties": [],
           "properties": [
             {
               "type": "ObjectTypeProperty",
@@ -185,55 +135,72 @@
             },
             {
               "type": "ObjectTypeProperty",
-              "start": 52,
-              "end": 69,
+              "start": 33,
+              "end": 48,
               "loc": {
                 "start": {
-                  "line": 4,
+                  "line": 3,
                   "column": 2
                 },
                 "end": {
-                  "line": 4,
-                  "column": 19
+                  "line": 3,
+                  "column": 17
                 }
               },
               "key": {
                 "type": "Identifier",
-                "start": 59,
-                "end": 60,
+                "start": 33,
+                "end": 39,
                 "loc": {
                   "start": {
-                    "line": 4,
-                    "column": 9
+                    "line": 3,
+                    "column": 2
                   },
                   "end": {
-                    "line": 4,
-                    "column": 10
+                    "line": 3,
+                    "column": 8
                   },
-                  "identifierName": "y"
+                  "identifierName": "static"
                 },
-                "name": "y"
+                "name": "static"
               },
-              "static": true,
+              "static": false,
               "proto": false,
               "kind": "init",
-              "method": false,
+              "method": true,
               "value": {
-                "type": "BooleanTypeAnnotation",
-                "start": 62,
-                "end": 69,
+                "type": "FunctionTypeAnnotation",
+                "start": 33,
+                "end": 48,
                 "loc": {
                   "start": {
-                    "line": 4,
-                    "column": 12
+                    "line": 3,
+                    "column": 2
                   },
                   "end": {
-                    "line": 4,
-                    "column": 19
+                    "line": 3,
+                    "column": 17
+                  }
+                },
+                "params": [],
+                "rest": null,
+                "typeParameters": null,
+                "returnType": {
+                  "type": "VoidTypeAnnotation",
+                  "start": 44,
+                  "end": 48,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 13
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 17
+                    }
                   }
                 }
               },
-              "variance": null,
               "optional": false
             }
           ],

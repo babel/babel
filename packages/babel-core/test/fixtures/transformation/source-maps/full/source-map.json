@@ -6,6 +6,6 @@
     "map",
     "x"
   ],
-  "mappings": "AAAAA,IAAIC,GAAJ,CAAQ;AAAA,SAAKC,IAAIA,CAAT;AAAA,CAAR",
+  "mappings": "AAAAA,GAAG,CAACC,GAAJ,CAAQ,UAAAC,CAAC;AAAA,SAAIA,CAAC,GAAGA,CAAR;AAAA,CAAT",
   "sourcesContent": ["arr.map(x => x * x);"]
 }

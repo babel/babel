@@ -3,7 +3,7 @@
 Using targets:
 {}
 
-Using modules transform: commonjs
+Using modules transform: auto
 
 Using plugins:
   transform-template-literals {}
@@ -32,6 +32,7 @@ Using plugins:
   proposal-async-generator-functions {}
   proposal-object-rest-spread {}
   proposal-unicode-property-regex {}
+  proposal-json-strings {}
   proposal-optional-catch-binding {}
 
 Using polyfills with `entry` option:
@@ -178,6 +179,7 @@ Using polyfills with `entry` option:
   es6.typed.float64-array {}
   es6.weak-map {}
   es6.weak-set {}
+  es7.array.flat-map {}
   web.timers {}
   web.immediate {}
   web.dom.iterable {}

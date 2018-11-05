@@ -8,6 +8,7 @@ import {
   type IgnoreList,
   type ConfigApplicableTest,
   type BabelrcSearch,
+  type CallerMetadata,
 } from "./validation/options";
 import pathPatternToRegex from "./pattern-to-regex";
 
@@ -50,12 +51,27 @@ export type ConfigContext = {
   cwd: string,
   root: string,
   envName: string,
+  caller: CallerMetadata | void,
 };
 
 /**
  * Build a config chain for a given preset.
  */
-export const buildPresetChain: (
+export function buildPresetChain(
+  arg: PresetInstance,
+  context: *,
+): ConfigChain | null {
+  const chain = buildPresetChainWalker(arg, context);
+  if (!chain) return null;
+
+  return {
+    plugins: dedupDescriptors(chain.plugins),
+    presets: dedupDescriptors(chain.presets),
+    options: chain.options,
+  };
+}
+
+export const buildPresetChainWalker: (
   arg: PresetInstance,
   context: *,
 ) => * = makeChainWalker({
@@ -128,9 +144,14 @@ export function buildRootChain(
 
   let configFile;
   if (typeof opts.configFile === "string") {
-    configFile = loadConfig(opts.configFile, context.cwd, context.envName);
+    configFile = loadConfig(
+      opts.configFile,
+      context.cwd,
+      context.envName,
+      context.caller,
+    );
   } else if (opts.configFile !== false) {
-    configFile = findRootConfig(context.root, context.envName);
+    configFile = findRootConfig(context.root, context.envName, context.caller);
   }
 
   let { babelrc, babelrcRoots } = opts;
@@ -169,6 +190,7 @@ export function buildRootChain(
     ({ ignore: ignoreFile, config: babelrcFile } = findRelativeConfig(
       pkgData,
       context.envName,
+      context.caller,
     ));
 
     if (
@@ -234,7 +256,7 @@ function babelrcLoadEnabled(
     if (typeof pat === "string") pat = pathPatternToRegex(pat, context.cwd);
 
     return pkgData.directories.some(directory => {
-      return matchPattern(pat, context.cwd, directory);
+      return matchPattern(pat, context.cwd, directory, context);
     });
   });
 }
@@ -449,7 +471,12 @@ function mergeExtendsChain(
 ): boolean {
   if (opts.extends === undefined) return true;
 
-  const file = loadConfig(opts.extends, dirname, context.envName);
+  const file = loadConfig(
+    opts.extends,
+    dirname,
+    context.envName,
+    context.caller,
+  );
 
   if (files.has(file)) {
     throw new Error(
@@ -515,7 +542,7 @@ function normalizeOptions(opts: ValidatedOptions): ValidatedOptions {
 
   // "sourceMap" is just aliased to sourceMap, so copy it over as
   // we merge the options together.
-  if (options.sourceMap) {
+  if (options.hasOwnProperty("sourceMap")) {
     options.sourceMaps = options.sourceMap;
     delete options.sourceMap;
   }
@@ -527,7 +554,7 @@ function dedupDescriptors(
 ): Array<UnloadedDescriptor> {
   const map: Map<
     Function,
-    Map<string | void, { value: UnloadedDescriptor | null }>,
+    Map<string | void, { value: UnloadedDescriptor }>,
   > = new Map();
 
   const descriptors = [];
@@ -542,16 +569,12 @@ function dedupDescriptors(
       }
       let desc = nameMap.get(item.name);
       if (!desc) {
-        desc = { value: null };
+        desc = { value: item };
         descriptors.push(desc);
 
         // Treat passPerPreset presets as unique, skipping them
         // in the merge processing steps.
         if (!item.ownPass) nameMap.set(item.name, desc);
-      }
-
-      if (item.options === false) {
-        desc.value = null;
       } else {
         desc.value = item;
       }
@@ -561,7 +584,7 @@ function dedupDescriptors(
   }
 
   return descriptors.reduce((acc, desc) => {
-    if (desc.value) acc.push(desc.value);
+    acc.push(desc.value);
     return acc;
   }, []);
 }
@@ -633,12 +656,23 @@ function matchesPatterns(
   dirname: string,
 ): boolean {
   return patterns.some(pattern =>
-    matchPattern(pattern, dirname, context.filename),
+    matchPattern(pattern, dirname, context.filename, context),
   );
 }
 
-function matchPattern(pattern, dirname, pathToTest): boolean {
-  if (typeof pattern === "function") return !!pattern(pathToTest);
+function matchPattern(
+  pattern,
+  dirname,
+  pathToTest,
+  context: ConfigContext,
+): boolean {
+  if (typeof pattern === "function") {
+    return !!pattern(pathToTest, {
+      dirname,
+      envName: context.envName,
+      caller: context.caller,
+    });
+  }
 
   if (typeof pathToTest !== "string") {
     throw new Error(

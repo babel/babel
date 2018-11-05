@@ -5,13 +5,15 @@ Using targets:
   "chrome": "55"
 }
 
-Using modules transform: commonjs
+Using modules transform: auto
 
 Using plugins:
   transform-dotall-regex { "chrome":"55" }
   proposal-async-generator-functions { "chrome":"55" }
   proposal-object-rest-spread { "chrome":"55" }
   proposal-unicode-property-regex { "chrome":"55" }
+  proposal-json-strings { "chrome":"55" }
+  proposal-optional-catch-binding { "chrome":"55" }
 
 Using polyfills with `usage` option:
 

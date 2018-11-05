@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 71,
+  "end": 51,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 2,
-      "column": 49
+      "column": 29
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 71,
+    "end": 51,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 2,
-        "column": 49
+        "column": 29
       }
     },
     "sourceType": "module",
@@ -92,45 +92,72 @@
             },
             "body": []
           }
+        }
+      },
+      {
+        "type": "ExportDefaultDeclaration",
+        "start": 22,
+        "end": 51,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 29
+          }
         },
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " `export default` does not work with interfaces",
-            "start": 22,
-            "end": 71,
+        "declaration": {
+          "type": "TSInterfaceDeclaration",
+          "start": 37,
+          "end": 51,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 15
+            },
+            "end": {
+              "line": 2,
+              "column": 29
+            }
+          },
+          "id": {
+            "type": "Identifier",
+            "start": 47,
+            "end": 48,
             "loc": {
               "start": {
                 "line": 2,
-                "column": 0
+                "column": 25
               },
               "end": {
                 "line": 2,
-                "column": 49
+                "column": 26
+              },
+              "identifierName": "A"
+            },
+            "name": "A"
+          },
+          "body": {
+            "type": "TSInterfaceBody",
+            "start": 49,
+            "end": 51,
+            "loc": {
+              "start": {
+                "line": 2,
+                "column": 27
+              },
+              "end": {
+                "line": 2,
+                "column": 29
               }
-            }
+            },
+            "body": []
           }
-        ]
+        }
       }
     ],
     "directives": []
-  },
-  "comments": [
-    {
-      "type": "CommentLine",
-      "value": " `export default` does not work with interfaces",
-      "start": 22,
-      "end": 71,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 0
-        },
-        "end": {
-          "line": 2,
-          "column": 49
-        }
-      }
-    }
-  ]
+  }
 }

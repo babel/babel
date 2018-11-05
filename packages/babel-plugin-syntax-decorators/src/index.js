@@ -8,16 +8,17 @@ export default declare((api, options) => {
     throw new Error("'legacy' must be a boolean.");
   }
 
-  if (legacy !== true) {
-    throw new Error(
-      "The new decorators proposal is not supported yet." +
-        ' You must pass the `"legacy": true` option to' +
-        " @babel/plugin-syntax-decorators",
-    );
-  }
-
   const { decoratorsBeforeExport } = options;
-  if (decoratorsBeforeExport !== undefined) {
+  if (decoratorsBeforeExport === undefined) {
+    if (!legacy) {
+      throw new Error(
+        "The '@babel/plugin-syntax-decorators' plugin requires a" +
+          " 'decoratorsBeforeExport' option, whose value must be a boolean." +
+          " If you want to use the legacy decorators semantics, you can set" +
+          " the 'legacy: true' option.",
+      );
+    }
+  } else {
     if (legacy) {
       throw new Error(
         "'decoratorsBeforeExport' can't be used with legacy decorators.",

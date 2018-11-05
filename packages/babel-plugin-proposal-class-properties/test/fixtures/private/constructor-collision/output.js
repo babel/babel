@@ -5,7 +5,10 @@ var Foo = function Foo() {
 
   babelHelpers.classCallCheck(this, Foo);
 
-  _bar.set(this, foo);
+  _bar.set(this, {
+    writable: true,
+    value: foo
+  });
 
   var _foo = "foo";
 };

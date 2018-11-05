@@ -46,6 +46,7 @@ export const definitions = {
     every: ["es6.array.is-array"],
     fill: ["es6.array.fill"],
     filter: ["es6.array.filter"],
+    finally: ["es7.promise.finally"],
     find: ["es6.array.find"],
     findIndex: ["es6.array.find-index"],
     fixed: ["es6.string.fixed"],

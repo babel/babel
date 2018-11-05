@@ -1,6 +1,4 @@
 {
-  "presets": [
-    "env",
-    ["stage-2", { "decoratorsLegacy": true }]
-  ]
+  "presets": ["env"],
+  "plugins": ["proposal-class-properties"]
 }

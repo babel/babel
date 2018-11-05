@@ -1,10 +1,13 @@
 {
   "presets": [
-    ["../../../../lib", {
-      "targets": {
-        "safari": "tp"
-      },
-      "shippedProposals": true
-    }]
+    [
+      "../../../../lib",
+      {
+        "targets": {
+          "safari": "tp"
+        },
+        "shippedProposals": true
+      }
+    ]
   ]
 }

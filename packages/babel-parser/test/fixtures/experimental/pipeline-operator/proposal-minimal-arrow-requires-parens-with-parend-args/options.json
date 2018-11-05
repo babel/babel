@@ -1,6 +1,4 @@
 {
-  "plugins": [
-    ["pipelineOperator", { "proposal": "minimal" }]
-  ],
+  "plugins": [["pipelineOperator", { "proposal": "minimal" }]],
   "throws": "Unexpected token, expected \";\" (1:10)"
 }

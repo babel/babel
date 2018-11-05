@@ -28,6 +28,11 @@ commander.option(
   "The name of the 'env' to use when loading configs and plugins. " +
     "Defaults to the value of BABEL_ENV, or else NODE_ENV, or else 'development'.",
 );
+commander.option(
+  "--root-mode [mode]",
+  "The project-root resolution mode. " +
+    "One of 'root' (the default), 'upward', or 'upward-optional'.",
+);
 
 // Basic file input configuration.
 commander.option("--source-type [script|module]", "");
@@ -76,7 +81,7 @@ commander.option(
   "print a comment after any injected non-user code",
 );
 
-// General soucemap formatting.
+// General source map formatting.
 commander.option("-s, --source-maps [true|false|inline|both]", "", booleanify);
 commander.option(
   "--source-map-target [string]",
@@ -162,20 +167,20 @@ export default function parseArgv(args: Array<string>) {
 
   filenames.forEach(function(filename) {
     if (!fs.existsSync(filename)) {
-      errors.push(filename + " doesn't exist");
+      errors.push(filename + " does not exist");
     }
   });
 
   if (commander.outDir && !filenames.length) {
-    errors.push("filenames required for --out-dir");
+    errors.push("--out-dir requires filenames");
   }
 
   if (commander.outFile && commander.outDir) {
-    errors.push("cannot have --out-file and --out-dir");
+    errors.push("--out-file and --out-dir cannot be used together");
   }
 
   if (commander.relative && !commander.outDir) {
-    errors.push("output directory required for --relative");
+    errors.push("--relative requires --out-dir usage");
   }
 
   if (commander.watch) {
@@ -207,41 +212,56 @@ export default function parseArgv(args: Array<string>) {
   }
 
   if (errors.length) {
-    console.error(errors.join(". "));
+    console.error("babel:");
+    errors.forEach(function(e) {
+      console.error("  " + e);
+    });
     process.exit(2);
   }
 
   const opts = commander.opts();
 
-  return {
-    babelOptions: {
-      presets: opts.presets,
-      plugins: opts.plugins,
-      configFile: opts.configFile,
-      envName: opts.envName,
-      sourceType: opts.sourceType,
-      ignore: opts.ignore,
-      only: opts.only,
-      retainLines: opts.retainLines,
-      compact: opts.compact,
-      minified: opts.minified,
-      auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
-      auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
-      sourceMaps: opts.sourceMaps,
-      sourceFileName: opts.sourceFileName,
-      sourceRoot: opts.sourceRoot,
-      moduleRoot: opts.moduleRoot,
-      moduleIds: opts.moduleIds,
-      moduleId: opts.moduleId,
+  const babelOptions = {
+    presets: opts.presets,
+    plugins: opts.plugins,
+    rootMode: opts.rootMode,
+    configFile: opts.configFile,
+    envName: opts.envName,
+    sourceType: opts.sourceType,
+    ignore: opts.ignore,
+    only: opts.only,
+    retainLines: opts.retainLines,
+    compact: opts.compact,
+    minified: opts.minified,
+    auxiliaryCommentBefore: opts.auxiliaryCommentBefore,
+    auxiliaryCommentAfter: opts.auxiliaryCommentAfter,
+    sourceMaps: opts.sourceMaps,
+    sourceFileName: opts.sourceFileName,
+    sourceRoot: opts.sourceRoot,
+    moduleRoot: opts.moduleRoot,
+    moduleIds: opts.moduleIds,
+    moduleId: opts.moduleId,
 
-      // Commander will default the "--no-" arguments to true, but we want to
-      // leave them undefined so that @babel/core can handle the
-      // default-assignment logic on its own.
-      babelrc: opts.babelrc === true ? undefined : opts.babelrc,
-      highlightCode:
-        opts.highlightCode === true ? undefined : opts.highlightCode,
-      comments: opts.comments === true ? undefined : opts.comments,
-    },
+    // Commander will default the "--no-" arguments to true, but we want to
+    // leave them undefined so that @babel/core can handle the
+    // default-assignment logic on its own.
+    babelrc: opts.babelrc === true ? undefined : opts.babelrc,
+    highlightCode: opts.highlightCode === true ? undefined : opts.highlightCode,
+    comments: opts.comments === true ? undefined : opts.comments,
+  };
+
+  // If the @babel/cli version is newer than the @babel/core version, and we have added
+  // new options for @babel/core, we'll potentially get option validation errors from
+  // @babel/core. To avoid that, we delete undefined options, so @babel/core will only
+  // give the error if users actually pass an unsupported CLI option.
+  for (const key of Object.keys(babelOptions)) {
+    if (babelOptions[key] === undefined) {
+      delete babelOptions[key];
+    }
+  }
+
+  return {
+    babelOptions,
     cliOptions: {
       filename: opts.filename,
       filenames,

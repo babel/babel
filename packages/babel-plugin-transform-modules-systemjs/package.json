@@ -1,23 +1,26 @@
 {
   "name": "@babel/plugin-transform-modules-systemjs",
-  "version": "7.0.0-beta.54",
+  "version": "7.1.3",
   "description": "This plugin transforms ES2015 modules to SystemJS",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-modules-systemjs",
   "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "lib/index.js",
   "dependencies": {
-    "@babel/helper-hoist-variables": "7.0.0-beta.54",
-    "@babel/helper-plugin-utils": "7.0.0-beta.54"
+    "@babel/helper-hoist-variables": "^7.0.0",
+    "@babel/helper-plugin-utils": "^7.0.0"
   },
   "keywords": [
     "babel-plugin"
   ],
   "peerDependencies": {
-    "@babel/core": ">=7.0.0-beta.50 <7.0.0-rc.0"
+    "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "7.0.0-beta.54",
-    "@babel/helper-plugin-test-runner": "7.0.0-beta.54",
-    "@babel/plugin-syntax-dynamic-import": "7.0.0-beta.54"
+    "@babel/core": "^7.0.0",
+    "@babel/helper-plugin-test-runner": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0"
   }
 }

@@ -40,6 +40,29 @@ describe("evaluation", function() {
     ).toBe(false);
   });
 
+  it("should short-circuit && and ||", function() {
+    expect(
+      getPath("x === 'y' || 42")
+        .get("body")[0]
+        .evaluate().confident,
+    ).toBe(false);
+    expect(
+      getPath("x === 'y' && 0")
+        .get("body")[0]
+        .evaluate().confident,
+    ).toBe(false);
+    expect(
+      getPath("42 || x === 'y'")
+        .get("body")[0]
+        .evaluate().value,
+    ).toBe(42);
+    expect(
+      getPath("0 && x === 'y'")
+        .get("body")[0]
+        .evaluate().value,
+    ).toBe(0);
+  });
+
   it("should work with repeated, indeterminate identifiers", function() {
     expect(
       getPath("var num = foo(); (num > 0 && num < 100);")

@@ -1,3 +1,8 @@
 {
-  "plugins": ["transform-function-name", "transform-shorthand-properties", "transform-arrow-functions", "transform-modules-umd"]
+  "plugins": [
+    "transform-function-name",
+    "transform-shorthand-properties",
+    "transform-arrow-functions",
+    "transform-modules-umd"
+  ]
 }

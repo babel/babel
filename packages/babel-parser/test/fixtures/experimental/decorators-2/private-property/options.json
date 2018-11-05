@@ -1,3 +1,7 @@
 {
-  "plugins": ["classProperties", "classPrivateProperties", "decorators"]
+  "plugins": [
+    "classProperties",
+    "classPrivateProperties",
+    ["decorators", { "decoratorsBeforeExport": false }]
+  ]
 }

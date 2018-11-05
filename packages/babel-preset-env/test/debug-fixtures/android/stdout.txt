@@ -5,7 +5,7 @@ Using targets:
   "android": "4"
 }
 
-Using modules transform: commonjs
+Using modules transform: auto
 
 Using plugins:
   transform-template-literals { "android":"4" }
@@ -34,6 +34,8 @@ Using plugins:
   proposal-async-generator-functions { "android":"4" }
   proposal-object-rest-spread { "android":"4" }
   proposal-unicode-property-regex { "android":"4" }
+  proposal-json-strings { "android":"4" }
+  proposal-optional-catch-binding { "android":"4" }
 
 Using polyfills with `entry` option:
 
@@ -127,6 +129,7 @@ Using polyfills with `entry` option:
   es6.string.ends-with { "android":"4" }
   es6.string.from-code-point { "android":"4" }
   es6.string.includes { "android":"4" }
+  es6.string.iterator { "android":"4" }
   es7.string.pad-start { "android":"4" }
   es7.string.pad-end { "android":"4" }
   es6.string.raw { "android":"4" }

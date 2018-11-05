@@ -257,7 +257,7 @@ function _evaluate(path, state) {
   }
 
   if (path.isLogicalExpression()) {
-    // If we are confident that one side of an && is false, or the left
+    // If we are confident that the left side of an && is false, or the left
     // side of an || is true, we can be confident about the entire expression
     const wasConfident = state.confident;
     const left = evaluateCached(path.get("left"), state);
@@ -265,25 +265,17 @@ function _evaluate(path, state) {
     state.confident = wasConfident;
     const right = evaluateCached(path.get("right"), state);
     const rightConfident = state.confident;
-    state.confident = leftConfident && rightConfident;
 
     switch (node.operator) {
       case "||":
         // TODO consider having a "truthy type" that doesn't bail on
         // left uncertainty but can still evaluate to truthy.
-        if (left && leftConfident) {
-          state.confident = true;
-          return left;
-        }
-
+        state.confident = leftConfident && (!!left || rightConfident);
         if (!state.confident) return;
 
         return left || right;
       case "&&":
-        if ((!left && leftConfident) || (!right && rightConfident)) {
-          state.confident = true;
-        }
-
+        state.confident = leftConfident && (!left || rightConfident);
         if (!state.confident) return;
 
         return left && right;

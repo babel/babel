@@ -1,4 +1,5 @@
 export default {
+  auto: "transform-modules-commonjs",
   amd: "transform-modules-amd",
   commonjs: "transform-modules-commonjs",
   cjs: "transform-modules-commonjs",

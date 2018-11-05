@@ -5,9 +5,15 @@ var Foo = function Foo(_foo) {
 
   babelHelpers.classCallCheck(this, Foo);
 
-  _bar.set(this, this);
+  _bar.set(this, {
+    writable: true,
+    value: this
+  });
 
-  _baz.set(this, foo);
+  _baz.set(this, {
+    writable: true,
+    value: foo
+  });
 };
 
 var _bar = new WeakMap();

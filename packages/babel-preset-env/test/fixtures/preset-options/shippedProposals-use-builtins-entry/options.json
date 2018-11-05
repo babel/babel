@@ -1,8 +1,11 @@
 {
   "presets": [
-    ["../../../../lib", {
-      "shippedProposals": true,
-      "useBuiltIns": "entry"
-    }]
+    [
+      "../../../../lib",
+      {
+        "shippedProposals": true,
+        "useBuiltIns": "entry"
+      }
+    ]
   ]
 }

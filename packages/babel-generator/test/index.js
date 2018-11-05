@@ -49,7 +49,8 @@ describe("generation", function() {
         version: 3,
         sources: ["a.js", "b.js"],
         mappings:
-          "AAAA,SAASA,EAAT,CAAaC,GAAb,EAAkB;AAAEC,UAAQC,GAAR,CAAYF,GAAZ;AAAmB;;ACAvCD,GAAG,OAAH",
+          // eslint-disable-next-line max-len
+          "AAAA,SAASA,EAAT,CAAaC,GAAb,EAAkB;AAAEC,EAAAA,OAAO,CAACC,GAAR,CAAYF,GAAZ;AAAmB;;ACAvCD,EAAE,CAAC,OAAD,CAAF",
         names: ["hi", "msg", "console", "log"],
         sourcesContent: [
           "function hi (msg) { console.log(msg); }\n",
@@ -104,6 +105,18 @@ describe("generation", function() {
           original: { line: 1, column: 20 },
         },
         {
+          name: "console",
+          generated: { line: 2, column: 2 },
+          source: "a.js",
+          original: { line: 1, column: 20 },
+        },
+        {
+          name: undefined,
+          generated: { line: 2, column: 9 },
+          source: "a.js",
+          original: { line: 1, column: 27 },
+        },
+        {
           name: "log",
           generated: { line: 2, column: 10 },
           source: "a.js",
@@ -141,6 +154,12 @@ describe("generation", function() {
         },
         {
           name: undefined,
+          generated: { line: 5, column: 2 },
+          source: "b.js",
+          original: { line: 1, column: 2 },
+        },
+        {
+          name: undefined,
           generated: { line: 5, column: 3 },
           source: "b.js",
           original: { line: 1, column: 3 },
@@ -148,6 +167,12 @@ describe("generation", function() {
         {
           name: undefined,
           generated: { line: 5, column: 10 },
+          source: "b.js",
+          original: { line: 1, column: 2 },
+        },
+        {
+          name: undefined,
+          generated: { line: 5, column: 11 },
           source: "b.js",
           original: { line: 1, column: 0 },
         },
@@ -189,7 +214,7 @@ describe("generation", function() {
         version: 3,
         sources: ["inline"],
         names: ["foo", "bar"],
-        mappings: "AAAA,SAASA,IAAT,GAAe;AAAEC;AAAM",
+        mappings: "AAAA,SAASA,IAAT,GAAe;AAAEC,EAAAA,IAAG;AAAG",
         sourcesContent: ["function foo() { bar; }\n"],
       },
       "sourcemap was incorrectly generated",
@@ -226,6 +251,18 @@ describe("generation", function() {
           generated: { line: 2, column: 0 },
           source: "inline",
           original: { line: 1, column: 17 },
+        },
+        {
+          name: "bar",
+          generated: { line: 2, column: 2 },
+          source: "inline",
+          original: { line: 1, column: 17 },
+        },
+        {
+          name: undefined,
+          generated: { line: 2, column: 6 },
+          source: "inline",
+          original: { line: 1, column: 20 },
         },
         {
           name: undefined,
@@ -378,8 +415,19 @@ suites.forEach(function(testSuite) {
               plugins: task.options.plugins || [],
               strictMode: false,
               sourceType: "module",
+              sourceMaps: !!task.sourceMap,
             });
-            const result = generate(actualAst, task.options, actualCode);
+            const options = {
+              sourceFileName: path.relative(__dirname, actual.loc),
+              ...task.options,
+              sourceMaps: task.sourceMap ? true : task.options.sourceMaps,
+            };
+
+            const result = generate(actualAst, options, actualCode);
+
+            if (options.sourceMaps) {
+              expect(result.map).toEqual(task.sourceMap);
+            }
 
             if (
               !expected.code &&

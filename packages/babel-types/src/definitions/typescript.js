@@ -128,6 +128,7 @@ defineType("TSIndexSignature", {
 
 const tsKeywordTypes = [
   "TSAnyKeyword",
+  "TSUnknownKeyword",
   "TSNumberKeyword",
   "TSObjectKeyword",
   "TSBooleanKeyword",
@@ -209,6 +210,22 @@ defineType("TSTupleType", {
   visitor: ["elementTypes"],
   fields: {
     elementTypes: validateArrayOfType("TSType"),
+  },
+});
+
+defineType("TSOptionalType", {
+  aliases: ["TSType"],
+  visitor: ["typeAnnotation"],
+  fields: {
+    typeAnnotation: validateType("TSType"),
+  },
+});
+
+defineType("TSRestType", {
+  aliases: ["TSType"],
+  visitor: ["typeAnnotation"],
+  fields: {
+    typeAnnotation: validateType("TSType"),
   },
 });
 

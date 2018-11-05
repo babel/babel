@@ -24,8 +24,8 @@ type Parse = {
 
 export const parse: Parse = (function parse(code, opts, callback) {
   if (typeof opts === "function") {
-    opts = undefined;
     callback = opts;
+    opts = undefined;
   }
 
   // For backward-compat with Babel 7's early betas, we allow sync parsing when

@@ -143,7 +143,7 @@ export default declare((api, options) => {
         }
 
         path.replaceWith(
-          t.callExpression(path.hub.file.addHelper("construct"), [
+          t.callExpression(path.hub.addHelper("construct"), [
             node.callee,
             args,
           ]),

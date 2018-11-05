@@ -7,7 +7,7 @@ Using targets:
   "node": "6.10"
 }
 
-Using modules transform: commonjs
+Using modules transform: auto
 
 Using plugins:
   transform-template-literals { "ie":"10" }
@@ -36,6 +36,8 @@ Using plugins:
   proposal-async-generator-functions { "chrome":"54", "ie":"10", "node":"6.10" }
   proposal-object-rest-spread { "chrome":"54", "ie":"10", "node":"6.10" }
   proposal-unicode-property-regex { "chrome":"54", "ie":"10", "node":"6.10" }
+  proposal-json-strings { "chrome":"54", "ie":"10", "node":"6.10" }
+  proposal-optional-catch-binding { "chrome":"54", "ie":"10", "node":"6.10" }
 
 Using polyfills with `entry` option:
 
@@ -138,6 +140,7 @@ Using polyfills with `entry` option:
   es6.string.from-code-point { "ie":"10" }
   es6.string.includes { "ie":"10" }
   es6.string.italics { "ie":"10" }
+  es6.string.iterator { "ie":"10" }
   es6.string.link { "ie":"10" }
   es7.string.pad-start { "chrome":"54", "ie":"10", "node":"6.10" }
   es7.string.pad-end { "chrome":"54", "ie":"10", "node":"6.10" }

@@ -4,13 +4,22 @@ var Foo = function Foo() {
   babelHelpers.classCallCheck(this, Foo);
   babelHelpers.defineProperty(this, "one", babelHelpers.classPrivateFieldGet(this, _private));
 
-  _two.set(this, babelHelpers.classPrivateFieldGet(this, _private));
+  _two.set(this, {
+    writable: true,
+    value: babelHelpers.classPrivateFieldGet(this, _private)
+  });
 
-  _private.set(this, 0);
+  _private.set(this, {
+    writable: true,
+    value: 0
+  });
 
   babelHelpers.defineProperty(this, "three", babelHelpers.classPrivateFieldGet(this, _private));
 
-  _four.set(this, babelHelpers.classPrivateFieldGet(this, _private));
+  _four.set(this, {
+    writable: true,
+    value: babelHelpers.classPrivateFieldGet(this, _private)
+  });
 };
 
 var _two = new WeakMap();

@@ -17,7 +17,10 @@ export default function defineHelper(
     throw new Error(`The ${id} helper is already defined.`);
   }
   Object.defineProperty(helpers, id, {
-    value: template.program(code),
+    value: {
+      minVersion: "7.0.0-beta.0",
+      ast: template.program(code),
+    },
   });
   return id;
 }

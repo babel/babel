@@ -44,13 +44,23 @@ export default declare((api, options) => {
     return false;
   }
 
-  const arrayUnpackVisitor = {
-    ReferencedIdentifier(path, state) {
-      if (state.bindings[path.node.name]) {
-        state.deopt = true;
-        path.stop();
-      }
-    },
+  const STOP_TRAVERSAL = {};
+
+  // NOTE: This visitor is meant to be used via t.traverse
+  const arrayUnpackVisitor = (node, ancestors, state) => {
+    if (!ancestors.length) {
+      // Top-level node: this is the array literal.
+      return;
+    }
+
+    if (
+      t.isIdentifier(node) &&
+      t.isReferenced(node, ancestors[ancestors.length - 1]) &&
+      state.bindings[node.name]
+    ) {
+      state.deopt = true;
+      throw STOP_TRAVERSAL;
+    }
   };
 
   class DestructuringTransformer {
@@ -160,7 +170,8 @@ export default declare((api, options) => {
     pushObjectRest(pattern, objRef, spreadProp, spreadPropIndex) {
       // get all the keys that appear in this object before the current spread
 
-      let keys = [];
+      const keys = [];
+      let allLiteral = true;
 
       for (let i = 0; i < pattern.properties.length; i++) {
         const prop = pattern.properties[i];
@@ -172,11 +183,15 @@ export default declare((api, options) => {
         // ignore other spread properties
         if (t.isRestElement(prop)) continue;
 
-        let key = prop.key;
+        const key = prop.key;
         if (t.isIdentifier(key) && !prop.computed) {
-          key = t.stringLiteral(prop.key.name);
+          keys.push(t.stringLiteral(key.name));
+        } else if (t.isLiteral(key)) {
+          keys.push(t.stringLiteral(String(key.value)));
+        } else {
+          keys.push(t.cloneNode(key));
+          allLiteral = false;
         }
-        keys.push(t.cloneNode(key));
       }
 
       let value;
@@ -186,11 +201,18 @@ export default declare((api, options) => {
           t.cloneNode(objRef),
         ]);
       } else {
-        keys = t.arrayExpression(keys);
+        let keyExpression = t.arrayExpression(keys);
+
+        if (!allLiteral) {
+          keyExpression = t.callExpression(
+            t.memberExpression(keyExpression, t.identifier("map")),
+            [this.addHelper("toPropertyKey")],
+          );
+        }
 
         value = t.callExpression(
           this.addHelper(`objectWithoutProperties${loose ? "Loose" : ""}`),
-          [t.cloneNode(objRef), keys],
+          [t.cloneNode(objRef), keyExpression],
         );
       }
 
@@ -282,7 +304,13 @@ export default declare((api, options) => {
       // deopt on reference to left side identifiers
       const bindings = t.getBindingIdentifiers(pattern);
       const state = { deopt: false, bindings };
-      this.scope.traverse(arr, arrayUnpackVisitor, state);
+
+      try {
+        t.traverse(arr, arrayUnpackVisitor, state);
+      } catch (e) {
+        if (e !== STOP_TRAVERSAL) throw e;
+      }
+
       return !state.deopt;
     }
 

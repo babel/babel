@@ -6,7 +6,10 @@ function () {
   function Foo() {
     babelHelpers.classCallCheck(this, Foo);
 
-    _foo.set(this, 0);
+    _foo.set(this, {
+      writable: true,
+      value: 0
+    });
   }
 
   babelHelpers.createClass(Foo, [{

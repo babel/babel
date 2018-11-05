@@ -1,10 +1,11 @@
 // @flow
 
 import * as helpers from "@babel/helpers";
-import { NodePath, Hub, Scope } from "@babel/traverse";
+import { NodePath, Scope, type HubInterface } from "@babel/traverse";
 import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "@babel/traverse";
 import * as t from "@babel/types";
+import semver from "semver";
 
 import type { NormalizedFile } from "../normalize-file";
 
@@ -26,9 +27,17 @@ export default class File {
   ast: Object = {};
   scope: Scope;
   metadata: {} = {};
-  hub: Hub = new Hub(this);
   code: string = "";
   inputMap: Object | null = null;
+
+  hub: HubInterface = {
+    // keep it for the usage in babel-core, ex: path.hub.file.opts.filename
+    file: this,
+    getCode: () => this.code,
+    getScope: () => this.scope,
+    addHelper: this.addHelper.bind(this),
+    buildError: this.buildCodeFrameError.bind(this),
+  };
 
   constructor(options: {}, { code, ast, inputMap }: NormalizedFile) {
     this.opts = options;
@@ -64,6 +73,16 @@ export default class File {
   }
 
   set(key: mixed, val: mixed) {
+    if (key === "helpersNamespace") {
+      throw new Error(
+        "Babel 7.0.0-beta.56 has dropped support for the 'helpersNamespace' utility." +
+          "If you are using @babel/plugin-external-helpers you will need to use a newer " +
+          "version than the one you currently have installed. " +
+          "If you have your own implementation, you'll want to explore using 'helperGenerator' " +
+          "alongside 'file.availableHelper()'.",
+      );
+    }
+
     this._map.set(key, val);
   }
 
@@ -121,12 +140,6 @@ export default class File {
     }
   }
 
-  // TODO: Remove this before 7.x's official release. Leaving it in for now to
-  // prevent unnecessary breakage between beta versions.
-  resolveModuleSource(source: string): string {
-    return source;
-  }
-
   addImport() {
     throw new Error(
       "This API has been removed. If you're looking for this " +
@@ -136,17 +149,58 @@ export default class File {
     );
   }
 
+  /**
+   * Check if a given helper is available in @babel/core's helper list.
+   *
+   * This _also_ allows you to pass a Babel version specifically. If the
+   * helper exists, but was not available for the full given range, it will be
+   * considered unavailable.
+   */
+  availableHelper(name: string, versionRange: ?string): boolean {
+    let minVersion;
+    try {
+      minVersion = helpers.minVersion(name);
+    } catch (err) {
+      if (err.code !== "BABEL_HELPER_UNKNOWN") throw err;
+
+      return false;
+    }
+
+    if (typeof versionRange !== "string") return true;
+
+    // semver.intersects() has some surprising behavior with comparing ranges
+    // with preprelease versions. We add '^' to ensure that we are always
+    // comparing ranges with ranges, which sidesteps this logic.
+    // For example:
+    //
+    //   semver.intersects(`<7.0.1`, "7.0.0-beta.0") // false - surprising
+    //   semver.intersects(`<7.0.1`, "^7.0.0-beta.0") // true - expected
+    //
+    // This is because the first falls back to
+    //
+    //   semver.satisfies("7.0.0-beta.0", `<7.0.1`) // false - surprising
+    //
+    // and this fails because a prerelease version can only satisfy a range
+    // if it is a prerelease within the same major/minor/patch range.
+    //
+    // Note: If this is found to have issues, please also revist the logic in
+    // transform-runtime's definitions.js file.
+    if (semver.valid(versionRange)) versionRange = `^${versionRange}`;
+
+    return (
+      !semver.intersects(`<${minVersion}`, versionRange) &&
+      !semver.intersects(`>=8.0.0`, versionRange)
+    );
+  }
+
   addHelper(name: string): Object {
     const declar = this.declarations[name];
     if (declar) return t.cloneNode(declar);
 
     const generator = this.get("helperGenerator");
-    const runtime = this.get("helpersNamespace");
     if (generator) {
       const res = generator(name);
       if (res) return res;
-    } else if (runtime) {
-      return t.memberExpression(t.cloneNode(runtime), t.identifier(name));
     }
 
     const uid = (this.declarations[name] = this.scope.generateUidIdentifier(

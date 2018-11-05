@@ -12,20 +12,132 @@ const pfs = {
 
 const parse = require("../../../packages/babel-parser").parse;
 
+const ignoredFeatures = [
+  "async-functions",
+  "arrow-function",
+  "class",
+  "const",
+  "destructuring-assignment",
+  "for-of",
+  "generators",
+  "let",
+  "template",
+  "Reflect.construct",
+  "Symbol",
+  "TypedArray",
+  "cross-realm",
+  "Reflect",
+  "DataView",
+  "ArrayBuffer",
+  "Symbol.toStringTag",
+  "Atomics",
+  "SharedArrayBuffer",
+  "Int8Array",
+  "Symbol.toPrimitive",
+  "caller",
+  "Symbol.iterator",
+  "u180e",
+  "Proxy",
+  "Symbol.match",
+  "regexp-dotall",
+  "Symbol.matchAll",
+  "Set",
+  "WeakSet",
+  "globalThis",
+  "Intl.Locale",
+  "tail-call-optimization",
+  "default-parameters",
+  "new.target",
+  "super",
+  "Symbol.unscopables",
+  "Symbol.species",
+  "Symbol.asyncIterator",
+  "Float32Array",
+  "Float64Array",
+  "Uint16Array",
+  "Uint8Array",
+  "Uint8ClampedArray",
+  "computed-property-names",
+  "well-formed-json-stringify",
+  "Object.fromEntries",
+  "Object.is",
+  "Reflect.setPrototypeOf",
+  "Reflect.set",
+  "String.fromCodePoint",
+  "regexp-lookbehind",
+  "regexp-named-groups",
+  "regexp-unicode-property-escapes",
+  "Symbol.hasInstance",
+  "Symbol.isConcatSpreadable",
+  "Symbol.replace",
+  "Symbol.search",
+  "Symbol.split",
+  "Array.prototype.values",
+  "Intl.ListFormat",
+  "Intl.RelativeTimeFormat",
+  "Intl.Segmenter",
+  "destructuring-binding",
+  "json-superset",
+  "Map",
+  "IsHTMLDDA",
+  "Array.prototype.flat",
+  "Array.prototype.flatMap",
+  "DataView.prototype.setUint8",
+  "DataView.prototype.getFloat32",
+  "DataView.prototype.getFloat64",
+  "DataView.prototype.getInt16",
+  "DataView.prototype.getInt32",
+  "DataView.prototype.getInt8",
+  "DataView.prototype.getUint16",
+  "DataView.prototype.getUint32",
+  "WeakMap",
+  "Promise.prototype.finally",
+  "String.prototype.endsWith",
+  "String.prototype.includes",
+  "String.prototype.matchAll",
+  "string-trimming",
+  "String.prototype.trimEnd",
+  "String.prototype.trimStart",
+  "Symbol.prototype.description",
+];
+
 const featuresToPlugins = {
-  BigInt: "bigInt",
-  "class-fields-public": "classProperties",
-  "class-fields-private": "classPrivateProperties",
   "async-iteration": "asyncGenerators",
+  BigInt: "bigInt",
+  "class-fields-private": "classPrivateProperties",
+  "class-fields-public": "classProperties",
+  "class-methods-private": "classPrivateMethods",
+  "class-static-fields-public": "classProperties",
+  "class-static-fields-private": "classPrivateProperties",
+  "class-static-methods-private": "classPrivateMethods",
+  "dynamic-import": "dynamicImport",
+  "export-star-as-namespace-from-module": "exportNamespaceFrom",
+  "import.meta": "importMeta",
+  "numeric-separator-literal": "numericSeparator",
   "object-rest": "objectRestSpread",
   "object-spread": "objectRestSpread",
   "optional-catch-binding": "optionalCatchBinding",
-  "numeric-separator-literal": "numericSeparator",
 };
 
 function getPlugins(features) {
-  return features && features.map(f => featuresToPlugins[f]).filter(Boolean);
+  return (
+    features &&
+    features
+      .map(f => {
+        if (!featuresToPlugins[f] && !ignoredFeatures.includes(f)) {
+          unmappedFeatures.add(f);
+        }
+        return featuresToPlugins[f];
+      })
+      .filter(Boolean)
+  );
 }
+
+const unmappedFeatures = new Set();
+
+exports.getUnmappedFeatures = function() {
+  return unmappedFeatures;
+};
 
 exports.getTests = function(testDir) {
   const stream = new TestStream(testDir, {

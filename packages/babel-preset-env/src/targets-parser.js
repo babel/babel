@@ -15,6 +15,8 @@ import browserModulesData from "../data/built-in-modules.json";
 import { TargetNames } from "./options";
 import type { Targets } from "./types";
 
+const browserslistDefaults = browserslist.defaults;
+
 const validateTargetNames = (validTargets, targets) => {
   for (const target in targets) {
     if (!TargetNames[target]) {
@@ -36,10 +38,12 @@ const browserNameMap = {
   ie: "ie",
   ios_saf: "ios",
   safari: "safari",
+  node: "node",
 };
 
-const isBrowsersQueryValid = (browsers: string | Array<string>): boolean =>
-  typeof browsers === "string" || Array.isArray(browsers);
+export const isBrowsersQueryValid = (
+  browsers: string | Array<string> | Targets,
+): boolean => typeof browsers === "string" || Array.isArray(browsers);
 
 const validateBrowsers = browsers => {
   invariant(
@@ -172,12 +176,22 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
 
   // Parse browsers target via browserslist
   const browsersquery = validateBrowsers(targets.browsers);
-  if (!options.ignoreBrowserslistConfig) {
+  const shouldParseBrowsers = !!targets.browsers;
+  const shouldSearchForConfig =
+    !options.ignoreBrowserslistConfig && !Object.keys(targets).length;
+
+  if (shouldParseBrowsers || shouldSearchForConfig) {
     browserslist.defaults = objectToBrowserslist(targets);
 
-    const browsers = browserslist(browsersquery, { path: options.configPath });
+    const browsers = browserslist(browsersquery, {
+      path: options.configPath,
+    });
+
     const queryBrowsers = getLowestVersions(browsers);
     targets = mergeBrowsers(queryBrowsers, targets);
+
+    // Reset browserslist defaults
+    browserslist.defaults = browserslistDefaults;
   }
 
   // Parse remaining targets

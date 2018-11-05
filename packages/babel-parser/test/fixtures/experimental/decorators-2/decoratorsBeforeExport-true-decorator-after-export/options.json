@@ -1,7 +1,5 @@
 {
   "sourceType": "module",
-  "plugins": [
-    ["decorators", { "decoratorsBeforeExport": true }]
-  ],
+  "plugins": [["decorators", { "decoratorsBeforeExport": true }]],
   "throws": "Decorators must be placed *before* the 'export' keyword. You can set the 'decoratorsBeforeExport' option to false to use the 'export @decorator class {}' syntax (1:7)"
 }

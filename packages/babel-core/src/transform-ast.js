@@ -31,8 +31,8 @@ export const transformFromAst: TransformFromAst = (function transformFromAst(
   callback,
 ) {
   if (typeof opts === "function") {
-    opts = undefined;
     callback = opts;
+    opts = undefined;
   }
 
   // For backward-compat with Babel 6, we allow sync transformation when

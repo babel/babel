@@ -2,7 +2,9 @@ import * as t from "@babel/types";
 import jsesc from "jsesc";
 
 export function Identifier(node: Object) {
-  this.word(node.name);
+  this.exactSource(node.loc, () => {
+    this.word(node.name);
+  });
 }
 
 export function RestElement(node: Object) {

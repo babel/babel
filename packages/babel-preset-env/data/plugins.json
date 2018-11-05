@@ -124,7 +124,8 @@
     "safari": "11.1",
     "node": "8.10",
     "ios": "11.3",
-    "opera": "49"
+    "opera": "49",
+    "electron": "3"
   },
   "transform-unicode-regex": {
     "chrome": "50",
@@ -148,7 +149,6 @@
   },
   "transform-parameters": {
     "chrome": "49",
-    "edge": "14",
     "firefox": "53",
     "safari": "10",
     "node": "6",
@@ -228,8 +228,10 @@
   "proposal-async-generator-functions": {
     "chrome": "63",
     "firefox": "57",
-    "safari": "tp",
-    "opera": "50"
+    "safari": "12",
+    "ios": "12",
+    "opera": "50",
+    "electron": "3"
   },
   "proposal-object-rest-spread": {
     "chrome": "60",
@@ -238,19 +240,22 @@
     "node": "8.3",
     "ios": "11.3",
     "opera": "47",
-    "electron": "2"
+    "electron": "2.1"
   },
   "proposal-unicode-property-regex": {
     "chrome": "64",
     "safari": "11.1",
     "ios": "11.3",
-    "opera": "51"
+    "opera": "51",
+    "electron": "3"
   },
+  "proposal-json-strings": {},
   "proposal-optional-catch-binding": {
     "chrome": "66",
     "firefox": "58",
     "safari": "11.1",
     "ios": "11.3",
-    "opera": "53"
+    "opera": "53",
+    "electron": "3"
   }
 }

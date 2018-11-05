@@ -1,3 +1,8 @@
 {
-  "plugins": ["transform-destructuring", "transform-parameters", "transform-block-scoping", "transform-regenerator"]
+  "plugins": [
+    "transform-destructuring",
+    "transform-parameters",
+    "transform-block-scoping",
+    "transform-regenerator"
+  ]
 }

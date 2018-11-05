@@ -11,8 +11,11 @@ function (_Parent) {
     babelHelpers.classCallCheck(this, Child);
     _this = babelHelpers.possibleConstructorReturn(this, babelHelpers.getPrototypeOf(Child).call(this));
 
-    _scopedFunctionWithThis.set(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this)), () => {
-      _this.name = {};
+    _scopedFunctionWithThis.set(babelHelpers.assertThisInitialized(babelHelpers.assertThisInitialized(_this)), {
+      writable: true,
+      value: () => {
+        _this.name = {};
+      }
     });
 
     return _this;
