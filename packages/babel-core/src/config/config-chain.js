@@ -155,6 +155,7 @@ export function buildRootChain(
   }
 
   let { babelrc, babelrcRoots } = opts;
+  let babelrcRootsDirectory = context.cwd;
 
   const configFileChain = emptyChain();
   if (configFile) {
@@ -168,6 +169,7 @@ export function buildRootChain(
       babelrc = validatedFile.options.babelrc;
     }
     if (babelrcRoots === undefined) {
+      babelrcRootsDirectory = validatedFile.dirname;
       babelrcRoots = validatedFile.options.babelrcRoots;
     }
 
@@ -185,7 +187,7 @@ export function buildRootChain(
   if (
     (babelrc === true || babelrc === undefined) &&
     pkgData &&
-    babelrcLoadEnabled(context, pkgData, babelrcRoots)
+    babelrcLoadEnabled(context, pkgData, babelrcRoots, babelrcRootsDirectory)
   ) {
     ({ ignore: ignoreFile, config: babelrcFile } = findRelativeConfig(
       pkgData,
@@ -229,6 +231,7 @@ function babelrcLoadEnabled(
   context: ConfigContext,
   pkgData: FilePackageData,
   babelrcRoots: BabelrcSearch | void,
+  babelrcRootsDirectory: string,
 ): boolean {
   if (typeof babelrcRoots === "boolean") return babelrcRoots;
 
@@ -243,7 +246,9 @@ function babelrcLoadEnabled(
   let babelrcPatterns = babelrcRoots;
   if (!Array.isArray(babelrcPatterns)) babelrcPatterns = [babelrcPatterns];
   babelrcPatterns = babelrcPatterns.map(pat => {
-    return typeof pat === "string" ? path.resolve(context.cwd, pat) : pat;
+    return typeof pat === "string"
+      ? path.resolve(babelrcRootsDirectory, pat)
+      : pat;
   });
 
   // Fast path to avoid having to match patterns if the babelrc is just
@@ -253,10 +258,12 @@ function babelrcLoadEnabled(
   }
 
   return babelrcPatterns.some(pat => {
-    if (typeof pat === "string") pat = pathPatternToRegex(pat, context.cwd);
+    if (typeof pat === "string") {
+      pat = pathPatternToRegex(pat, babelrcRootsDirectory);
+    }
 
     return pkgData.directories.some(directory => {
-      return matchPattern(pat, context.cwd, directory, context);
+      return matchPattern(pat, babelrcRootsDirectory, directory, context);
     });
   });
 }
