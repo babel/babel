@@ -935,13 +935,28 @@ helpers.skipFirstGeneratorNext = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.toPropertyKey = helper("7.0.0-beta.0")`
-  export default function _toPropertyKey(key) {
-    if (typeof key === "symbol") {
-      return key;
-    } else {
-      return String(key);
+helpers.toPrimitive = helper("7.1.5")`
+  export default function _toPrimitive(
+    input,
+    hint /*: "default" | "string" | "number" | void */
+  ) {
+    if (typeof input !== "object" || input === null) return input;
+    var prim = input[Symbol.toPrimitive];
+    if (prim !== undefined) {
+      var res = prim.call(input, hint || "default");
+      if (typeof res !== "object") return res;
+      throw new TypeError("@@toPrimitive must return a primitive value.");
     }
+    return (hint === "string" ? String : Number)(input);
+  }
+`;
+
+helpers.toPropertyKey = helper("7.1.5")`
+  import toPrimitive from "toPrimitive";
+
+  export default function _toPropertyKey(arg) {
+    var key = toPrimitive(arg, "string");
+    return typeof key === "symbol" ? key : String(key);
   }
 `;
 
@@ -1077,10 +1092,12 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
     descriptor.value = value;
     return value;
   }
+  
 `;
 
-helpers.decorate = helper("7.0.2")`
+helpers.decorate = helper("7.1.5")`
   import toArray from "toArray";
+  import toPropertyKey from "toPropertyKey";
 
   // These comments are stripped by @babel/template
   /*::
@@ -1219,6 +1236,8 @@ helpers.decorate = helper("7.0.2")`
   function _createElementDescriptor(
     def /*: ElementDefinition */,
   ) /*: ElementDescriptor */ {
+    var key = toPropertyKey(def.key);
+
     var descriptor /*: PropertyDescriptor */;
     if (def.kind === "method") {
       descriptor = {
@@ -1227,6 +1246,10 @@ helpers.decorate = helper("7.0.2")`
         configurable: true,
         enumerable: false,
       };
+      Object.defineProperty(def.value, "name", {
+        value: typeof key === "symbol" ? "" : key,
+        configurable: true,
+      });
     } else if (def.kind === "get") {
       descriptor = { get: def.value, configurable: true, enumerable: false };
     } else if (def.kind === "set") {
@@ -1237,7 +1260,7 @@ helpers.decorate = helper("7.0.2")`
 
     var element /*: ElementDescriptor */ = {
       kind: def.kind === "field" ? "field" : "method",
-      key: def.key,
+      key: key,
       placement: def.static
         ? "static"
         : def.kind === "field"
@@ -1574,8 +1597,7 @@ helpers.decorate = helper("7.0.2")`
       );
     }
 
-    var key = elementObject.key;
-    if (typeof key !== "string" && typeof key !== "symbol") key = String(key);
+    var key = toPropertyKey(elementObject.key);
 
     var placement = String(elementObject.placement);
     if (
@@ -1716,4 +1738,4 @@ helpers.decorate = helper("7.0.2")`
     }
     return constructor;
   }
-  `;
+`;

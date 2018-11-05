@@ -132,7 +132,7 @@ function resolveStandardizedName(
     } catch (e2) {}
 
     if (resolvedOppositeType) {
-      e.message += `\n- Did you accidentally pass a ${type} as a ${oppositeType}?`;
+      e.message += `\n- Did you accidentally pass a ${oppositeType} as a ${type}?`;
     }
 
     throw e;

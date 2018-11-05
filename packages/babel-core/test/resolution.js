@@ -400,7 +400,7 @@ describe("addon resolution", function() {
         presets: ["testplugin"],
       });
     }).toThrow(
-      /Cannot find module 'babel-preset-testplugin'.*\n- Did you accidentally pass a preset as a plugin\?/,
+      /Cannot find module 'babel-preset-testplugin'.*\n- Did you accidentally pass a plugin as a preset\?/,
     );
   });
 
@@ -414,7 +414,7 @@ describe("addon resolution", function() {
         plugins: ["testpreset"],
       });
     }).toThrow(
-      /Cannot find module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a plugin as a preset\?/,
+      /Cannot find module 'babel-plugin-testpreset'.*\n- Did you accidentally pass a preset as a plugin\?/,
     );
   });
 

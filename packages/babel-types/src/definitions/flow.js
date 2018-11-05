@@ -277,6 +277,10 @@ defineType("ObjectTypeAnnotation", {
       validate: assertValueType("boolean"),
       default: false,
     },
+    // If the inexact flag is present then this is an object type, and not a
+    // declare class, declare interface, or interface. If it is true, the
+    // object uses ... to express that it is inexact.
+    inexact: validateOptional(assertValueType("boolean")),
   },
 });
 

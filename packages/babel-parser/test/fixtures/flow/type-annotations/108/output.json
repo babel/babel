@@ -213,7 +213,8 @@
                   ],
                   "indexers": [],
                   "internalSlots": [],
-                  "exact": true
+                  "exact": true,
+                  "inexact": false
                 }
               }
             },
@@ -532,7 +533,8 @@
                   ],
                   "indexers": [],
                   "internalSlots": [],
-                  "exact": true
+                  "exact": true,
+                  "inexact": false
                 }
               }
             },
@@ -744,7 +746,8 @@
                   "properties": [],
                   "indexers": [],
                   "internalSlots": [],
-                  "exact": true
+                  "exact": true,
+                  "inexact": false
                 }
               }
             },
@@ -1003,7 +1006,8 @@
                         ],
                         "indexers": [],
                         "internalSlots": [],
-                        "exact": true
+                        "exact": true,
+                        "inexact": false
                       },
                       "variance": null,
                       "optional": false
@@ -1064,7 +1068,8 @@
                   ],
                   "indexers": [],
                   "internalSlots": [],
-                  "exact": false
+                  "exact": false,
+                  "inexact": false
                 }
               }
             },
@@ -1537,7 +1542,8 @@
                         ],
                         "indexers": [],
                         "internalSlots": [],
-                        "exact": false
+                        "exact": false,
+                        "inexact": false
                       },
                       "variance": null,
                       "optional": false
@@ -1598,7 +1604,8 @@
                   ],
                   "indexers": [],
                   "internalSlots": [],
-                  "exact": true
+                  "exact": true,
+                  "inexact": false
                 }
               }
             },

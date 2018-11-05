@@ -81,7 +81,7 @@ commander.option(
   "print a comment after any injected non-user code",
 );
 
-// General soucemap formatting.
+// General source map formatting.
 commander.option("-s, --source-maps [true|false|inline|both]", "", booleanify);
 commander.option(
   "--source-map-target [string]",
