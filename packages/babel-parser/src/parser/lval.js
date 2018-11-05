@@ -177,6 +177,7 @@ export default class LValParser extends NodeUtils {
 
   toReferencedList(
     exprList: $ReadOnlyArray<?Expression>,
+    isInParens?: boolean, // eslint-disable-line no-unused-vars
   ): $ReadOnlyArray<?Expression> {
     return exprList;
   }

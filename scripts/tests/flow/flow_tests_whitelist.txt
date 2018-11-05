@@ -30,7 +30,6 @@ types/annotations_in_comments_invalid/migrated_0003.js
 types/annotations/void_is_reserved_param.js
 types/member/reserved_words.js
 types/parameter_defaults/migrated_0032.js
-types/typecasts_invalid/migrated_0001.js
 class_method_kinds/polymorphic_getter.js
 numbers/underscored_bin.js
 numbers/underscored_float.js

@@ -1976,38 +1976,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // type casts that we've found that are illegal in this context
     toReferencedList(
       exprList: $ReadOnlyArray<?N.Expression>,
+      isInParens?: boolean,
     ): $ReadOnlyArray<?N.Expression> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
-        if (expr && expr._exprListItem && expr.type === "TypeCastExpression") {
-          this.raise(expr.start, "Unexpected type cast");
+        if (
+          expr &&
+          expr.type === "TypeCastExpression" &&
+          (!expr.extra || !expr.extra.parenthesized) &&
+          (exprList.length > 1 || !isInParens)
+        ) {
+          this.raise(
+            expr.typeAnnotation.start,
+            "The type cast expression is expected to be wrapped with parenthesis",
+          );
         }
       }
 
       return exprList;
-    }
-
-    // parse an item inside a expression list eg. `(NODE, NODE)` where NODE represents
-    // the position where this function is called
-    parseExprListItem(
-      allowEmpty: ?boolean,
-      refShorthandDefaultPos: ?Pos,
-      refNeedsArrowPos: ?Pos,
-    ): ?N.Expression {
-      const container = this.startNode();
-      const node = super.parseExprListItem(
-        allowEmpty,
-        refShorthandDefaultPos,
-        refNeedsArrowPos,
-      );
-      if (this.match(tt.colon)) {
-        container._exprListItem = true;
-        container.expression = node;
-        container.typeAnnotation = this.flowParseTypeAnnotation();
-        return this.finishNode(container, "TypeCastExpression");
-      } else {
-        return node;
-      }
     }
 
     checkLVal(

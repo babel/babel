@@ -804,7 +804,7 @@ export default class ExpressionParser extends LValParser {
           this.state.yieldInPossibleArrowParameters = null;
           const params = [this.parseIdentifier()];
           this.expect(tt.arrow);
-          // let foo = bar => {};
+          // let foo = async bar => {};
           this.parseArrowExpression(node, params, true);
           this.state.yieldInPossibleArrowParameters = oldYield;
           return node;
