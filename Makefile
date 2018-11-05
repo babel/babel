@@ -1,5 +1,5 @@
 MAKEFLAGS = -j1
-FLOW_COMMIT = bea8b83f50f597454941d2a7ecef6e93a881e576
+FLOW_COMMIT = e192e1a4793dd8e43415fbfe8046d832cb513c8b
 TEST262_COMMIT = 72f1cfa2abd66a69b29e9b7d691a8ae8c5a7a00f
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
@@ -82,7 +82,7 @@ test-ci-coverage:
 bootstrap-flow:
 	rm -rf ./build/flow
 	mkdir -p ./build
-	git clone --branch=master --single-branch --shallow-since=2017-01-01 https://github.com/facebook/flow.git ./build/flow
+	git clone --branch=master --single-branch --shallow-since=2018-11-01 https://github.com/facebook/flow.git ./build/flow
 	cd build/flow && git checkout $(FLOW_COMMIT)
 
 test-flow:

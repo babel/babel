@@ -1,0 +1,8 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "jsx",
+    "flow"
+  ],
+  "throws": "Cannot overwrite primitive type _ (2:5)"
+}
