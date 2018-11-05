@@ -946,7 +946,7 @@ helpers.toPrimitive = helper("7.1.5")`
     hint /*: "default" | "string" | "number" | void */
   ) {
     if (typeof input !== "object" || input === null) return input;
-    var prim = input[Symbol.toPrimitive];
+    var prim = typeof Symbol === 'function' ? input[Symbol.toPrimitive] : undefined;
     if (prim !== undefined) {
       var res = prim.call(input, hint || "default");
       if (typeof res !== "object") return res;
