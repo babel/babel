@@ -31,8 +31,9 @@ export default declare((api, { isTSX }) => {
 
       parserOpts.plugins.push(
         "typescript",
-        "objectRestSpread",
         "classProperties",
+        // TODO: This is enabled by default now, remove in Babel 8
+        "objectRestSpread",
       );
 
       if (isTSX) {

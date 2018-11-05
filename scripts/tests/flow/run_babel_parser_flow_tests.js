@@ -109,12 +109,10 @@ function update_whitelist(summary) {
 
 const options = {
   plugins: [
-    "asyncGenerators",
     "dynamicImport",
     ["flow", { all: true }],
     "flowComments",
     "jsx",
-    "objectRestSpread",
     "classPrivateProperties",
   ],
   sourceType: "module",

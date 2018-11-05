@@ -769,10 +769,10 @@ describe("api", function() {
         options,
         function(err) {
           expect(err.message).toMatch(
-            "Support for the experimental syntax 'asyncGenerators' isn't currently enabled (1:15):",
+            "Support for the experimental syntax 'logicalAssignment' isn't currently enabled (1:3):",
           );
           expect(err.message).toMatch(
-            "Add @babel/plugin-proposal-async-generator-functions (https://git.io/vb4yp) to the " +
+            "Add @babel/plugin-proposal-logical-assignment-operators (https://git.io/vAlRe) to the " +
               "'plugins' section of your Babel config to enable transformation.",
           );
           done();

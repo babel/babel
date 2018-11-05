@@ -1070,7 +1070,6 @@ export default class Tokenizer extends LocationParser {
   readString(quote: number): void {
     let out = "",
       chunkStart = ++this.state.pos;
-    const hasJsonStrings = this.hasPlugin("jsonStrings");
     for (;;) {
       if (this.state.pos >= this.input.length) {
         this.raise(this.state.start, "Unterminated string constant");
@@ -1083,8 +1082,8 @@ export default class Tokenizer extends LocationParser {
         out += this.readEscapedChar(false);
         chunkStart = this.state.pos;
       } else if (
-        hasJsonStrings &&
-        (ch === charCodes.lineSeparator || ch === charCodes.paragraphSeparator)
+        ch === charCodes.lineSeparator ||
+        ch === charCodes.paragraphSeparator
       ) {
         ++this.state.pos;
         ++this.state.curLine;
