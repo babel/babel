@@ -503,7 +503,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     checkReservedType(word: string, startLoc: number) {
-      this.checkNotUnderscore(word);
       if (primitiveTypes.indexOf(word) > -1) {
         this.raise(startLoc, `Cannot overwrite primitive type ${word}`);
       }
