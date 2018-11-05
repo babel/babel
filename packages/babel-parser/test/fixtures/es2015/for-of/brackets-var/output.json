@@ -1,0 +1,194 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 23,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 23
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 23,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 23
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ForOfStatement",
+        "start": 0,
+        "end": 23,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 23
+          }
+        },
+        "await": false,
+        "left": {
+          "type": "VariableDeclaration",
+          "start": 5,
+          "end": 12,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 5
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            }
+          },
+          "declarations": [
+            {
+              "type": "VariableDeclarator",
+              "start": 9,
+              "end": 12,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 9
+                },
+                "end": {
+                  "line": 1,
+                  "column": 12
+                }
+              },
+              "id": {
+                "type": "ObjectPattern",
+                "start": 9,
+                "end": 12,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 12
+                  }
+                },
+                "properties": [
+                  {
+                    "type": "ObjectProperty",
+                    "start": 10,
+                    "end": 11,
+                    "loc": {
+                      "start": {
+                        "line": 1,
+                        "column": 10
+                      },
+                      "end": {
+                        "line": 1,
+                        "column": 11
+                      }
+                    },
+                    "method": false,
+                    "key": {
+                      "type": "Identifier",
+                      "start": 10,
+                      "end": 11,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 10
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 11
+                        },
+                        "identifierName": "a"
+                      },
+                      "name": "a"
+                    },
+                    "computed": false,
+                    "shorthand": true,
+                    "value": {
+                      "type": "Identifier",
+                      "start": 10,
+                      "end": 11,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 10
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 11
+                        },
+                        "identifierName": "a"
+                      },
+                      "name": "a"
+                    },
+                    "extra": {
+                      "shorthand": true
+                    }
+                  }
+                ]
+              },
+              "init": null
+            }
+          ],
+          "kind": "var"
+        },
+        "right": {
+          "type": "RegExpLiteral",
+          "start": 16,
+          "end": 19,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 16
+            },
+            "end": {
+              "line": 1,
+              "column": 19
+            }
+          },
+          "extra": {
+            "raw": "/b/"
+          },
+          "pattern": "b",
+          "flags": ""
+        },
+        "body": {
+          "type": "BlockStatement",
+          "start": 21,
+          "end": 23,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 21
+            },
+            "end": {
+              "line": 1,
+              "column": 23
+            }
+          },
+          "body": [],
+          "directives": []
+        }
+      }
+    ],
+    "directives": []
+  }
+}

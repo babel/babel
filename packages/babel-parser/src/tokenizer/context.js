@@ -12,18 +12,21 @@ export class TokContext {
     token: string,
     isExpr?: boolean,
     preserveSpace?: boolean,
-    override?: Function, // Takes a Tokenizer as a this-parameter, and returns void.
+    override?: ?Function, // Takes a Tokenizer as a this-parameter, and returns void.
+    generator?: boolean,
   ) {
     this.token = token;
     this.isExpr = !!isExpr;
     this.preserveSpace = !!preserveSpace;
     this.override = override;
+    this.generator = !!generator;
   }
 
   token: string;
   isExpr: boolean;
   preserveSpace: boolean;
   override: ?Function;
+  generator: boolean;
 }
 
 export const types: {
@@ -31,11 +34,26 @@ export const types: {
 } = {
   braceStatement: new TokContext("{", false),
   braceExpression: new TokContext("{", true),
-  templateQuasi: new TokContext("${", true),
+  templateQuasi: new TokContext("${", false),
   parenStatement: new TokContext("(", false),
   parenExpression: new TokContext("(", true),
   template: new TokContext("`", true, true, p => p.readTmplToken()),
   functionExpression: new TokContext("function", true),
+  functionStatement: new TokContext("function", false),
+  functionExpressionGenerator: new TokContext(
+    "function",
+    true,
+    false,
+    null,
+    true,
+  ),
+  functionStatementGenerator: new TokContext(
+    "function",
+    false,
+    false,
+    null,
+    true,
+  ),
 };
 
 // Token-specific context update code
@@ -46,30 +64,44 @@ tt.parenR.updateContext = tt.braceR.updateContext = function() {
     return;
   }
 
-  const out = this.state.context.pop();
-  if (
-    out === types.braceStatement &&
-    this.curContext() === types.functionExpression
-  ) {
-    this.state.context.pop();
-    this.state.exprAllowed = false;
-  } else if (out === types.templateQuasi) {
-    this.state.exprAllowed = true;
-  } else {
-    this.state.exprAllowed = !out.isExpr;
+  let out = this.state.context.pop();
+  if (out === types.braceStatement && this.curContext().token === "function") {
+    out = this.state.context.pop();
   }
+
+  this.state.exprAllowed = !out.isExpr;
+};
+
+tt.star.updateContext = function(prevType) {
+  if (prevType === tt._function) {
+    const index = this.state.context.length - 1;
+    if (this.state.context[index] === types.functionExpression) {
+      this.state.context[index] = types.functionExpressionGenerator;
+    } else {
+      this.state.context[index] = types.functionStatementGenerator;
+    }
+  }
+  this.state.exprAllowed = true;
 };
 
 tt.name.updateContext = function(prevType) {
-  if (this.state.value === "of" && this.curContext() === types.parenStatement) {
-    this.state.exprAllowed = !prevType.beforeExpr;
-    return;
+  let allowed = false;
+  if (prevType !== tt.dot) {
+    if (
+      (this.state.value === "of" && !this.state.exprAllowed) ||
+      (this.state.value === "yield" && this.inGeneratorContext())
+    ) {
+      allowed = true;
+    }
   }
-
-  this.state.exprAllowed = false;
+  this.state.exprAllowed = allowed;
 
   if (prevType === tt._let || prevType === tt._const || prevType === tt._var) {
-    if (lineBreak.test(this.input.slice(this.state.end))) {
+    if (
+      lineBreak.test(
+        this.input.slice(this.state.end, this.lookahead(true).start),
+      )
+    ) {
       this.state.exprAllowed = true;
     }
   }
@@ -107,8 +139,22 @@ tt.incDec.updateContext = function() {
 };
 
 tt._function.updateContext = tt._class.updateContext = function(prevType) {
-  if (this.state.exprAllowed && !this.braceIsBlock(prevType)) {
+  if (
+    prevType.beforeExpr &&
+    prevType !== tt.semi &&
+    prevType !== tt._else &&
+    !(
+      prevType === tt._return &&
+      lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start))
+    ) &&
+    !(
+      (prevType === tt.colon || prevType === tt.braceL) &&
+      this.curContext() === types.b_stat
+    )
+  ) {
     this.state.context.push(types.functionExpression);
+  } else {
+    this.state.context.push(types.functionStatement);
   }
 
   this.state.exprAllowed = false;

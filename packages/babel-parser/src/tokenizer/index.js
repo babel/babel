@@ -1324,14 +1324,25 @@ export default class Tokenizer extends LocationParser {
   }
 
   braceIsBlock(prevType: TokenType): boolean {
-    if (prevType === tt.colon) {
-      const parent = this.curContext();
-      if (parent === ct.braceStatement || parent === ct.braceExpression) {
-        return !parent.isExpr;
-      }
+    const parent = this.curContext();
+    if (parent === ct.functionExpression || parent === ct.functionStatement) {
+      return true;
+    }
+    if (
+      prevType === tt.colon &&
+      (parent === ct.braceStatement || parent === ct.braceExpression)
+    ) {
+      return !parent.isExpr;
     }
 
-    if (prevType === tt._return) {
+    // The check for `tt.name && exprAllowed` detects whether we are
+    // after a `yield` or `of` construct. See the `updateContext` for
+    // `tt.name`.
+    if (
+      prevType === tt._return ||
+      prevType === tt._yield ||
+      (prevType === tt.name && this.state.exprAllowed)
+    ) {
       return lineBreak.test(
         this.input.slice(this.state.lastTokEnd, this.state.start),
       );
@@ -1341,13 +1352,22 @@ export default class Tokenizer extends LocationParser {
       prevType === tt._else ||
       prevType === tt.semi ||
       prevType === tt.eof ||
-      prevType === tt.parenR
+      prevType === tt.parenR ||
+      prevType === tt.arrow
     ) {
       return true;
     }
 
     if (prevType === tt.braceL) {
-      return this.curContext() === ct.braceStatement;
+      return parent === ct.braceStatement;
+    }
+
+    if (
+      prevType === tt._var ||
+      prevType === tt._let ||
+      prevType === tt._const
+    ) {
+      return false;
     }
 
     if (prevType === tt.relational) {
@@ -1356,6 +1376,14 @@ export default class Tokenizer extends LocationParser {
     }
 
     return !this.state.exprAllowed;
+  }
+
+  inGeneratorContext() {
+    for (let i = this.state.context.length - 1; i >= 1; i--) {
+      const context = this.state.context[i];
+      if (context.token === "function") return context.generator;
+    }
+    return false;
   }
 
   updateContext(prevType: TokenType): void {

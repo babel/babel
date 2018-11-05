@@ -538,7 +538,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      if (code === charCodes.lessThan && this.state.exprAllowed) {
+      if (
+        code === charCodes.lessThan &&
+        this.state.exprAllowed &&
+        this.state.input.charCodeAt(this.state.pos + 1) !==
+          charCodes.exclamationMark
+      ) {
         ++this.state.pos;
         return this.finishToken(tt.jsxTagStart);
       }

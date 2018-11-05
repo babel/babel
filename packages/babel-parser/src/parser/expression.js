@@ -964,7 +964,14 @@ export default class ExpressionParser extends LValParser {
 
   parseFunctionExpression(): N.FunctionExpression | N.MetaProperty {
     const node = this.startNode();
-    const meta = this.parseIdentifier(true);
+
+    // We do not do parseIdentifier here because of perf but more importantly
+    // because parseIdentifier will remove an item from the expression stack
+    // if function or class is parsed as identifier (in objects e.g.).
+    let meta = this.startNode();
+    this.next();
+    meta = this.createIdentifier(meta, "function");
+
     if (this.state.inGenerator && this.eat(tt.dot)) {
       return this.parseMetaProperty(node, meta, "sent");
     }
@@ -1863,8 +1870,14 @@ export default class ExpressionParser extends LValParser {
   parseIdentifier(liberal?: boolean): N.Identifier {
     const node = this.startNode();
     const name = this.parseIdentifierName(node.start, liberal);
+
+    return this.createIdentifier(node, name);
+  }
+
+  createIdentifier(node: N.Identifier, name: string): N.Identifier {
     node.name = name;
     node.loc.identifierName = name;
+
     return this.finishNode(node, "Identifier");
   }
 
@@ -1884,6 +1897,19 @@ export default class ExpressionParser extends LValParser {
       name = this.state.value;
     } else if (this.state.type.keyword) {
       name = this.state.type.keyword;
+
+      // `class` and `function` keywords push new context into this.context.
+      // But there is no chance to pop the context if the keyword is consumed
+      // as an identifier such as a property name.
+      // If the previous token is a dot, this does not apply because the
+      // context-managing code already ignored the keyword
+      if (
+        (name === "class" || name === "function") &&
+        (this.state.lastTokEnd !== this.state.lastTokStart + 1 ||
+          this.input.charCodeAt(this.state.lastTokStart) !== 46)
+      ) {
+        this.state.context.pop();
+      }
     } else {
       throw this.unexpected();
     }
