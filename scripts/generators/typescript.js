@@ -111,6 +111,8 @@ for (let i = 0; i < t.TYPES.length; i++) {
 
   if (t.NODE_FIELDS[t.TYPES[i]]) {
     decl += `node is ${t.TYPES[i]};`;
+  } else if (t.FLIPPED_ALIAS_KEYS[t.TYPES[i]]) {
+    decl += `node is ${t.TYPES[i]};`;
   } else {
     decl += `boolean;`;
   }
