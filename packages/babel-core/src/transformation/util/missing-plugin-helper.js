@@ -175,8 +175,8 @@ const pluginNameMap = {
   },
 
   // TODO: This plugins are now supported by default by @babel/parser: they can
-  // be removed from this list. Althought emoving them isn't a breaking change,
-  // its better to keep the nice error message for users using old versions of
+  // be removed from this list. Although removing them isn't a breaking change,
+  // it's better to keep a nice error message for users using older versions of
   // the parser. They can be removed in Babel 8.
   asyncGenerators: {
     syntax: {
