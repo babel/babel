@@ -842,6 +842,7 @@ export default class StatementParser extends ExpressionParser {
   ): T {
     const oldInFunc = this.state.inFunction;
     const oldInMethod = this.state.inMethod;
+    const oldInAsync = this.state.inAsync;
     const oldInGenerator = this.state.inGenerator;
     const oldInClassProperty = this.state.inClassProperty;
     this.state.inFunction = true;
@@ -872,11 +873,18 @@ export default class StatementParser extends ExpressionParser {
     // valid because yield is parsed as if it was outside the generator.
     // Therefore, this.state.inGenerator is set before or after parsing the
     // function id according to the "isStatement" parameter.
-    if (!isStatement) this.state.inGenerator = node.generator;
+    // The same applies to await & async functions.
+    if (!isStatement) {
+      this.state.inAsync = isAsync;
+      this.state.inGenerator = node.generator;
+    }
     if (this.match(tt.name) || this.match(tt._yield)) {
       node.id = this.parseBindingIdentifier();
     }
-    if (isStatement) this.state.inGenerator = node.generator;
+    if (isStatement) {
+      this.state.inAsync = isAsync;
+      this.state.inGenerator = node.generator;
+    }
 
     this.parseFunctionParams(node);
     this.parseFunctionBodyAndFinish(
@@ -887,6 +895,7 @@ export default class StatementParser extends ExpressionParser {
 
     this.state.inFunction = oldInFunc;
     this.state.inMethod = oldInMethod;
+    this.state.inAsync = oldInAsync;
     this.state.inGenerator = oldInGenerator;
     this.state.inClassProperty = oldInClassProperty;
 
