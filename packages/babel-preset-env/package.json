@@ -1,6 +1,6 @@
 {
   "name": "@babel/preset-env",
-  "version": "7.1.0",
+  "version": "7.1.5",
   "description": "A Babel preset for each environment.",
   "author": "Henry Zhu <hi@henryzoo.com>",
   "homepage": "https://babeljs.io/",
@@ -27,7 +27,7 @@
     "@babel/plugin-transform-arrow-functions": "^7.0.0",
     "@babel/plugin-transform-async-to-generator": "^7.1.0",
     "@babel/plugin-transform-block-scoped-functions": "^7.0.0",
-    "@babel/plugin-transform-block-scoping": "^7.0.0",
+    "@babel/plugin-transform-block-scoping": "^7.1.5",
     "@babel/plugin-transform-classes": "^7.1.0",
     "@babel/plugin-transform-computed-properties": "^7.0.0",
     "@babel/plugin-transform-destructuring": "^7.0.0",
@@ -60,8 +60,8 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.0.0",
-    "@babel/core": "^7.0.0",
+    "@babel/cli": "^7.1.5",
+    "@babel/core": "^7.1.5",
     "@babel/helper-fixtures": "^7.0.0",
     "@babel/helper-plugin-test-runner": "^7.0.0",
     "caniuse-db": "1.0.30000851",
