@@ -506,6 +506,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.parseLiteral(this.state.value, "JSXText");
       } else if (this.match(tt.jsxTagStart)) {
         return this.jsxParseElement();
+      } else if (
+        this.isRelational("<") &&
+        this.state.input.charCodeAt(this.state.pos) !==
+          charCodes.exclamationMark
+      ) {
+        // In case we encounter an lt token here it will always be the start of
+        // jsx as the lt sign is not allowed in places that expect an expression
+        this.finishToken(tt.jsxTagStart);
+        return this.jsxParseElement();
       } else {
         return super.parseExprAtom(refShortHandDefaultPos);
       }

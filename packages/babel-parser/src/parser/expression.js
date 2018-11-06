@@ -23,6 +23,7 @@ import * as N from "../types";
 import LValParser from "./lval";
 import { reservedWords } from "../util/identifier";
 import type { Pos, Position } from "../util/location";
+import * as charCodes from "charcodes";
 
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
@@ -718,6 +719,10 @@ export default class ExpressionParser extends LValParser {
   // or `{}`.
 
   parseExprAtom(refShorthandDefaultPos?: ?Pos): N.Expression {
+    // If a division operator appears in an expression position, the
+    // tokenizer got confused, and we force it to read a regexp instead.
+    if (this.state.type === tt.slash) this.readRegexp();
+
     const canBeArrow = this.state.potentialArrowAt === this.state.start;
     let node;
 
@@ -965,9 +970,11 @@ export default class ExpressionParser extends LValParser {
   parseFunctionExpression(): N.FunctionExpression | N.MetaProperty {
     const node = this.startNode();
 
-    // We do not do parseIdentifier here because of perf but more importantly
-    // because parseIdentifier will remove an item from the expression stack
-    // if function or class is parsed as identifier (in objects e.g.).
+    // We do not do parseIdentifier here because when parseFunctionExpression
+    // is called we already know that the current token is a "name" with the value "function"
+    // This will improve perf a tiny little bit as we do not do validation but more importantly
+    // here is that parseIdentifier will remove an item from the expression stack
+    // if "function" or "class" is parsed as identifier (in objects e.g.), which should not happen here.
     let meta = this.startNode();
     this.next();
     meta = this.createIdentifier(meta, "function");
@@ -1906,7 +1913,7 @@ export default class ExpressionParser extends LValParser {
       if (
         (name === "class" || name === "function") &&
         (this.state.lastTokEnd !== this.state.lastTokStart + 1 ||
-          this.input.charCodeAt(this.state.lastTokStart) !== 46)
+          this.input.charCodeAt(this.state.lastTokStart) !== charCodes.dot)
       ) {
         this.state.context.pop();
       }

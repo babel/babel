@@ -40,20 +40,6 @@ export const types: {
   template: new TokContext("`", true, true, p => p.readTmplToken()),
   functionExpression: new TokContext("function", true),
   functionStatement: new TokContext("function", false),
-  functionExpressionGenerator: new TokContext(
-    "function",
-    true,
-    false,
-    null,
-    true,
-  ),
-  functionStatementGenerator: new TokContext(
-    "function",
-    false,
-    false,
-    null,
-    true,
-  ),
 };
 
 // Token-specific context update code
@@ -72,39 +58,18 @@ tt.parenR.updateContext = tt.braceR.updateContext = function() {
   this.state.exprAllowed = !out.isExpr;
 };
 
-tt.star.updateContext = function(prevType) {
-  if (prevType === tt._function) {
-    const index = this.state.context.length - 1;
-    if (this.state.context[index] === types.functionExpression) {
-      this.state.context[index] = types.functionExpressionGenerator;
-    } else {
-      this.state.context[index] = types.functionStatementGenerator;
-    }
-  }
-  this.state.exprAllowed = true;
-};
-
 tt.name.updateContext = function(prevType) {
   let allowed = false;
   if (prevType !== tt.dot) {
     if (
       (this.state.value === "of" && !this.state.exprAllowed) ||
-      (this.state.value === "yield" && this.inGeneratorContext())
+      (this.state.value === "yield" && this.state.inGenerator)
     ) {
       allowed = true;
     }
   }
   this.state.exprAllowed = allowed;
 
-  if (prevType === tt._let || prevType === tt._const || prevType === tt._var) {
-    if (
-      lineBreak.test(
-        this.input.slice(this.state.end, this.lookahead(true).start),
-      )
-    ) {
-      this.state.exprAllowed = true;
-    }
-  }
   if (this.state.isIterator) {
     this.state.isIterator = false;
   }

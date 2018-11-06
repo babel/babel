@@ -1378,14 +1378,6 @@ export default class Tokenizer extends LocationParser {
     return !this.state.exprAllowed;
   }
 
-  inGeneratorContext() {
-    for (let i = this.state.context.length - 1; i >= 1; i--) {
-      const context = this.state.context[i];
-      if (context.token === "function") return context.generator;
-    }
-    return false;
-  }
-
   updateContext(prevType: TokenType): void {
     const type = this.state.type;
     let update;

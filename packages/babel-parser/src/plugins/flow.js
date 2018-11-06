@@ -6,6 +6,7 @@ import * as N from "../types";
 import type { Options } from "../options";
 import type { Pos, Position } from "../util/location";
 import type State from "../tokenizer/state";
+import { types as tc } from "../tokenizer/context";
 import * as charCodes from "charcodes";
 import { isIteratorStart } from "../util/identifier";
 
@@ -2392,7 +2393,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       refNeedsArrowPos?: ?Pos,
     ): N.Expression {
       let jsxError = null;
-      if (tt.jsxTagStart && this.match(tt.jsxTagStart)) {
+      if (
+        this.hasPlugin("jsx") &&
+        (this.match(tt.jsxTagStart) || this.isRelational("<"))
+      ) {
         const state = this.state.clone();
         try {
           return super.parseMaybeAssign(
@@ -2408,7 +2412,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             // Remove `tc.j_expr` and `tc.j_oTag` from context added
             // by parsing `jsxTagStart` to stop the JSX plugin from
             // messing with the tokens
-            this.state.context.length -= 2;
+            const cLength = this.state.context.length;
+            if (this.state.context[cLength - 1] === tc.j_oTag) {
+              this.state.context.length -= 2;
+            }
 
             jsxError = err;
           } else {
