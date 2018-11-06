@@ -1,0 +1,7 @@
+{
+  "sourceType": "module",
+  "plugins": [
+    "typescript"
+  ],
+  "throws": "A required element cannot follow an optional element. (1:17)"
+}
