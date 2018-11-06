@@ -13,20 +13,17 @@ export class TokContext {
     isExpr?: boolean,
     preserveSpace?: boolean,
     override?: ?Function, // Takes a Tokenizer as a this-parameter, and returns void.
-    generator?: boolean,
   ) {
     this.token = token;
     this.isExpr = !!isExpr;
     this.preserveSpace = !!preserveSpace;
     this.override = override;
-    this.generator = !!generator;
   }
 
   token: string;
   isExpr: boolean;
   preserveSpace: boolean;
   override: ?Function;
-  generator: boolean;
 }
 
 export const types: {
