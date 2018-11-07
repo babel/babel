@@ -38,7 +38,7 @@ aren't supported by ESLint. When using this plugin, ESLint is monkeypatched and 
 transformed into code that ESLint can understand. All location info such as line numbers,
 columns is also retained so you can track down errors with ease.
 
-Basically `babel-eslint` exports an [`index.js`](/index.js) that a linter can use.
+Basically `babel-eslint` exports an [`index.js`](/lib/index.js) that a linter can use.
 It just needs to export a `parse` method that takes in a string of code and outputs an AST.
 
 ## Usage
