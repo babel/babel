@@ -10,7 +10,7 @@ import { types as tc } from "../tokenizer/context";
 import * as charCodes from "charcodes";
 import { isIteratorStart } from "../util/identifier";
 
-const primitiveTypes = [
+const reservedTypes = [
   "any",
   "bool",
   "boolean",
@@ -504,8 +504,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     checkReservedType(word: string, startLoc: number) {
-      if (primitiveTypes.indexOf(word) > -1) {
-        this.raise(startLoc, `Cannot overwrite primitive type ${word}`);
+      if (reservedTypes.indexOf(word) > -1) {
+        this.raise(startLoc, `Cannot overwrite reserved type ${word}`);
       }
     }
 
