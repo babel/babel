@@ -113,6 +113,10 @@ const bareSupersVisitor = {
   CallExpression(path, { initializeInstanceElements }) {
     if (path.get("callee").isSuper()) {
       path.insertAfter(t.cloneNode(initializeInstanceElements));
+
+      // Sometimes this path gets requeued (e.g. in (super(), foo)), and
+      // it leads to infinite recursion.
+      path.skip();
     }
   },
   Function(path) {
