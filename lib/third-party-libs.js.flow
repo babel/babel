@@ -2,12 +2,6 @@
  * Basic declarations for the npm modules we use.
  */
 
-declare module "micromatch" {
-  declare module.exports: {
-    (Array<string>, Array<string>, ?{ nocase: boolean }): Array<string>,
-  };
-}
-
 declare module "resolve" {
   declare export default {
     sync: (string, {| basedir: string |}) => string;
