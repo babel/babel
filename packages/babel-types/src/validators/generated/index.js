@@ -2159,6 +2159,20 @@ export function isClassPrivateProperty(node: Object, opts?: Object): boolean {
 
   return false;
 }
+export function isClassPrivateMethod(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "ClassPrivateMethod") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isImport(node: Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -3492,7 +3506,8 @@ export function isFunction(node: Object, opts?: Object): boolean {
     "FunctionExpression" === nodeType ||
     "ObjectMethod" === nodeType ||
     "ArrowFunctionExpression" === nodeType ||
-    "ClassMethod" === nodeType
+    "ClassMethod" === nodeType ||
+    "ClassPrivateMethod" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -3737,7 +3752,8 @@ export function isMethod(node: Object, opts?: Object): boolean {
   if (
     nodeType === "Method" ||
     "ObjectMethod" === nodeType ||
-    "ClassMethod" === nodeType
+    "ClassMethod" === nodeType ||
+    "ClassPrivateMethod" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;
@@ -4119,6 +4135,7 @@ export function isPrivate(node: Object, opts?: Object): boolean {
   if (
     nodeType === "Private" ||
     "ClassPrivateProperty" === nodeType ||
+    "ClassPrivateMethod" === nodeType ||
     "PrivateName" === nodeType
   ) {
     if (typeof opts === "undefined") {

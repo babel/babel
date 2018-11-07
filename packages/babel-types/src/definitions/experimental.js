@@ -5,7 +5,10 @@ import defineType, {
   assertValueType,
   chain,
 } from "./utils";
-import { classMethodOrPropertyCommon } from "./es2015";
+import {
+  classMethodOrPropertyCommon,
+  classMethodOrDeclareMethodCommon,
+} from "./es2015";
 
 defineType("AwaitExpression", {
   builder: ["argument"],
@@ -127,6 +130,28 @@ defineType("ClassPrivateProperty", {
     value: {
       validate: assertNodeType("Expression"),
       optional: true,
+    },
+  },
+});
+
+defineType("ClassPrivateMethod", {
+  builder: ["kind", "key", "params", "body", "computed", "static"],
+  visitor: [
+    "key",
+    "params",
+    "body",
+    "decorators",
+    "returnType",
+    "typeParameters",
+  ],
+  aliases: ["Method", "Private", "Function"],
+  fields: {
+    ...classMethodOrDeclareMethodCommon,
+    key: {
+      validate: assertNodeType("PrivateName"),
+    },
+    body: {
+      validate: assertNodeType("BlockStatement"),
     },
   },
 });

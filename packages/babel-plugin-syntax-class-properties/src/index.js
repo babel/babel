@@ -7,7 +7,11 @@ export default declare(api => {
     name: "syntax-class-properties",
 
     manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push("classProperties", "classPrivateProperties");
+      parserOpts.plugins.push(
+        "classProperties",
+        "classPrivateProperties",
+        "classPrivateMethods",
+      );
     },
   };
 });
