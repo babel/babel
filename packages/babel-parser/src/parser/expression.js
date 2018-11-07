@@ -23,6 +23,7 @@ import * as N from "../types";
 import LValParser from "./lval";
 import { reservedWords } from "../util/identifier";
 import type { Pos, Position } from "../util/location";
+import * as charCodes from "charcodes";
 
 export default class ExpressionParser extends LValParser {
   // Forward-declaration: defined in statement.js
@@ -718,6 +719,10 @@ export default class ExpressionParser extends LValParser {
   // or `{}`.
 
   parseExprAtom(refShorthandDefaultPos?: ?Pos): N.Expression {
+    // If a division operator appears in an expression position, the
+    // tokenizer got confused, and we force it to read a regexp instead.
+    if (this.state.type === tt.slash) this.readRegexp();
+
     const canBeArrow = this.state.potentialArrowAt === this.state.start;
     let node;
 
@@ -964,7 +969,16 @@ export default class ExpressionParser extends LValParser {
 
   parseFunctionExpression(): N.FunctionExpression | N.MetaProperty {
     const node = this.startNode();
-    const meta = this.parseIdentifier(true);
+
+    // We do not do parseIdentifier here because when parseFunctionExpression
+    // is called we already know that the current token is a "name" with the value "function"
+    // This will improve perf a tiny little bit as we do not do validation but more importantly
+    // here is that parseIdentifier will remove an item from the expression stack
+    // if "function" or "class" is parsed as identifier (in objects e.g.), which should not happen here.
+    let meta = this.startNode();
+    this.next();
+    meta = this.createIdentifier(meta, "function");
+
     if (this.state.inGenerator && this.eat(tt.dot)) {
       return this.parseMetaProperty(node, meta, "sent");
     }
@@ -1863,8 +1877,14 @@ export default class ExpressionParser extends LValParser {
   parseIdentifier(liberal?: boolean): N.Identifier {
     const node = this.startNode();
     const name = this.parseIdentifierName(node.start, liberal);
+
+    return this.createIdentifier(node, name);
+  }
+
+  createIdentifier(node: N.Identifier, name: string): N.Identifier {
     node.name = name;
     node.loc.identifierName = name;
+
     return this.finishNode(node, "Identifier");
   }
 
@@ -1884,6 +1904,19 @@ export default class ExpressionParser extends LValParser {
       name = this.state.value;
     } else if (this.state.type.keyword) {
       name = this.state.type.keyword;
+
+      // `class` and `function` keywords push new context into this.context.
+      // But there is no chance to pop the context if the keyword is consumed
+      // as an identifier such as a property name.
+      // If the previous token is a dot, this does not apply because the
+      // context-managing code already ignored the keyword
+      if (
+        (name === "class" || name === "function") &&
+        (this.state.lastTokEnd !== this.state.lastTokStart + 1 ||
+          this.input.charCodeAt(this.state.lastTokStart) !== charCodes.dot)
+      ) {
+        this.state.context.pop();
+      }
     } else {
       throw this.unexpected();
     }

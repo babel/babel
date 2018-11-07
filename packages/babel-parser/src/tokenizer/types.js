@@ -174,7 +174,7 @@ export const keywords = {
   new: new KeywordTokenType("new", { beforeExpr, startsExpr }),
   this: new KeywordTokenType("this", { startsExpr }),
   super: new KeywordTokenType("super", { startsExpr }),
-  class: new KeywordTokenType("class"),
+  class: new KeywordTokenType("class", { startsExpr }),
   extends: new KeywordTokenType("extends", { beforeExpr }),
   export: new KeywordTokenType("export"),
   import: new KeywordTokenType("import", { startsExpr }),
