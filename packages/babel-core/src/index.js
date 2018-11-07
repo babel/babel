@@ -10,6 +10,7 @@ export { version } from "../package.json";
 export { getEnv } from "./config/helpers/environment";
 
 export * as types from "@babel/types";
+export * as parser from "@babel/parser";
 export { default as traverse } from "@babel/traverse";
 export { default as template } from "@babel/template";
 

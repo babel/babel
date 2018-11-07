@@ -154,6 +154,14 @@ describe("api", function() {
     );
   });
 
+  it("exposes the parser", function() {
+    expect(babel.parser).toBeDefined();
+  });
+
+  it("exposes types", function() {
+    expect(babel.types).toBeDefined();
+  });
+
   it("transformFile", function(done) {
     const options = {
       babelrc: false,
