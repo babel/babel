@@ -17,7 +17,7 @@
     "@babel/helper-split-export-declaration": "^7.0.0",
     "@babel/parser": "^7.1.5",
     "@babel/types": "^7.1.5",
-    "debug": "^3.1.0",
+    "debug": "^4.1.0",
     "globals": "^11.1.0",
     "lodash": "^4.17.10"
   },
