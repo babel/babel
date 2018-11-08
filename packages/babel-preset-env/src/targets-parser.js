@@ -102,7 +102,7 @@ const getLowestVersions = (browsers: Array<string>): Targets => {
       } else if (!isUnreleased && !isSplitUnreleased) {
         const parsedBrowserVersion = semverify(splitVersion);
 
-        all[normalizedBrowserName] = semverMin(version, parsedBrowserVersion);f
+        all[normalizedBrowserName] = semverMin(version, parsedBrowserVersion);
       }
     } catch (e) {}
 
