@@ -148,6 +148,8 @@ commander.option(
   "Delete the out directory before compilation",
 );
 
+commander.option("--info", "Display environment debugging information");
+
 commander.version(pkg.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
 
@@ -201,6 +203,7 @@ export default function parseArgv(args: Array<string>) {
   }
 
   if (
+    !commander.info &&
     !commander.outDir &&
     filenames.length === 0 &&
     typeof commander.filename !== "string" &&
@@ -277,6 +280,7 @@ export default function parseArgv(args: Array<string>) {
       verbose: opts.verbose,
       deleteDirOnStart: opts.deleteDirOnStart,
       sourceMapTarget: opts.sourceMapTarget,
+      info: opts.info,
     },
   };
 }
