@@ -56,4 +56,20 @@ describe("cloneNode", function() {
     expect(node.object).toBe(cloned.object);
     expect(node.property).toBe(cloned.property);
   });
+
+  it("should preserve type annotations", function() {
+    const node = t.variableDeclaration("let", [
+      t.variableDeclarator({
+        ...t.identifier("value"),
+        typeAnnotation: t.anyTypeAnnotation(),
+      }),
+    ]);
+    const cloned = t.cloneNode(node, /* deep */ true);
+    expect(cloned.declarations[0].id.typeAnnotation).toEqual(
+      node.declarations[0].id.typeAnnotation,
+    );
+    expect(cloned.declarations[0].id.typeAnnotation).not.toBe(
+      node.declarations[0].id.typeAnnotation,
+    );
+  });
 });
