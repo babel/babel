@@ -619,8 +619,8 @@ export default class StatementParser extends ExpressionParser {
     const kind = this.state.type.isLoop
       ? "loop"
       : this.match(tt._switch)
-        ? "switch"
-        : null;
+      ? "switch"
+      : null;
     for (let i = this.state.labels.length - 1; i >= 0; i--) {
       const label = this.state.labels[i];
       if (label.statementStart === node.start) {

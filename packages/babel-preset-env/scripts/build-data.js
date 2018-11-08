@@ -229,13 +229,15 @@ const getLowestImplementedVersion = ({ features }, env) => {
     return null;
   }
 
-  return envTests.map(str => str.replace(env, "")).reduce((a, b) => {
-    if (b === unreleasedLabelForEnv) {
-      return b;
-    }
+  return envTests
+    .map(str => str.replace(env, ""))
+    .reduce((a, b) => {
+      if (b === unreleasedLabelForEnv) {
+        return b;
+      }
 
-    return semver.lt(semver.coerce(a), semver.coerce(b)) ? b : a;
-  });
+      return semver.lt(semver.coerce(a), semver.coerce(b)) ? b : a;
+    });
 };
 
 const generateData = (environments, features) => {
