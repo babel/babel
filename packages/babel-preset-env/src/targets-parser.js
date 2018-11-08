@@ -30,15 +30,16 @@ const validateTargetNames = (validTargets, targets) => {
 };
 
 const browserNameMap = {
+  and_chr: "chrome",
   android: "android",
   chrome: "chrome",
-  and_chr: "chrome",
   edge: "edge",
   firefox: "firefox",
   ie: "ie",
   ios_saf: "ios",
-  safari: "safari",
   node: "node",
+  opera: "opera",
+  safari: "safari",
 };
 
 export const isBrowsersQueryValid = (
