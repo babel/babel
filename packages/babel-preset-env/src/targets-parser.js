@@ -30,16 +30,16 @@ const validateTargetNames = (validTargets, targets) => {
 };
 
 const browserNameMap = {
+  and_chr: "chrome",
   android: "android",
   chrome: "chrome",
-  and_chr: "chrome",
   edge: "edge",
   firefox: "firefox",
   ie: "ie",
   ios_saf: "ios",
-  safari: "safari",
-  opera: "opera",
   node: "node",
+  opera: "opera",
+  safari: "safari",
 };
 
 export const isBrowsersQueryValid = (
@@ -102,7 +102,7 @@ const getLowestVersions = (browsers: Array<string>): Targets => {
       } else if (!isUnreleased && !isSplitUnreleased) {
         const parsedBrowserVersion = semverify(splitVersion);
 
-        all[normalizedBrowserName] = semverMin(version, parsedBrowserVersion);
+        all[normalizedBrowserName] = semverMin(version, parsedBrowserVersion);f
       }
     } catch (e) {}
 
