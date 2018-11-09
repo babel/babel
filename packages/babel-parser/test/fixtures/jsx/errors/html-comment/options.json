@@ -1,4 +1,4 @@
 {
-    "sourceType": "script",
-    "plugins": ["jsx", "flow"]
-  }
+  "sourceType": "script",
+  "plugins": ["jsx", "flow"]
+}

@@ -332,8 +332,8 @@ export default class ExpressionParser extends LValParser {
         this.finishNode(
           node,
           op === tt.logicalOR ||
-          op === tt.logicalAND ||
-          op === tt.nullishCoalescing
+            op === tt.logicalAND ||
+            op === tt.nullishCoalescing
             ? "LogicalExpression"
             : "BinaryExpression",
         );

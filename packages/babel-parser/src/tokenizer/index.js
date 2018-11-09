@@ -881,10 +881,10 @@ export default class Tokenizer extends LocationParser {
       radix === 16
         ? allowedNumericSeparatorSiblings.hex
         : radix === 10
-          ? allowedNumericSeparatorSiblings.dec
-          : radix === 8
-            ? allowedNumericSeparatorSiblings.oct
-            : allowedNumericSeparatorSiblings.bin;
+        ? allowedNumericSeparatorSiblings.dec
+        : radix === 8
+        ? allowedNumericSeparatorSiblings.oct
+        : allowedNumericSeparatorSiblings.bin;
 
     let total = 0;
 
