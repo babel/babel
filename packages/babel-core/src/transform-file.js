@@ -9,6 +9,14 @@ import {
   type FileResultCallback,
 } from "./transformation";
 
+import typeof * as transformFileBrowserType from "./transform-file-browser";
+import typeof * as transformFileType from "./transform-file";
+
+// Kind of gross, but essentially asserting that the exports of this module are the same as the
+// exports of transform-file-browser, since this file may be replaced at bundle time with
+// transform-file-browser.
+((({}: any): $Exact<transformFileBrowserType>): $Exact<transformFileType>);
+
 type TransformFile = {
   (filename: string, callback: FileResultCallback): void,
   (filename: string, opts: ?InputOptions, callback: FileResultCallback): void,
