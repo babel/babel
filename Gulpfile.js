@@ -23,6 +23,7 @@ const rollupReplace = require("rollup-plugin-replace");
 const rollupCommonJs = require("rollup-plugin-commonjs");
 const rollupNodeResolve = require("rollup-plugin-node-resolve");
 const rollupNodeGlobals = require("rollup-plugin-node-globals");
+const rollupNodeBuiltins = require("rollup-plugin-node-builtins");
 const uglify = require("gulp-uglify");
 const rollupJson = require("rollup-plugin-json");
 const registerStandalonePackageTask = require("./scripts/gulp-tasks")
@@ -131,14 +132,11 @@ function buildRollup(packages) {
               format,
               name,
             },
-            external: ["fs", "path"],
             plugins: [
               {
                 name: "babel-source",
                 load(id) {
-                  const matches = id.match(
-                    /packages\/(babel-[^/]+|babylon)\/src\//
-                  );
+                  const matches = id.match(/packages\/(babel-[^/]+)\/src\//);
                   if (matches) {
                     // check if browser field exists for this file and replace
                     const packageFolder = path.join(
@@ -172,16 +170,13 @@ function buildRollup(packages) {
                       }
                     }
                   }
+                  return null;
                 },
                 resolveId(importee) {
                   let packageFolderName;
-                  if (importee === "babylon") {
-                    packageFolderName = importee;
-                  } else {
-                    const matches = importee.match(/^@babel\/([^/]+)$/);
-                    if (matches) {
-                      packageFolderName = `babel-${matches[1]}`;
-                    }
+                  const matches = importee.match(/^@babel\/([^/]+)$/);
+                  if (matches) {
+                    packageFolderName = `babel-${matches[1]}`;
                   }
 
                   if (packageFolderName) {
@@ -207,12 +202,15 @@ function buildRollup(packages) {
                       filename.replace(/^(\.\/)?lib\//, "src/")
                     );
                   }
+
+                  return null;
                 },
               },
               rollupJson(),
               rollupNodeResolve({
                 browser: true,
                 jsnext: true,
+                preferBuiltins: true,
               }),
               rollupReplace({
                 "process.env.NODE_ENV": '"production"',
@@ -226,11 +224,11 @@ function buildRollup(packages) {
               rollupBabel({
                 envName: "rollup",
                 babelrc: false,
-                exclude: "**/node_modules/**",
                 extends: "./babel.config.js",
               }),
-              rollupNodeGlobals({ sourceMap: false }),
               rollupCommonJs(),
+              rollupNodeGlobals({ sourceMap: false }),
+              rollupNodeBuiltins(),
             ],
           }),
           source("index.js"),

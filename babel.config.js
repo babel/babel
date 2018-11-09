@@ -100,6 +100,7 @@ module.exports = function(api) {
           "packages/*/test",
           "codemods/*/src",
           "codemods/*/test",
+          "**/node_modules/**",
         ],
         sourceType: "unambiguous",
       },
