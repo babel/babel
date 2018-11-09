@@ -4,5 +4,5 @@
     "jsx",
     "flow"
   ],
-  "throws": "Cannot overwrite primitive type _ (2:5)"
+  "throws": "Cannot overwrite reserved type _ (2:5)"
 }
