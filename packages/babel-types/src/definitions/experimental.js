@@ -245,6 +245,7 @@ defineType("BigIntLiteral", {
 
 defineType("CaseStatement", {
   builder: ["discriminant", "cases"],
+  visitor: ["discriminant", "cases"],
   fields: {
     discriminant: {
       validate: assertNodeType("Expression"),
@@ -255,6 +256,7 @@ defineType("CaseStatement", {
 
 defineType("WhenClause", {
   builder: ["pattern", "initializer", "matchGuard", "body"],
+  visitor: ["pattern", "initializer", "matchGuard", "body"],
   fields: {
     body: {
       validate: assertNodeType("Statement"),
@@ -270,10 +272,12 @@ defineType("WhenClause", {
 
 defineType("ObjectMatchPattern", {
   builder: ["properties"],
+  visitor: ["properties"],
 });
 
 defineType("ObjectMatchProperty", {
   builder: ["key", "initializer", "element"],
+  visitor: ["key", "initializer", "element"],
   fields: {
     key: {
       validate: assertNodeType("Identifier"),

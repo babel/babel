@@ -1,6 +1,6 @@
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxPatternMatching from "@babel/plugin-syntax-pattern-matching";
-import { types as t, template } from "@babel/core";
+import { types as t, template } from "../../babel-core";
 
 export default declare(api => {
   api.assertVersion(7);
@@ -10,7 +10,7 @@ export default declare(api => {
       const { substitutionsMap } = this;
       const { name } = path.node;
       const subName = substitutionsMap.get(name);
-      if (typeof subName === "undefined") {
+      if (typeof subName !== "undefined") {
         path.replaceWith(t.identifier(subName));
       }
     },
@@ -51,36 +51,48 @@ export default declare(api => {
           EXPR: expr,
         });
 
-        const test = objPattern.properties.reduce((acc, property) => {
+        return objPattern.properties.reduce((acc, property) => {
           const bindingId = path.scope.generateUidIdentifier(property.key.name);
           substitutionsMap.set(property.key.name, bindingId.name);
 
           return template.expression(
-            `LEFT && (BINDING_ID = EXPR, typeof BINDING_ID !== "undefined")`,
+            `LEFT && (BINDING_ID = EXPR.PROP, typeof BINDING_ID !== "undefined")`,
           )({
             LEFT: acc,
             EXPR: expr,
+            PROP: property.key,
             BINDING_ID: bindingId,
           });
         }, objectId);
-
-        // TODO: new scope variable and assignement
-
-        return template.expression(`
-        Object.is(EXPR) && DEEPER_EXPR
-      `)({
-          EXPR: expr,
-          DEEPER_EXPR: test,
-        });
       }
 
       function generateArrayTestExpr(expr, arrayPattern, substitutionsMap) {
-        return template.expression(`
-        Array.isArray(EXPR) && DEEPER_EXPR
-      `)({
+        const base = template.expression(`Array.isArray(EXPR)`)({
           EXPR: expr,
-          DEEPER_EXPR: generateArrayTestExpr(expr, pattern, substitutionsMap),
         });
+        return arrayPattern.elements.reduce((acc, element, index) => {
+          const subExpr = t.memberExpression(
+            expr,
+            t.numericLiteral(index),
+            true,
+          );
+          if (t.isIdentifier(element)) {
+            const bindingId = path.scope.generateUidIdentifier(element.name);
+            substitutionsMap.set(element.name, bindingId.name);
+            return template.expression(
+              `LEFT && (BINDING_ID = SUB_EXPR, typeof BINDING_ID !== "undefined")`,
+            )({
+              LEFT: acc,
+              SUB_EXPR: subExpr,
+              BINDING_ID: bindingId,
+            });
+          } else {
+            return template.expression(`LEFT && SUB_TEST`)({
+              LEFT: acc,
+              SUB_TEST: generateTestExpr(subExpr, element, substitutionsMap),
+            });
+          }
+        }, base);
       }
 
       const substitutionsMap = new Map();
