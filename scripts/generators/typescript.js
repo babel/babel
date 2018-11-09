@@ -11,18 +11,18 @@ interface BaseComment {
   start: number;
   end: number;
   loc: SourceLocation;
-  type: "BlockComment" | "LineComment";
+  type: "CommentBlock" | "CommentLine";
 }
 
-export interface BlockComment extends BaseComment {
-  type: "BlockComment";
+export interface CommentBlock extends BaseComment {
+  type: "CommentBlock";
 }
 
-export interface LineComment extends BaseComment {
-  type: "LineComment";
+export interface CommentLine extends BaseComment {
+  type: "CommentLine";
 }
 
-export type Comment = BlockComment | LineComment;
+export type Comment = CommentBlock | CommentLine;
 
 export interface SourceLocation {
   start: {

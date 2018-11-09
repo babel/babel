@@ -15,12 +15,12 @@ declare class ${NODE_PREFIX}Comment {
   loc: ${NODE_PREFIX}SourceLocation;
 }
 
-declare class ${NODE_PREFIX}BlockComment extends ${NODE_PREFIX}Comment {
-  type: "BlockComment";
+declare class ${NODE_PREFIX}CommentBlock extends ${NODE_PREFIX}Comment {
+  type: "CommentBlock";
 }
 
-declare class ${NODE_PREFIX}LineComment extends ${NODE_PREFIX}Comment {
-  type: "LineComment";
+declare class ${NODE_PREFIX}CommentLine extends ${NODE_PREFIX}Comment {
+  type: "CommentLine";
 }
 
 declare class ${NODE_PREFIX}SourceLocation {
