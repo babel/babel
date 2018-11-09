@@ -479,7 +479,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseObjectMatchProperty(): N.ObjectMatchProperty {
     const node = this.startNode();
-    node.name = this.parseIdentifier();
+    node.key = this.parseIdentifier();
     if (this.match(tt.colon)) {
       this.next();
       node.element = this.parseMatchPatternAtom();

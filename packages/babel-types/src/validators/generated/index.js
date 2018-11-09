@@ -2322,6 +2322,90 @@ export function isBigIntLiteral(node: Object, opts?: Object): boolean {
 
   return false;
 }
+export function isCaseStatement(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "CaseStatement") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isWhenClause(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "WhenClause") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isObjectMatchPattern(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "ObjectMatchPattern") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isObjectMatchProperty(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "ObjectMatchProperty") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isArrayMatchPattern(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "ArrayMatchPattern") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isMatchRestElement(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "MatchRestElement") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSParameterProperty(node: Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -3386,6 +3470,7 @@ export function isStatement(node: Object, opts?: Object): boolean {
     "InterfaceDeclaration" === nodeType ||
     "OpaqueType" === nodeType ||
     "TypeAlias" === nodeType ||
+    "CaseStatement" === nodeType ||
     "TSDeclareFunction" === nodeType ||
     "TSInterfaceDeclaration" === nodeType ||
     "TSTypeAliasDeclaration" === nodeType ||

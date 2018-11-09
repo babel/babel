@@ -104,7 +104,7 @@
                       "column": 9
                     }
                   },
-                  "name": {
+                  "key": {
                     "type": "Identifier",
                     "start": 23,
                     "end": 24,
@@ -1175,7 +1175,7 @@
                       "column": 9
                     }
                   },
-                  "name": {
+                  "key": {
                     "type": "Identifier",
                     "start": 515,
                     "end": 516,
