@@ -714,6 +714,33 @@ export function assertPrivateName(node: Object, opts?: Object = {}): void {
 export function assertBigIntLiteral(node: Object, opts?: Object = {}): void {
   assert("BigIntLiteral", node, opts);
 }
+export function assertCaseStatement(node: Object, opts?: Object = {}): void {
+  assert("CaseStatement", node, opts);
+}
+export function assertWhenClause(node: Object, opts?: Object = {}): void {
+  assert("WhenClause", node, opts);
+}
+export function assertObjectMatchPattern(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("ObjectMatchPattern", node, opts);
+}
+export function assertObjectMatchProperty(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("ObjectMatchProperty", node, opts);
+}
+export function assertArrayMatchPattern(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("ArrayMatchPattern", node, opts);
+}
+export function assertMatchRestElement(node: Object, opts?: Object = {}): void {
+  assert("MatchRestElement", node, opts);
+}
 export function assertTSParameterProperty(
   node: Object,
   opts?: Object = {},

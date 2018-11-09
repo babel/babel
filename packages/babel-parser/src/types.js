@@ -253,7 +253,7 @@ export type CaseStatement = NodeBase & {
 
 export type WhenClause = NodeBase & {
   type: "WhenClause",
-  pattern: Pattern | Literal,
+  pattern: MatchPattern | Literal,
   initializer?: Expression,
   matchGuard?: Expression,
   body: Statement,
@@ -268,7 +268,7 @@ export type ObjectMatchPattern = NodeBase & {
 
 export type ObjectMatchProperty = NodeBase & {
   type: "ObjectMatchProperty",
-  name: Identifier,
+  key: Identifier,
   initializer: Expression | null,
   element: MatchPattern | null,
 };

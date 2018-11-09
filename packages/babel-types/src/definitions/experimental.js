@@ -193,3 +193,55 @@ defineType("BigIntLiteral", {
   },
   aliases: ["Expression", "Pureish", "Literal", "Immutable"],
 });
+
+defineType("CaseStatement", {
+  builder: ["discriminant", "cases"],
+  fields: {
+    discriminant: {
+      validate: assertNodeType("Expression"),
+    },
+  },
+  aliases: ["Statement"],
+});
+
+defineType("WhenClause", {
+  builder: ["pattern", "initializer", "matchGuard", "body"],
+  fields: {
+    body: {
+      validate: assertNodeType("Statement"),
+    },
+    initializer: {
+      optional: true,
+    },
+    matchGuard: {
+      optional: true,
+    },
+  },
+});
+
+defineType("ObjectMatchPattern", {
+  builder: ["properties"],
+});
+
+defineType("ObjectMatchProperty", {
+  builder: ["key", "initializer", "element"],
+  fields: {
+    key: {
+      validate: assertNodeType("Identifier"),
+    },
+    initializer: {
+      optional: true,
+    },
+    element: {
+      optional: true,
+    },
+  },
+});
+
+defineType("ArrayMatchPattern", {
+  builder: ["elements"],
+});
+
+defineType("MatchRestElement", {
+  builder: ["body"],
+});

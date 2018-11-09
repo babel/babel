@@ -648,6 +648,30 @@ export function BigIntLiteral(...args: Array<any>): Object {
   return builder("BigIntLiteral", ...args);
 }
 export { BigIntLiteral as bigIntLiteral };
+export function CaseStatement(...args: Array<any>): Object {
+  return builder("CaseStatement", ...args);
+}
+export { CaseStatement as caseStatement };
+export function WhenClause(...args: Array<any>): Object {
+  return builder("WhenClause", ...args);
+}
+export { WhenClause as whenClause };
+export function ObjectMatchPattern(...args: Array<any>): Object {
+  return builder("ObjectMatchPattern", ...args);
+}
+export { ObjectMatchPattern as objectMatchPattern };
+export function ObjectMatchProperty(...args: Array<any>): Object {
+  return builder("ObjectMatchProperty", ...args);
+}
+export { ObjectMatchProperty as objectMatchProperty };
+export function ArrayMatchPattern(...args: Array<any>): Object {
+  return builder("ArrayMatchPattern", ...args);
+}
+export { ArrayMatchPattern as arrayMatchPattern };
+export function MatchRestElement(...args: Array<any>): Object {
+  return builder("MatchRestElement", ...args);
+}
+export { MatchRestElement as matchRestElement };
 export function TSParameterProperty(...args: Array<any>): Object {
   return builder("TSParameterProperty", ...args);
 }
