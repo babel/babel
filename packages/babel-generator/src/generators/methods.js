@@ -113,10 +113,12 @@ export function ArrowFunctionExpression(node: Object) {
   ) {
     if (
       this.format.retainLines &&
+      node.loc &&
+      node.body.loc &&
       node.loc.start.line < node.body.loc.start.line
     ) {
       this.token("(");
-      if (firstParam.loc.start.line > node.loc.start.line) {
+      if (firstParam.loc && firstParam.loc.start.line > node.loc.start.line) {
         this.indent();
         this.print(firstParam, node);
         this.dedent();
