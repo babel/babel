@@ -299,3 +299,84 @@ export function VariableDeclarator(node: Object) {
     this.print(node.init, node);
   }
 }
+
+export function CaseStatement(node: Object) {
+  this.word("case");
+  this.space();
+  this.token("(");
+  this.print(node.discriminant, node);
+  this.token(")");
+  this.space();
+  this.token("{");
+
+  this.printSequence(node.cases, node, { indent: true });
+
+  this.token("}");
+}
+
+export function WhenClause(node: Object) {
+  this.word("when");
+  this.space();
+  this.print(node.pattern, node);
+  if (node.matchGuard) {
+    this.space();
+    this.word("if");
+    this.space();
+    this.token("(");
+    this.print(node.matchGuard, node);
+    this.token(")");
+    this.space();
+  }
+  this.space();
+  this.token("->");
+  this.print(node.body, node, { indent: true });
+}
+
+export function ObjectMatchPattern(node: Object) {
+  this.token("{");
+
+  for (let i = 0; i < node.properties.length; i++) {
+    const property = node.properties[i];
+    this.print(property, node);
+    if (i !== node.properties.length - 1) {
+      this.token(",");
+      this.space();
+    }
+  }
+
+  this.token("}");
+}
+
+export function ObjectMatchProperty(node: Object) {
+  this.print(node.key, node);
+  if (node.element) {
+    this.token(":");
+    this.space();
+    this.print(node.element, node);
+  }
+  if (node.initializer) {
+    this.space(" ");
+    this.token("=");
+    this.space(" ");
+    this.print(node.initializer, node);
+  }
+  this.token(",");
+}
+
+export function ArrayMatchPattern(node: Object) {
+  this.token("[");
+  for (let i = 0; i < node.elements; i++) {
+    const element = node.elements[i];
+    this.print(element, node);
+    if (i !== node.elements.length - 1) {
+      this.token(",");
+      this.space();
+    }
+  }
+  this.token("]");
+}
+
+export function MatchRestElement(node: Object) {
+  this.token("...");
+  this.print(node.body, node);
+}
