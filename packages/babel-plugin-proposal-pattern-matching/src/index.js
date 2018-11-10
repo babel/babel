@@ -17,6 +17,7 @@ export default declare(api => {
   };
 
   const clauses = [];
+  const ids = [];
 
   // every when clause will create a "virtual" scope
   const WhenClauseVisitor = {
@@ -79,13 +80,14 @@ export default declare(api => {
         const base = template.expression(`Array.isArray(EXPR)`)({
           EXPR: expr,
         });
-        return arrayPattern.elements.reduce((acc, element, index) => {
-          const subExpr = t.memberExpression(
-            expr,
-            t.numericLiteral(index),
-            true,
-          );
+        const { elements } = arrayPattern;
+        return elements.reduce((acc, element, index) => {
           if (t.isIdentifier(element)) {
+            const subExpr = t.memberExpression(
+              expr,
+              t.numericLiteral(index),
+              true,
+            );
             const bindingId = path.scope.generateUidIdentifier(element.name);
             substitutionsMap.set(element.name, bindingId.name);
             return template.expression(
@@ -95,7 +97,45 @@ export default declare(api => {
               SUB_EXPR: subExpr,
               BINDING_ID: bindingId,
             });
+          } else if (t.isMatchRestElement(element)) {
+            if (index !== elements.length - 1) {
+              throw new Error(
+                "Syntax Error: RestElement must be at the end of ArrayPattern",
+              );
+            }
+            const restId = path.scope.generateUidIdentifier("rest");
+            ids.push(restId.name);
+            if (t.isIdentifier(element.body)) {
+              return template.expression(`LEFT && (REST_ID = EXPR.slice(NUM))`)(
+                {
+                  LEFT: acc,
+                  REST_ID: restId,
+                  EXPR: expr,
+                  NUM: t.numericLiteral(index),
+                },
+              );
+            } else {
+              const subTest = generateTestExpr(
+                restId,
+                element.body,
+                substitutionsMap,
+              );
+              return template.expression(
+                `LEFT && (REST_ID = EXPR.slice(NUM), SUB_TEST)`,
+              )({
+                LEFT: acc,
+                REST_ID: restId,
+                EXPR: expr,
+                NUM: t.numericLiteral(index),
+                SUB_TEST: subTest,
+              });
+            }
           } else {
+            const subExpr = t.memberExpression(
+              expr,
+              t.numericLiteral(index),
+              true,
+            );
             return template.expression(`LEFT && SUB_TEST`)({
               LEFT: acc,
               SUB_TEST: generateTestExpr(subExpr, element, substitutionsMap),
@@ -137,7 +177,6 @@ export default declare(api => {
           t.variableDeclarator(caseId, discriminant),
         ]);
 
-        const ids = [];
         let ifStatement;
         let lastStatement;
         clauses.forEach(({ test, body, substitutionsMap }) => {
