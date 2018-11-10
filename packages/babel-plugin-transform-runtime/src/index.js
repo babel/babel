@@ -213,6 +213,12 @@ export default declare((api, options, dirname) => {
         if (!has(definitions.builtins, node.name)) return;
         if (scope.getBindingIdentifier(node.name)) return;
 
+        // If we are checking Symbol using the typeof check,
+        // don't pull in the corejs builtin for Symbol
+        if (parent.type === "UnaryExpression" && parent.name === "typeof") {
+          return;
+        }
+
         // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
         path.replaceWith(
           this.addDefaultImport(
