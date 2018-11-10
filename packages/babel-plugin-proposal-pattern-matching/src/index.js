@@ -45,16 +45,32 @@ export default declare(api => {
         });
 
         return objPattern.properties.reduce((acc, property) => {
-          const bindingId = path.scope.generateUidIdentifier(property.key.name);
-          substitutionsMap.set(property.key.name, bindingId.name);
+          let bindingId;
+          const { key, element } = property;
+          if (element && t.isIdentifier(element)) {
+            bindingId = path.scope.generateUidIdentifier(element.name);
+            substitutionsMap.set(element.name, bindingId.name);
+          } else {
+            bindingId = path.scope.generateUidIdentifier(key.name);
+            substitutionsMap.set(key.name, bindingId.name);
+          }
 
-          return template.expression(
-            `LEFT && (BINDING_ID = EXPR.PROP, typeof BINDING_ID !== "undefined")`,
-          )({
+          let test;
+
+          if (element && !t.isIdentifier(element)) {
+            test = generateTestExpr(bindingId, element, substitutionsMap);
+          } else {
+            test = template.expression(`typeof BINDING_ID !== "undefined"`)({
+              BINDING_ID: bindingId,
+            });
+          }
+
+          return template.expression(`LEFT && (BINDING_ID = EXPR.PROP, TEST)`)({
             LEFT: acc,
             EXPR: expr,
             PROP: property.key,
             BINDING_ID: bindingId,
+            TEST: test,
           });
         }, objectId);
       }
