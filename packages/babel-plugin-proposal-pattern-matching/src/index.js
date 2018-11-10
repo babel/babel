@@ -22,13 +22,29 @@ export default declare(api => {
   // every when clause will create a "virtual" scope
   const WhenClauseVisitor = {
     WhenClause(path) {
-      function generateTestExpr(expr, pattern, substitutionsMap) {
-        if (
+      function generateTestExpr(
+        expr,
+        pattern,
+        substitutionsMap,
+        isRoot = false,
+      ) {
+        if (isRoot && t.isIdentifier(pattern)) {
+          // always true
+          if (pattern.name === "undefined") {
+            return t.booleanLiteral(true);
+          } else {
+            const bindingId = path.scope.generateUidIdentifier(pattern.name);
+            substitutionsMap.set(pattern.name, bindingId.name);
+            return template.expression(`(BINDING_ID = EXPR, true)`)({
+              BINDING_ID: bindingId,
+              EXPR: expr,
+            });
+          }
+        } else if (
           t.isNullLiteral(pattern) ||
           t.isStringLiteral(pattern) ||
           t.isBooleanLiteral(pattern) ||
-          t.isNumericLiteral(pattern) ||
-          t.isIdentifier(pattern)
+          t.isNumericLiteral(pattern)
         ) {
           return t.binaryExpression("===", expr, pattern);
         } else if (t.isObjectMatchPattern(pattern)) {
@@ -147,7 +163,7 @@ export default declare(api => {
       const substitutionsMap = new Map();
       const { pattern, body, matchGuard } = path.node;
       const { caseId } = this;
-      let test = generateTestExpr(caseId, pattern, substitutionsMap);
+      let test = generateTestExpr(caseId, pattern, substitutionsMap, true);
 
       if (matchGuard) {
         const matchGuardPath = path.get("matchGuard");
@@ -180,7 +196,7 @@ export default declare(api => {
         let ifStatement;
         let lastStatement;
         clauses.forEach(({ test, body, substitutionsMap }) => {
-          for (const id of substitutionsMap.keys()) {
+          for (const id of substitutionsMap.values()) {
             ids.push(id);
           }
           if (typeof ifStatement === "undefined") {
