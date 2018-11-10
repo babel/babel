@@ -5,7 +5,7 @@ import { types as t, template } from "../../babel-core";
 export default declare(api => {
   api.assertVersion(7);
 
-  const bodyIdentifierVisitor = {
+  const identifierSubstitueVisitor = {
     Identifier(path) {
       const { substitutionsMap } = this;
       const { name } = path.node;
@@ -22,14 +22,7 @@ export default declare(api => {
   const WhenClauseVisitor = {
     WhenClause(path) {
       function generateTestExpr(expr, pattern, substitutionsMap) {
-        if (t.isRegExpLiteral(pattern)) {
-          return template.expression(`
-        (EXPR instanceof RegExp) && REG.test(EXPR)
-      `)({
-            EXPR: expr,
-            REG: pattern,
-          });
-        } else if (
+        if (
           t.isNullLiteral(pattern) ||
           t.isStringLiteral(pattern) ||
           t.isBooleanLiteral(pattern) ||
@@ -42,7 +35,7 @@ export default declare(api => {
         } else if (t.isArrayMatchPattern(pattern)) {
           return generateArrayTestExpr(expr, pattern, substitutionsMap);
         } else {
-          throw new Error("Unexpected clause");
+          throw new Error("Syntax Error: not a Match Pattern");
         }
       }
 
@@ -96,10 +89,19 @@ export default declare(api => {
       }
 
       const substitutionsMap = new Map();
-      const { pattern, body } = path.node;
+      const { pattern, body, matchGuard } = path.node;
       const { caseId } = this;
-      const test = generateTestExpr(caseId, pattern, substitutionsMap);
-      path.traverse(bodyIdentifierVisitor, { substitutionsMap });
+      let test = generateTestExpr(caseId, pattern, substitutionsMap);
+
+      if (matchGuard) {
+        const matchGuardPath = path.get("matchGuard");
+        matchGuardPath.traverse(identifierSubstitueVisitor, {
+          substitutionsMap,
+        });
+        test = t.logicalExpression("&&", test, matchGuard);
+      }
+
+      path.traverse(identifierSubstitueVisitor, { substitutionsMap });
       clauses.push({
         test,
         body,
