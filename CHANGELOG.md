@@ -2542,7 +2542,7 @@ Also started Babel to compile itself with Babel 7! (We'll be working on making i
 
 #### :nail_care: Polish
 * `babel-register`
-  * [#5411](https://github.com/babel/babel/pull/5411) Seperate version env cache files. ([@pwmckenna](https://github.com/pwmckenna))
+  * [#5411](https://github.com/babel/babel/pull/5411) Separate version env cache files. ([@pwmckenna](https://github.com/pwmckenna))
 
 #### :memo: Documentation
 * `babel-plugin-transform-runtime`
