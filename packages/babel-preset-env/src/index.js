@@ -159,6 +159,10 @@ function supportsStaticESM(caller) {
   return !!(caller && caller.supportsStaticESM);
 }
 
+function supportsDynamicImport(caller) {
+  return !!(caller && caller.supportsDynamicImport);
+}
+
 export default declare((api, opts) => {
   api.assertVersion(7);
 
@@ -246,6 +250,10 @@ export default declare((api, opts) => {
     // NOTE: not giving spec here yet to avoid compatibility issues when
     // transform-modules-commonjs gets its spec mode
     plugins.push([getPlugin(moduleTransformations[modules]), { loose }]);
+  }
+
+  if (api.caller && api.caller(supportsDynamicImport)) {
+    plugins.push([getPlugin("syntax-dynamic-import")]);
   }
 
   transformations.forEach(pluginName =>
