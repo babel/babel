@@ -1739,3 +1739,18 @@ helpers.decorate = helper("7.1.5")`
     return constructor;
   }
 `;
+
+helpers.classPrivateMethodGet = helper("7.1.6")`
+  export default function _classPrivateMethodGet(receiver, privateSet, fn) {
+    if (!privateSet.has(receiver)) {
+      throw new TypeError("attempted to get private field on non-instance");
+    }
+    return fn;
+  }
+`;
+
+helpers.classPrivateMethodSet = helper("7.1.6")`
+  export default function _classPrivateMethodSet() {
+    throw new TypeError("attempted to reassign private method");
+  }
+`;

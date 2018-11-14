@@ -75,7 +75,6 @@ export default declare((api, options) => {
         enableFeature(this.file, FEATURES.fields, fields.loose);
       }
       if (privateMethods.enabled) {
-        throw new Error("Private methods are not supported yet");
         enableFeature(this.file, FEATURES.privateMethods);
       }
       if (decorators.enabled) {
@@ -107,7 +106,7 @@ export default declare((api, options) => {
             computedPaths.push(path);
           }
 
-          if (path.isClassPrivateProperty()) {
+          if (path.isPrivate()) {
             const { name } = path.node.key.id;
 
             if (privateNames.has(name)) {
@@ -116,7 +115,7 @@ export default declare((api, options) => {
             privateNames.add(name);
           }
 
-          if (path.isProperty()) {
+          if (path.isProperty() || path.isClassPrivateMethod()) {
             props.push(path);
           } else if (path.isClassMethod({ kind: "constructor" })) {
             constructor = path;
@@ -131,7 +130,6 @@ export default declare((api, options) => {
           nameFunction(path);
           ref = path.scope.generateUidIdentifier("class");
         } else {
-          // path.isClassDeclaration() && path.node.id
           ref = path.node.id;
         }
 
