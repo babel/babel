@@ -131,7 +131,11 @@ function buildRollup(packages) {
             output: {
               format,
               name,
+              globals: {
+                "@babel/standalone": "Babel",
+              },
             },
+            external: ["@babel/standalone"],
             plugins: [
               {
                 name: "babel-source",
@@ -269,13 +273,14 @@ const bundles = [
     dest: "",
     minify: true,
   },
-  /*"packages/preset-env-standalone": {
+  {
+    src: "packages/babel-preset-env-standalone",
     format: "umd",
-    name: "Babel",
-    filename: "babel",
+    name: "babelPresetEnv",
+    filename: "babel-preset-env",
     dest: "",
     minify: true,
-  },*/
+  },
 ];
 
 gulp.task("build", function() {
