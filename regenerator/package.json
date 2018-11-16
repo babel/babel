@@ -28,13 +28,13 @@
     "test": "test/run.sh"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0-beta.51",
-    "@babel/runtime": "^7.0.0-beta.51",
-    "@babel/types": "^7.0.0-beta.51",
+    "@babel/core": "^7.1.6",
+    "@babel/runtime": "^7.1.5",
+    "@babel/types": "^7.1.6",
     "commoner": "^0.10.8",
-    "private": "^0.1.6",
-    "recast": "^0.15.3",
-    "regenerator-preset": "^0.12.0",
+    "private": "^0.1.8",
+    "recast": "^0.16.0",
+    "regenerator-preset": "^0.12.1",
     "regenerator-runtime": "^0.12.1",
     "regenerator-transform": "^0.13.3",
     "through": "^2.3.8"
