@@ -44,7 +44,7 @@
     "@babel/plugin-transform-parameters": "^7.1.0",
     "@babel/plugin-transform-spread": "^7.0.0",
     "babel-check-duplicated-nodes": "^1.0.0",
-    "browserify": "^16.2.2",
+    "browserify": "^16.2.3",
     "mocha": "^5.2.0",
     "promise": "^8.0.2",
     "semver": "^5.6.0",
