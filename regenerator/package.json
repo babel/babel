@@ -40,15 +40,15 @@
     "through": "^2.3.8"
   },
   "devDependencies": {
-    "@babel/parser": "^7.0.0-beta.51",
-    "@babel/plugin-transform-parameters": "^7.0.0-beta.51",
-    "@babel/plugin-transform-spread": "^7.0.0-beta.51",
+    "@babel/parser": "^7.1.6",
+    "@babel/plugin-transform-parameters": "^7.1.0",
+    "@babel/plugin-transform-spread": "^7.0.0",
     "babel-check-duplicated-nodes": "^1.0.0",
     "browserify": "^16.2.2",
     "mocha": "^5.2.0",
-    "promise": "^7.0.4",
-    "semver": "^5.0.3",
-    "uglify-js": "^3.0.27"
+    "promise": "^8.0.2",
+    "semver": "^5.6.0",
+    "uglify-js": "^3.4.9"
   },
   "license": "MIT",
   "engines": {
