@@ -67,7 +67,7 @@ export function buildPresetChain(
   return {
     plugins: dedupDescriptors(chain.plugins),
     presets: dedupDescriptors(chain.presets),
-    options: chain.options,
+    options: chain.options.map(o => normalizeOptions(o)),
   };
 }
 
