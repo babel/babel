@@ -1,5 +1,7 @@
 "use strict";
 
 module.exports = {
-  rules: {},
+  rules: {
+    "no-deprecated-clone": require("./rules/no-deprecated-clone"),
+  },
 };

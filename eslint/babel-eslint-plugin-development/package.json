@@ -15,7 +15,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha tests --recursive",
-    "lint": "eslint src"
+    "lint": "eslint src tests"
   },
   "devDependencies": {
     "eslint": "^5.9.0",
