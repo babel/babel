@@ -330,9 +330,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         if (
           node.expression.type === "SequenceExpression" &&
-          ((node.expression.extra &&
-            node.expression.extra.parenthesized === false) ||
-            node.expression.extra === undefined)
+          (!node.expression.extra ||
+            node.expression.extra.parenthesized !== true)
         ) {
           this.raise(
             this.state.start,
