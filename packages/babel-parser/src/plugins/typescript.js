@@ -755,14 +755,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       if (this.match(tt.braceL)) {
-        const braceStack = [tt.braceL];
+        let braceStackCounter = 1;
         this.next();
 
-        while (braceStack.length > 0) {
+        while (braceStackCounter > 0) {
           if (this.match(tt.braceL)) {
-            braceStack.push(tt.braceL);
+            ++braceStackCounter;
           } else if (this.match(tt.braceR)) {
-            braceStack.pop();
+            --braceStackCounter;
           }
           this.next();
         }
