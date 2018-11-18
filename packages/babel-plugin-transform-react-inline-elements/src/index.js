@@ -5,6 +5,9 @@ import { types as t } from "@babel/core";
 export default declare(api => {
   api.assertVersion(7);
 
+  const PRAGMA_DEFAULT = "React.createElement";
+  const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
+
   function hasRefOrSpread(attrs) {
     for (let i = 0; i < attrs.length; i++) {
       const attr = attrs[i];
@@ -64,5 +67,19 @@ export default declare(api => {
       }
     },
   });
+
+  visitor.Program = {
+    enter(path, state) {
+      const { file } = state;
+
+      for (const comment of (file.ast.comments: Array<Object>)) {
+        const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
+        if (jsxMatches && jsxMatches[1] !== PRAGMA_DEFAULT) {
+          return path.stop();
+        }
+      }
+    },
+  };
+
   return { visitor };
 });
