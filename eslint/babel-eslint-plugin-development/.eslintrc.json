@@ -1,0 +1,20 @@
+{
+  "root": true,
+  "extends": "eslint:recommended",
+  "plugins": ["prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "script"
+  },
+  "env": {
+    "node": true
+  },
+  "rules": {
+    "prettier/prettier": "error",
+
+    "curly": ["error", "multi-line"],
+    "linebreak-style": ["error", "unix"],
+    "no-var": "error",
+    "prefer-const": "error"
+  }
+}

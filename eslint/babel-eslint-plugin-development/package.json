@@ -1,0 +1,30 @@
+{
+  "name": "eslint-plugin-babel-plugin",
+  "version": "0.0.0",
+  "description": "A set of eslint rules to enforce best practices in the development of Babel plugins.",
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin"
+  ],
+  "author": {
+    "name": "Nicolò Ribaudo",
+    "email": "nicolo.ribaudo@gmail.com",
+    "url": "https://github.com/nicolo-ribaudo"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests --recursive",
+    "lint": "eslint src"
+  },
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "eslint-plugin-prettier": "^3.0.0",
+    "mocha": "^5.2.0",
+    "prettier": "^1.15.2"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "license": "MIT"
+}
