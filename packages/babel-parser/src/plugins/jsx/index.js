@@ -326,20 +326,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (this.match(tt.braceR)) {
         node.expression = this.jsxParseEmptyExpression();
       } else {
-        node.expression = this.parseExpression();
-
-        if (
-          node.expression.type === "SequenceExpression" &&
-          (!node.expression.extra ||
-            node.expression.extra.parenthesized !== true)
-        ) {
-          this.raise(
-            this.state.start,
-            "Sequence of values at JSX must be parenthesized.",
-          );
-        }
+        node.expression = this.parseMaybeAssign();
       }
-
       this.expect(tt.braceR);
 
       return this.finishNode(node, "JSXExpressionContainer");
