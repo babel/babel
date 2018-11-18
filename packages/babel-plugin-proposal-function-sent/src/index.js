@@ -35,6 +35,7 @@ export default declare(api => {
   };
 
   return {
+    name: "proposal-function-sent",
     inherits: syntaxFunctionSent,
 
     visitor: {

@@ -26,6 +26,13 @@
       "env": {
         "jest": true
       }
+    },
+    {
+      "files": ["packages/babel-plugin-*/src/index.js"],
+      "excludedFiles": ["packages/babel-plugin-transform-regenerator/**/*.js"],
+      "rules": {
+        "local-rules/plugin-name": "error"
+      }
     }
   ]
 }

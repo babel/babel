@@ -4,6 +4,8 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "syntax-function-bind",
+
     manipulateOptions(opts, parserOpts) {
       parserOpts.plugins.push("functionBind");
     },

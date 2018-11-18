@@ -32,6 +32,7 @@ export default declare((api, options) => {
   }
 
   return {
+    name: "proposal-decorators",
     inherits: syntaxDecorators,
 
     manipulateOptions({ generatorOpts }) {

@@ -166,6 +166,8 @@ export default declare((api, options) => {
   };
 
   return {
+    name: "transform-modules-systemjs",
+
     visitor: {
       CallExpression(path, state) {
         if (path.node.callee.type === TYPE_IMPORT) {

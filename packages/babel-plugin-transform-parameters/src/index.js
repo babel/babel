@@ -7,6 +7,8 @@ export default declare((api, options) => {
 
   const { loose } = options;
   return {
+    name: "transform-parameters",
+
     visitor: {
       Function(path) {
         if (

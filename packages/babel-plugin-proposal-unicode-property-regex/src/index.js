@@ -11,6 +11,8 @@ export default declare((api, options) => {
   }
 
   return {
+    name: "proposal-unicode-property-regex",
+
     visitor: {
       RegExpLiteral(path) {
         const node = path.node;

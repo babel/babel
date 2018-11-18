@@ -93,6 +93,7 @@ export default declare((api, options) => {
   };
 
   return {
+    name: "transform-react-jsx",
     inherits: jsx,
     visitor,
   };

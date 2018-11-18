@@ -5,6 +5,8 @@ export default declare(api => {
   api.assertVersion(7);
 
   return {
+    name: "transform-reserved-words",
+
     visitor: {
       "BindingIdentifier|ReferencedIdentifier"(path) {
         if (!t.isValidES3Identifier(path.node.name)) {

@@ -24,6 +24,8 @@ export default declare(api => {
   }
 
   return {
+    name: "transform-proto-to-assign",
+
     visitor: {
       AssignmentExpression(path, file) {
         if (!isProtoAssignmentExpression(path.node)) return;
