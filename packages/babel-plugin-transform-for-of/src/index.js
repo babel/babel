@@ -178,6 +178,7 @@ export default declare((api, options) => {
   }
 
   return {
+    name: "transform-for-of",
     visitor: {
       ForOfStatement(path, state) {
         const right = path.get("right");

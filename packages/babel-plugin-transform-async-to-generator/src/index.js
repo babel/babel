@@ -30,6 +30,8 @@ export default declare((api, options) => {
   }
 
   return {
+    name: "transform-async-to-generator",
+
     visitor: {
       Function(path, state) {
         if (!path.node.async || path.node.generator) return;
