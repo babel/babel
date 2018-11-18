@@ -43,9 +43,11 @@ function () {
         }, _callee, this);
       }));
 
-      return function bar() {
+      function bar() {
         return _bar.apply(this, arguments);
-      };
+      }
+
+      return bar;
     }()
   }]);
 
