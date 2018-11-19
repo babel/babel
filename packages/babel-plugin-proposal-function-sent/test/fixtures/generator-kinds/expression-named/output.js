@@ -7,7 +7,9 @@ const foo = function () {
     return _functionSent;
   });
 
-  return function gen() {
+  function gen() {
     return _gen.apply(this, arguments);
-  };
+  }
+
+  return gen;
 }();

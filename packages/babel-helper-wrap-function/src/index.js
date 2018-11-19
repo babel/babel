@@ -3,12 +3,22 @@ import nameFunction from "@babel/helper-function-name";
 import template from "@babel/template";
 import * as t from "@babel/types";
 
-const buildExpressionWrapper = template.expression(`
+const buildAnonymousExpressionWrapper = template.expression(`
   (function () {
     var REF = FUNCTION;
     return function NAME(PARAMS) {
       return REF.apply(this, arguments);
     };
+  })()
+`);
+
+const buildNamedExpressionWrapper = template.expression(`
+  (function () {
+    var REF = FUNCTION;
+    function NAME(PARAMS) {
+      return REF.apply(this, arguments);
+    }
+    return NAME;
   })()
 `);
 
@@ -53,7 +63,9 @@ function plainFunction(path: NodePath, callId: Object) {
   const functionId = node.id;
   const wrapper = isDeclaration
     ? buildDeclarationWrapper
-    : buildExpressionWrapper;
+    : functionId
+    ? buildNamedExpressionWrapper
+    : buildAnonymousExpressionWrapper;
 
   if (path.isArrowFunctionExpression()) {
     path.arrowFunctionToExpression();

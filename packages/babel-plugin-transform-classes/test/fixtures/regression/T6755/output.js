@@ -32,9 +32,11 @@ function () {
       }, _callee, this);
     }));
 
-    return function test1() {
+    function test1() {
       return _test.apply(this, arguments);
-    };
+    }
+
+    return test1;
   }();
 
   _proto.test2 =
