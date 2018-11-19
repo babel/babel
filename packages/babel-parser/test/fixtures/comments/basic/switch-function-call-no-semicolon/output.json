@@ -198,25 +198,7 @@
                 "raw": "1"
               },
               "value": 1
-            },
-            "trailingComments": [
-              {
-                "type": "CommentLine",
-                "value": " comment",
-                "start": 47,
-                "end": 57,
-                "loc": {
-                  "start": {
-                    "line": 4,
-                    "column": 4
-                  },
-                  "end": {
-                    "line": 4,
-                    "column": 14
-                  }
-                }
-              }
-            ]
+            }
           },
           {
             "type": "SwitchCase",

@@ -124,25 +124,7 @@
                 "identifierName": "error"
               },
               "name": "error"
-            },
-            "leadingComments": [
-              {
-                "type": "CommentBlock",
-                "value": " Multiline\nComment ",
-                "start": 13,
-                "end": 36,
-                "loc": {
-                  "start": {
-                    "line": 1,
-                    "column": 13
-                  },
-                  "end": {
-                    "line": 2,
-                    "column": 10
-                  }
-                }
-              }
-            ]
+            }
           }
         ],
         "directives": []

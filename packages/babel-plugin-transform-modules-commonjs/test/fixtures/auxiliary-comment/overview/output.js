@@ -88,6 +88,7 @@ _foo5
 foo
 /*after*/
 );
+
 /* my comment */
 
 /*before*/

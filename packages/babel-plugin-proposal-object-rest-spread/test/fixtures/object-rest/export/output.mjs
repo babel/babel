@@ -2,9 +2,9 @@
 var {
   b
 } = asdf2,
-    c = babelHelpers.objectWithoutProperties(asdf2, ["b"]); // Skip
-
+    c = babelHelpers.objectWithoutProperties(asdf2, ["b"]);
 export { b, c };
+// Skip
 export var {
   bb,
   cc

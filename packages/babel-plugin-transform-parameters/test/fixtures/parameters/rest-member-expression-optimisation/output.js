@@ -16,9 +16,9 @@ function t() {
   }
 
   return a;
-} // https://github.com/babel/babel/pull/2833#issuecomment-166039291
+}
 
-
+// https://github.com/babel/babel/pull/2833#issuecomment-166039291
 function t() {
   for (var i = 0; i < arguments.length; i++) {
     return i < 0 || arguments.length <= i ? undefined : arguments[i];

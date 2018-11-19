@@ -132,10 +132,10 @@ function newExp() {
   }
 
   new rest[0]();
-} // In addition to swap() above because at some point someone tried checking
+}
+
+// In addition to swap() above because at some point someone tried checking
 // grandparent path for isArrayExpression() to deopt.
-
-
 function arrayDestructure() {
   for (var _len15 = arguments.length, rest = new Array(_len15), _key15 = 0; _key15 < _len15; _key15++) {
     rest[_key15] = arguments[_key15];

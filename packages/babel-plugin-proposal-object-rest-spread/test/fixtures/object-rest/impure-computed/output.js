@@ -1,5 +1,5 @@
-var key, x, y, z; // impure
-
+var key, x, y, z;
+// impure
 key = 1;
 
 var _$a = {
@@ -16,8 +16,8 @@ expect(x).toEqual({
   a: 1
 });
 expect(key).toBe(2);
-expect(y).toBe(1); // takes care of the order
-
+expect(y).toBe(1);
+// takes care of the order
 key = 1;
 
 var _$ = {
@@ -33,8 +33,8 @@ var _$ = {
     rest = babelHelpers.objectWithoutProperties(_$, [_ref2, _ref3].map(babelHelpers.toPropertyKey));
 
 expect(y).toBe(2);
-expect(z).toBe(3); // pure, computed property should remain as-is
-
+expect(z).toBe(3);
+// pure, computed property should remain as-is
 key = 2;
 var _$z = {
   2: "two",

@@ -143,7 +143,25 @@
                       "raw": "'1'"
                     },
                     "value": "1"
-                  }
+                  },
+                  "trailingComments": [
+                    {
+                      "type": "CommentLine",
+                      "value": " comment 1",
+                      "start": 22,
+                      "end": 34,
+                      "loc": {
+                        "start": {
+                          "line": 2,
+                          "column": 10
+                        },
+                        "end": {
+                          "line": 2,
+                          "column": 22
+                        }
+                      }
+                    }
+                  ]
                 },
                 {
                   "type": "ObjectProperty",
@@ -199,19 +217,19 @@
                     },
                     "value": "2"
                   },
-                  "leadingComments": [
+                  "trailingComments": [
                     {
                       "type": "CommentLine",
-                      "value": " comment 1",
-                      "start": 22,
-                      "end": 34,
+                      "value": " comment 2",
+                      "start": 45,
+                      "end": 57,
                       "loc": {
                         "start": {
-                          "line": 2,
+                          "line": 3,
                           "column": 10
                         },
                         "end": {
-                          "line": 2,
+                          "line": 3,
                           "column": 22
                         }
                       }
@@ -272,24 +290,6 @@
                     },
                     "value": "3"
                   },
-                  "leadingComments": [
-                    {
-                      "type": "CommentLine",
-                      "value": " comment 2",
-                      "start": 45,
-                      "end": 57,
-                      "loc": {
-                        "start": {
-                          "line": 3,
-                          "column": 10
-                        },
-                        "end": {
-                          "line": 3,
-                          "column": 22
-                        }
-                      }
-                    }
-                  ],
                   "trailingComments": [
                     {
                       "type": "CommentLine",

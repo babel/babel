@@ -140,25 +140,7 @@
                     "identifierName": "x"
                   },
                   "name": "x"
-                },
-                "leadingComments": [
-                  {
-                    "type": "CommentBlock",
-                    "value": " Multiline\nComment ",
-                    "start": 19,
-                    "end": 42,
-                    "loc": {
-                      "start": {
-                        "line": 1,
-                        "column": 19
-                      },
-                      "end": {
-                        "line": 2,
-                        "column": 10
-                      }
-                    }
-                  }
-                ]
+                }
               }
             ],
             "directives": []

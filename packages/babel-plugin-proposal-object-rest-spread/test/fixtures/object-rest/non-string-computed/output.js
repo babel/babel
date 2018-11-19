@@ -36,8 +36,8 @@ expect(v2).toBe("2");
 expect(v3).toBe("3");
 expect(v4).toBe("4");
 expect(v5).toBe("5");
-expect(vrest).toEqual({}); // shouldn't convert symbols to strings
-
+expect(vrest).toEqual({});
+// shouldn't convert symbols to strings
 const sx = Symbol();
 const sy = Symbol();
 const d = {

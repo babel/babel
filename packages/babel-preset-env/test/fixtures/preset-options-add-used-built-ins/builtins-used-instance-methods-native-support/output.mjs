@@ -2,8 +2,8 @@ import "core-js/modules/web.dom.iterable";
 Array.from; // static function
 
 Map; // top level built-in
-// instance methods may have false positives (which is ok)
 
+// instance methods may have false positives (which is ok)
 a.includes(); // method call
 
 b['find']; // computed string?

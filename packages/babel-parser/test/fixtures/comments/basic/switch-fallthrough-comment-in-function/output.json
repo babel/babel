@@ -180,24 +180,6 @@
                         }
                       }
                     }
-                  ],
-                  "trailingComments": [
-                    {
-                      "type": "CommentLine",
-                      "value": " falls through",
-                      "start": 81,
-                      "end": 97,
-                      "loc": {
-                        "start": {
-                          "line": 5,
-                          "column": 12
-                        },
-                        "end": {
-                          "line": 5,
-                          "column": 28
-                        }
-                      }
-                    }
                   ]
                 },
                 {

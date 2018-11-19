@@ -4,8 +4,9 @@ const {
       y = babelHelpers.objectWithoutProperties(a, ["x"]),
       z = foo(y);
 const s = babelHelpers.extends({}, r),
-      t = foo(s); // ordering is preserved
+      t = foo(s);
 
+// ordering is preserved
 var l = foo(),
     _bar = bar(),
     {

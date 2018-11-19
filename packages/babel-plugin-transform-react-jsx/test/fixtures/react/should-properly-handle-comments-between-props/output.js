@@ -3,6 +3,5 @@ var x = React.createElement("div", {
      comment */
   attr1: "foo"
 }, React.createElement("span", {
-  // a double-slash comment
   attr2: "bar"
 }));

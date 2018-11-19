@@ -28,9 +28,9 @@ class Obj {
     return {};
   }
 
-} // ensure superClass is still transformed
+}
 
-
+// ensure superClass is still transformed
 class SuperClass extends Obj {
   constructor() {
     var _temp;
@@ -49,8 +49,9 @@ class SuperClass extends Obj {
 
 }
 
-new SuperClass(); // ensure ComputedKey Method is still transformed
+new SuperClass();
 
+// ensure ComputedKey Method is still transformed
 class ComputedMethod extends Obj {
   constructor() {
     var _temp2;
@@ -71,8 +72,9 @@ class ComputedMethod extends Obj {
 
 }
 
-new ComputedMethod(); // ensure ComputedKey Field is still transformed
+new ComputedMethod();
 
+// ensure ComputedKey Field is still transformed
 class ComputedField extends Obj {
   constructor() {
     var _temp3;

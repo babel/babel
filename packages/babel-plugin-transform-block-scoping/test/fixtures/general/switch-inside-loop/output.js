@@ -18,8 +18,8 @@ for (i = 0; i < 10; i++) {
   _loop();
 }
 
-expect(i).toBe(10); // it should continue on continue statements within switch
-
+expect(i).toBe(10);
+// it should continue on continue statements within switch
 var j = 0;
 
 var _loop2 = function () {
@@ -42,8 +42,8 @@ for (i = 0; i < 10; i++) {
   if (_ret === "continue") continue;
 }
 
-expect(j).toBe(9); // it should work with loops nested within switch
-
+expect(j).toBe(9);
+// it should work with loops nested within switch
 j = 0;
 
 var _loop3 = function () {

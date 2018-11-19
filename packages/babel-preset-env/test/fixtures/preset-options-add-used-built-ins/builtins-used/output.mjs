@@ -16,9 +16,9 @@ new Promise(); // new builtin
 Symbol.match; // as member expression
 
 _arr[Symbol.iterator](); // Symbol.iterator
+
+
 // no import
-
-
 Array.asdf;
 Array2.from;
 Map2;

@@ -210,41 +210,7 @@
               "parenStart": 9
             }
           }
-        },
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " This looks A LOT like an async arrow function, but it isn't because",
-            "start": 25,
-            "end": 95,
-            "loc": {
-              "start": {
-                "line": 3,
-                "column": 0
-              },
-              "end": {
-                "line": 3,
-                "column": 70
-              }
-            }
-          },
-          {
-            "type": "CommentLine",
-            "value": " T + U isn't a valid type parameter.",
-            "start": 96,
-            "end": 134,
-            "loc": {
-              "start": {
-                "line": 4,
-                "column": 0
-              },
-              "end": {
-                "line": 4,
-                "column": 38
-              }
-            }
-          }
-        ]
+        }
       },
       {
         "type": "ExpressionStatement",

@@ -35,10 +35,10 @@ function (_Base) {
   return Obj;
 }(Base);
 
-const obj = new Obj(); // This is incorrect according to the spec,
+const obj = new Obj();
+// This is incorrect according to the spec,
 // but close enough for loose.
 // expect(obj.set()).toBe(3);
-
 expect(() => {
   obj.set();
 }).toThrow();

@@ -195,25 +195,7 @@
             },
             "body": []
           }
-        },
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " `export abstract class {}` is not valid TypeScript.",
-            "start": 75,
-            "end": 129,
-            "loc": {
-              "start": {
-                "line": 4,
-                "column": 0
-              },
-              "end": {
-                "line": 4,
-                "column": 54
-              }
-            }
-          }
-        ]
+        }
       },
       {
         "type": "ExportDefaultDeclaration",

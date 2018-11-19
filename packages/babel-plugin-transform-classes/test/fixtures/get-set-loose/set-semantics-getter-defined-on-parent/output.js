@@ -49,12 +49,12 @@ Object.defineProperty(Obj.prototype, 'test', {
   writable: true,
   configurable: true
 });
-const obj = new Obj(); // This is incorrect according to the spec,
+const obj = new Obj();
+// This is incorrect according to the spec,
 // but close enough for loose.
 // expect(() => {
-
-expect(obj.set()).toBe(3); // }).toThrow();
-
+expect(obj.set()).toBe(3);
+// }).toThrow();
 expect(called).toBe(false);
 expect(Base.prototype.test).toBe(1);
 expect(Obj.prototype.test).toBe(2);

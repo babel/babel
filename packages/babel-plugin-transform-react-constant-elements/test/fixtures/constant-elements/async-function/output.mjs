@@ -5,8 +5,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 export default {
   function(name) {
     return _asyncToGenerator(function* () {
-      const uppercasedName = name.upperCase(); // awaits depending on uppercasedName go here
-
+      const uppercasedName = name.upperCase();
+      // awaits depending on uppercasedName go here
       return <Foo name={uppercasedName} />;
     })();
   }

@@ -118,22 +118,6 @@
           "leadingComments": [
             {
               "type": "CommentBlock",
-              "value": ": string ",
-              "start": 22,
-              "end": 35,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 22
-                },
-                "end": {
-                  "line": 1,
-                  "column": 35
-                }
-              }
-            },
-            {
-              "type": "CommentBlock",
               "value": ": number ",
               "start": 37,
               "end": 50,

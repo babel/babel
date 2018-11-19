@@ -83,7 +83,7 @@ export class NodeUtils extends UtilParser {
     node.end = pos;
     node.loc.end = loc;
     if (this.options.ranges) node.range[1] = pos;
-    this.processComment(node);
+    this.processNodeOnFinish(node);
     return node;
   }
 

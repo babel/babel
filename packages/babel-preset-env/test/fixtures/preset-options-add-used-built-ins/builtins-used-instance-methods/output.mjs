@@ -21,8 +21,8 @@ import "core-js/modules/es6.array.from";
 Array.from; // static function
 
 Map; // top level built-in
-// instance methods may have false positives (which is ok)
 
+// instance methods may have false positives (which is ok)
 a.includes(); // method call
 
 b['find']; // computed string?

@@ -69,9 +69,9 @@ function a9([_ref10]) {
 
 function a10([a1, _ref11]) {
   let a2 = babelHelpers.extends({}, _ref11);
-} // Unchanged
+}
 
-
+// Unchanged
 function b(a) {}
 
 function b2(a, ...b) {}

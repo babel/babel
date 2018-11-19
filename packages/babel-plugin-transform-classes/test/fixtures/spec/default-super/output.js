@@ -15,11 +15,11 @@ function () {
     }
   }]);
   return Test;
-}(); // Instances
+}();
 
-
+// Instances
 expect(Object.getPrototypeOf(Test.prototype)).toBe(Object.prototype);
-expect(new Test()).toBe(Object); // Static
-
+expect(new Test()).toBe(Object);
+// Static
 expect(Object.getPrototypeOf(Test)).toBe(Function.prototype);
 expect(Test.test()).toBe(Function);

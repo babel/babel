@@ -189,25 +189,7 @@
               "column": 14
             }
           }
-        },
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " builtins",
-            "start": 56,
-            "end": 67,
-            "loc": {
-              "start": {
-                "line": 5,
-                "column": 0
-              },
-              "end": {
-                "line": 5,
-                "column": 11
-              }
-            }
-          }
-        ]
+        }
       },
       {
         "type": "TypeAlias",
@@ -465,25 +447,7 @@
               "column": 16
             }
           }
-        },
-        "trailingComments": [
-          {
-            "type": "CommentLine",
-            "value": " literal type annotations",
-            "start": 150,
-            "end": 177,
-            "loc": {
-              "start": {
-                "line": 11,
-                "column": 0
-              },
-              "end": {
-                "line": 11,
-                "column": 27
-              }
-            }
-          }
-        ]
+        }
       },
       {
         "type": "TypeAlias",

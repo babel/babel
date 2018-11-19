@@ -318,24 +318,6 @@
             }
           }
         },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " (x < y) as boolean;",
-            "start": 26,
-            "end": 48,
-            "loc": {
-              "start": {
-                "line": 2,
-                "column": 18
-              },
-              "end": {
-                "line": 2,
-                "column": 40
-              }
-            }
-          }
-        ],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -462,25 +444,7 @@
               "name": "T"
             }
           }
-        },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " x === (1 as number);",
-            "start": 68,
-            "end": 91,
-            "loc": {
-              "start": {
-                "line": 3,
-                "column": 19
-              },
-              "end": {
-                "line": 3,
-                "column": 42
-              }
-            }
-          }
-        ]
+        }
       }
     ],
     "directives": []

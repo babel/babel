@@ -26,9 +26,9 @@ try {} catch (_ref4) {
     }
   } = _ref4,
       c4 = babelHelpers.objectWithoutProperties(_ref4.c2, ["c3"]);
-} // Unchanged
+}
 
-
+// Unchanged
 try {} catch (a) {}
 
 try {} catch ({

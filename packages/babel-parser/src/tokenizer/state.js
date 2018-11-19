@@ -7,6 +7,7 @@ import { Position } from "../util/location";
 import { types as ct, type TokContext } from "./context";
 import type { Token } from "./index";
 import { types as tt, type TokenType } from "./types";
+import type { TokenTreeItem } from "../parser/comments";
 
 export default class State {
   init(options: Options, input: string): void {
@@ -45,11 +46,9 @@ export default class State {
 
     this.comments = [];
 
-    this.trailingComments = [];
-    this.leadingComments = [];
-    this.commentStack = [];
-    // $FlowIgnore
-    this.commentPreviousNode = null;
+    this.commentTokenTree = [];
+    this.commentQueue = [];
+    this.commentQueueLastIndex = 0;
 
     this.pos = this.lineStart = 0;
     this.curLine = options.startLine;
@@ -138,15 +137,9 @@ export default class State {
   comments: Array<N.Comment>;
 
   // Comment attachment store
-  trailingComments: Array<N.Comment>;
-  leadingComments: Array<N.Comment>;
-  commentStack: Array<{
-    start: number,
-    leadingComments: ?Array<N.Comment>,
-    trailingComments: ?Array<N.Comment>,
-    type: string,
-  }>;
-  commentPreviousNode: N.Node;
+  commentTokenTree: Array<N.Node | TokenTreeItem>;
+  commentQueue: Array<N.Comment>;
+  commentQueueLastIndex: number;
 
   // The current position of the tokenizer in the input.
   pos: number;

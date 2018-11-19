@@ -20,9 +20,9 @@ async function a() {
     } = _ref3,
         b = babelHelpers.objectWithoutProperties(_ref3, ["a"]);
   }
-} // skip
+}
 
-
+// skip
 for ({
   a
 } in {}) {}

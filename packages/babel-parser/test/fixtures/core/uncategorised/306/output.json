@@ -138,25 +138,7 @@
                   "identifierName": "there"
                 },
                 "name": "there"
-              },
-              "leadingComments": [
-                {
-                  "type": "CommentBlock",
-                  "value": " Multiline\nComment ",
-                  "start": 24,
-                  "end": 47,
-                  "loc": {
-                    "start": {
-                      "line": 1,
-                      "column": 24
-                    },
-                    "end": {
-                      "line": 2,
-                      "column": 10
-                    }
-                  }
-                }
-              ]
+              }
             }
           ],
           "directives": []

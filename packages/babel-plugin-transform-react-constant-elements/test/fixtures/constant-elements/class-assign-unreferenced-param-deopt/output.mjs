@@ -1,9 +1,10 @@
-import React from 'react'; // Regression test for https://github.com/babel/babel/issues/5552
+import React from 'react';
 
 var _ref =
 /*#__PURE__*/
 <div />;
 
+// Regression test for https://github.com/babel/babel/issues/5552
 class BugReport extends React.Component {
   constructor(...args) {
     super(...args);

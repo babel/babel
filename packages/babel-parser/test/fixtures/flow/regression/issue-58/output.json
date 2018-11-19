@@ -353,24 +353,6 @@
             "name": "e"
           }
         },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? b : (c => d)",
-            "start": 56,
-            "end": 75,
-            "loc": {
-              "start": {
-                "line": 2,
-                "column": 18
-              },
-              "end": {
-                "line": 2,
-                "column": 37
-              }
-            }
-          }
-        ],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -560,24 +542,6 @@
             }
           }
         },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? ((b): c => d) : e",
-            "start": 98,
-            "end": 122,
-            "loc": {
-              "start": {
-                "line": 3,
-                "column": 22
-              },
-              "end": {
-                "line": 3,
-                "column": 46
-              }
-            }
-          }
-        ],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -592,22 +556,6 @@
               "end": {
                 "line": 4,
                 "column": 48
-              }
-            }
-          },
-          {
-            "type": "CommentLine",
-            "value": " Nested arrow function inside parentheses",
-            "start": 173,
-            "end": 216,
-            "loc": {
-              "start": {
-                "line": 6,
-                "column": 0
-              },
-              "end": {
-                "line": 6,
-                "column": 43
               }
             }
           }
@@ -805,22 +753,6 @@
           }
         },
         "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? b : ((c): d => e)",
-            "start": 147,
-            "end": 171,
-            "loc": {
-              "start": {
-                "line": 4,
-                "column": 24
-              },
-              "end": {
-                "line": 4,
-                "column": 48
-              }
-            }
-          },
           {
             "type": "CommentLine",
             "value": " Nested arrow function inside parentheses",
@@ -1092,24 +1024,6 @@
             "name": "g"
           }
         },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? (b = (c) => d) : (e => f)",
-            "start": 246,
-            "end": 278,
-            "loc": {
-              "start": {
-                "line": 7,
-                "column": 29
-              },
-              "end": {
-                "line": 7,
-                "column": 61
-              }
-            }
-          }
-        ],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -1124,22 +1038,6 @@
               "end": {
                 "line": 8,
                 "column": 68
-              }
-            }
-          },
-          {
-            "type": "CommentLine",
-            "value": " Nested conditional expressions",
-            "start": 349,
-            "end": 382,
-            "loc": {
-              "start": {
-                "line": 10,
-                "column": 0
-              },
-              "end": {
-                "line": 10,
-                "column": 33
               }
             }
           }
@@ -1365,22 +1263,6 @@
           }
         },
         "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? ((b = (c) => d): e => f) : g",
-            "start": 312,
-            "end": 347,
-            "loc": {
-              "start": {
-                "line": 8,
-                "column": 33
-              },
-              "end": {
-                "line": 8,
-                "column": 68
-              }
-            }
-          },
           {
             "type": "CommentLine",
             "value": " Nested conditional expressions",
@@ -1640,24 +1522,6 @@
             "name": "h"
           }
         },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " b ? (c ? ((d): e => f) : g) : h",
-            "start": 419,
-            "end": 453,
-            "loc": {
-              "start": {
-                "line": 11,
-                "column": 36
-              },
-              "end": {
-                "line": 11,
-                "column": 70
-              }
-            }
-          }
-        ],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -1896,24 +1760,6 @@
             "name": "g"
           }
         },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? (b ? (c ? d : (e => f)) : g) : h",
-            "start": 490,
-            "end": 529,
-            "loc": {
-              "start": {
-                "line": 12,
-                "column": 36
-              },
-              "end": {
-                "line": 12,
-                "column": 75
-              }
-            }
-          }
-        ],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -1928,22 +1774,6 @@
               "end": {
                 "line": 14,
                 "column": 68
-              }
-            }
-          },
-          {
-            "type": "CommentLine",
-            "value": " Multiple arrow functions",
-            "start": 601,
-            "end": 628,
-            "loc": {
-              "start": {
-                "line": 16,
-                "column": 0
-              },
-              "end": {
-                "line": 16,
-                "column": 27
               }
             }
           }
@@ -2204,22 +2034,6 @@
         "leadingComments": [
           {
             "type": "CommentLine",
-            "value": " a ? (b ? c : ((d): e => f)) : g",
-            "start": 565,
-            "end": 599,
-            "loc": {
-              "start": {
-                "line": 14,
-                "column": 34
-              },
-              "end": {
-                "line": 14,
-                "column": 68
-              }
-            }
-          },
-          {
-            "type": "CommentLine",
             "value": " Multiple arrow functions",
             "start": 601,
             "end": 628,
@@ -2249,22 +2063,6 @@
               "end": {
                 "line": 17,
                 "column": 69
-              }
-            }
-          },
-          {
-            "type": "CommentLine",
-            "value": " Multiple nested arrow functions (<T> is needed to avoid ambiguities)",
-            "start": 700,
-            "end": 771,
-            "loc": {
-              "start": {
-                "line": 19,
-                "column": 0
-              },
-              "end": {
-                "line": 19,
-                "column": 71
               }
             }
           }
@@ -2523,22 +2321,6 @@
           }
         },
         "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? ((b): c => d) : ((e): f => g)",
-            "start": 662,
-            "end": 698,
-            "loc": {
-              "start": {
-                "line": 17,
-                "column": 33
-              },
-              "end": {
-                "line": 17,
-                "column": 69
-              }
-            }
-          },
           {
             "type": "CommentLine",
             "value": " Multiple nested arrow functions (<T> is needed to avoid ambiguities)",
@@ -2816,24 +2598,6 @@
             }
           }
         },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? ((b): c => ((d): e => f)) : g",
-            "start": 805,
-            "end": 841,
-            "loc": {
-              "start": {
-                "line": 20,
-                "column": 33
-              },
-              "end": {
-                "line": 20,
-                "column": 69
-              }
-            }
-          }
-        ],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -3094,24 +2858,6 @@
             }
           }
         },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? b : (c => (<T>(d): e => f))",
-            "start": 874,
-            "end": 908,
-            "loc": {
-              "start": {
-                "line": 21,
-                "column": 32
-              },
-              "end": {
-                "line": 21,
-                "column": 66
-              }
-            }
-          }
-        ],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -3126,22 +2872,6 @@
               "end": {
                 "line": 22,
                 "column": 66
-              }
-            }
-          },
-          {
-            "type": "CommentLine",
-            "value": " Invalid lhs value inside parentheses",
-            "start": 977,
-            "end": 1016,
-            "loc": {
-              "start": {
-                "line": 24,
-                "column": 0
-              },
-              "end": {
-                "line": 24,
-                "column": 39
               }
             }
           }
@@ -3306,22 +3036,6 @@
           }
         },
         "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? (<T>(b): c => d) : (e => f)",
-            "start": 941,
-            "end": 975,
-            "loc": {
-              "start": {
-                "line": 22,
-                "column": 32
-              },
-              "end": {
-                "line": 22,
-                "column": 66
-              }
-            }
-          },
           {
             "type": "CommentLine",
             "value": " Invalid lhs value inside parentheses",
@@ -3565,24 +3279,6 @@
             "name": "g"
           }
         },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? (b => c) : (d => e)",
-            "start": 1040,
-            "end": 1066,
-            "loc": {
-              "start": {
-                "line": 25,
-                "column": 23
-              },
-              "end": {
-                "line": 25,
-                "column": 49
-              }
-            }
-          }
-        ],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -3597,22 +3293,6 @@
               "end": {
                 "line": 26,
                 "column": 67
-              }
-            }
-          },
-          {
-            "type": "CommentLine",
-            "value": " Invalid lhs value inside parentheses inside arrow function",
-            "start": 1136,
-            "end": 1197,
-            "loc": {
-              "start": {
-                "line": 28,
-                "column": 0
-              },
-              "end": {
-                "line": 28,
-                "column": 61
               }
             }
           }
@@ -3863,22 +3543,6 @@
           }
         },
         "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? (b ? (c => d) : (e => f)) : g",
-            "start": 1098,
-            "end": 1134,
-            "loc": {
-              "start": {
-                "line": 26,
-                "column": 31
-              },
-              "end": {
-                "line": 26,
-                "column": 67
-              }
-            }
-          },
           {
             "type": "CommentLine",
             "value": " Invalid lhs value inside parentheses inside arrow function",
@@ -4200,24 +3864,6 @@
             }
           }
         },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? ((b): c => (d => e)) : (f => g)",
-            "start": 1232,
-            "end": 1270,
-            "loc": {
-              "start": {
-                "line": 29,
-                "column": 34
-              },
-              "end": {
-                "line": 29,
-                "column": 72
-              }
-            }
-          }
-        ],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -4232,22 +3878,6 @@
               "end": {
                 "line": 30,
                 "column": 93
-              }
-            }
-          },
-          {
-            "type": "CommentLine",
-            "value": " Function as type annotation",
-            "start": 1366,
-            "end": 1396,
-            "loc": {
-              "start": {
-                "line": 32,
-                "column": 0
-              },
-              "end": {
-                "line": 32,
-                "column": 30
               }
             }
           }
@@ -4491,22 +4121,6 @@
         "leadingComments": [
           {
             "type": "CommentLine",
-            "value": " a ? (b ? (c => d) : (e => (f => g))) : (h => i)",
-            "start": 1314,
-            "end": 1364,
-            "loc": {
-              "start": {
-                "line": 30,
-                "column": 43
-              },
-              "end": {
-                "line": 30,
-                "column": 93
-              }
-            }
-          },
-          {
-            "type": "CommentLine",
             "value": " Function as type annotation",
             "start": 1366,
             "end": 1396,
@@ -4536,22 +4150,6 @@
               "end": {
                 "line": 33,
                 "column": 60
-              }
-            }
-          },
-          {
-            "type": "CommentLine",
-            "value": " Async functions or calls",
-            "start": 1459,
-            "end": 1486,
-            "loc": {
-              "start": {
-                "line": 35,
-                "column": 0
-              },
-              "end": {
-                "line": 35,
-                "column": 27
               }
             }
           }
@@ -4709,22 +4307,6 @@
           }
         },
         "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? ((b): (c => d) => e) : f",
-            "start": 1426,
-            "end": 1457,
-            "loc": {
-              "start": {
-                "line": 33,
-                "column": 29
-              },
-              "end": {
-                "line": 33,
-                "column": 60
-              }
-            }
-          },
           {
             "type": "CommentLine",
             "value": " Async functions or calls",
@@ -4926,24 +4508,6 @@
             "name": "e"
           }
         },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? (async(b)) : (c => d)",
-            "start": 1511,
-            "end": 1539,
-            "loc": {
-              "start": {
-                "line": 36,
-                "column": 24
-              },
-              "end": {
-                "line": 36,
-                "column": 52
-              }
-            }
-          }
-        ],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -5151,24 +4715,6 @@
             }
           }
         },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? (async (b): c => d) : e",
-            "start": 1568,
-            "end": 1598,
-            "loc": {
-              "start": {
-                "line": 37,
-                "column": 28
-              },
-              "end": {
-                "line": 37,
-                "column": 58
-              }
-            }
-          }
-        ],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -5383,24 +4929,6 @@
             }
           }
         },
-        "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? (async(b => c)) : (d => e)",
-            "start": 1628,
-            "end": 1661,
-            "loc": {
-              "start": {
-                "line": 38,
-                "column": 29
-              },
-              "end": {
-                "line": 38,
-                "column": 62
-              }
-            }
-          }
-        ],
         "trailingComments": [
           {
             "type": "CommentLine",
@@ -5415,22 +4943,6 @@
               "end": {
                 "line": 39,
                 "column": 75
-              }
-            }
-          },
-          {
-            "type": "CommentLine",
-            "value": " https://github.com/prettier/prettier/issues/2194",
-            "start": 1739,
-            "end": 1790,
-            "loc": {
-              "start": {
-                "line": 41,
-                "column": 0
-              },
-              "end": {
-                "line": 41,
-                "column": 51
               }
             }
           }
@@ -5925,22 +5437,6 @@
         ],
         "kind": "let",
         "leadingComments": [
-          {
-            "type": "CommentLine",
-            "value": " a ? (async (b) => c => d) : (e => f)",
-            "start": 1698,
-            "end": 1737,
-            "loc": {
-              "start": {
-                "line": 39,
-                "column": 36
-              },
-              "end": {
-                "line": 39,
-                "column": 75
-              }
-            }
-          },
           {
             "type": "CommentLine",
             "value": " https://github.com/prettier/prettier/issues/2194",
