@@ -1037,7 +1037,7 @@ export type TsSignatureDeclaration =
 
 export type TsSignatureDeclarationOrIndexSignatureBase = NodeBase & {
   // Not using TypeScript's "ParameterDeclaration" here, since it's inconsistent with regular functions.
-  parameters: $ReadOnlyArray<Identifier | RestElement>,
+  parameters: $ReadOnlyArray<Identifier | RestElement | ObjectPattern>,
   typeAnnotation: ?TsTypeAnnotation,
 };
 

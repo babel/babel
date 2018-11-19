@@ -314,13 +314,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseBindingListForSignature(): $ReadOnlyArray<
-      N.Identifier | N.RestElement,
+      N.Identifier | N.RestElement | N.ObjectPattern,
     > {
       return this.parseBindingList(tt.parenR).map(pattern => {
-        if (pattern.type !== "Identifier" && pattern.type !== "RestElement") {
+        if (
+          pattern.type !== "Identifier" &&
+          pattern.type !== "RestElement" &&
+          pattern.type !== "ObjectPattern"
+        ) {
           throw this.unexpected(
             pattern.start,
-            "Name in a signature must be an Identifier.",
+            `Name in a signature must be an Identifier or ObjectPattern, instead got ${
+              pattern.type
+            }`,
           );
         }
         return pattern;
@@ -747,6 +753,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.next();
         return true;
       }
+
+      if (this.match(tt.braceL)) {
+        let braceStackCounter = 1;
+        this.next();
+
+        while (braceStackCounter > 0) {
+          if (this.match(tt.braceL)) {
+            ++braceStackCounter;
+          } else if (this.match(tt.braceR)) {
+            --braceStackCounter;
+          }
+          this.next();
+        }
+        return true;
+      }
+
       return false;
     }
 
