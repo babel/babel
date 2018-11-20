@@ -27,60 +27,15 @@ export { enableFeature, FEATURES, setLoose };
 const version = pkg.version.split(".").reduce((v, x) => v * 1e5 + +x, 0);
 const versionKey = "@babel/plugin-class-features/version";
 
-const getFeatureOptions = (options, name) => {
-  const value = options[name];
-
-  if (value === undefined || value === false) return { enabled: false };
-  if (value === true) return { enabled: true, loose: false };
-
-  if (typeof value === "object") {
-    if (
-      typeof value.loose !== "undefined" &&
-      typeof value.loose !== "boolean"
-    ) {
-      throw new Error(`.${name}.loose must be a boolean or undefined.`);
-    }
-
-    return { enabled: true, loose: !!value.loose };
-  }
-
-  throw new Error(
-    `.${name} must be a boolean, an object with a 'loose'` +
-      ` property or undefined.`,
-  );
-};
-
-export default declare((api, options) => {
+export default declare(api => {
   api.assertVersion(7);
-
-  const fields = getFeatureOptions(options, "fields");
-  const privateMethods = getFeatureOptions(options, "privateMethods");
-  const decorators = getFeatureOptions(options, "decorators");
 
   return {
     name: "class-features",
 
-    manipulateOptions(opts, parserOpts) {
-      if (fields) {
-        parserOpts.plugins.push("classProperties", "classPrivateProperties");
-      }
-    },
-
     pre() {
       if (!this.file.get(versionKey) || this.file.get(versionKey) < version) {
         this.file.set(versionKey, version);
-      }
-
-      if (fields.enabled) {
-        enableFeature(this.file, FEATURES.fields, fields.loose);
-      }
-      if (privateMethods.enabled) {
-        throw new Error("Private methods are not supported yet");
-        enableFeature(this.file, FEATURES.privateMethods);
-      }
-      if (decorators.enabled) {
-        throw new Error("Decorators are not supported yet");
-        enableFeature(this.file, FEATURES.decorators);
       }
     },
 
