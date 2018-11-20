@@ -261,13 +261,14 @@ export default class LValParser extends NodeUtils {
         if (
           this.state.inFunction &&
           this.state.inParameters &&
-          (this.lookahead().type === tt.name ||
-            this.lookahead().type === tt.ellipsis)
+          this.match(tt.comma)
         ) {
-          this.raise(
-            this.state.start,
-            "Rest parameter must be last formal parameter",
-          );
+          const nextTokenType = this.lookahead().type;
+          const errorMessage =
+            nextTokenType === tt.parenR
+              ? "A trailing comma is not permitted after the rest element"
+              : "Rest parameter must be last formal parameter";
+          this.raise(this.state.start, errorMessage);
         } else {
           this.expect(close);
         }
