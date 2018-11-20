@@ -26,4 +26,13 @@ Then, load the plugin in your `.eslintrc` configuration file. You can omit the `
 
 ## Supported Rules
 
-* Fill in provided rules here
+> Note: Rules marked with :wrench: are autofixable.
+
+* `babel-plugin/no-deprecated-clone` (:wrench:): Disallows using the deprecated
+  `t.clone(node)` and `t.cloneDeep(node)` methods from `@babel/types`. Those
+  calls are replaced with `t.cloneNode(node)` when using `eslint --fix`.
+* `babel-plugin/no-undefined-identifier`: Disallows using
+  `t.identifier("undefined")` to create a node which represents an `undefined`
+  value, since it might cause problem if `undefined` is redeclared.
+* `babel-plugin/plugin-name`: Requires plugins to have a `name` property, which
+  can be useful for debugging purposes.
