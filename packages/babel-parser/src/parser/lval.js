@@ -258,7 +258,19 @@ export default class LValParser extends NodeUtils {
         break;
       } else if (this.match(tt.ellipsis)) {
         elts.push(this.parseAssignableListItemTypes(this.parseRest()));
-        this.expect(close);
+        if (
+          this.state.inFunction &&
+          this.state.inParameters &&
+          (this.lookahead().type === tt.name ||
+            this.lookahead().type === tt.ellipsis)
+        ) {
+          this.raise(
+            this.state.start,
+            "Rest parameter must be last formal parameter",
+          );
+        } else {
+          this.expect(close);
+        }
         break;
       } else {
         const decorators = [];

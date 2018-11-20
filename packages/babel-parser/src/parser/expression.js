@@ -141,7 +141,7 @@ export default class ExpressionParser extends LValParser {
     if (this.match(tt.parenL) || this.match(tt.name) || this.match(tt._yield)) {
       this.state.potentialArrowAt = this.state.start;
     }
-
+    
     let left = this.parseMaybeConditional(
       noIn,
       refShorthandDefaultPos,
@@ -1117,6 +1117,17 @@ export default class ExpressionParser extends LValParser {
           this.raise(
             this.state.start,
             "A trailing comma is not permitted after the rest element",
+          );
+        }
+
+        if (
+          this.match(tt.comma) &&
+          (this.lookahead().type === tt.name ||
+            this.lookahead().type === tt.ellipsis)
+        ) {
+          this.raise(
+            this.state.start,
+            "Rest parameter must be last formal parameter",
           );
         }
 
