@@ -12,12 +12,8 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-function-name": "^7.1.0",
-    "@babel/helper-member-expression-to-functions": "^7.0.0",
-    "@babel/helper-optimise-call-expression": "^7.0.0",
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/helper-replace-supers": "^7.1.0",
-    "@babel/plugin-syntax-class-properties": "^7.0.0"
+    "@babel/plugin-class-features": "^7.1.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
