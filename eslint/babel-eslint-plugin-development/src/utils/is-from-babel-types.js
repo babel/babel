@@ -1,7 +1,6 @@
 "use strict";
 
-const getReferenceOrigin = require("./get-reference-origin");
-const getExportName = require("./get-export-name");
+const isBabelPluginFactory = require("./is-babel-plugin-factory");
 
 // Check if a ReferenceOrigin (returned by ./get-reference-origin.js)
 // is a reference to a @babel/types export.
@@ -25,32 +24,12 @@ module.exports = function isFromBabelTypes(
   }
 
   if (
-    origin.kind !== "property" ||
-    origin.base.kind !== "param" ||
-    origin.base.index !== 0
+    origin.kind === "property" &&
+    origin.base.kind === "param" &&
+    origin.base.index === 0
   ) {
-    // Not a parameter of the plugin factory function
-    return false;
+    return isBabelPluginFactory(origin.base.functionNode, scope);
   }
 
-  const { functionNode } = origin.base;
-  const { parent } = functionNode;
-
-  if (parent.type === "CallExpression") {
-    const calleeOrigin = getReferenceOrigin(parent.callee, scope);
-
-    // Using "declare" from "@babel/helper-plugin-utils"
-    return !!(
-      calleeOrigin &&
-      calleeOrigin.kind === "import" &&
-      calleeOrigin.name === "declare" &&
-      calleeOrigin.source === "@babel/helper-plugin-utils"
-    );
-  }
-
-  const exportName = getExportName(functionNode);
-
-  // export default function ({ types: t }) {}
-  // module.exports = function ({ types: t }) {}
-  return exportName === "default" || exportName === "module.exports";
+  return false;
 };
