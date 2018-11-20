@@ -169,9 +169,9 @@
     "chrome": "49",
     "edge": "14",
     "firefox": "51",
-    "safari": "10",
+    "safari": "10.1",
     "node": "6",
-    "ios": "10",
+    "ios": "10.3",
     "opera": "36",
     "electron": "1"
   },
@@ -229,6 +229,7 @@
     "chrome": "63",
     "firefox": "57",
     "safari": "12",
+    "node": "10.13",
     "ios": "12",
     "opera": "50",
     "electron": "3"
@@ -245,6 +246,7 @@
   "proposal-unicode-property-regex": {
     "chrome": "64",
     "safari": "11.1",
+    "node": "10.13",
     "ios": "11.3",
     "opera": "51",
     "electron": "3"
@@ -254,6 +256,7 @@
     "chrome": "66",
     "firefox": "58",
     "safari": "11.1",
+    "node": "10.13",
     "ios": "11.3",
     "opera": "53",
     "electron": "3"

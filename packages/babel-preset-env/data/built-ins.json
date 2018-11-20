@@ -205,6 +205,7 @@
     "edge": "12",
     "firefox": "5",
     "safari": "10.1",
+    "node": "10.13",
     "ie": "9",
     "ios": "10.3",
     "electron": "3"
@@ -840,6 +841,7 @@
     "edge": "18",
     "firefox": "58",
     "safari": "11.1",
+    "node": "10.13",
     "ios": "11.3",
     "opera": "50",
     "electron": "3"
@@ -1060,6 +1062,7 @@
     "chrome": "63",
     "firefox": "57",
     "safari": "12",
+    "node": "10.13",
     "ios": "12",
     "opera": "50",
     "electron": "3"
