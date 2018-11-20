@@ -1,0 +1,14 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "targets": {
+          "browsers": ["ios >= 10.3"]
+        },
+        "modules": false
+      }
+    ]
+  ]
+}
+
