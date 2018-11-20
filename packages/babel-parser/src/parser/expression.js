@@ -141,7 +141,7 @@ export default class ExpressionParser extends LValParser {
     if (this.match(tt.parenL) || this.match(tt.name) || this.match(tt._yield)) {
       this.state.potentialArrowAt = this.state.start;
     }
-    
+
     let left = this.parseMaybeConditional(
       noIn,
       refShorthandDefaultPos,
