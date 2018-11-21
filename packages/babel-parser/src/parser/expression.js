@@ -298,6 +298,7 @@ export default class ExpressionParser extends LValParser {
         const op = this.state.type;
 
         if (op === tt.pipeline) {
+          this.expectPlugin("pipelineOperator");
           this.state.inPipeline = true;
           this.checkPipelineAtInfixOperator(left, leftStartPos);
         } else if (op === tt.nullishCoalescing) {
@@ -958,7 +959,6 @@ export default class ExpressionParser extends LValParser {
 
       case tt.hash: {
         if (this.state.inPipeline) {
-          this.expectPlugin("pipelineOperator");
           node = this.startNode();
 
           if (
@@ -2034,8 +2034,6 @@ export default class ExpressionParser extends LValParser {
   // of the infix operator `|>`.
 
   checkPipelineAtInfixOperator(left: N.Expression, leftStartPos: number) {
-    this.expectPlugin("pipelineOperator");
-
     if (this.getPluginOption("pipelineOperator", "proposal") === "smart") {
       if (left.type === "SequenceExpression") {
         // Ensure that the pipeline head is not a comma-delimited
