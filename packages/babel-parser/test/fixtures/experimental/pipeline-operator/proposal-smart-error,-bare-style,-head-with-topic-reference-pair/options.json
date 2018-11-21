@@ -1,4 +1,4 @@
 {
   "plugins": [["pipelineOperator", { "proposal": "smart" }]],
-  "throws": "Pipeline head may not be a comma-separated sequence expression (1:0)"
+  "throws": "Pipeline head should not be a comma-separated sequence expression (1:0)"
 }

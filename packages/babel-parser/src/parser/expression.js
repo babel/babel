@@ -2040,7 +2040,7 @@ export default class ExpressionParser extends LValParser {
         // sequence expression.
         throw this.raise(
           leftStartPos,
-          `Pipeline head may not be a comma-separated sequence expression`,
+          `Pipeline head should not be a comma-separated sequence expression`,
         );
       }
     }
