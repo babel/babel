@@ -930,7 +930,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.extends = this.tsParseHeritageClause();
       }
       const body: N.TSInterfaceBody = this.startNode();
-      body.body = this.tsParseObjectTypeMembers();
+      body.body = this.tsInType(this.tsParseObjectTypeMembers.bind(this));
       node.body = this.finishNode(body, "TSInterfaceBody");
       return this.finishNode(node, "TSInterfaceDeclaration");
     }
