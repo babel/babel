@@ -124,6 +124,7 @@ export function createClassFeaturePlugin({
           ({ instanceNodes, wrapClass } = buildDecoratedClass(
             ref,
             path,
+            elements,
             this.file,
           ));
         } else {

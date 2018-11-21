@@ -21,7 +21,7 @@ function value(body, params = [], async, generator) {
   return method;
 }
 
-function takeDecorators({ node }) {
+function takeDecorators(node) {
   let result;
   if (node.decorators && node.decorators.length > 0) {
     result = t.arrayExpression(
@@ -42,7 +42,9 @@ function getKey(node) {
   }
 }
 
-function getSingleElementDefinition(path, superRef, classRef, file) {
+// NOTE: This function can be easily bound as .bind(file, classRef, superRef)
+//       to make it easier to use it in a loop.
+function extractElementDescriptor(/* this: File, */ classRef, superRef, path) {
   const { node, scope } = path;
   const isMethod = path.isClassMethod();
 
@@ -62,14 +64,14 @@ function getSingleElementDefinition(path, superRef, classRef, file) {
       isStatic: node.static,
       superRef,
       scope,
-      file,
+      file: this,
     },
     true,
   ).replace();
 
   const properties = [
     prop("kind", t.stringLiteral(isMethod ? node.kind : "field")),
-    prop("decorators", takeDecorators(path)),
+    prop("decorators", takeDecorators(node)),
     prop("static", node.static && t.booleanLiteral(true)),
     prop("key", getKey(node)),
     isMethod
@@ -79,21 +81,9 @@ function getSingleElementDefinition(path, superRef, classRef, file) {
       : prop("value", scope.buildUndefinedNode()),
   ].filter(Boolean);
 
+  path.remove();
+
   return t.objectExpression(properties);
-}
-
-function getElementsDefinitions(path, fId, file) {
-  const elements = [];
-  for (const p of path.get("body.body")) {
-    if (!p.isClassMethod({ kind: "constructor" })) {
-      elements.push(
-        getSingleElementDefinition(p, path.node.superClass, fId, file),
-      );
-      p.remove();
-    }
-  }
-
-  return t.arrayExpression(elements);
 }
 
 function addDecorateHelper(file) {
@@ -110,24 +100,26 @@ function addDecorateHelper(file) {
   }
 }
 
-export function buildDecoratedClass(ref, path, file) {
+export function buildDecoratedClass(ref, path, elements, file) {
   const { node, scope } = path;
   const initializeId = scope.generateUidIdentifier("initialize");
   const isDeclaration = node.id && path.isDeclaration();
   const isStrict = path.isInStrictMode();
-  const { superClass } = path.node;
+  const { superClass } = node;
 
   node.type = "ClassDeclaration";
-  if (!path.node.id) path.node.id = t.cloneNode(ref);
+  if (!node.id) node.id = t.cloneNode(ref);
 
-  const superId =
-    superClass &&
-    scope.generateUidIdentifierBasedOnNode(node.superClass, "super");
+  let superId;
+  if (superClass) {
+    superId = scope.generateUidIdentifierBasedOnNode(node.superClass, "super");
+    node.superClass = superId;
+  }
 
-  if (superClass) node.superClass = superId;
-
-  const classDecorators = takeDecorators(path);
-  const definitions = getElementsDefinitions(path, node.id, file);
+  const classDecorators = takeDecorators(node);
+  const definitions = t.arrayExpression(
+    elements.map(extractElementDescriptor.bind(file, node.id, superId)),
+  );
 
   let replacement = template.expression.ast`
     ${addDecorateHelper(file)}(
