@@ -1299,11 +1299,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return undefined;
       }
 
+      const oldInAsync = this.state.inAsync;
+      const oldInGenerator = this.state.inGenerator;
+      this.state.inAsync = true;
+      this.state.inGenerator = false;
       res.id = null;
       res.generator = false;
       res.expression = true; // May be set again by parseFunctionBody.
       res.async = true;
       this.parseFunctionBody(res, true);
+      this.state.inAsync = oldInAsync;
+      this.state.inGenerator = oldInGenerator;
       return this.finishNode(res, "ArrowFunctionExpression");
     }
 
