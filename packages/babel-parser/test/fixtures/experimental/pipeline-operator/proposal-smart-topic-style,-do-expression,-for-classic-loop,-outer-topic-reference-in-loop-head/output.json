@@ -179,7 +179,7 @@
                             "name": "i"
                           },
                           "init": {
-                            "type": "PrimaryTopicReference",
+                            "type": "PipelinePrimaryTopicReference",
                             "start": 27,
                             "end": 28,
                             "loc": {
@@ -247,7 +247,7 @@
                           "name": "i"
                         },
                         {
-                          "type": "PrimaryTopicReference",
+                          "type": "PipelinePrimaryTopicReference",
                           "start": 43,
                           "end": 44,
                           "loc": {
@@ -296,7 +296,7 @@
                         "name": "i"
                       },
                       "right": {
-                        "type": "PrimaryTopicReference",
+                        "type": "PipelinePrimaryTopicReference",
                         "start": 52,
                         "end": 53,
                         "loc": {

@@ -133,7 +133,7 @@
                       }
                     },
                     "expression": {
-                      "type": "PrimaryTopicReference",
+                      "type": "PipelinePrimaryTopicReference",
                       "start": 14,
                       "end": 15,
                       "loc": {

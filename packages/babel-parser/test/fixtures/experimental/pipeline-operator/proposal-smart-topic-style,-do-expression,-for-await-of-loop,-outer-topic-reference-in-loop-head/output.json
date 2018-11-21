@@ -234,7 +234,7 @@
                             "kind": "const"
                           },
                           "right": {
-                            "type": "PrimaryTopicReference",
+                            "type": "PipelinePrimaryTopicReference",
                             "start": 61,
                             "end": 62,
                             "loc": {

@@ -973,7 +973,7 @@ export default class ExpressionParser extends LValParser {
           this.next();
           if (this.primaryTopicReferenceIsAllowedInCurrentTopicContext()) {
             this.registerTopicReference();
-            return this.finishNode(node, "PrimaryTopicReference");
+            return this.finishNode(node, "PipelinePrimaryTopicReference");
           } else {
             throw this.raise(
               node.start,

@@ -90,7 +90,7 @@
               }
             },
             "expression": {
-              "type": "PrimaryTopicReference",
+              "type": "PipelinePrimaryTopicReference",
               "start": 9,
               "end": 10,
               "loc": {

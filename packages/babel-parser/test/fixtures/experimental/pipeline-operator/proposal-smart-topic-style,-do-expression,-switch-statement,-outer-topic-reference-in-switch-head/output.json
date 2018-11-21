@@ -133,7 +133,7 @@
                       }
                     },
                     "discriminant": {
-                      "type": "PrimaryTopicReference",
+                      "type": "PipelinePrimaryTopicReference",
                       "start": 24,
                       "end": 25,
                       "loc": {

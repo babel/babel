@@ -139,7 +139,7 @@
                     "name": "x"
                   },
                   "right": {
-                    "type": "PrimaryTopicReference",
+                    "type": "PipelinePrimaryTopicReference",
                     "start": 23,
                     "end": 24,
                     "loc": {

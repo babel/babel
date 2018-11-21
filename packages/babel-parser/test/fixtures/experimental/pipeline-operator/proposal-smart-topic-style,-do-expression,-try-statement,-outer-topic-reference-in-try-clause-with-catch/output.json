@@ -227,7 +227,7 @@
                             },
                             "arguments": [
                               {
-                                "type": "PrimaryTopicReference",
+                                "type": "PipelinePrimaryTopicReference",
                                 "start": 33,
                                 "end": 34,
                                 "loc": {

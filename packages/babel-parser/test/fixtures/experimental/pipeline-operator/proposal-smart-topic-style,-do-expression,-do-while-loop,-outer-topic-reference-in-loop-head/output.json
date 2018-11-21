@@ -233,7 +233,7 @@
                       },
                       "operator": "<",
                       "right": {
-                        "type": "PrimaryTopicReference",
+                        "type": "PipelinePrimaryTopicReference",
                         "start": 36,
                         "end": 37,
                         "loc": {

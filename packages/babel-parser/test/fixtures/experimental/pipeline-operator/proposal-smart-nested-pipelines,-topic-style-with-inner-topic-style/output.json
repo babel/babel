@@ -104,7 +104,7 @@
                 }
               },
               "left": {
-                "type": "PrimaryTopicReference",
+                "type": "PipelinePrimaryTopicReference",
                 "start": 6,
                 "end": 7,
                 "loc": {
@@ -166,7 +166,7 @@
                   },
                   "arguments": [
                     {
-                      "type": "PrimaryTopicReference",
+                      "type": "PipelinePrimaryTopicReference",
                       "start": 13,
                       "end": 14,
                       "loc": {
