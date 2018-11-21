@@ -1,4 +1,4 @@
-import { hasDecorators } from "./decorators";
+import { hasOwnDecorators } from "./decorators";
 
 export const FEATURES = Object.freeze({
   //classes: 1 << 0,
@@ -39,8 +39,18 @@ export function isLoose(file, feature) {
 }
 
 export function verifyUsedFeatures(path, file) {
-  if (hasDecorators(path) && !hasFeature(file, FEATURES.decorators)) {
-    throw path.buildCodeFrameError("Decorators are not enabled.");
+  if (hasOwnDecorators(path)) {
+    if (!hasFeature(file, FEATURES.decorators)) {
+      throw path.buildCodeFrameError("Decorators are not enabled.");
+    }
+
+    if (path.isPrivate()) {
+      throw path.buildCodeFrameError(
+        `Private ${
+          path.isClassMethod() ? "methods" : "fields"
+        } in decorated classes are not supported yet.`,
+      );
+    }
   }
 
   if (hasFeature(file, FEATURES.decorators)) {

@@ -318,6 +318,7 @@ export function buildFieldsInitNodes(
 ) {
   const staticNodes = [];
   const instanceNodes = [];
+  let needsClassRef = false;
 
   for (const prop of props) {
     const isStatic = prop.node.static;
@@ -329,19 +330,23 @@ export function buildFieldsInitNodes(
 
     switch (true) {
       case isStatic && isPrivate && isField && loose:
+        needsClassRef = true;
         staticNodes.push(
           buildPrivateFieldInitLoose(t.cloneNode(ref), prop, privateNamesMap),
         );
         break;
       case isStatic && isPrivate && isField && !loose:
+        needsClassRef = true;
         staticNodes.push(
           buildPrivateStaticFieldInitSpec(prop, privateNamesMap),
         );
         break;
       case isStatic && isPublic && isField && loose:
+        needsClassRef = true;
         staticNodes.push(buildPublicFieldInitLoose(t.cloneNode(ref), prop));
         break;
       case isStatic && isPublic && isField && !loose:
+        needsClassRef = true;
         staticNodes.push(
           buildPublicFieldInitSpec(t.cloneNode(ref), prop, state),
         );
@@ -397,5 +402,27 @@ export function buildFieldsInitNodes(
     }
   }
 
-  return { staticNodes, instanceNodes };
+  return {
+    staticNodes,
+    instanceNodes,
+    wrapClass(path) {
+      for (const prop of props) {
+        prop.remove();
+      }
+
+      if (!needsClassRef) return path;
+
+      if (path.isClassExpression()) {
+        path.scope.push({ id: ref });
+        path.replaceWith(
+          t.assignmentExpression("=", t.cloneNode(ref), path.node),
+        );
+      } else if (!path.node.id) {
+        // Anonymous class declaration
+        path.node.id = ref;
+      }
+
+      return path;
+    },
+  };
 }
