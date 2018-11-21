@@ -1113,11 +1113,13 @@ export default class ExpressionParser extends LValParser {
           ),
         );
 
-        if (this.match(tt.comma) && this.lookahead().type === tt.parenR) {
-          this.raise(
-            this.state.start,
-            "A trailing comma is not permitted after the rest element",
-          );
+        if (this.match(tt.comma)) {
+          const nextTokenType = this.lookahead().type;
+          const errorMessage =
+            nextTokenType === tt.parenR
+              ? "A trailing comma is not permitted after the rest element"
+              : "Rest parameter must be last formal parameter";
+          this.raise(this.state.start, errorMessage);
         }
 
         break;
