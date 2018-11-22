@@ -376,7 +376,7 @@ export default class Tokenizer extends LocationParser {
   // All in the name of speed.
 
   // number sign is "#"
-  readToken_numberSign(code: number): void {
+  readToken_numberSign(): void {
     if (this.state.pos === 0 && this.readToken_interpreter()) {
       return;
     }
@@ -400,10 +400,7 @@ export default class Tokenizer extends LocationParser {
     ) {
       this.finishOp(tt.hash, 1);
     } else {
-      this.raise(
-        this.state.pos,
-        `Unexpected character '${String.fromCodePoint(code)}'`,
-      );
+      this.raise(this.state.pos, "Unexpected character '#'");
     }
   }
 
@@ -655,7 +652,7 @@ export default class Tokenizer extends LocationParser {
   getTokenFromCode(code: number): void {
     switch (code) {
       case charCodes.numberSign:
-        this.readToken_numberSign(code);
+        this.readToken_numberSign();
         return;
 
       // The interpretation of a dot depends on whether it is followed
