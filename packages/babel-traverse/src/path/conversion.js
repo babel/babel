@@ -461,8 +461,12 @@ function getThisBinding(thisEnvFn, inConstructor) {
         if (supers.has(child.node)) return;
         supers.add(child.node);
 
-        child.replaceWith(
-          t.assignmentExpression("=", t.identifier(thisBinding), child.node),
+        child.insertAfter(
+          t.assignmentExpression(
+            "=",
+            t.identifier(thisBinding),
+            t.identifier("this"),
+          ),
         );
       },
     });
