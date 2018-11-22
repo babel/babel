@@ -366,9 +366,8 @@ export default class ExpressionParser extends LValParser {
               startLoc,
             );
           });
-        } else {
-          return this.parseExprOpBaseRightExpr(op, prec, noIn);
         }
+      // falls through
 
       default:
         return this.parseExprOpBaseRightExpr(op, prec, noIn);
