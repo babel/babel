@@ -566,7 +566,7 @@ export default class ExpressionParser extends LValParser {
         );
         this.state.yieldOrAwaitInPossibleArrowParameters = oldYOAIPAP;
       } else {
-        this.toReferencedList(node.arguments);
+        this.toReferencedListDeep(node.arguments);
 
         // We keep the old value if it isn't null, for cases like
         //   (x = async(yield)) => {}
@@ -891,7 +891,14 @@ export default class ExpressionParser extends LValParser {
           true,
           refShorthandDefaultPos,
         );
-        this.toReferencedList(node.elements);
+        if (!this.state.maybeInArrowParameters) {
+          // This could be an array pattern:
+          //   ([a: string, b: string]) => {}
+          // In this case, we don't have to call toReferencedList. We will
+          // call it, if needed, when we are sure that it is a parenthesized
+          // expression by calling toReferencedListDeep.
+          this.toReferencedList(node.elements);
+        }
         return this.finishNode(node, "ArrayExpression");
 
       case tt.braceL:
@@ -1173,10 +1180,10 @@ export default class ExpressionParser extends LValParser {
     }
     if (refNeedsArrowPos.start) this.unexpected(refNeedsArrowPos.start);
 
+    this.toReferencedListDeep(exprList, /* isParenthesizedExpr */ true);
     if (exprList.length > 1) {
       val = this.startNodeAt(innerStartPos, innerStartLoc);
       val.expressions = exprList;
-      this.toReferencedList(val.expressions);
       this.finishNodeAt(val, "SequenceExpression", innerEndPos, innerEndLoc);
     } else {
       val = exprList[0];

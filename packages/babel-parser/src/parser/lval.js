@@ -177,8 +177,23 @@ export default class LValParser extends NodeUtils {
 
   toReferencedList(
     exprList: $ReadOnlyArray<?Expression>,
-    isInParens?: boolean, // eslint-disable-line no-unused-vars
+    isParenthesizedExpr?: boolean, // eslint-disable-line no-unused-vars
   ): $ReadOnlyArray<?Expression> {
+    return exprList;
+  }
+
+  toReferencedListDeep(
+    exprList: $ReadOnlyArray<?Expression>,
+    isParenthesizedExpr?: boolean,
+  ): $ReadOnlyArray<?Expression> {
+    this.toReferencedList(exprList, isParenthesizedExpr);
+
+    for (const expr of exprList) {
+      if (expr && expr.type === "ArrayExpression") {
+        this.toReferencedListDeep(expr.elements);
+      }
+    }
+
     return exprList;
   }
 
