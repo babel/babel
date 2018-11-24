@@ -37,11 +37,16 @@ export default class Parser extends StatementParser {
 
   // Convenience method to parse an Expression only
   getExpression(): Expression {
+    const file = this.startNode();
     this.nextToken();
     const expr = this.parseExpression();
-    if (!this.match(tt.eof)) {
-      this.unexpected();
-    }
+    this.expect(tt.eof);
+
+    // This file is mostly a no-op, but starting and finishing it ensures
+    // that comment comment attachment has the opportunity to do anything
+    // it might want to do.
+    this.finishNode(file, "File");
+
     expr.comments = this.state.comments;
     return expr;
   }
