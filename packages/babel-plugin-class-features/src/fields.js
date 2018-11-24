@@ -264,7 +264,7 @@ function buildPrivateMethodInitLoose(ref, prop, privateNamesMap) {
     Object.defineProperty(${ref}, ${id}, {
       // configurable is false by default
       // enumerable is false by default
-      writable: false,
+      // writable is false by default
       value: ${methodId.name}
     });
   `;

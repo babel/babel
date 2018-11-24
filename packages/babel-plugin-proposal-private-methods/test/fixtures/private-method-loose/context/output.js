@@ -6,7 +6,6 @@ function () {
   function Foo(status) {
     babelHelpers.classCallCheck(this, Foo);
     Object.defineProperty(this, _getStatus, {
-      writable: false,
       value: _getStatus2
     });
     this.status = status;

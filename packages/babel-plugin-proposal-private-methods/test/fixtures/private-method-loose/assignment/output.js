@@ -3,7 +3,6 @@ var Foo = function Foo() {
 
   babelHelpers.classCallCheck(this, Foo);
   Object.defineProperty(this, _privateMethod, {
-    writable: false,
     value: _privateMethod2
   });
   this.publicField = babelHelpers.classPrivateFieldLooseBase(this, _privateMethod)[_privateMethod]();
