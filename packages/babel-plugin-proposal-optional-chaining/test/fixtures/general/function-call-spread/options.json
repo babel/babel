@@ -1,3 +1,7 @@
 {
-  "plugins": ["external-helpers", "proposal-optional-chaining", "transform-spread"]
+  "plugins": [
+    "external-helpers",
+    "proposal-optional-chaining",
+    "transform-spread"
+  ]
 }
