@@ -39,6 +39,10 @@ export function isLoose(file, feature) {
 }
 
 export function verifyUsedFeatures(path, file) {
+  if (hasDecorators(path) && !hasFeature(file, FEATURES.decorators)) {
+    throw path.buildCodeFrameError("Decorators are not enabled.");
+  }
+
   if (hasFeature(file, FEATURES.decorators)) {
     throw new Error(
       "@babel/plugin-class-features doesn't support decorators yet.",
@@ -63,8 +67,15 @@ export function verifyUsedFeatures(path, file) {
     }
   }
 
-  if (hasDecorators(path) && !hasFeature(file, FEATURES.decorators)) {
-    throw path.buildCodeFrameError("Decorators are not enabled.");
+  if (
+    hasFeature(file, FEATURES.privateMethods) &&
+    hasFeature(file, FEATURES.fields) &&
+    isLoose(file, FEATURES.privateMethods) !== isLoose(file, FEATURES.fields)
+  ) {
+    throw new Error(
+      "'loose' mode configuration must be the same for both @babel/plugin-proposal-class-properties " +
+        "and @babel/plugin-proposal-private-methods",
+    );
   }
 
   if (path.isProperty()) {

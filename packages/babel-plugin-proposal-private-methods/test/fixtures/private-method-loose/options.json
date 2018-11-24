@@ -6,7 +6,7 @@
         "helperVersion": "7.1.6"
       }
     ],
-    "proposal-private-methods",
+    ["proposal-private-methods", { "loose": true }],
     ["proposal-class-properties", { "loose": true }],
     "transform-classes",
     "transform-block-scoping",
