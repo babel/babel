@@ -1977,7 +1977,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // type casts that we've found that are illegal in this context
     toReferencedList(
       exprList: $ReadOnlyArray<?N.Expression>,
-      isInParens?: boolean,
+      isParenthesizedExpr?: boolean,
     ): $ReadOnlyArray<?N.Expression> {
       for (let i = 0; i < exprList.length; i++) {
         const expr = exprList[i];
@@ -1985,7 +1985,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           expr &&
           expr.type === "TypeCastExpression" &&
           (!expr.extra || !expr.extra.parenthesized) &&
-          (exprList.length > 1 || !isInParens)
+          (exprList.length > 1 || !isParenthesizedExpr)
         ) {
           this.raise(
             expr.typeAnnotation.start,
