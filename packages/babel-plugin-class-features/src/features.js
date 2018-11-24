@@ -45,17 +45,22 @@ export function verifyUsedFeatures(path, file) {
     );
   }
 
-  if (
-    path.isClassPrivateMethod() &&
-    !hasFeature(file, FEATURES.privateMethods)
-  ) {
-    throw path.buildCodeFrameError("Class private methods are not enabled.");
-  }
+  if (path.isClassPrivateMethod()) {
+    if (!hasFeature(file, FEATURES.privateMethods)) {
+      throw path.buildCodeFrameError("Class private methods are not enabled.");
+    }
 
-  if (path.isClassPrivateMethod() && path.node.static) {
-    throw new Error(
-      "@babel/plugin-class-features doesn't support class static private methods yet.",
-    );
+    if (path.node.static) {
+      throw new Error(
+        "@babel/plugin-class-features doesn't support class static private methods yet.",
+      );
+    }
+
+    if (path.node.kind !== "method") {
+      throw new Error(
+        "@babel/plugin-class-features doesn't support class private accessors yet.",
+      );
+    }
   }
 
   if (hasDecorators(path) && !hasFeature(file, FEATURES.decorators)) {
