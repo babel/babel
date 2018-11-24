@@ -41,7 +41,7 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
           var ${id} = ${state.addHelper("classPrivateFieldLooseKey")}("${name}")
         `,
       );
-    } else if (isMethod) {
+    } else if (isMethod && !isStatic) {
       initNodes.push(template.statement.ast`var ${id} = new WeakSet();`);
     } else if (!isStatic) {
       initNodes.push(template.statement.ast`var ${id} = new WeakMap();`);
@@ -126,7 +126,7 @@ const privateNameHandlerSpec = {
       methodId,
     } = privateNamesMap.get(name);
 
-    if (isStatic) {
+    if (isStatic && !isMethod) {
       return t.callExpression(
         file.addHelper("classStaticPrivateFieldSpecGet"),
         [this.receiver(member), t.cloneNode(classRef), t.cloneNode(id)],
@@ -152,7 +152,7 @@ const privateNameHandlerSpec = {
       name,
     );
 
-    if (isStatic) {
+    if (isStatic && !isMethod) {
       return t.callExpression(
         file.addHelper("classStaticPrivateFieldSpecSet"),
         [this.receiver(member), t.cloneNode(classRef), t.cloneNode(id), value],
