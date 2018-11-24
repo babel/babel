@@ -11,3 +11,5 @@ class Foo {
 }
 
 new Foo();
+// check for private method function object equality
+new Foo();
