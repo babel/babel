@@ -257,6 +257,19 @@ function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
   `;
 }
 
+function buildPrivateMethodInitLoose(ref, prop, privateNamesMap) {
+  const { methodId, id } = privateNamesMap.get(prop.node.key.id.name);
+
+  return template.statement.ast`
+    Object.defineProperty(${ref}, ${id}, {
+      // configurable is false by default
+      // enumerable is false by default
+      writable: false,
+      value: ${methodId.name}
+    });
+  `;
+}
+
 function buildPrivateInstanceMethodInitSpec(ref, prop, privateNamesMap) {
   const { id } = privateNamesMap.get(prop.node.key.id.name);
 
@@ -348,6 +361,17 @@ export function buildFieldsInitNodes(
         );
         break;
       case !isStatic && isPrivateMethod && loose:
+        instanceNodes.push(
+          buildPrivateMethodInitLoose(
+            t.thisExpression(),
+            prop,
+            privateNamesMap,
+          ),
+        );
+        staticNodes.push(
+          buildPrivateInstanceMethodDeclaration(prop, privateNamesMap),
+        );
+        break;
       case !isStatic && isPrivateMethod && !loose:
         instanceNodes.push(
           buildPrivateInstanceMethodInitSpec(
