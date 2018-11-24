@@ -67,17 +67,6 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
-  // Convenience method to parse an Expression only
-  getExpression(): N.Expression {
-    this.nextToken();
-    const expr = this.parseExpression();
-    if (!this.match(tt.eof)) {
-      this.unexpected();
-    }
-    expr.comments = this.state.comments;
-    return expr;
-  }
-
   // ### Expression parsing
 
   // These nest, from the most general expression type at the top to

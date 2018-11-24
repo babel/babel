@@ -1,10 +1,11 @@
 // @flow
 
 import type { Options } from "../options";
-import type { File, JSXOpeningElement } from "../types";
+import type { File, Expression, JSXOpeningElement } from "../types";
 import type { PluginList } from "../plugin-utils";
 import { getOptions } from "../options";
 import StatementParser from "./statement";
+import { types as tt } from "../tokenizer/types";
 
 export type PluginsMap = {
   [key: string]: { [option: string]: any },
@@ -32,6 +33,17 @@ export default class Parser extends StatementParser {
     const program = this.startNode();
     this.nextToken();
     return this.parseTopLevel(file, program);
+  }
+
+  // Convenience method to parse an Expression only
+  getExpression(): Expression {
+    this.nextToken();
+    const expr = this.parseExpression();
+    if (!this.match(tt.eof)) {
+      this.unexpected();
+    }
+    expr.comments = this.state.comments;
+    return expr;
   }
 }
 
