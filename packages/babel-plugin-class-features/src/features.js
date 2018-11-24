@@ -44,11 +44,18 @@ export function verifyUsedFeatures(path, file) {
       "@babel/plugin-class-features doesn't support decorators yet.",
     );
   }
+
   if (
     path.isClassPrivateMethod() &&
     !hasFeature(file, FEATURES.privateMethods)
   ) {
     throw path.buildCodeFrameError("Class private methods are not enabled.");
+  }
+
+  if (path.isClassPrivateMethod() && path.node.static) {
+    throw new Error(
+      "@babel/plugin-class-features doesn't support class static private methods yet.",
+    );
   }
 
   if (hasDecorators(path) && !hasFeature(file, FEATURES.decorators)) {
