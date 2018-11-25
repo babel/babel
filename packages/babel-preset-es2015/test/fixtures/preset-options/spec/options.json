@@ -1,8 +1,0 @@
-{
-  "presets": [
-    ["es2015", { "spec": true }]
-  ],
-  "plugins": [
-    "external-helpers"
-  ]
-}

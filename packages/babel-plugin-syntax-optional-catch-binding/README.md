@@ -1,52 +1,19 @@
-# babel-plugin-syntax-optional-catch-binding
+# @babel/plugin-syntax-optional-catch-binding
 
-> This plugin allows Babel to parse optional catch bindings.
+> Allow parsing of optional catch bindings
 
-## Example
+See our website [@babel/plugin-syntax-optional-catch-binding](https://babeljs.io/docs/en/next/babel-plugin-syntax-optional-catch-binding.html) for more information.
 
-**Syntax**
+## Install
 
-```javascript
-try {
-  throw 0;
-} catch {
-  doSomethingWhichDoesntCareAboutTheValueThrown();
-  console.log("Yay, code executes!");
-}
-```
-
-## Installation
+Using npm:
 
 ```sh
-npm install --save-dev babel-plugin-syntax-optional-catch-binding
+npm install --save-dev @babel/plugin-syntax-optional-catch-binding
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["syntax-optional-catch-binding"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins syntax-optional-catch-binding script.js
+yarn add @babel/plugin-syntax-optional-catch-binding --dev
 ```
-
-### Via Node API
-
-```javascript
-require("babel-core").transform("code", {
-  plugins: ["syntax-optional-catch-binding"]
-});
-```
-
-## References
-
-* [Proposal: Optional Catch Binding for ECMAScript](https://github.com/babel/proposals/issues/7)

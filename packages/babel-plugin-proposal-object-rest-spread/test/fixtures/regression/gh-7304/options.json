@@ -1,0 +1,15 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "shippedProposals": true,
+        "targets": {
+          "node": 8
+        },
+        "useBuiltIns": "usage"
+      }
+    ]
+  ],
+  "plugins": ["external-helpers"]
+}

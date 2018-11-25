@@ -1,12 +1,11 @@
 {
   "version": 3,
-  "file": "source-maps/full/expected.js",
-  "sources": ["source-maps/full/actual.js"],
+  "sources": ["source-maps/full/input.js"],
   "names": [
     "arr",
     "map",
     "x"
   ],
-  "mappings": "AAAAA,IAAIC,GAAJ,CAAQ;AAAA,SAAKC,IAAIA,CAAT;AAAA,CAAR",
+  "mappings": "AAAAA,GAAG,CAACC,GAAJ,CAAQ,UAAAC,CAAC;AAAA,SAAIA,CAAC,GAAGA,CAAR;AAAA,CAAT",
   "sourcesContent": ["arr.map(x => x * x);"]
 }

@@ -1,6 +1,10 @@
-import syntaxFlow from "babel-plugin-syntax-flow";
+import { declare } from "@babel/helper-plugin-utils";
+import syntaxFlow from "@babel/plugin-syntax-flow";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default declare(api => {
+  api.assertVersion(7);
+
   function wrapInFlowComment(path, parent) {
     let attach = path.getPrevSibling();
     let where = "trailing";
@@ -23,6 +27,7 @@ export default function({ types: t }) {
   }
 
   return {
+    name: "transform-flow-comments",
     inherits: syntaxFlow,
 
     visitor: {
@@ -142,4 +147,4 @@ export default function({ types: t }) {
       },
     },
   };
-}
+});

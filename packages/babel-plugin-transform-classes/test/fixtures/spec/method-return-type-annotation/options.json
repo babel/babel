@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "external-helpers",
+    "transform-function-name",
+    "transform-classes",
+    "transform-spread",
+    "transform-block-scoping",
+    "syntax-flow"
+  ]
+}

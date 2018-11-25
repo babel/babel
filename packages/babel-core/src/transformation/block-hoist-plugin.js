@@ -9,10 +9,11 @@ let LOADED_PLUGIN: Plugin | void;
 export default function loadBlockHoistPlugin(): Plugin {
   if (!LOADED_PLUGIN) {
     // Lazy-init the internal plugin to remove the init-time circular
-    // dependency between plugins being passed babel-core's export object,
+    // dependency between plugins being passed @babel/core's export object,
     // which loads this file, and this 'loadConfig' loading plugins.
     const config = loadConfig({
       babelrc: false,
+      configFile: false,
       plugins: [blockHoistPlugin],
     });
     LOADED_PLUGIN = config ? config.passes[0][0] : undefined;

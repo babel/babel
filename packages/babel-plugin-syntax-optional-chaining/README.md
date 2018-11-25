@@ -1,35 +1,19 @@
-# babel-plugin-syntax-optional-chaining
+# @babel/plugin-syntax-optional-chaining
 
-Allow parsing of optional properties.
+> Allow parsing of optional properties
 
-## Installation
+See our website [@babel/plugin-syntax-optional-chaining](https://babeljs.io/docs/en/next/babel-plugin-syntax-optional-chaining.html) for more information.
 
-```sh
-npm install --save-dev babel-plugin-syntax-optional-chaining
-```
+## Install
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["syntax-optional-chaining"]
-}
-```
-
-### Via CLI
+Using npm:
 
 ```sh
-babel --plugins syntax-optional-chaining script.js
+npm install --save-dev @babel/plugin-syntax-optional-chaining
 ```
 
-### Via Node API
+or using yarn:
 
-```javascript
-require("babel-core").transform("code", {
-  plugins: ["syntax-optional-chaining"]
-});
+```sh
+yarn add @babel/plugin-syntax-optional-chaining --dev
 ```

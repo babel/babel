@@ -1,1 +1,1 @@
-foo.json doesn't exist
+foo.json does not exist

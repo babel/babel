@@ -1,6 +1,6 @@
 import { basename, extname } from "path";
 
-import * as t from "babel-types";
+import splitExportDeclaration from "@babel/helper-split-export-declaration";
 
 export type ModuleMetadata = {
   exportName: string,
@@ -86,7 +86,12 @@ export function isSideEffectImport(source: SourceModuleMetadata) {
 export default function normalizeModuleAndLoadMetadata(
   programPath: NodePath,
   exportName?: string,
-  { noInterop = false } = {},
+  {
+    noInterop = false,
+    loose = false,
+    lazy = false,
+    esNamespaceOnly = false,
+  } = {},
 ): ModuleMetadata {
   if (!exportName) {
     exportName = programPath.scope.generateUidIdentifier("exports").name;
@@ -94,7 +99,7 @@ export default function normalizeModuleAndLoadMetadata(
 
   nameAnonymousExports(programPath);
 
-  const { local, source } = getModuleMetadata(programPath);
+  const { local, source } = getModuleMetadata(programPath, { loose, lazy });
 
   removeModuleDeclarations(programPath);
 
@@ -107,6 +112,16 @@ export default function normalizeModuleAndLoadMetadata(
     }
 
     if (noInterop) metadata.interop = "none";
+    else if (esNamespaceOnly) {
+      // Both the default and namespace interops pass through __esModule
+      // objects, but the namespace interop is used to enable Babel's
+      // destructuring-like interop behavior for normal CommonJS.
+      // Since some tooling has started to remove that behavior, we expose
+      // it as the `esNamespace` option.
+      if (metadata.interop === "namespace") {
+        metadata.interop = "default";
+      }
+    }
   }
 
   return {
@@ -120,8 +135,11 @@ export default function normalizeModuleAndLoadMetadata(
 /**
  * Get metadata about the imports and exports present in this module.
  */
-function getModuleMetadata(programPath: NodePath) {
-  const localData = getLocalExportMetadata(programPath);
+function getModuleMetadata(
+  programPath: NodePath,
+  { loose, lazy }: { loose: boolean, lazy: boolean },
+) {
+  const localData = getLocalExportMetadata(programPath, loose);
 
   const sourceData = new Map();
   const getData = sourceNode => {
@@ -146,6 +164,8 @@ function getModuleMetadata(programPath: NodePath) {
         reexports: new Map(),
         reexportNamespace: new Set(),
         reexportAll: null,
+
+        lazy: false,
       };
       sourceData.set(source, data);
     }
@@ -226,12 +246,18 @@ function getModuleMetadata(programPath: NodePath) {
   });
 
   for (const metadata of sourceData.values()) {
-    if (metadata.importsNamespace.size > 0) {
-      metadata.interop = "namespace";
-      continue;
-    }
     let needsDefault = false;
     let needsNamed = false;
+
+    if (metadata.importsNamespace.size > 0) {
+      needsDefault = true;
+      needsNamed = true;
+    }
+
+    if (metadata.reexportAll) {
+      needsNamed = true;
+    }
+
     for (const importName of metadata.imports.values()) {
       if (importName === "default") needsDefault = true;
       else needsNamed = true;
@@ -249,6 +275,25 @@ function getModuleMetadata(programPath: NodePath) {
     }
   }
 
+  for (const [source, metadata] of sourceData) {
+    if (
+      lazy !== false &&
+      !(isSideEffectImport(metadata) || metadata.reexportAll)
+    ) {
+      if (lazy === true) {
+        // 'true' means that local relative files are eagerly loaded and
+        // dependency modules are loaded lazily.
+        metadata.lazy = !/\./.test(source);
+      } else if (Array.isArray(lazy)) {
+        metadata.lazy = lazy.indexOf(source);
+      } else if (typeof lazy === "function") {
+        metadata.lazy = lazy(source);
+      } else {
+        throw new Error(`.lazy must be a boolean, string array, or function`);
+      }
+    }
+  }
+
   return {
     local: localData,
     source: sourceData,
@@ -260,6 +305,7 @@ function getModuleMetadata(programPath: NodePath) {
  */
 function getLocalExportMetadata(
   programPath: NodePath,
+  loose: boolean,
 ): Map<string, LocalExportMetadata> {
   const bindingKindLookup = new Map();
 
@@ -269,8 +315,19 @@ function getLocalExportMetadata(
       kind = "import";
     } else {
       if (child.isExportDefaultDeclaration()) child = child.get("declaration");
-      if (child.isExportNamedDeclaration() && child.node.declaration) {
-        child = child.get("declaration");
+      if (child.isExportNamedDeclaration()) {
+        if (child.node.declaration) {
+          child = child.get("declaration");
+        } else if (
+          loose &&
+          child.node.source &&
+          child.get("source").isStringLiteral()
+        ) {
+          child.node.specifiers.forEach(specifier => {
+            bindingKindLookup.set(specifier.local.name, "block");
+          });
+          return;
+        }
       }
 
       if (child.isFunctionDeclaration()) {
@@ -295,6 +352,7 @@ function getLocalExportMetadata(
   const getLocalMetadata = idPath => {
     const localName = idPath.node.name;
     let metadata = localMetadata.get(localName);
+
     if (!metadata) {
       const kind = bindingKindLookup.get(localName);
 
@@ -314,7 +372,7 @@ function getLocalExportMetadata(
   };
 
   programPath.get("body").forEach(child => {
-    if (child.isExportNamedDeclaration() && !child.node.source) {
+    if (child.isExportNamedDeclaration() && (loose || !child.node.source)) {
       if (child.node.declaration) {
         const declaration = child.get("declaration");
         const ids = declaration.getOuterBindingIdentifierPaths();
@@ -324,7 +382,6 @@ function getLocalExportMetadata(
               'Illegal export "__esModule".',
             );
           }
-
           getLocalMetadata(ids[name]).names.push(name);
         });
       } else {
@@ -335,7 +392,6 @@ function getLocalExportMetadata(
           if (exported.node.name === "__esModule") {
             throw exported.buildCodeFrameError('Illegal export "__esModule".');
           }
-
           getLocalMetadata(local).names.push(exported.node.name);
         });
       }
@@ -354,7 +410,6 @@ function getLocalExportMetadata(
       }
     }
   });
-
   return localMetadata;
 }
 
@@ -365,35 +420,7 @@ function nameAnonymousExports(programPath: NodePath) {
   // Name anonymous exported locals.
   programPath.get("body").forEach(child => {
     if (!child.isExportDefaultDeclaration()) return;
-
-    // export default foo;
-    const declaration = child.get("declaration");
-    if (declaration.isFunctionDeclaration()) {
-      if (!declaration.node.id) {
-        declaration.node.id = declaration.scope.generateUidIdentifier(
-          "default",
-        );
-      }
-    } else if (declaration.isClassDeclaration()) {
-      if (!declaration.node.id) {
-        declaration.node.id = declaration.scope.generateUidIdentifier(
-          "default",
-        );
-      }
-    } else {
-      const id = declaration.scope.generateUidIdentifier("default");
-      const namedDecl = t.exportNamedDeclaration(null, [
-        t.exportSpecifier(t.identifier(id.name), t.identifier("default")),
-      ]);
-      namedDecl._blockHoist = child.node._blockHoist;
-
-      const varDecl = t.variableDeclaration("var", [
-        t.variableDeclarator(id, declaration.node),
-      ]);
-      varDecl._blockHoist = child.node._blockHoist;
-
-      child.replaceWithMultiple([namedDecl, varDecl]);
-    }
+    splitExportDeclaration(child);
   });
 }
 

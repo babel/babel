@@ -2,7 +2,7 @@ import isInteger from "lodash/isInteger";
 import repeat from "lodash/repeat";
 import Buffer from "./buffer";
 import * as n from "./node";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 import * as generatorFunctions from "./generators";
 
@@ -19,13 +19,13 @@ export type Format = {
   auxiliaryCommentAfter: string,
   compact: boolean | "auto",
   minified: boolean,
-  quotes: "single" | "double",
   concise: boolean,
   indent: {
     adjustMultilineComment: boolean,
     style: string,
     base: number,
   },
+  decoratorsBeforeExport: boolean,
 };
 
 export default class Printer {
@@ -116,7 +116,10 @@ export default class Printer {
    */
 
   word(str: string): void {
-    if (this._endsWithWord) this._space();
+    // prevent concatenating words and creating // comment out of division and regex
+    if (this._endsWithWord || (this.endsWith("/") && str.indexOf("/") === 0)) {
+      this._space();
+    }
 
     this._maybeAddAuxComment();
     this._append(str);
@@ -197,6 +200,12 @@ export default class Printer {
     this._buf.removeTrailingNewline();
   }
 
+  exactSource(loc: Object, cb: () => void) {
+    this._catchUp("start", loc);
+
+    this._buf.exactSource(loc, cb);
+  }
+
   source(prop: string, loc: Object): void {
     this._catchUp(prop, loc);
 
@@ -245,15 +254,17 @@ export default class Printer {
     for (i = 0; i < str.length && str[i] === " "; i++) continue;
     if (i === str.length) return;
 
+    // Check for newline or comment.
     const cha = str[i];
-    const chaPost = str[i + 1];
-
-    // Check for newline or comment
-    if (cha === "\n" || (cha === "/" && (chaPost === "/" || chaPost === "*"))) {
-      this.token("(");
-      this.indent();
-      parenPushNewlineState.printed = true;
+    if (cha !== "\n") {
+      if (cha !== "/") return;
+      if (i + 1 === str.length) return;
+      const chaPost = str[i + 1];
+      if (chaPost !== "/" && chaPost !== "*") return;
     }
+    this.token("(");
+    this.indent();
+    parenPushNewlineState.printed = true;
   }
 
   _catchUp(prop: string, loc: Object) {

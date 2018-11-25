@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "external-helpers",
+    ["transform-modules-amd", { "noInterop": true }]
+  ]
+}

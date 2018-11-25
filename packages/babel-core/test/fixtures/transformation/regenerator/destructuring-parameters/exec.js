@@ -2,4 +2,4 @@ function* foo({ bar }) {
   return bar;
 }
 
-assert(foo({ bar: "bar" }).next().value, "bar");
+expect(foo({ bar: "bar" }).next().value).toBe("bar");

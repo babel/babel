@@ -1,1 +1,1 @@
-SyntaxError: test.js: Unexpected token, expected ; (2:10)
+SyntaxError: <CWD>/test.js: Unexpected token, expected ";" (2:10)

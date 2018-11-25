@@ -1,5 +1,5 @@
 import path from "path";
-import template from "babel-template";
+import template from "@babel/template";
 import helpers from "../../lib/helpers";
 
 function getHelperId(dir, name) {
@@ -17,7 +17,10 @@ export default function defineHelper(
     throw new Error(`The ${id} helper is already defined.`);
   }
   Object.defineProperty(helpers, id, {
-    value: template(code, { sourceType: "module" }),
+    value: {
+      minVersion: "7.0.0-beta.0",
+      ast: template.program(code),
+    },
   });
   return id;
 }

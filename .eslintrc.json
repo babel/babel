@@ -1,0 +1,38 @@
+{
+  "root": true,
+  "extends": "babel",
+  "plugins": ["local-rules", "prettier"],
+  "rules": {
+    "prettier/prettier": "error"
+  },
+  "env": {
+    "node": true
+  },
+  "overrides": [
+    {
+      "files": ["packages/*/src/**/*.js", "codemods/*/src/**/*.js"],
+      "rules": {
+        "local-rules/no-undefined-identifier": "error",
+        "local-rules/no-deprecated-clone": "error"
+      }
+    },
+    {
+      "files": [
+        "packages/*/test/**/*.js",
+        "codemods/*/test/**/*.js",
+        "packages/babel-helper-transform-fixture-test-runner/src/helpers.js",
+        "test/**/*.js"
+      ],
+      "env": {
+        "jest": true
+      }
+    },
+    {
+      "files": ["packages/babel-plugin-*/src/index.js"],
+      "excludedFiles": ["packages/babel-plugin-transform-regenerator/**/*.js"],
+      "rules": {
+        "local-rules/plugin-name": "error"
+      }
+    }
+  ]
+}

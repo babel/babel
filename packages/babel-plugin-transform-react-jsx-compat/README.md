@@ -1,55 +1,19 @@
-# babel-plugin-transform-react-jsx-compat
+# @babel/plugin-transform-react-jsx-compat
 
 > Turn JSX into React Pre-0.12 function calls
 
-## Example
+See our website [@babel/plugin-transform-react-jsx-compat](https://babeljs.io/docs/en/next/babel-plugin-transform-react-jsx-compat.html) for more information.
 
-**In**
+## Install
 
-```javascript
-var profile = <div>
-  <img src="avatar.png" class="profile" />
-  <h3>{[user.firstName, user.lastName].join(' ')}</h3>
-</div>;
-```
-
-**Out**
-
-```javascript
-var profile = React.DOM.div(null,
-  React.DOM.img({ src: "avatar.png", "class": "profile" }),
-  React.DOM.h3(null, [user.firstName, user.lastName].join(" "))
-);
-```
-
-## Installation
+Using npm:
 
 ```sh
-npm install --save-dev babel-plugin-transform-react-jsx-compat
+npm install --save-dev @babel/plugin-transform-react-jsx-compat
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["transform-react-jsx-compat"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins transform-react-jsx-compat script.js
-```
-
-### Via Node API
-
-```javascript
-require("babel-core").transform("code", {
-  plugins: ["transform-react-jsx-compat"]
-});
+yarn add @babel/plugin-transform-react-jsx-compat --dev
 ```

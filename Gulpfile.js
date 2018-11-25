@@ -3,22 +3,24 @@
 const plumber = require("gulp-plumber");
 const through = require("through2");
 const chalk = require("chalk");
-const pump = require("pump");
-const uglify = require("gulp-uglify");
-const rename = require("gulp-rename");
 const newer = require("gulp-newer");
 const babel = require("gulp-babel");
-const watch = require("gulp-watch");
+const gulpWatch = require("gulp-watch");
 const gutil = require("gulp-util");
+const filter = require("gulp-filter");
 const gulp = require("gulp");
 const path = require("path");
-const merge = require("merge-stream");
-const RootMostResolvePlugin = require("webpack-dependency-suite")
-  .RootMostResolvePlugin;
 const webpack = require("webpack");
-const webpackStream = require("webpack-stream");
+const merge = require("merge-stream");
+const rollup = require("rollup-stream");
+const source = require("vinyl-source-stream");
+const buffer = require("vinyl-buffer");
+const rollupBabel = require("rollup-plugin-babel");
+const rollupNodeResolve = require("rollup-plugin-node-resolve");
+const registerStandalonePackageTask = require("./scripts/gulp-tasks")
+  .registerStandalonePackageTask;
 
-const sources = ["codemods", "packages", "experimental"];
+const sources = ["codemods", "packages"];
 
 function swapSrcWithLib(srcPath) {
   const parts = srcPath.split(path.sep);
@@ -30,143 +32,141 @@ function getGlobFromSource(source) {
   return `./${source}/*/src/**/*.js`;
 }
 
-gulp.task("default", ["build"]);
+function getIndexFromPackage(name) {
+  return `${name}/src/index.js`;
+}
 
-gulp.task("build", function() {
+function compilationLogger(rollup) {
+  return through.obj(function(file, enc, callback) {
+    gutil.log(
+      `Compiling '${chalk.cyan(file.relative)}'${
+        rollup ? " with rollup " : ""
+      }...`
+    );
+    callback(null, file);
+  });
+}
+
+function errorsLogger() {
+  return plumber({
+    errorHandler(err) {
+      gutil.log(err.stack);
+    },
+  });
+}
+
+function rename(fn) {
+  return through.obj(function(file, enc, callback) {
+    file.path = fn(file);
+    callback(null, file);
+  });
+}
+
+function buildBabel(exclude) {
   return merge(
     sources.map(source => {
       const base = path.join(__dirname, source);
 
-      return gulp
-        .src(getGlobFromSource(source), { base: base })
-        .pipe(
-          plumber({
-            errorHandler: function(err) {
-              gutil.log(err.stack);
-            },
-          })
-        )
-        .pipe(
-          newer({
-            dest: base,
-            map: swapSrcWithLib,
-          })
-        )
-        .pipe(
-          through.obj(function(file, enc, callback) {
-            gutil.log("Compiling", "'" + chalk.cyan(file.relative) + "'...");
-            callback(null, file);
-          })
-        )
+      let stream = gulp.src(getGlobFromSource(source), { base: base });
+
+      if (exclude) {
+        const filters = exclude.map(p => `!**/${p}/**`);
+        filters.unshift("**");
+        stream = stream.pipe(filter(filters));
+      }
+
+      return stream
+        .pipe(errorsLogger())
+        .pipe(newer({ dest: base, map: swapSrcWithLib }))
+        .pipe(compilationLogger())
         .pipe(babel())
         .pipe(
-          through.obj(function(file, enc, callback) {
-            // Passing 'file.relative' because newer() above uses a relative
-            // path and this keeps it consistent.
-            file.path = path.resolve(file.base, swapSrcWithLib(file.relative));
-            callback(null, file);
-          })
+          // Passing 'file.relative' because newer() above uses a relative
+          // path and this keeps it consistent.
+          rename(file => path.resolve(file.base, swapSrcWithLib(file.relative)))
         )
         .pipe(gulp.dest(base));
     })
   );
-});
-
-gulp.task("watch", ["build"], function() {
-  watch(sources.map(getGlobFromSource), { debounceDelay: 200 }, function() {
-    gulp.start("build");
-  });
-});
-
-gulp.task("build-babel-standalone", cb => {
-  pump(
-    [
-      gulp.src(__dirname + "/packages/babel-standalone/src/index.js"),
-      webpackBuild(),
-      gulp.dest(__dirname + "/packages/babel-standalone"),
-      uglify(),
-      rename({ extname: ".min.js" }),
-      gulp.dest(__dirname + "/packages/babel-standalone"),
-    ],
-    cb
-  );
-});
-
-function webpackBuild() {
-  let version = require("./packages/babel-core/package.json").version;
-
-  // If this build is part of a pull request, include the pull request number in
-  // the version number.
-  if (process.env.CIRCLE_PR_NUMBER) {
-    version += "+pr." + process.env.CIRCLE_PR_NUMBER;
-  }
-
-  const config = {
-    module: {
-      rules: [
-        {
-          test: /\.js$/,
-          include: /node_modules/,
-          loader: "babel-loader",
-          options: {
-            // Some of the node_modules may have their own "babel" section in
-            // their project.json (or a ".babelrc" file). We need to ignore
-            // those as we're using our own Babel options.
-            babelrc: false,
-            presets: ["env"],
-          },
-        },
-        {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          loader: "babel-loader",
-          options: {
-            // Some of the node_modules may have their own "babel" section in
-            // their project.json (or a ".babelrc" file). We need to ignore
-            // those as we're using our own Babel options.
-            babelrc: false,
-            presets: ["env", "stage-0"],
-          },
-        },
-      ],
-    },
-    node: {
-      // Mock Node.js modules that Babel require()s but that we don't
-      // particularly care about.
-      fs: "empty",
-      module: "empty",
-      net: "empty",
-    },
-    output: {
-      filename: "babel.js",
-      library: "Babel",
-      libraryTarget: "umd",
-    },
-    plugins: [
-      new webpack.DefinePlugin({
-        "process.env.NODE_ENV": '"production"',
-        BABEL_VERSION: JSON.stringify(version),
-        VERSION: JSON.stringify(version),
-      }),
-      /*new webpack.NormalModuleReplacementPlugin(
-        /..\/..\/package/,
-        "../../../../src/babel-package-shim"
-      ),*/
-      new webpack.optimize.ModuleConcatenationPlugin(),
-    ],
-    resolve: {
-      plugins: [
-        // Dedupe packages that are used across multiple plugins.
-        // This replaces DedupePlugin from Webpack 1.x
-        new RootMostResolvePlugin(__dirname, true),
-      ],
-    },
-  };
-
-  return webpackStream(config, webpack);
-  // To write JSON for debugging:
-  /*return webpackStream(config, webpack, (err, stats) => {
-    require('gulp-util').log(stats.toString({colors: true}));
-    require('fs').writeFileSync('webpack-debug.json', JSON.stringify(stats.toJson()));
-  });*/
 }
+
+function buildRollup(packages) {
+  return merge(
+    packages.map(pkg => {
+      return rollup({
+        input: getIndexFromPackage(pkg),
+        format: "cjs",
+        plugins: [
+          rollupBabel({
+            envName: "babel-parser",
+          }),
+          rollupNodeResolve(),
+        ],
+      })
+        .pipe(source("index.js"))
+        .pipe(buffer())
+        .pipe(errorsLogger())
+        .pipe(compilationLogger(/* rollup */ true))
+        .pipe(gulp.dest(path.join(pkg, "lib")));
+    })
+  );
+}
+
+gulp.task("build", function() {
+  const bundles = ["packages/babel-parser"];
+
+  return merge([buildBabel(/* exclude */ bundles), buildRollup(bundles)]);
+});
+
+gulp.task("default", gulp.series("build"));
+
+gulp.task("build-no-bundle", () => buildBabel());
+
+gulp.task(
+  "watch",
+  gulp.series("build-no-bundle", function watch() {
+    gulpWatch(
+      sources.map(getGlobFromSource),
+      { debounceDelay: 200 },
+      gulp.task("build-no-bundle")
+    );
+  })
+);
+
+registerStandalonePackageTask(
+  gulp,
+  "babel",
+  "Babel",
+  path.join(__dirname, "packages"),
+  require("./packages/babel-core/package.json").version
+);
+
+const presetEnvWebpackPlugins = [
+  new webpack.NormalModuleReplacementPlugin(
+    /\.\/available-plugins/,
+    require.resolve(
+      path.join(
+        __dirname,
+        "./packages/babel-preset-env-standalone/src/available-plugins"
+      )
+    )
+  ),
+  new webpack.NormalModuleReplacementPlugin(
+    /caniuse-lite\/data\/regions\/.+/,
+    require.resolve(
+      path.join(
+        __dirname,
+        "./packages/babel-preset-env-standalone/src/caniuse-lite-regions"
+      )
+    )
+  ),
+];
+
+registerStandalonePackageTask(
+  gulp,
+  "babel-preset-env",
+  "babelPresetEnv",
+  path.join(__dirname, "packages"),
+  require("./packages/babel-preset-env/package.json").version,
+  presetEnvWebpackPlugins
+);

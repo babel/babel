@@ -1,3 +1,8 @@
 {
-  "plugins": ["syntax-function-sent", "transform-regenerator", "transform-es2015-parameters", "transform-es2015-block-scoping"]
+  "plugins": [
+    "syntax-function-sent",
+    "transform-regenerator",
+    "transform-parameters",
+    "transform-block-scoping"
+  ]
 }

@@ -101,7 +101,9 @@ function _evaluate(path, state) {
     path.get("tag").isMemberExpression()
   ) {
     const object = path.get("tag.object");
-    const { node: { name } } = object;
+    const {
+      node: { name },
+    } = object;
     const property = path.get("tag.property");
 
     if (
@@ -211,11 +213,11 @@ function _evaluate(path, state) {
   if (path.isArrayExpression()) {
     const arr = [];
     const elems: Array<NodePath> = path.get("elements");
-    for (let elem of elems) {
-      elem = elem.evaluate();
+    for (const elem of elems) {
+      const elemValue = elem.evaluate();
 
-      if (elem.confident) {
-        arr.push(elem.value);
+      if (elemValue.confident) {
+        arr.push(elemValue.value);
       } else {
         return deopt(elem, state);
       }
@@ -255,7 +257,7 @@ function _evaluate(path, state) {
   }
 
   if (path.isLogicalExpression()) {
-    // If we are confident that one side of an && is false, or the left
+    // If we are confident that the left side of an && is false, or the left
     // side of an || is true, we can be confident about the entire expression
     const wasConfident = state.confident;
     const left = evaluateCached(path.get("left"), state);
@@ -263,25 +265,17 @@ function _evaluate(path, state) {
     state.confident = wasConfident;
     const right = evaluateCached(path.get("right"), state);
     const rightConfident = state.confident;
-    state.confident = leftConfident && rightConfident;
 
     switch (node.operator) {
       case "||":
         // TODO consider having a "truthy type" that doesn't bail on
-        // left uncertainity but can still evaluate to truthy.
-        if (left && leftConfident) {
-          state.confident = true;
-          return left;
-        }
-
+        // left uncertainty but can still evaluate to truthy.
+        state.confident = leftConfident && (!!left || rightConfident);
         if (!state.confident) return;
 
         return left || right;
       case "&&":
-        if ((!left && leftConfident) || (!right && rightConfident)) {
-          state.confident = true;
-        }
-
+        state.confident = leftConfident && (!left || rightConfident);
         if (!state.confident) return;
 
         return left && right;

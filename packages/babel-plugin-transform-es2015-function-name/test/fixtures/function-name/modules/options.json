@@ -1,3 +1,0 @@
-{
-  "plugins": ["external-helpers", "transform-es2015-function-name", "transform-es2015-modules-commonjs", "transform-es2015-classes", "transform-decorators"]
-}

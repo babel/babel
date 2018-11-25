@@ -1,5 +1,5 @@
-import { react } from "babel-types";
-import * as t from "babel-types";
+import { react } from "@babel/types";
+import * as t from "@babel/types";
 
 const referenceVisitor = {
   // This visitor looks for bindings to establish a topmost scope for hoisting.
@@ -128,12 +128,6 @@ export default class PathHoister {
       }
     }
 
-    // We can't insert before/after a child of an export declaration, so move up
-    // to the declaration itself.
-    if (path.parentPath.isExportDeclaration()) {
-      path = path.parentPath;
-    }
-
     return path;
   }
 
@@ -212,10 +206,11 @@ export default class PathHoister {
 
     // generate declaration and insert it to our point
     let uid = attachTo.scope.generateUidIdentifier("ref");
+
     const declarator = t.variableDeclarator(uid, this.path.node);
 
     const insertFn = this.attachAfter ? "insertAfter" : "insertBefore";
-    attachTo[insertFn]([
+    const [attached] = attachTo[insertFn]([
       attachTo.isVariableDeclarator()
         ? declarator
         : t.variableDeclaration("var", [declarator]),
@@ -228,6 +223,10 @@ export default class PathHoister {
       uid = t.JSXExpressionContainer(uid);
     }
 
-    this.path.replaceWith(uid);
+    this.path.replaceWith(t.cloneNode(uid));
+
+    return attachTo.isVariableDeclarator()
+      ? attached.get("init")
+      : attached.get("declarations.0.init");
   }
 }

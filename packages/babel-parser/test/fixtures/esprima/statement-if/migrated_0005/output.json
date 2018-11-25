@@ -1,0 +1,129 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 24,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 7
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 24,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 7
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start": 0,
+        "end": 24,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 7
+          }
+        },
+        "test": {
+          "type": "BooleanLiteral",
+          "start": 4,
+          "end": 8,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 8
+            }
+          },
+          "value": true
+        },
+        "consequent": {
+          "type": "ExpressionStatement",
+          "start": 10,
+          "end": 18,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 10
+            },
+            "end": {
+              "line": 2,
+              "column": 1
+            }
+          },
+          "expression": {
+            "type": "CallExpression",
+            "start": 10,
+            "end": 16,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 10
+              },
+              "end": {
+                "line": 1,
+                "column": 16
+              }
+            },
+            "callee": {
+              "type": "Identifier",
+              "start": 10,
+              "end": 14,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 10
+                },
+                "end": {
+                  "line": 1,
+                  "column": 14
+                },
+                "identifierName": "that"
+              },
+              "name": "that"
+            },
+            "arguments": []
+          }
+        },
+        "alternate": {
+          "type": "EmptyStatement",
+          "start": 23,
+          "end": 24,
+          "loc": {
+            "start": {
+              "line": 2,
+              "column": 6
+            },
+            "end": {
+              "line": 2,
+              "column": 7
+            }
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

@@ -1,12 +1,12 @@
-import type Hub from "../hub";
+import type { HubInterface } from "../hub";
 import type TraversalContext from "../context";
 import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
-import invariant from "invariant";
 import traverse from "../index";
 import Scope from "../scope";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import { path as pathCache } from "../cache";
+import generator from "@babel/generator";
 
 // NodePath is split across many files.
 import * as NodePath_ancestry from "./ancestry";
@@ -24,7 +24,7 @@ import * as NodePath_comments from "./comments";
 const debug = buildDebug("babel");
 
 export default class NodePath {
-  constructor(hub: Hub, parent: Object) {
+  constructor(hub: HubInterface, parent: Object) {
     this.parent = parent;
     this.hub = hub;
     this.contexts = [];
@@ -49,7 +49,7 @@ export default class NodePath {
   }
 
   parent: Object;
-  hub: Hub;
+  hub: HubInterface;
   contexts: Array<TraversalContext>;
   data: Object;
   shouldSkip: boolean;
@@ -75,7 +75,9 @@ export default class NodePath {
       hub = parentPath.hub;
     }
 
-    invariant(parent, "To get a node path the parent needs to exist");
+    if (!parent) {
+      throw new Error("To get a node path the parent needs to exist");
+    }
 
     const targetNode = container[key];
 
@@ -119,7 +121,7 @@ export default class NodePath {
   }
 
   buildCodeFrameError(msg: string, Error: typeof Error = SyntaxError): Error {
-    return this.hub.file.buildCodeFrameError(this.node, msg, Error);
+    return this.hub.buildError(this.node, msg, Error);
   }
 
   traverse(visitor: Object, state?: any) {
@@ -146,6 +148,10 @@ export default class NodePath {
     if (!debug.enabled) return;
     debug(`${this.getPathLocation()} ${this.type}: ${message}`);
   }
+
+  toString() {
+    return generator(this.node).code;
+  }
 }
 
 Object.assign(
@@ -165,12 +171,13 @@ Object.assign(
 
 for (const type of (t.TYPES: Array<string>)) {
   const typeKey = `is${type}`;
+  const fn = t[typeKey];
   NodePath.prototype[typeKey] = function(opts) {
-    return t[typeKey](this.node, opts);
+    return fn(this.node, opts);
   };
 
   NodePath.prototype[`assert${type}`] = function(opts) {
-    if (!this[typeKey](opts)) {
+    if (!fn(this.node, opts)) {
       throw new TypeError(`Expected node path of type ${type}`);
     }
   };

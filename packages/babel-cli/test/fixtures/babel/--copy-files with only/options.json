@@ -1,8 +1,11 @@
 {
   "args": [
     "src",
-    "--out-dir", "lib",
+    "--out-dir",
+    "lib",
     "--copy-files",
-    "--only", "src/foo/*"
+    "--only",
+    "src/foo/*",
+    "--verbose"
   ]
 }

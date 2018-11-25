@@ -1,3 +1,8 @@
 {
-  "plugins": ["transform-es2015-destructuring", "transform-es2015-parameters", "transform-es2015-block-scoping", "transform-regenerator"]
+  "plugins": [
+    "transform-destructuring",
+    "transform-parameters",
+    "transform-block-scoping",
+    "transform-regenerator"
+  ]
 }

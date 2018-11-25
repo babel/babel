@@ -1,27 +1,44 @@
-import syntaxFlow from "babel-plugin-syntax-flow";
+import { declare } from "@babel/helper-plugin-utils";
+import syntaxFlow from "@babel/plugin-syntax-flow";
+import { types as t } from "@babel/core";
 
-export default function({ types: t }) {
+export default declare(api => {
+  api.assertVersion(7);
+
   const FLOW_DIRECTIVE = "@flow";
 
   let skipStrip = false;
 
   return {
+    name: "transform-flow-strip-types",
     inherits: syntaxFlow,
 
     visitor: {
-      Program(path, { file: { ast: { comments } }, opts }) {
+      Program(
+        path,
+        {
+          file: {
+            ast: { comments },
+          },
+          opts,
+        },
+      ) {
         skipStrip = false;
         let directiveFound = false;
 
-        for (const comment of (comments: Array<Object>)) {
-          if (comment.value.indexOf(FLOW_DIRECTIVE) >= 0) {
-            directiveFound = true;
+        if (comments) {
+          for (const comment of (comments: Array<Object>)) {
+            if (comment.value.indexOf(FLOW_DIRECTIVE) >= 0) {
+              directiveFound = true;
 
-            // remove flow directive
-            comment.value = comment.value.replace(FLOW_DIRECTIVE, "");
+              // remove flow directive
+              comment.value = comment.value.replace(FLOW_DIRECTIVE, "");
 
-            // remove the comment completely if it only consists of whitespace and/or stars
-            if (!comment.value.replace(/\*/g, "").trim()) comment.ignore = true;
+              // remove the comment completely if it only consists of whitespace and/or stars
+              if (!comment.value.replace(/\*/g, "").trim()) {
+                comment.ignore = true;
+              }
+            }
           }
         }
 
@@ -64,6 +81,11 @@ export default function({ types: t }) {
         if (!path.node.value) path.remove();
       },
 
+      ClassPrivateProperty(path) {
+        if (skipStrip) return;
+        path.node.typeAnnotation = null;
+      },
+
       Class(path) {
         if (skipStrip) return;
         path.node.implements = null;
@@ -104,6 +126,21 @@ export default function({ types: t }) {
         } while (t.isTypeCastExpression(node));
         path.replaceWith(node);
       },
+
+      CallExpression({ node }) {
+        if (skipStrip) return;
+        node.typeArguments = null;
+      },
+
+      OptionalCallExpression({ node }) {
+        if (skipStrip) return;
+        node.typeArguments = null;
+      },
+
+      NewExpression({ node }) {
+        if (skipStrip) return;
+        node.typeArguments = null;
+      },
     },
   };
-}
+});

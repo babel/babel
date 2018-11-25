@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 export default function simplifyAccess(path: NodePath, bindingNames) {
   path.traverse(simpleAssignmentVisitor, {
@@ -25,28 +25,51 @@ const simpleAssignmentVisitor = {
       }
 
       if (
-        path.node.prefix ||
-        (path.parentPath.isExpressionStatement() && !path.isCompletionRecord())
+        path.parentPath.isExpressionStatement() &&
+        !path.isCompletionRecord()
       ) {
         // ++i => (i += 1);
+        const operator = path.node.operator == "++" ? "+=" : "-=";
         path.replaceWith(
-          t.assignmentExpression("+=", arg.node, t.numericLiteral(1)),
+          t.assignmentExpression(operator, arg.node, t.numericLiteral(1)),
+        );
+      } else if (path.node.prefix) {
+        // ++i => (i = (+i) + 1);
+        path.replaceWith(
+          t.assignmentExpression(
+            "=",
+            t.identifier(localName),
+            t.binaryExpression(
+              path.node.operator[0],
+              t.unaryExpression("+", arg.node),
+              t.numericLiteral(1),
+            ),
+          ),
         );
       } else {
-        const varName = path.scope.generateDeclaredUidIdentifier("old");
+        const old = path.scope.generateUidIdentifierBasedOnNode(
+          arg.node,
+          "old",
+        );
+        const varName = old.name;
+        path.scope.push({ id: old });
 
-        const assignment = t.binaryExpression(
-          path.node.operator.slice(0, 1),
-          varName,
+        const binary = t.binaryExpression(
+          path.node.operator[0],
+          t.identifier(varName),
           t.numericLiteral(1),
         );
 
-        // i++ => (_tmp = i, i = _tmp + 1, _tmp)
+        // i++ => (_old = (+i), i = _old + 1, _old)
         path.replaceWith(
           t.sequenceExpression([
-            t.assignmentExpression("=", varName, arg.node),
-            t.assignmentExpression("=", arg.node, assignment),
-            varName,
+            t.assignmentExpression(
+              "=",
+              t.identifier(varName),
+              t.unaryExpression("+", arg.node),
+            ),
+            t.assignmentExpression("=", t.cloneNode(arg.node), binary),
+            t.identifier(varName),
           ]),
         );
       }
@@ -78,7 +101,7 @@ const simpleAssignmentVisitor = {
 
       path.node.right = t.binaryExpression(
         path.node.operator.slice(0, -1),
-        path.node.left,
+        t.cloneNode(path.node.left),
         path.node.right,
       );
       path.node.operator = "=";

@@ -1,3 +1,7 @@
 {
-  "plugins": ["external-helpers", "transform-es2015-modules-commonjs", "transform-async-to-generator"]
+  "plugins": [
+    "external-helpers",
+    "transform-modules-commonjs",
+    "transform-async-to-generator"
+  ]
 }

@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "external-helpers",
+    "transform-function-name",
+    ["transform-arrow-functions", { "spec": true }]
+  ]
+}

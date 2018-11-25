@@ -1,6 +1,6 @@
-import nameFunction from "babel-helper-function-name";
+import nameFunction from "@babel/helper-function-name";
 import has from "lodash/has";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 function toKind(node: Object) {
   if (t.isClassMethod(node) || t.isObjectMethod(node)) {
@@ -61,7 +61,7 @@ export function push(
     key = t.toComputedKey(node, node.key);
   }
 
-  if (t.isObjectProperty(node) || t.isClassProperty(node)) {
+  if (t.isProperty(node)) {
     value = node.value;
   } else if (t.isObjectMethod(node) || t.isClassMethod(node)) {
     value = t.functionExpression(
@@ -131,15 +131,12 @@ export function toClassObject(mutatorMap: Object): Object {
     const propNode = t.objectProperty(map._key, mapNode, map._computed);
 
     Object.keys(map).forEach(function(key) {
-      let node = map[key];
+      const node = map[key];
       if (key[0] === "_") return;
 
-      const inheritNode = node;
-      if (t.isClassMethod(node) || t.isClassProperty(node)) node = node.value;
-
       const prop = t.objectProperty(t.identifier(key), node);
-      t.inheritsComments(prop, inheritNode);
-      t.removeComments(inheritNode);
+      t.inheritsComments(prop, node);
+      t.removeComments(node);
 
       mapNode.properties.push(prop);
     });

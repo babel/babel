@@ -1,0 +1,4 @@
+{
+  "presets": [["../../../../lib"]],
+  "throws": "\"one\" is read-only"
+}

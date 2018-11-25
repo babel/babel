@@ -1,6 +1,5 @@
-/* eslint max-len: "off" */
-
-import * as t from "../index";
+// @flow
+import isValidIdentifier from "../validators/isValidIdentifier";
 
 import {
   BINARY_OPERATORS,
@@ -16,7 +15,7 @@ import defineType, {
   assertEach,
   chain,
   assertOneOf,
-} from "./index";
+} from "./utils";
 
 defineType("ArrayExpression", {
   fields: {
@@ -66,6 +65,15 @@ defineType("BinaryExpression", {
   },
   visitor: ["left", "right"],
   aliases: ["Binary", "Expression"],
+});
+
+defineType("InterpreterDirective", {
+  builder: ["value"],
+  fields: {
+    value: {
+      validate: assertValueType("string"),
+    },
+  },
 });
 
 defineType("Directive", {
@@ -119,7 +127,7 @@ defineType("BreakStatement", {
 });
 
 defineType("CallExpression", {
-  visitor: ["callee", "arguments", "typeParameters"],
+  visitor: ["callee", "arguments", "typeParameters", "typeArguments"],
   builder: ["callee", "arguments"],
   aliases: ["Expression"],
   fields: {
@@ -129,15 +137,21 @@ defineType("CallExpression", {
     arguments: {
       validate: chain(
         assertValueType("array"),
-        assertEach(assertNodeType("Expression", "SpreadElement")),
+        assertEach(
+          assertNodeType("Expression", "SpreadElement", "JSXNamespacedName"),
+        ),
       ),
     },
     optional: {
       validate: assertOneOf(true, false),
       optional: true,
     },
-    typeParameters: {
+    typeArguments: {
       validate: assertNodeType("TypeParameterInstantiation"),
+      optional: true,
+    },
+    typeParameters: {
+      validate: assertNodeType("TSTypeParameterInstantiation"),
       optional: true,
     },
   },
@@ -285,12 +299,19 @@ export const functionCommon = {
     validate: assertValueType("boolean"),
     default: false,
   },
+};
+
+export const functionTypeAnnotationCommon = {
   returnType: {
     validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
     optional: true,
   },
   typeParameters: {
-    validate: assertNodeType("TypeParameterDeclaration", "Noop"),
+    validate: assertNodeType(
+      "TypeParameterDeclaration",
+      "TSTypeParameterDeclaration",
+      "Noop",
+    ),
     optional: true,
   },
 };
@@ -312,6 +333,7 @@ defineType("FunctionDeclaration", {
   visitor: ["id", "params", "body", "returnType", "typeParameters"],
   fields: {
     ...functionDeclarationCommon,
+    ...functionTypeAnnotationCommon,
     body: {
       validate: assertNodeType("BlockStatement"),
     },
@@ -339,6 +361,7 @@ defineType("FunctionExpression", {
   ],
   fields: {
     ...functionCommon,
+    ...functionTypeAnnotationCommon,
     id: {
       validate: assertNodeType("Identifier"),
       optional: true,
@@ -351,7 +374,7 @@ defineType("FunctionExpression", {
 
 export const patternLikeCommon = {
   typeAnnotation: {
-    // TODO: babel-plugin-transform-flow-comments puts a Noop here, is there a better way?
+    // TODO: @babel/plugin-transform-flow-comments puts a Noop here, is there a better way?
     validate: assertNodeType("TypeAnnotation", "TSTypeAnnotation", "Noop"),
     optional: true,
   },
@@ -370,11 +393,11 @@ defineType("Identifier", {
   fields: {
     ...patternLikeCommon,
     name: {
-      validate(node, key, val) {
-        if (!t.isValidIdentifier(val)) {
+      validate: chain(function(node, key, val) {
+        if (!isValidIdentifier(val)) {
           // throw new TypeError(`"${val}" is not a valid identifer name`);
         }
-      },
+      }, assertValueType("string")),
     },
     optional: {
       validate: assertValueType("boolean"),
@@ -490,7 +513,7 @@ defineType("MemberExpression", {
     },
     property: {
       validate: (function() {
-        const normal = assertNodeType("Identifier");
+        const normal = assertNodeType("Identifier", "PrivateName");
         const computed = assertNodeType("Expression");
 
         return function(node, key, val) {
@@ -512,8 +535,10 @@ defineType("MemberExpression", {
 defineType("NewExpression", { inherits: "CallExpression" });
 
 defineType("Program", {
+  // Note: We explicitly leave 'interpreter' out here because it is
+  // conceptually comment-like, and Babel does not traverse comments either.
   visitor: ["directives", "body"],
-  builder: ["body", "directives", "sourceType"],
+  builder: ["body", "directives", "sourceType", "interpreter"],
   fields: {
     sourceFile: {
       validate: assertValueType("string"),
@@ -521,6 +546,11 @@ defineType("Program", {
     sourceType: {
       validate: assertOneOf("script", "module"),
       default: "script",
+    },
+    interpreter: {
+      validate: assertNodeType("InterpreterDirective"),
+      default: null,
+      optional: true,
     },
     directives: {
       validate: chain(
@@ -558,6 +588,7 @@ defineType("ObjectMethod", {
   builder: ["kind", "key", "params", "body", "computed"],
   fields: {
     ...functionCommon,
+    ...functionTypeAnnotationCommon,
     kind: {
       validate: chain(
         assertValueType("string"),
@@ -660,6 +691,7 @@ defineType("RestElement", {
   visitor: ["argument", "typeAnnotation"],
   builder: ["argument"],
   aliases: ["LVal", "PatternLike"],
+  deprecatedAlias: "RestProperty",
   fields: {
     ...patternLikeCommon,
     argument: {
@@ -821,6 +853,10 @@ defineType("VariableDeclarator", {
     id: {
       validate: assertNodeType("LVal"),
     },
+    definite: {
+      optional: true,
+      validate: assertValueType("boolean"),
+    },
     init: {
       optional: true,
       validate: assertNodeType("Expression"),
@@ -846,7 +882,7 @@ defineType("WithStatement", {
   aliases: ["Statement"],
   fields: {
     object: {
-      object: assertNodeType("Expression"),
+      validate: assertNodeType("Expression"),
     },
     body: {
       validate: assertNodeType("BlockStatement", "Statement"),

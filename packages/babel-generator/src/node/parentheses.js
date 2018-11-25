@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 const PRECEDENCE = {
   "||": 0,
@@ -27,6 +27,10 @@ const PRECEDENCE = {
   "**": 10,
 };
 
+const isClassExtendsClause = (node: Object, parent: Object): boolean =>
+  (t.isClassDeclaration(parent) || t.isClassExpression(parent)) &&
+  parent.superClass === node;
+
 export function NullableTypeAnnotation(node: Object, parent: Object): boolean {
   return t.isArrayTypeAnnotation(parent);
 }
@@ -34,8 +38,15 @@ export function NullableTypeAnnotation(node: Object, parent: Object): boolean {
 export { NullableTypeAnnotation as FunctionTypeAnnotation };
 
 export function UpdateExpression(node: Object, parent: Object): boolean {
-  // (foo++).test()
-  return t.isMemberExpression(parent) && parent.object === node;
+  return (
+    // (foo++).test(), (foo++)[0]
+    t.isMemberExpression(parent, { object: node }) ||
+    // (foo++)()
+    t.isCallExpression(parent, { callee: node }) ||
+    // new (foo++)()
+    t.isNewExpression(parent, { callee: node }) ||
+    isClassExtendsClause(node, parent)
+  );
 }
 
 export function ObjectExpression(
@@ -60,6 +71,10 @@ export function Binary(node: Object, parent: Object): boolean {
     t.isBinaryExpression(parent, { operator: "**" })
   ) {
     return parent.left === node;
+  }
+
+  if (isClassExtendsClause(node, parent)) {
+    return true;
   }
 
   if (
@@ -151,7 +166,8 @@ export function YieldExpression(node: Object, parent: Object): boolean {
     t.isCallExpression(parent) ||
     t.isMemberExpression(parent) ||
     t.isNewExpression(parent) ||
-    (t.isConditionalExpression(parent) && node === parent.test)
+    (t.isConditionalExpression(parent) && node === parent.test) ||
+    isClassExtendsClause(node, parent)
   );
 }
 
@@ -170,7 +186,8 @@ export function UnaryLike(node: Object, parent: Object): boolean {
     t.isMemberExpression(parent, { object: node }) ||
     t.isCallExpression(parent, { callee: node }) ||
     t.isNewExpression(parent, { callee: node }) ||
-    t.isBinaryExpression(parent, { operator: "**", left: node })
+    t.isBinaryExpression(parent, { operator: "**", left: node }) ||
+    isClassExtendsClause(node, parent)
   );
 }
 
@@ -192,6 +209,7 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
     t.isBinary(parent) ||
     t.isConditionalExpression(parent, { test: node }) ||
     t.isAwaitExpression(parent) ||
+    t.isOptionalMemberExpression(parent) ||
     t.isTaggedTemplateExpression(parent) ||
     t.isTSTypeAssertion(parent) ||
     t.isTSAsExpression(parent)
@@ -202,12 +220,23 @@ export function ConditionalExpression(node: Object, parent: Object): boolean {
   return UnaryLike(node, parent);
 }
 
+export function OptionalMemberExpression(
+  node: Object,
+  parent: Object,
+): boolean {
+  return t.isCallExpression(parent) || t.isMemberExpression(parent);
+}
+
 export function AssignmentExpression(node: Object): boolean {
   if (t.isObjectPattern(node.left)) {
     return true;
   } else {
     return ConditionalExpression(...arguments);
   }
+}
+
+export function NewExpression(node: Object, parent: Object): boolean {
+  return isClassExtendsClause(node, parent);
 }
 
 // Walk up the print stack to determine if our node can come first

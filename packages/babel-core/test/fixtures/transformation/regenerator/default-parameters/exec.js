@@ -2,5 +2,5 @@ function* foo(bar = "bar") {
   return bar;
 }
 
-assert.deepEqual(foo().next().value, "bar");
-assert.deepEqual(foo("foo").next().value, "foo");
+expect(foo().next().value).toBe("bar");
+expect(foo("foo").next().value).toBe("foo");

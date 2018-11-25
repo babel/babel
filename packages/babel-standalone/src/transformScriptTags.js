@@ -40,8 +40,8 @@ function buildBabelOptions(script) {
   return {
     presets: script.presets || ["react", "es2015"],
     plugins: script.plugins || [
-      "transform-class-properties",
-      "transform-object-rest-spread",
+      "proposal-class-properties",
+      "proposal-object-rest-spread",
       "transform-flow-strip-types",
     ],
     sourceMaps: "inline",
@@ -161,7 +161,7 @@ function loadScripts(transformFn, scripts) {
         ...scriptData,
         content: script.innerHTML,
         loaded: true,
-        url: null,
+        url: script.getAttribute("data-module") || null,
       };
     }
   });

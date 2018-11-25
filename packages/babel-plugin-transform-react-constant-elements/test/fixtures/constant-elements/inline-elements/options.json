@@ -1,3 +1,7 @@
 {
-  "plugins": ["transform-react-constant-elements", "transform-react-inline-elements", "syntax-jsx"]
+  "plugins": [
+    "transform-react-constant-elements",
+    "transform-react-inline-elements",
+    "syntax-jsx"
+  ]
 }

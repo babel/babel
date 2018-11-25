@@ -1,8 +1,0 @@
-{
-  "plugins": [
-    ["../../../../lib/use-built-ins-entry-plugin", {
-      "regenerator": true,
-      "polyfills": []
-    }]
-  ]
-}

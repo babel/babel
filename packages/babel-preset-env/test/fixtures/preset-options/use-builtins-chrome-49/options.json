@@ -1,0 +1,14 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "targets": {
+          "chrome": 49
+        },
+        "modules": false,
+        "useBuiltIns": "entry"
+      }
+    ]
+  ]
+}

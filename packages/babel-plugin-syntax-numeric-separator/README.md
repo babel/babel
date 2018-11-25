@@ -1,36 +1,19 @@
-# babel-plugin-syntax-numeric-separator
+# @babel/plugin-syntax-numeric-separator
 
-> Allow parsing of Numeric Literals (Decimal, Binary, Hex and Octal) that contain a _NumericLiteralSeparator_.
+> Allow parsing of Decimal, Binary, Hex and Octal literals that contain a Numeric Literal Separator
 
+See our website [@babel/plugin-syntax-numeric-separator](https://babeljs.io/docs/en/next/babel-plugin-syntax-numeric-separator.html) for more information.
 
-## Installation
+## Install
 
-```sh
-npm install --save-dev babel-plugin-syntax-numeric-separator
-```
-
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["syntax-numeric-separator"]
-}
-```
-
-### Via CLI
+Using npm:
 
 ```sh
-babel --plugins syntax-numeric-separator script.js
+npm install --save-dev @babel/plugin-syntax-numeric-separator
 ```
 
-### Via Node API
+or using yarn:
 
-```javascript
-require("babel-core").transform("code", {
-  plugins: ["syntax-numeric-separator"]
-});
+```sh
+yarn add @babel/plugin-syntax-numeric-separator --dev
 ```

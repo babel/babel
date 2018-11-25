@@ -1,9 +1,10 @@
+// @flow
 import defineType, {
   assertNodeType,
   assertValueType,
   chain,
   assertEach,
-} from "./index";
+} from "./utils";
 
 defineType("JSXAttribute", {
   visitor: ["name", "value"],
@@ -16,6 +17,7 @@ defineType("JSXAttribute", {
       optional: true,
       validate: assertNodeType(
         "JSXElement",
+        "JSXFragment",
         "StringLiteral",
         "JSXExpressionContainer",
       ),
@@ -54,6 +56,7 @@ defineType("JSXElement", {
             "JSXExpressionContainer",
             "JSXSpreadChild",
             "JSXElement",
+            "JSXFragment",
           ),
         ),
       ),
@@ -62,7 +65,7 @@ defineType("JSXElement", {
 });
 
 defineType("JSXEmptyExpression", {
-  aliases: ["JSX", "Expression"],
+  aliases: ["JSX"],
 });
 
 defineType("JSXExpressionContainer", {
@@ -70,7 +73,7 @@ defineType("JSXExpressionContainer", {
   aliases: ["JSX", "Immutable"],
   fields: {
     expression: {
-      validate: assertNodeType("Expression"),
+      validate: assertNodeType("Expression", "JSXEmptyExpression"),
     },
   },
 });
@@ -87,7 +90,7 @@ defineType("JSXSpreadChild", {
 
 defineType("JSXIdentifier", {
   builder: ["name"],
-  aliases: ["JSX", "Expression"],
+  aliases: ["JSX"],
   fields: {
     name: {
       validate: assertValueType("string"),
@@ -97,7 +100,7 @@ defineType("JSXIdentifier", {
 
 defineType("JSXMemberExpression", {
   visitor: ["object", "property"],
-  aliases: ["JSX", "Expression"],
+  aliases: ["JSX"],
   fields: {
     object: {
       validate: assertNodeType("JSXMemberExpression", "JSXIdentifier"),
@@ -139,6 +142,13 @@ defineType("JSXOpeningElement", {
         assertEach(assertNodeType("JSXAttribute", "JSXSpreadAttribute")),
       ),
     },
+    typeParameters: {
+      validate: assertNodeType(
+        "TypeParameterInstantiation",
+        "TSTypeParameterInstantiation",
+      ),
+      optional: true,
+    },
   },
 });
 
@@ -160,4 +170,40 @@ defineType("JSXText", {
       validate: assertValueType("string"),
     },
   },
+});
+
+defineType("JSXFragment", {
+  builder: ["openingFragment", "closingFragment", "children"],
+  visitor: ["openingFragment", "children", "closingFragment"],
+  aliases: ["JSX", "Immutable", "Expression"],
+  fields: {
+    openingFragment: {
+      validate: assertNodeType("JSXOpeningFragment"),
+    },
+    closingFragment: {
+      validate: assertNodeType("JSXClosingFragment"),
+    },
+    children: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(
+          assertNodeType(
+            "JSXText",
+            "JSXExpressionContainer",
+            "JSXSpreadChild",
+            "JSXElement",
+            "JSXFragment",
+          ),
+        ),
+      ),
+    },
+  },
+});
+
+defineType("JSXOpeningFragment", {
+  aliases: ["JSX", "Immutable"],
+});
+
+defineType("JSXClosingFragment", {
+  aliases: ["JSX", "Immutable"],
 });

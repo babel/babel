@@ -1,4 +1,0 @@
-# Ensure babel-register won't compile fixtures, or try to recompile compiled code.
-packages/*/test/fixtures
-packages/*/lib
-packages/babel-standalone/babel.js

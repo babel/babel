@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 export function WithStatement(node: Object) {
   this.word("with");
@@ -290,6 +290,7 @@ export function VariableDeclaration(node: Object, parent: Object) {
 
 export function VariableDeclarator(node: Object) {
   this.print(node.id, node);
+  if (node.definite) this.token("!"); // TS
   this.print(node.id.typeAnnotation, node);
   if (node.init) {
     this.space();

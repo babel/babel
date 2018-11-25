@@ -19,7 +19,6 @@ export default class SourceMap {
   get() {
     if (!this._cachedMap) {
       const map = (this._cachedMap = new sourceMap.SourceMapGenerator({
-        file: this._opts.sourceMapTarget,
         sourceRoot: this._opts.sourceRoot,
       }));
 
@@ -54,6 +53,7 @@ export default class SourceMap {
     column: number,
     identifierName: ?string,
     filename: ?string,
+    force?: boolean,
   ) {
     // Adding an empty mapping at the start of a generated line just clutters the map.
     if (this._lastGenLine !== generatedLine && line === null) return;
@@ -61,6 +61,7 @@ export default class SourceMap {
     // If this mapping points to the same source location as the last one, we can ignore it since
     // the previous one covers it.
     if (
+      !force &&
       this._lastGenLine === generatedLine &&
       this._lastSourceLine === line &&
       this._lastSourceColumn === column

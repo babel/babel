@@ -1,34 +1,37 @@
 {
-  "lerna": "2.0.0-rc.4",
-  "version": "7.0.0-beta.2",
+  "lerna": "2.11.0",
+  "version": "7.1.6",
   "changelog": {
     "repo": "babel/babel",
+    "cacheDir": ".changelog",
     "labels": {
-      "Tag: Spec Compliancy": ":eyeglasses: Spec Compliancy",
-      "Tag: Breaking Change": ":boom: Breaking Change",
-      "Tag: New Feature": ":rocket: New Feature",
-      "Tag: Bug Fix": ":bug: Bug Fix",
-      "Tag: Polish": ":nail_care: Polish",
-      "Tag: Docs": ":memo: Documentation",
-      "Tag: Internal": ":house: Internal"
+      "PR: Spec Compliancy :eyeglasses:": ":eyeglasses: Spec Compliancy",
+      "PR: Breaking Change :boom:": ":boom: Breaking Change",
+      "PR: New Feature :rocket:": ":rocket: New Feature",
+      "PR: Bug Fix :bug:": ":bug: Bug Fix",
+      "PR: Polish :nail_care:": ":nail_care: Polish",
+      "PR: Docs :memo:": ":memo: Documentation",
+      "PR: Internal :house:": ":house: Internal"
     }
   },
-  "cacheDir": ".changelog",
   "commands": {
     "publish": {
       "ignore": [
         "*.md",
+        "*.json",
+        "*.txt",
         "test/**",
         "codemods/**",
-        "experimental/**"
+        "package.json"
       ]
     }
   },
   "packages": [
     "packages/*",
-    "codemods/*",
-    "experimental/*"
+    "codemods/*"
   ],
   "npmClient": "yarn",
-  "npmClientArgs": ["--no-lockfile"]
+  "npmClientArgs": [
+    "--no-lockfile"
+  ]
 }

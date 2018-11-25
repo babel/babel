@@ -7,6 +7,13 @@
 'use strict';
 
 exports.__esModule = true;
-exports.default = {
-  plugins: [require('../../../../../babel-plugin-syntax-decorators')]
+module.exports = function() {
+  return {
+    plugins: [
+      [
+        require('../../../../../babel-plugin-syntax-decorators'),
+        { legacy: true }
+      ],
+    ]
+  };
 };

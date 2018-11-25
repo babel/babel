@@ -1,0 +1,3 @@
+{
+  "throws": "await is not allowed in the parameters of an arrow function inside an async function (2:23)"
+}

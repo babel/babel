@@ -1,0 +1,251 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 34,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 1,
+      "column": 34
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 34,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 1,
+        "column": 34
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "VariableDeclaration",
+        "start": 0,
+        "end": 34,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 34
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 4,
+            "end": 34,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 4
+              },
+              "end": {
+                "line": 1,
+                "column": 34
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 4,
+              "end": 34,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 4
+                },
+                "end": {
+                  "line": 1,
+                  "column": 34
+                },
+                "identifierName": "a"
+              },
+              "name": "a",
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start": 5,
+                "end": 34,
+                "loc": {
+                  "start": {
+                    "line": 1,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 1,
+                    "column": 34
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "ObjectTypeAnnotation",
+                  "start": 7,
+                  "end": 34,
+                  "loc": {
+                    "start": {
+                      "line": 1,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 1,
+                      "column": 34
+                    }
+                  },
+                  "callProperties": [],
+                  "properties": [
+                    {
+                      "type": "ObjectTypeProperty",
+                      "start": 8,
+                      "end": 33,
+                      "loc": {
+                        "start": {
+                          "line": 1,
+                          "column": 8
+                        },
+                        "end": {
+                          "line": 1,
+                          "column": 33
+                        }
+                      },
+                      "key": {
+                        "type": "Identifier",
+                        "start": 8,
+                        "end": 14,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 8
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 14
+                          },
+                          "identifierName": "subObj"
+                        },
+                        "name": "subObj"
+                      },
+                      "static": false,
+                      "proto": false,
+                      "kind": "init",
+                      "method": false,
+                      "value": {
+                        "type": "NullableTypeAnnotation",
+                        "start": 16,
+                        "end": 33,
+                        "loc": {
+                          "start": {
+                            "line": 1,
+                            "column": 16
+                          },
+                          "end": {
+                            "line": 1,
+                            "column": 33
+                          }
+                        },
+                        "typeAnnotation": {
+                          "type": "ObjectTypeAnnotation",
+                          "start": 17,
+                          "end": 33,
+                          "loc": {
+                            "start": {
+                              "line": 1,
+                              "column": 17
+                            },
+                            "end": {
+                              "line": 1,
+                              "column": 33
+                            }
+                          },
+                          "callProperties": [],
+                          "properties": [
+                            {
+                              "type": "ObjectTypeProperty",
+                              "start": 18,
+                              "end": 32,
+                              "loc": {
+                                "start": {
+                                  "line": 1,
+                                  "column": 18
+                                },
+                                "end": {
+                                  "line": 1,
+                                  "column": 32
+                                }
+                              },
+                              "key": {
+                                "type": "Identifier",
+                                "start": 18,
+                                "end": 24,
+                                "loc": {
+                                  "start": {
+                                    "line": 1,
+                                    "column": 18
+                                  },
+                                  "end": {
+                                    "line": 1,
+                                    "column": 24
+                                  },
+                                  "identifierName": "strVal"
+                                },
+                                "name": "strVal"
+                              },
+                              "static": false,
+                              "proto": false,
+                              "kind": "init",
+                              "method": false,
+                              "value": {
+                                "type": "StringTypeAnnotation",
+                                "start": 26,
+                                "end": 32,
+                                "loc": {
+                                  "start": {
+                                    "line": 1,
+                                    "column": 26
+                                  },
+                                  "end": {
+                                    "line": 1,
+                                    "column": 32
+                                  }
+                                }
+                              },
+                              "variance": null,
+                              "optional": false
+                            }
+                          ],
+                          "indexers": [],
+                          "internalSlots": [],
+                          "exact": false,
+                          "inexact": false
+                        }
+                      },
+                      "variance": null,
+                      "optional": false
+                    }
+                  ],
+                  "indexers": [],
+                  "internalSlots": [],
+                  "exact": false,
+                  "inexact": false
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "var"
+      }
+    ],
+    "directives": []
+  }
+}

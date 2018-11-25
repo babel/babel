@@ -1,0 +1,11 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "loose": true,
+        "include": ["transform-typeof-symbol"]
+      }
+    ]
+  ]
+}

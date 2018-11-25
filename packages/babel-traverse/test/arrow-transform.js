@@ -1,8 +1,7 @@
 import { NodePath } from "../lib";
-import assert from "assert";
-import { parse } from "babylon";
-import generate from "babel-generator";
-import * as t from "babel-types";
+import { parse } from "@babel/parser";
+import generate from "@babel/generator";
+import * as t from "@babel/types";
 
 function assertConversion(
   input,
@@ -14,13 +13,11 @@ function assertConversion(
 
   const rootPath = NodePath.get({
     hub: {
-      file: {
-        addHelper(helperName) {
-          return t.memberExpression(
-            t.identifier("babelHelpers"),
-            t.identifier(helperName),
-          );
-        },
+      addHelper(helperName) {
+        return t.memberExpression(
+          t.identifier("babelHelpers"),
+          t.identifier(helperName),
+        );
       },
     },
     parentPath: null,
@@ -35,7 +32,7 @@ function assertConversion(
     },
   });
 
-  assert.equal(generate(inputAst).code, generate(outputAst).code);
+  expect(generate(inputAst).code).toBe(generate(outputAst).code);
 }
 
 function wrapMethod(body, methodName, extend) {

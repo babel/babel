@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    "transform-async-to-generator",
+    "proposal-async-generator-functions"
+  ],
+  "presets": ["env"],
+  "parserOpts": {
+    "allowReturnOutsideFunction": true
+  }
+}

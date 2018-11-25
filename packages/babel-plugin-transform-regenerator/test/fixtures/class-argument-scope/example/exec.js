@@ -5,4 +5,4 @@ class Test {
 }
 
 let test = new Test;
-assert.equal(test.iter().next().value, test);
+expect(test.iter().next().value).toBe(test);

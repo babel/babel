@@ -1,5 +1,19 @@
-# babel-helper-hoist-variables
+# @babel/helper-hoist-variables
 
-## Usage
+> Helper function to hoist variables
 
-TODO
+See our website [@babel/helper-hoist-variables](https://babeljs.io/docs/en/next/babel-helper-hoist-variables.html) for more information.
+
+## Install
+
+Using npm:
+
+```sh
+npm install --save-dev @babel/helper-hoist-variables
+```
+
+or using yarn:
+
+```sh
+yarn add @babel/helper-hoist-variables --dev
+```

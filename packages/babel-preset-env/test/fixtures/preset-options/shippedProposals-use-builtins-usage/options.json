@@ -1,0 +1,12 @@
+{
+  "sourceType": "module",
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "shippedProposals": true,
+        "useBuiltIns": "usage"
+      }
+    ]
+  ]
+}

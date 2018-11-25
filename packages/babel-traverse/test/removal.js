@@ -1,7 +1,6 @@
 import traverse from "../lib";
-import assert from "assert";
-import { parse } from "babylon";
-import generate from "babel-generator";
+import { parse } from "@babel/parser";
+import generate from "@babel/generator";
 
 function getPath(code) {
   const ast = parse(code);
@@ -31,11 +30,7 @@ describe("removal", function() {
       const body = path.get("body");
       body.remove();
 
-      assert.equal(
-        generateCode(rootPath),
-        "x = () => {};",
-        "body should be replaced with BlockStatement",
-      );
+      expect(generateCode(rootPath)).toBe("x = () => {};");
     });
   });
 });

@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    "transform-for-of",
+    "transform-arrow-functions",
+    "transform-destructuring",
+    "transform-block-scoping"
+  ]
+}

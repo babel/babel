@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 export function _params(node: Object) {
   this.print(node.typeParameters, node);
@@ -31,12 +31,6 @@ export function _methodHead(node: Object) {
   const kind = node.kind;
   const key = node.key;
 
-  if (kind === "method" || kind === "init") {
-    if (node.generator) {
-      this.token("*");
-    }
-  }
-
   if (kind === "get" || kind === "set") {
     this.word(kind);
     this.space();
@@ -45,6 +39,12 @@ export function _methodHead(node: Object) {
   if (node.async) {
     this.word("async");
     this.space();
+  }
+
+  if (kind === "method" || kind === "init") {
+    if (node.generator) {
+      this.token("*");
+    }
   }
 
   if (node.computed) {
@@ -111,7 +111,25 @@ export function ArrowFunctionExpression(node: Object) {
     t.isIdentifier(firstParam) &&
     !hasTypes(node, firstParam)
   ) {
-    this.print(firstParam, node);
+    if (
+      this.format.retainLines &&
+      node.loc &&
+      node.body.loc &&
+      node.loc.start.line < node.body.loc.start.line
+    ) {
+      this.token("(");
+      if (firstParam.loc && firstParam.loc.start.line > node.loc.start.line) {
+        this.indent();
+        this.print(firstParam, node);
+        this.dedent();
+        this._catchUp("start", node.body.loc);
+      } else {
+        this.print(firstParam, node);
+      }
+      this.token(")");
+    } else {
+      this.print(firstParam, node);
+    }
   } else {
     this._params(node);
   }

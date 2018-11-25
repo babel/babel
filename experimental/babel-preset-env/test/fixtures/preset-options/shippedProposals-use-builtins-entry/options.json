@@ -1,8 +1,0 @@
-{
-  "presets": [
-    ["../../../../lib", {
-      "shippedProposals": true,
-      "useBuiltIns": "entry"
-    }]
-  ]
-}

@@ -1,13 +1,11 @@
 const includes = require("lodash/includes");
 const readdir = require("fs-readdir-recursive");
-const helper = require("babel-helper-fixtures");
-const assert = require("assert");
+const helper = require("@babel/helper-fixtures");
 const rimraf = require("rimraf");
 const outputFileSync = require("output-file-sync");
 const child = require("child_process");
 const merge = require("lodash/merge");
 const path = require("path");
-const chai = require("chai");
 const fs = require("fs");
 
 const fixtureLoc = path.join(__dirname, "fixtures");
@@ -18,13 +16,13 @@ const fileFilter = function(x) {
 };
 
 const presetLocs = [
-  path.join(__dirname, "../../babel-preset-es2015"),
+  path.join(__dirname, "../../babel-preset-env"),
   path.join(__dirname, "../../babel-preset-react"),
 ].join(",");
 
 const pluginLocs = [
   path.join(__dirname, "/../../babel-plugin-transform-strict-mode"),
-  path.join(__dirname, "/../../babel-plugin-transform-es2015-modules-commonjs"),
+  path.join(__dirname, "/../../babel-plugin-transform-modules-commonjs"),
 ].join(",");
 
 const readDir = function(loc, filter) {
@@ -53,18 +51,12 @@ const assertTest = function(stdout, stderr, opts) {
 
   if (opts.stderr) {
     if (opts.stderrContains) {
-      assert.ok(
-        includes(stderr, expectStderr),
-        "stderr " +
-          JSON.stringify(stderr) +
-          " didn't contain " +
-          JSON.stringify(expectStderr),
-      );
+      expect(includes(stderr, expectStderr)).toBeTruthy();
     } else {
-      chai.expect(stderr).to.equal(expectStderr, "stderr didn't match");
+      expect(stderr).toBe(expectStderr);
     }
   } else if (stderr) {
-    throw new Error("stderr:\n" + stderr);
+    throw new Error("stderr:\n" + stderr + "\n\nstdout:\n" + stdout);
   }
 
   const expectStdout = opts.stdout.trim();
@@ -73,15 +65,9 @@ const assertTest = function(stdout, stderr, opts) {
 
   if (opts.stdout) {
     if (opts.stdoutContains) {
-      assert.ok(
-        includes(stdout, expectStdout),
-        "stdout " +
-          JSON.stringify(stdout) +
-          " didn't contain " +
-          JSON.stringify(expectStdout),
-      );
+      expect(includes(stdout, expectStdout)).toBeTruthy();
     } else {
-      chai.expect(stdout).to.equal(expectStdout, "stdout didn't match");
+      expect(stdout).toBe(expectStdout);
     }
   } else if (stdout) {
     throw new Error("stdout:\n" + stdout);
@@ -92,24 +78,19 @@ const assertTest = function(stdout, stderr, opts) {
 
     Object.keys(actualFiles).forEach(function(filename) {
       if (!opts.inFiles.hasOwnProperty(filename)) {
-        const expect = opts.outFiles[filename];
+        const expected = opts.outFiles[filename];
         const actual = actualFiles[filename];
 
-        chai.expect(expect, "Output is missing: " + filename).to.not.be
-          .undefined;
+        expect(expected).not.toBeUndefined();
 
-        if (expect) {
-          chai
-            .expect(actual)
-            .to.equal(expect, "Compiled output does not match: " + filename);
+        if (expected) {
+          expect(actual).toBe(expected);
         }
       }
     });
 
     Object.keys(opts.outFiles).forEach(function(filename) {
-      chai
-        .expect(actualFiles, "Extraneous file in output: " + filename)
-        .to.contain.key(filename);
+      expect(actualFiles).toHaveProperty(filename);
     });
   }
 };
@@ -177,6 +158,16 @@ fs.readdirSync(fixtureLoc).forEach(function(binName) {
 
   const suiteLoc = path.join(fixtureLoc, binName);
   describe("bin/" + binName, function() {
+    let cwd;
+
+    beforeEach(() => {
+      cwd = process.cwd();
+    });
+
+    afterEach(() => {
+      process.chdir(cwd);
+    });
+
     fs.readdirSync(suiteLoc).forEach(function(testName) {
       if (testName[0] === ".") return;
 

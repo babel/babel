@@ -1,42 +1,19 @@
-# babel-plugin-syntax-throw-expressions
+# @babel/plugin-syntax-throw-expressions
 
-Allow parsing of Throw Expressions:
+> Allow parsing of Throw Expressions
 
-```js
-function test(param = throw new Error('required!')) {
-  const test = param === true || throw new Error('Falsey!');
-}
-```
+See our website [@babel/plugin-syntax-throw-expressions](https://babeljs.io/docs/en/next/babel-plugin-syntax-throw-expressions.html) for more information.
 
+## Install
 
-## Installation
+Using npm:
 
 ```sh
-npm install --save-dev babel-plugin-syntax-throw-expressions
+npm install --save-dev @babel/plugin-syntax-throw-expressions
 ```
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["syntax-throw-expressions"]
-}
-```
-
-### Via CLI
+or using yarn:
 
 ```sh
-babel --plugins syntax-throw-expressions script.js
-```
-
-### Via Node API
-
-```javascript
-require("babel-core").transform("code", {
-  plugins: ["syntax-throw-expressions"]
-});
+yarn add @babel/plugin-syntax-throw-expressions --dev
 ```

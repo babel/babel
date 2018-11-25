@@ -34,7 +34,7 @@ function getNormalizedV8Flag(arg) {
 }
 
 getV8Flags(function(err, v8Flags) {
-  babelArgs.forEach(function(arg) {
+  babelArgs.forEach(function(arg, index) {
     const flag = arg.split("=")[0];
 
     switch (flag) {
@@ -46,7 +46,16 @@ getV8Flags(function(err, v8Flags) {
       case "--debug":
       case "--debug-brk":
       case "--inspect":
+      case "--inspect-brk":
+      case "--experimental-modules":
         args.unshift(arg);
+        break;
+
+      case "-r":
+      case "--require":
+        args.push(flag);
+        args.push(babelArgs[index + 1]);
+        delete babelArgs[index + 1];
         break;
 
       case "-gc":
@@ -93,6 +102,10 @@ getV8Flags(function(err, v8Flags) {
           process.exit(code);
         }
       });
+    });
+    process.on("SIGINT", () => {
+      proc.kill("SIGINT");
+      process.exit(1);
     });
   }
 });

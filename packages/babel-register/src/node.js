@@ -2,34 +2,35 @@ import deepClone from "lodash/cloneDeep";
 import sourceMapSupport from "source-map-support";
 import * as registerCache from "./cache";
 import escapeRegExp from "lodash/escapeRegExp";
-import * as babel from "babel-core";
-import { OptionManager, DEFAULT_EXTENSIONS } from "babel-core";
+import * as babel from "@babel/core";
+import { OptionManager, DEFAULT_EXTENSIONS } from "@babel/core";
 import { addHook } from "pirates";
 import fs from "fs";
 import path from "path";
 
 const maps = {};
-const transformOpts = {};
+let transformOpts = {};
 let piratesRevert = null;
 
-sourceMapSupport.install({
-  handleUncaughtExceptions: false,
-  environment: "node",
-  retrieveSourceMap(source) {
-    const map = maps && maps[source];
-    if (map) {
-      return {
-        url: null,
-        map: map,
-      };
-    } else {
-      return null;
-    }
-  },
-});
+function installSourceMapSupport() {
+  sourceMapSupport.install({
+    handleUncaughtExceptions: false,
+    environment: "node",
+    retrieveSourceMap(source) {
+      const map = maps && maps[source];
+      if (map) {
+        return {
+          url: null,
+          map: map,
+        };
+      } else {
+        return null;
+      }
+    },
+  });
+}
 
-registerCache.load();
-let cache = registerCache.get();
+let cache;
 
 function mtime(filename) {
   return +fs.statSync(filename).mtime;
@@ -38,11 +39,12 @@ function mtime(filename) {
 function compile(code, filename) {
   // merge in base options and resolve all the plugins and presets relative to this file
   const opts = new OptionManager().init(
-    Object.assign(
-      { sourceRoot: path.dirname(filename) }, // sourceRoot can be overwritten
-      deepClone(transformOpts),
-      { filename },
-    ),
+    // sourceRoot can be overwritten
+    {
+      sourceRoot: path.dirname(filename),
+      ...deepClone(transformOpts),
+      filename,
+    },
   );
 
   // Bail out ASAP if the file has been ignored.
@@ -54,68 +56,97 @@ function compile(code, filename) {
 
   if (env) cacheKey += `:${env}`;
 
-  if (cache) {
-    const cached = cache[cacheKey];
-    if (cached && cached.mtime === mtime(filename)) {
-      return cached.code;
+  let cached = cache && cache[cacheKey];
+
+  if (!cached || cached.mtime !== mtime(filename)) {
+    cached = babel.transform(code, {
+      ...opts,
+      sourceMaps: opts.sourceMaps === undefined ? "both" : opts.sourceMaps,
+      ast: false,
+    });
+
+    if (cache) {
+      cache[cacheKey] = cached;
+      cached.mtime = mtime(filename);
     }
   }
 
-  const result = babel.transform(
-    code,
-    Object.assign(opts, {
-      // Do not process config files since has already been done with the OptionManager
-      // calls above and would introduce duplicates.
-      babelrc: false,
-      sourceMaps: "both",
-      ast: false,
-    }),
-  );
-
-  if (cache) {
-    cache[cacheKey] = result;
-    result.mtime = mtime(filename);
+  if (cached.map) {
+    if (Object.keys(maps).length === 0) {
+      installSourceMapSupport();
+    }
+    maps[filename] = cached.map;
   }
 
-  maps[filename] = result.map;
+  return cached.code;
+}
 
-  return result.code;
+let compiling = false;
+
+function compileHook(code, filename) {
+  if (compiling) return code;
+
+  try {
+    compiling = true;
+    return compile(code, filename);
+  } finally {
+    compiling = false;
+  }
 }
 
 function hookExtensions(exts) {
   if (piratesRevert) piratesRevert();
-  piratesRevert = addHook(compile, { exts, ignoreNodeModules: false });
+  piratesRevert = addHook(compileHook, { exts, ignoreNodeModules: false });
 }
 
 export function revert() {
   if (piratesRevert) piratesRevert();
-  delete require.cache[require.resolve(__filename)];
 }
 
-register({
-  extensions: DEFAULT_EXTENSIONS,
-});
+register();
 
 export default function register(opts?: Object = {}) {
-  if (opts.extensions) hookExtensions(opts.extensions);
+  // Clone to avoid mutating the arguments object with the 'delete's below.
+  opts = {
+    ...opts,
+  };
+  hookExtensions(opts.extensions || DEFAULT_EXTENSIONS);
 
-  if (opts.cache === false) cache = null;
+  if (opts.cache === false && cache) {
+    registerCache.clear();
+    cache = null;
+  } else if (opts.cache !== false && !cache) {
+    registerCache.load();
+    cache = registerCache.get();
+  }
 
   delete opts.extensions;
   delete opts.cache;
 
-  Object.assign(transformOpts, opts);
+  transformOpts = {
+    ...opts,
+    caller: {
+      name: "@babel/register",
+      ...(opts.caller || {}),
+    },
+  };
 
-  if (!transformOpts.ignore && !transformOpts.only) {
+  let { cwd = "." } = transformOpts;
+
+  // Ensure that the working directory is resolved up front so that
+  // things don't break if it changes later.
+  cwd = transformOpts.cwd = path.resolve(cwd);
+
+  if (transformOpts.ignore === undefined && transformOpts.only === undefined) {
     transformOpts.only = [
       // Only compile things inside the current working directory.
-      new RegExp("^" + escapeRegExp(process.cwd()), "i"),
+      new RegExp("^" + escapeRegExp(cwd), "i"),
     ];
     transformOpts.ignore = [
       // Ignore any node_modules inside the current working directory.
       new RegExp(
         "^" +
-          escapeRegExp(process.cwd()) +
+          escapeRegExp(cwd) +
           "(?:" +
           path.sep +
           ".*)?" +

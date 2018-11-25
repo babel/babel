@@ -1,97 +1,140 @@
 import defaults from "lodash/defaults";
 import outputFileSync from "output-file-sync";
+import { sync as mkdirpSync } from "mkdirp";
 import slash from "slash";
 import path from "path";
 import fs from "fs";
 
 import * as util from "./util";
 
-export default function(commander, filenames, opts) {
-  function write(src, relative, base) {
-    if (!util.isCompilableExtension(relative, commander.extensions)) {
+export default async function({ cliOptions, babelOptions }) {
+  const filenames = cliOptions.filenames;
+
+  async function write(src, base) {
+    let relative = path.relative(base, src);
+
+    if (!util.isCompilableExtension(relative, cliOptions.extensions)) {
       return false;
     }
 
     // remove extension and then append back on .js
-    relative = util.adjustRelative(relative, commander.keepFileExtension);
+    relative = util.adjustRelative(relative, cliOptions.keepFileExtension);
 
-    const dest = getDest(commander, relative, base);
+    const dest = getDest(relative, base);
 
-    const data = util.compile(
-      src,
-      defaults(
-        {
-          sourceFileName: slash(path.relative(dest + "/..", src)),
-          sourceMapTarget: path.basename(relative),
-        },
-        opts,
-      ),
-    );
+    try {
+      const res = await util.compile(
+        src,
+        defaults(
+          {
+            sourceFileName: slash(path.relative(dest + "/..", src)),
+          },
+          babelOptions,
+        ),
+      );
 
-    if (!data) return false;
+      if (!res) return false;
 
-    // we've requested explicit sourcemaps to be written to disk
-    if (data.map && commander.sourceMaps && commander.sourceMaps !== "inline") {
-      const mapLoc = dest + ".map";
-      data.code = util.addSourceMappingUrl(data.code, mapLoc);
-      outputFileSync(mapLoc, JSON.stringify(data.map));
+      // we've requested explicit sourcemaps to be written to disk
+      if (
+        res.map &&
+        babelOptions.sourceMaps &&
+        babelOptions.sourceMaps !== "inline"
+      ) {
+        const mapLoc = dest + ".map";
+        res.code = util.addSourceMappingUrl(res.code, mapLoc);
+        res.map.file = path.basename(relative);
+        outputFileSync(mapLoc, JSON.stringify(res.map));
+      }
+
+      outputFileSync(dest, res.code);
+      util.chmod(src, dest);
+
+      if (cliOptions.verbose) {
+        console.log(src + " -> " + dest);
+      }
+
+      return true;
+    } catch (err) {
+      if (cliOptions.watch) {
+        console.error(err);
+        return false;
+      }
+
+      throw err;
     }
-
-    outputFileSync(dest, data.code);
-    util.chmod(src, dest);
-
-    util.log(src + " -> " + dest);
-
-    return true;
   }
 
-  function getDest(commander, filename, base) {
-    if (commander.relative) return path.join(base, commander.outDir, filename);
-    return path.join(commander.outDir, filename);
+  function getDest(filename, base) {
+    if (cliOptions.relative) {
+      return path.join(base, cliOptions.outDir, filename);
+    }
+    return path.join(cliOptions.outDir, filename);
   }
 
-  function handleFile(src, filename, base) {
-    const didWrite = write(src, filename, base);
+  async function handleFile(src, base) {
+    const written = await write(src, base);
 
-    if (!didWrite && commander.copyFiles) {
-      const dest = getDest(commander, filename, base);
+    if (!written && cliOptions.copyFiles) {
+      const filename = path.relative(base, src);
+      const dest = getDest(filename, base);
       outputFileSync(dest, fs.readFileSync(src));
       util.chmod(src, dest);
     }
+    return written;
   }
 
-  function handle(filename) {
-    if (!fs.existsSync(filename)) return;
+  async function handle(filenameOrDir) {
+    if (!fs.existsSync(filenameOrDir)) return 0;
 
-    const stat = fs.statSync(filename);
+    const stat = fs.statSync(filenameOrDir);
 
-    if (stat.isDirectory(filename)) {
-      const dirname = filename;
+    if (stat.isDirectory()) {
+      const dirname = filenameOrDir;
 
-      if (commander.deleteDirOnStart) {
-        util.deleteDir(commander.outDir);
+      let count = 0;
+
+      const files = util.readdir(dirname, cliOptions.includeDotfiles);
+      for (const filename of files) {
+        const src = path.join(dirname, filename);
+
+        const written = await handleFile(src, dirname);
+        if (written) count += 1;
       }
 
-      util
-        .readdir(dirname, commander.includeDotfiles)
-        .forEach(function(filename) {
-          const src = path.join(dirname, filename);
-          handleFile(src, filename, dirname);
-        });
+      return count;
     } else {
-      write(filename, path.basename(filename), path.dirname(filename));
+      const filename = filenameOrDir;
+      const written = await handleFile(filename, path.dirname(filename));
+
+      return written ? 1 : 0;
     }
   }
 
-  if (!commander.skipInitialBuild) {
-    filenames.forEach(handle);
+  if (!cliOptions.skipInitialBuild) {
+    if (cliOptions.deleteDirOnStart) {
+      util.deleteDir(cliOptions.outDir);
+    }
+
+    mkdirpSync(cliOptions.outDir);
+
+    let compiledFiles = 0;
+    for (const filename of cliOptions.filenames) {
+      compiledFiles += await handle(filename);
+    }
+
+    console.log(
+      `Successfully compiled ${compiledFiles} ${
+        compiledFiles !== 1 ? "files" : "file"
+      } with Babel.`,
+    );
   }
 
-  if (commander.watch) {
+  if (cliOptions.watch) {
     const chokidar = util.requireChokidar();
 
-    filenames.forEach(function(dirname) {
-      const watcher = chokidar.watch(dirname, {
+    filenames.forEach(function(filenameOrDir) {
+      const watcher = chokidar.watch(filenameOrDir, {
         persistent: true,
         ignoreInitial: true,
         awaitWriteFinish: {
@@ -102,12 +145,14 @@ export default function(commander, filenames, opts) {
 
       ["add", "change"].forEach(function(type) {
         watcher.on(type, function(filename) {
-          const relative = path.relative(dirname, filename) || filename;
-          try {
-            handleFile(filename, relative);
-          } catch (err) {
-            console.error(err.stack);
-          }
+          handleFile(
+            filename,
+            filename === filenameOrDir
+              ? path.dirname(filenameOrDir)
+              : filenameOrDir,
+          ).catch(err => {
+            console.error(err);
+          });
         });
       });
     });

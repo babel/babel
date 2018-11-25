@@ -1,0 +1,14 @@
+{
+  "presets": [
+    [
+      "../../../../lib",
+      {
+        "targets": {
+          "browsers": "chromeandroid 59"
+        },
+        "modules": false,
+        "useBuiltIns": "entry"
+      }
+    ]
+  ]
+}

@@ -3,10 +3,10 @@ import Module from "module";
 import { inspect } from "util";
 import path from "path";
 import repl from "repl";
-import * as babel from "babel-core";
+import * as babel from "@babel/core";
 import vm from "vm";
-import "babel-polyfill";
-import register from "babel-register";
+import "@babel/polyfill";
+import register from "@babel/register";
 
 import pkg from "../package.json";
 
@@ -21,8 +21,12 @@ function collect(value, previousValue): Array<string> {
   return previousValue ? previousValue.concat(values) : values;
 }
 
-/* eslint-disable max-len */
 program.option("-e, --eval [script]", "Evaluate script");
+program.option(
+  "--no-babelrc",
+  "Specify whether or not to use .babelrc and .babelignore files",
+);
+program.option("-r, --require [module]", "Require module");
 program.option("-p, --print [code]", "Evaluate script and print result");
 program.option(
   "-o, --only [globs]",
@@ -39,20 +43,38 @@ program.option(
   "List of extensions to hook into [.es6,.js,.es,.jsx,.mjs]",
   collect,
 );
+program.option(
+  "--config-file [path]",
+  "Path to the babel config file to use. Defaults to working directory babel.config.js",
+);
+program.option(
+  "--env-name [name]",
+  "The name of the 'env' to use when loading configs and plugins. " +
+    "Defaults to the value of BABEL_ENV, or else NODE_ENV, or else 'development'.",
+);
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
-/* eslint-enable max-len */
 
 program.version(pkg.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
 
 register({
+  caller: {
+    name: "@babel/node",
+  },
   extensions: program.extensions,
   ignore: program.ignore,
   only: program.only,
   plugins: program.plugins,
   presets: program.presets,
+  configFile: program.configFile,
+  envName: program.envName,
+
+  // Commander will default the "--no-" arguments to true, but we want to
+  // leave them undefined so that @babel/core can handle the
+  // default-assignment logic on its own.
+  babelrc: program.babelrc === true ? undefined : program.babelrc,
 });
 
 const replPlugin = ({ types: t }) => ({
@@ -131,8 +153,15 @@ if (program.eval || program.print) {
       }
 
       if (arg[0] === "-") {
-        const parsedArg = program[arg.slice(2)];
-        if (parsedArg && parsedArg !== true) {
+        const camelArg = arg
+          .slice(2)
+          .replace(/-(\w)/, (s, c) => c.toUpperCase());
+        const parsedArg = program[camelArg];
+        if (
+          arg === "-r" ||
+          arg === "--require" ||
+          (parsedArg && parsedArg !== true)
+        ) {
           ignoreNext = true;
         }
       } else {
@@ -141,6 +170,15 @@ if (program.eval || program.print) {
       }
     });
     args = args.slice(i);
+
+    // We have to handle require ourselves, as we want to require it in the context of babel-register
+    if (program.require) {
+      let requireFileName = program.require;
+      if (!path.isAbsolute(requireFileName)) {
+        requireFileName = path.join(process.cwd(), requireFileName);
+      }
+      require(requireFileName);
+    }
 
     // make the filename absolute
     const filename = args[0];

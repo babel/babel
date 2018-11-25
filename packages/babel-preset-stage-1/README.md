@@ -1,49 +1,55 @@
-# babel-preset-stage-1
+# @babel/preset-stage-1
 
-> Babel preset for stage 1 plugins.
+As of v7.0.0-beta.55, we've removed Babel's Stage presets. Please consider reading our [blog post](https://babeljs.io/blog/2018/07/27/removing-babels-stage-presets) on this decision for more details. TL;DR is that it's more beneficial in the long run to explicitly add which proposals to use.
 
-The gist of Stage 1 is:
+---
 
-> **Stage 1**: proposal
->
-> **What is it?** A formal proposal for the feature.
->
-> **What’s required?** A so-called champion must be identified who is responsible for the proposal. Either the champion or a co-champion must be a member of TC39 (source). The problem solved by the proposal must be described in prose. The solution must be described via examples, an API and a discussion of semantics and algorithms. Lastly, potential obstacles for the proposal must be identified, such as interactions with other features and implementation challenges. Implementation-wise, polyfills and demos are needed.
->
-> **What’s next?** By accepting a proposal for stage 1, TC39 declares its willingness to examine, discuss and contribute to the proposal. Going forward, major changes to the proposal are expected
+For a more automatic migration, we have updated [babel-upgrade](https://github.com/babel/babel-upgrade) to do this for you (you can run `npx babel-upgrade`).
 
-## Install
+If you want the same configuration as before:
 
-```sh
-npm install --save-dev babel-preset-stage-1
-```
-
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
+```jsonc
 {
-  "presets": ["stage-1"]
+  "plugins": [
+    // Stage 1
+    "@babel/plugin-proposal-export-default-from",
+    "@babel/plugin-proposal-logical-assignment-operators",
+    ["@babel/plugin-proposal-optional-chaining", { "loose": false }],
+    ["@babel/plugin-proposal-pipeline-operator", { "proposal": "minimal" }],
+    ["@babel/plugin-proposal-nullish-coalescing-operator", { "loose": false }],
+    "@babel/plugin-proposal-do-expressions",
+
+    // Stage 2
+    ["@babel/plugin-proposal-decorators", { "legacy": true }],
+    "@babel/plugin-proposal-function-sent",
+    "@babel/plugin-proposal-export-namespace-from",
+    "@babel/plugin-proposal-numeric-separator",
+    "@babel/plugin-proposal-throw-expressions",
+
+    // Stage 3
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-syntax-import-meta",
+    ["@babel/plugin-proposal-class-properties", { "loose": false }],
+    "@babel/plugin-proposal-json-strings"
+  ]
 }
 ```
 
-### Via CLI
+If you're using the same configuration across many separate projects,
+keep in mind that you can also create your own custom presets with
+whichever plugins and presets you're looking to use.
 
-```sh
-babel script.js --presets stage-1
+```js
+module.exports = function() {
+  return {
+    plugins: [
+      require("@babel/plugin-syntax-dynamic-import"),
+      [require("@babel/plugin-proposal-decorators"), { "legacy": true }],
+      [require("@babel/plugin-proposal-class-properties"), { "loose": false }],
+    ],
+    presets: [
+      // ...
+    ],
+  };
+};
 ```
-
-### Via Node API
-
-```javascript
-require("babel-core").transform("code", {
-  presets: ["stage-1"]
-});
-```
-
-## References
-
-- Chapter "[The TC39 process for ECMAScript features](http://exploringjs.com/es2016-es2017/ch_tc39-process.html)" in "Exploring ES2016 and ES2017" by Axel Rauschmayer

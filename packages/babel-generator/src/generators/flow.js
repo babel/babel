@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import { ExportAllDeclaration } from "./modules";
 
 export function AnyTypeAnnotation() {
@@ -182,7 +182,8 @@ export function FunctionTypeAnnotation(node: Object, parent: Object) {
   // this node type is overloaded, not sure why but it makes it EXTREMELY annoying
   if (
     parent.type === "ObjectTypeCallProperty" ||
-    parent.type === "DeclareFunction"
+    parent.type === "DeclareFunction" ||
+    (parent.type === "ObjectTypeProperty" && parent.method)
   ) {
     this.token(":");
   } else {
@@ -197,8 +198,10 @@ export function FunctionTypeAnnotation(node: Object, parent: Object) {
 export function FunctionTypeParam(node: Object) {
   this.print(node.name, node);
   if (node.optional) this.token("?");
-  this.token(":");
-  this.space();
+  if (node.name) {
+    this.token(":");
+    this.space();
+  }
   this.print(node.typeAnnotation, node);
 }
 
@@ -227,6 +230,12 @@ export function _interfaceish(node: Object) {
     this.space();
     this.printList(node.mixins, node);
   }
+  if (node.implements && node.implements.length) {
+    this.space();
+    this.word("implements");
+    this.space();
+    this.printList(node.implements, node);
+  }
   this.space();
   this.print(node.body, node);
 }
@@ -251,6 +260,18 @@ function andSeparator() {
   this.space();
   this.token("&");
   this.space();
+}
+
+export function InterfaceTypeAnnotation(node: Object) {
+  this.word("interface");
+  if (node.extends && node.extends.length) {
+    this.space();
+    this.word("extends");
+    this.space();
+    this.printList(node.extends, node);
+  }
+  this.space();
+  this.print(node.body, node);
 }
 
 export function IntersectionTypeAnnotation(node: Object) {
@@ -375,6 +396,7 @@ export function ObjectTypeAnnotation(node: Object) {
   const props = node.properties.concat(
     node.callProperties || [],
     node.indexers || [],
+    node.internalSlots || [],
   );
 
   if (props.length) {
@@ -404,6 +426,24 @@ export function ObjectTypeAnnotation(node: Object) {
   }
 }
 
+export function ObjectTypeInternalSlot(node: Object) {
+  if (node.static) {
+    this.word("static");
+    this.space();
+  }
+  this.token("[");
+  this.token("[");
+  this.print(node.id, node);
+  this.token("]");
+  this.token("]");
+  if (node.optional) this.token("?");
+  if (!node.method) {
+    this.token(":");
+    this.space();
+  }
+  this.print(node.value, node);
+}
+
 export function ObjectTypeCallProperty(node: Object) {
   if (node.static) {
     this.word("static");
@@ -419,9 +459,11 @@ export function ObjectTypeIndexer(node: Object) {
   }
   this._variance(node);
   this.token("[");
-  this.print(node.id, node);
-  this.token(":");
-  this.space();
+  if (node.id) {
+    this.print(node.id, node);
+    this.token(":");
+    this.space();
+  }
   this.print(node.key, node);
   this.token("]");
   this.token(":");
@@ -430,6 +472,10 @@ export function ObjectTypeIndexer(node: Object) {
 }
 
 export function ObjectTypeProperty(node: Object) {
+  if (node.proto) {
+    this.word("proto");
+    this.space();
+  }
   if (node.static) {
     this.word("static");
     this.space();
@@ -437,8 +483,10 @@ export function ObjectTypeProperty(node: Object) {
   this._variance(node);
   this.print(node.key, node);
   if (node.optional) this.token("?");
-  this.token(":");
-  this.space();
+  if (!node.method) {
+    this.token(":");
+    this.space();
+  }
   this.print(node.value, node);
 }
 
@@ -468,6 +516,14 @@ export function TypeCastExpression(node: Object) {
   this.print(node.expression, node);
   this.print(node.typeAnnotation, node);
   this.token(")");
+}
+
+export function Variance(node: Object) {
+  if (node.kind === "plus") {
+    this.token("+");
+  } else {
+    this.token("-");
+  }
 }
 
 export function VoidTypeAnnotation() {

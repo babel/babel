@@ -1,49 +1,63 @@
 MAKEFLAGS = -j1
-
-export NODE_ENV = test
+FLOW_COMMIT = e192e1a4793dd8e43415fbfe8046d832cb513c8b
+TEST262_COMMIT = 238c88d4a084d9928372954e2fec54af2c951281
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
 
-SOURCES = packages codemods experimental
+SOURCES = packages codemods
 
 .PHONY: build build-dist watch lint fix clean test-clean test-only test test-ci publish bootstrap
 
-build: clean
-	make clean-lib
+build: clean clean-lib
 	./node_modules/.bin/gulp build
-ifneq ("$(BABEL_ENV)", "cov")
+	node ./packages/babel-types/scripts/generateTypeHelpers.js
+	# call build again as the generated files might need to be compiled again.
+	./node_modules/.bin/gulp build
+	# generate flow and typescript typings
+	node scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
+	node scripts/generators/typescript.js > ./packages/babel-types/lib/index.d.ts
+ifneq ("$(BABEL_COVERAGE)", "true")
 	make build-standalone
+	make build-preset-env-standalone
 endif
 
 build-standalone:
 	./node_modules/.bin/gulp build-babel-standalone
 
+build-preset-env-standalone:
+	./node_modules/.bin/gulp build-babel-preset-env-standalone
+
 build-dist: build
 	cd packages/babel-polyfill; \
 	scripts/build-dist.sh
-	cd packages/babel-runtime; \
+	cd packages/babel-plugin-transform-runtime; \
 	node scripts/build-dist.js
-	node scripts/generate-babel-types-docs.js
 
-watch: clean
-	make clean-lib
+watch: clean clean-lib
+
+	# Ensure that build artifacts for types are created during local
+	# development too.
+	BABEL_ENV=development ./node_modules/.bin/gulp build-no-bundle
+	node ./packages/babel-types/scripts/generateTypeHelpers.js
+	node scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
 	BABEL_ENV=development ./node_modules/.bin/gulp watch
 
 flow:
 	./node_modules/.bin/flow check --strip-root
 
 lint:
-	./node_modules/.bin/eslint scripts $(SOURCES) *.js --format=codeframe --rulesdir="./scripts/eslint_rules"
+	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' --format=codeframe
 
-fix:
-	./node_modules/.bin/eslint scripts $(SOURCES) *.js --format=codeframe --fix --rulesdir="./scripts/eslint_rules"
+fix: fix-json
+	./node_modules/.bin/eslint scripts $(SOURCES) '*.js' --format=codeframe --fix
+
+fix-json:
+	./node_modules/.bin/prettier "{packages,codemod}/*/test/fixtures/**/options.json" --write --loglevel warn
 
 clean: test-clean
 	rm -rf packages/babel-polyfill/browser*
 	rm -rf packages/babel-polyfill/dist
-	# rm -rf packages/babel-runtime/helpers
-	# rm -rf packages/babel-runtime/core-js
 	rm -rf coverage
 	rm -rf packages/*/npm-debug*
 
@@ -52,37 +66,73 @@ test-clean:
 		$(call clean-source-test, $(source)))
 
 test-only:
-	./scripts/test.sh
+	BABEL_ENV=test ./scripts/test.sh
 	make test-clean
 
 test: lint test-only
 
-test-ci:
-	make bootstrap
-	make test-only
+test-ci: bootstrap test-only
 
 test-ci-coverage: SHELL:=/bin/bash
 test-ci-coverage:
-	BABEL_ENV=cov make bootstrap
-	./scripts/test-cov.sh
+	BABEL_COVERAGE=true BABEL_ENV=test make bootstrap
+	BABEL_ENV=test TEST_TYPE=cov ./scripts/test-cov.sh
 	bash <(curl -s https://codecov.io/bash) -f coverage/coverage-final.json
 
-publish:
-	git pull --rebase
+bootstrap-flow:
+	rm -rf ./build/flow
+	mkdir -p ./build
+	git clone --branch=master --single-branch --shallow-since=2018-11-01 https://github.com/facebook/flow.git ./build/flow
+	cd build/flow && git checkout $(FLOW_COMMIT)
+
+test-flow:
+	node scripts/tests/flow/run_babel_parser_flow_tests.js
+
+test-flow-ci: bootstrap test-flow
+
+test-flow-update-whitelist:
+	node scripts/tests/flow/run_babel_parser_flow_tests.js --update-whitelist
+
+bootstrap-test262:
+	rm -rf ./build/test262
+	mkdir -p ./build
+	git clone --branch=master --single-branch --shallow-since=2018-11-01 https://github.com/tc39/test262.git ./build/test262
+	cd build/test262 && git checkout $(TEST262_COMMIT)
+
+test-test262:
+	node scripts/tests/test262/run_babel_parser_test262.js
+
+test-test262-ci: bootstrap test-test262
+
+test-test262-update-whitelist:
+	node scripts/tests/test262/run_babel_parser_test262.js --update-whitelist
+
+clone-license:
+	./scripts/clone-license.sh
+
+prepublish-build:
 	make clean-lib
+	rm -rf packages/babel-runtime/helpers
+	rm -rf packages/babel-runtime-corejs2/helpers
+	rm -rf packages/babel-runtime-corejs2/core-js
 	BABEL_ENV=production make build-dist
+	make clone-license
+
+prepublish:
+	git pull --rebase
+	make prepublish-build
 	make test
-	# not using lerna independent mode atm, so only update packages that have changed since we use ^
+
+publish: prepublish
 	# --only-explicit-updates
-	./node_modules/.bin/lerna publish --force-publish=* --npm-tag=next --exact --skip-temp-tag
+	./node_modules/.bin/lerna publish --force-publish="@babel/runtime,@babel/runtime-corejs2" --dangerously-only-publish-explicit-updates-this-is-a-custom-flag-for-babel-and-you-should-not-be-using-it-just-deal-with-more-packages-being-published-it-is-not-a-big-deal
 	make clean
 
-bootstrap:
-	make clean-all
-	yarn
-	./node_modules/.bin/lerna bootstrap
+bootstrap: clean-all
+	yarn --ignore-engines
+	./node_modules/.bin/lerna bootstrap -- --ignore-engines
 	make build
-	cd packages/babel-runtime; \
+	cd packages/babel-plugin-transform-runtime; \
 	node scripts/build-dist.js
 
 clean-lib:
@@ -92,6 +142,7 @@ clean-lib:
 clean-all:
 	rm -rf node_modules
 	rm -rf package-lock.json
+	rm -rf .changelog
 
 	$(foreach source, $(SOURCES), \
 		$(call clean-source-all, $(source)))

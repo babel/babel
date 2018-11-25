@@ -1,7 +1,7 @@
 {
-    "plugins": [
-        "transform-es2015-parameters", 
-        "transform-es2015-spread",
-        "transform-regenerator"
-    ]
+  "plugins": [
+    "transform-parameters",
+    "transform-spread",
+    "transform-regenerator"
+  ]
 }

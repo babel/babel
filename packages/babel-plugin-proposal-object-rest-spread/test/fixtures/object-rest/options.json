@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    "syntax-async-generators",
+    "proposal-object-rest-spread",
+    ["external-helpers", { "helperVersion": "7.1.5" }]
+  ]
+}

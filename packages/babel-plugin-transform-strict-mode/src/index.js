@@ -1,7 +1,12 @@
-import * as t from "babel-types";
+import { declare } from "@babel/helper-plugin-utils";
+import { types as t } from "@babel/core";
 
-export default function() {
+export default declare(api => {
+  api.assertVersion(7);
+
   return {
+    name: "transform-strict-mode",
+
     visitor: {
       Program(path) {
         const { node } = path;
@@ -17,4 +22,4 @@ export default function() {
       },
     },
   };
-}
+});

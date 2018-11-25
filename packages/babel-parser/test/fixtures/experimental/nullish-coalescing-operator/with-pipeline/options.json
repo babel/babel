@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "nullishCoalescingOperator",
+    ["pipelineOperator", { "proposal": "minimal" }]
+  ]
+}

@@ -1,0 +1,3 @@
+{
+  "throws": "invalid use of await inside of an async function (1:16)"
+}

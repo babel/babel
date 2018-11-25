@@ -1,28 +1,19 @@
-# babel-helper-builder-react-jsx
+# @babel/helper-builder-react-jsx
 
-## Usage
+> Helper function to build react jsx
 
-```javascript
-type ElementState = {
-  tagExpr: Object; // tag node
-  tagName: string; // raw string tag name
-  args: Array<Object>; // array of call arguments
-  call?: Object; // optional call property that can be set to override the call expression returned
-  pre?: Function; // function called with (state: ElementState) before building attribs
-  post?: Function; // function called with (state: ElementState) after building attribs
-};
+See our website [@babel/helper-builder-react-jsx](https://babeljs.io/docs/en/next/babel-helper-builder-react-jsx.html) for more information.
 
-require("babel-helper-builder-react-jsx")({
-  filter: function (element: JSXElement) {
-    // if returns false, the element isn't transformed
-  },
+## Install
 
-  pre: function (state: ElementState) {
-    // called before building the element
-  },
+Using npm:
 
-  post: function (state: ElementState) {
-    // called after building the element
-  }
-});
+```sh
+npm install --save-dev @babel/helper-builder-react-jsx
+```
+
+or using yarn:
+
+```sh
+yarn add @babel/helper-builder-react-jsx --dev
 ```

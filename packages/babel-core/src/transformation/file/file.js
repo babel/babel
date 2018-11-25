@@ -1,10 +1,11 @@
 // @flow
 
-import getHelper from "babel-helpers";
-import { NodePath, Hub, Scope } from "babel-traverse";
-import { codeFrameColumns } from "babel-code-frame";
-import traverse from "babel-traverse";
-import * as t from "babel-types";
+import * as helpers from "@babel/helpers";
+import { NodePath, Scope, type HubInterface } from "@babel/traverse";
+import { codeFrameColumns } from "@babel/code-frame";
+import traverse from "@babel/traverse";
+import * as t from "@babel/types";
+import semver from "semver";
 
 import type { NormalizedFile } from "../normalize-file";
 
@@ -26,16 +27,22 @@ export default class File {
   ast: Object = {};
   scope: Scope;
   metadata: {} = {};
-  hub: Hub = new Hub(this);
   code: string = "";
-  shebang: string | null = "";
   inputMap: Object | null = null;
 
-  constructor(options: {}, { code, ast, shebang, inputMap }: NormalizedFile) {
+  hub: HubInterface = {
+    // keep it for the usage in babel-core, ex: path.hub.file.opts.filename
+    file: this,
+    getCode: () => this.code,
+    getScope: () => this.scope,
+    addHelper: this.addHelper.bind(this),
+    buildError: this.buildCodeFrameError.bind(this),
+  };
+
+  constructor(options: {}, { code, ast, inputMap }: NormalizedFile) {
     this.opts = options;
     this.code = code;
     this.ast = ast;
-    this.shebang = shebang;
     this.inputMap = inputMap;
 
     this.path = NodePath.get({
@@ -48,7 +55,34 @@ export default class File {
     this.scope = this.path.scope;
   }
 
+  /**
+   * Provide backward-compatible access to the interpreter directive handling
+   * in Babel 6.x. If you are writing a plugin for Babel 7.x, it would be
+   * best to use 'program.interpreter' directly.
+   */
+  get shebang(): string {
+    const { interpreter } = this.path.node;
+    return interpreter ? interpreter.value : "";
+  }
+  set shebang(value: string): void {
+    if (value) {
+      this.path.get("interpreter").replaceWith(t.interpreterDirective(value));
+    } else {
+      this.path.get("interpreter").remove();
+    }
+  }
+
   set(key: mixed, val: mixed) {
+    if (key === "helpersNamespace") {
+      throw new Error(
+        "Babel 7.0.0-beta.56 has dropped support for the 'helpersNamespace' utility." +
+          "If you are using @babel/plugin-external-helpers you will need to use a newer " +
+          "version than the one you currently have installed. " +
+          "If you have your own implementation, you'll want to explore using 'helperGenerator' " +
+          "alongside 'file.availableHelper()'.",
+      );
+    }
+
     this._map.set(key, val);
   }
 
@@ -56,87 +90,133 @@ export default class File {
     return this._map.get(key);
   }
 
+  has(key: mixed): boolean {
+    return this._map.has(key);
+  }
+
   getModuleName(): ?string {
-    const opts = this.opts;
-    if (!opts.moduleIds) {
-      return null;
-    }
+    const {
+      filename,
+      filenameRelative = filename,
+
+      moduleId,
+      moduleIds = !!moduleId,
+
+      getModuleId,
+
+      sourceRoot: sourceRootTmp,
+      moduleRoot = sourceRootTmp,
+      sourceRoot = moduleRoot,
+    } = this.opts;
+
+    if (!moduleIds) return null;
 
     // moduleId is n/a if a `getModuleId()` is provided
-    if (opts.moduleId != null && !opts.getModuleId) {
-      return opts.moduleId;
+    if (moduleId != null && !getModuleId) {
+      return moduleId;
     }
 
-    let filenameRelative = opts.filenameRelative;
-    let moduleName = "";
+    let moduleName = moduleRoot != null ? moduleRoot + "/" : "";
 
-    if (opts.moduleRoot != null) {
-      moduleName = opts.moduleRoot + "/";
+    if (filenameRelative) {
+      const sourceRootReplacer =
+        sourceRoot != null ? new RegExp("^" + sourceRoot + "/?") : "";
+
+      moduleName += filenameRelative
+        // remove sourceRoot from filename
+        .replace(sourceRootReplacer, "")
+        // remove extension
+        .replace(/\.(\w*?)$/, "");
     }
-
-    if (!opts.filenameRelative) {
-      return moduleName + opts.filename.replace(/^\//, "");
-    }
-
-    if (opts.sourceRoot != null) {
-      // remove sourceRoot from filename
-      const sourceRootRegEx = new RegExp("^" + opts.sourceRoot + "/?");
-      filenameRelative = filenameRelative.replace(sourceRootRegEx, "");
-    }
-
-    // remove extension
-    filenameRelative = filenameRelative.replace(/\.(\w*?)$/, "");
-
-    moduleName += filenameRelative;
 
     // normalize path separators
     moduleName = moduleName.replace(/\\/g, "/");
 
-    if (opts.getModuleId) {
+    if (getModuleId) {
       // If return is falsy, assume they want us to use our generated default name
-      return opts.getModuleId(moduleName) || moduleName;
+      return getModuleId(moduleName) || moduleName;
     } else {
       return moduleName;
     }
-  }
-
-  // TODO: Remove this before 7.x's official release. Leaving it in for now to
-  // prevent unnecessary breakage between beta versions.
-  resolveModuleSource(source: string): string {
-    return source;
   }
 
   addImport() {
     throw new Error(
       "This API has been removed. If you're looking for this " +
         "functionality in Babel 7, you should import the " +
-        "'babel-helper-module-imports' module and use the functions exposed " +
+        "'@babel/helper-module-imports' module and use the functions exposed " +
         " from that module, such as 'addNamed' or 'addDefault'.",
+    );
+  }
+
+  /**
+   * Check if a given helper is available in @babel/core's helper list.
+   *
+   * This _also_ allows you to pass a Babel version specifically. If the
+   * helper exists, but was not available for the full given range, it will be
+   * considered unavailable.
+   */
+  availableHelper(name: string, versionRange: ?string): boolean {
+    let minVersion;
+    try {
+      minVersion = helpers.minVersion(name);
+    } catch (err) {
+      if (err.code !== "BABEL_HELPER_UNKNOWN") throw err;
+
+      return false;
+    }
+
+    if (typeof versionRange !== "string") return true;
+
+    // semver.intersects() has some surprising behavior with comparing ranges
+    // with preprelease versions. We add '^' to ensure that we are always
+    // comparing ranges with ranges, which sidesteps this logic.
+    // For example:
+    //
+    //   semver.intersects(`<7.0.1`, "7.0.0-beta.0") // false - surprising
+    //   semver.intersects(`<7.0.1`, "^7.0.0-beta.0") // true - expected
+    //
+    // This is because the first falls back to
+    //
+    //   semver.satisfies("7.0.0-beta.0", `<7.0.1`) // false - surprising
+    //
+    // and this fails because a prerelease version can only satisfy a range
+    // if it is a prerelease within the same major/minor/patch range.
+    //
+    // Note: If this is found to have issues, please also revist the logic in
+    // transform-runtime's definitions.js file.
+    if (semver.valid(versionRange)) versionRange = `^${versionRange}`;
+
+    return (
+      !semver.intersects(`<${minVersion}`, versionRange) &&
+      !semver.intersects(`>=8.0.0`, versionRange)
     );
   }
 
   addHelper(name: string): Object {
     const declar = this.declarations[name];
-    if (declar) return declar;
+    if (declar) return t.cloneNode(declar);
 
     const generator = this.get("helperGenerator");
-    const runtime = this.get("helpersNamespace");
     if (generator) {
       const res = generator(name);
       if (res) return res;
-    } else if (runtime) {
-      return t.memberExpression(runtime, t.identifier(name));
     }
 
     const uid = (this.declarations[name] = this.scope.generateUidIdentifier(
       name,
     ));
 
-    const { nodes, globals } = getHelper(
+    const dependencies = {};
+    for (const dep of helpers.getDependencies(name)) {
+      dependencies[dep] = this.addHelper(dep);
+    }
+
+    const { nodes, globals } = helpers.get(
       name,
-      name => this.addHelper(name),
+      dep => dependencies[dep],
       uid,
-      () => Object.keys(this.scope.getAllBindings()),
+      Object.keys(this.scope.getAllBindings()),
     );
 
     globals.forEach(name => {
@@ -168,8 +248,8 @@ export default class File {
 
   buildCodeFrameError(
     node: ?{
-      loc?: { line: number, column: number },
-      _loc?: { line: number, column: number },
+      loc?: { start: { line: number, column: number } },
+      _loc?: { start: { line: number, column: number } },
     },
     msg: string,
     Error: typeof Error = SyntaxError,
@@ -193,17 +273,19 @@ export default class File {
     }
 
     if (loc) {
+      const { highlightCode = true } = this.opts;
+
       msg +=
         "\n" +
         codeFrameColumns(
           this.code,
           {
             start: {
-              line: loc.line,
-              column: loc.column + 1,
+              line: loc.start.line,
+              column: loc.start.column + 1,
             },
           },
-          this.opts,
+          { highlightCode },
         );
     }
 

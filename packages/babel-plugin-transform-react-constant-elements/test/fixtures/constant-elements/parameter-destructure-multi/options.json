@@ -1,4 +1,8 @@
 {
-
-  "plugins": ["transform-es2015-destructuring", "transform-es2015-parameters", "transform-react-constant-elements", "syntax-jsx"]
+  "plugins": [
+    "transform-destructuring",
+    "transform-parameters",
+    "transform-react-constant-elements",
+    "syntax-jsx"
+  ]
 }

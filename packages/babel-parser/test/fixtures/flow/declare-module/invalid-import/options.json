@@ -1,0 +1,3 @@
+{
+  "throws": "Imports within a `declare module` body must always be `import type` or `import typeof` (1:21)"
+}

@@ -1,7 +1,9 @@
 {
-
   "plugins": [
-    ["transform-react-constant-elements", {"allowMutablePropsOnTags": ["FormattedMessage"]}],
+    [
+      "transform-react-constant-elements",
+      { "allowMutablePropsOnTags": ["FormattedMessage"] }
+    ],
     "syntax-jsx"
   ]
 }

@@ -1,6 +1,5 @@
-import commander from "commander";
 import readdirRecursive from "fs-readdir-recursive";
-import * as babel from "babel-core";
+import * as babel from "@babel/core";
 import includes from "lodash/includes";
 import path from "path";
 import fs from "fs";
@@ -16,11 +15,15 @@ export function readdir(
   includeDotfiles: boolean,
   filter: ReaddirFilter,
 ) {
-  return readdirRecursive(
-    dirname,
-    filename =>
-      (includeDotfiles || filename[0] !== ".") && (!filter || filter(filename)),
-  );
+  return readdirRecursive(dirname, (filename, _index, currentDirectory) => {
+    const stat = fs.statSync(path.join(currentDirectory, filename));
+
+    if (stat.isDirectory()) return true;
+
+    return (
+      (includeDotfiles || filename[0] !== ".") && (!filter || filter(filename))
+    );
+  });
 }
 
 export function readdirForCompilable(
@@ -46,29 +49,37 @@ export function addSourceMappingUrl(code, loc) {
   return code + "\n//# sourceMappingURL=" + path.basename(loc);
 }
 
-export function log(msg) {
-  if (!commander.quiet) console.log(msg);
-}
+const CALLER = {
+  name: "@babel/cli",
+};
 
 export function transform(filename, code, opts) {
-  opts = Object.assign({}, opts, {
+  opts = {
+    ...opts,
+    caller: CALLER,
     filename,
-  });
+  };
 
-  return babel.transform(code, opts);
+  return new Promise((resolve, reject) => {
+    babel.transform(code, opts, (err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    });
+  });
 }
 
 export function compile(filename, opts) {
-  try {
-    return babel.transformFileSync(filename, opts);
-  } catch (err) {
-    if (commander.watch) {
-      console.error(err);
-      return { ignored: true };
-    } else {
-      throw err;
-    }
-  }
+  opts = {
+    ...opts,
+    caller: CALLER,
+  };
+
+  return new Promise((resolve, reject) => {
+    babel.transformFile(filename, opts, (err, result) => {
+      if (err) reject(err);
+      else resolve(result);
+    });
+  });
 }
 
 export function deleteDir(path) {

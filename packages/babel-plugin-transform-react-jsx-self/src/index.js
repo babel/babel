@@ -11,20 +11,25 @@
  *
  * <sometag __self={this} />
  */
+import { declare } from "@babel/helper-plugin-utils";
+import { types as t } from "@babel/core";
 
 const TRACE_ID = "__self";
 
-export default function({ types: t }) {
+export default declare(api => {
+  api.assertVersion(7);
+
   const visitor = {
     JSXOpeningElement({ node }) {
-      const id = t.jSXIdentifier(TRACE_ID);
+      const id = t.jsxIdentifier(TRACE_ID);
       const trace = t.thisExpression();
 
-      node.attributes.push(t.jSXAttribute(id, t.jSXExpressionContainer(trace)));
+      node.attributes.push(t.jsxAttribute(id, t.jsxExpressionContainer(trace)));
     },
   };
 
   return {
+    name: "transform-react-jsx-self",
     visitor,
   };
-}
+});

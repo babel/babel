@@ -1,4 +1,4 @@
-import * as t from "babel-types";
+import * as t from "@babel/types";
 
 export function ImportSpecifier(node: Object) {
   if (node.importKind === "type" || node.importKind === "typeof") {
@@ -57,7 +57,10 @@ export function ExportAllDeclaration(node: Object) {
 }
 
 export function ExportNamedDeclaration(node: Object) {
-  if (t.isClassDeclaration(node.declaration)) {
+  if (
+    this.format.decoratorsBeforeExport &&
+    t.isClassDeclaration(node.declaration)
+  ) {
     this.printJoin(node.declaration.decorators, node);
   }
 
@@ -67,7 +70,10 @@ export function ExportNamedDeclaration(node: Object) {
 }
 
 export function ExportDefaultDeclaration(node: Object) {
-  if (t.isClassDeclaration(node.declaration)) {
+  if (
+    this.format.decoratorsBeforeExport &&
+    t.isClassDeclaration(node.declaration)
+  ) {
     this.printJoin(node.declaration.decorators, node);
   }
 

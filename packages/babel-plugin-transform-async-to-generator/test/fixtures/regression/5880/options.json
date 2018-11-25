@@ -1,8 +1,0 @@
-{
-  "plugins": [
-    "external-helpers",
-    "transform-async-to-generator",
-    "transform-es2015-destructuring",
-    "syntax-async-generators"
-  ]
-}

@@ -1,24 +1,19 @@
 // @flow
 
-import type Plugin from "./plugin";
-import manageOptions from "./option-manager";
+import loadFullConfig from "./full";
+export type {
+  ResolvedConfig,
+  InputOptions,
+  PluginPasses,
+  Plugin,
+} from "./full";
 
-export type ResolvedConfig = {
-  options: Object,
-  passes: PluginPasses,
-};
+export { loadFullConfig as default };
+export { loadPartialConfig } from "./partial";
+export type { PartialConfig } from "./partial";
 
-export type { Plugin };
-export type PluginPassList = Array<Plugin>;
-export type PluginPasses = Array<PluginPassList>;
+export function loadOptions(opts: {}): Object | null {
+  const config = loadFullConfig(opts);
 
-/**
- * Standard API for loading Babel configuration data. Not for public consumption.
- */
-export default function loadConfig(opts: mixed): ResolvedConfig | null {
-  if (opts != null && typeof opts !== "object") {
-    throw new Error("Babel options must be an object, null, or undefined");
-  }
-
-  return manageOptions(opts || {});
+  return config ? config.options : null;
 }

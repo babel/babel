@@ -1,64 +1,19 @@
-# babel-template
+# @babel/template
 
 > Generate an AST from a string template.
 
-In computer science, this is known as an implementation of quasiquotes.
+See our website [@babel/template](https://babeljs.io/docs/en/next/babel-template.html) for more information or the [issues](https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22pkg%3A%20template%22+is%3Aopen) associated with this package.
 
 ## Install
 
+Using npm:
+
 ```sh
-npm install --save-dev babel-template
+npm install --save-dev @babel/template
 ```
 
-## Usage
+or using yarn:
 
-```js
-import template from "babel-template";
-import generate from "babel-generator";
-import * as t from "babel-types";
-
-const buildRequire = template(`
-  var IMPORT_NAME = require(SOURCE);
-`);
-
-const ast = buildRequire({
-  IMPORT_NAME: t.identifier("myModule"),
-  SOURCE: t.stringLiteral("my-module")
-});
-
-console.log(generate(ast).code);
+```sh
+yarn add @babel/template --dev
 ```
-
-```js
-const myModule = require("my-module");
-```
-
-## API
-
-### `template(code, [opts])`
-
-#### code
-
-Type: `string`
-
-#### options
-
-`babel-template` accepts all of the options from [babylon], and specifies
-some defaults of its own:
-
-* `allowReturnOutsideFunction` is set to `true` by default.
-* `allowSuperOutsideMethod` is set to `true` by default.
-
-##### preserveComments
-
-Type: `boolean`
-Default: `false`
-
-Set this to `true` to preserve any comments from the `code` parameter.
-
-#### Return value
-
-`babel-template` returns a `function` which is invoked with an optional object
-of replacements. See the usage section for an example.
-
-[babylon]: https://github.com/babel/babylon#options

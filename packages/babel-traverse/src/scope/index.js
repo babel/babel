@@ -6,14 +6,8 @@ import traverse from "../index";
 import defaults from "lodash/defaults";
 import Binding from "./binding";
 import globals from "globals";
-import * as t from "babel-types";
+import * as t from "@babel/types";
 import { scope as scopeCache } from "../cache";
-
-// Number of calls to the crawl method to figure out whether we're
-// somewhere inside a call that was trigerred by call. This is meant
-// to be used to figure out whether a warning should be trigerred.
-// See `warnOnFlowBinding`.
-let _crawlCallsCount = 0;
 
 // Recursively gathers the identifying names of a node.
 function gatherNodeParts(node: Object, parts: Array) {
@@ -42,6 +36,12 @@ function gatherNodeParts(node: Object, parts: Array) {
     for (const prop of (node.properties: Array)) {
       gatherNodeParts(prop.key || prop.argument, parts);
     }
+  } else if (t.isPrivateName(node)) {
+    gatherNodeParts(node.id, parts);
+  } else if (t.isThisExpression(node)) {
+    parts.push("this");
+  } else if (t.isSuper(node)) {
+    parts.push("super");
   }
 }
 
@@ -67,9 +67,6 @@ const collectorVisitor = {
     if (path.isExportDeclaration() && path.get("declaration").isDeclaration()) {
       return;
     }
-
-    // TODO(amasad): remove support for flow as bindings (See warning below).
-    //if (path.isFlow()) return;
 
     // we've ran into a declaration!
     const parent =
@@ -216,17 +213,17 @@ export default class Scope {
    * Generate a unique identifier and add it to the current scope.
    */
 
-  generateDeclaredUidIdentifier(name: string = "temp") {
+  generateDeclaredUidIdentifier(name?: string) {
     const id = this.generateUidIdentifier(name);
     this.push({ id });
-    return id;
+    return t.cloneNode(id);
   }
 
   /**
    * Generate a unique identifier.
    */
 
-  generateUidIdentifier(name: string = "temp") {
+  generateUidIdentifier(name?: string) {
     return t.identifier(this.generateUid(name));
   }
 
@@ -269,14 +266,7 @@ export default class Scope {
     return `_${id}`;
   }
 
-  /**
-   * Generate a unique identifier based on a node.
-   */
-
-  generateUidIdentifierBasedOnNode(
-    parent: Object,
-    defaultName?: String,
-  ): Object {
+  generateUidBasedOnNode(parent: Object, defaultName?: String) {
     let node = parent;
 
     if (t.isAssignmentExpression(parent)) {
@@ -293,7 +283,18 @@ export default class Scope {
     let id = parts.join("$");
     id = id.replace(/^_/, "") || defaultName || "ref";
 
-    return this.generateUidIdentifier(id.slice(0, 20));
+    return this.generateUid(id.slice(0, 20));
+  }
+
+  /**
+   * Generate a unique identifier based on a node.
+   */
+
+  generateUidIdentifierBasedOnNode(
+    parent: Object,
+    defaultName?: String,
+  ): Object {
+    return t.identifier(this.generateUidBasedOnNode(parent, defaultName));
   }
 
   /**
@@ -332,7 +333,10 @@ export default class Scope {
       return null;
     } else {
       const id = this.generateUidIdentifierBasedOnNode(node);
-      if (!dontPush) this.push({ id });
+      if (!dontPush) {
+        this.push({ id });
+        return t.cloneNode(id);
+      }
       return id;
     }
   }
@@ -358,7 +362,7 @@ export default class Scope {
       (local.kind === "param" && (kind === "let" || kind === "const"));
 
     if (duplicate) {
-      throw this.hub.file.buildCodeFrameError(
+      throw this.hub.buildError(
         id,
         `Duplicate declaration "${name}"`,
         TypeError,
@@ -401,8 +405,6 @@ export default class Scope {
   }
 
   toArray(node: Object, i?: number) {
-    const file = this.hub.file;
-
     if (t.isIdentifier(node)) {
       const binding = this.getBinding(node.name);
       if (binding && binding.constant && binding.path.isGenericType("Array")) {
@@ -430,16 +432,22 @@ export default class Scope {
       );
     }
 
-    let helperName = "toArray";
+    let helperName;
     const args = [node];
     if (i === true) {
+      // Used in array-spread to create an array.
       helperName = "toConsumableArray";
     } else if (i) {
       args.push(t.numericLiteral(i));
+
+      // Used in array-rest to create an array from a subset of an iterable.
       helperName = "slicedToArray";
-      // TODO if (this.hub.file.isLoose("es6.forOf")) helperName += "-loose";
+      // TODO if (this.hub.isLoose("es6.forOf")) helperName += "-loose";
+    } else {
+      // Used in array-rest to create an array
+      helperName = "toArray";
     }
-    return t.callExpression(file.addHelper(helperName), args);
+    return t.callExpression(this.hub.addHelper(helperName), args);
   }
 
   hasLabel(name: string) {
@@ -517,7 +525,7 @@ export default class Scope {
 
     for (const name in ids) {
       for (const id of (ids[name]: Array<Object>)) {
-        let local = this.getOwnBinding(name);
+        const local = this.getOwnBinding(name);
 
         if (local) {
           // same identifier so continue safely as we're likely trying to register it
@@ -526,11 +534,6 @@ export default class Scope {
 
           this.checkBlockScopedCollisions(local, kind, name, id);
         }
-
-        // It's erroneous that we currently consider flow a binding, however, we can't
-        // remove it because people might be depending on it. See warning section
-        // in `warnOnFlowBinding`.
-        if (local && local.path.isFlow()) local = null;
 
         parent.references[name] = true;
 
@@ -618,7 +621,7 @@ export default class Scope {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       if (node.kind === "get" || node.kind === "set") return false;
       return true;
-    } else if (t.isClassProperty(node) || t.isObjectProperty(node)) {
+    } else if (t.isProperty(node)) {
       if (node.computed && !this.isPure(node.key, constantsOnly)) return false;
       return this.isPure(node.value, constantsOnly);
     } else if (t.isUnaryExpression(node)) {
@@ -677,15 +680,7 @@ export default class Scope {
   }
 
   crawl() {
-    _crawlCallsCount++;
-    this._crawl();
-    _crawlCallsCount--;
-  }
-
-  _crawl() {
     const path = this.path;
-
-    //
 
     this.references = Object.create(null);
     this.bindings = Object.create(null);
@@ -908,28 +903,17 @@ export default class Scope {
     return this.getBindingIdentifier(name) === node;
   }
 
-  warnOnFlowBinding(binding) {
-    if (_crawlCallsCount === 0 && binding && binding.path.isFlow()) {
-      console.warn(`
-        You or one of the Babel plugins you are using are using Flow declarations as bindings.
-        Support for this will be removed in version 7. To find out the caller, grep for this
-        message and change it to a \`console.trace()\`.
-      `);
-    }
-    return binding;
-  }
-
   getBinding(name: string) {
     let scope = this;
 
     do {
       const binding = scope.getOwnBinding(name);
-      if (binding) return this.warnOnFlowBinding(binding);
+      if (binding) return binding;
     } while ((scope = scope.parent));
   }
 
   getOwnBinding(name: string) {
-    return this.warnOnFlowBinding(this.bindings[name]);
+    return this.bindings[name];
   }
 
   getBindingIdentifier(name: string) {

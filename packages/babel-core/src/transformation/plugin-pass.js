@@ -8,10 +8,19 @@ export default class PluginPass {
   file: File;
   opts: Object;
 
+  // The working directory that Babel's programmatic options are loaded
+  // relative to.
+  cwd: string;
+
+  // The absolute path of the file being compiled.
+  filename: string | void;
+
   constructor(file: File, key: ?string, options: ?Object) {
     this.key = key;
     this.file = file;
     this.opts = options || {};
+    this.cwd = file.opts.cwd;
+    this.filename = file.opts.filename;
   }
 
   set(key: mixed, val: mixed) {
@@ -20,6 +29,10 @@ export default class PluginPass {
 
   get(key: mixed): any {
     return this._map.get(key);
+  }
+
+  availableHelper(name: string, versionRange: ?string) {
+    return this.file.availableHelper(name, versionRange);
   }
 
   addHelper(name: string) {
@@ -36,8 +49,8 @@ export default class PluginPass {
 
   buildCodeFrameError(
     node: ?{
-      loc?: { line: number, column: number },
-      _loc?: { line: number, column: number },
+      loc?: { start: { line: number, column: number } },
+      _loc?: { start: { line: number, column: number } },
     },
     msg: string,
     Error?: typeof Error,

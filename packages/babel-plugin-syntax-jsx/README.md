@@ -1,35 +1,19 @@
-# babel-plugin-syntax-jsx
+# @babel/plugin-syntax-jsx
 
-> Allow parsing of JSX
+> Allow parsing of jsx
 
-## Installation
+See our website [@babel/plugin-syntax-jsx](https://babeljs.io/docs/en/next/babel-plugin-syntax-jsx.html) for more information.
 
-```sh
-npm install --save-dev babel-plugin-syntax-jsx
-```
+## Install
 
-## Usage
-
-### Via `.babelrc` (Recommended)
-
-**.babelrc**
-
-```json
-{
-  "plugins": ["syntax-jsx"]
-}
-```
-
-### Via CLI
+Using npm:
 
 ```sh
-babel --plugins syntax-jsx script.js
+npm install --save-dev @babel/plugin-syntax-jsx
 ```
 
-### Via Node API
+or using yarn:
 
-```javascript
-require("babel-core").transform("code", {
-  plugins: ["syntax-jsx"]
-});
+```sh
+yarn add @babel/plugin-syntax-jsx --dev
 ```

@@ -1,25 +1,33 @@
-import type { NodePath } from "babel-traverse";
-import nameFunction from "babel-helper-function-name";
-import template from "babel-template";
-import * as t from "babel-types";
+import type { NodePath } from "@babel/traverse";
+import nameFunction from "@babel/helper-function-name";
+import template from "@babel/template";
+import * as t from "@babel/types";
 
-const buildWrapper = template(`
-  (() => {
+const buildAnonymousExpressionWrapper = template.expression(`
+  (function () {
     var REF = FUNCTION;
     return function NAME(PARAMS) {
       return REF.apply(this, arguments);
     };
-  })
+  })()
 `);
 
-const namedBuildWrapper = template(`
-  (() => {
+const buildNamedExpressionWrapper = template.expression(`
+  (function () {
     var REF = FUNCTION;
     function NAME(PARAMS) {
       return REF.apply(this, arguments);
     }
     return NAME;
-  })
+  })()
+`);
+
+const buildDeclarationWrapper = template(`
+  function NAME(PARAMS) { return REF.apply(this, arguments); }
+  function REF() {
+    REF = FUNCTION;
+    return REF.apply(this, arguments);
+  }
 `);
 
 function classOrObjectMethod(path: NodePath, callId: Object) {
@@ -53,12 +61,14 @@ function plainFunction(path: NodePath, callId: Object) {
   const node = path.node;
   const isDeclaration = path.isFunctionDeclaration();
   const functionId = node.id;
-  let wrapper = buildWrapper;
+  const wrapper = isDeclaration
+    ? buildDeclarationWrapper
+    : functionId
+    ? buildNamedExpressionWrapper
+    : buildAnonymousExpressionWrapper;
 
   if (path.isArrowFunctionExpression()) {
     path.arrowFunctionToExpression();
-  } else if (!isDeclaration && functionId) {
-    wrapper = namedBuildWrapper;
   }
 
   node.id = null;
@@ -70,7 +80,7 @@ function plainFunction(path: NodePath, callId: Object) {
   const built = t.callExpression(callId, [node]);
   const container = wrapper({
     NAME: functionId || null,
-    REF: path.scope.generateUidIdentifier("ref"),
+    REF: path.scope.generateUidIdentifier(functionId ? functionId.name : "ref"),
     FUNCTION: built,
     PARAMS: node.params.reduce(
       (acc, param) => {
@@ -88,35 +98,13 @@ function plainFunction(path: NodePath, callId: Object) {
         done: false,
       },
     ).params,
-  }).expression;
+  });
 
-  if (isDeclaration && functionId) {
-    const declar = t.variableDeclaration("let", [
-      t.variableDeclarator(
-        t.identifier(functionId.name),
-        t.callExpression(container, []),
-      ),
-    ]);
-    (declar: any)._blockHoist = true;
-
-    if (path.parentPath.isExportDefaultDeclaration()) {
-      // change the path type so that replaceWith() does not wrap
-      // the identifier into an expressionStatement
-      path.parentPath.insertBefore(declar);
-      path.parentPath.replaceWith(
-        t.exportNamedDeclaration(null, [
-          t.exportSpecifier(
-            t.identifier(functionId.name),
-            t.identifier("default"),
-          ),
-        ]),
-      );
-      return;
-    }
-
-    path.replaceWith(declar);
+  if (isDeclaration) {
+    path.replaceWith(container[0]);
+    path.insertAfter(container[1]);
   } else {
-    const retFunction = container.body.body[1].argument;
+    const retFunction = container.callee.body.body[1].argument;
     if (!functionId) {
       nameFunction({
         node: retFunction,
@@ -127,7 +115,7 @@ function plainFunction(path: NodePath, callId: Object) {
 
     if (!retFunction || retFunction.id || node.params.length) {
       // we have an inferred function id or params so we need this wrapper
-      path.replaceWith(t.callExpression(container, []));
+      path.replaceWith(container);
     } else {
       // we can omit this wrapper as the conditions it protects for do not apply
       path.replaceWith(built);
