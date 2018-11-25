@@ -1,25 +1,22 @@
+/* eslint-disable local-rules/plugin-name */
+
 import { declare } from "@babel/helper-plugin-utils";
-import pluginClassFeatures, {
-  enableFeature,
+import {
+  createClassFeaturePlugin,
   FEATURES,
-} from "@babel/plugin-class-features";
+} from "@babel/helper-class-features-plugin";
 
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  const { loose } = options;
-
-  return {
+  return createClassFeaturePlugin({
     name: "proposal-class-properties",
 
-    inherits: pluginClassFeatures,
+    feature: FEATURES.fields,
+    loose: options.loose,
 
     manipulateOptions(opts, parserOpts) {
       parserOpts.plugins.push("classProperties", "classPrivateProperties");
     },
-
-    pre() {
-      enableFeature(this.file, FEATURES.fields, loose);
-    },
-  };
+  });
 });

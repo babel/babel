@@ -13,7 +13,7 @@
   ],
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",
-    "@babel/plugin-class-features": "^7.1.4"
+    "@babel/helper-class-features-plugin": "^7.1.4"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0-0"
