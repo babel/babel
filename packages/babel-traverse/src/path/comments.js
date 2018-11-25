@@ -5,6 +5,12 @@ import * as t from "@babel/types";
  * Share comments amongst siblings.
  */
 
+/**
+ * TODO(logan): Deprecated. Remove in Babel 8.x. I don't even really know
+ * what this function is supposed to do, but it doesn't seems to make
+ * a lot of sense as is. It used to be used as part of path removal,
+ * but in that usecase it was weird anyway.
+ */
 export function shareCommentsWithSiblings() {
   // NOTE: this assumes numbered keys
   if (typeof this.key === "string") return;

@@ -13,7 +13,7 @@ export function remove() {
     return;
   }
 
-  this.shareCommentsWithSiblings();
+  moveCommentsToSiblings(this);
   this._remove();
   this._markRemoved();
 }
@@ -49,5 +49,30 @@ export function _assertUnremoved() {
     throw this.buildCodeFrameError(
       "NodePath has been removed so is read-only.",
     );
+  }
+}
+
+function moveCommentsToSiblings(path) {
+  // NOTE: this assumes numbered keys
+  if (typeof path.key === "string") return;
+
+  const node = path.node;
+  if (!node) return;
+
+  const trailing = node.trailingComments;
+  const leading = node.leadingComments;
+  if (!trailing && !leading) return;
+
+  const comments = [].concat(leading || [], trailing || []);
+
+  const prev = path.getSibling(path.key - 1);
+  const next = path.getSibling(path.key + 1);
+  const hasPrev = Boolean(prev.node);
+  const hasNext = Boolean(next.node);
+
+  if (hasNext) {
+    next.addComments("leading", comments);
+  } else if (hasPrev) {
+    prev.addComments("trailing", comments);
   }
 }
