@@ -1716,7 +1716,7 @@ export default class ExpressionParser extends LValParser {
     const oldInAsync = this.state.inAsync;
     const oldInGenerator = this.state.inGenerator;
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    this.state.inAsync = true;
+    this.state.inAsync = isAsync;
     this.state.inGenerator = false;
     this.state.maybeInArrowParameters = false;
     this.parseFunctionBody(node, true);
