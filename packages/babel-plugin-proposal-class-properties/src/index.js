@@ -4,7 +4,7 @@ import { declare } from "@babel/helper-plugin-utils";
 import {
   createClassFeaturePlugin,
   FEATURES,
-} from "@babel/helper-class-features-plugin";
+} from "@babel/helper-create-class-features-plugin";
 
 export default declare((api, options) => {
   api.assertVersion(7);
