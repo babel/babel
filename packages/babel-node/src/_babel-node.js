@@ -64,7 +64,7 @@ program.version(pkg.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
 
-register({
+const babelOptions = {
   caller: {
     name: "@babel/node",
   },
@@ -81,7 +81,15 @@ register({
   // leave them undefined so that @babel/core can handle the
   // default-assignment logic on its own.
   babelrc: program.babelrc === true ? undefined : program.babelrc,
-});
+};
+
+for (const key of Object.keys(babelOptions)) {
+  if (babelOptions[key] === undefined) {
+    delete babelOptions[key];
+  }
+}
+
+register(babelOptions);
 
 const replPlugin = ({ types: t }) => ({
   visitor: {
