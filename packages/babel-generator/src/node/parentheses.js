@@ -166,6 +166,7 @@ export function YieldExpression(node: Object, parent: Object): boolean {
     t.isCallExpression(parent) ||
     t.isMemberExpression(parent) ||
     t.isNewExpression(parent) ||
+    (t.isAwaitExpression(parent) && t.isYieldExpression(node)) ||
     (t.isConditionalExpression(parent) && node === parent.test) ||
     isClassExtendsClause(node, parent)
   );
