@@ -154,12 +154,12 @@ describe("api", function() {
     );
   });
 
-  it("exposes the parser", function() {
-    expect(babel.parser).toBeDefined();
-  });
-
   it("exposes types", function() {
     expect(babel.types).toBeDefined();
+  });
+
+  it("exposes the parser's token types", function() {
+    expect(babel.tokTypes).toBeDefined();
   });
 
   it("transformFile", function(done) {
