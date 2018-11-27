@@ -63,7 +63,6 @@
     "rollup-stream": "^1.24.1",
     "test262-stream": "^1.2.0",
     "through2": "^2.0.0",
-    "uglify-js": "^2.4.16",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
     "webpack": "^3.4.1",
