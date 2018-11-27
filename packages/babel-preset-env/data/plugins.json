@@ -131,9 +131,9 @@
     "chrome": "50",
     "edge": "13",
     "firefox": "46",
-    "safari": "10",
+    "safari": "12",
     "node": "6",
-    "ios": "10",
+    "ios": "12",
     "opera": "37",
     "electron": "1.1"
   },

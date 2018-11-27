@@ -232,8 +232,8 @@ const getLowestImplementedVersion = ({ features }, env) => {
   return envTests
     .map(str => str.replace(env, ""))
     .reduce((a, b) => {
-      if (b === unreleasedLabelForEnv) {
-        return b;
+      if (a === unreleasedLabelForEnv || b === unreleasedLabelForEnv) {
+        return unreleasedLabelForEnv;
       }
 
       return semver.lt(semver.coerce(a), semver.coerce(b)) ? b : a;
