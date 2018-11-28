@@ -55,13 +55,13 @@ export function verifyUsedFeatures(path, file) {
     }
 
     if (path.node.static) {
-      throw new Error(
+      throw path.buildCodeFrameError(
         "@babel/plugin-class-features doesn't support class static private methods yet.",
       );
     }
 
     if (path.node.kind !== "method") {
-      throw new Error(
+      throw path.buildCodeFrameError(
         "@babel/plugin-class-features doesn't support class private accessors yet.",
       );
     }
@@ -72,7 +72,7 @@ export function verifyUsedFeatures(path, file) {
     hasFeature(file, FEATURES.fields) &&
     isLoose(file, FEATURES.privateMethods) !== isLoose(file, FEATURES.fields)
   ) {
-    throw new Error(
+    throw path.buildCodeFrameError(
       "'loose' mode configuration must be the same for both @babel/plugin-proposal-class-properties " +
         "and @babel/plugin-proposal-private-methods",
     );
