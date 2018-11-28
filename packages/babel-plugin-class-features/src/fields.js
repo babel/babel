@@ -24,17 +24,14 @@ export function buildPrivateNamesMap(props) {
 export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
   const initNodes = [];
 
-  for (const [
-    name,
-    { id, static: isStatic, method: isMethod },
-  ] of privateNamesMap) {
+  for (const [name, value] of privateNamesMap) {
     // In loose mode, both static and instance fields are transpiled using a
     // secret non-enumerable property. Hence, we also need to generate that
     // key (using the classPrivateFieldLooseKey helper).
     // In spec mode, only instance fields need a "private name" initializer
     // because static fields are directly assigned to a variable in the
     // buildPrivateStaticFieldInitSpec function.
-
+    const { id, static: isStatic, method: isMethod } = value;
     if (loose) {
       initNodes.push(
         template.statement.ast`
