@@ -49,6 +49,7 @@ const es = {
     features: [
       'RegExp "y" and "u" flags / "u" flag, case folding',
       'RegExp "y" and "u" flags / "u" flag, Unicode code point escapes',
+      'RegExp "y" and "u" flags / "u" flag, non-BMP Unicode characters',
       'RegExp "y" and "u" flags / "u" flag',
     ],
   },
