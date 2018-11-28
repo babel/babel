@@ -135,7 +135,7 @@ defineType("ClassPrivateProperty", {
 });
 
 defineType("ClassPrivateMethod", {
-  builder: ["kind", "key", "params", "body", "computed", "static"],
+  builder: ["kind", "key", "params", "body", "static"],
   visitor: [
     "key",
     "params",
