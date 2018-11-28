@@ -34,7 +34,7 @@ export function createClassFeaturePlugin({
   return {
     name: "class-features/" + name,
 
-    manipulateOptions: manipulateOptions,
+    manipulateOptions,
 
     pre() {
       enableFeature(this.file, feature, loose);
