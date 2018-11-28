@@ -9357,7 +9357,7 @@ uglify-js@3.3.x, uglify-js@^3.0.5:
     commander "~2.14.1"
     source-map "~0.6.1"
 
-uglify-js@^2.4.16, uglify-js@^2.6, uglify-js@^2.8.29:
+uglify-js@^2.6, uglify-js@^2.8.29:
   version "2.8.29"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-2.8.29.tgz#29c5733148057bb4e1f75df35b7a9cb72e6a59dd"
   integrity sha1-KcVzMUgFe7Th913zW3qcty5qWd0=

@@ -115,7 +115,7 @@ prepublish-build:
 	rm -rf packages/babel-runtime/helpers
 	rm -rf packages/babel-runtime-corejs2/helpers
 	rm -rf packages/babel-runtime-corejs2/core-js
-	BABEL_ENV=production make build-dist
+	BABEL_ENV=production IS_PUBLISH=true make build-dist
 	make clone-license
 
 prepublish:
