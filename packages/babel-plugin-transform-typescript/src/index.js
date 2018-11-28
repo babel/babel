@@ -25,6 +25,8 @@ const PARSED_PARAMS = new WeakSet();
 export default declare((api, { jsxPragma = "React" }) => {
   api.assertVersion(7);
 
+  const JSX_ANNOTATION_REGEX = /\*?\s*@jsx\s+([^\s]+)/;
+
   return {
     name: "transform-typescript",
     inherits: syntaxTypeScript,
@@ -37,6 +39,17 @@ export default declare((api, { jsxPragma = "React" }) => {
 
       Program(path, state: State) {
         state.programPath = path;
+
+        const { file } = state;
+
+        if (file.ast.comments) {
+          for (const comment of (file.ast.comments: Array<Object>)) {
+            const jsxMatches = JSX_ANNOTATION_REGEX.exec(comment.value);
+            if (jsxMatches) {
+              jsxPragma = jsxMatches[1];
+            }
+          }
+        }
 
         // remove type imports
         for (const stmt of path.get("body")) {
