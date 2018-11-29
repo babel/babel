@@ -53,12 +53,6 @@ export function verifyUsedFeatures(path, file) {
     }
   }
 
-  if (hasFeature(file, FEATURES.decorators)) {
-    throw new Error(
-      "@babel/plugin-class-features doesn't support decorators yet.",
-    );
-  }
-
   // NOTE: We can't use path.isPrivateMethod() because it isn't supported in <7.2.0
   if (path.isPrivate() && path.isMethod()) {
     if (!hasFeature(file, FEATURES.privateMethods)) {

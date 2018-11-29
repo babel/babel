@@ -1,9 +1,11 @@
+/* eslint-disable local-rules/plugin-name */
+
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
-import pluginClassFeatures, {
-  enableFeature,
+import {
+  createClassFeaturePlugin,
   FEATURES,
-} from "@babel/plugin-class-features";
+} from "@babel/helper-create-class-features-plugin";
 import legacyVisitor from "./transformer-legacy";
 
 export default declare((api, options) => {
@@ -45,17 +47,15 @@ export default declare((api, options) => {
     };
   }
 
-  return {
+  return createClassFeaturePlugin({
     name: "proposal-decorators",
-    inherits: pluginClassFeatures,
+
+    feature: FEATURES.decorators,
+    // loose: options.loose, Not supported
 
     manipulateOptions({ generatorOpts, parserOpts }) {
       parserOpts.plugins.push(["decorators", { decoratorsBeforeExport }]);
       generatorOpts.decoratorsBeforeExport = decoratorsBeforeExport;
     },
-
-    pre() {
-      enableFeature(this.file, FEATURES.decorators, false);
-    },
-  };
+  });
 });
