@@ -620,6 +620,10 @@ export function ClassPrivateProperty(...args: Array<any>): Object {
   return builder("ClassPrivateProperty", ...args);
 }
 export { ClassPrivateProperty as classPrivateProperty };
+export function ClassPrivateMethod(...args: Array<any>): Object {
+  return builder("ClassPrivateMethod", ...args);
+}
+export { ClassPrivateMethod as classPrivateMethod };
 export function Import(...args: Array<any>): Object {
   return builder("Import", ...args);
 }

@@ -39,19 +39,43 @@ export function isLoose(file, feature) {
 }
 
 export function verifyUsedFeatures(path, file) {
+  if (hasDecorators(path) && !hasFeature(file, FEATURES.decorators)) {
+    throw path.buildCodeFrameError("Decorators are not enabled.");
+  }
+
   if (hasFeature(file, FEATURES.decorators)) {
     throw new Error(
       "@babel/plugin-class-features doesn't support decorators yet.",
     );
   }
-  if (hasFeature(file, FEATURES.privateMethods)) {
-    throw new Error(
-      "@babel/plugin-class-features doesn't support private methods yet.",
-    );
+
+  if (path.isClassPrivateMethod()) {
+    if (!hasFeature(file, FEATURES.privateMethods)) {
+      throw path.buildCodeFrameError("Class private methods are not enabled.");
+    }
+
+    if (path.node.static) {
+      throw path.buildCodeFrameError(
+        "@babel/plugin-class-features doesn't support class static private methods yet.",
+      );
+    }
+
+    if (path.node.kind !== "method") {
+      throw path.buildCodeFrameError(
+        "@babel/plugin-class-features doesn't support class private accessors yet.",
+      );
+    }
   }
 
-  if (hasDecorators(path) && !hasFeature(file, FEATURES.decorators)) {
-    throw path.buildCodeFrameError("Decorators are not enabled.");
+  if (
+    hasFeature(file, FEATURES.privateMethods) &&
+    hasFeature(file, FEATURES.fields) &&
+    isLoose(file, FEATURES.privateMethods) !== isLoose(file, FEATURES.fields)
+  ) {
+    throw path.buildCodeFrameError(
+      "'loose' mode configuration must be the same for both @babel/plugin-proposal-class-properties " +
+        "and @babel/plugin-proposal-private-methods",
+    );
   }
 
   if (path.isProperty()) {
