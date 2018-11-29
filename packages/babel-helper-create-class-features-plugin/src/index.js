@@ -32,8 +32,7 @@ export function createClassFeaturePlugin({
   manipulateOptions,
 }) {
   return {
-    name: "class-features/" + name,
-
+    name,
     manipulateOptions,
 
     pre() {
