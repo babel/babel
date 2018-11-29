@@ -1,5 +1,5 @@
 {
-  "name": "@babel/plugin-class-features",
+  "name": "@babel/helper-create-class-features-plugin",
   "version": "7.1.4",
   "author": "The Babel Team (https://babeljs.io/team)",
   "license": "MIT",

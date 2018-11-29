@@ -1,4 +1,3 @@
-import { declare } from "@babel/helper-plugin-utils";
 import nameFunction from "@babel/helper-function-name";
 import { types as t } from "@babel/core";
 import {
@@ -12,13 +11,12 @@ import {
   enableFeature,
   verifyUsedFeatures,
   FEATURES,
-  setLoose,
   isLoose,
 } from "./features";
 
 import pkg from "../package.json";
 
-export { enableFeature, FEATURES, setLoose };
+export { FEATURES };
 
 // Note: Versions are represented as an integer. e.g. 7.1.5 is represented
 //       as 70000100005. This method is easier than using a semver-parsing
@@ -27,59 +25,21 @@ export { enableFeature, FEATURES, setLoose };
 const version = pkg.version.split(".").reduce((v, x) => v * 1e5 + +x, 0);
 const versionKey = "@babel/plugin-class-features/version";
 
-const getFeatureOptions = (options, name) => {
-  const value = options[name];
-
-  if (value === undefined || value === false) return { enabled: false };
-  if (value === true) return { enabled: true, loose: false };
-
-  if (typeof value === "object") {
-    if (
-      typeof value.loose !== "undefined" &&
-      typeof value.loose !== "boolean"
-    ) {
-      throw new Error(`.${name}.loose must be a boolean or undefined.`);
-    }
-
-    return { enabled: true, loose: !!value.loose };
-  }
-
-  throw new Error(
-    `.${name} must be a boolean, an object with a 'loose'` +
-      ` property or undefined.`,
-  );
-};
-
-export default declare((api, options) => {
-  api.assertVersion(7);
-
-  const fields = getFeatureOptions(options, "fields");
-  const privateMethods = getFeatureOptions(options, "privateMethods");
-  const decorators = getFeatureOptions(options, "decorators");
-
+export function createClassFeaturePlugin({
+  name,
+  feature,
+  loose,
+  manipulateOptions,
+}) {
   return {
-    name: "class-features",
-
-    manipulateOptions(opts, parserOpts) {
-      if (fields) {
-        parserOpts.plugins.push("classProperties", "classPrivateProperties");
-      }
-    },
+    name,
+    manipulateOptions,
 
     pre() {
+      enableFeature(this.file, feature, loose);
+
       if (!this.file.get(versionKey) || this.file.get(versionKey) < version) {
         this.file.set(versionKey, version);
-      }
-
-      if (fields.enabled) {
-        enableFeature(this.file, FEATURES.fields, fields.loose);
-      }
-      if (privateMethods.enabled) {
-        enableFeature(this.file, FEATURES.privateMethods);
-      }
-      if (decorators.enabled) {
-        throw new Error("Decorators are not supported yet");
-        enableFeature(this.file, FEATURES.decorators);
       }
     },
 
@@ -203,4 +163,4 @@ export default declare((api, options) => {
       },
     },
   };
-});
+}
