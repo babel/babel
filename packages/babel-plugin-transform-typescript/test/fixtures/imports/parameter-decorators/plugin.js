@@ -25,7 +25,7 @@ exports.default = function(_ref) {
               .forEach(function(decorator) {
                 resultantDecorator = types.callExpression(
                   decorator.expression,
-                  [resultantDecorator || types.Identifier(paramUidName)],
+                  [resultantDecorator || types.Identifier(paramUidName)]
                 );
               });
 
@@ -41,9 +41,9 @@ exports.default = function(_ref) {
                   types.variableDeclaration("var", [
                     types.variableDeclarator(
                       types.Identifier(decoratedParamUidName),
-                      resultantDecorator,
+                      resultantDecorator
                     ),
-                  ]),
+                  ])
                 );
               param.replaceWith(types.Identifier(paramUidName));
             }
