@@ -29,8 +29,11 @@ export function readdir(
 export function readdirForCompilable(
   dirname: string,
   includeDotfiles: boolean,
+  altExts?: Array<string>,
 ) {
-  return readdir(dirname, includeDotfiles, isCompilableExtension);
+  return readdir(dirname, includeDotfiles, function(filename) {
+    return isCompilableExtension(filename, altExts);
+  });
 }
 
 /**
