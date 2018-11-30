@@ -26,11 +26,11 @@ Using plugins:
   transform-regenerator { "electron":"0.36" }
   transform-exponentiation-operator { "electron":"0.36" }
   transform-async-to-generator { "electron":"0.36" }
-  proposal-async-generator-functions { "electron":"0.36" }
-  proposal-object-rest-spread { "electron":"0.36" }
-  proposal-unicode-property-regex { "electron":"0.36" }
-  proposal-json-strings { "electron":"0.36" }
-  proposal-optional-catch-binding { "electron":"0.36" }
+  transform-async-generator-functions { "electron":"0.36" }
+  transform-object-rest-spread { "electron":"0.36" }
+  transform-unicode-property-regex { "electron":"0.36" }
+  transform-json-strings { "electron":"0.36" }
+  transform-optional-catch-binding { "electron":"0.36" }
 
 Using polyfills with `entry` option:
 

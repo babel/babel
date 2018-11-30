@@ -1,6 +1,5 @@
 {
   "plugins": [
-    "syntax-async-generators",
     "transform-object-rest-spread",
     ["external-helpers", { "helperVersion": "7.1.5" }]
   ]

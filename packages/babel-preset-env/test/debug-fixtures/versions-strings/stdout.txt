@@ -33,11 +33,11 @@ Using plugins:
   transform-regenerator { "ie":"10" }
   transform-exponentiation-operator { "ie":"10", "node":"6.10" }
   transform-async-to-generator { "chrome":"54", "ie":"10", "node":"6.10" }
-  proposal-async-generator-functions { "chrome":"54", "ie":"10", "node":"6.10" }
-  proposal-object-rest-spread { "chrome":"54", "ie":"10", "node":"6.10" }
-  proposal-unicode-property-regex { "chrome":"54", "ie":"10", "node":"6.10" }
-  proposal-json-strings { "chrome":"54", "ie":"10", "node":"6.10" }
-  proposal-optional-catch-binding { "chrome":"54", "ie":"10", "node":"6.10" }
+  transform-async-generator-functions { "chrome":"54", "ie":"10", "node":"6.10" }
+  transform-object-rest-spread { "chrome":"54", "ie":"10", "node":"6.10" }
+  transform-unicode-property-regex { "chrome":"54", "ie":"10", "node":"6.10" }
+  transform-json-strings { "chrome":"54", "ie":"10", "node":"6.10" }
+  transform-optional-catch-binding { "chrome":"54", "ie":"10", "node":"6.10" }
 
 Using polyfills with `entry` option:
 

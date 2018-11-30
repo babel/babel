@@ -31,11 +31,11 @@ Using plugins:
   transform-regenerator { "android":"4" }
   transform-exponentiation-operator { "android":"4" }
   transform-async-to-generator { "android":"4" }
-  proposal-async-generator-functions { "android":"4" }
-  proposal-object-rest-spread { "android":"4" }
-  proposal-unicode-property-regex { "android":"4" }
-  proposal-json-strings { "android":"4" }
-  proposal-optional-catch-binding { "android":"4" }
+  transform-async-generator-functions { "android":"4" }
+  transform-object-rest-spread { "android":"4" }
+  transform-unicode-property-regex { "android":"4" }
+  transform-json-strings { "android":"4" }
+  transform-optional-catch-binding { "android":"4" }
 
 Using polyfills with `entry` option:
 

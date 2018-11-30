@@ -2,7 +2,6 @@
   "plugins": [
     ["proposal-decorators", { "decoratorsBeforeExport": false }],
     "proposal-class-properties",
-    "syntax-async-generators",
     ["external-helpers", { "helperVersion": "7.1.5" }]
   ]
 }

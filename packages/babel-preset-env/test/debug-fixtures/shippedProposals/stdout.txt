@@ -29,11 +29,11 @@ Using plugins:
   transform-regenerator {}
   transform-exponentiation-operator {}
   transform-async-to-generator {}
-  proposal-async-generator-functions {}
-  proposal-object-rest-spread {}
-  proposal-unicode-property-regex {}
-  proposal-json-strings {}
-  proposal-optional-catch-binding {}
+  transform-async-generator-functions {}
+  transform-object-rest-spread {}
+  transform-unicode-property-regex {}
+  transform-json-strings {}
+  transform-optional-catch-binding {}
 
 Using polyfills with `entry` option:
 

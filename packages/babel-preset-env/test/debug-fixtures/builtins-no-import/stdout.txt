@@ -14,11 +14,11 @@ Using plugins:
   transform-destructuring { "node":"6" }
   transform-exponentiation-operator { "node":"6" }
   transform-async-to-generator { "node":"6" }
-  proposal-async-generator-functions { "node":"6" }
-  proposal-object-rest-spread { "node":"6" }
-  proposal-unicode-property-regex { "node":"6" }
-  proposal-json-strings { "node":"6" }
-  proposal-optional-catch-binding { "node":"6" }
+  transform-async-generator-functions { "node":"6" }
+  transform-object-rest-spread { "node":"6" }
+  transform-unicode-property-regex { "node":"6" }
+  transform-json-strings { "node":"6" }
+  transform-optional-catch-binding { "node":"6" }
 
 Using polyfills with `entry` option:
 
