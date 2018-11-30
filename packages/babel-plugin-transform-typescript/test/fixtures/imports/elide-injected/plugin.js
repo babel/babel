@@ -14,6 +14,10 @@ module.exports = function({ types: t }) {
               )
             );
 
+          // with this crawl, babel-plugin-transform-typescript
+          // used to elide the import we just added
+          // https://github.com/babel/babel/issues/7592
+          path.scope.crawl();
           path.node.callee = t.identifier("local");
         }
       },
