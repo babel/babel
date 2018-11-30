@@ -1,8 +1,8 @@
 {
-  "name": "@babel/plugin-proposal-json-strings",
+  "name": "@babel/plugin-transform-json-strings",
   "version": "7.0.0",
   "description": "Escape U+2028 LINE SEPARATOR and U+2029 PARAGRAPH SEPARATOR in JS strings",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-json-strings",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-json-strings",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

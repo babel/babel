@@ -1,5 +1,5 @@
 {
   "plugins": [
-    ["proposal-object-rest-spread", { "loose": true, "useBuiltIns": true }]
+    ["transform-object-rest-spread", { "loose": true, "useBuiltIns": true }]
   ]
 }

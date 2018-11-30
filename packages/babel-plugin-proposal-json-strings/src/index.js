@@ -15,7 +15,7 @@ export default declare(api => {
   }
 
   return {
-    name: "proposal-json-strings",
+    name: "transform-json-strings",
     inherits: syntaxJsonStrings,
 
     visitor: {

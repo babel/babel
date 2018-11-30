@@ -1,7 +1,7 @@
 {
   "plugins": [
     "external-helpers",
-    "proposal-async-generator-functions",
+    "transform-async-generator-functions",
     "transform-destructuring"
   ]
 }

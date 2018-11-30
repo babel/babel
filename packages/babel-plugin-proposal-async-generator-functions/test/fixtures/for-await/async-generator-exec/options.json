@@ -2,7 +2,7 @@
   "plugins": [
     "external-helpers",
     "transform-async-to-generator",
-    "proposal-async-generator-functions"
+    "transform-async-generator-functions"
   ],
   "presets": ["env"],
   "parserOpts": {

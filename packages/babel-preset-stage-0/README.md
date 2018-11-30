@@ -33,7 +33,7 @@ If you want the same configuration as before:
     "@babel/plugin-syntax-dynamic-import",
     "@babel/plugin-syntax-import-meta",
     ["@babel/plugin-proposal-class-properties", { "loose": false }],
-    "@babel/plugin-proposal-json-strings"
+    "@babel/plugin-transform-json-strings"
   ]
 }
 ```
@@ -47,8 +47,8 @@ module.exports = function() {
   return {
     plugins: [
       require("@babel/plugin-syntax-dynamic-import"),
-      [require("@babel/plugin-proposal-decorators"), { "legacy": true }],
-      [require("@babel/plugin-proposal-class-properties"), { "loose": false }],
+      [require("@babel/plugin-proposal-decorators"), { legacy: true }],
+      [require("@babel/plugin-proposal-class-properties"), { loose: false }],
     ],
     presets: [
       // ...

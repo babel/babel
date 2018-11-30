@@ -1,4 +1,4 @@
 {
   "presets": [["env", { "targets": { "node": "8" } }]],
-  "plugins": [["proposal-object-rest-spread", { "loose": true }]]
+  "plugins": [["transform-object-rest-spread", { "loose": true }]]
 }

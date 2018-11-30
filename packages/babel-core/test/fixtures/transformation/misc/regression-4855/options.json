@@ -3,6 +3,6 @@
   "presets": ["env"],
   "plugins": [
     ["external-helpers", { "helperVersion": "7.1.5" }],
-    "proposal-object-rest-spread"
+    "transform-object-rest-spread"
   ]
 }
