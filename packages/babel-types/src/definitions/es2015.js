@@ -13,7 +13,7 @@ import {
 } from "./core";
 
 defineType("AssignmentPattern", {
-  visitor: ["left", "right"],
+  visitor: ["left", "right", "decorators" /* for legacy param decorators */],
   builder: ["left", "right"],
   aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
@@ -471,7 +471,11 @@ defineType("ClassMethod", {
 });
 
 defineType("ObjectPattern", {
-  visitor: ["properties", "typeAnnotation"],
+  visitor: [
+    "properties",
+    "typeAnnotation",
+    "decorators" /* for legacy param decorators */,
+  ],
   builder: ["properties"],
   aliases: ["Pattern", "PatternLike", "LVal"],
   fields: {
