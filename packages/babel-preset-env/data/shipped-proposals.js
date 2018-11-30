@@ -8,11 +8,7 @@ const builtIns = {
 const features = {};
 
 const pluginSyntaxMap = new Map([
-  ["proposal-async-generator-functions", "syntax-async-generators"],
-  ["proposal-object-rest-spread", "syntax-object-rest-spread"],
-  ["proposal-optional-catch-binding", "syntax-optional-catch-binding"],
-  ["proposal-unicode-property-regex", null],
-  ["proposal-json-strings", "syntax-json-strings"],
+  // ["proposal-foo", "syntax-foo"]
 ]);
 
 module.exports = { builtIns, features, pluginSyntaxMap };

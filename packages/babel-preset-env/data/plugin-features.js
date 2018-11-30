@@ -92,12 +92,12 @@ const es = {
     features: ["async functions"],
   },
 
-  "proposal-async-generator-functions": "Asynchronous Iterators",
-  "proposal-object-rest-spread": "object rest/spread properties",
-  "proposal-unicode-property-regex": "RegExp Unicode Property Escapes",
+  "transform-async-generator-functions": "Asynchronous Iterators",
+  "transform-object-rest-spread": "object rest/spread properties",
+  "transform-unicode-property-regex": "RegExp Unicode Property Escapes",
 
-  "proposal-json-strings": "", // Awaiting mapping in compat-table
-  "proposal-optional-catch-binding": "optional catch binding",
+  "transform-json-strings": "", // Awaiting mapping in compat-table
+  "transform-optional-catch-binding": "optional catch binding",
 };
 
 const proposals = require("./shipped-proposals").features;
