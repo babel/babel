@@ -971,14 +971,23 @@ export default class Tokenizer extends LocationParser {
 
   readNumber(startsWithDot: boolean): void {
     const start = this.state.pos;
-    let octal = this.input.charCodeAt(start) === charCodes.digit0;
     let isFloat = false;
     let isBigInt = false;
 
     if (!startsWithDot && this.readInt(10) === null) {
       this.raise(start, "Invalid number");
     }
-    if (octal && this.state.pos == start + 1) octal = false; // number === 0
+    let octal =
+      this.state.pos - start >= 2 &&
+      this.input.charCodeAt(start) === charCodes.digit0;
+    if (octal) {
+      if (this.state.strict) {
+        this.raise(start, "Invalid number");
+      }
+      if (/[89]/.test(this.input.slice(start, this.state.pos))) {
+        octal = false;
+      }
+    }
 
     let next = this.input.charCodeAt(this.state.pos);
     if (next === charCodes.dot && !octal) {
@@ -1022,18 +1031,7 @@ export default class Tokenizer extends LocationParser {
       return;
     }
 
-    let val;
-    if (isFloat) {
-      val = parseFloat(str);
-    } else if (!octal || str.length === 1) {
-      val = parseInt(str, 10);
-    } else if (this.state.strict) {
-      this.raise(start, "Invalid number");
-    } else if (/[89]/.test(str)) {
-      val = parseInt(str, 10);
-    } else {
-      val = parseInt(str, 8);
-    }
+    const val = octal ? parseInt(str, 8) : parseFloat(str);
     this.finishToken(tt.num, val);
   }
 
