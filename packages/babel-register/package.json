@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "core-js": "^2.5.7",
-    "find-cache-dir": "^1.0.0",
+    "find-cache-dir": "^2.0.0",
     "home-or-tmp": "^3.0.0",
     "lodash": "^4.17.10",
     "mkdirp": "^0.5.1",
