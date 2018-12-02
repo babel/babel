@@ -165,6 +165,7 @@ registerPlugins({
   "proposal-export-default-from": require("@babel/plugin-proposal-export-default-from"),
   "proposal-export-namespace-from": require("@babel/plugin-proposal-export-namespace-from"),
   "proposal-pipeline-operator": require("@babel/plugin-proposal-pipeline-operator"),
+  "proposal-private-methods": require("@babel/plugin-proposal-private-methods"),
   "transform-arrow-functions": require("@babel/plugin-transform-arrow-functions"),
   "transform-block-scoped-functions": require("@babel/plugin-transform-block-scoped-functions"),
   "transform-block-scoping": require("@babel/plugin-transform-block-scoping"),
