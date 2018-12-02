@@ -70,7 +70,7 @@ function findFile(filepath: string, allowJSON: boolean) {
     throw new Error(`Found conflicting file matches: ${matches.join(", ")}`);
   }
 
-  return matches[0] || filepath + ".js";
+  return matches[0];
 }
 
 export default function get(entryLoc): Array<Suite> {
@@ -101,9 +101,22 @@ export default function get(entryLoc): Array<Suite> {
     }
 
     function push(taskName, taskDir) {
-      const actualLoc = findFile(taskDir + "/input");
-      const expectLoc = findFile(taskDir + "/output", true /* allowJSON */);
+      const taskDirStats = fs.statSync(taskDir);
+      let actualLoc = findFile(taskDir + "/input");
       let execLoc = findFile(taskDir + "/exec");
+
+      // If neither input nor exec is present it is not a real testcase
+      if (taskDirStats.isDirectory() && !actualLoc && !execLoc) {
+        return;
+      } else if (!actualLoc) {
+        actualLoc = taskDir + "/input.js";
+      } else if (!execLoc) {
+        execLoc = taskDir + "/exec.js";
+      }
+
+      const expectLoc =
+        findFile(taskDir + "/output", true /* allowJSON */) ||
+        taskDir + "/output.js";
 
       const actualLocAlias =
         suiteName + "/" + taskName + "/" + path.basename(actualLoc);
@@ -112,7 +125,7 @@ export default function get(entryLoc): Array<Suite> {
       let execLocAlias =
         suiteName + "/" + taskName + "/" + path.basename(actualLoc);
 
-      if (fs.statSync(taskDir).isFile()) {
+      if (taskDirStats.isFile()) {
         const ext = path.extname(taskDir);
         if (EXTENSIONS.indexOf(ext) === -1) return;
 
