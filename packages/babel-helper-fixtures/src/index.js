@@ -107,6 +107,9 @@ export default function get(entryLoc): Array<Suite> {
 
       // If neither input nor exec is present it is not a real testcase
       if (taskDirStats.isDirectory() && !actualLoc && !execLoc) {
+        if (fs.readdirSync(taskDir).length > 0) {
+          console.warn(`Skipped test folder with invalid layout: ${taskDir}`);
+        }
         return;
       } else if (!actualLoc) {
         actualLoc = taskDir + "/input.js";
