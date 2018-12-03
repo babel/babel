@@ -2131,6 +2131,54 @@ export function isOptionalMemberExpression(
 
   return false;
 }
+export function isPipelineTopicExpression(
+  node: Object,
+  opts?: Object,
+): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "PipelineTopicExpression") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isPipelineBareFunction(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "PipelineBareFunction") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
+export function isPipelinePrimaryTopicReference(
+  node: Object,
+  opts?: Object,
+): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "PipelinePrimaryTopicReference") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isOptionalCallExpression(node: Object, opts?: Object): boolean {
   if (!node) return false;
 
@@ -3164,6 +3212,7 @@ export function isExpression(node: Object, opts?: Object): boolean {
     "AwaitExpression" === nodeType ||
     "BindExpression" === nodeType ||
     "OptionalMemberExpression" === nodeType ||
+    "PipelinePrimaryTopicReference" === nodeType ||
     "OptionalCallExpression" === nodeType ||
     "Import" === nodeType ||
     "DoExpression" === nodeType ||

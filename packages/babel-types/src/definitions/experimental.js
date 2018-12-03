@@ -89,6 +89,30 @@ defineType("OptionalMemberExpression", {
   },
 });
 
+defineType("PipelineTopicExpression", {
+  builder: ["expression"],
+  visitor: ["expression"],
+  fields: {
+    expression: {
+      validate: assertNodeType("Expression"),
+    },
+  },
+});
+
+defineType("PipelineBareFunction", {
+  builder: ["callee"],
+  visitor: ["callee"],
+  fields: {
+    callee: {
+      validate: assertNodeType("Expression"),
+    },
+  },
+});
+
+defineType("PipelinePrimaryTopicReference", {
+  aliases: ["Expression"],
+});
+
 defineType("OptionalCallExpression", {
   visitor: ["callee", "arguments", "typeParameters", "typeArguments"],
   builder: ["callee", "arguments", "optional"],

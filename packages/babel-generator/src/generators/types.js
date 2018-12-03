@@ -151,3 +151,15 @@ export function BigIntLiteral(node: Object) {
   }
   this.token(node.value);
 }
+
+export function PipelineTopicExpression(node: Object) {
+  this.print(node.expression, node);
+}
+
+export function PipelineBareFunction(node: Object) {
+  this.print(node.callee, node);
+}
+
+export function PipelinePrimaryTopicReference() {
+  this.token("#");
+}
