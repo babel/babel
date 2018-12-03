@@ -1,4 +1,4 @@
 {
-  "throws": "Identifier directly after number (2:4)",
+  "throws": "Unexpected digit after hash token (2:2)",
   "plugins": ["classPrivateProperties"]
 }

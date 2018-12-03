@@ -374,7 +374,36 @@ export default class Tokenizer extends LocationParser {
   // into it.
   //
   // All in the name of speed.
-  //
+
+  // number sign is "#"
+  readToken_numberSign(): void {
+    if (this.state.pos === 0 && this.readToken_interpreter()) {
+      return;
+    }
+
+    const nextPos = this.state.pos + 1;
+    const next = this.input.charCodeAt(nextPos);
+    if (next >= charCodes.digit0 && next <= charCodes.digit9) {
+      this.raise(this.state.pos, "Unexpected digit after hash token");
+    }
+
+    if (
+      (this.hasPlugin("classPrivateProperties") ||
+        this.hasPlugin("classPrivateMethods")) &&
+      this.state.classLevel > 0
+    ) {
+      ++this.state.pos;
+      this.finishToken(tt.hash);
+      return;
+    } else if (
+      this.getPluginOption("pipelineOperator", "proposal") === "smart"
+    ) {
+      this.finishOp(tt.hash, 1);
+    } else {
+      this.raise(this.state.pos, "Unexpected character '#'");
+    }
+  }
+
   readToken_dot(): void {
     const next = this.input.charCodeAt(this.state.pos + 1);
     if (next >= charCodes.digit0 && next <= charCodes.digit9) {
@@ -623,24 +652,8 @@ export default class Tokenizer extends LocationParser {
   getTokenFromCode(code: number): void {
     switch (code) {
       case charCodes.numberSign:
-        if (this.state.pos === 0 && this.readToken_interpreter()) {
-          return;
-        }
-
-        if (
-          (this.hasPlugin("classPrivateProperties") ||
-            this.hasPlugin("classPrivateMethods")) &&
-          this.state.classLevel > 0
-        ) {
-          ++this.state.pos;
-          this.finishToken(tt.hash);
-          return;
-        } else {
-          this.raise(
-            this.state.pos,
-            `Unexpected character '${String.fromCodePoint(code)}'`,
-          );
-        }
+        this.readToken_numberSign();
+        return;
 
       // The interpretation of a dot depends on whether it is followed
       // by a digit or another two dots.

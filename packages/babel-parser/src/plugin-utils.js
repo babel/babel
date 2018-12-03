@@ -38,7 +38,7 @@ export function getPluginOption(
   return null;
 }
 
-const PIPELINE_PROPOSALS = ["minimal"];
+const PIPELINE_PROPOSALS = ["minimal", "smart"];
 
 export function validatePlugins(plugins: PluginList) {
   if (hasPlugin(plugins, "decorators")) {
@@ -77,7 +77,7 @@ export function validatePlugins(plugins: PluginList) {
   ) {
     throw new Error(
       "'pipelineOperator' requires 'proposal' option whose value should be one of: " +
-        PIPELINE_PROPOSALS.join(", "),
+        PIPELINE_PROPOSALS.map(p => `'${p}'`).join(", "),
     );
   }
 }

@@ -6,7 +6,7 @@ import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
 import type { Token } from "./index";
-import { types as tt, type TokenType } from "./types";
+import { types as tt, type TokenType, type TopicContextState } from "./types";
 
 export default class State {
   init(options: Options, input: string): void {
@@ -26,12 +26,19 @@ export default class State {
     this.maybeInArrowParameters = false;
     this.inGenerator = false;
     this.inAsync = false;
+    this.inPipeline = false;
     this.inPropertyName = false;
     this.inType = false;
     this.inClassProperty = false;
     this.noAnonFunctionType = false;
     this.hasFlowComment = false;
     this.isIterator = false;
+
+    // Used by smartPipelines.
+    this.topicContext = {
+      maxNumOfResolvableTopics: 0,
+      maxTopicIndex: null,
+    };
 
     this.classLevel = 0;
 
@@ -104,12 +111,16 @@ export default class State {
   inGenerator: boolean;
   inMethod: boolean | N.MethodKind;
   inAsync: boolean;
+  inPipeline: boolean;
   inType: boolean;
   noAnonFunctionType: boolean;
   inPropertyName: boolean;
   inClassProperty: boolean;
   hasFlowComment: boolean;
   isIterator: boolean;
+
+  // For the smartPipelines plugin:
+  topicContext: TopicContextState;
 
   // Check whether we are in a (nested) class or not.
   classLevel: number;
