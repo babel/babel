@@ -11,8 +11,8 @@ export function buildPrivateNamesMap(props) {
       privateNamesMap.set(name, {
         id: prop.scope.generateUidIdentifier(name),
         static: !!prop.node.static,
-        method: prop.isClassPrivateMethod(),
-        methodId: prop.isClassPrivateMethod()
+        method: prop.isMethod(),
+        methodId: prop.isMethod()
           ? prop.scope.generateUidIdentifier(name)
           : undefined,
       });
@@ -321,34 +321,37 @@ export function buildFieldsInitNodes(
 
   for (const prop of props) {
     const isStatic = prop.node.static;
-    const isPrivateField = prop.isClassPrivateProperty();
-    const isPrivateMethod = prop.isClassPrivateMethod();
+    const isInstance = !isStatic;
+    const isPrivate = prop.isPrivate();
+    const isPublic = !isPrivate;
+    const isField = prop.isProperty();
+    const isMethod = !isField;
 
     switch (true) {
-      case isStatic && isPrivateField && loose:
+      case isStatic && isPrivate && isField && loose:
         staticNodes.push(
           buildPrivateFieldInitLoose(t.cloneNode(ref), prop, privateNamesMap),
         );
         break;
-      case isStatic && isPrivateField && !loose:
+      case isStatic && isPrivate && isField && !loose:
         staticNodes.push(
           buildPrivateStaticFieldInitSpec(prop, privateNamesMap),
         );
         break;
-      case isStatic && !isPrivateField && loose:
+      case isStatic && isPublic && isField && loose:
         staticNodes.push(buildPublicFieldInitLoose(t.cloneNode(ref), prop));
         break;
-      case isStatic && !isPrivateField && !loose:
+      case isStatic && isPublic && isField && !loose:
         staticNodes.push(
           buildPublicFieldInitSpec(t.cloneNode(ref), prop, state),
         );
         break;
-      case !isStatic && isPrivateField && loose:
+      case isInstance && isPrivate && isField && loose:
         instanceNodes.push(
           buildPrivateFieldInitLoose(t.thisExpression(), prop, privateNamesMap),
         );
         break;
-      case !isStatic && isPrivateField && !loose:
+      case isInstance && isPrivate && isField && !loose:
         instanceNodes.push(
           buildPrivateInstanceFieldInitSpec(
             t.thisExpression(),
@@ -357,7 +360,7 @@ export function buildFieldsInitNodes(
           ),
         );
         break;
-      case !isStatic && isPrivateMethod && loose:
+      case isInstance && isPrivate && isMethod && loose:
         instanceNodes.push(
           buildPrivateMethodInitLoose(
             t.thisExpression(),
@@ -369,7 +372,7 @@ export function buildFieldsInitNodes(
           buildPrivateInstanceMethodDeclaration(prop, privateNamesMap),
         );
         break;
-      case !isStatic && isPrivateMethod && !loose:
+      case isInstance && isPrivate && isMethod && !loose:
         instanceNodes.push(
           buildPrivateInstanceMethodInitSpec(
             t.thisExpression(),
@@ -381,10 +384,10 @@ export function buildFieldsInitNodes(
           buildPrivateInstanceMethodDeclaration(prop, privateNamesMap),
         );
         break;
-      case !isStatic && !isPrivateField && loose:
+      case isInstance && isPublic && isField && loose:
         instanceNodes.push(buildPublicFieldInitLoose(t.thisExpression(), prop));
         break;
-      case !isStatic && !isPrivateField && !loose:
+      case isInstance && isPublic && isField && !loose:
         instanceNodes.push(
           buildPublicFieldInitSpec(t.thisExpression(), prop, state),
         );

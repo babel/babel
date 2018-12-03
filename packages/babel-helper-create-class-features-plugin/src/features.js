@@ -49,7 +49,8 @@ export function verifyUsedFeatures(path, file) {
     );
   }
 
-  if (path.isClassPrivateMethod()) {
+  // NOTE: We can't use path.isPrivateMethod() because it isn't supported in <7.2.0
+  if (path.isPrivate() && path.isMethod()) {
     if (!hasFeature(file, FEATURES.privateMethods)) {
       throw path.buildCodeFrameError("Class private methods are not enabled.");
     }

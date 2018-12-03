@@ -75,7 +75,7 @@ export function createClassFeaturePlugin({
             privateNames.add(name);
           }
 
-          if (path.isProperty() || path.isClassPrivateMethod()) {
+          if (path.isProperty() || path.isPrivate()) {
             props.push(path);
           } else if (path.isClassMethod({ kind: "constructor" })) {
             constructor = path;
