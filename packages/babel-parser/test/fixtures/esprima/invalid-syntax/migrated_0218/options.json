@@ -1,3 +1,3 @@
 {
-  "throws": "Invalid number (1:33)"
+  "throws": "Legacy octal literals are not allowed in strict mode (1:33)"
 }

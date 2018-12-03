@@ -1,0 +1,4 @@
+{
+    "sourceType": "module",
+    "throws": "Legacy octal literals are not allowed in strict mode (1:0)"
+}
