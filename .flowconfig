@@ -1,11 +1,10 @@
 [ignore]
-.*/build/.*
-.*/packages/.*/lib
-.*/packages/.*/test
-.*/codemods/.*/lib
-.*/codemods/.*/test
-.*/node_modules/conventional-changelog-core/
-.*/node_modules/module-deps/
+<PROJECT_ROOT>/build/.*
+<PROJECT_ROOT>/packages/.*/lib
+<PROJECT_ROOT>/packages/.*/test
+<PROJECT_ROOT>/codemods/.*/lib
+<PROJECT_ROOT>/codemods/.*/test
+<PROJECT_ROOT>/node_modules/module-deps/
 
 [include]
 packages/*/src

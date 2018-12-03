@@ -20,17 +20,18 @@ before_install:
 
 install:
   # the `make test-ci` script runs this command already
-  - if [ "$JOB" != "test" ]; then yarn install; fi
+  - if [ "$JOB" != "test" ] && [ "$JOB" != "lint" ]; then yarn install; fi
+  - if [ "$JOB" = "lint" ]; then make bootstrap; fi
 
 before_script:
-  - 'if [ "$JOB" = "babel-parser-flow-tests" ]; then make bootstrap-flow; fi'
-  - 'if [ "$JOB" = "babel-parser-test262-tests" ]; then make bootstrap-test262; fi'
+  - if [ "$JOB" = "babel-parser-flow-tests" ]; then make bootstrap-flow; fi
+  - if [ "$JOB" = "babel-parser-test262-tests" ]; then make bootstrap-test262; fi
 
 script:
-  - 'if [ "$JOB" = "test" ]; then make test-ci; fi'
-  - 'if [ "$JOB" = "lint" ]; then make lint && make flow; fi'
-  - 'if [ "$JOB" = "babel-parser-flow-tests" ]; then make test-flow-ci; fi'
-  - 'if [ "$JOB" = "babel-parser-test262-tests" ]; then make test-test262-ci; fi'
+  - if [ "$JOB" = "test" ]; then make test-ci; fi
+  - if [ "$JOB" = "lint" ]; then make lint && make flow; fi
+  - if [ "$JOB" = "babel-parser-flow-tests" ]; then make test-flow-ci; fi
+  - if [ "$JOB" = "babel-parser-test262-tests" ]; then make test-test262-ci; fi
 
 matrix:
   fast_finish: true
