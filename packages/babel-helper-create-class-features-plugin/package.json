@@ -1,6 +1,6 @@
 {
   "name": "@babel/helper-create-class-features-plugin",
-  "version": "7.1.4",
+  "version": "7.2.0",
   "author": "The Babel Team (https://babeljs.io/team)",
   "license": "MIT",
   "description": "Compile class public and private fields, private methods and decorators to ES6",
@@ -24,7 +24,7 @@
     "@babel/core": "^7.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.1.0",
+    "@babel/core": "^7.2.0",
     "@babel/helper-plugin-test-runner": "^7.0.0"
   }
 }
