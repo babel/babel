@@ -930,7 +930,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.extends = this.tsParseHeritageClause();
       }
       const body: N.TSInterfaceBody = this.startNode();
-      body.body = this.tsParseObjectTypeMembers();
+      body.body = this.tsInType(this.tsParseObjectTypeMembers.bind(this));
       node.body = this.finishNode(body, "TSInterfaceBody");
       return this.finishNode(node, "TSInterfaceDeclaration");
     }
@@ -1299,11 +1299,17 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return undefined;
       }
 
+      const oldInAsync = this.state.inAsync;
+      const oldInGenerator = this.state.inGenerator;
+      this.state.inAsync = true;
+      this.state.inGenerator = false;
       res.id = null;
       res.generator = false;
       res.expression = true; // May be set again by parseFunctionBody.
       res.async = true;
       this.parseFunctionBody(res, true);
+      this.state.inAsync = oldInAsync;
+      this.state.inGenerator = oldInGenerator;
       return this.finishNode(res, "ArrowFunctionExpression");
     }
 

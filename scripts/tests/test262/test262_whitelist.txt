@@ -1654,8 +1654,6 @@ language/statements/switch/syntax/redeclaration/let-declaration-attempt-to-redec
 language/statements/switch/syntax/redeclaration/let-declaration-attempt-to-redeclare-with-async-generator-declaration.js(strict mode)
 language/statements/switch/syntax/redeclaration/var-declaration-attempt-to-redeclare-with-async-generator-declaration.js(default)
 language/statements/switch/syntax/redeclaration/var-declaration-attempt-to-redeclare-with-async-generator-declaration.js(strict mode)
-language/expressions/dynamic-import/assignment-expression/await-identifier.js(default)
-language/expressions/dynamic-import/assignment-expression/await-identifier.js(strict mode)
 language/literals/regexp/named-groups/invalid-dangling-groupname-2-u.js(default)
 language/literals/regexp/named-groups/invalid-dangling-groupname-2-u.js(strict mode)
 language/literals/regexp/named-groups/invalid-dangling-groupname-2.js(default)

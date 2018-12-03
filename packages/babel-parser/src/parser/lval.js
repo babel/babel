@@ -177,8 +177,23 @@ export default class LValParser extends NodeUtils {
 
   toReferencedList(
     exprList: $ReadOnlyArray<?Expression>,
-    isInParens?: boolean, // eslint-disable-line no-unused-vars
+    isParenthesizedExpr?: boolean, // eslint-disable-line no-unused-vars
   ): $ReadOnlyArray<?Expression> {
+    return exprList;
+  }
+
+  toReferencedListDeep(
+    exprList: $ReadOnlyArray<?Expression>,
+    isParenthesizedExpr?: boolean,
+  ): $ReadOnlyArray<?Expression> {
+    this.toReferencedList(exprList, isParenthesizedExpr);
+
+    for (const expr of exprList) {
+      if (expr && expr.type === "ArrayExpression") {
+        this.toReferencedListDeep(expr.elements);
+      }
+    }
+
     return exprList;
   }
 
@@ -258,7 +273,20 @@ export default class LValParser extends NodeUtils {
         break;
       } else if (this.match(tt.ellipsis)) {
         elts.push(this.parseAssignableListItemTypes(this.parseRest()));
-        this.expect(close);
+        if (
+          this.state.inFunction &&
+          this.state.inParameters &&
+          this.match(tt.comma)
+        ) {
+          const nextTokenType = this.lookahead().type;
+          const errorMessage =
+            nextTokenType === tt.parenR
+              ? "A trailing comma is not permitted after the rest element"
+              : "Rest parameter must be last formal parameter";
+          this.raise(this.state.start, errorMessage);
+        } else {
+          this.expect(close);
+        }
         break;
       } else {
         const decorators = [];

@@ -363,14 +363,14 @@ export default class Printer {
     }
     if (needsParens) this.token("(");
 
-    this._printLeadingComments(node, parent);
+    this._printLeadingComments(node);
 
     const loc = t.isProgram(node) || t.isFile(node) ? null : node.loc;
     this.withSource("start", loc, () => {
       this[node.type](node, parent);
     });
 
-    this._printTrailingComments(node, parent);
+    this._printTrailingComments(node);
 
     if (needsParens) this.token(")");
 
@@ -472,12 +472,12 @@ export default class Printer {
     this.print(node, parent);
   }
 
-  _printTrailingComments(node, parent) {
-    this._printComments(this._getComments(false, node, parent));
+  _printTrailingComments(node) {
+    this._printComments(this._getComments(false, node));
   }
 
-  _printLeadingComments(node, parent) {
-    this._printComments(this._getComments(true, node, parent));
+  _printLeadingComments(node) {
+    this._printComments(this._getComments(true, node));
   }
 
   printInnerComments(node, indent = true) {

@@ -52,6 +52,11 @@ program.option(
   "The name of the 'env' to use when loading configs and plugins. " +
     "Defaults to the value of BABEL_ENV, or else NODE_ENV, or else 'development'.",
 );
+commander.option(
+  "--root-mode [mode]",
+  "The project-root resolution mode. " +
+    "One of 'root' (the default), 'upward', or 'upward-optional'.",
+);
 program.option("-w, --plugins [string]", "", collect);
 program.option("-b, --presets [string]", "", collect);
 
@@ -59,7 +64,7 @@ program.version(pkg.version);
 program.usage("[options] [ -e script | script.js ] [arguments]");
 program.parse(process.argv);
 
-register({
+const babelOptions = {
   caller: {
     name: "@babel/node",
   },
@@ -70,12 +75,21 @@ register({
   presets: program.presets,
   configFile: program.configFile,
   envName: program.envName,
+  rootMode: program.rootMode,
 
   // Commander will default the "--no-" arguments to true, but we want to
   // leave them undefined so that @babel/core can handle the
   // default-assignment logic on its own.
   babelrc: program.babelrc === true ? undefined : program.babelrc,
-});
+};
+
+for (const key of Object.keys(babelOptions)) {
+  if (babelOptions[key] === undefined) {
+    delete babelOptions[key];
+  }
+}
+
+register(babelOptions);
 
 const replPlugin = ({ types: t }) => ({
   visitor: {

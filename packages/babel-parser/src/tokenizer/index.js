@@ -374,7 +374,36 @@ export default class Tokenizer extends LocationParser {
   // into it.
   //
   // All in the name of speed.
-  //
+
+  // number sign is "#"
+  readToken_numberSign(): void {
+    if (this.state.pos === 0 && this.readToken_interpreter()) {
+      return;
+    }
+
+    const nextPos = this.state.pos + 1;
+    const next = this.input.charCodeAt(nextPos);
+    if (next >= charCodes.digit0 && next <= charCodes.digit9) {
+      this.raise(this.state.pos, "Unexpected digit after hash token");
+    }
+
+    if (
+      (this.hasPlugin("classPrivateProperties") ||
+        this.hasPlugin("classPrivateMethods")) &&
+      this.state.classLevel > 0
+    ) {
+      ++this.state.pos;
+      this.finishToken(tt.hash);
+      return;
+    } else if (
+      this.getPluginOption("pipelineOperator", "proposal") === "smart"
+    ) {
+      this.finishOp(tt.hash, 1);
+    } else {
+      this.raise(this.state.pos, "Unexpected character '#'");
+    }
+  }
+
   readToken_dot(): void {
     const next = this.input.charCodeAt(this.state.pos + 1);
     if (next >= charCodes.digit0 && next <= charCodes.digit9) {
@@ -623,24 +652,8 @@ export default class Tokenizer extends LocationParser {
   getTokenFromCode(code: number): void {
     switch (code) {
       case charCodes.numberSign:
-        if (this.state.pos === 0 && this.readToken_interpreter()) {
-          return;
-        }
-
-        if (
-          (this.hasPlugin("classPrivateProperties") ||
-            this.hasPlugin("classPrivateMethods")) &&
-          this.state.classLevel > 0
-        ) {
-          ++this.state.pos;
-          this.finishToken(tt.hash);
-          return;
-        } else {
-          this.raise(
-            this.state.pos,
-            `Unexpected character '${String.fromCodePoint(code)}'`,
-          );
-        }
+        this.readToken_numberSign();
+        return;
 
       // The interpretation of a dot depends on whether it is followed
       // by a digit or another two dots.
@@ -971,14 +984,26 @@ export default class Tokenizer extends LocationParser {
 
   readNumber(startsWithDot: boolean): void {
     const start = this.state.pos;
-    let octal = this.input.charCodeAt(start) === charCodes.digit0;
     let isFloat = false;
     let isBigInt = false;
 
     if (!startsWithDot && this.readInt(10) === null) {
       this.raise(start, "Invalid number");
     }
-    if (octal && this.state.pos == start + 1) octal = false; // number === 0
+    let octal =
+      this.state.pos - start >= 2 &&
+      this.input.charCodeAt(start) === charCodes.digit0;
+    if (octal) {
+      if (this.state.strict) {
+        this.raise(
+          start,
+          "Legacy octal literals are not allowed in strict mode",
+        );
+      }
+      if (/[89]/.test(this.input.slice(start, this.state.pos))) {
+        octal = false;
+      }
+    }
 
     let next = this.input.charCodeAt(this.state.pos);
     if (next === charCodes.dot && !octal) {
@@ -1022,18 +1047,7 @@ export default class Tokenizer extends LocationParser {
       return;
     }
 
-    let val;
-    if (isFloat) {
-      val = parseFloat(str);
-    } else if (!octal || str.length === 1) {
-      val = parseInt(str, 10);
-    } else if (this.state.strict) {
-      this.raise(start, "Invalid number");
-    } else if (/[89]/.test(str)) {
-      val = parseInt(str, 10);
-    } else {
-      val = parseInt(str, 8);
-    }
+    const val = octal ? parseInt(str, 8) : parseFloat(str);
     this.finishToken(tt.num, val);
   }
 

@@ -1,0 +1,25 @@
+{
+  "name": "@babel/plugin-proposal-private-methods",
+  "version": "7.2.0",
+  "description": "This plugin transforms private class methods",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-private-methods",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "lib/index.js",
+  "keywords": [
+    "babel-plugin"
+  ],
+  "dependencies": {
+    "@babel/helper-create-class-features-plugin": "^7.2.0",
+    "@babel/helper-plugin-utils": "^7.0.0"
+  },
+  "peerDependencies": {
+    "@babel/core": "^7.0.0-0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.2.0",
+    "@babel/helper-plugin-test-runner": "^7.0.0"
+  }
+}

@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 36,
+  "end": 20,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 36
+      "column": 20
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 36,
+    "end": 20,
     "loc": {
       "start": {
         "line": 1,
@@ -23,16 +23,17 @@
       },
       "end": {
         "line": 1,
-        "column": 36
+        "column": 20
       }
     },
     "sourceType": "script",
     "interpreter": null,
-    "body": [
+    "body": [],
+    "directives": [
       {
-        "type": "VariableDeclaration",
+        "type": "Directive",
         "start": 0,
-        "end": 36,
+        "end": 20,
         "loc": {
           "start": {
             "line": 1,
@@ -40,66 +41,30 @@
           },
           "end": {
             "line": 1,
-            "column": 36
+            "column": 20
           }
         },
-        "declarations": [
-          {
-            "type": "VariableDeclarator",
-            "start": 4,
-            "end": 35,
-            "loc": {
-              "start": {
-                "line": 1,
-                "column": 4
-              },
-              "end": {
-                "line": 1,
-                "column": 35
-              }
+        "value": {
+          "type": "DirectiveLiteral",
+          "start": 0,
+          "end": 20,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 0
             },
-            "id": {
-              "type": "Identifier",
-              "start": 4,
-              "end": 10,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 4
-                },
-                "end": {
-                  "line": 1,
-                  "column": 10
-                },
-                "identifierName": "source"
-              },
-              "name": "source"
-            },
-            "init": {
-              "type": "StringLiteral",
-              "start": 13,
-              "end": 35,
-              "loc": {
-                "start": {
-                  "line": 1,
-                  "column": 13
-                },
-                "end": {
-                  "line": 1,
-                  "column": 35
-                }
-              },
-              "extra": {
-                "rawValue": "\"\\u{714E}\\u{8336}\"",
-                "raw": "'\"\\\\u{714E}\\\\u{8336}\"'"
-              },
-              "value": "\"\\u{714E}\\u{8336}\""
+            "end": {
+              "line": 1,
+              "column": 20
             }
+          },
+          "value": "\\\\u{714E}\\\\u{8336}",
+          "extra": {
+            "raw": "\"\\\\u{714E}\\\\u{8336}\"",
+            "rawValue": "\\\\u{714E}\\\\u{8336}"
           }
-        ],
-        "kind": "var"
+        }
       }
-    ],
-    "directives": []
+    ]
   }
 }

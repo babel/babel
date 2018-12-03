@@ -297,18 +297,21 @@ export default class ExpressionParser extends LValParser {
         }
 
         const op = this.state.type;
-        if (op === tt.nullishCoalescing) {
-          this.expectPlugin("nullishCoalescingOperator");
-        } else if (op === tt.pipeline) {
+
+        if (op === tt.pipeline) {
           this.expectPlugin("pipelineOperator");
+          this.state.inPipeline = true;
+          this.checkPipelineAtInfixOperator(left, leftStartPos);
+        } else if (op === tt.nullishCoalescing) {
+          this.expectPlugin("nullishCoalescingOperator");
         }
 
         this.next();
 
-        const startPos = this.state.start;
-        const startLoc = this.state.startLoc;
-
-        if (op === tt.pipeline) {
+        if (
+          op === tt.pipeline &&
+          this.getPluginOption("pipelineOperator", "proposal") === "minimal"
+        ) {
           if (
             this.match(tt.name) &&
             this.state.value === "await" &&
@@ -321,13 +324,7 @@ export default class ExpressionParser extends LValParser {
           }
         }
 
-        node.right = this.parseExprOp(
-          this.parseMaybeUnary(),
-          startPos,
-          startLoc,
-          op.rightAssociative ? prec - 1 : prec,
-          noIn,
-        );
+        node.right = this.parseExprOpRightExpr(op, prec, noIn);
 
         this.finishNode(
           node,
@@ -337,6 +334,7 @@ export default class ExpressionParser extends LValParser {
             ? "LogicalExpression"
             : "BinaryExpression",
         );
+
         return this.parseExprOp(
           node,
           leftStartPos,
@@ -347,6 +345,54 @@ export default class ExpressionParser extends LValParser {
       }
     }
     return left;
+  }
+
+  // Helper function for `parseExprOp`. Parse the right-hand side of binary-
+  // operator expressions, then apply any operator-specific functions.
+
+  parseExprOpRightExpr(
+    op: TokenType,
+    prec: number,
+    noIn: ?boolean,
+  ): N.Expression {
+    switch (op) {
+      case tt.pipeline:
+        if (this.getPluginOption("pipelineOperator", "proposal") === "smart") {
+          const startPos = this.state.start;
+          const startLoc = this.state.startLoc;
+          return this.withTopicPermittingContext(() => {
+            return this.parseSmartPipelineBody(
+              this.parseExprOpBaseRightExpr(op, prec, noIn),
+              startPos,
+              startLoc,
+            );
+          });
+        }
+      // falls through
+
+      default:
+        return this.parseExprOpBaseRightExpr(op, prec, noIn);
+    }
+  }
+
+  // Helper function for `parseExprOpRightExpr`. Parse the right-hand side of
+  // binary-operator expressions without applying any operator-specific functions.
+
+  parseExprOpBaseRightExpr(
+    op: TokenType,
+    prec: number,
+    noIn: ?boolean,
+  ): N.Expression {
+    const startPos = this.state.start;
+    const startLoc = this.state.startLoc;
+
+    return this.parseExprOp(
+      this.parseMaybeUnary(),
+      startPos,
+      startLoc,
+      op.rightAssociative ? prec - 1 : prec,
+      noIn,
+    );
   }
 
   // Parse unary operators, both prefix and postfix.
@@ -566,7 +612,7 @@ export default class ExpressionParser extends LValParser {
         );
         this.state.yieldOrAwaitInPossibleArrowParameters = oldYOAIPAP;
       } else {
-        this.toReferencedList(node.arguments);
+        this.toReferencedListDeep(node.arguments);
 
         // We keep the old value if it isn't null, for cases like
         //   (x = async(yield)) => {}
@@ -891,7 +937,14 @@ export default class ExpressionParser extends LValParser {
           true,
           refShorthandDefaultPos,
         );
-        this.toReferencedList(node.elements);
+        if (!this.state.maybeInArrowParameters) {
+          // This could be an array pattern:
+          //   ([a: string, b: string]) => {}
+          // In this case, we don't have to call toReferencedList. We will
+          // call it, if needed, when we are sure that it is a parenthesized
+          // expression by calling toReferencedListDeep.
+          this.toReferencedList(node.elements);
+        }
         return this.finishNode(node, "ArrayExpression");
 
       case tt.braceL:
@@ -926,6 +979,32 @@ export default class ExpressionParser extends LValParser {
             callee.start,
             "Binding should be performed on object property.",
           );
+        }
+      }
+
+      case tt.hash: {
+        if (this.state.inPipeline) {
+          node = this.startNode();
+
+          if (
+            this.getPluginOption("pipelineOperator", "proposal") !== "smart"
+          ) {
+            this.raise(
+              node.start,
+              "Primary Topic Reference found but pipelineOperator not passed 'smart' for 'proposal' option.",
+            );
+          }
+
+          this.next();
+          if (this.primaryTopicReferenceIsAllowedInCurrentTopicContext()) {
+            this.registerTopicReference();
+            return this.finishNode(node, "PipelinePrimaryTopicReference");
+          } else {
+            throw this.raise(
+              node.start,
+              `Topic reference was used in a lexical context without topic binding`,
+            );
+          }
         }
       }
 
@@ -1113,11 +1192,13 @@ export default class ExpressionParser extends LValParser {
           ),
         );
 
-        if (this.match(tt.comma) && this.lookahead().type === tt.parenR) {
-          this.raise(
-            this.state.start,
-            "A trailing comma is not permitted after the rest element",
-          );
+        if (this.match(tt.comma)) {
+          const nextTokenType = this.lookahead().type;
+          const errorMessage =
+            nextTokenType === tt.parenR
+              ? "A trailing comma is not permitted after the rest element"
+              : "Rest parameter must be last formal parameter";
+          this.raise(this.state.start, errorMessage);
         }
 
         break;
@@ -1171,10 +1252,10 @@ export default class ExpressionParser extends LValParser {
     }
     if (refNeedsArrowPos.start) this.unexpected(refNeedsArrowPos.start);
 
+    this.toReferencedListDeep(exprList, /* isParenthesizedExpr */ true);
     if (exprList.length > 1) {
       val = this.startNodeAt(innerStartPos, innerStartLoc);
       val.expressions = exprList;
-      this.toReferencedList(val.expressions);
       this.finishNodeAt(val, "SequenceExpression", innerEndPos, innerEndLoc);
     } else {
       val = exprList[0];
@@ -1707,7 +1788,7 @@ export default class ExpressionParser extends LValParser {
     const oldInAsync = this.state.inAsync;
     const oldInGenerator = this.state.inGenerator;
     const oldMaybeInArrowParameters = this.state.maybeInArrowParameters;
-    this.state.inAsync = true;
+    this.state.inAsync = isAsync;
     this.state.inGenerator = false;
     this.state.maybeInArrowParameters = false;
     this.parseFunctionBody(node, true);
@@ -2027,5 +2108,181 @@ export default class ExpressionParser extends LValParser {
       node.argument = this.parseMaybeAssign();
     }
     return this.finishNode(node, "YieldExpression");
+  }
+
+  // Validates a pipeline (for any of the pipeline Babylon plugins) at the point
+  // of the infix operator `|>`.
+
+  checkPipelineAtInfixOperator(left: N.Expression, leftStartPos: number) {
+    if (this.getPluginOption("pipelineOperator", "proposal") === "smart") {
+      if (left.type === "SequenceExpression") {
+        // Ensure that the pipeline head is not a comma-delimited
+        // sequence expression.
+        throw this.raise(
+          leftStartPos,
+          `Pipeline head should not be a comma-separated sequence expression`,
+        );
+      }
+    }
+  }
+
+  parseSmartPipelineBody(
+    childExpression: N.Expression,
+    startPos: number,
+    startLoc: Position,
+  ): N.PipelineBody {
+    const pipelineStyle = this.checkSmartPipelineBodyStyle(childExpression);
+
+    this.checkSmartPipelineBodyEarlyErrors(
+      childExpression,
+      pipelineStyle,
+      startPos,
+    );
+
+    return this.parseSmartPipelineBodyInStyle(
+      childExpression,
+      pipelineStyle,
+      startPos,
+      startLoc,
+    );
+  }
+
+  checkSmartPipelineBodyEarlyErrors(
+    childExpression: N.Expression,
+    pipelineStyle: N.PipelineStyle,
+    startPos: number,
+  ): void {
+    if (this.match(tt.arrow)) {
+      // If the following token is invalidly `=>`, then throw a human-friendly error
+      // instead of something like 'Unexpected token, expected ";"'.
+      throw this.raise(
+        this.state.start,
+        `Unexpected arrow "=>" after pipeline body; arrow function in pipeline body must be parenthesized`,
+      );
+    } else if (
+      pipelineStyle === "PipelineTopicExpression" &&
+      childExpression.type === "SequenceExpression"
+    ) {
+      throw this.raise(
+        startPos,
+        `Pipeline body may not be a comma-separated sequence expression`,
+      );
+    }
+  }
+
+  parseSmartPipelineBodyInStyle(
+    childExpression: N.Expression,
+    pipelineStyle: N.PipelineStyle,
+    startPos: number,
+    startLoc: Position,
+  ): N.PipelineBody {
+    const bodyNode = this.startNodeAt(startPos, startLoc);
+    switch (pipelineStyle) {
+      case "PipelineBareFunction":
+        bodyNode.callee = childExpression;
+        break;
+      case "PipelineBareConstructor":
+        bodyNode.callee = childExpression.callee;
+        break;
+      case "PipelineBareAwaitedFunction":
+        bodyNode.callee = childExpression.argument;
+        break;
+      case "PipelineTopicExpression":
+        if (!this.topicReferenceWasUsedInCurrentTopicContext()) {
+          throw this.raise(
+            startPos,
+            `Pipeline is in topic style but does not use topic reference`,
+          );
+        }
+        bodyNode.expression = childExpression;
+        break;
+      default:
+        throw this.raise(startPos, `Unknown pipeline style ${pipelineStyle}`);
+    }
+    return this.finishNode(bodyNode, pipelineStyle);
+  }
+
+  checkSmartPipelineBodyStyle(expression: N.Expression): N.PipelineStyle {
+    switch (expression.type) {
+      default:
+        return this.isSimpleReference(expression)
+          ? "PipelineBareFunction"
+          : "PipelineTopicExpression";
+    }
+  }
+
+  isSimpleReference(expression: N.Expression): boolean {
+    switch (expression.type) {
+      case "MemberExpression":
+        return (
+          !expression.computed && this.isSimpleReference(expression.object)
+        );
+      case "Identifier":
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  // Enable topic references from outer contexts within smart pipeline bodies.
+  // The function modifies the parser's topic-context state to enable or disable
+  // the use of topic references with the smartPipelines plugin. They then run a
+  // callback, then they reset the parser to the old topic-context state that it
+  // had before the function was called.
+
+  withTopicPermittingContext<T>(callback: () => T): T {
+    const outerContextTopicState = this.state.topicContext;
+    this.state.topicContext = {
+      // Enable the use of the primary topic reference.
+      maxNumOfResolvableTopics: 1,
+      // Hide the use of any topic references from outer contexts.
+      maxTopicIndex: null,
+    };
+
+    try {
+      return callback();
+    } finally {
+      this.state.topicContext = outerContextTopicState;
+    }
+  }
+
+  // Disable topic references from outer contexts within syntax constructs
+  // such as the bodies of iteration statements.
+  // The function modifies the parser's topic-context state to enable or disable
+  // the use of topic references with the smartPipelines plugin. They then run a
+  // callback, then they reset the parser to the old topic-context state that it
+  // had before the function was called.
+
+  withTopicForbiddingContext<T>(callback: () => T): T {
+    const outerContextTopicState = this.state.topicContext;
+    this.state.topicContext = {
+      // Disable the use of the primary topic reference.
+      maxNumOfResolvableTopics: 0,
+      // Hide the use of any topic references from outer contexts.
+      maxTopicIndex: null,
+    };
+
+    try {
+      return callback();
+    } finally {
+      this.state.topicContext = outerContextTopicState;
+    }
+  }
+
+  // Register the use of a primary topic reference (`#`) within the current
+  // topic context.
+  registerTopicReference(): void {
+    this.state.topicContext.maxTopicIndex = 0;
+  }
+
+  primaryTopicReferenceIsAllowedInCurrentTopicContext(): boolean {
+    return this.state.topicContext.maxNumOfResolvableTopics >= 1;
+  }
+
+  topicReferenceWasUsedInCurrentTopicContext(): boolean {
+    return (
+      this.state.topicContext.maxTopicIndex != null &&
+      this.state.topicContext.maxTopicIndex >= 0
+    );
   }
 }

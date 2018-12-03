@@ -87,6 +87,7 @@ defineType("ClassBody", {
         assertEach(
           assertNodeType(
             "ClassMethod",
+            "ClassPrivateMethod",
             "ClassProperty",
             "ClassPrivateProperty",
             "TSDeclareMethod",
