@@ -1,1 +1,0 @@
-var source = 'T\u200D = []';

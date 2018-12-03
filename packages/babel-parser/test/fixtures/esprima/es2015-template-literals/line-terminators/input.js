@@ -1,1 +1,1 @@
-var source = '`\n\r\n`';
+`\n\r\n`
