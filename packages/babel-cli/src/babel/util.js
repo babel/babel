@@ -105,7 +105,6 @@ export function deleteFile(path) {
   if (fs.existsSync(path)) {
     fs.unlink(path, err => {
       if (err) throw err;
-      console.log(path + " was deleted");
     });
   }
 }

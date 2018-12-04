@@ -89,12 +89,18 @@ export default async function({ cliOptions, babelOptions }) {
     const dest = getDest(relative, base);
     util.deleteFile(dest);
     // Delete the source map if they're enabled
+    let sourceMapMessage = "";
     if (
       util.isCompilableExtension(relative, cliOptions.extensions) &&
       babelOptions.sourceMaps &&
       babelOptions.sourceMaps !== "inline"
     ) {
       util.deleteFile(dest + ".map");
+      sourceMapMessage = " and " + dest + ".map";
+    }
+
+    if (cliOptions.verbose) {
+      console.log(dest + sourceMapMessage + " deleted by Babel.");
     }
   }
 
