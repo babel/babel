@@ -82,8 +82,8 @@ describe("arrow function conversion", () => {
       () => this;
     `,
       `
-      var _supercall = (..._args) => _this = super(..._args),
-          _this;
+      var _supercall = (..._args) => (super(..._args), _this = this),
+        _this;
 
       (function () {
         _supercall(345);
@@ -115,9 +115,10 @@ describe("arrow function conversion", () => {
       (function () {
         _this;
       });
-      _this = super();
+      super();
+      _this = this;
       this;
-      () => _this = super();
+      () => (super(), _this = this);
       () => this;
     `,
       { methodName: "constructor", extend: true },
@@ -144,9 +145,10 @@ describe("arrow function conversion", () => {
 
         _this;
       }).bind(_arrowCheckId);
-      _this = super();
+      super();
+      _this = this;
       this;
-      () => _this = super();
+      () => (super(), _this = this);
       () => this;
     `,
       {
