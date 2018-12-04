@@ -84,6 +84,20 @@ export default async function({ cliOptions, babelOptions }) {
     return written;
   }
 
+  async function handleFileDelete(src, base) {
+    const relative = path.relative(base, src);
+    const dest = getDest(relative, base);
+    util.deleteFile(dest);
+    // Delete the source map if they're enabled
+    if (
+      util.isCompilableExtension(relative, cliOptions.extensions) &&
+      babelOptions.sourceMaps &&
+      babelOptions.sourceMaps !== "inline"
+    ) {
+      util.deleteFile(dest + ".map");
+    }
+  }
+
   async function handle(filenameOrDir) {
     if (!fs.existsSync(filenameOrDir)) return 0;
 
@@ -153,6 +167,17 @@ export default async function({ cliOptions, babelOptions }) {
           ).catch(err => {
             console.error(err);
           });
+        });
+      });
+
+      watcher.on("unlink", function(filename) {
+        handleFileDelete(
+          filename,
+          filename === filenameOrDir
+            ? path.dirname(filenameOrDir)
+            : filenameOrDir,
+        ).catch(err => {
+          console.error(err);
         });
       });
     });

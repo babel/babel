@@ -101,6 +101,17 @@ export function deleteDir(path) {
   }
 }
 
+export function deleteFile(path) {
+  if (fs.existsSync(path)) {
+    //fs.unlinkSync(path);
+
+    fs.unlink(path, err => {
+      if (err) throw err;
+      console.log(path + " was deleted");
+    });
+  }
+}
+
 process.on("uncaughtException", function(err) {
   console.error(err);
   process.exit(1);
