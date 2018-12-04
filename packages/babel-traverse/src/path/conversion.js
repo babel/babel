@@ -461,14 +461,14 @@ function getThisBinding(thisEnvFn, inConstructor) {
         if (supers.has(child.node)) return;
         supers.add(child.node);
 
-        child.replaceWithMultiple(
+        child.replaceWithMultiple([
           child.node,
           t.assignmentExpression(
             "=",
             t.identifier(thisBinding),
             t.identifier("this"),
           ),
-        );
+        ]);
       },
     });
   });
