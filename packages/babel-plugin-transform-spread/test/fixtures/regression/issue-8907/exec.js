@@ -3,7 +3,9 @@ const arr = [];
 arr.concat = () => {
     throw new Error('Should not be called');
 };
-
+let x;
 expect(() => {
-    const x = [...arr];
+    x = [...arr];
 }).not.toThrow();
+
+expect(x).not.toBe(arr);
