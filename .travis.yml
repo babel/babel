@@ -1,6 +1,5 @@
 git:
   depth: 5
-sudo: false
 language: node_js
 cache:
   yarn: true
