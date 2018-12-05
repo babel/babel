@@ -1,6 +1,10 @@
 ---
-name: 💥 v7 Regression
-about: Report an unexpected behavior in v7 from v6 (Check the upgrade guide first ✌️)
+name: "\U0001F4A5 v7 Regression"
+about: Report an unexpected behavior in v7 from v6 (Check the upgrade guide first
+  ✌️)
+title: ''
+labels: 'i: bug, 7.x: regression'
+assignees: ''
 
 ---
 
