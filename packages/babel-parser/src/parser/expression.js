@@ -1759,7 +1759,7 @@ export default class ExpressionParser extends LValParser {
   parseArrowExpression(
     node: N.ArrowFunctionExpression,
     params?: ?(N.Expression[]),
-    isAsync?: boolean,
+    isAsync?: boolean = false,
   ): N.ArrowFunctionExpression {
     // if we got there, it's no more "yield in possible arrow parameters";
     // it's just "yield in arrow parameters"

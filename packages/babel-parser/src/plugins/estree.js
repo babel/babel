@@ -300,7 +300,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (node) {
         node.type = "Property";
-        if (node.kind === "method") node.kind = "init";
+        if (((node: any): N.ClassMethod).kind === "method") node.kind = "init";
         node.shorthand = false;
       }
 

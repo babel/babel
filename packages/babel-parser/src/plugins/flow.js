@@ -1842,7 +1842,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.assertModuleNodeAllowed(node);
     }
 
-    parseExport(node: N.ExportNamedDeclaration): N.ExportNamedDeclaration {
+    parseExport(
+      node: N.ExportNamedDeclaration | N.ExportAllDeclaration,
+    ): N.ExportNamedDeclaration | N.ExportAllDeclaration {
       node = super.parseExport(node);
       if (
         node.type === "ExportNamedDeclaration" ||
