@@ -1,4 +1,4 @@
-import { createTypeAnnotationBasedOnTypeof } from "@babel/types";
+import { createTypeAnnotationBasedOnTypeof } from "../../..";
 
 describe("builders", function() {
   describe("flow", function() {
