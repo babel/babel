@@ -140,7 +140,10 @@ export default class State {
   // The first yield or await expression inside parenthesized expressions
   // and arrow function parameters. It is used to disallow yield and await in
   // arrow function parameters.
-  yieldOrAwaitInPossibleArrowParameters: ?N.YieldExpression;
+  yieldOrAwaitInPossibleArrowParameters:
+    | N.YieldExpression
+    | N.AwaitExpression
+    | null;
 
   // Token store.
   tokens: Array<Token | N.Comment>;

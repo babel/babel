@@ -43,6 +43,7 @@ export function makeWeakCache<
 >(
   handler: (ArgT, CacheConfigurator<SideChannel>) => ResultT,
 ): (ArgT, SideChannel) => ResultT {
+  // $FlowIssue https://github.com/facebook/flow/issues/4528
   return makeCachedFunction(new WeakMap(), handler);
 }
 
@@ -54,6 +55,7 @@ function makeCachedFunction<
   ArgT,
   ResultT,
   SideChannel,
+  // $FlowIssue https://github.com/facebook/flow/issues/4528
   Cache: CacheMap<ArgT, ResultT, SideChannel>,
 >(
   callCache: Cache,

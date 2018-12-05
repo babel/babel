@@ -896,9 +896,9 @@ export default class StatementParser extends ExpressionParser {
   parseFunction<T: N.NormalFunction>(
     node: T,
     isStatement: boolean,
-    allowExpressionBody?: boolean,
-    isAsync?: boolean,
-    optionalId?: boolean,
+    allowExpressionBody?: boolean = false,
+    isAsync?: boolean = false,
+    optionalId?: boolean = false,
   ): T {
     const oldInFunc = this.state.inFunction;
     const oldInMethod = this.state.inMethod;

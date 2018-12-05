@@ -350,7 +350,7 @@ function validateNested(loc: NestingPath, opts: {}) {
       NONPRESET_VALIDATORS[key] ||
       BABELRC_VALIDATORS[key] ||
       ROOT_VALIDATORS[key] ||
-      throwUnknownError;
+      (throwUnknownError: Validator<void>);
 
     validator(optLoc, opts[key]);
   });
