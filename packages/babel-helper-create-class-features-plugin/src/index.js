@@ -16,12 +16,15 @@ import {
   enableFeature,
   verifyUsedFeatures,
   FEATURES,
+  OPTIONS,
   isLoose,
+  setOption,
+  getOption,
 } from "./features";
 
 import pkg from "../package.json";
 
-export { FEATURES };
+export { FEATURES, OPTIONS };
 
 // Note: Versions are represented as an integer. e.g. 7.1.5 is represented
 //       as 70000100005. This method is easier than using a semver-parsing
@@ -34,6 +37,7 @@ export function createClassFeaturePlugin({
   name,
   feature,
   loose,
+  options = [],
   manipulateOptions,
 }) {
   return {
@@ -42,6 +46,10 @@ export function createClassFeaturePlugin({
 
     pre() {
       enableFeature(this.file, feature, loose);
+
+      for (const [name, value] of options) {
+        setOption(this.file, name, value);
+      }
 
       if (!this.file.get(versionKey) || this.file.get(versionKey) < version) {
         this.file.set(versionKey, version);
@@ -57,6 +65,10 @@ export function createClassFeaturePlugin({
         // Only fields are currently supported, this needs to be moved somewhere
         // else when other features are added.
         const loose = isLoose(this.file, FEATURES.fields);
+        const ignoreUninitializedFields = getOption(
+          this.file,
+          OPTIONS.fields.ignoreUninitialized,
+        );
 
         let constructor;
         let isDecorated = hasOwnDecorators(path.node);
@@ -73,13 +85,26 @@ export function createClassFeaturePlugin({
             computedPaths.push(path);
           }
 
-          if (path.isPrivate()) {
+          const isPrivate = path.isPrivate();
+          const isField = path.isProperty();
+
+          if (isPrivate) {
             const { name } = path.node.key.id;
 
             if (privateNames.has(name)) {
               throw path.buildCodeFrameError("Duplicate private field");
             }
             privateNames.add(name);
+          }
+
+          if (
+            ignoreUninitializedFields &&
+            isField &&
+            !isPrivate &&
+            !path.node.value
+          ) {
+            path.remove();
+            continue;
           }
 
           if (path.isClassMethod({ kind: "constructor" })) {

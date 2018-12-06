@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    "external-helpers",
+    [
+      "proposal-class-properties",
+      { "ignoreUninitialized": true, "loose": true }
+    ]
+  ]
+}
