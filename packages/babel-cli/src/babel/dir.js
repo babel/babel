@@ -23,8 +23,12 @@ export default async function({
       return false;
     }
 
-    // remove extension and then append back on .js
-    relative = util.adjustRelative(relative, cliOptions.keepFileExtension);
+    // remove extension and then append back on the configured extension
+    relative = util.adjustRelative(
+      relative,
+      cliOptions.keepFileExtension,
+      cliOptions.useFileExtension,
+    );
 
     const dest = getDest(relative, base);
 

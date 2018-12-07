@@ -149,6 +149,10 @@ commander.option(
   "--delete-dir-on-start",
   "Delete the out directory before compilation",
 );
+commander.option(
+  "--use-file-extension [string]",
+  "Use a specific extension for the output files",
+);
 
 commander.version(pkg.version + " (@babel/core " + version + ")");
 commander.usage("[options] <files ...>");
@@ -274,6 +278,7 @@ export default function parseArgv(args: Array<string>): CmdOptions {
       filenames,
       extensions: opts.extensions,
       keepFileExtension: opts.keepFileExtension,
+      useFileExtension: opts.useFileExtension,
       watch: opts.watch,
       skipInitialBuild: opts.skipInitialBuild,
       outFile: opts.outFile,
