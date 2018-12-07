@@ -52,7 +52,7 @@ program.option(
   "The name of the 'env' to use when loading configs and plugins. " +
     "Defaults to the value of BABEL_ENV, or else NODE_ENV, or else 'development'.",
 );
-commander.option(
+program.option(
   "--root-mode [mode]",
   "The project-root resolution mode. " +
     "One of 'root' (the default), 'upward', or 'upward-optional'.",
