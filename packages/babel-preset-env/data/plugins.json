@@ -149,6 +149,7 @@
   },
   "transform-parameters": {
     "chrome": "49",
+    "edge": "18",
     "firefox": "53",
     "safari": "10",
     "node": "6",
@@ -158,6 +159,7 @@
   },
   "transform-destructuring": {
     "chrome": "51",
+    "edge": "18",
     "firefox": "53",
     "safari": "10",
     "node": "6.5",
