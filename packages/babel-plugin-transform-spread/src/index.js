@@ -14,6 +14,16 @@ export default declare((api, options) => {
     }
   }
 
+  function hasHole(spread) {
+    const elements = spread.elements;
+    for (let i = 0; i < elements.length; i++) {
+      if (elements[i] === null) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   function hasSpread(nodes) {
     for (let i = 0; i < nodes.length; i++) {
       if (t.isSpreadElement(nodes[i])) {
@@ -36,7 +46,14 @@ export default declare((api, options) => {
     for (const prop of props) {
       if (t.isSpreadElement(prop)) {
         _props = push(_props, nodes);
-        nodes.push(getSpreadLiteral(prop, scope));
+        let spreadLiteral = getSpreadLiteral(prop, scope);
+        if (t.isArrayExpression(spreadLiteral) && hasHole(spreadLiteral)) {
+          spreadLiteral = t.callExpression(
+            this.addHelper("toConsumableArray"),
+            [spreadLiteral],
+          );
+        }
+        nodes.push(spreadLiteral);
       } else {
         _props.push(prop);
       }
@@ -56,7 +73,7 @@ export default declare((api, options) => {
         const elements = node.elements;
         if (!hasSpread(elements)) return;
 
-        const nodes = build(elements, scope);
+        const nodes = build.call(this, elements, scope);
         const first = nodes.shift();
 
         if (nodes.length === 0 && first !== elements[0].argument) {
