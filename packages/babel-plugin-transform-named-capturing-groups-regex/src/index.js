@@ -3,7 +3,7 @@ import regexpTree from "regexp-tree";
 export default function({ types: t }, options) {
   const { runtime = true } = options;
   if (typeof runtime !== "boolean") {
-    throw new Error(".runtime must be boolean");
+    throw new Error("The 'runtime' option must be boolean");
   }
 
   return {

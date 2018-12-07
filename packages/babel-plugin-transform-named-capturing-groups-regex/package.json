@@ -14,7 +14,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-named-capturing-groups-regex",
   "bugs": "https://github.com/babel/babel/issues",
   "dependencies": {
-    "regexp-tree": "^0.0.78"
+    "regexp-tree": "^0.0.85"
   },
   "peerDependencies": {
     "@babel/core": "^7.0.0"
