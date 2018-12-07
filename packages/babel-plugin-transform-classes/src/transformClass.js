@@ -494,7 +494,8 @@ export default function transformClass(
         node.generator,
         node.async,
       );
-      func.returnType = node.returnType;
+      t.inherits(func, node);
+
       const key = t.toComputedKey(node, node.key);
       if (t.isStringLiteral(key)) {
         func = nameFunction({
