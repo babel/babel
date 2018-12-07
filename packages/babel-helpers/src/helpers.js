@@ -1853,4 +1853,5 @@ helpers.wrapRegExp = helper("7.2.2")`
     }
 
     return _wrapRegExp.apply(this, arguments);
+  }
 `;
