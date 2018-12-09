@@ -1,6 +1,11 @@
+/* eslint-disable local-rules/plugin-name */
+
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
-import visitor from "./transformer";
+import {
+  createClassFeaturePlugin,
+  FEATURES,
+} from "@babel/helper-create-class-features-plugin";
 import legacyVisitor from "./transformer-legacy";
 
 export default declare((api, options) => {
@@ -31,14 +36,26 @@ export default declare((api, options) => {
     }
   }
 
-  return {
-    name: "proposal-decorators",
-    inherits: syntaxDecorators,
+  if (legacy) {
+    return {
+      name: "proposal-decorators",
+      inherits: syntaxDecorators,
+      manipulateOptions({ generatorOpts }) {
+        generatorOpts.decoratorsBeforeExport = decoratorsBeforeExport;
+      },
+      visitor: legacyVisitor,
+    };
+  }
 
-    manipulateOptions({ generatorOpts }) {
+  return createClassFeaturePlugin({
+    name: "proposal-decorators",
+
+    feature: FEATURES.decorators,
+    // loose: options.loose, Not supported
+
+    manipulateOptions({ generatorOpts, parserOpts }) {
+      parserOpts.plugins.push(["decorators", { decoratorsBeforeExport }]);
       generatorOpts.decoratorsBeforeExport = decoratorsBeforeExport;
     },
-
-    visitor: legacy ? legacyVisitor : visitor,
-  };
+  });
 });

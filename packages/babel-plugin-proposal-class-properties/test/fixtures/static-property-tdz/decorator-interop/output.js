@@ -1,4 +1,4 @@
-var _class, _descriptor, _class2, _Symbol$search, _temp;
+var _class, _descriptor, _Symbol$search, _temp;
 
 function _initializerDefineProperty(target, property, descriptor, context) { if (!descriptor) return; Object.defineProperty(target, property, { enumerable: descriptor.enumerable, configurable: descriptor.configurable, writable: descriptor.writable, value: descriptor.initializer ? descriptor.initializer.call(context) : void 0 }); }
 
@@ -14,7 +14,7 @@ function _initializerWarningHelper(descriptor, context) { throw new Error('Decor
 
 function dec() {}
 
-let A = (_class = (_temp = (_Symbol$search = Symbol.search, _class2 =
+let A = (_class = (_temp = (_Symbol$search = Symbol.search,
 /*#__PURE__*/
 function () {
   "use strict";
