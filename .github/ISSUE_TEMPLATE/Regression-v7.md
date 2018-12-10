@@ -10,7 +10,7 @@ assignees: ''
 
 # v7 Regression
 
-> First check out: https://new.babeljs.io/docs/en/next/v7-migration.html
+> First check out: https://babeljs.io/docs/en/v7-migration
 > Also a partial upgrade tool: https://github.com/babel/babel-upgrade
 
 **Potential Commit/PR that introduced the regression**
