@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    ["proposal-decorators", { "legacy": true, "initializers": true }]
+  ],
+  "throws": "'initializers' can't be used with legacy decorators."
+}
