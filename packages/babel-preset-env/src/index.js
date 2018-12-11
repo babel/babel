@@ -203,6 +203,7 @@ export default declare((api, opts) => {
   const targets = getTargets(optionsTargets, {
     ignoreBrowserslistConfig,
     configPath,
+    env: api.env(),
   });
   const include = transformIncludesAndExcludes(optionsInclude);
   const exclude = transformIncludesAndExcludes(optionsExclude);

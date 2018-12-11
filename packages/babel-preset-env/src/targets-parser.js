@@ -186,6 +186,7 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
 
     const browsers = browserslist(browsersquery, {
       path: options.configPath,
+      env: options.env,
     });
 
     const queryBrowsers = getLowestVersions(browsers);
