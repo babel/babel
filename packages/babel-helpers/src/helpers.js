@@ -1095,7 +1095,7 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
   
 `;
 
-helpers.decorate = helper("7.1.5")`
+helpers.decorate = helper("7.2.2")`
   import toArray from "toArray";
   import toPropertyKey from "toPropertyKey";
 
@@ -1263,9 +1263,9 @@ helpers.decorate = helper("7.1.5")`
         /*::<C>*/ O /*: C */,
         elements /*: ElementDescriptor[] */,
       ) {
-        ["method", "field"].forEach(function(kind) {
+        this.elementsDefinitionOrder.forEach(function(kinds) {
           elements.forEach(function(element /*: ElementDescriptor */) {
-            if (element.kind === kind && element.placement === "own") {
+            if (kinds.includes(element.kind) && element.placement === "own") {
               this.defineClassElement(O, element);
             }
           }, this);
@@ -1279,11 +1279,11 @@ helpers.decorate = helper("7.1.5")`
       ) {
         var proto = F.prototype;
 
-        ["method", "field"].forEach(function(kind) {
+        this.elementsDefinitionOrder.forEach(function(kinds) {
           elements.forEach(function(element /*: ElementDescriptor */) {
             var placement = element.placement;
             if (
-              element.kind === kind &&
+              kinds.includes(element.kind) &&
               (placement === "static" || placement === "prototype")
             ) {
               var receiver = placement === "static" ? F : proto;
@@ -1434,10 +1434,7 @@ helpers.decorate = helper("7.1.5")`
 
             for (var j = 0; j < elements.length - 1; j++) {
               for (var k = j + 1; k < elements.length; k++) {
-                if (
-                  elements[j].key === elements[k].key &&
-                  elements[j].placement === elements[k].placement
-                ) {
+                if (this.isDuplicatedElement(elements[j], elements[k])) {
                   throw new TypeError(
                     "Duplicated element (" + elements[j].key + ")",
                   );
@@ -1448,6 +1445,10 @@ helpers.decorate = helper("7.1.5")`
         }
 
         return { elements: elements, finishers: finishers };
+      },
+
+      isDuplicatedElement: function(a, b) {
+        return a.key === b.key && a.placement === b.placement;
       },
 
       // FromElementDescriptor
@@ -1485,11 +1486,7 @@ helpers.decorate = helper("7.1.5")`
         }, this);
       },
 
-      // ToElementDescriptor
-      toElementDescriptor: function(
-        elementObject /*: ElementObject */,
-      ) /*: ElementDescriptor */ {
-        var kind = String(elementObject.kind);
+      validateElementKind: function(kind) {
         if (kind !== "method" && kind !== "field") {
           throw new TypeError(
             'An element descriptor\\'s .kind property must be either "method" or' +
@@ -1499,10 +1496,9 @@ helpers.decorate = helper("7.1.5")`
               '"',
           );
         }
+      },
 
-        var key = toPropertyKey(elementObject.key);
-
-        var placement = String(elementObject.placement);
+      validateElementPlacement: function(placement) {
         if (
           placement !== "static" &&
           placement !== "prototype" &&
@@ -1516,6 +1512,19 @@ helpers.decorate = helper("7.1.5")`
               '"',
           );
         }
+      },
+
+      // ToElementDescriptor
+      toElementDescriptor: function(
+        elementObject /*: ElementObject */,
+      ) /*: ElementDescriptor */ {
+        var kind = String(elementObject.kind);
+        this.validateElementKind(kind);
+
+        var key = toPropertyKey(elementObject.key);
+
+        var placement = String(elementObject.placement);
+        this.validateElementPlacement(placement);
 
         var descriptor /*: PropertyDescriptor */ = elementObject.descriptor;
 
@@ -1771,6 +1780,95 @@ helpers.decorate = helper("7.1.5")`
     return value;
   }
 
+`;
+
+helpers.decoratorsWithInitializer = helper("7.2.2")`
+  export default function _decoratorsWithInitializer(original) {
+    return { __proto__: original,
+      elementsDefinitionOrder: [
+        ["method"],
+        ["field", "initializer"],
+      ],
+
+      defineClassElement: function (O, element) {
+        if (element.kind === "initializer") {
+          _assertInitializerReturnsVoid(element.initializer.call(O));
+          return;
+        }
+
+        return original.defineClassElement.apply(this, arguments);
+      },
+
+      isDuplicatedElement: function (a, b) {
+        if (a.kind === "initializer" || b.kind === "initializer") {
+          return false;
+        }
+
+        return original.isDuplicatedElement.apply(this, arguments);
+      },
+
+      fromElementDescriptor: function(element) {
+        if (element.kind === "initializer") {
+          var obj = {
+            kind: "initializer",
+            placement: element.placement,
+            initializer: element.initializer,
+          };
+
+          Object.defineProperty(obj, Symbol.toStringTag, {
+            value: "Descriptor",
+            configurable: true,
+          });
+
+          return obj;
+        }
+
+        return original.fromElementDescriptor.apply(this, arguments);
+      },
+
+      validateElementKind: function(kind) {
+        if (kind !== "method" && kind !== "field" && kind !== "initializer") {
+          throw new TypeError(
+            'An element descriptor\\'s .kind property must be either "method",' +
+              ' "field" or "initializer", but a decorator created an element' +
+              '  descriptor with .kind "' + kind + '"',
+          );
+        }
+      },
+
+      toElementDescriptor: function(elementObject) {
+        var kind = String(elementObject.kind);
+
+        if (kind === "initializer") {
+          this.disallowProperty(elementObject, "key", "An initializer descriptor");
+
+          var placement = String(elementObject.placement);
+          this.validateElementPlacement(placement);
+
+          this.disallowProperty(elementObject, "descriptor", "An initializer descriptor");
+
+          var initializer = elementObject.initializer;
+          if (initializer === undefined) {
+            throw new TypeError(
+              "An initializer descriptor must have a .initializer property."
+            );
+          }
+
+          this.disallowProperty(elementObject, "elements", "An initializer descriptor");
+
+          return { kind: kind, placement: placement, initializer: initializer };
+        }
+
+        return original.toElementDescriptor.apply(this, arguments);
+      },
+    };
+  }
+
+  function _assertInitializerReturnsVoid(res) {
+    if (res !== undefined) {
+      throw new TypeError("Initializers can only return 'undefined'.");
+    }
+  }
 `;
 
 helpers.classPrivateMethodGet = helper("7.1.6")`

@@ -5,6 +5,7 @@ import syntaxDecorators from "@babel/plugin-syntax-decorators";
 import {
   createClassFeaturePlugin,
   FEATURES,
+  OPTIONS,
 } from "@babel/helper-create-class-features-plugin";
 import legacyVisitor from "./transformer-legacy";
 
@@ -36,6 +37,16 @@ export default declare((api, options) => {
     }
   }
 
+  const { initializers } = options;
+  if (initializers !== undefined) {
+    if (legacy) {
+      throw new Error("'initializers' can't be used with legacy decorators.");
+    }
+    if (typeof initializers !== "boolean") {
+      throw new Error("'initializers' must be a boolean.");
+    }
+  }
+
   if (legacy) {
     return {
       name: "proposal-decorators",
@@ -52,6 +63,7 @@ export default declare((api, options) => {
 
     feature: FEATURES.decorators,
     // loose: options.loose, Not supported
+    options: [[OPTIONS.decorators.initializers, !!initializers]],
 
     manipulateOptions({ generatorOpts, parserOpts }) {
       parserOpts.plugins.push(["decorators", { decoratorsBeforeExport }]);
