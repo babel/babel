@@ -8,6 +8,9 @@ const template = require("@babel/template");
 const t = require("@babel/types");
 
 const transformRuntime = require("../");
+const transformMemberExpressionLiterals = require("@babel/plugin-transform-member-expression-literals");
+const transformPropertyLiterals = require("@babel/plugin-transform-property-literals");
+
 const getcorejsDefinitions = require("../lib/definitions").default;
 const corejsDefinitions = getcorejsDefinitions();
 
@@ -146,6 +149,8 @@ function buildHelper(
     presets: [[require("@babel/preset-env"), { modules: false }]],
     plugins: [
       [transformRuntime, { corejs, useESModules: esm }],
+      [transformMemberExpressionLiterals],
+      [transformPropertyLiterals],
       buildRuntimeRewritePlugin(
         runtimeName,
         path.relative(path.dirname(helperFilename), pkgDirname),
