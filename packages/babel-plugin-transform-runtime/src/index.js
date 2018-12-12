@@ -64,13 +64,9 @@ export default declare((api, options, dirname) => {
       "The 'absoluteRuntime' option must be undefined, a boolean, or a string.",
     );
   }
-  if (
-    corejsVersion !== false &&
-    (typeof corejsVersion !== "number" || corejsVersion !== 2) &&
-    (typeof corejsVersion !== "string" || corejsVersion !== "2")
-  ) {
+  if (![false, undefined, 2, 3, "2", "3"].includes(corejsVersion)) {
     throw new Error(
-      `The 'corejs' option must be undefined, false, 2 or '2', ` +
+      `The 'corejs' option must be undefined, false, 2, '2', 3 or '3', ` +
         `but got ${JSON.stringify(corejsVersion)}.`,
     );
   }
@@ -90,7 +86,7 @@ export default declare((api, options, dirname) => {
     } else {
       throw new Error(
         "The 'useBuiltIns' option has been removed. Use the 'corejs'" +
-          "option with value '2' to polyfill with CoreJS 2.x via @babel/runtime.",
+          "option to polyfill with CoreJS via @babel/runtime.",
       );
     }
   }
@@ -103,7 +99,7 @@ export default declare((api, options, dirname) => {
     } else {
       throw new Error(
         "The 'polyfill' option has been removed. Use the 'corejs'" +
-          "option with value '2' to polyfill with CoreJS 2.x via @babel/runtime.",
+          "option to polyfill with CoreJS via @babel/runtime.",
       );
     }
   }
@@ -119,8 +115,12 @@ export default declare((api, options, dirname) => {
   const esModules =
     useESModules === "auto" ? api.caller(supportsStaticESM) : useESModules;
 
-  const injectCoreJS2 = `${corejsVersion}` === "2";
-  const moduleName = injectCoreJS2
+  const injectCoreJS2 = corejsVersion === 2 || corejsVersion === "2";
+  const injectCoreJS3 = corejsVersion === 3 || corejsVersion === "3";
+  const injectCoreJS = injectCoreJS2 || injectCoreJS3;
+  const moduleName = injectCoreJS3
+    ? "@babel/runtime-corejs3"
+    : injectCoreJS2
     ? "@babel/runtime-corejs2"
     : "@babel/runtime";
 
@@ -209,7 +209,7 @@ export default declare((api, options, dirname) => {
           return;
         }
 
-        if (!injectCoreJS2) return;
+        if (!injectCoreJS) return;
 
         if (t.isMemberExpression(parent)) return;
         if (!has(definitions.builtins, node.name)) return;
@@ -226,7 +226,7 @@ export default declare((api, options, dirname) => {
 
       // arr[Symbol.iterator]() -> _core.$for.getIterator(arr)
       CallExpression(path) {
-        if (!injectCoreJS2) return;
+        if (!injectCoreJS) return;
 
         // we can't compile this
         if (path.node.arguments.length) return;
@@ -251,7 +251,7 @@ export default declare((api, options, dirname) => {
 
       // Symbol.iterator in arr -> core.$for.isIterable(arr)
       BinaryExpression(path) {
-        if (!injectCoreJS2) return;
+        if (!injectCoreJS) return;
 
         if (path.node.operator !== "in") return;
         if (!path.get("left").matchesPattern("Symbol.iterator")) return;
@@ -270,7 +270,7 @@ export default declare((api, options, dirname) => {
       // Array.from -> _core.Array.from
       MemberExpression: {
         enter(path) {
-          if (!injectCoreJS2) return;
+          if (!injectCoreJS) return;
           if (!path.isReferenced()) return;
 
           const { node } = path;
@@ -308,7 +308,7 @@ export default declare((api, options, dirname) => {
         },
 
         exit(path) {
-          if (!injectCoreJS2) return;
+          if (!injectCoreJS) return;
           if (!path.isReferenced()) return;
 
           const { node } = path;

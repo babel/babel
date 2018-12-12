@@ -38,6 +38,10 @@ package-lock.json
 /packages/babel-runtime-corejs2/core-js/**/*.js
 !/packages/babel-runtime-corejs2/core-js/map.js
 
+/packages/babel-runtime-corejs3/helpers/*.js
+/packages/babel-runtime-corejs3/helpers/esm/*.js
+/packages/babel-runtime-corejs3/core-js/**/*.js
+
 /packages/babel-register/test/.babel
 /packages/babel-cli/test/tmp
 /packages/babel-node/test/tmp
