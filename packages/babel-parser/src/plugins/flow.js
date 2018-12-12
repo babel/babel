@@ -10,6 +10,8 @@ import { types as tc } from "../tokenizer/context";
 import * as charCodes from "charcodes";
 import { isIteratorStart } from "../util/identifier";
 
+const charCodeTab = 9;
+
 const reservedTypes = [
   "any",
   "bool",
@@ -2721,17 +2723,29 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     skipFlowComment(): number | boolean {
-      const ch2 = this.input.charCodeAt(this.state.pos + 2);
-      const ch3 = this.input.charCodeAt(this.state.pos + 3);
+      let firstNonWhiteSpace = this.state.pos + 2;
+      while (
+        [charCodes.space, charCodeTab].includes(
+          this.input.charCodeAt(firstNonWhiteSpace),
+        )
+      ) {
+        firstNonWhiteSpace++;
+      }
+
+      const ch2 = this.input.charCodeAt(firstNonWhiteSpace);
+      const ch3 = this.input.charCodeAt(firstNonWhiteSpace + 1);
 
       if (ch2 === charCodes.colon && ch3 === charCodes.colon) {
-        return 4; // check for /*::
+        return firstNonWhiteSpace + 2; // check for /*::
       }
-      if (this.input.slice(this.state.pos + 2, 14) === "flow-include") {
-        return 14; // check for /*flow-include
+      if (
+        this.input.slice(firstNonWhiteSpace, firstNonWhiteSpace + 12) ===
+        "flow-include"
+      ) {
+        return firstNonWhiteSpace + 12; // check for /*flow-include
       }
       if (ch2 === charCodes.colon && ch3 !== charCodes.colon) {
-        return 2; // check for /*:, advance only 2 steps
+        return firstNonWhiteSpace - this.state.pos; // check for /*:, advance up to :
       }
       return false;
     }
