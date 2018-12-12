@@ -25,6 +25,8 @@
     "@babel/helper-plugin-test-runner": "^7.0.0",
     "@babel/helpers": "^7.2.0",
     "@babel/plugin-transform-runtime": "^7.3.4",
+    "@babel/plugin-transform-member-expression-literals": "^7.2.0",
+    "@babel/plugin-transform-property-literals": "^7.2.0",
     "@babel/preset-env": "^7.3.4",
     "@babel/runtime": "^7.3.4",
     "@babel/template": "^7.0.0",
