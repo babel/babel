@@ -278,7 +278,24 @@ export default declare((api, options, dirname) => {
           const prop = node.property;
 
           if (!t.isReferenced(obj, node)) return;
-          if (node.computed) return;
+
+          if (node.computed) {
+            if (injectCoreJS2) return;
+            // object[Symbol.iterator] -> core.getIteratorMethod(object)
+            if (path.get("property").matchesPattern("Symbol.iterator")) {
+              path.replaceWith(
+                t.callExpression(
+                  this.addDefaultImport(
+                    `${moduleName}/core-js/get-iterator-method`,
+                    "getIteratorMethod",
+                  ),
+                  [obj],
+                ),
+              );
+            }
+            return;
+          }
+
           if (!has(definitions.methods, obj.name)) return;
 
           const methods = definitions.methods[obj.name];

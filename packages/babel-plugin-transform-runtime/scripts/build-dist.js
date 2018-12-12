@@ -58,7 +58,7 @@ function writeCoreJS2(runtimeName) {
 function writeCoreJS3(runtimeName) {
   const pkgDirname = getRuntimeRoot(runtimeName);
 
-  const paths = ["is-iterable", "get-iterator"];
+  const paths = ["is-iterable", "get-iterator", "get-iterator-method"];
 
   Object.keys(corejsDefinitions.builtins).forEach(key => {
     const path = corejsDefinitions.builtins[key];
