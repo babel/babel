@@ -1,28 +1,28 @@
 {
   "type": "File",
   "start": 0,
-  "end": 51,
+  "end": 99,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 3,
+      "line": 4,
       "column": 1
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 51,
+    "end": 99,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 3,
+        "line": 4,
         "column": 1
       }
     },
@@ -32,14 +32,14 @@
       {
         "type": "ClassDeclaration",
         "start": 0,
-        "end": 51,
+        "end": 99,
         "loc": {
           "start": {
             "line": 1,
             "column": 0
           },
           "end": {
-            "line": 3,
+            "line": 4,
             "column": 1
           }
         },
@@ -64,57 +64,154 @@
         "body": {
           "type": "ClassBody",
           "start": 14,
-          "end": 51,
+          "end": 99,
           "loc": {
             "start": {
               "line": 1,
               "column": 14
             },
             "end": {
-              "line": 3,
+              "line": 4,
               "column": 1
             }
           },
-          "body": [],
-          "innerComments": [
+          "body": [
             {
-              "type": "CommentBlock",
-              "value": "flow-include prop: string; ",
-              "start": 18,
-              "end": 49,
+              "type": "ClassProperty",
+              "start": 39,
+              "end": 52,
               "loc": {
                 "start": {
                   "line": 2,
-                  "column": 2
+                  "column": 23
                 },
                 "end": {
                   "line": 2,
-                  "column": 33
+                  "column": 36
                 }
-              }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 39,
+                "end": 43,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 23
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 27
+                  },
+                  "identifierName": "prop"
+                },
+                "name": "prop"
+              },
+              "computed": false,
+              "variance": null,
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start": 43,
+                "end": 51,
+                "loc": {
+                  "start": {
+                    "line": 2,
+                    "column": 27
+                  },
+                  "end": {
+                    "line": 2,
+                    "column": 35
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "StringTypeAnnotation",
+                  "start": 45,
+                  "end": 51,
+                  "loc": {
+                    "start": {
+                      "line": 2,
+                      "column": 29
+                    },
+                    "end": {
+                      "line": 2,
+                      "column": 35
+                    }
+                  }
+                }
+              },
+              "value": null
+            },
+            {
+              "type": "ClassProperty",
+              "start": 80,
+              "end": 94,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 24
+                },
+                "end": {
+                  "line": 3,
+                  "column": 38
+                }
+              },
+              "static": false,
+              "key": {
+                "type": "Identifier",
+                "start": 80,
+                "end": 85,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 24
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 29
+                  },
+                  "identifierName": "prop2"
+                },
+                "name": "prop2"
+              },
+              "computed": false,
+              "variance": null,
+              "typeAnnotation": {
+                "type": "TypeAnnotation",
+                "start": 85,
+                "end": 93,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 29
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 37
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "NumberTypeAnnotation",
+                  "start": 87,
+                  "end": 93,
+                  "loc": {
+                    "start": {
+                      "line": 3,
+                      "column": 31
+                    },
+                    "end": {
+                      "line": 3,
+                      "column": 37
+                    }
+                  }
+                }
+              },
+              "value": null
             }
           ]
         }
       }
     ],
     "directives": []
-  },
-  "comments": [
-    {
-      "type": "CommentBlock",
-      "value": "flow-include prop: string; ",
-      "start": 18,
-      "end": 49,
-      "loc": {
-        "start": {
-          "line": 2,
-          "column": 2
-        },
-        "end": {
-          "line": 2,
-          "column": 33
-        }
-      }
-    }
-  ]
+  }
 }
