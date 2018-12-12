@@ -8,13 +8,16 @@ const template = require("@babel/template");
 const t = require("@babel/types");
 
 const transformRuntime = require("../");
-const getCorejs2Definitions = require("../lib/definitions").default;
-const corejs2Definitions = getCorejs2Definitions();
+const getcorejsDefinitions = require("../lib/definitions").default;
+const corejsDefinitions = getcorejsDefinitions();
 
 writeHelpers("@babel/runtime");
 
 writeCoreJS2("@babel/runtime-corejs2");
 writeHelpers("@babel/runtime-corejs2", { corejs: 2 });
+
+writeCoreJS3("@babel/runtime-corejs3");
+writeHelpers("@babel/runtime-corejs3", { corejs: 3 });
 
 function writeCoreJS2(runtimeName) {
   const pkgDirname = getRuntimeRoot(runtimeName);
@@ -29,13 +32,13 @@ function writeCoreJS2(runtimeName) {
     "symbol/async-iterator",
   ];
 
-  Object.keys(corejs2Definitions.builtins).forEach(key => {
-    const path = corejs2Definitions.builtins[key];
+  Object.keys(corejsDefinitions.builtins).forEach(key => {
+    const path = corejsDefinitions.builtins[key];
     paths.push(path);
   });
 
-  Object.keys(corejs2Definitions.methods).forEach(key => {
-    const props = corejs2Definitions.methods[key];
+  Object.keys(corejsDefinitions.methods).forEach(key => {
+    const props = corejsDefinitions.methods[key];
     Object.keys(props).forEach(key2 => {
       paths.push(props[key2]);
     });
@@ -45,6 +48,31 @@ function writeCoreJS2(runtimeName) {
     outputFile(
       path.join(pkgDirname, "core-js", `${corePath}.js`),
       `module.exports = require("core-js/library/fn/${corePath}");`
+    );
+  });
+}
+
+function writeCoreJS3(runtimeName) {
+  const pkgDirname = getRuntimeRoot(runtimeName);
+
+  const paths = ["is-iterable", "get-iterator"];
+
+  Object.keys(corejsDefinitions.builtins).forEach(key => {
+    const path = corejsDefinitions.builtins[key];
+    paths.push(path);
+  });
+
+  Object.keys(corejsDefinitions.methods).forEach(key => {
+    const props = corejsDefinitions.methods[key];
+    Object.keys(props).forEach(key2 => {
+      paths.push(props[key2]);
+    });
+  });
+
+  paths.forEach(function(corePath) {
+    outputFile(
+      path.join(pkgDirname, "core-js", `${corePath}.js`),
+      `module.exports = require("core-js-pure/features/${corePath}");`
     );
   });
 }
