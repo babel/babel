@@ -11,8 +11,8 @@ const transformRuntime = require("../");
 const transformMemberExpressionLiterals = require("@babel/plugin-transform-member-expression-literals");
 const transformPropertyLiterals = require("@babel/plugin-transform-property-literals");
 
-const getcorejsDefinitions = require("../lib/definitions").default;
-const corejsDefinitions = getcorejsDefinitions();
+const corejs2Definitions = require("../lib/runtime-corejs2-definitions").default();
+const corejs3Definitions = require("../lib/runtime-corejs3-definitions").default();
 
 writeHelpers("@babel/runtime");
 
@@ -35,13 +35,13 @@ function writeCoreJS2(runtimeName) {
     "symbol/async-iterator",
   ];
 
-  Object.keys(corejsDefinitions.builtins).forEach(key => {
-    const path = corejsDefinitions.builtins[key];
+  Object.keys(corejs2Definitions.builtins).forEach(key => {
+    const path = corejs2Definitions.builtins[key];
     paths.push(path);
   });
 
-  Object.keys(corejsDefinitions.methods).forEach(key => {
-    const props = corejsDefinitions.methods[key];
+  Object.keys(corejs2Definitions.methods).forEach(key => {
+    const props = corejs2Definitions.methods[key];
     Object.keys(props).forEach(key2 => {
       paths.push(props[key2]);
     });
@@ -60,13 +60,13 @@ function writeCoreJS3(runtimeName) {
 
   const paths = ["is-iterable", "get-iterator", "get-iterator-method"];
 
-  Object.keys(corejsDefinitions.builtins).forEach(key => {
-    const path = corejsDefinitions.builtins[key];
+  Object.keys(corejs3Definitions.builtins).forEach(key => {
+    const path = corejs3Definitions.builtins[key];
     paths.push(path);
   });
 
-  Object.keys(corejsDefinitions.methods).forEach(key => {
-    const props = corejsDefinitions.methods[key];
+  Object.keys(corejs3Definitions.methods).forEach(key => {
+    const props = corejs3Definitions.methods[key];
     Object.keys(props).forEach(key2 => {
       paths.push(props[key2]);
     });

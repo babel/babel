@@ -4,7 +4,8 @@ import { declare } from "@babel/helper-plugin-utils";
 import { addDefault, isModule } from "@babel/helper-module-imports";
 import { types as t } from "@babel/core";
 
-import getDefinitions from "./definitions";
+import getCoreJS2Definitions from "./runtime-corejs2-definitions";
+import getCoreJS3Definitions from "./runtime-corejs3-definitions";
 
 function resolveAbsoluteRuntime(moduleName: string, dirname: string) {
   try {
@@ -40,8 +41,6 @@ export default declare((api, options, dirname) => {
     version: runtimeVersion = "7.0.0-beta.0",
     absoluteRuntime = false,
   } = options;
-
-  const definitions = getDefinitions(runtimeVersion);
 
   if (typeof useRuntimeRegenerator !== "boolean") {
     throw new Error(
@@ -118,11 +117,16 @@ export default declare((api, options, dirname) => {
   const injectCoreJS2 = corejsVersion === 2 || corejsVersion === "2";
   const injectCoreJS3 = corejsVersion === 3 || corejsVersion === "3";
   const injectCoreJS = injectCoreJS2 || injectCoreJS3;
+
   const moduleName = injectCoreJS3
     ? "@babel/runtime-corejs3"
     : injectCoreJS2
     ? "@babel/runtime-corejs2"
     : "@babel/runtime";
+
+  const definitions = (injectCoreJS2
+    ? getCoreJS2Definitions
+    : getCoreJS3Definitions)(runtimeVersion);
 
   const HEADER_HELPERS = ["interopRequireWildcard", "interopRequireDefault"];
 
