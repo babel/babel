@@ -675,6 +675,24 @@ export function assertOptionalMemberExpression(
 ): void {
   assert("OptionalMemberExpression", node, opts);
 }
+export function assertPipelineTopicExpression(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("PipelineTopicExpression", node, opts);
+}
+export function assertPipelineBareFunction(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("PipelineBareFunction", node, opts);
+}
+export function assertPipelinePrimaryTopicReference(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("PipelinePrimaryTopicReference", node, opts);
+}
 export function assertOptionalCallExpression(
   node: Object,
   opts?: Object = {},

@@ -612,6 +612,18 @@ export function OptionalMemberExpression(...args: Array<any>): Object {
   return builder("OptionalMemberExpression", ...args);
 }
 export { OptionalMemberExpression as optionalMemberExpression };
+export function PipelineTopicExpression(...args: Array<any>): Object {
+  return builder("PipelineTopicExpression", ...args);
+}
+export { PipelineTopicExpression as pipelineTopicExpression };
+export function PipelineBareFunction(...args: Array<any>): Object {
+  return builder("PipelineBareFunction", ...args);
+}
+export { PipelineBareFunction as pipelineBareFunction };
+export function PipelinePrimaryTopicReference(...args: Array<any>): Object {
+  return builder("PipelinePrimaryTopicReference", ...args);
+}
+export { PipelinePrimaryTopicReference as pipelinePrimaryTopicReference };
 export function OptionalCallExpression(...args: Array<any>): Object {
   return builder("OptionalCallExpression", ...args);
 }
