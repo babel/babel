@@ -2,7 +2,7 @@
   "name": "@babel/plugin-proposal-nullish-coalescing-operator",
   "version": "7.2.0",
   "description": "Remove nullish coalescing operator",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-nullish-coalescing-opearator",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-nullish-coalescing-operator",
   "license": "MIT",
   "publishConfig": {
     "access": "public"

@@ -18,10 +18,7 @@
     "regular expressions",
     "dotall"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-dotall-regex.git"
-  },
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-dotall-regex",
   "bugs": "https://github.com/babel/babel/issues",
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.0.0",

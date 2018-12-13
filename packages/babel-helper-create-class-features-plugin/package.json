@@ -4,7 +4,7 @@
   "author": "The Babel Team (https://babeljs.io/team)",
   "license": "MIT",
   "description": "Compile class public and private fields, private methods and decorators to ES6",
-  "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-class-features",
+  "repository": "https://github.com/babel/babel/tree/master/packages/babel-helper-create-class-features-plugin",
   "main": "lib/index.js",
   "publishConfig": {
     "access": "public"
