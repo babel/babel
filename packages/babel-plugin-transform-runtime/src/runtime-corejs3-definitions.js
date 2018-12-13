@@ -1,41 +1,4 @@
-import semver from "semver";
-
-function hasMinVersion(minVersion, runtimeVersion) {
-  // If the range is unavailable, we're running the script during Babel's
-  // build process, and we want to assume that all versions are satisfied so
-  // that the built output will include all definitions.
-  if (!runtimeVersion) return true;
-
-  // semver.intersects() has some surprising behavior with comparing ranges
-  // with preprelease versions. We add '^' to ensure that we are always
-  // comparing ranges with ranges, which sidesteps this logic.
-  // For example:
-  //
-  //   semver.intersects(`<7.0.1`, "7.0.0-beta.0") // false - surprising
-  //   semver.intersects(`<7.0.1`, "^7.0.0-beta.0") // true - expected
-  //
-  // This is because the first falls back to
-  //
-  //   semver.satisfies("7.0.0-beta.0", `<7.0.1`) // false - surprising
-  //
-  // and this fails because a prerelease version can only satisfy a range
-  // if it is a prerelease within the same major/minor/patch range.
-  //
-  // Note: If this is found to have issues, please also revist the logic in
-  // babel-core's availableHelper() API.
-  if (semver.valid(runtimeVersion)) runtimeVersion = `^${runtimeVersion}`;
-
-  return (
-    !semver.intersects(`<${minVersion}`, runtimeVersion) &&
-    !semver.intersects(`>=8.0.0`, runtimeVersion)
-  );
-}
-
-export default runtimeVersion => {
-  // Conditionally include 'Math' because it was not included in the 7.0.0
-  // release of '@babel/runtime'. See issue https://github.com/babel/babel/pull/8616.
-  const includeMathModule = hasMinVersion("7.0.1", runtimeVersion);
-
+export default () => {
   return {
     builtins: {
       Symbol: "symbol",
@@ -84,33 +47,28 @@ export default runtimeVersion => {
         values: "object/values",
       },
 
-      ...(includeMathModule
-        ? {
-            Math: {
-              acosh: "math/acosh",
-              asinh: "math/asinh",
-              atanh: "math/atanh",
-              cbrt: "math/cbrt",
-              clz32: "math/clz32",
-              cosh: "math/cosh",
-              expm1: "math/expm1",
-              fround: "math/fround",
-              hypot: "math/hypot",
-              imul: "math/imul",
-              log10: "math/log10",
-              log1p: "math/log1p",
-              log2: "math/log2",
-              sign: "math/sign",
-              sinh: "math/sinh",
-              tanh: "math/tanh",
-              trunc: "math/trunc",
-            },
-          }
-        : {}),
+      Math: {
+        acosh: "math/acosh",
+        asinh: "math/asinh",
+        atanh: "math/atanh",
+        cbrt: "math/cbrt",
+        clz32: "math/clz32",
+        cosh: "math/cosh",
+        expm1: "math/expm1",
+        fround: "math/fround",
+        hypot: "math/hypot",
+        imul: "math/imul",
+        log10: "math/log10",
+        log1p: "math/log1p",
+        log2: "math/log2",
+        sign: "math/sign",
+        sinh: "math/sinh",
+        tanh: "math/tanh",
+        trunc: "math/trunc",
+      },
 
       Symbol: {
-        // FIXME: Disabled to work around zloirock/core-js#262.
-        // asyncIterator: "symbol/async-iterator",
+        asyncIterator: "symbol/async-iterator",
         for: "symbol/for",
         hasInstance: "symbol/has-instance",
         isConcatSpreadable: "symbol/is-concat-spreadable",
