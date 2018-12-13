@@ -2723,29 +2723,32 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     skipFlowComment(): number | boolean {
-      let firstNonWhiteSpace = this.state.pos + 2;
+      const { pos } = this.state;
+      let shiftToFirstNonWhiteSpace = 2;
       while (
         [charCodes.space, charCodeTab].includes(
-          this.input.charCodeAt(firstNonWhiteSpace),
+          this.input.charCodeAt(pos + shiftToFirstNonWhiteSpace),
         )
       ) {
-        firstNonWhiteSpace++;
+        shiftToFirstNonWhiteSpace++;
       }
 
-      const ch2 = this.input.charCodeAt(firstNonWhiteSpace);
-      const ch3 = this.input.charCodeAt(firstNonWhiteSpace + 1);
+      const ch2 = this.input.charCodeAt(shiftToFirstNonWhiteSpace + pos);
+      const ch3 = this.input.charCodeAt(shiftToFirstNonWhiteSpace + pos + 1);
 
       if (ch2 === charCodes.colon && ch3 === charCodes.colon) {
-        return firstNonWhiteSpace + 2; // check for /*::
+        return shiftToFirstNonWhiteSpace + 2; // check for /*::
       }
       if (
-        this.input.slice(firstNonWhiteSpace, firstNonWhiteSpace + 12) ===
-        "flow-include"
+        this.input.slice(
+          shiftToFirstNonWhiteSpace + pos,
+          shiftToFirstNonWhiteSpace + pos + 12,
+        ) === "flow-include"
       ) {
-        return firstNonWhiteSpace + 12; // check for /*flow-include
+        return shiftToFirstNonWhiteSpace + 12; // check for /*flow-include
       }
       if (ch2 === charCodes.colon && ch3 !== charCodes.colon) {
-        return firstNonWhiteSpace - this.state.pos; // check for /*:, advance up to :
+        return shiftToFirstNonWhiteSpace; // check for /*:, advance up to :
       }
       return false;
     }
