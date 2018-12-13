@@ -8,6 +8,8 @@ export type ModuleMetadata = {
   // The name of the variable that will reference an object containing export names.
   exportNameListName: null | string,
 
+  hasExports: boolean,
+
   // Lookup from local binding to export information.
   local: Map<string, LocalExportMetadata>,
 
@@ -52,18 +54,7 @@ export type LocalExportMetadata = {
  * Check if the module has any exports that need handling.
  */
 export function hasExports(metadata: ModuleMetadata) {
-  const { local, source } = metadata;
-
-  return (
-    local.size > 0 ||
-    Array.from(source).some(([, meta]) => {
-      return (
-        meta.reexports.size > 0 ||
-        meta.reexportNamespace.size > 0 ||
-        !!meta.reexportAll
-      );
-    })
-  );
+  return metadata.hasExports;
 }
 
 /**
@@ -99,7 +90,10 @@ export default function normalizeModuleAndLoadMetadata(
 
   nameAnonymousExports(programPath);
 
-  const { local, source } = getModuleMetadata(programPath, { loose, lazy });
+  const { local, source, hasExports } = getModuleMetadata(programPath, {
+    loose,
+    lazy,
+  });
 
   removeModuleDeclarations(programPath);
 
@@ -127,6 +121,7 @@ export default function normalizeModuleAndLoadMetadata(
   return {
     exportName,
     exportNameListName: null,
+    hasExports,
     local,
     source,
   };
@@ -171,6 +166,7 @@ function getModuleMetadata(
     }
     return data;
   };
+  let hasExports = false;
   programPath.get("body").forEach(child => {
     if (child.isImportDeclaration()) {
       const data = getData(child.node.source);
@@ -219,6 +215,7 @@ function getModuleMetadata(
         }
       });
     } else if (child.isExportAllDeclaration()) {
+      hasExports = true;
       const data = getData(child.node.source);
       if (!data.loc) data.loc = child.node.loc;
 
@@ -226,6 +223,7 @@ function getModuleMetadata(
         loc: child.node.loc,
       };
     } else if (child.isExportNamedDeclaration() && child.node.source) {
+      hasExports = true;
       const data = getData(child.node.source);
       if (!data.loc) data.loc = child.node.loc;
 
@@ -242,6 +240,11 @@ function getModuleMetadata(
           throw exportName.buildCodeFrameError('Illegal export "__esModule".');
         }
       });
+    } else if (
+      child.isExportNamedDeclaration() ||
+      child.isExportDefaultDeclaration()
+    ) {
+      hasExports = true;
     }
   });
 
@@ -295,6 +298,7 @@ function getModuleMetadata(
   }
 
   return {
+    hasExports,
     local: localData,
     source: sourceData,
   };
