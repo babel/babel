@@ -1,4 +1,4 @@
-var _ref, _;
+var _, _ref;
 
 function then(fn) {
   return async value => {

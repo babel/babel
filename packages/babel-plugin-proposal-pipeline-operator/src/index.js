@@ -5,12 +5,37 @@ import { types as t } from "@babel/core";
 export default declare(api => {
   api.assertVersion(7);
 
-  return {
-    name: "proposal-pipeline-operator",
-    inherits: syntaxPipelineOperator,
+  const updateTopicReferenceVisitor = {
+    PipelinePrimaryTopicReference(path) {
+      path.replaceWith(this.topicId);
+    },
+    AwaitExpression(path) {
+      throw path.buildCodeFrameError(
+        "await is not supported inside pipeline expressions yet",
+      );
+    },
+  };
 
-    visitor: {
-      BinaryExpression(path) {
+  const visitor = {
+    PipelineTopicExpression(path) {
+      path.get("expression").traverse(visitor);
+
+      const topicId = path.scope.generateUidIdentifier("topic");
+
+      path.traverse(updateTopicReferenceVisitor, { topicId });
+
+      const arrowFunctionExpression = t.arrowFunctionExpression(
+        [topicId],
+        path.node.expression,
+      );
+
+      path.replaceWith(arrowFunctionExpression);
+    },
+    PipelineBareFunction(path) {
+      path.replaceWith(path.node.callee);
+    },
+    BinaryExpression: {
+      exit(path) {
         const { scope } = path;
         const { node } = path;
         const { operator, left } = node;
@@ -60,5 +85,11 @@ export default declare(api => {
         );
       },
     },
+  };
+
+  return {
+    name: "proposal-pipeline-operator",
+    inherits: syntaxPipelineOperator,
+    visitor,
   };
 });

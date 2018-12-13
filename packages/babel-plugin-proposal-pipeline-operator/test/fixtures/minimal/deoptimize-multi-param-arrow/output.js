@@ -1,4 +1,4 @@
-var _ref, _a;
+var _a, _ref;
 
 var a = 1,
     b = 2,
