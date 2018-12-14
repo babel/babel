@@ -1,8 +1,12 @@
 "use strict";
 
-var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
-
 var _Object$keys = require("@babel/runtime-corejs3/core-js/object/keys");
+
+var _forEachInstanceProperty = require("@babel/runtime-corejs3/core-js/instance/for-each");
+
+var _context;
+
+var _interopRequireDefault = require("@babel/runtime-corejs3/helpers/interopRequireDefault");
 
 var _Object$defineProperty = require("@babel/runtime-corejs3/core-js/object/define-property");
 
@@ -21,7 +25,7 @@ var _fuz = require("fuz");
 
 var _mod = require("mod");
 
-_Object$keys(_mod).forEach(function (key) {
+_forEachInstanceProperty(_context = _Object$keys(_mod)).call(_context, function (key) {
   if (key === "default" || key === "__esModule") return;
   if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
 
