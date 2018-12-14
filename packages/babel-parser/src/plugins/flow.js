@@ -2697,21 +2697,34 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.readToken_mult_modulo(code);
     }
 
+    parseTopLevel(file: N.File, program: N.Program): N.File {
+      const fileNode = super.parseTopLevel(file, program);
+      if (this.state.hasFlowComment) {
+        this.unexpected(null, "Unterminated flow-comment");
+      }
+      return fileNode;
+    }
+
     skipBlockComment(): void {
       if (
         this.hasPlugin("flow") &&
         this.hasPlugin("flowComments") &&
         this.skipFlowComment()
       ) {
+        if (this.state.hasFlowComment) {
+          this.unexpected(
+            null,
+            "Cannot have a flow comment inside another flow comment",
+          );
+        }
         this.hasFlowCommentCompletion();
         this.state.pos += this.skipFlowComment();
         this.state.hasFlowComment = true;
         return;
       }
 
-      let end;
       if (this.hasPlugin("flow") && this.state.hasFlowComment) {
-        end = this.input.indexOf("*-/", (this.state.pos += 2));
+        const end = this.input.indexOf("*-/", (this.state.pos += 2));
         if (end === -1) this.raise(this.state.pos - 2, "Unterminated comment");
         this.state.pos = end + 3;
         return;
