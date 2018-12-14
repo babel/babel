@@ -40,6 +40,9 @@ function skipAllButComputedKey(path) {
 }
 
 export const environmentVisitor = {
+  TypeAnnotation(path) {
+    path.skip();
+  },
   Function(path) {
     // Methods will be handled by the Method visit
     if (path.isMethod()) return;
