@@ -1384,6 +1384,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         default:
           if (this.state.type.keyword === "typeof") {
             return this.flowParseTypeofType();
+          } else if (this.state.type.keyword) {
+            const label = this.state.type.label;
+            this.next();
+            return super.createIdentifier(node, label);
           }
       }
 
