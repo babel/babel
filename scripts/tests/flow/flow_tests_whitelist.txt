@@ -27,7 +27,6 @@ decorators/migrated_0007.js
 private_class_properties/multiple.js
 private_class_properties/super.js
 types/annotations/migrated_0001.js
-types/annotations_in_comments_invalid/migrated_0003.js
 types/annotations/void_is_reserved_param.js
 types/member/reserved_words.js
 types/parameter_defaults/migrated_0032.js
@@ -38,3 +37,4 @@ numbers/underscored_float_whole.js
 numbers/underscored_hex.js
 numbers/underscored_number.js
 numbers/underscored_oct.js
+types/annotations_in_comments/migrated_0001.js

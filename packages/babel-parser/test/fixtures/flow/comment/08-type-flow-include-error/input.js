@@ -1,4 +1,4 @@
-/*flow-include
+/* flow-include
 type Foo = {
   foo: number,
   bar: boolean,
