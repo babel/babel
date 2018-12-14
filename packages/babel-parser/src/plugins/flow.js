@@ -10,8 +10,6 @@ import { types as tc } from "../tokenizer/context";
 import * as charCodes from "charcodes";
 import { isIteratorStart } from "../util/identifier";
 
-const charCodeTab = 9;
-
 const reservedTypes = [
   "any",
   "bool",
@@ -2726,7 +2724,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const { pos } = this.state;
       let shiftToFirstNonWhiteSpace = 2;
       while (
-        [charCodes.space, charCodeTab].includes(
+        [charCodes.space, charCodes.tab].includes(
           this.input.charCodeAt(pos + shiftToFirstNonWhiteSpace),
         )
       ) {
