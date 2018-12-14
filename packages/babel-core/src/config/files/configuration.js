@@ -141,7 +141,7 @@ export function loadConfig(
  * throw if there are parsing errors while loading a config.
  */
 function readConfig(filepath, envName, caller): ConfigFile | null {
-  return path.extname(filepath) === ".js"
+  return /\.m?js/.test(path.extname(filepath))
     ? readConfigJS(filepath, { envName, caller })
     : readConfigJSON5(filepath);
 }
