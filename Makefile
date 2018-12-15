@@ -28,6 +28,12 @@ build-standalone:
 build-preset-env-standalone:
 	./node_modules/.bin/gulp build-babel-preset-env-standalone
 
+prepublish-build-standalone:
+	BABEL_ENV=production IS_PUBLISH=true ./node_modules/.bin/gulp build-babel-standalone
+
+prepublish-build-preset-env-standalone:
+	BABEL_ENV=production IS_PUBLISH=true ./node_modules/.bin/gulp build-babel-preset-env-standalone
+
 build-dist: build
 	cd packages/babel-polyfill; \
 	scripts/build-dist.sh
@@ -115,7 +121,7 @@ prepublish-build:
 	rm -rf packages/babel-runtime/helpers
 	rm -rf packages/babel-runtime-corejs2/helpers
 	rm -rf packages/babel-runtime-corejs2/core-js
-	BABEL_ENV=production IS_PUBLISH=true make build-dist
+	BABEL_ENV=production make build-dist
 	make clone-license
 
 prepublish:
