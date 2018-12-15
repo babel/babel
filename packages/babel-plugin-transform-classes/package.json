@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-transform-classes",
-  "version": "7.2.0",
+  "version": "7.2.2",
   "description": "Compile ES2015 classes to ES5",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-classes",
   "license": "MIT",
@@ -25,7 +25,7 @@
     "@babel/core": "^7.0.0-0"
   },
   "devDependencies": {
-    "@babel/core": "^7.2.0",
+    "@babel/core": "^7.2.2",
     "@babel/helper-plugin-test-runner": "^7.0.0"
   }
 }

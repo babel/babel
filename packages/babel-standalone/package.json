@@ -1,6 +1,6 @@
 {
   "name": "@babel/standalone",
-  "version": "7.2.0",
+  "version": "7.2.2",
   "description": "Standalone build of Babel for use in non-Node.js environments.",
   "main": "babel.js",
   "files": [
@@ -9,12 +9,12 @@
     "src"
   ],
   "devDependencies": {
-    "@babel/core": "^7.2.0",
+    "@babel/core": "^7.2.2",
     "@babel/helper-plugin-utils": "^7.0.0",
     "@babel/plugin-external-helpers": "^7.2.0",
     "@babel/plugin-proposal-async-generator-functions": "^7.2.0",
     "@babel/plugin-proposal-class-properties": "^7.2.0",
-    "@babel/plugin-proposal-decorators": "^7.2.0",
+    "@babel/plugin-proposal-decorators": "^7.2.2",
     "@babel/plugin-proposal-do-expressions": "^7.2.0",
     "@babel/plugin-proposal-export-default-from": "^7.2.0",
     "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
@@ -50,7 +50,7 @@
     "@babel/plugin-transform-async-to-generator": "^7.2.0",
     "@babel/plugin-transform-block-scoped-functions": "^7.2.0",
     "@babel/plugin-transform-block-scoping": "^7.2.0",
-    "@babel/plugin-transform-classes": "^7.2.0",
+    "@babel/plugin-transform-classes": "^7.2.2",
     "@babel/plugin-transform-computed-properties": "^7.2.0",
     "@babel/plugin-transform-destructuring": "^7.2.0",
     "@babel/plugin-transform-dotall-regex": "^7.2.0",
@@ -86,7 +86,7 @@
     "@babel/plugin-transform-regenerator": "^7.0.0",
     "@babel/plugin-transform-runtime": "^7.2.0",
     "@babel/plugin-transform-shorthand-properties": "^7.2.0",
-    "@babel/plugin-transform-spread": "^7.2.0",
+    "@babel/plugin-transform-spread": "^7.2.2",
     "@babel/plugin-transform-sticky-regex": "^7.2.0",
     "@babel/plugin-transform-strict-mode": "^7.2.0",
     "@babel/plugin-transform-template-literals": "^7.2.0",
