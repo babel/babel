@@ -1,0 +1,4 @@
+{
+  "plugins": [["pipelineOperator", { "proposal": "smart", "topicToken": "?" }]],
+  "throws": "Pipeline is in topic style but does not use any topic reference (1:5)"
+}
