@@ -598,6 +598,10 @@ export type PipelineStyle =
   | "PipelineBareAwaitedFunction"
   | "PipelineTopicExpression";
 
+export type PipelinePrimaryTopicReference = NodeBase & {
+  type: "PipelinePrimaryTopicReference",
+};
+
 // Template Literals
 
 export type TemplateLiteral = NodeBase & {

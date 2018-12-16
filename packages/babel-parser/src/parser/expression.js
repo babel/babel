@@ -983,29 +983,11 @@ export default class ExpressionParser extends LValParser {
       }
 
       case tt.hash: {
-        if (this.state.inPipeline) {
-          node = this.startNode();
+        return this.parsePrimaryTopicReference();
+      }
 
-          if (
-            this.getPluginOption("pipelineOperator", "proposal") !== "smart"
-          ) {
-            this.raise(
-              node.start,
-              "Primary Topic Reference found but pipelineOperator not passed 'smart' for 'proposal' option.",
-            );
-          }
-
-          this.next();
-          if (this.primaryTopicReferenceIsAllowedInCurrentTopicContext()) {
-            this.registerTopicReference();
-            return this.finishNode(node, "PipelinePrimaryTopicReference");
-          } else {
-            throw this.raise(
-              node.start,
-              `Topic reference was used in a lexical context without topic binding`,
-            );
-          }
-        }
+      case tt.question: {
+        return this.parsePrimaryTopicReference();
       }
 
       default:
@@ -2110,6 +2092,34 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "YieldExpression");
   }
 
+  // Parses a pipeline primary topic reference.
+  parsePrimaryTopicReference(): N.PipelinePrimaryTopicReference {
+    if (this.state.inPipeline) {
+      const node = this.startNode();
+
+      if (this.getPluginOption("pipelineOperator", "proposal") !== "smart") {
+        this.raise(
+          node.start,
+          "Topic reference found but pipelineOperator plugin was not passed 'smart'" +
+            " for 'proposal' option.",
+        );
+      }
+
+      this.next();
+      if (this.primaryTopicReferenceIsAllowedInCurrentTopicContext()) {
+        this.registerTopicReference();
+        return this.finishNode(node, "PipelinePrimaryTopicReference");
+      } else {
+        throw this.raise(
+          node.start,
+          `Topic reference was used in a lexical context without topic binding`,
+        );
+      }
+    } else {
+      throw this.unexpected();
+    }
+  }
+
   // Validates a pipeline (for any of the pipeline Babylon plugins) at the point
   // of the infix operator `|>`.
 
@@ -2191,7 +2201,7 @@ export default class ExpressionParser extends LValParser {
         if (!this.topicReferenceWasUsedInCurrentTopicContext()) {
           throw this.raise(
             startPos,
-            `Pipeline is in topic style but does not use topic reference`,
+            `Pipeline is in topic style but does not use any topic reference`,
           );
         }
         bodyNode.expression = childExpression;
@@ -2269,8 +2279,8 @@ export default class ExpressionParser extends LValParser {
     }
   }
 
-  // Register the use of a primary topic reference (`#`) within the current
-  // topic context.
+  // For the smart-pipelines plugin.
+  // Register the use of a primary topic reference within the current topic context.
   registerTopicReference(): void {
     this.state.topicContext.maxTopicIndex = 0;
   }
