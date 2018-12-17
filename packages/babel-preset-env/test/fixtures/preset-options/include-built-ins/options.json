@@ -6,7 +6,7 @@
         "targets": {
           "chrome": 55
         },
-        "include": ["es6.map", "es6.set"],
+        "include": ["es.map", "es.set"],
         "modules": false,
         "useBuiltIns": "entry"
       }

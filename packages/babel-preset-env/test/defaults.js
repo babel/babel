@@ -17,7 +17,8 @@ describe("defaults", () => {
       expect(defaultWebIncludesForChromeAndNode).toEqual([
         "web.timers",
         "web.immediate",
-        "web.dom.iterable",
+        "web.dom-collections.for-each",
+        "web.dom-collections.iterator",
       ]);
     });
 
