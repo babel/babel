@@ -55,4 +55,20 @@ suite("validators", function () {
       assert(t.isNodesEquivalent(pattern, pattern) === true);
     });
   });
+
+  suite("isReferenced", function () {
+    it("ObjectTypeProperty key is not a reference", function () {
+      const node = t.identifier("a");
+      const parent = t.objectTypeProperty(node, t.numberTypeAnnotation());
+
+      assert(t.isReferenced(node, parent) === false);
+    });
+
+    it("ObjectTypeProperty value is a reference", function () {
+      const node = t.identifier("a");
+      const parent = t.objectTypeProperty(t.identifier("someKey"), node);
+
+      assert(t.isReferenced(node, parent) === true);
+    });
+  });
 });
