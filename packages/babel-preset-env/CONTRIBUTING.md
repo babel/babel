@@ -38,16 +38,16 @@ and split it with `/`:
 
 `Object static methods / Object.values`
 
-Find the corresponding module on [core-js](https://github.com/zloirock/core-js/tree/master/modules):
+Find the corresponding module on [core-js](https://github.com/zloirock/core-js/tree/master/packages/core-js/modules):
 
-`es7.object.values.js`
+`es.object.values.js`
 
 Find required ES version in [`built-in-features.js`](https://github.com/babel/babel/blob/master/packages/babel-preset-env/data/built-in-features.js) and add the new feature:
 
 ```js
-const es2017 = {
+const es = {
   //...
-  "es7.object.values": "Object static methods / Object.values"
+  "es.object.values": "Object static methods / Object.values"
 }
 ```
 

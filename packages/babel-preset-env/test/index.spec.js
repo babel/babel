@@ -96,10 +96,10 @@ describe("babel-preset-env", () => {
     });
 
     it("should return in built-ins array", () => {
-      expect(babelPresetEnv.transformIncludesAndExcludes(["es6.map"])).toEqual({
-        all: ["es6.map"],
+      expect(babelPresetEnv.transformIncludesAndExcludes(["es.map"])).toEqual({
+        all: ["es.map"],
         plugins: new Set(),
-        builtIns: new Set(["es6.map"]),
+        builtIns: new Set(["es.map"]),
       });
     });
   });
