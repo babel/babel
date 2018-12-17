@@ -45,6 +45,7 @@ Using polyfills with `entry` option:
 [<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es.symbol { "ie":"10" }
   es.symbol.async-iterator { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.symbol.description { "chrome":"54", "ie":"10", "node":"6.10" }
   es.symbol.has-instance { "ie":"10" }
   es.symbol.is-concat-spreadable { "ie":"10" }
   es.symbol.iterator { "ie":"10" }
@@ -56,84 +57,28 @@ Using polyfills with `entry` option:
   es.symbol.to-primitive { "ie":"10" }
   es.symbol.to-string-tag { "ie":"10" }
   es.symbol.unscopables { "ie":"10" }
-  es.object.assign { "ie":"10" }
-  es.object.get-own-property-descriptor { "ie":"10" }
-  es.object.get-own-property-descriptors { "ie":"10", "node":"6.10" }
-  es.object.get-prototype-of { "ie":"10" }
-  es.object.keys { "ie":"10" }
-  es.object.values { "ie":"10", "node":"6.10" }
-  es.object.entries { "ie":"10", "node":"6.10" }
-  es.object.get-own-property-names { "ie":"10" }
-  es.object.freeze { "ie":"10" }
-  es.object.seal { "ie":"10" }
-  es.object.prevent-extensions { "ie":"10" }
-  es.object.is-frozen { "ie":"10" }
-  es.object.is-sealed { "ie":"10" }
-  es.object.is-extensible { "ie":"10" }
-  es.object.is { "ie":"10" }
-  es.object.set-prototype-of { "ie":"10" }
-  es.object.to-string { "ie":"10", "node":"6.10" }
-  es.object.define-getter { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.object.define-setter { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.object.lookup-getter { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.object.lookup-setter { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.function.name { "ie":"10" }
-  es.function.has-instance { "ie":"10" }
-  es.array.from { "ie":"10" }
-  es.array.of { "ie":"10" }
+  es.array-buffer.constructor { "ie":"10" }
+  es.array-buffer.is-view { "ie":"10" }
   es.array.concat { "ie":"10" }
   es.array.copy-within { "ie":"10" }
   es.array.fill { "ie":"10" }
   es.array.filter { "ie":"10" }
   es.array.find { "ie":"10" }
   es.array.find-index { "ie":"10" }
+  es.array.from { "ie":"10" }
   es.array.includes { "ie":"10" }
+  es.array.iterator { "ie":"10" }
   es.array.map { "ie":"10" }
+  es.array.of { "ie":"10" }
   es.array.slice { "ie":"10" }
   es.array.sort { "chrome":"54", "node":"6.10" }
   es.array.splice { "ie":"10" }
-  es.array.iterator { "ie":"10" }
   es.array.species { "ie":"10" }
-  es.string.from-code-point { "ie":"10" }
-  es.string.raw { "ie":"10" }
-  es.string.match { "ie":"10" }
-  es.string.replace { "ie":"10" }
-  es.string.split { "ie":"10" }
-  es.string.search { "ie":"10" }
-  es.string.code-point-at { "ie":"10" }
-  es.string.ends-with { "ie":"10" }
-  es.string.includes { "ie":"10" }
-  es.string.repeat { "ie":"10" }
-  es.string.starts-with { "ie":"10" }
-  es.string.pad-start { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.string.pad-end { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.string.iterator { "ie":"10" }
-  es.string.anchor { "ie":"10" }
-  es.string.big { "ie":"10" }
-  es.string.blink { "ie":"10" }
-  es.string.bold { "ie":"10" }
-  es.string.fixed { "ie":"10" }
-  es.string.fontcolor { "ie":"10" }
-  es.string.fontsize { "ie":"10" }
-  es.string.italics { "ie":"10" }
-  es.string.link { "ie":"10" }
-  es.string.small { "ie":"10" }
-  es.string.strike { "ie":"10" }
-  es.string.sub { "ie":"10" }
-  es.string.sup { "ie":"10" }
-  es.regexp.constructor { "ie":"10" }
-  es.regexp.to-string { "ie":"10" }
-  es.regexp.flags { "ie":"10" }
-  es.number.constructor { "ie":"10" }
-  es.number.epsilon { "ie":"10" }
-  es.number.is-finite { "ie":"10" }
-  es.number.is-integer { "ie":"10" }
-  es.number.is-safe-integer { "ie":"10" }
-  es.number.is-nan { "ie":"10" }
-  es.number.min-safe-integer { "ie":"10" }
-  es.number.max-safe-integer { "ie":"10" }
-  es.number.parse-float { "ie":"10" }
-  es.number.parse-int { "ie":"10" }
+  es.date.to-primitive { "ie":"10" }
+  es.function.has-instance { "ie":"10" }
+  es.function.name { "ie":"10" }
+  es.json.to-string-tag { "ie":"10" }
+  es.map { "ie":"10" }
   es.math.acosh { "ie":"10" }
   es.math.asinh { "ie":"10" }
   es.math.atanh { "ie":"10" }
@@ -150,16 +95,41 @@ Using polyfills with `entry` option:
   es.math.sign { "ie":"10" }
   es.math.sinh { "ie":"10" }
   es.math.tanh { "ie":"10" }
-  es.math.trunc { "ie":"10" }
   es.math.to-string-tag { "ie":"10" }
-  es.json.to-string-tag { "ie":"10" }
+  es.math.trunc { "ie":"10" }
+  es.number.constructor { "ie":"10" }
+  es.number.epsilon { "ie":"10" }
+  es.number.is-finite { "ie":"10" }
+  es.number.is-integer { "ie":"10" }
+  es.number.is-nan { "ie":"10" }
+  es.number.is-safe-integer { "ie":"10" }
+  es.number.max-safe-integer { "ie":"10" }
+  es.number.min-safe-integer { "ie":"10" }
+  es.number.parse-float { "ie":"10" }
+  es.number.parse-int { "ie":"10" }
+  es.object.assign { "ie":"10" }
+  es.object.define-getter { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.define-setter { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.entries { "ie":"10", "node":"6.10" }
+  es.object.freeze { "ie":"10" }
+  es.object.get-own-property-descriptor { "ie":"10" }
+  es.object.get-own-property-descriptors { "ie":"10", "node":"6.10" }
+  es.object.get-own-property-names { "ie":"10" }
+  es.object.get-prototype-of { "ie":"10" }
+  es.object.is-extensible { "ie":"10" }
+  es.object.is-frozen { "ie":"10" }
+  es.object.is-sealed { "ie":"10" }
+  es.object.is { "ie":"10" }
+  es.object.keys { "ie":"10" }
+  es.object.lookup-getter { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.lookup-setter { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.object.prevent-extensions { "ie":"10" }
+  es.object.seal { "ie":"10" }
+  es.object.set-prototype-of { "ie":"10" }
+  es.object.to-string { "ie":"10", "node":"6.10" }
+  es.object.values { "ie":"10", "node":"6.10" }
   es.promise { "ie":"10" }
   es.promise.finally { "chrome":"54", "ie":"10", "node":"6.10" }
-  es.map { "ie":"10" }
-  es.set { "ie":"10" }
-  es.weak-map { "ie":"10" }
-  es.weak-set { "ie":"10" }
-  es.date.to-primitive { "ie":"10" }
   es.reflect.apply { "ie":"10" }
   es.reflect.construct { "ie":"10" }
   es.reflect.define-property { "ie":"10" }
@@ -173,8 +143,37 @@ Using polyfills with `entry` option:
   es.reflect.prevent-extensions { "ie":"10" }
   es.reflect.set { "ie":"10" }
   es.reflect.set-prototype-of { "ie":"10" }
-  es.array-buffer.constructor { "ie":"10" }
-  es.array-buffer.is-view { "ie":"10" }
+  es.regexp.constructor { "ie":"10" }
+  es.regexp.flags { "ie":"10" }
+  es.regexp.to-string { "ie":"10" }
+  es.set { "ie":"10" }
+  es.string.anchor { "ie":"10" }
+  es.string.big { "ie":"10" }
+  es.string.blink { "ie":"10" }
+  es.string.bold { "ie":"10" }
+  es.string.code-point-at { "ie":"10" }
+  es.string.ends-with { "ie":"10" }
+  es.string.fixed { "ie":"10" }
+  es.string.fontcolor { "ie":"10" }
+  es.string.fontsize { "ie":"10" }
+  es.string.from-code-point { "ie":"10" }
+  es.string.includes { "ie":"10" }
+  es.string.italics { "ie":"10" }
+  es.string.iterator { "ie":"10" }
+  es.string.link { "ie":"10" }
+  es.string.match { "ie":"10" }
+  es.string.pad-start { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.pad-end { "chrome":"54", "ie":"10", "node":"6.10" }
+  es.string.raw { "ie":"10" }
+  es.string.repeat { "ie":"10" }
+  es.string.replace { "ie":"10" }
+  es.string.search { "ie":"10" }
+  es.string.small { "ie":"10" }
+  es.string.split { "ie":"10" }
+  es.string.starts-with { "ie":"10" }
+  es.string.strike { "ie":"10" }
+  es.string.sub { "ie":"10" }
+  es.string.sup { "ie":"10" }
   es.typed-array.int8-array { "ie":"10" }
   es.typed-array.uint8-array { "ie":"10" }
   es.typed-array.uint8-clamped-array { "ie":"10" }
@@ -209,8 +208,15 @@ Using polyfills with `entry` option:
   es.typed-array.subarray { "ie":"10" }
   es.typed-array.to-locale-string { "ie":"10" }
   es.typed-array.to-string { "ie":"10" }
+  es.weak-map { "ie":"10" }
+  es.weak-set { "ie":"10" }
   web.dom-collections.for-each { "chrome":"54", "ie":"10" }
   web.dom-collections.iterator { "chrome":"54", "ie":"10" }
   web.immediate { "chrome":"54" }
+  web.queue-microtask { "chrome":"54", "ie":"10", "node":"6.10" }
+  web.url { "chrome":"54", "ie":"10", "node":"6.10" }
+  web.url.to-json { "chrome":"54" }
+  web.url-search-params { "chrome":"54", "ie":"10", "node":"6.10" }
+  web.url-search-params.sort { "chrome":"54" }
   web.timers {}
 Successfully compiled 1 file with Babel.

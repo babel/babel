@@ -20,15 +20,21 @@ Using polyfills with `entry` option:
 
 [<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es.symbol.async-iterator { "chrome":"60" }
+  es.symbol.description { "chrome":"60" }
+  es.array.sort { "chrome":"60" }
   es.object.define-getter { "chrome":"60" }
   es.object.define-setter { "chrome":"60" }
   es.object.lookup-getter { "chrome":"60" }
   es.object.lookup-setter { "chrome":"60" }
-  es.array.sort { "chrome":"60" }
   es.promise.finally { "chrome":"60" }
   es7.array.flat-map { "chrome":"60" }
   web.dom-collections.iterator { "chrome":"60" }
   web.immediate { "chrome":"60" }
-  web.timers {}
+  web.queue-microtask { "chrome":"60" }
+  web.url { "chrome":"60" }
+  web.url.to-json { "chrome":"60" }
+  web.url-search-params { "chrome":"60" }
+  web.url-search-params.sort { "chrome":"60" }
   web.dom-collections.for-each {}
+  web.timers {}
 Successfully compiled 1 file with Babel.
