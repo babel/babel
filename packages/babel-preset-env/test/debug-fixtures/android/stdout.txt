@@ -43,6 +43,7 @@ Using polyfills with `entry` option:
 [<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
   es.symbol { "android":"4" }
   es.symbol.async-iterator { "android":"4" }
+  es.symbol.description { "android":"4" }
   es.symbol.has-instance { "android":"4" }
   es.symbol.is-concat-spreadable { "android":"4" }
   es.symbol.iterator { "android":"4" }
@@ -54,70 +55,27 @@ Using polyfills with `entry` option:
   es.symbol.to-primitive { "android":"4" }
   es.symbol.to-string-tag { "android":"4" }
   es.symbol.unscopables { "android":"4" }
-  es.object.assign { "android":"4" }
-  es.object.get-own-property-descriptor { "android":"4" }
-  es.object.get-own-property-descriptors { "android":"4" }
-  es.object.get-prototype-of { "android":"4" }
-  es.object.keys { "android":"4" }
-  es.object.values { "android":"4" }
-  es.object.entries { "android":"4" }
-  es.object.get-own-property-names { "android":"4" }
-  es.object.freeze { "android":"4" }
-  es.object.seal { "android":"4" }
-  es.object.prevent-extensions { "android":"4" }
-  es.object.is-frozen { "android":"4" }
-  es.object.is-sealed { "android":"4" }
-  es.object.is-extensible { "android":"4" }
-  es.object.is { "android":"4" }
-  es.object.set-prototype-of { "android":"4" }
-  es.object.to-string { "android":"4" }
-  es.object.define-getter { "android":"4" }
-  es.object.define-setter { "android":"4" }
-  es.object.lookup-getter { "android":"4" }
-  es.object.lookup-setter { "android":"4" }
-  es.function.has-instance { "android":"4" }
-  es.array.from { "android":"4" }
-  es.array.of { "android":"4" }
+  es.array-buffer.constructor { "android":"4" }
+  es.array-buffer.is-view { "android":"4" }
   es.array.concat { "android":"4" }
   es.array.copy-within { "android":"4" }
   es.array.fill { "android":"4" }
   es.array.filter { "android":"4" }
   es.array.find { "android":"4" }
   es.array.find-index { "android":"4" }
+  es.array.from { "android":"4" }
   es.array.includes { "android":"4" }
+  es.array.iterator { "android":"4" }
   es.array.map { "android":"4" }
+  es.array.of { "android":"4" }
   es.array.slice { "android":"4" }
   es.array.sort { "android":"4" }
   es.array.splice { "android":"4" }
-  es.array.iterator { "android":"4" }
   es.array.species { "android":"4" }
-  es.string.from-code-point { "android":"4" }
-  es.string.raw { "android":"4" }
-  es.string.match { "android":"4" }
-  es.string.replace { "android":"4" }
-  es.string.split { "android":"4" }
-  es.string.search { "android":"4" }
-  es.string.code-point-at { "android":"4" }
-  es.string.ends-with { "android":"4" }
-  es.string.includes { "android":"4" }
-  es.string.repeat { "android":"4" }
-  es.string.starts-with { "android":"4" }
-  es.string.pad-start { "android":"4" }
-  es.string.pad-end { "android":"4" }
-  es.string.iterator { "android":"4" }
-  es.regexp.constructor { "android":"4" }
-  es.regexp.to-string { "android":"4" }
-  es.regexp.flags { "android":"4" }
-  es.number.constructor { "android":"4" }
-  es.number.epsilon { "android":"4" }
-  es.number.is-finite { "android":"4" }
-  es.number.is-integer { "android":"4" }
-  es.number.is-safe-integer { "android":"4" }
-  es.number.is-nan { "android":"4" }
-  es.number.min-safe-integer { "android":"4" }
-  es.number.max-safe-integer { "android":"4" }
-  es.number.parse-float { "android":"4" }
-  es.number.parse-int { "android":"4" }
+  es.date.to-primitive { "android":"4" }
+  es.function.has-instance { "android":"4" }
+  es.json.to-string-tag { "android":"4" }
+  es.map { "android":"4" }
   es.math.acosh { "android":"4" }
   es.math.asinh { "android":"4" }
   es.math.atanh { "android":"4" }
@@ -134,16 +92,41 @@ Using polyfills with `entry` option:
   es.math.sign { "android":"4" }
   es.math.sinh { "android":"4" }
   es.math.tanh { "android":"4" }
-  es.math.trunc { "android":"4" }
   es.math.to-string-tag { "android":"4" }
-  es.json.to-string-tag { "android":"4" }
+  es.math.trunc { "android":"4" }
+  es.number.constructor { "android":"4" }
+  es.number.epsilon { "android":"4" }
+  es.number.is-finite { "android":"4" }
+  es.number.is-integer { "android":"4" }
+  es.number.is-nan { "android":"4" }
+  es.number.is-safe-integer { "android":"4" }
+  es.number.max-safe-integer { "android":"4" }
+  es.number.min-safe-integer { "android":"4" }
+  es.number.parse-float { "android":"4" }
+  es.number.parse-int { "android":"4" }
+  es.object.assign { "android":"4" }
+  es.object.define-getter { "android":"4" }
+  es.object.define-setter { "android":"4" }
+  es.object.entries { "android":"4" }
+  es.object.freeze { "android":"4" }
+  es.object.get-own-property-descriptor { "android":"4" }
+  es.object.get-own-property-descriptors { "android":"4" }
+  es.object.get-own-property-names { "android":"4" }
+  es.object.get-prototype-of { "android":"4" }
+  es.object.is-extensible { "android":"4" }
+  es.object.is-frozen { "android":"4" }
+  es.object.is-sealed { "android":"4" }
+  es.object.is { "android":"4" }
+  es.object.keys { "android":"4" }
+  es.object.lookup-getter { "android":"4" }
+  es.object.lookup-setter { "android":"4" }
+  es.object.prevent-extensions { "android":"4" }
+  es.object.seal { "android":"4" }
+  es.object.set-prototype-of { "android":"4" }
+  es.object.to-string { "android":"4" }
+  es.object.values { "android":"4" }
   es.promise { "android":"4" }
   es.promise.finally { "android":"4" }
-  es.map { "android":"4" }
-  es.set { "android":"4" }
-  es.weak-map { "android":"4" }
-  es.weak-set { "android":"4" }
-  es.date.to-primitive { "android":"4" }
   es.reflect.apply { "android":"4" }
   es.reflect.construct { "android":"4" }
   es.reflect.define-property { "android":"4" }
@@ -157,8 +140,24 @@ Using polyfills with `entry` option:
   es.reflect.prevent-extensions { "android":"4" }
   es.reflect.set { "android":"4" }
   es.reflect.set-prototype-of { "android":"4" }
-  es.array-buffer.constructor { "android":"4" }
-  es.array-buffer.is-view { "android":"4" }
+  es.regexp.constructor { "android":"4" }
+  es.regexp.flags { "android":"4" }
+  es.regexp.to-string { "android":"4" }
+  es.set { "android":"4" }
+  es.string.code-point-at { "android":"4" }
+  es.string.ends-with { "android":"4" }
+  es.string.from-code-point { "android":"4" }
+  es.string.includes { "android":"4" }
+  es.string.iterator { "android":"4" }
+  es.string.match { "android":"4" }
+  es.string.pad-start { "android":"4" }
+  es.string.pad-end { "android":"4" }
+  es.string.raw { "android":"4" }
+  es.string.repeat { "android":"4" }
+  es.string.replace { "android":"4" }
+  es.string.search { "android":"4" }
+  es.string.split { "android":"4" }
+  es.string.starts-with { "android":"4" }
   es.typed-array.int8-array { "android":"4" }
   es.typed-array.uint8-array { "android":"4" }
   es.typed-array.uint8-clamped-array { "android":"4" }
@@ -193,8 +192,15 @@ Using polyfills with `entry` option:
   es.typed-array.subarray { "android":"4" }
   es.typed-array.to-locale-string { "android":"4" }
   es.typed-array.to-string { "android":"4" }
+  es.weak-map { "android":"4" }
+  es.weak-set { "android":"4" }
   web.dom-collections.for-each { "android":"4" }
   web.dom-collections.iterator { "android":"4" }
   web.immediate { "android":"4" }
+  web.queue-microtask { "android":"4" }
+  web.url { "android":"4" }
+  web.url-search-params { "android":"4" }
   web.timers {}
+  web.url.to-json {}
+  web.url-search-params.sort {}
 Successfully compiled 1 file with Babel.

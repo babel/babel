@@ -15,10 +15,15 @@ describe("defaults", () => {
         node: "8",
       });
       expect(defaultWebIncludesForChromeAndNode).toEqual([
-        "web.timers",
-        "web.immediate",
         "web.dom-collections.for-each",
         "web.dom-collections.iterator",
+        "web.immediate",
+        "web.queue-microtask",
+        "web.timers",
+        "web.url",
+        "web.url.to-json",
+        "web.url-search-params",
+        "web.url-search-params.sort",
       ]);
     });
 
