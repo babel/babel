@@ -53,10 +53,10 @@
     semver "^5.4.1"
     source-map "^0.5.0"
 
-"@babel/eslint-plugin-developement@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@babel/eslint-plugin-developement/-/eslint-plugin-developement-1.0.0.tgz#20f17fce19c9d5de0bca97028bbf7e6ada335ec2"
-  integrity sha512-fe6LAesnmQFBDVUKwuFfkhegv9xeR2uFQZYMZun3IefMFx9Qsktjpardxow7GmZ7S17gxT6bXcrHVazw9G1yPA==
+"@babel/eslint-plugin-development@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@babel/eslint-plugin-development/-/eslint-plugin-development-1.0.1.tgz#1f5206ae95795db09b65e7dbc2b158d66497a44c"
+  integrity sha512-ioEhN8HgKr4Yx8ef+XryNpKN4FimSFceb0qVVxvoUzpFn3xyq17MlY5AquEqtXObE7Nu7WKq7QL9INzjCrugyw==
 
 "@babel/generator@7.0.0-beta.40":
   version "7.0.0-beta.40"

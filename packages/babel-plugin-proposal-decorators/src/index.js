@@ -1,4 +1,4 @@
-/* eslint-disable @babel/developement/plugin-name */
+/* eslint-disable @babel/development/plugin-name */
 
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxDecorators from "@babel/plugin-syntax-decorators";
