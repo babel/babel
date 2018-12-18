@@ -6,10 +6,6 @@ import smartVisitor from "./smartVisitor";
 export default declare((api, options) => {
   api.assertVersion(7);
 
-  // FIXME: Hacky... Need a way to get rid of this
-  delete smartVisitor._exploded;
-  delete smartVisitor._verified;
-
   const visitorsPerProposal = {
     minimal: minimalVisitor,
     smart: smartVisitor,

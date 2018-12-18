@@ -10,13 +10,14 @@ const updateTopicReferenceVisitor = {
       "await is not supported inside pipeline expressions yet",
     );
   },
+  PipelineTopicExpression(path) {
+    path.skip();
+  },
 };
 
 const smartVisitor = {
   ...minimalVisitor,
   PipelineTopicExpression(path) {
-    path.get("expression").traverse(smartVisitor);
-
     const topicId = path.scope.generateUidIdentifier("topic");
 
     path.traverse(updateTopicReferenceVisitor, { topicId });
