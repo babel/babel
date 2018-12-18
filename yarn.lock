@@ -53,6 +53,11 @@
     semver "^5.4.1"
     source-map "^0.5.0"
 
+"@babel/eslint-plugin-developement@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@babel/eslint-plugin-developement/-/eslint-plugin-developement-1.0.0.tgz#20f17fce19c9d5de0bca97028bbf7e6ada335ec2"
+  integrity sha512-fe6LAesnmQFBDVUKwuFfkhegv9xeR2uFQZYMZun3IefMFx9Qsktjpardxow7GmZ7S17gxT6bXcrHVazw9G1yPA==
+
 "@babel/generator@7.0.0-beta.40":
   version "7.0.0-beta.40"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.0.0-beta.40.tgz#ab61f9556f4f71dbd1138949c795bb9a21e302ea"
@@ -3532,11 +3537,6 @@ eslint-plugin-flowtype@^3.2.0:
   integrity sha512-baJmzngM6UKbEkJ5OY3aGw2zjXBt5L2QKZvTsOlXX7yHKIjNRrlJx2ods8Rng6EdqPR9rVNIQNYHpTs0qfn2qA==
   dependencies:
     lodash "^4.17.10"
-
-eslint-plugin-local-rules@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-local-rules/-/eslint-plugin-local-rules-0.1.0.tgz#6808bb4c1b9a432f6e54ff4dfb290073e1cdf700"
-  integrity sha1-aAi7TBuaQy9uVP9N+ykAc+HN9wA=
 
 eslint-plugin-prettier@^3.0.0:
   version "3.0.0"

@@ -497,6 +497,7 @@ export default class Scope {
     if (this.hasBinding("undefined")) {
       return t.unaryExpression("void", t.numericLiteral(0), true);
     } else {
+      // eslint-disable-next-line @babel/developement/no-undefined-identifier
       return t.identifier("undefined");
     }
   }

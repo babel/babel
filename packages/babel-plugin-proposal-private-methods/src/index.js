@@ -1,4 +1,4 @@
-/* eslint-disable local-rules/plugin-name */
+/* eslint-disable @babel/developement/plugin-name */
 
 import { declare } from "@babel/helper-plugin-utils";
 import {
