@@ -23,7 +23,6 @@ describe("defaults", () => {
         "web.url",
         "web.url.to-json",
         "web.url-search-params",
-        "web.url-search-params.sort",
       ]);
     });
 

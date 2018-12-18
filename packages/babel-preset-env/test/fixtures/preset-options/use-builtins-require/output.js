@@ -32,8 +32,6 @@ require("core-js/modules/web.url.to-json");
 
 require("core-js/modules/web.url-search-params");
 
-require("core-js/modules/web.url-search-params.sort");
-
 require("core-js/modules/web.timers");
 
 1 ** 2;

@@ -202,5 +202,4 @@ Using polyfills with `entry` option:
   web.url-search-params { "android":"4" }
   web.timers {}
   web.url.to-json {}
-  web.url-search-params.sort {}
 Successfully compiled 1 file with Babel.

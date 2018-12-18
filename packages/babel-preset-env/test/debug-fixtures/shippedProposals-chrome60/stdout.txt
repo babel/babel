@@ -34,7 +34,6 @@ Using polyfills with `entry` option:
   web.url { "chrome":"60" }
   web.url.to-json { "chrome":"60" }
   web.url-search-params { "chrome":"60" }
-  web.url-search-params.sort { "chrome":"60" }
   web.dom-collections.for-each {}
   web.timers {}
 Successfully compiled 1 file with Babel.

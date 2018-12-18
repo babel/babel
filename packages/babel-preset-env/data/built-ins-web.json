@@ -59,16 +59,5 @@
     "node": "10.0",
     "opera": "50",
     "safari": "12"
-  },
-  "web.url-search-params.sort": {
-    "android": "1.5",
-    "chrome": "63",
-    "firefox": "57",
-    "ie": "6",
-    "ios": "12",
-    "node": "10.0",
-    "opera": "50",
-    "safari": "12",
-    "node": "0.10"
   }
 }
