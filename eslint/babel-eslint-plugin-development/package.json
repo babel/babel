@@ -1,5 +1,5 @@
 {
-  "name": "@babel/eslint-plugin-developement",
+  "name": "@babel/eslint-plugin-development",
   "version": "1.0.0",
   "description": "A set of eslint rules to enforce best practices in the development of Babel plugins.",
   "keywords": [
