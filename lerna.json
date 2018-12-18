@@ -1,5 +1,4 @@
 {
-  "lerna": "2.11.0",
   "version": "7.2.2",
   "changelog": {
     "repo": "babel/babel",
@@ -14,9 +13,9 @@
       "PR: Internal :house:": ":house: Internal"
     }
   },
-  "commands": {
+  "command": {
     "publish": {
-      "ignore": [
+      "ignoreChanges": [
         "*.md",
         "*.txt",
         "test/**",

@@ -49,7 +49,7 @@
     "gulp-watch": "^5.0.1",
     "husky": "^1.2.0",
     "jest": "^23.6.0",
-    "lerna": "^2.11.0",
+    "lerna": "^3.6.0",
     "lerna-changelog": "^0.5.0",
     "lint-staged": "^8.1.0",
     "lodash": "^4.17.10",
@@ -68,6 +68,9 @@
     "webpack": "^3.4.1",
     "webpack-dependency-suite": "^2.4.4",
     "webpack-stream": "^4.0.0"
+  },
+  "resolutions": {
+    "@lerna/**/@lerna/collect-updates": "https://github.com/nicolo-ribaudo/lerna.git#babel-collect-updates"
   },
   "engines": {
     "node": ">= 6.9.0 < 12.0.0",
