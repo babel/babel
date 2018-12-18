@@ -245,6 +245,5 @@ Using polyfills with `entry` option:
   web.url { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   web.url.to-json { "chrome":"54", "electron":"0.36" }
   web.url-search-params { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
-  web.url-search-params.sort { "chrome":"54", "electron":"0.36" }
   web.timers {}
 Successfully compiled 1 file with Babel.
