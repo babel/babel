@@ -29,5 +29,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/babel/eslint-plugin-babel-plugin.git"
+  }
 }
