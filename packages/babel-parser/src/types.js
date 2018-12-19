@@ -602,6 +602,8 @@ export type PipelinePrimaryTopicReference = NodeBase & {
   type: "PipelinePrimaryTopicReference",
 };
 
+export type PipelineProposedTopicToken = "#" | "?";
+
 // Template Literals
 
 export type TemplateLiteral = NodeBase & {

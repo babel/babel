@@ -1,0 +1,4 @@
+{
+  "plugins": [["pipelineOperator", { "proposal": "smart" }]],
+  "throws": "Pipeline was used with ? topic token, but pipelineOperator plugin was not passed a \"topicToken\" option, which is \"#\" by default (1:5)"
+}

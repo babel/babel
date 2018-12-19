@@ -983,11 +983,11 @@ export default class ExpressionParser extends LValParser {
       }
 
       case tt.hash: {
-        return this.parsePrimaryTopicReference();
+        return this.parsePrimaryTopicReference("#");
       }
 
       case tt.question: {
-        return this.parsePrimaryTopicReference();
+        return this.parsePrimaryTopicReference("?");
       }
 
       default:
@@ -2092,20 +2092,28 @@ export default class ExpressionParser extends LValParser {
     return this.finishNode(node, "YieldExpression");
   }
 
-  // Parses a pipeline primary topic reference.
-  parsePrimaryTopicReference(): N.PipelinePrimaryTopicReference {
+  // Parses a smart-pipeline primary topic reference.
+  // The pipelineOperator plugin must be active, and its proposal option must be "smart".
+  // The topicToken argument is "#" or "?" and is matched against the topicToken option
+  // given to the pipelineOperator plugin's topicToken option (which is "#" by default).
+
+  parsePrimaryTopicReference(
+    topicToken: N.PipelineProposedTopicToken,
+  ): N.PipelinePrimaryTopicReference {
     if (this.state.inPipeline) {
       const node = this.startNode();
 
       if (this.getPluginOption("pipelineOperator", "proposal") !== "smart") {
         this.raise(
           node.start,
-          "Topic reference found but pipelineOperator plugin was not passed 'smart'" +
-            " for 'proposal' option.",
+          "Topic reference found but pipelineOperator plugin was not passed 'smart' " +
+            "for 'proposal' option.",
         );
       }
 
+      this.validateTopicToken(topicToken);
       this.next();
+
       if (this.primaryTopicReferenceIsAllowedInCurrentTopicContext()) {
         this.registerTopicReference();
         return this.finishNode(node, "PipelinePrimaryTopicReference");
@@ -2118,6 +2126,45 @@ export default class ExpressionParser extends LValParser {
     } else {
       throw this.unexpected();
     }
+  }
+
+  // Asserts that the given topic token is valid under the pipelineOperator plugin's
+  // topicToken configuration option.
+
+  validateTopicToken(topicToken: N.PipelineProposedTopicToken): void {
+    if (!this.matchesTopicTokenConfiguration(topicToken)) {
+      const node = this.startNode();
+      const message = this.getPipelineOperatorPluginTopicTokenOption()
+        ? `Pipeline was used with ${topicToken} topic token, but ` +
+          `pipelineOperator plugin was passed a "topicToken": ` +
+          `"${this.getPipelineOperatorPluginTopicTokenOption()}" option`
+        : `Pipeline was used with ${topicToken} topic token, but ` +
+          `pipelineOperator plugin was not passed a "topicToken" option, which ` +
+          `is "#" by default`;
+      this.raise(node.start, message);
+    }
+  }
+
+  // Tests whether a topic-token string is the same as the pipelineOperator plugin's
+  // topicToken configuration option.
+
+  matchesTopicTokenConfiguration(
+    topicToken: N.PipelineProposedTopicToken,
+  ): boolean {
+    const defaultTopicToken = "#";
+    const pluginConfigurationTopicToken = this.getPluginOption(
+      "pipelineOperator",
+      "topicToken",
+    );
+    const effectivePluginConfigurationTopicToken =
+      pluginConfigurationTopicToken || defaultTopicToken;
+    return effectivePluginConfigurationTopicToken === topicToken;
+  }
+
+  // Returns the value of the pipelineOperator plugin's topicToken configuration option.
+
+  getPipelineOperatorPluginTopicTokenOption(): string {
+    return this.getPluginOption("pipelineOperator", "topicToken");
   }
 
   // Validates a pipeline (for any of the pipeline Babylon plugins) at the point
