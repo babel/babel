@@ -160,6 +160,13 @@ for (const type in t.FLIPPED_ALIAS_KEYS) {
     .map(type => `${type}`)
     .join(" | ")};\n`;
 }
+code += "\n";
+
+code += "export interface Aliases {\n";
+for (const type in t.FLIPPED_ALIAS_KEYS) {
+  code += `  ${type}: ${type};\n`;
+}
+code += "}\n\n";
 
 code += lines.join("\n") + "\n";
 
