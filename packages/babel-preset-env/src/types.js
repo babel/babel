@@ -18,6 +18,7 @@ export type Options = {
   debug: boolean,
   exclude: Array<string | RegExp>,
   forceAllTransforms: boolean,
+  forwardEnv: boolean,
   ignoreBrowserslistConfig: boolean,
   include: Array<string | RegExp>,
   loose: boolean,
