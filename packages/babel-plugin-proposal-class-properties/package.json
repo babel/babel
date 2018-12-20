@@ -1,6 +1,6 @@
 {
   "name": "@babel/plugin-proposal-class-properties",
-  "version": "7.2.1",
+  "version": "7.2.3",
   "description": "This plugin transforms static class properties as well as properties declared with the property initializer syntax",
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-plugin-proposal-class-properties",
   "license": "MIT",
@@ -12,7 +12,7 @@
     "babel-plugin"
   ],
   "dependencies": {
-    "@babel/helper-create-class-features-plugin": "^7.2.1",
+    "@babel/helper-create-class-features-plugin": "^7.2.3",
     "@babel/helper-plugin-utils": "^7.0.0"
   },
   "peerDependencies": {

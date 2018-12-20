@@ -1,5 +1,5 @@
 {
-  "version": "7.2.2",
+  "version": "7.2.3",
   "changelog": {
     "repo": "babel/babel",
     "cacheDir": ".changelog",
@@ -26,8 +26,8 @@
     }
   },
   "packages": [
-    "packages/*",
-    "codemods/*"
+    "codemods/*",
+    "packages/*"
   ],
   "npmClient": "yarn",
   "npmClientArgs": [
