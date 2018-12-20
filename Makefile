@@ -130,7 +130,7 @@ prepublish:
 	make test
 
 publish: prepublish
-	./node_modules/.bin/lerna publish --force-publish="@babel/runtime,@babel/runtime-corejs2,@babel/standalone,@babel/preset-env-standalone"
+	./node_modules/.bin/lerna publish --force-publish="@babel/runtime,@babel/runtime-corejs2,@babel/standalone,@babel/preset-env-standalone" --require-scripts
 	make clean
 
 bootstrap: clean-all
