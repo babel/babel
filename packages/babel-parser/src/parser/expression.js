@@ -2163,7 +2163,7 @@ export default class ExpressionParser extends LValParser {
 
   // Returns the value of the pipelineOperator plugin's topicToken configuration option.
 
-  getPipelineOperatorPluginTopicTokenOption(): string {
+  getPipelineOperatorPluginTopicTokenOption(): ?string {
     return this.getPluginOption("pipelineOperator", "topicToken");
   }
 
