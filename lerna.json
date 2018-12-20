@@ -18,11 +18,11 @@
     "publish": {
       "ignore": [
         "*.md",
-        "*.json",
         "*.txt",
         "test/**",
         "codemods/**",
-        "package.json"
+        "# We ignore every JSON file, except for built-in-modules, built-ins and plugins defined in babel-preset-env/data.",
+        "@(!(built-in-modules|built-ins|plugins)).json"
       ]
     }
   },
