@@ -2134,10 +2134,11 @@ export default class ExpressionParser extends LValParser {
   validateTopicToken(topicToken: N.PipelineProposedTopicToken): void {
     if (!this.matchesTopicTokenConfiguration(topicToken)) {
       const node = this.startNode();
-      const message = this.getPipelineOperatorPluginTopicTokenOption()
+      const topicTokenOption = this.getPipelineOperatorPluginTopicTokenOption();
+      const message = topicTokenOption
         ? `Pipeline was used with ${topicToken} topic token, but ` +
           `pipelineOperator plugin was passed a "topicToken": ` +
-          `"${this.getPipelineOperatorPluginTopicTokenOption()}" option`
+          `"${topicTokenOption}" option`
         : `Pipeline was used with ${topicToken} topic token, but ` +
           `pipelineOperator plugin was not passed a "topicToken" option, which ` +
           `is "#" by default`;
