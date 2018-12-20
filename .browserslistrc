@@ -1,0 +1,7 @@
+# This is only a test for verifying that `forwardEnv` works correctly.
+# By default browserslist uses "production" which is intentional empty here.
+# In the Babel test suite: NODE_ENV === BABEL_ENV === "test".
+# The value we use here is set in our fixture test for `preset-env` and
+# should only be applied when the `forwardEnv` option is true.
+[env-from-preset]
+ios >= 11
