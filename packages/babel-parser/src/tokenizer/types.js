@@ -13,7 +13,12 @@
 // expressions and divisions. It is set on all token types that can
 // be followed by an expression (thus, a slash after them would be a
 // regular expression).
-//
+
+// The `startsExpr` property is used to determine whether an expression
+// may be the “argument” subexpression of a `yield` expression or
+// `yield` statement. It is set on all token types that may be at the
+// start of a subexpression.
+
 // `isLoop` marks a keyword as starting a loop, which is important
 // to know when parsing a label, in order to allow or disallow
 // continue jumps to that label.
@@ -104,7 +109,7 @@ export const types: { [name: string]: TokenType } = {
   backQuote: new TokenType("`", { startsExpr }),
   dollarBraceL: new TokenType("${", { beforeExpr, startsExpr }),
   at: new TokenType("@"),
-  hash: new TokenType("#"),
+  hash: new TokenType("#", { startsExpr }),
 
   // Special hashbang token.
   interpreterDirective: new TokenType("#!..."),
