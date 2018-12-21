@@ -6,16 +6,28 @@ import optimiseCall from "@babel/helper-optimise-call-expression";
 export function buildPrivateNamesMap(props) {
   const privateNamesMap = new Map();
   for (const prop of props) {
-    if (prop.isPrivate()) {
+    const isPrivate = prop.isPrivate();
+    const isMethod = !prop.isProperty();
+    const isInstance = !prop.node.static;
+    if (isPrivate) {
       const { name } = prop.node.key.id;
-      privateNamesMap.set(name, {
-        id: prop.scope.generateUidIdentifier(name),
-        static: !!prop.node.static,
-        method: prop.isMethod(),
-        methodId: prop.isMethod()
-          ? prop.scope.generateUidIdentifier(name)
-          : undefined,
-      });
+      const update = privateNamesMap.has(name)
+        ? privateNamesMap.get(name)
+        : {
+            id: prop.scope.generateUidIdentifier(name),
+            static: !isInstance,
+            method: isMethod,
+            methodId:
+              isMethod && isInstance && prop.node.kind === "method"
+                ? prop.scope.generateUidIdentifier(name)
+                : undefined,
+          };
+      if (prop.node.kind === "get") {
+        update.getId = prop.scope.generateUidIdentifier(`get_${name}`);
+      } else if (prop.node.kind === "set") {
+        update.setId = prop.scope.generateUidIdentifier(`set_${name}`);
+      }
+      privateNamesMap.set(name, update);
     }
   }
   return privateNamesMap;
@@ -255,16 +267,57 @@ function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
 }
 
 function buildPrivateMethodInitLoose(ref, prop, privateNamesMap) {
-  const { methodId, id } = privateNamesMap.get(prop.node.key.id.name);
+  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const { methodId, id, getId, setId, initAdded } = privateName;
+  if (initAdded) return;
 
-  return template.statement.ast`
-    Object.defineProperty(${ref}, ${id}, {
-      // configurable is false by default
-      // enumerable is false by default
-      // writable is false by default
-      value: ${methodId.name}
+  if (methodId) {
+    return template.statement.ast`
+        Object.defineProperty(${ref}, ${id}, {
+          // configurable is false by default
+          // enumerable is false by default
+          // writable is false by default
+          value: ${methodId.name}
+        });
+      `;
+  }
+
+  if (getId || setId) {
+    privateNamesMap.set(prop.node.key.id.name, {
+      ...privateName,
+      initAdded: true,
     });
-  `;
+
+    if (getId && setId) {
+      return template.statement.ast`
+        Object.defineProperty(${ref}, ${id}, {
+          // configurable is false by default
+          // enumerable is false by default
+          // writable is false by default
+          get: ${getId.name},
+          set: ${setId.name}
+        });
+      `;
+    } else if (getId && !setId) {
+      return template.statement.ast`
+        Object.defineProperty(${ref}, ${id}, {
+          // configurable is false by default
+          // enumerable is false by default
+          // writable is false by default
+          get: ${getId.name}
+        });
+      `;
+    } else if (!getId && setId) {
+      return template.statement.ast`
+        Object.defineProperty(${ref}, ${id}, {
+          // configurable is false by default
+          // enumerable is false by default
+          // writable is false by default
+          set: ${setId.name}
+        });
+      `;
+    }
+  }
 }
 
 function buildPrivateInstanceMethodInitSpec(ref, prop, privateNamesMap) {
@@ -300,9 +353,37 @@ function buildPublicFieldInitSpec(ref, prop, state) {
 }
 
 function buildPrivateInstanceMethodDeclaration(prop, privateNamesMap) {
-  const { methodId } = privateNamesMap.get(prop.node.key.id.name);
+  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const {
+    methodId,
+    getId,
+    setId,
+    getterDeclared,
+    setterDeclared,
+  } = privateName;
   const { params, body } = prop.node;
   const methodValue = t.functionExpression(methodId, params, body);
+  const isGetter = getId && !getterDeclared && params.length === 0;
+  const isSetter = setId && !setterDeclared && params.length > 0;
+
+  if (isGetter) {
+    privateNamesMap.set(prop.node.key.id.name, {
+      ...privateName,
+      getterDeclared: true,
+    });
+    return t.variableDeclaration("var", [
+      t.variableDeclarator(getId, methodValue),
+    ]);
+  }
+  if (isSetter) {
+    privateNamesMap.set(prop.node.key.id.name, {
+      ...privateName,
+      setterDeclared: true,
+    });
+    return t.variableDeclaration("var", [
+      t.variableDeclarator(setId, methodValue),
+    ]);
+  }
 
   return t.variableDeclaration("var", [
     t.variableDeclarator(methodId, methodValue),
@@ -404,7 +485,7 @@ export function buildFieldsInitNodes(
 
   return {
     staticNodes,
-    instanceNodes,
+    instanceNodes: instanceNodes.filter(instanceNode => instanceNode),
     wrapClass(path) {
       for (const prop of props) {
         prop.remove();

@@ -1048,7 +1048,11 @@ helpers.classPrivateFieldGet = helper("7.0.0-beta.0")`
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to get private field on non-instance");
     }
-    return privateMap.get(receiver).value;
+    var descriptor = privateMap.get(receiver);
+    if (descriptor.get) {
+      return descriptor.get();
+    }
+    return descriptor.value;
   }
 `;
 
@@ -1064,8 +1068,12 @@ helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
       // class bodies.
       throw new TypeError("attempted to set read only private field");
     }
-    descriptor.value = value;
-    return value;
+    if (descriptor.set) {
+      descriptor.set(value);
+    } else {
+      descriptor.value = value;
+      return value;
+    }
   }
 `;
 

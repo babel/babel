@@ -75,10 +75,31 @@ export function createClassFeaturePlugin({
 
           if (path.isPrivate()) {
             const { name } = path.node.key.id;
+            const getName = `get_${name}`;
+            const setName = `set_${name}`;
 
-            if (privateNames.has(name)) {
+            if (path.node.kind === "get") {
+              if (privateNames.has(getName)) {
+                throw path.buildCodeFrameError("Duplicate private field");
+              }
+
+              privateNames.add(getName);
+            } else if (path.node.kind === "set") {
+              if (privateNames.has(setName)) {
+                throw path.buildCodeFrameError("Duplicate private field");
+              }
+
+              privateNames.add(setName);
+            }
+
+            if (
+              privateNames.has(name) &&
+              !privateNames.has(getName) &&
+              !privateNames.has(setName)
+            ) {
               throw path.buildCodeFrameError("Duplicate private field");
             }
+
             privateNames.add(name);
           }
 
