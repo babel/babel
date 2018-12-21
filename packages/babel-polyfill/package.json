@@ -1,6 +1,6 @@
 {
   "name": "@babel/polyfill",
-  "version": "7.2.3",
+  "version": "7.2.5",
   "description": "Provides polyfills necessary for a full ES2015+ environment",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "homepage": "https://babeljs.io/",
