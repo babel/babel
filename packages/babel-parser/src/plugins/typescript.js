@@ -45,6 +45,8 @@ function keywordTypeFromName(
       return "TSAnyKeyword";
     case "boolean":
       return "TSBooleanKeyword";
+    case "bigint":
+      return "TSBigIntKeyword";
     case "never":
       return "TSNeverKeyword";
     case "number":

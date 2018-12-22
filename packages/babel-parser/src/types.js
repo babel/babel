@@ -1157,6 +1157,7 @@ export type TsKeywordTypeType =
   | "TSNumberKeyword"
   | "TSObjectKeyword"
   | "TSBooleanKeyword"
+  | "TSBigIntKeyword"
   | "TSStringKeyword"
   | "TSSymbolKeyword"
   | "TSVoidKeyword"
