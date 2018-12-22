@@ -9,3 +9,4 @@ let st: string;
 let sy: symbol;
 let u: undefined;
 let v: void;
+let n: bigint;

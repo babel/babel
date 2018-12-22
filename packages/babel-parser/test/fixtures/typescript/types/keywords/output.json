@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 169,
+  "end": 184,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 11,
-      "column": 12
+      "line": 12,
+      "column": 14
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 169,
+    "end": 184,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 11,
-        "column": 12
+        "line": 12,
+        "column": 14
       }
     },
     "sourceType": "module",
@@ -910,6 +910,87 @@
                     "end": {
                       "line": 11,
                       "column": 11
+                    }
+                  }
+                }
+              }
+            },
+            "init": null
+          }
+        ],
+        "kind": "let"
+      },
+      {
+        "type": "VariableDeclaration",
+        "start": 170,
+        "end": 184,
+        "loc": {
+          "start": {
+            "line": 12,
+            "column": 0
+          },
+          "end": {
+            "line": 12,
+            "column": 14
+          }
+        },
+        "declarations": [
+          {
+            "type": "VariableDeclarator",
+            "start": 174,
+            "end": 183,
+            "loc": {
+              "start": {
+                "line": 12,
+                "column": 4
+              },
+              "end": {
+                "line": 12,
+                "column": 13
+              }
+            },
+            "id": {
+              "type": "Identifier",
+              "start": 174,
+              "end": 183,
+              "loc": {
+                "start": {
+                  "line": 12,
+                  "column": 4
+                },
+                "end": {
+                  "line": 12,
+                  "column": 13
+                },
+                "identifierName": "n"
+              },
+              "name": "n",
+              "typeAnnotation": {
+                "type": "TSTypeAnnotation",
+                "start": 175,
+                "end": 183,
+                "loc": {
+                  "start": {
+                    "line": 12,
+                    "column": 5
+                  },
+                  "end": {
+                    "line": 12,
+                    "column": 13
+                  }
+                },
+                "typeAnnotation": {
+                  "type": "TSBigIntKeyword",
+                  "start": 177,
+                  "end": 183,
+                  "loc": {
+                    "start": {
+                      "line": 12,
+                      "column": 7
+                    },
+                    "end": {
+                      "line": 12,
+                      "column": 13
                     }
                   }
                 }
