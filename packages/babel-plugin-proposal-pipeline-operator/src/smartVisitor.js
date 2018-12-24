@@ -10,6 +10,11 @@ const updateTopicReferenceVisitor = {
       "await is not supported inside pipeline expressions yet",
     );
   },
+  YieldExpression(path) {
+    throw path.buildCodeFrameError(
+      "yield is not supported inside pipeline expressions yet",
+    );
+  },
   PipelineTopicExpression(path) {
     path.skip();
   },
