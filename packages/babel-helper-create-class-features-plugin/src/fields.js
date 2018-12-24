@@ -43,7 +43,7 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
     // In spec mode, only instance fields need a "private name" initializer
     // because static fields are directly assigned to a variable in the
     // buildPrivateStaticFieldInitSpec function.
-    const { id, static: isStatic, method: isMethod } = value;
+    const { id, static: isStatic, method: isMethod, getId, setId } = value;
     if (loose) {
       initNodes.push(
         template.statement.ast`
@@ -51,7 +51,11 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
         `,
       );
     } else if (isMethod && !isStatic) {
-      initNodes.push(template.statement.ast`var ${id} = new WeakSet();`);
+      if (getId || setId) {
+        initNodes.push(template.statement.ast`var ${id} = new WeakMap();`);
+      } else {
+        initNodes.push(template.statement.ast`var ${id} = new WeakSet();`);
+      }
     } else if (!isStatic) {
       initNodes.push(template.statement.ast`var ${id} = new WeakMap();`);
     }
@@ -133,6 +137,7 @@ const privateNameHandlerSpec = {
       static: isStatic,
       method: isMethod,
       methodId,
+      getId,
     } = privateNamesMap.get(name);
 
     if (isStatic && !isMethod) {
@@ -140,41 +145,57 @@ const privateNameHandlerSpec = {
         file.addHelper("classStaticPrivateFieldSpecGet"),
         [this.receiver(member), t.cloneNode(classRef), t.cloneNode(id)],
       );
-    } else if (isMethod) {
+    }
+    if (isMethod) {
+      if (getId) {
+        return t.callExpression(file.addHelper("classPrivateFieldGet"), [
+          this.receiver(member),
+          t.cloneNode(id),
+        ]);
+      }
       return t.callExpression(file.addHelper("classPrivateMethodGet"), [
         this.receiver(member),
         t.cloneNode(id),
         t.cloneNode(methodId),
       ]);
-    } else {
-      return t.callExpression(file.addHelper("classPrivateFieldGet"), [
-        this.receiver(member),
-        t.cloneNode(id),
-      ]);
     }
+    return t.callExpression(file.addHelper("classPrivateFieldGet"), [
+      this.receiver(member),
+      t.cloneNode(id),
+    ]);
   },
 
   set(member, value) {
     const { classRef, privateNamesMap, file } = this;
     const { name } = member.node.property.id;
-    const { id, static: isStatic, method: isMethod } = privateNamesMap.get(
-      name,
-    );
+    const {
+      id,
+      static: isStatic,
+      method: isMethod,
+      setId,
+    } = privateNamesMap.get(name);
 
     if (isStatic && !isMethod) {
       return t.callExpression(
         file.addHelper("classStaticPrivateFieldSpecSet"),
         [this.receiver(member), t.cloneNode(classRef), t.cloneNode(id), value],
       );
-    } else if (isMethod) {
-      return t.callExpression(file.addHelper("classPrivateMethodSet"), []);
-    } else {
-      return t.callExpression(file.addHelper("classPrivateFieldSet"), [
-        this.receiver(member),
-        t.cloneNode(id),
-        value,
-      ]);
     }
+    if (isMethod) {
+      if (setId) {
+        return t.callExpression(file.addHelper("classPrivateFieldSet"), [
+          this.receiver(member),
+          t.cloneNode(id),
+          value,
+        ]);
+      }
+      return t.callExpression(file.addHelper("classPrivateMethodSet"), []);
+    }
+    return t.callExpression(file.addHelper("classPrivateFieldSet"), [
+      this.receiver(member),
+      t.cloneNode(id),
+      value,
+    ]);
   },
 
   call(member, args) {
@@ -321,8 +342,37 @@ function buildPrivateMethodInitLoose(ref, prop, privateNamesMap) {
 }
 
 function buildPrivateInstanceMethodInitSpec(ref, prop, privateNamesMap) {
-  const { id } = privateNamesMap.get(prop.node.key.id.name);
+  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const { id, getId, setId, initAdded } = privateName;
+  if (initAdded) return;
 
+  if (getId || setId) {
+    privateNamesMap.set(prop.node.key.id.name, {
+      ...privateName,
+      initAdded: true,
+    });
+
+    if (getId && setId) {
+      return template.statement.ast`
+        ${id}.set(${ref}, {
+          get: ${getId.name},
+          set: ${setId.name}
+        });
+      `;
+    } else if (getId && !setId) {
+      return template.statement.ast`
+        ${id}.set(${ref}, {
+          get: ${getId.name}
+        });
+      `;
+    } else if (!getId && setId) {
+      return template.statement.ast`
+        ${id}.set(${ref}, {
+          set: ${setId.name}
+        });
+      `;
+    }
+  }
   return template.statement.ast`${id}.add(${ref})`;
 }
 

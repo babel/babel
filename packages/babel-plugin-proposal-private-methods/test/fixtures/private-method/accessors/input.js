@@ -34,24 +34,14 @@ class Foo {
     this.publicField = 0;
     this.#privateFieldValue = this.#privateFieldValue++;
     this.publicFieldValue = this.publicFieldValue++;
-    expect(this.#privateField).toEqual(this.publicField);
 
-    this.#privateFieldValue = ++this.#privateFieldValue;
-    this.publicFieldValue = ++this.publicFieldValue;
-    expect(this.#privateField).toEqual(this.publicField);
+    ++this.#privateFieldValue;
+    ++this.publicFieldValue;
 
     this.#privateFieldValue += 1;
     this.publicFieldValue += 1;
-    expect(this.#privateField).toEqual(this.publicField);
+
+    this.#privateFieldValue = -(this.#privateFieldValue ** this.#privateFieldValue);
+    this.publicFieldValue = -(this.publicFieldValue ** this.publicFieldValue);
   }
 }
-
-
-const foo = new Foo();
-
-expect(foo.publicGetPrivateField()).toEqual("top secret string");
-
-foo.publicSetPrivateField("new secret string");
-expect(foo.publicGetPrivateField()).toEqual("new secret string");
-
-foo.testUpdates();

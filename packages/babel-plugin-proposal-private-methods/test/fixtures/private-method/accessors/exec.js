@@ -36,8 +36,8 @@ class Foo {
     this.publicFieldValue = this.publicFieldValue++;
     expect(this.#privateField).toEqual(this.publicField);
 
-    this.#privateFieldValue = ++this.#privateFieldValue;
-    this.publicFieldValue = ++this.publicFieldValue;
+    ++this.#privateFieldValue;
+    ++this.publicFieldValue;
     expect(this.#privateField).toEqual(this.publicField);
 
     this.#privateFieldValue += 1;
@@ -45,7 +45,6 @@ class Foo {
     expect(this.#privateField).toEqual(this.publicField);
   }
 }
-
 
 const foo = new Foo();
 

@@ -24,7 +24,7 @@ class Foo {
     this.#privateFieldValue--;
     this.#privateFieldValue = this.#privateFieldValue++;
     this.#privateFieldValue = ++this.#privateFieldValue;
-    this.#privateFieldValue = this.#privateFieldValue += 1;
+    this.#privateFieldValue += 1;
     this.#privateFieldValue = -(this.#privateFieldValue ** this.#privateFieldValue);
   }
 }
