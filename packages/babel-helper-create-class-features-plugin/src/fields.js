@@ -17,15 +17,13 @@ export function buildPrivateNamesMap(props) {
             id: prop.scope.generateUidIdentifier(name),
             static: !isInstance,
             method: isMethod,
-            methodId:
-              isMethod && isInstance && prop.node.kind === "method"
-                ? prop.scope.generateUidIdentifier(name)
-                : undefined,
           };
       if (prop.node.kind === "get") {
         update.getId = prop.scope.generateUidIdentifier(`get_${name}`);
       } else if (prop.node.kind === "set") {
         update.setId = prop.scope.generateUidIdentifier(`set_${name}`);
+      } else if (prop.node.kind === "method" && isMethod && isInstance) {
+        update.methodId = prop.scope.generateUidIdentifier(name);
       }
       privateNamesMap.set(name, update);
     }
@@ -535,7 +533,7 @@ export function buildFieldsInitNodes(
 
   return {
     staticNodes,
-    instanceNodes: instanceNodes.filter(instanceNode => instanceNode),
+    instanceNodes: instanceNodes.filter(Boolean),
     wrapClass(path) {
       for (const prop of props) {
         prop.remove();

@@ -1073,8 +1073,9 @@ helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
       }
 
       descriptor.value = value;
-      return value;
     }
+
+    return value;
   }
 `;
 
