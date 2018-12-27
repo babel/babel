@@ -1,7 +1,4 @@
-exports.stringifyValidator = function stringifyValidator(
-  validator,
-  nodePrefix
-) {
+module.exports = function stringifyValidator(validator, nodePrefix) {
   if (validator === undefined) {
     return "any";
   }
@@ -35,11 +32,6 @@ exports.stringifyValidator = function stringifyValidator(
   }
 
   return ["any"];
-};
-
-exports.toFunctionName = function toFunctionName(typeName) {
-  const _ = typeName.replace(/^TS/, "ts").replace(/^JSX/, "jsx");
-  return _.slice(0, 1).toLowerCase() + _.slice(1);
 };
 
 /**

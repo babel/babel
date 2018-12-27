@@ -1,7 +1,8 @@
 "use strict";
 
 const t = require("../../");
-const utils = require("../../../../scripts/generators/utils");
+const stringifyValidator = require("../utils/stringifyValidator");
+const toFunctionName = require("../utils/toFunctionName");
 
 const NODE_PREFIX = "BabelNode";
 
@@ -73,7 +74,7 @@ for (const type in t.NODE_FIELDS) {
 
       const validate = field.validate;
       if (validate) {
-        typeAnnotation = utils.stringifyValidator(validate, NODE_PREFIX);
+        typeAnnotation = stringifyValidator(validate, NODE_PREFIX);
       }
 
       if (typeAnnotation) {
@@ -94,7 +95,7 @@ for (const type in t.NODE_FIELDS) {
   // Flow chokes on super() and import() :/
   if (type !== "Super" && type !== "Import") {
     lines.push(
-      `declare function ${utils.toFunctionName(type)}(${args.join(
+      `declare function ${toFunctionName(type)}(${args.join(
         ", "
       )}): ${NODE_PREFIX}${type};`
     );

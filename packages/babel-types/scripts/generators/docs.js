@@ -1,9 +1,10 @@
 "use strict";
 
 const util = require("util");
-const utils = require("./utils");
+const stringifyValidator = require("../utils/stringifyValidator");
+const toFunctionName = require("../utils/toFunctionName");
 
-const types = require("../../packages/babel-types");
+const types = require("../../");
 
 const readme = [
   `# @babel/types
@@ -43,7 +44,7 @@ Object.keys(types.BUILDER_KEYS)
     readme.push("```javascript");
     readme.push(
       "t." +
-        utils.toFunctionName(key) +
+        toFunctionName(key) +
         "(" +
         types.BUILDER_KEYS[key].join(", ") +
         ")"
@@ -87,7 +88,7 @@ Object.keys(types.BUILDER_KEYS)
         } else if (validator) {
           try {
             fieldDescription.push(
-              ": `" + utils.stringifyValidator(validator, "") + "`"
+              ": `" + stringifyValidator(validator, "") + "`"
             );
           } catch (ex) {
             if (ex.code === "UNEXPECTED_VALIDATOR_TYPE") {
