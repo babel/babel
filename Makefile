@@ -15,8 +15,8 @@ build: clean clean-lib
 	# call build again as the generated files might need to be compiled again.
 	./node_modules/.bin/gulp build
 	# generate flow and typescript typings
-	node scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
-	node scripts/generators/typescript.js > ./packages/babel-types/lib/index.d.ts
+	node packages/babel-types/scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
+	node packages/babel-types/scripts/generators/typescript.js > ./packages/babel-types/lib/index.d.ts
 ifneq ("$(BABEL_COVERAGE)", "true")
 	make build-standalone
 	make build-preset-env-standalone
@@ -46,7 +46,8 @@ watch: clean clean-lib
 	# development too.
 	BABEL_ENV=development ./node_modules/.bin/gulp build-no-bundle
 	node ./packages/babel-types/scripts/generateTypeHelpers.js
-	node scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
+	node packages/babel-types/scripts/generators/flow.js > ./packages/babel-types/lib/index.js.flow
+	node packages/babel-types/scripts/generators/typescript.js > ./packages/babel-types/lib/index.d.ts
 	BABEL_ENV=development ./node_modules/.bin/gulp watch
 
 flow:
