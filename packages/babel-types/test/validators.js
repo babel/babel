@@ -122,4 +122,19 @@ describe("validators", function() {
       expect(t.isReferenced(node, parent)).toBe(true);
     });
   });
+
+  describe("isType", function() {
+    it("returns true if nodeType equals targetType", function() {
+      expect(t.isType("Identifier", "Identifier")).toBe(true);
+    });
+    it("returns false if targetType is a primary node type", function() {
+      expect(t.isType("Expression", "ArrayExpression")).toBe(false);
+    });
+    it("returns true if targetType is an alias of nodeType", function() {
+      expect(t.isType("ArrayExpression", "Expression")).toBe(true);
+    });
+    it("returns false if nodeType and targetType are unrelated", function() {
+      expect(t.isType("ArrayExpression", "ClassBody")).toBe(false);
+    });
+  });
 });
