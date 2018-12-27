@@ -1,5 +1,6 @@
 import { types as t, template } from "@babel/core";
 import ReplaceSupers from "@babel/helper-replace-supers";
+import nameFunction from "@babel/helper-function-name";
 
 export function hasOwnDecorators(node) {
   return !!(node.decorators && node.decorators.length);
@@ -14,11 +15,13 @@ function prop(key, value) {
   return t.objectProperty(t.identifier(key), value);
 }
 
-function value(body, params = [], async, generator) {
-  const method = t.objectMethod("method", t.identifier("value"), params, body);
-  method.async = !!async;
-  method.generator = !!generator;
-  return method;
+function method(key, body) {
+  return t.objectMethod(
+    "method",
+    t.identifier(key),
+    [],
+    t.blockStatement(body),
+  );
 }
 
 function takeDecorators(node) {
@@ -74,12 +77,19 @@ function extractElementDescriptor(/* this: File, */ classRef, superRef, path) {
     prop("decorators", takeDecorators(node)),
     prop("static", node.static && t.booleanLiteral(true)),
     prop("key", getKey(node)),
-    isMethod
-      ? value(node.body, node.params, node.async, node.generator)
-      : node.value
-      ? value(template.ast`{ return ${node.value} }`)
-      : prop("value", scope.buildUndefinedNode()),
   ].filter(Boolean);
+
+  if (isMethod) {
+    const id = node.computed ? null : node.key;
+    t.toExpression(node);
+    properties.push(prop("value", nameFunction({ node, id, scope }) || node));
+  } else if (node.value) {
+    properties.push(
+      method("value", template.statements.ast`return ${node.value}`),
+    );
+  } else {
+    properties.push(prop("value", scope.buildUndefinedNode()));
+  }
 
   path.remove();
 

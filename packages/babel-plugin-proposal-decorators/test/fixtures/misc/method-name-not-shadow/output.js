@@ -1,3 +1,4 @@
+var _method = 1;
 let Foo = babelHelpers.decorate([decorator], function (_initialize) {
   "use strict";
 
@@ -12,16 +13,10 @@ let Foo = babelHelpers.decorate([decorator], function (_initialize) {
     F: Foo,
     d: [{
       kind: "method",
-      key: "f1",
-      value: async function f1() {}
-    }, {
-      kind: "method",
-      key: "f2",
-      value: function* f2() {}
-    }, {
-      kind: "method",
-      key: "f3",
-      value: async function* f3() {}
+      key: "method",
+      value: function method() {
+        return _method;
+      }
     }]
   };
 });

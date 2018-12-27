@@ -14,9 +14,7 @@ let A = babelHelpers.decorate([dec(a, b, ...c)], function (_initialize) {
       kind: "method",
       decorators: [dec(a, b, ...c)],
       key: "method",
-
-      value() {}
-
+      value: function method() {}
     }]
   };
 });
