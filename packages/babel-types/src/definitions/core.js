@@ -687,6 +687,49 @@ defineType("ObjectProperty", {
   aliases: ["UserWhitespacable", "Property", "ObjectMember"],
 });
 
+defineType("Property", {
+  builder: ["key", "value", "computed", "shorthand", "decorators"],
+  fields: {
+    computed: {
+      validate: assertValueType("boolean"),
+      default: false,
+    },
+    key: {
+      validate: (function() {
+        const normal = assertNodeType(
+          "Identifier",
+          "StringLiteral",
+          "NumericLiteral",
+        );
+        const computed = assertNodeType("Expression");
+
+        return function(node, key, val) {
+          const validator = node.computed ? computed : normal;
+          validator(node, key, val);
+        };
+      })(),
+    },
+    value: {
+      // Value may be PatternLike if this is an AssignmentProperty
+      // https://github.com/babel/babylon/issues/434
+      validate: assertNodeType("Expression", "PatternLike"),
+    },
+    shorthand: {
+      validate: assertValueType("boolean"),
+      default: false,
+    },
+    decorators: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("Decorator")),
+      ),
+      optional: true,
+    },
+  },
+  visitor: ["key", "value", "decorators"],
+  aliases: ["UserWhitespacable", "ObjectProperty", "ObjectMember"],
+});
+
 defineType("RestElement", {
   visitor: ["argument", "typeAnnotation"],
   builder: ["argument"],
