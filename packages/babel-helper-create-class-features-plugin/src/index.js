@@ -98,8 +98,10 @@ export function createClassFeaturePlugin({
               privateNames.add(setName).add(name);
             } else {
               if (
-                privateNames.has(name) &&
-                (privateNames.has(getName) || privateNames.has(setName))
+                (privateNames.has(name) &&
+                  (!privateNames.has(getName) && !privateNames.has(setName))) ||
+                (privateNames.has(name) &&
+                  (privateNames.has(getName) || privateNames.has(setName)))
               ) {
                 throw path.buildCodeFrameError("Duplicate private field");
               }

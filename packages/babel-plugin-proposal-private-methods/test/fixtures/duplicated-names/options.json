@@ -1,0 +1,15 @@
+{
+  "plugins": [
+    [
+      "external-helpers",
+      {
+        "helperVersion": "7.1.6"
+      }
+    ],
+    "proposal-private-methods",
+    "proposal-class-properties",
+    "transform-classes",
+    "transform-block-scoping",
+    "syntax-class-properties"
+  ]
+}
