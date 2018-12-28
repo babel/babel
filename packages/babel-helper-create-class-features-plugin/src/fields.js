@@ -136,6 +136,7 @@ const privateNameHandlerSpec = {
       method: isMethod,
       methodId,
       getId,
+      setId,
     } = privateNamesMap.get(name);
 
     if (isStatic && !isMethod) {
@@ -145,7 +146,7 @@ const privateNameHandlerSpec = {
       );
     }
     if (isMethod) {
-      if (getId) {
+      if (getId || setId) {
         return t.callExpression(file.addHelper("classPrivateFieldGet"), [
           this.receiver(member),
           t.cloneNode(id),
