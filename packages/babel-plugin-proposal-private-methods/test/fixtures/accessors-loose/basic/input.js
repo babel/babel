@@ -1,5 +1,9 @@
-class Foo {
+class Cl {
   #privateField = "top secret string";
+
+  constructor() {
+    this.publicField = "not secret string";
+  }
 
   get #privateFieldValue() {
     return this.#privateField;
@@ -15,16 +19,5 @@ class Foo {
 
   publicSetPrivateField(newValue) {
     this.#privateFieldValue = newValue;
-  }
-
-  testUpdates() {
-    this.#privateFieldValue++;
-    ++this.#privateFieldValue;
-    --this.#privateFieldValue;
-    this.#privateFieldValue--;
-    this.#privateFieldValue = this.#privateFieldValue++;
-    this.#privateFieldValue = ++this.#privateFieldValue;
-    this.#privateFieldValue += 1;
-    this.#privateFieldValue = -(this.#privateFieldValue ** this.#privateFieldValue);
   }
 }

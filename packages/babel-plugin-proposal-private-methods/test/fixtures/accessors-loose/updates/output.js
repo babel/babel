@@ -26,6 +26,28 @@ function () {
     value: function publicSetPrivateField(newValue) {
       babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue] = newValue;
     }
+  }, {
+    key: "testUpdates",
+    value: function testUpdates() {
+      babelHelpers.classPrivateFieldLooseBase(this, _privateField)[_privateField] = 0;
+      this.publicField = 0;
+      babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue] = babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue]++;
+      this.publicFieldValue = this.publicFieldValue++;
+      ++babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue];
+      ++this.publicFieldValue;
+      babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue] += 1;
+      this.publicFieldValue += 1;
+      babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue] = -(babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue] ** babelHelpers.classPrivateFieldLooseBase(this, _privateFieldValue)[_privateFieldValue]);
+      this.publicFieldValue = -(this.publicFieldValue ** this.publicFieldValue);
+    }
+  }, {
+    key: "publicFieldValue",
+    get: function () {
+      return this.publicField;
+    },
+    set: function (newValue) {
+      this.publicField = newValue;
+    }
   }]);
   return Cl;
 }();

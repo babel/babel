@@ -1,10 +1,10 @@
-var Foo =
+var Cl =
 /*#__PURE__*/
 function () {
   "use strict";
 
-  function Foo() {
-    babelHelpers.classCallCheck(this, Foo);
+  function Cl() {
+    babelHelpers.classCallCheck(this, Cl);
 
     _privateField.set(this, {
       writable: true,
@@ -19,7 +19,7 @@ function () {
     this.publicField = "not secret string";
   }
 
-  babelHelpers.createClass(Foo, [{
+  babelHelpers.createClass(Cl, [{
     key: "publicGetPrivateField",
     value: function publicGetPrivateField() {
       return babelHelpers.classPrivateFieldGet(this, _privateFieldValue);
@@ -29,32 +29,8 @@ function () {
     value: function publicSetPrivateField(newValue) {
       babelHelpers.classPrivateFieldSet(this, _privateFieldValue, newValue);
     }
-  }, {
-    key: "testUpdates",
-    value: function testUpdates() {
-      var _this$privateFieldVal, _this$privateFieldVal2;
-
-      babelHelpers.classPrivateFieldSet(this, _privateField, 0);
-      this.publicField = 0;
-      babelHelpers.classPrivateFieldSet(this, _privateFieldValue, (babelHelpers.classPrivateFieldSet(this, _privateFieldValue, (_this$privateFieldVal2 = +babelHelpers.classPrivateFieldGet(this, _privateFieldValue)) + 1), _this$privateFieldVal2));
-      this.publicFieldValue = this.publicFieldValue++;
-      babelHelpers.classPrivateFieldSet(this, _privateFieldValue, +babelHelpers.classPrivateFieldGet(this, _privateFieldValue) + 1);
-      ++this.publicFieldValue;
-      babelHelpers.classPrivateFieldSet(this, _privateFieldValue, babelHelpers.classPrivateFieldGet(this, _privateFieldValue) + 1);
-      this.publicFieldValue += 1;
-      babelHelpers.classPrivateFieldSet(this, _privateFieldValue, -(babelHelpers.classPrivateFieldGet(this, _privateFieldValue) ** babelHelpers.classPrivateFieldGet(this, _privateFieldValue)));
-      this.publicFieldValue = -(this.publicFieldValue ** this.publicFieldValue);
-    }
-  }, {
-    key: "publicFieldValue",
-    get: function () {
-      return this.publicField;
-    },
-    set: function (newValue) {
-      this.publicField = newValue;
-    }
   }]);
-  return Foo;
+  return Cl;
 }();
 
 var _privateField = new WeakMap();
