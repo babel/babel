@@ -3,6 +3,6 @@
     ["proposal-decorators", { "decoratorsBeforeExport": false }],
     "proposal-class-properties",
     "syntax-async-generators",
-    ["external-helpers", { "helperVersion": "7.1.5" }]
+    ["external-helpers", { "helperVersion": "7.1000.0" }]
   ]
 }

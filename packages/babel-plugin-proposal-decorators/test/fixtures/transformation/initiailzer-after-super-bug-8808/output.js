@@ -14,4 +14,4 @@ let Sub = babelHelpers.decorate([decorator(parameter)], function (_initialize, _
     F: Sub,
     d: []
   };
-}, Super);
+}, Super, [babelHelpers.privateName()]);

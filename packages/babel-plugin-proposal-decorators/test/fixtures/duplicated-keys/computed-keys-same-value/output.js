@@ -28,4 +28,4 @@ let Foo = babelHelpers.decorate([_ => desc = _], function (_initialize) {
 
     }]
   };
-});
+}, void 0, [babelHelpers.privateName()]);

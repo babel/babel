@@ -19,7 +19,7 @@
 
       }]
     };
-  });
+  }, void 0, [babelHelpers.privateName()]);
 };
 
 () => {
@@ -43,5 +43,5 @@
 
       }]
     };
-  });
+  }, void 0, [babelHelpers.privateName()]);
 };

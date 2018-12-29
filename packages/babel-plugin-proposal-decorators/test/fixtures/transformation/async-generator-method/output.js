@@ -30,4 +30,4 @@ let Foo = babelHelpers.decorate([decorator], function (_initialize) {
 
     }]
   };
-});
+}, void 0, [babelHelpers.privateName()]);

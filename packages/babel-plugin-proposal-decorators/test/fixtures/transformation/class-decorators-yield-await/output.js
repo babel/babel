@@ -13,5 +13,5 @@ async function* f() {
       F: A,
       d: []
     };
-  });
+  }, void 0, [babelHelpers.privateName()]);
 }

@@ -1,0 +1,8 @@
+{
+  "plugins": [
+    ["proposal-decorators", { "decoratorsBeforeExport": false }],
+    ["proposal-class-properties", { "loose": true }],
+    ["external-helpers", { "helperVersion": "7.1000.0" }]
+  ],
+  "throws": "Decorators and private elements together are not supported yet in loose mode."
+}

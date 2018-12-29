@@ -19,4 +19,4 @@ let A = babelHelpers.decorate([dec(a, b, ...c)], function (_initialize) {
 
     }]
   };
-});
+}, void 0, [babelHelpers.privateName()]);

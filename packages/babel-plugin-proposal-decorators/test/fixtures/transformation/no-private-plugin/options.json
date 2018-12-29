@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    ["proposal-decorators", { "decoratorsBeforeExport": false }],
+    [
+      "external-helpers",
+      {
+        "helperVersion": "7.1000.0"
+      }
+    ]
+  ]
+}
