@@ -1095,7 +1095,7 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
   
 `;
 
-helpers.decorate = helper("7.2.2")`
+helpers.decorate = helper("7.2.6")`
   import toArray from "toArray";
   import toPropertyKey from "toPropertyKey";
 
@@ -1782,7 +1782,7 @@ helpers.decorate = helper("7.2.2")`
 
 `;
 
-helpers.decoratorsWithInitializer = helper("7.2.2")`
+helpers.decoratorsWithInitializer = helper("7.2.6")`
   export default function _decoratorsWithInitializer(original) {
     return { __proto__: original,
       elementsDefinitionOrder: [
