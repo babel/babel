@@ -1048,7 +1048,11 @@ helpers.classPrivateFieldGet = helper("7.0.0-beta.0")`
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to get private field on non-instance");
     }
-    return privateMap.get(receiver).value;
+    var descriptor = privateMap.get(receiver);
+    if (descriptor.get) {
+      return descriptor.get.call(receiver);
+    }
+    return descriptor.value;
   }
 `;
 
@@ -1058,13 +1062,17 @@ helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
       throw new TypeError("attempted to set private field on non-instance");
     }
     var descriptor = privateMap.get(receiver);
-    if (!descriptor.writable) {
-      // This should only throw in strict mode, but class bodies are
-      // always strict and private fields can only be used inside
-      // class bodies.
-      throw new TypeError("attempted to set read only private field");
+    if (descriptor.set) {
+      descriptor.set.call(receiver, value);
+    } else {
+      if (!descriptor.writable) {
+        // This should only throw in strict mode, but class bodies are
+        // always strict and private fields can only be used inside
+        // class bodies.
+        throw new TypeError("attempted to set read only private field");
+      }
+      descriptor.value = value;
     }
-    descriptor.value = value;
     return value;
   }
 `;
@@ -1241,7 +1249,7 @@ helpers.decorate = helper("7.1.5")`
       api.initializeInstanceElements(O, decorated.elements);
     }, superClass);
     var decorated = api.decorateClass(
-      _coalesceClassElements(r.d.map(_createElementDescriptor)),
+      _coalesceClassElements(r.d.map(api.createElementDescriptor, api)),
       decorators,
     );
 
@@ -1256,6 +1264,52 @@ helpers.decorate = helper("7.1.5")`
     };
 
     var api = {
+      toElementKey(key) {
+        return toPropertyKey(key);
+      },
+
+      // ClassElementEvaluation
+      createElementDescriptor: function(
+        def /*: ElementDefinition */,
+      ) /*: ElementDescriptor */ {
+        var key = this.toElementKey(def.key);
+
+        var descriptor /*: PropertyDescriptor */;
+        if (def.kind === "method") {
+          descriptor = {
+            value: def.value,
+            writable: true,
+            configurable: true,
+            enumerable: false,
+          };
+          Object.defineProperty(def.value, "name", {
+            value: typeof key === "symbol" ? "" : key,
+            configurable: true,
+          });
+        } else if (def.kind === "get") {
+          descriptor = { get: def.value, configurable: true, enumerable: false };
+        } else if (def.kind === "set") {
+          descriptor = { set: def.value, configurable: true, enumerable: false };
+        } else if (def.kind === "field") {
+          descriptor = { configurable: true, writable: true, enumerable: true };
+        }
+
+        var element /*: ElementDescriptor */ = {
+          kind: def.kind === "field" ? "field" : "method",
+          key: key,
+          placement: def.static
+            ? "static"
+            : def.kind === "field"
+            ? "own"
+            : "prototype",
+          descriptor: descriptor,
+        };
+        if (def.decorators) element.decorators = def.decorators;
+        if (def.kind === "field") element.initializer = def.value;
+
+        return element;
+      },
+
       elementsDefinitionOrder: [["method"], ["field"]],
 
       // InitializeInstanceElements
@@ -1293,6 +1347,8 @@ helpers.decorate = helper("7.1.5")`
         }, this);
       },
 
+      defineProperty: Object.defineProperty,
+
       // DefineClassElement
       defineClassElement: function(
         /*::<C>*/ receiver /*: C | Class<C> */,
@@ -1308,7 +1364,7 @@ helpers.decorate = helper("7.1.5")`
             value: initializer === void 0 ? void 0 : initializer.call(receiver),
           };
         }
-        Object.defineProperty(receiver, element.key, descriptor);
+        this.defineProperty(receiver, element.key, descriptor);
       },
 
       // DecorateClass
@@ -1500,7 +1556,7 @@ helpers.decorate = helper("7.1.5")`
           );
         }
 
-        var key = toPropertyKey(elementObject.key);
+        var key = this.toElementKey(elementObject.key);
 
         var placement = String(elementObject.placement);
         if (
@@ -1639,48 +1695,6 @@ helpers.decorate = helper("7.1.5")`
     return api;
   }
 
-  // ClassElementEvaluation
-  function _createElementDescriptor(
-    def /*: ElementDefinition */,
-  ) /*: ElementDescriptor */ {
-    var key = toPropertyKey(def.key);
-
-    var descriptor /*: PropertyDescriptor */;
-    if (def.kind === "method") {
-      descriptor = {
-        value: def.value,
-        writable: true,
-        configurable: true,
-        enumerable: false,
-      };
-      Object.defineProperty(def.value, "name", {
-        value: typeof key === "symbol" ? "" : key,
-        configurable: true,
-      });
-    } else if (def.kind === "get") {
-      descriptor = { get: def.value, configurable: true, enumerable: false };
-    } else if (def.kind === "set") {
-      descriptor = { set: def.value, configurable: true, enumerable: false };
-    } else if (def.kind === "field") {
-      descriptor = { configurable: true, writable: true, enumerable: true };
-    }
-
-    var element /*: ElementDescriptor */ = {
-      kind: def.kind === "field" ? "field" : "method",
-      key: key,
-      placement: def.static
-        ? "static"
-        : def.kind === "field"
-        ? "own"
-        : "prototype",
-      descriptor: descriptor,
-    };
-    if (def.decorators) element.decorators = def.decorators;
-    if (def.kind === "field") element.initializer = def.value;
-
-    return element;
-  }
-
   // CoalesceGetterSetter
   function _coalesceGetterSetter(
     element /*: ElementDescriptor */,
@@ -1771,6 +1785,101 @@ helpers.decorate = helper("7.1.5")`
     return value;
   }
 
+`;
+
+helpers.privateName = helper("7.2.2")`
+  import PrivateFieldGet from "classPrivateFieldGet";
+  import PrivateFieldSet from "classPrivateFieldSet";
+
+  // When called with no arguments, this helper returns a
+  // mixin for the _decorate helper
+
+  export default function _privateName() {
+    _privateName = function (name, description) {
+      if (arguments.length === 0) {
+        return decoratorsWithPrivateNamesSpec;
+      }
+      return createPrivateName(name, description);
+    };
+
+    var privateNameData = new WeakMap();
+    var description = new WeakMap();
+
+    function isPrivateName(obj) {
+      return typeof obj === "object" && privateNameData.has(obj);
+    }
+
+    // PrivateNameObject
+    function createPrivateName(name, desc) {
+      var O = Object.create(PrivateName.prototype);
+      privateNameData.set(O, name);
+      description.set(O, desc);
+      Object.freeze(O);
+      return O;
+    }
+
+    // %PrivateName%
+    function PrivateName() {
+      throw new TypeError(
+        "The PrivateName constructuro cannot be instantiated directly."
+      );
+    }
+    Object.freeze(PrivateName.prototype.constructor);
+    PrivateName.prototype.get = Object.freeze(function (object) {
+      return PrivateFieldGet(object, GetPrivateName(this));
+    });
+    PrivateName.prototype.set = Object.freeze(function (object, value) {
+      return PrivateFieldSet(object, GetPrivateName(this), value);
+    });
+    PrivateName.prototype.description = Object.freeze(function () {
+      GetPrivateName(this); // Assert that this is a private name
+      var desc = description.get(this);
+      return desc === undefined ? "" : desc;
+    });
+    PrivateName.prototype.toString = Object.freeze(function () {
+      // NOTE: Comment this line when a related test fails, because
+      // jest tries to convert this to a string when the expected
+      // and the actual results don't match.
+      throw new TypeError(
+        "PrivateName objects can't be converted to a string."
+      );
+    });
+    Object.freeze(PrivateName.prototype);
+    Object.freeze(PrivateName);
+    function GetPrivateName(O) {
+      if (!isPrivateName(O)) {
+        throw new TypeError(String(O) + " isn't a PrivateName.");
+      }
+      return privateNameData.get(O);
+    }
+  
+    return _privateName.apply(this, arguments);
+
+    function decoratorsWithPrivateNamesSpec(original) {
+      return { __proto__: original,
+        toElementKey: function(key) {
+          if (isPrivateName(key)) return key;
+          return original.toElementKey.apply(this, arguments);
+        },
+
+        createElementDescriptor: function() {
+          var desc = original.createElementDescriptor.apply(this, arguments);
+          if (isPrivateName(desc.key) && desc.placement === "prototype") {
+            desc.placement = "own";
+          }
+          return desc;
+        },
+
+        defineProperty: function(target, key, descriptor) {
+          if (isPrivateName(key)) {
+            privateNameData.get(key).set(target, descriptor);
+          } else {
+            original.defineProperty.apply(this, arguments);
+          }
+        },
+      };
+    }
+  }
 `;
 
 helpers.classPrivateMethodGet = helper("7.1.6")`

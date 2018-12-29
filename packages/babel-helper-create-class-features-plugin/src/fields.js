@@ -3,7 +3,7 @@ import { environmentVisitor } from "@babel/helper-replace-supers";
 import memberExpressionToFunctions from "@babel/helper-member-expression-to-functions";
 import optimiseCall from "@babel/helper-optimise-call-expression";
 
-export function buildPrivateNamesMap(props) {
+export function buildPrivateNamesMap(props, isDecorated) {
   const privateNamesMap = new Map();
   for (const prop of props) {
     if (prop.isPrivate()) {
@@ -12,17 +12,35 @@ export function buildPrivateNamesMap(props) {
         id: prop.scope.generateUidIdentifier(name),
         static: !!prop.node.static,
         method: prop.isMethod(),
-        methodId: prop.isMethod()
-          ? prop.scope.generateUidIdentifier(name)
-          : undefined,
+        methodId:
+          // If there are decorators, we don't need to assign the function
+          // to an hoisted variable.
+          !isDecorated && prop.isMethod()
+            ? prop.scope.generateUidIdentifier(name)
+            : undefined,
       });
     }
   }
   return privateNamesMap;
 }
 
-export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
+const buildWeakMapAssign = template.statement`var ID = new WeakMap();`;
+
+export function buildPrivateNamesNodes(
+  privateNamesMap,
+  loose,
+  isDecorated,
+  state,
+) {
   const initNodes = [];
+
+  if (isDecorated) {
+    for (const [, value] of privateNamesMap) {
+      initNodes.push(buildWeakMapAssign({ ID: value.id }));
+    }
+
+    return initNodes;
+  }
 
   for (const [name, value] of privateNamesMap) {
     // In loose mode, both static and instance fields are transpiled using a
@@ -41,7 +59,7 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
     } else if (isMethod && !isStatic) {
       initNodes.push(template.statement.ast`var ${id} = new WeakSet();`);
     } else if (!isStatic) {
-      initNodes.push(template.statement.ast`var ${id} = new WeakMap();`);
+      initNodes.push(buildWeakMapAssign({ ID: id }));
     }
   }
 
@@ -113,8 +131,23 @@ const privateNameHandlerSpec = {
     return t.cloneNode(object);
   },
 
+  buildClassPrivateFieldGet(member, id) {
+    return t.callExpression(this.file.addHelper("classPrivateFieldGet"), [
+      this.receiver(member),
+      t.cloneNode(id),
+    ]);
+  },
+
+  buildClassPrivateFieldSet(member, id, value) {
+    return t.callExpression(this.file.addHelper("classPrivateFieldSet"), [
+      this.receiver(member),
+      t.cloneNode(id),
+      value,
+    ]);
+  },
+
   get(member) {
-    const { classRef, privateNamesMap, file } = this;
+    const { classRef, privateNamesMap, isDecorated, file } = this;
     const { name } = member.node.property.id;
     const {
       id,
@@ -122,6 +155,10 @@ const privateNameHandlerSpec = {
       method: isMethod,
       methodId,
     } = privateNamesMap.get(name);
+
+    if (isDecorated) {
+      return this.buildClassPrivateFieldGet(member, id);
+    }
 
     if (isStatic && !isMethod) {
       return t.callExpression(
@@ -135,19 +172,20 @@ const privateNameHandlerSpec = {
         t.cloneNode(methodId),
       ]);
     } else {
-      return t.callExpression(file.addHelper("classPrivateFieldGet"), [
-        this.receiver(member),
-        t.cloneNode(id),
-      ]);
+      return this.buildClassPrivateFieldGet(member, id);
     }
   },
 
   set(member, value) {
-    const { classRef, privateNamesMap, file } = this;
+    const { classRef, privateNamesMap, isDecorated, file } = this;
     const { name } = member.node.property.id;
     const { id, static: isStatic, method: isMethod } = privateNamesMap.get(
       name,
     );
+
+    if (isDecorated) {
+      return this.buildClassPrivateFieldSet(member, id, value);
+    }
 
     if (isStatic && !isMethod) {
       return t.callExpression(
@@ -157,11 +195,7 @@ const privateNameHandlerSpec = {
     } else if (isMethod) {
       return t.callExpression(file.addHelper("classPrivateMethodSet"), []);
     } else {
-      return t.callExpression(file.addHelper("classPrivateFieldSet"), [
-        this.receiver(member),
-        t.cloneNode(id),
-        value,
-      ]);
+      return this.buildClassPrivateFieldSet(member, id, value);
     }
   },
 
@@ -175,6 +209,8 @@ const privateNameHandlerSpec = {
 
 const privateNameHandlerLoose = {
   handle(member) {
+    // ASSERT: !isDecorated
+
     const { privateNamesMap, file } = this;
     const { object } = member.node;
     const { name } = member.node.property.id;
@@ -194,11 +230,13 @@ export function transformPrivateNamesUsage(
   path,
   privateNamesMap,
   loose,
+  isDecorated,
   state,
 ) {
   const body = path.get("body");
 
   if (loose) {
+    // ASSERT: !isDecorated
     body.traverse(privateNameVisitor, {
       privateNamesMap,
       file: state,
@@ -208,6 +246,7 @@ export function transformPrivateNamesUsage(
     memberExpressionToFunctions(body, privateNameVisitor, {
       privateNamesMap,
       classRef: ref,
+      isDecorated,
       file: state,
       ...privateNameHandlerSpec,
     });

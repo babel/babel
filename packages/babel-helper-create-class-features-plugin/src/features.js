@@ -30,7 +30,7 @@ export function enableFeature(file, feature, loose) {
   }
 }
 
-function hasFeature(file, feature) {
+export function hasFeature(file, feature) {
   return !!(file.get(featuresKey) & feature);
 }
 
@@ -39,18 +39,8 @@ export function isLoose(file, feature) {
 }
 
 export function verifyUsedFeatures(path, file) {
-  if (hasOwnDecorators(path)) {
-    if (!hasFeature(file, FEATURES.decorators)) {
-      throw path.buildCodeFrameError("Decorators are not enabled.");
-    }
-
-    if (path.isPrivate()) {
-      throw path.buildCodeFrameError(
-        `Private ${
-          path.isClassMethod() ? "methods" : "fields"
-        } in decorated classes are not supported yet.`,
-      );
-    }
+  if (hasOwnDecorators(path) && !hasFeature(file, FEATURES.decorators)) {
+    throw path.buildCodeFrameError("Decorators are not enabled.");
   }
 
   // NOTE: We can't use path.isPrivateMethod() because it isn't supported in <7.2.0

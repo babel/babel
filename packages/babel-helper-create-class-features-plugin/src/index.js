@@ -96,6 +96,13 @@ export function createClassFeaturePlugin({
 
         if (!props.length && !isDecorated) return;
 
+        if (loose && isDecorated && privateNames.size) {
+          throw path.buildCodeFrameError(
+            "Decorators and private elements together are " +
+              "not supported yet in loose mode.",
+          );
+        }
+
         let ref;
 
         if (path.isClassExpression() || !path.node.id) {
@@ -105,17 +112,22 @@ export function createClassFeaturePlugin({
           ref = path.node.id;
         }
 
-        // NODE: These three functions don't support decorators yet,
-        //       but verifyUsedFeatures throws if there are both
-        //       decorators and private fields.
         const privateNamesMap = buildPrivateNamesMap(props);
         const privateNamesNodes = buildPrivateNamesNodes(
           privateNamesMap,
           loose,
+          isDecorated,
           state,
         );
 
-        transformPrivateNamesUsage(ref, path, privateNamesMap, loose, state);
+        transformPrivateNamesUsage(
+          ref,
+          path,
+          privateNamesMap,
+          loose,
+          isDecorated,
+          state,
+        );
 
         let keysNodes, staticNodes, instanceNodes, wrapClass;
 
@@ -125,6 +137,7 @@ export function createClassFeaturePlugin({
             ref,
             path,
             elements,
+            privateNamesMap,
             this.file,
           ));
         } else {
