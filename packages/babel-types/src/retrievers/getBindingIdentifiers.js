@@ -111,6 +111,7 @@ getBindingIdentifiers.keys = {
   UpdateExpression: ["argument"],
 
   ObjectProperty: ["value"],
+  Property: ["value"],
 
   AssignmentPattern: ["left"],
   ArrayPattern: ["elements"],
