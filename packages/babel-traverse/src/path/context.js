@@ -236,9 +236,6 @@ export function setKey(key: number) {
   this.key = key;
   this.node = this.container[this.key];
   this.type = this.node && this.node.type;
-  if (typeof this.type !== "string") {
-    throw new Error("NodePath.type is not string");
-  }
 }
 
 export function requeue(pathToQueue: traverse.NodePath = this) {
