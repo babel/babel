@@ -1,8 +1,9 @@
 // This file contains methods responsible for maintaining a TraversalContext.
+// @flow
 
 import traverse from "../index";
 
-export function call(key): boolean {
+export function call(key: number): boolean {
   const opts = this.opts;
 
   this.debug(key);
@@ -37,7 +38,9 @@ export function _call(fns?: Array<Function>): boolean {
       );
     }
     if (ret) {
-      throw new Error(`Unexpected return value from visitor method ${fn}`);
+      throw new Error(
+        `Unexpected return value from visitor method ${fn.toString()}`,
+      );
     }
 
     // node has been replaced, it will have been requeued
@@ -91,7 +94,7 @@ export function skip() {
   this.shouldSkip = true;
 }
 
-export function skipKey(key) {
+export function skipKey(key: Number) {
   this.skipKeys[key] = true;
 }
 
@@ -116,7 +119,7 @@ export function setScope() {
   if (this.scope) this.scope.init();
 }
 
-export function setContext(context) {
+export function setContext(context: traverse.TraversalContext) {
   this.shouldSkip = false;
   this.shouldStop = false;
   this.removed = false;
@@ -209,12 +212,17 @@ export function popContext() {
   }
 }
 
-export function pushContext(context) {
+export function pushContext(context: traverse.TraversalContext) {
   this.contexts.push(context);
   this.setContext(context);
 }
 
-export function setup(parentPath, container, listKey, key) {
+export function setup(
+  parentPath: traverse.NodePath,
+  container: Array<traverse.NodePath>,
+  listKey: ?String,
+  key: number,
+) {
   this.inList = !!listKey;
   this.listKey = listKey;
   this.parentKey = listKey || key;
@@ -224,13 +232,16 @@ export function setup(parentPath, container, listKey, key) {
   this.setKey(key);
 }
 
-export function setKey(key) {
+export function setKey(key: number) {
   this.key = key;
   this.node = this.container[this.key];
   this.type = this.node && this.node.type;
+  if (typeof this.type !== "string") {
+    throw new Error("NodePath.type is not string");
+  }
 }
 
-export function requeue(pathToQueue = this) {
+export function requeue(pathToQueue: traverse.NodePath = this) {
   if (pathToQueue.removed) return;
 
   // TODO(loganfsmyth): This should be switched back to queue in parent contexts
