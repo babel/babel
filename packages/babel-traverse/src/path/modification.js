@@ -1,15 +1,18 @@
 // This file contains methods that modify the path/node in some ways.
+// @flow
 
 import { path as pathCache } from "../cache";
+// $FlowFixMe Not sure why flow can't find this.
 import PathHoister from "./lib/hoister";
 import NodePath from "./index";
+import type { Scope } from "../scope";
 import * as t from "@babel/types";
 
 /**
  * Insert the provided nodes before the current one.
  */
 
-export function insertBefore(nodes) {
+export function insertBefore(nodes: Array<NodePath>): Array<NodePath> {
   this._assertUnremoved();
 
   nodes = this._verifyNodeList(nodes);
@@ -50,7 +53,10 @@ export function insertBefore(nodes) {
   }
 }
 
-export function _containerInsert(from, nodes) {
+export function _containerInsert(
+  from: number,
+  nodes: Array<NodePath>,
+): Array<NodePath> {
   this.updateSiblingKeys(from, nodes.length);
 
   const paths = [];
@@ -80,11 +86,13 @@ export function _containerInsert(from, nodes) {
   return paths;
 }
 
-export function _containerInsertBefore(nodes) {
+export function _containerInsertBefore(
+  nodes: Array<NodePath>,
+): Array<NodePath> {
   return this._containerInsert(this.key, nodes);
 }
 
-export function _containerInsertAfter(nodes) {
+export function _containerInsertAfter(nodes: Array<NodePath>): Array<NodePath> {
   return this._containerInsert(this.key + 1, nodes);
 }
 
@@ -93,7 +101,7 @@ export function _containerInsertAfter(nodes) {
  * expression, ensure that the completion record is correct by pushing the current node.
  */
 
-export function insertAfter(nodes) {
+export function insertAfter(nodes: Array<NodePath>): Array<NodePath> {
   this._assertUnremoved();
 
   nodes = this._verifyNodeList(nodes);
@@ -159,7 +167,10 @@ export function insertAfter(nodes) {
  * Update all sibling node paths after `fromIndex` by `incrementBy`.
  */
 
-export function updateSiblingKeys(fromIndex, incrementBy) {
+export function updateSiblingKeys(
+  fromIndex: number,
+  incrementBy: number,
+): ?Array<NodePath> {
   if (!this.parent) return;
 
   const paths = pathCache.get(this.parent);
@@ -171,7 +182,7 @@ export function updateSiblingKeys(fromIndex, incrementBy) {
   }
 }
 
-export function _verifyNodeList(nodes) {
+export function _verifyNodeList(nodes: Array<NodePath>): Array<NodePath> {
   if (!nodes) {
     return [];
   }
@@ -205,7 +216,10 @@ export function _verifyNodeList(nodes) {
   return nodes;
 }
 
-export function unshiftContainer(listKey, nodes) {
+export function unshiftContainer(
+  listKey: string,
+  nodes: Array<NodePath>,
+): Array<NodePath> {
   this._assertUnremoved();
 
   nodes = this._verifyNodeList(nodes);
@@ -223,7 +237,10 @@ export function unshiftContainer(listKey, nodes) {
   return path.insertBefore(nodes);
 }
 
-export function pushContainer(listKey, nodes) {
+export function pushContainer(
+  listKey: string,
+  nodes: Array<NodePath>,
+): Array<NodePath> {
   this._assertUnremoved();
 
   nodes = this._verifyNodeList(nodes);
@@ -248,7 +265,7 @@ export function pushContainer(listKey, nodes) {
  * referencing it.
  */
 
-export function hoist(scope = this.scope) {
+export function hoist(scope: Scope = this.scope): NodePath {
   const hoister = new PathHoister(this, scope);
   return hoister.run();
 }
