@@ -1,9 +1,9 @@
 // This file contains methods responsible for replacing a node with another.
-
+// @flow
 import { codeFrameColumns } from "@babel/code-frame";
 import traverse from "../index";
 import NodePath from "./index";
-import { parse } from "@babel/parser";
+import { parseExpression } from "@babel/parser";
 import * as t from "@babel/types";
 
 const hoistVariablesVisitor = {
@@ -43,7 +43,7 @@ const hoistVariablesVisitor = {
  *  - Remove the current node.
  */
 
-export function replaceWithMultiple(nodes: Array<Object>) {
+export function replaceWithMultiple(nodes: Array<NodePath>) {
   this.resync();
 
   nodes = this._verifyNodeList(nodes);
@@ -68,18 +68,19 @@ export function replaceWithMultiple(nodes: Array<Object>) {
  * easier to use, your transforms will be extremely brittle.
  */
 
-export function replaceWithSourceString(replacement) {
+export function replaceWithSourceString(replacementSource: string) {
   this.resync();
+  let replacement;
 
   try {
-    replacement = `(${replacement})`;
-    replacement = parse(replacement);
+    replacementSource = `(${replacementSource})`;
+    replacement = parseExpression(replacementSource);
   } catch (err) {
     const loc = err.loc;
     if (loc) {
       err.message +=
         " - make sure this is an expression.\n" +
-        codeFrameColumns(replacement, {
+        codeFrameColumns(replacementSource, {
           start: {
             line: loc.line,
             column: loc.column + 1,
@@ -90,7 +91,6 @@ export function replaceWithSourceString(replacement) {
     throw err;
   }
 
-  replacement = replacement.program.body[0].expression;
   traverse.removeProperties(replacement);
   return this.replaceWith(replacement);
 }
@@ -99,7 +99,7 @@ export function replaceWithSourceString(replacement) {
  * Replace the current node with another.
  */
 
-export function replaceWith(replacement) {
+export function replaceWith(replacement: NodePath) {
   this.resync();
 
   if (this.removed) {
@@ -190,10 +190,10 @@ export function replaceWith(replacement) {
 }
 
 /**
- * Description
+ * Helper function for replaceWith()
  */
 
-export function _replaceWith(node) {
+export function _replaceWith(node: NodePath) {
   if (!this.container) {
     throw new ReferenceError("Container is falsy");
   }
