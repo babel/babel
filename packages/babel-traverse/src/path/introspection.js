@@ -1,5 +1,5 @@
 // This file contains methods responsible for introspecting the current path for certain values.
-
+// @flow
 import type NodePath from "./index";
 import includes from "lodash/includes";
 import * as t from "@babel/types";
@@ -23,7 +23,7 @@ export function matchesPattern(
  * if the array has any items, otherwise we just check if it's falsy.
  */
 
-export function has(key): boolean {
+export function has(key: string): boolean {
   const val = this.node && this.node[key];
   if (val && Array.isArray(val)) {
     return !!val.length;
@@ -36,7 +36,7 @@ export function has(key): boolean {
  * Description
  */
 
-export function isStatic() {
+export function isStatic(): boolean {
   return this.scope.isStatic(this.node);
 }
 
@@ -50,7 +50,7 @@ export const is = has;
  * Opposite of `has`.
  */
 
-export function isnt(key): boolean {
+export function isnt(key: string): boolean {
   return !this.has(key);
 }
 
@@ -58,7 +58,7 @@ export function isnt(key): boolean {
  * Check whether the path node `key` strict equals `value`.
  */
 
-export function equals(key, value): boolean {
+export function equals(key: string, value: string): boolean {
   return this.node[key] === value;
 }
 
@@ -95,7 +95,9 @@ export function canHaveVariableDeclarationOrExpression() {
  * is the same as containing a block statement.
  */
 
-export function canSwapBetweenExpressionAndStatement(replacement) {
+export function canSwapBetweenExpressionAndStatement(
+  replacement: NodePath,
+): boolean {
   if (this.key !== "body" || !this.parentPath.isArrowFunctionExpression()) {
     return false;
   }
@@ -113,7 +115,7 @@ export function canSwapBetweenExpressionAndStatement(replacement) {
  * Check whether the current path references a completion record
  */
 
-export function isCompletionRecord(allowInsideFunction?) {
+export function isCompletionRecord(allowInsideFunction: ?boolean): boolean {
   let path = this;
   let first = true;
 
@@ -142,7 +144,7 @@ export function isCompletionRecord(allowInsideFunction?) {
  * so we can explode it if necessary.
  */
 
-export function isStatementOrBlock() {
+export function isStatementOrBlock(): boolean {
   if (
     this.parentPath.isLabeledStatement() ||
     t.isBlockStatement(this.container)
@@ -157,7 +159,7 @@ export function isStatementOrBlock() {
  * Check if the currently assigned path references the `importName` of `moduleSource`.
  */
 
-export function referencesImport(moduleSource, importName) {
+export function referencesImport(moduleSource: NodePath, importName: string) {
   if (!this.isReferencedIdentifier()) return false;
 
   const binding = this.scope.getBinding(this.node.name);
@@ -202,7 +204,7 @@ export function getSource() {
   return "";
 }
 
-export function willIMaybeExecuteBefore(target) {
+export function willIMaybeExecuteBefore(target: NodePath) {
   return this._guessExecutionStatusRelativeTo(target) !== "after";
 }
 
@@ -213,7 +215,7 @@ export function willIMaybeExecuteBefore(target) {
  * before or after the input `target` element.
  */
 
-export function _guessExecutionStatusRelativeTo(target) {
+export function _guessExecutionStatusRelativeTo(target: NodePath) {
   // check if the two paths are in different functions, we can't track execution of these
   const targetFuncParent =
     target.scope.getFunctionParent() || target.scope.getProgramParent();
@@ -255,6 +257,7 @@ export function _guessExecutionStatusRelativeTo(target) {
   }
 
   // get the relationship paths that associate these nodes to their common ancestor
+  // $FlowFixMe if commonPath is set then targetIndex must also be set.
   const targetRelationship = targetPaths[targetIndex - 1];
   const selfRelationship = selfPaths[selfIndex - 1];
   if (!targetRelationship || !selfRelationship) {
@@ -277,7 +280,7 @@ export function _guessExecutionStatusRelativeTo(target) {
 }
 
 export function _guessExecutionStatusRelativeToDifferentFunctions(
-  targetFuncParent,
+  targetFuncParent: NodePath,
 ) {
   const targetFuncPath = targetFuncParent.path;
   if (!targetFuncPath.isFunctionDeclaration()) return;
@@ -324,14 +327,20 @@ export function _guessExecutionStatusRelativeToDifferentFunctions(
 }
 
 /**
- * Resolve a "pointer" `NodePath` to it's absolute path.
+ * Resolve a "pointer" `NodePath` to its absolute path.
  */
 
-export function resolve(dangerous, resolved) {
+export function resolve(
+  dangerous: ?Array<NodePath>,
+  resolved: ?Array<NodePath>,
+): NodePath {
   return this._resolve(dangerous, resolved) || this;
 }
 
-export function _resolve(dangerous?, resolved?): ?NodePath {
+export function _resolve(
+  dangerous: ?Array<NodePath>,
+  resolved: ?Array<NodePath>,
+): ?NodePath {
   // detect infinite recursion
   // todo: possibly have a max length on this just to be safe
   if (resolved && resolved.indexOf(this) >= 0) return;
@@ -377,7 +386,7 @@ export function _resolve(dangerous?, resolved?): ?NodePath {
 
     if (target.isObjectExpression()) {
       const props = target.get("properties");
-      for (const prop of (props: Array)) {
+      for (const prop of (props: Array<any>)) {
         if (!prop.isProperty()) continue;
 
         const key = prop.get("key");
