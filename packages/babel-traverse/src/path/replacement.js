@@ -44,18 +44,19 @@ const hoistVariablesVisitor = {
  */
 
 export function replaceWithMultiple(nodes: Array<NodePath>) {
-  this.resync();
+  const _this: NodePath = this;
+  _this.resync();
 
-  nodes = this._verifyNodeList(nodes);
-  t.inheritLeadingComments(nodes[0], this.node);
-  t.inheritTrailingComments(nodes[nodes.length - 1], this.node);
-  this.node = this.container[this.key] = null;
-  const paths = this.insertAfter(nodes);
+  nodes = _this._verifyNodeList(nodes);
+  t.inheritLeadingComments(nodes[0], _this.node);
+  t.inheritTrailingComments(nodes[nodes.length - 1], _this.node);
+  _this.node = _this.container[_this.key] = null;
+  const paths = _this.insertAfter(nodes);
 
-  if (this.node) {
-    this.requeue();
+  if (_this.node) {
+    _this.requeue();
   } else {
-    this.remove();
+    _this.remove();
   }
   return paths;
 }

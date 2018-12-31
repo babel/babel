@@ -68,6 +68,7 @@ export function equals(key: string, value: string): boolean {
  */
 
 export function isNodeType(type: string): boolean {
+  // $FlowFixMe WOO! this is the error that we were hoping to get
   return t.isType(this.type, type);
 }
 

@@ -1,5 +1,7 @@
+// @flow
 import type { HubInterface } from "../hub";
 import type TraversalContext from "../context";
+// $FlowFixMe Not sure why flow can't find this.
 import * as virtualTypes from "./lib/virtual-types";
 import buildDebug from "debug";
 import traverse from "../index";
@@ -70,7 +72,21 @@ export default class NodePath {
   type: ?string;
   typeAnnotation: ?Object;
 
-  static get({ hub, parentPath, parent, container, listKey, key }): NodePath {
+  static get({
+    hub,
+    parentPath,
+    parent,
+    container,
+    listKey,
+    key,
+  }: {
+    hub: ?HubInterface,
+    parentPath: ?NodePath,
+    parent: NodePath,
+    container: Array<NodePath>,
+    listKey: string,
+    key: number,
+  }): NodePath {
     if (!hub && parentPath) {
       hub = parentPath.hub;
     }
@@ -86,7 +102,7 @@ export default class NodePath {
       pathCache.set(parent, paths);
     }
 
-    let path;
+    let path: ?NodePath;
 
     for (let i = 0; i < paths.length; i++) {
       const pathCheck = paths[i];
@@ -107,6 +123,7 @@ export default class NodePath {
   }
 
   getScope(scope: Scope) {
+    // $FlowFixMe I'm pretty sure this method can't exist.
     return this.isScope() ? new Scope(this) : scope;
   }
 
@@ -130,6 +147,7 @@ export default class NodePath {
 
   set(key: string, node: Object) {
     t.validate(this.node, key, node);
+    // $FlowFixMe not sure how to prove that this.node is not null here.
     this.node[key] = node;
   }
 
@@ -138,44 +156,143 @@ export default class NodePath {
     let path = this;
     do {
       let key = path.key;
+      // $FlowFixMe yeah yeah: in theory these can be null
       if (path.inList) key = `${path.listKey}[${key}]`;
       parts.unshift(key);
     } while ((path = path.parentPath));
     return parts.join(".");
   }
 
-  debug(message) {
+  debug(message: any) {
     if (!debug.enabled) return;
+    // $FlowFixMe yeah yeah: in theory these can be null
     debug(`${this.getPathLocation()} ${this.type}: ${message}`);
   }
 
   toString() {
     return generator(this.node).code;
   }
-}
 
-Object.assign(
-  NodePath.prototype,
-  NodePath_ancestry,
-  NodePath_inference,
-  NodePath_replacement,
-  NodePath_evaluation,
-  NodePath_conversion,
-  NodePath_introspection,
-  NodePath_context,
-  NodePath_removal,
-  NodePath_modification,
-  NodePath_family,
-  NodePath_comments,
-);
+  findParent = NodePath_ancestry.findParent;
+  find = NodePath_ancestry.find;
+  getFunctionParent = NodePath_ancestry.getFunctionParent;
+  getStatementParent = NodePath_ancestry.getStatementParent;
+  getEarliestCommonAncestorFrom =
+    NodePath_ancestry.getEarliestCommonAncestorFrom;
+  getDeepestCommonAncestorFrom = NodePath_ancestry.getDeepestCommonAncestorFrom;
+  getAncestry = NodePath_ancestry.getAncestry;
+  isAncestor = NodePath_ancestry.isAncestor;
+  isDescendant = NodePath_ancestry.isDescendant;
+  inType = NodePath_ancestry.inType;
+  getTypeAnnotation = NodePath_inference.getTypeAnnotation;
+  _getTypeAnnotation = NodePath_inference._getTypeAnnotation;
+  isBaseType = NodePath_inference.isBaseType;
+  couldBeBaseType = NodePath_inference.couldBeBaseType;
+  baseTypeStrictlyMatches = NodePath_inference.baseTypeStrictlyMatches;
+  isGenericType = NodePath_inference.isGenericType;
+
+  shareCommentsWithSiblings = NodePath_comments.shareCommentsWithSiblings;
+  addComment = NodePath_comments.addComment;
+  addComments = NodePath_comments.addComments;
+  call = NodePath_context.call;
+  _call = NodePath_context._call;
+  isBlacklisted = NodePath_context.isBlacklisted;
+  visit = NodePath_context.visit;
+  skip = NodePath_context.skip;
+  skipKey = NodePath_context.skipKey;
+  stop = NodePath_context.stop;
+  setScope = NodePath_context.setScope;
+  setContext = NodePath_context.setContext;
+  resync = NodePath_context.resync;
+  _resyncParent = NodePath_context._resyncParent;
+  _resyncKey = NodePath_context._resyncKey;
+  _resyncList = NodePath_context._resyncList;
+  _resyncRemoved = NodePath_context._resyncRemoved;
+  popContext = NodePath_context.popContext;
+  pushContext = NodePath_context.pushContext;
+  setup = NodePath_context.setup;
+  setKey = NodePath_context.setKey;
+  requeue = NodePath_context.requeue;
+  _getQueueContexts = NodePath_context._getQueueContexts;
+  toComputedKey = NodePath_conversion.toComputedKey;
+  ensureBlock = NodePath_conversion.ensureBlock;
+  arrowFunctionToShadowed = NodePath_conversion.arrowFunctionToShadowed;
+  unwrapFunctionEnvironment = NodePath_conversion.unwrapFunctionEnvironment;
+  arrowFunctionToExpression = NodePath_conversion.arrowFunctionToExpression;
+  evaluateTruthy = NodePath_evaluation.evaluateTruthy;
+  evaluate = NodePath_evaluation.evaluate;
+  getOpposite = NodePath_family.getOpposite;
+  getCompletionRecords = NodePath_family.getCompletionRecords;
+  getSibling = NodePath_family.getSibling;
+  getPrevSibling = NodePath_family.getPrevSibling;
+  getNextSibling = NodePath_family.getNextSibling;
+  getAllNextSiblings = NodePath_family.getAllNextSiblings;
+  getAllPrevSiblings = NodePath_family.getAllPrevSiblings;
+  get = NodePath_family.get;
+  _getKey = NodePath_family._getKey;
+  _getPattern = NodePath_family._getPattern;
+  getBindingIdentifiers = NodePath_family.getBindingIdentifiers;
+  getOuterBindingIdentifiers = NodePath_family.getOuterBindingIdentifiers;
+  getBindingIdentifierPaths = NodePath_family.getBindingIdentifierPaths;
+  getOuterBindingIdentifierPaths =
+    NodePath_family.getOuterBindingIdentifierPaths;
+  matchesPattern = NodePath_introspection.matchesPattern;
+  has = NodePath_introspection.has;
+  isStatic = NodePath_introspection.isStatic;
+  isnt = NodePath_introspection.isnt;
+  equals = NodePath_introspection.equals;
+  isNodeType = NodePath_introspection.isNodeType;
+  canHaveVariableDeclarationOrExpression =
+    NodePath_introspection.canHaveVariableDeclarationOrExpression;
+  canSwapBetweenExpressionAndStatement =
+    NodePath_introspection.canSwapBetweenExpressionAndStatement;
+  isCompletionRecord = NodePath_introspection.isCompletionRecord;
+  isStatementOrBlock = NodePath_introspection.isStatementOrBlock;
+  referencesImport = NodePath_introspection.referencesImport;
+  getSource = NodePath_introspection.getSource;
+  willIMaybeExecuteBefore = NodePath_introspection.willIMaybeExecuteBefore;
+  _guessExecutionStatusRelativeTo =
+    NodePath_introspection._guessExecutionStatusRelativeTo;
+  _guessExecutionStatusRelativeToDifferentFunctions =
+    NodePath_introspection._guessExecutionStatusRelativeToDifferentFunctions;
+  resolve = NodePath_introspection.resolve;
+  _resolve = NodePath_introspection._resolve;
+  isConstantExpression = NodePath_introspection.isConstantExpression;
+  isInStrictMode = NodePath_introspection.isInStrictMode;
+  insertBefore = NodePath_modification.insertBefore;
+  _containerInsert = NodePath_modification._containerInsert;
+  _containerInsertBefore = NodePath_modification._containerInsertBefore;
+  _containerInsertAfter = NodePath_modification._containerInsertAfter;
+  insertAfter = NodePath_modification.insertAfter;
+  updateSiblingKeys = NodePath_modification.updateSiblingKeys;
+  _verifyNodeList = NodePath_modification._verifyNodeList;
+  unshiftContainer = NodePath_modification.unshiftContainer;
+  pushContainer = NodePath_modification.pushContainer;
+  hoist = NodePath_modification.hoist;
+  remove = NodePath_removal.remove;
+  _removeFromScope = NodePath_removal._removeFromScope;
+  _callRemovalHooks = NodePath_removal._callRemovalHooks;
+  _remove = NodePath_removal._remove;
+  _markRemoved = NodePath_removal._markRemoved;
+  _assertUnremoved = NodePath_removal._assertUnremoved;
+  replaceWithMultiple = NodePath_replacement.replaceWithMultiple;
+  replaceWithSourceString = NodePath_replacement.replaceWithSourceString;
+  replaceWith = NodePath_replacement.replaceWith;
+  _replaceWith = NodePath_replacement._replaceWith;
+  replaceExpressionWithStatements =
+    NodePath_replacement.replaceExpressionWithStatements;
+  replaceInline = NodePath_replacement.replaceInline;
+}
 
 for (const type of (t.TYPES: Array<string>)) {
   const typeKey = `is${type}`;
   const fn = t[typeKey];
+  // $FlowFixMe somehow generate these?
   NodePath.prototype[typeKey] = function(opts) {
     return fn(this.node, opts);
   };
 
+  // $FlowFixMe somehow generate these?
   NodePath.prototype[`assert${type}`] = function(opts) {
     if (!fn(this.node, opts)) {
       throw new TypeError(`Expected node path of type ${type}`);
@@ -189,6 +306,7 @@ for (const type in virtualTypes) {
 
   const virtualType = virtualTypes[type];
 
+  // $FlowFixMe somehow generate these?
   NodePath.prototype[`is${type}`] = function(opts) {
     return virtualType.checkPath(this, opts);
   };

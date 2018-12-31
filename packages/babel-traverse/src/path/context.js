@@ -220,7 +220,7 @@ export function pushContext(context: traverse.TraversalContext) {
 export function setup(
   parentPath: traverse.NodePath,
   container: Array<traverse.NodePath>,
-  listKey: ?String,
+  listKey: ?string,
   key: number,
 ) {
   this.inList = !!listKey;
