@@ -140,11 +140,7 @@ export function replaceWith(replacement: NodePath) {
 
   let nodePath = "";
 
-  if (
-    this.type &&
-    this.isNodeType("Statement") &&
-    t.isExpression(replacement)
-  ) {
+  if (this.isNodeType("Statement") && t.isExpression(replacement)) {
     if (
       !this.canHaveVariableDeclarationOrExpression() &&
       !this.canSwapBetweenExpressionAndStatement(replacement) &&
@@ -156,11 +152,7 @@ export function replaceWith(replacement: NodePath) {
     }
   }
 
-  if (
-    this.type &&
-    this.isNodeType("Expression") &&
-    t.isStatement(replacement)
-  ) {
+  if (this.isNodeType("Expression") && t.isStatement(replacement)) {
     if (
       !this.canHaveVariableDeclarationOrExpression() &&
       !this.canSwapBetweenExpressionAndStatement(replacement)

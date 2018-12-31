@@ -27,8 +27,7 @@ export function insertBefore(nodes: Array<NodePath>): Array<NodePath> {
   ) {
     return parentPath.insertBefore(nodes);
   } else if (
-    (this.type &&
-      this.isNodeType("Expression") &&
+    (this.isNodeType("Expression") &&
       this.listKey !== "params" &&
       this.listKey !== "arguments") ||
     (parentPath.isForStatement() && this.key === "init")
@@ -126,7 +125,7 @@ export function insertAfter(nodes: Array<NodePath>): Array<NodePath> {
       }),
     );
   } else if (
-    (this.type && this.isNodeType("Expression") && !this.isJSXElement()) ||
+    (this.isNodeType("Expression") && !this.isJSXElement()) ||
     (parentPath.isForStatement() && this.key === "init")
   ) {
     if (this.node) {
