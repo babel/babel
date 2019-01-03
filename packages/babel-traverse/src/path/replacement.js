@@ -192,17 +192,14 @@ export function _replaceWith(node: NodePath) {
   }
 
   if (this.inList) {
-    // $FlowFixMe how do we prove that this.key is not null?
     t.validate(this.parent, this.key, [node]);
   } else {
-    // $FlowFixMe how do we prove that this.key is not null?
     t.validate(this.parent, this.key, node);
   }
 
   // $FlowFixMe coercing undefined to string for debugging is fine
   this.debug(`Replace with ${node && node.type}`);
 
-  // $FlowFixMe is this.container an object or an array?
   this.node = this.container[this.key] = node;
 }
 

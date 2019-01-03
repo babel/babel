@@ -147,8 +147,6 @@ export function isCompletionRecord(allowInsideFunction: ?boolean): boolean {
 export function isStatementOrBlock(): boolean {
   if (
     this.parentPath.isLabeledStatement() ||
-    // this.container could be an array but isBlockStatement() only
-    // understands Object. $FlowFixMe
     t.isBlockStatement(this.container)
   ) {
     return false;

@@ -61,8 +61,6 @@ export function _containerInsert(
 
   const paths = [];
 
-  // Is there any way to discriminate between NodePath objects that
-  // have Array containers and those that have Object containers? $FlowFixMe
   this.container.splice(from, 0, ...nodes);
   for (let i = 0; i < nodes.length; i++) {
     const to = from + i;
