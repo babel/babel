@@ -37,6 +37,7 @@ export default class NodePath {
     this.state = null;
     this.opts = null;
     this.skipKeys = null;
+    // $FlowFixMe we immediately call path.setup() so this is fine for now.
     this.parentPath = null;
     this.context = null;
     this.container = null;
@@ -60,7 +61,7 @@ export default class NodePath {
   state: any;
   opts: ?Object;
   skipKeys: ?Object;
-  parentPath: ?NodePath;
+  parentPath: NodePath;
   context: TraversalContext;
   container: ?Object | Array<Object>;
   listKey: ?string;
@@ -80,7 +81,7 @@ export default class NodePath {
     listKey,
     key,
   }: {
-    hub: ?HubInterface,
+    hub?: HubInterface,
     parentPath: ?NodePath,
     parent: NodePath,
     container: Array<NodePath>,
@@ -113,6 +114,8 @@ export default class NodePath {
     }
 
     if (!path) {
+      // TODO: make a constructor that does the setup, so that
+      // path.parentPath is never set to null.
       path = new NodePath(hub, parent);
       paths.push(path);
     }
