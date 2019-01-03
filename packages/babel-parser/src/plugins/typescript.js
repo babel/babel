@@ -1364,6 +1364,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       allowModifiers: ?boolean,
       decorators: N.Decorator[],
     ): N.Pattern | N.TSParameterProperty {
+      // Store original location/position to include modifiers in range
+      const startPos = this.state.start;
+      const startLoc = this.state.startLoc;
+
       let accessibility: ?N.Accessibility;
       let readonly = false;
       if (allowModifiers) {
@@ -1375,7 +1379,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.parseAssignableListItemTypes(left);
       const elt = this.parseMaybeDefault(left.start, left.loc.start, left);
       if (accessibility || readonly) {
-        const pp: N.TSParameterProperty = this.startNodeAtNode(elt);
+        const pp: N.TSParameterProperty = this.startNodeAt(startPos, startLoc);
         if (decorators.length) {
           pp.decorators = decorators;
         }
@@ -1389,12 +1393,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
         pp.parameter = elt;
         return this.finishNode(pp, "TSParameterProperty");
-      } else {
-        if (decorators.length) {
-          left.decorators = decorators;
-        }
-        return elt;
       }
+
+      if (decorators.length) {
+        left.decorators = decorators;
+      }
+
+      return elt;
     }
 
     parseFunctionBodyAndFinish(
