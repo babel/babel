@@ -366,7 +366,7 @@ export function buildFieldsInitNodes(
         );
         break;
       case isInstance && isPrivate && isMethod && loose:
-        instanceNodes.push(
+        instanceNodes.unshift(
           buildPrivateMethodInitLoose(
             t.thisExpression(),
             prop,
@@ -378,7 +378,7 @@ export function buildFieldsInitNodes(
         );
         break;
       case isInstance && isPrivate && isMethod && !loose:
-        instanceNodes.push(
+        instanceNodes.unshift(
           buildPrivateInstanceMethodInitSpec(
             t.thisExpression(),
             prop,
