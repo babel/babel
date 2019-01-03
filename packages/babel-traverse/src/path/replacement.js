@@ -44,19 +44,18 @@ const hoistVariablesVisitor = {
  */
 
 export function replaceWithMultiple(nodes: Array<NodePath>) {
-  const _this: NodePath = this;
-  _this.resync();
+  this.resync();
 
-  nodes = _this._verifyNodeList(nodes);
-  t.inheritLeadingComments(nodes[0], _this.node);
-  t.inheritTrailingComments(nodes[nodes.length - 1], _this.node);
-  _this.node = _this.container[_this.key] = null;
-  const paths = _this.insertAfter(nodes);
+  nodes = this._verifyNodeList(nodes);
+  t.inheritLeadingComments(nodes[0], this.node);
+  t.inheritTrailingComments(nodes[nodes.length - 1], this.node);
+  this.node = this.container[this.key] = null;
+  const paths = this.insertAfter(nodes);
 
-  if (_this.node) {
-    _this.requeue();
+  if (this.node) {
+    this.requeue();
   } else {
-    _this.remove();
+    this.remove();
   }
   return paths;
 }
@@ -108,6 +107,7 @@ export function replaceWith(replacement: NodePath) {
   }
 
   if (replacement instanceof NodePath) {
+    // $FlowFixMe signature should be NodePath | ?Object?
     replacement = replacement.node;
   }
 
@@ -192,13 +192,17 @@ export function _replaceWith(node: NodePath) {
   }
 
   if (this.inList) {
+    // $FlowFixMe how do we prove that this.key is not null?
     t.validate(this.parent, this.key, [node]);
   } else {
+    // $FlowFixMe how do we prove that this.key is not null?
     t.validate(this.parent, this.key, node);
   }
 
+  // $FlowFixMe coercing undefined to string for debugging is fine
   this.debug(`Replace with ${node && node.type}`);
 
+  // $FlowFixMe is this.container an object or an array?
   this.node = this.container[this.key] = node;
 }
 
@@ -227,6 +231,9 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
   ).getCompletionRecords();
   for (const path of completionRecords) {
     if (!path.isExpressionStatement()) continue;
+    // it's an expression statement: of course it will have an expression
+    // $FlowFixMe
+    const expression = path.node.expression;
 
     const loop = path.findParent(path => path.isLoop());
     if (loop) {
@@ -245,11 +252,9 @@ export function replaceExpressionWithStatements(nodes: Array<Object>) {
 
       path
         .get("expression")
-        .replaceWith(
-          t.assignmentExpression("=", t.cloneNode(uid), path.node.expression),
-        );
+        .replaceWith(t.assignmentExpression("=", t.cloneNode(uid), expression));
     } else {
-      path.replaceWith(t.returnStatement(path.node.expression));
+      path.replaceWith(t.returnStatement(expression));
     }
   }
 

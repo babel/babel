@@ -147,6 +147,8 @@ export function isCompletionRecord(allowInsideFunction: ?boolean): boolean {
 export function isStatementOrBlock(): boolean {
   if (
     this.parentPath.isLabeledStatement() ||
+    // this.container could be an array but isBlockStatement() only
+    // understands Object. $FlowFixMe
     t.isBlockStatement(this.container)
   ) {
     return false;
@@ -280,8 +282,11 @@ export function _guessExecutionStatusRelativeTo(target: NodePath) {
 }
 
 export function _guessExecutionStatusRelativeToDifferentFunctions(
+  // FIXME: I don't know whether targetFuncParent is actually a NodePath.
+  // I suspect it isn't, because it has a .path property.
   targetFuncParent: NodePath,
 ) {
+  // $FlowFixMe NodePath doesn't have a .path. It's probably not a NodePath.
   const targetFuncPath = targetFuncParent.path;
   if (!targetFuncPath.isFunctionDeclaration()) return;
 

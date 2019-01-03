@@ -285,6 +285,805 @@ export default class NodePath {
   replaceExpressionWithStatements =
     NodePath_replacement.replaceExpressionWithStatements;
   replaceInline = NodePath_replacement.replaceInline;
+  isArrayExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isAssignmentExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isBinaryExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isInterpreterDirective = function(opts?: Object): boolean {
+    return false;
+  };
+  isDirective = function(opts?: Object): boolean {
+    return false;
+  };
+  isDirectiveLiteral = function(opts?: Object): boolean {
+    return false;
+  };
+  isBlockStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isBreakStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isCallExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isCatchClause = function(opts?: Object): boolean {
+    return false;
+  };
+  isConditionalExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isContinueStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isDebuggerStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isDoWhileStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isEmptyStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isExpressionStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isFile = function(opts?: Object): boolean {
+    return false;
+  };
+  isForInStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isForStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isFunctionDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isFunctionExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isIdentifier = function(opts?: Object): boolean {
+    return false;
+  };
+  isIfStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isLabeledStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isStringLiteral = function(opts?: Object): boolean {
+    return false;
+  };
+  isNumericLiteral = function(opts?: Object): boolean {
+    return false;
+  };
+  isNullLiteral = function(opts?: Object): boolean {
+    return false;
+  };
+  isBooleanLiteral = function(opts?: Object): boolean {
+    return false;
+  };
+  isRegExpLiteral = function(opts?: Object): boolean {
+    return false;
+  };
+  isLogicalExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isMemberExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isNewExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isProgram = function(opts?: Object): boolean {
+    return false;
+  };
+  isObjectExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isObjectMethod = function(opts?: Object): boolean {
+    return false;
+  };
+  isObjectProperty = function(opts?: Object): boolean {
+    return false;
+  };
+  isRestElement = function(opts?: Object): boolean {
+    return false;
+  };
+  isReturnStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isSequenceExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isSwitchCase = function(opts?: Object): boolean {
+    return false;
+  };
+  isSwitchStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isThisExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isThrowStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isTryStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isUnaryExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isUpdateExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isVariableDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isVariableDeclarator = function(opts?: Object): boolean {
+    return false;
+  };
+  isWhileStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isWithStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isAssignmentPattern = function(opts?: Object): boolean {
+    return false;
+  };
+  isArrayPattern = function(opts?: Object): boolean {
+    return false;
+  };
+  isArrowFunctionExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isClassBody = function(opts?: Object): boolean {
+    return false;
+  };
+  isClassDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isClassExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isExportAllDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isExportDefaultDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isExportNamedDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isExportSpecifier = function(opts?: Object): boolean {
+    return false;
+  };
+  isForOfStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isImportDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isImportDefaultSpecifier = function(opts?: Object): boolean {
+    return false;
+  };
+  isImportNamespaceSpecifier = function(opts?: Object): boolean {
+    return false;
+  };
+  isImportSpecifier = function(opts?: Object): boolean {
+    return false;
+  };
+  isMetaProperty = function(opts?: Object): boolean {
+    return false;
+  };
+  isClassMethod = function(opts?: Object): boolean {
+    return false;
+  };
+  isObjectPattern = function(opts?: Object): boolean {
+    return false;
+  };
+  isSpreadElement = function(opts?: Object): boolean {
+    return false;
+  };
+  isSuper = function(opts?: Object): boolean {
+    return false;
+  };
+  isTaggedTemplateExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isTemplateElement = function(opts?: Object): boolean {
+    return false;
+  };
+  isTemplateLiteral = function(opts?: Object): boolean {
+    return false;
+  };
+  isYieldExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isAnyTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isArrayTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isBooleanTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isBooleanLiteralTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isNullLiteralTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isClassImplements = function(opts?: Object): boolean {
+    return false;
+  };
+  isDeclareClass = function(opts?: Object): boolean {
+    return false;
+  };
+  isDeclareFunction = function(opts?: Object): boolean {
+    return false;
+  };
+  isDeclareInterface = function(opts?: Object): boolean {
+    return false;
+  };
+  isDeclareModule = function(opts?: Object): boolean {
+    return false;
+  };
+  isDeclareModuleExports = function(opts?: Object): boolean {
+    return false;
+  };
+  isDeclareTypeAlias = function(opts?: Object): boolean {
+    return false;
+  };
+  isDeclareOpaqueType = function(opts?: Object): boolean {
+    return false;
+  };
+  isDeclareVariable = function(opts?: Object): boolean {
+    return false;
+  };
+  isDeclareExportDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isDeclareExportAllDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isDeclaredPredicate = function(opts?: Object): boolean {
+    return false;
+  };
+  isExistsTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isFunctionTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isFunctionTypeParam = function(opts?: Object): boolean {
+    return false;
+  };
+  isGenericTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isInferredPredicate = function(opts?: Object): boolean {
+    return false;
+  };
+  isInterfaceExtends = function(opts?: Object): boolean {
+    return false;
+  };
+  isInterfaceDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isInterfaceTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isIntersectionTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isMixedTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isEmptyTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isNullableTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isNumberLiteralTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isNumberTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isObjectTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isObjectTypeInternalSlot = function(opts?: Object): boolean {
+    return false;
+  };
+  isObjectTypeCallProperty = function(opts?: Object): boolean {
+    return false;
+  };
+  isObjectTypeIndexer = function(opts?: Object): boolean {
+    return false;
+  };
+  isObjectTypeProperty = function(opts?: Object): boolean {
+    return false;
+  };
+  isObjectTypeSpreadProperty = function(opts?: Object): boolean {
+    return false;
+  };
+  isOpaqueType = function(opts?: Object): boolean {
+    return false;
+  };
+  isQualifiedTypeIdentifier = function(opts?: Object): boolean {
+    return false;
+  };
+  isStringLiteralTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isStringTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isThisTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isTupleTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isTypeofTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isTypeAlias = function(opts?: Object): boolean {
+    return false;
+  };
+  isTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isTypeCastExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isTypeParameter = function(opts?: Object): boolean {
+    return false;
+  };
+  isTypeParameterDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isTypeParameterInstantiation = function(opts?: Object): boolean {
+    return false;
+  };
+  isUnionTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isVariance = function(opts?: Object): boolean {
+    return false;
+  };
+  isVoidTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXAttribute = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXClosingElement = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXElement = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXEmptyExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXExpressionContainer = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXSpreadChild = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXIdentifier = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXMemberExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXNamespacedName = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXOpeningElement = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXSpreadAttribute = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXText = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXFragment = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXOpeningFragment = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSXClosingFragment = function(opts?: Object): boolean {
+    return false;
+  };
+  isNoop = function(opts?: Object): boolean {
+    return false;
+  };
+  isParenthesizedExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isAwaitExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isBindExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isClassProperty = function(opts?: Object): boolean {
+    return false;
+  };
+  isOptionalMemberExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isPipelineTopicExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isPipelineBareFunction = function(opts?: Object): boolean {
+    return false;
+  };
+  isPipelinePrimaryTopicReference = function(opts?: Object): boolean {
+    return false;
+  };
+  isOptionalCallExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isClassPrivateProperty = function(opts?: Object): boolean {
+    return false;
+  };
+  isClassPrivateMethod = function(opts?: Object): boolean {
+    return false;
+  };
+  isImport = function(opts?: Object): boolean {
+    return false;
+  };
+  isDecorator = function(opts?: Object): boolean {
+    return false;
+  };
+  isDoExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isExportDefaultSpecifier = function(opts?: Object): boolean {
+    return false;
+  };
+  isExportNamespaceSpecifier = function(opts?: Object): boolean {
+    return false;
+  };
+  isPrivateName = function(opts?: Object): boolean {
+    return false;
+  };
+  isBigIntLiteral = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSParameterProperty = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSDeclareFunction = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSDeclareMethod = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSQualifiedName = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSCallSignatureDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSConstructSignatureDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSPropertySignature = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSMethodSignature = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSIndexSignature = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSAnyKeyword = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSUnknownKeyword = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSNumberKeyword = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSObjectKeyword = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSBooleanKeyword = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSStringKeyword = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSSymbolKeyword = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSVoidKeyword = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSUndefinedKeyword = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSNullKeyword = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSNeverKeyword = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSThisType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSFunctionType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSConstructorType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSTypeReference = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSTypePredicate = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSTypeQuery = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSTypeLiteral = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSArrayType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSTupleType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSOptionalType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSRestType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSUnionType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSIntersectionType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSConditionalType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSInferType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSParenthesizedType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSTypeOperator = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSIndexedAccessType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSMappedType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSLiteralType = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSExpressionWithTypeArguments = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSInterfaceDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSInterfaceBody = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSTypeAliasDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSAsExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSTypeAssertion = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSEnumDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSEnumMember = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSModuleDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSModuleBlock = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSImportEqualsDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSExternalModuleReference = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSNonNullExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSExportAssignment = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSNamespaceExportDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSTypeAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSTypeParameterInstantiation = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSTypeParameterDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSTypeParameter = function(opts?: Object): boolean {
+    return false;
+  };
+
+  isExpression = function(opts?: Object): boolean {
+    return false;
+  };
+  isBinary = function(opts?: Object): boolean {
+    return false;
+  };
+  isScopable = function(opts?: Object): boolean {
+    return false;
+  };
+  isBlockParent = function(opts?: Object): boolean {
+    return false;
+  };
+  isBlock = function(opts?: Object): boolean {
+    return false;
+  };
+  isStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isTerminatorless = function(opts?: Object): boolean {
+    return false;
+  };
+  isCompletionStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isConditional = function(opts?: Object): boolean {
+    return false;
+  };
+  isLoop = function(opts?: Object): boolean {
+    return false;
+  };
+  isWhile = function(opts?: Object): boolean {
+    return false;
+  };
+  isExpressionWrapper = function(opts?: Object): boolean {
+    return false;
+  };
+  isFor = function(opts?: Object): boolean {
+    return false;
+  };
+  isForXStatement = function(opts?: Object): boolean {
+    return false;
+  };
+  isFunction = function(opts?: Object): boolean {
+    return false;
+  };
+  isFunctionParent = function(opts?: Object): boolean {
+    return false;
+  };
+  isPureish = function(opts?: Object): boolean {
+    return false;
+  };
+  isDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isPatternLike = function(opts?: Object): boolean {
+    return false;
+  };
+  isLVal = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSEntityName = function(opts?: Object): boolean {
+    return false;
+  };
+  isLiteral = function(opts?: Object): boolean {
+    return false;
+  };
+  isImmutable = function(opts?: Object): boolean {
+    return false;
+  };
+  isUserWhitespacable = function(opts?: Object): boolean {
+    return false;
+  };
+  isMethod = function(opts?: Object): boolean {
+    return false;
+  };
+  isObjectMember = function(opts?: Object): boolean {
+    return false;
+  };
+  isProperty = function(opts?: Object): boolean {
+    return false;
+  };
+  isUnaryLike = function(opts?: Object): boolean {
+    return false;
+  };
+  isPattern = function(opts?: Object): boolean {
+    return false;
+  };
+  isClass = function(opts?: Object): boolean {
+    return false;
+  };
+  isModuleDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isExportDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isModuleSpecifier = function(opts?: Object): boolean {
+    return false;
+  };
+  isFlow = function(opts?: Object): boolean {
+    return false;
+  };
+  isFlowType = function(opts?: Object): boolean {
+    return false;
+  };
+  isFlowBaseAnnotation = function(opts?: Object): boolean {
+    return false;
+  };
+  isFlowDeclaration = function(opts?: Object): boolean {
+    return false;
+  };
+  isFlowPredicate = function(opts?: Object): boolean {
+    return false;
+  };
+  isJSX = function(opts?: Object): boolean {
+    return false;
+  };
+  isPrivate = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSTypeElement = function(opts?: Object): boolean {
+    return false;
+  };
+  isTSType = function(opts?: Object): boolean {
+    return false;
+  };
+  isNumberLiteral = function(opts?: Object): boolean {
+    return false;
+  };
+  isRegexLiteral = function(opts?: Object): boolean {
+    return false;
+  };
+  isRestProperty = function(opts?: Object): boolean {
+    return false;
+  };
+  isSpreadProperty = function(opts?: Object): boolean {
+    return false;
+  };
 }
 
 for (const type of (t.TYPES: Array<string>)) {

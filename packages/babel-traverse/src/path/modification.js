@@ -37,9 +37,10 @@ export function insertBefore(nodes: Array<NodePath>): Array<NodePath> {
   } else if (Array.isArray(this.container)) {
     return this._containerInsertBefore(nodes);
   } else if (this.isStatementOrBlock()) {
+    const node = this.node;
     const shouldInsertCurrentNode =
       this.node &&
-      (!this.isExpressionStatement() || this.node.expression != null);
+      (this.node.expression != null || !this.isExpressionStatement());
 
     this.replaceWith(
       t.blockStatement(shouldInsertCurrentNode ? [this.node] : []),
@@ -61,6 +62,8 @@ export function _containerInsert(
 
   const paths = [];
 
+  // Is there any way to discriminate between NodePath objects that
+  // have Array containers and those that have Object containers? $FlowFixMe
   this.container.splice(from, 0, ...nodes);
   for (let i = 0; i < nodes.length; i++) {
     const to = from + i;
@@ -149,7 +152,7 @@ export function insertAfter(nodes: Array<NodePath>): Array<NodePath> {
   } else if (this.isStatementOrBlock()) {
     const shouldInsertCurrentNode =
       this.node &&
-      (!this.isExpressionStatement() || this.node.expression != null);
+      (this.node.expression != null || !this.isExpressionStatement());
 
     this.replaceWith(
       t.blockStatement(shouldInsertCurrentNode ? [this.node] : []),
@@ -182,12 +185,14 @@ export function updateSiblingKeys(
   }
 }
 
-export function _verifyNodeList(nodes: Array<NodePath>): Array<NodePath> {
+export function _verifyNodeList(
+  nodes: Array<NodePath> | NodePath,
+): Array<NodePath> {
   if (!nodes) {
     return [];
   }
 
-  if (nodes.constructor !== Array) {
+  if (!Array.isArray(nodes)) {
     nodes = [nodes];
   }
 
