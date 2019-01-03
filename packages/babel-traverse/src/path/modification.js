@@ -37,7 +37,6 @@ export function insertBefore(nodes: Array<NodePath>): Array<NodePath> {
   } else if (Array.isArray(this.container)) {
     return this._containerInsertBefore(nodes);
   } else if (this.isStatementOrBlock()) {
-    const node = this.node;
     const shouldInsertCurrentNode =
       this.node &&
       (this.node.expression != null || !this.isExpressionStatement());
