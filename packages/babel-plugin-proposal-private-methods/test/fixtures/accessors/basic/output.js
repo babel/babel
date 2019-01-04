@@ -6,14 +6,14 @@ function () {
   function Cl() {
     babelHelpers.classCallCheck(this, Cl);
 
-    _privateField.set(this, {
-      writable: true,
-      value: "top secret string"
-    });
-
     _privateFieldValue.set(this, {
       get: _get_privateFieldValue,
       set: _set_privateFieldValue
+    });
+
+    _privateField.set(this, {
+      writable: true,
+      value: "top secret string"
     });
 
     this.publicField = "not secret string";

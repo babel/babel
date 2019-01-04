@@ -3,13 +3,13 @@ var Cl = function Cl() {
 
   babelHelpers.classCallCheck(this, Cl);
 
+  _privateFieldValue.set(this, {
+    set: _set_privateFieldValue
+  });
+
   _privateField.set(this, {
     writable: true,
     value: 0
-  });
-
-  _privateFieldValue.set(this, {
-    set: _set_privateFieldValue
   });
 
   this.publicField = babelHelpers.classPrivateFieldGet(this, _privateFieldValue);

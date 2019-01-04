@@ -5,13 +5,13 @@ function () {
 
   function Cl() {
     babelHelpers.classCallCheck(this, Cl);
-    Object.defineProperty(this, _privateField, {
-      writable: true,
-      value: "top secret string"
-    });
     Object.defineProperty(this, _privateFieldValue, {
       get: _get_privateFieldValue,
       set: _set_privateFieldValue
+    });
+    Object.defineProperty(this, _privateField, {
+      writable: true,
+      value: "top secret string"
     });
     this.publicField = "not secret string";
   }
