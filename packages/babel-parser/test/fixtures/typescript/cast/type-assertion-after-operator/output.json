@@ -80,12 +80,12 @@
           "operator": "+",
           "right": {
             "type": "TSTypeAssertion",
-            "start": 5,
+            "start": 4,
             "end": 14,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 5
+                "column": 4
               },
               "end": {
                 "line": 1,
