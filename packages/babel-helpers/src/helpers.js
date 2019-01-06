@@ -1877,7 +1877,25 @@ helpers.privateName = helper("7.2.2")`
             original.defineProperty.apply(this, arguments);
           }
         },
+
+        decorateClass: function(elements, decorators) {
+          if (
+            decorators && decorators.length &&
+            elements.some(isPrivateElement)
+          ) {
+            throw new Error(
+              "Babel doesn't support class-level decorators " +
+              "with private elements yet."
+            );
+          }
+
+          return original.decorateClass.apply(this, arguments);
+        }
       };
+    }
+
+    function isPrivateElement(element) {
+      return isPrivateName(element.key);
     }
   }
 `;

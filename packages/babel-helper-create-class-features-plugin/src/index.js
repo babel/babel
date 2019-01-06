@@ -96,11 +96,19 @@ export function createClassFeaturePlugin({
 
         if (!props.length && !isDecorated) return;
 
-        if (loose && isDecorated && privateNames.size) {
-          throw path.buildCodeFrameError(
-            "Decorators and private elements together are " +
-              "not supported yet in loose mode.",
-          );
+        if (isDecorated && privateNames.size) {
+          if (loose) {
+            throw path.buildCodeFrameError(
+              "Decorators and private elements together are " +
+                "not supported yet in loose mode.",
+            );
+          }
+          if (hasOwnDecorators(path.node)) {
+            throw path.buildCodeFrameError(
+              "Babel doesn't support class-level decorators " +
+                "with private elements yet",
+            );
+          }
         }
 
         let ref;

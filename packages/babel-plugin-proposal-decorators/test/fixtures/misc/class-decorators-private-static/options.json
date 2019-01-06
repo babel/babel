@@ -1,0 +1,3 @@
+{
+  "throws": "Babel doesn't support class-level decorators with private elements yet"
+}

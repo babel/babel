@@ -1,0 +1,4 @@
+@deco
+class A {
+  #priv;
+}

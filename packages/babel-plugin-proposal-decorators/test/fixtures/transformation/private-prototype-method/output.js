@@ -1,4 +1,4 @@
-let A = babelHelpers.decorate([deco], function (_initialize) {
+let A = babelHelpers.decorate(null, function (_initialize) {
   "use strict";
 
   class A {
@@ -13,6 +13,11 @@ let A = babelHelpers.decorate([deco], function (_initialize) {
   return {
     F: A,
     d: [{
+      kind: "field",
+      decorators: [deco],
+      key: "prop",
+      value: void 0
+    }, {
       kind: "method",
       key: babelHelpers.privateName(_foo, "foo"),
 

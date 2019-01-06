@@ -1,5 +1,6 @@
-@deco
 class A {
+  @deco prop;
+
   #foo() {}
 
   test() {
