@@ -230,6 +230,7 @@ exports.updateWhitelist = function(filename, summary) {
         return line !== null;
       })
       .concat(toAdd)
+      .sort()
       .join("\n");
 
     return pfs.writeFile(filename, newContents, "utf-8");
