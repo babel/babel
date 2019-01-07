@@ -906,10 +906,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsParseHeritageClause(): $ReadOnlyArray<N.TsExpressionWithTypeArguments> {
-      return this.tsParseDelimitedList(
+      const originalStart = this.state.start;
+
+      const heritageElements = this.tsParseDelimitedList(
         "HeritageClauseElement",
         this.tsParseExpressionWithTypeArguments.bind(this),
       );
+
+      if (!heritageElements.length) {
+        this.raise(originalStart, "'implements' list cannot be empty.");
+      }
+
+      return heritageElements;
     }
 
     tsParseExpressionWithTypeArguments(): N.TsExpressionWithTypeArguments {
