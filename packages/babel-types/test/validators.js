@@ -136,5 +136,8 @@ describe("validators", function() {
     it("returns false if nodeType and targetType are unrelated", function() {
       expect(t.isType("ArrayExpression", "ClassBody")).toBe(false);
     });
+    it("returns false if nodeType is undefined", function() {
+      expect(t.isType(undefined, "Expression")).toBe(false);
+    });
   });
 });
