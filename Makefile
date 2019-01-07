@@ -1,6 +1,6 @@
 MAKEFLAGS = -j1
-FLOW_COMMIT = e192e1a4793dd8e43415fbfe8046d832cb513c8b
-TEST262_COMMIT = 238c88d4a084d9928372954e2fec54af2c951281
+FLOW_COMMIT = 2ac56861e3ceff9ca406ae586fbafb3480c6c0b7
+TEST262_COMMIT = f77b930e6720f8005d5302acaedd434e13bf2fe2
 
 # Fix color output until TravisCI fixes https://github.com/travis-ci/travis-ci/issues/7967
 export FORCE_COLOR = true
