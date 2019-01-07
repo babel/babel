@@ -896,6 +896,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseTypeAssertion(): N.TsTypeAssertion {
       const node: N.TsTypeAssertion = this.startNode();
+      this.next(); // <
       // Not actually necessary to set state.inType because we never reach here if JSX plugin is enabled,
       // but need `tsInType` to satisfy the assertion in `tsParseType`.
       node.typeAnnotation = this.tsInType(() => this.tsParseType());
@@ -2001,7 +2002,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     // Handle type assertions
     parseMaybeUnary(refShorthandDefaultPos?: ?Pos): N.Expression {
-      if (!this.hasPlugin("jsx") && this.eatRelational("<")) {
+      if (!this.hasPlugin("jsx") && this.isRelational("<")) {
         return this.tsParseTypeAssertion();
       } else {
         return super.parseMaybeUnary(refShorthandDefaultPos);

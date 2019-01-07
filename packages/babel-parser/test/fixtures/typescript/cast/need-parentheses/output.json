@@ -59,12 +59,12 @@
           },
           "object": {
             "type": "TSTypeAssertion",
-            "start": 2,
+            "start": 1,
             "end": 6,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 2
+                "column": 1
               },
               "end": {
                 "line": 1,
