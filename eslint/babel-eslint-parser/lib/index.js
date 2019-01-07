@@ -13,7 +13,3 @@ exports.parseForESLint = function(code, options) {
 
   return require("./parse-with-scope")(code, options);
 };
-
-exports.parseNoPatch = function(code, options) {
-  return require("./parse")(code, options);
-};

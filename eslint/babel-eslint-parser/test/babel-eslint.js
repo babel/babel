@@ -536,12 +536,3 @@ describe("babylon-to-espree", () => {
     });
   });
 });
-
-describe("Public API", () => {
-  it("exports a parseNoPatch function", () => {
-    assertImplementsAST(
-      espree.parse("foo"),
-      babelEslint.parseNoPatch("foo", {})
-    );
-  });
-});
