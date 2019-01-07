@@ -117,6 +117,8 @@ export default class Buffer {
     filename: ?string,
     force?: boolean,
   ): void {
+    if (!str) return;
+
     // If there the line is ending, adding a new mapping marker is redundant
     if (this._map && str[0] !== "\n") {
       this._map.mark(
