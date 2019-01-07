@@ -905,19 +905,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "TSTypeAssertion");
     }
 
-    tsParseHeritageClause(): $ReadOnlyArray<N.TsExpressionWithTypeArguments> {
+    tsParseHeritageClause(
+      descriptor: string,
+    ): $ReadOnlyArray<N.TsExpressionWithTypeArguments> {
       const originalStart = this.state.start;
 
-      const heritageElements = this.tsParseDelimitedList(
+      const delimitedList = this.tsParseDelimitedList(
         "HeritageClauseElement",
         this.tsParseExpressionWithTypeArguments.bind(this),
       );
 
-      if (!heritageElements.length) {
-        this.raise(originalStart, "'implements' list cannot be empty.");
+      if (!delimitedList.length) {
+        this.raise(originalStart, `'${descriptor}' list cannot be empty.`);
       }
 
-      return heritageElements;
+      return delimitedList;
     }
 
     tsParseExpressionWithTypeArguments(): N.TsExpressionWithTypeArguments {
@@ -938,7 +940,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.id = this.parseIdentifier();
       node.typeParameters = this.tsTryParseTypeParameters();
       if (this.eat(tt._extends)) {
-        node.extends = this.tsParseHeritageClause();
+        node.extends = this.tsParseHeritageClause("extends");
       }
       const body: N.TSInterfaceBody = this.startNode();
       body.body = this.tsInType(this.tsParseObjectTypeMembers.bind(this));
@@ -1887,7 +1889,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         node.superTypeParameters = this.tsParseTypeArguments();
       }
       if (this.eatContextual("implements")) {
-        node.implements = this.tsParseHeritageClause();
+        node.implements = this.tsParseHeritageClause("implements");
       }
     }
 

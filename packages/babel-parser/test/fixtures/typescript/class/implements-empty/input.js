@@ -1,2 +1,2 @@
-class Foo extends Bar implements {
+class Foo implements {
 }
