@@ -14,6 +14,7 @@
   <a href="https://codecov.io/github/babel/babel"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/babel/babel/master.svg?maxAge=43200"></a>
   <a href="https://slack.babeljs.io/"><img alt="Slack Status" src="https://slack.babeljs.io/badge.svg"></a>
   <a href="https://www.npmjs.com/package/babel-core"><img alt="npm Downloads" src="https://img.shields.io/npm/dm/babel-core.svg?maxAge=43200"></a>
+  <a href="https://twitter.com/intent/follow?screen_name=babeljs"><img alt="Follow on Twitter" src="https://img.shields.io/twitter/follow/babeljs.svg?style=social&label=Follow"></a>
 </p>
 
 <h2 align="center">Supporting Babel</h2>
