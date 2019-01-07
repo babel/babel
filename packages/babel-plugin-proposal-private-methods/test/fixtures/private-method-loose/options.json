@@ -3,7 +3,7 @@
     [
       "external-helpers",
       {
-        "helperVersion": "7.1.6"
+        "helperVersion": "7.1000.0"
       }
     ],
     ["proposal-private-methods", { "loose": true }],
