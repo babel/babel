@@ -85,6 +85,10 @@ export function compile(filename, opts) {
   });
 }
 
+export function deleteFile(path) {
+  fs.unlinkSync(path);
+}
+
 export function deleteDir(path) {
   if (fs.existsSync(path)) {
     fs.readdirSync(path).forEach(function(file) {
@@ -94,7 +98,7 @@ export function deleteDir(path) {
         deleteDir(curPath);
       } else {
         // delete file
-        fs.unlinkSync(curPath);
+        deleteFile(curPath);
       }
     });
     fs.rmdirSync(path);
