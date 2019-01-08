@@ -1,4 +1,5 @@
 {
+  "envName": "env-from-preset",
   "presets": [
     [
       "../../../../lib",
