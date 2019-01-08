@@ -90,6 +90,23 @@ export default async function({ cliOptions, babelOptions }) {
     }
   }
 
+  async function unlinkDir(src, base) {
+    const relative = path.relative(base, src);
+    const dest = getDest(relative, base);
+
+    try {
+      util.deleteDir(dest);
+      return true;
+    } catch (err) {
+      if (cliOptions.watch) {
+        console.error(err);
+        return false;
+      }
+
+      throw err;
+    }
+  }
+
   function getDest(filename, base) {
     if (cliOptions.relative) {
       return path.join(base, cliOptions.outDir, filename);
@@ -185,6 +202,17 @@ export default async function({ cliOptions, babelOptions }) {
         unlink(
           filename,
           filename === filenameOrDir
+            ? path.dirname(filenameOrDir)
+            : filenameOrDir,
+        ).catch(err => {
+          console.error(err);
+        });
+      });
+
+      watcher.on("unlinkDir", dirname => {
+        unlinkDir(
+          dirname,
+          dirname === filenameOrDir
             ? path.dirname(filenameOrDir)
             : filenameOrDir,
         ).catch(err => {
