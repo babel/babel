@@ -220,26 +220,28 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return result;
     }
 
-    tsParseEntityName(allowReservedWords: boolean): N.TsEntityName {
-      let entity: N.TsEntityName;
-      // TODO: package this into its own tsParse function
-      if (this.state.type === tt._import) {
-        entity = this.startNode();
-        this.next();
-        if (!this.match(tt.parenL)) {
-          this.unexpected(null, tt.parenL);
-        }
-        this.eat(tt.parenL);
-        const args = this.parseCallExpressionArguments(tt.parenR, false, {
-          start: -1,
-        });
-        // TODO: assert args is length 1
-        entity.argument = args[0];
-        // TODO: make a TS-specific node type
-        entity = this.finishNode(entity, "Import");
-      } else {
-        entity = this.parseIdentifier();
+    tsParseImportType(allowReservedWords: boolean): N.TsImportType {
+      const node: N.TsImportType = this.startNode();
+      this.expect(tt._import);
+      this.expect(tt.parenL);
+      if (!this.match(tt.string)) {
+        throw this.unexpected();
       }
+      node.argument = this.parseLiteral(this.state.value, "StringLiteral");
+      this.expect(tt.parenR);
+
+      if (this.match(tt.dot)) {
+        this.eat(tt.dot);
+        node.qualifier = this.tsParseEntityName(allowReservedWords);
+      }
+      if (!this.hasPrecedingLineBreak() && this.isRelational("<")) {
+        node.typeParameters = this.tsParseTypeArguments();
+      }
+      return this.finishNode(node, "TSImportType");
+    }
+
+    tsParseEntityName(allowReservedWords: boolean): N.TsEntityName {
+      let entity: N.TsEntityName = this.parseIdentifier();
       while (this.eat(tt.dot)) {
         const node: N.TsQualifiedName = this.startNodeAtNode(entity);
         node.left = entity;
@@ -275,7 +277,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseTypeQuery(): N.TsTypeQuery {
       const node: N.TsTypeQuery = this.startNode();
       this.expect(tt._typeof);
-      node.exprName = this.tsParseEntityName(/* allowReservedWords */ true);
+      if (this.match(tt._import)) {
+        node.exprName = this.tsParseImportType(/* allowReservedWords */ true);
+      } else {
+        node.exprName = this.tsParseEntityName(/* allowReservedWords */ true);
+      }
       return this.finishNode(node, "TSTypeQuery");
     }
 
@@ -664,10 +670,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case tt._typeof:
           return this.tsParseTypeQuery();
         case tt._import:
-          // TODO: should this really be the same as parsing the RHS of typeof?
-          // XXX: TSQualifiedName is not allowed to be a return type of this function but import() references
-          // are allowed to have dots to access exported members
-          return this.tsParseEntityName(true);
+          return this.tsParseImportType(true);
         case tt.braceL:
           return this.tsLookAhead(this.tsIsStartOfMappedType.bind(this))
             ? this.tsParseMappedType()

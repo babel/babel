@@ -1286,6 +1286,13 @@ export type TsLiteralType = TsTypeBase & {
   literal: NumericLiteral | StringLiteral | BooleanLiteral,
 };
 
+export type TsImportType = TsTypeBase & {
+  type: "TsImportType",
+  argument: StringLiteral,
+  qualifier?: TsEntityName,
+  typeParameter?: TsTypeParameter,
+};
+
 // ================
 // TypeScript declarations
 // ================
