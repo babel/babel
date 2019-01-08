@@ -1146,6 +1146,7 @@ export type TsType =
   | TsIndexedAccessType
   | TsMappedType
   | TsLiteralType
+  | TsImportType
   // TODO: This probably shouldn't be included here.
   | TsTypePredicate;
 
@@ -1201,7 +1202,7 @@ export type TsTypePredicate = TsTypeBase & {
 // `typeof` operator
 export type TsTypeQuery = TsTypeBase & {
   type: "TSTypeQuery",
-  exprName: TsEntityName,
+  exprName: TsEntityName | TsImportType,
 };
 
 export type TsTypeLiteral = TsTypeBase & {
@@ -1290,7 +1291,7 @@ export type TsImportType = TsTypeBase & {
   type: "TsImportType",
   argument: StringLiteral,
   qualifier?: TsEntityName,
-  typeParameter?: TsTypeParameter,
+  typeParameters?: TsTypeParameterInstantiation,
 };
 
 // ================
