@@ -2001,10 +2001,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       // Correct TypeScript code should have at least 1 type parameter, but don't crash on bad code.
       if (typeParameters && typeParameters.params.length !== 0) {
-        this.resetStartLocationFromNode(
-          arrowExpression,
-          typeParameters.params[0],
-        );
+        this.resetStartLocationFromNode(arrowExpression, typeParameters);
       }
       arrowExpression.typeParameters = typeParameters;
       return arrowExpression;

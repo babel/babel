@@ -45,12 +45,12 @@
         },
         "expression": {
           "type": "ArrowFunctionExpression",
-          "start": 62,
+          "start": 61,
           "end": 78,
           "loc": {
             "start": {
               "line": 2,
-              "column": 1
+              "column": 0
             },
             "end": {
               "line": 2,
