@@ -234,7 +234,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.eat(tt.dot);
         node.qualifier = this.tsParseEntityName(allowReservedWords);
       }
-      if (!this.hasPrecedingLineBreak() && this.isRelational("<")) {
+      if (this.isRelational("<")) {
         node.typeParameters = this.tsParseTypeArguments();
       }
       return this.finishNode(node, "TSImportType");
