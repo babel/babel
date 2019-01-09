@@ -1653,10 +1653,6 @@ helpers.decorate = helper("7.1.5")`
         configurable: true,
         enumerable: false,
       };
-      Object.defineProperty(def.value, "name", {
-        value: typeof key === "symbol" ? "" : key,
-        configurable: true,
-      });
     } else if (def.kind === "get") {
       descriptor = { get: def.value, configurable: true, enumerable: false };
     } else if (def.kind === "set") {
