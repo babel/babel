@@ -520,17 +520,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       //   No mandatory elements may follow optional elements
       //   If there's a rest element, it must be at the end of the tuple
       let seenOptionalElement = false;
-      node.elementTypes.forEach((elementNode, i) => {
-        if (elementNode.type === "TSRestType") {
-          if (i !== node.elementTypes.length - 1) {
-            this.raise(
-              elementNode.start,
-              "A rest element must be last in a tuple type.",
-            );
-          }
-        } else if (elementNode.type === "TSOptionalType") {
+      node.elementTypes.forEach(elementNode => {
+        if (elementNode.type === "TSOptionalType") {
           seenOptionalElement = true;
-        } else if (seenOptionalElement) {
+        } else if (seenOptionalElement && elementNode.type !== "TSRestType") {
           this.raise(
             elementNode.start,
             "A required element cannot follow an optional element.",
