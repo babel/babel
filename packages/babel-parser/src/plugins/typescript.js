@@ -227,7 +227,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (!this.match(tt.string)) {
         throw this.unexpected(
           null,
-          "Argument in a type import must be an string literal",
+          "Argument in a type import must be a string literal",
         );
       }
       node.argument = this.parseLiteral(this.state.value, "StringLiteral");
