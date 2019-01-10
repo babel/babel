@@ -185,7 +185,7 @@ defineType("TSTypeQuery", {
   aliases: ["TSType"],
   visitor: ["exprName"],
   fields: {
-    exprName: validateType("TSEntityName"),
+    exprName: validateType(["TSEntityName", "TSImportType"]),
   },
 });
 
@@ -411,7 +411,7 @@ defineType("TSImportType", {
   fields: {
     argument: validateType("StringLiteral"),
     qualifier: validateOptionalType("TSEntityName"),
-    typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
+    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
 
