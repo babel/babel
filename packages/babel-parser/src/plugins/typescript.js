@@ -225,7 +225,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       this.expect(tt._import);
       this.expect(tt.parenL);
       if (!this.match(tt.string)) {
-        throw this.unexpected();
+        throw this.unexpected(
+          null,
+          "Argument in a type import must be an string literal",
+        );
       }
       node.argument = this.parseLiteral(this.state.value, "StringLiteral");
       this.expect(tt.parenR);
