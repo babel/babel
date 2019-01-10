@@ -220,7 +220,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return result;
     }
 
-    tsParseImportType(allowReservedWords: boolean): N.TsImportType {
+    tsParseImportType(): N.TsImportType {
       const node: N.TsImportType = this.startNode();
       this.expect(tt._import);
       this.expect(tt.parenL);
@@ -230,9 +230,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.argument = this.parseLiteral(this.state.value, "StringLiteral");
       this.expect(tt.parenR);
 
-      if (this.match(tt.dot)) {
-        this.eat(tt.dot);
-        node.qualifier = this.tsParseEntityName(allowReservedWords);
+      if (this.eat(tt.dot)) {
+        node.qualifier = this.tsParseEntityName(/* allowReservedWords */ true);
       }
       if (this.isRelational("<")) {
         node.typeParameters = this.tsParseTypeArguments();
@@ -278,7 +277,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const node: N.TsTypeQuery = this.startNode();
       this.expect(tt._typeof);
       if (this.match(tt._import)) {
-        node.exprName = this.tsParseImportType(/* allowReservedWords */ true);
+        node.exprName = this.tsParseImportType();
       } else {
         node.exprName = this.tsParseEntityName(/* allowReservedWords */ true);
       }
@@ -670,7 +669,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case tt._typeof:
           return this.tsParseTypeQuery();
         case tt._import:
-          return this.tsParseImportType(true);
+          return this.tsParseImportType();
         case tt.braceL:
           return this.tsLookAhead(this.tsIsStartOfMappedType.bind(this))
             ? this.tsParseMappedType()
