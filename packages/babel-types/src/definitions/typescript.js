@@ -410,7 +410,7 @@ defineType("TSImportType", {
   visitor: ["argument", "qualifier", "typeParameters"],
   fields: {
     argument: validateType("StringLiteral"),
-    qualifier: validateOptionalType("TsEntityName"),
+    qualifier: validateOptionalType("TSEntityName"),
     typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
   },
 });
