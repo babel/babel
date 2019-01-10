@@ -172,22 +172,24 @@ export default class ExpressionParser extends LValParser {
 
       this.checkLVal(left, undefined, undefined, "assignment expression");
 
-      if (left.extra && left.extra.parenthesized) {
-        let errorMsg;
-        if (left.type === "ObjectPattern") {
-          errorMsg = "`({a}) = 0` use `({a} = 0)`";
-        } else if (left.type === "ArrayPattern") {
-          errorMsg = "`([a]) = 0` use `([a] = 0)`";
-        }
-        if (errorMsg) {
-          this.raise(
-            left.start,
-            `You're trying to assign to a parenthesized expression, eg. instead of ${errorMsg}`,
-          );
-        }
+      let patternErrorMsg;
+      let elementName;
+      if (left.type === "ObjectPattern") {
+        patternErrorMsg = "`({a}) = 0` use `({a} = 0)`";
+        elementName = "property";
+      } else if (left.type === "ArrayPattern") {
+        patternErrorMsg = "`([a]) = 0` use `([a] = 0)`";
+        elementName = "element";
       }
 
-      this.checkCommaAfterRestFromSpread("element");
+      if (patternErrorMsg && left.extra && left.extra.parenthesized) {
+        this.raise(
+          left.start,
+          `You're trying to assign to a parenthesized expression, eg. instead of ${patternErrorMsg}`,
+        );
+      }
+
+      if (elementName) this.checkCommaAfterRestFromSpread(elementName);
       this.state.commaAfterSpreadAt = oldCommaAfterSpreadAt;
 
       this.next();
@@ -1428,7 +1430,7 @@ export default class ExpressionParser extends LValParser {
         node.properties.push(prop);
         if (isPattern) {
           this.toAssignable(prop, true, "object pattern");
-          this.checkCommaAfterRest(tt.braceR, "element");
+          this.checkCommaAfterRest(tt.braceR, "property");
           this.expect(tt.braceR);
           break;
         }
@@ -1898,10 +1900,6 @@ export default class ExpressionParser extends LValParser {
         spreadNodeStartPos,
         spreadNodeStartLoc,
       );
-
-      if (this.state.commaAfterSpreadAt === -1 && this.match(tt.comma)) {
-        this.state.commaAfterSpreadAt = this.state.start;
-      }
     } else {
       elt = this.parseMaybeAssign(
         false,

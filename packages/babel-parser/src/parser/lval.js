@@ -193,10 +193,10 @@ export default class LValParser extends NodeUtils {
 
   // Parses spread element.
 
-  parseSpread<T: RestElement | SpreadElement>(
+  parseSpread(
     refShorthandDefaultPos: ?Pos,
     refNeedsArrowPos?: ?Pos,
-  ): T {
+  ): SpreadElement {
     const node = this.startNode();
     this.next();
     node.argument = this.parseMaybeAssign(
@@ -205,6 +205,11 @@ export default class LValParser extends NodeUtils {
       undefined,
       refNeedsArrowPos,
     );
+
+    if (this.state.commaAfterSpreadAt === -1 && this.match(tt.comma)) {
+      this.state.commaAfterSpreadAt = this.state.start;
+    }
+
     return this.finishNode(node, "SpreadElement");
   }
 
