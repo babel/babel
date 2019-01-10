@@ -1,6 +1,6 @@
 "use strict";
 
-const BABEL_VISITOR_KEYS = require("@babel/types").VISITOR_KEYS;
+const BABEL_VISITOR_KEYS = require("@babel/core").types.VISITOR_KEYS;
 const ESLINT_VISITOR_KEYS = require("eslint-visitor-keys").KEYS;
 
 module.exports = Object.assign(

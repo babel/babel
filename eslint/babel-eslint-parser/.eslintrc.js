@@ -1,12 +1,12 @@
+"use strict";
+
 module.exports = {
   root: true,
   extends: "babel",
-  "plugins": [
-    "prettier"
-  ],
+  plugins: ["prettier"],
   rules: {
     "max-len": "off",
-    "strict": "error",
+    strict: "error",
     "prettier/prettier": "error",
   },
   env: {
@@ -19,8 +19,8 @@ module.exports = {
     {
       files: ["test/**/*"],
       env: {
-        mocha: true
-      }
-    }
-  ]
+        mocha: true,
+      },
+    },
+  ],
 };

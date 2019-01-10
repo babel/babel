@@ -1,6 +1,6 @@
 "use strict";
 
-const t = require("@babel/types");
+const t = require("@babel/core").types;
 const escope = require("eslint-scope");
 const Definition = require("eslint-scope/lib/definition").Definition;
 const OriginalPatternVisitor = require("eslint-scope/lib/pattern-visitor");

@@ -1,6 +1,6 @@
 "use strict";
 
-const t = require("@babel/types");
+const t = require("@babel/core").types;
 const convertComments = require("./convertComments");
 
 module.exports = function(ast, traverse, code) {

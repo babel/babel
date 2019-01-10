@@ -1,6 +1,7 @@
 "use strict";
 
 const eslint = require("eslint");
+const path = require("path");
 const unpad = require("dedent");
 
 function verifyAndAssertMessagesWithSpecificESLint(
@@ -12,20 +13,17 @@ function verifyAndAssertMessagesWithSpecificESLint(
   linter
 ) {
   const config = {
-    parser: require.resolve(".."),
+    parser: require.resolve("../.."),
     rules,
     env: {
       node: true,
       es6: true,
     },
     parserOptions: {
-      ecmaVersion: 2018,
+      sourceType,
       ecmaFeatures: {
-        jsx: true,
-        experimentalObjectRestSpread: true,
         globalReturn: true,
       },
-      sourceType,
     },
   };
 
@@ -1155,10 +1153,13 @@ describe("verify", () => {
     ) {
       const overrideConfig = {
         parserOptions: {
-          ecmaFeatures: {
-            legacyDecorators: true,
-          },
           sourceType,
+          babelOptions: {
+            configFile: path.resolve(
+              __dirname,
+              "../fixtures/config/babel.config.decorators-legacy.js"
+            ),
+          },
         },
       };
       return verifyAndAssertMessages(

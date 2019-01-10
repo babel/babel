@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 // Checks if the source ast implements the target ast. Ignores extra keys on source ast
 module.exports = function assertImplementsAST(target, source, path) {
@@ -24,8 +24,9 @@ module.exports = function assertImplementsAST(target, source, path) {
     target.constructor.name !== source.constructor.name
   ) {
     error(
-      `object have different constructors (${target.constructor
-        .name} !== ${source.constructor.name}`
+      `object have different constructors (${target.constructor.name} !== ${
+        source.constructor.name
+      }`
     );
   } else if (typeA === "object") {
     const keysTarget = Object.keys(target);

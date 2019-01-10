@@ -1,12 +1,12 @@
 "use strict";
 
 const assert = require("assert");
-const babelEslint = require("..");
+const babelEslint = require("../..");
 const espree = require("espree");
 const escope = require("eslint-scope");
 const util = require("util");
 const unpad = require("dedent");
-const assertImplementsAST = require("./fixtures/assert-implements-ast");
+const assertImplementsAST = require("../helpers/assert-implements-ast");
 
 function lookup(obj, keypath, backwardsDepth) {
   if (!keypath) {
