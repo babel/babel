@@ -185,7 +185,7 @@ defineType("TSTypeQuery", {
   aliases: ["TSType"],
   visitor: ["exprName"],
   fields: {
-    exprName: validateType("TSEntityName"),
+    exprName: validateType(["TSEntityName", "TSImportType"]),
   },
 });
 
@@ -402,6 +402,16 @@ defineType("TSModuleBlock", {
   visitor: ["body"],
   fields: {
     body: validateArrayOfType("Statement"),
+  },
+});
+
+defineType("TSImportType", {
+  aliases: ["TSType"],
+  visitor: ["argument", "qualifier", "typeParameters"],
+  fields: {
+    argument: validateType("StringLiteral"),
+    qualifier: validateOptionalType("TSEntityName"),
+    typeParameters: validateOptionalType("TSTypeParameterInstantiation"),
   },
 });
 
