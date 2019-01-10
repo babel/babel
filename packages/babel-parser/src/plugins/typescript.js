@@ -220,6 +220,28 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return result;
     }
 
+    tsParseImportType(): N.TsImportType {
+      const node: N.TsImportType = this.startNode();
+      this.expect(tt._import);
+      this.expect(tt.parenL);
+      if (!this.match(tt.string)) {
+        throw this.unexpected(
+          null,
+          "Argument in a type import must be a string literal",
+        );
+      }
+      node.argument = this.parseLiteral(this.state.value, "StringLiteral");
+      this.expect(tt.parenR);
+
+      if (this.eat(tt.dot)) {
+        node.qualifier = this.tsParseEntityName(/* allowReservedWords */ true);
+      }
+      if (this.isRelational("<")) {
+        node.typeParameters = this.tsParseTypeArguments();
+      }
+      return this.finishNode(node, "TSImportType");
+    }
+
     tsParseEntityName(allowReservedWords: boolean): N.TsEntityName {
       let entity: N.TsEntityName = this.parseIdentifier();
       while (this.eat(tt.dot)) {
@@ -257,7 +279,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     tsParseTypeQuery(): N.TsTypeQuery {
       const node: N.TsTypeQuery = this.startNode();
       this.expect(tt._typeof);
-      node.exprName = this.tsParseEntityName(/* allowReservedWords */ true);
+      if (this.match(tt._import)) {
+        node.exprName = this.tsParseImportType();
+      } else {
+        node.exprName = this.tsParseEntityName(/* allowReservedWords */ true);
+      }
       return this.finishNode(node, "TSTypeQuery");
     }
 
@@ -645,6 +671,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
         case tt._typeof:
           return this.tsParseTypeQuery();
+        case tt._import:
+          return this.tsParseImportType();
         case tt.braceL:
           return this.tsLookAhead(this.tsIsStartOfMappedType.bind(this))
             ? this.tsParseMappedType()
