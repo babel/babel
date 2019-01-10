@@ -187,13 +187,7 @@ export default class ExpressionParser extends LValParser {
         }
       }
 
-      if (this.state.commaAfterSpreadAt > -1) {
-        this.raise(
-          this.state.commaAfterSpreadAt,
-          "A trailing comma is not permitted after the rest element",
-        );
-      }
-
+      this.checkCommaAfterRestFromSpread("element");
       this.state.commaAfterSpreadAt = oldCommaAfterSpreadAt;
 
       this.next();
@@ -610,12 +604,7 @@ export default class ExpressionParser extends LValParser {
       if (possibleAsync && this.shouldParseAsyncArrow()) {
         state.stop = true;
 
-        if (this.state.commaAfterSpreadAt > -1) {
-          this.raise(
-            this.state.commaAfterSpreadAt,
-            "A trailing comma is not permitted after the rest element",
-          );
-        }
+        this.checkCommaAfterRestFromSpread("parameter");
 
         node = this.parseAsyncArrowFromCallExpression(
           this.startNodeAt(startPos, startLoc),

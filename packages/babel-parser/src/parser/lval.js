@@ -438,4 +438,13 @@ export default class LValParser extends NodeUtils {
       this.raise(this.state.start, errorMessage);
     }
   }
+
+  checkCommaAfterRestFromSpread(kind: string): void {
+    if (this.state.commaAfterSpreadAt > -1) {
+      this.raise(
+        this.state.commaAfterSpreadAt,
+        `A trailing comma is not permitted after the rest ${kind}`,
+      );
+    }
+  }
 }
