@@ -122,7 +122,7 @@ export default class LValParser extends NodeUtils {
 
       this.raise(prop.key.start, error);
     } else if (prop.type === "SpreadElement" && !isLast) {
-      this.raise(prop.start, "The rest element must be the last element");
+      this.raiseRestNotLast(prop.start, "property");
     } else {
       this.toAssignable(prop, isBinding, "object destructuring pattern");
     }
@@ -159,10 +159,12 @@ export default class LValParser extends NodeUtils {
     }
     for (let i = 0; i < end; i++) {
       const elt = exprList[i];
-      if (elt && elt.type === "SpreadElement") {
-        this.raise(elt.start, "The rest element must be the last element");
+      if (elt) {
+        this.toAssignable(elt, isBinding, contextDescription);
+        if (elt.type === "RestElement") {
+          this.raiseRestNotLast(elt.start, "element");
+        }
       }
-      if (elt) this.toAssignable(elt, isBinding, contextDescription);
     }
     return exprList;
   }
@@ -435,21 +437,25 @@ export default class LValParser extends NodeUtils {
 
   checkCommaAfterRest(close: TokenType, kind: string): void {
     if (this.match(tt.comma)) {
-      const nextTokenType = this.lookahead().type;
-      const errorMessage =
-        nextTokenType === close
-          ? `A trailing comma is not permitted after the rest ${kind}`
-          : `The rest ${kind} must be the last ${kind}`;
-      this.raise(this.state.start, errorMessage);
+      if (this.lookahead().type === close) {
+        this.raiseCommaAfterRest(this.state.start, kind);
+      } else {
+        this.raiseRestNotLast(this.state.start, kind);
+      }
     }
   }
 
   checkCommaAfterRestFromSpread(kind: string): void {
     if (this.state.commaAfterSpreadAt > -1) {
-      this.raise(
-        this.state.commaAfterSpreadAt,
-        `A trailing comma is not permitted after the rest ${kind}`,
-      );
+      this.raiseCommaAfterRest(this.state.commaAfterSpreadAt, kind);
     }
+  }
+
+  raiseCommaAfterRest(pos: number, kind: string) {
+    this.raise(pos, `A trailing comma is not permitted after the rest ${kind}`);
+  }
+
+  raiseRestNotLast(pos: number, kind: string) {
+    this.raise(pos, `The rest ${kind} must be the last ${kind}`);
   }
 }
