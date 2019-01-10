@@ -130,6 +130,9 @@ export default class ExpressionParser extends LValParser {
       return left;
     }
 
+    const oldCommaAfterSpreadAt = this.state.commaAfterSpreadAt;
+    this.state.commaAfterSpreadAt = -1;
+
     let failOnShorthandAssign;
     if (refShorthandDefaultPos) {
       failOnShorthandAssign = false;
@@ -184,12 +187,23 @@ export default class ExpressionParser extends LValParser {
         }
       }
 
+      if (this.state.commaAfterSpreadAt > -1) {
+        this.raise(
+          this.state.commaAfterSpreadAt,
+          "A trailing comma is not permitted after the rest element",
+        );
+      }
+
+      this.state.commaAfterSpreadAt = oldCommaAfterSpreadAt;
+
       this.next();
       node.right = this.parseMaybeAssign(noIn);
       return this.finishNode(node, "AssignmentExpression");
     } else if (failOnShorthandAssign && refShorthandDefaultPos.start) {
       this.unexpected(refShorthandDefaultPos.start);
     }
+
+    this.state.commaAfterSpreadAt = oldCommaAfterSpreadAt;
 
     return left;
   }
@@ -580,15 +594,12 @@ export default class ExpressionParser extends LValParser {
       let node = this.startNodeAt(startPos, startLoc);
       node.callee = base;
 
-      // TODO: Clean up/merge this into `this.state` or a class like acorn's
-      // `DestructuringErrors` alongside refShorthandDefaultPos and
-      // refNeedsArrowPos.
-      const refTrailingCommaPos: Pos = { start: -1 };
+      const oldCommaAfterSpreadAt = this.state.commaAfterSpreadAt;
+      this.state.commaAfterSpreadAt = -1;
 
       node.arguments = this.parseCallExpressionArguments(
         tt.parenR,
         possibleAsync,
-        refTrailingCommaPos,
       );
       if (!state.optionalChainMember) {
         this.finishCallExpression(node);
@@ -599,9 +610,9 @@ export default class ExpressionParser extends LValParser {
       if (possibleAsync && this.shouldParseAsyncArrow()) {
         state.stop = true;
 
-        if (refTrailingCommaPos.start > -1) {
+        if (this.state.commaAfterSpreadAt > -1) {
           this.raise(
-            refTrailingCommaPos.start,
+            this.state.commaAfterSpreadAt,
             "A trailing comma is not permitted after the rest element",
           );
         }
@@ -621,6 +632,7 @@ export default class ExpressionParser extends LValParser {
       }
 
       this.state.maybeInArrowParameters = oldMaybeInArrowParameters;
+      this.state.commaAfterSpreadAt = oldCommaAfterSpreadAt;
 
       return node;
     } else if (this.match(tt.backQuote)) {
@@ -700,7 +712,6 @@ export default class ExpressionParser extends LValParser {
   parseCallExpressionArguments(
     close: TokenType,
     possibleAsyncArrow: boolean,
-    refTrailingCommaPos?: Pos,
   ): $ReadOnlyArray<?N.Expression> {
     const elts = [];
     let innerParenStart;
@@ -725,7 +736,6 @@ export default class ExpressionParser extends LValParser {
           false,
           possibleAsyncArrow ? { start: 0 } : undefined,
           possibleAsyncArrow ? { start: 0 } : undefined,
-          possibleAsyncArrow ? refTrailingCommaPos : undefined,
         ),
       );
     }
@@ -1923,7 +1933,6 @@ export default class ExpressionParser extends LValParser {
     allowEmpty: ?boolean,
     refShorthandDefaultPos: ?Pos,
     refNeedsArrowPos: ?Pos,
-    refTrailingCommaPos?: Pos,
   ): ?N.Expression {
     let elt;
     if (allowEmpty && this.match(tt.comma)) {
@@ -1937,8 +1946,8 @@ export default class ExpressionParser extends LValParser {
         spreadNodeStartLoc,
       );
 
-      if (refTrailingCommaPos && this.match(tt.comma)) {
-        refTrailingCommaPos.start = this.state.start;
+      if (this.state.commaAfterSpreadAt === -1 && this.match(tt.comma)) {
+        this.state.commaAfterSpreadAt = this.state.start;
       }
     } else {
       elt = this.parseMaybeAssign(
