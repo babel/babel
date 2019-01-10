@@ -272,9 +272,6 @@ export default class LValParser extends NodeUtils {
           this.state.inFunction && this.state.inParameters
             ? "parameter"
             : "element",
-          this.state.inFunction && this.state.inParameters
-            ? "formal parameter"
-            : undefined,
         );
         this.expect(close);
         break;
@@ -431,17 +428,13 @@ export default class LValParser extends NodeUtils {
     this.raise(node.argument.start, "Invalid rest operator's argument");
   }
 
-  checkCommaAfterRest(
-    close: TokenType,
-    kind: string,
-    kind2: string = kind,
-  ): void {
+  checkCommaAfterRest(close: TokenType, kind: string): void {
     if (this.match(tt.comma)) {
       const nextTokenType = this.lookahead().type;
       const errorMessage =
         nextTokenType === close
           ? `A trailing comma is not permitted after the rest ${kind}`
-          : `Rest ${kind} must be last ${kind2}`;
+          : `Rest ${kind} must be last ${kind}`;
       this.raise(this.state.start, errorMessage);
     }
   }

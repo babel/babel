@@ -1202,7 +1202,7 @@ export default class ExpressionParser extends LValParser {
           ),
         );
 
-        this.checkCommaAfterRest(tt.parenR, "parameter", "formal parameter");
+        this.checkCommaAfterRest(tt.parenR, "parameter");
 
         break;
       } else {
