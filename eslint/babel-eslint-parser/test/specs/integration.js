@@ -223,3 +223,14 @@ function strictSuite() {
     // it
   });
 }
+
+describe("https://github.com/babel/babel-eslint/issues/558", () => {
+  it("doesn't crash with eslint-plugin-import", () => {
+    const engine = new eslint.CLIEngine({ ignore: false });
+    engine.executeOnFiles([
+      "fixtures/eslint-plugin-import/a.js",
+      "fixtures/eslint-plugin-import/b.js",
+      "fixtures/eslint-plugin-import/c.js",
+    ]);
+  });
+});

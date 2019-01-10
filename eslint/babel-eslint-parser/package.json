@@ -14,7 +14,7 @@
   "homepage": "https://github.com/babel/babel-eslint",
   "scripts": {
     "test": "npm run lint && npm run test-only",
-    "test-only": "cd test && mocha --require fixtures/preprocess-to-patch.js specs && cd -",
+    "test-only": "cd test && mocha specs && cd -",
     "lint": "eslint .",
     "lint-fix": "npm run lint -- --fix",
     "precommit": "lint-staged",
