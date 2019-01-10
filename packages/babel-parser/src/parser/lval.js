@@ -122,10 +122,7 @@ export default class LValParser extends NodeUtils {
 
       this.raise(prop.key.start, error);
     } else if (prop.type === "SpreadElement" && !isLast) {
-      this.raise(
-        prop.start,
-        "The rest element has to be the last element when destructuring",
-      );
+      this.raise(prop.start, "Rest element must be last element");
     } else {
       this.toAssignable(prop, isBinding, "object destructuring pattern");
     }
@@ -163,10 +160,7 @@ export default class LValParser extends NodeUtils {
     for (let i = 0; i < end; i++) {
       const elt = exprList[i];
       if (elt && elt.type === "SpreadElement") {
-        this.raise(
-          elt.start,
-          "The rest element has to be the last element when destructuring",
-        );
+        this.raise(elt.start, "Rest element must be last element");
       }
       if (elt) this.toAssignable(elt, isBinding, contextDescription);
     }
@@ -273,20 +267,16 @@ export default class LValParser extends NodeUtils {
         break;
       } else if (this.match(tt.ellipsis)) {
         elts.push(this.parseAssignableListItemTypes(this.parseRest()));
-        if (
-          this.state.inFunction &&
-          this.state.inParameters &&
-          this.match(tt.comma)
-        ) {
-          const nextTokenType = this.lookahead().type;
-          const errorMessage =
-            nextTokenType === tt.parenR
-              ? "A trailing comma is not permitted after the rest element"
-              : "Rest parameter must be last formal parameter";
-          this.raise(this.state.start, errorMessage);
-        } else {
-          this.expect(close);
-        }
+        this.checkCommaAfterRest(
+          close,
+          this.state.inFunction && this.state.inParameters
+            ? "parameter"
+            : "element",
+          this.state.inFunction && this.state.inParameters
+            ? "formal parameter"
+            : undefined,
+        );
+        this.expect(close);
         break;
       } else {
         const decorators = [];
@@ -439,5 +429,20 @@ export default class LValParser extends NodeUtils {
     }
 
     this.raise(node.argument.start, "Invalid rest operator's argument");
+  }
+
+  checkCommaAfterRest(
+    close: TokenType,
+    kind: string,
+    kind2: string = kind,
+  ): void {
+    if (this.match(tt.comma)) {
+      const nextTokenType = this.lookahead().type;
+      const errorMessage =
+        nextTokenType === close
+          ? `A trailing comma is not permitted after the rest ${kind}`
+          : `Rest ${kind} must be last ${kind2}`;
+      this.raise(this.state.start, errorMessage);
+    }
   }
 }

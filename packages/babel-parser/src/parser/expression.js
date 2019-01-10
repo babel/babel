@@ -1202,14 +1202,7 @@ export default class ExpressionParser extends LValParser {
           ),
         );
 
-        if (this.match(tt.comma)) {
-          const nextTokenType = this.lookahead().type;
-          const errorMessage =
-            nextTokenType === tt.parenR
-              ? "A trailing comma is not permitted after the rest element"
-              : "Rest parameter must be last formal parameter";
-          this.raise(this.state.start, errorMessage);
-        }
+        this.checkCommaAfterRest(tt.parenR, "parameter", "formal parameter");
 
         break;
       } else {
@@ -1408,8 +1401,6 @@ export default class ExpressionParser extends LValParser {
     node.properties = [];
     this.next();
 
-    let firstRestLocation = null;
-
     while (!this.eat(tt.braceR)) {
       if (first) {
         first = false;
@@ -1445,34 +1436,14 @@ export default class ExpressionParser extends LValParser {
 
       if (this.match(tt.ellipsis)) {
         prop = this.parseSpread(isPattern ? { start: 0 } : undefined);
-        if (isPattern) {
-          this.toAssignable(prop, true, "object pattern");
-        }
         node.properties.push(prop);
         if (isPattern) {
-          const position = this.state.start;
-          if (firstRestLocation !== null) {
-            this.unexpected(
-              firstRestLocation,
-              "Cannot have multiple rest elements when destructuring",
-            );
-          } else if (this.eat(tt.braceR)) {
-            break;
-          } else if (
-            this.match(tt.comma) &&
-            this.lookahead().type === tt.braceR
-          ) {
-            this.unexpected(
-              position,
-              "A trailing comma is not permitted after the rest element",
-            );
-          } else {
-            firstRestLocation = position;
-            continue;
-          }
-        } else {
-          continue;
+          this.toAssignable(prop, true, "object pattern");
+          this.checkCommaAfterRest(tt.braceR, "element");
+          this.expect(tt.braceR);
+          break;
         }
+        continue;
       }
 
       prop.method = false;
@@ -1527,13 +1498,6 @@ export default class ExpressionParser extends LValParser {
       }
 
       node.properties.push(prop);
-    }
-
-    if (firstRestLocation !== null) {
-      this.unexpected(
-        firstRestLocation,
-        "The rest element has to be the last element when destructuring",
-      );
     }
 
     if (decorators.length) {
