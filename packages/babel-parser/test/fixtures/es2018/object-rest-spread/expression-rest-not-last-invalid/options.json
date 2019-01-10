@@ -1,3 +1,3 @@
 {
-  "throws": "Rest element must be last element (1:2)"
+  "throws": "The rest element must be the last element (1:2)"
 }
