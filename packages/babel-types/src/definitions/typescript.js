@@ -405,6 +405,16 @@ defineType("TSModuleBlock", {
   },
 });
 
+defineType("TSImportType", {
+  aliases: ["TSType"],
+  visitor: ["argument", "qualifier", "typeParameters"],
+  fields: {
+    argument: validateType("StringLiteral"),
+    qualifier: validateOptionalType("TsEntityName"),
+    typeParameters: validateOptionalType("TSTypeParameterDeclaration"),
+  },
+});
+
 defineType("TSImportEqualsDeclaration", {
   aliases: ["Statement"],
   visitor: ["id", "moduleReference"],
