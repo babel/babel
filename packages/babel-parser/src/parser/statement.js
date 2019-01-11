@@ -106,7 +106,12 @@ export default class StatementParser extends ExpressionParser {
         return this.parseForStatement(node);
       case tt._function:
         if (this.lookahead().type === tt.dot) break;
-        if (!declaration) this.unexpected();
+        if (!declaration) {
+          this.raise(
+            this.state.start,
+            "Function declaration not allowed in this context",
+          );
+        }
         return this.parseFunctionStatement(node);
 
       case tt._class:
@@ -189,7 +194,13 @@ export default class StatementParser extends ExpressionParser {
           const state = this.state.clone();
           this.next();
           if (this.match(tt._function) && !this.canInsertSemicolon()) {
-            this.expect(tt._function);
+            if (!declaration) {
+              this.raise(
+                this.state.lastTokStart,
+                "Function declaration not allowed in this context",
+              );
+            }
+            this.next();
             return this.parseFunction(node, true, false, true);
           } else {
             this.state = state;
