@@ -21,9 +21,53 @@ Spec says:
 */
 
 case ({x: 1}) { when {x: 1} -> 1; when x -> throw new Error(); }
-
 case ({x: 2}) { when {x: 1} -> throw new Error(); when y -> 1; }
-
+case (null) { when {x: 1} -> throw new Error(); when y -> 1; }
+case (undefined) { when {x: 1} -> throw new Error(); when y -> 1; }
+case ({x: 1, y: 2}) { when {x: 1} -> 1; when x -> throw new Error(); }
+case ({x: "1"}) { when {x: 1} -> throw new Error(); when y -> 1; }
+case ({x: null}) { when {x: 1} -> throw new Error(); when y -> 1; }
+case ({x: undefined}) { when {x: 1} -> throw new Error(); when y -> 1; }
+case ({x: 1.0}) { when {x: 1} -> 1; when x -> throw new Error(); }
 expect(
   (() => { case ({asdf: 1}) { when {asdf: 1} -> return true; }; return false; })()
 ).toBe(true);
+
+case ([1,2]) { when [1,2] -> 1; when x -> throw new Error(); }
+case ([1]) { when [1,2] -> throw new Error(); when y -> 1; }
+/* Known failures in here.
+case ([1,2,3]) { when [1,2] -> throw new Error(); when y -> 1; }
+case ([2,1]) { when [1,2] -> throw new Error(); when y -> 1; }
+case ([1,undefined]) { when [1,2] -> throw new Error(); when y -> 1; }
+case ([1,2]) { when [1,undefined] -> throw new Error(); when y -> 1; }
+case ([1]) { when [1,undefined] -> throw new Error(); when y -> 1; }
+case ([1,2,undefined]) { when [1,2] -> throw new Error(); when y -> 1; }
+*/
+// TODO test other things that can do GetIterator -- and that can't
+
+case (1) { when 1 -> 1; when x -> throw new Error(); }
+case (2) { when 1 -> throw new Error(); when y -> 1; }
+case (null) { when 1 -> throw new Error(); when y -> 1; }
+case (undefined) { when 1 -> throw new Error(); when y -> 1; }
+case (NaN) { when 1 -> throw new Error(); when y -> 1; }
+case (NaN) { when NaN -> 1; when x -> throw new Error(); }
+
+case (undefined) { when x -> 1; when y -> throw new Error(); }
+case (null) { when x -> 1; when y -> throw new Error(); }
+case (0) { when x -> 1; when y -> throw new Error(); }
+case (1) { when x -> 1; when y -> throw new Error(); }
+case (false) { when x -> 1; when y -> throw new Error(); }
+case ({}) { when x -> 1; when y -> throw new Error(); }
+case ([{}]) { when x -> 1; when y -> throw new Error(); }
+
+// TODO more simple stuff here
+
+case ({x: 3}) { when {x} if (x === 3) -> 1; when y -> throw new Error(); }
+case ({x: undefined}) { when {x} if (x === undefined) -> throw new Error(); when y -> 1; }
+case ({}) { when {x} if (x === undefined) -> throw new Error(); when y -> 1; }
+case ({}) { when {x} if (x === 3) -> throw new Error(); when y -> 1; }
+case (null) { when {x} if (x === undefined) -> throw new Error(); when y -> 1; }
+case (undefined) { when {x} if (x === undefined) -> throw new Error(); when y -> 1; }
+
+case ('foobar') { when x if (x.match(/^foo/)) -> 1; when y -> throw new Error(); }
+case ('bar') { when x if (x.match(/^foo/)) -> throw new Error(); when y -> 1; }
