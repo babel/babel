@@ -99,6 +99,9 @@ export function runCodeInTestContext(code: string, opts: { filename: string }) {
       filename,
       displayErrors: true,
     })(module.exports, req, module, filename, dirname, opts);
+  } catch (e) {
+    console.log(code);
+    throw e;
   } finally {
     process.chdir(oldCwd);
   }
