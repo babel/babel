@@ -6,7 +6,20 @@ import { Position } from "../util/location";
 
 import { types as ct, type TokContext } from "./context";
 import type { Token } from "./index";
-import { types as tt, type TokenType, type TopicContextState } from "./types";
+import { types as tt, type TokenType } from "./types";
+
+type TopicContextState = {
+  // When a topic binding has been currently established,
+  // then this is 1. Otherwise, it is 0. This is forwards compatible
+  // with a future plugin for multiple lexical topics.
+  maxNumOfResolvableTopics: number,
+
+  // When a topic binding has been currently established, and if that binding
+  // has been used as a topic reference `#`, then this is 0. Otherwise, it is
+  // `null`. This is forwards compatible with a future plugin for multiple
+  // lexical topics.
+  maxTopicIndex: null | 0,
+};
 
 export default class State {
   strict: boolean;
