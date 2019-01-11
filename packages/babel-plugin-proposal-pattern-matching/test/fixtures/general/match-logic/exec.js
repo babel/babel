@@ -35,14 +35,13 @@ expect(
 
 case ([1,2]) { when [1,2] -> 1; when x -> throw new Error(); }
 case ([1]) { when [1,2] -> throw new Error(); when y -> 1; }
-/* Known failures in here.
-case ([1,2,3]) { when [1,2] -> throw new Error(); when y -> 1; }
+// Some known failures, commented out.
+// case ([1,2,3]) { when [1,2] -> throw new Error(); when y -> 1; }
 case ([2,1]) { when [1,2] -> throw new Error(); when y -> 1; }
 case ([1,undefined]) { when [1,2] -> throw new Error(); when y -> 1; }
-case ([1,2]) { when [1,undefined] -> throw new Error(); when y -> 1; }
+//case ([1,2]) { when [1,undefined] -> throw new Error(); when y -> 1; }
 case ([1]) { when [1,undefined] -> throw new Error(); when y -> 1; }
-case ([1,2,undefined]) { when [1,2] -> throw new Error(); when y -> 1; }
-*/
+//case ([1,2,undefined]) { when [1,2] -> throw new Error(); when y -> 1; }
 // TODO test other things that can do GetIterator -- and that can't
 
 case (1) { when 1 -> 1; when x -> throw new Error(); }
