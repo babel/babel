@@ -57,7 +57,9 @@ export default declare(api => {
       }
 
       function generateObjectTestExpr(expr, objPattern, substitutionsMap) {
-        const objectId = template.expression(`Object.is(EXPR)`)({
+        const objectId = template.expression(
+          `EXPR !== undefined && EXPR !== null`,
+        )({
           EXPR: expr,
         });
 
