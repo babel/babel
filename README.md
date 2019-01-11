@@ -56,7 +56,8 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 
 ## Bronze
 
-<a href="https://webflow.com/" target="_blank"><img src="https://opencollective.com/proxy/images/?src=https%3A%2F%2Fopencollective-production.s3-us-west-1.amazonaws.com%2F4a5024b0-8cf2-11e7-b1a2-b30b1de1463c.png&height=64"></a>
+<a href="https://webflow.com" target="_blank"><img src="https://opencollective.com/proxy/images/?src=https%3A%2F%2Fopencollective-production.s3-us-west-1.amazonaws.com%2F4a5024b0-8cf2-11e7-b1a2-b30b1de1463c.png&height=64"></a>
+<a href="https://issuehunt.io" target="_blank"><img src="https://lh6.googleusercontent.com/0Kqv4QqltolBMm4AN450HKLKmbEj1O42T0lrT86sCpz2mXCe4vwQLI-Mo9a5gXyPGcRS7RRr9HhPLrhq_Cc=w2288-h1442-rw" height="64"></a>
 
 ## Intro
 
