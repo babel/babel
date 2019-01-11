@@ -15,6 +15,8 @@ export default class State {
 
     this.input = input;
 
+    this.commaAfterSpreadAt = -1;
+
     this.potentialArrowAt = -1;
 
     this.noArrowAt = [];
@@ -86,6 +88,11 @@ export default class State {
 
   // TODO
   input: string;
+
+  // A comma after "...a" is only allowed in spread, but not in rest.
+  // Since we parse destructuring patterns as array/object literals
+  // and then convert them, we need to track it.
+  commaAfterSpreadAt: number;
 
   // Used to signify the start of a potential arrow function
   potentialArrowAt: number;

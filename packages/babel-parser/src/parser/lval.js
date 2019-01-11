@@ -122,10 +122,7 @@ export default class LValParser extends NodeUtils {
 
       this.raise(prop.key.start, error);
     } else if (prop.type === "SpreadElement" && !isLast) {
-      this.raise(
-        prop.start,
-        "The rest element has to be the last element when destructuring",
-      );
+      this.raiseRestNotLast(prop.start, "property");
     } else {
       this.toAssignable(prop, isBinding, "object destructuring pattern");
     }
@@ -162,13 +159,12 @@ export default class LValParser extends NodeUtils {
     }
     for (let i = 0; i < end; i++) {
       const elt = exprList[i];
-      if (elt && elt.type === "SpreadElement") {
-        this.raise(
-          elt.start,
-          "The rest element has to be the last element when destructuring",
-        );
+      if (elt) {
+        this.toAssignable(elt, isBinding, contextDescription);
+        if (elt.type === "RestElement") {
+          this.raiseRestNotLast(elt.start, "element");
+        }
       }
-      if (elt) this.toAssignable(elt, isBinding, contextDescription);
     }
     return exprList;
   }
@@ -199,10 +195,10 @@ export default class LValParser extends NodeUtils {
 
   // Parses spread element.
 
-  parseSpread<T: RestElement | SpreadElement>(
+  parseSpread(
     refShorthandDefaultPos: ?Pos,
     refNeedsArrowPos?: ?Pos,
-  ): T {
+  ): SpreadElement {
     const node = this.startNode();
     this.next();
     node.argument = this.parseMaybeAssign(
@@ -211,6 +207,11 @@ export default class LValParser extends NodeUtils {
       undefined,
       refNeedsArrowPos,
     );
+
+    if (this.state.commaAfterSpreadAt === -1 && this.match(tt.comma)) {
+      this.state.commaAfterSpreadAt = this.state.start;
+    }
+
     return this.finishNode(node, "SpreadElement");
   }
 
@@ -273,20 +274,13 @@ export default class LValParser extends NodeUtils {
         break;
       } else if (this.match(tt.ellipsis)) {
         elts.push(this.parseAssignableListItemTypes(this.parseRest()));
-        if (
-          this.state.inFunction &&
-          this.state.inParameters &&
-          this.match(tt.comma)
-        ) {
-          const nextTokenType = this.lookahead().type;
-          const errorMessage =
-            nextTokenType === tt.parenR
-              ? "A trailing comma is not permitted after the rest element"
-              : "Rest parameter must be last formal parameter";
-          this.raise(this.state.start, errorMessage);
-        } else {
-          this.expect(close);
-        }
+        this.checkCommaAfterRest(
+          close,
+          this.state.inFunction && this.state.inParameters
+            ? "parameter"
+            : "element",
+        );
+        this.expect(close);
         break;
       } else {
         const decorators = [];
@@ -439,5 +433,29 @@ export default class LValParser extends NodeUtils {
     }
 
     this.raise(node.argument.start, "Invalid rest operator's argument");
+  }
+
+  checkCommaAfterRest(close: TokenType, kind: string): void {
+    if (this.match(tt.comma)) {
+      if (this.lookahead().type === close) {
+        this.raiseCommaAfterRest(this.state.start, kind);
+      } else {
+        this.raiseRestNotLast(this.state.start, kind);
+      }
+    }
+  }
+
+  checkCommaAfterRestFromSpread(kind: string): void {
+    if (this.state.commaAfterSpreadAt > -1) {
+      this.raiseCommaAfterRest(this.state.commaAfterSpreadAt, kind);
+    }
+  }
+
+  raiseCommaAfterRest(pos: number, kind: string) {
+    this.raise(pos, `A trailing comma is not permitted after the rest ${kind}`);
+  }
+
+  raiseRestNotLast(pos: number, kind: string) {
+    this.raise(pos, `The rest ${kind} must be the last ${kind}`);
   }
 }
