@@ -221,7 +221,7 @@ export default class StatementParser extends ExpressionParser {
       expr.type === "Identifier" &&
       this.eat(tt.colon)
     ) {
-      return this.parseLabeledStatement(node, maybeName, expr);
+      return this.parseLabeledStatement(node, maybeName, expr, declaration);
     } else {
       return this.parseExpressionStatement(node, expr);
     }
@@ -660,6 +660,7 @@ export default class StatementParser extends ExpressionParser {
     node: N.LabeledStatement,
     maybeName: string,
     expr: N.Identifier,
+    declaration: boolean,
   ): N.LabeledStatement {
     for (const label of this.state.labels) {
       if (label.name === maybeName) {
@@ -687,7 +688,7 @@ export default class StatementParser extends ExpressionParser {
       kind: kind,
       statementStart: this.state.start,
     });
-    node.body = this.parseStatement(true);
+    node.body = this.parseStatement(declaration);
 
     if (
       node.body.type == "ClassDeclaration" ||
