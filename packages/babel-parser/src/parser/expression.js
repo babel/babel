@@ -1318,7 +1318,7 @@ export default class ExpressionParser extends LValParser {
     node.callee = this.parseNoCallExpr();
 
     if (node.callee.type === "Import") {
-      this.raise(node.callee.start, "import(...) can't be constructed");
+      this.raise(node.callee.start, "Cannot use new with import(...)");
     } else if (
       node.callee.type === "OptionalMemberExpression" ||
       node.callee.type === "OptionalCallExpression"
