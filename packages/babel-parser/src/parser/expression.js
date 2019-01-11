@@ -596,6 +596,7 @@ export default class ExpressionParser extends LValParser {
       node.arguments = this.parseCallExpressionArguments(
         tt.parenR,
         possibleAsync,
+        base.type === "Import",
       );
       if (!state.optionalChainMember) {
         this.finishCallExpression(node);
@@ -703,6 +704,7 @@ export default class ExpressionParser extends LValParser {
   parseCallExpressionArguments(
     close: TokenType,
     possibleAsyncArrow: boolean,
+    dynamicImport?: boolean,
   ): $ReadOnlyArray<?N.Expression> {
     const elts = [];
     let innerParenStart;
@@ -713,7 +715,15 @@ export default class ExpressionParser extends LValParser {
         first = false;
       } else {
         this.expect(tt.comma);
-        if (this.eat(close)) break;
+        if (this.eat(close)) {
+          if (dynamicImport) {
+            this.raise(
+              this.state.lastTokStart,
+              "Trailing comma is disallowed inside import(...) arguments",
+            );
+          }
+          break;
+        }
       }
 
       // we need to make sure that if this is an async arrow functions,
