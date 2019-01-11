@@ -914,6 +914,11 @@ export function TSModuleBlock(...args: Array<any>): Object {
 }
 export { TSModuleBlock as tsModuleBlock };
 export { TSModuleBlock as tSModuleBlock };
+export function TSImportType(...args: Array<any>): Object {
+  return builder("TSImportType", ...args);
+}
+export { TSImportType as tsImportType };
+export { TSImportType as tSImportType };
 export function TSImportEqualsDeclaration(...args: Array<any>): Object {
   return builder("TSImportEqualsDeclaration", ...args);
 }

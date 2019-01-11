@@ -939,6 +939,9 @@ export function assertTSModuleDeclaration(
 export function assertTSModuleBlock(node: Object, opts?: Object = {}): void {
   assert("TSModuleBlock", node, opts);
 }
+export function assertTSImportType(node: Object, opts?: Object = {}): void {
+  assert("TSImportType", node, opts);
+}
 export function assertTSImportEqualsDeclaration(
   node: Object,
   opts?: Object = {},
