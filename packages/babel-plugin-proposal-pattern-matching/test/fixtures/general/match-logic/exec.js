@@ -35,14 +35,17 @@ expect(
 
 case ([1,2]) { when [1,2] -> 1; when x -> throw new Error(); }
 case ([1]) { when [1,2] -> throw new Error(); when y -> 1; }
-// Some known failures, commented out.
 case ([1,2,3]) { when [1,2] -> throw new Error(); when y -> 1; }
 case ([2,1]) { when [1,2] -> throw new Error(); when y -> 1; }
 case ([1,undefined]) { when [1,2] -> throw new Error(); when y -> 1; }
-//case ([1,2]) { when [1,undefined] -> throw new Error(); when y -> 1; }
-case ([1]) { when [1,undefined] -> throw new Error(); when y -> 1; }
+// An element of `undefined` doesn't match even a general pattern.
+case ([1,undefined]) { when [1,x] -> throw new Error(); when y -> 1; }
 case ([1,2,undefined]) { when [1,2] -> throw new Error(); when y -> 1; }
 // TODO test other things that can do GetIterator -- and that can't
+
+// `undefined` on the RHS is a *binding*, for a local to shadow the real `undefined`.
+case ([1,2]) { when [1,undefined] -> expect(undefined).toBe(2); when y -> throw new Error(); }
+case ([1]) { when [1,undefined] -> throw new Error(); when y -> 1; }
 
 case (1) { when 1 -> 1; when x -> throw new Error(); }
 case (2) { when 1 -> throw new Error(); when y -> 1; }
