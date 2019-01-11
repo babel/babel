@@ -22,11 +22,8 @@ Spec says:
 
 case ({x: 1}) { when {x: 1} -> 1; when x -> throw new Error(); }
 
-// Fails with: SyntaxError: Identifier '_x' has already been declared
-// case ({x: 2}) { when {x: 1} -> throw new Error(); when y -> 1; }
+case ({x: 2}) { when {x: 1} -> throw new Error(); when y -> 1; }
 
-/* Known failure
 expect(
   (() => { case ({asdf: 1}) { when {asdf: 1} -> return true; }; return false; })()
 ).toBe(true);
-*/

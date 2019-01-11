@@ -190,6 +190,7 @@ export default declare(api => {
       CaseStatement(path) {
         const { discriminant } = path.node;
         const caseId = path.scope.generateUidIdentifier("case");
+        clauses.splice(0);
         ids.splice(0);
         path.traverse(WhenClauseVisitor, { caseId });
         const variableDeclaration = t.variableDeclaration("let", [
