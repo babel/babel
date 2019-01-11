@@ -90,7 +90,7 @@ export default class State {
   input: string;
 
   // A comma after "...a" is only allowed in spread, but not in rest.
-  // Since we parse destructuring expressions ar array/object literals
+  // Since we parse destructuring patterns as array/object literals
   // and then convert them, we need to track it.
   commaAfterSpreadAt: number;
 
