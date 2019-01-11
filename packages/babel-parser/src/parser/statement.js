@@ -994,8 +994,16 @@ export default class StatementParser extends ExpressionParser {
     this.next();
     this.takeDecorators(node);
     this.parseClassId(node, isStatement, optionalId);
+
+    // class bodies and heritages are implicitly strict
+    const oldStrict = this.state.strict;
+    this.state.strict = true;
+
     this.parseClassSuper(node);
     this.parseClassBody(node);
+
+    this.state.strict = oldStrict;
+
     return this.finishNode(
       node,
       isStatement ? "ClassDeclaration" : "ClassExpression",
@@ -1020,9 +1028,6 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseClassBody(node: N.Class): void {
-    // class bodies are implicitly strict
-    const oldStrict = this.state.strict;
-    this.state.strict = true;
     this.state.classLevel++;
 
     const state = { hadConstructor: false };
@@ -1087,7 +1092,6 @@ export default class StatementParser extends ExpressionParser {
     node.body = this.finishNode(classBody, "ClassBody");
 
     this.state.classLevel--;
-    this.state.strict = oldStrict;
   }
 
   parseClassMember(

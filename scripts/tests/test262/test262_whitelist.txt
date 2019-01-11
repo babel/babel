@@ -1691,7 +1691,6 @@ language/statements/class/elements/wrapped-in-sc-rs-private-setter-alt.js(defaul
 language/statements/class/elements/wrapped-in-sc-rs-private-setter-alt.js(strict mode)
 language/statements/class/elements/wrapped-in-sc-rs-private-setter.js(default)
 language/statements/class/elements/wrapped-in-sc-rs-private-setter.js(strict mode)
-language/statements/class/strict-mode/with.js(default)
 language/statements/class/syntax/early-errors/class-definition-evaluation-block-duplicate-binding.js(default)
 language/statements/class/syntax/early-errors/class-definition-evaluation-block-duplicate-binding.js(strict mode)
 language/statements/class/syntax/early-errors/class-definition-evaluation-scriptbody-duplicate-binding.js(default)
