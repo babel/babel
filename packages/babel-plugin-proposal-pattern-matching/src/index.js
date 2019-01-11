@@ -98,7 +98,31 @@ export default declare(api => {
         const base = template.expression(`Array.isArray(EXPR)`)({
           EXPR: expr,
         });
+
         const { elements } = arrayPattern;
+
+        let base2;
+        if (
+          elements.length > 0 &&
+          t.isMatchRestElement(elements[elements.length - 1])
+        ) {
+          if (elements.length > 1) {
+            base2 = template.expression(`LEFT && EXPR.length >= LEN`)({
+              LEFT: base,
+              EXPR: expr,
+              LEN: t.numericLiteral(elements.length - 1),
+            });
+          } else {
+            base2 = base;
+          }
+        } else {
+          base2 = template.expression(`LEFT && EXPR.length == LEN`)({
+            LEFT: base,
+            EXPR: expr,
+            LEN: t.numericLiteral(elements.length),
+          });
+        }
+
         return elements.reduce((acc, element, index) => {
           if (t.isIdentifier(element)) {
             const subExpr = t.memberExpression(
@@ -159,7 +183,7 @@ export default declare(api => {
               SUB_TEST: generateTestExpr(subExpr, element, substitutionsMap),
             });
           }
-        }, base);
+        }, base2);
       }
 
       const substitutionsMap = new Map();
