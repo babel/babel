@@ -4,22 +4,8 @@ const assert = require("assert");
 const babelEslint = require("../..");
 const espree = require("espree");
 const escope = require("eslint-scope");
-const util = require("util");
 const unpad = require("dedent");
 const assertImplementsAST = require("../helpers/assert-implements-ast");
-
-function lookup(obj, keypath, backwardsDepth) {
-  if (!keypath) {
-    return obj;
-  }
-
-  return keypath
-    .split(".")
-    .slice(0, -1 * backwardsDepth)
-    .reduce((base, segment) => {
-      return base && base[segment], obj;
-    });
-}
 
 function parseAndAssertSame(code) {
   code = unpad(code);
@@ -38,7 +24,6 @@ function parseAndAssertSame(code) {
     loc: true,
     range: true,
     comment: true,
-    attachComment: true,
     ecmaVersion: 2018,
     sourceType: "module",
   });
@@ -46,25 +31,7 @@ function parseAndAssertSame(code) {
     eslintVisitorKeys: true,
     eslintScopeManager: true,
   }).ast;
-  try {
-    assertImplementsAST(esAST, babylonAST);
-  } catch (err) {
-    const traversal = err.message.slice(3, err.message.indexOf(":"));
-    err.message += unpad(`
-      espree:
-      ${util.inspect(lookup(esAST, traversal, 2), {
-        depth: err.depth,
-        colors: true,
-      })}
-      babel-eslint:
-      ${util.inspect(lookup(babylonAST, traversal, 2), {
-        depth: err.depth,
-        colors: true,
-      })}
-    `);
-    throw err;
-  }
-  //assert.equal(esAST, babylonAST);
+  assertImplementsAST(esAST, babylonAST);
 }
 
 describe("babylon-to-espree", () => {

@@ -1,30 +1,11 @@
 "use strict";
 
-const attachComments = require("./attachComments");
+const convertTokens = require("./convertTokens");
 const convertComments = require("./convertComments");
-const toTokens = require("./toTokens");
-const toAST = require("./toAST");
+const convertAST = require("./convertAST");
 
 module.exports = function(ast, traverse, tt, code) {
-  // convert tokens
-  ast.tokens = toTokens(ast.tokens, tt, code);
-
-  // add comments
+  ast.tokens = convertTokens(ast.tokens, tt, code);
   convertComments(ast.comments);
-
-  // transform esprima and acorn divergent nodes
-  toAST(ast, traverse, code);
-
-  // ast.program.tokens = ast.tokens;
-  // ast.program.comments = ast.comments;
-  // ast = ast.program;
-
-  // remove File
-  ast.type = "Program";
-  ast.sourceType = ast.program.sourceType;
-  ast.directives = ast.program.directives;
-  ast.body = ast.program.body;
-  delete ast.program;
-
-  attachComments(ast, ast.comments, ast.tokens);
+  convertAST(ast, traverse, code);
 };

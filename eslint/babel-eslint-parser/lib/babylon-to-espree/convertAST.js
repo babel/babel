@@ -1,7 +1,7 @@
 "use strict";
 
 const t = require("@babel/core").types;
-const convertComments = require("./convertComments");
+const convertProgramNode = require("./convertProgramNode");
 
 module.exports = function(ast, traverse, code) {
   const state = { source: code };
@@ -20,6 +20,8 @@ module.exports = function(ast, traverse, code) {
 
   delete t.VISITOR_KEYS.Property;
   delete t.VISITOR_KEYS.MethodDefinition;
+
+  convertProgramNode(ast);
 };
 
 const astTransformVisitor = {
@@ -31,16 +33,15 @@ const astTransformVisitor = {
     node._babelType = node.type;
 
     if (node.innerComments) {
-      node.trailingComments = node.innerComments;
       delete node.innerComments;
     }
 
     if (node.trailingComments) {
-      convertComments(node.trailingComments);
+      delete node.trailingComments;
     }
 
     if (node.leadingComments) {
-      convertComments(node.leadingComments);
+      delete node.leadingComments;
     }
   },
   exit(path) {
