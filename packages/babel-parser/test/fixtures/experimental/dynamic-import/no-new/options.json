@@ -1,0 +1,3 @@
+{
+  "throws": "import(...) can't be constructed (1:4)"
+}

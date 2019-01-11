@@ -1306,7 +1306,10 @@ export default class ExpressionParser extends LValParser {
     }
 
     node.callee = this.parseNoCallExpr();
-    if (
+
+    if (node.callee.type === "Import") {
+      this.raise(node.callee.start, "import(...) can't be constructed");
+    } else if (
       node.callee.type === "OptionalMemberExpression" ||
       node.callee.type === "OptionalCallExpression"
     ) {
@@ -1314,13 +1317,13 @@ export default class ExpressionParser extends LValParser {
         this.state.lastTokEnd,
         "constructors in/after an Optional Chain are not allowed",
       );
-    }
-    if (this.eat(tt.questionDot)) {
+    } else if (this.eat(tt.questionDot)) {
       this.raise(
         this.state.start,
         "constructors in/after an Optional Chain are not allowed",
       );
     }
+
     this.parseNewArguments(node);
     return this.finishNode(node, "NewExpression");
   }
