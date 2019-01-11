@@ -65,7 +65,7 @@ describe("arrow function conversion", () => {
       _supercall();
       () => _supercall();
     `,
-      { methodName: "constructor" },
+      { methodName: "constructor", extend: true },
     );
   });
 

@@ -1,1 +1,1 @@
-"use strict"; (class A {constructor() { super() }})
+"use strict"; (class A extends B {constructor() { super() }})

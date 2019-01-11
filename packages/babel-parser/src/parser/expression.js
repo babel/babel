@@ -805,17 +805,24 @@ export default class ExpressionParser extends LValParser {
         ) {
           this.unexpected();
         }
-        if (
-          this.match(tt.parenL) &&
-          this.state.inMethod !== "constructor" &&
-          !this.options.allowSuperOutsideMethod
-        ) {
-          this.raise(
-            node.start,
-            "super() is only valid inside a class constructor. " +
-              "Make sure the method name is spelled exactly as 'constructor'.",
-          );
+
+        if (this.match(tt.parenL)) {
+          if (this.state.inMethod === "constructor") {
+            if (!this.state.inDerivedClass) {
+              this.raise(
+                node.start,
+                "super() is only allowed in a derived constructor",
+              );
+            }
+          } else if (!this.options.allowSuperOutsideMethod) {
+            this.raise(
+              node.start,
+              "super() is only valid inside a class constructor. " +
+                "Make sure the method name is spelled exactly as 'constructor'.",
+            );
+          }
         }
+
         return this.finishNode(node, "Super");
 
       case tt._import:

@@ -2051,13 +2051,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // parse type parameters for class methods
-    pushClassMethod(
-      classBody: N.ClassBody,
-      method: N.ClassMethod,
-      isGenerator: boolean,
-      isAsync: boolean,
-      isConstructor: boolean,
-    ): void {
+    pushClassMethod(classBody: N.ClassBody, method: N.ClassMethod): void {
       if ((method: $FlowFixMe).variance) {
         this.unexpected((method: $FlowFixMe).variance.start);
       }
@@ -2068,20 +2062,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         );
       }
 
-      super.pushClassMethod(
-        classBody,
-        method,
-        isGenerator,
-        isAsync,
-        isConstructor,
-      );
+      super.pushClassMethod(...arguments);
     }
 
     pushClassPrivateMethod(
       classBody: N.ClassBody,
       method: N.ClassPrivateMethod,
-      isGenerator: boolean,
-      isAsync: boolean,
     ): void {
       if ((method: $FlowFixMe).variance) {
         this.unexpected((method: $FlowFixMe).variance.start);
@@ -2091,7 +2077,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         method.typeParameters = this.flowParseTypeParameterDeclaration();
       }
 
-      super.pushClassPrivateMethod(classBody, method, isGenerator, isAsync);
+      super.pushClassPrivateMethod(...arguments);
     }
 
     // parse a the super class type parameters and implements

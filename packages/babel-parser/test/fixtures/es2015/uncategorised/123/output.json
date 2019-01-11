@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 51,
+  "end": 61,
   "loc": {
     "start": {
       "line": 1,
@@ -9,13 +9,13 @@
     },
     "end": {
       "line": 1,
-      "column": 51
+      "column": 61
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 51,
+    "end": 61,
     "loc": {
       "start": {
         "line": 1,
@@ -23,7 +23,7 @@
       },
       "end": {
         "line": 1,
-        "column": 51
+        "column": 61
       }
     },
     "sourceType": "script",
@@ -32,7 +32,7 @@
       {
         "type": "ExpressionStatement",
         "start": 14,
-        "end": 51,
+        "end": 61,
         "loc": {
           "start": {
             "line": 1,
@@ -40,13 +40,13 @@
           },
           "end": {
             "line": 1,
-            "column": 51
+            "column": 61
           }
         },
         "expression": {
           "type": "ClassExpression",
           "start": 15,
-          "end": 50,
+          "end": 60,
           "loc": {
             "start": {
               "line": 1,
@@ -54,7 +54,7 @@
             },
             "end": {
               "line": 1,
-              "column": 50
+              "column": 60
             }
           },
           "id": {
@@ -74,49 +74,65 @@
             },
             "name": "A"
           },
-          "superClass": null,
-          "body": {
-            "type": "ClassBody",
-            "start": 23,
-            "end": 50,
+          "superClass": {
+            "type": "Identifier",
+            "start": 31,
+            "end": 32,
             "loc": {
               "start": {
                 "line": 1,
-                "column": 23
+                "column": 31
               },
               "end": {
                 "line": 1,
-                "column": 50
+                "column": 32
+              },
+              "identifierName": "B"
+            },
+            "name": "B"
+          },
+          "body": {
+            "type": "ClassBody",
+            "start": 33,
+            "end": 60,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 33
+              },
+              "end": {
+                "line": 1,
+                "column": 60
               }
             },
             "body": [
               {
                 "type": "ClassMethod",
-                "start": 24,
-                "end": 49,
+                "start": 34,
+                "end": 59,
                 "loc": {
                   "start": {
                     "line": 1,
-                    "column": 24
+                    "column": 34
                   },
                   "end": {
                     "line": 1,
-                    "column": 49
+                    "column": 59
                   }
                 },
                 "static": false,
                 "key": {
                   "type": "Identifier",
-                  "start": 24,
-                  "end": 35,
+                  "start": 34,
+                  "end": 45,
                   "loc": {
                     "start": {
                       "line": 1,
-                      "column": 24
+                      "column": 34
                     },
                     "end": {
                       "line": 1,
-                      "column": 35
+                      "column": 45
                     },
                     "identifierName": "constructor"
                   },
@@ -130,59 +146,59 @@
                 "params": [],
                 "body": {
                   "type": "BlockStatement",
-                  "start": 38,
-                  "end": 49,
+                  "start": 48,
+                  "end": 59,
                   "loc": {
                     "start": {
                       "line": 1,
-                      "column": 38
+                      "column": 48
                     },
                     "end": {
                       "line": 1,
-                      "column": 49
+                      "column": 59
                     }
                   },
                   "body": [
                     {
                       "type": "ExpressionStatement",
-                      "start": 40,
-                      "end": 47,
+                      "start": 50,
+                      "end": 57,
                       "loc": {
                         "start": {
                           "line": 1,
-                          "column": 40
+                          "column": 50
                         },
                         "end": {
                           "line": 1,
-                          "column": 47
+                          "column": 57
                         }
                       },
                       "expression": {
                         "type": "CallExpression",
-                        "start": 40,
-                        "end": 47,
+                        "start": 50,
+                        "end": 57,
                         "loc": {
                           "start": {
                             "line": 1,
-                            "column": 40
+                            "column": 50
                           },
                           "end": {
                             "line": 1,
-                            "column": 47
+                            "column": 57
                           }
                         },
                         "callee": {
                           "type": "Super",
-                          "start": 40,
-                          "end": 45,
+                          "start": 50,
+                          "end": 55,
                           "loc": {
                             "start": {
                               "line": 1,
-                              "column": 40
+                              "column": 50
                             },
                             "end": {
                               "line": 1,
-                              "column": 45
+                              "column": 55
                             }
                           }
                         },

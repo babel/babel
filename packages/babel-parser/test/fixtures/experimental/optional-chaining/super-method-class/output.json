@@ -1,7 +1,7 @@
 {
   "type": "File",
   "start": 0,
-  "end": 55,
+  "end": 66,
   "loc": {
     "start": {
       "line": 1,
@@ -15,7 +15,7 @@
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 55,
+    "end": 66,
     "loc": {
       "start": {
         "line": 1,
@@ -32,7 +32,7 @@
       {
         "type": "ClassDeclaration",
         "start": 0,
-        "end": 55,
+        "end": 66,
         "loc": {
           "start": {
             "line": 1,
@@ -60,15 +60,31 @@
           },
           "name": "A"
         },
-        "superClass": null,
-        "body": {
-          "type": "ClassBody",
-          "start": 7,
-          "end": 55,
+        "superClass": {
+          "type": "Identifier",
+          "start": 16,
+          "end": 17,
           "loc": {
             "start": {
               "line": 1,
-              "column": 7
+              "column": 16
+            },
+            "end": {
+              "line": 1,
+              "column": 17
+            },
+            "identifierName": "B"
+          },
+          "name": "B"
+        },
+        "body": {
+          "type": "ClassBody",
+          "start": 18,
+          "end": 66,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 18
             },
             "end": {
               "line": 5,
@@ -78,8 +94,8 @@
           "body": [
             {
               "type": "ClassMethod",
-              "start": 13,
-              "end": 53,
+              "start": 24,
+              "end": 64,
               "loc": {
                 "start": {
                   "line": 2,
@@ -93,8 +109,8 @@
               "static": false,
               "key": {
                 "type": "Identifier",
-                "start": 13,
-                "end": 24,
+                "start": 24,
+                "end": 35,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -116,8 +132,8 @@
               "params": [],
               "body": {
                 "type": "BlockStatement",
-                "start": 26,
-                "end": 53,
+                "start": 37,
+                "end": 64,
                 "loc": {
                   "start": {
                     "line": 2,
@@ -131,8 +147,8 @@
                 "body": [
                   {
                     "type": "ExpressionStatement",
-                    "start": 36,
-                    "end": 47,
+                    "start": 47,
+                    "end": 58,
                     "loc": {
                       "start": {
                         "line": 3,
@@ -145,8 +161,8 @@
                     },
                     "expression": {
                       "type": "OptionalMemberExpression",
-                      "start": 36,
-                      "end": 46,
+                      "start": 47,
+                      "end": 57,
                       "loc": {
                         "start": {
                           "line": 3,
@@ -159,8 +175,8 @@
                       },
                       "object": {
                         "type": "CallExpression",
-                        "start": 36,
-                        "end": 43,
+                        "start": 47,
+                        "end": 54,
                         "loc": {
                           "start": {
                             "line": 3,
@@ -173,8 +189,8 @@
                         },
                         "callee": {
                           "type": "Super",
-                          "start": 36,
-                          "end": 41,
+                          "start": 47,
+                          "end": 52,
                           "loc": {
                             "start": {
                               "line": 3,
@@ -190,8 +206,8 @@
                       },
                       "property": {
                         "type": "Identifier",
-                        "start": 45,
-                        "end": 46,
+                        "start": 56,
+                        "end": 57,
                         "loc": {
                           "start": {
                             "line": 3,

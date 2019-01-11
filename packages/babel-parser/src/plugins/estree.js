@@ -197,26 +197,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       delete node.directives;
     }
 
-    pushClassMethod(
-      classBody: N.ClassBody,
-      method: N.ClassMethod,
-      isGenerator: boolean,
-      isAsync: boolean,
-      isConstructor: boolean,
-    ): void {
-      this.parseMethod(
-        method,
-        isGenerator,
-        isAsync,
-        isConstructor,
-        "MethodDefinition",
-      );
+    pushClassMethod(classBody: N.ClassBody, method: N.ClassMethod): void {
+      super.pushClassMethod(...arguments);
       if (method.typeParameters) {
         // $FlowIgnore
         method.value.typeParameters = method.typeParameters;
         delete method.typeParameters;
       }
-      classBody.body.push(method);
     }
 
     parseExprAtom(refShorthandDefaultPos?: ?Pos): N.Expression {
@@ -280,7 +267,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       // $FlowIgnore
       node.value = funcNode;
 
-      return this.finishNode(node, type);
+      return this.finishNode(
+        node,
+        type === "ClassMethod" ? "MethodDefinition" : type,
+      );
     }
 
     parseObjectMethod(

@@ -1030,7 +1030,10 @@ export default class StatementParser extends ExpressionParser {
   parseClassBody(node: N.Class): void {
     this.state.classLevel++;
 
-    const state = { hadConstructor: false };
+    const state = {
+      hadConstructor: false,
+      isDerived: node.superClass !== null,
+    };
     let decorators: N.Decorator[] = [];
     const classBody: N.ClassBody = this.startNode();
 
@@ -1097,7 +1100,7 @@ export default class StatementParser extends ExpressionParser {
   parseClassMember(
     classBody: N.ClassBody,
     member: N.ClassMember,
-    state: { hadConstructor: boolean },
+    state: { hadConstructor: boolean, isDerived: boolean },
   ): void {
     let isStatic = false;
     const containsEsc = this.state.containsEsc;
@@ -1116,6 +1119,7 @@ export default class StatementParser extends ExpressionParser {
         this.pushClassMethod(
           classBody,
           method,
+          state.isDerived,
           false,
           false,
           /* isConstructor */ false,
@@ -1128,7 +1132,7 @@ export default class StatementParser extends ExpressionParser {
         prop.computed = false;
         prop.key = key;
         prop.static = false;
-        classBody.body.push(this.parseClassProperty(prop));
+        this.pushClassProperty(classBody, prop, state.isDerived);
         return;
       } else if (containsEsc) {
         throw this.unexpected();
@@ -1144,7 +1148,7 @@ export default class StatementParser extends ExpressionParser {
   parseClassMemberWithIsStatic(
     classBody: N.ClassBody,
     member: N.ClassMember,
-    state: { hadConstructor: boolean },
+    state: { hadConstructor: boolean, isDerived: boolean },
     isStatic: boolean,
   ) {
     const publicMethod: $FlowSubtype<N.ClassMethod> = member;
@@ -1164,7 +1168,13 @@ export default class StatementParser extends ExpressionParser {
 
       if (method.key.type === "PrivateName") {
         // Private generator method
-        this.pushClassPrivateMethod(classBody, privateMethod, true, false);
+        this.pushClassPrivateMethod(
+          classBody,
+          privateMethod,
+          state.isDerived,
+          true,
+          false,
+        );
         return;
       }
 
@@ -1175,6 +1185,7 @@ export default class StatementParser extends ExpressionParser {
       this.pushClassMethod(
         classBody,
         publicMethod,
+        state.isDerived,
         true,
         false,
         /* isConstructor */ false,
@@ -1194,7 +1205,13 @@ export default class StatementParser extends ExpressionParser {
       method.kind = "method";
 
       if (isPrivate) {
-        this.pushClassPrivateMethod(classBody, privateMethod, false, false);
+        this.pushClassPrivateMethod(
+          classBody,
+          privateMethod,
+          state.isDerived,
+          false,
+          false,
+        );
         return;
       }
 
@@ -1221,15 +1238,16 @@ export default class StatementParser extends ExpressionParser {
       this.pushClassMethod(
         classBody,
         publicMethod,
+        state.isDerived,
         false,
         false,
         isConstructor,
       );
     } else if (this.isClassProperty()) {
       if (isPrivate) {
-        this.pushClassPrivateProperty(classBody, privateProp);
+        this.pushClassPrivateProperty(classBody, privateProp, state.isDerived);
       } else {
-        this.pushClassProperty(classBody, publicProp);
+        this.pushClassProperty(classBody, publicProp, state.isDerived);
       }
     } else if (isSimple && key.name === "async" && !this.isLineTerminator()) {
       // an async method
@@ -1244,6 +1262,7 @@ export default class StatementParser extends ExpressionParser {
         this.pushClassPrivateMethod(
           classBody,
           privateMethod,
+          state.isDerived,
           isGenerator,
           true,
         );
@@ -1258,6 +1277,7 @@ export default class StatementParser extends ExpressionParser {
         this.pushClassMethod(
           classBody,
           publicMethod,
+          state.isDerived,
           isGenerator,
           true,
           /* isConstructor */ false,
@@ -1276,7 +1296,13 @@ export default class StatementParser extends ExpressionParser {
 
       if (method.key.type === "PrivateName") {
         // private getter/setter
-        this.pushClassPrivateMethod(classBody, privateMethod, false, false);
+        this.pushClassPrivateMethod(
+          classBody,
+          privateMethod,
+          state.isDerived,
+          false,
+          false,
+        );
       } else {
         if (this.isNonstaticConstructor(publicMethod)) {
           this.raise(
@@ -1287,6 +1313,7 @@ export default class StatementParser extends ExpressionParser {
         this.pushClassMethod(
           classBody,
           publicMethod,
+          state.isDerived,
           false,
           false,
           /* isConstructor */ false,
@@ -1297,9 +1324,9 @@ export default class StatementParser extends ExpressionParser {
     } else if (this.isLineTerminator()) {
       // an uninitialized class property (due to ASI, since we don't otherwise recognize the next token)
       if (isPrivate) {
-        this.pushClassPrivateProperty(classBody, privateProp);
+        this.pushClassPrivateProperty(classBody, privateProp, state.isDerived);
       } else {
-        this.pushClassProperty(classBody, publicProp);
+        this.pushClassProperty(classBody, publicProp, state.isDerived);
       }
     } else {
       this.unexpected();
@@ -1331,7 +1358,14 @@ export default class StatementParser extends ExpressionParser {
     return key;
   }
 
-  pushClassProperty(classBody: N.ClassBody, prop: N.ClassProperty) {
+  pushClassProperty(
+    classBody: N.ClassBody,
+    prop: N.ClassProperty,
+    inDerived: boolean,
+  ) {
+    const oldInDerivedClass = this.state.inDerivedClass;
+    this.state.inDerivedClass = inDerived;
+
     // This only affects properties, not methods.
     if (this.isNonstaticConstructor(prop)) {
       this.raise(
@@ -1340,23 +1374,35 @@ export default class StatementParser extends ExpressionParser {
       );
     }
     classBody.body.push(this.parseClassProperty(prop));
+
+    this.state.inDerivedClass = oldInDerivedClass;
   }
 
   pushClassPrivateProperty(
     classBody: N.ClassBody,
     prop: N.ClassPrivateProperty,
+    inDerived: boolean,
   ) {
+    const oldInDerivedClass = this.state.inDerivedClass;
+    this.state.inDerivedClass = inDerived;
+
     this.expectPlugin("classPrivateProperties", prop.key.start);
     classBody.body.push(this.parseClassPrivateProperty(prop));
+
+    this.state.inDerivedClass = oldInDerivedClass;
   }
 
   pushClassMethod(
     classBody: N.ClassBody,
     method: N.ClassMethod,
+    inDerived: boolean,
     isGenerator: boolean,
     isAsync: boolean,
     isConstructor: boolean,
   ): void {
+    const oldInDerivedClass = this.state.inDerivedClass;
+    this.state.inDerivedClass = inDerived;
+
     classBody.body.push(
       this.parseMethod(
         method,
@@ -1366,14 +1412,20 @@ export default class StatementParser extends ExpressionParser {
         "ClassMethod",
       ),
     );
+
+    this.state.inDerivedClass = oldInDerivedClass;
   }
 
   pushClassPrivateMethod(
     classBody: N.ClassBody,
     method: N.ClassPrivateMethod,
+    inDerived: boolean,
     isGenerator: boolean,
     isAsync: boolean,
   ): void {
+    const oldInDerivedClass = this.state.inDerivedClass;
+    this.state.inDerivedClass = inDerived;
+
     this.expectPlugin("classPrivateMethods", method.key.start);
     classBody.body.push(
       this.parseMethod(
@@ -1384,6 +1436,8 @@ export default class StatementParser extends ExpressionParser {
         "ClassPrivateMethod",
       ),
     );
+
+    this.state.inDerivedClass = oldInDerivedClass;
   }
 
   // Overridden in typescript.js

@@ -70,6 +70,7 @@ export default class State {
   maybeInArrowParameters: boolean = false;
   inGenerator: boolean = false;
   inMethod: boolean | N.MethodKind = false;
+  inDerivedClass: boolean = false;
   inAsync: boolean = false;
   inPipeline: boolean = false;
   inType: boolean = false;

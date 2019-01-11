@@ -1687,7 +1687,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseClassMember(
       classBody: N.ClassBody,
       member: any,
-      state: { hadConstructor: boolean },
+      state: { hadConstructor: boolean, isDerived: boolean },
     ): void {
       const accessibility = this.parseAccessModifier();
       if (accessibility) member.accessibility = accessibility;
@@ -1698,7 +1698,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parseClassMemberWithIsStatic(
       classBody: N.ClassBody,
       member: any,
-      state: { hadConstructor: boolean },
+      state: { hadConstructor: boolean, isDerived: boolean },
       isStatic: boolean,
     ): void {
       const methodOrProp: N.ClassMethod | N.ClassProperty = member;
@@ -1736,7 +1736,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         methodOrProp.static = isStatic;
         this.parseClassPropertyName(prop);
         this.parsePostMemberNameModifiers(methodOrProp);
-        this.pushClassProperty(classBody, prop);
+        this.pushClassProperty(classBody, prop, state.isDerived);
         return;
       }
 
@@ -1876,33 +1876,19 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.parseClassProperty(node);
     }
 
-    pushClassMethod(
-      classBody: N.ClassBody,
-      method: N.ClassMethod,
-      isGenerator: boolean,
-      isAsync: boolean,
-      isConstructor: boolean,
-    ): void {
+    pushClassMethod(classBody: N.ClassBody, method: N.ClassMethod): void {
       const typeParameters = this.tsTryParseTypeParameters();
       if (typeParameters) method.typeParameters = typeParameters;
-      super.pushClassMethod(
-        classBody,
-        method,
-        isGenerator,
-        isAsync,
-        isConstructor,
-      );
+      super.pushClassMethod(...arguments);
     }
 
     pushClassPrivateMethod(
       classBody: N.ClassBody,
       method: N.ClassPrivateMethod,
-      isGenerator: boolean,
-      isAsync: boolean,
     ): void {
       const typeParameters = this.tsTryParseTypeParameters();
       if (typeParameters) method.typeParameters = typeParameters;
-      super.pushClassPrivateMethod(classBody, method, isGenerator, isAsync);
+      super.pushClassPrivateMethod(...arguments);
     }
 
     parseClassSuper(node: N.Class): void {
