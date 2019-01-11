@@ -596,6 +596,7 @@ export default class ExpressionParser extends LValParser {
       node.arguments = this.parseCallExpressionArguments(
         tt.parenR,
         possibleAsync,
+        base.type === "Import",
       );
       if (!state.optionalChainMember) {
         this.finishCallExpression(node);
@@ -703,6 +704,7 @@ export default class ExpressionParser extends LValParser {
   parseCallExpressionArguments(
     close: TokenType,
     possibleAsyncArrow: boolean,
+    dynamicImport?: boolean,
   ): $ReadOnlyArray<?N.Expression> {
     const elts = [];
     let innerParenStart;
@@ -713,7 +715,15 @@ export default class ExpressionParser extends LValParser {
         first = false;
       } else {
         this.expect(tt.comma);
-        if (this.eat(close)) break;
+        if (this.eat(close)) {
+          if (dynamicImport) {
+            this.raise(
+              this.state.lastTokStart,
+              "Trailing comma is disallowed inside import(...) arguments",
+            );
+          }
+          break;
+        }
       }
 
       // we need to make sure that if this is an async arrow functions,
@@ -1306,7 +1316,10 @@ export default class ExpressionParser extends LValParser {
     }
 
     node.callee = this.parseNoCallExpr();
-    if (
+
+    if (node.callee.type === "Import") {
+      this.raise(node.callee.start, "Cannot use new with import(...)");
+    } else if (
       node.callee.type === "OptionalMemberExpression" ||
       node.callee.type === "OptionalCallExpression"
     ) {
@@ -1314,13 +1327,13 @@ export default class ExpressionParser extends LValParser {
         this.state.lastTokEnd,
         "constructors in/after an Optional Chain are not allowed",
       );
-    }
-    if (this.eat(tt.questionDot)) {
+    } else if (this.eat(tt.questionDot)) {
       this.raise(
         this.state.start,
         "constructors in/after an Optional Chain are not allowed",
       );
     }
+
     this.parseNewArguments(node);
     return this.finishNode(node, "NewExpression");
   }
