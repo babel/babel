@@ -35,7 +35,7 @@ export default declare(api => {
           } else {
             const bindingId = path.scope.generateUidIdentifier(pattern.name);
             substitutionsMap.set(pattern.name, bindingId.name);
-            return template.expression(`(BINDING_ID = EXPR, true)`)({
+            return template.expression`(BINDING_ID = EXPR, true)`({
               BINDING_ID: bindingId,
               EXPR: expr,
             });
@@ -57,11 +57,9 @@ export default declare(api => {
       }
 
       function generateObjectTestExpr(expr, objPattern, substitutionsMap) {
-        const objectId = template.expression(
-          `EXPR !== undefined && EXPR !== null`,
-        )({
-          EXPR: expr,
-        });
+        const objectId = template.expression`EXPR !== undefined && EXPR !== null`(
+          { EXPR: expr },
+        );
 
         return objPattern.properties.reduce((acc, property) => {
           let bindingId;
@@ -79,12 +77,12 @@ export default declare(api => {
           if (element && !t.isIdentifier(element)) {
             test = generateTestExpr(bindingId, element, substitutionsMap);
           } else {
-            test = template.expression(`typeof BINDING_ID !== "undefined"`)({
+            test = template.expression`typeof BINDING_ID !== "undefined"`({
               BINDING_ID: bindingId,
             });
           }
 
-          return template.expression(`LEFT && (BINDING_ID = EXPR.PROP, TEST)`)({
+          return template.expression`LEFT && (BINDING_ID = EXPR.PROP, TEST)`({
             LEFT: acc,
             EXPR: expr,
             PROP: property.key,
@@ -96,9 +94,7 @@ export default declare(api => {
 
       function generateArrayTestExpr(expr, arrayPattern, substitutionsMap) {
         const clauses = [
-          template.expression(`Array.isArray(EXPR)`)({
-            EXPR: expr,
-          }),
+          template.expression`Array.isArray(EXPR)`({ EXPR: expr }),
         ];
 
         const { elements } = arrayPattern;
@@ -109,7 +105,7 @@ export default declare(api => {
         ) {
           if (elements.length > 1) {
             clauses.push(
-              template.expression(`EXPR.length >= LEN`)({
+              template.expression`EXPR.length >= LEN`({
                 EXPR: expr,
                 LEN: t.numericLiteral(elements.length - 1),
               }),
@@ -117,7 +113,7 @@ export default declare(api => {
           }
         } else {
           clauses.push(
-            template.expression(`EXPR.length == LEN`)({
+            template.expression`EXPR.length == LEN`({
               EXPR: expr,
               LEN: t.numericLiteral(elements.length),
             }),
@@ -134,12 +130,12 @@ export default declare(api => {
             const bindingId = path.scope.generateUidIdentifier(element.name);
             substitutionsMap.set(element.name, bindingId.name);
             clauses.push(
-              template.expression(
-                `(BINDING_ID = SUB_EXPR, typeof BINDING_ID !== "undefined")`,
-              )({
-                SUB_EXPR: subExpr,
-                BINDING_ID: bindingId,
-              }),
+              template.expression`(BINDING_ID = SUB_EXPR, typeof BINDING_ID !== "undefined")`(
+                {
+                  SUB_EXPR: subExpr,
+                  BINDING_ID: bindingId,
+                },
+              ),
             );
           } else if (t.isMatchRestElement(element)) {
             if (index !== elements.length - 1) {
@@ -151,7 +147,7 @@ export default declare(api => {
             ids.push(restId.name);
             if (t.isIdentifier(element.body)) {
               clauses.push(
-                template.expression(`(REST_ID = EXPR.slice(NUM))`)({
+                template.expression`(REST_ID = EXPR.slice(NUM))`({
                   REST_ID: restId,
                   EXPR: expr,
                   NUM: t.numericLiteral(index),
@@ -164,7 +160,7 @@ export default declare(api => {
                 substitutionsMap,
               );
               clauses.push(
-                template.expression(`(REST_ID = EXPR.slice(NUM), SUB_TEST)`)({
+                template.expression`(REST_ID = EXPR.slice(NUM), SUB_TEST)`({
                   REST_ID: restId,
                   EXPR: expr,
                   NUM: t.numericLiteral(index),
