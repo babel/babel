@@ -95,35 +95,36 @@ export default declare(api => {
       }
 
       function generateArrayTestExpr(expr, arrayPattern, substitutionsMap) {
-        const base = template.expression(`Array.isArray(EXPR)`)({
-          EXPR: expr,
-        });
+        const clauses = [
+          template.expression(`Array.isArray(EXPR)`)({
+            EXPR: expr,
+          }),
+        ];
 
         const { elements } = arrayPattern;
 
-        let base2;
         if (
           elements.length > 0 &&
           t.isMatchRestElement(elements[elements.length - 1])
         ) {
           if (elements.length > 1) {
-            base2 = template.expression(`LEFT && EXPR.length >= LEN`)({
-              LEFT: base,
-              EXPR: expr,
-              LEN: t.numericLiteral(elements.length - 1),
-            });
-          } else {
-            base2 = base;
+            clauses.push(
+              template.expression(`EXPR.length >= LEN`)({
+                EXPR: expr,
+                LEN: t.numericLiteral(elements.length - 1),
+              }),
+            );
           }
         } else {
-          base2 = template.expression(`LEFT && EXPR.length == LEN`)({
-            LEFT: base,
-            EXPR: expr,
-            LEN: t.numericLiteral(elements.length),
-          });
+          clauses.push(
+            template.expression(`EXPR.length == LEN`)({
+              EXPR: expr,
+              LEN: t.numericLiteral(elements.length),
+            }),
+          );
         }
 
-        return elements.reduce((acc, element, index) => {
+        elements.forEach((element, index) => {
           if (t.isIdentifier(element)) {
             const subExpr = t.memberExpression(
               expr,
@@ -132,13 +133,14 @@ export default declare(api => {
             );
             const bindingId = path.scope.generateUidIdentifier(element.name);
             substitutionsMap.set(element.name, bindingId.name);
-            return template.expression(
-              `LEFT && (BINDING_ID = SUB_EXPR, typeof BINDING_ID !== "undefined")`,
-            )({
-              LEFT: acc,
-              SUB_EXPR: subExpr,
-              BINDING_ID: bindingId,
-            });
+            clauses.push(
+              template.expression(
+                `(BINDING_ID = SUB_EXPR, typeof BINDING_ID !== "undefined")`,
+              )({
+                SUB_EXPR: subExpr,
+                BINDING_ID: bindingId,
+              }),
+            );
           } else if (t.isMatchRestElement(element)) {
             if (index !== elements.length - 1) {
               throw new Error(
@@ -148,13 +150,12 @@ export default declare(api => {
             const restId = path.scope.generateUidIdentifier("rest");
             ids.push(restId.name);
             if (t.isIdentifier(element.body)) {
-              return template.expression(`LEFT && (REST_ID = EXPR.slice(NUM))`)(
-                {
-                  LEFT: acc,
+              clauses.push(
+                template.expression(`(REST_ID = EXPR.slice(NUM))`)({
                   REST_ID: restId,
                   EXPR: expr,
                   NUM: t.numericLiteral(index),
-                },
+                }),
               );
             } else {
               const subTest = generateTestExpr(
@@ -162,15 +163,14 @@ export default declare(api => {
                 element.body,
                 substitutionsMap,
               );
-              return template.expression(
-                `LEFT && (REST_ID = EXPR.slice(NUM), SUB_TEST)`,
-              )({
-                LEFT: acc,
-                REST_ID: restId,
-                EXPR: expr,
-                NUM: t.numericLiteral(index),
-                SUB_TEST: subTest,
-              });
+              clauses.push(
+                template.expression(`(REST_ID = EXPR.slice(NUM), SUB_TEST)`)({
+                  REST_ID: restId,
+                  EXPR: expr,
+                  NUM: t.numericLiteral(index),
+                  SUB_TEST: subTest,
+                }),
+              );
             }
           } else {
             const subExpr = t.memberExpression(
@@ -178,12 +178,13 @@ export default declare(api => {
               t.numericLiteral(index),
               true,
             );
-            return template.expression(`LEFT && SUB_TEST`)({
-              LEFT: acc,
-              SUB_TEST: generateTestExpr(subExpr, element, substitutionsMap),
-            });
+            clauses.push(generateTestExpr(subExpr, element, substitutionsMap));
           }
-        }, base2);
+        });
+
+        return clauses.slice(1).reduce((acc, clause) => {
+          return t.logicalExpression("&&", acc, clause);
+        }, clauses[0]);
       }
 
       const substitutionsMap = new Map();
