@@ -12,7 +12,7 @@ const failIf = testExpr => t.ifStatement(testExpr, t.continueStatement(null));
 
 class WhenRewriter {
   constructor({ scope, caseLabel }) {
-    this.stmts = [];
+    this.stmts = undefined; // Initialized in `translate` before each use.
     this.scope = scope;
     this.caseLabel = caseLabel;
   }
@@ -29,6 +29,7 @@ class WhenRewriter {
 
   translate(node, valueId) {
     const { pattern, matchGuard, body } = node;
+    this.stmts = [];
     this.translatePattern(pattern, valueId);
     if (matchGuard !== undefined) {
       this.failIf(t.unaryExpression("!", matchGuard));
@@ -129,29 +130,22 @@ class WhenRewriter {
 export default declare(api => {
   api.assertVersion(7);
 
-  const visitWhen = (
-    whenNode,
-    { discriminantId, stmts: outerStmts, caseLabel, scope },
-  ) => {
-    const rewriter = new WhenRewriter({ scope, caseLabel });
-    outerStmts.push(rewriter.translate(whenNode, discriminantId));
-  };
-
   const caseVisitor = {
     CaseStatement(path) {
-      const { discriminant, cases } = path.node;
       const { scope } = path;
       const caseLabel = scope.generateUidIdentifier("case");
-      const discriminantId = scope.generateUidIdentifier("caseVal");
+      const rewriter = new WhenRewriter({ scope, caseLabel });
 
       const stmts = [];
+      const { discriminant, cases } = path.node;
+      const discriminantId = scope.generateUidIdentifier("caseVal");
       stmts.push(constStatement(discriminantId, discriminant));
       for (const whenNode of cases) {
-        visitWhen(whenNode, { discriminantId, stmts, caseLabel, scope });
+        stmts.push(rewriter.translate(whenNode, discriminant));
       }
       path.replaceWith(
         template`
-          LABEL: do {STMTS} while (0);
+          LABEL: do { STMTS } while (0);
         `({ LABEL: caseLabel, STMTS: stmts }),
       );
     },
