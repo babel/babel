@@ -120,47 +120,33 @@ export default declare(api => {
   ) => {
     const { pattern, matchGuard, body } = whenNode;
 
-    const wrapper = template`
-      do { } while (0);
-    `();
-    const stmts = wrapper.body.body; // DoWhileS -> BlockS -> []
-
+    const stmts = [];
     new WhenRewriter({ stmts, scope }).rewriteNode(pattern, discriminantId);
-
     if (matchGuard !== undefined) {
       stmts.push(failIf(t.unaryExpression("!", matchGuard)));
     }
-
     stmts.push(body);
-
     stmts.push(t.continueStatement(outerLabel));
-
-    outerStmts.push(wrapper);
+    outerStmts.push(template`do { STMTS } while (0);`({ STMTS: stmts }));
   };
 
   const caseVisitor = {
     CaseStatement(path) {
       const { discriminant, cases } = path.node;
-
-      const outerLabel = path.scope.generateUidIdentifier("case");
-      const wrapper = template`
-        LABEL:
-        do {
-        } while (0);
-      `({ LABEL: outerLabel });
-      const stmts = wrapper.body.body.body; // LabeledS -> DoWhileS -> BlockS -> []
-
-      const discriminantId = path.scope.generateUidIdentifierBasedOnNode(
-        discriminant,
-      );
-      stmts.push(constStatement(discriminantId, discriminant));
-
       const { scope } = path;
+      const outerLabel = scope.generateUidIdentifier("case");
+      const discriminantId = scope.generateUidIdentifier("caseVal");
+
+      const stmts = [];
+      stmts.push(constStatement(discriminantId, discriminant));
       for (const whenNode of cases) {
         visitWhen(whenNode, { discriminantId, stmts, outerLabel, scope });
       }
-
-      path.replaceWith(wrapper);
+      path.replaceWith(
+        template`
+          LABEL: do {STMTS} while (0);
+        `({ LABEL: outerLabel, STMTS: stmts }),
+      );
     },
   };
 
