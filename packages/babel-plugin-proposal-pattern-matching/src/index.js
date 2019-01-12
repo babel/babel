@@ -11,20 +11,35 @@ const constStatement = (id, initializer) =>
 const failIf = testExpr => t.ifStatement(testExpr, t.continueStatement(null));
 
 class WhenRewriter {
-  constructor({ stmts, scope }) {
-    this.stmts = stmts;
+  constructor({ scope, caseLabel }) {
+    this.stmts = [];
     this.scope = scope;
+    this.caseLabel = caseLabel;
   }
 
+  // private
   bindConst(id, initializer) {
     this.stmts.push(constStatement(id, initializer));
   }
 
+  // private
   failIf(testExpr) {
     this.stmts.push(failIf(testExpr));
   }
 
-  rewriteNode(pattern, id) {
+  translate(node, valueId) {
+    const { pattern, matchGuard, body } = node;
+    this.translatePattern(pattern, valueId);
+    if (matchGuard !== undefined) {
+      this.failIf(t.unaryExpression("!", matchGuard));
+    }
+    this.stmts.push(body);
+    this.stmts.push(t.continueStatement(this.caseLabel));
+    return template`do { STMTS } while (0);`({ STMTS: this.stmts });
+  }
+
+  // private
+  translatePattern(pattern, id) {
     const { scope } = this;
 
     switch (pattern.type) {
@@ -49,7 +64,7 @@ class WhenRewriter {
           const subId = scope.generateUidIdentifier(key.name);
           this.bindConst(subId, exprT`ID.KEY`({ ID: id, KEY: key }));
           this.failIf(exprT`typeof SUBID === "undefined"`({ SUBID: subId }));
-          this.rewriteNode(property.element || property.key, subId);
+          this.translatePattern(property.element || property.key, subId);
         }
         return;
 
@@ -85,7 +100,7 @@ class WhenRewriter {
             exprT`ID[INDEX]`({ ID: id, INDEX: t.numericLiteral(index) }),
           );
           this.failIf(exprT`typeof SUBID === "undefined"`({ SUBID: subId }));
-          this.rewriteNode(element, subId);
+          this.translatePattern(element, subId);
         });
 
         if (haveRest) {
@@ -97,7 +112,7 @@ class WhenRewriter {
               START: t.numericLiteral(numElements),
             }),
           );
-          this.rewriteNode(elements[elements.length - 1].body, subId);
+          this.translatePattern(elements[elements.length - 1].body, subId);
         }
 
         return;
@@ -118,16 +133,8 @@ export default declare(api => {
     whenNode,
     { discriminantId, stmts: outerStmts, caseLabel, scope },
   ) => {
-    const { pattern, matchGuard, body } = whenNode;
-
-    const stmts = [];
-    new WhenRewriter({ stmts, scope }).rewriteNode(pattern, discriminantId);
-    if (matchGuard !== undefined) {
-      stmts.push(failIf(t.unaryExpression("!", matchGuard)));
-    }
-    stmts.push(body);
-    stmts.push(t.continueStatement(caseLabel));
-    outerStmts.push(template`do { STMTS } while (0);`({ STMTS: stmts }));
+    const rewriter = new WhenRewriter({ scope, caseLabel });
+    outerStmts.push(rewriter.translate(whenNode, discriminantId));
   };
 
   const caseVisitor = {
