@@ -152,7 +152,6 @@ export default declare(api => {
     CaseStatement(path) {
       const { discriminant, cases } = path.node;
 
-      // TODO is this the right namespace for a label?
       const outerLabel = path.scope.generateUidIdentifier("case");
       const wrapper = template`
         LABEL:
