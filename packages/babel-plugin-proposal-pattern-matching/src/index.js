@@ -3,6 +3,11 @@ import { declare } from "@babel/helper-plugin-utils";
 import syntaxPatternMatching from "@babel/plugin-syntax-pattern-matching";
 import { types as t, template } from "../../babel-core";
 
+const exprT = template.expression;
+
+const constStatement = (id, initializer) =>
+  t.variableDeclaration("const", [t.variableDeclarator(id, initializer)]);
+
 export default declare(api => {
   api.assertVersion(7);
 
@@ -18,32 +23,20 @@ export default declare(api => {
         return;
 
       case "Identifier":
-        stmts.push(
-          template`
-            const SRCID = ID;
-          `({ SRCID: pattern, ID: id }),
-        );
+        stmts.push(constStatement(pattern, id));
         return;
 
       case "ObjectMatchPattern":
         stmts.push(
-          failIf(
-            template.expression`
-            ID === null || typeof ID === "undefined"
-          `({ ID: id }),
-          ),
+          failIf(exprT`ID === null || typeof ID === "undefined"`({ ID: id })),
         );
         for (const property of pattern.properties) {
           assert(property.type === "ObjectMatchProperty");
           const { key } = property;
           const subId = scope.generateUidIdentifier(key.name);
           stmts.push(
-            template`const SUBID = ID.KEY`({ SUBID: subId, ID: id, KEY: key }),
-            failIf(
-              template.expression`typeof SUBID === "undefined"`({
-                SUBID: subId,
-              }),
-            ),
+            constStatement(subId, exprT`ID.KEY`({ ID: id, KEY: key })),
+            failIf(exprT`typeof SUBID === "undefined"`({ SUBID: subId })),
           );
           matchPattern(property.element || property.key, subId, {
             stmts,
@@ -56,7 +49,7 @@ export default declare(api => {
         stmts.push(
           failIf(
             // TODO this is too specific
-            template.expression`!Array.isArray(ID)`({ ID: id }),
+            exprT`!Array.isArray(ID)`({ ID: id }),
           ),
         );
 
@@ -86,16 +79,11 @@ export default declare(api => {
         elements.slice(0, numElements).forEach((element, index) => {
           const subId = scope.generateUidIdentifier(index);
           stmts.push(
-            template`const SUBID = ID[INDEX]`({
-              SUBID: subId,
-              ID: id,
-              INDEX: t.numericLiteral(index),
-            }),
-            failIf(
-              template.expression`typeof SUBID === "undefined"`({
-                SUBID: subId,
-              }),
+            constStatement(
+              subId,
+              exprT`ID[INDEX]`({ ID: id, INDEX: t.numericLiteral(index) }),
             ),
+            failIf(exprT`typeof SUBID === "undefined"`({ SUBID: subId })),
           );
           matchPattern(element, subId, { stmts, scope });
         });
@@ -103,11 +91,13 @@ export default declare(api => {
         if (haveRest) {
           const subId = scope.generateUidIdentifier("rest");
           stmts.push(
-            template`const SUBID = ID.slice(START)`({
-              SUBID: subId,
-              ID: id,
-              START: t.numericLiteral(numElements),
-            }),
+            constStatement(
+              subId,
+              exprT`ID.slice(START)`({
+                ID: id,
+                START: t.numericLiteral(numElements),
+              }),
+            ),
           );
           matchPattern(elements[elements.length - 1].body, subId, {
             stmts,
@@ -132,8 +122,8 @@ export default declare(api => {
     const { pattern, matchGuard, body } = whenNode;
 
     const wrapper = template`
-        do { } while (0);
-      `();
+      do { } while (0);
+    `();
     const stmts = wrapper.body.body; // DoWhileS -> BlockS -> []
 
     matchPattern(pattern, discriminantId, { stmts, scope });
@@ -163,11 +153,7 @@ export default declare(api => {
       const discriminantId = path.scope.generateUidIdentifierBasedOnNode(
         discriminant,
       );
-      stmts.push(
-        t.variableDeclaration("const", [
-          t.variableDeclarator(discriminantId, discriminant),
-        ]),
-      );
+      stmts.push(constStatement(discriminantId, discriminant));
 
       const { scope } = path;
       for (const whenNode of cases) {
