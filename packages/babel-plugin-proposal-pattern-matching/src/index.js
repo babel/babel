@@ -99,6 +99,22 @@ export default declare(api => {
           );
           matchPattern(element, subId, { stmts, scope });
         });
+
+        if (haveRest) {
+          const subId = scope.generateUidIdentifier("rest");
+          stmts.push(
+            template`const SUBID = ID.slice(START)`({
+              SUBID: subId,
+              ID: id,
+              START: t.numericLiteral(numElements),
+            }),
+          );
+          matchPattern(elements[elements.length - 1].body, subId, {
+            stmts,
+            scope,
+          });
+        }
+
         return;
       }
 
