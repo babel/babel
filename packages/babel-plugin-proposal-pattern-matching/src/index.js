@@ -111,7 +111,7 @@ export default declare(api => {
 
   const whenVisitor = {
     WhenClause(path, { discriminantId, stmts: outerStmts, outerLabel, scope }) {
-      const { pattern, body } = path.node;
+      const { pattern, matchGuard, body } = path.node;
 
       const wrapper = template`
         do { } while (0);
@@ -119,6 +119,9 @@ export default declare(api => {
       const stmts = wrapper.body.body; // DoWhileS -> BlockS -> []
 
       matchPattern(pattern, discriminantId, { stmts, scope });
+      if (matchGuard !== undefined) {
+        stmts.push(failIf(t.unaryExpression("!", matchGuard)));
+      }
 
       stmts.push(body);
 
