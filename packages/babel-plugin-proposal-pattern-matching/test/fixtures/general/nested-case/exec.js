@@ -24,5 +24,4 @@ case (1) {
   }
   when x -> log.push('c', x);
 }
-// TODO known failure
-// expect(log).toEqual(['c', 1]);
+expect(log).toEqual(['c', 1]);

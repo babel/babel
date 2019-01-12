@@ -125,30 +125,31 @@ export default declare(api => {
     }
   };
 
-  const whenVisitor = {
-    WhenClause(path, { discriminantId, stmts: outerStmts, outerLabel, scope }) {
-      const { pattern, matchGuard, body } = path.node;
+  const visitWhen = (
+    whenNode,
+    { discriminantId, stmts: outerStmts, outerLabel, scope },
+  ) => {
+    const { pattern, matchGuard, body } = whenNode;
 
-      const wrapper = template`
+    const wrapper = template`
         do { } while (0);
       `();
-      const stmts = wrapper.body.body; // DoWhileS -> BlockS -> []
+    const stmts = wrapper.body.body; // DoWhileS -> BlockS -> []
 
-      matchPattern(pattern, discriminantId, { stmts, scope });
-      if (matchGuard !== undefined) {
-        stmts.push(failIf(t.unaryExpression("!", matchGuard)));
-      }
+    matchPattern(pattern, discriminantId, { stmts, scope });
+    if (matchGuard !== undefined) {
+      stmts.push(failIf(t.unaryExpression("!", matchGuard)));
+    }
 
-      stmts.push(body);
+    stmts.push(body);
 
-      stmts.push(t.continueStatement(outerLabel));
+    stmts.push(t.continueStatement(outerLabel));
 
-      outerStmts.push(wrapper);
-    },
+    outerStmts.push(wrapper);
   };
 
   const caseVisitor = {
-    CaseStatement(path, state) {
+    CaseStatement(path) {
       const { discriminant, cases } = path.node;
 
       // TODO is this the right namespace for a label?
@@ -170,8 +171,9 @@ export default declare(api => {
       );
 
       const { scope } = path;
-      path.traverse(whenVisitor, { discriminantId, stmts, outerLabel, scope });
-      // console.log(stmts[1].body.body);
+      for (const whenNode of cases) {
+        visitWhen(whenNode, { discriminantId, stmts, outerLabel, scope });
+      }
 
       path.replaceWith(
         template`
