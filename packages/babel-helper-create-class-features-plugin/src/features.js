@@ -39,9 +39,17 @@ export function isLoose(file, feature) {
 }
 
 export function verifyUsedFeatures(path, file) {
-  if (hasOwnDecorators(path)) {
+  if (hasOwnDecorators(path.node)) {
     if (!hasFeature(file, FEATURES.decorators)) {
-      throw path.buildCodeFrameError("Decorators are not enabled.");
+      throw path.buildCodeFrameError(
+        "Decorators are not enabled." +
+          "\nIf you are using " +
+          '["@babel/plugin-proposal-decorators", { "legacy": true }], ' +
+          'put it comes *before* "@babel/plugin-proposal-class-properties" ' +
+          "and enable loose mode:\n" +
+          '\t["@babel/plugin-proposal-decorators", { "legacy": true }]\n' +
+          '\t["@babel/plugin-proposal-class-properties", { "loose": true }]',
+      );
     }
 
     if (path.isPrivate()) {
