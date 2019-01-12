@@ -6,18 +6,15 @@ import { types as t, template } from "../../babel-core";
 export default declare(api => {
   api.assertVersion(7);
 
+  const failIf = testExpr => t.ifStatement(testExpr, t.continueStatement(null));
+
   const matchPattern = (pattern, id, { stmts, scope }) => {
     switch (pattern.type) {
       case "NumericLiteral":
       case "StringLiteral":
       case "BooleanLiteral":
       case "NullLiteral":
-        stmts.push(
-          t.ifStatement(
-            t.binaryExpression("!==", id, pattern),
-            t.continueStatement(null),
-          ),
-        );
+        stmts.push(failIf(t.binaryExpression("!==", id, pattern)));
         return;
 
       case "Identifier":
@@ -30,11 +27,10 @@ export default declare(api => {
 
       case "ObjectMatchPattern":
         stmts.push(
-          t.ifStatement(
+          failIf(
             template.expression`
-              ID === null || typeof ID === "undefined"
-            `({ ID: id }),
-            t.continueStatement(null),
+            ID === null || typeof ID === "undefined"
+          `({ ID: id }),
           ),
         );
         for (const property of pattern.properties) {
@@ -51,9 +47,55 @@ export default declare(api => {
         }
         return;
 
-      case "ArrayMatchPattern":
-        console.warn("Unimplemented: array matching");
+      case "ArrayMatchPattern": {
+        stmts.push(
+          failIf(
+            // TODO this is too specific
+            template.expression`!Array.isArray(ID)`({ ID: id }),
+          ),
+        );
+
+        const { elements } = pattern;
+        if (
+          elements.slice(0, -1).some(elt => elt.type === "MatchRestElement")
+        ) {
+          throw new Error("rest-pattern before end of array pattern");
+        }
+        const haveRest =
+          elements.length > 0 &&
+          elements[elements.length - 1].type === "MatchRestElement";
+
+        const numElements = elements.length - (haveRest ? 1 : 0);
+        if (!haveRest || numElements > 0) {
+          stmts.push(
+            failIf(
+              t.binaryExpression(
+                haveRest ? "<" : "!==",
+                t.memberExpression(id, t.identifier("length")),
+                t.numericLiteral(numElements),
+              ),
+            ),
+          );
+        }
+
+        elements.slice(0, numElements).forEach((element, index) => {
+          const subId = scope.generateUidIdentifier(index);
+          stmts.push(
+            template`const SUBID = ID[INDEX]`({
+              SUBID: subId,
+              ID: id,
+              INDEX: t.numericLiteral(index),
+            }),
+            failIf(
+              template.expression`typeof SUBID === "undefined"`({
+                SUBID: subId,
+              }),
+            ),
+          );
+          matchPattern(element, subId, { stmts, scope });
+        });
         return;
+      }
 
       case "RegExpLiteral":
       default:
