@@ -30,14 +30,29 @@ export default declare(api => {
 
       case "ObjectMatchPattern":
         stmts.push(
-          template`/* TODO object match */`({}, { preserveComments: true }),
+          t.ifStatement(
+            template.expression`
+              ID === null || typeof ID === "undefined"
+            `({ ID: id }),
+            t.continueStatement(null),
+          ),
         );
+        for (const property of pattern.properties) {
+          assert(property.type === "ObjectMatchProperty");
+          const { key } = property;
+          const subId = scope.generateUidIdentifier(key.name);
+          stmts.push(
+            template`const SUBID = ID.KEY`({ SUBID: subId, ID: id, KEY: key }),
+          );
+          matchPattern(property.element || property.key, subId, {
+            stmts,
+            scope,
+          });
+        }
         return;
 
       case "ArrayMatchPattern":
-        stmts.push(
-          template`/* TODO array match */`({}, { preserveComments: true }),
-        );
+        console.warn("Unimplemented: array matching");
         return;
 
       case "RegExpLiteral":
