@@ -16,44 +16,46 @@ class WhenRewriter {
     this.scope = scope;
   }
 
+  bindConst(id, initializer) {
+    this.stmts.push(constStatement(id, initializer));
+  }
+
+  failIf(testExpr) {
+    this.stmts.push(failIf(testExpr));
+  }
+
   rewriteNode(pattern, id) {
-    const { stmts, scope } = this;
+    const { scope } = this;
 
     switch (pattern.type) {
       case "NumericLiteral":
       case "StringLiteral":
       case "BooleanLiteral":
       case "NullLiteral":
-        stmts.push(failIf(t.binaryExpression("!==", id, pattern)));
+        this.failIf(t.binaryExpression("!==", id, pattern));
         return;
 
       case "Identifier":
-        stmts.push(constStatement(pattern, id));
+        this.bindConst(pattern, id);
         return;
 
       case "ObjectMatchPattern":
-        stmts.push(
-          failIf(exprT`ID === null || typeof ID === "undefined"`({ ID: id })),
+        this.failIf(
+          exprT`ID === null || typeof ID === "undefined"`({ ID: id }),
         );
         for (const property of pattern.properties) {
           assert(property.type === "ObjectMatchProperty");
           const { key } = property;
           const subId = scope.generateUidIdentifier(key.name);
-          stmts.push(
-            constStatement(subId, exprT`ID.KEY`({ ID: id, KEY: key })),
-            failIf(exprT`typeof SUBID === "undefined"`({ SUBID: subId })),
-          );
+          this.bindConst(subId, exprT`ID.KEY`({ ID: id, KEY: key }));
+          this.failIf(exprT`typeof SUBID === "undefined"`({ SUBID: subId }));
           this.rewriteNode(property.element || property.key, subId);
         }
         return;
 
       case "ArrayMatchPattern": {
-        stmts.push(
-          failIf(
-            // TODO this is too specific
-            exprT`!Array.isArray(ID)`({ ID: id }),
-          ),
-        );
+        // TODO this is too specific
+        this.failIf(exprT`!Array.isArray(ID)`({ ID: id }));
 
         const { elements } = pattern;
         if (
@@ -67,39 +69,33 @@ class WhenRewriter {
 
         const numElements = elements.length - (haveRest ? 1 : 0);
         if (!haveRest || numElements > 0) {
-          stmts.push(
-            failIf(
-              t.binaryExpression(
-                haveRest ? "<" : "!==",
-                t.memberExpression(id, t.identifier("length")),
-                t.numericLiteral(numElements),
-              ),
+          this.failIf(
+            t.binaryExpression(
+              haveRest ? "<" : "!==",
+              t.memberExpression(id, t.identifier("length")),
+              t.numericLiteral(numElements),
             ),
           );
         }
 
         elements.slice(0, numElements).forEach((element, index) => {
           const subId = scope.generateUidIdentifier(index);
-          stmts.push(
-            constStatement(
-              subId,
-              exprT`ID[INDEX]`({ ID: id, INDEX: t.numericLiteral(index) }),
-            ),
-            failIf(exprT`typeof SUBID === "undefined"`({ SUBID: subId })),
+          this.bindConst(
+            subId,
+            exprT`ID[INDEX]`({ ID: id, INDEX: t.numericLiteral(index) }),
           );
+          this.failIf(exprT`typeof SUBID === "undefined"`({ SUBID: subId }));
           this.rewriteNode(element, subId);
         });
 
         if (haveRest) {
           const subId = scope.generateUidIdentifier("rest");
-          stmts.push(
-            constStatement(
-              subId,
-              exprT`ID.slice(START)`({
-                ID: id,
-                START: t.numericLiteral(numElements),
-              }),
-            ),
+          this.bindConst(
+            subId,
+            exprT`ID.slice(START)`({
+              ID: id,
+              START: t.numericLiteral(numElements),
+            }),
           );
           this.rewriteNode(elements[elements.length - 1].body, subId);
         }
