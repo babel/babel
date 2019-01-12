@@ -1,4 +1,20 @@
 
+function match_x(input) {
+  case (input) {
+    when {x} -> return x;
+  }
+  return false;
+}
+
+expect(match_x({x: 1})).toBe(1);
+expect(match_x({x: "x"})).toBe("x");
+expect(match_x({x: undefined})).toBe(false);
+expect(match_x({})).toBe(false);
+expect(match_x([1])).toBe(false);
+expect(match_x(null)).toBe(false);
+expect(match_x(undefined)).toBe(false);
+
+
 /*
   case (input) {
     when {x: 1} -> ... // matches if `input` can do ToObject and `input.x` is 1

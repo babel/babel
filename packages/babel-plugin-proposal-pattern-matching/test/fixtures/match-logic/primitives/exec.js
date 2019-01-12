@@ -33,3 +33,15 @@ function match_NaN(input) {
 }
 
 expect(match_NaN(2)).toBe(2);
+
+
+// Ditto `undefined`.
+function match_undefined(input) {
+  case (input) {
+    when undefined -> return undefined;
+  }
+  return false;
+}
+
+expect(match_undefined(2)).toBe(2);
+expect(match_undefined(undefined)).toBe(undefined);

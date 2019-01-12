@@ -32,6 +32,24 @@ expect(match_1_x([1, undefined])).toBe(false);
 expect(match_1_2([1, 2, undefined])).toBe(false);
 
 
+function match_1_x_y(input) {
+  case (input) {
+    when [1, x, y] -> return [x, y];
+  }
+  return false;
+}
+
+expect(match_1_x_y([1, 2, 3])).toEqual([2, 3]);
+expect(match_1_x_y([1, 2, 3, 4])).toBe(false);
+expect(match_1_x_y([1, 2])).toBe(false);
+expect(match_1_x_y([1, 2, undefined])).toBe(false);
+expect(match_1_x_y([1, undefined, 3])).toBe(false);
+expect(match_1_x_y([undefined, 2, 3])).toBe(false);
+expect(match_1_x_y([null, 2, 3])).toBe(false);
+expect(match_1_x_y([0, 2, 3])).toBe(false);
+expect(match_1_x_y([[1], 2, 3])).toBe(false);
+
+
 // `undefined` on the RHS is a *binding*, for a local to shadow the real `undefined`.
 function match_1_undefined(input) {
   case (input) {
