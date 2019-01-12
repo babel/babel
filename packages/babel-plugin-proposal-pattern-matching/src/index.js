@@ -174,14 +174,7 @@ export default declare(api => {
         visitWhen(whenNode, { discriminantId, stmts, outerLabel, scope });
       }
 
-      path.replaceWith(
-        template`
-          LABEL:
-          do {
-            STMTS
-          } while (0);
-        `({ LABEL: outerLabel, STMTS: stmts }),
-      );
+      path.replaceWith(wrapper);
     },
   };
 
