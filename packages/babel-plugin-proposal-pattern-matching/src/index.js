@@ -116,7 +116,7 @@ export default declare(api => {
 
   const visitWhen = (
     whenNode,
-    { discriminantId, stmts: outerStmts, outerLabel, scope },
+    { discriminantId, stmts: outerStmts, caseLabel, scope },
   ) => {
     const { pattern, matchGuard, body } = whenNode;
 
@@ -126,7 +126,7 @@ export default declare(api => {
       stmts.push(failIf(t.unaryExpression("!", matchGuard)));
     }
     stmts.push(body);
-    stmts.push(t.continueStatement(outerLabel));
+    stmts.push(t.continueStatement(caseLabel));
     outerStmts.push(template`do { STMTS } while (0);`({ STMTS: stmts }));
   };
 
@@ -134,18 +134,18 @@ export default declare(api => {
     CaseStatement(path) {
       const { discriminant, cases } = path.node;
       const { scope } = path;
-      const outerLabel = scope.generateUidIdentifier("case");
+      const caseLabel = scope.generateUidIdentifier("case");
       const discriminantId = scope.generateUidIdentifier("caseVal");
 
       const stmts = [];
       stmts.push(constStatement(discriminantId, discriminant));
       for (const whenNode of cases) {
-        visitWhen(whenNode, { discriminantId, stmts, outerLabel, scope });
+        visitWhen(whenNode, { discriminantId, stmts, caseLabel, scope });
       }
       path.replaceWith(
         template`
           LABEL: do {STMTS} while (0);
-        `({ LABEL: outerLabel, STMTS: stmts }),
+        `({ LABEL: caseLabel, STMTS: stmts }),
       );
     },
   };
