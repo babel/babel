@@ -1,6 +1,6 @@
 case (input) {
-  when {x} -> console.log('object') // matches if `input` can do ToObject and `input.x` is 1
-  when [a, b] -> console.log('array') // matches if `input` can do GetIterator, has exactly 2 items, and the items are 1, then 2.
+  when {x: 1} -> console.log('object') // matches if `input` can do ToObject and `input.x` is 1
+  when [a, 2] -> console.log('array') // matches if `input` can do GetIterator, has exactly 2 items, and the items are non-undefined, then 2.
   when 1 -> console.log('number') // matches if `input` is 1
   when 'foo' -> console.log('string') // matches if `input` is 'foo'
   when false -> console.log('boolean') // matches if `input` is `false`
