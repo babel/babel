@@ -206,6 +206,7 @@ export default declare(api => {
   };
 
   return {
+    name: "proposal-pattern-matching",
     inherits: syntaxPatternMatching,
     visitor: {
       CaseStatement(path) {
