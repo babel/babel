@@ -45,8 +45,8 @@ export function verifyUsedFeatures(path, file) {
         "Decorators are not enabled." +
           "\nIf you are using " +
           '["@babel/plugin-proposal-decorators", { "legacy": true }], ' +
-          'put it comes *before* "@babel/plugin-proposal-class-properties" ' +
-          "and enable loose mode:\n" +
+          'make sure it comes *before* "@babel/plugin-proposal-class-properties" ' +
+          "and enable loose mode, like so:\n" +
           '\t["@babel/plugin-proposal-decorators", { "legacy": true }]\n' +
           '\t["@babel/plugin-proposal-class-properties", { "loose": true }]',
       );
