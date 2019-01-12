@@ -39,6 +39,11 @@ export default declare(api => {
           const subId = scope.generateUidIdentifier(key.name);
           stmts.push(
             template`const SUBID = ID.KEY`({ SUBID: subId, ID: id, KEY: key }),
+            failIf(
+              template.expression`typeof SUBID === "undefined"`({
+                SUBID: subId,
+              }),
+            ),
           );
           matchPattern(property.element || property.key, subId, {
             stmts,
