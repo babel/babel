@@ -8,12 +8,17 @@ const exprT = template.expression;
 const constStatement = (id, initializer) =>
   t.variableDeclaration("const", [t.variableDeclarator(id, initializer)]);
 
-export default declare(api => {
-  api.assertVersion(7);
+const failIf = testExpr => t.ifStatement(testExpr, t.continueStatement(null));
 
-  const failIf = testExpr => t.ifStatement(testExpr, t.continueStatement(null));
+class WhenRewriter {
+  constructor({ stmts, scope }) {
+    this.stmts = stmts;
+    this.scope = scope;
+  }
 
-  const matchPattern = (pattern, id, { stmts, scope }) => {
+  rewriteNode(pattern, id) {
+    const { stmts, scope } = this;
+
     switch (pattern.type) {
       case "NumericLiteral":
       case "StringLiteral":
@@ -38,10 +43,7 @@ export default declare(api => {
             constStatement(subId, exprT`ID.KEY`({ ID: id, KEY: key })),
             failIf(exprT`typeof SUBID === "undefined"`({ SUBID: subId })),
           );
-          matchPattern(property.element || property.key, subId, {
-            stmts,
-            scope,
-          });
+          this.rewriteNode(property.element || property.key, subId);
         }
         return;
 
@@ -85,7 +87,7 @@ export default declare(api => {
             ),
             failIf(exprT`typeof SUBID === "undefined"`({ SUBID: subId })),
           );
-          matchPattern(element, subId, { stmts, scope });
+          this.rewriteNode(element, subId);
         });
 
         if (haveRest) {
@@ -99,10 +101,7 @@ export default declare(api => {
               }),
             ),
           );
-          matchPattern(elements[elements.length - 1].body, subId, {
-            stmts,
-            scope,
-          });
+          this.rewriteNode(elements[elements.length - 1].body, subId);
         }
 
         return;
@@ -113,7 +112,11 @@ export default declare(api => {
         // TODO better error; use path.buildCodeFrameError ?
         throw new Error("Bad expression in pattern");
     }
-  };
+  }
+}
+
+export default declare(api => {
+  api.assertVersion(7);
 
   const visitWhen = (
     whenNode,
@@ -126,7 +129,8 @@ export default declare(api => {
     `();
     const stmts = wrapper.body.body; // DoWhileS -> BlockS -> []
 
-    matchPattern(pattern, discriminantId, { stmts, scope });
+    new WhenRewriter({ stmts, scope }).rewriteNode(pattern, discriminantId);
+
     if (matchGuard !== undefined) {
       stmts.push(failIf(t.unaryExpression("!", matchGuard)));
     }
