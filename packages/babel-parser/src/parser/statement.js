@@ -1455,9 +1455,7 @@ export default class StatementParser extends ExpressionParser {
 
   // Parses module export declaration.
 
-  // TODO: better type. Node is an N.AnyExport.
-  // TODO: Make .declaration, .source and .specifiers consistent.
-  parseExport(node: N.Node): N.Node {
+  parseExport(node: N.Node): N.AnyExport {
     const hasDefault = this.maybeParseExportDefaultSpecifier(node);
     const parseAfterDefault = !hasDefault || this.eat(tt.comma);
     const hasStar = parseAfterDefault && this.eatExportStar(node);
@@ -1493,13 +1491,6 @@ export default class StatementParser extends ExpressionParser {
 
     if (isFromRequired || hasSpecifiers || hasDeclaration) {
       this.checkExport(node, true);
-
-      // TODO: This is needed to avoid changing the tests.
-      // Remove later.
-      if (hasNamespace || hasDefault) {
-        delete node.declaration;
-      }
-
       return this.finishNode(node, "ExportNamedDeclaration");
     }
 
@@ -1783,25 +1774,22 @@ export default class StatementParser extends ExpressionParser {
   }
 
   checkDuplicateExports(
-    node: N.Identifier | N.ExportNamedDeclaration | N.ExportSpecifier,
+    node:
+      | N.Identifier
+      | N.ExportNamedDeclaration
+      | N.ExportSpecifier
+      | N.ExportDefaultSpecifier,
     name: string,
   ): void {
     if (this.state.exportedIdentifiers.indexOf(name) > -1) {
-      this.raiseDuplicateExportError(node, name);
+      throw this.raise(
+        node.start,
+        name === "default"
+          ? "Only one default export allowed per module."
+          : `\`${name}\` has already been exported. Exported identifiers must be unique.`,
+      );
     }
     this.state.exportedIdentifiers.push(name);
-  }
-
-  raiseDuplicateExportError(
-    node: N.Identifier | N.ExportNamedDeclaration | N.ExportSpecifier,
-    name: string,
-  ): empty {
-    throw this.raise(
-      node.start,
-      name === "default"
-        ? "Only one default export allowed per module."
-        : `\`${name}\` has already been exported. Exported identifiers must be unique.`,
-    );
   }
 
   // Parses a comma-separated list of module exports.
@@ -1843,7 +1831,7 @@ export default class StatementParser extends ExpressionParser {
 
   // Parses import declaration.
 
-  parseImport(node: N.Node): N.ImportDeclaration | N.TsImportEqualsDeclaration {
+  parseImport(node: N.Node): N.AnyImport {
     // import '...'
     node.specifiers = [];
     if (!this.match(tt.string)) {

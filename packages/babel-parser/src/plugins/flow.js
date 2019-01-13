@@ -1846,17 +1846,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.assertModuleNodeAllowed(node);
     }
 
-    parseExport(
-      node: N.ExportNamedDeclaration | N.ExportAllDeclaration,
-    ): N.ExportNamedDeclaration | N.ExportAllDeclaration {
-      node = super.parseExport(node);
+    parseExport(node: N.Node): N.AnyExport {
+      const decl = super.parseExport(node);
       if (
-        node.type === "ExportNamedDeclaration" ||
-        node.type === "ExportAllDeclaration"
+        decl.type === "ExportNamedDeclaration" ||
+        decl.type === "ExportAllDeclaration"
       ) {
-        node.exportKind = node.exportKind || "value";
+        decl.exportKind = decl.exportKind || "value";
       }
-      return node;
+      return decl;
     }
 
     parseExportDeclaration(node: N.ExportNamedDeclaration): ?N.Declaration {

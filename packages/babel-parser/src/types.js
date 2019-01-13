@@ -783,7 +783,9 @@ export type AnyExport =
   | ExportNamedDeclaration
   | ExportDefaultDeclaration
   | ExportAllDeclaration
-  | TsExportAssignment;
+  | TsExportAssignment
+  | TsImportEqualsDeclaration
+  | TsNamespaceExportDeclaration;
 
 export type ModuleSpecifier = NodeBase & {
   local: Identifier,
@@ -820,7 +822,7 @@ export type ImportNamespaceSpecifier = ModuleSpecifier & {
 export type ExportNamedDeclaration = NodeBase & {
   type: "ExportNamedDeclaration",
   declaration: ?Declaration,
-  specifiers: $ReadOnlyArray<ExportSpecifier>,
+  specifiers: $ReadOnlyArray<ExportSpecifier | ExportDefaultSpecifier>,
   source: ?Literal,
 
   exportKind?: "type" | "value", // TODO: Not in spec
@@ -828,6 +830,11 @@ export type ExportNamedDeclaration = NodeBase & {
 
 export type ExportSpecifier = NodeBase & {
   type: "ExportSpecifier",
+  exported: Identifier,
+};
+
+export type ExportDefaultSpecifier = NodeBase & {
+  type: "ExportDefaultSpecifier",
   exported: Identifier,
 };
 
