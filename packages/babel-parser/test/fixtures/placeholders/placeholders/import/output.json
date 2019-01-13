@@ -1,0 +1,1556 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 546,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 27,
+      "column": 46
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 546,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 27,
+        "column": 46
+      }
+    },
+    "sourceType": "module",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ImportDeclaration",
+        "start": 0,
+        "end": 16,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 16
+          }
+        },
+        "specifiers": [],
+        "source": {
+          "type": "Placeholder",
+          "start": 7,
+          "end": 15,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 7
+            },
+            "end": {
+              "line": 1,
+              "column": 15
+            }
+          },
+          "expectedNode": "StringLiteral",
+          "key": {
+            "type": "Identifier",
+            "start": 9,
+            "end": 13,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 9
+              },
+              "end": {
+                "line": 1,
+                "column": 13
+              },
+              "identifierName": "FILE"
+            },
+            "name": "FILE"
+          }
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 18,
+        "end": 42,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 24
+          }
+        },
+        "specifiers": [],
+        "source": {
+          "type": "Placeholder",
+          "start": 33,
+          "end": 41,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 15
+            },
+            "end": {
+              "line": 3,
+              "column": 23
+            }
+          },
+          "expectedNode": "StringLiteral",
+          "key": {
+            "type": "Identifier",
+            "start": 35,
+            "end": 39,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 17
+              },
+              "end": {
+                "line": 3,
+                "column": 21
+              },
+              "identifierName": "FILE"
+            },
+            "name": "FILE"
+          }
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 44,
+        "end": 75,
+        "loc": {
+          "start": {
+            "line": 5,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 31
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start": 51,
+            "end": 62,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 7
+              },
+              "end": {
+                "line": 5,
+                "column": 18
+              }
+            },
+            "local": {
+              "type": "Placeholder",
+              "start": 51,
+              "end": 62,
+              "loc": {
+                "start": {
+                  "line": 5,
+                  "column": 7
+                },
+                "end": {
+                  "line": 5,
+                  "column": 18
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 53,
+                "end": 60,
+                "loc": {
+                  "start": {
+                    "line": 5,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 5,
+                    "column": 16
+                  },
+                  "identifierName": "DEFAULT"
+                },
+                "name": "DEFAULT"
+              }
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 68,
+          "end": 74,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 24
+            },
+            "end": {
+              "line": 5,
+              "column": 30
+            }
+          },
+          "extra": {
+            "rawValue": "file",
+            "raw": "\"file\""
+          },
+          "value": "file"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 77,
+        "end": 110,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 0
+          },
+          "end": {
+            "line": 7,
+            "column": 33
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start": 84,
+            "end": 95,
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 7
+              },
+              "end": {
+                "line": 7,
+                "column": 18
+              }
+            },
+            "local": {
+              "type": "Placeholder",
+              "start": 84,
+              "end": 95,
+              "loc": {
+                "start": {
+                  "line": 7,
+                  "column": 7
+                },
+                "end": {
+                  "line": 7,
+                  "column": 18
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 86,
+                "end": 93,
+                "loc": {
+                  "start": {
+                    "line": 7,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 7,
+                    "column": 16
+                  },
+                  "identifierName": "DEFAULT"
+                },
+                "name": "DEFAULT"
+              }
+            }
+          }
+        ],
+        "source": {
+          "type": "Placeholder",
+          "start": 101,
+          "end": 109,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 24
+            },
+            "end": {
+              "line": 7,
+              "column": 32
+            }
+          },
+          "expectedNode": "StringLiteral",
+          "key": {
+            "type": "Identifier",
+            "start": 103,
+            "end": 107,
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 26
+              },
+              "end": {
+                "line": 7,
+                "column": 30
+              },
+              "identifierName": "FILE"
+            },
+            "name": "FILE"
+          }
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 112,
+        "end": 145,
+        "loc": {
+          "start": {
+            "line": 9,
+            "column": 0
+          },
+          "end": {
+            "line": 9,
+            "column": 33
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start": 119,
+            "end": 132,
+            "loc": {
+              "start": {
+                "line": 9,
+                "column": 7
+              },
+              "end": {
+                "line": 9,
+                "column": 20
+              }
+            },
+            "local": {
+              "type": "Placeholder",
+              "start": 124,
+              "end": 132,
+              "loc": {
+                "start": {
+                  "line": 9,
+                  "column": 12
+                },
+                "end": {
+                  "line": 9,
+                  "column": 20
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 126,
+                "end": 130,
+                "loc": {
+                  "start": {
+                    "line": 9,
+                    "column": 14
+                  },
+                  "end": {
+                    "line": 9,
+                    "column": 18
+                  },
+                  "identifierName": "STAR"
+                },
+                "name": "STAR"
+              }
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 138,
+          "end": 144,
+          "loc": {
+            "start": {
+              "line": 9,
+              "column": 26
+            },
+            "end": {
+              "line": 9,
+              "column": 32
+            }
+          },
+          "extra": {
+            "rawValue": "file",
+            "raw": "\"file\""
+          },
+          "value": "file"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 147,
+        "end": 189,
+        "loc": {
+          "start": {
+            "line": 11,
+            "column": 0
+          },
+          "end": {
+            "line": 11,
+            "column": 42
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start": 154,
+            "end": 165,
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 7
+              },
+              "end": {
+                "line": 11,
+                "column": 18
+              }
+            },
+            "local": {
+              "type": "Placeholder",
+              "start": 154,
+              "end": 165,
+              "loc": {
+                "start": {
+                  "line": 11,
+                  "column": 7
+                },
+                "end": {
+                  "line": 11,
+                  "column": 18
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 156,
+                "end": 163,
+                "loc": {
+                  "start": {
+                    "line": 11,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 11,
+                    "column": 16
+                  },
+                  "identifierName": "DEFAULT"
+                },
+                "name": "DEFAULT"
+              }
+            }
+          },
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start": 167,
+            "end": 176,
+            "loc": {
+              "start": {
+                "line": 11,
+                "column": 20
+              },
+              "end": {
+                "line": 11,
+                "column": 29
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 172,
+              "end": 176,
+              "loc": {
+                "start": {
+                  "line": 11,
+                  "column": 25
+                },
+                "end": {
+                  "line": 11,
+                  "column": 29
+                },
+                "identifierName": "star"
+              },
+              "name": "star"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 182,
+          "end": 188,
+          "loc": {
+            "start": {
+              "line": 11,
+              "column": 35
+            },
+            "end": {
+              "line": 11,
+              "column": 41
+            }
+          },
+          "extra": {
+            "rawValue": "file",
+            "raw": "\"file\""
+          },
+          "value": "file"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 191,
+        "end": 234,
+        "loc": {
+          "start": {
+            "line": 13,
+            "column": 0
+          },
+          "end": {
+            "line": 13,
+            "column": 43
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start": 198,
+            "end": 206,
+            "loc": {
+              "start": {
+                "line": 13,
+                "column": 7
+              },
+              "end": {
+                "line": 13,
+                "column": 15
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 198,
+              "end": 206,
+              "loc": {
+                "start": {
+                  "line": 13,
+                  "column": 7
+                },
+                "end": {
+                  "line": 13,
+                  "column": 15
+                },
+                "identifierName": "_default"
+              },
+              "name": "_default"
+            }
+          },
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start": 208,
+            "end": 221,
+            "loc": {
+              "start": {
+                "line": 13,
+                "column": 17
+              },
+              "end": {
+                "line": 13,
+                "column": 30
+              }
+            },
+            "local": {
+              "type": "Placeholder",
+              "start": 213,
+              "end": 221,
+              "loc": {
+                "start": {
+                  "line": 13,
+                  "column": 22
+                },
+                "end": {
+                  "line": 13,
+                  "column": 30
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 215,
+                "end": 219,
+                "loc": {
+                  "start": {
+                    "line": 13,
+                    "column": 24
+                  },
+                  "end": {
+                    "line": 13,
+                    "column": 28
+                  },
+                  "identifierName": "STAR"
+                },
+                "name": "STAR"
+              }
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 227,
+          "end": 233,
+          "loc": {
+            "start": {
+              "line": 13,
+              "column": 36
+            },
+            "end": {
+              "line": 13,
+              "column": 42
+            }
+          },
+          "extra": {
+            "rawValue": "file",
+            "raw": "\"file\""
+          },
+          "value": "file"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 236,
+        "end": 282,
+        "loc": {
+          "start": {
+            "line": 15,
+            "column": 0
+          },
+          "end": {
+            "line": 15,
+            "column": 46
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start": 243,
+            "end": 254,
+            "loc": {
+              "start": {
+                "line": 15,
+                "column": 7
+              },
+              "end": {
+                "line": 15,
+                "column": 18
+              }
+            },
+            "local": {
+              "type": "Placeholder",
+              "start": 243,
+              "end": 254,
+              "loc": {
+                "start": {
+                  "line": 15,
+                  "column": 7
+                },
+                "end": {
+                  "line": 15,
+                  "column": 18
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 245,
+                "end": 252,
+                "loc": {
+                  "start": {
+                    "line": 15,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 15,
+                    "column": 16
+                  },
+                  "identifierName": "DEFAULT"
+                },
+                "name": "DEFAULT"
+              }
+            }
+          },
+          {
+            "type": "ImportNamespaceSpecifier",
+            "start": 256,
+            "end": 269,
+            "loc": {
+              "start": {
+                "line": 15,
+                "column": 20
+              },
+              "end": {
+                "line": 15,
+                "column": 33
+              }
+            },
+            "local": {
+              "type": "Placeholder",
+              "start": 261,
+              "end": 269,
+              "loc": {
+                "start": {
+                  "line": 15,
+                  "column": 25
+                },
+                "end": {
+                  "line": 15,
+                  "column": 33
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 263,
+                "end": 267,
+                "loc": {
+                  "start": {
+                    "line": 15,
+                    "column": 27
+                  },
+                  "end": {
+                    "line": 15,
+                    "column": 31
+                  },
+                  "identifierName": "STAR"
+                },
+                "name": "STAR"
+              }
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 275,
+          "end": 281,
+          "loc": {
+            "start": {
+              "line": 15,
+              "column": 39
+            },
+            "end": {
+              "line": 15,
+              "column": 45
+            }
+          },
+          "extra": {
+            "rawValue": "file",
+            "raw": "\"file\""
+          },
+          "value": "file"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 284,
+        "end": 317,
+        "loc": {
+          "start": {
+            "line": 17,
+            "column": 0
+          },
+          "end": {
+            "line": 17,
+            "column": 33
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start": 293,
+            "end": 302,
+            "loc": {
+              "start": {
+                "line": 17,
+                "column": 9
+              },
+              "end": {
+                "line": 17,
+                "column": 18
+              }
+            },
+            "imported": {
+              "type": "Placeholder",
+              "start": 293,
+              "end": 302,
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 9
+                },
+                "end": {
+                  "line": 17,
+                  "column": 18
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 295,
+                "end": 300,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 16
+                  },
+                  "identifierName": "NAMED"
+                },
+                "name": "NAMED"
+              }
+            },
+            "local": {
+              "type": "Placeholder",
+              "start": 293,
+              "end": 302,
+              "loc": {
+                "start": {
+                  "line": 17,
+                  "column": 9
+                },
+                "end": {
+                  "line": 17,
+                  "column": 18
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 295,
+                "end": 300,
+                "loc": {
+                  "start": {
+                    "line": 17,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 17,
+                    "column": 16
+                  },
+                  "identifierName": "NAMED"
+                },
+                "name": "NAMED"
+              }
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 310,
+          "end": 316,
+          "loc": {
+            "start": {
+              "line": 17,
+              "column": 26
+            },
+            "end": {
+              "line": 17,
+              "column": 32
+            }
+          },
+          "extra": {
+            "rawValue": "file",
+            "raw": "\"file\""
+          },
+          "value": "file"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 319,
+        "end": 361,
+        "loc": {
+          "start": {
+            "line": 19,
+            "column": 0
+          },
+          "end": {
+            "line": 19,
+            "column": 42
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start": 328,
+            "end": 346,
+            "loc": {
+              "start": {
+                "line": 19,
+                "column": 9
+              },
+              "end": {
+                "line": 19,
+                "column": 27
+              }
+            },
+            "imported": {
+              "type": "Identifier",
+              "start": 328,
+              "end": 333,
+              "loc": {
+                "start": {
+                  "line": 19,
+                  "column": 9
+                },
+                "end": {
+                  "line": 19,
+                  "column": 14
+                },
+                "identifierName": "named"
+              },
+              "name": "named"
+            },
+            "local": {
+              "type": "Placeholder",
+              "start": 337,
+              "end": 346,
+              "loc": {
+                "start": {
+                  "line": 19,
+                  "column": 18
+                },
+                "end": {
+                  "line": 19,
+                  "column": 27
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 339,
+                "end": 344,
+                "loc": {
+                  "start": {
+                    "line": 19,
+                    "column": 20
+                  },
+                  "end": {
+                    "line": 19,
+                    "column": 25
+                  },
+                  "identifierName": "ALIAS"
+                },
+                "name": "ALIAS"
+              }
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 354,
+          "end": 360,
+          "loc": {
+            "start": {
+              "line": 19,
+              "column": 35
+            },
+            "end": {
+              "line": 19,
+              "column": 41
+            }
+          },
+          "extra": {
+            "rawValue": "file",
+            "raw": "\"file\""
+          },
+          "value": "file"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 363,
+        "end": 409,
+        "loc": {
+          "start": {
+            "line": 21,
+            "column": 0
+          },
+          "end": {
+            "line": 21,
+            "column": 46
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportSpecifier",
+            "start": 372,
+            "end": 394,
+            "loc": {
+              "start": {
+                "line": 21,
+                "column": 9
+              },
+              "end": {
+                "line": 21,
+                "column": 31
+              }
+            },
+            "imported": {
+              "type": "Placeholder",
+              "start": 372,
+              "end": 381,
+              "loc": {
+                "start": {
+                  "line": 21,
+                  "column": 9
+                },
+                "end": {
+                  "line": 21,
+                  "column": 18
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 374,
+                "end": 379,
+                "loc": {
+                  "start": {
+                    "line": 21,
+                    "column": 11
+                  },
+                  "end": {
+                    "line": 21,
+                    "column": 16
+                  },
+                  "identifierName": "NAMED"
+                },
+                "name": "NAMED"
+              }
+            },
+            "local": {
+              "type": "Placeholder",
+              "start": 385,
+              "end": 394,
+              "loc": {
+                "start": {
+                  "line": 21,
+                  "column": 22
+                },
+                "end": {
+                  "line": 21,
+                  "column": 31
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 387,
+                "end": 392,
+                "loc": {
+                  "start": {
+                    "line": 21,
+                    "column": 24
+                  },
+                  "end": {
+                    "line": 21,
+                    "column": 29
+                  },
+                  "identifierName": "ALIAS"
+                },
+                "name": "ALIAS"
+              }
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 402,
+          "end": 408,
+          "loc": {
+            "start": {
+              "line": 21,
+              "column": 39
+            },
+            "end": {
+              "line": 21,
+              "column": 45
+            }
+          },
+          "extra": {
+            "rawValue": "file",
+            "raw": "\"file\""
+          },
+          "value": "file"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 411,
+        "end": 454,
+        "loc": {
+          "start": {
+            "line": 23,
+            "column": 0
+          },
+          "end": {
+            "line": 23,
+            "column": 43
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start": 418,
+            "end": 426,
+            "loc": {
+              "start": {
+                "line": 23,
+                "column": 7
+              },
+              "end": {
+                "line": 23,
+                "column": 15
+              }
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 418,
+              "end": 426,
+              "loc": {
+                "start": {
+                  "line": 23,
+                  "column": 7
+                },
+                "end": {
+                  "line": 23,
+                  "column": 15
+                },
+                "identifierName": "_default"
+              },
+              "name": "_default"
+            }
+          },
+          {
+            "type": "ImportSpecifier",
+            "start": 430,
+            "end": 439,
+            "loc": {
+              "start": {
+                "line": 23,
+                "column": 19
+              },
+              "end": {
+                "line": 23,
+                "column": 28
+              }
+            },
+            "imported": {
+              "type": "Placeholder",
+              "start": 430,
+              "end": 439,
+              "loc": {
+                "start": {
+                  "line": 23,
+                  "column": 19
+                },
+                "end": {
+                  "line": 23,
+                  "column": 28
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 432,
+                "end": 437,
+                "loc": {
+                  "start": {
+                    "line": 23,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 23,
+                    "column": 26
+                  },
+                  "identifierName": "NAMED"
+                },
+                "name": "NAMED"
+              }
+            },
+            "local": {
+              "type": "Placeholder",
+              "start": 430,
+              "end": 439,
+              "loc": {
+                "start": {
+                  "line": 23,
+                  "column": 19
+                },
+                "end": {
+                  "line": 23,
+                  "column": 28
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 432,
+                "end": 437,
+                "loc": {
+                  "start": {
+                    "line": 23,
+                    "column": 21
+                  },
+                  "end": {
+                    "line": 23,
+                    "column": 26
+                  },
+                  "identifierName": "NAMED"
+                },
+                "name": "NAMED"
+              }
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 447,
+          "end": 453,
+          "loc": {
+            "start": {
+              "line": 23,
+              "column": 36
+            },
+            "end": {
+              "line": 23,
+              "column": 42
+            }
+          },
+          "extra": {
+            "rawValue": "file",
+            "raw": "\"file\""
+          },
+          "value": "file"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 456,
+        "end": 498,
+        "loc": {
+          "start": {
+            "line": 25,
+            "column": 0
+          },
+          "end": {
+            "line": 25,
+            "column": 42
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start": 463,
+            "end": 474,
+            "loc": {
+              "start": {
+                "line": 25,
+                "column": 7
+              },
+              "end": {
+                "line": 25,
+                "column": 18
+              }
+            },
+            "local": {
+              "type": "Placeholder",
+              "start": 463,
+              "end": 474,
+              "loc": {
+                "start": {
+                  "line": 25,
+                  "column": 7
+                },
+                "end": {
+                  "line": 25,
+                  "column": 18
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 465,
+                "end": 472,
+                "loc": {
+                  "start": {
+                    "line": 25,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 25,
+                    "column": 16
+                  },
+                  "identifierName": "DEFAULT"
+                },
+                "name": "DEFAULT"
+              }
+            }
+          },
+          {
+            "type": "ImportSpecifier",
+            "start": 478,
+            "end": 483,
+            "loc": {
+              "start": {
+                "line": 25,
+                "column": 22
+              },
+              "end": {
+                "line": 25,
+                "column": 27
+              }
+            },
+            "imported": {
+              "type": "Identifier",
+              "start": 478,
+              "end": 483,
+              "loc": {
+                "start": {
+                  "line": 25,
+                  "column": 22
+                },
+                "end": {
+                  "line": 25,
+                  "column": 27
+                },
+                "identifierName": "named"
+              },
+              "name": "named"
+            },
+            "local": {
+              "type": "Identifier",
+              "start": 478,
+              "end": 483,
+              "loc": {
+                "start": {
+                  "line": 25,
+                  "column": 22
+                },
+                "end": {
+                  "line": 25,
+                  "column": 27
+                },
+                "identifierName": "named"
+              },
+              "name": "named"
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 491,
+          "end": 497,
+          "loc": {
+            "start": {
+              "line": 25,
+              "column": 35
+            },
+            "end": {
+              "line": 25,
+              "column": 41
+            }
+          },
+          "extra": {
+            "rawValue": "file",
+            "raw": "\"file\""
+          },
+          "value": "file"
+        }
+      },
+      {
+        "type": "ImportDeclaration",
+        "start": 500,
+        "end": 546,
+        "loc": {
+          "start": {
+            "line": 27,
+            "column": 0
+          },
+          "end": {
+            "line": 27,
+            "column": 46
+          }
+        },
+        "specifiers": [
+          {
+            "type": "ImportDefaultSpecifier",
+            "start": 507,
+            "end": 518,
+            "loc": {
+              "start": {
+                "line": 27,
+                "column": 7
+              },
+              "end": {
+                "line": 27,
+                "column": 18
+              }
+            },
+            "local": {
+              "type": "Placeholder",
+              "start": 507,
+              "end": 518,
+              "loc": {
+                "start": {
+                  "line": 27,
+                  "column": 7
+                },
+                "end": {
+                  "line": 27,
+                  "column": 18
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 509,
+                "end": 516,
+                "loc": {
+                  "start": {
+                    "line": 27,
+                    "column": 9
+                  },
+                  "end": {
+                    "line": 27,
+                    "column": 16
+                  },
+                  "identifierName": "DEFAULT"
+                },
+                "name": "DEFAULT"
+              }
+            }
+          },
+          {
+            "type": "ImportSpecifier",
+            "start": 522,
+            "end": 531,
+            "loc": {
+              "start": {
+                "line": 27,
+                "column": 22
+              },
+              "end": {
+                "line": 27,
+                "column": 31
+              }
+            },
+            "imported": {
+              "type": "Placeholder",
+              "start": 522,
+              "end": 531,
+              "loc": {
+                "start": {
+                  "line": 27,
+                  "column": 22
+                },
+                "end": {
+                  "line": 27,
+                  "column": 31
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 524,
+                "end": 529,
+                "loc": {
+                  "start": {
+                    "line": 27,
+                    "column": 24
+                  },
+                  "end": {
+                    "line": 27,
+                    "column": 29
+                  },
+                  "identifierName": "NAMED"
+                },
+                "name": "NAMED"
+              }
+            },
+            "local": {
+              "type": "Placeholder",
+              "start": 522,
+              "end": 531,
+              "loc": {
+                "start": {
+                  "line": 27,
+                  "column": 22
+                },
+                "end": {
+                  "line": 27,
+                  "column": 31
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 524,
+                "end": 529,
+                "loc": {
+                  "start": {
+                    "line": 27,
+                    "column": 24
+                  },
+                  "end": {
+                    "line": 27,
+                    "column": 29
+                  },
+                  "identifierName": "NAMED"
+                },
+                "name": "NAMED"
+              }
+            }
+          }
+        ],
+        "source": {
+          "type": "StringLiteral",
+          "start": 539,
+          "end": 545,
+          "loc": {
+            "start": {
+              "line": 27,
+              "column": 39
+            },
+            "end": {
+              "line": 27,
+              "column": 45
+            }
+          },
+          "extra": {
+            "rawValue": "file",
+            "raw": "\"file\""
+          },
+          "value": "file"
+        }
+      }
+    ],
+    "directives": []
+  }
+}

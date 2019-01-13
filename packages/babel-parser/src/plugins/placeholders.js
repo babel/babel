@@ -119,4 +119,49 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.parsePlaceholder("ClassBody") || super.parseClassBody(...arguments)
       );
     }
+
+    parseImport(
+      node: N.Node,
+    ): N.ImportDeclaration | N.TsImportEqualsDeclaration {
+      const placeholder = this.parsePlaceholder("Identifier");
+      if (!placeholder) return super.parseImport(...arguments);
+
+      node.specifiers = [];
+
+      if (!this.isContextual("from") && !this.match(tt.comma)) {
+        // import %%STRING%%;
+        placeholder.expectedNode = "StringLiteral";
+        node.source = placeholder;
+        this.semicolon();
+        return this.finishNode(node, "ImportDeclaration");
+      }
+
+      // import %%DEFAULT%% ...
+      const specifier = this.startNodeAtNode(placeholder);
+      specifier.local = placeholder;
+      this.finishNode(specifier, "ImportDefaultSpecifier");
+      node.specifiers.push(specifier);
+
+      if (this.eat(tt.comma)) {
+        // import %%DEFAULT%%, * as ...
+        const hasStarImport = this.maybeParseStarImportSpecifier(node);
+
+        // import %%DEFAULT%%, { ...
+        if (!hasStarImport) this.parseNamedImportSpecifiers(node);
+      }
+
+      this.expectContextual("from");
+      node.source = this.parseImportSource();
+      this.semicolon();
+      return this.finishNode(node, "ImportDeclaration");
+    }
+
+    parseImportSource(): N.StringLiteral | N.Placeholder {
+      // import ... from %%STRING%%;
+
+      return (
+        this.parsePlaceholder("StringLiteral") ||
+        super.parseImportSource(...arguments)
+      );
+    }
   };
