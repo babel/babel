@@ -41,4 +41,40 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       return super.getTokenFromCode(...arguments);
     }
+
+    /* ============================================================ *
+     * parser/expression.js                                         *
+     * ============================================================ */
+
+    parseExprAtom(): N.Expression | N.Placeholder {
+      return (
+        this.parsePlaceholder("Expression") || super.parseExprAtom(...arguments)
+      );
+    }
+
+    /* ============================================================ *
+     * parser/lval.js                                               *
+     * ============================================================ */
+
+    parseBindingAtom(): N.Pattern | N.Placeholder {
+      return (
+        this.parsePlaceholder("Pattern") || super.parseBindingAtom(...arguments)
+      );
+    }
+
+    checkLVal(expr: N.Expression): void {
+      if (expr.type !== "Placeholder") super.checkLVal(...arguments);
+    }
+
+    toAssignable(node: Node): Node {
+      if (
+        node &&
+        node.type === "Placeholder" &&
+        node.expectedNode === "Expression"
+      ) {
+        node.expectedNode = "Pattern";
+        return node;
+      }
+      return super.toAssignable(...arguments);
+    }
   };

@@ -1,0 +1,4 @@
+{
+  "plugins": ["placeholders"],
+  "throws": "Unexpected token, expected \";\" (4:8)"
+}
