@@ -798,7 +798,7 @@ export default class StatementParser extends ExpressionParser {
   parseExpressionStatement(
     node: N.ExpressionStatement,
     expr: N.Expression,
-  ): N.ExpressionStatement {
+  ): N.Statement {
     node.expression = expr;
     this.semicolon();
     return this.finishNode(node, "ExpressionStatement");
@@ -1156,7 +1156,7 @@ export default class StatementParser extends ExpressionParser {
     );
   }
 
-  parseClassBody(): void {
+  parseClassBody(): N.ClassBody {
     this.state.classLevel++;
 
     const state = { hadConstructor: false };

@@ -8,9 +8,50 @@ import * as N from "../types";
 
 tt.placeholder = new TokenType("%%", { startsExpr: true });
 
+export type PlaceholderTypes =
+  | "Identifier"
+  | "StringLiteral"
+  | "Expression"
+  | "Statement"
+  | "Declaration"
+  | "BlockStatement"
+  | "ClassBody"
+  | "Pattern";
+
+// $PropertyType doesn't support enums. Use a fake "switch" (GetPlaceholderNode)
+//type MaybePlaceholder<T: PlaceholderTypes> = $PropertyType<N, T> | N.Placeholder<T>;
+
+type _Switch<Value, Cases, Index> = $Call<
+  (
+    $ElementType<$ElementType<Cases, Index>, 0>,
+  ) => $ElementType<$ElementType<Cases, Index>, 1>,
+  Value,
+>;
+type $Switch<Value, Cases> = _Switch<Value, Cases, *>;
+
+type NodeOf<T: PlaceholderTypes> = $Switch<
+  T,
+  [
+    ["Identifier", N.Identifier],
+    ["StringLiteral", N.StringLiteral],
+    ["Expression", N.Expression],
+    ["Statement", N.Statement],
+    ["Declaration", N.Declaration],
+    ["BlockStatement", N.BlockStatement],
+    ["ClassBody", N.ClassBody],
+    ["Pattern", N.Pattern],
+  ],
+>;
+
+// Placeholder<T> breaks everything, because its type is incompatible with
+// the substituted nodes.
+type MaybePlaceholder<T: PlaceholderTypes> = NodeOf<T>; // | Placeholder<T>
+
 export default (superClass: Class<Parser>): Class<Parser> =>
   class extends superClass {
-    parsePlaceholder(expectedNode: string): ?N.Placeholder {
+    parsePlaceholder<T: PlaceholderTypes>(
+      expectedNode: T,
+    ): /*?N.Placeholder<T>*/ ?MaybePlaceholder<T> {
       if (this.match(tt.placeholder)) {
         const node = this.startNode();
         this.next();
@@ -26,7 +67,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    finishPlaceholder(node: N.Node, expectedNode: string): N.Placeholder {
+    finishPlaceholder<T: PlaceholderTypes>(
+      node: N.Node,
+      expectedNode: T,
+    ): /*N.Placeholder<T>*/ MaybePlaceholder<T> {
       node.expectedNode = expectedNode;
       return this.finishNode(node, "Placeholder");
     }
@@ -50,13 +94,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
      * parser/expression.js                                         *
      * ============================================================ */
 
-    parseExprAtom(): N.Expression | N.Placeholder {
+    parseExprAtom(): MaybePlaceholder<"Expression"> {
       return (
         this.parsePlaceholder("Expression") || super.parseExprAtom(...arguments)
       );
     }
 
-    parseIdentifier(): N.Identifier | N.Placeholder {
+    parseIdentifier(): MaybePlaceholder<"Identifier"> {
       // NOTE: This function only handles identifiers outside of
       // expressions and binding patterns, since they are already
       // handled by the parseExprAtom and parseBindingAtom functions.
@@ -78,7 +122,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
      * parser/lval.js                                               *
      * ============================================================ */
 
-    parseBindingAtom(): N.Pattern | N.Placeholder {
+    parseBindingAtom(): MaybePlaceholder<"Pattern"> {
       return (
         this.parsePlaceholder("Pattern") || super.parseBindingAtom(...arguments)
       );
@@ -88,7 +132,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       if (expr.type !== "Placeholder") super.checkLVal(...arguments);
     }
 
-    toAssignable(node: Node): Node {
+    toAssignable(node: N.Node): N.Node {
       if (
         node &&
         node.type === "Placeholder" &&
@@ -110,9 +154,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseExpressionStatement(
-      node: N.Node,
+      node: MaybePlaceholder<"Statement">,
       expr: N.Expression,
-    ): N.Statement | N.Placeholder {
+    ): MaybePlaceholder<"Statement"> {
       if (
         expr.type !== "Placeholder" ||
         (expr.extra && expr.extra.parenthesized)
@@ -121,32 +165,33 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       if (this.match(tt.colon)) {
-        node.label = this.finishPlaceholder(expr, "Identifier");
+        const stmt: N.LabeledStatement = node;
+        stmt.label = this.finishPlaceholder(expr, "Identifier");
         this.next();
-        node.body = this.parseStatement(true);
-        return this.finishNode(node, "LabeledStatement");
+        stmt.body = this.parseStatement(true);
+        return this.finishNode(stmt, "LabeledStatement");
       }
 
       this.semicolon();
       return this.finishPlaceholder(node, "Statement");
     }
 
-    parseBlock(): N.BlockStatement | N.Placeholder {
+    parseBlock(): MaybePlaceholder<"BlockStatement"> {
       return (
         this.parsePlaceholder("BlockStatement") ||
         super.parseBlock(...arguments)
       );
     }
 
-    parseFunctionId(): ?N.Identifier | N.Placeholder {
+    parseFunctionId(): ?MaybePlaceholder<"Identifier"> {
       return (
         this.parsePlaceholder("Identifier") ||
         super.parseFunctionId(...arguments)
       );
     }
 
-    parseClass(
-      node: N.Class,
+    parseClass<T: N.Class>(
+      node: T,
       isStatement: /* T === ClassDeclaration */ boolean,
       optionalId?: boolean,
     ): T {
@@ -254,7 +299,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return this.finishNode(node, "ImportDeclaration");
     }
 
-    parseImportSource(): N.StringLiteral | N.Placeholder {
+    parseImportSource(): MaybePlaceholder<"StringLiteral"> {
       // import ... from %%STRING%%;
 
       return (
