@@ -45,6 +45,16 @@ function findEnclosingBreakable(path) {
     if (path.isLoop() || path.isSwitchStatement()) {
       return path;
     }
+    if (
+      path.parentPath.isLabeledStatement() &&
+      path.parentPath.node.body !== path.node
+    ) {
+      // There's been a modification at `path.parentPath` since
+      // `path` was constructed, which could be from a previous
+      // `forceLabelStatement`.  TODO this solution feels messy.
+      path = path.parentPath.get("body");
+      continue;
+    }
     path = path.parentPath;
   }
   return null;
@@ -63,6 +73,16 @@ function findEnclosingLoop(path) {
   while (path && !path.isFunction()) {
     if (path.isLoop()) {
       return path;
+    }
+    if (
+      path.parentPath.isLabeledStatement() &&
+      path.parentPath.node.body !== path.node
+    ) {
+      // There's been a modification at `path.parentPath` since
+      // `path` was constructed, which could be from a previous
+      // `forceLabelStatement`.  TODO this solution feels messy.
+      path = path.parentPath.get("body");
+      continue;
     }
     path = path.parentPath;
   }

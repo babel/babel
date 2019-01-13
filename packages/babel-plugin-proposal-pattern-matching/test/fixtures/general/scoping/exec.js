@@ -70,7 +70,7 @@ let log;
 })();
 expect(log).toEqual(["when1", "end"]);
 
-/* TODO this fails
+
 let s;
 (() => {
   s = "";
@@ -85,7 +85,7 @@ let s;
   s += ".";
 })();
 expect(s).toEqual("(11)(2(33)(4."); // no 5
-*/
+
 
 case ({ x: 1 }) {
   when { x } -> {
