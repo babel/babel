@@ -41,6 +41,7 @@ class WhenRewriter {
 
   // private
   translatePattern(pattern, id) {
+    assert(id.type === "Identifier");
     const { scope } = this;
 
     switch (pattern.type) {
@@ -141,7 +142,7 @@ export default declare(api => {
       const discriminantId = scope.generateUidIdentifier("caseVal");
       stmts.push(constStatement(discriminantId, discriminant));
       for (const whenNode of cases) {
-        stmts.push(rewriter.translate(whenNode, discriminant));
+        stmts.push(rewriter.translate(whenNode, discriminantId));
       }
       path.replaceWith(
         template`
