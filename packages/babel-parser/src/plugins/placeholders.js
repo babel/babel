@@ -13,7 +13,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     parsePlaceholder(expectedNode: string): ?N.Placeholder {
       if (this.match(tt.placeholder)) {
         const node = this.startNode();
-        node.expectedNode = expectedNode;
         this.next();
         this.assertNoSpace("Unexpected space in placeholder.");
 
@@ -23,8 +22,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
         this.assertNoSpace("Unexpected space in placeholder.");
         this.expect(tt.placeholder);
-        return this.finishNode(node, "Placeholder");
+        return this.finishPlaceholder(node, expectedNode);
       }
+    }
+
+    finishPlaceholder(node: N.Node, expectedNode: string): N.Placeholder {
+      node.expectedNode = expectedNode;
+      return this.finishNode(node, "Placeholder");
     }
 
     /* ============================================================ *
@@ -100,6 +104,33 @@ export default (superClass: Class<Parser>): Class<Parser> =>
      * parser/statement.js                                          *
      * ============================================================ */
 
+    verifyBreakContinue(node: N.BreakStatement | N.ContinueStatement) {
+      if (node.label && node.label.type === "Placeholder") return;
+      super.verifyBreakContinue(...arguments);
+    }
+
+    parseExpressionStatement(
+      node: N.Node,
+      expr: N.Expression,
+    ): N.Statement | N.Placeholder {
+      if (
+        expr.type !== "Placeholder" ||
+        (expr.extra && expr.extra.parenthesized)
+      ) {
+        return super.parseExpressionStatement(...arguments);
+      }
+
+      if (this.match(tt.colon)) {
+        node.label = this.finishPlaceholder(expr, "Identifier");
+        this.next();
+        node.body = this.parseStatement(true);
+        return this.finishNode(node, "LabeledStatement");
+      }
+
+      this.semicolon();
+      return this.finishPlaceholder(node, "Statement");
+    }
+
     parseBlock(): N.BlockStatement | N.Placeholder {
       return (
         this.parsePlaceholder("BlockStatement") ||
@@ -134,8 +165,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           node.id = placeholder;
         } else if (optionalId || !isStatement) {
           node.id = null;
-          placeholder.expectedNode = "ClassBody";
-          node.body = placeholder;
+          node.body = this.finishPlaceholder(placeholder, "ClassBody");
           return this.finishNode(node, type);
         } else {
           this.unexpected(null, "A class name is required");
@@ -155,11 +185,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (!this.isContextual("from") && !this.match(tt.comma)) {
         // export %%DECL%%;
-        placeholder.expectedNode = "Declaration";
-
         node.specifiers = [];
         node.source = null;
-        node.declaration = placeholder;
+        node.declaration = this.finishPlaceholder(placeholder, "Declaration");
         return this.finishNode(node, "ExportNamedDeclaration");
       }
 
@@ -201,8 +229,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       if (!this.isContextual("from") && !this.match(tt.comma)) {
         // import %%STRING%%;
-        placeholder.expectedNode = "StringLiteral";
-        node.source = placeholder;
+        node.source = this.finishPlaceholder(placeholder, "StringLiteral");
         this.semicolon();
         return this.finishNode(node, "ImportDeclaration");
       }

@@ -408,15 +408,24 @@ export default class StatementParser extends ExpressionParser {
 
     if (this.isLineTerminator()) {
       node.label = null;
-    } else if (!this.match(tt.name)) {
-      this.unexpected();
     } else {
       node.label = this.parseIdentifier();
       this.semicolon();
     }
 
-    // Verify that there is an actual destination to break or
-    // continue to.
+    this.verifyBreakContinue(node, keyword);
+
+    return this.finishNode(
+      node,
+      isBreak ? "BreakStatement" : "ContinueStatement",
+    );
+  }
+
+  verifyBreakContinue(
+    node: N.BreakStatement | N.ContinueStatement,
+    keyword: string,
+  ) {
+    const isBreak = keyword === "break";
     let i;
     for (i = 0; i < this.state.labels.length; ++i) {
       const lab = this.state.labels[i];
@@ -428,10 +437,6 @@ export default class StatementParser extends ExpressionParser {
     if (i === this.state.labels.length) {
       this.raise(node.start, "Unsyntactic " + keyword);
     }
-    return this.finishNode(
-      node,
-      isBreak ? "BreakStatement" : "ContinueStatement",
-    );
   }
 
   parseDebuggerStatement(node: N.DebuggerStatement): N.DebuggerStatement {
