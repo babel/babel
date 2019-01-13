@@ -1456,34 +1456,117 @@ export default class StatementParser extends ExpressionParser {
   // Parses module export declaration.
 
   // TODO: better type. Node is an N.AnyExport.
+  // TODO: Make .declaration, .source and .specifiers consistent.
   parseExport(node: N.Node): N.Node {
-    // export * from '...'
-    if (this.shouldParseExportStar()) {
-      this.parseExportStar(node);
-      if (node.type === "ExportAllDeclaration") return node;
-    } else if (this.isExportDefaultSpecifier()) {
-      this.expectPlugin("exportDefaultFrom");
-      const specifier = this.startNode();
-      specifier.exported = this.parseIdentifier(true);
-      const specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")];
-      node.specifiers = specifiers;
-      if (this.match(tt.comma) && this.lookahead().type === tt.star) {
-        this.expect(tt.comma);
-        const specifier = this.startNode();
-        this.expect(tt.star);
-        this.expectContextual("as");
-        specifier.exported = this.parseIdentifier();
-        specifiers.push(this.finishNode(specifier, "ExportNamespaceSpecifier"));
-      } else {
-        this.parseExportSpecifiersMaybe(node);
-      }
+    const hasDefault = this.maybeParseExportDefaultSpecifier(node);
+    const parseAfterDefault = !hasDefault || this.eat(tt.comma);
+    const hasStar = parseAfterDefault && this.eatExportStar(node);
+    const hasNamespace =
+      hasStar && this.maybeParseExportNamespaceSpecifier(node);
+    const parseAfterNamespace =
+      parseAfterDefault && (!hasNamespace || this.eat(tt.comma));
+    const isFromRequired = hasDefault || hasStar;
+
+    if (hasStar && !hasNamespace) {
+      if (hasDefault) this.unexpected();
       this.parseExportFrom(node, true);
-    } else if (this.eat(tt._default)) {
+
+      return this.finishNode(node, "ExportAllDeclaration");
+    }
+
+    const hasSpecifiers = this.maybeParseExportNamedSpecifiers(node);
+
+    if (
+      (hasDefault && parseAfterDefault && !hasStar && !hasSpecifiers) ||
+      (hasNamespace && parseAfterNamespace && !hasSpecifiers)
+    ) {
+      throw this.unexpected(null, tt.braceL);
+    }
+
+    let hasDeclaration;
+    if (isFromRequired || hasSpecifiers) {
+      hasDeclaration = false;
+      this.parseExportFrom(node, isFromRequired);
+    } else {
+      hasDeclaration = this.maybeParseExportDeclaration(node);
+    }
+
+    if (isFromRequired || hasSpecifiers || hasDeclaration) {
+      this.checkExport(node, true);
+
+      // TODO: This is needed to avoid changing the tests.
+      // Remove later.
+      if (hasNamespace || hasDefault) {
+        delete node.declaration;
+      }
+
+      return this.finishNode(node, "ExportNamedDeclaration");
+    }
+
+    if (this.eat(tt._default)) {
       // export default ...
       node.declaration = this.parseExportDefaultExpression();
       this.checkExport(node, true, true);
+
       return this.finishNode(node, "ExportDefaultDeclaration");
-    } else if (this.shouldParseExportDeclaration()) {
+    }
+
+    throw this.unexpected(null, tt.braceL);
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  eatExportStar(node: N.Node): boolean {
+    return this.eat(tt.star);
+  }
+
+  maybeParseExportDefaultSpecifier(node: N.Node): boolean {
+    if (this.isExportDefaultSpecifier()) {
+      // export defaultObj ...
+      this.expectPlugin("exportDefaultFrom");
+      const specifier = this.startNode();
+      specifier.exported = this.parseIdentifier(true);
+      node.specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")];
+      return true;
+    }
+    return false;
+  }
+
+  maybeParseExportNamespaceSpecifier(node: N.Node): boolean {
+    if (this.isContextual("as")) {
+      if (!node.specifiers) node.specifiers = [];
+      this.expectPlugin("exportNamespaceFrom");
+
+      const specifier = this.startNodeAt(
+        this.state.lastTokStart,
+        this.state.lastTokStartLoc,
+      );
+
+      this.next();
+
+      specifier.exported = this.parseIdentifier(true);
+      node.specifiers.push(
+        this.finishNode(specifier, "ExportNamespaceSpecifier"),
+      );
+      return true;
+    }
+    return false;
+  }
+
+  maybeParseExportNamedSpecifiers(node: N.Node): boolean {
+    if (this.match(tt.braceL)) {
+      if (!node.specifiers) node.specifiers = [];
+      node.specifiers.push(...this.parseExportSpecifiers());
+
+      node.source = null;
+      node.declaration = null;
+
+      return true;
+    }
+    return false;
+  }
+
+  maybeParseExportDeclaration(node: N.Node): boolean {
+    if (this.shouldParseExportDeclaration()) {
       if (this.isContextual("async")) {
         const next = this.lookahead();
 
@@ -1496,14 +1579,10 @@ export default class StatementParser extends ExpressionParser {
       node.specifiers = [];
       node.source = null;
       node.declaration = this.parseExportDeclaration(node);
-    } else {
-      // export { x, y as z } [from '...']
-      node.declaration = null;
-      node.specifiers = this.parseExportSpecifiers();
-      this.parseExportFrom(node);
+
+      return true;
     }
-    this.checkExport(node, true);
-    return this.finishNode(node, "ExportNamedDeclaration");
+    return false;
   }
 
   isAsyncFunction() {
@@ -1590,12 +1669,6 @@ export default class StatementParser extends ExpressionParser {
     );
   }
 
-  parseExportSpecifiersMaybe(node: N.ExportNamedDeclaration): void {
-    if (this.eat(tt.comma)) {
-      node.specifiers = node.specifiers.concat(this.parseExportSpecifiers());
-    }
-  }
-
   parseExportFrom(node: N.ExportNamedDeclaration, expect?: boolean): void {
     if (this.eatContextual("from")) {
       node.source = this.parseImportSource();
@@ -1609,39 +1682,6 @@ export default class StatementParser extends ExpressionParser {
     }
 
     this.semicolon();
-  }
-
-  shouldParseExportStar(): boolean {
-    return this.match(tt.star);
-  }
-
-  parseExportStar(node: N.ExportNamedDeclaration): void {
-    this.expect(tt.star);
-
-    if (this.isContextual("as")) {
-      this.parseExportNamespace(node);
-    } else {
-      this.parseExportFrom(node, true);
-      this.finishNode(node, "ExportAllDeclaration");
-    }
-  }
-
-  parseExportNamespace(node: N.ExportNamedDeclaration): void {
-    this.expectPlugin("exportNamespaceFrom");
-
-    const specifier = this.startNodeAt(
-      this.state.lastTokStart,
-      this.state.lastTokStartLoc,
-    );
-
-    this.next();
-
-    specifier.exported = this.parseIdentifier(true);
-
-    node.specifiers = [this.finishNode(specifier, "ExportNamespaceSpecifier")];
-
-    this.parseExportSpecifiersMaybe(node);
-    this.parseExportFrom(node, true);
   }
 
   shouldParseExportDeclaration(): boolean {
