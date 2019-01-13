@@ -1,5 +1,6 @@
 export default {
   "syntax-async-generators": require("@babel/plugin-syntax-async-generators"),
+  "syntax-json-strings": require("@babel/plugin-syntax-json-strings"),
   "syntax-object-rest-spread": require("@babel/plugin-syntax-object-rest-spread"),
   "syntax-optional-catch-binding": require("@babel/plugin-syntax-optional-catch-binding"),
   "transform-async-to-generator": require("@babel/plugin-transform-async-to-generator"),

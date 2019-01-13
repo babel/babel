@@ -253,7 +253,15 @@
     "opera": "51",
     "electron": "3"
   },
-  "proposal-json-strings": {},
+  "proposal-json-strings": {
+    "chrome": "66",
+    "firefox": "62",
+    "safari": "12",
+    "node": "10.13",
+    "ios": "12",
+    "opera": "53",
+    "electron": "3"
+  },
   "proposal-optional-catch-binding": {
     "chrome": "66",
     "firefox": "58",
