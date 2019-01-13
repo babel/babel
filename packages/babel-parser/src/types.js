@@ -1419,6 +1419,16 @@ export type TsNonNullExpression = NodeBase & {
 };
 
 // ================
+// Babel placeholders %%foo%%
+// ================
+
+export type Placeholder = NodeBase & {
+  type: "Placeholder",
+  id: Identifier,
+  expectedNode: string,
+};
+
+// ================
 // Other
 // ================
 
