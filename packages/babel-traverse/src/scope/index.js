@@ -238,7 +238,7 @@ export default class Scope {
       .replace(/[0-9]+$/g, "");
 
     let uid;
-    let i = 0;
+    let i = 1;
     do {
       uid = this._generateUid(name, i);
       i++;
