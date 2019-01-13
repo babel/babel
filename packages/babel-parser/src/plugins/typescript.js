@@ -1186,6 +1186,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsTryParseDeclare(nany: any): ?N.Declaration {
+      if (this.isLineTerminator()) {
+        return;
+      }
+
       switch (this.state.type) {
         case tt._function:
           this.next();
@@ -1262,7 +1266,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): ?N.Declaration {
       switch (value) {
         case "abstract":
-          if (next || this.match(tt._class)) {
+          if (!this.isLineTerminator() && (next || this.match(tt._class))) {
             const cls: N.ClassDeclaration = node;
             cls.abstract = true;
             if (next) this.next();
