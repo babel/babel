@@ -114,10 +114,39 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
     }
 
-    parseClassBody(): N.ClassBody | N.Placeholder {
-      return (
-        this.parsePlaceholder("ClassBody") || super.parseClassBody(...arguments)
-      );
+    parseClass(
+      node: N.Class,
+      isStatement: /* T === ClassDeclaration */ boolean,
+      optionalId?: boolean,
+    ): T {
+      const type = isStatement ? "ClassDeclaration" : "ClassExpression";
+
+      this.next();
+      this.takeDecorators(node);
+
+      const placeholder = this.parsePlaceholder("Identifier");
+      if (placeholder) {
+        if (
+          this.match(tt._extends) ||
+          this.match(tt.placeholder) ||
+          this.match(tt.braceL)
+        ) {
+          node.id = placeholder;
+        } else if (optionalId || !isStatement) {
+          node.id = null;
+          placeholder.expectedNode = "ClassBody";
+          node.body = placeholder;
+          return this.finishNode(node, type);
+        } else {
+          this.unexpected(null, "A class name is required");
+        }
+      } else {
+        this.parseClassId(node, isStatement, optionalId);
+      }
+
+      this.parseClassSuper(node);
+      node.body = this.parsePlaceholder("ClassBody") || this.parseClassBody();
+      return this.finishNode(node, type);
     }
 
     parseExport(node: N.Node): N.Node {

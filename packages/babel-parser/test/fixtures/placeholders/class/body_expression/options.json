@@ -1,6 +1,0 @@
-{
-  "plugins": [
-    "placeholders"
-  ],
-  "throws": "Unexpected token, expected \"{\" (1:19)"
-}
