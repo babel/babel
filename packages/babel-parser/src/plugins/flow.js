@@ -2232,7 +2232,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // parse typeof and type imports
-    parseImportSpecifiers(node: N.ImportDeclaration): void {
+    maybeParseDefaultImportSpecifier(node: N.ImportDeclaration): boolean {
       node.importKind = "value";
 
       let kind = null;
@@ -2259,7 +2259,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      super.parseImportSpecifiers(node);
+      return super.maybeParseDefaultImportSpecifier(node);
     }
 
     // parse import-type/typeof shorthand
