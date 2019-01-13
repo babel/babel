@@ -53,7 +53,6 @@
 })();
 
 
-/* TODO broken
 (() => {
   do {
     case (42) {
@@ -78,7 +77,6 @@
     expect(true).toBe(false);
   } while (0);
 })();
-*/
 
 
 case ({ x: 1 }) {
