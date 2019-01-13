@@ -1030,10 +1030,7 @@ export default class StatementParser extends ExpressionParser {
     node.generator = this.eat(tt.star);
 
     if (isStatement) {
-      node.id =
-        statement & FUNC_NULLABLE_ID && !this.match(tt.name)
-          ? null
-          : this.parseIdentifier();
+      node.id = this.parseFunctionId(isStatement, isHangingStatement);
       if (node.id && !isHangingStatement) {
         // If it is a regular function declaration in sloppy mode, then it is
         // subject to Annex B semantics (BIND_FUNCTION). Otherwise, the binding
@@ -1061,7 +1058,7 @@ export default class StatementParser extends ExpressionParser {
     this.scope.enter(functionFlags(node.async, node.generator));
 
     if (!isStatement) {
-      node.id = this.match(tt.name) ? this.parseIdentifier() : null;
+      node.id = this.parseFunctionId();
     }
 
     this.parseFunctionParams(node);
@@ -1083,6 +1080,16 @@ export default class StatementParser extends ExpressionParser {
     this.state.awaitPos = oldAwaitPos;
 
     return node;
+  }
+
+  parseFunctionId(isStatement?: boolean, optionalId?: boolean): ?N.Identifier {
+    if (this.match(tt.name)) {
+      return this.parseIdentifier();
+    }
+    if (isStatement && !optionalId) {
+      this.unexpected();
+    }
+    return null;
   }
 
   parseFunctionParams(node: N.Function, allowModifiers?: boolean): void {

@@ -42,13 +42,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.getTokenFromCode(...arguments);
     }
 
-    match(type: TokenType): boolean {
-      // Let's pretend that placeholders _are_ tt.name, since they are
-      // allowed wherever an identifier is allowed.
-      if (type == tt.name && super.match(tt.placeholder)) return true;
-      return super.match(...arguments);
-    }
-
     /* ============================================================ *
      * parser/expression.js                                         *
      * ============================================================ */
@@ -111,6 +104,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return (
         this.parsePlaceholder("BlockStatement") ||
         super.parseBlock(...arguments)
+      );
+    }
+
+    parseFunctionId(): ?N.Identifier | N.Placeholder {
+      return (
+        this.parsePlaceholder("Identifier") ||
+        super.parseFunctionId(...arguments)
       );
     }
 
