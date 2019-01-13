@@ -120,6 +120,48 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       );
     }
 
+    parseExport(node: N.Node): N.Node {
+      const placeholder = this.parsePlaceholder("Identifier");
+      if (!placeholder) return super.parseExport(...arguments);
+
+      if (!this.isContextual("from") && !this.match(tt.comma)) {
+        // export %%DECL%%;
+        placeholder.expectedNode = "Declaration";
+
+        node.specifiers = [];
+        node.source = null;
+        node.declaration = placeholder;
+        return this.finishNode(node, "ExportNamedDeclaration");
+      }
+
+      // export %%NAME%% from "foo";
+      this.expectPlugin("exportDefaultFrom");
+      const specifier = this.startNode();
+      specifier.exported = placeholder;
+      node.specifiers = [this.finishNode(specifier, "ExportDefaultSpecifier")];
+
+      return super.parseExport(node);
+    }
+
+    maybeParseExportDefaultSpecifier(node: N.Node): boolean {
+      if (node.specifiers && node.specifiers.length > 0) {
+        // "export %%NAME%%" has already been parsed by #parseExport.
+        return true;
+      }
+      return super.maybeParseExportDefaultSpecifier(...arguments);
+    }
+
+    checkExport(node: N.ExportNamedDeclaration): void {
+      const { specifiers } = node;
+      if (specifiers && specifiers.length) {
+        node.specifiers = specifiers.filter(
+          node => node.exported.type === "Placeholder",
+        );
+      }
+      super.checkExport(node);
+      node.specifiers = specifiers;
+    }
+
     parseImport(
       node: N.Node,
     ): N.ImportDeclaration | N.TsImportEqualsDeclaration {
