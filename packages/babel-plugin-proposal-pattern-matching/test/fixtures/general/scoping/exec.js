@@ -25,7 +25,6 @@
       when v -> {
         var hoistMe = v;
         const noHoist = v;
-        function alsoMe () { return v }
       }
     }
   } while (0);
@@ -35,9 +34,10 @@
   // TODO spec says SyntaxError; is that quite right?
   // If so, test that specifically
   expect(typeof noHoist).toBe('undefined');
-
-  expect(alsoMe()).toBe(42);
 })();
+
+
+// For the `alsoMe` case, see test `hoist-function`.
 
 
 (() => {

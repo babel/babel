@@ -1,0 +1,4 @@
+{
+  "plugins": ["proposal-pattern-matching"],
+  "minNodeVersion": "8.0.0"
+}
