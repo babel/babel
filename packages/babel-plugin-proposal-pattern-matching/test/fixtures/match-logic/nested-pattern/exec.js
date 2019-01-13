@@ -14,7 +14,6 @@ expect(f({name: "Chen", age: 3, number: [1, 2, 3]})).toEqual(['object']);
 expect(f({name: "Chen", age: 4, number: [1, 2, 3]})).toEqual([]);
 expect(f({name: "Chen", age: 3, number: [1, 2]})).toEqual([]);
 
-// Known failure.
-// expect(f({name: "Chen", age: 3, number: [1, 2, 3, 4]})).toEqual([]);
+expect(f({name: "Chen", age: 3, number: [1, 2, 3, 4]})).toEqual([]);
 
 expect(f([1, {type: 3, stuff: 4}, 5])).toEqual(['array', 5]);
