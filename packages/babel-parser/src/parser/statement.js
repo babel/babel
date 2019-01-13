@@ -1117,7 +1117,7 @@ export default class StatementParser extends ExpressionParser {
 
     this.parseClassId(node, isStatement, optionalId);
     this.parseClassSuper(node);
-    this.parseClassBody(node);
+    node.body = this.parseClassBody();
 
     this.state.strict = oldStrict;
 
@@ -1144,7 +1144,7 @@ export default class StatementParser extends ExpressionParser {
     );
   }
 
-  parseClassBody(node: N.Class): void {
+  parseClassBody(): void {
     this.state.classLevel++;
 
     const state = { hadConstructor: false };
@@ -1207,9 +1207,9 @@ export default class StatementParser extends ExpressionParser {
       );
     }
 
-    node.body = this.finishNode(classBody, "ClassBody");
-
     this.state.classLevel--;
+
+    return this.finishNode(classBody, "ClassBody");
   }
 
   parseClassMember(

@@ -1,0 +1,490 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 136,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 9,
+      "column": 39
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 136,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 9,
+        "column": 39
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "ClassDeclaration",
+        "start": 0,
+        "end": 15,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 15
+          }
+        },
+        "id": {
+          "type": "Placeholder",
+          "start": 6,
+          "end": 12,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 6
+            },
+            "end": {
+              "line": 1,
+              "column": 12
+            }
+          },
+          "expectedNode": "Identifier",
+          "key": {
+            "type": "Identifier",
+            "start": 8,
+            "end": 10,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 8
+              },
+              "end": {
+                "line": 1,
+                "column": 10
+              },
+              "identifierName": "ID"
+            },
+            "name": "ID"
+          }
+        },
+        "superClass": null,
+        "body": {
+          "type": "ClassBody",
+          "start": 13,
+          "end": 15,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 13
+            },
+            "end": {
+              "line": 1,
+              "column": 15
+            }
+          },
+          "body": []
+        }
+      },
+      {
+        "type": "ExpressionStatement",
+        "start": 17,
+        "end": 37,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 20
+          }
+        },
+        "expression": {
+          "type": "UnaryExpression",
+          "start": 17,
+          "end": 37,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 0
+            },
+            "end": {
+              "line": 3,
+              "column": 20
+            }
+          },
+          "operator": "void",
+          "prefix": true,
+          "argument": {
+            "type": "ClassExpression",
+            "start": 22,
+            "end": 37,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 5
+              },
+              "end": {
+                "line": 3,
+                "column": 20
+              }
+            },
+            "id": {
+              "type": "Placeholder",
+              "start": 28,
+              "end": 34,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 11
+                },
+                "end": {
+                  "line": 3,
+                  "column": 17
+                }
+              },
+              "expectedNode": "Identifier",
+              "key": {
+                "type": "Identifier",
+                "start": 30,
+                "end": 32,
+                "loc": {
+                  "start": {
+                    "line": 3,
+                    "column": 13
+                  },
+                  "end": {
+                    "line": 3,
+                    "column": 15
+                  },
+                  "identifierName": "ID"
+                },
+                "name": "ID"
+              }
+            },
+            "superClass": null,
+            "body": {
+              "type": "ClassBody",
+              "start": 35,
+              "end": 37,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 18
+                },
+                "end": {
+                  "line": 3,
+                  "column": 20
+                }
+              },
+              "body": []
+            }
+          }
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 39,
+        "end": 72,
+        "loc": {
+          "start": {
+            "line": 5,
+            "column": 0
+          },
+          "end": {
+            "line": 5,
+            "column": 33
+          }
+        },
+        "id": {
+          "type": "Placeholder",
+          "start": 45,
+          "end": 51,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 6
+            },
+            "end": {
+              "line": 5,
+              "column": 12
+            }
+          },
+          "expectedNode": "Identifier",
+          "key": {
+            "type": "Identifier",
+            "start": 47,
+            "end": 49,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 8
+              },
+              "end": {
+                "line": 5,
+                "column": 10
+              },
+              "identifierName": "ID"
+            },
+            "name": "ID"
+          }
+        },
+        "superClass": {
+          "type": "Placeholder",
+          "start": 60,
+          "end": 69,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 21
+            },
+            "end": {
+              "line": 5,
+              "column": 30
+            }
+          },
+          "expectedNode": "Expression",
+          "key": {
+            "type": "Identifier",
+            "start": 62,
+            "end": 67,
+            "loc": {
+              "start": {
+                "line": 5,
+                "column": 23
+              },
+              "end": {
+                "line": 5,
+                "column": 28
+              },
+              "identifierName": "SUPER"
+            },
+            "name": "SUPER"
+          }
+        },
+        "body": {
+          "type": "ClassBody",
+          "start": 70,
+          "end": 72,
+          "loc": {
+            "start": {
+              "line": 5,
+              "column": 31
+            },
+            "end": {
+              "line": 5,
+              "column": 33
+            }
+          },
+          "body": []
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 74,
+        "end": 95,
+        "loc": {
+          "start": {
+            "line": 7,
+            "column": 0
+          },
+          "end": {
+            "line": 7,
+            "column": 21
+          }
+        },
+        "id": {
+          "type": "Placeholder",
+          "start": 80,
+          "end": 86,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 6
+            },
+            "end": {
+              "line": 7,
+              "column": 12
+            }
+          },
+          "expectedNode": "Identifier",
+          "key": {
+            "type": "Identifier",
+            "start": 82,
+            "end": 84,
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 8
+              },
+              "end": {
+                "line": 7,
+                "column": 10
+              },
+              "identifierName": "ID"
+            },
+            "name": "ID"
+          }
+        },
+        "superClass": null,
+        "body": {
+          "type": "Placeholder",
+          "start": 87,
+          "end": 95,
+          "loc": {
+            "start": {
+              "line": 7,
+              "column": 13
+            },
+            "end": {
+              "line": 7,
+              "column": 21
+            }
+          },
+          "expectedNode": "ClassBody",
+          "key": {
+            "type": "Identifier",
+            "start": 89,
+            "end": 93,
+            "loc": {
+              "start": {
+                "line": 7,
+                "column": 15
+              },
+              "end": {
+                "line": 7,
+                "column": 19
+              },
+              "identifierName": "BODY"
+            },
+            "name": "BODY"
+          }
+        }
+      },
+      {
+        "type": "ClassDeclaration",
+        "start": 97,
+        "end": 136,
+        "loc": {
+          "start": {
+            "line": 9,
+            "column": 0
+          },
+          "end": {
+            "line": 9,
+            "column": 39
+          }
+        },
+        "id": {
+          "type": "Placeholder",
+          "start": 103,
+          "end": 109,
+          "loc": {
+            "start": {
+              "line": 9,
+              "column": 6
+            },
+            "end": {
+              "line": 9,
+              "column": 12
+            }
+          },
+          "expectedNode": "Identifier",
+          "key": {
+            "type": "Identifier",
+            "start": 105,
+            "end": 107,
+            "loc": {
+              "start": {
+                "line": 9,
+                "column": 8
+              },
+              "end": {
+                "line": 9,
+                "column": 10
+              },
+              "identifierName": "ID"
+            },
+            "name": "ID"
+          }
+        },
+        "superClass": {
+          "type": "Placeholder",
+          "start": 118,
+          "end": 127,
+          "loc": {
+            "start": {
+              "line": 9,
+              "column": 21
+            },
+            "end": {
+              "line": 9,
+              "column": 30
+            }
+          },
+          "expectedNode": "Expression",
+          "key": {
+            "type": "Identifier",
+            "start": 120,
+            "end": 125,
+            "loc": {
+              "start": {
+                "line": 9,
+                "column": 23
+              },
+              "end": {
+                "line": 9,
+                "column": 28
+              },
+              "identifierName": "SUPER"
+            },
+            "name": "SUPER"
+          }
+        },
+        "body": {
+          "type": "Placeholder",
+          "start": 128,
+          "end": 136,
+          "loc": {
+            "start": {
+              "line": 9,
+              "column": 31
+            },
+            "end": {
+              "line": 9,
+              "column": 39
+            }
+          },
+          "expectedNode": "ClassBody",
+          "key": {
+            "type": "Identifier",
+            "start": 130,
+            "end": 134,
+            "loc": {
+              "start": {
+                "line": 9,
+                "column": 33
+              },
+              "end": {
+                "line": 9,
+                "column": 37
+              },
+              "identifierName": "BODY"
+            },
+            "name": "BODY"
+          }
+        }
+      }
+    ],
+    "directives": []
+  }
+}

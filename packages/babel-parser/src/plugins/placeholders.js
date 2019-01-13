@@ -42,6 +42,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return super.getTokenFromCode(...arguments);
     }
 
+    match(type: TokenType): boolean {
+      // Let's pretend that placeholders _are_ tt.name, since they are
+      // allowed wherever an identifier is allowed.
+      if (type == tt.name && super.match(tt.placeholder)) return true;
+      return super.match(...arguments);
+    }
+
     /* ============================================================ *
      * parser/expression.js                                         *
      * ============================================================ */
@@ -50,6 +57,24 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       return (
         this.parsePlaceholder("Expression") || super.parseExprAtom(...arguments)
       );
+    }
+
+    parseIdentifier(): N.Identifier | N.Placeholder {
+      // NOTE: This function only handles identifiers outside of
+      // expressions and binding patterns, since they are already
+      // handled by the parseExprAtom and parseBindingAtom functions.
+      // This is needed, for example, to parse "class %%NAME%% {}".
+      return (
+        this.parsePlaceholder("Identifier") ||
+        super.parseIdentifier(...arguments)
+      );
+    }
+
+    checkReservedWord(word: string): void {
+      // Sometimes we call #checkReservedWord(node.name), expecting
+      // that node is an Identifier. If it is a Placeholder, name
+      // will be undefined.
+      if (word !== undefined) super.checkReservedWord(...arguments);
     }
 
     /* ============================================================ *
@@ -76,5 +101,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return node;
       }
       return super.toAssignable(...arguments);
+    }
+
+    /* ============================================================ *
+     * parser/statement.js                                          *
+     * ============================================================ */
+
+    parseBlock(): N.BlockStatement | N.Placeholder {
+      return (
+        this.parsePlaceholder("BlockStatement") ||
+        super.parseBlock(...arguments)
+      );
+    }
+
+    parseClassBody(): N.ClassBody | N.Placeholder {
+      return (
+        this.parsePlaceholder("ClassBody") || super.parseClassBody(...arguments)
+      );
     }
   };

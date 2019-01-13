@@ -1,0 +1,281 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 83,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 3,
+      "column": 34
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 83,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 3,
+        "column": 34
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "TryStatement",
+        "start": 0,
+        "end": 47,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 47
+          }
+        },
+        "block": {
+          "type": "Placeholder",
+          "start": 4,
+          "end": 11,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 11
+            }
+          },
+          "expectedNode": "BlockStatement",
+          "key": {
+            "type": "Identifier",
+            "start": 6,
+            "end": 9,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 6
+              },
+              "end": {
+                "line": 1,
+                "column": 9
+              },
+              "identifierName": "TRY"
+            },
+            "name": "TRY"
+          }
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start": 12,
+          "end": 27,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 12
+            },
+            "end": {
+              "line": 1,
+              "column": 27
+            }
+          },
+          "param": null,
+          "body": {
+            "type": "Placeholder",
+            "start": 18,
+            "end": 27,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 18
+              },
+              "end": {
+                "line": 1,
+                "column": 27
+              }
+            },
+            "expectedNode": "BlockStatement",
+            "key": {
+              "type": "Identifier",
+              "start": 20,
+              "end": 25,
+              "loc": {
+                "start": {
+                  "line": 1,
+                  "column": 20
+                },
+                "end": {
+                  "line": 1,
+                  "column": 25
+                },
+                "identifierName": "CATCH"
+              },
+              "name": "CATCH"
+            }
+          }
+        },
+        "guardedHandlers": [],
+        "finalizer": {
+          "type": "Placeholder",
+          "start": 36,
+          "end": 47,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 36
+            },
+            "end": {
+              "line": 1,
+              "column": 47
+            }
+          },
+          "expectedNode": "BlockStatement",
+          "key": {
+            "type": "Identifier",
+            "start": 38,
+            "end": 45,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 38
+              },
+              "end": {
+                "line": 1,
+                "column": 45
+              },
+              "identifierName": "FINALLY"
+            },
+            "name": "FINALLY"
+          }
+        }
+      },
+      {
+        "type": "TryStatement",
+        "start": 49,
+        "end": 83,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 34
+          }
+        },
+        "block": {
+          "type": "BlockStatement",
+          "start": 53,
+          "end": 55,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 4
+            },
+            "end": {
+              "line": 3,
+              "column": 6
+            }
+          },
+          "body": [],
+          "directives": []
+        },
+        "handler": {
+          "type": "CatchClause",
+          "start": 56,
+          "end": 83,
+          "loc": {
+            "start": {
+              "line": 3,
+              "column": 7
+            },
+            "end": {
+              "line": 3,
+              "column": 34
+            }
+          },
+          "param": {
+            "type": "Placeholder",
+            "start": 63,
+            "end": 72,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 14
+              },
+              "end": {
+                "line": 3,
+                "column": 23
+              }
+            },
+            "expectedNode": "Pattern",
+            "key": {
+              "type": "Identifier",
+              "start": 65,
+              "end": 70,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 16
+                },
+                "end": {
+                  "line": 3,
+                  "column": 21
+                },
+                "identifierName": "PARAM"
+              },
+              "name": "PARAM"
+            }
+          },
+          "body": {
+            "type": "Placeholder",
+            "start": 74,
+            "end": 83,
+            "loc": {
+              "start": {
+                "line": 3,
+                "column": 25
+              },
+              "end": {
+                "line": 3,
+                "column": 34
+              }
+            },
+            "expectedNode": "BlockStatement",
+            "key": {
+              "type": "Identifier",
+              "start": 76,
+              "end": 81,
+              "loc": {
+                "start": {
+                  "line": 3,
+                  "column": 27
+                },
+                "end": {
+                  "line": 3,
+                  "column": 32
+                },
+                "identifierName": "CATCH"
+              },
+              "name": "CATCH"
+            }
+          }
+        },
+        "guardedHandlers": [],
+        "finalizer": null
+      }
+    ],
+    "directives": []
+  }
+}
