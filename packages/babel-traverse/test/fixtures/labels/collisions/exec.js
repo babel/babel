@@ -2,7 +2,7 @@
 const log = [];
 
 (function () {
-  // _label:   // TODO: known failure
+  _label:
   do {
     { log.push(0); }
     _label2: if (1) {
@@ -11,7 +11,7 @@ const log = [];
       log.push(2);
     }
     log.push(3);
-    continue; // _label;  // goes with known-failing bit above
+    continue _label;
     log.push(4);
   } while (0);
   log.push(5);

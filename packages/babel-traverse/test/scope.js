@@ -214,7 +214,7 @@ describe("scope", function() {
       ).toBeTruthy();
     });
 
-    test("label", function() {
+    test("getLabel", function() {
       expect(getPath("foo: { }").scope.getBinding("foo")).toBeUndefined();
       expect(getPath("foo: { }").scope.getLabel("foo").type).toBe(
         "LabeledStatement",
@@ -237,12 +237,10 @@ describe("scope", function() {
       expect(
         gen("foo", getPath("_foo: { } _foo1: { } _foo2: { }")), //
       ).toBe("_foo3");
-      /* Known failures.
       expect(gen("foo", getPath("do { _foo: { } } while (0)"))).toBe("_foo2");
       expect(
         gen("foo", getPathHere("_foo: do { HERE } while (0)")), //
       ).toBe("_foo2");
-      */
     });
 
     it("reference paths", function() {
