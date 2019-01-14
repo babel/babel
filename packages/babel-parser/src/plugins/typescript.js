@@ -1266,7 +1266,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): ?N.Declaration {
       switch (value) {
         case "abstract":
-          if (!this.isLineTerminator() && (next || this.match(tt._class))) {
+          if (this.tsCheckLineTerminatorAndMatch(tt._class, next)) {
             const cls: N.ClassDeclaration = node;
             cls.abstract = true;
             if (next) this.next();
@@ -1309,12 +1309,16 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           break;
 
         case "type":
-          if (next || this.match(tt.name)) {
+          if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
             if (next) this.next();
             return this.tsParseTypeAliasDeclaration(node);
           }
           break;
       }
+    }
+
+    tsCheckLineTerminatorAndMatch(tokenType: TokenType, next: boolean) {
+      return !this.isLineTerminator() && (next || this.match(tokenType));
     }
 
     tsTryParseGenericAsyncArrowFunction(
