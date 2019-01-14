@@ -1286,7 +1286,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           break;
 
         case "interface":
-          if (next || this.match(tt.name)) {
+          if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
             if (next) this.next();
             return this.tsParseInterfaceDeclaration(node);
           }
@@ -1296,13 +1296,13 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (next) this.next();
           if (this.match(tt.string)) {
             return this.tsParseAmbientExternalModuleDeclaration(node);
-          } else if (next || this.match(tt.name)) {
+          } else if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
             return this.tsParseModuleOrNamespaceDeclaration(node);
           }
           break;
 
         case "namespace":
-          if (next || this.match(tt.name)) {
+          if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
             if (next) this.next();
             return this.tsParseModuleOrNamespaceDeclaration(node);
           }
