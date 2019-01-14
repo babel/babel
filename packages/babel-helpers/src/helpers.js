@@ -391,7 +391,7 @@ helpers.objectSpread = helper("7.0.0-beta.0")`
     for (var i = 1; i < arguments.length; i++) {
       var argument = arguments[i];
       if (argument.isSpread) {
-        var source = (arguments[i] != null) ? arguments[i] : {};
+        var source = (argument.argument != null) ? argument.argument : {};
         var ownKeys = Object.keys(source);
         if (typeof Object.getOwnPropertySymbols === 'function') {
           ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
@@ -402,7 +402,7 @@ helpers.objectSpread = helper("7.0.0-beta.0")`
           defineProperty(target, key, source[key]);
         });
       } else {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(argument));
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(argument.argument));
       }
     }
     return target;
