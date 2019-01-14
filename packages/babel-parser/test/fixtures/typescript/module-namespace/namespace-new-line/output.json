@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 18,
+  "end": 16,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 2,
-      "column": 8
+      "line": 3,
+      "column": 2
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 18,
+    "end": 16,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 2,
-        "column": 8
+        "line": 3,
+        "column": 2
       }
     },
     "sourceType": "module",
@@ -64,7 +64,7 @@
       {
         "type": "ExpressionStatement",
         "start": 10,
-        "end": 18,
+        "end": 13,
         "loc": {
           "start": {
             "line": 2,
@@ -72,13 +72,13 @@
           },
           "end": {
             "line": 2,
-            "column": 8
+            "column": 3
           }
         },
         "expression": {
-          "type": "AssignmentExpression",
+          "type": "Identifier",
           "start": 10,
-          "end": 18,
+          "end": 13,
           "loc": {
             "start": {
               "line": 2,
@@ -86,44 +86,29 @@
             },
             "end": {
               "line": 2,
-              "column": 8
-            }
-          },
-          "operator": "=",
-          "left": {
-            "type": "Identifier",
-            "start": 10,
-            "end": 13,
-            "loc": {
-              "start": {
-                "line": 2,
-                "column": 0
-              },
-              "end": {
-                "line": 2,
-                "column": 3
-              },
-              "identifierName": "Foo"
+              "column": 3
             },
-            "name": "Foo"
+            "identifierName": "Foo"
           },
-          "right": {
-            "type": "ObjectExpression",
-            "start": 16,
-            "end": 18,
-            "loc": {
-              "start": {
-                "line": 2,
-                "column": 6
-              },
-              "end": {
-                "line": 2,
-                "column": 8
-              }
-            },
-            "properties": []
-          }
+          "name": "Foo"
         }
+      },
+      {
+        "type": "BlockStatement",
+        "start": 14,
+        "end": 16,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 2
+          }
+        },
+        "body": [],
+        "directives": []
       }
     ],
     "directives": []

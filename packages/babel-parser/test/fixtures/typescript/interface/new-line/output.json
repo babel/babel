@@ -1,29 +1,29 @@
 {
   "type": "File",
   "start": 0,
-  "end": 16,
+  "end": 14,
   "loc": {
     "start": {
       "line": 1,
       "column": 0
     },
     "end": {
-      "line": 2,
-      "column": 6
+      "line": 3,
+      "column": 2
     }
   },
   "program": {
     "type": "Program",
     "start": 0,
-    "end": 16,
+    "end": 14,
     "loc": {
       "start": {
         "line": 1,
         "column": 0
       },
       "end": {
-        "line": 2,
-        "column": 6
+        "line": 3,
+        "column": 2
       }
     },
     "sourceType": "module",
@@ -64,7 +64,7 @@
       {
         "type": "ExpressionStatement",
         "start": 10,
-        "end": 16,
+        "end": 11,
         "loc": {
           "start": {
             "line": 2,
@@ -72,13 +72,13 @@
           },
           "end": {
             "line": 2,
-            "column": 6
+            "column": 1
           }
         },
         "expression": {
-          "type": "AssignmentExpression",
+          "type": "Identifier",
           "start": 10,
-          "end": 16,
+          "end": 11,
           "loc": {
             "start": {
               "line": 2,
@@ -86,44 +86,29 @@
             },
             "end": {
               "line": 2,
-              "column": 6
-            }
-          },
-          "operator": "=",
-          "left": {
-            "type": "Identifier",
-            "start": 10,
-            "end": 11,
-            "loc": {
-              "start": {
-                "line": 2,
-                "column": 0
-              },
-              "end": {
-                "line": 2,
-                "column": 1
-              },
-              "identifierName": "F"
+              "column": 1
             },
-            "name": "F"
+            "identifierName": "F"
           },
-          "right": {
-            "type": "ObjectExpression",
-            "start": 14,
-            "end": 16,
-            "loc": {
-              "start": {
-                "line": 2,
-                "column": 4
-              },
-              "end": {
-                "line": 2,
-                "column": 6
-              }
-            },
-            "properties": []
-          }
+          "name": "F"
         }
+      },
+      {
+        "type": "BlockStatement",
+        "start": 12,
+        "end": 14,
+        "loc": {
+          "start": {
+            "line": 3,
+            "column": 0
+          },
+          "end": {
+            "line": 3,
+            "column": 2
+          }
+        },
+        "body": [],
+        "directives": []
       }
     ],
     "directives": []

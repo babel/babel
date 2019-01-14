@@ -1,2 +1,3 @@
 interface
-F = {}
+F
+{}
