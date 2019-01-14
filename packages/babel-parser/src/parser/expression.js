@@ -304,7 +304,6 @@ export default class ExpressionParser extends LValParser {
         const operator = this.state.value;
         node.left = left;
         node.operator = operator;
-
         if (
           operator === "**" &&
           left.type === "UnaryExpression" &&
@@ -613,6 +612,7 @@ export default class ExpressionParser extends LValParser {
         tt.parenR,
         possibleAsync,
         base.type === "Import",
+        base.type !== "Super",
       );
       if (!state.optionalChainMember) {
         this.finishCallExpression(node);
@@ -721,6 +721,7 @@ export default class ExpressionParser extends LValParser {
     close: TokenType,
     possibleAsyncArrow: boolean,
     dynamicImport?: boolean,
+    allowPlaceholder?: boolean,
   ): $ReadOnlyArray<?N.Expression> {
     const elts = [];
     let innerParenStart;
@@ -753,6 +754,7 @@ export default class ExpressionParser extends LValParser {
           false,
           possibleAsyncArrow ? { start: 0 } : undefined,
           possibleAsyncArrow ? { start: 0 } : undefined,
+          allowPlaceholder,
         ),
       );
     }
@@ -1902,6 +1904,7 @@ export default class ExpressionParser extends LValParser {
     allowEmpty: ?boolean,
     refShorthandDefaultPos: ?Pos,
     refNeedsArrowPos: ?Pos,
+    allowPlaceholder: ?boolean,
   ): ?N.Expression {
     let elt;
     if (allowEmpty && this.match(tt.comma)) {
@@ -1914,6 +1917,14 @@ export default class ExpressionParser extends LValParser {
         spreadNodeStartPos,
         spreadNodeStartLoc,
       );
+    } else if (this.match(tt.question)) {
+      this.expectPlugin("partialApplication");
+      if (!allowPlaceholder) {
+        this.raise(this.state.start, "Unexpected argument placeholder");
+      }
+      const node = this.startNode();
+      this.next();
+      elt = this.finishNode(node, "ArgumentPlaceholder");
     } else {
       elt = this.parseMaybeAssign(
         false,

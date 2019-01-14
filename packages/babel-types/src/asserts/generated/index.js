@@ -660,6 +660,12 @@ export function assertParenthesizedExpression(
 ): void {
   assert("ParenthesizedExpression", node, opts);
 }
+export function assertArgumentPlaceholder(
+  node: Object,
+  opts?: Object = {},
+): void {
+  assert("ArgumentPlaceholder", node, opts);
+}
 export function assertAwaitExpression(node: Object, opts?: Object = {}): void {
   assert("AwaitExpression", node, opts);
 }
