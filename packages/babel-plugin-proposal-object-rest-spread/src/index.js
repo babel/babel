@@ -429,7 +429,7 @@ export default declare((api, opts) => {
             push();
             args.push(t.objectExpression([
               t.objectProperty(t.identifier("isSpread"), t.booleanLiteral(true)),
-              t.objectProperty(t.identifier("argument"), props.argument)
+              t.objectProperty(t.identifier("argument"), prop.argument)
             ]));
           } else {
             props.push(prop);
