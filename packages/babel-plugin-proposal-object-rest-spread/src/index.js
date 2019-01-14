@@ -414,7 +414,7 @@ export default declare((api, opts) => {
         function push() {
           if (!props.length) return;
           args.push(t.objectExpression([
-            t.objectProperty(t.identifier("isSpread"), false),
+            t.objectProperty(t.identifier("isSpread"), t.booleanLiteral(false)),
             t.objectProperty(t.identifier("argument"), t.objectExpression(props))
           ]));
           props = [];
@@ -428,7 +428,7 @@ export default declare((api, opts) => {
           if (t.isSpreadElement(prop)) {
             push();
             args.push(t.objectExpression([
-              t.objectProperty(t.identifier("isSpread"), true),
+              t.objectProperty(t.identifier("isSpread"), t.booleanLiteral(true)),
               t.objectProperty(t.identifier("argument"), props.argument)
             ]));
           } else {
