@@ -413,7 +413,10 @@ export default declare((api, opts) => {
 
         function push() {
           if (!props.length) return;
-          args.push(t.objectExpression(props));
+          args.push(t.objectExpression([
+            t.objectProperty(t.identifier("isSpread"), false),
+            t.objectProperty(t.identifier("argument"), t.objectExpression(props))
+          ]));
           props = [];
         }
 
@@ -424,7 +427,10 @@ export default declare((api, opts) => {
         for (const prop of (path.node.properties: Array)) {
           if (t.isSpreadElement(prop)) {
             push();
-            args.push(prop.argument);
+            args.push(t.objectExpression([
+              t.objectProperty(t.identifier("isSpread"), true),
+              t.objectProperty(t.identifier("argument"), props.argument)
+            ]));
           } else {
             props.push(prop);
           }
@@ -432,14 +438,14 @@ export default declare((api, opts) => {
 
         push();
 
-        let helper;
         if (loose) {
-          helper = getExtendsHelper(file);
+          const helper = getExtendsHelper(file);
+          const objects = args.map(arg => arg.argument);
+          path.replaceWith(t.callExpression(helper, objects));
         } else {
-          helper = file.addHelper("objectSpread");
+          const helper = file.addHelper("objectSpread");
+          path.replaceWith(t.callExpression(helper, args));
         }
-
-        path.replaceWith(t.callExpression(helper, args));
       },
     },
   };
