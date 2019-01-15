@@ -311,6 +311,11 @@ export default class Tokenizer extends LocationParser {
     loop: while (this.state.pos < this.input.length) {
       const ch = this.input.charCodeAt(this.state.pos);
       switch (ch) {
+        case charCodes.space:
+        case charCodes.nonBreakingSpace:
+        case charCodes.tab:
+          ++this.state.pos;
+          break;
         case charCodes.carriageReturn:
           if (
             this.input.charCodeAt(this.state.pos + 1) === charCodes.lineFeed
@@ -651,10 +656,6 @@ export default class Tokenizer extends LocationParser {
 
   getTokenFromCode(code: number): void {
     switch (code) {
-      case charCodes.numberSign:
-        this.readToken_numberSign();
-        return;
-
       // The interpretation of a dot depends on whether it is followed
       // by a digit or another two dots.
 
@@ -719,10 +720,6 @@ export default class Tokenizer extends LocationParser {
 
       case charCodes.questionMark:
         this.readToken_question();
-        return;
-      case charCodes.atSign:
-        ++this.state.pos;
-        this.finishToken(tt.at);
         return;
 
       case charCodes.graveAccent:
@@ -808,6 +805,15 @@ export default class Tokenizer extends LocationParser {
 
       case charCodes.tilde:
         this.finishOp(tt.tilde, 1);
+        return;
+
+      case charCodes.atSign:
+        ++this.state.pos;
+        this.finishToken(tt.at);
+        return;
+
+      case charCodes.numberSign:
+        this.readToken_numberSign();
         return;
     }
 
@@ -1266,10 +1272,11 @@ export default class Tokenizer extends LocationParser {
   // as a micro-optimization.
 
   readWord1(): string {
+    let word = "";
     this.state.containsEsc = false;
-    let word = "",
-      first = true,
-      chunkStart = this.state.pos;
+    const start = this.state.pos;
+    let chunkStart = this.state.pos;
+
     while (this.state.pos < this.input.length) {
       const ch = this.input.codePointAt(this.state.pos);
       if (isIdentifierChar(ch)) {
@@ -1281,6 +1288,8 @@ export default class Tokenizer extends LocationParser {
 
         word += this.input.slice(chunkStart, this.state.pos);
         const escStart = this.state.pos;
+        const identifierCheck =
+          this.state.pos === start ? isIdentifierStart : isIdentifierChar;
 
         if (this.input.charCodeAt(++this.state.pos) !== charCodes.lowercaseU) {
           this.raise(
@@ -1291,8 +1300,11 @@ export default class Tokenizer extends LocationParser {
 
         ++this.state.pos;
         const esc = this.readCodePoint(true);
-        // $FlowFixMe (thinks esc may be null, but throwOnInvalid is true)
-        if (!(first ? isIdentifierStart : isIdentifierChar)(esc, true)) {
+
+        if (
+          // $FlowFixMe (thinks esc may be null, but throwOnInvalid is true)
+          !identifierCheck(esc, true)
+        ) {
           this.raise(escStart, "Invalid Unicode escape");
         }
 
@@ -1302,7 +1314,6 @@ export default class Tokenizer extends LocationParser {
       } else {
         break;
       }
-      first = false;
     }
     return word + this.input.slice(chunkStart, this.state.pos);
   }
