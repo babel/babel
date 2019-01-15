@@ -423,7 +423,7 @@ export default declare((api, opts) => {
         if (t.isSpreadElement(path.node.properties[0])) {
           args.push({
             isSpread: false,
-            object: [],
+            object: t.objectExpression([]),
           });
         }
 
