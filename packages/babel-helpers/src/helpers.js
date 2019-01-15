@@ -1784,7 +1784,7 @@ helpers.classPrivateMethodSet = helper("7.1.6")`
   }
 `;
 
-helpers.wrapRegExp = helper("7.2.2")`
+helpers.wrapRegExp = helper("7.2.6")`
   import wrapNativeSuper from "wrapNativeSuper";
   import getPrototypeOf from "getPrototypeOf";
   import possibleConstructorReturn from "possibleConstructorReturn";
