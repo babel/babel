@@ -149,12 +149,10 @@ export default class LValParser extends NodeUtils {
         const arg = last.argument;
         this.toAssignable(arg, isBinding, contextDescription);
         if (
-          [
-            "Identifier",
-            "MemberExpression",
-            "ArrayPattern",
-            "ObjectPattern",
-          ].indexOf(arg.type) === -1
+          arg.type !== "Identifier" &&
+          arg.type !== "MemberExpression" &&
+          arg.type !== "ArrayPattern" &&
+          arg.type !== "ObjectPattern"
         ) {
           this.unexpected(arg.start);
         }
@@ -430,13 +428,12 @@ export default class LValParser extends NodeUtils {
   }
 
   checkToRestConversion(node: SpreadElement): void {
-    const validArgumentTypes = ["Identifier", "MemberExpression"];
-
-    if (validArgumentTypes.indexOf(node.argument.type) !== -1) {
-      return;
+    if (
+      node.argument.type !== "Identifier" &&
+      node.argument.type !== "MemberExpression"
+    ) {
+      this.raise(node.argument.start, "Invalid rest operator's argument");
     }
-
-    this.raise(node.argument.start, "Invalid rest operator's argument");
   }
 
   checkCommaAfterRest(close: TokenType, kind: string): void {

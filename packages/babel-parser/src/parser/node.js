@@ -7,8 +7,6 @@ import type { Comment, Node as NodeType, NodeBase } from "../types";
 
 // Start an AST node, attaching a start offset.
 
-const commentKeys = ["leadingComments", "trailingComments", "innerComments"];
-
 class Node implements NodeBase {
   constructor(parser: Parser, pos: number, loc: Position) {
     this.type = "";
@@ -34,7 +32,11 @@ class Node implements NodeBase {
     const node2: any = new Node();
     Object.keys(this).forEach(key => {
       // Do not clone comments that are already attached to the node
-      if (commentKeys.indexOf(key) < 0) {
+      if (
+        key !== "leadingComments" &&
+        key !== "trailingComments" &&
+        key !== "innerComments"
+      ) {
         // $FlowIgnore
         node2[key] = this[key];
       }
