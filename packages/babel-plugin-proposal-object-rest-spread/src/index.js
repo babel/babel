@@ -413,27 +413,27 @@ export default declare((api, opts) => {
 
         function push() {
           if (!props.length) return;
-          args.push(t.objectExpression([
-            t.objectProperty(t.identifier("isSpread"), t.booleanLiteral(false)),
-            t.objectProperty(t.identifier("argument"), t.objectExpression(props))
-          ]));
+          args.push({
+            isSpread: false,
+            object: t.objectExpression(props),
+          });
           props = [];
         }
 
         if (t.isSpreadElement(path.node.properties[0])) {
-          args.push(t.objectExpression([
-            t.objectProperty(t.identifier("isSpread"), t.booleanLiteral(false)),
-            t.objectProperty(t.identifier("argument"), t.objectExpression([]))
-          ]));
+          args.push({
+            isSpread: false,
+            object: [],
+          });
         }
 
         for (const prop of (path.node.properties: Array)) {
           if (t.isSpreadElement(prop)) {
             push();
-            args.push(t.objectExpression([
-              t.objectProperty(t.identifier("isSpread"), t.booleanLiteral(true)),
-              t.objectProperty(t.identifier("argument"), prop.argument)
-            ]));
+            args.push({
+              isSpread: true,
+              object: prop.argument,
+            });
           } else {
             props.push(prop);
           }
@@ -443,11 +443,24 @@ export default declare((api, opts) => {
 
         if (loose) {
           const helper = getExtendsHelper(file);
-          const objects = args.map(arg => arg.argument);
+          const objects = args.map(arg => arg.object);
           path.replaceWith(t.callExpression(helper, objects));
         } else {
           const helper = file.addHelper("objectSpread");
-          path.replaceWith(t.callExpression(helper, args));
+          const objects = args.map(arg =>
+            t.objectExpression([
+              t.objectProperty(
+                t.identifier("isSpread"),
+                t.booleanLiteral(arg.isSpread),
+              ),
+              t.objectProperty(
+                t.identifier("object"),
+                arg.object,
+              ),
+            ])
+          );
+          objects[0] = objects[0].properties[1];
+          path.replaceWith(t.callExpression(helper, objects));
         }
       },
     },
