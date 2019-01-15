@@ -20,7 +20,7 @@ import {
 } from "../util/whitespace";
 import State from "./state";
 
-const VALID_REGEX_FLAGS = "gmsiyu";
+const VALID_REGEX_FLAGS = new Set(["g", "m", "s", "i", "y", "u"]);
 
 // The following character codes are forbidden from being
 // an immediate sibling of NumericLiteralSeparator _
@@ -874,7 +874,7 @@ export default class Tokenizer extends LocationParser {
       const char = this.state.input[this.state.pos];
       const charCode = this.state.input.codePointAt(this.state.pos);
 
-      if (VALID_REGEX_FLAGS.indexOf(char) > -1) {
+      if (VALID_REGEX_FLAGS.has(char)) {
         if (mods.indexOf(char) > -1) {
           this.raise(this.state.pos + 1, "Duplicate regular expression flag");
         }
