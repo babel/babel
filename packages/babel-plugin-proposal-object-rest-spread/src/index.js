@@ -453,11 +453,8 @@ export default declare((api, opts) => {
                 t.identifier("isSpread"),
                 t.booleanLiteral(arg.isSpread),
               ),
-              t.objectProperty(
-                t.identifier("object"),
-                arg.object,
-              ),
-            ])
+              t.objectProperty(t.identifier("object"), arg.object),
+            ]),
           );
           objects[0] = objects[0].properties[1].value;
           path.replaceWith(t.callExpression(helper, objects));
