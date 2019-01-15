@@ -459,7 +459,7 @@ export default declare((api, opts) => {
               ),
             ])
           );
-          objects[0] = objects[0].properties[1];
+          objects[0] = objects[0].properties[1].value;
           path.replaceWith(t.callExpression(helper, objects));
         }
       },
