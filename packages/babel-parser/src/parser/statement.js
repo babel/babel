@@ -161,7 +161,7 @@ export default class StatementParser extends ExpressionParser {
         this.next();
 
         let result;
-        if (starttype == tt._import) {
+        if (starttype === tt._import) {
           result = this.parseImport(node);
 
           if (
@@ -693,9 +693,9 @@ export default class StatementParser extends ExpressionParser {
     node.body = this.parseStatement(declaration);
 
     if (
-      node.body.type == "ClassDeclaration" ||
-      (node.body.type == "VariableDeclaration" && node.body.kind !== "var") ||
-      (node.body.type == "FunctionDeclaration" &&
+      node.body.type === "ClassDeclaration" ||
+      (node.body.type === "VariableDeclaration" && node.body.kind !== "var") ||
+      (node.body.type === "FunctionDeclaration" &&
         (this.state.strict || node.body.generator || node.body.async))
     ) {
       this.raise(node.body.start, "Invalid labeled declaration");

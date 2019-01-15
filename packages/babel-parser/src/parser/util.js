@@ -25,7 +25,7 @@ export default class UtilParser extends Tokenizer {
 
   isLookaheadRelational(op: "<" | ">"): boolean {
     const l = this.lookahead();
-    return l.type == tt.relational && l.value == op;
+    return l.type === tt.relational && l.value === op;
   }
 
   // TODO

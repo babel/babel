@@ -1630,7 +1630,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.match(tt.name) &&
         (this.state.value === "type" ||
           this.state.value === "interface" ||
-          this.state.value == "opaque")
+          this.state.value === "opaque")
       ) {
         return false;
       }

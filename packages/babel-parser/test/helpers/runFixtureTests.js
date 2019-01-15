@@ -126,7 +126,7 @@ function ppJSON(v) {
 }
 
 function addPath(str, pt) {
-  if (str.charAt(str.length - 1) == ")") {
+  if (str.charAt(str.length - 1) === ")") {
     return str.slice(0, str.length - 1) + "/" + pt + ")";
   } else {
     return str + " (" + pt + ")";
