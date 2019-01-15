@@ -1303,7 +1303,7 @@ export default class Tokenizer extends LocationParser {
       if (isIdentifierChar(ch)) {
         this.state.pos += ch <= 0xffff ? 1 : 2;
       } else if (this.state.isIterator && ch === charCodes.atSign) {
-        this.state.pos += 1;
+        ++this.state.pos;
       } else if (ch === charCodes.backslash) {
         this.state.containsEsc = true;
 
