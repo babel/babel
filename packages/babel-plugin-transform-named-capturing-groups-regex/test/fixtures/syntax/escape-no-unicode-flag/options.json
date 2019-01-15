@@ -1,0 +1,3 @@
+{
+  "throws": "invalid group Unicode name \"\\u{41}\", use `u` flag."
+}
