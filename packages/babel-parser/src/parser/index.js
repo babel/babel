@@ -6,9 +6,7 @@ import type { PluginList } from "../plugin-utils";
 import { getOptions } from "../options";
 import StatementParser from "./statement";
 
-export type PluginsMap = {
-  [key: string]: { [option: string]: any },
-};
+export type PluginsMap = Map<string, { [string]: any }>;
 
 export default class Parser extends StatementParser {
   // Forward-declaration so typescript plugin can override jsx plugin
@@ -35,10 +33,10 @@ export default class Parser extends StatementParser {
 }
 
 function pluginsMap(plugins: PluginList): PluginsMap {
-  const pluginMap: PluginsMap = (Object.create(null): Object);
+  const pluginMap: PluginsMap = new Map();
   for (const plugin of plugins) {
-    const [name, options = {}] = Array.isArray(plugin) ? plugin : [plugin, {}];
-    if (!pluginMap[name]) pluginMap[name] = options || {};
+    const [name, options] = Array.isArray(plugin) ? plugin : [plugin, {}];
+    if (!pluginMap.has(name)) pluginMap.set(name, options || {});
   }
   return pluginMap;
 }
