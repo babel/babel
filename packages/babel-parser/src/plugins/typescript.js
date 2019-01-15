@@ -1187,6 +1187,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsTryParseDeclare(nany: any): ?N.Declaration {
+      if (this.isLineTerminator()) {
+        return;
+      }
+
       switch (this.state.type) {
         case tt._function:
           this.next();
@@ -1263,7 +1267,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): ?N.Declaration {
       switch (value) {
         case "abstract":
-          if (next || this.match(tt._class)) {
+          if (this.tsCheckLineTerminatorAndMatch(tt._class, next)) {
             const cls: N.ClassDeclaration = node;
             cls.abstract = true;
             if (next) this.next();
@@ -1283,7 +1287,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           break;
 
         case "interface":
-          if (next || this.match(tt.name)) {
+          if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
             if (next) this.next();
             return this.tsParseInterfaceDeclaration(node);
           }
@@ -1293,25 +1297,29 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (next) this.next();
           if (this.match(tt.string)) {
             return this.tsParseAmbientExternalModuleDeclaration(node);
-          } else if (next || this.match(tt.name)) {
+          } else if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
             return this.tsParseModuleOrNamespaceDeclaration(node);
           }
           break;
 
         case "namespace":
-          if (next || this.match(tt.name)) {
+          if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
             if (next) this.next();
             return this.tsParseModuleOrNamespaceDeclaration(node);
           }
           break;
 
         case "type":
-          if (next || this.match(tt.name)) {
+          if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
             if (next) this.next();
             return this.tsParseTypeAliasDeclaration(node);
           }
           break;
       }
+    }
+
+    tsCheckLineTerminatorAndMatch(tokenType: TokenType, next: boolean) {
+      return !this.isLineTerminator() && (next || this.match(tokenType));
     }
 
     tsTryParseGenericAsyncArrowFunction(
