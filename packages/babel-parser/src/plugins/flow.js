@@ -1933,7 +1933,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // ensure that inside flow types, we bypass the jsx parser plugin
-    readToken(code: number): void {
+    getTokenFromCode(code: number): void {
       const next = this.state.input.charCodeAt(this.state.pos + 1);
       if (
         this.state.inType &&
@@ -1944,7 +1944,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.state.isIterator = true;
         return super.readWord();
       } else {
-        return super.readToken(code);
+        return super.getTokenFromCode(code);
       }
     }
 

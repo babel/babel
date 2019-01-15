@@ -214,17 +214,7 @@ export default class Tokenizer extends LocationParser {
     if (curContext.override) {
       curContext.override(this);
     } else {
-      this.readToken(this.state.input.codePointAt(this.state.pos));
-    }
-  }
-
-  readToken(code: number): void {
-    // Identifier or keyword. '\uXXXX' sequences are allowed in
-    // identifiers, so '\' also dispatches to that.
-    if (isIdentifierStart(code) || code === charCodes.backslash) {
-      this.readWord();
-    } else {
-      this.getTokenFromCode(code);
+      this.getTokenFromCode(this.state.input.codePointAt(this.state.pos));
     }
   }
 
@@ -826,6 +816,16 @@ export default class Tokenizer extends LocationParser {
       case charCodes.numberSign:
         this.readToken_numberSign();
         return;
+
+      case charCodes.backslash:
+        this.readWord();
+        return;
+
+      default:
+        if (isIdentifierStart(code)) {
+          this.readWord();
+          return;
+        }
     }
 
     this.raise(

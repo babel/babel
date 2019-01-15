@@ -2213,11 +2213,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // ensure that inside types, we bypass the jsx parser plugin
-    readToken(code: number): void {
+    getTokenFromCode(code: number): void {
       if (this.state.inType && (code === 62 || code === 60)) {
         return this.finishOp(tt.relational, 1);
       } else {
-        return super.readToken(code);
+        return super.getTokenFromCode(code);
       }
     }
 

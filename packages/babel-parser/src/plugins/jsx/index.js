@@ -93,7 +93,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
                 ++this.state.pos;
                 return this.finishToken(tt.jsxTagStart);
               }
-              return this.getTokenFromCode(ch);
+              return super.getTokenFromCode(ch);
             }
             out += this.state.input.slice(chunkStart, this.state.pos);
             return this.finishToken(tt.jsxText, out);
@@ -520,8 +520,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    readToken(code: number): void {
-      if (this.state.inPropertyName) return super.readToken(code);
+    getTokenFromCode(code: number): void {
+      if (this.state.inPropertyName) return super.getTokenFromCode(code);
 
       const context = this.curContext();
 
@@ -557,7 +557,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return this.finishToken(tt.jsxTagStart);
       }
 
-      return super.readToken(code);
+      return super.getTokenFromCode(code);
     }
 
     updateContext(prevType: TokenType): void {
