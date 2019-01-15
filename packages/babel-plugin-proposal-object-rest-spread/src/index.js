@@ -421,7 +421,10 @@ export default declare((api, opts) => {
         }
 
         if (t.isSpreadElement(path.node.properties[0])) {
-          args.push(t.objectExpression([]));
+          args.push(t.objectExpression([
+            t.objectProperty(t.identifier("isSpread"), t.booleanLiteral(false)),
+            t.objectProperty(t.identifier("argument"), t.objectExpression([]))
+          ]));
         }
 
         for (const prop of (path.node.properties: Array)) {
