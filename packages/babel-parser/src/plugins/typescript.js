@@ -398,8 +398,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       this.expect(tt.bracketL);
       const id = this.parseIdentifier();
-      this.expect(tt.colon);
-      id.typeAnnotation = this.tsParseTypeAnnotation(/* eatColon */ false);
+      id.typeAnnotation = this.tsParseTypeAnnotation();
+      this.finishNode(id, "Identifier"); // set end position to end of type
+
       this.expect(tt.bracketR);
       node.parameters = [id];
 
