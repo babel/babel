@@ -44,7 +44,7 @@ export default class StatementParser extends ExpressionParser {
     const directiveLiteral = this.startNodeAt(expr.start, expr.loc.start);
     const directive = this.startNodeAt(stmt.start, stmt.loc.start);
 
-    const raw = this.input.slice(expr.start, expr.end);
+    const raw = this.state.input.slice(expr.start, expr.end);
     const val = (directiveLiteral.value = raw.slice(1, -1)); // remove quotes
 
     this.addExtra(directiveLiteral, "raw", raw);
@@ -551,7 +551,9 @@ export default class StatementParser extends ExpressionParser {
   parseThrowStatement(node: N.ThrowStatement): N.ThrowStatement {
     this.next();
     if (
-      lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start))
+      lineBreak.test(
+        this.state.input.slice(this.state.lastTokEnd, this.state.start),
+      )
     ) {
       this.raise(this.state.lastTokEnd, "Illegal newline after throw");
     }
@@ -1521,7 +1523,7 @@ export default class StatementParser extends ExpressionParser {
   isAsyncFunction() {
     if (!this.isContextual("async")) return false;
 
-    const { input, pos } = this.state;
+    const { input, pos, length } = this.state;
 
     skipWhiteSpace.lastIndex = pos;
     const skip = skipWhiteSpace.exec(input);
@@ -1533,7 +1535,7 @@ export default class StatementParser extends ExpressionParser {
     return (
       !lineBreak.test(input.slice(pos, next)) &&
       input.slice(next, next + 8) === "function" &&
-      (next + 8 === input.length || !isIdentifierChar(input.charAt(next + 8)))
+      (next + 8 === length || !isIdentifierChar(input.charCodeAt(next + 8)))
     );
   }
 

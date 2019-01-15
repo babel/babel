@@ -22,7 +22,6 @@ export default class Parser extends StatementParser {
 
     this.options = options;
     this.inModule = this.options.sourceType === "module";
-    this.input = input;
     this.plugins = pluginsMap(this.options.plugins);
     this.filename = options.sourceFilename;
   }

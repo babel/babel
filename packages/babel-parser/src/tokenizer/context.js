@@ -107,7 +107,9 @@ tt._function.updateContext = tt._class.updateContext = function(prevType) {
     prevType !== tt._else &&
     !(
       prevType === tt._return &&
-      lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start))
+      lineBreak.test(
+        this.state.input.slice(this.state.lastTokEnd, this.state.start),
+      )
     ) &&
     !(
       (prevType === tt.colon || prevType === tt.braceL) &&
