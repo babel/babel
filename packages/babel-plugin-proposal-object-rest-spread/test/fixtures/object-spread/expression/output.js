@@ -33,3 +33,15 @@ _objectSpread({}, {
   }
 
 });
+
+_objectSpread({}, {
+  foo: 'bar'
+}, {
+  isSpread: false,
+  object: {
+    get foo() {
+      return 'foo';
+    }
+
+  }
+});
