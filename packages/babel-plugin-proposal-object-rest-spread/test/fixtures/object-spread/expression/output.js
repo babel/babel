@@ -1,13 +1,12 @@
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var argument = arguments[i]; if (argument.isSpread) { var source = argument.object != null ? argument.object : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } else { Object.defineProperties(target, Object.getOwnPropertyDescriptors(argument.object)); } } return target; }
+function _objectSpreadStep(target, object) { var source = object != null ? object : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); }
+
+function _objectSpread(target) { _objectSpreadStep(target, arguments[1]); for (var i = 2; i < arguments.length; i++) { var argument = arguments[i]; if (argument.isSpread) { _objectSpreadStep(target, argument.object); } else { Object.defineProperties(target, Object.getOwnPropertyDescriptors(argument.object)); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 _objectSpread({
   x
-}, {
-  isSpread: true,
-  object: y
-}, {
+}, y, {
   isSpread: false,
   object: {
     a
@@ -22,24 +21,15 @@ _objectSpread({
   }
 });
 
+_objectSpread({}, Object.prototype);
+
 _objectSpread({}, {
-  isSpread: true,
-  object: Object.prototype
+  foo: 'bar'
 });
 
 _objectSpread({}, {
-  isSpread: true,
-  object: {
-    foo: 'bar'
+  get foo() {
+    return 'foo';
   }
-});
 
-_objectSpread({}, {
-  isSpread: true,
-  object: {
-    get foo() {
-      return 'foo';
-    }
-
-  }
 });
