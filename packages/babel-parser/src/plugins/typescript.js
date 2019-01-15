@@ -264,7 +264,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseThisTypePredicate(lhs: N.TsThisType): N.TsTypePredicate {
       this.next();
-      const node: N.TsTypePredicate = this.startNode();
+      const node: N.TsTypePredicate = this.startNodeAtNode(lhs);
       node.parameterName = lhs;
       node.typeAnnotation = this.tsParseTypeAnnotation(/* eatColon */ false);
       return this.finishNode(node, "TSTypePredicate");
