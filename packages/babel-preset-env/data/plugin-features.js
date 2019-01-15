@@ -98,6 +98,7 @@ const es = {
 
   "proposal-json-strings": "JSON superset",
   "proposal-optional-catch-binding": "optional catch binding",
+  "transform-named-capturing-groups-regex": "RegExp named capture groups",
 };
 
 const proposals = require("./shipped-proposals").features;

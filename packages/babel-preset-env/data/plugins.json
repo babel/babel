@@ -270,5 +270,13 @@
     "ios": "11.3",
     "opera": "53",
     "electron": "3"
+  },
+  "transform-named-capturing-groups-regex": {
+    "chrome": "64",
+    "safari": "11.1",
+    "node": "10.13",
+    "ios": "11.3",
+    "opera": "51",
+    "electron": "3"
   }
 }

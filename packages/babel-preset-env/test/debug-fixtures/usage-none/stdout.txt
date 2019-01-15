@@ -37,6 +37,7 @@ Using plugins:
   proposal-unicode-property-regex { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-json-strings { "chrome":"52", "firefox":"50", "ie":"11" }
   proposal-optional-catch-binding { "chrome":"52", "firefox":"50", "ie":"11" }
+  transform-named-capturing-groups-regex { "chrome":"52", "firefox":"50", "ie":"11" }
 
 Using polyfills with `usage` option:
 

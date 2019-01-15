@@ -47,6 +47,7 @@ Using plugins:
   proposal-unicode-property-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-json-strings { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
   proposal-optional-catch-binding { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
+  transform-named-capturing-groups-regex { "chrome":"54", "electron":"0.36", "ie":"10", "node":"6.1" }
 
 Using polyfills with `entry` option:
 
