@@ -64,7 +64,7 @@ const astralIdentifierCodes = [509,0,227,0,150,4,294,9,1368,2,2,1,6,3,41,2,5,0,1
 // rare.
 function isInAstralSet(code: number, set: $ReadOnlyArray<number>): boolean {
   let pos = 0x10000;
-  for (let i = 0; i < set.length; i += 2) {
+  for (let i = 0, length = set.length; i < length; i += 2) {
     pos += set[i];
     if (pos > code) return false;
 

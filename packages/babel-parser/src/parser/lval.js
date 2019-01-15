@@ -56,9 +56,13 @@ export default class LValParser extends NodeUtils {
 
         case "ObjectExpression":
           node.type = "ObjectPattern";
-          for (let index = 0; index < node.properties.length; index++) {
-            const prop = node.properties[index];
-            const isLast = index === node.properties.length - 1;
+          for (
+            let i = 0, length = node.properties.length, last = length - 1;
+            i < length;
+            i++
+          ) {
+            const prop = node.properties[i];
+            const isLast = i === last;
             this.toAssignableObjectExpressionProp(prop, isBinding, isLast);
           }
           break;
