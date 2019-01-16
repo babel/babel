@@ -1769,6 +1769,13 @@ helpers.decorate = helper("7.1.5")`
 
 `;
 
+helpers.decoratorsJan2019 = helper("7.3.0")`
+  export default function _decoratorsJan2019(original) {
+    return { __proto__: original,
+    }
+  }
+`;
+
 helpers.classPrivateMethodGet = helper("7.1.6")`
   export default function _classPrivateMethodGet(receiver, privateSet, fn) {
     if (!privateSet.has(receiver)) {

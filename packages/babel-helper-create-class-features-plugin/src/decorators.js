@@ -2,6 +2,8 @@ import { types as t, template } from "@babel/core";
 import ReplaceSupers from "@babel/helper-replace-supers";
 import nameFunction from "@babel/helper-function-name";
 
+import { OPTIONS, getOption } from "./features";
+
 export function hasOwnDecorators(node) {
   return !!(node.decorators && node.decorators.length);
 }
@@ -115,7 +117,7 @@ export function buildDecoratedClass(ref, path, elements, file) {
   const initializeId = scope.generateUidIdentifier("initialize");
   const isDeclaration = node.id && path.isDeclaration();
   const isStrict = path.isInStrictMode();
-  const { superClass } = node;
+  let { superClass } = node;
 
   node.type = "ClassDeclaration";
   if (!node.id) node.id = t.cloneNode(ref);
@@ -131,6 +133,17 @@ export function buildDecoratedClass(ref, path, elements, file) {
     elements.map(extractElementDescriptor.bind(file, node.id, superId)),
   );
 
+  let mixins = [];
+  if (getOption(file, OPTIONS.decorators.version) === "jan-2019") {
+    mixins.push(file.addHelper("decoratorsJan2019"));
+  }
+  if (mixins.length > 0) {
+    mixins = t.arrayExpression(mixins);
+    if (!superClass) superClass = scope.buildUndefinedNode();
+  } else {
+    mixins = null;
+  }
+
   let replacement = template.expression.ast`
     ${addDecorateHelper(file)}(
       ${classDecorators || t.nullLiteral()},
@@ -138,7 +151,8 @@ export function buildDecoratedClass(ref, path, elements, file) {
         ${node}
         return { F: ${t.cloneNode(node.id)}, d: ${definitions} };
       },
-      ${superClass}
+      ${superClass},
+      ${mixins},
     )
   `;
   let classPathDesc = "arguments.1.body.body.0";

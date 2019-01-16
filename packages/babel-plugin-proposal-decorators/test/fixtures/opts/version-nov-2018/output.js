@@ -12,4 +12,4 @@ let Foo = babelHelpers.decorate([deco], function (_initialize) {
     F: Foo,
     d: []
   };
-}, void 0, [babelHelpers.decoratorsJan2019]);
+});

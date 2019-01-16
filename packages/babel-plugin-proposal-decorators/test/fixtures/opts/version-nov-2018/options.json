@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    [
+      "proposal-decorators",
+      { "version": "nov-2018", "decoratorsBeforeExport": false }
+    ],
+    ["external-helpers", { "helperVersion": "7.1000.0" }]
+  ]
+}

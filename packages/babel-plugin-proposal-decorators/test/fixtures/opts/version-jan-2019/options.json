@@ -1,6 +1,6 @@
 {
   "plugins": [
     ["proposal-decorators", { "version": "jan-2019" }],
-    "external-helpers"
+    ["external-helpers", { "helperVersion": "7.1000.0" }]
   ]
 }
