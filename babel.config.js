@@ -14,12 +14,16 @@ module.exports = function(api) {
   let convertESM = true;
   let ignoreLib = true;
   let includeRuntime = false;
+  const nodeVersion = "6.9";
 
   switch (env) {
     // Configs used during bundling builds.
     case "babel-parser":
       convertESM = false;
       ignoreLib = false;
+      envOpts.targets = {
+        node: nodeVersion,
+      };
       break;
     case "standalone":
       convertESM = false;
@@ -29,7 +33,7 @@ module.exports = function(api) {
     case "production":
       // Config during builds before publish.
       envOpts.targets = {
-        node: "6.9",
+        node: nodeVersion,
       };
       break;
     case "development":
