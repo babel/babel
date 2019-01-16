@@ -1281,7 +1281,7 @@ export default class StatementParser extends ExpressionParser {
     } else if (
       isSimple &&
       (key.name === "get" || key.name === "set") &&
-      !(this.isLineTerminator() && this.match(tt.star))
+      !(this.match(tt.star) && this.isLineTerminator())
     ) {
       // `get\n*` is an uninitialized property named 'get' followed by a generator.
       // a getter or setter

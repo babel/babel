@@ -1319,7 +1319,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsCheckLineTerminatorAndMatch(tokenType: TokenType, next: boolean) {
-      return !this.isLineTerminator() && (next || this.match(tokenType));
+      return (next || this.match(tokenType)) && !this.isLineTerminator();
     }
 
     tsTryParseGenericAsyncArrowFunction(
