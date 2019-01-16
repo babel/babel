@@ -46,7 +46,6 @@ expect(match_x1({x: 1.0})).toBe(true);
   }
 */
 
-/* TODO not implemented
 
 function match_x_rest(input) {
   case (input) {
@@ -67,5 +66,3 @@ function match_x_restobj(input) {
   }
   return false;
 }
-
-*/

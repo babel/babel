@@ -273,6 +273,14 @@ defineType("WhenClause", {
 defineType("ObjectMatchPattern", {
   builder: ["properties"],
   visitor: ["properties"],
+  fields: {
+    properties: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("ObjectMatchProperty", "MatchRestElement")),
+      ),
+    },
+  },
 });
 
 defineType("ObjectMatchProperty", {

@@ -60,19 +60,34 @@ class WhenRewriter {
         this.bindConst(pattern, id);
         return;
 
-      case "ObjectMatchPattern":
+      case "ObjectMatchPattern": {
         this.failIf(
           exprT`ID === null || typeof ID === "undefined"`({ ID: id }),
         );
-        for (const property of pattern.properties) {
-          assert(property.type === "ObjectMatchProperty");
-          const { key } = property;
-          const subId = scope.generateUidIdentifier(key.name);
-          this.bindConst(subId, exprT`ID.KEY`({ ID: id, KEY: key }));
-          this.failIf(exprT`typeof SUBID === "undefined"`({ SUBID: subId }));
-          this.translatePattern(property.element || property.key, subId);
+        // TODO check <=1 rest-pattern and only at end (though this
+        // probably belongs at parse time)
+        const propertyIds = pattern.properties.map(() =>
+          scope.generateUidIdentifier(),
+        );
+        const lhs = t.ObjectPattern(
+          pattern.properties.map((p, i) => {
+            if (t.isMatchRestElement(p)) return t.restElement(propertyIds[i]);
+            else return t.objectProperty(p.key, propertyIds[i]);
+          }),
+        );
+        this.bindConst(lhs, id);
+
+        for (let i = 0; i < pattern.properties.length; ++i) {
+          const subId = propertyIds[i];
+          const property = pattern.properties[i];
+          this.failIf(exprT`SUBID === void 0`({ SUBID: subId }));
+          const subPattern = t.isMatchRestElement(property)
+            ? property.body
+            : property.element || property.key;
+          this.translatePattern(subPattern, subId);
         }
         return;
+      }
 
       case "ArrayMatchPattern": {
         // TODO this is too specific

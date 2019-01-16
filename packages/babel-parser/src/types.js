@@ -263,7 +263,7 @@ export type WhenClause = NodeBase & {
 
 export type ObjectMatchPattern = NodeBase & {
   type: "ObjectMatchPattern",
-  properties: $ReadOnlyArray<ObjectMatchProperty>,
+  properties: $ReadOnlyArray<ObjectMatchProperty | MatchRestElement>,
 };
 
 export type ObjectMatchProperty = NodeBase & {
