@@ -2726,11 +2726,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     skipBlockComment(): void {
-      if (
-        this.hasPlugin("flow") &&
-        this.hasPlugin("flowComments") &&
-        this.skipFlowComment()
-      ) {
+      if (this.hasPlugin("flowComments") && this.skipFlowComment()) {
         if (this.state.hasFlowComment) {
           this.unexpected(
             null,
@@ -2743,7 +2739,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return;
       }
 
-      if (this.hasPlugin("flow") && this.state.hasFlowComment) {
+      if (this.state.hasFlowComment) {
         const end = this.state.input.indexOf("*-/", (this.state.pos += 2));
         if (end === -1) this.raise(this.state.pos - 2, "Unterminated comment");
         this.state.pos = end + 3;
