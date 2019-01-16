@@ -2,20 +2,18 @@ import assert from "assert";
 import { declare } from "@babel/helper-plugin-utils";
 import syntaxPatternMatching from "@babel/plugin-syntax-pattern-matching";
 import { types as t, template } from "../../babel-core";
-import { labelRewriteVisitor } from "./labels";
 
 const exprT = template.expression;
 
 const constStatement = (id, initializer) =>
   t.variableDeclaration("const", [t.variableDeclarator(id, initializer)]);
 
-const failIf = testExpr => t.ifStatement(testExpr, t.continueStatement(null));
-
 class WhenRewriter {
-  constructor({ scope, caseLabel }) {
+  constructor({ scope, outerLabel }) {
     this.stmts = undefined; // Initialized in `translate` before each use.
     this.scope = scope;
-    this.caseLabel = caseLabel;
+    this.outerLabel = outerLabel;
+    this.innerLabel = scope.generateUidIdentifier("caseInner");
   }
 
   // private
@@ -30,7 +28,7 @@ class WhenRewriter {
 
   // private
   failIf(testExpr) {
-    this.stmts.push(failIf(testExpr));
+    this.stmts.push(t.ifStatement(testExpr, t.breakStatement(this.innerLabel)));
   }
 
   translate(node, valueId) {
@@ -41,8 +39,8 @@ class WhenRewriter {
       this.failIf(t.unaryExpression("!", matchGuard));
     }
     this.stmts.push(body);
-    this.stmts.push(t.continueStatement(this.caseLabel));
-    return template`do { STMTS } while (0);`({ STMTS: this.stmts });
+    this.stmts.push(t.breakStatement(this.outerLabel));
+    return t.labeledStatement(this.innerLabel, t.blockStatement(this.stmts));
   }
 
   // private
@@ -142,10 +140,8 @@ export default declare(api => {
   const caseVisitor = {
     CaseStatement(path) {
       const { scope } = path;
-      const caseLabel = scope.generateUidIdentifier("case");
-      const rewriter = new WhenRewriter({ scope, caseLabel });
-
-      path.traverse(labelRewriteVisitor, { outerPath: path });
+      const outerLabel = scope.generateUidIdentifier("caseOuter");
+      const rewriter = new WhenRewriter({ scope, outerLabel });
 
       const stmts = [];
       const { discriminant, cases } = path.node;
@@ -154,11 +150,7 @@ export default declare(api => {
       for (const whenNode of cases) {
         stmts.push(rewriter.translate(whenNode, discriminantId));
       }
-      path.replaceWith(
-        template`
-          LABEL: do { STMTS } while (0);
-        `({ LABEL: caseLabel, STMTS: stmts }),
-      );
+      path.replaceWith(t.labeledStatement(outerLabel, t.blockStatement(stmts)));
     },
   };
 
