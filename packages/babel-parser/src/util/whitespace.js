@@ -4,7 +4,7 @@ import * as charCodes from "charcodes";
 
 // Matches a whole line break (where CRLF is considered a single
 // line break). Used to count lines.
-export const lineBreak = /\r\n?|\n|\u2028|\u2029/;
+export const lineBreak = /\r\n?|[\n\u2028\u2029]/;
 export const lineBreakG = new RegExp(lineBreak.source, "g");
 
 // https://tc39.github.io/ecma262/#sec-line-terminators
