@@ -1935,7 +1935,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     // ensure that inside flow types, we bypass the jsx parser plugin
     getTokenFromCode(code: number): void {
       const next = this.state.input.charCodeAt(this.state.pos + 1);
-      if (
+      if (code === charCodes.leftCurlyBrace && next === charCodes.verticalBar) {
+        return this.finishOp(tt.braceBarL, 2);
+      } else if (
         this.state.inType &&
         (code === charCodes.greaterThan || code === charCodes.lessThan)
       ) {
@@ -2699,6 +2701,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       super.readToken_mult_modulo(code);
+    }
+
+    readToken_pipe_amp(code: number): void {
+      const next = this.state.input.charCodeAt(this.state.pos + 1);
+      if (
+        code === charCodes.verticalBar &&
+        next === charCodes.rightCurlyBrace
+      ) {
+        // '|}'
+        this.finishOp(tt.braceBarR, 2);
+        return;
+      }
+
+      super.readToken_pipe_amp(code);
     }
 
     parseTopLevel(file: N.File, program: N.Program): N.File {

@@ -482,7 +482,7 @@ export default class Tokenizer extends LocationParser {
   }
 
   readToken_pipe_amp(code: number): void {
-    // '|&'
+    // '||' '&&' '||=' '&&='
     const next = this.state.input.charCodeAt(this.state.pos + 1);
 
     if (next === code) {
@@ -503,10 +503,6 @@ export default class Tokenizer extends LocationParser {
       // '|>'
       if (next === charCodes.greaterThan) {
         this.finishOp(tt.pipeline, 2);
-        return;
-      } else if (next === charCodes.rightCurlyBrace && this.hasPlugin("flow")) {
-        // '|}'
-        this.finishOp(tt.braceBarR, 2);
         return;
       }
     }
@@ -688,20 +684,10 @@ export default class Tokenizer extends LocationParser {
         ++this.state.pos;
         this.finishToken(tt.bracketR);
         return;
-
       case charCodes.leftCurlyBrace:
-        if (
-          this.hasPlugin("flow") &&
-          this.state.input.charCodeAt(this.state.pos + 1) ===
-            charCodes.verticalBar
-        ) {
-          this.finishOp(tt.braceBarL, 2);
-        } else {
-          ++this.state.pos;
-          this.finishToken(tt.braceL);
-        }
+        ++this.state.pos;
+        this.finishToken(tt.braceL);
         return;
-
       case charCodes.rightCurlyBrace:
         ++this.state.pos;
         this.finishToken(tt.braceR);
