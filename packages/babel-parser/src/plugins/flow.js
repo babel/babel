@@ -1398,7 +1398,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const startPos = this.state.start,
         startLoc = this.state.startLoc;
       let type = this.flowParsePrimaryType();
-      while (!this.canInsertSemicolon() && this.match(tt.bracketL)) {
+      while (this.match(tt.bracketL) && !this.canInsertSemicolon()) {
         const node = this.startNodeAt(startPos, startLoc);
         node.elementType = type;
         this.expect(tt.bracketL);

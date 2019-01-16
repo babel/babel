@@ -869,9 +869,9 @@ export default class ExpressionParser extends LValParser {
           return this.parseFunction(node, false, false, true);
         } else if (
           canBeArrow &&
-          !this.canInsertSemicolon() &&
           id.name === "async" &&
-          this.match(tt.name)
+          this.match(tt.name) &&
+          !this.canInsertSemicolon()
         ) {
           const oldYOAIPAP = this.state.yieldOrAwaitInPossibleArrowParameters;
           const oldInAsync = this.state.inAsync;
@@ -886,7 +886,8 @@ export default class ExpressionParser extends LValParser {
           return node;
         }
 
-        if (canBeArrow && !this.canInsertSemicolon() && this.eat(tt.arrow)) {
+        if (canBeArrow && this.match(tt.arrow) && !this.canInsertSemicolon()) {
+          this.next();
           const oldYOAIPAP = this.state.yieldOrAwaitInPossibleArrowParameters;
           this.state.yieldOrAwaitInPossibleArrowParameters = null;
           this.parseArrowExpression(node, [id]);
@@ -2076,8 +2077,8 @@ export default class ExpressionParser extends LValParser {
     this.next();
     if (
       this.match(tt.semi) ||
-      this.canInsertSemicolon() ||
-      (!this.match(tt.star) && !this.state.type.startsExpr)
+      (!this.match(tt.star) && !this.state.type.startsExpr) ||
+      this.canInsertSemicolon()
     ) {
       node.delegate = false;
       node.argument = null;
