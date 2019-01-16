@@ -865,6 +865,7 @@ export default class StatementParser extends ExpressionParser {
     kind: TokenType,
   ): N.VariableDeclaration {
     const declarations = (node.declarations = []);
+    const isTypescript = this.hasPlugin("typescript");
     // $FlowFixMe
     node.kind = kind.keyword;
     for (;;) {
@@ -879,7 +880,7 @@ export default class StatementParser extends ExpressionParser {
         ) {
           // `const` with no initializer is allowed in TypeScript.
           // It could be a declaration like `const x: number;`.
-          if (!this.hasPlugin("typescript")) {
+          if (!isTypescript) {
             this.unexpected();
           }
         } else if (
