@@ -7,6 +7,12 @@ export const FEATURES = Object.freeze({
   decorators: 1 << 3,
 });
 
+export const OPTIONS = Object.freeze({
+  decorators: Object.freeze({
+    version: "decorators/version",
+  }),
+});
+
 // We can't use a symbol because this needs to always be the same, even if
 // this package isn't deduped by npm. e.g.
 //  - node_modules/
@@ -16,6 +22,7 @@ export const FEATURES = Object.freeze({
 //        - @babel-plugin-class-features
 const featuresKey = "@babel/plugin-class-features/featuresKey";
 const looseKey = "@babel/plugin-class-features/looseKey";
+const getOptionKey = name => `@babel/plugin-class-features/options/${name}`;
 
 export function enableFeature(file, feature, loose) {
   // We can't blindly enable the feature because, if it was already set,
@@ -36,6 +43,18 @@ function hasFeature(file, feature) {
 
 export function isLoose(file, feature) {
   return !!(file.get(looseKey) & feature);
+}
+
+export function setOption(file, name, value) {
+  // We only set the option the first time. See the "enableFeature"
+  // function for more information.
+  if (getOption(file, name) === undefined) {
+    file.set(getOptionKey(name), value);
+  }
+}
+
+export function getOption(file, name) {
+  return file.get(getOptionKey(name));
 }
 
 export function verifyUsedFeatures(path, file) {

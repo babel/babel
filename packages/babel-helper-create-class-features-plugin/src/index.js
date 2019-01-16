@@ -16,12 +16,14 @@ import {
   enableFeature,
   verifyUsedFeatures,
   FEATURES,
+  OPTIONS,
   isLoose,
+  setOption,
 } from "./features";
 
 import pkg from "../package.json";
 
-export { FEATURES };
+export { FEATURES, OPTIONS };
 
 // Note: Versions are represented as an integer. e.g. 7.1.5 is represented
 //       as 70000100005. This method is easier than using a semver-parsing
@@ -34,6 +36,7 @@ export function createClassFeaturePlugin({
   name,
   feature,
   loose,
+  options = [],
   manipulateOptions,
 }) {
   return {
@@ -42,6 +45,10 @@ export function createClassFeaturePlugin({
 
     pre() {
       enableFeature(this.file, feature, loose);
+
+      for (const [name, value] of options) {
+        setOption(this.file, name, value);
+      }
 
       if (!this.file.get(versionKey) || this.file.get(versionKey) < version) {
         this.file.set(versionKey, version);

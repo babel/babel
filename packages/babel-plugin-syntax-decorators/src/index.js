@@ -8,20 +8,38 @@ export default declare((api, options) => {
     throw new Error("'legacy' must be a boolean.");
   }
 
+  const { version: proposalVersion = legacy ? "legacy" : "nov-2018" } = options;
+  if (legacy && proposalVersion !== "legacy") {
+    throw new Error(
+      "'legacy' and 'version' can't be used together, since" +
+        " 'legacy: true' is an alias for 'version: \"legacy\"'.",
+    );
+  } else if (
+    proposalVersion !== "legacy" &&
+    proposalVersion !== "nov-2018" &&
+    proposalVersion !== "jan-2019"
+  ) {
+    throw new Error(
+      "'version' must be either 'legacy', 'nov-2018' (default) or" +
+        " 'jan-2019' (recommended).",
+    );
+  }
+
   const { decoratorsBeforeExport } = options;
   if (decoratorsBeforeExport === undefined) {
-    if (!legacy) {
+    if (proposalVersion === "nov-2018") {
       throw new Error(
-        "The '@babel/plugin-syntax-decorators' plugin requires a" +
-          " 'decoratorsBeforeExport' option, whose value must be a boolean." +
-          " If you want to use the legacy decorators semantics, you can set" +
-          " the 'legacy: true' option.",
+        "The decorators plugin requires a 'decoratorsBeforeExport' option," +
+          " whose value must be a boolean. If you want to use the legacy" +
+          " decorators semantics, you can set the 'legacy: true' option.",
       );
     }
   } else {
-    if (legacy) {
+    if (proposalVersion !== "nov-2018") {
       throw new Error(
-        "'decoratorsBeforeExport' can't be used with legacy decorators.",
+        "'decoratorsBeforeExport' can only be used for" +
+          " 'version: \"nov-2018\"' decorators. It defaults to true for" +
+          " 'version: \"legacy\"' and to false for 'version: \"jan-2019\"'.",
       );
     }
     if (typeof decoratorsBeforeExport !== "boolean") {
@@ -33,11 +51,14 @@ export default declare((api, options) => {
     name: "syntax-decorators",
 
     manipulateOptions(opts, parserOpts) {
-      parserOpts.plugins.push(
-        legacy
-          ? "decorators-legacy"
-          : ["decorators", { decoratorsBeforeExport }],
-      );
+      if (proposalVersion === "legacy") {
+        parserOpts.plugins.push("decorators-legacy");
+      } else {
+        parserOpts.plugins.push([
+          "decorators",
+          { decoratorsBeforeExport: !!decoratorsBeforeExport },
+        ]);
+      }
     },
   };
 });
