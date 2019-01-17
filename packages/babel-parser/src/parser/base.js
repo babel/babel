@@ -1,7 +1,7 @@
 // @flow
 
 import type { Options } from "../options";
-import { reservedWords } from "../util/identifier";
+import { isES2015ReservedWord } from "../util/identifier";
 
 import type State from "../tokenizer/state";
 import type { PluginsMap } from "./index";
@@ -21,7 +21,7 @@ export default class BaseParser {
     if (word === "await") {
       return this.inModule;
     } else {
-      return reservedWords[6](word);
+      return isES2015ReservedWord(word);
     }
   }
 

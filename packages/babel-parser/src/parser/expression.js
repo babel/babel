@@ -21,7 +21,10 @@
 import { types as tt, type TokenType } from "../tokenizer/types";
 import * as N from "../types";
 import LValParser from "./lval";
-import { reservedWords } from "../util/identifier";
+import {
+  isStrictReservedWord,
+  isStrictBindReservedWord,
+} from "../util/identifier";
 import type { Pos, Position } from "../util/location";
 import * as charCodes from "charcodes";
 
@@ -1997,8 +2000,8 @@ export default class ExpressionParser extends LValParser {
   ): void {
     if (
       this.state.strict &&
-      (reservedWords.strict(word) ||
-        (isBinding && reservedWords.strictBind(word)))
+      (isStrictReservedWord(word) ||
+        (isBinding && isStrictBindReservedWord(word)))
     ) {
       this.raise(startLoc, word + " is a reserved word in strict mode");
     }
