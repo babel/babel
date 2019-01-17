@@ -1,0 +1,7 @@
+{
+  "plugins": [
+    ["proposal-decorators", { "version": "jan-2019" }],
+    "proposal-class-properties",
+    ["external-helpers", { "helperVersion": "7.1000.0" }]
+  ]
+}
