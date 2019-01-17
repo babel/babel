@@ -1095,9 +1095,16 @@ helpers.classStaticPrivateFieldSpecSet = helper("7.0.2")`
   
 `;
 
+helpers.toPropertyDescriptor = helper("7.2.6")`
+  export default function _toPropertyDescriptor(desc) {
+    return Object.getOwnPropertyDescriptor(Object.defineProperty({}, "", desc), "");
+  }
+`;
+
 helpers.decorate = helper("7.1.5")`
   import toArray from "toArray";
   import toPropertyKey from "toPropertyKey";
+  import toPropertyDescriptor from "toPropertyDescriptor";
 
   // These comments are stripped by @babel/template
   /*::
@@ -1485,10 +1492,7 @@ helpers.decorate = helper("7.1.5")`
         }, this);
       },
 
-      // ToElementDescriptor
-      toElementDescriptor: function(
-        elementObject /*: ElementObject */,
-      ) /*: ElementDescriptor */ {
+      getElementKind: function(elementObject) {
         var kind = String(elementObject.kind);
         if (kind !== "method" && kind !== "field") {
           throw new TypeError(
@@ -1499,9 +1503,10 @@ helpers.decorate = helper("7.1.5")`
               '"',
           );
         }
+        return kind;
+      },
 
-        var key = toPropertyKey(elementObject.key);
-
+      getElementPlacement: function(elementObject) {
         var placement = String(elementObject.placement);
         if (
           placement !== "static" &&
@@ -1516,17 +1521,31 @@ helpers.decorate = helper("7.1.5")`
               '"',
           );
         }
+        return placement;
+      },
 
-        var descriptor /*: PropertyDescriptor */ = elementObject.descriptor;
+      getElementDescriptor: function(elementObject) {
+        return toPropertyDescriptor(elementObject.descriptor);
+      },
 
-        this.disallowProperty(elementObject, "elements", "An element descriptor");
+      // ToElementDescriptor
+      toElementDescriptor: function(
+        elementObject /*: ElementObject */,
+      ) /*: ElementDescriptor */ {
+        var kind = this.getElementKind(elementObject);
+        var key = toPropertyKey(elementObject.key);
+        var placement = this.getElementPlacement(elementObject);
+
+        var descriptor /*: PropertyDescriptor */ = this.getElementDescriptor(elementObject);
 
         var element /*: ElementDescriptor */ = {
           kind: kind,
           key: key,
           placement: placement,
-          descriptor: Object.assign({}, descriptor),
+          descriptor: descriptor,
         };
+
+        this.disallowProperty(elementObject, "elements", "An element descriptor");
 
         if (kind !== "field") {
           this.disallowProperty(elementObject, "initializer", "A method descriptor");
@@ -1770,8 +1789,57 @@ helpers.decorate = helper("7.1.5")`
 `;
 
 helpers.decoratorsJan2019 = helper("7.3.0")`
+  import toPropertyDescriptor from "toPropertyDescriptor";
+
   export default function _decoratorsJan2019(original) {
     return { __proto__: original,
+
+      fromElementDescriptor: function(element) {
+        var descriptor = element.descriptor;
+        var kind = element.kind;
+        var obj /*: ElementObject */ = {
+          kind: kind,
+          key: element.key,
+          placement: element.placement,
+        }
+
+        if (kind === "method" || kind === "field") {
+          obj.enumerable = descriptor.enumerable;
+          obj.configurable = descriptor.configurable;
+          obj.writable = descriptor.writable;
+        }
+        if (kind === "method") {
+          obj.value = descriptor.value;
+        }
+        if (kind === "field") {
+          obj.initializer = element.initializer;
+        }
+
+        var desc = {
+          value: "Descriptor",
+          configurable: true,
+        };
+        Object.defineProperty(obj, Symbol.toStringTag, desc);
+
+        return obj;
+      },
+
+      getElementDescriptor: function(elementObject) {
+        return toPropertyDescriptor(elementObject);
+      },
+
+      toClassDescriptor: function(obj) {
+        var result = original.toClassDescriptor.apply(this, arguments);
+
+        this.disallowProperty(obj, "enumerable", "A class descriptor");
+        this.disallowProperty(obj, "writable", "A class descriptor");
+        this.disallowProperty(obj, "configurable", "A class descriptor");
+        this.disallowProperty(obj, "value", "A class descriptor");
+        this.disallowProperty(obj, "get", "A class descriptor");
+        this.disallowProperty(obj, "set", "A class descriptor");
+
+        return result;
+      },
     }
   }
 `;
