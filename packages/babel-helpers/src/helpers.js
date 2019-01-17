@@ -1270,9 +1270,9 @@ helpers.decorate = helper("7.1.5")`
         /*::<C>*/ O /*: C */,
         elements /*: ElementDescriptor[] */,
       ) {
-        ["method", "field"].forEach(function(kind) {
+        this.elementsDefinitionOrder.forEach(function(kinds) {
           elements.forEach(function(element /*: ElementDescriptor */) {
-            if (element.kind === kind && element.placement === "own") {
+            if (kinds.indexOf(element.kind) > -1 && element.placement === "own") {
               this.defineClassElement(O, element);
             }
           }, this);
@@ -1286,11 +1286,11 @@ helpers.decorate = helper("7.1.5")`
       ) {
         var proto = F.prototype;
 
-        ["method", "field"].forEach(function(kind) {
+        this.elementsDefinitionOrder.forEach(function(kinds) {
           elements.forEach(function(element /*: ElementDescriptor */) {
             var placement = element.placement;
             if (
-              element.kind === kind &&
+              kinds.indexOf(element.kind) > -1 &&
               (placement === "static" || placement === "prototype")
             ) {
               var receiver = placement === "static" ? F : proto;
@@ -1441,10 +1441,7 @@ helpers.decorate = helper("7.1.5")`
 
             for (var j = 0; j < elements.length - 1; j++) {
               for (var k = j + 1; k < elements.length; k++) {
-                if (
-                  elements[j].key === elements[k].key &&
-                  elements[j].placement === elements[k].placement
-                ) {
+                if (this.isDuplicatedElement(elements[j], elements[k])) {
                   throw new TypeError(
                     "Duplicated element (" + elements[j].key + ")",
                   );
@@ -1455,6 +1452,10 @@ helpers.decorate = helper("7.1.5")`
         }
 
         return { elements: elements, finishers: finishers };
+      },
+
+      isDuplicatedElement: function(a, b) {
+        return a.key === b.key && a.placement === b.placement;
       },
 
       // FromElementDescriptor
@@ -1793,17 +1794,37 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
 
   export default function _decoratorsJan2019(original) {
     return { __proto__: original,
+      elementsDefinitionOrder: [
+        ["method"],
+        ["field", "hook"],
+      ],
+
+      defineClassElement: function (O, element) {
+        if (element.kind === "hook") {
+          _assertVoid(element.initializer.call(O));
+          return;
+        }
+
+        return original.defineClassElement.apply(this, arguments);
+      },
+
+      isDuplicatedElement: function (a, b) {
+        if (a.kind === "hook" || b.kind === "hook") {
+          return false;
+        }
+         return original.isDuplicatedElement.apply(this, arguments);
+      },
 
       fromElementDescriptor: function(element) {
         var descriptor = element.descriptor;
         var kind = element.kind;
         var obj /*: ElementObject */ = {
           kind: kind,
-          key: element.key,
           placement: element.placement,
-        }
+        };
 
         if (kind === "method" || kind === "field") {
+          obj.key = element.key;
           obj.enumerable = descriptor.enumerable;
           obj.configurable = descriptor.configurable;
           obj.writable = descriptor.writable;
@@ -1811,7 +1832,7 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
         if (kind === "method") {
           obj.value = descriptor.value;
         }
-        if (kind === "field") {
+        if (kind === "field" || kind === "hook") {
           obj.initializer = element.initializer;
         }
 
@@ -1824,8 +1845,50 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
         return obj;
       },
 
+      getElementKind: function(elementObject) {
+        var kind = String(elementObject.kind);
+        if (kind !== "method" && kind !== "field" && kind !== "hook") {
+          throw new TypeError(
+            'An element descriptor\\'s .kind property must be either' +
+              ' "method", "field" or "hook", but a decorator created an' +
+              ' element descriptor with .kind "' +
+              kind +
+              '"',
+          );
+        }
+        return kind;
+     },
+
       getElementDescriptor: function(elementObject) {
         return toPropertyDescriptor(elementObject);
+      },
+
+      toElementDescriptor: function(elementObject) {
+        var kind = String(elementObject.kind);
+
+        if (kind === "hook") {
+          this.disallowProperty(elementObject, "key", "An hook descriptor");
+
+          var placement = this.getElementPlacement(elementObject)
+
+          this.disallowProperty(elementObject, "enumerable", "An hook descriptor");
+          this.disallowProperty(elementObject, "configurable", "An hook descriptor");
+          this.disallowProperty(elementObject, "writable", "An hook descriptor");
+          this.disallowProperty(elementObject, "value", "An hook descriptor");
+
+          var initializer = elementObject.initializer;
+          if (initializer === undefined) {
+            throw new TypeError(
+              "An hook descriptor must have a .initializer property."
+            );
+          }
+
+          this.disallowProperty(elementObject, "elements", "An hook descriptor");
+
+          return { kind: kind, placement: placement, initializer: initializer };
+        }
+
+        return original.toElementDescriptor.apply(this, arguments);
       },
 
       toClassDescriptor: function(obj) {
@@ -1840,6 +1903,12 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
 
         return result;
       },
+    }
+  }
+
+  function _assertVoid(res) {
+    if (res !== undefined) {
+      throw new TypeError("Hooks can only return 'undefined'.");
     }
   }
 `;
