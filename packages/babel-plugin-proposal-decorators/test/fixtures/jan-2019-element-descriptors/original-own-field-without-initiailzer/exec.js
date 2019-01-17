@@ -12,5 +12,5 @@ expect(el).toEqual(Object.defineProperty({
   enumerable: true,
   configurable: true,
   writable: true,
-  initializer: undefined,
+  initialize: undefined,
 }, Symbol.toStringTag, { value: "Descriptor" }));

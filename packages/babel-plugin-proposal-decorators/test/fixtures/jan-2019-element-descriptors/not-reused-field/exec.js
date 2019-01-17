@@ -8,4 +8,4 @@ class A {
 
 expect(dec1).toEqual(dec2);
 expect(dec1).not.toBe(dec2);
-expect(dec1.initializer).toBe(dec2.initializer);
+expect(dec1.initialize).toBe(dec2.initialize);

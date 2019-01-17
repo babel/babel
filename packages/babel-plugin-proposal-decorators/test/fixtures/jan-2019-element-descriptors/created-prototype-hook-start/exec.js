@@ -6,14 +6,12 @@ var self;
 
 @pushElement({
   kind: "hook",
-  placement: "own",
-  initializer() {
+  placement: "prototype",
+  start() {
     self = this;
   }
 })
 class A {}
 
-new A();
-
-expect(self).toBeInstanceOf(A);
-expect(new A()).not.toHaveProperty("undefined");
+expect(self).toBe(A.prototype);
+expect(A.prototype).not.toHaveProperty("undefined");

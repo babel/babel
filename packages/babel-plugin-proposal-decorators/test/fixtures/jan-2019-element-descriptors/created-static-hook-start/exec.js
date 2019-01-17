@@ -7,7 +7,7 @@ var self;
 @pushElement({
   kind: "hook",
   placement: "static",
-  initializer() {
+  start() {
     self = this;
   }
 })

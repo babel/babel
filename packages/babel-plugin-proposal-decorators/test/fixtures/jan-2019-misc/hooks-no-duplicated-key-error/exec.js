@@ -2,11 +2,11 @@ function decorator(el) {
   el.elements = [{
     kind: "hook",
     placement: "own",
-    initializer() {}
+    start() {}
   }, {
     kind: "hook",
     placement: "own",
-    initializer() {}
+    start() {}
   }];
 }
 

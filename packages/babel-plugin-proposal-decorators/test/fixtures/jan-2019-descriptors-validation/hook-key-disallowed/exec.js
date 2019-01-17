@@ -7,7 +7,7 @@ expect(() => {
     kind: "hook",
     key: "foo",
     placement: "own",
-    initializer() {}
+    start() {}
   })
   class A {}
 }).toThrow(TypeError);

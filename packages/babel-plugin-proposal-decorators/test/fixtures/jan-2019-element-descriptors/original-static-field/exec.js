@@ -13,7 +13,7 @@ expect(el).toEqual(Object.defineProperty({
   enumerable: true,
   configurable: true,
   writable: true,
-  initializer: expect.any(Function),
+  initialize: expect.any(Function),
 }, Symbol.toStringTag, { value: "Descriptor" }));
 
-expect(el.initializer()).toBe(val);
+expect(el.initialize()).toBe(val);

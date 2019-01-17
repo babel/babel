@@ -1791,6 +1791,7 @@ helpers.decorate = helper("7.1.5")`
 
 helpers.decoratorsJan2019 = helper("7.3.0")`
   import toPropertyDescriptor from "toPropertyDescriptor";
+  import toPropertyKey from "toPropertyKey";
 
   export default function _decoratorsJan2019(original) {
     return { __proto__: original,
@@ -1801,7 +1802,7 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
 
       defineClassElement: function (O, element) {
         if (element.kind === "hook") {
-          _assertVoid(element.initializer.call(O));
+          _assertVoid(element.start.call(O));
           return;
         }
 
@@ -1832,8 +1833,11 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
         if (kind === "method") {
           obj.value = descriptor.value;
         }
-        if (kind === "field" || kind === "hook") {
-          obj.initializer = element.initializer;
+        if (kind === "field") {
+          obj.initialize = element.initializer;
+        }
+        if (kind === "hook") {
+          obj.start = element.start;
         }
 
         var desc = {
@@ -1864,29 +1868,46 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
       },
 
       toElementDescriptor: function(elementObject) {
-        var kind = String(elementObject.kind);
+        var kind = this.getElementKind(elementObject);
+        var placement = this.getElementPlacement(elementObject);
 
         if (kind === "hook") {
-          this.disallowProperty(elementObject, "key", "An hook descriptor");
+          this.disallowProperty(elementObject, "key", "A hook descriptor");
+          this.disallowProperty(elementObject, "enumerable", "A hook descriptor");
+          this.disallowProperty(elementObject, "configurable", "A hook descriptor");
+          this.disallowProperty(elementObject, "writable", "A hook descriptor");
+          this.disallowProperty(elementObject, "value", "A hook descriptor");
+          this.disallowProperty(elementObject, "initialize", "A hook descriptor");
+          this.disallowProperty(elementObject, "elements", "A hook descriptor");
 
-          var placement = this.getElementPlacement(elementObject)
-
-          this.disallowProperty(elementObject, "enumerable", "An hook descriptor");
-          this.disallowProperty(elementObject, "configurable", "An hook descriptor");
-          this.disallowProperty(elementObject, "writable", "An hook descriptor");
-          this.disallowProperty(elementObject, "value", "An hook descriptor");
-
-          var initializer = elementObject.initializer;
-          if (initializer === undefined) {
+          var start = elementObject.start;
+          if (start === undefined) {
             throw new TypeError(
-              "An hook descriptor must have a .initializer property."
+              "A hook descriptor must have a .start property."
             );
           }
 
-          this.disallowProperty(elementObject, "elements", "An hook descriptor");
+          return { kind: kind, placement: placement, start: start };
+        } else if (kind === "field") {
+          var key = toPropertyKey(elementObject.key);
+          var descriptor /*: PropertyDescriptor */ = this.getElementDescriptor(elementObject);
 
-          return { kind: kind, placement: placement, initializer: initializer };
+          this.disallowProperty(elementObject, "elements", "A field descriptor");
+          this.disallowProperty(elementObject, "get", "A field descriptor");
+          this.disallowProperty(elementObject, "set", "A field descriptor");
+          this.disallowProperty(elementObject, "value", "A field descriptor");
+          this.disallowProperty(elementObject, "value", "A field descriptor");
+  
+          return {
+            kind: kind,
+            placement: placement,
+            key: key,
+            descriptor: descriptor,
+            initializer: elementObject.initialize,
+          };
         }
+
+        this.disallowProperty(elementObject, "initialize", "A method descriptor");
 
         return original.toElementDescriptor.apply(this, arguments);
       },
@@ -1900,6 +1921,8 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
         this.disallowProperty(obj, "value", "A class descriptor");
         this.disallowProperty(obj, "get", "A class descriptor");
         this.disallowProperty(obj, "set", "A class descriptor");
+        this.disallowProperty(obj, "initialize", "A class descriptor");
+        this.disallowProperty(obj, "start", "A class descriptor");
 
         return result;
       },

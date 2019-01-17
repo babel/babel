@@ -11,7 +11,7 @@ var value = {};
   enumerable: true,
   configurable: true,
   writable: true,
-  initializer() {
+  initialize() {
     return value;
   }
 })

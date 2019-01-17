@@ -6,7 +6,7 @@ expect(() => {
   @pushElement({
     kind: "hook",
     placement: "own",
-    initializer() {
+    start() {
       return 2;
     }
   })
