@@ -106,7 +106,12 @@ export default class StatementParser extends ExpressionParser {
         return this.parseForStatement(node);
       case tt._function:
         if (this.lookahead().type === tt.dot) break;
-        if (!declaration) this.unexpected();
+        if (!declaration) {
+          this.raise(
+            this.state.start,
+            "Function declaration not allowed in this context",
+          );
+        }
         return this.parseFunctionStatement(node);
 
       case tt._class:
@@ -189,7 +194,13 @@ export default class StatementParser extends ExpressionParser {
           const state = this.state.clone();
           this.next();
           if (this.match(tt._function) && !this.canInsertSemicolon()) {
-            this.expect(tt._function);
+            if (!declaration) {
+              this.raise(
+                this.state.lastTokStart,
+                "Function declaration not allowed in this context",
+              );
+            }
+            this.next();
             return this.parseFunction(node, true, false, true);
           } else {
             this.state = state;
@@ -210,7 +221,7 @@ export default class StatementParser extends ExpressionParser {
       expr.type === "Identifier" &&
       this.eat(tt.colon)
     ) {
-      return this.parseLabeledStatement(node, maybeName, expr);
+      return this.parseLabeledStatement(node, maybeName, expr, declaration);
     } else {
       return this.parseExpressionStatement(node, expr);
     }
@@ -649,6 +660,7 @@ export default class StatementParser extends ExpressionParser {
     node: N.LabeledStatement,
     maybeName: string,
     expr: N.Identifier,
+    declaration: boolean,
   ): N.LabeledStatement {
     for (const label of this.state.labels) {
       if (label.name === maybeName) {
@@ -676,7 +688,7 @@ export default class StatementParser extends ExpressionParser {
       kind: kind,
       statementStart: this.state.start,
     });
-    node.body = this.parseStatement(true);
+    node.body = this.parseStatement(declaration);
 
     if (
       node.body.type == "ClassDeclaration" ||
