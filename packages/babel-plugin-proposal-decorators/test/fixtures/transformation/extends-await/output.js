@@ -1,5 +1,5 @@
 async function g() {
-  let A = babelHelpers.decorate([dec], function (_initialize, _super) {
+  let A = babelHelpers.decorateBase([dec], function (_initialize, _super) {
     "use strict";
 
     class A extends _super {
@@ -15,5 +15,5 @@ async function g() {
       F: A,
       d: []
     };
-  }, (await B));
+  }, (await B), [babelHelpers.decoratorsNov2018]);
 }

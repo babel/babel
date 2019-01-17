@@ -1,4 +1,4 @@
-export default babelHelpers.decorate([dec()], function (_initialize) {
+export default babelHelpers.decorateBase([dec()], function (_initialize) {
   class _class {
     constructor() {
       _initialize(this);
@@ -10,4 +10,4 @@ export default babelHelpers.decorate([dec()], function (_initialize) {
     F: _class,
     d: []
   };
-});
+}, void 0, [babelHelpers.decoratorsNov2018]);

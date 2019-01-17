@@ -1,5 +1,5 @@
 var _method = 1;
-let Foo = babelHelpers.decorate([decorator], function (_initialize) {
+let Foo = babelHelpers.decorateBase([decorator], function (_initialize) {
   "use strict";
 
   class Foo {
@@ -19,4 +19,4 @@ let Foo = babelHelpers.decorate([decorator], function (_initialize) {
       }
     }]
   };
-});
+}, void 0, [babelHelpers.decoratorsNov2018]);

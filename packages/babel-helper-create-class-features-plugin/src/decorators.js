@@ -98,15 +98,44 @@ function extractElementDescriptor(/* this: File, */ classRef, superRef, path) {
   return t.objectExpression(properties);
 }
 
-function addDecorateHelper(file) {
+function getDecorateHelper(file, version) {
+  if (version === "jan-2019") {
+    try {
+      return {
+        base: file.addHelper("decorateBase"),
+        mixins: [file.addHelper("decoratorsJan2019")],
+      };
+    } catch (err) {
+      if (err.code === "BABEL_HELPER_UNKNOWN") {
+        err.message +=
+          "\n  '@babel/plugin-transform-decorators' with 'version: jan-2019'" +
+          " requires '@babel/core' version ^7.3.0 and you appear to be using" +
+          " an older version.";
+      }
+      throw err;
+    }
+  }
+
+  // version === "nov-2018"
   try {
-    return file.addHelper("decorate");
+    return {
+      base: file.addHelper("decorateBase"),
+      mixins: [file.addHelper("decoratorsNov2018")],
+    };
   } catch (err) {
     if (err.code === "BABEL_HELPER_UNKNOWN") {
-      err.message +=
-        "\n  '@babel/plugin-transform-decorators' in non-legacy mode" +
-        " requires '@babel/core' version ^7.0.2 and you appear to be using" +
-        " an older version.";
+      try {
+        return {
+          base: file.addHelper("decorate"),
+          mixins: null,
+        };
+      } catch (err) {
+        err.message +=
+          "\n  '@babel/plugin-transform-decorators' in non-legacy mode" +
+          " requires '@babel/core' version ^7.3.0 and you appear to be using" +
+          " an older version.";
+        throw err;
+      }
     }
     throw err;
   }
@@ -133,19 +162,21 @@ export function buildDecoratedClass(ref, path, elements, file) {
     elements.map(extractElementDescriptor.bind(file, node.id, superId)),
   );
 
-  let mixins = [];
-  if (getOption(file, OPTIONS.decorators.version) === "jan-2019") {
-    mixins.push(file.addHelper("decoratorsJan2019"));
-  }
-  if (mixins.length > 0) {
-    mixins = t.arrayExpression(mixins);
+  const decorate = getDecorateHelper(
+    file,
+    getOption(file, OPTIONS.decorators.version),
+  );
+
+  let mixins;
+  if (decorate.mixins.length > 0) {
+    mixins = t.arrayExpression(decorate.mixins);
     if (!superClass) superClass = scope.buildUndefinedNode();
   } else {
     mixins = null;
   }
 
   let replacement = template.expression.ast`
-    ${addDecorateHelper(file)}(
+    ${decorate.base}(
       ${classDecorators || t.nullLiteral()},
       function (${initializeId}, ${superClass ? superId : null}) {
         ${node}

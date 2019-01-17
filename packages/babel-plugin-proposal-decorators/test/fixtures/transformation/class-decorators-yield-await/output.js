@@ -1,5 +1,5 @@
 async function* f() {
-  let A = babelHelpers.decorate([yield dec1, await dec2], function (_initialize) {
+  let A = babelHelpers.decorateBase([yield dec1, await dec2], function (_initialize) {
     "use strict";
 
     class A {
@@ -13,5 +13,5 @@ async function* f() {
       F: A,
       d: []
     };
-  });
+  }, void 0, [babelHelpers.decoratorsNov2018]);
 }

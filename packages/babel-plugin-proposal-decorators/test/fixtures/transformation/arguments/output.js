@@ -1,4 +1,4 @@
-let A = babelHelpers.decorate([dec(a, b, ...c)], function (_initialize) {
+let A = babelHelpers.decorateBase([dec(a, b, ...c)], function (_initialize) {
   "use strict";
 
   class A {
@@ -17,4 +17,4 @@ let A = babelHelpers.decorate([dec(a, b, ...c)], function (_initialize) {
       value: function method() {}
     }]
   };
-});
+}, void 0, [babelHelpers.decoratorsNov2018]);

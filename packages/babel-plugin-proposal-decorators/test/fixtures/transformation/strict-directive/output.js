@@ -1,7 +1,7 @@
 () => {
   "use strict";
 
-  let Foo = babelHelpers.decorate([dec], function (_initialize) {
+  let Foo = babelHelpers.decorateBase([dec], function (_initialize) {
     class Foo {
       constructor() {
         _initialize(this);
@@ -17,11 +17,11 @@
         value: function method() {}
       }]
     };
-  });
+  }, void 0, [babelHelpers.decoratorsNov2018]);
 };
 
 () => {
-  let Foo = babelHelpers.decorate([dec], function (_initialize2) {
+  let Foo = babelHelpers.decorateBase([dec], function (_initialize2) {
     "use strict";
 
     class Foo {
@@ -39,5 +39,5 @@
         value: function method() {}
       }]
     };
-  });
+  }, void 0, [babelHelpers.decoratorsNov2018]);
 };

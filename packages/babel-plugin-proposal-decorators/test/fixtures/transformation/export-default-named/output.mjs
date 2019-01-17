@@ -1,4 +1,4 @@
-let Foo = babelHelpers.decorate([dec()], function (_initialize) {
+let Foo = babelHelpers.decorateBase([dec()], function (_initialize) {
   class Foo {
     constructor() {
       _initialize(this);
@@ -10,5 +10,5 @@ let Foo = babelHelpers.decorate([dec()], function (_initialize) {
     F: Foo,
     d: []
   };
-});
+}, void 0, [babelHelpers.decoratorsNov2018]);
 export { Foo as default };
