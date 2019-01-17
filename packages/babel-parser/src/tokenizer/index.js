@@ -3,11 +3,7 @@
 import type { Options } from "../options";
 import type { Position } from "../util/location";
 import * as charCodes from "charcodes";
-import {
-  isIdentifierStart,
-  isIdentifierChar,
-  isKeyword,
-} from "../util/identifier";
+import { isIdentifierStart, isIdentifierChar } from "../util/identifier";
 import { types as tt, keywords as keywordTypes, type TokenType } from "./types";
 import { type TokContext, types as ct } from "./context";
 import LocationParser from "../parser/location";
@@ -153,12 +149,6 @@ export default class Tokenizer extends LocationParser {
 
   match(type: TokenType): boolean {
     return this.state.type === type;
-  }
-
-  // TODO
-
-  isKeyword(word: string): boolean {
-    return isKeyword(word);
   }
 
   // TODO
@@ -1336,14 +1326,10 @@ export default class Tokenizer extends LocationParser {
 
   readWord(): void {
     const word = this.readWord1();
-    let type = tt.name;
+    const type = keywordTypes[word] || tt.name;
 
-    if (this.isKeyword(word)) {
-      if (this.state.containsEsc) {
-        this.raise(this.state.pos, `Escape sequence in keyword ${word}`);
-      }
-
-      type = keywordTypes[word];
+    if (type.keyword && this.state.containsEsc) {
+      this.raise(this.state.pos, `Escape sequence in keyword ${word}`);
     }
 
     // Allow @@iterator and @@asyncIterator as a identifier only inside type

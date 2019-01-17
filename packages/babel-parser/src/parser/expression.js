@@ -24,6 +24,7 @@ import LValParser from "./lval";
 import {
   isStrictReservedWord,
   isStrictBindReservedWord,
+  isKeyword,
 } from "../util/identifier";
 import type { Pos, Position } from "../util/location";
 import * as charCodes from "charcodes";
@@ -2020,7 +2021,7 @@ export default class ExpressionParser extends LValParser {
       );
     }
 
-    if (this.isReservedWord(word) || (checkKeywords && this.isKeyword(word))) {
+    if (this.isReservedWord(word) || (checkKeywords && isKeyword(word))) {
       this.raise(startLoc, word + " is a reserved word");
     }
   }

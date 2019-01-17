@@ -1190,9 +1190,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         case "any":
           return this.finishNode(node, "AnyTypeAnnotation");
 
-        case "void":
-          return this.finishNode(node, "VoidTypeAnnotation");
-
         case "bool":
         case "boolean":
           return this.finishNode(node, "BooleanTypeAnnotation");
@@ -1368,6 +1365,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             this.state.value,
             "NumberLiteralTypeAnnotation",
           );
+
+        case tt._void:
+          this.next();
+          return this.finishNode(node, "VoidTypeAnnotation");
 
         case tt._null:
           this.next();
@@ -1919,16 +1920,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.parseClassId(node, isStatement, optionalId);
       if (this.isRelational("<")) {
         node.typeParameters = this.flowParseTypeParameterDeclaration();
-      }
-    }
-
-    // don't consider `void` to be a keyword as then it'll use the void token type
-    // and set startExpr
-    isKeyword(name: string): boolean {
-      if (this.state.inType && name === "void") {
-        return false;
-      } else {
-        return super.isKeyword(name);
       }
     }
 
