@@ -1487,8 +1487,7 @@ helpers.decorate = helper("7.1.5")`
         if (elementObjects === undefined) return;
         return toArray(elementObjects).map(function(elementObject) {
           var element = this.toElementDescriptor(elementObject);
-          this.disallowProperty(elementObject, "finisher", "An element descriptor");
-          this.disallowProperty(elementObject, "extras", "An element descriptor");
+          this.disallowProperties(elementObject, "An element descriptor", ["finisher", "extras"]);
           return element;
         }, this);
       },
@@ -1551,22 +1550,11 @@ helpers.decorate = helper("7.1.5")`
         if (kind !== "field") {
           this.disallowProperty(elementObject, "initializer", "A method descriptor");
         } else {
-          this.disallowProperty(
-            descriptor,
+          this.disallowProperties(descriptor, "The property descriptor of a field descriptor", [
             "get",
-            "The property descriptor of a field descriptor",
-          );
-          this.disallowProperty(
-            descriptor,
             "set",
-            "The property descriptor of a field descriptor",
-          );
-          this.disallowProperty(
-            descriptor,
             "value",
-            "The property descriptor of a field descriptor",
-          );
-
+          ]);
           element.initializer = elementObject.initializer;
         }
 
@@ -1619,11 +1607,13 @@ helpers.decorate = helper("7.1.5")`
           );
         }
 
-        this.disallowProperty(obj, "key", "A class descriptor");
-        this.disallowProperty(obj, "placement", "A class descriptor");
-        this.disallowProperty(obj, "descriptor", "A class descriptor");
-        this.disallowProperty(obj, "initializer", "A class descriptor");
-        this.disallowProperty(obj, "extras", "A class descriptor");
+        this.disallowProperties(obj, "A class descriptor", [
+          "key",
+          "placement",
+          "descriptor",
+          "initializer",
+          "extras",
+        ]);
 
         var finisher = _optionalCallableProperty(obj, "finisher");
         var elements = this.toElementDescriptors(obj.elements);
@@ -1653,7 +1643,13 @@ helpers.decorate = helper("7.1.5")`
         if (obj[name] !== undefined) {
           throw new TypeError(objectType + " can't have a ." + name + " property.");
         }
-      }
+      },
+
+      disallowProperties: function(obj, objectType, names) {
+        for (var i = 0; i < names.length; i++) {
+          this.disallowProperty(obj, names[i], objectType);
+        }
+      },
     };
 
     return api;
@@ -1872,13 +1868,17 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
         var placement = this.getElementPlacement(elementObject);
 
         if (kind === "hook") {
-          this.disallowProperty(elementObject, "key", "A hook descriptor");
-          this.disallowProperty(elementObject, "enumerable", "A hook descriptor");
-          this.disallowProperty(elementObject, "configurable", "A hook descriptor");
-          this.disallowProperty(elementObject, "writable", "A hook descriptor");
-          this.disallowProperty(elementObject, "value", "A hook descriptor");
-          this.disallowProperty(elementObject, "initialize", "A hook descriptor");
-          this.disallowProperty(elementObject, "elements", "A hook descriptor");
+          this.disallowProperties(elementObject, "A hook descriptor", [
+            "key",
+            "enumerable",
+            "configurable",
+            "writable",
+            "value",
+            "get",
+            "set",
+            "initialize",
+            "elements",
+          ]);          
 
           var start = elementObject.start;
           if (start === undefined) {
@@ -1892,11 +1892,13 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
           var key = toPropertyKey(elementObject.key);
           var descriptor /*: PropertyDescriptor */ = this.getElementDescriptor(elementObject);
 
-          this.disallowProperty(elementObject, "elements", "A field descriptor");
-          this.disallowProperty(elementObject, "get", "A field descriptor");
-          this.disallowProperty(elementObject, "set", "A field descriptor");
-          this.disallowProperty(elementObject, "value", "A field descriptor");
-          this.disallowProperty(elementObject, "value", "A field descriptor");
+          this.disallowProperties(elementObject, "A field descriptor", [
+            "elements",
+            "get",
+            "set",
+            "value",
+            "start",
+          ]);
   
           return {
             kind: kind,
@@ -1915,14 +1917,16 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
       toClassDescriptor: function(obj) {
         var result = original.toClassDescriptor.apply(this, arguments);
 
-        this.disallowProperty(obj, "enumerable", "A class descriptor");
-        this.disallowProperty(obj, "writable", "A class descriptor");
-        this.disallowProperty(obj, "configurable", "A class descriptor");
-        this.disallowProperty(obj, "value", "A class descriptor");
-        this.disallowProperty(obj, "get", "A class descriptor");
-        this.disallowProperty(obj, "set", "A class descriptor");
-        this.disallowProperty(obj, "initialize", "A class descriptor");
-        this.disallowProperty(obj, "start", "A class descriptor");
+        this.disallowProperties(obj, "A class descriptor", [
+          "enumerable",
+          "writable",
+          "configurable",
+          "value",
+          "get",
+          "set",
+          "initialize",
+          "start",
+        ]);
 
         return result;
       },
