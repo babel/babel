@@ -42,6 +42,7 @@
     "@babel/plugin-transform-modules-commonjs": "^7.2.0",
     "@babel/plugin-transform-modules-systemjs": "^7.2.0",
     "@babel/plugin-transform-modules-umd": "^7.2.0",
+    "@babel/plugin-transform-named-capturing-groups-regex": "^7.2.5",
     "@babel/plugin-transform-new-target": "^7.0.0",
     "@babel/plugin-transform-object-super": "^7.2.0",
     "@babel/plugin-transform-parameters": "^7.2.0",
