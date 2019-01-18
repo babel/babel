@@ -479,7 +479,10 @@ export default class StatementParser extends ExpressionParser {
 
   parseObjectMatchProperty(): N.ObjectMatchProperty {
     if (this.match(tt.ellipsis)) {
-      return this.parseMatchRestElement();
+      const node = this.startNode();
+      this.next();
+      node.body = this.parseIdentifier();
+      return this.finishNode(node, "MatchRestElement");
     }
     const node = this.startNode();
     node.key = this.parseIdentifier();
