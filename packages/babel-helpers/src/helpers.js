@@ -1107,11 +1107,12 @@ helpers.toPropertyDescriptor = helper("7.2.6")`
 // - { kind: "hook", replace() {} }
 // The decoratorsNov2018 mixin supports the following features:
 // - { finisher() {} }
-// - { initializer() {} } (when kind: "initializer")
+// - { initializer() {} } (when kind: "field")
 // - { descriptor: {...} }
 // The decoratorsJan2019 mixin supports the following features:
 // - { kind: "hook", start() {} }
-// - { initialize() {} } (when kind: "initializer")
+// - { kind: "hook", finish() {} }
+// - { initialize() {} } (when kind: "field")
 // - { ...descriptor }
 helpers.decorateBase = helper("7.2.6")`
   import toArray from "toArray";
@@ -1638,10 +1639,11 @@ helpers.decorateBase = helper("7.2.6")`
 
       getElementHookMethod: function(elementObject, element) {
         var replace = this.optionalCallableProperty(elementObject, "replace");
-        if (element.kind === "hook") {
+        if (replace) {
+          if (element.kind !== "hook") {
+            throw _propertyDisallowed(element.kind, "initialize");
+          }
           element.replace = replace;
-        } else if (replace) {
-          throw _propertyDisallowed(element.kind, "initialize");
         }
       },
 
@@ -1867,7 +1869,10 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
           if (element.kind === "hook" && element.start) return true;
           return original.initializationPhases[1](element);
         },
-        original.initializationPhases[2],
+        function (element) {
+          if (element.kind === "hook" && element.finish) return true;
+          return original.initializationPhases[2](element);
+        },
       ],
 
       defineClassElement: function (O, element) {
@@ -1877,6 +1882,9 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
           return original.defineClassElement.call(this, O, el);
         } else if (kind === "hook" && element.start) {
           _assertVoid(element.start.call(O));
+          return;
+        } else if (kind === "hook" && element.finish) {
+          _assertVoid(element.finish.call(O));
           return;
         }
 
@@ -1903,6 +1911,7 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
             break;
           case "hook":
             if (element.start) obj.start = element.start;
+            else if (element.finish) obj.finish = element.finish;
         }
         return obj;
       },
@@ -1924,15 +1933,21 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
       getElementHookMethod: function(elementObject, element) {
         var kind = element.kind;
         var start = this.optionalCallableProperty(elementObject, "start");
-        if (kind === "hook") {
+        var finish = this.optionalCallableProperty(elementObject, "finish");
+
+        if (start) {
+          if (kind !== "hook") throw _propertyDisallowed(kind, "start");
           element.start = start;
-        } else if (start) {
-          throw _propertyDisallowed(kind, "start");
         }
+        if (finish) {
+          if (kind !== "hook") throw _propertyDisallowed(kind, "finish");
+          element.finish = finish;
+        }
+
         original.getElementHookMethod.apply(this, arguments);
 
-        if (kind === "hook" && !element.start && !element.replace) {
-          throw new TypeError("Hook elements require either .start or .replace");
+        if (kind === "hook" && !start && !finish && !element.replace) {
+          throw new TypeError("Hook elements require either .start, .finish or .replace");
         }
       },
 
