@@ -1,6 +1,8 @@
 function decorate(el) {
-  el.value = 2;
+  el.method = f;
 }
+
+function f() {}
 
 var Foo;
 
@@ -11,4 +13,4 @@ expect(() => {
   }
 }).not.toThrow();
 
-expect(Foo.prototype.bar).toBe(2);
+expect(Foo.prototype.bar).toBe(f);

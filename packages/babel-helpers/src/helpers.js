@@ -1892,9 +1892,16 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
 
       fromElementDescriptor: function(element) {
         var obj = original.fromElementDescriptor.apply(this, arguments);
-        Object.assign(obj, element.descriptor);
-        if (element.kind === "field") obj.initialize = element.initializer;
-        else if (element.kind === "hook" && element.start) obj.start = element.start;
+        var kind = element.kind;
+        if (kind === "method" || kind === "field") {
+          obj.enumerable = element.descriptor.enumerable;
+          obj.writable = element.descriptor.writable;
+          obj.configurable = element.descriptor.configurable;
+          if (kind === "field") obj.initialize = element.initializer;
+          else obj.method = element.descriptor.value;
+        } else if (kind === "hook" && element.start) {
+          obj.start = element.start;
+        }
         return obj;
       },
 
@@ -1909,6 +1916,18 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
 
         if (element.kind === "hook" && !element.start && !element.replace) {
           throw new TypeError("Hook elements require either .start or .replace");
+        }
+      },
+
+      getElementDescriptor: function(elementObject, element) {
+        original.getElementDescriptor.apply(this, arguments);
+
+        if (element.kind === "method") {
+          var method = this.optionalCallableProperty(elementObject, "method");
+          if (!method) {
+            throw new Error("A method descriptor must have a .method property");
+          }
+          element.descriptor.value = method;
         }
       },
     }

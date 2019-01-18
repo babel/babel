@@ -11,7 +11,7 @@ function method() {}
   enumerable: true,
   configurable: true,
   writable: true,
-  value: method,
+  method,
 })
 class A {}
 
