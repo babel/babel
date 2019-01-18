@@ -1240,7 +1240,7 @@ helpers.decorateBase = helper("7.2.6")`
       api.initializeInstanceElements(O, elements);
     }, superClass);
     var elements = api.decorateClass(
-      _coalesceClassElements(r.d.map(_createElementDescriptor)),
+      api.coalesceClassElements(r.d.map(api.createElementDescriptor, api)),
       decorators,
     );
 
@@ -1253,11 +1253,105 @@ helpers.decorateBase = helper("7.2.6")`
     };
 
     var api = {
+      coalescableKinds: ["method"],
+
       initializationPhases: [
         function (element) { return element.kind === "method" },
         function (element) { return element.kind === "field" },
         function (element) { return element.kind === "hook" && element.replace },
       ],
+
+      // ClassElementEvaluation
+      createElementDescriptor: function(
+        def /*: ElementDefinition */,
+      ) /*: ElementDescriptor */ {
+        var key = toPropertyKey(def.key);
+    
+        var descriptor /*: PropertyDescriptor */;
+        if (def.kind === "method") {
+          descriptor = {
+            value: def.value,
+            writable: true,
+            configurable: true,
+            enumerable: false,
+          };
+        } else if (def.kind === "get") {
+          descriptor = { get: def.value, configurable: true, enumerable: false };
+        } else if (def.kind === "set") {
+          descriptor = { set: def.value, configurable: true, enumerable: false };
+        } else if (def.kind === "field") {
+          descriptor = { configurable: true, writable: true, enumerable: true };
+        }
+    
+        var element /*: ElementDescriptor */ = {
+          kind: def.kind === "field" ? "field" : "method",
+          key: key,
+          placement: def.static
+            ? "static"
+            : def.kind === "field"
+            ? "own"
+            : "prototype",
+          descriptor: descriptor,
+        };
+        if (def.decorators) element.decorators = def.decorators;
+        if (def.kind === "field") element.initializer = def.value;
+    
+        return element;
+      },
+
+      // CoalesceClassElements
+      coalesceClassElements: function(
+        elements /*: ElementDescriptor[] */,
+      ) /*: ElementDescriptor[] */ {
+        var newElements /*: ElementDescriptor[] */ = [];
+
+        var isSameElement = function(other /*: ElementDescriptor */) /*: boolean */ {
+          return (
+            this.coalescableKinds.indexOf(other.kind) > -1 &&
+            other.key === element.key &&
+            other.placement === element.placement
+          );
+        };
+
+        for (var i = 0; i < elements.length; i++) {
+          var element /*: ElementDescriptor */ = elements[i];
+          var other /*: ElementDescriptor */;
+
+          if (
+            this.coalescableKinds.indexOf(element.kind) > -1 &&
+            (other = newElements.find(isSameElement, this))
+          ) {
+            if (
+              _isDataDescriptor(element.descriptor) ||
+              _isDataDescriptor(other.descriptor)
+            ) {
+              if (_hasDecorators(element) || _hasDecorators(other)) {
+                throw new ReferenceError(
+                  "Duplicated methods (" + element.key + ") can't be decorated.",
+                );
+              }
+              other.descriptor = element.descriptor;
+            } else {
+              if (_hasDecorators(element)) {
+                if (_hasDecorators(other)) {
+                  throw new ReferenceError(
+                    "Decorators can't be placed on different accessors with for " +
+                      "the same property (" +
+                      element.key +
+                      ").",
+                  );
+                }
+                other.decorators = element.decorators;
+              }
+              _coalesceGetterSetter(element, other);
+            }
+          } else {
+            newElements.push(element);
+          }
+        }
+
+        return newElements;
+      },
 
       // InitializeInstanceElements
       initializeInstanceElements: function(
@@ -1515,11 +1609,10 @@ helpers.decorateBase = helper("7.2.6")`
       },
 
       getElementKey(elementObject, element) {
-        if (element.kind === "method" || element.kind === "field") {
-          element.key = toPropertyKey(elementObject.key);
-        } else if (element.kind === "hook") {
+        if (element.kind === "hook") {
           this.disallowProperty(elementObject, "key", "A hook descriptor");
         }
+        element.key = toPropertyKey(elementObject.key);
       },
 
       getElementPlacement: function(elementObject, element) {
@@ -1540,40 +1633,15 @@ helpers.decorateBase = helper("7.2.6")`
         element.placement = placement;
       },
 
-      getElementDescriptor: function(elementObject, element) {
-        if (element.kind === "hook") {
-          this.disallowProperties(elementObject, "A hook descriptor", [
-            "enumerable", "configurable", "writable",
-            "get", "set", "value",
-          ]);
-          return;
-        }
-
-        if (element.kind === "field") {
-          this.disallowProperties(elementObject, "A field descriptor", [
-            "get",
-            "set",
-            "value",
-          ]);
-        }
-        element.descriptor = toPropertyDescriptor(elementObject);
-      },
-
-      getElementInitialize: function(elementObject, element) {
-        var initialize = this.optionalCallableProperty(elementObject, "initialize");
-        if (element.kind === "field") {
-          element.initializer = initialize;
-        } else if (initialize) {
-          throw _propertyDisallowed(kind, "initialize");
-        }
-      },
+      getElementDescriptor: null,
+      getElementInitialize: null,
 
       getElementHookMethod: function(elementObject, element) {
         var replace = this.optionalCallableProperty(elementObject, "replace");
         if (element.kind === "hook") {
           element.replace = replace;
         } else if (replace) {
-          throw _propertyDisallowed(kind, "initialize");
+          throw _propertyDisallowed(element.kind, "initialize");
         }
       },
 
@@ -1659,44 +1727,6 @@ helpers.decorateBase = helper("7.2.6")`
     return new TypeError(objectType + " can't have a ." + name + " property.");
   }
 
-  // ClassElementEvaluation
-  function _createElementDescriptor(
-    def /*: ElementDefinition */,
-  ) /*: ElementDescriptor */ {
-    var key = toPropertyKey(def.key);
-
-    var descriptor /*: PropertyDescriptor */;
-    if (def.kind === "method") {
-      descriptor = {
-        value: def.value,
-        writable: true,
-        configurable: true,
-        enumerable: false,
-      };
-    } else if (def.kind === "get") {
-      descriptor = { get: def.value, configurable: true, enumerable: false };
-    } else if (def.kind === "set") {
-      descriptor = { set: def.value, configurable: true, enumerable: false };
-    } else if (def.kind === "field") {
-      descriptor = { configurable: true, writable: true, enumerable: true };
-    }
-
-    var element /*: ElementDescriptor */ = {
-      kind: def.kind === "field" ? "field" : "method",
-      key: key,
-      placement: def.static
-        ? "static"
-        : def.kind === "field"
-        ? "own"
-        : "prototype",
-      descriptor: descriptor,
-    };
-    if (def.decorators) element.decorators = def.decorators;
-    if (def.kind === "field") element.initializer = def.value;
-
-    return element;
-  }
-
   // CoalesceGetterSetter
   function _coalesceGetterSetter(
     element /*: ElementDescriptor */,
@@ -1707,60 +1737,6 @@ helpers.decorateBase = helper("7.2.6")`
     } else {
       other.descriptor.set = element.descriptor.set;
     }
-  }
-
-  // CoalesceClassElements
-  function _coalesceClassElements(
-    elements /*: ElementDescriptor[] */,
-  ) /*: ElementDescriptor[] */ {
-    var newElements /*: ElementDescriptor[] */ = [];
-
-    var isSameElement = function(other /*: ElementDescriptor */) /*: boolean */ {
-      return (
-        other.kind === "method" &&
-        other.key === element.key &&
-        other.placement === element.placement
-      );
-    };
-
-    for (var i = 0; i < elements.length; i++) {
-      var element /*: ElementDescriptor */ = elements[i];
-      var other /*: ElementDescriptor */;
-
-      if (
-        element.kind === "method" &&
-        (other = newElements.find(isSameElement))
-      ) {
-        if (
-          _isDataDescriptor(element.descriptor) ||
-          _isDataDescriptor(other.descriptor)
-        ) {
-          if (_hasDecorators(element) || _hasDecorators(other)) {
-            throw new ReferenceError(
-              "Duplicated methods (" + element.key + ") can't be decorated.",
-            );
-          }
-          other.descriptor = element.descriptor;
-        } else {
-          if (_hasDecorators(element)) {
-            if (_hasDecorators(other)) {
-              throw new ReferenceError(
-                "Decorators can't be placed on different accessors with for " +
-                  "the same property (" +
-                  element.key +
-                  ").",
-              );
-            }
-            other.decorators = element.decorators;
-          }
-          _coalesceGetterSetter(element, other);
-        }
-      } else {
-        newElements.push(element);
-      }
-    }
-
-    return newElements;
   }
 
   function _hasDecorators(element /*: ElementDescriptor */) /*: boolean */ {
@@ -1839,7 +1815,7 @@ helpers.decoratorsNov2018 = helper("7.3.0")`
         if (element.kind === "field") {
           element.initializer = initialize;
         } else if (initialize) {
-          throw _propertyDisallowed(kind, "initialize");
+          this.disallowProperty(elementObject, "initializer", element.kind);
         }
       },
 
@@ -1872,8 +1848,21 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
 
   export default function _decoratorsJan2019(original) {
     return { __proto__: original,
+      coalescableKinds: ["method", "accessor"],
+
+      createElementDescriptor: function(def) {
+        var element = original.createElementDescriptor.apply(this, arguments);
+        if (def.kind === "get" || def.kind === "set") {
+          element.kind = "accessor";
+        }
+        return element;
+      },
+
       initializationPhases: [
-        original.initializationPhases[0],
+        function (element) {
+          if (element.kind === "accessor") return true;
+          return original.initializationPhases[0](element);
+        },
         function (element) {
           if (element.kind === "hook" && element.start) return true;
           return original.initializationPhases[1](element);
@@ -1882,7 +1871,11 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
       ],
 
       defineClassElement: function (O, element) {
-        if (element.kind === "hook" && element.start) {
+        var kind = element.kind;
+        if (kind === "accessor") {
+          var el = Object.assign({}, element, { kind: "method" });
+          return original.defineClassElement.call(this, O, el);
+        } else if (kind === "hook" && element.start) {
           _assertVoid(element.start.call(O));
           return;
         }
@@ -1893,43 +1886,114 @@ helpers.decoratorsJan2019 = helper("7.3.0")`
       fromElementDescriptor: function(element) {
         var obj = original.fromElementDescriptor.apply(this, arguments);
         var kind = element.kind;
-        if (kind === "method" || kind === "field") {
-          obj.enumerable = element.descriptor.enumerable;
-          obj.writable = element.descriptor.writable;
-          obj.configurable = element.descriptor.configurable;
-          if (kind === "field") obj.initialize = element.initializer;
-          else obj.method = element.descriptor.value;
-        } else if (kind === "hook" && element.start) {
-          obj.start = element.start;
+        var desc = element.descriptor;
+        switch (kind) {
+          case "method":
+            obj.method = desc.value;
+          case "field":
+            obj.writable = desc.writable;
+            if (kind === "field") obj.initialize = element.initializer;
+          case "accessor":
+            obj.enumerable = desc.enumerable;
+            obj.configurable = desc.configurable;
+            if (kind === "accessor") {
+              obj.get = desc.get;
+              obj.set = desc.set;
+            }
+            break;
+          case "hook":
+            if (element.start) obj.start = element.start;
         }
         return obj;
       },
 
+      getElementKind: function(elementObject, element) {
+        var kind = String(elementObject.kind);
+        if (kind !== "method" && kind !== "field" && kind !== "hook" && kind !== "accessor") {
+          throw new TypeError(
+            'An element descriptor\\'s .kind property must be either "method", ' +
+              '"accessor", "field" or "hook", but a decorator created an ' +
+              'element descriptor with  .kind "' +
+              kind +
+              '"',
+          );
+        }
+        element.kind = kind;
+      },
+
       getElementHookMethod: function(elementObject, element) {
+        var kind = element.kind;
         var start = this.optionalCallableProperty(elementObject, "start");
-        if (element.kind === "hook") {
+        if (kind === "hook") {
           element.start = start;
         } else if (start) {
           throw _propertyDisallowed(kind, "start");
         }
         original.getElementHookMethod.apply(this, arguments);
 
-        if (element.kind === "hook" && !element.start && !element.replace) {
+        if (kind === "hook" && !element.start && !element.replace) {
           throw new TypeError("Hook elements require either .start or .replace");
         }
       },
 
       getElementDescriptor: function(elementObject, element) {
-        original.getElementDescriptor.apply(this, arguments);
+        var kind = element.kind;
 
-        if (element.kind === "method") {
-          var method = this.optionalCallableProperty(elementObject, "method");
-          if (!method) {
+        if (kind === "hook") {
+          this.disallowProperties(elementObject, "A hook descriptor", [
+            "enumerable", "configurable", "writable",
+            "get", "set", "value",
+          ]);
+          return;
+        }
+
+        var desc = element.descriptor = {};
+
+        if (kind === "field") {
+          this.disallowProperties(elementObject, "A field descriptor", [
+            "get",
+            "set",
+            "method",
+          ]);
+        }
+
+        if (kind === "method") {
+          desc.value = this.optionalCallableProperty(elementObject, "method");
+          if (!desc.value) {
             throw new Error("A method descriptor must have a .method property");
           }
-          element.descriptor.value = method;
+          this.disallowProperties(elementObject, "A method descriptor", [
+            "get",
+            "set",
+          ]);
         }
+
+        if (kind === "accessor") {
+          desc.get = this.optionalCallableProperty(elementObject, "get");
+          desc.set = this.optionalCallableProperty(elementObject, "set");
+          this.disallowProperties(elementObject, "An accessor descriptor", [
+            "writable",
+            "method",
+          ]);
+          if (!desc.get && !desc.set) {
+            throw new TypeError("An accessor descriptor requires are least one of .get and .set");
+          }
+        } else { // method or field
+          desc.writable = !!elementObject.writable;
+        }
+
+        desc.enumerable = !!elementObject.enumerable;
+        desc.configurable = !!elementObject.configurable;
       },
+
+      getElementInitialize: function(elementObject, element) {
+        var initialize = this.optionalCallableProperty(elementObject, "initialize");
+        if (element.kind === "field") {
+          element.initializer = initialize;
+        } else if (initialize) {
+          throw _propertyDisallowed(element.kind, "initialize");
+        }
+      }
     }
   }
 
