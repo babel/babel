@@ -1270,7 +1270,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (this.tsCheckLineTerminatorAndMatch(tt._class, next)) {
             const cls: N.ClassDeclaration = node;
             cls.abstract = true;
-            if (next) this.next();
+            if (next) {
+              this.next();
+              if (!this.match(tt._class)) {
+                this.unexpected(null, tt._class);
+              }
+            }
             return this.parseClass(
               cls,
               /* isStatement */ true,
