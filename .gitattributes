@@ -1,1 +1,4 @@
 * text eol=lf
+
+# Suppress noisy giant files (i.e., treat as "binary") in diffs.
+output.json -diff

@@ -107,11 +107,6 @@ const collectorVisitor = {
     },
   },
 
-  LabeledStatement(path) {
-    path.scope.getProgramParent().addGlobal(path.node);
-    path.scope.getBlockParent().registerDeclaration(path);
-  },
-
   AssignmentExpression(path, state) {
     state.assignments.push(path);
   },
@@ -148,6 +143,43 @@ const collectorVisitor = {
       }
     }
   },
+
+  LabeledStatement: {
+    enter(path, state) {
+      state.allLabels.push(path);
+      state.activeLabels.push(path);
+    },
+
+    exit(path, state) {
+      state.activeLabels.pop();
+    },
+  },
+
+  Scopable: {
+    /*
+     * state.activeLabels: All labels that are ancestors of the
+     *   current node.
+     *
+     * state.allLabels: All labels seen in traversal so far.
+     *
+     * state.labelIndexStack: A stack of indexes into allLabels,
+     *   so that `l === labelIndexStack[i]` means that the i'th
+     *   active scope started after the first l labels were seen.
+     *
+     * This logic is a little over-inclusive: it doesn't take advantage
+     * of the fact that scopes inside a function don't need to worry about
+     * labels outside, and vice versa.
+     */
+    enter(path, state) {
+      state.labelIndexStack.push(state.allLabels.length);
+    },
+
+    exit(path, state) {
+      const start = state.labelIndexStack.pop();
+      path.scope.registerInnerLabels(state.allLabels.slice(start));
+      path.scope.registerOuterLabels(state.activeLabels);
+    },
+  },
 };
 
 let uid = 0;
@@ -173,7 +205,8 @@ export default class Scope {
     this.block = node;
     this.path = path;
 
-    this.labels = new Map();
+    this.innerLabels = new Map();
+    this.outerLabels = new Map();
   }
 
   /**
@@ -238,7 +271,7 @@ export default class Scope {
       .replace(/[0-9]+$/g, "");
 
     let uid;
-    let i = 0;
+    let i = 1;
     do {
       uid = this._generateUid(name, i);
       i++;
@@ -455,17 +488,23 @@ export default class Scope {
   }
 
   getLabel(name: string) {
-    return this.labels.get(name);
+    return this.outerLabels.get(name) || this.innerLabels.get(name);
   }
 
-  registerLabel(path: NodePath) {
-    this.labels.set(path.node.label.name, path);
+  registerInnerLabels(paths: Array<NodePath>) {
+    for (const path of paths) {
+      this.innerLabels.set(path.node.label.name, path);
+    }
+  }
+
+  registerOuterLabels(paths: Array<NodePath>) {
+    for (const path of paths) {
+      this.outerLabels.set(path.node.label.name, path);
+    }
   }
 
   registerDeclaration(path: NodePath) {
-    if (path.isLabeledStatement()) {
-      this.registerLabel(path);
-    } else if (path.isFunctionDeclaration()) {
+    if (path.isFunctionDeclaration()) {
       this.registerBinding("hoisted", path.get("id"), path);
     } else if (path.isVariableDeclaration()) {
       const declarations = path.get("declarations");
@@ -738,11 +777,16 @@ export default class Scope {
       references: [],
       constantViolations: [],
       assignments: [],
+      activeLabels: [],
+      allLabels: [],
+      labelIndexStack: [],
     };
 
     this.crawling = true;
     path.traverse(collectorVisitor, state);
     this.crawling = false;
+
+    this.registerInnerLabels(state.allLabels);
 
     // register assignments
     for (const path of state.assignments) {

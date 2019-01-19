@@ -24,7 +24,7 @@ export const reservedWords = {
 // And the keywords
 
 export const isKeyword = makePredicate(
-  "break case catch continue debugger default do else finally for function if return switch throw try var while with null true false instanceof typeof void delete new in this let const class extends export import yield super",
+  "break case catch continue debugger default do else finally for function if return switch throw try var when while with null true false instanceof typeof void delete new in this let const class extends export import yield super",
 );
 
 // ## Character categories

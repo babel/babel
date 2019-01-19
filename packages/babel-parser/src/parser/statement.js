@@ -98,6 +98,8 @@ export default class StatementParser extends ExpressionParser {
       case tt._continue:
         // $FlowFixMe
         return this.parseBreakContinueStatement(node, starttype.keyword);
+      case tt._case:
+        return this.parseCaseStatement(node);
       case tt._debugger:
         return this.parseDebuggerStatement(node);
       case tt._do:
@@ -369,6 +371,170 @@ export default class StatementParser extends ExpressionParser {
       node,
       isBreak ? "BreakStatement" : "ContinueStatement",
     );
+  }
+
+  parseCaseStatement(node: N.CaseStatement): N.CaseStatement {
+    this.next();
+    node.discriminant = this.parseParenExpression();
+
+    const cases = [];
+
+    this.expect(tt.braceL);
+    while (!this.match(tt.braceR)) {
+      this.expect(tt._when);
+      cases.push(this.parseWhenClause());
+    }
+    this.next();
+
+    node.cases = cases;
+    return this.finishNode(node, "CaseStatement");
+  }
+
+  parseWhenClause(): N.WhenClause {
+    const node = this.startNode();
+
+    node.pattern = this.parseWhenClausePattern();
+
+    if (this.match(tt._if)) {
+      this.next();
+      node.matchGuard = this.parseParenExpression();
+    }
+
+    this.expect(tt.thinArrow);
+
+    if (this.match(tt.braceL)) {
+      node.body = this.parseBlock(false);
+    } else {
+      node.body = this.parseStatement(false);
+    }
+
+    return this.finishNode(node, "WhenClause");
+  }
+
+  parseWhenClausePattern(): N.MatchPattern | void {
+    let node;
+
+    if (this.match(tt.regexp)) {
+      const value = this.state.value;
+      node = this.parseLiteral(value.value, "RegExpLiteral");
+      node.pattern = value.pattern;
+      node.flags = value.flags;
+      return node;
+    }
+
+    return this.parseMatchPatternAtom();
+  }
+
+  parseMatchPatternAtom(): N.MatchPattern | void {
+    let node;
+
+    switch (this.state.type) {
+      case tt.regexp: {
+        const value = this.state.value;
+        node = this.parseLiteral(value.value, "RegExpLiteral");
+        node.pattern = value.pattern;
+        node.flags = value.flags;
+        return node;
+      }
+
+      case tt.num:
+        return this.parseLiteral(this.state.value, "NumericLiteral");
+
+      case tt.bigint:
+        return this.parseLiteral(this.state.value, "BigIntLiteral");
+
+      case tt.string:
+        return this.parseLiteral(this.state.value, "StringLiteral");
+
+      case tt._null:
+        node = this.startNode();
+        this.next();
+        return this.finishNode(node, "NullLiteral");
+
+      case tt._true:
+      case tt._false:
+        return this.parseBooleanLiteral();
+
+      case tt.name:
+        return this.parseIdentifier();
+      case tt.braceL:
+        return this.parseObjectMatchPattern();
+      case tt.bracketL:
+        return this.parseArrayMatchPattern();
+
+      default:
+        this.unexpected();
+    }
+  }
+
+  parseObjectMatchPattern(): N.ObjectMatchPattern {
+    const node = this.startNode();
+    this.expect(tt.braceL);
+
+    const properties = [];
+    if (!this.match(tt.bracketR)) {
+      while (true) {
+        properties.push(this.parseObjectMatchProperty());
+        if (this.match(tt.braceR)) {
+          break;
+        } else {
+          this.expect(tt.comma);
+        }
+      }
+    }
+    node.properties = properties;
+
+    this.next();
+    return this.finishNode(node, "ObjectMatchPattern");
+  }
+
+  parseObjectMatchProperty(): N.ObjectMatchProperty {
+    if (this.match(tt.ellipsis)) {
+      const node = this.startNode();
+      this.next();
+      node.body = this.parseIdentifier();
+      return this.finishNode(node, "MatchRestElement");
+    }
+    const node = this.startNode();
+    node.key = this.parseIdentifier();
+    if (this.match(tt.colon)) {
+      this.next();
+      node.element = this.parseMatchPatternAtom();
+    }
+    return this.finishNode(node, "ObjectMatchProperty");
+  }
+
+  parseArrayMatchPattern(): N.ArrayMatchPattern {
+    const node = this.startNode();
+    this.expect(tt.bracketL);
+
+    const elements = [];
+    if (!this.match(tt.bracketR)) {
+      while (true) {
+        if (this.match(tt.ellipsis)) {
+          elements.push(this.parseMatchRestElement());
+        } else {
+          elements.push(this.parseMatchPatternAtom());
+        }
+
+        if (this.match(tt.bracketR)) {
+          break;
+        } else {
+          this.expect(tt.comma);
+        }
+      }
+    }
+
+    this.next();
+    node.elements = elements;
+    return this.finishNode(node, "ArrayMatchPattern");
+  }
+
+  parseMatchRestElement(): N.MatchRestElement {
+    const node = this.startNode();
+    this.next();
+    node.body = this.parseMatchPatternAtom();
+    return this.finishNode(node, "MatchRestElement");
   }
 
   parseDebuggerStatement(node: N.DebuggerStatement): N.DebuggerStatement {

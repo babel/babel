@@ -242,3 +242,67 @@ defineType("BigIntLiteral", {
   },
   aliases: ["Expression", "Pureish", "Literal", "Immutable"],
 });
+
+defineType("CaseStatement", {
+  builder: ["discriminant", "cases"],
+  visitor: ["discriminant", "cases"],
+  fields: {
+    discriminant: {
+      validate: assertNodeType("Expression"),
+    },
+  },
+  aliases: ["Statement"],
+});
+
+defineType("WhenClause", {
+  builder: ["pattern", "initializer", "matchGuard", "body"],
+  visitor: ["pattern", "initializer", "matchGuard", "body"],
+  fields: {
+    body: {
+      validate: assertNodeType("Statement"),
+    },
+    initializer: {
+      optional: true,
+    },
+    matchGuard: {
+      optional: true,
+    },
+  },
+});
+
+defineType("ObjectMatchPattern", {
+  builder: ["properties"],
+  visitor: ["properties"],
+  fields: {
+    properties: {
+      validate: chain(
+        assertValueType("array"),
+        assertEach(assertNodeType("ObjectMatchProperty", "MatchRestElement")),
+      ),
+    },
+  },
+});
+
+defineType("ObjectMatchProperty", {
+  builder: ["key", "initializer", "element"],
+  visitor: ["key", "initializer", "element"],
+  fields: {
+    key: {
+      validate: assertNodeType("Identifier"),
+    },
+    initializer: {
+      optional: true,
+    },
+    element: {
+      optional: true,
+    },
+  },
+});
+
+defineType("ArrayMatchPattern", {
+  builder: ["elements"],
+});
+
+defineType("MatchRestElement", {
+  builder: ["body"],
+});
