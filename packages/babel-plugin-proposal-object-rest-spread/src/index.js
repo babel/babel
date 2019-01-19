@@ -412,54 +412,31 @@ export default declare((api, opts) => {
         let props = [];
 
         function push() {
-          if (!props.length) return;
-          args.push({
-            isSpread: false,
-            object: t.objectExpression(props),
-          });
+          args.push(t.objectExpression(props));
           props = [];
-        }
-
-        if (t.isSpreadElement(path.node.properties[0])) {
-          args.push({
-            isSpread: false,
-            object: t.objectExpression([]),
-          });
         }
 
         for (const prop of (path.node.properties: Array)) {
           if (t.isSpreadElement(prop)) {
             push();
-            args.push({
-              isSpread: true,
-              object: prop.argument,
-            });
+            args.push(prop.argument);
           } else {
             props.push(prop);
           }
         }
 
-        push();
-
-        if (loose) {
-          const helper = getExtendsHelper(file);
-          const objects = args.map(arg => arg.object);
-          path.replaceWith(t.callExpression(helper, objects));
-        } else {
-          const helper = file.addHelper("objectSpread");
-          const objects = args.map(arg =>
-            t.objectExpression([
-              t.objectProperty(
-                t.identifier("isSpread"),
-                t.booleanLiteral(arg.isSpread),
-              ),
-              t.objectProperty(t.identifier("object"), arg.object),
-            ]),
-          );
-          objects[0] = objects[0].properties[1].value;
-          objects[1] = objects[1].properties[1].value;
-          path.replaceWith(t.callExpression(helper, objects));
+        if (props.length) {
+          push();
         }
+
+        let helper;
+        if (loose) {
+          helper = getExtendsHelper(file);
+        } else {
+          helper = file.addHelper("objectSpread");
+        }
+
+        path.replaceWith(t.callExpression(helper, args));
       },
     },
   };

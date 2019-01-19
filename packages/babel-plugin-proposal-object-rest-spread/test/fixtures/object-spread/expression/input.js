@@ -4,6 +4,6 @@
 
 ({ ...{ foo: 'bar' } });
 
-({ ...{ get foo () { return 'foo' } } });
+({ ...{ foo: 'bar' }, ...{ bar: 'baz' } });
 
-({ ...{ foo: 'bar' }, get foo () { return 'foo' } });
+({ ...{ get foo () { return 'foo' } } });

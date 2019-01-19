@@ -387,27 +387,21 @@ helpers.extends = helper("7.0.0-beta.0")`
 helpers.objectSpread = helper("7.0.0-beta.0")`
   import defineProperty from "defineProperty";
 
-  function _objectSpreadStep(target, object) {
-    var source = (object != null) ? object : {};
-    var ownKeys = Object.keys(source);
-    if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
-        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
-    }
-    ownKeys.forEach(function(key) {
-      defineProperty(target, key, source[key]);
-    });
-  }
-
   export default function _objectSpread(target) {
-    _objectSpreadStep(target, arguments[1]);
-    for (var i = 2; i < arguments.length; i++) {
-      var argument = arguments[i];
-      if (argument.isSpread) {
-        _objectSpreadStep(target, argument.object);
+    for (var i = 1; i < arguments.length; i++) {
+      if (i % 2) {
+        var source = (arguments[i] != null) ? arguments[i] : {};
+        var ownKeys = Object.keys(source);
+        if (typeof Object.getOwnPropertySymbols === 'function') {
+          ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+          }));
+        }
+        ownKeys.forEach(function(key) {
+          defineProperty(target, key, source[key]);
+        });
       } else {
-        Object.defineProperties(target, Object.getOwnPropertyDescriptors(argument.object));
+        Object.defineProperties(target, Object.getOwnPropertyDescriptors(arguments[i]));
       }
     }
     return target;
