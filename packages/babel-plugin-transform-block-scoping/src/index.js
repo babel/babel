@@ -346,6 +346,7 @@ class BlockScoping {
     scope: Scope,
     throwIfClosureRequired: boolean,
     tdzEnabled: boolean,
+    addHelper: func,
     state: Object,
   ) {
     this.parent = parent;
@@ -353,6 +354,7 @@ class BlockScoping {
     this.state = state;
     this.throwIfClosureRequired = throwIfClosureRequired;
     this.tdzEnabled = tdzEnabled;
+    this.addHelper = addHelper;
 
     this.blockPath = blockPath;
     this.block = blockPath.node;
