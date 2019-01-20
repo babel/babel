@@ -1,6 +1,6 @@
 // @flow
-import { logEntryPolyfills } from "./debug";
-import { createImport, isPolyfillSource, isRequire } from "./utils";
+import { logEntryPolyfills } from "../../debug";
+import { createImport, isPolyfillSource, isRequire } from "../../utils";
 
 type Plugin = {
   visitor: Object,
@@ -57,7 +57,7 @@ export default function({ types: t }: { types: Object }): Plugin {
   };
 
   return {
-    name: "transform-polyfill-require",
+    name: "corejs3-entry",
     visitor: isPolyfillImport,
     pre() {
       this.numPolyfillImports = 0;

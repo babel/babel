@@ -16,8 +16,9 @@ import {
   features as proposalPlugins,
   pluginSyntaxMap,
 } from "../data/shipped-proposals.js";
-import useBuiltInsEntryPlugin from "./use-built-ins-entry-plugin";
-import addUsedBuiltInsPlugin from "./use-built-ins-plugin";
+import addCoreJS3EntryPlugin from "./polyfills/corejs3/entry-plugin";
+import addCoreJS3UsagePlugin from "./polyfills/corejs3/usage-plugin";
+import addRegeneratorUsagePlugin from "./polyfills/regenerator/usage-plugin";
 import getTargets from "./targets-parser";
 import availablePlugins from "./available-plugins";
 import {
@@ -294,10 +295,12 @@ Using polyfills with \`${useBuiltIns}\` option:`,
       },
     };
 
-    plugins.push([
-      useBuiltIns === "usage" ? addUsedBuiltInsPlugin : useBuiltInsEntryPlugin,
-      pluginOptions,
-    ]);
+    if (useBuiltIns === "usage") {
+      plugins.push([addCoreJS3UsagePlugin, pluginOptions]);
+      plugins.push([addRegeneratorUsagePlugin, pluginOptions]);
+    } else {
+      plugins.push([addCoreJS3EntryPlugin, pluginOptions]);
+    }
   }
 
   return {

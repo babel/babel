@@ -62,7 +62,7 @@ export const logEntryPolyfills = (
   if (!polyfills.size) {
     console.log(
       `
-[${filename}] Based on your targets, none were added.`,
+[${filename}] Based on your targets, polyfills were not added.`,
     );
     return;
   }
@@ -80,13 +80,25 @@ export const logUsagePolyfills = (polyfills, filename, onDebug) => {
   if (!polyfills.size) {
     console.log(
       `
-[${filename}] Based on your code and targets, none were added.`,
+[${filename}] Based on your code and targets, core-js polyfills were not added.`,
     );
     return;
   }
   console.log(
     `
-[${filename}] Added following polyfill${wordEnds(polyfills.size)}:`,
+[${filename}] Added following core-js polyfill${wordEnds(polyfills.size)}:`,
   );
   onDebug(polyfills);
+};
+
+export const logUsageRegenerator = (regenerator, filename, onDebug) => {
+  if (!regenerator) {
+    console.log(
+      `
+[${filename}] Based on your code and targets, regenerator-runtime was not added.`,
+    );
+    return;
+  }
+  console.log(`[${filename}] Added regenerator-runtime:`);
+  onDebug(["regenerator-runtime"]);
 };
