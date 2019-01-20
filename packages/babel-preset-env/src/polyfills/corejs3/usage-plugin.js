@@ -1,20 +1,13 @@
 // @flow
 import { definitions } from "./built-in-definitions";
-import { logUsagePolyfills } from "./debug";
-import { createImport, isPolyfillSource, isRequire } from "./utils";
+import { logUsagePolyfills } from "../../debug";
+import { createImport, isPolyfillSource, isRequire } from "../../utils";
 
 type Plugin = {
   visitor: Object,
   pre: Function,
   name: string,
 };
-
-// function warnOnInstanceMethod() {
-// state.opts.debug &&
-//   console.warn(
-//     `Adding a polyfill: An instance method may have been used: ${details}`,
-//   );
-// }
 
 function has(obj: Object, key: string): boolean {
   return Object.prototype.hasOwnProperty.call(obj, key);
@@ -24,15 +17,6 @@ function getType(target: any): string {
   if (Array.isArray(target)) return "array";
   return typeof target;
 }
-
-// function getObjectString(node: Object): string {
-//   if (node.type === "Identifier") {
-//     return node.name;
-//   } else if (node.type === "MemberExpression") {
-//     return `${getObjectString(node.object)}.${getObjectString(node.property)}`;
-//   }
-//   return node.name;
-// }
 
 export default function({ types: t }: { types: Object }): Plugin {
   function addImport(
@@ -168,13 +152,6 @@ export default function({ types: t }: { types: Object }): Plugin {
           if (has(staticMethods, propName)) {
             const builtIn = staticMethods[propName];
             addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
-            // if (obj.name === "Array" && prop.name === "from") {
-            //   addImport(
-            //     path,
-            //     "@babel/polyfill/lib/core-js/modules/web.dom.iterable",
-            //     this.builtIns,
-            //   );
-            // }
           }
         }
 
@@ -229,11 +206,6 @@ export default function({ types: t }: { types: Object }): Plugin {
           t.isIdentifier(prop) &&
           has(definitions.instanceMethods, prop.name)
         ) {
-          // warnOnInstanceMethod(
-          //   state,
-          //   `${path.parentPath.node.kind} { ${prop.name} } = ${obj.name}`,
-          // );
-
           const builtIn = definitions.instanceMethods[prop.name];
           addUnsupported(path, state.opts.polyfills, builtIn, this.builtIns);
         }
@@ -260,28 +232,20 @@ export default function({ types: t }: { types: Object }): Plugin {
       }
     },
 
-    Function(path, state) {
+    Function(path) {
       const { node } = path;
 
       // destructuring
       if (node.params.some(param => param.type === "ArrayPattern")) {
         addCommonIterators(path, this.builtIns);
       }
-
-      if (!this.usesRegenerator && (node.generator || node.async)) {
-        this.usesRegenerator = true;
-        if (state.opts.regenerator) {
-          addImport(path, "regenerator-runtime", this.builtIns);
-        }
-      }
     },
   };
 
   return {
-    name: "use-built-ins",
+    name: "corejs3-usage",
     pre() {
       this.builtIns = new Set();
-      this.usesRegenerator = false;
     },
     post() {
       const { debug, onDebug } = this.opts;

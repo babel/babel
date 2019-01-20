@@ -41,7 +41,7 @@ Using plugins:
 
 Using polyfills with `usage` option:
 
-[<CWD>/src/in.js] Added following polyfills:
+[<CWD>/src/in.js] Added following core-js polyfills:
   es.object.to-string { "firefox":"50", "ie":"11" }
   es.promise.finally { "chrome":"52", "firefox":"50", "ie":"11" }
   es.promise { "ie":"11" }
@@ -50,9 +50,12 @@ Using polyfills with `usage` option:
   es.array.iterator { "ie":"11" }
   web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
 
-[<CWD>/src/in2.js] Added following polyfills:
-  regenerator-runtime { "chrome":"52", "firefox":"50", "ie":"11" }
+[<CWD>/src/in.js] Based on your code and targets, regenerator-runtime was not added.
+
+[<CWD>/src/in2.js] Added following core-js polyfills:
   es.array.iterator { "ie":"11" }
   es.string.iterator { "ie":"11" }
   web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
+[<CWD>/src/in2.js] Added regenerator-runtime:
+  regenerator-runtime { "chrome":"52", "firefox":"50", "ie":"11" }
 Successfully compiled 2 files with Babel.
