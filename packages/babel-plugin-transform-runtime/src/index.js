@@ -204,7 +204,10 @@ export default declare((api, options, dirname) => {
     visitor: {
       ReferencedIdentifier(path) {
         const { node, parent, scope } = path;
-        if (node.name === "regeneratorRuntime" && useRuntimeRegenerator) {
+        const { name } = node;
+
+        // transform regeneratorRuntime
+        if (name === "regeneratorRuntime" && useRuntimeRegenerator) {
           path.replaceWith(
             this.addDefaultImport(
               `${modulePath}/regenerator`,
@@ -217,14 +220,14 @@ export default declare((api, options, dirname) => {
         if (!injectCoreJS) return;
 
         if (t.isMemberExpression(parent)) return;
-        if (!has(definitions.builtins, node.name)) return;
-        if (scope.getBindingIdentifier(node.name)) return;
+        if (!has(definitions.builtins, name)) return;
+        if (scope.getBindingIdentifier(name)) return;
 
-        // Symbol() -> _core.Symbol(); new Promise -> new _core.Promise
+        // transform Symbol(), new Promise
         path.replaceWith(
           this.addDefaultImport(
-            `${modulePath}/core-js/${definitions.builtins[node.name]}`,
-            node.name,
+            `${modulePath}/core-js/${definitions.builtins[name]}`,
+            name,
           ),
         );
       },
@@ -232,14 +235,14 @@ export default declare((api, options, dirname) => {
       CallExpression(path) {
         if (!injectCoreJS) return;
 
-        const node = path.node;
-        const callee = node.callee;
+        const { node } = path;
+        const { callee } = node;
+
         if (!t.isMemberExpression(callee)) return;
 
-        const object = callee.object;
-        const property = callee.property;
+        const { object, property } = callee;
 
-        // array.includes()
+        // transform array.includes()
         if (
           !injectCoreJS2 &&
           (!has(definitions.methods, object.name) ||
@@ -287,7 +290,7 @@ export default declare((api, options, dirname) => {
         );
       },
 
-      // Symbol.iterator in arr -> core.$for.isIterable(arr)
+      // transform Symbol.iterator in arr -> isIterable(arr)
       BinaryExpression(path) {
         if (!injectCoreJS) return;
 
@@ -305,21 +308,20 @@ export default declare((api, options, dirname) => {
         );
       },
 
-      // Array.from -> _core.Array.from
+      // transform Array.from
       MemberExpression: {
         enter(path) {
           if (!injectCoreJS) return;
           if (!path.isReferenced()) return;
 
           const { node } = path;
-          const obj = node.object;
-          const prop = node.property;
+          const { object, property } = node;
 
-          if (!t.isReferenced(obj, node)) return;
+          if (!t.isReferenced(object, node)) return;
 
           if (node.computed) {
             if (injectCoreJS2) return;
-            // object[Symbol.iterator] -> core.getIteratorMethod(object)
+            // object[Symbol.iterator] -> getIteratorMethod(object)
             if (path.get("property").matchesPattern("Symbol.iterator")) {
               path.replaceWith(
                 t.callExpression(
@@ -327,44 +329,44 @@ export default declare((api, options, dirname) => {
                     `${moduleName}/core-js/get-iterator-method`,
                     "getIteratorMethod",
                   ),
-                  [obj],
+                  [object],
                 ),
               );
             }
             return;
           }
 
-          // method = array.includes
+          // transform method = array.includes
           if (
-            !has(definitions.methods, obj.name) ||
-            !has(definitions.methods[obj.name], prop.name)
+            !has(definitions.methods, object.name) ||
+            !has(definitions.methods[object.name], property.name)
           ) {
             if (injectCoreJS2) return;
-            if (has(definitions.instanceMethods, prop.name)) {
+            if (has(definitions.instanceMethods, property.name)) {
               path.replaceWith(
                 t.callExpression(
                   this.addDefaultImport(
                     `${moduleName}/core-js/instance/${
-                      definitions.instanceMethods[prop.name]
+                      definitions.instanceMethods[property.name]
                     }`,
-                    `${prop.name}InstanceProperty`,
+                    `${property.name}InstanceProperty`,
                   ),
-                  [obj],
+                  [object],
                 ),
               );
             }
             return;
           }
 
-          const methods = definitions.methods[obj.name];
+          const methods = definitions.methods[object.name];
 
           // doesn't reference the global
-          if (path.scope.getBindingIdentifier(obj.name)) return;
+          if (path.scope.getBindingIdentifier(object.name)) return;
 
           path.replaceWith(
             this.addDefaultImport(
-              `${modulePath}/core-js/${methods[prop.name]}`,
-              `${obj.name}$${prop.name}`,
+              `${modulePath}/core-js/${methods[property.name]}`,
+              `${object.name}$${property.name}`,
             ),
           );
         },
@@ -374,16 +376,17 @@ export default declare((api, options, dirname) => {
           if (!path.isReferenced()) return;
 
           const { node } = path;
-          const obj = node.object;
+          const { object } = node;
+          const { name } = object;
 
-          if (!has(definitions.builtins, obj.name)) return;
-          if (path.scope.getBindingIdentifier(obj.name)) return;
+          if (!has(definitions.builtins, name)) return;
+          if (path.scope.getBindingIdentifier(name)) return;
 
           path.replaceWith(
             t.memberExpression(
               this.addDefaultImport(
-                `${modulePath}/core-js/${definitions.builtins[obj.name]}`,
-                obj.name,
+                `${modulePath}/core-js/${definitions.builtins[name]}`,
+                name,
               ),
               node.property,
               node.computed,
