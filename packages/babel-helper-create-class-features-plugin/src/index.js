@@ -75,11 +75,39 @@ export function createClassFeaturePlugin({
 
           if (path.isPrivate()) {
             const { name } = path.node.key.id;
+            const getName = `get ${name}`;
+            const setName = `set ${name}`;
 
-            if (privateNames.has(name)) {
-              throw path.buildCodeFrameError("Duplicate private field");
+            if (path.node.kind === "get") {
+              if (
+                privateNames.has(getName) ||
+                (privateNames.has(name) && !privateNames.has(setName))
+              ) {
+                throw path.buildCodeFrameError("Duplicate private field");
+              }
+
+              privateNames.add(getName).add(name);
+            } else if (path.node.kind === "set") {
+              if (
+                privateNames.has(setName) ||
+                (privateNames.has(name) && !privateNames.has(getName))
+              ) {
+                throw path.buildCodeFrameError("Duplicate private field");
+              }
+
+              privateNames.add(setName).add(name);
+            } else {
+              if (
+                (privateNames.has(name) &&
+                  (!privateNames.has(getName) && !privateNames.has(setName))) ||
+                (privateNames.has(name) &&
+                  (privateNames.has(getName) || privateNames.has(setName)))
+              ) {
+                throw path.buildCodeFrameError("Duplicate private field");
+              }
+
+              privateNames.add(name);
             }
-            privateNames.add(name);
           }
 
           if (path.isClassMethod({ kind: "constructor" })) {

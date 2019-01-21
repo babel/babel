@@ -1052,7 +1052,11 @@ helpers.classPrivateFieldGet = helper("7.0.0-beta.0")`
     if (!privateMap.has(receiver)) {
       throw new TypeError("attempted to get private field on non-instance");
     }
-    return privateMap.get(receiver).value;
+    var descriptor = privateMap.get(receiver);
+    if (descriptor.get) {
+      return descriptor.get.call(receiver);
+    }
+    return descriptor.value;
   }
 `;
 
@@ -1062,13 +1066,19 @@ helpers.classPrivateFieldSet = helper("7.0.0-beta.0")`
       throw new TypeError("attempted to set private field on non-instance");
     }
     var descriptor = privateMap.get(receiver);
-    if (!descriptor.writable) {
-      // This should only throw in strict mode, but class bodies are
-      // always strict and private fields can only be used inside
-      // class bodies.
-      throw new TypeError("attempted to set read only private field");
+    if (descriptor.set) {
+      descriptor.set.call(receiver, value);
+    } else {
+      if (!descriptor.writable) {
+        // This should only throw in strict mode, but class bodies are
+        // always strict and private fields can only be used inside
+        // class bodies.
+        throw new TypeError("attempted to set read only private field");
+      }
+
+      descriptor.value = value;
     }
-    descriptor.value = value;
+
     return value;
   }
 `;
