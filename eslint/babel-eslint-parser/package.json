@@ -1,6 +1,6 @@
 {
   "name": "babel-eslint",
-  "version": "10.0.1",
+  "version": "11.0.0-beta.0",
   "description": "Custom parser for ESLint",
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "license": "MIT",
