@@ -34,7 +34,7 @@ Babel (pronounced ["babble"](https://soundcloud.com/sebmck/how-to-pronounce-babe
 
 ### Base Support Sponsors
 
-Become a Base Support Sponsor with a yearly donation of $24000 ($2k/month upfront) and get your logo on our README on Github and the front page of https://babeljs.io. as well as access to up to 2hrs of support per month. Support will be remote with the option of a share screen or via private chat. Contact Babel's core team to set up time slots and for sponsorhip for other support requirements (more hours, workshops, etc). [[Become a Base Support Sponsor](https://opencollective.com/babel#base-support-sponsor)]
+Become a Base Support Sponsor with a yearly donation of $24000 ($2k/month upfront) and get your logo on our README on GitHub and the front page of https://babeljs.io. as well as access to up to 2hrs of support per month. Support will be remote with the option of a share screen or via private chat. Contact Babel's core team to set up time slots and for sponsorhip for other support requirements (more hours, workshops, etc). [[Become a Base Support Sponsor](https://opencollective.com/babel#base-support-sponsor)]
 
 <a href="https://opencollective.com/babel/tiers/base-support-sponsor/0/website" target="_blank"><img src="https://opencollective.com/babel/tiers/base-support-sponsor/0/avatar"></a>
 <a href="https://opencollective.com/babel/tiers/base-support-sponsor/1/website" target="_blank"><img src="https://opencollective.com/babel/tiers/base-support-sponsor/1/avatar.svg"></a>
@@ -50,7 +50,7 @@ Become a Base Support Sponsor with a yearly donation of $24000 ($2k/month upfron
 
 ### Gold Sponsors
 
-Become a gold sponsor with a monthly donation of $1000 and get your logo on our README on Github and the front page of https://babeljs.io. [[Become a Gold Sponsor](https://opencollective.com/babel#gold-sponsors)]
+Become a gold sponsor with a monthly donation of $1000 and get your logo on our README on GitHub and the front page of https://babeljs.io. [[Become a Gold Sponsor](https://opencollective.com/babel#gold-sponsors)]
 
 <a href="https://opencollective.com/babel/tiers/gold-sponsors/0/website" target="_blank"><img src="https://opencollective.com/babel/tiers/gold-sponsors/0/avatar"></a>
 <a href="https://opencollective.com/babel/tiers/gold-sponsors/1/website" target="_blank"><img src="https://opencollective.com/babel/tiers/gold-sponsors/1/avatar.svg"></a>
@@ -66,7 +66,7 @@ Become a gold sponsor with a monthly donation of $1000 and get your logo on our 
 
 ### Silver Sponsors
 
-Become a silver sponsor with a monthly donation of $500 and get your logo on our README on Github and the front page of https://babeljs.io. [[Become a Silver Sponsor](https://opencollective.com/babel#silver-sponsors)]
+Become a silver sponsor with a monthly donation of $500 and get your logo on our README on GitHub and the front page of https://babeljs.io. [[Become a Silver Sponsor](https://opencollective.com/babel#silver-sponsors)]
 
 <a href="https://opencollective.com/babel/tiers/silver-sponsors/0/website" target="_blank"><img src="https://opencollective.com/babel/tiers/silver-sponsors/0/avatar"></a>
 <a href="https://opencollective.com/babel/tiers/silver-sponsors/1/website" target="_blank"><img src="https://opencollective.com/babel/tiers/silver-sponsors/1/avatar.svg"></a>
@@ -82,7 +82,7 @@ Become a silver sponsor with a monthly donation of $500 and get your logo on our
 
 ### Bronze Sponsors
 
-Become a bronze sponsor with a monthly donation of $100 and get your logo on our README on Github. [[Become a Bronze Sponsor](https://opencollective.com/babel#bronze-sponsors)]
+Become a bronze sponsor with a monthly donation of $100 and get your logo on our README on GitHub. [[Become a Bronze Sponsor](https://opencollective.com/babel#bronze-sponsors)]
 
 <a href="https://opencollective.com/babel/tiers/bronze-sponsors/0/website" target="_blank"><img src="https://opencollective.com/babel/tiers/bronze-sponsors/0/avatar"></a>
 <a href="https://opencollective.com/babel/tiers/bronze-sponsors/1/website" target="_blank"><img src="https://opencollective.com/babel/tiers/bronze-sponsors/1/avatar.svg"></a>
@@ -98,7 +98,7 @@ Become a bronze sponsor with a monthly donation of $100 and get your logo on our
 
 ## Patreon Sponsors
 
-Become a sponsor and get your logo on our README on Github with a link to your site. [[Become a sponsor](https://www.patreon.com/henryzhu)]
+Become a sponsor and get your logo on our README on GitHub with a link to your site. [[Become a sponsor](https://www.patreon.com/henryzhu)]
 
 ## Bronze
 
