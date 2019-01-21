@@ -16,7 +16,7 @@ exports.parse = function(code, options) {
   return exports.parseForESLint(code, options).ast;
 };
 
-exports.parseForESLint = function(code, options) {
+exports.parseForESLint = function(code, options = {}) {
   if (!IS_RUNNING_SUPPORTED_VERSION) {
     throw new Error(
       `babel-eslint@${
@@ -25,7 +25,6 @@ exports.parseForESLint = function(code, options) {
     );
   }
 
-  options = options || {};
   options.babelOptions = options.babelOptions || {};
   options.ecmaVersion = options.ecmaVersion || 2018;
   options.sourceType = options.sourceType || "module";

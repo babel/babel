@@ -1,10 +1,15 @@
 "use strict";
 
 const babylonToEspree = require("./babylon-to-espree");
-const { parseSync: parse, tokTypes: tt, traverse } = require("@babel/core");
+const {
+  parseSync: parse,
+  tokTypes: tt,
+  traverse,
+  loadPartialConfig,
+} = require("@babel/core");
 
 module.exports = function(code, options) {
-  const opts = {
+  let opts = {
     sourceType: options.sourceType,
     filename: options.filePath,
     cwd: options.babelOptions.cwd,
@@ -35,7 +40,24 @@ module.exports = function(code, options) {
     },
   };
 
+  if (options.requireConfigFile !== false) {
+    const config = loadPartialConfig(opts);
+
+    if (config !== null) {
+      if (!config.hasFilesystemConfig()) {
+        throw new Error(
+          `No Babel config file detected for ${
+            config.options.filename
+          }. Either disable config file checking with requireConfigFile: false, or configure Babel so that it can find the config files.`
+        );
+      }
+
+      opts = config.options;
+    }
+  }
+
   let ast;
+
   try {
     ast = parse(code, opts);
   } catch (err) {
