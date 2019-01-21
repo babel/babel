@@ -21,7 +21,11 @@
 import { types as tt, type TokenType } from "../tokenizer/types";
 import * as N from "../types";
 import LValParser from "./lval";
-import { reservedWords } from "../util/identifier";
+import {
+  isStrictReservedWord,
+  isStrictBindReservedWord,
+  isKeyword,
+} from "../util/identifier";
 import type { Pos, Position } from "../util/location";
 import * as charCodes from "charcodes";
 
@@ -525,7 +529,7 @@ export default class ExpressionParser extends LValParser {
     } else if (this.match(tt.questionDot)) {
       this.expectPlugin("optionalChaining");
       state.optionalChainMember = true;
-      if (noCalls && this.lookahead().type == tt.parenL) {
+      if (noCalls && this.lookahead().type === tt.parenL) {
         state.stop = true;
         return base;
       }
@@ -869,9 +873,9 @@ export default class ExpressionParser extends LValParser {
           return this.parseFunction(node, false, false, true);
         } else if (
           canBeArrow &&
-          !this.canInsertSemicolon() &&
           id.name === "async" &&
-          this.match(tt.name)
+          this.match(tt.name) &&
+          !this.canInsertSemicolon()
         ) {
           const oldYOAIPAP = this.state.yieldOrAwaitInPossibleArrowParameters;
           const oldInAsync = this.state.inAsync;
@@ -886,7 +890,8 @@ export default class ExpressionParser extends LValParser {
           return node;
         }
 
-        if (canBeArrow && !this.canInsertSemicolon() && this.eat(tt.arrow)) {
+        if (canBeArrow && this.match(tt.arrow) && !this.canInsertSemicolon()) {
+          this.next();
           const oldYOAIPAP = this.state.yieldOrAwaitInPossibleArrowParameters;
           this.state.yieldOrAwaitInPossibleArrowParameters = null;
           this.parseArrowExpression(node, [id]);
@@ -1146,7 +1151,11 @@ export default class ExpressionParser extends LValParser {
 
     const node = this.startNodeAt(startPos, startLoc);
     this.addExtra(node, "rawValue", value);
-    this.addExtra(node, "raw", this.input.slice(startPos, this.state.end));
+    this.addExtra(
+      node,
+      "raw",
+      this.state.input.slice(startPos, this.state.end),
+    );
     node.value = value;
     this.next();
     return this.finishNode(node, type);
@@ -1365,7 +1374,7 @@ export default class ExpressionParser extends LValParser {
       }
     }
     elem.value = {
-      raw: this.input
+      raw: this.state.input
         .slice(this.state.start, this.state.end)
         .replace(/\r\n?/g, "\n"),
       cooked: this.state.value,
@@ -1967,7 +1976,8 @@ export default class ExpressionParser extends LValParser {
       if (
         (name === "class" || name === "function") &&
         (this.state.lastTokEnd !== this.state.lastTokStart + 1 ||
-          this.input.charCodeAt(this.state.lastTokStart) !== charCodes.dot)
+          this.state.input.charCodeAt(this.state.lastTokStart) !==
+            charCodes.dot)
       ) {
         this.state.context.pop();
       }
@@ -1991,8 +2001,8 @@ export default class ExpressionParser extends LValParser {
   ): void {
     if (
       this.state.strict &&
-      (reservedWords.strict(word) ||
-        (isBinding && reservedWords.strictBind(word)))
+      (isStrictReservedWord(word) ||
+        (isBinding && isStrictBindReservedWord(word)))
     ) {
       this.raise(startLoc, word + " is a reserved word in strict mode");
     }
@@ -2011,7 +2021,7 @@ export default class ExpressionParser extends LValParser {
       );
     }
 
-    if (this.isReservedWord(word) || (checkKeywords && this.isKeyword(word))) {
+    if (this.isReservedWord(word) || (checkKeywords && isKeyword(word))) {
       this.raise(startLoc, word + " is a reserved word");
     }
   }
@@ -2071,8 +2081,8 @@ export default class ExpressionParser extends LValParser {
     this.next();
     if (
       this.match(tt.semi) ||
-      this.canInsertSemicolon() ||
-      (!this.match(tt.star) && !this.state.type.startsExpr)
+      (!this.match(tt.star) && !this.state.type.startsExpr) ||
+      this.canInsertSemicolon()
     ) {
       node.delegate = false;
       node.argument = null;

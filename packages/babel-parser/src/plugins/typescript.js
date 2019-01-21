@@ -1324,7 +1324,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsCheckLineTerminatorAndMatch(tokenType: TokenType, next: boolean) {
-      return !this.isLineTerminator() && (next || this.match(tokenType));
+      return (next || this.match(tokenType)) && !this.isLineTerminator();
     }
 
     tsTryParseGenericAsyncArrowFunction(
@@ -2218,11 +2218,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // ensure that inside types, we bypass the jsx parser plugin
-    readToken(code: number): void {
+    getTokenFromCode(code: number): void {
       if (this.state.inType && (code === 62 || code === 60)) {
         return this.finishOp(tt.relational, 1);
       } else {
-        return super.readToken(code);
+        return super.getTokenFromCode(code);
       }
     }
 

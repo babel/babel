@@ -44,7 +44,7 @@ export default class StatementParser extends ExpressionParser {
     const directiveLiteral = this.startNodeAt(expr.start, expr.loc.start);
     const directive = this.startNodeAt(stmt.start, stmt.loc.start);
 
-    const raw = this.input.slice(expr.start, expr.end);
+    const raw = this.state.input.slice(expr.start, expr.end);
     const val = (directiveLiteral.value = raw.slice(1, -1)); // remove quotes
 
     this.addExtra(directiveLiteral, "raw", raw);
@@ -161,7 +161,7 @@ export default class StatementParser extends ExpressionParser {
         this.next();
 
         let result;
-        if (starttype == tt._import) {
+        if (starttype === tt._import) {
           result = this.parseImport(node);
 
           if (
@@ -551,7 +551,9 @@ export default class StatementParser extends ExpressionParser {
   parseThrowStatement(node: N.ThrowStatement): N.ThrowStatement {
     this.next();
     if (
-      lineBreak.test(this.input.slice(this.state.lastTokEnd, this.state.start))
+      lineBreak.test(
+        this.state.input.slice(this.state.lastTokEnd, this.state.start),
+      )
     ) {
       this.raise(this.state.lastTokEnd, "Illegal newline after throw");
     }
@@ -691,9 +693,9 @@ export default class StatementParser extends ExpressionParser {
     node.body = this.parseStatement(declaration);
 
     if (
-      node.body.type == "ClassDeclaration" ||
-      (node.body.type == "VariableDeclaration" && node.body.kind !== "var") ||
-      (node.body.type == "FunctionDeclaration" &&
+      node.body.type === "ClassDeclaration" ||
+      (node.body.type === "VariableDeclaration" && node.body.kind !== "var") ||
+      (node.body.type === "FunctionDeclaration" &&
         (this.state.strict || node.body.generator || node.body.async))
     ) {
       this.raise(node.body.start, "Invalid labeled declaration");
@@ -863,6 +865,7 @@ export default class StatementParser extends ExpressionParser {
     kind: TokenType,
   ): N.VariableDeclaration {
     const declarations = (node.declarations = []);
+    const isTypescript = this.hasPlugin("typescript");
     // $FlowFixMe
     node.kind = kind.keyword;
     for (;;) {
@@ -877,7 +880,7 @@ export default class StatementParser extends ExpressionParser {
         ) {
           // `const` with no initializer is allowed in TypeScript.
           // It could be a declaration like `const x: number;`.
-          if (!this.hasPlugin("typescript")) {
+          if (!isTypescript) {
             this.unexpected();
           }
         } else if (
@@ -1278,7 +1281,7 @@ export default class StatementParser extends ExpressionParser {
     } else if (
       isSimple &&
       (key.name === "get" || key.name === "set") &&
-      !(this.isLineTerminator() && this.match(tt.star))
+      !(this.match(tt.star) && this.isLineTerminator())
     ) {
       // `get\n*` is an uninitialized property named 'get' followed by a generator.
       // a getter or setter
@@ -1521,7 +1524,7 @@ export default class StatementParser extends ExpressionParser {
   isAsyncFunction() {
     if (!this.isContextual("async")) return false;
 
-    const { input, pos } = this.state;
+    const { input, pos, length } = this.state;
 
     skipWhiteSpace.lastIndex = pos;
     const skip = skipWhiteSpace.exec(input);
@@ -1533,7 +1536,7 @@ export default class StatementParser extends ExpressionParser {
     return (
       !lineBreak.test(input.slice(pos, next)) &&
       input.slice(next, next + 8) === "function" &&
-      (next + 8 === input.length || !isIdentifierChar(input.charAt(next + 8)))
+      (next + 8 === length || !isIdentifierChar(input.charCodeAt(next + 8)))
     );
   }
 

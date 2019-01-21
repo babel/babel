@@ -4,28 +4,72 @@
 
 import * as charCodes from "charcodes";
 
-function makePredicate(words: string): (str: string) => boolean {
-  const wordsArr = words.split(" ");
-  return function(str) {
-    return wordsArr.indexOf(str) >= 0;
-  };
-}
-
-// Reserved word lists for various dialects of the language
-
-export const reservedWords = {
-  "6": makePredicate("enum await"),
-  strict: makePredicate(
-    "implements interface let package private protected public static yield",
-  ),
-  strictBind: makePredicate("eval arguments"),
+export const isES2015ReservedWord = (word: string): boolean => {
+  return word === "enum" || word === "await";
 };
 
-// And the keywords
+const reservedWordsStrict = new Set([
+  "implements",
+  "interface",
+  "let",
+  "package",
+  "private",
+  "protected",
+  "public",
+  "static",
+  "yield",
+]);
+export function isStrictReservedWord(word: string): boolean {
+  return reservedWordsStrict.has(word);
+}
 
-export const isKeyword = makePredicate(
-  "break case catch continue debugger default do else finally for function if return switch throw try var while with null true false instanceof typeof void delete new in this let const class extends export import yield super",
-);
+export function isStrictBindReservedWord(word: string): boolean {
+  return word === "eval" || word === "arguments";
+}
+
+const keywords = new Set([
+  "break",
+  "case",
+  "catch",
+  "continue",
+  "debugger",
+  "default",
+  "do",
+  "else",
+  "finally",
+  "for",
+  "function",
+  "if",
+  "return",
+  "switch",
+  "throw",
+  "try",
+  "var",
+  "while",
+  "with",
+  "null",
+  "true",
+  "false",
+  "instanceof",
+  "typeof",
+  "void",
+  "delete",
+  "new",
+  "in",
+  "this",
+  "let",
+  "const",
+  "class",
+  "extends",
+  "export",
+  "import",
+  "yield",
+  "super",
+]);
+
+export function isKeyword(word: string): boolean {
+  return keywords.has(word);
+}
 
 // ## Character categories
 
@@ -64,7 +108,7 @@ const astralIdentifierCodes = [509,0,227,0,150,4,294,9,1368,2,2,1,6,3,41,2,5,0,1
 // rare.
 function isInAstralSet(code: number, set: $ReadOnlyArray<number>): boolean {
   let pos = 0x10000;
-  for (let i = 0; i < set.length; i += 2) {
+  for (let i = 0, length = set.length; i < length; i += 2) {
     pos += set[i];
     if (pos > code) return false;
 

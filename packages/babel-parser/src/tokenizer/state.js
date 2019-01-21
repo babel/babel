@@ -24,6 +24,7 @@ type TopicContextState = {
 export default class State {
   strict: boolean;
   input: string;
+  length: number;
 
   curLine: number;
 
@@ -37,6 +38,7 @@ export default class State {
       options.strictMode === false ? false : options.sourceType === "module";
 
     this.input = input;
+    this.length = input.length;
 
     this.curLine = options.startLine;
     this.startLoc = this.endLoc = this.curPosition();
@@ -176,7 +178,9 @@ export default class State {
 
   clone(skipArrays?: boolean): State {
     const state = new State();
-    Object.keys(this).forEach(key => {
+    const keys = Object.keys(this);
+    for (let i = 0, length = keys.length; i < length; i++) {
+      const key = keys[i];
       // $FlowIgnore
       let val = this[key];
 
@@ -186,7 +190,8 @@ export default class State {
 
       // $FlowIgnore
       state[key] = val;
-    });
+    }
+
     return state;
   }
 }

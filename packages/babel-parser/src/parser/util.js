@@ -25,7 +25,7 @@ export default class UtilParser extends Tokenizer {
 
   isLookaheadRelational(op: "<" | ">"): boolean {
     const l = this.lookahead();
-    return l.type == tt.relational && l.value == op;
+    return l.type === tt.relational && l.value === op;
   }
 
   // TODO
@@ -87,7 +87,7 @@ export default class UtilParser extends Tokenizer {
 
   hasPrecedingLineBreak(): boolean {
     return lineBreak.test(
-      this.input.slice(this.state.lastTokEnd, this.state.start),
+      this.state.input.slice(this.state.lastTokEnd, this.state.start),
     );
   }
 
