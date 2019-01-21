@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime-corejs2",
-  "version": "7.2.0",
+  "version": "7.3.0",
   "description": "babel's modular runtime helpers with core-js@2 polyfilling",
   "license": "MIT",
   "publishConfig": {
@@ -13,6 +13,6 @@
     "regenerator-runtime": "^0.12.0"
   },
   "devDependencies": {
-    "@babel/helpers": "^7.2.0"
+    "@babel/helpers": "^7.3.0"
   }
 }
