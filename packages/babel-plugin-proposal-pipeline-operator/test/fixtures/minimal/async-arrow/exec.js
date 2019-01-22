@@ -8,6 +8,6 @@ var result = 1
   |> (async (x) => await x + 1)
   |> then((x) => x + 1);
 
-result.then(val => {
+return result.then(val => {
   expect(val).toBe(3);
 });
