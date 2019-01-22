@@ -72,6 +72,13 @@ class WhenRewriter {
           if (t.isMatchRestElement(property)) {
             assert(i === pattern.properties.length - 1); // guaranteed by parser
             lhsPatterns.push(t.restElement(subId));
+          } else if (property.initializer) {
+            lhsPatterns.push(
+              t.objectProperty(
+                property.key,
+                t.assignmentPattern(subId, property.initializer),
+              ),
+            );
           } else {
             lhsPatterns.push(t.objectProperty(property.key, subId));
           }

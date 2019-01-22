@@ -488,6 +488,9 @@ export default class StatementParser extends ExpressionParser {
         }
         this.checkReservedWord(node.key.name, node.key.start, true, true);
       }
+      if (this.eat(tt.eq)) {
+        node.initializer = this.parseMaybeAssign();
+      }
       properties.push(this.finishNode(node, "ObjectMatchProperty"));
 
       if (!this.eat(tt.comma)) {
