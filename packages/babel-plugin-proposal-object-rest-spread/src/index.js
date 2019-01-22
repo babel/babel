@@ -412,8 +412,13 @@ export default declare((api, opts) => {
         let props = [];
 
         function push() {
+          if (!props.length) return;
           args.push(t.objectExpression(props));
           props = [];
+        }
+
+        if (t.isSpreadElement(path.node.properties[0])) {
+          args.push(t.objectExpression([]));
         }
 
         for (const prop of (path.node.properties: Array)) {
@@ -425,9 +430,7 @@ export default declare((api, opts) => {
           }
         }
 
-        if (props.length) {
-          push();
-        }
+        push();
 
         let helper;
         if (loose) {
