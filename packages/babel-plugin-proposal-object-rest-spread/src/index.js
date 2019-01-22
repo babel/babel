@@ -431,13 +431,8 @@ export default declare((api, opts) => {
         let props = [];
 
         function push() {
-          if (!props.length) return;
           args.push(t.objectExpression(props));
           props = [];
-        }
-
-        if (t.isSpreadElement(path.node.properties[0])) {
-          args.push(t.objectExpression([]));
         }
 
         for (const prop of (path.node.properties: Array)) {
@@ -449,13 +444,15 @@ export default declare((api, opts) => {
           }
         }
 
-        push();
+        if (props.length) {
+          push();
+        }
 
         let helper;
         if (loose) {
           helper = getExtendsHelper(file);
         } else {
-          helper = file.addHelper("objectSpread");
+          helper = file.addHelper("objectSpread2");
         }
 
         path.replaceWith(t.callExpression(helper, args));
