@@ -1048,12 +1048,12 @@ export default class StatementParser extends ExpressionParser {
   ): T {
     this.next();
     this.takeDecorators(node);
-    this.parseClassId(node, isStatement, optionalId);
 
-    // class bodies and heritages are implicitly strict
+    // A class definition is always strict mode code.
     const oldStrict = this.state.strict;
     this.state.strict = true;
 
+    this.parseClassId(node, isStatement, optionalId);
     this.parseClassSuper(node);
     this.parseClassBody(node);
 
