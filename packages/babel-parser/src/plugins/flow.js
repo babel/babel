@@ -1847,17 +1847,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.assertModuleNodeAllowed(node);
     }
 
-    parseExport(
-      node: N.ExportNamedDeclaration | N.ExportAllDeclaration,
-    ): N.ExportNamedDeclaration | N.ExportAllDeclaration {
-      node = super.parseExport(node);
+    parseExport(node: N.Node): N.AnyExport {
+      const decl = super.parseExport(node);
       if (
-        node.type === "ExportNamedDeclaration" ||
-        node.type === "ExportAllDeclaration"
+        decl.type === "ExportNamedDeclaration" ||
+        decl.type === "ExportAllDeclaration"
       ) {
-        node.exportKind = node.exportKind || "value";
+        decl.exportKind = decl.exportKind || "value";
       }
-      return node;
+      return decl;
     }
 
     parseExportDeclaration(node: N.ExportNamedDeclaration): ?N.Declaration {
@@ -1893,27 +1891,26 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    shouldParseExportStar(): boolean {
-      return (
-        super.shouldParseExportStar() ||
-        (this.isContextual("type") && this.lookahead().type === tt.star)
-      );
-    }
+    eatExportStar(node: N.Node): boolean {
+      if (super.eatExportStar(...arguments)) return true;
 
-    parseExportStar(node: N.ExportNamedDeclaration): void {
-      if (this.eatContextual("type")) {
+      if (this.isContextual("type") && this.lookahead().type === tt.star) {
         node.exportKind = "type";
+        this.next();
+        this.next();
+        return true;
       }
 
-      return super.parseExportStar(node);
+      return false;
     }
 
-    parseExportNamespace(node: N.ExportNamedDeclaration) {
-      if (node.exportKind === "type") {
-        this.unexpected();
+    maybeParseExportNamespaceSpecifier(node: N.Node): boolean {
+      const pos = this.state.start;
+      const hasNamespace = super.maybeParseExportNamespaceSpecifier(node);
+      if (hasNamespace && node.exportKind === "type") {
+        this.unexpected(pos);
       }
-
-      return super.parseExportNamespace(node);
+      return hasNamespace;
     }
 
     parseClassId(node: N.Class, isStatement: boolean, optionalId: ?boolean) {
@@ -2225,7 +2222,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // parse typeof and type imports
-    parseImportSpecifiers(node: N.ImportDeclaration): void {
+    maybeParseDefaultImportSpecifier(node: N.ImportDeclaration): boolean {
       node.importKind = "value";
 
       let kind = null;
@@ -2252,7 +2249,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      super.parseImportSpecifiers(node);
+      return super.maybeParseDefaultImportSpecifier(node);
     }
 
     // parse import-type/typeof shorthand

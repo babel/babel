@@ -145,7 +145,8 @@
             "raw": "\"bar\""
           },
           "value": "bar"
-        }
+        },
+        "declaration": null
       }
     ],
     "directives": []

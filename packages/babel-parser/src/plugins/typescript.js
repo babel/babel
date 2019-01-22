@@ -1615,16 +1615,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     */
     checkDuplicateExports() {}
 
-    parseImport(
-      node: N.Node,
-    ): N.ImportDeclaration | N.TsImportEqualsDeclaration {
+    parseImport(node: N.Node): N.AnyImport {
       if (this.match(tt.name) && this.lookahead().type === tt.eq) {
         return this.tsParseImportEqualsDeclaration(node);
       }
       return super.parseImport(node);
     }
 
-    parseExport(node: N.Node): N.Node {
+    parseExport(node: N.Node): N.AnyExport {
       if (this.match(tt._import)) {
         // `export import A = B;`
         this.expect(tt._import);
