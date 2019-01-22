@@ -455,41 +455,40 @@ export default class StatementParser extends ExpressionParser {
   parseObjectMatchPattern(): N.ObjectMatchPattern {
     const node = this.startNode();
     this.expect(tt.braceL);
-
     const properties = [];
-    if (!this.match(tt.bracketR)) {
-      while (true) {
-        properties.push(this.parseObjectMatchProperty());
-        if (this.match(tt.braceR)) {
-          break;
-        } else {
-          if (properties[properties.length - 1].type === "MatchRestElement") {
-            this.unexpected(null, 'Expected "}" after rest property');
-          }
-          this.expect(tt.comma);
-        }
+    while (true) {
+      // Loop invariant: we've consumed zero or more ObjectMatchProperty's,
+      // all followed by tt.comma.
+
+      if (this.eat(tt.braceR)) {
+        break;
+      }
+
+      if (this.match(tt.ellipsis)) {
+        const node = this.startNode();
+        this.next();
+        node.body = this.parseIdentifier();
+        properties.push(this.finishNode(node, "MatchRestElement"));
+
+        this.checkCommaAfterRest(tt.braceR, "property");
+        this.expect(tt.braceR);
+        break;
+      }
+
+      const node = this.startNode();
+      node.key = this.parseIdentifier();
+      if (this.eat(tt.colon)) {
+        node.element = this.parseMatchPatternAtom();
+      }
+      properties.push(this.finishNode(node, "ObjectMatchProperty"));
+
+      if (!this.eat(tt.comma)) {
+        this.expect(tt.braceR);
+        break;
       }
     }
     node.properties = properties;
-
-    this.next();
     return this.finishNode(node, "ObjectMatchPattern");
-  }
-
-  parseObjectMatchProperty(): N.ObjectMatchProperty {
-    if (this.match(tt.ellipsis)) {
-      const node = this.startNode();
-      this.next();
-      node.body = this.parseIdentifier();
-      return this.finishNode(node, "MatchRestElement");
-    }
-    const node = this.startNode();
-    node.key = this.parseIdentifier();
-    if (this.match(tt.colon)) {
-      this.next();
-      node.element = this.parseMatchPatternAtom();
-    }
-    return this.finishNode(node, "ObjectMatchProperty");
   }
 
   parseArrayMatchPattern(): N.ArrayMatchPattern {
