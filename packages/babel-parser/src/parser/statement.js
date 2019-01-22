@@ -76,7 +76,7 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(node, "InterpreterDirective");
   }
 
-  isLet() {
+  isLet(declaration?: boolean): boolean {
     if (!this.isContextual("let")) {
       return false;
     }
@@ -93,6 +93,12 @@ export default class StatementParser extends ExpressionParser {
       return true;
     }
     if (isIdentifierStart(nextCh)) {
+      if (
+        !declaration &&
+        lineBreak.test(this.state.input.slice(this.state.end, next))
+      ) {
+        return false;
+      }
       let pos = next + 1;
       while (isIdentifierChar(this.state.input.charCodeAt(pos))) {
         ++pos;
@@ -122,7 +128,7 @@ export default class StatementParser extends ExpressionParser {
     const node = this.startNode();
     let kind;
 
-    if (this.isLet()) {
+    if (this.isLet(declaration)) {
       starttype = tt._var;
       kind = "let";
     }
