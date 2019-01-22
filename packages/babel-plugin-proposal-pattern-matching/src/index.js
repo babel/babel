@@ -64,16 +64,21 @@ class WhenRewriter {
         this.failIf(
           exprT`ID === null || typeof ID === "undefined"`({ ID: id }),
         );
-        // The parser guarantees that only the last element can be a rest-pattern.
-        const propertyIds = pattern.properties.map(() =>
-          scope.generateUidIdentifier(),
-        );
-        const lhs = t.ObjectPattern(
-          pattern.properties.map((p, i) => {
-            if (t.isMatchRestElement(p)) return t.restElement(propertyIds[i]);
-            else return t.objectProperty(p.key, propertyIds[i]);
-          }),
-        );
+
+        const propertyIds = [];
+        const lhsPatterns = [];
+        for (let i = 0; i < pattern.properties.length; ++i) {
+          const property = pattern.properties[i];
+          const subId = scope.generateUidIdentifier();
+          propertyIds.push(subId);
+          if (t.isMatchRestElement(property)) {
+            assert(i === pattern.properties.length - 1); // guaranteed by parser
+            lhsPatterns.push(t.restElement(subId));
+          } else {
+            lhsPatterns.push(t.objectProperty(property.key, subId));
+          }
+        }
+        const lhs = t.ObjectPattern(lhsPatterns);
         this.bindConst(lhs, id);
 
         for (let i = 0; i < pattern.properties.length; ++i) {
