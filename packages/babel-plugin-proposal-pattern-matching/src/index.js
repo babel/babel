@@ -64,8 +64,7 @@ class WhenRewriter {
         this.failIf(
           exprT`ID === null || typeof ID === "undefined"`({ ID: id }),
         );
-        // TODO check <=1 rest-pattern and only at end (though this
-        // probably belongs at parse time)
+        // The parser guarantees that only the last element can be a rest-pattern.
         const propertyIds = pattern.properties.map(() =>
           scope.generateUidIdentifier(),
         );

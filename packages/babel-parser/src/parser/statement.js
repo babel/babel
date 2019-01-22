@@ -463,6 +463,9 @@ export default class StatementParser extends ExpressionParser {
         if (this.match(tt.braceR)) {
           break;
         } else {
+          if (properties[properties.length - 1].type === "MatchRestElement") {
+            this.unexpected(null, 'Expected "}" after rest property');
+          }
           this.expect(tt.comma);
         }
       }
