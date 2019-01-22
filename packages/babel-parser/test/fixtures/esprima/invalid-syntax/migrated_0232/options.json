@@ -1,3 +1,3 @@
 {
-  "throws": "Unexpected token (1:37)"
+  "throws": "let is a reserved word in strict mode (1:37)"
 }

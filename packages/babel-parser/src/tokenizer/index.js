@@ -1384,8 +1384,8 @@ export default class Tokenizer extends LocationParser {
 
     if (
       prevType === tt._var ||
-      prevType === tt._let ||
-      prevType === tt._const
+      prevType === tt._const ||
+      prevType === tt.name
     ) {
       return false;
     }

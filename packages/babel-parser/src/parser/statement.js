@@ -3,8 +3,13 @@
 import * as N from "../types";
 import { types as tt, type TokenType } from "../tokenizer/types";
 import ExpressionParser from "./expression";
-import { isIdentifierChar } from "../util/identifier";
+import {
+  isIdentifierChar,
+  isIdentifierStart,
+  keywordRelationalOperator,
+} from "../util/identifier";
 import { lineBreak, skipWhiteSpace } from "../util/whitespace";
+import * as charCodes from "charcodes";
 
 // Reused empty array added for node fields that are always empty.
 
@@ -71,6 +76,33 @@ export default class StatementParser extends ExpressionParser {
     return this.finishNode(node, "InterpreterDirective");
   }
 
+  isLet() {
+    if (!this.isContextual("let")) {
+      return false;
+    }
+    skipWhiteSpace.lastIndex = this.state.pos;
+    const skip = skipWhiteSpace.exec(this.state.input);
+    // $FlowIgnore
+    const next = this.state.pos + skip[0].length;
+    const nextCh = this.state.input.charCodeAt(next);
+    if (
+      (nextCh === charCodes.leftCurlyBrace &&
+        !lineBreak.test(this.state.input.slice(this.state.end, next))) ||
+      nextCh === charCodes.leftSquareBracket
+    ) {
+      return true;
+    }
+    if (isIdentifierStart(nextCh)) {
+      let pos = next + 1;
+      while (isIdentifierChar(this.state.input.charCodeAt(pos))) {
+        ++pos;
+      }
+      const ident = this.state.input.slice(next, pos);
+      if (!keywordRelationalOperator.test(ident)) return true;
+    }
+    return false;
+  }
+
   // Parse a single statement.
   //
   // If expecting a statement and finding a slash operator, parse a
@@ -86,8 +118,14 @@ export default class StatementParser extends ExpressionParser {
   }
 
   parseStatementContent(declaration: boolean, topLevel: ?boolean): N.Statement {
-    const starttype = this.state.type;
+    let starttype = this.state.type;
     const node = this.startNode();
+    let kind;
+
+    if (this.isLet()) {
+      starttype = tt._var;
+      kind = "let";
+    }
 
     // Most types of statements are recognized by the keyword they
     // start with. Many are trivial to parse, some require a bit of
@@ -129,12 +167,11 @@ export default class StatementParser extends ExpressionParser {
       case tt._try:
         return this.parseTryStatement(node);
 
-      case tt._let:
       case tt._const:
-        if (!declaration) this.unexpected(); // NOTE: falls through to _var
-
       case tt._var:
-        return this.parseVarStatement(node, starttype);
+        kind = kind || this.state.value;
+        if (!declaration && kind !== "var") this.unexpected();
+        return this.parseVarStatement(node, kind);
 
       case tt._while:
         return this.parseWhileStatement(node);
@@ -424,18 +461,19 @@ export default class StatementParser extends ExpressionParser {
       return this.parseFor(node, null);
     }
 
-    if (this.match(tt._var) || this.match(tt._let) || this.match(tt._const)) {
+    const isLet = this.isLet();
+    if (this.match(tt._var) || this.match(tt._const) || isLet) {
       const init = this.startNode();
-      const varKind = this.state.type;
+      const kind = isLet ? "let" : this.state.value;
       this.next();
-      this.parseVar(init, true, varKind);
+      this.parseVar(init, true, kind);
       this.finishNode(init, "VariableDeclaration");
 
       if (this.match(tt._in) || this.isContextual("of")) {
         if (init.declarations.length === 1) {
           const declaration = init.declarations[0];
           const isForInInitializer =
-            varKind === tt._var &&
+            kind === "var" &&
             declaration.init &&
             declaration.id.type != "ObjectPattern" &&
             declaration.id.type != "ArrayPattern" &&
@@ -606,7 +644,7 @@ export default class StatementParser extends ExpressionParser {
 
   parseVarStatement(
     node: N.VariableDeclaration,
-    kind: TokenType,
+    kind: "var" | "let" | "const",
   ): N.VariableDeclaration {
     this.next();
     this.parseVar(node, false, kind);
@@ -862,12 +900,11 @@ export default class StatementParser extends ExpressionParser {
   parseVar(
     node: N.VariableDeclaration,
     isFor: boolean,
-    kind: TokenType,
+    kind: "var" | "let" | "const",
   ): N.VariableDeclaration {
     const declarations = (node.declarations = []);
     const isTypescript = this.hasPlugin("typescript");
-    // $FlowFixMe
-    node.kind = kind.keyword;
+    node.kind = kind;
     for (;;) {
       const decl = this.startNode();
       this.parseVarHead(decl);
@@ -875,7 +912,7 @@ export default class StatementParser extends ExpressionParser {
         decl.init = this.parseMaybeAssign(isFor);
       } else {
         if (
-          kind === tt._const &&
+          kind === "const" &&
           !(this.match(tt._in) || this.isContextual("of"))
         ) {
           // `const` with no initializer is allowed in TypeScript.
@@ -1638,11 +1675,7 @@ export default class StatementParser extends ExpressionParser {
       }
       this.parseDecorators(false);
       return this.parseClass(expr, true, true);
-    } else if (
-      this.match(tt._let) ||
-      this.match(tt._const) ||
-      this.match(tt._var)
-    ) {
+    } else if (this.match(tt._const) || this.match(tt._var) || this.isLet()) {
       return this.raise(
         this.state.start,
         "Only expressions, functions or classes are allowed as the `default` export.",
@@ -1661,7 +1694,7 @@ export default class StatementParser extends ExpressionParser {
 
   isExportDefaultSpecifier(): boolean {
     if (this.match(tt.name)) {
-      return this.state.value !== "async";
+      return this.state.value !== "async" && this.state.value !== "let";
     }
 
     if (!this.match(tt._default)) {
@@ -1710,9 +1743,9 @@ export default class StatementParser extends ExpressionParser {
     return (
       this.state.type.keyword === "var" ||
       this.state.type.keyword === "const" ||
-      this.state.type.keyword === "let" ||
       this.state.type.keyword === "function" ||
       this.state.type.keyword === "class" ||
+      this.isLet() ||
       this.isAsyncFunction()
     );
   }

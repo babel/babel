@@ -344,7 +344,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         if (
           this.match(tt._const) ||
-          this.match(tt._let) ||
+          this.isLet() ||
           ((this.isContextual("type") || this.isContextual("interface")) &&
             !insideModule)
         ) {
