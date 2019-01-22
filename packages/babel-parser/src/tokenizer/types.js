@@ -184,7 +184,7 @@ export const keywords = Object.create(null, {
   const: makeKeywordProps("const"),
   while: makeKeywordProps("while", { isLoop }),
   with: makeKeywordProps("with"),
-  new: makeKeywordProps("new"),
+  new: makeKeywordProps("new", { beforeExpr, startsExpr }),
   this: makeKeywordProps("this", { startsExpr }),
   super: makeKeywordProps("super", { startsExpr }),
   class: makeKeywordProps("class", { startsExpr }),
