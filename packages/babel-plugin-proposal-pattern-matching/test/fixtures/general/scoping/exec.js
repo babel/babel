@@ -25,31 +25,22 @@
       when v -> {
         var hoistMe = v;
         const noHoist = v;
+        // For the `alsoMe` case, see test `hoist-function`.
+      }
+      when y -> {
+        function foo () {};
+        (function bar () {});
       }
     }
   } while (0);
 
   expect(hoistMe).toBe(42);
+  expect(foo).toBe(undefined);
+  expect(() => bar).toThrow(ReferenceError);
 
   // TODO spec says SyntaxError; is that quite right?
   // If so, test that specifically
   expect(typeof noHoist).toBe('undefined');
-})();
-
-
-// For the `alsoMe` case, see test `hoist-function`.
-
-
-(() => {
-  do {
-    case (42) {
-      when v -> {}
-      // TODO currently a SyntaxError
-      // when y -> function foo () {}
-    }
-  } while (0);
-
-  //expect(typeof foo).toBe('function');
 })();
 
 

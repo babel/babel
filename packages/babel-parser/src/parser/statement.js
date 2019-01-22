@@ -391,11 +391,7 @@ export default class StatementParser extends ExpressionParser {
 
     this.expect(tt.thinArrow);
 
-    if (this.match(tt.braceL)) {
-      node.body = this.parseBlock(false);
-    } else {
-      node.body = this.parseStatement(false);
-    }
+    node.body = this.parseStatement(true);
 
     return this.finishNode(node, "WhenClause");
   }
