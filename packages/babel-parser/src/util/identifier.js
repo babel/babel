@@ -57,7 +57,6 @@ const keywords = new Set([
   "new",
   "in",
   "this",
-  "let",
   "const",
   "class",
   "extends",
@@ -70,6 +69,8 @@ const keywords = new Set([
 export function isKeyword(word: string): boolean {
   return keywords.has(word);
 }
+
+export const keywordRelationalOperator = /^in(stanceof)?$/;
 
 // ## Character categories
 

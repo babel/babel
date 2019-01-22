@@ -1,0 +1,120 @@
+{
+  "type": "File",
+  "start": 0,
+  "end": 13,
+  "loc": {
+    "start": {
+      "line": 1,
+      "column": 0
+    },
+    "end": {
+      "line": 2,
+      "column": 2
+    }
+  },
+  "program": {
+    "type": "Program",
+    "start": 0,
+    "end": 13,
+    "loc": {
+      "start": {
+        "line": 1,
+        "column": 0
+      },
+      "end": {
+        "line": 2,
+        "column": 2
+      }
+    },
+    "sourceType": "script",
+    "interpreter": null,
+    "body": [
+      {
+        "type": "IfStatement",
+        "start": 0,
+        "end": 10,
+        "loc": {
+          "start": {
+            "line": 1,
+            "column": 0
+          },
+          "end": {
+            "line": 1,
+            "column": 10
+          }
+        },
+        "test": {
+          "type": "NumericLiteral",
+          "start": 4,
+          "end": 5,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 4
+            },
+            "end": {
+              "line": 1,
+              "column": 5
+            }
+          },
+          "extra": {
+            "rawValue": 1,
+            "raw": "1"
+          },
+          "value": 1
+        },
+        "consequent": {
+          "type": "ExpressionStatement",
+          "start": 7,
+          "end": 10,
+          "loc": {
+            "start": {
+              "line": 1,
+              "column": 7
+            },
+            "end": {
+              "line": 1,
+              "column": 10
+            }
+          },
+          "expression": {
+            "type": "Identifier",
+            "start": 7,
+            "end": 10,
+            "loc": {
+              "start": {
+                "line": 1,
+                "column": 7
+              },
+              "end": {
+                "line": 1,
+                "column": 10
+              },
+              "identifierName": "let"
+            },
+            "name": "let"
+          }
+        },
+        "alternate": null
+      },
+      {
+        "type": "BlockStatement",
+        "start": 11,
+        "end": 13,
+        "loc": {
+          "start": {
+            "line": 2,
+            "column": 0
+          },
+          "end": {
+            "line": 2,
+            "column": 2
+          }
+        },
+        "body": [],
+        "directives": []
+      }
+    ],
+    "directives": []
+  }
+}

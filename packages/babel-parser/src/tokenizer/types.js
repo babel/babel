@@ -180,7 +180,6 @@ export const keywords = Object.create(null, {
   throw: makeKeywordProps("throw", { beforeExpr, prefix, startsExpr }),
   try: makeKeywordProps("try"),
   var: makeKeywordProps("var"),
-  let: makeKeywordProps("let"),
   const: makeKeywordProps("const"),
   while: makeKeywordProps("while", { isLoop }),
   with: makeKeywordProps("with"),

@@ -344,7 +344,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         if (
           this.match(tt._const) ||
-          this.match(tt._let) ||
+          this.isLet() ||
           ((this.isContextual("type") || this.isContextual("interface")) &&
             !insideModule)
         ) {
@@ -2344,8 +2344,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // parse flow type annotations on variable declarator heads - let foo: string = bar
-    parseVarHead(decl: N.VariableDeclarator): void {
-      super.parseVarHead(decl);
+    parseVarId(
+      decl: N.VariableDeclarator,
+      kind: "var" | "let" | "const",
+    ): void {
+      super.parseVarId(decl, kind);
       if (this.match(tt.colon)) {
         decl.id.typeAnnotation = this.flowParseTypeAnnotation();
         this.finishNode(decl.id, decl.id.type);
