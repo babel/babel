@@ -476,9 +476,17 @@ export default class StatementParser extends ExpressionParser {
       }
 
       const node = this.startNode();
-      node.key = this.parseIdentifier();
+      node.key =
+        this.match(tt.num) || this.match(tt.string)
+          ? this.parseExprAtom()
+          : this.parseIdentifier(true);
       if (this.eat(tt.colon)) {
         node.element = this.parseMatchPatternAtom();
+      } else {
+        if (node.key.type !== "Identifier") {
+          this.unexpected();
+        }
+        this.checkReservedWord(node.key.name, node.key.start, true, true);
       }
       properties.push(this.finishNode(node, "ObjectMatchProperty"));
 

@@ -40,6 +40,29 @@ expect(match_x1({x: 1.0})).toBe(true);
 
 
 /*
+  Just like in destructuring, an object pattern can mention keys that
+  aren't valid identifiers -- so long as it doesn't try to bind them.
+*/
+
+function match_nonident(input) {
+  case (input) {
+    when {case: 1} -> return 1;
+    when {"case": 2} -> return 2;
+    when {0: 3} -> return 3;
+  }
+  return false;
+}
+
+expect(match_nonident({case: 1})).toBe(1);
+expect(match_nonident({case: 2})).toBe(2);
+expect(match_nonident({case: 3})).toBe(false);
+expect(match_nonident({0: 3})).toBe(3);
+expect(match_nonident({0: 3, case: 1})).toBe(1);
+expect(match_nonident({})).toBe(false);
+expect(match_nonident(undefined)).toBe(false);
+
+
+/*
   case (input) {
     when {x, ...y} -> ... // binds all-other-properties to `y`.
     when {x, ...{y}} -> ... // SyntaxError -- see parser tests
