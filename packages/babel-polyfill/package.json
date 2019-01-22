@@ -11,7 +11,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-polyfill",
   "main": "lib/index.js",
   "dependencies": {
-    "core-js": "^2.6.2",
+    "core-js": "^2.6.3",
     "regenerator-runtime": "^0.12.0"
   }
 }
