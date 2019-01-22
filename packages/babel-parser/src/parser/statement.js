@@ -453,16 +453,19 @@ export default class StatementParser extends ExpressionParser {
     this.next();
     this.state.labels.push(loopLabel);
 
-    let forAwait = false;
-    if (this.state.inAsync && this.isContextual("await")) {
-      forAwait = true;
-      this.next();
+    let awaitAt = -1;
+    if (
+      (this.state.inAsync ||
+        (!this.state.inFunction && this.options.allowAwaitOutsideFunction)) &&
+      this.eatContextual("await")
+    ) {
+      awaitAt = this.state.lastTokStart;
     }
     this.expect(tt.parenL);
 
     if (this.match(tt.semi)) {
-      if (forAwait) {
-        this.unexpected();
+      if (awaitAt > -1) {
+        this.unexpected(awaitAt);
       }
       return this.parseFor(node, null);
     }
@@ -487,12 +490,12 @@ export default class StatementParser extends ExpressionParser {
           if (this.state.strict && isForInInitializer) {
             this.raise(this.state.start, "for-in initializer in strict mode");
           } else if (isForInInitializer || !declaration.init) {
-            return this.parseForIn(node, init, forAwait);
+            return this.parseForIn(node, init, awaitAt);
           }
         }
       }
-      if (forAwait) {
-        this.unexpected();
+      if (awaitAt > -1) {
+        this.unexpected(awaitAt);
       }
       return this.parseFor(node, init);
     }
@@ -505,12 +508,12 @@ export default class StatementParser extends ExpressionParser {
         : "for-in statement";
       this.toAssignable(init, undefined, description);
       this.checkLVal(init, undefined, undefined, description);
-      return this.parseForIn(node, init, forAwait);
+      return this.parseForIn(node, init, awaitAt);
     } else if (refShorthandDefaultPos.start) {
       this.unexpected(refShorthandDefaultPos.start);
     }
-    if (forAwait) {
-      this.unexpected();
+    if (awaitAt > -1) {
+      this.unexpected(awaitAt);
     }
     return this.parseFor(node, init);
   }
@@ -872,16 +875,16 @@ export default class StatementParser extends ExpressionParser {
   parseForIn(
     node: N.ForInOf,
     init: N.VariableDeclaration,
-    forAwait: boolean,
+    awaitAt: number,
   ): N.ForInOf {
     const type = this.match(tt._in) ? "ForInStatement" : "ForOfStatement";
-    if (forAwait) {
+    if (awaitAt > -1) {
       this.eatContextual("of");
     } else {
       this.next();
     }
     if (type === "ForOfStatement") {
-      node.await = !!forAwait;
+      node.await = awaitAt > -1;
     }
     node.left = init;
     node.right = this.parseExpression();
