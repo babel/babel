@@ -1948,8 +1948,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // `let x: number;`
-    parseVarHead(decl: N.VariableDeclarator): void {
-      super.parseVarHead(decl);
+    parseVarId(
+      decl: N.VariableDeclarator,
+      kind: "var" | "let" | "const",
+    ): void {
+      super.parseVarId(decl, kind);
       if (decl.id.type === "Identifier" && this.eat(tt.bang)) {
         decl.definite = true;
       }
