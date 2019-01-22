@@ -1,5 +1,7 @@
 var a = 1,
     b = 2,
     c = 3;
-var result = ((a, b), c);
+const _pipe = a;
+const _pipe2 = b;
+var result = c;
 expect(result).toBe(c);

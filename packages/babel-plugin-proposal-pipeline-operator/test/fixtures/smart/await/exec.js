@@ -4,3 +4,7 @@ async function myFunction(n) {
     |> Promise.resolve(#)
     |> await #;
 }
+
+return myFunction(-7).then(result => {
+  expect(result).toBe(7);
+});

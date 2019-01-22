@@ -1,5 +1,4 @@
-var _;
-
 var inc = x => x + 1;
 
-expect((_ = 10, inc(_))).toBe(11);
+const _pipe = 10;
+expect(inc(_pipe)).toBe(11);

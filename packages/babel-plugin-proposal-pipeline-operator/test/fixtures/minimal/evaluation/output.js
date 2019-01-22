@@ -1,5 +1,3 @@
-var _obj$prop;
-
 var obj = {
   get prop() {
     return this._prop = 1;
@@ -11,5 +9,6 @@ var obj = {
   }
 
 };
-var result = (_obj$prop = obj.prop, obj.method(_obj$prop));
+const _pipe = obj.prop;
+var result = obj.method(_pipe);
 expect(result).toBe(1);

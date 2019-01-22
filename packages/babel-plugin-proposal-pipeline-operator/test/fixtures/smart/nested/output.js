@@ -1,7 +1,11 @@
-var _topic2, _topic8;
+const _pipe = 5;
 
-var result = (_topic8 = (_topic2 = 5, Math.pow(_topic2, 2)), [10, 20, 30, 40, 50].filter(n => {
-  var _topic5, _topic7;
+const _pipe4 = Math.pow(_pipe, 2);
 
-  return _topic7 = (_topic5 = _topic8, n > _topic5), !_topic7;
-}));
+var result = [10, 20, 30, 40, 50].filter(n => {
+  const _pipe2 = _pipe4;
+
+  const _pipe3 = n > _pipe2;
+
+  return !_pipe3;
+});

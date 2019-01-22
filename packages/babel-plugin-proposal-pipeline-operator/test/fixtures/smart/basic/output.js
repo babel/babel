@@ -1,3 +1,7 @@
-var _topic2, _topic4, _topic6;
+const _pipe = 5;
 
-var result = (_topic6 = (_topic4 = (_topic2 = 5, _topic2 + 1), _topic4 + _topic4), Math.pow((x => x * 7)(_topic6), 2));
+const _pipe2 = _pipe + 1;
+
+const _pipe3 = _pipe2 + _pipe2;
+
+var result = Math.pow((x => x * 7)(_pipe3), 2);

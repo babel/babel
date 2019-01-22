@@ -1,6 +1,5 @@
-var _ref;
-
 var map = fn => array => array.map(fn);
 
-var result = (_ref = [10, 20], map(x => x * 20)(_ref));
+const _pipe = [10, 20];
+var result = map(x => x * 20)(_pipe);
 expect(result).toEqual([200, 400]);

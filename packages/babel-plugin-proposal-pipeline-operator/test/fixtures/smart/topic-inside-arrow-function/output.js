@@ -1,7 +1,13 @@
-var _ref, _topic2, _topic4, _ref2;
+const _pipe = -2.2 // -2.2
+;
 
-const result = (_ref2 = (_topic4 = (_topic2 = (_ref = -2.2 // -2.2
-, Math.floor(_ref) // -3
-), () => Math.pow(_topic2, 5) // () => -243
-), _topic4() // -243
-), Math.sign(_ref2)); // -1
+const _pipe2 = Math.floor(_pipe) // -3
+;
+
+const _pipe3 = () => Math.pow(_pipe2, 5) // () => -243
+;
+
+const _pipe4 = _pipe3() // -243
+;
+
+const result = Math.sign(_pipe4); // -1

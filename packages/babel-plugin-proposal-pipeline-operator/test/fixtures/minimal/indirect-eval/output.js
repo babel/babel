@@ -1,8 +1,7 @@
 (function () {
   'use strict';
 
-  var _functionReturn;
-
-  var result = (_functionReturn = '(function() { return this; })()', (0, eval)(_functionReturn));
+  const _pipe = '(function() { return this; })()';
+  var result = (0, eval)(_pipe);
   expect(result).not.toBeUndefined();
 })();

@@ -1,3 +1,5 @@
-var _topic2, _ref;
+const _pipe = v;
 
-_ref = (_topic2 = v, _topic2.method), f(_ref);
+const _pipe2 = _pipe.method();
+
+f(_pipe2);

@@ -1,6 +1,10 @@
-var _ref, _ref2, _sum;
+const _pipe = [5, 10];
 
-var result = (_sum = (_ref2 = (_ref = [5, 10], _ref.map(x => x * 2)), _ref2.reduce((a, b) => a + b)), _sum + 1);
+const _pipe2 = _pipe.map(x => x * 2);
+
+const _pipe3 = _pipe2.reduce((a, b) => a + b);
+
+var result = _pipe3 + 1;
 expect(result).toBe(31);
 
 var inc = x => x + 1;
@@ -8,8 +12,10 @@ var inc = x => x + 1;
 var double = x => x * 2;
 
 var result2 = [4, 9].map(x => {
-  var _x, _ref3;
+  const _pipe4 = x;
 
-  return _ref3 = (_x = x, inc(_x)), double(_ref3);
+  const _pipe5 = inc(_pipe4);
+
+  return double(_pipe5);
 });
 expect(result2).toEqual([10, 20]);
