@@ -63,12 +63,31 @@ expect(match_nonident(undefined)).toBe(false);
 
 
 /*
+  Object patterns don't match non-objects like strings, even if they
+  have the given property.
+
+  TODO compare this with spec, and reconcile.
+*/
+
+function match_0(input) {
+  case (input) {
+    when {0: v} -> return v;
+  }
+  return false;
+}
+
+expect(match_0("abc")).toBe(false);
+expect(match_0([4, 5, 6])).toBe(4); // TODO choose the behavior here
+expect(match_0({0: 1})).toBe(1);
+expect(match_0({})).toBe(false);
+
+
+/*
   case (input) {
     when {x, ...y} -> ... // binds all-other-properties to `y`.
     when {x, ...{y}} -> ... // SyntaxError -- see parser tests
   }
 */
-
 
 function match_x_rest(input) {
   case (input) {

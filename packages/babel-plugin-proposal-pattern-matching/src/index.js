@@ -61,9 +61,7 @@ class WhenRewriter {
         return;
 
       case "ObjectMatchPattern": {
-        this.failIf(
-          exprT`ID === null || typeof ID === "undefined"`({ ID: id }),
-        );
+        this.failIf(exprT`ID === null || typeof ID !== "object"`({ ID: id }));
 
         const propertyIds = [];
         const lhsPatterns = [];
