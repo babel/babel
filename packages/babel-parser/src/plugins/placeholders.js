@@ -82,7 +82,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     getTokenFromCode(code: number) {
       if (
         code === charCodes.percentSign &&
-        this.input.charCodeAt(this.state.pos + 1) === charCodes.percentSign
+        this.state.input.charCodeAt(this.state.pos + 1) ===
+          charCodes.percentSign
       ) {
         return this.finishOp(tt.placeholder, 2);
       }
