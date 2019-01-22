@@ -384,7 +384,7 @@ helpers.extends = helper("7.0.0-beta.0")`
   }
 `;
 
-helpers.objectSpread = helper("7.0.0-beta.0")`
+helpers.objectSpread = helper("7.3.1")`
   import defineProperty from "defineProperty";
 
   export default function _objectSpread(target) {
