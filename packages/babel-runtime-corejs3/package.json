@@ -9,7 +9,7 @@
   "repository": "https://github.com/babel/babel/tree/master/packages/babel-runtime-corejs3",
   "author": "Denis Pushkarev <zloirock@zloirock.ru>",
   "dependencies": {
-    "core-js-pure": "3.0.0-beta.9",
+    "core-js-pure": "3.0.0-beta.10",
     "regenerator-runtime": "^0.12.0"
   }
 }
