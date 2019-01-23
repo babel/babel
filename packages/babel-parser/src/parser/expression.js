@@ -22,9 +22,10 @@ import { types as tt, type TokenType } from "../tokenizer/types";
 import * as N from "../types";
 import LValParser from "./lval";
 import {
+  isKeyword,
+  isReservedWord,
   isStrictReservedWord,
   isStrictBindReservedWord,
-  isKeyword,
 } from "../util/identifier";
 import type { Pos, Position } from "../util/location";
 import * as charCodes from "charcodes";
@@ -1988,43 +1989,45 @@ export default class ExpressionParser extends LValParser {
     checkKeywords: boolean,
     isBinding: boolean,
   ): void {
-    if (this.state.inGenerator && word === "yield") {
+    const state = this.state;
+    if (state.inGenerator && word === "yield") {
       this.raise(
         startLoc,
         "Can not use 'yield' as identifier inside a generator",
       );
     }
 
-    if (this.state.inAsync && word === "await") {
+    if (state.inAsync && word === "await") {
       this.raise(
         startLoc,
         "Can not use 'await' as identifier inside an async function",
       );
     }
 
-    if (this.state.inClassProperty && word === "arguments") {
+    if (state.inClassProperty && word === "arguments") {
       this.raise(
         startLoc,
         "'arguments' is not allowed in class field initializer",
       );
     }
+    if (checkKeywords && isKeyword(word)) {
+      this.raise(startLoc, `Unexpected keyword '${word}'`);
+    }
 
-    if (this.isReservedWord(word) || (checkKeywords && isKeyword(word))) {
-      if (!this.state.inAsync && word === "await") {
+    const reservedTest = !state.strict
+      ? isReservedWord
+      : isBinding
+      ? isStrictBindReservedWord
+      : isStrictReservedWord;
+
+    if (reservedTest(word, this.inModule)) {
+      if (!state.inAsync && word === "await") {
         this.raise(
           startLoc,
           "Can not use keyword 'await' outside an async function",
         );
       }
-      this.raise(startLoc, word + " is a reserved word");
-    }
-
-    if (
-      this.state.strict &&
-      (isStrictReservedWord(word) ||
-        (isBinding && isStrictBindReservedWord(word)))
-    ) {
-      this.raise(startLoc, word + " is a reserved word in strict mode");
+      this.raise(startLoc, `Unexpected reserved word '${word}'`);
     }
   }
 

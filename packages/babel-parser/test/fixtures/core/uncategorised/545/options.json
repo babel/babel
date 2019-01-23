@@ -1,4 +1,4 @@
 {
   "sourceType": "module",
-  "throws": "public is a reserved word in strict mode (1:8)"
+  "throws": "Unexpected reserved word 'public' (1:8)"
 }

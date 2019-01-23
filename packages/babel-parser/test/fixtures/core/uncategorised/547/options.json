@@ -1,3 +1,3 @@
 {
-  "throws": "arguments is a reserved word in strict mode (2:8)"
+  "throws": "Unexpected reserved word 'arguments' (2:8)"
 }
