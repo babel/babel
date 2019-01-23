@@ -975,17 +975,9 @@ export default class StatementParser extends ExpressionParser {
 
     this.initFunction(node, isAsync);
 
-    if (this.match(tt.star)) {
-      node.generator = true;
-      this.next();
-    }
+    node.generator = this.eat(tt.star);
 
-    if (
-      isStatement &&
-      !optionalId &&
-      !this.match(tt.name) &&
-      !this.match(tt._yield)
-    ) {
+    if (isStatement && !optionalId && !this.match(tt.name)) {
       this.unexpected();
     }
 
@@ -1002,8 +994,8 @@ export default class StatementParser extends ExpressionParser {
       this.state.inAsync = isAsync;
       this.state.inGenerator = node.generator;
     }
-    if (this.match(tt.name) || this.match(tt._yield)) {
-      node.id = this.parseBindingIdentifier();
+    if (this.match(tt.name)) {
+      node.id = this.parseIdentifier();
     }
     if (isStatement) {
       this.state.inAsync = isAsync;

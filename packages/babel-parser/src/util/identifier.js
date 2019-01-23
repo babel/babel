@@ -62,7 +62,6 @@ const keywords = new Set([
   "extends",
   "export",
   "import",
-  "yield",
   "super",
 ]);
 

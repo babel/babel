@@ -1360,7 +1360,6 @@ export default class Tokenizer extends LocationParser {
     // `tt.name`.
     if (
       prevType === tt._return ||
-      prevType === tt._yield ||
       (prevType === tt.name && this.state.exprAllowed)
     ) {
       return lineBreak.test(
