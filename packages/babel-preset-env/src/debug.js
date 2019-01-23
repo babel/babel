@@ -8,7 +8,7 @@ const wordEnds = size => {
 
 // Outputs a message that shows which target(s) caused an item to be included:
 // transform-foo { "edge":"13", "firefox":"49", "ie":"10" }
-export const logPlugin = (item, targetVersions, list) => {
+export const logPluginOrPolyfill = (item, targetVersions, list) => {
   const minVersions = list[item] || {};
 
   const filteredList = Object.keys(targetVersions).reduce((result, env) => {
@@ -44,55 +44,60 @@ export const logEntryPolyfills = (
   importPolyfillIncluded,
   polyfills,
   filename,
-  onDebug,
+  polyfillTargets,
+  allBuiltInsList,
 ) => {
   if (!importPolyfillIncluded) {
-    console.log(
-      `
-[${filename}] \`import '@babel/polyfill'\` was not found.`,
-    );
+    console.log(`\n[${filename}] \`import '@babel/polyfill'\` was not found.`);
     return;
   }
   if (!polyfills.size) {
     console.log(
-      `
-[${filename}] Based on your targets, polyfills were not added.`,
+      `\n[${filename}] Based on your targets, polyfills were not added.`,
     );
     return;
   }
 
   console.log(
-    `
-[${filename}] Replaced \`@babel/polyfill\` with the following polyfill${wordEnds(
+    `\n[${filename}] Replaced \`@babel/polyfill\` with the following polyfill${wordEnds(
       polyfills.size,
     )}:`,
   );
-  onDebug(polyfills);
+  for (const polyfill of polyfills) {
+    logPluginOrPolyfill(polyfill, polyfillTargets, allBuiltInsList);
+  }
 };
 
-export const logUsagePolyfills = (polyfills, filename, onDebug) => {
+export const logUsagePolyfills = (
+  polyfills,
+  filename,
+  polyfillTargets,
+  allBuiltInsList,
+) => {
   if (!polyfills.size) {
     console.log(
-      `
-[${filename}] Based on your code and targets, core-js polyfills were not added.`,
+      `\n[${filename}] Based on your code and targets, core-js polyfills were not added.`,
     );
     return;
   }
   console.log(
-    `
-[${filename}] Added following core-js polyfill${wordEnds(polyfills.size)}:`,
+    `\n[${filename}] Added following core-js polyfill${wordEnds(
+      polyfills.size,
+    )}:`,
   );
-  onDebug(polyfills);
+  for (const polyfill of polyfills) {
+    logPluginOrPolyfill(polyfill, polyfillTargets, allBuiltInsList);
+  }
 };
 
-export const logUsageRegenerator = (regenerator, filename, onDebug) => {
+export const logUsageRegenerator = (regenerator, filename) => {
   if (!regenerator) {
     console.log(
-      `
-[${filename}] Based on your code and targets, regenerator-runtime was not added.`,
+      `\n[${filename}] Based on your code and targets, regenerator-runtime was not added.`,
     );
-    return;
+  } else {
+    console.log(
+      `[${filename}] Based on your code and targets, added regenerator-runtime.`,
+    );
   }
-  console.log(`[${filename}] Added regenerator-runtime:`);
-  onDebug(["regenerator-runtime"]);
 };

@@ -2,7 +2,7 @@
 
 import builtInsList from "../data/built-ins.json";
 import builtInsWebList from "../data/built-ins-web.json";
-import { logPlugin } from "./debug";
+import { logPluginOrPolyfill } from "./debug";
 import {
   getPlatformSpecificDefaultFor,
   getOptionSpecificExcludesFor,
@@ -184,7 +184,7 @@ export default declare((api, opts) => {
     console.log(`\nUsing modules transform: ${modules.toString()}`);
     console.log("\nUsing plugins:");
     transformations.forEach(transform => {
-      logPlugin(transform, targets, pluginList);
+      logPluginOrPolyfill(transform, targets, pluginList);
     });
 
     if (!useBuiltIns) {
@@ -192,10 +192,7 @@ export default declare((api, opts) => {
         "\nUsing polyfills: No polyfills were added, since the `useBuiltIns` option was not set.",
       );
     } else {
-      console.log(
-        `
-Using polyfills with \`${useBuiltIns}\` option:`,
-      );
+      console.log(`\nUsing polyfills with \`${useBuiltIns}\` option:`);
     }
   }
 
@@ -204,11 +201,8 @@ Using polyfills with \`${useBuiltIns}\` option:`,
       debug,
       polyfills,
       regenerator,
-      onDebug: polyfills => {
-        polyfills.forEach(polyfill =>
-          logPlugin(polyfill, polyfillTargets, allBuiltInsList),
-        );
-      },
+      polyfillTargets,
+      allBuiltInsList,
     };
 
     if (useBuiltIns === "usage") {
