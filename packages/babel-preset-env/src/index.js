@@ -49,12 +49,8 @@ const getPlugin = (pluginName: string) => {
 };
 
 const getBuiltInTargets = targets => {
-  const builtInTargets = {
-    ...targets,
-  };
-  if (builtInTargets.uglify != null) {
-    delete builtInTargets.uglify;
-  }
+  // eslint-disable-next-line no-unused-vars
+  const { uglify, ...builtInTargets } = targets;
   return builtInTargets;
 };
 
