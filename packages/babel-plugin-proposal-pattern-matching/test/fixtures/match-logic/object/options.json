@@ -1,0 +1,6 @@
+{
+  "plugins": [
+    "proposal-pattern-matching",
+    "transform-destructuring"
+  ]
+}
