@@ -195,7 +195,7 @@ export function referencesImport(moduleSource, importName) {
 
 export function getSource() {
   const node = this.node;
-  if (node.end) {
+  if (node.end && this.hub) {
     const code = this.hub.getCode();
     if (code) return code.slice(node.start, node.end);
   }
