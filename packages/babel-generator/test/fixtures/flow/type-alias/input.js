@@ -14,3 +14,5 @@ type overloads =
 ;
 
 type func = string => string;
+
+type D = X.Y<Z>;

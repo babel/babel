@@ -9,3 +9,4 @@ type union = {
 };
 type overloads = (x: string) => number & (x: number) => string;
 type func = (string) => string;
+type D = X.Y<Z>;
