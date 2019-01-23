@@ -1,6 +1,5 @@
 //@flow
 
-import semver from "semver";
 import builtInsList from "../data/built-ins.json";
 import builtInsWebList from "../data/built-ins-web.json";
 import { logPlugin } from "./debug";
@@ -8,6 +7,7 @@ import {
   getPlatformSpecificDefaultFor,
   getOptionSpecificExcludesFor,
 } from "./defaults";
+import { filterItems } from "./env-filter";
 import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
@@ -21,13 +21,7 @@ import addCoreJS3UsagePlugin from "./polyfills/corejs3/usage-plugin";
 import addRegeneratorUsagePlugin from "./polyfills/regenerator/usage-plugin";
 import getTargets from "./targets-parser";
 import availablePlugins from "./available-plugins";
-import {
-  filterStageFromList,
-  prettifyTargets,
-  semverify,
-  isUnreleasedVersion,
-} from "./utils";
-import type { Targets } from "./types";
+import { filterStageFromList, prettifyTargets } from "./utils";
 import { declare } from "@babel/helper-plugin-utils";
 
 const allBuiltInsList = Object.assign(builtInsList, builtInsWebList);
@@ -54,50 +48,6 @@ const pluginListWithoutProposals = filterStageFromList(
   proposalPlugins,
 );
 
-export const isPluginRequired = (
-  supportedEnvironments: Targets,
-  plugin: Targets,
-): boolean => {
-  const targetEnvironments: Array<string> = Object.keys(supportedEnvironments);
-
-  if (targetEnvironments.length === 0) {
-    return true;
-  }
-
-  const isRequiredForEnvironments: Array<string> = targetEnvironments.filter(
-    environment => {
-      // Feature is not implemented in that environment
-      if (!plugin[environment]) {
-        return true;
-      }
-
-      const lowestImplementedVersion: string = plugin[environment];
-      const lowestTargetedVersion: string = supportedEnvironments[environment];
-      // If targets has unreleased value as a lowest version, then don't require a plugin.
-      if (isUnreleasedVersion(lowestTargetedVersion, environment)) {
-        return false;
-        // Include plugin if it is supported in the unreleased environment, which wasn't specified in targets
-      } else if (isUnreleasedVersion(lowestImplementedVersion, environment)) {
-        return true;
-      }
-
-      if (!semver.valid(lowestTargetedVersion)) {
-        throw new Error(
-          `Invalid version passed for target "${environment}": "${lowestTargetedVersion}". ` +
-            "Versions must be in semver format (major.minor.patch)",
-        );
-      }
-
-      return semver.gt(
-        semverify(lowestImplementedVersion),
-        lowestTargetedVersion,
-      );
-    },
-  );
-
-  return isRequiredForEnvironments.length > 0;
-};
-
 const getBuiltInTargets = targets => {
   const builtInTargets = {
     ...targets,
@@ -121,42 +71,6 @@ export const transformIncludesAndExcludes = (opts: Array<string>): Object => {
       builtIns: new Set(),
     },
   );
-};
-
-const filterItems = (
-  list,
-  includes,
-  excludes,
-  targets,
-  defaultIncludes,
-  defaultExcludes,
-): Set<string> => {
-  const result = new Set();
-
-  for (const item in list) {
-    if (
-      !excludes.has(item) &&
-      (isPluginRequired(targets, list[item]) || includes.has(item))
-    ) {
-      result.add(item);
-    } else {
-      const shippedProposalsSyntax = pluginSyntaxMap.get(item);
-
-      if (shippedProposalsSyntax) {
-        result.add(shippedProposalsSyntax);
-      }
-    }
-  }
-
-  if (defaultIncludes) {
-    defaultIncludes.forEach(item => !excludes.has(item) && result.add(item));
-  }
-
-  if (defaultExcludes) {
-    defaultExcludes.forEach(item => !includes.has(item) && result.delete(item));
-  }
-
-  return result;
 };
 
 function supportsStaticESM(caller) {
@@ -220,6 +134,7 @@ export default declare((api, opts) => {
     transformTargets,
     null,
     getOptionSpecificExcludesFor({ loose }),
+    pluginSyntaxMap,
   );
 
   let polyfills;
@@ -234,6 +149,7 @@ export default declare((api, opts) => {
       exclude.builtIns,
       polyfillTargets,
       getPlatformSpecificDefaultFor(polyfillTargets),
+      null,
     );
   }
 

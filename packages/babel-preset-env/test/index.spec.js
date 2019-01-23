@@ -1,13 +1,14 @@
 "use strict";
 
 const babelPresetEnv = require("../lib/index.js");
+const envFilter = require("../lib/env-filter.js");
 
 describe("babel-preset-env", () => {
   describe("isPluginRequired", () => {
     const MAX_VERSION = `${Number.MAX_SAFE_INTEGER}.0.0`;
 
     it("returns true if no targets are specified", () => {
-      expect(babelPresetEnv.isPluginRequired({}, {})).toBe(true);
+      expect(envFilter.isPluginRequired({}, {})).toBe(true);
     });
 
     it("returns true if plugin feature is not implemented in one or more targets", () => {
@@ -22,12 +23,12 @@ describe("babel-preset-env", () => {
         chrome: MAX_VERSION,
         firefox: MAX_VERSION,
       };
-      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(false);
+      expect(envFilter.isPluginRequired(targets, plugin)).toBe(false);
 
       targets = {
         edge: "12",
       };
-      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(true);
+      expect(envFilter.isPluginRequired(targets, plugin)).toBe(true);
     });
 
     it("returns false if plugin feature is implemented by lower than target", () => {
@@ -38,7 +39,7 @@ describe("babel-preset-env", () => {
         chrome: MAX_VERSION,
       };
 
-      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(false);
+      expect(envFilter.isPluginRequired(targets, plugin)).toBe(false);
     });
 
     it("returns false if plugin feature is implemented is equal to target", () => {
@@ -48,7 +49,7 @@ describe("babel-preset-env", () => {
       const targets = {
         chrome: "49.0.0",
       };
-      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(false);
+      expect(envFilter.isPluginRequired(targets, plugin)).toBe(false);
     });
 
     it("returns true if plugin feature is implemented is greater than target", () => {
@@ -58,7 +59,7 @@ describe("babel-preset-env", () => {
       const targets = {
         chrome: "49.0.0",
       };
-      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(true);
+      expect(envFilter.isPluginRequired(targets, plugin)).toBe(true);
     });
 
     it("returns when target is a decimal", () => {
@@ -68,7 +69,7 @@ describe("babel-preset-env", () => {
       const targets = {
         node: "6.10.0",
       };
-      expect(babelPresetEnv.isPluginRequired(targets, plugin)).toBe(false);
+      expect(envFilter.isPluginRequired(targets, plugin)).toBe(false);
     });
 
     it("throws an error if target version is invalid", () => {
@@ -78,7 +79,7 @@ describe("babel-preset-env", () => {
       const targets = {
         chrome: 55,
       };
-      expect(() => babelPresetEnv.isPluginRequired(targets, plugin)).toThrow();
+      expect(() => envFilter.isPluginRequired(targets, plugin)).toThrow();
     });
   });
 
