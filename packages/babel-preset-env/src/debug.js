@@ -91,13 +91,9 @@ export const logUsagePolyfills = (
 };
 
 export const logUsageRegenerator = (regenerator, filename) => {
-  if (!regenerator) {
+  if (regenerator) {
     console.log(
-      `\n[${filename}] Based on your code and targets, regenerator-runtime was not added.`,
-    );
-  } else {
-    console.log(
-      `[${filename}] Based on your code and targets, added regenerator-runtime.`,
+      `\n[${filename}] Based on your code and targets, added regenerator-runtime.`,
     );
   }
 };

@@ -50,11 +50,10 @@ Using polyfills with `usage` option:
   es.array.iterator { "ie":"11" }
   web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
 
-[<CWD>/src/in.js] Based on your code and targets, regenerator-runtime was not added.
-
 [<CWD>/src/in2.js] Added following core-js polyfills:
   es.array.iterator { "ie":"11" }
   es.string.iterator { "ie":"11" }
   web.dom-collections.iterator { "chrome":"52", "firefox":"50", "ie":"11" }
+
 [<CWD>/src/in2.js] Based on your code and targets, added regenerator-runtime.
 Successfully compiled 2 files with Babel.

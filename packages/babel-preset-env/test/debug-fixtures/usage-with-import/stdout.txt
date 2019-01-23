@@ -19,6 +19,4 @@ Using plugins:
 Using polyfills with `usage` option:
 
 [<CWD>/src/in.js] Based on your code and targets, core-js polyfills were not added.
-
-[<CWD>/src/in.js] Based on your code and targets, regenerator-runtime was not added.
 Successfully compiled 1 file with Babel.

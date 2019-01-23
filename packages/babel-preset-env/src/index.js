@@ -137,22 +137,6 @@ export default declare((api, opts) => {
     pluginSyntaxMap,
   );
 
-  let polyfills;
-  let polyfillTargets;
-
-  if (useBuiltIns) {
-    polyfillTargets = getBuiltInTargets(targets);
-
-    polyfills = filterItems(
-      shippedProposals ? allBuiltInsList : builtInsListWithoutProposals,
-      include.builtIns,
-      exclude.builtIns,
-      polyfillTargets,
-      getPlatformSpecificDefaultFor(polyfillTargets),
-      null,
-    );
-  }
-
   const plugins = [];
   const pluginUseBuiltIns = useBuiltIns !== false;
 
@@ -197,6 +181,17 @@ export default declare((api, opts) => {
   }
 
   if (useBuiltIns === "usage" || useBuiltIns === "entry") {
+    const polyfillTargets = getBuiltInTargets(targets);
+
+    const polyfills = filterItems(
+      shippedProposals ? allBuiltInsList : builtInsListWithoutProposals,
+      include.builtIns,
+      exclude.builtIns,
+      polyfillTargets,
+      getPlatformSpecificDefaultFor(polyfillTargets),
+      null,
+    );
+
     const pluginOptions = {
       debug,
       polyfills,
@@ -207,7 +202,9 @@ export default declare((api, opts) => {
 
     if (useBuiltIns === "usage") {
       plugins.push([addCoreJS3UsagePlugin, pluginOptions]);
-      plugins.push([addRegeneratorUsagePlugin, pluginOptions]);
+      if (regenerator) {
+        plugins.push([addRegeneratorUsagePlugin, pluginOptions]);
+      }
     } else {
       plugins.push([addCoreJS3EntryPlugin, pluginOptions]);
     }

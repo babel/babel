@@ -8,14 +8,12 @@ export default function() {
       this.usesRegenerator = false;
     },
     visitor: {
-      Function(path, state) {
+      Function(path) {
         const { node } = path;
 
         if (!this.usesRegenerator && (node.generator || node.async)) {
           this.usesRegenerator = true;
-          if (state.opts.regenerator) {
-            createImport(path, "regenerator-runtime");
-          }
+          createImport(path, "regenerator-runtime");
         }
       },
     },
