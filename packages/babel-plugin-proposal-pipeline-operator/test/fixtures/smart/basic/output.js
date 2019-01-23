@@ -1,3 +1,3 @@
-var _topic2, _topic4, _topic6;
+var _ref, _ref2, _;
 
-var result = (_topic6 = (_topic4 = (_topic2 = 5, _topic2 + 1), _topic4 + _topic4), Math.pow((x => x * 7)(_topic6), 2));
+var result = (_ref = (_ref2 = (_ = 5, _ + 1), _ref2 + _ref2), Math.pow((x => x * 7)(_ref), 2));

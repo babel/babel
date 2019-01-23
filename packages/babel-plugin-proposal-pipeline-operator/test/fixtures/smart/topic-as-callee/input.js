@@ -1,1 +1,1 @@
-v |> #.method |> f;
+v |> #.method() |> f;

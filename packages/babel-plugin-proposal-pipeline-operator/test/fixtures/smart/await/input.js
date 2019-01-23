@@ -1,5 +1,6 @@
-async function myFunction() {
-  const value = -5.9
-  |> abs
-  |> await Math.floor(#);
+async function myFunction(n) {
+  return n
+    |> Math.abs
+    |> Promise.resolve(#)
+    |> await #;
 }

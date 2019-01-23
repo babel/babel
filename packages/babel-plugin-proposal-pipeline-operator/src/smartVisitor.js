@@ -1,19 +1,8 @@
 import { types as t } from "@babel/core";
-import minimalVisitor from "./minimalVisitor";
 
 const updateTopicReferenceVisitor = {
   PipelinePrimaryTopicReference(path) {
     path.replaceWith(this.topicId);
-  },
-  AwaitExpression(path) {
-    throw path.buildCodeFrameError(
-      "await is not supported inside pipeline expressions yet",
-    );
-  },
-  YieldExpression(path) {
-    throw path.buildCodeFrameError(
-      "yield is not supported inside pipeline expressions yet",
-    );
   },
   PipelineTopicExpression(path) {
     path.skip();
@@ -21,21 +10,38 @@ const updateTopicReferenceVisitor = {
 };
 
 const smartVisitor = {
-  ...minimalVisitor,
-  PipelineTopicExpression(path) {
-    const topicId = path.scope.generateUidIdentifier("topic");
+  BinaryExpression(path) {
+    const { scope } = path;
+    const { node } = path;
+    const { operator, left, right } = node;
+    if (operator !== "|>") return;
 
-    path.traverse(updateTopicReferenceVisitor, { topicId });
+    const placeholder = scope.generateUidIdentifierBasedOnNode(left);
+    scope.push({ id: placeholder });
 
-    const arrowFunctionExpression = t.arrowFunctionExpression(
-      [topicId],
-      path.node.expression,
+    let call;
+    if (t.isPipelineTopicExpression(right)) {
+      path
+        .get("right")
+        .traverse(updateTopicReferenceVisitor, { topicId: placeholder });
+
+      call = right.body ? right.body : right.expression;
+    } else {
+      // PipelineBareFunction
+      let callee = right.callee;
+      if (t.isIdentifier(callee, { name: "eval" })) {
+        callee = t.sequenceExpression([t.numericLiteral(0), callee]);
+      }
+
+      call = t.callExpression(callee, [t.cloneNode(placeholder)]);
+    }
+
+    path.replaceWith(
+      t.sequenceExpression([
+        t.assignmentExpression("=", t.cloneNode(placeholder), left),
+        call,
+      ]),
     );
-
-    path.replaceWith(arrowFunctionExpression);
-  },
-  PipelineBareFunction(path) {
-    path.replaceWith(path.node.callee);
   },
 };
 
