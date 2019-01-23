@@ -26,6 +26,16 @@ import { declare } from "@babel/helper-plugin-utils";
 
 const allBuiltInsList = Object.assign(builtInsList, builtInsWebList);
 
+const builtInsListWithoutProposals = filterStageFromList(
+  allBuiltInsList,
+  proposalBuiltIns,
+);
+
+const pluginListWithoutProposals = filterStageFromList(
+  pluginList,
+  proposalPlugins,
+);
+
 const getPlugin = (pluginName: string) => {
   const plugin = availablePlugins[pluginName];
 
@@ -37,16 +47,6 @@ const getPlugin = (pluginName: string) => {
 
   return plugin;
 };
-
-const builtInsListWithoutProposals = filterStageFromList(
-  allBuiltInsList,
-  proposalBuiltIns,
-);
-
-const pluginListWithoutProposals = filterStageFromList(
-  pluginList,
-  proposalPlugins,
-);
 
 const getBuiltInTargets = targets => {
   const builtInTargets = {
@@ -204,9 +204,9 @@ Using polyfills with \`${useBuiltIns}\` option:`,
       debug,
       polyfills,
       regenerator,
-      onDebug: (polyfills, context) => {
+      onDebug: polyfills => {
         polyfills.forEach(polyfill =>
-          logPlugin(polyfill, polyfillTargets, allBuiltInsList, context),
+          logPlugin(polyfill, polyfillTargets, allBuiltInsList),
         );
       },
     };

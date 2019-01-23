@@ -6,15 +6,9 @@ const wordEnds = size => {
   return size > 1 ? "s" : "";
 };
 
-export const logMessage = (message, context) => {
-  const pre = context ? `[${context}] ` : "";
-  const logStr = `  ${pre}${message}`;
-  console.log(logStr);
-};
-
 // Outputs a message that shows which target(s) caused an item to be included:
 // transform-foo { "edge":"13", "firefox":"49", "ie":"10" }
-export const logPlugin = (item, targetVersions, list, context) => {
+export const logPlugin = (item, targetVersions, list) => {
   const minVersions = list[item] || {};
 
   const filteredList = Object.keys(targetVersions).reduce((result, env) => {
@@ -43,7 +37,7 @@ export const logPlugin = (item, targetVersions, list, context) => {
     .replace(/^\{"/, '{ "')
     .replace(/"\}$/, '" }');
 
-  logMessage(`${item} ${formattedTargets}`, context);
+  console.log(`  ${item} ${formattedTargets}`);
 };
 
 export const logEntryPolyfills = (
