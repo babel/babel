@@ -20,14 +20,10 @@ export default function() {
       },
     },
     post() {
-      const { debug, onDebug } = this.opts;
+      const { debug } = this.opts;
 
       if (debug) {
-        logUsageRegenerator(
-          this.usesRegenerator,
-          this.file.opts.filename,
-          onDebug,
-        );
+        logUsageRegenerator(this.usesRegenerator, this.file.opts.filename);
       }
     },
   };

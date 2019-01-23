@@ -1,20 +1,8 @@
-// @flow
 import { logEntryPolyfills } from "../../debug";
 import { createImport, isPolyfillSource, isRequire } from "../../utils";
 
-type Plugin = {
-  visitor: Object,
-  pre: Function,
-  post: Function,
-  name: string,
-};
-
-export default function({ types: t }: { types: Object }): Plugin {
-  function replaceWithPolyfillImports(
-    path: Object,
-    polyfills: Array<string> | Set<string>,
-    regenerator: boolean,
-  ): void {
+export default function({ types: t }) {
+  function replaceWithPolyfillImports(path, polyfills, regenerator): void {
     if (regenerator) {
       createImport(path, "regenerator-runtime");
     }
@@ -64,14 +52,15 @@ export default function({ types: t }: { types: Object }): Plugin {
       this.importPolyfillIncluded = false;
     },
     post() {
-      const { debug, onDebug, polyfills } = this.opts;
+      const { debug, polyfillTargets, allBuiltInsList, polyfills } = this.opts;
 
       if (debug) {
         logEntryPolyfills(
           this.importPolyfillIncluded,
           polyfills,
           this.file.opts.filename,
-          onDebug,
+          polyfillTargets,
+          allBuiltInsList,
         );
       }
     },

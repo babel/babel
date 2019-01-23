@@ -248,10 +248,15 @@ export default function({ types: t }: { types: Object }): Plugin {
       this.builtIns = new Set();
     },
     post() {
-      const { debug, onDebug } = this.opts;
+      const { debug, polyfillTargets, allBuiltInsList } = this.opts;
 
       if (debug) {
-        logUsagePolyfills(this.builtIns, this.file.opts.filename, onDebug);
+        logUsagePolyfills(
+          this.builtIns,
+          this.file.opts.filename,
+          polyfillTargets,
+          allBuiltInsList,
+        );
       }
     },
     visitor: addAndRemovePolyfillImports,
