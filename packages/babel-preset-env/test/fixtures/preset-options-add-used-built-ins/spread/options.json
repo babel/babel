@@ -5,9 +5,7 @@
       {
         "useBuiltIns": "usage",
         "modules": false,
-        "exclude": [
-          "transform-spread"
-        ]
+        "exclude": ["transform-spread"]
       }
     ]
   ]
