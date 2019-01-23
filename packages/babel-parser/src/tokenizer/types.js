@@ -190,7 +190,6 @@ export const keywords = Object.create(null, {
   extends: makeKeywordProps("extends", { beforeExpr }),
   export: makeKeywordProps("export"),
   import: makeKeywordProps("import", { startsExpr }),
-  yield: makeKeywordProps("yield", { beforeExpr, startsExpr }),
   null: makeKeywordProps("null", { startsExpr }),
   true: makeKeywordProps("true", { startsExpr }),
   false: makeKeywordProps("false", { startsExpr }),

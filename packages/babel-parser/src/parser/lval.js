@@ -14,16 +14,14 @@ import type {
   SpreadElement,
 } from "../types";
 import type { Pos, Position } from "../util/location";
+import {
+  isStrictReservedWord,
+  isStrictBindReservedWord,
+} from "../util/identifier";
 import { NodeUtils } from "./node";
 
 export default class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
-  +checkReservedWord: (
-    word: string,
-    startLoc: number,
-    checkKeywords: boolean,
-    isBinding: boolean,
-  ) => void;
   +parseIdentifier: (liberal?: boolean) => Identifier;
   +parseMaybeAssign: (
     noIn?: ?boolean,
@@ -224,22 +222,11 @@ export default class LValParser extends NodeUtils {
     return this.finishNode(node, "RestElement");
   }
 
-  shouldAllowYieldIdentifier(): boolean {
-    return (
-      this.match(tt._yield) && !this.state.strict && !this.state.inGenerator
-    );
-  }
-
-  parseBindingIdentifier(): Identifier {
-    return this.parseIdentifier(this.shouldAllowYieldIdentifier());
-  }
-
   // Parses lvalue (assignable) atom.
   parseBindingAtom(): Pattern {
     switch (this.state.type) {
-      case tt._yield:
       case tt.name:
-        return this.parseBindingIdentifier();
+        return this.parseIdentifier();
 
       case tt.bracketL: {
         const node = this.startNode();
@@ -347,7 +334,16 @@ export default class LValParser extends NodeUtils {
   ): void {
     switch (expr.type) {
       case "Identifier":
-        this.checkReservedWord(expr.name, expr.start, false, true);
+        if (
+          this.state.strict &&
+          (isStrictReservedWord(expr.name) ||
+            isStrictBindReservedWord(expr.name))
+        ) {
+          this.raise(
+            expr.start,
+            expr.name + " is a reserved word in strict mode",
+          );
+        }
 
         if (checkClashes) {
           // we need to prefix this with an underscore for the cases where we have a key of
