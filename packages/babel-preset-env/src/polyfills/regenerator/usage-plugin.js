@@ -1,14 +1,7 @@
-// @flow
 import { createImport } from "../../utils";
 import { logUsageRegenerator } from "../../debug";
 
-type Plugin = {
-  visitor: Object,
-  pre: Function,
-  name: string,
-};
-
-export default function(): Plugin {
+export default function() {
   return {
     name: "regenerator-usage",
     pre() {
