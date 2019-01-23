@@ -127,7 +127,7 @@ export default class ExpressionParser extends LValParser {
     const startPos = this.state.start;
     const startLoc = this.state.startLoc;
     if (this.match(tt._yield) && this.state.inGenerator) {
-      let left = this.parseYield();
+      let left = this.parseYield(noIn);
       if (afterLeftParse) {
         left = afterLeftParse.call(this, left, startPos, startLoc);
       }
@@ -2063,7 +2063,7 @@ export default class ExpressionParser extends LValParser {
 
   // Parses yield expression inside generator.
 
-  parseYield(): N.YieldExpression {
+  parseYield(noIn?: ?boolean): N.YieldExpression {
     const node = this.startNode();
 
     if (this.state.inParameters) {
@@ -2088,7 +2088,7 @@ export default class ExpressionParser extends LValParser {
       node.argument = null;
     } else {
       node.delegate = this.eat(tt.star);
-      node.argument = this.parseMaybeAssign();
+      node.argument = this.parseMaybeAssign(noIn);
     }
     return this.finishNode(node, "YieldExpression");
   }
