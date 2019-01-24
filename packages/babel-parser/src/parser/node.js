@@ -91,12 +91,16 @@ export class NodeUtils extends UtilParser {
     return node;
   }
 
+  resetStartLocation(node: NodeBase, start: number, startLoc: Position): void {
+    node.start = start;
+    node.loc.start = startLoc;
+    if (this.options.ranges) node.range[0] = start;
+  }
+
   /**
    * Reset the start location of node to the start location of locationNode
    */
   resetStartLocationFromNode(node: NodeBase, locationNode: NodeBase): void {
-    node.start = locationNode.start;
-    node.loc.start = locationNode.loc.start;
-    if (this.options.ranges) node.range[0] = locationNode.range[0];
+    this.resetStartLocation(node, locationNode.start, locationNode.loc.start);
   }
 }
