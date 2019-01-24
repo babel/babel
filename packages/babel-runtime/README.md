@@ -9,13 +9,13 @@ See our website [@babel/runtime](https://babeljs.io/docs/en/next/babel-runtime.h
 Using npm:
 
 ```sh
-npm install --save @babel/polyfill
+npm install --save @babel/runtime
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/polyfill
+yarn add @babel/runtime
 ```
 
-> Because this is a polyfill (which will run before your source code), we need it to be a `dependency`, not a `devDependency`
+> This is meant to be used as a runtime `dependency` along with the Babel plugin [`@babel/plugin-transform-runtime`](plugin-transform-runtime.md).
