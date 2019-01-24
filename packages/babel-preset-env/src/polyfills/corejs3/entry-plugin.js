@@ -2,7 +2,7 @@ import { logEntryPolyfills } from "../../debug";
 import { createImport, isPolyfillSource, isRequire } from "../../utils";
 
 export default function({ types: t }) {
-  function replaceWithPolyfillImports(path, polyfills, regenerator): void {
+  function replaceWithPolyfillImports(path, polyfills, regenerator) {
     if (regenerator) {
       createImport(path, "regenerator-runtime");
     }
