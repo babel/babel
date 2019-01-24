@@ -388,7 +388,7 @@ export const patternLikeCommon = {
 
 defineType("Identifier", {
   builder: ["name"],
-  visitor: ["typeAnnotation"],
+  visitor: ["typeAnnotation", "decorators" /* for legacy param decorators */],
   aliases: ["Expression", "PatternLike", "LVal", "TSEntityName"],
   fields: {
     ...patternLikeCommon,
