@@ -57,7 +57,9 @@ const getBuiltInTargets = targets => {
 export const transformIncludesAndExcludes = (opts: Array<string>): Object => {
   return opts.reduce(
     (result, opt) => {
-      const target = opt.match(/^(es|esnext|web)\./) ? "builtIns" : "plugins";
+      const target = opt.match(/^(es|es6|es7|esnext|web)\./)
+        ? "builtIns"
+        : "plugins";
       result[target].add(opt);
       return result;
     },
