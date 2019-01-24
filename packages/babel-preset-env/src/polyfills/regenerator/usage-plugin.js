@@ -1,5 +1,4 @@
 import { createImport } from "../../utils";
-import { logUsageRegenerator } from "../../debug";
 
 export default function() {
   return {
@@ -18,10 +17,12 @@ export default function() {
       },
     },
     post() {
-      const { debug } = this.opts;
-
-      if (debug) {
-        logUsageRegenerator(this.usesRegenerator, this.file.opts.filename);
+      if (this.opts.debug && this.usesRegenerator) {
+        console.log(
+          `\n[${
+            this.file.opts.filename
+          }] Based on your code and targets, added regenerator-runtime.`,
+        );
       }
     },
   };
