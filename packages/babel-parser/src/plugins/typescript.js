@@ -1853,10 +1853,21 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseExportDeclaration(node: N.ExportNamedDeclaration): ?N.Declaration {
+      // Store original location/position
+      const startPos = this.state.start;
+      const startLoc = this.state.startLoc;
+
       // "export declare" is equivalent to just "export".
       const isDeclare = this.eatContextual("declare");
 
+      // Reset location to include `declare` in range
+      if (isDeclare) {
+        this.state.start = startPos;
+        this.state.startLoc = startLoc;
+      }
+
       let declaration: ?N.Declaration;
+
       if (this.match(tt.name)) {
         declaration = this.tsTryParseExportDeclaration();
       }

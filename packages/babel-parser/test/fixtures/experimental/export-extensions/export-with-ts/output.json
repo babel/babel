@@ -114,12 +114,12 @@
         "source": null,
         "declaration": {
           "type": "TSInterfaceDeclaration",
-          "start": 42,
+          "start": 34,
           "end": 56,
           "loc": {
             "start": {
               "line": 2,
-              "column": 15
+              "column": 7
             },
             "end": {
               "line": 2,
