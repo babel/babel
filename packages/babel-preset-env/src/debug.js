@@ -89,11 +89,3 @@ export const logUsagePolyfills = (
     logPluginOrPolyfill(polyfill, polyfillTargets, allBuiltInsList);
   }
 };
-
-export const logUsageRegenerator = (regenerator, filename) => {
-  if (regenerator) {
-    console.log(
-      `\n[${filename}] Based on your code and targets, added regenerator-runtime.`,
-    );
-  }
-};

@@ -28,11 +28,11 @@ export default function({ types: t }) {
       this.regeneratorImportExcluded = false;
     },
     post() {
-      const { debug, filename } = this.opts;
-
-      if (debug && this.regeneratorImportExcluded) {
+      if (this.opts.debug && this.regeneratorImportExcluded) {
         console.log(
-          `\n[${filename}] Based on your targets, regenerator-runtime import excluded.`,
+          `\n[${
+            this.file.opts.filename
+          }] Based on your targets, regenerator-runtime import excluded.`,
         );
       }
     },

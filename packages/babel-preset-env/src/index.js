@@ -16,9 +16,12 @@ import {
   features as proposalPlugins,
   pluginSyntaxMap,
 } from "../data/shipped-proposals.js";
-import addCoreJS3EntryPlugin from "./polyfills/corejs3/entry-plugin";
+import addCoreJS2UsagePlugin from "./polyfills/corejs2/usage-plugin";
 import addCoreJS3UsagePlugin from "./polyfills/corejs3/usage-plugin";
 import addRegeneratorUsagePlugin from "./polyfills/regenerator/usage-plugin";
+import replaceCoreJS2EntryPlugin from "./polyfills/corejs2/entry-plugin";
+import replaceCoreJS3EntryPlugin from "./polyfills/corejs3/entry-plugin";
+import removeRegeneratorEntryPlugin from "./polyfills/regenerator/entry-plugin";
 import getTargets from "./targets-parser";
 import availablePlugins from "./available-plugins";
 import { filterStageFromList, prettifyTargets } from "./utils";
@@ -199,12 +202,23 @@ export default declare((api, opts) => {
     };
 
     if (useBuiltIns === "usage") {
-      plugins.push([addCoreJS3UsagePlugin, pluginOptions]);
+      if (false) {
+        plugins.push([addCoreJS2UsagePlugin, pluginOptions]);
+      } else {
+        plugins.push([addCoreJS3UsagePlugin, pluginOptions]);
+      }
       if (regenerator) {
         plugins.push([addRegeneratorUsagePlugin, pluginOptions]);
       }
     } else {
-      plugins.push([addCoreJS3EntryPlugin, pluginOptions]);
+      if (false) {
+        plugins.push([replaceCoreJS2EntryPlugin, pluginOptions]);
+      } else {
+        plugins.push([replaceCoreJS3EntryPlugin, pluginOptions]);
+        if (!regenerator) {
+          plugins.push([removeRegeneratorEntryPlugin, pluginOptions]);
+        }
+      }
     }
   }
 
