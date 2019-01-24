@@ -19,22 +19,24 @@ export default function({ types: t }) {
     }
   }
 
-  function addCommonIterators(path: Object, builtIns: Set<string>): void {
-    addImport(path, "es.array.iterator", builtIns);
-    addImport(path, "es.string.iterator", builtIns);
-    addImport(path, "web.dom-collections.iterator", builtIns);
+  function addCommonIterators(path, polyfills, builtIns) {
+    addUnsupported(
+      path,
+      polyfills,
+      [
+        "es.array.iterator",
+        "es.string.iterator",
+        "web.dom-collections.iterator",
+      ],
+      builtIns,
+    );
   }
 
-  function addUnsupported(
-    path: Object,
-    polyfills: Set<string>,
-    builtIn: Array<string> | string,
-    builtIns: Set<string>,
-  ): void {
+  function addUnsupported(path, polyfills, builtIn, builtIns) {
     if (Array.isArray(builtIn)) {
-      for (const i of builtIn) {
-        if (polyfills.has(i)) {
-          addImport(path, i, builtIns);
+      for (const mod of builtIn) {
+        if (polyfills.has(mod)) {
+          addImport(path, mod, builtIns);
         }
       }
     } else {
@@ -87,22 +89,22 @@ export default function({ types: t }) {
     },
 
     // for-of loop
-    ForOfStatement(path) {
-      addCommonIterators(path, this.builtIns);
+    ForOfStatement(path, state) {
+      addCommonIterators(path, state.opts.polyfills, this.builtIns);
     },
 
     // spread
-    ArrayExpression(path) {
+    ArrayExpression(path, state) {
       if (path.node.elements.some(el => el.type === "SpreadElement")) {
-        addCommonIterators(path, this.builtIns);
+        addCommonIterators(path, state.opts.polyfills, this.builtIns);
       }
     },
 
     // yield*
-    YieldExpression(path) {
+    YieldExpression(path, state) {
       if (!path.node.delegate) return;
 
-      addCommonIterators(path, this.builtIns);
+      addCommonIterators(path, state.opts.polyfills, this.builtIns);
     },
 
     // Array.from
@@ -175,7 +177,7 @@ export default function({ types: t }) {
 
       // destructuring
       if (node.id.type === "ArrayPattern") {
-        addCommonIterators(path, this.builtIns);
+        addCommonIterators(path, state.opts.polyfills, this.builtIns);
       }
 
       if (!path.isReferenced()) return;
@@ -202,31 +204,41 @@ export default function({ types: t }) {
     },
 
     // destructuring
-    AssignmentExpression(path) {
+    AssignmentExpression(path, state) {
       if (path.node.left.type === "ArrayPattern") {
-        addCommonIterators(path, this.builtIns);
+        addCommonIterators(path, state.opts.polyfills, this.builtIns);
       }
     },
     // destructuring
-    CatchClause(path) {
+    CatchClause(path, state) {
       const { node } = path;
       if (node.param && node.param.type === "ArrayPattern") {
-        addCommonIterators(path, this.builtIns);
+        addCommonIterators(path, state.opts.polyfills, this.builtIns);
       }
     },
     // destructuring
-    ForXStatement(path) {
+    ForXStatement(path, state) {
       if (path.node.left.type === "ArrayPattern") {
-        addCommonIterators(path, this.builtIns);
+        addCommonIterators(path, state.opts.polyfills, this.builtIns);
       }
     },
 
-    Function(path) {
+    Function(path, state) {
       const { node } = path;
+      const { polyfills } = state.opts;
 
       // destructuring
       if (node.params.some(param => param.type === "ArrayPattern")) {
-        addCommonIterators(path, this.builtIns);
+        addCommonIterators(path, polyfills, this.builtIns);
+      }
+
+      if (node.async) {
+        addUnsupported(
+          path,
+          polyfills,
+          ["es.promise.finally", "es.promise"],
+          this.builtIns,
+        );
       }
     },
   };
