@@ -100,8 +100,8 @@ describe("normalize-options", () => {
         exclude: ["es.math.log.*"],
       });
       expect(normalized.exclude).toEqual([
-        "es.math.log1p",
         "es.math.log10",
+        "es.math.log1p",
         "es.math.log2",
       ]);
     });

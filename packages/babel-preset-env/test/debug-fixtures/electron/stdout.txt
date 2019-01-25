@@ -41,60 +41,69 @@ Using polyfills with `entry` option:
   es.symbol.description { "electron":"0.36" }
   es.symbol.has-instance { "electron":"0.36" }
   es.symbol.is-concat-spreadable { "electron":"0.36" }
-  es.symbol.iterator { "electron":"0.36" }
   es.symbol.match { "electron":"0.36" }
   es.symbol.replace { "electron":"0.36" }
   es.symbol.search { "electron":"0.36" }
   es.symbol.species { "electron":"0.36" }
   es.symbol.split { "electron":"0.36" }
-  es.symbol.to-primitive { "electron":"0.36" }
   es.symbol.to-string-tag { "electron":"0.36" }
-  es.symbol.unscopables { "electron":"0.36" }
-  es.array-buffer.constructor { "electron":"0.36" }
-  es.array-buffer.is-view { "electron":"0.36" }
-  es.array-buffer.slice { "electron":"0.36" }
-  es.array.concat { "electron":"0.36" }
-  es.array.every { "electron":"0.36" }
-  es.array.filter { "electron":"0.36" }
-  es.array.for-each { "electron":"0.36" }
+  es.object.assign { "electron":"0.36" }
+  es.object.entries { "electron":"0.36" }
+  es.object.get-own-property-descriptors { "electron":"0.36" }
+  es.object.values { "electron":"0.36" }
+  es.object.to-string { "electron":"0.36" }
+  es.object.define-getter { "electron":"0.36" }
+  es.object.define-setter { "electron":"0.36" }
+  es.object.lookup-getter { "electron":"0.36" }
+  es.object.lookup-setter { "electron":"0.36" }
+  es.function.has-instance { "electron":"0.36" }
   es.array.from { "electron":"0.36" }
+  es.array.concat { "electron":"0.36" }
+  es.array.filter { "electron":"0.36" }
+  es.array.includes { "electron":"0.36" }
   es.array.index-of { "electron":"0.36" }
-  es.array.is-array { "electron":"0.36" }
-  es.array.iterator { "electron":"0.36" }
   es.array.last-index-of { "electron":"0.36" }
   es.array.map { "electron":"0.36" }
-  es.array.reduce { "electron":"0.36" }
-  es.array.reduce-right { "electron":"0.36" }
   es.array.slice { "electron":"0.36" }
-  es.array.some { "electron":"0.36" }
   es.array.sort { "electron":"0.36" }
   es.array.splice { "electron":"0.36" }
   es.array.species { "electron":"0.36" }
-  es.data-view { "electron":"0.36" }
-  es.date.now { "electron":"0.36" }
-  es.date.to-iso-string { "electron":"0.36" }
-  es.date.to-json { "electron":"0.36" }
-  es.date.to-string { "electron":"0.36" }
-  es.function.bind { "electron":"0.36" }
-  es.function.has-instance { "electron":"0.36" }
-  es.function.name { "electron":"0.36" }
-  es.json.to-string-tag { "electron":"0.36" }
-  es.map { "electron":"0.36" }
+  es.array.iterator { "electron":"0.36" }
+  es.string.ends-with { "electron":"0.36" }
+  es.string.includes { "electron":"0.36" }
+  es.string.match { "electron":"0.36" }
+  es.string.pad-end { "electron":"0.36" }
+  es.string.pad-start { "electron":"0.36" }
+  es.string.replace { "electron":"0.36" }
+  es.string.search { "electron":"0.36" }
+  es.string.split { "electron":"0.36" }
+  es.string.starts-with { "electron":"0.36" }
+  es.string.trim { "electron":"0.36" }
+  es.regexp.constructor { "electron":"0.36" }
+  es.regexp.flags { "electron":"0.36" }
+  es.regexp.to-string { "electron":"0.36" }
+  es.math.acosh { "electron":"0.36" }
   es.math.to-string-tag { "electron":"0.36" }
-  es.object.assign { "electron":"0.36" }
-  es.object.create { "electron":"0.36" }
-  es.object.define-getter { "electron":"0.36" }
-  es.object.define-property { "electron":"0.36" }
-  es.object.define-properties { "electron":"0.36" }
-  es.object.define-setter { "electron":"0.36" }
-  es.object.entries { "electron":"0.36" }
-  es.object.get-own-property-descriptors { "electron":"0.36" }
-  es.object.lookup-getter { "electron":"0.36" }
-  es.object.lookup-setter { "electron":"0.36" }
-  es.object.to-string { "electron":"0.36" }
-  es.object.values { "electron":"0.36" }
+  es.json.to-string-tag { "electron":"0.36" }
   es.promise { "electron":"0.36" }
   es.promise.finally { "electron":"0.36" }
+  es.map { "electron":"0.36" }
+  es.set { "electron":"0.36" }
+  es.weak-map { "electron":"0.36" }
+  es.weak-set { "electron":"0.36" }
+  es.typed-array.int8-array { "electron":"0.36" }
+  es.typed-array.uint8-array { "electron":"0.36" }
+  es.typed-array.uint8-clamped-array { "electron":"0.36" }
+  es.typed-array.int16-array { "electron":"0.36" }
+  es.typed-array.uint16-array { "electron":"0.36" }
+  es.typed-array.int32-array { "electron":"0.36" }
+  es.typed-array.uint32-array { "electron":"0.36" }
+  es.typed-array.float32-array { "electron":"0.36" }
+  es.typed-array.float64-array { "electron":"0.36" }
+  es.typed-array.from { "electron":"0.36" }
+  es.typed-array.of { "electron":"0.36" }
+  es.typed-array.includes { "electron":"0.36" }
+  es.typed-array.to-string { "electron":"0.36" }
   es.reflect.apply { "electron":"0.36" }
   es.reflect.construct { "electron":"0.36" }
   es.reflect.define-property { "electron":"0.36" }
@@ -108,66 +117,6 @@ Using polyfills with `entry` option:
   es.reflect.prevent-extensions { "electron":"0.36" }
   es.reflect.set { "electron":"0.36" }
   es.reflect.set-prototype-of { "electron":"0.36" }
-  es.regexp.constructor { "electron":"0.36" }
-  es.regexp.flags { "electron":"0.36" }
-  es.regexp.to-string { "electron":"0.36" }
-  es.set { "electron":"0.36" }
-  es.string.anchor { "electron":"0.36" }
-  es.string.big { "electron":"0.36" }
-  es.string.blink { "electron":"0.36" }
-  es.string.bold { "electron":"0.36" }
-  es.string.fixed { "electron":"0.36" }
-  es.string.fontcolor { "electron":"0.36" }
-  es.string.fontsize { "electron":"0.36" }
-  es.string.italics { "electron":"0.36" }
-  es.string.link { "electron":"0.36" }
-  es.string.match { "electron":"0.36" }
-  es.string.pad-start { "electron":"0.36" }
-  es.string.pad-end { "electron":"0.36" }
-  es.string.replace { "electron":"0.36" }
-  es.string.search { "electron":"0.36" }
-  es.string.small { "electron":"0.36" }
-  es.string.split { "electron":"0.36" }
-  es.string.strike { "electron":"0.36" }
-  es.string.sub { "electron":"0.36" }
-  es.string.sup { "electron":"0.36" }
-  es.string.trim { "electron":"0.36" }
-  es.typed-array.int8-array { "electron":"0.36" }
-  es.typed-array.uint8-array { "electron":"0.36" }
-  es.typed-array.uint8-clamped-array { "electron":"0.36" }
-  es.typed-array.int16-array { "electron":"0.36" }
-  es.typed-array.uint16-array { "electron":"0.36" }
-  es.typed-array.int32-array { "electron":"0.36" }
-  es.typed-array.uint32-array { "electron":"0.36" }
-  es.typed-array.float32-array { "electron":"0.36" }
-  es.typed-array.float64-array { "electron":"0.36" }
-  es.typed-array.from { "electron":"0.36" }
-  es.typed-array.of { "electron":"0.36" }
-  es.typed-array.copy-within { "electron":"0.36" }
-  es.typed-array.every { "electron":"0.36" }
-  es.typed-array.fill { "electron":"0.36" }
-  es.typed-array.filter { "electron":"0.36" }
-  es.typed-array.find { "electron":"0.36" }
-  es.typed-array.find-index { "electron":"0.36" }
-  es.typed-array.for-each { "electron":"0.36" }
-  es.typed-array.includes { "electron":"0.36" }
-  es.typed-array.index-of { "electron":"0.36" }
-  es.typed-array.iterator { "electron":"0.36" }
-  es.typed-array.join { "electron":"0.36" }
-  es.typed-array.last-index-of { "electron":"0.36" }
-  es.typed-array.map { "electron":"0.36" }
-  es.typed-array.reduce { "electron":"0.36" }
-  es.typed-array.reduce-right { "electron":"0.36" }
-  es.typed-array.reverse { "electron":"0.36" }
-  es.typed-array.set { "electron":"0.36" }
-  es.typed-array.slice { "electron":"0.36" }
-  es.typed-array.some { "electron":"0.36" }
-  es.typed-array.sort { "electron":"0.36" }
-  es.typed-array.subarray { "electron":"0.36" }
-  es.typed-array.to-locale-string { "electron":"0.36" }
-  es.typed-array.to-string { "electron":"0.36" }
-  es.weak-map { "electron":"0.36" }
-  es.weak-set { "electron":"0.36" }
   web.dom-collections.for-each { "electron":"0.36" }
   web.dom-collections.iterator { "electron":"0.36" }
   web.immediate { "electron":"0.36" }
@@ -175,5 +124,4 @@ Using polyfills with `entry` option:
   web.url { "electron":"0.36" }
   web.url.to-json { "electron":"0.36" }
   web.url-search-params { "electron":"0.36" }
-  web.timers {}
 Successfully compiled 1 file with Babel.

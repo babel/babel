@@ -53,9 +53,36 @@ Using polyfills with `entry` option:
   es.symbol.to-primitive {}
   es.symbol.to-string-tag {}
   es.symbol.unscopables {}
-  es.array-buffer.constructor {}
-  es.array-buffer.is-view {}
-  es.array-buffer.slice {}
+  es.object.assign {}
+  es.object.create {}
+  es.object.define-property {}
+  es.object.define-properties {}
+  es.object.entries {}
+  es.object.freeze {}
+  es.object.get-own-property-descriptor {}
+  es.object.get-own-property-descriptors {}
+  es.object.get-own-property-names {}
+  es.object.get-prototype-of {}
+  es.object.is {}
+  es.object.is-extensible {}
+  es.object.is-frozen {}
+  es.object.is-sealed {}
+  es.object.keys {}
+  es.object.prevent-extensions {}
+  es.object.seal {}
+  es.object.set-prototype-of {}
+  es.object.values {}
+  es.object.to-string {}
+  es.object.define-getter {}
+  es.object.define-setter {}
+  es.object.lookup-getter {}
+  es.object.lookup-setter {}
+  es.function.bind {}
+  es.function.name {}
+  es.function.has-instance {}
+  es.array.from {}
+  es.array.is-array {}
+  es.array.of {}
   es.array.concat {}
   es.array.copy-within {}
   es.array.every {}
@@ -64,50 +91,54 @@ Using polyfills with `entry` option:
   es.array.find {}
   es.array.find-index {}
   es.array.for-each {}
-  es.array.from {}
   es.array.includes {}
   es.array.index-of {}
-  es.array.is-array {}
-  es.array.iterator {}
+  es.array.join {}
   es.array.last-index-of {}
   es.array.map {}
-  es.array.of {}
   es.array.reduce {}
   es.array.reduce-right {}
+  es.array.reverse {}
   es.array.slice {}
   es.array.some {}
   es.array.sort {}
   es.array.splice {}
   es.array.species {}
-  es.data-view {}
-  es.date.now {}
-  es.date.to-iso-string {}
-  es.date.to-json {}
-  es.date.to-primitive {}
-  es.date.to-string {}
-  es.function.bind {}
-  es.function.has-instance {}
-  es.function.name {}
-  es.json.to-string-tag {}
-  es.map {}
-  es.math.acosh {}
-  es.math.asinh {}
-  es.math.atanh {}
-  es.math.cbrt {}
-  es.math.clz32 {}
-  es.math.cosh {}
-  es.math.expm1 {}
-  es.math.fround {}
-  es.math.hypot {}
-  es.math.imul {}
-  es.math.log1p {}
-  es.math.log10 {}
-  es.math.log2 {}
-  es.math.sign {}
-  es.math.sinh {}
-  es.math.tanh {}
-  es.math.to-string-tag {}
-  es.math.trunc {}
+  es.array.iterator {}
+  es.string.from-code-point {}
+  es.string.raw {}
+  es.string.code-point-at {}
+  es.string.ends-with {}
+  es.string.includes {}
+  es.string.match {}
+  es.string.pad-end {}
+  es.string.pad-start {}
+  es.string.repeat {}
+  es.string.replace {}
+  es.string.search {}
+  es.string.split {}
+  es.string.starts-with {}
+  es.string.trim {}
+  es.string.iterator {}
+  es.string.anchor {}
+  es.string.big {}
+  es.string.blink {}
+  es.string.bold {}
+  es.string.fixed {}
+  es.string.fontcolor {}
+  es.string.fontsize {}
+  es.string.italics {}
+  es.string.link {}
+  es.string.small {}
+  es.string.strike {}
+  es.string.sub {}
+  es.string.sup {}
+  es.regexp.constructor {}
+  es.regexp.exec {}
+  es.regexp.flags {}
+  es.regexp.to-string {}
+  es.parse-int {}
+  es.parse-float {}
   es.number.constructor {}
   es.number.epsilon {}
   es.number.is-finite {}
@@ -118,77 +149,42 @@ Using polyfills with `entry` option:
   es.number.min-safe-integer {}
   es.number.parse-float {}
   es.number.parse-int {}
-  es.object.assign {}
-  es.object.create {}
-  es.object.define-getter {}
-  es.object.define-property {}
-  es.object.define-properties {}
-  es.object.define-setter {}
-  es.object.entries {}
-  es.object.freeze {}
-  es.object.get-own-property-descriptor {}
-  es.object.get-own-property-descriptors {}
-  es.object.get-own-property-names {}
-  es.object.get-prototype-of {}
-  es.object.is-extensible {}
-  es.object.is-frozen {}
-  es.object.is-sealed {}
-  es.object.is {}
-  es.object.keys {}
-  es.object.lookup-getter {}
-  es.object.lookup-setter {}
-  es.object.prevent-extensions {}
-  es.object.seal {}
-  es.object.set-prototype-of {}
-  es.object.to-string {}
-  es.object.values {}
+  es.number.to-fixed {}
+  es.number.to-precision {}
+  es.math.acosh {}
+  es.math.asinh {}
+  es.math.atanh {}
+  es.math.cbrt {}
+  es.math.clz32 {}
+  es.math.cosh {}
+  es.math.expm1 {}
+  es.math.fround {}
+  es.math.hypot {}
+  es.math.imul {}
+  es.math.log10 {}
+  es.math.log1p {}
+  es.math.log2 {}
+  es.math.sign {}
+  es.math.sinh {}
+  es.math.tanh {}
+  es.math.to-string-tag {}
+  es.math.trunc {}
+  es.date.now {}
+  es.date.to-json {}
+  es.date.to-iso-string {}
+  es.date.to-string {}
+  es.date.to-primitive {}
+  es.json.to-string-tag {}
   es.promise {}
   es.promise.finally {}
-  es.reflect.apply {}
-  es.reflect.construct {}
-  es.reflect.define-property {}
-  es.reflect.delete-property {}
-  es.reflect.get {}
-  es.reflect.get-own-property-descriptor {}
-  es.reflect.get-prototype-of {}
-  es.reflect.has {}
-  es.reflect.is-extensible {}
-  es.reflect.own-keys {}
-  es.reflect.prevent-extensions {}
-  es.reflect.set {}
-  es.reflect.set-prototype-of {}
-  es.regexp.constructor {}
-  es.regexp.flags {}
-  es.regexp.to-string {}
+  es.map {}
   es.set {}
-  es.string.anchor {}
-  es.string.big {}
-  es.string.blink {}
-  es.string.bold {}
-  es.string.code-point-at {}
-  es.string.ends-with {}
-  es.string.fixed {}
-  es.string.fontcolor {}
-  es.string.fontsize {}
-  es.string.from-code-point {}
-  es.string.includes {}
-  es.string.italics {}
-  es.string.iterator {}
-  es.string.link {}
-  es.string.match {}
-  es.string.pad-start {}
-  es.string.pad-end {}
-  es.string.raw {}
-  es.string.repeat {}
-  es.string.replace {}
-  es.string.search {}
-  es.string.small {}
-  es.string.split {}
-  es.string.starts-with {}
-  es.string.strike {}
-  es.string.sub {}
-  es.string.sup {}
-  es.string.trim {}
+  es.weak-map {}
+  es.weak-set {}
+  es.array-buffer.constructor {}
+  es.array-buffer.is-view {}
+  es.array-buffer.slice {}
+  es.data-view {}
   es.typed-array.int8-array {}
   es.typed-array.uint8-array {}
   es.typed-array.uint8-clamped-array {}
@@ -223,9 +219,19 @@ Using polyfills with `entry` option:
   es.typed-array.subarray {}
   es.typed-array.to-locale-string {}
   es.typed-array.to-string {}
-  es.weak-map {}
-  es.weak-set {}
-  es7.array.flat-map {}
+  es.reflect.apply {}
+  es.reflect.construct {}
+  es.reflect.define-property {}
+  es.reflect.delete-property {}
+  es.reflect.get {}
+  es.reflect.get-own-property-descriptor {}
+  es.reflect.get-prototype-of {}
+  es.reflect.has {}
+  es.reflect.is-extensible {}
+  es.reflect.own-keys {}
+  es.reflect.prevent-extensions {}
+  es.reflect.set {}
+  es.reflect.set-prototype-of {}
   web.dom-collections.for-each {}
   web.dom-collections.iterator {}
   web.immediate {}
@@ -234,4 +240,11 @@ Using polyfills with `entry` option:
   web.url {}
   web.url.to-json {}
   web.url-search-params {}
+  esnext.array.flat {}
+  esnext.array.flat-map {}
+  esnext.global-this {}
+  esnext.string.match-all {}
+  esnext.string.trim-start {}
+  esnext.string.trim-end {}
+  esnext.object.from-entries {}
 Successfully compiled 1 file with Babel.

@@ -3,11 +3,11 @@
     [
       "../../../../lib",
       {
-        "useBuiltIns": "usage",
-        "modules": false,
         "targets": {
-          "chrome": 71
-        }
+          "node": "11"
+        },
+        "modules": false,
+        "useBuiltIns": "entry"
       }
     ]
   ]
