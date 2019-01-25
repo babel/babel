@@ -1,19 +1,10 @@
 import type { Targets } from "./types";
 
-const defaultWebIncludes = [
-  "web.dom-collections.for-each",
-  "web.dom-collections.iterator",
-  "web.immediate",
-  "web.queue-microtask",
-  "web.timers",
-  "web.url",
-  "web.url.to-json",
-  "web.url-search-params",
-];
+const defaultWebIncludes = ["web.timers", "web.immediate", "web.dom.iterable"];
 
 const defaultExcludesForLooseMode = ["transform-typeof-symbol"];
 
-export const getPlatformSpecificDefaultFor = (
+export const getCoreJS2PlatformSpecificDefaultFor = (
   targets: Targets,
 ): ?Array<string> => {
   const targetNames = Object.keys(targets);

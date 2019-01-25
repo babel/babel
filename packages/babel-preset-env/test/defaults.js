@@ -3,33 +3,32 @@
 const defaults = require("../lib/defaults.js");
 
 const {
-  getPlatformSpecificDefaultFor,
+  getCoreJS2PlatformSpecificDefaultFor,
   getOptionSpecificExcludesFor,
 } = defaults;
 
 describe("defaults", () => {
-  describe("getPlatformSpecificDefaultFor", () => {
+  describe("getCoreJS2PlatformSpecificDefaultFor", () => {
     it("should return web polyfills for non-`node` platform", () => {
-      const defaultWebIncludesForChromeAndNode = getPlatformSpecificDefaultFor({
-        chrome: "63",
-        node: "8",
-      });
+      const defaultWebIncludesForChromeAndNode = getCoreJS2PlatformSpecificDefaultFor(
+        {
+          chrome: "63",
+          node: "8",
+        },
+      );
       expect(defaultWebIncludesForChromeAndNode).toEqual([
-        "web.dom-collections.for-each",
-        "web.dom-collections.iterator",
-        "web.immediate",
-        "web.queue-microtask",
         "web.timers",
-        "web.url",
-        "web.url.to-json",
-        "web.url-search-params",
+        "web.immediate",
+        "web.dom.iterable",
       ]);
     });
 
     it("shouldn't return web polyfills for node platform", () => {
-      const defaultWebIncludesForChromeAndNode = getPlatformSpecificDefaultFor({
-        node: "8",
-      });
+      const defaultWebIncludesForChromeAndNode = getCoreJS2PlatformSpecificDefaultFor(
+        {
+          node: "8",
+        },
+      );
       expect(defaultWebIncludesForChromeAndNode).toBeNull();
     });
   });
