@@ -2,7 +2,7 @@
 
 import invariant from "invariant";
 import browserslist from "browserslist";
-// import corejs2Polyfills from "../data/corejs2-built-ins.json";
+import corejs2Polyfills from "../data/corejs2-built-ins.json";
 import corejs3Polyfills from "core-js-compat/data";
 import moduleTransformations from "./module-transformations";
 import { isBrowsersQueryValid } from "./targets-parser";
@@ -23,10 +23,15 @@ const validateTopLevelOptions = (options: Options) => {
   }
 };
 
-const validIncludesAndExcludes = new Set([
+const validIncludesAndExcludesWithCoreJS2 = new Set([
   ...Object.keys(pluginsList),
   ...Object.keys(moduleTransformations).map(m => moduleTransformations[m]),
-  // ...Object.keys(corejs2Polyfills),
+  ...Object.keys(corejs2Polyfills),
+]);
+
+const validIncludesAndExcludesWithCoreJS3 = new Set([
+  ...Object.keys(pluginsList),
+  ...Object.keys(moduleTransformations).map(m => moduleTransformations[m]),
   ...Object.keys(corejs3Polyfills),
 ]);
 
@@ -39,21 +44,24 @@ const pluginToRegExp = (plugin: any): ?RegExp => {
   }
 };
 
-const selectPlugins = (regexp: ?RegExp): Array<string> =>
-  Array.from(validIncludesAndExcludes).filter(
-    item => regexp instanceof RegExp && regexp.test(item),
-  );
+const selectPlugins = (regexp: ?RegExp, corejs: number): Array<string> =>
+  Array.from(
+    corejs == 2
+      ? validIncludesAndExcludesWithCoreJS2
+      : validIncludesAndExcludesWithCoreJS3,
+  ).filter(item => regexp instanceof RegExp && regexp.test(item));
 
 const flatten = array => [].concat(...array);
 
 const expandIncludesAndExcludes = (
   plugins: Array<string | RegExp> = [],
   type: string,
+  corejs: number,
 ): Array<string> => {
   if (plugins.length === 0) return [];
 
   const selectedPlugins = plugins.map(plugin =>
-    selectPlugins(pluginToRegExp(plugin)),
+    selectPlugins(pluginToRegExp(plugin), corejs),
   );
   const invalidRegExpList = plugins.filter(
     (p, i) => selectedPlugins[i].length === 0,
@@ -182,13 +190,17 @@ export const validateUseBuiltInsOption = (
 export default function normalizeOptions(opts: Options) {
   validateTopLevelOptions(opts);
 
+  const corejs = opts.corejs && String(opts.corejs) === "2" ? 2 : 3;
+
   const include = expandIncludesAndExcludes(
     opts.include,
     TopLevelOptions.include,
+    corejs,
   );
   const exclude = expandIncludesAndExcludes(
     opts.exclude,
     TopLevelOptions.exclude,
+    corejs,
   );
 
   checkDuplicateIncludeExcludes(include, exclude);
@@ -216,5 +228,6 @@ export default function normalizeOptions(opts: Options) {
     spec: validateBoolOption(TopLevelOptions.spec, opts.spec, false),
     targets: normalizeTargets(opts.targets),
     useBuiltIns: validateUseBuiltInsOption(opts.useBuiltIns),
+    corejs,
   };
 }

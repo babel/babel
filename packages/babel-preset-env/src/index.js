@@ -1,10 +1,10 @@
 //@flow
 
-// import corejs2Polyfills from "../data/corejs2-built-ins.json";
+import corejs2Polyfills from "../data/corejs2-built-ins.json";
 import corejs3Polyfills from "core-js-compat/data";
 import { logPluginOrPolyfill } from "./debug";
 import {
-  // getCoreJS2PlatformSpecificDefaultFor,
+  getCoreJS2PlatformSpecificDefaultFor,
   getOptionSpecificExcludesFor,
 } from "./defaults";
 import { filterItems } from "./env-filter";
@@ -12,7 +12,7 @@ import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
 import {
-  // builtIns as proposalBuiltIns,
+  builtIns as proposalBuiltIns,
   corejs3ShippedProposalsList,
   features as proposalPlugins,
   pluginSyntaxMap,
@@ -28,12 +28,10 @@ import availablePlugins from "./available-plugins";
 import { filterStageFromList, prettifyTargets } from "./utils";
 import { declare } from "@babel/helper-plugin-utils";
 
-/*
 const corejs2PolyfillsWithoutProposals = filterStageFromList(
   corejs2Polyfills,
   proposalBuiltIns,
 );
-*/
 
 const pluginListWithoutProposals = filterStageFromList(
   pluginList,
@@ -110,6 +108,7 @@ export default declare((api, opts) => {
     spec,
     targets: optionsTargets,
     useBuiltIns,
+    corejs,
   } = normalizeOptions(opts);
   // TODO: remove this in next major
   let hasUglifyTarget = false;
@@ -201,13 +200,19 @@ export default declare((api, opts) => {
     const polyfillTargets = getBuiltInTargets(targets);
 
     const polyfills = filterItems(
-      shippedProposals
+      corejs === 2
+        ? shippedProposals
+          ? corejs2Polyfills
+          : corejs2PolyfillsWithoutProposals
+        : shippedProposals
         ? corejs3PolyfillsWithShippedProposals
         : corejs3PolyfillsWithoutProposals,
       include.builtIns,
       exclude.builtIns,
       polyfillTargets,
-      null, // getCoreJS2PlatformSpecificDefaultFor(polyfillTargets),
+      corejs === 2
+        ? getCoreJS2PlatformSpecificDefaultFor(polyfillTargets)
+        : null,
       null,
     );
 
@@ -216,11 +221,11 @@ export default declare((api, opts) => {
       polyfills,
       regenerator,
       polyfillTargets,
-      allBuiltInsList: corejs3Polyfills, // corejs2Polyfills,
+      allBuiltInsList: corejs === 2 ? corejs2Polyfills : corejs3Polyfills,
     };
 
     if (useBuiltIns === "usage") {
-      if (false) {
+      if (corejs === 2) {
         plugins.push([addCoreJS2UsagePlugin, pluginOptions]);
       } else {
         plugins.push([addCoreJS3UsagePlugin, pluginOptions]);
@@ -229,7 +234,7 @@ export default declare((api, opts) => {
         plugins.push([addRegeneratorUsagePlugin, pluginOptions]);
       }
     } else {
-      if (false) {
+      if (corejs === 2) {
         plugins.push([replaceCoreJS2EntryPlugin, pluginOptions]);
       } else {
         plugins.push([replaceCoreJS3EntryPlugin, pluginOptions]);

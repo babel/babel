@@ -11,6 +11,7 @@ export const TopLevelOptions = {
   spec: "spec",
   targets: "targets",
   useBuiltIns: "useBuiltIns",
+  corejs: "corejs",
 };
 
 export const ModulesOption = {
