@@ -3,6 +3,7 @@
 import invariant from "invariant";
 import browserslist from "browserslist";
 import corejs2Polyfills from "../data/corejs2-built-ins.json";
+import { defaultWebIncludes } from "./defaults";
 import corejs3Polyfills from "core-js-compat/data";
 import moduleTransformations from "./module-transformations";
 import { isBrowsersQueryValid } from "./targets-parser";
@@ -27,6 +28,7 @@ const validIncludesAndExcludesWithCoreJS2 = new Set([
   ...Object.keys(pluginsList),
   ...Object.keys(moduleTransformations).map(m => moduleTransformations[m]),
   ...Object.keys(corejs2Polyfills),
+  ...defaultWebIncludes,
 ]);
 
 const validIncludesAndExcludesWithCoreJS3 = new Set([
