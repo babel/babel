@@ -1,10 +1,11 @@
 //@flow
 
-import builtInsList from "../data/built-ins.json";
-import builtInsWebList from "../data/built-ins-web.json";
+// import corejs2ESPolyfills from "../data/built-ins.json";
+// import corejs2WebPolyfills from "../data/built-ins-web.json";
+import corejs3Polyfills from "core-js-compat/data";
 import { logPluginOrPolyfill } from "./debug";
 import {
-  getPlatformSpecificDefaultFor,
+  // getPlatformSpecificDefaultFor,
   getOptionSpecificExcludesFor,
 } from "./defaults";
 import { filterItems } from "./env-filter";
@@ -12,7 +13,8 @@ import moduleTransformations from "./module-transformations";
 import normalizeOptions from "./normalize-options.js";
 import pluginList from "../data/plugins.json";
 import {
-  builtIns as proposalBuiltIns,
+  // builtIns as proposalBuiltIns,
+  corejs3ShippedProposalsList,
   features as proposalPlugins,
   pluginSyntaxMap,
 } from "../data/shipped-proposals.js";
@@ -27,16 +29,33 @@ import availablePlugins from "./available-plugins";
 import { filterStageFromList, prettifyTargets } from "./utils";
 import { declare } from "@babel/helper-plugin-utils";
 
-const allBuiltInsList = Object.assign(builtInsList, builtInsWebList);
+/*
+const corejs2Polyfills = Object.assign(corejs2ESPolyfills, corejs2WebPolyfills);
 
-const builtInsListWithoutProposals = filterStageFromList(
-  allBuiltInsList,
+const corejs2PolyfillsWithoutProposals = filterStageFromList(
+  corejs2Polyfills,
   proposalBuiltIns,
 );
+*/
 
 const pluginListWithoutProposals = filterStageFromList(
   pluginList,
   proposalPlugins,
+);
+
+const corejs3PolyfillsWithoutProposals = Object.keys(corejs3Polyfills)
+  .filter(name => !name.startsWith("esnext."))
+  .reduce((memo, key) => {
+    memo[key] = corejs3Polyfills[key];
+    return memo;
+  }, {});
+
+const corejs3PolyfillsWithShippedProposals = corejs3ShippedProposalsList.reduce(
+  (memo, key) => {
+    memo[key] = corejs3Polyfills[key];
+    return memo;
+  },
+  { ...corejs3PolyfillsWithoutProposals },
 );
 
 const getPlugin = (pluginName: string) => {
@@ -185,11 +204,13 @@ export default declare((api, opts) => {
     const polyfillTargets = getBuiltInTargets(targets);
 
     const polyfills = filterItems(
-      shippedProposals ? allBuiltInsList : builtInsListWithoutProposals,
+      shippedProposals
+        ? corejs3PolyfillsWithShippedProposals
+        : corejs3PolyfillsWithoutProposals,
       include.builtIns,
       exclude.builtIns,
       polyfillTargets,
-      getPlatformSpecificDefaultFor(polyfillTargets),
+      null, // getPlatformSpecificDefaultFor(polyfillTargets),
       null,
     );
 
@@ -198,7 +219,7 @@ export default declare((api, opts) => {
       polyfills,
       regenerator,
       polyfillTargets,
-      allBuiltInsList,
+      allBuiltInsList: corejs3Polyfills, // corejs2Polyfills,
     };
 
     if (useBuiltIns === "usage") {

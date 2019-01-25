@@ -3,7 +3,7 @@
     ["../../lib", {
       "debug": true,
       "targets": {
-        "browsers": "chrome 60"
+        "browsers": "chrome 71"
       },
       "shippedProposals": true,
       "useBuiltIns": "entry"

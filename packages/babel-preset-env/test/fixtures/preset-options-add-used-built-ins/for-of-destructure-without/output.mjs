@@ -1,6 +1,5 @@
-for (const _ref of foo) {
-  const {
-    a
-  } = _ref;
+for (const {
+  a
+} of foo) {
   console.log(a);
 }

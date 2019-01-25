@@ -5,6 +5,16 @@ const builtIns = {
   "es7.array.flat-map": "Array.prototype.{flat, flatMap} / Array.prototype.flatMap"
 };
 
+const corejs3ShippedProposalsList = [
+  "esnext.array.flat",
+  "esnext.array.flat-map",
+  "esnext.global-this",
+  "esnext.string.match-all",
+  "esnext.string.trim-start",
+  "esnext.string.trim-end",
+  "esnext.object.from-entries",
+];
+
 const features = {};
 
 const pluginSyntaxMap = new Map([
@@ -15,4 +25,4 @@ const pluginSyntaxMap = new Map([
   ["proposal-json-strings", "syntax-json-strings"],
 ]);
 
-module.exports = { builtIns, features, pluginSyntaxMap };
+module.exports = { builtIns, corejs3ShippedProposalsList, features, pluginSyntaxMap };

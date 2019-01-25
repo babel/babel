@@ -1,4 +1,3 @@
-import "core-js/modules/web.dom-collections.iterator";
 Array.from; // static function
 
 Map; // top level built-in

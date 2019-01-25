@@ -46,12 +46,12 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
-  es.symbol { "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.symbol.async-iterator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.symbol.description { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es.symbol.has-instance { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol.has-instance { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.symbol.is-concat-spreadable { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.symbol.iterator { "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol.iterator { "ie":"10", "safari":"7" }
   es.symbol.match { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.symbol.replace { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.symbol.search { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
@@ -59,30 +59,102 @@ Using polyfills with `entry` option:
   es.symbol.split { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.symbol.to-primitive { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.symbol.to-string-tag { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es.symbol.unscopables { "ie":"10", "ios":"9", "safari":"7" }
-  es.array-buffer.constructor { "ie":"10", "ios":"9", "safari":"7" }
-  es.array-buffer.is-view { "ie":"10", "ios":"9", "safari":"7" }
+  es.symbol.unscopables { "ie":"10", "safari":"7" }
+  es.object.assign { "ie":"10", "safari":"7" }
+  es.object.define-property { "safari":"7" }
+  es.object.define-properties { "safari":"7" }
+  es.object.entries { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.object.freeze { "ie":"10", "safari":"7" }
+  es.object.get-own-property-descriptor { "ie":"10", "safari":"7" }
+  es.object.get-own-property-descriptors { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.object.get-own-property-names { "ie":"10", "safari":"7" }
+  es.object.get-prototype-of { "ie":"10", "safari":"7" }
+  es.object.is { "ie":"10", "safari":"7" }
+  es.object.is-extensible { "ie":"10", "safari":"7" }
+  es.object.is-frozen { "ie":"10", "safari":"7" }
+  es.object.is-sealed { "ie":"10", "safari":"7" }
+  es.object.keys { "ie":"10", "safari":"7" }
+  es.object.prevent-extensions { "ie":"10", "safari":"7" }
+  es.object.seal { "ie":"10", "safari":"7" }
+  es.object.set-prototype-of { "ie":"10", "safari":"7" }
+  es.object.values { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.object.to-string { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.object.define-getter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
+  es.object.define-setter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
+  es.object.lookup-getter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
+  es.object.lookup-setter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
+  es.function.name { "edge":"13", "ie":"10", "safari":"7" }
+  es.function.has-instance { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.array.from { "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
+  es.array.of { "ie":"10", "safari":"7" }
   es.array.concat { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
   es.array.copy-within { "ie":"10", "safari":"7" }
+  es.array.every { "safari":"7" }
   es.array.fill { "ie":"10", "safari":"7" }
   es.array.filter { "ie":"10", "ios":"9", "safari":"7" }
   es.array.find { "ie":"10", "safari":"7" }
   es.array.find-index { "ie":"10", "safari":"7" }
-  es.array.from { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.array.includes { "edge":"13", "ie":"10", "safari":"7" }
-  es.array.iterator { "chrome":"54", "firefox":"49", "ie":"10", "safari":"7" }
+  es.array.for-each { "safari":"7" }
+  es.array.includes { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.array.index-of { "safari":"7" }
+  es.array.join { "ie":"10", "safari":"7" }
+  es.array.last-index-of { "safari":"7" }
   es.array.map { "ie":"10", "ios":"9", "safari":"7" }
-  es.array.of { "ie":"10", "safari":"7" }
+  es.array.reduce { "safari":"7" }
+  es.array.reduce-right { "safari":"7" }
+  es.array.reverse { "ios":"9", "safari":"7" }
   es.array.slice { "ie":"10", "ios":"9", "safari":"7" }
+  es.array.some { "safari":"7" }
   es.array.sort { "chrome":"54", "ios":"9", "safari":"7" }
   es.array.splice { "ie":"10", "ios":"9", "safari":"7" }
   es.array.species { "ie":"10", "ios":"9", "safari":"7" }
-  es.date.to-json { "ios":"9", "safari":"7" }
-  es.date.to-primitive { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.function.has-instance { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es.function.name { "edge":"13", "ie":"10" }
-  es.json.to-string-tag { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es.map { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.array.iterator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.string.from-code-point { "ie":"10", "safari":"7" }
+  es.string.raw { "ie":"10", "safari":"7" }
+  es.string.code-point-at { "ie":"10", "safari":"7" }
+  es.string.ends-with { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.string.includes { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.string.match { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.string.pad-end { "chrome":"54", "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.string.pad-start { "chrome":"54", "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.string.repeat { "ie":"10", "safari":"7" }
+  es.string.replace { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.string.search { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.string.split { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.string.starts-with { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.string.trim { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.string.iterator { "ie":"10", "safari":"7" }
+  es.string.anchor { "ie":"10", "safari":"7" }
+  es.string.big { "ie":"10", "safari":"7" }
+  es.string.blink { "ie":"10", "safari":"7" }
+  es.string.bold { "ie":"10", "safari":"7" }
+  es.string.fixed { "ie":"10", "safari":"7" }
+  es.string.fontcolor { "ie":"10", "safari":"7" }
+  es.string.fontsize { "ie":"10", "safari":"7" }
+  es.string.italics { "ie":"10", "safari":"7" }
+  es.string.link { "ie":"10", "safari":"7" }
+  es.string.small { "ie":"10", "safari":"7" }
+  es.string.strike { "ie":"10", "safari":"7" }
+  es.string.sub { "ie":"10", "safari":"7" }
+  es.string.sup { "ie":"10", "safari":"7" }
+  es.regexp.constructor { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.regexp.exec { "safari":"7" }
+  es.regexp.flags { "edge":"13", "ie":"10", "safari":"7" }
+  es.regexp.to-string { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.parse-int { "safari":"7" }
+  es.parse-float { "safari":"7" }
+  es.number.constructor { "ie":"10", "safari":"7" }
+  es.number.epsilon { "ie":"10", "safari":"7" }
+  es.number.is-finite { "ie":"10", "safari":"7" }
+  es.number.is-integer { "ie":"10", "safari":"7" }
+  es.number.is-nan { "ie":"10", "safari":"7" }
+  es.number.is-safe-integer { "ie":"10", "safari":"7" }
+  es.number.max-safe-integer { "ie":"10", "safari":"7" }
+  es.number.min-safe-integer { "ie":"10", "safari":"7" }
+  es.number.parse-float { "ie":"10", "ios":"9", "safari":"7" }
+  es.number.parse-int { "ie":"10", "safari":"7" }
+  es.number.to-fixed { "edge":"13", "ie":"10", "safari":"7" }
+  es.number.to-precision { "safari":"7" }
   es.math.acosh { "ie":"10", "safari":"7" }
   es.math.asinh { "ie":"10", "safari":"7" }
   es.math.atanh { "ie":"10", "safari":"7" }
@@ -92,92 +164,30 @@ Using polyfills with `entry` option:
   es.math.expm1 { "ie":"10", "safari":"7" }
   es.math.fround { "ie":"10", "safari":"7" }
   es.math.hypot { "ie":"10", "safari":"7" }
-  es.math.imul { "ie":"10" }
-  es.math.log1p { "ie":"10", "safari":"7" }
+  es.math.imul { "ie":"10", "safari":"7" }
   es.math.log10 { "ie":"10", "safari":"7" }
+  es.math.log1p { "ie":"10", "safari":"7" }
   es.math.log2 { "ie":"10", "safari":"7" }
   es.math.sign { "ie":"10", "safari":"7" }
   es.math.sinh { "ie":"10", "safari":"7" }
   es.math.tanh { "ie":"10", "safari":"7" }
   es.math.to-string-tag { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.math.trunc { "ie":"10", "safari":"7" }
-  es.number.constructor { "ie":"10", "safari":"7" }
-  es.number.epsilon { "ie":"10", "safari":"7" }
-  es.number.is-finite { "ie":"10", "safari":"7" }
-  es.number.is-integer { "ie":"10", "safari":"7" }
-  es.number.is-nan { "ie":"10", "safari":"7" }
-  es.number.is-safe-integer { "ie":"10", "safari":"7" }
-  es.number.max-safe-integer { "ie":"10", "safari":"7" }
-  es.number.min-safe-integer { "ie":"10", "safari":"7" }
-  es.number.parse-float { "ie":"10", "safari":"7" }
-  es.number.parse-int { "ie":"10", "safari":"7" }
-  es.object.assign { "ie":"10", "ios":"9", "safari":"7" }
-  es.object.define-getter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
-  es.object.define-setter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
-  es.object.entries { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.object.freeze { "ie":"10", "safari":"7" }
-  es.object.get-own-property-descriptor { "ie":"10", "safari":"7" }
-  es.object.get-own-property-descriptors { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es.object.get-own-property-names { "ie":"10", "safari":"7" }
-  es.object.get-prototype-of { "ie":"10", "safari":"7" }
-  es.object.is-extensible { "ie":"10", "safari":"7" }
-  es.object.is-frozen { "ie":"10", "safari":"7" }
-  es.object.is-sealed { "ie":"10", "safari":"7" }
-  es.object.is { "ie":"10", "safari":"7" }
-  es.object.keys { "ie":"10", "safari":"7" }
-  es.object.lookup-getter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
-  es.object.lookup-setter { "chrome":"54", "edge":"13", "ie":"10", "safari":"7" }
-  es.object.prevent-extensions { "ie":"10", "safari":"7" }
-  es.object.seal { "ie":"10", "safari":"7" }
-  es.object.set-prototype-of { "ie":"10", "safari":"7" }
-  es.object.to-string { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es.object.values { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.promise { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.date.to-json { "ios":"9", "safari":"7" }
+  es.date.to-iso-string { "safari":"7" }
+  es.date.to-string { "safari":"7" }
+  es.date.to-primitive { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.json.to-string-tag { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.promise { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.promise.finally { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es.reflect.apply { "ie":"10", "ios":"9", "safari":"7" }
-  es.reflect.construct { "ie":"10", "ios":"9", "safari":"7" }
-  es.reflect.define-property { "ie":"10", "ios":"9", "safari":"7" }
-  es.reflect.delete-property { "ie":"10", "ios":"9", "safari":"7" }
-  es.reflect.get { "ie":"10", "ios":"9", "safari":"7" }
-  es.reflect.get-own-property-descriptor { "ie":"10", "ios":"9", "safari":"7" }
-  es.reflect.get-prototype-of { "ie":"10", "ios":"9", "safari":"7" }
-  es.reflect.has { "ie":"10", "ios":"9", "safari":"7" }
-  es.reflect.is-extensible { "ie":"10", "ios":"9", "safari":"7" }
-  es.reflect.own-keys { "ie":"10", "ios":"9", "safari":"7" }
-  es.reflect.prevent-extensions { "ie":"10", "ios":"9", "safari":"7" }
-  es.reflect.set { "ie":"10", "ios":"9", "safari":"7" }
-  es.reflect.set-prototype-of { "ie":"10", "ios":"9", "safari":"7" }
-  es.regexp.constructor { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.regexp.flags { "edge":"13", "ie":"10", "safari":"7" }
-  es.regexp.to-string { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.map { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.set { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  es.string.anchor { "ie":"10" }
-  es.string.big { "ie":"10" }
-  es.string.blink { "ie":"10" }
-  es.string.bold { "ie":"10" }
-  es.string.code-point-at { "ie":"10", "safari":"7" }
-  es.string.ends-with { "ie":"10", "safari":"7" }
-  es.string.fixed { "ie":"10" }
-  es.string.fontcolor { "ie":"10" }
-  es.string.fontsize { "ie":"10" }
-  es.string.from-code-point { "ie":"10", "safari":"7" }
-  es.string.includes { "ie":"10", "safari":"7" }
-  es.string.italics { "ie":"10" }
-  es.string.iterator { "ie":"10", "safari":"7" }
-  es.string.link { "ie":"10" }
-  es.string.match { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.string.pad-start { "chrome":"54", "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.string.pad-end { "chrome":"54", "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.string.raw { "ie":"10", "safari":"7" }
-  es.string.repeat { "ie":"10", "safari":"7" }
-  es.string.replace { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.string.search { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.string.small { "ie":"10" }
-  es.string.split { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
-  es.string.starts-with { "ie":"10", "safari":"7" }
-  es.string.strike { "ie":"10" }
-  es.string.sub { "ie":"10" }
-  es.string.sup { "ie":"10" }
+  es.weak-map { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.weak-set { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.array-buffer.constructor { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.array-buffer.is-view { "ie":"10", "safari":"7" }
+  es.array-buffer.slice { "ie":"10", "ios":"9", "safari":"7" }
+  es.data-view { "safari":"7" }
   es.typed-array.int8-array { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.typed-array.uint8-array { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   es.typed-array.uint8-clamped-array { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
@@ -205,21 +215,31 @@ Using polyfills with `entry` option:
   es.typed-array.reduce { "ie":"10", "ios":"9", "safari":"7" }
   es.typed-array.reduce-right { "ie":"10", "ios":"9", "safari":"7" }
   es.typed-array.reverse { "ie":"10", "ios":"9", "safari":"7" }
-  es.typed-array.set { "ie":"10", "ios":"9", "safari":"7" }
+  es.typed-array.set { "ie":"10", "safari":"7" }
   es.typed-array.slice { "ie":"10", "ios":"9", "safari":"7" }
   es.typed-array.some { "ie":"10", "ios":"9", "safari":"7" }
   es.typed-array.sort { "ie":"10", "ios":"9", "safari":"7" }
-  es.typed-array.subarray { "ie":"10", "ios":"9", "safari":"7" }
-  es.typed-array.to-locale-string { "ie":"10", "ios":"9", "safari":"7" }
-  es.typed-array.to-string { "ie":"10", "ios":"9", "safari":"7" }
-  es.weak-map { "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
-  es.weak-set { "edge":"13", "firefox":"49", "ie":"10", "safari":"7" }
+  es.typed-array.subarray { "ie":"10", "safari":"7" }
+  es.typed-array.to-locale-string { "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.typed-array.to-string { "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  es.reflect.apply { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.reflect.construct { "edge":"13", "ie":"10", "ios":"9", "safari":"7" }
+  es.reflect.define-property { "ie":"10", "ios":"9", "safari":"7" }
+  es.reflect.delete-property { "ie":"10", "ios":"9", "safari":"7" }
+  es.reflect.get { "ie":"10", "ios":"9", "safari":"7" }
+  es.reflect.get-own-property-descriptor { "ie":"10", "ios":"9", "safari":"7" }
+  es.reflect.get-prototype-of { "ie":"10", "ios":"9", "safari":"7" }
+  es.reflect.has { "ie":"10", "ios":"9", "safari":"7" }
+  es.reflect.is-extensible { "ie":"10", "ios":"9", "safari":"7" }
+  es.reflect.own-keys { "ie":"10", "ios":"9", "safari":"7" }
+  es.reflect.prevent-extensions { "ie":"10", "ios":"9", "safari":"7" }
+  es.reflect.set { "ie":"10", "ios":"9", "safari":"7" }
+  es.reflect.set-prototype-of { "ie":"10", "ios":"9", "safari":"7" }
   web.dom-collections.for-each { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   web.dom-collections.iterator { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   web.immediate { "chrome":"54", "firefox":"49", "ios":"9", "safari":"7" }
   web.queue-microtask { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   web.url { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  web.url.to-json { "chrome":"54", "edge":"13", "firefox":"49" }
+  web.url.to-json { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   web.url-search-params { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
-  web.timers {}
 Successfully compiled 1 file with Babel.
