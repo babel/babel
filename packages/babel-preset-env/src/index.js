@@ -4,7 +4,7 @@
 import corejs3Polyfills from "core-js-compat/data";
 import { logPluginOrPolyfill } from "./debug";
 import {
-  // getPlatformSpecificDefaultFor,
+  // getCoreJS2PlatformSpecificDefaultFor,
   getOptionSpecificExcludesFor,
 } from "./defaults";
 import { filterItems } from "./env-filter";
@@ -207,7 +207,7 @@ export default declare((api, opts) => {
       include.builtIns,
       exclude.builtIns,
       polyfillTargets,
-      null, // getPlatformSpecificDefaultFor(polyfillTargets),
+      null, // getCoreJS2PlatformSpecificDefaultFor(polyfillTargets),
       null,
     );
 
