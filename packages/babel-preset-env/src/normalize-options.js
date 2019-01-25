@@ -2,8 +2,7 @@
 
 import invariant from "invariant";
 import browserslist from "browserslist";
-// import builtInsList from "../data/built-ins.json";
-// import builtInsWebList from "../data/built-ins-web.json";
+// import corejs2Polyfills from "../data/corejs2-built-ins.json";
 import corejs3Polyfills from "core-js-compat/data";
 import moduleTransformations from "./module-transformations";
 import { isBrowsersQueryValid } from "./targets-parser";
@@ -11,8 +10,6 @@ import { getValues, findSuggestion } from "./utils";
 import pluginsList from "../data/plugins.json";
 import { TopLevelOptions, ModulesOption, UseBuiltInsOption } from "./options";
 import type { Targets, Options, ModuleOption, BuiltInsOption } from "./types";
-
-// const corejs2Polyfills = Object.assign(builtInsList, builtInsWebList);
 
 const validateTopLevelOptions = (options: Options) => {
   for (const option in options) {

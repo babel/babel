@@ -289,7 +289,7 @@ const generateData = (environments, features) => {
   });
 };
 
-["plugin", "built-in"].forEach(target => {
+["plugin", "corejs2-built-in"].forEach(target => {
   const newData = generateData(
     environments,
     require(`../data/${target}-features`)

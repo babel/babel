@@ -1,7 +1,6 @@
 //@flow
 
-// import corejs2ESPolyfills from "../data/built-ins.json";
-// import corejs2WebPolyfills from "../data/built-ins-web.json";
+// import corejs2Polyfills from "../data/corejs2-built-ins.json";
 import corejs3Polyfills from "core-js-compat/data";
 import { logPluginOrPolyfill } from "./debug";
 import {
@@ -30,8 +29,6 @@ import { filterStageFromList, prettifyTargets } from "./utils";
 import { declare } from "@babel/helper-plugin-utils";
 
 /*
-const corejs2Polyfills = Object.assign(corejs2ESPolyfills, corejs2WebPolyfills);
-
 const corejs2PolyfillsWithoutProposals = filterStageFromList(
   corejs2Polyfills,
   proposalBuiltIns,
