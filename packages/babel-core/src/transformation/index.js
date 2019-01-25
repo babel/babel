@@ -107,6 +107,9 @@ function transformFile(file: File, pluginPasses: PluginPasses): void {
       passes,
       file.opts.wrapPluginVisitorMethod,
     );
+
+    file.invalidCache();
+
     traverse(file.ast, visitor, file.scope);
 
     for (const [plugin, pass] of passPairs) {
