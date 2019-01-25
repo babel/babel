@@ -26,6 +26,8 @@ require("core-js/modules/es.symbol.async-iterator");
 
 require("core-js/modules/es.symbol");
 
+require("core-js/modules/es.symbol.description");
+
 require("core-js/modules/es.promise");
 
 require("core-js/modules/es.promise.finally");
