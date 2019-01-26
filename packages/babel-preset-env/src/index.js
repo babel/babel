@@ -95,6 +95,12 @@ function supportsStaticESM(caller) {
 export default declare((api, opts) => {
   api.assertVersion(7);
 
+  if (opts.useBuiltIns && opts.corejs === undefined) {
+    console.log(
+      "\nWith `useBuiltIns` option, required direct setting of `corejs` option\n",
+    );
+  }
+
   const {
     configPath,
     debug,
