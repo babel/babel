@@ -1,0 +1,4 @@
+{
+    "plugins": [["transform-typescript", { "isTSX": true }]]
+}
+  
