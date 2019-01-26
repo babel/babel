@@ -116,7 +116,7 @@ export default class NodePath {
 
   getData(key: string, def?: any): any {
     let val = this.data[key];
-    if (!val && def) val = this.data[key] = def;
+    if (val === undefined && def) val = this.data[key] = def;
     return val;
   }
 
