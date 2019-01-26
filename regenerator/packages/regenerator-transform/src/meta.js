@@ -7,7 +7,9 @@
 
 import assert from "assert";
 import { getTypes } from "./util.js";
-let m = require("private").makeAccessor();
+import { makeAccessor } from "private";
+
+let m = makeAccessor();
 let hasOwn = Object.prototype.hasOwnProperty;
 
 function makePredicate(propertyName, knownTypes) {

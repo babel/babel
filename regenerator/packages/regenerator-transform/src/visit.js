@@ -12,6 +12,7 @@ import { hoist } from "./hoist";
 import { Emitter } from "./emit";
 import replaceShorthandObjectMethod from "./replaceShorthandObjectMethod";
 import * as util from "./util";
+import { makeAccessor } from "private";
 
 exports.getVisitor = ({ types: t }) => ({
   Function: {
@@ -194,7 +195,7 @@ function getOuterFnExpr(funPath) {
   return t.clone(node.id);
 }
 
-const getMarkInfo = require("private").makeAccessor();
+const getMarkInfo = makeAccessor();
 
 function getMarkedFunctionId(funPath) {
   const t = util.getTypes();

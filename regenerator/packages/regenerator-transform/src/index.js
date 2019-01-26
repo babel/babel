@@ -5,9 +5,11 @@
  * LICENSE file in the root directory of this source tree.
  */
 
+import { getVisitor } from "./visit";
+
 export default function (context) {
   const plugin = {
-    visitor: require("./visit").getVisitor(context),
+    visitor: getVisitor(context),
   };
 
   // Some presets manually call child presets, but fail to pass along the

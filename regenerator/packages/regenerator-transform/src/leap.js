@@ -6,8 +6,9 @@
  */
 
 import assert from "assert";
+import { Emitter } from "./emit";
 import { inherits } from "util";
-import { getTypes } from "./util.js";
+import { getTypes } from "./util";
 
 function Entry() {
   assert.ok(this instanceof Entry);
@@ -127,7 +128,6 @@ exports.LabeledEntry = LabeledEntry;
 function LeapManager(emitter) {
   assert.ok(this instanceof LeapManager);
 
-  let Emitter = require("./emit").Emitter;
   assert.ok(emitter instanceof Emitter);
 
   this.emitter = emitter;
