@@ -1,3 +1,5 @@
+With `useBuiltIns` option, required direct setting of `corejs` option
+
 Warning, the following targets are using a decimal version:
 
   electron: 0.36
