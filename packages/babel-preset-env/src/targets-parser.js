@@ -167,12 +167,13 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
   validateTargetNames(targets);
 
   // `esmodules` as a target indicates the specific set of browsers supporting ES Modules.
-  // These values OVERRIDE the `browsers` field.
+  // These values OVERRIDE the `browsers` and `intersectsbrowsers` fields.
   if (targets.esmodules) {
     const supportsESModules = browserModulesData["es6.module"];
     targets.browsers = Object.keys(supportsESModules)
       .map(browser => `${browser} ${supportsESModules[browser]}`)
       .join(", ");
+    targets.intersectbrowsers = "";
   }
 
   // Parse browsers target via browserslist
@@ -184,9 +185,22 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
   if (shouldParseBrowsers || shouldSearchForConfig) {
     browserslist.defaults = objectToBrowserslist(targets);
 
-    const browsers = browserslist(browsersquery, {
+    let browsers = browserslist(browsersquery, {
       path: options.configPath,
     });
+
+    // Parse intersectbrowsers target via browserslist
+    const intersectbrowsersquery = validateBrowsers(targets.intersectbrowsers);
+    const shouldParseIntersectbrowsers = !!targets.intersectbrowsers;
+    if (shouldParseIntersectbrowsers) {
+      // note: when browserslist is modified to take an intersection parameter, this can be simplified
+      const intersectbrowsers = browserslist(intersectbrowsersquery, {
+        path: options.configPath,
+      });
+
+      // intersect
+      browsers = browsers.filter(x => intersectbrowsers.includes(x));
+    }
 
     const queryBrowsers = getLowestVersions(browsers);
     targets = mergeBrowsers(queryBrowsers, targets);
@@ -201,7 +215,10 @@ const getTargets = (targets: Object = {}, options: Object = {}): Targets => {
     .sort()
     .reduce(
       (results: ParsedResult, target: string): ParsedResult => {
-        if (target !== TargetNames.browsers) {
+        if (
+          target !== TargetNames.browsers &&
+          target !== TargetNames.intersectbrowsers
+        ) {
           const value = targets[target];
 
           // Warn when specifying minor/patch as a decimal

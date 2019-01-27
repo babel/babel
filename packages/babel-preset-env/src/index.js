@@ -200,6 +200,23 @@ export default declare((api, opts) => {
     console.log("");
   }
 
+  if (
+    optionsTargets &&
+    optionsTargets.esmodules &&
+    optionsTargets.intersectbrowsers
+  ) {
+    console.log("");
+    console.log(
+      "@babel/preset-env: esmodules and intersectbrowsers targets have been specified together.",
+    );
+    console.log(
+      `\`intersectbrowsers\` target, \`${
+        optionsTargets.intersectbrowsers
+      }\` will be ignored.`,
+    );
+    console.log("");
+  }
+
   const targets = getTargets(optionsTargets, {
     ignoreBrowserslistConfig,
     configPath,

@@ -33,6 +33,7 @@ export const TargetNames = {
   esmodules: "esmodules",
   node: "node",
   browsers: "browsers",
+  intersectbrowsers: "intersectbrowsers",
   chrome: "chrome",
   opera: "opera",
   edge: "edge",
