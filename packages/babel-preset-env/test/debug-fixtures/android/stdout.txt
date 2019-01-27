@@ -1,3 +1,5 @@
+With `useBuiltIns` option, required direct setting of `corejs` option
+
 @babel/preset-env: `DEBUG` option
 
 Using targets:

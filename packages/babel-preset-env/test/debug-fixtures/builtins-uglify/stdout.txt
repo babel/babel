@@ -1,3 +1,6 @@
+With `useBuiltIns` option, required direct setting of `corejs` option
+
+
 The uglify target has been deprecated. Set the top level
 option `forceAllTransforms: true` instead.
 
