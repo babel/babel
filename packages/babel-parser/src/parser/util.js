@@ -116,7 +116,7 @@ export default class UtilParser extends Tokenizer {
   // Throws if the current token and the prev one are separated by a space.
   assertNoSpace(message: string = "Unexpected space."): void {
     if (this.state.start > this.state.lastTokEnd) {
-      this.raise(this.state.start, message);
+      this.raise(this.state.lastTokEnd, message);
     }
   }
 
