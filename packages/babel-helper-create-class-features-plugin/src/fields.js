@@ -410,8 +410,14 @@ function buildPrivateInstanceMethodDeclaration(prop, privateNamesMap) {
     getterDeclared,
     setterDeclared,
   } = privateName;
-  const { params, body } = prop.node;
-  const methodValue = t.functionExpression(methodId, params, body);
+  const { params, body, generator, async } = prop.node;
+  const methodValue = t.functionExpression(
+    methodId,
+    params,
+    body,
+    generator,
+    async,
+  );
   const isGetter = getId && !getterDeclared && params.length === 0;
   const isSetter = setId && !setterDeclared && params.length > 0;
 
