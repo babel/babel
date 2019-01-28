@@ -7,18 +7,22 @@ for (var _ref of []) {
 }
 
 for (var _ref2 of []) {
-  var {
+  var _ref3 = _ref2;
+  ({
     a
-  } = _ref2,
-      b = babelHelpers.objectWithoutProperties(_ref2, ["a"]);
+  } = _ref3);
+  b = babelHelpers.objectWithoutProperties(_ref3, ["a"]);
+  _ref3;
 }
 
 async function a() {
-  for await (var _ref3 of []) {
-    var {
+  for await (var _ref4 of []) {
+    var _ref5 = _ref4;
+    ({
       a
-    } = _ref3,
-        b = babelHelpers.objectWithoutProperties(_ref3, ["a"]);
+    } = _ref5);
+    b = babelHelpers.objectWithoutProperties(_ref5, ["a"]);
+    _ref5;
   }
 } // skip
 
