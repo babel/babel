@@ -15,7 +15,5 @@ npm install --save @babel/runtime
 or using yarn:
 
 ```sh
-yarn add @babel/runtime
+yarn add @babel/runtime 
 ```
-
-> This is meant to be used as a runtime `dependency` along with the Babel plugin [`@babel/plugin-transform-runtime`](plugin-transform-runtime.md).
