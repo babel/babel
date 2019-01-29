@@ -77,6 +77,24 @@ module.exports = {
 };
 ```
 
+**.eslintrc.js using glob-based configuration**
+
+This configuration would use the default parser for all files except for those found by the `"files/transformed/by/babel/*.js"` glob.
+
+```js
+module.exports = {
+  rules: {
+    indent: "error"
+  },
+  overrides: [
+    {
+      files: ["files/transformed/by/babel/*.js"],
+      parser: "babel-eslint",
+    }
+  ]
+};
+```
+
 ### Run
 
 ```sh
