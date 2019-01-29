@@ -9,11 +9,11 @@ See our website [@babel/runtime](https://babeljs.io/docs/en/next/babel-runtime.h
 Using npm:
 
 ```sh
-npm install --save-dev @babel/runtime
+npm install --save @babel/runtime
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/runtime --dev
+yarn add @babel/runtime 
 ```
