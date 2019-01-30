@@ -19,6 +19,7 @@ Using plugins:
   proposal-unicode-property-regex { "node":"6" }
   proposal-json-strings { "node":"6" }
   proposal-optional-catch-binding { "node":"6" }
+  transform-named-capturing-groups-regex { "node":"6" }
 
 Using polyfills with `entry` option:
 

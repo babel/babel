@@ -94,7 +94,7 @@
                 {
                   "type": "Identifier",
                   "start": 23,
-                  "end": 24,
+                  "end": 32,
                   "loc": {
                     "start": {
                       "line": 2,
@@ -102,19 +102,19 @@
                     },
                     "end": {
                       "line": 2,
-                      "column": 6
+                      "column": 14
                     },
                     "identifierName": "x"
                   },
                   "name": "x",
                   "typeAnnotation": {
                     "type": "TSTypeAnnotation",
-                    "start": 26,
+                    "start": 24,
                     "end": 32,
                     "loc": {
                       "start": {
                         "line": 2,
-                        "column": 8
+                        "column": 6
                       },
                       "end": {
                         "line": 2,

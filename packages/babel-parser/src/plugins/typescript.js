@@ -264,7 +264,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
     tsParseThisTypePredicate(lhs: N.TsThisType): N.TsTypePredicate {
       this.next();
-      const node: N.TsTypePredicate = this.startNode();
+      const node: N.TsTypePredicate = this.startNodeAtNode(lhs);
       node.parameterName = lhs;
       node.typeAnnotation = this.tsParseTypeAnnotation(/* eatColon */ false);
       return this.finishNode(node, "TSTypePredicate");
@@ -398,8 +398,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
 
       this.expect(tt.bracketL);
       const id = this.parseIdentifier();
-      this.expect(tt.colon);
-      id.typeAnnotation = this.tsParseTypeAnnotation(/* eatColon */ false);
+      id.typeAnnotation = this.tsParseTypeAnnotation();
+      this.finishNode(id, "Identifier"); // set end position to end of type
+
       this.expect(tt.bracketR);
       node.parameters = [id];
 
@@ -546,17 +547,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       //   No mandatory elements may follow optional elements
       //   If there's a rest element, it must be at the end of the tuple
       let seenOptionalElement = false;
-      node.elementTypes.forEach((elementNode, i) => {
-        if (elementNode.type === "TSRestType") {
-          if (i !== node.elementTypes.length - 1) {
-            this.raise(
-              elementNode.start,
-              "A rest element must be last in a tuple type.",
-            );
-          }
-        } else if (elementNode.type === "TSOptionalType") {
+      node.elementTypes.forEach(elementNode => {
+        if (elementNode.type === "TSOptionalType") {
           seenOptionalElement = true;
-        } else if (seenOptionalElement) {
+        } else if (seenOptionalElement && elementNode.type !== "TSRestType") {
           this.raise(
             elementNode.start,
             "A required element cannot follow an optional element.",
@@ -573,6 +567,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         const restNode: N.TsRestType = this.startNode();
         this.next(); // skips ellipsis
         restNode.typeAnnotation = this.tsParseType();
+        this.checkCommaAfterRest(tt.bracketR, "type");
         return this.finishNode(restNode, "TSRestType");
       }
 
@@ -1192,7 +1187,18 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     tsTryParseDeclare(nany: any): ?N.Declaration {
-      switch (this.state.type) {
+      if (this.isLineTerminator()) {
+        return;
+      }
+      let starttype = this.state.type;
+      let kind;
+
+      if (this.isContextual("let")) {
+        starttype = tt._var;
+        kind = "let";
+      }
+
+      switch (starttype) {
         case tt._function:
           this.next();
           return this.parseFunction(nany, /* isStatement */ true);
@@ -1211,8 +1217,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           }
         // falls through
         case tt._var:
-        case tt._let:
-          return this.parseVarStatement(nany, this.state.type);
+          kind = kind || this.state.value;
+          return this.parseVarStatement(nany, kind);
         case tt.name: {
           const value = this.state.value;
           if (value === "global") {
@@ -1268,10 +1274,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     ): ?N.Declaration {
       switch (value) {
         case "abstract":
-          if (next || this.match(tt._class)) {
+          if (this.tsCheckLineTerminatorAndMatch(tt._class, next)) {
             const cls: N.ClassDeclaration = node;
             cls.abstract = true;
-            if (next) this.next();
+            if (next) {
+              this.next();
+              if (!this.match(tt._class)) {
+                this.unexpected(null, tt._class);
+              }
+            }
             return this.parseClass(
               cls,
               /* isStatement */ true,
@@ -1288,7 +1299,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           break;
 
         case "interface":
-          if (next || this.match(tt.name)) {
+          if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
             if (next) this.next();
             return this.tsParseInterfaceDeclaration(node);
           }
@@ -1298,25 +1309,29 @@ export default (superClass: Class<Parser>): Class<Parser> =>
           if (next) this.next();
           if (this.match(tt.string)) {
             return this.tsParseAmbientExternalModuleDeclaration(node);
-          } else if (next || this.match(tt.name)) {
+          } else if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
             return this.tsParseModuleOrNamespaceDeclaration(node);
           }
           break;
 
         case "namespace":
-          if (next || this.match(tt.name)) {
+          if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
             if (next) this.next();
             return this.tsParseModuleOrNamespaceDeclaration(node);
           }
           break;
 
         case "type":
-          if (next || this.match(tt.name)) {
+          if (this.tsCheckLineTerminatorAndMatch(tt.name, next)) {
             if (next) this.next();
             return this.tsParseTypeAliasDeclaration(node);
           }
           break;
       }
+    }
+
+    tsCheckLineTerminatorAndMatch(tokenType: TokenType, next: boolean) {
+      return (next || this.match(tokenType)) && !this.isLineTerminator();
     }
 
     tsTryParseGenericAsyncArrowFunction(
@@ -1607,16 +1622,14 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     */
     checkDuplicateExports() {}
 
-    parseImport(
-      node: N.Node,
-    ): N.ImportDeclaration | N.TsImportEqualsDeclaration {
+    parseImport(node: N.Node): N.AnyImport {
       if (this.match(tt.name) && this.lookahead().type === tt.eq) {
         return this.tsParseImportEqualsDeclaration(node);
       }
       return super.parseImport(node);
     }
 
-    parseExport(node: N.Node): N.Node {
+    parseExport(node: N.Node): N.AnyExport {
       if (this.match(tt._import)) {
         // `export import A = B;`
         this.expect(tt._import);
@@ -1840,10 +1853,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     parseExportDeclaration(node: N.ExportNamedDeclaration): ?N.Declaration {
+      // Store original location/position
+      const startPos = this.state.start;
+      const startLoc = this.state.startLoc;
+
       // "export declare" is equivalent to just "export".
       const isDeclare = this.eatContextual("declare");
 
       let declaration: ?N.Declaration;
+
       if (this.match(tt.name)) {
         declaration = this.tsTryParseExportDeclaration();
       }
@@ -1852,6 +1870,9 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
 
       if (declaration && isDeclare) {
+        // Reset location to include `declare` in range
+        this.resetStartLocation(declaration, startPos, startLoc);
+
         declaration.declare = true;
       }
 
@@ -1935,8 +1956,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // `let x: number;`
-    parseVarHead(decl: N.VariableDeclarator): void {
-      super.parseVarHead(decl);
+    parseVarId(
+      decl: N.VariableDeclarator,
+      kind: "var" | "let" | "const",
+    ): void {
+      super.parseVarId(decl, kind);
       if (decl.id.type === "Identifier" && this.eat(tt.bang)) {
         decl.definite = true;
       }
@@ -2210,11 +2234,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // ensure that inside types, we bypass the jsx parser plugin
-    readToken(code: number): void {
+    getTokenFromCode(code: number): void {
       if (this.state.inType && (code === 62 || code === 60)) {
         return this.finishOp(tt.relational, 1);
       } else {
-        return super.readToken(code);
+        return super.getTokenFromCode(code);
       }
     }
 

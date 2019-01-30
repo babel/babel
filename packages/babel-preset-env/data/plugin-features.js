@@ -96,8 +96,9 @@ const es = {
   "proposal-object-rest-spread": "object rest/spread properties",
   "proposal-unicode-property-regex": "RegExp Unicode Property Escapes",
 
-  "proposal-json-strings": "", // Awaiting mapping in compat-table
+  "proposal-json-strings": "JSON superset",
   "proposal-optional-catch-binding": "optional catch binding",
+  "transform-named-capturing-groups-regex": "RegExp named capture groups",
 };
 
 const proposals = require("./shipped-proposals").features;

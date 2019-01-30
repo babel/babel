@@ -13,12 +13,15 @@ const cwd = process.cwd();
 const packageDir = join(cwd, "packages");
 
 const packages = readdirSync(packageDir);
+const packagesInstalledToDep = ["@babel/polyfill", "@babel/runtime"];
 const getWebsiteLink = n => `https://babeljs.io/docs/en/next/${n}.html`;
 const getPackageJson = pkg => require(join(packageDir, pkg, "package.json"));
 const getIssueLabelLink = l =>
   `https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22${encodeURIComponent(
     l
   )}%22+is%3Aopen`;
+const getNpmInstall = name => `npm install ${packagesInstalledToDep.includes(name) ? "--save" : "--save-dev"} ${name}`;
+const getYarnAdd = name => `yarn add ${name} ${packagesInstalledToDep.includes(name) ? "" : "--dev"}`;
 
 const labels = {
   "babel-preset-flow": getIssueLabelLink("area: flow"),
@@ -54,13 +57,13 @@ See our website [${name}](${websiteLink}) for more information${
 Using npm:
 
 \`\`\`sh
-npm install --save-dev ${name}
+${getNpmInstall(name)}
 \`\`\`
 
 or using yarn:
 
 \`\`\`sh
-yarn add ${name} --dev
+${getYarnAdd(name)}
 \`\`\`
 `;
 

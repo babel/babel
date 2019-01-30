@@ -41,6 +41,7 @@ Using plugins:
   proposal-unicode-property-regex { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   proposal-json-strings { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
   proposal-optional-catch-binding { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
+  transform-named-capturing-groups-regex { "chrome":"54", "edge":"13", "firefox":"49", "ie":"10", "ios":"9", "safari":"7" }
 
 Using polyfills with `entry` option:
 

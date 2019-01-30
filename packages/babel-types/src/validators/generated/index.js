@@ -3031,6 +3031,20 @@ export function isTSModuleBlock(node: Object, opts?: Object): boolean {
 
   return false;
 }
+export function isTSImportType(node: Object, opts?: Object): boolean {
+  if (!node) return false;
+
+  const nodeType = node.type;
+  if (nodeType === "TSImportType") {
+    if (typeof opts === "undefined") {
+      return true;
+    } else {
+      return shallowEqual(node, opts);
+    }
+  }
+
+  return false;
+}
 export function isTSImportEqualsDeclaration(
   node: Object,
   opts?: Object,
@@ -4254,7 +4268,8 @@ export function isTSType(node: Object, opts?: Object): boolean {
     "TSIndexedAccessType" === nodeType ||
     "TSMappedType" === nodeType ||
     "TSLiteralType" === nodeType ||
-    "TSExpressionWithTypeArguments" === nodeType
+    "TSExpressionWithTypeArguments" === nodeType ||
+    "TSImportType" === nodeType
   ) {
     if (typeof opts === "undefined") {
       return true;

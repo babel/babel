@@ -1,19 +1,19 @@
-# @babel/plugin-class-features
+# @babel/helper-create-class-features-plugin
 
 > Compile class public and private fields, private methods and decorators to ES6
 
-See our website [@babel/plugin-class-features](https://babeljs.io/docs/en/next/babel-plugin-class-features.html) for more information.
+See our website [@babel/helper-create-class-features-plugin](https://babeljs.io/docs/en/next/babel-helper-create-class-features-plugin.html) for more information.
 
 ## Install
 
 Using npm:
 
 ```sh
-npm install --save-dev @babel/plugin-class-features
+npm install --save-dev @babel/helper-create-class-features-plugin
 ```
 
 or using yarn:
 
 ```sh
-yarn add @babel/plugin-class-features --dev
+yarn add @babel/helper-create-class-features-plugin --dev
 ```

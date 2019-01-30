@@ -1,6 +1,6 @@
 {
   "name": "@babel/runtime",
-  "version": "7.2.0",
+  "version": "7.3.1",
   "description": "babel's modular runtime helpers",
   "license": "MIT",
   "publishConfig": {
@@ -12,6 +12,6 @@
     "regenerator-runtime": "^0.12.0"
   },
   "devDependencies": {
-    "@babel/helpers": "^7.2.0"
+    "@babel/helpers": "^7.3.1"
   }
 }

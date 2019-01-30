@@ -192,7 +192,7 @@ const getLowestImplementedVersion = ({ features }, env) => {
     // only doing this for built-ins atm
     //
     // NOTE: when/if compat-table adds a babel7 key, we'll want to update this
-    if (!test.babel6 && isBuiltIn) {
+    if (!test.babel6corejs2 && isBuiltIn) {
       return "-1";
     }
 

@@ -14,16 +14,14 @@ import type {
   SpreadElement,
 } from "../types";
 import type { Pos, Position } from "../util/location";
+import {
+  isStrictReservedWord,
+  isStrictBindReservedWord,
+} from "../util/identifier";
 import { NodeUtils } from "./node";
 
 export default class LValParser extends NodeUtils {
   // Forward-declaration: defined in expression.js
-  +checkReservedWord: (
-    word: string,
-    startLoc: number,
-    checkKeywords: boolean,
-    isBinding: boolean,
-  ) => void;
   +parseIdentifier: (liberal?: boolean) => Identifier;
   +parseMaybeAssign: (
     noIn?: ?boolean,
@@ -56,9 +54,13 @@ export default class LValParser extends NodeUtils {
 
         case "ObjectExpression":
           node.type = "ObjectPattern";
-          for (let index = 0; index < node.properties.length; index++) {
-            const prop = node.properties[index];
-            const isLast = index === node.properties.length - 1;
+          for (
+            let i = 0, length = node.properties.length, last = length - 1;
+            i < length;
+            i++
+          ) {
+            const prop = node.properties[i];
+            const isLast = i === last;
             this.toAssignableObjectExpressionProp(prop, isBinding, isLast);
           }
           break;
@@ -122,10 +124,7 @@ export default class LValParser extends NodeUtils {
 
       this.raise(prop.key.start, error);
     } else if (prop.type === "SpreadElement" && !isLast) {
-      this.raise(
-        prop.start,
-        "The rest element has to be the last element when destructuring",
-      );
+      this.raiseRestNotLast(prop.start, "property");
     } else {
       this.toAssignable(prop, isBinding, "object destructuring pattern");
     }
@@ -148,12 +147,10 @@ export default class LValParser extends NodeUtils {
         const arg = last.argument;
         this.toAssignable(arg, isBinding, contextDescription);
         if (
-          [
-            "Identifier",
-            "MemberExpression",
-            "ArrayPattern",
-            "ObjectPattern",
-          ].indexOf(arg.type) === -1
+          arg.type !== "Identifier" &&
+          arg.type !== "MemberExpression" &&
+          arg.type !== "ArrayPattern" &&
+          arg.type !== "ObjectPattern"
         ) {
           this.unexpected(arg.start);
         }
@@ -162,13 +159,12 @@ export default class LValParser extends NodeUtils {
     }
     for (let i = 0; i < end; i++) {
       const elt = exprList[i];
-      if (elt && elt.type === "SpreadElement") {
-        this.raise(
-          elt.start,
-          "The rest element has to be the last element when destructuring",
-        );
+      if (elt) {
+        this.toAssignable(elt, isBinding, contextDescription);
+        if (elt.type === "RestElement") {
+          this.raiseRestNotLast(elt.start, "element");
+        }
       }
-      if (elt) this.toAssignable(elt, isBinding, contextDescription);
     }
     return exprList;
   }
@@ -199,10 +195,10 @@ export default class LValParser extends NodeUtils {
 
   // Parses spread element.
 
-  parseSpread<T: RestElement | SpreadElement>(
+  parseSpread(
     refShorthandDefaultPos: ?Pos,
     refNeedsArrowPos?: ?Pos,
-  ): T {
+  ): SpreadElement {
     const node = this.startNode();
     this.next();
     node.argument = this.parseMaybeAssign(
@@ -211,6 +207,11 @@ export default class LValParser extends NodeUtils {
       undefined,
       refNeedsArrowPos,
     );
+
+    if (this.state.commaAfterSpreadAt === -1 && this.match(tt.comma)) {
+      this.state.commaAfterSpreadAt = this.state.start;
+    }
+
     return this.finishNode(node, "SpreadElement");
   }
 
@@ -221,22 +222,11 @@ export default class LValParser extends NodeUtils {
     return this.finishNode(node, "RestElement");
   }
 
-  shouldAllowYieldIdentifier(): boolean {
-    return (
-      this.match(tt._yield) && !this.state.strict && !this.state.inGenerator
-    );
-  }
-
-  parseBindingIdentifier(): Identifier {
-    return this.parseIdentifier(this.shouldAllowYieldIdentifier());
-  }
-
   // Parses lvalue (assignable) atom.
   parseBindingAtom(): Pattern {
     switch (this.state.type) {
-      case tt._yield:
       case tt.name:
-        return this.parseBindingIdentifier();
+        return this.parseIdentifier();
 
       case tt.bracketL: {
         const node = this.startNode();
@@ -273,20 +263,13 @@ export default class LValParser extends NodeUtils {
         break;
       } else if (this.match(tt.ellipsis)) {
         elts.push(this.parseAssignableListItemTypes(this.parseRest()));
-        if (
-          this.state.inFunction &&
-          this.state.inParameters &&
-          this.match(tt.comma)
-        ) {
-          const nextTokenType = this.lookahead().type;
-          const errorMessage =
-            nextTokenType === tt.parenR
-              ? "A trailing comma is not permitted after the rest element"
-              : "Rest parameter must be last formal parameter";
-          this.raise(this.state.start, errorMessage);
-        } else {
-          this.expect(close);
-        }
+        this.checkCommaAfterRest(
+          close,
+          this.state.inFunction && this.state.inParameters
+            ? "parameter"
+            : "element",
+        );
+        this.expect(close);
         break;
       } else {
         const decorators = [];
@@ -351,7 +334,16 @@ export default class LValParser extends NodeUtils {
   ): void {
     switch (expr.type) {
       case "Identifier":
-        this.checkReservedWord(expr.name, expr.start, false, true);
+        if (
+          this.state.strict &&
+          (isStrictReservedWord(expr.name) ||
+            isStrictBindReservedWord(expr.name))
+        ) {
+          this.raise(
+            expr.start,
+            expr.name + " is a reserved word in strict mode",
+          );
+        }
 
         if (checkClashes) {
           // we need to prefix this with an underscore for the cases where we have a key of
@@ -432,12 +424,35 @@ export default class LValParser extends NodeUtils {
   }
 
   checkToRestConversion(node: SpreadElement): void {
-    const validArgumentTypes = ["Identifier", "MemberExpression"];
-
-    if (validArgumentTypes.indexOf(node.argument.type) !== -1) {
-      return;
+    if (
+      node.argument.type !== "Identifier" &&
+      node.argument.type !== "MemberExpression"
+    ) {
+      this.raise(node.argument.start, "Invalid rest operator's argument");
     }
+  }
 
-    this.raise(node.argument.start, "Invalid rest operator's argument");
+  checkCommaAfterRest(close: TokenType, kind: string): void {
+    if (this.match(tt.comma)) {
+      if (this.lookahead().type === close) {
+        this.raiseCommaAfterRest(this.state.start, kind);
+      } else {
+        this.raiseRestNotLast(this.state.start, kind);
+      }
+    }
+  }
+
+  checkCommaAfterRestFromSpread(kind: string): void {
+    if (this.state.commaAfterSpreadAt > -1) {
+      this.raiseCommaAfterRest(this.state.commaAfterSpreadAt, kind);
+    }
+  }
+
+  raiseCommaAfterRest(pos: number, kind: string) {
+    this.raise(pos, `A trailing comma is not permitted after the rest ${kind}`);
+  }
+
+  raiseRestNotLast(pos: number, kind: string) {
+    this.raise(pos, `The rest ${kind} must be the last ${kind}`);
   }
 }

@@ -1,3 +1,3 @@
 {
-  "throws": "Rest parameter must be last formal parameter (1:5)"
+  "throws": "The rest parameter must be the last parameter (1:5)"
 }

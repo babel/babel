@@ -7,8 +7,6 @@ import type { Comment, Node as NodeType, NodeBase } from "../types";
 
 // Start an AST node, attaching a start offset.
 
-const commentKeys = ["leadingComments", "trailingComments", "innerComments"];
-
 class Node implements NodeBase {
   constructor(parser: Parser, pos: number, loc: Position) {
     this.type = "";
@@ -31,16 +29,22 @@ class Node implements NodeBase {
 
   __clone(): this {
     // $FlowIgnore
-    const node2: any = new Node();
-    Object.keys(this).forEach(key => {
+    const newNode: any = new Node();
+    const keys = Object.keys(this);
+    for (let i = 0, length = keys.length; i < length; i++) {
+      const key = keys[i];
       // Do not clone comments that are already attached to the node
-      if (commentKeys.indexOf(key) < 0) {
+      if (
+        key !== "leadingComments" &&
+        key !== "trailingComments" &&
+        key !== "innerComments"
+      ) {
         // $FlowIgnore
-        node2[key] = this[key];
+        newNode[key] = this[key];
       }
-    });
+    }
 
-    return node2;
+    return newNode;
   }
 }
 
@@ -87,12 +91,16 @@ export class NodeUtils extends UtilParser {
     return node;
   }
 
+  resetStartLocation(node: NodeBase, start: number, startLoc: Position): void {
+    node.start = start;
+    node.loc.start = startLoc;
+    if (this.options.ranges) node.range[0] = start;
+  }
+
   /**
    * Reset the start location of node to the start location of locationNode
    */
   resetStartLocationFromNode(node: NodeBase, locationNode: NodeBase): void {
-    node.start = locationNode.start;
-    node.loc.start = locationNode.loc.start;
-    if (this.options.ranges) node.range[0] = locationNode.range[0];
+    this.resetStartLocation(node, locationNode.start, locationNode.loc.start);
   }
 }

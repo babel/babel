@@ -1,0 +1,6 @@
+{
+  "throws": "await is not supported inside pipeline expressions yet",
+  "plugins": [
+    ["proposal-pipeline-operator", { "proposal": "smart" }]
+  ]
+}

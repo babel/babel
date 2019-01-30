@@ -1,3 +1,3 @@
 {
-  "throws": "yield is a reserved word inside generator functions (1:18)"
+  "throws": "Can not use 'yield' as identifier inside a generator (1:18)"
 }

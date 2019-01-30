@@ -1,7 +1,7 @@
 // @flow
 
 import type { Options } from "../options";
-import { reservedWords } from "../util/identifier";
+import { isES2015ReservedWord } from "../util/identifier";
 
 import type State from "../tokenizer/state";
 import type { PluginsMap } from "./index";
@@ -16,21 +16,21 @@ export default class BaseParser {
 
   // Initialized by Tokenizer
   state: State;
-  input: string;
 
   isReservedWord(word: string): boolean {
     if (word === "await") {
       return this.inModule;
     } else {
-      return reservedWords[6](word);
+      return isES2015ReservedWord(word);
     }
   }
 
   hasPlugin(name: string): boolean {
-    return Object.hasOwnProperty.call(this.plugins, name);
+    return this.plugins.has(name);
   }
 
   getPluginOption(plugin: string, name: string) {
-    if (this.hasPlugin(plugin)) return this.plugins[plugin][name];
+    // $FlowIssue
+    if (this.hasPlugin(plugin)) return this.plugins.get(plugin)[name];
   }
 }

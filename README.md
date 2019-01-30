@@ -9,11 +9,14 @@
 </p>
 
 <p align="center">
+    <a href="https://www.npmjs.com/package/@babel/core"><img alt="v7 npm Downloads" src="https://img.shields.io/npm/dm/@babel/core.svg?maxAge=43200&label=v7%20downloads"></a>
+  <a href="https://www.npmjs.com/package/babel-core"><img alt="v6 npm Downloads" src="https://img.shields.io/npm/dm/babel-core.svg?maxAge=43200&label=v6%20downloads"></a>
+</p>
+<p align="center">
   <a href="https://travis-ci.org/babel/babel"><img alt="Travis Status" src="https://img.shields.io/travis/babel/babel/master.svg?label=travis&maxAge=43200"></a>
   <a href="https://circleci.com/gh/babel/babel"><img alt="CircleCI Status" src="https://img.shields.io/circleci/project/github/babel/babel/master.svg?label=circle&maxAge=43200"></a>
   <a href="https://codecov.io/github/babel/babel"><img alt="Coverage Status" src="https://img.shields.io/codecov/c/github/babel/babel/master.svg?maxAge=43200"></a>
   <a href="https://slack.babeljs.io/"><img alt="Slack Status" src="https://slack.babeljs.io/badge.svg"></a>
-  <a href="https://www.npmjs.com/package/babel-core"><img alt="npm Downloads" src="https://img.shields.io/npm/dm/babel-core.svg?maxAge=43200"></a>
   <a href="https://twitter.com/intent/follow?screen_name=babeljs"><img alt="Follow on Twitter" src="https://img.shields.io/twitter/follow/babeljs.svg?style=social&label=Follow"></a>
 </p>
 
@@ -56,7 +59,8 @@ Become a sponsor and get your logo on our README on Github with a link to your s
 
 ## Bronze
 
-<a href="https://webflow.com/" target="_blank"><img src="https://opencollective.com/proxy/images/?src=https%3A%2F%2Fopencollective-production.s3-us-west-1.amazonaws.com%2F4a5024b0-8cf2-11e7-b1a2-b30b1de1463c.png&height=64"></a>
+<a href="https://webflow.com" target="_blank"><img src="https://opencollective.com/proxy/images/?src=https%3A%2F%2Fopencollective-production.s3-us-west-1.amazonaws.com%2F4a5024b0-8cf2-11e7-b1a2-b30b1de1463c.png&height=64"></a>
+<a href="https://issuehunt.io" target="_blank"><img src="https://github.com/BoostIO/issuehunt-materials/blob/master/v1/issuehunt-logo-and-word-v1.png?raw=true" height="64"></a>
 
 ## Intro
 

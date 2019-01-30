@@ -344,7 +344,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       } else {
         if (
           this.match(tt._const) ||
-          this.match(tt._let) ||
+          this.isLet() ||
           ((this.isContextual("type") || this.isContextual("interface")) &&
             !insideModule)
         ) {
@@ -1124,7 +1124,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       node.types = [];
       this.expect(tt.bracketL);
       // We allow trailing commas
-      while (this.state.pos < this.input.length && !this.match(tt.bracketR)) {
+      while (this.state.pos < this.state.length && !this.match(tt.bracketR)) {
         node.types.push(this.flowParseType());
         if (this.match(tt.bracketR)) break;
         this.expect(tt.comma);
@@ -1189,9 +1189,6 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       switch (id.name) {
         case "any":
           return this.finishNode(node, "AnyTypeAnnotation");
-
-        case "void":
-          return this.finishNode(node, "VoidTypeAnnotation");
 
         case "bool":
         case "boolean":
@@ -1369,6 +1366,10 @@ export default (superClass: Class<Parser>): Class<Parser> =>
             "NumberLiteralTypeAnnotation",
           );
 
+        case tt._void:
+          this.next();
+          return this.finishNode(node, "VoidTypeAnnotation");
+
         case tt._null:
           this.next();
           return this.finishNode(node, "NullLiteralTypeAnnotation");
@@ -1398,7 +1399,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       const startPos = this.state.start,
         startLoc = this.state.startLoc;
       let type = this.flowParsePrimaryType();
-      while (!this.canInsertSemicolon() && this.match(tt.bracketL)) {
+      while (this.match(tt.bracketL) && !this.canInsertSemicolon()) {
         const node = this.startNodeAt(startPos, startLoc);
         node.elementType = type;
         this.expect(tt.bracketL);
@@ -1630,7 +1631,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.match(tt.name) &&
         (this.state.value === "type" ||
           this.state.value === "interface" ||
-          this.state.value == "opaque")
+          this.state.value === "opaque")
       ) {
         return false;
       }
@@ -1846,17 +1847,15 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.assertModuleNodeAllowed(node);
     }
 
-    parseExport(
-      node: N.ExportNamedDeclaration | N.ExportAllDeclaration,
-    ): N.ExportNamedDeclaration | N.ExportAllDeclaration {
-      node = super.parseExport(node);
+    parseExport(node: N.Node): N.AnyExport {
+      const decl = super.parseExport(node);
       if (
-        node.type === "ExportNamedDeclaration" ||
-        node.type === "ExportAllDeclaration"
+        decl.type === "ExportNamedDeclaration" ||
+        decl.type === "ExportAllDeclaration"
       ) {
-        node.exportKind = node.exportKind || "value";
+        decl.exportKind = decl.exportKind || "value";
       }
-      return node;
+      return decl;
     }
 
     parseExportDeclaration(node: N.ExportNamedDeclaration): ?N.Declaration {
@@ -1892,27 +1891,26 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    shouldParseExportStar(): boolean {
-      return (
-        super.shouldParseExportStar() ||
-        (this.isContextual("type") && this.lookahead().type === tt.star)
-      );
-    }
+    eatExportStar(node: N.Node): boolean {
+      if (super.eatExportStar(...arguments)) return true;
 
-    parseExportStar(node: N.ExportNamedDeclaration): void {
-      if (this.eatContextual("type")) {
+      if (this.isContextual("type") && this.lookahead().type === tt.star) {
         node.exportKind = "type";
+        this.next();
+        this.next();
+        return true;
       }
 
-      return super.parseExportStar(node);
+      return false;
     }
 
-    parseExportNamespace(node: N.ExportNamedDeclaration) {
-      if (node.exportKind === "type") {
-        this.unexpected();
+    maybeParseExportNamespaceSpecifier(node: N.Node): boolean {
+      const pos = this.state.start;
+      const hasNamespace = super.maybeParseExportNamespaceSpecifier(node);
+      if (hasNamespace && node.exportKind === "type") {
+        this.unexpected(pos);
       }
-
-      return super.parseExportNamespace(node);
+      return hasNamespace;
     }
 
     parseClassId(node: N.Class, isStatement: boolean, optionalId: ?boolean) {
@@ -1922,20 +1920,12 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       }
     }
 
-    // don't consider `void` to be a keyword as then it'll use the void token type
-    // and set startExpr
-    isKeyword(name: string): boolean {
-      if (this.state.inType && name === "void") {
-        return false;
-      } else {
-        return super.isKeyword(name);
-      }
-    }
-
     // ensure that inside flow types, we bypass the jsx parser plugin
-    readToken(code: number): void {
-      const next = this.input.charCodeAt(this.state.pos + 1);
-      if (
+    getTokenFromCode(code: number): void {
+      const next = this.state.input.charCodeAt(this.state.pos + 1);
+      if (code === charCodes.leftCurlyBrace && next === charCodes.verticalBar) {
+        return this.finishOp(tt.braceBarL, 2);
+      } else if (
         this.state.inType &&
         (code === charCodes.greaterThan || code === charCodes.lessThan)
       ) {
@@ -1944,7 +1934,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         this.state.isIterator = true;
         return super.readWord();
       } else {
-        return super.readToken(code);
+        return super.getTokenFromCode(code);
       }
     }
 
@@ -2232,7 +2222,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // parse typeof and type imports
-    parseImportSpecifiers(node: N.ImportDeclaration): void {
+    maybeParseDefaultImportSpecifier(node: N.ImportDeclaration): boolean {
       node.importKind = "value";
 
       let kind = null;
@@ -2259,7 +2249,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         }
       }
 
-      super.parseImportSpecifiers(node);
+      return super.maybeParseDefaultImportSpecifier(node);
     }
 
     // parse import-type/typeof shorthand
@@ -2354,8 +2344,11 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     // parse flow type annotations on variable declarator heads - let foo: string = bar
-    parseVarHead(decl: N.VariableDeclarator): void {
-      super.parseVarHead(decl);
+    parseVarId(
+      decl: N.VariableDeclarator,
+      kind: "var" | "let" | "const",
+    ): void {
+      super.parseVarId(decl, kind);
       if (this.match(tt.colon)) {
         decl.id.typeAnnotation = this.flowParseTypeAnnotation();
         this.finishNode(decl.id, decl.id.type);
@@ -2686,7 +2679,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     readToken_mult_modulo(code: number): void {
-      const next = this.input.charCodeAt(this.state.pos + 1);
+      const next = this.state.input.charCodeAt(this.state.pos + 1);
       if (
         code === charCodes.asterisk &&
         next === charCodes.slash &&
@@ -2701,6 +2694,20 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       super.readToken_mult_modulo(code);
     }
 
+    readToken_pipe_amp(code: number): void {
+      const next = this.state.input.charCodeAt(this.state.pos + 1);
+      if (
+        code === charCodes.verticalBar &&
+        next === charCodes.rightCurlyBrace
+      ) {
+        // '|}'
+        this.finishOp(tt.braceBarR, 2);
+        return;
+      }
+
+      super.readToken_pipe_amp(code);
+    }
+
     parseTopLevel(file: N.File, program: N.Program): N.File {
       const fileNode = super.parseTopLevel(file, program);
       if (this.state.hasFlowComment) {
@@ -2710,11 +2717,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     skipBlockComment(): void {
-      if (
-        this.hasPlugin("flow") &&
-        this.hasPlugin("flowComments") &&
-        this.skipFlowComment()
-      ) {
+      if (this.hasPlugin("flowComments") && this.skipFlowComment()) {
         if (this.state.hasFlowComment) {
           this.unexpected(
             null,
@@ -2727,8 +2730,8 @@ export default (superClass: Class<Parser>): Class<Parser> =>
         return;
       }
 
-      if (this.hasPlugin("flow") && this.state.hasFlowComment) {
-        const end = this.input.indexOf("*-/", (this.state.pos += 2));
+      if (this.state.hasFlowComment) {
+        const end = this.state.input.indexOf("*-/", (this.state.pos += 2));
         if (end === -1) this.raise(this.state.pos - 2, "Unterminated comment");
         this.state.pos = end + 3;
         return;
@@ -2742,20 +2745,22 @@ export default (superClass: Class<Parser>): Class<Parser> =>
       let shiftToFirstNonWhiteSpace = 2;
       while (
         [charCodes.space, charCodes.tab].includes(
-          this.input.charCodeAt(pos + shiftToFirstNonWhiteSpace),
+          this.state.input.charCodeAt(pos + shiftToFirstNonWhiteSpace),
         )
       ) {
         shiftToFirstNonWhiteSpace++;
       }
 
-      const ch2 = this.input.charCodeAt(shiftToFirstNonWhiteSpace + pos);
-      const ch3 = this.input.charCodeAt(shiftToFirstNonWhiteSpace + pos + 1);
+      const ch2 = this.state.input.charCodeAt(shiftToFirstNonWhiteSpace + pos);
+      const ch3 = this.state.input.charCodeAt(
+        shiftToFirstNonWhiteSpace + pos + 1,
+      );
 
       if (ch2 === charCodes.colon && ch3 === charCodes.colon) {
         return shiftToFirstNonWhiteSpace + 2; // check for /*::
       }
       if (
-        this.input.slice(
+        this.state.input.slice(
           shiftToFirstNonWhiteSpace + pos,
           shiftToFirstNonWhiteSpace + pos + 12,
         ) === "flow-include"
@@ -2769,7 +2774,7 @@ export default (superClass: Class<Parser>): Class<Parser> =>
     }
 
     hasFlowCommentCompletion(): void {
-      const end = this.input.indexOf("*/", this.state.pos);
+      const end = this.state.input.indexOf("*/", this.state.pos);
       if (end === -1) {
         this.raise(this.state.pos, "Unterminated comment");
       }

@@ -6,16 +6,26 @@ import optimiseCall from "@babel/helper-optimise-call-expression";
 export function buildPrivateNamesMap(props) {
   const privateNamesMap = new Map();
   for (const prop of props) {
-    if (prop.isPrivate()) {
+    const isPrivate = prop.isPrivate();
+    const isMethod = !prop.isProperty();
+    const isInstance = !prop.node.static;
+    if (isPrivate) {
       const { name } = prop.node.key.id;
-      privateNamesMap.set(name, {
-        id: prop.scope.generateUidIdentifier(name),
-        static: !!prop.node.static,
-        method: prop.isMethod(),
-        methodId: prop.isMethod()
-          ? prop.scope.generateUidIdentifier(name)
-          : undefined,
-      });
+      const update = privateNamesMap.has(name)
+        ? privateNamesMap.get(name)
+        : {
+            id: prop.scope.generateUidIdentifier(name),
+            static: !isInstance,
+            method: isMethod,
+          };
+      if (prop.node.kind === "get") {
+        update.getId = prop.scope.generateUidIdentifier(`get_${name}`);
+      } else if (prop.node.kind === "set") {
+        update.setId = prop.scope.generateUidIdentifier(`set_${name}`);
+      } else if (prop.node.kind === "method" && isMethod && isInstance) {
+        update.methodId = prop.scope.generateUidIdentifier(name);
+      }
+      privateNamesMap.set(name, update);
     }
   }
   return privateNamesMap;
@@ -31,7 +41,7 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
     // In spec mode, only instance fields need a "private name" initializer
     // because static fields are directly assigned to a variable in the
     // buildPrivateStaticFieldInitSpec function.
-    const { id, static: isStatic, method: isMethod } = value;
+    const { id, static: isStatic, method: isMethod, getId, setId } = value;
     if (loose) {
       initNodes.push(
         template.statement.ast`
@@ -39,7 +49,11 @@ export function buildPrivateNamesNodes(privateNamesMap, loose, state) {
         `,
       );
     } else if (isMethod && !isStatic) {
-      initNodes.push(template.statement.ast`var ${id} = new WeakSet();`);
+      if (getId || setId) {
+        initNodes.push(template.statement.ast`var ${id} = new WeakMap();`);
+      } else {
+        initNodes.push(template.statement.ast`var ${id} = new WeakSet();`);
+      }
     } else if (!isStatic) {
       initNodes.push(template.statement.ast`var ${id} = new WeakMap();`);
     }
@@ -121,6 +135,8 @@ const privateNameHandlerSpec = {
       static: isStatic,
       method: isMethod,
       methodId,
+      getId,
+      setId,
     } = privateNamesMap.get(name);
 
     if (isStatic && !isMethod) {
@@ -128,41 +144,57 @@ const privateNameHandlerSpec = {
         file.addHelper("classStaticPrivateFieldSpecGet"),
         [this.receiver(member), t.cloneNode(classRef), t.cloneNode(id)],
       );
-    } else if (isMethod) {
+    }
+    if (isMethod) {
+      if (getId || setId) {
+        return t.callExpression(file.addHelper("classPrivateFieldGet"), [
+          this.receiver(member),
+          t.cloneNode(id),
+        ]);
+      }
       return t.callExpression(file.addHelper("classPrivateMethodGet"), [
         this.receiver(member),
         t.cloneNode(id),
         t.cloneNode(methodId),
       ]);
-    } else {
-      return t.callExpression(file.addHelper("classPrivateFieldGet"), [
-        this.receiver(member),
-        t.cloneNode(id),
-      ]);
     }
+    return t.callExpression(file.addHelper("classPrivateFieldGet"), [
+      this.receiver(member),
+      t.cloneNode(id),
+    ]);
   },
 
   set(member, value) {
     const { classRef, privateNamesMap, file } = this;
     const { name } = member.node.property.id;
-    const { id, static: isStatic, method: isMethod } = privateNamesMap.get(
-      name,
-    );
+    const {
+      id,
+      static: isStatic,
+      method: isMethod,
+      setId,
+    } = privateNamesMap.get(name);
 
     if (isStatic && !isMethod) {
       return t.callExpression(
         file.addHelper("classStaticPrivateFieldSpecSet"),
         [this.receiver(member), t.cloneNode(classRef), t.cloneNode(id), value],
       );
-    } else if (isMethod) {
-      return t.callExpression(file.addHelper("classPrivateMethodSet"), []);
-    } else {
-      return t.callExpression(file.addHelper("classPrivateFieldSet"), [
-        this.receiver(member),
-        t.cloneNode(id),
-        value,
-      ]);
     }
+    if (isMethod) {
+      if (setId) {
+        return t.callExpression(file.addHelper("classPrivateFieldSet"), [
+          this.receiver(member),
+          t.cloneNode(id),
+          value,
+        ]);
+      }
+      return t.callExpression(file.addHelper("classPrivateMethodSet"), []);
+    }
+    return t.callExpression(file.addHelper("classPrivateFieldSet"), [
+      this.receiver(member),
+      t.cloneNode(id),
+      value,
+    ]);
   },
 
   call(member, args) {
@@ -255,21 +287,91 @@ function buildPrivateStaticFieldInitSpec(prop, privateNamesMap) {
 }
 
 function buildPrivateMethodInitLoose(ref, prop, privateNamesMap) {
-  const { methodId, id } = privateNamesMap.get(prop.node.key.id.name);
+  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const { methodId, id, getId, setId, initAdded } = privateName;
+  if (initAdded) return;
 
-  return template.statement.ast`
-    Object.defineProperty(${ref}, ${id}, {
-      // configurable is false by default
-      // enumerable is false by default
-      // writable is false by default
-      value: ${methodId.name}
+  if (methodId) {
+    return template.statement.ast`
+        Object.defineProperty(${ref}, ${id}, {
+          // configurable is false by default
+          // enumerable is false by default
+          // writable is false by default
+          value: ${methodId.name}
+        });
+      `;
+  }
+
+  if (getId || setId) {
+    privateNamesMap.set(prop.node.key.id.name, {
+      ...privateName,
+      initAdded: true,
     });
-  `;
+
+    if (getId && setId) {
+      return template.statement.ast`
+        Object.defineProperty(${ref}, ${id}, {
+          // configurable is false by default
+          // enumerable is false by default
+          // writable is false by default
+          get: ${getId.name},
+          set: ${setId.name}
+        });
+      `;
+    } else if (getId && !setId) {
+      return template.statement.ast`
+        Object.defineProperty(${ref}, ${id}, {
+          // configurable is false by default
+          // enumerable is false by default
+          // writable is false by default
+          get: ${getId.name}
+        });
+      `;
+    } else if (!getId && setId) {
+      return template.statement.ast`
+        Object.defineProperty(${ref}, ${id}, {
+          // configurable is false by default
+          // enumerable is false by default
+          // writable is false by default
+          set: ${setId.name}
+        });
+      `;
+    }
+  }
 }
 
 function buildPrivateInstanceMethodInitSpec(ref, prop, privateNamesMap) {
-  const { id } = privateNamesMap.get(prop.node.key.id.name);
+  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const { id, getId, setId, initAdded } = privateName;
+  if (initAdded) return;
 
+  if (getId || setId) {
+    privateNamesMap.set(prop.node.key.id.name, {
+      ...privateName,
+      initAdded: true,
+    });
+
+    if (getId && setId) {
+      return template.statement.ast`
+        ${id}.set(${ref}, {
+          get: ${getId.name},
+          set: ${setId.name}
+        });
+      `;
+    } else if (getId && !setId) {
+      return template.statement.ast`
+        ${id}.set(${ref}, {
+          get: ${getId.name}
+        });
+      `;
+    } else if (!getId && setId) {
+      return template.statement.ast`
+        ${id}.set(${ref}, {
+          set: ${setId.name}
+        });
+      `;
+    }
+  }
   return template.statement.ast`${id}.add(${ref})`;
 }
 
@@ -300,9 +402,37 @@ function buildPublicFieldInitSpec(ref, prop, state) {
 }
 
 function buildPrivateInstanceMethodDeclaration(prop, privateNamesMap) {
-  const { methodId } = privateNamesMap.get(prop.node.key.id.name);
+  const privateName = privateNamesMap.get(prop.node.key.id.name);
+  const {
+    methodId,
+    getId,
+    setId,
+    getterDeclared,
+    setterDeclared,
+  } = privateName;
   const { params, body } = prop.node;
   const methodValue = t.functionExpression(methodId, params, body);
+  const isGetter = getId && !getterDeclared && params.length === 0;
+  const isSetter = setId && !setterDeclared && params.length > 0;
+
+  if (isGetter) {
+    privateNamesMap.set(prop.node.key.id.name, {
+      ...privateName,
+      getterDeclared: true,
+    });
+    return t.variableDeclaration("var", [
+      t.variableDeclarator(getId, methodValue),
+    ]);
+  }
+  if (isSetter) {
+    privateNamesMap.set(prop.node.key.id.name, {
+      ...privateName,
+      setterDeclared: true,
+    });
+    return t.variableDeclaration("var", [
+      t.variableDeclarator(setId, methodValue),
+    ]);
+  }
 
   return t.variableDeclaration("var", [
     t.variableDeclarator(methodId, methodValue),
@@ -404,7 +534,7 @@ export function buildFieldsInitNodes(
 
   return {
     staticNodes,
-    instanceNodes,
+    instanceNodes: instanceNodes.filter(Boolean),
     wrapClass(path) {
       for (const prop of props) {
         prop.remove();
