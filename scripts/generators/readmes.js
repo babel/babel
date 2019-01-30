@@ -20,8 +20,12 @@ const getIssueLabelLink = l =>
   `https://github.com/babel/babel/issues?utf8=%E2%9C%93&q=is%3Aissue+label%3A%22${encodeURIComponent(
     l
   )}%22+is%3Aopen`;
-const getNpmInstall = name => `npm install ${packagesInstalledToDep.includes(name) ? "--save" : "--save-dev"} ${name}`;
-const getYarnAdd = name => `yarn add ${name} ${packagesInstalledToDep.includes(name) ? "" : "--dev"}`;
+const getNpmInstall = name =>
+  `npm install ${
+    packagesInstalledToDep.includes(name) ? "--save" : "--save-dev"
+  } ${name}`;
+const getYarnAdd = name =>
+  `yarn add ${name} ${packagesInstalledToDep.includes(name) ? "" : "--dev"}`;
 
 const labels = {
   "babel-preset-flow": getIssueLabelLink("area: flow"),
