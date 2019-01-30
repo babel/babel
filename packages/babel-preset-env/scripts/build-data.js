@@ -54,15 +54,15 @@ const byTestSuite = suite => browser => {
     : true;
 };
 
-const compatSources = ["es5", "es6", "es2016plus", "esnext"].reduce((
-  result,
-  source
-) => {
-  const data = require(`compat-table/data-${source}`);
-  data.browsers = pickBy(envs, byTestSuite(source));
-  result.push(data);
-  return result;
-}, []);
+const compatSources = ["es5", "es6", "es2016plus", "esnext"].reduce(
+  (result, source) => {
+    const data = require(`compat-table/data-${source}`);
+    data.browsers = pickBy(envs, byTestSuite(source));
+    result.push(data);
+    return result;
+  },
+  []
+);
 
 const interpolateAllResults = (rawBrowsers, tests) => {
   const interpolateResults = res => {
