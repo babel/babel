@@ -6,7 +6,7 @@ const chalk = require("chalk");
 const newer = require("gulp-newer");
 const babel = require("gulp-babel");
 const gulpWatch = require("gulp-watch");
-const gutil = require("gulp-util");
+const fancyLog = require("fancy-log");
 const filter = require("gulp-filter");
 const gulp = require("gulp");
 const path = require("path");
@@ -38,7 +38,7 @@ function getIndexFromPackage(name) {
 
 function compilationLogger(rollup) {
   return through.obj(function(file, enc, callback) {
-    gutil.log(
+    fancyLog(
       `Compiling '${chalk.cyan(file.relative)}'${
         rollup ? " with rollup " : ""
       }...`
@@ -50,7 +50,7 @@ function compilationLogger(rollup) {
 function errorsLogger() {
   return plumber({
     errorHandler(err) {
-      gutil.log(err.stack);
+      fancyLog(err.stack);
     },
   });
 }
