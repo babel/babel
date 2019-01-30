@@ -28,7 +28,7 @@ const labels = {
   "babel-preset-node": getIssueLabelLink("area: node"),
   "babel-preset-react": getIssueLabelLink("area: react"),
   "babel-preset-typescript": getIssueLabelLink("area: typescript"),
-  "babel-parser": getIssueLabelLink("pkg: babylon"),
+  "babel-parser": getIssueLabelLink("pkg: parser (babylon)"),
   "babel-cli": getIssueLabelLink("pkg: cli"),
   "babel-core": getIssueLabelLink("pkg: core"),
   "babel-generator": getIssueLabelLink("pkg: generator"),
