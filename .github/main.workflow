@@ -4,7 +4,7 @@ workflow "Release" {
 }
 
 action "Trigger GitHub release" {
-  uses = "./trigger-github-release/"
+  uses = "./.github/actions/trigger-github-release/"
   secrets = ["GITHUB_TOKEN"]
 
   # When GitHub Actions will support the "release" event for public
@@ -16,11 +16,11 @@ action "Trigger GitHub release" {
 }
 
 action "Is version tag" {
-  uses = "actions/bin/filter@b2bea07"
+  uses = "actions/bin/filter@master"
   args = "tag v*"
 }
 
 action "On master branch" {
-  uses = "actions/bin/filter@c6471707d308175c57dfe91963406ef205837dbd"
+  uses = "actions/bin/filter@master"
   args = "branch master"
 }
