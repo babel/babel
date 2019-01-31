@@ -97,6 +97,7 @@ describe("normalize-options", () => {
 
     it("should expand regular expressions in `include` and `exclude`", () => {
       const normalized = normalizeOptions.default({
+        corejs: 3,
         exclude: ["es.math.log.*"],
       });
       expect(normalized.exclude).toEqual([
@@ -109,6 +110,7 @@ describe("normalize-options", () => {
     it("should not allow the same modules in `include` and `exclude`", () => {
       const normalizeWithNonExistingPlugin = () => {
         normalizeOptions.default({
+          corejs: 3,
           include: ["es.math.log2"],
           exclude: ["es.math.log.*"],
         });
@@ -118,6 +120,7 @@ describe("normalize-options", () => {
 
     it("should not do partial match if not explicitly defined `include` and `exclude`", () => {
       const normalized = normalizeOptions.default({
+        corejs: 3,
         include: ["es.reflect.set-prototype-of"],
         exclude: ["es.reflect.set"],
       });

@@ -192,7 +192,7 @@ export const validateUseBuiltInsOption = (
 export default function normalizeOptions(opts: Options) {
   validateTopLevelOptions(opts);
 
-  const corejs = opts.corejs && String(opts.corejs) === "2" ? 2 : 3;
+  const corejs = opts.corejs && String(opts.corejs) === "3" ? 3 : 2;
 
   const include = expandIncludesAndExcludes(
     opts.include,
