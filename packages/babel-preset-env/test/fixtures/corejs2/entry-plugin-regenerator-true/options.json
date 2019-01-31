@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    [
+      "../../../../lib/polyfills/corejs2/entry-plugin",
+      {
+        "regenerator": true,
+        "polyfills": []
+      }
+    ]
+  ]
+}
