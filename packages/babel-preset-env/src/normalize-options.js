@@ -1,7 +1,6 @@
 //@flow
 
 import invariant from "invariant";
-import browserslist from "browserslist";
 import corejs2Polyfills from "../data/corejs2-built-ins.json";
 import { defaultWebIncludes } from "./defaults";
 import corejs3Polyfills from "core-js-compat/data";
@@ -80,11 +79,6 @@ const expandIncludesAndExcludes = (
   return flatten(selectedPlugins);
 };
 
-const validBrowserslistTargets = [
-  ...Object.keys(browserslist.data),
-  ...Object.keys(browserslist.aliases),
-];
-
 export const normalizePluginName = (plugin: string): string =>
   plugin.replace(/^(@babel\/|babel-)(plugin-)?/, "");
 
@@ -162,16 +156,6 @@ export const validateModulesOption = (
   );
 
   return modulesOpt;
-};
-
-export const objectToBrowserslist = (object: Targets): Array<string> => {
-  return Object.keys(object).reduce((list, targetName) => {
-    if (validBrowserslistTargets.indexOf(targetName) >= 0) {
-      const targetVersion = object[targetName];
-      return list.concat(`${targetName} ${targetVersion}`);
-    }
-    return list;
-  }, []);
 };
 
 export const validateUseBuiltInsOption = (
