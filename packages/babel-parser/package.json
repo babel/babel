@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "@babel/helper-fixtures": "^7.2.0",
-    "charcodes": "0.1.0",
     "unicode-11.0.0": "^0.7.8"
   },
   "bin": {
