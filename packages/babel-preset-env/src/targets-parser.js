@@ -10,12 +10,26 @@ import {
   getValues,
   findSuggestion,
 } from "./utils";
-import { objectToBrowserslist } from "./normalize-options";
 import browserModulesData from "../data/built-in-modules.json";
 import { TargetNames } from "./options";
 import type { Targets } from "./types";
 
 const browserslistDefaults = browserslist.defaults;
+
+const validBrowserslistTargets = [
+  ...Object.keys(browserslist.data),
+  ...Object.keys(browserslist.aliases),
+];
+
+const objectToBrowserslist = (object: Targets): Array<string> => {
+  return Object.keys(object).reduce((list, targetName) => {
+    if (validBrowserslistTargets.indexOf(targetName) >= 0) {
+      const targetVersion = object[targetName];
+      return list.concat(`${targetName} ${targetVersion}`);
+    }
+    return list;
+  }, []);
+};
 
 const validateTargetNames = (validTargets, targets) => {
   for (const target in targets) {
