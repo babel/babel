@@ -1,4 +1,4 @@
 {
   "sourceType": "module",
-  "throws": "enum is a reserved word (1:15)"
+  "throws": "Unexpected reserved word 'enum' (1:15)"
 }
