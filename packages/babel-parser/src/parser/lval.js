@@ -14,10 +14,7 @@ import type {
   SpreadElement,
 } from "../types";
 import type { Pos, Position } from "../util/location";
-import {
-  isStrictReservedWord,
-  isStrictBindReservedWord,
-} from "../util/identifier";
+import { isStrictBindReservedWord } from "../util/identifier";
 import { NodeUtils } from "./node";
 
 export default class LValParser extends NodeUtils {
@@ -336,12 +333,13 @@ export default class LValParser extends NodeUtils {
       case "Identifier":
         if (
           this.state.strict &&
-          (isStrictReservedWord(expr.name) ||
-            isStrictBindReservedWord(expr.name))
+          isStrictBindReservedWord(expr.name, this.inModule)
         ) {
           this.raise(
             expr.start,
-            expr.name + " is a reserved word in strict mode",
+            `${isBinding ? "Binding" : "Assigning to"} '${
+              expr.name
+            }' in strict mode`,
           );
         }
 

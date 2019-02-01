@@ -1,4 +1,4 @@
 {
-  "throws": "delete is a reserved word (1:14)",
+  "throws": "Unexpected keyword 'delete' (1:14)",
   "plugins": ["flow", "jsx"]
 }

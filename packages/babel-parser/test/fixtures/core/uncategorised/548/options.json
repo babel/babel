@@ -1,4 +1,4 @@
 {
   "sourceType": "module",
-  "throws": "arguments is a reserved word in strict mode (1:8)"
+  "throws": "Unexpected reserved word 'arguments' (1:8)"
 }

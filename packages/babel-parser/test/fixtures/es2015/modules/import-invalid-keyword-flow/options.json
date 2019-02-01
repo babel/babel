@@ -1,4 +1,4 @@
 {
   "plugins": ["flow"],
-  "throws": "default is a reserved word (1:9)"
+  "throws": "Unexpected keyword 'default' (1:9)"
 }
