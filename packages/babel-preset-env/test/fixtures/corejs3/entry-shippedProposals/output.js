@@ -38,6 +38,8 @@ require("core-js/modules/es.object.entries");
 
 require("core-js/modules/es.object.freeze");
 
+require("core-js/modules/es.object.from-entries");
+
 require("core-js/modules/es.object.get-own-property-descriptor");
 
 require("core-js/modules/es.object.get-own-property-descriptors");
@@ -130,6 +132,14 @@ require("core-js/modules/es.array.species");
 
 require("core-js/modules/es.array.iterator");
 
+require("core-js/modules/es.array.flat");
+
+require("core-js/modules/es.array.flat-map");
+
+require("core-js/modules/es.array.unscopables.flat");
+
+require("core-js/modules/es.array.unscopables.flat-map");
+
 require("core-js/modules/es.string.from-code-point");
 
 require("core-js/modules/es.string.raw");
@@ -157,6 +167,10 @@ require("core-js/modules/es.string.split");
 require("core-js/modules/es.string.starts-with");
 
 require("core-js/modules/es.string.trim");
+
+require("core-js/modules/es.string.trim-start");
+
+require("core-js/modules/es.string.trim-end");
 
 require("core-js/modules/es.string.iterator");
 
@@ -400,19 +414,9 @@ require("core-js/modules/web.url.to-json");
 
 require("core-js/modules/web.url-search-params");
 
-require("core-js/modules/esnext.array.flat");
-
-require("core-js/modules/esnext.array.flat-map");
-
 require("core-js/modules/esnext.global-this");
 
 require("core-js/modules/esnext.string.match-all");
-
-require("core-js/modules/esnext.string.trim-start");
-
-require("core-js/modules/esnext.string.trim-end");
-
-require("core-js/modules/esnext.object.from-entries");
 
 require("regenerator-runtime/runtime");
 

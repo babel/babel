@@ -6,13 +6,8 @@ const builtIns = {
 };
 
 const corejs3ShippedProposalsList = [
-  "esnext.array.flat",
-  "esnext.array.flat-map",
   "esnext.global-this",
   "esnext.string.match-all",
-  "esnext.string.trim-start",
-  "esnext.string.trim-end",
-  "esnext.object.from-entries",
 ];
 
 const features = {};

@@ -60,6 +60,7 @@ Using polyfills with `entry` option:
   es.object.assign { "ie":"10" }
   es.object.entries { "ie":"10", "node":"6" }
   es.object.freeze { "ie":"10" }
+  es.object.from-entries { "chrome":"54", "ie":"10", "node":"6" }
   es.object.get-own-property-descriptor { "ie":"10" }
   es.object.get-own-property-descriptors { "ie":"10", "node":"6" }
   es.object.get-own-property-names { "ie":"10" }
@@ -98,6 +99,10 @@ Using polyfills with `entry` option:
   es.array.splice { "ie":"10", "node":"6" }
   es.array.species { "ie":"10", "node":"6" }
   es.array.iterator { "chrome":"54", "ie":"10", "node":"6" }
+  es.array.flat { "chrome":"54", "ie":"10", "node":"6" }
+  es.array.flat-map { "chrome":"54", "ie":"10", "node":"6" }
+  es.array.unscopables.flat { "chrome":"54", "ie":"10", "node":"6" }
+  es.array.unscopables.flat-map { "chrome":"54", "ie":"10", "node":"6" }
   es.string.from-code-point { "ie":"10" }
   es.string.raw { "ie":"10" }
   es.string.code-point-at { "ie":"10" }
@@ -112,6 +117,8 @@ Using polyfills with `entry` option:
   es.string.split { "ie":"10", "node":"6" }
   es.string.starts-with { "ie":"10", "node":"6" }
   es.string.trim { "chrome":"54", "ie":"10", "node":"6" }
+  es.string.trim-start { "chrome":"54", "ie":"10", "node":"6" }
+  es.string.trim-end { "chrome":"54", "ie":"10", "node":"6" }
   es.string.iterator { "ie":"10" }
   es.string.anchor { "ie":"10" }
   es.string.big { "ie":"10" }

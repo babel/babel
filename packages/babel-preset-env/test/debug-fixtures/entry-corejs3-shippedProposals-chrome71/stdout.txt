@@ -16,7 +16,9 @@ Using plugins:
 Using polyfills with `entry` option:
 
 [<CWD>/src/in.js] Replaced `@babel/polyfill` with the following polyfills:
+  es.object.from-entries { "chrome":"71" }
+  es.array.unscopables.flat { "chrome":"71" }
+  es.array.unscopables.flat-map { "chrome":"71" }
   web.immediate { "chrome":"71" }
   esnext.string.match-all { "chrome":"71" }
-  esnext.object.from-entries { "chrome":"71" }
 Successfully compiled 1 file with Babel.

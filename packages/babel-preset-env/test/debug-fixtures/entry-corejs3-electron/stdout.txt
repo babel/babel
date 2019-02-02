@@ -49,6 +49,7 @@ Using polyfills with `entry` option:
   es.symbol.to-string-tag { "electron":"0.36" }
   es.object.assign { "electron":"0.36" }
   es.object.entries { "electron":"0.36" }
+  es.object.from-entries { "electron":"0.36" }
   es.object.get-own-property-descriptors { "electron":"0.36" }
   es.object.values { "electron":"0.36" }
   es.object.to-string { "electron":"0.36" }
@@ -69,6 +70,10 @@ Using polyfills with `entry` option:
   es.array.splice { "electron":"0.36" }
   es.array.species { "electron":"0.36" }
   es.array.iterator { "electron":"0.36" }
+  es.array.flat { "electron":"0.36" }
+  es.array.flat-map { "electron":"0.36" }
+  es.array.unscopables.flat { "electron":"0.36" }
+  es.array.unscopables.flat-map { "electron":"0.36" }
   es.string.ends-with { "electron":"0.36" }
   es.string.includes { "electron":"0.36" }
   es.string.match { "electron":"0.36" }
@@ -79,6 +84,8 @@ Using polyfills with `entry` option:
   es.string.split { "electron":"0.36" }
   es.string.starts-with { "electron":"0.36" }
   es.string.trim { "electron":"0.36" }
+  es.string.trim-start { "electron":"0.36" }
+  es.string.trim-end { "electron":"0.36" }
   es.regexp.constructor { "electron":"0.36" }
   es.regexp.flags { "electron":"0.36" }
   es.regexp.to-string { "electron":"0.36" }
