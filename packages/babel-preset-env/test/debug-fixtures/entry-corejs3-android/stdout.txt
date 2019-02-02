@@ -60,6 +60,7 @@ Using polyfills with `entry` option:
   es.object.define-properties { "android":"4" }
   es.object.entries { "android":"4" }
   es.object.freeze { "android":"4" }
+  es.object.from-entries { "android":"4" }
   es.object.get-own-property-descriptor { "android":"4" }
   es.object.get-own-property-descriptors { "android":"4" }
   es.object.get-own-property-names { "android":"4" }
@@ -104,6 +105,10 @@ Using polyfills with `entry` option:
   es.array.splice { "android":"4" }
   es.array.species { "android":"4" }
   es.array.iterator { "android":"4" }
+  es.array.flat { "android":"4" }
+  es.array.flat-map { "android":"4" }
+  es.array.unscopables.flat { "android":"4" }
+  es.array.unscopables.flat-map { "android":"4" }
   es.string.from-code-point { "android":"4" }
   es.string.raw { "android":"4" }
   es.string.code-point-at { "android":"4" }
@@ -118,6 +123,8 @@ Using polyfills with `entry` option:
   es.string.split { "android":"4" }
   es.string.starts-with { "android":"4" }
   es.string.trim { "android":"4" }
+  es.string.trim-start { "android":"4" }
+  es.string.trim-end { "android":"4" }
   es.string.iterator { "android":"4" }
   es.string.anchor { "android":"4" }
   es.string.big { "android":"4" }

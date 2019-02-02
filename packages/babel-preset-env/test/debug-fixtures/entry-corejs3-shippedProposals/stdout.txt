@@ -59,6 +59,7 @@ Using polyfills with `entry` option:
   es.object.define-properties {}
   es.object.entries {}
   es.object.freeze {}
+  es.object.from-entries {}
   es.object.get-own-property-descriptor {}
   es.object.get-own-property-descriptors {}
   es.object.get-own-property-names {}
@@ -105,6 +106,10 @@ Using polyfills with `entry` option:
   es.array.splice {}
   es.array.species {}
   es.array.iterator {}
+  es.array.flat {}
+  es.array.flat-map {}
+  es.array.unscopables.flat {}
+  es.array.unscopables.flat-map {}
   es.string.from-code-point {}
   es.string.raw {}
   es.string.code-point-at {}
@@ -119,6 +124,8 @@ Using polyfills with `entry` option:
   es.string.split {}
   es.string.starts-with {}
   es.string.trim {}
+  es.string.trim-start {}
+  es.string.trim-end {}
   es.string.iterator {}
   es.string.anchor {}
   es.string.big {}
@@ -240,11 +247,6 @@ Using polyfills with `entry` option:
   web.url {}
   web.url.to-json {}
   web.url-search-params {}
-  esnext.array.flat {}
-  esnext.array.flat-map {}
   esnext.global-this {}
   esnext.string.match-all {}
-  esnext.string.trim-start {}
-  esnext.string.trim-end {}
-  esnext.object.from-entries {}
 Successfully compiled 1 file with Babel.
