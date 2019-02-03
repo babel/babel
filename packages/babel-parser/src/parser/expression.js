@@ -333,8 +333,16 @@ export default class ExpressionParser extends LValParser {
 
         if (op === tt.pipeline) {
           this.expectPlugin("pipelineOperator");
+          const wasInPipeline = this.state.inPipeline;
           this.state.inPipeline = true;
           this.checkPipelineAtInfixOperator(left, leftStartPos);
+
+          if (
+            this.getPluginOption("pipelineOperator", "proposal") === "fsharp" &&
+            !wasInPipeline
+          ) {
+            node.left = this.makePipelineHead(left);
+          }
         } else if (op === tt.nullishCoalescing) {
           this.expectPlugin("nullishCoalescingOperator");
         }
@@ -388,18 +396,21 @@ export default class ExpressionParser extends LValParser {
     prec: number,
     noIn: ?boolean,
   ): N.Expression {
+    const startPos = this.state.start;
+    const startLoc = this.state.startLoc;
     switch (op) {
       case tt.pipeline:
-        if (this.getPluginOption("pipelineOperator", "proposal") === "smart") {
-          const startPos = this.state.start;
-          const startLoc = this.state.startLoc;
-          return this.withTopicPermittingContext(() => {
-            return this.parseSmartPipelineBody(
-              this.parseExprOpBaseRightExpr(op, prec, noIn),
-              startPos,
-              startLoc,
-            );
-          });
+        switch (this.getPluginOption("pipelineOperator", "proposal")) {
+          case "smart":
+            return this.withTopicPermittingContext(() => {
+              return this.parseSmartPipelineBody(
+                this.parseExprOpBaseRightExpr(op, prec, noIn),
+                startPos,
+                startLoc,
+              );
+            });
+          case "fsharp":
+            return this.parseFSharpPipelineBody(op, prec, noIn);
         }
       // falls through
 
@@ -2268,5 +2279,32 @@ export default class ExpressionParser extends LValParser {
       this.state.topicContext.maxTopicIndex != null &&
       this.state.topicContext.maxTopicIndex >= 0
     );
+  }
+
+  makePipelineHead(left: N.Expression): N.Expression {
+    const node = this.startNode();
+    node.head = left;
+
+    return this.finishNode(node, "PipelineHead");
+  }
+
+  parseFSharpPipelineBody(
+    op: TokenType,
+    prec: number,
+    noIn: ?boolean,
+  ): N.Expression {
+    const startPos = this.state.start;
+    const startLoc = this.state.startLoc;
+
+    const node = this.startNodeAt(this.state.start, this.state.startLoc);
+    node.body = this.parseExprOp(
+      this.parseMaybeUnary(),
+      startPos,
+      startLoc,
+      op.rightAssociative ? prec - 1 : prec,
+      noIn,
+    );
+
+    return this.finishNode(node, "PipelineBody");
   }
 }
