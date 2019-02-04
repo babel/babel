@@ -25,7 +25,7 @@ const smartVisitor = {
         .get("right")
         .traverse(updateTopicReferenceVisitor, { topicId: placeholder });
 
-      call = right.body ? right.body : right.expression;
+      call = right.expression;
     } else {
       // PipelineBareFunction
       let callee = right.callee;
